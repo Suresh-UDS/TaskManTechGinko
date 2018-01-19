@@ -2,3 +2,132 @@
 /SiteLocationService/node_modules/**
 
 /SiteLocationService/.idea/**
+
+
+######################
+# Project Specific
+######################
+/Webadmin/src/main/webapp/dist
+
+######################
+# Node
+######################
+/Webadmin/node/**
+/Webadmin/node_modules/**
+
+######################
+# SASS
+######################
+/Webadmin/.sass-cache/**
+
+######################
+# Eclipse
+######################
+/Webadmin/*.pydevproject
+/Webadmin/.project
+/Webadmin/.metadata
+/Webadmin/bin/**
+/Webadmin/tmp/**
+/Webadmin/tmp/**/*
+/Webadmin/*.tmp
+/Webadmin/*.bak
+/Webadmin/*.swp
+/Webadmin/*~.nib
+/Webadmin/local.properties
+/Webadmin/.classpath
+/Webadmin/.settings/**
+/Webadmin/.loadpath
+/Webadmin/src/main/resources/rebel.xml
+
+# External tool builders
+/Webadmin/.externalToolBuilders/**
+
+# Locally stored "Eclipse launch configurations"
+/Webadmin/*.launch
+
+# CDT-specific
+/Webadmin/.cproject
+
+# PDT-specific
+/Webadmin/.buildpath
+
+######################
+# Intellij
+######################
+.idea/**
+*.iml
+*.iws
+*.ipr
+*.ids
+*.orig
+
+######################
+# Maven
+######################
+/Webadmin//log/**
+/Webadmin//target/**
+
+######################
+# Gradle
+######################
+/Webadmin/.gradle/**
+/Webadmin/gradle/**
+/Webadmin/.cache-main
+/Webadmin/.cache-tests
+/Webadmin/.jhipster/**
+/Webadmin/.npmrc
+######################
+# Package Files
+######################
+/Webadmin/*.jar
+/Webadmin/*.war
+/Webadmin/*.ear
+/Webadmin/*.db
+
+######################
+# Windows
+######################
+# Windows image file caches
+Thumbs.db
+
+# Folder config file
+Desktop.ini
+
+######################
+# Mac OSX
+######################
+.DS_Store
+.svn
+
+# Thumbnails
+._*
+
+# Files that might appear on external disk
+.Spotlight-V100
+.Trashes
+
+######################
+# Directories
+######################
+/Webadmin/build/**
+/Webadmin/bin/**
+/Webadmin/spring_loaded/**
+/Webadmin/deploy/**
+
+######################
+# Logs
+######################
+/Webadmin/*.log
+
+######################
+# Others
+######################
+/Webadmin/*.class
+/Webadmin/*.*~
+/Webadmin/*~
+/Webadmin/.merge_file*
+
+######################
+# Gradle Wrapper
+######################
+/Webadmin/!gradle/wrapper/gradle-wrapper.jar
