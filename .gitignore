@@ -131,3 +131,13 @@ Desktop.ini
 # Gradle Wrapper
 ######################
 /Webadmin/!gradle/wrapper/gradle-wrapper.jar
+
+
+# Mobile App
+/MobileApp/www/*
+/MobileApp/node_modules/*
+/MobileApp/platforms/*
+/MobileApp/plugins/*
+
+
+/
