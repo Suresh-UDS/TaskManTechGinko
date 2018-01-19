@@ -11,4 +11,13 @@ angular.module('timeSheetApp')
             Auth.logout();
             $state.go('login');
         };
+
+        $scope.initscrollbar = function()
+             {
+               $('#sidebarWrapper').perfectScrollbar();
+             }
+
+             $scope.initscrollbar();
+
+
     });
