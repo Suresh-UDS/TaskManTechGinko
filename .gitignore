@@ -1,0 +1,4 @@
+/SiteLocationService/node/**
+/SiteLocationService/node_modules/**
+
+/SiteLocationService/.idea/**
