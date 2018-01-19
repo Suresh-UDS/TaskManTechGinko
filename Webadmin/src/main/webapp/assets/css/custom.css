@@ -1,0 +1,294 @@
+a:focus
+{
+ outline: none;
+}
+
+
+.orng-1
+{
+    background: #ff7b00 !important;
+}
+.orng-2
+{
+    background: #ff9000 !important;
+}
+.orng-3
+{
+    background: #ffa500 !important;
+}
+.orng-4
+{
+    background: #ffba00 !important;
+}
+.margn-top20
+{
+  margin-top:20px !important;
+}
+.pdng-top15
+{
+  padding-top:15px;
+}
+
+.card .card-content .category
+{
+    color:#fff;
+}
+.card .card-footer .stats
+{
+    color:#fff;
+}
+.navbar .dropdown-menu li a:hover, .navbar .dropdown-menu li a:focus, .navbar .dropdown-menu li a:active, .navbar.navbar-default .dropdown-menu li a:hover, .navbar.navbar-default .dropdown-menu li a:focus, .navbar.navbar-default .dropdown-menu li a:active
+{
+    background-color: #ff9800;
+    box-shadow: 0 12px 20px -10px rgba(255, 152, 0, 0.28), 0 4px 20px 0px rgba(0, 0, 0, 0.12), 0 7px 8px -5px rgba(255, 152, 0, 0.2);
+
+}
+.dropdown-menu li a:hover, .dropdown-menu li a:focus, .dropdown-menu li a:active
+{
+    background-color: #ff9800;
+    box-shadow: 0 12px 20px -10px rgba(255, 152, 0, 0.28), 0 4px 20px 0px rgba(0, 0, 0, 0.12), 0 7px 8px -5px rgba(255, 152, 0, 0.2);
+}
+.dropdown-menu i.material-icons
+{
+    padding-right:5px;
+}
+.form-control-feedback
+{
+    opacity: 1;
+}
+.form-group
+{
+    margin-top:0;
+}
+.min-hgt100
+{
+    min-height:100px;
+}
+.card-stats .title
+{
+    padding-top:10px;
+}
+.colorlines
+{
+    padding: 0px 20px;
+}
+.skyblueline
+{
+    background: #00bcd4;
+}
+.redline
+{
+    background: #f44336;
+}
+.orangeline
+{
+    background: #ff9800;
+}
+ul.chatlinesList li
+{
+    list-style:none;
+    padding: 5px;
+}
+ul.chatlinesList
+{
+    padding-top: 30px;
+}
+.card img {
+    width: 50px !important;
+    height: 50px !important;
+    border-radius: 50%;
+}
+.navbar .dropdown-menu li a:hover, .navbar .dropdown-menu li a:focus, .navbar .dropdown-menu li a:active, .navbar.navbar-default .dropdown-menu li a:hover, .navbar.navbar-default .dropdown-menu li a:focus, .navbar.navbar-default .dropdown-menu li a:active
+{
+  background-color: #ff9800;
+  box-shadow: 0 12px 20px -10px rgba(255, 152, 0, 0.28), 0 4px 20px 0px rgba(0, 0, 0, 0.12), 0 7px 8px -5px rgba(255, 152, 0, 0.2);
+
+}
+.dropdown-menu li a:hover, .dropdown-menu li a:focus, .dropdown-menu li a:active
+{
+  background-color: #ff9800;
+  box-shadow: 0 12px 20px -10px rgba(255, 152, 0, 0.28), 0 4px 20px 0px rgba(0, 0, 0, 0.12), 0 7px 8px -5px rgba(255, 152, 0, 0.2);
+}
+.dropdown-menu i.material-icons
+{
+  padding-right:5px;
+}
+.form-control-feedback
+{
+  opacity: 1;
+}
+.form-group
+{
+  margin-top:0;
+}
+.min-hgt100
+{
+  min-height:100px;
+}
+h2.title
+{
+  margin: 5px 0;
+}
+
+.card.attendance
+{
+  margin-top:5px;
+}
+.nodata h4
+{
+    padding-top: 20px;
+    text-align: center ;
+}
+span.calender-icon
+{
+  padding-top: 30px;
+}
+.download-btn
+{
+  line-height:60px;
+  font-size: 16px;
+  font-weight: bold;
+
+}
+select.siteList
+{
+  padding: 5px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  margin-top: 30px;
+}
+.selectcon select.siteList
+{
+  margin-top: 5px;
+}
+
+.txt-align-rgt
+{
+ text-align:right;
+}
+.txt-align-center
+{
+ text-align:center;
+}
+.rememberMe
+{
+  padding-left: 56px;
+}
+.card-login .card-content {
+    padding: 20px 30px 10px 10px;
+}
+.card-login .card-content .input-group
+{
+  padding:10px 0;
+}
+.formcard .card-content .form-group
+{
+     padding: 5px 0;
+     margin: 5px 0;
+}
+textarea.form-control {
+    height: 36px;
+}
+
+
+.margin-TB-5
+{
+  margin:5px 0;
+}
+
+.btn.btn-primary, .btn.btn-primary:hover, .btn.btn-primary:focus, .btn.btn-primary:active, .btn.btn-primary.active, .btn.btn-primary:active:focus, .btn.btn-primary:active:hover, .btn.btn-primary.active:focus, .btn.btn-primary.active:hover, .open>.btn.btn-primary.dropdown-toggle, .open>.btn.btn-primary.dropdown-toggle:focus, .open>.btn.btn-primary.dropdown-toggle:hover, .navbar .navbar-nav>li>a.btn.btn-primary, .navbar .navbar-nav>li>a.btn.btn-primary:hover, .navbar .navbar-nav>li>a.btn.btn-primary:focus, .navbar .navbar-nav>li>a.btn.btn-primary:active, .navbar .navbar-nav>li>a.btn.btn-primary.active, .navbar .navbar-nav>li>a.btn.btn-primary:active:focus, .navbar .navbar-nav>li>a.btn.btn-primary:active:hover, .navbar .navbar-nav>li>a.btn.btn-primary.active:focus, .navbar .navbar-nav>li>a.btn.btn-primary.active:hover, .open>.navbar .navbar-nav>li>a.btn.btn-primary.dropdown-toggle, .open>.navbar .navbar-nav>li>a.btn.btn-primary.dropdown-toggle:focus, .open>.navbar .navbar-nav>li>a.btn.btn-primary.dropdown-toggle:hover
+{
+  background-color: #ff9800;
+}
+.tablecard .btn, .navbar .navbar-nav>li>a.btn
+{
+      padding: 5px 5px;
+      margin: 5px 1px;
+}
+/*.alert.alert-info*/
+/*{*/
+  /*background-color: #fff;*/
+  /*color: #ff9800;*/
+  /*border:1px solid #ff0000;*/
+/*}*/
+/*.alert.alert-info i*/
+/*{*/
+  /*color: #f44336;*/
+/*}*/
+/*.alert.alert-info .close i {*/
+    /*color: #f44336;*/
+/*}*/
+span.red-star
+{
+    padding:0 5px;
+    color:red;
+}
+.jobcards .card [data-background-color],.cardsCon .card [data-background-color]
+{
+ /* border: 1px solid #ccc;
+  background: #fff;*/
+  padding:10px 30px;
+}
+
+
+
+.jobcards .card [data-background-color] .card-title {
+    /*color:#ff9800;*/
+}
+.jobcards .formcard.minhgt320
+{
+  min-height:360px;
+}
+.jobcards .formcard.minhgt430
+{
+  min-height:460px;
+}
+.jobcards  .form-group.minhgt90
+{
+   min-height:90px;
+}
+.addSiteCon .formcard
+{
+  min-height:300px;
+}
+.editSiteCon .formcard
+{
+  min-height:380px;
+}
+
+
+
+.form-group label.control-label
+{
+  font-size:14px;
+  margin-top: 0;
+}
+.pagination>li>a, .pagination>li>span
+{
+  background: #fff;
+}
+.pagination>li>a:hover
+{
+  background: #4caf50;
+  color:#fff;
+}
+
+.form-group.label-floating label.control-label, .form-group.label-placeholder label.control-label
+{
+  top: -2px;
+}
+
+.form-group.label-static label.control-label,
+.form-group.label-floating.is-focused label.control-label,
+.form-group.label-floating:not(.is-empty) label.control-label {
+    top: -10px;
+    font-size: 12px;
+
+}
+
+
+.main-panel>.content
+{
+   margin-top: 55px;
+   padding: 10px 15px;
+}

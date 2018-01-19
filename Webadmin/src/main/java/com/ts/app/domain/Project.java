@@ -1,0 +1,232 @@
+package com.ts.app.domain;
+
+import java.io.Serializable;
+import java.util.Date;
+import java.util.List;
+import java.util.Set;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+
+/**
+ * Project
+ */
+@Entity
+@Table(name = "project")
+public class Project extends AbstractAuditingEntity implements Serializable {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
+
+    @NotNull  
+    @Size(min = 1, max = 50)
+    @Column(length = 50, unique = true, nullable = false)
+    private String name;   
+
+    @OneToMany(mappedBy = "project",fetch=FetchType.EAGER)  
+    private Set<Site> site;  
+
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "userId", nullable = false)
+	private User user;
+	
+    @ManyToMany(mappedBy="projects")
+	private List<Employee> employees;
+
+	
+	private String phone;
+	private String email;
+	
+	private Date startDate;
+	private Date endDate;
+	
+	private String address;
+	private String country;
+	private String state;
+	
+	private float addressLat;
+	private float addressLng;
+
+	public Long getId() {
+		return id;
+	}
+
+
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+
+
+	public String getName() {
+		return name;
+	}
+
+
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public Set<Site> getSite() {
+		return site;
+	}
+
+
+
+	public void setSite(Set<Site> site) {
+		this.site = site;
+	}
+
+
+
+	public User getUser() {
+		return user;
+	}
+
+
+
+	public void setUser(User user) {
+		this.user = user;
+	}
+
+
+
+	public String getPhone() {
+		return phone;
+	}
+
+
+
+	public void setPhone(String phone) {
+		this.phone = phone;
+	}
+
+
+
+	public String getEmail() {
+		return email;
+	}
+
+
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+
+
+	public String getAddress() {
+		return address;
+	}
+
+
+
+	public void setAddress(String address) {
+		this.address = address;
+	}
+
+
+
+	public Date getStartDate() {
+		return startDate;
+	}
+
+
+
+	public void setStartDate(Date startDate) {
+		this.startDate = startDate;
+	}
+
+
+
+	public Date getEndDate() {
+		return endDate;
+	}
+
+
+
+	public void setEndDate(Date endDate) {
+		this.endDate = endDate;
+	}
+
+
+
+	public float getAddressLat() {
+		return addressLat;
+	}
+
+
+
+	public void setAddressLat(float addressLat) {
+		this.addressLat = addressLat;
+	}
+
+
+
+	public float getAddressLng() {
+		return addressLng;
+	}
+
+
+
+	public void setAddressLng(float addressLng) {
+		this.addressLng = addressLng;
+	}
+
+
+
+	public String getCountry() {
+		return country;
+	}
+
+
+
+	public void setCountry(String country) {
+		this.country = country;
+	}
+
+
+
+	public String getState() {
+		return state;
+	}
+
+
+
+	public void setState(String state) {
+		this.state = state;
+	}
+
+
+
+	public List<Employee> getEmployees() {
+		return employees;
+	}
+
+
+
+	public void setEmployees(List<Employee> employees) {
+		this.employees = employees;
+	}
+
+	
+
+}

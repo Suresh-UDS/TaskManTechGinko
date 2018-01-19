@@ -1,0 +1,107 @@
+<div class="crud-form">
+	<div class="container">
+		<div class="row">
+			<div class="col-md-12">
+                <div class="titleCon">
+                    <h3>View Site</h3>
+                </div>
+				<div class="form-container table-container" ng-init="loadSite()">
+					<form ng-show="!success" name="form" role="form" class="form-horizontal">
+						<div class="form-group ">
+							<label class="col-sm-3 control-label"> ID </label>
+							<div class="col-sm-9">
+								<input id='siteID' ng-model="site.id" class='form-control'
+									name='siteID' type='text' maxlength='50' readonly />
+							</div>
+						</div>
+
+						<div class="form-group ">
+							<label class="col-sm-3 control-label"> Name </label>
+							<div class="col-sm-9">
+								<input id='siteName' ng-model="site.name" class='form-control'
+									name='siteName' type='text' maxlength='50' readonly/>
+							</div>
+						</div>
+
+						<div class="form-group ">
+							<label class="col-sm-3 control-label"> Project </label>
+							<div class="col-sm-9">
+								<input id='projectName' ng-model="site.projectName" class='form-control'
+									name='projectName' type='text' maxlength='50' readonly/>
+							</div>
+						</div>
+
+						<!--<div class="form-group ">-->
+							<!--<label class="col-sm-3 control-label"> Country </label>-->
+							<!--<div class="col-sm-5">-->
+								<!--<input id='country' ng-model="site.country" class='form-control'-->
+									<!--name='country' type='text' value=""-->
+									<!--ng-maxlength=50-->
+									<!--ng-pattern="/^[A-Za-z0-9\s&-/]*$/" readonly="readonly"/>-->
+							<!--</div>-->
+						<!--</div>-->
+						<!--<div class="form-group ">-->
+							<!--<label class="col-sm-3 control-label"> State </label>-->
+							<!--<div class="col-sm-5">-->
+								<!--<input id='state' ng-model="site.state" class='form-control'-->
+									<!--name='state' type='text' value=""-->
+									<!--ng-maxlength=50 readonly="readonly"-->
+									<!--/>-->
+
+							<!--</div>-->
+							<!--</div>-->
+							<!--<div class="form-group ">-->
+							<!--<label class="col-sm-3 control-label"> Address </label>-->
+							<!--<div class="col-sm-5">-->
+								<!--<textarea id='siteName' ng-model="site.address"-->
+									<!--class='form-control'-->
+									<!--name='address' readonly="readonly"-->
+									<!--ng-maxlength='2500' >-->
+									<!--</textarea>-->
+
+
+							<!--</div>-->
+						<!--</div>-->
+						<!--<div class="form-group ">-->
+							<!--<label class="col-sm-3 control-label">Start Date</label>-->
+							<!--<div class="col-sm-5">-->
+								<!--<input ng-model="site.startDate"-->
+									<!--class='form-control'-->
+									<!--name='startDate' readonly="readonly"-->
+									<!--datetime-picker="dd-MMM-yyyy HH:mm"-->
+							 <!--&gt;-->
+									<!--</input>-->
+
+							<!--</div>-->
+						<!--</div>-->
+
+						<!--<div class="form-group ">-->
+							<!--<label class="col-sm-3 control-label">End Date</label>-->
+							<!--<div class="col-sm-5">-->
+								<!--<input ng-model="site.endDate"-->
+									<!--class='form-control'-->
+									<!--name='endDate' readonly="readonly"-->
+									<!--datetime-picker="dd-MMM-yyyy HH:mm"-->
+									 <!--&gt;-->
+									<!--</input>-->
+						<!--</div>-->
+                        <!--</div>    -->
+
+						<!-- Start of hidden inputs -->
+						<!-- End of hidden inputs -->
+
+						<div class="form-group">
+							<div class="col-sm-offset-3 col-sm-7">
+								<button class="btn btn-default close-button-right b10" type="button"
+									ng-click="cancelSite()" id="close-button-right">
+									<i class="fa fa-warning"></i> Back
+								</button>
+							</div>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+
+</div>

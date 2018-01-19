@@ -1,0 +1,337 @@
+
+<div class="alert alert-success" ng-show="success">
+    <strong>Project saved!</strong>
+</div>
+
+<div class="alert alert-danger" ng-show="error">
+    <strong>Project Not Saved!</strong> Please try again later.
+</div>
+<div class="alert alert-danger" ng-show="errorProjectExists">
+    <strong>Project already registered!</strong> Please choose another one.
+</div>
+
+<div class="crud-form"
+     data-unique-hash="a2ad475d60b22954085c657a73309b8f">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+
+                <div class="titleCon">
+                    <h3>Edit Project</h3>
+                </div>
+
+                <div class="form-container table-container" ng-init="loadProject()">
+                    <form ng-show="!success" name="form" role="form" novalidate
+                          ng-submit="updateProject()"
+                          class="form-horizontal">
+
+
+                        <div class="row">
+                            <div class="col-md-7 col-md-offset-2">
+                                <div class="card formcard">
+
+                                    <div class="card-content">
+
+
+                                        <div class="row">
+
+                                            <div class="col-md-2">
+                                                <div class="form-group">
+                                                    <label class="control-label">ID</label>
+                                                    <input id='projectID' ng-model="project.id" class='form-control'
+                                                           name='projectID' type='text' maxlength='50' readonly />
+                                                </div>
+                                            </div>
+                                            <div class="col-md-5">
+                                                <div class="form-group">
+                                                    <label class="control-label">Name</label>
+                                                    <input id='projectName' ng-model="project.name"
+                                                           class='form-control' name='projectName' type='text'
+                                                           ng-minlength=2 ng-maxlength=50 ng-pattern="/^[A-Za-z0-9\s&-/]*$/" autofocus required/>
+                                                    <div ng-show="form.$submitted || form.projectName.$touched">
+                                                        <div ng-show="form.projectName.$dirty || form.projectName.$invalid">
+                                                            <p class="help-block" style="color:maroon"
+                                                               ng-show="form.projectName.$error.required">
+                                                                Project name is required.
+                                                            </p>
+                                                            <p class="help-block" style="color:maroon"
+                                                               ng-show="form.projectName.$error.minlength">
+                                                                Project name is required to be at least 2 character.
+                                                            </p>
+                                                            <p class="help-block" style="color:maroon"
+                                                               ng-show="form.projectName.$error.maxlength">
+                                                                Project name cannot be longer than 50 characters.
+                                                            </p>
+                                                            <p class="help-block" style="color:maroon"
+                                                               ng-show="form.projectName.$error.pattern">
+                                                                Project name can only contain letters, digits and space.
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-5">
+
+                                                <div class="form-group">
+                                                    <label class="control-label"> Country </label>
+                                                    <input id='country' ng-model="project.country" class='form-control'
+                                                           name='country' type='text' value=""
+                                                           ng-maxlength=50
+                                                           ng-pattern="/^[A-Za-z0-9\s&-/]*$/"/>
+                                                    <div ng-show="form.$submitted || form.country.$touched">
+                                                        <div ng-show="form.country.$dirty || form.country.$invalid">
+                                                            <p class="help-block" style="color:maroon"
+                                                               ng-show="form.country.$error.maxlength">
+                                                                Country cannot be longer than 50 characters.
+                                                            </p>
+                                                            <p class="help-block" style="color:maroon"
+                                                               ng-show="form.country.$error.pattern">
+                                                                Country can only contain letters and space.
+                                                            </p>
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+
+
+                                            </div>
+
+
+                                        </div>
+
+
+                                        <div class="row">
+                                            <div class="col-md-11 col-md-offset-1">
+                                                <div class="form-group">
+
+                                                    <button class="btn btn-default btn-success b10" type="submit"
+                                                            id="form-button-save" ng-disabled="form.$invalid">
+                                                        <i class="fa fa-check"></i> Save
+                                                    </button>
+                                                    <button class="btn btn-info b10" type="submit"
+                                                            id="save-and-go-back-button" ng-disabled="form.$invalid">
+                                                        <i class="fa fa-rotate-left"></i> Save and go back to list
+                                                    </button>
+                                                    <button class="btn btn-default cancel-button b10" type="button"
+                                                            ng-click="cancelProject()" id="cancel-button">
+                                                        <i class="fa fa-warning"></i> Cancel
+                                                    </button>
+
+                                                </div>
+                                            </div>
+                                        </div>
+
+
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+
+                        <!--<div class="form-group ">-->
+                        <!--<label class="col-sm-3 control-label"> State </label>-->
+                        <!--<div class="col-sm-5">-->
+                        <!--<input id='state' ng-model="project.state" class='form-control'-->
+                        <!--name='state' type='text' value=""-->
+                        <!--ng-maxlength=50 -->
+                        <!--/>-->
+                        <!--<div ng-show="form.$submitted || form.state.$touched">-->
+                        <!--<div ng-show="form.state.$dirty || form.state.$invalid">-->
+                        <!--<p class="help-block" style="color:maroon"-->
+                        <!--ng-show="form.state.$error.maxlength">-->
+                        <!--State cannot be longer than 200 characters.-->
+                        <!--</p>-->
+                        <!---->
+                        <!--</div>-->
+                        <!--</div>-->
+                        <!--</div>-->
+                        <!--</div>-->
+                        <!--<div class="form-group ">-->
+                        <!--<label class="col-sm-3 control-label"> Address </label>-->
+                        <!--<div class="col-sm-5">-->
+                        <!--<textarea id='projectName' ng-model="project.address"-->
+                        <!--class='form-control' -->
+                        <!--name='address' -->
+                        <!--ng-maxlength='2500' >-->
+                        <!--</textarea>-->
+                        <!--<div ng-show="form.$submitted || form.address.$touched">-->
+                        <!--<div ng-show="form.address.$dirty || form.address.$invalid">-->
+                        <!--&lt;!&ndash; <p class="help-block" style="color:maroon"-->
+                        <!--ng-show="form.projectName.$error.pattern">-->
+                        <!--Project name can only contain letters, digits and space.-->
+                        <!--</p> &ndash;&gt;-->
+                        <!--</div>-->
+                        <!--</div>-->
+
+                        <!--</div>-->
+                        <!--</div>-->
+                        <!--<div class="form-group ">-->
+                        <!--<label class="col-sm-3 control-label"> Geo location </label>-->
+                        <!--<div class="col-sm-9">-->
+                        <!---->
+                        <!--<div ng-show="form.$submitted || form.geo.$touched">-->
+                        <!--<div ng-show="form.geo.$dirty || form.geo.$invalid">-->
+                        <!--&lt;!&ndash; <p class="help-block" style="color:maroon"-->
+                        <!--ng-show="form.projectName.$error.pattern">-->
+                        <!--Project name can only contain letters, digits and space.-->
+                        <!--</p> &ndash;&gt;-->
+                        <!--</div>-->
+                        <!--</div>-->
+
+                        <!--<map-coords lat="project.addressLat" lng="project.addressLng"></map-coords>-->
+                        <!---->
+                        <!--</div>-->
+                        <!--</div>-->
+                        <!---->
+                        <!--<div class="form-group ">-->
+                        <!--<label class="col-sm-3 control-label">Phone</label>-->
+                        <!--<div class="col-sm-5">-->
+                        <!--<input ng-model="project.phone"-->
+                        <!--class='form-control' -->
+                        <!--name='phone'-->
+                        <!--ng-minlength=8 -->
+                        <!--ng-maxlength='20' >-->
+                        <!--</input>-->
+                        <!--<div ng-show="form.$submitted || form.phone.$touched">-->
+                        <!--<div ng-show="form.phone.$dirty || form.phone.$invalid">-->
+                        <!--<p class="help-block" style="color:maroon"-->
+                        <!--ng-show="form.phone.$error.required">-->
+                        <!--Phone is required.-->
+                        <!--</p>-->
+                        <!--<p class="help-block" style="color:maroon"-->
+                        <!--ng-show="form.phone.$error.minlength">-->
+                        <!--Phone is required to be at least 5 character.-->
+                        <!--</p>-->
+                        <!--<p class="help-block" style="color:maroon"-->
+                        <!--ng-show="form.phone.$error.maxlength">-->
+                        <!--Phone cannot be longer than 20 characters.-->
+                        <!--</p>-->
+                        <!--<p class="help-block" style="color:maroon"-->
+                        <!--ng-show="form.phone.$error.pattern">-->
+                        <!--Phone can only contain digits-->
+                        <!--</p>-->
+                        <!--</div>-->
+                        <!--</div>-->
+
+                        <!--</div>-->
+                        <!--</div>-->
+                        <!---->
+                        <!--<div class="form-group ">-->
+                        <!--<label class="col-sm-3 control-label">Email</label>-->
+                        <!--<div class="col-sm-5">-->
+                        <!--<input ng-model="project.email"-->
+                        <!--class='form-control' -->
+                        <!--name='email'-->
+                        <!--ng-minlength=7 -->
+                        <!--ng-maxlength='200' >-->
+                        <!--</input>-->
+                        <!--<div ng-show="form.$submitted || form.email.$touched">-->
+                        <!--<div ng-show="form.email.$dirty || form.email.$invalid">-->
+                        <!--<p class="help-block" style="color:maroon"-->
+                        <!--ng-show="form.email.$error.required">-->
+                        <!--Email is required.-->
+                        <!--</p>-->
+                        <!--<p class="help-block" style="color:maroon"-->
+                        <!--ng-show="form.email.$error.minlength">-->
+                        <!--Email is required to be at least 7 character.-->
+                        <!--</p>-->
+                        <!--<p class="help-block" style="color:maroon"-->
+                        <!--ng-show="form.email.$error.maxlength">-->
+                        <!--Email cannot be longer than 200 characters.-->
+                        <!--</p>-->
+                        <!--<p class="help-block" style="color:maroon"-->
+                        <!--ng-show="form.email.$error.pattern">-->
+                        <!--Invalid Email Format-->
+                        <!--</p>-->
+                        <!--</div>-->
+                        <!--</div>-->
+
+                        <!--</div>-->
+                        <!--</div>-->
+                        <!---->
+                        <!--<div class="form-group ">-->
+                        <!--<label class="col-sm-3 control-label">Start Date</label>-->
+                        <!--<div class="col-sm-5">-->
+                        <!--<p class="input-group">-->
+                        <!--<input ng-model="project.startDate" class='form-control'-->
+                        <!--name='startDate' datetime-picker="dd-MMM-yyyy HH:mm"-->
+                        <!--is-open="calendar.start" /> <span-->
+                        <!--class="input-group-btn">-->
+                        <!--<button type="button" class="btn btn-default"-->
+                        <!--ng-click="openCalendar($event, 'start')">-->
+                        <!--<i class="fa fa-calendar"></i>-->
+                        <!--</button>-->
+                        <!--</span>-->
+                        <!--</p>-->
+                        <!--<div ng-show="form.$submitted || form.startDate.$touched">-->
+                        <!--<div ng-show="form.startDate.$dirty || form.startDate.$invalid">-->
+                        <!--<p class="help-block" style="color:maroon"-->
+                        <!--ng-show="form.startDate.$error.required">-->
+                        <!--Start Date is required.-->
+                        <!--</p>-->
+                        <!---->
+                        <!--<p class="help-block" style="color:maroon"-->
+                        <!--ng-show="form.startDate.$error.pattern">-->
+                        <!--Invalid Date Format-->
+                        <!--</p>-->
+                        <!--</div>-->
+                        <!--</div>-->
+
+                        <!--</div>-->
+                        <!--</div>-->
+                        <!---->
+                        <!--<div class="form-group ">-->
+                        <!--<label class="col-sm-3 control-label">End Date</label>-->
+                        <!--<div class="col-sm-5">-->
+                        <!--<p class="input-group">-->
+                        <!--<input ng-model="project.endDate" class='form-control'-->
+                        <!--name='endDate' datetime-picker="dd-MMM-yyyy HH:mm"-->
+                        <!--is-open="calendar.end" /> <span-->
+                        <!--class="input-group-btn">-->
+                        <!--<button type="button" class="btn btn-default"-->
+                        <!--ng-click="openCalendar($event, 'end')">-->
+                        <!--<i class="fa fa-calendar"></i>-->
+                        <!--</button>-->
+                        <!--</span>-->
+                        <!--</p>-->
+                        <!--<div ng-show="form.$submitted || form.endDate.$touched">-->
+                        <!--<div ng-show="form.endDate.$dirty || form.endDate.$invalid">-->
+                        <!--<p class="help-block" style="color:maroon"-->
+                        <!--ng-show="form.endDate.$error.required">-->
+                        <!--End Date is required.-->
+                        <!--</p>-->
+                        <!---->
+                        <!--<p class="help-block" style="color:maroon"-->
+                        <!--ng-show="form.endDate.$error.pattern">-->
+                        <!--Invalid Date Format-->
+                        <!--</p>-->
+                        <!--</div>-->
+                        <!--</div>-->
+
+                        <!--</div>-->
+                        <!--</div>-->
+
+
+                        <!-- Start of hidden inputs -->
+                        <!-- End of hidden inputs -->
+
+                        <div class='small-loading hidden' id='FormLoading'>Loading,
+                            saving data...</div>
+
+                        <div class="form-group">
+                            <div id='report-error' class='report-div error bg-danger'
+                                 style="display: none"></div>
+                            <div id='report-success' class='report-div success bg-success'
+                                 style="display: none"></div>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>

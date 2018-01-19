@@ -1,0 +1,157 @@
+
+<div class="container gc-container">
+	<div class="success-message hidden"></div>
+
+	<div class="row">
+		<div class="col-md-12 table-section">
+			<div class="table-label">
+				<div class="floatL l5">Employee History</div>
+				<div class="floatR r5 minimize-maximize-container minimize-maximize">
+					<i class="fa fa-caret-up"></i>
+				</div>
+				<div class="floatR r5 gc-full-width">
+					<i class="fa fa-expand"></i>
+				</div>
+				<div class="clear"></div>
+			</div>
+
+			<div class="table-container" ng-init="loadEmployeeHistory()">
+
+				<table class="table table-bordered grocery-crud-table table-hover">
+					<thead>
+						<tr>
+							<th class="column-with-ordering" data-order-by="employeeId">Employee
+								ID</th>
+							<th class="column-with-ordering" data-order-by="employeeName">Employee
+								Name</th>
+							<th class="column-with-ordering" data-order-by="projectName">Project</th>
+							<th class="column-with-ordering" data-order-by="siteName">Site</th>
+							<th class="column-with-ordering" data-order-by="city">NA</th>
+							<th class="column-with-ordering" data-order-by="country">NA</th>
+						</tr>
+
+						<tr class="filter-row gc-search-row">
+							<td><input type="text"
+								class="form-control searchable-input floatL"
+								placeholder="Search ID" name="employeeId" /></td>
+							<td><input type="text"
+								class="form-control searchable-input floatL"
+								placeholder="Search EmployeeName" name="employeeName" /></td>
+							<td><input type="text"
+								class="form-control searchable-input floatL"
+								placeholder="Search ProjectName" name="projectName" /></td>
+							<td><input type="text"
+								class="form-control searchable-input floatL"
+								placeholder="Search SiteName" name="siteName" /></td>
+							<td><input type="text"
+								class="form-control searchable-input floatL"
+								placeholder="Search NA" name="city" /></td>
+							<td><input type="text"
+								class="form-control searchable-input floatL"
+								placeholder="Search NA" name="country" /></td>
+						</tr>
+
+					</thead>
+					<tbody>
+
+						<tr ng-repeat="empHist in employeeHistory">
+							<td>{{empHist.employeeId}}</td>
+							<td>{{empHist.employeeName}}</td>
+							<td>{{empHist.projectName}}</td>
+							<td>{{empHist.siteName}}</td>
+							<td>NA</td>
+							<td>NA</td>
+						</tr>
+
+
+
+					</tbody>
+
+					<!-- Table Footer -->
+					<tfoot>
+						<tr>
+							<td colspan="9">
+								<!-- "Show 10/25/50/100 entries" (dropdown per-page) -->
+								<div class="floatL t20 l5">
+									<div class="floatL t10">Show</div>
+									<div class="floatL r5 l5 t3">
+										<select name="per_page" class="per_page form-control">
+											<option value="10" selected="selected">
+												10&nbsp;&nbsp;</option>
+											<option value="25">25&nbsp;&nbsp;</option>
+											<option value="50">50&nbsp;&nbsp;</option>
+											<option value="100">100&nbsp;&nbsp;</option>
+										</select>
+									</div>
+									<div class="floatL t10">entries</div>
+									<div class="floatL r5 l20 t3">
+										<button class="btn btn-default b10 " type="button"
+											ng-click="cancelEmployee()">
+											<i class="fa fa-chevron-left"></i> Back
+										</button>
+									</div>
+								</div> <!-- End of "Show 10/25/50/100 entries" (dropdown per-page) -->
+
+
+
+								<div class="floatR r5">
+
+									<!-- Buttons - First,Previous,Next,Last Page -->
+									<ul class="pagination">
+										<li class="disabled paging-first"><a href="#"><i
+												class="fa fa-step-backward"></i></a></li>
+										<li class="prev disabled paging-previous"><a href="#"><i
+												class="fa fa-chevron-left"></i></a></li>
+										<li><span class="page-number-input-container"> <input
+												type="number" value="1"
+												class="form-control page-number-input" />
+										</span></li>
+										<li class="next paging-next"><a href="#"><i
+												class="fa fa-chevron-right"></i></a></li>
+										<li class="paging-last"><a href="#"><i
+												class="fa fa-step-forward"></i></a></li>
+									</ul>
+									<!-- End of Buttons - First,Previous,Next,Last Page -->
+
+									<input type="hidden" name="page_number"
+										class="page-number-hidden" value="1" />
+
+									<!-- Start of: Settings button -->
+									<div class="btn-group floatR t20 l10 settings-button-container">
+										<button type="button"
+											class="btn btn-default dropdown-toggle settings-button"
+											data-toggle="dropdown">
+											<i class="fa fa-cog r5"></i> <span class="caret"></span>
+										</button>
+
+										<ul class="dropdown-menu dropdown-menu-right">
+											<li><a href="javascript:void(0)" class="clear-filtering">
+													<i class="fa fa-eraser"></i> Clear filtering
+											</a></li>
+										</ul>
+									</div>
+									<!-- End of: Settings button -->
+
+								</div> <!-- "Displaying 1 to 10 of 116 items" -->
+								<div class="floatR r10 t30">
+									Displaying <span class="paging-starts">1</span> to <span
+										class="paging-ends">10</span> of <span
+										class="current-total-results">122</span> items <span
+										class="full-total-container hidden"> (filtered from <span
+										class='full-total'>122</span> total entries)
+									</span>
+								</div> <!-- End of "Displaying 1 to 10 of 116 items" -->
+
+								<div class="clear"></div>
+							</td>
+						</tr>
+					</tfoot>
+					<!-- End of: Table Footer -->
+				</table>
+			</div>
+
+		</div>
+
+
+	</div>
+</div>

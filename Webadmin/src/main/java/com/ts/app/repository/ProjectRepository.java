@@ -1,0 +1,49 @@
+package com.ts.app.repository;
+
+import java.util.List;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
+
+import com.ts.app.domain.Project;
+
+public interface ProjectRepository extends JpaRepository<Project, Long> {
+
+	// Optional<User> findOneByActivationKey(String activationKey);
+
+	// List<User> findAllByActivatedIsFalseAndCreatedDateBefore(ZonedDateTime
+	// dateTime);
+
+	// Optional<User> findOneByResetKey(String resetKey);
+
+	// Optional<User> findOneByEmail(String email);
+
+	// Optional<Project> findOneByLogin(String login);
+
+	@Query("SELECT p FROM Project p join p.employees e WHERE e.id = :empId and p.active = 'Y'")
+	List<Project> findAll(@Param("empId") long empId);
+	
+	@Query("SELECT p FROM Project p join p.employees e WHERE e.id in (:empIds) and p.active = 'Y'")
+	List<Project> findAll(@Param("empIds") List<Long> empIds);
+	
+	@Query("SELECT p FROM Project p join p.employees e WHERE e.id = :empId and p.active = 'Y'")
+	List<Project> findAllByUserGroupId(@Param("empId") long empId);
+
+	@Override
+	void delete(Project t);
+
+	@Query("SELECT p FROM Project p join p.employees e WHERE p.id = :projectId and e.id= :empId and p.active = 'Y'")
+	Page<Project> findProjectsById(@Param("projectId") long projectId, @Param("empId") long empId, Pageable pageRequest);
+
+	@Query("SELECT p FROM Project p join p.employees e WHERE e.id = :empId and p.active = 'Y'")
+	Page<Project> findProjects(@Param("empId") long empId, Pageable pageRequest);
+
+	@Query("SELECT p FROM Project p join p.employees e WHERE e.id in (:empIds) and p.active = 'Y'")
+	Page<Project> findProjects(@Param("empIds") List<Long> empIds, Pageable pageRequest);
+
+	@Query("SELECT p FROM Project p WHERE p.active = 'Y'")
+	Page<Project> findAllProjects(Pageable pageRequest);
+}

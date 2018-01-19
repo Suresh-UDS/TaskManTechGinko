@@ -1,0 +1,113 @@
+
+<div class="alert alert-success" ng-show="success">
+	<strong>UserGroup saved!</strong>
+</div>
+
+<div class="alert alert-danger" ng-show="error">
+	<strong>UserGroup Not Saved!</strong> Please try again later.
+</div>
+<div class="crud-form"
+	data-unique-hash="a2ad475d60b22954085c657a73309b8f">
+	<div class="">
+
+        <div class="col-md-8">
+            <h3 class="title">Edit User Group</h3>
+        </div>
+
+		<div class="row">
+			<div class="col-md-12">
+				<div class="form-container table-container" ng-init="loadUserGroup()">
+					<form ng-show="!success" name="form" role="form" novalidate
+						ng-submit="updateUserGroup()" show-validation class="form-horizontal">
+
+                        <div class="row">
+                            <div class="col-md-7 col-md-offset-2">
+                                <div class="card">
+                                    <div class="card-content">
+
+                                            <div class="row">
+
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <label class="control-label">ID</label>
+                                                        <input id='userGroupID' ng-model="userGroup.id" class='form-control'
+                                                               name='userGroupID' type='text' maxlength="50" readonly />
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <label class="control-label">Name</label>
+                                                        <input id='userGroupName' ng-model="userGroup.name" class='form-control'
+                                                               name='userGroupName' type='text' minlength="5" maxlength="50"  required/>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+
+                                            <div ng-show="form.$submitted || form.userGroupName.$touched">
+                                                <div ng-show="form.userGroupName.$dirty || form.userGroupName.$invalid">
+                                                    <p class="help-block" style="color:maroon"
+                                                       ng-show="form.userGroupName.$error.required">
+                                                        Name is required.
+                                                    </p>
+                                                    <p class="help-block" style="color:maroon"
+                                                       ng-show="form.userGroupName.$error.minlength">
+                                                        Name is required to be at least 5 character.
+                                                    </p>
+                                                    <p class="help-block" style="color:maroon"
+                                                       ng-show="form.userGroupName.$error.maxlength">
+                                                        Name cannot be longer than 50 characters.
+                                                    </p>
+                                                </div>
+                                            </div>
+
+
+                                            <div class="form-group label-floating">
+                                                <button class="btn btn-success" type="submit"
+                                                        id="form-button-save">
+                                                     <span class="btn-label">
+                                            <i class="material-icons">check</i>
+                                        </span> Save
+                                                </button>
+                                                <button class="btn btn-info" type="submit"
+                                                        id="save-and-go-back-button">
+                                                    <i class="material-icons">rotate_left</i> Save and go back to list
+                                                </button>
+                                                <button class="btn btn-danger" type="button"
+                                                        ng-click="cancelUserGroup()" id="cancel-button">
+                                                    <i class="material-icons">close</i> Cancel
+                                                </button>
+                                            </div>
+
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+
+
+						<!-- Start of hidden inputs -->
+						<!-- End of hidden inputs -->
+
+						<div class='small-loading hidden' id='FormLoading'>Loading,
+							saving data...</div>
+
+						<div class="form-group">
+							<div id='report-error' class='report-div error bg-danger'
+								style="display: none"></div>
+							<div id='report-success' class='report-div success bg-success'
+								style="display: none"></div>
+						</div>
+						<div class="form-group">
+							<div class="col-sm-offset-3 col-sm-7">
+
+							</div>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+
+</div>

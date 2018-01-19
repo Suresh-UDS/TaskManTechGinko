@@ -1,0 +1,136 @@
+
+
+<div ng-switch="isAuthenticated()" class="sidebar" data-active-color="orange" data-background-color="black" data-image="../assets/img/sidebar-1.jpg">
+    <!--
+Tip 1: You can change the color of active element of the sidebar using: data-active-color="purple | blue | green | orange | red | rose"
+Tip 2: you can also add an image using data-image tag
+Tip 3: you can change the color of the sidebar with data-background-color="white | black"
+-->
+    <div class="logo">
+        <a href="#" class="simple-text logo-mini">
+            Z
+        </a>
+        <a href="#" class="simple-text logo-normal">
+            Zappy
+        </a>
+
+    </div>
+
+    <div class="sidebar-wrapper" >
+        <div class="user">
+
+            <div class="photo">
+                <img src="../assets/img/faces/avatar.png" />
+            </div>
+            <div class="info">
+                <a data-toggle="collapse" data-target="#collapseExample" href="#" class="collapsed">
+                            <span>
+                                Admin
+                                <b class="caret"></b>
+                            </span>
+                </a>
+                <div class="clearfix"></div>
+                <div class="collapse" id="collapseExample">
+                    <ul class="nav">
+
+                        <li ng-click="logout()" ng-switch-when="true">
+                            <a href="#" >
+                                <span class="sidebar-mini"> L </span>
+                                <span class="sidebar-normal"> Logout </span>
+                            </a>
+                        </li>
+                        <li  ng-switch-when="false">
+                            <a ui-sref="login" >
+                                <span class="sidebar-mini"> L </span>
+                                <span class="sidebar-normal"> Login </span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <ul class="nav" ng-switch-when="true">
+            <li ui-sref-active="active">
+                <a ui-sref="dashboard">
+                    <i class="material-icons">dashboard</i>
+                    <p> Dashboard </p>
+                </a>
+            </li>
+            <li ui-sref-active="active">
+                <a ui-sref="projects">
+                    <i class="material-icons">people</i>
+                    <p>Client </p>
+                </a>
+            </li>
+            <li ui-sref-active="active">
+                <a ui-sref="sites">
+                    <i class="material-icons">dns</i>
+                    <p>Sites</p>
+                </a>
+            </li>
+            <li ui-sref-active="active">
+                <a ui-sref="employees">
+                    <i class="material-icons">people</i>
+                    <p>Employee</p>
+                </a>
+            </li>
+            <li ui-sref-active="active">
+                <a ui-sref="assets">
+                    <i class="material-icons">settings</i>
+                    <p>Assets </p>
+                </a>
+            </li>
+            <li ui-sref-active="active">
+                <a ui-sref="jobs">
+                    <i class="material-icons">description</i>
+                    <p>Jobs </p>
+                </a>
+            </li>
+            <li ui-sref-active="active">
+                <a ui-sref="attendances">
+                    <i class="material-icons">content_paste</i>
+                    <p>Attendance</p>
+                </a>
+            </li>
+
+            <li has-authority="ROLE_ADMIN" ng-class="{active: $state.includes('admin')}">
+                <a data-toggle="collapse" data-target="#formsExamples" href="#">
+                    <i class="material-icons">content_paste</i>
+                    <p> Administrator
+                        <b class="caret"></b>
+                    </p>
+                </a>
+                <div class="collapse" id="formsExamples">
+                    <ul class="nav">
+                        <li ui-sref-active="active">
+                            <a ui-sref="users">
+                                <i class="material-icons">people</i>
+                                <p>User</p>
+                            </a>
+                        </li>
+                        <li ui-sref-active="active">
+                            <a ui-sref="userGroups">
+                                <i class="material-icons">group</i>
+                                <p>User Group</p>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </li>
+
+            <!--<li ui-sref="checkInOut">-->
+            <!---->
+            <!--<a href="">-->
+            <!--<i class="material-icons">location_on</i>-->
+            <!--<p>Check in out</p>-->
+            <!--</a>-->
+            <!--</li>-->
+
+
+        </ul>
+    </div>
+
+    <div class="sidebar-background" style="background-image: url(../assets/img/sidebar-1.jpg) "></div>
+</div>
+
+
