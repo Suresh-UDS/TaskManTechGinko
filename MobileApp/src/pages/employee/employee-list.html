@@ -1,0 +1,30 @@
+<!--
+  Generated template for the SiteListPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+  <ion-navbar color="primary" >
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>Employee List</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content>
+
+  <ion-list>
+    <ion-item *ngFor="let employee of employeeList;let i of index" class="bottom-border" >
+
+      <p (click)="getEmployeeAttendance(employee.id)"  >{{employee.fullName}}
+        <span style="float: right">
+          <button ion-button  (click)="viewCamera(employee,'enroll')"  >Enroll</button>
+          <button ion-button color="orange" (click)="viewCamera(employee,'verify','checkIn')" *ngIf="!employee.checkedIn" >Check - In</button>
+          <button ion-button color="orange" (click)="viewCamera(employee,'verify','checkOut')" *ngIf="employee.checkedIn">Check - Out</button>
+        </span></p>
+    </ion-item>
+  </ion-list>
+
+</ion-content>

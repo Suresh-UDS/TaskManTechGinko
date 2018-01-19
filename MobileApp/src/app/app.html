@@ -1,0 +1,39 @@
+<ion-menu class="menu-width" [content]="content">
+
+
+  <ion-content>
+
+    <div class="wrapper bg-clr">
+      <div class="sidebar sidebar-right" data-color="orange" data-image="img/sidebar-1.jpg">
+        <!--
+    Tip 1: You can change the color of the sidebar using: data-color="purple | blue | green | orange | red"
+
+    Tip 2: you can also add an image using data-image tag
+  -->
+        <div class="logo">
+          <p text-center>User</p>
+        </div>
+        <div class="sidebar-wrapper">
+          <ul class="nav">
+            <li menuClose *ngFor="let p of pages" (click)="openPage(p)" [ngClass]="{'active':p.active}" >
+              <a>
+                <i class="material-icons">dashboard</i>
+                <p>{{p.title}}</p>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <!--
+    <ion-list>
+      <button menuClose ion-item *ngFor="let p of pages" (click)="openPage(p)">
+        {{p.title}}
+      </button>
+    </ion-list>-->
+  </ion-content>
+
+</ion-menu>
+
+<!-- Disable swipe-to-go-back because it's poor UX to combine STGB with side menus -->
+<ion-nav [root]="rootPage" #content swipeBackEnabled="false"></ion-nav>

@@ -1,0 +1,73 @@
+<ion-header>
+  <ion-navbar>
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>Quotation</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+
+  <div class="row">
+    <ion-col col-11 class="margin-auto">
+      <div class="card">
+          <div class="card-header border-bottom padding-left-right0">
+              <p class="category display-inline">Pending</p>
+            <button ion-button icon-left icon-only clear (click)="presentPopover($event)" class="pop-icon">
+              <ion-icon name="more"></ion-icon>
+            </button>
+          </div>
+            <div class="card-content">
+              <h3 class="title" text-center>50</h3>
+            </div>
+            <div class="card-footer">
+              <div class="stats align-right">
+                  <p class="display-inline">view</p><ion-icon class="primary-clr padding-left5 fnt-12" name="arrow-forward"></ion-icon>
+              </div>
+            </div>
+      </div>
+    </ion-col>
+  </div>
+  <div class="row">
+    <ion-col col-11 class="margin-auto">
+      <div class="card">
+        <div class="card-header border-bottom padding-left-right0">
+          <p class="category display-inline">Overdue</p>
+          <button ion-button icon-left icon-only clear (click)="presentPopover($event)" class="pop-icon">
+            <ion-icon name="more"></ion-icon>
+          </button>
+        </div>
+        <div class="card-content">
+          <h3 class="title" text-center>50</h3>
+        </div>
+        <div class="card-footer">
+          <div class="stats align-right">
+            <p class="display-inline">view</p><ion-icon class="primary-clr padding-left5 fnt-12" name="arrow-forward"></ion-icon>
+          </div>
+        </div>
+      </div>
+    </ion-col>
+  </div>
+  <div class="row">
+    <ion-col col-11 class="margin-auto">
+      <div class="card">
+        <div class="card-header border-bottom padding-left-right0">
+          <p class="category display-inline">Approved</p>
+          <button ion-button icon-left icon-only clear (click)="presentPopover($event)" class="pop-icon">
+            <ion-icon name="more"></ion-icon>
+          </button>
+        </div>
+        <div class="card-content">
+          <h3 class="title" text-center>50</h3>
+        </div>
+        <div class="card-footer">
+          <div class="stats align-right">
+            <p class="display-inline">view</p><ion-icon class="primary-clr padding-left5 fnt-12" name="arrow-forward"></ion-icon>
+          </div>
+        </div>
+      </div>
+    </ion-col>
+  </div>
+
+</ion-content>
