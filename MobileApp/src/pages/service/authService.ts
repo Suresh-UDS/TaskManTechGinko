@@ -133,8 +133,8 @@ export class authService
         )
     }
 
-    getSites(userId) : Observable<any>{
-        return this.http.post(this.Url+'api/site/search',{userId:userId}).map(
+    getSites(employeeId) : Observable<any>{
+        return this.http.get(this.Url+'api/site/employee/'+employeeId).map(
             response=>{
                 console.log(response);
                 return response
