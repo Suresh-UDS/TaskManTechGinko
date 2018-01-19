@@ -14,6 +14,9 @@ import {SitePage} from "../pages/site/site";
 import {JobsPage} from "../pages/jobs/jobs";
 import {ReportsPage} from "../pages/reports/reports";
 import {LogoutPage} from "../pages/logout/logout";
+import {AttendancePage} from "../pages/attendance/attendance";
+import {EmployeeDetailPage} from "../pages/employee-detail/employee-detail";
+import {TabsPage} from "../pages/tabs/tabs";
 
 @Component({
   templateUrl: 'app.html'
@@ -30,13 +33,15 @@ export class MyApp {
 
     // used for an example of ngFor and navigation
     this.pages = [
-      { title: 'Site', component: SitePage,active:true,icon:''},
-      { title: 'Employee', component: EmployeeList,active:false,icon:''},
-      { title: 'Jobs', component: JobsPage,active:false,icon:''},
-      { title: 'attendance', component: AttendanceListPage,active:false,icon:''},
-      { title: 'Reports', component: ReportsPage,active:false,icon:''},
-      { title: 'Logout', component: LogoutPage,active:false,icon:''}
+      { title: 'Dashboard', component: TabsPage,active:true,icon:'dashboard'},
+      { title: 'Site', component: SitePage,active:false,icon:'dns'},
+      { title: 'Employee', component: EmployeeDetailPage,active:false,icon:'people'},
+      { title: 'Jobs', component: JobsPage,active:false,icon:'description'},
+      { title: 'Attendance', component: AttendancePage,active:false,icon:'content_paste'},
+      { title: 'Reports', component: ReportsPage,active:false,icon:'trending_up'},
+      { title: 'Logout', component: LogoutPage,active:false,icon:'power_settings_new'}
     ];
+
 
   }
 

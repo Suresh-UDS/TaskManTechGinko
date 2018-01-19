@@ -3,9 +3,9 @@
 
   <ion-content>
 
-    <div class="wrapper bg-clr">
-      <div class="sidebar sidebar-right" data-color="orange" data-image="img/sidebar-1.jpg">
-        <!--
+    <div class="wrapper">
+      <div class="sidebar" data-color="rose" data-background-color="black"  data-image="img/sidebar-1.jpg">
+      <!--
     Tip 1: You can change the color of the sidebar using: data-color="purple | blue | green | orange | red"
 
     Tip 2: you can also add an image using data-image tag
@@ -17,7 +17,7 @@
           <ul class="nav">
             <li menuClose *ngFor="let p of pages" (click)="openPage(p)" [ngClass]="{'active':p.active}" >
               <a>
-                <i class="material-icons">dashboard</i>
+                <i class="material-icons">{{p.icon}}</i>
                 <p>{{p.title}}</p>
               </a>
             </li>
