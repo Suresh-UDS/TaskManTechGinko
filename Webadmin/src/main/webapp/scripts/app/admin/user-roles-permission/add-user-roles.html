@@ -36,68 +36,47 @@
                                <div class="card formcard">
                                    <div class="card-content">
 
-                                       <div class="row" ng-init="loadGroups()">
+                                       <div class="row">
 
                                            <div class="col-md-4">
                                                <div class="form-group label-floating">
-                                                   <label class="control-label">User Group <span class="red-star">*</span> </label>
+                                                   <label class="control-label">Role Name <span class="red-star">*</span> </label>
                                                    <input type="text" class="form-control"
-                                                           ng-model="selectedGroup"
-                                                          uib-typeahead="group as group.name for group in userGroups | filter:$viewValue | limitTo:5"
-                                                          name="UserGroup" ng-minlength="5" ng-maxlength="50" autofocus
+                                                          name="RoleName"  autofocus
                                                           required autocomplete="off">
 
-                                                  
+
+
+                                               </div>
+                                           </div>
+                                           <div class="col-md-8">
+                                               <div class="form-group label-floating">
+                                                   <label class="control-label">Description <span class="red-star">*</span></label>
+                                                   <input type="text" class="form-control" name="Description">
+
+                                               </div>
+                                           </div>
+
+
+                                       </div>
+                                       <div class="row">
+                                           <div class="col-md-3">
+                                               <div class="form-group label-floating">
+                                                   <label class="control-label">Status   <span class="red-star">*</span></label>
+                                                   <select class="selectpicker" data-style="btn btn-primary btn-round" title="Single Select" data-size="7">
+                                                       <option disabled selected>Choose Status</option>
+                                                       <option value="2">Active</option>
+                                                       <option value="3">InActive</option>
+                                                   </select>
 
                                                </div>
                                            </div>
                                            <div class="col-md-4">
                                                <div class="form-group label-floating">
-                                                   <label class="control-label">Username <span class="red-star">*</span></label>
-                                                   <input type="text" class="form-control" name="login"
-                                                          ng-model="user.login" ng-required="user.id == null"
-                                                          ng-pattern="/^[A-Za-z0-9\s]*$/" ng-minlength="5"
-                                                          ng-maxlength="50" required>
-                                                   <div ng-show="form.$submitted || form.login.$touched">
-                                                       <div ng-show="form.login.$dirty || form.login.$invalid">
-                                                           <p class="help-block" style="color: maroon"
-                                                              ng-show="form.login.$error.required" translate-value-max="50">
-                                                               Login is required.</p>
-                                                           <p class="help-block" style="color: maroon"
-                                                              ng-show="form.login.$error.minlength"
-                                                              translate-value-max="50">Login is required to be at least
-                                                               5 character.</p>
-                                                           <p class="help-block" style="color: maroon"
-                                                              ng-show="form.login.$error.maxlength"
-                                                              translate-value-max="50">Login cannot be longer than 50
-                                                               characters.</p>
-                                                           <p class="help-block" style="color: maroon"
-                                                              ng-show="form.login.$error.pattern">Login can only
-                                                               contain letters and digits.</p>
-                                                       </div>
-                                                   </div>
-                                               </div>
-                                           </div>
-                                           <div class="col-md-4">
-                                               <div class="form-group label-floating">
-                                                   <label class="control-label">Password <span class="red-star">*</span></label>
-                                                   <input type="password" class="form-control" id="password"
-                                                          name="password" ng-model="user.password" ng-minlength=8
-                                                          ng-maxlength="20" required>
+                                                   <label class="control-label">Role Level   <span class="red-star">*</span></label>
+                                                   <input type="number" class="form-control">
 
-                                                   <div ng-show="form.$submitted || form.password.$touched">
-                                                       <div ng-show="form.password.$dirty || form.password.$invalid">
-                                                           <p class="help-block" style="color: maroon"
-                                                              ng-show="form.password.$error.required">Your password is
-                                                               required.</p>
-                                                           <p class="help-block" style="color: maroon"
-                                                              ng-show="form.password.$error.minlength">Your password is
-                                                               required to be at least 8 characters.</p>
-                                                           <p class="help-block" style="color: maroon"
-                                                              ng-show="form.password.$error.maxlength">Your password
-                                                               cannot be longer than 20 characters.</p>
-                                                       </div>
-                                                   </div>
+
                                                </div>
                                            </div>
 
