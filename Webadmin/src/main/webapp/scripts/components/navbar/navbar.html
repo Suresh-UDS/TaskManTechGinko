@@ -92,6 +92,18 @@ Tip 3: you can change the color of the sidebar with data-background-color="white
                     <p>Attendance</p>
                 </a>
             </li>
+            <li ui-sref-active="active">
+                <a ui-sref="user-roles">
+                    <i class="material-icons">group</i>
+                    <p>User Roles</p>
+                </a>
+            </li>
+            <li ui-sref-active="active">
+                <a ui-sref="role-permission">
+                    <i class="material-icons">group</i>
+                    <p>Role Permission</p>
+                </a>
+            </li>
 
             <li has-authority="ROLE_ADMIN" ng-class="{active: $state.includes('admin')}">
                 <a data-toggle="collapse" data-target="#formsExamples" href="#">
