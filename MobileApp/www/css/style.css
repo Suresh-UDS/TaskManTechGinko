@@ -14,10 +14,9 @@
 }
 .segmnt
 {
-  width: 100%;
-  margin-top:8px;
- /* border: 1px solid #00bcd4;;
-  border-radius: 8px;*/
+  width: 80%;
+  border: 1px solid orange;
+  border-radius: 8px;
 }
 .segment-button.segment-activated
 {
@@ -141,4 +140,82 @@ container-scroll::-webkit-scrollbar-thumb
 .segment-md-clr-blue .segment-button
 {
   border-bottom-color: #00bcd4;
+}
+.round
+{
+  background-color: #FFFFFF !important;
+}
+.bg-grey
+{
+  background-color:#EEEEEE !important;
+}
+.clr-orange
+{
+  color: #FE5E3E;
+}
+.padding-top0
+{
+  padding-top: 0 !important;
+}
+.table-sales
+{
+  margin-top: 0 !important;
+}
+.padding-right2
+{
+  padding-right: 2px;
+}
+.padding-left2
+{
+  padding-left: 2px;
+}
+.white-bg
+{
+  background-color: #FFFFFF;
+}
+table tr
+{
+  height:calc(100vh-85vh);
+}
+.fnt-18
+{
+  font-size: 18px;
+}
+
+.red
+{
+  color: red;
+}
+.green
+{
+  color: green
+}
+.blue
+{
+  color: deepskyblue
+}
+.padding-bottom0
+{
+  padding-bottom:0 !important;
+}
+.padding-right0
+{
+  padding-right: 0 !important;
+}
+.padding-left0
+{
+  padding-left: 0 !important;
+}
+.card
+{
+  margin: 5px 0 15px 0 !important;
+}
+.segment-button.segment-activated
+{
+  background-color: #191919 !important;
+}
+
+.segment-md .segment-button
+{
+  color: orange !important;
 }

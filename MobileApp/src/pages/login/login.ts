@@ -45,6 +45,7 @@ export class LoginPage {
         window.localStorage.setItem('employeeId',response.json().employee.id);
         window.localStorage.setItem('employeeFullName',response.json().employee.fullName);
         window.localStorage.setItem('employeeEmpId',response.json().employee.empId);
+        window.localStorage.setItem('employeeUserId',response.json().employee.userId);
         var employee = response.json().employee;
         this.navCtrl.setRoot(TabsPage);
 
