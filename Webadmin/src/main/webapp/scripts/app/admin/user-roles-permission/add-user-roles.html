@@ -38,7 +38,7 @@
 
                                        <div class="row">
 
-                                           <div class="col-md-4">
+                                           <div class="col-md-6">
                                                <div class="form-group label-floating">
                                                    <label class="control-label">Role Name <span class="red-star">*</span> </label>
                                                    <input type="text" class="form-control" ng-model="userRole.name"
@@ -49,22 +49,22 @@
 
                                                </div>
                                            </div>
-                                           
+
 
                                        </div>
                                        <div class="row">
-                                       		<div class="col-md-8">
+                                       		<div class="col-md-12">
                                                <div class="form-group label-floating">
                                                    <label class="control-label">Description </label>
                                                    <input type="text" class="form-control" name="Description" ng-model="userRole.description">
 
                                                </div>
                                            	</div>
-                                       
+
                                        </div>
                                        <div class="row">
-                                           
-                                           <div class="col-md-5">
+
+                                           <div class="col-md-6">
                                                <div class="form-group label-floating">
                                                    <label class="control-label">Role Level   </label>
                                                    <input type="number" class="form-control" ng-model="userRole.roleLevel">
@@ -72,39 +72,35 @@
 
                                                </div>
                                            </div>
+                                           <div class="col-md-6">
+                                               <div class="form-group">
+                                                   <label class="control-label font-size15">
+                                                       Active
+                                                   </label>
+
+                                                   <div>
+                                                       <div class="radio radio-inline">
+                                                           <label>
+                                                               <input type="radio"id="active" name="active" ng-model="userRole.active" value="Y" checked="checked" required>Yes
+                                                           </label>
+                                                       </div>
+                                                       <div class="radio radio-inline">
+                                                           <label>
+                                                               <input type="radio"id="active" name="active" ng-model="userRole.active" value="N" required >No
+                                                           </label>
+                                                       </div>
+                                                   </div>
+
+
+                                               </div>
+                                           </div>
 
                                        </div>
-									   <div class="row">
-									       <div class="col-md-12">
-
-                                                <div class="form-group">
-                                                    <label class="control-label font-size15">
-                                                        Active
-                                                    </label>
-
-                                                    <div>
-                                                        <div class="radio radio-inline">
-                                                            <label>
-                                                                <input type="radio"id="active" name="active" ng-model="userRole.active" value="Y" checked="checked" required>Yes
-                                                            </label>
-                                                        </div>
-                                                        <div class="radio radio-inline">
-                                                            <label>
-                                                                <input type="radio"id="active" name="active" ng-model="userRole.active" value="N" required >No
-                                                            </label>
-                                                        </div>
-                                                    </div>
-
-
-                                                </div>
-                                            </div>
-									   
-									   </div>		
 
 
                                        <div class="row">
 
-                                           <div class="col-sm-offset-1 col-sm-10">
+                                           <div class="col-sm-offset-2 col-sm-8">
                                                <div class="form-group">
                                                    <button class="btn btn-success" type="submit"
                                                            id="form-button-save">

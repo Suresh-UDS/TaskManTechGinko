@@ -200,6 +200,12 @@ textarea.form-control {
 {
   background-color: #ff9800;
 }
+
+.btn-group.open>.dropdown-toggle.btn.btn-primary, .btn-group-vertical.open>.dropdown-toggle.btn.btn-primary
+{
+  background-color: #ff9800;
+}
+
 .tablecard .btn, .navbar .navbar-nav>li>a.btn
 {
       padding: 5px 5px;
