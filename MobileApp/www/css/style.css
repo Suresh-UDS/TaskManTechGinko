@@ -187,11 +187,11 @@ table tr
 }
 .green
 {
-  color: green
+  color: green;
 }
 .blue
 {
-  color: deepskyblue
+  color: deepskyblue;
 }
 .padding-bottom0
 {
@@ -217,4 +217,16 @@ table tr
 .segment-md .segment-button
 {
   color: orange !important;
+}
+.red-card
+{
+  box-shadow: 0 1px 4px 0 rgb(255, 0, 0) !important;
+}
+.green-card
+{
+  box-shadow: 0 1px 4px 0 rgb(0, 255, 0) !important;
+}
+.blue-card
+{
+  box-shadow: 0 1px 4px 0 deepskyblue !important;
 }

@@ -29,7 +29,9 @@
             </ion-item>
         </ion-list>
         <ion-list *ngSwitchCase="'jobs'">
-                <div class="card" *ngFor="let job of allJobs">
+                <div class="card" *ngFor="let job of allJobs" [ngClass]="{'red-card' : (job.status == 'OVERDUE'),
+                                                          'green-card' : (job.status == 'COMPLETED'),
+                                                          'blue-card' :(job.status =='OPEN' || job.status == 'ASSIGNED' || job.status == 'INPROGRESS')}">
 
                     <div class="card-content padding-bottom0" >
                         <ion-row class="margin0">
