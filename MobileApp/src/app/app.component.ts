@@ -17,6 +17,7 @@ import {LogoutPage} from "../pages/logout/logout";
 import {AttendancePage} from "../pages/attendance/attendance";
 import {EmployeeDetailPage} from "../pages/employee-detail/employee-detail";
 import {TabsPage} from "../pages/tabs/tabs";
+import {QuotationPage} from "../pages/quotation/quotation";
 
 @Component({
   templateUrl: 'app.html'
@@ -34,7 +35,9 @@ export class MyApp {
     // used for an example of ngFor and navigation
     this.pages = [
       { title: 'Dashboard', component: TabsPage,active:true,icon:'dashboard'},
+      { title: 'Quotation', component: TabsPage,active:false,icon:'receipt'},
       { title: 'Site', component: SitePage,active:false,icon:'dns'},
+      { title: 'Client', component: SitePage,active:false,icon:'person'},
       { title: 'Employee', component: EmployeeDetailPage,active:false,icon:'people'},
       { title: 'Jobs', component: JobsPage,active:false,icon:'description'},
       { title: 'Attendance', component: AttendancePage,active:false,icon:'content_paste'},
