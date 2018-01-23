@@ -17,6 +17,11 @@ export class DashboardPage {
   constructor(public renderer: Renderer,private loadingCtrl:LoadingController,public navCtrl: NavController,public authService:authService,public modalCtrl: ModalController,
               private datePickerProvider: DatePickerProvider) {
 
+    this.categories = [
+      {name: 'overdue'},
+      {name: 'upcoming'},
+      {name: 'completed'},
+      ];
   }
 
 /*
@@ -31,6 +36,9 @@ export class DashboardPage {
   ionViewDidLoad()
   {
     demo.initFullCalendar();
+
+
+
 
     this.authService.searchSite().subscribe(response=>
     {
