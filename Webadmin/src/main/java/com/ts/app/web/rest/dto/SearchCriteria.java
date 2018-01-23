@@ -68,6 +68,14 @@ public class SearchCriteria extends Paginator {
 	private boolean completedStatus;
 
 	private boolean overdueStatus;
+	
+	private long userRoleId;
+	
+	private long applicationModuleId;
+	
+	private long applicationActionId;
+	
+	private long userRolePermissionId;
 
 	public long getId() {
 		return id;
@@ -321,4 +329,41 @@ public class SearchCriteria extends Paginator {
     public void setAssetTitle(String assetTitle) {
         AssetTitle = assetTitle;
     }
+
+	public long getUserRoleId() {
+		return userRoleId;
+	}
+
+	public void setUserRoleId(long userRoleId) {
+		this.userRoleId = userRoleId;
+	}
+
+	public void setLocationId(long locationId) {
+		this.locationId = locationId;
+	}
+
+	public long getApplicationModuleId() {
+		return applicationModuleId;
+	}
+
+	public void setApplicationModuleId(long applicationModuleId) {
+		this.applicationModuleId = applicationModuleId;
+	}
+
+	public long getApplicationActionId() {
+		return applicationActionId;
+	}
+
+	public void setApplicationActionId(long applicationActionId) {
+		this.applicationActionId = applicationActionId;
+	}
+
+	public long getUserRolePermissionId() {
+		return userRolePermissionId;
+	}
+
+	public void setUserRolePermissionId(long userRolePermissionId) {
+		this.userRolePermissionId = userRolePermissionId;
+	}
+    
 }
