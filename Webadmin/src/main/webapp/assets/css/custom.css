@@ -292,3 +292,7 @@ span.red-star
    margin-top: 55px;
    padding: 10px 15px;
 }
+.permissioncard .checkbox label
+{
+  color: #444;
+}
