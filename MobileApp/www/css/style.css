@@ -39,6 +39,7 @@
 }
 .container-scroll > .row {
   /*width: 200%; !* = 100% * 4/3 *!*/
+  width:1400px;
 }
 
 container-scroll::-webkit-scrollbar-track
@@ -82,6 +83,14 @@ container-scroll::-webkit-scrollbar-thumb
 .margin-auto
 {
   margin: auto;
+}
+.margin-top25
+{
+  margin-top:25%;
+}
+.margn-btom20
+{
+  margin-bottom:20px;
 }
 .padding-left5
 {
@@ -130,7 +139,7 @@ container-scroll::-webkit-scrollbar-thumb
 .hariz-scroll-con
 {
   padding:10px 15px;
-  width: 1400px;
+ /* width: 1400px;*/
 }
 .margin-top5
 {
