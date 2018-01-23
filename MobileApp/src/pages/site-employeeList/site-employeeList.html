@@ -20,8 +20,11 @@
       <ion-icon name="podium" item-start class="icon-color"></ion-icon>
       <p  >{{site.name}}
       <span style="float: right">
-        <button ion-button (click)="viewCamera(site.id,'checkIn')" *ngIf="!checkedIn" >Check - In</button>
-        <button ion-button  (click)="viewCamera(site.id,'checkOut')" *ngIf="checkedIn">Check - Out</button>
+        <button ion-button  (click)="viewCamera(site.id,'enroll')"  >Enroll</button>
+          <span *ngIf="employee.faceAuthorised">
+            <button ion-button color="orange" (click)="viewCamera(site.id,'checkIn')" *ngIf="!checkedIn" >Check - In</button>
+            <button ion-button color="orange" (click)="viewCamera(site.id,'checkOut')" *ngIf="checkedIn">Check - Out</button>
+          </span>
       </span></p>
     </ion-item>
   </ion-list>

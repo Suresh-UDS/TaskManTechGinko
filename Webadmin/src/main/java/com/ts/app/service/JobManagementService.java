@@ -862,6 +862,69 @@ public class JobManagementService extends AbstractService {
         return mapperUtil.toModelList(entities, PriceDTO.class);
     }
 
+    public List<JobDTO> findByDate(SearchCriteria searchCriteria, boolean isAdmin) {
+        List<JobDTO> result = null;
+        if(searchCriteria != null) {
+            log.debug("findBYSearchCriteria search criteria -"+ (searchCriteria.getCheckInDateTimeFrom()));
+
+            Employee employee = employeeRepository.findByUserId(searchCriteria.getUserId());
+            List<Long> subEmpIds = new ArrayList<Long>();
+            if(employee != null) {
+                searchCriteria.setDesignation(employee.getDesignation());
+                Hibernate.initialize(employee.getSubOrdinates());
+                findAllSubordinates(employee, subEmpIds);
+                log.debug("List of subordinate ids -"+ subEmpIds);
+                if(CollectionUtils.isEmpty(subEmpIds)) {
+                    subEmpIds.add(employee.getId());
+                }
+                searchCriteria.setSubordinateIds(subEmpIds);
+            }
+            log.debug("SearchCriteria ="+ searchCriteria);
+
+            List<Job> allJobsList = new ArrayList<Job>();
+            List<JobDTO> transactions = null;
+
+            Date checkInDate = searchCriteria.getCheckInDateTimeFrom();
+            log.debug("JobSpecification toPredicate - searchCriteria checkInDateFrom -"+ checkInDate);
+            if(checkInDate != null) {
+                log.debug("check in date is not null");
+                Calendar checkInDateFrom = Calendar.getInstance(TimeZone.getTimeZone("Asia/Kolkata"));
+                checkInDateFrom.setTime(checkInDate);
+
+                checkInDateFrom.set(Calendar.HOUR_OF_DAY, 0);
+                checkInDateFrom.set(Calendar.MINUTE,0);
+                checkInDateFrom.set(Calendar.SECOND,0);
+                java.sql.Date fromDt = DateUtil.convertToSQLDate(DateUtil.convertUTCToIST(checkInDateFrom));
+                //String fromDt = DateUtil.formatUTCToIST(checkInDateFrom);
+                Calendar checkInDateTo = Calendar.getInstance(TimeZone.getTimeZone("Asia/Kolkata"));
+                checkInDateTo.setTime(checkInDate);
+
+                checkInDateTo.set(Calendar.HOUR_OF_DAY, 23);
+                checkInDateTo.set(Calendar.MINUTE,59);
+                checkInDateTo.set(Calendar.SECOND,0);
+                java.sql.Date toDt = DateUtil.convertToSQLDate(DateUtil.convertUTCToIST(checkInDateTo));
+
+//				page = jobRepository.findByDateRange(searchCriteria.getSiteId(), searchCriteria.getUserId(), subEmpIds, searchCriteria.getJobStatus(),
+//												fromDt, toDt, searchCriteria.isScheduled(), pageRequest);
+
+                allJobsList = jobRepository.findByDateRange(searchCriteria.getUserId(),subEmpIds,fromDt,toDt);
+                result = mapperUtil.toModelList(allJobsList,JobDTO.class);
+                return result;
+
+
+            }else {
+
+                allJobsList = jobRepository.findWithoutDateRange(searchCriteria.getUserId(),subEmpIds);
+                result = mapperUtil.toModelList(allJobsList,JobDTO.class);
+                return result;
+            }
+
+
+
+        }
+        return result;
+    }
+
 
 
 }

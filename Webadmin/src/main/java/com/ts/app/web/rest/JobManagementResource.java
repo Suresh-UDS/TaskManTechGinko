@@ -177,6 +177,17 @@ public class JobManagementResource {
 		return result;
 	}
 
+    @RequestMapping(value = "/jobs/date/search",method = RequestMethod.POST)
+    public List<JobDTO> findByDate(@RequestBody SearchCriteria searchCriteria) {
+        List<JobDTO> result = null;
+        if(searchCriteria != null) {
+            searchCriteria.setUserId(SecurityUtils.getCurrentUserId());
+            jobService.updateJobStatus(searchCriteria.getSiteId(), searchCriteria.getJobStatus());
+            result = jobService.findByDate(searchCriteria,true);
+        }
+        return result;
+    }
+
     @RequestMapping(value = "/location", method = RequestMethod.GET)
     public List<LocationDTO> findAll(HttpServletRequest request) {
         log.info("--Invoked Location.findAll --");
