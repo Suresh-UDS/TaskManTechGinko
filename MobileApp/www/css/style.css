@@ -144,18 +144,35 @@ container-scroll::-webkit-scrollbar-thumb
 /* calendar css */
 .Viewcalendartxt h2
 {
-      text-align: center;
-      font-size: 18px;
+     font-size: 18px;
+     padding-left: 10px;
 }
-.fc-unthemed .fc-today {
+#fullCalendarCon .fc-unthemed .fc-today {
     background: #F44336 !important;
     color: #fff !important;
 }
-.fc-toolbar h2
+#fullCalendarCon .fc-toolbar h2
 {
-      font-size: 17px;
+      font-size: 18px !important;
+      margin-bottom: 5px;
 }
-
+#fullCalendarCon .fc-toolbar .fc-left {
+    float: none;
+    display: block;
+}
+#fullCalendarCon .fc-toolbar .fc-right
+{
+     margin-top: 14px;
+}
+.fc button, .fc button:hover, .fc button:focus, .fc button:active, .fc button.active, .fc button:active:focus, .fc button:active:hover, .fc button.active:focus, .fc button.active:hover, .open>.fc button.dropdown-toggle, .open>.fc button.dropdown-toggle:focus, .open>.fc button.dropdown-toggle:hover, .fc button.btn-primary, .fc button.btn-primary:hover, .fc button.btn-primary:focus, .fc button.btn-primary:active, .fc button.btn-primary.active, .fc button.btn-primary:active:focus, .fc button.btn-primary:active:hover, .fc button.btn-primary.active:focus, .fc button.btn-primary.active:hover, .open>.fc button.btn-primary.dropdown-toggle, .open>.fc button.btn-primary.dropdown-toggle:focus, .open>.fc button.btn-primary.dropdown-toggle:hover
+{
+    background-color: #ff9800;
+}
+.icon-right
+{
+  padding-right:5px;
+  float:right;
+}
 .margin-top5
 {
   margin-top:5px !important;
