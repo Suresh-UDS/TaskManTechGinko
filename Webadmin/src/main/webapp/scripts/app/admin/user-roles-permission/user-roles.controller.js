@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('timeSheetApp')
-    .controller('UserRolesController', function ($rootScope, $scope, $state, $timeout, UserGroupComponent,EmployeeComponent, UserComponent, $http, $stateParams, $location, JobComponent) {
+    .controller('UserRolesController', function ($rootScope, $scope, $state, $timeout, UserRoleComponent,EmployeeComponent, UserComponent, $http, $stateParams, $location, JobComponent) {
         $scope.success = null;
         $scope.error = null;
         $scope.doNotMatch = null;
@@ -18,46 +18,21 @@ angular.module('timeSheetApp')
 
         $scope.users;
 
-        $scope.userGroups;
+        $scope.userRoles;
 
-        $scope.selectedUser;
+        $scope.selectedUserRole;
 
-        //$scope.user = {};
-        //$scope.user.emailSubscribed = true;
-
-        $scope.loadGroups = function () {
-        	UserGroupComponent.findAll().then(function (data) {
-                $scope.userGroups = data;
-            });
-        };
-
-        $scope.loadEmployee = function () {
-            console.log("load employees ");
-        	EmployeeComponent.findAll().then(function (data) {
-        		$scope.selectedEmployee = null;
-                $scope.employees = data;
-                console.log($scope.employees);
-            });
-        };
-
-        $scope.saveUser = function () {
-        	if($scope.selectedGroup) {
-            	$scope.user.userGroupId = $scope.selectedGroup.id;
-        	}
-        	$scope.user.clearPassword = $scope.user.password;
-        	if($scope.selectedEmployee) {
-            	$scope.user.employeeId = $scope.selectedEmployee.id
-        	}
-        	console.log($scope.user);
-        	UserComponent.createUser($scope.user).then(function () {
+        $scope.saveUserRole = function () {
+        	console.log('userRole -'+ $scope.userRole);
+        	UserRoleComponent.createUserRole($scope.userRole).then(function () {
             	$scope.success = 'OK';
             	$scope.loadUsers();
-            	$location.path('/users');
+            	$location.path('/user-roles');
             }).catch(function (response) {
                 $scope.success = null;
                 console.log(response.data);
                 if (response.status === 400 && response.data.message === 'error.duplicateRecordError') {
-                    $scope.errorUserExists = true;
+                    $scope.errorUserRoleExists = true;
                 } else if(response.status === 400 && response.data.message === 'error.validation'){
                 	$scope.validationError = true;
                 	$scope.validationErrorMsg = response.data.description;
@@ -67,11 +42,11 @@ angular.module('timeSheetApp')
             });
         };
 
-        $scope.cancelUser = function () {
-        	$location.path('/users');
+        $scope.cancelUserRole = function () {
+        	$location.path('/user-roles');
         };
 
-        $scope.loadUsers = function () {
+        $scope.loadUserRoles = function () {
 //        	if($rootScope.searchCriteriaUser) {
 //        		$scope.search();
 //        	}else {
@@ -89,34 +64,26 @@ angular.module('timeSheetApp')
 
 
 
-        $scope.loadUser = function() {
-        	$scope.loadEmployee();
-        	UserComponent.findOne($stateParams.id).then(function (data) {
-                $scope.user = data;
-                $scope.selectedEmployee = {id : data.employeeId,name : data.employeeName}
+        $scope.loadUserRole = function() {
+        	console.log('loadUserRole -' + $stateParams.id);
+        	UserRoleComponent.findOne($stateParams.id).then(function (data) {
+                $scope.userRole = data;
             });
 
         };
 
-        $scope.updateUser = function () {
-        	if($scope.selectedGroup) {
-        		$scope.user.userGroupId = $scope.selectedGroup.id;
-        	}
-        	$scope.user.password = $scope.user.clearPassword;
-        	if($scope.selectedEmployee) {
-            	$scope.user.employeeId = $scope.selectedEmployee.id
-        	}
-        	console.log('User details - ' + JSON.stringify($scope.user));
+        $scope.updateUserRole = function () {
+        	console.log('UserRole details - ' + JSON.stringify($scope.userRole));
 
-        	UserComponent.updateUser($scope.user).then(function () {
+        	UserRoleComponent.updateUserRole($scope.userRole).then(function () {
             	$scope.success = 'OK';
-            	$scope.loadUsers();
-            	$location.path('/users');
+            	$scope.loadUserRoles();
+            	$location.path('/user-roles');
             }).catch(function (response) {
                 $scope.success = null;
                 console.log('Error - '+ response.data);
                 if (response.status === 400 && response.data.message === 'error.duplicateRecordError') {
-                    $scope.errorUserExists = true;
+                    $scope.errorUserRoleExists = true;
                 } else if(response.status === 400 && response.data.message === 'error.validation'){
                 	$scope.validationError = true;
                 	$scope.validationErrorMsg = response.data.description;
@@ -128,14 +95,14 @@ angular.module('timeSheetApp')
 
         $scope.deleteConfirm = function (user){
         	console.log('...>>>delete confirm<<<');
-        	$scope.confirmUser = user;
-        	console.log(user.id);
+        	$scope.confirmUserRole = userRole;
+        	console.log(userRole.id);
         }
 
-        $scope.deleteUser = function () {
-        	console.log("user>>>>",+$scope.confirmUser);
+        $scope.deleteUserRole = function () {
+        	console.log("user>>>>",+$scope.confirmUserRole);
 //        	$scope.user = user;
-        	UserComponent.deleteUser($scope.confirmUser);
+        	UserRoleComponent.deleteUserRole($scope.confirmUserRole);
         	$scope.success = 'OK';
         	$state.reload();
         };
@@ -150,33 +117,30 @@ angular.module('timeSheetApp')
         	}
 
         	$scope.searchCriteria.currPage = currPageVal;
-        	console.log('Selected  user group -' + $scope.selectedUser);
+        	console.log('Selected  user role -' + $scope.selectedUserRole);
 
-        	if(!$scope.selectedUser) {
-        		if($rootScope.searchCriteriaUser) {
-            		$scope.searchCriteria = $rootScope.searchCriteriaUser;
+        	if(!$scope.selectedUserRole) {
+        		if($rootScope.searchCriteriaUserRole) {
+            		$scope.searchCriteria = $rootScope.searchCriteriaUserRole;
         		}else {
         			$scope.searchCriteria.findAll = true;
         		}
 
         	}else {
-	        	if($scope.selectedUser) {
+	        	if($scope.selectedUserRole) {
 	        		$scope.searchCriteria.findAll = false;
-		        	$scope.searchCriteria.userId = $scope.selectedUser.id;
-		        	$scope.searchCriteria.userLogin = $scope.selectedUser.login;
-		        	$scope.searchCriteria.userFirstName = $scope.selectedUser.firstName;
-		        	$scope.searchCriteria.userLastName = $scope.selectedUser.lastName;
-		        	$scope.searchCriteria.userEmail = $scope.selectedUser.email;
-		        	console.log('selected user id ='+ $scope.searchCriteria.userId);
+		        	$scope.searchCriteria.userRoleId = $scope.selectedUserRole.id;
+		        	$scope.searchCriteria.name = $scope.selectedUserRole.name;
+		        	$scope.searchCriteria.activeFlag = $scope.selectedUserRole.activeFlag;
+		        	console.log('selected user role id ='+ $scope.searchCriteria.userRoleId);
 	        	}else {
-	        		$scope.searchCriteria.userId = 0;
+	        		$scope.searchCriteria.userRoleId = 0;
 	        	}
         	}
         	console.log($scope.searchCriteria);
-        	UserComponent.search($scope.searchCriteria).then(function (data) {
-        		$scope.loadEmployee();
-                $scope.users = data.transactions;
-                console.log($scope.users);
+        	UserRoleComponent.search($scope.searchCriteria).then(function (data) {
+                $scope.userRoles = data.transactions;
+                console.log($scope.userRoles);
                 $scope.pages.currPage = data.currPage;
                 $scope.pages.totalPages = data.totalPages;
                 if($scope.users == null){
@@ -189,7 +153,7 @@ angular.module('timeSheetApp')
                 $scope.pages.totalCnt = data.totalCount;
             	$scope.hide = true;
             });
-        	$rootScope.searchCriteriaUser = $scope.searchCriteria;
+        	$rootScope.searchCriteriaUserRole = $scope.searchCriteria;
         	if($scope.pages.currPage == 1) {
             	$scope.firstStyle();
         	}

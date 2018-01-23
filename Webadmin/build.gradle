@@ -21,6 +21,7 @@ apply plugin: 'maven'
 apply plugin: 'spring-boot'
 apply plugin: 'war'
 apply plugin: 'propdeps'
+apply plugin: 'eclipse'
 defaultTasks 'bootRun'
 
 bootRepackage {
@@ -36,7 +37,7 @@ bootRun {
     addResources = false
 }
 
-apply from: 'yeoman.gradle'
+//apply from: 'yeoman.gradle'
 apply from: 'sonar.gradle'
 
 apply plugin: 'eclipse'
@@ -174,7 +175,8 @@ dependencies {
     compile group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5.4'
 	compile group: 'org.apache.httpcomponents', name: 'httpcore', version: '4.4.8'
 	compile 'com.google.cloud:google-cloud-vision:1.14.0'
-
+	//compile "org.springframework.data:spring-data-redis:2.0.2.RELEASE"
+	//compile "redis.clients:jedis:2.9.0"
     
 }
 

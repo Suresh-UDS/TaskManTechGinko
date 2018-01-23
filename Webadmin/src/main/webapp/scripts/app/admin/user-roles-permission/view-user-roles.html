@@ -3,7 +3,7 @@
 		<div class="row">
 			<div class="col-md-12">
 
-				<div class="form-container table-container" ng-init="loadUser()">
+				<div class="form-container table-container" ng-init="loadUserRole()">
 					<form ng-show="!success" name="form" role="form" class="form-horizontal">
 
                         <div class="col-md-6 col-md-offset-2">
@@ -19,20 +19,38 @@
                                             <tbody>
                                             <tr>
 
-                                                <td>Role Name</td>
-                                                <td></td>
+                                                <td>Id</td>
+                                                <td>{{userRole.id}}</td>
+
+                                            </tr>
+                                            <tr>
+
+                                                <td>Name</td>
+                                                <td>{{userRole.name}}</td>
 
                                             </tr>
                                             <tr>
 
                                                 <td>Description </td>
-                                                <td></td>
+                                                <td>{{userRole.description}}</td>
 
                                             </tr>
                                             <tr>
 
-                                                <td>Status </td>
-                                                <td></td>
+                                                <td>Level </td>
+                                                <td>{{userRole.roleLevel}}</td>
+
+                                            </tr>
+                                            <tr>
+
+                                                <td>Active </td>
+                                                <td>{{userRole.active}}</td>
+
+                                            </tr>
+                                            <tr>
+
+                                                <td>Created Date </td>
+                                                <td>{{userRole.createdDate}}</td>
 
                                             </tr>
 
@@ -42,7 +60,7 @@
                                     </div>
 
                                     <button class="btn btn-default close-button-right b10" type="button"
-                                            ng-click="cancelEmployee()" id="close-button-right">
+                                            ng-click="cancelUserRole()" id="close-button-right">
                                         <i class="fa fa-warning"></i> Back
                                     </button>
 
