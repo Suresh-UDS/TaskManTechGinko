@@ -34,37 +34,37 @@
                                 <!--</div>-->
                                 <!--</td>-->
                                 <td>
-                                    <div class="form-group" ng-init="loadUsers()">
+                                    <div class="form-group" ng-init="loadUserRoles()">
                                         <div class="dropdown">
                                             <input type="text" class="form-control searchable-input floatL" placeholder="Role ID"
-                                                   ng-model="selectedUser" ng-value="searchCriteria.userLogin" name="userLogin" uib-typeahead="user as user.login for user in users | filter:$viewValue | limitTo:5" />
+                                                   ng-model="selectedUser" ng-value="searchCriteria.userRoleId" name="userRoleId" uib-typeahead="userRule as userRole.id for userRole in userRoles | filter:$viewValue | limitTo:5" />
 
                                         </div>
                                     </div>
                                 </td>
                                 <td>
-                                    <div class="form-group" ng-init="loadUsers()">
+                                    <div class="form-group" ng-init="loadUserRoles()">
                                         <div class="dropdown">
                                             <input type="text" class="form-control searchable-input floatL" placeholder="Role Name"
-                                                   ng-model="selectedUser" ng-value="searchCriteria.userFirstName" name="userFirstName" uib-typeahead="user as user.firstName for user in users | filter:$viewValue | limitTo:5" />
+                                                   ng-model="selectedUser" ng-value="searchCriteria.name" name="name" uib-typeahead="userRule as userRole.name for userRole in userRoles | filter:$viewValue | limitTo:5" />
 
                                         </div>
                                     </div>
                                 </td>
                                 <td>
-                                    <div class="form-group" ng-init="loadUsers()">
+<!--                                     <div class="form-group" ng-init="loadUserRoles()">
                                         <div class="dropdown">
                                             <input type="text" class="form-control searchable-input floatL" placeholder="Created Date"
-                                                   ng-model="selectedUser" ng-value="searchCriteria.userLastName" name="userLastName" uib-typeahead="user as user.lastName for user in users | filter:$viewValue | limitTo:5" />
+                                                   ng-model="selectedUser" ng-value="searchCriteria.userLastName" name="userLastName" uib-typeahead="userRule as userRole. for userRole in userRoles | filter:$viewValue | limitTo:5" />
 
                                         </div>
                                     </div>
-                                </td>
+ -->                                </td>
                                 <td>
-                                    <div class="form-group" ng-init="loadUsers()">
+                                    <div class="form-group" ng-init="loadUserRoles()">
                                         <div class="dropdown">
                                             <input type="text" class="form-control searchable-input floatL" placeholder="Role Level"
-                                                   ng-model="selectedUser" ng-value="searchCriteria.userEmail" name="userEmail" uib-typeahead="user as user.email for user in users | filter:$viewValue | limitTo:5" />
+                                                   ng-model="selectedUser" ng-value="searchCriteria.roleLevel" name="roleLevel" uib-typeahead="userRule as userRole.roleLevel for userRole in userRoles | filter:$viewValue | limitTo:5" />
 
                                         </div>
                                     </div>
@@ -88,7 +88,7 @@
 
 
 
-    <div class="row" ng-init="loadUsers()">
+    <div class="row" ng-init="loadUserRoles()">
 
         <div class="col-md-12">
             <div class="card margin-TB-5 tablecard">
@@ -101,75 +101,27 @@
                             <tr>
                                 <th>Role ID</th>
                                 <th>Role Name</th>
-                                <th>Created Date</th>
                                 <th>Role Description</th>
                                 <th>Role Level</th>
-                                <th>Publish</th>
+                                <th>Active</th>
+                                <th>Created Date</th>
                                 <th class="disabled-sorting text-right">Actions</th>
                             </tr>
                             </thead>
                             <tbody>
-                            <tr>
-                               <td>12</td>
-                               <td>SUPERVISOR</td>
-                               <td>2018-01-03 12:01:34.0	</td>
-                               <td>Supervisor</td>
-                               <td>4</td>
-                               <td>
-                                   <div class="checkbox">
-                                       <label>
-                                           <input type="checkbox" name="terms">
-                                       </label>
-                                   </div>
-                               </td>
-
+                            
+                            <tr ng-repeat="userRole in userRoles">
+                       		    <td>{{userRole.id}}</td>
+                                <td>{{userRole.name}}</td>
+                                <td>{{userRole.description}}</td>
+                                <td>{{userRole.roleLevel}}</td>
+                                <td>{{userRole.active}}</td>
+                                <td>{{userRole.createdDate}}</td>
 
                                 <td class="text-right">
-                                    <a   has-authority="ROLE_ADMIN" ng-click="getCheckInDetails(employee.id)" ui-sref="view-user-role"   class="btn btn-simple btn-info btn-icon like"><i class="material-icons">remove_red_eye</i></a>
-                                    <a   has-authority="ROLE_ADMIN" ui-sref="edit-user-role"   class="btn btn-simple btn-info btn-icon like"><i class="material-icons">edit</i></a>
-                                    <a ng-class="{active: $state.includes('admin')}" has-authority="ROLE_ADMIN"  ng-click="deleteConfirm(site)"  onClick="$('#deleteModal').modal()" data-target="#myModal"  class="btn btn-simple btn-danger"><i class="material-icons">close</i></a>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>12</td>
-                                <td>SUPERVISOR</td>
-                                <td>2018-01-03 12:01:34.0	</td>
-                                <td>Supervisor</td>
-                                <td>4</td>
-                                <td>
-                                    <div class="checkbox">
-                                        <label>
-                                            <input type="checkbox" name="terms">
-                                        </label>
-                                    </div>
-                                </td>
-
-
-                                <td class="text-right">
-                                    <a   has-authority="ROLE_ADMIN" ng-click="getCheckInDetails(employee.id)" ui-sref="view-employee({ id: employee.id })"   class="btn btn-simple btn-info btn-icon like"><i class="material-icons">remove_red_eye</i></a>
-                                    <a   has-authority="ROLE_ADMIN" ui-sref="edit-user({ id: user.id })"   class="btn btn-simple btn-info btn-icon like"><i class="material-icons">edit</i></a>
-                                    <a ng-class="{active: $state.includes('admin')}" has-authority="ROLE_ADMIN"  ng-click="deleteConfirm(site)"  onClick="$('#deleteModal').modal()" data-target="#myModal"  class="btn btn-simple btn-danger"><i class="material-icons">close</i></a>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>12</td>
-                                <td>SUPERVISOR</td>
-                                <td>2018-01-03 12:01:34.0	</td>
-                                <td>Supervisor</td>
-                                <td>4</td>
-                                <td>
-                                    <div class="checkbox">
-                                        <label>
-                                            <input type="checkbox" name="terms">
-                                        </label>
-                                    </div>
-                                </td>
-
-
-                                <td class="text-right">
-                                    <a   has-authority="ROLE_ADMIN" ng-click="getCheckInDetails(employee.id)" ui-sref="view-employee({ id: employee.id })"   class="btn btn-simple btn-info btn-icon like"><i class="material-icons">remove_red_eye</i></a>
-                                    <a   has-authority="ROLE_ADMIN" ui-sref="edit-user({ id: user.id })"   class="btn btn-simple btn-info btn-icon like"><i class="material-icons">edit</i></a>
-                                    <a ng-class="{active: $state.includes('admin')}" has-authority="ROLE_ADMIN"  ng-click="deleteConfirm(site)"  onClick="$('#deleteModal').modal()" data-target="#myModal"  class="btn btn-simple btn-danger"><i class="material-icons">close</i></a>
+                                    <a   has-authority="ROLE_ADMIN" ui-sref="view-user-role({ id: userRole.id })"   class="btn btn-simple btn-info btn-icon like"><i class="material-icons">remove_red_eye</i></a>
+                                    <a   has-authority="ROLE_ADMIN" ui-sref="edit-user-role({ id: userRole.id })"  class="btn btn-simple btn-info btn-icon like"><i class="material-icons">edit</i></a>
+                                    <!-- <a ng-class="{active: $state.includes('admin')}" has-authority="ROLE_ADMIN"  ng-click="deleteConfirm(site)"  onClick="$('#deleteModal').modal()" data-target="#myModal"  class="btn btn-simple btn-danger"><i class="material-icons">close</i></a> -->
                                 </td>
                             </tr>
 
@@ -181,7 +133,7 @@
         </div>
     </div>
 
-    <div class="card margin-TB-5 txt-align-center" ng-hide="users">
+    <div class="card margin-TB-5 txt-align-center" ng-hide="userRoles">
 
         <div class="card-content">
 

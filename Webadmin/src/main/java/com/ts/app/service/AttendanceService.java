@@ -88,7 +88,8 @@ public class AttendanceService extends AbstractService {
     }
 
 	public AttendanceDTO saveAttendance(AttendanceDTO attnDto) {
-		Attendance attn = mapperUtil.toEntity(attnDto, Attendance.class);
+        log.debug("Attendance latitude in "+attnDto.getLatitudeIn());
+        Attendance attn = mapperUtil.toEntity(attnDto, Attendance.class);
 		attn.setActive(attn.ACTIVE_YES);
 		SearchCriteria sc = new SearchCriteria();
 		sc.setSiteId(attnDto.getSiteId());

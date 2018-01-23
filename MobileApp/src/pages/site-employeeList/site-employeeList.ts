@@ -28,6 +28,9 @@ export class EmployeeSiteListPage {
   lattitude:any;
   longitude:any;
   checkedIn:any;
+  loader:any;
+  attendanceId:any;
+  employee:any;
   constructor(public navCtrl: NavController, public navParams: NavParams, private  authService: authService, public camera: Camera,
               private loadingCtrl:LoadingController, private geolocation:Geolocation, private toastCtrl:ToastController) {
 
@@ -58,6 +61,17 @@ export class EmployeeSiteListPage {
     toast.present();
   }
 
+  showLoader(msg){
+    this.loader = this.loadingCtrl.create({
+      content:msg
+    });
+    this.loader.present();
+  }
+
+  closeLoader(){
+    this.loader.dismiss();
+  }
+
   getAttendances(site){
     this.authService.getSiteAttendances(site.id).subscribe(response=>{
       console.log(response.json());
@@ -78,7 +92,10 @@ export class EmployeeSiteListPage {
         this.employeeId = window.localStorage.getItem('employeeId');
         this.employeeFullName = window.localStorage.getItem('employeeFullName');
         this.employeeEmpId = window.localStorage.getItem('employeeEmpId');
-        console.log(window.localStorage.getItem('employeeId'));
+        var employeeDetails = JSON.parse(window.localStorage.getItem('employeeDetails'));
+        this.employee = employeeDetails.employee;
+        console.log("Employee details from localstorage");
+        console.log(this.employee.userId);
         this.authService.getAttendances(this.employeeId).subscribe(
           response =>{
             console.log(response.json());
@@ -86,6 +103,7 @@ export class EmployeeSiteListPage {
             if(result[0]){
               console.log("already checked in ");
               this.checkedIn = true;
+              this.attendanceId=result[0].id;
 
             }else{
               console.log("Not yet checked in ");
@@ -112,76 +130,192 @@ export class EmployeeSiteListPage {
     };
 
     this.camera.getPicture(options).then((imageData) => {
-      let loader = this.loadingCtrl.create({
-        content:''
-      });
-      loader.present();
-      let base64Image = 'data:image/jpeg;base64,' + imageData;
-      var employeeName = this.employeeFullName+this.employeeId;
-
-      this.authService.detectFace(employeeName,imageData).subscribe(response=>{
-        console.log("response in site list");
+      // let loader = this.loadingCtrl.create({
+      //   content:''
+      // });
+      // loader.present();
+      var employeeName = this.employeeFullName + this.employeeEmpId;
+      if(attendanceMode == 'enroll'){
+        this.showLoader('Enrolling Face');
+        this.authService.enrollFace(employeeName,imageData).subscribe(response=>{
+          console.log("Face verification response");
           console.log(response.json());
-          var detectResponse = response.json();
+          var verificationResponse = response.json();
+          this.employee.imageData = imageData;
+          this.authService.markEnrolled(this.employee).subscribe(response=>{
+            console.log("face marked to database");
+            this.closeLoader();
+            var msg='Face enrolled Successfully';
+            this.showSuccessToast(msg);
+          },error=>{
+            this.closeLoader();
+            console.log("Error in enrolling to server");
+            console.log(error)
+          });
 
-          if(detectResponse && detectResponse.images){
-            if(detectResponse.images[0].status === 'Complete'){
-              this.authService.verifyUser(this.employeeFullName,imageData).subscribe(response=>{
-                console.log("Face verification response");
-                console.log(response.json());
-                var verificationResponse = response.json();
-                if(verificationResponse && verificationResponse.images){
-                  if(verificationResponse.images[0].transaction.confidence >=0.75){
-                    if(attendanceMode == 'checkIn'){
-                      this.authService.markAttendanceCheckIn(siteId,this.employeeEmpId,this.lattitude,this.longitude,imageData).subscribe(response=>{
+        },error=>{
+          this.closeLoader();
+          console.log("Error");
+          console.log(error)
+        })
+      }else {
+
+        this.showLoader('getting location');
+        var employeeName = this.employeeFullName + this.employeeEmpId;
+
+        this.geolocation.getCurrentPosition().then((response) => {
+          console.log("Current location");
+          console.log(response);
+          this.closeLoader();
+          this.showLoader('verifying Location');
+          this.lattitude = response.coords.latitude;
+          this.longitude = response.coords.longitude;
+          this.authService.checkSiteProximity(siteId, this.lattitude, this.longitude).subscribe(
+            response => {
+              this.closeLoader();
+              this.showLoader('');
+              console.log(response.json());
+
+              this.authService.detectFace(employeeName, imageData).subscribe(response => {
+                  console.log("response in site list");
+                  console.log(response.json());
+                  var detectResponse = response.json();
+
+                  if (detectResponse.images && detectResponse.images[0].status === 'Complete') {
+                    this.closeLoader();
+
+                    if (attendanceMode == 'checkIn') {
+                      this.showLoader('Verifying Face');
+                      this.authService.verifyUser(employeeName, imageData).subscribe(response => {
+                        console.log("Face verification response");
                         console.log(response.json());
-                        loader.dismiss();
-                        if(response && response.status === 200){
-                          var msg='Face Verified and Attendance marked Successfully';
+                        var verificationResponse = response.json();
+                        if (verificationResponse && verificationResponse.images) {
+                          if (verificationResponse.images[0].transaction.confidence >= 0.75) {
+                            console.log(this.lattitude);
+                            console.log(this.longitude);
+                            this.closeLoader();
+                            this.showLoader('Marking Attendance');
+                            this.authService.markAttendanceCheckIn(siteId, this.employeeEmpId, this.lattitude, this.longitude, imageData).subscribe(response => {
+                              console.log(response.json());
+                              this.closeLoader();
+                              if (response && response.status === 200) {
+                                var msg = 'Face Verified and Attendance marked Successfully';
+                                this.showSuccessToast(msg);
+                                window.location.reload();
+                              }
+                            }, error => {
+                              var msg = 'Attendance Not Marked';
+                              console.log(error);
+                              this.showSuccessToast(msg);
+                              this.closeLoader();
+                            })
+                          }
+                        } else {
+                          this.closeLoader();
+                          var msg = "Unable to verify face, please try again";
                           this.showSuccessToast(msg);
                         }
-                      },error=>{
-                        var msg = 'Attendance Not Marked';
-                        console.log(error);
+                      }, error => {
+                        this.closeLoader();
+                        var msg = "Unable to verify face, please try again";
                         this.showSuccessToast(msg);
-                        loader.dismiss();
                       })
-                    }else{
-                      this.authService.markAttendanceCheckOut(siteId,this.employeeEmpId,this.lattitude,this.longitude,imageData,1).subscribe(response=>{
+
+                    } else {
+                      this.showLoader('Verifying Face');
+                      this.authService.verifyUser(employeeName, imageData).subscribe(response => {
+                        console.log("Face verification response");
                         console.log(response.json());
-                        loader.dismiss();
-                        if(response && response.status === 200){
-                          var msg='Face Verified and Attendance marked Successfully';
+                        var verificationResponse = response.json();
+                        if (verificationResponse && verificationResponse.images) {
+                          if (verificationResponse.images[0].transaction.confidence >= 0.75) {
+                            console.log(this.lattitude);
+                            console.log(this.longitude);
+                            this.closeLoader();
+                            this.showLoader('Marking Attendance');
+
+                            this.authService.markAttendanceCheckOut(siteId, this.employeeEmpId, this.lattitude, this.longitude, imageData, this.attendanceId).subscribe(response => {
+                              console.log(response.json());
+                              this.closeLoader();
+                              if (response && response.status === 200) {
+                                var msg = 'Face Verified and Attendance marked Successfully';
+                                this.showSuccessToast(msg);
+                                window.location.reload();
+                              }
+                            }, error => {
+                              var msg = 'Attendance Not Marked';
+                              console.log(error);
+                              this.showSuccessToast(msg);
+                              this.closeLoader();
+                            })
+                          }
+                        } else {
+                          this.closeLoader();
+                          var msg = "Unable to verify face, please try again";
                           this.showSuccessToast(msg);
                         }
-                      },error=>{
-                        var msg = 'Attendance Not Marked';
-                        console.log(error);
+                      }, error => {
+                        this.closeLoader();
+                        var msg = "Unable to verify face, please try again";
                         this.showSuccessToast(msg);
-                        loader.dismiss();
                       })
                     }
 
-                }
-                }else{
-                  loader.dismiss();
-                  var msg = "Unable to verify face, please try again";
-                  this.showSuccessToast(msg);
-                }
-              })
+                  } else {
+                    console.log("error in detecting face");
+                    this.closeLoader();
+                    var msg = "Face not Detected, please try again";
+                    this.showSuccessToast(msg);
+                  }
 
-          }
-          }else{
-            console.log("error in detecting face");
-            loader.dismiss();
-            var msg = "Face not Detected, please try again";
-            this.showSuccessToast(msg);
-          }
-      });
 
-      // this.navCtrl.push(AttendanceViewPage,base64Image)
+                }, error => {
+                  console.log("errors")
+                  console.log(error.json());
+                  if (error.json().status == "false") {
+                    var msg = "You are currently not at the site location";
+                    this.showSuccessToast(msg);
+                    this.closeLoader();
+                  }
+                }
+              )
+            }, error => {
+              console.log("errors");
+              console.log("errors")
+              console.log(error.json());
+              if (error.json().status === "false") {
+                var msg = "You are currently not at the site location";
+                this.showSuccessToast(msg);
+                this.closeLoader();
+              } else {
+                var msg = "You are currently not at the site location";
+                this.showSuccessToast(msg);
+                this.closeLoader();
+              }
+            });
+
+        }).catch((error) => {
+
+          console.log("Location error")
+          this.lattitude = 0;
+          this.longitude = 0;
+          var msg = "Unable to get location";
+          this.showSuccessToast(msg);
+          this.closeLoader();
+        })
+      }
+
+      // this.navCtrl.push(AttendanceViewPage,imageData)
     }, (err) => {
-      console.log(err);
+
+
+      console.log("Location error")
+      this.lattitude = 0;
+      this.longitude = 0;
+
+      var msg= "Unable to get location";
+      this.showSuccessToast(msg);
     })
   }
 

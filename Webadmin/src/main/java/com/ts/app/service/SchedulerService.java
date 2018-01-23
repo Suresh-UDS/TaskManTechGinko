@@ -199,7 +199,7 @@ public class SchedulerService extends AbstractService {
 		}
 	}
 
-	@Scheduled(initialDelay = 60000,fixedRate = 900000) //Runs every 5 mins
+	//@Scheduled(initialDelay = 60000,fixedRate = 900000) //Runs every 5 mins
 	public void overDueTaskCheck() {
 		Calendar cal = Calendar.getInstance();
 		List<Job> overDueJobs = jobRepository.findOverdueJobsByStatusAndEndDateTime(cal.getTime());
@@ -232,7 +232,7 @@ public class SchedulerService extends AbstractService {
 		}
 	}
 	
-	@Scheduled(cron="0 0 0 1/1 * ?") //Test to run every 30 seconds
+	//@Scheduled(cron="0 0 0 1/1 * ?") //Test to run every 30 seconds
 	public void attendanceCheckOutTask() {
 		Calendar startCal = Calendar.getInstance();
 		startCal.set(Calendar.HOUR_OF_DAY,0);

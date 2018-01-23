@@ -13,7 +13,7 @@ import {LoadingController, ToastController} from "ionic-angular";
 export class authService
 {
     private Url_local = 'http://localhost:8000/';
-    private mobile_url = "http://192.168.1.8:8088/";
+    private mobile_url = "http://192.168.1.4:8088/";
     private aws_url = '';
     private Url = this.mobile_url;
     private kairosResponse ={
@@ -88,6 +88,17 @@ export class authService
         )
     }
 
+    markEnrolled(employee):Observable<any>{
+        return this.http.post(this.Url+'api/employee/enroll',{id:employee.id,enrolled_face:employee.imageData}).map(
+            (response)=>{
+                console.log(response);
+                return response;
+            },(error)=>{
+                console.log(error);
+                return error;
+            }
+        )
+    }
 
     markAttendanceCheckIn(siteId,empId,lat,long,imageData):Observable<any>{
         return this.http.post(this.Url+'api/attendance',{siteId:siteId,employeeEmpId:empId,latitudeIn:lat,longitudeIn:long,checkInImage:imageData}).map(
@@ -151,6 +162,22 @@ export class authService
         )
     }
 
+    getTodayJobs(): Observable<any>{
+        return this.http.post(this.Url+'api/jobs/date/search',{checkInDateTimeFrom:new Date()}).map(
+            response=>{
+                console.log(response);
+                return response.json();
+            }
+        )
+    }
 
+    getJobs(): Observable<any>{
+        return this.http.post(this.Url+'api/jobs/date/search',{}).map(
+            response=>{
+                console.log(response);
+                return response.json();
+            }
+        )
+    }
 
 }
