@@ -39,7 +39,7 @@
 }
 .container-scroll > .row {
   /*width: 200%; !* = 100% * 4/3 *!*/
-  width:1400px;
+  width:1600px;
 }
 
 container-scroll::-webkit-scrollbar-track
@@ -141,6 +141,21 @@ container-scroll::-webkit-scrollbar-thumb
   padding:10px 15px;
  /* width: 1400px;*/
 }
+/* calendar css */
+.Viewcalendartxt h2
+{
+      text-align: center;
+      font-size: 18px;
+}
+.fc-unthemed .fc-today {
+    background: #F44336 !important;
+    color: #fff !important;
+}
+.fc-toolbar h2
+{
+      font-size: 17px;
+}
+
 .margin-top5
 {
   margin-top:5px !important;
