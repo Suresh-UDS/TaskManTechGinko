@@ -26,13 +26,13 @@
 }
 .segment-button.segment-activated:first-child
 {
-  /*border-bottom-left-radius: 7px !important;
-  border-top-left-radius: 7px !important;*/
+  border-bottom-left-radius: 7px !important;
+  border-top-left-radius: 7px !important;
 }
 .segment-button.segment-activated:last-child
 {
- /* border-top-right-radius: 7px !important;
-  border-bottom-right-radius: 7px !important;*/
+  border-top-right-radius: 7px !important;
+  border-bottom-right-radius: 7px !important;
 }
 .container-scroll {
   overflow-x: auto;
@@ -83,6 +83,14 @@ container-scroll::-webkit-scrollbar-thumb
 .margin-auto
 {
   margin: auto;
+}
+.margin-top25
+{
+  margin-top:25%;
+}
+.margn-btom20
+{
+  margin-bottom:20px;
 }
 .padding-left5
 {
