@@ -227,3 +227,12 @@ table tr
 {
   color: orange !important;
 }
+
+ion-scroll.item{
+	height: 100%;
+}
+ion-scroll.item ion-col
+{
+  min-width: 150px;
+  margin: 5px;
+}
