@@ -77,14 +77,14 @@ public class Employee extends AbstractAuditingEntity implements Serializable {
     @Column(length = 50, nullable = true)
     private String designation;
 
-    @ManyToMany(cascade={CascadeType.ALL})
+    @ManyToMany(cascade={CascadeType.ALL}, fetch = FetchType.LAZY)
     @JoinTable(
         name = "employee_project",
         joinColumns = {@JoinColumn(name = "employee_id", referencedColumnName = "id")},
         inverseJoinColumns = {@JoinColumn(name = "project_id", referencedColumnName = "id")})
 	private List<Project> projects;
 
-    @ManyToMany(cascade={CascadeType.ALL})
+    @ManyToMany(cascade={CascadeType.ALL}, fetch = FetchType.LAZY)
     @JoinTable(
         name = "employee_site",
         joinColumns = {@JoinColumn(name = "employee_id", referencedColumnName = "id")},

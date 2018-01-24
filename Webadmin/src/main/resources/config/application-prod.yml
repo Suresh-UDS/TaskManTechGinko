@@ -20,17 +20,17 @@ spring:
             enabled: false
     datasource:
         driver-class-name: com.mysql.jdbc.Driver
-        url: jdbc:mysql://localhost:3306/TimeSheet_Uds_Live?useUnicode=true&characterEncoding=utf8
+        url: jdbc:mysql://localhost:3306/Zappy-attendance?useUnicode=true&characterEncoding=utf8
         name:
         username: root
-        password: admin
+        password: Uds@2018
     jpa:
         database-platform: org.hibernate.dialect.MySQLInnoDBDialect
         database: MYSQL
         show_sql: false
         properties:
             hibernate.cache.use_second_level_cache: true
-            hibernate.cache.use_query_cache: false
+            hibernate.cache.use_query_cache: true
             hibernate.generate_statistics: false
             hibernate.cache.region.factory_class: org.hibernate.cache.ehcache.SingletonEhCacheRegionFactory
     mail:
@@ -89,7 +89,7 @@ jhipster:
     cache: # Hibernate 2nd level cache, used by CacheConfiguration
         timeToLiveSeconds: 3600
         ehcache:
-            maxBytesLocalHeap: 64M
+            maxBytesLocalHeap: 512M
     mail: # specific JHipster mail property, for standard properties see MailProperties
         from: no-reply@taskman.uds.com
     metrics: # DropWizard Metrics configuration, used by MetricsConfiguration
