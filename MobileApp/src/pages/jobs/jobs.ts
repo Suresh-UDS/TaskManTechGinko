@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import {LoadingController, NavController} from 'ionic-angular';
 import {authService} from "../service/authService";
+import {ViewJobPage} from "./view-job";
 
 @Component({
   selector: 'page-jobs',
@@ -44,11 +45,17 @@ export class JobsPage {
 
     getAllJobs(){
         this.showLoader('Getting All Jobs');
-        this.authService.getJobs().subscribe(response=>{
+        var search={};
+        this.authService.getJobs(search).subscribe(response=>{
             console.log("All jobs of current user");
             console.log(response);
             this.allJobs = response;
             this.closeLoader();
         })
+    }
+
+    viewJob(job)
+    {
+        this.navCtrl.push(ViewJobPage,{job:job})
     }
 }

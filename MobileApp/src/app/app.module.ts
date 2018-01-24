@@ -34,6 +34,8 @@ import {AttendancePopoverPage} from "../pages/attendance/attendance-popover";
 import {EmployeeDetailPage} from "../pages/employee-detail/employee-detail";
 import {CustomerDetailPage} from "../pages/customer-detail/customer-detail";
 import {SiteViewPage} from "../pages/site-view/site-view";
+import {ViewJobPage} from "../pages/jobs/view-job";
+import {EmployeeListPage} from "../pages/employee-list/employee-list";
 @NgModule({
   declarations: [
     MyApp,
@@ -57,7 +59,9 @@ import {SiteViewPage} from "../pages/site-view/site-view";
     AttendancePopoverPage,
     EmployeeDetailPage,
     CustomerDetailPage,
-    SiteViewPage
+    SiteViewPage,
+    ViewJobPage,
+    EmployeeListPage
   ],
   imports: [
     BrowserModule,
@@ -89,7 +93,9 @@ import {SiteViewPage} from "../pages/site-view/site-view";
     AttendancePopoverPage,
     EmployeeDetailPage,
     CustomerDetailPage,
-    SiteViewPage
+    SiteViewPage,
+    ViewJobPage,
+    EmployeeListPage
   ],
   providers: [
     StatusBar,
