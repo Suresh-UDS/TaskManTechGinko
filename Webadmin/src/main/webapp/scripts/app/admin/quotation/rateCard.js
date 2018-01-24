@@ -59,7 +59,7 @@ angular.module('timeSheetApp')
                               }
              }).state('view-rateCard', {
             parent: 'manage',
-            url: '/view-rateCard:id',
+            url: '/view-rateCard',
             controller: 'RateCardController',
             data: {
                 authorities: [],
