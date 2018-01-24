@@ -302,3 +302,12 @@ span.red-star
 {
   color: #444;
 }
+.appModuleCard table label
+{
+   padding: 2px 5px;
+       background: #ccc;
+       color: #fff;
+       border-radius: 5px;
+       font-size: 12px;
+       margin: 0 2px;
+}
