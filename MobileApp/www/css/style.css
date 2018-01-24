@@ -12,18 +12,21 @@
 {
   height: 30%;
 }
+/*
 .segmnt
 {
   width: 80%;
   border: 1px solid orange;
   border-radius: 8px;
-}
+}*/
 .segment-button.segment-activated
 {
   border-bottom: none !important;
   background-color: #00bcd4 !important;
   color: #FFFFFF !important;
 }
+
+/*
 .segment-button.segment-activated:first-child
 {
   border-bottom-left-radius: 7px !important;
@@ -33,7 +36,7 @@
 {
   border-top-right-radius: 7px !important;
   border-bottom-right-radius: 7px !important;
-}
+}*/
 .container-scroll {
   overflow-x: auto;
 }

@@ -1,0 +1,128 @@
+<div class="crud-form"
+     data-unique-hash="a2ad475d60b22954085c657a73309b8f">
+    <div class="">
+
+        <div class="row">
+            <div class="col-mod-12">
+                <div class="alert alert-success" ng-show="success">
+                    <strong>Quotation saved!</strong>
+                </div>
+
+                <div class="alert alert-danger" ng-show="error">
+                    <strong>Quotation Not Saved!</strong> Please try again later.
+                </div>
+                <div class="alert alert-danger" ng-show="errorQuotationExists">
+                    <strong>Quotation already registered!</strong> Please choose another one.
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="titleCon">
+                    <h3>Add Rate Card</h3>
+                </div>
+                <div class="form-container table-container">
+                    <form ng-show="!success" name="form" role="form" novalidate
+                          ng-submit="saveQuotation()"  class="form-horizontal">
+
+                        <div class="row">
+                            <div class="col-md-8 col-md-offset-2">
+                                <div class="card formcard">
+
+                                    <div class="card-content">
+
+                                        <div class="row">
+
+                                            <div class="col-md-6">
+                                                <select class="selectpicker" data-style="btn btn-primary" title="Single Select" data-size="7">
+                                                    <option disabled selected>Choose Type</option>
+                                                    <option value="1">Material</option>
+                                                    <option value="2">Labour</option>
+                                                    <option value="3">Service</option>
+                                                </select>
+                                            </div>
+
+                                            <div class="col-md-6">
+                                                <div class="form-group label-floating">
+                                                    <label class="control-label">Title</label>
+                                                    <input   class='form-control' name='rateCardTitle' type='text' value=""
+                                                           ng-minlength='2' ng-maxlength='50' ng-pattern="/^[A-Za-z0-9\s&-/]*$/" autofocus required/>
+
+                                                </div>
+                                            </div>
+
+                                        </div>
+
+
+                                        <div class="row">
+
+                                            <div class="col-md-6">
+                                                <div class="form-group label-floating">
+                                                    <label class="control-label">Material Cost</label>
+                                                    <input   class='form-control' name='rateCardTitle' type='text' value=""
+                                                             ng-minlength='2' ng-maxlength='50' ng-pattern="/^[A-Za-z0-9\s&-/]*$/" autofocus required/>
+
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group label-floating">
+                                                    <label class="control-label">UOM Type</label>
+                                                    <input id='quotationDescription' ng-model="quotation.description" class='form-control'
+                                                           name='quotationDescription' type='text' value=""
+                                                           ng-maxlength=50
+                                                           ng-pattern="/^[A-Za-z0-9\s&-/]*$/" disabled/>
+
+                                                </div>
+                                            </div>
+
+                                        </div>
+
+                                        <div class="row">
+
+                                            <div class="col-md-10 col-md-offset-1">
+                                                <div class="form-group">
+
+                                                    <button class="btn btn-success" type="submit"
+                                                            id="form-button-save" ng-disabled="form.$invalid">
+                                                        <span class="btn-label"><i class="material-icons">check</i></span> Save
+                                                    </button>
+                                                    <button class="btn btn-info" type="submit"
+                                                            id="save-and-go-back-button" ng-disabled="form.$invalid">
+                                                        <i class="fa fa-rotate-left" ></i> Save and go back to list
+                                                    </button>
+                                                    <button class="btn btn-danger" type="button"
+                                                            ng-click="cancelQuotation()" id="cancel-button">
+                                                        <i class="material-icons">close</i> Cancel
+                                                    </button>
+
+                                                </div>
+                                            </div>
+                                        </div>
+
+
+
+
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class='small-loading hidden' id='FormLoading'>Loading,
+                            saving data...</div>
+
+                        <div class="form-group">
+                            <div id='report-error' class='report-div error bg-danger'
+                                 style="display: none"></div>
+                            <div id='report-success' class='report-div success bg-success'
+                                 style="display: none"></div>
+                        </div>
+
+                    </form>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+
+
+</div>
