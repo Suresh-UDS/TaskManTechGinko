@@ -156,15 +156,15 @@ Tip 2: you can also add an image using data-image tag
 
         </div>
     </div>
+    <!--
+        <ion-segment [(ngModel)]="cat" class="" color="clr-blue">
+            <div *ngFor="let c of categories">
+                <ion-segment-button [value]="c" (click)="getAllJobs()">
+                    {{c}}
+                </ion-segment-button>
+            </div>
+        </ion-segment>-->
 
-    <ion-segment [(ngModel)]="cat" class="" color="clr-blue">
-        <div *ngFor="let c of categories">
-            <ion-segment-button [value]="c" (click)="getAllJobs()">
-                {{c}}
-            </ion-segment-button>
-        </div>
-    </ion-segment>
-<!--
         <ion-segment [(ngModel)]="categories" class="" color="clr-blue">
             <ion-segment-button value="overdue" >
                 Overdue
@@ -176,7 +176,7 @@ Tip 2: you can also add an image using data-image tag
                 Completed
             </ion-segment-button>
         </ion-segment>
--->
+
     <div class="main-panel" >
 
       <div class="content margin-top0">
@@ -185,7 +185,7 @@ Tip 2: you can also add an image using data-image tag
           <div class="row">
             <ion-col col-10 class="margin-auto">
 
-
+<!--
                 <div [ngSwitch]="cat">
                     <div *ngFor="let c of categories">
                             <ion-list *ngSwitchCase="c">
@@ -224,7 +224,7 @@ Tip 2: you can also add an image using data-image tag
                                                     <p>{{job.actualStartTime | date:'dd/MM/yyyy @ H:mm' }} - {{job.actualEndTime | date:'dd/MM/yyyy @ H:mm' }} </p>
                                                 </div>
                                                 <div class="stats align-right">
-                                                    <!--<p class="display-inline">view</p><ion-icon class="primary-clr padding-left5 fnt-12" name="arrow-forward"></ion-icon>-->
+
                                                 </div>
                                             </div>
                                         </div>
@@ -234,8 +234,10 @@ Tip 2: you can also add an image using data-image tag
                     </div>
                 </div>
 
+                -->
 
-                <!--
+
+
 
                 <div [ngSwitch]="categories">
                         <ion-list *ngSwitchCase="'overdue'">
@@ -275,7 +277,7 @@ Tip 2: you can also add an image using data-image tag
                                     </div>
                                     <div class="stats align-right">
                                         <!--<p class="display-inline">view</p><ion-icon class="primary-clr padding-left5 fnt-12" name="arrow-forward"></ion-icon>-->
-                                <!--    </div>
+                                   </div>
                                 </div>
                             </div>
                             </div>
@@ -320,7 +322,7 @@ Tip 2: you can also add an image using data-image tag
                                     </div>
                                     <div class="stats align-right">
                                         <!--<p class="display-inline">view</p><ion-icon class="primary-clr padding-left5 fnt-12" name="arrow-forward"></ion-icon>-->
-                                <!--    </div>
+                                  </div>
                                 </div>
                             </div>
                         </div>
@@ -364,14 +366,14 @@ Tip 2: you can also add an image using data-image tag
                                     </div>
                                     <div class="stats align-right">
                                         <!--<p class="display-inline">view</p><ion-icon class="primary-clr padding-left5 fnt-12" name="arrow-forward"></ion-icon>-->
-                            <!--        </div>
+                                   </div>
                                 </div>
                             </div>
                         </div>
                     </ion-list>
 
 
-                </div>-->
+                </div>
             </ion-col>
           </div>
         </div>

@@ -19,17 +19,23 @@ import {Geofence} from "@ionic-native/geofence";
 })
 export class EmployeeDetailPage {
 
+  empDetail:any;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, private  authService: authService, public camera: Camera,
+  constructor(public navCtrl: NavController,public myService:authService, public navParams: NavParams, private  authService: authService, public camera: Camera,
               private loadingCtrl:LoadingController, private geolocation:Geolocation, private toastCtrl:ToastController,
               private geoFence:Geofence) {
+
+    this.empDetail=this.navParams.get('emp');
 
 
   }
 
 
   ionViewDidLoad() {
-    console.log('ionViewDidLoad SiteListPage');
+    console.log('ionViewDidLoad Employee Detail Page');
+    console.log(this.empDetail);
+
+
   }
 
 
