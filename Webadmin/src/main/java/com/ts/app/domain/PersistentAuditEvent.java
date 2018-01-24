@@ -3,6 +3,10 @@ package com.ts.app.domain;
 import java.time.LocalDateTime;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -12,6 +16,8 @@ import java.util.Map;
  */
 @Entity
 @Table(name = "jhi_persistent_audit_event")
+@Cacheable(true)
+@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class PersistentAuditEvent {
 
     @Id

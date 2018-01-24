@@ -19,6 +19,8 @@ import java.io.Serializable;
  */
 @Entity
 @Table(name = "jhi_persistent_token")
+@Cacheable(true)
+@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class PersistentToken implements Serializable {
 
     
