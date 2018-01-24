@@ -18,9 +18,7 @@ export class DashboardPage {
               private datePickerProvider: DatePickerProvider) {
 
     this.categories = [
-      {name: 'overdue'},
-      {name: 'upcoming'},
-      {name: 'completed'},
+      'overdue','upcoming','completed'
       ];
   }
 
@@ -61,7 +59,8 @@ export class DashboardPage {
   }
   getAllJobs(){
     this.showLoader('Getting All Jobs');
-    this.authService.getJobs().subscribe(response=>{
+    var search={};
+    this.authService.getJobs(search).subscribe(response=>{
       console.log("All jobs of current user");
       console.log(response);
       this.allJobs = response;
