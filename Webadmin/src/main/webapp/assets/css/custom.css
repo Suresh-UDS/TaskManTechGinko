@@ -311,3 +311,9 @@ span.red-star
        font-size: 12px;
        margin: 0 2px;
 }
+.addedActionList .list-group-item>.badge
+{
+      padding: 0;
+      background: #fff;
+      color: #777;
+}
