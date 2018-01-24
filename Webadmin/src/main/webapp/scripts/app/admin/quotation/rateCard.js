@@ -39,9 +39,27 @@ angular.module('timeSheetApp')
 
 
                 }
-            }).state('view-rateCard', {
+            }).state('rateCardList', {
+                              parent: 'manage',
+                              url: '/rateCardList',
+                              controller: 'RateCardController',
+                              data: {
+                                  authorities: [],
+                                  pageTitle: 'RateCard List'
+                              },
+                              views: {
+                                  'content@': {
+                                      templateUrl: 'scripts/app/admin/quotation/rateCard-list.html',
+                                      controller: 'RateCardController'
+                                  }
+                              },
+                              resolve: {
+
+
+                              }
+             }).state('view-rateCard', {
             parent: 'manage',
-            url: '/view-rateCard:id',
+            url: '/view-rateCard',
             controller: 'RateCardController',
             data: {
                 authorities: [],

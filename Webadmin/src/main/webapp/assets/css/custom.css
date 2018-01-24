@@ -305,9 +305,15 @@ span.red-star
 .appModuleCard table label
 {
    padding: 2px 5px;
-       background: #ccc;
-       color: #fff;
-       border-radius: 5px;
-       font-size: 12px;
-       margin: 0 2px;
+   background: #ccc;
+   color: #fff;
+   border-radius: 5px;
+   font-size: 12px;
+   margin: 0 2px;
+}
+.addedActionList .list-group-item>.badge
+{
+        padding: 0;
+      background: #fff;
+      color: #777;
 }

@@ -57,5 +57,23 @@ angular.module('timeSheetApp')
 
 
             }
-        });
+        }).state('quotation-list', {
+                          parent: 'manage',
+                          url: '/quotation-list',
+                          controller: 'QuotationController',
+                          data: {
+                              authorities: [],
+                              pageTitle: 'Quotation'
+                          },
+                          views: {
+                              'content@': {
+                                  templateUrl: 'scripts/app/admin/quotation/quotation-list.html',
+                                  controller: 'QuotationController'
+                              }
+                          },
+                          resolve: {
+
+
+                          }
+                      });
     });

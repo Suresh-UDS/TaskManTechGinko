@@ -20,35 +20,87 @@
 
                 <div class="card-content">
 
-                    <div class="row col-md-offset-2 ">
+                    <div class="row col-md-offset-2">
 
                         <div class="col-md-4">
 
+                            <div class="form-group label-floating pdng-top15">
+                                <label class="control-label">Module Name</label>
+                                <input type="text" class="form-control">
+                            </div>
+
+                        </div>
+
+                        <div class="col-md-3">
+
                             <select class="selectpicker" data-style="btn btn-primary btn-round" title="Single Select" data-size="7">
-                                <option disabled selected>Choose Role</option>
-                                <option value="1">SUPER_ADMIN</option>
-                                <option value="2">CITY_ADMIN</option>
-                                <option value="3">HUB_ADMIN</option>
+                                <option disabled selected>Choose Action</option>
+                                <option value="1">List</option>
+                                <option value="2">View</option>
+                                <option value="3">Edit</option>
+                                <option value="4">Delete</option>
+                                <option value="5">Create</option>
                             </select>
 
 
                         </div>
-                        <div class="col-md-6 ">
+                        <div class="col-md-3">
 
                             <button class="btn btn-success">
-                                        <span class="btn-label">
-                                            <i class="material-icons">check</i>
-                                        </span>
-                                Submit
-                            </button>
-
-                            <button class="btn btn-danger">
-                                <i class="material-icons">close</i> Cancel
+                                <span class="btn-label">
+                                    <i class="material-icons">add</i>
+                                </span>
+                                Add
                             </button>
 
                         </div>
 
                     </div>
+
+                    <div class="col-md-4 col-md-offset-4 addedActionList">
+
+                        <div class="form-group txt-align-center">
+
+                            <label class="">Action List</label>
+
+                            <ul class="listOfActions list-group">
+
+                                <li class="list-group-item justify-content-between">
+                                    Create
+                                    <span class="badge badge-default badge-pill" onclick="removeAction(this)"><i class="material-icons">remove_circle</i></span>
+                                </li>
+                                <li class="list-group-item justify-content-between">
+                                    List
+                                    <span class="badge badge-default badge-pill" onclick="removeAction(this)"><i class="material-icons">remove_circle</i></span>
+                                </li>
+
+                                <li class="list-group-item justify-content-between">
+                                    View
+                                    <span class="badge badge-default badge-pill" onclick="removeAction(this)"><i class="material-icons">remove_circle</i></span>
+                                </li>
+
+                                <li class="list-group-item justify-content-between">
+                                    Edit
+                                    <span class="badge badge-default badge-pill" onclick="removeAction(this)"><i class="material-icons">remove_circle</i></span>
+                                </li>
+
+                                <li class="list-group-item justify-content-between">
+                                    Delete
+                                    <span class="badge badge-default badge-pill" onclick="removeAction(this)"><i class="material-icons">remove_circle</i></span>
+                                </li>
+
+                                <li class="list-group-item justify-content-between">
+                                    Booking History
+                                    <span class="badge badge-default badge-pill" onclick="removeAction(this)"><i class="material-icons">remove_circle</i></span>
+                                </li>
+
+                            </ul>
+
+                        </div>
+
+
+                    </div>
+
 
                 </div>
 
