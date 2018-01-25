@@ -24,7 +24,7 @@
                           ng-submit="saveQuotation()"  class="form-horizontal">
 
                         <div class="row">
-                            <div class="col-md-8 col-md-offset-2">
+                            <div class="col-md-6">
                                 <div class="card formcard">
 
                                     <div class="card-content">
@@ -60,7 +60,7 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div class="col-md-6">
+                                            <div class="col-md-12">
                                                 <div class="form-group label-floating">
                                                     <label class="control-label">Description</label>
                                                     <input id='quotationDescription' ng-model="quotation.description" class='form-control'
@@ -83,19 +83,223 @@
                                             </div>
 
                                         </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+
+                                <div class="card formcard">
+
+                                    <div class="card-content">
+
                                         <div class="row">
 
-                                            <div class="col-md-10 col-md-offset-1">
+                                            <div class="col-md-4">
+
+                                                <button class="btn btn-outline" type="submit">
+                                                    <span class="btn-label"><i class="material-icons">add</i></span> Material
+                                                </button>
+
+                                            </div>
+                                            <div class="col-md-4">
+                                                <button class="btn btn-outline" type="submit">
+                                                    <span class="btn-label"><i class="material-icons">add</i></span> Service
+                                                </button>
+
+                                            </div>
+                                            <div class="col-md-4">
+                                                <button class="btn btn-outline" type="submit">
+                                                    <span class="btn-label"><i class="material-icons">add</i></span> Labour
+                                                </button>
+
+                                            </div>
+
+                                        </div>
+
+                                        <div class="row">
+
+                                            <div class="col-md-4">
+                                                <div class="form-group label-floating">
+                                                    <label class="control-label">Material Name</label>
+                                                    <input  class='form-control' name='name' type='text' value=""
+                                                            ng-minlength='2' ng-maxlength='50' ng-pattern="/^[A-Za-z0-9\s&-/]*$/" autofocus required/>
+
+                                                </div>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <div class="form-group label-floating">
+                                                    <label class="control-label">Qty</label>
+                                                    <input  class='form-control' name='name' type='text' value=""
+                                                            ng-minlength='2' ng-maxlength='50' ng-pattern="/^[A-Za-z0-9\s&-/]*$/" autofocus required/>
+
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <div class="form-group label-floating">
+                                                    <label class="control-label">Cost</label>
+                                                    <input  class='form-control' name='name' type='text' value=""
+                                                            ng-minlength='2' ng-maxlength='50' ng-pattern="/^[A-Za-z0-9\s&-/]*$/" autofocus required/>
+
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <button class="btn btn-success" type="submit">
+                                                    <span class="btn-label"><i class="material-icons">check</i></span>
+                                                </button>
+                                                <button class="btn btn-danger" type="submit">
+                                                    <span class="btn-label"><i class="material-icons">close</i></span>
+                                                </button>
+
+                                            </div>
+
+
+
+                                        </div>
+
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <div class="col-md-12">
+
+                                <div class="card formcard">
+
+                                    <div class="card-content">
+                                        <div class="row">
+
+                                            <div class="table-responsive">
+                                                <table class="table table-striped">
+                                                    <thead>
+                                                    <tr>
+                                                        <th>Type</th>
+                                                        <th>Name</th>
+                                                        <th>UOM type</th>
+                                                        <th>Cost</th>
+                                                        <th class="text-right">Actions</th>
+                                                    </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                    <tr>
+                                                        <td>Labour</td>
+                                                        <td>Muthu</td>
+                                                        <td>per hour</td>
+                                                        <td>200 </td>
+                                                        <td class="text-right">
+                                                            <a ng-class="{active: $state.includes('admin')}" has-authority="ROLE_ADMIN"  ng-click="deleteConfirm(site)"  onClick="$('#deleteModal').modal()" data-target="#myModal"  class="btn btn-simple btn-danger"><i class="material-icons">close</i></a>
+                                                        </td>
+
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Labour</td>
+                                                        <td>Muthu</td>
+                                                        <td>per hour</td>
+                                                        <td>200 </td>
+                                                        <td class="text-right">
+                                                            <a ng-class="{active: $state.includes('admin')}" has-authority="ROLE_ADMIN"  ng-click="deleteConfirm(site)"  onClick="$('#deleteModal').modal()" data-target="#myModal"  class="btn btn-simple btn-danger"><i class="material-icons">close</i></a>
+                                                        </td>
+
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Labour</td>
+                                                        <td>Muthu</td>
+                                                        <td>per hour</td>
+                                                        <td>200 </td>
+                                                        <td class="text-right">
+                                                            <a ng-class="{active: $state.includes('admin')}" has-authority="ROLE_ADMIN"  ng-click="deleteConfirm(site)"  onClick="$('#deleteModal').modal()" data-target="#myModal"  class="btn btn-simple btn-danger"><i class="material-icons">close</i></a>
+                                                        </td>
+
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Labour</td>
+                                                        <td>Muthu</td>
+                                                        <td>per hour</td>
+                                                        <td>200 </td>
+                                                        <td class="text-right">
+                                                            <a ng-class="{active: $state.includes('admin')}" has-authority="ROLE_ADMIN"  ng-click="deleteConfirm(site)"  onClick="$('#deleteModal').modal()" data-target="#myModal"  class="btn btn-simple btn-danger"><i class="material-icons">close</i></a>
+                                                        </td>
+
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Labour</td>
+                                                        <td>Muthu</td>
+                                                        <td>per hour</td>
+                                                        <td>200 </td>
+                                                        <td class="text-right">
+                                                            <a ng-class="{active: $state.includes('admin')}" has-authority="ROLE_ADMIN"  ng-click="deleteConfirm(site)"  onClick="$('#deleteModal').modal()" data-target="#myModal"  class="btn btn-simple btn-danger"><i class="material-icons">close</i></a>
+                                                        </td>
+
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Labour</td>
+                                                        <td>Muthu</td>
+                                                        <td>per hour</td>
+                                                        <td>200 </td>
+                                                        <td class="text-right">
+                                                            <a ng-class="{active: $state.includes('admin')}" has-authority="ROLE_ADMIN"  ng-click="deleteConfirm(site)"  onClick="$('#deleteModal').modal()" data-target="#myModal"  class="btn btn-simple btn-danger"><i class="material-icons">close</i></a>
+                                                        </td>
+
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Labour</td>
+                                                        <td>Muthu</td>
+                                                        <td>per hour</td>
+                                                        <td>200 </td>
+                                                        <td class="text-right">
+                                                            <a ng-class="{active: $state.includes('admin')}" has-authority="ROLE_ADMIN"  ng-click="deleteConfirm(site)"  onClick="$('#deleteModal').modal()" data-target="#myModal"  class="btn btn-simple btn-danger"><i class="material-icons">close</i></a>
+                                                        </td>
+
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Labour</td>
+                                                        <td>Muthu</td>
+                                                        <td>per hour</td>
+                                                        <td>200 </td>
+                                                        <td class="text-right">
+                                                            <a ng-class="{active: $state.includes('admin')}" has-authority="ROLE_ADMIN"  ng-click="deleteConfirm(site)"  onClick="$('#deleteModal').modal()" data-target="#myModal"  class="btn btn-simple btn-danger"><i class="material-icons">close</i></a>
+                                                        </td>
+
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Labour</td>
+                                                        <td>Muthu</td>
+                                                        <td>per hour</td>
+                                                        <td>200 </td>
+                                                        <td class="text-right">
+                                                            <a ng-class="{active: $state.includes('admin')}" has-authority="ROLE_ADMIN"  ng-click="deleteConfirm(site)"  onClick="$('#deleteModal').modal()" data-target="#myModal"  class="btn btn-simple btn-danger"><i class="material-icons">close</i></a>
+                                                        </td>
+
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Labour</td>
+                                                        <td>Muthu</td>
+                                                        <td>per hour</td>
+                                                        <td>200 </td>
+                                                        <td class="text-right">
+                                                            <a ng-class="{active: $state.includes('admin')}" has-authority="ROLE_ADMIN"  ng-click="deleteConfirm(site)"  onClick="$('#deleteModal').modal()" data-target="#myModal"  class="btn btn-simple btn-danger"><i class="material-icons">close</i></a>
+                                                        </td>
+
+                                                    </tr>
+
+
+                                                    </tbody>
+                                                </table>
+                                            </div>
+
+
+                                        </div>
+
+                                        <div class="row">
+
+                                            <div class="col-md-6 col-md-offset-4">
                                                 <div class="form-group">
 
                                                     <button class="btn btn-success" type="submit"
                                                             id="form-button-save" ng-disabled="form.$invalid">
-                                                        <span class="btn-label"><i class="material-icons">check</i></span> Save
+                                                        <span class="btn-label"><i class="material-icons">check</i></span> Send
                                                     </button>
-                                                    <button class="btn btn-info" type="submit"
-                                                            id="save-and-go-back-button" ng-disabled="form.$invalid">
-                                                        <i class="fa fa-rotate-left" ></i> Save and go back to list
-                                                    </button>
+
                                                     <button class="btn btn-danger" type="button"
                                                             ng-click="cancelQuotation()" id="cancel-button">
                                                         <i class="material-icons">close</i> Cancel
@@ -104,15 +308,18 @@
                                                 </div>
                                             </div>
                                         </div>
-
-
-
-
-
                                     </div>
+
                                 </div>
+
                             </div>
+
+
                         </div>
+
+
+
+
 
                         <div class='small-loading hidden' id='FormLoading'>Loading,
                             saving data...</div>
