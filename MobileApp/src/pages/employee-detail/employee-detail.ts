@@ -5,6 +5,7 @@ import {authService} from "../service/authService";
 import {Camera, CameraOptions} from "@ionic-native/camera";
 import {Geolocation} from "@ionic-native/geolocation";
 import {Geofence} from "@ionic-native/geofence";
+import {componentService} from "../service/componentService";
 
 /**
  * Generated class for the EmployeeList page.
@@ -20,13 +21,14 @@ import {Geofence} from "@ionic-native/geofence";
 export class EmployeeDetailPage {
 
   empDetail:any;
+  categories:any;
 
-  constructor(public navCtrl: NavController,public myService:authService, public navParams: NavParams, private  authService: authService, public camera: Camera,
+  constructor(public navCtrl: NavController,public myService:authService, public component:componentService,public navParams: NavParams, private  authService: authService, public camera: Camera,
               private loadingCtrl:LoadingController, private geolocation:Geolocation, private toastCtrl:ToastController,
               private geoFence:Geofence) {
 
     this.empDetail=this.navParams.get('emp');
-
+    this.categories = 'detail';
 
   }
 

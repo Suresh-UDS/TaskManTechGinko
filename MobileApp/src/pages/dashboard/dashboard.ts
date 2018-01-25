@@ -2,6 +2,7 @@ import { Component, Input, ViewChild, ElementRef, Renderer } from '@angular/core
 import {LoadingController, ModalController, NavController} from 'ionic-angular';
 import {authService} from "../service/authService";
 import {DatePickerProvider} from "ionic2-date-picker";
+import {componentService} from "../service/componentService";
 declare var demo;
 @Component({
   selector: 'page-dashboard',
@@ -14,12 +15,15 @@ export class DashboardPage {
   categories:any;
   loader:any;
   dateView:any;
-  constructor(public renderer: Renderer,private loadingCtrl:LoadingController,public navCtrl: NavController,public authService:authService,public modalCtrl: ModalController,
+  constructor(public renderer: Renderer,private loadingCtrl:LoadingController,public navCtrl: NavController,public component:componentService,public authService:authService,public modalCtrl: ModalController,
               private datePickerProvider: DatePickerProvider) {
 
-    this.categories = [
+    this.categories='overdue';
+
+   /* this.categories = [
       'overdue','upcoming','completed'
       ];
+      */
   }
 
 /*
@@ -47,24 +51,15 @@ export class DashboardPage {
       console.log(error);
     })
   }
-  showLoader(msg){
-    this.loader = this.loadingCtrl.create({
-      content:msg
-    });
-    this.loader.present();
-  }
 
-  closeLoader(){
-    this.loader.dismiss();
-  }
   getAllJobs(){
-    this.showLoader('Getting All Jobs');
+    this.component.showLoader('Getting All Jobs');
     var search={};
     this.authService.getJobs(search).subscribe(response=>{
       console.log("All jobs of current user");
       console.log(response);
       this.allJobs = response;
-      this.closeLoader();
+      this.component.closeLoader();
     })
   }
 }

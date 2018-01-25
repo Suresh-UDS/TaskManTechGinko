@@ -8,8 +8,6 @@
 </ion-header>
 
 <ion-content>
-
-
     <div class="Viewcalendartxt" data-toggle="collapse" data-target="#fullCalendarCon">
         <h2>View Calendar <i class="material-icons icon-right">arrow_drop_down</i></h2>
     </div>
@@ -24,11 +22,6 @@
             </ion-col>
         </ion-row>
     </div>
-
-
-
-
-
 
  <!--
   <div class="wrapper">
@@ -166,7 +159,7 @@ Tip 2: you can also add an image using data-image tag
         </ion-segment>-->
 
         <ion-segment [(ngModel)]="categories" class="" color="clr-blue">
-            <ion-segment-button value="overdue" >
+            <ion-segment-button value="overdue" (click)="getAllJobs()">
                 Overdue
             </ion-segment-button>
             <ion-segment-button value="upcoming">
@@ -183,7 +176,7 @@ Tip 2: you can also add an image using data-image tag
         <div class="container-fluid">
 
           <div class="row">
-            <ion-col col-10 class="margin-auto">
+            <ion-col col-11 class="margin-auto">
 
 <!--
                 <div [ngSwitch]="cat">

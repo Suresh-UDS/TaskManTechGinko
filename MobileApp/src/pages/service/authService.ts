@@ -13,8 +13,8 @@ import {LoadingController, ToastController} from "ionic-angular";
 export class authService
 {
     private Url_local = 'http://localhost:8000/';
-    private mobile_url = "http://192.168.1.17:8088/";
-    private aws_url = '';
+    private mobile_url = "http://192.168.1.11:8088/";
+    private aws_url = 'ec2-52-77-216-21.ap-southeast-1.compute.amazonaws.com:8088/';
     private Url = this.mobile_url;
     private kairosResponse ={
         status :String,
@@ -76,6 +76,14 @@ export class authService
         return this.http.get(this.Url+'api/employee/site/'+siteId).map(
             response=>{
                 return response;
+            }
+        )
+    }
+
+    getAllEmployees():Observable<any>{
+        return this.http.get(this.Url+'api/employee').map(
+            response=>{
+                return response.json();
             }
         )
     }
