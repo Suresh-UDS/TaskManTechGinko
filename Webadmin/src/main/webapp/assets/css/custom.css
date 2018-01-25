@@ -291,7 +291,10 @@ span.red-star
     font-size: 12px;
 
 }
-
+button.btn.btn-outline {
+    background: no-repeat;
+    color: #333;
+}
 
 .main-panel>.content
 {
