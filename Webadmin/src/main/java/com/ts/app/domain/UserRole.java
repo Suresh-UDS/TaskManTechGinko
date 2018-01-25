@@ -3,6 +3,7 @@ package com.ts.app.domain;
 import java.io.Serializable;
 import java.util.Set;
 
+import javax.persistence.Cacheable;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -12,8 +13,13 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+
 @Entity
 @Table(name = "user_role")
+@Cacheable(true)
+@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class UserRole extends AbstractAuditingEntity implements Serializable {
 
 	/**

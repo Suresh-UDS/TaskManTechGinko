@@ -3,6 +3,10 @@ package com.ts.app.domain;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+
 import java.io.Serializable;
 
 /**
@@ -10,6 +14,8 @@ import java.io.Serializable;
  */
 @Entity
 @Table(name = "device")
+@Cacheable(true)
+@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class Device extends AbstractAuditingEntity implements Serializable {
 
     @Id

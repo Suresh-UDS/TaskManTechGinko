@@ -20,6 +20,8 @@ import java.time.ZonedDateTime;
  */
 @Entity
 @Table(name = "jhi_user")
+@Cacheable(true)
+@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class User extends AbstractAuditingEntity implements Serializable {
 
 	@Id
@@ -107,6 +109,9 @@ public class User extends AbstractAuditingEntity implements Serializable {
 	@Column(name = "emailSubscribed", nullable = true,columnDefinition = "TINYINT(1)")
 	private boolean emailSubscribed;
 
+//	@ManyToOne(fetch = FetchType.EAGER)
+//	@JoinColumn(name = "userRoleId", nullable = true)
+//	private UserRole userRole;
 
 	public String getAdminFlag() {
 		return adminFlag;
@@ -287,6 +292,14 @@ public class User extends AbstractAuditingEntity implements Serializable {
 	public boolean isAdmin() {
 		return (adminFlag.equalsIgnoreCase("Y"));
 	}
+	
+//	public UserRole getUserRole() {
+//		return userRole;
+//	}
+//
+//	public void setUserRole(UserRole userRole) {
+//		this.userRole = userRole;
+//	}
 
 	@Override
 	public String toString() {

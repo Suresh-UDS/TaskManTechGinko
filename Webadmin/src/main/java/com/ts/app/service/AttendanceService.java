@@ -1,11 +1,13 @@
 package com.ts.app.service;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
 import javax.inject.Inject;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.hibernate.Hibernate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -18,10 +20,14 @@ import com.ts.app.domain.AbstractAuditingEntity;
 import com.ts.app.domain.Attendance;
 import com.ts.app.domain.Employee;
 import com.ts.app.domain.Site;
+import com.ts.app.domain.User;
+import com.ts.app.domain.UserGroup;
+import com.ts.app.domain.UserGroupEnum;
 import com.ts.app.ext.api.FaceRecognitionService;
 import com.ts.app.repository.AttendanceRepository;
 import com.ts.app.repository.EmployeeRepository;
 import com.ts.app.repository.SiteRepository;
+import com.ts.app.repository.UserRepository;
 import com.ts.app.service.util.ExportUtil;
 import com.ts.app.service.util.FileUploadHelper;
 import com.ts.app.service.util.MapperUtil;
@@ -63,6 +69,9 @@ public class AttendanceService extends AbstractService {
 
     @Inject
     private ExportUtil exportUtil;
+    
+    @Inject
+    private UserRepository userRepository;
 
     public AttendanceDTO saveCheckOutAttendance(AttendanceDTO attnDto){
         Attendance attn = mapperUtil.toEntity(attnDto, Attendance.class);
@@ -288,7 +297,29 @@ public class AttendanceService extends AbstractService {
 
 
             }else {
-        		page = attendanceRepository.findAll(pageRequest);
+            	java.sql.Date startDate = new java.sql.Date(searchCriteria.getCheckInDateTimeFrom().getTime());
+            	java.sql.Date toDate = new java.sql.Date(searchCriteria.getCheckInDateTimeTo().getTime());
+            	long userId = searchCriteria.getUserId();
+            	if(userId > 0) {
+            		User user = userRepository.findOne(userId);
+            		Hibernate.initialize(user.getUserGroup());
+            		UserGroup userGroup = user.getUserGroup();
+            		if(userGroup != null) {
+            			if(userGroup.getName().equalsIgnoreCase(UserGroupEnum.ADMIN.toValue())){
+                    		page = attendanceRepository.findByCheckInTime(startDate, toDate, pageRequest);
+            			}else {
+            				Employee emp = user.getEmployee();
+            				List<Site> sites = emp.getSites();
+            				if(CollectionUtils.isNotEmpty(sites)) {
+            					List<Long> siteIds = new ArrayList<Long>();
+            					for(Site site : sites) {
+            						siteIds.add(site.getId());
+            					}
+            					attendanceRepository.findByMultipleSitesAndCheckInTime(siteIds, startDate, toDate, pageRequest);
+            				}
+            			}
+            		}
+            	}
             }
             if(page != null) {
                 transactions = mapperUtil.toModelList(page.getContent(), AttendanceDTO.class);

@@ -13,7 +13,7 @@ import {LoadingController, ToastController} from "ionic-angular";
 export class authService
 {
     private Url_local = 'http://localhost:8000/';
-    private mobile_url = "http://192.168.1.5:8088/";
+    private mobile_url = "http://192.168.1.17:8088/";
     private aws_url = '';
     private Url = this.mobile_url;
     private kairosResponse ={
@@ -21,7 +21,7 @@ export class authService
         headers:String,
         responseText: String
     };
-
+    loader:any;
     constructor(private http: HttpClient, private https:Http, public loadingCtrl: LoadingController, private toastCtrl: ToastController)
     {
     }
@@ -76,14 +76,6 @@ export class authService
         return this.http.get(this.Url+'api/employee/site/'+siteId).map(
             response=>{
                 return response;
-            }
-        )
-    }
-
-    getAllEmployees():Observable<any>{
-        return this.http.get(this.Url+'api/employee').map(
-            response=>{
-                return response.json();
             }
         )
     }
@@ -179,8 +171,8 @@ export class authService
         )
     }
 
-    getJobs(): Observable<any>{
-        return this.http.post(this.Url+'api/jobs/date/search',{}).map(
+    getJobs(searchCriteria): Observable<any>{
+        return this.http.post(this.Url+'api/jobs/date/search',{searchCriteria}).map(
             response=>{
                 console.log(response);
                 return response.json();
@@ -188,4 +180,16 @@ export class authService
         )
     }
 
+
+    // Loader
+    showLoader(msg){
+        this.loader = this.loadingCtrl.create({
+            content:msg
+        });
+        this.loader.present();
+    }
+
+    closeLoader(){
+        this.loader.dismiss();
+    }
 }

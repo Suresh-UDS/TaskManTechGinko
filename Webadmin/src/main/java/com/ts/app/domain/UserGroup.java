@@ -3,6 +3,7 @@ package com.ts.app.domain;
 import java.io.Serializable;
 import java.util.Set;
 
+import javax.persistence.Cacheable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -21,6 +22,8 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
  */
 @Entity
 @Table(name = "userGroup")
+@Cacheable(true)
+@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class UserGroup extends AbstractAuditingEntity implements Serializable {
 
     @Id

@@ -5,11 +5,17 @@ import com.ts.app.domain.util.StringUtil;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+
 import java.io.Serializable;
 import java.util.Date;
 
 @Entity
 @Table(name = "job")
+@Cacheable(true)
+@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class Job extends AbstractAuditingEntity implements Serializable{
 
 	@Id

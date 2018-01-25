@@ -21,12 +21,14 @@ export class SitePage {
   ionViewDidLoad() {
     this.employeeId=window.localStorage.getItem('employeeId');
     console.log('ionViewDidLoad SitePage');
-    this.myService.getSites(this.employeeId).subscribe(
+    this.myService.showLoader('Getting All Sites');
+    this.myService.searchSite().subscribe(
       response=>{
         console.log('ionViewDidLoad SitePage:');
 
         console.log(response.json());
         this.sites=response.json();
+          this.myService.closeLoader();
       },
       error=>{
         console.log('ionViewDidLoad SitePage:'+error);

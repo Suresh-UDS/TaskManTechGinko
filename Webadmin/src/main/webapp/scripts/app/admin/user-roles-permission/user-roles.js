@@ -69,5 +69,22 @@ angular.module('timeSheetApp').config(function($stateProvider) {
       		resolve : {
 
       		}
-      	});
+      	}).state('app-module-actions', {
+                		parent : 'admin',
+                		url : '/app-module-actions',
+                		controller : 'UserRolesController',
+                		data : {
+                			authorities : [],
+                			pageTitle : 'App Module Actions'
+                		},
+                		views : {
+                			'content@' : {
+                				templateUrl : 'scripts/app/admin/user-roles-permission/app-module-actions.html',
+                				controller : 'UserRolesController'
+                			}
+                		},
+                		resolve : {
+
+                		}
+                	});
 });

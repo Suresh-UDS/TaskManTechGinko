@@ -1,10 +1,16 @@
 package com.ts.app.domain;
 
 import javax.persistence.*;
+
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+
 import java.io.Serializable;
 
 @Entity
 @Table(name = "notification_log")
+@Cacheable(true)
+@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class NotificationLog extends AbstractAuditingEntity implements Serializable {
 
 	/**

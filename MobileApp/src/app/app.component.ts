@@ -18,6 +18,8 @@ import {AttendancePage} from "../pages/attendance/attendance";
 import {EmployeeDetailPage} from "../pages/employee-detail/employee-detail";
 import {TabsPage} from "../pages/tabs/tabs";
 import {QuotationPage} from "../pages/quotation/quotation";
+import {CustomerDetailPage} from "../pages/customer-detail/customer-detail";
+import {EmployeeListPage} from "../pages/employee-list/employee-list";
 
 @Component({
   templateUrl: 'app.html'
@@ -35,10 +37,10 @@ export class MyApp {
     // used for an example of ngFor and navigation
     this.pages = [
       { title: 'Dashboard', component: TabsPage,active:true,icon:'dashboard'},
-      { title: 'Quotation', component: TabsPage,active:false,icon:'receipt'},
+      { title: 'Quotation', component: QuotationPage,active:false,icon:'receipt'},
       { title: 'Site', component: SitePage,active:false,icon:'dns'},
-      { title: 'Client', component: SitePage,active:false,icon:'person'},
-      { title: 'Employee', component: EmployeeDetailPage,active:false,icon:'people'},
+      { title: 'Client', component: CustomerDetailPage,active:false,icon:'person'},
+      { title: 'Employee', component: EmployeeListPage,active:false,icon:'people'},
       { title: 'Jobs', component: JobsPage,active:false,icon:'description'},
       { title: 'Attendance', component: AttendancePage,active:false,icon:'content_paste'},
       { title: 'Reports', component: ReportsPage,active:false,icon:'trending_up'},

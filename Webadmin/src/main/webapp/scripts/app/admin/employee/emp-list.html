@@ -120,8 +120,8 @@
                                 <td ng-if="!employee.faceAuthorised && employee.faceIdEnrolled">
                                     <button class="btn btn-success btn-sm" ng-click="approveImage(employee)">Approve</button>
                                 </td>
-                                <td ng-if="employee.faceAuthorised && employee.faceIdEnrolled"><p style="color:green">Image Approved</p> </td>
-                                <td ng-if="!employee.faceAuthorised && !employee.faceIdEnrolled"><p style="color:red">Image not enrolled</p> </td>
+                                <td ng-if="employee.faceAuthorised && employee.faceIdEnrolled"><p style="color:green">Face Id Approved</p> </td>
+                                <td ng-if="!employee.faceAuthorised && !employee.faceIdEnrolled"><p style="color:red">Face Id not enrolled</p> </td>
 
                                 <td class="text-right">
                                     <a   has-authority="ROLE_ADMIN" ng-click="getCheckInDetails(employee.id)" ui-sref="view-employee({ id: employee.id })"   class="btn btn-simple btn-info btn-icon like"><i class="material-icons">remove_red_eye</i></a>

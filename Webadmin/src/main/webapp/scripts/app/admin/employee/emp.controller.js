@@ -684,11 +684,12 @@ angular.module('timeSheetApp')
 
                 if(response.status == 200){
                     console.log("Image Approved");
-                    $scope.showNotifications('top','center','success','Image approved');
+                    $scope.showNotifications('top','center','success','Face Id Approved');
                 }else{
-                    $scope.showNotifications('top','center','warning','Failed to approve image');
+                    $scope.showNotifications('top','center','warning','Failed to approve Face Id');
                     console.log("Failed to approve image");
                 }
+                $scope.search();
             })
         }
 

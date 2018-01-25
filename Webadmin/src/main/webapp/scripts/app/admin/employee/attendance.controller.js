@@ -160,8 +160,7 @@ angular.module('timeSheetApp')
         	console.log(JSON.stringify($scope.searchCriteria));
         	AttendanceComponent.search($scope.searchCriteria).then(function (data) {
                 $scope.attendancesData = data.transactions;
-                console.log('Attendance search result list -' + $scope.attendances);
-                console.log( $scope.attendances);
+                console.log('Attendance search result list -' + $scope.attendancesData);
                 $scope.pages.currPage = data.currPage;
                 $scope.pages.totalPages = data.totalPages;
                 if($scope.employees == null){

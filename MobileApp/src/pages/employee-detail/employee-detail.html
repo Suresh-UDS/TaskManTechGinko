@@ -5,7 +5,7 @@
   Ionic pages and navigation.
 -->
 <ion-header>
-  <ion-navbar color="primary" >
+  <ion-navbar>
     <button ion-button menuToggle>
       <ion-icon name="menu"></ion-icon>
     </button>
@@ -24,6 +24,9 @@
     <ion-segment-button value="quotation">
       Quotation
     </ion-segment-button>
+    <ion-segment-button value="attendance">
+      Attendance
+    </ion-segment-button>
 
   </ion-segment>
 
@@ -32,27 +35,22 @@
 
     <ion-list *ngSwitchCase="'detail'">
       <ion-col col-11 class="margin-auto">
-        <div class="card">
-          <div class="card-content">
-            <div class="row">
-              <label class="col-md-4 label-on-left">Name</label>
-              <div class="col-md-8">
-                <p text-right>Name</p>
-              </div>
+        <div class="card" >
+
+          <div class="card-content padding-bottom0" >
+            <div *ngFor="let emp of empDetail">
+              {{emp.empId}}
+              {{emp.fullName}}
+              {{emp.designation}}
             </div>
-            <div class="row">
-              <label class="col-md-4 label-on-left">Mobile</label>
-              <div class="col-md-8">
-                <p text-right>9003837625</p>
-              </div>
-            </div>
-            <div class="row">
-              <label class="col-md-4 label-on-left">Email</label>
-              <div class="col-md-8">
-                <p text-right>name@gmail.com</p>
-              </div>
-            </div>
+
           </div>
+
+          <div class="card-footer">
+
+          </div>
+
+
         </div>
       </ion-col>
     </ion-list>
@@ -63,6 +61,11 @@
       </ion-item>
     </ion-list>
     <ion-list *ngSwitchCase="'quotation'">
+      <ion-item>
+
+      </ion-item>
+    </ion-list>
+    <ion-list *ngSwitchCase="'attendance'">
       <ion-item>
 
       </ion-item>
