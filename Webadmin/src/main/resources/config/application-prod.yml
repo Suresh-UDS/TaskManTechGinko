@@ -1,5 +1,5 @@
 # ===================================================================
-# Spring Boot configuration for the "prod" profile.
+# Spring Boot configuration for the "dev" profile.
 #
 # This configuration overrides the application.yml file.
 # ===================================================================
@@ -15,9 +15,9 @@ spring:
         active: prod
     devtools:
         restart:
-            enabled: false
+            enabled: true
         livereload:
-            enabled: false
+            enabled: false # we use Grunt + BrowserSync for livereload
     datasource:
         driver-class-name: com.mysql.jdbc.Driver
         url: jdbc:mysql://localhost:3306/Zappy-attendance?useUnicode=true&characterEncoding=utf8
@@ -27,7 +27,7 @@ spring:
     jpa:
         database-platform: org.hibernate.dialect.MySQLInnoDBDialect
         database: MYSQL
-        show_sql: false
+        show_sql: true
         properties:
             hibernate.cache.use_second_level_cache: true
             hibernate.cache.use_query_cache: true
@@ -36,7 +36,7 @@ spring:
     mail:
         host: smtp.gmail.com
         port: 587
-        username: timesheettestuser1@gmail.com	
+        username: timesheettestuser1@gmail.com
         password: Test123#
         properties:
             mail.transport.protocol: smtp
@@ -44,12 +44,18 @@ spring:
             mail.smtp.starttls.enable: true
             mail.smtp.port: 587
             mail.debug: true
+
+    messages:
+        cache-seconds: 1
     thymeleaf:
-        cache: true
+        cache: false
 
 liquibase:
-    contexts: prod
+    contexts: dev
     enabled: false
+
+server:
+    port: 8088
 
 upload:
     file:
@@ -59,7 +65,7 @@ export:
          path: /opt/exports
 qrcode:
     file:
-         path: /opt/qrcode    
+         path: /opt/qrcode
 max:
     user: 10
     userGroup: 2
@@ -72,20 +78,17 @@ email:
         schedule2: 0 0 18 * * ?
         url: http://localhost:8088/
 
-server:
-    port: 8088
-    compression:
-        enabled: true
-        mime-types: text/html,text/xml,text/plain,text/css, application/javascript, application/json
+
+locationService:
+   url: http://localhost:8000/api/site/location
+#   url: http://ec2-52-77-216-21.ap-southeast-1.compute.amazonaws.com:8000/api/site/location
+
 
 # ===================================================================
 # JHipster specific properties
 # ===================================================================
 
 jhipster:
-    http:
-        cache: # Used by the CachingHttpHeadersFilter
-            timeToLiveInDays: 31
     cache: # Hibernate 2nd level cache, used by CacheConfiguration
         timeToLiveSeconds: 3600
         ehcache:

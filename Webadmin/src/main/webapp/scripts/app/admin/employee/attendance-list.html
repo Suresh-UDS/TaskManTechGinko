@@ -140,7 +140,7 @@
                                     <img src="assets/img/user.png" width="30px" height="30px"/>
                                 </td>
                                 <td align="center">
-                                    <a id="maps" href="#" ng-click="initMap('mapIn',attendance.latitudeIn, attendance.longitudeIn, 'mapOut', attendance.latitudeout, attendance.longitudeOut)" onClick="$('#mapModal').modal()" data-target="#mapModal" >
+                                    <a id="maps" href="#" ng-click="newInitMap('mapIn',attendance.latitudeIn, attendance.longitudeIn, 'mapOut', attendance.latitudeOut, attendance.longitudeOut)" onClick="$('#mapModal').modal()" data-target="#mapModal" >
                                         <img src="assets/img/map-icon-2-1.jpg" width="30px" height="30px" />
                                     </a>
                                 </td>
@@ -300,44 +300,3 @@
     </div>
 </div>
 <!-- end notice modal -->
-
-
-
-    <div id="mapModal1" data-backdrop="false" class="modal fade" tabindex="-1" role="dialog"
-         aria-labelledby="myModalLabel" aria-hidden="true" >
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-body">
-
-                    <table >
-                        <thead>
-                        <tr >
-                            <th style="text-align: center">IN</th>
-                            <td>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
-                            <th style="text-align: center">OUT</th>
-                        </tr>
-
-                        </thead>
-                        <tr>
-                            <td><br/></td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <div id="mapIn" style="width:250px;height:250px">
-                                </div>
-                            </td>
-                            <td>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
-                            <td>
-                                <div id="mapOut" style="width:250px;height:250px"></div>
-                            </td>
-                        </tr>
-                    </table>
-
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
