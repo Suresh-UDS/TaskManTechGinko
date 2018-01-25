@@ -28,6 +28,10 @@ a:focus
 {
   padding-top:15px;
 }
+.no-padding
+{
+  padding:0 !important;
+}
 
 .card .card-content .category
 {
