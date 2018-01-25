@@ -233,6 +233,10 @@ angular.module('timeSheetApp')
         $scope.initMap = function(container, latIn, lngIn, containerOut, latOut, lngOut) {
             // Create a map object and specify the DOM element for display.
             var myLatLng = {lat: latIn, lng: lngIn};
+            var myLatLngOut = {lat:latOut, lng:lngOut};
+            console.log(myLatLng);
+            console.log(myLatLngOut);
+            console.log("Container");
             console.log(document.getElementById(container));
             if (latIn == 0 && lngIn == 0) {
                 var mapInEle = document.getElementById(container);
@@ -256,9 +260,10 @@ angular.module('timeSheetApp')
                 var marker = new google.maps.Marker({
                     map: mapIn,
                     position: myLatLng,
-                    title: 'Location',
+                    title: 'Checked-in',
                     draggable: false
                 });
+
             }
 
             if (latOut == 0 && lngOut == 0) {
@@ -267,7 +272,7 @@ angular.module('timeSheetApp')
             } else {
 
                 var mapOut = new google.maps.Map(document.getElementById(containerOut), {
-                    center: myLatLng,
+                    center: myLatLngOut,
                     scrollwheel: false,
                     streetViewControl: false,
                     zoom: 14,
@@ -282,13 +287,20 @@ angular.module('timeSheetApp')
                 // Create a marker and set its position.
                 var marker = new google.maps.Marker({
                     map: mapOut,
-                    position: myLatLng,
-                    title: 'Location',
+                    position: myLatLngOut,
+                    title: 'checked-out',
                     draggable: false
                 });
             }
 
 
+        };
+
+        $scope.newInitMap = function( container, latIn, lngIn, containerOut, latOut, lngOut){
+            window.setTimeout(function( ){
+                    $scope.initMap(container, latIn, lngIn, containerOut, latOut, lngOut)
+                },1000
+            )
         }
 
         $scope.next = function() {
