@@ -24,7 +24,7 @@
                           ng-submit="saveQuotation()"  class="form-horizontal">
 
                         <div class="row">
-                            <div class="col-md-6">
+                            <div class="col-md-12">
                                 <div class="card formcard">
 
                                     <div class="card-content">
@@ -32,7 +32,7 @@
 
                                         <div class="row">
 
-                                            <div class="col-md-6">
+                                            <div class="col-md-4">
                                                 <div class="form-group label-floating">
                                                     <label class="control-label">Title</label>
                                                     <input id='quotationTitle' ng-model="quotation.title"
@@ -60,7 +60,7 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div class="col-md-12">
+                                            <div class="col-md-8">
                                                 <div class="form-group label-floating">
                                                     <label class="control-label">Description</label>
                                                     <input id='quotationDescription' ng-model="quotation.description" class='form-control'
@@ -159,6 +159,7 @@
                                                 <button class="btn btn-success" type="submit">
                                                     <span class="btn-label"><i class="material-icons">check</i></span>
                                                 </button>
+
                                                 <button class="btn btn-danger" type="submit">
                                                     <span class="btn-label"><i class="material-icons">close</i></span>
                                                 </button>
@@ -304,14 +305,16 @@
 
                                         <div class="row">
 
-                                            <div class="col-md-6 col-md-offset-4">
+                                            <div class="col-md-6 col-md-offset-3">
                                                 <div class="form-group">
 
                                                     <button class="btn btn-success" type="submit"
                                                             id="form-button-save" ng-disabled="form.$invalid">
                                                         <span class="btn-label"><i class="material-icons">check</i></span> Send
                                                     </button>
-
+                                                    <button class="btn btn-warning" type="submit">
+                                                        <span class="btn-label"><i class="material-icons">save</i></span> Save Draft
+                                                    </button>
                                                     <button class="btn btn-danger" type="button"
                                                             ng-click="cancelQuotation()" id="cancel-button">
                                                         <i class="material-icons">close</i> Cancel
