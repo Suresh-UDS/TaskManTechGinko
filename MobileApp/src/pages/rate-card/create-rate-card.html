@@ -1,0 +1,53 @@
+<ion-header>
+  <ion-navbar>
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>Jobs</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+
+    <div class="row">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-content">
+                    <h4 class="card-title">Edit Profile</h4>
+                        <ion-row>
+                            <ion-col col-12>
+                                <div class="form-group label-floating">
+                                    <label class="control-label">Title</label>
+                                    <ion-select>
+                                        <ion-option value="nes">NES</ion-option>
+                                        <ion-option value="n64">Nintendo64</ion-option>
+                                        <ion-option value="ps">PlayStation</ion-option>
+                                        <ion-option value="genesis">Sega Genesis</ion-option>
+                                        <ion-option value="saturn">Sega Saturn</ion-option>
+                                        <ion-option value="snes">SNES</ion-option>
+                                    </ion-select>
+                                </div>
+                            </ion-col>
+
+                            <ion-col col-12>
+                                <div class="form-group label-floating">
+                                    <label class="control-label">Cost</label>
+                                    <input type="text" class="form-control" disabled>
+                                </div>
+                            </ion-col>
+
+                            <ion-col col-12>
+                                <div class="form-group label-floating">
+                                    <label class="control-label">UOM</label>
+                                    <input type="text" class="form-control" disabled>
+                                </div>
+                            </ion-col>
+                            <button type="submit" class="btn btn-rose pull-right">Create</button>
+                            <div class="clearfix"></div>
+                        </ion-row>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</ion-content>
