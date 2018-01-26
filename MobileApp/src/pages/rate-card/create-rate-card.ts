@@ -17,6 +17,7 @@ export class CreateRateCardPage {
         uom:any;
     };
 
+    uom:any;
 
     constructor(public navCtrl: NavController,public navParams:NavParams, public authService: authService, private loadingCtrl:LoadingController) {
         this.rateCardDetails={
@@ -46,7 +47,9 @@ export class CreateRateCardPage {
     }
 
     rateCardUOM(rateCardType){
-        this.rateCardDetails.uom = rateCardType.uom;
+        this.uom = rateCardType;
+        console.log("Rate Card types");
+        console.log(this.uom);
     }
 
 

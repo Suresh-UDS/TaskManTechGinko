@@ -1,0 +1,77 @@
+<ion-header>
+  <ion-navbar>
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>Quotation</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content>
+          <div class="row padding0 margin0 white-bg">
+            <ion-col col-12 class="padding-top0">
+              <div class="table-responsive table-sales">
+                <table class="table">
+                  <tbody>
+                  <tr (click)="quotationView()">
+                    <td>
+                      <div class="flag">
+                        <img src="../assets/img/flags/US.png">
+                      </div>
+                    </td>
+                    <td>Approved</td>
+                    <td class="text-right">
+                      <span class="clr-orange padding-right2">(</span>0<span class="clr-orange padding-left2">)</span>
+                    </td>
+                    <td class="text-right">
+                      <ion-icon class="primary-clr padding-left5 fnt-12" name="arrow-forward"></ion-icon>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <div class="flag">
+                        <img src="../assets/img/flags/DE.png">
+                      </div>
+                    </td>
+                    <td>Overdue</td>
+                    <td class="text-right">
+                      <span class="clr-orange padding-right2">(</span>0<span class="clr-orange padding-left2">)</span>
+                    </td>
+                    <td class="text-right">
+                      <ion-icon class="primary-clr padding-left5 fnt-12" name="arrow-forward"></ion-icon>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <div class="flag">
+                        <img src="../assets/img/flags/AU.png">
+                      </div>
+                    </td>
+                    <td>Requested</td>
+                    <td class="text-right">
+                      <span class="clr-orange padding-right2">(</span>0<span class="clr-orange padding-left2">)</span>
+                    </td>
+                    <td class="text-right">
+                      <ion-icon class="primary-clr padding-left5 fnt-12" name="arrow-forward"></ion-icon>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <div class="flag">
+                        <img src="../assets/img/flags/AU.png">
+                      </div>
+                    </td>
+                    <td>Archieved</td>
+                    <td class="text-right">
+                      <span class="clr-orange padding-right2">(</span>0<span class="clr-orange padding-left2">)</span>
+                    </td>
+                    <td class="text-right">
+                      <ion-icon class="primary-clr padding-left5 fnt-12" name="arrow-forward"></ion-icon>
+                    </td>
+                  </tr>
+                  </tbody>
+                </table>
+              </div>
+            </ion-col>
+          </div>
+</ion-content>

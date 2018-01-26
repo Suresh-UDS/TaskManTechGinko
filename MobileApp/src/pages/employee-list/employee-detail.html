@@ -1,0 +1,169 @@
+<!--
+  Generated template for the SiteListPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+  <ion-navbar>
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>Employee Detail</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content>
+  <ion-segment [(ngModel)]="categories" class="segmnt margin-auto margin-top5" color="clr-blue">
+    <ion-segment-button value="detail">
+      Detail
+    </ion-segment-button>
+    <ion-segment-button value="jobs" (click)="getAllJobs()">
+      Jobs
+    </ion-segment-button>
+    <ion-segment-button value="quotation">
+      Quotation
+    </ion-segment-button>
+    <ion-segment-button value="attendance">
+      Attendance
+    </ion-segment-button>
+
+  </ion-segment>
+
+
+  <div [ngSwitch]="categories">
+
+    <ion-list *ngSwitchCase="'detail'">
+      <ion-row class="margin0 white-bg padding10">
+        <ion-col col-6 class="label-on-left">Employee ID</ion-col>
+        <ion-col col-6>
+          <p text-right>{{empDetail.empId}}</p>
+        </ion-col>
+        <ion-col col-6 class="label-on-left">Name</ion-col>
+        <ion-col col-6>
+          <p text-right>{{empDetail.fullName}}</p>
+        </ion-col>
+        <ion-col col-6 class="label-on-left">Designation</ion-col>
+        <ion-col col-6>
+          <p text-right>{{empDetail.designation}}</p>
+        </ion-col>
+      </ion-row>
+
+      <ion-row class="margin-tp25 white-bg padding10">
+        <ion-col col-6 class="label-on-left">Job Id</ion-col>
+        <ion-col col-6>
+          <p text-right>{{empDetail.jobId}}</p>
+        </ion-col>
+        <ion-col col-6 class="label-on-left">Job Title</ion-col>
+        <ion-col col-6>
+          <p text-right>{{empDetail.jobTitle}}</p>
+        </ion-col>
+        <ion-col col-6 class="label-on-left">Project Name</ion-col>
+        <ion-col col-6>
+          <p text-right>{{empDetail.projectName}}</p>
+        </ion-col>
+
+      </ion-row>
+    </ion-list>
+
+    <ion-list *ngSwitchCase="'jobs'" >
+      <ion-row>
+      <ion-col col-11 class="margin-auto">
+      <div class="card" *ngFor="let job of jobs" [ngClass]="{'red-card' : (job.status == 'OVERDUE'),
+                                                          'green-card' : (job.status == 'COMPLETED'),
+                                                          'blue-card' :(job.status =='OPEN' || job.status == 'ASSIGNED' || job.status == 'INPROGRESS')}">
+
+        <div class="card-content padding-bottom0" >
+          <ion-row class="margin0">
+            <ion-col col-12 class="padding-right0">
+              <button ion-button icon-left icon-only clear class="pop-icon" (click)="viewJob(job)">
+                <ion-icon name="eye" class="fnt-12 padding0"></ion-icon>
+              </button>
+            </ion-col>
+          </ion-row>
+          <ion-row class="margin0">
+            <ion-col col-8 class="padding-left0"><p text-left>{{job.title}}</p></ion-col>
+            <ion-col col-4 class="padding-right0">
+              <p text-right [ngClass]="{'red' : (job.status == 'OVERDUE'),
+                                                          'green' : (job.status == 'COMPLETED'),
+                                                          'blue' :(job.status =='OPEN' || job.status == 'ASSIGNED' || job.status == 'INPROGRESS')}" >
+                {{job.status}}
+              </p>
+            </ion-col>
+          </ion-row>
+          <p>{{job.employeeName}}</p>
+          <p>{{job.siteProjectName}} - {{job.siteName}}</p>
+        </div>
+
+        <div class="card-footer">
+          <div *ngIf="job.status !='COMPLETED'">
+            <p>{{job.plannedStartTime | date:'dd/MM/yyyy @ H:mm' }} - {{job.plannedEndTime | date:'dd/MM/yyyy @ H:mm' }} </p>
+          </div>
+          <div *ngIf="job.status =='COMPLETED'">
+            <p>{{job.actualStartTime | date:'dd/MM/yyyy @ H:mm' }} - {{job.actualEndTime | date:'dd/MM/yyyy @ H:mm' }} </p>
+          </div>
+          <div class="stats align-right">
+            <!--<p class="display-inline">view</p><ion-icon class="primary-clr padding-left5 fnt-12" name="arrow-forward"></ion-icon>-->
+          </div>
+        </div>
+      </div>
+      </ion-col>
+      </ion-row>
+    </ion-list>
+    <ion-list *ngSwitchCase="'quotation'">
+      <div class="row padding0 margin0 white-bg">
+        <ion-col col-12 class="padding-top0">
+          <div class="table-responsive table-sales">
+            <table class="table fnt-18">
+              <tbody>
+              <tr (click)="quotationView()">
+                <td>Approved</td>
+                <td class="text-right">
+                  <span class="clr-orange padding-right2">(</span>0<span class="clr-orange padding-left2">)</span>
+                </td>
+                <td class="text-right">
+                  <ion-icon class="primary-clr padding-left5 fnt-12" name="arrow-forward"></ion-icon>
+                </td>
+              </tr>
+              <tr (click)="quotationView()">
+                <td>Overdue</td>
+                <td class="text-right">
+                  <span class="clr-orange padding-right2">(</span>0<span class="clr-orange padding-left2">)</span>
+                </td>
+                <td class="text-right">
+                  <ion-icon class="primary-clr padding-left5 fnt-12" name="arrow-forward"></ion-icon>
+                </td>
+              </tr>
+              <tr (click)="quotationView()">
+                <td>Requested</td>
+                <td class="text-right">
+                  <span class="clr-orange padding-right2">(</span>0<span class="clr-orange padding-left2">)</span>
+                </td>
+                <td class="text-right">
+                  <ion-icon class="primary-clr padding-left5 fnt-12" name="arrow-forward"></ion-icon>
+                </td>
+              </tr>
+              <tr (click)="quotationView()">
+                <td>Archieved</td>
+                <td class="text-right">
+                  <span class="clr-orange padding-right2">(</span>0<span class="clr-orange padding-left2">)</span>
+                </td>
+                <td class="text-right">
+                  <ion-icon class="primary-clr padding-left5 fnt-12" name="arrow-forward"></ion-icon>
+                </td>
+              </tr>
+              </tbody>
+            </table>
+          </div>
+        </ion-col>
+      </div>
+    </ion-list>
+    <ion-list *ngSwitchCase="'attendance'">
+      <ion-item>
+
+      </ion-item>
+    </ion-list>
+
+  </div>
+
+</ion-content>

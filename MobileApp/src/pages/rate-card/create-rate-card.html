@@ -15,10 +15,10 @@
                 <div class="card-content">
                         <ion-row>
                             <ion-col col-12>
-                                <ion-list radio-group (onselect)="rateCardUOM(rateCardDetails.type)" [(ngModel)]="rateCardDetails.type">
+                                <ion-list radio-group  [(ngModel)]="rateCardDetails.type">
                                     <ion-item *ngFor="let type of rateCardTypes">
                                         <ion-label style="color:black;">{{type.name}}</ion-label>
-                                        <ion-radio  value={{type.name}} ></ion-radio>
+                                        <ion-radio  value={{type.name}} (ionSelect)="rateCardUOM(type.uom)"></ion-radio>
                                     </ion-item>
                                 </ion-list>
                             </ion-col>
@@ -40,7 +40,7 @@
                             <ion-col col-12>
                                 <div class="form-group label-floating">
                                     <label class="control-label">UOM</label>
-                                    <input type="text" class="form-control" [(ngModel)]="rateCardDetails.uom" disabled>
+                                    <input type="text" class="form-control" [(ngModel)]="uom" disabled>
                                 </div>
                             </ion-col>
                             <button type="submit" class="btn btn-rose pull-right" (click)="createRateCard(rateCardDetails)" >Create</button>
