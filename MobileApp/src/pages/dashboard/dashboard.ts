@@ -50,6 +50,9 @@ export class DashboardPage {
     {
       console.log(error);
     })
+
+    this.getAllJobs()
+
   }
 
   getAllJobs(){

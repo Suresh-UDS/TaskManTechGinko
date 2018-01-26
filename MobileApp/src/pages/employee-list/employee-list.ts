@@ -5,8 +5,8 @@ import {authService} from "../service/authService";
 import {Camera, CameraOptions} from "@ionic-native/camera";
 import {Geolocation} from "@ionic-native/geolocation";
 import {Geofence} from "@ionic-native/geofence";
-import {EmployeeDetailPage} from "../employee-detail/employee-detail";
 import {componentService} from "../service/componentService";
+import {EmployeeDetailPage} from "./employee-detail";
 
 /**
  * Generated class for the EmployeeList page.

@@ -290,10 +290,7 @@ table tr
 }
 .emp-round
 {
-  border-bottom-left-radius: 18px;
-  border-top-left-radius: 18px;
-  border-top-right-radius: 18px;
-  border-bottom-right-radius: 18px;
+  border-radius:50%;
   background-color: orange;
 }
 .emp-round p

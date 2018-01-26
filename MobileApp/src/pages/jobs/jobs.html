@@ -20,9 +20,7 @@
 
 <ion-content padding>
 
-
     <div [ngSwitch]="categories">
-
         <ion-list *ngSwitchCase="'today'">
             <ion-item *ngFor="let job of todaysJobs">
                 <p>{{job.title}}</p>
