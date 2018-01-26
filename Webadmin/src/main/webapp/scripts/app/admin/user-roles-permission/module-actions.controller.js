@@ -54,6 +54,9 @@ angular.module('timeSheetApp')
         	}
         	ModuleActionComponent.createModuleAction($scope.moduleActions).then(function () {
             	$scope.success = 'OK';
+            	$scope.moduleName = '';
+            	$scope.selectedActions = [];
+            	$scope.moduleActions = {};
             	$scope.loadModuleActions();
             	$location.path('/app-module-actions');
             }).catch(function (response) {
@@ -86,10 +89,14 @@ angular.module('timeSheetApp')
 
 
 
-        $scope.loadModuleAction = function() {
-        	console.log('loadModuleAction -' + $stateParams.id);
-        	ModuleActionComponent.findOne($stateParams.id).then(function (data) {
-                $scope.moduleAction = data;
+        $scope.loadModuleAction = function(id) {
+        	console.log('loadModuleAction -' + id);
+        	ModuleActionComponent.findOne(id).then(function (data) {
+                $scope.moduleName = data.name;
+                for(var i in data.moduleActions) {
+                	$scope.selectedActions.push(data.moduleActions[i].name);	
+                }
+                
             });
 
         };
@@ -99,6 +106,9 @@ angular.module('timeSheetApp')
 
         	ModuleActionComponent.updateModuleAction($scope.moduleAction).then(function () {
             	$scope.success = 'OK';
+            	$scope.moduleName = '';
+            	$scope.selectedActions = [];
+            	$scope.moduleActions = {};
             	$scope.loadModuleActions();
             	$location.path('/user-roles');
             }).catch(function (response) {
