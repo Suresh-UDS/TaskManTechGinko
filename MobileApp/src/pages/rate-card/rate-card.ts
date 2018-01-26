@@ -10,6 +10,8 @@ import {CreateRateCardPage} from "./create-rate-card";
 })
 export class RateCardPage {
 
+    rateCards:any;
+
     constructor(public navCtrl: NavController,public component:componentService, public authService: authService, private loadingCtrl:LoadingController) {
 
     }
@@ -22,5 +24,16 @@ export class RateCardPage {
     {
         this.navCtrl.push(CreateRateCardPage);
     }
+
+    ionViewWillEnter(){
+        this.authService.getRateCards().subscribe(
+            response=>{
+                console.log(response);
+                this.rateCards = response;
+            }
+        )
+    }
+
+
 
 }

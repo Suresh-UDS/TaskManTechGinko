@@ -8,7 +8,7 @@ var RateCardTypeModel = function() {
     var RateCardTypeModelSchema = new Schema({
         name: String,
         uom: String,
-        lastModifiedDate: Date
+            lastModifiedDate: Date
     });
 
 

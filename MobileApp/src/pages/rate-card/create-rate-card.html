@@ -3,7 +3,7 @@
     <button ion-button menuToggle>
       <ion-icon name="menu"></ion-icon>
     </button>
-    <ion-title>Jobs</ion-title>
+    <ion-title>Create Rate Card</ion-title>
   </ion-navbar>
 </ion-header>
 
@@ -13,36 +13,37 @@
         <div class="col-md-8">
             <div class="card">
                 <div class="card-content">
-                    <h4 class="card-title">Edit Profile</h4>
                         <ion-row>
+                            <ion-col col-12>
+                                <ion-list radio-group (onselect)="rateCardUOM(rateCardDetails.type)" [(ngModel)]="rateCardDetails.type">
+                                    <ion-item *ngFor="let type of rateCardTypes">
+                                        <ion-label style="color:black;">{{type.name}}</ion-label>
+                                        <ion-radio  value={{type.name}} ></ion-radio>
+                                    </ion-item>
+                                </ion-list>
+                            </ion-col>
+
                             <ion-col col-12>
                                 <div class="form-group label-floating">
                                     <label class="control-label">Title</label>
-                                    <ion-select>
-                                        <ion-option value="nes">NES</ion-option>
-                                        <ion-option value="n64">Nintendo64</ion-option>
-                                        <ion-option value="ps">PlayStation</ion-option>
-                                        <ion-option value="genesis">Sega Genesis</ion-option>
-                                        <ion-option value="saturn">Sega Saturn</ion-option>
-                                        <ion-option value="snes">SNES</ion-option>
-                                    </ion-select>
+                                    <input type="text" class="form-control" [(ngModel)]="rateCardDetails.title" >
                                 </div>
                             </ion-col>
 
                             <ion-col col-12>
                                 <div class="form-group label-floating">
                                     <label class="control-label">Cost</label>
-                                    <input type="text" class="form-control" disabled>
+                                    <input type="text" class="form-control" [(ngModel)]="rateCardDetails.cost" >
                                 </div>
                             </ion-col>
 
                             <ion-col col-12>
                                 <div class="form-group label-floating">
                                     <label class="control-label">UOM</label>
-                                    <input type="text" class="form-control" disabled>
+                                    <input type="text" class="form-control" [(ngModel)]="rateCardDetails.uom" disabled>
                                 </div>
                             </ion-col>
-                            <button type="submit" class="btn btn-rose pull-right">Create</button>
+                            <button type="submit" class="btn btn-rose pull-right" (click)="createRateCard(rateCardDetails)" >Create</button>
                             <div class="clearfix"></div>
                         </ion-row>
                 </div>
