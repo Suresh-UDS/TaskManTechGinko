@@ -4,19 +4,17 @@ var Schema = mongoose.Schema;
 
 // model creation
 
-var RateCardModel = function() {
-    var RateCardSchema = new Schema({
-        title: String,
-        type: String,
-        cost: Number,
+var RateCardTypeModel = function() {
+    var RateCardTypeModelSchema = new Schema({
+        name: String,
         uom: String,
         lastModifiedDate: Date
     });
 
 
     // register the mongoose model
-    mongoose.model('RateCard', RateCardSchema);
+    mongoose.model('RateCardType', RateCardTypeModelSchema);
 };
 
 // create an export function to encapsulate the model creation
-module.exports = RateCardModel;
+module.exports = RateCardTypeModel;
