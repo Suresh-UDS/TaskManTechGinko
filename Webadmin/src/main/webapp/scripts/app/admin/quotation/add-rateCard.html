@@ -4,16 +4,16 @@
 
         <div class="row">
             <div class="col-mod-12">
-                <div class="alert alert-success" ng-show="success">
-                    <strong>Quotation saved!</strong>
-                </div>
+                <!--<div class="alert alert-success" ng-show="success">-->
+                    <!--<strong>Quotation saved!</strong>-->
+                <!--</div>-->
 
-                <div class="alert alert-danger" ng-show="error">
-                    <strong>Quotation Not Saved!</strong> Please try again later.
-                </div>
-                <div class="alert alert-danger" ng-show="errorQuotationExists">
-                    <strong>Quotation already registered!</strong> Please choose another one.
-                </div>
+                <!--<div class="alert alert-danger" ng-show="error">-->
+                    <!--<strong>Quotation Not Saved!</strong> Please try again later.-->
+                <!--</div>-->
+                <!--<div class="alert alert-danger" ng-show="errorQuotationExists">-->
+                    <!--<strong>Quotation already registered!</strong> Please choose another one.-->
+                <!--</div>-->
             </div>
             <div class="col-md-12">
                 <div class="titleCon">
@@ -32,19 +32,19 @@
                                         <div class="row">
 
                                             <div class="col-md-6">
-                                                <select class="selectpicker" data-style="btn btn-primary" title="Single Select" data-size="7">
+                                                <select class="selectpicker" data-style="btn btn-primary" ng-model="rateCard.type" title="Single Select" data-size="7">
                                                     <option disabled selected>Choose Type</option>
-                                                    <option value="1">Material</option>
-                                                    <option value="2">Labour</option>
-                                                    <option value="3">Service</option>
+                                                    <option value="material">Material</option>
+                                                    <option value="labour">Labour</option>
+                                                    <option value="service">Service</option>
                                                 </select>
                                             </div>
 
                                             <div class="col-md-6">
                                                 <div class="form-group label-floating">
                                                     <label class="control-label">Title</label>
-                                                    <input   class='form-control' name='rateCardTitle' type='text' value=""
-                                                           ng-minlength='2' ng-maxlength='50' ng-pattern="/^[A-Za-z0-9\s&-/]*$/" autofocus required/>
+                                                    <input ng-model="rateCard.title" class='form-control' name='rateCardTitle' type='text' value=""
+                                                           ng-minlength='2' ng-maxlength='50' autofocus required/>
 
                                                 </div>
                                             </div>
@@ -56,19 +56,19 @@
 
                                             <div class="col-md-6">
                                                 <div class="form-group label-floating">
-                                                    <label class="control-label">Material Cost</label>
-                                                    <input   class='form-control' name='rateCardTitle' type='text' value=""
-                                                             ng-minlength='2' ng-maxlength='50' ng-pattern="/^[A-Za-z0-9\s&-/]*$/" autofocus required/>
+                                                    <label class="control-label"> Cost</label>
+                                                    <input   class='form-control' ng-model="rateCard.cost" name='rateCardTitle' type='text' value=""
+                                                             ng-minlength='2' ng-maxlength='50' autofocus required/>
 
                                                 </div>
                                             </div>
                                             <div class="col-md-6">
                                                 <div class="form-group label-floating">
                                                     <label class="control-label">UOM Type</label>
-                                                    <input id='quotationDescription' ng-model="quotation.description" class='form-control'
-                                                           name='quotationDescription' type='text' value=""
+                                                    <input id='uomType' ng-model="rateCard.uom" class='form-control'
+                                                           name='uomType' type='text' value=""
                                                            ng-maxlength=50
-                                                           ng-pattern="/^[A-Za-z0-9\s&-/]*$/" disabled/>
+                                                            disabled/>
 
                                                 </div>
                                             </div>
@@ -80,7 +80,7 @@
                                             <div class="col-md-10 col-md-offset-1">
                                                 <div class="form-group">
 
-                                                    <button class="btn btn-success" type="submit"
+                                                    <button class="btn btn-success" type="submit" ng-click="saveRateCard(rateCard)"
                                                             id="form-button-save" ng-disabled="form.$invalid">
                                                         <span class="btn-label"><i class="material-icons">check</i></span> Save
                                                     </button>
