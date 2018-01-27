@@ -7,6 +7,7 @@ import {CreateJobPage} from "./add-job";
 import { ActionSheetController } from 'ionic-angular'
 import {CompleteJobPage} from "./completeJob";
 
+
 @Component({
   selector: 'page-jobs',
   templateUrl: 'jobs.html'
@@ -23,9 +24,18 @@ export class JobsPage {
         this.categories = 'today';
     }
 
-    ionViewWillEnter() {
-
+    ionViewDidLoad() {
+        this.getTodaysJobs();
+        this.getAllJobs();
     }
+
+    doRefresh(refresher)
+    {
+        this.getTodaysJobs();
+        this.getAllJobs();
+        refresher.complete();
+    }
+
     getTodaysJobs(){
         this.component.showLoader('Getting Today\'s Jobs');
         this.authService.getTodayJobs().subscribe(response=>{

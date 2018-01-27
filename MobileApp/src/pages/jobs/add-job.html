@@ -29,10 +29,22 @@
 
                         <ion-col col-12>
                             <div class="form-group label-floating">
-                                <label class="control-label">Location</label>
-                                <input type="text" class="form-control" [(ngModel)]="location" >
+                                <label class="control-label">Site</label>
+                                <ion-select [(ngModel)]="siteName" class="select-box">
+                                    <ion-option *ngFor="let site of sites" [value]="site.name" (ionSelect)="getEmployee(site.id)">{{site.name}}</ion-option>
+                                </ion-select>
                             </div>
                         </ion-col>
+
+                        <ion-col col-12>
+                            <div class="form-group label-floating">
+                                <label class="control-label">Employee</label>
+                                <ion-select [(ngModel)]="employ" [disabled]="empSelect" class="select-box">
+                                    <ion-option *ngFor="let emp of employee" [value]="emp.id" >{{emp.fullName}}</ion-option>
+                                </ion-select>
+                            </div>
+                        </ion-col>
+
                         <ion-col col-12>
                             <div class="form-group label-floating">
                                 <label class="control-label">Start Date</label>
@@ -43,6 +55,18 @@
                             <div class="form-group label-floating">
                                 <label class="control-label">Start Time</label>
                                 <ion-datetime displayFormat="hh:mm a" class="form-control" [(ngModel)]="startTime"></ion-datetime>
+                            </div>
+                        </ion-col>
+                        <ion-col col-12>
+                            <div class="form-group label-floating">
+                                <label class="control-label">End Date</label>
+                                <ion-datetime displayFormat="MM/DD/YYYY" class="form-control" [(ngModel)]="endDate"></ion-datetime>
+                            </div>
+                        </ion-col>
+                        <ion-col col-12>
+                            <div class="form-group label-floating">
+                                <label class="control-label">End Time</label>
+                                <ion-datetime displayFormat="hh:mm a" class="form-control" [(ngModel)]="endTime"></ion-datetime>
                             </div>
                         </ion-col>
 

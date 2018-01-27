@@ -36,7 +36,7 @@ export class LoginPage {
 
   signin()
   {
-    this.component.showLoader('Getting All Sites');
+    this.component.showLoader('Login');
       this.myService.login(this.username,this.password).subscribe(response=>
       {
         console.log(response);
@@ -58,7 +58,7 @@ export class LoginPage {
             this.component.closeLoader();
           console.log(response);
           let toast = this.toastCtrl.create({
-            message:response.json().msg,
+            message:'Login Failure',
             showCloseButton: true,
             closeButtonText: "Ok",
             position: 'bottom',
@@ -91,7 +91,7 @@ export class LoginPage {
         this.component.closeLoader();
         console.log(error);
         let toast = this.toastCtrl.create({
-          message:error.json().msg,
+          message:'Login Failure',
           showCloseButton: true,
           closeButtonText: "Ok",
           position: 'bottom',

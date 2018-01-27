@@ -236,8 +236,8 @@ export class authService
         )
     }
 
-    addJob(job): Observable<any> {
-        return this.http.post(this.Node_url + '/api/job', job).map(
+    createJob(job): Observable<any> {
+        return this.http.post(this.Url + 'api/job', job).map(
             response => {
                 return response;
             })
