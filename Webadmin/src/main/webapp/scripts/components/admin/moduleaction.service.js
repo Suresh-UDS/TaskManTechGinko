@@ -54,6 +54,11 @@ angular.module('timeSheetApp')
             	return $http.post('api/applicationModule/search', searchCriteria).then(function (response) {
             		return response.data;
             	});
+            },
+            findAllActions: function () {
+                return $http.get('api/applicationAction').then(function (response) {
+                    return response.data;
+                });
             }
         
         };

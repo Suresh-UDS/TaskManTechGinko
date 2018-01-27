@@ -60,7 +60,7 @@ public class ApplicationActionService extends AbstractService {
 	}
 
 	public List<ApplicationActionDTO> findAll() {
-		List<ApplicationAction> entities = appActionRepository.findActiveApplicationActions();
+		List<ApplicationAction> entities = appActionRepository.findAll();
 		return mapperUtil.toModelList(entities, ApplicationActionDTO.class);
 	}
 

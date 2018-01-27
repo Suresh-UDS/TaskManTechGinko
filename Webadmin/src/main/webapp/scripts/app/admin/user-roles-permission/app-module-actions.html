@@ -14,7 +14,7 @@
 
     </div>
 
-    <div class="row">
+    <div class="row" ng-init="loadActions()">
         <div class="col-md-12">
             <div class="card margin-TB-5" >
 
@@ -33,8 +33,11 @@
 
                         <div class="col-md-3">
 
+                            <select ng-model="actionSelector" ng-change="selectAction(actionSelector)" ng-options="action as action.name for action in masterActions" class="selectpicker" data-style="btn btn-primary btn-round" title="Select Action" data-size="7">
+                                <!-- <option value="{{action.id}}" ng-repeat="action in masterActions">{{action.name}}</option> -->
+                            </select>
 
-                            <select ng-model="actionSelector" class="selectpicker" data-style="btn btn-primary" title="Single Select" data-size="7">
+<!--                             <select ng-model="actionSelector" class="selectpicker" data-style="btn btn-primary" title="Single Select" data-size="7">
 
                                 <option disabled selected>Choose Action</option>
                                 <option value="List">List</option>
@@ -43,7 +46,7 @@
                                 <option value="Delete">Delete</option>
                                 <option value="Create">Create</option>
                             </select>
-
+ -->
 
                         </div>
                         <div class="col-md-3">
@@ -70,7 +73,7 @@
                             <ul class="listOfActions list-group">
 
                                 <li class="list-group-item justify-content-between" ng-repeat=" action in selectedActions" ng-bind-html-unsafe="action.text">
-                                    {{action}}
+                                    {{action.name}}
                                     <span class="badge badge-default badge-pill" ng-click="removeAction($index)"><i class="material-icons">remove_circle</i></span>
                                 </li>
 
