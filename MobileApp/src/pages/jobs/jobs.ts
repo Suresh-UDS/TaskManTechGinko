@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import {LoadingController, NavController} from 'ionic-angular';
 import {authService} from "../service/authService";
 import {ViewJobPage} from "./view-job";
+import {componentService} from "../service/componentService";
 
 @Component({
   selector: 'page-jobs',
@@ -14,48 +15,38 @@ export class JobsPage {
     categories:any;
     loader:any;
 
-    constructor(public navCtrl: NavController, public authService: authService, private loadingCtrl:LoadingController) {
+    constructor(public navCtrl: NavController,public component:componentService, public authService: authService, private loadingCtrl:LoadingController) {
         this.categories = 'today';
     }
 
     ionViewWillEnter() {
 
     }
-
-    showLoader(msg){
-        this.loader = this.loadingCtrl.create({
-            content:msg
-        });
-        this.loader.present();
-    }
-
-    closeLoader(){
-        this.loader.dismiss();
-    }
-
     getTodaysJobs(){
-        this.showLoader('Getting Today\'s Jobs');
+        this.component.showLoader('Getting Today\'s Jobs');
         this.authService.getTodayJobs().subscribe(response=>{
             console.log("Todays jobs of current user");
             console.log(response);
             this.todaysJobs = response;
-            this.closeLoader();
+            this.component.closeLoader();
         })
     }
 
     getAllJobs(){
-        this.showLoader('Getting All Jobs');
+        this.component.showLoader('Getting All Jobs');
         var search={};
         this.authService.getJobs(search).subscribe(response=>{
             console.log("All jobs of current user");
             console.log(response);
             this.allJobs = response;
-            this.closeLoader();
+            this.component.closeLoader();
         })
     }
 
     viewJob(job)
     {
+        console.log("========view job ===========");
+        console.log(job);
         this.navCtrl.push(ViewJobPage,{job:job})
     }
 }

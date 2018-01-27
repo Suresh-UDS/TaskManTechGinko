@@ -15,11 +15,11 @@ import {JobsPage} from "../pages/jobs/jobs";
 import {ReportsPage} from "../pages/reports/reports";
 import {LogoutPage} from "../pages/logout/logout";
 import {AttendancePage} from "../pages/attendance/attendance";
-import {EmployeeDetailPage} from "../pages/employee-detail/employee-detail";
 import {TabsPage} from "../pages/tabs/tabs";
 import {QuotationPage} from "../pages/quotation/quotation";
 import {CustomerDetailPage} from "../pages/customer-detail/customer-detail";
 import {EmployeeListPage} from "../pages/employee-list/employee-list";
+import {RateCardPage} from "../pages/rate-card/rate-card";
 
 @Component({
   templateUrl: 'app.html'
@@ -42,6 +42,7 @@ export class MyApp {
       { title: 'Client', component: CustomerDetailPage,active:false,icon:'person'},
       { title: 'Employee', component: EmployeeListPage,active:false,icon:'people'},
       { title: 'Jobs', component: JobsPage,active:false,icon:'description'},
+      { title: 'Rate Card', component: RateCardPage,active:false,icon:'description'},
       { title: 'Attendance', component: AttendancePage,active:false,icon:'content_paste'},
       { title: 'Reports', component: ReportsPage,active:false,icon:'trending_up'},
       { title: 'Logout', component: LogoutPage,active:false,icon:'power_settings_new'}

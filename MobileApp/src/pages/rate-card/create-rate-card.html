@@ -1,0 +1,54 @@
+<ion-header>
+  <ion-navbar>
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>Create Rate Card</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+
+    <div class="row">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-content">
+                        <ion-row>
+                            <ion-col col-12>
+                                <ion-list radio-group  [(ngModel)]="rateCardDetails.type">
+                                    <ion-item *ngFor="let type of rateCardTypes">
+                                        <ion-label style="color:black;">{{type.name}}</ion-label>
+                                        <ion-radio  value={{type.name}} (ionSelect)="rateCardUOM(type.uom)"></ion-radio>
+                                    </ion-item>
+                                </ion-list>
+                            </ion-col>
+
+                            <ion-col col-12>
+                                <div class="form-group label-floating">
+                                    <label class="control-label">Title</label>
+                                    <input type="text" class="form-control" [(ngModel)]="rateCardDetails.title" >
+                                </div>
+                            </ion-col>
+
+                            <ion-col col-12>
+                                <div class="form-group label-floating">
+                                    <label class="control-label">Cost</label>
+                                    <input type="text" class="form-control" [(ngModel)]="rateCardDetails.cost" >
+                                </div>
+                            </ion-col>
+
+                            <ion-col col-12>
+                                <div class="form-group label-floating">
+                                    <label class="control-label">UOM</label>
+                                    <input type="text" class="form-control" [(ngModel)]="uom" disabled>
+                                </div>
+                            </ion-col>
+                            <button type="submit" class="btn btn-rose pull-right" (click)="createRateCard(rateCardDetails)" >Create</button>
+                            <div class="clearfix"></div>
+                        </ion-row>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</ion-content>

@@ -5,6 +5,7 @@ import {authService} from "../service/authService";
 import {Camera, CameraOptions} from "@ionic-native/camera";
 import {Geolocation} from "@ionic-native/geolocation";
 import {Geofence} from "@ionic-native/geofence";
+import {componentService} from "../service/componentService";
 
 /**
  * Generated class for the EmployeeList page.
@@ -19,8 +20,8 @@ import {Geofence} from "@ionic-native/geofence";
 })
 export class CustomerDetailPage {
 
-
-  constructor(public navCtrl: NavController, public navParams: NavParams, private  authService: authService, public camera: Camera,
+  jobs:any;
+  constructor(public navCtrl: NavController, public component:componentService,public navParams: NavParams, private  authService: authService, public camera: Camera,
               private loadingCtrl:LoadingController, private geolocation:Geolocation, private toastCtrl:ToastController,
               private geoFence:Geofence) {
 
@@ -31,7 +32,16 @@ export class CustomerDetailPage {
   ionViewDidLoad() {
     console.log('ionViewDidLoad SiteListPage');
   }
-
+  getAllJobs(){
+    this.component.showLoader('Getting All Jobs');
+    var search={};
+    this.authService.getJobs(search).subscribe(response=>{
+      console.log("All jobs of current user");
+      console.log(response);
+      this.jobs = response;
+      this.component.closeLoader();
+    })
+  }
 
 
 

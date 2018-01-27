@@ -91,6 +91,10 @@ container-scroll::-webkit-scrollbar-thumb
 {
   margin-top:25%;
 }
+.margin-tp25
+{
+  margin: 25px 0 0 0 !important;
+}
 .margn-btom20
 {
   margin-bottom:20px;
@@ -141,7 +145,7 @@ container-scroll::-webkit-scrollbar-thumb
 }
 .hariz-scroll-con
 {
-  padding:10px 15px;
+  /*padding:10px 15px;*/
  /* width: 1400px;*/
 }
 /* calendar css */
@@ -275,4 +279,24 @@ table tr
 {
   box-shadow: 0 1px 4px 0 deepskyblue !important;
 
+}
+.padding10
+{
+  padding: 10px;
+}
+.emp .item-md.item-block .item-inner,.emp .list-md .item-block .item-inner
+{
+  border-bottom: 1px solid #dedede;
+}
+.emp-round
+{
+  border-radius:50%;
+  background-color: orange;
+}
+.emp-round p
+{
+  color: #FFFFFF !important;
+  text-align: center !important;
+  vertical-align: middle !important;
+  line-height: 38px !important;
 }
