@@ -34,7 +34,7 @@
                             <td>200 </td>
                             <td>per hour</td>
                             <td class="text-right">
-                                <a  ng-class="{active: $state.includes('admin')}" has-authority="ROLE_ADMIN" ui-sref="view-rateCard"  class="btn btn-simple btn-info"><i class="material-icons">remove_red_eye</i></a>
+                                <a  ng-class="{active: $state.includes('admin')}" has-authority="ROLE_ADMIN"  data-toggle="modal" data-target="#RightModal" class="btn btn-simple btn-info"><i class="material-icons">remove_red_eye</i></a>
                                 <a  ng-class="{active: $state.includes('admin')}" has-authority="ROLE_ADMIN" ui-sref="edit-rateCard"  class="btn btn-simple btn-success"><i class="material-icons">edit</i></a>
                                 <a ng-class="{active: $state.includes('admin')}" has-authority="ROLE_ADMIN"  ng-click="deleteConfirm(site)"  onClick="$('#deleteModal').modal()" data-target="#myModal"  class="btn btn-simple btn-danger"><i class="material-icons">close</i></a>
                             </td>
@@ -46,7 +46,20 @@
                             <td>200 </td>
                             <td>per hour</td>
                             <td class="text-right">
-                                <a  ng-class="{active: $state.includes('admin')}" has-authority="ROLE_ADMIN" ui-sref="view-rateCard"  class="btn btn-simple btn-info"><i class="material-icons">remove_red_eye</i></a>
+                                <a  ng-class="{active: $state.includes('admin')}" has-authority="ROLE_ADMIN"  data-toggle="modal" data-target="#RightModal" class="btn btn-simple btn-info"><i class="material-icons">remove_red_eye</i></a>
+                                <a  ng-class="{active: $state.includes('admin')}" has-authority="ROLE_ADMIN" ui-sref="edit-rateCard"  class="btn btn-simple btn-success"><i class="material-icons">edit</i></a>
+                                <a ng-class="{active: $state.includes('admin')}" has-authority="ROLE_ADMIN"  ng-click="deleteConfirm(site)"  onClick="$('#deleteModal').modal()" data-target="#myModal"  class="btn btn-simple btn-danger"><i class="material-icons">close</i></a>
+                            </td>
+
+                        </tr>
+
+                        <tr>
+                            <td>Labour</td>
+                            <td>Muthu</td>
+                            <td>200 </td>
+                            <td>per hour</td>
+                            <td class="text-right">
+                                <a  ng-class="{active: $state.includes('admin')}" has-authority="ROLE_ADMIN"  data-toggle="modal" data-target="#RightModal" class="btn btn-simple btn-info"><i class="material-icons">remove_red_eye</i></a>
                                 <a  ng-class="{active: $state.includes('admin')}" has-authority="ROLE_ADMIN" ui-sref="edit-rateCard"  class="btn btn-simple btn-success"><i class="material-icons">edit</i></a>
                                 <a ng-class="{active: $state.includes('admin')}" has-authority="ROLE_ADMIN"  ng-click="deleteConfirm(site)"  onClick="$('#deleteModal').modal()" data-target="#myModal"  class="btn btn-simple btn-danger"><i class="material-icons">close</i></a>
                             </td>
@@ -58,8 +71,8 @@
                             <td>200 </td>
                             <td>per hour</td>
                             <td class="text-right">
-                                <a  ng-class="{active: $state.includes('admin')}" has-authority="ROLE_ADMIN" ui-sref="view-rateCard"  class="btn btn-simple btn-info"><i class="material-icons">remove_red_eye</i></a>
-                                <a  ng-class="{active: $state.includes('admin')}" has-authority="ROLE_ADMIN" ui-sref=""  class="btn btn-simple btn-success"><i class="material-icons">edit</i></a>
+                                <a  ng-class="{active: $state.includes('admin')}" has-authority="ROLE_ADMIN"  data-toggle="modal" data-target="#RightModal" class="btn btn-simple btn-info"><i class="material-icons">remove_red_eye</i></a>
+                                <a  ng-class="{active: $state.includes('admin')}" has-authority="ROLE_ADMIN" ui-sref="edit-rateCard"  class="btn btn-simple btn-success"><i class="material-icons">edit</i></a>
                                 <a ng-class="{active: $state.includes('admin')}" has-authority="ROLE_ADMIN"  ng-click="deleteConfirm(site)"  onClick="$('#deleteModal').modal()" data-target="#myModal"  class="btn btn-simple btn-danger"><i class="material-icons">close</i></a>
                             </td>
 
@@ -70,8 +83,8 @@
                             <td>200 </td>
                             <td>per hour</td>
                             <td class="text-right">
-                                <a  ng-class="{active: $state.includes('admin')}" has-authority="ROLE_ADMIN" ui-sref="view-rateCard"  class="btn btn-simple btn-info"><i class="material-icons">remove_red_eye</i></a>
-                                <a  ng-class="{active: $state.includes('admin')}" has-authority="ROLE_ADMIN" ui-sref=""  class="btn btn-simple btn-success"><i class="material-icons">edit</i></a>
+                                <a  ng-class="{active: $state.includes('admin')}" has-authority="ROLE_ADMIN"  data-toggle="modal" data-target="#RightModal" class="btn btn-simple btn-info"><i class="material-icons">remove_red_eye</i></a>
+                                <a  ng-class="{active: $state.includes('admin')}" has-authority="ROLE_ADMIN" ui-sref="edit-rateCard"  class="btn btn-simple btn-success"><i class="material-icons">edit</i></a>
                                 <a ng-class="{active: $state.includes('admin')}" has-authority="ROLE_ADMIN"  ng-click="deleteConfirm(site)"  onClick="$('#deleteModal').modal()" data-target="#myModal"  class="btn btn-simple btn-danger"><i class="material-icons">close</i></a>
                             </td>
 
@@ -82,24 +95,13 @@
                             <td>200 </td>
                             <td>per hour</td>
                             <td class="text-right">
-                                <a  ng-class="{active: $state.includes('admin')}" has-authority="ROLE_ADMIN" ui-sref="view-rateCard"  class="btn btn-simple btn-info"><i class="material-icons">remove_red_eye</i></a>
-                                <a  ng-class="{active: $state.includes('admin')}" has-authority="ROLE_ADMIN" ui-sref=""  class="btn btn-simple btn-success"><i class="material-icons">edit</i></a>
+                                <a  ng-class="{active: $state.includes('admin')}" has-authority="ROLE_ADMIN"  data-toggle="modal" data-target="#RightModal" class="btn btn-simple btn-info"><i class="material-icons">remove_red_eye</i></a>
+                                <a  ng-class="{active: $state.includes('admin')}" has-authority="ROLE_ADMIN" ui-sref="edit-rateCard"  class="btn btn-simple btn-success"><i class="material-icons">edit</i></a>
                                 <a ng-class="{active: $state.includes('admin')}" has-authority="ROLE_ADMIN"  ng-click="deleteConfirm(site)"  onClick="$('#deleteModal').modal()" data-target="#myModal"  class="btn btn-simple btn-danger"><i class="material-icons">close</i></a>
                             </td>
 
                         </tr>
-                        <tr>
-                            <td>Labour</td>
-                            <td>Muthu</td>
-                            <td>200 </td>
-                            <td>per hour</td>
-                            <td class="text-right">
-                                <a  ng-class="{active: $state.includes('admin')}" has-authority="ROLE_ADMIN" ui-sref="view-rateCard"  class="btn btn-simple btn-info"><i class="material-icons">remove_red_eye</i></a>
-                                <a  ng-class="{active: $state.includes('admin')}" has-authority="ROLE_ADMIN" ui-sref=""  class="btn btn-simple btn-success"><i class="material-icons">edit</i></a>
-                                <a ng-class="{active: $state.includes('admin')}" has-authority="ROLE_ADMIN"  ng-click="deleteConfirm(site)"  onClick="$('#deleteModal').modal()" data-target="#myModal"  class="btn btn-simple btn-danger"><i class="material-icons">close</i></a>
-                            </td>
 
-                        </tr>
 
                         </tbody>
                     </table>
@@ -148,3 +150,78 @@
     </div>
 
 </div>
+
+
+<!-- Modal -->
+<div class="modal right fade" id="RightModal" tabindex="-1" role="dialog" aria-labelledby="RightModal">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel2">View Quotation</h4>
+            </div>
+
+            <div class="modal-body">
+
+                <div class="card">
+
+                    <div class="card-content">
+
+                        <div class="table-responsive">
+                            <table class="table">
+
+                                <tbody>
+                                <tr>
+
+                                    <td>Type</td>
+                                    <td>Service</td>
+
+                                </tr>
+                                <tr>
+
+                                    <td>Title</td>
+                                    <td>name</td>
+
+                                </tr>
+                                <tr>
+
+                                    <td>Material Cost</td>
+                                    <td>1200</td>
+
+                                </tr>
+                                <tr>
+
+                                    <td>UOM Type</td>
+                                    <td>per hour</td>
+
+                                </tr>
+
+
+                                </tbody>
+                            </table>
+                        </div>
+
+
+                        <div class="row">
+
+                            <div class="col-md-4 col-md-offset-4">
+                                <button class="btn btn-default close-button-right b10" type="button"
+                                        data-dismiss="modal">
+                                    <i class="material-icons">keyboard_arrow_left</i> Back
+                                </button>
+                            </div>
+
+                        </div>
+
+
+                    </div>
+
+                </div>
+
+
+            </div>
+
+        </div><!-- modal-content -->
+    </div><!-- modal-dialog -->
+</div><!-- modal -->
