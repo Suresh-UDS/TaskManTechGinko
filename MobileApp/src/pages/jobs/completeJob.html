@@ -1,0 +1,41 @@
+<ion-header>
+    <ion-navbar>
+        <button ion-button menuToggle>
+            <ion-icon name="menu"></ion-icon>
+        </button>
+        <ion-title>Complete Job</ion-title>
+    </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+
+    <ion-list >
+        <ion-row class="margin0 white-bg padding10">
+            <ion-col col-6 class="label-on-left">Job Id</ion-col>
+            <ion-col col-6>
+                <p text-right>{{jobDetails.id}}</p>
+            </ion-col>
+            <ion-col col-6 class="label-on-left">Name</ion-col>
+            <ion-col col-6>
+                <p text-right>{{jobDetails.title}}</p>
+            </ion-col>
+            <ion-col col-6 class="label-on-left">Status</ion-col>
+            <ion-col col-6>
+                <p text-right>{{jobDetails.status}}</p>
+            </ion-col>
+        </ion-row>
+
+        <ion-row class="margin-tp25 white-bg padding10">
+            <ion-col col-6 class="label-on-left">Photo (Before)
+            </ion-col>
+            <ion-col col-6 text-right>
+                <button class="ion-button" (click)="viewCamera('beforeJob',jobDetails)"><ion-icon name="ios-camera"></ion-icon></button>
+            </ion-col>
+            <ion-col *ngFor="let image of takenImages">
+                <ion-img [src]=image width="40px" height="40px"></ion-img>
+            </ion-col>
+
+        </ion-row>
+    </ion-list>
+
+</ion-content>
