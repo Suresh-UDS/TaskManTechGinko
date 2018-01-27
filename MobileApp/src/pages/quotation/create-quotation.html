@@ -34,10 +34,30 @@
                                     <div class="form-group">
                                         <ion-row>
                                             <ion-col *ngFor="let type of rateCardTypes">
-                                                <button ion-button color="dark"> Add {{type.name}}</button>
+                                                <button ion-button color="dark" (click)="showAdd(type)"> Add {{type.name}}</button>
                                             </ion-col>
 
                                         </ion-row>
+                                        <ion-row  *ngIf="showRateInformation">
+                                            <ion-col>
+                                                <input type="text" class="form-control" [(ngModel)]="">
+                                            </ion-col>
+                                            <ion-col>
+                                                <input type="text" class="form-control" [(ngModel)]="">
+                                            </ion-col>
+                                        </ion-row>
+                                    </div>
+                                </ion-col>
+
+                                <ion-col col-12>
+                                    <div class="form-group">
+                                        <ion-item>
+                                            <ion-label>Choose Type</ion-label>
+                                            <ion-select [(ngModel)]="rateCardType">
+                                                <ion-option *ngFor="let type of rateCardTypes" [value]="type.name"></ion-option>
+
+                                            </ion-select>
+                                        </ion-item>
                                     </div>
                                 </ion-col>
                             </ion-row>

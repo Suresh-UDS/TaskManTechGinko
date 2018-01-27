@@ -10,8 +10,19 @@ export class CreateQuotationPage {
 
     quotationDetails:{
         title:any,
-        description:any
+        description:any,
+        rateCard:[
+            {
+                type:any,
+                uom:any,
+                name:any;
+                cost:any
+            }
+            ]
     };
+
+    rateCardType:any;
+    uom:any;
 
     allSites:any;
     siteEmployees:any;
@@ -23,6 +34,7 @@ export class CreateQuotationPage {
     stepCondition: any;
     stepDefaultCondition: any;
     currentStep: any;
+    showRateInformation:any;
 
     constructor(public navCtrl: NavController,public popoverCtrl: PopoverController, public evts: Events, public authService:authService) {
 
@@ -48,8 +60,18 @@ export class CreateQuotationPage {
 
         this.quotationDetails ={
             title:'',
-            description:''
+            description:'',
+            rateCard:[
+                {
+                    type:'',
+                    uom:'',
+                    name:'',
+                    cost:''
+                }
+            ]
         };
+
+        this.showRateInformation=false;
 
         this.selectedSite=null;
         console.log(window.localStorage.getItem('employeeUserId'));
@@ -84,6 +106,12 @@ export class CreateQuotationPage {
         this.authService.getRateCardTypes().subscribe(response=>{
             this.rateCardTypes = response;
         })
+    }
+
+    showAdd(type){
+        this.showRateInformation = true;
+        this.rateCardType = type.title;
+        this.uom = type.uom;
     }
 
 
