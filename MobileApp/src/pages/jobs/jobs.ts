@@ -3,6 +3,7 @@ import {LoadingController, NavController} from 'ionic-angular';
 import {authService} from "../service/authService";
 import {ViewJobPage} from "./view-job";
 import {componentService} from "../service/componentService";
+import {AddPage} from "./add-job";
 
 @Component({
   selector: 'page-jobs',
@@ -41,6 +42,11 @@ export class JobsPage {
             this.allJobs = response;
             this.component.closeLoader();
         })
+    }
+
+    addJob()
+    {
+        this.navCtrl.push(AddPage);
     }
 
     viewJob(job)

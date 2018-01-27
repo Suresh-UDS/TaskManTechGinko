@@ -39,6 +39,7 @@ import {RateCardPage} from "../pages/rate-card/rate-card";
 import {CreateRateCardPage} from "../pages/rate-card/create-rate-card";
 import {EmployeeDetailPage} from "../pages/employee-list/employee-detail";
 import {SiteViewPage} from "../pages/site/site-view";
+import {AddPage} from "../pages/jobs/add-job";
 @NgModule({
   declarations: [
     MyApp,
@@ -66,7 +67,8 @@ import {SiteViewPage} from "../pages/site/site-view";
     ViewJobPage,
     EmployeeListPage,
     RateCardPage,
-    CreateRateCardPage
+    CreateRateCardPage,
+    AddPage
   ],
   imports: [
     BrowserModule,
@@ -102,7 +104,8 @@ import {SiteViewPage} from "../pages/site/site-view";
     ViewJobPage,
     EmployeeListPage,
     RateCardPage,
-    CreateRateCardPage
+    CreateRateCardPage,
+    AddPage
   ],
   providers: [
     StatusBar,
