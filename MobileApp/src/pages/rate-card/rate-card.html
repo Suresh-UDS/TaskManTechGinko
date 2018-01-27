@@ -9,9 +9,9 @@
 
 <ion-content padding>
 
-    <button ion-button full icon-only (click)="createRate()">
-        <ion-icon name="add"></ion-icon>
-    </button>
+    <ion-fab top right edge>
+        <button (click)="createRate()"  ion-fab><ion-icon name="add"></ion-icon></button>
+    </ion-fab>
 
     <ion-list>
         <ion-item *ngFor="let rate of rateCards">

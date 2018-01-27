@@ -2,10 +2,10 @@ import { Component } from '@angular/core';
 import {NavController, PopoverController} from 'ionic-angular';
 
 @Component({
-  selector: 'page-quotation',
-  templateUrl: 'quotation.html'
+  selector: 'page-view-quotation',
+  templateUrl: 'quotation-view.html'
 })
-export class QuotationPage {
+export class QuotationViewPage {
 
   constructor(public navCtrl: NavController,public popoverCtrl: PopoverController) {
 
