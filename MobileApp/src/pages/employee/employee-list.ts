@@ -114,7 +114,6 @@ export class EmployeeList {
               console.log("already checked in ");
               employee.checkedIn = true;
               employee.attendanceId = result[0].id;
-
             }else{
               console.log("Not yet checked in ");
               employee.checkedIn = false;

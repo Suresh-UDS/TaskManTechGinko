@@ -22,6 +22,7 @@ export class EmployeeDetailPage {
 
   empDetail:any;
   categories:any;
+  jobs:any;
 
   constructor(public navCtrl: NavController,public myService:authService, public component:componentService,public navParams: NavParams, private  authService: authService, public camera: Camera,
               private loadingCtrl:LoadingController, private geolocation:Geolocation, private toastCtrl:ToastController,
@@ -39,6 +40,18 @@ export class EmployeeDetailPage {
 
 
   }
+
+  getAllJobs(){
+    this.component.showLoader('Getting All Jobs');
+    var search={};
+    this.authService.getJobs(search).subscribe(response=>{
+      console.log("All jobs of current user");
+      console.log(response);
+      this.jobs = response;
+      this.component.closeLoader();
+    })
+  }
+
 
 
 

@@ -15,7 +15,6 @@ import {JobsPage} from "../pages/jobs/jobs";
 import {ReportsPage} from "../pages/reports/reports";
 import {LogoutPage} from "../pages/logout/logout";
 import {AttendancePage} from "../pages/attendance/attendance";
-import {EmployeeDetailPage} from "../pages/employee-detail/employee-detail";
 import {TabsPage} from "../pages/tabs/tabs";
 import {QuotationPage} from "../pages/quotation/quotation";
 import {CustomerDetailPage} from "../pages/customer-detail/customer-detail";

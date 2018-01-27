@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 import { NavController } from 'ionic-angular';
 import {authService} from "../service/authService";
-import {SiteViewPage} from "../site-view/site-view";
 import {componentService} from "../service/componentService";
+import {SiteViewPage} from "./site-view";
 
 @Component({
   selector: 'page-site',

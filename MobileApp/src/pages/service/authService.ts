@@ -14,7 +14,9 @@ export class authService
 {
     private Url_local = 'http://localhost:8000/';
     private mobile_url = "http://192.168.1.11:8088/";
-    private aws_url = 'ec2-52-77-216-21.ap-southeast-1.compute.amazonaws.com:8088/';
+    private aws_url = 'http://ec2-52-77-216-21.ap-southeast-1.compute.amazonaws.com:8088/';
+    private node_url='http://192.168.1.11:8000/';
+    private Node_url= this.node_url;
     private Url = this.mobile_url;
     private kairosResponse ={
         status :String,
@@ -183,6 +185,33 @@ export class authService
         return this.http.post(this.Url+'api/jobs/date/search',{searchCriteria}).map(
             response=>{
                 console.log(response);
+                return response.json();
+            }
+        )
+    }
+
+    getRateCardTypes():Observable<any>{
+        return this.http.get(this.Node_url+'api/rateCardTypes').map(
+            response=>{
+                console.log(response);
+                return response.json();
+            }
+        )
+    }
+
+    createRateCard(rateCard):Observable<any>{
+        return this.http.post(this.Node_url+'api/rateCard/create',rateCard).map(
+            response=>{
+                console.log(response);
+                return response.json();
+            }
+        )
+    }
+
+    getRateCards(): Observable<any>{
+        return this.http.get(this.Node_url+'api/rateCard').map(
+            response=>{
+                console.log(response.json());
                 return response.json();
             }
         )

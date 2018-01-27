@@ -31,14 +31,14 @@ import {QuotationPage} from "../pages/quotation/quotation";
 import {QuotationPopoverPage} from "../pages/quotation/quotation-popover";
 import {AttendancePage} from "../pages/attendance/attendance";
 import {AttendancePopoverPage} from "../pages/attendance/attendance-popover";
-import {EmployeeDetailPage} from "../pages/employee-detail/employee-detail";
 import {CustomerDetailPage} from "../pages/customer-detail/customer-detail";
-import {SiteViewPage} from "../pages/site-view/site-view";
 import {ViewJobPage} from "../pages/jobs/view-job";
 import {EmployeeListPage} from "../pages/employee-list/employee-list";
 import {componentService} from "../pages/service/componentService";
 import {RateCardPage} from "../pages/rate-card/rate-card";
 import {CreateRateCardPage} from "../pages/rate-card/create-rate-card";
+import {EmployeeDetailPage} from "../pages/employee-list/employee-detail";
+import {SiteViewPage} from "../pages/site/site-view";
 @NgModule({
   declarations: [
     MyApp,

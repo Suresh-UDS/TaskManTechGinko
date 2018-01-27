@@ -6,7 +6,7 @@ import {ReportsPage} from "../reports/reports";
 import {QuotationPage} from "../quotation/quotation";
 import {AttendancePage} from "../attendance/attendance";
 import {CustomerDetailPage} from "../customer-detail/customer-detail";
-import {EmployeeDetailPage} from "../employee-detail/employee-detail";
+import {EmployeeDetailPage} from "../employee-list/employee-detail";
 
 @Component({
   selector: 'page-tabs',

@@ -1,0 +1,22 @@
+<ion-header>
+  <ion-navbar>
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>Rate Cards</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+
+    <button ion-button full icon-only (click)="createRate()">
+        <ion-icon name="add"></ion-icon>
+    </button>
+
+    <ion-list>
+        <ion-item *ngFor="let rate of rateCards">
+            <p style="color: #2e2e2e">{{rate.title}} - {{rate.cost}} - {{rate.uom}}</p>
+        </ion-item>
+    </ion-list>
+
+</ion-content>
