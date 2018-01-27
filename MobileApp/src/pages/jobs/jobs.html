@@ -4,6 +4,11 @@
       <ion-icon name="menu"></ion-icon>
     </button>
     <ion-title>Jobs</ion-title>
+      <ion-buttons right>
+          <button ion-button clear (click)="addJob()" class="add-btn">
+              <ion-icon name="add"></ion-icon>
+          </button>
+      </ion-buttons>
   </ion-navbar>
     <ion-toolbar transparent>
         <ion-segment [(ngModel)]="categories" class="segmnt margin-auto margin-top5" color="#ff9800">
@@ -16,6 +21,8 @@
 
         </ion-segment>
     </ion-toolbar>
+
+
 </ion-header>
 
 <ion-content padding>
@@ -27,7 +34,10 @@
             </ion-item>
         </ion-list>
         <ion-list *ngSwitchCase="'jobs'">
-                <div class="card" *ngFor="let job of allJobs" [ngClass]="{'red-card' : (job.status == 'OVERDUE'),
+
+
+
+            <div class="card" *ngFor="let job of allJobs" [ngClass]="{'red-card' : (job.status == 'OVERDUE'),
                                                           'green-card' : (job.status == 'COMPLETED'),
                                                           'blue-card' :(job.status =='OPEN' || job.status == 'ASSIGNED' || job.status == 'INPROGRESS')}">
 

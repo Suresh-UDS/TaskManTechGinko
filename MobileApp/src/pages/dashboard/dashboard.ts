@@ -15,7 +15,10 @@ export class DashboardPage {
   categories:any;
   loader:any;
   dateView:any;
-  constructor(public renderer: Renderer,private loadingCtrl:LoadingController,public navCtrl: NavController,public component:componentService,public authService:authService,public modalCtrl: ModalController,
+  employee:any;
+  sites:any;
+    firstLetter:any;
+  constructor(public renderer: Renderer,public myService:authService,private loadingCtrl:LoadingController,public navCtrl: NavController,public component:componentService,public authService:authService,public modalCtrl: ModalController,
               private datePickerProvider: DatePickerProvider) {
 
     this.categories='overdue';
@@ -51,7 +54,37 @@ export class DashboardPage {
       console.log(error);
     })
 
+
+    this.myService.getAllEmployees().subscribe(
+        response=>{
+          console.log('ionViewDidLoad Employee list:');
+          console.log(response);
+          this.employee=response;
+          this.component.closeLoader();
+        },
+        error=>{
+          console.log('ionViewDidLoad SitePage:'+error);
+        }
+    )
+
+    this.myService.searchSite().subscribe(
+        response=>{
+          console.log('ionViewDidLoad SitePage:');
+
+          console.log(response.json()
+          );
+          this.sites=response.json();
+          this.component.closeLoader();
+        },
+        error=>{
+          console.log('ionViewDidLoad SitePage:'+error);
+        }
+    )
+
+
     this.getAllJobs()
+
+
 
   }
 
@@ -65,4 +98,11 @@ export class DashboardPage {
       this.component.closeLoader();
     })
   }
+
+    first(emp)
+    {
+        this.firstLetter=emp.charAt(0);
+    }
+
+
 }
