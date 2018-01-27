@@ -15,9 +15,10 @@ export class authService
     private Url_local = 'http://localhost:8000/';
     private mobile_url = "http://192.168.1.11:8088/";
     private aws_url = 'http://ec2-52-77-216-21.ap-southeast-1.compute.amazonaws.com:8088/';
+    private staging_url = 'http://ec2-52-77-216-21.ap-southeast-1.compute.amazonaws.com:8088/';
     private node_url='http://192.168.1.11:8000/';
     private Node_url= this.node_url;
-    private Url = this.mobile_url;
+    private Url = this.staging_url;
     private kairosResponse ={
         status :String,
         headers:String,
@@ -143,6 +144,24 @@ export class authService
         )
     }
 
+    getEmployeeAttendances(employeeId) : Observable <any>{
+        return this.http.post(this.Url+'api/attendance/'+employeeId,{employeeId:employeeId}).map(
+            (response=>{
+                console.log(response);
+                return response;
+            })
+        )
+    }
+
+    getAllAttendances():Observable<any>{
+        return this.http.get(this.Url+'api/attendance/search').map(
+            (response=>{
+                console.log(response);
+                return response;
+            })
+        )
+    }
+
     checkSiteProximity(siteId,lat,lng):Observable<any>{
         return this.http.get('http://ec2-52-77-216-21.ap-southeast-1.compute.amazonaws.com:8000/api/site/nearby?'+'siteId='+siteId+'&'+'lat='+lat+'&lng='+lng ).map(
             (response)=>{
@@ -210,6 +229,24 @@ export class authService
 
     getRateCards(): Observable<any>{
         return this.http.get(this.Node_url+'api/rateCard').map(
+            response=>{
+                console.log(response.json());
+                return response.json();
+            }
+        )
+    }
+
+    getQuotations(): Observable<any>{
+        return this.http.get(this.Node_url+'api/quotation').map(
+            response=>{
+                console.log(response.json());
+                return response.json();
+            }
+        )
+    }
+
+    createQuotation(quotation): Observable<any>{
+        return this.http.post(this.Node_url+'api/quotation/create',quotation).map(
             response=>{
                 console.log(response.json());
                 return response.json();
