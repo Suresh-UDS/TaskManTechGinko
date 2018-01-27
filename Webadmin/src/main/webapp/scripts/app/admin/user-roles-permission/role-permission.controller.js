@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('timeSheetApp')
-    .controller('ModuleActionsController', function ($rootScope, $scope, $state, $timeout, ModuleActionComponent,EmployeeComponent, $http, $stateParams, $location, JobComponent) {
+    .controller('RolePermissionController', function ($rootScope, $scope, $state, $timeout, UserRoleComponent, ModuleActionComponent,RolePermissionComponent, $http, $stateParams, $location, JobComponent) {
         $scope.success = null;
         $scope.error = null;
         $scope.doNotMatch = null;
@@ -16,18 +16,89 @@ angular.module('timeSheetApp')
 
         $scope.selectedGroup;
 
-        $scope.users;
-
+        $scope.userRoles;
+        
         $scope.moduleActions;
 
         $scope.selectedModuleAction;
         
         $scope.moduleActions;
         
-        $scope.moduleId;
         $scope.moduleName;
         
         $scope.selectedActions=[];
+        
+        $scope.selectedPermissions = [];
+        
+        $scope.permissions = {
+        		
+        };
+        
+        $scope.selectRole = function() {
+        	console.log('selected role - '+ $scope.selectedUserRole);
+        	//$scope.loadModuleActions();
+        	$scope.loadPermissions();
+        }
+        
+        $scope.checkPermission = function(moduleId, moduleName, actionId, actionName, obj) {
+        	console.log('moduleName - ' + moduleName +' actionId - ' + actionId + ' actionName -' + actionName + ' checked-' +obj.Selected )
+        	if(angular.isArray($scope.selectedPermissions)) {
+        		var permMatch = false;
+        		$scope.selectedPermissions.forEach(function(perm) {
+        			
+        			if(perm.moduleName.indexOf(moduleName) != -1) {
+        				permMatch = true;
+        				var actions = perm.actions;
+        				
+        				if(angular.isArray(actions)) {
+        					var actionMatch = false;
+        					for(var i = 0; i < actions.length ; i++) {
+        						var action = actions[i];
+        						if(action.name.indexOf(actionName) != -1) {
+        							actionMatch = true;
+        							if(!obj.Selected) {
+        								actions.splice(i,1);
+        							}
+        							
+        						}	
+        					}
+        					if(!actionMatch) {
+        						var action = {
+        							"id" : actionId,
+        							"name" : actionName
+        						}
+        						actions.push(action);
+        					}
+        				}
+        				
+        			}
+        			
+        			
+        			
+        		})
+        		
+        		if(!permMatch){
+        				var actions = [];
+						var action = {
+							"id" : actionId,
+							"name" : actionName
+						}
+						actions.push(action);
+        				
+        				var permission = {
+        					"id" : moduleId,
+        					"name" : moduleName,
+        					"moduleActions" : actions
+        						
+        				}
+        				
+        				$scope.selectedPermissions.push(permission);
+        				
+        			}
+        		
+        	}
+        	console.log('selectedPermissions - ' + JSON.stringify($scope.selectedPermissions));
+        }
         
         $scope.addAction = function() {
         	var action = $scope.actionSelector
@@ -40,27 +111,20 @@ angular.module('timeSheetApp')
         	$scope.selectedActions.splice(ind,1);
         }
 
-        $scope.saveModuleActions = function () {
-        	console.log('moduleActions -'+ $scope.moduleName +' , id -'+ $scope.moduleId);
-        	console.log('moduleActions -'+ $scope.selectedActions);
-        	var actions = []
-        	for(var i in $scope.selectedActions) {
-        		actions[i] = {
-        			"name" : $scope.selectedActions[i]		
-        		}
+        $scope.saveRolePermissions = function () {
+        	console.log('selectedRole -'+ $scope.selectedUserRole);
+        	console.log('selectedRolePermissions -'+ JSON.stringify($scope.selectedPermissions));
+        	$scope.permissions = {
+        		"roleId" : $scope.selectedUserRole,
+        		"applicationModules" : $scope.selectedPermissions 
         	}
-        	$scope.moduleActions = {
-        		"id" : $scope.moduleId,	
-        		"name" : $scope.moduleName,
-        		"moduleActions" : actions 
-        	}
-        	ModuleActionComponent.createModuleAction($scope.moduleActions).then(function () {
+        	RolePermissionComponent.createRolePermission($scope.permissions).then(function () {
             	$scope.success = 'OK';
             	$scope.moduleName = '';
-            	$scope.selectedActions = [];
-            	$scope.moduleActions = {};
-            	$scope.loadModuleActions();
-            	$location.path('/app-module-actions');
+            	$scope.selectedPermissions = [];
+            	$scope.selectedUserRole = '';
+            	$scope.refreshPage();
+            	$location.path('/role-permission');
             }).catch(function (response) {
                 $scope.success = null;
                 console.log(response.data);
@@ -78,23 +142,36 @@ angular.module('timeSheetApp')
         $scope.cancelModuleAction = function () {
         	$scope.selectedActions = [];
         };
+        
+        $scope.init = function() {
+        	$scope.loadUserRoles();
+        	$scope.loadModuleActions();
+        }
 
         $scope.loadModuleActions = function () {
-
-        	$scope.search();
+        	var searchCriteria = {
+        		"findAll" : true	
+        	}
+        	ModuleActionComponent.search(searchCriteria).then(function (data) {
+        		$scope.moduleActions = data.transactions;
+        	})
         };
 
         $scope.refreshPage = function() {
         	$scope.clearFilter();
-        	$scope.loadUsers();
+        	$scope.loadUserRoles();
+        	$scope.loadModuleActions();
         }
 
-
+        $scope.loadUserRoles = function () {
+        	UserRoleComponent.findAll().then(function (data) {
+                $scope.userRoles = data;
+            });
+        };
 
         $scope.loadModuleAction = function(id) {
         	console.log('loadModuleAction -' + id);
         	ModuleActionComponent.findOne(id).then(function (data) {
-        		$scope.moduleId = data.id;
                 $scope.moduleName = data.name;
                 for(var i in data.moduleActions) {
                 	$scope.selectedActions.push(data.moduleActions[i].name);	
@@ -142,7 +219,7 @@ angular.module('timeSheetApp')
         	$state.reload();
         };
 
-        $scope.search = function () {
+        $scope.loadPermissions = function () {
         	var currPageVal = ($scope.pages ? $scope.pages.currPage : 1);
         	if(!$scope.searchCriteria) {
             	var searchCriteria = {
@@ -152,33 +229,75 @@ angular.module('timeSheetApp')
         	}
 
         	$scope.searchCriteria.currPage = currPageVal;
-        	console.log('Selected  module action -' + $scope.selectedModuleAction);
 
-        	if(!$scope.selectedModuleAction) {
-        		if($rootScope.searchCriteriaModuleAction) {
-            		$scope.searchCriteria = $rootScope.searchCriteriaModuleAction;
-        		}else {
-        			$scope.searchCriteria.findAll = true;
-        		}
-
+        	if($scope.selectedUserRole) {
+        		$scope.searchCriteria.findAll = false;
+	        	$scope.searchCriteria.userRoleId = $scope.selectedUserRole;
+	        	console.log('selected user role id ='+ JSON.stringify($scope.selectedUserRole));
         	}else {
-	        	if($scope.selectedModuleAction) {
-	        		$scope.searchCriteria.findAll = false;
-		        	$scope.searchCriteria.moduleActionId = $scope.selectedModuleAction.id;
-		        	$scope.searchCriteria.name = $scope.selectedModuleAction.name;
-		        	$scope.searchCriteria.activeFlag = $scope.selectedModuleAction.activeFlag;
-		        	console.log('selected user role id ='+ $scope.searchCriteria.moduleActionId);
-	        	}else {
-	        		$scope.searchCriteria.moduleActionId = 0;
-	        	}
+        		$scope.searchCriteria.selectedUserRole = 0;
         	}
         	console.log($scope.searchCriteria);
-        	ModuleActionComponent.search($scope.searchCriteria).then(function (data) {
-                $scope.moduleActions = data.transactions;
-                console.log($scope.moduleActions);
+        	RolePermissionComponent.search($scope.searchCriteria).then(function (data) {
+                $scope.permissions = data;
+                console.log('permissions - ' + JSON.stringify($scope.permissions));
+                
+                if($scope.moduleActions && $scope.permissions) {
+                	
+                	var permAppModules = $scope.permissions.applicationModules;
+                	
+                	for(var i=0; i < $scope.moduleActions.length; i++) {
+                	//$scope.moduleActions.forEach(function(module) {
+                		var module = $scope.moduleActions[i];
+                		console.log('module - ' + JSON.stringify(module));
+                		var permModuleMatch = false;
+                		for(var j=0; j < permAppModules.length; j++) {
+                			var permModule = permAppModules[j];
+                			console.log('perm module - ' + JSON.stringify(permModule));
+                		//permAppModules.forEach(function(permModule) {
+                		
+                			if(module.name && module.name.indexOf(permModule.name) != -1) {
+                				permModuleMatch = true;
+                				console.log('module match - ' + module.name);
+                				var permActions = permModule.moduleActions;
+                				var modActions = module.moduleActions;
+                				console.log('permActions - ' + JSON.stringify(permActions) +', modActions -' + JSON.stringify(modActions));
+                				for(var k=0; k < modActions.length; k++) {
+                					var action = modActions[k];
+                					console.log('action - ' + JSON.stringify(action));
+                				//modActions.forEach(function(action) {
+                					var permActionMatch = false;
+                					for(var l=0; l < permActions.length; l++) {
+                						var permAction = permActions[l];
+                						console.log('perm action- ' + JSON.stringify(permAction));
+                					//permActions.forEach(function(permAction) {
+                						
+                						if(action.name.indexOf(permAction.name) != -1) {
+                							console.log('action match found -' + action.name);
+                							permActionMatch = true;
+                							console.log('action in scope - ' + $scope.moduleActions[i].moduleActions[k].name);
+                							$scope.moduleActions[i].moduleActions[k].selected = true;
+                						}
+                						
+                					}
+                					if(permActionMatch) {
+            							break;
+                					}
+                					
+                				}
+                			}
+                			if(permModuleMatch) {
+                				break;
+                			}
+                			
+                		}
+                	}
+                }
+                
+                
                 $scope.pages.currPage = data.currPage;
                 $scope.pages.totalPages = data.totalPages;
-                if($scope.moduleActions == null){
+                if($scope.permissions == null){
                     $scope.pages.startInd = 0;
                 }else{
                     $scope.pages.startInd = (data.currPage - 1) * 10 + 1;
@@ -188,121 +307,13 @@ angular.module('timeSheetApp')
                 $scope.pages.totalCnt = data.totalCount;
             	$scope.hide = true;
             });
-        	$rootScope.searchCriteriaModuleAction = $scope.searchCriteria;
         	if($scope.pages.currPage == 1) {
             	$scope.firstStyle();
         	}
         };
 
 
-        $scope.first = function() {
-            if($scope.pages.currPage > 1) {
-                $scope.pages.currPage = 1;
-                $scope.firstStyle();
-                $scope.search();
-            }
-        };
 
-        $scope.firstStyle = function() {
-            var first = document.getElementById('#first');
-            var ele = angular.element(first);
-            ele.addClass('disabledLink');
-            var previous = document.getElementById('#previous');
-            ele = angular.element(previous);
-            ele.addClass('disabledLink');
-            if($scope.pages.totalPages > 1) {
-                var nextSitePage = document.getElementById('#next');
-                var ele = angular.element(next);
-                ele.removeClass('disabledLink');
-                var lastSitePage = document.getElementById('#lastSitePage');
-                ele = angular.element(lastSitePage);
-                ele.removeClass('disabledLink');
-            }
-
-        }
-
-        $scope.previous = function() {
-            console.log("Calling previous")
-
-            if($scope.pages.currPage > 1) {
-                $scope.pages.currPage = $scope.pages.currPage - 1;
-                if($scope.pages.currPage == 1) {
-                    var first = document.getElementById('#first');
-                    var ele = angular.element(first);
-                    ele.addClass('disabled');
-                    var previous = document.getElementById('#previous');
-                    ele = angular.element(previous);
-                    ele.addClass('disabled');
-                }
-                var next = document.getElementById('#next');
-                var ele = angular.element(next);
-                ele.removeClass('disabled');
-                var lastSitePage = document.getElementById('#last');
-                ele = angular.element(last);
-                ele.removeClass('disabled');
-                $scope.search();
-            }
-
-        };
-
-        $scope.next = function() {
-            console.log("Calling next")
-
-            if($scope.pages.currPage < $scope.pages.totalPages) {
-                $scope.pages.currPage = $scope.pages.currPage + 1;
-                if($scope.pages.currPage == $scope.pages.totalPages) {
-                    var next = document.getElementById('#next');
-                    var ele = angular.element(next);
-                    ele.addClass('disabled');
-                    var last = document.getElementById('#last');
-                    ele = angular.element(last);
-                    ele.addClass('disabled');
-                }
-                var first = document.getElementById('#first')
-                var ele = angular.element(first);
-                ele.removeClass('disabled');
-                var previous = document.getElementById('#previous')
-                ele = angular.element(previous);
-                ele.removeClass('disabled');
-                $scope.search();
-            }
-
-        };
-
-        $scope.last = function() {
-            console.log("Calling last")
-            if($scope.pages.currPage < $scope.pages.totalPages) {
-                $scope.pages.currPage = $scope.pages.totalPages;
-                if($scope.pages.currPage == $scope.pages.totalPages) {
-                    var next = document.getElementById('#next');
-                    var ele = angular.element(next);
-                    ele.addClass('disabled');
-                    var last = document.getElementById('#last');
-                    ele = angular.element(last);
-                    ele.addClass('disabled');
-                }
-                var first = document.getElementById('#first');
-                var ele = angular.element(first);
-                ele.removeClass('disabled');
-                var previous = document.getElementById('#previous');
-                ele = angular.element(previous);
-                ele.removeClass('disabled');
-                $scope.search();
-            }
-
-        };
-
-        $scope.clearFilter = function() {
-            $scope.selectedSite = null;
-            $scope.selectedProject = null;
-            $scope.searchCriteria = {};
-            $rootScope.searchCriteriaSite = null;
-            $scope.pages = {
-                currPage: 1,
-                totalPages: 0
-            }
-            $scope.search();
-        };
 
 
             $scope.inputType = "password";

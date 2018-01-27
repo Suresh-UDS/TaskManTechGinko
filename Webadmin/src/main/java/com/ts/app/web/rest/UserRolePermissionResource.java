@@ -47,7 +47,7 @@ public class UserRolePermissionResource {
 	@RequestMapping(value = "/userRolePermission", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
 	@Timed 
 	public ResponseEntity<?> saveUserRolePermission(@Valid @RequestBody UserRolePermissionDTO userRolePermissionDTO, HttpServletRequest request) {
-		log.info("Inside the saveUserRolePermission -" + userRolePermissionDTO.getId());
+		log.info("Inside the saveUserRolePermission -" + userRolePermissionDTO);
 		UserRolePermissionDTO userRolePermissionDto = null;
 		try {
 			userRolePermissionDto = userRolePermissionService.createUserRolePermissionInformation(userRolePermissionDTO);
@@ -87,8 +87,8 @@ public class UserRolePermissionResource {
 	}
 	
 	@RequestMapping(value = "/userRolePermission/search",method = RequestMethod.POST)
-	public SearchResult<UserRolePermissionDTO> searchUserRolePermissions(@RequestBody SearchCriteria searchCriteria) {
-		SearchResult<UserRolePermissionDTO> result = null;
+	public UserRolePermissionDTO searchUserRolePermissions(@RequestBody SearchCriteria searchCriteria) {
+		UserRolePermissionDTO result = null;
 		if(searchCriteria != null) {
 			result = userRolePermissionService.findBySearchCrieria(searchCriteria);
 		}

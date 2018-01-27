@@ -29,6 +29,8 @@ import {DatePickerModule} from "ionic2-date-picker";
 import {Calendar} from "@ionic-native/calendar";
 import {QuotationPage} from "../pages/quotation/quotation";
 import {QuotationPopoverPage} from "../pages/quotation/quotation-popover";
+import {QuotationViewPage} from "../pages/quotation/quotation-view";
+import {CreateQuotationPage} from "../pages/quotation/create-quotation";
 import {AttendancePage} from "../pages/attendance/attendance";
 import {AttendancePopoverPage} from "../pages/attendance/attendance-popover";
 import {CustomerDetailPage} from "../pages/customer-detail/customer-detail";
@@ -39,7 +41,12 @@ import {RateCardPage} from "../pages/rate-card/rate-card";
 import {CreateRateCardPage} from "../pages/rate-card/create-rate-card";
 import {EmployeeDetailPage} from "../pages/employee-list/employee-detail";
 import {SiteViewPage} from "../pages/site/site-view";
-import {AddPage} from "../pages/jobs/add-job";
+import {CreateJobPage} from "../pages/jobs/add-job";
+
+import {IonSimpleWizard} from "../pages/ion-simple-wizard/ion-simple-wizard.component";
+import {IonSimpleWizardStep} from "../pages/ion-simple-wizard/ion-simple-wizard.step.component";
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+
 @NgModule({
   declarations: [
     MyApp,
@@ -59,6 +66,8 @@ import {AddPage} from "../pages/jobs/add-job";
     LogoutPage,
     QuotationPage,
     QuotationPopoverPage,
+    QuotationViewPage,
+    CreateQuotationPage,
     AttendancePage,
     AttendancePopoverPage,
     EmployeeDetailPage,
@@ -68,12 +77,17 @@ import {AddPage} from "../pages/jobs/add-job";
     EmployeeListPage,
     RateCardPage,
     CreateRateCardPage,
-    AddPage
+    CreateJobPage,
+
+
+      IonSimpleWizardStep,
+      IonSimpleWizard
   ],
   imports: [
     BrowserModule,
     HttpModule,
     DatePickerModule,
+    BrowserAnimationsModule,
     IonicModule.forRoot(MyApp),
     IonicStorageModule.forRoot()
   ],
@@ -96,6 +110,8 @@ import {AddPage} from "../pages/jobs/add-job";
     LogoutPage,
     QuotationPage,
     QuotationPopoverPage,
+    QuotationViewPage,
+    CreateQuotationPage,
     AttendancePage,
     AttendancePopoverPage,
     EmployeeDetailPage,
@@ -105,7 +121,9 @@ import {AddPage} from "../pages/jobs/add-job";
     EmployeeListPage,
     RateCardPage,
     CreateRateCardPage,
-    AddPage
+    CreateJobPage,
+      IonSimpleWizardStep,
+      IonSimpleWizard
   ],
   providers: [
     StatusBar,
