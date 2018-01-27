@@ -1,6 +1,9 @@
 package com.ts.app.service;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.inject.Inject;
 
@@ -13,13 +16,16 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.ts.app.domain.AbstractAuditingEntity;
+import com.ts.app.domain.ApplicationAction;
 import com.ts.app.domain.ApplicationModule;
 import com.ts.app.repository.ApplicationModuleRepository;
 import com.ts.app.service.util.MapperUtil;
+import com.ts.app.web.rest.dto.ApplicationActionDTO;
+import com.ts.app.web.rest.dto.ApplicationModuleDTO;
 import com.ts.app.web.rest.dto.BaseDTO;
 import com.ts.app.web.rest.dto.SearchCriteria;
 import com.ts.app.web.rest.dto.SearchResult;
-import com.ts.app.web.rest.dto.ApplicationModuleDTO;
+
 
 /**
  * Service class for managing app module information.
@@ -37,19 +43,31 @@ public class ApplicationModuleService extends AbstractService {
 	private MapperUtil<AbstractAuditingEntity, BaseDTO> mapperUtil;
 
 	public ApplicationModuleDTO createApplicationModuleInformation(ApplicationModuleDTO appModuleDto) {
-		ApplicationModule appModule = mapperUtil.toEntity(appModuleDto, ApplicationModule.class);
-		appModule.setActive(ApplicationModule.ACTIVE_YES);
-        appModule = appModuleRepository.save(appModule);
-		log.debug("Created Information for ApplicationModule: {}", appModule);
-		appModuleDto = mapperUtil.toModel(appModule, ApplicationModuleDTO.class);
+		if(appModuleDto.getId() > 0) {
+			updateApplicationModule(appModuleDto);
+		}else {
+			ApplicationModule appModule = mapperUtil.toEntity(appModuleDto, ApplicationModule.class);
+			appModule.setActive(ApplicationModule.ACTIVE_YES);
+	        appModule = appModuleRepository.save(appModule);
+			log.debug("Created Information for ApplicationModule: {}", appModule);
+			appModuleDto = mapperUtil.toModel(appModule, ApplicationModuleDTO.class);
+		}
 		return appModuleDto;
 	}
 
 	public void updateApplicationModule(ApplicationModuleDTO appModule) {
 		log.debug("Inside Update");
 		ApplicationModule appModuleUpdate = appModuleRepository.findOne(appModule.getId());
-		appModuleUpdate.setName(appModule.getName());
+		List<ApplicationActionDTO> actionDtos = appModule.getModuleActions();
+		List<ApplicationAction> actions = new ArrayList<ApplicationAction>();
+		for(ApplicationActionDTO actionDto : actionDtos) {
+			actions.add(mapperUtil.toEntity(actionDto, ApplicationAction.class));
+		}
+		Set<ApplicationAction> actionsSet = new HashSet<ApplicationAction>();
+		actionsSet.addAll(actions);
+		appModuleUpdate.setModuleActions(actionsSet);
 		appModuleRepository.saveAndFlush(appModuleUpdate);
+		log.debug("updated ApplicationModule: {}", appModuleUpdate);
 	}
 
 	public void deleteApplicationModule(Long id) {

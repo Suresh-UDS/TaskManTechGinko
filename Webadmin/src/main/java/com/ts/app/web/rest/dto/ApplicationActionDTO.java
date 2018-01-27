@@ -10,6 +10,8 @@ public class ApplicationActionDTO extends BaseDTO {
 	private long id;
 
 	private String name;
+	
+	private boolean selected;
 
 	public long getId() {
 		return id;
@@ -26,5 +28,14 @@ public class ApplicationActionDTO extends BaseDTO {
 	public void setName(String name) {
 		this.name = name;
 	}
+
+	public boolean isSelected() {
+		return selected;
+	}
+
+	public void setSelected(boolean selected) {
+		this.selected = selected;
+	}
+	
 
 }

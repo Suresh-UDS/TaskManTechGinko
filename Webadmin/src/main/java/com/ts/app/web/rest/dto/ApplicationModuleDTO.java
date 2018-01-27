@@ -1,7 +1,7 @@
 package com.ts.app.web.rest.dto;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ApplicationModuleDTO extends BaseDTO{
 
@@ -9,17 +9,7 @@ public class ApplicationModuleDTO extends BaseDTO{
 
 	private String name;
 
-	private Set<ApplicationActionDTO> moduleActions;
-
-	private Set<UserRolePermissionDTO> rolePermission;
-
-	public Set<UserRolePermissionDTO> getRolePermission() {
-		return rolePermission;
-	}
-
-	public void setRolePermission(Set<UserRolePermissionDTO> rolePermission) {
-		this.rolePermission = rolePermission;
-	}
+	private List<ApplicationActionDTO> moduleActions;
 
 	public long getId() {
 		return id;
@@ -37,14 +27,14 @@ public class ApplicationModuleDTO extends BaseDTO{
 		this.name = name;
 	}
 
-	public Set<ApplicationActionDTO> getModuleActions() {
+	public List<ApplicationActionDTO> getModuleActions() {
 		if (moduleActions == null) {
-			moduleActions = new HashSet<>();
+			moduleActions = new ArrayList<>();
 		}
 		return moduleActions;
 	}
 
-	public void setModuleActions(Set<ApplicationActionDTO> moduleActions) {
+	public void setModuleActions(List<ApplicationActionDTO> moduleActions) {
 		this.moduleActions = moduleActions;
 	}
 
