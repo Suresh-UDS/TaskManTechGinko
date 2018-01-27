@@ -1,0 +1,72 @@
+<ion-header>
+    <ion-navbar>
+        <button ion-button menuToggle>
+            <ion-icon name="menu"></ion-icon>
+        </button>
+        <ion-title>Add-Quotation</ion-title>
+    </ion-navbar>
+</ion-header>
+
+<ion-content>
+
+    <ion-simple-wizard [(step)]="step" [showSteps]="true" (finish)="onFinish()" [finishIcon]="'done-all'" [(stepCondition)]="stepCondition">
+        <ion-wizard-step>
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="card">
+                        <div class="card-content">
+                            <ion-row>
+                                <ion-col col-12>
+                                    <div class="form-group label-floating">
+                                        <label class="control-label">Title</label>
+                                        <input type="text" class="form-control" [(ngModel)]="quotationDetails.title" >
+                                    </div>
+                                </ion-col>
+
+                                <ion-col col-12>
+                                    <div class="form-group label-floating">
+                                        <label class="control-label">Description</label>
+                                        <ion-textarea type="text" class="form-control" [(ngModel)]="quotationDetails.description" ></ion-textarea>
+                                    </div>
+                                </ion-col>
+
+                                <ion-col col-12>
+                                    <div class="form-group">
+                                        <ion-row>
+                                            <ion-col *ngFor="let type of rateCardTypes">
+                                                <button ion-button color="dark"> Add {{type.name}}</button>
+                                            </ion-col>
+
+                                        </ion-row>
+                                    </div>
+                                </ion-col>
+                            </ion-row>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </ion-wizard-step>
+
+        <ion-wizard-step>
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="card">
+                        <div class="card-content">
+                            <ion-row>
+                                <ion-item>
+                                    <ion-label>Select Site</ion-label>
+                                    <ion-select [(ngModel)]="selectedSite">
+                                        <ion-option *ngFor="let site of allSites" [value]="site"></ion-option>
+
+                                    </ion-select>
+                                </ion-item>
+                            </ion-row>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </ion-wizard-step>
+    </ion-simple-wizard>
+
+</ion-content>
+
