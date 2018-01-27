@@ -17,7 +17,7 @@ angular.module('timeSheetApp')
         $scope.selectedGroup;
 
         $scope.users;
-
+        $scope.masterActions;
         $scope.moduleActions;
 
         $scope.selectedModuleAction;
@@ -36,6 +36,11 @@ angular.module('timeSheetApp')
         	console.log('action selected -' + action + ',' + $scope.selectedActions)
         }
         
+        $scope.selectAction = function(obj) {
+        	console.log('action id -' +obj.id +', name - ' + obj.name);
+        	
+        }
+        
         $scope.removeAction = function(ind) {
         	$scope.selectedActions.splice(ind,1);
         }
@@ -45,17 +50,17 @@ angular.module('timeSheetApp')
         	console.log('moduleActions -'+ $scope.selectedActions);
         	var actions = []
         	for(var i in $scope.selectedActions) {
-        		actions[i] = {
-        			"name" : $scope.selectedActions[i]		
-        		}
+        		actions[i] = $scope.selectedActions[i];
         	}
         	$scope.moduleActions = {
         		"id" : $scope.moduleId,	
         		"name" : $scope.moduleName,
         		"moduleActions" : actions 
         	}
+        	console.log('module actions- ' + JSON.stringify($scope.moduleActions));
         	ModuleActionComponent.createModuleAction($scope.moduleActions).then(function () {
             	$scope.success = 'OK';
+            	$scope.moduleId = 0;
             	$scope.moduleName = '';
             	$scope.selectedActions = [];
             	$scope.moduleActions = {};
@@ -79,6 +84,13 @@ angular.module('timeSheetApp')
         	$scope.selectedActions = [];
         };
 
+        $scope.loadActions = function() {
+        	ModuleActionComponent.findAllActions().then(function (data) {
+        		$scope.masterActions = data;
+        	})
+        	
+        }
+        
         $scope.loadModuleActions = function () {
 
         	$scope.search();
@@ -97,7 +109,7 @@ angular.module('timeSheetApp')
         		$scope.moduleId = data.id;
                 $scope.moduleName = data.name;
                 for(var i in data.moduleActions) {
-                	$scope.selectedActions.push(data.moduleActions[i].name);	
+                	$scope.selectedActions.push(data.moduleActions[i]);	
                 }
                 
             });

@@ -18,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.ts.app.domain.AbstractAuditingEntity;
 import com.ts.app.domain.ApplicationAction;
 import com.ts.app.domain.ApplicationModule;
+import com.ts.app.repository.ApplicationActionRepository;
 import com.ts.app.repository.ApplicationModuleRepository;
 import com.ts.app.service.util.MapperUtil;
 import com.ts.app.web.rest.dto.ApplicationActionDTO;
@@ -38,6 +39,9 @@ public class ApplicationModuleService extends AbstractService {
 
 	@Inject
 	private ApplicationModuleRepository appModuleRepository;
+	
+	@Inject
+	private ApplicationActionRepository appActionRepository;
 
 	@Inject
 	private MapperUtil<AbstractAuditingEntity, BaseDTO> mapperUtil;
@@ -47,6 +51,15 @@ public class ApplicationModuleService extends AbstractService {
 			updateApplicationModule(appModuleDto);
 		}else {
 			ApplicationModule appModule = mapperUtil.toEntity(appModuleDto, ApplicationModule.class);
+			List<ApplicationActionDTO> actionDtos = appModuleDto.getModuleActions();
+			List<ApplicationAction> actions = new ArrayList<ApplicationAction>();
+			for(ApplicationActionDTO actionDto : actionDtos) {
+				actions.add(appActionRepository.findOne(actionDto.getId()));
+				//actions.add(mapperUtil.toEntity(actionDto, ApplicationAction.class));
+			}
+			Set<ApplicationAction> actionsSet = new HashSet<ApplicationAction>();
+			actionsSet.addAll(actions);
+			appModule.setModuleActions(actionsSet);
 			appModule.setActive(ApplicationModule.ACTIVE_YES);
 	        appModule = appModuleRepository.save(appModule);
 			log.debug("Created Information for ApplicationModule: {}", appModule);
@@ -61,7 +74,8 @@ public class ApplicationModuleService extends AbstractService {
 		List<ApplicationActionDTO> actionDtos = appModule.getModuleActions();
 		List<ApplicationAction> actions = new ArrayList<ApplicationAction>();
 		for(ApplicationActionDTO actionDto : actionDtos) {
-			actions.add(mapperUtil.toEntity(actionDto, ApplicationAction.class));
+			actions.add(appActionRepository.findOne(actionDto.getId()));
+			//actions.add(mapperUtil.toEntity(actionDto, ApplicationAction.class));
 		}
 		Set<ApplicationAction> actionsSet = new HashSet<ApplicationAction>();
 		actionsSet.addAll(actions);
