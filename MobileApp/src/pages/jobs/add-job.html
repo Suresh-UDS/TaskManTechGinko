@@ -1,0 +1,58 @@
+<ion-header>
+  <ion-navbar>
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>Jobs</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+    <div class="row">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-content">
+                    <ion-row>
+                        <ion-col col-12>
+                            <div class="form-group label-floating">
+                                <label class="control-label">Title</label>
+                                <input type="text" class="form-control" [(ngModel)]="title" >
+                            </div>
+                        </ion-col>
+
+                        <ion-col col-12>
+                            <div class="form-group label-floating">
+                                <label class="control-label">Description</label>
+                                <input type="text" class="form-control" [(ngModel)]="description" >
+                            </div>
+                        </ion-col>
+
+                        <ion-col col-12>
+                            <div class="form-group label-floating">
+                                <label class="control-label">Location</label>
+                                <input type="text" class="form-control" [(ngModel)]="location" >
+                            </div>
+                        </ion-col>
+                        <ion-col col-12>
+                            <div class="form-group label-floating">
+                                <label class="control-label">Start Date</label>
+                                <ion-datetime displayFormat="MM/DD/YYYY" class="form-control" [(ngModel)]="startDate"></ion-datetime>
+                            </div>
+                        </ion-col>
+                        <ion-col col-12>
+                            <div class="form-group label-floating">
+                                <label class="control-label">Start Time</label>
+                                <ion-datetime displayFormat="hh:mm a" class="form-control" [(ngModel)]="startTime"></ion-datetime>
+                            </div>
+                        </ion-col>
+
+                        <button type="submit" class="btn btn-warning pull-right margin-auto" (click)="addJob()">Add</button>
+
+                        <div class="clearfix"></div>
+                    </ion-row>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</ion-content>
