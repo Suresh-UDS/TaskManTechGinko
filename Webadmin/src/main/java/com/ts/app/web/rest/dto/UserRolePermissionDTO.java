@@ -1,5 +1,7 @@
 package com.ts.app.web.rest.dto;
 
+import java.util.List;
+
 public class UserRolePermissionDTO extends BaseDTO {
 
 	/**
@@ -24,6 +26,8 @@ public class UserRolePermissionDTO extends BaseDTO {
 	private long userId;
 
 	private String permissionType;
+	
+	private List<ApplicationModuleDTO> applicationModules;
 
 	public long getId() {
 		return id;
@@ -96,5 +100,15 @@ public class UserRolePermissionDTO extends BaseDTO {
 	public void setPermissionType(String permissionType) {
 		this.permissionType = permissionType;
 	}
+
+	public List<ApplicationModuleDTO> getApplicationModules() {
+		return applicationModules;
+	}
+
+	public void setApplicationModules(List<ApplicationModuleDTO> applicationModules) {
+		this.applicationModules = applicationModules;
+	}
+	
+	
 	
 }

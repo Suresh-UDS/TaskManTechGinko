@@ -18,11 +18,14 @@ public interface UserRolePermissionRepository extends JpaRepository<UserRolePerm
 	@Query("SELECT ur FROM UserRolePermission ur WHERE ur.active='Y' order by last_modified_date desc")
 	List<UserRolePermission> findActiveUserRolePermissions();
 	
-	@Query("SELECT ur FROM UserRolePermission ur WHERE ur.id = :permissionId and ur.active='Y'")
-	Page<UserRolePermission> findUserRolePermissionById(@Param("permissionId") long permissionId, Pageable pageRequest);
+	@Query("SELECT ur FROM UserRolePermission ur WHERE ur.role.id = :roleId and ur.active='Y'")
+	Page<UserRolePermission> findUserRolePermissionByRoleId(@Param("roleId") long roleId, Pageable pageRequest);
 	
 	@Query("SELECT ur FROM UserRolePermission ur WHERE ur.active='Y' order by last_modified_date desc")
 	Page<UserRolePermission> findUserRolePermissions(Pageable pageRequest);
+	
+	@Query("DELETE FROM UserRolePermission ur WHERE ur.role.id = :roleId")
+	void deleteByRoleId(@Param("roleId") long roleId);
 
 
 }
