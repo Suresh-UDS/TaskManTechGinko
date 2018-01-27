@@ -153,6 +153,9 @@ Tip 2: you can also add an image using data-image tag
 
                 <div [ngSwitch]="categories">
                         <ion-list *ngSwitchCase="'overdue'">
+                            <ion-refresher (ionRefresh)="doRefresh($event)">
+                                <ion-refresher-content></ion-refresher-content>
+                            </ion-refresher>
                             <div *ngFor="let job of allJobs">
                             <div class="card"  *ngIf="job.status == 'OVERDUE'" [ngClass]="{'red-card' : (job.status == 'OVERDUE'),
                                                           'green-card' : (job.status == 'COMPLETED'),
@@ -198,6 +201,9 @@ Tip 2: you can also add an image using data-image tag
 
 
                     <ion-list *ngSwitchCase="'upcoming'">
+                        <ion-refresher (ionRefresh)="doRefresh($event)">
+                            <ion-refresher-content></ion-refresher-content>
+                        </ion-refresher>
                         <div *ngFor="let job of allJobs">
                             <div class="card"  *ngIf="job.status =='OPEN' || job.status == 'ASSIGNED' || job.status == 'INPROGRESS'" [ngClass]="{'red-card' : (job.status == 'OVERDUE'),
                                                           'green-card' : (job.status == 'COMPLETED'),
@@ -242,6 +248,9 @@ Tip 2: you can also add an image using data-image tag
 
 
                     <ion-list *ngSwitchCase="'completed'">
+                        <ion-refresher (ionRefresh)="doRefresh($event)">
+                            <ion-refresher-content></ion-refresher-content>
+                        </ion-refresher>
                         <div *ngFor="let job of allJobs">
                             <div class="card"  *ngIf="job.status =='COMPLETED'" [ngClass]="{'red-card' : (job.status == 'OVERDUE'),
                                                           'green-card' : (job.status == 'COMPLETED'),

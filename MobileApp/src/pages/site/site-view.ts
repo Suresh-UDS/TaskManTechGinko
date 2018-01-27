@@ -14,6 +14,8 @@ export class SiteViewPage {
   siteDetail:any;
   categories:any;
   jobs:any;
+  attendances:any;
+
   constructor(public navCtrl: NavController,public component:componentService,public navParams:NavParams,public myService:authService,public authService:authService) {
   this.categories='detail';
     this.siteDetail=this.navParams.get('site')
@@ -21,8 +23,9 @@ export class SiteViewPage {
     console.log(this.siteDetail.name);
   }
 
-  ionViewWillEnter() {
-
+  ionViewDidLoad() {
+      this.getJobs();
+      this.getAttendance()
   }
 
   getJobs()
@@ -33,6 +36,20 @@ export class SiteViewPage {
       console.log("All jobs of current user");
       console.log(response);
       this.jobs = response;
+      this.component.closeLoader();
+    })
+  }
+
+  getAttendance()
+  {
+    this.component.showLoader('Getting Attendance');
+    var search={siteId:this.siteDetail.id};
+    //TODO
+    //Add Search criteria to attendance
+    this.authService.getSiteAttendances(this.siteDetail.id).subscribe(response=>{
+      console.log("Attendance");
+      console.log(response);
+      this.attendances = response.json();
       this.component.closeLoader();
     })
   }

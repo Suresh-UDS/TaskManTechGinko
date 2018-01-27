@@ -3,7 +3,7 @@ import {LoadingController, NavController} from 'ionic-angular';
 import {authService} from "../service/authService";
 import {ViewJobPage} from "./view-job";
 import {componentService} from "../service/componentService";
-import {AddPage} from "./add-job";
+import {CreateJobPage} from "./add-job";
 
 @Component({
   selector: 'page-jobs',
@@ -20,9 +20,18 @@ export class JobsPage {
         this.categories = 'today';
     }
 
-    ionViewWillEnter() {
-
+    ionViewDidLoad() {
+        this.getTodaysJobs();
+        this.getAllJobs();
     }
+
+    doRefresh(refresher)
+    {
+        this.getTodaysJobs();
+        this.getAllJobs();
+        refresher.complete();
+    }
+
     getTodaysJobs(){
         this.component.showLoader('Getting Today\'s Jobs');
         this.authService.getTodayJobs().subscribe(response=>{
@@ -46,7 +55,7 @@ export class JobsPage {
 
     addJob()
     {
-        this.navCtrl.push(AddPage);
+        this.navCtrl.push(CreateJobPage);
     }
 
     viewJob(job)
