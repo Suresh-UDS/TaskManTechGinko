@@ -261,6 +261,16 @@ export class authService
         )
     }
 
+    checkOutJob(job):Observable<any>{
+        return this.http.post(this.Url+'api/employee/out',job).map(
+            response=>{
+                console.log(response.json());
+                return response.json();
+            }
+        )
+    }
+
+
 
     // Loader
     showLoader(msg){
