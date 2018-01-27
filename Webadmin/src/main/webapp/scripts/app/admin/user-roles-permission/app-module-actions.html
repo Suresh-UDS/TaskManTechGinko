@@ -33,7 +33,9 @@
 
                         <div class="col-md-3">
 
-                            <select ng-model="actionSelector" class="selectpicker" data-style="btn btn-primary btn-round" title="Single Select" data-size="7">
+
+                            <select ng-model="actionSelector" class="selectpicker" data-style="btn btn-primary" title="Single Select" data-size="7">
+
                                 <option disabled selected>Choose Action</option>
                                 <option value="List">List</option>
                                 <option value="View">View</option>
@@ -57,7 +59,9 @@
 
                     </div>
 
-                    <div class="row col-md-5 addedActionList" ng-hide="!(selectedActions.length > 0)">
+
+                    <div class="row col-md-5 addedActionList pdng-top15" ng-hide="!(selectedActions.length > 0)">
+
 
                         <div class="form-group">
 
@@ -74,7 +78,7 @@
 
                         </div>
 						<div class="row">
-	
+
 	                       <div class="col-sm-8">
 	                           <div class="form-group">
 	                               <button class="btn btn-success" type="submit" ng-click="saveModuleActions()"
@@ -89,13 +93,13 @@
 	                               </button>
 	                           </div>
 	                       </div>
-	
+
 	                   </div>
 
                     </div>
-					
+
                 </div>
-				
+
             </div>
         </div>
     </div>
