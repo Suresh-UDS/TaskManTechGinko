@@ -300,3 +300,26 @@ table tr
   vertical-align: middle !important;
   line-height: 38px !important;
 }
+.width-round
+{
+  width: 40px;
+  height: 40px;
+}
+.width-round img
+{
+  border-radius: 50% !important;
+}
+.align-right
+{
+  float: right;
+}
+.add-btn
+{
+  width: 40px;
+  color: orange !important;
+  font-size: 20px !important;
+}
+.select-box
+{
+  max-width:100%;
+}

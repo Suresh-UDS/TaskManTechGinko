@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import {Events, NavController, PopoverController} from 'ionic-angular';
+import {AlertController, Events, NavController, PopoverController} from 'ionic-angular';
 import {authService} from "../service/authService";
 
 @Component({
@@ -36,7 +36,7 @@ export class CreateQuotationPage {
     currentStep: any;
     showRateInformation:any;
 
-    constructor(public navCtrl: NavController,public popoverCtrl: PopoverController, public evts: Events, public authService:authService) {
+    constructor(public navCtrl: NavController,public popoverCtrl: PopoverController, public evts: Events, public authService:authService, public alertCtrl: AlertController) {
 
     // Step Wizard Settings
         this.step = 1;//The value of the first step, always 1
@@ -112,6 +112,45 @@ export class CreateQuotationPage {
         this.showRateInformation = true;
         this.rateCardType = type.title;
         this.uom = type.uom;
+    }
+
+
+    /**
+     * Demo functions
+     */
+    onFinish() {
+        this.alertCtrl.create({
+            message: 'Wizard Finished!!',
+            title: 'Congrats!!',
+            buttons: [{
+                text: 'Ok'
+            }]
+        }).present();
+    }
+
+    toggle() {
+        this.stepCondition = !this.stepCondition;
+    }
+    getIconStep2() {
+        return this.stepCondition ? 'unlock' : 'lock';
+    }
+
+    getIconStep3() {
+        return this.stepCondition ? 'happy' : 'sad';
+    }
+    getLikeIcon() {
+        return this.stepCondition ? 'thumbs-down' : 'thumbs-up';
+    }
+    goToExample2() {
+        // this.navCtrl.push(DynamicPage);
+    }
+
+    textChange(e) {
+        if (e.target.value && e.target.value.trim() !== '') {
+            this.stepCondition = true;
+        } else {
+            this.stepCondition = false;
+        }
     }
 
 

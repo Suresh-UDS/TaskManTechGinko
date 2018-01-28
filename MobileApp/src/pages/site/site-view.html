@@ -12,13 +12,13 @@
     <ion-segment-button value="detail">
       Detail
     </ion-segment-button>
-    <ion-segment-button value="jobs" (click)="getJobs()">
+    <ion-segment-button value="jobs">
       Jobs
     </ion-segment-button>
     <ion-segment-button value="quotation">
       Quotation
     </ion-segment-button>
-    <ion-segment-button value="attendance">
+    <ion-segment-button value="attendance" (click)="getAttendance()">
       Attendance
     </ion-segment-button>
 
@@ -85,6 +85,9 @@
           </ion-row>
     </ion-list>
     <ion-list *ngSwitchCase="'jobs'">
+      <ion-refresher (ionRefresh)="doRefresh($event)">
+        <ion-refresher-content></ion-refresher-content>
+      </ion-refresher>
       <div class="card" *ngFor="let job of jobs" [ngClass]="{'red-card' : (job.status == 'OVERDUE'),
                                                           'green-card' : (job.status == 'COMPLETED'),
                                                           'blue-card' :(job.status =='OPEN' || job.status == 'ASSIGNED' || job.status == 'INPROGRESS')}">
@@ -125,6 +128,9 @@
       </div>
     </ion-list>
     <ion-list *ngSwitchCase="'quotation'">
+      <ion-refresher (ionRefresh)="doRefresh($event)">
+        <ion-refresher-content></ion-refresher-content>
+      </ion-refresher>
       <div class="row padding0 margin0 white-bg">
         <ion-col col-12 class="padding-top0">
           <div class="table-responsive table-sales">
@@ -173,8 +179,24 @@
       </div>
     </ion-list>
     <ion-list *ngSwitchCase="'attendance'">
-      <ion-item>
-
+      <ion-refresher (ionRefresh)="doRefresh($event)">
+        <ion-refresher-content></ion-refresher-content>
+      </ion-refresher>
+      <ion-item *ngFor="let a of attendances" class="bottom-border">
+        <ion-row (click)="viewCamera(a)">
+          <!--<ion-col col-2 >-->
+          <!--&lt;!&ndash;<ion-icon name="calendar" class="fnt-30 margin9 icon-color"></ion-icon>&ndash;&gt;-->
+          <!--</ion-col>-->
+          <ion-col col-10>
+            <p>Site Name - {{a.siteName}}</p>
+            <p>Employee - {{a.employeeFullName}}</p>
+            <p><b>Checkin Time</b>{{a.checkInTime |date:'MM/dd/yyyy @ h:mma'}}</p>
+            <p><b>Checkout Time</b>{{a.checkOutTime |date:'MM/dd/yyyy @ h:mma'}}</p>
+          </ion-col>
+        </ion-row>
+        <ion-row *ngIf="!a">
+          No Attendance Records Found
+        </ion-row>
       </ion-item>
     </ion-list>
 

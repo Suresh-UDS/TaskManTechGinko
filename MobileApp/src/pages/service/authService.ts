@@ -236,8 +236,8 @@ export class authService
         )
     }
 
-    addJob(job): Observable<any> {
-        return this.http.post(this.Node_url + '/api/job', job).map(
+    createJob(job): Observable<any> {
+        return this.http.post(this.Url + 'api/job', job).map(
             response => {
                 return response;
             })
@@ -260,6 +260,16 @@ export class authService
             }
         )
     }
+
+    checkOutJob(job):Observable<any>{
+        return this.http.post(this.Url+'api/employee/out',job).map(
+            response=>{
+                console.log(response.json());
+                return response.json();
+            }
+        )
+    }
+
 
 
     // Loader

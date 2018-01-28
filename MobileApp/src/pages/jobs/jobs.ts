@@ -4,6 +4,9 @@ import {authService} from "../service/authService";
 import {ViewJobPage} from "./view-job";
 import {componentService} from "../service/componentService";
 import {CreateJobPage} from "./add-job";
+import { ActionSheetController } from 'ionic-angular'
+import {CompleteJobPage} from "./completeJob";
+
 
 @Component({
   selector: 'page-jobs',
@@ -16,13 +19,23 @@ export class JobsPage {
     categories:any;
     loader:any;
 
-    constructor(public navCtrl: NavController,public component:componentService, public authService: authService, private loadingCtrl:LoadingController) {
+    constructor(public navCtrl: NavController,public component:componentService, public authService: authService,
+                    private loadingCtrl:LoadingController, private actionSheetCtrl: ActionSheetController) {
         this.categories = 'today';
     }
 
-    ionViewWillEnter() {
-
+    ionViewDidLoad() {
+        this.getTodaysJobs();
+        this.getAllJobs();
     }
+
+    doRefresh(refresher)
+    {
+        this.getTodaysJobs();
+        this.getAllJobs();
+        refresher.complete();
+    }
+
     getTodaysJobs(){
         this.component.showLoader('Getting Today\'s Jobs');
         this.authService.getTodayJobs().subscribe(response=>{
@@ -54,5 +67,45 @@ export class JobsPage {
         console.log("========view job ===========");
         console.log(job);
         this.navCtrl.push(ViewJobPage,{job:job})
+    }
+
+    presentActionSheet(job){
+        let actionSheet = this.actionSheetCtrl.create({
+            title:'Job',
+            buttons:[
+                {
+                    text:'View Job',
+
+                    handler:()=>{
+                        console.log("view job");
+                        this.navCtrl.push(ViewJobPage,{job:job})
+                    }
+                },
+                {
+                    text:'Edit job',
+                    handler:()=>{
+                        console.log('edit job');
+                    }
+                },
+
+                {
+                    text:'Complete Job',
+                    handler:()=>{
+                        console.log('Complete job');
+                        this.navCtrl.push(CompleteJobPage,{job:job})
+                    }
+                },
+
+                {
+                    text:'Cancel',
+                    role:'cancel',
+                    handler:()=>{
+                        console.log("Cancel clicker");
+                    }
+                }
+            ]
+        });
+
+        actionSheet.present();
     }
 }
