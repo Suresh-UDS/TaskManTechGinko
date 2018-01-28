@@ -286,7 +286,7 @@ table tr
 }
 .emp .item-md.item-block .item-inner,.emp .list-md .item-block .item-inner
 {
-  border-bottom: 1px solid #dedede;
+  border-bottom: 0 !important;
 }
 .emp-round
 {
@@ -324,6 +324,7 @@ table tr
 .select-box
 {
   max-width:100%;
+  border-bottom: 1px solid #dedede;
 }
 .camera-btn
 {
@@ -361,4 +362,17 @@ table tr
 .item-label .label-md
 {
   margin: 0 !important;
+}
+.radio-label
+{
+  color: black;
+  text-align: left;
+}
+.width50
+{
+  width: 50% !important;
+}
+.inline-block
+{
+  display: inline-block !important;
 }

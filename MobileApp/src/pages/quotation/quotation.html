@@ -8,11 +8,12 @@
 </ion-header>
 
 <ion-content>
+  <ion-fab top right edge>
+    <button (click)="createQuotation()"  ion-fab><ion-icon name="add"></ion-icon></button>
+  </ion-fab>
           <div class="row padding0 margin0 white-bg">
             <ion-col col-12 class="padding-top0">
-              <ion-fab top right edge>
-                <button (click)="createQuotation()"  ion-fab><ion-icon name="add"></ion-icon></button>
-              </ion-fab>
+
               <div class="table-responsive table-sales">
 
                 <table class="table fnt-18">
