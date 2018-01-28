@@ -12,10 +12,10 @@
   </ion-navbar>
     <ion-toolbar transparent>
         <ion-segment [(ngModel)]="categories" class="segmnt margin-auto margin-top5" color="#ff9800">
-            <ion-segment-button value="today">
+            <ion-segment-button value="today" (click)="getTodaysJobs(false)">
                 Today's Jobs
             </ion-segment-button>
-            <ion-segment-button value="jobs">
+            <ion-segment-button value="jobs" (click)="getAllJobs(false)">
                 All Jobs
             </ion-segment-button>
 
@@ -29,7 +29,7 @@
 
     <div [ngSwitch]="categories">
         <ion-list *ngSwitchCase="'today'">
-            <ion-refresher (ionRefresh)="doRefresh($event)">
+            <ion-refresher (ionRefresh)="doRefresh($event,today)">
                 <ion-refresher-content></ion-refresher-content>
             </ion-refresher>
                 <div class="card" *ngFor="let job of todaysJobs" [ngClass]="{'red-card' : (job.status == 'OVERDUE'),
@@ -73,7 +73,7 @@
         </ion-list>
         <ion-list *ngSwitchCase="'jobs'">
 
-            <ion-refresher (ionRefresh)="doRefresh($event)">
+            <ion-refresher (ionRefresh)="doRefresh($event,all)">
                 <ion-refresher-content></ion-refresher-content>
             </ion-refresher>
 

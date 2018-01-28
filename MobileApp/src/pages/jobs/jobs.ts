@@ -18,6 +18,9 @@ export class JobsPage {
     allJobs:any;
     categories:any;
     loader:any;
+    all="all";
+    today="today";
+    ref=false;
 
     constructor(public navCtrl: NavController,public component:componentService, public authService: authService,
                     private loadingCtrl:LoadingController, private actionSheetCtrl: ActionSheetController) {
@@ -25,18 +28,69 @@ export class JobsPage {
     }
 
     ionViewDidLoad() {
-        this.getTodaysJobs();
-        this.getAllJobs();
     }
 
-    doRefresh(refresher)
+    doRefresh(refresher,segment)
     {
-        this.getTodaysJobs();
-        this.getAllJobs();
-        refresher.complete();
+        this.ref=true;
+        if(segment=="today")
+        {
+            this.getTodaysJobs(this.ref);
+            refresher.complete();
+        }
+        else if(segment=="all")
+        {
+            console.log("------------- segment attandance");
+            this.getAllJobs(this.ref);
+            refresher.complete();
+        }
+
     }
 
-    getTodaysJobs(){
+    getTodaysJobs(ref)
+    {
+        if(this.todaysJobs)
+        {
+            if(ref)
+            {
+                this.loadTodaysJobs();
+            }
+            else
+            {
+                this.todaysJobs=this.todaysJobs;
+            }
+        }
+        else
+        {
+            this.loadTodaysJobs();
+        }
+    }
+
+
+    getAllJobs(ref)
+    {
+        if(this.todaysJobs)
+        {
+            if(ref)
+            {
+                this.loadAllJobs();
+            }
+            else
+            {
+                this.todaysJobs=this.todaysJobs;
+            }
+        }
+        else
+        {
+            this.loadAllJobs();
+        }
+    }
+
+
+
+
+
+    loadTodaysJobs(){
         this.component.showLoader('Getting Today\'s Jobs');
         this.authService.getTodayJobs().subscribe(response=>{
             console.log("Todays jobs of current user");
@@ -46,7 +100,7 @@ export class JobsPage {
         })
     }
 
-    getAllJobs(){
+    loadAllJobs(){
         this.component.showLoader('Getting All Jobs');
         var search={};
         this.authService.getJobs(search).subscribe(response=>{

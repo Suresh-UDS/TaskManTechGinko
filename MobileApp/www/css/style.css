@@ -290,6 +290,8 @@ table tr
 }
 .emp-round
 {
+  width: 40px;
+  height: 40px;
   border-radius:50%;
   background-color: orange;
 }
@@ -322,4 +324,41 @@ table tr
 .select-box
 {
   max-width:100%;
+}
+.camera-btn
+{
+  background-color: orange;
+  color: #FFFFFF;
+  border-radius: 50%;
+  width: 35px;
+  height: 35px;
+  font-size: 20px;
+  line-height: 25px;
+}
+.line-height
+{
+  line-height:35px;
+}
+.margin-bottom25
+{
+  margin-bottom:25px !important;
+}
+.content-md
+{
+  background-color:#EEEEEE !important;
+}
+.width98
+{
+  width:98%;
+}
+.margin-side-auto
+{
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
+
+
+.item-label .label-md
+{
+  margin: 0 !important;
 }
