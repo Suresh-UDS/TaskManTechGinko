@@ -198,7 +198,7 @@ public class JobManagementResource {
 	public SearchResult<JobDTO> searchJobsForEmployee(@RequestBody SearchCriteria searchCriteria) {
 		SearchResult<JobDTO> result = null;
 		if(searchCriteria != null) {
-			jobService.updateJobStatus(searchCriteria.getSiteId(), searchCriteria.getJobStatus());
+			jobService.updateJobStatus(searchCriteria.getSiteId(), searchCriteria   .getJobStatus());
 			result = jobService.findBySearchCrieria(searchCriteria,false);
 		}
 		return result;

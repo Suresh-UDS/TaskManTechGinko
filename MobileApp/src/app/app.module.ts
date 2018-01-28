@@ -42,10 +42,10 @@ import {CreateRateCardPage} from "../pages/rate-card/create-rate-card";
 import {EmployeeDetailPage} from "../pages/employee-list/employee-detail";
 import {SiteViewPage} from "../pages/site/site-view";
 import {CreateJobPage} from "../pages/jobs/add-job";
-
 import {IonSimpleWizard} from "../pages/ion-simple-wizard/ion-simple-wizard.component";
 import {IonSimpleWizardStep} from "../pages/ion-simple-wizard/ion-simple-wizard.step.component";
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import {CompleteJobPage} from "../pages/jobs/completeJob";
 
 @NgModule({
   declarations: [
@@ -78,6 +78,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     RateCardPage,
     CreateRateCardPage,
     CreateJobPage,
+    CompleteJobPage,
 
 
       IonSimpleWizardStep,
@@ -122,6 +123,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     RateCardPage,
     CreateRateCardPage,
     CreateJobPage,
+      CompleteJobPage,
       IonSimpleWizardStep,
       IonSimpleWizard
   ],

@@ -18,7 +18,7 @@ export class authService
     private staging_url = 'http://ec2-52-77-216-21.ap-southeast-1.compute.amazonaws.com:8088/';
     private node_url='http://192.168.1.11:8000/';
     private Node_url= this.node_url;
-    private Url = this.staging_url;
+    private Url = this.mobile_url;
     private kairosResponse ={
         status :String,
         headers:String,
