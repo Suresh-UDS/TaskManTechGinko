@@ -50,6 +50,7 @@ public abstract class AbstractAuditingEntity implements Cloneable{
     
     @Column(name = "active")
     private String active;
+    
 
     public String getCreatedBy() {
         return createdBy;
@@ -94,4 +95,6 @@ public abstract class AbstractAuditingEntity implements Cloneable{
     public Object clone() throws CloneNotSupportedException {
     	return super.clone();
     }
+
+    
 }
