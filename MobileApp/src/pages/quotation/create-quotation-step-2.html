@@ -12,6 +12,17 @@
         <button (click)="addRates($event)"  ion-fab><ion-icon name="add"></ion-icon></button>
     </ion-fab>
 
+    <ion-col col-12>
+        <div class="form-group">
+            <ion-item>
+                <ion-label>Choose Type</ion-label>
+                <ion-select style="color: black" [(ngModel)]="siteDetails" class="select-box">
+                    <ion-option style="color: black;" *ngFor="let site of allSites" [value]="site.name" (ionSelect)="selectSite(site)" >{{site.name}}</ion-option>
+                </ion-select>
+            </ion-item>
+        </div>
+    </ion-col>
+
     <div class="card-content margin-tp25 white-bg">
         <div class="table-responsive">
             <table class="table">
@@ -99,7 +110,7 @@
 <ion-footer>
     <ion-toolbar class="align-right" >
         <button class="btn btn-warning center pull-right" (click)="saveRates()">
-            Next<ion-icon name="ios-arrow-forward-outline"></ion-icon>
+            Next <ion-icon name="ios-arrow-forward-outline"></ion-icon>
         </button>
     </ion-toolbar>
 </ion-footer>

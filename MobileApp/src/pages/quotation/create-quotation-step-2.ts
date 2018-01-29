@@ -26,13 +26,14 @@ export class CreateQuotationPage2 {
     selectedSite:any;
 
     showRateInformation:any;
-
+    siteDetails:any;
     quotation:any;
     rates:any
 
     constructor(public navCtrl: NavController,public modalCtrl: ModalController,public navParams:NavParams,public popoverCtrl: PopoverController, public evts: Events, public authService:authService, public alertCtrl: AlertController) {
 
-       console.log();
+       console.log(this.navParams.get('quotationDetails'));
+       var quotationDetails = this.navParams.get('quotationDetails');
        this.quotation=this.navParams.get('quotationDetails');
         this.rateCardType = {};
         this.rates =[];
@@ -43,6 +44,10 @@ export class CreateQuotationPage2 {
         console.log(window.localStorage.getItem('employeeId'));
         console.log(window.localStorage.getItem('employeeFullName'));
 
+    }
+
+    selectSite(site){
+        this.selectedSite = site;
     }
 
     ionViewWillEnter(){
@@ -116,7 +121,8 @@ export class CreateQuotationPage2 {
 
     saveRates()
     {
-        this.navCtrl.push(CreateQuotationPage3,{rate:this.rates,quotation:this.quotation})
+        
+        this.navCtrl.push(CreateQuotationPage3,{rate:this.rates,quotation:this.quotation,site:this.selectedSite})
     }
 
 }

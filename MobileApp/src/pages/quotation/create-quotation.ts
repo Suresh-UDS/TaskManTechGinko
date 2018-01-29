@@ -88,10 +88,7 @@ export class CreateQuotationPage {
             "description":this.description
         }
         console.log(quotation)
-        this.authService.createQuotation(quotation).subscribe(response=>{
-            console.log(response);
             this.navCtrl.push(CreateQuotationPage2,{quotationDetails:quotation});
-        })
     }
 
     getRateCardTypes(){

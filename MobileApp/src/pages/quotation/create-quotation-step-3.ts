@@ -17,11 +17,16 @@ export class CreateQuotationPage3 {
     constructor(public navCtrl: NavController,public modalCtrl: ModalController,public navParams:NavParams,public popoverCtrl: PopoverController, public evts: Events, public authService:authService, public alertCtrl: AlertController) {
         this.quotation=this.navParams.get('quotation');
         this.rate=this.navParams.get('rate');
+        console.log(this.navParams.get('quotation'));
+        console.log(this.navParams.get('rate'));
+        console.log(this.navParams.get('site'));
     }
 
     ionViewWillEnter(){
 
     }
+
+
 
 
 
