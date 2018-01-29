@@ -19,27 +19,27 @@
                 <table class="table fnt-18">
                   <tbody>
                   <tr (click)="quotationView()">
+                    <td>Drafted</td>
+                    <td class="text-right">
+                      <span class="clr-orange padding-right2">(</span>{{draftedQuotationsCount}}<span class="clr-orange padding-left2">)</span>
+                    </td>
+                    <td class="text-right">
+                      <ion-icon class="primary-clr padding-left5 fnt-12" name="arrow-forward"></ion-icon>
+                    </td>
+                  </tr>
+                  <tr (click)="quotationView()">
+                    <td>Submitted</td>
+                    <td class="text-right">
+                      <span class="clr-orange padding-right2">(</span>{{submittedQuotationsCount}}<span class="clr-orange padding-left2">)</span>
+                    </td>
+                    <td class="text-right">
+                      <ion-icon class="primary-clr padding-left5 fnt-12" name="arrow-forward"></ion-icon>
+                    </td>
+                  </tr>
+                  <tr (click)="quotationView()">
                     <td>Approved</td>
                     <td class="text-right">
-                      <span class="clr-orange padding-right2">(</span>0<span class="clr-orange padding-left2">)</span>
-                    </td>
-                    <td class="text-right">
-                      <ion-icon class="primary-clr padding-left5 fnt-12" name="arrow-forward"></ion-icon>
-                    </td>
-                  </tr>
-                  <tr (click)="quotationView()">
-                    <td>Overdue</td>
-                    <td class="text-right">
-                      <span class="clr-orange padding-right2">(</span>0<span class="clr-orange padding-left2">)</span>
-                    </td>
-                    <td class="text-right">
-                      <ion-icon class="primary-clr padding-left5 fnt-12" name="arrow-forward"></ion-icon>
-                    </td>
-                  </tr>
-                  <tr (click)="quotationView()">
-                    <td>Requested</td>
-                    <td class="text-right">
-                      <span class="clr-orange padding-right2">(</span>0<span class="clr-orange padding-left2">)</span>
+                      <span class="clr-orange padding-right2">(</span>{{approvedQuotationsCount}}<span class="clr-orange padding-left2">)</span>
                     </td>
                     <td class="text-right">
                       <ion-icon class="primary-clr padding-left5 fnt-12" name="arrow-forward"></ion-icon>
@@ -48,7 +48,7 @@
                   <tr (click)="quotationView()">
                     <td>Archieved</td>
                     <td class="text-right">
-                      <span class="clr-orange padding-right2">(</span>0<span class="clr-orange padding-left2">)</span>
+                      <span class="clr-orange padding-right2">(</span>{{archivedQuotationsCount}}<span class="clr-orange padding-left2">)</span>
                     </td>
                     <td class="text-right">
                       <ion-icon class="primary-clr padding-left5 fnt-12" name="arrow-forward"></ion-icon>

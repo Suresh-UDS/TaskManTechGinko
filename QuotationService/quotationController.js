@@ -3,6 +3,7 @@ var moment = require('moment');
 var Quotation = mongoose.model('Quotation');
 var RateCard = mongoose.model('RateCard');
 var RateCardType = mongoose.model('RateCardType');
+var mailerService = require('./mailerService');
 
 
 
@@ -38,8 +39,9 @@ module.exports = {
         quotation.isArchived = false;
         quotation.lastModifiedDate = date;
 
-        quotation.save(function(err){
+        quotation.save(function(err,quotation){
             if(!err){
+                mailerService.submitQuotation();
                 res.json(200,quotation)
             }else{
                 console.log("Error in saving quotation");

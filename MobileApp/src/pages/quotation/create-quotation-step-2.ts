@@ -1,34 +1,16 @@
 import { Component } from '@angular/core';
-import {AlertController, Events, NavController, PopoverController} from 'ionic-angular';
+import {AlertController, Events, NavController, NavParams, PopoverController} from 'ionic-angular';
 import {authService} from "../service/authService";
-import {CreateQuotationPage2} from "./create-quotation-step-2";
 
 @Component({
-    selector: 'page-create-quotation',
-    templateUrl: 'create-quotation.html'
+    selector: 'page-create-quotation-step2',
+    templateUrl: 'create-quotation-step-2.html'
 })
-export class CreateQuotationPage {
+export class CreateQuotationPage2 {
 
-    quotationDetails:{
-        title:any,
-        description:any,
-        rateCard:[
-            {
-                type:any,
-                uom:any,
-                name:any;
-                cost:any
-            }
-            ]
-    };
-
-    title:any;
-    description:any;
+   title:any;
+   description:any;
     rateCardType:any;
-    rateCardUom:any;
-    rateCardName:any;
-    rateCardCost:any;
-
     uom:any;
 
     empSelect:any;
@@ -41,20 +23,9 @@ export class CreateQuotationPage {
 
     showRateInformation:any;
 
-    constructor(public navCtrl: NavController,public popoverCtrl: PopoverController, public evts: Events, public authService:authService, public alertCtrl: AlertController) {
+    constructor(public navCtrl: NavController,public navParams:NavParams,public popoverCtrl: PopoverController, public evts: Events, public authService:authService, public alertCtrl: AlertController) {
 
-        this.quotationDetails ={
-            title:'',
-            description:'',
-            rateCard:[
-                {
-                    type:'',
-                    uom:'',
-                    name:'',
-                    cost:''
-                }
-            ]
-        };
+       console.log(this.navParams.get('quotation'));
         this.rateCardType = {};
 
         this.showRateInformation=false;
@@ -82,15 +53,10 @@ export class CreateQuotationPage {
         })
     }
 
-    saveQuotation(title,description){
-        var quotation = {
-            "title":this.title,
-            "description":this.description
-        }
+    saveQuotation(quotation){
         console.log(quotation)
         this.authService.createQuotation(quotation).subscribe(response=>{
             console.log(response);
-            this.navCtrl.push(CreateQuotationPage2,{quotationDetails:quotation});
         })
     }
 
@@ -118,8 +84,8 @@ export class CreateQuotationPage {
 
         rateCard.type = type.name;
         rateCard.uom = type.uom;
-        this.quotationDetails.rateCard.push(rateCard);
-        console.log(this.quotationDetails);
+        // this.quotationDetails.rateCard.push(rateCard);
+        // console.log(this.quotationDetails);
     }
 
 
