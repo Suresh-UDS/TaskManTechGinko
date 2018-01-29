@@ -7,7 +7,7 @@
     </ion-navbar>
 </ion-header>
 
-<ion-content>
+<ion-content padding>
             <div class="row">
                 <div class="col-md-8">
                     <div class="card">
@@ -23,7 +23,7 @@
                                 <ion-col col-12>
                                     <div class="form-group label-floating">
                                         <label class="control-label">Description</label>
-                                        <ion-textarea type="text" class="form-control" [(ngModel)]="description" ></ion-textarea>
+                                        <input type="text" class="form-control" [(ngModel)]="description" >
                                     </div>
                                 </ion-col>
                             </ion-row>
@@ -35,8 +35,8 @@
 
 <ion-footer>
     <ion-toolbar class="align-right" >
-        <button class="btn btn-warning center" (click)="saveQuotation(title,description)">
-            Next <ion-icon name="ios-arrow-forward-outline"></ion-icon>
+        <button class="btn btn-warning center pull-right" (click)="saveQuotation(title,description)">
+            Next<ion-icon name="ios-arrow-forward-outline"></ion-icon>
         </button>
     </ion-toolbar>
 </ion-footer>

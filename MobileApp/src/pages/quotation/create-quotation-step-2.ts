@@ -1,13 +1,17 @@
-import { Component } from '@angular/core';
-import {AlertController, Events, NavController, NavParams, PopoverController} from 'ionic-angular';
+import {Component, ViewChild} from '@angular/core';
+import {
+    AlertController, Events, ModalController, NavController, NavParams, PopoverController,
+    Select
+} from 'ionic-angular';
 import {authService} from "../service/authService";
+import {QuotationPopoverPage} from "./quotation-popover";
+import {CreateQuotationPage3} from "./create-quotation-step-3";
 
 @Component({
     selector: 'page-create-quotation-step2',
     templateUrl: 'create-quotation-step-2.html'
 })
 export class CreateQuotationPage2 {
-
    title:any;
    description:any;
     rateCardType:any;
@@ -23,11 +27,15 @@ export class CreateQuotationPage2 {
 
     showRateInformation:any;
 
-    constructor(public navCtrl: NavController,public navParams:NavParams,public popoverCtrl: PopoverController, public evts: Events, public authService:authService, public alertCtrl: AlertController) {
+    quotation:any;
+    rates:any
 
-       console.log(this.navParams.get('quotation'));
+    constructor(public navCtrl: NavController,public modalCtrl: ModalController,public navParams:NavParams,public popoverCtrl: PopoverController, public evts: Events, public authService:authService, public alertCtrl: AlertController) {
+
+       console.log();
+       this.quotation=this.navParams.get('quotationDetails');
         this.rateCardType = {};
-
+        this.rates =[];
         this.showRateInformation=false;
 
         this.selectedSite=null;
@@ -88,7 +96,27 @@ export class CreateQuotationPage2 {
         // console.log(this.quotationDetails);
     }
 
+    addRates(eve) {
+        let popover = this.popoverCtrl.create(QuotationPopoverPage);
+        popover.present({
+            ev:eve
+        });
 
+        popover.onDidDismiss(data=>
+        {
+            this.rates.push(data);
+            console.log(this.rates);
+        })
+    }
 
+    remove(index)
+    {
+        this.rates.pop(index)
+    }
+
+    saveRates()
+    {
+        this.navCtrl.push(CreateQuotationPage3,{rate:this.rates,quotation:this.quotation})
+    }
 
 }

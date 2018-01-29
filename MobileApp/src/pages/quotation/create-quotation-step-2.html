@@ -7,61 +7,99 @@
     </ion-navbar>
 </ion-header>
 
-<ion-content>
-    <div class="row">
-        <div class="col-md-8">
-            <div class="card">
-                <div class="card-content">
+<ion-content padding>
+    <ion-fab top right edge>
+        <button (click)="addRates($event)"  ion-fab><ion-icon name="add"></ion-icon></button>
+    </ion-fab>
 
-                    <ion-row class="margin0 white-bg padding10">
-                        <ion-col col-6 class="label-on-left">Title</ion-col>
-                        <ion-col col-6>
-                            <p text-right>{{title}}</p>
-                        </ion-col>
-                        <ion-col col-6 class="label-on-left">Description</ion-col>
-                        <ion-col col-6>
-                            <p text-right>{{description}}</p>
-                        </ion-col>
-                    </ion-row>
-
-
-                    <ion-row>
-                        <ion-col col-12>
-                            <div class="form-group">
-                                <ion-item>
-                                    <ion-label>Choose Type</ion-label>
-                                    <ion-select [(ngModel)]="rateCardType">
-                                        <ion-option *ngFor="let type of rateCardTypes" [value]="type.name" (ionSelect)="selectUOMType(type)" ></ion-option>
-                                    </ion-select>
-                                </ion-item>
-                            </div>
-                        </ion-col>
-
-                        <ion-col col-12>
-                            <div class="form-group ">
-                                <label class="control-label">Select Site</label>
-                                <ion-select [(ngModel)]="siteName" class="select-box">
-                                    <ion-option *ngFor="let site of allSites" [value]="site.name" (ionSelect)="getSiteEmployees(site.id)">{{site.name}}</ion-option>
-                                </ion-select>
-                            </div>
-                        </ion-col>
-
-                        <ion-col col-12 *ngIf="siteEmployees">
-                            <div class="form-group ">
-                                <label class="control-label">Select Site</label>
-                                <ion-select [(ngModel)]="empSelect" class="select-box">
-                                    <ion-option *ngFor="let employee of siteEmployees" [value]="employee.fullName" >{{site.name}}</ion-option>
-                                </ion-select>
-                            </div>
-                        </ion-col>
-                    </ion-row>
-                </div>
-            </div>
+    <div class="card-content margin-tp25 white-bg">
+        <div class="table-responsive">
+            <table class="table">
+                <thead>
+                <tr>
+                    <th class="text-center">Type</th>
+                    <th>Name</th>
+                    <th>Rate</th>
+                    <th>Uom</th>
+                    <th></th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr *ngFor="let rate of rates;let i = index ">
+                    <td>{{rate.type}}</td>
+                    <td>{{rate.name}}</td>
+                    <td>{{rate.cost}}</td>
+                    <td>{{rate.uom}}</td>
+                    <td class="td-actions text-right">
+                            <i class="material-icons clr-red" (click)="remove(i)">close</i>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
         </div>
     </div>
+
+
+    <!--<div class="row">-->
+        <!--<div class="col-md-8">-->
+            <!--<div class="card">-->
+                <!--<div class="card-content">-->
+                    <!--<ion-row class="margin0 white-bg padding10">-->
+                        <!--<ion-col col-6 class="label-on-left">Title</ion-col>-->
+                        <!--<ion-col col-6>-->
+                            <!--<p text-right>{{title}}</p>-->
+                        <!--</ion-col>-->
+                        <!--<ion-col col-6 class="label-on-left">Description</ion-col>-->
+                        <!--<ion-col col-6>-->
+                            <!--<p text-right>{{description}}</p>-->
+                        <!--</ion-col>-->
+                    <!--</ion-row>-->
+
+
+                    <!--<ion-row>-->
+                        <!--<ion-col col-12>-->
+                            <!--<div class="form-group">-->
+                                <!--<ion-item>-->
+                                    <!--<ion-label>Choose Type</ion-label>-->
+                                    <!--<ion-select [(ngModel)]="rateCardType">-->
+                                        <!--<ion-option *ngFor="let type of rateCardTypes" [value]="type.name" (ionSelect)="selectUOMType(type)" ></ion-option>-->
+                                    <!--</ion-select>-->
+                                <!--</ion-item>-->
+                            <!--</div>-->
+                        <!--</ion-col>-->
+
+                        <!--<ion-col col-12>-->
+                            <!--<div class="form-group ">-->
+                                <!--<label class="control-label">Select Site</label>-->
+                                <!--<ion-select [(ngModel)]="siteName" class="select-box">-->
+                                    <!--<ion-option *ngFor="let site of allSites" [value]="site.name" (ionSelect)="getSiteEmployees(site.id)">{{site.name}}</ion-option>-->
+                                <!--</ion-select>-->
+                            <!--</div>-->
+                        <!--</ion-col>-->
+
+                        <!--<ion-col col-12 *ngIf="siteEmployees">-->
+                            <!--<div class="form-group ">-->
+                                <!--<label class="control-label">Select Site</label>-->
+                                <!--<ion-select [(ngModel)]="empSelect" class="select-box">-->
+                                    <!--<ion-option *ngFor="let employee of siteEmployees" [value]="employee.fullName" >{{site.name}}</ion-option>-->
+                                <!--</ion-select>-->
+                            <!--</div>-->
+                        <!--</ion-col>-->
+                    <!--</ion-row>-->
+                <!--</div>-->
+            <!--</div>-->
+        <!--</div>-->
+    <!--</div>-->
 
 
 
 
 </ion-content>
 
+<ion-footer>
+    <ion-toolbar class="align-right" >
+        <button class="btn btn-warning center pull-right" (click)="saveRates()">
+            Next<ion-icon name="ios-arrow-forward-outline"></ion-icon>
+        </button>
+    </ion-toolbar>
+</ion-footer>

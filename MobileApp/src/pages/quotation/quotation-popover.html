@@ -1,15 +1,32 @@
-<ion-content>
+<ion-content >
     <ion-list >
-        <button ion-item class="lable-clr">
-            item1
-        </button>
-        <button ion-item>
-            item2
-        </button>
-        <button ion-item>
-            item3
-        </button>
+        <ion-row class="margin0 white-bg padding10">
+            <ion-col col-12>
+                <div class="form-group">
+                    <ion-item>
+                        <ion-label>Choose Type</ion-label>
+                        <ion-select style="color: black" interface="popover" [(ngModel)]="type" class="select-box">
+                            <ion-option *ngFor="let type of rateCardTypes" [value]="type.name" (ionSelect)="selectUOMType(type)" >{{type.name}}</ion-option>
+                        </ion-select>
+                    </ion-item>
+                </div>
+            </ion-col>
+
+            <ion-col col-12>
+                <div class="form-group label-floating">
+                    <label class="control-label">Name</label>
+                    <input type="text" class="form-control" [(ngModel)]="name">
+                </div>
+            </ion-col>
+
+            <ion-col col-12>
+                <div class="form-group label-floating">
+                    <label class="control-label">Cost</label>
+                    <input type="text" class="form-control" [(ngModel)]="cost">
+                </div>
+            </ion-col>
+
+            <button type="submit" class="btn btn-warning pull-right margin-auto" (click)="addRates()">Ok</button>
+        </ion-row>
     </ion-list>
-
-
 </ion-content>

@@ -135,8 +135,10 @@ container-scroll::-webkit-scrollbar-thumb
 }
 .popover-md .popover-content
 {
+  top: 90px !important;
+  left: 100px !important;
   padding: 0;
-  width: 150px !important;
+  width: 250px !important;
   padding-right: 10px !important;
 }
 .lable-clr .label
@@ -266,7 +268,10 @@ table tr
 {
   color: orange !important;
 }
-
+.clr-red
+{
+  color:#f53d3d;
+}
 .red-card
 {
   box-shadow: 0 1px 4px 0 rgb(255, 0, 0) !important;
@@ -284,7 +289,7 @@ table tr
 {
   padding: 10px;
 }
-.emp .item-md.item-block .item-inner,.emp .list-md .item-block .item-inner
+.emp .item-md .item-block .item-inner,.emp .list-md .item-block .item-inner
 {
   border-bottom: 0 !important;
 }
@@ -375,4 +380,25 @@ table tr
 .inline-block
 {
   display: inline-block !important;
+}
+
+.select-rate {
+  position: absolute;
+}
+.select-rate .select-icon, .select-text {
+  display: none !important;  /* hidden triangle icon and selected text */
+}
+
+.modal-backdrop {
+  left: 0;
+  top: 0;
+  position: absolute;
+  z-index: 2;
+  display: block;
+  width: 100%;
+  height: 100%;
+  background-color: #000;
+  opacity: .01;
+  -webkit-transform: translateZ(0);
+  transform: translateZ(0);
 }

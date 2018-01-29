@@ -47,6 +47,7 @@ import {IonSimpleWizardStep} from "../pages/ion-simple-wizard/ion-simple-wizard.
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {CompleteJobPage} from "../pages/jobs/completeJob";
 import {CreateQuotationPage2} from "../pages/quotation/create-quotation-step-2";
+import {CreateQuotationPage3} from "../pages/quotation/create-quotation-step-3";
 
 @NgModule({
   declarations: [
@@ -84,7 +85,8 @@ import {CreateQuotationPage2} from "../pages/quotation/create-quotation-step-2";
 
 
       IonSimpleWizardStep,
-      IonSimpleWizard
+      IonSimpleWizard,
+    CreateQuotationPage3
   ],
   imports: [
     BrowserModule,
@@ -128,7 +130,8 @@ import {CreateQuotationPage2} from "../pages/quotation/create-quotation-step-2";
     CreateJobPage,
       CompleteJobPage,
       IonSimpleWizardStep,
-      IonSimpleWizard
+      IonSimpleWizard,
+    CreateQuotationPage3
   ],
   providers: [
     StatusBar,
