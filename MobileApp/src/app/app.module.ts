@@ -46,6 +46,7 @@ import {IonSimpleWizard} from "../pages/ion-simple-wizard/ion-simple-wizard.comp
 import {IonSimpleWizardStep} from "../pages/ion-simple-wizard/ion-simple-wizard.step.component";
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {CompleteJobPage} from "../pages/jobs/completeJob";
+import {CreateQuotationPage2} from "../pages/quotation/create-quotation-step-2";
 
 @NgModule({
   declarations: [
@@ -68,6 +69,7 @@ import {CompleteJobPage} from "../pages/jobs/completeJob";
     QuotationPopoverPage,
     QuotationViewPage,
     CreateQuotationPage,
+      CreateQuotationPage2,
     AttendancePage,
     AttendancePopoverPage,
     EmployeeDetailPage,
@@ -113,6 +115,7 @@ import {CompleteJobPage} from "../pages/jobs/completeJob";
     QuotationPopoverPage,
     QuotationViewPage,
     CreateQuotationPage,
+      CreateQuotationPage2,
     AttendancePage,
     AttendancePopoverPage,
     EmployeeDetailPage,
