@@ -8,41 +8,49 @@
 </ion-header>
 
 <ion-content padding>
+  <ion-fab top right mini edge>
+    <button (click)="markAttendance()"  ion-fab><ion-icon name="add"></ion-icon></button>
+  </ion-fab>
 
   <div class="row">
-    <ion-col col-11 class="margin-auto">
-      <div class="card">
-        <div class="card-header border-bottom padding-left-right0">
-          <p class="category display-inline">Name</p>
-          <button ion-button icon-left icon-only clear (click)="presentPopover($event)" class="pop-icon">
-            <ion-icon name="more"></ion-icon>
-          </button>
-        </div>
-        <div class="card-content">
-          <ion-row class="margin0">
-            <ion-col col-9 class="ver-center">
-              <h3 class="title">Sitename</h3>
-            </ion-col>
-            <ion-col col-3>
-              <ion-item class="remove">
-                <ion-avatar item-left>
-                  <img src="img/faces/marc.jpg" width="10%">
-                </ion-avatar>
+      <ion-row class="margin0 white-bg padding10 margin-bottom25 width98 margin-side-auto" *ngFor="let a of attendances">
+          <ion-col col-12 *ngIf="!attendances">
+              <p>No Records</p>
+          </ion-col>
+          <ion-col col-6 class="label-on-left">Name</ion-col>
+          <ion-col col-6>
+              <p text-left class="margin0">{{a.employeeFullName}}</p>
+          </ion-col>
+          <ion-col col-6 class="label-on-left">Site</ion-col>
+          <ion-col col-6>
+              <p text-left class="margin0">{{a.siteName}}</p>
+          </ion-col>
+          <ion-col col-6>
+              <p text-left class="margin0" class="display-inline">{{a.checkInTime |date:'MM/dd/yyyy @ h:mma'}}</p>
+          </ion-col>
+          <ion-col col-6>
+              <p text-right class="margin0" class="display-inline">{{a.checkOutTime |date:'MM/dd/yyyy @ h:mma'}}</p>
+          </ion-col>
+          <ion-col col-6 class="align-center">
+              <ion-item no-lines class="item-label">
+                  <ion-avatar *ngIf="a.checkInImage">
+                      <img  [src]="a.checkInImage" >
+                  </ion-avatar>
+                  <ion-avatar *ngIf="!a.checkInImage">
+                      <img  src="img/user.png" width="10%">
+                  </ion-avatar>
               </ion-item>
-            </ion-col>
-          </ion-row>
-        </div>
-        <div class="card-footer">
-          <ion-row class="margin0">
-            <ion-col col-6>
-              <p class="title margin0 primary-clr">In:</p>
-            </ion-col>
-            <ion-col col-6>
-              <p class="primary-clr title margin0">Out:</p>
-            </ion-col>
-          </ion-row>
-        </div>
-      </div>
-    </ion-col>
+          </ion-col>
+          <ion-col col-6 class="align-center">
+              <ion-item no-lines class="item-label">
+                  <ion-avatar *ngIf="a.checkOutImage">
+                      <img  [src]="a.checkOutImage" >
+                  </ion-avatar>
+                  <ion-avatar *ngIf="!a.checkOutImage">
+                      <img  src="img/user.png" >
+                  </ion-avatar>
+              </ion-item>
+          </ion-col>
+      </ion-row>
   </div>
 </ion-content>

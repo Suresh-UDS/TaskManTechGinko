@@ -15,9 +15,9 @@
                 <div class="card-content">
                         <ion-row>
                             <ion-col col-12>
-                                <ion-list radio-group  [(ngModel)]="rateCardDetails.type">
-                                    <ion-item *ngFor="let type of rateCardTypes">
-                                        <ion-label style="color:black;">{{type.name}}</ion-label>
+                                <ion-list radio-group  [(ngModel)]="rateCardDetails.type" class="margin0">
+                                    <ion-item *ngFor="let type of rateCardTypes" class="padding-left0 inline-block width50" no-lines>
+                                        <ion-label class="radio-label">{{type.name}}</ion-label>
                                         <ion-radio  value={{type.name}} (ionSelect)="rateCardUOM(type.uom)"></ion-radio>
                                     </ion-item>
                                 </ion-list>
@@ -38,12 +38,12 @@
                             </ion-col>
 
                             <ion-col col-12>
-                                <div class="form-group label-floating">
-                                    <label class="control-label">UOM</label>
-                                    <input type="text" class="form-control" [(ngModel)]="uom" disabled>
+                                <div class="form-group ">
+                                    <label class="control-label" *ngIf="uom">UOM</label>
+                                    <input type="text" class="form-control" placeholder="UOM" [(ngModel)]="uom" disabled>
                                 </div>
                             </ion-col>
-                            <button type="submit" class="btn btn-rose pull-right" (click)="createRateCard(rateCardDetails)" >Create</button>
+                            <button type="submit" class="btn btn-warning pull-right margin-auto" (click)="createRateCard(rateCardDetails)" >Create</button>
                             <div class="clearfix"></div>
                         </ion-row>
                 </div>

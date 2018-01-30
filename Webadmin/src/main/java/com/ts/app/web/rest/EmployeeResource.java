@@ -93,6 +93,20 @@ public class EmployeeResource {
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 
+    @RequestMapping(value = "/employee/out", method = RequestMethod.POST)
+    public ResponseEntity<?> employeeOut(@RequestBody CheckInOutDTO checkInOut) {
+        checkInOut.setUserId(SecurityUtils.getCurrentUserId());
+        employeeService.onlyCheckOut(checkInOut);
+        return new ResponseEntity<String>("{ \"empId\" : "+'"'+checkInOut.getEmployeeEmpId() + '"'+", \"status\" : \"success\", \"transactionId\" : \"" + checkInOut.getId() +"\" }", HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/employee/checkInOut", method = RequestMethod.POST)
+    public SearchResult findAllCheckInOut(@RequestBody SearchCriteria searchCriteria) {
+        log.info("--Invoked findAllCheckInOut --");
+        return employeeService.findAllCheckInOut(searchCriteria);
+    }
+
+
     @RequestMapping(value = "/employee/enroll", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> enrollEmployeeFace(@Valid @RequestBody EmployeeDTO employee, HttpServletRequest request) {
         log.info("Inside Enroll" + employee.getName() + " , "+ employee.getProjectId());

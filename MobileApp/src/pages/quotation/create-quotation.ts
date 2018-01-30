@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import {AlertController, Events, NavController, PopoverController} from 'ionic-angular';
 import {authService} from "../service/authService";
+import {CreateQuotationPage2} from "./create-quotation-step-2";
 
 @Component({
     selector: 'page-create-quotation',
@@ -21,8 +22,16 @@ export class CreateQuotationPage {
             ]
     };
 
+    title:any;
+    description:any;
     rateCardType:any;
+    rateCardUom:any;
+    rateCardName:any;
+    rateCardCost:any;
+
     uom:any;
+
+    empSelect:any;
 
     allSites:any;
     siteEmployees:any;
@@ -30,33 +39,9 @@ export class CreateQuotationPage {
 
     selectedSite:any;
 
-    step: any;
-    stepCondition: any;
-    stepDefaultCondition: any;
-    currentStep: any;
     showRateInformation:any;
 
     constructor(public navCtrl: NavController,public popoverCtrl: PopoverController, public evts: Events, public authService:authService, public alertCtrl: AlertController) {
-
-    // Step Wizard Settings
-        this.step = 1;//The value of the first step, always 1
-        this.stepCondition = false;//Set to true if you don't need condition in every step
-        this.stepDefaultCondition = this.stepCondition;//Save the default condition for every step
-        //You can subscribe to the Event 'step:changed' to handle the current step
-        this.evts.subscribe('step:changed', step => {
-            //Handle the current step if you need
-            this.currentStep = step[0];
-            //Set the step condition to the default value
-            this.stepCondition = this.stepDefaultCondition;
-        });
-        this.evts.subscribe('step:next', () => {
-            //Do something if next
-            console.log('Next pressed: ', this.currentStep);
-        });
-        this.evts.subscribe('step:back', () => {
-            //Do something if back
-            console.log('Back pressed: ', this.currentStep);
-        });
 
         this.quotationDetails ={
             title:'',
@@ -70,6 +55,7 @@ export class CreateQuotationPage {
                 }
             ]
         };
+        this.rateCardType = {};
 
         this.showRateInformation=false;
 
@@ -96,14 +82,19 @@ export class CreateQuotationPage {
         })
     }
 
-    saveQuotation(quotation){
-        this.authService.createQuotation(quotation).subscribe(response=>{
-            console.log(response);
-        })
+    saveQuotation(title,description){
+        var quotation = {
+            "title":this.title,
+            "description":this.description
+        }
+        console.log(quotation)
+            this.navCtrl.push(CreateQuotationPage2,{quotationDetails:quotation});
     }
 
     getRateCardTypes(){
         this.authService.getRateCardTypes().subscribe(response=>{
+            console.log("Rate Card types");
+            console.log(this.rateCardTypes);
             this.rateCardTypes = response;
         })
     }
@@ -114,44 +105,20 @@ export class CreateQuotationPage {
         this.uom = type.uom;
     }
 
+    selectUOMType(type){
+        var rateCard = {
+            type:'',
+            uom:'',
+            name:'',
+            cost:''
+        };
 
-    /**
-     * Demo functions
-     */
-    onFinish() {
-        this.alertCtrl.create({
-            message: 'Wizard Finished!!',
-            title: 'Congrats!!',
-            buttons: [{
-                text: 'Ok'
-            }]
-        }).present();
-    }
-
-    toggle() {
-        this.stepCondition = !this.stepCondition;
-    }
-    getIconStep2() {
-        return this.stepCondition ? 'unlock' : 'lock';
+        rateCard.type = type.name;
+        rateCard.uom = type.uom;
+        this.quotationDetails.rateCard.push(rateCard);
+        console.log(this.quotationDetails);
     }
 
-    getIconStep3() {
-        return this.stepCondition ? 'happy' : 'sad';
-    }
-    getLikeIcon() {
-        return this.stepCondition ? 'thumbs-down' : 'thumbs-up';
-    }
-    goToExample2() {
-        // this.navCtrl.push(DynamicPage);
-    }
-
-    textChange(e) {
-        if (e.target.value && e.target.value.trim() !== '') {
-            this.stepCondition = true;
-        } else {
-            this.stepCondition = false;
-        }
-    }
 
 
 

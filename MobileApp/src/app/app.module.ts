@@ -42,10 +42,12 @@ import {CreateRateCardPage} from "../pages/rate-card/create-rate-card";
 import {EmployeeDetailPage} from "../pages/employee-list/employee-detail";
 import {SiteViewPage} from "../pages/site/site-view";
 import {CreateJobPage} from "../pages/jobs/add-job";
-
 import {IonSimpleWizard} from "../pages/ion-simple-wizard/ion-simple-wizard.component";
 import {IonSimpleWizardStep} from "../pages/ion-simple-wizard/ion-simple-wizard.step.component";
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import {CompleteJobPage} from "../pages/jobs/completeJob";
+import {CreateQuotationPage2} from "../pages/quotation/create-quotation-step-2";
+import {CreateQuotationPage3} from "../pages/quotation/create-quotation-step-3";
 
 @NgModule({
   declarations: [
@@ -68,6 +70,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     QuotationPopoverPage,
     QuotationViewPage,
     CreateQuotationPage,
+      CreateQuotationPage2,
     AttendancePage,
     AttendancePopoverPage,
     EmployeeDetailPage,
@@ -78,10 +81,12 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     RateCardPage,
     CreateRateCardPage,
     CreateJobPage,
+    CompleteJobPage,
 
 
       IonSimpleWizardStep,
-      IonSimpleWizard
+      IonSimpleWizard,
+    CreateQuotationPage3
   ],
   imports: [
     BrowserModule,
@@ -112,6 +117,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     QuotationPopoverPage,
     QuotationViewPage,
     CreateQuotationPage,
+      CreateQuotationPage2,
     AttendancePage,
     AttendancePopoverPage,
     EmployeeDetailPage,
@@ -122,8 +128,10 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     RateCardPage,
     CreateRateCardPage,
     CreateJobPage,
+      CompleteJobPage,
       IonSimpleWizardStep,
-      IonSimpleWizard
+      IonSimpleWizard,
+    CreateQuotationPage3
   ],
   providers: [
     StatusBar,

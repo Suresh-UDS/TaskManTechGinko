@@ -53,6 +53,18 @@ public class    EmployeeService extends AbstractService {
 	@Inject
 	private EmployeeRepository employeeRepository;
 
+    @Inject
+    private DeviceRepository deviceRepository;
+
+    @Inject
+    private JobRepository jobRepository;
+
+    @Inject
+    private CheckInOutRepository checkInOutRepository;
+
+    @Inject
+    private CheckInOutImageRepository checkInOutImageRepository;
+
 	@Inject
 	private EmployeeHistoryRepository employeeHistoryRepository;
 
@@ -80,8 +92,11 @@ public class    EmployeeService extends AbstractService {
 	@Inject
 	private PushService pushService;
 
-//	@Inject
-//	private MailService mailService;
+	@Inject
+	private MailService mailService;
+
+    @Inject
+    private JobManagementService jobManagementService;
 
 	@Inject
 	private Environment env;
@@ -260,6 +275,89 @@ public class    EmployeeService extends AbstractService {
         return projDtos;
 
 	}
+
+    @Transactional
+    public CheckInOutDTO onlyCheckOut(CheckInOutDTO checkInOutDto) {
+
+        log.debug("EmployeeService.checkOut - empId - "+checkInOutDto.getEmployeeEmpId());
+        //CheckInOut checkInOut = mapperUtil.toEntity(checkInOutDto, CheckInOut.class);
+        Timestamp zdt   = new Timestamp(System.currentTimeMillis());
+        CheckInOut checkInOut = new CheckInOut();
+        checkInOutDto.setCheckInDateTime(zdt);
+        checkInOut.setCheckOutDateTime(zdt);
+        Device checkoutDevice = deviceRepository.findByUniqueId(checkInOutDto.getDeviceOutUniqueId());
+//        checkInOut.setDeviceOut(checkoutDevice);
+        checkInOut.setMinsWorked(0);
+        checkInOut.setEmployee(employeeRepository.findOne(checkInOutDto.getEmployeeId()));
+        checkInOut.setProject(projectRepository.findOne(checkInOutDto.getProjectId()));
+        checkInOut.setSite(siteRepository.findOne(checkInOutDto.getSiteId()));
+        Job job = jobRepository.findOne(checkInOutDto.getJobId());
+        zdt = new  Timestamp(job.getPlannedStartTime().getTime());
+        checkInOut.setCheckInDateTime(zdt);
+        checkInOut.setJob(job);
+//        Device device = deviceRepository.findByUniqueId(checkInOutDto.getDeviceInUniqueId());
+//        log.debug("device id " + (device == null ? 0 : device.getId()));
+//        if(device != null) {
+//            checkInOut.setDeviceIn(device);
+//        }else {
+//            checkInOut.setDeviceIn(checkoutDevice);
+//        }
+//        //checkInOut.setDeviceOut(device);
+        checkInOut.setLongitudeOut(checkInOutDto.getLongitudeOut());
+        checkInOut.setLatitudeOut(checkInOutDto.getLatitudeOut());
+        checkInOut.setRemarks(checkInOutDto.getRemarks());
+        checkInOut = checkInOutRepository.save(checkInOut);
+        checkInOutDto.setId(checkInOut.getId());
+        JobDTO completedJob = jobManagementService.onlyCompleteJob(checkInOutDto.getJobId());
+        log.debug("onlyCheckOut - completedJob" + completedJob);
+        log.debug("Transaction id "+checkInOutDto.getId());
+        if(completedJob != null) {
+            long siteId = completedJob.getSiteId();
+            long transactionId = checkInOutDto.getId();
+            log.debug("onlyCheckOut - completedJob siteId -" + transactionId);
+            List<User> users = userService.findUsers(siteId);
+            log.debug("onlyCheckOut - completedJob users  -" + users);
+            if(CollectionUtils.isNotEmpty(users)) {
+                long userIds[] = new long[users.size()];
+                int ind = 0;
+                for(User user : users) {
+                    userIds[ind] = user.getId();
+                    log.debug("onlyCheckOut - completedJob user id  -" + user.getId());
+                    ind++;
+                    mailService.sendCompletedJobAlert(user, completedJob.getSiteName(), completedJob.getId(), completedJob.getTitle(), null);
+                }
+                String message = "Job  -"+ completedJob.getTitle() + " completed for site-" + completedJob.getSiteName();
+                log.debug("push message -"+ message);
+                pushService.send(userIds, message);
+                jobManagementService.saveNotificationLog(checkInOutDto.getJobId(),checkInOutDto.getUserId(), users, siteId, message);
+            }
+        }
+        log.debug("tranction Id",checkInOutDto.getId());
+        log.debug("Created check out Information for Employee: {}", checkInOut.getEmployee().getEmpId());
+
+        return checkInOutDto;
+
+    }
+
+    @Transactional(readOnly = true)
+    public SearchResult findAllCheckInOut(SearchCriteria searchCriteria) {
+        Timestamp checkInDt = new Timestamp(System.currentTimeMillis());
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        try {
+            checkInDt = new Timestamp(sdf.parse(sdf.format(checkInDt)).getTime());
+        } catch (ParseException e) {
+            log.error("Error while parsing the date");
+        }
+        Pageable pageRequest = createPageRequest(searchCriteria.getCurrPage());
+        Page<CheckInOut> page = checkInOutRepository.findByCheckInDateTimeRange(checkInDt,checkInDt,pageRequest);
+        List<CheckInOutDTO> dtoList = mapperUtil.toModelList(page.getContent(), CheckInOutDTO.class);
+        SearchResult result = new SearchResult();
+        result.setTotalPages(page.getTotalPages());
+        result.setCurrPage(page.getNumber() + 1);
+        result.setTotalCount(page.getTotalElements());
+        result.setTransactions(dtoList);
+        return result;
+    }
 
 	public List<EmployeeDTO> findAll(long userId) {
 		User user = userRepository.findOne(userId);
