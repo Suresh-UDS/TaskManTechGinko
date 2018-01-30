@@ -12,11 +12,12 @@ import {CreateQuotationPage3} from "./create-quotation-step-3";
     templateUrl: 'create-quotation-step-2.html'
 })
 export class CreateQuotationPage2 {
-   title:any;
-   description:any;
+    title:any;
+    description:any;
     rateCardType:any;
     uom:any;
-
+    val=0;
+    index:any;
     empSelect:any;
 
     allSites:any;
@@ -41,6 +42,8 @@ export class CreateQuotationPage2 {
     approvedByUserName:any;
     authorisedByUserId:any;
     authorisedByUserName:any;
+    grandTotal=0;
+
     constructor(public navCtrl: NavController,public modalCtrl: ModalController,public navParams:NavParams,public popoverCtrl: PopoverController, public evts: Events, public authService:authService, public alertCtrl: AlertController) {
 
        console.log(this.navParams.get('quotationDetails'));
@@ -132,15 +135,32 @@ export class CreateQuotationPage2 {
         popover.onDidDismiss(data=>
         {
             this.rates.push(data);
+            this.grandTotal=this.grandTotal+data.total;
             console.log(this.rates);
         })
     }
 
     remove(index)
     {
-        this.rates.pop(index)
-    }
+        console.log(this.grandTotal);
+        this.grandTotal=this.grandTotal-this.rates[index].total;
+        console.log(this.grandTotal);
+        this.rates.pop(index);
 
+    }
+    addTotal(i,no,cost)
+    {
+        this.index=i;
+        console.log("add total");
+        this.grandTotal = Math.abs(this.grandTotal-this.rates[i].total);
+        this.rates[i].total=no*cost;
+        console.log(this.rates[i].total);
+        console.log(no+" * "+cost );
+        console.log(this.grandTotal);
+        this.grandTotal =this.grandTotal+this.rates[i].total ;
+        console.log("add total-------:"+this.grandTotal);
+
+    }
     saveRates()
     {
         var quotationDetails = {
@@ -161,6 +181,7 @@ export class CreateQuotationPage2 {
         this.authService.createQuotation(quotationDetails).subscribe(
             response=>{
                 console.log(response);
+
 
             }
         )
