@@ -16,7 +16,7 @@
         <div class="form-group">
             <ion-item>
                 <ion-label>Choose Type</ion-label>
-                <ion-select style="color: black" [(ngModel)]="siteDetails" class="select-box">
+                <ion-select style="color: black" [(ngModel)]="selectedSite" class="select-box">
                     <ion-option style="color: black;" *ngFor="let site of allSites" [value]="site.name" (ionSelect)="selectSite(site)" >{{site.name}}</ion-option>
                 </ion-select>
             </ion-item>

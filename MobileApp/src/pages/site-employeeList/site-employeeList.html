@@ -17,8 +17,7 @@
 
   <ion-list>
     <ion-item *ngFor="let site of siteList;let i of index" class="bottom-border" >
-      <ion-icon name="podium" item-start class="icon-color"></ion-icon>
-      <p  >{{site.name}}
+      <p style="float:left"  >{{site.name}}
       <span style="float: right">
         <button ion-button  (click)="viewCamera(site.id,'enroll')"  >Enroll</button>
           <span *ngIf="employee.faceAuthorised">

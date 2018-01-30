@@ -30,6 +30,17 @@ export class CreateQuotationPage2 {
     quotation:any;
     rates:any
 
+    clientEmailId:any;
+    sentByUserId:any;
+    sentByUserName:any;
+    sentToUserId:any;
+    sentToUserName:any;
+    createdByUserId:any;
+    createdByUserName:any;
+    approvedByUserId:any;
+    approvedByUserName:any;
+    authorisedByUserId:any;
+    authorisedByUserName:any;
     constructor(public navCtrl: NavController,public modalCtrl: ModalController,public navParams:NavParams,public popoverCtrl: PopoverController, public evts: Events, public authService:authService, public alertCtrl: AlertController) {
 
        console.log(this.navParams.get('quotationDetails'));
@@ -43,11 +54,22 @@ export class CreateQuotationPage2 {
         console.log(window.localStorage.getItem('employeeUserId'));
         console.log(window.localStorage.getItem('employeeId'));
         console.log(window.localStorage.getItem('employeeFullName'));
+        var employeeDetails = JSON.parse(window.localStorage.getItem('employeeDetails'));
+        this.sentByUserId = employeeDetails.employee.id;
+        this.sentByUserName = employeeDetails.employee.fullName;
 
     }
 
     selectSite(site){
         this.selectedSite = site;
+        this.authService.getClientDetails(site.id).subscribe(
+            response=>{
+                console.log(response);
+                this.sentToUserId = response.id;
+                this.sentToUserName = response.name;
+                this.clientEmailId = response.email;
+            }
+        )
     }
 
     ionViewWillEnter(){
@@ -121,8 +143,30 @@ export class CreateQuotationPage2 {
 
     saveRates()
     {
-        
-        this.navCtrl.push(CreateQuotationPage3,{rate:this.rates,quotation:this.quotation,site:this.selectedSite})
+        var quotationDetails = {
+            "title":this.quotation.title,
+            "description":this.quotation.description,
+            "rateCardDetails":this.rates,
+            "sentByUserId":this.sentByUserId,
+            "sentByUserName":this.sentByUserName,
+            "sentToUserId":this.sentToUserId,
+            "sentToUserName":this.sentToUserName,
+            "createdByUserId":this.sentByUserId,
+            "createdByUserName":this.sentByUserName,
+            "clientEmailId": this.clientEmailId,
+            "siteId":this.selectedSite.id,
+            "siteName":this.selectedSite.name
+        }
+
+        this.authService.createQuotation(quotationDetails).subscribe(
+            response=>{
+                console.log(response);
+
+            }
+        )
+
+
+        // this.navCtrl.push(CreateQuotationPage3,{rate:this.rates,quotation:this.quotation,site:this.selectedSite})
     }
 
 }

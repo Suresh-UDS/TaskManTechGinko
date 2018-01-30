@@ -154,10 +154,10 @@ export class authService
     }
 
     getAllAttendances():Observable<any>{
-        return this.http.get(this.Url+'api/attendance/search').map(
+        return this.http.get(this.Url+'api/attendance/').map(
             (response=>{
                 console.log(response);
-                return response;
+                return response.json();
             })
         )
     }
@@ -263,6 +263,15 @@ export class authService
 
     checkOutJob(job):Observable<any>{
         return this.http.post(this.Url+'api/employee/out',job).map(
+            response=>{
+                console.log(response.json());
+                return response.json();
+            }
+        )
+    }
+
+    getClientDetails(id):Observable<any>{
+        return this.http.get(this.Url+'api/project/'+id).map(
             response=>{
                 console.log(response.json());
                 return response.json();

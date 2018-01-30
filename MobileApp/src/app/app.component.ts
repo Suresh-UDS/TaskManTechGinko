@@ -45,7 +45,7 @@ export class MyApp {
       { title: 'Rate Card', component: RateCardPage,active:false,icon:'description'},
       { title: 'Attendance', component: AttendancePage,active:false,icon:'content_paste'},
       { title: 'Reports', component: ReportsPage,active:false,icon:'trending_up'},
-      { title: 'Logout', component: LogoutPage,active:false,icon:'power_settings_new'}
+      // { title: 'Logout', component: LogoutPage,active:false,icon:'power_settings_new'}
     ];
 
 
@@ -60,6 +60,11 @@ export class MyApp {
      // this.statusBar.overlaysWebView(true);
      // this.statusBar.backgroundColorByHexString("#25312C");
     });
+  }
+
+  logout(){
+    this.nav.setRoot(LoginPage);
+    window.localStorage.clear();
   }
 
   openPage(page) {

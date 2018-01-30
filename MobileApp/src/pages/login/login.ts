@@ -47,6 +47,7 @@ export class LoginPage {
         window.localStorage.setItem('employeeFullName',response.json().employee.fullName);
         window.localStorage.setItem('employeeEmpId',response.json().employee.empId);
         window.localStorage.setItem('employeeUserId',response.json().employee.userId);
+        window.localStorage.setItem('employeeDetails',JSON.stringify(response.json()));
         var employee = response.json().employee;
 
         if (response.status == 200) {
