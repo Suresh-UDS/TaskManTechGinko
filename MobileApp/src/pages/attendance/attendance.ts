@@ -4,6 +4,7 @@ import {authService} from "../service/authService";
 import {AttendancePopoverPage} from "./attendance-popover";
 import {SiteListPage} from "../site-list/site-list";
 import {EmployeeSiteListPage} from "../site-employeeList/site-employeeList";
+import {componentService} from "../service/componentService";
 
 @Component({
   selector: 'page-attendance',
@@ -14,11 +15,13 @@ export class AttendancePage {
   empID:any;
   attendances:any;
 
-  constructor(public navCtrl: NavController,public myService:authService,public popoverCtrl: PopoverController) {
+  constructor(public navCtrl: NavController,public myService:authService,public popoverCtrl: PopoverController, public component: componentService) {
+        this.component.showLoader('');
         this.myService.getAllAttendances().subscribe(response=>{
             console.log("All attendances");
             console.log(response);
             this.attendances = response;
+            this.component.closeLoader();
         })
   }
     presentPopover(myEvent) {

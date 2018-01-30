@@ -4,11 +4,11 @@
       <ion-icon name="menu"></ion-icon>
     </button>
     <ion-title>Jobs</ion-title>
-      <ion-buttons right>
-          <button ion-button clear (click)="addJob()" class="add-btn">
-              <ion-icon name="add"></ion-icon>
-          </button>
-      </ion-buttons>
+      <!--<ion-buttons right>-->
+          <!--<button ion-button clear (click)="addJob()" class="add-btn">-->
+              <!--<ion-icon name="add"></ion-icon>-->
+          <!--</button>-->
+      <!--</ion-buttons>-->
   </ion-navbar>
     <ion-toolbar transparent>
         <ion-segment [(ngModel)]="categories" class="segmnt margin-auto margin-top5" color="#ff9800">
@@ -26,6 +26,9 @@
 </ion-header>
 
 <ion-content padding>
+    <ion-fab top right  edge>
+        <button (click)="addJob()"  mini ion-fab><ion-icon name="add"></ion-icon></button>
+    </ion-fab>
 
     <div [ngSwitch]="categories">
         <ion-list *ngSwitchCase="'today'">

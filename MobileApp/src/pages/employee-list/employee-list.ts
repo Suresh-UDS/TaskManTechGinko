@@ -32,7 +32,7 @@ export class EmployeeListPage {
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad Employee list');
-    this.component.showLoader('Getting All Sites');
+    this.component.showLoader('Getting All Employees');
     this.myService.getAllEmployees().subscribe(
         response=>{
           console.log('ionViewDidLoad Employee list:');
@@ -41,7 +41,7 @@ export class EmployeeListPage {
           this.component.closeLoader();
         },
         error=>{
-          console.log('ionViewDidLoad SitePage:'+error);
+          console.log('ionViewDidLoad Employee Page:'+error);
         }
     )
   }
