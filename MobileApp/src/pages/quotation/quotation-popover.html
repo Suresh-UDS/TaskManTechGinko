@@ -3,11 +3,9 @@
         <ion-row class="margin0 white-bg padding10">
             <ion-col col-12>
                 <div class="form-group">
-                    <ion-item>
-                        <ion-select style="color: black" interface="popover" [(ngModel)]="type" class="select-box">
+                        <ion-select style="color: black" interface="action-sheet" [(ngModel)]="type" class="select-box" placeholder="Choose Site">
                             <ion-option style="color: black" *ngFor="let type of rateCardTypes" [value]="type.name" (ionSelect)="selectUOMType(type)" >{{type.name}}</ion-option>
                         </ion-select>
-                    </ion-item>
                 </div>
             </ion-col>
 

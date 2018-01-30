@@ -16,7 +16,7 @@ export class QuotationPopoverPage {
   selectedUOM:any;
   addrates:any;
   constructor(public navCtrl: NavController,public popoverCtrl: PopoverController, public authService:authService,public viewCtrl: ViewController) {
-    this.addrates={type:'',name:'',cost:'',uom:''}
+    this.addrates={type:'',name:'',no:1,cost:0,uom:'',total:0}
   }
   ionViewWillEnter(){
     this.getRateCardTypes();
@@ -27,6 +27,7 @@ export class QuotationPopoverPage {
       this.rateCardTypes = response;
       console.log(this.rateCardTypes);
     })
+
   }
   selectUOMType(type){
         this.selectedType=type.name;
@@ -34,7 +35,7 @@ export class QuotationPopoverPage {
   }
   addRates()
   {
-    this.addrates={type:this.type,name:this.name,cost:this.cost,uom:this.selectedUOM}
+    this.addrates={type:this.type,name:this.name,no:1,cost:this.cost,uom:this.selectedUOM,total:this.cost};
     console.log(this.addrates);
     // this.navCtrl.push(CreateQuotationPage2,{rates:this.addrates})
       this.viewCtrl.dismiss(this.addrates);

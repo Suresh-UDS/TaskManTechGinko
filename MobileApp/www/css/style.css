@@ -385,20 +385,31 @@ table tr
 .select-rate {
   position: absolute;
 }
-.select-rate .select-icon, .select-text {
-  display: none !important;  /* hidden triangle icon and selected text */
+.table>thead>tr>th
+{
+  font-size:14px !important;
 }
-
-.modal-backdrop {
-  left: 0;
-  top: 0;
-  position: absolute;
-  z-index: 2;
-  display: block;
-  width: 100%;
-  height: 100%;
-  background-color: #000;
-  opacity: .01;
-  -webkit-transform: translateZ(0);
-  transform: translateZ(0);
+.padding-bottom3
+{
+  padding-bottom: 3px !important;
+}
+.width15
+{
+  width: 15px !important;
+}
+.table-scroll
+{
+  width: 500px;
+  overflow-x: scroll;
+}
+.width100
+{
+  width: 100px;
+}
+.table-data
+{
+  width: 85px;
+  overflow: hidden;
+  display: inline-block;
+  border-top: 0;
 }
