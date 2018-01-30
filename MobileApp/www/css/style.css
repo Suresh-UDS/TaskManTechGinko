@@ -411,5 +411,6 @@ table tr
   width: 85px;
   overflow: hidden;
   display: inline-block;
-  border-top: 0;
+  border-top: 0 !important;
+  white-space: initial !important;
 }
