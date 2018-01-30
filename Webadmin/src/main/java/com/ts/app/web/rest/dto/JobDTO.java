@@ -56,6 +56,8 @@ public class JobDTO extends BaseDTO {
 	private boolean scheduled;
 
 	private String frequency;
+	
+	private JobChecklistDTO jobChecklistItems;
 
 	public String getTitle() {
 		return title;
@@ -296,5 +298,14 @@ public class JobDTO extends BaseDTO {
 	public void setFrequency(String frequency) {
 		this.frequency = frequency;
 	}
+	public JobChecklistDTO getJobChecklistItems() {
+		return jobChecklistItems;
+	}
+	public void setJobChecklistItems(JobChecklistDTO jobChecklistItems) {
+		this.jobChecklistItems = jobChecklistItems;
+	}
+	
+	
+	
 
 }

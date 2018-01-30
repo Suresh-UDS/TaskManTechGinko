@@ -18,6 +18,11 @@ import java.util.Date;
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class Job extends AbstractAuditingEntity implements Serializable{
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	@Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
@@ -82,6 +87,9 @@ public class Job extends AbstractAuditingEntity implements Serializable{
 	private boolean completedDueEmailAlert;
 
 	private String frequency;
+	
+    @OneToMany(mappedBy ="job", cascade = CascadeType.ALL)
+	private JobChecklist checklist;
 
 	public Long getId() {
 		return id;
@@ -282,6 +290,11 @@ public class Job extends AbstractAuditingEntity implements Serializable{
 	public void setFrequency(String frequency) {
 		this.frequency = frequency;
 	}
-
+	public JobChecklist getChecklist() {
+		return checklist;
+	}
+	public void setChecklist(JobChecklist checklist) {
+		this.checklist = checklist;
+	}
 
 }

@@ -99,6 +99,21 @@
                                                 </div>
 
                                             </div>
+                                            
+                                            <div class="col-md-6">
+                                                <div class="form-group label-floating">
+                                                    <label class="control-label">Checklist</label>
+                                                    <div class="dropdown">
+                                                        <input type="text"
+                                                               class="form-control"
+                                                               name='checklist'
+                                                               ng-model="selectedChecklist"
+                                                               uib-typeahead="checklist as checklist.name for checklist in checklists | filter:$viewValue | limitTo:5"
+                                                               autocomplete="off" />
+                                                    </div>
+                                                </div>
+
+                                            </div>
 
                                         </div>
                                         <div class="row">
