@@ -1,16 +1,28 @@
 package com.ts.app.domain;
 
-import com.ts.app.domain.util.StringUtil;
+import java.io.Serializable;
+import java.util.Date;
+import java.util.List;
 
-import javax.persistence.*;
+import javax.persistence.Cacheable;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
-import java.io.Serializable;
-import java.util.Date;
+import com.ts.app.domain.util.StringUtil;
 
 @Entity
 @Table(name = "job")
@@ -89,7 +101,7 @@ public class Job extends AbstractAuditingEntity implements Serializable{
 	private String frequency;
 	
     @OneToMany(mappedBy ="job", cascade = CascadeType.ALL)
-	private JobChecklist checklist;
+	private List<JobChecklist> checklistItems;
 
 	public Long getId() {
 		return id;
@@ -290,11 +302,13 @@ public class Job extends AbstractAuditingEntity implements Serializable{
 	public void setFrequency(String frequency) {
 		this.frequency = frequency;
 	}
-	public JobChecklist getChecklist() {
-		return checklist;
+	public List<JobChecklist> getChecklistItems() {
+		return checklistItems;
 	}
-	public void setChecklist(JobChecklist checklist) {
-		this.checklist = checklist;
+	public void setChecklistItems(List<JobChecklist> checklistItems) {
+		this.checklistItems = checklistItems;
 	}
+	
+	
 
 }
