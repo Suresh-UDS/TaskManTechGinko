@@ -1,10 +1,11 @@
 package com.ts.app.web.rest.dto;
 
+import java.util.Date;
+import java.util.List;
+
 import com.ts.app.domain.JobStatus;
 import com.ts.app.domain.JobType;
 import com.ts.app.domain.util.StringUtil;
-
-import java.util.Date;
 
 public class JobDTO extends BaseDTO {
 
@@ -57,7 +58,7 @@ public class JobDTO extends BaseDTO {
 
 	private String frequency;
 	
-	private JobChecklistDTO jobChecklistItems;
+	private List<JobChecklistDTO> checklistItems;
 
 	public String getTitle() {
 		return title;
@@ -298,12 +299,14 @@ public class JobDTO extends BaseDTO {
 	public void setFrequency(String frequency) {
 		this.frequency = frequency;
 	}
-	public JobChecklistDTO getJobChecklistItems() {
-		return jobChecklistItems;
+	public List<JobChecklistDTO> getChecklistItems() {
+		return checklistItems;
 	}
-	public void setJobChecklistItems(JobChecklistDTO jobChecklistItems) {
-		this.jobChecklistItems = jobChecklistItems;
+	public void setChecklistItems(List<JobChecklistDTO> checklistItems) {
+		this.checklistItems = checklistItems;
 	}
+
+	
 	
 	
 	
