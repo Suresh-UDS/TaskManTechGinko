@@ -22,9 +22,9 @@ module.exports = {
 			secureConnection: true,
 			port: 465
 		},
-		username :'nodejs133@gmail.com',
-		password :'nodejs@123',
-		from:'Test App'
+		username :'karthickkumararajak@gmail.com',
+		password :'0838010059',
+		from:'Team UDS'
 	},
 
 	pushService : {
