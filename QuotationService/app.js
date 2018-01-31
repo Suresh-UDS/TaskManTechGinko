@@ -16,6 +16,8 @@ var RateCardType = mongoose.model('RateCardType');
 var fs = require('fs');
 var path = require('path');
 
+var cors = require('cors');
+
 
 function startup(){
 
@@ -49,17 +51,19 @@ function startup(){
     app.use(app.router);
   });
 
-  // app.use(function(req, res, next){
-  //     res.setHeader('Access-Control-Allow-Origin', 'http://localhost:8088');
-  //
-  //     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
-  //
-  //     res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
-  //
-  //     res.setHeader('Access-Control-Allow-Credentials', true);
-  //
-  //     next();
-  // });
+  app.use(function(req, res, next){
+      res.setHeader('Access-Control-Allow-Origin', 'http://localhost:8088');
+  
+      res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
+  
+      res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
+  
+      res.setHeader('Access-Control-Allow-Credentials', true);
+  
+      next();
+  });
+
+  app.use(cors({origin:'http://localhost:8088'}));
 
   // Define routes
   app.get('/', controllers.ping);
@@ -72,8 +76,10 @@ function startup(){
   app.post('/api/rateCard/create', quotationController.createRateCard);
   app.get('/api/quotation', quotationController.getQuotations);
   app.get('/api/rateCard', quotationController.getRateCards);
-
+  app.get('/api/pdf/create',quotationController.createPDF);
   app.get('/api/rateCardTypes',quotationController.getRateCardTypes);
+
+  // app.get('/api/rateCard/get',quotationController.getRateCardsPageWise);
   listen(server);
 }
 

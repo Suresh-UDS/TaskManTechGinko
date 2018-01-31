@@ -1,6 +1,5 @@
-var logger = require('../utils/logger');
-var mailer = require('../../config/mailer');
-var config = require('../../config/'+ process.argv[2] + '.properties');
+var mailer = require('./config/mailer');
+var config = require('./config/'+ process.argv[2] + '.properties');
 var uuid = require('node-uuid');
 var handlebars = require('handlebars');
 var path = require('path');
@@ -33,8 +32,8 @@ function getContent(template,data){
 }
 
 function sendMail(from,to,subject,template,data){
-    logger.info("sending mail - template - "+template);
-    data.logo = config.app.logoPath;
+    // logger.info("sending mail - template - "+template);
+    data.logo = './config/logo.png';
         mailer.sendMail({
             from: from,
             to: to,

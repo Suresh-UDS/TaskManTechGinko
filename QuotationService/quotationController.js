@@ -4,7 +4,8 @@ var Quotation = mongoose.model('Quotation');
 var RateCard = mongoose.model('RateCard');
 var RateCardType = mongoose.model('RateCardType');
 var mailerService = require('./mailerService');
-
+var PDFDocument = require('pdfkit');
+var fs = require('fs');
 
 
 // create an export function to encapsulate the controller's methods
@@ -20,6 +21,7 @@ module.exports = {
         console.log("Create quotation function");
         var date = new Date();
         var quotation = new Quotation();
+        console.log(req.body.rateCardDetails);
         if(req.body.title) quotation.title = req.body.title;
         if(req.body.description) quotation.description = req.body.title;
         if(req.body.rateCardDetails) quotation.rateCardDetails = req.body.rateCardDetails;
@@ -33,6 +35,8 @@ module.exports = {
         if(req.body.approvedByUserName) quotation.approvedByUserName = req.body.approvedByUserName;
         if(req.body.authorisedByUserId) quotation.authorisedByUserId = req.body.authorisedByUserId;
         if(req.body.authorisedByUserName) quotation.authorisedByUserName = req.body.authorisedByUserName;
+        if(req.body.siteName) quotation.siteName = req.body.siteName;
+        if(req.body.clientEmailId) quotation.clientEmailId = req.body.clientEmailId;
         quotation.isDrafted = true;
         quotation.isSubmitted = false;
         quotation.isApproved = false;
@@ -41,10 +45,11 @@ module.exports = {
 
         quotation.save(function(err,quotation){
             if(!err){
-                mailerService.submitQuotation();
+                mailerService.submitQuotation('karthickk@techginko.com',quotation);
                 res.json(200,quotation)
             }else{
                 console.log("Error in saving quotation");
+                console.log(err)
                 res.json(500,err);
             }
         })
@@ -100,6 +105,28 @@ module.exports = {
                 res.send(200,err)
             }else{
                 res.send(200,rateCardTypes);
+            }
+        })
+    },
+
+    createPDF: function(req,res,next){
+        var doc=new PDFDocument;
+        doc.pipe= fs.createWriteStream('./templates/output.pdf');
+        doc.font('fonts/PalatinoBold.ttf')
+            .fontSize(25)
+            .text(req.body,100,100)
+
+        doc.end();
+        res.send(200);
+    },
+
+    getQuotationsPagewise: function(req,res,next){
+        RateCard.find().skip(req.body.noi*(req.body.pageNumber-1)).limit(req.body.noi).exec(function(err,rateCards){
+            console.log("rate cards");
+            if(err){
+                res.send(200,err);
+            }else{
+                res.send(200,rateCards);
             }
         })
     },
