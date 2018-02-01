@@ -50,7 +50,7 @@ export class QuotationPage {
 
   quotationView()
   {
-    this.navCtrl.push(QuotationPage)
+    this.navCtrl.setRoot(QuotationPage)
 
   }
 

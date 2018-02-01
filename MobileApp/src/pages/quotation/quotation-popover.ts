@@ -15,6 +15,8 @@ export class QuotationPopoverPage {
   selectedType:any;
   selectedUOM:any;
   addrates:any;
+  errorMsg:any;
+  field:any;
   constructor(public navCtrl: NavController,public popoverCtrl: PopoverController, public authService:authService,public viewCtrl: ViewController) {
     this.addrates={type:'',name:'',no:1,cost:0,uom:'',total:0}
   }
@@ -35,10 +37,30 @@ export class QuotationPopoverPage {
   }
   addRates()
   {
-    this.addrates={type:this.type,name:this.name,no:1,cost:this.cost,uom:this.selectedUOM,total:this.cost};
-    console.log(this.addrates);
-    // this.navCtrl.push(CreateQuotationPage2,{rates:this.addrates})
+
+    if(this.name && this.cost)
+    {
+      this.addrates={type:this.type,name:this.name,no:1,cost:this.cost,uom:this.selectedUOM,total:this.cost};
+      console.log(this.addrates);
+      // this.navCtrl.push(CreateQuotationPage2,{rates:this.addrates})
       this.viewCtrl.dismiss(this.addrates);
+    }
+    else
+    {
+      if(!this.name)
+      {
+        this.errorMsg="Name Required";
+        this.field="name";
+      }
+      else if(!this.cost)
+      {
+        this.errorMsg="Cost Required";
+        this.field="cost";
+      }
+
+    }
+
+
   }
 
 }

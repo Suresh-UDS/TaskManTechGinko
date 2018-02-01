@@ -17,6 +17,7 @@
                             <div class="form-group label-floating">
                                 <label class="control-label">Title</label>
                                 <input type="text" class="form-control" [(ngModel)]="title" >
+                                <span *ngIf="field==='title' && errorMsg" class="error">{{errorMsg}}</span>
                             </div>
                         </ion-col>
 
@@ -24,6 +25,7 @@
                             <div class="form-group label-floating">
                                 <label class="control-label">Description</label>
                                 <input type="text" class="form-control" [(ngModel)]="description" >
+                                <span *ngIf="field==='description' && errorMsg" class="error">{{errorMsg}}</span>
                             </div>
                         </ion-col>
 
@@ -33,6 +35,7 @@
                                 <ion-select [(ngModel)]="siteName" class="select-box">
                                     <ion-option *ngFor="let site of sites" [value]="site.name" (ionSelect)="getEmployee(site.id)">{{site.name}}</ion-option>
                                 </ion-select>
+                                <span *ngIf="field==='siteName' && errorMsg" class="error">{{errorMsg}}</span>
                             </div>
                         </ion-col>
 
@@ -42,6 +45,7 @@
                                 <ion-select [(ngModel)]="employ" [disabled]="empSelect" class="select-box">
                                     <ion-option *ngFor="let emp of employee" [value]="emp.id" >{{emp.fullName}}</ion-option>
                                 </ion-select>
+                                <span *ngIf="field==='employ' && errorMsg" class="error">{{errorMsg}}</span>
                             </div>
                         </ion-col>
 
@@ -49,24 +53,28 @@
                             <div class="form-group label-floating">
                                 <label class="control-label">Start Date</label>
                                 <ion-datetime displayFormat="MM/DD/YYYY" class="form-control" [(ngModel)]="startDate"></ion-datetime>
+                                <span *ngIf="field==='startDate' && errorMsg" class="error">{{errorMsg}}</span>
                             </div>
                         </ion-col>
                         <ion-col col-12>
                             <div class="form-group label-floating">
                                 <label class="control-label">Start Time</label>
                                 <ion-datetime displayFormat="hh:mm a" class="form-control" [(ngModel)]="startTime"></ion-datetime>
+                                <span *ngIf="field==='startTime' && errorMsg" class="error">{{errorMsg}}</span>
                             </div>
                         </ion-col>
                         <ion-col col-12>
                             <div class="form-group label-floating">
                                 <label class="control-label">End Date</label>
                                 <ion-datetime displayFormat="MM/DD/YYYY" class="form-control" [(ngModel)]="endDate"></ion-datetime>
+                                <span *ngIf="field==='endDate' && errorMsg" class="error">{{errorMsg}}</span>
                             </div>
                         </ion-col>
                         <ion-col col-12>
                             <div class="form-group label-floating">
                                 <label class="control-label">End Time</label>
                                 <ion-datetime displayFormat="hh:mm a" class="form-control" [(ngModel)]="endTime"></ion-datetime>
+                                <span *ngIf="field==='endTime' && errorMsg" class="error">{{errorMsg}}</span>
                             </div>
                         </ion-col>
 

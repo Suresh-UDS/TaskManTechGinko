@@ -1,3 +1,16 @@
+
+@font-face {
+    font-family: robotoThin !important;
+    src: url(../assets/font/Roboto-Thin.ttf);
+}
+@font-face {
+    font-family: robotoBold !important;
+    src: url(../assets/font/Roboto-Bold.ttf);
+}
+*
+{
+    font-family: robotoThin;
+}
 .sidebar {
   height: 100% !important;
   width: 100% !important;
@@ -289,9 +302,13 @@ table tr
 {
   padding: 10px;
 }
-.emp .item-md .item-block .item-inner,.emp .list-md .item-block .item-inner
+.emp-list .item-block .item-inner
 {
-  border-bottom: 0 !important;
+    border-bottom: 0 !important;
+}
+.emp .item-inner
+{
+    border-bottom: 0 !important;
 }
 .emp-round
 {
@@ -411,5 +428,48 @@ table tr
   width: 85px;
   overflow: hidden;
   display: inline-block;
-  border-top: 0;
+  border-top: 0 !important;
+  white-space: initial !important;
+}
+.width95
+{
+  width: 95% !important;
+}
+.error
+{
+  color:red;
+}
+.fnt-wt
+{
+  font-weight: normal !important;
+}
+.bottom-border
+{
+  border-bottom: 1px solid #eeeeee !important;
+}
+.login-bg-img
+{
+  background: url('img/login.jpeg');
+  padding-top: 25%;
+}
+.width90
+{
+  width: 90%;
+}
+.padding-top25
+{
+  padding-top: 25px !important;
+}
+.clr-blk
+{
+  color: #000000;
+}
+.bottom-div
+{
+  position:absolute;
+  bottom:0;
+}
+.clr-white
+{
+  color: #FFFFFF;
 }

@@ -24,6 +24,8 @@ export class LoginPage {
 
   username:any;
   password:any;
+  msg:any;
+  now:any;
 
   constructor(public navCtrl: NavController,public component:componentService,public menuCtrl:MenuController, public toastCtrl:ToastController,public navParams: NavParams,public myService:authService) {
 
@@ -32,6 +34,7 @@ export class LoginPage {
   ionViewDidLoad() {
     console.log('ionViewDidLoad LoginPage');
     this.menuCtrl.swipeEnable(false);
+    this.now = new Date().getTime();
   }
 
   signin()
@@ -55,7 +58,7 @@ export class LoginPage {
           this.component.closeLoader();
         }
 
-        else {
+      /*  else {
             this.component.closeLoader();
           console.log(response);
           let toast = this.toastCtrl.create({
@@ -72,7 +75,7 @@ export class LoginPage {
 
           toast.present();
 
-        }
+        }*/
 
     /*if(employee.userUserGroupName == "Admin"){
         console.log("Admin user ");
@@ -91,20 +94,29 @@ export class LoginPage {
       error=>{
         this.component.closeLoader();
         console.log(error);
+        if(error.type==2)
+        {
+            this.msg='Invalid UserName and Password'
+        }
+        if(error.type==3)
+        {
+          this.msg='Server Unreachable'
+        }
+
         let toast = this.toastCtrl.create({
-          message:'Login Failure',
+          message:this.msg,
           showCloseButton: true,
           closeButtonText: "Ok",
           position: 'bottom',
           cssClass: ""
         });
 
+        toast.present();
+
         toast.onDidDismiss(() => {
           console.log('Dismissed toast');
         });
-
-        toast.present();
-      }
+        }
       );
 
   }

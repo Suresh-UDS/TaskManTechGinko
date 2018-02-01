@@ -11,24 +11,30 @@
     </button>
     <ion-title>Employee Detail</ion-title>
   </ion-navbar>
+
+
+  <ion-toolbar transparent>
+    <ion-segment [(ngModel)]="categories" class="segmnt margin-auto margin-top5" color="clr-blue">
+      <ion-segment-button value="detail">
+        Detail
+      </ion-segment-button>
+      <ion-segment-button value="jobs" (click)="getJobs(false)">
+        Jobs
+      </ion-segment-button>
+      <ion-segment-button value="quotation">
+        Quotation
+      </ion-segment-button>
+      <ion-segment-button value="attendance" (click)="getAttendance(false)">
+        Attendance
+      </ion-segment-button>
+    </ion-segment>
+  </ion-toolbar>
+
+
 </ion-header>
 
 <ion-content>
-  <ion-segment [(ngModel)]="categories" class="segmnt margin-auto margin-top5" color="clr-blue">
-    <ion-segment-button value="detail">
-      Detail
-    </ion-segment-button>
-    <ion-segment-button value="jobs" (click)="getJobs(false)">
-      Jobs
-    </ion-segment-button>
-    <ion-segment-button value="quotation">
-      Quotation
-    </ion-segment-button>
-    <ion-segment-button value="attendance" (click)="getAttendance(false)">
-      Attendance
-    </ion-segment-button>
 
-  </ion-segment>
 
 
   <div [ngSwitch]="categories">

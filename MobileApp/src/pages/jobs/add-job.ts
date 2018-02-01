@@ -32,6 +32,8 @@ export class CreateJobPage {
     empSelect:any;
     employee:any;
     employ:any;
+    errorMsg:any;
+    field:any;
     constructor(public navCtrl: NavController,public component:componentService,public navParams:NavParams,public myService:authService, public authService: authService, private loadingCtrl:LoadingController) {
         this.jobDetails=this.navParams.get('job');
 
@@ -58,44 +60,91 @@ export class CreateJobPage {
     }
     addJob()
     {
-        this.siteId=window.localStorage.getItem('site')
-        console.log( this.siteId);
-        var sDate = moment(this.startDate).format("MM/DD/YYYY");
-        var sTime = moment(this.startTime).format("hh:mm A");
+        if(this.title && this.description && this.siteName && this.employ && this.startDate && this.startTime && this.endDate && this.endTime)
+        {
+            this.siteId=window.localStorage.getItem('site')
+            console.log( this.siteId);
+            var sDate = moment(this.startDate).format("MM/DD/YYYY");
+            var sTime = moment(this.startTime).format("hh:mm A");
 
-        var startDateTimeMoment = moment(sDate+' '+sTime,"MM/DD/YYYY hh:mm A");
-        var eDate = moment(this.endDate).format("MM/DD/YYYY");
-        var eTime = moment(this.endTime).format("hh:mm A");
-        var endDateTimeMoment = moment(eDate+' '+eTime,"MM/DD/YYYY hh:mm A");
-        this.plannedStartTime = startDateTimeMoment.toDate();
-        this.plannedStartTime = this.plannedStartTime.toISOString();
-        this.plannedEndTime = endDateTimeMoment.toDate().toISOString();
-        this.plannedHours = 2;
-        this.userId=localStorage.getItem('employeeUserId')
-        this.newJob={
-            "title":this.title,
-            "description":this.description,
-            "plannedStartTime":this.plannedStartTime,
-            "plannedEndTime":this.plannedEndTime,
-            "plannedHours":this.plannedHours,
-            "jobStatus":"ASSIGNED",
-            "comments":"test",
-            "siteId":this.siteId,
-            "employeeId":this.employ,
-            "userId":this.userId,
-            "locationId":1
-        }
-
-
-        this.myService.createJob(this.newJob).subscribe(
-            response=> {
-            console.log(response);
-            this.navCtrl.setRoot(JobsPage);
-            },
-            error=>{
-                console.log(error);
+            var startDateTimeMoment = moment(sDate+' '+sTime,"MM/DD/YYYY hh:mm A");
+            var eDate = moment(this.endDate).format("MM/DD/YYYY");
+            var eTime = moment(this.endTime).format("hh:mm A");
+            var endDateTimeMoment = moment(eDate+' '+eTime,"MM/DD/YYYY hh:mm A");
+            this.plannedStartTime = startDateTimeMoment.toDate();
+            this.plannedStartTime = this.plannedStartTime.toISOString();
+            this.plannedEndTime = endDateTimeMoment.toDate().toISOString();
+            this.plannedHours = 2;
+            this.userId=localStorage.getItem('employeeUserId')
+            this.newJob={
+                "title":this.title,
+                "description":this.description,
+                "plannedStartTime":this.plannedStartTime,
+                "plannedEndTime":this.plannedEndTime,
+                "plannedHours":this.plannedHours,
+                "jobStatus":"ASSIGNED",
+                "comments":"test",
+                "siteId":this.siteId,
+                "employeeId":this.employ,
+                "userId":this.userId,
+                "locationId":1
             }
-            )
+
+
+            this.myService.createJob(this.newJob).subscribe(
+                response=> {
+                console.log(response);
+                this.navCtrl.setRoot(JobsPage);
+                },
+                error=>{
+                    console.log(error);
+                }
+                )
+        }
+        else
+        {
+            if(!this.title)
+            {
+                this.errorMsg="Title Required";
+                this.field="title";
+            }
+            else if(!this.description)
+            {
+                this.errorMsg="Description Required";
+                this.field="description";
+            }
+            else if(!this.siteName)
+            {
+                this.errorMsg="Site Name Required";
+                this.field="siteName";
+            }
+            else if(!this.employ)
+            {
+                this.errorMsg="Employ Required";
+                this.field="employ";
+            }
+            else if(!this.startDate)
+            {
+                this.errorMsg="StartDate Required";
+                this.field="startDate";
+            }
+            else if(!this.startTime)
+            {
+                this.errorMsg="StartTime Required";
+                this.field="startTime";
+            }
+            else if(!this.endDate)
+            {
+                this.errorMsg="EndDate Required";
+                this.field="endDate";
+            }
+            else if(!this.endTime)
+            {
+                this.errorMsg="EndTime Required";
+                this.field="endTime";
+            }
+
+        }
     }
 
     getEmployee(id)

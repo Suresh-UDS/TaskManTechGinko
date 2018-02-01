@@ -54,6 +54,9 @@ import {SubmittedQuotationPage} from "../pages/quotation/submittedQuotations";
 import {ArchivedQuotationPage} from "../pages/quotation/archivedQuotations";
 import {ViewQuotationPage} from "../pages/quotation/viewQuotation";
 
+import {CreateEmployeePage} from "../pages/employee-list/create-employee";
+
+
 @NgModule({
   declarations: [
     MyApp,
@@ -96,7 +99,8 @@ import {ViewQuotationPage} from "../pages/quotation/viewQuotation";
 
       IonSimpleWizardStep,
       IonSimpleWizard,
-    CreateQuotationPage3
+    CreateQuotationPage3,
+    CreateEmployeePage
   ],
   imports: [
     BrowserModule,
@@ -146,7 +150,8 @@ import {ViewQuotationPage} from "../pages/quotation/viewQuotation";
       CompleteJobPage,
       IonSimpleWizardStep,
       IonSimpleWizard,
-    CreateQuotationPage3
+    CreateQuotationPage3,
+    CreateEmployeePage
   ],
   providers: [
     StatusBar,

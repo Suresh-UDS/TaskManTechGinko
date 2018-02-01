@@ -7,6 +7,7 @@ import {Geolocation} from "@ionic-native/geolocation";
 import {Geofence} from "@ionic-native/geofence";
 import {componentService} from "../service/componentService";
 import {EmployeeDetailPage} from "./employee-detail";
+import {CreateEmployeePage} from "./create-employee";
 
 /**
  * Generated class for the EmployeeList page.
@@ -55,7 +56,10 @@ export class EmployeeListPage {
     {
         this.firstLetter=emp.charAt(0);
     }
-
+    createEmployee($event)
+    {
+        this.navCtrl.push(CreateEmployeePage)
+    }
 
 
 }

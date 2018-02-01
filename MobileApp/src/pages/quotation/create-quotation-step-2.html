@@ -39,7 +39,7 @@
                 <tbody>
                 <tr *ngFor="let rate of rates;let i = index ">
                     <td class="text-center">{{rate.type}}</td>
-                    <td class="text-center table-data padding-left0 padding-right0">{{rate.name}}</td>
+                    <td class="text-center table-data">{{rate.name}}</td>
                     <td class="text-center">{{rate.cost}}</td>
                     <td class="text-center">
                         <input type="number" class="form-control align-center width15" [(ngModel)]="rate.no" (change)="addTotal(i,rate.no,rate.cost)">
