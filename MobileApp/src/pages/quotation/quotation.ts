@@ -3,6 +3,10 @@ import {NavController, PopoverController} from 'ionic-angular';
 import {QuotationPopoverPage} from "./quotation-popover";
 import {CreateQuotationPage} from "./create-quotation";
 import {authService} from "../service/authService";
+import {ApprovedQuotationPage} from "./approvedQuotations";
+import {ArchivedQuotationPage} from "./archivedQuotations";
+import {DraftedQuotationPage} from "./draftedQuotations";
+import {SubmittedQuotationPage} from "./submittedQuotations";
 
 @Component({
   selector: 'page-quotation',
@@ -19,12 +23,21 @@ export class QuotationPage {
     submittedQuotationsCount:any;
     draftedQuotationsCount:any;
     archivedQuotationsCount:any;
+    approvedQuotationpage:ApprovedQuotationPage;
+    archivedQuotationPage:ArchivedQuotationPage;
+    draftedQuotationsPage:DraftedQuotationPage;
+    submittedQuotationsPage:SubmittedQuotationPage;
+
   constructor(public navCtrl: NavController,public popoverCtrl: PopoverController, private authService: authService) {
       this.draftedQuotationsCount= 0;
       this.approvedQuotationsCount=0;
       this.submittedQuotationsCount=0;
       this.archivedQuotationsCount=0;
       this.getQuotations();
+      this.draftedQuotations=[];
+      this.approvedQuotations=[];
+      this.submittedQuotations=[];
+      this.archivedQuotations=[];
   }
 
 
@@ -41,6 +54,21 @@ export class QuotationPage {
 
   }
 
+  gotoApprovedQuotation(){
+      this.navCtrl.push(ApprovedQuotationPage,{'quotations':this.approvedQuotations});
+  }
+
+  gotoArchivedQuotation(){
+       this.navCtrl.push(ArchivedQuotationPage,{'quotations':this.archivedQuotations});
+  }
+
+  gotoSubmittedQuotation(){
+      this.navCtrl.push(SubmittedQuotationPage,{'quotations':this.submittedQuotations});
+  }
+  gotoDraftedQuotation(){
+      this.navCtrl.push(DraftedQuotationPage,{'quotations':this.draftedQuotations});
+  }
+
   getQuotations(){
       this.authService.getQuotations().subscribe(
           response=>{
@@ -54,20 +82,21 @@ export class QuotationPage {
                       console.log("drafted");
                       console.log(this.quotations[i].isDrafted)
                       this.draftedQuotationsCount++;
+                      this.draftedQuotations.push(this.quotations[i]);
                   }else if(this.quotations[i].isArchived == true){
                       console.log("archived");
                       console.log(this.quotations[i].isArchived)
-
+                      this.archivedQuotations.push(this.quotations[i]);
                       this.archivedQuotationsCount++;
                   }else if(this.quotations[i].isApproved == true){
                       console.log("approved");
                       console.log(this.quotations[i].isApproved)
-
+                      this.approvedQuotations.push(this.quotations[i]);
                       this.approvedQuotationsCount++;
                   }else if(this.quotations[i].isSubmitted == true){
                       console.log("submitted");
                       console.log(this.quotations[i].isSubmitted)
-
+                      this.submittedQuotations.push(this.quotations[i]);
                       this.submittedQuotationsCount++;
                   }else{
                       console.log("all false");
@@ -77,7 +106,6 @@ export class QuotationPage {
           }
       )
   }
-
 
 
   createQuotation(){

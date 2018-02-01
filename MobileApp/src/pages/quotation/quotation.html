@@ -9,7 +9,7 @@
 
 <ion-content>
   <ion-fab top right edge>
-    <button (click)="createQuotation()"  ion-fab><ion-icon name="add"></ion-icon></button>
+    <button mini (click)="createQuotation()"  ion-fab><ion-icon name="add"></ion-icon></button>
   </ion-fab>
           <div class="row padding0 margin0 white-bg">
             <ion-col col-12 class="padding-top0">
@@ -18,7 +18,7 @@
 
                 <table class="table fnt-18">
                   <tbody>
-                  <tr (click)="quotationView()">
+                  <tr (click)="gotoDraftedQuotation()">
                     <td>Drafted</td>
                     <td class="text-right">
                       <span class="clr-orange padding-right2">(</span>{{draftedQuotationsCount}}<span class="clr-orange padding-left2">)</span>
@@ -27,7 +27,7 @@
                       <ion-icon class="primary-clr padding-left5 fnt-12" name="arrow-forward"></ion-icon>
                     </td>
                   </tr>
-                  <tr (click)="quotationView()">
+                  <tr (click)="gotoSubmittedQuotation()">
                     <td>Submitted</td>
                     <td class="text-right">
                       <span class="clr-orange padding-right2">(</span>{{submittedQuotationsCount}}<span class="clr-orange padding-left2">)</span>
@@ -36,7 +36,7 @@
                       <ion-icon class="primary-clr padding-left5 fnt-12" name="arrow-forward"></ion-icon>
                     </td>
                   </tr>
-                  <tr (click)="quotationView()">
+                  <tr (click)="gotoApprovedQuotation()">
                     <td>Approved</td>
                     <td class="text-right">
                       <span class="clr-orange padding-right2">(</span>{{approvedQuotationsCount}}<span class="clr-orange padding-left2">)</span>
@@ -45,7 +45,7 @@
                       <ion-icon class="primary-clr padding-left5 fnt-12" name="arrow-forward"></ion-icon>
                     </td>
                   </tr>
-                  <tr (click)="quotationView()">
+                  <tr (click)="gotoArchivedQuotation()">
                     <td>Archieved</td>
                     <td class="text-right">
                       <span class="clr-orange padding-right2">(</span>{{archivedQuotationsCount}}<span class="clr-orange padding-left2">)</span>

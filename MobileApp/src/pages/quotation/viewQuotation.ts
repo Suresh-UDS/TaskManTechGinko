@@ -3,24 +3,20 @@ import {NavController, NavParams, PopoverController} from 'ionic-angular';
 import {QuotationPopoverPage} from "./quotation-popover";
 import {CreateQuotationPage} from "./create-quotation";
 import {authService} from "../service/authService";
-import {ViewQuotationPage} from "./viewQuotation";
 
 @Component({
-    selector: 'page-approved-quotation',
-    templateUrl: 'approvedQuotations.html'
+    selector: 'page-view-quotation',
+    templateUrl: 'viewQuotation.html'
 })
-export class ApprovedQuotationPage {
+export class ViewQuotationPage {
 
-    quotations:any;
+    quotation:any;
 
     constructor(public navCtrl: NavController,public popoverCtrl: PopoverController, private authService: authService, private navParams: NavParams) {
-        this.quotations = this.navParams.get('quotations');
-        console.log(this.quotations);
+        this.quotation = this.navParams.get('quotationDetails');
+        console.log(this.quotation);
     }
 
-    viewQuotation(quotation){
-        this.navCtrl.push(ViewQuotationPage,{quotationDetails:quotation})
-    }
 
 
 

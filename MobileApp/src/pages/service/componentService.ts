@@ -30,4 +30,19 @@ export class componentService
     closeLoader(){
         this.loader.dismiss();
     }
+
+    closeAll(){
+        this.loader.dismissAll();
+    }
+
+    showToastMessage(msg){
+        let toast = this.toastCtrl.create({
+            message:msg,
+            duration:3000,
+            position:'bottom'
+        });
+
+        toast.present();
+
+    }
 }
