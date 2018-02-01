@@ -27,13 +27,15 @@
                                 <div class="form-group label-floating">
                                     <label class="control-label">Title</label>
                                     <input type="text" class="form-control" [(ngModel)]="rateCardDetails.title" >
+                                    <span *ngIf="field==='title' && errorMsg" class="error">{{errorMsg}}</span>
                                 </div>
                             </ion-col>
 
                             <ion-col col-12>
                                 <div class="form-group label-floating">
                                     <label class="control-label">Cost</label>
-                                    <input type="text" class="form-control" [(ngModel)]="rateCardDetails.cost" >
+                                    <input type="number" class="form-control" [(ngModel)]="rateCardDetails.cost" >
+                                    <span *ngIf="field==='cost' && errorMsg" class="error">{{errorMsg}}</span>
                                 </div>
                             </ion-col>
 

@@ -13,6 +13,7 @@
                 <div class="form-group label-floating">
                     <label class="control-label">Name</label>
                     <input type="text" class="form-control" [(ngModel)]="name">
+                    <span *ngIf="field==='name' && errorMsg" class="error">{{errorMsg}}</span>
                 </div>
             </ion-col>
 
@@ -20,6 +21,7 @@
                 <div class="form-group label-floating">
                     <label class="control-label">Cost</label>
                     <input type="number" class="form-control" [(ngModel)]="cost">
+                    <span *ngIf="field==='cost' && errorMsg" class="error">{{errorMsg}}</span>
                 </div>
             </ion-col>
 

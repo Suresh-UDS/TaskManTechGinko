@@ -18,7 +18,8 @@ export class CreateRateCardPage {
     };
 
     uom:any;
-
+    errorMsg:any;
+    field:any;
     constructor(public navCtrl: NavController,public navParams:NavParams, public authService: authService, private loadingCtrl:LoadingController) {
         this.rateCardDetails={
             type:'',
@@ -41,9 +42,26 @@ export class CreateRateCardPage {
     }
 
     createRateCard(rateCard){
-        this.authService.createRateCard(rateCard).subscribe(response=>{
-            console.log(response);
-        })
+
+        if(this.rateCardDetails.title && this.rateCardDetails.cost)
+        {
+            this.authService.createRateCard(rateCard).subscribe(response => {
+                console.log(response);
+            })
+        }
+        else
+        {
+            if(!this.rateCardDetails.title)
+            {
+                this.errorMsg="Title Required";
+                this.field="title";
+            }
+            else if(!this.rateCardDetails.cost)
+            {
+                this.errorMsg="Cost Required";
+                this.field="cost";
+            }
+        }
     }
 
     rateCardUOM(rateCardType){

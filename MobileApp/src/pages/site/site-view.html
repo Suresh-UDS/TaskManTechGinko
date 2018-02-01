@@ -87,12 +87,11 @@
             </ion-col>
           </ion-row>
     </ion-list>
-    <ion-list *ngSwitchCase="'jobs'">
+    <ion-list *ngSwitchCase="'jobs'" class="align-center">
       <ion-refresher (ionRefresh)="doRefresh($event,job)">
         <ion-refresher-content></ion-refresher-content>
       </ion-refresher>
-      <ion-col col-10 class="margin-auto">
-        <div class="card" *ngFor="let job of jobs" [ngClass]="{'red-card' : (job.status == 'OVERDUE'),
+        <div class="card width95" *ngFor="let job of jobs" [ngClass]="{'red-card' : (job.status == 'OVERDUE'),
                                                             'green-card' : (job.status == 'COMPLETED'),
                                                             'blue-card' :(job.status =='OPEN' || job.status == 'ASSIGNED' || job.status == 'INPROGRESS')}">
           <div class="card-content padding-bottom0" >
@@ -129,7 +128,6 @@
             </div>
           </div>
         </div>
-      </ion-col>
     </ion-list>
     <ion-list *ngSwitchCase="'quotation'">
       <ion-refresher (ionRefresh)="doRefresh($event,attendance)">

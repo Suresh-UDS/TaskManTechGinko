@@ -40,6 +40,8 @@ export class CreateQuotationPage {
     selectedSite:any;
 
     showRateInformation:any;
+    errorMsg:any;
+
 
     constructor(public navCtrl: NavController,public popoverCtrl: PopoverController, public evts: Events, public authService:authService, public alertCtrl: AlertController) {
 
@@ -64,8 +66,16 @@ export class CreateQuotationPage {
         console.log(window.localStorage.getItem('employeeId'));
         console.log(window.localStorage.getItem('employeeFullName'));
 
-    }
 
+
+    }
+    setFormValidation(id) {
+        id.validate({
+            errorPlacement: function(error, element) {
+                element.closest('div').addClass('has-error');
+            }
+        });
+    }
     ionViewWillEnter(){
         this.authService.searchSite().subscribe(response=>{
             console.log(response.json());
@@ -73,6 +83,11 @@ export class CreateQuotationPage {
         })
 
         this.getRateCardTypes();
+    }
+
+    ionViewDidEnter(){
+        console.log(document.getElementById('LoginValidation'));
+        this.setFormValidation(document.getElementById('LoginValidation'));
     }
 
     getSiteEmployees(siteId){
@@ -83,12 +98,22 @@ export class CreateQuotationPage {
     }
 
     saveQuotation(title,description){
-        var quotation = {
-            "title":this.title,
-            "description":this.description
-        }
-        console.log(quotation)
+
+        if(title)
+        {
+            var quotation = {
+                "title":this.title,
+                "description":this.description
+            }
+            console.log(quotation)
             this.navCtrl.push(CreateQuotationPage2,{quotationDetails:quotation});
+        }
+        else
+        {
+            this.errorMsg="Title Required";
+        }
+
+
     }
 
     getRateCardTypes(){

@@ -9,33 +9,38 @@
 
 <ion-content padding>
             <div class="row">
-                <div class="col-md-8">
+                <div class="col-md-10">
+                    <form id="LoginValidation">
                     <div class="card">
                         <div class="card-content">
-                            <ion-row>
-                                <ion-col col-12>
-                                    <div class="form-group label-floating">
-                                        <label class="control-label">Title</label>
-                                        <input type="text" class="form-control" [(ngModel)]="title" >
-                                    </div>
-                                </ion-col>
+                            <ion-row padding>
+                                    <ion-col col-12>
+                                        <div class="form-group label-floating">
+                                            <label class="control-label">Title</label>
+                                            <input type="text" class="form-control" [(ngModel)]="title" name="title" required="true">
+                                            <span *ngIf="errorMsg" class="error">{{errorMsg}}</span>
+                                        </div>
 
-                                <ion-col col-12>
-                                    <div class="form-group label-floating">
-                                        <label class="control-label">Description</label>
-                                        <input type="text" class="form-control" [(ngModel)]="description" >
-                                    </div>
-                                </ion-col>
+                                    </ion-col>
+
+                                    <ion-col col-12>
+                                        <div class="form-group label-floating">
+                                            <label class="control-label">Description</label>
+                                            <input type="text" class="form-control" [(ngModel)]="description" name="description" required="true">
+                                        </div>
+                                    </ion-col>
+
                             </ion-row>
                         </div>
                     </div>
+                    </form>
                 </div>
             </div>
 </ion-content>
 
 <ion-footer>
-    <ion-toolbar class="align-right" >
-        <button class="btn btn-warning center pull-right" (click)="saveQuotation(title,description)">
+    <ion-toolbar class="align-center" >
+        <button class="btn btn-warning center margin-auto" type="submit" (click)="saveQuotation(title,description)">
             Next<ion-icon name="ios-arrow-forward-outline"></ion-icon>
         </button>
     </ion-toolbar>
