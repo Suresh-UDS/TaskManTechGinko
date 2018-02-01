@@ -21,6 +21,8 @@ import {CustomerDetailPage} from "../pages/customer-detail/customer-detail";
 import {EmployeeListPage} from "../pages/employee-list/employee-list";
 import {RateCardPage} from "../pages/rate-card/rate-card";
 
+import{OneSignal} from "@ionic-native/onesignal";
+
 @Component({
   templateUrl: 'app.html'
 })
@@ -31,7 +33,7 @@ export class MyApp {
 
   pages: Array<{title: string, component: any,active:any,icon:any}>;
 
-  constructor(public platform: Platform, public statusBar: StatusBar, public splashScreen: SplashScreen) {
+  constructor(public platform: Platform, public statusBar: StatusBar, public splashScreen: SplashScreen, private oneSignal: OneSignal) {
     this.initializeApp();
 
     // used for an example of ngFor and navigation
@@ -59,6 +61,18 @@ export class MyApp {
       this.splashScreen.hide();
      // this.statusBar.overlaysWebView(true);
      // this.statusBar.backgroundColorByHexString("#25312C");
+
+        this.oneSignal.startInit('647127c6-f890-4aad-b4e2-52379805f26c','1015991031299');
+        this.oneSignal.inFocusDisplaying(this.oneSignal.OSInFocusDisplayOption.InAppAlert);
+        this.oneSignal.handleNotificationReceived().subscribe(response =>{
+            console.log(response);
+        })
+
+        this.oneSignal.handleNotificationOpened().subscribe(response=>{
+            console.log(response);
+        })
+
+        this.oneSignal.endInit();
     });
   }
 
@@ -82,4 +96,6 @@ export class MyApp {
       }
     }
   }
+
+
 }

@@ -48,7 +48,14 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {CompleteJobPage} from "../pages/jobs/completeJob";
 import {CreateQuotationPage2} from "../pages/quotation/create-quotation-step-2";
 import {CreateQuotationPage3} from "../pages/quotation/create-quotation-step-3";
+import {ApprovedQuotationPage} from "../pages/quotation/approvedQuotations";
+import {DraftedQuotationPage} from "../pages/quotation/draftedQuotations";
+import {SubmittedQuotationPage} from "../pages/quotation/submittedQuotations";
+import {ArchivedQuotationPage} from "../pages/quotation/archivedQuotations";
+import {ViewQuotationPage} from "../pages/quotation/viewQuotation";
+
 import {CreateEmployeePage} from "../pages/employee-list/create-employee";
+
 
 @NgModule({
   declarations: [
@@ -72,6 +79,11 @@ import {CreateEmployeePage} from "../pages/employee-list/create-employee";
     QuotationViewPage,
     CreateQuotationPage,
       CreateQuotationPage2,
+      ApprovedQuotationPage,
+      DraftedQuotationPage,
+      SubmittedQuotationPage,
+      ArchivedQuotationPage,
+      ViewQuotationPage,
     AttendancePage,
     AttendancePopoverPage,
     EmployeeDetailPage,
@@ -120,6 +132,11 @@ import {CreateEmployeePage} from "../pages/employee-list/create-employee";
     QuotationViewPage,
     CreateQuotationPage,
       CreateQuotationPage2,
+      ApprovedQuotationPage,
+      DraftedQuotationPage,
+      SubmittedQuotationPage,
+      ArchivedQuotationPage,
+      ViewQuotationPage,
     AttendancePage,
     AttendancePopoverPage,
     EmployeeDetailPage,

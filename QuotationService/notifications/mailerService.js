@@ -1,5 +1,5 @@
-var mailer = require('./config/mailer');
-var config = require('./config/'+ process.argv[2] + '.properties');
+var mailer = require('../config/mailer');
+var config = require('../config/'+ process.argv[2] + '.properties');
 var uuid = require('node-uuid');
 var handlebars = require('handlebars');
 var path = require('path');

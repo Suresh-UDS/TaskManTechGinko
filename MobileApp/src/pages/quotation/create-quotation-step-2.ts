@@ -6,6 +6,8 @@ import {
 import {authService} from "../service/authService";
 import {QuotationPopoverPage} from "./quotation-popover";
 import {CreateQuotationPage3} from "./create-quotation-step-3";
+import {QuotationPage} from "./quotation";
+import {componentService} from "../service/componentService";
 
 @Component({
     selector: 'page-create-quotation-step2',
@@ -44,7 +46,7 @@ export class CreateQuotationPage2 {
     authorisedByUserName:any;
     grandTotal=0;
 
-    constructor(public navCtrl: NavController,public modalCtrl: ModalController,public navParams:NavParams,public popoverCtrl: PopoverController, public evts: Events, public authService:authService, public alertCtrl: AlertController) {
+    constructor(public navCtrl: NavController,public modalCtrl: ModalController,public navParams:NavParams,public popoverCtrl: PopoverController, public evts: Events, public authService:authService, public alertCtrl: AlertController, public componentService:componentService) {
 
        console.log(this.navParams.get('quotationDetails'));
        var quotationDetails = this.navParams.get('quotationDetails');
@@ -175,10 +177,46 @@ export class CreateQuotationPage2 {
             "createdByUserName":this.sentByUserName,
             "clientEmailId": this.clientEmailId,
             "siteId":this.selectedSite.id,
-            "siteName":this.selectedSite.name
-        }
+            "siteName":this.selectedSite.name,
+            "grandTotal":this.grandTotal,
+            "isDrafted":true
+        };
 
         this.authService.createQuotation(quotationDetails).subscribe(
+            response=>{
+                console.log(response);
+                this.componentService.showToastMessage('Quotation Successfully Drafted');
+                this.navCtrl.push(QuotationPage);
+
+            },err=>{
+                this.componentService.showToastMessage('Error in drafting quotation, your changes cannot be saved!');
+            }
+        )
+
+
+        // this.navCtrl.push(CreateQuotationPage3,{rate:this.rates,quotation:this.quotation,site:this.selectedSite})
+    }
+
+    sendQuotation(){
+
+        var quotationDetails = {
+            "title":this.quotation.title,
+            "description":this.quotation.description,
+            "rateCardDetails":this.rates,
+            "sentByUserId":this.sentByUserId,
+            "sentByUserName":this.sentByUserName,
+            "sentToUserId":this.sentToUserId,
+            "sentToUserName":this.sentToUserName,
+            "createdByUserId":this.sentByUserId,
+            "createdByUserName":this.sentByUserName,
+            "clientEmailId": this.clientEmailId,
+            "siteId":this.selectedSite.id,
+            "siteName":this.selectedSite.name,
+            "grandTotal":this.grandTotal,
+            "isSubmitted":true
+        };
+
+        this.authService.editQuotation(quotationDetails).subscribe(
             response=>{
                 console.log(response);
 
@@ -186,8 +224,6 @@ export class CreateQuotationPage2 {
             }
         )
 
-
-        // this.navCtrl.push(CreateQuotationPage3,{rate:this.rates,quotation:this.quotation,site:this.selectedSite})
     }
 
 }

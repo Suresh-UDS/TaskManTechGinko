@@ -279,6 +279,15 @@ export class authService
         )
     }
 
+    editQuotation(quotation): Observable<any>{
+        return this.http.post(this.Node_url+'api/quotation/edit',quotation).map(
+            response=>{
+                console.log(response.json());
+                return response.json();
+            }
+        )
+    }
+
     checkOutJob(job):Observable<any>{
         return this.http.post(this.Url+'api/employee/out',job).map(
             response=>{

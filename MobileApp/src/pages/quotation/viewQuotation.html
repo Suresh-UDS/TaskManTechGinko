@@ -1,0 +1,80 @@
+<ion-header>
+    <ion-navbar>
+        <button ion-button menuToggle>
+            <ion-icon name="menu"></ion-icon>
+        </button>
+        <ion-title> </ion-title>
+    </ion-navbar>
+</ion-header>
+
+<ion-content>
+    <ion-fab top right edge>
+        <button mini  ion-fab><ion-icon name="ios-create"></ion-icon></button>
+    </ion-fab>
+    <ion-row class="margin0 white-bg padding10">
+        <!--<ion-col col-6 class="label-on-left">Quotation Id</ion-col>-->
+        <!--<ion-col col-6>-->
+        <!--<p text-right>{{quotation.id}}</p>-->
+        <!--</ion-col>-->
+        <ion-col col-6 class="label-on-left">Title</ion-col>
+        <ion-col col-6 *ngIf="quotation.title">
+            <p text-right>{{quotation.title}}</p>
+        </ion-col>
+        <ion-col col-6 class="label-on-left">Description</ion-col>
+        <ion-col col-6 *ngIf="quotation.description">
+            <p text-right>{{quotation.description}}</p>
+        </ion-col>
+
+    </ion-row>
+    <div class="card-content white-bg">
+        <div class="table-responsive">
+            <table class="table table-scroll">
+                <thead>
+                <tr>
+                    <th class="text-center">Type</th>
+                    <th class="text-center">Name</th>
+                    <th class="text-center">Rate</th>
+                    <th class="text-center">No</th>
+                    <th class="text-center">Uom</th>
+                    <th class="text-center">Total</th>
+                    <th class="text-center">&nbsp;&nbsp;&nbsp;&nbsp;</th>
+                </tr>
+                </thead>
+                <tbody *ngIf="quotation.rateCardDetails.length>0">
+                <tr *ngFor="let rate of quotation.rateCardDetails;let i = index ">
+                    <td class="text-center">{{rate.type}}</td>
+                    <td class="text-center table-data padding-left0 padding-right0">{{rate.name}}</td>
+                    <td class="text-center">{{rate.cost}}</td>
+                    <td class="text-center">
+                        <!--<input type="number" class="form-control align-center width15" [(ngModel)]="rate.no" (change)="addTotal(i,rate.no,rate.cost)">-->
+                        {{rate.no}}
+                    </td>
+                    <td class="text-center">{{rate.uom}}</td>
+                    <td class="text-center">{{rate.total}}</td>
+                    <!--<td class="td-actions text-center">-->
+                    <!--<i class="material-icons clr-red" (click)="remove(i)">close</i>-->
+                    <!--</td>-->
+                </tr>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td class="text-center">Grand Total</td>
+                    <td class="text-center">{{quotation.grandTotal}}</td>
+                    <td></td>
+                </tr>
+                </tbody>
+                <tbody *ngIf="quotation.title.length<0">
+                <div class="card">
+                    <td>No rates added</td>
+                </div>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</ion-content>
+
+<ion-footer>
+
+</ion-footer>
