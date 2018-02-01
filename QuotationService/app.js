@@ -5,14 +5,17 @@ var app = express();
 var server = require('http').createServer(app);
 var mongoose = require('mongoose');
 var async = require('async');
-var quotation = require('./quotation')();
-var rateCard = require('./rateCard')();
-var rateCardType = require('./rateCardType')();
+var quotation = require('./schema/quotation')();
+var rateCard = require('./schema/rateCard')();
+var rateCardType = require('./schema/rateCardType')();
+var notification = require('./schema/notification')();
 var controllers = require('./controller');
 var quotationController = require('./quotationController');
+var notificationService = require('./notifications/notificationService');
 var Location = mongoose.model('Quotation');
 var RateCard = mongoose.model('RateCard');
 var RateCardType = mongoose.model('RateCardType');
+var Notification = mongoose.model('Notification');
 var fs = require('fs');
 var path = require('path');
 
@@ -73,13 +76,18 @@ function startup(){
 
 
   app.post('/api/quotation/create', quotationController.createQuotation);
+  app.post('/api/quotation/edit', quotationController.editQuotation);
+  app.post('/api/quotation/send', quotationController.sendQuotation);
   app.post('/api/rateCard/create', quotationController.createRateCard);
   app.get('/api/quotation', quotationController.getQuotations);
   app.get('/api/rateCard', quotationController.getRateCards);
   app.get('/api/pdf/create',quotationController.createPDF);
   app.get('/api/rateCardTypes',quotationController.getRateCardTypes);
 
-  // app.get('/api/rateCard/get',quotationController.getRateCardsPageWise);
+  app.post('/api/oneSignal/send',notificationService.sendNotification);
+  app.post('/api/oneSignal/subscribe', notificationService.subscribe);
+
+  // app.get('/api/rateCard/search',quotationController.getRateCardsPageWise);
   listen(server);
 }
 
@@ -87,7 +95,7 @@ function listen(server){
     var port = 8000;
     server.listen(port, function(err,result) {
       if (err)
-          console.error(err)
+          console.error(err);
       else
           console.log('Express server up and running - provider location service at port -' + port)
 	})

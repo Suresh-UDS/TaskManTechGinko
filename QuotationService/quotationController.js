@@ -3,7 +3,7 @@ var moment = require('moment');
 var Quotation = mongoose.model('Quotation');
 var RateCard = mongoose.model('RateCard');
 var RateCardType = mongoose.model('RateCardType');
-var mailerService = require('./mailerService');
+var mailerService = require('./notifications/mailerService');
 var PDFDocument = require('pdfkit');
 var fs = require('fs');
 
@@ -21,7 +21,7 @@ module.exports = {
         console.log("Create quotation function");
         var date = new Date();
         var quotation = new Quotation();
-        console.log(req.body.rateCardDetails);
+        console.log(req.body);
         if(req.body.title) quotation.title = req.body.title;
         if(req.body.description) quotation.description = req.body.title;
         if(req.body.rateCardDetails) quotation.rateCardDetails = req.body.rateCardDetails;
@@ -37,15 +37,39 @@ module.exports = {
         if(req.body.authorisedByUserName) quotation.authorisedByUserName = req.body.authorisedByUserName;
         if(req.body.siteName) quotation.siteName = req.body.siteName;
         if(req.body.clientEmailId) quotation.clientEmailId = req.body.clientEmailId;
-        quotation.isDrafted = true;
-        quotation.isSubmitted = false;
-        quotation.isApproved = false;
-        quotation.isArchived = false;
+        if(req.body.grandTotal) quotation.grandTotal = req.body.grandTotal;
+        if(req.body.isDrafted){
+            quotation.isDrafted = true;
+            quotation.processHistory.isDrafted = date;
+        }else{
+            quotation.isDrafted = false;
+        }
+
+        if(req.body.isSubmitted){
+            quotation.isSubmitted = true;
+            quotation.processHistory.isSubmitted = date;
+        }else{
+            quotation.isSubmitted = false;
+        }
+
+        if(req.body.isApproved){
+            quotation.isApproved = true;
+            quotation.processHistory.isApproved = date;
+        }else{
+            quotation.isApproved = false;
+        }
+
+        if(req.body.isArchived){
+            quotation.isArchived = true;
+            quotation.processHistory.isArchived = date;
+        }else{
+            quotation.isArchived = false;
+        }
         quotation.lastModifiedDate = date;
 
         quotation.save(function(err,quotation){
             if(!err){
-                mailerService.submitQuotation('karthickk@techginko.com',quotation);
+                // mailerService.submitQuotation('karthickk@techginko.com',quotation);
                 res.json(200,quotation)
             }else{
                 console.log("Error in saving quotation");
@@ -53,6 +77,149 @@ module.exports = {
                 res.json(500,err);
             }
         })
+    },
+
+    editQuotation: function(req,res,next){
+        console.log("Edit Quotation");
+        console.log(req.body)
+        var date = new Date();
+        Quotation.findById(req.body.id,function(err,quotation){
+
+            if(req.body.title) quotation.title = req.body.title;
+            if(req.body.description) quotation.description = req.body.title;
+            if(req.body.rateCardDetails) quotation.rateCardDetails = req.body.rateCardDetails;
+            if(req.body.sentByUserId) quotation.sentByUserId = req.body.sentByUserId;
+            if(req.body.sentByUserName) quotation.sentByUserName = req.body.sentByUserName;
+            if(req.body.sentToUserId) quotation.sentToUserId = req.body.sentToUserId;
+            if(req.body.sentToUserName) quotation.sentToUserName = req.body.sentToUserName;
+            if(req.body.createdByUserId) quotation.createdByUserId = req.body.createdByUserId;
+            if(req.body.createdByUserName) quotation.createdByUserName = req.body.createdByUserName;
+            if(req.body.approvedByUserId) quotation.approvedByUserId = req.body.approvedByUserId;
+            if(req.body.approvedByUserName) quotation.approvedByUserName = req.body.approvedByUserName;
+            if(req.body.authorisedByUserId) quotation.authorisedByUserId = req.body.authorisedByUserId;
+            if(req.body.authorisedByUserName) quotation.authorisedByUserName = req.body.authorisedByUserName;
+            if(req.body.siteName) quotation.siteName = req.body.siteName;
+            if(req.body.clientEmailId) quotation.clientEmailId = req.body.clientEmailId;
+            if(req.body.grandTotal) quotation.grandTotal = req.body.grandTotal;
+            if(req.body.isDrafted){
+                quotation.isDrafted = true;
+                quotation.processHistory.isDrafted = date;
+            }else{
+                quotation.isDrafted = false;
+            }
+
+            if(req.body.isSubmitted){
+                quotation.isSubmitted = true;
+                quotation.processHistory.isSubmitted = date;
+            }else{
+                quotation.isSubmitted = false;
+            }
+
+            if(req.body.isApproved){
+                quotation.isApproved = true;
+                quotation.processHistory.isApproved = date;
+            }else{
+                quotation.isApproved = false;
+            }
+
+            if(req.body.isArchived){
+                quotation.isArchived = true;
+                quotation.processHistory.isArchived = date;
+            }else{
+                quotation.isArchived = false;
+            }
+            quotation.lastModifiedDate = date;
+
+            quotation.save(function(err,quotation){
+                if(!err){
+                    // mailerService.submitQuotation('karthickk@techginko.com',quotation);
+                    res.json(200,quotation)
+                }else{
+                    console.log("Error in saving quotation");
+                    console.log(err)
+                    res.json(500,err);
+                }
+            })
+
+        })
+
+    },
+
+    sendQuotation: function(req,res,next){
+        console.log("Send quotation");
+        Quotation.findById(req.body.id,function(err,quotation){
+            mailerService.submitQuotation(quotation.sentToEmailId,quotation).then(function(err,success){
+                if(err){
+                    console.log('Error in sending mail');
+                    res.send(200,'Error in sending Mail, Quotation not Sent');
+                }else{
+                    console.log("Mail successfully sent");
+                    quotation.isDrafted = false;
+                    quotation.isSubmitted = true;
+                    quotation.processHistory.isSubmitted = new Date();
+
+                    quotation.save(function(err,quotation){
+                        if(!err){
+                            // mailerService.submitQuotation('karthickk@techginko.com',quotation);
+                            res.json(200,quotation)
+                        }else{
+                            console.log("Error in saving quotation");
+                            console.log(err)
+                            res.json(500,err);
+                        }
+                    })
+                }
+            });
+        })
+    },
+
+    approveQuotation: function(req,res,next){
+        console.log("Approve Quotation");
+        Quotation.findById(req.body.id,function(err,quotation){
+            mailerService.submitQuotation(quotation.clientEmailId,quotation).then(function(err,success){
+                if(err){
+                    console.log('Error in sending mail');
+                    res.send(200,'Error in sending Mail, Quotation not Sent');
+                }else{
+                    console.log("Mail successfully sent");
+                    quotation.isSubmitted = false;
+                    quotation.isApproved = true;
+                    quotation.processHistory.isApproved = new Date();
+
+                    quotation.save(function(err,quotation){
+                        if(!err){
+                            // mailerService.submitQuotation('karthickk@techginko.com',quotation);
+                            res.json(200,quotation)
+                        }else{
+                            console.log("Error in saving quotation");
+                            console.log(err)
+                            res.json(500,err);
+                        }
+                    })
+                }
+            });
+        })
+    },
+
+    archiveQuotation: function(req,res,next){
+
+        console.log("Archive Quotation");
+        Quotation.findById(req.body.id,function(err,quotation){
+            quotation.isApproved = false;
+            quotation.isArchived = true;
+            quotation.processHistory.isArchived = new Date();
+            quotation.save(function(err,quotation){
+                if(!err){
+                    // mailerService.submitQuotation('karthickk@techginko.com',quotation);
+                    res.json(200,quotation)
+                }else{
+                    console.log("Error in saving quotation");
+                    console.log(err);
+                    res.json(500,err);
+                }
+            })
+        })
+
     },
 
     createRateCard: function(req,res,next){
@@ -69,6 +236,7 @@ module.exports = {
                 res.json(200,rateCard);
             }else{
                 res.json(500,err);
+                console.log(err)
             }
         })
     },
@@ -131,105 +299,5 @@ module.exports = {
         })
     },
 
-    saveSiteLocation: function(req, res, next) {
-        console.log('saveSiteLocation called -' + req.body)
-        var locations = [req.body.lng, req.body.lat];
-        var location = new Location();
-        location.userId = req.body.userId;
-        location.status = req.body.status;
-        location.lastModifiedDate = moment().toDate();
-        location.loc = locations;
-        location.siteId = req.body.siteId;
-        location.radius = req.body.radius;
-        console.log(location);
-        Location.findOne({siteId : location.siteId},function(err,result){
-            console.log('saveSiteLocation - err '+ err)
-            console.log('saveSiteLocation - result '+ result);
-            if(err) {
-                res.json(500, "Error updating provider location - " + err);
-            }
-            if(result) {
-                result.status = location.status;
-                result.lastModifiedDate = location.lastModifiedDate;
-                result.loc = locations;
-                result.siteId = location.siteId;
-                result.radius = location.radius;
-                result.save(function(err){
-                    if(!err) {
-                        res.json(200,location);
-                    }
-                })
-            }else {
-                location.save(function(err) {
-                    if(!err) {
-                        res.json(200,location);
-                    }
-                })
-            }
-        });
-    },
-
-    findSiteLocation: function(req, res, next) {
-        var userId = req.query.userId;
-        Location.findOne({userId : userId},function(err,result){
-            if(err) {
-                res.json(500, "Error retrieving provider location - " + err);
-            }
-            if(result) {
-                res.json(200,result);
-            }
-        });
-    },
-
-
-    isSiteNearby: function(req, res, next) {
-        console.log('isSiteNearby called')
-        var limit = parseInt(req.query.limit) || 10;
-        var siteId = parseInt(req.query.siteId)
-
-        // get the max distance or set it to 8 kilometers
-        //var maxDistance = parseInt(req.query.distance) || 8;
-
-        // find a location
-        Location.findOne({
-            siteId: siteId
-        }).exec(function(err, siteLocation) {
-            if(err) {
-                return res.json(500, err);
-            }
-            var maxDistance = siteLocation.radius;
-
-            // we need to convert the distance to radians
-            // the raduis of Earth is approximately 6371 kilometers
-            maxDistance /= 6371;
-
-            // get coordinates [ <longitude> , <latitude> ]
-            var coords = [];
-            coords[0] = req.query.lng || 0;
-            coords[1] = req.query.lat|| 0;
-
-            var status = req.query.status;
-
-            // find a location
-            Location.find({
-                loc: {
-                    $nearSphere: coords,
-                    $maxDistance: maxDistance
-                }
-            }).limit(1).exec(function(err, locations) {
-                console.log('err-' + err);
-                if (err) {
-                    return res.json(500, err);
-                }
-                console.log(locations);
-                if(locations[0]){
-                    var nearbySite = locations[0];
-                    if(nearbySite.siteId == siteId) {
-                        res.json(200, '{status: true}')
-                    }
-                }
-                res.json(500, '{status: false}');
-            });
-        });
-    }
+    
 };
