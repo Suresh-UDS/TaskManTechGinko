@@ -25,6 +25,7 @@ export class JobsPage {
     constructor(public navCtrl: NavController,public component:componentService, public authService: authService,
                     private loadingCtrl:LoadingController, private actionSheetCtrl: ActionSheetController) {
         this.categories = 'today';
+        this.loadTodaysJobs();
     }
 
     ionViewDidLoad() {

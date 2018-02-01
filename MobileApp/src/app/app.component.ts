@@ -37,13 +37,13 @@ export class MyApp {
     // used for an example of ngFor and navigation
     this.pages = [
       { title: 'Dashboard', component: TabsPage,active:true,icon:'dashboard'},
-      { title: 'Quotation', component: QuotationPage,active:false,icon:'receipt'},
       { title: 'Site', component: SitePage,active:false,icon:'dns'},
-      { title: 'Client', component: CustomerDetailPage,active:false,icon:'person'},
+      // { title: 'Client', component: CustomerDetailPage,active:false,icon:'person'},
       { title: 'Employee', component: EmployeeListPage,active:false,icon:'people'},
       { title: 'Jobs', component: JobsPage,active:false,icon:'description'},
-      { title: 'Rate Card', component: RateCardPage,active:false,icon:'description'},
-      { title: 'Attendance', component: AttendancePage,active:false,icon:'content_paste'},
+        { title: 'Attendance', component: AttendancePage,active:false,icon:'content_paste'},
+        { title: 'Rate Card', component: RateCardPage,active:false,icon:'description'},
+      { title: 'Quotation', component: QuotationPage,active:false,icon:'receipt'},
       { title: 'Reports', component: ReportsPage,active:false,icon:'trending_up'},
       // { title: 'Logout', component: LogoutPage,active:false,icon:'power_settings_new'}
     ];

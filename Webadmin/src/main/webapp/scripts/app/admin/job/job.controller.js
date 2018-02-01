@@ -4,7 +4,7 @@ angular.module('timeSheetApp')
 		    .controller(
 				'JobController',
 				function($scope, $rootScope, $state, $timeout, JobComponent,AssetComponent,
-						ProjectComponent, SiteComponent,EmployeeComponent, $http, $stateParams,
+						ProjectComponent, SiteComponent,EmployeeComponent,ChecklistComponent, $http, $stateParams,
 						$location) {
         $scope.success = null;
         $scope.error = null;
@@ -18,10 +18,19 @@ angular.module('timeSheetApp')
         $scope.pages = { currPage : 1};
         $scope.status =[{ "name" : "OPEN"},{ "name" : "ASSIGNED"},{ "name" : "INPROGRESS"},{ "name" : "COMPLETED"}]
         $scope.isEdit = !!$stateParams.id
+        $scope.checklists;
+        $scope.selectedChecklist = null;
+        $scope.jobChecklistItems =[];
 
         $scope.loadProjects = function () {
         	ProjectComponent.findAll().then(function (data) {
                 $scope.projects = data;
+            });
+        };
+        
+        $scope.loadChecklists = function () {
+        	ChecklistComponent.findAll().then(function (data) {
+                $scope.checklists = data;
             });
         };
 
@@ -97,6 +106,7 @@ angular.module('timeSheetApp')
         	$scope.loadLocations();
         	$scope.loadAssets();
         	$scope.loadPrice();
+        	$scope.loadChecklists();
         	if($scope.isEdit){
         		$scope.editJob();
         	}else {
@@ -107,7 +117,21 @@ angular.module('timeSheetApp')
         	}
         }
 
-
+        $scope.onSelectChecklist = function() {
+        	var items = $scope.selectedChecklist.items;
+        	for(var i =0; i<items.length;i++) {
+        		var checklistItem = {
+        			"checklistId" : $scope.selectedChecklist.id,	
+        			"checklistName" : $scope.selectedChecklist.name,
+        			"checklistItemId" : items[i].id,
+        			"checklistItemName" : items[i].name,
+        			"jobId" : $scope.job.id,
+        			"jobTitle" : $scope.job.title
+        		}
+        		$scope.jobChecklistItems.push(checklistItem);
+        	}
+        	
+        }
 
         $scope.saveJob = function () {
         	$scope.error = null;
@@ -115,6 +139,7 @@ angular.module('timeSheetApp')
         	$scope.errorProjectExists = null;
         	$scope.job.siteId = $scope.selectedSite.id
             $scope.job.locationId = $scope.selectedLocation.id;
+        	$scope.job.jobChecklistItems = $scope.jobChecklistItems;
         	if($scope.selectedAsset) {
             	$scope.job.assetId = $scope.selectedAsset.id;
         	}

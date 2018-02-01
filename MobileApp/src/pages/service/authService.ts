@@ -218,8 +218,26 @@ export class authService
         )
     }
 
+    getRateTypes(): Observable<any>{
+        return this.http.get(this.Url+'api/rateCard/types').map(
+            response=>{
+                console.log(response);
+                return response;
+            }
+        )
+    }
+
+    getUOMTypes(): Observable<any>{
+        return this.http.get(this.Url+'api/rateCard/uom').map(
+            response=>{
+                console.log(response);
+                return response;
+            }
+        )
+    }
+
     createRateCard(rateCard):Observable<any>{
-        return this.http.post(this.Node_url+'api/rateCard/create',rateCard).map(
+        return this.http.post(this.Url+'api/rateCard/create',rateCard).map(
             response=>{
                 console.log(response);
                 return response.json();
