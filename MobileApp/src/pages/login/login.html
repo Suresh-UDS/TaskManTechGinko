@@ -6,14 +6,14 @@
 -->
 
 
-<ion-content>
+<ion-content class="login">
     <div class="wrapper wrapper-full-page login-bg-img">
             <!--   you can change the color of the filter page using: data-color="blue | purple | green | orange | red | rose " -->
             <div class="content">
               <div class="container">
                 <div class="row">
-                  <div class="width90 margin-auto">
-                      <div>
+                  <div class="width90 margin-auto align-center pos-abs">
+                      <div class="margin-bottom">
                           <img src="img/logo.png">
                       </div>
                       
@@ -42,23 +42,21 @@
                           </div>
                         </div>
                         <div class="footer text-center">
-                          <button type="submit" class="btn btn-danger btn-simple btn-wd btn-lg" (click)="signin()">Sign In</button>
+                          <button type="submit" class="btn btn-warning btn-simple btn-wd btn-lg" (click)="signin()">Sign In</button>
                         </div>
+                      </div>
+
+                      <div class="">
+                          <p class="copyright align-center icon-color">
+                              &copy;
+                              <a href="" class="clr-white"><span class="clr-blk">Powered By</span> <span class="icon-color">T</span>ech<span class="icon-color">G</span>inko</a>
+                          </p>
                       </div>
                   </div>
                 </div>
             </div>
         </div>
-        <footer class="footer bottom-div">
-            <div class="container">
-                <p class="copyright pull-left">
-                    &copy;
-                    <a href="" class="clr-white">Powered By <span class="clr-orange">T</span>ech<span class="clr-orange">G</span>inko</a>
-                </p>
-            </div>
-        </footer>
     </div>
-
 
 
 

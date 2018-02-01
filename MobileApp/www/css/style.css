@@ -55,7 +55,7 @@
 }
 .container-scroll > .row {
   /*width: 200%; !* = 100% * 4/3 *!*/
-  width:1600px;
+  width:3000px;
 }
 
 container-scroll::-webkit-scrollbar-track
@@ -160,8 +160,8 @@ container-scroll::-webkit-scrollbar-thumb
 }
 .hariz-scroll-con
 {
-  /*padding:10px 15px;*/
- /* width: 1400px;*/
+  padding:10px 15px;
+  width: 1400px;
 }
 /* calendar css */
 .Viewcalendartxt h2
@@ -427,8 +427,6 @@ table tr
 {
   width: 85px;
   overflow: hidden;
-  display: inline-block;
-  border-top: 0 !important;
   white-space: initial !important;
 }
 .width95
@@ -450,7 +448,6 @@ table tr
 .login-bg-img
 {
   background: url('img/login.jpeg');
-  padding-top: 25%;
 }
 .width90
 {
@@ -472,4 +469,34 @@ table tr
 .clr-white
 {
   color: #FFFFFF;
+}
+.margin-bottom
+{
+  margin-bottom: 15%;
+}
+.pos-abs
+{
+  position: absolute;
+  top: 9%;
+  left: 5%;
+}
+.card [data-background-color]
+{
+  margin: -20px 60px 0 !important;
+}
+a:hover, a:focus
+{
+  color: #000000;
+}
+.login .scroll-content
+{
+  background: url(img/login.jpeg);
+}
+.padding-right5
+{
+    padding-right: 5px;
+}
+.padding-bottom5
+{
+    padding-bottom: 5px;
 }
