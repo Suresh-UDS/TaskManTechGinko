@@ -22,6 +22,8 @@ public class JobChecklistDTO extends BaseDTO implements Serializable {
 	private long jobId;
 	
 	private String jobTitle;
+	
+	private boolean completed;
 
 
 	public long getId() {
@@ -79,5 +81,14 @@ public class JobChecklistDTO extends BaseDTO implements Serializable {
 	public void setJobTitle(String jobTitle) {
 		this.jobTitle = jobTitle;
 	}
+
+	public boolean isCompleted() {
+		return completed;
+	}
+
+	public void setCompleted(boolean completed) {
+		this.completed = completed;
+	}
+	
 
 }
