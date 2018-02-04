@@ -55,6 +55,15 @@ import {ArchivedQuotationPage} from "../pages/quotation/archivedQuotations";
 import {ViewQuotationPage} from "../pages/quotation/viewQuotation";
 
 import {CreateEmployeePage} from "../pages/employee-list/create-employee";
+import {OneSignal} from "@ionic-native/onesignal";
+import {GoogleMaps} from "@ionic-native/google-maps";
+import {Toast} from "@ionic-native/toast";
+import {AppConfig, MY_CONFIG_TOKEN} from "../pages/service/app-config";
+import {AttendanceService} from "../pages/service/attendanceService";
+import {EmployeeService} from "../pages/service/employeeService";
+import {JobService} from "../pages/service/jobService";
+import {QuotationService} from "../pages/service/quotationService";
+import {SiteService} from "../pages/service/siteService";
 
 
 @NgModule({
@@ -157,12 +166,21 @@ import {CreateEmployeePage} from "../pages/employee-list/create-employee";
     StatusBar,
     SplashScreen,
     Camera,
+      AttendanceService,
+      EmployeeService,
+      JobService,
+      QuotationService,
+      SiteService,
     authService,
     HttpClient,
     Geolocation,
     Geofence,
+      GoogleMaps,
+      Toast,
+      OneSignal,
     componentService,
-    {provide: ErrorHandler, useClass: IonicErrorHandler}
+    {provide: ErrorHandler, useClass: IonicErrorHandler},
+      {provide:MY_CONFIG_TOKEN, useValue: AppConfig}
   ]
 })
 export class AppModule {}

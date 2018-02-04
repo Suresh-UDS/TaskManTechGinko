@@ -6,6 +6,7 @@ import {Camera, CameraOptions} from "@ionic-native/camera";
 import {Geolocation} from "@ionic-native/geolocation";
 import {Geofence} from "@ionic-native/geofence";
 import {componentService} from "../service/componentService";
+import {JobService} from "../service/jobService";
 
 /**
  * Generated class for the EmployeeList page.
@@ -23,7 +24,7 @@ export class CustomerDetailPage {
   jobs:any;
   constructor(public navCtrl: NavController, public component:componentService,public navParams: NavParams, private  authService: authService, public camera: Camera,
               private loadingCtrl:LoadingController, private geolocation:Geolocation, private toastCtrl:ToastController,
-              private geoFence:Geofence) {
+              private geoFence:Geofence, private jobService: JobService) {
 
 
   }
@@ -35,7 +36,7 @@ export class CustomerDetailPage {
   getAllJobs(){
     this.component.showLoader('Getting All Jobs');
     var search={};
-    this.authService.getJobs(search).subscribe(response=>{
+    this.jobService.getJobs(search).subscribe(response=>{
       console.log("All jobs of current user");
       console.log(response);
       this.jobs = response;

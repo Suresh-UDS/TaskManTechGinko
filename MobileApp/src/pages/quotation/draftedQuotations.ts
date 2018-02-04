@@ -4,6 +4,7 @@ import {QuotationPopoverPage} from "./quotation-popover";
 import {CreateQuotationPage} from "./create-quotation";
 import {authService} from "../service/authService";
 import {ViewQuotationPage} from "./viewQuotation";
+import {componentService} from "../service/componentService";
 
 @Component({
     selector: 'page-drafted-quotation',
@@ -13,7 +14,7 @@ export class DraftedQuotationPage {
 
     quotations:any;
 
-    constructor(public navCtrl: NavController,public popoverCtrl: PopoverController, private authService: authService, private navParams: NavParams) {
+    constructor(public navCtrl: NavController,public popoverCtrl: PopoverController, private authService: authService, private navParams: NavParams, private componentService: componentService) {
         this.quotations = this.navParams.get('quotations');
         console.log(this.quotations);
     }
@@ -23,8 +24,6 @@ export class DraftedQuotationPage {
         this.navCtrl.push(ViewQuotationPage,{quotationDetails:quotation})
     }
 
-    sendQuotation(){
-        
-    }
+
 
 }

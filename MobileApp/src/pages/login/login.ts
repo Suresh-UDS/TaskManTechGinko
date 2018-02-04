@@ -6,6 +6,7 @@ import {authService} from "../service/authService";
 import {DashboardPage} from "../dashboard/dashboard";
 import {TabsPage} from "../tabs/tabs";
 import {componentService} from "../service/componentService";
+import { Toast } from '@ionic-native/toast';
 
 
 /**
@@ -27,7 +28,8 @@ export class LoginPage {
   msg:any;
   now:any;
 
-  constructor(public navCtrl: NavController,public component:componentService,public menuCtrl:MenuController, public toastCtrl:ToastController,public navParams: NavParams,public myService:authService) {
+  constructor(public navCtrl: NavController,public component:componentService,public menuCtrl:MenuController,
+              public toastCtrl:ToastController,public navParams: NavParams,public myService:authService, public toast:Toast) {
 
   }
 
@@ -103,19 +105,25 @@ export class LoginPage {
           this.msg='Server Unreachable'
         }
 
-        let toast = this.toastCtrl.create({
-          message:this.msg,
-          showCloseButton: true,
-          closeButtonText: "Ok",
-          position: 'bottom',
-          cssClass: ""
-        });
+        // let toast = this.toastCtrl.create({
+        //   message:this.msg,
+        //   showCloseButton: true,
+        //   closeButtonText: "Ok",
+        //   position: 'bottom',
+        //   cssClass: ""
+        // });
+        //
+        // toast.present();
+        //
+        // toast.onDidDismiss(() => {
+        //   console.log('Dismissed toast');
+        // });
+          this.toast.show(this.msg,'5000','center').subscribe(
+              toast=>{
+                console.log(toast);
+              }
+          )
 
-        toast.present();
-
-        toast.onDidDismiss(() => {
-          console.log('Dismissed toast');
-        });
         }
       );
 

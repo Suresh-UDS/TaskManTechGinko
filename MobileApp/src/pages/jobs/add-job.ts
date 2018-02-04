@@ -4,6 +4,9 @@ import {authService} from "../service/authService";
 import * as moment from 'moment';
 import {componentService} from "../service/componentService";
 import {JobsPage} from "./jobs";
+import {JobService} from "../service/jobService";
+import {AttendanceService} from "../service/attendanceService";
+import {SiteService} from "../service/siteService";
 
 @Component({
   selector: 'page-add-job',
@@ -34,8 +37,16 @@ export class CreateJobPage {
     employ:any;
     errorMsg:any;
     field:any;
-    constructor(public navCtrl: NavController,public component:componentService,public navParams:NavParams,public myService:authService, public authService: authService, private loadingCtrl:LoadingController) {
+    checklists:any;
+    constructor(public navCtrl: NavController,public component:componentService,public navParams:NavParams,public myService:authService, public authService: authService, private loadingCtrl:LoadingController, private jobService: JobService, private attendanceService: AttendanceService, private siteService: SiteService) {
         this.jobDetails=this.navParams.get('job');
+
+        this.jobService.loadCheckLists().subscribe(
+            response=>{
+                console.log(response);
+
+            }
+        )
 
     }
 
@@ -44,7 +55,7 @@ export class CreateJobPage {
 
 
         this.component.showLoader('Getting All Sites');
-        this.myService.searchSite().subscribe(
+        this.siteService.searchSite().subscribe(
             response=>{
                 console.log('ionViewDidLoad Add jobs');
 
@@ -91,7 +102,7 @@ export class CreateJobPage {
             }
 
 
-            this.myService.createJob(this.newJob).subscribe(
+            this.jobService.createJob(this.newJob).subscribe(
                 response=> {
                 console.log(response);
                 this.navCtrl.setRoot(JobsPage);
@@ -153,7 +164,7 @@ export class CreateJobPage {
         this.empSelect=false;
         window.localStorage.setItem('site',id);
         console.log(this.empSelect);
-        this.myService.searchSiteEmployee(id).subscribe(
+        this.siteService.searchSiteEmployee(id).subscribe(
             response=> {
                 console.log(response.json());
                 if(response.json().length>0)

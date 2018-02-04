@@ -75,6 +75,15 @@
     </div>
 </ion-content>
 
-<ion-footer>
+<ion-footer >
+    <ion-toolbar class="align-right" >
 
+        <button *ngIf="!quotation.isSubmitted" class="btn btn-success center pull-right" (click)="sendQuotation(quotation)">
+            Send Quotation &nbsp; <ion-icon name="ios-arrow-forward-outline"></ion-icon>
+        </button>
+        <button *ngIf="quotation.isSubmitted" class="btn btn-success center pull-right" (click)="approveQuotation(quotation)">
+            Approve Quotation &nbsp; <ion-icon name="ios-arrow-forward-outline"></ion-icon>
+        </button>
+
+    </ion-toolbar>
 </ion-footer>
