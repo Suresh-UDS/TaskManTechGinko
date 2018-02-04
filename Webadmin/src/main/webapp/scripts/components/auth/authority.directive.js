@@ -64,4 +64,37 @@ angular.module('timeSheetApp')
                 }
             }
         };
+    }])
+    .directive('hasPermission', ['Principal', function (Principal) {
+        return {
+            restrict: 'A',
+            link: function (scope, element, attrs) {
+                var setVisible = function () {
+                        element.removeClass('hidden');
+                    },
+                    setHidden = function () {
+                        element.addClass('hidden');
+                    },
+                    defineVisibility = function (reset) {
+
+                        if (reset) {
+                            setVisible();
+                        }
+
+                        Principal.hasPermission(permission)
+                            .then(function (result) {
+                                if (result) {
+                                    setVisible();
+                                } else {
+                                    setHidden();
+                                }
+                            });
+                    },
+                    permission = attrs.hasPermission.replace(/\s+/g, '');
+
+                if (permission.length > 0) {
+                    defineVisibility(true);
+                }
+            }
+        };
     }]);

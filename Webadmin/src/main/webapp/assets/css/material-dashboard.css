@@ -5603,7 +5603,17 @@ be a descendant of the grid when it is being dragged.
 
 select.bs-select-hidden,
 select.selectpicker {
-    display: none !important;
+    position: absolute !important;
+    left: 50%;
+    display: block !important;
+    width: 0.5px !important;
+    height: 100% !important;
+    padding: 0 !important;
+    opacity: 0 !important;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+
 }
 
 .bootstrap-select {

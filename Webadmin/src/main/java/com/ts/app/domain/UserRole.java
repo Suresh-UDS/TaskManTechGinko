@@ -49,7 +49,7 @@ public class UserRole extends AbstractAuditingEntity implements Serializable {
 	private int roleLevel;
 
 	@OneToMany(mappedBy = "role", cascade = CascadeType.ALL, fetch=FetchType.LAZY,orphanRemoval = true)
-	private Set<UserRolePermission> rolePermission;
+	private Set<UserRolePermission> rolePermissions;
 
 	public Long getId() {
 		return id;
@@ -83,12 +83,12 @@ public class UserRole extends AbstractAuditingEntity implements Serializable {
 		this.isDeleted = isDeleted;
 	}
 
-	public Set<UserRolePermission> getRolePermission() {
-		return rolePermission;
+	public Set<UserRolePermission> getRolePermissions() {
+		return rolePermissions;
 	}
 
-	public void setRolePermission(Set<UserRolePermission> rolePermission) {
-		this.rolePermission = rolePermission;
+	public void setRolePermissions(Set<UserRolePermission> rolePermission) {
+		this.rolePermissions = rolePermission;
 	}
 
 	public boolean isActiveFlag() {
