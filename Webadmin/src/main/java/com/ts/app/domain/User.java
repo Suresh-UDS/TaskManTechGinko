@@ -109,9 +109,9 @@ public class User extends AbstractAuditingEntity implements Serializable {
 	@Column(name = "emailSubscribed", nullable = true,columnDefinition = "TINYINT(1)")
 	private boolean emailSubscribed;
 
-//	@ManyToOne(fetch = FetchType.EAGER)
-//	@JoinColumn(name = "userRoleId", nullable = true)
-//	private UserRole userRole;
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "userRoleId", nullable = true)
+	private UserRole userRole;
 
 	public String getAdminFlag() {
 		return adminFlag;
@@ -293,13 +293,13 @@ public class User extends AbstractAuditingEntity implements Serializable {
 		return (adminFlag.equalsIgnoreCase("Y"));
 	}
 	
-//	public UserRole getUserRole() {
-//		return userRole;
-//	}
-//
-//	public void setUserRole(UserRole userRole) {
-//		this.userRole = userRole;
-//	}
+	public UserRole getUserRole() {
+		return userRole;
+	}
+
+	public void setUserRole(UserRole userRole) {
+		this.userRole = userRole;
+	}
 
 	@Override
 	public String toString() {
