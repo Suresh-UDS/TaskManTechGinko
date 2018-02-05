@@ -448,6 +448,18 @@ public class JobManagementService extends AbstractService {
 		job.setScheduleWeeklySaturday(jobDTO.isScheduleWeeklySaturday());
 		job.setScheduled(jobDTO.isScheduled());
 		job.setFrequency(jobDTO.getFrequency());
+		
+		//add the job checklist items
+		if(CollectionUtils.isNotEmpty(jobDTO.getChecklistItems())) {
+			List<JobChecklistDTO> jobclDtoList = jobDTO.getChecklistItems();
+			List<JobChecklist> checklistItems = new ArrayList<JobChecklist>();
+			for(JobChecklistDTO jobclDto : jobclDtoList) {
+				JobChecklist checklist = mapperUtil.toEntity(jobclDto, JobChecklist.class);
+				checklist.setJob(job);
+				checklistItems.add(checklist);
+			}
+			job.setChecklistItems(checklistItems);
+		}
 
 	}
 

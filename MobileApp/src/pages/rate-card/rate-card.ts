@@ -3,6 +3,7 @@ import {LoadingController, NavController} from 'ionic-angular';
 import {authService} from "../service/authService";
 import {componentService} from "../service/componentService";
 import {CreateRateCardPage} from "./create-rate-card";
+import {QuotationService} from "../service/quotationService";
 
 @Component({
   selector: 'page-rate-card',
@@ -12,7 +13,7 @@ export class RateCardPage {
 
     rateCards:any;
 
-    constructor(public navCtrl: NavController,public component:componentService, public authService: authService, private loadingCtrl:LoadingController) {
+    constructor(public navCtrl: NavController,public component:componentService, public authService: authService, private loadingCtrl:LoadingController, private quotationService: QuotationService) {
 
     }
 
@@ -26,7 +27,7 @@ export class RateCardPage {
     }
 
     ionViewWillEnter(){
-        this.authService.getRateCards().subscribe(
+        this.quotationService.getRateCards().subscribe(
             response=>{
                 console.log(response);
                 this.rateCards = response;

@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import {LoadingController, NavController, NavParams} from 'ionic-angular';
 import {authService} from "../service/authService";
+import {QuotationService} from "../service/quotationService";
 
 @Component({
   selector: 'page-create-rate-card',
@@ -20,7 +21,7 @@ export class CreateRateCardPage {
     uom:any;
     errorMsg:any;
     field:any;
-    constructor(public navCtrl: NavController,public navParams:NavParams, public authService: authService, private loadingCtrl:LoadingController) {
+    constructor(public navCtrl: NavController,public navParams:NavParams, public authService: authService, private loadingCtrl:LoadingController, private quotationService: QuotationService) {
         this.rateCardDetails={
             type:'',
             title:'',
@@ -34,7 +35,7 @@ export class CreateRateCardPage {
     }
 
     ionViewWillEnter(){
-        this.authService.getRateCardTypes().subscribe(response=>{
+        this.quotationService.getRateCardTypes().subscribe(response=>{
             console.log("Rate Card types");
             console.log(response);
             this.rateCardTypes = response;
@@ -45,8 +46,11 @@ export class CreateRateCardPage {
 
         if(this.rateCardDetails.title && this.rateCardDetails.cost)
         {
-            this.authService.createRateCard(rateCard).subscribe(response => {
+
+            rateCard.uom = this.uom;
+            this.quotationService.createRateCard(rateCard).subscribe(response => {
                 console.log(response);
+                this.navCtrl.pop();
             })
         }
         else

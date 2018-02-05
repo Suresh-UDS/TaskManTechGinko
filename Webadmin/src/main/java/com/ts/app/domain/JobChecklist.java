@@ -45,6 +45,9 @@ public class JobChecklist extends AbstractAuditingEntity implements Serializable
 	@ManyToOne()
 	@JoinColumn(name = "job_id")
 	private Job job;
+	
+	@Column(name = "is_completed")
+	private boolean completed;
 
 
 	public long getId() {
@@ -87,5 +90,21 @@ public class JobChecklist extends AbstractAuditingEntity implements Serializable
 		this.checklistItemName = checklistItemName;
 	}
 
+	public boolean isCompleted() {
+		return completed;
+	}
 
+	public void setCompleted(boolean completed) {
+		this.completed = completed;
+	}
+
+	public Job getJob() {
+		return job;
+	}
+
+	public void setJob(Job job) {
+		this.job = job;
+	}
+
+	
 }

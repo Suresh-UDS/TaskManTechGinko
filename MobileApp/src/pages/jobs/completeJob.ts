@@ -4,6 +4,8 @@ import {authService} from "../service/authService";
 import {Camera, CameraOptions} from "@ionic-native/camera";
 import {Geolocation} from "@ionic-native/geolocation";
 import {JobsPage} from "./jobs";
+import {JobService} from "../service/jobService";
+import {AttendanceService} from "../service/attendanceService";
 
 @Component({
     selector: 'page-complete-job',
@@ -26,9 +28,12 @@ export class CompleteJobPage {
     latitude:any;
     longitude:any;
 
+    checkList:any;
+
 
     constructor(public navCtrl: NavController,public navParams:NavParams, public authService: authService,
-                private loadingCtrl:LoadingController, public camera: Camera,private geolocation:Geolocation) {
+                private loadingCtrl:LoadingController, public camera: Camera,private geolocation:Geolocation, private jobService: JobService,
+                private attendanceService: AttendanceService) {
         this.jobDetails=this.navParams.get('job');
         this.takenImages = [];
         this.checkOutDetails={
@@ -40,6 +45,15 @@ export class CompleteJobPage {
         latitudeOut:'',
         longitude:''
         };
+
+        this.jobService.loadCheckLists().subscribe(
+            response=>{
+                console.log("Checklist items");
+                console.log(response[0].items);
+                this.checkList = response[0].items;
+            }
+        )
+
     }
 
     ionViewWillEnter() {
@@ -86,7 +100,7 @@ export class CompleteJobPage {
         this.checkOutDetails.latitudeOut = this.latitude;
         this.checkOutDetails.longitude = this.longitude;
         console.log(this.checkOutDetails);
-        this.authService.checkOutJob(this.checkOutDetails).subscribe(
+        this.jobService.checkOutJob(this.checkOutDetails).subscribe(
             response=>{
                 console.log(response);
                 this.navCtrl.push(JobsPage);

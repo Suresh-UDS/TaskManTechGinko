@@ -37,6 +37,13 @@
             </ion-col>
 
         </ion-row>
+
+        <ion-row class="margin-tp25 white-bg padding10" >
+                <ion-item *ngFor="let list of checkList">
+                    <ion-label style="color: black">{{list.name}}</ion-label>
+                    <ion-checkbox [(ngModel)]="list.name"></ion-checkbox>
+                </ion-item>
+        </ion-row>
     </ion-list>
 
 </ion-content>

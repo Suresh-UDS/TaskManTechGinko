@@ -19,7 +19,7 @@ angular.module('timeSheetApp')
         $scope.status =[{ "name" : "OPEN"},{ "name" : "ASSIGNED"},{ "name" : "INPROGRESS"},{ "name" : "COMPLETED"}]
         $scope.isEdit = !!$stateParams.id
         $scope.checklists;
-        $scope.selectedChecklist = null;
+        $scope.selectedChecklist;
         $scope.jobChecklistItems =[];
 
         $scope.loadProjects = function () {
@@ -29,7 +29,8 @@ angular.module('timeSheetApp')
         };
         
         $scope.loadChecklists = function () {
-        	ChecklistComponent.findAll().then(function (data) {
+        		ChecklistComponent.findAll().then(function (data) {
+        			console.log('retrieved checklists - ' + JSON.stringify(data));
                 $scope.checklists = data;
             });
         };
@@ -61,8 +62,24 @@ angular.module('timeSheetApp')
         		console.log($scope.job);
         		$scope.selectedSite = {id : data.siteId,name : data.siteName};
         		$scope.selectedEmployee = {id : data.employeeId,name : data.employeeName};
-        		$scope.selectedLocation = {id:data.location,name:data.locationName};
-        		$scope.selectedAsset = {id:data.asset,title:data};
+        		$scope.selectedLocation = {id:data.locationId,name:data.locationName};
+        		$scope.selectedAsset = {id:data.assetId,title:data.assetTitle};
+        		if(data.checklistItems) {
+        			var checklist = {};
+        			var items = [];
+        			for(var i =0; i < data.checklistItems.length ; i++) {
+        				var item = {};
+        				var checklistItem = data.checklistItems[i];
+        				checklist.id = checklistItem.checklistId;
+        				checklist.name = checklistItem.checklistName;
+        				item.id = checklistItem.checklistItemId;
+        				item.name = checklistItem.checklistItemName;
+        				item.completed = checklistItem.completed;
+        				items.push(item);
+        			}
+        			checklist.items = items;
+            		$scope.selectedChecklist = checklist;
+        		}
         	});
         }
         $scope.loadJobs = function(){
@@ -118,6 +135,8 @@ angular.module('timeSheetApp')
         }
 
         $scope.onSelectChecklist = function() {
+        	console.log('selected check list - ' + JSON.stringify($scope.selectedChecklist));
+        	/*
         	var items = $scope.selectedChecklist.items;
         	for(var i =0; i<items.length;i++) {
         		var checklistItem = {
@@ -130,28 +149,42 @@ angular.module('timeSheetApp')
         		}
         		$scope.jobChecklistItems.push(checklistItem);
         	}
-        	
+        	*/
         }
 
         $scope.saveJob = function () {
-        	$scope.error = null;
-        	$scope.success =null;
-        	$scope.errorProjectExists = null;
-        	$scope.job.siteId = $scope.selectedSite.id
-            $scope.job.locationId = $scope.selectedLocation.id;
-        	$scope.job.jobChecklistItems = $scope.jobChecklistItems;
-        	if($scope.selectedAsset) {
-            	$scope.job.assetId = $scope.selectedAsset.id;
-        	}
-        	if($scope.selectedEmployee) {
-        		$scope.job.employeeId = $scope.selectedEmployee.id
-        	}
-        	console.log('job details ='+ JSON.stringify($scope.job));
-        	//$scope.job.jobStatus = $scope.selectedStatus.name;
-        	var post = $scope.isEdit ? JobComponent.update : JobComponent.create
-        	post($scope.job).then(function () {
-                $scope.success = 'OK';
-            	$location.path('/jobs');
+	        	$scope.error = null;
+	        	$scope.success =null;
+	        	$scope.errorProjectExists = null;
+	        	console.log('selected check list - ' + JSON.stringify($scope.selectedChecklist));
+	        	var items = $scope.selectedChecklist.items;
+	        	for(var i =0; i<items.length;i++) {
+	        		var checklistItem = {
+	        			"checklistId" : $scope.selectedChecklist.id,	
+	        			"checklistName" : $scope.selectedChecklist.name,
+	        			"checklistItemId" : items[i].id,
+	        			"checklistItemName" : items[i].name,
+	        			"jobId" : $scope.job.id,
+	        			"jobTitle" : $scope.job.title
+	        		}
+	        		$scope.jobChecklistItems.push(checklistItem);
+	        	}
+	        	
+	        	$scope.job.siteId = $scope.selectedSite.id
+	            $scope.job.locationId = $scope.selectedLocation.id;
+	        	$scope.job.checklistItems = $scope.jobChecklistItems;
+	        	if($scope.selectedAsset) {
+	            	$scope.job.assetId = $scope.selectedAsset.id;
+	        	}
+	        	if($scope.selectedEmployee) {
+	        		$scope.job.employeeId = $scope.selectedEmployee.id
+	        	}
+	        	console.log('job details ='+ JSON.stringify($scope.job));
+	        	//$scope.job.jobStatus = $scope.selectedStatus.name;
+	        	var post = $scope.isEdit ? JobComponent.update : JobComponent.create
+	        	post($scope.job).then(function () {
+	                $scope.success = 'OK';
+	            	$location.path('/jobs');
             }).catch(function (response) {
                 $scope.success = null;
                 console.log('Error - '+ response.data);

@@ -71,6 +71,8 @@ public class UserDTO extends BaseDTO{
 	
 	private String employeeName;
 	
+	private UserRoleDTO userRole;
+	
     public UserDTO() {
     }
 
@@ -96,10 +98,11 @@ public class UserDTO extends BaseDTO{
         this.langKey = langKey;
         this.authorities = authorities;
         this.adminFlag = adminFlag;
-    	if(emp != null) {
+    		if(emp != null) {
 	        this.employeeId = emp.getId();
 	        this.employeeName = emp.getFullName();
-    	}
+    		}
+    		this.setUserRole(userRole);
     }
     
 	public long getId() {
@@ -258,6 +261,14 @@ public class UserDTO extends BaseDTO{
 
 	public void setEmailSubscribed(boolean emailSubscribed) {
 		this.emailSubscribed = emailSubscribed;
+	}
+	
+	public UserRoleDTO getUserRole() {
+		return userRole;
+	}
+
+	public void setUserRole(UserRoleDTO userRole) {
+		this.userRole = userRole;
 	}
 
 	@Override
