@@ -8,6 +8,8 @@ import {QuotationPopoverPage} from "./quotation-popover";
 import {CreateQuotationPage3} from "./create-quotation-step-3";
 import {QuotationPage} from "./quotation";
 import {componentService} from "../service/componentService";
+import {QuotationService} from "../service/quotationService";
+import {SiteService} from "../service/siteService";
 
 @Component({
     selector: 'page-create-quotation-step2',
@@ -46,7 +48,9 @@ export class CreateQuotationPage2 {
     authorisedByUserName:any;
     grandTotal=0;
 
-    constructor(public navCtrl: NavController,public modalCtrl: ModalController,public navParams:NavParams,public popoverCtrl: PopoverController, public evts: Events, public authService:authService, public alertCtrl: AlertController, public componentService:componentService) {
+    constructor(public navCtrl: NavController,public modalCtrl: ModalController,public navParams:NavParams,public popoverCtrl: PopoverController, public evts: Events, public authService:authService, public alertCtrl: AlertController, public componentService:componentService,
+                private quotationService: QuotationService, private siteService: SiteService
+                ) {
 
        console.log(this.navParams.get('quotationDetails'));
        var quotationDetails = this.navParams.get('quotationDetails');
@@ -78,7 +82,7 @@ export class CreateQuotationPage2 {
     }
 
     ionViewWillEnter(){
-        this.authService.searchSite().subscribe(response=>{
+        this.siteService.searchSite().subscribe(response=>{
             console.log(response.json());
             this.allSites = response.json();
         })
@@ -87,7 +91,7 @@ export class CreateQuotationPage2 {
     }
 
     getSiteEmployees(siteId){
-        this.authService.searchSiteEmployee(siteId).subscribe(response=>{
+        this.siteService.searchSiteEmployee(siteId).subscribe(response=>{
             console.log(response.json());
             this.siteEmployees = response.json();
         })
@@ -95,13 +99,13 @@ export class CreateQuotationPage2 {
 
     saveQuotation(quotation){
         console.log(quotation)
-        this.authService.createQuotation(quotation).subscribe(response=>{
+        this.quotationService.createQuotation(quotation).subscribe(response=>{
             console.log(response);
         })
     }
 
     getRateCardTypes(){
-        this.authService.getRateCardTypes().subscribe(response=>{
+        this.quotationService.getRateCardTypes().subscribe(response=>{
             console.log("Rate Card types");
             console.log(this.rateCardTypes);
             this.rateCardTypes = response;
@@ -182,7 +186,7 @@ export class CreateQuotationPage2 {
             "isDrafted":true
         };
 
-        this.authService.createQuotation(quotationDetails).subscribe(
+        this.quotationService.createQuotation(quotationDetails).subscribe(
             response=>{
                 console.log(response);
                 this.componentService.showToastMessage('Quotation Successfully Drafted');
@@ -216,7 +220,7 @@ export class CreateQuotationPage2 {
             "isSubmitted":true
         };
 
-        this.authService.editQuotation(quotationDetails).subscribe(
+        this.quotationService.editQuotation(quotationDetails).subscribe(
             response=>{
                 console.log(response);
 

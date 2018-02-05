@@ -1,14 +1,15 @@
 import { Component } from '@angular/core';
-import {NavController, NavParams} from 'ionic-angular';
+import {NavController, NavParams, ToastController} from 'ionic-angular';
 import {authService} from "../service/authService";
 import {componentService} from "../service/componentService";
+import {JobService} from "../service/jobService";
+import {AttendanceService} from "../service/attendanceService";
 
 @Component({
   selector: 'page-site-view',
   templateUrl: 'site-view.html'
 })
 export class SiteViewPage {
-
 
   siteName:any;
   siteDetail:any;
@@ -18,7 +19,9 @@ export class SiteViewPage {
   ref=false;
   job="job";
   attendance="attendance";
-  constructor(public navCtrl: NavController,public component:componentService,public navParams:NavParams,public myService:authService,public authService:authService) {
+  constructor(public navCtrl: NavController,public component:componentService,public navParams:NavParams,public myService:authService,public authService:authService, public toastCtrl: ToastController,
+
+              private jobService:JobService, private attendanceService: AttendanceService) {
   this.categories='detail';
     this.siteDetail=this.navParams.get('site')
     console.log('ionViewDidLoad SiteViewPage');
@@ -27,8 +30,18 @@ export class SiteViewPage {
 
   ionViewDidLoad()
   {
-
   }
+
+
+    showToast(message: string) {
+        let toast = this.toastCtrl.create({
+            message: message,
+            duration: 2000,
+            position: 'middle'
+        });
+
+        toast.present(toast);
+    }
 
   doRefresh(refresher,segment)
   {
@@ -70,7 +83,7 @@ export class SiteViewPage {
   {
     this.component.showLoader('Getting All Jobs');
     var search={siteId:this.siteDetail.id};
-    this.authService.getJobs(search).subscribe(response=>{
+    this.jobService.getJobs(search).subscribe(response=>{
       console.log("Job Refresher");
       console.log(response);
       this.jobs = response;
@@ -105,13 +118,15 @@ export class SiteViewPage {
       var search={siteId:this.siteDetail.id};
       //TODO
       //Add Search criteria to attendance
-      this.authService.getSiteAttendances(this.siteDetail.id).subscribe(response=>{
+      this.attendanceService.getSiteAttendances(this.siteDetail.id).subscribe(response=>{
         console.log("Loader Attendance");
         console.log(response.json());
         this.attendances = response.json();
         this.component.closeLoader();
       })
   }
+
+
 
 
 

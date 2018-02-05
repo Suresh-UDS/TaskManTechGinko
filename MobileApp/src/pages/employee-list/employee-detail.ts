@@ -6,6 +6,9 @@ import {Camera, CameraOptions} from "@ionic-native/camera";
 import {Geolocation} from "@ionic-native/geolocation";
 import {Geofence} from "@ionic-native/geofence";
 import {componentService} from "../service/componentService";
+import {JobsPage} from "../jobs/jobs";
+import {JobService} from "../service/jobService";
+import {AttendanceService} from "../service/attendanceService";
 
 /**
  * Generated class for the EmployeeList page.
@@ -30,7 +33,7 @@ export class EmployeeDetailPage {
 
   constructor(public navCtrl: NavController,public myService:authService, public component:componentService,public navParams: NavParams, private  authService: authService, public camera: Camera,
               private loadingCtrl:LoadingController, private geolocation:Geolocation, private toastCtrl:ToastController,
-              private geoFence:Geofence) {
+              private geoFence:Geofence, private jobService: JobService, private attendanceService: AttendanceService) {
 
     this.empDetail=this.navParams.get('emp');
     this.categories = 'detail';
@@ -85,7 +88,7 @@ export class EmployeeDetailPage {
   {
     this.component.showLoader('Getting All Jobs');
     var search={empId:this.empDetail.id};
-    this.authService.getJobs(search).subscribe(response=>{
+    this.jobService.getJobs(search).subscribe(response=>{
       console.log("Job Refresher");
       console.log(response);
       this.jobs = response;
@@ -117,7 +120,7 @@ export class EmployeeDetailPage {
   loadAttendance()
   {
     this.component.showLoader('Getting Attendance');
-    this.authService.getSiteAttendances(this.empDetail.id).subscribe(response=>{
+    this.attendanceService.getSiteAttendances(this.empDetail.id).subscribe(response=>{
       console.log("Loader Attendance");
       console.log(response);
       this.attendances = response.json();
@@ -128,7 +131,7 @@ export class EmployeeDetailPage {
   getAllJobs(){
     this.component.showLoader('Getting All Jobs');
     var search={empId:this.empDetail.id};
-    this.authService.getJobs(search).subscribe(response=>{
+    this.jobService.getJobs(search).subscribe(response=>{
       console.log("All jobs of current user");
       console.log(response);
       this.jobs = response;

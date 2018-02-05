@@ -8,6 +8,7 @@ import {Geofence} from "@ionic-native/geofence";
 import {componentService} from "../service/componentService";
 import {EmployeeDetailPage} from "./employee-detail";
 import {CreateEmployeePage} from "./create-employee";
+import {EmployeeService} from "../service/employeeService";
 
 /**
  * Generated class for the EmployeeList page.
@@ -26,7 +27,7 @@ export class EmployeeListPage {
     firstLetter:any;
   constructor(public navCtrl: NavController,public component:componentService,public myService:authService, public navParams: NavParams, private  authService: authService, public camera: Camera,
               private loadingCtrl:LoadingController, private geolocation:Geolocation, private toastCtrl:ToastController,
-              private geoFence:Geofence) {
+              private geoFence:Geofence, private employeeService: EmployeeService) {
 
 
   }
@@ -34,7 +35,7 @@ export class EmployeeListPage {
   ionViewDidLoad() {
     console.log('ionViewDidLoad Employee list');
     this.component.showLoader('Getting All Employees');
-    this.myService.getAllEmployees().subscribe(
+    this.employeeService.getAllEmployees().subscribe(
         response=>{
           console.log('ionViewDidLoad Employee list:');
             console.log(response);

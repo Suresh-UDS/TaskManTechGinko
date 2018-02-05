@@ -7,54 +7,72 @@
 
 
 <ion-content class="login">
-    <div class="wrapper wrapper-full-page login-bg-img">
+    <div class="wrapper wrapper-full-page">
+        <div class="full-page login-page" filter-color="black" data-image="img/login.jpeg">
             <!--   you can change the color of the filter page using: data-color="blue | purple | green | orange | red | rose " -->
-            <div class="content">
+            <div class="content padding-top40">
               <div class="container">
                 <div class="row">
-                  <div class="width90 margin-auto align-center pos-abs">
-                      <div class="margin-bottom">
-                          <img src="img/logo.png">
-                      </div>
-                      
-                      <div class="card card-login card-hidden">
-                        <div class="card-header text-center" data-background-color="orange">
-                          <h4 class="card-title">Login</h4>
-                        </div>
-                        <div class="card-content padding-top25">
-                          <div class="input-group">
-                              <span class="input-group-addon">
-                                  <i class="material-icons">face</i>
-                              </span>
-                            <div class="form-group label-floating">
-                              <label class="control-label">User Name</label>
-                              <input type="text" class="form-control" [(ngModel)]="username" >
-                            </div>
-                          </div>
-                          <div class="input-group">
-                              <span class="input-group-addon">
-                                  <i class="material-icons">lock_outline</i>
-                              </span>
-                            <div class="form-group label-floating">
-                              <label class="control-label">Password</label>
-                              <input type="password" class="form-control" [(ngModel)]="password" >
-                            </div>
-                          </div>
-                        </div>
-                        <div class="footer text-center">
-                          <button type="submit" class="btn btn-warning btn-simple btn-wd btn-lg" (click)="signin()">Sign In</button>
-                        </div>
-                      </div>
+                    <div class="col-md-4 col-sm-6 col-md-offset-4 col-sm-offset-3">
 
-                      <div class="">
-                          <p class="copyright align-center icon-color">
-                              &copy;
-                              <a href="" class="clr-white"><span class="clr-blk">Powered By</span> <span class="icon-color">T</span>ech<span class="icon-color">G</span>inko</a>
-                          </p>
-                      </div>
-                  </div>
+                              <div class="width90 margin-auto align-center">
+                                  <div class="margin-bottom">
+                                      <img src="img/logo.png">
+                                  </div>
+
+                                  <div class="card card-login">
+                                    <div class="card-header text-center" data-background-color="orange">
+                                      <h4 class="card-title">Login</h4>
+                                    </div>
+                                    <div class="card-content padding-top25">
+                                      <div class="input-group">
+                                          <span class="input-group-addon">
+                                              <i class="material-icons">face</i>
+                                          </span>
+                                        <div class="form-group label-floating" [ngClass]="{'has-error': eMsg=='all'||eMsg=='username'}">
+                                          <label class="control-label">User Name</label>
+                                                <input class="form-control" type="text" [(ngModel)]="username" id="username" name="username" #uname="ngModel" required [ngClass]="{'has-error': uname.errors || eMsg=='all'|| eMsg=='username'}">
+                                                <div *ngIf="uname.errors && (uname.dirty || uname.touched)" class="error-msg">
+
+                                                </div>
+
+                                                <div *ngIf="uname.errors && (uname.untouched )" class="error-msg">
+
+                                                </div>
+                                        </div>
+                                      </div>
+                                      <div class="input-group">
+                                          <span class="input-group-addon">
+                                              <i class="material-icons">lock_outline</i>
+                                          </span>
+                                        <div class="form-group label-floating" [ngClass]="{'has-error': eMsg=='all'|| eMsg=='password'}">
+                                          <label class="control-label">Password</label>
+                                            <input class="form-control" type="password" [(ngModel)]="password" id="password" name="password" #pass="ngModel" required [ngClass]="{'has-error':eMsg=='all' || eMsg=='password'}">
+                                            <div *ngIf="pass.errors && (pass.dirty || pass.touched)" class="error-msg">
+
+                                            </div>
+                                            <div *ngIf="pass.errors && (pass.untouched )" class="error-msg">
+
+                                            </div>
+                                        </div>
+                                      </div>
+                                    </div>
+                                    <div class="footer text-center">
+                                      <button class="btn btn-warning btn-simple btn-wd btn-lg" (click)="signin()">Sign In</button>
+                                    </div>
+                                  </div>
+
+                                  <div class="">
+                                      <p class="copyright align-center icon-color">
+                                          &copy;<a href="" class="clr-white"><span class="clr-blk">Powered By</span> <span class="icon-color">T</span>ech<span class="icon-color">G</span>inko</a>
+                                      </p>
+                                  </div>
+                              </div>
+
+                    </div>
                 </div>
             </div>
+        </div>
         </div>
     </div>
 

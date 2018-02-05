@@ -7,6 +7,7 @@ import {ApprovedQuotationPage} from "./approvedQuotations";
 import {ArchivedQuotationPage} from "./archivedQuotations";
 import {DraftedQuotationPage} from "./draftedQuotations";
 import {SubmittedQuotationPage} from "./submittedQuotations";
+import {QuotationService} from "../service/quotationService";
 
 @Component({
   selector: 'page-quotation',
@@ -28,7 +29,7 @@ export class QuotationPage {
     draftedQuotationsPage:DraftedQuotationPage;
     submittedQuotationsPage:SubmittedQuotationPage;
 
-  constructor(public navCtrl: NavController,public popoverCtrl: PopoverController, private authService: authService) {
+  constructor(public navCtrl: NavController,public popoverCtrl: PopoverController, private authService: authService, private quotationService: QuotationService) {
       this.draftedQuotationsCount= 0;
       this.approvedQuotationsCount=0;
       this.submittedQuotationsCount=0;
@@ -70,7 +71,7 @@ export class QuotationPage {
   }
 
   getQuotations(){
-      this.authService.getQuotations().subscribe(
+      this.quotationService.getQuotations(window.localStorage.getItem('employeeId')).subscribe(
           response=>{
               console.log(response);
 

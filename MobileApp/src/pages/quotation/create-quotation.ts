@@ -2,6 +2,8 @@ import { Component } from '@angular/core';
 import {AlertController, Events, NavController, PopoverController} from 'ionic-angular';
 import {authService} from "../service/authService";
 import {CreateQuotationPage2} from "./create-quotation-step-2";
+import {SiteService} from "../service/siteService";
+import {QuotationService} from "../service/quotationService";
 
 @Component({
     selector: 'page-create-quotation',
@@ -43,7 +45,8 @@ export class CreateQuotationPage {
     errorMsg:any;
 
 
-    constructor(public navCtrl: NavController,public popoverCtrl: PopoverController, public evts: Events, public authService:authService, public alertCtrl: AlertController) {
+    constructor(public navCtrl: NavController,public popoverCtrl: PopoverController, public evts: Events, public authService:authService, public alertCtrl: AlertController,
+                private siteService: SiteService, private quotationService: QuotationService) {
 
         this.quotationDetails ={
             title:'',
@@ -77,7 +80,7 @@ export class CreateQuotationPage {
         });
     }
     ionViewWillEnter(){
-        this.authService.searchSite().subscribe(response=>{
+        this.siteService.searchSite().subscribe(response=>{
             console.log(response.json());
             this.allSites = response.json();
         })
@@ -91,7 +94,7 @@ export class CreateQuotationPage {
     }
 
     getSiteEmployees(siteId){
-        this.authService.searchSiteEmployee(siteId).subscribe(response=>{
+        this.siteService.searchSiteEmployee(siteId).subscribe(response=>{
             console.log(response.json());
             this.siteEmployees = response.json();
         })
@@ -117,7 +120,7 @@ export class CreateQuotationPage {
     }
 
     getRateCardTypes(){
-        this.authService.getRateCardTypes().subscribe(response=>{
+        this.quotationService.getRateCardTypes().subscribe(response=>{
             console.log("Rate Card types");
             console.log(this.rateCardTypes);
             this.rateCardTypes = response;

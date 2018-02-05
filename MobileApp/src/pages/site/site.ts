@@ -3,6 +3,7 @@ import { NavController } from 'ionic-angular';
 import {authService} from "../service/authService";
 import {componentService} from "../service/componentService";
 import {SiteViewPage} from "./site-view";
+import {SiteService} from "../service/siteService";
 
 @Component({
   selector: 'page-site',
@@ -15,7 +16,7 @@ export class SitePage {
   sites:any;
 
 
-  constructor(public navCtrl: NavController,public myService:authService,public component:componentService) {
+  constructor(public navCtrl: NavController,public myService:authService,public component:componentService, private siteService: SiteService) {
 
   }
 
@@ -23,7 +24,7 @@ export class SitePage {
     this.employeeId=window.localStorage.getItem('employeeId');
     console.log('ionViewDidLoad SitePage');
     this.component.showLoader('Getting All Sites');
-    this.myService.searchSite().subscribe(
+    this.siteService.searchSite().subscribe(
       response=>{
         console.log('ionViewDidLoad SitePage:');
 

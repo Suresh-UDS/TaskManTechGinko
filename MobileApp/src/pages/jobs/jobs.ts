@@ -6,6 +6,7 @@ import {componentService} from "../service/componentService";
 import {CreateJobPage} from "./add-job";
 import { ActionSheetController } from 'ionic-angular'
 import {CompleteJobPage} from "./completeJob";
+import {JobService} from "../service/jobService";
 
 
 @Component({
@@ -23,7 +24,7 @@ export class JobsPage {
     ref=false;
 
     constructor(public navCtrl: NavController,public component:componentService, public authService: authService,
-                    private loadingCtrl:LoadingController, private actionSheetCtrl: ActionSheetController) {
+                    private loadingCtrl:LoadingController, private actionSheetCtrl: ActionSheetController, private jobService: JobService) {
         this.categories = 'today';
         this.loadTodaysJobs();
     }
@@ -93,7 +94,7 @@ export class JobsPage {
 
     loadTodaysJobs(){
         this.component.showLoader('Getting Today\'s Jobs');
-        this.authService.getTodayJobs().subscribe(response=>{
+        this.jobService.getTodayJobs().subscribe(response=>{
             console.log("Todays jobs of current user");
             console.log(response);
             this.todaysJobs = response;
@@ -104,7 +105,7 @@ export class JobsPage {
     loadAllJobs(){
         this.component.showLoader('Getting All Jobs');
         var search={};
-        this.authService.getJobs(search).subscribe(response=>{
+        this.jobService.getJobs(search).subscribe(response=>{
             console.log("All jobs of current user");
             console.log(response);
             this.allJobs = response;

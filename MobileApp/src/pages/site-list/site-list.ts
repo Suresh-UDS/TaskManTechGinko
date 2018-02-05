@@ -5,6 +5,8 @@ import {authService} from "../service/authService";
 import {Camera, CameraOptions} from "@ionic-native/camera";
 import {Geolocation} from "@ionic-native/geolocation";
 import {EmployeeList} from "../employee/employee-list";
+import {AttendanceService} from "../service/attendanceService";
+import {SiteService} from "../service/siteService";
 
 /**
  * Generated class for the SiteListPage page.
@@ -29,7 +31,7 @@ export class SiteListPage {
   longitude:any;
   checkedIn:any;
   constructor(public navCtrl: NavController, public navParams: NavParams, private  authService: authService, public camera: Camera,
-              private loadingCtrl:LoadingController, private geolocation:Geolocation, private toastCtrl:ToastController) {
+              private loadingCtrl:LoadingController, private geolocation:Geolocation, private toastCtrl:ToastController, private attendanceService: AttendanceService, private siteService: SiteService) {
 
     this.geolocation.getCurrentPosition().then((response)=>{
       console.log("Current location");
@@ -59,7 +61,7 @@ export class SiteListPage {
   }
 
   getAttendances(site){
-    this.authService.getSiteAttendances(site.id).subscribe(response=>{
+    this.attendanceService.getSiteAttendances(site.id).subscribe(response=>{
       console.log(response.json());
       this.navCtrl.push(AttendanceListPage,{'attendances':response.json()});
     })
@@ -71,7 +73,7 @@ export class SiteListPage {
 
   ionViewWillEnter(){
 
-      this.authService.searchSite().subscribe(response=>{
+      this.siteService.searchSite().subscribe(response=>{
         console.log(response.json());
         this.siteList = response.json();
         this.userGroup = window.localStorage.getItem('userGroup');
@@ -81,7 +83,7 @@ export class SiteListPage {
         console.log(window.localStorage.getItem('responseImageDetails'));
       })
 
-    this.authService.getAttendances(this.employeeId).subscribe(
+    this.attendanceService.getAttendances(this.employeeId).subscribe(
       response =>{
         console.log(response.json());
         var result = response.json()
