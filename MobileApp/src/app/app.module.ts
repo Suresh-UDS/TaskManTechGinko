@@ -55,7 +55,8 @@ import {ArchivedQuotationPage} from "../pages/quotation/archivedQuotations";
 import {ViewQuotationPage} from "../pages/quotation/viewQuotation";
 
 import {CreateEmployeePage} from "../pages/employee-list/create-employee";
-
+import {OneSignal} from "@ionic-native/onesignal";
+import { Toast } from '@ionic-native/toast';
 
 @NgModule({
   declarations: [
@@ -95,8 +96,6 @@ import {CreateEmployeePage} from "../pages/employee-list/create-employee";
     CreateRateCardPage,
     CreateJobPage,
     CompleteJobPage,
-
-
       IonSimpleWizardStep,
       IonSimpleWizard,
     CreateQuotationPage3,
@@ -151,7 +150,8 @@ import {CreateEmployeePage} from "../pages/employee-list/create-employee";
       IonSimpleWizardStep,
       IonSimpleWizard,
     CreateQuotationPage3,
-    CreateEmployeePage
+    CreateEmployeePage,
+
   ],
   providers: [
     StatusBar,
@@ -162,6 +162,8 @@ import {CreateEmployeePage} from "../pages/employee-list/create-employee";
     Geolocation,
     Geofence,
     componentService,
+      OneSignal,
+    Toast,
     {provide: ErrorHandler, useClass: IonicErrorHandler}
   ]
 })
