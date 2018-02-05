@@ -40,15 +40,17 @@ angular.module('timeSheetApp')
         	$scope.loadPermissions();
         }
         
-        $scope.checkPermission = function(moduleId, moduleName, actionId, actionName, obj) {
-        	console.log('moduleName - ' + moduleName +' actionId - ' + actionId + ' actionName -' + actionName + ' checked-' +obj.Selected )
+        $scope.checkPermission = function(moduleId, moduleName, actionId, actionName) {
+        	console.log('moduleName - ' + moduleName +' actionId - ' + actionId + ' actionName -' + actionName + ' checked-')
         	if(angular.isArray($scope.selectedPermissions)) {
         		var permMatch = false;
-        		$scope.selectedPermissions.forEach(function(perm) {
+        		var perms = $scope.selectedPermissions;
+        		for(var p = 0; p < perms.length; p++) {
+        			var perm = perms[p];
         			if(perm.name) {
 	        			if(perm.name.indexOf(moduleName) != -1) {
 	        				permMatch = true;
-	        				var actions = perm.actions;
+	        				var actions = perm.moduleActions;
 	        				
 	        				if(angular.isArray(actions)) {
 	        					var actionMatch = false;
@@ -56,9 +58,10 @@ angular.module('timeSheetApp')
 	        						var action = actions[i];
 	        						if(action.name.indexOf(actionName) != -1) {
 	        							actionMatch = true;
-	        							if(!obj.Selected) {
-	        								actions.splice(i,1);
-	        							}
+	        							break;
+//	        							if(!obj.Selected) {
+//	        								actions.splice(i,1);
+//	        							}
 	        							
 	        						}	
 	        					}
@@ -68,14 +71,16 @@ angular.module('timeSheetApp')
 	        							"name" : actionName
 	        						}
 	        						actions.push(action);
+	        						perm.moduleActions = actions;
 	        					}
 	        				}
+	        				break;
 	        				
 	        			}
         			}
         			
         			
-        		})
+        		}
         		
         		if(!permMatch){
         				var actions = [];
@@ -297,10 +302,10 @@ angular.module('timeSheetApp')
                 if($scope.permissions == null){
                     $scope.pages.startInd = 0;
                 }else{
-                    $scope.pages.startInd = (data.currPage - 1) * 10 + 1;
+                    $scope.pages.startInd = (data.currPage - 1) * 100 + 1;
                 }
 
-                $scope.pages.endInd = data.totalCount > 10  ? (data.currPage) * 10 : data.totalCount ;
+                $scope.pages.endInd = data.totalCount > 100  ? (data.currPage) * 100 : data.totalCount ;
                 $scope.pages.totalCnt = data.totalCount;
             	$scope.hide = true;
             });
