@@ -104,8 +104,6 @@ import {SiteService} from "../pages/service/siteService";
     CreateRateCardPage,
     CreateJobPage,
     CompleteJobPage,
-
-
       IonSimpleWizardStep,
       IonSimpleWizard,
     CreateQuotationPage3,
@@ -160,7 +158,8 @@ import {SiteService} from "../pages/service/siteService";
       IonSimpleWizardStep,
       IonSimpleWizard,
     CreateQuotationPage3,
-    CreateEmployeePage
+    CreateEmployeePage,
+
   ],
   providers: [
     StatusBar,
@@ -179,6 +178,8 @@ import {SiteService} from "../pages/service/siteService";
       Toast,
       OneSignal,
     componentService,
+      OneSignal,
+    Toast,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
       {provide:MY_CONFIG_TOKEN, useValue: AppConfig}
   ]

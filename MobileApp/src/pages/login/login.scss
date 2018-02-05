@@ -5,5 +5,9 @@ page-login {
   {
     border-bottom:none !important;
   }
+  .ripple.ripple-on {
+    background-color: transparent !important;
+    color: #ff9800;
+  }
 
 }

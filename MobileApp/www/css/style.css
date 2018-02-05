@@ -447,7 +447,7 @@ table tr
 }
 .login-bg-img
 {
-  background: url('img/login.jpeg');
+ /* background: url('img/login.jpeg'); */
 }
 .width90
 {
@@ -499,4 +499,23 @@ a:hover, a:focus
 .padding-bottom5
 {
     padding-bottom: 5px;
+}
+.padding-top40
+{
+  padding-top: 40px !important;
+}
+.error-msg {
+  color: #f44336;
+}
+.form-group.is-focused .form-control
+{
+  background-image: linear-gradient(#ff9800, #ff9800), linear-gradient(#D2D2D2, #D2D2D2) !important;
+}
+.form-control,
+.form-group .form-control
+{
+  background-image: linear-gradient(#ff9800, #ff9800), linear-gradient(#D2D2D2, #D2D2D2) !important;
+}
+.form-group.has-error .form-control {
+  background-image: linear-gradient(#f44336, #f44336), linear-gradient(#D2D2D2, #D2D2D2) !important;
 }
