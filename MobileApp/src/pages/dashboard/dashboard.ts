@@ -6,6 +6,10 @@ import {componentService} from "../service/componentService";
 import {SiteService} from "../service/siteService";
 import {EmployeeService} from "../service/employeeService";
 import {JobService} from "../service/jobService";
+import {CreateRateCardPage} from "../rate-card/create-rate-card";
+import {CreateJobPage} from "../jobs/add-job";
+import {CreateQuotationPage} from "../quotation/create-quotation";
+import {CreateEmployeePage} from "../employee-list/create-employee";
 declare var demo;
 @Component({
   selector: 'page-dashboard',
@@ -107,5 +111,25 @@ export class DashboardPage {
         this.firstLetter=emp.charAt(0);
     }
 
+
+    fabClick(fab)
+    {
+        if(fab=='ratecard')
+        {
+            this.navCtrl.push(CreateRateCardPage);
+        }
+        else if(fab=='job')
+        {
+            this.navCtrl.push(CreateJobPage);
+        }
+        else if(fab=='quotation')
+        {
+            this.navCtrl.push(CreateQuotationPage);
+        }
+        else if(fab=='employee')
+        {
+            this.navCtrl.push(CreateEmployeePage);
+        }
+    }
 
 }

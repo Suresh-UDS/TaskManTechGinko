@@ -24,19 +24,35 @@
                             </ion-col>
 
                             <ion-col col-12>
-                                <div class="form-group label-floating">
+
+                                <div class="form-group label-floating" [ngClass]="{'has-error': eMsg=='all'||eMsg=='title'}">
                                     <label class="control-label">Title</label>
-                                    <input type="text" class="form-control" [(ngModel)]="rateCardDetails.title" >
-                                    <span *ngIf="field==='title' && errorMsg" class="error">{{errorMsg}}</span>
+                                    <input class="form-control" type="text" [(ngModel)]="rateCardDetails.title" id="title" name="title" #titl="ngModel" required [ngClass]="{'has-error': titl.errors || eMsg=='all'|| eMsg=='title'}">
+                                    <div *ngIf="titl.errors && (titl.dirty || titl.touched)" class="error-msg">
+
+                                    </div>
+
+                                    <div *ngIf="titl.errors && (titl.untouched )" class="error-msg">
+
+                                    </div>
                                 </div>
+
+
                             </ion-col>
 
                             <ion-col col-12>
-                                <div class="form-group label-floating">
+                                <div class="form-group label-floating" [ngClass]="{'has-error': eMsg=='all'||eMsg=='title'}">
                                     <label class="control-label">Cost</label>
-                                    <input type="number" class="form-control" [(ngModel)]="rateCardDetails.cost" >
-                                    <span *ngIf="field==='cost' && errorMsg" class="error">{{errorMsg}}</span>
+                                    <input class="form-control" type="number" [(ngModel)]="rateCardDetails.cost" id="cost" name="cost" #cst="ngModel" required [ngClass]="{'has-error': cst.errors || eMsg=='all'|| eMsg=='cost'}">
+                                    <div *ngIf="cst.errors && (cst.dirty || cst.touched)" class="error-msg">
+
+                                    </div>
+
+                                    <div *ngIf="cst.errors && (cst.untouched )" class="error-msg">
+
+                                    </div>
                                 </div>
+
                             </ion-col>
 
                             <ion-col col-12>
@@ -45,7 +61,7 @@
                                     <input type="text" class="form-control" placeholder="UOM" [(ngModel)]="uom" disabled>
                                 </div>
                             </ion-col>
-                            <button type="submit" class="btn btn-warning pull-right margin-auto" (click)="createRateCard(rateCardDetails)" >Create</button>
+                            <button class="btn btn-warning pull-right margin-auto" (click)="createRateCard(rateCardDetails)" >Create</button>
                             <div class="clearfix"></div>
                         </ion-row>
                 </div>
