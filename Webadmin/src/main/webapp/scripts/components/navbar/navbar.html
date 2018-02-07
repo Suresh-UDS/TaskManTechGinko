@@ -50,7 +50,7 @@ Tip 3: you can change the color of the sidebar with data-background-color="white
             </div>
         </div>
         <ul class="nav" ng-switch-when="true">
-            <li ui-sref-active="active" has-permission="Dashboard:List">
+            <li ui-sref-active="active" >
                 <a ui-sref="dashboard">
                     <i class="material-icons">dashboard</i>
                     <p> Dashboard </p>
@@ -104,6 +104,38 @@ Tip 3: you can change the color of the sidebar with data-background-color="white
                     <p>Quotation </p>
                 </a>
             </li>
+            
+            <li has-authority="ROLE_ADMIN" ng-class="{active: $state.includes('reports')}">
+                <a data-toggle="collapse" data-target="#formsExamples" href="#">
+                    <i class="material-icons">content_paste</i>
+                    <p> Reports
+                        <b class="caret"></b>
+                    </p>
+                </a>
+                <div class="collapse" id="formsExamples">
+                    <ul class="nav">
+                        <li ui-sref-active="active">
+                            <a ui-sref="employeeReports">
+                                <i class="material-icons">people</i>
+                                <p>Employee</p>
+                            </a>
+                        </li>
+                        <li ui-sref-active="active">
+                            <a ui-sref="userGroups">
+                                <i class="material-icons">description</i>
+                                <p>Job</p>
+                            </a>
+                        </li>
+                        <li ui-sref-active="active">
+                            <a ui-sref="userGroups">
+                                <i class="material-icons">content_paste</i>
+                                <p>Attendance</p>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </li>
+            
             <li ui-sref-active="active" has-permission="RateCard:List">
                 <a ui-sref="rateCardList">
                     <i class="material-icons">credit_card</i>

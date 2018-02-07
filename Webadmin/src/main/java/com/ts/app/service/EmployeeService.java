@@ -122,6 +122,7 @@ public class    EmployeeService extends AbstractService {
 
 			employeeDto = updateEmployee(employeeDto, true);
 		}else {
+			employeeDto.setFullName(employeeDto.getName());
 			Employee employee = mapperUtil.toEntity(employeeDto, Employee.class);
 			log.debug("EmployeeService.createEmployeeInformation - userId - "+employee.getUser().getId());
 			employee.setUser(null);
@@ -144,6 +145,12 @@ public class    EmployeeService extends AbstractService {
 			employee.setSites(sites);
 			employee.setFaceAuthorised(false);
 			employee.setFaceIdEnrolled(false);
+			List<EmployeeProjectSite> projectSites =  employee.getProjectSites();
+			if(CollectionUtils.isNotEmpty(projectSites)) {
+				for(EmployeeProjectSite projSite : projectSites) {
+					projSite.setEmployee(employee);
+				}
+			}
 			employeeRepository.save(employee);
 			log.debug("Created Information for Employee: {}", employee);
 			employeeDto = mapperUtil.toModel(employee, EmployeeDTO.class);
@@ -154,7 +161,7 @@ public class    EmployeeService extends AbstractService {
 	public EmployeeDTO updateEmployee(EmployeeDTO employee, boolean shouldUpdateActiveStatus) {
 		log.debug("Inside Update");
 		Employee employeeUpdate = employeeRepository.findOne(employee.getId());
-		Hibernate.initialize(employee.getProjects());
+		Hibernate.initialize(employeeUpdate.getProjects());
 		List<Project> projects = employeeUpdate.getProjects();
 		boolean projExists = false;
 		for(Project proj : projects) {
@@ -214,6 +221,16 @@ public class    EmployeeService extends AbstractService {
 		if(shouldUpdateActiveStatus) {
 			employeeUpdate.setActive(Employee.ACTIVE_YES);
 		}
+		List<EmployeeProjectSite> projectSites =  employeeUpdate.getProjectSites();
+		projectSites.clear();
+		if(CollectionUtils.isNotEmpty(employee.getProjectSites())) {
+			for(EmployeeProjectSiteDTO projSiteDto : employee.getProjectSites()) {
+				EmployeeProjectSite projSite = mapperUtil.toEntity(projSiteDto, EmployeeProjectSite.class);
+				projSite.setEmployee(employeeUpdate);
+				projectSites.add(projSite);
+			}
+		}
+		
 		employeeRepository.saveAndFlush(employeeUpdate);
 		employee = mapperUtil.toModel(employeeUpdate, EmployeeDTO.class);
 		return employee;
@@ -395,8 +412,8 @@ public class    EmployeeService extends AbstractService {
 	public EmployeeDTO findOne(Long id) {
 		Employee entity = employeeRepository.findOne(id);
 		Hibernate.initialize(entity.getProjects());
-		List<Project> projects = entity.getProjects();
-		entity.setProjects(projects);
+		//List<Project> projects = entity.getProjects();
+		//entity.setProjects(projects);
 		Hibernate.initialize(entity.getSites());
 		List<Site> sites = entity.getSites();
 		for(Site site : sites) {
@@ -404,6 +421,15 @@ public class    EmployeeService extends AbstractService {
 			site.setProject(site.getProject());
 		}
 		entity.setSites(sites);
+		Hibernate.initialize(entity.getProjectSites());
+		if(CollectionUtils.isNotEmpty(entity.getProjectSites())) {
+			for(EmployeeProjectSite projSite : entity.getProjectSites()) {
+				Project proj =  projectRepository.findOne(projSite.getProjectId());
+				projSite.setProjectName(proj.getName());
+				Site site =  siteRepository.findOne(projSite.getSiteId());
+				projSite.setSiteName(site.getName());
+			}
+		}
 		log.debug("Employee retrieved by findOne - "+ entity );
 		EmployeeDTO dto =  mapperUtil.toModel(entity, EmployeeDTO.class);
 		Hibernate.initialize(entity.getManager());
@@ -411,6 +437,7 @@ public class    EmployeeService extends AbstractService {
 			dto.setManagerId(entity.getManager().getId());
 			dto.setManagerName(entity.getManager().getName());
 		}
+		//entity.setProjectSites(entity.getProjectSites());
 		return dto;
 	}
 

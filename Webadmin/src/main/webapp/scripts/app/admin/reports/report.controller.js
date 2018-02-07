@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('timeSheetApp')
-    .controller('EmployeeController', function ($rootScope, $scope, $state, $timeout, ProjectComponent, SiteComponent, EmployeeComponent, $http,$stateParams,$location) {
+    .controller('ReportController', function ($rootScope, $scope, $state, $timeout, ProjectComponent, SiteComponent, EmployeeComponent, $http,$stateParams,$location) {
         $scope.success = null;
         $scope.error = null;
         $scope.errorMessage = null;

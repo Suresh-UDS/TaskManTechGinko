@@ -67,7 +67,7 @@ public class EmployeeResource {
 	@RequestMapping(value = "/employee", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
 	@Timed
 	public ResponseEntity<?> saveEmployee(@Valid @RequestBody EmployeeDTO employeeDTO, HttpServletRequest request) {
-		log.info("Inside the saveEmployee -" + employeeDTO.getName() + ", projectId -" + employeeDTO.getProjectId());
+		log.info("Inside the saveEmployee -" + employeeDTO);
 		log.info("Inside Save employee"+employeeDTO.getManagerId());
 		long userId = SecurityUtils.getCurrentUserId();
 		log.info("save Employee call - userId "+userId);

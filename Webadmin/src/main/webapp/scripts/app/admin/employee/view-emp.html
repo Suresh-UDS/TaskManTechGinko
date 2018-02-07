@@ -97,17 +97,17 @@
                                                     <thead>
                                                     <tr>
 
-                                                        <th>Id</th>
-                                                        <th>Site Name</th>
+                                                        <th>Client</th>
+                                                        <th>Site</th>
                                                         <th>Check In/Out</th>
 
                                                     </tr>
                                                     </thead>
                                                     <tbody>
-                                                    <tr ng-repeat="site in sites">
+                                                    <tr ng-repeat="projSite in projectSiteList">
 
-                                                        <td>{{site.id}}</td>
-                                                        <td>{{site.name}}</td>
+                                                        <td>{{projSite.projectName}}</td>
+                                                        <td>{{projSite.siteName}}</td>
                                                         <td>
                                                             <button ng-click="checkIn(site.id,employee.empId,employee.id)" data-dismiss="modal"  class="btn btn-success">check-In</button>
                                                             <button ng-click="checkOut(site.id,employee.empId,employee.id)" data-dismiss="modal"  class="btn btn-success">check-Out</button>
