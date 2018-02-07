@@ -14,12 +14,12 @@
 </ion-header>
 
 <ion-content>
-  <ion-fab top right edge>
-    <button mini (click)="createEmployee($event)"  ion-fab><ion-icon name="add"></ion-icon></button>
+  <ion-fab bottom right>
+    <button (click)="createEmployee($event)"  ion-fab><ion-icon name="add"></ion-icon></button>
   </ion-fab>
 
   <ion-list class="emp-list">
-    <ion-item *ngFor="let emp of employee;let i of index" class="bottom-border emp" (click)="viewEmployee(emp)" >
+    <ion-item *ngFor="let emp of employees;let i of index" class="bottom-border emp" (click)="viewEmployee(emp)" >
       <ion-avatar item-start *ngIf="emp.enrolled_face">
         <img  [src]="emp.enrolled_face" >
       </ion-avatar>
@@ -27,7 +27,11 @@
       <ion-avatar item-start *ngIf="!emp.enrolled_face" class="emp-round">
         <p class="margin-auto">{{firstLetter}}</p>
       </ion-avatar>
-      <p text-left class="fnt-wt">{{emp.name}}</p>
+      <p text-left class="fnt-wt" text-capitalize>{{emp.name}}</p>
     </ion-item>
   </ion-list>
+
+  <ion-infinite-scroll *ngIf="page<totalPages"  (ionInfinite)="doInfinite($event)">
+    <ion-infinite-scroll-content></ion-infinite-scroll-content>
+  </ion-infinite-scroll>
 </ion-content>

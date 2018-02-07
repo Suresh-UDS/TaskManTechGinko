@@ -56,7 +56,7 @@ import {ViewQuotationPage} from "../pages/quotation/viewQuotation";
 
 import {CreateEmployeePage} from "../pages/employee-list/create-employee";
 import {OneSignal} from "@ionic-native/onesignal";
-import {GoogleMaps} from "@ionic-native/google-maps";
+// import {GoogleMaps} from "@ionic-native/google-maps";
 import {Toast} from "@ionic-native/toast";
 import {AppConfig, MY_CONFIG_TOKEN} from "../pages/service/app-config";
 import {AttendanceService} from "../pages/service/attendanceService";
@@ -174,7 +174,7 @@ import {SiteService} from "../pages/service/siteService";
     HttpClient,
     Geolocation,
     Geofence,
-      GoogleMaps,
+      // GoogleMaps,
       Toast,
       OneSignal,
     componentService,

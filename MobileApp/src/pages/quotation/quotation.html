@@ -8,10 +8,35 @@
 </ion-header>
 
 <ion-content>
-  <ion-fab top right edge>
-    <button mini (click)="createQuotation()"  ion-fab><ion-icon name="add"></ion-icon></button>
+  <ion-fab bottom right>
+    <button (click)="createQuotation()"  ion-fab><ion-icon name="add"></ion-icon></button>
   </ion-fab>
-          <div class="row padding0 margin0 white-bg">
+
+<!--
+
+
+ <ion-row class="margin0 white-bg border-btm padding-left10">
+        <ion-col col-2 class="ver-center">
+          <div class="q-round">
+                <button ion-button clear color="primary" class="icon-round">
+                  <ion-icon name="ios-construct-outline" class="fnt-24"></ion-icon>
+                </button>
+          </div>
+        </ion-col>
+        <ion-col col-9 class="padding-left10">
+                <div>
+                  <p text-left class="fnt-18">Drafted</p>
+                </div>
+                <div>
+                  <span class="clr-orange padding-right2">(</span>0<span class="clr-orange padding-left2">)</span>
+                </div>
+        </ion-col>
+        <ion-col col-1 class="ver-center">
+                <ion-icon name="ios-arrow-forward-outline"></ion-icon>
+        </ion-col>
+    </ion-row>
+  -->
+
             <ion-col col-12 class="padding-top0">
 
               <div class="table-responsive table-sales">
@@ -58,5 +83,5 @@
                 </table>
               </div>
             </ion-col>
-          </div>
+
 </ion-content>

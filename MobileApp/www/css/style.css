@@ -122,7 +122,7 @@ container-scroll::-webkit-scrollbar-thumb
 }
 .fnt-12
 {
-  font-size: 12px;
+  font-size: 12px !important;
 }
 .pop-icon
 {
@@ -190,6 +190,7 @@ container-scroll::-webkit-scrollbar-thumb
 {
     background-color: #ff9800;
 }
+
 .icon-right
 {
   padding-right:5px;
@@ -213,7 +214,7 @@ container-scroll::-webkit-scrollbar-thumb
 }
 .clr-orange
 {
-  color: #FE5E3E;
+  color: #ff9800;
 }
 .padding-top0
 {
@@ -315,11 +316,12 @@ table tr
   width: 40px;
   height: 40px;
   border-radius:50%;
-  background-color: orange;
+  background-color: #000000;
 }
 .emp-round p
 {
-  color: #FFFFFF !important;
+  font-weight:bold;
+  color:#ff9800 !important;
   text-align: center !important;
   vertical-align: middle !important;
   line-height: 38px !important;
@@ -439,7 +441,7 @@ table tr
 }
 .fnt-wt
 {
-  font-weight: normal !important;
+  font-weight: 300 !important;
 }
 .bottom-border
 {
@@ -518,4 +520,85 @@ a:hover, a:focus
 }
 .form-group.has-error .form-control {
   background-image: linear-gradient(#f44336, #f44336), linear-gradient(#D2D2D2, #D2D2D2) !important;
+}
+.icon-round
+{
+  width: 100% !important;
+  height: 62% !important;
+  border-radius: 50% !important;
+}
+.icon-round-green
+{
+  border: 1px solid #4caf50 !important;
+  color: #4caf50 !important;
+}
+.icon-round-red
+{
+  border: 1px solid #f44336 !important;
+  color: #f44336 !important;
+}
+.icon-round-blue
+{
+  border: 1px solid #00acc1 !important;
+  color: #00acc1 !important;
+}
+.fnt-24
+{
+  font-size: 24px !important;
+}
+.timeline>li>.timeline-badge
+{
+  width: 25px !important;
+  height: 25px !important;
+
+}
+.item-fnt p
+{
+  font-weight: 300;
+}
+.padding-left16
+{
+  padding-left: 16px !important;
+}
+.padding-right10
+{
+  padding-right: 10px !important;
+}
+.padding-left10
+{
+  padding-left:10px;
+}
+.border-btm
+{
+  border-bottom: 1px solid #eeeeee;
+}
+.padding-top5
+{
+  padding-top: 5px !important;
+}
+.ln-ght20 p
+{
+  line-height: 20px !important;
+}
+.q-round
+{
+  width: 90% !important;
+  height: 50% !important;
+  border-radius: 50% !important;
+  border: 1px solid #ff9800;
+}
+.fab-md-dark
+{
+  color: #ff9800 !important;
+}
+ion-fab-list
+{
+  left:-9px !important;
+}
+.empl-round
+{
+  width: 25%;
+  border-radius: 50%;
+  background-color: #ccc;
+  padding: 7px;
 }

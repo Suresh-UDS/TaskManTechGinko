@@ -120,7 +120,7 @@ export class LoginPage {
                this.msg='Server Unreachable'
                }
 
-                this.toast.show(this.msg, '20000', 'center').subscribe(
+                this.toast.show(this.msg, '3000', 'center').subscribe(
                     toast => {
                         console.log(toast);
                     }
@@ -147,7 +147,6 @@ export class LoginPage {
               this.eMsg="all";
           }
       }
-
 
   }
   ionViewDidEnter(){

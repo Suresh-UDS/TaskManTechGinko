@@ -16,7 +16,7 @@ export class QuotationPopoverPage {
   selectedType:any;
   selectedUOM:any;
   addrates:any;
-  errorMsg:any;
+  eMsg:any;
   field:any;
   constructor(public navCtrl: NavController,public popoverCtrl: PopoverController, public authService:authService,public viewCtrl: ViewController,
               private quotationService:QuotationService
@@ -52,12 +52,12 @@ export class QuotationPopoverPage {
     {
       if(!this.name)
       {
-        this.errorMsg="Name Required";
+        this.eMsg="name";
         this.field="name";
       }
       else if(!this.cost)
       {
-        this.errorMsg="Cost Required";
+        this.eMsg="cost";
         this.field="cost";
       }
 
