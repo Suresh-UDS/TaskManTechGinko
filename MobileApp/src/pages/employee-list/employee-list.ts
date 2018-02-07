@@ -9,6 +9,7 @@ import {componentService} from "../service/componentService";
 import {EmployeeDetailPage} from "./employee-detail";
 import {CreateEmployeePage} from "./create-employee";
 import {EmployeeService} from "../service/employeeService";
+import {Toast} from "@ionic-native/toast";
 
 /**
  * Generated class for the EmployeeList page.
@@ -23,29 +24,41 @@ import {EmployeeService} from "../service/employeeService";
 })
 export class EmployeeListPage {
 
-  employee:any;
+  employees:any;
     firstLetter:any;
+    page:1;
+    totalPages:0;
+
   constructor(public navCtrl: NavController,public component:componentService,public myService:authService, public navParams: NavParams, private  authService: authService, public camera: Camera,
-              private loadingCtrl:LoadingController, private geolocation:Geolocation, private toastCtrl:ToastController,
+              private loadingCtrl:LoadingController, private geolocation:Geolocation, private toast: Toast,
               private geoFence:Geofence, private employeeService: EmployeeService) {
 
+      this.employees = [];
 
   }
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad Employee list');
-    this.component.showLoader('Getting All Employees');
-    this.employeeService.getAllEmployees().subscribe(
-        response=>{
-          console.log('ionViewDidLoad Employee list:');
-            console.log(response);
-          this.employee=response;
-          this.component.closeLoader();
-        },
-        error=>{
-          console.log('ionViewDidLoad Employee Page:'+error);
-        }
-    )
+    this.component.showLoader('Getting Employees');
+    var searchCriteria = {
+        currPage:this.page
+    };
+      this.employeeService.searchEmployees(searchCriteria).subscribe(
+          response=>{
+              console.log('ionViewDidLoad Employee list:');
+              console.log(response);
+              console.log(response.transactions);
+              this.employees = response.transactions;
+              console.log(this.employees);
+              this.page = response.currPage;
+              this.totalPages = response.totalPages;
+              this.component.closeLoader();
+          },
+          error=>{
+              console.log('ionViewDidLoad Employee Page:'+error);
+          }
+      )
+
   }
 
     viewEmployee(emp)
@@ -55,11 +68,57 @@ export class EmployeeListPage {
 
     first(emp)
     {
+        // console.log(emp)
         this.firstLetter=emp.charAt(0);
     }
     createEmployee($event)
     {
         this.navCtrl.push(CreateEmployeePage)
+    }
+
+    doInfinite(infiniteScroll){
+      console.log('Begin async operation');
+      console.log(infiniteScroll);
+        console.log(this.totalPages);
+        console.log(this.page);
+      var searchCriteria ={
+          currPage:this.page+1
+      };
+      if(this.page>this.totalPages){
+          console.log("End of all pages");
+          infiniteScroll.complete();
+          this.toast.show('All Employees Loaded','5000','bottom').subscribe(
+              toast => {
+                  console.log(toast);
+              }
+          );
+
+      }else{
+          console.log("Getting pages");
+          console.log(this.totalPages);
+          console.log(this.page);
+          setTimeout(()=>{
+              this.employeeService.searchEmployees(searchCriteria).subscribe(
+                  response=>{
+                      console.log('ionViewDidLoad Employee list:');
+                      console.log(response);
+                      console.log(response.transactions);
+                      for(var i=0;i<response.transactions.length;i++){
+                          this.employees.push(response.transactions[i]);
+                      }
+                      this.page = response.currPage;
+                      this.totalPages = response.totalPages;
+                      this.component.closeLoader();
+                  },
+                  error=>{
+                      console.log('ionViewDidLoad Employee Page:'+error);
+                  }
+              )
+              infiniteScroll.complete();
+          },1000);
+      }
+
+
     }
 
 

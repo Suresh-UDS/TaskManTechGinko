@@ -102,6 +102,10 @@ public class Job extends AbstractAuditingEntity implements Serializable{
 	
     @OneToMany(mappedBy ="job", cascade = CascadeType.ALL)
 	private List<JobChecklist> checklistItems;
+    
+    @ManyToOne(cascade={CascadeType.ALL})
+	@JoinColumn(name="parent_job_id")
+    private Job parentJob;
 
 	public Long getId() {
 		return id;
@@ -271,23 +275,6 @@ public class Job extends AbstractAuditingEntity implements Serializable{
 	public void setCompletedDueEmailAlert(boolean completedDueEmailAlert) {
 		this.completedDueEmailAlert = completedDueEmailAlert;
 	}
-	public String toString() {
-		StringBuilder sb = new StringBuilder();
-		sb.append("Job Details - {" + StringUtil.SPACE);
-		sb.append("Id :" + id + StringUtil.SPACE);
-		sb.append("title :" + title + StringUtil.SPACE);
-		sb.append("description :" + description + StringUtil.SPACE);
-		sb.append("planned start time :" + plannedStartTime + StringUtil.SPACE);
-		sb.append("comments :" + comments + StringUtil.SPACE);
-		sb.append("siteId :" + site.getId() + StringUtil.SPACE);
-		sb.append("siteName :" + site.getName() + StringUtil.SPACE);
-		//sb.append("employeeId :" + employee.getId() + StringUtil.SPACE);
-		//sb.append("employeeName :" + employee.getName() + StringUtil.SPACE);
-		sb.append("jobStatus :" + status + StringUtil.SPACE);
-		sb.append("active :" + getActive() + StringUtil.SPACE);
-		sb.append(" } ");
-		return sb.toString();
-	}
 
     public Asset getAsset() {
         return asset;
@@ -308,7 +295,29 @@ public class Job extends AbstractAuditingEntity implements Serializable{
 	public void setChecklistItems(List<JobChecklist> checklistItems) {
 		this.checklistItems = checklistItems;
 	}
+	public Job getParentJob() {
+		return parentJob;
+	}
+	public void setParentJob(Job parentJob) {
+		this.parentJob = parentJob;
+	}
 	
-	
+	public String toString() {
+		StringBuilder sb = new StringBuilder();
+		sb.append("Job Details - {" + StringUtil.SPACE);
+		sb.append("Id :" + id + StringUtil.SPACE);
+		sb.append("title :" + title + StringUtil.SPACE);
+		sb.append("description :" + description + StringUtil.SPACE);
+		sb.append("planned start time :" + plannedStartTime + StringUtil.SPACE);
+		sb.append("comments :" + comments + StringUtil.SPACE);
+		sb.append("siteId :" + site.getId() + StringUtil.SPACE);
+		sb.append("siteName :" + site.getName() + StringUtil.SPACE);
+		//sb.append("employeeId :" + employee.getId() + StringUtil.SPACE);
+		//sb.append("employeeName :" + employee.getName() + StringUtil.SPACE);
+		sb.append("jobStatus :" + status + StringUtil.SPACE);
+		sb.append("active :" + getActive() + StringUtil.SPACE);
+		sb.append(" } ");
+		return sb.toString();
+	}
 
 }

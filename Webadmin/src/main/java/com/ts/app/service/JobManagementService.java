@@ -399,7 +399,7 @@ public class JobManagementService extends AbstractService {
 			schConfDto.setScheduleWeeklyThursday(jobDTO.isScheduleWeeklyThursday());
 			schConfDto.setScheduleWeeklyFriday(jobDTO.isScheduleWeeklyFriday());
 			schConfDto.setScheduleWeeklySaturday(jobDTO.isScheduleWeeklySaturday());
-
+			
 			schedulerService.save(schConfDto,job);
 		}
 
@@ -502,7 +502,7 @@ public class JobManagementService extends AbstractService {
 	public void deleteJob(Long id){
 		jobRepository.delete(id);
 	}
-
+	
 	public List<JobDTO> getJobs(){
 		return null;
 	}
@@ -566,34 +566,38 @@ public class JobManagementService extends AbstractService {
 
 		//if the job is scheduled for recurrence create a scheduled task
 		if(!StringUtils.isEmpty(jobDTO.getSchedule()) && !jobDTO.getSchedule().equalsIgnoreCase("ONCE")) {
-			schedulerService.deleteCurrentSchedule(jobDTO.getId());
-			SchedulerConfigDTO schConfDto = new SchedulerConfigDTO();
-			schConfDto.setSchedule(jobDTO.getSchedule());
-			schConfDto.setType("CREATE_JOB");
-			StringBuffer data = new StringBuffer();
-			data.append("title="+jobDTO.getTitle());
-			data.append("&description="+jobDTO.getDescription());
-			data.append("&siteId="+jobDTO.getSiteId());
-			data.append("&empId="+jobDTO.getEmployeeId());
-			data.append("&plannedStartTime="+jobDTO.getPlannedStartTime());
-			data.append("&plannedEndTime="+jobDTO.getPlannedEndTime());
-			data.append("&plannedHours="+jobDTO.getPlannedHours());
-			schConfDto.setData(data.toString());
-			schConfDto.setStartDate(jobDTO.getPlannedStartTime());
-			schConfDto.setEndDate(jobDTO.getPlannedEndTime());
-			schConfDto.setScheduleEndDate(jobDTO.getScheduleEndDate());
-			schConfDto.setScheduleDailyExcludeWeekend(jobDTO.isScheduleDailyExcludeWeekend());
-			schConfDto.setScheduleWeeklySunday(jobDTO.isScheduleWeeklySunday());
-			schConfDto.setScheduleWeeklyMonday(jobDTO.isScheduleWeeklyMonday());
-			schConfDto.setScheduleWeeklyTuesday(jobDTO.isScheduleWeeklyTuesday());
-			schConfDto.setScheduleWeeklyWednesday(jobDTO.isScheduleWeeklyWednesday());
-			schConfDto.setScheduleWeeklyThursday(jobDTO.isScheduleWeeklyThursday());
-			schConfDto.setScheduleWeeklyFriday(jobDTO.isScheduleWeeklyFriday());
-			schConfDto.setScheduleWeeklySaturday(jobDTO.isScheduleWeeklySaturday());
-			schConfDto.setActive("Y");
-			schedulerService.save(schConfDto,job);
+			if(jobDTO.getActive().equalsIgnoreCase("yes")) {
+				schedulerService.deleteCurrentSchedule(jobDTO.getId());
+				SchedulerConfigDTO schConfDto = new SchedulerConfigDTO();
+				schConfDto.setSchedule(jobDTO.getSchedule());
+				schConfDto.setType("CREATE_JOB");
+				StringBuffer data = new StringBuffer();
+				data.append("title="+jobDTO.getTitle());
+				data.append("&description="+jobDTO.getDescription());
+				data.append("&siteId="+jobDTO.getSiteId());
+				data.append("&empId="+jobDTO.getEmployeeId());
+				data.append("&plannedStartTime="+jobDTO.getPlannedStartTime());
+				data.append("&plannedEndTime="+jobDTO.getPlannedEndTime());
+				data.append("&plannedHours="+jobDTO.getPlannedHours());
+				schConfDto.setData(data.toString());
+				schConfDto.setStartDate(jobDTO.getPlannedStartTime());
+				schConfDto.setEndDate(jobDTO.getPlannedEndTime());
+				schConfDto.setScheduleEndDate(jobDTO.getScheduleEndDate());
+				schConfDto.setScheduleDailyExcludeWeekend(jobDTO.isScheduleDailyExcludeWeekend());
+				schConfDto.setScheduleWeeklySunday(jobDTO.isScheduleWeeklySunday());
+				schConfDto.setScheduleWeeklyMonday(jobDTO.isScheduleWeeklyMonday());
+				schConfDto.setScheduleWeeklyTuesday(jobDTO.isScheduleWeeklyTuesday());
+				schConfDto.setScheduleWeeklyWednesday(jobDTO.isScheduleWeeklyWednesday());
+				schConfDto.setScheduleWeeklyThursday(jobDTO.isScheduleWeeklyThursday());
+				schConfDto.setScheduleWeeklyFriday(jobDTO.isScheduleWeeklyFriday());
+				schConfDto.setScheduleWeeklySaturday(jobDTO.isScheduleWeeklySaturday());
+				schConfDto.setActive("Y");
+				schedulerService.save(schConfDto,job);
+			}else {
+				schedulerService.deleteCurrentSchedule(jobDTO.getId());
+			}
 		}else {
-        	//delete any existing job schedule if
+			//delete any existing job schedule if
 			schedulerService.deleteCurrentSchedule(jobDTO.getId());
 		}
 

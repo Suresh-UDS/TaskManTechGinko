@@ -21,6 +21,14 @@ export class EmployeeService {
         )
     }
 
+    searchEmployees(searchCriteria):Observable<any>{
+        return this.http.post(this.config.Url+'api/employee/search',searchCriteria).map(
+            response=>{
+                return response.json();
+            }
+        )
+    }
+
     markEnrolled(employee):Observable<any>{
         return this.http.post(this.config.Url+'api/employee/enroll',{id:employee.id,enrolled_face:employee.imageData}).map(
             (response)=>{

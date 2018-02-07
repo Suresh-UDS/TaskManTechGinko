@@ -120,7 +120,7 @@ public class UserRolePermissionService extends AbstractService {
 	public UserRolePermissionDTO findBySearchCrieria(SearchCriteria searchCriteria) {
 		UserRolePermissionDTO permDto = new UserRolePermissionDTO();
 		if(searchCriteria != null) {
-			Pageable pageRequest = createPageRequest(searchCriteria.getCurrPage());
+			Pageable pageRequest = createPageRequest(searchCriteria.getCurrPage(), 100);
 			Page<UserRolePermission> page = null;
 			if(!searchCriteria.isFindAll()) {
 				if(searchCriteria.getUserRoleId() != 0) {

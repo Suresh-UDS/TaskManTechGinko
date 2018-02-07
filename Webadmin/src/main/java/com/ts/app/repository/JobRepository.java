@@ -87,5 +87,6 @@ public interface JobRepository extends JpaRepository<Job, Long>,JpaSpecification
     @Query("SELECT j from Job j where  (j.employee.user.id = :userId or j.employee.id in (:subEmpIds))")
     List<Job> findWithoutDateRange(@Param("userId") long userId, @Param("subEmpIds") List<Long> subEmpIds);
 
-
+    @Query("DELETE from Job j where j.parentJob.id = :parentJobId and j.plannedStartTime between :startDate and :endDate ")
+    void deleteScheduledJobs(@Param("parentJobId") long parentJobId, @Param("startDate") Date startDate, @Param("endDate") Date endDate);
 }
