@@ -41,6 +41,7 @@ public class ExportUtil {
 
 	// CSV file header
 	private static final Object[] FILE_HEADER = { "ID", "TITLE", "DATE", "COMPLETED TIME", "SITE", "LOCATION"};
+	private static final Object[] JOB_DETAIL_REPORT_FILE_HEADER = { "SITE", "TITLE", "EMPLOYEE", "TYPE", "PLANNED START TIME", "COMPLETED TIME", "STATUS"};
 	private static final Object[] CONSOLIDATED_REPORT_FILE_HEADER = { "SITE", "LOCATION", "ASSIGNED JOBS", "COMPLETED JOBS", "OVERDUE JOBS","TAT"};
 	private static final Object[] DETAIL_REPORT_FILE_HEADER = { "SITE", "DATE", "EMPLOYEE ID", "EMPLOYEE NAME", "CHECK IN TIME", "CHECK OUT TIME"};
 	private static final Object[] EMPLOYEE_DETAIL_REPORT_FILE_HEADER = { "EMPLOYEE ID", "EMPLOYEE NAME", "DESIGNATION", "REPORTING TO", "CLIENT", "SITE", "ACTIVE"};
@@ -233,15 +234,17 @@ public class ExportUtil {
 						csvFilePrinter = new CSVPrinter(fileWriter, csvFileFormat);
 						if(!isAppend) {
 							// Create CSV file header
-							csvFilePrinter.printRecord(FILE_HEADER);
+							csvFilePrinter.printRecord(JOB_DETAIL_REPORT_FILE_HEADER);
 						}
 						for (JobDTO transaction : content) {
 							List record = new ArrayList();
 							log.debug("Writing transaction record for site :"+ transaction.getSiteName());
 							record.add(transaction.getSiteName());
 							record.add(String.valueOf(transaction.getTitle()));
+							record.add(transaction.getEmployeeName());
 							record.add(transaction.getJobType());
 							record.add(transaction.getPlannedStartTime());
+							record.add(transaction.getActualEndTime());
 							record.add(transaction.getJobStatus().toString());
 							csvFilePrinter.printRecord(record);
 						}

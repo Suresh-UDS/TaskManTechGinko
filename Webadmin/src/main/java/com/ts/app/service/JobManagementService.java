@@ -151,7 +151,11 @@ public class JobManagementService extends AbstractService {
 	        	java.sql.Date fromDt = DateUtil.convertToSQLDate(DateUtil.convertUTCToIST(checkInDateFrom));
 	        	//String fromDt = DateUtil.formatUTCToIST(checkInDateFrom);
 	        	Calendar checkInDateTo = Calendar.getInstance(TimeZone.getTimeZone("Asia/Kolkata"));
-	        	checkInDateTo.setTime(checkInDate);
+	        	if(searchCriteria.getCheckInDateTimeTo() != null) {
+	        		checkInDateTo.setTime(searchCriteria.getCheckInDateTimeTo());
+	        	}else {
+	        		checkInDateTo.setTime(checkInDate);
+	        	}
 
 	        	checkInDateTo.set(Calendar.HOUR_OF_DAY, 23);
 	        	checkInDateTo.set(Calendar.MINUTE,59);
@@ -174,17 +178,29 @@ public class JobManagementService extends AbstractService {
 	                */
 	        		if(searchCriteria.isAssignedStatus()) {
 	        		    log.debug("search criteria assigned status true");
-	        			page = jobRepository.findByDateRangeAndLocation(searchCriteria.getSiteId(),searchCriteria.getUserId(),subEmpIds, JobStatus.ASSIGNED,fromDt,toDt,searchCriteria.isScheduled(),searchCriteria.getLocationId(),pageRequest);
-	        			allJobsList.addAll(page.getContent());
+	        		    if(searchCriteria.getSiteId() > 0) {
+	        		    		page = jobRepository.findByDateRangeAndLocation(searchCriteria.getSiteId(),searchCriteria.getUserId(),subEmpIds, JobStatus.ASSIGNED,fromDt,toDt,searchCriteria.isScheduled(),searchCriteria.getLocationId(),pageRequest);
+	        		    }else {
+	        		    		page = jobRepository.findByStatusAndDateRange(searchCriteria.getUserId(),subEmpIds,fromDt,toDt, JobStatus.ASSIGNED,pageRequest);
+	        		    }
+	        		    	allJobsList.addAll(page.getContent());
 	        		}
 	        		if(searchCriteria.isCompletedStatus()) {
 	        		    log.debug("search criteria completed status true");
-	        			page = jobRepository.findByDateRangeAndLocation(searchCriteria.getSiteId(),searchCriteria.getUserId(),subEmpIds, JobStatus.COMPLETED,fromDt,toDt,searchCriteria.getLocationId(),pageRequest);
-	        			allJobsList.addAll(page.getContent());
+	        		    if(searchCriteria.getSiteId() > 0) {
+	        		    		page = jobRepository.findByDateRangeAndLocation(searchCriteria.getSiteId(),searchCriteria.getUserId(),subEmpIds, JobStatus.COMPLETED,fromDt,toDt,searchCriteria.getLocationId(),pageRequest);
+	        		    }else {
+	        		    		page = jobRepository.findByStatusAndDateRange(searchCriteria.getUserId(),subEmpIds,fromDt,toDt, JobStatus.COMPLETED,pageRequest);
+	        		    }
+	        		    	allJobsList.addAll(page.getContent());
 	        		}
 	        		if(searchCriteria.isOverdueStatus()) {
-                        log.debug("search criteria overdue status true");
-                        page = jobRepository.findOverDueJobsByDateRangeAndLocation(searchCriteria.getSiteId(),searchCriteria.getUserId(),subEmpIds,fromDt,toDt,searchCriteria.getLocationId(),pageRequest);
+	        			log.debug("search criteria overdue status true");
+	        			if(searchCriteria.getSiteId() > 0) {
+	        				page = jobRepository.findOverDueJobsByDateRangeAndLocation(searchCriteria.getSiteId(),searchCriteria.getUserId(),subEmpIds,fromDt,toDt,searchCriteria.getLocationId(),pageRequest);
+	        			}else {
+	        				page = jobRepository.findByStatusAndDateRange(searchCriteria.getUserId(),subEmpIds,fromDt,toDt, JobStatus.OVERDUE,pageRequest);
+	        			}
 	        			allJobsList.addAll(page.getContent());
 	        		}
 	        	}else {
@@ -941,6 +957,23 @@ public class JobManagementService extends AbstractService {
         return result;
     }
 
+	public ExportResult export(List<JobDTO> transactions) {
+		return exportUtil.writeJobReportToFile(transactions, null, null);
+	}
 
+	public ExportResult getExportStatus(String fileId) {
+		ExportResult er = new ExportResult();
+		fileId += ".csv";
+		if(!StringUtils.isEmpty(fileId)) {
+			String status = exportUtil.getExportStatus(fileId);
+			er.setFile(fileId);
+			er.setStatus(status);
+		}
+		return er;
+	}
+
+	public byte[] getExportFile(String fileName) {
+		return exportUtil.readExportFile(fileName);
+	}
 
 }

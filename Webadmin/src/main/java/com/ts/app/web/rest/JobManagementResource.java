@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.util.List;
 
@@ -290,6 +291,50 @@ public class JobManagementResource {
         return jobService.findBySiteId(siteId);
     }
 
+    @RequestMapping(value = "/job/export",method = RequestMethod.POST)
+	public ExportResponse exportJob(@RequestBody SearchCriteria searchCriteria) {
+		ExportResponse resp = new ExportResponse();
+		if(searchCriteria != null) {
+			searchCriteria.setUserId(SecurityUtils.getCurrentUserId());
+			SearchResult<JobDTO> result = jobService.findBySearchCrieria(searchCriteria, true);
+			List<JobDTO> results = result.getTransactions();
+			resp.addResult(jobService.export(results));
+		}
+		return resp;
+	}
 
+    @RequestMapping(value = "/job/export/{fileId}/status",method = RequestMethod.GET)
+	public ExportResult exportStatus(@PathVariable("fileId") String fileId) {
+		log.debug("ExportStatus -  fileId -"+ fileId);
+		ExportResult result = jobService.getExportStatus(fileId);
+		if(result!=null && result.getStatus() != null) {
+			switch(result.getStatus()) {
+				case "PROCESSING" :
+					result.setMsg("Exporting...");
+					break;
+				case "COMPLETED" :
+					result.setMsg("Download");
+					result.setFile("/api/job/export/"+fileId);
+					break;
+				case "FAILED" :
+					result.setMsg("Failed to export. Please try again");
+					break;
+				default :
+					result.setMsg("Failed to export. Please try again");
+					break;
+			}
+		}
+		return result;
+	}
+
+	@RequestMapping(value = "/job/export/{fileId}",method = RequestMethod.GET)
+	public byte[] getExportFile(@PathVariable("fileId") String fileId, HttpServletResponse response) {
+		byte[] content = jobService.getExportFile(fileId);
+		response.setContentType("application/force-download");
+		response.setContentLength(content.length);
+		response.setHeader("Content-Transfer-Encoding", "binary");
+		response.setHeader("Content-Disposition","attachment; filename=\"" + fileId + ".txt\"");
+		return content;
+	}
 
 }
