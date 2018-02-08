@@ -50,9 +50,16 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long> {
 	@Query("SELECT e FROM Employee e WHERE e.id <> :empId and e.active='Y' order by e.empId")
 	List<Employee> findAllEligibleManagers(@Param("empId") long empId);
 
+    @Query("SELECT e FROM Employee e , User u WHERE u.userGroup.id = :userGroupId and e.isReliever=true and e.active='Y' order by e.empId")
+    List<Employee> findAllRelieversByGroupId(@Param("userGroupId") long userGroupId);
+
+    @Query("SELECT e FROM Employee e  WHERE  e.isReliever=true and e.active='Y' order by e.empId")
+    List<Employee> findAllRelievers();
+
+	/*
     @Query("SELECT e FROM Employee e join e.projectSites ps WHERE ((e.id = :employeeId and ps.projectId = :projectId) or ps.siteId = :siteId) and e.active='Y' order by e.empId")
 	Page<Employee> findEmployeesByIdAndProjectIdOrSiteId(@Param("employeeId") long employeeId, @Param("projectId") long projectId, @Param("siteId") long siteId, Pageable pageRequest);
-	
+
     @Query("SELECT e FROM Employee e join e.projectSites ps WHERE ((e.id = :employeeId and ps.siteId = :siteId) or ps.projectId = :projectId) and e.active='Y' order by e.empId")
 	Page<Employee> findEmployeesByIdAndSiteIdOrProjectId(@Param("employeeId") long employeeId, @Param("projectId") long projectId, @Param("siteId") long siteId, Pageable pageRequest);
 
@@ -61,13 +68,13 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long> {
 
     @Query("SELECT e FROM Employee e join e.projectSites ps WHERE (e.id = :employeeId and ps.siteId = :siteId and ps.projectId = :projectId) and e.active='Y' order by e.empId")
 	Page<Employee> findEmployeesByIdAndSiteIdAndProjectId(@Param("employeeId") long employeeId, @Param("projectId") long projectId, @Param("siteId") long siteId,Pageable pageRequest);
-    
+
     @Query("SELECT e FROM Employee e join e.projectSites ps WHERE (ps.siteId = :siteId and ps.projectId = :projectId) and e.active='Y' order by e.empId")
 	Page<Employee> findBySiteIdAndProjectId(@Param("projectId") long projectId, @Param("siteId") long siteId, Pageable pageRequest);
 
     @Query("SELECT e FROM Employee e join e.projectSites ps WHERE ((e.id = :employeeId and ps.projectId = :projectId) or ps.siteId = :siteId) and e.active='Y' and e.createdDate between :startDate and :endDate order by e.empId")
 	Page<Employee> findEmployeesByIdAndProjectIdOrSiteId(@Param("employeeId") long employeeId, @Param("projectId") long projectId, @Param("siteId") long siteId, @Param("startDate") Date startDate, @Param("endDate") Date endDate, Pageable pageRequest);
-	
+
     @Query("SELECT e FROM Employee e join e.projectSites ps WHERE ((e.id = :employeeId and ps.siteId = :siteId) or ps.projectId = :projectId) and e.active='Y' and e.createdDate between :startDate and :endDate order by e.empId")
 	Page<Employee> findEmployeesByIdAndSiteIdOrProjectId(@Param("employeeId") long employeeId, @Param("projectId") long projectId, @Param("siteId") long siteId, @Param("startDate") Date startDate, @Param("endDate") Date endDate,Pageable pageRequest);
 
@@ -76,10 +83,10 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long> {
 
     @Query("SELECT e FROM Employee e join e.projectSites ps WHERE (e.id = :employeeId and ps.siteId = :siteId and ps.projectId = :projectId) and e.active='Y' and e.createdDate between :startDate and :endDate order by e.empId")
 	Page<Employee> findEmployeesByIdAndSiteIdAndProjectId(@Param("employeeId") long employeeId, @Param("projectId") long projectId, @Param("siteId") long siteId, @Param("startDate") Date startDate, @Param("endDate") Date endDate,Pageable pageRequest);
-    
+
     @Query("SELECT e FROM Employee e join e.projectSites ps WHERE (ps.siteId = :siteId and ps.projectId = :projectId) and e.active='Y' and e.createdDate between :startDate and :endDate order by e.empId")
 	Page<Employee> findBySiteIdAndProjectId(@Param("projectId") long projectId, @Param("siteId") long siteId, @Param("startDate") Date startDate, @Param("endDate") Date endDate, Pageable pageRequest);
-    
+
     /*
     @Query("SELECT e FROM Employee e , User u WHERE ((e.id = :employeeId and e.project.id = :projectId) or e.site.id = :siteId) and e.user.id = u.id and u.userGroup.id = :userGroupId and e.active='Y' order by e.empId")
 	Page<Employee> findEmployeesByIdAndProjectIdOrSiteId(@Param("employeeId") long employeeId, @Param("projectId") long projectId, @Param("siteId") long siteId, @Param("userGroupId") long userGroupId, Pageable pageRequest);

@@ -59,6 +59,8 @@ public class Employee extends AbstractAuditingEntity implements Serializable {
 	@Column(length = 50, nullable = true, unique = true)
 	private String name;
 
+    private String lastName;
+
 	@Column(name="qr_code_image")
 	private String qrCodeImage;
 
@@ -91,9 +93,9 @@ public class Employee extends AbstractAuditingEntity implements Serializable {
         joinColumns = {@JoinColumn(name = "employee_id", referencedColumnName = "id")},
         inverseJoinColumns = {@JoinColumn(name = "site_id", referencedColumnName = "id")})
 	private List<Site> sites;
-    
+
 	@OneToMany(mappedBy="employee",cascade={CascadeType.ALL})
-	@Cascade(org.hibernate.annotations.CascadeType.DELETE_ORPHAN) 
+	@Cascade(org.hibernate.annotations.CascadeType.DELETE_ORPHAN)
     private List<EmployeeProjectSite> projectSites;
 
 	@NotNull
@@ -105,6 +107,12 @@ public class Employee extends AbstractAuditingEntity implements Serializable {
 	private boolean isFaceAuthorised;
 
 	private String enrolled_face;
+
+	private boolean isLeft;
+
+	private boolean isRelieved;
+
+	private boolean isReliever;
 
 	public Long getId() {
 		return id;
@@ -245,6 +253,37 @@ public class Employee extends AbstractAuditingEntity implements Serializable {
         this.enrolled_face = enrolled_face;
     }
 
+    public boolean isLeft() {
+        return isLeft;
+    }
+
+    public void setLeft(boolean left) {
+        isLeft = left;
+    }
+
+    public boolean isRelieved() {
+        return isRelieved;
+    }
+
+    public void setRelieved(boolean relieved) {
+        isRelieved = relieved;
+    }
+
+    public boolean isReliever() {
+        return isReliever;
+    }
+
+    public void setReliever(boolean reliever) {
+        isReliever = reliever;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
 	public List<EmployeeProjectSite> getProjectSites() {
 		return projectSites;
 	}
@@ -252,6 +291,5 @@ public class Employee extends AbstractAuditingEntity implements Serializable {
 	public void setProjectSites(List<EmployeeProjectSite> projectSites) {
 		this.projectSites = projectSites;
 	}
-    
-    
+
 }

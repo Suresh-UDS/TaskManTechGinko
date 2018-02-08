@@ -135,7 +135,14 @@ angular.module('timeSheetApp')
                     return response;
                 })
             },
-            
+
+            getAllRelievers: function(){
+                return $http.get('api/employee/relievers').then(function (response) {
+                    console.log(response);
+                    return response;
+                })
+            },
+
             exportAllData: function(searchCriteria) {
 	            	return $http.post('api/employee/export', searchCriteria).then(function (response) {
 	            		return response.data;
@@ -148,12 +155,13 @@ angular.module('timeSheetApp')
 	                	});
 	            	}
             },
-            
+
             getExportFile: function(fileName) {
 	            	return $http.get('api/employee/export/'+fileName).then(function (response) {
 	            		return response.data;
 	            	});
-            }            
+            }
+
 
 
 

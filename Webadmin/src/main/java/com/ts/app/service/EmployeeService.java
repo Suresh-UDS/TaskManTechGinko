@@ -145,6 +145,9 @@ public class    EmployeeService extends AbstractService {
 			employee.setSites(sites);
 			employee.setFaceAuthorised(false);
 			employee.setFaceIdEnrolled(false);
+			employee.setLeft(false);
+			employee.setRelieved(false);
+			employee.setReliever(false);
 			List<EmployeeProjectSite> projectSites =  employee.getProjectSites();
 			if(CollectionUtils.isNotEmpty(projectSites)) {
 				for(EmployeeProjectSite projSite : projectSites) {
@@ -160,6 +163,8 @@ public class    EmployeeService extends AbstractService {
 
 	public EmployeeDTO updateEmployee(EmployeeDTO employee, boolean shouldUpdateActiveStatus) {
 		log.debug("Inside Update");
+		log.debug("Inside Update"+employee);
+		log.debug("Inside Update"+employee.isLeft());
 		Employee employeeUpdate = employeeRepository.findOne(employee.getId());
 		Hibernate.initialize(employeeUpdate.getProjects());
 		List<Project> projects = employeeUpdate.getProjects();
@@ -200,6 +205,7 @@ public class    EmployeeService extends AbstractService {
 
 		employeeUpdate.setFullName(employee.getFullName());
 		employeeUpdate.setName(employee.getName());
+		employeeUpdate.setLastName(employee.getLastName());
 		if(newProj != null && !projExists) {
 			employeeUpdate.getProjects().add(newProj);
 		}
@@ -212,7 +218,9 @@ public class    EmployeeService extends AbstractService {
 	    ZonedDateTime zdt   = ZonedDateTime.of(LocalDateTime.now(), zone);
 		employeeUpdate.setLastModifiedDate(zdt);
 		employeeUpdate.setCode(employee.getCode());
-
+        employeeUpdate.setLeft(employee.isLeft());
+        employeeUpdate.setReliever(employee.isReliever());
+        employeeUpdate.setRelieved(employee.isRelieved());
         if(employee.getManagerId() > 0) {
             Employee manager =  employeeRepository.findOne(employee.getManagerId());
             employeeUpdate.setManager(manager);
@@ -230,7 +238,7 @@ public class    EmployeeService extends AbstractService {
 				projectSites.add(projSite);
 			}
 		}
-		
+
 		employeeRepository.saveAndFlush(employeeUpdate);
 		employee = mapperUtil.toModel(employeeUpdate, EmployeeDTO.class);
 		return employee;
@@ -388,6 +396,18 @@ public class    EmployeeService extends AbstractService {
 		return mapperUtil.toModelList(entities, EmployeeDTO.class);
 	}
 
+    public List<EmployeeDTO> findAllRelievers(long userId) {
+        User user = userRepository.findOne(userId);
+        long userGroupId = user.getUserGroup().getId();
+        List<Employee> entities = null;
+        if(user.getUserGroup().getName().equalsIgnoreCase("admin")) {
+            entities = employeeRepository.findAllRelievers();
+        }else {
+            entities = employeeRepository.findAllRelieversByGroupId(userGroupId);
+        }
+        return mapperUtil.toModelList(entities, EmployeeDTO.class);
+    }
+
     public List<EmployeeDTO> findBySiteId(long userId,long siteId) {
         User user = userRepository.findOne(userId);
         long userGroupId = user.getUserGroup().getId();
@@ -435,7 +455,7 @@ public class    EmployeeService extends AbstractService {
 		Hibernate.initialize(entity.getManager());
 		if(entity.getManager() != null) {
 			dto.setManagerId(entity.getManager().getId());
-			dto.setManagerName(entity.getManager().getName());
+			dto.setManagerName(entity.getManager().getFullName());
 		}
 		//entity.setProjectSites(entity.getProjectSites());
 		return dto;
