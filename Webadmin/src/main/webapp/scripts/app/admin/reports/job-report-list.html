@@ -1,0 +1,192 @@
+<div class="gc-container">
+	<div class="success-message hidden"></div>
+
+
+    <div class="row">
+        <div class="col-md-8">
+            <h2 class="title">Job Report</h2>
+        </div>
+        <div class="col-md-4 txt-align-rgt">
+            <a class="download-btn" href="{{exportFile()}}">{{exportMsg()}}</a>
+            <button ng-show="jobs.length" type="button" class="btn btn-success" ng-click=exportAllData()>
+                <i class="material-icons">file_upload</i> Export</button>
+        
+            <button ng-click="refreshPage()" class="btn btn-warning align-left"> <i class="material-icons padding-right5">refresh</i>Reload<div class="ripple-container"></div></button>
+        </div>
+    </div>
+
+    <div class="row">
+
+        <div class="col-md-12">
+
+            <div class="card">
+                <div class="card-content">
+                    <form name="searchForm" ng-submit="loadJobs()">
+
+                        <table class="table" border="0">
+                            <tr class="filter-row gc-search-row">
+                                <td>
+                                    <div class="form-group" ng-init="loadProjects();loadAllSites();loadAssets()">
+	                                    <div class="dropdown col-xs-4 col-md-3" >
+	
+	                                        <input id="dateFilterFrom" type="text" class="form-control datepicker"   value={{now}} placeholder="From Date" />
+	                                    </div>
+	                                    <div class="dropdown col-xs-4 col-md-3" >
+
+                                        		<input id="dateFilterTo" type="text" class="form-control datepicker"   value={{now}} placeholder="To Date" />
+                                    		</div>
+                                        <div class="dropdown col-xs-4 col-md-3">
+                                            <input type="text"
+                                                   class="form-control searchable-input floatL"
+                                                   placeholder="Search Project" ng-model="selectedProject"
+
+                                                   name="projectId"
+                                                   uib-typeahead="project as project.name for project in projects | filter:$viewValue | limitTo:5" />
+                                        </div>
+                                        <div class="dropdown col-xs-4 col-md-3">
+                                            <input type="text"
+                                                   class="form-control searchable-input floatL"
+                                                   placeholder="Search Site" ng-model="selectedSite"
+                                                   uib-typeahead="site as site.name for site in sites | filter:$viewValue | limitTo:5" />
+                                        </div>
+
+                                        <div class="dropdown col-xs-4 col-md-3">
+
+                                            <input type="text"
+                                                   class="form-control searchable-input floatL"
+                                                   placeholder="Search Status" ng-model="selectedStatus"
+                                                   uib-typeahead="stat as stat.name for stat in status | filter:$viewValue | limitTo:5" />
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="floatL form-group">
+                                        <button type="submit" class="btn btn-primary search-button t4"
+                                                ng-disabled="searchForm.$invalid">
+                                            <i class="fa fa-search"></i>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+
+                        </table>
+
+                    </form>
+                </div>
+            </div>
+
+
+        </div>
+
+    </div>
+
+
+    <div class="row">
+
+        <div class="col-md-12">
+            <div class="card tablecard">
+                <div class="card-content">
+                    <div class="table-responsive">
+                        <table class="table table-striped" ng-init="search();">
+
+                            <thead>
+                            <tr>
+                                <th>Job Id</th>
+                                <th>Job Title</th>
+                                <th>Employee</th>
+                                <th>Status</th>
+                                <th>Project</th>
+                                <th>Site</th>
+                                <th>Start Time</th>
+                                <th>End Time</th>
+                            </tr>
+                            </thead>
+
+                            <tbody>
+                            <tr ng-repeat="job in jobs">
+                                <td>{{job.id}}</td>
+                                <td>{{job.title}}</td>
+                                <td>{{job.employeeName}}</td>
+                                <td>{{job.status}}</td>
+                                <td>{{job.siteProjectName}}</td>
+                                <td>{{job.siteName}}</td>
+                                <td><label ng-bind="job.plannedStartTime | date:'dd-MMM-yyyy hh:mm a'"/></td>
+								<td><label ng-bind="job.actualEndTime | date:'dd-MMM-yyyy hh:mm a'"/></td>
+                            </tr>
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <!-- end content-->
+            </div>
+            <!--  end card  -->
+        </div>
+        <!-- end col-md-12 -->
+    </div>
+    <!-- end row -->
+
+    <div class="card margin-TB-5 txt-align-center" ng-hide="jobs">
+
+        <div class="card-content">
+
+            <h3>No data Found</h3>
+
+        </div>
+
+    </div>
+
+    <div class="row">
+
+        <div class="col-md-6"></div>
+        <div class="col-md-6 text-right">
+            <ul class="pagination pagination-warning">
+
+                <li class="paging-first" ID="first">
+                    <a href="#" id="first" ng-click="first()">
+                        <i id="first" class=" fa fa-step-backward"></i></a>
+                </li>
+                <li class="prev paging-previous" id="previous">
+                    <a id="previous" href="#" ng-click="previous()"> prev</a>
+                </li>
+
+                <li class="active">
+                    <a href="javascript:void(0);">{{pages.currPage}}</a>
+                </li>
+                <li class="next paging-next" id="next">
+                    <a id="next" href="#" ng-click="next()" >next</a>
+                </li>
+                <li class="paging-last" id="last">
+                    <a id="last" href="#" ng-click="last()"><i id="last" class="fa fa-step-forward"></i></a>
+                </li>
+
+            </ul>
+        </div>
+
+    </div>
+
+
+
+
+	<div class="row">
+
+		<div id="deleteModal" data-backdrop="false" class="modal fade"
+			tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+			aria-hidden="true">
+			<div class="delete-dialog">
+				<div class="modal-content">
+					<div class="modal-body">
+						Are you sure to delete the job?<br>
+					</div>
+					<div class="delete-footer">
+						<button type="button" ng-click="deleteJob()"
+							class="btn btn-danger-outline text-danger" data-dismiss="modal">Confirm</button>
+						<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</div>
+</div>

@@ -149,11 +149,9 @@ angular.module('timeSheetApp')
 	            	});
             },
             exportStatus: function(fileName) {
-	            	if(empId == 0) {
-	                	return $http.get('api/employee/export/'+fileName+"/status").then(function (response) {
-	                		return response.data;
-	                	});
-	            	}
+                	return $http.get('api/employee/export/'+fileName+"/status").then(function (response) {
+                		return response.data;
+                	});
             },
 
             getExportFile: function(fileName) {

@@ -6,7 +6,7 @@
         </div>
         <div class="col-md-4 txt-align-rgt">
             
-            <a class="download-btn" href="{{exportFile(0)}}">{{exportMsg(0)}}</a>
+            <a class="download-btn" href="{{exportFile()}}">{{exportMsg()}}</a>
             <button ng-show="employees.length" type="button" class="btn btn-success" ng-click=exportAllData()>
                 <i class="material-icons">file_upload</i> Export</button>
             <button ng-click="refreshPage()" class="btn btn-warning align-left"> <i class="material-icons padding-right5">refresh</i>Reload<div class="ripple-container"></div></button>
@@ -29,18 +29,15 @@
 
 								<td>
                                     <div class="form-group" >
-									   
                                         <input id="dateFilterFrom" type="text" class="form-control datepicker" ng-model="fromDate"  value={{now}} placeholder="From Date" />
-                                        <span class="form-control-feedback calender-icon"><i class="material-icons">date_range</i></span>
                                         
                                     </div>
                                 </td>
 
                                 <td>
                                     <div class="form-group" >
-
                                         <input id="dateFilterTo" type="text" class="form-control datepicker" ng-model="toDate"  value={{now}} placeholder="To Date" />
-                                        <span class="form-control-feedback calender-icon"><i class="material-icons">date_range</i></span>
+                                        
                                     </div>
                                 </td>
                                 
@@ -105,6 +102,7 @@
                                 <th>Reporting To</th>
                                 <th>Client</th>
                                 <th>Site</th>
+                                <th>Joining Date</th>
                                 <th>Active</th>
                             </tr>
                             </thead>
@@ -117,6 +115,7 @@
 							   <td>{{employee.managerName}}</td>
 							   <td>{{employee.projectSites[0].projectName}}</td>
 							   <td>{{employee.projectSites[0].siteName}}</td>
+							   <td>{{employee.createdDate}}</td>
 							   <td>{{employee.active}}</td>
                             </tr>
 
