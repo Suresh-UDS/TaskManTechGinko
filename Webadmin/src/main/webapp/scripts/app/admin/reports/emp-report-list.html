@@ -1,10 +1,14 @@
-<div>
+<div >
 
     <div class="row" ng-init="loadEmployees()">
         <div class="col-md-8" ng-init="loadProjects()">
             <h2 class="title">Employee Reports</h2>
         </div>
         <div class="col-md-4 txt-align-rgt">
+            
+            <a class="download-btn" href="{{exportFile(0)}}">{{exportMsg(0)}}</a>
+            <button ng-show="employees.length" type="button" class="btn btn-success" ng-click=exportAllData()>
+                <i class="material-icons">file_upload</i> Export</button>
             <button ng-click="refreshPage()" class="btn btn-warning align-left"> <i class="material-icons padding-right5">refresh</i>Reload<div class="ripple-container"></div></button>
         </div>
     </div>
@@ -26,7 +30,8 @@
 								<td>
                                     <div class="form-group" >
 									   
-                                        <input id="dateFilterFrom" type="text" class="form-control datepicker"   value={{now}} placeholder="From Date" /><span class="form-control-feedback calender-icon"><i class="material-icons">date_range</i></span>
+                                        <input id="dateFilterFrom" type="text" class="form-control datepicker" ng-model="fromDate"  value={{now}} placeholder="From Date" />
+                                        <span class="form-control-feedback calender-icon"><i class="material-icons">date_range</i></span>
                                         
                                     </div>
                                 </td>
@@ -34,7 +39,7 @@
                                 <td>
                                     <div class="form-group" >
 
-                                        <input id="dateFilterTo" type="text" class="form-control datepicker"   value={{now}} placeholder="To Date" />
+                                        <input id="dateFilterTo" type="text" class="form-control datepicker" ng-model="toDate"  value={{now}} placeholder="To Date" />
                                         <span class="form-control-feedback calender-icon"><i class="material-icons">date_range</i></span>
                                     </div>
                                 </td>
@@ -48,7 +53,7 @@
                                                    placeholder="Search Client"
                                                    ng-model="selectedProject"
                                                    ng-value="searchCriteria.projectName"
-                                                   uib-typeahead="project as project.name for project in allProjects | filter:$viewValue | limitTo:5"/>
+                                                   uib-typeahead="project as project.name for project in projects | filter:$viewValue | limitTo:5"/>
                                         </div>
                                     </div>
                                 </td>
@@ -60,7 +65,7 @@
                                                    placeholder="Search Site"
                                                    ng-model="selectedSite"
                                                    ng-value="searchCriteria.siteName"
-                                                   uib-typeahead="site as site.name for site in allSites | filter:$viewValue | limitTo:5"/>
+                                                   uib-typeahead="site as site.name for site in sites | filter:$viewValue | limitTo:5"/>
                                         </div>
                                     </div>
                                 </td>

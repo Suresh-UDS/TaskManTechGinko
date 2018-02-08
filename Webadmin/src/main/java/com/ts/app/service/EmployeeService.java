@@ -540,23 +540,66 @@ public class    EmployeeService extends AbstractService {
 			Pageable pageRequest = createPageRequest(searchCriteria.getCurrPage());
 			Page<Employee> page = null;
 			List<EmployeeDTO> transactions = null;
+			
+            Calendar startCal = Calendar.getInstance();
+            startCal.setTime(searchCriteria.getFromDate());
+	    		startCal.set(Calendar.HOUR_OF_DAY, 0);
+	    		startCal.set(Calendar.MINUTE, 0);
+	    		startCal.set(Calendar.SECOND, 0);
+	    		Calendar endCal = Calendar.getInstance();
+	    		endCal.setTime(searchCriteria.getToDate());
+	    		endCal.set(Calendar.HOUR_OF_DAY, 23);
+	    		endCal.set(Calendar.MINUTE, 59);
+	    		endCal.set(Calendar.SECOND, 0);
+	
+	    		searchCriteria.setCheckInDateTimeFrom(startCal.getTime());
+	    		searchCriteria.setCheckInDateTimeTo(endCal.getTime());
+
+			
+			java.sql.Date startDate = new java.sql.Date(searchCriteria.getFromDate().getTime());
+        		java	.sql.Date toDate = new java.sql.Date(searchCriteria.getToDate().getTime());
+			
 			log.debug("findBySearchCriteria - "+searchCriteria.getSiteId() +", "+searchCriteria.getEmployeeId() +", "+searchCriteria.getProjectId());
 			if((searchCriteria.getSiteId() != 0 && searchCriteria.getProjectId() != 0)) {
-				//page = employeeRepository.findEmployeesByIdOrSiteIdAndProjectId(searchCriteria.getEmployeeId(), searchCriteria.getProjectId(), searchCriteria.getSiteId(), userGroupId, pageRequest);
+				if(searchCriteria.getFromDate() != null) {
+					page = employeeRepository.findBySiteIdAndProjectId(searchCriteria.getProjectId(), searchCriteria.getSiteId(),startDate, toDate, pageRequest);
+				}else {
+					page = employeeRepository.findBySiteIdAndProjectId(searchCriteria.getProjectId(), searchCriteria.getSiteId(), pageRequest);
+				}
 			}else if((searchCriteria.getSiteId() != 0 && searchCriteria.getEmployeeId() != 0)) {
 				log.debug("findBySearchCriteria - "+searchCriteria.getSiteId() +", "+searchCriteria.getEmployeeId() +", "+searchCriteria.getProjectId());
-				//page = employeeRepository.findEmployeesByIdAndSiteIdOrProjectId(searchCriteria.getEmployeeId(), searchCriteria.getProjectId(), searchCriteria.getSiteId(), userGroupId, pageRequest);
+				if(searchCriteria.getFromDate() != null) {
+					page = employeeRepository.findEmployeesByIdAndSiteIdOrProjectId(searchCriteria.getEmployeeId(), searchCriteria.getProjectId(), searchCriteria.getSiteId(), startDate, toDate, pageRequest);
+				}else {
+					page = employeeRepository.findEmployeesByIdAndSiteIdOrProjectId(searchCriteria.getEmployeeId(), searchCriteria.getProjectId(), searchCriteria.getSiteId(), pageRequest);
+				}
 			}else if((searchCriteria.getEmployeeId() != 0 && searchCriteria.getProjectId() != 0)) {
-				//page = employeeRepository.findEmployeesByIdAndProjectIdOrSiteId(searchCriteria.getEmployeeId(), searchCriteria.getProjectId(), searchCriteria.getSiteId(), userGroupId, pageRequest);
+				if(searchCriteria.getFromDate() != null) {
+					page = employeeRepository.findEmployeesByIdAndProjectIdOrSiteId(searchCriteria.getEmployeeId(), searchCriteria.getProjectId(), searchCriteria.getSiteId(), startDate, toDate, pageRequest);
+				}else {
+					page = employeeRepository.findEmployeesByIdAndProjectIdOrSiteId(searchCriteria.getEmployeeId(), searchCriteria.getProjectId(), searchCriteria.getSiteId(), pageRequest);
+				}
 			}else if (searchCriteria.getEmployeeId() != 0 && searchCriteria.getProjectId() != 0 && searchCriteria.getSiteId() != 0) {
-                //page = employeeRepository.findEmployeesByIdAndSiteIdAndProjectId(searchCriteria.getEmployeeId(), searchCriteria.getProjectId(), searchCriteria.getSiteId(), userGroupId, pageRequest);
+				if(searchCriteria.getFromDate() != null) {
+					page = employeeRepository.findEmployeesByIdAndSiteIdAndProjectId(searchCriteria.getEmployeeId(), searchCriteria.getProjectId(), searchCriteria.getSiteId(), startDate, toDate,pageRequest);
+				}else {
+					page = employeeRepository.findEmployeesByIdAndSiteIdAndProjectId(searchCriteria.getEmployeeId(), searchCriteria.getProjectId(), searchCriteria.getSiteId(), pageRequest);
+				}
             }else if (searchCriteria.getEmployeeId() != 0) {
 			    page = employeeRepository.findByEmployeeId(searchCriteria.getEmployeeId(),pageRequest);
             	//page = employeeRepository.findEmployeesByIdOrSiteIdAndProjectId(searchCriteria.getEmployeeId(), searchCriteria.getProjectId(), searchCriteria.getSiteId(), userGroupId, pageRequest);
             }else if (searchCriteria.getProjectId() != 0) {
-            	//page = employeeRepository.findEmployeesByIdAndSiteIdOrProjectId(searchCriteria.getEmployeeId(), searchCriteria.getProjectId(), searchCriteria.getSiteId(), userGroupId, pageRequest);
+            		if(searchCriteria.getFromDate() != null) {
+            			page = employeeRepository.findEmployeesByIdAndSiteIdOrProjectId(searchCriteria.getEmployeeId(), searchCriteria.getProjectId(), searchCriteria.getSiteId(), startDate, toDate, pageRequest);
+            		}else {
+            			page = employeeRepository.findEmployeesByIdAndSiteIdOrProjectId(searchCriteria.getEmployeeId(), searchCriteria.getProjectId(), searchCriteria.getSiteId(), pageRequest);
+            		}
             }else if (searchCriteria.getSiteId() != 0) {
-            	//page = employeeRepository.findEmployeesByIdAndProjectIdOrSiteId(searchCriteria.getEmployeeId(), searchCriteria.getProjectId(), searchCriteria.getSiteId(), userGroupId, pageRequest);
+            		if(searchCriteria.getFromDate() != null) {
+            			page = employeeRepository.findEmployeesByIdAndProjectIdOrSiteId(searchCriteria.getEmployeeId(), searchCriteria.getProjectId(), searchCriteria.getSiteId(), startDate, toDate, pageRequest);
+            		}else {
+            			page = employeeRepository.findEmployeesByIdAndProjectIdOrSiteId(searchCriteria.getEmployeeId(), searchCriteria.getProjectId(), searchCriteria.getSiteId(), pageRequest);
+            		}
             }else {
             	if(user.getUserGroup().getName().equalsIgnoreCase("admin")) {
             		page = employeeRepository.findAll(pageRequest);
@@ -609,7 +652,25 @@ public class    EmployeeService extends AbstractService {
 		return;
 	}
 
+	public ExportResult export(List<EmployeeDTO> transactions) {
+		return exportUtil.writeToCsvFile(transactions, null);
+	}
 
+	public ExportResult getExportStatus(String fileId) {
+		ExportResult er = new ExportResult();
+		fileId += ".csv";
+		if(!StringUtils.isEmpty(fileId)) {
+			String status = exportUtil.getExportStatus(fileId);
+			er.setFile(fileId);
+			//er.setEmpId(empId);
+			er.setStatus(status);
+		}
+		return er;
+	}
+
+	public byte[] getExportFile(String fileName) {
+		return exportUtil.readExportFile(fileName);
+	}
 
 
 }

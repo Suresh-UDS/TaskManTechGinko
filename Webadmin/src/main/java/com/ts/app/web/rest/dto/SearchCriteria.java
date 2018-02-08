@@ -31,6 +31,10 @@ public class SearchCriteria extends Paginator {
 
 	private Date checkInDateTimeTo;
 
+	private Date fromDate;
+
+	private Date toDate;
+
 	private JobStatus jobStatus;
 
 	private long locationId;
@@ -386,4 +390,20 @@ public class SearchCriteria extends Paginator {
     public void setRateCardTitle(String rateCardTitle) {
         this.rateCardTitle = rateCardTitle;
     }
+	public Date getFromDate() {
+		return fromDate;
+	}
+
+	public void setFromDate(Date fromDate) {
+		this.fromDate = fromDate;
+	}
+
+	public Date getToDate() {
+		return toDate;
+	}
+
+	public void setToDate(Date toDate) {
+		this.toDate = toDate;
+	}
+
 }
