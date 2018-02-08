@@ -399,7 +399,7 @@ public class JobManagementService extends AbstractService {
 			schConfDto.setScheduleWeeklyThursday(jobDTO.isScheduleWeeklyThursday());
 			schConfDto.setScheduleWeeklyFriday(jobDTO.isScheduleWeeklyFriday());
 			schConfDto.setScheduleWeeklySaturday(jobDTO.isScheduleWeeklySaturday());
-			
+
 			schedulerService.save(schConfDto,job);
 		}
 
@@ -448,7 +448,7 @@ public class JobManagementService extends AbstractService {
 		job.setScheduleWeeklySaturday(jobDTO.isScheduleWeeklySaturday());
 		job.setScheduled(jobDTO.isScheduled());
 		job.setFrequency(jobDTO.getFrequency());
-		
+
 		//add the job checklist items
 		if(CollectionUtils.isNotEmpty(jobDTO.getChecklistItems())) {
 			List<JobChecklistDTO> jobclDtoList = jobDTO.getChecklistItems();
@@ -502,7 +502,7 @@ public class JobManagementService extends AbstractService {
 	public void deleteJob(Long id){
 		jobRepository.delete(id);
 	}
-	
+
 	public List<JobDTO> getJobs(){
 		return null;
 	}
@@ -939,6 +939,37 @@ public class JobManagementService extends AbstractService {
 
         }
         return result;
+    }
+
+    public List<Job> assignReliever(EmployeeDTO employee, EmployeeDTO reliever, Date startDate, Date endDate) {
+
+        Calendar checkInDateFrom = Calendar.getInstance(TimeZone.getTimeZone("Asia/Kolkata"));
+        checkInDateFrom.setTime(startDate);
+
+        checkInDateFrom.set(Calendar.HOUR_OF_DAY, 0);
+        checkInDateFrom.set(Calendar.MINUTE,0);
+        checkInDateFrom.set(Calendar.SECOND,0);
+        java.sql.Date fromDt = DateUtil.convertToSQLDate(DateUtil.convertUTCToIST(checkInDateFrom));
+
+        Calendar checkInDateTo = Calendar.getInstance(TimeZone.getTimeZone("Asia/Kolkata"));
+        checkInDateFrom.setTime(endDate);
+
+        checkInDateTo.set(Calendar.HOUR_OF_DAY, 0);
+        checkInDateTo.set(Calendar.MINUTE,0);
+        checkInDateTo.set(Calendar.SECOND,0);
+        java.sql.Date toDt = DateUtil.convertToSQLDate(DateUtil.convertUTCToIST(checkInDateFrom));
+
+        List<Job> allJobsList = new ArrayList<Job>();
+
+        allJobsList= jobRepository.findByDateRangeAndEmployee(employee.getId(), fromDt, toDt);
+        Employee relieverDetails = mapperUtil.toEntity(reliever,Employee.class);
+        for(Job job: allJobsList){
+            job.setRelieved(true);
+            job.setReliever(relieverDetails);
+            job = jobRepository.save(job);
+        }
+
+        return allJobsList;
     }
 
 

@@ -136,7 +136,7 @@
                                     </button>
                                     <button ng-disabled="employee.left" title="Mark Left"   has-authority="ROLE_ADMIN"  data-toggle="modal" data-target="#leftModal" data-dismiss="#leftModal" ng-click="employeeDetails(employee.id)"  class="btn btn-simple btn-info btn-icon like"> <i style="font-size: 20px !important; color: #942a25" class="fas fa-user-times"></i></button>
                                     <button ng-disabled="employee.left" title="Site Transfer"   has-authority="ROLE_ADMIN"  data-toggle="modal" data-target="#siteTransferModal" data-dismiss="#siteTransferModal"   class="btn btn-simple btn-info btn-icon like" > <i style="font-size: 20px; color: orangered" class="material-icons">transfer_within_a_station</i></button>
-                                    <button ng-if="!employee.reliever" ng-disabled="employee.left" title="Relieve Employee"   has-authority="ROLE_ADMIN"  data-toggle="modal" data-target="#relieverConfirmation" data-dismiss="#relieverConfirmation" ng-click="getRelievers()"   class="btn btn-simple btn-info btn-icon like"> <i style="font-size: 20px" class="material-icons">assignment_ind</i></button>
+                                    <button ng-if="!employee.reliever" ng-disabled="employee.left" title="Relieve Employee"   has-authority="ROLE_ADMIN"  data-toggle="modal" data-target="#relieverConfirmation" data-dismiss="#relieverConfirmation" ng-click="getRelievers(employee)"   class="btn btn-simple btn-info btn-icon like"> <i style="font-size: 20px" class="material-icons">assignment_ind</i></button>
                                 </td>
 
                             </tr>
@@ -361,7 +361,7 @@
             </div>
 
             <div class="modal-footer ">
-                <button type="button" class="btn btn-info btn-round btn-sucess" data-dismiss="modal" ng-click="assignReliever()">Assign Reliever</button>
+                <button type="button" class="btn btn-info btn-round btn-sucess" data-dismiss="modal" ng-click="assignReliever(relievedEmployee)">Assign Reliever</button>
                 <button type="button" class="btn btn-info btn-round btn-danger" data-dismiss="modal">Cancel</button>
             </div>
         </div>

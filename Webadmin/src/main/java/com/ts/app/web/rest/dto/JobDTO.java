@@ -23,6 +23,11 @@ public class JobDTO extends BaseDTO {
 	private Long employeeId;
 	private String employeeName;
 
+	private Long relieverId;
+	private String relieverName;
+
+	private boolean relieved;
+
 	private Long locationId;
 	private String locationName;
 
@@ -57,7 +62,7 @@ public class JobDTO extends BaseDTO {
 	private boolean scheduled;
 
 	private String frequency;
-	
+
 	private List<JobChecklistDTO> checklistItems;
 
 	public String getTitle() {
@@ -263,8 +268,11 @@ public class JobDTO extends BaseDTO {
 		sb.append("employeeName :" + employeeName + StringUtil.SPACE);
 		sb.append("jobStatus :" + jobStatus + StringUtil.SPACE);
 		sb.append("location :" + locationId + StringUtil.SPACE);
+		sb.append("relieverId:"+relieverId+StringUtil.SPACE);
+		sb.append("relieverName:"+relieverName+StringUtil.SPACE);
 		sb.append("asset :" + assetId + StringUtil.SPACE);
 		sb.append("active :" + getActive() + StringUtil.SPACE);
+		sb.append("relieved:"+relieved+ StringUtil.SPACE);
 		sb.append(" } ");
 		return sb.toString();
 	}
@@ -306,9 +314,28 @@ public class JobDTO extends BaseDTO {
 		this.checklistItems = checklistItems;
 	}
 
-	
-	
-	
-	
 
+    public Long getRelieverId() {
+        return relieverId;
+    }
+
+    public void setRelieverId(Long relieverId) {
+        this.relieverId = relieverId;
+    }
+
+    public String getRelieverName() {
+        return relieverName;
+    }
+
+    public void setRelieverName(String relieverName) {
+        this.relieverName = relieverName;
+    }
+
+    public boolean isRelieved() {
+        return relieved;
+    }
+
+    public void setRelieved(boolean relieved) {
+        this.relieved = relieved;
+    }
 }

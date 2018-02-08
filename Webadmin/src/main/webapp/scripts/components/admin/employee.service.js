@@ -160,6 +160,20 @@ angular.module('timeSheetApp')
 	            	return $http.get('api/employee/export/'+fileName).then(function (response) {
 	            		return response.data;
 	            	});
+            },
+
+            assignReliever: function (employee, reliever,fromDate, toDate) {
+                var relieveDetails = {
+                    employeeId:employee.id,
+                    employeeEmpId:employee.empId,
+                    relieverEmpId:reliever.empId,
+                    relieverId:reliever.id,
+                    relievedFromDate:fromDate,
+                    relievedToDate:toDate
+                }
+                return $http.post('api/employee/assignReliever',relieveDetails).then(function (response) {
+                    return response.data;
+                })
             }
 
 
