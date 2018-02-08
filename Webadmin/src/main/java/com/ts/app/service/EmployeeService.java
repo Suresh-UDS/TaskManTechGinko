@@ -542,7 +542,9 @@ public class    EmployeeService extends AbstractService {
 			List<EmployeeDTO> transactions = null;
 			
             Calendar startCal = Calendar.getInstance();
-            startCal.setTime(searchCriteria.getFromDate());
+            if(searchCriteria.getFromDate() != null) {
+            		startCal.setTime(searchCriteria.getFromDate());
+            }
 	    		startCal.set(Calendar.HOUR_OF_DAY, 0);
 	    		startCal.set(Calendar.MINUTE, 0);
 	    		startCal.set(Calendar.SECOND, 0);
