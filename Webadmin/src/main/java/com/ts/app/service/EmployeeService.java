@@ -547,13 +547,15 @@ public class    EmployeeService extends AbstractService {
 	    		startCal.set(Calendar.MINUTE, 0);
 	    		startCal.set(Calendar.SECOND, 0);
 	    		Calendar endCal = Calendar.getInstance();
-	    		endCal.setTime(searchCriteria.getToDate());
+	    		if(searchCriteria.getToDate() != null) {
+	    			endCal.setTime(searchCriteria.getToDate());
+	    		}
 	    		endCal.set(Calendar.HOUR_OF_DAY, 23);
 	    		endCal.set(Calendar.MINUTE, 59);
 	    		endCal.set(Calendar.SECOND, 0);
 	
-	    		searchCriteria.setCheckInDateTimeFrom(startCal.getTime());
-	    		searchCriteria.setCheckInDateTimeTo(endCal.getTime());
+	    		searchCriteria.setFromDate(startCal.getTime());
+	    		searchCriteria.setToDate(endCal.getTime());
 
 			
 			java.sql.Date startDate = new java.sql.Date(searchCriteria.getFromDate().getTime());
