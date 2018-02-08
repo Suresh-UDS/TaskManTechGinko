@@ -68,6 +68,8 @@ public class EmployeeDTO extends BaseDTO {
 
     private List<SiteDTO> sites;
 
+    private List<EmployeeProjectSiteDTO> projectSites;
+
     private boolean isLeft;
 
     private boolean isReliever;
@@ -218,11 +220,16 @@ public class EmployeeDTO extends BaseDTO {
         	}
         }
         if(CollectionUtils.isNotEmpty(sites)) {
-        	for(SiteDTO site : sites) {
-        		sb.append(site);
-        	}
+	        	for(SiteDTO site : sites) {
+	        		sb.append(site);
+	        	}
         }
-        sb.append("userId-" + userId);
+        sb.append("userId-" + userId +" ");
+        if(CollectionUtils.isNotEmpty(projectSites)) {
+        		for(EmployeeProjectSiteDTO projSite : projectSites) {
+        			sb.append(projSite);
+        		}
+        }
         return sb.toString();
     }
 
@@ -331,4 +338,12 @@ public class EmployeeDTO extends BaseDTO {
     public void setRelieved(boolean relieved) {
         isRelieved = relieved;
     }
+	public List<EmployeeProjectSiteDTO> getProjectSites() {
+		return projectSites;
+	}
+
+	public void setProjectSites(List<EmployeeProjectSiteDTO> projectSites) {
+		this.projectSites = projectSites;
+	}
+
 }

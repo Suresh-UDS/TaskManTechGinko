@@ -19,7 +19,7 @@ export class CreateRateCardPage {
     };
 
     uom:any;
-    errorMsg:any;
+    eMsg:any;
     field:any;
     constructor(public navCtrl: NavController,public navParams:NavParams, public authService: authService, private loadingCtrl:LoadingController, private quotationService: QuotationService) {
         this.rateCardDetails={
@@ -57,13 +57,17 @@ export class CreateRateCardPage {
         {
             if(!this.rateCardDetails.title)
             {
-                this.errorMsg="Title Required";
+                this.eMsg="title";
                 this.field="title";
             }
             else if(!this.rateCardDetails.cost)
             {
-                this.errorMsg="Cost Required";
+                this.eMsg="title";
                 this.field="cost";
+            }
+            else if(!this.rateCardDetails.title && !this.rateCardDetails.cost)
+            {
+                this.eMsg="all";
             }
         }
     }

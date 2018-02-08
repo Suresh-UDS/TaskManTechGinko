@@ -2,7 +2,6 @@ package com.ts.app.domain;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -26,6 +25,8 @@ import javax.validation.constraints.Size;
 
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
+
+import org.hibernate.annotations.Cascade;
 
 
 @Entity
@@ -92,6 +93,10 @@ public class Employee extends AbstractAuditingEntity implements Serializable {
         joinColumns = {@JoinColumn(name = "employee_id", referencedColumnName = "id")},
         inverseJoinColumns = {@JoinColumn(name = "site_id", referencedColumnName = "id")})
 	private List<Site> sites;
+
+	@OneToMany(mappedBy="employee",cascade={CascadeType.ALL})
+	@Cascade(org.hibernate.annotations.CascadeType.DELETE_ORPHAN)
+    private List<EmployeeProjectSite> projectSites;
 
 	@NotNull
 	@Column(length = 10, nullable = true)
@@ -279,4 +284,12 @@ public class Employee extends AbstractAuditingEntity implements Serializable {
     public void setLastName(String lastName) {
         this.lastName = lastName;
     }
+	public List<EmployeeProjectSite> getProjectSites() {
+		return projectSites;
+	}
+
+	public void setProjectSites(List<EmployeeProjectSite> projectSites) {
+		this.projectSites = projectSites;
+	}
+
 }

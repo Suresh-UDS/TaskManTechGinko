@@ -15,10 +15,16 @@
                         <div class="card-content">
                             <ion-row padding>
                                     <ion-col col-12>
-                                        <div class="form-group label-floating">
+                                        <div class="form-group label-floating" [ngClass]="{'has-error': eMsg=='all'||eMsg=='title'}">
                                             <label class="control-label">Title</label>
-                                            <input type="text" class="form-control" [(ngModel)]="title" name="title" required="true">
-                                            <span *ngIf="errorMsg" class="error">{{errorMsg}}</span>
+                                            <input class="form-control" type="text" [(ngModel)]="title" id="title" name="title" #titl="ngModel" required [ngClass]="{'has-error': titl.errors || eMsg=='all'|| eMsg=='title'}">
+                                            <div *ngIf="titl.errors && (titl.dirty || titl.touched)" class="error-msg">
+
+                                            </div>
+
+                                            <div *ngIf="titl.errors && (titl.untouched )" class="error-msg">
+
+                                            </div>
                                         </div>
 
                                     </ion-col>

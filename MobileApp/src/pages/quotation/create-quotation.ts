@@ -42,7 +42,7 @@ export class CreateQuotationPage {
     selectedSite:any;
 
     showRateInformation:any;
-    errorMsg:any;
+    eMsg:any;
 
 
     constructor(public navCtrl: NavController,public popoverCtrl: PopoverController, public evts: Events, public authService:authService, public alertCtrl: AlertController,
@@ -113,7 +113,7 @@ export class CreateQuotationPage {
         }
         else
         {
-            this.errorMsg="Title Required";
+            this.eMsg="title";
         }
 
 

@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('timeSheetApp')
-    .controller('EmployeeController', function ($rootScope, $scope, $state, $timeout, ProjectComponent, SiteComponent, EmployeeComponent, $http,$stateParams,$location) {
+    .controller('ReportController', function ($rootScope, $scope, $state, $timeout, ProjectComponent, SiteComponent, EmployeeComponent, $http,$stateParams,$location) {
         $scope.success = null;
         $scope.error = null;
         $scope.errorMessage = null;
@@ -23,13 +23,7 @@ angular.module('timeSheetApp')
         $scope.existingEmployee;
 
         $scope.selectedManager;
-
-        $scope.initCalender = function(){
-
-            demo.initFormExtendedDatetimepickers();
-
-        };
-
+        
         $scope.projectSiteList = [];
 
         $scope.addProjectSite = function() {
@@ -48,12 +42,12 @@ angular.module('timeSheetApp')
 	        	$scope.projectSiteList.push(projSite);
 	        	console.log('project site list -' + $scope.projectSiteList)
         };
-
+        
         $scope.removeProjectSite = function(ind) {
         		$scope.projectSiteList.splice(ind,1);
         };
-
-
+        
+        
         $scope.loadProjects = function () {
         	ProjectComponent.findAll().then(function (data) {
         	    console.log("Loading all projects")
@@ -196,26 +190,7 @@ angular.module('timeSheetApp')
        $scope.refreshPage = function() {
            $scope.clearFilter();
            $scope.loadEmployees();
-       };
-
-       $scope.employeeDetails= function(id){
-           EmployeeComponent.findOne(id).then(function (data) {
-                console.log(data);
-                $scope.employee = data;
-           })
-       };
-
-       $scope.updateEmployeeLeft= function(employee){
-           console.log(employee);
-           employee.left = true;
-          EmployeeComponent.updateEmployee(employee).then(function(data){
-              $scope.showNotifications('top','center','success','Employee Successfully Marked Left');
-              $scope.search();
-          }).catch(function(response){
-              console.log(response);
-              $scope.showNotifications('top','center','danger','Error in marking Left');
-          })
-        };
+       }
 
 
 
@@ -347,7 +322,7 @@ angular.module('timeSheetApp')
             	if($scope.projectSiteList) {
             		$scope.employee.projectSites = $scope.projectSiteList;
             	}
-
+	        	
 	        	EmployeeComponent.updateEmployee($scope.employee).then(function(){
 		        	$scope.success = 'OK';
                     $scope.showNotifications('top','center','success','Employee Successfully Updated');
@@ -750,8 +725,6 @@ angular.module('timeSheetApp')
                 $scope.search();
             })
         }
-
-        $scope.initCalender();
 
 
 

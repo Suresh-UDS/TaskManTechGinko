@@ -35,9 +35,10 @@ export class CreateJobPage {
     empSelect:any;
     employee:any;
     employ:any;
-    errorMsg:any;
+    eMsg:any;
     field:any;
     checklists:any;
+    empPlace:any;
     constructor(public navCtrl: NavController,public component:componentService,public navParams:NavParams,public myService:authService, public authService: authService, private loadingCtrl:LoadingController, private jobService: JobService, private attendanceService: AttendanceService, private siteService: SiteService) {
         this.jobDetails=this.navParams.get('job');
 
@@ -47,6 +48,8 @@ export class CreateJobPage {
 
             }
         )
+
+        this.empPlace="Employee"
 
     }
 
@@ -114,45 +117,60 @@ export class CreateJobPage {
         }
         else
         {
+            console.log("============else");
+
             if(!this.title)
             {
-                this.errorMsg="Title Required";
+                console.log("============title");
+                this.eMsg="title";
                 this.field="title";
             }
             else if(!this.description)
             {
-                this.errorMsg="Description Required";
+                console.log("============desc");
+                this.eMsg="description";
                 this.field="description";
             }
             else if(!this.siteName)
             {
-                this.errorMsg="Site Name Required";
+                console.log("============site");
+                this.eMsg="siteName";
                 this.field="siteName";
             }
             else if(!this.employ)
             {
-                this.errorMsg="Employ Required";
+                console.log("============employ");
+                this.eMsg="employ";
                 this.field="employ";
             }
             else if(!this.startDate)
             {
-                this.errorMsg="StartDate Required";
+                console.log("============sdate");
+                this.eMsg="startDate";
                 this.field="startDate";
             }
             else if(!this.startTime)
             {
-                this.errorMsg="StartTime Required";
+                console.log("============stime");
+                this.eMsg="startTime";
                 this.field="startTime";
             }
             else if(!this.endDate)
             {
-                this.errorMsg="EndDate Required";
+                console.log("============edate");
+                this.eMsg="endDate";
                 this.field="endDate";
             }
             else if(!this.endTime)
             {
-                this.errorMsg="EndTime Required";
+                console.log("============etime");
+                this.eMsg="endTime";
                 this.field="endTime";
+            }
+            else if(!this.title && !this.description && !this.siteName && !this.employ && !this.startDate && !this.startTime && !this.endDate && !this.endTime)
+            {
+                console.log("============all");
+                this.eMsg="all";
             }
 
         }
@@ -160,25 +178,39 @@ export class CreateJobPage {
 
     getEmployee(id)
     {
+        if(id)
+        {
         console.log('ionViewDidLoad Add jobs employee');
-        this.empSelect=false;
+
         window.localStorage.setItem('site',id);
         console.log(this.empSelect);
         this.siteService.searchSiteEmployee(id).subscribe(
             response=> {
                 console.log(response.json());
-                if(response.json().length>0)
+                if(response.json().length !==0)
                 {
+                    this.empSelect=false;
+                    this.empPlace="Employee"
                     this.employee=response.json();
+                    console.log(this.employee);
                 }
                 else
                 {
-                    this.employee="No Employee";
+                    this.empSelect=true;
+                    this.empPlace="No Employee"
+                    this.employee=[]
                 }
-
             },
             error=>{
+                this.employee="No Employee";
                 console.log(error);
+                console.log(this.employee);
             })
+
+        }
+        else
+        {
+            this.employee=[];
+        }
     }
 }

@@ -71,7 +71,7 @@ export class JobsPage {
 
     getAllJobs(ref)
     {
-        if(this.todaysJobs)
+        if(this.allJobs)
         {
             if(ref)
             {
@@ -79,7 +79,7 @@ export class JobsPage {
             }
             else
             {
-                this.todaysJobs=this.todaysJobs;
+                this.allJobs=this.allJobs;
             }
         }
         else

@@ -39,15 +39,18 @@
 
                         <div class="row">
 
-                            <div class="col-md-12">
-                                <div class="card formcard">
+                            <div class="col-md-6">
+                                <div class="card formcard minhgt320">
+                                    <div class="card-header card-header-text" data-background-color="orange">
+                                        <h4 class="card-title">Identity and Name</h4>
+                                    </div>
                                     <div class="card-content">
 
                                         <div class="row">
 
-                                            <div class="col-md-4">
+                                            <div class="col-md-6">
                                                 <div class="form-group label-floating">
-                                                    <label class="control-label">ID</label>
+                                                    <label class="control-label">Employee ID</label>
                                                     <input id='employeeEmpId' ng-model="employee.empId" class='form-control'
                                                            name='employeeEmpId' type='text' value="" ng-minlength=1 ng-maxlength=10 ng-pattern="/^[A-Za-z0-9]*$/" autofocus required ng-blur="getEmployeeByEmpId()"/>
                                                     <div ng-show="form.$submitted || form.employeeEmpId.$touched">
@@ -72,7 +75,7 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div class="col-md-4">
+                                            <!-- <div class="col-md-12">
                                                 <div class="form-group label-floating">
                                                     <label class="control-label">Full Name</label>
                                                     <input id='employeeFullName' ng-model="employee.fullName" class='form-control'
@@ -99,8 +102,8 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                            <div class="col-md-4">
+                                            </div> -->
+                                            <div class="col-md-12">
                                                 <div class="form-group label-floating">
                                                     <label class="control-label">Name</label>
                                                     <input id='employeeName' ng-model="employee.name" class='form-control'
@@ -132,17 +135,33 @@
                                         </div>
                                         <div class="row" ng-init="loadProjects()">
 
-                                            <div class="col-md-4">
-                                                <div class="form-group selectcon">
-                                                    <label class="control-label">Designation</label>
-                                                    <select class="siteList" ng-model="employee.designation">
-                                                        <option ng-repeat="designation in employeeDesignations">{{designation}}</option>
-                                                    </select>
-                                                </div>
-                                            </div>
+                                            
+                                            
+
+                                        </div>
+                                        <div class="row" >
+
+                                            
+
+                                        </div>
+
+
+                                    </div>
+                                </div>
+                            </div>
+
+                       		<div class="col-md-6">
+                                <div class="card formcard minhgt320">
+                                    <div class="card-header card-header-text" data-background-color="orange">
+                                        <h4 class="card-title">Client Info</h4>
+                                    </div>
+                                    <div class="card-content">
+
+                                        <div class="row">
+
                                             <div class="col-md-4">
                                                 <div class="form-group label-floating">
-                                                    <label class="control-label">Project</label>
+                                                    <label class="control-label">Client</label>
                                                     <div class="dropdown">
                                                         <input type="text" class="form-control" ng-model="selectedProject" name="projectName"
                                                                uib-typeahead="project as project.name for project in projects | filter:$viewValue | limitTo:5"
@@ -151,19 +170,19 @@
                                                             <div ng-show="form.projectName.$dirty || form.projectName.$invalid">
                                                                 <p class="help-block" style="color:maroon"
                                                                    ng-show="form.projectName.$error.required">
-                                                                    Project name is required.
+                                                                    Client name is required.
                                                                 </p>
                                                                 <p class="help-block" style="color:maroon"
                                                                    ng-show="form.projectName.$error.minlength">
-                                                                    Project name is required to be at least 2 character.
+                                                                    Client name is required to be at least 2 character.
                                                                 </p>
                                                                 <p class="help-block" style="color:maroon"
                                                                    ng-show="form.projectName.$error.maxlength">
-                                                                    Project name cannot be longer than 50 characters.
+                                                                    Client name cannot be longer than 50 characters.
                                                                 </p>
                                                                 <p class="help-block" style="color:maroon"
                                                                    ng-show="form.projectName.$error.pattern">
-                                                                    Project name can only contain letters, digits and space.
+                                                                    Client name can only contain letters, digits and space.
                                                                 </p>
                                                             </div>
                                                         </div>
@@ -200,12 +219,67 @@
                                                     </div>
                                                 </div>
                                             </div>
+                                            
+											<div class="col-md-4">
+					
+					                            <button class="btn btn-success" type="button" ng-click="addProjectSite()">
+					                                <span class="btn-label">
+					                                    <i class="material-icons">add</i>
+					                                </span>
+					                                Add
+					                            </button>
+					
+					                        </div>
+					                                            
+                                            
+                                            <div class="col-md-12 addedActionList pdng-top15" ng-hide="!(projectSiteList.length > 0)">
 
-                                        </div>
-                                        <div class="row" >
 
-                                            <div class="col-md-4">
-                                                <div class="form-group label-floating">
+						                        <div class="form-group">
+						
+						                            <label class="">Site List</label>
+						
+						                            <ul class="listOfActions list-group">
+						
+						                                <li class="list-group-item justify-content-between" ng-repeat="projSite in projectSiteList" ng-bind-html-unsafe="projSite.text">
+						                                    {{projSite.projectName}}  -  {{projSite.siteName}}
+						                                    <span class="badge badge-default badge-pill" ng-click="removeProjectSite($index)"><i class="material-icons">remove_circle</i></span>
+						                                </li>
+						
+						                            </ul>
+						
+						                        </div>
+                                            </div>
+                                            
+                                       </div>
+                                       
+                                    </div>
+                                </div>
+                             </div>                
+                                                
+                       </div>
+                       
+                       <div class="row" >
+	                       <div class="col-md-6">
+	                                <div class="card formcard minhgt320">
+	                                    <div class="card-header card-header-text" data-background-color="orange">
+	                                        <h4 class="card-title">Reporting hierarchy</h4>
+	                                    </div>
+	                                    <div class="card-content">
+	
+	                                        <div class="row">
+	
+	                                            <div class="col-md-6">
+	                                                <div class="form-group selectcon">
+	                                                    <label class="control-label">Designation</label>
+	                                                    <select class="siteList" ng-model="employee.designation">
+	                                                        <option ng-repeat="designation in employeeDesignations">{{designation}}</option>
+	                                                    </select>
+	    	                                            </div>
+        		                                    </div>
+        		                                    
+        		                                    <div class="col-md-6">
+                                                <div class="form-group ">
                                                     <label class="control-label">Manager</label>
                                                     <div class="dropdown">
                                                         <input ng-focus="loadAllManagers()" type="text" class="form-control" ng-model="selectedManager" name="manager"
@@ -230,17 +304,20 @@
                                                     </div>
                                                 </div>
                                             </div>
-
-                                        </div>
-
-                                        <div class="row">
+        		                                </div>
+        		                                
+        		                            </div>
+        		                         </div>
+        		               </div>                     
+                       </div>
+						<div class="row">
 
                                             <div class="col-sm-offset-3 col-sm-7">
                                                 <button class="btn btn-success" type="submit"
                                                         id="form-button-save" ng-disabled="form.$invalid" >
                                                     <span class="btn-label">
-                                            <i class="material-icons">check</i>
-                                        </span> Save
+                                            				<i class="material-icons">check</i>
+                                        				</span> Save
                                                 </button>
                                                 <button class="btn btn-info" type="submit"
                                                         id="save-and-go-back-button" ng-disabled="form.$invalid">
@@ -252,15 +329,7 @@
                                                 </button>
                                             </div>
 
-                                        </div>
-
-
-                                    </div>
-                                </div>
-                            </div>
-
-                        </div>
-
+                                        </div>	
 
 						<!--<div class="form-group"  >-->
 							<!--<label class="col-sm-3 control-label"> Photo Code </label>-->
