@@ -231,6 +231,12 @@ public class EmployeeResource {
         return result;
     }
 
+    @RequestMapping(value = "/employee/relievers", method = RequestMethod.GET)
+    public List<EmployeeDTO> findAllRelievers() {
+        log.info("--Invoked EmployeeResource.findAll Relievers--");
+        return employeeService.findAllRelievers(SecurityUtils.getCurrentUserId());
+    }
+
 
 
 

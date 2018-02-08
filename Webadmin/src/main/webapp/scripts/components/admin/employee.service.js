@@ -134,6 +134,12 @@ angular.module('timeSheetApp')
                     console.log(response);
                     return response;
                 })
+            },
+            getAllRelievers: function(){
+                return $http.get('api/employee/relievers').then(function (response) {
+                    console.log(response);
+                    return response;
+                })
             }
 
 

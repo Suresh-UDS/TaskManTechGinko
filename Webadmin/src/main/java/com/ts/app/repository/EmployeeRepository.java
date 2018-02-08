@@ -34,21 +34,26 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long> {
 	@Query("SELECT e FROM Employee e , User u WHERE e.user.id = u.id and u.userGroup.id = :userGroupId order by e.empId")
 	List<Employee> findAllActiveAndInactive(@Param("userGroupId") long userGroupId);
 
-	@Query("SELECT e FROM Employee e , User u WHERE e.user.id = u.id and u.userGroup.id = :userGroupId and e.active='Y' and e.isLeft=false order by e.empId")
+	@Query("SELECT e FROM Employee e , User u WHERE e.user.id = u.id and u.userGroup.id = :userGroupId and e.active='Y' order by e.empId")
 	List<Employee> findAll(@Param("userGroupId") long userGroupId);
 
-	@Query("SELECT e FROM Employee e, User u WHERE e.user.id = u.id and u.userGroup.id = :userGroupId and e.active='Y' and e.isLeft=false order by e.empId")
+	@Query("SELECT e FROM Employee e, User u WHERE e.user.id = u.id and u.userGroup.id = :userGroupId and e.active='Y' order by e.empId")
     Page<Employee> findEmployees(@Param("userGroupId") long userGroupId, Pageable pageRequest);
 
     @Query("SELECT e FROM Employee e WHERE e.id = :employeeId")
     Page<Employee> findByEmployeeId(@Param("employeeId") long employeeId, Pageable pageRequest);
 
-	@Query("SELECT e FROM Employee e WHERE e.active='Y' and e.isLeft=false order by e.createdDate desc")
+	@Query("SELECT e FROM Employee e WHERE e.active='Y' order by e.createdDate desc")
     Page<Employee> findAll(Pageable pageRequest);
 
 	@Query("SELECT e FROM Employee e WHERE e.id <> :empId and e.active='Y' order by e.empId")
 	List<Employee> findAllEligibleManagers(@Param("empId") long empId);
 
+    @Query("SELECT e FROM Employee e , User u WHERE u.userGroup.id = :userGroupId and e.isReliever=true and e.active='Y' order by e.empId")
+    List<Employee> findAllRelieversByGroupId(@Param("userGroupId") long userGroupId);
+
+    @Query("SELECT e FROM Employee e  WHERE  e.isReliever=true and e.active='Y' order by e.empId")
+    List<Employee> findAllRelievers();
 
 	/*
     @Query("SELECT e FROM Employee e , User u WHERE ((e.id = :employeeId and e.project.id = :projectId) or e.site.id = :siteId) and e.user.id = u.id and u.userGroup.id = :userGroupId and e.active='Y' order by e.empId")

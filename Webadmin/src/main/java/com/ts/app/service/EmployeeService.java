@@ -396,6 +396,18 @@ public class    EmployeeService extends AbstractService {
 		return mapperUtil.toModelList(entities, EmployeeDTO.class);
 	}
 
+    public List<EmployeeDTO> findAllRelievers(long userId) {
+        User user = userRepository.findOne(userId);
+        long userGroupId = user.getUserGroup().getId();
+        List<Employee> entities = null;
+        if(user.getUserGroup().getName().equalsIgnoreCase("admin")) {
+            entities = employeeRepository.findAllRelievers();
+        }else {
+            entities = employeeRepository.findAllRelieversByGroupId(userGroupId);
+        }
+        return mapperUtil.toModelList(entities, EmployeeDTO.class);
+    }
+
     public List<EmployeeDTO> findBySiteId(long userId,long siteId) {
         User user = userRepository.findOne(userId);
         long userGroupId = user.getUserGroup().getId();

@@ -24,11 +24,35 @@ angular.module('timeSheetApp')
 
         $scope.selectedManager;
 
+        $scope.selectedReliever;
+
+        $scope.isReliever;
+
+        $scope.relievers;
+
+        $scope.relieverDateTo;
+
+        $scope.relieverDateFrom;
+
         $scope.initCalender = function(){
 
             demo.initFormExtendedDatetimepickers();
 
-        };
+        }
+
+        $('#dateFilterFrom').on('dp.change', function(e){
+            console.log(e.date);
+
+            console.log(e.date._d);
+            $scope.relieverDateFrom = e.date._d;
+        });
+
+        $('#dateFilterTo').on('dp.change', function(e){
+            console.log(e.date);
+
+            console.log(e.date._d);
+            $scope.relieverDateTo = e.date._d;
+        });
 
         $scope.projectSiteList = [];
 
@@ -228,6 +252,7 @@ angular.module('timeSheetApp')
 
         $scope.loadEmployee = function() {
         	EmployeeComponent.findOne($stateParams.id).then(function (data) {
+        	    console.log(data);
                 $scope.employee = data;
                 $scope.projectSiteList = $scope.employee.projectSites;
                 $scope.employee.code = pad($scope.employee.code , 4);
@@ -337,6 +362,7 @@ angular.module('timeSheetApp')
         		$scope.errorProject = null;
         	}else
         	*/
+        	console.log($scope.employee);
         	if(!$scope.selectedManager.id){
                              $scope.errorManager = "true";
                              $scope.errorSite = null;
@@ -381,6 +407,21 @@ angular.module('timeSheetApp')
         	$state.reload();
         };
 
+        $scope.getRelievers = function(){
+          console.log("Getting Relievers");
+          EmployeeComponent.getAllRelievers().then(function(response){
+              console.log("Response from relievers");
+              console.log(response.data);
+              $scope.relievers = response.data;
+          })
+        };
+
+        $scope.assignReliever= function(){
+            console.log($scope.relieverDateTo);
+            console.log($scope.relieverDateFrom);
+            console.log($scope.selectedReliever);
+        };
+
 
 
         $scope.search = function () {
@@ -388,7 +429,7 @@ angular.module('timeSheetApp')
         	if(!$scope.searchCriteria) {
             	var searchCriteria = {
             			currPage : currPageVal
-            	}
+            	};
             	$scope.searchCriteria = searchCriteria;
         	}
     		console.log('criteria in root scope -'+JSON.stringify($rootScope.searchCriteriaEmployees));
