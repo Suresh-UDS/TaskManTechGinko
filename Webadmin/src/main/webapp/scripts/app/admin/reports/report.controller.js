@@ -23,8 +23,28 @@ angular.module('timeSheetApp')
         $scope.existingEmployee;
 
         $scope.selectedManager;
-        
+
         $scope.projectSiteList = [];
+
+        $scope.initCalender = function(){
+
+            demo.initFormExtendedDatetimepickers();
+
+        };
+
+        $('#dateFilterFrom').on('dp.change', function(e){
+            console.log(e.date);
+
+            console.log(e.date._d);
+
+        });
+
+        $('#dateFilterTo').on('dp.change', function(e){
+            console.log(e.date);
+
+            console.log(e.date._d);
+
+        });
 
         $scope.addProjectSite = function() {
 	        	console.log('selected project -' + $scope.selectedProject.name);
@@ -42,12 +62,12 @@ angular.module('timeSheetApp')
 	        	$scope.projectSiteList.push(projSite);
 	        	console.log('project site list -' + $scope.projectSiteList)
         };
-        
+
         $scope.removeProjectSite = function(ind) {
         		$scope.projectSiteList.splice(ind,1);
         };
-        
-        
+
+
         $scope.loadProjects = function () {
         	ProjectComponent.findAll().then(function (data) {
         	    console.log("Loading all projects")
@@ -322,7 +342,7 @@ angular.module('timeSheetApp')
             	if($scope.projectSiteList) {
             		$scope.employee.projectSites = $scope.projectSiteList;
             	}
-	        	
+
 	        	EmployeeComponent.updateEmployee($scope.employee).then(function(){
 		        	$scope.success = 'OK';
                     $scope.showNotifications('top','center','success','Employee Successfully Updated');
@@ -726,6 +746,8 @@ angular.module('timeSheetApp')
             })
         }
 
+
+        $scope.initCalender();
 
 
     });
