@@ -68,14 +68,19 @@ public class SearchCriteria extends Paginator {
 	private boolean completedStatus;
 
 	private boolean overdueStatus;
-	
+
 	private long userRoleId;
-	
+
 	private long applicationModuleId;
-	
+
 	private long applicationActionId;
-	
+
 	private long userRolePermissionId;
+
+	private String rateCardTitle;
+
+	private String rateCardType;
+
 
 	public long getId() {
 		return id;
@@ -365,5 +370,20 @@ public class SearchCriteria extends Paginator {
 	public void setUserRolePermissionId(long userRolePermissionId) {
 		this.userRolePermissionId = userRolePermissionId;
 	}
-    
+
+    public String getRateCardType() {
+        return rateCardType;
+    }
+
+    public void setRateCardType(String rateCardType) {
+        this.rateCardType = rateCardType;
+    }
+
+    public String getRateCardTitle() {
+        return rateCardTitle;
+    }
+
+    public void setRateCardTitle(String rateCardTitle) {
+        this.rateCardTitle = rateCardTitle;
+    }
 }
