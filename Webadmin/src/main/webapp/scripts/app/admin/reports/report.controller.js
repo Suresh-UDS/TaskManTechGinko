@@ -189,7 +189,7 @@ angular.module('timeSheetApp')
 
        $scope.refreshPage = function() {
            $scope.clearFilter();
-           $scope.loadEmployees();
+           //$scope.loadEmployees();
        }
 
 
@@ -412,6 +412,9 @@ angular.module('timeSheetApp')
 	        	}
         	}
         	$scope.searchCriteria.currPage = currPageVal;
+        	
+        	$scope.searchCriteria.fromDate = $scope.fromDate;
+        	$scope.searchCriteria.toDate = $scope.toDate;
         	console.log(JSON.stringify($scope.searchCriteria));
 
 
@@ -483,6 +486,65 @@ angular.module('timeSheetApp')
             // EmployeeComponent.getSites(employeeId).then(function (data) {
             //     console.log(data)
             // })
+        };
+        
+        $scope.exportAllData = function(){
+
+	        	EmployeeComponent.exportAllData($scope.searchCriteria).then(function(data){
+	        		var result = data.results[0];
+	        		console.log(result);
+	        		console.log(result.file + ', ' + result.status + ',' + result.msg);
+	        		var exportAllStatus = {
+	        				fileName : result.file,
+	        				exportMsg : 'Exporting All...'
+	        		};
+	        		$scope.exportStatusMap[0] = exportAllStatus;
+	        		console.log('exportStatusMap size - ' + $scope.exportStatusMap.length);
+	        		$scope.start();
+	              },function(err){
+	            	  console.log('error message for export all ')
+	            	  console.log(err);
+	              });
+        };
+        
+        $scope.exportStatusMap = {};
+
+
+        $scope.exportStatus = function() {
+	        	console.log('exportStatusMap length -'+$scope.exportStatusMap.length);
+	        	angular.forEach($scope.exportStatusMap, function(exportStatusObj, index){
+	        		
+	            	EmployeeComponent.exportStatus(exportStatusObj.fileName).then(function(data) {
+	            		if(data) {
+	                		exportStatusObj.exportStatus = data.status;
+	                		console.log('exportStatus - '+ exportStatusObj);
+	                		exportStatusObj.exportMsg = data.msg;
+	                		console.log('exportMsg - '+ exportStatusObj.exportMsg);
+	                		if(exportStatusObj.exportStatus == 'COMPLETED'){
+	                    		exportStatusObj.exportFile = data.file;
+	                    		console.log('exportFile - '+ exportStatusObj.exportFile);
+	                    		$scope.stop();
+	                		}else if(exportStatusObj.exportStatus == 'FAILED'){
+	                    		$scope.stop();
+	                		}else if(!exportStatusObj.exportStatus){
+	                			$scope.stop();
+	                		}else {
+	                			exportStatuObj.exportFile = '#';
+	                		}
+	            		}
+	
+	            	});
+	        	});
+
+        }
+
+        $scope.exportFile = function() {
+	        return ($scope.exportStatusMap ? $scope.exportStatusMap.exportFile : '#');
+        }
+
+
+        $scope.exportMsg = function() {
+	        return ($scope.exportStatusMap ? $scope.exportStatusMap.exportMsg : '');
         };
 
 
@@ -667,8 +729,8 @@ angular.module('timeSheetApp')
         };
 
         $scope.clearFilter = function() {
-            $scope.selectedSite = null;
-            $scope.selectedProject = null;
+            $scope.selectedSite = {};
+            $scope.selectedProject = {};
             $scope.searchCriteria = {};
             $rootScope.searchCriteriaSite = null;
             $scope.pages = {

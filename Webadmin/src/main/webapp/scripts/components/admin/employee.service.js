@@ -134,7 +134,27 @@ angular.module('timeSheetApp')
                     console.log(response);
                     return response;
                 })
-            }
+            },
+            
+            exportAllData: function(searchCriteria) {
+	            	return $http.post('api/employee/export', searchCriteria).then(function (response) {
+	            		return response.data;
+	            	});
+            },
+            exportStatus: function(fileName) {
+	            	if(empId == 0) {
+	                	return $http.get('api/employee/export/'+fileName+"/status").then(function (response) {
+	                		return response.data;
+	                	});
+	            	}
+            },
+            
+            getExportFile: function(fileName) {
+	            	return $http.get('api/employee/export/'+fileName).then(function (response) {
+	            		return response.data;
+	            	});
+            }            
+
 
 
         };

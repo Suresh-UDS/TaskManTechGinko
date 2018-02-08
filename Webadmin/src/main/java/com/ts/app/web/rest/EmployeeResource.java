@@ -231,7 +231,50 @@ public class EmployeeResource {
         return result;
     }
 
+    @RequestMapping(value = "/employee/export",method = RequestMethod.POST)
+	public ExportResponse exportEmployee(@RequestBody SearchCriteria searchCriteria) {
+		ExportResponse resp = new ExportResponse();
+		if(searchCriteria != null) {
+			searchCriteria.setUserId(SecurityUtils.getCurrentUserId());
+			SearchResult<EmployeeDTO> result = employeeService.findBySearchCrieria(searchCriteria);
+			List<EmployeeDTO> results = result.getTransactions();
+			resp.addResult(employeeService.export(results));
+		}
+		return resp;
+	}
 
+    @RequestMapping(value = "/employee/export/{fileId}/status",method = RequestMethod.GET)
+	public ExportResult exportStatus(@PathVariable("fileId") String fileId) {
+		log.debug("ExportStatus -  fileId -"+ fileId);
+		ExportResult result = employeeService.getExportStatus(fileId);
+		if(result!=null && result.getStatus() != null) {
+			switch(result.getStatus()) {
+				case "PROCESSING" :
+					result.setMsg("Exporting...");
+					break;
+				case "COMPLETED" :
+					result.setMsg("Download");
+					result.setFile("/api/employee/export/"+fileId);
+					break;
+				case "FAILED" :
+					result.setMsg("Failed to export. Please try again");
+					break;
+				default :
+					result.setMsg("Failed to export. Please try again");
+					break;
+			}
+		}
+		return result;
+	}
 
+	@RequestMapping(value = "/employee/export/{fileId}",method = RequestMethod.GET)
+	public byte[] getExportFile(@PathVariable("fileId") String fileId, HttpServletResponse response) {
+		byte[] content = employeeService.getExportFile(fileId);
+		response.setContentType("application/force-download");
+		response.setContentLength(content.length);
+		response.setHeader("Content-Transfer-Encoding", "binary");
+		response.setHeader("Content-Disposition","attachment; filename=\"" + fileId + ".txt\"");
+		return content;
+	}
 
 }
