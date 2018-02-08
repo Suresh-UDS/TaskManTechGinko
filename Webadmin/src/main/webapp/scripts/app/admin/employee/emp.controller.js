@@ -24,6 +24,12 @@ angular.module('timeSheetApp')
 
         $scope.selectedManager;
 
+        $scope.initCalender = function(){
+
+            demo.initFormExtendedDatetimepickers();
+
+        };
+
         $scope.loadProjects = function () {
         	ProjectComponent.findAll().then(function (data) {
         	    console.log("Loading all projects")
@@ -163,7 +169,26 @@ angular.module('timeSheetApp')
        $scope.refreshPage = function() {
            $scope.clearFilter();
            $scope.loadEmployees();
-       }
+       };
+
+       $scope.employeeDetails= function(id){
+           EmployeeComponent.findOne(id).then(function (data) {
+                console.log(data);
+                $scope.employee = data;
+           })
+       };
+
+       $scope.updateEmployeeLeft= function(employee){
+           console.log(employee);
+           employee.left = true;
+          EmployeeComponent.updateEmployee(employee).then(function(data){
+              $scope.showNotifications('top','center','success','Employee Successfully Marked Left');
+              $scope.search();
+          }).catch(function(response){
+              console.log(response);
+              $scope.showNotifications('top','center','danger','Error in marking Left');
+          })
+        };
 
 
 
@@ -692,6 +717,8 @@ angular.module('timeSheetApp')
                 $scope.search();
             })
         }
+
+        $scope.initCalender();
 
 
 

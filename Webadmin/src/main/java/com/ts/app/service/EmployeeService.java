@@ -144,6 +144,9 @@ public class    EmployeeService extends AbstractService {
 			employee.setSites(sites);
 			employee.setFaceAuthorised(false);
 			employee.setFaceIdEnrolled(false);
+			employee.setLeft(false);
+			employee.setRelieved(false);
+			employee.setReliever(false);
 			employeeRepository.save(employee);
 			log.debug("Created Information for Employee: {}", employee);
 			employeeDto = mapperUtil.toModel(employee, EmployeeDTO.class);
@@ -153,6 +156,8 @@ public class    EmployeeService extends AbstractService {
 
 	public EmployeeDTO updateEmployee(EmployeeDTO employee, boolean shouldUpdateActiveStatus) {
 		log.debug("Inside Update");
+		log.debug("Inside Update"+employee);
+		log.debug("Inside Update"+employee.isLeft());
 		Employee employeeUpdate = employeeRepository.findOne(employee.getId());
 		Hibernate.initialize(employee.getProjects());
 		List<Project> projects = employeeUpdate.getProjects();
@@ -193,6 +198,7 @@ public class    EmployeeService extends AbstractService {
 
 		employeeUpdate.setFullName(employee.getFullName());
 		employeeUpdate.setName(employee.getName());
+		employeeUpdate.setLastName(employee.getLastName());
 		if(newProj != null && !projExists) {
 			employeeUpdate.getProjects().add(newProj);
 		}
@@ -205,7 +211,9 @@ public class    EmployeeService extends AbstractService {
 	    ZonedDateTime zdt   = ZonedDateTime.of(LocalDateTime.now(), zone);
 		employeeUpdate.setLastModifiedDate(zdt);
 		employeeUpdate.setCode(employee.getCode());
-
+        employeeUpdate.setLeft(employee.isLeft());
+        employeeUpdate.setReliever(employee.isReliever());
+        employeeUpdate.setRelieved(employee.isRelieved());
         if(employee.getManagerId() > 0) {
             Employee manager =  employeeRepository.findOne(employee.getManagerId());
             employeeUpdate.setManager(manager);
@@ -409,7 +417,7 @@ public class    EmployeeService extends AbstractService {
 		Hibernate.initialize(entity.getManager());
 		if(entity.getManager() != null) {
 			dto.setManagerId(entity.getManager().getId());
-			dto.setManagerName(entity.getManager().getName());
+			dto.setManagerName(entity.getManager().getFullName());
 		}
 		return dto;
 	}
