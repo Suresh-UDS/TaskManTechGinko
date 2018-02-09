@@ -16,10 +16,11 @@ angular.module('timeSheetApp', ['LocalStorageModule',
             }
 
         });
-        console.log($state.current);
+        console.log('current state - ' +JSON.stringify($state));
         $rootScope.isLoggedIn = true;
 
         $rootScope.stateDetails = $state;
+        $rootScope.pageTile;
         $rootScope.logoutUser = function () {
             Auth.logout();
             $rootScope.isLoggedIn = false;
@@ -27,7 +28,7 @@ angular.module('timeSheetApp', ['LocalStorageModule',
         };
 
         $rootScope.$on('$stateChangeSuccess',  function(event, toState, toParams, fromState, fromParams) {
-            var titleKey = 'eTimeSheet' ;
+            var titleKey = 'Dashboard' ;
 
             // Remember previous state unless we've been redirected to login or we've just
             // reset the state memory after logout. If we're redirected to login, our
@@ -43,6 +44,7 @@ angular.module('timeSheetApp', ['LocalStorageModule',
                 titleKey = toState.data.pageTitle;
             }
             $window.document.title = titleKey;
+            $rootScope.pageTitle = titleKey;
             console.log(toState.name)
             if(toState.name == 'login'){
                 $rootScope.isLoggedIn = false;

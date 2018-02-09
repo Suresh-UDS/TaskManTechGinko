@@ -1,10 +1,14 @@
 package com.ts.app.service;
 
-import com.ts.app.domain.*;
-import com.ts.app.repository.*;
-import com.ts.app.service.util.*;
-import com.ts.app.web.rest.dto.*;
-import com.ts.app.web.rest.errors.TimesheetException;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
+import java.util.Set;
+import java.util.TimeZone;
+
+import javax.inject.Inject;
+
 import org.apache.commons.collections.CollectionUtils;
 import org.hibernate.Hibernate;
 import org.joda.time.DateTime;
@@ -20,9 +24,50 @@ import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
+import org.springframework.web.multipart.MultipartFile;
 
-import javax.inject.Inject;
-import java.util.*;
+import com.ts.app.domain.AbstractAuditingEntity;
+import com.ts.app.domain.Asset;
+import com.ts.app.domain.Employee;
+import com.ts.app.domain.Job;
+import com.ts.app.domain.JobChecklist;
+import com.ts.app.domain.JobStatus;
+import com.ts.app.domain.Location;
+import com.ts.app.domain.NotificationLog;
+import com.ts.app.domain.Price;
+import com.ts.app.domain.Site;
+import com.ts.app.domain.User;
+import com.ts.app.repository.AssetRepository;
+import com.ts.app.repository.EmployeeRepository;
+import com.ts.app.repository.JobRepository;
+import com.ts.app.repository.JobSpecification;
+import com.ts.app.repository.LocationRepository;
+import com.ts.app.repository.NotificationRepository;
+import com.ts.app.repository.PricingRepository;
+import com.ts.app.repository.SiteRepository;
+import com.ts.app.repository.UserRepository;
+import com.ts.app.service.util.DateUtil;
+import com.ts.app.service.util.ExportUtil;
+import com.ts.app.service.util.FileUploadHelper;
+import com.ts.app.service.util.ImportUtil;
+import com.ts.app.service.util.MapperUtil;
+import com.ts.app.service.util.PagingUtil;
+import com.ts.app.service.util.QRCodeUtil;
+import com.ts.app.web.rest.dto.AssetDTO;
+import com.ts.app.web.rest.dto.BaseDTO;
+import com.ts.app.web.rest.dto.EmployeeDTO;
+import com.ts.app.web.rest.dto.ExportResult;
+import com.ts.app.web.rest.dto.ImportResult;
+import com.ts.app.web.rest.dto.JobChecklistDTO;
+import com.ts.app.web.rest.dto.JobDTO;
+import com.ts.app.web.rest.dto.LocationDTO;
+import com.ts.app.web.rest.dto.NotificationLogDTO;
+import com.ts.app.web.rest.dto.PriceDTO;
+import com.ts.app.web.rest.dto.ReportResult;
+import com.ts.app.web.rest.dto.SchedulerConfigDTO;
+import com.ts.app.web.rest.dto.SearchCriteria;
+import com.ts.app.web.rest.dto.SearchResult;
+import com.ts.app.web.rest.errors.TimesheetException;
 
 /**
  * Service class for managing Device information.
@@ -74,6 +119,9 @@ public class JobManagementService extends AbstractService {
 
     @Inject
     private FileUploadHelper fileUploadHelper;
+    
+    @Inject
+    private ImportUtil importUtil;
 
     @Inject
     private PricingRepository priceRepository;
@@ -277,6 +325,100 @@ public class JobManagementService extends AbstractService {
 		}
 		return result;
 	}
+	
+	
+	public List<ReportResult> generateConsolidatedReport(SearchCriteria searchCriteria, boolean isAdmin) {
+		List<ReportResult> reportResults = new ArrayList<ReportResult>();
+		if(searchCriteria != null) {
+
+			Employee employee = employeeRepository.findByUserId(searchCriteria.getUserId());
+			List<Long> subEmpIds = new ArrayList<Long>();
+			if(employee != null) {
+				searchCriteria.setDesignation(employee.getDesignation());
+				Hibernate.initialize(employee.getSubOrdinates());
+				findAllSubordinates(employee, subEmpIds);
+				log.debug("List of subordinate ids -"+ subEmpIds);
+				if(CollectionUtils.isEmpty(subEmpIds)) {
+					subEmpIds.add(employee.getId());
+				}
+				searchCriteria.setSubordinateIds(subEmpIds);
+			}
+			log.debug("SearchCriteria ="+ searchCriteria);
+
+			Pageable pageRequest = createPageRequest(searchCriteria.getCurrPage());
+			Page<Job> page = null;
+			List<Job> allJobsList = new ArrayList<Job>();
+			List<JobDTO> transactions = null;
+
+			Date checkInDate = searchCriteria.getCheckInDateTimeFrom();
+
+            log.debug("JobManagementService toPredicate - searchCriteria projectid -"+ searchCriteria.getProjectId());
+            log.debug("JobManagementService toPredicate - searchCriteria siteId -"+ searchCriteria.getSiteId());
+            log.debug("JobManagementService toPredicate - searchCriteria jobstatus -"+ searchCriteria.getJobStatus());
+            log.debug("JobManagementService toPredicate - searchCriteria jobTitle -"+ searchCriteria.getJobTitle());
+            log.debug("JobManagementService toPredicate - searchCriteria scheduled -"+ searchCriteria.isScheduled());
+            log.debug("JobSpecification toPredicate - searchCriteria get assigned status -"+ searchCriteria.isAssignedStatus());
+            log.debug("JobSpecification toPredicate - searchCriteria get completed status -"+ searchCriteria.isCompletedStatus());
+            log.debug("JobSpecification toPredicate - searchCriteria get overdue status -"+ searchCriteria.isOverdueStatus());
+            log.debug("JobSpecification toPredicate - searchCriteria get consolidated status -"+ searchCriteria.isConsolidated());
+
+            
+            log.debug("JobSpecification toPredicate - searchCriteria checkInDateFrom -"+ checkInDate);
+        		if(checkInDate != null) {
+	        	    log.debug("check in date is not null");
+		        	Calendar checkInDateFrom = Calendar.getInstance(TimeZone.getTimeZone("Asia/Kolkata"));
+		        	checkInDateFrom.setTime(checkInDate);
+	
+		        	checkInDateFrom.set(Calendar.HOUR_OF_DAY, 0);
+		        	checkInDateFrom.set(Calendar.MINUTE,0);
+		        	checkInDateFrom.set(Calendar.SECOND,0);
+		        	java.sql.Date fromDt = DateUtil.convertToSQLDate(DateUtil.convertUTCToIST(checkInDateFrom));
+		        	//String fromDt = DateUtil.formatUTCToIST(checkInDateFrom);
+		        	Calendar checkInDateTo = Calendar.getInstance(TimeZone.getTimeZone("Asia/Kolkata"));
+		        	if(searchCriteria.getCheckInDateTimeTo() != null) {
+		        		checkInDateTo.setTime(searchCriteria.getCheckInDateTimeTo());
+		        	}else {
+		        		checkInDateTo.setTime(checkInDate);
+		        	}
+	
+		        	checkInDateTo.set(Calendar.HOUR_OF_DAY, 23);
+		        	checkInDateTo.set(Calendar.MINUTE,59);
+		        	checkInDateTo.set(Calendar.SECOND,0);
+		        	java.sql.Date toDt = DateUtil.convertToSQLDate(DateUtil.convertUTCToIST(checkInDateTo));
+	
+		        	if(searchCriteria.isConsolidated()) {
+	
+		        	    log.debug("site reporsitory find all");
+		        		List<Site> allSites = siteRepository.findAll();
+		        		for(Site site : allSites) {
+		        			if(searchCriteria.isGraphRequest()) {
+		        				reportResults.add(reportService.jobCountGroupByDate(site.getId(), fromDt, toDt));
+		        			}else {
+		        				reportResults.add(reportService.jobCountBySiteAndStatusAndDateRange(site.getId(),fromDt, toDt));
+		        			}
+		        		}
+	
+		        	}
+	        	}else {
+	        		if(!searchCriteria.isConsolidated()) {
+	        			page = jobRepository.findAll(new JobSpecification(searchCriteria,isAdmin),pageRequest);
+	        			allJobsList.addAll(page.getContent());
+	        		}else {
+		        		List<Site> allSites = siteRepository.findAll();
+		        		for(Site site : allSites) {
+		        			reportResults.add(reportService.jobCountBySiteAndStatus(site.getId()));
+		        		}
+	
+	        		}
+	        	}
+
+		}
+		return reportResults;
+	}
+	
+	
+	
+	
 
     public SearchResult<JobDTO> findByDateSelected(SearchCriteria searchCriteria, boolean isAdmin) {
         SearchResult<JobDTO> result = new SearchResult<JobDTO>();
@@ -976,4 +1118,18 @@ public class JobManagementService extends AbstractService {
 		return exportUtil.readExportFile(fileName);
 	}
 
+	public ImportResult importFile(MultipartFile file, long dateTime) {
+		return importUtil.importJobData(file, dateTime);
+	}
+	
+	public ImportResult getImportStatus(String fileId) {
+		ImportResult er = new ImportResult();
+		//fileId += ".csv";
+		if(!StringUtils.isEmpty(fileId)) {
+			String status = importUtil.getImportStatus(fileId);
+			er.setFile(fileId);
+			er.setStatus(status);
+		}
+		return er;
+	}
 }

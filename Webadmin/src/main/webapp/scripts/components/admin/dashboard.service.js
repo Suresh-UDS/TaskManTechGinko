@@ -4,7 +4,13 @@ angular.module('timeSheetApp')
     .factory('DashboardComponent', function DashboardComponent(Project,$http,ProjectDelete) {
         return {
 
-            loadAttendanceReport: function (siteId,selectedDate,endDate) {
+            loadAttendanceReportByProject: function (projectId, selectedDate,endDate) {
+                return $http.get('api/reports/attendance/project/'+projectId+'/selectedDate/'+selectedDate).then(function (response) {
+                    return response.data;
+                });
+            },
+
+        		loadAttendanceReport: function (siteId,selectedDate,endDate) {
                 return $http.get('api/reports/attendance/site/'+siteId+'/selectedDate/'+selectedDate).then(function (response) {
                     return response.data;
                 });

@@ -27,6 +27,8 @@ public class FileUploadHelper {
 
 	private static final Logger log = LoggerFactory.getLogger(FileUploadHelper.class);
 
+	private static final String NEW_IMPORT_FOLDER = "/opt/imports/new";
+
 	@Inject
 	private Environment env;
 
@@ -246,6 +248,38 @@ public class FileUploadHelper {
             log.error("Error while reading the image file ,"+ imageFileName , io);
         }
         return imageDataString;
+    }
+    
+    public String uploadJobImportFile(MultipartFile file, String filePath , String fileName) {
+        log.debug("file =" + file + ",  name=" + fileName);
+        if (!file.isEmpty()) {
+            // check and create emp directory
+            FileSystem fileSystem = FileSystems.getDefault();
+            //filePath += "/" + fileName;
+            Path path = fileSystem.getPath(filePath);
+            // path = path.resolve(String.valueOf(empId));
+            if (!Files.exists(path)) {
+                Path newEmpPath = Paths.get(filePath);
+                try {
+                    Files.createDirectory(newEmpPath);
+                } catch (IOException e) {
+                    log.error("Error while creating path for attendance " + newEmpPath);
+                }
+            }
+            try {
+                filePath += "/" + fileName;
+                byte[] bytes = file.getBytes();
+                BufferedOutputStream stream = new BufferedOutputStream(new FileOutputStream(new File(filePath)));
+                stream.write(bytes);
+                stream.close();
+                log.debug("File uploaded successfully to attendance folder - " + fileName);
+            } catch (Exception e) {
+                log.error("File uploaded failed for attendance - " + fileName, e);
+            }
+        } else {
+            log.error("Empty file, upload failed for attendance- " + fileName);
+        }
+        return fileName;
     }
 
 }

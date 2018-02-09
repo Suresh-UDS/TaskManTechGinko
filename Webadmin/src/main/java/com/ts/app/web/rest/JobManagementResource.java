@@ -1,5 +1,34 @@
 package com.ts.app.web.rest;
 
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+
+import javax.inject.Inject;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
+
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
+
 import com.codahale.metrics.annotation.Timed;
 import com.ts.app.domain.AbstractAuditingEntity;
 import com.ts.app.domain.User;
@@ -10,21 +39,21 @@ import com.ts.app.service.SchedulerService;
 import com.ts.app.service.UserService;
 import com.ts.app.service.util.ImportUtil;
 import com.ts.app.service.util.MapperUtil;
-import com.ts.app.web.rest.dto.*;
-import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
-import javax.inject.Inject;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.validation.Valid;
-import java.util.List;
+import com.ts.app.web.rest.dto.AssetDTO;
+import com.ts.app.web.rest.dto.BaseDTO;
+import com.ts.app.web.rest.dto.EmployeeDTO;
+import com.ts.app.web.rest.dto.ExportResponse;
+import com.ts.app.web.rest.dto.ExportResult;
+import com.ts.app.web.rest.dto.GraphResponse;
+import com.ts.app.web.rest.dto.ImportResult;
+import com.ts.app.web.rest.dto.JobDTO;
+import com.ts.app.web.rest.dto.LocationDTO;
+import com.ts.app.web.rest.dto.NotificationLogDTO;
+import com.ts.app.web.rest.dto.Paginator;
+import com.ts.app.web.rest.dto.PriceDTO;
+import com.ts.app.web.rest.dto.ReportResult;
+import com.ts.app.web.rest.dto.SearchCriteria;
+import com.ts.app.web.rest.dto.SearchResult;
 
 /**
  * REST controller for managing the Site information.
@@ -172,11 +201,57 @@ public class JobManagementResource {
 		SearchResult<JobDTO> result = null;
 		if(searchCriteria != null) {
 			searchCriteria.setUserId(SecurityUtils.getCurrentUserId());
-			jobService.updateJobStatus(searchCriteria.getSiteId(), searchCriteria.getJobStatus());
+			//jobService.updateJobStatus(searchCriteria.getSiteId(), searchCriteria.getJobStatus());
 			result = jobService.findBySearchCrieria(searchCriteria,true);
 		}
 		return result;
 	}
+	
+	@RequestMapping(value = "/jobs/report",method = RequestMethod.POST)
+	public List<ReportResult> jobReport(@RequestBody SearchCriteria searchCriteria) {
+		List<ReportResult> result = null;
+		if(searchCriteria != null) {
+			searchCriteria.setUserId(SecurityUtils.getCurrentUserId());
+			result = jobService.generateConsolidatedReport(searchCriteria, true);
+		}
+		return result;
+	}
+	
+	@RequestMapping(value = "/jobs/graph",method = RequestMethod.POST)
+	public GraphResponse jobGraph(@RequestBody SearchCriteria searchCriteria) {
+		GraphResponse result = null;
+		if(searchCriteria != null) {
+			searchCriteria.setUserId(SecurityUtils.getCurrentUserId());
+			List<ReportResult> reportResultList = jobService.generateConsolidatedReport(searchCriteria, true);
+			Map<String,Long> dataMap = new HashMap<String,Long>();
+			for(ReportResult rep : reportResultList) {
+				Map<java.sql.Date, Long> totalCntMap = rep.getTotalCountMap();
+				if(totalCntMap != null && totalCntMap.size() > 0) {
+					if(CollectionUtils.isEmpty(result.getDateSeries())) {
+						Iterator<java.sql.Date> dateItr = totalCntMap.keySet().iterator();
+						List<Date> dateSeries = new ArrayList<Date>();
+						while(dateItr.hasNext()) {
+							Date dt = new Date(dateItr.next().getTime());
+							dateSeries.add(dt);
+						}
+						result.setDateSeries(dateSeries);
+					}
+				}
+				if(CollectionUtils.isNotEmpty(result.getDateSeries())) {
+					List<Date> dateSeries = result.getDateSeries();
+					for(Date date : dateSeries) {
+						long totalCnt = totalCntMap.get(date);
+						if(dataMap.containsKey("TOTAL")) {
+							long cumTotalCnt = dataMap.get("TOTAL");
+							cumTotalCnt += totalCnt;
+							dataMap.put("TOTAL", cumTotalCnt);
+						}
+					}
+				}
+			}
+		}
+		return result;
+	}	
 
     @RequestMapping(value = "/jobs/date/search",method = RequestMethod.POST)
     public List<JobDTO> findByDate(@RequestBody SearchCriteria searchCriteria) {
@@ -273,9 +348,33 @@ public class JobManagementResource {
     }
 
 	@RequestMapping(path="/jobs/import", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<?> importJobData(){
-		importUtil.importJobData();
-		return new ResponseEntity<>(HttpStatus.OK);
+	public ResponseEntity<ImportResult> importJobData(@RequestParam("jobFile") MultipartFile file){
+		Calendar cal = Calendar.getInstance();
+		ImportResult result = importUtil.importJobData(file, cal.getTimeInMillis());
+		return new ResponseEntity<ImportResult>(result,HttpStatus.OK);
+	}
+	
+    @RequestMapping(value = "/jobs/import/{fileId}/status",method = RequestMethod.GET)
+	public ImportResult importStatus(@PathVariable("fileId") String fileId) {
+		log.debug("ImportStatus -  fileId -"+ fileId);
+		ImportResult result = jobService.getImportStatus(fileId);
+		if(result!=null && result.getStatus() != null) {
+			switch(result.getStatus()) {
+				case "PROCESSING" :
+					result.setMsg("Importing data...");
+					break;
+				case "COMPLETED" :
+					result.setMsg("Completed importing");
+					break;
+				case "FAILED" :
+					result.setMsg("Failed to import. Please try again");
+					break;
+				default :
+					result.setMsg("Completed importing");
+					break;
+			}
+		}
+		return result;
 	}
 
 

@@ -8,10 +8,10 @@ Tip 3: you can change the color of the sidebar with data-background-color="white
 -->
     <div class="logo">
         <a href="#" class="simple-text logo-mini">
-            Z
+            T
         </a>
         <a href="#" class="simple-text logo-normal">
-            Zappy
+            TaskMan
         </a>
 
     </div>
@@ -104,7 +104,12 @@ Tip 3: you can change the color of the sidebar with data-background-color="white
                     <p>Quotation </p>
                 </a>
             </li>
-            
+            <li ui-sref-active="active" >
+                <a ui-sref="imports">
+                    <i class="material-icons">file_upload</i>
+                    <p>Import</p>
+                </a>
+            </li>
             <li has-authority="ROLE_ADMIN" ng-class="{active: $state.includes('reports')}">
                 <a data-toggle="collapse" data-target="#formsExamples" href="#">
                     <i class="material-icons">content_paste</i>

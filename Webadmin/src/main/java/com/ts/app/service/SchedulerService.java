@@ -280,7 +280,7 @@ public class SchedulerService extends AbstractService {
 		        DateTime lastDate = currDate.dayOfMonth().withMaximumValue();
 				while(currDate.isBefore(lastDate) || currDate.isEqual(lastDate)) {
 					jobCreationTask(dailyTask.getJob(), dailyTask.getData(), currDate.toDate());
-					currDate.plusDays(1);
+					currDate = currDate.plusDays(1);
 				}
 			}else if(creationPolicy.equalsIgnoreCase("daily")) {
 				jobCreationTask(dailyTask.getJob(), dailyTask.getData(), new Date());
@@ -352,9 +352,14 @@ public class SchedulerService extends AbstractService {
 		String plannedHours = dataMap.get("plannedHours");
 		Calendar plannedEndTimeCal = Calendar.getInstance();
 		plannedEndTimeCal.setTime(plannedEndTime);
-
+		
 		Calendar startTime = Calendar.getInstance();
 		startTime.setTime(jobDate);
+		//update the plannedEndTimeCal to the current job date in iteration
+		plannedEndTimeCal.set(Calendar.DAY_OF_MONTH, startTime.get(Calendar.DAY_OF_MONTH));
+		plannedEndTimeCal.set(Calendar.MONTH, startTime.get(Calendar.MONTH));
+
+		
 		Calendar endTime = Calendar.getInstance();
 		endTime.setTime(jobDate);
 		Calendar cal = DateUtils.toCalendar(sHrs);
@@ -363,6 +368,7 @@ public class SchedulerService extends AbstractService {
 		log.debug("Start time hours ="+ sHr +", start time mins -"+ sMin);
 		startTime.set(Calendar.HOUR_OF_DAY, sHr);
 		startTime.set(Calendar.MINUTE, sMin);
+		startTime.getTime(); //to recalculate
 		cal = DateUtils.toCalendar(eHrs);
 		int eHr = cal.get(Calendar.HOUR_OF_DAY);
 		int eMin = cal.get(Calendar.MINUTE);
@@ -372,9 +378,11 @@ public class SchedulerService extends AbstractService {
 			endTime.set(Calendar.HOUR_OF_DAY, startTime.get(Calendar.HOUR_OF_DAY));
 			endTime.add(Calendar.HOUR_OF_DAY, 1);
 			endTime.set(Calendar.MINUTE, eMin);
+			endTime.getTime(); //to recalculate
 		}else {
 			endTime.set(Calendar.HOUR_OF_DAY, eHr);
 			endTime.set(Calendar.MINUTE, eMin);
+			endTime.getTime(); //to recalculate
 		}
 
 		job.setPlannedStartTime(startTime.getTime());
@@ -388,14 +396,18 @@ public class SchedulerService extends AbstractService {
 		if(StringUtils.isNotEmpty(frequency) &&
 				frequency.equalsIgnoreCase(FREQ_ONCE_EVERY_HOUR)) {
 			Calendar tmpCal = Calendar.getInstance();
+			tmpCal.set(Calendar.DAY_OF_MONTH, plannedEndTimeCal.get(Calendar.DAY_OF_MONTH));
+			tmpCal.set(Calendar.MONTH, plannedEndTimeCal.get(Calendar.MONTH));
 			tmpCal.set(Calendar.HOUR_OF_DAY, plannedEndTimeCal.get(Calendar.HOUR_OF_DAY));
 			tmpCal.set(Calendar.MINUTE,plannedEndTimeCal.get(Calendar.MINUTE));
+			tmpCal.getTime(); //recalculate
 			log.debug("Planned end time cal value = " + tmpCal.getTime());
 			log.debug("end time value based on frequency = " + endTime.getTime());
 			log.debug("planned end time after endTime " + tmpCal.getTime().after(endTime.getTime()));
 			if(tmpCal.getTime().after(endTime.getTime())) {
 				tmpCal.setTime(endTime.getTime());
 				tmpCal.add(Calendar.HOUR_OF_DAY, 1);
+				tmpCal.getTime(); //recalculate
 				createJob(parentJob, dataMap, jobDate, plannedEndTime, endTime.getTime(), tmpCal.getTime());
 			}
 		}

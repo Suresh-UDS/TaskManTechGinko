@@ -4,7 +4,6 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
-import javax.persistence.Cacheable;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -19,15 +18,10 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
-
 import com.ts.app.domain.util.StringUtil;
 
 @Entity
 @Table(name = "job")
-@Cacheable(true)
-@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class Job extends AbstractAuditingEntity implements Serializable{
 
 	/**

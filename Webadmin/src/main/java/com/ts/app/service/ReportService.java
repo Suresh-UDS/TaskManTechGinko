@@ -100,15 +100,43 @@ public class ReportService extends AbstractService {
         long assignedJobCount = jobRepository.findJobCountBySiteIdAndStatusDateRange(siteId, sqlDate,sqlEndDate, JobStatus.ASSIGNED);
         long completedJobCount = jobRepository.findJobCountBySiteIdAndStatusDateRange(siteId,sqlDate,sqlEndDate, JobStatus.COMPLETED);
         long overdueJobCount = jobRepository.findJobCountBySiteIdAndStatusDateRange(siteId, sqlDate,sqlEndDate, JobStatus.OVERDUE);
+        long totalJobCount = jobRepository.findTotalJobCountBySiteIdAndDateRange(siteId, sqlDate);
         long completedJobTAT = jobRepository.jobCountTAT(siteId, JobStatus.COMPLETED);
 
         ReportResult reportResult = new ReportResult();
         reportResult.setSiteId(siteId);
         reportResult.setSiteName(siteRepository.findOne(siteId).getName());
+        reportResult.setTotalJobCount(totalJobCount);
         reportResult.setAssignedJobCount(assignedJobCount);
         reportResult.setCompletedJobCount(completedJobCount);
         reportResult.setTat(completedJobTAT);
         reportResult.setOverdueJobCount(overdueJobCount);
+        log.debug("completed job turn around time jobCountBySiteAndStatusAndDateRange");
+        log.debug(String.valueOf(completedJobTAT));
+        return reportResult;
+    }
+    
+    public ReportResult jobCountGroupByDate(Long siteId, Date selectedDate, Date endDate) {
+        java.sql.Date sqlDate = new java.sql.Date(DateUtils.toCalendar(selectedDate).getTimeInMillis());
+        java.sql.Date sqlEndDate = new java.sql.Date(DateUtils.toCalendar(endDate).getTimeInMillis());
+
+        log.debug("selected Date  in report result"+selectedDate);
+        log.debug("end date in report result"+endDate);
+
+        Map<java.sql.Date, Long> assignedCountMap = jobRepository.findJobCountByDateForReports(siteId, sqlDate,sqlEndDate, JobStatus.ASSIGNED);
+        Map<java.sql.Date, Long> completedCountMap = jobRepository.findJobCountByDateForReports(siteId,sqlDate,sqlEndDate, JobStatus.COMPLETED);
+        Map<java.sql.Date, Long> overdueCountMap = jobRepository.findJobCountByDateForReports(siteId, sqlDate,sqlEndDate, JobStatus.OVERDUE);
+        Map<java.sql.Date, Long> totalCountMap = jobRepository.findTotalJobCountByDateForReports(siteId, sqlDate, sqlEndDate);
+        long completedJobTAT = jobRepository.jobCountTAT(siteId, JobStatus.COMPLETED);
+
+        ReportResult reportResult = new ReportResult();
+        reportResult.setSiteId(siteId);
+        reportResult.setSiteName(siteRepository.findOne(siteId).getName());
+        reportResult.setTotalCountMap(totalCountMap);
+        reportResult.setAssignedCountMap(assignedCountMap);
+        reportResult.setCompletedCountMap(completedCountMap);
+        reportResult.setTat(completedJobTAT);
+        reportResult.setOverdueCountMap(overdueCountMap);
         log.debug("completed job turn around time jobCountBySiteAndStatusAndDateRange");
         log.debug(String.valueOf(completedJobTAT));
         return reportResult;
@@ -119,12 +147,14 @@ public class ReportService extends AbstractService {
         long completedJobCount = jobRepository.jobCountBySiteAndStatus(siteId, JobStatus.COMPLETED);
         long completedJobTAT = jobRepository.jobCountTAT(siteId, JobStatus.COMPLETED);
         long overdueJobCount = jobRepository.jobCountBySiteAndStatus(siteId, JobStatus.OVERDUE);
+        long totalJobCount = jobRepository.jobCountBySite(siteId);
         ReportResult reportResult = new ReportResult();
         reportResult.setSiteId(siteId);
         reportResult.setSiteName(siteRepository.findOne(siteId).getName());
         reportResult.setAssignedJobCount(assignedJobCount);
         reportResult.setCompletedJobCount(completedJobCount);
         reportResult.setOverdueJobCount(overdueJobCount);
+        reportResult.setTotalJobCount(totalJobCount);
         reportResult.setTat(completedJobTAT);
         log.debug("completed job turn around time jobCountBySiteAndStatus");
         log.debug(String.valueOf(completedJobTAT));
@@ -203,6 +233,61 @@ public class ReportService extends AbstractService {
         log.info("Attendance report params : siteId - "+ siteId + ", selectedDate - " + selectedDate + ", endDate -" + endDate );
         java.sql.Date sqlDate = new java.sql.Date(DateUtils.toCalendar(selectedDate).getTimeInMillis());
         java.sql.Date sqlEndDate = new java.sql.Date(DateUtils.toCalendar(endDate).getTimeInMillis());
+        long totalEmployeeCount = 0;
+        long presentEmployeeCount = 0;
+        long absentEmployeeCount = 0;
+        if(siteId > 0) {
+            totalEmployeeCount = employeeRepository.findCountBySiteId(siteId);
+        }else {
+            totalEmployeeCount = employeeRepository.findTotalCount();
+        }
+        if(siteId > 0) {
+            presentEmployeeCount = attendanceRepository.findCountBySiteAndCheckInTime(siteId, sqlDate, sqlEndDate);
+        }else {
+            presentEmployeeCount = attendanceRepository.findCountByCheckInTime(sqlDate, sqlEndDate);
+        }
+        absentEmployeeCount = totalEmployeeCount - presentEmployeeCount;
+        ReportResult reportResult = new ReportResult();
+        reportResult.setSiteId(siteId);
+        reportResult.setTotalEmployeeCount(totalEmployeeCount);
+        reportResult.setPresentEmployeeCount(presentEmployeeCount);
+        reportResult.setAbsentEmployeeCount(absentEmployeeCount);
+        return reportResult;
+    }
+    
+    public ReportResult getAttendanceStatsByProjectIdDateRange(Long projectId, Date selectedDate, Date endDate) {
+        log.info("Attendance report params : projectId - "+ projectId + ", selectedDate - " + selectedDate + ", endDate -" + endDate );
+        java.sql.Date sqlDate = new java.sql.Date(DateUtils.toCalendar(selectedDate).getTimeInMillis());
+        java.sql.Date sqlEndDate = new java.sql.Date(DateUtils.toCalendar(endDate).getTimeInMillis());
+        long totalEmployeeCount = 0;
+        long presentEmployeeCount = 0;
+        long absentEmployeeCount = 0;
+        if(projectId > 0) {
+            totalEmployeeCount = employeeRepository.findCountBySiteId(projectId);
+        }else {
+            totalEmployeeCount = employeeRepository.findTotalCount();
+        }
+        if(projectId > 0) {
+            presentEmployeeCount = attendanceRepository.findCountBySiteAndCheckInTime(projectId, sqlDate, sqlEndDate);
+        }else {
+            presentEmployeeCount = attendanceRepository.findCountByCheckInTime(sqlDate, sqlEndDate);
+        }
+        absentEmployeeCount = totalEmployeeCount - presentEmployeeCount;
+        ReportResult reportResult = new ReportResult();
+        reportResult.setProjectId(projectId);
+        reportResult.setTotalEmployeeCount(totalEmployeeCount);
+        reportResult.setPresentEmployeeCount(presentEmployeeCount);
+        reportResult.setAbsentEmployeeCount(absentEmployeeCount);
+        return reportResult;
+    }
+    
+    public ReportResult getAttendanceStatsDateRange(Long siteId) {
+        log.info("Attendance report params : siteId - "+ siteId);
+        Calendar toCal = Calendar.getInstance(); 
+        Calendar fromCal = Calendar.getInstance();
+        	fromCal.add(Calendar.DAY_OF_MONTH, -10);
+        java.sql.Date sqlDate = new java.sql.Date(fromCal.getTimeInMillis());
+        java.sql.Date sqlEndDate = new java.sql.Date(toCal.getTimeInMillis());
         long totalEmployeeCount = 0;
         long presentEmployeeCount = 0;
         long absentEmployeeCount = 0;

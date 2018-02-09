@@ -32,7 +32,13 @@ public class ReportResource {
 		return reportService.getAttendanceStatsDateRange(siteId, selectedDate, selectedDate);
 	}
 	
-//    @CrossOrigin
+	@RequestMapping(value = "/reports/attendance/project/{projectId}/selectedDate/{selectedDate}", method = RequestMethod.GET)
+	public ReportResult getAttendanceStatusByProject(@PathVariable Long projectId, @PathVariable("selectedDate") Date selectedDate) {
+		return reportService.getAttendanceStatsByProjectIdDateRange(projectId, selectedDate, selectedDate);
+	}
+
+	
+	//    @CrossOrigin
 //    @RequestMapping(value = "/reports/site/{siteId}/selectedDate/{selectedDate}", method = RequestMethod.GET)
 //    public ReportResult getJobStatusBySite(@PathVariable Long siteId, @PathVariable("selectedDate") Date selectedDate) {
 //        return reportService.getJobStats(siteId, selectedDate);
