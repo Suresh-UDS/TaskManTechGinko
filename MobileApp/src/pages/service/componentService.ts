@@ -8,13 +8,14 @@ import {HttpClient} from "../Interceptor/HttpClient"
 import {map} from "rxjs/operator/map";
 import {Injectable} from "@angular/core";
 import {LoadingController, ToastController} from "ionic-angular";
+import { Toast } from '@ionic-native/toast';
 
 @Injectable()
 export class componentService
 {
 
     loader:any;
-    constructor(public loadingCtrl: LoadingController, private toastCtrl: ToastController)
+    constructor(public loadingCtrl: LoadingController,private toast: Toast, private toastCtrl: ToastController)
     {
     }
 
@@ -36,13 +37,12 @@ export class componentService
     }
 
     showToastMessage(msg){
-        let toast = this.toastCtrl.create({
-            message:msg,
-            duration:3000,
-            position:'bottom'
-        });
-
-        toast.present();
+        
+        this.toast.show(msg, '3000', 'center').subscribe(
+            toast => {
+                console.log(toast);
+            }
+        );
 
     }
 }

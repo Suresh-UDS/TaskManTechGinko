@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import {NavController, PopoverController} from 'ionic-angular';
+import {NavController, NavParams, PopoverController} from 'ionic-angular';
 
 @Component({
   selector: 'page-attendance-popover',
@@ -7,8 +7,10 @@ import {NavController, PopoverController} from 'ionic-angular';
 })
 export class AttendancePopoverPage {
 
-  constructor(public navCtrl: NavController,public popoverCtrl: PopoverController) {
+  img:any;
 
+  constructor(public navCtrl: NavController,public popoverCtrl: PopoverController,public navParams: NavParams) {
+    this.img=this.navParams.get('i');
   }
 
 }

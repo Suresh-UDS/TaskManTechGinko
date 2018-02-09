@@ -34,6 +34,7 @@ export class CreateEmployeePage {
   eImg:any;
   username:any;
   password:any;
+  msg:any;
   constructor(public navCtrl: NavController,public component:componentService,public myService:authService, public navParams: NavParams, private  authService: authService, public camera: Camera,
               private loadingCtrl:LoadingController, private geolocation:Geolocation, private toastCtrl:ToastController,
               private geoFence:Geofence) {
@@ -68,6 +69,7 @@ export class CreateEmployeePage {
     if (this.firstname && this.lastname && this.number && this.mail && this.eId && this.address )
     {
         // Save Employee
+      this.component.showToastMessage(this.msg);
     }
     else
     {
@@ -99,6 +101,7 @@ export class CreateEmployeePage {
       {
         this.eMsg = "all";
       }
+      this.component.showToastMessage(this.msg);
     }
   }
   login() {

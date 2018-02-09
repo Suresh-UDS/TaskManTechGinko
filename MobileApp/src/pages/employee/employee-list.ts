@@ -9,6 +9,7 @@ import {EmployeeService} from "../service/employeeService";
 import {JobService} from "../service/jobService";
 import {SiteService} from "../service/siteService";
 import {AttendanceService} from "../service/attendanceService";
+import {componentService} from "../service/componentService";
 
 /**
  * Generated class for the EmployeeList page.
@@ -34,7 +35,7 @@ export class EmployeeList {
   site:any;
   attendanceId:any;
   loader:any;
-  constructor(public navCtrl: NavController, public navParams: NavParams, private  authService: authService, public camera: Camera,
+  constructor(public navCtrl: NavController,public component:componentService, public navParams: NavParams, private  authService: authService, public camera: Camera,
               private loadingCtrl:LoadingController, private geolocation:Geolocation, private toastCtrl:ToastController,
               private geoFence:Geofence, private employeeService: EmployeeService, private jobService: JobService, private siteService:SiteService, private attendanceService:AttendanceService) {
 
@@ -59,13 +60,7 @@ export class EmployeeList {
   }
 
   showSuccessToast(msg){
-    let toast = this.toastCtrl.create({
-      message:msg,
-      duration:3000,
-      position:'bottom'
-    });
-
-    toast.present();
+    this.component.showToastMessage(msg);
   }
 
   showLoader(msg){

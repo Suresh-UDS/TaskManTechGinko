@@ -85,7 +85,7 @@
                 <ion-item-options>
                     <button ion-button clear color="primary"><ion-icon name="md-eye" class="fnt-24"></ion-icon></button>
                     <button ion-button clear color="clr-blue"><ion-icon name="md-create" class="fnt-24"></ion-icon></button>
-                    <button ion-button clear color="secondary" *ngIf="job.status !='COMPLETED'"><ion-icon name="md-checkmark-circle" class="fnt-24"></ion-icon></button>
+                    <button ion-button clear color="secondary" *ngIf="job.status !='COMPLETED'" (click)="compeleteJob(job)"><ion-icon name="md-checkmark-circle" class="fnt-24"></ion-icon></button>
                     <button ion-button clear color="danger"><ion-icon name="md-close-circle" class="fnt-24"></ion-icon></button>
                 </ion-item-options>
             </ion-item-sliding>
@@ -159,9 +159,13 @@
                                 <p text-left>{{job.siteProjectName}} - {{job.siteName}}</p>
                             </div>
                         </ion-col>
+                        <!--
+                        <ion-col col-1>
+                            <p (click)="open(ItemSliding,Item)">f</p>
+                        </ion-col>
+                        -->
                     </ion-row>
                         <div text-capitalize >
-
                             <ion-row class="margin0">
                                 <ion-col col-6 class="padding-right5">
                                     <div *ngIf="job.status =='COMPLETED'">
@@ -180,10 +184,6 @@
                                     </div>
                                 </ion-col>
                             </ion-row>
-
-
-
-
                         </div>
                     </div>
                 </ion-item>
@@ -196,15 +196,11 @@
                         <button ion-button clear color="clr-blue"><ion-icon name="md-create" class="fnt-24"></ion-icon></button>
                     </div>
                     <div>
-                        <button ion-button clear color="secondary" *ngIf="job.status !='COMPLETED'"><ion-icon name="md-checkmark-circle" class="fnt-24"></ion-icon></button>
+                        <button ion-button clear color="secondary" *ngIf="job.status !='COMPLETED'" (click)="compeleteJob(job)"><ion-icon name="md-checkmark-circle" class="fnt-24"></ion-icon></button>
                     </div>
                     <div>
                         <button ion-button clear color="danger"><ion-icon name="md-close-circle" class="fnt-24"></ion-icon></button>
                     </div>
-
-
-
-
                 </ion-item-options>
             </ion-item-sliding>
 

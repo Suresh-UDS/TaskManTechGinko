@@ -7,6 +7,7 @@ import {Geolocation} from "@ionic-native/geolocation";
 import {EmployeeList} from "../employee/employee-list";
 import {AttendanceService} from "../service/attendanceService";
 import {SiteService} from "../service/siteService";
+import {componentService} from "../service/componentService";
 
 /**
  * Generated class for the SiteListPage page.
@@ -30,7 +31,7 @@ export class SiteListPage {
   lattitude:any;
   longitude:any;
   checkedIn:any;
-  constructor(public navCtrl: NavController, public navParams: NavParams, private  authService: authService, public camera: Camera,
+  constructor(public navCtrl: NavController,public component:componentService, public navParams: NavParams, private  authService: authService, public camera: Camera,
               private loadingCtrl:LoadingController, private geolocation:Geolocation, private toastCtrl:ToastController, private attendanceService: AttendanceService, private siteService: SiteService) {
 
     this.geolocation.getCurrentPosition().then((response)=>{
@@ -51,13 +52,7 @@ export class SiteListPage {
   }
 
   showSuccessToast(msg){
-    let toast = this.toastCtrl.create({
-      message:msg,
-      duration:3000,
-      position:'bottom'
-    });
-
-    toast.present();
+    this.component.showToastMessage(msg);
   }
 
   getAttendances(site){
