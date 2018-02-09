@@ -87,11 +87,7 @@ export class EmployeeListPage {
       if(this.page>this.totalPages){
           console.log("End of all pages");
           infiniteScroll.complete();
-          this.toast.show('All Employees Loaded','5000','bottom').subscribe(
-              toast => {
-                  console.log(toast);
-              }
-          );
+          this.component.showToastMessage('All Employees Loaded');
 
       }else{
           console.log("Getting pages");

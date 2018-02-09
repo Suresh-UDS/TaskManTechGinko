@@ -64,6 +64,7 @@ import {EmployeeService} from "../pages/service/employeeService";
 import {JobService} from "../pages/service/jobService";
 import {QuotationService} from "../pages/service/quotationService";
 import {SiteService} from "../pages/service/siteService";
+import {JobPopoverPage} from "../pages/jobs/job-popover";
 
 
 @NgModule({
@@ -107,7 +108,8 @@ import {SiteService} from "../pages/service/siteService";
       IonSimpleWizardStep,
       IonSimpleWizard,
     CreateQuotationPage3,
-    CreateEmployeePage
+    CreateEmployeePage,
+    JobPopoverPage
   ],
   imports: [
     BrowserModule,
@@ -159,6 +161,7 @@ import {SiteService} from "../pages/service/siteService";
       IonSimpleWizard,
     CreateQuotationPage3,
     CreateEmployeePage,
+    JobPopoverPage
 
   ],
   providers: [

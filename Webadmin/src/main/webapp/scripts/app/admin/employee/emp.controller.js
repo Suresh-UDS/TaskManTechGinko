@@ -34,6 +34,8 @@ angular.module('timeSheetApp')
 
         $scope.relieverDateFrom;
 
+
+
         $scope.initCalender = function(){
 
             demo.initFormExtendedDatetimepickers();
@@ -407,8 +409,9 @@ angular.module('timeSheetApp')
         	$state.reload();
         };
 
-        $scope.getRelievers = function(){
+        $scope.getRelievers = function(employee){
           console.log("Getting Relievers");
+          $scope.relievedEmployee = employee;
           EmployeeComponent.getAllRelievers().then(function(response){
               console.log("Response from relievers");
               console.log(response.data);
@@ -416,10 +419,19 @@ angular.module('timeSheetApp')
           })
         };
 
-        $scope.assignReliever= function(){
+        $scope.assignReliever= function(employee){
             console.log($scope.relieverDateTo);
             console.log($scope.relieverDateFrom);
             console.log($scope.selectedReliever);
+            var searchCriteria = {
+                fromDate : $scope.relieverDateFrom,
+                toDate: $scope.relieverDateTo
+            }
+            EmployeeComponent.assignReliever(employee,$scope.selectedReliever,$scope.relieverDateFrom,$scope.relieverDateTo).then(function (response) {
+                console.log(response);
+            })
+
+
         };
 
 

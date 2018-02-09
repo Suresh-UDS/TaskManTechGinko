@@ -29,6 +29,7 @@ export class AttendancePage {
         let popover = this.popoverCtrl.create(AttendancePopoverPage);
         popover.present({
             ev: myEvent
+
         });
     }
 
@@ -57,7 +58,13 @@ export class AttendancePage {
       }
     }
 
+    viewImage(img)
+    {
+        let popover = this.popoverCtrl.create(AttendancePopoverPage,{i:img},{cssClass:'view-img',showBackdrop:true});
+        popover.present({
 
+        });
+    }
 
 
 }

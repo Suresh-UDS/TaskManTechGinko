@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import {LoadingController, NavController} from 'ionic-angular';
+import {Item, ItemSliding, LoadingController, NavController} from 'ionic-angular';
 import {authService} from "../service/authService";
 import {ViewJobPage} from "./view-job";
 import {componentService} from "../service/componentService";
@@ -123,6 +123,19 @@ export class JobsPage {
         console.log("========view job ===========");
         console.log(job);
         this.navCtrl.push(ViewJobPage,{job:job})
+    }
+
+    compeleteJob(job)
+    {
+        this.navCtrl.push(CompleteJobPage,{job:job})
+    }
+
+    open(itemSlide: ItemSliding, item: Item)
+    {
+        itemSlide.setElementClass("active-sliding", true);
+        itemSlide.setElementClass("active-slide", true);
+        itemSlide.setElementClass("active-options-right", true);
+        item.setElementStyle("transform", "translate3d(-144px, 0px, 0px)")
     }
 
     presentActionSheet(job){

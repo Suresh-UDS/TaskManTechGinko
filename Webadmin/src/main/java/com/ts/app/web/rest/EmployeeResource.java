@@ -1,5 +1,6 @@
 package com.ts.app.web.rest;
 
+import java.util.Date;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -7,8 +8,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
+import com.ts.app.domain.Employee;
 import com.ts.app.domain.User;
 import com.ts.app.repository.UserRepository;
+import com.ts.app.service.JobManagementService;
 import com.ts.app.service.MailService;
 import com.ts.app.service.NotificationService;
 import com.ts.app.service.util.QRCodeUtil;
@@ -46,6 +49,9 @@ public class EmployeeResource {
 
 	@Inject
 	private EmployeeService employeeService;
+
+    @Inject
+    private JobManagementService jobService;
 
     @Inject
     private MailService mailService;
@@ -282,5 +288,22 @@ public class EmployeeResource {
 		response.setHeader("Content-Disposition","attachment; filename=\"" + fileId + ".txt\"");
 		return content;
 	}
+
+    @RequestMapping(value = "/employee/assignReliever", method = RequestMethod.POST)
+    public ResponseEntity<?> assignReliever(@RequestBody RelieverDTO reliever) {
+
+        log.info("Inside assign Reliever" + reliever.getEmployeeId() + " , "+ reliever.getRelieverId());
+
+        EmployeeDTO selectedEmployee = employeeService.findByEmpId(reliever.getEmployeeEmpId());
+        EmployeeDTO selectedReliever = employeeService.findByEmpId(reliever.getRelieverEmpId());
+        selectedEmployee.setRelieved(true);
+        try {
+            employeeService.updateEmployee(selectedEmployee,false);
+            jobService.assignReliever(selectedEmployee,selectedReliever, reliever.getRelievedFromDate(), reliever.getRelievedToDate());
+        }catch(Exception e) {
+            throw new TimesheetException(e, selectedEmployee);
+        }
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 
 }

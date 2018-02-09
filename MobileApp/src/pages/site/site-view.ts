@@ -65,13 +65,7 @@ export class SiteViewPage {
 
 
     showToast(message: string) {
-        let toast = this.toastCtrl.create({
-            message: message,
-            duration: 2000,
-            position: 'middle'
-        });
-
-        toast.present(toast);
+      this.component.showToastMessage(message);
     }
 
   doRefresh(refresher,segment)

@@ -65,31 +65,7 @@ export class LoginPage {
 
                 else {
                   this.component.closeLoader();
-                  this.toast.show(`Login Failure`, '5000', 'center').subscribe(
-                      toast => {
-                          console.log(toast);
-                      }
-                  );
-
-
-
-                  /*
-               this.component.closeLoader();
-               console.log(response);
-               let toast = this.toastCtrl.create({
-               message:'Login Failure',
-               showCloseButton: true,
-               closeButtonText: "Ok",
-               position: 'middle',
-               cssClass: ""
-               });
-
-               toast.onDidDismiss(() => {
-               console.log('Dismissed toast');
-               });
-
-               toast.present();
-*/
+                  this.component.showToastMessage(this.msg);
                }
 
               /*if(employee.userUserGroupName == "Admin"){
@@ -120,12 +96,14 @@ export class LoginPage {
                this.msg='Server Unreachable'
                }
 
+                this.component.showToastMessage(this.msg);
+               /*
                 this.toast.show(this.msg, '3000', 'center').subscribe(
                     toast => {
                         console.log(toast);
                     }
                 );
-
+                */
             }
         );
 

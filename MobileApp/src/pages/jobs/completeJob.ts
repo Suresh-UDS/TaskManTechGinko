@@ -1,11 +1,12 @@
 import { Component } from '@angular/core';
-import {LoadingController, NavController, NavParams} from 'ionic-angular';
+import {LoadingController, NavController, NavParams, PopoverController} from 'ionic-angular';
 import {authService} from "../service/authService";
 import {Camera, CameraOptions} from "@ionic-native/camera";
 import {Geolocation} from "@ionic-native/geolocation";
 import {JobsPage} from "./jobs";
 import {JobService} from "../service/jobService";
 import {AttendanceService} from "../service/attendanceService";
+import {JobPopoverPage} from "./job-popover";
 
 @Component({
     selector: 'page-complete-job',
@@ -29,11 +30,14 @@ export class CompleteJobPage {
     longitude:any;
 
     checkList:any;
+    count:any;
+    sLength:any;
+    onButton:any;
 
 
     constructor(public navCtrl: NavController,public navParams:NavParams, public authService: authService,
                 private loadingCtrl:LoadingController, public camera: Camera,private geolocation:Geolocation, private jobService: JobService,
-                private attendanceService: AttendanceService) {
+                private attendanceService: AttendanceService,public popoverCtrl: PopoverController,) {
         this.jobDetails=this.navParams.get('job');
         this.takenImages = [];
         this.checkOutDetails={
@@ -45,7 +49,7 @@ export class CompleteJobPage {
         latitudeOut:'',
         longitude:''
         };
-
+        /*
         this.jobService.loadCheckLists().subscribe(
             response=>{
                 console.log("Checklist items");
@@ -53,13 +57,26 @@ export class CompleteJobPage {
                 this.checkList = response[0].items;
             }
         )
+        */
 
     }
 
-    ionViewWillEnter() {
-
+    ionViewDidLoad() {
+        console.log(this.jobDetails);
+        console.log(this.jobDetails.checklistItems);
     }
+    viewImage(index,img)
+    {
+        let popover = this.popoverCtrl.create(JobPopoverPage,{i:img,ind:index},{cssClass:'view-img',showBackdrop:true});
+        popover.present({
 
+        });
+
+        popover.onDidDismiss(data=>
+        {
+            this.takenImages.pop(data);
+        })
+    }
     viewCamera(status,job) {
 
             const options: CameraOptions = {
@@ -110,6 +127,29 @@ export class CompleteJobPage {
         )
 
     }
+    changeStatus(i)
+    {
+
+        this.sLength=this.jobDetails.checklistItems.length;
 
 
+            this.count=this.jobDetails.checklistItems.filter((data,i)=>{
+                return data.status;
+            }).length;
+            console.log(this.jobDetails.checklistItems[i].status);
+
+        this.jobDetails.checklistItems[i].status=true;
+        console.log("Count:"+this.count);
+
+        if(this.sLength==this.count)
+        {
+            this.onButton=true;
+        }
+
+    }
+
+    call()
+    {
+
+    }
 }

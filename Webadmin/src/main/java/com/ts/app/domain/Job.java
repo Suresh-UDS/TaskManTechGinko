@@ -25,7 +25,7 @@ import com.ts.app.domain.util.StringUtil;
 public class Job extends AbstractAuditingEntity implements Serializable{
 
 	/**
-	 * 
+	 *
 	 */
 	private static final long serialVersionUID = 1L;
 
@@ -52,6 +52,10 @@ public class Job extends AbstractAuditingEntity implements Serializable{
 	private Employee employee;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "relieverId", nullable = true)
+    private Employee reliever;
+
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "locationId")
     private Location location;
 
@@ -62,6 +66,8 @@ public class Job extends AbstractAuditingEntity implements Serializable{
 	private String comments;
 	private JobStatus status;
 	private JobType type;
+
+	private boolean relieved;
 
 	@NotNull
     private Date plannedStartTime;
@@ -93,13 +99,15 @@ public class Job extends AbstractAuditingEntity implements Serializable{
 	private boolean completedDueEmailAlert;
 
 	private String frequency;
-	
+
     @OneToMany(mappedBy ="job", cascade = CascadeType.ALL)
 	private List<JobChecklist> checklistItems;
-    
+
     @ManyToOne(cascade={CascadeType.ALL})
 	@JoinColumn(name="parent_job_id")
     private Job parentJob;
+
+
 
 	public Long getId() {
 		return id;
@@ -295,7 +303,7 @@ public class Job extends AbstractAuditingEntity implements Serializable{
 	public void setParentJob(Job parentJob) {
 		this.parentJob = parentJob;
 	}
-	
+
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
 		sb.append("Job Details - {" + StringUtil.SPACE);
@@ -314,4 +322,19 @@ public class Job extends AbstractAuditingEntity implements Serializable{
 		return sb.toString();
 	}
 
+    public Employee getReliever() {
+        return reliever;
+    }
+
+    public void setReliever(Employee reliever) {
+        this.reliever = reliever;
+    }
+
+    public boolean isRelieved() {
+        return relieved;
+    }
+
+    public void setRelieved(boolean relieved) {
+        this.relieved = relieved;
+    }
 }
