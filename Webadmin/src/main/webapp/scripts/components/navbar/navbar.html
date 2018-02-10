@@ -22,32 +22,47 @@ Tip 3: you can change the color of the sidebar with data-background-color="white
             <div class="photo">
                 <img src="../assets/img/faces/avatar.png" />
             </div>
-            <div class="info">
-                <a data-toggle="collapse" data-target="#collapseExample" href="#" class="collapsed">
-                            <span>
-                                Admin
-                                <b class="caret"></b>
-                            </span>
-                </a>
-                <div class="clearfix"></div>
-                <div class="collapse" id="collapseExample">
-                    <ul class="nav">
 
-                        <li ng-click="logout()" ng-switch-when="true">
-                            <a href="#" >
-                                <span class="sidebar-mini"> L </span>
-                                <span class="sidebar-normal"> Logout </span>
-                            </a>
-                        </li>
-                        <li  ng-switch-when="false">
-                            <a ui-sref="login" >
-                                <span class="sidebar-mini"> L </span>
-                                <span class="sidebar-normal"> Login </span>
-                            </a>
-                        </li>
-                    </ul>
-                </div>
+            <div class="info" ng-switch-when="true" >
+                <a ng-click="logout()" >
+                    <!--<span class="sidebar-mini">L</span>-->
+                    <span class="sidebar-normal">Logout</span>
+                </a>
+
+
+            </div >
+            <div class="info" ng-switch-when="false">
+                <a ui-sref="login" >
+                    <!--<span class="sidebar-mini">L</span>-->
+                    <span class="sidebar-normal">Login</span>
+                </a>
             </div>
+            <!--<div class="info">-->
+                <!--<a data-toggle="collapse" data-target="#collapseExample" href="#" class="collapsed">-->
+                            <!--<span>-->
+                                <!--Admin-->
+                                <!--<b class="caret"></b>-->
+                            <!--</span>-->
+                <!--</a>-->
+                <!--<div class="clearfix"></div>-->
+                <!--<div class="collapse" id="collapseExample">-->
+                    <!--<ul class="nav">-->
+
+                        <!--<li ng-click="logout()" ng-switch-when="true">-->
+                            <!--<a href="#" >-->
+                                <!--<span class="sidebar-mini"> L </span>-->
+                                <!--<span class="sidebar-normal"> Logout </span>-->
+                            <!--</a>-->
+                        <!--</li>-->
+                        <!--<li  ng-switch-when="false">-->
+                            <!--<a ui-sref="login" >-->
+                                <!--<span class="sidebar-mini"> L </span>-->
+                                <!--<span class="sidebar-normal"> Login </span>-->
+                            <!--</a>-->
+                        <!--</li>-->
+                    <!--</ul>-->
+                <!--</div>-->
+            <!--</div>-->
         </div>
         <ul class="nav" ng-switch-when="true">
             <li ui-sref-active="active" >
@@ -74,12 +89,12 @@ Tip 3: you can change the color of the sidebar with data-background-color="white
                     <p>Employee</p>
                 </a>
             </li>
-            <li ui-sref-active="active" has-permission="Assets:List">
-                <a ui-sref="assets">
-                    <i class="material-icons">settings</i>
-                    <p>Assets </p>
-                </a>
-            </li>
+            <!--<li ui-sref-active="active" has-permission="Assets:List">-->
+                <!--<a ui-sref="assets">-->
+                    <!--<i class="material-icons">settings</i>-->
+                    <!--<p>Assets </p>-->
+                <!--</a>-->
+            <!--</li>-->
             <li ui-sref-active="active" has-permission="Checklist:List">
                 <a ui-sref="checklists">
                     <i class="material-icons">content_paste</i>
@@ -104,7 +119,7 @@ Tip 3: you can change the color of the sidebar with data-background-color="white
                     <p>Quotation </p>
                 </a>
             </li>
-            
+
             <li has-authority="ROLE_ADMIN" ng-class="{active: $state.includes('reports')}">
                 <a data-toggle="collapse" data-target="#formsExamples" href="#">
                     <i class="material-icons">content_paste</i>
@@ -135,7 +150,7 @@ Tip 3: you can change the color of the sidebar with data-background-color="white
                     </ul>
                 </div>
             </li>
-            
+
             <li ui-sref-active="active" has-permission="RateCard:List">
                 <a ui-sref="rateCardList">
                     <i class="material-icons">credit_card</i>

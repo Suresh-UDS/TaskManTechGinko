@@ -989,6 +989,40 @@ public class JobManagementService extends AbstractService {
         return allJobsList;
     }
 
+    public void assignJobsForDifferentEmployee(EmployeeDTO employee, EmployeeDTO reliever,Date fromDate){
+        Calendar checkInDateFrom = Calendar.getInstance(TimeZone.getTimeZone("Asia/Kolkata"));
+        checkInDateFrom.setTime(fromDate);
+
+        checkInDateFrom.set(Calendar.HOUR_OF_DAY, 0);
+        checkInDateFrom.set(Calendar.MINUTE,0);
+        checkInDateFrom.set(Calendar.SECOND,0);
+        java.sql.Date fromDt = DateUtil.convertToSQLDate(DateUtil.convertUTCToIST(checkInDateFrom));
+
+        List<Job> allJobsList = new ArrayList<Job>();
+
+        allJobsList= jobRepository.findByStartDateAndEmployee(employee.getId(), fromDt);
+        Employee relieverDetails = mapperUtil.toEntity(reliever,Employee.class);
+        for(Job job: allJobsList){
+            job.setEmployee(relieverDetails);
+            job = jobRepository.save(job);
+        }
+    }
+
+    public void deleteJobsForEmployee(EmployeeDTO employee, Date fromDate){
+
+        Calendar checkInDateFrom = Calendar.getInstance(TimeZone.getTimeZone("Asia/Kolkata"));
+        checkInDateFrom.setTime(fromDate);
+
+        checkInDateFrom.set(Calendar.HOUR_OF_DAY, 0);
+        checkInDateFrom.set(Calendar.MINUTE,0);
+        checkInDateFrom.set(Calendar.SECOND,0);
+        java.sql.Date fromDt = DateUtil.convertToSQLDate(DateUtil.convertUTCToIST(checkInDateFrom));
+
+        jobRepository.deleteEmployeeUpcomingJobs(employee.getId(),fromDt);
+
+
+    }
+
 
 	public ExportResult export(List<JobDTO> transactions) {
 		return exportUtil.writeJobReportToFile(transactions, null, null);

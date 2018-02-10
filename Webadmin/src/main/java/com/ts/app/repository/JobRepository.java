@@ -87,12 +87,18 @@ public interface JobRepository extends JpaRepository<Job, Long>,JpaSpecification
     @Query("SELECT j from Job j where  (j.plannedStartTime between :startDate and :endDate) and j.employee.id = :empId")
     List<Job> findByDateRangeAndEmployee(@Param("empId")Long empId,@Param("startDate") Date startDate, @Param("endDate") Date endDate);
 
+    @Query("SELECT j from Job j where  (j.plannedStartTime>= :startDate) and j.employee.id = :empId")
+    List<Job> findByStartDateAndEmployee(@Param("empId")Long empId,@Param("startDate") Date startDate);
+
     @Query("SELECT j from Job j where  (j.employee.user.id = :userId or j.employee.id in (:subEmpIds))")
     List<Job> findWithoutDateRange(@Param("userId") long userId, @Param("subEmpIds") List<Long> subEmpIds);
 
     @Query("DELETE from Job j where j.parentJob.id = :parentJobId and j.plannedStartTime between :startDate and :endDate ")
     void deleteScheduledJobs(@Param("parentJobId") long parentJobId, @Param("startDate") Date startDate, @Param("endDate") Date endDate);
-    
+
+    @Query("DELETE from Job j where j.employee.id=:empId and j.plannedStartTime>=:startDate ")
+    void deleteEmployeeUpcomingJobs(@Param("empId") long empId, @Param("startDate") Date startDate);
+
     @Query("SELECT j from Job j where  (j.plannedStartTime between :startDate and :endDate) and (j.employee.user.id = :userId or j.employee.id in (:subEmpIds)) and j.status = :currentJobStatus")
     Page<Job> findByStatusAndDateRange(@Param("userId") long userId, @Param("subEmpIds") List<Long> subEmpIds, @Param("startDate") Date startDate, @Param("endDate") Date endDate, @Param("currentJobStatus") JobStatus currentJobStatus, Pageable pageRequest);
 
