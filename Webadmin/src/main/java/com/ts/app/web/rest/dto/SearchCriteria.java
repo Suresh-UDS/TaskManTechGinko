@@ -84,6 +84,8 @@ public class SearchCriteria extends Paginator {
 	private String rateCardTitle;
 
 	private String rateCardType;
+	
+	private boolean graphRequest;
 
 
 	public long getId() {
@@ -406,4 +408,13 @@ public class SearchCriteria extends Paginator {
 		this.toDate = toDate;
 	}
 
+	public boolean isGraphRequest() {
+		return graphRequest;
+	}
+
+	public void setGraphRequest(boolean graphRequest) {
+		this.graphRequest = graphRequest;
+	}
+
+	
 }

@@ -3,6 +3,56 @@ a:focus
  outline: none;
 }
 
+.box {
+    position: relative;
+    overflow: hidden;
+    margin-bottom: 20px;
+    border-radius: 2px;
+    z-index: 1;
+}
+
+.bg-info .bg-info.darken, .bg-info.darken {
+    background-color: #52bcdc!important;
+    border-color: #2cadd4!important;
+}
+
+.box-cell {
+    display: table-cell;
+    overflow: hidden;
+    padding: 0;
+    vertical-align: inherit;
+    border-color: rgba(0,0,0,.05);
+}
+
+.box-cell, .box-cell>* {
+    position: relative;
+}
+
+.box-cell, .box-row {
+    float: none;
+}
+
+.p-l-3, .p-x-3 {
+    padding-left: 20px!important;
+}
+
+.p-r-3, .p-x-3 {
+    padding-right: 20px!important;
+}
+
+.p-b-1, .p-y-1 {
+    padding-bottom: 10px!important;
+}
+
+.p-t-1, .p-y-1 {
+    padding-top: 10px!important;
+}
+
+.green-1
+{
+	background: #4caf50 !important;
+}
+
 
 .orng-1
 {
@@ -35,11 +85,11 @@ a:focus
 
 .card .card-content .category
 {
-    color:#fff;
+    color:#000;
 }
 .card .card-footer .stats
 {
-    color:#fff;
+    color:#000;
 }
 .navbar .dropdown-menu li a:hover, .navbar .dropdown-menu li a:focus, .navbar .dropdown-menu li a:active, .navbar.navbar-default .dropdown-menu li a:hover, .navbar.navbar-default .dropdown-menu li a:focus, .navbar.navbar-default .dropdown-menu li a:active
 {

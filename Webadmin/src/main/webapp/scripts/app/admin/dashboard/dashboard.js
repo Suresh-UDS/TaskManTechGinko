@@ -7,7 +7,8 @@ angular.module('timeSheetApp')
                 parent: 'site',
                 url: '/dashboard',
                 data: {
-                    authorities: []
+                    authorities: [],
+                    pageTile: 'Dashboard'
                 },
                 views: {
                     'content@': {
