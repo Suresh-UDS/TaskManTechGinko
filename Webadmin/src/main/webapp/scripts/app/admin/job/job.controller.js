@@ -242,6 +242,10 @@ angular.module('timeSheetApp')
         	console.log('Selected  project -' + $scope.selectedProject);
         	console.log('Selected  job -' + $scope.selectedJob);
         	console.log('search criteria - '+JSON.stringify($rootScope.searchCriteriaProject));
+        	
+        	if(!$scope.selectedProject && !$scope.selectedSite && !$scope.selectedStatus && !$scope.selectedJob){ 
+        		$scope.searchCriteria.findAll = true;
+        	}
 
         	if($scope.selectedProject) {
         		$scope.searchCriteria.projectId = $scope.selectedProject.id;

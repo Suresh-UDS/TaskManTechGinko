@@ -647,13 +647,13 @@ angular.module('timeSheetApp')
         	}
         };
 
-        $scope.first = function() {
-            if($scope.pages.currPage > 1) {
-                $scope.pages.currPage = 1;
-                $scope.firstStyle();
-                $scope.search();
-            }
-        };
+//        $scope.first = function() {
+//            if($scope.pages.currPage > 1) {
+//                $scope.pages.currPage = 1;
+//                $scope.firstStyle();
+//                $scope.search();
+//            }
+//        };
 
         $scope.firstStyle = function() {
             var first = document.getElementById('#first');
