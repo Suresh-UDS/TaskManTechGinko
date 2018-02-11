@@ -104,7 +104,7 @@ Tip 3: you can change the color of the sidebar with data-background-color="white
                     <p>Quotation </p>
                 </a>
             </li>
-            <li ui-sref-active="active" >
+            <li ui-sref-active="active" has-permission="Import:List">
                 <a ui-sref="imports">
                     <i class="material-icons">file_upload</i>
                     <p>Import</p>
@@ -167,13 +167,13 @@ Tip 3: you can change the color of the sidebar with data-background-color="white
             </li>
 
             <li has-authority="ROLE_ADMIN" ng-class="{active: $state.includes('admin')}">
-                <a data-toggle="collapse" data-target="#formsExamples" href="#">
+                <a data-toggle="collapse" data-target="#formsExamples1" href="#">
                     <i class="material-icons">content_paste</i>
                     <p> Administrator
                         <b class="caret"></b>
                     </p>
                 </a>
-                <div class="collapse" id="formsExamples">
+                <div class="collapse" id="formsExamples1">
                     <ul class="nav">
                         <li ui-sref-active="active">
                             <a ui-sref="users">

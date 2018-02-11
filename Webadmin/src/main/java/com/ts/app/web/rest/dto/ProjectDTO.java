@@ -19,6 +19,10 @@ public class ProjectDTO extends BaseDTO {
     
     private long id;
     
+    private String contactFirstName;
+    
+    private String contactLastName;
+    
     private String phone;
 	private String email;
 	private String address;
@@ -141,4 +145,22 @@ public class ProjectDTO extends BaseDTO {
 	public void setState(String state) {
 		this.state = state;
 	}
+
+	public String getContactFirstName() {
+		return contactFirstName;
+	}
+
+	public void setContactFirstName(String contactFirstName) {
+		this.contactFirstName = contactFirstName;
+	}
+
+	public String getContactLastName() {
+		return contactLastName;
+	}
+
+	public void setContactLastName(String contactLastName) {
+		this.contactLastName = contactLastName;
+	}
+	
+	
 }
