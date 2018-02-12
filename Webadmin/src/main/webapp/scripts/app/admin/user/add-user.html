@@ -36,27 +36,27 @@
                                <div class="card formcard">
                                    <div class="card-content">
 
-                                       <div class="row" ng-init="loadGroups()">
+                                       <div class="row" ng-init="loadUserRoles()">
 
                                            <div class="col-md-4">
                                                <div class="form-group label-floating">
-                                                   <label class="control-label">User Group <span class="red-star">*</span> </label>
+                                                   <label class="control-label">User Role <span class="red-star">*</span> </label>
                                                    <input type="text" class="form-control"
-                                                           ng-model="selectedGroup"
-                                                          uib-typeahead="group as group.name for group in userGroups | filter:$viewValue | limitTo:5"
-                                                          name="UserGroup" ng-minlength="5" ng-maxlength="50" autofocus
-                                                          required autocomplete="off">
+                                                           ng-model="selectedRole"
+                                                          uib-typeahead="role as role.name for role in userRoles | filter:$viewValue | limitTo:5"
+                                                          name="UserRole" ng-minlength="5" ng-maxlength="50" autofocus
+                                                          required >
 
-                                                   <div ng-show="form.$submitted || form.UserGroup.$touched">
-                                                       <div ng-show="form.UserGroup.$dirty || form.UserGroup.$invalid">
+                                                   <div ng-show="form.$submitted || form.UserRole.$touched">
+                                                       <div ng-show="form.UserRole.$dirty || form.UserRole.$invalid">
                                                            <p class="help-block" style="color: maroon"
-                                                              ng-show="form.UserGroup.$error.required">User Group is
+                                                              ng-show="form.UserRole.$error.required">User Role is
                                                                required.</p>
                                                            <p class="help-block" style="color: maroon"
-                                                              ng-show="form.UserGroup.$error.minlength">User Group is
+                                                              ng-show="form.UserRole.$error.minlength">User Role is
                                                                required to be at least 5 character.</p>
                                                            <p class="help-block" style="color: maroon"
-                                                              ng-show="form.UserGroup.$error.maxlength">User Group
+                                                              ng-show="form.UserRole.$error.maxlength">User Role
                                                                cannot be longer than 50 characters.</p>
                                                        </div>
                                                    </div>
@@ -237,10 +237,6 @@
                                                       <span class="btn-label">
                                             <i class="material-icons">check</i>
                                         </span> Save
-                                                   </button>
-                                                   <button class="btn btn-info" type="submit"
-                                                           id="save-and-go-back-button">
-                                                       <i class="material-icons">rotate_left</i> Save and go back to list
                                                    </button>
                                                    <button class="btn btn-danger" type="button"
                                                            ng-click="cancelUser()" id="cancel-button">

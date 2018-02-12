@@ -32,6 +32,7 @@ import com.ts.app.repository.PersistentTokenRepository;
 import com.ts.app.repository.SiteRepository;
 import com.ts.app.repository.UserGroupRepository;
 import com.ts.app.repository.UserRepository;
+import com.ts.app.repository.UserRoleRepository;
 import com.ts.app.security.SecurityUtils;
 import com.ts.app.service.util.MapperUtil;
 import com.ts.app.service.util.RandomUtil;
@@ -59,6 +60,9 @@ public class UserService extends AbstractService {
 
 	@Inject
 	private UserGroupRepository userGroupRepository;
+
+	@Inject
+	private UserRoleRepository userRoleRepository;
 
 	@Inject
 	private PersistentTokenRepository persistentTokenRepository;
@@ -160,7 +164,7 @@ public class UserService extends AbstractService {
 
 	public UserDTO createUserInformation(UserDTO userDto) {
 		User newUser = new User();
-		newUser.setClearPassword(userDto.getClearPassword());
+		newUser.setClearPassword(userDto.getPassword());
 		String encryptedPassword = null;
 		if (StringUtils.isNotEmpty(userDto.getPassword())) {
 			encryptedPassword = passwordEncoder.encode(userDto.getPassword());
@@ -174,10 +178,15 @@ public class UserService extends AbstractService {
 		newUser.setLastName(userDto.getLastName());
 		newUser.setEmail(userDto.getEmail());
 		newUser.setLangKey(userDto.getLangKey());
-		if (userDto.getUserGroupId() > 0) {
-			newUser.setUserGroup(userGroupRepository.findOne(userDto.getUserGroupId()));
+//		if (userDto.getUserGroupId() > 0) {
+//			newUser.setUserGroup(userGroupRepository.findOne(userDto.getUserGroupId()));
+//		} else {
+//			throw new IllegalArgumentException("Not a valid User Group");
+//		}
+		if (userDto.getUserRoleId() > 0) {
+			newUser.setUserRole(userRoleRepository.findOne(userDto.getUserRoleId()));
 		} else {
-			throw new IllegalArgumentException("Not a valid User Group");
+			throw new IllegalArgumentException("Not a valid User Role");
 		}
 		// new user is not active
 		newUser.setActivated(userDto.isActivated());

@@ -9,7 +9,7 @@ angular.module('timeSheetApp')
                 controller: 'ProjectController',
                 data: {
                     authorities: [],
-                    pageTitle: 'Projects'
+                    pageTitle: 'Client'
                 },
                 views: {
                     'content@': {

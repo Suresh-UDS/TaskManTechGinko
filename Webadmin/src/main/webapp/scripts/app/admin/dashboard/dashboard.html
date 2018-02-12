@@ -65,7 +65,7 @@
                    </div>
                    <div class="card-content">
                        <p class="category">Clients</p>
-                       <h3 class="card-title">{{projectCount}}</h3>
+                       <h3 class="card-title">{{projectCount ? projectCount : 0}}</h3>
                    </div>
                    <div class="card-footer">
                        <div class="stats">
@@ -80,7 +80,7 @@
                    </div>
                    <div class="card-content">
                        <p class="category">Sites</p>
-                       <h3 class="card-title">{{siteCount}}</h3>
+                       <h3 class="card-title">{{siteCount ? siteCount : 0}}</h3>
                    </div>
                    <div class="card-footer">
                        <div class="stats">
@@ -95,7 +95,7 @@
                    </div>
                    <div class="card-content">
                        <p class="category">Employees</p>
-                       <h3 class="card-title">{{totalEmployeeCount}}</h3>
+                       <h3 class="card-title">{{totalEmployeeCount ? totalEmployeeCount : 0}}</h3>
                    </div>
                    <div class="card-footer">
                        <div class="stats">
@@ -142,7 +142,7 @@
 				                   </div>
 				                   <div class="card-content">
 				                       <p class="category">Total Jobs</p>
-				                       <h3 class="card-title">{{result.totalJobCount}}</h3>
+				                       <h3 class="card-title">{{result.totalJobCount ? result.totalJobCount : 0}}</h3>
 				                   </div>
 				                   <div class="card-footer">
 				                       <div class="stats">
@@ -157,7 +157,7 @@
 				                   </div>
 				                   <div class="card-content">
 				                       <p class="category">Assigned</p>
-				                       <h3 class="card-title">{{result.assignedJobCount}}</h3>
+				                       <h3 class="card-title">{{result.assignedJobCount ? result.assignedJobCount : 0}}</h3>
 				                   </div>
 				                   <div class="card-footer">
 				                       <div class="stats">
@@ -268,7 +268,7 @@
 				                   </div>
 				                   <div class="card-content">
 				                       <p class="category">Left</p>
-				                       <h3 class="card-title">{{leftCount}}</h3>
+				                       <h3 class="card-title">{{leftCount ? leftCount : 0}}</h3>
 				                   </div>
 				                   <div class="card-footer">
 				                       <div class="stats">
