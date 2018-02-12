@@ -14,5 +14,13 @@ public abstract class AbstractService {
 		page -= 1;
         return new PageRequest(page, PagingUtil.PAGE_SIZE); 
     }
+	
+	protected Pageable createPageRequest(int page, int pageSize) {
+		if(page == 0) {
+			page = 1;
+		}
+		page -= 1;
+        return new PageRequest(page, pageSize); 
+    }
 
 }

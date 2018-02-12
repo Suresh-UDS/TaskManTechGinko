@@ -96,7 +96,7 @@ public class User extends AbstractAuditingEntity implements Serializable {
 	private String adminFlag;
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "userGroupId", nullable = false)
+	@JoinColumn(name = "userGroupId", nullable = true)
 	private UserGroup userGroup;
 	
 	@OneToOne(fetch = FetchType.EAGER)
@@ -109,9 +109,14 @@ public class User extends AbstractAuditingEntity implements Serializable {
 	@Column(name = "emailSubscribed", nullable = true,columnDefinition = "TINYINT(1)")
 	private boolean emailSubscribed;
 
-//	@ManyToOne(fetch = FetchType.EAGER)
-//	@JoinColumn(name = "userRoleId", nullable = true)
-//	private UserRole userRole;
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "userRoleId", nullable = false)
+	private UserRole userRole;
+	
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "projectId", nullable = true)
+	private Project project;
+	
 
 	public String getAdminFlag() {
 		return adminFlag;
@@ -293,13 +298,21 @@ public class User extends AbstractAuditingEntity implements Serializable {
 		return (adminFlag.equalsIgnoreCase("Y"));
 	}
 	
-//	public UserRole getUserRole() {
-//		return userRole;
-//	}
-//
-//	public void setUserRole(UserRole userRole) {
-//		this.userRole = userRole;
-//	}
+	public UserRole getUserRole() {
+		return userRole;
+	}
+
+	public void setUserRole(UserRole userRole) {
+		this.userRole = userRole;
+	}
+	
+	public Project getProject() {
+		return project;
+	}
+
+	public void setProject(Project project) {
+		this.project = project;
+	}
 
 	@Override
 	public String toString() {

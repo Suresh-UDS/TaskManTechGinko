@@ -2,6 +2,10 @@ import { Component } from '@angular/core';
 import {NavController, PopoverController} from 'ionic-angular';
 import {authService} from "../service/authService";
 import {AttendancePopoverPage} from "./attendance-popover";
+import {SiteListPage} from "../site-list/site-list";
+import {EmployeeSiteListPage} from "../site-employeeList/site-employeeList";
+import {componentService} from "../service/componentService";
+import {AttendanceService} from "../service/attendanceService";
 
 @Component({
   selector: 'page-attendance',
@@ -10,14 +14,22 @@ import {AttendancePopoverPage} from "./attendance-popover";
 export class AttendancePage {
 
   empID:any;
+  attendances:any;
 
-  constructor(public navCtrl: NavController,public myService:authService,public popoverCtrl: PopoverController) {
-
+  constructor(public navCtrl: NavController,public myService:authService,public attendanceService:AttendanceService,public popoverCtrl: PopoverController, public component: componentService) {
+        this.component.showLoader('');
+        this.attendanceService.getAllAttendances().subscribe(response=>{
+            console.log("All attendances");
+            console.log(response);
+            this.attendances = response;
+            this.component.closeLoader();
+        })
   }
     presentPopover(myEvent) {
         let popover = this.popoverCtrl.create(AttendancePopoverPage);
         popover.present({
             ev: myEvent
+
         });
     }
 
@@ -29,7 +41,30 @@ export class AttendancePage {
 
     }
 
+    markAttendance(){
+      console.log(window.localStorage.getItem('userGroup'));
+      if(window.localStorage.getItem('userGroup')=='Admin'){
+          console.log("Admin login");
+          this.navCtrl.setRoot(SiteListPage);
+      }else if(window.localStorage.getItem('userGroup') == 'Employee'){
+          console.log("Empoyee login");
+          this.navCtrl.setRoot(EmployeeSiteListPage);
+      }else if(window.localStorage.getItem('userGroup') == 'client'){
+          console.log("Client login");
+          this.navCtrl.setRoot(SiteListPage);
+      }else{
+          console.log("Others login");
+          this.navCtrl.setRoot(SiteListPage);
+      }
+    }
 
+    viewImage(img)
+    {
+        let popover = this.popoverCtrl.create(AttendancePopoverPage,{i:img},{cssClass:'view-img',showBackdrop:true});
+        popover.present({
+
+        });
+    }
 
 
 }

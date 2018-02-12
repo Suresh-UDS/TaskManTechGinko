@@ -42,10 +42,30 @@ import {CreateRateCardPage} from "../pages/rate-card/create-rate-card";
 import {EmployeeDetailPage} from "../pages/employee-list/employee-detail";
 import {SiteViewPage} from "../pages/site/site-view";
 import {CreateJobPage} from "../pages/jobs/add-job";
-
 import {IonSimpleWizard} from "../pages/ion-simple-wizard/ion-simple-wizard.component";
 import {IonSimpleWizardStep} from "../pages/ion-simple-wizard/ion-simple-wizard.step.component";
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import {CompleteJobPage} from "../pages/jobs/completeJob";
+import {CreateQuotationPage2} from "../pages/quotation/create-quotation-step-2";
+import {CreateQuotationPage3} from "../pages/quotation/create-quotation-step-3";
+import {ApprovedQuotationPage} from "../pages/quotation/approvedQuotations";
+import {DraftedQuotationPage} from "../pages/quotation/draftedQuotations";
+import {SubmittedQuotationPage} from "../pages/quotation/submittedQuotations";
+import {ArchivedQuotationPage} from "../pages/quotation/archivedQuotations";
+import {ViewQuotationPage} from "../pages/quotation/viewQuotation";
+
+import {CreateEmployeePage} from "../pages/employee-list/create-employee";
+import {OneSignal} from "@ionic-native/onesignal";
+// import {GoogleMaps} from "@ionic-native/google-maps";
+import {Toast} from "@ionic-native/toast";
+import {AppConfig, MY_CONFIG_TOKEN} from "../pages/service/app-config";
+import {AttendanceService} from "../pages/service/attendanceService";
+import {EmployeeService} from "../pages/service/employeeService";
+import {JobService} from "../pages/service/jobService";
+import {QuotationService} from "../pages/service/quotationService";
+import {SiteService} from "../pages/service/siteService";
+import {JobPopoverPage} from "../pages/jobs/job-popover";
+
 
 @NgModule({
   declarations: [
@@ -68,6 +88,12 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     QuotationPopoverPage,
     QuotationViewPage,
     CreateQuotationPage,
+      CreateQuotationPage2,
+      ApprovedQuotationPage,
+      DraftedQuotationPage,
+      SubmittedQuotationPage,
+      ArchivedQuotationPage,
+      ViewQuotationPage,
     AttendancePage,
     AttendancePopoverPage,
     EmployeeDetailPage,
@@ -78,10 +104,12 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     RateCardPage,
     CreateRateCardPage,
     CreateJobPage,
-
-
+    CompleteJobPage,
       IonSimpleWizardStep,
-      IonSimpleWizard
+      IonSimpleWizard,
+    CreateQuotationPage3,
+    CreateEmployeePage,
+    JobPopoverPage
   ],
   imports: [
     BrowserModule,
@@ -112,6 +140,12 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     QuotationPopoverPage,
     QuotationViewPage,
     CreateQuotationPage,
+      CreateQuotationPage2,
+      ApprovedQuotationPage,
+      DraftedQuotationPage,
+      SubmittedQuotationPage,
+      ArchivedQuotationPage,
+      ViewQuotationPage,
     AttendancePage,
     AttendancePopoverPage,
     EmployeeDetailPage,
@@ -122,19 +156,35 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     RateCardPage,
     CreateRateCardPage,
     CreateJobPage,
+      CompleteJobPage,
       IonSimpleWizardStep,
-      IonSimpleWizard
+      IonSimpleWizard,
+    CreateQuotationPage3,
+    CreateEmployeePage,
+    JobPopoverPage
+
   ],
   providers: [
     StatusBar,
     SplashScreen,
     Camera,
+      AttendanceService,
+      EmployeeService,
+      JobService,
+      QuotationService,
+      SiteService,
     authService,
     HttpClient,
     Geolocation,
     Geofence,
+      // GoogleMaps,
+      Toast,
+      OneSignal,
     componentService,
-    {provide: ErrorHandler, useClass: IonicErrorHandler}
+      OneSignal,
+    Toast,
+    {provide: ErrorHandler, useClass: IonicErrorHandler},
+      {provide:MY_CONFIG_TOKEN, useValue: AppConfig}
   ]
 })
 export class AppModule {}

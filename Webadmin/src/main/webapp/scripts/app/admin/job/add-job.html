@@ -100,6 +100,22 @@
 
                                             </div>
 
+                                            <div class="col-md-6">
+                                                <div class="form-group label-floating">
+                                                    <label class="control-label">Checklist</label>
+                                                    <div class="dropdown">
+                                                        <input type="text"
+                                                               class="form-control"
+                                                               name='checklist'
+                                                               ng-model="selectedChecklist"
+                                                               ng-change="onSelectChecklist()"
+                                                               uib-typeahead="checklist as checklist.name for checklist in checklists | filter:$viewValue | limitTo:5"
+                                                               autocomplete="off" />
+                                                    </div>
+                                                </div>
+
+                                            </div>
+
                                         </div>
                                         <div class="row">
 
@@ -212,13 +228,19 @@
 
                                         <div class="row">
                                             <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label class="label-control">Start date</label>
+                                                    <span class="form-control-feedback calender-icon"><i class="material-icons">date_range</i></span>
+                                                    <input type="text" class="form-control datetimepicker"  id="dateFilterFrom"  placeholder="{{dateFilterFrom | date:'dd-MMM-yyyy'}}"/>
+
+                                                </div>
                                                 <div class="form-group label-floating">
                                                     <label class="control-label">Start Date </label>
                                                     <p class="input-group">
                                                         <input
                                                             ng-model="job.plannedStartTime"
                                                             class='form-control'
-                                                            name='plannedStartDate'
+                                                            name='plannedStartTime'
                                                             required
                                                             datetime-picker="dd-MMM-yyyy HH:mm"
                                                             is-open="calendar.plannedStart" />
@@ -231,10 +253,10 @@
                                                     </p>
 
 
-                                                    <div ng-show="form.$submitted || form.plannedStartDate.$touched">
-                                                        <div ng-show="form.plannedStartDate.$dirty || form.plannedStartDate.$invalid">
+                                                    <div ng-show="form.$submitted || form.plannedStartTime.$touched">
+                                                        <div ng-show="form.plannedStartTime.$dirty || form.plannedStartTime.$invalid">
                                                             <p class="help-block" style="color: maroon"
-                                                               ng-show="form.plannedStartDate.$error.required">Required.</p>
+                                                               ng-show="form.plannedStartTime.$error.required">Required.</p>
                                                             <!--
                                                             <p class="help-block" style="color:maroon"
                                                                    ng-show="form.plannedStartDate.$error.pattern">
@@ -268,7 +290,7 @@
                                                         <div ng-show="form.plannedEndDate.$dirty || form.plannedEndDate.$invalid">
 
                                                             <p class="help-block" style="color:maroon"
-                                                               ng-show="form.plannedStartDate.$error.required">
+                                                               ng-show="form.plannedEndDate.$error.required">
                                                                 Required
                                                             </p>
                                                         </div>

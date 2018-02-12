@@ -9,9 +9,9 @@
 
 <ion-content>
   <ion-list>
-    <ion-item *ngFor="let site of sites;let i of index" class="bottom-border" (click)="viewSite(site)">
+    <ion-item *ngFor="let site of sites;let i of index" class="bottom-border emp" (click)="viewSite(site)">
       <ion-icon name="podium" item-start class="icon-color"></ion-icon>
-      <p text-left>{{site.name}}</p>
+      <p text-left  class="fnt-wt" text-capitalize>{{site.name}}</p>
     </ion-item>
   </ion-list>
 

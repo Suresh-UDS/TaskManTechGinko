@@ -134,8 +134,85 @@ angular.module('timeSheetApp')
                     console.log(response);
                     return response;
                 })
-            }
+            },
 
+            getAllRelievers: function(){
+                return $http.get('api/employee/relievers').then(function (response) {
+                    console.log(response);
+                    return response;
+                })
+            },
+
+            exportAllData: function(searchCriteria) {
+	            	return $http.post('api/employee/export', searchCriteria).then(function (response) {
+	            		return response.data;
+	            	});
+            },
+            exportStatus: function(fileName) {
+                	return $http.get('api/employee/export/'+fileName+"/status").then(function (response) {
+                		return response.data;
+                	});
+            },
+
+            getExportFile: function(fileName) {
+	            	return $http.get('api/employee/export/'+fileName).then(function (response) {
+	            		return response.data;
+	            	});
+            },
+
+            assignReliever: function (employee, reliever,fromDate, toDate) {
+                var relieveDetails = {
+                    employeeId:employee.id,
+                    employeeEmpId:employee.empId,
+                    relieverEmpId:reliever.empId,
+                    relieverId:reliever.id,
+                    relievedFromDate:fromDate,
+                    relievedToDate:toDate
+                }
+                return $http.post('api/employee/assignReliever',relieveDetails).then(function (response) {
+                    return response.data;
+                })
+            },
+
+            deleteJobsAndTransferEmployee: function(employee, fromDate){
+                var data = {
+                    employeeId:employee.id,
+                    employeeEmpId:employee.empId,
+                    relievedFromDate: fromDate
+                }
+                return $http.post('api/employee/deleteJobsAndTransfer',data).then(function (response) {
+                    console.log(response.data);
+                    return response.data;
+                })
+            },
+
+            assignJobsAndTransferEmployee: function (employee, reliever,fromDate) {
+                var data = {
+                    employeeId:employee.id,
+                    employeeEmpId:employee.empId,
+                    relieverEmpId:reliever.empId,
+                    relieverId:reliever.id,
+                    relievedFromDate:fromDate,
+                }
+                return $http.post('api/employee/assignJobsAndTransfer',data).then(function (response) {
+                    console.log(response.data);
+                    return response.data;
+                })
+            },
+
+            findAllDesginations: function () {
+                return $http.get('api/designation').then(function (response) {
+                    console.log("Designation");
+                    return response.data;
+                })
+            },
+
+            createDesignation: function (designation) {
+                return $http.post('api/designation').then(function (response) {
+                    console.log("Added Designation")
+                    console.log(response.data);
+                })
+            }
 
         };
     });

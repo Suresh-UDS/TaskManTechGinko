@@ -9,7 +9,7 @@ angular.module('timeSheetApp')
                 controller: 'ProjectController',
                 data: {
                     authorities: [],
-                    pageTitle: 'Add Project'
+                    pageTitle: 'Add Client'
                 },
                 views: {
                     'content@': {
@@ -27,7 +27,7 @@ angular.module('timeSheetApp')
             controller: 'ProjectController',
             data: {
                 authorities: [],
-                pageTitle: 'Edit Project'
+                pageTitle: 'Edit Client'
             },
             views: {
                 'content@': {
@@ -45,7 +45,7 @@ angular.module('timeSheetApp')
             controller: 'ProjectController',
             data: {
                 authorities: [],
-                pageTitle: 'View Project'
+                pageTitle: 'View Client'
             },
             views: {
                 'content@': {

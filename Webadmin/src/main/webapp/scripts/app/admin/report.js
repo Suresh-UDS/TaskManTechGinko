@@ -3,7 +3,7 @@
 angular.module('timeSheetApp')
     .config(function ($stateProvider) {
         $stateProvider
-            .state('report', {
+            .state('reports', {
                 abstract: true,
                 parent: 'site'
             });

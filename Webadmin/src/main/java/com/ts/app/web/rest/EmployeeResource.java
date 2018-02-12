@@ -1,5 +1,6 @@
 package com.ts.app.web.rest;
 
+import java.util.Date;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -7,8 +8,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
+import com.ts.app.domain.Employee;
 import com.ts.app.domain.User;
 import com.ts.app.repository.UserRepository;
+import com.ts.app.service.JobManagementService;
 import com.ts.app.service.MailService;
 import com.ts.app.service.NotificationService;
 import com.ts.app.service.util.QRCodeUtil;
@@ -48,6 +51,9 @@ public class EmployeeResource {
 	private EmployeeService employeeService;
 
     @Inject
+    private JobManagementService jobService;
+
+    @Inject
     private MailService mailService;
 
     @Inject
@@ -67,7 +73,7 @@ public class EmployeeResource {
 	@RequestMapping(value = "/employee", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
 	@Timed
 	public ResponseEntity<?> saveEmployee(@Valid @RequestBody EmployeeDTO employeeDTO, HttpServletRequest request) {
-		log.info("Inside the saveEmployee -" + employeeDTO.getName() + ", projectId -" + employeeDTO.getProjectId());
+		log.info("Inside the saveEmployee -" + employeeDTO);
 		log.info("Inside Save employee"+employeeDTO.getManagerId());
 		long userId = SecurityUtils.getCurrentUserId();
 		log.info("save Employee call - userId "+userId);
@@ -92,6 +98,20 @@ public class EmployeeResource {
 		}
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
+
+    @RequestMapping(value = "/employee/out", method = RequestMethod.POST)
+    public ResponseEntity<?> employeeOut(@RequestBody CheckInOutDTO checkInOut) {
+        checkInOut.setUserId(SecurityUtils.getCurrentUserId());
+        employeeService.onlyCheckOut(checkInOut);
+        return new ResponseEntity<String>("{ \"empId\" : "+'"'+checkInOut.getEmployeeEmpId() + '"'+", \"status\" : \"success\", \"transactionId\" : \"" + checkInOut.getId() +"\" }", HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/employee/checkInOut", method = RequestMethod.POST)
+    public SearchResult findAllCheckInOut(@RequestBody SearchCriteria searchCriteria) {
+        log.info("--Invoked findAllCheckInOut --");
+        return employeeService.findAllCheckInOut(searchCriteria);
+    }
+
 
     @RequestMapping(value = "/employee/enroll", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> enrollEmployeeFace(@Valid @RequestBody EmployeeDTO employee, HttpServletRequest request) {
@@ -217,6 +237,127 @@ public class EmployeeResource {
         return result;
     }
 
+    @RequestMapping(value = "/employee/relievers", method = RequestMethod.GET)
+    public List<EmployeeDTO> findAllRelievers() {
+        log.info("--Invoked EmployeeResource.findAll Relievers--");
+        return employeeService.findAllRelievers(SecurityUtils.getCurrentUserId());
+    }
+
+    @RequestMapping(value = "/employee/export",method = RequestMethod.POST)
+	public ExportResponse exportEmployee(@RequestBody SearchCriteria searchCriteria) {
+		ExportResponse resp = new ExportResponse();
+		if(searchCriteria != null) {
+			searchCriteria.setUserId(SecurityUtils.getCurrentUserId());
+			SearchResult<EmployeeDTO> result = employeeService.findBySearchCrieria(searchCriteria);
+			List<EmployeeDTO> results = result.getTransactions();
+			resp.addResult(employeeService.export(results));
+		}
+		return resp;
+	}
+
+    @RequestMapping(value = "/employee/export/{fileId}/status",method = RequestMethod.GET)
+	public ExportResult exportStatus(@PathVariable("fileId") String fileId) {
+		log.debug("ExportStatus -  fileId -"+ fileId);
+		ExportResult result = employeeService.getExportStatus(fileId);
+		if(result!=null && result.getStatus() != null) {
+			switch(result.getStatus()) {
+				case "PROCESSING" :
+					result.setMsg("Exporting...");
+					break;
+				case "COMPLETED" :
+					result.setMsg("Download");
+					result.setFile("/api/employee/export/"+fileId);
+					break;
+				case "FAILED" :
+					result.setMsg("Failed to export. Please try again");
+					break;
+				default :
+					result.setMsg("Failed to export. Please try again");
+					break;
+			}
+		}
+		return result;
+	}
+
+	@RequestMapping(value = "/employee/export/{fileId}",method = RequestMethod.GET)
+	public byte[] getExportFile(@PathVariable("fileId") String fileId, HttpServletResponse response) {
+		byte[] content = employeeService.getExportFile(fileId);
+		response.setContentType("application/force-download");
+		response.setContentLength(content.length);
+		response.setHeader("Content-Transfer-Encoding", "binary");
+		response.setHeader("Content-Disposition","attachment; filename=\"" + fileId + ".txt\"");
+		return content;
+	}
+
+    @RequestMapping(value = "/employee/assignReliever", method = RequestMethod.POST)
+    public ResponseEntity<?> assignReliever(@RequestBody RelieverDTO reliever) {
+
+        log.info("Inside assign Reliever" + reliever.getEmployeeId() + " , "+ reliever.getRelieverId());
+
+        EmployeeDTO selectedEmployee = employeeService.findByEmpId(reliever.getEmployeeEmpId());
+        EmployeeDTO selectedReliever = employeeService.findByEmpId(reliever.getRelieverEmpId());
+        selectedEmployee.setRelieved(true);
+        try {
+            employeeService.updateEmployee(selectedEmployee,false);
+            jobService.assignReliever(selectedEmployee,selectedReliever, reliever.getRelievedFromDate(), reliever.getRelievedToDate());
+        }catch(Exception e) {
+            throw new TimesheetException(e, selectedEmployee);
+        }
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/employee/assignJobsAndTransfer", method = RequestMethod.POST)
+    public ResponseEntity<?> transferEmployee(@RequestBody RelieverDTO reliever) {
+
+        log.info("Inside assign Reliever" + reliever.getEmployeeId() + " , "+ reliever.getRelieverId());
+
+        EmployeeDTO selectedEmployee = employeeService.findByEmpId(reliever.getEmployeeEmpId());
+        EmployeeDTO selectedReliever = employeeService.findByEmpId(reliever.getRelieverEmpId());
+        selectedEmployee.setRelieved(true);
+        try {
+            employeeService.updateEmployee(selectedEmployee,false);
+            jobService.assignJobsForDifferentEmployee(selectedEmployee,selectedReliever, reliever.getRelievedFromDate());
+        }catch(Exception e) {
+            throw new TimesheetException(e, selectedEmployee);
+        }
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/employee/deleteJobsAndTransfer", method = RequestMethod.POST)
+    public ResponseEntity<?> deleteJobsAndTransfer(@RequestBody RelieverDTO reliever) {
+
+        log.info("Inside assign Reliever" + reliever.getEmployeeId() + " , "+ reliever.getRelieverId());
+
+        EmployeeDTO selectedEmployee = employeeService.findByEmpId(reliever.getEmployeeEmpId());
+        selectedEmployee.setRelieved(true);
+        try {
+            employeeService.updateEmployee(selectedEmployee,false);
+            jobService.deleteJobsForEmployee(selectedEmployee,reliever.getRelievedFromDate());
+        }catch(Exception e) {
+            throw new TimesheetException(e, selectedEmployee);
+        }
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/designation", method = RequestMethod.GET)
+    public List<DesignationDTO> findAllDesignations() {
+        log.info("--Invoked EmployeeResource.findAllDesignations --");
+        return employeeService.findAllDesignations();
+    }
+
+    @RequestMapping(value = "/designation", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+    @Timed
+    public ResponseEntity<?> saveDesignation(@Valid @RequestBody DesignationDTO designationDTO, HttpServletRequest request) {
+        log.info("Inside the save designation-" + designationDTO);
+        log.info("Inside Save designation"+designationDTO.getName());
+        long userId = SecurityUtils.getCurrentUserId();
+        try {
+            DesignationDTO designation= employeeService.createDesignation(designationDTO);
+        }catch(Exception e) {
+            throw new TimesheetException(e, designationDTO);
+        }
+        return new ResponseEntity<>(HttpStatus.CREATED);
+    }
 
 
 

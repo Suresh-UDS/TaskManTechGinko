@@ -105,7 +105,7 @@ public class ApplicationModuleService extends AbstractService {
 	public SearchResult<ApplicationModuleDTO> findBySearchCrieria(SearchCriteria searchCriteria) {
 		SearchResult<ApplicationModuleDTO> result = new SearchResult<ApplicationModuleDTO>();
 		if(searchCriteria != null) {
-			Pageable pageRequest = createPageRequest(searchCriteria.getCurrPage());
+			Pageable pageRequest = createPageRequest(searchCriteria.getCurrPage(),100);
 			Page<ApplicationModule> page = null;
 			List<ApplicationModuleDTO> transactions = null;
 			if(!searchCriteria.isFindAll()) {
@@ -131,8 +131,8 @@ public class ApplicationModuleService extends AbstractService {
 		}
 		result.setCurrPage(page.getNumber() + 1);
 		result.setTotalCount(page.getTotalElements());
-        result.setStartInd((result.getCurrPage() - 1) * 10 + 1);
-        result.setEndInd((result.getTotalCount() > 10  ? (result.getCurrPage()) * 10 : result.getTotalCount()));
+        result.setStartInd((result.getCurrPage() - 1) * 100 + 1);
+        result.setEndInd((result.getTotalCount() > 100  ? (result.getCurrPage()) * 100 : result.getTotalCount()));
 
 		result.setTransactions(transactions);
 		return;

@@ -1,6 +1,7 @@
 package com.ts.app.web.rest.dto;
 
 import java.io.Serializable;
+import java.util.List;
 
 public class UserRoleDTO extends BaseDTO  implements Serializable {
 
@@ -20,6 +21,8 @@ public class UserRoleDTO extends BaseDTO  implements Serializable {
 	private boolean isDeleted;
 	
 	private int roleLevel;
+	
+	private List<UserRolePermissionDTO> rolePermissions;
 
 	public Long getId() {
 		return id;
@@ -67,6 +70,14 @@ public class UserRoleDTO extends BaseDTO  implements Serializable {
 
 	public void setRoleLevel(int roleLevel) {
 		this.roleLevel = roleLevel;
+	}
+
+	public List<UserRolePermissionDTO> getRolePermissions() {
+		return rolePermissions;
+	}
+
+	public void setRolePermissions(List<UserRolePermissionDTO> rolePermissions) {
+		this.rolePermissions = rolePermissions;
 	}
 
 	

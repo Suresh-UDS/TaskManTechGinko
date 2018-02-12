@@ -69,6 +69,13 @@ angular.module('timeSheetApp')
             		return response.data;
             	});
             },
+            
+            generateReport: function(searchCriteria) {
+	            	return $http.post('api/jobs/report', searchCriteria).then(function (response) {
+	            		return response.data;
+	            	});
+            },
+            
 
             standardPrices: function () {
                 return $http.get('api/price').then(function (response) {
@@ -77,5 +84,43 @@ angular.module('timeSheetApp')
                     return response.data;
                 });
             },
+            
+            exportAllData: function(searchCriteria) {
+	            	return $http.post('api/job/export', searchCriteria).then(function (response) {
+	            		return response.data;
+	            	});
+	        },
+	        exportStatus: function(fileName) {
+	            	if(empId == 0) {
+	                	return $http.get('api/job/export/'+fileName+"/status").then(function (response) {
+	                		return response.data;
+	                	});
+	            	}
+	        },
+	
+	        getExportFile: function(fileName) {
+	            	return $http.get('api/job/export/'+fileName).then(function (response) {
+	            		return response.data;
+	            	});
+	        },
+	        
+	        importFile: function(file) {
+	        		var fileFormData = new FormData();
+	            fileFormData.append('jobFile', file);
+	            	return $http.post('api/jobs/import', fileFormData, {
+	                    transformRequest: angular.identity,
+	                    headers: {'Content-Type': undefined}
+	     
+	                }).then(function (response) {
+	            			return response.data;
+	                });
+	        		
+	        },
+	        importStatus: function(fileName) {
+                	return $http.get('api/jobs/import/'+fileName+"/status").then(function (response) {
+                		return response.data;
+                	});
+	        }	        
+            
         };
     });

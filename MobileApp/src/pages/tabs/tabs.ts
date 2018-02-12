@@ -7,6 +7,7 @@ import {QuotationPage} from "../quotation/quotation";
 import {AttendancePage} from "../attendance/attendance";
 import {CustomerDetailPage} from "../customer-detail/customer-detail";
 import {EmployeeDetailPage} from "../employee-list/employee-detail";
+import {EmployeeListPage} from "../employee-list/employee-list";
 
 @Component({
   selector: 'page-tabs',
@@ -16,13 +17,13 @@ export class TabsPage {
   DashboardTab:any;
   QuotationTab:any;
   CustomerDetailTab:any;
-  EmployeeDetailTab:any;
+  EmployeeListTab:any;
 
   constructor() {
     this.DashboardTab=DashboardPage;
     this.QuotationTab=QuotationPage;
     this.CustomerDetailTab=CustomerDetailPage;
-    this.EmployeeDetailTab=EmployeeDetailPage;
+    this.EmployeeListTab=EmployeeListPage;
   }
   ionViewDidLoad() {
     console.log('ionViewDidLoad TabsPage');

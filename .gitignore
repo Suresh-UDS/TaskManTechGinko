@@ -227,8 +227,9 @@ QuotationService/.idea/vcs.xml
 QuotationService/.idea/modules.xml
 
 
-D:\workspace\FMS\Webadmin\src\main\webapp\bower_components\*
 
 Webadmin/src/main/webapp/bower_components/*
 
 MobileApp/.idea/
+QuotationService/.idea/
+QuotationService/package-lock.json

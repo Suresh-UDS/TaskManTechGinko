@@ -13,7 +13,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
@@ -33,7 +32,12 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class Project extends AbstractAuditingEntity implements Serializable {
 
-    @Id
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+	@Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
@@ -52,6 +56,11 @@ public class Project extends AbstractAuditingEntity implements Serializable {
     @ManyToMany(mappedBy="projects")
 	private List<Employee> employees;
 
+    @Column(name = "contact_first_name", length = 50)
+    private String contactFirstName;
+    
+    @Column(name = "contact_last_name", length = 50)
+    private String contactLastName;
 	
 	private String phone;
 	private String email;
@@ -228,6 +237,30 @@ public class Project extends AbstractAuditingEntity implements Serializable {
 
 	public void setEmployees(List<Employee> employees) {
 		this.employees = employees;
+	}
+
+
+
+	public String getContactFirstName() {
+		return contactFirstName;
+	}
+
+
+
+	public void setContactFirstName(String contactFirstName) {
+		this.contactFirstName = contactFirstName;
+	}
+
+
+
+	public String getContactLastName() {
+		return contactLastName;
+	}
+
+
+
+	public void setContactLastName(String contactLastName) {
+		this.contactLastName = contactLastName;
 	}
 
 	

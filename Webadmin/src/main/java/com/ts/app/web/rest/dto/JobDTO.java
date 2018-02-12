@@ -1,10 +1,11 @@
 package com.ts.app.web.rest.dto;
 
+import java.util.Date;
+import java.util.List;
+
 import com.ts.app.domain.JobStatus;
 import com.ts.app.domain.JobType;
 import com.ts.app.domain.util.StringUtil;
-
-import java.util.Date;
 
 public class JobDTO extends BaseDTO {
 
@@ -21,6 +22,11 @@ public class JobDTO extends BaseDTO {
 
 	private Long employeeId;
 	private String employeeName;
+
+	private Long relieverId;
+	private String relieverName;
+
+	private boolean relieved;
 
 	private Long locationId;
 	private String locationName;
@@ -56,6 +62,8 @@ public class JobDTO extends BaseDTO {
 	private boolean scheduled;
 
 	private String frequency;
+
+	private List<JobChecklistDTO> checklistItems;
 
 	public String getTitle() {
 		return title;
@@ -260,8 +268,11 @@ public class JobDTO extends BaseDTO {
 		sb.append("employeeName :" + employeeName + StringUtil.SPACE);
 		sb.append("jobStatus :" + jobStatus + StringUtil.SPACE);
 		sb.append("location :" + locationId + StringUtil.SPACE);
+		sb.append("relieverId:"+relieverId+StringUtil.SPACE);
+		sb.append("relieverName:"+relieverName+StringUtil.SPACE);
 		sb.append("asset :" + assetId + StringUtil.SPACE);
 		sb.append("active :" + getActive() + StringUtil.SPACE);
+		sb.append("relieved:"+relieved+ StringUtil.SPACE);
 		sb.append(" } ");
 		return sb.toString();
 	}
@@ -296,5 +307,35 @@ public class JobDTO extends BaseDTO {
 	public void setFrequency(String frequency) {
 		this.frequency = frequency;
 	}
+	public List<JobChecklistDTO> getChecklistItems() {
+		return checklistItems;
+	}
+	public void setChecklistItems(List<JobChecklistDTO> checklistItems) {
+		this.checklistItems = checklistItems;
+	}
 
+
+    public Long getRelieverId() {
+        return relieverId;
+    }
+
+    public void setRelieverId(Long relieverId) {
+        this.relieverId = relieverId;
+    }
+
+    public String getRelieverName() {
+        return relieverName;
+    }
+
+    public void setRelieverName(String relieverName) {
+        this.relieverName = relieverName;
+    }
+
+    public boolean isRelieved() {
+        return relieved;
+    }
+
+    public void setRelieved(boolean relieved) {
+        this.relieved = relieved;
+    }
 }

@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import {LoadingController, NavController, NavParams} from 'ionic-angular';
 import {authService} from "../service/authService";
+import {QuotationService} from "../service/quotationService";
 
 @Component({
   selector: 'page-create-rate-card',
@@ -18,8 +19,9 @@ export class CreateRateCardPage {
     };
 
     uom:any;
-
-    constructor(public navCtrl: NavController,public navParams:NavParams, public authService: authService, private loadingCtrl:LoadingController) {
+    eMsg:any;
+    field:any;
+    constructor(public navCtrl: NavController,public navParams:NavParams, public authService: authService, private loadingCtrl:LoadingController, private quotationService: QuotationService) {
         this.rateCardDetails={
             type:'',
             title:'',
@@ -33,7 +35,7 @@ export class CreateRateCardPage {
     }
 
     ionViewWillEnter(){
-        this.authService.getRateCardTypes().subscribe(response=>{
+        this.quotationService.getRateCardTypes().subscribe(response=>{
             console.log("Rate Card types");
             console.log(response);
             this.rateCardTypes = response;
@@ -41,9 +43,33 @@ export class CreateRateCardPage {
     }
 
     createRateCard(rateCard){
-        this.authService.createRateCard(rateCard).subscribe(response=>{
-            console.log(response);
-        })
+
+        if(this.rateCardDetails.title && this.rateCardDetails.cost)
+        {
+
+            rateCard.uom = this.uom;
+            this.quotationService.createRateCard(rateCard).subscribe(response => {
+                console.log(response);
+                this.navCtrl.pop();
+            })
+        }
+        else
+        {
+            if(!this.rateCardDetails.title)
+            {
+                this.eMsg="title";
+                this.field="title";
+            }
+            else if(!this.rateCardDetails.cost)
+            {
+                this.eMsg="title";
+                this.field="cost";
+            }
+            else if(!this.rateCardDetails.title && !this.rateCardDetails.cost)
+            {
+                this.eMsg="all";
+            }
+        }
     }
 
     rateCardUOM(rateCardType){

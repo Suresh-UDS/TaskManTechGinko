@@ -19,6 +19,8 @@ public class EmployeeDTO extends BaseDTO {
     @Size(min = 1, max = 50)
     private String name;
 
+    private String lastName;
+
     private long id;
 
     @Size(min = 4, max = 10)
@@ -65,6 +67,14 @@ public class EmployeeDTO extends BaseDTO {
     private List<ProjectDTO> projects;
 
     private List<SiteDTO> sites;
+
+    private List<EmployeeProjectSiteDTO> projectSites;
+
+    private boolean isLeft;
+
+    private boolean isReliever;
+
+    private boolean isRelieved;
 
     @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property="@id")
     private EmployeeDTO manager;
@@ -210,11 +220,16 @@ public class EmployeeDTO extends BaseDTO {
         	}
         }
         if(CollectionUtils.isNotEmpty(sites)) {
-        	for(SiteDTO site : sites) {
-        		sb.append(site);
-        	}
+	        	for(SiteDTO site : sites) {
+	        		sb.append(site);
+	        	}
         }
-        sb.append("userId-" + userId);
+        sb.append("userId-" + userId +" ");
+        if(CollectionUtils.isNotEmpty(projectSites)) {
+        		for(EmployeeProjectSiteDTO projSite : projectSites) {
+        			sb.append(projSite);
+        		}
+        }
         return sb.toString();
     }
 
@@ -290,4 +305,45 @@ public class EmployeeDTO extends BaseDTO {
     public void setFaceIdEnrolled(boolean faceIdEnrolled) {
         isFaceIdEnrolled = faceIdEnrolled;
     }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+
+    public boolean isLeft() {
+        return isLeft;
+    }
+
+    public void setLeft(boolean left) {
+        isLeft = left;
+    }
+
+    public boolean isReliever() {
+        return isReliever;
+    }
+
+    public void setReliever(boolean reliever) {
+        isReliever = reliever;
+    }
+
+    public boolean isRelieved() {
+        return isRelieved;
+    }
+
+    public void setRelieved(boolean relieved) {
+        isRelieved = relieved;
+    }
+	public List<EmployeeProjectSiteDTO> getProjectSites() {
+		return projectSites;
+	}
+
+	public void setProjectSites(List<EmployeeProjectSiteDTO> projectSites) {
+		this.projectSites = projectSites;
+	}
+
 }

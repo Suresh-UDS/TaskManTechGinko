@@ -4,31 +4,35 @@
   See http://ionicframework.com/docs/components/#navigation for more info on
   Ionic pages and navigation.
 -->
-<ion-header>
+<ion-header no-border>
   <ion-navbar>
     <button ion-button menuToggle>
       <ion-icon name="menu"></ion-icon>
     </button>
     <ion-title>Employee Detail</ion-title>
   </ion-navbar>
+
+
+    <ion-segment [(ngModel)]="categories" class="segmnt margin-auto" color="clr-blue">
+      <ion-segment-button value="detail">
+        Detail
+      </ion-segment-button>
+      <ion-segment-button value="jobs" (click)="getJobs(false)">
+        Jobs
+      </ion-segment-button>
+      <ion-segment-button value="quotation">
+        Quotation
+      </ion-segment-button>
+      <ion-segment-button value="attendance" (click)="getAttendance(false)">
+        Attendance
+      </ion-segment-button>
+    </ion-segment>
+
+
 </ion-header>
 
 <ion-content>
-  <ion-segment [(ngModel)]="categories" class="segmnt margin-auto margin-top5" color="clr-blue">
-    <ion-segment-button value="detail">
-      Detail
-    </ion-segment-button>
-    <ion-segment-button value="jobs" (click)="getAllJobs()">
-      Jobs
-    </ion-segment-button>
-    <ion-segment-button value="quotation">
-      Quotation
-    </ion-segment-button>
-    <ion-segment-button value="attendance">
-      Attendance
-    </ion-segment-button>
 
-  </ion-segment>
 
 
   <div [ngSwitch]="categories">
@@ -67,86 +71,100 @@
     </ion-list>
 
     <ion-list *ngSwitchCase="'jobs'" >
-      <ion-row>
-      <ion-col col-11 class="margin-auto">
-      <div class="card" *ngFor="let job of jobs" [ngClass]="{'red-card' : (job.status == 'OVERDUE'),
-                                                          'green-card' : (job.status == 'COMPLETED'),
-                                                          'blue-card' :(job.status =='OPEN' || job.status == 'ASSIGNED' || job.status == 'INPROGRESS')}">
+      <ion-refresher (ionRefresh)="doRefresh($event,job)">
+        <ion-refresher-content></ion-refresher-content>
+      </ion-refresher>
+      <ion-item-sliding *ngFor="let job of jobs">
 
-        <div class="card-content padding-bottom0" >
-          <ion-row class="margin0">
-            <ion-col col-12 class="padding-right0">
-              <button ion-button icon-left icon-only clear class="pop-icon" (click)="viewJob(job)">
-                <ion-icon name="eye" class="fnt-12 padding0"></ion-icon>
-              </button>
-            </ion-col>
-          </ion-row>
-          <ion-row class="margin0">
-            <ion-col col-8 class="padding-left0"><p text-left>{{job.title}}</p></ion-col>
-            <ion-col col-4 class="padding-right0">
-              <p text-right [ngClass]="{'red' : (job.status == 'OVERDUE'),
-                                                          'green' : (job.status == 'COMPLETED'),
-                                                          'blue' :(job.status =='OPEN' || job.status == 'ASSIGNED' || job.status == 'INPROGRESS')}" >
-                {{job.status}}
-              </p>
-            </ion-col>
-          </ion-row>
-          <p>{{job.employeeName}}</p>
-          <p>{{job.siteProjectName}} - {{job.siteName}}</p>
-        </div>
+        <ion-item class="item-fnt padding-left0" >
+          <div class="padding-left16">
+            <ion-row>
+              <ion-col col-2 class="">
+                <button ion-button clear color="primary" class="icon-round"
+                        [ngClass]="{'icon-round-red' : (job.status == 'OVERDUE'),
+                                                          'icon-round-green' : (job.status == 'COMPLETED'),
+                                                          'icon-round-blue' :(job.status =='OPEN' || job.status == 'ASSIGNED' || job.status == 'INPROGRESS')}">
+                  <ion-icon name="ios-construct-outline" class="fnt-24"></ion-icon>
+                </button>
+              </ion-col>
+              <ion-col col-10 class="padding-left5">
+                <div class="border-btm padding-bottom5 ln-ght20" text-capitalize>
+                  <p text-left>{{job.title}}</p>
+                  <p text-left>{{job.employeeName}}</p>
+                  <p text-left>{{job.siteProjectName}} - {{job.siteName}}</p>
+                </div>
+              </ion-col>
+            </ion-row>
+            <div text-capitalize >
 
-        <div class="card-footer">
-          <div *ngIf="job.status !='COMPLETED'">
-            <p>{{job.plannedStartTime | date:'dd/MM/yyyy @ H:mm' }} - {{job.plannedEndTime | date:'dd/MM/yyyy @ H:mm' }} </p>
+              <ion-row class="margin0">
+                <ion-col col-6 class="padding-right5">
+                  <div *ngIf="job.status =='COMPLETED'">
+                    <p text-left class="fnt-12"><ion-icon ios="ios-calendar" md="md-calendar" class="green padding-right10"></ion-icon>{{job.actualStartTime | date:'MMM d, y, h:mm a' }} </p>
+                  </div>
+                  <div *ngIf="job.status !='COMPLETED'">
+                    <p text-left class="fnt-12"><ion-icon ios="ios-calendar" md="md-calendar" class="green padding-right10"></ion-icon>{{job.plannedStartTime | date:'MMM d, y, h:mm a' }} </p>
+                  </div>
+                </ion-col>
+                <ion-col col-6>
+                  <div *ngIf="job.status =='COMPLETED'">
+                    <p text-left class="fnt-12"><ion-icon ios="ios-calendar" md="md-calendar" class="red padding-right10"></ion-icon>{{job.actualEndTime | date:'MMM d, y, h:mm a' }} </p>
+                  </div>
+                  <div *ngIf="job.status !='COMPLETED'">
+                    <p text-left class="fnt-12"><ion-icon ios="ios-calendar" md="md-calendar" class="red padding-right10"></ion-icon>{{job.plannedEndTime | date:'MMM d, y, h:mm a' }} </p>
+                  </div>
+                </ion-col>
+              </ion-row>
+            </div>
           </div>
-          <div *ngIf="job.status =='COMPLETED'">
-            <p>{{job.actualStartTime | date:'dd/MM/yyyy @ H:mm' }} - {{job.actualEndTime | date:'dd/MM/yyyy @ H:mm' }} </p>
-          </div>
-          <div class="stats align-right">
-            <!--<p class="display-inline">view</p><ion-icon class="primary-clr padding-left5 fnt-12" name="arrow-forward"></ion-icon>-->
-          </div>
-        </div>
-      </div>
-      </ion-col>
-      </ion-row>
+        </ion-item>
+
+        <ion-item-options>
+          <button ion-button clear color="primary"><ion-icon name="md-eye" class="fnt-24"></ion-icon></button>
+          <button ion-button clear color="clr-blue"><ion-icon name="md-create" class="fnt-24"></ion-icon></button>
+          <button ion-button clear color="secondary" *ngIf="job.status !='COMPLETED'"><ion-icon name="md-checkmark-circle" class="fnt-24"></ion-icon></button>
+          <button ion-button clear color="danger"><ion-icon name="md-close-circle" class="fnt-24"></ion-icon></button>
+        </ion-item-options>
+      </ion-item-sliding>
     </ion-list>
     <ion-list *ngSwitchCase="'quotation'">
       <div class="row padding0 margin0 white-bg">
         <ion-col col-12 class="padding-top0">
           <div class="table-responsive table-sales">
+
             <table class="table fnt-18">
               <tbody>
-              <tr (click)="quotationView()">
+              <tr (click)="gotoDraftedQuotation()">
+                <td>Drafted</td>
+                <td class="text-right">
+                  <span class="clr-orange padding-right2">(</span>{{draftedQuotationsCount}}<span class="clr-orange padding-left2">)</span>
+                </td>
+                <td class="text-right">
+                  <ion-icon class="primary-clr padding-left5 fnt-12" name="arrow-forward"></ion-icon>
+                </td>
+              </tr>
+              <tr (click)="gotoSubmittedQuotation()">
+                <td>Submitted</td>
+                <td class="text-right">
+                  <span class="clr-orange padding-right2">(</span>{{submittedQuotationsCount}}<span class="clr-orange padding-left2">)</span>
+                </td>
+                <td class="text-right">
+                  <ion-icon class="primary-clr padding-left5 fnt-12" name="arrow-forward"></ion-icon>
+                </td>
+              </tr>
+              <tr (click)="gotoApprovedQuotation()">
                 <td>Approved</td>
                 <td class="text-right">
-                  <span class="clr-orange padding-right2">(</span>0<span class="clr-orange padding-left2">)</span>
+                  <span class="clr-orange padding-right2">(</span>{{approvedQuotationsCount}}<span class="clr-orange padding-left2">)</span>
                 </td>
                 <td class="text-right">
                   <ion-icon class="primary-clr padding-left5 fnt-12" name="arrow-forward"></ion-icon>
                 </td>
               </tr>
-              <tr (click)="quotationView()">
-                <td>Overdue</td>
-                <td class="text-right">
-                  <span class="clr-orange padding-right2">(</span>0<span class="clr-orange padding-left2">)</span>
-                </td>
-                <td class="text-right">
-                  <ion-icon class="primary-clr padding-left5 fnt-12" name="arrow-forward"></ion-icon>
-                </td>
-              </tr>
-              <tr (click)="quotationView()">
-                <td>Requested</td>
-                <td class="text-right">
-                  <span class="clr-orange padding-right2">(</span>0<span class="clr-orange padding-left2">)</span>
-                </td>
-                <td class="text-right">
-                  <ion-icon class="primary-clr padding-left5 fnt-12" name="arrow-forward"></ion-icon>
-                </td>
-              </tr>
-              <tr (click)="quotationView()">
+              <tr (click)="gotoArchivedQuotation()">
                 <td>Archieved</td>
                 <td class="text-right">
-                  <span class="clr-orange padding-right2">(</span>0<span class="clr-orange padding-left2">)</span>
+                  <span class="clr-orange padding-right2">(</span>{{archivedQuotationsCount}}<span class="clr-orange padding-left2">)</span>
                 </td>
                 <td class="text-right">
                   <ion-icon class="primary-clr padding-left5 fnt-12" name="arrow-forward"></ion-icon>
@@ -159,11 +177,50 @@
       </div>
     </ion-list>
     <ion-list *ngSwitchCase="'attendance'">
-      <ion-item>
+      <ion-refresher (ionRefresh)="doRefresh($event,attendance)">
+        <ion-refresher-content></ion-refresher-content>
+      </ion-refresher>
 
-      </ion-item>
+      <ion-row class="margin0 white-bg padding10 margin-bottom25 width98 margin-side-auto" *ngFor="let a of attendances">
+        <ion-col col-12 *ngIf="!attendances">
+          <p>No Records</p>
+        </ion-col>
+        <ion-col col-6 class="label-on-left">Name</ion-col>
+        <ion-col col-6>
+          <p text-left class="margin0">{{a.employeeFullName}}</p>
+        </ion-col>
+        <ion-col col-6 class="label-on-left">Site</ion-col>
+        <ion-col col-6>
+          <p text-left class="margin0">{{a.siteName}}</p>
+        </ion-col>
+        <ion-col col-6>
+          <p text-left class="margin0" class="display-inline">{{a.checkInTime |date:'MM/dd/yyyy @ h:mma'}}</p>
+        </ion-col>
+        <ion-col col-6>
+          <p text-right class="margin0" class="display-inline">{{a.checkOutTime |date:'MM/dd/yyyy @ h:mma'}}</p>
+        </ion-col>
+        <ion-col col-6 class="align-center">
+          <ion-item no-lines class="item-label">
+            <ion-avatar *ngIf="a.checkInImage">
+              <img  [src]="a.checkInImage" >
+            </ion-avatar>
+            <ion-avatar *ngIf="!a.checkInImage">
+              <img  src="img/user.png" width="10%">
+            </ion-avatar>
+          </ion-item>
+        </ion-col>
+        <ion-col col-6 class="align-center">
+          <ion-item no-lines class="item-label">
+            <ion-avatar *ngIf="a.checkOutImage">
+              <img  [src]="a.checkOutImage" >
+            </ion-avatar>
+            <ion-avatar *ngIf="!a.checkOutImage">
+              <img  src="img/user.png" >
+            </ion-avatar>
+          </ion-item>
+        </ion-col>
+      </ion-row>
     </ion-list>
-
   </div>
 
 </ion-content>

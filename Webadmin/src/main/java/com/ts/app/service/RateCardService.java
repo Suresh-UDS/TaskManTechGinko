@@ -1,0 +1,333 @@
+package com.ts.app.service;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.inject.Inject;
+
+import com.fasterxml.jackson.databind.SerializationFeature;
+import org.apache.commons.collections.CollectionUtils;
+import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.ts.app.domain.AbstractAuditingEntity;
+import com.ts.app.domain.RateCard;
+import com.ts.app.repository.ProjectRepository;
+import com.ts.app.repository.RateCardRepository;
+import com.ts.app.repository.SiteRepository;
+import com.ts.app.repository.UserRepository;
+import com.ts.app.service.util.MapperUtil;
+import com.ts.app.web.rest.dto.BaseDTO;
+import com.ts.app.web.rest.dto.RateCardDTO;
+import com.ts.app.web.rest.dto.SearchCriteria;
+import com.ts.app.web.rest.dto.SearchResult;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
+import org.springframework.util.StringUtils;
+import org.springframework.web.client.RestTemplate;
+
+/**
+ * Service class for exposing rate card related operations.
+ */
+@Service
+@Transactional
+public class RateCardService extends AbstractService {
+
+    @Value("${quotationService.url}")
+    private String quotationSvcEndPoint;
+
+	private final Logger log = LoggerFactory.getLogger(RateCardService.class);
+
+	@Inject
+	private RateCardRepository rateCardRepository;
+
+	@Inject
+	private ProjectRepository projectRepository;
+
+	@Inject
+	private UserRepository userRepository;
+
+	@Inject
+	private SiteRepository siteRepository;
+
+	@Inject
+	private MapperUtil<AbstractAuditingEntity, BaseDTO> mapperUtil;
+
+	public RateCardDTO createRateCardInformation(RateCardDTO rateCardDto) {
+		// log.info("The admin Flag value is " +adminFlag);
+
+        log.debug("Rate card creation");
+
+        try{
+            RestTemplate restTemplate = new RestTemplate();
+            MappingJackson2HttpMessageConverter jsonHttpMessageConverter = new MappingJackson2HttpMessageConverter();
+            jsonHttpMessageConverter.getObjectMapper().configure(SerializationFeature.FAIL_ON_EMPTY_BEANS,false);
+            restTemplate.getMessageConverters().add(jsonHttpMessageConverter);
+
+            MultiValueMap<String, String> headers =new LinkedMultiValueMap<String, String>();
+            Map<String, String> map=  new HashMap<String, String>();
+            map.put("Content-Type", MediaType.APPLICATION_JSON_VALUE);
+
+            headers.setAll(map);
+
+            Map<String,Object> paramMap = new HashMap<String,Object>();
+            paramMap.put("title",rateCardDto.getTitle());
+            paramMap.put("type",rateCardDto.getType());
+            paramMap.put("cost",rateCardDto.getAmount());
+            paramMap.put("uom",rateCardDto.getUom());
+
+            JSONObject request = new JSONObject();
+            request.put("title",rateCardDto.getTitle());
+            request.put("type",rateCardDto.getType());
+            request.put("cost",rateCardDto.getAmount());
+            request.put("uom", rateCardDto.getUom());
+
+            HttpEntity<?> requestEntity = new HttpEntity<>(request.toString(),headers);
+            log.debug("Request entity rate card service"+requestEntity);
+            log.debug("Rate card service end point"+quotationSvcEndPoint);
+            ResponseEntity<?> response = restTemplate.postForEntity(quotationSvcEndPoint+"/rateCard/create", requestEntity, String.class);
+            log.debug("Response freom push service "+ response.getStatusCode());
+            log.debug("response from push service"+response.getBody());
+
+        }catch(Exception e) {
+            log.error("Error while calling location service ", e);
+            e.printStackTrace();
+        }
+//		RateCard rateCard = mapperUtil.toEntity(rateCardDto, RateCard.class);
+//		Project proj = projectRepository.findOne(rateCardDto.getProjectId());
+//		rateCard.setProject(proj);
+//		if(rateCardDto.getSiteId() > 0) {
+//			Site site = siteRepository.findOne(rateCardDto.getSiteId());
+//			rateCard.setSite(site);
+//		}else {
+//			rateCard.setSite(null);
+//		}
+//		rateCard.setActive(rateCard.ACTIVE_YES);
+//
+//		rateCard = rateCardRepository.save(rateCard);
+//		log.debug("Created Information for RateCard: {}", rateCard);
+//		rateCardDto = mapperUtil.toModel(rateCard, RateCardDTO.class);
+		return rateCardDto;
+	}
+
+	public void updateRateCard(RateCardDTO rateCard) {
+//		log.debug("Inside Update");
+//		RateCard rateCardUpdate = rateCardRepository.findOne(rateCard.getId());
+//		mapToEntity(rateCard, rateCardUpdate);
+//		rateCardRepository.saveAndFlush(rateCardUpdate);
+
+	}
+
+	private void mapToEntity(RateCardDTO rateCardDTO, RateCard rateCard) {
+		rateCard.setName(rateCardDTO.getName());
+		rateCard.setType(rateCardDTO.getType());
+		rateCard.setUom(rateCardDTO.getUom());
+		rateCard.setAmount(rateCardDTO.getAmount());
+	}
+
+	public void deleteRateCard(RateCardDTO rateCardDto) {
+		log.debug("Inside Delete");
+
+//		RateCard rateCardUpdate = rateCardRepository.findOne(id);
+//		rateCardUpdate.setActive(RateCard.ACTIVE_NO);
+//		rateCardUpdate.setDeleted(true);
+//		rateCardRepository.save(rateCardUpdate);
+
+        try {
+            RestTemplate restTemplate = new RestTemplate();
+            MappingJackson2HttpMessageConverter jsonHttpMessageConverter = new MappingJackson2HttpMessageConverter();
+            jsonHttpMessageConverter.getObjectMapper().configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
+            restTemplate.getMessageConverters().add(jsonHttpMessageConverter);
+
+            MultiValueMap<String, String> headers = new LinkedMultiValueMap<String, String>();
+            Map<String, String> map = new HashMap<String, String>();
+            map.put("Content-Type", MediaType.APPLICATION_JSON_VALUE);
+
+            Map<String,Object> paramMap = new HashMap<String,Object>();
+            paramMap.put("id",rateCardDto.getId());
+
+
+            JSONObject request = new JSONObject();
+            request.put("id",rateCardDto.getId());
+
+            HttpEntity<?> requestEntity = new HttpEntity<>(request.toString(),headers);
+            log.debug("Rate card service end point"+quotationSvcEndPoint);
+            ResponseEntity<?> response = restTemplate.postForEntity(quotationSvcEndPoint+"/rateCard",requestEntity, String.class);
+            log.debug("Response freom push service "+ response.getStatusCode());
+            log.debug("response from push service"+response.getBody());
+//            rateCardDTOList = (List<RateCardDTO>) response.getBody();
+//            rateCardDetails = response.getBody();
+
+        }catch(Exception e) {
+            log.error("Error while calling location service ", e);
+            e.printStackTrace();
+        }
+	}
+
+	public Object findAll() {
+
+        log.debug("Rate card creation");
+        List<RateCardDTO> rateCardDTOList = null;
+        Object rateCardDetails = "";
+
+        try {
+            RestTemplate restTemplate = new RestTemplate();
+            MappingJackson2HttpMessageConverter jsonHttpMessageConverter = new MappingJackson2HttpMessageConverter();
+            jsonHttpMessageConverter.getObjectMapper().configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
+            restTemplate.getMessageConverters().add(jsonHttpMessageConverter);
+
+            MultiValueMap<String, String> headers = new LinkedMultiValueMap<String, String>();
+            Map<String, String> map = new HashMap<String, String>();
+            map.put("Content-Type", MediaType.APPLICATION_JSON_VALUE);
+
+            HttpEntity<?> requestEntity = new HttpEntity<>(headers);
+            log.debug("Rate card service end point"+quotationSvcEndPoint);
+            ResponseEntity<?> response = restTemplate.getForEntity(quotationSvcEndPoint+"/rateCard", String.class);
+            log.debug("Response freom push service "+ response.getStatusCode());
+            log.debug("response from push service"+response.getBody());
+//            rateCardDTOList = (List<RateCardDTO>) response.getBody();
+            rateCardDetails = response.getBody();
+
+        }catch(Exception e) {
+            log.error("Error while calling location service ", e);
+            e.printStackTrace();
+        }
+
+//		List<RateCard> entities = new ArrayList<RateCard>();
+//		entities = rateCardRepository.findAll();
+//		return mapperUtil.toModelList(entities, RateCardDTO.class);
+        return  rateCardDetails;
+	}
+
+    public Object getQuotations() {
+
+        log.debug("get Quotations");
+        Object quotationList = "";
+
+        try {
+            RestTemplate restTemplate = new RestTemplate();
+            MappingJackson2HttpMessageConverter jsonHttpMessageConverter = new MappingJackson2HttpMessageConverter();
+            jsonHttpMessageConverter.getObjectMapper().configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
+            restTemplate.getMessageConverters().add(jsonHttpMessageConverter);
+
+            MultiValueMap<String, String> headers = new LinkedMultiValueMap<String, String>();
+            Map<String, String> map = new HashMap<String, String>();
+            map.put("Content-Type", MediaType.APPLICATION_JSON_VALUE);
+
+            HttpEntity<?> requestEntity = new HttpEntity<>(headers);
+            log.debug("Rate card service end point"+quotationSvcEndPoint);
+            ResponseEntity<?> response = restTemplate.getForEntity(quotationSvcEndPoint+"/quotation", String.class);
+            log.debug("Response freom push service "+ response.getStatusCode());
+            log.debug("response from push service"+response.getBody());
+//            rateCardDTOList = (List<RateCardDTO>) response.getBody();
+            quotationList = response.getBody();
+
+        }catch(Exception e) {
+            log.error("Error while calling location service ", e);
+            e.printStackTrace();
+        }
+
+//		List<RateCard> entities = new ArrayList<RateCard>();
+//		entities = rateCardRepository.findAll();
+//		return mapperUtil.toModelList(entities, RateCardDTO.class);
+        return  quotationList;
+    }
+
+	public RateCardDTO findOne(Long id) {
+		RateCard entity = rateCardRepository.findOne(id);
+		return mapperUtil.toModel(entity, RateCardDTO.class);
+	}
+
+    public SearchResult<RateCardDTO> findBySearchCriteria(SearchCriteria searchCriteria) {
+    	log.debug("search Criteria",searchCriteria);
+
+        try{
+            RestTemplate restTemplate = new RestTemplate();
+            MappingJackson2HttpMessageConverter jsonHttpMessageConverter = new MappingJackson2HttpMessageConverter();
+            jsonHttpMessageConverter.getObjectMapper().configure(SerializationFeature.FAIL_ON_EMPTY_BEANS,false);
+            restTemplate.getMessageConverters().add(jsonHttpMessageConverter);
+
+            MultiValueMap<String, String> headers =new LinkedMultiValueMap<String, String>();
+            Map<String, String> map=  new HashMap<String, String>();
+            map.put("Content-Type", MediaType.APPLICATION_JSON_VALUE);
+
+            headers.setAll(map);
+
+            Map<String,Object> paramMap = new HashMap<String,Object>();
+//            paramMap.put("title",searchCriteria.get`());
+
+
+            JSONObject request = new JSONObject();
+//            request.put("title",rateCardDto.getTitle());
+            if(StringUtils.isEmpty(searchCriteria.getRateCardTitle()) && StringUtils.isEmpty(searchCriteria.getRateCardType())){
+
+            }else if(StringUtils.isEmpty(searchCriteria.getRateCardType())){
+                request.put("title",searchCriteria.getRateCardTitle());
+            }else if(StringUtils.isEmpty(searchCriteria.getRateCardTitle())){
+                request.put("type",searchCriteria.getRateCardType());
+            }else{
+                request.put("title",searchCriteria.getRateCardTitle());
+                request.put("type",searchCriteria.getRateCardType());
+            }
+
+            HttpEntity<?> requestEntity = new HttpEntity<>(request.toString(),headers);
+            log.debug("Request entity rate card service"+requestEntity);
+            log.debug("Rate card service end point"+quotationSvcEndPoint);
+            ResponseEntity<?> response = restTemplate.postForEntity(quotationSvcEndPoint+"/rateCard", requestEntity, String.class);
+            log.debug("Response freom push service "+ response.getStatusCode());
+            log.debug("response from push service"+response.getBody());
+
+        }catch(Exception e) {
+            log.error("Error while calling location service ", e);
+            e.printStackTrace();
+        }
+
+        SearchResult<RateCardDTO> result = new SearchResult<RateCardDTO>();
+        if(searchCriteria != null) {
+            Pageable pageRequest = createPageRequest(searchCriteria.getCurrPage());
+            Page<RateCard> page = null;
+            List<RateCardDTO> transactions = null;
+            if(!searchCriteria.isFindAll()) {
+                if(searchCriteria.getSiteId() != 0) {
+                    page = rateCardRepository.findBySiteId(searchCriteria.getSiteId(),pageRequest);
+                }
+            }else {
+        		page = rateCardRepository.findAllActive(pageRequest);
+            }
+            if(page != null) {
+                transactions = mapperUtil.toModelList(page.getContent(), RateCardDTO.class);
+                if(CollectionUtils.isNotEmpty(transactions)) {
+                    buildSearchResult(searchCriteria, page, transactions,result);
+                }
+            }
+        }
+        return result;
+    }
+
+    private void buildSearchResult(SearchCriteria searchCriteria, Page<RateCard> page, List<RateCardDTO> transactions, SearchResult<RateCardDTO> result) {
+        if(page != null) {
+            result.setTotalPages(page.getTotalPages());
+        }
+        result.setCurrPage(page.getNumber() + 1);
+        result.setTotalCount(page.getTotalElements());
+        result.setStartInd((result.getCurrPage() - 1) * 10 + 1);
+        result.setEndInd((result.getTotalCount() > 10  ? (result.getCurrPage()) * 10 : result.getTotalCount()));
+
+        result.setTransactions(transactions);
+        return;
+    }
+
+
+
+}

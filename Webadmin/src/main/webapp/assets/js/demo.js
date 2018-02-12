@@ -302,8 +302,8 @@ demo = {
 
 
     initCharts : function() {
-                console.log("Charts function"+$('#colouredBarsChart').length)
-        if($('#colouredBarsChart').length != 0){
+                console.log("Charts function"+$('#attendanceLineGraph').length)
+        if($('#attendanceLineGraph').length != 0){
             dataColouredBarsChart = {
                             labels: ['\'06', '\'07', '\'08', '\'09', '\'10', '\'11', '\'12', '\'13', '\'14', '\'15'],
                             series: [
@@ -315,7 +315,7 @@ demo = {
 
                         optionsColouredBarsChart = {
                             lineSmooth: Chartist.Interpolation.cardinal({
-                                tension: 10
+                                tension: 20
                             }),
                             axisY: {
                                 showGrid: true,
@@ -331,7 +331,7 @@ demo = {
                         };
 
 
-                        var colouredBarsChart = new Chartist.Line('#colouredBarsChart', dataColouredBarsChart, optionsColouredBarsChart);
+                        var colouredBarsChart = new Chartist.Line('#attendanceLineGraph', dataColouredBarsChart, optionsColouredBarsChart);
 
                         md.startAnimationForLineChart(colouredBarsChart);
 

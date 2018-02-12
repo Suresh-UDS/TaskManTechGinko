@@ -17,11 +17,11 @@ public class UserRolePermissionDTO extends BaseDTO {
 
 	private long moduleId;
 	
-	private String moduleNaame;
+	private String moduleName;
 
 	private long actionId;
 	
-	private String actionNaame;
+	private String actionName;
 
 	private long userId;
 
@@ -61,12 +61,12 @@ public class UserRolePermissionDTO extends BaseDTO {
 		this.moduleId = moduleId;
 	}
 
-	public String getModuleNaame() {
-		return moduleNaame;
+	public String getModuleName() {
+		return moduleName;
 	}
 
-	public void setModuleNaame(String moduleNaame) {
-		this.moduleNaame = moduleNaame;
+	public void setModuleName(String moduleName) {
+		this.moduleName = moduleName;
 	}
 
 	public long getActionId() {
@@ -77,12 +77,12 @@ public class UserRolePermissionDTO extends BaseDTO {
 		this.actionId = actionId;
 	}
 
-	public String getActionNaame() {
-		return actionNaame;
+	public String getActionName() {
+		return actionName;
 	}
 
-	public void setActionNaame(String actionNaame) {
-		this.actionNaame = actionNaame;
+	public void setActionName(String actionNaame) {
+		this.actionName = actionNaame;
 	}
 
 	public long getUserId() {

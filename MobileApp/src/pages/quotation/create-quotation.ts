@@ -1,6 +1,9 @@
 import { Component } from '@angular/core';
-import {Events, NavController, PopoverController} from 'ionic-angular';
+import {AlertController, Events, NavController, PopoverController} from 'ionic-angular';
 import {authService} from "../service/authService";
+import {CreateQuotationPage2} from "./create-quotation-step-2";
+import {SiteService} from "../service/siteService";
+import {QuotationService} from "../service/quotationService";
 
 @Component({
     selector: 'page-create-quotation',
@@ -21,8 +24,16 @@ export class CreateQuotationPage {
             ]
     };
 
+    title:any;
+    description:any;
     rateCardType:any;
+    rateCardUom:any;
+    rateCardName:any;
+    rateCardCost:any;
+
     uom:any;
+
+    empSelect:any;
 
     allSites:any;
     siteEmployees:any;
@@ -30,33 +41,12 @@ export class CreateQuotationPage {
 
     selectedSite:any;
 
-    step: any;
-    stepCondition: any;
-    stepDefaultCondition: any;
-    currentStep: any;
     showRateInformation:any;
+    eMsg:any;
 
-    constructor(public navCtrl: NavController,public popoverCtrl: PopoverController, public evts: Events, public authService:authService) {
 
-    // Step Wizard Settings
-        this.step = 1;//The value of the first step, always 1
-        this.stepCondition = false;//Set to true if you don't need condition in every step
-        this.stepDefaultCondition = this.stepCondition;//Save the default condition for every step
-        //You can subscribe to the Event 'step:changed' to handle the current step
-        this.evts.subscribe('step:changed', step => {
-            //Handle the current step if you need
-            this.currentStep = step[0];
-            //Set the step condition to the default value
-            this.stepCondition = this.stepDefaultCondition;
-        });
-        this.evts.subscribe('step:next', () => {
-            //Do something if next
-            console.log('Next pressed: ', this.currentStep);
-        });
-        this.evts.subscribe('step:back', () => {
-            //Do something if back
-            console.log('Back pressed: ', this.currentStep);
-        });
+    constructor(public navCtrl: NavController,public popoverCtrl: PopoverController, public evts: Events, public authService:authService, public alertCtrl: AlertController,
+                private siteService: SiteService, private quotationService: QuotationService) {
 
         this.quotationDetails ={
             title:'',
@@ -70,6 +60,7 @@ export class CreateQuotationPage {
                 }
             ]
         };
+        this.rateCardType = {};
 
         this.showRateInformation=false;
 
@@ -78,10 +69,18 @@ export class CreateQuotationPage {
         console.log(window.localStorage.getItem('employeeId'));
         console.log(window.localStorage.getItem('employeeFullName'));
 
-    }
 
+
+    }
+    setFormValidation(id) {
+        id.validate({
+            errorPlacement: function(error, element) {
+                element.closest('div').addClass('has-error');
+            }
+        });
+    }
     ionViewWillEnter(){
-        this.authService.searchSite().subscribe(response=>{
+        this.siteService.searchSite().subscribe(response=>{
             console.log(response.json());
             this.allSites = response.json();
         })
@@ -89,21 +88,41 @@ export class CreateQuotationPage {
         this.getRateCardTypes();
     }
 
+    ionViewDidEnter(){
+        console.log(document.getElementById('LoginValidation'));
+        this.setFormValidation(document.getElementById('LoginValidation'));
+    }
+
     getSiteEmployees(siteId){
-        this.authService.searchSiteEmployee(siteId).subscribe(response=>{
+        this.siteService.searchSiteEmployee(siteId).subscribe(response=>{
             console.log(response.json());
             this.siteEmployees = response.json();
         })
     }
 
-    saveQuotation(quotation){
-        this.authService.createQuotation(quotation).subscribe(response=>{
-            console.log(response);
-        })
+    saveQuotation(title,description){
+
+        if(title)
+        {
+            var quotation = {
+                "title":this.title,
+                "description":this.description
+            }
+            console.log(quotation)
+            this.navCtrl.push(CreateQuotationPage2,{quotationDetails:quotation});
+        }
+        else
+        {
+            this.eMsg="title";
+        }
+
+
     }
 
     getRateCardTypes(){
-        this.authService.getRateCardTypes().subscribe(response=>{
+        this.quotationService.getRateCardTypes().subscribe(response=>{
+            console.log("Rate Card types");
+            console.log(this.rateCardTypes);
             this.rateCardTypes = response;
         })
     }
@@ -113,6 +132,21 @@ export class CreateQuotationPage {
         this.rateCardType = type.title;
         this.uom = type.uom;
     }
+
+    selectUOMType(type){
+        var rateCard = {
+            type:'',
+            uom:'',
+            name:'',
+            cost:''
+        };
+
+        rateCard.type = type.name;
+        rateCard.uom = type.uom;
+        this.quotationDetails.rateCard.push(rateCard);
+        console.log(this.quotationDetails);
+    }
+
 
 
 

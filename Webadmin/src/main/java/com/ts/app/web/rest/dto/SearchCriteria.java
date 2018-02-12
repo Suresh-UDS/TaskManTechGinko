@@ -31,6 +31,10 @@ public class SearchCriteria extends Paginator {
 
 	private Date checkInDateTimeTo;
 
+	private Date fromDate;
+
+	private Date toDate;
+
 	private JobStatus jobStatus;
 
 	private long locationId;
@@ -68,14 +72,21 @@ public class SearchCriteria extends Paginator {
 	private boolean completedStatus;
 
 	private boolean overdueStatus;
-	
+
 	private long userRoleId;
-	
+
 	private long applicationModuleId;
-	
+
 	private long applicationActionId;
-	
+
 	private long userRolePermissionId;
+
+	private String rateCardTitle;
+
+	private String rateCardType;
+	
+	private boolean graphRequest;
+
 
 	public long getId() {
 		return id;
@@ -365,5 +376,45 @@ public class SearchCriteria extends Paginator {
 	public void setUserRolePermissionId(long userRolePermissionId) {
 		this.userRolePermissionId = userRolePermissionId;
 	}
-    
+
+    public String getRateCardType() {
+        return rateCardType;
+    }
+
+    public void setRateCardType(String rateCardType) {
+        this.rateCardType = rateCardType;
+    }
+
+    public String getRateCardTitle() {
+        return rateCardTitle;
+    }
+
+    public void setRateCardTitle(String rateCardTitle) {
+        this.rateCardTitle = rateCardTitle;
+    }
+	public Date getFromDate() {
+		return fromDate;
+	}
+
+	public void setFromDate(Date fromDate) {
+		this.fromDate = fromDate;
+	}
+
+	public Date getToDate() {
+		return toDate;
+	}
+
+	public void setToDate(Date toDate) {
+		this.toDate = toDate;
+	}
+
+	public boolean isGraphRequest() {
+		return graphRequest;
+	}
+
+	public void setGraphRequest(boolean graphRequest) {
+		this.graphRequest = graphRequest;
+	}
+
+	
 }

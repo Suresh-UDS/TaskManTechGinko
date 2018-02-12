@@ -14,36 +14,155 @@
                 <div class="card-content">
                     <ion-row>
                         <ion-col col-12>
-                            <div class="form-group label-floating">
+
+                            <div class="form-group label-floating" [ngClass]="{'has-error': eMsg=='all'||eMsg=='title'}">
                                 <label class="control-label">Title</label>
-                                <input type="text" class="form-control" [(ngModel)]="title" >
+                                <input class="form-control" type="text" [(ngModel)]="title" id="title" name="title" #titl="ngModel" required [ngClass]="{'has-error': titl.errors || eMsg=='all'|| eMsg=='title'}">
+                                <div *ngIf="titl.errors && (titl.dirty || titl.touched)" class="error-msg">
+
+                                </div>
+
+                                <div *ngIf="titl.errors && (titl.untouched )" class="error-msg">
+
+                                </div>
                             </div>
+
                         </ion-col>
 
                         <ion-col col-12>
-                            <div class="form-group label-floating">
+                            <div class="form-group label-floating" [ngClass]="{'has-error': eMsg=='all'||eMsg=='description'}">
                                 <label class="control-label">Description</label>
-                                <input type="text" class="form-control" [(ngModel)]="description" >
+                                <input class="form-control" type="text" [(ngModel)]="description" id="description" name="title" #desc="ngModel" required [ngClass]="{'has-error': desc.errors || eMsg=='all'|| eMsg=='description'}">
+                                <div *ngIf="desc.errors && (desc.dirty || desc.touched)" class="error-msg">
+
+                                </div>
+
+                                <div *ngIf="desc.errors && (desc.untouched )" class="error-msg">
+
+                                </div>
                             </div>
+
                         </ion-col>
 
                         <ion-col col-12>
-                            <div class="form-group label-floating">
-                                <label class="control-label">Location</label>
-                                <input type="text" class="form-control" [(ngModel)]="location" >
+
+                            <div class="form-group label-floating" [ngClass]="{'has-error': eMsg=='all'||eMsg=='siteName'}">
+                                <label class="control-label" *ngIf="!site.errors">Site</label>
+
+                                <ion-select [(ngModel)]="siteName" class="select-box" id="siteName" placeholder="Choose Site" name="siteName" #site="ngModel" required [ngClass]="{'has-error': site.errors || eMsg=='all'|| eMsg=='siteName'}">
+                                    <ion-option *ngFor="let site of sites" [value]="site.name" (ionSelect)="getEmployee(site.id)">{{site.name}}</ion-option>
+                                </ion-select>
+
+                                <div *ngIf="site.errors && (site.dirty || site.touched)" class="error-msg">
+
+                                </div>
+
+                                <div *ngIf="site.errors && (site.untouched )" class="error-msg">
+
+                                </div>
                             </div>
+
+
                         </ion-col>
+
                         <ion-col col-12>
+
+                            <div class="form-group label-floating" [ngClass]="{'has-error': eMsg=='all'||eMsg=='siteName'}">
+                                <label class="control-label" *ngIf="empSelect">Employee</label>
+                                    <ion-select [(ngModel)]="employ" [disabled]="empSelect" class="select-box" id="employ" name="employ" [placeholder]="empPlace" #emp="ngModel" required [ngClass]="{'has-error': emp.errors || eMsg=='all'|| eMsg=='employ'}">
+                                        <ion-option  *ngFor="let emp of employee" [value]="emp.id" >{{emp.fullName}}</ion-option>
+                                    </ion-select>
+
+                                <div *ngIf="emp.errors && (emp.dirty || emp.touched)" class="error-msg">
+
+                                </div>
+
+                                <div *ngIf="emp.errors && (emp.untouched )" class="error-msg">
+
+                                </div>
+                            </div>
+                            <!--
+                            <div class="form-group label-floating">
+                                <label class="control-label">Employee</label>
+                                <ion-select [(ngModel)]="employ" [disabled]="empSelect" class="select-box">
+                                    <ion-option *ngFor="let emp of employee" [value]="emp.id" >{{emp.fullName}}</ion-option>
+                                </ion-select>
+                                <span *ngIf="field==='employ' && errorMsg" class="error">{{errorMsg}}</span>
+                            </div>
+                            -->
+                        </ion-col>
+
+                        <ion-col col-12>
+                            <div class="form-group label-floating" [ngClass]="{'has-error': eMsg=='all'||eMsg=='startDate'}">
+                                <label class="control-label" *ngIf="!sDate.errors">Start Date</label>
+
+                                <ion-datetime displayFormat="MM/DD/YYYY" class="form-control" placeholder="Select Date" [(ngModel)]="startDate" id="startDate" name="startDate" #sDate="ngModel" required [ngClass]="{'has-error': sDate.errors || eMsg=='all'|| eMsg=='startDate'}"></ion-datetime>
+
+                                <div *ngIf="sDate.errors && (sDate.dirty || sDate.touched)" class="error-msg">
+
+                                </div>
+
+                                <div *ngIf="sDate.errors && (sDate.untouched )" class="error-msg">
+
+                                </div>
+                            </div>
+
+
+                            <!--
                             <div class="form-group label-floating">
                                 <label class="control-label">Start Date</label>
                                 <ion-datetime displayFormat="MM/DD/YYYY" class="form-control" [(ngModel)]="startDate"></ion-datetime>
+                                <span *ngIf="field==='startDate' && errorMsg" class="error">{{errorMsg}}</span>
+                            </div>
+                            -->
+                        </ion-col>
+                        <ion-col col-12>
+                            <div class="form-group label-floating" [ngClass]="{'has-error': eMsg=='all'||eMsg=='startTime'}">
+                                <label class="control-label" *ngIf="!sTime.errors">Start Time</label>
+
+                                <ion-datetime displayFormat="hh:mm a" class="form-control" [(ngModel)]="startTime" id="startTime" placeholder="Select Time" name="startTime" #sTime="ngModel" required [ngClass]="{'has-error': sDate.errors || eMsg=='all'|| eMsg=='startTime'}"></ion-datetime>
+
+                                <div *ngIf="sTime.errors && (sTime.dirty || sTime.touched)" class="error-msg">
+
+                                </div>
+
+                                <div *ngIf="sTime.errors && (sTime.untouched )" class="error-msg">
+
+                                </div>
+                            </div>
+
+                        </ion-col>
+                        <ion-col col-12>
+                            <div class="form-group label-floating" [ngClass]="{'has-error': eMsg=='all'||eMsg=='endDate'}">
+                                <label class="control-label" *ngIf="!eDate.errors">End Time</label>
+
+                                <ion-datetime displayFormat="MM/DD/YYYY" class="form-control" [(ngModel)]="endDate" id="endDate" placeholder="End Date" name="endDate" #eDate="ngModel" required [ngClass]="{'has-error': sDate.errors || eMsg=='all'|| eMsg=='endDate'}"></ion-datetime>
+
+                                <div *ngIf="eDate.errors && (eDate.dirty || eDate.touched)" class="error-msg">
+
+                                </div>
+
+                                <div *ngIf="eDate.errors && (eDate.untouched )" class="error-msg">
+
+                                </div>
                             </div>
                         </ion-col>
                         <ion-col col-12>
-                            <div class="form-group label-floating">
-                                <label class="control-label">Start Time</label>
-                                <ion-datetime displayFormat="hh:mm a" class="form-control" [(ngModel)]="startTime"></ion-datetime>
+                            <div class="form-group label-floating" [ngClass]="{'has-error': eMsg=='all'||eMsg=='endTime'}">
+                                <label class="control-label" *ngIf="!eTime.errors">Start Time</label>
+
+                                <ion-datetime displayFormat="hh:mm a" class="form-control" [(ngModel)]="endTime" id="endTime" placeholder="End Time" name="endTime" #eTime="ngModel" required [ngClass]="{'has-error': sDate.errors || eMsg=='all'|| eMsg=='endTime'}"></ion-datetime>
+
+                                <div *ngIf="eTime.errors && (eTime.dirty || eTime.touched)" class="error-msg">
+
+                                </div>
+
+                                <div *ngIf="eTime.errors && (eTime.untouched )" class="error-msg">
+
+                                </div>
                             </div>
+
+
                         </ion-col>
 
                         <button type="submit" class="btn btn-warning pull-right margin-auto" (click)="addJob()">Add</button>

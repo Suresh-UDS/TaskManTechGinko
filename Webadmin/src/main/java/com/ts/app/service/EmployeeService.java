@@ -1,6 +1,5 @@
 package com.ts.app.service;
 
-import java.sql.Date;
 import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -20,11 +19,7 @@ import com.ts.app.repository.*;
 import com.ts.app.web.rest.dto.*;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.time.DateUtils;
-import org.hibernate.EmptyInterceptor;
 import org.hibernate.Hibernate;
-import org.joda.time.DateTime;
-import org.joda.time.Days;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.env.Environment;
@@ -53,6 +48,21 @@ public class    EmployeeService extends AbstractService {
 	@Inject
 	private EmployeeRepository employeeRepository;
 
+    @Inject
+    private DeviceRepository deviceRepository;
+
+    @Inject
+    private JobRepository jobRepository;
+
+    @Inject
+    private DesignationRepository designationRepository;
+
+    @Inject
+    private CheckInOutRepository checkInOutRepository;
+
+    @Inject
+    private CheckInOutImageRepository checkInOutImageRepository;
+
 	@Inject
 	private EmployeeHistoryRepository employeeHistoryRepository;
 
@@ -80,8 +90,11 @@ public class    EmployeeService extends AbstractService {
 	@Inject
 	private PushService pushService;
 
-//	@Inject
-//	private MailService mailService;
+	@Inject
+	private MailService mailService;
+
+    @Inject
+    private JobManagementService jobManagementService;
 
 	@Inject
 	private Environment env;
@@ -107,6 +120,7 @@ public class    EmployeeService extends AbstractService {
 
 			employeeDto = updateEmployee(employeeDto, true);
 		}else {
+			employeeDto.setFullName(employeeDto.getName());
 			Employee employee = mapperUtil.toEntity(employeeDto, Employee.class);
 			log.debug("EmployeeService.createEmployeeInformation - userId - "+employee.getUser().getId());
 			employee.setUser(null);
@@ -129,6 +143,15 @@ public class    EmployeeService extends AbstractService {
 			employee.setSites(sites);
 			employee.setFaceAuthorised(false);
 			employee.setFaceIdEnrolled(false);
+			employee.setLeft(false);
+			employee.setRelieved(false);
+			employee.setReliever(false);
+			List<EmployeeProjectSite> projectSites =  employee.getProjectSites();
+			if(CollectionUtils.isNotEmpty(projectSites)) {
+				for(EmployeeProjectSite projSite : projectSites) {
+					projSite.setEmployee(employee);
+				}
+			}
 			employeeRepository.save(employee);
 			log.debug("Created Information for Employee: {}", employee);
 			employeeDto = mapperUtil.toModel(employee, EmployeeDTO.class);
@@ -136,10 +159,18 @@ public class    EmployeeService extends AbstractService {
 		return employeeDto;
 	}
 
+    public DesignationDTO createDesignation(DesignationDTO designationDTO) {
+        Designation designation= mapperUtil.toEntity(designationDTO, Designation.class);
+	    designationRepository.save(designation);
+        return designationDTO;
+    }
+
 	public EmployeeDTO updateEmployee(EmployeeDTO employee, boolean shouldUpdateActiveStatus) {
 		log.debug("Inside Update");
+		log.debug("Inside Update"+employee);
+		log.debug("Inside Update"+employee.isLeft());
 		Employee employeeUpdate = employeeRepository.findOne(employee.getId());
-		Hibernate.initialize(employee.getProjects());
+		Hibernate.initialize(employeeUpdate.getProjects());
 		List<Project> projects = employeeUpdate.getProjects();
 		boolean projExists = false;
 		for(Project proj : projects) {
@@ -178,6 +209,7 @@ public class    EmployeeService extends AbstractService {
 
 		employeeUpdate.setFullName(employee.getFullName());
 		employeeUpdate.setName(employee.getName());
+		employeeUpdate.setLastName(employee.getLastName());
 		if(newProj != null && !projExists) {
 			employeeUpdate.getProjects().add(newProj);
 		}
@@ -190,7 +222,9 @@ public class    EmployeeService extends AbstractService {
 	    ZonedDateTime zdt   = ZonedDateTime.of(LocalDateTime.now(), zone);
 		employeeUpdate.setLastModifiedDate(zdt);
 		employeeUpdate.setCode(employee.getCode());
-
+        employeeUpdate.setLeft(employee.isLeft());
+        employeeUpdate.setReliever(employee.isReliever());
+        employeeUpdate.setRelieved(employee.isRelieved());
         if(employee.getManagerId() > 0) {
             Employee manager =  employeeRepository.findOne(employee.getManagerId());
             employeeUpdate.setManager(manager);
@@ -199,10 +233,21 @@ public class    EmployeeService extends AbstractService {
 		if(shouldUpdateActiveStatus) {
 			employeeUpdate.setActive(Employee.ACTIVE_YES);
 		}
+		List<EmployeeProjectSite> projectSites =  employeeUpdate.getProjectSites();
+		projectSites.clear();
+		if(CollectionUtils.isNotEmpty(employee.getProjectSites())) {
+			for(EmployeeProjectSiteDTO projSiteDto : employee.getProjectSites()) {
+				EmployeeProjectSite projSite = mapperUtil.toEntity(projSiteDto, EmployeeProjectSite.class);
+				projSite.setEmployee(employeeUpdate);
+				projectSites.add(projSite);
+			}
+		}
+
 		employeeRepository.saveAndFlush(employeeUpdate);
 		employee = mapperUtil.toModel(employeeUpdate, EmployeeDTO.class);
 		return employee;
 	}
+
 
 	public void deleteEmployee(Long id) {
 		log.debug("Inside Delete");
@@ -261,6 +306,89 @@ public class    EmployeeService extends AbstractService {
 
 	}
 
+    @Transactional
+    public CheckInOutDTO onlyCheckOut(CheckInOutDTO checkInOutDto) {
+
+        log.debug("EmployeeService.checkOut - empId - "+checkInOutDto.getEmployeeEmpId());
+        //CheckInOut checkInOut = mapperUtil.toEntity(checkInOutDto, CheckInOut.class);
+        Timestamp zdt   = new Timestamp(System.currentTimeMillis());
+        CheckInOut checkInOut = new CheckInOut();
+        checkInOutDto.setCheckInDateTime(zdt);
+        checkInOut.setCheckOutDateTime(zdt);
+        Device checkoutDevice = deviceRepository.findByUniqueId(checkInOutDto.getDeviceOutUniqueId());
+//        checkInOut.setDeviceOut(checkoutDevice);
+        checkInOut.setMinsWorked(0);
+        checkInOut.setEmployee(employeeRepository.findOne(checkInOutDto.getEmployeeId()));
+        checkInOut.setProject(projectRepository.findOne(checkInOutDto.getProjectId()));
+        checkInOut.setSite(siteRepository.findOne(checkInOutDto.getSiteId()));
+        Job job = jobRepository.findOne(checkInOutDto.getJobId());
+        zdt = new  Timestamp(job.getPlannedStartTime().getTime());
+        checkInOut.setCheckInDateTime(zdt);
+        checkInOut.setJob(job);
+//        Device device = deviceRepository.findByUniqueId(checkInOutDto.getDeviceInUniqueId());
+//        log.debug("device id " + (device == null ? 0 : device.getId()));
+//        if(device != null) {
+//            checkInOut.setDeviceIn(device);
+//        }else {
+//            checkInOut.setDeviceIn(checkoutDevice);
+//        }
+//        //checkInOut.setDeviceOut(device);
+        checkInOut.setLongitudeOut(checkInOutDto.getLongitudeOut());
+        checkInOut.setLatitudeOut(checkInOutDto.getLatitudeOut());
+        checkInOut.setRemarks(checkInOutDto.getRemarks());
+        checkInOut = checkInOutRepository.save(checkInOut);
+        checkInOutDto.setId(checkInOut.getId());
+        JobDTO completedJob = jobManagementService.onlyCompleteJob(checkInOutDto.getJobId());
+        log.debug("onlyCheckOut - completedJob" + completedJob);
+        log.debug("Transaction id "+checkInOutDto.getId());
+        if(completedJob != null) {
+            long siteId = completedJob.getSiteId();
+            long transactionId = checkInOutDto.getId();
+            log.debug("onlyCheckOut - completedJob siteId -" + transactionId);
+            List<User> users = userService.findUsers(siteId);
+            log.debug("onlyCheckOut - completedJob users  -" + users);
+            if(CollectionUtils.isNotEmpty(users)) {
+                long userIds[] = new long[users.size()];
+                int ind = 0;
+                for(User user : users) {
+                    userIds[ind] = user.getId();
+                    log.debug("onlyCheckOut - completedJob user id  -" + user.getId());
+                    ind++;
+                    mailService.sendCompletedJobAlert(user, completedJob.getSiteName(), completedJob.getId(), completedJob.getTitle(), null);
+                }
+                String message = "Job  -"+ completedJob.getTitle() + " completed for site-" + completedJob.getSiteName();
+                log.debug("push message -"+ message);
+                pushService.send(userIds, message);
+                jobManagementService.saveNotificationLog(checkInOutDto.getJobId(),checkInOutDto.getUserId(), users, siteId, message);
+            }
+        }
+        log.debug("tranction Id",checkInOutDto.getId());
+        log.debug("Created check out Information for Employee: {}", checkInOut.getEmployee().getEmpId());
+
+        return checkInOutDto;
+
+    }
+
+    @Transactional(readOnly = true)
+    public SearchResult findAllCheckInOut(SearchCriteria searchCriteria) {
+        Timestamp checkInDt = new Timestamp(System.currentTimeMillis());
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        try {
+            checkInDt = new Timestamp(sdf.parse(sdf.format(checkInDt)).getTime());
+        } catch (ParseException e) {
+            log.error("Error while parsing the date");
+        }
+        Pageable pageRequest = createPageRequest(searchCriteria.getCurrPage());
+        Page<CheckInOut> page = checkInOutRepository.findByCheckInDateTimeRange(checkInDt,checkInDt,pageRequest);
+        List<CheckInOutDTO> dtoList = mapperUtil.toModelList(page.getContent(), CheckInOutDTO.class);
+        SearchResult result = new SearchResult();
+        result.setTotalPages(page.getTotalPages());
+        result.setCurrPage(page.getNumber() + 1);
+        result.setTotalCount(page.getTotalElements());
+        result.setTransactions(dtoList);
+        return result;
+    }
+
 	public List<EmployeeDTO> findAll(long userId) {
 		User user = userRepository.findOne(userId);
 		long userGroupId = user.getUserGroup().getId();
@@ -272,6 +400,18 @@ public class    EmployeeService extends AbstractService {
 		}
 		return mapperUtil.toModelList(entities, EmployeeDTO.class);
 	}
+
+    public List<EmployeeDTO> findAllRelievers(long userId) {
+        User user = userRepository.findOne(userId);
+        long userGroupId = user.getUserGroup().getId();
+        List<Employee> entities = null;
+        if(user.getUserGroup().getName().equalsIgnoreCase("admin")) {
+            entities = employeeRepository.findAllRelievers();
+        }else {
+            entities = employeeRepository.findAllRelieversByGroupId(userGroupId);
+        }
+        return mapperUtil.toModelList(entities, EmployeeDTO.class);
+    }
 
     public List<EmployeeDTO> findBySiteId(long userId,long siteId) {
         User user = userRepository.findOne(userId);
@@ -297,8 +437,8 @@ public class    EmployeeService extends AbstractService {
 	public EmployeeDTO findOne(Long id) {
 		Employee entity = employeeRepository.findOne(id);
 		Hibernate.initialize(entity.getProjects());
-		List<Project> projects = entity.getProjects();
-		entity.setProjects(projects);
+		//List<Project> projects = entity.getProjects();
+		//entity.setProjects(projects);
 		Hibernate.initialize(entity.getSites());
 		List<Site> sites = entity.getSites();
 		for(Site site : sites) {
@@ -306,13 +446,23 @@ public class    EmployeeService extends AbstractService {
 			site.setProject(site.getProject());
 		}
 		entity.setSites(sites);
+		Hibernate.initialize(entity.getProjectSites());
+		if(CollectionUtils.isNotEmpty(entity.getProjectSites())) {
+			for(EmployeeProjectSite projSite : entity.getProjectSites()) {
+				Project proj =  projectRepository.findOne(projSite.getProjectId());
+				projSite.setProjectName(proj.getName());
+				Site site =  siteRepository.findOne(projSite.getSiteId());
+				projSite.setSiteName(site.getName());
+			}
+		}
 		log.debug("Employee retrieved by findOne - "+ entity );
 		EmployeeDTO dto =  mapperUtil.toModel(entity, EmployeeDTO.class);
 		Hibernate.initialize(entity.getManager());
 		if(entity.getManager() != null) {
 			dto.setManagerId(entity.getManager().getId());
-			dto.setManagerName(entity.getManager().getName());
+			dto.setManagerName(entity.getManager().getFullName());
 		}
+		//entity.setProjectSites(entity.getProjectSites());
 		return dto;
 	}
 
@@ -395,23 +545,70 @@ public class    EmployeeService extends AbstractService {
 			Pageable pageRequest = createPageRequest(searchCriteria.getCurrPage());
 			Page<Employee> page = null;
 			List<EmployeeDTO> transactions = null;
+
+            Calendar startCal = Calendar.getInstance();
+            if(searchCriteria.getFromDate() != null) {
+            		startCal.setTime(searchCriteria.getFromDate());
+            }
+	    		startCal.set(Calendar.HOUR_OF_DAY, 0);
+	    		startCal.set(Calendar.MINUTE, 0);
+	    		startCal.set(Calendar.SECOND, 0);
+	    		Calendar endCal = Calendar.getInstance();
+	    		if(searchCriteria.getToDate() != null) {
+	    			endCal.setTime(searchCriteria.getToDate());
+	    		}
+	    		endCal.set(Calendar.HOUR_OF_DAY, 23);
+	    		endCal.set(Calendar.MINUTE, 59);
+	    		endCal.set(Calendar.SECOND, 0);
+
+	    		searchCriteria.setFromDate(startCal.getTime());
+	    		searchCriteria.setToDate(endCal.getTime());
+
+
+			java.sql.Date startDate = new java.sql.Date(searchCriteria.getFromDate().getTime());
+        		java	.sql.Date toDate = new java.sql.Date(searchCriteria.getToDate().getTime());
+
 			log.debug("findBySearchCriteria - "+searchCriteria.getSiteId() +", "+searchCriteria.getEmployeeId() +", "+searchCriteria.getProjectId());
 			if((searchCriteria.getSiteId() != 0 && searchCriteria.getProjectId() != 0)) {
-				//page = employeeRepository.findEmployeesByIdOrSiteIdAndProjectId(searchCriteria.getEmployeeId(), searchCriteria.getProjectId(), searchCriteria.getSiteId(), userGroupId, pageRequest);
+				if(searchCriteria.getFromDate() != null) {
+					page = employeeRepository.findBySiteIdAndProjectId(searchCriteria.getProjectId(), searchCriteria.getSiteId(),startDate, toDate, pageRequest);
+				}else {
+					page = employeeRepository.findBySiteIdAndProjectId(searchCriteria.getProjectId(), searchCriteria.getSiteId(), pageRequest);
+				}
 			}else if((searchCriteria.getSiteId() != 0 && searchCriteria.getEmployeeId() != 0)) {
 				log.debug("findBySearchCriteria - "+searchCriteria.getSiteId() +", "+searchCriteria.getEmployeeId() +", "+searchCriteria.getProjectId());
-				//page = employeeRepository.findEmployeesByIdAndSiteIdOrProjectId(searchCriteria.getEmployeeId(), searchCriteria.getProjectId(), searchCriteria.getSiteId(), userGroupId, pageRequest);
+				if(searchCriteria.getFromDate() != null) {
+					page = employeeRepository.findEmployeesByIdAndSiteIdOrProjectId(searchCriteria.getEmployeeId(), searchCriteria.getProjectId(), searchCriteria.getSiteId(), startDate, toDate, pageRequest);
+				}else {
+					page = employeeRepository.findEmployeesByIdAndSiteIdOrProjectId(searchCriteria.getEmployeeId(), searchCriteria.getProjectId(), searchCriteria.getSiteId(), pageRequest);
+				}
 			}else if((searchCriteria.getEmployeeId() != 0 && searchCriteria.getProjectId() != 0)) {
-				//page = employeeRepository.findEmployeesByIdAndProjectIdOrSiteId(searchCriteria.getEmployeeId(), searchCriteria.getProjectId(), searchCriteria.getSiteId(), userGroupId, pageRequest);
+				if(searchCriteria.getFromDate() != null) {
+					page = employeeRepository.findEmployeesByIdAndProjectIdOrSiteId(searchCriteria.getEmployeeId(), searchCriteria.getProjectId(), searchCriteria.getSiteId(), startDate, toDate, pageRequest);
+				}else {
+					page = employeeRepository.findEmployeesByIdAndProjectIdOrSiteId(searchCriteria.getEmployeeId(), searchCriteria.getProjectId(), searchCriteria.getSiteId(), pageRequest);
+				}
 			}else if (searchCriteria.getEmployeeId() != 0 && searchCriteria.getProjectId() != 0 && searchCriteria.getSiteId() != 0) {
-                //page = employeeRepository.findEmployeesByIdAndSiteIdAndProjectId(searchCriteria.getEmployeeId(), searchCriteria.getProjectId(), searchCriteria.getSiteId(), userGroupId, pageRequest);
+				if(searchCriteria.getFromDate() != null) {
+					page = employeeRepository.findEmployeesByIdAndSiteIdAndProjectId(searchCriteria.getEmployeeId(), searchCriteria.getProjectId(), searchCriteria.getSiteId(), startDate, toDate,pageRequest);
+				}else {
+					page = employeeRepository.findEmployeesByIdAndSiteIdAndProjectId(searchCriteria.getEmployeeId(), searchCriteria.getProjectId(), searchCriteria.getSiteId(), pageRequest);
+				}
             }else if (searchCriteria.getEmployeeId() != 0) {
 			    page = employeeRepository.findByEmployeeId(searchCriteria.getEmployeeId(),pageRequest);
             	//page = employeeRepository.findEmployeesByIdOrSiteIdAndProjectId(searchCriteria.getEmployeeId(), searchCriteria.getProjectId(), searchCriteria.getSiteId(), userGroupId, pageRequest);
             }else if (searchCriteria.getProjectId() != 0) {
-            	//page = employeeRepository.findEmployeesByIdAndSiteIdOrProjectId(searchCriteria.getEmployeeId(), searchCriteria.getProjectId(), searchCriteria.getSiteId(), userGroupId, pageRequest);
+            		if(searchCriteria.getFromDate() != null) {
+            			page = employeeRepository.findEmployeesByIdAndSiteIdOrProjectId(searchCriteria.getEmployeeId(), searchCriteria.getProjectId(), searchCriteria.getSiteId(), startDate, toDate, pageRequest);
+            		}else {
+            			page = employeeRepository.findEmployeesByIdAndSiteIdOrProjectId(searchCriteria.getEmployeeId(), searchCriteria.getProjectId(), searchCriteria.getSiteId(), pageRequest);
+            		}
             }else if (searchCriteria.getSiteId() != 0) {
-            	//page = employeeRepository.findEmployeesByIdAndProjectIdOrSiteId(searchCriteria.getEmployeeId(), searchCriteria.getProjectId(), searchCriteria.getSiteId(), userGroupId, pageRequest);
+            		if(searchCriteria.getFromDate() != null) {
+            			page = employeeRepository.findEmployeesByIdAndProjectIdOrSiteId(searchCriteria.getEmployeeId(), searchCriteria.getProjectId(), searchCriteria.getSiteId(), startDate, toDate, pageRequest);
+            		}else {
+            			page = employeeRepository.findEmployeesByIdAndProjectIdOrSiteId(searchCriteria.getEmployeeId(), searchCriteria.getProjectId(), searchCriteria.getSiteId(), pageRequest);
+            		}
             }else {
             	if(user.getUserGroup().getName().equalsIgnoreCase("admin")) {
             		page = employeeRepository.findAll(pageRequest);
@@ -464,7 +661,32 @@ public class    EmployeeService extends AbstractService {
 		return;
 	}
 
+	public ExportResult export(List<EmployeeDTO> transactions) {
+		return exportUtil.writeToCsvFile(transactions, null);
+	}
+
+	public ExportResult getExportStatus(String fileId) {
+		ExportResult er = new ExportResult();
+		fileId += ".csv";
+		if(!StringUtils.isEmpty(fileId)) {
+			String status = exportUtil.getExportStatus(fileId);
+			er.setFile(fileId);
+			//er.setEmpId(empId);
+			er.setStatus(status);
+		}
+		return er;
+	}
+
+	public byte[] getExportFile(String fileName) {
+		return exportUtil.readExportFile(fileName);
+	}
 
 
+    public List<DesignationDTO> findAllDesignations() {
+//        User user = userRepository.findOne(userId);
+        List<Designation> designation = designationRepository.findAll();
+
+        return mapperUtil.toModelList(designation, DesignationDTO.class);
+    }
 
 }

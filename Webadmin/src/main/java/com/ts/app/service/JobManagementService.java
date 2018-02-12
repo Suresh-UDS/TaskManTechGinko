@@ -1,10 +1,14 @@
 package com.ts.app.service;
 
-import com.ts.app.domain.*;
-import com.ts.app.repository.*;
-import com.ts.app.service.util.*;
-import com.ts.app.web.rest.dto.*;
-import com.ts.app.web.rest.errors.TimesheetException;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
+import java.util.Set;
+import java.util.TimeZone;
+
+import javax.inject.Inject;
+
 import org.apache.commons.collections.CollectionUtils;
 import org.hibernate.Hibernate;
 import org.joda.time.DateTime;
@@ -20,9 +24,50 @@ import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
+import org.springframework.web.multipart.MultipartFile;
 
-import javax.inject.Inject;
-import java.util.*;
+import com.ts.app.domain.AbstractAuditingEntity;
+import com.ts.app.domain.Asset;
+import com.ts.app.domain.Employee;
+import com.ts.app.domain.Job;
+import com.ts.app.domain.JobChecklist;
+import com.ts.app.domain.JobStatus;
+import com.ts.app.domain.Location;
+import com.ts.app.domain.NotificationLog;
+import com.ts.app.domain.Price;
+import com.ts.app.domain.Site;
+import com.ts.app.domain.User;
+import com.ts.app.repository.AssetRepository;
+import com.ts.app.repository.EmployeeRepository;
+import com.ts.app.repository.JobRepository;
+import com.ts.app.repository.JobSpecification;
+import com.ts.app.repository.LocationRepository;
+import com.ts.app.repository.NotificationRepository;
+import com.ts.app.repository.PricingRepository;
+import com.ts.app.repository.SiteRepository;
+import com.ts.app.repository.UserRepository;
+import com.ts.app.service.util.DateUtil;
+import com.ts.app.service.util.ExportUtil;
+import com.ts.app.service.util.FileUploadHelper;
+import com.ts.app.service.util.ImportUtil;
+import com.ts.app.service.util.MapperUtil;
+import com.ts.app.service.util.PagingUtil;
+import com.ts.app.service.util.QRCodeUtil;
+import com.ts.app.web.rest.dto.AssetDTO;
+import com.ts.app.web.rest.dto.BaseDTO;
+import com.ts.app.web.rest.dto.EmployeeDTO;
+import com.ts.app.web.rest.dto.ExportResult;
+import com.ts.app.web.rest.dto.ImportResult;
+import com.ts.app.web.rest.dto.JobChecklistDTO;
+import com.ts.app.web.rest.dto.JobDTO;
+import com.ts.app.web.rest.dto.LocationDTO;
+import com.ts.app.web.rest.dto.NotificationLogDTO;
+import com.ts.app.web.rest.dto.PriceDTO;
+import com.ts.app.web.rest.dto.ReportResult;
+import com.ts.app.web.rest.dto.SchedulerConfigDTO;
+import com.ts.app.web.rest.dto.SearchCriteria;
+import com.ts.app.web.rest.dto.SearchResult;
+import com.ts.app.web.rest.errors.TimesheetException;
 
 /**
  * Service class for managing Device information.
@@ -74,6 +119,9 @@ public class JobManagementService extends AbstractService {
 
     @Inject
     private FileUploadHelper fileUploadHelper;
+    
+    @Inject
+    private ImportUtil importUtil;
 
     @Inject
     private PricingRepository priceRepository;
@@ -151,7 +199,11 @@ public class JobManagementService extends AbstractService {
 	        	java.sql.Date fromDt = DateUtil.convertToSQLDate(DateUtil.convertUTCToIST(checkInDateFrom));
 	        	//String fromDt = DateUtil.formatUTCToIST(checkInDateFrom);
 	        	Calendar checkInDateTo = Calendar.getInstance(TimeZone.getTimeZone("Asia/Kolkata"));
-	        	checkInDateTo.setTime(checkInDate);
+	        	if(searchCriteria.getCheckInDateTimeTo() != null) {
+	        		checkInDateTo.setTime(searchCriteria.getCheckInDateTimeTo());
+	        	}else {
+	        		checkInDateTo.setTime(checkInDate);
+	        	}
 
 	        	checkInDateTo.set(Calendar.HOUR_OF_DAY, 23);
 	        	checkInDateTo.set(Calendar.MINUTE,59);
@@ -174,17 +226,29 @@ public class JobManagementService extends AbstractService {
 	                */
 	        		if(searchCriteria.isAssignedStatus()) {
 	        		    log.debug("search criteria assigned status true");
-	        			page = jobRepository.findByDateRangeAndLocation(searchCriteria.getSiteId(),searchCriteria.getUserId(),subEmpIds, JobStatus.ASSIGNED,fromDt,toDt,searchCriteria.isScheduled(),searchCriteria.getLocationId(),pageRequest);
-	        			allJobsList.addAll(page.getContent());
+	        		    if(searchCriteria.getSiteId() > 0) {
+	        		    		page = jobRepository.findByDateRangeAndLocation(searchCriteria.getSiteId(),searchCriteria.getUserId(),subEmpIds, JobStatus.ASSIGNED,fromDt,toDt,searchCriteria.isScheduled(),searchCriteria.getLocationId(),pageRequest);
+	        		    }else {
+	        		    		page = jobRepository.findByStatusAndDateRange(searchCriteria.getUserId(),subEmpIds,fromDt,toDt, JobStatus.ASSIGNED,pageRequest);
+	        		    }
+	        		    	allJobsList.addAll(page.getContent());
 	        		}
 	        		if(searchCriteria.isCompletedStatus()) {
 	        		    log.debug("search criteria completed status true");
-	        			page = jobRepository.findByDateRangeAndLocation(searchCriteria.getSiteId(),searchCriteria.getUserId(),subEmpIds, JobStatus.COMPLETED,fromDt,toDt,searchCriteria.getLocationId(),pageRequest);
-	        			allJobsList.addAll(page.getContent());
+	        		    if(searchCriteria.getSiteId() > 0) {
+	        		    		page = jobRepository.findByDateRangeAndLocation(searchCriteria.getSiteId(),searchCriteria.getUserId(),subEmpIds, JobStatus.COMPLETED,fromDt,toDt,searchCriteria.getLocationId(),pageRequest);
+	        		    }else {
+	        		    		page = jobRepository.findByStatusAndDateRange(searchCriteria.getUserId(),subEmpIds,fromDt,toDt, JobStatus.COMPLETED,pageRequest);
+	        		    }
+	        		    	allJobsList.addAll(page.getContent());
 	        		}
 	        		if(searchCriteria.isOverdueStatus()) {
-                        log.debug("search criteria overdue status true");
-                        page = jobRepository.findOverDueJobsByDateRangeAndLocation(searchCriteria.getSiteId(),searchCriteria.getUserId(),subEmpIds,fromDt,toDt,searchCriteria.getLocationId(),pageRequest);
+	        			log.debug("search criteria overdue status true");
+	        			if(searchCriteria.getSiteId() > 0) {
+	        				page = jobRepository.findOverDueJobsByDateRangeAndLocation(searchCriteria.getSiteId(),searchCriteria.getUserId(),subEmpIds,fromDt,toDt,searchCriteria.getLocationId(),pageRequest);
+	        			}else {
+	        				page = jobRepository.findByStatusAndDateRange(searchCriteria.getUserId(),subEmpIds,fromDt,toDt, JobStatus.OVERDUE,pageRequest);
+	        			}
 	        			allJobsList.addAll(page.getContent());
 	        		}
 	        	}else {
@@ -261,6 +325,100 @@ public class JobManagementService extends AbstractService {
 		}
 		return result;
 	}
+	
+	
+	public List<ReportResult> generateConsolidatedReport(SearchCriteria searchCriteria, boolean isAdmin) {
+		List<ReportResult> reportResults = new ArrayList<ReportResult>();
+		if(searchCriteria != null) {
+
+			Employee employee = employeeRepository.findByUserId(searchCriteria.getUserId());
+			List<Long> subEmpIds = new ArrayList<Long>();
+			if(employee != null) {
+				searchCriteria.setDesignation(employee.getDesignation());
+				Hibernate.initialize(employee.getSubOrdinates());
+				findAllSubordinates(employee, subEmpIds);
+				log.debug("List of subordinate ids -"+ subEmpIds);
+				if(CollectionUtils.isEmpty(subEmpIds)) {
+					subEmpIds.add(employee.getId());
+				}
+				searchCriteria.setSubordinateIds(subEmpIds);
+			}
+			log.debug("SearchCriteria ="+ searchCriteria);
+
+			Pageable pageRequest = createPageRequest(searchCriteria.getCurrPage());
+			Page<Job> page = null;
+			List<Job> allJobsList = new ArrayList<Job>();
+			List<JobDTO> transactions = null;
+
+			Date checkInDate = searchCriteria.getCheckInDateTimeFrom();
+
+            log.debug("JobManagementService toPredicate - searchCriteria projectid -"+ searchCriteria.getProjectId());
+            log.debug("JobManagementService toPredicate - searchCriteria siteId -"+ searchCriteria.getSiteId());
+            log.debug("JobManagementService toPredicate - searchCriteria jobstatus -"+ searchCriteria.getJobStatus());
+            log.debug("JobManagementService toPredicate - searchCriteria jobTitle -"+ searchCriteria.getJobTitle());
+            log.debug("JobManagementService toPredicate - searchCriteria scheduled -"+ searchCriteria.isScheduled());
+            log.debug("JobSpecification toPredicate - searchCriteria get assigned status -"+ searchCriteria.isAssignedStatus());
+            log.debug("JobSpecification toPredicate - searchCriteria get completed status -"+ searchCriteria.isCompletedStatus());
+            log.debug("JobSpecification toPredicate - searchCriteria get overdue status -"+ searchCriteria.isOverdueStatus());
+            log.debug("JobSpecification toPredicate - searchCriteria get consolidated status -"+ searchCriteria.isConsolidated());
+
+            
+            log.debug("JobSpecification toPredicate - searchCriteria checkInDateFrom -"+ checkInDate);
+        		if(checkInDate != null) {
+	        	    log.debug("check in date is not null");
+		        	Calendar checkInDateFrom = Calendar.getInstance(TimeZone.getTimeZone("Asia/Kolkata"));
+		        	checkInDateFrom.setTime(checkInDate);
+	
+		        	checkInDateFrom.set(Calendar.HOUR_OF_DAY, 0);
+		        	checkInDateFrom.set(Calendar.MINUTE,0);
+		        	checkInDateFrom.set(Calendar.SECOND,0);
+		        	java.sql.Date fromDt = DateUtil.convertToSQLDate(DateUtil.convertUTCToIST(checkInDateFrom));
+		        	//String fromDt = DateUtil.formatUTCToIST(checkInDateFrom);
+		        	Calendar checkInDateTo = Calendar.getInstance(TimeZone.getTimeZone("Asia/Kolkata"));
+		        	if(searchCriteria.getCheckInDateTimeTo() != null) {
+		        		checkInDateTo.setTime(searchCriteria.getCheckInDateTimeTo());
+		        	}else {
+		        		checkInDateTo.setTime(checkInDate);
+		        	}
+	
+		        	checkInDateTo.set(Calendar.HOUR_OF_DAY, 23);
+		        	checkInDateTo.set(Calendar.MINUTE,59);
+		        	checkInDateTo.set(Calendar.SECOND,0);
+		        	java.sql.Date toDt = DateUtil.convertToSQLDate(DateUtil.convertUTCToIST(checkInDateTo));
+	
+		        	if(searchCriteria.isConsolidated()) {
+	
+		        	    log.debug("site reporsitory find all");
+		        		List<Site> allSites = siteRepository.findAll();
+		        		for(Site site : allSites) {
+		        			if(searchCriteria.isGraphRequest()) {
+		        				reportResults.add(reportService.jobCountGroupByDate(site.getId(), fromDt, toDt));
+		        			}else {
+		        				reportResults.add(reportService.jobCountBySiteAndStatusAndDateRange(site.getId(),fromDt, toDt));
+		        			}
+		        		}
+	
+		        	}
+	        	}else {
+	        		if(!searchCriteria.isConsolidated()) {
+	        			page = jobRepository.findAll(new JobSpecification(searchCriteria,isAdmin),pageRequest);
+	        			allJobsList.addAll(page.getContent());
+	        		}else {
+		        		List<Site> allSites = siteRepository.findAll();
+		        		for(Site site : allSites) {
+		        			reportResults.add(reportService.jobCountBySiteAndStatus(site.getId()));
+		        		}
+	
+	        		}
+	        	}
+
+		}
+		return reportResults;
+	}
+	
+	
+	
+	
 
     public SearchResult<JobDTO> findByDateSelected(SearchCriteria searchCriteria, boolean isAdmin) {
         SearchResult<JobDTO> result = new SearchResult<JobDTO>();
@@ -449,6 +607,18 @@ public class JobManagementService extends AbstractService {
 		job.setScheduled(jobDTO.isScheduled());
 		job.setFrequency(jobDTO.getFrequency());
 
+		//add the job checklist items
+		if(CollectionUtils.isNotEmpty(jobDTO.getChecklistItems())) {
+			List<JobChecklistDTO> jobclDtoList = jobDTO.getChecklistItems();
+			List<JobChecklist> checklistItems = new ArrayList<JobChecklist>();
+			for(JobChecklistDTO jobclDto : jobclDtoList) {
+				JobChecklist checklist = mapperUtil.toEntity(jobclDto, JobChecklist.class);
+				checklist.setJob(job);
+				checklistItems.add(checklist);
+			}
+			job.setChecklistItems(checklistItems);
+		}
+
 	}
 
 	private Site getSite(Long siteId) {
@@ -554,34 +724,38 @@ public class JobManagementService extends AbstractService {
 
 		//if the job is scheduled for recurrence create a scheduled task
 		if(!StringUtils.isEmpty(jobDTO.getSchedule()) && !jobDTO.getSchedule().equalsIgnoreCase("ONCE")) {
-			schedulerService.deleteCurrentSchedule(jobDTO.getId());
-			SchedulerConfigDTO schConfDto = new SchedulerConfigDTO();
-			schConfDto.setSchedule(jobDTO.getSchedule());
-			schConfDto.setType("CREATE_JOB");
-			StringBuffer data = new StringBuffer();
-			data.append("title="+jobDTO.getTitle());
-			data.append("&description="+jobDTO.getDescription());
-			data.append("&siteId="+jobDTO.getSiteId());
-			data.append("&empId="+jobDTO.getEmployeeId());
-			data.append("&plannedStartTime="+jobDTO.getPlannedStartTime());
-			data.append("&plannedEndTime="+jobDTO.getPlannedEndTime());
-			data.append("&plannedHours="+jobDTO.getPlannedHours());
-			schConfDto.setData(data.toString());
-			schConfDto.setStartDate(jobDTO.getPlannedStartTime());
-			schConfDto.setEndDate(jobDTO.getPlannedEndTime());
-			schConfDto.setScheduleEndDate(jobDTO.getScheduleEndDate());
-			schConfDto.setScheduleDailyExcludeWeekend(jobDTO.isScheduleDailyExcludeWeekend());
-			schConfDto.setScheduleWeeklySunday(jobDTO.isScheduleWeeklySunday());
-			schConfDto.setScheduleWeeklyMonday(jobDTO.isScheduleWeeklyMonday());
-			schConfDto.setScheduleWeeklyTuesday(jobDTO.isScheduleWeeklyTuesday());
-			schConfDto.setScheduleWeeklyWednesday(jobDTO.isScheduleWeeklyWednesday());
-			schConfDto.setScheduleWeeklyThursday(jobDTO.isScheduleWeeklyThursday());
-			schConfDto.setScheduleWeeklyFriday(jobDTO.isScheduleWeeklyFriday());
-			schConfDto.setScheduleWeeklySaturday(jobDTO.isScheduleWeeklySaturday());
-			schConfDto.setActive("Y");
-			schedulerService.save(schConfDto,job);
+			if(jobDTO.getActive().equalsIgnoreCase("yes")) {
+				schedulerService.deleteCurrentSchedule(jobDTO.getId());
+				SchedulerConfigDTO schConfDto = new SchedulerConfigDTO();
+				schConfDto.setSchedule(jobDTO.getSchedule());
+				schConfDto.setType("CREATE_JOB");
+				StringBuffer data = new StringBuffer();
+				data.append("title="+jobDTO.getTitle());
+				data.append("&description="+jobDTO.getDescription());
+				data.append("&siteId="+jobDTO.getSiteId());
+				data.append("&empId="+jobDTO.getEmployeeId());
+				data.append("&plannedStartTime="+jobDTO.getPlannedStartTime());
+				data.append("&plannedEndTime="+jobDTO.getPlannedEndTime());
+				data.append("&plannedHours="+jobDTO.getPlannedHours());
+				schConfDto.setData(data.toString());
+				schConfDto.setStartDate(jobDTO.getPlannedStartTime());
+				schConfDto.setEndDate(jobDTO.getPlannedEndTime());
+				schConfDto.setScheduleEndDate(jobDTO.getScheduleEndDate());
+				schConfDto.setScheduleDailyExcludeWeekend(jobDTO.isScheduleDailyExcludeWeekend());
+				schConfDto.setScheduleWeeklySunday(jobDTO.isScheduleWeeklySunday());
+				schConfDto.setScheduleWeeklyMonday(jobDTO.isScheduleWeeklyMonday());
+				schConfDto.setScheduleWeeklyTuesday(jobDTO.isScheduleWeeklyTuesday());
+				schConfDto.setScheduleWeeklyWednesday(jobDTO.isScheduleWeeklyWednesday());
+				schConfDto.setScheduleWeeklyThursday(jobDTO.isScheduleWeeklyThursday());
+				schConfDto.setScheduleWeeklyFriday(jobDTO.isScheduleWeeklyFriday());
+				schConfDto.setScheduleWeeklySaturday(jobDTO.isScheduleWeeklySaturday());
+				schConfDto.setActive("Y");
+				schedulerService.save(schConfDto,job);
+			}else {
+				schedulerService.deleteCurrentSchedule(jobDTO.getId());
+			}
 		}else {
-        	//delete any existing job schedule if
+			//delete any existing job schedule if
 			schedulerService.deleteCurrentSchedule(jobDTO.getId());
 		}
 
@@ -926,5 +1100,104 @@ public class JobManagementService extends AbstractService {
     }
 
 
+    public List<Job> assignReliever(EmployeeDTO employee, EmployeeDTO reliever, Date startDate, Date endDate) {
 
+        Calendar checkInDateFrom = Calendar.getInstance(TimeZone.getTimeZone("Asia/Kolkata"));
+        checkInDateFrom.setTime(startDate);
+
+        checkInDateFrom.set(Calendar.HOUR_OF_DAY, 0);
+        checkInDateFrom.set(Calendar.MINUTE,0);
+        checkInDateFrom.set(Calendar.SECOND,0);
+        java.sql.Date fromDt = DateUtil.convertToSQLDate(DateUtil.convertUTCToIST(checkInDateFrom));
+
+        Calendar checkInDateTo = Calendar.getInstance(TimeZone.getTimeZone("Asia/Kolkata"));
+        checkInDateFrom.setTime(endDate);
+
+        checkInDateTo.set(Calendar.HOUR_OF_DAY, 0);
+        checkInDateTo.set(Calendar.MINUTE,0);
+        checkInDateTo.set(Calendar.SECOND,0);
+        java.sql.Date toDt = DateUtil.convertToSQLDate(DateUtil.convertUTCToIST(checkInDateFrom));
+
+        List<Job> allJobsList = new ArrayList<Job>();
+
+        allJobsList= jobRepository.findByDateRangeAndEmployee(employee.getId(), fromDt, toDt);
+        Employee relieverDetails = mapperUtil.toEntity(reliever,Employee.class);
+        for(Job job: allJobsList){
+            job.setRelieved(true);
+            job.setReliever(relieverDetails);
+            job = jobRepository.save(job);
+        }
+
+        return allJobsList;
+    }
+
+    public void assignJobsForDifferentEmployee(EmployeeDTO employee, EmployeeDTO reliever,Date fromDate){
+        Calendar checkInDateFrom = Calendar.getInstance(TimeZone.getTimeZone("Asia/Kolkata"));
+        checkInDateFrom.setTime(fromDate);
+
+        checkInDateFrom.set(Calendar.HOUR_OF_DAY, 0);
+        checkInDateFrom.set(Calendar.MINUTE,0);
+        checkInDateFrom.set(Calendar.SECOND,0);
+        java.sql.Date fromDt = DateUtil.convertToSQLDate(DateUtil.convertUTCToIST(checkInDateFrom));
+
+        List<Job> allJobsList = new ArrayList<Job>();
+
+        allJobsList= jobRepository.findByStartDateAndEmployee(employee.getId(), fromDt);
+        Employee relieverDetails = mapperUtil.toEntity(reliever,Employee.class);
+        for(Job job: allJobsList){
+            job.setEmployee(relieverDetails);
+            job = jobRepository.save(job);
+        }
+    }
+
+    public void deleteJobsForEmployee(EmployeeDTO employee, Date fromDate){
+
+        Calendar checkInDateFrom = Calendar.getInstance(TimeZone.getTimeZone("Asia/Kolkata"));
+        checkInDateFrom.setTime(fromDate);
+
+        checkInDateFrom.set(Calendar.HOUR_OF_DAY, 0);
+        checkInDateFrom.set(Calendar.MINUTE,0);
+        checkInDateFrom.set(Calendar.SECOND,0);
+        java.sql.Date fromDt = DateUtil.convertToSQLDate(DateUtil.convertUTCToIST(checkInDateFrom));
+
+        jobRepository.deleteEmployeeUpcomingJobs(employee.getId(),fromDt);
+
+
+    }
+
+
+	public ExportResult export(List<JobDTO> transactions) {
+		return exportUtil.writeJobReportToFile(transactions, null, null);
+	}
+
+
+	public ExportResult getExportStatus(String fileId) {
+		ExportResult er = new ExportResult();
+		fileId += ".csv";
+		if(!StringUtils.isEmpty(fileId)) {
+			String status = exportUtil.getExportStatus(fileId);
+			er.setFile(fileId);
+			er.setStatus(status);
+		}
+		return er;
+	}
+
+	public byte[] getExportFile(String fileName) {
+		return exportUtil.readExportFile(fileName);
+	}
+
+	public ImportResult importFile(MultipartFile file, long dateTime) {
+		return importUtil.importJobData(file, dateTime);
+	}
+	
+	public ImportResult getImportStatus(String fileId) {
+		ImportResult er = new ImportResult();
+		//fileId += ".csv";
+		if(!StringUtils.isEmpty(fileId)) {
+			String status = importUtil.getImportStatus(fileId);
+			er.setFile(fileId);
+			er.setStatus(status);
+		}
+		return er;
+	}
 }

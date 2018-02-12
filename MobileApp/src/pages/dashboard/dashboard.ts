@@ -3,6 +3,13 @@ import {LoadingController, ModalController, NavController} from 'ionic-angular';
 import {authService} from "../service/authService";
 import {DatePickerProvider} from "ionic2-date-picker";
 import {componentService} from "../service/componentService";
+import {SiteService} from "../service/siteService";
+import {EmployeeService} from "../service/employeeService";
+import {JobService} from "../service/jobService";
+import {CreateRateCardPage} from "../rate-card/create-rate-card";
+import {CreateJobPage} from "../jobs/add-job";
+import {CreateQuotationPage} from "../quotation/create-quotation";
+import {CreateEmployeePage} from "../employee-list/create-employee";
 declare var demo;
 @Component({
   selector: 'page-dashboard',
@@ -19,7 +26,7 @@ export class DashboardPage {
   sites:any;
     firstLetter:any;
   constructor(public renderer: Renderer,public myService:authService,private loadingCtrl:LoadingController,public navCtrl: NavController,public component:componentService,public authService:authService,public modalCtrl: ModalController,
-              private datePickerProvider: DatePickerProvider) {
+              private datePickerProvider: DatePickerProvider, private siteService:SiteService, private employeeService: EmployeeService, private jobService:JobService) {
 
     this.categories='overdue';
 
@@ -45,7 +52,7 @@ export class DashboardPage {
 
 
 
-    this.authService.searchSite().subscribe(response=>
+    this.siteService.searchSite().subscribe(response=>
     {
       console.log(response);
     },
@@ -55,7 +62,7 @@ export class DashboardPage {
     })
 
 
-    this.myService.getAllEmployees().subscribe(
+    this.employeeService.getAllEmployees().subscribe(
         response=>{
           console.log('ionViewDidLoad Employee list:');
           console.log(response);
@@ -67,7 +74,7 @@ export class DashboardPage {
         }
     )
 
-    this.myService.searchSite().subscribe(
+    this.siteService.searchSite().subscribe(
         response=>{
           console.log('ionViewDidLoad SitePage:');
 
@@ -91,7 +98,7 @@ export class DashboardPage {
   getAllJobs(){
     this.component.showLoader('Getting All Jobs');
     var search={};
-    this.authService.getJobs(search).subscribe(response=>{
+    this.jobService.getJobs(search).subscribe(response=>{
       console.log("All jobs of current user");
       console.log(response);
       this.allJobs = response;
@@ -104,5 +111,25 @@ export class DashboardPage {
         this.firstLetter=emp.charAt(0);
     }
 
+
+    fabClick(fab)
+    {
+        if(fab=='ratecard')
+        {
+            this.navCtrl.push(CreateRateCardPage);
+        }
+        else if(fab=='job')
+        {
+            this.navCtrl.push(CreateJobPage);
+        }
+        else if(fab=='quotation')
+        {
+            this.navCtrl.push(CreateQuotationPage);
+        }
+        else if(fab=='employee')
+        {
+            this.navCtrl.push(CreateEmployeePage);
+        }
+    }
 
 }

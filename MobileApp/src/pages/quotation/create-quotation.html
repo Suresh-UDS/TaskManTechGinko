@@ -7,86 +7,47 @@
     </ion-navbar>
 </ion-header>
 
-<ion-content>
-
-    <ion-simple-wizard [(step)]="step" [showSteps]="true" (finish)="onFinish()" [finishIcon]="'done-all'" [(stepCondition)]="stepCondition">
-        <ion-wizard-step>
+<ion-content padding>
             <div class="row">
-                <div class="col-md-8">
+                <div class="col-md-10">
+                    <form id="LoginValidation">
                     <div class="card">
                         <div class="card-content">
-                            <ion-row>
-                                <ion-col col-12>
-                                    <div class="form-group label-floating">
-                                        <label class="control-label">Title</label>
-                                        <input type="text" class="form-control" [(ngModel)]="quotationDetails.title" >
-                                    </div>
-                                </ion-col>
+                            <ion-row padding>
+                                    <ion-col col-12>
+                                        <div class="form-group label-floating" [ngClass]="{'has-error': eMsg=='all'||eMsg=='title'}">
+                                            <label class="control-label">Title</label>
+                                            <input class="form-control" type="text" [(ngModel)]="title" id="title" name="title" #titl="ngModel" required [ngClass]="{'has-error': titl.errors || eMsg=='all'|| eMsg=='title'}">
+                                            <div *ngIf="titl.errors && (titl.dirty || titl.touched)" class="error-msg">
 
-                                <ion-col col-12>
-                                    <div class="form-group label-floating">
-                                        <label class="control-label">Description</label>
-                                        <ion-textarea type="text" class="form-control" [(ngModel)]="quotationDetails.description" ></ion-textarea>
-                                    </div>
-                                </ion-col>
+                                            </div>
 
-                                <ion-col col-12>
-                                    <div class="form-group">
-                                        <ion-row>
-                                            <ion-col *ngFor="let type of rateCardTypes">
-                                                <button ion-button color="dark" (click)="showAdd(type)"> Add {{type.name}}</button>
-                                            </ion-col>
+                                            <div *ngIf="titl.errors && (titl.untouched )" class="error-msg">
 
-                                        </ion-row>
-                                        <ion-row  *ngIf="showRateInformation">
-                                            <ion-col>
-                                                <input type="text" class="form-control" [(ngModel)]="">
-                                            </ion-col>
-                                            <ion-col>
-                                                <input type="text" class="form-control" [(ngModel)]="">
-                                            </ion-col>
-                                        </ion-row>
-                                    </div>
-                                </ion-col>
+                                            </div>
+                                        </div>
 
-                                <ion-col col-12>
-                                    <div class="form-group">
-                                        <ion-item>
-                                            <ion-label>Choose Type</ion-label>
-                                            <ion-select [(ngModel)]="rateCardType">
-                                                <ion-option *ngFor="let type of rateCardTypes" [value]="type.name"></ion-option>
+                                    </ion-col>
 
-                                            </ion-select>
-                                        </ion-item>
-                                    </div>
-                                </ion-col>
+                                    <ion-col col-12>
+                                        <div class="form-group label-floating">
+                                            <label class="control-label">Description</label>
+                                            <input type="text" class="form-control" [(ngModel)]="description" name="description" required="true">
+                                        </div>
+                                    </ion-col>
+
                             </ion-row>
                         </div>
                     </div>
+                    </form>
                 </div>
             </div>
-        </ion-wizard-step>
-
-        <ion-wizard-step>
-            <div class="row">
-                <div class="col-md-8">
-                    <div class="card">
-                        <div class="card-content">
-                            <ion-row>
-                                <ion-item>
-                                    <ion-label>Select Site</ion-label>
-                                    <ion-select [(ngModel)]="selectedSite">
-                                        <ion-option *ngFor="let site of allSites" [value]="site"></ion-option>
-
-                                    </ion-select>
-                                </ion-item>
-                            </ion-row>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </ion-wizard-step>
-    </ion-simple-wizard>
-
 </ion-content>
 
+<ion-footer>
+    <ion-toolbar class="align-center" >
+        <button class="btn btn-warning center margin-auto" type="submit" (click)="saveQuotation(title,description)">
+            Next<ion-icon name="ios-arrow-forward-outline"></ion-icon>
+        </button>
+    </ion-toolbar>
+</ion-footer>

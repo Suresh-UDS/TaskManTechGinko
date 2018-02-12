@@ -5,6 +5,11 @@ import {authService} from "../service/authService";
 import {Camera, CameraOptions} from "@ionic-native/camera";
 import {Geolocation} from "@ionic-native/geolocation";
 import {Geofence} from "@ionic-native/geofence";
+import {EmployeeService} from "../service/employeeService";
+import {JobService} from "../service/jobService";
+import {SiteService} from "../service/siteService";
+import {AttendanceService} from "../service/attendanceService";
+import {componentService} from "../service/componentService";
 
 /**
  * Generated class for the EmployeeList page.
@@ -30,9 +35,9 @@ export class EmployeeList {
   site:any;
   attendanceId:any;
   loader:any;
-  constructor(public navCtrl: NavController, public navParams: NavParams, private  authService: authService, public camera: Camera,
+  constructor(public navCtrl: NavController,public component:componentService, public navParams: NavParams, private  authService: authService, public camera: Camera,
               private loadingCtrl:LoadingController, private geolocation:Geolocation, private toastCtrl:ToastController,
-              private geoFence:Geofence) {
+              private geoFence:Geofence, private employeeService: EmployeeService, private jobService: JobService, private siteService:SiteService, private attendanceService:AttendanceService) {
 
     this.geolocation.getCurrentPosition().then((response)=>{
       console.log("Current location");
@@ -55,13 +60,7 @@ export class EmployeeList {
   }
 
   showSuccessToast(msg){
-    let toast = this.toastCtrl.create({
-      message:msg,
-      duration:3000,
-      position:'bottom'
-    });
-
-    toast.present();
+    this.component.showToastMessage(msg);
   }
 
   showLoader(msg){
@@ -76,7 +75,7 @@ export class EmployeeList {
   }
 
   getAttendances(site){
-    this.authService.getSiteAttendances(site.id).subscribe(response=>{
+    this.attendanceService.getSiteAttendances(site.id).subscribe(response=>{
       console.log(response.json());
       this.navCtrl.push(AttendanceListPage,{'attendances':response.json()});
     })
@@ -87,7 +86,7 @@ export class EmployeeList {
   }
 
   getEmployeeAttendance(employeeId){
-    this.authService.getAttendances(employeeId).subscribe(
+    this.attendanceService.getAttendances(employeeId).subscribe(
       response=>{
         console.log(response)
         this.navCtrl.push(AttendanceListPage,{'attendances':response.json()});
@@ -98,7 +97,7 @@ export class EmployeeList {
 
   ionViewWillEnter(){
 
-    this.authService.searchSiteEmployee(this.site.id).subscribe(response=>{
+    this.siteService.searchSiteEmployee(this.site.id).subscribe(response=>{
       console.log(response.json());
       this.employeeList = response.json();
       this.userGroup = window.localStorage.getItem('userGroup');
@@ -106,7 +105,7 @@ export class EmployeeList {
       this.employeeFullName = window.localStorage.getItem('employeeFullName');
       this.employeeEmpId = window.localStorage.getItem('employeeEmpId');
       for(let employee of this.employeeList) {
-        this.authService.getAttendances(employee.id).subscribe(
+        this.attendanceService.getAttendances(employee.id).subscribe(
           response =>{
             console.log(response.json());
             var result = response.json()
@@ -126,7 +125,7 @@ export class EmployeeList {
   }
 
   isEmployeeCheckedIn(employeeId){
-    this.authService.getAttendances(employeeId).subscribe(
+    this.attendanceService.getAttendances(employeeId).subscribe(
       response =>{
         console.log(response.json());
         var result = response.json()
@@ -188,7 +187,7 @@ export class EmployeeList {
                     console.log(response.json());
                     var verificationResponse = response.json();
                     employee.imageData = imageData;
-                    this.authService.markEnrolled(employee).subscribe(response=>{
+                    this.employeeService.markEnrolled(employee).subscribe(response=>{
                       console.log("face marked to database");
                       this.closeLoader();
                       var msg='Face enrolled Successfully';
@@ -219,7 +218,7 @@ export class EmployeeList {
                           console.log(this.longitude);
                           this.closeLoader();
                           this.showLoader('Marking Attendance');
-                          this.authService.markAttendanceCheckIn(this.site.id,employee.empId,this.lattitude,this.longitude,imageData).subscribe(response=>{
+                          this.attendanceService.markAttendanceCheckIn(this.site.id,employee.empId,this.lattitude,this.longitude,imageData).subscribe(response=>{
                             console.log(response.json());
                             this.closeLoader();
                             if(response && response.status === 200){
@@ -257,7 +256,7 @@ export class EmployeeList {
                         this.closeLoader();
                         this.showLoader('Marking Attendance');
 
-                        this.authService.markAttendanceCheckOut(this.site.id,employee.empId,this.lattitude,this.longitude,imageData,employee.attendanceId).subscribe(response=>{
+                        this.attendanceService.markAttendanceCheckOut(this.site.id,employee.empId,this.lattitude,this.longitude,imageData,employee.attendanceId).subscribe(response=>{
                           console.log(response.json());
                           this.closeLoader();
                           if(response && response.status === 200){

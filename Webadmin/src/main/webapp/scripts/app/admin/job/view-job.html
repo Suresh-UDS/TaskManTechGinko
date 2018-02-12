@@ -10,7 +10,7 @@
 
 				<div class="form-container table-container">
 					<form ng-show="!success" name="form" role="form" novalidate
-						ng-submit="saveJob()"  class="form-horizontal">
+						class="form-horizontal">
 
 						<div class="form-group ">
 							<label class="col-sm-3 control-label">Title </label>
@@ -20,31 +20,7 @@
 									class='form-control'
 									name='jobName'
 									type='text' value=""
-									ng-minlength='5'
-									ng-maxlength='250'
-									ng-pattern="/^[A-Za-z0-9\s]*$/" autofocus
-									required />
-
-								<div ng-show="form.$submitted || form.jobName.$touched">
-			                    	<div ng-show="form.jobName.$dirty || form.jobName.$invalid">
-			                        <p class="help-block" style="color:maroon"
-			                               ng-show="form.jobName.$error.required">
-			                            Job Title is required.
-			                        </p>
-			                        <p class="help-block" style="color:maroon"
-			                               ng-show="form.jobName.$error.minlength">
-			                            Job Title is required to be at least 5 character.
-			                        </p>
-			                        <p class="help-block" style="color:maroon"
-			                               ng-show="form.jobName.$error.maxlength">
-			                            Job Title cannot be longer than 250 characters.
-			                        </p>
-			                        <p class="help-block" style="color:maroon"
-			                               ng-show="form.jobName.$error.pattern">
-			                            job Title can only contain letters, digits and space.
-			                    	</p>
-			                    	</div>
-		                    </div>
+									readonly />
 
 							</div>
 						</div>
@@ -56,27 +32,27 @@
 									ng-model="job.description"
 									class='form-control'
 									name='jobDesc'
-									ng-maxlength='2500'
-									ng-pattern="/^[A-Za-z0-9\s]*$/"
+									readonly
 									 ></textarea>
 
-								<div ng-show="form.$submitted || form.jobDesc.$touched">
-			                    	<div ng-show="form.jobDesc.$dirty || form.jobDesc.$invalid">
-			                        <p class="help-block" style="color:maroon"
-			                               ng-show="form.jobDesc.$error.maxlength">
-			                            Job name cannot be longer than 2500 characters.
-			                        </p>
-			                        <p class="help-block" style="color:maroon"
-			                               ng-show="form.jobDesc.$error.pattern">
-			                            job name can only contain letters, digits and space.
-			                    	</p>
-			                    	</div>
-		                    </div>
 
 							</div>
 						</div>
 
+						<div class="form-group ">
+							<label class="col-sm-3 control-label">Checklist </label>
+							<div class="col-sm-5">
+								<ul class="listOfActions list-group">
 
+                                		<li class="list-group-item justify-content-between" ng-repeat=" item in job.checklistItems" ng-bind-html-unsafe="item.text">
+                                    		{{item.checklistItemName}}
+                                		</li>
+                            		</ul>
+									
+
+							</div>
+						</div>
+						
                         <div class="form-group ">
                             <label class="col-sm-3 control-label">Location </label>
                             <div class="col-sm-5">
@@ -84,22 +60,7 @@
                                     ng-model="job.location"
                                     class='form-control'
                                     name='jobLocation'
-                                    ng-maxlength='2500'
-                                    ng-pattern="/^[A-Za-z0-9\s]*$/"
-                                >
-
-                                <div ng-show="form.$submitted || form.jobDesc.$touched">
-                                    <div ng-show="form.jobLocaiton.$dirty || form.jobLocation.$invalid">
-                                        <p class="help-block" style="color:maroon"
-                                           ng-show="form.jobLocation.$error.maxlength">
-                                            Job Location cannot be longer than 2500 characters.
-                                        </p>
-                                        <p class="help-block" style="color:maroon"
-                                           ng-show="form.jobLocation.$error.pattern">
-                                            job Location can only contain letters, digits and space.
-                                        </p>
-                                    </div>
-                                </div>
+                                    readonly>
 
                             </div>
                         </div>
@@ -112,17 +73,7 @@
 									class="form-control"
 									name='siteName'
 									ng-model="selectedSite"
-									uib-typeahead="site as site.name for site in sites | filter:$viewValue | limitTo:5"
-									required
-									autocomplete="off" />
-								<div ng-show="form.$submitted || form.siteName.$touched">
-									<div
-										ng-show="form.siteName.$dirty || form.siteName.$invalid">
-										<p class="help-block" style="color: maroon"
-											ng-show="form.siteName.$error.required">Site
-											is required.</p>
-									</div>
-								</div>
+									readonly />
 							</div>
 						</div>
 						</div>
@@ -134,15 +85,9 @@
 									class="form-control"
 									name='employeeName'
 									ng-model="selectedEmployee"
-									uib-typeahead="emp as emp.name for emp in employees | filter:$viewValue | limitTo:5"
-									autocomplete="off" />
+									readonly
+									/>
 
-								<div ng-show="form.$submitted || form.employeeName.$touched">
-									<div
-										ng-show="form.employeeName.$dirty || form.employeeName.$invalid">
-
-									</div>
-								</div>
 							</div>
 						</div>
 						</div>
@@ -155,24 +100,12 @@
 									ng-model="job.plannedStartTime"
 									class='form-control'
 									name='plannedStartDate'
-									required
-									datetime-picker="dd-MMM-yyyy HH:mm"
-									is-open="calendar.plannedStart" />
+									readonly
+									/>
 
 								</p>
 
 
-								<div ng-show="form.$submitted || form.plannedStartDate.$touched">
-			                    	<div ng-show="form.plannedStartDate.$dirty || form.plannedStartDate.$invalid">
-			                       	<p class="help-block" style="color: maroon"
-											ng-show="form.plannedStartDate.$error.required">Required.</p>
-			                        <!--
-			                        <p class="help-block" style="color:maroon"
-			                               ng-show="form.plannedStartDate.$error.pattern">
-			                            job name can only contain letters, digits and space.
-			                    	</p> -->
-			                    	</div>
-		                    </div>
 
 							</div>
 						</div>
@@ -185,21 +118,10 @@
 									ng-model="job.plannedEndTime"
 									class='form-control'
 									name='plannedEndDate'
-									required
-									datetime-picker="dd-MMM-yyyy HH:mm"
-									is-open="calendar.plannedEnd" />
+									readonly
+									/>
 
 								</p>
-
-								<div ng-show="form.$submitted || form.plannedEndDate.$touched">
-			                    	<div ng-show="form.plannedEndDate.$dirty || form.plannedEndDate.$invalid">
-
-			                        <p class="help-block" style="color:maroon"
-			                               ng-show="form.plannedStartDate.$error.required">
-			                           Required
-			                        </p>
-			                    	</div>
-		                    </div>
 
 							</div>
 						</div>
@@ -212,22 +134,9 @@
 									class='form-control'
 									name='plannedHours'
 									type="number"
-									required
+									readonly
 									 ></textarea>
 
-								<div ng-show="form.$submitted || form.plannedHours.$touched">
-									<div
-										ng-show="form.plannedHours.$dirty || form.plannedHours.$invalid">
-									<p class="help-block" style="color:maroon"
-			                               ng-show="form.plannedHours.$error.required">
-			                           Required
-			                        </p>
-
-										<!-- <p class="help-block" style="color: maroon"
-											ng-show="form.plannedHours.$error.pattern">job name can
-											only contain letters, digits and space.</p> -->
-									</div>
-								</div>
 							</div>
 						</div>
 
@@ -238,27 +147,8 @@
 								required
 								name="jobStatus"
 								ng-model="job.jobStatus"
-								class="form-control searchable-input floatL"/>
-									<!-- <option>OPEN</option>
-									<option>ASSIGNED</option>
-									<option>INPROGRESS</option>
-									<option>COMPLETED</option>
-									<option></option>
-								</select> -->
-								<!-- <input type="text"
-												class="form-control searchable-input floatL"
-												ng-model="selectedStatus"
-												uib-typeahead="stat as stat.name for stat in status | filter:$viewValue | limitTo:5" />
- -->
-								<div ng-show="form.$submitted || form.jobStatus.$touched">
-									<div
-										ng-show="form.jobStatus.$dirty || form.jobStatus.$invalid">
-
-									<p class="help-block" style="color:maroon"
-			                               ng-show="form.jobStatus.$error.required">
-			                           Required
-									</div>
-								</div>
+								class="form-control searchable-input floatL"
+								readonly/>
 							</div>
 						</div>
 
@@ -269,27 +159,8 @@
                                     required
                                     name="jobType"
                                     ng-model="job.jobType"
-                                    class="form-control searchable-input floatL"/>
-                                <!-- <option>OPEN</option>
-                                <option>ASSIGNED</option>
-                                <option>INPROGRESS</option>
-                                <option>COMPLETED</option>
-                                <option></option>
-                            </select> -->
-                                <!-- <input type="text"
-                                                class="form-control searchable-input floatL"
-                                                ng-model="selectedStatus"
-                                                uib-typeahead="stat as stat.name for stat in status | filter:$viewValue | limitTo:5" />
- -->
-                                <div ng-show="form.$submitted || form.jobStatus.$touched">
-                                    <div
-                                        ng-show="form.jobType.$dirty || form.jobType.$invalid">
-
-                                        <p class="help-block" style="color:maroon"
-                                           ng-show="form.jobType.$error.required">
-                                            Required
-                                    </div>
-                                </div>
+                                    class="form-control searchable-input floatL"
+                                    readonly/>
                             </div>
                         </div>
 
@@ -301,23 +172,11 @@
 									class='form-control'
 									name='jobComments'
 									ng-maxlength='2500'
+									readonly
 									 ></textarea>
 
-								<div ng-show="form.$submitted || form.jobComments.$touched">
-			                    	<div ng-show="form.jobComments.$dirty || form.jobComments.$invalid">
-
-			                        <p class="help-block" style="color:maroon"
-			                               ng-show="form.jobComments.$error.maxlength">
-			                           Comments cannot be longer than 2500 characters.
-			                        </p>
-			                       <!--  <p class="help-block" style="color:maroon"
-			                               ng-show="form.jobComments.$error.pattern">
-			                            Comments can only contain letters, digits and space.
-			                    	</p> -->
-			                    	</div>
 		                    </div>
 
-							</div>
 						</div>
 
                         <!--<div class="titleCon">-->
@@ -337,22 +196,10 @@
                                               ng-model="job.actualStartTime"
                                               class='form-control'
                                               name='actualStartDate'
-                                              datetime-picker="dd-MMM-yyyy HH:mm"
-                                              is-open="calendar.actualStart" />
+                                              
+                                              readonly/>
 
                                       </p>
-
-                                      <div ng-show="form.$submitted || form.actualStartDate.$touched">
-                                          <div ng-show="form.actualStartDate.$dirty || form.actualStartDate.$invalid">
-                                              <p class="help-block" style="color: maroon"
-                                                 ng-show="form.actualStartDate.$error.required">Required.</p>
-                                              <!--
-                                              <p class="help-block" style="color:maroon"
-                                                     ng-show="form.actualStartDate.$error.pattern">
-                                                  job name can only contain letters, digits and space.
-                                              </p> -->
-                                          </div>
-                                      </div>
 
                                   </div>
                               </div>
@@ -368,16 +215,9 @@
                                               ng-model="job.actualEndTime"
                                               class='form-control'
                                               name='actualEndDate'
-                                              datetime-picker="dd-MMM-yyyy HH:mm"
-                                              is-open="calendar.actualEnd" />
+                                              readonly />
 
                                       </p>
-
-                                      <div ng-show="form.$submitted || form.actualEndDate.$touched">
-                                          <div ng-show="form.actualEndDate.$dirty || form.actualEndDate.$invalid">
-
-                                          </div>
-                                      </div>
 
                                   </div>
                               </div>
@@ -393,17 +233,9 @@
                                           class='form-control'
                                           name='actualHours'
                                           type="number"
+                                          readonly
                                       ></textarea>
 
-                                      <div ng-show="form.$submitted || form.actualHours.$touched">
-                                          <div
-                                              ng-show="form.actualHours.$dirty || form.actualHours.$invalid">
-
-                                              <!-- <p class="help-block" style="color: maroon"
-                                                  ng-show="form.actualHours.$error.pattern">job name can
-                                                  only contain letters, digits and space.</p> -->
-                                          </div>
-                                      </div>
                                   </div>
                               </div>
 

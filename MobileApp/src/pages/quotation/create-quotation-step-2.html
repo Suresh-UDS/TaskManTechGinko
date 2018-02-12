@@ -1,0 +1,78 @@
+<ion-header>
+    <ion-navbar>
+        <button ion-button menuToggle>
+            <ion-icon name="menu"></ion-icon>
+        </button>
+        <ion-title>Add-Rates</ion-title>
+    </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+    <ion-fab bottom right>
+        <button mini (click)="addRates($event)"  ion-fab><ion-icon name="add"></ion-icon></button>
+    </ion-fab>
+
+    <ion-col col-10>
+        <div class="card-content white-bg">
+                <div class="form-group label-floating width80 margin-auto padding-bottom3">
+                    <ion-select style="color: black" [(ngModel)]="selectedSite" class="select-box" placeholder="Choose Site">
+                        <ion-option style="color: black;" *ngFor="let site of allSites" [value]="site.name" (ionSelect)="selectSite(site)" >{{site.name}}</ion-option>
+                    </ion-select>
+                </div>
+        </div>
+    </ion-col>
+
+    <div class="card-content white-bg">
+        <div class="table-responsive">
+            <table class="table table-scroll">
+                <thead>
+                <tr>
+                    <th class="text-center">Type</th>
+                    <th class="text-center">Name</th>
+                    <th class="text-center">Rate</th>
+                    <th class="text-center">No</th>
+                    <th class="text-center">Uom</th>
+                    <th class="text-center">Total</th>
+                    <th class="text-center">&nbsp;&nbsp;&nbsp;&nbsp;</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr *ngFor="let rate of rates;let i = index ">
+                    <td class="text-center">{{rate.type}}</td>
+                    <td class="text-center table-data">{{rate.name}}</td>
+                    <td class="text-center">{{rate.cost}}</td>
+                    <td class="text-center">
+                        <input type="number" class="form-control align-center width15" [(ngModel)]="rate.no" (change)="addTotal(i,rate.no,rate.cost)">
+                    </td>
+                    <td class="text-center">{{rate.uom}}</td>
+                    <td class="text-center">{{rate.total}}</td>
+                    <td class="td-actions text-center">
+                        <i class="material-icons clr-red" (click)="remove(i)">close</i>
+                    </td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td class="text-center">Grand Total</td>
+                    <td class="text-center">{{grandTotal}}</td>
+                    <td></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</ion-content>
+
+<ion-footer>
+    <ion-toolbar class="align-right" >
+        <button class="btn btn-warning center pull-left" >
+            Save
+        </button>
+        <button class="btn btn-success center pull-right" (click)="saveRates()">
+            Submitted <ion-icon name="ios-arrow-forward-outline"></ion-icon>
+        </button>
+    </ion-toolbar>
+</ion-footer>

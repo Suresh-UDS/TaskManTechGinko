@@ -26,8 +26,7 @@ import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
 import com.ts.app.web.rest.dto.AttendanceDTO;
-import com.ts.app.web.rest.dto.ExportResult;
-import com.ts.app.web.rest.dto.CheckInOutDTO;
+import com.ts.app.web.rest.dto.EmployeeDTO;
 import com.ts.app.web.rest.dto.ExportResult;
 import com.ts.app.web.rest.dto.JobDTO;
 import com.ts.app.web.rest.dto.ReportResult;
@@ -42,8 +41,10 @@ public class ExportUtil {
 
 	// CSV file header
 	private static final Object[] FILE_HEADER = { "ID", "TITLE", "DATE", "COMPLETED TIME", "SITE", "LOCATION"};
+	private static final Object[] JOB_DETAIL_REPORT_FILE_HEADER = { "SITE", "TITLE", "EMPLOYEE", "TYPE", "PLANNED START TIME", "COMPLETED TIME", "STATUS"};
 	private static final Object[] CONSOLIDATED_REPORT_FILE_HEADER = { "SITE", "LOCATION", "ASSIGNED JOBS", "COMPLETED JOBS", "OVERDUE JOBS","TAT"};
 	private static final Object[] DETAIL_REPORT_FILE_HEADER = { "SITE", "DATE", "EMPLOYEE ID", "EMPLOYEE NAME", "CHECK IN TIME", "CHECK OUT TIME"};
+	private static final Object[] EMPLOYEE_DETAIL_REPORT_FILE_HEADER = { "EMPLOYEE ID", "EMPLOYEE NAME", "DESIGNATION", "REPORTING TO", "CLIENT", "SITE", "ACTIVE"};
 
 	@Inject
 	private Environment env;
@@ -233,15 +234,17 @@ public class ExportUtil {
 						csvFilePrinter = new CSVPrinter(fileWriter, csvFileFormat);
 						if(!isAppend) {
 							// Create CSV file header
-							csvFilePrinter.printRecord(FILE_HEADER);
+							csvFilePrinter.printRecord(JOB_DETAIL_REPORT_FILE_HEADER);
 						}
 						for (JobDTO transaction : content) {
 							List record = new ArrayList();
 							log.debug("Writing transaction record for site :"+ transaction.getSiteName());
 							record.add(transaction.getSiteName());
 							record.add(String.valueOf(transaction.getTitle()));
+							record.add(transaction.getEmployeeName());
 							record.add(transaction.getJobType());
 							record.add(transaction.getPlannedStartTime());
+							record.add(transaction.getActualEndTime());
 							record.add(transaction.getJobStatus().toString());
 							csvFilePrinter.printRecord(record);
 						}
@@ -380,6 +383,116 @@ public class ExportUtil {
 		result.setStatus(getExportStatus(fileName));
 		return result;
 	}
+	
+	public ExportResult writeToCsvFile(List<EmployeeDTO> content, ExportResult result) {
+		boolean isAppend = (result != null);
+		log.debug("result = " + result + ", isAppend=" + isAppend);
+		if(result == null) {
+			result = new ExportResult();
+		}
+		// Create the CSVFormat object with "\n" as a record delimiter
+		CSVFormat csvFileFormat = CSVFormat.DEFAULT.withRecordSeparator(NEW_LINE_SEPARATOR).withDelimiter(',');
+		String fileName = null;
+		if(StringUtils.isEmpty(result.getFile())) {
+			//if(StringUtils.isNotEmpty(empId)) {
+			//	fileName = empId + System.currentTimeMillis() + ".csv";
+			//}else {
+				fileName = System.currentTimeMillis() + ".csv";
+			//}
+		}	else {
+			fileName = result.getFile() + ".csv";
+		}
+		if(statusMap.containsKey(fileName)) {
+			String status = statusMap.get(fileName);
+			log.debug("Current status for filename -"+fileName+", status -" + status);
+		}else {
+			statusMap.put(fileName, "PROCESSING");
+		}
+		final String exportFileName = fileName;
+
+		if(lock == null) {
+			lock = new Lock();
+		}
+			try {
+				lock.lock();
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+			Thread writerThread = new Thread(new Runnable() {
+
+				FileWriter fileWriter = null;
+				CSVPrinter csvFilePrinter = null;
+
+				@Override
+				public void run() {
+					// TODO Auto-generated method stub
+					String filePath = env.getProperty("export.file.path");
+					FileSystem fileSystem = FileSystems.getDefault();
+					//if(StringUtils.isNotEmpty(empId)) {
+					//	filePath += "/" + empId;
+					//}
+					Path path = fileSystem.getPath(filePath);
+					// path = path.resolve(String.valueOf(empId));
+					if (!Files.exists(path)) {
+						Path newEmpPath = Paths.get(filePath);
+						try {
+							Files.createDirectory(newEmpPath);
+						} catch (IOException e) {
+							log.error("Error while creating path " + newEmpPath);
+						}
+					}
+					filePath += "/" + exportFileName;
+					try {
+						// initialize FileWriter object
+						log.debug("filePath = " + filePath + ", isAppend=" + isAppend);
+						fileWriter = new FileWriter( filePath,isAppend);
+						// initialize CSVPrinter object
+						csvFilePrinter = new CSVPrinter(fileWriter, csvFileFormat);
+						if(!isAppend) {
+							// Create CSV file header
+							csvFilePrinter.printRecord(EMPLOYEE_DETAIL_REPORT_FILE_HEADER);
+						}
+						// Write a new student object list to the CSV file
+						for (EmployeeDTO transaction : content) {
+							List record = new ArrayList();
+							//log.debug("Writing transaction record for Employee id :"+ transaction.getEmployeeEmpId());
+							record.add(transaction.getEmpId());
+							record.add(transaction.getName());
+							record.add(transaction.getDesignation());
+							record.add(transaction.getManagerName());
+							record.add(transaction.getProjectName());
+							record.add(transaction.getSiteName());
+							record.add(transaction.getActive());
+							csvFilePrinter.printRecord(record);
+						}
+						log.info(exportFileName + " CSV file was created successfully !!!");
+						statusMap.put(exportFileName, "COMPLETED");
+					} catch (Exception e) {
+						log.error("Error in CsvFileWriter !!!");
+						statusMap.put(exportFileName, "FAILED");
+					} finally {
+						try {
+							fileWriter.flush();
+							fileWriter.close();
+							csvFilePrinter.close();
+						} catch (IOException e) {
+							log.error("Error while flushing/closing fileWriter/csvPrinter !!!");
+							statusMap.put(exportFileName, "FAILED");
+						}
+					}
+					lock.unlock();
+				}
+
+			});
+			writerThread.start();
+
+		//result.setEmpId(empId);
+		result.setFile(fileName.substring(0,fileName.indexOf('.')));
+		result.setStatus(getExportStatus(fileName));
+		return result;
+	}
 
 	public String getExportStatus(String fileName) {
 		String status = null;
@@ -396,6 +509,28 @@ public class ExportUtil {
 		return status;
 	}
 
+	public byte[] readExportFile(String fileName) {
+		String filePath = env.getProperty("export.file.path");
+		filePath += "/" + fileName +".csv";
+		File file = new File(filePath);
+		byte csvData[] = null;
+		try {
+			FileInputStream csvFile = new FileInputStream(file);
+	        csvData = new byte[(int) file.length()];
+			List<String> lines = IOUtils.readLines(csvFile);
+			StringBuffer sb = new StringBuffer();
+			for(String line : lines) {
+				sb.append(line +"\n");
+			}
+			csvData = sb.toString().getBytes();
+	        csvFile.close();
+
+		}catch(IOException io) {
+			log.error("Error while reading the csv file ,"+ fileName , io);
+		}
+		return csvData;
+	}
+	
 	public byte[] readExportFile(String empId, String fileName) {
 		String filePath = env.getProperty("export.file.path");
 		if(StringUtils.isNotBlank(empId)) {

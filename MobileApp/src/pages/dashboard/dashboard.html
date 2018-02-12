@@ -8,6 +8,39 @@
 </ion-header>
 
 <ion-content>
+
+    <ion-fab right bottom>
+        <button ion-fab color="dark"><ion-icon name="md-add" class="clr-orange"></ion-icon></button>
+        <ion-fab-list side="top" fab-list-margin>
+            <ion-label color="dark" class="margin0">Quotation</ion-label>
+            <button ion-fab color="primary" (click)="fabClick('quotation')">
+                <i class="material-icons clr-blk">receipt</i>
+            </button>
+            <ion-label color="dark" class="margin0">Job</ion-label>
+            <button ion-fab color="primary" (click)="fabClick('job')">
+                <i class="material-icons clr-blk">description</i>
+            </button>
+            <ion-label color="dark" class="margin0">Employee</ion-label>
+            <button ion-fab color="primary" (click)="fabClick('employee')">
+                <i class="material-icons clr-blk">people</i>
+            </button>
+            <ion-label color="dark" class="margin0">Rate Card</ion-label>
+            <button ion-fab color="primary" (click)="fabClick('ratecard')">
+                <i class="material-icons clr-blk">description</i>
+            </button>
+        </ion-fab-list>
+    </ion-fab>
+
+    <!--
+    <ion-fab right bottom>
+        <button ion-fab color="dark"><ion-icon name="arrow-dropleft"></ion-icon></button>
+        <ion-fab-list side="top">
+            <button ion-fab><i class="material-icons">receipt</i>Add Quotation</button>
+            <button ion-fab><i class="material-icons">description</i>Add</button>
+            <button ion-fab><i class="material-icons">description</i>Add</button>
+        </ion-fab-list>
+    </ion-fab>
+    -->
     <div class="Viewcalendartxt" data-toggle="collapse" data-target="#fullCalendarCon">
         <h2>View Calendar <i class="material-icons icon-right">arrow_drop_down</i></h2>
     </div>
@@ -39,9 +72,11 @@ Tip 1: You can change the color of the sidebar using: data-color="purple | blue 
 Tip 2: you can also add an image using data-image tag
 -->
 
+
+
     <div class="container-fluid container-scroll hariz-scroll-con">
         <div class="row">
-            <span *ngFor="let emp of employee;let i of index">
+            <span *ngFor="let emp of employee;let i of index" class="padding-right5 padding-bottom5">
                 <!--<ion-avatar item-start *ngIf="emp.enrolled_face" class="emp-round width-round">-->
                     <!--<img  [src]="emp.enrolled_face" >-->
                 <!--</ion-avatar>-->
@@ -57,8 +92,18 @@ Tip 2: you can also add an image using data-image tag
     </div>
 
 
+ <!--
+    <ion-row >
+        <ion-col col-6 class="margin-auto">
+            <div class="form-group label-floating">
+                <ion-select [(ngModel)]="empName" class="select-box" placeholder="Choose Employee">
+                    <ion-option *ngFor="let emp of employee;let i of index" [value]="emp.name">{{emp.name}}</ion-option>
+                </ion-select>
+            </div>
+        </ion-col>
 
-
+    </ion-row>
+    -->
     <div class="container-fluid container-scroll hariz-scroll-con">
         <div class="row">
 
@@ -68,6 +113,8 @@ Tip 2: you can also add an image using data-image tag
 
         </div>
     </div>
+
+
     <!--
         <ion-segment [(ngModel)]="cat" class="" color="clr-blue">
             <div *ngFor="let c of categories">
@@ -76,6 +123,9 @@ Tip 2: you can also add an image using data-image tag
                 </ion-segment-button>
             </div>
         </ion-segment>-->
+
+
+
 
         <ion-segment [(ngModel)]="categories" class="" color="clr-blue">
             <ion-segment-button value="overdue">
@@ -153,6 +203,7 @@ Tip 2: you can also add an image using data-image tag
 
                 <div [ngSwitch]="categories">
                         <ion-list *ngSwitchCase="'overdue'">
+
                             <div *ngFor="let job of allJobs">
                             <div class="card"  *ngIf="job.status == 'OVERDUE'" [ngClass]="{'red-card' : (job.status == 'OVERDUE'),
                                                           'green-card' : (job.status == 'COMPLETED'),
@@ -198,6 +249,9 @@ Tip 2: you can also add an image using data-image tag
 
 
                     <ion-list *ngSwitchCase="'upcoming'">
+                        <ion-refresher (ionRefresh)="doRefresh($event)">
+                            <ion-refresher-content></ion-refresher-content>
+                        </ion-refresher>
                         <div *ngFor="let job of allJobs">
                             <div class="card"  *ngIf="job.status =='OPEN' || job.status == 'ASSIGNED' || job.status == 'INPROGRESS'" [ngClass]="{'red-card' : (job.status == 'OVERDUE'),
                                                           'green-card' : (job.status == 'COMPLETED'),
@@ -242,6 +296,9 @@ Tip 2: you can also add an image using data-image tag
 
 
                     <ion-list *ngSwitchCase="'completed'">
+                        <ion-refresher (ionRefresh)="doRefresh($event)">
+                            <ion-refresher-content></ion-refresher-content>
+                        </ion-refresher>
                         <div *ngFor="let job of allJobs">
                             <div class="card"  *ngIf="job.status =='COMPLETED'" [ngClass]="{'red-card' : (job.status == 'OVERDUE'),
                                                           'green-card' : (job.status == 'COMPLETED'),

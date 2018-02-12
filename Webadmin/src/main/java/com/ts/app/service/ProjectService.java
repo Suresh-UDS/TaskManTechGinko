@@ -87,6 +87,8 @@ public class ProjectService extends AbstractService {
 		project.setPhone(projectDTO.getPhone());
 		project.setStartDate(projectDTO.getStartDate());
 		project.setEndDate(projectDTO.getEndDate());
+		project.setContactFirstName(projectDTO.getContactFirstName());
+		project.setContactLastName(projectDTO.getContactLastName());
 	}
 
 	public void deleteProject(Long id) {
@@ -178,7 +180,12 @@ public class ProjectService extends AbstractService {
             	}
             }
             if(page != null) {
-                transactions = mapperUtil.toModelList(page.getContent(), ProjectDTO.class);
+            		try {
+            			transactions = mapperUtil.toModelList(page.getContent(), ProjectDTO.class);
+            		}catch(Exception e) {
+            			log.error("Error while converting entity to model ",e);
+            			e.printStackTrace();
+            		}
                 if(CollectionUtils.isNotEmpty(transactions)) {
                     buildSearchResult(searchCriteria, page, transactions,result);
                 }

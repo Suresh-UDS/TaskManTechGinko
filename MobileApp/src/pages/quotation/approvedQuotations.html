@@ -1,0 +1,17 @@
+<ion-header>
+    <ion-navbar>
+        <button ion-button menuToggle>
+            <ion-icon name="menu"></ion-icon>
+        </button>
+        <ion-title>Approved </ion-title>
+    </ion-navbar>
+</ion-header>
+
+<ion-content>
+
+    <ion-list>
+        <ion-item *ngFor="let quotation of quotations;let i of index" class="bottom-border emp" (click)="viewQuotation(quotation)">
+            <p text-left>{{quotation.title}}</p>
+        </ion-item>
+    </ion-list>
+</ion-content>

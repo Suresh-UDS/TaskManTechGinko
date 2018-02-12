@@ -2,6 +2,7 @@ package com.ts.app.service;
 
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -15,9 +16,11 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.core.env.Environment;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.joda.time.DateTime;
 
 import com.google.common.base.Splitter;
 import com.ts.app.domain.AbstractAuditingEntity;
@@ -30,6 +33,7 @@ import com.ts.app.repository.AttendanceRepository;
 import com.ts.app.repository.JobRepository;
 import com.ts.app.repository.SchedulerConfigRepository;
 import com.ts.app.repository.SiteRepository;
+import com.ts.app.service.util.DateUtil;
 import com.ts.app.service.util.ExportUtil;
 import com.ts.app.service.util.MapperUtil;
 import com.ts.app.web.rest.dto.BaseDTO;
@@ -76,6 +80,9 @@ public class SchedulerService extends AbstractService {
 
 	@Inject
 	private PushService pushService;
+	
+	@Inject
+	private Environment env;
 
 	public SearchResult<SchedulerConfigDTO> getSchedulerConfig() {
 		//get all config to show in admin
@@ -101,7 +108,10 @@ public class SchedulerService extends AbstractService {
 			SchedulerConfig entity =  schedulerConfigRepository.findOne(dto.getId());
 			if(entity !=null){
 				mapperUtil.toEntity(dto, entity);
-				schedulerConfigRepository.save(entity);
+				entity = schedulerConfigRepository.save(entity);
+				if(entity.getActive().equalsIgnoreCase("no")) { //if the job schedule is de-activated then the remaining jobs to be deleted.
+					deleteJobs(entity);
+				}
 			}else{
 				throw new TimesheetException("Scheduler Config not found");
 			}
@@ -110,7 +120,9 @@ public class SchedulerService extends AbstractService {
 			SchedulerConfig entity = mapperUtil.toEntity(dto, SchedulerConfig.class);
 			entity.setJob(job);
 			entity.setActive("Y");
-			schedulerConfigRepository.save(entity);
+			entity = schedulerConfigRepository.save(entity);
+			//create jobs based on the creation policy
+			createJobs(entity);
 		}
 
 	}
@@ -260,9 +272,45 @@ public class SchedulerService extends AbstractService {
 		}
 	}
 
+	public void createJobs(SchedulerConfig dailyTask) {
+		if ("CREATE_JOB".equals(dailyTask.getType())) {
+			String creationPolicy = env.getProperty("scheduler.dailyJob.creation");
+			if(creationPolicy.equalsIgnoreCase("monthly")) { //if the creation policy is set to monthly, create jobs for the rest of the month
+				DateTime currDate = DateTime.now();
+		        DateTime lastDate = currDate.dayOfMonth().withMaximumValue();
+				while(currDate.isBefore(lastDate) || currDate.isEqual(lastDate)) {
+					jobCreationTask(dailyTask.getJob(), dailyTask.getData(), currDate.toDate());
+					currDate = currDate.plusDays(1);
+				}
+			}else if(creationPolicy.equalsIgnoreCase("daily")) {
+				jobCreationTask(dailyTask.getJob(), dailyTask.getData(), new Date());
+			}
+			dailyTask.setLastRun(new Date());
+		} else {
+			log.warn("Unknown scheduler config type job" + dailyTask);
+		}
+	}
+	
+	public void deleteJobs(SchedulerConfig dailyTask) {
+		if ("CREATE_JOB".equals(dailyTask.getType())) {
+			String creationPolicy = env.getProperty("scheduler.dailyJob.creation");
+			if(creationPolicy.equalsIgnoreCase("monthly")) { //if the creation policy is set to monthly, create jobs for the rest of the month
+				DateTime currDate = DateTime.now();
+		        DateTime lastDate = currDate.dayOfMonth().withMaximumValue();
+				while(currDate.isBefore(lastDate) || currDate.isEqual(lastDate)) {
+					jobRepository.deleteScheduledJobs(dailyTask.getJob().getId(), DateUtil.convertToSQLDate(currDate.toDate()), DateUtil.convertToSQLDate(lastDate.toDate()));
+					currDate.plusDays(1);
+				}
+			}
+			dailyTask.setLastRun(new Date());
+		} else {
+			log.warn("Unknown scheduler config type job" + dailyTask);
+		}
+	}
+	
 	private void processDailyTasks(SchedulerConfig dailyTask) {
 		if ("CREATE_JOB".equals(dailyTask.getType())) {
-			jobCreationTask(dailyTask.getData());
+			jobCreationTask(dailyTask.getJob(), dailyTask.getData(), new Date());
 			dailyTask.setLastRun(new Date());
 		} else {
 			log.warn("Unknown scheduler config type job" + dailyTask);
@@ -272,14 +320,14 @@ public class SchedulerService extends AbstractService {
 	private void processWeeklyTasks(SchedulerConfig weeklyTask) {
 		if ("CREATE_JOB".equals(weeklyTask.getType())) {
 
-			jobCreationTask(weeklyTask.getData());
+			jobCreationTask(weeklyTask.getJob(), weeklyTask.getData(),new Date());
 			weeklyTask.setLastRun(new Date());
 		} else {
 			log.warn("Unknown scheduler config type job" + weeklyTask);
 		}
 	}
 
-	private void jobCreationTask(String data){
+	private void jobCreationTask(Job parentJob, String data, Date jobDate){
 		log.debug("Creating Job : "+data);
 		Map<String, String> dataMap = Splitter.on("&").withKeyValueSeparator("=").split(data);
 		String sTime = dataMap.get("plannedStartTime");
@@ -288,13 +336,13 @@ public class SchedulerService extends AbstractService {
 		try {
 			Date sHrs = sdf.parse(sTime);
 			Date eHrs = sdf.parse(eTime);
-			createJob(dataMap, eHrs, sHrs, eHrs);
+			createJob(parentJob, dataMap, jobDate, eHrs, sHrs, eHrs);
 		}catch(Exception e) {
 			log.error("Error while creating scheduled job ",e);
 		}
 	}
 
-	private JobDTO createJob(Map<String,String> dataMap, Date plannedEndTime, Date sHrs, Date eHrs) {
+	private JobDTO createJob(Job parentJob, Map<String,String> dataMap, Date jobDate, Date plannedEndTime, Date sHrs, Date eHrs) {
 		JobDTO job = new JobDTO();
 		job.setTitle(dataMap.get("title"));
 		job.setDescription(dataMap.get("description"));
@@ -304,15 +352,23 @@ public class SchedulerService extends AbstractService {
 		String plannedHours = dataMap.get("plannedHours");
 		Calendar plannedEndTimeCal = Calendar.getInstance();
 		plannedEndTimeCal.setTime(plannedEndTime);
-
+		
 		Calendar startTime = Calendar.getInstance();
+		startTime.setTime(jobDate);
+		//update the plannedEndTimeCal to the current job date in iteration
+		plannedEndTimeCal.set(Calendar.DAY_OF_MONTH, startTime.get(Calendar.DAY_OF_MONTH));
+		plannedEndTimeCal.set(Calendar.MONTH, startTime.get(Calendar.MONTH));
+
+		
 		Calendar endTime = Calendar.getInstance();
+		endTime.setTime(jobDate);
 		Calendar cal = DateUtils.toCalendar(sHrs);
 		int sHr = cal.get(Calendar.HOUR_OF_DAY);
 		int sMin = cal.get(Calendar.MINUTE);
 		log.debug("Start time hours ="+ sHr +", start time mins -"+ sMin);
 		startTime.set(Calendar.HOUR_OF_DAY, sHr);
 		startTime.set(Calendar.MINUTE, sMin);
+		startTime.getTime(); //to recalculate
 		cal = DateUtils.toCalendar(eHrs);
 		int eHr = cal.get(Calendar.HOUR_OF_DAY);
 		int eMin = cal.get(Calendar.MINUTE);
@@ -322,9 +378,11 @@ public class SchedulerService extends AbstractService {
 			endTime.set(Calendar.HOUR_OF_DAY, startTime.get(Calendar.HOUR_OF_DAY));
 			endTime.add(Calendar.HOUR_OF_DAY, 1);
 			endTime.set(Calendar.MINUTE, eMin);
+			endTime.getTime(); //to recalculate
 		}else {
 			endTime.set(Calendar.HOUR_OF_DAY, eHr);
 			endTime.set(Calendar.MINUTE, eMin);
+			endTime.getTime(); //to recalculate
 		}
 
 		job.setPlannedStartTime(startTime.getTime());
@@ -338,15 +396,19 @@ public class SchedulerService extends AbstractService {
 		if(StringUtils.isNotEmpty(frequency) &&
 				frequency.equalsIgnoreCase(FREQ_ONCE_EVERY_HOUR)) {
 			Calendar tmpCal = Calendar.getInstance();
+			tmpCal.set(Calendar.DAY_OF_MONTH, plannedEndTimeCal.get(Calendar.DAY_OF_MONTH));
+			tmpCal.set(Calendar.MONTH, plannedEndTimeCal.get(Calendar.MONTH));
 			tmpCal.set(Calendar.HOUR_OF_DAY, plannedEndTimeCal.get(Calendar.HOUR_OF_DAY));
 			tmpCal.set(Calendar.MINUTE,plannedEndTimeCal.get(Calendar.MINUTE));
+			tmpCal.getTime(); //recalculate
 			log.debug("Planned end time cal value = " + tmpCal.getTime());
 			log.debug("end time value based on frequency = " + endTime.getTime());
 			log.debug("planned end time after endTime " + tmpCal.getTime().after(endTime.getTime()));
 			if(tmpCal.getTime().after(endTime.getTime())) {
 				tmpCal.setTime(endTime.getTime());
 				tmpCal.add(Calendar.HOUR_OF_DAY, 1);
-				createJob(dataMap, plannedEndTime, endTime.getTime(), tmpCal.getTime());
+				tmpCal.getTime(); //recalculate
+				createJob(parentJob, dataMap, jobDate, plannedEndTime, endTime.getTime(), tmpCal.getTime());
 			}
 		}
 		return job;

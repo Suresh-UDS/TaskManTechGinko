@@ -4,31 +4,26 @@ angular.module('timeSheetApp')
     .factory('RateCardComponent', function RateCardComponent($http) {
         return {
         	createRateCard: function(rateCard){
-        	  return $http.post('http://localhost:8000/api/quotation/create',rateCard,options).then(function (response) {
+        	  return $http.post('api/rateCard',rateCard).then(function (response) {
                   console.log("Create Rate Card response");
         	      console.log(response);
         	      return response;
               })
             },
             findAll: function () {
-                return $http.get('api/project').then(function (response) {
-                    return response.data;
-                });
-            },
-            findSites: function (projectId) {
-                return $http.get('api/project/'+projectId+'/sites').then(function (response) {
+                return $http.get('api/rateCard').then(function (response) {
                     return response.data;
                 });
             },
             findOne: function(id){
-            	  return $http.get('api/project/'+id).then(function (response) {
+            	  return $http.get('api/rateCard/'+id).then(function (response) {
                       return response.data;
                   });
             },
-            updateProject: function (project, callback) {
+            updateRateCard: function (rateCard, callback) {
                 var cb = callback || angular.noop;
 
-                return Project.update(project,
+                return RateCard.update(rateCard,
                     function () {
                         return cb(project);
                     },
@@ -36,23 +31,52 @@ angular.module('timeSheetApp')
                         return cb(err);
                     }.bind(this)).$promise;
             },
-            deleteProject: function (project, callback) {
+            deleteRateCard: function (rateCard) {
 
-                var cb = callback || angular.noop;
+                // var cb = callback || angular.noop;
+                //
+                // return RateCardDelete.deleteRateCard(rateCard,
+                //     function () {
+                //         return cb(rateCard);
+                //     },
+                //     function (err) {
+                //         this.logout();
+                //         return cb(err);
+                //     }.bind(this)).$promise;
 
-                return ProjectDelete.deleteProject(project,
-                    function () {
-                        return cb(project);
-                    },
-                    function (err) {
-                        this.logout();
-                        return cb(err);
-                    }.bind(this)).$promise;
+                return $http.post('api/rateCard/delete',rateCard).then(function (response) {
+                    console.log("Deleted response");
+                    console.log(response);
+                    return response;
+                })
             },
             search: function(searchCriteria) {
-                return $http.post('api/project/search', searchCriteria).then(function (response) {
+
+                return $http.post('api/rateCard/search', searchCriteria).then(function (response) {
+                    console.log("Search response");
+                    console.log(response);
                     return response.data;
                 });
+            },
+
+            getRateTypes: function() {
+                return $http.get('api/rateCard/types').then(function (response) {
+                    return response.data;
+                });
+            },
+
+            getUomTypes: function() {
+                return $http.get('api/rateCard/uom').then(function (response) {
+                    return response.data;
+                });
+            },
+
+            getAllQuotations: function(){
+                return $http.get('api/rateCard/quotation/get').then(function (response) {
+                    console.log("All Quotation");
+                    console.log(response.data);
+                    return response.data;
+                })
             }
 
         };

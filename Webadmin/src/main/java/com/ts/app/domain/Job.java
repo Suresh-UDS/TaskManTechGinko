@@ -1,22 +1,33 @@
 package com.ts.app.domain;
 
-import com.ts.app.domain.util.StringUtil;
+import java.io.Serializable;
+import java.util.Date;
+import java.util.List;
 
-import javax.persistence.*;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
-
-import java.io.Serializable;
-import java.util.Date;
+import com.ts.app.domain.util.StringUtil;
 
 @Entity
 @Table(name = "job")
-@Cacheable(true)
-@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class Job extends AbstractAuditingEntity implements Serializable{
+
+	/**
+	 *
+	 */
+	private static final long serialVersionUID = 1L;
 
 	@Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -41,6 +52,10 @@ public class Job extends AbstractAuditingEntity implements Serializable{
 	private Employee employee;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "relieverId", nullable = true)
+    private Employee reliever;
+
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "locationId")
     private Location location;
 
@@ -51,6 +66,8 @@ public class Job extends AbstractAuditingEntity implements Serializable{
 	private String comments;
 	private JobStatus status;
 	private JobType type;
+
+	private boolean relieved;
 
 	@NotNull
     private Date plannedStartTime;
@@ -82,6 +99,15 @@ public class Job extends AbstractAuditingEntity implements Serializable{
 	private boolean completedDueEmailAlert;
 
 	private String frequency;
+
+    @OneToMany(mappedBy ="job", cascade = CascadeType.ALL)
+	private List<JobChecklist> checklistItems;
+
+    @ManyToOne(cascade={CascadeType.ALL})
+	@JoinColumn(name="parent_job_id")
+    private Job parentJob;
+
+
 
 	public Long getId() {
 		return id;
@@ -251,6 +277,33 @@ public class Job extends AbstractAuditingEntity implements Serializable{
 	public void setCompletedDueEmailAlert(boolean completedDueEmailAlert) {
 		this.completedDueEmailAlert = completedDueEmailAlert;
 	}
+
+    public Asset getAsset() {
+        return asset;
+    }
+
+    public void setAsset(Asset asset) {
+        this.asset = asset;
+    }
+	public String getFrequency() {
+		return frequency;
+	}
+	public void setFrequency(String frequency) {
+		this.frequency = frequency;
+	}
+	public List<JobChecklist> getChecklistItems() {
+		return checklistItems;
+	}
+	public void setChecklistItems(List<JobChecklist> checklistItems) {
+		this.checklistItems = checklistItems;
+	}
+	public Job getParentJob() {
+		return parentJob;
+	}
+	public void setParentJob(Job parentJob) {
+		this.parentJob = parentJob;
+	}
+
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
 		sb.append("Job Details - {" + StringUtil.SPACE);
@@ -269,19 +322,19 @@ public class Job extends AbstractAuditingEntity implements Serializable{
 		return sb.toString();
 	}
 
-    public Asset getAsset() {
-        return asset;
+    public Employee getReliever() {
+        return reliever;
     }
 
-    public void setAsset(Asset asset) {
-        this.asset = asset;
+    public void setReliever(Employee reliever) {
+        this.reliever = reliever;
     }
-	public String getFrequency() {
-		return frequency;
-	}
-	public void setFrequency(String frequency) {
-		this.frequency = frequency;
-	}
 
+    public boolean isRelieved() {
+        return relieved;
+    }
 
+    public void setRelieved(boolean relieved) {
+        this.relieved = relieved;
+    }
 }

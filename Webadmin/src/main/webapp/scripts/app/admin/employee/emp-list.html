@@ -2,7 +2,7 @@
 
     <div class="row" ng-init="loadEmployees()">
         <div class="col-md-8" ng-init="loadProjects()">
-            <h2 class="title">Employee</h2>
+            <!--<h2 class="title">Employee</h2>-->
         </div>
         <div class="col-md-4 txt-align-rgt">
             <button ui-sref="add-employee"  ng-class="{active: $state.includes('admin')}" has-authority="ROLE_ADMIN" class="btn btn-success align-left"> <i class="material-icons padding-right5">add</i>ADD<div class="ripple-container"></div></button>
@@ -32,7 +32,7 @@
                                                    class="form-control "
                                                    placeholder="Search Employee Id"
                                                    ng-model="selectedEmployee"
-                                                   ng-value="searchCriteria.employeesEmpId"
+                                                   ng-value="searchCriteria.employeeEmpId"
                                                    uib-typeahead="employee as employee.empId for employee in allEmployees | filter:$viewValue | limitTo:5" />
 
                                         </div>
@@ -99,6 +99,7 @@
                                 <th>Name</th>
                                 <th>Enrolled Face Id</th>
                                 <th>Authorize Face Id</th>
+                                <th>Status</th>
                                 <th class="disabled-sorting text-right">Actions</th>
                             </tr>
                             </thead>
@@ -109,7 +110,7 @@
                                 <td>{{employee.fullName}}</td>
 
                                 <td ng-if="employee.enrolled_face">
-                                    <a id="images" href="#" onClick="$('#enrollImageModal').modal()" data-target="#myModal" data-dismiss="#enrollImageModal" ng-click="loadEnrolledImage(employee.enrolled_face)">
+                                    <a id="images" href="#" onClick="$('#enrollImageModal').modal()" data-target="#enrollImageModal" data-dismiss="#enrollImageModal" ng-click="loadEnrolledImage(employee.enrolled_face)">
                                         <img src={{employee.enrolled_face}} width="30px" height="30px"/>
                                     </a>
                                 </td>
@@ -122,13 +123,20 @@
                                 </td>
                                 <td ng-if="employee.faceAuthorised && employee.faceIdEnrolled"><p style="color:green">Face Id Approved</p> </td>
                                 <td ng-if="!employee.faceAuthorised && !employee.faceIdEnrolled"><p style="color:red">Face Id not enrolled</p> </td>
-
+                                <td>
+                                    <button class="btn btn-primary btn-xs btn-warning"  ng-if="employee.reliever">Reliever</button>
+                                    <button class="btn btn-primary btn-xs btn-danger" disabled ng-if="employee.left">InActive</button>
+                                    <button class="btn btn-primary btn-xs btn-success"  ng-if="!employee.left">Active</button>
+                                </td>
                                 <td class="text-right">
-                                    <a   has-authority="ROLE_ADMIN" ng-click="getCheckInDetails(employee.id)" ui-sref="view-employee({ id: employee.id })"   class="btn btn-simple btn-info btn-icon like"><i class="material-icons">remove_red_eye</i></a>
-                                    <a   has-authority="ROLE_ADMIN" data-toggle="modal" data-target="#noticeModal" ng-click="getEmployeeDetails(employee.id)"  class="btn btn-simple btn-info btn-icon like"><i class="material-icons">date_range</i></a>
-                                    <button ng-class="{active: $state.includes('admin')}" has-authority="ROLE_ADMIN"  ui-sref="edit-employee({ id: employee.id })" type="button" rel="tooltip" title="Edit Profile" class="btn btn-success btn-simple btn-xs">
-                                        <i class="fa fa-edit"></i>
+                                    <button ng-disabled="employee.left" title="View" has-authority="ROLE_ADMIN" ng-click="getCheckInDetails(employee.id)" ui-sref="view-employee({ id: employee.id })"   class="btn btn-simple btn-info btn-icon like"><i style="font-size: 20px" class="material-icons">remove_red_eye</i></button>
+                                    <button ng-disabled="employee.left" title="Mark Attendance " has-authority="ROLE_ADMIN" data-toggle="modal" data-target="#noticeModal" ng-click="getEmployeeDetails(employee.id)"  class="btn btn-simple btn-info btn-icon like"><i style="font-size: 20px" class="material-icons">date_range</i></button>
+                                    <button ng-disabled="employee.left" ng-class="{active: $state.includes('admin')}" has-authority="ROLE_ADMIN"  ui-sref="edit-employee({ id: employee.id })" type="button" rel="tooltip" title="Edit Profile" class="btn btn-success btn-simple btn-xs">
+                                        <i style="font-size: 20px !important;" class="fa fa-edit"></i>
                                     </button>
+                                    <button ng-disabled="employee.left" title="Mark Left"   has-authority="ROLE_ADMIN"  data-toggle="modal" data-target="#leftModal" data-dismiss="#leftModal" ng-click="employeeDetails(employee.id)"  class="btn btn-simple btn-info btn-icon like"> <i style="font-size: 20px !important; color: #942a25" class="fas fa-user-times"></i></button>
+                                    <button ng-disabled="employee.left" title="Site Transfer"   has-authority="ROLE_ADMIN"  data-toggle="modal" data-target="#siteTransferModal" data-dismiss="#siteTransferModal"   class="btn btn-simple btn-info btn-icon like" ng-click="siteTransferDetails(employee);loadSites()" > <i style="font-size: 20px; color: orangered" class="material-icons">transfer_within_a_station</i></button>
+                                    <button ng-if="!employee.reliever" ng-disabled="employee.left" title="Relieve Employee"   has-authority="ROLE_ADMIN"  data-toggle="modal" data-target="#relieverConfirmation" data-dismiss="#relieverConfirmation" ng-click="getRelievers(employee)"   class="btn btn-simple btn-info btn-icon like"> <i style="font-size: 20px" class="material-icons">assignment_ind</i></button>
                                 </td>
 
                             </tr>
@@ -232,12 +240,159 @@
                         </div>
                     </div>
                 </div>
-
-
-
             </div>
             <div class="modal-footer text-center">
                 <button type="button" class="btn btn-info btn-round" data-dismiss="modal">close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="leftModal" tabindex="-1" role="dialog" aria-labelledby="leftModal" aria-hidden="true">
+    <div class="modal-dialog modal-notice">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="material-icons">clear</i></button>
+                <h5 class="modal-title" id="isLeftModal">Mark Employee as Left ?</h5>
+            </div>
+            <div class="modal-footer ">
+                <button type="button" class="btn btn-info btn-round" data-dismiss="modal" ng-click="updateEmployeeLeft(employee)">Yes</button>
+                <button type="button" class="btn btn-info btn-round" data-dismiss="modal">No</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="siteTransferModal" tabindex="-1" role="dialog" aria-labelledby="leftModal" aria-hidden="true">
+    <div class="modal-dialog modal-notice">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="material-icons">clear</i></button>
+                <h5 class="modal-title" id="siteTransfer ">Transfer Employee</h5>
+            </div>
+            <div class="modal-body">
+
+                <div class="col-md-12 addedActionList pdng-top15" ng-hide="!(transferEmployeeDetails.projectSites.length > 0)">
+                    <div class="form-group">
+                        <label class="">Current Site </label>
+                        <ul class="listOfActions list-group">
+                            <li class="list-group-item justify-content-between" ng-repeat="projSite in transferEmployeeDetails.projectSites" ng-bind-html-unsafe="projSite.text">
+                                {{projSite.projectName}}  -  {{projSite.siteName}}
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="col-md-12">
+                    <div class="form-group selectcon">
+                        <label class="control-label">To Site</label>
+                        <select class="siteList" ng-model="transferSite" ng-options="site as site.name for site in sites" >
+                        </select>
+                    </div>
+                </div>
+                <div class="row" ng-hide="!(transferEmployeeDetails.projectSites.length > 0)">
+                        <div class="form-group">
+                            <div class="checkbox col-md-12">
+                                <input type="radio" name="terms"ng-model="transferEmployeeOptions" value="delete"> Delete All upcoming data and Transfer employee
+                            </div>
+                            <div class="checkbox col-md-12">
+                                <input type="radio" name="terms" ng-model="transferEmployeeOptions" value="assign"> Assign another employee to the Jobs
+                            </div>
+
+                            <div ng-switch="transferEmployeeOptions" class="col-md-12">
+                                    <div class="form-group selectcon" ng-switch-when="assign">
+                                        <label class="control-label">Assign Employee</label>
+                                        <select ng-options="employee.id as employee.fullName for employee in allEmployees" ng-model="transferringEmployee" required random-directive>
+                                            <option value="">Please select...</option>
+                                        </select>
+                                    </div>
+                            </div>
+                         </div>
+                </div>
+            </div>
+            <div class="modal-footer ">
+                <button type="button" class="btn btn-info btn-round" data-dismiss="modal" ng-click="transferEmployee(transferEmployeeDetails,transferringEmployee)">Transfer Employee</button>
+                <button type="button" class="btn btn-info btn-round" data-dismiss="modal">No</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="enrollImageModal" class="modal fade" data-backdrop="false" tabindex="-1" role="dialog"
+     aria-labelledby="myModalLabel" aria-hidden="true" >
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <table >
+                    <thead>
+                    <tr >
+                        <th style="text-align: center">Enrolled Image</th>
+                    </tr>
+
+                    </thead>
+                    <tr>
+                        <td><br/></td>
+                    </tr>
+                    <tr>
+                        <td><img id="enrolledImage" width="250" height="250" src="#"
+                                 class="img-responsive"></td>
+                        <td>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+
+                    </tr>
+                </table>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="relieverConfirmation" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-notice">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="material-icons">clear</i></button>
+                <h5 class="modal-title">Assign Reliever</h5>
+            </div>
+
+            <div class="modal-body">
+                <table class="table" border="0">
+                    <tr class="filter-row gc-search-row">
+                        <td>
+                            <div class="form-group" >
+
+                                <input id="dateFilterFrom" type="text" class="form-control datepicker" ng-model="relieverDateFrom" value={{now}} placeholder="From Date" />
+                            </div>
+                        </td>
+
+                        <td>
+                            <div class="form-group" >
+
+                                <input id="dateFilterTo" type="text" class="form-control datepicker" ng-model="relieverDateTo"  value={{now}} placeholder="To Date" />
+                            </div>
+                        </td>
+
+                        <td>
+                            <div class="form-group" >
+                                <div class="dropdown">
+                                    <input type="text"
+                                           class="form-control "
+                                           placeholder="Search Reliever"
+                                           ng-model="selectedReliever"
+                                           ng-value="selectedReliever.name"
+                                           uib-typeahead="employee as employee.fullName for employee in relievers | filter:$viewValue | limitTo:5" />
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+
+            <div class="modal-footer ">
+                <button type="button" class="btn btn-info btn-round btn-sucess" data-dismiss="modal" ng-click="assignReliever(relievedEmployee)">Assign Reliever</button>
+                <button type="button" class="btn btn-info btn-round btn-danger" data-dismiss="modal">Cancel</button>
             </div>
         </div>
     </div>
@@ -638,33 +793,4 @@
 	<!--</div>-->
 </div>
 
-<div id="enrollImageModal" class="modal fade" data-backdrop="false" tabindex="-1" role="dialog"
-     aria-labelledby="myModalLabel" aria-hidden="true" >
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-body">
-                <table >
-                    <thead>
-                    <tr >
-                        <th style="text-align: center">Enrolled Image</th>
-                    </tr>
 
-                    </thead>
-                    <tr>
-                        <td><br/></td>
-                    </tr>
-                    <tr>
-                        <td><img id="enrolledImage" width="250" height="250" src="#"
-                                 class="img-responsive"></td>
-                        <td>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
-
-                    </tr>
-                </table>
-
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-            </div>
-        </div>
-    </div>
-</div>

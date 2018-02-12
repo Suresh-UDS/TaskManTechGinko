@@ -3,7 +3,7 @@
     <div class="col-md-8">
         <h2 class="title">Quotation</h2>
     </div>
-    <div class="col-md-4 txt-align-rgt">
+    <div class="col-md-4 txt-align-rgt" ng-init="loadAllQuotations()">
         <button ui-sref="add-quotation"  ng-class="{active: $state.includes('admin')}" has-authority="ROLE_ADMIN" class="btn btn-success align-left"> <i class="material-icons padding-right5">add</i>ADD<div class="ripple-container"></div></button>
         <button ng-click="refreshPage()" class="btn btn-warning align-left"> <i class="material-icons padding-right5">refresh</i>Reload<div class="ripple-container"></div></button>
     </div>
@@ -20,21 +20,24 @@
                     <table class="table table-striped">
                         <thead>
                         <tr>
-                            <th>ID</th>
-                            <th>Service</th>
+                            <th>Title</th>
+                            <th>Create By</th>
                             <th>Date</th>
                             <th>Status</th>
-                            <th>Approved by</th>
+                            <th>Amount</th>
                             <th class="text-right">Actions</th>
                         </tr>
                         </thead>
                         <tbody>
-                        <tr>
-                            <td>1003</td>
-                            <td>cleaning</td>
-                            <td>20-01-2018 </td>
-                            <td>Approved</td>
-                            <td>Manager</td>
+                        <tr ng-repeat="quotation in quotations">
+                            <td>{{quotation.title}}</td>
+                            <td>{{quotation.createdByUserName}}</td>
+                            <td>{{quotation.lastModifiedDate}} </td>
+                            <td ng-if="quotation.isApproved"> Approved</td>
+                            <td ng-if="quotation.isArchived"> Archived</td>
+                            <td ng-if="quotation.isDrafted">Drafted </td>
+                            <td ng-if="quotation.isSubmitted">Submitted </td>
+                            <td>{{quotation.grandTotal}} </td>
                             <td class="text-right">
                                 <a  ng-class="{active: $state.includes('admin')}" has-authority="ROLE_ADMIN" ui-sref="view-rateCard"  class="btn btn-simple btn-info"><i class="material-icons">remove_red_eye</i></a>
                                 <a  ng-class="{active: $state.includes('admin')}" has-authority="ROLE_ADMIN" ui-sref="edit-rateCard"  class="btn btn-simple btn-success"><i class="material-icons">edit</i></a>
@@ -42,84 +45,7 @@
                             </td>
 
                         </tr>
-                        <tr>
-                            <td>1003</td>
-                            <td>cleaning</td>
-                            <td>20-01-2018 </td>
-                            <td>Approved</td>
-                            <td>Manager</td>
-                            <td class="text-right">
-                                <a  ng-class="{active: $state.includes('admin')}" has-authority="ROLE_ADMIN" ui-sref="view-rateCard"  class="btn btn-simple btn-info"><i class="material-icons">remove_red_eye</i></a>
-                                <a  ng-class="{active: $state.includes('admin')}" has-authority="ROLE_ADMIN" ui-sref="edit-rateCard"  class="btn btn-simple btn-success"><i class="material-icons">edit</i></a>
-                                <a ng-class="{active: $state.includes('admin')}" has-authority="ROLE_ADMIN"  ng-click="deleteConfirm(site)"  onClick="$('#deleteModal').modal()" data-target="#myModal"  class="btn btn-simple btn-danger"><i class="material-icons">close</i></a>
-                            </td>
 
-                        </tr>
-                        <tr>
-                            <td>1003</td>
-                            <td>cleaning</td>
-                            <td>20-01-2018 </td>
-                            <td>Approved</td>
-                            <td>Manager</td>
-                            <td class="text-right">
-                                <a  ng-class="{active: $state.includes('admin')}" has-authority="ROLE_ADMIN" ui-sref="view-rateCard"  class="btn btn-simple btn-info"><i class="material-icons">remove_red_eye</i></a>
-                                <a  ng-class="{active: $state.includes('admin')}" has-authority="ROLE_ADMIN" ui-sref="edit-rateCard"  class="btn btn-simple btn-success"><i class="material-icons">edit</i></a>
-                                <a ng-class="{active: $state.includes('admin')}" has-authority="ROLE_ADMIN"  ng-click="deleteConfirm(site)"  onClick="$('#deleteModal').modal()" data-target="#myModal"  class="btn btn-simple btn-danger"><i class="material-icons">close</i></a>
-                            </td>
-
-                        </tr>
-                        <tr>
-                            <td>1003</td>
-                            <td>cleaning</td>
-                            <td>20-01-2018 </td>
-                            <td>Approved</td>
-                            <td>Manager</td>
-                            <td class="text-right">
-                                <a  ng-class="{active: $state.includes('admin')}" has-authority="ROLE_ADMIN" ui-sref="view-rateCard"  class="btn btn-simple btn-info"><i class="material-icons">remove_red_eye</i></a>
-                                <a  ng-class="{active: $state.includes('admin')}" has-authority="ROLE_ADMIN" ui-sref="edit-rateCard"  class="btn btn-simple btn-success"><i class="material-icons">edit</i></a>
-                                <a ng-class="{active: $state.includes('admin')}" has-authority="ROLE_ADMIN"  ng-click="deleteConfirm(site)"  onClick="$('#deleteModal').modal()" data-target="#myModal"  class="btn btn-simple btn-danger"><i class="material-icons">close</i></a>
-                            </td>
-
-                        </tr>
-                        <tr>
-                            <td>1003</td>
-                            <td>cleaning</td>
-                            <td>20-01-2018 </td>
-                            <td>Approved</td>
-                            <td>Manager</td>
-                            <td class="text-right">
-                                <a  ng-class="{active: $state.includes('admin')}" has-authority="ROLE_ADMIN" ui-sref="view-rateCard"  class="btn btn-simple btn-info"><i class="material-icons">remove_red_eye</i></a>
-                                <a  ng-class="{active: $state.includes('admin')}" has-authority="ROLE_ADMIN" ui-sref="edit-rateCard"  class="btn btn-simple btn-success"><i class="material-icons">edit</i></a>
-                                <a ng-class="{active: $state.includes('admin')}" has-authority="ROLE_ADMIN"  ng-click="deleteConfirm(site)"  onClick="$('#deleteModal').modal()" data-target="#myModal"  class="btn btn-simple btn-danger"><i class="material-icons">close</i></a>
-                            </td>
-
-                        </tr>
-                        <tr>
-                            <td>1003</td>
-                            <td>cleaning</td>
-                            <td>20-01-2018 </td>
-                            <td>Approved</td>
-                            <td>Manager</td>
-                            <td class="text-right">
-                                <a  ng-class="{active: $state.includes('admin')}" has-authority="ROLE_ADMIN" ui-sref="view-rateCard"  class="btn btn-simple btn-info"><i class="material-icons">remove_red_eye</i></a>
-                                <a  ng-class="{active: $state.includes('admin')}" has-authority="ROLE_ADMIN" ui-sref="edit-rateCard"  class="btn btn-simple btn-success"><i class="material-icons">edit</i></a>
-                                <a ng-class="{active: $state.includes('admin')}" has-authority="ROLE_ADMIN"  ng-click="deleteConfirm(site)"  onClick="$('#deleteModal').modal()" data-target="#myModal"  class="btn btn-simple btn-danger"><i class="material-icons">close</i></a>
-                            </td>
-
-                        </tr>
-                        <tr>
-                            <td>1003</td>
-                            <td>cleaning</td>
-                            <td>20-01-2018 </td>
-                            <td>Approved</td>
-                            <td>Manager</td>
-                            <td class="text-right">
-                                <a  ng-class="{active: $state.includes('admin')}" has-authority="ROLE_ADMIN" ui-sref="view-rateCard"  class="btn btn-simple btn-info"><i class="material-icons">remove_red_eye</i></a>
-                                <a  ng-class="{active: $state.includes('admin')}" has-authority="ROLE_ADMIN" ui-sref="edit-rateCard"  class="btn btn-simple btn-success"><i class="material-icons">edit</i></a>
-                                <a ng-class="{active: $state.includes('admin')}" has-authority="ROLE_ADMIN"  ng-click="deleteConfirm(site)"  onClick="$('#deleteModal').modal()" data-target="#myModal"  class="btn btn-simple btn-danger"><i class="material-icons">close</i></a>
-                            </td>
-
-                        </tr>
 
 
                         </tbody>
@@ -130,7 +56,7 @@
     </div>
 </div>
 
-<div class="card margin-TB-5 txt-align-center" ng-hide="users">
+<div class="card margin-TB-5 txt-align-center" ng-hide="quotations">
 
     <div class="card-content">
 

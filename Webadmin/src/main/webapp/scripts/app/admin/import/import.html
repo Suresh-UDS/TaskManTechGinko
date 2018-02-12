@@ -1,0 +1,164 @@
+<div class="gc-container">
+	<div class="success-message hidden"></div>
+
+
+    <div class="row">
+
+        <div class="col-md-12">
+
+            
+            
+            <div class="card">
+            		<div class="card-header card-header-icon" data-background-color="green">
+                     <i class="material-icons">domain</i><h4 class="card-title">Client</h4>
+                     
+                 </div>
+            
+                <div class="card-content">
+                    <form name="importClientForm" ng-submit="importClients()">
+						<div class="row">
+							 
+							  <div class="form-group label-floating" >
+                                  <div class="col-md-4">
+                                      <input type="file"
+                                             class="form-control" style="opacity:100;position:relative"
+                                             ng-model="selectedClientFile"
+                                             name="clientFile"
+                                      />
+                                  
+                                  </div>
+                                  <div class="col-md-1">
+                                   <button class="btn btn-success" ng-click="" >
+                                        <span class="btn-label">
+                                       		<i class="material-icons">file_upload</i>
+                                   		</span>Import Clients
+                                   </button>
+                                  </div>
+                              </div>
+						</div>
+			
+
+
+                    </form>
+                </div>
+            </div>
+            
+            <div class="card">
+            		<div class="card-header card-header-icon" data-background-color="green">
+                     <i class="material-icons">location_city</i><h4 class="card-title">Sites</h4>
+                     
+                 </div>
+            
+                <div class="card-content">
+                    <form name="importSiteForm" ng-submit="importSites()">
+						<div class="row">
+							 
+							  <div class="form-group label-floating" >
+                                  <div class="col-md-4">
+                                      <input type="file"
+                                             class="form-control" style="opacity:100;position:relative"
+                                             ng-model="selectedSiteFile"
+                                             name="siteFile"
+                                      />
+                                  
+                                  </div>
+                                  <div class="col-md-1">
+                                   <button class="btn btn-success" ng-click="" >
+                                        <span class="btn-label">
+                                       		<i class="material-icons">file_upload</i>
+                                   		</span>Import Sites
+                                   </button>
+                                  </div>
+                              </div>
+						</div>
+			
+
+
+                    </form>
+                </div>
+            </div>
+            
+            <div class="card">
+            		<div class="card-header card-header-icon" data-background-color="green">
+                     <i class="material-icons">people</i><h4 class="card-title">Employees</h4>
+                     
+                 </div>
+            
+                <div class="card-content">
+                    <form name="importEmployeeForm" ng-submit="importEmployees()">
+						<div class="row">
+							 
+							  <div class="form-group label-floating" >
+                                  <div class="col-md-4">
+                                      <input type="file"
+                                             class="form-control" style="opacity:100;position:relative"
+                                             ng-model="selectedEmployeeFile"
+                                             name="employeeFile"
+                                      />
+                                  
+                                  </div>
+                                  <div class="col-md-1">
+                                   <button class="btn btn-success" ng-click="" >
+                                        <span class="btn-label">
+                                       		<i class="material-icons">file_upload</i>
+                                   		</span>Import Employees
+                                   </button>
+                                  </div>
+                              </div>
+							</div>
+			
+
+
+                    </form>
+                </div>
+            </div>
+            
+            <div class="card">
+            		<div class="card-header card-header-icon" data-background-color="green">
+                     <i class="material-icons">work</i><h4 class="card-title">Jobs</h4>
+                     
+                 </div>
+            
+                <div class="card-content">
+                    <form name="importJobForm" ng-submit="importJobs()">
+						<div class="row">
+							 
+							  <div class="form-group label-floating" >
+                                  <div class="col-md-4">
+                                      <input type="file"
+                                             class="form-control" style="opacity:100;position:relative"
+                                             file-model ng-model="selectedJobFile"
+                                             id="selectedJobFileField"
+                                      />
+                                  
+                                  </div>
+                                  <div class="col-md-1">
+                                   <button class="btn btn-success" ng-click="uploadJobFile()" >
+                                        <span class="btn-label">
+                                       		<i class="material-icons">file_upload</i>
+                                   		</span>Import Jobs
+                                   </button>
+                                  </div>
+                                  <div class="col-md-2">
+                                  </div>
+                                  <div class="col-md-3" ng-hide="!jobImportMsg()">
+                                  	<span class="card-title">Status - {{jobImportMsg()}}</span>
+                                  </div>
+                                  
+                              </div>
+						</div>
+			
+
+
+                    </form>
+                </div>
+            </div>
+
+
+        </div>
+
+    </div>
+
+
+   
+</div>

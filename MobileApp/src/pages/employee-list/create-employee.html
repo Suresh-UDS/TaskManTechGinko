@@ -1,0 +1,184 @@
+<!--
+  Generated template for the SiteListPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+  <ion-navbar no-border>
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>Employee List</ion-title>
+  </ion-navbar>
+    <ion-segment [(ngModel)]="categories" class="segmnt margin-auto" color="clr-blue">
+      <ion-segment-button value="basic">
+        Basic
+      </ion-segment-button>
+      <ion-segment-button value="login" >
+        Login
+      </ion-segment-button>
+    </ion-segment>
+
+</ion-header>
+
+<ion-content padding>
+  <div [ngSwitch]="categories">
+
+    <ion-list *ngSwitchCase="'basic'">
+      <div class="card">
+        <div class="card-content">
+          <ion-row>
+
+            <ion-col col-12>
+                <div class="margin-auto empl-round" (click)="viewCamera()">
+                  <img src="img/user.png">
+                </div>
+            </ion-col>
+
+            <ion-col col-12>
+
+              <div class="form-group label-floating" [ngClass]="{'has-error': eMsg=='all'||eMsg=='firstname'}">
+                <label class="control-label">First Name</label>
+                <input class="form-control" type="text" [(ngModel)]="firstname" id="firstname" name="firstname" #fname="ngModel" required [ngClass]="{'has-error': fname.errors || eMsg=='all'|| eMsg=='firstname'}">
+                <div *ngIf="fname.errors && (fname.dirty || fname.touched)" class="error-msg">
+
+                </div>
+
+                <div *ngIf="fname.errors && (fname.untouched )" class="error-msg">
+
+                </div>
+              </div>
+
+            </ion-col>
+
+            <ion-col col-12>
+
+              <div class="form-group label-floating" [ngClass]="{'has-error': eMsg=='all'||eMsg=='lastname'}">
+                <label class="control-label">Last Name</label>
+                <input class="form-control" type="text" [(ngModel)]="lastname" id="lastname" name="lastname" #lname="ngModel" required [ngClass]="{'has-error': lname.errors || eMsg=='all'|| eMsg=='lastname'}">
+                <div *ngIf="lname.errors && (lname.dirty || lname.touched)" class="error-msg">
+
+                </div>
+
+                <div *ngIf="lname.errors && (lname.untouched )" class="error-msg">
+
+                </div>
+              </div>
+
+            </ion-col>
+
+            <ion-col col-12>
+              <div class="form-group label-floating" [ngClass]="{'has-error': eMsg=='all'||eMsg=='number'}">
+                <label class="control-label">Mobile Number</label>
+                <input class="form-control" type="number" [(ngModel)]="number" id="number" name="number" #num="ngModel" required [ngClass]="{'has-error': num.errors || eMsg=='all'|| eMsg=='number'}">
+                <div *ngIf="num.errors && (num.dirty || num.touched)" class="error-msg">
+
+                </div>
+                <div *ngIf="num.errors && (num.untouched )" class="error-msg">
+
+                </div>
+              </div>
+            </ion-col>
+
+            <ion-col col-12>
+              <div class="form-group label-floating" [ngClass]="{'has-error': eMsg=='all'||eMsg=='mail'}">
+                <label class="control-label">Mail Id</label>
+                <input class="form-control" type="email" [(ngModel)]="mail" id="mail" name="mail" #mid="ngModel" required [ngClass]="{'has-error': mid.errors || eMsg=='all'|| eMsg=='number'}">
+                <div *ngIf="mid.errors && (mid.dirty || mid.touched)" class="error-msg">
+
+                </div>
+                <div *ngIf="mid.errors && (mid.untouched )" class="error-msg">
+
+                </div>
+              </div>
+            </ion-col>
+
+
+            <ion-col col-12>
+              <div class="form-group label-floating" [ngClass]="{'has-error': eMsg=='all'||eMsg=='eId'}">
+                <label class="control-label">Employee Id</label>
+                <input class="form-control" type="text" [(ngModel)]="eId" id="eId" name="number" #id="ngModel" required [ngClass]="{'has-error': id.errors || eMsg=='all'|| eMsg=='eId'}">
+                <div *ngIf="id.errors && (id.dirty || id.touched)" class="error-msg">
+
+                </div>
+
+                <div *ngIf="id.errors && (id.untouched )" class="error-msg">
+
+                </div>
+              </div>
+            </ion-col>
+
+            <ion-col col-12>
+
+              <div class="form-group label-floating" [ngClass]="{'has-error': eMsg=='all'||eMsg=='address'}">
+                <label class="control-label">Address</label>
+                <input class="form-control" type="text" [(ngModel)]="address" id="address" name="address" #add="ngModel" required [ngClass]="{'has-error': add.errors || eMsg=='all'|| eMsg=='address'}">
+                <div *ngIf="add.errors && (add.dirty || add.touched)" class="error-msg">
+
+                </div>
+
+                <div *ngIf="add.errors && (add.untouched )" class="error-msg">
+
+                </div>
+              </div>
+
+
+            </ion-col>
+
+            <button type="submit" class="btn btn-warning  margin-auto" (click)="addJob()">Next</button>
+
+            <div class="clearfix"></div>
+          </ion-row>
+        </div>
+      </div>
+    </ion-list>
+    <ion-list *ngSwitchCase="'login'">
+      <div class="card">
+        <div class="card-content">
+          <ion-row>
+            <ion-col col-12>
+              <div class="form-group label-floating">
+
+                <div class="form-group label-floating" [ngClass]="{'has-error': eMsg=='all'||eMsg=='username'}">
+                  <label class="control-label">User Name</label>
+                  <input class="form-control" type="text" [(ngModel)]="username" id="username" name="username" #uname="ngModel" required [ngClass]="{'has-error': uname.errors || eMsg=='all'|| eMsg=='username'}">
+                  <div *ngIf="uname.errors && (uname.dirty || uname.touched)" class="error-msg">
+
+                  </div>
+
+                  <div *ngIf="uname.errors && (uname.untouched )" class="error-msg">
+
+                  </div>
+                </div>
+              </div>
+
+            </ion-col>
+
+            <ion-col col-12>
+
+              <div class="form-group label-floating" [ngClass]="{'has-error': eMsg=='all'||eMsg=='password'}">
+                <label class="control-label">Password</label>
+                <input class="form-control" type="text" [(ngModel)]="password" id="password" name="password" #pass="ngModel" required [ngClass]="{'has-error': pass.errors || eMsg=='all'|| eMsg=='password'}">
+                <div *ngIf="pass.errors && (pass.dirty || pass.touched)" class="error-msg">
+
+                </div>
+
+                <div *ngIf="pass.errors && (pass.untouched )" class="error-msg">
+
+                </div>
+              </div>
+
+
+            </ion-col>
+
+
+            <button type="submit" class="btn btn-warning  margin-auto" (click)="login()">Next</button>
+
+            <div class="clearfix"></div>
+          </ion-row>
+        </div>
+      </div>
+    </ion-list>
+  </div>
+</ion-content>
