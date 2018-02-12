@@ -21,7 +21,8 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 
 
 @Service
-public class SiteLocationService {
+public class
+SiteLocationService {
 
     @Value("${locationService.url}")
     private String locSvcEndpoint;

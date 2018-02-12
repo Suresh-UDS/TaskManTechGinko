@@ -306,4 +306,59 @@ public class EmployeeResource {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+    @RequestMapping(value = "/employee/assignJobsAndTransfer", method = RequestMethod.POST)
+    public ResponseEntity<?> transferEmployee(@RequestBody RelieverDTO reliever) {
+
+        log.info("Inside assign Reliever" + reliever.getEmployeeId() + " , "+ reliever.getRelieverId());
+
+        EmployeeDTO selectedEmployee = employeeService.findByEmpId(reliever.getEmployeeEmpId());
+        EmployeeDTO selectedReliever = employeeService.findByEmpId(reliever.getRelieverEmpId());
+        selectedEmployee.setRelieved(true);
+        try {
+            employeeService.updateEmployee(selectedEmployee,false);
+            jobService.assignJobsForDifferentEmployee(selectedEmployee,selectedReliever, reliever.getRelievedFromDate());
+        }catch(Exception e) {
+            throw new TimesheetException(e, selectedEmployee);
+        }
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/employee/deleteJobsAndTransfer", method = RequestMethod.POST)
+    public ResponseEntity<?> deleteJobsAndTransfer(@RequestBody RelieverDTO reliever) {
+
+        log.info("Inside assign Reliever" + reliever.getEmployeeId() + " , "+ reliever.getRelieverId());
+
+        EmployeeDTO selectedEmployee = employeeService.findByEmpId(reliever.getEmployeeEmpId());
+        selectedEmployee.setRelieved(true);
+        try {
+            employeeService.updateEmployee(selectedEmployee,false);
+            jobService.deleteJobsForEmployee(selectedEmployee,reliever.getRelievedFromDate());
+        }catch(Exception e) {
+            throw new TimesheetException(e, selectedEmployee);
+        }
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/designation", method = RequestMethod.GET)
+    public List<DesignationDTO> findAllDesignations() {
+        log.info("--Invoked EmployeeResource.findAllDesignations --");
+        return employeeService.findAllDesignations();
+    }
+
+    @RequestMapping(value = "/designation", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+    @Timed
+    public ResponseEntity<?> saveDesignation(@Valid @RequestBody DesignationDTO designationDTO, HttpServletRequest request) {
+        log.info("Inside the save designation-" + designationDTO);
+        log.info("Inside Save designation"+designationDTO.getName());
+        long userId = SecurityUtils.getCurrentUserId();
+        try {
+            DesignationDTO designation= employeeService.createDesignation(designationDTO);
+        }catch(Exception e) {
+            throw new TimesheetException(e, designationDTO);
+        }
+        return new ResponseEntity<>(HttpStatus.CREATED);
+    }
+
+
+
 }

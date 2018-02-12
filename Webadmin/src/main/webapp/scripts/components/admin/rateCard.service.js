@@ -31,35 +31,52 @@ angular.module('timeSheetApp')
                         return cb(err);
                     }.bind(this)).$promise;
             },
-            deleteRateCard: function (rateCard, callback) {
+            deleteRateCard: function (rateCard) {
 
-                var cb = callback || angular.noop;
+                // var cb = callback || angular.noop;
+                //
+                // return RateCardDelete.deleteRateCard(rateCard,
+                //     function () {
+                //         return cb(rateCard);
+                //     },
+                //     function (err) {
+                //         this.logout();
+                //         return cb(err);
+                //     }.bind(this)).$promise;
 
-                return RateCardDelete.deleteRateCard(rateCard,
-                    function () {
-                        return cb(rateCard);
-                    },
-                    function (err) {
-                        this.logout();
-                        return cb(err);
-                    }.bind(this)).$promise;
+                return $http.post('api/rateCard/delete',rateCard).then(function (response) {
+                    console.log("Deleted response");
+                    console.log(response);
+                    return response;
+                })
             },
             search: function(searchCriteria) {
+
                 return $http.post('api/rateCard/search', searchCriteria).then(function (response) {
+                    console.log("Search response");
+                    console.log(response);
                     return response.data;
                 });
             },
-            
+
             getRateTypes: function() {
                 return $http.get('api/rateCard/types').then(function (response) {
                     return response.data;
                 });
             },
-            
+
             getUomTypes: function() {
                 return $http.get('api/rateCard/uom').then(function (response) {
                     return response.data;
                 });
+            },
+
+            getAllQuotations: function(){
+                return $http.get('api/rateCard/quotation/get').then(function (response) {
+                    console.log("All Quotation");
+                    console.log(response.data);
+                    return response.data;
+                })
             }
 
         };

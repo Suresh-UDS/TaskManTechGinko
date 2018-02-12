@@ -181,7 +181,7 @@
                                                 <div class="form-group ">
                                                     <label class="control-label">Manager</label>
                                                     <div class="dropdown">
-                                                        <input ng-focus="loadAllManagers()" type="text" class="form-control" ng-model="selectedManager" name="manager"
+                                                        <input ng-focus="loadAllManagers()" type="text" class="form-control" ng-model="selectedManager" name="manager" ng-value="employee.manager.name"
                                                                uib-typeahead="employee as employee.name for employee in allManagers | filter:$viewValue | limitTo:10"
                                                                ng-minlength=1 ng-maxlength=50 ng-pattern="/^[A-Za-z0-9\s]*$/"  autocomplete="off" />
                                                         <div ng-show="form.$submitted || form.manager.$touched">
@@ -318,7 +318,7 @@
                                                 <div class="form-group">
                                                     <div class="checkbox">
                                                         <label>
-                                                            <input type="checkbox" name="reliever" ng-model="employee.reliever"> Mark As Reliever
+                                                            <input type="checkbox" name="terms">
                                                         </label>
                                                     </div>
                                                 </div>
@@ -343,7 +343,7 @@
 
                                                 <div class="form-group">
                                                     <button class="btn btn-success" type="submit"
-                                                            id="form-button-save" >
+                                                            id="form-button-save" ng-disabled="form.$invalid">
                                                         <span class="btn-label">
                                             <i class="material-icons">check</i>
                                         </span> Save

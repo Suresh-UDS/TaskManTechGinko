@@ -22,12 +22,19 @@ angular.module('timeSheetApp')
         $scope.selectedChecklist;
         $scope.jobChecklistItems =[];
 
+        $scope.initCalender = function(){
+
+            demo.initFormExtendedDatetimepickers();
+
+
+        };
+
         $scope.loadProjects = function () {
         	ProjectComponent.findAll().then(function (data) {
                 $scope.projects = data;
             });
         };
-        
+
         $scope.loadChecklists = function () {
         		ChecklistComponent.findAll().then(function (data) {
         			console.log('retrieved checklists - ' + JSON.stringify(data));
@@ -140,7 +147,7 @@ angular.module('timeSheetApp')
         	var items = $scope.selectedChecklist.items;
         	for(var i =0; i<items.length;i++) {
         		var checklistItem = {
-        			"checklistId" : $scope.selectedChecklist.id,	
+        			"checklistId" : $scope.selectedChecklist.id,
         			"checklistName" : $scope.selectedChecklist.name,
         			"checklistItemId" : items[i].id,
         			"checklistItemName" : items[i].name,
@@ -160,7 +167,7 @@ angular.module('timeSheetApp')
 	        	var items = $scope.selectedChecklist.items;
 	        	for(var i =0; i<items.length;i++) {
 	        		var checklistItem = {
-	        			"checklistId" : $scope.selectedChecklist.id,	
+	        			"checklistId" : $scope.selectedChecklist.id,
 	        			"checklistName" : $scope.selectedChecklist.name,
 	        			"checklistItemId" : items[i].id,
 	        			"checklistItemName" : items[i].name,
@@ -169,7 +176,7 @@ angular.module('timeSheetApp')
 	        		}
 	        		$scope.jobChecklistItems.push(checklistItem);
 	        	}
-	        	
+
 	        	$scope.job.siteId = $scope.selectedSite.id
 	            $scope.job.locationId = $scope.selectedLocation.id;
 	        	$scope.job.checklistItems = $scope.jobChecklistItems;
@@ -372,4 +379,6 @@ angular.module('timeSheetApp')
             }
             $scope.search();
         };
+
+        $scope.initCalender();
     });
