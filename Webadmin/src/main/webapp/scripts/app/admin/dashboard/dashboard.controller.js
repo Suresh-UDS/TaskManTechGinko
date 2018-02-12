@@ -130,7 +130,7 @@ angular.module('timeSheetApp')
 
         $scope.changeProject = function() {
         		console.log('selected project - ' + JSON.stringify($scope.selectedProject));
-        		$scope.loadSites($scope.selectedProject);
+        		$scope.loadSites($scope.selectedProject.id);
         		$scope.selectedSite = null;
         		$scope.refreshReport();
         }
