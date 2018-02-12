@@ -181,6 +181,18 @@ public class SiteService extends AbstractService {
 		return mapperUtil.toModel(entity, SiteDTO.class);
 	}
 
+	public List<SiteDTO> searchSiteList(SearchCriteria searchCriteria){
+	    User user= userRepository.findOne(searchCriteria.getUserId());
+        SearchResult<SiteDTO> result = new SearchResult<SiteDTO>();
+        List<Site> siteList = null;
+        log.debug("Inside search result" + searchCriteria.getName());
+
+        siteList = siteRepository.findSitesByName(searchCriteria.getName());
+
+        return mapperUtil.toModelList(siteList,SiteDTO.class);
+
+    }
+
 	public SearchResult<SiteDTO> findBySearchCrieria(SearchCriteria searchCriteria) {
 		User user = userRepository.findOne(searchCriteria.getUserId());
 		Hibernate.initialize(user.getEmployee());

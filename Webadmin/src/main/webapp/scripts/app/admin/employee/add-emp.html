@@ -77,19 +77,18 @@
                                             </div>
                                             <div class="col-md-6">
                                                 <div class="form-group selectcon">
-                                                    <label class="control-label">Designation</label>
-                                                    <select class="siteList" ng-model="employee.designation">
-                                                        <option ng-repeat="designation in employeeDesignations">{{designation}}</option>
+                                                    <select class="siteList" ng-model="employee.designation" ng-options="designation as designation.designation for designation in designations">
+                                                        <option value="">Please select Designation..</option>
                                                     </select>
 
-                                                    <a   data-toggle="collapse" data-target="#collapseExample" class="btn btn-round btn-fab btn-fab-mini" aria-expanded="false" aria-controls="collapseExample">
+                                                    <a href="javascript:;"  data-toggle="collapse" data-parent="#accordian" data-target="#addDesignation" class="btn btn-round btn-fab btn-fab-mini btn-simple" aria-expanded="false" aria-controls="collapseExample">
                                                         <i class="material-icons">add</i>
                                                     </a>
-                                                    <div class="collapse" id="collapseExample">
-                                                        <div class="card card-body">
+                                                    <div class="collapse" id="addDesignation">
+                                                        <div class="">
                                                             <input id='designationName' ng-model="designation"
                                                                    name='designation' type='text' value=""/>
-                                                            <a class="btn btn-success btn-fab btn-fab-mini" ng-click="addDesignation()">Add</a>
+                                                            <a class="btn btn-success"  ng-click="addDesignation()">Add</a>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -241,6 +240,7 @@
                                                 <div class="form-group label-floating">
                                                     <label class="control-label">Client</label>
                                                     <div class="dropdown">
+
                                                         <input type="text" class="form-control" ng-model="selectedProject" name="projectName" ng-value="selectedProject.name"
                                                                uib-typeahead="project as project.name for project in projects | filter:$viewValue | limitTo:5"
                                                                ng-minlength=2 ng-maxlength=50 ng-pattern="/^[A-Za-z0-9\s&-/]*$/"  autocomplete="off" />
@@ -270,10 +270,11 @@
                                             <div class="col-md-4">
                                                 <div class="form-group label-floating">
                                                     <label class="control-label">Site</label>
-                                                    <div class="dropdown">
-                                                        <input ng-focus="loadSites()" type="text" class="form-control"  ng-model="selectedSite" name="siteName" ng-value="selectedSite.name"
-                                                               uib-typeahead="site as site.name for site in sites | filter:$viewValue | limitTo:5"
-                                                               ng-minlength=2 ng-maxlength=50 ng-pattern="/^[A-Za-z0-9\s&-/]*$/"  autocomplete="off" />
+                                                    <div >
+                                                        <!--<input ng-focus="loadSites()" type="text" class="form-control"  ng-model="selectedSite" name="siteName" ng-value="selectedSite.name"-->
+                                                               <!--uib-typeahead="site as site.name for site in sites | filter:$viewValue | limitTo:5"-->
+                                                               <!--ng-minlength=2 ng-maxlength=50 ng-pattern="/^[A-Za-z0-9\s&-/]*$/"  autocomplete="off" />-->
+                                                        <input class="form-control" type="text" ng-model="asyncSelected" uib-typeahead="site for sites in getSites($viewValue)" typeahead-loading="loadingLocations" typeahead-no-results="noResults" class="form-control">
                                                         <div ng-show="form.$submitted || form.siteName.$touched">
                                                             <div ng-show="form.siteName.$dirty || form.siteName.$invalid">
                                                                 <p class="help-block" style="color:maroon"
@@ -390,10 +391,10 @@
                                             				<i class="material-icons">check</i>
                                         				</span> Save
                                                 </button>
-                                                <button class="btn btn-info" type="submit"
-                                                        id="save-and-go-back-button" ng-disabled="form.$invalid">
-                                                    <i class="material-icons">rotate_left</i> Save and go back to list
-                                                </button>
+                                                <!--<button class="btn btn-info" type="submit"-->
+                                                        <!--id="save-and-go-back-button" ng-disabled="form.$invalid">-->
+                                                    <!--<i class="material-icons">rotate_left</i> Save and go back to list-->
+                                                <!--</button>-->
                                                 <button class="btn btn-danger" type="button"
                                                         ng-click="cancelEmployee()" id="cancel-button">
                                                     <i class="material-icons">close</i> Cancel
@@ -481,22 +482,5 @@
 
 </div>
 
-<div class="modal right fade" id="addDesgination" tabindex="-1" role="dialog" aria-labelledby="RightModal">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="myModalLabel2">Add Designation</h4>
-            </div>
-
-            <div class="modal-body">
-
-
-            </div>
-
-        </div><!-- modal-content -->
-    </div><!-- modal-dialog -->
-</div>
 
 

@@ -349,7 +349,7 @@ public class EmployeeResource {
     @Timed
     public ResponseEntity<?> saveDesignation(@Valid @RequestBody DesignationDTO designationDTO, HttpServletRequest request) {
         log.info("Inside the save designation-" + designationDTO);
-        log.info("Inside Save designation"+designationDTO.getName());
+        log.info("Inside Save designation"+designationDTO.getDesignation());
         long userId = SecurityUtils.getCurrentUserId();
         try {
             DesignationDTO designation= employeeService.createDesignation(designationDTO);

@@ -65,4 +65,8 @@ public interface SiteRepository extends JpaRepository<Site, Long> {
 	@Query("SELECT s FROM Site s WHERE (s.id = :siteId or s.project.id = :projectId) and s.active='Y'")
 	Page<Site> findSitesByIdOrProjectId(@Param("siteId") long siteId, @Param("projectId") long projectId, Pageable pageRequest);
 
+
+    @Query("SELECT s FROM Site s WHERE s.name like %:name% and s.active='Y'")
+    List<Site> findSitesByName(@Param("name") String name);
+
 }
