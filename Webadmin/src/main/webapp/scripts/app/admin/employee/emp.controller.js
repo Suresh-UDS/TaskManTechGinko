@@ -118,6 +118,7 @@ angular.module('timeSheetApp')
         }
 
         $scope.loadSites = function () {
+        	console.log('selected project - ' + JSON.stringify($scope.selectedProject));
         	if($scope.selectedProject) {
             	ProjectComponent.findSites($scope.selectedProject.id).then(function (data) {
                     $scope.sites = data;

@@ -77,7 +77,7 @@
                                             </div>
                                             <div class="col-md-6">
                                                 <div class="form-group selectcon">
-                                                    <select class="siteList" ng-model="employee.designation" ng-options="designation as designation.designation for designation in designations">
+                                                    <select class="siteList" ng-model="employee.designation" ng-options="designation.designation as designation.designation for designation in designations">
                                                         <option value="">Please select Designation..</option>
                                                     </select>
 
@@ -243,6 +243,7 @@
 
                                                         <input type="text" class="form-control" ng-model="selectedProject" name="projectName" ng-value="selectedProject.name"
                                                                uib-typeahead="project as project.name for project in projects | filter:$viewValue | limitTo:5"
+                                                               ng-blur="loadSites()"
                                                                ng-minlength=2 ng-maxlength=50 ng-pattern="/^[A-Za-z0-9\s&-/]*$/"  autocomplete="off" />
                                                         <div ng-show="form.$submitted || form.projectName.$touched">
                                                             <div ng-show="form.projectName.$dirty || form.projectName.$invalid">
