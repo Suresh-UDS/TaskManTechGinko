@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('timeSheetApp')
-    .controller('EmployeeController', function ($rootScope, $scope, $state, $timeout, ProjectComponent, SiteComponent, EmployeeComponent, $http,$stateParams,$location) {
+    .controller('EmployeeController', function ($rootScope,$window, $scope, $state, $timeout, ProjectComponent, SiteComponent, EmployeeComponent, $http,$stateParams,$location) {
         $scope.success = null;
         $scope.error = null;
         $scope.errorMessage = null;
@@ -33,6 +33,9 @@ angular.module('timeSheetApp')
         $scope.relieverDateTo;
 
         $scope.relieverDateFrom;
+
+        $scope.designation;
+
 
 
 
@@ -87,6 +90,14 @@ angular.module('timeSheetApp')
             });
         };
 
+        $scope.loadDesignations = function () {
+            console.log("Loading all designations")
+            EmployeeComponent.findAllDesginations().then(function (data) {
+                console.log("Loading all Designations");
+                $scope.designations = data;
+            })
+        }
+
         $scope.loadSites = function () {
         	if($scope.selectedProject) {
             	ProjectComponent.findSites($scope.selectedProject.id).then(function (data) {
@@ -102,7 +113,7 @@ angular.module('timeSheetApp')
         $scope.loadAllEmployees = function () {
         	if(!$scope.allEmployees) {
             	EmployeeComponent.findAll().then(function (data) {
-            	console.log(data)
+            	console.log(data);
             		$scope.allEmployees = data;
             	})
         	}
@@ -122,9 +133,60 @@ angular.module('timeSheetApp')
                 	})
         		}
         	}
+        };
+
+        $scope.siteTransferDetails = function(employee){
+            console.log(employee)
+            $scope.transferEmployeeDetails =employee;
+            $scope.transferSite;
+            $scope.transferEmployeeOptions;
+            $scope.transferringEmployee;
+            $scope.relievingEmployee;
+
+        };
+
+        $scope.updateNewEmployee = function(employee){
+            console.log("Selected employee");
+            console.log(employee);
         }
 
+        $scope.updateSelectedSite = function(site){
+          console.log(site);
+        };
 
+        $scope.transferEmployee= function(employee,reliever){
+            console.log(employee);
+            console.log($scope.transferSite);
+            console.log($scope.transferEmployeeOptions);
+            console.log($scope.transferringEmployee);
+            console.log(reliever);
+            var projSite = {
+                "projectId" : $scope.transferSite.projectId,
+                "projectName" : $scope.transferSite.projectName,
+                "siteId" : $scope.transferSite.id,
+                "siteName" : $scope.transferSite.name,
+            };
+                projSite.employeeId = employee.id;
+                projSite.employeeName = employee.name;
+            employee.projectSites.length=0;
+            employee.projectSites.push(projSite);
+            console.log('project site list -' );
+            console.log(employee);
+
+            if($scope.transferEmployeeOptions == 'delete'){
+                console.log("Delete jobs and transfer employees");
+                EmployeeComponent.deleteJobsAndTransferEmployee(employee,new Date())
+            }else if($scope.transferringEmployee!=null){
+                EmployeeComponent.assignJobsAndTransferEmployee(employee,$scope.transferringEmployee,new Date())
+                console.log("Assign jobs to another employee and transfer this employee");
+            }else{
+                $window.alert("Please select and employee while assigning jobs to another employee");
+            }
+        };
+
+        $scope.deleteAndTransfer= function(employee){
+
+        };
 
         $scope.loadEmployees = function () {
 //        	if($rootScope.searchCriteriaEmployees) {
@@ -142,6 +204,10 @@ angular.module('timeSheetApp')
         	$scope.saveEmployee();
         }
 
+        $scope.addDesignation = function () {
+            console.log($scope.designation);
+
+        }
         $scope.saveEmployee = function () {
         	$scope.error = null;
         	$scope.success = null;
@@ -427,7 +493,7 @@ angular.module('timeSheetApp')
                 fromDate : $scope.relieverDateFrom,
                 toDate: $scope.relieverDateTo
             }
-            EmployeeComponent.assignReliever(employee,$scope.selectedReliever,$scope.relieverDateFrom,$scope.relieverDateTo).then(function (response) {
+            EmployeeComponent.assignReliever(employee,$scope.selectedReliever,$scope.relieverDateFrom,$scope.reliev).then(function (response) {
                 console.log(response);
             })
 

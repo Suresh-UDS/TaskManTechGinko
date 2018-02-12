@@ -1,6 +1,5 @@
 package com.ts.app.service;
 
-import java.sql.Date;
 import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -20,11 +19,7 @@ import com.ts.app.repository.*;
 import com.ts.app.web.rest.dto.*;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.time.DateUtils;
-import org.hibernate.EmptyInterceptor;
 import org.hibernate.Hibernate;
-import org.joda.time.DateTime;
-import org.joda.time.Days;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.env.Environment;
@@ -58,6 +53,9 @@ public class    EmployeeService extends AbstractService {
 
     @Inject
     private JobRepository jobRepository;
+
+    @Inject
+    private DesignationRepository designationRepository;
 
     @Inject
     private CheckInOutRepository checkInOutRepository;
@@ -161,6 +159,12 @@ public class    EmployeeService extends AbstractService {
 		return employeeDto;
 	}
 
+    public DesignationDTO createDesignation(DesignationDTO designationDTO) {
+        Designation designation= mapperUtil.toEntity(designationDTO, Designation.class);
+	    designationRepository.save(designation);
+        return designationDTO;
+    }
+
 	public EmployeeDTO updateEmployee(EmployeeDTO employee, boolean shouldUpdateActiveStatus) {
 		log.debug("Inside Update");
 		log.debug("Inside Update"+employee);
@@ -243,6 +247,7 @@ public class    EmployeeService extends AbstractService {
 		employee = mapperUtil.toModel(employeeUpdate, EmployeeDTO.class);
 		return employee;
 	}
+
 
 	public void deleteEmployee(Long id) {
 		log.debug("Inside Delete");
@@ -540,7 +545,7 @@ public class    EmployeeService extends AbstractService {
 			Pageable pageRequest = createPageRequest(searchCriteria.getCurrPage());
 			Page<Employee> page = null;
 			List<EmployeeDTO> transactions = null;
-			
+
             Calendar startCal = Calendar.getInstance();
             if(searchCriteria.getFromDate() != null) {
             		startCal.setTime(searchCriteria.getFromDate());
@@ -555,14 +560,14 @@ public class    EmployeeService extends AbstractService {
 	    		endCal.set(Calendar.HOUR_OF_DAY, 23);
 	    		endCal.set(Calendar.MINUTE, 59);
 	    		endCal.set(Calendar.SECOND, 0);
-	
+
 	    		searchCriteria.setFromDate(startCal.getTime());
 	    		searchCriteria.setToDate(endCal.getTime());
 
-			
+
 			java.sql.Date startDate = new java.sql.Date(searchCriteria.getFromDate().getTime());
         		java	.sql.Date toDate = new java.sql.Date(searchCriteria.getToDate().getTime());
-			
+
 			log.debug("findBySearchCriteria - "+searchCriteria.getSiteId() +", "+searchCriteria.getEmployeeId() +", "+searchCriteria.getProjectId());
 			if((searchCriteria.getSiteId() != 0 && searchCriteria.getProjectId() != 0)) {
 				if(searchCriteria.getFromDate() != null) {
@@ -676,5 +681,12 @@ public class    EmployeeService extends AbstractService {
 		return exportUtil.readExportFile(fileName);
 	}
 
+
+    public List<DesignationDTO> findAllDesignations() {
+//        User user = userRepository.findOne(userId);
+        List<Designation> designation = designationRepository.findAll();
+
+        return mapperUtil.toModelList(designation, DesignationDTO.class);
+    }
 
 }
