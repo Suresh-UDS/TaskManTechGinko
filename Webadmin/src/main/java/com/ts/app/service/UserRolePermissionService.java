@@ -59,21 +59,25 @@ public class UserRolePermissionService extends AbstractService {
 	public UserRolePermissionDTO createUserRolePermissionInformation(UserRolePermissionDTO userRolePermissionDto) {
 		//UserRolePermission userRolePermission = mapperUtil.toEntity(userRolePermissionDto, UserRolePermission.class);
 		UserRole role = userRoleRepository.findOne(userRolePermissionDto.getRoleId());
-		List<UserRolePermission> permissions = new ArrayList<UserRolePermission>();
-		for(ApplicationModuleDTO moduleDto : userRolePermissionDto.getApplicationModules()) {
-			ApplicationModule module = moduleRepository.findOne(moduleDto.getId());
-			for(ApplicationActionDTO actionDto : moduleDto.getModuleActions()) {
-				UserRolePermission userRolePermission = new UserRolePermission();
-				userRolePermission.setRole(role);
-				userRolePermission.setModule(module);
-				ApplicationAction action = actionRepository.findOne(actionDto.getId()); 
-				userRolePermission.setAction(action);
-				userRolePermission.setActive(UserRolePermission.ACTIVE_YES);
-				permissions.add(userRolePermission);
+		if(CollectionUtils.isNotEmpty(role.getRolePermissions())) {
+			updateUserRolePermission(userRolePermissionDto);
+		}else {
+			List<UserRolePermission> permissions = new ArrayList<UserRolePermission>();
+			for(ApplicationModuleDTO moduleDto : userRolePermissionDto.getApplicationModules()) {
+				ApplicationModule module = moduleRepository.findOne(moduleDto.getId());
+				for(ApplicationActionDTO actionDto : moduleDto.getModuleActions()) {
+					UserRolePermission userRolePermission = new UserRolePermission();
+					userRolePermission.setRole(role);
+					userRolePermission.setModule(module);
+					ApplicationAction action = actionRepository.findOne(actionDto.getId()); 
+					userRolePermission.setAction(action);
+					userRolePermission.setActive(UserRolePermission.ACTIVE_YES);
+					permissions.add(userRolePermission);
+				}
 			}
+	        List<UserRolePermission> userRolePermissions = userRolePermissionRepository.save(permissions);
+			log.debug("Created Information for UserRolePermission: {}", userRolePermissions);
 		}
-        List<UserRolePermission> userRolePermissions = userRolePermissionRepository.save(permissions);
-		log.debug("Created Information for UserRolePermission: {}", userRolePermissions);
 		//userRolePermissionDto = mapperUtil.toModel(userRolePermission, UserRolePermissionDTO.class);
 		return userRolePermissionDto;
 	}

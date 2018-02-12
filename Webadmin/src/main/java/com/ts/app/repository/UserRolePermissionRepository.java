@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
@@ -24,6 +25,7 @@ public interface UserRolePermissionRepository extends JpaRepository<UserRolePerm
 	@Query("SELECT ur FROM UserRolePermission ur WHERE ur.active='Y' order by last_modified_date desc")
 	Page<UserRolePermission> findUserRolePermissions(Pageable pageRequest);
 	
+	@Modifying
 	@Query("DELETE FROM UserRolePermission ur WHERE ur.role.id = :roleId")
 	void deleteByRoleId(@Param("roleId") long roleId);
 
