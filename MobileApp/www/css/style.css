@@ -148,6 +148,12 @@ container-scroll::-webkit-scrollbar-thumb
   /*padding:10px 15px;*/
  /* width: 1400px;*/
 }
+.font-size12 p
+{
+  font-size:12px;
+}
+
+
 /* calendar css */
 .Viewcalendartxt h2
 {
