@@ -8,7 +8,7 @@ angular.module('timeSheetApp')
         $scope.doNotMatch = null;
         $scope.errorEmployeeExists = null;
 
-        $scope.employeeDesignations = ["MD","Operations Manger","Supervisor"]
+        // $scope.employeeDesignations=null;
 
         $timeout(function (){angular.element('[ng-model="name"]').focus();});
 
@@ -90,6 +90,25 @@ angular.module('timeSheetApp')
             });
         };
 
+        $scope.searchProjects = function(value){
+            var projectName = {
+                name: value
+            }
+          ProjectComponent.searchProject().then(function (data) {
+              $scope.projects = data;
+          })
+        };
+
+        $scope.getSites= function (value) {
+            var searchData = {
+                name:value
+            }
+            SiteComponent.getSites(searchData).then(function (data) {
+                console.log(data);
+                $scope.sites = data;
+            })
+        }
+
         $scope.loadDesignations = function () {
             console.log("Loading all designations")
             EmployeeComponent.findAllDesginations().then(function (data) {
@@ -123,6 +142,7 @@ angular.module('timeSheetApp')
         	if(!$scope.allManagers) {
         		if($scope.employee && $scope.employee.id) {
                 	EmployeeComponent.findAllManagers($scope.employee.id).then(function (data) {
+                	    console.log("Managers")
                     	console.log(data)
                     		$scope.allManagers = data;
                     	})
@@ -206,8 +226,24 @@ angular.module('timeSheetApp')
 
         $scope.addDesignation = function () {
             console.log($scope.designation);
+            if($scope.designation){
+                console.log("Designation entered");
+                var designationDetails ={
+                    designation:$scope.designation
+                };
+                EmployeeComponent.createDesignation(designationDetails).then(function (response) {
+                    console.log(response);
+                    $scope.designation= null;
+                    $scope.showNotifications('top','center','success','Designation Added Successfully');
+                    $scope.loadDesignations();
 
-        }
+                })
+            }else{
+                console.log("Desgination not entered");
+            }
+
+
+        };
         $scope.saveEmployee = function () {
         	$scope.error = null;
         	$scope.success = null;

@@ -203,13 +203,14 @@ angular.module('timeSheetApp')
             findAllDesginations: function () {
                 return $http.get('api/designation').then(function (response) {
                     console.log("Designation");
+                    console.log(response);
                     return response.data;
                 })
             },
 
             createDesignation: function (designation) {
-                return $http.post('api/designation').then(function (response) {
-                    console.log("Added Designation")
+                return $http.post('api/designation',designation).then(function (response) {
+                    console.log("Added Designation");
                     console.log(response.data);
                 })
             }

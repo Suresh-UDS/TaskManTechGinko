@@ -270,11 +270,11 @@
                                             <div class="col-md-4">
                                                 <div class="form-group label-floating">
                                                     <label class="control-label">Site</label>
-                                                    <div >
-                                                        <!--<input ng-focus="loadSites()" type="text" class="form-control"  ng-model="selectedSite" name="siteName" ng-value="selectedSite.name"-->
-                                                               <!--uib-typeahead="site as site.name for site in sites | filter:$viewValue | limitTo:5"-->
-                                                               <!--ng-minlength=2 ng-maxlength=50 ng-pattern="/^[A-Za-z0-9\s&-/]*$/"  autocomplete="off" />-->
-                                                        <input class="form-control" type="text" ng-model="asyncSelected" uib-typeahead="site for sites in getSites($viewValue)" typeahead-loading="loadingLocations" typeahead-no-results="noResults" class="form-control">
+                                                    <div class="dropdown" >
+                                                        <input ng-focus="loadSites()" type="text" class="form-control"  ng-model="selectedSite" name="siteName" ng-value="selectedSite.name"
+                                                               uib-typeahead="site as site.name for site in sites | filter:$viewValue | limitTo:5"
+                                                               ng-minlength=2 ng-maxlength=50 ng-pattern="/^[A-Za-z0-9\s&-/]*$/"  autocomplete="off" />
+
                                                         <div ng-show="form.$submitted || form.siteName.$touched">
                                                             <div ng-show="form.siteName.$dirty || form.siteName.$invalid">
                                                                 <p class="help-block" style="color:maroon"
