@@ -31,10 +31,10 @@
 
                         </div>
 
-                        <div class="col-md-3">
+                        <div class="col-md-3 form-group  pdng-top15">
 
-                            <select ng-model="actionSelector" ng-change="selectAction(actionSelector)" ng-options="action as action.name for action in masterActions" class="selectpicker" data-style="btn btn-primary btn-round" title="Select Action" data-size="7">
-                                <!-- <option value="{{action.id}}" ng-repeat="action in masterActions">{{action.name}}</option> -->
+                            <select ng-model="actionSelector" ng-change="selectAction(actionSelector)" ng-options="action as action.name for action in masterActions" class="form-control"  title="Select Action" >
+                                 <option value="Please select Action..."></option>
                             </select>
 
 <!--                             <select ng-model="actionSelector" class="selectpicker" data-style="btn btn-primary" title="Single Select" data-size="7">

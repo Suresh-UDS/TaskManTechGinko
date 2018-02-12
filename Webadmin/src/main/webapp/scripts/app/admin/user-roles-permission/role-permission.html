@@ -20,14 +20,15 @@
 
                 <div class="card-content">
 
-                    <div class="row col-md-offset-2 ">
+
 
                         <div class="col-md-4">
 
-                            <select ng-model="selectedUserRole" ng-change="selectRole()"  class="selectpicker" data-style="btn btn-primary" title="Select Role" data-size="7">
-                                <option value="{{role.id}}" ng-repeat="role in userRoles">{{role.name}}</option>
+                            <select ng-model="selectedUserRole" ng-change="selectRole()"  class="form-control" data-style="btn btn-primary" title="Select Role" data-size="7"
+                            ng-options="role as role.name for role in userRoles">
+                                <option value="Please select Roles..."></option>
                             </select>
-							
+
                         </div>
                         <div class="col-md-6 ">
 
@@ -44,7 +45,7 @@
 
                         </div>
 
-                    </div>
+
 
                 </div>
 
@@ -75,7 +76,7 @@
                                <td>
                                    <div class="checkbox checkbox-inline" style="width:18%;" ng-repeat=" action in moduleAction.moduleActions">
                                        <label>
-                                           <input ng-model="action.selected" type="checkbox" name="BookingHistory"   value="action.id" ng-change="checkPermission(moduleAction.id, moduleAction.name, action.id, action.name)" >{{action.name}} 
+                                           <input ng-model="action.selected" type="checkbox" name="BookingHistory"   value="action.id" ng-change="checkPermission(moduleAction.id, moduleAction.name, action.id, action.name)" >{{action.name}}
                                        </label>
                                    </div>
                                </td>
