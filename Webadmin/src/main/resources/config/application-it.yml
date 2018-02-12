@@ -20,10 +20,10 @@ spring:
             enabled: false # we use Grunt + BrowserSync for livereload
     datasource:
         driver-class-name: com.mysql.jdbc.Driver
-        url: jdbc:mysql://localhost:3306/TaskMan-test?useUnicode=true&characterEncoding=utf8
+        url: jdbc:mysql://localhost:3306/uds-attendance?useUnicode=true&characterEncoding=utf8
         name:
         username: root
-        password: admin123
+        password: Uds@2018
     jpa:
         database-platform: org.hibernate.dialect.MySQLInnoDBDialect
         database: MYSQL
@@ -82,6 +82,11 @@ email:
 locationService:
    url: http://localhost:8000/api/site/location
 #   url: http://ec2-52-77-216-21.ap-southeast-1.compute.amazonaws.com:8000/api/site/location
+
+quotationService:
+#   url: http://locahost:8000/api/site/location
+#   url: http://ec2-52-77-216-21.ap-southeast-1.compute.amazonaws.com:8000/api/site/location
+   url: http://localhost:8000/
 
 scheduler:
    dailyJob:

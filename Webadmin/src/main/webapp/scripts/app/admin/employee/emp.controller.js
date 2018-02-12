@@ -356,15 +356,15 @@ angular.module('timeSheetApp')
 
 
         $scope.loadEmployee = function() {
+        	console.log('employee id - ' +$stateParams.id)
         	EmployeeComponent.findOne($stateParams.id).then(function (data) {
-        	    console.log(data);
+        	    	console.log('employee data -'+JSON.stringify(data));
                 $scope.employee = data;
                 $scope.projectSiteList = $scope.employee.projectSites;
                 $scope.employee.code = pad($scope.employee.code , 4);
                 $scope.loadSelectedProject($scope.employee.projectId);
                 $scope.loadSelectedSite($scope.employee.siteId);
                 $scope.loadSelectedManager($scope.employee.managerId);
-                console.log($scope.employee.sites);
                 $scope.sites = $scope.employee.sites;
             });
 
@@ -378,17 +378,14 @@ angular.module('timeSheetApp')
                 $scope.loadSelectedProject($scope.employee.projectId);
                 $scope.loadSelectedSite($scope.employee.siteId);
                 $scope.loadSelectedManager($scope.employee.managerId);
-                console.log($scope.employee.sites);
                 $scope.sites = $scope.employee.sites;
             });
         };
 
         $scope.getEmployeeByEmpId = function() {
         	var empIdEle = document.getElementById('employeeEmpId');
-        	console.log(empIdEle.value);
         	EmployeeComponent.findDuplicate(empIdEle.value).then(function (data) {
                 $scope.existingEmployee = data;
-                console.log('Existing employee found ' + JSON.stringify($scope.existingEmployee));
                 if($scope.existingEmployee) {
                 	if($scope.existingEmployee.active == 'N'){
 
@@ -425,7 +422,6 @@ angular.module('timeSheetApp')
         	EmployeeComponent.deleteEmployeeSite(empId,siteId).then(function(response){
 	        	$scope.success = 'OK';
 	        	employeeSites = response.data;
-	        	console.log('delete employee site repsonse - ' + response.data);
 	        	$scope.showNotifications('top','center','success','Employee Successfully deleted');
 	        	$location.path('/employees');
         	}).catch(function (response) {
@@ -467,7 +463,6 @@ angular.module('timeSheetApp')
         		$scope.errorProject = null;
         	}else
         	*/
-        	console.log($scope.employee);
         	if(!$scope.selectedManager.id){
                              $scope.errorManager = "true";
                              $scope.errorSite = null;
@@ -504,9 +499,7 @@ angular.module('timeSheetApp')
         }
 
         $scope.deleteEmployee = function (employee) {
-        	console.log(employee)
         	$scope.employee = employee;
-        	console.log($scope.employee);
         	EmployeeComponent.deleteEmployee($scope.confirmEmployee);
         	$scope.success = 'OK';
         	$state.reload();
@@ -599,7 +592,6 @@ angular.module('timeSheetApp')
         	EmployeeComponent.search($scope.searchCriteria).then(function (data) {
                 $scope.employees = data.transactions;
 
-                console.log('Employee search result list -' + $scope.employees);
                 $scope.pages.currPage = data.currPage;
                 $scope.pages.totalPages = data.totalPages;
                 if($scope.employees == null){
