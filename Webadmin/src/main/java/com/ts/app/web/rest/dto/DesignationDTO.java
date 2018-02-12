@@ -9,7 +9,7 @@ public class DesignationDTO extends BaseDTO implements Serializable {
 
     private long id;
 
-    private String name;
+    private String designation;
 
     public long getId() {
         return id;
@@ -19,11 +19,12 @@ public class DesignationDTO extends BaseDTO implements Serializable {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+
+    public String getDesignation() {
+        return designation;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setDesignation(String designation) {
+        this.designation = designation;
     }
 }
