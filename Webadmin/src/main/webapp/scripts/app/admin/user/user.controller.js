@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('timeSheetApp')
-    .controller('UserController', function ($rootScope, $scope, $state, $timeout, UserGroupComponent,EmployeeComponent, UserComponent, $http, $stateParams, $location, JobComponent) {
+    .controller('UserController', function ($rootScope, $scope, $state, $timeout, UserGroupComponent,EmployeeComponent, UserComponent, UserRoleComponent, $http, $stateParams, $location, JobComponent) {
         $scope.success = null;
         $scope.error = null;
         $scope.doNotMatch = null;
@@ -19,6 +19,10 @@ angular.module('timeSheetApp')
         $scope.users;
 
         $scope.userGroups;
+        
+        $scope.userRoles;
+        
+        $scope.selectedRole;
 
         $scope.selectedUser;
 
@@ -30,6 +34,13 @@ angular.module('timeSheetApp')
                 $scope.userGroups = data;
             });
         };
+        
+        $scope.loadUserRoles = function () {
+        	UserRoleComponent.findAll().then(function (data) {
+                $scope.userRoles = data;
+            });
+        };
+
 
         $scope.loadEmployee = function () {
             console.log("load employees ");
@@ -43,6 +54,9 @@ angular.module('timeSheetApp')
         $scope.saveUser = function () {
         	if($scope.selectedGroup) {
             	$scope.user.userGroupId = $scope.selectedGroup.id;
+        	}
+        	if($scope.selectedRole) {
+            	$scope.user.userRoleId = $scope.selectedRole.id;
         	}
         	$scope.user.clearPassword = $scope.user.password;
         	if($scope.selectedEmployee) {
@@ -90,11 +104,12 @@ angular.module('timeSheetApp')
 
 
         $scope.loadUser = function() {
-        	$scope.loadEmployee();
-        	UserComponent.findOne($stateParams.id).then(function (data) {
-                $scope.user = data;
-                $scope.selectedEmployee = {id : data.employeeId,name : data.employeeName}
-            });
+	        	$scope.loadEmployee();
+	        	UserComponent.findOne($stateParams.id).then(function (data) {
+	                $scope.user = data;
+	                $scope.selectedRole = {id : data.userRoleId, name : data.userRoleName}
+	                $scope.selectedEmployee = {id : data.employeeId,name : data.employeeName}
+	            });
 
         };
 

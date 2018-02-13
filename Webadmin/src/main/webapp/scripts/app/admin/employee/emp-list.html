@@ -2,7 +2,7 @@
 
     <div class="row" ng-init="loadEmployees()">
         <div class="col-md-8" ng-init="loadProjects()">
-            <h2 class="title">Employee</h2>
+            <!--<h2 class="title">Employee</h2>-->
         </div>
         <div class="col-md-4 txt-align-rgt">
             <button ui-sref="add-employee"  ng-class="{active: $state.includes('admin')}" has-authority="ROLE_ADMIN" class="btn btn-success align-left"> <i class="material-icons padding-right5">add</i>ADD<div class="ripple-container"></div></button>
@@ -140,7 +140,7 @@
                                         <i style="font-size: 20px !important;" class="fa fa-edit"></i>
                                     </button>
                                     <button ng-disabled="employee.left" title="Mark Left"   has-authority="ROLE_ADMIN"  data-toggle="modal" data-target="#leftModal" data-dismiss="#leftModal" ng-click="employeeDetails(employee.id)"  class="btn btn-simple btn-info btn-icon like"> <i style="font-size: 20px !important; color: #942a25" class="fas fa-user-times"></i></button>
-                                    <button ng-disabled="employee.left" title="Site Transfer"   has-authority="ROLE_ADMIN"  data-toggle="modal" data-target="#siteTransferModal" data-dismiss="#siteTransferModal"   class="btn btn-simple btn-info btn-icon like" > <i style="font-size: 20px; color: orangered" class="material-icons">transfer_within_a_station</i></button>
+                                    <button ng-disabled="employee.left" title="Site Transfer"   has-authority="ROLE_ADMIN"  data-toggle="modal" data-target="#siteTransferModal" data-dismiss="#siteTransferModal"   class="btn btn-simple btn-info btn-icon like" ng-click="siteTransferDetails(employee);loadSites()" > <i style="font-size: 20px; color: orangered" class="material-icons">transfer_within_a_station</i></button>
                                     <button ng-if="!employee.reliever" ng-disabled="employee.left" title="Relieve Employee"   has-authority="ROLE_ADMIN"  data-toggle="modal" data-target="#relieverConfirmation" data-dismiss="#relieverConfirmation" ng-click="getRelievers(employee)"   class="btn btn-simple btn-info btn-icon like"> <i style="font-size: 20px" class="material-icons">assignment_ind</i></button>
                                 </td>
 
@@ -276,17 +276,47 @@
                 <h5 class="modal-title" id="siteTransfer ">Transfer Employee</h5>
             </div>
             <div class="modal-body">
-                <div class="col-md-12">
-                    <div class="card">
-                        <div class="card-content">
-                            <legend>Tags</legend>
-                            <input type="text" value="Amsterdam,Washington,Sydney,Beijing" class="tagsinput" data-role="tagsinput" data-color="rose" />
-                        </div>
+
+                <div class="col-md-12 addedActionList pdng-top15" ng-hide="!(transferEmployeeDetails.projectSites.length > 0)">
+                    <div class="form-group">
+                        <label class="">Current Site </label>
+                        <ul class="listOfActions list-group">
+                            <li class="list-group-item justify-content-between" ng-repeat="projSite in transferEmployeeDetails.projectSites" ng-bind-html-unsafe="projSite.text">
+                                {{projSite.projectName}}  -  {{projSite.siteName}}
+                            </li>
+                        </ul>
                     </div>
+                </div>
+
+                <div class="col-md-12">
+                    <div class="form-group selectcon">
+                        <label class="control-label">To Site</label>
+                        <select class="siteList" ng-model="transferSite" ng-options="site as site.name for site in sites" >
+                        </select>
+                    </div>
+                </div>
+                <div class="row" ng-hide="!(transferEmployeeDetails.projectSites.length > 0)">
+                        <div class="form-group">
+                            <div class="checkbox col-md-12">
+                                <input type="radio" name="terms"ng-model="transferEmployeeOptions" value="delete"> Delete All upcoming data and Transfer employee
+                            </div>
+                            <div class="checkbox col-md-12">
+                                <input type="radio" name="terms" ng-model="transferEmployeeOptions" value="assign"> Assign another employee to the Jobs
+                            </div>
+
+                            <div ng-switch="transferEmployeeOptions" class="col-md-12">
+                                    <div class="form-group selectcon" ng-switch-when="assign">
+                                        <label class="control-label">Assign Employee</label>
+                                        <select ng-options="employee.id as employee.fullName for employee in allEmployees" ng-model="transferringEmployee" required random-directive>
+                                            <option value="">Please select...</option>
+                                        </select>
+                                    </div>
+                            </div>
+                         </div>
                 </div>
             </div>
             <div class="modal-footer ">
-                <button type="button" class="btn btn-info btn-round" data-dismiss="modal" ng-click="updateEmployeeLeft(employee)">Yes</button>
+                <button type="button" class="btn btn-info btn-round" data-dismiss="modal" ng-click="transferEmployee(transferEmployeeDetails,transferringEmployee)">Transfer Employee</button>
                 <button type="button" class="btn btn-info btn-round" data-dismiss="modal">No</button>
             </div>
         </div>

@@ -14,34 +14,34 @@ angular.module('timeSheetApp')
         $scope.pages = { currPage : 1};
 
     	$scope.rateCard;
-    	
+
     	$scope.rateCards;
-    	
+
     	$scope.rateCardTypes;
-    	
+
     	$scope.uomTypes;
-    	
+
     	$scope.projects;
-    	
+
     	$scope.sites;
-    	
+
         $scope.selectedProject;
 
         $scope.selectedSite;
-    	
+
     	$scope.init = function() {
     		$scope.loadProjects();
     		$scope.loadRateCardTypes();
     		$scope.loadUomTypes();
     		$scope.loadRateCards();
     	}
-    	
+
     	$scope.loadProjects = function () {
         	ProjectComponent.findAll().then(function (data) {
                 $scope.projects = data;
             });
         };
-        
+
         $scope.loadSites = function () {
         	ProjectComponent.findSites($scope.selectedProject.id).then(function (data) {
         		$scope.selectedSite = null;
@@ -54,7 +54,7 @@ angular.module('timeSheetApp')
         	$scope.error = null;
         	$scope.success =null;
         	$scope.errorRateCardExists = null;
-        	$scope.rateCard.projectId = $scope.selectedProject.id;
+        	// $scope.rateCard.projectId = $scope.selectedProject.id;
         	RateCardComponent.createRateCard($scope.rateCard).then(function () {
                 $scope.success = 'OK';
             	$scope.loadRateCards();
@@ -70,34 +70,35 @@ angular.module('timeSheetApp')
             });;
 
         };
-        
+
         $scope.loadRateCardTypes = function() {
         	RateCardComponent.getRateTypes().then(function(data) {
         		console.log('rateCard types - ' + data);
         		$scope.rateCardTypes = data;
         	})
         }
-        
+
         $scope.loadUomTypes = function() {
         	RateCardComponent.getUomTypes().then(function(data) {
         		console.log('uom types - ' + data);
         		$scope.uomTypes = data;
         	})
         }
-    	
+
         $scope.loadRateCards = function () {
             $scope.search();
         };
-        
+
         $scope.refreshPage = function(){
             $scope.clearFilter();
             $scope.loadRateCards();
         }
-        
+
         $scope.loadRateCard = function(rateCard) {
         	//RateCardComponent.findOne($stateParams.id).then(function (data) {
             //    $scope.rateCard = data;
             //});
+            console.log(rateCard);
         	$scope.rateCard = rateCard;
 
         };
@@ -117,7 +118,7 @@ angular.module('timeSheetApp')
                 }
             });;
         };
-        
+
         $scope.cancelRateCard = function () {
         	$location.path('/rateCardList');
         };
@@ -128,11 +129,13 @@ angular.module('timeSheetApp')
         }
 
         $scope.deleteRateCard = function () {
+            console.log($scope.confirmRateCard);
+            $scope.confirmRateCard.id = $scope.confirmRateCard._id;
         	RateCardComponent.deleteRateCard($scope.confirmRateCard);
         	$scope.success = 'OK';
         	$state.reload();
         };
-        
+
         $scope.search = function () {
         	var currPageVal = ($scope.pages ? $scope.pages.currPage : 1);
         	if(!$scope.searchCriteria) {
@@ -167,7 +170,7 @@ angular.module('timeSheetApp')
         	}
         	console.log($scope.searchCriteria);
         	RateCardComponent.search($scope.searchCriteria).then(function (data) {
-                $scope.rateCards = data.transactions;
+                $scope.rateCards = data;
                 console.log($scope.rateCards);
                 $scope.pages.currPage = data.currPage;
                 $scope.pages.totalPages = data.totalPages;
@@ -274,5 +277,5 @@ angular.module('timeSheetApp')
             }
             $scope.search();
         };
-    	
+
     });

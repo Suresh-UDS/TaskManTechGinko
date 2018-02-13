@@ -118,7 +118,7 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long> {
 
 	@Query("SELECT count(e) FROM Employee e")
 	long findTotalCount();
-	
-	
-	
+
+
+
 }

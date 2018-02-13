@@ -23,7 +23,6 @@ import com.ts.app.domain.RateType;
 import com.ts.app.domain.UOMType;
 import com.ts.app.service.RateCardService;
 import com.ts.app.web.rest.dto.SearchCriteria;
-import com.ts.app.web.rest.dto.SearchResult;
 import com.ts.app.web.rest.dto.RateCardDTO;
 import com.ts.app.web.rest.errors.TimesheetException;
 
@@ -48,7 +47,7 @@ public class RateCardResource {
 	 * POST /saveRateCard -> saveRateCard the RateCard.
 	 */
 	@RequestMapping(value = "/rateCard", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-	@Timed 
+	@Timed
 	public ResponseEntity<?> saveRateCard(@Valid @RequestBody RateCardDTO rateCardDTO, HttpServletRequest request) {
 		log.info("Inside the saveRateCard -" + rateCardDTO.getName());
 		RateCardDTO rateCardDto = null;
@@ -71,15 +70,16 @@ public class RateCardResource {
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 
-	@RequestMapping(value = "/rateCard/{id}", method = RequestMethod.DELETE)
-	public ResponseEntity<?> delete(@PathVariable Long id) {
-		log.info("Inside Delete" + id);
-		rateCardService.deleteRateCard(id);
+	@RequestMapping(value = "/rateCard/delete", method = RequestMethod.POST)
+	public ResponseEntity<?> delete(@RequestBody RateCardDTO rateCard) {
+		log.info("Inside Delete" + rateCard.getId());
+		rateCardService.deleteRateCard(rateCard);
+
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 
 	@RequestMapping(value = "/rateCard", method = RequestMethod.GET)
-	public List<RateCardDTO> findAll() {
+	public Object findAll() {
 		log.info("--Invoked RateCardResource.findAll --");
 		return rateCardService.findAll();
 	}
@@ -88,16 +88,16 @@ public class RateCardResource {
 	public RateCardDTO get(@PathVariable Long id) {
 		return rateCardService.findOne(id);
 	}
-	
+
 	@RequestMapping(value = "/rateCard/search",method = RequestMethod.POST)
-	public SearchResult<RateCardDTO> searchRateCards(@RequestBody SearchCriteria searchCriteria) {
-		SearchResult<RateCardDTO> result = null;
+	public Object searchRateCards(@RequestBody SearchCriteria searchCriteria) {
+		Object result = null;
 		if(searchCriteria != null) {
-			result = rateCardService.findBySearchCrieria(searchCriteria);
+			result =  rateCardService.findAll();
 		}
 		return result;
 	}
-	
+
 	@RequestMapping(value = "/rateCard/types", method = RequestMethod.GET)
 	public List<RateType> getRateCardTypes() {
 		log.info("--Invoked RateCardResource.getRateCardTypes --");
@@ -106,10 +106,18 @@ public class RateCardResource {
 	}
 
 	@RequestMapping(value = "/rateCard/uom", method = RequestMethod.GET)
-	public List<UOMType> getUomTypes() {
-		log.info("--Invoked RateCardResource.getUomTypes --");
-		List<UOMType> uomTypes = Arrays.asList(UOMType.values());
-		return uomTypes;
-	}
+    public List<UOMType> getUomTypes() {
+        log.info("--Invoked RateCardResource.getUomTypes --");
+        List<UOMType> uomTypes = Arrays.asList(UOMType.values());
+        return uomTypes;
+    }
+
+    @RequestMapping(value = "/rateCard/quotation/get", method = RequestMethod.GET)
+    public Object getQuotations() {
+        log.info("--Invoked RateCardResource.Get Quotations --");
+        Object result =null;
+        result= rateCardService.getQuotations();
+        return result;
+    }
 
 }

@@ -30,9 +30,14 @@ public class RateCard extends AbstractAuditingEntity implements Serializable {
     @Column(length = 250, nullable = false)
     private String name;
 
+    @NotNull
+    @Size(min = 1, max = 250)
+    @Column(length = 250, nullable = false)
+    private String title;
+
     @Column(length = 250, nullable = false)
     private RateType type;
-    
+
     @Column(length = 250, nullable = false)
     private UOMType uom;
 
@@ -48,10 +53,10 @@ public class RateCard extends AbstractAuditingEntity implements Serializable {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "projectId", nullable = true)
     private Project project;
-    
+
     @Column(name = "is_deleted")
     private boolean deleted;
-    
+
     public Long getId() {
         return id;
     }
@@ -103,7 +108,13 @@ public class RateCard extends AbstractAuditingEntity implements Serializable {
 	public void setDeleted(boolean deleted) {
 		this.deleted = deleted;
 	}
-	
-	
-    
+
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
 }

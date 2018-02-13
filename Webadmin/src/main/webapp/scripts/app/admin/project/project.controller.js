@@ -78,7 +78,7 @@ angular.module('timeSheetApp')
         	$scope.errorProjectExists = null;
         	ProjectComponent.createProject($scope.project).then(function () {
                 $scope.success = 'OK';
-            	$scope.loadProjects();
+            	//$scope.loadProjects();
             	$location.path('/projects');
             }).catch(function (response) {
                 $scope.success = null;
@@ -126,7 +126,7 @@ angular.module('timeSheetApp')
         $scope.updateProject = function () {
         	ProjectComponent.updateProject($scope.project).then(function () {
                 $scope.success = 'OK';
-            	$scope.loadProjects();
+            	//$scope.loadProjects();
             	$location.path('/projects');
             }).catch(function (response) {
                 $scope.success = null;

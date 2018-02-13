@@ -73,6 +73,10 @@ public class UserDTO extends BaseDTO{
 	
 	private UserRoleDTO userRole;
 	
+	private long userRoleId;
+	
+	private String userRoleName;
+	
     public UserDTO() {
     }
 
@@ -269,6 +273,22 @@ public class UserDTO extends BaseDTO{
 
 	public void setUserRole(UserRoleDTO userRole) {
 		this.userRole = userRole;
+	}
+	
+	public long getUserRoleId() {
+		return userRoleId;
+	}
+
+	public void setUserRoleId(long userRoleId) {
+		this.userRoleId = userRoleId;
+	}
+
+	public String getUserRoleName() {
+		return userRoleName;
+	}
+
+	public void setUserRoleName(String userRoleName) {
+		this.userRoleName = userRoleName;
 	}
 
 	@Override
