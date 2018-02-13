@@ -542,7 +542,7 @@ public class    EmployeeService extends AbstractService {
     	long userGroupId = user.getUserGroup().getId();
 		SearchResult<EmployeeDTO> result = new SearchResult<EmployeeDTO>();
 		if(searchCriteria != null) {
-			Pageable pageRequest = createPageRequest(searchCriteria.getCurrPage(), searchCriteria.getSort());
+			Pageable pageRequest = createPageRequest(searchCriteria.getCurrPage());
 			Page<Employee> page = null;
 			List<EmployeeDTO> transactions = null;
 
@@ -697,7 +697,7 @@ public class    EmployeeService extends AbstractService {
 
         return mapperUtil.toModelList(designation, DesignationDTO.class);
     }
-    
+
     private EmployeeDTO mapToModel(Employee employee) {
     		EmployeeDTO empDto = new EmployeeDTO();
     		empDto.setId(employee.getId());
@@ -709,7 +709,7 @@ public class    EmployeeService extends AbstractService {
     		empDto.setFaceAuthorised(employee.isFaceAuthorised());
     		empDto.setFaceIdEnrolled(employee.isFaceIdEnrolled());
     		empDto.setDesignation(employee.getDesignation());
-    		
+
     		return empDto;
     }
 
