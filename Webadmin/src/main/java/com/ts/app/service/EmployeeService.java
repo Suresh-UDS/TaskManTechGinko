@@ -391,33 +391,34 @@ public class    EmployeeService extends AbstractService {
 
 	public List<EmployeeDTO> findAll(long userId) {
 		User user = userRepository.findOne(userId);
-		long userGroupId = user.getUserGroup().getId();
 		List<Employee> entities = null;
-		if(user.getUserGroup().getName().equalsIgnoreCase("admin")) {
+		if(user.getUserRole().getName().equalsIgnoreCase(UserRoleEnum.ADMIN.toValue())) {
 			entities = employeeRepository.findAll();
 		}else {
-			entities = employeeRepository.findAll(userGroupId);
+			List<Long> subEmpIds = null;
+			subEmpIds = findAllSubordinates(user.getEmployee(), subEmpIds);
+			entities = employeeRepository.findAllByIds(subEmpIds);
 		}
 		return mapperUtil.toModelList(entities, EmployeeDTO.class);
 	}
 
     public List<EmployeeDTO> findAllRelievers(long userId) {
         User user = userRepository.findOne(userId);
-        long userGroupId = user.getUserGroup().getId();
         List<Employee> entities = null;
-        if(user.getUserGroup().getName().equalsIgnoreCase("admin")) {
+        if(user.getUserRole().getName().equalsIgnoreCase(UserRoleEnum.ADMIN.toValue())) {
             entities = employeeRepository.findAllRelievers();
         }else {
-            entities = employeeRepository.findAllRelieversByGroupId(userGroupId);
+			List<Long> subEmpIds = null;
+			subEmpIds = findAllSubordinates(user.getEmployee(), subEmpIds);
+            entities = employeeRepository.findAllRelieversByIds(subEmpIds);
         }
         return mapperUtil.toModelList(entities, EmployeeDTO.class);
     }
 
     public List<EmployeeDTO> findBySiteId(long userId,long siteId) {
         User user = userRepository.findOne(userId);
-        long userGroupId = user.getUserGroup().getId();
         List<Employee> entities = null;
-        if(user.getUserGroup().getName().equalsIgnoreCase("admin")) {
+        if(user.getUserRole().getName().equalsIgnoreCase(UserRoleEnum.ADMIN.toValue())) {
             entities = employeeRepository.findBySiteId(siteId);
         }else {
             entities = employeeRepository.findBySiteId(siteId);
@@ -539,7 +540,6 @@ public class    EmployeeService extends AbstractService {
 
 	public SearchResult<EmployeeDTO> findBySearchCrieria(SearchCriteria searchCriteria) {
 		User user = userRepository.findOne(searchCriteria.getUserId());
-    	long userGroupId = user.getUserGroup().getId();
 		SearchResult<EmployeeDTO> result = new SearchResult<EmployeeDTO>();
 		if(searchCriteria != null) {
 			Pageable pageRequest = createPageRequest(searchCriteria.getCurrPage());
@@ -610,10 +610,13 @@ public class    EmployeeService extends AbstractService {
             			page = employeeRepository.findEmployeesByIdAndProjectIdOrSiteId(searchCriteria.getEmployeeId(), searchCriteria.getProjectId(), searchCriteria.getSiteId(), pageRequest);
             		}
             }else {
-            	if(user.getUserGroup().getName().equalsIgnoreCase("admin")) {
+            	if(user.getUserRole().getName().equalsIgnoreCase(UserRoleEnum.ADMIN.toValue())) {
             		page = employeeRepository.findAll(pageRequest);
             	}else {
-            		page = employeeRepository.findEmployees(userGroupId, pageRequest);
+            		List<Long> subEmpIds = null;
+            		subEmpIds = findAllSubordinates(user.getEmployee(), subEmpIds);
+					
+            		page = employeeRepository.findAllByEmpIds(subEmpIds, pageRequest);
             	}
             }
 

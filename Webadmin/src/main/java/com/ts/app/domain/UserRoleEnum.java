@@ -1,12 +1,12 @@
 package com.ts.app.domain;
 
-public enum UserGroupEnum {
+public enum UserRoleEnum {
 	
 	ADMIN("Admin");
 	
 	private String val;
 	
-	private UserGroupEnum(String value){
+	private UserRoleEnum(String value){
 		val = value;
 	}
 	

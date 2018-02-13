@@ -31,15 +31,9 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long> {
 
 	@Query("SELECT e FROM Employee e WHERE e.empId IN :empIds order by e.empId")
 	List<Employee> findAllByEmpIds(@Param("empIds") List<String> empIds);
-
-	@Query("SELECT e FROM Employee e , User u WHERE e.user.id = u.id and u.userGroup.id = :userGroupId order by e.empId")
-	List<Employee> findAllActiveAndInactive(@Param("userGroupId") long userGroupId);
-
-	@Query("SELECT e FROM Employee e , User u WHERE e.user.id = u.id and u.userGroup.id = :userGroupId and e.active='Y' order by e.empId")
-	List<Employee> findAll(@Param("userGroupId") long userGroupId);
-
-	@Query("SELECT e FROM Employee e, User u WHERE e.user.id = u.id and u.userGroup.id = :userGroupId and e.active='Y' order by e.empId")
-    Page<Employee> findEmployees(@Param("userGroupId") long userGroupId, Pageable pageRequest);
+	
+	@Query("SELECT e FROM Employee e WHERE e.id IN :empIds order by e.empId")
+	Page<Employee> findAllByEmpIds(@Param("empIds") List<Long> empIds, Pageable PageRequest);
 
     @Query("SELECT e FROM Employee e WHERE e.id = :employeeId")
     Page<Employee> findByEmployeeId(@Param("employeeId") long employeeId, Pageable pageRequest);
@@ -47,15 +41,20 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long> {
 	@Query("SELECT e FROM Employee e WHERE e.active='Y' order by e.createdDate desc")
     Page<Employee> findAll(Pageable pageRequest);
 
+	@Query("SELECT e FROM Employee e WHERE e.id IN :empIds and e.active='Y' order by e.createdDate desc")
+    List<Employee> findAllByIds(@Param("empIds") List<Long> empIds);
+
 	@Query("SELECT e FROM Employee e WHERE e.id <> :empId and e.active='Y' order by e.empId")
 	List<Employee> findAllEligibleManagers(@Param("empId") long empId);
 
-    @Query("SELECT e FROM Employee e , User u WHERE u.userGroup.id = :userGroupId and e.isReliever=true and e.active='Y' order by e.empId")
-    List<Employee> findAllRelieversByGroupId(@Param("userGroupId") long userGroupId);
+//    @Query("SELECT e FROM Employee e , User u WHERE u.userGroup.id = :userGroupId and e.isReliever=true and e.active='Y' order by e.empId")
+//    List<Employee> findAllRelieversByGroupId(@Param("userGroupId") long userGroupId);
 
     @Query("SELECT e FROM Employee e  WHERE  e.isReliever=true and e.active='Y' order by e.empId")
     List<Employee> findAllRelievers();
 
+    @Query("SELECT e FROM Employee e  WHERE e.id IN :empIds and  e.isReliever=true and e.active='Y' order by e.empId")
+    List<Employee> findAllRelieversByIds(@Param("empIds") List<Long> empIds);
 
     @Query("SELECT e FROM Employee e join e.projectSites ps WHERE ((e.id = :employeeId and ps.projectId = :projectId) or ps.siteId = :siteId) and e.active='Y' order by e.empId")
 	Page<Employee> findEmployeesByIdAndProjectIdOrSiteId(@Param("employeeId") long employeeId, @Param("projectId") long projectId, @Param("siteId") long siteId, Pageable pageRequest);
