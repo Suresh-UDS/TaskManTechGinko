@@ -81,8 +81,13 @@
     </div>
 
 
-
-
+	<div class="row" style="padding-left:10px">
+	<label>Show</label>
+	<select class="siteList" ng-model="sort" ng-change="hasChanged()" ng-options="paging.value for paging in pageSizes" value="{{paging.value}}">   
+	</select>
+	<label>number of entries</label>
+	
+	</div>
 
 
     <div class="row">
@@ -91,7 +96,7 @@
             <div class="card tablecard">
                 <div class="card-content">
                     <div class="table-responsive">
-                        <table class="table table-striped">
+                        <table id="datatables" class="table table-striped">
 
                             <thead>
                             <tr>
@@ -105,7 +110,7 @@
                             </thead>
 
                             <tbody>
-                            <tr ng-repeat="employee in employees" repeat-done="initDataTables()">
+                            <tr ng-repeat="employee in allEmployees" repeat-done="initDataTables()">
                                 <td>{{employee.empId}}</td>
                                 <td>{{employee.fullName}}</td>
 
