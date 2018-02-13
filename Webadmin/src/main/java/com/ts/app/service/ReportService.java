@@ -231,8 +231,15 @@ public class ReportService extends AbstractService {
 
     public ReportResult getAttendanceStatsDateRange(Long siteId, Date selectedDate, Date endDate) {
         log.info("Attendance report params : siteId - "+ siteId + ", selectedDate - " + selectedDate + ", endDate -" + endDate );
-        java.sql.Date sqlDate = new java.sql.Date(DateUtils.toCalendar(selectedDate).getTimeInMillis());
-        java.sql.Date sqlEndDate = new java.sql.Date(DateUtils.toCalendar(endDate).getTimeInMillis());
+        Calendar startCal = DateUtils.toCalendar(selectedDate);
+	    	startCal.set(Calendar.HOUR_OF_DAY, 0);
+	    	startCal.set(Calendar.MINUTE, 0);
+	    	Calendar endCal = DateUtils.toCalendar(endDate);
+	    	endCal.set(Calendar.HOUR_OF_DAY, 23);
+	    	endCal.set(Calendar.MINUTE, 59);
+
+        java.sql.Date sqlDate = new java.sql.Date(startCal.getTimeInMillis());
+        java.sql.Date sqlEndDate = new java.sql.Date(endCal.getTimeInMillis());
         long totalEmployeeCount = 0;
         long presentEmployeeCount = 0;
         long absentEmployeeCount = 0;
@@ -257,8 +264,15 @@ public class ReportService extends AbstractService {
     
     public ReportResult getAttendanceStatsByProjectIdDateRange(Long projectId, Date selectedDate, Date endDate) {
         log.info("Attendance report params : projectId - "+ projectId + ", selectedDate - " + selectedDate + ", endDate -" + endDate );
-        java.sql.Date sqlDate = new java.sql.Date(DateUtils.toCalendar(selectedDate).getTimeInMillis());
-        java.sql.Date sqlEndDate = new java.sql.Date(DateUtils.toCalendar(endDate).getTimeInMillis());
+        Calendar startCal = DateUtils.toCalendar(selectedDate);
+	    	startCal.set(Calendar.HOUR_OF_DAY, 0);
+	    	startCal.set(Calendar.MINUTE, 0);
+	    	Calendar endCal = DateUtils.toCalendar(endDate);
+	    	endCal.set(Calendar.HOUR_OF_DAY, 23);
+	    	endCal.set(Calendar.MINUTE, 59);
+
+        java.sql.Date sqlDate = new java.sql.Date(startCal.getTimeInMillis());
+        java.sql.Date sqlEndDate = new java.sql.Date(endCal.getTimeInMillis());
         long totalEmployeeCount = 0;
         long presentEmployeeCount = 0;
         long absentEmployeeCount = 0;
@@ -286,6 +300,11 @@ public class ReportService extends AbstractService {
         Calendar toCal = Calendar.getInstance(); 
         Calendar fromCal = Calendar.getInstance();
         	fromCal.add(Calendar.DAY_OF_MONTH, -10);
+	    	fromCal.set(Calendar.HOUR_OF_DAY, 0);
+	    	fromCal.set(Calendar.MINUTE, 0);
+	    	toCal.set(Calendar.HOUR_OF_DAY, 23);
+	    	toCal.set(Calendar.MINUTE, 59);
+
         java.sql.Date sqlDate = new java.sql.Date(fromCal.getTimeInMillis());
         java.sql.Date sqlEndDate = new java.sql.Date(toCal.getTimeInMillis());
         long totalEmployeeCount = 0;
