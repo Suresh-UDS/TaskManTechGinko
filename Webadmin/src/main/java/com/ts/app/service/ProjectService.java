@@ -14,6 +14,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 import com.ts.app.domain.AbstractAuditingEntity;
 import com.ts.app.domain.Employee;
@@ -49,11 +50,21 @@ public class ProjectService extends AbstractService {
 	@Inject
 	private MapperUtil<AbstractAuditingEntity, BaseDTO> mapperUtil;
 
+	public boolean isDuplicate(ProjectDTO projectDto) {
+		SearchCriteria criteria = new SearchCriteria();
+		criteria.setProjectName(projectDto.getName());
+		SearchResult<ProjectDTO> searchResults = findBySearchCrieria(criteria);
+		if(searchResults != null && CollectionUtils.isNotEmpty(searchResults.getTransactions())) {
+			return true;
+		}
+		return false;
+
+	}
+	
 	public ProjectDTO createProjectInformation(ProjectDTO projectDto) {
 		// log.info("The admin Flag value is " +adminFlag);
 		Project project = mapperUtil.toEntity(projectDto, Project.class);
 		project.setActive(project.ACTIVE_YES);
-
 		project = projectRepository.save(project);
 		log.debug("Created Information for Project: {}", project);
 		projectDto = mapperUtil.toModel(project, ProjectDTO.class);
@@ -162,6 +173,8 @@ public class ProjectService extends AbstractService {
             if(!searchCriteria.isFindAll()) {
                 if(searchCriteria.getProjectId() != 0) {
                     page = projectRepository.findProjectsById(searchCriteria.getProjectId(),empId, pageRequest);
+                }else if(!StringUtils.isEmpty(searchCriteria.getProjectName())) {
+                		page = projectRepository.findAllByName(searchCriteria.getProjectName(), pageRequest);
                 }
             }else {
             	if(empId > 0 && !user.isAdmin()) {

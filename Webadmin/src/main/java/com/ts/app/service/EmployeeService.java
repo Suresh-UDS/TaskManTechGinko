@@ -618,7 +618,16 @@ public class    EmployeeService extends AbstractService {
             }
 
 			if(page != null) {
-				transactions = mapperUtil.toModelList(page.getContent(), EmployeeDTO.class);
+				//transactions = mapperUtil.toModelList(page.getContent(), EmployeeDTO.class);
+				if(transactions == null) {
+					transactions = new ArrayList<EmployeeDTO>();
+				}
+				List<Employee> empList =  page.getContent();
+				if(CollectionUtils.isNotEmpty(empList)) {
+					for(Employee emp : empList) {
+						transactions.add(mapToModel(emp));
+					}
+				}
 				if(CollectionUtils.isNotEmpty(transactions)) {
 					buildSearchResult(searchCriteria, page, transactions,result);
 				}
@@ -687,6 +696,21 @@ public class    EmployeeService extends AbstractService {
         List<Designation> designation = designationRepository.findAll();
 
         return mapperUtil.toModelList(designation, DesignationDTO.class);
+    }
+    
+    private EmployeeDTO mapToModel(Employee employee) {
+    		EmployeeDTO empDto = new EmployeeDTO();
+    		empDto.setId(employee.getId());
+    		empDto.setEmpId(employee.getEmpId());
+    		empDto.setName(employee.getName());
+    		empDto.setFullName(employee.getFullName());
+    		empDto.setLastName(employee.getLastName());
+    		empDto.setActive(employee.getActive());
+    		empDto.setFaceAuthorised(employee.isFaceAuthorised());
+    		empDto.setFaceIdEnrolled(employee.isFaceIdEnrolled());
+    		empDto.setDesignation(employee.getDesignation());
+    		
+    		return empDto;
     }
 
 }

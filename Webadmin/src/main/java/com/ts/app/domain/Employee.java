@@ -94,7 +94,7 @@ public class Employee extends AbstractAuditingEntity implements Serializable {
         inverseJoinColumns = {@JoinColumn(name = "site_id", referencedColumnName = "id")})
 	private List<Site> sites;
 
-	@OneToMany(mappedBy="employee",cascade={CascadeType.ALL})
+	@OneToMany(mappedBy="employee",cascade={CascadeType.ALL}, fetch = FetchType.LAZY)
 	@Cascade(org.hibernate.annotations.CascadeType.DELETE_ORPHAN)
     private List<EmployeeProjectSite> projectSites;
 

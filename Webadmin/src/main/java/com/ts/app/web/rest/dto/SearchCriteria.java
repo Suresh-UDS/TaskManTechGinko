@@ -42,6 +42,8 @@ public class SearchCriteria extends Paginator {
 	private long siteId;
 
 	private long projectId;
+	
+	private String projectName;
 
 	private long userGroupId;
 
@@ -414,6 +416,14 @@ public class SearchCriteria extends Paginator {
 
 	public void setGraphRequest(boolean graphRequest) {
 		this.graphRequest = graphRequest;
+	}
+
+	public String getProjectName() {
+		return projectName;
+	}
+
+	public void setProjectName(String projectName) {
+		this.projectName = projectName;
 	}
 
 	

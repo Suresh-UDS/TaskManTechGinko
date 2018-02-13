@@ -32,6 +32,9 @@ public interface ProjectRepository extends JpaRepository<Project, Long> {
 	@Query("SELECT p FROM Project p join p.employees e WHERE e.id = :empId and p.active = 'Y'")
 	List<Project> findAllByUserGroupId(@Param("empId") long empId);
 
+	@Query("SELECT p FROM Project p WHERE p.name = :name and p.active = 'Y'")
+	List<Project> findAllByName(@Param("name") String name);
+
 	@Override
 	void delete(Project t);
 
@@ -46,4 +49,8 @@ public interface ProjectRepository extends JpaRepository<Project, Long> {
 
 	@Query("SELECT p FROM Project p WHERE p.active = 'Y'")
 	Page<Project> findAllProjects(Pageable pageRequest);
+	
+	@Query("SELECT p FROM Project p WHERE p.name = :name and p.active = 'Y'")
+	Page<Project> findAllByName(@Param("name") String name, Pageable pageRequest);
+
 }
