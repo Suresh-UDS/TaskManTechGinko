@@ -135,6 +135,26 @@ angular.module('timeSheetApp')
             	EmployeeComponent.findAll().then(function (data) {
             	console.log(data);
             		$scope.allEmployees = data;
+            	$timeout(function(){ 
+                    $('#datatables').DataTable({
+                        "pagingType": "full_numbers",
+                        "lengthMenu": [
+                            [10, 25, 50, -1],
+                            [10, 25, 50, "All"]
+                        ],
+                        responsive: true,
+                        language: {
+                            search: "_INPUT_",
+                            searchPlaceholder: "Search records",
+                        }
+
+                    });
+
+
+                    var table = $('#datatables').DataTable();
+
+                    $('.card .material-datatables label').addClass('form-group');
+                },1000);
             	})
         	}
         };
@@ -529,8 +549,26 @@ angular.module('timeSheetApp')
 
 
         };
-
-
+       
+                
+        $scope.pageSizes = [{
+        	value: 10
+          }, {
+        	  value: 15
+          }, {
+        	  value: 20
+          }];
+        
+        $scope.sort = $scope.pageSizes[0];
+        $scope.pageSort = $scope.pageSizes[0].value;
+        
+        $scope.hasChanged = function(){  
+        	alert($scope.sort.value)
+        	$scope.pageSort = $scope.sort.value;
+        	$scope.search();
+        }
+        
+        
 
         $scope.search = function () {
         	var currPageVal = ($scope.pages ? $scope.pages.currPage : 1);
@@ -587,11 +625,22 @@ angular.module('timeSheetApp')
         	}
         	$scope.searchCriteria.currPage = currPageVal;
         	console.log(JSON.stringify($scope.searchCriteria));
-
+        	
+        	if($scope.pageSort){ 
+        		$scope.searchCriteria.sort = $scope.pageSort;
+//        		alert($scope.pageSort);
+        	}
+        
+            
+        	
 
         	EmployeeComponent.search($scope.searchCriteria).then(function (data) {
+//        		alert(data.totalCount);
+//        		alert(data.totalPages);
+//        		alert(data.currPage);
+        		$scope.total_count = data.totalCount;
                 $scope.employees = data.transactions;
-
+                console.log('Employee search result list -' + $scope.employees);
                 $scope.pages.currPage = data.currPage;
                 $scope.pages.totalPages = data.totalPages;
                 if($scope.employees == null){
