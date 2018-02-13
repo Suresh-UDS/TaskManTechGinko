@@ -709,7 +709,7 @@ public class    EmployeeService extends AbstractService {
     		empDto.setFaceAuthorised(employee.isFaceAuthorised());
     		empDto.setFaceIdEnrolled(employee.isFaceIdEnrolled());
     		empDto.setDesignation(employee.getDesignation());
-
+    		empDto.setEnrolled_face(employee.getEnrolled_face());
     		return empDto;
     }
 
