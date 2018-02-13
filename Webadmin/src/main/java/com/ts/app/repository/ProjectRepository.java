@@ -44,7 +44,7 @@ public interface ProjectRepository extends JpaRepository<Project, Long> {
 	@Query("SELECT p FROM Project p join p.employees e WHERE e.id = :empId and p.active = 'Y'")
 	Page<Project> findProjects(@Param("empId") long empId, Pageable pageRequest);
 
-	@Query("SELECT p FROM Project p join p.employees e WHERE e.id in (:empIds) and p.active = 'Y'")
+	@Query("SELECT distinct p FROM Project p join p.employees e WHERE e.id in (:empIds) and p.active = 'Y'")
 	Page<Project> findProjects(@Param("empIds") List<Long> empIds, Pageable pageRequest);
 
 	@Query("SELECT p FROM Project p WHERE p.active = 'Y'")
