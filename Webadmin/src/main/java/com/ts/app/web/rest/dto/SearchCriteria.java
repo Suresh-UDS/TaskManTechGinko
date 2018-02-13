@@ -42,7 +42,7 @@ public class SearchCriteria extends Paginator {
 	private long siteId;
 
 	private long projectId;
-	
+
 	private String projectName;
 
 	private long userGroupId;
@@ -86,19 +86,9 @@ public class SearchCriteria extends Paginator {
 	private String rateCardTitle;
 
 	private String rateCardType;
-	
+
 	private boolean graphRequest;
-	
-	private int sort;
 
-
-	public int getSort() {
-		return sort;
-	}
-
-	public void setSort(int sort) {
-		this.sort = sort;
-	}
 
 	public long getId() {
 		return id;
@@ -436,5 +426,5 @@ public class SearchCriteria extends Paginator {
 		this.projectName = projectName;
 	}
 
-	
+
 }
