@@ -38,7 +38,7 @@
 
                                             <div class="col-md-12">
 
-                                                <div class="form-group label-floating">
+                                                <div class="form-group">
                                                     <label class="control-label">Title </label>
                                                     <input id='jobName'
                                                            ng-model="job.title"
@@ -74,7 +74,7 @@
 
                                             </div>
                                             <div class="col-md-12">
-                                                <div class="form-group label-floating">
+                                                <div class="form-group">
                                                     <label class="control-label">Description </label>
                                             <textarea
                                                 ng-model="job.description"
@@ -243,81 +243,51 @@
                                     <div class="card-content">
 
                                         <div class="row">
-                                            <div class="col-md-6">
+                                            <div class="col-md-12">
                                                 <div class="form-group">
                                                     <label class="label-control">Start date</label>
                                                     <span class="form-control-feedback calender-icon"><i class="material-icons">date_range</i></span>
                                                     <input type="text" class="form-control datetimepicker"  id="dateFilterFrom"  placeholder="{{dateFilterFrom | date:'dd-MMM-yyyy'}}"/>
 
                                                 </div>
-                                                <div class="form-group label-floating">
-                                                    <label class="control-label">Start Date </label>
-                                                    <p class="input-group">
-                                                        <input
-                                                            ng-model="job.plannedStartTime"
-                                                            class='form-control'
-                                                            name='plannedStartTime'
-                                                            required
-                                                            datetime-picker="dd-MMM-yyyy HH:mm"
-                                                            is-open="calendar.plannedStart" />
-                                            <span class="input-group-btn">
-                                                <button type="button" class="btn btn-default"
-                                                        ng-click="openCalendar($event, 'plannedStart')">
-                                                    <i class="fa fa-calendar"></i>
-                                                </button>
-                                            </span>
-                                                    </p>
+                                                <!--<div class="form-group label-floating">-->
+                                                    <!--<label class="control-label">Start Date </label>-->
+                                                    <!--<p class="input-group">-->
+                                                        <!--<input-->
+                                                            <!--ng-model="job.plannedStartTime"-->
+                                                            <!--class='form-control'-->
+                                                            <!--name='plannedStartTime'-->
+                                                            <!--required-->
+                                                            <!--datetime-picker="dd-MMM-yyyy HH:mm"-->
+                                                            <!--is-open="calendar.plannedStart" />-->
+                                            <!--<span class="input-group-btn">-->
+                                                <!--<button type="button" class="btn btn-default"-->
+                                                        <!--ng-click="openCalendar($event, 'plannedStart')">-->
+                                                    <!--<i class="fa fa-calendar"></i>-->
+                                                <!--</button>-->
+                                            <!--</span>-->
+                                                    <!--</p>-->
 
 
-                                                    <div ng-show="form.$submitted || form.plannedStartTime.$touched">
-                                                        <div ng-show="form.plannedStartTime.$dirty || form.plannedStartTime.$invalid">
-                                                            <p class="help-block" style="color: maroon"
-                                                               ng-show="form.plannedStartTime.$error.required">Required.</p>
-                                                            <!--
-                                                            <p class="help-block" style="color:maroon"
-                                                                   ng-show="form.plannedStartDate.$error.pattern">
-                                                                job name can only contain letters, digits and space.
-                                                            </p> -->
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                            </div>
-                                            <div class="col-md-6">
-                                                <div class="form-group label-floating">
-                                                    <label class="control-label">End Date </label>
-                                                    <p class="input-group">
-                                                        <input
-                                                            ng-model="job.plannedEndTime"
-                                                            class='form-control'
-                                                            name='plannedEndDate'
-                                                            required
-                                                            datetime-picker="dd-MMM-yyyy HH:mm"
-                                                            is-open="calendar.plannedEnd" />
-									<span class="input-group-btn">
-										<button type="button" class="btn btn-default"
-                                                ng-click="openCalendar($event, 'plannedEnd')">
-											<i class="fa fa-calendar"></i>
-										</button>
-									</span>
-                                                    </p>
-
-                                                    <div ng-show="form.$submitted || form.plannedEndDate.$touched">
-                                                        <div ng-show="form.plannedEndDate.$dirty || form.plannedEndDate.$invalid">
-
-                                                            <p class="help-block" style="color:maroon"
-                                                               ng-show="form.plannedEndDate.$error.required">
-                                                                Required
-                                                            </p>
-                                                        </div>
-                                                    </div>
-                                                </div>
+                                                    <!--<div ng-show="form.$submitted || form.plannedStartTime.$touched">-->
+                                                        <!--<div ng-show="form.plannedStartTime.$dirty || form.plannedStartTime.$invalid">-->
+                                                            <!--<p class="help-block" style="color: maroon"-->
+                                                               <!--ng-show="form.plannedStartTime.$error.required">Required.</p>-->
+                                                            <!--&lt;!&ndash;-->
+                                                            <!--<p class="help-block" style="color:maroon"-->
+                                                                   <!--ng-show="form.plannedStartDate.$error.pattern">-->
+                                                                <!--job name can only contain letters, digits and space.-->
+                                                            <!--</p> &ndash;&gt;-->
+                                                        <!--</div>-->
+                                                    <!--</div>-->
+                                                <!--</div>-->
 
                                             </div>
+
                                         </div>
                                         <div class="row">
                                             <div class="col-md-2">
-                                                <div class="form-group label-floating">
+                                                <div class="form-group">
                                                     <label class="control-label">Hours </label>
                                                     <input
                                                         ng-model="job.plannedHours"
@@ -344,7 +314,7 @@
 
                                             </div>
                                             <div class="col-md-5">
-                                                <div class="form-group label-floating">
+                                                <div class="form-group">
                                                     <label class="control-label">Status </label>
                                                     <select
                                                         required
@@ -375,7 +345,7 @@
 
                                             </div>
                                             <div class="col-md-5">
-                                                <div class="form-group label-floating">
+                                                <div class="form-group">
                                                     <label class="control-label">Type </label>
                                                     <select
                                                         required
@@ -411,7 +381,7 @@
                                         </div>
                                         <div class="row">
                                             <div class="col-md-12">
-                                                <div class="form-group label-floating">
+                                                <div class="form-group">
                                                     <label class="control-label">Comments </label>
                                             <textarea
                                                 ng-model="job.comments"
@@ -446,100 +416,100 @@
 
                         <div class="row">
 
-                            <div class="col-md-6">
-                                <div class="card formcard minhgt430">
-                                    <div class="card-header card-header-text" data-background-color="orange">
-                                        <h4 class="card-title">Actual status</h4>
-                                    </div>
-                                    <div class="card-content">
+                            <!--<div class="col-md-6">-->
+                                <!--<div class="card formcard minhgt430">-->
+                                    <!--<div class="card-header card-header-text" data-background-color="orange">-->
+                                        <!--<h4 class="card-title">Actual status</h4>-->
+                                    <!--</div>-->
+                                    <!--<div class="card-content">-->
 
-                                        <div class="row">
-                                            <div class="col-md-12">
-                                                <div class="form-group label-floating">
-                                                    <label class="control-label">Start Date </label>
-                                                    <p class="input-group">
-                                                        <input
-                                                            ng-model="job.actualStartTime"
-                                                            class='form-control'
-                                                            name='actualStartDate'
-                                                            datetime-picker="dd-MMM-yyyy HH:mm"
-                                                            is-open="calendar.actualStart" />
-									<span class="input-group-btn">
-										<button type="button" class="btn btn-default"
-                                                ng-click="openCalendar($event, 'actualStart')">
-											<i class="fa fa-calendar"></i>
-										</button>
-									</span>
-                                                    </p>
+                                        <!--<div class="row">-->
+                                            <!--<div class="col-md-12">-->
+                                                <!--<div class="form-group label-floating">-->
+                                                    <!--<label class="control-label">Start Date </label>-->
+                                                    <!--<p class="input-group">-->
+                                                        <!--<input-->
+                                                            <!--ng-model="job.actualStartTime"-->
+                                                            <!--class='form-control'-->
+                                                            <!--name='actualStartDate'-->
+                                                            <!--datetime-picker="dd-MMM-yyyy HH:mm"-->
+                                                            <!--is-open="calendar.actualStart" />-->
+									<!--<span class="input-group-btn">-->
+										<!--<button type="button" class="btn btn-default"-->
+                                                <!--ng-click="openCalendar($event, 'actualStart')">-->
+											<!--<i class="fa fa-calendar"></i>-->
+										<!--</button>-->
+									<!--</span>-->
+                                                    <!--</p>-->
 
-                                                    <div ng-show="form.$submitted || form.actualStartDate.$touched">
-                                                        <div ng-show="form.actualStartDate.$dirty || form.actualStartDate.$invalid">
-                                                            <p class="help-block" style="color: maroon"
-                                                               ng-show="form.actualStartDate.$error.required">Required.</p>
-                                                            <!--
-                                                            <p class="help-block" style="color:maroon"
-                                                                   ng-show="form.actualStartDate.$error.pattern">
-                                                                job name can only contain letters, digits and space.
-                                                            </p> -->
-                                                        </div>
-                                                    </div>
-                                                </div>
+                                                    <!--<div ng-show="form.$submitted || form.actualStartDate.$touched">-->
+                                                        <!--<div ng-show="form.actualStartDate.$dirty || form.actualStartDate.$invalid">-->
+                                                            <!--<p class="help-block" style="color: maroon"-->
+                                                               <!--ng-show="form.actualStartDate.$error.required">Required.</p>-->
+                                                            <!--&lt;!&ndash;-->
+                                                            <!--<p class="help-block" style="color:maroon"-->
+                                                                   <!--ng-show="form.actualStartDate.$error.pattern">-->
+                                                                <!--job name can only contain letters, digits and space.-->
+                                                            <!--</p> &ndash;&gt;-->
+                                                        <!--</div>-->
+                                                    <!--</div>-->
+                                                <!--</div>-->
 
-                                            </div>
-                                            <div class="col-md-12">
-                                                <div class="form-group label-floating">
-                                                    <label class="control-label">End Date
-                                                    </label>
-                                                    <p class="input-group">
-                                                        <input
-                                                            ng-model="job.actualEndTime"
-                                                            class='form-control'
-                                                            name='actualEndDate'
-                                                            datetime-picker="dd-MMM-yyyy HH:mm"
-                                                            is-open="calendar.actualEnd" />
-									<span class="input-group-btn">
-										<button type="button" class="btn btn-default"
-                                                ng-click="openCalendar($event, 'actualEnd')">
-											<i class="fa fa-calendar"></i>
-										</button>
-									</span>
-                                                    </p>
+                                            <!--</div>-->
+                                            <!--<div class="col-md-12">-->
+                                                <!--<div class="form-group label-floating">-->
+                                                    <!--<label class="control-label">End Date-->
+                                                    <!--</label>-->
+                                                    <!--<p class="input-group">-->
+                                                        <!--<input-->
+                                                            <!--ng-model="job.actualEndTime"-->
+                                                            <!--class='form-control'-->
+                                                            <!--name='actualEndDate'-->
+                                                            <!--datetime-picker="dd-MMM-yyyy HH:mm"-->
+                                                            <!--is-open="calendar.actualEnd" />-->
+									<!--<span class="input-group-btn">-->
+										<!--<button type="button" class="btn btn-default"-->
+                                                <!--ng-click="openCalendar($event, 'actualEnd')">-->
+											<!--<i class="fa fa-calendar"></i>-->
+										<!--</button>-->
+									<!--</span>-->
+                                                    <!--</p>-->
 
-                                                    <div ng-show="form.$submitted || form.actualEndDate.$touched">
-                                                        <div ng-show="form.actualEndDate.$dirty || form.actualEndDate.$invalid">
+                                                    <!--<div ng-show="form.$submitted || form.actualEndDate.$touched">-->
+                                                        <!--<div ng-show="form.actualEndDate.$dirty || form.actualEndDate.$invalid">-->
 
-                                                        </div>
-                                                    </div>
-                                                </div>
+                                                        <!--</div>-->
+                                                    <!--</div>-->
+                                                <!--</div>-->
 
-                                            </div>
-                                            <div class="col-md-12">
-                                                <div class="form-group label-floating">
-                                                    <label class="control-label">Hours </label>
-                                                    <input
-                                                        ng-model="job.actualHours"
-                                                        class='form-control'
-                                                        name='actualHours'
-                                                        type="number"
-                                                    ></textarea>
+                                            <!--</div>-->
+                                            <!--<div class="col-md-12">-->
+                                                <!--<div class="form-group label-floating">-->
+                                                    <!--<label class="control-label">Hours </label>-->
+                                                    <!--<input-->
+                                                        <!--ng-model="job.actualHours"-->
+                                                        <!--class='form-control'-->
+                                                        <!--name='actualHours'-->
+                                                        <!--type="number"-->
+                                                    <!--&gt;</textarea>-->
 
-                                                    <div ng-show="form.$submitted || form.actualHours.$touched">
-                                                        <div
-                                                            ng-show="form.actualHours.$dirty || form.actualHours.$invalid">
+                                                    <!--<div ng-show="form.$submitted || form.actualHours.$touched">-->
+                                                        <!--<div-->
+                                                            <!--ng-show="form.actualHours.$dirty || form.actualHours.$invalid">-->
 
-                                                            <!-- <p class="help-block" style="color: maroon"
-                                                                ng-show="form.actualHours.$error.pattern">job name can
-                                                                only contain letters, digits and space.</p> -->
-                                                        </div>
-                                                    </div>
-                                                </div>
+                                                            <!--&lt;!&ndash; <p class="help-block" style="color: maroon"-->
+                                                                <!--ng-show="form.actualHours.$error.pattern">job name can-->
+                                                                <!--only contain letters, digits and space.</p> &ndash;&gt;-->
+                                                        <!--</div>-->
+                                                    <!--</div>-->
+                                                <!--</div>-->
 
-                                            </div>
-                                        </div>
+                                            <!--</div>-->
+                                        <!--</div>-->
 
-                                    </div>
-                                </div>
-                            </div>
+                                    <!--</div>-->
+                                <!--</div>-->
+                            <!--</div>-->
                             <div class="col-md-6">
                                 <div class="card formcard minhgt430">
                                     <div class="card-header card-header-text" data-background-color="orange">
@@ -649,7 +619,7 @@
                                         <div class="row">
 
                                             <div class="col-md-12">
-                                                <div class="form-group label-floating">
+                                                <div class="form-group">
                                                     <label class="control-label">Schedule End Date </label>
                                                     <p class="input-group">
                                                         <input
