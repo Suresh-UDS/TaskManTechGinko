@@ -617,7 +617,11 @@ angular.module('timeSheetApp')
 
 	        	if($scope.selectedSite) {
 		        	$scope.searchCriteria.siteId = $scope.selectedSite.id;
-		        	$scope.searchCriteria.siteName = $scope.selectedSite.name;
+		        	if(!$scope.searchCriteria.siteId) {
+		        		$scope.searchCriteria.siteName = $scope.selectedSite;
+		        	}else {
+			        	$scope.searchCriteria.siteName = $scope.selectedSite.name;
+		        	}
 		        	console.log('selected site id ='+ $scope.searchCriteria.siteId);
 	        	}else {
 	        		$scope.searchCriteria.siteId = 0;
@@ -625,7 +629,13 @@ angular.module('timeSheetApp')
 
 	        	if($scope.selectedProject) {
 		        	$scope.searchCriteria.projectId = $scope.selectedProject.id;
-		        	$scope.searchCriteria.projectName = $scope.selectedProject.name;
+		        	if(!$scope.searchCriteria.projectId) {
+		        		$scope.searchCriteria.projectName = $scope.selectedProject;
+		        		console.log('selected project name ='+ $scope.selectedProject + ', ' +$scope.searchCriteria.projectName);
+		        	}else {
+			        	$scope.searchCriteria.projectName = $scope.selectedProject.name;
+		        	}
+
 		        	console.log('selected project id ='+ $scope.searchCriteria.projectId);
 	        	}else {
 	        		$scope.searchCriteria.projectId = 0;

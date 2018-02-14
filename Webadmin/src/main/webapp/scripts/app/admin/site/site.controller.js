@@ -182,7 +182,11 @@ angular.module('timeSheetApp')
         		$scope.searchCriteria.findAll = false;
 	        	if($scope.selectedSite) {
 		        	$scope.searchCriteria.siteId = $scope.selectedSite.id;
-		        	$scope.searchCriteria.siteName = $scope.selectedSite.name;
+		        	if(!$scope.searchCriteria.siteId) {
+		        		$scope.searchCriteria.siteName = $scope.selectedSite;
+		        	}else {
+			        	$scope.searchCriteria.siteName = $scope.selectedSite.name;
+		        	}
 		        	console.log('selected site id ='+ $scope.searchCriteria.siteId);
 	        	}else {
 	        		$scope.searchCriteria.siteId = 0;

@@ -26,6 +26,9 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long> {
 	@Query("SELECT e FROM Employee e join e.sites s WHERE s.id = :siteId")
 	List<Employee> findBySiteId(@Param("siteId") long siteId);
 
+	@Query("SELECT e FROM Employee e join e.sites s WHERE s.id = :siteId and e.id IN :empIds")
+	List<Employee> findBySiteIdAndEmpIds(@Param("siteId") long siteId, @Param("empIds") List<Long> empIds);
+
 	@Query("SELECT e FROM Employee e join e.projects p WHERE p.id = :projectId")
 	List<Employee> findByProjectId(@Param("projectId") long projectId);
 
@@ -86,6 +89,12 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long> {
     @Query("SELECT e FROM Employee e join e.projectSites ps WHERE (ps.siteId = :siteId and ps.projectId = :projectId) and e.active='Y' and e.createdDate between :startDate and :endDate order by e.empId")
 	Page<Employee> findBySiteIdAndProjectId(@Param("projectId") long projectId, @Param("siteId") long siteId, @Param("startDate") Date startDate, @Param("endDate") Date endDate, Pageable pageRequest);
 
+    @Query("SELECT e FROM Employee e join e.projectSites ps WHERE ps.siteName like '%' || :siteName || '%' and e.id in (:empIds) and e.active='Y' order by e.empId")
+	Page<Employee> findBySiteName(@Param("siteName") String siteId, @Param("empIds") List<Long> empIds, Pageable pageRequest);
+    
+    @Query("SELECT e FROM Employee e join e.projectSites ps WHERE ps.projectName like '%' || :projectName || '%' and e.id in (:empIds) and e.active='Y' order by e.empId")
+	Page<Employee> findByProjectName(@Param("projectName") String projectName, @Param("empIds") List<Long> empIds, Pageable pageRequest);
+    
     /*
     @Query("SELECT e FROM Employee e , User u WHERE ((e.id = :employeeId and e.project.id = :projectId) or e.site.id = :siteId) and e.user.id = u.id and u.userGroup.id = :userGroupId and e.active='Y' order by e.empId")
 	Page<Employee> findEmployeesByIdAndProjectIdOrSiteId(@Param("employeeId") long employeeId, @Param("projectId") long projectId, @Param("siteId") long siteId, @Param("userGroupId") long userGroupId, Pageable pageRequest);

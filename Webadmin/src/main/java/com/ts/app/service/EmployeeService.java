@@ -421,7 +421,9 @@ public class    EmployeeService extends AbstractService {
         if(user.getUserRole().getName().equalsIgnoreCase(UserRoleEnum.ADMIN.toValue())) {
             entities = employeeRepository.findBySiteId(siteId);
         }else {
-            entities = employeeRepository.findBySiteId(siteId);
+	    		List<Long> subEmpIds = null;
+	    		subEmpIds = findAllSubordinates(user.getEmployee(), subEmpIds);
+            entities = employeeRepository.findBySiteIdAndEmpIds(siteId, subEmpIds);
         }
         return mapperUtil.toModelList(entities, EmployeeDTO.class);
     }
@@ -609,15 +611,23 @@ public class    EmployeeService extends AbstractService {
             		}else {
             			page = employeeRepository.findEmployeesByIdAndProjectIdOrSiteId(searchCriteria.getEmployeeId(), searchCriteria.getProjectId(), searchCriteria.getSiteId(), pageRequest);
             		}
-            }else {
-            	if(user.getUserRole().getName().equalsIgnoreCase(UserRoleEnum.ADMIN.toValue())) {
-            		page = employeeRepository.findAll(pageRequest);
-            	}else {
-            		List<Long> subEmpIds = null;
-            		subEmpIds = findAllSubordinates(user.getEmployee(), subEmpIds);
-					
-            		page = employeeRepository.findAllByEmpIds(subEmpIds, pageRequest);
-            	}
+            }else if (StringUtils.isNotEmpty(searchCriteria.getSiteName())) {
+	        		List<Long> subEmpIds = null;
+	        		subEmpIds = findAllSubordinates(user.getEmployee(), subEmpIds);
+	        		page = employeeRepository.findBySiteName(searchCriteria.getSiteName(), subEmpIds, pageRequest);
+            }else if (StringUtils.isNotEmpty(searchCriteria.getProjectName())) {
+	        		List<Long> subEmpIds = null;
+	        		subEmpIds = findAllSubordinates(user.getEmployee(), subEmpIds);
+	        		page = employeeRepository.findByProjectName(searchCriteria.getProjectName(), subEmpIds, pageRequest);
+	        }else {
+	            	if(user.getUserRole().getName().equalsIgnoreCase(UserRoleEnum.ADMIN.toValue())) {
+	            		page = employeeRepository.findAll(pageRequest);
+	            	}else {
+	            		List<Long> subEmpIds = null;
+	            		subEmpIds = findAllSubordinates(user.getEmployee(), subEmpIds);
+						
+	            		page = employeeRepository.findAllByEmpIds(subEmpIds, pageRequest);
+	            	}
             }
 
 			if(page != null) {

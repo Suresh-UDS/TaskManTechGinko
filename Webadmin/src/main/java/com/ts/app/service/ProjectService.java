@@ -172,25 +172,28 @@ public class ProjectService extends AbstractService {
             List<ProjectDTO> transactions = null;
             if(!searchCriteria.isFindAll()) {
                 if(searchCriteria.getProjectId() != 0) {
-                    page = projectRepository.findProjectsById(searchCriteria.getProjectId(),empId, pageRequest);
+                		if(empId > 0 && !user.isAdmin()){
+                			List<Long> subEmpIds = findSubOrdinates(user.getEmployee(), empId);
+                			page = projectRepository.findProjectsById(searchCriteria.getProjectId(),subEmpIds, pageRequest);
+                		}else {
+                			page = projectRepository.findProjectsById(searchCriteria.getProjectId(),pageRequest);
+                		}
                 }else if(!StringUtils.isEmpty(searchCriteria.getProjectName())) {
-                		page = projectRepository.findAllByName(searchCriteria.getProjectName(), pageRequest);
+                		if(empId > 0 && !user.isAdmin()){
+                			List<Long> subEmpIds = findSubOrdinates(user.getEmployee(), empId);
+                    		page = projectRepository.findAllByName(searchCriteria.getProjectName(), subEmpIds, pageRequest);
+                		}else {
+                    		page = projectRepository.findAllByName(searchCriteria.getProjectName(), pageRequest);
+                			
+                		}
                 }
             }else {
-            	if(empId > 0 && !user.isAdmin()) {
-					Employee employee = user.getEmployee();
-					List<Long> subEmpIds = new ArrayList<Long>();
-					subEmpIds.add(empId);
-					if(employee != null) {
-						Hibernate.initialize(employee.getSubOrdinates());
-						subEmpIds.addAll(siteService.findAllSubordinates(employee, subEmpIds));
-						log.debug("List of subordinate ids -"+ subEmpIds);
-
-					}
-            		page = projectRepository.findProjects(subEmpIds, pageRequest);
-            	}else {
-            		page = projectRepository.findAllProjects(pageRequest);
-            	}
+	            	if(empId > 0 && !user.isAdmin()) {
+	            		List<Long> subEmpIds = findSubOrdinates(user.getEmployee(), empId);
+	            		page = projectRepository.findProjects(subEmpIds, pageRequest);
+	            	}else {
+	            		page = projectRepository.findAllProjects(pageRequest);
+	            	}
             }
             if(page != null) {
             		try {
@@ -220,6 +223,16 @@ public class ProjectService extends AbstractService {
         return;
     }
 
+    private List<Long> findSubOrdinates(Employee employee, long empId) {
+		List<Long> subEmpIds = new ArrayList<Long>();
+		subEmpIds.add(empId);
+		if(employee != null) {
+			Hibernate.initialize(employee.getSubOrdinates());
+			subEmpIds.addAll(findAllSubordinates(employee, subEmpIds));
+			log.debug("List of subordinate ids -"+ subEmpIds);
 
+		}
+		return subEmpIds;
+	}
 
 }

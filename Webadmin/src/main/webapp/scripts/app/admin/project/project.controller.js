@@ -181,8 +181,12 @@ angular.module('timeSheetApp')
         		$scope.searchCriteria.findAll = false;
 	        	if($scope.selectedProject) {
 		        	$scope.searchCriteria.projectId = $scope.selectedProject.id;
-		        	$scope.searchCriteria.projectName = $scope.selectedProject.name;
-		        	console.log('selected Project id ='+ $scope.searchCriteria.projectId);
+		        	if(!$scope.searchCriteria.projectId) {
+		        		$scope.searchCriteria.projectName = $scope.selectedProject;
+		        		console.log('selected project name ='+ $scope.selectedProject + ', ' +$scope.searchCriteria.projectName);
+		        	}else {
+			        	$scope.searchCriteria.projectName = $scope.selectedProject.name;
+		        	}
 	        	}else {
 	        		$scope.searchCriteria.projectId = 0;
 	        	}
