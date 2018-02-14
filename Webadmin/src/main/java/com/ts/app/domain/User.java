@@ -95,10 +95,6 @@ public class User extends AbstractAuditingEntity implements Serializable {
 	@Column(name = "admin_flag", length = 1)
 	private String adminFlag;
 
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "userGroupId", nullable = true)
-	private UserGroup userGroup;
-	
 	@OneToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "employeeId", nullable = true)
 	private Employee employee;
@@ -239,14 +235,6 @@ public class User extends AbstractAuditingEntity implements Serializable {
 		this.persistentTokens = persistentTokens;
 	}
 
-	public UserGroup getUserGroup() {
-		return userGroup;
-	}
-
-	public void setUserGroup(UserGroup userGroup) {
-		this.userGroup = userGroup;
-	}
-	
 	public Employee getEmployee() {
 		return employee;
 	}

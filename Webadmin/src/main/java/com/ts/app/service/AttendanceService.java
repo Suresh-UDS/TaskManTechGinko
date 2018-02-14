@@ -21,8 +21,8 @@ import com.ts.app.domain.Attendance;
 import com.ts.app.domain.Employee;
 import com.ts.app.domain.Site;
 import com.ts.app.domain.User;
-import com.ts.app.domain.UserGroup;
-import com.ts.app.domain.UserGroupEnum;
+import com.ts.app.domain.UserRoleEnum;
+import com.ts.app.domain.UserRole;
 import com.ts.app.ext.api.FaceRecognitionService;
 import com.ts.app.repository.AttendanceRepository;
 import com.ts.app.repository.EmployeeRepository;
@@ -302,10 +302,10 @@ public class AttendanceService extends AbstractService {
             	long userId = searchCriteria.getUserId();
             	if(userId > 0) {
             		User user = userRepository.findOne(userId);
-            		Hibernate.initialize(user.getUserGroup());
-            		UserGroup userGroup = user.getUserGroup();
-            		if(userGroup != null) {
-            			if(userGroup.getName().equalsIgnoreCase(UserGroupEnum.ADMIN.toValue())){
+            		Hibernate.initialize(user.getUserRole());
+            		UserRole userRole = user.getUserRole();
+            		if(userRole != null) {
+            			if(userRole.getName().equalsIgnoreCase(UserRoleEnum.ADMIN.toValue())){
                     		page = attendanceRepository.findByCheckInTime(startDate, toDate, pageRequest);
             			}else {
             				Employee emp = user.getEmployee();
@@ -316,6 +316,8 @@ public class AttendanceService extends AbstractService {
             						siteIds.add(site.getId());
             					}
             					attendanceRepository.findByMultipleSitesAndCheckInTime(siteIds, startDate, toDate, pageRequest);
+            				}else {
+            					
             				}
             			}
             		}
