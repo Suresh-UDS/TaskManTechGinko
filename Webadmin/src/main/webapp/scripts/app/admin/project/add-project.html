@@ -16,24 +16,21 @@
                 </div>
             </div>
 			<div class="col-md-12">
-				<div class="form-container table-container">
+				<div class="form-container table-container cardsCon">
 					<form ng-show="!success" name="form" role="form" novalidate
 						ng-submit="saveProject()"  class="form-horizontal">
 
                         <div class="row">
-                            <div class="col-md-6  col-md-offset-3">
-                                <div class="card formcard">
-                                    <div class="card-header card-header-text" data-background-color="orange">
-                                        <h4 class="card-title">Client Name and Location</h4>
-                                    </div>
+                            <div class="col-md-6">
 
-                                    <div class="card-content">
-
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">Client Name and Location</div>
+                                    <div class="panel-body">
 
                                         <div class="row">
 
                                             <div class="col-md-10">
-                                                <div class="form-group label-floating">
+                                                <div class="form-group">
                                                     <label class="control-label">Name</label>
                                                     <input id='projectName' ng-model="project.name"
                                                            class='form-control' name='projectName' type='text' value=""
@@ -60,10 +57,10 @@
                                                     </div>
                                                 </div>
                                             </div>
-										</div>
-										<div class="row">                                            
+                                        </div>
+                                        <div class="row">
                                             <div class="col-md-10">
-                                                <div class="form-group label-floating">
+                                                <div class="form-group">
                                                     <label class="control-label">Address</label>
                                                     <input id='address' ng-model="project.address" class='form-control'
                                                            name='address' type='text' value=""
@@ -85,30 +82,23 @@
                                             </div>
 
                                         </div>
-                                        <div class="row">                                            
 
-                                        </div>
-                                        <div class="row">                                            
-
-                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        </div>    
-                        <div class="row ">      	  
-                            <div class="col-md-6 col-md-offset-3">
-                                <div class="card formcard">
-                                    <div class="card-header card-header-text" data-background-color="orange">
-                                        <h4 class="card-title">Contact Info</h4>
-                                    </div>
 
-                                    <div class="card-content">
+
+                            </div>
+                            <div class="col-md-6">
+
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">Contact Info</div>
+                                    <div class="panel-body">
 
 
                                         <div class="row">
 
                                             <div class="col-md-10">
-                                                <div class="form-group label-floating">
+                                                <div class="form-group">
                                                     <label class="control-label">First Name</label>
                                                     <input id='projectContactFirstName' ng-model="project.contactFirstName"
                                                            class='form-control' name='projectContactFirstName' type='text' value=""
@@ -135,10 +125,10 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                         </div>
-                                         <div class="row">   
+                                        </div>
+                                        <div class="row">
                                             <div class="col-md-10">
-                                                <div class="form-group label-floating">
+                                                <div class="form-group">
                                                     <label class="control-label">Last Name</label>
                                                     <input id='projectContactLastName' ng-model="project.contactLastName"
                                                            class='form-control' name='projectContactLastName' type='text' value=""
@@ -167,9 +157,9 @@
                                             </div>
 
                                         </div>
-                                  		<div class="row">   
+                                        <div class="row">
                                             <div class="col-md-6">
-                                                <div class="form-group label-floating">
+                                                <div class="form-group">
                                                     <label class="control-label">Phone</label>
                                                     <input id='phone' ng-model="project.phone"
                                                            class='form-control' name='phone' type='phone' value=""
@@ -198,9 +188,9 @@
                                             </div>
 
                                         </div>
-										<div class="row">   
-                                            <div class="col-md-8">
-                                                <div class="form-group label-floating">
+                                        <div class="row">
+                                            <div class="col-md-10">
+                                                <div class="form-group">
                                                     <label class="control-label">Email</label>
                                                     <input id='email' ng-model="project.email"
                                                            class='form-control' name='email' type='email' value=""
@@ -231,14 +221,15 @@
                                         </div>
 
 
-
-
                                     </div>
                                 </div>
+
+
                             </div>
                         </div>
+
 						<div class="row">
-                              <div class="col-md-6 col-md-offset-3">
+                              <div class="col-md-4 col-md-offset-8 txt-align-rgt">
                                   <div class="form-group">
 
                                       <button class="btn btn-success" type="submit"
@@ -253,7 +244,7 @@
                                   </div>
                               </div>
                           </div>
-							
+
 
 						<!--<div class="form-group ">-->
 							<!--<label class="col-sm-3 control-label"> State </label>-->

@@ -2,7 +2,10 @@ a:focus
 {
  outline: none;
 }
-
+body
+{
+  font-size: 13px;
+}
 .box {
     position: relative;
     overflow: hidden;
@@ -70,9 +73,17 @@ a:focus
 {
     background: #ffba00 !important;
 }
+.margn-top15
+{
+  margin-top:15px !important;
+}
 .margn-top20
 {
   margin-top:20px !important;
+}
+.margn-top30
+{
+  margin-top:30px !important;
 }
 .pdng-top15
 {
@@ -316,11 +327,14 @@ span.red-star
   min-height:380px;
 }
 
-
+.navbar-brand
+{
+  font-size: 16px;
+}
 
 .form-group label.control-label
 {
-  font-size:14px;
+  font-size:13px;
   margin-top: 0;
 }
 .pagination>li>a, .pagination>li>span
@@ -375,6 +389,76 @@ button.btn.btn-outline {
       color: #777;
 }
 
+.form-control, .form-group .form-control
+{
+      border: 1px solid #d6d6d6;
+      border-radius: 2px;
+      background: none !important;
+      padding-left:10px;
+}
+.form-group label.control-label
+{
+   color:#444;
+   font-weight: 600;
+   margin-bottom: 5px;
+}
+
+.form-group.is-focused .form-control
+{
+        border: 1px solid #FFAA22;
+        background: none !important;
+}
+
+.form-group.has-error .form-control
+{
+  border: 1px solid red;
+  background: none !important;
+}
+.cardsCon,.form-container
+{
+  margin-top: 30px;
+}
+.card
+{
+  /*background: #F9F9F9;*/
+  border-radius: 0;
+}
+.card [data-background-color]
+{
+  border-radius: 0;
+}
+.label-on-left
+{
+  padding-top: 20px;
+}
+.checkbox label, .radio label, label, .label-on-left, .label-on-right
+{
+  font-size:13px;
+}
+.table-striped>tbody>tr:nth-of-type(odd) {
+    background-color: #eeeeee;
+}
+.panel
+{
+  background-color: #fff;
+}
+.panel .panel-body
+{
+  padding: 15px;
+}
+.panel-default>.panel-heading
+{
+  color: #444;
+  font-size: 16px;
+  background-color: #f5f5f5;
+  border-bottom: 1px solid #ddd;
+  padding:10px;
+}
+
+.listOfActions li.list-group-item
+{
+  min-height:45px;
+}
 
 /* left right modal css*/
 
