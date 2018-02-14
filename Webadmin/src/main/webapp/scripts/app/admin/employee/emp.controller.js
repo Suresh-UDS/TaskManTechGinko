@@ -135,7 +135,7 @@ angular.module('timeSheetApp')
             	EmployeeComponent.findAll().then(function (data) {
             	console.log(data);
             		$scope.allEmployees = data;
-            	})
+            	});
         	}
         };
 
@@ -528,8 +528,29 @@ angular.module('timeSheetApp')
 
 
         };
-
-
+       
+                
+        $scope.pageSizes = [{
+        	value: 10
+          }, {
+        	  value: 15
+          }, {
+        	  value: 20
+          }];
+        
+        $scope.sort = $scope.pageSizes[0];
+        $scope.pageSort = $scope.pageSizes[0].value;
+        
+        $scope.hasChanged = function(){  
+        	alert($scope.sort.value)
+        	$scope.pageSort = $scope.sort.value;
+        	$scope.search();
+        }
+        
+        $scope.clickNextOrPrev = function(number){ 
+        	$scope.pages.currPage = number;
+        	$scope.search();
+        }
 
         $scope.search = function () {
         	var currPageVal = ($scope.pages ? $scope.pages.currPage : 1);
@@ -586,13 +607,44 @@ angular.module('timeSheetApp')
         	}
         	$scope.searchCriteria.currPage = currPageVal;
         	console.log(JSON.stringify($scope.searchCriteria));
-
+        	
+        	if($scope.pageSort){ 
+        		$scope.searchCriteria.sort = $scope.pageSort;
+        	}
+        	
 
         	EmployeeComponent.search($scope.searchCriteria).then(function (data) {
                 $scope.employees = data.transactions;
                 console.log('Employee search result list -' + $scope.employees);
                 $scope.pages.currPage = data.currPage;
                 $scope.pages.totalPages = data.totalPages;
+//                alert($scope.pages.totalPages);
+                
+                $scope.numberArrays = [];
+                
+                for(var i=1; i<=$scope.pages.totalPages; i++){
+                	$scope.numberArrays.push(i);
+//                	alert($scope.numberArrays);
+                }
+                
+                if($scope.employees.length > 0 ){ 
+                    $scope.showCurrPage = data.currPage;
+                    $scope.pageEntries = $scope.employees.length;
+                    $scope.totalCountPages = data.totalCount;
+                    
+                    if($scope.showCurrPage != data.totalPages){ 
+                    	$scope.pageStartIntex =  (data.currPage - 1) * $scope.pageSort + 1; // 1 to // 11 to 
+                        
+                        $scope.pageEndIntex = $scope.pageEntries * $scope.showCurrPage; // 10 entries of 52 // 10 * 2 = 20 of 52 entries
+                        
+                    }else if($scope.showCurrPage === data.totalPages){ 
+                    	$scope.pageStartIntex =  (data.currPage - 1) * $scope.pageSort + 1;
+                    	$scope.pageEndIntex = $scope.totalCountPages;
+                    }
+                    
+                    
+                }
+                
                 if($scope.employees == null){
                     $scope.pages.startInd = 0;
                 }else{
