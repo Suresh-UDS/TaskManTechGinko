@@ -39,9 +39,10 @@ public abstract class AbstractService {
         if(logger.isDebugEnabled()) {
         		logger.debug("List of subordinates -"+ subs);
         }
-        if(subs == null){
+        if(subEmpIds == null){
             subEmpIds = new ArrayList<Long>();
         }
+        
         for(Employee sub : subs) {
             subEmpIds.add(sub.getId());
             Hibernate.initialize(sub.getSubOrdinates());

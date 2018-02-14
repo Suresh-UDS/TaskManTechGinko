@@ -64,7 +64,7 @@ public class Employee extends AbstractAuditingEntity implements Serializable {
 	@Column(name="qr_code_image")
 	private String qrCodeImage;
 
-	@OneToOne(fetch = FetchType.EAGER,optional=true)
+	@OneToOne(fetch = FetchType.LAZY,optional=true)
 	@JoinColumn(name = "userId", nullable = true)
 	private User user;
 

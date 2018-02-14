@@ -69,20 +69,20 @@ angular.module('timeSheetApp')
         };
 
         $scope.loadSites = function () {
-        	$scope.clearFilter();
-//        	if($rootScope.searchCriteriaSite) {
-//        		$scope.search();
-//        	}else {
-//            	SiteComponent.findAll().then(function (data) {
-//                    $scope.sites = data;
-//                });
-//        	}
-        	//$scope.search();
+	        	$scope.clearFilter();
+	//        	if($rootScope.searchCriteriaSite) {
+	//        		$scope.search();
+	//        	}else {
+	//            	SiteComponent.findAll().then(function (data) {
+	//                    $scope.sites = data;
+	//                });
+	//        	}
+	        	$scope.search();
         };
 
         $scope.refreshPage = function(){
                $scope.clearFilter();
-               $scope.loadSites();
+               $scope.search();
         }
 
 
@@ -169,7 +169,7 @@ angular.module('timeSheetApp')
         	}
 
         	$scope.searchCriteria.currPage = currPageVal;
-        	console.log('Selected  project -' + $scope.selectedProject +" , "+ $scope.selectedSite);
+        	console.log('Selected  project -' + JSON.stringify($scope.selectedProject) +" , "+ $scope.selectedSite);
         	console.log('search criteria - '+JSON.stringify($rootScope.searchCriteriaSite));
 
         	if(!$scope.selectedSite && !$scope.selectedProject) {
@@ -190,7 +190,12 @@ angular.module('timeSheetApp')
 
 	        	if($scope.selectedProject) {
 		        	$scope.searchCriteria.projectId = $scope.selectedProject.id;
-		        	$scope.searchCriteria.projectName = $scope.selectedProject.name;
+		        	if(!$scope.searchCriteria.projectId) {
+		        		$scope.searchCriteria.projectName = $scope.selectedProject;
+		        		console.log('selected project name ='+ $scope.selectedProject + ', ' +$scope.searchCriteria.projectName);
+		        	}else {
+			        	$scope.searchCriteria.projectName = $scope.selectedProject.name;
+		        	}
 		        	console.log('selected project id ='+ $scope.searchCriteria.projectId);
 	        	}else {
 	        		$scope.searchCriteria.projectId = 0;
@@ -326,7 +331,7 @@ angular.module('timeSheetApp')
         		currPage: 1,
         		totalPages: 0
         	}
-        	$scope.search();
+        	//$scope.search();
         };
 
 

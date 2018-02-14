@@ -40,6 +40,8 @@ public class SearchCriteria extends Paginator {
 	private long locationId;
 
 	private long siteId;
+	
+	private String siteName;
 
 	private long projectId;
 
@@ -436,5 +438,12 @@ public class SearchCriteria extends Paginator {
 		this.projectName = projectName;
 	}
 
+	public String getSiteName() {
+		return siteName;
+	}
+
+	public void setSiteName(String siteName) {
+		this.siteName = siteName;
+	}
 
 }
