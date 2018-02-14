@@ -90,7 +90,17 @@ public class SearchCriteria extends Paginator {
 	private String rateCardType;
 
 	private boolean graphRequest;
+	
+	private int sort;
 
+
+	public int getSort() {
+		return sort;
+	}
+
+	public void setSort(int sort) {
+		this.sort = sort;
+	}
 
 	public long getId() {
 		return id;
