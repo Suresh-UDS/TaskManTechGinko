@@ -327,11 +327,14 @@ span.red-star
   min-height:380px;
 }
 
-
+.navbar-brand
+{
+  font-size: 16px;
+}
 
 .form-group label.control-label
 {
-  font-size:14px;
+  font-size:13px;
   margin-top: 0;
 }
 .pagination>li>a, .pagination>li>span
@@ -389,9 +392,17 @@ button.btn.btn-outline {
 .form-control, .form-group .form-control
 {
       border: 1px solid #d6d6d6;
+      border-radius: 2px;
       background: none !important;
       padding-left:10px;
 }
+.form-group label.control-label
+{
+   color:#444;
+   font-weight: 600;
+   margin-bottom: 5px;
+}
+
 .form-group.is-focused .form-control
 {
         border: 1px solid #FFAA22;
@@ -403,9 +414,13 @@ button.btn.btn-outline {
   border: 1px solid red;
   background: none !important;
 }
+.cardsCon
+{
+  margin-top: 30px;
+}
 .card
 {
-  background: #F9F9F9;
+  /*background: #F9F9F9;*/
   border-radius: 0;
 }
 .card [data-background-color]
@@ -423,7 +438,22 @@ button.btn.btn-outline {
 .table-striped>tbody>tr:nth-of-type(odd) {
     background-color: #eeeeee;
 }
-
+.panel
+{
+  background-color: #fff;
+}
+.panel .panel-body
+{
+  padding: 15px;
+}
+.panel-default>.panel-heading
+{
+  color: #444;
+  font-size: 16px;
+  background-color: #f5f5f5;
+  border-bottom: 1px solid #ddd;
+  padding:10px;
+}
 
 .listOfActions li.list-group-item
 {
