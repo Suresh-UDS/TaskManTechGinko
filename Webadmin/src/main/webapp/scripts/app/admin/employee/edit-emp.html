@@ -239,10 +239,13 @@
                                                     <label class="control-label">Client</label>
                                                     <div class="dropdown">
 
-                                                        <input type="text" class="form-control" ng-model="selectedProject" name="projectName" ng-value="selectedProject.name"
-                                                               uib-typeahead="project as project.name for project in projects | filter:$viewValue | limitTo:5"
-                                                               ng-blur="loadSites()"
-                                                               ng-minlength=2 ng-maxlength=50 ng-pattern="/^[A-Za-z0-9\s&-/]*$/"  autocomplete="off" />
+                                                        <!--<input type="text" class="form-control" ng-model="selectedProject" name="projectName" ng-value="selectedProject.name"-->
+                                                               <!--uib-typeahead="project as project.name for project in projects | filter:$viewValue | limitTo:5"-->
+                                                               <!--ng-blur="loadSites()"-->
+                                                               <!--ng-minlength=2 ng-maxlength=50 ng-pattern="/^[A-Za-z0-9\s&-/]*$/"  autocomplete="off" />-->
+                                                        <select class=" form-control " ng-model="selectedProject" ng-change="loadSites()" ng-options="project as project.name for project in projects" >
+                                                            <option value="">Please select Client...</option>
+                                                        </select>
                                                         <div ng-show="form.$submitted || form.projectName.$touched">
                                                             <div ng-show="form.projectName.$dirty || form.projectName.$invalid">
                                                                 <p class="help-block" style="color:maroon"
@@ -270,9 +273,13 @@
                                                 <div class="form-group label-floating">
                                                     <label class="control-label">Site</label>
                                                     <div class="dropdown" >
-                                                        <input ng-focus="loadSites()" type="text" class="form-control"  ng-model="selectedSite" name="siteName" ng-value="selectedSite.name"
-                                                               uib-typeahead="site as site.name for site in sites | filter:$viewValue | limitTo:5"
-                                                               ng-minlength=2 ng-maxlength=50 ng-pattern="/^[A-Za-z0-9\s&-/]*$/"  autocomplete="off" />
+                                                        <!--<input ng-focus="loadSites()" type="text" class="form-control"  ng-model="selectedSite" name="siteName" ng-value="selectedSite.name"-->
+                                                               <!--uib-typeahead="site as site.name for site in sites | filter:$viewValue | limitTo:5"-->
+                                                               <!--ng-minlength=2 ng-maxlength=50 ng-pattern="/^[A-Za-z0-9\s&-/]*$/"  autocomplete="off" />-->
+
+                                                        <select class="form-control " ng-model="selectedSite"  ng-options="site as site.name for site in sites">
+                                                            <option value="">Please select Site...</option>
+                                                        </select>
 
                                                         <div ng-show="form.$submitted || form.siteName.$touched">
                                                             <div ng-show="form.siteName.$dirty || form.siteName.$invalid">
@@ -353,9 +360,13 @@
                                                 <div class="form-group ">
                                                     <label class="control-label">Manager</label>
                                                     <div class="dropdown">
-                                                        <input ng-focus="loadAllManagers()" type="text" class="form-control" ng-model="selectedManager" name="manager"
-                                                               uib-typeahead="employee as employee.name for employee in allManagers | filter:$viewValue | limitTo:10"
-                                                               ng-minlength=1 ng-maxlength=50 ng-pattern="/^[A-Za-z0-9\s]*$/"  autocomplete="off" />
+                                                        <!--<input ng-focus="loadAllManagers()" type="text" class="form-control" ng-model="selectedManager" name="manager"-->
+                                                               <!--uib-typeahead="employee as employee.name for employee in allManagers | filter:$viewValue | limitTo:10"-->
+                                                               <!--ng-minlength=1 ng-maxlength=50 ng-pattern="/^[A-Za-z0-9\s]*$/"  autocomplete="off" />-->
+
+                                                        <select class=" form-control " ng-model="selectedManager"  ng-options="manager as manager.name for manager in allManagers" >
+                                                            <option value="">Please select Manager...</option>
+                                                        </select>
                                                         <div ng-show="form.$submitted || form.manager.$touched">
                                                             <div ng-show="form.manager.$dirty || form.manager.$invalid">
                                                                 <p class="help-block" style="color:maroon"

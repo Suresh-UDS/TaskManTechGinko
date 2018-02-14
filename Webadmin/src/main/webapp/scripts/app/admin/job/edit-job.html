@@ -105,13 +105,16 @@
                                                 <div class="form-group">
                                                     <label class="control-label">Checklist</label>
                                                     <div class="dropdown">
-                                                        <input type="text"
-                                                               class="form-control"
-                                                               name='checklist'
-                                                               ng-model="selectedChecklist"
-                                                               ng-change="onSelectChecklist()"
-                                                               uib-typeahead="checklist as checklist.name for checklist in checklists | filter:$viewValue | limitTo:5"
-                                                               autocomplete="off" />
+                                                        <!--<input type="text"-->
+                                                               <!--class="form-control"-->
+                                                               <!--name='checklist'-->
+                                                               <!--ng-model="selectedChecklist"-->
+                                                               <!--ng-change="onSelectChecklist()"-->
+                                                               <!--uib-typeahead="checklist as checklist.name for checklist in checklists | filter:$viewValue | limitTo:5"-->
+                                                               <!--autocomplete="off" />-->
+                                                        <select class="form-control " ng-model="selectedChecklist"  ng-options="checklist as checklist.name for checklist in checklists">
+                                                            <option value="">Please select Checklist...</option>
+                                                        </select>
                                                     </div>
                                                 </div>
 
@@ -124,13 +127,17 @@
                                                 <div class="form-group">
                                                     <label class="control-label">Site </label>
                                                     <div class="dropdown">
-                                                        <input type="text"
-                                                               class="form-control"
-                                                               name='siteName'
-                                                               ng-model="selectedSite"
-                                                               uib-typeahead="site as site.name for site in sites | filter:$viewValue | limitTo:5"
-                                                               required
-                                                               autocomplete="off" />
+                                                        <!--<input type="text"-->
+                                                               <!--class="form-control"-->
+                                                               <!--name='siteName'-->
+                                                               <!--ng-model="selectedSite"-->
+                                                               <!--uib-typeahead="site as site.name for site in sites | filter:$viewValue | limitTo:5"-->
+                                                               <!--required-->
+                                                               <!--autocomplete="off" />-->
+
+                                                        <select class="form-control " ng-model="selectedSite"  ng-options="site as site.name for site in sites">
+                                                            <option value="">Please select Site...</option>
+                                                        </select>
                                                         <div ng-show="form.$submitted || form.siteName.$touched">
                                                             <div
                                                                 ng-show="form.siteName.$dirty || form.siteName.$invalid">
@@ -147,13 +154,17 @@
                                                 <div class="form-group">
                                                     <label class="control-label">Location </label>
                                                     <div class="dropdown">
-                                                        <input type="text"
-                                                               class="form-control"
-                                                               name='location'
-                                                               ng-model="selectedLocation"
-                                                               uib-typeahead="location as location.name for location in locations | filter:$viewValue | limitTo:5"
-                                                               required
-                                                               autocomplete="off" />
+                                                        <!--<input type="text"-->
+                                                               <!--class="form-control"-->
+                                                               <!--name='location'-->
+                                                               <!--ng-model="selectedLocation"-->
+                                                               <!--uib-typeahead="location as location.name for location in locations | filter:$viewValue | limitTo:5"-->
+                                                               <!--required-->
+                                                               <!--autocomplete="off" />-->
+
+                                                        <select class="form-control " ng-model="selectedLocation"  ng-options="location as location.name for location in locations">
+                                                            <option value="">Please select Location...</option>
+                                                        </select>
                                                         <div ng-show="form.$submitted || form.location.$touched">
                                                             <div
                                                                 ng-show="form.location.$dirty || form.location.$invalid">
@@ -170,39 +181,43 @@
                                         </div>
                                         <div class="row">
 
-                                            <div class="col-md-6">
-                                                <div class="form-group">
-                                                    <label class="control-label">Asset </label>
-                                                    <div class="dropdown">
-                                                        <input type="text"
-                                                               class="form-control"
-                                                               name='asset'
-                                                               ng-model="selectedAsset"
-                                                               uib-typeahead="asset as asset.title for asset in assets | filter:$viewValue | limitTo:5"
-                                                               autocomplete="off" />
-                                                        <div ng-show="form.$submitted || form.location.$touched">
-                                                            <div
-                                                                ng-show="form.asset.$dirty || form.asset.$invalid">
-                                                                <p class="help-block" style="color: maroon"
-                                                                   ng-show="form.asset.$error.required">Asset
-                                                                    is required.</p>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
+                                            <!--<div class="col-md-6">-->
+                                                <!--<div class="form-group">-->
+                                                    <!--<label class="control-label">Asset </label>-->
+                                                    <!--<div class="dropdown">-->
+                                                        <!--<input type="text"-->
+                                                               <!--class="form-control"-->
+                                                               <!--name='asset'-->
+                                                               <!--ng-model="selectedAsset"-->
+                                                               <!--uib-typeahead="asset as asset.title for asset in assets | filter:$viewValue | limitTo:5"-->
+                                                               <!--autocomplete="off" />-->
+                                                        <!--<div ng-show="form.$submitted || form.location.$touched">-->
+                                                            <!--<div-->
+                                                                <!--ng-show="form.asset.$dirty || form.asset.$invalid">-->
+                                                                <!--<p class="help-block" style="color: maroon"-->
+                                                                   <!--ng-show="form.asset.$error.required">Asset-->
+                                                                    <!--is required.</p>-->
+                                                            <!--</div>-->
+                                                        <!--</div>-->
+                                                    <!--</div>-->
+                                                <!--</div>-->
 
                                             </div>
                                             <div class="col-md-6">
                                                 <div class="form-group">
                                                     <label class="control-label">Employee </label>
                                                     <div class="dropdown">
-                                                        <input type="text"
-                                                               class="form-control"
-                                                               name='employeeName'
-                                                               ng-model="selectedEmployee"
-                                                               uib-typeahead="emp as emp.name for emp in employees | filter:$viewValue | limitTo:5"
-                                                               required
-                                                               autocomplete="off" />
+                                                        <!--<input type="text"-->
+                                                               <!--class="form-control"-->
+                                                               <!--name='employeeName'-->
+                                                               <!--ng-model="selectedEmployee"-->
+                                                               <!--uib-typeahead="emp as emp.name for emp in employees | filter:$viewValue | limitTo:5"-->
+                                                               <!--required-->
+                                                               <!--autocomplete="off" />-->
+
+                                                        <select class="form-control " ng-model="selectedEmployee"  ng-options="emp as emp.name for emp in employees">
+                                                            <option value="">Please select Employees...</option>
+                                                        </select>
 
                                                         <div ng-show="form.$submitted || form.employeeName.$touched">
                                                             <div

@@ -36,6 +36,10 @@ angular.module('timeSheetApp')
 
         $scope.designation;
 
+        $scope.loading = false;
+
+        $scope.notLoading = true;
+
 
 
 
@@ -99,6 +103,18 @@ angular.module('timeSheetApp')
           })
         };
 
+        $scope.showLoader = function(){
+            console.log("Show Loader");
+            $scope.loading = true;
+            $scope.notLoading=false;
+        };
+
+        $scope.hideLoader = function(){
+            console.log("Show Loader");
+            $scope.loading = false;
+            $scope.notLoading=true;
+        };
+
         $scope.getSites= function (value) {
             var searchData = {
                 name:value
@@ -110,6 +126,7 @@ angular.module('timeSheetApp')
         }
 
         $scope.loadDesignations = function () {
+
             console.log("Loading all designations")
             EmployeeComponent.findAllDesginations().then(function (data) {
                 console.log("Loading all Designations");
@@ -118,14 +135,19 @@ angular.module('timeSheetApp')
         }
 
         $scope.loadSites = function () {
+            $scope.showLoader();
         	console.log('selected project - ' + JSON.stringify($scope.selectedProject));
         	if($scope.selectedProject) {
             	ProjectComponent.findSites($scope.selectedProject.id).then(function (data) {
                     $scope.sites = data;
+                    $scope.hideLoader();
+
                 });
         	}else {
             	SiteComponent.findAll().then(function (data) {
                     $scope.sites = data;
+                    $scope.hideLoader();
+
                 });
         	}
         };
@@ -140,18 +162,22 @@ angular.module('timeSheetApp')
         };
 
         $scope.loadAllManagers = function () {
+            $scope.showLoader();
         	if(!$scope.allManagers) {
         		if($scope.employee && $scope.employee.id) {
                 	EmployeeComponent.findAllManagers($scope.employee.id).then(function (data) {
-                	    console.log("Managers")
-                    	console.log(data)
+                	    console.log("Managers");
+                    	console.log(data);
                     		$scope.allManagers = data;
+                    		$scope.hideLoader();
                     	})
         		}else {
                 	EmployeeComponent.findAll().then(function (data) {
                     	console.log(data)
                     	$scope.allManagers = data;
-                	})
+                        $scope.hideLoader();
+
+                    })
         		}
         	}
         };
@@ -528,8 +554,8 @@ angular.module('timeSheetApp')
 
 
         };
-       
-                
+
+
         $scope.pageSizes = [{
         	value: 10
           }, {
@@ -537,17 +563,17 @@ angular.module('timeSheetApp')
           }, {
         	  value: 20
           }];
-        
+
         $scope.sort = $scope.pageSizes[0];
         $scope.pageSort = $scope.pageSizes[0].value;
-        
-        $scope.hasChanged = function(){  
+
+        $scope.hasChanged = function(){
         	alert($scope.sort.value)
         	$scope.pageSort = $scope.sort.value;
         	$scope.search();
         }
-        
-        $scope.clickNextOrPrev = function(number){ 
+
+        $scope.clickNextOrPrev = function(number){
         	$scope.pages.currPage = number;
         	$scope.search();
         }
@@ -607,11 +633,11 @@ angular.module('timeSheetApp')
         	}
         	$scope.searchCriteria.currPage = currPageVal;
         	console.log(JSON.stringify($scope.searchCriteria));
-        	
-        	if($scope.pageSort){ 
+
+        	if($scope.pageSort){
         		$scope.searchCriteria.sort = $scope.pageSort;
         	}
-        	
+
 
         	EmployeeComponent.search($scope.searchCriteria).then(function (data) {
                 $scope.employees = data.transactions;
@@ -619,32 +645,32 @@ angular.module('timeSheetApp')
                 $scope.pages.currPage = data.currPage;
                 $scope.pages.totalPages = data.totalPages;
 //                alert($scope.pages.totalPages);
-                
+
                 $scope.numberArrays = [];
-                
+
                 for(var i=1; i<=$scope.pages.totalPages; i++){
                 	$scope.numberArrays.push(i);
 //                	alert($scope.numberArrays);
                 }
-                
-                if($scope.employees.length > 0 ){ 
+
+                if($scope.employees.length > 0 ){
                     $scope.showCurrPage = data.currPage;
                     $scope.pageEntries = $scope.employees.length;
                     $scope.totalCountPages = data.totalCount;
-                    
-                    if($scope.showCurrPage != data.totalPages){ 
-                    	$scope.pageStartIntex =  (data.currPage - 1) * $scope.pageSort + 1; // 1 to // 11 to 
-                        
+
+                    if($scope.showCurrPage != data.totalPages){
+                    	$scope.pageStartIntex =  (data.currPage - 1) * $scope.pageSort + 1; // 1 to // 11 to
+
                         $scope.pageEndIntex = $scope.pageEntries * $scope.showCurrPage; // 10 entries of 52 // 10 * 2 = 20 of 52 entries
-                        
-                    }else if($scope.showCurrPage === data.totalPages){ 
+
+                    }else if($scope.showCurrPage === data.totalPages){
                     	$scope.pageStartIntex =  (data.currPage - 1) * $scope.pageSort + 1;
                     	$scope.pageEndIntex = $scope.totalCountPages;
                     }
-                    
-                    
+
+
                 }
-                
+
                 if($scope.employees == null){
                     $scope.pages.startInd = 0;
                 }else{
