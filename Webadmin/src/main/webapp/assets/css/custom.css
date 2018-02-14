@@ -414,7 +414,7 @@ button.btn.btn-outline {
   border: 1px solid red;
   background: none !important;
 }
-.cardsCon
+.cardsCon,.form-container
 {
   margin-top: 30px;
 }

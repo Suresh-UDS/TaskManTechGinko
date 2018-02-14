@@ -38,11 +38,10 @@
 						<div class="row">
 
                             <div class="col-md-6">
-                                <div class="card formcard minhgt320">
-                                    <div class="card-header card-header-text" data-background-color="orange">
-                                        <h4 class="card-title">Identity and Name</h4>
-                                    </div>
-                                    <div class="card-content">
+
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">Identity and Name</div>
+                                    <div class="panel-body">
 
                                         <div class="row">
 
@@ -94,34 +93,6 @@
                                         </div>
 
 
-                                            <!-- <div class="col-md-12">
-                                                <div class="form-group">
-                                                    <label class="control-label">Full Name</label>
-                                                    <input id='employeeFullName' ng-model="employee.fullName" class='form-control'
-                                                           name='employeeFullName' type='text' value=""
-                                                           ng-minlength=5 ng-maxlength=50 ng-pattern="/^[A-Za-z0-9\s]*$/" required />
-                                                    <div ng-show="form.$submitted || form.employeeFullName.$touched">
-                                                        <div ng-show="form.employeeFullName.$dirty || form.employeeFullName.$invalid">
-                                                            <p class="help-block" style="color:maroon"
-                                                               ng-show="form.employeeFullName.$error.required">
-                                                                Employee full name is required.
-                                                            </p>
-                                                            <p class="help-block" style="color:maroon"
-                                                               ng-show="form.employeeFullName.$error.minlength">
-                                                                Employee full name is required to be at least 5 character.
-                                                            </p>
-                                                            <p class="help-block" style="color:maroon"
-                                                               ng-show="form.employeeFullName.$error.maxlength">
-                                                                Employee full name cannot be longer than 50 characters.
-                                                            </p>
-                                                            <p class="help-block" style="color:maroon"
-                                                               ng-show="form.employeeFullName.$error.pattern">
-                                                                Employee full name can only contain letters,numbers and space.
-                                                            </p>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div> -->
                                         <div class="row">
                                             <div class="col-md-6">
                                                 <div class="form-group ">
@@ -214,23 +185,17 @@
 
                                         </div>
 
-                                        <div class="row" ng-init="loadProjects()">
-
-                                        </div>
-                                        <div class="row" >
-
-                                        </div>
-
                                     </div>
                                 </div>
+
+
                             </div>
 
                        		<div class="col-md-6">
-                                <div class="card formcard minhgt320">
-                                    <div class="card-header card-header-text" data-background-color="orange">
-                                        <h4 class="card-title">Client Info</h4>
-                                    </div>
-                                    <div class="card-content">
+
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">Client Info</div>
+                                    <div class="panel-body">
 
                                         <div class="row">
 
@@ -298,92 +263,95 @@
                                                 </div>
                                             </div>
 
-											<div class="col-md-4">
+                                            <div class="col-md-4">
 
-					                            <button class="btn btn-success margn-top30" type="button" ng-click="addProjectSite()">
+                                                <button class="btn btn-success margn-top30" type="button" ng-click="addProjectSite()">
 					                                <span class="btn-label">
 					                                    <i class="material-icons">add</i>
 					                                </span>
-					                                Add
-					                            </button>
+                                                    Add
+                                                </button>
 
-					                        </div>
+                                            </div>
 
 
                                             <div class="col-md-12 addedActionList pdng-top15" ng-hide="!(employee.projectSites.length > 0)">
 
 
-						                        <div class="form-group">
+                                                <div class="form-group">
 
-						                            <label class="">Site List</label>
+                                                    <label class="">Site List</label>
 
-						                            <ul class="listOfActions list-group">
+                                                    <ul class="listOfActions list-group">
 
-						                                <li class="list-group-item justify-content-between" ng-repeat="projSite in employee.projectSites" ng-bind-html-unsafe="projSite.text">
-						                                    {{projSite.projectName}}  -  {{projSite.siteName}}
-						                                    <span class="badge badge-default badge-pill" ng-click="removeProjectSite($index)"><i class="material-icons">remove_circle</i></span>
-						                                </li>
+                                                        <li class="list-group-item justify-content-between" ng-repeat="projSite in employee.projectSites" ng-bind-html-unsafe="projSite.text">
+                                                            {{projSite.projectName}}  -  {{projSite.siteName}}
+                                                            <span class="badge badge-default badge-pill" ng-click="removeProjectSite($index)"><i class="material-icons">remove_circle</i></span>
+                                                        </li>
 
-						                            </ul>
+                                                    </ul>
 
-						                        </div>
+                                                </div>
                                             </div>
 
-                                       </div>
+                                        </div>
 
                                     </div>
                                 </div>
+
+
                              </div>
 
                        </div>
 
                        <div class="row" >
 	                       <div class="col-md-6">
-	                                <div class="card formcard minhgt320">
-	                                    <div class="card-header card-header-text" data-background-color="orange">
-	                                        <h4 class="card-title">Reporting hierarchy</h4>
-	                                    </div>
-	                                    <div class="card-content">
 
-	                                        <div class="row">
+                               <div class="panel panel-default">
+                                   <div class="panel-heading">Reporting hierarchy</div>
+                                   <div class="panel-body">
 
+                                       <div class="row">
 
 
-        		                                    <div class="col-md-6">
-                                                <div class="form-group ">
-                                                    <label class="control-label">Manager</label>
-                                                    <div class="dropdown">
-                                                        <input ng-focus="loadAllManagers()" type="text" class="form-control" ng-model="selectedManager" name="manager"
-                                                               uib-typeahead="employee as employee.name for employee in allManagers | filter:$viewValue | limitTo:10"
-                                                               ng-minlength=1 ng-maxlength=50 ng-pattern="/^[A-Za-z0-9\s]*$/"  autocomplete="off" />
-                                                        <div ng-show="form.$submitted || form.manager.$touched">
-                                                            <div ng-show="form.manager.$dirty || form.manager.$invalid">
-                                                                <p class="help-block" style="color:maroon"
-                                                                   ng-show="form.manager.$error.required">
-                                                                    Manager is required.
-                                                                </p>
-                                                                <p class="help-block" style="color:maroon"
-                                                                   ng-show="form.manager.$error.maxlength">
-                                                                    Manager cannot be longer than 50 characters.
-                                                                </p>
-                                                                <p class="help-block" style="color:maroon"
-                                                                   ng-show="form.manager.$error.pattern">
-                                                                    Manager can only contain letters, digits and space.
-                                                                </p>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-        		                                </div>
 
-        		                            </div>
-        		                         </div>
+                                           <div class="col-md-6">
+                                               <div class="form-group ">
+                                                   <label class="control-label">Manager</label>
+                                                   <div class="dropdown">
+                                                       <input ng-focus="loadAllManagers()" type="text" class="form-control" ng-model="selectedManager" name="manager"
+                                                              uib-typeahead="employee as employee.name for employee in allManagers | filter:$viewValue | limitTo:10"
+                                                              ng-minlength=1 ng-maxlength=50 ng-pattern="/^[A-Za-z0-9\s]*$/"  autocomplete="off" />
+                                                       <div ng-show="form.$submitted || form.manager.$touched">
+                                                           <div ng-show="form.manager.$dirty || form.manager.$invalid">
+                                                               <p class="help-block" style="color:maroon"
+                                                                  ng-show="form.manager.$error.required">
+                                                                   Manager is required.
+                                                               </p>
+                                                               <p class="help-block" style="color:maroon"
+                                                                  ng-show="form.manager.$error.maxlength">
+                                                                   Manager cannot be longer than 50 characters.
+                                                               </p>
+                                                               <p class="help-block" style="color:maroon"
+                                                                  ng-show="form.manager.$error.pattern">
+                                                                   Manager can only contain letters, digits and space.
+                                                               </p>
+                                                           </div>
+                                                       </div>
+                                                   </div>
+                                               </div>
+                                           </div>
+                                       </div>
+
+                                   </div>
+                               </div>
+
+
         		               </div>
                        </div>
 						<div class="row">
 
-                                            <div class="col-sm-offset-3 col-sm-7">
+                                            <div class="col-sm-offset-8 col-sm-4 txt-align-rgt">
                                                 <button class="btn btn-success" type="submit"
                                                         id="form-button-save" ng-disabled="form.$invalid" >
                                                     <span class="btn-label">
