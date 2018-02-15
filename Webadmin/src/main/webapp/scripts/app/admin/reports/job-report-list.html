@@ -4,13 +4,13 @@
 
     <div class="row">
         <div class="col-md-8">
-            <h2 class="title">Job Report</h2>
+            <!--<h2 class="title">Job Report</h2>-->
         </div>
         <div class="col-md-4 txt-align-rgt">
             <a class="download-btn" href="{{exportFile()}}">{{exportMsg()}}</a>
             <button ng-show="jobs.length" type="button" class="btn btn-success" ng-click=exportAllData()>
                 <i class="material-icons">file_upload</i> Export</button>
-        
+
             <button ng-click="refreshPage()" class="btn btn-warning align-left"> <i class="material-icons padding-right5">refresh</i>Reload<div class="ripple-container"></div></button>
         </div>
     </div>
@@ -27,15 +27,15 @@
                             <tr class="filter-row gc-search-row">
                                 <td>
                                     <div class="form-group" ng-init="loadProjects();loadAllSites();loadAssets()">
-	                                    <div class="dropdown col-xs-4 col-md-3" >
-	
+	                                    <div class="dropdown col-xs-4 col-md-2" >
+
 	                                        <input id="dateFilterFrom" type="text" class="form-control datepicker"   value={{now}} placeholder="From Date" />
 	                                    </div>
-	                                    <div class="dropdown col-xs-4 col-md-3" >
+	                                    <div class="dropdown col-xs-4 col-md-2" >
 
                                         		<input id="dateFilterTo" type="text" class="form-control datepicker"   value={{now}} placeholder="To Date" />
                                     		</div>
-                                        <div class="dropdown col-xs-4 col-md-3">
+                                        <div class="dropdown col-xs-4 col-md-2">
                                             <input type="text"
                                                    class="form-control searchable-input floatL"
                                                    placeholder="Search Project" ng-model="selectedProject"

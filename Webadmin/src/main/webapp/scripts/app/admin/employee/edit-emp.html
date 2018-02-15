@@ -73,17 +73,23 @@
                                                 </div>
                                             </div>
                                             <div class="col-md-6">
-                                                <div class="form-group selectcon margn-top30">
-                                                    <select class="siteList" ng-model="employee.designation" ng-options="designation.designation as designation.designation for designation in designations">
-                                                        <option value="">Please select Designation..</option>
-                                                    </select>
+                                                <div class="form-group selectcon" style="padding-top:25px;">
 
-                                                    <a href="javascript:;"  data-toggle="collapse" data-parent="#accordian" data-target="#addDesignation" class="btn btn-round btn-fab btn-fab-mini btn-simple" aria-expanded="false" aria-controls="collapseExample">
-                                                        <i class="material-icons">add</i>
-                                                    </a>
+                                                    <div class="" style="float:left;width:80%;">
+                                                        <select class="form-control" ng-model="employee.designation" ng-options="designation.designation as designation.designation for designation in designations">
+                                                            <option value="">Please select Designation..</option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="" style="float:left;">
+                                                        <a href="javascript:;"  data-toggle="collapse" data-parent="#accordian" data-target="#addDesignation" class="btn btn-round btn-fab btn-fab-mini btn-simple" aria-expanded="false" aria-controls="collapseExample">
+                                                            <i class="material-icons">add</i>
+                                                        </a>
+                                                    </div>
+
+
                                                     <div class="collapse" id="addDesignation">
                                                         <div class="">
-                                                            <input id='designationName' ng-model="designation"
+                                                            <input class="input-desc" id='designationName' ng-model="designation"
                                                                    name='designation' type='text' value=""/>
                                                             <a class="btn btn-success"  ng-click="addDesignation()">Add</a>
                                                         </div>
@@ -300,7 +306,7 @@
 
                                             <div class="col-md-4">
 
-                                                <button class="btn btn-success margn-top30" type="button" ng-click="addProjectSite()">
+                                                <button class="btn btn-success margn-top20" type="button" ng-click="addProjectSite()">
 					                                <span class="btn-label">
 					                                    <i class="material-icons">add</i>
 					                                </span>
@@ -338,6 +344,7 @@
                        </div>
 
                        <div class="row" >
+
 	                       <div class="col-md-6">
 
                                <div class="panel panel-default">
@@ -382,26 +389,31 @@
 
         		               </div>
                        </div>
-						<div class="row">
 
-                                            <div class="col-sm-offset-8 col-sm-4 txt-align-rgt">
-                                                <button class="btn btn-success" type="submit"
-                                                        id="form-button-save" ng-disabled="form.$invalid" >
+                      </div>
+
+
+                           <div class="row">
+
+                               <div class="col-sm-offset-8 col-sm-4 txt-align-rgt">
+                                   <button class="btn btn-success" type="submit"
+                                           id="form-button-save" ng-disabled="form.$invalid" >
                                                     <span class="btn-label">
                                             				<i class="material-icons">check</i>
                                         				</span> Save
-                                                </button>
-                                                <!--<button class="btn btn-info" type="submit"-->
-                                                        <!--id="save-and-go-back-button" ng-disabled="form.$invalid">-->
-                                                    <!--<i class="material-icons">rotate_left</i> Save and go back to list-->
-                                                <!--</button>-->
-                                                <button class="btn btn-danger" type="button"
-                                                        ng-click="cancelEmployee()" id="cancel-button">
-                                                    <i class="material-icons">close</i> Cancel
-                                                </button>
-                                            </div>
+                                   </button>
+                                   <!--<button class="btn btn-info" type="submit"-->
+                                   <!--id="save-and-go-back-button" ng-disabled="form.$invalid">-->
+                                   <!--<i class="material-icons">rotate_left</i> Save and go back to list-->
+                                   <!--</button>-->
+                                   <button class="btn btn-danger" type="button"
+                                           ng-click="cancelEmployee()" id="cancel-button">
+                                       <i class="material-icons">close</i> Cancel
+                                   </button>
+                               </div>
 
-                                        </div>
+                           </div>
+
 
 						<!--<div class="form-group"  >-->
 							<!--<label class="col-sm-3 control-label"> Photo Code </label>-->

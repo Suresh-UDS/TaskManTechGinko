@@ -441,6 +441,7 @@ button.btn.btn-outline {
 .panel
 {
   background-color: #fff;
+  border: 1px solid #ddd;
 }
 .panel .panel-body
 {
@@ -459,6 +460,14 @@ button.btn.btn-outline {
 {
   min-height:45px;
 }
+.input-desc
+{
+  width: 80%;
+  padding-top: 10px;
+  margin-top: 5px;
+}
+
+
 
 /* left right modal css*/
 
