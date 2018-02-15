@@ -578,6 +578,10 @@ a:hover, a:focus
 {
   font-weight: 300;
 }
+.item-fnt .label-md
+{
+  margin:0 !important;
+}
 .padding-left16
 {
   padding-left: 16px !important;
@@ -637,3 +641,6 @@ ion-fab-list
   transform: rotate(90deg);
 }
 
+.padding-bottom0{
+  
+}
