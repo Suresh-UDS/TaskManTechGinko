@@ -14,6 +14,7 @@ import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.core.env.Environment;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -78,6 +79,9 @@ public class UserService extends AbstractService {
 
 	@Inject
 	private MapperUtil<AbstractAuditingEntity, BaseDTO> mapperUtil;
+	
+	@Inject
+	private Environment env;
 
 	public User findUser(long userId) {
 		return userRepository.findOne(userId);
@@ -164,7 +168,7 @@ public class UserService extends AbstractService {
 
 	public UserDTO createUserInformation(UserDTO userDto) {
 		User newUser = new User();
-		newUser.setClearPassword(userDto.getPassword());
+		newUser.setClearPassword(env.getProperty("default.user.password"));
 		String encryptedPassword = null;
 		if (StringUtils.isNotEmpty(userDto.getPassword())) {
 			encryptedPassword = passwordEncoder.encode(userDto.getPassword());

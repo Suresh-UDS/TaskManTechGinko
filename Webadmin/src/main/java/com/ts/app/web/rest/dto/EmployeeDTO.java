@@ -75,6 +75,8 @@ public class EmployeeDTO extends BaseDTO {
     private boolean isReliever;
 
     private boolean isRelieved;
+    
+    private boolean createUser;
 
     @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property="@id")
     private EmployeeDTO manager;
@@ -346,4 +348,13 @@ public class EmployeeDTO extends BaseDTO {
 		this.projectSites = projectSites;
 	}
 
+	public boolean isCreateUser() {
+		return createUser;
+	}
+
+	public void setCreateUser(boolean createUser) {
+		this.createUser = createUser;
+	}
+
+	
 }
