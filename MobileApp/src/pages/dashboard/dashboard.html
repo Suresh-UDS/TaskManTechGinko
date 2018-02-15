@@ -46,9 +46,9 @@
     <ion-row class="margin0 padding-top15">
         <ion-col col-8 class="align-right">
             <p  text-right class="fnt-18 date-txt" (click)="showCalendar()">
-                <span class="clr-orange">{{selectDate | date:'d' }}</span>
-                <span class="clr-blue">{{selectDate | date:'MMM' }}</span>
-                <span class="clr-orange">{{selectDate | date:'y' }}</span>
+                <span class="clr-black">{{selectDate | date:'d' }}</span>
+                <span class="clr-orange">{{selectDate | date:'MMM' }}</span>
+                <span class="clr-black">{{selectDate | date:'y' }}</span>
             </p>
         </ion-col>
         <ion-col col-4 class="padding-right5 align-right">
@@ -88,20 +88,35 @@ Tip 2: you can also add an image using data-image tag
 
     </ion-row>
     -->
-    <div class="container-fluid container-scroll hariz-scroll-con">
-        <div class="row">
-            <div *ngIf="!empSelect">
-                <p text-center ></p>
-            </div>
 
-            <button ion-button round color="light"  *ngFor="let site of sites;let i of index" (click)="activeSite(site.id)" [ngClass]="{'bg-orange':selectSite}">
-                <p class="siteName">{{site.name}}</p>
-            </button>
+    <div class="SiteCon">
+        <div text-center>
+            <p class="margin0">Sites</p>
+        </div>
+        <div class="container-fluid container-scroll hariz-scroll-con">
+
+            <div class="row">
+                <div *ngIf="!empSelect">
+                    <p text-center ></p>
+                </div>
+
+
+                <button ion-button round color="light"  *ngFor="let site of sites;let i of index" (click)="activeSite(site.id)" [ngClass]="{'bg-orange':selectSite}">
+                    <p class="siteName">{{site.name}}</p>
+                </button>
+            </div>
         </div>
     </div>
 
-    <div class="container-fluid container-scroll hariz-scroll-con">
-        <div class="row">
+    <div class="EmpCon" style="padding-bottom:10px;">
+
+        <div text-center>
+            <p class="margin0">Employees</p>
+        </div>
+        <div class="container-fluid container-scroll hariz-scroll-con">
+
+            <div class="row">
+
             <span *ngFor="let emp of employee;let i of index" class="Nametxt">
                 <!--<ion-avatar item-start *ngIf="emp.enrolled_face" class="emp-round width-round">-->
                 <!--<img  [src]="emp.enrolled_face" >-->
@@ -113,8 +128,12 @@ Tip 2: you can also add an image using data-image tag
                 </ion-avatar>
                 <!--<p text-left>{{emp.name}}</p>-->
             </span>
+            </div>
         </div>
+
     </div>
+
+
 
 
     <!--

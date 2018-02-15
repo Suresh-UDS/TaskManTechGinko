@@ -67,10 +67,23 @@
   text-transform: capitalize;
   padding-top: 10px;
 }
+.sidebar .nav li.active>a, .sidebar .nav li.active>a i
+{
+  color: #fff;
+}
+.SiteCon
+{
+  background: #fff;
+  padding: 5px 0;
+}
+.EmpCon
+{
+  padding: 5px 0;
+}
 .hariz-scroll-con
 {
-    padding:10px 15px;
-    width: 1800px;
+    padding:3px 15px;
+    width:100%;
 }
 container-scroll::-webkit-scrollbar-track
 {
@@ -239,6 +252,10 @@ container-scroll::-webkit-scrollbar-thumb
 .clr-orange
 {
   color: #ff9800;
+}
+.clr-black
+{
+  color: #444;
 }
 .padding-top0
 {
