@@ -24,11 +24,11 @@ export class ViewQuotationPage {
         this.quotationService.sendQuotation(quotation).subscribe(
             response=>{
                 console.log(response);
-                this.componentService.showToastMessage('Quotation Sent Successfully');
+                this.componentService.showToastMessage('Quotation Sent Successfully','bottom');
                 this.navCtrl.push(QuotationPage);
             },err=>{
                 console.log("Unable to send quotation, please try again later")
-                this.componentService.showToastMessage('Error in sending Quotation, Please try again later');
+                this.componentService.showToastMessage('Error in sending Quotation, Please try again later','bottom');
             }
         )
     }
@@ -37,12 +37,12 @@ export class ViewQuotationPage {
         this.quotationService.approveQuotation(this.quotation).subscribe(
             response=>{
                 console.log(response);
-                this.componentService.showToastMessage('Quotation Approved');
+                this.componentService.showToastMessage('Quotation Approved','bottom');
                 this.navCtrl.push(QuotationPage);
             },err=>{
                 console.log("Unable to send quotation");
                 console.log(err);
-                this.componentService.showToastMessage('Error in sending Quotation, please try again later');
+                this.componentService.showToastMessage('Error in sending Quotation, please try again later','bottom');
             }
         )
     }

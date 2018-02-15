@@ -36,9 +36,9 @@ export class componentService
         this.loader.dismissAll();
     }
 
-    showToastMessage(msg){
+    showToastMessage(msg,align){
         
-        this.toast.show(msg, '3000', 'center').subscribe(
+        this.toast.show(msg, '3000', align).subscribe(
             toast => {
                 console.log(toast);
             }
