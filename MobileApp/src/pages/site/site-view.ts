@@ -11,6 +11,7 @@ import {ArchivedQuotationPage} from "../quotation/archivedQuotations";
 import {ApprovedQuotationPage} from "../quotation/approvedQuotations";
 import {CreateQuotationPage} from "../quotation/create-quotation";
 import {QuotationService} from "../service/quotationService";
+import {SiteService} from "../service/siteService";
 
 @Component({
   selector: 'page-site-view',
@@ -40,7 +41,7 @@ export class SiteViewPage {
   archivedQuotationPage:ArchivedQuotationPage;
   draftedQuotationsPage:DraftedQuotationPage;
   submittedQuotationsPage:SubmittedQuotationPage;
-  constructor(public navCtrl: NavController,public component:componentService,private employeeService: EmployeeService,public navParams:NavParams,public myService:authService,public authService:authService, public toastCtrl: ToastController,
+  constructor(public navCtrl: NavController,public component:componentService,private employeeService: EmployeeService,public navParams:NavParams,private siteService: SiteService,public myService:authService,public authService:authService, public toastCtrl: ToastController,
 
               private jobService:JobService, private attendanceService: AttendanceService, private quotationService: QuotationService) {
   this.categories='detail';
@@ -76,13 +77,12 @@ export class SiteViewPage {
       this.getJobs(this.ref);
       refresher.complete();
     }
-    else if(segment=="attendance")
+    else if(segment=="employee")
     {
-      console.log("------------- segment attandance");
+      console.log("------------- segment Employee");
       this.getEmployee(this.ref);
       refresher.complete();
     }
-
   }
 
   getJobs(ref)
@@ -139,23 +139,42 @@ export class SiteViewPage {
 
   loadEmployee()
   {
-    this.component.showLoader('Getting Attendance');
+    this.component.showLoader('Getting Employee');
     // var search={siteId:this.siteDetail.id};
     //TODO
     //Add Search criteria to attendance
 
-    this.employeeService.getAllEmployees().subscribe(
-        response=>{
-          console.log('Loader Employee');
-          console.log(response);
-          this.employee=response;
-          this.component.closeLoader();
+    // this.employeeService.getAllEmployees().subscribe(
+    //     response=>{
+    //       console.log('Loader Employee');
+    //       console.log(response);
+    //       this.employee=response;
+    //       this.component.closeLoader();
+    //     },
+    //     error=>{
+    //       console.log(error);
+    //     }
+    // )
+
+    this.siteService.searchSiteEmployee(this.siteDetail.id).subscribe(
+        response=> {
+          console.log(response.json());
+          if(response.json().length !==0)
+          {
+            this.employee=response.json();
+            console.log(this.employee);
+              this.component.closeLoader();
+          }
+          else
+          {
+            this.employee=[]
+            this.component.closeLoader();
+          }
         },
         error=>{
           console.log(error);
-        }
-    )
-
+          console.log(this.employee);
+        })
   }
   first(emp)
   {

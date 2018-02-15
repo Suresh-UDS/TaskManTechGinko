@@ -382,6 +382,10 @@ table tr
 {
   margin-bottom:25px !important;
 }
+.margin-bottom5
+{
+  margin-bottom: 5px;
+}
 .content-md
 {
   background-color:#EEEEEE !important;
@@ -476,6 +480,10 @@ table tr
 .clr-blk
 {
   color: #000000;
+}
+.clr-blue
+{
+  color: #00bcd4;
 }
 .bottom-div
 {
@@ -597,13 +605,17 @@ a:hover, a:focus
 .q-round
 {
   width: 90% !important;
-  height: 50% !important;
+  height: 80% !important;
   border-radius: 50% !important;
   border: 1px solid #ff9800;
 }
 .fab-md-dark
 {
   color: #ff9800 !important;
+}
+.bg-orange
+{
+  background-color:#ff9800;
 }
 ion-fab-list
 {
@@ -624,3 +636,4 @@ ion-fab-list
 {
   transform: rotate(90deg);
 }
+

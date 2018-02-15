@@ -6,8 +6,8 @@
     <ion-title>{{siteDetail.name}}</ion-title>
   </ion-navbar>
 
-      <ion-scroll scrollX="true" style="width:355px;height:50px">
-    <ion-segment [(ngModel)]="categories" color="clr-blue">
+      <!--<ion-scroll scrollX="true" style="width:355px;height:50px">-->
+    <ion-segment [(ngModel)]="categories" color="clr-blue" class="segmnt margin-auto">
         <ion-segment-button value="detail">
             Detail
         </ion-segment-button>
@@ -21,7 +21,7 @@
             Employee
         </ion-segment-button>
     </ion-segment>
-      </ion-scroll>
+      <!--</ion-scroll>-->
 
 
 </ion-header>
@@ -48,9 +48,6 @@
               <p text-right>{{siteDetail.addressLat}},{{siteDetail.addressLng}}</p>
             </ion-col>
           </ion-row>
-
-        
-
     </ion-list>
     <ion-list *ngSwitchCase="'jobs'" class="align-center">
       <ion-refresher (ionRefresh)="doRefresh($event,job)">
@@ -115,9 +112,6 @@
 
     </ion-list>
     <ion-list *ngSwitchCase="'quotation'">
-      <ion-refresher (ionRefresh)="doRefresh($event,attendance)">
-        <ion-refresher-content></ion-refresher-content>
-      </ion-refresher>
       <div class="row padding0 margin0 white-bg">
         <ion-col col-12 class="padding-top0">
           <div class="table-responsive table-sales">
