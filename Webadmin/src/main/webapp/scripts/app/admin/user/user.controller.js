@@ -19,12 +19,14 @@ angular.module('timeSheetApp')
         $scope.users;
 
         $scope.userGroups;
-        
+
         $scope.userRoles;
-        
+
         $scope.selectedRole;
 
         $scope.selectedUser;
+
+        $scope.loading;
 
         //$scope.user = {};
         //$scope.user.emailSubscribed = true;
@@ -34,7 +36,7 @@ angular.module('timeSheetApp')
                 $scope.userGroups = data;
             });
         };
-        
+
         $scope.loadUserRoles = function () {
         	UserRoleComponent.findAll().then(function (data) {
                 $scope.userRoles = data;
@@ -44,10 +46,12 @@ angular.module('timeSheetApp')
 
         $scope.loadEmployee = function () {
             console.log("load employees ");
-        	EmployeeComponent.findAll().then(function (data) {
+            $scope.loading = true;
+            EmployeeComponent.findAll().then(function (data) {
         		$scope.selectedEmployee = null;
                 $scope.employees = data;
                 console.log($scope.employees);
+                $scope.loading=false;
             });
         };
 
