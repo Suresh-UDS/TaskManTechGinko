@@ -5,7 +5,7 @@
     <div class="row">
 
         <div class="col-md-8">
-            <h2 class="title">App Module & Actions</h2>
+            <!--<h2 class="title">App Module & Actions</h2>-->
         </div>
 
         <div class="col-md-4 txt-align-rgt">
@@ -24,14 +24,14 @@
 
                         <div class="col-md-4">
 
-                            <div class="form-group label-floating pdng-top15">
+                            <div class="form-group">
                                 <label class="control-label">Module Name</label>
                                 <input type="text" class="form-control" ng-model="moduleName">
                             </div>
 
                         </div>
 
-                        <div class="col-md-3 form-group  pdng-top15">
+                        <div class="col-md-3 form-group  pdng-top20">
 
                             <select ng-model="actionSelector" ng-change="selectAction(actionSelector)" ng-options="action as action.name for action in masterActions" class="form-control"  title="Select Action" >
                                  <option value="Please select Action..."></option>
@@ -49,7 +49,7 @@
  -->
 
                         </div>
-                        <div class="col-md-3">
+                        <div class="col-md-3" style="padding-top:5px;">
 
                             <button class="btn btn-success" ng-click="addAction()">
                                 <span class="btn-label">
