@@ -2,10 +2,10 @@
 
     <div class="row" ng-init="loadEmployees()">
         <div class="col-md-8" ng-init="loadProjects()">
-            <h2 class="title">Employee Reports</h2>
+            <!--<h2 class="title">Employee Reports</h2>-->
         </div>
         <div class="col-md-4 txt-align-rgt">
-            
+
             <a class="download-btn" href="{{exportFile()}}">{{exportMsg()}}</a>
             <button ng-show="employees.length" type="button" class="btn btn-success" ng-click=exportAllData()>
                 <i class="material-icons">file_upload</i> Export</button>
@@ -30,17 +30,17 @@
 								<td>
                                     <div class="form-group" >
                                         <input id="dateFilterFrom" type="text" class="form-control datepicker" ng-model="fromDate"  value={{now}} placeholder="From Date" />
-                                        
+
                                     </div>
                                 </td>
 
                                 <td>
                                     <div class="form-group" >
                                         <input id="dateFilterTo" type="text" class="form-control datepicker" ng-model="toDate"  value={{now}} placeholder="To Date" />
-                                        
+
                                     </div>
                                 </td>
-                                
+
 
                                 <td>
                                     <div class="form-group" >
