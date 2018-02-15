@@ -37,6 +37,7 @@ import com.ts.app.domain.NotificationLog;
 import com.ts.app.domain.Price;
 import com.ts.app.domain.Site;
 import com.ts.app.domain.User;
+import com.ts.app.domain.UserRoleEnum;
 import com.ts.app.repository.AssetRepository;
 import com.ts.app.repository.EmployeeRepository;
 import com.ts.app.repository.JobRepository;
@@ -188,90 +189,116 @@ public class JobManagementService extends AbstractService {
 
             List<ReportResult> reportResults = new ArrayList<ReportResult>();
             log.debug("JobSpecification toPredicate - searchCriteria checkInDateFrom -"+ checkInDate);
-        	if(checkInDate != null) {
-        	    log.debug("check in date is not null");
-	        	Calendar checkInDateFrom = Calendar.getInstance(TimeZone.getTimeZone("Asia/Kolkata"));
-	        	checkInDateFrom.setTime(checkInDate);
+	        	if(checkInDate != null) {
+	        	    log.debug("check in date is not null");
+		        	Calendar checkInDateFrom = Calendar.getInstance(TimeZone.getTimeZone("Asia/Kolkata"));
+		        	checkInDateFrom.setTime(checkInDate);
+	
+		        	checkInDateFrom.set(Calendar.HOUR_OF_DAY, 0);
+		        	checkInDateFrom.set(Calendar.MINUTE,0);
+		        	checkInDateFrom.set(Calendar.SECOND,0);
+		        	java.sql.Date fromDt = DateUtil.convertToSQLDate(DateUtil.convertUTCToIST(checkInDateFrom));
+		        	//String fromDt = DateUtil.formatUTCToIST(checkInDateFrom);
+		        	Calendar checkInDateTo = Calendar.getInstance(TimeZone.getTimeZone("Asia/Kolkata"));
+		        	if(searchCriteria.getCheckInDateTimeTo() != null) {
+		        		checkInDateTo.setTime(searchCriteria.getCheckInDateTimeTo());
+		        	}else {
+		        		checkInDateTo.setTime(checkInDate);
+		        	}
+	
+		        	checkInDateTo.set(Calendar.HOUR_OF_DAY, 23);
+		        	checkInDateTo.set(Calendar.MINUTE,59);
+		        	checkInDateTo.set(Calendar.SECOND,0);
+		        	java.sql.Date toDt = DateUtil.convertToSQLDate(DateUtil.convertUTCToIST(checkInDateTo));
+	
+	//				page = jobRepository.findByDateRange(searchCriteria.getSiteId(), searchCriteria.getUserId(), subEmpIds, searchCriteria.getJobStatus(),
+	//												fromDt, toDt, searchCriteria.isScheduled(), pageRequest);
+	
+		        	if(!searchCriteria.isConsolidated()) {
+	
+		        		/*
+		                if(searchCriteria.getJobStatus().toString().equalsIgnoreCase("OVERDUE")) {
+		                    log.debug("getting overdue jobs");
+		                    page = jobRepository.findOverDueJobsByDateRangeAndLocation(searchCriteria.getSiteId(),searchCriteria.getUserId(),subEmpIds,fromDt,toDt,searchCriteria.getLocationId(),pageRequest);
+		                }else{
+		                    log.debug("getting other jobs");
+		                    page = jobRepository.findByDateRangeAndLocation(searchCriteria.getSiteId(),searchCriteria.getUserId(),subEmpIds,searchCriteria.getJobStatus(),fromDt,toDt,searchCriteria.isScheduled(),searchCriteria.getLocationId(),pageRequest);
+		                }
+		                */
+		        		if(searchCriteria.isAssignedStatus()) {
+		        		    log.debug("search criteria assigned status true");
+		        		    if(searchCriteria.getSiteId() > 0) {
+		        		    		page = jobRepository.findByDateRangeAndLocation(searchCriteria.getSiteId(),searchCriteria.getUserId(),subEmpIds, JobStatus.ASSIGNED,fromDt,toDt,searchCriteria.isScheduled(),searchCriteria.getLocationId(),pageRequest);
+		        		    }else {
+		        		    		page = jobRepository.findByStatusAndDateRange(searchCriteria.getUserId(),subEmpIds,fromDt,toDt, JobStatus.ASSIGNED,pageRequest);
+		        		    }
+		        		    	allJobsList.addAll(page.getContent());
+		        		}
+		        		if(searchCriteria.isCompletedStatus()) {
+		        		    log.debug("search criteria completed status true");
+		        		    if(searchCriteria.getSiteId() > 0) {
+		        		    		page = jobRepository.findByDateRangeAndLocation(searchCriteria.getSiteId(),searchCriteria.getUserId(),subEmpIds, JobStatus.COMPLETED,fromDt,toDt,searchCriteria.getLocationId(),pageRequest);
+		        		    }else {
+		        		    		page = jobRepository.findByStatusAndDateRange(searchCriteria.getUserId(),subEmpIds,fromDt,toDt, JobStatus.COMPLETED,pageRequest);
+		        		    }
+		        		    	allJobsList.addAll(page.getContent());
+		        		}
+		        		if(searchCriteria.isOverdueStatus()) {
+		        			log.debug("search criteria overdue status true");
+		        			if(searchCriteria.getSiteId() > 0) {
+		        				page = jobRepository.findOverDueJobsByDateRangeAndLocation(searchCriteria.getSiteId(),searchCriteria.getUserId(),subEmpIds,fromDt,toDt,searchCriteria.getLocationId(),pageRequest);
+		        			}else {
+		        				page = jobRepository.findByStatusAndDateRange(searchCriteria.getUserId(),subEmpIds,fromDt,toDt, JobStatus.OVERDUE,pageRequest);
+		        			}
+		        			allJobsList.addAll(page.getContent());
+		        		}
+		            	if(employee.getUser().getUserRole().getName().equalsIgnoreCase(UserRoleEnum.ADMIN.toValue())) {
+		            		if(searchCriteria.getSiteId() > 0 && searchCriteria.getEmployeeId() >0) {
+		            			page = jobRepository.findByStartDateSiteAndEmployee(searchCriteria.getSiteId(), searchCriteria.getEmployeeId(), fromDt, toDt, pageRequest);
+		            		}else if(searchCriteria.getSiteId() > 0 && searchCriteria.getEmployeeId() == 0) {
+		            			page = jobRepository.findByStartDateAndSite(searchCriteria.getSiteId(), fromDt, toDt, pageRequest);
+		            		}else if(searchCriteria.getSiteId() == 0 && searchCriteria.getEmployeeId() > 0) {
+		            			page = jobRepository.findByStartDateAndEmployee(searchCriteria.getEmployeeId(), fromDt, toDt, pageRequest);
+		            		}else {
+			        			page = jobRepository.findAll(new JobSpecification(searchCriteria,isAdmin),pageRequest);
+		            		}
+		        			allJobsList.addAll(page.getContent());
 
-	        	checkInDateFrom.set(Calendar.HOUR_OF_DAY, 0);
-	        	checkInDateFrom.set(Calendar.MINUTE,0);
-	        	checkInDateFrom.set(Calendar.SECOND,0);
-	        	java.sql.Date fromDt = DateUtil.convertToSQLDate(DateUtil.convertUTCToIST(checkInDateFrom));
-	        	//String fromDt = DateUtil.formatUTCToIST(checkInDateFrom);
-	        	Calendar checkInDateTo = Calendar.getInstance(TimeZone.getTimeZone("Asia/Kolkata"));
-	        	if(searchCriteria.getCheckInDateTimeTo() != null) {
-	        		checkInDateTo.setTime(searchCriteria.getCheckInDateTimeTo());
+		            	}else {
+		            		if(searchCriteria.getSiteId() > 0 && searchCriteria.getEmployeeId() >0) {
+		            			page = jobRepository.findByStartDateSiteAndEmployee(searchCriteria.getSiteId(), searchCriteria.getEmployeeId(), fromDt, toDt, pageRequest);
+		            		}else if(searchCriteria.getSiteId() > 0 && searchCriteria.getEmployeeId() == 0) {
+		            			page = jobRepository.findByStartDateAndSite(searchCriteria.getSiteId(), fromDt, toDt, pageRequest);
+		            		}else if(searchCriteria.getSiteId() == 0 && searchCriteria.getEmployeeId() > 0) {
+		            			page = jobRepository.findByStartDateAndEmployee(searchCriteria.getEmployeeId(), fromDt, toDt, pageRequest);
+		            		}else {
+		            			page = jobRepository.findByDateRange(searchCriteria.getUserId(), subEmpIds, fromDt, toDt, pageRequest);
+		            		}
+		            		allJobsList.addAll(page.getContent());
+		            	}
+	
+		        	}else {
+		        	    log.debug("site reporsitory find all");
+		        		List<Site> allSites = siteRepository.findAll();
+		        		for(Site site : allSites) {
+		        			reportResults.add(reportService.jobCountBySiteAndStatusAndDateRange(site.getId(),fromDt, toDt));
+		        		}
+	
+		        	}
 	        	}else {
-	        		checkInDateTo.setTime(checkInDate);
-	        	}
-
-	        	checkInDateTo.set(Calendar.HOUR_OF_DAY, 23);
-	        	checkInDateTo.set(Calendar.MINUTE,59);
-	        	checkInDateTo.set(Calendar.SECOND,0);
-	        	java.sql.Date toDt = DateUtil.convertToSQLDate(DateUtil.convertUTCToIST(checkInDateTo));
-
-//				page = jobRepository.findByDateRange(searchCriteria.getSiteId(), searchCriteria.getUserId(), subEmpIds, searchCriteria.getJobStatus(),
-//												fromDt, toDt, searchCriteria.isScheduled(), pageRequest);
-
-	        	if(!searchCriteria.isConsolidated()) {
-
-	        		/*
-	                if(searchCriteria.getJobStatus().toString().equalsIgnoreCase("OVERDUE")) {
-	                    log.debug("getting overdue jobs");
-	                    page = jobRepository.findOverDueJobsByDateRangeAndLocation(searchCriteria.getSiteId(),searchCriteria.getUserId(),subEmpIds,fromDt,toDt,searchCriteria.getLocationId(),pageRequest);
-	                }else{
-	                    log.debug("getting other jobs");
-	                    page = jobRepository.findByDateRangeAndLocation(searchCriteria.getSiteId(),searchCriteria.getUserId(),subEmpIds,searchCriteria.getJobStatus(),fromDt,toDt,searchCriteria.isScheduled(),searchCriteria.getLocationId(),pageRequest);
-	                }
-	                */
-	        		if(searchCriteria.isAssignedStatus()) {
-	        		    log.debug("search criteria assigned status true");
-	        		    if(searchCriteria.getSiteId() > 0) {
-	        		    		page = jobRepository.findByDateRangeAndLocation(searchCriteria.getSiteId(),searchCriteria.getUserId(),subEmpIds, JobStatus.ASSIGNED,fromDt,toDt,searchCriteria.isScheduled(),searchCriteria.getLocationId(),pageRequest);
-	        		    }else {
-	        		    		page = jobRepository.findByStatusAndDateRange(searchCriteria.getUserId(),subEmpIds,fromDt,toDt, JobStatus.ASSIGNED,pageRequest);
-	        		    }
-	        		    	allJobsList.addAll(page.getContent());
-	        		}
-	        		if(searchCriteria.isCompletedStatus()) {
-	        		    log.debug("search criteria completed status true");
-	        		    if(searchCriteria.getSiteId() > 0) {
-	        		    		page = jobRepository.findByDateRangeAndLocation(searchCriteria.getSiteId(),searchCriteria.getUserId(),subEmpIds, JobStatus.COMPLETED,fromDt,toDt,searchCriteria.getLocationId(),pageRequest);
-	        		    }else {
-	        		    		page = jobRepository.findByStatusAndDateRange(searchCriteria.getUserId(),subEmpIds,fromDt,toDt, JobStatus.COMPLETED,pageRequest);
-	        		    }
-	        		    	allJobsList.addAll(page.getContent());
-	        		}
-	        		if(searchCriteria.isOverdueStatus()) {
-	        			log.debug("search criteria overdue status true");
-	        			if(searchCriteria.getSiteId() > 0) {
-	        				page = jobRepository.findOverDueJobsByDateRangeAndLocation(searchCriteria.getSiteId(),searchCriteria.getUserId(),subEmpIds,fromDt,toDt,searchCriteria.getLocationId(),pageRequest);
-	        			}else {
-	        				page = jobRepository.findByStatusAndDateRange(searchCriteria.getUserId(),subEmpIds,fromDt,toDt, JobStatus.OVERDUE,pageRequest);
-	        			}
+	        		if(!searchCriteria.isConsolidated()) {
+	        			page = jobRepository.findAll(new JobSpecification(searchCriteria,isAdmin),pageRequest);
 	        			allJobsList.addAll(page.getContent());
+	        		}else {
+		        		List<Site> allSites = siteRepository.findAll();
+		        		for(Site site : allSites) {
+		        			reportResults.add(reportService.jobCountBySiteAndStatus(site.getId()));
+		        		}
+	
 	        		}
-	        	}else {
-	        	    log.debug("site reporsitory find all");
-	        		List<Site> allSites = siteRepository.findAll();
-	        		for(Site site : allSites) {
-	        			reportResults.add(reportService.jobCountBySiteAndStatusAndDateRange(site.getId(),fromDt, toDt));
-	        		}
-
 	        	}
-        	}else {
-        		if(!searchCriteria.isConsolidated()) {
-        			page = jobRepository.findAll(new JobSpecification(searchCriteria,isAdmin),pageRequest);
-        			allJobsList.addAll(page.getContent());
-        		}else {
-	        		List<Site> allSites = siteRepository.findAll();
-	        		for(Site site : allSites) {
-	        			reportResults.add(reportService.jobCountBySiteAndStatus(site.getId()));
-	        		}
 
-        		}
-        	}
-
+        	/*
 			if(CollectionUtils.isNotEmpty(allJobsList)) {
 				transactions = mapperUtil.toModelList(allJobsList, JobDTO.class);
 				if(CollectionUtils.isNotEmpty(transactions)) {
@@ -301,6 +328,7 @@ public class JobManagementService extends AbstractService {
         	    log.debug("no jobs found on the daterange");
             }
 
+			
 			if(CollectionUtils.isNotEmpty(reportResults)) {
 				//if report generation needed
                 log.debug("report resulsts");
@@ -321,8 +349,19 @@ public class JobManagementService extends AbstractService {
 
 				}
 			}
+			*/
 
+		if(CollectionUtils.isNotEmpty(allJobsList)) {
+			//transactions = mapperUtil.toModelList(allJobsList, JobDTO.class);
+			if(transactions == null) {
+				transactions = new ArrayList<JobDTO>();
+			}
+        		for(Job job : allJobsList) {
+        			transactions.add(mapToModel(job));
+        		}
+			buildSearchResult(searchCriteria, page, transactions,result);
 		}
+	}
 		return result;
 	}
 	
@@ -463,7 +502,16 @@ public class JobManagementService extends AbstractService {
             page = jobRepository.findAll(new JobSpecification(searchCriteria,isAdmin),pageRequest);
 
             if(page != null) {
-                transactions = mapperUtil.toModelList(page.getContent(), JobDTO.class);
+                //transactions = mapperUtil.toModelList(page.getContent(), JobDTO.class);
+	    			if(transactions == null) {
+	    				transactions = new ArrayList<JobDTO>();
+	    			}
+            	
+            		if(CollectionUtils.isNotEmpty(page.getContent())) {
+	            		for(Job job : page.getContent()) {
+	            			transactions.add(mapToModel(job));
+	            		}
+            		}
                 if(CollectionUtils.isNotEmpty(transactions)) {
                     buildSearchResult(searchCriteria, page, transactions,result);
                 }
@@ -565,6 +613,22 @@ public class JobManagementService extends AbstractService {
 	}
 
 
+	private JobDTO mapToModel(Job job) {
+		JobDTO dto = new JobDTO();
+		dto.setId(job.getId());
+		dto.setTitle(job.getTitle());
+		dto.setSiteId(job.getSite().getId());
+		dto.setSiteName(job.getSite().getName());
+		dto.setDescription(job.getDescription());
+		dto.setStatus(job.getStatus().name());
+		dto.setEmployeeId(job.getEmployee().getId());
+		dto.setEmployeeName(job.getEmployee().getName());
+		dto.setPlannedStartTime(job.getPlannedStartTime());
+		dto.setPlannedEndTime(job.getPlannedEndTime());
+		dto.setActualStartTime(job.getActualStartTime());
+		dto.setActualEndTime(job.getActualEndTime());
+		return dto;
+	}
 
 	private void mapToEntity(JobDTO jobDTO, Job job) {
 		Employee employee = getEmployee(jobDTO.getEmployeeId());
@@ -1081,8 +1145,20 @@ public class JobManagementService extends AbstractService {
 //				page = jobRepository.findByDateRange(searchCriteria.getSiteId(), searchCriteria.getUserId(), subEmpIds, searchCriteria.getJobStatus(),
 //												fromDt, toDt, searchCriteria.isScheduled(), pageRequest);
 
-                allJobsList = jobRepository.findByDateRange(searchCriteria.getUserId(),subEmpIds,fromDt,toDt);
-                result = mapperUtil.toModelList(allJobsList,JobDTO.class);
+	    			Pageable pageRequest = createPageRequest(searchCriteria.getCurrPage());
+	    			//Pageable pageRequest = new PageRequest(searchCriteria.getCurrPage(), PagingUtil.PAGE_SIZE, new Sort(Direction.DESC,"id"));
+	    			Page<Job> page = null;
+
+                page = jobRepository.findByDateRange(searchCriteria.getUserId(),subEmpIds,fromDt,toDt, pageRequest);
+                allJobsList.addAll(page.getContent());
+                if(CollectionUtils.isNotEmpty(allJobsList)) {
+                		if(result == null) {
+                			result = new ArrayList<JobDTO>();
+                		}
+                		for(Job job : allJobsList) {
+                			result.add(mapToModel(job));
+                		}
+                }
                 return result;
 
 
