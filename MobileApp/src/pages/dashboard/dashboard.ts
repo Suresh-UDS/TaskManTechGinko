@@ -14,6 +14,7 @@ declare var demo;
 @Component({
   selector: 'page-dashboard',
   templateUrl: 'dashboard.html'
+
 })
 export class DashboardPage {
   @ViewChild('date') MyCalendar: ElementRef;
@@ -25,11 +26,14 @@ export class DashboardPage {
   employee:any;
   sites:any;
     firstLetter:any;
+    selectDate:any;
+    selectSite:any;
+    empSelect=false;
   constructor(public renderer: Renderer,public myService:authService,private loadingCtrl:LoadingController,public navCtrl: NavController,public component:componentService,public authService:authService,public modalCtrl: ModalController,
               private datePickerProvider: DatePickerProvider, private siteService:SiteService, private employeeService: EmployeeService, private jobService:JobService) {
 
     this.categories='overdue';
-
+    this.selectDate=new Date();
    /* this.categories = [
       'overdue','upcoming','completed'
       ];
@@ -47,11 +51,7 @@ export class DashboardPage {
 */
   ionViewDidLoad()
   {
-    demo.initFullCalendar();
-
-
-
-
+   // demo.initFullCalendar();
     this.siteService.searchSite().subscribe(response=>
     {
       console.log(response);
@@ -89,15 +89,18 @@ export class DashboardPage {
     )
 
 
-    this.getAllJobs()
+   // this.getAllJobs()
 
 
 
   }
 
-  getAllJobs(){
+  getAllJobs(sDate){
     this.component.showLoader('Getting All Jobs');
-    var search={};
+    console.log("selected date");
+    console.log(sDate);
+    var currDate = new Date(sDate);
+    var search={checkInDateTimeFrom:currDate};
     this.jobService.getJobs(search).subscribe(response=>{
       console.log("All jobs of current user");
       console.log(response);
@@ -130,6 +133,46 @@ export class DashboardPage {
         {
             this.navCtrl.push(CreateEmployeePage);
         }
+    }
+
+    showCalendar() {
+        const dateSelected =
+            this.datePickerProvider.showCalendar(this.modalCtrl);
+
+        dateSelected.subscribe(date =>
+        {
+            this.selectDate=date;
+            this.getAllJobs(this.selectDate)
+            console.log("first date picker: date selected is", date)
+        });
+
+    }
+
+    activeSite(id)
+    {
+        var search={siteId:id};
+        console.log("Selected Site Id");
+        console.log(id);
+        this.selectSite=true;
+        this.siteService.searchSiteEmployee(id).subscribe(
+            response=> {
+                console.log(response.json());
+                if(response.json().length !==0)
+                {
+                    this.empSelect=false;
+                    this.employee=response.json();
+                    console.log(this.employee);
+                }
+                else
+                {
+                    this.employee=[]
+                }
+            },
+            error=>{
+                this.empSelect=true;
+                console.log(error);
+                console.log(this.employee);
+            })
     }
 
 }

@@ -10,7 +10,9 @@
 <ion-content>
 
     <ion-fab right bottom>
-        <button ion-fab color="dark"><ion-icon name="md-add" class="clr-orange"></ion-icon></button>
+        <button ion-fab color="dark">
+            <ion-icon name="md-add" class="clr-orange"></ion-icon>
+        </button>
         <ion-fab-list side="top" fab-list-margin>
             <ion-label color="dark" class="margin0">Quotation</ion-label>
             <button ion-fab color="primary" (click)="fabClick('quotation')">
@@ -41,20 +43,18 @@
         </ion-fab-list>
     </ion-fab>
     -->
-    <div class="Viewcalendartxt" data-toggle="collapse" data-target="#fullCalendarCon">
-        <h2>View Calendar <i class="material-icons icon-right">arrow_drop_down</i></h2>
-    </div>
-    <div  class="collapse" id="fullCalendarCon">
-        <ion-row>
-            <ion-col col-12>
-                <div class="card card-calendar">
-                    <div class="card-content" class="ps-child">
-                        <div id="fullCalendar"></div>
-                    </div>
-                </div>
-            </ion-col>
-        </ion-row>
-    </div>
+    <ion-row class="margin0 padding-top5">
+        <ion-col col-8 class="align-right">
+            <p text-right class="fnt-18">
+                <span class="clr-orange">{{selectDate | date:'d' }}</span>
+                <span class="clr-blue">{{selectDate | date:'MMM' }}</span>
+                <span class="clr-orange">{{selectDate | date:'y' }}</span>
+            </p>
+        </ion-col>
+        <ion-col col-4 class="padding-right5 align-right">
+            <p text-right class="fnt-18" (click)="showCalendar()"><ion-icon ios="ios-calendar" md="md-calendar" class="green padding-right10"></ion-icon></p>
+        </ion-col>
+    </ion-row>
 
  <!--
   <div class="wrapper">
@@ -74,25 +74,9 @@ Tip 2: you can also add an image using data-image tag
 
 
 
-    <div class="container-fluid container-scroll hariz-scroll-con">
-        <div class="row">
-            <span *ngFor="let emp of employee;let i of index" class="padding-right5 padding-bottom5">
-                <!--<ion-avatar item-start *ngIf="emp.enrolled_face" class="emp-round width-round">-->
-                    <!--<img  [src]="emp.enrolled_face" >-->
-                <!--</ion-avatar>-->
-                <!--<p *ngIf="!emp.enrolled_face && first(emp.name)"></p>-->
-                <p *ngIf="first(emp.name)"></p>
-                <ion-avatar item-start *ngIf="!emp.enrolled_face" class="emp-round">
-                    <p class="margin-auto"> {{firstLetter}}</p>
-                </ion-avatar>
-                <!--<p text-left>{{emp.name}}</p>-->
-            </span>
-
-        </div>
-    </div>
 
 
- <!--
+    <!--
     <ion-row >
         <ion-col col-6 class="margin-auto">
             <div class="form-group label-floating">
@@ -106,11 +90,29 @@ Tip 2: you can also add an image using data-image tag
     -->
     <div class="container-fluid container-scroll hariz-scroll-con">
         <div class="row">
+            <div *ngIf="!empSelect">
+                <p text-center ></p>
+            </div>
 
-            <button ion-button round color="light" *ngFor="let site of sites;let i of index">
+            <button ion-button round color="light"  *ngFor="let site of sites;let i of index" (click)="activeSite(site.id)" [ngClass]="{'bg-orange':selectSite}">
                 <p text-left>{{site.name}}</p>
             </button>
+        </div>
+    </div>
 
+    <div class="container-fluid container-scroll hariz-scroll-con">
+        <div class="row">
+            <span *ngFor="let emp of employee;let i of index" class="padding-right5 padding-bottom5">
+                <!--<ion-avatar item-start *ngIf="emp.enrolled_face" class="emp-round width-round">-->
+                <!--<img  [src]="emp.enrolled_face" >-->
+                <!--</ion-avatar>-->
+                <!--<p *ngIf="!emp.enrolled_face && first(emp.name)"></p>-->
+                <p *ngIf="first(emp.name)"></p>
+                <ion-avatar item-start *ngIf="!emp.enrolled_face" class="emp-round">
+                    <p class="margin-auto"> {{firstLetter}}</p>
+                </ion-avatar>
+                <!--<p text-left>{{emp.name}}</p>-->
+            </span>
         </div>
     </div>
 
@@ -122,7 +124,8 @@ Tip 2: you can also add an image using data-image tag
                     {{c}}
                 </ion-segment-button>
             </div>
-        </ion-segment>-->
+        </ion-segment>
+     -->
 
 
 
