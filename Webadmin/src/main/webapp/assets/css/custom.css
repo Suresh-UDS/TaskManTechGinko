@@ -441,6 +441,7 @@ button.btn.btn-outline {
 .panel
 {
   background-color: #fff;
+  border: 1px solid #ddd;
 }
 .panel .panel-body
 {
