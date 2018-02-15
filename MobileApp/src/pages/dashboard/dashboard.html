@@ -43,16 +43,16 @@
         </ion-fab-list>
     </ion-fab>
     -->
-    <ion-row class="margin0 padding-top5">
+    <ion-row class="margin0 padding-top15">
         <ion-col col-8 class="align-right">
-            <p text-right class="fnt-18">
+            <p  text-right class="fnt-18 date-txt" (click)="showCalendar()">
                 <span class="clr-orange">{{selectDate | date:'d' }}</span>
                 <span class="clr-blue">{{selectDate | date:'MMM' }}</span>
                 <span class="clr-orange">{{selectDate | date:'y' }}</span>
             </p>
         </ion-col>
         <ion-col col-4 class="padding-right5 align-right">
-            <p text-right class="fnt-18" (click)="showCalendar()"><ion-icon ios="ios-calendar" md="md-calendar" class="green padding-right10"></ion-icon></p>
+            <p text-right class="fnt-18" (click)="showCalendar()"><ion-icon ios="ios-calendar" md="md-calendar" class="green fnt-25 padding-right10"></ion-icon></p>
         </ion-col>
     </ion-row>
 
@@ -95,14 +95,14 @@ Tip 2: you can also add an image using data-image tag
             </div>
 
             <button ion-button round color="light"  *ngFor="let site of sites;let i of index" (click)="activeSite(site.id)" [ngClass]="{'bg-orange':selectSite}">
-                <p text-left>{{site.name}}</p>
+                <p class="siteName">{{site.name}}</p>
             </button>
         </div>
     </div>
 
     <div class="container-fluid container-scroll hariz-scroll-con">
         <div class="row">
-            <span *ngFor="let emp of employee;let i of index" class="padding-right5 padding-bottom5">
+            <span *ngFor="let emp of employee;let i of index" class="Nametxt">
                 <!--<ion-avatar item-start *ngIf="emp.enrolled_face" class="emp-round width-round">-->
                 <!--<img  [src]="emp.enrolled_face" >-->
                 <!--</ion-avatar>-->

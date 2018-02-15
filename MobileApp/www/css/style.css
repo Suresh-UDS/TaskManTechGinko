@@ -55,7 +55,17 @@
 }
 .container-scroll > .row {
   /*width: 200%; !* = 100% * 4/3 *!*/
-  width:2300px;
+  width:3500px;
+}
+.date-txt
+{
+  font-weight: 400;
+}
+.siteName
+{
+  font-size: 12px;
+  text-transform: capitalize;
+  padding-top: 10px;
 }
 .hariz-scroll-con
 {
@@ -258,7 +268,14 @@ table tr
 {
   font-size: 18px;
 }
-
+.fnt-25
+{
+  font-size: 25px;
+}
+.Nametxt
+{
+  padding: 0 10px;
+}
 .red
 {
   color: red;
@@ -582,6 +599,10 @@ a:hover, a:focus
 {
   margin:0 !important;
 }
+.item-fnt .item-md.item-block .item-inner
+{
+   padding-right: 0 !important;
+}
 .padding-left16
 {
   padding-left: 16px !important;
@@ -601,6 +622,14 @@ a:hover, a:focus
 .padding-top5
 {
   padding-top: 5px !important;
+}
+.padding-top10
+{
+  padding-top: 10px !important;
+}
+.padding-top15
+{
+  padding-top: 15px !important;
 }
 .ln-ght20 p
 {
@@ -641,6 +670,3 @@ ion-fab-list
   transform: rotate(90deg);
 }
 
-.padding-bottom0{
-  
-}
