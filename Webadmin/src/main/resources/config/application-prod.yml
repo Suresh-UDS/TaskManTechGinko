@@ -92,6 +92,8 @@ scheduler:
    dailyJob:
       creation: monthly
       
+default.user.password: uds12345      
+      
 # ===================================================================
 # JHipster specific properties
 # ===================================================================
