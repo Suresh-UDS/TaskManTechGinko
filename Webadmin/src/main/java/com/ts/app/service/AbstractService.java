@@ -42,7 +42,7 @@ public abstract class AbstractService {
         if(subEmpIds == null){
             subEmpIds = new ArrayList<Long>();
         }
-        
+        subEmpIds.add(employee.getId());
         for(Employee sub : subs) {
             subEmpIds.add(sub.getId());
             Hibernate.initialize(sub.getSubOrdinates());
