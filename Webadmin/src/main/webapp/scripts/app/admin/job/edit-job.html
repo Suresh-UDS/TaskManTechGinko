@@ -28,12 +28,10 @@
                         <div class="row">
 
                             <div class="col-md-6">
-                                <div class="card formcard minhgt320">
-                                    <div class="card-header card-header-text" data-background-color="orange">
-                                        <h4 class="card-title">Job</h4>
-                                    </div>
-                                    <div class="card-content">
-                                        <!--<h4 class="card-title">About Job</h4>-->
+
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">Job</div>
+                                    <div class="panel-body">
 
                                         <div class="row">
 
@@ -101,17 +99,17 @@
 
                                             </div>
 
-                                             <div class="col-md-6">
+                                            <div class="col-md-6">
                                                 <div class="form-group">
                                                     <label class="control-label">Checklist</label>
                                                     <div class="dropdown">
                                                         <!--<input type="text"-->
-                                                               <!--class="form-control"-->
-                                                               <!--name='checklist'-->
-                                                               <!--ng-model="selectedChecklist"-->
-                                                               <!--ng-change="onSelectChecklist()"-->
-                                                               <!--uib-typeahead="checklist as checklist.name for checklist in checklists | filter:$viewValue | limitTo:5"-->
-                                                               <!--autocomplete="off" />-->
+                                                        <!--class="form-control"-->
+                                                        <!--name='checklist'-->
+                                                        <!--ng-model="selectedChecklist"-->
+                                                        <!--ng-change="onSelectChecklist()"-->
+                                                        <!--uib-typeahead="checklist as checklist.name for checklist in checklists | filter:$viewValue | limitTo:5"-->
+                                                        <!--autocomplete="off" />-->
                                                         <select class="form-control " ng-model="selectedChecklist"  ng-options="checklist as checklist.name for checklist in checklists">
                                                             <option value="">Please select Checklist...</option>
                                                         </select>
@@ -120,20 +118,17 @@
 
                                             </div>
 
-                                        </div>
-                                        <div class="row">
-
                                             <div class="col-md-6">
                                                 <div class="form-group">
                                                     <label class="control-label">Site </label>
                                                     <div class="dropdown">
                                                         <!--<input type="text"-->
-                                                               <!--class="form-control"-->
-                                                               <!--name='siteName'-->
-                                                               <!--ng-model="selectedSite"-->
-                                                               <!--uib-typeahead="site as site.name for site in sites | filter:$viewValue | limitTo:5"-->
-                                                               <!--required-->
-                                                               <!--autocomplete="off" />-->
+                                                        <!--class="form-control"-->
+                                                        <!--name='siteName'-->
+                                                        <!--ng-model="selectedSite"-->
+                                                        <!--uib-typeahead="site as site.name for site in sites | filter:$viewValue | limitTo:5"-->
+                                                        <!--required-->
+                                                        <!--autocomplete="off" />-->
 
                                                         <select class="form-control " ng-model="selectedSite"  ng-options="site as site.name for site in sites">
                                                             <option value="">Please select Site...</option>
@@ -150,17 +145,23 @@
                                                 </div>
 
                                             </div>
+
+
+                                        </div>
+                                        <div class="row">
+
+
                                             <div class="col-md-6">
                                                 <div class="form-group">
                                                     <label class="control-label">Location </label>
                                                     <div class="dropdown">
                                                         <!--<input type="text"-->
-                                                               <!--class="form-control"-->
-                                                               <!--name='location'-->
-                                                               <!--ng-model="selectedLocation"-->
-                                                               <!--uib-typeahead="location as location.name for location in locations | filter:$viewValue | limitTo:5"-->
-                                                               <!--required-->
-                                                               <!--autocomplete="off" />-->
+                                                        <!--class="form-control"-->
+                                                        <!--name='location'-->
+                                                        <!--ng-model="selectedLocation"-->
+                                                        <!--uib-typeahead="location as location.name for location in locations | filter:$viewValue | limitTo:5"-->
+                                                        <!--required-->
+                                                        <!--autocomplete="off" />-->
 
                                                         <select class="form-control " ng-model="selectedLocation"  ng-options="location as location.name for location in locations">
                                                             <option value="">Please select Location...</option>
@@ -177,11 +178,38 @@
                                                 </div>
 
                                             </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label class="control-label">Employee </label>
+                                                    <div class="dropdown">
+                                                        <!--<input type="text"-->
+                                                        <!--class="form-control"-->
+                                                        <!--name='employeeName'-->
+                                                        <!--ng-model="selectedEmployee"-->
+                                                        <!--uib-typeahead="emp as emp.name for emp in employees | filter:$viewValue | limitTo:5"-->
+                                                        <!--required-->
+                                                        <!--autocomplete="off" />-->
+
+                                                        <select class="form-control " ng-model="selectedEmployee"  ng-options="emp as emp.name for emp in employees">
+                                                            <option value="">Please select Employees...</option>
+                                                        </select>
+
+                                                        <div ng-show="form.$submitted || form.employeeName.$touched">
+                                                            <div
+                                                                ng-show="form.employeeName.$dirty || form.employeeName.$invalid">
+
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+
 
                                         </div>
                                         <div class="row">
 
-                                            <div class="col-md-6">
+                                            <div class="col-md-12">
                                                 <div class="form-group">
                                                     <label class="control-label">Asset </label>
                                                     <div class="dropdown">
@@ -203,44 +231,19 @@
                                                 </div>
 
                                             </div>
-                                            <div class="col-md-6">
-                                                <div class="form-group">
-                                                    <label class="control-label">Employee </label>
-                                                    <div class="dropdown">
-                                                        <!--<input type="text"-->
-                                                               <!--class="form-control"-->
-                                                               <!--name='employeeName'-->
-                                                               <!--ng-model="selectedEmployee"-->
-                                                               <!--uib-typeahead="emp as emp.name for emp in employees | filter:$viewValue | limitTo:5"-->
-                                                               <!--required-->
-                                                               <!--autocomplete="off" />-->
-
-                                                        <select class="form-control " ng-model="selectedEmployee"  ng-options="emp as emp.name for emp in employees">
-                                                            <option value="">Please select Employees...</option>
-                                                        </select>
-
-                                                        <div ng-show="form.$submitted || form.employeeName.$touched">
-                                                            <div
-                                                                ng-show="form.employeeName.$dirty || form.employeeName.$invalid">
-
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                            </div>
 
                                         </div>
 
                                     </div>
                                 </div>
+
+
                             </div>
                             <div class="col-md-6">
-                                <div class="card formcard minhgt320">
-                                    <div class="card-header card-header-text" data-background-color="orange">
-                                        <h4 class="card-title">Plan</h4>
-                                    </div>
-                                    <div class="card-content">
+
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">Plan</div>
+                                    <div class="panel-body">
 
                                         <div class="row">
                                             <div class="col-md-6">
@@ -434,6 +437,8 @@
 
                                     </div>
                                 </div>
+
+
                             </div>
 
                         </div>
@@ -442,11 +447,11 @@
 
 
                             <div class="col-md-6">
-                                <div class="card formcard minhgt430">
-                                    <div class="card-header card-header-text" data-background-color="orange">
-                                        <h4 class="card-title">Schedule</h4>
-                                    </div>
-                                    <div class="card-content">
+
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">Schedule</div>
+                                    <div class="panel-body">
+
                                         <div class="row">
                                             <div class="col-md-12">
                                                 <div class="form-group">
@@ -605,8 +610,11 @@
                                                 </div>
                                             </div>
                                         </div>
+
                                     </div>
                                 </div>
+
+
                             </div>
 
                         </div>

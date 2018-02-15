@@ -16,20 +16,18 @@
                 <!--</div>-->
             </div>
             <div class="col-md-12">
-                <div class="titleCon">
-                    <h3>Add Rate Card</h3>
-                </div>
+
                 <div class="form-container table-container">
                     <form ng-show="!success" name="form" role="form" novalidate
                           ng-submit="saveRateCard()"  class="form-horizontal">
 
                         <div class="row">
-                            <div class="col-md-8 col-md-offset-2">
+                            <div class="col-md-6 col-md-offset-3">
                                 <div class="card formcard">
 
                                     <div class="card-content">
 										<div class="row">
-											<div class="col-md-6">
+											<div class="col-md-10">
 	                                           <div class="form-group">
 	                                               <label class="control-label">Client Name </label>
 
@@ -57,23 +55,23 @@
 	                                                       </p>
 	                                                   </div>
 	                                               </div>
-	
-	
+
+
 	                                           </div>
 	                                       </div>
-										
-										
+
+
 										</div>
                                         <div class="row">
 
-                                            <div class="col-md-6">
+                                            <div class="col-md-10">
                                             	<div class="form-group">
                                                 	<label class="control-label">Type</label>
-                                            
+
                                                 	<select ng-model="rateCard.type" ng-options="type as type for type in rateCardTypes" class="selectpicker" data-style="btn btn-primary btn-round" title="Select Type" data-size="7">
 					                                	<!-- <option value="{{action.id}}" ng-repeat="action in masterActions">{{action.name}}</option> -->
 					                            	</select>
-					                                            
+
                                                 <!-- <select class="selectpicker" data-style="btn btn-primary" ng-model="rateCard.type" title="Single Select" data-size="7">
                                                     <option disabled selected>Choose Type</option>
                                                     <option value="material">Material</option>
@@ -83,11 +81,11 @@
                                                 </div>
                                             </div>
 
-                                           
+
                                         </div>
-                                        
+
                                         <div class="row">
-	                                         <div class="col-md-6">
+	                                         <div class="col-md-10">
                                                 <div class="form-group">
                                                     <label class="control-label">Name</label>
                                                     <input ng-model="rateCard.name" class='form-control' name='name' type='text' value=""
@@ -95,13 +93,13 @@
 
                                                 </div>
                                             </div>
-                                        
+
                                         </div>
 
 
                                         <div class="row">
 
-                                            <div class="col-md-6">
+                                            <div class="col-md-10">
                                                 <div class="form-group">
                                                     <label class="control-label"> Cost</label>
                                                     <input   class='form-control' ng-model="rateCard.amount" name='amount' type='number' value=""
@@ -109,10 +107,10 @@
 
                                                 </div>
                                             </div>
-                                            
+
                                         </div>
                                         <div class="row">
-	                                        <div class="col-md-6">
+	                                        <div class="col-md-10">
                                                 <div class="form-group">
                                                     <label class="control-label">UOM Type</label>
 	                                                <select ng-model="rateCard.uom" ng-options="uom as uom for uom in uomTypes" class="selectpicker" data-style="btn btn-primary btn-round" title="Select UOM" data-size="7">
@@ -121,13 +119,13 @@
 
                                                 </div>
                                             </div>
-                                        
-                                        
+
+
                                         </div>
 
                                         <div class="row">
 
-                                            <div class="col-md-12">
+                                            <div class="col-md-12 txt-align-rgt">
                                                 <div class="form-group">
 
                                                     <button class="btn btn-success" type="submit" ng-click="saveRateCard(rateCard)"
