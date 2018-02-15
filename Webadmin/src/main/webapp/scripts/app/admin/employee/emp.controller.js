@@ -85,6 +85,12 @@ angular.module('timeSheetApp')
         $scope.removeProjectSite = function(ind) {
         		$scope.projectSiteList.splice(ind,1);
         };
+        
+        $scope.initAddEdit = function() {
+        		$scope.loadProjects();
+        		$scope.loadDesignations();
+        		$scope.loadAllManagers();
+        }
 
 
         $scope.loadProjects = function () {
