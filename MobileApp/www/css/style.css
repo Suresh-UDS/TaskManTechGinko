@@ -63,9 +63,18 @@
 }
 .siteName
 {
+  white-space: pre-line;
+  width: 70px;
+  line-height: 15px;
   font-size: 12px;
   text-transform: capitalize;
   padding-top: 10px;
+}
+button.siteBtn
+{
+  height: 60px !important;
+  border-radius: 5px !important;
+  padding: 5px 10px !important;
 }
 .sidebar .nav li.active>a, .sidebar .nav li.active>a i
 {
@@ -74,11 +83,11 @@
 .SiteCon
 {
   background: #fff;
-  padding: 5px 0;
+  padding: 10px 0;
 }
 .EmpCon
 {
-  padding: 5px 0;
+  padding: 10px 0;
 }
 .hariz-scroll-con
 {

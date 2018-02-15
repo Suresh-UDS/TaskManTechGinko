@@ -46,13 +46,14 @@
     <ion-row class="margin0 padding-top15">
         <ion-col col-8 class="align-right">
             <p  text-right class="fnt-18 date-txt" (click)="showCalendar()">
+                <ion-icon ios="ios-calendar" md="md-calendar" class="green fnt-25 padding-right10"></ion-icon>
                 <span class="clr-black">{{selectDate | date:'d' }}</span>
                 <span class="clr-orange">{{selectDate | date:'MMM' }}</span>
                 <span class="clr-black">{{selectDate | date:'y' }}</span>
             </p>
         </ion-col>
         <ion-col col-4 class="padding-right5 align-right">
-            <p text-right class="fnt-18" (click)="showCalendar()"><ion-icon ios="ios-calendar" md="md-calendar" class="green fnt-25 padding-right10"></ion-icon></p>
+            <!--<p text-right class="fnt-18" (click)="showCalendar()"><ion-icon ios="ios-calendar" md="md-calendar" class="green fnt-25 padding-right10"></ion-icon></p>-->
         </ion-col>
     </ion-row>
 
@@ -101,7 +102,7 @@ Tip 2: you can also add an image using data-image tag
                 </div>
 
 
-                <button ion-button round color="light"  *ngFor="let site of sites;let i of index" (click)="activeSite(site.id)" [ngClass]="{'bg-orange':selectSite}">
+                <button class="siteBtn" ion-button round color="light"  *ngFor="let site of sites;let i of index" (click)="activeSite(site.id)" [ngClass]="{'bg-orange':selectSite}">
                     <p class="siteName">{{site.name}}</p>
                 </button>
             </div>
