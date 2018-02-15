@@ -1,17 +1,55 @@
-<div>
+<div ng-init="loadProjects()">
 
     <div class="row">
-        <div class="col-md-8" ng-init="loadProjects()">
-            <h2 class="title">Client</h2>
-        </div>
-        <div class="col-md-4 txt-align-rgt">
+        <div class="col-md-12 txt-align-rgt">
                 <button ui-sref="add-project" class="btn btn-success align-left"> <i class="material-icons padding-right5">add</i>ADD<div class="ripple-container"></div></button>
                 <button ng-click="refreshPage()" class="btn btn-warning align-left"> <i class="material-icons padding-right5">refresh</i>Reload<div class="ripple-container"></div></button>
         </div>
     </div>
 
-    <div class="row">
+	<div class="row" init="loadProjects()">
 
+        <div class="col-md-12" >
+
+            <div class="card margin-TB-5">
+
+                <div class="card-content">
+
+                    <form name="searchForm"  ng-submit="search()" novalidate >
+
+                        <table class="table" border="0">
+                            <tr class="filter-row gc-search-row">
+
+
+                                <td>
+                                	<div class="form-group" >
+	                                <div class="dropdown">
+                                        <input type="text"
+                                               class="form-control searchable-input floatL"
+                                               placeholder="Search Client" ng-model="selectedProject"
+
+                                               name="projectId"
+                                               uib-typeahead="project as project.name for project in projects | filter:$viewValue | limitTo:5" />
+                                    </div>
+                                  </div>
+                                </td>
+                                
+                                <td align="right">
+                                    <div class="floatR form-group">
+                                        <button type="submit" class="btn btn-primary search-button t4"  >
+                                            <i class="fa fa-search"></i>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                        </table>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
         <div class="col-md-12">
             <div class="card tablecard">
                 <div class="card-content">
@@ -22,6 +60,10 @@
                             <tr>
                                 <th>ID</th>
                                 <th>Name</th>
+                                <th>Address</th>
+                                <th>Contact Person</th>
+                                <th>Phone</th>
+                                <th>Email</th>
                                 <th class="disabled-sorting text-right">Actions</th>
                             </tr>
                             </thead>
@@ -30,12 +72,15 @@
                             <tr ng-repeat="project in projects">
                                 <td>{{project.id}}</td>
                                 <td>{{project.name}}</td>
-
+							   <td>{{project.address}}</td>
+							   <td>{{project.contactFirstName}} {{project.contactLastName}}</td>
+							   <td>{{project.phone}}</td>
+							   <td>{{project.email}}</td>
                                 <td class="text-right">
 
                                     <a  ng-class="{active: $state.includes('admin')}" has-authority="ROLE_ADMIN" ui-sref="edit-project({ id: project.id })"  class="btn btn-simple btn-info"><i class="material-icons">edit</i></a>
 
-                                    <a ng-class="{active: $state.includes('admin')}" has-authority="ROLE_ADMIN"  ng-click="deleteConfirm(project)"  onClick="$('#deleteModal').modal()" data-target="#myModal"   class="btn btn-simple btn-danger"><i class="material-icons">close</i></a>
+                                    <!-- <a ng-class="{active: $state.includes('admin')}" has-authority="ROLE_ADMIN"  ng-click="deleteConfirm(project)"  onClick="$('#deleteModal').modal()" data-target="#myModal"   class="btn btn-simple btn-danger"><i class="material-icons">close</i></a> -->
 
 
                                 </td>
@@ -70,7 +115,7 @@
         <div class="col-md-6 text-right">
             <ul class="pagination pagination-warning">
 
-                <li class="paging-first" ID="first">
+                <li class="paging-first" id="first">
                     <a href="#" id="first" ng-click="first()">
                         <i id="first" class=" fa fa-step-backward"></i></a>
                 </li>

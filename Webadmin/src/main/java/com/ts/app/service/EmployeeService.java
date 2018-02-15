@@ -1,6 +1,5 @@
 package com.ts.app.service;
 
-import java.sql.Date;
 import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -20,11 +19,7 @@ import com.ts.app.repository.*;
 import com.ts.app.web.rest.dto.*;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.time.DateUtils;
-import org.hibernate.EmptyInterceptor;
 import org.hibernate.Hibernate;
-import org.joda.time.DateTime;
-import org.joda.time.Days;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.env.Environment;
@@ -58,6 +53,9 @@ public class    EmployeeService extends AbstractService {
 
     @Inject
     private JobRepository jobRepository;
+
+    @Inject
+    private DesignationRepository designationRepository;
 
     @Inject
     private CheckInOutRepository checkInOutRepository;
@@ -161,6 +159,12 @@ public class    EmployeeService extends AbstractService {
 		return employeeDto;
 	}
 
+    public DesignationDTO createDesignation(DesignationDTO designationDTO) {
+        Designation designation= mapperUtil.toEntity(designationDTO, Designation.class);
+	    designationRepository.save(designation);
+        return designationDTO;
+    }
+
 	public EmployeeDTO updateEmployee(EmployeeDTO employee, boolean shouldUpdateActiveStatus) {
 		log.debug("Inside Update");
 		log.debug("Inside Update"+employee);
@@ -243,6 +247,7 @@ public class    EmployeeService extends AbstractService {
 		employee = mapperUtil.toModel(employeeUpdate, EmployeeDTO.class);
 		return employee;
 	}
+
 
 	public void deleteEmployee(Long id) {
 		log.debug("Inside Delete");
@@ -386,36 +391,39 @@ public class    EmployeeService extends AbstractService {
 
 	public List<EmployeeDTO> findAll(long userId) {
 		User user = userRepository.findOne(userId);
-		long userGroupId = user.getUserGroup().getId();
 		List<Employee> entities = null;
-		if(user.getUserGroup().getName().equalsIgnoreCase("admin")) {
+		if(user.getUserRole().getName().equalsIgnoreCase(UserRoleEnum.ADMIN.toValue())) {
 			entities = employeeRepository.findAll();
 		}else {
-			entities = employeeRepository.findAll(userGroupId);
+			List<Long> subEmpIds = null;
+			subEmpIds = findAllSubordinates(user.getEmployee(), subEmpIds);
+			entities = employeeRepository.findAllByIds(subEmpIds);
 		}
 		return mapperUtil.toModelList(entities, EmployeeDTO.class);
 	}
 
     public List<EmployeeDTO> findAllRelievers(long userId) {
         User user = userRepository.findOne(userId);
-        long userGroupId = user.getUserGroup().getId();
         List<Employee> entities = null;
-        if(user.getUserGroup().getName().equalsIgnoreCase("admin")) {
+        if(user.getUserRole().getName().equalsIgnoreCase(UserRoleEnum.ADMIN.toValue())) {
             entities = employeeRepository.findAllRelievers();
         }else {
-            entities = employeeRepository.findAllRelieversByGroupId(userGroupId);
+			List<Long> subEmpIds = null;
+			subEmpIds = findAllSubordinates(user.getEmployee(), subEmpIds);
+            entities = employeeRepository.findAllRelieversByIds(subEmpIds);
         }
         return mapperUtil.toModelList(entities, EmployeeDTO.class);
     }
 
     public List<EmployeeDTO> findBySiteId(long userId,long siteId) {
         User user = userRepository.findOne(userId);
-        long userGroupId = user.getUserGroup().getId();
         List<Employee> entities = null;
-        if(user.getUserGroup().getName().equalsIgnoreCase("admin")) {
+        if(user.getUserRole().getName().equalsIgnoreCase(UserRoleEnum.ADMIN.toValue())) {
             entities = employeeRepository.findBySiteId(siteId);
         }else {
-            entities = employeeRepository.findBySiteId(siteId);
+	    		List<Long> subEmpIds = null;
+	    		subEmpIds = findAllSubordinates(user.getEmployee(), subEmpIds);
+            entities = employeeRepository.findBySiteIdAndEmpIds(siteId, subEmpIds);
         }
         return mapperUtil.toModelList(entities, EmployeeDTO.class);
     }
@@ -534,13 +542,12 @@ public class    EmployeeService extends AbstractService {
 
 	public SearchResult<EmployeeDTO> findBySearchCrieria(SearchCriteria searchCriteria) {
 		User user = userRepository.findOne(searchCriteria.getUserId());
-    	long userGroupId = user.getUserGroup().getId();
 		SearchResult<EmployeeDTO> result = new SearchResult<EmployeeDTO>();
 		if(searchCriteria != null) {
-			Pageable pageRequest = createPageRequest(searchCriteria.getCurrPage());
+			Pageable pageRequest = createPageRequest(searchCriteria.getCurrPage(), searchCriteria.getSort());
 			Page<Employee> page = null;
 			List<EmployeeDTO> transactions = null;
-			
+
             Calendar startCal = Calendar.getInstance();
             if(searchCriteria.getFromDate() != null) {
             		startCal.setTime(searchCriteria.getFromDate());
@@ -555,14 +562,14 @@ public class    EmployeeService extends AbstractService {
 	    		endCal.set(Calendar.HOUR_OF_DAY, 23);
 	    		endCal.set(Calendar.MINUTE, 59);
 	    		endCal.set(Calendar.SECOND, 0);
-	
+
 	    		searchCriteria.setFromDate(startCal.getTime());
 	    		searchCriteria.setToDate(endCal.getTime());
 
-			
+
 			java.sql.Date startDate = new java.sql.Date(searchCriteria.getFromDate().getTime());
         		java	.sql.Date toDate = new java.sql.Date(searchCriteria.getToDate().getTime());
-			
+
 			log.debug("findBySearchCriteria - "+searchCriteria.getSiteId() +", "+searchCriteria.getEmployeeId() +", "+searchCriteria.getProjectId());
 			if((searchCriteria.getSiteId() != 0 && searchCriteria.getProjectId() != 0)) {
 				if(searchCriteria.getFromDate() != null) {
@@ -604,16 +611,36 @@ public class    EmployeeService extends AbstractService {
             		}else {
             			page = employeeRepository.findEmployeesByIdAndProjectIdOrSiteId(searchCriteria.getEmployeeId(), searchCriteria.getProjectId(), searchCriteria.getSiteId(), pageRequest);
             		}
-            }else {
-            	if(user.getUserGroup().getName().equalsIgnoreCase("admin")) {
-            		page = employeeRepository.findAll(pageRequest);
-            	}else {
-            		page = employeeRepository.findEmployees(userGroupId, pageRequest);
-            	}
+            }else if (StringUtils.isNotEmpty(searchCriteria.getSiteName())) {
+	        		List<Long> subEmpIds = null;
+	        		subEmpIds = findAllSubordinates(user.getEmployee(), subEmpIds);
+	        		page = employeeRepository.findBySiteName(searchCriteria.getSiteName(), subEmpIds, pageRequest);
+            }else if (StringUtils.isNotEmpty(searchCriteria.getProjectName())) {
+	        		List<Long> subEmpIds = null;
+	        		subEmpIds = findAllSubordinates(user.getEmployee(), subEmpIds);
+	        		page = employeeRepository.findByProjectName(searchCriteria.getProjectName(), subEmpIds, pageRequest);
+	        }else {
+	            	if(user.getUserRole().getName().equalsIgnoreCase(UserRoleEnum.ADMIN.toValue())) {
+	            		page = employeeRepository.findAll(pageRequest);
+	            	}else {
+	            		List<Long> subEmpIds = null;
+	            		subEmpIds = findAllSubordinates(user.getEmployee(), subEmpIds);
+						
+	            		page = employeeRepository.findAllByEmpIds(subEmpIds, pageRequest);
+	            	}
             }
 
 			if(page != null) {
-				transactions = mapperUtil.toModelList(page.getContent(), EmployeeDTO.class);
+				//transactions = mapperUtil.toModelList(page.getContent(), EmployeeDTO.class);
+				if(transactions == null) {
+					transactions = new ArrayList<EmployeeDTO>();
+				}
+				List<Employee> empList =  page.getContent();
+				if(CollectionUtils.isNotEmpty(empList)) {
+					for(Employee emp : empList) {
+						transactions.add(mapToModel(emp));
+					}
+				}
 				if(CollectionUtils.isNotEmpty(transactions)) {
 					buildSearchResult(searchCriteria, page, transactions,result);
 				}
@@ -676,5 +703,27 @@ public class    EmployeeService extends AbstractService {
 		return exportUtil.readExportFile(fileName);
 	}
 
+
+    public List<DesignationDTO> findAllDesignations() {
+//        User user = userRepository.findOne(userId);
+        List<Designation> designation = designationRepository.findAll();
+
+        return mapperUtil.toModelList(designation, DesignationDTO.class);
+    }
+
+    private EmployeeDTO mapToModel(Employee employee) {
+    		EmployeeDTO empDto = new EmployeeDTO();
+    		empDto.setId(employee.getId());
+    		empDto.setEmpId(employee.getEmpId());
+    		empDto.setName(employee.getName());
+    		empDto.setFullName(employee.getFullName());
+    		empDto.setLastName(employee.getLastName());
+    		empDto.setActive(employee.getActive());
+    		empDto.setFaceAuthorised(employee.isFaceAuthorised());
+    		empDto.setFaceIdEnrolled(employee.isFaceIdEnrolled());
+    		empDto.setDesignation(employee.getDesignation());
+    		empDto.setEnrolled_face(employee.getEnrolled_face());
+    		return empDto;
+    }
 
 }

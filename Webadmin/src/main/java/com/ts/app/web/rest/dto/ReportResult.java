@@ -6,10 +6,16 @@ import java.util.Map;
 
 public class ReportResult {
 
+	long projectId;
+	
+	long projectName;
+	
 	long siteId;
 
 	String siteName;
 
+	long totalJobCount;
+	
 	long assignedJobCount;
 
 	long completedJobCount;
@@ -36,7 +42,13 @@ public class ReportResult {
 
 	Map<JobType,Long> jobCountByType;
 
-
+	Map<java.sql.Date,Long> totalCountMap;
+	
+	Map<java.sql.Date,Long> assignedCountMap;
+	
+	Map<java.sql.Date,Long> completedCountMap;
+	
+	Map<java.sql.Date,Long> overdueCountMap;
 
 	public String getSiteName() {
 		return siteName;
@@ -158,4 +170,62 @@ public class ReportResult {
     public void setAbsentEmployeeCount(long absentEmployeeCount) {
         this.absentEmployeeCount = absentEmployeeCount;
     }
+
+	public long getTotalJobCount() {
+		return totalJobCount;
+	}
+
+	public void setTotalJobCount(long totalJobCount) {
+		this.totalJobCount = totalJobCount;
+	}
+
+	public Map<java.sql.Date, Long> getTotalCountMap() {
+		return totalCountMap;
+	}
+
+	public void setTotalCountMap(Map<java.sql.Date, Long> totalCountMap) {
+		this.totalCountMap = totalCountMap;
+	}
+
+	public Map<java.sql.Date, Long> getAssignedCountMap() {
+		return assignedCountMap;
+	}
+
+	public void setAssignedCountMap(Map<java.sql.Date, Long> assignedCountMap) {
+		this.assignedCountMap = assignedCountMap;
+	}
+
+	public Map<java.sql.Date, Long> getCompletedCountMap() {
+		return completedCountMap;
+	}
+
+	public void setCompletedCountMap(Map<java.sql.Date, Long> completedCountMap) {
+		this.completedCountMap = completedCountMap;
+	}
+
+	public Map<java.sql.Date, Long> getOverdueCountMap() {
+		return overdueCountMap;
+	}
+
+	public void setOverdueCountMap(Map<java.sql.Date, Long> overdueCountMap) {
+		this.overdueCountMap = overdueCountMap;
+	}
+
+	public long getProjectId() {
+		return projectId;
+	}
+
+	public void setProjectId(long projectId) {
+		this.projectId = projectId;
+	}
+
+	public long getProjectName() {
+		return projectName;
+	}
+
+	public void setProjectName(long projectName) {
+		this.projectName = projectName;
+	}
+    
+    
 }

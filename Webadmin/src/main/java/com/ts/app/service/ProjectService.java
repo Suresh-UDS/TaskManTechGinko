@@ -14,6 +14,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 import com.ts.app.domain.AbstractAuditingEntity;
 import com.ts.app.domain.Employee;
@@ -49,11 +50,21 @@ public class ProjectService extends AbstractService {
 	@Inject
 	private MapperUtil<AbstractAuditingEntity, BaseDTO> mapperUtil;
 
+	public boolean isDuplicate(ProjectDTO projectDto) {
+		SearchCriteria criteria = new SearchCriteria();
+		criteria.setProjectName(projectDto.getName());
+		SearchResult<ProjectDTO> searchResults = findBySearchCrieria(criteria);
+		if(searchResults != null && CollectionUtils.isNotEmpty(searchResults.getTransactions())) {
+			return true;
+		}
+		return false;
+
+	}
+	
 	public ProjectDTO createProjectInformation(ProjectDTO projectDto) {
 		// log.info("The admin Flag value is " +adminFlag);
 		Project project = mapperUtil.toEntity(projectDto, Project.class);
 		project.setActive(project.ACTIVE_YES);
-
 		project = projectRepository.save(project);
 		log.debug("Created Information for Project: {}", project);
 		projectDto = mapperUtil.toModel(project, ProjectDTO.class);
@@ -87,6 +98,8 @@ public class ProjectService extends AbstractService {
 		project.setPhone(projectDTO.getPhone());
 		project.setStartDate(projectDTO.getStartDate());
 		project.setEndDate(projectDTO.getEndDate());
+		project.setContactFirstName(projectDTO.getContactFirstName());
+		project.setContactLastName(projectDTO.getContactLastName());
 	}
 
 	public void deleteProject(Long id) {
@@ -159,26 +172,36 @@ public class ProjectService extends AbstractService {
             List<ProjectDTO> transactions = null;
             if(!searchCriteria.isFindAll()) {
                 if(searchCriteria.getProjectId() != 0) {
-                    page = projectRepository.findProjectsById(searchCriteria.getProjectId(),empId, pageRequest);
+                		if(empId > 0 && !user.isAdmin()){
+                			List<Long> subEmpIds = findSubOrdinates(user.getEmployee(), empId);
+                			page = projectRepository.findProjectsById(searchCriteria.getProjectId(),subEmpIds, pageRequest);
+                		}else {
+                			page = projectRepository.findProjectsById(searchCriteria.getProjectId(),pageRequest);
+                		}
+                }else if(!StringUtils.isEmpty(searchCriteria.getProjectName())) {
+                		if(empId > 0 && !user.isAdmin()){
+                			List<Long> subEmpIds = findSubOrdinates(user.getEmployee(), empId);
+                    		page = projectRepository.findAllByName(searchCriteria.getProjectName(), subEmpIds, pageRequest);
+                		}else {
+                    		page = projectRepository.findAllByName(searchCriteria.getProjectName(), pageRequest);
+                			
+                		}
                 }
             }else {
-            	if(empId > 0 && !user.isAdmin()) {
-					Employee employee = user.getEmployee();
-					List<Long> subEmpIds = new ArrayList<Long>();
-					subEmpIds.add(empId);
-					if(employee != null) {
-						Hibernate.initialize(employee.getSubOrdinates());
-						subEmpIds.addAll(siteService.findAllSubordinates(employee, subEmpIds));
-						log.debug("List of subordinate ids -"+ subEmpIds);
-
-					}
-            		page = projectRepository.findProjects(subEmpIds, pageRequest);
-            	}else {
-            		page = projectRepository.findAllProjects(pageRequest);
-            	}
+	            	if(empId > 0 && !user.isAdmin()) {
+	            		List<Long> subEmpIds = findSubOrdinates(user.getEmployee(), empId);
+	            		page = projectRepository.findProjects(subEmpIds, pageRequest);
+	            	}else {
+	            		page = projectRepository.findAllProjects(pageRequest);
+	            	}
             }
             if(page != null) {
-                transactions = mapperUtil.toModelList(page.getContent(), ProjectDTO.class);
+            		try {
+            			transactions = mapperUtil.toModelList(page.getContent(), ProjectDTO.class);
+            		}catch(Exception e) {
+            			log.error("Error while converting entity to model ",e);
+            			e.printStackTrace();
+            		}
                 if(CollectionUtils.isNotEmpty(transactions)) {
                     buildSearchResult(searchCriteria, page, transactions,result);
                 }
@@ -200,6 +223,16 @@ public class ProjectService extends AbstractService {
         return;
     }
 
+    private List<Long> findSubOrdinates(Employee employee, long empId) {
+		List<Long> subEmpIds = new ArrayList<Long>();
+		subEmpIds.add(empId);
+		if(employee != null) {
+			Hibernate.initialize(employee.getSubOrdinates());
+			subEmpIds.addAll(findAllSubordinates(employee, subEmpIds));
+			log.debug("List of subordinate ids -"+ subEmpIds);
 
+		}
+		return subEmpIds;
+	}
 
 }

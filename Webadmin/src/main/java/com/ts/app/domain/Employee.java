@@ -64,7 +64,7 @@ public class Employee extends AbstractAuditingEntity implements Serializable {
 	@Column(name="qr_code_image")
 	private String qrCodeImage;
 
-	@OneToOne(fetch = FetchType.EAGER,optional=true)
+	@OneToOne(fetch = FetchType.LAZY,optional=true)
 	@JoinColumn(name = "userId", nullable = true)
 	private User user;
 
@@ -94,7 +94,7 @@ public class Employee extends AbstractAuditingEntity implements Serializable {
         inverseJoinColumns = {@JoinColumn(name = "site_id", referencedColumnName = "id")})
 	private List<Site> sites;
 
-	@OneToMany(mappedBy="employee",cascade={CascadeType.ALL})
+	@OneToMany(mappedBy="employee",cascade={CascadeType.ALL}, fetch = FetchType.LAZY)
 	@Cascade(org.hibernate.annotations.CascadeType.DELETE_ORPHAN)
     private List<EmployeeProjectSite> projectSites;
 

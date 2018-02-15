@@ -165,6 +165,18 @@ container-scroll::-webkit-scrollbar-thumb
   color:#000000;
 }
 
+.hariz-scroll-con
+{
+  /*padding:10px 15px;*/
+ /* width: 1400px;*/
+}
+.font-size12 p
+{
+  font-size:12px;
+}
+
+
+
 /* calendar css */
 .Viewcalendartxt h2
 {

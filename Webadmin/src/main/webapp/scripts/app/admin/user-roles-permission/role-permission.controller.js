@@ -42,13 +42,17 @@ angular.module('timeSheetApp')
         
         $scope.checkPermission = function(moduleId, moduleName, actionId, actionName) {
         	console.log('moduleName - ' + moduleName +' actionId - ' + actionId + ' actionName -' + actionName + ' checked-')
+        	console.log('selected Permissions data -' + angular.isArray($scope.selectedPermissions))
         	if(angular.isArray($scope.selectedPermissions)) {
         		var permMatch = false;
+        		console.log('$scope.selectedPermissions - '+ $scope.selectedPermissions);
         		var perms = $scope.selectedPermissions;
         		for(var p = 0; p < perms.length; p++) {
         			var perm = perms[p];
+        			console.log('permission module name - ' + perm.name);
         			if(perm.name) {
 	        			if(perm.name.indexOf(moduleName) != -1) {
+	        				console.log('module name matched - ' + permMatch);
 	        				permMatch = true;
 	        				var actions = perm.moduleActions;
 	        				
@@ -57,11 +61,10 @@ angular.module('timeSheetApp')
 	        					for(var i = 0; i < actions.length ; i++) {
 	        						var action = actions[i];
 	        						if(action.name.indexOf(actionName) != -1) {
+	        							console.log('action name matched - ' + actionName);
 	        							actionMatch = true;
+        								actions.splice(i,1);
 	        							break;
-//	        							if(!obj.Selected) {
-//	        								actions.splice(i,1);
-//	        							}
 	        							
 	        						}	
 	        					}
@@ -120,7 +123,7 @@ angular.module('timeSheetApp')
         	console.log('selectedRole -'+ $scope.selectedUserRole);
         	console.log('selectedRolePermissions -'+ JSON.stringify($scope.selectedPermissions));
         	$scope.permissions = {
-        		"roleId" : $scope.selectedUserRole,
+        		"roleId" : $scope.selectedUserRole.id,
         		"applicationModules" : $scope.selectedPermissions 
         	}
         	RolePermissionComponent.createRolePermission($scope.permissions).then(function () {
@@ -237,8 +240,9 @@ angular.module('timeSheetApp')
 
         	if($scope.selectedUserRole) {
         		$scope.searchCriteria.findAll = false;
-	        	$scope.searchCriteria.userRoleId = $scope.selectedUserRole;
-	        	console.log('selected user role id ='+ JSON.stringify($scope.selectedUserRole));
+        		console.log('selected user role id - '+$scope.selectedUserRole.id)
+	        	$scope.searchCriteria.userRoleId = $scope.selectedUserRole.id;
+	        	console.log('search criteria user role id ='+ JSON.stringify($scope.searchCriteria.userRoleId));
         	}else {
         		$scope.searchCriteria.selectedUserRole = 0;
         	}
@@ -283,6 +287,71 @@ angular.module('timeSheetApp')
                 							permActionMatch = true;
                 							console.log('action in scope - ' + $scope.moduleActions[i].moduleActions[k].name);
                 							$scope.moduleActions[i].moduleActions[k].selected = true;
+                							if($scope.selectedPermissions && $scope.selectedPermissions.length > 0) {
+                								var selPerms = $scope.selectedPermissions;
+            									var selPermMatch = false;
+                								for(var p=0; p < selPerms.length; p++) {
+                									if(selPerms[p].name.indexOf(module.name) != -1) {
+                										selPermMatch = true;
+                										var selPermActions = selPerms[p].moduleActions;
+                										if(selPermActions) { 
+                    										for(var a=0; a < selPermActions.length; a++) {
+                    											if(selPermActions[a].name.indexOf(permAction.name) == -1) {
+                    												var action = {
+                    	                    								"id" : permAction.id,
+                    	                    								"name" : permAction.name
+                    	                    							}
+                    												
+                    												selPermActions.push(action);
+                    												break;	
+                    											}
+                    										}                											
+                										}else {
+                											var actions = [];
+                                							var action = {
+                                								"id" : action.id,
+                                								"name" : action.name
+                                							}
+                                							actions.push(action);
+                										}
+                										break;
+                									}
+                									
+                								}
+                								if(!selPermMatch) { //if the selectedPermissions array does not contain the module
+                									var actions = [];
+                        							var action = {
+                        								"id" : action.id,
+                        								"name" : action.name
+                        							}
+                        							actions.push(action);
+                									var permission = {
+	    	                	        					"id" : module.id,
+	    	                	        					"name" : module.name,
+	    	                	        					"moduleActions" : actions
+	    	                	        						
+	    	                	        					}
+	    	                	        				
+	    	                	        					$scope.selectedPermissions.push(permission);
+                								}
+                							}else {  //if the selectedPermissions array is empty
+                    							var actions = [];
+                    							var action = {
+                    								"id" : action.id,
+                    								"name" : action.name
+                    							}
+                    							actions.push(action);
+                    	        				
+	    	                	        				var permission = {
+	    	                	        					"id" : module.id,
+	    	                	        					"name" : module.name,
+	    	                	        					"moduleActions" : actions
+	    	                	        						
+	    	                	        				}
+	    	                	        				
+	    	                	        				$scope.selectedPermissions.push(permission);
+                								
+                							}
                 							break;
                 						}
                 						

@@ -66,7 +66,12 @@ public class ProjectResource {
 		try {
 			log.debug("Logged in user id -" + SecurityUtils.getCurrentUserId());
 			projectDTO.setUserId(SecurityUtils.getCurrentUserId());
-			projectDTO = projectService.createProjectInformation(projectDTO);
+			if(!projectService.isDuplicate(projectDTO)) {
+				projectDTO = projectService.createProjectInformation(projectDTO);
+			}else {
+				projectDTO.setMessage("error.duplicateRecordError");
+				return new ResponseEntity<>(projectDTO,HttpStatus.BAD_REQUEST);
+			}
 		}catch (Exception cve) {
 			throw new TimesheetException(cve);
 		}

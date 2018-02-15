@@ -38,6 +38,7 @@ import com.ts.app.repository.AuthorityRepository;
 import com.ts.app.repository.EmployeeRepository;
 import com.ts.app.repository.UserGroupRepository;
 import com.ts.app.repository.UserRepository;
+import com.ts.app.repository.UserRoleRepository;
 import com.ts.app.security.AuthoritiesConstants;
 import com.ts.app.security.SecurityUtils;
 import com.ts.app.service.MailService;
@@ -100,6 +101,9 @@ public class UserResource {
 	private UserGroupRepository userGroupRepository;
 
 	@Inject
+	private UserRoleRepository userRoleRepository;
+
+	@Inject
 	private AuthorityRepository authorityRepository;
 
 	@Inject
@@ -157,32 +161,38 @@ public class UserResource {
 		log.debug("REST request to update User : {}", userDTO);
 		return Optional.of(userRepository.findOne(userDTO.getId())).map(user -> {
 			
-			if(userDTO.getUserGroupId() > 0) {
-            	user.setUserGroup(userGroupRepository.findOne(userDTO.getUserGroupId()));
-            }else {
-            	throw new TimesheetException(new IllegalArgumentException("Not a valid User Group"));
-            }
+//			if(userDTO.getUserGroupId() > 0) {
+//            		user.setUserGroup(userGroupRepository.findOne(userDTO.getUserGroupId()));
+//            }else {
+//            		throw new TimesheetException(new IllegalArgumentException("Not a valid User Group"));
+//            }
 			
+			if(userDTO.getUserRoleId() > 0) {
+	        		user.setUserRole(userRoleRepository.findOne(userDTO.getUserRoleId()));
+	        }else {
+	        		throw new TimesheetException(new IllegalArgumentException("Not a valid User Role"));
+	        }
+
 			Employee employee = null;
 			log.debug("Create new user - Associated employee id - "+ userDTO.getEmployeeId());
             if(userDTO.getEmployeeId() > 0) {
             	employee = employeeRepository.findOne(userDTO.getEmployeeId());
             	user.setEmployee(employee);
             }
-        	if(employee != null) {
-        		employee.setUser(user);
-        		employeeRepository.save(employee);
-        	}
+	        	if(employee != null) {
+	        		employee.setUser(user);
+	        		employeeRepository.save(employee);
+	        	}
 			
-			user.setLogin(userDTO.getLogin());
-			user.setClearPassword(userDTO.getClearPassword());
-			String encryptedPassword = null;
-            if(StringUtils.isNotEmpty(userDTO.getPassword())){
-            	encryptedPassword = passwordEncoder.encode(userDTO.getPassword());
-            }else {
-            	encryptedPassword = passwordEncoder.encode(RandomUtil.generatePassword());
-            }
-			user.setPassword(encryptedPassword);
+			//user.setLogin(userDTO.getLogin());
+			//user.setClearPassword(userDTO.getClearPassword());
+			//String encryptedPassword = null;
+//            if(StringUtils.isNotEmpty(userDTO.getPassword())){
+//            	encryptedPassword = passwordEncoder.encode(userDTO.getPassword());
+//            }else {
+//            	encryptedPassword = passwordEncoder.encode(RandomUtil.generatePassword());
+//            }
+			//user.setPassword(encryptedPassword);
 			user.setFirstName(userDTO.getFirstName());
 			user.setLastName(userDTO.getLastName());
 			user.setEmail(userDTO.getEmail());

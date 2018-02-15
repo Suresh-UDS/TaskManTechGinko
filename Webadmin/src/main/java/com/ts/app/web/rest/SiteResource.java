@@ -115,6 +115,16 @@ public class SiteResource {
 		return result;
 	}
 
+    @RequestMapping(value = "/site/searchList",method = RequestMethod.POST)
+    public List<SiteDTO> searchSiteList(@RequestBody SearchCriteria searchCriteria) {
+        List<SiteDTO> result = null;
+        if(searchCriteria != null) {
+            searchCriteria.setUserId(SecurityUtils.getCurrentUserId());
+            result = siteService.searchSiteList(searchCriteria);
+        }
+        return result;
+    }
+
     @RequestMapping(value = "/site/employee/{employeeId}", method = RequestMethod.GET)
     public List<SiteDTO> findByEmployeeId(@PathVariable Long employeeId) {
         log.info("--Invoked EmployeeResource.findAll --");

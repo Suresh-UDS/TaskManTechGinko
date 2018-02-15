@@ -3,23 +3,23 @@
 angular.module('timeSheetApp')
     .config(function ($stateProvider) {
         $stateProvider
-            .state('projects', {
+            .state('imports', {
                 parent: 'manage',
-                url: '/projects',
-                controller: 'ProjectController',
+                url: '/imports',
+                controller: 'ImportController',
                 data: {
                     authorities: [],
-                    pageTitle: 'Client'
+                    pageTitle: 'Import'
                 },
                 views: {
                     'content@': {
-                        templateUrl: 'scripts/app/admin/project/project-list.html',
-                        controller: 'ProjectController'
+                        templateUrl: 'scripts/app/admin/import/import.html',
+                        controller: 'ImportController'
                     }
                 },
                 resolve: {
                     
                 }
-            });      
-       
+            });       
+        
     });

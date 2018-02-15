@@ -18,6 +18,8 @@ public abstract class BaseDTO {
 	
 	private String errorMessage;
 	
+	private String message;
+	
 	private long userId;
 	
 	private String active;
@@ -93,6 +95,14 @@ public abstract class BaseDTO {
 
 	public void setActive(String active) {
 		this.active = active;
+	}
+
+	public String getMessage() {
+		return message;
+	}
+
+	public void setMessage(String message) {
+		this.message = message;
 	}
 
 	

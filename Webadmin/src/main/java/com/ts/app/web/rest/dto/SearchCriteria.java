@@ -40,8 +40,12 @@ public class SearchCriteria extends Paginator {
 	private long locationId;
 
 	private long siteId;
+	
+	private String siteName;
 
 	private long projectId;
+
+	private String projectName;
 
 	private long userGroupId;
 
@@ -85,6 +89,18 @@ public class SearchCriteria extends Paginator {
 
 	private String rateCardType;
 
+	private boolean graphRequest;
+	
+	private int sort;
+
+
+	public int getSort() {
+		return sort;
+	}
+
+	public void setSort(int sort) {
+		this.sort = sort;
+	}
 
 	public long getId() {
 		return id;
@@ -404,6 +420,30 @@ public class SearchCriteria extends Paginator {
 
 	public void setToDate(Date toDate) {
 		this.toDate = toDate;
+	}
+
+	public boolean isGraphRequest() {
+		return graphRequest;
+	}
+
+	public void setGraphRequest(boolean graphRequest) {
+		this.graphRequest = graphRequest;
+	}
+
+	public String getProjectName() {
+		return projectName;
+	}
+
+	public void setProjectName(String projectName) {
+		this.projectName = projectName;
+	}
+
+	public String getSiteName() {
+		return siteName;
+	}
+
+	public void setSiteName(String siteName) {
+		this.siteName = siteName;
 	}
 
 }

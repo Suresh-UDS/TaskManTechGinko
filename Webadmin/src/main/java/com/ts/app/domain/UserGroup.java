@@ -35,8 +35,7 @@ public class UserGroup extends AbstractAuditingEntity implements Serializable {
     @Column(length = 50, unique = true, nullable = false)
     private String name;   
 
-    @OneToMany(mappedBy = "userGroup")  
-    private Set<User> user;  
+   
 
 	
 
@@ -63,14 +62,5 @@ public class UserGroup extends AbstractAuditingEntity implements Serializable {
 	}
 	
 
-	public Set<User> getUser() {
-		return user;
-	}
-
-
-
-	public void setUser(Set<User> user) {
-		this.user = user;
-	}
 
 }
