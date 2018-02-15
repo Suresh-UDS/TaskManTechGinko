@@ -652,7 +652,10 @@ public class JobManagementService extends AbstractService {
 		job.setEmployee(employee);
 		job.setComments(jobDTO.getComments());
 		job.setPlannedStartTime(jobDTO.getPlannedStartTime());
-		job.setPlannedEndTime(jobDTO.getPlannedEndTime());
+		Calendar endTimeCal = Calendar.getInstance();
+		endTimeCal.setTime(jobDTO.getPlannedStartTime());
+		endTimeCal.add(Calendar.HOUR_OF_DAY, jobDTO.getPlannedHours());
+		job.setPlannedEndTime(endTimeCal.getTime());
 		job.setPlannedHours(jobDTO.getPlannedHours());
 
 		job.setActualStartTime(jobDTO.getActualStartTime());
