@@ -607,6 +607,11 @@ a:hover, a:focus
   border: 1px solid #00acc1 !important;
   color: #00acc1 !important;
 }
+.icon-round-orange
+{
+  border: 1px solid #ff9800 !important;
+  color: #ff9800 !important;
+}
 .fnt-24
 {
   font-size: 24px !important;
@@ -664,9 +669,9 @@ a:hover, a:focus
 .q-round
 {
   width: 90% !important;
-  height: 80% !important;
+  height: 90% !important;
   border-radius: 50% !important;
-  border: 1px solid #ff9800;
+  /*border: 1px solid #ff9800;*/
 }
 .fab-md-dark
 {
@@ -695,4 +700,7 @@ ion-fab-list
 {
   transform: rotate(90deg);
 }
-
+.paddding-top20
+{
+  padding-top: 20px;
+}
