@@ -28,7 +28,6 @@ export class DashboardPage {
     firstLetter:any;
     selectDate:any;
     selectSite:any;
-    empSelect=false;
   constructor(public renderer: Renderer,public myService:authService,private loadingCtrl:LoadingController,public navCtrl: NavController,public component:componentService,public authService:authService,public modalCtrl: ModalController,
               private datePickerProvider: DatePickerProvider, private siteService:SiteService, private employeeService: EmployeeService, private jobService:JobService) {
 
@@ -89,7 +88,7 @@ export class DashboardPage {
     )
 
 
-   // this.getAllJobs()
+    //this.getAllJobs()
 
 
 
@@ -159,7 +158,6 @@ export class DashboardPage {
                 console.log(response.json());
                 if(response.json().length !==0)
                 {
-                    this.empSelect=false;
                     this.employee=response.json();
                     console.log(this.employee);
                 }
@@ -169,7 +167,6 @@ export class DashboardPage {
                 }
             },
             error=>{
-                this.empSelect=true;
                 console.log(error);
                 console.log(this.employee);
             })
