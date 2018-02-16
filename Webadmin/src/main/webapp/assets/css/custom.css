@@ -442,6 +442,10 @@ button.btn.btn-outline {
   border-radius: 0;
   /*margin: 8px 0;*/
 }
+.TableCard
+{
+   margin: 8px 0;
+}
 
 .DashboardCardsCon .card [data-background-color]
 {
