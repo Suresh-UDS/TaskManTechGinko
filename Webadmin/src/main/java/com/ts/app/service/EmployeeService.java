@@ -544,7 +544,7 @@ public class    EmployeeService extends AbstractService {
 		User user = userRepository.findOne(searchCriteria.getUserId());
 		SearchResult<EmployeeDTO> result = new SearchResult<EmployeeDTO>();
 		if(searchCriteria != null) {
-			Pageable pageRequest = createPageRequest(searchCriteria.getCurrPage(), searchCriteria.getSort());
+			Pageable pageRequest = createPageRequest(searchCriteria.getCurrPage());
 			Page<Employee> page = null;
 			List<EmployeeDTO> transactions = null;
 

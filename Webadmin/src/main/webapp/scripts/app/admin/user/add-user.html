@@ -41,11 +41,14 @@
                                            <div class="col-md-4">
                                                <div class="form-group">
                                                    <label class="control-label">User Role <span class="red-star">*</span> </label>
-                                                   <input type="text" class="form-control"
-                                                           ng-model="selectedRole"
-                                                          uib-typeahead="role as role.name for role in userRoles | filter:$viewValue | limitTo:5"
-                                                          name="UserRole" ng-minlength="5" ng-maxlength="50" autofocus
-                                                          required >
+                                                   <!--<input type="text" class="form-control"-->
+                                                           <!--ng-model="selectedRole"-->
+                                                          <!--uib-typeahead="role as role.name for role in userRoles | filter:$viewValue | limitTo:5"-->
+                                                          <!--name="UserRole" ng-minlength="5" ng-maxlength="50" autofocus-->
+                                                          <!--required >-->
+                                                   <select class="form-control " ng-model="selectedRole"  ng-options="role as role.name for role in userRoles">
+                                                       <option value="">Please select Roles...</option>
+                                                   </select>
 
                                                    <div ng-show="form.$submitted || form.UserRole.$touched">
                                                        <div ng-show="form.UserRole.$dirty || form.UserRole.$invalid">
@@ -174,9 +177,9 @@
                                        <div class="row">
 
                                            <div class="col-md-4">
-                                               <div class="form-group label-floating">
-                                                   <!--<label class="control-label">Employee</label>-->
-                                                   <div class="dropdown">
+                                               <div class="form-group ">
+                                                   <label class="control-label">Employee</label>
+                                                   <div>
                                                        <!--<input type="text" class="form-control" name='employeeName'-->
                                                               <!--ng-model="selectedEmployee"-->
                                                               <!--uib-typeahead="emp as emp.name for emp in employees | filter:$viewValue | limitTo:5"-->
@@ -194,12 +197,16 @@
                                                        </div>
                                                    </div>
                                                </div>
+                                               <div ng-show="loading">
+                                                   <img src="../../../../assets/img/spinner.gif">
+                                                   Loading Details, Please wait..
+                                               </div>
                                            </div>
 
                                            <div class="col-md-4">
                                                <div class="form-group">
                                                    <label class="control-label">Profiles*</label>
-                                                   <select class="selectpicker" data-style="select-with-transition" multiple title="Choose Site" data-size="7" name="authority" multiple     ng-model="user.authorities"
+                                                   <select class="form-control" data-style="select-with-transition" multiple title="Choose Authority" data-size="7" name="authority" multiple     ng-model="user.authorities"
                                                            ng-options="authority for authority in authorities track by authority" >
                                                    </select>
                                                    <div ng-show="form.$submitted || form.authority.$touched">

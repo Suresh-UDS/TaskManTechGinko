@@ -60,7 +60,7 @@ export class EmployeeList {
   }
 
   showSuccessToast(msg){
-    this.component.showToastMessage(msg);
+    this.component.showToastMessage(msg,'bottom');
   }
 
   showLoader(msg){

@@ -22,6 +22,7 @@ export class JobsPage {
     all="all";
     today="today";
     ref=false;
+    count=0;
 
     constructor(public navCtrl: NavController,public component:componentService, public authService: authService,
                     private loadingCtrl:LoadingController, private actionSheetCtrl: ActionSheetController, private jobService: JobService) {
@@ -130,14 +131,32 @@ export class JobsPage {
         this.navCtrl.push(CompleteJobPage,{job:job})
     }
 
-    open(itemSlide: ItemSliding, item: Item)
+    open(itemSlide: ItemSliding, item: Item,c)
     {
-        itemSlide.setElementClass("active-sliding", true);
-        itemSlide.setElementClass("active-slide", true);
-        itemSlide.setElementClass("active-options-right", true);
-        item.setElementStyle("transform", "translate3d(-144px, 0px, 0px)")
-    }
+        this.count=c;
+        if(c==1)
+        {
+            this.count=0;
+            console.log('------------:'+this.count);
+            this.close(itemSlide);
+        }
+        else
+        {
+            this.count=1;
+            console.log('------------:'+this.count);
+            itemSlide.setElementClass("active-sliding", true);
+            itemSlide.setElementClass("active-slide", true);
+            itemSlide.setElementClass("active-options-right", true);
+            item.setElementStyle("transform", "translate3d(-150px, 0px, 0px)")
+        }
 
+    }
+    close(item: ItemSliding) {
+        item.close();
+        item.setElementClass("active-sliding", false);
+        item.setElementClass("active-slide", false);
+        item.setElementClass("active-options-right", false);
+    }
     presentActionSheet(job){
         let actionSheet = this.actionSheetCtrl.create({
             title:'Job',

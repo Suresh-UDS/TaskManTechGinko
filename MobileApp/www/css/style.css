@@ -55,12 +55,44 @@
 }
 .container-scroll > .row {
   /*width: 200%; !* = 100% * 4/3 *!*/
-  width:2300px;
+  width:4500px;
+}
+.date-txt
+{
+  font-weight: 400;
+}
+.siteName
+{
+  white-space: pre-line;
+  width: 70px;
+  line-height: 15px;
+  font-size: 12px;
+  text-transform: capitalize;
+  padding-top: 10px;
+}
+button.siteBtn
+{
+  height: 60px !important;
+  border-radius: 5px !important;
+  padding: 5px 10px !important;
+}
+.sidebar .nav li.active>a, .sidebar .nav li.active>a i
+{
+  color: #fff;
+}
+.SiteCon
+{
+  background: #fff;
+  padding: 10px 0;
+}
+.EmpCon
+{
+  padding: 10px 0;
 }
 .hariz-scroll-con
 {
-    padding:10px 15px;
-    width: 1800px;
+    padding:3px 15px;
+    width:100%;
 }
 container-scroll::-webkit-scrollbar-track
 {
@@ -230,6 +262,10 @@ container-scroll::-webkit-scrollbar-thumb
 {
   color: #ff9800;
 }
+.clr-black
+{
+  color: #444;
+}
 .padding-top0
 {
   padding-top: 0 !important;
@@ -258,7 +294,14 @@ table tr
 {
   font-size: 18px;
 }
-
+.fnt-25
+{
+  font-size: 25px;
+}
+.Nametxt
+{
+  padding: 0 10px;
+}
 .red
 {
   color: red;
@@ -578,6 +621,14 @@ a:hover, a:focus
 {
   font-weight: 300;
 }
+.item-fnt .label-md
+{
+  margin:0 !important;
+}
+.item-fnt .item-md.item-block .item-inner
+{
+   padding-right: 0 !important;
+}
 .padding-left16
 {
   padding-left: 16px !important;
@@ -597,6 +648,14 @@ a:hover, a:focus
 .padding-top5
 {
   padding-top: 5px !important;
+}
+.padding-top10
+{
+  padding-top: 10px !important;
+}
+.padding-top15
+{
+  padding-top: 15px !important;
 }
 .ln-ght20 p
 {

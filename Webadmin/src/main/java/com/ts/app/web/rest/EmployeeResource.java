@@ -14,6 +14,7 @@ import com.ts.app.repository.UserRepository;
 import com.ts.app.service.JobManagementService;
 import com.ts.app.service.MailService;
 import com.ts.app.service.NotificationService;
+import com.ts.app.service.UserService;
 import com.ts.app.service.util.QRCodeUtil;
 import com.ts.app.web.rest.dto.*;
 import org.apache.commons.collections.CollectionUtils;
@@ -61,6 +62,9 @@ public class EmployeeResource {
 
     @Inject
     private NotificationService notificationService;
+    
+    @Inject
+    private UserService userService;
 
 	@Inject
 	public EmployeeResource(EmployeeService employeeService) {
@@ -81,6 +85,19 @@ public class EmployeeResource {
 
 		try {
 			EmployeeDTO employeeDto = employeeService.createEmployeeInformation(employeeDTO);
+			
+			/*
+			if(employeeDto.isCreateUser()) {
+				UserDTO userDto = new UserDTO();
+				userDto.setLogin(employeeDto.getEmpId());
+				userDto.setFirstName(employeeDto.getName());
+				userDto.setLastName(employeeDto.getLastName());
+				userDto.setEmployeeId(employeeDto.getId());
+				userDto.setEmployeeName(employeeDto.getName());
+				userService.createUserInformation(userDto);
+			}	
+			*/
+			
 		}catch(Exception e) {
 			throw new TimesheetException(e, employeeDTO);
 		}

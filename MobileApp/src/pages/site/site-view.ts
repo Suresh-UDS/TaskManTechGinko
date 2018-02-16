@@ -66,7 +66,7 @@ export class SiteViewPage {
 
 
     showToast(message: string) {
-      this.component.showToastMessage(message);
+      this.component.showToastMessage(message,'bottom');
     }
 
   doRefresh(refresher,segment)

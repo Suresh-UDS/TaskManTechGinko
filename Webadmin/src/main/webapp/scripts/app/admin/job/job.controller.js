@@ -16,17 +16,14 @@ angular.module('timeSheetApp')
         $scope.selectedLocation = null;
         $scope.searchCriteria = {};
         $scope.pages = { currPage : 1};
-        $scope.status =[{ "name" : "OPEN"},{ "name" : "ASSIGNED"},{ "name" : "INPROGRESS"},{ "name" : "COMPLETED"}]
-        $scope.isEdit = !!$stateParams.id
+        $scope.status =[{ "name" : "OPEN"},{ "name" : "ASSIGNED"},{ "name" : "INPROGRESS"},{ "name" : "COMPLETED"}];
+        $scope.isEdit = !!$stateParams.id;
         $scope.checklists;
         $scope.selectedChecklist;
         $scope.jobChecklistItems =[];
 
         $scope.initCalender = function(){
-
             demo.initFormExtendedDatetimepickers();
-
-
         };
 
         $scope.loadProjects = function () {
@@ -34,6 +31,13 @@ angular.module('timeSheetApp')
                 $scope.projects = data;
             });
         };
+
+        $('#dateFilterFrom').on('dp.change', function(e){
+            console.log(e.date);
+
+            console.log(e.date._d);
+                $scope.job.plannedStartTime = e.date._d;
+        });
 
         $scope.loadChecklists = function () {
         		ChecklistComponent.findAll().then(function (data) {
@@ -139,11 +143,11 @@ angular.module('timeSheetApp')
             	$scope.job.schedule = 'ONCE';
             	$scope.job.active = 'YES';
         	}
-        }
+        };
 
         $scope.onSelectChecklist = function() {
         	console.log('selected check list - ' + JSON.stringify($scope.selectedChecklist));
-        	/*
+
         	var items = $scope.selectedChecklist.items;
         	for(var i =0; i<items.length;i++) {
         		var checklistItem = {
@@ -156,7 +160,7 @@ angular.module('timeSheetApp')
         		}
         		$scope.jobChecklistItems.push(checklistItem);
         	}
-        	*/
+
         }
 
         $scope.saveJob = function () {
@@ -249,8 +253,8 @@ angular.module('timeSheetApp')
         	console.log('Selected  project -' + $scope.selectedProject);
         	console.log('Selected  job -' + $scope.selectedJob);
         	console.log('search criteria - '+JSON.stringify($rootScope.searchCriteriaProject));
-        	
-        	if(!$scope.selectedProject && !$scope.selectedSite && !$scope.selectedStatus && !$scope.selectedJob){ 
+
+        	if(!$scope.selectedProject && !$scope.selectedSite && !$scope.selectedStatus && !$scope.selectedJob){
         		$scope.searchCriteria.findAll = true;
         	}
 

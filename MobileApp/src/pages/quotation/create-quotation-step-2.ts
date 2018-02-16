@@ -189,11 +189,11 @@ export class CreateQuotationPage2 {
         this.quotationService.createQuotation(quotationDetails).subscribe(
             response=>{
                 console.log(response);
-                this.componentService.showToastMessage('Quotation Successfully Drafted');
+                this.componentService.showToastMessage('Quotation Successfully Drafted','bottom');
                 this.navCtrl.push(QuotationPage);
 
             },err=>{
-                this.componentService.showToastMessage('Error in drafting quotation, your changes cannot be saved!');
+                this.componentService.showToastMessage('Error in drafting quotation, your changes cannot be saved!','bottom');
             }
         )
 

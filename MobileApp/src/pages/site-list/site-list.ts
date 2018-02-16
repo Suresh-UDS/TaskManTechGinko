@@ -52,7 +52,7 @@ export class SiteListPage {
   }
 
   showSuccessToast(msg){
-    this.component.showToastMessage(msg);
+    this.component.showToastMessage(msg,'bottom');
   }
 
   getAttendances(site){
