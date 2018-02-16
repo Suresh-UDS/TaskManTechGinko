@@ -70,7 +70,7 @@
                                                        placeholder="Search Site"
                                                        ng-model="selectedSite"
                                                        ng-value="searchCriteria.siteName"
-                                                       uib-typeahead="site as site.name for site in allSites | filter:$viewValue | limitTo:5"/>
+                                                       uib-typeahead="site as site.name for site in sites | filter:$viewValue | limitTo:5"/>
                                             </div>
                                         </div>
                                     </td>

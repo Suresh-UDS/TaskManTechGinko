@@ -1,7 +1,7 @@
 package com.ts.app.domain;
 
 import java.io.Serializable;
-import java.sql.Timestamp;
+import java.util.Date;
 
 /**
  * Represents the reporting fields from Employee and Attendance entities.
@@ -27,11 +27,11 @@ public class EmployeeAttendanceReport implements Serializable {
 	
 	private String projectName;
 	
-	private Timestamp checkInTime;
+	private Date checkInTime;
 	
-	private Timestamp checkOutTime;
+	private Date checkOutTime;
 	
-	public EmployeeAttendanceReport(String employeeId, String name, String lastName, String siteName, String projectName, Timestamp checkInTime, Timestamp checkOutTime) {
+	public EmployeeAttendanceReport(String employeeId, String name, String lastName, String siteName, String projectName, Date checkInTime, Date checkOutTime) {
 		this.employeeId = employeeId;
 		this.name = name;
 		this.lastName = lastName;
@@ -65,19 +65,27 @@ public class EmployeeAttendanceReport implements Serializable {
 		this.lastName = lastName;
 	}
 
-	public Timestamp getCheckInTime() {
+	public String getEmployeeId() {
+		return employeeId;
+	}
+
+	public void setEmployeeId(String employeeId) {
+		this.employeeId = employeeId;
+	}
+
+	public Date getCheckInTime() {
 		return checkInTime;
 	}
 
-	public void setCheckInTime(Timestamp checkInTime) {
+	public void setCheckInTime(Date checkInTime) {
 		this.checkInTime = checkInTime;
 	}
 
-	public Timestamp getCheckOutTime() {
+	public Date getCheckOutTime() {
 		return checkOutTime;
 	}
 
-	public void setCheckOutTime(Timestamp checkOutTime) {
+	public void setCheckOutTime(Date checkOutTime) {
 		this.checkOutTime = checkOutTime;
 	}
 

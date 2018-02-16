@@ -187,6 +187,13 @@ angular.module('timeSheetApp')
         		}
         	}
         };
+        
+//        $scope.init() {
+//        		$scope.loadEmployees();
+//        		$scope.loadProjects();
+//        		$scope.loadSites();
+//        		$scope.loadAllEmployees();
+//        };
 
         $scope.siteTransferDetails = function(employee){
             console.log(employee)
@@ -669,7 +676,7 @@ angular.module('timeSheetApp')
 //                	alert($scope.numberArrays);
                 }
 
-                if($scope.employees.length > 0 ){
+                if($scope.employees && $scope.employees.length > 0 ){
                     $scope.showCurrPage = data.currPage;
                     $scope.pageEntries = $scope.employees.length;
                     $scope.totalCountPages = data.totalCount;
@@ -935,8 +942,9 @@ angular.module('timeSheetApp')
         $scope.clearFilter = function() {
             $scope.selectedSite = null;
             $scope.selectedProject = null;
+            $scope.selectedEmployee = null;
             $scope.searchCriteria = {};
-            $rootScope.searchCriteriaSite = null;
+            $rootScope.searchCriteriaEmployees = null;
             $scope.pages = {
                 currPage: 1,
                 totalPages: 0
