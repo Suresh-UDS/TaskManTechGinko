@@ -14,84 +14,73 @@
     </div>
 
 
-    <div class="row" >
-
-        <div class="col-md-12" ng-init="loadSites()">
-
-            <div class="card margin-TB-6">
-
-                <div class="card-content">
-
-                    <form name="searchForm"  ng-submit="search()" novalidate >
-
-                        <table class="table" border="0">
-                            <tr class="filter-row gc-search-row">
-
-								<td>
-                                    <div class="form-group" >
-                                        <input id="dateFilterFrom" type="text" class="form-control datepicker" ng-model="fromDate"  value={{now}} placeholder="From Date" />
-
-                                    </div>
-                                </td>
-
-                                <td>
-                                    <div class="form-group" >
-                                        <input id="dateFilterTo" type="text" class="form-control datepicker" ng-model="toDate"  value={{now}} placeholder="To Date" />
-
-                                    </div>
-                                </td>
-
-
-                                <td>
-                                    <div class="form-group" >
-                                        <div class="dropdown">
-                                            <input type="text"
-                                                   class="form-control searchable-input floatL"
-                                                   placeholder="Search Client"
-                                                   ng-model="selectedProject"
-                                                   ng-value="searchCriteria.projectName"
-                                                   uib-typeahead="project as project.name for project in projects | filter:$viewValue | limitTo:5"/>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td>
-                                    <div class="form-group" >
-                                        <div class="dropdown">
-                                            <input type="text"
-                                                   class="form-control searchable-input floatL"
-                                                   placeholder="Search Site"
-                                                   ng-model="selectedSite"
-                                                   ng-value="searchCriteria.siteName"
-                                                   uib-typeahead="site as site.name for site in sites | filter:$viewValue | limitTo:5"/>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td align="right">
-                                    <div class="floatR form-group">
-                                        <button type="submit" class="btn btn-primary search-button t4"  >
-                                            <i class="fa fa-search"></i>
-                                        </button>
-                                    </div>
-                                </td>
-                            </tr>
-                        </table>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
-
-
-
-
-
 
     <div class="row">
 
         <div class="col-md-12">
-            <div class="card tablecard">
+            <div class="card TableCard">
                 <div class="card-content">
-                    <div class="table-responsive">
+
+                    <div class="SearchTable">
+
+                        <form name="searchForm"  ng-submit="search()" novalidate >
+
+                            <table class="table" border="0">
+                                <tr class="filter-row gc-search-row">
+
+                                    <td>
+                                        <div class="form-group" >
+                                            <input id="dateFilterFrom" type="text" class="form-control datepicker" ng-model="fromDate"  value={{now}} placeholder="From Date" />
+
+                                        </div>
+                                    </td>
+
+                                    <td>
+                                        <div class="form-group" >
+                                            <input id="dateFilterTo" type="text" class="form-control datepicker" ng-model="toDate"  value={{now}} placeholder="To Date" />
+
+                                        </div>
+                                    </td>
+
+
+                                    <td>
+                                        <div class="form-group" >
+                                            <div class="dropdown">
+                                                <input type="text"
+                                                       class="form-control searchable-input floatL"
+                                                       placeholder="Search Client"
+                                                       ng-model="selectedProject"
+                                                       ng-value="searchCriteria.projectName"
+                                                       uib-typeahead="project as project.name for project in projects | filter:$viewValue | limitTo:5"/>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="form-group" >
+                                            <div class="dropdown">
+                                                <input type="text"
+                                                       class="form-control searchable-input floatL"
+                                                       placeholder="Search Site"
+                                                       ng-model="selectedSite"
+                                                       ng-value="searchCriteria.siteName"
+                                                       uib-typeahead="site as site.name for site in sites | filter:$viewValue | limitTo:5"/>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td align="right">
+                                        <div class="floatR form-group">
+                                            <button type="submit" class="btn btn-primary search-button t4"  >
+                                                <i class="fa fa-search"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </table>
+                        </form>
+
+                    </div>
+
+                    <div class="table-responsive tablecard">
                         <table class="table table-striped">
 
                             <thead>
@@ -124,6 +113,7 @@
 
                             </tbody>
                         </table>
+
                     </div>
                 </div>
                 <!-- end content-->
@@ -137,6 +127,10 @@
     <div class="card margin-TB-5 txt-align-center" ng-hide="employees">
 
         <div class="card-content">
+
+            <div class="" style="text-align:center;padding: 10px 0;">
+                <div loader-css="ball-pulse"></div>
+            </div>
 
             <h3>No data Found</h3>
 

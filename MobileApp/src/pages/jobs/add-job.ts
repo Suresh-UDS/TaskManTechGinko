@@ -202,7 +202,6 @@ export class CreateJobPage {
                 }
             },
             error=>{
-                this.employee="No Employee";
                 console.log(error);
                 console.log(this.employee);
             })

@@ -20,11 +20,14 @@
     <!-- Custom CSS     -->
     <link href="assets/css/custom.css" rel="stylesheet" />
 
+
+
     <link href="http://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons" />
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <script defer src="https://use.fontawesome.com/releases/v5.0.6/js/all.js"></script>
 
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/loaders.css/0.1.2/loaders.min.css" />
 
 </head>
 
@@ -35,15 +38,15 @@
 
         <div class="main-panel">
 
-            <nav class="navbar navbar-transparent navbar-absolute">
+            <nav class="navbar navbar-transparent navbar-absolute TopNavbar">
                 <div class="container-fluid">
                     <div class="navbar-minimize">
-                        <button id="minimizeSidebar" class="btn btn-round btn-white btn-fill btn-just-icon">
+                        <button id="minimizeSidebar" class="btn btn-round btn-white btn-fill btn-just-icon no-padding">
                             <i class="material-icons visible-on-sidebar-regular">more_vert</i>
                             <i class="material-icons visible-on-sidebar-mini">view_list</i>
                         </button>
                     </div>
-                    <a class="navbar-brand" href="#">{{pageTitle}}</a>
+                    <a class="navbar-brand TopNavTitle" href="#">{{pageTitle}}</a>
 
 
                     <div class="navbar-header">
@@ -141,6 +144,9 @@
     <script src="bower_components/ngInfiniteScroll/build/ng-infinite-scroll.js"></script>
     <script src="bower_components/bootstrap-ui-datetime-picker/dist/datetime-picker.min.js"></script>
     <script src="bower_components/checklist-model/checklist-model.js"></script>
+
+    <script src="bower_components/angular-loaders/dist/angular-loaders.min.js"></script>
+
     <!-- endbower -->
 
     <!--  <script src='//maps.googleapis.com/maps/api/js?sensor=false'></script>-->
@@ -345,6 +351,10 @@
 
     <script src="scripts/app/admin/photo-management/photo.controller.js"></script>
     <script src="scripts/app/admin/photo-management/photo.js"></script>
+
+    <script src="scripts/app/admin/settings/settings.controller.js"></script>
+    <script src="scripts/app/admin/settings/settings.js"></script>
+    <script src="scripts/app/admin/settings/settings-list.js"></script>
 
     <script src="scripts/app/admin/manage.js"></script>
     <script src="scripts/app/admin/report.js"></script>

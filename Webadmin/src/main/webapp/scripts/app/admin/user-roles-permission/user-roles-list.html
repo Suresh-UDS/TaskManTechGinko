@@ -15,87 +15,81 @@
 
     </div>
 
-    <div class="row">
-        <div class="col-md-12">
-            <div class="card margin-TB-5" >
-
-                <div class="card-content">
-                    <form name="searchForm"  ng-submit="search()" novalidate >
-
-                        <table class="table" border="0">
-                            <tr class="filter-row gc-search-row">
-                                <!--<td>-->
-                                <!--<div class="form-group" ng-init="loadUsers()">-->
-                                <!--<div class="dropdown">-->
-                                <!--<input type="text" class="form-control searchable-input floatL" placeholder="Search Id" -->
-                                <!--ng-model="selectedUser" ng-value="searchCriteria.userId" name="userId" uib-typeahead="user as user.id for user in users | filter:$viewValue | limitTo:5" />-->
-                                <!---->
-                                <!--</div>-->
-                                <!--</div>-->
-                                <!--</td>-->
-                                <td>
-                                    <div class="form-group" ng-init="loadUserRoles()">
-                                        <div class="dropdown">
-                                            <input type="text" class="form-control searchable-input floatL" placeholder="Role ID"
-                                                   ng-model="selectedUser" ng-value="searchCriteria.userRoleId" name="userRoleId" uib-typeahead="userRule as userRole.id for userRole in userRoles | filter:$viewValue | limitTo:5" />
-
-                                        </div>
-                                    </div>
-                                </td>
-                                <td>
-                                    <div class="form-group" ng-init="loadUserRoles()">
-                                        <div class="dropdown">
-                                            <input type="text" class="form-control searchable-input floatL" placeholder="Role Name"
-                                                   ng-model="selectedUser" ng-value="searchCriteria.name" name="name" uib-typeahead="userRule as userRole.name for userRole in userRoles | filter:$viewValue | limitTo:5" />
-
-                                        </div>
-                                    </div>
-                                </td>
-                                <td>
-<!--                                     <div class="form-group" ng-init="loadUserRoles()">
-                                        <div class="dropdown">
-                                            <input type="text" class="form-control searchable-input floatL" placeholder="Created Date"
-                                                   ng-model="selectedUser" ng-value="searchCriteria.userLastName" name="userLastName" uib-typeahead="userRule as userRole. for userRole in userRoles | filter:$viewValue | limitTo:5" />
-
-                                        </div>
-                                    </div>
- -->                                </td>
-                                <td>
-                                    <div class="form-group" ng-init="loadUserRoles()">
-                                        <div class="dropdown">
-                                            <input type="text" class="form-control searchable-input floatL" placeholder="Role Level"
-                                                   ng-model="selectedUser" ng-value="searchCriteria.roleLevel" name="roleLevel" uib-typeahead="userRule as userRole.roleLevel for userRole in userRoles | filter:$viewValue | limitTo:5" />
-
-                                        </div>
-                                    </div>
-                                </td>
-                                <td>
-                                    <div class="floatR form-group">
-                                        <button type="submit" class="btn btn-primary search-button t4"  ng-disabled="searchForm.$invalid">
-                                            <i class="fa fa-search"></i>
-                                        </button>
-                                    </div>
-                                </td>
-                            </tr>
-                        </table>
-                    </form>
-
-                </div>
-
-            </div>
-        </div>
-    </div>
 
 
 
     <div class="row" ng-init="loadUserRoles()">
 
         <div class="col-md-12">
-            <div class="card margin-TB-5 tablecard">
+            <div class="card margin-TB-5 TableCard">
 
                 <div class="card-content">
 
-                    <div class="table-responsive">
+                    <div class="SearchTable">
+
+                        <form name="searchForm"  ng-submit="search()" novalidate >
+
+                            <table class="table" border="0">
+                                <tr class="filter-row gc-search-row">
+                                    <!--<td>-->
+                                    <!--<div class="form-group" ng-init="loadUsers()">-->
+                                    <!--<div class="dropdown">-->
+                                    <!--<input type="text" class="form-control searchable-input floatL" placeholder="Search Id" -->
+                                    <!--ng-model="selectedUser" ng-value="searchCriteria.userId" name="userId" uib-typeahead="user as user.id for user in users | filter:$viewValue | limitTo:5" />-->
+                                    <!---->
+                                    <!--</div>-->
+                                    <!--</div>-->
+                                    <!--</td>-->
+                                    <td>
+                                        <div class="form-group" ng-init="loadUserRoles()">
+                                            <div class="dropdown">
+                                                <input type="text" class="form-control searchable-input floatL" placeholder="Role ID"
+                                                       ng-model="selectedUser" ng-value="searchCriteria.userRoleId" name="userRoleId" uib-typeahead="userRule as userRole.id for userRole in userRoles | filter:$viewValue | limitTo:5" />
+
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="form-group" ng-init="loadUserRoles()">
+                                            <div class="dropdown">
+                                                <input type="text" class="form-control searchable-input floatL" placeholder="Role Name"
+                                                       ng-model="selectedUser" ng-value="searchCriteria.name" name="name" uib-typeahead="userRule as userRole.name for userRole in userRoles | filter:$viewValue | limitTo:5" />
+
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <!--                                     <div class="form-group" ng-init="loadUserRoles()">
+                                                                                <div class="dropdown">
+                                                                                    <input type="text" class="form-control searchable-input floatL" placeholder="Created Date"
+                                                                                           ng-model="selectedUser" ng-value="searchCriteria.userLastName" name="userLastName" uib-typeahead="userRule as userRole. for userRole in userRoles | filter:$viewValue | limitTo:5" />
+
+                                                                                </div>
+                                                                            </div>
+                                         -->                                </td>
+                                    <td>
+                                        <div class="form-group" ng-init="loadUserRoles()">
+                                            <div class="dropdown">
+                                                <input type="text" class="form-control searchable-input floatL" placeholder="Role Level"
+                                                       ng-model="selectedUser" ng-value="searchCriteria.roleLevel" name="roleLevel" uib-typeahead="userRule as userRole.roleLevel for userRole in userRoles | filter:$viewValue | limitTo:5" />
+
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="floatR form-group">
+                                            <button type="submit" class="btn btn-primary search-button t4"  ng-disabled="searchForm.$invalid">
+                                                <i class="fa fa-search"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </table>
+                        </form>
+
+                    </div>
+
+                    <div class="table-responsive tablecard">
                         <table class="table table-striped">
                             <thead>
                             <tr>
@@ -127,6 +121,7 @@
 
                             </tbody>
                         </table>
+
                     </div>
                 </div>
             </div>
@@ -136,6 +131,10 @@
     <div class="card margin-TB-5 txt-align-center" ng-hide="userRoles">
 
         <div class="card-content">
+
+            <div class="" style="text-align:center;padding: 10px 0;">
+                <div loader-css="ball-pulse"></div>
+            </div>
 
             <h3>No data Found</h3>
 

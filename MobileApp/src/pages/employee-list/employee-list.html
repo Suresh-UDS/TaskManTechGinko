@@ -28,6 +28,9 @@
         <p class="margin-auto">{{firstLetter}}</p>
       </ion-avatar>
       <p text-left class="fnt-wt" text-capitalize>{{emp.name}}</p>
+        <button ion-button icon-left icon-only clear class="pop-icon" (click)="presentActionSheet(emp)">
+            <ion-icon name="ios-more" class="fnt-12 padding0"></ion-icon>
+        </button>
     </ion-item>
   </ion-list>
 
