@@ -11,6 +11,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import com.ts.app.domain.Attendance;
+import com.ts.app.domain.EmployeeAttendanceReport;
 
 public interface AttendanceRepository extends JpaRepository<Attendance, Long>,JpaSpecificationExecutor<Attendance> {
 
@@ -53,4 +54,8 @@ public interface AttendanceRepository extends JpaRepository<Attendance, Long>,Jp
 
     @Query("SELECT count(a) from Attendance a where a.site.id = :siteId and a.checkInTime between :startDate and :endDate order by a.checkInTime desc")
 	long findCountBySiteAndCheckInTime(@Param("siteId") Long siteId, @Param("startDate") Date startDate, @Param("endDate") Date endDate);
+    
+    @Query("SELECT new com.ts.app.domain(e.empId, e.name, e.lastName, a.site.name, a.site.project.name, a.checkInTime, a.checkOutTime) from Employee e join Attendance a where a.employee.id = e.id and a.checkInTime between :startDate and :endDate order by a.checkInTime desc")
+    List<EmployeeAttendanceReport> findBySiteId(@Param("siteId") Long siteId, @Param("startDate") Date startDate, @Param("endDate") Date endDate);
+    
 }

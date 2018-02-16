@@ -1,6 +1,7 @@
 package com.ts.app.service;
 
 import java.io.File;
+import java.util.Date;
 import java.util.Enumeration;
 import java.util.Locale;
 import java.util.Properties;
@@ -150,17 +151,17 @@ public class MailService {
     }
 
     @Async
-    public void sendJobReportEmailFile(User user,String file,  String baseUrl) {
-        log.debug("Sending job report e-mail to '{}'", user.getEmail());
-        Locale locale = Locale.forLanguageTag(user.getLangKey() != null ? user.getLangKey() : "en-US");
+    public void sendJobReportEmailFile(String emailIds, String file,  String baseUrl, Date currDate) {
+        log.debug("Sending job report e-mail to '{}'", emailIds);
+        Locale locale = Locale.forLanguageTag("en-US");
         Context context = new Context(locale);
-        context.setVariable("user", user);
         context.setVariable("baseUrl", baseUrl);
         context.setVariable("fileName",file);
+        context.setVariable("date", currDate);
         String content = templateEngine.process("jobReportEmail", context);
         String subject = messageSource.getMessage("email.report.title", null, locale);
         String fileName = file;
-        sendEmail(user.getEmail(), subject, content, true, true,fileName);
+        sendEmail(emailIds, subject, content, true, true,fileName);
     }
 
 
@@ -177,7 +178,7 @@ public class MailService {
     }
 
     @Async
-    public void sendOverdueJobAlert(User user,  String siteName, long jobId , String jobName, String fileName) {
+    public void sendOverdueJobAlert(User user, String emailIds,  String siteName, long jobId , String jobName, String fileName) {
         log.debug("Sending overdue job alert e-mail to '{}'", user.getEmail());
         Locale locale = Locale.forLanguageTag(user.getLangKey() != null ? user.getLangKey() : "en-US");
         Context context = new Context(locale);
@@ -188,7 +189,7 @@ public class MailService {
         context.setVariable("siteName", siteName);
         String content = templateEngine.process("overdueJobEmailAlert", context);
         String subject = messageSource.getMessage("email.overdue.report.title", null, locale);
-        sendEmail(user.getEmail(), subject, content, true, true, fileName);
+        sendEmail(emailIds, subject, content, true, true, fileName);
     }
 
 

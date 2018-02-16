@@ -9,7 +9,7 @@
             <button ng-click="refreshPage()" type="submit" class="btn btn-warning">
                 <i class="material-icons padding-right5">refresh</i>Reload
             </button>
-            <button type="button" class="btn btn-success" ng-click=exportAllData()>
+            <button ng-show="attendancesData.length" type="button" class="btn btn-success" ng-click=exportAllData()>
                 <i class="material-icons">file_upload</i> Export</button>
 
         </div>
