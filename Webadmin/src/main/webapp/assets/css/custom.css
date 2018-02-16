@@ -101,7 +101,10 @@ body
 {
   padding:0 !important;
 }
-
+.card .card-content
+{
+  padding: 5px 20px;
+}
 .card .card-content .category
 {
     color:#000;
@@ -374,7 +377,7 @@ button.btn.btn-outline {
 
 .main-panel>.content
 {
-   margin-top: 55px;
+   margin-top: 45px;
    padding: 10px 15px;
 }
 .permissioncard .checkbox label
@@ -410,11 +413,18 @@ button.btn.btn-outline {
    font-weight: 600;
    margin-bottom: 5px;
 }
-
+.navbar.navbar-transparent
+{
+  border-bottom: 1px solid #ccc;
+}
 .form-group.is-focused .form-control
 {
         border: 1px solid #FFAA22;
         background: none !important;
+}
+.SearchTable
+{
+      border-bottom: 1px solid #dfdfdf;
 }
 
 .form-group.has-error .form-control
@@ -430,6 +440,19 @@ button.btn.btn-outline {
 {
   /*background: #F9F9F9;*/
   border-radius: 0;
+  /*margin: 8px 0;*/
+}
+
+.DashboardCardsCon .card [data-background-color]
+{
+  padding: 5px;
+}
+.DashboardCardsCon  .card-stats .card-header i
+{
+  font-size: 30px;
+  line-height: 40px;
+  width: 40px;
+  height: 40px;
 }
 .card [data-background-color]
 {
@@ -474,6 +497,29 @@ button.btn.btn-outline {
   padding-top: 10px;
   margin-top: 5px;
 }
+
+.table>thead>tr>th, .table>tbody>tr>th
+{
+  font-size: 15px;
+}
+.TopNavbar
+{
+  border-radius:0;
+  * Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#7d7e7d+0,0e0e0e+100;Black+3D */
+  background: #7d7e7d; /* Old browsers */
+  background: -moz-linear-gradient(left, #7d7e7d 0%, #0e0e0e 100%); /* FF3.6-15 */
+  background: -webkit-linear-gradient(left, #7d7e7d 0%,#0e0e0e 100%); /* Chrome10-25,Safari5.1-6 */
+  background: linear-gradient(to right, #7d7e7d 0%,#0e0e0e 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#7d7e7d', endColorstr='#0e0e0e',GradientType=1 ); /* IE6-9 */
+}
+
+.TopNavTitle
+{
+  padding: 0 8px !important;
+  height: 25px !important;
+  color:#fff !important;
+}
+
 
 
 
