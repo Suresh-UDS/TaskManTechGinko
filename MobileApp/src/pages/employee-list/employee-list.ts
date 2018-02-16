@@ -1,5 +1,8 @@
 import { Component } from '@angular/core';
-import {IonicPage, LoadingController, NavController, NavParams, ToastController} from 'ionic-angular';
+import {
+    ActionSheetController, IonicPage, LoadingController, NavController, NavParams,
+    ToastController
+} from 'ionic-angular';
 import {AttendanceListPage} from "../attendance-list/attendance-list";
 import {authService} from "../service/authService";
 import {Camera, CameraOptions} from "@ionic-native/camera";
@@ -28,10 +31,11 @@ export class EmployeeListPage {
     firstLetter:any;
     page:1;
     totalPages:0;
+    pageSort:15;
 
   constructor(public navCtrl: NavController,public component:componentService,public myService:authService, public navParams: NavParams, private  authService: authService, public camera: Camera,
               private loadingCtrl:LoadingController, private geolocation:Geolocation, private toast: Toast,
-              private geoFence:Geofence, private employeeService: EmployeeService) {
+              private geoFence:Geofence, private employeeService: EmployeeService, private actionSheetCtrl: ActionSheetController) {
 
       this.employees = [];
 
@@ -41,7 +45,8 @@ export class EmployeeListPage {
     console.log('ionViewDidLoad Employee list');
     this.component.showLoader('Getting Employees');
     var searchCriteria = {
-        currPage:this.page
+        currPage:this.page,
+        pageSort: this.pageSort
     };
       this.employeeService.searchEmployees(searchCriteria).subscribe(
           response=>{
@@ -87,7 +92,7 @@ export class EmployeeListPage {
       if(this.page>this.totalPages){
           console.log("End of all pages");
           infiniteScroll.complete();
-          this.component.showToastMessage('All Employees Loaded','bottom');
+          this.component.showToastMessage('All Employees Loaded', 'bottom');
 
       }else{
           console.log("Getting pages");
@@ -115,6 +120,45 @@ export class EmployeeListPage {
       }
 
 
+    }
+
+    presentActionSheet(employee){
+        let actionSheet = this.actionSheetCtrl.create({
+            title:'Employee Actions',
+            buttons:[
+                {
+                    text:'Mark Left',
+
+                    handler:()=>{
+                        console.log("Mark Employee Left");
+                        // this.navCtrl.push(ViewJobPage,{job:job})
+                    }
+                },
+                {
+                    text:'Site Transfer',
+                    handler:()=>{
+                        console.log('Transfer Employee');
+                    }
+                },
+
+                {
+                    text:'Relieve Employee',
+                    handler:()=>{
+                        console.log('Relieve employee with another employee ');
+                    }
+                },
+
+                {
+                    text:'Cancel',
+                    role:'cancel',
+                    handler:()=>{
+                        console.log("Cancel clicker");
+                    }
+                }
+            ]
+        });
+
+        actionSheet.present();
     }
 
 

@@ -54,20 +54,13 @@
       </ion-row>
 
       <ion-row class="margin-tp25 white-bg padding10">
-        <ion-col col-6 class="label-on-left">Job Id</ion-col>
+        <ion-col col-6 class="label-on-left">Sites</ion-col>
         <ion-col col-6>
-          <p text-right>{{empDetail.jobId}}</p>
-        </ion-col>
-        <ion-col col-6 class="label-on-left">Job Title</ion-col>
-        <ion-col col-6>
-          <p text-right>{{empDetail.jobTitle}}</p>
-        </ion-col>
-        <ion-col col-6 class="label-on-left">Project Name</ion-col>
-        <ion-col col-6>
-          <p text-right>{{empDetail.projectName}}</p>
+          <p *ngFor="let site of empDetail.projectSites" text-right>{{site.name}}</p>
         </ion-col>
 
       </ion-row>
+
     </ion-list>
 
     <ion-list *ngSwitchCase="'jobs'" >
