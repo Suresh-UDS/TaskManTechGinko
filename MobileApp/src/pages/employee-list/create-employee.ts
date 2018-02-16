@@ -69,7 +69,7 @@ export class CreateEmployeePage {
     if (this.firstname && this.lastname && this.number && this.mail && this.eId && this.address )
     {
         // Save Employee
-      this.component.showToastMessage(this.msg);
+      this.component.showToastMessage(this.msg,'bottom');
     }
     else
     {
@@ -101,7 +101,7 @@ export class CreateEmployeePage {
       {
         this.eMsg = "all";
       }
-      this.component.showToastMessage(this.msg);
+      this.component.showToastMessage(this.msg,'bottom');
     }
   }
   login() {

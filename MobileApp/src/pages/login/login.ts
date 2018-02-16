@@ -65,7 +65,7 @@ export class LoginPage {
 
                 else {
                   this.component.closeLoader();
-                  this.component.showToastMessage(this.msg);
+                  this.component.showToastMessage(this.msg,'center');
                }
 
               /*if(employee.userUserGroupName == "Admin"){
@@ -96,7 +96,7 @@ export class LoginPage {
                this.msg='Server Unreachable'
                }
 
-                this.component.showToastMessage(this.msg);
+                this.component.showToastMessage(this.msg,'center');
                /*
                 this.toast.show(this.msg, '3000', 'center').subscribe(
                     toast => {
