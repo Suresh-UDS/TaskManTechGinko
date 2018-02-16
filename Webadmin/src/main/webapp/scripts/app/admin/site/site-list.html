@@ -10,65 +10,59 @@
         </div>
     </div>
 
-	<div class="row" init="loadProjects()">
-
-        <div class="col-md-12" >
-
-            <div class="card margin-TB-5">
-
-                <div class="card-content">
-
-                    <form name="searchForm"  ng-submit="search()" novalidate >
-
-                        <table class="table" border="0">
-                            <tr class="filter-row gc-search-row">
-
-
-                                <td>
-                                	<div class="form-group" >
-	                                <div class="dropdown">
-                                        <input type="text"
-                                               class="form-control searchable-input floatL"
-                                               placeholder="Search Client" ng-model="selectedProject"
-
-                                               name="projectId"
-                                               uib-typeahead="project as project.name for project in projects | filter:$viewValue | limitTo:5" />
-                                    </div>
-                                  </div>
-                                </td>
-                                <td>
-                                    <div class="form-group" >
-                                        <div class="dropdown">
-                                            <input type="text"
-                                                   class="form-control searchable-input floatL"
-                                                   placeholder="Search Site"
-                                                   ng-model="selectedSite"
-                                                   ng-value="searchCriteria.siteName"
-                                                   uib-typeahead="site as site.name for site in allSites | filter:$viewValue | limitTo:5"/>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td align="right">
-                                    <div class="floatR form-group">
-                                        <button type="submit" class="btn btn-primary search-button t4"  >
-                                            <i class="fa fa-search"></i>
-                                        </button>
-                                    </div>
-                                </td>
-                            </tr>
-                        </table>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
 
     <div class="row">
         <div class="col-md-12">
-            <div class="card tablecard">
+            <div class="card TableCard">
                 <div class="card-content">
                     <!--<h4 class="card-title">Striped Table</h4>-->
-                    <div class="table-responsive">
+
+                    <div class="SearchTable" init="loadProjects()">
+
+                        <form name="searchForm"  ng-submit="search()" novalidate >
+
+                            <table class="table" border="0">
+                                <tr class="filter-row gc-search-row">
+
+
+                                    <td>
+                                        <div class="form-group no-padding" >
+                                            <div class="dropdown">
+                                                <input type="text"
+                                                       class="form-control searchable-input floatL"
+                                                       placeholder="Search Client" ng-model="selectedProject"
+
+                                                       name="projectId"
+                                                       uib-typeahead="project as project.name for project in projects | filter:$viewValue | limitTo:5" />
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="form-group no-padding" >
+                                            <div class="dropdown">
+                                                <input type="text"
+                                                       class="form-control searchable-input floatL"
+                                                       placeholder="Search Site"
+                                                       ng-model="selectedSite"
+                                                       ng-value="searchCriteria.siteName"
+                                                       uib-typeahead="site as site.name for site in allSites | filter:$viewValue | limitTo:5"/>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td align="right">
+                                        <div class="floatR form-group no-padding">
+                                            <button type="submit" class="btn btn-primary search-button t4"  >
+                                                <i class="fa fa-search"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </table>
+                        </form>
+
+                    </div>
+
+                    <div class="table-responsive tablecard">
                         <table class="table table-striped">
                             <thead>
                             <tr>
@@ -93,6 +87,7 @@
                             </tbody>
                         </table>
                     </div>
+
                 </div>
             </div>
         </div>
