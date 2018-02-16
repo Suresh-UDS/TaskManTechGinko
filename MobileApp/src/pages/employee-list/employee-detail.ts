@@ -1,5 +1,8 @@
 import { Component } from '@angular/core';
-import {IonicPage, LoadingController, NavController, NavParams, ToastController} from 'ionic-angular';
+import {
+  IonicPage, Item, ItemSliding, LoadingController, NavController, NavParams,
+  ToastController
+} from 'ionic-angular';
 import {AttendanceListPage} from "../attendance-list/attendance-list";
 import {authService} from "../service/authService";
 import {Camera, CameraOptions} from "@ionic-native/camera";
@@ -37,6 +40,7 @@ export class EmployeeDetailPage {
   job="job";
   attendance="attendance";
   quotations:any;
+  count=0;
   approvedQuotations:any;
   submittedQuotations:any;
   draftedQuotations:any;
@@ -228,5 +232,30 @@ export class EmployeeDetailPage {
   }
 
 
+  open(itemSlide: ItemSliding, item: Item,c)
+  {
+    this.count=c;
+    if(c==1)
+    {
+      this.count=0;
+      console.log('------------:'+this.count);
+      this.close(itemSlide);
+    }
+    else
+    {
+      this.count=1;
+      console.log('------------:'+this.count);
+      itemSlide.setElementClass("active-sliding", true);
+      itemSlide.setElementClass("active-slide", true);
+      itemSlide.setElementClass("active-options-right", true);
+      item.setElementStyle("transform", "translate3d(-150px, 0px, 0px)")
+    }
 
+  }
+  close(item: ItemSliding) {
+    item.close();
+    item.setElementClass("active-sliding", false);
+    item.setElementClass("active-slide", false);
+    item.setElementClass("active-options-right", false);
+  }
 }
