@@ -110,7 +110,7 @@
                                                         <!--ng-change="onSelectChecklist()"-->
                                                         <!--uib-typeahead="checklist as checklist.name for checklist in checklists | filter:$viewValue | limitTo:5"-->
                                                         <!--autocomplete="off" />-->
-                                                        <select class="form-control " ng-model="selectedChecklist"  ng-options="checklist as checklist.name for checklist in checklists">
+                                                        <select class="form-control " ng-model="selectedChecklist" ng-init="selectedChecklist = selected" ng-options="checklist as checklist.name for checklist in checklists track by checklist.id">
                                                             <option value="">Please select Checklist...</option>
                                                         </select>
                                                     </div>
@@ -130,7 +130,7 @@
                                                         <!--required-->
                                                         <!--autocomplete="off" />-->
 
-                                                        <select class="form-control " ng-model="selectedSite"  ng-options="site as site.name for site in sites">
+                                                        <select class="form-control " ng-model="selectedSite" ng-init="selectedSite = selected" ng-options="site as site.name for site in sites track by site.id">
                                                             <option value="">Please select Site...</option>
                                                         </select>
                                                         <div ng-show="form.$submitted || form.siteName.$touched">
@@ -163,7 +163,7 @@
                                                         <!--required-->
                                                         <!--autocomplete="off" />-->
 
-                                                        <select class="form-control " ng-model="selectedLocation"  ng-options="location as location.name for location in locations">
+                                                        <select class="form-control " ng-model="selectedLocation"  ng-init="selectedLocation = selected" ng-options="location as location.name for location in locations track by location.id">
                                                             <option value="">Please select Location...</option>
                                                         </select>
                                                         <div ng-show="form.$submitted || form.location.$touched">
@@ -190,7 +190,7 @@
                                                         <!--required-->
                                                         <!--autocomplete="off" />-->
 
-                                                        <select class="form-control " ng-model="selectedEmployee"  ng-options="emp as emp.name for emp in employees">
+                                                        <select class="form-control " ng-model="selectedEmployee" ng-init="selectedEmployee = selected" ng-options="emp as emp.name for emp in employees track by emp.id">
                                                             <option value="">Please select Employees...</option>
                                                         </select>
 
@@ -251,7 +251,7 @@
                                                 <div class="form-group">
                                                     <label class="label-control">Start date</label>
                                                     <span class="form-control-feedback calender-icon"><i class="material-icons">date_range</i></span>
-                                                    <input type="text"  ng-model="job.plannedStartTime"  name='plannedStartDate' class="form-control datetimepicker"  id="dateFilterFrom"  placeholder="{{dateFilterFrom | date:'dd-MMM-yyyy'}}"/>
+                                                    <input type="text"  ng-model="job.plannedStartTime"  name='plannedStartDate' class="form-control datetimepicker"  id="dateFilterFrom"  placeholder="{{dateFilterFrom | date:'dd-MMM-yyyy HH:mm:ss Z'}}"/>
 
                                                 </div>
 

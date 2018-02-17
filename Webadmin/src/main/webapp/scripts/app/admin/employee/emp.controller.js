@@ -87,9 +87,9 @@ angular.module('timeSheetApp')
         };
         
         $scope.initAddEdit = function() {
+        		$scope.loadAllManagers();
         		$scope.loadProjects();
         		$scope.loadDesignations();
-        		$scope.loadAllManagers();
         }
 
 
@@ -449,8 +449,10 @@ angular.module('timeSheetApp')
         };
 
         $scope.loadSelectedManager = function(managerId) {
+        		console.log('manager id - ' + managerId);
         	EmployeeComponent.findOne(managerId).then(function (data) {
                 $scope.selectedManager = data;
+        		console.log('selectedManager - ' + $scope.selectedManager)
             });
         };
 

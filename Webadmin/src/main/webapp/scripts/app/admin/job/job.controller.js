@@ -65,6 +65,7 @@ angular.module('timeSheetApp')
 
         $scope.editJob = function(){
         	JobComponent.findById($stateParams.id).then(function(data){
+        		console.log(JSON.stringify(data));
         		$scope.job=data;
         		$scope.selectedSite = {id : data.siteId,name : data.siteName};
         		$scope.selectedEmployee = {id : data.employeeId,name : data.employeeName};
