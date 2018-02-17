@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import {
-    ActionSheetController, IonicPage, LoadingController, NavController, NavParams,
+    ActionSheetController, Button, IonicPage, Item, ItemSliding, LoadingController, NavController, NavParams,
     ToastController
 } from 'ionic-angular';
 import {AttendanceListPage} from "../attendance-list/attendance-list";
@@ -32,6 +32,7 @@ export class EmployeeListPage {
     page:1;
     totalPages:0;
     pageSort:15;
+    count=0;
 
   constructor(public navCtrl: NavController,public component:componentService,public myService:authService, public navParams: NavParams, private  authService: authService, public camera: Camera,
               private loadingCtrl:LoadingController, private geolocation:Geolocation, private toast: Toast,
@@ -159,6 +160,35 @@ export class EmployeeListPage {
         });
 
         actionSheet.present();
+    }
+
+    open(itemSlide: ItemSliding, item: Item,c,menu:Button)
+    {
+        this.count=c;
+        if(c==1)
+        {
+            this.count=0;
+            console.log('------------:'+this.count);
+            menu.setElementStyle("display", "block")
+        }
+        else
+        {
+            this.count=1;
+            console.log('------------:'+this.count);
+            itemSlide.setElementClass("active-sliding", true);
+            itemSlide.setElementClass("active-slide", true);
+            itemSlide.setElementClass("active-options-right", true);
+            item.setElementStyle("transform", "translate3d(-110px, 0px, 0px)")
+            menu.setElementStyle("display", "none")
+        }
+
+    }
+    close(item: ItemSliding,menu:Button) {
+        item.close();
+        item.setElementClass("active-sliding", false);
+        item.setElementClass("active-slide", false);
+        item.setElementClass("active-options-right", false);
+        menu.setElementStyle("display", "block")
     }
 
 

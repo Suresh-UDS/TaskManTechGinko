@@ -163,6 +163,39 @@ angular.module('timeSheetApp')
                 console.log('Attendance search result list -' + $scope.attendancesData);
                 $scope.pages.currPage = data.currPage;
                 $scope.pages.totalPages = data.totalPages;
+                
+                $scope.numberArrays = [];
+                var startPage = 1;
+                if(($scope.pages.totalPages - $scope.pages.currPage) >= 10) {
+                		startPage = $scope.pages.currPage;
+                }else if($scope.pages.totalPages > 10) {
+                		startPage = $scope.pages.totalPages - 10;
+                }
+                var cnt = 0;
+                for(var i=startPage; i<=$scope.pages.totalPages; i++){
+                		cnt++;
+                		if(cnt <= 10) {
+	                		$scope.numberArrays.push(i);
+                		}
+                }
+
+                if($scope.jobs && $scope.projects.length > 0 ){
+                    $scope.showCurrPage = data.currPage;
+                    $scope.pageEntries = $scope.projects.length;
+                    $scope.totalCountPages = data.totalCount;
+
+                    if($scope.showCurrPage != data.totalPages){
+                    	$scope.pageStartIntex =  (data.currPage - 1) * $scope.pageSort + 1; // 1 to // 11 to
+
+                        $scope.pageEndIntex = $scope.pageEntries * $scope.showCurrPage; // 10 entries of 52 // 10 * 2 = 20 of 52 entries
+
+                    }else if($scope.showCurrPage === data.totalPages){
+                    	$scope.pageStartIntex =  (data.currPage - 1) * $scope.pageSort + 1;
+                    	$scope.pageEndIntex = $scope.totalCountPages;
+                    }
+                }
+                
+                
                 if($scope.employees == null){
                     $scope.pages.startInd = 0;
                 }else{
@@ -181,6 +214,10 @@ angular.module('timeSheetApp')
         };
 
 
+        $scope.clickNextOrPrev = function(number){
+	        	$scope.pages.currPage = number;
+	        	$scope.search();
+	    }
 
 
         $scope.first = function() {
@@ -208,6 +245,7 @@ angular.module('timeSheetApp')
         $scope.previous = function() {
         	if($scope.pages.currPage > 1) {
             	$scope.pages.currPage = $scope.pages.currPage - 1;
+	    		$scope.search();
             	if($scope.pages.currPage == 1) {
 	       	       	 var ele = angular.element('#first');
 	    	    	 ele.addClass('disabled');
@@ -218,7 +256,6 @@ angular.module('timeSheetApp')
     	    	 ele.removeClass('disabled');
     	    	 ele = angular.element('#last');
     	    	 ele.removeClass('disabled');
-	    		$scope.search();
         	}
 
         };
@@ -306,6 +343,7 @@ angular.module('timeSheetApp')
         $scope.next = function() {
         	if($scope.pages.currPage < $scope.pages.totalPages) {
             	$scope.pages.currPage = $scope.pages.currPage + 1;
+	    		$scope.search();
             	if($scope.pages.currPage == $scope.pages.totalPages) {
 	       	       	 var ele = angular.element('#next');
 	    	    	 ele.addClass('disabled');
@@ -316,7 +354,6 @@ angular.module('timeSheetApp')
     	    	 ele.removeClass('disabled');
     	    	 ele = angular.element('#previous');
     	    	 ele.removeClass('disabled');
-	    		$scope.search();
         	}
 
         };
@@ -324,6 +361,7 @@ angular.module('timeSheetApp')
         $scope.last = function() {
         	if($scope.pages.currPage < $scope.pages.totalPages) {
             	$scope.pages.currPage = $scope.pages.totalPages;
+    	    		$scope.search();
             	if($scope.pages.currPage == $scope.pages.totalPages) {
 	       	       	 var ele = angular.element('#next');
 	    	    	 ele.addClass('disabled');
@@ -334,7 +372,6 @@ angular.module('timeSheetApp')
     	    	ele.removeClass('disabled');
     	    	ele = angular.element('#previous');
     	    	ele.removeClass('disabled');
-    	    	$scope.search();
         	}
 
         };

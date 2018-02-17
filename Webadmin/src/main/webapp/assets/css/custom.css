@@ -266,7 +266,14 @@ textarea.form-control {
     height: 36px;
 }
 
-
+.line-scale-party>div, .line-scale>div
+{
+  background-color: #000 !important;
+}
+.ball-pulse>div
+{
+   background-color: #FFAA22 !important;
+}
 .margin-TB-5
 {
   margin:5px 0;
