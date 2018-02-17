@@ -92,16 +92,11 @@ Tip 2: you can also add an image using data-image tag
 
     <div class="SiteCon">
         <div text-center>
-            <p class="margin0">Sites</p>
+            <p class="margin0"><span class="margin-right15">Sites</span><span class="padding-left5" *ngIf="spinner"><ion-spinner name="bubbles"></ion-spinner></span></p>
         </div>
         <div class="container-fluid container-scroll hariz-scroll-con">
 
             <div class="row">
-                <div *ngIf="!empSelect">
-                    <p text-center ></p>
-                </div>
-
-
                 <button class="siteBtn" ion-button round color="light"  *ngFor="let site of sites;let i of index" (click)="activeSite(site.id)" [ngClass]="{'bg-orange':selectSite}">
                     <p class="siteName">{{site.name}}</p>
                 </button>
@@ -112,10 +107,13 @@ Tip 2: you can also add an image using data-image tag
     <div class="EmpCon" style="padding-bottom:10px;">
 
         <div text-center>
-            <p class="margin0">Employees</p>
+            <p class="margin0"><span class="margin-right15">Employees</span><span class="padding-left5" *ngIf="empSpinner"><ion-spinner name="bubbles"></ion-spinner></span></p>
+
         </div>
         <div class="container-fluid container-scroll hariz-scroll-con">
-
+            <div *ngIf="empSelect">
+                <p text-center class="margin0 clr-orange">No Employee</p>
+            </div>
             <div class="row">
 
             <span *ngFor="let emp of employee;let i of index" class="Nametxt">
@@ -164,8 +162,8 @@ Tip 2: you can also add an image using data-image tag
 
     <div class="main-panel" >
 
-      <div class="content margin-top0">
-        <div class="container-fluid">
+      <div class="content margin-top0 padding0">
+        <div class="container-fluid padding0">
 
           <div class="row">
             <ion-col col-11 class="margin-auto">
@@ -226,141 +224,186 @@ Tip 2: you can also add an image using data-image tag
 
                 <div [ngSwitch]="categories">
                         <ion-list *ngSwitchCase="'overdue'">
-
-                            <div *ngFor="let job of allJobs">
-                            <div class="card"  *ngIf="job.status == 'OVERDUE'" [ngClass]="{'red-card' : (job.status == 'OVERDUE'),
-                                                          'green-card' : (job.status == 'COMPLETED'),
-                                                          'blue-card' :(job.status =='OPEN' || job.status == 'ASSIGNED' || job.status == 'INPROGRESS')}">
-
-                                <div class="card-content padding-bottom0" >
+                            <ion-refresher (ionRefresh)="doRefresh($event,all)">
+                                <ion-refresher-content></ion-refresher-content>
+                            </ion-refresher>
+                            <div  class="white-bg" *ngFor="let job of allJobs" >
+                                <div class="padding-left16 padding-top5">
                                     <ion-row class="margin0">
-                                        <ion-col col-12 class="padding-right0">
-                                            <button ion-button icon-left icon-only clear class="pop-icon">
-                                                <ion-icon name="md-create" class="fnt-12 padding0"></ion-icon>
+
+                                        <ion-col col-2 class="ver-center">
+                                            <button ion-button clear color="primary" class="icon-round"
+                                                    [ngClass]="{'icon-round-red' : (job.status == 'OVERDUE'),
+                                                          'icon-round-green' : (job.status == 'COMPLETED'),
+                                                          'icon-round-blue' :(job.status =='OPEN' || job.status == 'ASSIGNED' || job.status == 'INPROGRESS')}">
+                                                <ion-icon name="ios-construct-outline" class="fnt-24"></ion-icon>
                                             </button>
                                         </ion-col>
-                                    </ion-row>
-                                    <ion-row class="margin0">
-                                        <ion-col col-8 class="padding-left0"><p text-left>{{job.title}}</p></ion-col>
-                                        <ion-col col-4 class="padding-right0">
-                                            <p text-right [ngClass]="{'red' : (job.status == 'OVERDUE'),
-                                                          'green' : (job.status == 'COMPLETED'),
-                                                          'blue' :(job.status =='OPEN' || job.status == 'ASSIGNED' || job.status == 'INPROGRESS')}" >
-                                                {{job.status}}
-                                            </p>
+                                        <ion-col col-10 class="padding-left5">
+                                            <div class="border-btm padding-bottom5 ln-ght20" text-capitalize>
+                                                <p text-left class="margin0">{{job.title}}</p>
+                                                <p text-left class="margin0">{{job.employeeName}}</p>
+                                                <p text-left class="margin0">{{job.siteProjectName}} - {{job.siteName}}</p>
+                                            </div>
                                         </ion-col>
+                                        <!--
+                                        <ion-col col-1>
+                                            <p (click)="open(ItemSliding,Item)">f</p>
+                                        </ion-col>
+                                        -->
+
                                     </ion-row>
-                                    <p>{{job.employeeName}}</p>
-                                    <p>{{job.siteProjectName}} - {{job.siteName}}</p>
                                 </div>
 
-                                <div class="card-footer">
-                                    <div *ngIf="job.status !='COMPLETED'">
-                                        <p>{{job.plannedStartTime | date:'dd/MM/yyyy @ H:mm' }} - {{job.plannedEndTime | date:'dd/MM/yyyy @ H:mm' }} </p>
-                                    </div>
-                                    <div *ngIf="job.status =='COMPLETED'">
-                                        <p>{{job.actualStartTime | date:'dd/MM/yyyy @ H:mm' }} - {{job.actualEndTime | date:'dd/MM/yyyy @ H:mm' }} </p>
-                                    </div>
-                                    <div class="stats align-right">
-                                        <!--<p class="display-inline">view</p><ion-icon class="primary-clr padding-left5 fnt-12" name="arrow-forward"></ion-icon>-->
-                                   </div>
-                                </div>
-                            </div>
+                                    <ion-item class="item-fnt padding-left0" >
+                                        <!--<div class="padding-left16">-->
+
+                                        <div text-capitalize >
+                                            <ion-row class="margin0">
+                                                <ion-col col-6 class="padding-right5">
+                                                    <div *ngIf="job.status =='COMPLETED'">
+                                                        <p text-left class="fnt-12"><ion-icon ios="ios-calendar" md="md-calendar" class="green padding-right10"></ion-icon>{{job.actualStartTime | date:'MMM d, y, h:mm a' }} </p>
+                                                    </div>
+                                                    <div *ngIf="job.status !='COMPLETED'">
+                                                        <p text-left class="fnt-12"><ion-icon ios="ios-calendar" md="md-calendar" class="green padding-right10"></ion-icon>{{job.plannedStartTime | date:'MMM d, y, h:mm a' }} </p>
+                                                    </div>
+                                                </ion-col>
+                                                <ion-col col-6>
+                                                    <div *ngIf="job.status =='COMPLETED'">
+                                                        <p text-right class="fnt-12"><ion-icon ios="ios-calendar" md="md-calendar" class="red padding-right10"></ion-icon>{{job.actualEndTime | date:'MMM d, y, h:mm a' }} </p>
+                                                    </div>
+                                                    <div *ngIf="job.status !='COMPLETED'">
+                                                        <p text-right class="fnt-12"><ion-icon ios="ios-calendar" md="md-calendar" class="red padding-right10"></ion-icon>{{job.plannedEndTime | date:'MMM d, y, h:mm a' }} </p>
+                                                    </div>
+                                                </ion-col>
+                                            </ion-row>
+                                        </div>
+                                        <!--</div>-->
+                                    </ion-item>
+
+
                             </div>
                         </ion-list>
 
 
 
                     <ion-list *ngSwitchCase="'upcoming'">
-                        <ion-refresher (ionRefresh)="doRefresh($event)">
+                        <ion-refresher (ionRefresh)="doRefresh($event,all)">
                             <ion-refresher-content></ion-refresher-content>
                         </ion-refresher>
-                        <div *ngFor="let job of allJobs">
-                            <div class="card"  *ngIf="job.status =='OPEN' || job.status == 'ASSIGNED' || job.status == 'INPROGRESS'" [ngClass]="{'red-card' : (job.status == 'OVERDUE'),
-                                                          'green-card' : (job.status == 'COMPLETED'),
-                                                          'blue-card' :(job.status =='OPEN' || job.status == 'ASSIGNED' || job.status == 'INPROGRESS')}">
+                        <div  class="white-bg" *ngFor="let job of allJobs" >
+                            <div class="padding-left16 padding-top5">
+                                <ion-row class="margin0">
 
-                                <div class="card-content padding-bottom0" >
-                                    <ion-row class="margin0">
-                                        <ion-col col-12 class="padding-right0">
-                                            <button ion-button icon-left icon-only clear class="pop-icon">
-                                                <ion-icon name="md-create" class="fnt-12 padding0"></ion-icon>
-                                            </button>
-                                        </ion-col>
-                                    </ion-row>
-                                    <ion-row class="margin0">
-                                        <ion-col col-8 class="padding-left0"><p text-left>{{job.title}}</p></ion-col>
-                                        <ion-col col-4 class="padding-right0">
-                                            <p text-right [ngClass]="{'red' : (job.status == 'OVERDUE'),
-                                                          'green' : (job.status == 'COMPLETED'),
-                                                          'blue' :(job.status =='OPEN' || job.status == 'ASSIGNED' || job.status == 'INPROGRESS')}" >
-                                                {{job.status}}
-                                            </p>
-                                        </ion-col>
-                                    </ion-row>
-                                    <p>{{job.employeeName}}</p>
-                                    <p>{{job.siteProjectName}} - {{job.siteName}}</p>
-                                </div>
+                                    <ion-col col-2 class="ver-center">
+                                        <button ion-button clear color="primary" class="icon-round"
+                                                [ngClass]="{'icon-round-red' : (job.status == 'OVERDUE'),
+                                                          'icon-round-green' : (job.status == 'COMPLETED'),
+                                                          'icon-round-blue' :(job.status =='OPEN' || job.status == 'ASSIGNED' || job.status == 'INPROGRESS')}">
+                                            <ion-icon name="ios-construct-outline" class="fnt-24"></ion-icon>
+                                        </button>
+                                    </ion-col>
+                                    <ion-col col-10 class="padding-left5">
+                                        <div class="border-btm padding-bottom5 ln-ght20" text-capitalize>
+                                            <p text-left class="margin0">{{job.title}}</p>
+                                            <p text-left class="margin0">{{job.employeeName}}</p>
+                                            <p text-left class="margin0">{{job.siteProjectName}} - {{job.siteName}}</p>
+                                        </div>
+                                    </ion-col>
 
-                                <div class="card-footer">
-                                    <div *ngIf="job.status !='COMPLETED'">
-                                        <p>{{job.plannedStartTime | date:'dd/MM/yyyy @ H:mm' }} - {{job.plannedEndTime | date:'dd/MM/yyyy @ H:mm' }} </p>
-                                    </div>
-                                    <div *ngIf="job.status =='COMPLETED'">
-                                        <p>{{job.actualStartTime | date:'dd/MM/yyyy @ H:mm' }} - {{job.actualEndTime | date:'dd/MM/yyyy @ H:mm' }} </p>
-                                    </div>
-                                    <div class="stats align-right">
-                                        <!--<p class="display-inline">view</p><ion-icon class="primary-clr padding-left5 fnt-12" name="arrow-forward"></ion-icon>-->
-                                  </div>
-                                </div>
+                                </ion-row>
                             </div>
+
+                            <ion-item class="item-fnt padding-left0" >
+                                <!--<div class="padding-left16">-->
+
+                                <div text-capitalize >
+                                    <ion-row class="margin0">
+                                        <ion-col col-6 class="padding-right5">
+                                            <div *ngIf="job.status =='COMPLETED'">
+                                                <p text-left class="fnt-12"><ion-icon ios="ios-calendar" md="md-calendar" class="green padding-right10"></ion-icon>{{job.actualStartTime | date:'MMM d, y, h:mm a' }} </p>
+                                            </div>
+                                            <div *ngIf="job.status !='COMPLETED'">
+                                                <p text-left class="fnt-12"><ion-icon ios="ios-calendar" md="md-calendar" class="green padding-right10"></ion-icon>{{job.plannedStartTime | date:'MMM d, y, h:mm a' }} </p>
+                                            </div>
+                                        </ion-col>
+                                        <ion-col col-6>
+                                            <div *ngIf="job.status =='COMPLETED'">
+                                                <p text-right class="fnt-12"><ion-icon ios="ios-calendar" md="md-calendar" class="red padding-right10"></ion-icon>{{job.actualEndTime | date:'MMM d, y, h:mm a' }} </p>
+                                            </div>
+                                            <div *ngIf="job.status !='COMPLETED'">
+                                                <p text-right class="fnt-12"><ion-icon ios="ios-calendar" md="md-calendar" class="red padding-right10"></ion-icon>{{job.plannedEndTime | date:'MMM d, y, h:mm a' }} </p>
+                                            </div>
+                                        </ion-col>
+                                    </ion-row>
+                                </div>
+                                <!--</div>-->
+                            </ion-item>
+
+
                         </div>
                     </ion-list>
 
 
                     <ion-list *ngSwitchCase="'completed'">
-                        <ion-refresher (ionRefresh)="doRefresh($event)">
+                        <ion-refresher (ionRefresh)="doRefresh($event,all)">
                             <ion-refresher-content></ion-refresher-content>
                         </ion-refresher>
-                        <div *ngFor="let job of allJobs">
-                            <div class="card"  *ngIf="job.status =='COMPLETED'" [ngClass]="{'red-card' : (job.status == 'OVERDUE'),
-                                                          'green-card' : (job.status == 'COMPLETED'),
-                                                          'blue-card' :(job.status =='OPEN' || job.status == 'ASSIGNED' || job.status == 'INPROGRESS')}">
+                        <div  class="white-bg" *ngFor="let job of allJobs" >
+                            <div class="padding-left16 padding-top5">
+                                <ion-row class="margin0">
 
-                                <div class="card-content padding-bottom0" >
-                                    <ion-row class="margin0">
-                                        <ion-col col-12 class="padding-right0">
-                                            <button ion-button icon-left icon-only clear class="pop-icon">
-                                                <ion-icon name="md-create" class="fnt-12 padding0"></ion-icon>
-                                            </button>
-                                        </ion-col>
-                                    </ion-row>
-                                    <ion-row class="margin0">
-                                        <ion-col col-8 class="padding-left0"><p text-left>{{job.title}}</p></ion-col>
-                                        <ion-col col-4 class="padding-right0">
-                                            <p text-right [ngClass]="{'red' : (job.status == 'OVERDUE'),
-                                                          'green' : (job.status == 'COMPLETED'),
-                                                          'blue' :(job.status =='OPEN' || job.status == 'ASSIGNED' || job.status == 'INPROGRESS')}" >
-                                                {{job.status}}
-                                            </p>
-                                        </ion-col>
-                                    </ion-row>
-                                    <p>{{job.employeeName}}</p>
-                                    <p>{{job.siteProjectName}} - {{job.siteName}}</p>
-                                </div>
+                                    <ion-col col-2 class="ver-center">
+                                        <button ion-button clear color="primary" class="icon-round"
+                                                [ngClass]="{'icon-round-red' : (job.status == 'OVERDUE'),
+                                                          'icon-round-green' : (job.status == 'COMPLETED'),
+                                                          'icon-round-blue' :(job.status =='OPEN' || job.status == 'ASSIGNED' || job.status == 'INPROGRESS')}">
+                                            <ion-icon name="ios-construct-outline" class="fnt-24"></ion-icon>
+                                        </button>
+                                    </ion-col>
+                                    <ion-col col-10 class="padding-left5">
+                                        <div class="border-btm padding-bottom5 ln-ght20" text-capitalize>
+                                            <p text-left class="margin0">{{job.title}}</p>
+                                            <p text-left class="margin0">{{job.employeeName}}</p>
+                                            <p text-left class="margin0">{{job.siteProjectName}} - {{job.siteName}}</p>
+                                        </div>
+                                    </ion-col>
+                                    <!--
+                                    <ion-col col-1>
+                                        <p (click)="open(ItemSliding,Item)">f</p>
+                                    </ion-col>
+                                    -->
 
-                                <div class="card-footer">
-                                    <div *ngIf="job.status !='COMPLETED'">
-                                        <p>{{job.plannedStartTime | date:'dd/MM/yyyy @ H:mm' }} - {{job.plannedEndTime | date:'dd/MM/yyyy @ H:mm' }} </p>
-                                    </div>
-                                    <div *ngIf="job.status =='COMPLETED'">
-                                        <p>{{job.actualStartTime | date:'dd/MM/yyyy @ H:mm' }} - {{job.actualEndTime | date:'dd/MM/yyyy @ H:mm' }} </p>
-                                    </div>
-                                    <div class="stats align-right">
-                                        <!--<p class="display-inline">view</p><ion-icon class="primary-clr padding-left5 fnt-12" name="arrow-forward"></ion-icon>-->
-                                   </div>
-                                </div>
+                                </ion-row>
                             </div>
+
+                            <ion-item class="item-fnt padding-left0" >
+                                <!--<div class="padding-left16">-->
+
+                                <div text-capitalize >
+                                    <ion-row class="margin0">
+                                        <ion-col col-6 class="padding-right5">
+                                            <div *ngIf="job.status =='COMPLETED'">
+                                                <p text-left class="fnt-12"><ion-icon ios="ios-calendar" md="md-calendar" class="green padding-right10"></ion-icon>{{job.actualStartTime | date:'MMM d, y, h:mm a' }} </p>
+                                            </div>
+                                            <div *ngIf="job.status !='COMPLETED'">
+                                                <p text-left class="fnt-12"><ion-icon ios="ios-calendar" md="md-calendar" class="green padding-right10"></ion-icon>{{job.plannedStartTime | date:'MMM d, y, h:mm a' }} </p>
+                                            </div>
+                                        </ion-col>
+                                        <ion-col col-6>
+                                            <div *ngIf="job.status =='COMPLETED'">
+                                                <p text-right class="fnt-12"><ion-icon ios="ios-calendar" md="md-calendar" class="red padding-right10"></ion-icon>{{job.actualEndTime | date:'MMM d, y, h:mm a' }} </p>
+                                            </div>
+                                            <div *ngIf="job.status !='COMPLETED'">
+                                                <p text-right class="fnt-12"><ion-icon ios="ios-calendar" md="md-calendar" class="red padding-right10"></ion-icon>{{job.plannedEndTime | date:'MMM d, y, h:mm a' }} </p>
+                                            </div>
+                                        </ion-col>
+                                    </ion-row>
+                                </div>
+                                <!--</div>-->
+                            </ion-item>
+
+
                         </div>
                     </ion-list>
 
