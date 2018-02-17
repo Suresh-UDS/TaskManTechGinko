@@ -70,7 +70,7 @@
                                                        placeholder="Search Site"
                                                        ng-model="selectedSite"
                                                        ng-value="searchCriteria.siteName"
-                                                       uib-typeahead="site as site.name for site in allSites | filter:$viewValue | limitTo:5"/>
+                                                       uib-typeahead="site as site.name for site in sites | filter:$viewValue | limitTo:5"/>
                                             </div>
                                         </div>
                                     </td>
@@ -142,8 +142,11 @@
 
 
 
+
+
                             </tbody>
                         </table>
+
                     </div>
                 </div>
                 <!-- end content-->
@@ -157,6 +160,9 @@
     <div class="card margin-TB-5 txt-align-center" ng-hide="employees">
 
         <div class="card-content">
+            <div class="" style="text-align:center;padding: 10px 0;">
+                <div loader-css="ball-pulse"></div>
+            </div>
 
             <h3>No data Found</h3>
 
@@ -181,7 +187,7 @@
                 <a id="previous" href="#" ng-click="previous()"> prev</a>
             </li>
 
-            <li class="active" ng-repeat="number in numberArrays" ng-click="clickNextOrPrev(number)">
+            <li ng-class="{active: number == pages.currPage}" class="paging" ng-repeat="number in numberArrays" ng-click="clickNextOrPrev(number)">
                 <a href="#" style="cursor:pointer">{{number}}</a>
             </li>
             <li class="next paging-next" id="next">

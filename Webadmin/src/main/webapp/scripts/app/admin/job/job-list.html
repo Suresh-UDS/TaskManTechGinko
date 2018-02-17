@@ -114,8 +114,11 @@
 
                             </tr>
 
+
+
                             </tbody>
                         </table>
+
                     </div>
                 </div>
                 <!-- end content-->
@@ -129,6 +132,9 @@
     <div class="card margin-TB-5 txt-align-center" ng-hide="jobs">
 
         <div class="card-content">
+            <div class="" style="text-align:center;padding: 10px 0;">
+                <div loader-css="ball-pulse"></div>
+            </div>
 
             <h3>No data Found</h3>
 
@@ -138,30 +144,30 @@
 
     <div class="row">
 
-        <div class="col-md-6"></div>
-        <div class="col-md-6 text-right">
-            <ul class="pagination pagination-warning">
+        <div class="col-md-4"></div>
+         <div class="col-md-8 text-right">
+        <ul class="pagination pagination-warning">
 
-                <li class="paging-first" ID="first">
-                    <a href="#" id="first" ng-click="first()">
-                        <i id="first" class=" fa fa-step-backward"></i></a>
-                </li>
-                <li class="prev paging-previous" id="previous">
-                    <a id="previous" href="#" ng-click="previous()"> prev</a>
-                </li>
+            <li class="paging-first" ID="first">
+                <a href="#" id="first" ng-click="first()">
+                    <i id="first" class=" fa fa-step-backward"></i></a>
+            </li>
+            <li class="prev paging-previous" id="previous">
+                <a id="previous" href="#" ng-click="previous()"> prev</a>
+            </li>
 
-                <li class="active">
-                    <a href="javascript:void(0);">{{pages.currPage}}</a>
-                </li>
-                <li class="next paging-next" id="next">
-                    <a id="next" href="#" ng-click="next()" >next</a>
-                </li>
-                <li class="paging-last" id="last">
-                    <a id="last" href="#" ng-click="last()"><i id="last" class="fa fa-step-forward"></i></a>
-                </li>
+            <li ng-class="{active: number == pages.currPage}" class="paging" ng-repeat="number in numberArrays" ng-click="clickNextOrPrev(number)">
+                <a href="#" style="cursor:pointer">{{number}}</a>
+            </li>
+            <li class="next paging-next" id="next">
+                <a id="next" href="#" ng-click="next()" >next</a>
+            </li>
+            <li class="paging-last" id="last">
+                <a id="last" href="#" ng-click="last()"><i id="last" class="fa fa-step-forward"></i></a>
+            </li>
 
-            </ul>
-        </div>
+        </ul>
+    </div>
 
     </div>
 

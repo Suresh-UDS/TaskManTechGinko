@@ -3,9 +3,12 @@ package com.ts.app.service;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.inject.Inject;
+
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.core.env.Environment;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
@@ -21,10 +24,14 @@ public class PushService {
 	
 	private final Logger log = LoggerFactory.getLogger(PushService.class);
 	
-	private static final String pushEndpoint = "http://localhost:9000/api/push/send";
+	//private static final String pushEndpoint = "http://localhost:9000/api/push/send";
+	
+	@Inject
+	private Environment env;
 
 	public void send(long users[],String message) {
 		try {
+			String pushEndpoint = env.getProperty("pushService.url");
 			RestTemplate restTemplate = new RestTemplate();
 			MappingJackson2HttpMessageConverter jsonHttpMessageConverter = new MappingJackson2HttpMessageConverter();
 			jsonHttpMessageConverter.getObjectMapper().configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
