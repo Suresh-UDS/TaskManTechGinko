@@ -25,11 +25,13 @@ export class DashboardPage {
   dateView:any;
   employee:any;
   sites:any;
+  spinner=true;
+  empSpinner=false;
+  searchCriteria:any;
     firstLetter:any;
     selectDate:any;
     selectSite:any;
-    searchCriteria:any;
-
+    empSelect:any
   constructor(public renderer: Renderer,public myService:authService,private loadingCtrl:LoadingController,public navCtrl: NavController,public component:componentService,public authService:authService,public modalCtrl: ModalController,
               private datePickerProvider: DatePickerProvider, private siteService:SiteService, private employeeService: EmployeeService, private jobService:JobService) {
 
@@ -69,6 +71,7 @@ export class DashboardPage {
           console.log('ionViewDidLoad Employee list:');
           console.log(response);
           this.employee=response;
+            this.empSpinner=false;
           this.component.closeLoader();
         },
         error=>{
@@ -80,10 +83,11 @@ export class DashboardPage {
     this.siteService.searchSite().subscribe(
         response=>{
           console.log('ionViewDidLoad SitePage:');
-
           console.log(response.json()
           );
           this.sites=response.json();
+          this.spinner=false;
+          this.empSpinner=true;
           this.component.closeLoader();
         },
         error=>{
@@ -100,8 +104,8 @@ export class DashboardPage {
   }
 
   searchJobs(searchCriteria){
-      searchCriteria.CheckInDateTimeFrom = new Date(searchCriteria.checkInDateTimeFrom);
       this.component.showLoader('Getting Jobs');
+      searchCriteria.CheckInDateTimeFrom = new Date(searchCriteria.checkInDateTimeFrom);
       this.jobService.getJobs(searchCriteria).subscribe(
           response=>{
               console.log("Jobs from search criteria");
@@ -111,6 +115,7 @@ export class DashboardPage {
           }
       )
   }
+
 
   getAllJobs(sDate){
     this.component.showLoader('Getting All Jobs');
@@ -158,8 +163,10 @@ export class DashboardPage {
 
         dateSelected.subscribe(date =>
         {
-            this.selectDate=date;
-            this.getAllJobs(this.selectDate)
+            // this.selectDate=date;
+            this.searchCriteria.checkInDateTimeFrom = date;
+            // this.getAllJobs(this.selectDate)
+            this.searchJobs(this.searchCriteria);
             console.log("first date picker: date selected is", date)
         });
 
@@ -176,24 +183,33 @@ export class DashboardPage {
 
     activeSite(id)
     {
-        var search={siteId:id};
+        // var search={siteId:id};
         console.log("Selected Site Id");
         console.log(id);
         this.selectSite=true;
+<<<<<<< HEAD
         this.searchCriteria={
             siteId:id
         };
         this.searchJobs(this.searchCriteria);
+=======
+        this.empSpinner=true;
+>>>>>>> 9ca77d5a19ff536c2c95d0b763042d337e94c386
         this.siteService.searchSiteEmployee(id).subscribe(
             response=> {
                 console.log(response.json());
                 if(response.json().length !==0)
                 {
                     this.employee=response.json();
+                    this.empSpinner=false;
+                    this.empSelect=false;
+                    console.log("Spinner:"+this.empSpinner);
                     console.log(this.employee);
                 }
                 else
                 {
+                    this.empSelect=true;
+                    this.empSpinner=false;
                     this.employee=[]
                 }
             },

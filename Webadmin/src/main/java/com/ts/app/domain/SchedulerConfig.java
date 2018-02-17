@@ -63,6 +63,8 @@ public class SchedulerConfig extends AbstractAuditingEntity implements
 	private boolean scheduleWeeklyThursday;
 	private boolean scheduleWeeklyFriday;
 	private boolean scheduleWeeklySaturday;
+	
+	private int scheduleMonthlyDay;	
 
 	public Long getId() {
 		return id;
@@ -208,4 +210,13 @@ public class SchedulerConfig extends AbstractAuditingEntity implements
     public void setAsset(Asset asset) {
         this.asset = asset;
     }
+
+	public int getScheduleMonthlyDay() {
+		return scheduleMonthlyDay;
+	}
+
+	public void setScheduleMonthlyDay(int scheduleMonthlyDay) {
+		this.scheduleMonthlyDay = scheduleMonthlyDay;
+	}
+    
 }

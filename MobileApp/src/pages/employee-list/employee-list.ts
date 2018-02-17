@@ -178,7 +178,7 @@ export class EmployeeListPage {
             itemSlide.setElementClass("active-sliding", true);
             itemSlide.setElementClass("active-slide", true);
             itemSlide.setElementClass("active-options-right", true);
-            item.setElementStyle("transform", "translate3d(-110px, 0px, 0px)")
+            item.setElementStyle("transform", "translate3d(-120px, 0px, 0px)")
             menu.setElementStyle("display", "none")
         }
 
