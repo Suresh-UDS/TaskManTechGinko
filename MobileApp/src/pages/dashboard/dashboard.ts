@@ -28,11 +28,14 @@ export class DashboardPage {
     firstLetter:any;
     selectDate:any;
     selectSite:any;
+    searchCriteria:any;
+
   constructor(public renderer: Renderer,public myService:authService,private loadingCtrl:LoadingController,public navCtrl: NavController,public component:componentService,public authService:authService,public modalCtrl: ModalController,
               private datePickerProvider: DatePickerProvider, private siteService:SiteService, private employeeService: EmployeeService, private jobService:JobService) {
 
     this.categories='overdue';
     this.selectDate=new Date();
+    this.searchCriteria={};
    /* this.categories = [
       'overdue','upcoming','completed'
       ];
@@ -58,7 +61,7 @@ export class DashboardPage {
     error=>
     {
       console.log(error);
-    })
+    });
 
 
     this.employeeService.getAllEmployees().subscribe(
@@ -70,6 +73,7 @@ export class DashboardPage {
         },
         error=>{
           console.log('ionViewDidLoad SitePage:'+error);
+            this.component.closeLoader();
         }
     )
 
@@ -84,14 +88,28 @@ export class DashboardPage {
         },
         error=>{
           console.log('ionViewDidLoad SitePage:'+error);
+            this.component.closeLoader();
+
         }
-    )
+    );
+    this.searchCriteria={
+        checkInDateTimeFrom:new Date()
+    }
+      this.searchJobs(this.searchCriteria);
 
+  }
 
-    //this.getAllJobs()
-
-
-
+  searchJobs(searchCriteria){
+      searchCriteria.CheckInDateTimeFrom = new Date(searchCriteria.checkInDateTimeFrom);
+      this.component.showLoader('Getting Jobs');
+      this.jobService.getJobs(searchCriteria).subscribe(
+          response=>{
+              console.log("Jobs from search criteria");
+              console.log(response);
+              this.allJobs = response;
+              this.component.closeLoader();
+          }
+      )
   }
 
   getAllJobs(sDate){
@@ -147,12 +165,25 @@ export class DashboardPage {
 
     }
 
+    selectEmployee(emp){
+      console.log("Selected Employee");
+      console.log(emp.id+" "+ emp.name);
+      this.searchCriteria={
+          employeeId:emp.id
+      };
+      this.searchJobs(this.searchCriteria);
+    }
+
     activeSite(id)
     {
         var search={siteId:id};
         console.log("Selected Site Id");
         console.log(id);
         this.selectSite=true;
+        this.searchCriteria={
+            siteId:id
+        };
+        this.searchJobs(this.searchCriteria);
         this.siteService.searchSiteEmployee(id).subscribe(
             response=> {
                 console.log(response.json());
