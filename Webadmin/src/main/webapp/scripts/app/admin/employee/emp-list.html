@@ -187,7 +187,7 @@
                 <a id="previous" href="#" ng-click="previous()"> prev</a>
             </li>
 
-            <li class="active" ng-repeat="number in numberArrays" ng-click="clickNextOrPrev(number)">
+            <li ng-class="{active: number == pages.currPage}" class="paging" ng-repeat="number in numberArrays" ng-click="clickNextOrPrev(number)">
                 <a href="#" style="cursor:pointer">{{number}}</a>
             </li>
             <li class="next paging-next" id="next">

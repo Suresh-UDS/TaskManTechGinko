@@ -671,9 +671,18 @@ angular.module('timeSheetApp')
 
                 $scope.numberArrays = [];
 
-                for(var i=1; i<=$scope.pages.totalPages; i++){
-                	$scope.numberArrays.push(i);
-//                	alert($scope.numberArrays);
+                var startPage = 1;
+                if(($scope.pages.totalPages - $scope.pages.currPage) >= 10) {
+                		startPage = $scope.pages.currPage;
+                }else if($scope.pages.totalPages > 10) {
+                		startPage = $scope.pages.totalPages - 10;
+                }
+                var cnt = 0;
+                for(var i=startPage; i<=$scope.pages.totalPages; i++){
+                		cnt++;
+                		if(cnt <= 10) {
+	                		$scope.numberArrays.push(i);
+                		}
                 }
 
                 if($scope.employees && $scope.employees.length > 0 ){

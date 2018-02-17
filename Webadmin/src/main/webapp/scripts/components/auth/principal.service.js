@@ -77,9 +77,7 @@ angular.module('timeSheetApp')
                 return this.identity().then(function(_id) {
                     //return _id.authorities && _id.authorities.indexOf(authority) !== -1;
                 	   var permissions = _id.userRole.rolePermissions;
-                	   console.log(JSON.stringify(permissions));
                 	   var permVal = permission.split(":");
-                	   console.log(JSON.stringify(permVal));
                 	   var moduleName = permVal[0];
                 	   var actionName = permVal[1];
                 	   if(permissions) {
@@ -87,7 +85,6 @@ angular.module('timeSheetApp')
                 		   for(var i =0; i < permissions.length; i++) {
                 			   if(permissions[i].moduleName.indexOf(moduleName) != -1
                 					   && permissions[i].actionName.indexOf(actionName) != -1) {
-                				   console.log('match found for ' + moduleName  +' , '+ actionName);
                 				   return true;
                 				   
                 			   }
