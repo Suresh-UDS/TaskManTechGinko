@@ -29,6 +29,8 @@ public class SchedulerConfigDTO extends BaseDTO {
 	private boolean scheduleWeeklyThursday;
 	private boolean scheduleWeeklyFriday;
 	private boolean scheduleWeeklySaturday;
+	
+	private int scheduleMonthlyDay;
 
 	public Long getId() {
 		return id;
@@ -164,6 +166,14 @@ public class SchedulerConfigDTO extends BaseDTO {
 
 	public void setScheduleWeeklySaturday(boolean scheduleWeeklySaturday) {
 		this.scheduleWeeklySaturday = scheduleWeeklySaturday;
+	}
+
+	public int getScheduleMonthlyDay() {
+		return scheduleMonthlyDay;
+	}
+
+	public void setScheduleMonthlyDay(int scheduleMonthlyDay) {
+		this.scheduleMonthlyDay = scheduleMonthlyDay;
 	}
 	
 	
