@@ -2,44 +2,56 @@ package com.ts.app.service;
 
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.inject.Inject;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateUtils;
+import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.env.Environment;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.joda.time.DateTime;
 
 import com.google.common.base.Splitter;
+import com.google.common.primitives.Longs;
 import com.ts.app.domain.AbstractAuditingEntity;
 import com.ts.app.domain.Attendance;
 import com.ts.app.domain.Employee;
+import com.ts.app.domain.EmployeeAttendanceReport;
 import com.ts.app.domain.Job;
+import com.ts.app.domain.JobStatus;
+import com.ts.app.domain.Project;
 import com.ts.app.domain.SchedulerConfig;
+import com.ts.app.domain.Setting;
+import com.ts.app.domain.Site;
 import com.ts.app.domain.User;
 import com.ts.app.repository.AttendanceRepository;
 import com.ts.app.repository.JobRepository;
+import com.ts.app.repository.ProjectRepository;
 import com.ts.app.repository.SchedulerConfigRepository;
+import com.ts.app.repository.SettingRepository;
 import com.ts.app.repository.SiteRepository;
 import com.ts.app.service.util.DateUtil;
 import com.ts.app.service.util.ExportUtil;
 import com.ts.app.service.util.MapperUtil;
+import com.ts.app.web.rest.dto.AttendanceDTO;
 import com.ts.app.web.rest.dto.BaseDTO;
 import com.ts.app.web.rest.dto.ExportResult;
 import com.ts.app.web.rest.dto.JobDTO;
+import com.ts.app.web.rest.dto.ReportResult;
 import com.ts.app.web.rest.dto.SchedulerConfigDTO;
+import com.ts.app.web.rest.dto.SearchCriteria;
 import com.ts.app.web.rest.dto.SearchResult;
 import com.ts.app.web.rest.errors.TimesheetException;
 
@@ -54,6 +66,9 @@ public class SchedulerService extends AbstractService {
 
 	private static final String FREQ_ONCE_EVERY_HOUR = "Once in an hour";
 
+	@Inject
+	private ProjectRepository projectRepository;
+	
 	@Inject
 	private SiteRepository siteRepository;
 
@@ -76,10 +91,19 @@ public class SchedulerService extends AbstractService {
 	private SchedulerConfigRepository schedulerConfigRepository;
 
 	@Inject
+	private ReportService reportService;
+
+	@Inject
+	private AttendanceService attendanceService;
+
+	@Inject
 	private AttendanceRepository attendanceRepository;
 
 	@Inject
 	private PushService pushService;
+	
+	@Inject
+	private SettingRepository settingRepository;
 	
 	@Inject
 	private Environment env;
@@ -211,9 +235,16 @@ public class SchedulerService extends AbstractService {
 		}
 	}
 
-	//@Scheduled(initialDelay = 60000,fixedRate = 900000) //Runs every 5 mins
+	//@Scheduled(initialDelay = 60000,fixedRate = 300000) //Runs every 15 mins
 	public void overDueTaskCheck() {
 		Calendar cal = Calendar.getInstance();
+		Setting overdueAlertSetting = settingRepository.findSettingByKey("email.notification.overdue");
+		String alertEmailIds = "";
+		if(overdueAlertSetting.getValue().equalsIgnoreCase("true")) {
+			Setting overdueEmails = settingRepository.findSettingByKey("job.overdue.alert.emails");
+			alertEmailIds = overdueEmails.getValue();
+		}
+		
 		List<Job> overDueJobs = jobRepository.findOverdueJobsByStatusAndEndDateTime(cal.getTime());
 		List<JobDTO> jobs = new ArrayList<JobDTO>();
 		for(Job job : overDueJobs) {
@@ -226,22 +257,108 @@ public class SchedulerService extends AbstractService {
 			exportResult = exportUtil.writeJobReportToFile(jobs, null, exportResult);
 			for (Job job : overDueJobs) {
 				try {
-					if(!job.isOverDueEmailAlert()) {
-						List<Employee> employees = job.getSite().getEmployees();
-						for(Employee emp : employees) {
-							User user = emp.getUser();
-							if(user != null) {
-								mailService.sendOverdueJobAlert(user, job.getSite().getName(), job.getId(), job.getTitle(), exportResult.getFile());
-							}
+					List<Long> pushAlertUserIds = new ArrayList<Long>();
+					Employee assignee = job.getEmployee();
+					pushAlertUserIds.add(assignee.getUser().getId()); //add employee user account id for push 
+					int alertCnt = job.getOverdueAlertCount() + 1;
+					Employee manager = assignee;
+					for(int x = 0; x < alertCnt; x++ ) {
+						manager = manager.getManager();
+						if(manager != null) {
+							alertEmailIds += "," + manager.getUser().getEmail();
+							pushAlertUserIds.add(manager.getUser().getId()); //add manager user account id for push
 						}
-						job.setOverDueEmailAlert(true);
-						jobRepository.save(job);
 					}
+					long[] pushUserIds = Longs.toArray(pushAlertUserIds);
+					String message = "Site - "+ job.getSite().getName() + ", Job - " + job.getTitle() + ", Status - " + JobStatus.OVERDUE.name() + ", Time - "+ job.getPlannedEndTime();
+					pushService.send(pushUserIds, message); //send push to employee and managers.
+					if(overdueAlertSetting.getValue().equalsIgnoreCase("true")) { //send escalation emails to managers and alert emails
+						mailService.sendOverdueJobAlert(assignee.getUser(), alertEmailIds, job.getSite().getName(), job.getId(), job.getTitle(), exportResult.getFile());
+						job.setOverDueEmailAlert(true);
+					}
+					job.setOverdueAlertCount(alertCnt);
+					job.setStatus(JobStatus.OVERDUE);
+					jobRepository.save(job);
+
 				} catch (Exception ex) {
 					log.warn("Failed to create JOB ", ex);
 				}
 			}
 		}
+	}
+	
+	//@Scheduled(initialDelay = 60000,fixedRate = 900000) //Runs every 15 mins
+	//@Scheduled(cron="0 0 18 1/1 * ?")
+	public void endOfDayReportSchedule() {
+		Setting eodReports = settingRepository.findSettingByKey("email.notification.eodReports");
+		Setting eodReportEmails = settingRepository.findSettingByKey("email.notification.eodReports.emails");
+		Calendar cal = Calendar.getInstance();
+		cal.set(Calendar.HOUR_OF_DAY, 0);
+		cal.set(Calendar.MINUTE, 0);
+		List<Project> projects = projectRepository.findAll();
+		for(Project proj : projects) {
+			//Set<Site> sites = proj.getSite();
+			//Iterator<Site> siteItr = sites.iterator();
+			//while(siteItr.hasNext()) {
+				SearchCriteria sc = new SearchCriteria();
+				sc.setCheckInDateTimeFrom(cal.getTime());
+				sc.setProjectId(proj.getId());
+				List<ReportResult> reportResults = jobManagementService.generateConsolidatedReport(sc, true);
+				
+				if(CollectionUtils.isNotEmpty(reportResults)) {
+						//if report generation needed
+		                log.debug("results exists");
+						if(eodReports.getValue().equalsIgnoreCase("true")) {
+						    log.debug("send report");
+							ExportResult exportResult = new ExportResult();
+							exportResult = exportUtil.writeConsolidatedJobReportToFile(proj.getName(), reportResults, null, exportResult);
+							//send reports in email.
+							mailService.sendJobReportEmailFile(eodReportEmails.getValue(), exportResult.getFile(), null, cal.getTime());
+		
+						}
+		
+				}
+				else{
+		    	    		log.debug("no jobs found on the daterange");
+		        }
+		
+			//}
+		}
+		
+	}
+	
+	//@Scheduled(cron="0 0 10 1/1 * ?")
+	//@Scheduled(cron="0 0 19 1/1 * ?")
+	public void attendanceReportSchedule() {
+		Setting attendaceReports = settingRepository.findSettingByKey("email.notification.attedanceReports");
+		Setting attendaceReportEmails = settingRepository.findSettingByKey("email.notification.attendanceReports.emails");
+		Calendar cal = Calendar.getInstance();
+		cal.set(Calendar.HOUR_OF_DAY, 0);
+		cal.set(Calendar.MINUTE, 0);
+		List<Project> projects = projectRepository.findAll();
+		for(Project proj : projects) {
+			SearchCriteria sc = new SearchCriteria();
+			sc.setCheckInDateTimeFrom(cal.getTime());
+			sc.setCheckInDateTimeTo(cal.getTime());
+			sc.setProjectId(proj.getId());			
+			//SearchResult<AttendanceDTO> searchResults = attendanceService.findBySearchCrieria(sc);
+			Set<Site> sites = proj.getSite();
+			Iterator<Site> siteItr = sites.iterator();
+			while(siteItr.hasNext()) {
+				Site site = siteItr.next();
+				List<EmployeeAttendanceReport> empAttnList = attendanceRepository.findBySiteId(site.getId(), DateUtil.convertToSQLDate(cal.getTime()), DateUtil.convertToSQLDate(cal.getTime()));
+				if(attendaceReports.getValue().equalsIgnoreCase("true")) {
+				    log.debug("send report");
+					ExportResult exportResult = new ExportResult();
+					exportResult = exportUtil.writeAttendanceReportToFile(proj.getName(), empAttnList, null, exportResult);
+					//send reports in email.
+					mailService.sendJobReportEmailFile(attendaceReportEmails.getValue(), exportResult.getFile(), null, cal.getTime());
+
+				}
+			}
+			
+		}
+		
 	}
 	
 	//@Scheduled(cron="0 0 0 1/1 * ?") //Test to run every 30 seconds

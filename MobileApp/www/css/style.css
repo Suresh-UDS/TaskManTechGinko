@@ -704,3 +704,10 @@ ion-fab-list
 {
   padding-top: 20px;
 }
+ion-spinner{
+  width: 12px !important;
+  height: 15px !important;
+  margin-left: 15px !important;
+  stroke: #ff9800;
+  fill:#ff9800;
+}

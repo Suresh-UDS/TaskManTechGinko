@@ -87,9 +87,9 @@ angular.module('timeSheetApp')
         };
         
         $scope.initAddEdit = function() {
+        		$scope.loadAllManagers();
         		$scope.loadProjects();
         		$scope.loadDesignations();
-        		$scope.loadAllManagers();
         }
 
 
@@ -187,6 +187,13 @@ angular.module('timeSheetApp')
         		}
         	}
         };
+        
+//        $scope.init() {
+//        		$scope.loadEmployees();
+//        		$scope.loadProjects();
+//        		$scope.loadSites();
+//        		$scope.loadAllEmployees();
+//        };
 
         $scope.siteTransferDetails = function(employee){
             console.log(employee)
@@ -330,7 +337,7 @@ angular.module('timeSheetApp')
                     	$scope.success = 'OK';
                     	$scope.selectedProject = {};
                     	$scope.selectedSite = {};
-                    	$scope.loadEmployees();
+                    	//$scope.loadEmployees();
                         $scope.showNotifications('top','center','success','Employee Created Successfully');
                     	$location.path('/employees');
                     }).catch(function (response) {
@@ -442,8 +449,10 @@ angular.module('timeSheetApp')
         };
 
         $scope.loadSelectedManager = function(managerId) {
+        		console.log('manager id - ' + managerId);
         	EmployeeComponent.findOne(managerId).then(function (data) {
                 $scope.selectedManager = data;
+        		console.log('selectedManager - ' + $scope.selectedManager)
             });
         };
 
@@ -664,12 +673,21 @@ angular.module('timeSheetApp')
 
                 $scope.numberArrays = [];
 
-                for(var i=1; i<=$scope.pages.totalPages; i++){
-                	$scope.numberArrays.push(i);
-//                	alert($scope.numberArrays);
+                var startPage = 1;
+                if(($scope.pages.totalPages - $scope.pages.currPage) >= 10) {
+                		startPage = $scope.pages.currPage;
+                }else if($scope.pages.totalPages > 10) {
+                		startPage = $scope.pages.totalPages - 10;
+                }
+                var cnt = 0;
+                for(var i=startPage; i<=$scope.pages.totalPages; i++){
+                		cnt++;
+                		if(cnt <= 10) {
+	                		$scope.numberArrays.push(i);
+                		}
                 }
 
-                if($scope.employees.length > 0 ){
+                if($scope.employees && $scope.employees.length > 0 ){
                     $scope.showCurrPage = data.currPage;
                     $scope.pageEntries = $scope.employees.length;
                     $scope.totalCountPages = data.totalCount;
@@ -935,8 +953,9 @@ angular.module('timeSheetApp')
         $scope.clearFilter = function() {
             $scope.selectedSite = null;
             $scope.selectedProject = null;
+            $scope.selectedEmployee = null;
             $scope.searchCriteria = {};
-            $rootScope.searchCriteriaSite = null;
+            $rootScope.searchCriteriaEmployees = null;
             $scope.pages = {
                 currPage: 1,
                 totalPages: 0

@@ -95,6 +95,8 @@ public class Job extends AbstractAuditingEntity implements Serializable{
 	private boolean scheduled;
 
 	private boolean overDueEmailAlert;
+	
+	private int overdueAlertCount;
 
 	private boolean completedDueEmailAlert;
 
@@ -304,6 +306,28 @@ public class Job extends AbstractAuditingEntity implements Serializable{
 		this.parentJob = parentJob;
 	}
 
+    public Employee getReliever() {
+        return reliever;
+    }
+
+    public void setReliever(Employee reliever) {
+        this.reliever = reliever;
+    }
+
+    public boolean isRelieved() {
+        return relieved;
+    }
+
+    public void setRelieved(boolean relieved) {
+        this.relieved = relieved;
+    }
+	public int getOverdueAlertCount() {
+		return overdueAlertCount;
+	}
+	public void setOverdueAlertCount(int overdueAlertCount) {
+		this.overdueAlertCount = overdueAlertCount;
+	}
+    
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
 		sb.append("Job Details - {" + StringUtil.SPACE);
@@ -322,19 +346,4 @@ public class Job extends AbstractAuditingEntity implements Serializable{
 		return sb.toString();
 	}
 
-    public Employee getReliever() {
-        return reliever;
-    }
-
-    public void setReliever(Employee reliever) {
-        this.reliever = reliever;
-    }
-
-    public boolean isRelieved() {
-        return relieved;
-    }
-
-    public void setRelieved(boolean relieved) {
-        this.relieved = relieved;
-    }
 }

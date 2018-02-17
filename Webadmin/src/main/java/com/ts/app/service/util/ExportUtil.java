@@ -25,6 +25,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
+import com.ts.app.domain.EmployeeAttendanceReport;
 import com.ts.app.web.rest.dto.AttendanceDTO;
 import com.ts.app.web.rest.dto.EmployeeDTO;
 import com.ts.app.web.rest.dto.ExportResult;
@@ -45,6 +46,7 @@ public class ExportUtil {
 	private static final Object[] CONSOLIDATED_REPORT_FILE_HEADER = { "SITE", "LOCATION", "ASSIGNED JOBS", "COMPLETED JOBS", "OVERDUE JOBS","TAT"};
 	private static final Object[] DETAIL_REPORT_FILE_HEADER = { "SITE", "DATE", "EMPLOYEE ID", "EMPLOYEE NAME", "CHECK IN TIME", "CHECK OUT TIME"};
 	private static final Object[] EMPLOYEE_DETAIL_REPORT_FILE_HEADER = { "EMPLOYEE ID", "EMPLOYEE NAME", "DESIGNATION", "REPORTING TO", "CLIENT", "SITE", "ACTIVE"};
+	private static final Object[] ATTENDANCE_DETAIL_REPORT_FILE_HEADER = { "EMPLOYEE ID", "EMPLOYEE NAME", "SITE", "CLIENT", "CHECK IN", "CHECK OUT"};
 
 	@Inject
 	private Environment env;
@@ -53,7 +55,7 @@ public class ExportUtil {
 
 	private Lock lock;
 
-	public ExportResult writeConsolidatedJobReportToFile(List<ReportResult> content, final String empId, ExportResult result) {
+	public ExportResult writeConsolidatedJobReportToFile(String projName, List<ReportResult> content, final String empId, ExportResult result) {
 		boolean isAppend = false;
 //		boolean isAppend = (result != null);
 		log.debug("result = " + result + ", isAppend=" + isAppend);
@@ -67,8 +69,8 @@ public class ExportUtil {
 		if(StringUtils.isEmpty(result.getFile())) {
 			if(StringUtils.isNotEmpty(empId)) {
 				fileName = empId + System.currentTimeMillis() + ".csv";
-			}else {
-				fileName = System.currentTimeMillis() + ".csv";
+			}else if(StringUtils.isNotEmpty(projName)) {
+				fileName = projName  +  "_" + System.currentTimeMillis() + ".csv";
 			}
 		}	else {
 			fileName = result.getFile() + ".csv";
@@ -121,6 +123,8 @@ public class ExportUtil {
 						// initialize FileWriter object
 						log.debug("filePath = " + filePath + ", isAppend=" + isAppend);
 						fileWriter = new FileWriter( filePath,isAppend);
+						String siteName = null;
+						
 						// initialize CSVPrinter object
 						csvFilePrinter = new CSVPrinter(fileWriter, csvFileFormat);
 						if(!isAppend) {
@@ -128,6 +132,10 @@ public class ExportUtil {
 							csvFilePrinter.printRecord(CONSOLIDATED_REPORT_FILE_HEADER);
 						}
 						for (ReportResult transaction : content) {
+							if(StringUtils.isEmpty(siteName) || !siteName.equalsIgnoreCase(transaction.getSiteName())) {
+								csvFilePrinter.printRecord("");
+								csvFilePrinter.printRecord("CLIENT - " + projName + "  SITE - " + transaction.getSiteName());
+							}
 							List record = new ArrayList();
 							log.debug("Writing transaction record for site :"+ transaction.getSiteName());
 							record.add(transaction.getSiteName());
@@ -246,6 +254,117 @@ public class ExportUtil {
 							record.add(transaction.getPlannedStartTime());
 							record.add(transaction.getActualEndTime());
 							record.add(transaction.getJobStatus().toString());
+							csvFilePrinter.printRecord(record);
+						}
+						log.info(exportFileName + " CSV file was created successfully !!!");
+						statusMap.put(exportFileName, "COMPLETED");
+					} catch (Exception e) {
+						log.error("Error in CsvFileWriter !!!");
+						statusMap.put(exportFileName, "FAILED");
+					} finally {
+						try {
+							fileWriter.flush();
+							fileWriter.close();
+							csvFilePrinter.close();
+						} catch (IOException e) {
+							log.error("Error while flushing/closing fileWriter/csvPrinter !!!");
+							statusMap.put(exportFileName, "FAILED");
+						}
+					}
+					lock.unlock();
+				}
+
+			});
+			writerThread.start();
+
+		result.setEmpId(empId);
+		result.setFile(fileName.substring(0,fileName.indexOf('.')));
+		result.setStatus(getExportStatus(fileName));
+		return result;
+	}
+	
+	
+	public ExportResult writeAttendanceReportToFile(String projName, List<EmployeeAttendanceReport> content, final String empId, ExportResult result) {
+		boolean isAppend = (result != null);
+		log.debug("result = " + result + ", isAppend=" + isAppend);
+		if(result == null) {
+			result = new ExportResult();
+		}
+		// Create the CSVFormat object with "\n" as a record delimiter
+		CSVFormat csvFileFormat = CSVFormat.DEFAULT.withRecordSeparator(NEW_LINE_SEPARATOR).withDelimiter(',');
+		String fileName = null;
+		if(StringUtils.isEmpty(result.getFile())) {
+			if(StringUtils.isNotEmpty(empId)) {
+				fileName = empId + System.currentTimeMillis() + ".csv";
+			}else if(StringUtils.isNotEmpty(projName)) {
+				fileName = projName  +  "_" + System.currentTimeMillis() + ".csv";
+			}else {
+				fileName = System.currentTimeMillis() + ".csv";
+			}
+		}	else {
+			fileName = result.getFile() + ".csv";
+		}
+		if(statusMap.containsKey(fileName)) {
+			String status = statusMap.get(fileName);
+			log.debug("Current status for filename -"+fileName+", status -" + status);
+		}else {
+			statusMap.put(fileName, "PROCESSING");
+		}
+		final String exportFileName = fileName;
+
+		if(lock == null) {
+			lock = new Lock();
+		}
+			try {
+				lock.lock();
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+			Thread writerThread = new Thread(new Runnable() {
+
+				FileWriter fileWriter = null;
+				CSVPrinter csvFilePrinter = null;
+
+				@Override
+				public void run() {
+					// TODO Auto-generated method stub
+					String filePath = env.getProperty("export.file.path");
+					FileSystem fileSystem = FileSystems.getDefault();
+					if(StringUtils.isNotEmpty(empId)) {
+						filePath += "/" + empId;
+					}
+					Path path = fileSystem.getPath(filePath);
+					// path = path.resolve(String.valueOf(empId));
+					if (!Files.exists(path)) {
+						Path newEmpPath = Paths.get(filePath);
+						try {
+							Files.createDirectory(newEmpPath);
+						} catch (IOException e) {
+							log.error("Error while creating path " + newEmpPath);
+						}
+					}
+					filePath += "/" + exportFileName;
+					try {
+						// initialize FileWriter object
+						log.debug("filePath = " + filePath + ", isAppend=" + isAppend);
+						fileWriter = new FileWriter( filePath,isAppend);
+						// initialize CSVPrinter object
+						csvFilePrinter = new CSVPrinter(fileWriter, csvFileFormat);
+						if(!isAppend) {
+							// Create CSV file header
+							csvFilePrinter.printRecord(ATTENDANCE_DETAIL_REPORT_FILE_HEADER);
+						}
+						for (EmployeeAttendanceReport transaction : content) {
+							List record = new ArrayList();
+							log.debug("Writing transaction record for site :"+ transaction.getSiteName());
+							record.add(transaction.getEmployeeIds());
+							record.add(transaction.getName() + transaction.getLastName());
+							record.add(transaction.getSiteName());
+							record.add(transaction.getProjectName());
+							record.add(transaction.getCheckInTime());
+							record.add(transaction.getCheckOutTime());
 							csvFilePrinter.printRecord(record);
 						}
 						log.info(exportFileName + " CSV file was created successfully !!!");

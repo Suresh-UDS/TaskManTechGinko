@@ -11,6 +11,7 @@ import java.util.Calendar;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+import java.util.TimeZone;
 
 import javax.inject.Inject;
 
@@ -28,6 +29,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.ts.app.service.util.DateUtil;
 import com.ts.app.service.util.ExportUtil;
 import com.ts.app.service.util.FileUploadHelper;
 import com.ts.app.service.util.MapperUtil;
@@ -548,14 +550,14 @@ public class    EmployeeService extends AbstractService {
 			Page<Employee> page = null;
 			List<EmployeeDTO> transactions = null;
 
-            Calendar startCal = Calendar.getInstance();
+            Calendar startCal = Calendar.getInstance(TimeZone.getTimeZone("Asia/Kolkata"));
             if(searchCriteria.getFromDate() != null) {
             		startCal.setTime(searchCriteria.getFromDate());
             }
 	    		startCal.set(Calendar.HOUR_OF_DAY, 0);
 	    		startCal.set(Calendar.MINUTE, 0);
 	    		startCal.set(Calendar.SECOND, 0);
-	    		Calendar endCal = Calendar.getInstance();
+	    		Calendar endCal = Calendar.getInstance(TimeZone.getTimeZone("Asia/Kolkata"));
 	    		if(searchCriteria.getToDate() != null) {
 	    			endCal.setTime(searchCriteria.getToDate());
 	    		}
@@ -563,12 +565,12 @@ public class    EmployeeService extends AbstractService {
 	    		endCal.set(Calendar.MINUTE, 59);
 	    		endCal.set(Calendar.SECOND, 0);
 
-	    		searchCriteria.setFromDate(startCal.getTime());
-	    		searchCriteria.setToDate(endCal.getTime());
+	    		//searchCriteria.setFromDate(startCal.getTime());
+	    		//searchCriteria.setToDate(endCal.getTime());
 
 
-			java.sql.Date startDate = new java.sql.Date(searchCriteria.getFromDate().getTime());
-        		java	.sql.Date toDate = new java.sql.Date(searchCriteria.getToDate().getTime());
+			java.sql.Date startDate = DateUtil.convertToSQLDate(DateUtil.convertUTCToIST(startCal));
+			java.sql.Date toDate = DateUtil.convertToSQLDate(DateUtil.convertUTCToIST(endCal));
 
 			log.debug("findBySearchCriteria - "+searchCriteria.getSiteId() +", "+searchCriteria.getEmployeeId() +", "+searchCriteria.getProjectId());
 			if((searchCriteria.getSiteId() != 0 && searchCriteria.getProjectId() != 0)) {
