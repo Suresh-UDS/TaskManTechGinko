@@ -184,6 +184,7 @@ angular.module('timeSheetApp')
 	        	var post = $scope.isEdit ? JobComponent.update : JobComponent.create
 	        	post($scope.job).then(function () {
 	                $scope.success = 'OK';
+	                $scope.showNotifications('top','center','success','Job Created Successfully');
 	            	$location.path('/jobs');
             }).catch(function (response) {
                 $scope.success = null;
@@ -216,6 +217,7 @@ angular.module('timeSheetApp')
         $scope.refreshPage = function(){
                 $scope.clearFilter();
                 // $scope.loadJobs();
+                $scope.search();
         }
 
         $scope.deleteConfirm = function (job){
@@ -404,11 +406,12 @@ angular.module('timeSheetApp')
             $scope.searchCriteria = {};
             $scope.selectedSite = null;
             $scope.selectedStatus = null;
+            $scope.selectedJob = null;
             $scope.pages = {
                 currPage: 1,
                 totalPages: 0
             }
-            $scope.search();
+            //$scope.search();
         };
 
         $scope.initCalender();

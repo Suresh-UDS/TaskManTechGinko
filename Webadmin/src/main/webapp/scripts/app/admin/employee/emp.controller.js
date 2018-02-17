@@ -337,7 +337,7 @@ angular.module('timeSheetApp')
                     	$scope.success = 'OK';
                     	$scope.selectedProject = {};
                     	$scope.selectedSite = {};
-                    	$scope.loadEmployees();
+                    	//$scope.loadEmployees();
                         $scope.showNotifications('top','center','success','Employee Created Successfully');
                     	$location.path('/employees');
                     }).catch(function (response) {

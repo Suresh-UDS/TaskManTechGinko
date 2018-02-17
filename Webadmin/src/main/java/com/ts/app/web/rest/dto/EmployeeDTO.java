@@ -48,8 +48,6 @@ public class EmployeeDTO extends BaseDTO {
 
     private String siteName;
 
-    private long userId;
-
     private String userUserGroupName;
 
     private long managerId;
@@ -169,14 +167,6 @@ public class EmployeeDTO extends BaseDTO {
 
 	public void setManagerName(String managerName) {this.managerName = managerName;}
 
-	public long getUserId() {
-		return userId;
-	}
-
-	public void setUserId(long userId) {
-		this.userId = userId;
-	}
-
 	public long getCode() {
 		return code;
 	}
@@ -226,7 +216,7 @@ public class EmployeeDTO extends BaseDTO {
 	        		sb.append(site);
 	        	}
         }
-        sb.append("userId-" + userId +" ");
+        sb.append("userId-" + getUserId() +" ");
         if(CollectionUtils.isNotEmpty(projectSites)) {
         		for(EmployeeProjectSiteDTO projSite : projectSites) {
         			sb.append(projSite);

@@ -26,6 +26,7 @@ public class MapperUtil<E extends AbstractAuditingEntity, M extends BaseDTO> {
 		E entity = null;
 		if(model != null) {
 			ModelMapper mapper = new ModelMapper();
+			mapper.getConfiguration().setAmbiguityIgnored(true);
 			entity = mapper.map(model, entityType);
 		}	
 		return entity;
@@ -33,6 +34,7 @@ public class MapperUtil<E extends AbstractAuditingEntity, M extends BaseDTO> {
 	
 	public  void  toEntity(M model,E entity) {
 		ModelMapper mapper = new ModelMapper();
+		mapper.getConfiguration().setAmbiguityIgnored(true);
 		mapper.map(model, entity);
 	}
 	public <E extends AbstractAuditingEntity, M extends BaseDTO> M  toModel(E entity, Class<M> modelType) {

@@ -134,7 +134,7 @@
                                                     <label class="control-label">Last Name</label>
                                                     <input id='employeeLastName' ng-model="employee.lastName" class='form-control'
                                                            name='employeeLastName' type='text' value=""
-                                                           ng-minlength=2 ng-maxlength=50 ng-pattern="/^[A-Za-z0-9\s&-/]*$/" required />
+                                                           ng-minlength=1 ng-maxlength=50 ng-pattern="/^[A-Za-z0-9\s&-/]*$/" required />
                                                     <div ng-show="form.$submitted || form.employeeLastName.$touched">
                                                         <div ng-show="form.employeeLastName.$dirty || form.employeeLastName.$invalid">
                                                             <p class="help-block" style="color:maroon"
@@ -143,7 +143,7 @@
                                                             </p>
                                                             <p class="help-block" style="color:maroon"
                                                                ng-show="form.employeeLastName.$error.minlength">
-                                                                Employee last name is required to be at least 5 character.
+                                                                Employee last name is required to be at least 1 character.
                                                             </p>
                                                             <p class="help-block" style="color:maroon"
                                                                ng-show="form.employeeLastName.$error.maxlength">
@@ -179,7 +179,7 @@
                                                             </p>
                                                             <p class="help-block" style="color:maroon"
                                                                ng-show="form.employeePhone.$error.maxlength">
-                                                                Employee Phone No. cannot be longer .
+                                                                Employee Phone No. cannot be longer than 13 characters.
                                                             </p>
                                                             <p class="help-block" style="color:maroon"
                                                                ng-show="form.employeePhone.$error.pattern">
