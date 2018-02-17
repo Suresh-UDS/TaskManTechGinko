@@ -588,8 +588,8 @@ a:hover, a:focus
 }
 .icon-round
 {
-  width: 100% !important;
-  height: 62% !important;
+  width: 100px !important;
+  height: 45px !important;
   border-radius: 50% !important;
 }
 .icon-round-green
