@@ -93,8 +93,18 @@
 
                             <thead>
                             <tr>
-                                <th>ID</th>
-                                <th>Name</th>
+                                <th>ID <a href="#">
+                                
+                                <span ng-click="columnAscOrder('empId')"  class=""><i class="fa fa-caret-up"></i></span>
+          						<span ng-click="columnDescOrder('empId')" class=""><i class="fa fa-caret-down"></i></span>
+          						
+    							 </a></th>
+                                <th>Name<a href="#">
+                                
+                                <span ng-click="columnAscOrder('name')" class=""><i class="fas fa-caret-up"></i></span>
+          						<span ng-click="columnDescOrder('name')" class=""><i class="fas fa-caret-down"></i></span>
+          						
+    							 </a></th>
                                 <th>Enrolled Face Id</th>
                                 <th>Authorize Face Id</th>
                                 <th>Status</th>

@@ -592,6 +592,18 @@ angular.module('timeSheetApp')
         	$scope.pages.currPage = number;
         	$scope.search();
         }
+        
+        $scope.columnAscOrder = function(field){ 
+        	$scope.selectedColumn = field; 
+        	$scope.isAscOrder = true;
+        	$scope.search();
+        }
+        
+        $scope.columnDescOrder = function(field){ 
+        	$scope.selectedColumn = field; 
+        	$scope.isAscOrder = false;
+        	$scope.search();
+        }
 
         $scope.search = function () {
         	var currPageVal = ($scope.pages ? $scope.pages.currPage : 1);
@@ -662,8 +674,14 @@ angular.module('timeSheetApp')
         	if($scope.pageSort){
         		$scope.searchCriteria.sort = $scope.pageSort;
         	}
-
-
+        	
+        	if($scope.selectedColumn){
+        		
+        		$scope.searchCriteria.columnName = $scope.selectedColumn;
+        		$scope.searchCriteria.sortByAsc = $scope.isAscOrder;
+        		
+        	} 
+        	
         	EmployeeComponent.search($scope.searchCriteria).then(function (data) {
                 $scope.employees = data.transactions;
                 console.log('Employee search result list -' + $scope.employees);
