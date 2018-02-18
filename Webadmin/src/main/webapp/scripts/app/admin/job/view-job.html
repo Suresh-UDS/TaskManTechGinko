@@ -39,11 +39,7 @@
                                                 <tr>
                                                     <td>Checklist</td>
                                                     <td>
-                                                        <ul>
-                                                            <li ng-repeat="checklist in checklists">
-                                                                {{checklist.name}}
-                                                            </li>
-                                                        </ul>
+                                                       {{}}
                                                     </td>
 
                                                 </tr>
@@ -53,7 +49,7 @@
                                                     <td>
                                                         <ul>
                                                             <li>
-                                                                {{site.name}}
+                                                                {{job.siteName}}
                                                             </li>
                                                         </ul>
                                                     </td>
@@ -62,19 +58,19 @@
                                                 <tr>
 
                                                     <td>Location</td>
-                                                    <td>{{location.name}}</td>
+                                                    <td>{{job.locationName}}</td>
 
                                                 </tr>
                                                 <tr>
 
                                                     <td>Employee</td>
-                                                    <td>{{emp.name}}</td>
+                                                    <td>{{job.employeeName}}</td>
 
                                                 </tr>
                                                 <tr>
 
                                                     <td>Asset</td>
-                                                    <td>{{job.asset}}</td>
+                                                    <td>{{job.assetTitle}}</td>
 
                                                 </tr>
 
@@ -190,7 +186,7 @@
 
                         </div>
 
-                      
+
 
 
 
