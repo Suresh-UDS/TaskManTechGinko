@@ -9,7 +9,7 @@ var quotation = require('./schema/quotation')();
 var rateCard = require('./schema/rateCard')();
 var rateCardType = require('./schema/rateCardType')();
 var notification = require('./schema/notification')();
-var controllers = require('./controller');
+//var controllers = require('./controller');
 var quotationController = require('./quotationController');
 var notificationService = require('./notifications/notificationService');
 var Location = mongoose.model('Quotation');
@@ -95,7 +95,7 @@ function startup(){
 }
 
 function listen(server){
-    var port = 8000;
+    var port = 8001;
     server.listen(port, function(err,result) {
       if (err)
           console.error(err);
