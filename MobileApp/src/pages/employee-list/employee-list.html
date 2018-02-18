@@ -19,19 +19,38 @@
   </ion-fab>
 
   <ion-list class="emp-list">
-    <ion-item *ngFor="let emp of employees;let i of index" class="bottom-border emp" (click)="viewEmployee(emp)" >
-      <ion-avatar item-start *ngIf="emp.enrolled_face">
-        <img  [src]="emp.enrolled_face" >
-      </ion-avatar>
-        <p *ngIf="!emp.enrolled_face && first(emp.name)"></p>
-      <ion-avatar item-start *ngIf="!emp.enrolled_face" class="emp-round">
-        <p class="margin-auto">{{firstLetter}}</p>
-      </ion-avatar>
-      <p text-left class="fnt-wt" text-capitalize>{{emp.name}}</p>
-        <button ion-button icon-left icon-only clear class="pop-icon" (click)="presentActionSheet(emp)">
-            <ion-icon name="ios-more" class="fnt-12 padding0"></ion-icon>
-        </button>
-    </ion-item>
+
+    <div *ngFor="let emp of employees;let i of index">
+    <ion-item-sliding #slidingItem>
+      <ion-item #item  class="bottom-border emp padding-left0"  >
+        <ion-row class="margin0">
+          <ion-col col-2>
+            <ion-avatar item-start *ngIf="emp.enrolled_face" >
+              <img  [src]="emp.enrolled_face" >
+            </ion-avatar>
+            <p *ngIf="!emp.enrolled_face && first(emp.name)"></p>
+            <ion-avatar item-start *ngIf="!emp.enrolled_face" class="emp-round">
+              <p class="margin-auto">{{firstLetter}}</p>
+            </ion-avatar>
+          </ion-col>
+          <ion-col col-8 class="ver-center" (click)="viewEmployee(emp)">
+              <p text-left class="fnt-wt" text-capitalize>{{emp.name}}</p>
+          </ion-col>
+          <ion-col col-2 class="ver-center">
+              <button #menu ion-button icon-left icon-only clear class="pop-icon" (click)="open(slidingItem, item ,count,menu)">
+                <ion-icon name="ios-more" class="fnt-18 padding0"></ion-icon>
+              </button>
+          </ion-col>
+        </ion-row>
+      </ion-item>
+
+      <ion-item-options side="right" (click)="close(slidingItem,menu)">
+        <button ion-button clear color="danger"><ion-icon name="close" class="fnt-24 padding-bottom0"></ion-icon></button>
+        <button ion-button clear color="primary"><i class="material-icons fnt-24">transfer_within_a_station</i></button>
+        <button ion-button clear color="clr-blue"><i class="material-icons fnt-24">assignment_ind</i></button>
+      </ion-item-options>
+    </ion-item-sliding>
+    </div>
   </ion-list>
 
   <ion-infinite-scroll *ngIf="page<totalPages"  (ionInfinite)="doInfinite($event)">

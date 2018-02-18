@@ -234,6 +234,32 @@ public class SchedulerService extends AbstractService {
 			schedulerConfigRepository.save(weeklyTasks);
 		}
 	}
+	
+	@Scheduled(initialDelay = 60000, fixedRate = 1800000) //Runs every day at 00:00
+	//@Scheduled(cron="30 * * * * ?") //Test to run every 30 seconds
+	public void runMonthlyTask() {
+		Calendar cal = Calendar.getInstance();
+		cal.set(Calendar.HOUR_OF_DAY,0);
+		cal.set(Calendar.MINUTE,0);
+		List<SchedulerConfig> monthlyTasks = schedulerConfigRepository.getMonthlyTask(cal.getTime());
+		log.debug("Found {} Monthly Tasks", monthlyTasks.size());
+
+		if(CollectionUtils.isNotEmpty(monthlyTasks)) {
+			for (SchedulerConfig monthlyTask : monthlyTasks) {
+				try {
+					boolean shouldProcess = false;
+					Calendar today = Calendar.getInstance();
+					if(today.get(Calendar.DAY_OF_WEEK) == monthlyTask.getScheduleMonthlyDay()) {
+						processMonthlyTasks(monthlyTask);
+					}
+				} catch (Exception ex) {
+					log.warn("Failed to create JOB ", ex);
+				}
+
+			}
+			schedulerConfigRepository.save(monthlyTasks);
+		}
+	}
 
 	//@Scheduled(initialDelay = 60000,fixedRate = 300000) //Runs every 15 mins
 	public void overDueTaskCheck() {
@@ -441,6 +467,16 @@ public class SchedulerService extends AbstractService {
 			weeklyTask.setLastRun(new Date());
 		} else {
 			log.warn("Unknown scheduler config type job" + weeklyTask);
+		}
+	}
+
+	private void processMonthlyTasks(SchedulerConfig monthlyTask) {
+		if ("CREATE_JOB".equals(monthlyTask.getType())) {
+
+			jobCreationTask(monthlyTask.getJob(), monthlyTask.getData(),new Date());
+			monthlyTask.setLastRun(new Date());
+		} else {
+			log.warn("Unknown scheduler config type job" + monthlyTask);
 		}
 	}
 

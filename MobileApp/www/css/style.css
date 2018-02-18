@@ -588,8 +588,8 @@ a:hover, a:focus
 }
 .icon-round
 {
-  width: 100% !important;
-  height: 62% !important;
+  width: 100px !important;
+  height: 45px !important;
   border-radius: 50% !important;
 }
 .icon-round-green
@@ -705,9 +705,20 @@ ion-fab-list
   padding-top: 20px;
 }
 ion-spinner{
-  width: 12px !important;
-  height: 15px !important;
-  margin-left: 15px !important;
-  stroke: #ff9800;
-  fill:#ff9800;
+  width: 20px !important;
+  height: 20px !important;
+  stroke: #ff9800 !important;
+  fill:#ff9800 !important;
+}
+.margin-right15
+{
+  margin-right: 15px;
+}
+.emp .item-md.item-block .item-inner
+{
+  padding-right: 0 !important;
+}
+.emp .label-md
+{
+  margin: 0 !important;
 }

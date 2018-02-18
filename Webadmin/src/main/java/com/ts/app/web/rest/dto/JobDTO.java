@@ -58,6 +58,8 @@ public class JobDTO extends BaseDTO {
 	private boolean scheduleWeeklyThursday;
 	private boolean scheduleWeeklyFriday;
 	private boolean scheduleWeeklySaturday;
+	
+	private int scheduleMonthlyDay;
 
 	private boolean scheduled;
 
@@ -338,4 +340,12 @@ public class JobDTO extends BaseDTO {
     public void setRelieved(boolean relieved) {
         this.relieved = relieved;
     }
+	public int getScheduleMonthlyDay() {
+		return scheduleMonthlyDay;
+	}
+	public void setScheduleMonthlyDay(int scheduleMonthlyDay) {
+		this.scheduleMonthlyDay = scheduleMonthlyDay;
+	}
+    
+    
 }
