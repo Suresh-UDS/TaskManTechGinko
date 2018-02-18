@@ -39,7 +39,11 @@
                                                 <tr>
                                                     <td>Checklist</td>
                                                     <td>
-                                                       {{}}
+                                                        <ul class="checkList">
+                                                            <li ng-repeat="checklist in checklists">
+                                                                {{checklist.name}}
+                                                            </li>
+                                                        </ul>
                                                     </td>
 
                                                 </tr>
@@ -47,11 +51,7 @@
 
                                                     <td>Site </td>
                                                     <td>
-                                                        <ul>
-                                                            <li>
-                                                                {{job.siteName}}
-                                                            </li>
-                                                        </ul>
+                                                        {{job.siteName}}
                                                     </td>
 
                                                 </tr>

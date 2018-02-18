@@ -10,6 +10,15 @@ ul li
 {
   list-style:none;
 }
+ul.checkList li
+{
+      padding: 2px 4px;
+      background: #eeeeee;
+      float: left;
+      margin: 2px 3px;
+      border-radius: 5px;
+      font-size: 11px;
+}
 .box {
     position: relative;
     overflow: hidden;
