@@ -503,13 +503,13 @@ angular.module('timeSheetApp')
         		$scope.errorProject = null;
         	}else
         	*/
-        	if(!$scope.selectedManager.id){
-                             $scope.errorManager = "true";
-                             $scope.errorSite = null;
-            }else {
+//        	if(!$scope.selectedManager.id){
+//                             $scope.errorManager = "true";
+//                             $scope.errorSite = null;
+//            }else {
 	        	$scope.employee.projectId = $scope.selectedProject.id;
 	        	$scope.employee.siteId = $scope.selectedSite.id;
-	        	$scope.employee.managerId = $scope.selectedManager.id;
+	        	$scope.employee.managerId = $scope.selectedManager ? $scope.selectedManager.id : 0;
             	if($scope.projectSiteList) {
             		$scope.employee.projectSites = $scope.projectSiteList;
             	}
@@ -531,7 +531,7 @@ angular.module('timeSheetApp')
                         $scope.showNotifications('top','center','danger','Unable to Update employee, Please try again later..');
                     }
                 });
-        	}
+        	//}
         };
 
         $scope.deleteConfirm = function (employee){

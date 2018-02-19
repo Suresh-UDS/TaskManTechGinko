@@ -6,7 +6,6 @@ angular.module('timeSheetApp')
         $scope.$state = $state;
         $scope.inProduction = ENV === 'prod';
         console.log('admin -'+$state.includes('admin'));
-
         $scope.logout = function () {
             Auth.logout();
             $state.go('login');

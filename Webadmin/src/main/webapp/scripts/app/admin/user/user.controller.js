@@ -113,8 +113,8 @@ angular.module('timeSheetApp')
 	                $scope.user = data;
 	                $scope.selectedRole = {id : data.userRoleId, name : data.userRoleName}
 	                $scope.selectedEmployee = {id : data.employeeId,name : data.employeeName}
+		        	console.log('selectedEmployee - ' + JSON.stringify($scope.selectedEmployee));
 	            });
-
         };
 
         $scope.updateUser = function () {
