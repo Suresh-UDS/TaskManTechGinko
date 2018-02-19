@@ -232,7 +232,9 @@ Tip 2: you can also add an image using data-image tag
                             <ion-refresher (ionRefresh)="doRefresh($event,all)">
                                 <ion-refresher-content></ion-refresher-content>
                             </ion-refresher>
-                            <div  class="white-bg" *ngFor="let job of allJobs" >
+                            <div  class="white-bg" *ngFor="let job of allJobs; let i = index" >
+                                <div *ngIf="job.status == 'OVERDUE'">
+
                                 <div class="padding-left16 padding-top5">
                                     <ion-row class="margin0">
 
@@ -286,7 +288,7 @@ Tip 2: you can also add an image using data-image tag
                                         <!--</div>-->
                                     </ion-item>
 
-
+                                </div>
                             </div>
                         </ion-list>
 
@@ -297,7 +299,8 @@ Tip 2: you can also add an image using data-image tag
                             <ion-refresher-content></ion-refresher-content>
                         </ion-refresher>
                         <div  class="white-bg" *ngFor="let job of allJobs" >
-                            <div class="padding-left16 padding-top5">
+                            <div *ngIf="job.status =='OPEN' || job.status == 'ASSIGNED' || job.status == 'INPROGRESS'">
+                            <div class="padding-left16 padding-top5" >
                                 <ion-row class="margin0">
 
                                     <ion-col col-2 class="ver-center">
@@ -345,7 +348,7 @@ Tip 2: you can also add an image using data-image tag
                                 <!--</div>-->
                             </ion-item>
 
-
+                            </div>
                         </div>
                     </ion-list>
 
@@ -355,10 +358,12 @@ Tip 2: you can also add an image using data-image tag
                             <ion-refresher-content></ion-refresher-content>
                         </ion-refresher>
                         <div  class="white-bg" *ngFor="let job of allJobs" >
+                            <div *ngIf="job.status =='COMPLETED'">
                             <div class="padding-left16 padding-top5">
                                 <ion-row class="margin0">
 
                                     <ion-col col-2 class="ver-center">
+
                                         <button ion-button clear color="primary" class="icon-round"
                                                 [ngClass]="{'icon-round-red' : (job.status == 'OVERDUE'),
                                                           'icon-round-green' : (job.status == 'COMPLETED'),
@@ -408,11 +413,9 @@ Tip 2: you can also add an image using data-image tag
                                 <!--</div>-->
                             </ion-item>
 
-
+                            </div>
                         </div>
                     </ion-list>
-
-
                 </div>
             </ion-col>
           </div>
