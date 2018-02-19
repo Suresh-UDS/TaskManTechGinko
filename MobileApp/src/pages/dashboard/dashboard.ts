@@ -187,14 +187,11 @@ export class DashboardPage {
         console.log("Selected Site Id");
         console.log(id);
         this.selectSite=true;
-<<<<<<< HEAD
         this.searchCriteria={
             siteId:id
         };
         this.searchJobs(this.searchCriteria);
-=======
         this.empSpinner=true;
->>>>>>> 9ca77d5a19ff536c2c95d0b763042d337e94c386
         this.siteService.searchSiteEmployee(id).subscribe(
             response=> {
                 console.log(response.json());

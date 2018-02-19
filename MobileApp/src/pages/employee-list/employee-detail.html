@@ -67,6 +67,13 @@
       <ion-refresher (ionRefresh)="doRefresh($event,job)">
         <ion-refresher-content></ion-refresher-content>
       </ion-refresher>
+      <div *ngIf="jobs?.length<0">
+        <ion-card>
+          <ion-card-content>
+            No Jobs
+          </ion-card-content>
+        </ion-card>
+      </div>
       <div  class="white-bg" *ngFor="let job of jobs" >
         <div class="padding-left16 padding-top5">
           <ion-row class="margin0">
