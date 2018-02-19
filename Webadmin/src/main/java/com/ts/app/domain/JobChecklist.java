@@ -5,6 +5,7 @@ import java.io.Serializable;
 import javax.persistence.Cacheable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
@@ -42,7 +43,7 @@ public class JobChecklist extends AbstractAuditingEntity implements Serializable
 	@Column(name = "checklist_item_name")
 	private String checklistItemName;
 	
-	@ManyToOne()
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "job_id")
 	private Job job;
 	

@@ -27,6 +27,12 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long> {
 	@Query("SELECT e FROM Employee e join e.sites s WHERE s.id = :siteId")
 	List<Employee> findBySiteId(@Param("siteId") long siteId);
 
+	@Query("SELECT e FROM Employee e join e.projectSites s WHERE s.siteId IN (:siteIds)")
+	List<Employee> findBySiteIds(@Param("siteIds") List<Long> siteIds);
+
+	@Query("SELECT e FROM Employee e join e.projectSites s WHERE s.siteId IN (:siteIds)")
+	Page<Employee> findBySiteIds(@Param("siteIds") List<Long> siteIds, Pageable pageRequest);
+
 	@Query("SELECT e FROM Employee e join e.sites s WHERE s.id = :siteId and e.id IN (:empIds)")
 	List<Employee> findBySiteIdAndEmpIds(@Param("siteId") long siteId, @Param("empIds") List<Long> empIds);
 

@@ -645,10 +645,20 @@ public class    EmployeeService extends AbstractService {
 	            	if(user.getUserRole().getName().equalsIgnoreCase(UserRoleEnum.ADMIN.toValue())) {
 	            		page = employeeRepository.findAll(pageRequest);
 	            	}else {
-	            		List<Long> subEmpIds = null;
-	            		subEmpIds = findAllSubordinates(user.getEmployee(), subEmpIds);
-						
-	            		page = employeeRepository.findAllByEmpIds(subEmpIds, pageRequest);
+	            		List<EmployeeProjectSite> projectSites = user.getEmployee().getProjectSites();
+	            		if(CollectionUtils.isNotEmpty(projectSites)) {
+	            			List<Long> siteIds = new ArrayList<Long>();
+	            			for(EmployeeProjectSite projSite : projectSites) {
+	            				siteIds.add(projSite.getSiteId());
+	            			}
+	            			page = employeeRepository.findBySiteIds(siteIds, pageRequest);
+	            		}else {
+		            		List<Long> subEmpIds = null;
+		            		subEmpIds = findAllSubordinates(user.getEmployee(), subEmpIds);
+						if(CollectionUtils.isNotEmpty(subEmpIds)) {	
+		            			page = employeeRepository.findAllByEmpIds(subEmpIds, pageRequest);
+						}
+	            		}
 	            	}
             }
 

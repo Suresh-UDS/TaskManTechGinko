@@ -29,6 +29,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.ts.app.domain.AbstractAuditingEntity;
 import com.ts.app.domain.Asset;
 import com.ts.app.domain.Employee;
+import com.ts.app.domain.EmployeeProjectSite;
 import com.ts.app.domain.Job;
 import com.ts.app.domain.JobChecklist;
 import com.ts.app.domain.JobStatus;
@@ -288,7 +289,20 @@ public class JobManagementService extends AbstractService {
 	        	}else {
 	        		if(!searchCriteria.isConsolidated()) {
 	        			page = jobRepository.findAll(new JobSpecification(searchCriteria,isAdmin),pageRequest);
-	        			allJobsList.addAll(page.getContent());
+	        			if(CollectionUtils.isEmpty(page.getContent())) {
+		            		List<EmployeeProjectSite> projectSites = employee.getProjectSites();
+		            		if(CollectionUtils.isNotEmpty(projectSites)) {
+		            			List<Long> siteIds = new ArrayList<Long>();
+		            			for(EmployeeProjectSite projSite : projectSites) {
+		            				siteIds.add(projSite.getSiteId());
+		            			}
+		            			page = jobRepository.findByStartDateAndSites(siteIds, pageRequest);
+		            			allJobsList.addAll(page.getContent());
+		            		}
+	        				
+	        			}else {
+	            			allJobsList.addAll(page.getContent());
+	            		}
 	        		}else {
 		        		List<Site> allSites = siteRepository.findAll();
 		        		for(Site site : allSites) {
