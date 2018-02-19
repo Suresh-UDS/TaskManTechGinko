@@ -1,5 +1,5 @@
 import { Component, Input, ViewChild, ElementRef, Renderer } from '@angular/core';
-import {LoadingController, ModalController, NavController} from 'ionic-angular';
+import {Events, LoadingController, ModalController, NavController} from 'ionic-angular';
 import {authService} from "../service/authService";
 import {DatePickerProvider} from "ionic2-date-picker";
 import {componentService} from "../service/componentService";
@@ -10,6 +10,8 @@ import {CreateRateCardPage} from "../rate-card/create-rate-card";
 import {CreateJobPage} from "../jobs/add-job";
 import {CreateQuotationPage} from "../quotation/create-quotation";
 import {CreateEmployeePage} from "../employee-list/create-employee";
+import {AttendancePage} from "../attendance/attendance";
+import {CompleteJobPage} from "../jobs/completeJob";
 declare var demo;
 @Component({
   selector: 'page-dashboard',
@@ -31,10 +33,16 @@ export class DashboardPage {
     firstLetter:any;
     selectDate:any;
     selectSite:any;
-    empSelect:any
+    empSelect:any;
+    userType:any;
   constructor(public renderer: Renderer,public myService:authService,private loadingCtrl:LoadingController,public navCtrl: NavController,public component:componentService,public authService:authService,public modalCtrl: ModalController,
-              private datePickerProvider: DatePickerProvider, private siteService:SiteService, private employeeService: EmployeeService, private jobService:JobService) {
+              private datePickerProvider: DatePickerProvider, private siteService:SiteService, private employeeService: EmployeeService, private jobService:JobService, public events:Events) {
 
+      this.events.subscribe('userType',(type)=>{
+          console.log("User type event");
+          console.log(type);
+          this.userType = type;
+      })
     this.categories='overdue';
     this.selectDate=new Date();
     this.searchCriteria={};
@@ -155,6 +163,9 @@ export class DashboardPage {
         {
             this.navCtrl.push(CreateEmployeePage);
         }
+        else if(fab =='attendance'){
+            this.navCtrl.push(AttendancePage);
+        }
     }
 
     showCalendar() {
@@ -187,14 +198,11 @@ export class DashboardPage {
         console.log("Selected Site Id");
         console.log(id);
         this.selectSite=true;
-<<<<<<< HEAD
         this.searchCriteria={
             siteId:id
         };
         this.searchJobs(this.searchCriteria);
-=======
         this.empSpinner=true;
->>>>>>> 9ca77d5a19ff536c2c95d0b763042d337e94c386
         this.siteService.searchSiteEmployee(id).subscribe(
             response=> {
                 console.log(response.json());
@@ -217,6 +225,11 @@ export class DashboardPage {
                 console.log(error);
                 console.log(this.employee);
             })
+    }
+
+    compeleteJob(job)
+    {
+        this.navCtrl.push(CompleteJobPage,{job:job})
     }
 
 }

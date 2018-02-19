@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import {Item, ItemSliding, LoadingController, NavController} from 'ionic-angular';
+import {Events, Item, ItemSliding, LoadingController, NavController} from 'ionic-angular';
 import {authService} from "../service/authService";
 import {ViewJobPage} from "./view-job";
 import {componentService} from "../service/componentService";
@@ -23,11 +23,18 @@ export class JobsPage {
     today="today";
     ref=false;
     count=0;
+    userType:any;
 
     constructor(public navCtrl: NavController,public component:componentService, public authService: authService,
-                    private loadingCtrl:LoadingController, private actionSheetCtrl: ActionSheetController, private jobService: JobService) {
+                    private loadingCtrl:LoadingController, private actionSheetCtrl: ActionSheetController, private jobService: JobService, public events:Events) {
         this.categories = 'today';
         this.loadTodaysJobs();
+
+        this.events.subscribe('userType',(type)=>{
+            console.log("User type event");
+            console.log(type);
+            this.userType = type;
+        });
     }
 
     ionViewDidLoad() {
@@ -100,7 +107,11 @@ export class JobsPage {
             console.log(response);
             this.todaysJobs = response;
             this.component.closeLoader();
-        })
+        },err=>{
+            this.component.closeLoader();
+            this.component.showToastMessage('Unable to fetch todays jobs','bottom');
+        }
+        )
     }
 
     loadAllJobs(){
@@ -111,7 +122,11 @@ export class JobsPage {
             console.log(response);
             this.allJobs = response;
             this.component.closeLoader();
-        })
+        },
+            err=>{
+            this.component.closeLoader();
+            this.component.showToastMessage('Unable to fetch Jobs','bottom');
+            })
     }
 
     addJob()

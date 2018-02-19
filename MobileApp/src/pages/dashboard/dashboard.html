@@ -13,21 +13,26 @@
         <button ion-fab color="dark">
             <ion-icon name="md-add" class="clr-orange"></ion-icon>
         </button>
-        <ion-fab-list side="top" fab-list-margin>
-            <ion-label color="dark" class="margin0">Quotation</ion-label>
-            <button ion-fab color="primary" (click)="fabClick('quotation')">
+        <ion-fab-list side="top" fab-list-margin >
+            <ion-label color="dark" class="margin0" *ngIf="userType === 'ADMIN' || userType === 'TECHNICIAN' || userType === 'FACILITYMANAGER' || userType === 'SUPERVISOR'">Quotation</ion-label>
+            <button ion-fab color="primary" *ngIf="userType === 'ADMIN' || userType === 'TECHNICIAN' || userType === 'FACILITYMANAGER' || userType === 'SUPERVISOR'" (click)="fabClick('quotation')">
                 <i class="material-icons clr-blk">receipt</i>
             </button>
-            <ion-label color="dark" class="margin0">Job</ion-label>
+            <ion-label color="dark"  class="margin0">Job</ion-label>
             <button ion-fab color="primary" (click)="fabClick('job')">
                 <i class="material-icons clr-blk">description</i>
             </button>
-            <ion-label color="dark" class="margin0">Employee</ion-label>
-            <button ion-fab color="primary" (click)="fabClick('employee')">
+
+            <ion-label *ngIf="userType === 'ADMIN' || userType === 'TECHNICIAN' || userType === 'FACILITYMANAGER' || userType === 'SUPERVISOR'"  color="dark"  class="margin0">Attendance</ion-label>
+            <button *ngIf="userType === 'ADMIN' || userType === 'TECHNICIAN' || userType === 'FACILITYMANAGER' || userType === 'SUPERVISOR'"  ion-fab color="primary" (click)="fabClick('attendance')">
+                <i class="material-icons clr-blk">content_paste</i>
+            </button>
+            <ion-label color="dark" *ngIf="userType === 'ADMIN' || userType === 'FACILITYMANAGER' || userType === 'SUPERVISOR'" class="margin0">Employee</ion-label>
+            <button ion-fab color="primary" *ngIf="userType === 'ADMIN' || userType === 'FACILITYMANAGER' || userType === 'SUPERVISOR'" (click)="fabClick('employee')">
                 <i class="material-icons clr-blk">people</i>
             </button>
-            <ion-label color="dark" class="margin0">Rate Card</ion-label>
-            <button ion-fab color="primary" (click)="fabClick('ratecard')">
+            <ion-label *ngIf="userType === 'ADMIN' || userType === 'TECHNICIAN' || userType === 'FACILITYMANAGER' || userType === 'SUPERVISOR'"   color="dark" class="margin0">Rate Card</ion-label>
+            <button *ngIf="userType === 'ADMIN' || userType === 'TECHNICIAN' || userType === 'FACILITYMANAGER' || userType === 'SUPERVISOR'"  ion-fab color="primary" (click)="fabClick('ratecard')">
                 <i class="material-icons clr-blk">description</i>
             </button>
         </ion-fab-list>
@@ -240,7 +245,7 @@ Tip 2: you can also add an image using data-image tag
                                             </button>
                                         </ion-col>
                                         <ion-col col-10 class="padding-left5">
-                                            <div class="border-btm padding-bottom5 ln-ght20" text-capitalize>
+                                            <div class="border-btm padding-bottom5 ln-ght20" text-capitalize (click)="compeleteJob(job)">
                                                 <p text-left class="margin0">{{job.title}}</p>
                                                 <p text-left class="margin0">{{job.employeeName}}</p>
                                                 <p text-left class="margin0">{{job.siteProjectName}} - {{job.siteName}}</p>
@@ -304,7 +309,7 @@ Tip 2: you can also add an image using data-image tag
                                         </button>
                                     </ion-col>
                                     <ion-col col-10 class="padding-left5">
-                                        <div class="border-btm padding-bottom5 ln-ght20" text-capitalize>
+                                        <div class="border-btm padding-bottom5 ln-ght20" text-capitalize (click)="completeJob(job)">
                                             <p text-left class="margin0">{{job.title}}</p>
                                             <p text-left class="margin0">{{job.employeeName}}</p>
                                             <p text-left class="margin0">{{job.siteProjectName}} - {{job.siteName}}</p>
