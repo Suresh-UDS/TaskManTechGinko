@@ -168,13 +168,11 @@ export class EmployeeListPage {
         if(c==1)
         {
             this.count=0;
-            console.log('------------:'+this.count);
             menu.setElementStyle("display", "block")
         }
         else
         {
             this.count=1;
-            console.log('------------:'+this.count);
             itemSlide.setElementClass("active-sliding", true);
             itemSlide.setElementClass("active-slide", true);
             itemSlide.setElementClass("active-options-right", true);
@@ -184,6 +182,7 @@ export class EmployeeListPage {
 
     }
     close(item: ItemSliding,menu:Button) {
+        this.count=0;
         item.close();
         item.setElementClass("active-sliding", false);
         item.setElementClass("active-slide", false);
@@ -191,5 +190,19 @@ export class EmployeeListPage {
         menu.setElementStyle("display", "block")
     }
 
+    drag(menu,e)
+    {
 
+        let percent = e.getSlidingPercent();
+        console.log("Drag:"+percent);
+        if(percent==1)
+        {
+            menu.setElementStyle("display", "none")
+
+        }
+        else
+        {
+            menu.setElementStyle("display", "block")
+        }
+    }
 }
