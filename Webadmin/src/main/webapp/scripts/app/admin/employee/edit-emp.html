@@ -161,7 +161,7 @@
                                                     <label class="control-label">Last Name</label>
                                                     <input id='employeeLastName' ng-model="employee.lastName" class='form-control'
                                                            name='employeeLastName' type='text' value=""
-                                                           ng-minlength=2 ng-maxlength=50 ng-pattern="/^[A-Za-z0-9\s&-/]*$/" required />
+                                                           ng-minlength=1 ng-maxlength=50 ng-pattern="/^[A-Za-z0-9\s&-/]*$/" required />
                                                     <div ng-show="form.$submitted || form.employeeLastName.$touched">
                                                         <div ng-show="form.employeeLastName.$dirty || form.employeeLastName.$invalid">
                                                             <p class="help-block" style="color:maroon"

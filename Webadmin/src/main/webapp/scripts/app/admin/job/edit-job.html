@@ -421,6 +421,11 @@
                                                                 <input type="radio" id="schedule" name="shedule" ng-model="job.schedule" value="WEEKLY" required> Weekly
                                                             </label>
                                                         </div>
+                                                        <div class="radio radio-inline">
+                                                            <label>
+                                                                <input type="radio" id="schedule" name="shedule" ng-model="job.schedule" value="MONTHLY" required> Monthly
+                                                            </label>
+                                                        </div>
                                                         <div ng-show="form.$submitted || form.schedule.$touched">
                                                             <div ng-show="form.schedule.$dirty || form.schedule.$invalid">
                                                                 <p class="help-block" style="color:maroon"
@@ -485,6 +490,13 @@
                                                                 <input type="checkbox" id="weeklySaturday" name="weeklySaturday" ng-model="job.scheduleWeeklySaturday" value="true" checked="job.scheduleWeeklySaturday">Sat
                                                             </label>
                                                         </div>
+                                                    </div>
+                                                    
+                                                    <div class="" ng-show="job.schedule == 'MONTHLY'">
+                                                    		<select class="form-control " ng-model="job.scheduleMonthlyDay"  ng-options="day as day for day in monthDays">
+                                                            <option value="">Please select the day of month...</option>
+                                                         </select>
+                                                    
                                                     </div>
 
                                                     <div ng-show="(form.$submitted || form.schedule.$touched) && (form.schedule == 'DAILY' || form.schedule == 'WEEKLY')">
