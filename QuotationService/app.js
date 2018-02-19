@@ -9,7 +9,7 @@ var quotation = require('./schema/quotation')();
 var rateCard = require('./schema/rateCard')();
 var rateCardType = require('./schema/rateCardType')();
 var notification = require('./schema/notification')();
-var controllers = require('./controller');
+//var controllers = require('./controller');
 var quotationController = require('./quotationController');
 var notificationService = require('./notifications/notificationService');
 var Location = mongoose.model('Quotation');
@@ -52,21 +52,17 @@ function startup(){
     app.use(express.bodyParser());
     app.use(express.methodOverride());
     app.use(app.router);
+
   });
 
   app.use(function(req, res, next){
-      res.setHeader('Access-Control-Allow-Origin', 'http://localhost:8088');
-  
-      res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
-  
-      res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
-  
-      res.setHeader('Access-Control-Allow-Credentials', true);
-  
+      res.header("Access-Control-Allow-Origin", "*");
+      req.header("Access-Control-Allow-Origin", "*");
+      res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+      req.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
       next();
   });
 
-  app.use(cors({origin:'http://localhost:8088'}));
 
   // Define routes
   app.get('/', controllers.ping);
@@ -78,21 +74,28 @@ function startup(){
   app.post('/api/quotation/create', quotationController.createQuotation);
   app.post('/api/quotation/edit', quotationController.editQuotation);
   app.post('/api/quotation/send', quotationController.sendQuotation);
+  app.post('/api/quotation/approve',quotationController.approveQuotation);
   app.post('/api/rateCard/create', quotationController.createRateCard);
+
+  app.get('/api/quotation/:id',quotationController.getQuotationById);
+  app.get('/api/quotation/search',quotationController.search);
   app.get('/api/quotation', quotationController.getQuotations);
+  app.post('/api/quotation', quotationController.getQuotations);
   app.get('/api/rateCard', quotationController.getRateCards);
+  app.post('/api/rateCard', quotationController.getRateCards);
   app.get('/api/pdf/create',quotationController.createPDF);
   app.get('/api/rateCardTypes',quotationController.getRateCardTypes);
+  app.post('/api/rateCard/delete',quotationController.deleteRateCard);
 
-  app.post('/api/oneSignal/send',notificationService.sendNotification);
-  app.post('/api/oneSignal/subscribe', notificationService.subscribe);
+  // app.post('/api/oneSignal/send',notificationService.sendNotification);
+  // app.post('/api/oneSignal/subscribe', notificationService.subscribe);
 
   // app.get('/api/rateCard/search',quotationController.getRateCardsPageWise);
   listen(server);
 }
 
 function listen(server){
-    var port = 8000;
+    var port = 8001;
     server.listen(port, function(err,result) {
       if (err)
           console.error(err);

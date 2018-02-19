@@ -17,372 +17,130 @@
 
                         <div class="row">
 
-                            <div class="col-md-6">
+                            <div class="col-md-4">
 
                                 <div class="panel panel-default">
-                                    <div class="panel-heading">Job</div>
+                                    <div class="panel-heading">Job Details</div>
                                     <div class="panel-body">
 
-                                        <div class="row">
 
-                                            <div class="col-md-4">
+                                        <div class="table-responsive">
+                                            <table class="table">
+                                                <tbody>
+                                                <tr>
+                                                    <td>Title</td>
+                                                    <td>{{job.title}}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Description</td>
+                                                    <td>{{job.description}}</td>
 
-                                                <div class="form-group">
-                                                    <label class="control-label">Title </label>
-                                                    <input id='jobName'
-                                                           ng-model="job.title"
-                                                           class='form-control'
-                                                           name='jobName'
-                                                           type='text' value=""
-                                                           ng-minlength='5'
-                                                           ng-maxlength='250'
-                                                           ng-pattern="/^[A-Za-z0-9\s]*$/" autofocus
-                                                           required readonly />
+                                                </tr>
+                                                <tr>
+                                                    <td>Checklist</td>
+                                                    <td>
+                                                        <ul class="checkList">
+                                                            <li ng-repeat="checklist in checklists">
+                                                                {{checklist.name}}
+                                                            </li>
+                                                        </ul>
+                                                    </td>
 
-                                                    <div ng-show="form.$submitted || form.jobName.$touched">
-                                                        <div ng-show="form.jobName.$dirty || form.jobName.$invalid">
-                                                            <p class="help-block" style="color:maroon"
-                                                               ng-show="form.jobName.$error.required">
-                                                                Job Title is required.
-                                                            </p>
-                                                            <p class="help-block" style="color:maroon"
-                                                               ng-show="form.jobName.$error.minlength">
-                                                                Job Title is required to be at least 5 character.
-                                                            </p>
-                                                            <p class="help-block" style="color:maroon"
-                                                               ng-show="form.jobName.$error.maxlength">
-                                                                Job Title cannot be longer than 250 characters.
-                                                            </p>
-                                                            <p class="help-block" style="color:maroon"
-                                                               ng-show="form.jobName.$error.pattern">
-                                                                job Title can only contain letters, digits and space.
-                                                            </p>
-                                                        </div>
-                                                    </div>
-                                                </div>
+                                                </tr>
+                                                <tr>
 
-                                            </div>
-                                            <div class="col-md-8">
-                                                <div class="form-group">
-                                                    <label class="control-label">Description </label>
-                                            <textarea
-                                                ng-model="job.description"
-                                                class='form-control'
-                                                name='jobDesc'
-                                                ng-maxlength='2500'
-                                                ng-pattern="/^[a-zA-Z0-9 _\\\/.’'\-,#:]+$/" readonly
-                                            ></textarea>
+                                                    <td>Site </td>
+                                                    <td>
+                                                        {{job.siteName}}
+                                                    </td>
 
-                                                    <div ng-show="form.$submitted || form.jobDesc.$touched">
-                                                        <div ng-show="form.jobDesc.$dirty || form.jobDesc.$invalid">
-                                                            <p class="help-block" style="color:maroon"
-                                                               ng-show="form.jobDesc.$error.maxlength">
-                                                                Job name cannot be longer than 2500 characters.
-                                                            </p>
-                                                            <p class="help-block" style="color:maroon"
-                                                               ng-show="form.jobDesc.$error.pattern">
-                                                                Job name can only contain letters, digits, few special characters and space.
-                                                            </p>
-                                                        </div>
-                                                    </div>
-                                                </div>
+                                                </tr>
+                                                <tr>
 
-                                            </div>
+                                                    <td>Location</td>
+                                                    <td>{{job.locationName}}</td>
 
-                                            <div class="col-md-6">
-                                                <div class="form-group">
-                                                    <label class="control-label">Checklist</label>
-                                                    <div class="dropdown">
-                                                        <!--<input type="text"-->
-                                                        <!--class="form-control"-->
-                                                        <!--name='checklist'-->
-                                                        <!--ng-model="selectedChecklist"-->
-                                                        <!--ng-change="onSelectChecklist()"-->
-                                                        <!--uib-typeahead="checklist as checklist.name for checklist in checklists | filter:$viewValue | limitTo:5"-->
-                                                        <!--autocomplete="off" />-->
-                                                        <select class="form-control " ng-model="selectedChecklist"  ng-options="checklist as checklist.name for checklist in checklists">
-                                                            <option value="">Please select Checklist...</option>
-                                                        </select>
-                                                    </div>
-                                                </div>
+                                                </tr>
+                                                <tr>
 
-                                            </div>
+                                                    <td>Employee</td>
+                                                    <td>{{job.employeeName}}</td>
 
-                                            <div class="col-md-6">
-                                                <div class="form-group">
-                                                    <label class="control-label">Site </label>
-                                                    <div class="dropdown">
-                                                        <!--<input type="text"-->
-                                                        <!--class="form-control"-->
-                                                        <!--name='siteName'-->
-                                                        <!--ng-model="selectedSite"-->
-                                                        <!--uib-typeahead="site as site.name for site in sites | filter:$viewValue | limitTo:5"-->
-                                                        <!--required-->
-                                                        <!--autocomplete="off" />-->
+                                                </tr>
+                                                <tr>
 
-                                                        <select class="form-control " ng-model="selectedSite"  ng-options="site as site.name for site in sites">
-                                                            <option value="">Please select Site...</option>
-                                                        </select>
-                                                        <div ng-show="form.$submitted || form.siteName.$touched">
-                                                            <div
-                                                                ng-show="form.siteName.$dirty || form.siteName.$invalid">
-                                                                <p class="help-block" style="color: maroon"
-                                                                   ng-show="form.siteName.$error.required">Site
-                                                                    is required.</p>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
+                                                    <td>Asset</td>
+                                                    <td>{{job.assetTitle}}</td>
 
-                                            </div>
+                                                </tr>
 
 
+                                                </tbody>
+                                            </table>
                                         </div>
-                                        <div class="row">
 
 
-                                            <div class="col-md-6">
-                                                <div class="form-group">
-                                                    <label class="control-label">Location </label>
-                                                    <div class="dropdown">
-                                                        <!--<input type="text"-->
-                                                        <!--class="form-control"-->
-                                                        <!--name='location'-->
-                                                        <!--ng-model="selectedLocation"-->
-                                                        <!--uib-typeahead="location as location.name for location in locations | filter:$viewValue | limitTo:5"-->
-                                                        <!--required-->
-                                                        <!--autocomplete="off" />-->
-
-                                                        <select class="form-control " ng-model="selectedLocation"  ng-options="location as location.name for location in locations">
-                                                            <option value="">Please select Location...</option>
-                                                        </select>
-                                                        <div ng-show="form.$submitted || form.location.$touched">
-                                                            <div
-                                                                ng-show="form.location.$dirty || form.location.$invalid">
-                                                                <p class="help-block" style="color: maroon"
-                                                                   ng-show="form.location.$error.required">Location
-                                                                    is required.</p>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                            </div>
-                                            <div class="col-md-6">
-                                                <div class="form-group">
-                                                    <label class="control-label">Employee </label>
-                                                    <div class="dropdown">
-                                                        <!--<input type="text"-->
-                                                        <!--class="form-control"-->
-                                                        <!--name='employeeName'-->
-                                                        <!--ng-model="selectedEmployee"-->
-                                                        <!--uib-typeahead="emp as emp.name for emp in employees | filter:$viewValue | limitTo:5"-->
-                                                        <!--required-->
-                                                        <!--autocomplete="off" />-->
-
-                                                        <select class="form-control " ng-model="selectedEmployee"  ng-options="emp as emp.name for emp in employees">
-                                                            <option value="">Please select Employees...</option>
-                                                        </select>
-
-                                                        <div ng-show="form.$submitted || form.employeeName.$touched">
-                                                            <div
-                                                                ng-show="form.employeeName.$dirty || form.employeeName.$invalid">
-
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                            </div>
-
-
-                                        </div>
-                                        <div class="row">
-
-                                            <div class="col-md-12">
-                                                <div class="form-group">
-                                                    <label class="control-label">Asset </label>
-                                                    <div class="dropdown">
-                                                        <input type="text"
-                                                               class="form-control"
-                                                               name='asset'
-                                                               ng-model="selectedAsset"
-                                                               uib-typeahead="asset as asset.title for asset in assets | filter:$viewValue | limitTo:5"
-                                                               autocomplete="off" />
-                                                        <div ng-show="form.$submitted || form.location.$touched">
-                                                            <div
-                                                                ng-show="form.asset.$dirty || form.asset.$invalid">
-                                                                <p class="help-block" style="color: maroon"
-                                                                   ng-show="form.asset.$error.required">Asset
-                                                                    is required.</p>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                            </div>
-
-                                        </div>
 
                                     </div>
                                 </div>
 
 
                             </div>
-                            <div class="col-md-6">
+                            <div class="col-md-4">
 
                                 <div class="panel panel-default">
                                     <div class="panel-heading">Plan</div>
                                     <div class="panel-body">
 
-                                        <div class="row">
-                                            <div class="col-md-12">
 
-                                                <div class="form-group">
-                                                    <label class="label-control">Start date</label>
-                                                    <span class="form-control-feedback calender-icon"><i class="material-icons">date_range</i></span>
-                                                    <input type="text"  ng-model="job.plannedStartTime"  name='plannedStartDate' class="form-control datetimepicker"  id="dateFilterFrom"  placeholder="{{dateFilterFrom | date:'dd-MMM-yyyy'}}" readonly />
+                                        <div class="table-responsive">
+                                            <table class="table">
+                                                <tbody>
+                                                <tr>
+                                                    <td>Start date</td>
+                                                    <td>{{job.plannedStartTime}}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>End date</td>
+                                                    <td>{{job.plannedEndTime}}</td>
 
-                                                </div>
+                                                </tr>
+                                                <tr>
+                                                    <td>Hours</td>
+                                                    <td>
+                                                        {{job.plannedHours}}
+                                                    </td>
+
+                                                </tr>
+                                                <tr>
+
+                                                    <td>Status </td>
+                                                    <td>
+                                                       {{job.jobStatus}}
+                                                    </td>
+
+                                                </tr>
+                                                <tr>
+
+                                                    <td>Type </td>
+                                                    <td>
+                                                        {{job.jobType}}
+                                                    </td>
+
+                                                </tr>
+                                                <tr>
+
+                                                    <td>Comments </td>
+                                                    <td>
+                                                        {{job.comments}}
+                                                    </td>
+
+                                                </tr>
 
 
 
-                                            </div>
-                                            <div class="col-md-12">
-
-                                                <div class="form-group">
-                                                    <label class="label-control">End date</label>
-                                                    <span class="form-control-feedback calender-icon"><i class="material-icons">date_range</i></span>
-                                                    <input type="text"  ng-model="job.plannedEndTime"  name='plannedEndDate' class="form-control datetimepicker"  id="dateFilterFrom"  placeholder="{{dateFilterFrom | date:'dd-MMM-yyyy'}}" readonly/>
-
-                                                </div>
-
-
-
-                                            </div>
-
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-md-6">
-                                                <div class="form-group">
-                                                    <label class="control-label">Hours </label>
-                                                    <input
-                                                        ng-model="job.plannedHours"
-                                                        class='form-control'
-                                                        name='plannedHours'
-                                                        type="number"
-                                                        required readonly
-                                                    ></textarea>
-
-                                                    <div ng-show="form.$submitted || form.plannedHours.$touched">
-                                                        <div
-                                                            ng-show="form.plannedHours.$dirty || form.plannedHours.$invalid">
-                                                            <p class="help-block" style="color:maroon"
-                                                               ng-show="form.plannedHours.$error.required">
-                                                                Required
-                                                            </p>
-
-                                                            <!-- <p class="help-block" style="color: maroon"
-                                                                ng-show="form.plannedHours.$error.pattern">job name can
-                                                                only contain letters, digits and space.</p> -->
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                            </div>
-                                            <div class="col-md-6">
-                                                <div class="form-group">
-                                                    <label class="control-label">Status </label>
-                                                    <select
-                                                        required readonly
-                                                        name="jobStatus"
-                                                        ng-model="job.jobStatus"
-                                                        class="form-control searchable-input floatL">
-                                                        <option>OPEN</option>
-                                                        <option>ASSIGNED</option>
-                                                        <option>INPROGRESS</option>
-                                                        <option>COMPLETED</option>
-                                                        <option></option>
-                                                    </select>
-                                                    <!-- <input type="text"
-                                                                    class="form-control searchable-input floatL"
-                                                                    ng-model="selectedStatus"
-                                                                    uib-typeahead="stat as stat.name for stat in status | filter:$viewValue | limitTo:5" />
-                     -->
-                                                    <div ng-show="form.$submitted || form.jobStatus.$touched">
-                                                        <div
-                                                            ng-show="form.jobStatus.$dirty || form.jobStatus.$invalid">
-
-                                                            <p class="help-block" style="color:maroon"
-                                                               ng-show="form.jobStatus.$error.required">
-                                                                Required
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-md-6">
-                                                <div class="form-group">
-                                                    <label class="control-label">Type </label>
-                                                    <select
-                                                        required readonly
-                                                        name="jobType"
-                                                        ng-model="job.jobType"
-                                                        class="form-control searchable-input floatL">
-                                                        <option>HOUSEKEEPING</option>
-                                                        <option>ELECTRICAL</option>
-                                                        <option>AC</option>
-                                                        <option>CARPENTRY</option>
-                                                        <option>PEST</option>
-                                                        <option>PLUMBING</option>
-                                                        <option>MAINTENANCE</option>
-                                                        <option></option>
-                                                    </select>
-                                                    <!-- <input type="text"
-                                                                    class="form-control searchable-input floatL"
-                                                                    ng-model="selectedStatus"
-                                                                    uib-typeahead="stat as stat.name for stat in status | filter:$viewValue | limitTo:5" />
-                     -->
-                                                    <div ng-show="form.$submitted || form.jobType.$touched">
-                                                        <div
-                                                            ng-show="form.jobType.$dirty || form.jobType.$invalid">
-
-                                                            <p class="help-block" style="color:maroon"
-                                                               ng-show="form.jobType.$error.required">
-                                                                Required
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                            </div>
-                                            <div class="col-md-6">
-                                                <div class="form-group">
-                                                    <label class="control-label">Comments </label>
-                                            <textarea
-                                                ng-model="job.comments"
-                                                class='form-control'
-                                                name='jobComments'
-                                                ng-maxlength='2500' readonly
-                                            ></textarea>
-
-                                                    <div ng-show="form.$submitted || form.jobComments.$touched">
-                                                        <div ng-show="form.jobComments.$dirty || form.jobComments.$invalid">
-
-                                                            <p class="help-block" style="color:maroon"
-                                                               ng-show="form.jobComments.$error.maxlength">
-                                                                Comments cannot be longer than 2500 characters.
-                                                            </p>
-                                                            <!--  <p class="help-block" style="color:maroon"
-                                                                    ng-show="form.jobComments.$error.pattern">
-                                                                 Comments can only contain letters, digits and space.
-                                                             </p> -->
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                            </div>
+                                                </tbody>
+                                            </table>
                                         </div>
 
                                     </div>
@@ -390,54 +148,35 @@
 
 
                             </div>
-
-                        </div>
-
-                        <div class="row">
-
-
-                            <div class="col-md-12">
+                            <div class="col-md-4">
 
                                 <div class="panel panel-default">
                                     <div class="panel-heading">Actual </div>
                                     <div class="panel-body">
 
-                                        <div class="row">
+                                        <div class="table-responsive">
+                                            <table class="table">
+                                                <tbody>
+                                                <tr>
+                                                    <td>Start date</td>
+                                                    <td>{{job.actualStartTime}}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>End date</td>
+                                                    <td>{{job.actualEndTimee}}</td>
 
-                                            <div class="col-md-4">
-                                                <div class="form-group">
-                                                    <label class="label-control">Start date</label>
-                                                    <span class="form-control-feedback calender-icon"><i class="material-icons">date_range</i></span>
-                                                    <input type="text"  ng-model="job.actualStartTime"  name='actualStartDate' class="form-control datetimepicker"  id="dateFilterFrom"  placeholder="{{dateFilterFrom | date:'dd-MMM-yyyy'}}" readonly/>
+                                                </tr>
+                                                <tr>
+                                                    <td>Hours</td>
+                                                    <td>
+                                                        {{job.actualHours}}
+                                                    </td>
 
-                                                </div>
-                                            </div>
-                                            <div class="col-md-4">
-                                                <div class="form-group">
-                                                    <label class="label-control">End date</label>
-                                                    <span class="form-control-feedback calender-icon"><i class="material-icons">date_range</i></span>
-                                                    <input type="text"  ng-model="job.actualEndTimee"  name='actualEndTimee' class="form-control datetimepicker"  id="dateFilterFrom"  placeholder="{{dateFilterFrom | date:'dd-MMM-yyyy'}}" readonly/>
+                                                </tr>
 
-                                                </div>
-                                            </div>
-                                            <div class="col-md-4">
-                                                <div class="form-group">
-                                                    <label class="control-label">Hours </label>
-                                                    <input
-                                                        ng-model="job.actualHours"
-                                                        class='form-control'
-                                                        name='actualHours'
-                                                        type="number"
-                                                        required readonly
-                                                    ></textarea>
-
-
-                                                </div>
-                                            </div>
-
+                                                </tbody>
+                                            </table>
                                         </div>
-
-
 
                                     </div>
                                 </div>
@@ -446,6 +185,8 @@
                             </div>
 
                         </div>
+
+
 
 
 

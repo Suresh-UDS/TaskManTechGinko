@@ -503,13 +503,13 @@ angular.module('timeSheetApp')
         		$scope.errorProject = null;
         	}else
         	*/
-        	if(!$scope.selectedManager.id){
-                             $scope.errorManager = "true";
-                             $scope.errorSite = null;
-            }else {
+//        	if(!$scope.selectedManager.id){
+//                             $scope.errorManager = "true";
+//                             $scope.errorSite = null;
+//            }else {
 	        	$scope.employee.projectId = $scope.selectedProject.id;
 	        	$scope.employee.siteId = $scope.selectedSite.id;
-	        	$scope.employee.managerId = $scope.selectedManager.id;
+	        	$scope.employee.managerId = $scope.selectedManager ? $scope.selectedManager.id : 0;
             	if($scope.projectSiteList) {
             		$scope.employee.projectSites = $scope.projectSiteList;
             	}
@@ -531,7 +531,7 @@ angular.module('timeSheetApp')
                         $scope.showNotifications('top','center','danger','Unable to Update employee, Please try again later..');
                     }
                 });
-        	}
+        	//}
         };
 
         $scope.deleteConfirm = function (employee){
@@ -590,6 +590,18 @@ angular.module('timeSheetApp')
 
         $scope.clickNextOrPrev = function(number){
         	$scope.pages.currPage = number;
+        	$scope.search();
+        }
+        
+        $scope.columnAscOrder = function(field){ 
+        	$scope.selectedColumn = field; 
+        	$scope.isAscOrder = true;
+        	$scope.search();
+        }
+        
+        $scope.columnDescOrder = function(field){ 
+        	$scope.selectedColumn = field; 
+        	$scope.isAscOrder = false;
         	$scope.search();
         }
 
@@ -662,8 +674,14 @@ angular.module('timeSheetApp')
         	if($scope.pageSort){
         		$scope.searchCriteria.sort = $scope.pageSort;
         	}
-
-
+        	
+        	if($scope.selectedColumn){
+        		
+        		$scope.searchCriteria.columnName = $scope.selectedColumn;
+        		$scope.searchCriteria.sortByAsc = $scope.isAscOrder;
+        		
+        	} 
+        	
         	EmployeeComponent.search($scope.searchCriteria).then(function (data) {
                 $scope.employees = data.transactions;
                 console.log('Employee search result list -' + $scope.employees);

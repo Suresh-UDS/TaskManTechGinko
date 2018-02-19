@@ -113,6 +113,8 @@ public class Employee extends AbstractAuditingEntity implements Serializable {
 	private boolean isRelieved;
 
 	private boolean isReliever;
+	
+	private String phone;
 
 	public Long getId() {
 		return id;
@@ -292,4 +294,13 @@ public class Employee extends AbstractAuditingEntity implements Serializable {
 		this.projectSites = projectSites;
 	}
 
+	public String getPhone() {
+		return phone;
+	}
+
+	public void setPhone(String phone) {
+		this.phone = phone;
+	}
+
+	
 }

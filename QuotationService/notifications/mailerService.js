@@ -47,8 +47,9 @@ module.exports = {
     submitQuotation: function(emailId, data) {
             sendMail( config.mailer.from,
                 emailId,
-                'Quotation for '+data.siteName,
+                'Quotation',
                 'submit_quotation_template',
+
                 {clientName: data.sentToUserName,
                     siteName: data.siteName,
                     createdByUserName:data.createdByUserName})

@@ -4,6 +4,7 @@ var Quotation = mongoose.model('Quotation');
 var RateCard = mongoose.model('RateCard');
 var RateCardType = mongoose.model('RateCardType');
 var mailerService = require('./notifications/mailerService');
+var notificationService = require('./notifications/notificationService');
 var PDFDocument = require('pdfkit');
 var fs = require('fs');
 
@@ -147,8 +148,8 @@ module.exports = {
 
     sendQuotation: function(req,res,next){
         console.log("Send quotation");
-        Quotation.findById(req.body.id,function(err,quotation){
-            mailerService.submitQuotation(quotation.sentToEmailId,quotation).then(function(err,success){
+        console.log(req.body)
+        Quotation.findById(req.body._id,function(err,quotation){
                 if(err){
                     console.log('Error in sending mail');
                     res.send(200,'Error in sending Mail, Quotation not Sent');
@@ -157,10 +158,12 @@ module.exports = {
                     quotation.isDrafted = false;
                     quotation.isSubmitted = true;
                     quotation.processHistory.isSubmitted = new Date();
+                    mailerService.submitQuotation(quotation.sentToEmailId,quotation)
 
                     quotation.save(function(err,quotation){
                         if(!err){
                             // mailerService.submitQuotation('karthickk@techginko.com',quotation);
+                            notificationService.sendNotification('e678b6d8-9747-4528-864d-911a24cd786a','Quotation Received')
                             res.json(200,quotation)
                         }else{
                             console.log("Error in saving quotation");
@@ -170,13 +173,11 @@ module.exports = {
                     })
                 }
             });
-        })
     },
 
     approveQuotation: function(req,res,next){
         console.log("Approve Quotation");
-        Quotation.findById(req.body.id,function(err,quotation){
-            mailerService.submitQuotation(quotation.clientEmailId,quotation).then(function(err,success){
+        Quotation.findById(req.body._id,function(err,quotation){
                 if(err){
                     console.log('Error in sending mail');
                     res.send(200,'Error in sending Mail, Quotation not Sent');
@@ -185,10 +186,12 @@ module.exports = {
                     quotation.isSubmitted = false;
                     quotation.isApproved = true;
                     quotation.processHistory.isApproved = new Date();
+                    mailerService.submitQuotation(quotation.clientEmailId,quotation);
 
                     quotation.save(function(err,quotation){
                         if(!err){
                             // mailerService.submitQuotation('karthickk@techginko.com',quotation);
+                            notificationService.sendNotification('e678b6d8-9747-4528-864d-911a24cd786a','Quotation Approved by Client')
                             res.json(200,quotation)
                         }else{
                             console.log("Error in saving quotation");
@@ -198,7 +201,6 @@ module.exports = {
                     })
                 }
             });
-        })
     },
 
     archiveQuotation: function(req,res,next){
@@ -241,6 +243,20 @@ module.exports = {
         })
     },
 
+    deleteRateCard: function(req,res,next){
+      console.log("Delete Rate card");
+      console.log(req.id);
+      RateCard.remove(id,function(err){
+          if(err){
+              console.log("Error in finding rateCard");
+              res.send(500,err);
+          }else{
+              console.log("Rate card removed");
+              res.send(200);
+          }
+      })
+    },
+
     getQuotations: function(req,res,next){
       console.log("Get Quotations");
       Quotation.find({}, function(err,quotations){
@@ -250,6 +266,37 @@ module.exports = {
           }else{
               res.send(200,quotations);
           }
+      })
+    },
+
+    getQuotationById: function(req,res,next){
+        console.log("Get quotations by id");
+        console.log(req.params.id);
+        var query = Quotation.find({sentByUserId:req.params.id})
+        query.sort('-lastModifiedDate')
+        query.exec(function(err,quotations){
+            if(err){
+                res.send(500, err);
+            } else{
+                res.send(200,quotations);
+            }
+
+        })
+    },
+
+    search: function(req,res,next){
+      console.log("Search quotations");
+      console.log(req.body);
+      Quotation.find({title:{$regex:'^'+req.body.title,$options:"si"}}).sort({'title':1}).limit(10).exec(function(err,result){
+          if(err){
+              console.log("Error in finding quotation");
+              res.send(200,'No Quotation found');
+          }else{
+              var response = _.map(result,function(data){
+                  return data.model
+              })
+          }
+          res.send(200,response);
       })
     },
 
@@ -298,6 +345,7 @@ module.exports = {
             }
         })
     },
+
 
     
 };

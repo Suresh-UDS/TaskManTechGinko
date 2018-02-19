@@ -10,6 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 
 import com.ts.app.domain.Employee;
 import com.ts.app.service.util.PagingUtil;
@@ -32,6 +33,14 @@ public abstract class AbstractService {
 		}
 		page -= 1;
         return new PageRequest(page, pageSize); 
+    }
+	
+	public Pageable createPageSort(int page, int pageSize, Sort s) {
+		if(page == 0) {
+			page = 1;
+		}
+		page -= 1;
+        return new PageRequest(page, pageSize, s); 
     }
 	
     public List<Long> findAllSubordinates(Employee employee, List<Long> subEmpIds) {

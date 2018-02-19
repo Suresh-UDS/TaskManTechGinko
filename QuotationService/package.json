@@ -1,0 +1,22 @@
+{
+  "name": "QuotationService",
+  "version": "0.0.1",
+  "description": "Storing provider location in MongoDB using Express and Mongoose",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "async": "0.2.10",
+    "express": "^3.5.0",
+    "moment": "2.4.0",
+    "mongoose": "4.3.4",
+    "node-uuid": "^1.4.8",
+    "nodemailer": "^4.4.2",
+    "nodemailer-smtp-transport": "^4.4.2",
+    "onesignal-node": "^1.0.2",
+    "pdfkit": "^0.8.3"
+    "handlebars": "^4.0.11",
+    "cors": "^2.8.4"
+  }
+}

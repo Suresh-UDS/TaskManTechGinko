@@ -25,7 +25,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.env.Environment;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -541,12 +543,21 @@ public class    EmployeeService extends AbstractService {
 		List<EmployeeHistory> empHistory = employeeHistoryRepository.findByEmployeeId(empId);
 		return mapperUtil.toModelList(empHistory, EmployeeHistoryDTO.class);
 	}
+	
+	private Sort orderByASC(String columnName) {
+	    return new Sort(Sort.Direction.ASC, columnName);
+	}
+//	
+	private Sort orderByDESC(String columnName) {
+	    return new Sort(Sort.Direction.DESC, columnName);
+	}
 
 	public SearchResult<EmployeeDTO> findBySearchCrieria(SearchCriteria searchCriteria) {
 		User user = userRepository.findOne(searchCriteria.getUserId());
 		SearchResult<EmployeeDTO> result = new SearchResult<EmployeeDTO>();
 		if(searchCriteria != null) {
 			Pageable pageRequest = createPageRequest(searchCriteria.getCurrPage());
+			
 			Page<Employee> page = null;
 			List<EmployeeDTO> transactions = null;
 
@@ -621,14 +632,33 @@ public class    EmployeeService extends AbstractService {
 	        		List<Long> subEmpIds = null;
 	        		subEmpIds = findAllSubordinates(user.getEmployee(), subEmpIds);
 	        		page = employeeRepository.findByProjectName(searchCriteria.getProjectName(), subEmpIds, pageRequest);
+	        }else if(StringUtils.isNotEmpty(searchCriteria.getColumnName())){
+	        	if(searchCriteria.isSortByAsc() == true){  
+	        		Pageable pageable = createPageSort(searchCriteria.getCurrPage(), 10, orderByASC(searchCriteria.getColumnName()));
+		        	page = employeeRepository.findByOrder(pageable);
+	        	}else if(searchCriteria.isSortByAsc() == false){ 
+	        		Pageable pageable = createPageSort(searchCriteria.getCurrPage(), 10, orderByDESC(searchCriteria.getColumnName()));
+		        	page = employeeRepository.findByOrder(pageable);
+	        	}	
+	        	
 	        }else {
 	            	if(user.getUserRole().getName().equalsIgnoreCase(UserRoleEnum.ADMIN.toValue())) {
 	            		page = employeeRepository.findAll(pageRequest);
 	            	}else {
-	            		List<Long> subEmpIds = null;
-	            		subEmpIds = findAllSubordinates(user.getEmployee(), subEmpIds);
-						
-	            		page = employeeRepository.findAllByEmpIds(subEmpIds, pageRequest);
+	            		List<EmployeeProjectSite> projectSites = user.getEmployee().getProjectSites();
+	            		if(CollectionUtils.isNotEmpty(projectSites)) {
+	            			List<Long> siteIds = new ArrayList<Long>();
+	            			for(EmployeeProjectSite projSite : projectSites) {
+	            				siteIds.add(projSite.getSiteId());
+	            			}
+	            			page = employeeRepository.findBySiteIds(siteIds, pageRequest);
+	            		}else {
+		            		List<Long> subEmpIds = null;
+		            		subEmpIds = findAllSubordinates(user.getEmployee(), subEmpIds);
+						if(CollectionUtils.isNotEmpty(subEmpIds)) {	
+		            			page = employeeRepository.findAllByEmpIds(subEmpIds, pageRequest);
+						}
+	            		}
 	            	}
             }
 

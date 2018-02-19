@@ -92,15 +92,10 @@ public class SearchCriteria extends Paginator {
 	private boolean graphRequest;
 	
 	private int sort;
-
-
-	public int getSort() {
-		return sort;
-	}
-
-	public void setSort(int sort) {
-		this.sort = sort;
-	}
+	
+	private String columnName;
+	
+	private boolean sortByAsc;
 
 	public long getId() {
 		return id;
@@ -445,5 +440,30 @@ public class SearchCriteria extends Paginator {
 	public void setSiteName(String siteName) {
 		this.siteName = siteName;
 	}
+	
+	public boolean isSortByAsc() {
+		return sortByAsc;
+	}
+
+	public void setSortByAsc(boolean sortByAsc) {
+		this.sortByAsc = sortByAsc;
+	}
+
+	public String getColumnName() {
+		return columnName;
+	}
+
+	public void setColumnName(String columnName) {
+		this.columnName = columnName;
+	}
+
+	public int getSort() {
+		return sort;
+	}
+
+	public void setSort(int sort) {
+		this.sort = sort;
+	}
+
 
 }

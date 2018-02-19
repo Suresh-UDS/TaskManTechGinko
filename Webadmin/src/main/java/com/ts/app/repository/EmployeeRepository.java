@@ -2,9 +2,10 @@ package com.ts.app.repository;
 
 import java.sql.Date;
 import java.util.List;
-
+ 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -25,6 +26,12 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long> {
 
 	@Query("SELECT e FROM Employee e join e.sites s WHERE s.id = :siteId")
 	List<Employee> findBySiteId(@Param("siteId") long siteId);
+
+	@Query("SELECT e FROM Employee e join e.projectSites s WHERE s.siteId IN (:siteIds)")
+	List<Employee> findBySiteIds(@Param("siteIds") List<Long> siteIds);
+
+	@Query("SELECT e FROM Employee e join e.projectSites s WHERE s.siteId IN (:siteIds)")
+	Page<Employee> findBySiteIds(@Param("siteIds") List<Long> siteIds, Pageable pageRequest);
 
 	@Query("SELECT e FROM Employee e join e.sites s WHERE s.id = :siteId and e.id IN (:empIds)")
 	List<Employee> findBySiteIdAndEmpIds(@Param("siteId") long siteId, @Param("empIds") List<Long> empIds);
@@ -126,6 +133,10 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long> {
 
 	@Query("SELECT count(e) FROM Employee e")
 	long findTotalCount();
+	
+	@Query( "SELECT e FROM Employee e")
+	Page<Employee> findByOrder(Pageable pageRequest);
+	
 
 
 

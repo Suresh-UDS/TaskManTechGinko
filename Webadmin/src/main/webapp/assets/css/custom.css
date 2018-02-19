@@ -6,6 +6,19 @@ body
 {
   font-size: 13px;
 }
+ul li
+{
+  list-style:none;
+}
+ul.checkList li
+{
+      padding: 2px 4px;
+      background: #eeeeee;
+      float: left;
+      margin: 2px 3px;
+      border-radius: 5px;
+      font-size: 11px;
+}
 .box {
     position: relative;
     overflow: hidden;
@@ -81,9 +94,17 @@ body
 {
   margin-top:20px !important;
 }
+.margn-top22
+{
+  margin-top:22px !important;
+}
 .margn-top30
 {
   margin-top:30px !important;
+}
+.margn-top40
+{
+  margin-top:40px !important;
 }
 .pdng-top15
 {
