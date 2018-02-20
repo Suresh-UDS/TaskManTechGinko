@@ -30,6 +30,10 @@ ul.checkList li
     border-radius: 2px;
     z-index: 1;
 }
+.SubNav
+{
+  padding-left:30px;
+}
 
 .bg-info .bg-info.darken, .bg-info.darken {
     background-color: #52bcdc!important;
@@ -109,6 +113,10 @@ ul.checkList li
 .margn-top40
 {
   margin-top:40px !important;
+}
+.pdng-top13
+{
+  padding-top:13px;
 }
 .pdng-top15
 {
