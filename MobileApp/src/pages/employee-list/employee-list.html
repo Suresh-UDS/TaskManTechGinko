@@ -21,7 +21,7 @@
   <ion-list class="emp-list">
 
     <div *ngFor="let emp of employees;let i of index">
-    <ion-item-sliding #slidingItem>
+    <ion-item-sliding #slidingItem (ionDrag)="drag(menu,$event)">
       <ion-item #item  class="bottom-border emp padding-left0"  >
         <ion-row class="margin0">
           <ion-col col-2>
@@ -33,12 +33,12 @@
               <p class="margin-auto">{{firstLetter}}</p>
             </ion-avatar>
           </ion-col>
-          <ion-col col-8 class="ver-center" (click)="viewEmployee(emp)">
+          <ion-col col-9 class="ver-center" (click)="viewEmployee(emp)">
               <p text-left class="fnt-wt" text-capitalize>{{emp.name}}</p>
           </ion-col>
-          <ion-col col-2 class="ver-center">
+          <ion-col col-1 class="ver-center">
               <button #menu ion-button icon-left icon-only clear class="pop-icon" (click)="open(slidingItem, item ,count,menu)">
-                <ion-icon name="ios-more" class="fnt-18 padding0"></ion-icon>
+                <ion-icon name="md-more" class="fnt-18 padding0"></ion-icon>
               </button>
           </ion-col>
         </ion-row>
