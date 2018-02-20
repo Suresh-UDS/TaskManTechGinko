@@ -69,7 +69,7 @@ public class AttendanceService extends AbstractService {
 
     @Inject
     private ExportUtil exportUtil;
-    
+
     @Inject
     private UserRepository userRepository;
 
@@ -317,7 +317,7 @@ public class AttendanceService extends AbstractService {
             					}
             					attendanceRepository.findByMultipleSitesAndCheckInTime(siteIds, startDate, toDate, pageRequest);
             				}else {
-            					
+
             				}
             			}
             		}

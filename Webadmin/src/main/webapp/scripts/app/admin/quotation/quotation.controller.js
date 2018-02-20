@@ -13,4 +13,17 @@ angular.module('timeSheetApp')
 
         };
 
+        $scope.selectQuotation = function(quotation){
+
+            $scope.quotation = quotation;
+        }
+
+        $scope.approveQuotation = function(quotation){
+            RateCardComponent.approveQuotation(quotation).then(function (response) {
+                console.log(response);
+                // $scope.quotation = response
+                $scope.loadAllQuotations();
+            })
+        }
+
     });

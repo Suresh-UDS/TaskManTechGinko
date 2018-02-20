@@ -244,6 +244,50 @@ public class RateCardService extends AbstractService {
         return  quotationList;
     }
 
+    public Object approveQuotation(RateCardDTO quotation) {
+        log.debug("Approve Quotations");
+        Object approvedQuotation = "";
+
+        try {
+
+            RestTemplate restTemplate = new RestTemplate();
+            MappingJackson2HttpMessageConverter jsonHttpMessageConverter = new MappingJackson2HttpMessageConverter();
+            jsonHttpMessageConverter.getObjectMapper().configure(SerializationFeature.FAIL_ON_EMPTY_BEANS,false);
+            restTemplate.getMessageConverters().add(jsonHttpMessageConverter);
+
+            MultiValueMap<String, String> headers =new LinkedMultiValueMap<String, String>();
+            Map<String, String> map=  new HashMap<String, String>();
+            map.put("Content-Type", MediaType.APPLICATION_JSON_VALUE);
+
+            headers.setAll(map);
+
+            Map<String,Object> paramMap = new HashMap<String,Object>();
+            paramMap.put("id",quotation.getId());
+
+            JSONObject request = new JSONObject();
+            request.put("id",quotation.getId());
+
+            HttpEntity<?> requestEntity = new HttpEntity<>(request.toString(),headers);
+            log.debug("Request entity rate card service"+requestEntity);
+            log.debug("Rate card service end point"+quotationSvcEndPoint);
+            ResponseEntity<?> response = restTemplate.postForEntity(quotationSvcEndPoint+"/quotation/approve", requestEntity, String.class);
+            log.debug("Response from push service "+ response.getStatusCode());
+            log.debug("response from push service"+response.getBody());
+
+
+        }catch(Exception e) {
+            log.error("Error while calling location service ", e);
+            e.printStackTrace();
+        }
+
+//		List<RateCard> entities = new ArrayList<RateCard>();
+//		entities = rateCardRepository.findAll();
+//		return mapperUtil.toModelList(entities, RateCardDTO.class);
+        return  approvedQuotation;
+    }
+
+
+
 	public RateCardDTO findOne(Long id) {
 		RateCard entity = rateCardRepository.findOne(id);
 		return mapperUtil.toModel(entity, RateCardDTO.class);
