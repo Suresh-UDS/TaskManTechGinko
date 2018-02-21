@@ -19,8 +19,6 @@
 {
    font-family:arial !important;
 }
-
-
 .sidebar {
   height: 100% !important;
   width: 100% !important;
@@ -181,7 +179,7 @@ button.ion-circle-icons
 }
 .fnt-12
 {
-  font-size: 12px !important;
+  font-size: 11px !important;
 }
 .pop-icon
 {
@@ -223,12 +221,29 @@ button.ion-circle-icons
 {
   color:#000000;
 }
-.list-ios [col-6]
+.list-ios [col-6],.content-ios [col-6]
 {
   width: 49% !important;
   max-width: 49% !important;
 }
+.content-ios [col-8]
+{
+  width:65% !important;
+  max-width: 65% !important;
+}
+.content-ios [col-9]
+{
+   width: 74% !important;
+   max-width: 74% !important;
+}
 
+
+button.pop-icon
+{
+      border: 1px solid #FFC107 !important;
+      border-radius: 50% !important;
+      padding: 15px !important;
+}
 
 
 
