@@ -41,5 +41,17 @@ export class EmployeeService {
         )
     }
 
+    employeeImage():Observable<any>{
+        return this.http.post(this.config.Url+'api/employee/authorizeImage',{}).map(
+            (response)=>{
+                console.log(response);
+                return response;
+            },(error)=>{
+                console.log(error);
+                return error;
+            }
+        )
+    }
+
 
 }

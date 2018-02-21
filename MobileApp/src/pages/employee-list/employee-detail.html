@@ -38,6 +38,71 @@
   <div [ngSwitch]="categories">
 
     <ion-list *ngSwitchCase="'detail'">
+
+      <!--
+      <div class="padding10">
+        <ion-row class="margin0 white-bg padding5">
+          <ion-col col-12>
+            <p text-center class="margin-bottom0 fnt-20 label-on-left">Employee</p>
+          </ion-col>
+        </ion-row>
+
+        <ion-row class="margin-left-right0 margin-top3 white-bg padding5">
+
+          <ion-col col-8>
+            <p text-left class="margin-bottom0 fnt-12 clr-orange">Name</p>
+            <p text-left class="margin-bottom0">{{empDetail.fullName}}</p>
+          </ion-col>
+          <ion-col col-4>
+            <p text-right class="margin-bottom0 fnt-12 clr-orange">Id</p>
+            <p text-right class="margin-bottom0">{{empDetail.empId}}</p>
+          </ion-col>
+          <ion-col col-12>
+            <p text-left class="margin-bottom0 fnt-12 clr-orange">Designation</p>
+            <p text-left class="margin-bottom0">{{empDetail.designation}}</p>
+          </ion-col>
+        </ion-row>
+      </div>
+
+      <div class="padding10">
+        <ion-row class="margin0 white-bg padding5">
+          <ion-col col-12>
+            <p text-center class="margin-bottom0 fnt-20 label-on-left">Manager</p>
+          </ion-col>
+        </ion-row>
+
+        <ion-row class="margin-left-right0 margin-top3 white-bg padding5">
+          <ion-col col-8>
+            <p text-left class="margin-bottom0 fnt-12 clr-orange">Name</p>
+            <p text-left class="margin-bottom0">{{empDetail.manager.fullName}}</p>
+          </ion-col>
+          <ion-col col-4>
+            <p text-right class="margin-bottom0 fnt-12 clr-orange">Id</p>
+            <p text-right class="margin-bottom0">{{empDetail.manager.id}}</p>
+          </ion-col>
+          <ion-col col-12>
+            <p text-left class="margin-bottom0 fnt-12 clr-orange">Designation</p>
+            <p text-left class="margin-bottom0">{{empDetail.manager.designation}}</p>
+          </ion-col>
+        </ion-row>
+      </div>
+
+      <div class="padding10">
+        <ion-row class="margin0 white-bg padding5">
+          <ion-col col-12>
+            <p text-center class="margin-bottom0 fnt-20 label-on-left">Sites</p>
+          </ion-col>
+        </ion-row>
+
+        <ion-row class="margin-left-right0 margin-top3 white-bg padding5">
+          <ion-col col-8 *ngFor="let site of empDetail.sites">
+            <p text-left class="margin-bottom0">{{site.name}}</p>
+          </ion-col>
+        </ion-row>
+      </div>
+-->
+
+
       <ion-row class="margin0 white-bg padding10">
         <ion-col col-6 class="label-on-left">Employee ID</ion-col>
         <ion-col col-6>
@@ -50,6 +115,13 @@
         <ion-col col-6 class="label-on-left">Designation</ion-col>
         <ion-col col-6>
           <p text-right>{{empDetail.designation}}</p>
+        </ion-col>
+      </ion-row>
+
+      <ion-row class="margin0 white-bg padding10" *ngIf="empDetail.manager">
+        <ion-col col-6 class="label-on-left">Manager Name</ion-col>
+        <ion-col col-6>
+          <p text-right>{{empDetail.manager.fullName}}</p>
         </ion-col>
       </ion-row>
 

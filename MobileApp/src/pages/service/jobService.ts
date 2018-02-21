@@ -23,6 +23,7 @@ export class JobService {
     }
 
     getJobs(searchCriteria): Observable<any>{
+        console.log(searchCriteria);
         return this.http.post(this.config.Url+'api/jobs/search',{searchCriteria}).map(
             response=>{
                 console.log(response);

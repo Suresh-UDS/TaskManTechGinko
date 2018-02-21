@@ -13,6 +13,7 @@ import {AppConfig, ApplicationConfig, MY_CONFIG_TOKEN} from "./app-config";
 @Injectable()
 export class authService
 {
+    isUserLoggedIn
     private kairosResponse ={
         status :String,
         headers:String,
@@ -57,6 +58,8 @@ export class authService
         return this.https.post(this.config.Url+'api/auth/'+username+'/'+password,{username:username,password:password}).map(
             (response)=>
             {
+                this.isUserLoggedIn = true;
+
                 return response;
             });
     }
