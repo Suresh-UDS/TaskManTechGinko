@@ -95,9 +95,8 @@ Tip 2: you can also add an image using data-image tag
             <p class="margin0"><span class="margin-right15">Sites</span><span class="padding-left5" *ngIf="spinner"><ion-spinner name="bubbles"></ion-spinner></span></p>
         </div>
         <div class="container-fluid container-scroll hariz-scroll-con">
-
             <div class="row">
-                <button class="siteBtn" ion-button round color="light"  *ngFor="let site of sites;let i of index" (click)="activeSite(site.id)" [ngClass]="{'bg-orange':selectSite}">
+                <button class="siteBtn" ion-button round  *ngFor="let site of sites;let i of index" (click)="activeSite(site.id,i)" [color]="selectSite && i==index ? 'primary' : 'light'">
                     <p class="siteName">{{site.name}}</p>
                 </button>
             </div>
@@ -108,7 +107,6 @@ Tip 2: you can also add an image using data-image tag
 
         <div text-center>
             <p class="margin0"><span class="margin-right15">Employees</span><span class="padding-left5" *ngIf="empSpinner"><ion-spinner name="bubbles"></ion-spinner></span></p>
-
         </div>
         <div class="container-fluid container-scroll hariz-scroll-con">
             <div *ngIf="empSelect">
@@ -122,7 +120,7 @@ Tip 2: you can also add an image using data-image tag
                 <!--</ion-avatar>-->
                 <!--<p *ngIf="!emp.enrolled_face && first(emp.name)"></p>-->
                 <p *ngIf="first(emp.name)"></p>
-                <ion-avatar item-start *ngIf="!emp.enrolled_face" class="emp-round">
+                <ion-avatar item-start *ngIf="!emp.enrolled_face" class="emp-round" (click)="selectEmployee(emp,i)" [ngClass]="{'emp-round-active':empActive && i==empIndex}">
                     <p class="margin-auto"> {{firstLetter}}</p>
                 </ion-avatar>
                 <!--<p text-left>{{emp.name}}</p>-->

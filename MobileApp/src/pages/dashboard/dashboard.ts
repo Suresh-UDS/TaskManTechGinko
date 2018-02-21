@@ -28,10 +28,13 @@ export class DashboardPage {
   spinner=true;
   empSpinner=false;
   searchCriteria:any;
+  index:any;
     firstLetter:any;
     selectDate:any;
-    selectSite:any;
-    empSelect:any
+    selectSite=false;
+    empSelect:any;
+    empIndex:any;
+    empActive=false;
   constructor(public renderer: Renderer,public myService:authService,private loadingCtrl:LoadingController,public navCtrl: NavController,public component:componentService,public authService:authService,public modalCtrl: ModalController,
               private datePickerProvider: DatePickerProvider, private siteService:SiteService, private employeeService: EmployeeService, private jobService:JobService) {
 
@@ -71,7 +74,7 @@ export class DashboardPage {
           console.log('ionViewDidLoad Employee list:');
           console.log(response);
           this.employee=response;
-            this.empSpinner=false;
+          this.empSpinner=false;
           this.component.closeLoader();
         },
         error=>{
@@ -172,18 +175,21 @@ export class DashboardPage {
 
     }
 
-    selectEmployee(emp){
+    selectEmployee(emp,i){
       console.log("Selected Employee");
       console.log(emp.id+" "+ emp.name);
       this.searchCriteria={
           employeeId:emp.id
       };
       this.searchJobs(this.searchCriteria);
+      this.empActive=true;
+      this.empIndex=i;
     }
 
-    activeSite(id)
+    activeSite(id,i)
     {
         // var search={siteId:id};
+        this.index=i;
         console.log("Selected Site Id");
         console.log(id);
         this.selectSite=true;
@@ -200,6 +206,7 @@ export class DashboardPage {
                     this.employee=response.json();
                     this.empSpinner=false;
                     this.empSelect=false;
+                    this.selectSite=true;
                     console.log("Spinner:"+this.empSpinner);
                     console.log(this.employee);
                 }
