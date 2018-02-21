@@ -39,6 +39,8 @@ export class DashboardPage {
     empIndex:any;
     empActive=false;
     count=0;
+    overdueCount:any;
+    cnt:any;
   constructor(public renderer: Renderer,public myService:authService,private loadingCtrl:LoadingController,public navCtrl: NavController,public component:componentService,public authService:authService,public modalCtrl: ModalController,
               private datePickerProvider: DatePickerProvider, private siteService:SiteService, private employeeService: EmployeeService, private jobService:JobService) {
 
@@ -108,6 +110,9 @@ export class DashboardPage {
     }
       this.searchJobs(this.searchCriteria);
 
+
+
+
   }
 
   searchJobs(searchCriteria){
@@ -118,6 +123,9 @@ export class DashboardPage {
               console.log("Jobs from search criteria");
               console.log(response);
               this.allJobs = response;
+              this.component.closeLoader();
+          },err=>{
+              console.log("Error in getting josb");
               this.component.closeLoader();
           }
       )
@@ -136,6 +144,15 @@ export class DashboardPage {
       this.allJobs = response;
       this.component.closeLoader();
     })
+
+
+      /*
+      this.cnt=this.allJobs.filter((data,i)=>{
+          return data.status=='OVERDUE';
+      }).length
+
+      console.log("Count------:"+this.count);
+*/
   }
 
     first(emp)
@@ -192,7 +209,7 @@ export class DashboardPage {
 
     activeSite(id,i)
     {
-        // var search={siteId:id};
+         var search={siteId:id};
         this.index=i;
         console.log("Selected Site Id");
         console.log(id);
@@ -292,5 +309,6 @@ export class DashboardPage {
     {
         this.navCtrl.push(CompleteJobPage,{job:job})
     }
+
 
 }
