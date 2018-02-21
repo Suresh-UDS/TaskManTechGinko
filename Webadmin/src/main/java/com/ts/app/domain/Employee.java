@@ -68,7 +68,7 @@ public class Employee extends AbstractAuditingEntity implements Serializable {
 	@JoinColumn(name = "userId", nullable = true)
 	private User user;
 
-	@ManyToOne(fetch = FetchType.EAGER, cascade={CascadeType.MERGE,CascadeType.PERSIST,CascadeType.REFRESH})
+	@ManyToOne(fetch = FetchType.LAZY, cascade={CascadeType.MERGE,CascadeType.PERSIST,CascadeType.REFRESH})
 	@JoinColumn(name = "managerId", referencedColumnName = "id", nullable = true)
 	private Employee manager;
 
