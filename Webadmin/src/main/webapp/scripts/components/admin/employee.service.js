@@ -213,7 +213,24 @@ angular.module('timeSheetApp')
                     console.log("Added Designation");
                     console.log(response.data);
                 })
-            }
+            },
+            importEmployeeFile: function(file) {
+        		var fileFormData = new FormData();
+            fileFormData.append('employeeFile', file);
+            	return $http.post('api/employee/import', fileFormData, {
+                    transformRequest: angular.identity,
+                    headers: {'Content-Type': undefined}
+     
+                }).then(function (response) {
+            			return response.data;
+                });
+        		
+            },
+            importEmployeeStatus: function(fileName) {
+            	return $http.get('api/employee/import/'+fileName+"/status").then(function (response) {
+            		return response.data;
+            	});
+            }	
 
         };
     });

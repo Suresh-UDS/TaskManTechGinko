@@ -95,23 +95,25 @@
                                 <div class="col-md-6 pdng-top13">
                                     <input type="file"
                                            class="form-control" style="opacity:100;position:relative"
-                                           ng-model="selectedEmployeeFile"
-                                           name="employeeFile"
-                                    />
-
-                                </div>
-                                <div class="col-md-6">
-                                    <button class="btn btn-success" ng-click="" >
+                                             file-model ng-model="selectedEmployeeFile"
+                                             name="employeeFile"
+                                      />
+                                  
+                                  </div>
+                                  <div class="col-md-6">
+                                   <button class="btn btn-success" ng-click="uploadEmployeeFile()" >
                                         <span class="btn-label">
                                        		<i class="material-icons">file_upload</i>
                                    		</span>Import Employees
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-
-
-
+                                   </button>
+                                  </div>
+                                  <div class="col-md-2">
+                                  </div>
+                                  <div class="col-md-3" ng-hide="!employeeImportMsg()">
+                                  	<span class="card-title">Status - {{employeeImportMsg()}}</span>
+                                  </div>
+                              </div>
+							</div>
                     </form>
 
                 </div>

@@ -10,18 +10,27 @@ import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+import javax.inject.Inject;
 import javax.transaction.Transactional;
 
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang.StringUtils;
 import org.apache.poi.ss.format.CellFormatType;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.hibernate.Hibernate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,13 +39,21 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.ts.app.domain.Employee;
+import com.ts.app.domain.EmployeeProjectSite;
 import com.ts.app.domain.JobStatus;
 import com.ts.app.domain.JobType;
 import com.ts.app.domain.Location;
+import com.ts.app.domain.Project;
+import com.ts.app.domain.Site;
 import com.ts.app.domain.util.StringUtil;
 import com.ts.app.repository.EmployeeRepository;
 import com.ts.app.repository.LocationRepository;
+import com.ts.app.repository.ProjectRepository;
+import com.ts.app.repository.SiteRepository;
+import com.ts.app.service.EmployeeService;
 import com.ts.app.service.JobManagementService;
+import com.ts.app.web.rest.dto.EmployeeDTO;
+import com.ts.app.web.rest.dto.EmployeeProjectSiteDTO;
 import com.ts.app.web.rest.dto.ImportResult;
 import com.ts.app.web.rest.dto.JobDTO;
 
@@ -53,7 +70,6 @@ public class ImportUtil {
 	private static final String CLIENT_FOLDER = "client";
 	private static final String SITE_FOLDER = "site";
 	private static final String COMPLETED_IMPORT_FOLDER = "/opt/imports/completed";
-
 	private static final String SEPARATOR = System.getProperty("file.separator");
 
 	private static final Map<String,String> statusMap = new ConcurrentHashMap<String,String>();
@@ -68,7 +84,13 @@ public class ImportUtil {
 	private EmployeeRepository employeeRepo;
 	
 	@Autowired
-	private FileUploadHelper fileUploadHelper;
+	private ProjectRepository projectRepo;
+	
+	@Autowired
+	private SiteRepository siteRepo;
+	
+	@Autowired
+	private FileUploadHelper fileUploadHelper;	
 
 	public ImportResult importJobData(MultipartFile file, long dateTime) {
         String fileName = dateTime + ".xlsx";
@@ -162,7 +184,9 @@ public class ImportUtil {
 					case "job" :
 						importJobFromFile(fileObj.getPath());
 						break;
-						
+					case "employee":
+						importEmployeeFromFile(fileObj.getPath());
+						break;
 				}
 				statusMap.put(fileKey, "COMPLETED");
 				FileSystem fileSystem = FileSystems.getDefault();
@@ -468,74 +492,56 @@ public class ImportUtil {
 			FileInputStream excelFile = new FileInputStream(new File(path));
 			Workbook workbook = new XSSFWorkbook(excelFile);
 			Sheet datatypeSheet = workbook.getSheetAt(0);
-			Iterator<Row> iterator = datatypeSheet.iterator();
+			//Iterator<Row> iterator = datatypeSheet.iterator();
 			int lastRow = datatypeSheet.getLastRowNum();
-			int r = 0;
-			Row projectRow = datatypeSheet.getRow(r);
-			long projectId = (long) projectRow.getCell(2).getNumericCellValue();
-			r++;
-			Row siteRow = datatypeSheet.getRow(r);
-			long siteId = (long) siteRow.getCell(2).getNumericCellValue();
-			r++;
-			Row managerRow = datatypeSheet.getRow(r);
-			String managerId = String.valueOf(managerRow.getCell(2).getNumericCellValue());
-			String supervisorId = String.valueOf(managerRow.getCell(5).getNumericCellValue());
-			r = 4;
-			for (; r < lastRow; r++) {
+			int r = 1;
+			
+			log.debug("Last Row number -" + lastRow);
+			for (; r <= lastRow; r++) {
 				log.debug("Current Row number -" + r);
 				Row currentRow = datatypeSheet.getRow(r);
-				JobDTO jobDto = new JobDTO();
-				jobDto.setTitle(currentRow.getCell(1).getStringCellValue());
-				jobDto.setDesc(currentRow.getCell(1).getStringCellValue());
-				jobDto.setSiteId(siteId);
-				String location = currentRow.getCell(2).getStringCellValue();
-				Location loc = locationRepo.findByName(location);
-				if (loc == null) {
-					loc = new Location();
-					loc.setName(location);
-					loc.setActive("Y");
-					loc = locationRepo.save(loc);
+				Employee employee = new Employee();
+				
+				/*Employee existingEmployee = employeeRepo.findByEmpId(currentRow.getCell(2).getStringCellValue().trim());
+				log.debug("Employee obj =" + existingEmployee);
+				&& existingEmployee.getActive().equals(Employee.ACTIVE_NO
+				if(existingEmployee!=null){
+					log.debug("*************Existing Employee");
+					
 				}
-				jobDto.setLocationId(loc.getId());
-				String jobType = currentRow.getCell(3).getStringCellValue();
-				String empId = null;
-				log.debug("cell type =" + currentRow.getCell(5).getCellType());
-				if (currentRow.getCell(5).getCellType() == CellFormatType.NUMBER.ordinal()) {
-					try {
-						empId = String.valueOf(currentRow.getCell(5).getNumericCellValue());
-					} catch (IllegalStateException ise) {
-						empId = currentRow.getCell(5).getStringCellValue();
-					}
-				} else {
-					try {
-						empId = currentRow.getCell(5).getStringCellValue();
-					} catch (IllegalStateException ise) {
-						empId = String.valueOf(currentRow.getCell(5).getNumericCellValue());
-					}
-
-				}
-				log.debug("Employee id =" + empId);
-				Employee emp = employeeRepo.findByEmpId(empId);
-				log.debug("Employee obj =" + emp);
-				if (emp != null) {
-					jobDto.setEmployeeId(emp.getId());
-					jobDto.setEmployeeName(emp.getFullName());
-					jobDto.setStatus(JobStatus.ASSIGNED.name());
-					jobDto.setJobType(JobType.valueOf(jobType));
-					String schedule = currentRow.getCell(6).getStringCellValue();
-					jobDto.setSchedule(schedule);
-					Date startDate = currentRow.getCell(7).getDateCellValue();
-					Date startTime = currentRow.getCell(9).getDateCellValue();
-					Date endDate = currentRow.getCell(8).getDateCellValue();
-					Date endTime = currentRow.getCell(10).getDateCellValue();
-					jobDto.setPlannedStartTime(DateUtil.convertToDateTime(startDate, startTime));
-					jobDto.setPlannedEndTime(DateUtil.convertToDateTime(startDate, endTime));
-					jobDto.setScheduleEndDate(DateUtil.convertToDateTime(endDate, endTime));
-					jobDto.setFrequency(currentRow.getCell(11).getStringCellValue());
-					jobDto.setActive("Y");
-					jobService.saveJob(jobDto);
-
-				}
+				else {*/
+				employee.setDesignation(currentRow.getCell(7).getStringCellValue());
+				employee.setName(currentRow.getCell(2).getStringCellValue());
+				employee.setEmpId("12345"+r);
+				employee.setLastName(currentRow.getCell(3).getStringCellValue());
+				employee.setFullName(currentRow.getCell(2).getStringCellValue());
+				// email, phone number missing
+				ZoneId  zone = ZoneId.of("Asia/Singapore");
+				ZonedDateTime zdt   = ZonedDateTime.of(LocalDateTime.now(), zone);
+				employee.setCreatedDate(zdt);
+				employee.setActive(Employee.ACTIVE_YES);
+				if(StringUtils.isNotEmpty(currentRow.getCell(7).getStringCellValue())) {
+					Employee manager =  employeeRepo.findOne(Long.valueOf(currentRow.getCell(7).getStringCellValue()));
+					employee.setManager(manager);
+		        }
+				Project newProj = projectRepo.findOne(Long.valueOf(currentRow.getCell(0).getStringCellValue()));
+				Site newSite = siteRepo.findOne(Long.valueOf(currentRow.getCell(1).getStringCellValue()));
+				List<Project> projects = new ArrayList<Project>();
+				projects.add(newProj);
+				List<Site> sites = new ArrayList<Site>();
+				sites.add(newSite);
+				employee.setProjects(projects);
+				employee.setSites(sites);
+				employee.setFaceAuthorised(false);
+				employee.setFaceIdEnrolled(false);
+				employee.setLeft(false);
+				employee.setRelieved(false);
+				employee.setReliever(false);
+				
+				employeeRepo.save(employee);
+				log.debug("Created Information for Employee: {}", employee);
+				
+			/*}*/
 			}
 
 		} catch (FileNotFoundException e) {
@@ -543,6 +549,6 @@ public class ImportUtil {
 		} catch (IOException e) {
 			log.error("Error while reading the job data file for import", e);
 		}
-	}
+	}	
 
 }
