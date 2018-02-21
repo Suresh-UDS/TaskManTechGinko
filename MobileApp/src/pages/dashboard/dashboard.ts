@@ -124,6 +124,9 @@ export class DashboardPage {
               console.log(response);
               this.allJobs = response;
               this.component.closeLoader();
+          },err=>{
+              console.log("Error in getting josb");
+              this.component.closeLoader();
           }
       )
   }
