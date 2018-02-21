@@ -358,11 +358,14 @@ table tr
 }
 .Nametxt
 {
-  text-align: center;
+      text-align: center;
       padding: 0;
       width: 65px;
       font-size: 10px;
       height: 65px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
 }
 .red
 {
