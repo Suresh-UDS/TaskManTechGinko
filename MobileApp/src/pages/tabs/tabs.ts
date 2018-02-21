@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NavController } from 'ionic-angular';
+import {Events, NavController} from 'ionic-angular';
 import {DashboardPage} from "../dashboard/dashboard";
 import {AttendanceListPage} from "../attendance-list/attendance-list";
 import {ReportsPage} from "../reports/reports";
@@ -18,12 +18,18 @@ export class TabsPage {
   QuotationTab:any;
   CustomerDetailTab:any;
   EmployeeListTab:any;
+  userType:any;
 
-  constructor() {
+  constructor(public events:Events) {
     this.DashboardTab=DashboardPage;
     this.QuotationTab=QuotationPage;
     this.CustomerDetailTab=CustomerDetailPage;
     this.EmployeeListTab=EmployeeListPage;
+
+    this.events.subscribe('userType',(type)=>{
+      console.log(type);
+      this.userType = type;
+    })
   }
   ionViewDidLoad() {
     console.log('ionViewDidLoad TabsPage');

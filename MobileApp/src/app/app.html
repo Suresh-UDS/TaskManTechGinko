@@ -11,11 +11,11 @@
     Tip 2: you can also add an image using data-image tag
   -->
         <div class="logo">
-          <p text-center>User</p>
+          <p text-center>{{userName}}</p>
         </div>
         <div class="sidebar-wrapper">
           <ul class="nav">
-            <li menuClose *ngFor="let p of pages" (click)="openPage(p)" [ngClass]="{'active':p.active}" >
+            <li menuClose *ngFor="let p of pages" (click)="openPage(p)" [ngClass]="{'active':p.active}"  >
               <a>
                 <i class="material-icons">{{p.icon}}</i>
                 <p>{{p.title}}</p>

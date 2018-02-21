@@ -51,18 +51,22 @@ public class ProjectService extends AbstractService {
 	private MapperUtil<AbstractAuditingEntity, BaseDTO> mapperUtil;
 
 	public boolean isDuplicate(ProjectDTO projectDto) {
+	    log.debug("Project duplicate get"+projectDto.getUserId());
 		SearchCriteria criteria = new SearchCriteria();
 		criteria.setProjectName(projectDto.getName());
+		criteria.setUserId(projectDto.getUserId());
 		SearchResult<ProjectDTO> searchResults = findBySearchCrieria(criteria);
+		criteria.setUserId(projectDto.getUserId());
 		if(searchResults != null && CollectionUtils.isNotEmpty(searchResults.getTransactions())) {
 			return true;
 		}
 		return false;
 
 	}
-	
+
 	public ProjectDTO createProjectInformation(ProjectDTO projectDto) {
 		// log.info("The admin Flag value is " +adminFlag);
+        log.debug("Create user information"+projectDto.getUserId());
 		Project project = mapperUtil.toEntity(projectDto, Project.class);
 		project.setActive(project.ACTIVE_YES);
 		project = projectRepository.save(project);
@@ -158,6 +162,7 @@ public class ProjectService extends AbstractService {
     public SearchResult<ProjectDTO> findBySearchCrieria(SearchCriteria searchCriteria) {
     	log.debug("search Criteria",searchCriteria);
     	User user = userRepository.findOne(searchCriteria.getUserId());
+    	log.debug("userId in porject search"+searchCriteria.getUserId());
     	Hibernate.initialize(user.getEmployee());
     	long empId = 0;
     	if(user.getEmployee()!=null) {
@@ -184,7 +189,7 @@ public class ProjectService extends AbstractService {
                     		page = projectRepository.findAllByName(searchCriteria.getProjectName(), subEmpIds, pageRequest);
                 		}else {
                     		page = projectRepository.findAllByName(searchCriteria.getProjectName(), pageRequest);
-                			
+
                 		}
                 }
             }else {

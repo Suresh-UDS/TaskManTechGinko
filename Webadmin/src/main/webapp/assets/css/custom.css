@@ -30,6 +30,10 @@ ul.checkList li
     border-radius: 2px;
     z-index: 1;
 }
+.SubNav
+{
+  padding-left:30px;
+}
 
 .bg-info .bg-info.darken, .bg-info.darken {
     background-color: #52bcdc!important;
@@ -90,6 +94,10 @@ ul.checkList li
 {
     background: #ffba00 !important;
 }
+.margn-top10
+{
+  margin-top:10px !important;
+}
 .margn-top15
 {
   margin-top:15px !important;
@@ -109,6 +117,10 @@ ul.checkList li
 .margn-top40
 {
   margin-top:40px !important;
+}
+.pdng-top13
+{
+  padding-top:13px;
 }
 .pdng-top15
 {
@@ -312,6 +324,26 @@ textarea.form-control {
 .btn-group.open>.dropdown-toggle.btn.btn-primary, .btn-group-vertical.open>.dropdown-toggle.btn.btn-primary
 {
   background-color: #ff9800;
+}
+
+.AddQuotationContent  .nav-pills:not(.nav-pills-icons)>li>a {
+    border-radius: 5px 5px 0px 0px;
+        box-shadow: none !important;
+}
+.AddQuotationContent .nav-pills>li i
+{
+      display: inline;
+      font-size: 16px;
+      padding: 0;
+}
+.AddQuotationContent  .tab-pane
+{
+   padding:10px;
+}
+.AddQuotationContent .TabsContent
+{
+      padding-top: 10px;
+      border: 1px solid #ff9800;
 }
 
 .tablecard .btn, .navbar .navbar-nav>li>a.btn

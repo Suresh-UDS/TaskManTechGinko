@@ -120,4 +120,12 @@ public class RateCardResource {
         return result;
     }
 
+    @RequestMapping(value = "/rateCard/quotation/approve",method = RequestMethod.POST)
+    public Object approveQuotation(@RequestBody RateCardDTO rateCardDTO){
+	    log.info("Approve Quotations");
+	    Object result = null;
+	    rateCardService.approveQuotation(rateCardDTO);
+	    return result;
+    }
+
 }

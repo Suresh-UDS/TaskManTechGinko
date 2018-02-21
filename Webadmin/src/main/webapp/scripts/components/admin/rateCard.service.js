@@ -77,6 +77,13 @@ angular.module('timeSheetApp')
                     console.log(response.data);
                     return response.data;
                 })
+            },
+
+            approveQuotation: function(quotation){
+                return $http.post('api/rateCard/quotation/approve',quotation).then(function(response){
+                    console.log(response.data);
+                    return response.data;
+                })
             }
 
         };

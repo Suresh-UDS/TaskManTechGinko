@@ -73,6 +73,15 @@ export class authService
         )
     }
 
+    userRolePermissions(searchCriteria):Observable<any>{
+        return this.http.post(this.config.Url+'api/userRolePermission/search',searchCriteria).map(
+            response=>{
+                console.log(response.json());
+                return response.json();
+            }
+        )
+    }
+
 
 
 

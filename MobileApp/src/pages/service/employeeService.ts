@@ -6,6 +6,7 @@ import {map} from "rxjs/operator/map";
 import {Inject, Injectable} from "@angular/core";
 import {LoadingController, ToastController} from "ionic-angular";
 import {AppConfig, ApplicationConfig, MY_CONFIG_TOKEN} from "./app-config";
+import {ObserveOnMessage} from "rxjs/operators/observeOn";
 
 @Injectable()
 export class EmployeeService {
@@ -29,6 +30,14 @@ export class EmployeeService {
         )
     }
 
+    getAllDesignations():Observable<any>{
+        return this.http.get(this.config.Url+'api/designation').map(
+            response=>{
+                return response.json();
+            }
+        )
+    }
+
     markEnrolled(employee):Observable<any>{
         return this.http.post(this.config.Url+'api/employee/enroll',{id:employee.id,enrolled_face:employee.imageData}).map(
             (response)=>{
@@ -41,14 +50,38 @@ export class EmployeeService {
         )
     }
 
-    employeeImage():Observable<any>{
-        return this.http.post(this.config.Url+'api/employee/authorizeImage',{}).map(
-            (response)=>{
-                console.log(response);
-                return response;
-            },(error)=>{
-                console.log(error);
-                return error;
+    createEmployee(employee):Observable<any>{
+        return this.http.post(this.config.Url+'api/employee',employee).map(
+            response=>{
+                console.log(response.json());
+                return response.json();
+            }
+        )
+    }
+
+    getUserRole(employeeId):Observable<any>{
+        return this.http.get(this.config.Url+'api/userRole/'+employeeId).map(
+            response=>{
+                console.log(response.json());
+                return response.json();
+            }
+        )
+    }
+
+    getUser(employeeId):Observable<any>{
+        return this.http.get(this.config.Url+'api/users/'+employeeId).map(
+            response=>{
+                console.log(response.json());
+                return response.json();
+            }
+        )
+    }
+
+    getUserRolePermissions(searchCriteria): Observable<any>{
+        return this.http.post(this.config.Url+'api/userRolePermission/search',searchCriteria).map(
+            response=>{
+                console.log(response.json());
+                return response.json();
             }
         )
     }

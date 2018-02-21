@@ -30,7 +30,7 @@ spring:
         database: MYSQL
         show_sql: true
         hibernate:
-            ddl-auto: create
+            ddl-auto: update
         properties:
             hibernate.cache.use_second_level_cache: true
             hibernate.cache.use_query_cache: true

@@ -15,7 +15,6 @@ export class SitePage {
   employeeId: any;
   sites:any;
 
-
   constructor(public navCtrl: NavController,public myService:authService,public component:componentService, private siteService: SiteService) {
 
   }

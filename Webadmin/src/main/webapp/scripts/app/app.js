@@ -2,7 +2,7 @@
 
 angular.module('timeSheetApp', ['LocalStorageModule',
                'ui.bootstrap', 'ui.bootstrap.datetimepicker', // for modal dialogs
-    'ngResource', 'ui.router', 'ngCookies', 'ngAria', 'ngCacheBuster', 'ngFileUpload', 'infinite-scroll', 'App.filters','uiGmapgoogle-maps','checklist-model','alexjoffroy.angular-loaders'])
+    'ngResource', 'ui.router', 'ngCookies', 'ngAria', 'ngCacheBuster', 'ngFileUpload', 'infinite-scroll', 'App.filters','uiGmapgoogle-maps','checklist-model','alexjoffroy.angular-loaders','ngMaterial', 'ngMessages'])
 
     .run(function ($rootScope, $location, $window, $http, $state,  Auth, Principal, ENV, VERSION) {
         $rootScope.ENV = ENV;
@@ -127,3 +127,5 @@ angular.module('timeSheetApp', ['LocalStorageModule',
     		return (zeros + input).slice(-1 * n)
     	};
     });
+
+

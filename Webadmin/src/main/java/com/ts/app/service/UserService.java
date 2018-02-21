@@ -7,6 +7,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 
@@ -320,7 +321,7 @@ public class UserService extends AbstractService {
 	}
 
 	@Transactional(readOnly = true)
-	public User getUserWithAuthorities() {
+	public UserDTO getUserWithAuthorities() {
 		User user = userRepository.findOneByLogin(SecurityUtils.getCurrentUserLogin()).get();
 		if (user != null && CollectionUtils.isNotEmpty(user.getAuthorities())) {
 			user.getAuthorities().size(); // eagerly load the association
@@ -329,7 +330,11 @@ public class UserService extends AbstractService {
 			UserRole role = user.getUserRole();
 			role.getRolePermissions().size();
 		}
-		return user;
+		UserDTO userDto = mapperUtil.toModel(user, UserDTO.class);
+		userDto.setAuthorities(user.getAuthorities().stream().map(Authority::getName)
+							.collect(Collectors.toSet()));
+    
+		return userDto;
 	}
 
 	/**
