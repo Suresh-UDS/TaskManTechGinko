@@ -143,6 +143,7 @@ public class AccountResource {
 	@RequestMapping(value = "/account", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	@Timed
 	public ResponseEntity<UserDTO> getAccount() {
+		/*
 		User user = userService.getUserWithAuthorities();
 		UserDTO userDto = null;
 		if(user != null) {
@@ -151,6 +152,8 @@ public class AccountResource {
 			UserRoleDTO userRole = roleMapper.toModel(user.getUserRole(), UserRoleDTO.class);
 			userDto.setUserRole(userRole);
 		}
+		*/
+		UserDTO userDto = userService.getUserWithAuthorities();
 		if(userDto != null) {
 			return new ResponseEntity<>(userDto, HttpStatus.OK); 
 		}
@@ -275,6 +278,7 @@ public class AccountResource {
 		response.put("token", TokenUtils.createToken(userDetails));
 		response.put("pushSubscribed", userDetails.isPushSubscribed());
 		response.put("employee", employee );
+		response.put("user", userDetails.getUser());
 
 		return response;
 	}

@@ -15,8 +15,13 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.ts.app.domain.AbstractAuditingEntity;
 import com.ts.app.domain.User;
+import com.ts.app.domain.UserRole;
 import com.ts.app.repository.UserRepository;
+import com.ts.app.service.util.MapperUtil;
+import com.ts.app.web.rest.dto.BaseDTO;
+import com.ts.app.web.rest.dto.UserDTO;
 
 
 /**
@@ -43,14 +48,20 @@ public class CustomUserDetailsService implements org.springframework.security.co
             if (!user.getActivated()) {
                 throw new UserNotActivatedException("User " + lowercaseLogin + " was not activated");
             }
+            UserRole role = user.getUserRole();
+            role.getRolePermissions().size();
+
             Set<GrantedAuthority> grantedAuthorities = user.getAuthorities().stream()
                     .map(authority -> new SimpleGrantedAuthority(authority.getName()))
                 .collect(Collectors.toSet());
                 
-    
+            MapperUtil<AbstractAuditingEntity, BaseDTO> mapper = new MapperUtil<>();
+            
+            UserDTO userDto = mapper.toModel(user, UserDTO.class);
+            
             return new CustomUserDetails(user.getId(), lowercaseLogin,
                 user.getPassword(),
-                grantedAuthorities, true, true, true, true, user.isPushSubscribed());
+                grantedAuthorities, true, true, true, true, user.isPushSubscribed(), userDto);
         }).orElseThrow(() -> new UsernameNotFoundException("User " + lowercaseLogin + " was not found in the " +
         "database"));
         

@@ -152,7 +152,7 @@ public class DatabaseConfiguration {
 		properties.put("hibernate.format_sql",true);
 		properties.put("hibernate.cache.region.factory_class", "org.hibernate.cache.ehcache.SingletonEhCacheRegionFactory");
 		properties.put("hibernate.cache.use_second_level_cache", true);
-		properties.put("hibernate.cache.use_query_cache", false);
+		properties.put("hibernate.cache.use_query_cache", true);
 		properties.put("hibernate.generate_statistics", false);
 		return properties;
 	}
