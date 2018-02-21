@@ -233,3 +233,5 @@ Webadmin/src/main/webapp/bower_components/*
 MobileApp/.idea/
 QuotationService/.idea/
 QuotationService/package-lock.json
+
+MobileApp/www/build/

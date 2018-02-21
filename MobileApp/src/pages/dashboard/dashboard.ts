@@ -1,5 +1,5 @@
 import { Component, Input, ViewChild, ElementRef, Renderer } from '@angular/core';
-import {Events, LoadingController, ModalController, NavController} from 'ionic-angular';
+import {LoadingController, ModalController, NavController} from 'ionic-angular';
 import {authService} from "../service/authService";
 import {DatePickerProvider} from "ionic2-date-picker";
 import {componentService} from "../service/componentService";
@@ -10,8 +10,6 @@ import {CreateRateCardPage} from "../rate-card/create-rate-card";
 import {CreateJobPage} from "../jobs/add-job";
 import {CreateQuotationPage} from "../quotation/create-quotation";
 import {CreateEmployeePage} from "../employee-list/create-employee";
-import {AttendancePage} from "../attendance/attendance";
-import {CompleteJobPage} from "../jobs/completeJob";
 declare var demo;
 @Component({
   selector: 'page-dashboard',
@@ -30,19 +28,16 @@ export class DashboardPage {
   spinner=true;
   empSpinner=false;
   searchCriteria:any;
+  index:any;
     firstLetter:any;
     selectDate:any;
-    selectSite:any;
+    selectSite=false;
     empSelect:any;
-    userType:any;
+    empIndex:any;
+    empActive=false;
   constructor(public renderer: Renderer,public myService:authService,private loadingCtrl:LoadingController,public navCtrl: NavController,public component:componentService,public authService:authService,public modalCtrl: ModalController,
-              private datePickerProvider: DatePickerProvider, private siteService:SiteService, private employeeService: EmployeeService, private jobService:JobService, public events:Events) {
+              private datePickerProvider: DatePickerProvider, private siteService:SiteService, private employeeService: EmployeeService, private jobService:JobService) {
 
-      this.events.subscribe('userType',(type)=>{
-          console.log("User type event");
-          console.log(type);
-          this.userType = type;
-      })
     this.categories='overdue';
     this.selectDate=new Date();
     this.searchCriteria={};
@@ -79,7 +74,7 @@ export class DashboardPage {
           console.log('ionViewDidLoad Employee list:');
           console.log(response);
           this.employee=response;
-            this.empSpinner=false;
+          this.empSpinner=false;
           this.component.closeLoader();
         },
         error=>{
@@ -163,9 +158,6 @@ export class DashboardPage {
         {
             this.navCtrl.push(CreateEmployeePage);
         }
-        else if(fab =='attendance'){
-            this.navCtrl.push(AttendancePage);
-        }
     }
 
     showCalendar() {
@@ -183,18 +175,21 @@ export class DashboardPage {
 
     }
 
-    selectEmployee(emp){
+    selectEmployee(emp,i){
       console.log("Selected Employee");
       console.log(emp.id+" "+ emp.name);
       this.searchCriteria={
           employeeId:emp.id
       };
       this.searchJobs(this.searchCriteria);
+      this.empActive=true;
+      this.empIndex=i;
     }
 
-    activeSite(id)
+    activeSite(id,i)
     {
         // var search={siteId:id};
+        this.index=i;
         console.log("Selected Site Id");
         console.log(id);
         this.selectSite=true;
@@ -211,6 +206,7 @@ export class DashboardPage {
                     this.employee=response.json();
                     this.empSpinner=false;
                     this.empSelect=false;
+                    this.selectSite=true;
                     console.log("Spinner:"+this.empSpinner);
                     console.log(this.employee);
                 }
@@ -225,11 +221,6 @@ export class DashboardPage {
                 console.log(error);
                 console.log(this.employee);
             })
-    }
-
-    compeleteJob(job)
-    {
-        this.navCtrl.push(CompleteJobPage,{job:job})
     }
 
 }

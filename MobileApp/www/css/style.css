@@ -140,6 +140,14 @@ container-scroll::-webkit-scrollbar-thumb
 {
   margin-top:25%;
 }
+.margin-top5
+{
+    margin-top:5px !important;
+}
+.margin-top3
+{
+    margin-top:3px !important;
+}
 .margin-tp25
 {
   margin: 25px 0 0 0 !important;
@@ -391,6 +399,14 @@ table tr
   text-align: center !important;
   vertical-align: middle !important;
   line-height: 38px !important;
+}
+.emp-round-active
+{
+  background-color: #ff9800 !important;
+}
+.emp-round-active p
+{
+  color: #000000 !important;
 }
 .width-round
 {
@@ -688,7 +704,7 @@ a:hover, a:focus
 }
 .bg-orange
 {
-  background-color:#ff9800;
+  background-color:#ff9800 !important;
 }
 ion-fab-list
 {
@@ -730,4 +746,22 @@ ion-spinner{
 .emp .label-md
 {
   margin: 0 !important;
+}
+.padding5
+{
+  padding:5px;
+}
+.map
+{
+  height: 50%;
+  border: 1px solid #c0c1c2;
+}
+.margin-bottom0
+{
+  margin-bottom: 0 !important;
+}
+.margin-left-right0
+{
+  margin-right: 0 !important;
+  margin-left: 0 !important;
 }
