@@ -33,14 +33,14 @@
             <ion-refresher (ionRefresh)="doRefresh($event,today)">
                 <ion-refresher-content></ion-refresher-content>
             </ion-refresher>
-            <div *ngIf="allJobs?.length<0">
+            <div *ngIf="todaysJobs?.length<0">
                 <ion-card>
                     <ion-card-content>
                         No Jobs
                     </ion-card-content>
                 </ion-card>
             </div>
-            <div  class="white-bg" *ngFor="let job of allJobs" >
+            <div  class="white-bg" *ngFor="let job of todaysJobs" >
 
                 <div class="padding-left16 padding-top5">
                     <ion-row class="margin0">
@@ -53,7 +53,7 @@
                                 <ion-icon name="ios-construct-outline" class="fnt-24"></ion-icon>
                             </button>
                         </ion-col>
-                        <ion-col col-8 class="padding-left5">
+                        <ion-col col-7 class="padding-left5">
                             <div class="border-btm padding-bottom5 ln-ght20" text-capitalize>
                                 <p text-left class="margin0">{{job.title}}</p>
                                 <p text-left class="margin0">{{job.employeeName}}</p>
