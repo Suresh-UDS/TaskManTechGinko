@@ -191,7 +191,7 @@ var JobsPage = (function () {
     };
     JobsPage = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
-            selector: 'page-jobs',template:/*ion-inline-start:"/Users/gnana/techginko/workspace/fms/MobileApp/src/pages/jobs/jobs.html"*/`<ion-header no-border>\n  <ion-navbar>\n    <button ion-button menuToggle>\n      <ion-icon name="menu"></ion-icon>\n    </button>\n    <ion-title>Jobs</ion-title>\n      <!--<ion-buttons right>-->\n          <!--<button ion-button clear (click)="addJob()" class="add-btn">-->\n              <!--<ion-icon name="add"></ion-icon>-->\n          <!--</button>-->\n      <!--</ion-buttons>-->\n  </ion-navbar>\n        <ion-segment [(ngModel)]="categories" class="segmnt margin-auto" color="#ff9800">\n            <ion-segment-button value="today" (click)="getTodaysJobs(false)">\n                Today\'s Jobs\n            </ion-segment-button>\n            <ion-segment-button value="jobs" (click)="getAllJobs(false)">\n                All Jobs\n            </ion-segment-button>\n\n        </ion-segment>\n\n\n</ion-header>\n\n<ion-content>\n    <ion-fab bottom right >\n        <button (click)="addJob()" ion-fab><ion-icon name="add"></ion-icon></button>\n    </ion-fab>\n\n    <div [ngSwitch]="categories">\n        <ion-list *ngSwitchCase="\'today\'">\n            <ion-refresher (ionRefresh)="doRefresh($event,today)">\n                <ion-refresher-content></ion-refresher-content>\n            </ion-refresher>\n            <div *ngIf="allJobs?.length<0">\n                <ion-card>\n                    <ion-card-content>\n                        No Jobs\n                    </ion-card-content>\n                </ion-card>\n            </div>\n            <div  class="white-bg" *ngFor="let job of allJobs" >\n\n                <div class="padding-left16 padding-top5">\n                    <ion-row class="margin0">\n\n                        <ion-col col-2 class="ver-center">\n                            <button ion-button clear color="primary" class="icon-round"\n                                    [ngClass]="{\'icon-round-red\' : (job.status == \'OVERDUE\'),\n                                                          \'icon-round-green\' : (job.status == \'COMPLETED\'),\n                                                          \'icon-round-blue\' :(job.status ==\'OPEN\' || job.status == \'ASSIGNED\' || job.status == \'INPROGRESS\')}">\n                                <ion-icon name="ios-construct-outline" class="fnt-24"></ion-icon>\n                            </button>\n                        </ion-col>\n                        <ion-col col-8 class="padding-left5">\n                            <div class="border-btm padding-bottom5 ln-ght20" text-capitalize>\n                                <p text-left class="margin0">{{job.title}}</p>\n                                <p text-left class="margin0">{{job.employeeName}}</p>\n                                <p text-left class="margin0">{{job.siteProjectName}} - {{job.siteName}}</p>\n                            </div>\n                        </ion-col>\n                        <ion-col col-2 class="padding-left0 ver-center">\n                            <div class="padding-bottom5">\n                                <button ion-button clear color="primary" (click)="open(slidingItem, item ,count)">\n                                    <i class="material-icons">more_horiz</i>\n                                </button>\n                            </div>\n                        </ion-col>\n                        <!--\n                        <ion-col col-1>\n                            <p (click)="open(ItemSliding,Item)">f</p>\n                        </ion-col>\n                        -->\n\n                    </ion-row>\n                </div>\n                <ion-item-sliding #slidingItem>\n\n                    <ion-item #item class="item-fnt padding-left0" >\n                        <!--<div class="padding-left16">-->\n\n                        <div text-capitalize >\n                            <ion-row class="margin0">\n                                <ion-col col-6 class="padding-right5">\n                                    <div *ngIf="job.status ==\'COMPLETED\'">\n                                        <p text-left class="fnt-12"><ion-icon ios="ios-calendar" md="md-calendar" class="green padding-right10"></ion-icon>{{job.actualStartTime | date:\'MMM d, y, h:mm a\' }} </p>\n                                    </div>\n                                    <div *ngIf="job.status !=\'COMPLETED\'">\n                                        <p text-left class="fnt-12"><ion-icon ios="ios-calendar" md="md-calendar" class="green padding-right10"></ion-icon>{{job.plannedStartTime | date:\'MMM d, y, h:mm a\' }} </p>\n                                    </div>\n                                </ion-col>\n                                <ion-col col-6>\n                                    <div *ngIf="job.status ==\'COMPLETED\'">\n                                        <p text-right class="fnt-12"><ion-icon ios="ios-calendar" md="md-calendar" class="red padding-right10"></ion-icon>{{job.actualEndTime | date:\'MMM d, y, h:mm a\' }} </p>\n                                    </div>\n                                    <div *ngIf="job.status !=\'COMPLETED\'">\n                                        <p text-right class="fnt-12"><ion-icon ios="ios-calendar" md="md-calendar" class="red padding-right10"></ion-icon>{{job.plannedEndTime | date:\'MMM d, y, h:mm a\' }} </p>\n                                    </div>\n                                </ion-col>\n                            </ion-row>\n                        </div>\n                        <!--</div>-->\n                    </ion-item>\n\n                    <ion-item-options (click)="close(slidingItem)">\n                        <div>\n                            <button ion-button clear color="primary"><ion-icon name="md-eye" class="fnt-24"></ion-icon></button>\n                        </div>\n                        <!--<div *ngIf="userType === \'ADMIN\' || userType === \'TECHNICIAN\' || userType === \'FACILITYMANAGER\' || userType === \'SUPERVISOR\'">-->\n                            <!--<button ion-button clear color="clr-blue"><ion-icon name="md-create" class="fnt-24"></ion-icon></button>-->\n                        <!--</div>-->\n                        <div *ngIf="userType === \'ADMIN\' || userType === \'TECHNICIAN\' || userType === \'FACILITYMANAGER\' || userType === \'SUPERVISOR\'">\n                            <button ion-button clear color="secondary" *ngIf="job.status !=\'COMPLETED\'" (click)="compeleteJob(job)"><ion-icon name="md-checkmark-circle" class="fnt-24"></ion-icon></button>\n                        </div>\n                        <div *ngIf="userType === \'ADMIN\' || userType === \'TECHNICIAN\' || userType === \'FACILITYMANAGER\' || userType === \'SUPERVISOR\'">\n                            <button ion-button clear color="danger"><ion-icon name="md-close-circle" class="fnt-24"></ion-icon></button>\n                        </div>\n                    </ion-item-options>\n                </ion-item-sliding>\n\n            </div>\n\n\n\n            <!--\n                <div class="card" *ngFor="let job of todaysJobs" [ngClass]="{\'red-card\' : (job.status == \'OVERDUE\'),\n                                                          \'green-card\' : (job.status == \'COMPLETED\'),\n                                                          \'blue-card\' :(job.status ==\'OPEN\' || job.status == \'ASSIGNED\' || job.status == \'INPROGRESS\')}">\n\n                    <div class="card-content padding-bottom0" >\n                        <ion-row class="margin0">\n                            <ion-col col-12 class="padding-right0">\n                                <button ion-button icon-left icon-only clear class="pop-icon" (click)="presentActionSheet(job)">\n                                    <ion-icon name="ios-more" class="fnt-12 padding0"></ion-icon>\n                                </button>\n                            </ion-col>\n                        </ion-row>\n                        <ion-row class="margin0">\n                            <ion-col col-7 class="padding-left0"><p text-left>{{job.title}}</p></ion-col>\n                            <ion-col col-5 class="padding-right0">\n                                <p text-right [ngClass]="{\'red\' : (job.status == \'OVERDUE\'),\n                                                          \'green\' : (job.status == \'COMPLETED\'),\n                                                          \'blue\' :(job.status ==\'OPEN\' || job.status == \'ASSIGNED\' || job.status == \'INPROGRESS\')}" >\n                                    {{job.status}}\n                                </p>\n                            </ion-col>\n                        </ion-row>\n                        <p>{{job.employeeName}}</p>\n                        <p>{{job.siteProjectName}} - {{job.siteName}}</p>\n                    </div>\n\n\n                    <div class="card-footer">\n                        <div *ngIf="job.status !=\'COMPLETED\'">\n                            <p>{{job.plannedStartTime | date:\'dd/MM/yyyy @ H:mm\' }} - {{job.plannedEndTime | date:\'dd/MM/yyyy @ H:mm\' }} </p>\n                        </div>\n                        <div *ngIf="job.status ==\'COMPLETED\'">\n                            <p>{{job.actualStartTime | date:\'dd/MM/yyyy @ H:mm\' }} - {{job.actualEndTime | date:\'dd/MM/yyyy @ H:mm\' }} </p>\n                        </div>\n                        <div class="stats align-right">\n                            <!--<p class="display-inline">view</p><ion-icon class="primary-clr padding-left5 fnt-12" name="arrow-forward"></ion-icon>-->\n                        <!--</div>-->\n                    <!--</div>-->\n                <!--</div>-->\n\n        </ion-list>\n        <ion-list *ngSwitchCase="\'jobs\'">\n\n            <ion-refresher (ionRefresh)="doRefresh($event,all)">\n                <ion-refresher-content></ion-refresher-content>\n            </ion-refresher>\n\n            <div  class="white-bg" *ngFor="let job of allJobs" >\n                <div class="padding-left16 padding-top5">\n                <ion-row class="margin0">\n\n                    <ion-col col-2 class="ver-center">\n                        <button ion-button clear color="primary" class="icon-round"\n                                [ngClass]="{\'icon-round-red\' : (job.status == \'OVERDUE\'),\n                                                          \'icon-round-green\' : (job.status == \'COMPLETED\'),\n                                                          \'icon-round-blue\' :(job.status ==\'OPEN\' || job.status == \'ASSIGNED\' || job.status == \'INPROGRESS\')}">\n                            <ion-icon name="ios-construct-outline" class="fnt-24"></ion-icon>\n                        </button>\n                    </ion-col>\n                    <ion-col col-8 class="padding-left5">\n                        <div class="border-btm padding-bottom5 ln-ght20" text-capitalize>\n                            <p text-left class="margin0">{{job.title}}</p>\n                            <p text-left class="margin0">{{job.employeeName}}</p>\n                            <p text-left class="margin0">{{job.siteProjectName}} - {{job.siteName}}</p>\n                        </div>\n                    </ion-col>\n                    <ion-col col-2 class="padding-left0 ver-center">\n                        <div class="padding-bottom5">\n                            <button ion-button clear color="primary" (click)="open(slidingItem, item ,count)">\n                                <i class="material-icons">more_horiz</i>\n                            </button>\n                        </div>\n                    </ion-col>\n                    <!--\n                    <ion-col col-1>\n                        <p (click)="open(ItemSliding,Item)">f</p>\n                    </ion-col>\n                    -->\n\n                </ion-row>\n                </div>\n            <ion-item-sliding #slidingItem>\n\n                <ion-item #item class="item-fnt padding-left0" >\n                    <!--<div class="padding-left16">-->\n\n                        <div text-capitalize >\n                            <ion-row class="margin0">\n                                <ion-col col-6 class="padding-right5">\n                                    <div *ngIf="job.status ==\'COMPLETED\'">\n                                        <p text-left class="fnt-12"><ion-icon ios="ios-calendar" md="md-calendar" class="green padding-right10"></ion-icon>{{job.actualStartTime | date:\'MMM d, y, h:mm a\' }} </p>\n                                    </div>\n                                    <div *ngIf="job.status !=\'COMPLETED\'">\n                                        <p text-left class="fnt-12"><ion-icon ios="ios-calendar" md="md-calendar" class="green padding-right10"></ion-icon>{{job.plannedStartTime | date:\'MMM d, y, h:mm a\' }} </p>\n                                    </div>\n                                </ion-col>\n                                <ion-col col-6>\n                                    <div *ngIf="job.status ==\'COMPLETED\'">\n                                        <p text-right class="fnt-12"><ion-icon ios="ios-calendar" md="md-calendar" class="red padding-right10"></ion-icon>{{job.actualEndTime | date:\'MMM d, y, h:mm a\' }} </p>\n                                    </div>\n                                    <div *ngIf="job.status !=\'COMPLETED\'">\n                                        <p text-right class="fnt-12"><ion-icon ios="ios-calendar" md="md-calendar" class="red padding-right10"></ion-icon>{{job.plannedEndTime | date:\'MMM d, y, h:mm a\' }} </p>\n                                    </div>\n                                </ion-col>\n                            </ion-row>\n                        </div>\n                    <!--</div>-->\n                </ion-item>\n\n                <ion-item-options (click)="close(slidingItem)">\n                    <div>\n                        <button ion-button clear color="primary"><ion-icon name="md-eye" class="fnt-24"></ion-icon></button>\n                    </div>\n                    <div>\n                        <button ion-button clear color="clr-blue"><ion-icon name="md-create" class="fnt-24"></ion-icon></button>\n                    </div>\n                    <div>\n                        <button ion-button clear color="secondary" *ngIf="job.status !=\'COMPLETED\'" (click)="compeleteJob(job)"><ion-icon name="md-checkmark-circle" class="fnt-24"></ion-icon></button>\n                    </div>\n                    <div>\n                        <button ion-button clear color="danger"><ion-icon name="md-close-circle" class="fnt-24"></ion-icon></button>\n                    </div>\n                </ion-item-options>\n            </ion-item-sliding>\n\n        </div>\n\n            <!--\n            <div class="card" *ngFor="let job of allJobs" [ngClass]="{\'red-card\' : (job.status == \'OVERDUE\'),\n                                                          \'green-card\' : (job.status == \'COMPLETED\'),\n                                                          \'blue-card\' :(job.status ==\'OPEN\' || job.status == \'ASSIGNED\' || job.status == \'INPROGRESS\')}">\n\n                    <div class="card-content padding-bottom0" >\n                        <ion-row class="margin0">\n                            <ion-col col-12 class="padding-right0">\n                                <button ion-button icon-left icon-only clear class="pop-icon" (click)="presentActionSheet(job)">\n                                    <ion-icon name="ios-more" class="fnt-12 padding0"></ion-icon>\n                                </button>\n                            </ion-col>\n                        </ion-row>\n                        <ion-row class="margin0">\n                            <ion-col col-7 class="padding-left0"><p text-left>{{job.title}}</p></ion-col>\n                            <ion-col col-5 class="padding-right0">\n                                <p text-right [ngClass]="{\'red\' : (job.status == \'OVERDUE\'),\n                                                          \'green\' : (job.status == \'COMPLETED\'),\n                                                          \'blue\' :(job.status ==\'OPEN\' || job.status == \'ASSIGNED\' || job.status == \'INPROGRESS\')}" >\n                                    {{job.status}}\n                                </p>\n                            </ion-col>\n                        </ion-row>\n                        <p>{{job.employeeName}}</p>\n                        <p>{{job.siteProjectName}} - {{job.siteName}}</p>\n                    </div>\n\n                    <div class="card-footer">\n                        <div *ngIf="job.status !=\'COMPLETED\'">\n                            <p>{{job.plannedStartTime | date:\'dd/MM/yyyy @ H:mm\' }} - {{job.plannedEndTime | date:\'dd/MM/yyyy @ H:mm\' }} </p>\n                        </div>\n                        <div *ngIf="job.status ==\'COMPLETED\'">\n                            <p>{{job.actualStartTime | date:\'dd/MM/yyyy @ H:mm\' }} - {{job.actualEndTime | date:\'dd/MM/yyyy @ H:mm\' }} </p>\n                        </div>\n                        <div class="stats align-right">\n                            <!--<p class="display-inline">view</p><ion-icon class="primary-clr padding-left5 fnt-12" name="arrow-forward"></ion-icon>-->\n                        <!--</div>-->\n                    <!--</div>-->\n                <!--</div>-->\n\n\n        </ion-list>\n\n    </div>\n\n</ion-content>\n`/*ion-inline-end:"/Users/gnana/techginko/workspace/fms/MobileApp/src/pages/jobs/jobs.html"*/
+            selector: 'page-jobs',template:/*ion-inline-start:"/Users/gnana/techginko/workspace/fms/MobileApp/src/pages/jobs/jobs.html"*/`<ion-header no-border>\n  <ion-navbar>\n    <button ion-button menuToggle>\n      <ion-icon name="menu"></ion-icon>\n    </button>\n    <ion-title>Jobs</ion-title>\n      <!--<ion-buttons right>-->\n          <!--<button ion-button clear (click)="addJob()" class="add-btn">-->\n              <!--<ion-icon name="add"></ion-icon>-->\n          <!--</button>-->\n      <!--</ion-buttons>-->\n  </ion-navbar>\n        <ion-segment [(ngModel)]="categories" class="segmnt margin-auto" color="#ff9800">\n            <ion-segment-button value="today" (click)="getTodaysJobs(false)">\n                Today\'s Jobs\n            </ion-segment-button>\n            <ion-segment-button value="jobs" (click)="getAllJobs(false)">\n                All Jobs\n            </ion-segment-button>\n\n        </ion-segment>\n\n\n</ion-header>\n\n<ion-content>\n    <ion-fab bottom right >\n        <button (click)="addJob()" ion-fab><ion-icon name="add"></ion-icon></button>\n    </ion-fab>\n\n    <div [ngSwitch]="categories">\n        <ion-list *ngSwitchCase="\'today\'">\n            <ion-refresher (ionRefresh)="doRefresh($event,today)">\n                <ion-refresher-content></ion-refresher-content>\n            </ion-refresher>\n            <div *ngIf="allJobs?.length<0">\n                <ion-card>\n                    <ion-card-content>\n                        No Jobs\n                    </ion-card-content>\n                </ion-card>\n            </div>\n            <div  class="white-bg" *ngFor="let job of allJobs" >\n\n                <div class="padding-left16 padding-top5">\n                    <ion-row class="margin0">\n\n                        <ion-col col-2 class="ver-center">\n                            <button ion-button clear color="primary" class="icon-round"\n                                    [ngClass]="{\'icon-round-red\' : (job.status == \'OVERDUE\'),\n                                                          \'icon-round-green\' : (job.status == \'COMPLETED\'),\n                                                          \'icon-round-blue\' :(job.status ==\'OPEN\' || job.status == \'ASSIGNED\' || job.status == \'INPROGRESS\')}">\n                                <ion-icon name="ios-construct-outline" class="fnt-24"></ion-icon>\n                            </button>\n                        </ion-col>\n                        <ion-col col-7 class="padding-left5">\n                            <div class="border-btm padding-bottom5 ln-ght20" text-capitalize>\n                                <p text-left class="margin0">{{job.title}}</p>\n                                <p text-left class="margin0">{{job.employeeName}}</p>\n                                <p text-left class="margin0">{{job.siteProjectName}} - {{job.siteName}}</p>\n                            </div>\n                        </ion-col>\n                        <ion-col col-2 class="padding-left0 ver-center">\n                            <div class="padding-bottom5">\n                                <button ion-button clear color="primary" (click)="open(slidingItem, item ,count)">\n                                    <i class="material-icons">more_horiz</i>\n                                </button>\n                            </div>\n                        </ion-col>\n                        <!--\n                        <ion-col col-1>\n                            <p (click)="open(ItemSliding,Item)">f</p>\n                        </ion-col>\n                        -->\n\n                    </ion-row>\n                </div>\n                <ion-item-sliding #slidingItem>\n\n                    <ion-item #item class="item-fnt padding-left0" >\n                        <!--<div class="padding-left16">-->\n\n                        <div text-capitalize >\n                            <ion-row class="margin0">\n                                <ion-col col-6 class="padding-right5">\n                                    <div *ngIf="job.status ==\'COMPLETED\'">\n                                        <p text-left class="fnt-12"><ion-icon ios="ios-calendar" md="md-calendar" class="green padding-right10"></ion-icon>{{job.actualStartTime | date:\'MMM d, y, h:mm a\' }} </p>\n                                    </div>\n                                    <div *ngIf="job.status !=\'COMPLETED\'">\n                                        <p text-left class="fnt-12"><ion-icon ios="ios-calendar" md="md-calendar" class="green padding-right10"></ion-icon>{{job.plannedStartTime | date:\'MMM d, y, h:mm a\' }} </p>\n                                    </div>\n                                </ion-col>\n                                <ion-col col-6>\n                                    <div *ngIf="job.status ==\'COMPLETED\'">\n                                        <p text-right class="fnt-12"><ion-icon ios="ios-calendar" md="md-calendar" class="red padding-right10"></ion-icon>{{job.actualEndTime | date:\'MMM d, y, h:mm a\' }} </p>\n                                    </div>\n                                    <div *ngIf="job.status !=\'COMPLETED\'">\n                                        <p text-right class="fnt-12"><ion-icon ios="ios-calendar" md="md-calendar" class="red padding-right10"></ion-icon>{{job.plannedEndTime | date:\'MMM d, y, h:mm a\' }} </p>\n                                    </div>\n                                </ion-col>\n                            </ion-row>\n                        </div>\n                        <!--</div>-->\n                    </ion-item>\n\n                    <ion-item-options (click)="close(slidingItem)">\n                        <div>\n                            <button ion-button clear color="primary"><ion-icon name="md-eye" class="fnt-24"></ion-icon></button>\n                        </div>\n                        <!--<div *ngIf="userType === \'ADMIN\' || userType === \'TECHNICIAN\' || userType === \'FACILITYMANAGER\' || userType === \'SUPERVISOR\'">-->\n                            <!--<button ion-button clear color="clr-blue"><ion-icon name="md-create" class="fnt-24"></ion-icon></button>-->\n                        <!--</div>-->\n                        <div >\n                            <button ion-button clear color="secondary" *ngIf="job.status !=\'COMPLETED\'" (click)="compeleteJob(job)"><ion-icon name="md-checkmark-circle" class="fnt-24"></ion-icon></button>\n                        </div>\n                        <div *ngIf="userType === \'ADMIN\' || userType === \'TECHNICIAN\' || userType === \'FACILITYMANAGER\' || userType === \'SUPERVISOR\'">\n                            <button ion-button clear color="danger"><ion-icon name="md-close-circle" class="fnt-24"></ion-icon></button>\n                        </div>\n                    </ion-item-options>\n                </ion-item-sliding>\n\n            </div>\n\n\n\n            <!--\n                <div class="card" *ngFor="let job of todaysJobs" [ngClass]="{\'red-card\' : (job.status == \'OVERDUE\'),\n                                                          \'green-card\' : (job.status == \'COMPLETED\'),\n                                                          \'blue-card\' :(job.status ==\'OPEN\' || job.status == \'ASSIGNED\' || job.status == \'INPROGRESS\')}">\n\n                    <div class="card-content padding-bottom0" >\n                        <ion-row class="margin0">\n                            <ion-col col-12 class="padding-right0">\n                                <button ion-button icon-left icon-only clear class="pop-icon" (click)="presentActionSheet(job)">\n                                    <ion-icon name="ios-more" class="fnt-12 padding0"></ion-icon>\n                                </button>\n                            </ion-col>\n                        </ion-row>\n                        <ion-row class="margin0">\n                            <ion-col col-7 class="padding-left0"><p text-left>{{job.title}}</p></ion-col>\n                            <ion-col col-5 class="padding-right0">\n                                <p text-right [ngClass]="{\'red\' : (job.status == \'OVERDUE\'),\n                                                          \'green\' : (job.status == \'COMPLETED\'),\n                                                          \'blue\' :(job.status ==\'OPEN\' || job.status == \'ASSIGNED\' || job.status == \'INPROGRESS\')}" >\n                                    {{job.status}}\n                                </p>\n                            </ion-col>\n                        </ion-row>\n                        <p>{{job.employeeName}}</p>\n                        <p>{{job.siteProjectName}} - {{job.siteName}}</p>\n                    </div>\n\n\n                    <div class="card-footer">\n                        <div *ngIf="job.status !=\'COMPLETED\'">\n                            <p>{{job.plannedStartTime | date:\'dd/MM/yyyy @ H:mm\' }} - {{job.plannedEndTime | date:\'dd/MM/yyyy @ H:mm\' }} </p>\n                        </div>\n                        <div *ngIf="job.status ==\'COMPLETED\'">\n                            <p>{{job.actualStartTime | date:\'dd/MM/yyyy @ H:mm\' }} - {{job.actualEndTime | date:\'dd/MM/yyyy @ H:mm\' }} </p>\n                        </div>\n                        <div class="stats align-right">\n                            <!--<p class="display-inline">view</p><ion-icon class="primary-clr padding-left5 fnt-12" name="arrow-forward"></ion-icon>-->\n                        <!--</div>-->\n                    <!--</div>-->\n                <!--</div>-->\n\n        </ion-list>\n        <ion-list *ngSwitchCase="\'jobs\'">\n\n            <ion-refresher (ionRefresh)="doRefresh($event,all)">\n                <ion-refresher-content></ion-refresher-content>\n            </ion-refresher>\n\n            <div  class="white-bg" *ngFor="let job of allJobs" >\n                <div class="padding-left16 padding-top5">\n                <ion-row class="margin0">\n\n                    <ion-col col-2 class="ver-center">\n                        <button ion-button clear color="primary" class="icon-round"\n                                [ngClass]="{\'icon-round-red\' : (job.status == \'OVERDUE\'),\n                                                          \'icon-round-green\' : (job.status == \'COMPLETED\'),\n                                                          \'icon-round-blue\' :(job.status ==\'OPEN\' || job.status == \'ASSIGNED\' || job.status == \'INPROGRESS\')}">\n                            <ion-icon name="ios-construct-outline" class="fnt-24"></ion-icon>\n                        </button>\n                    </ion-col>\n                    <ion-col col-8 class="padding-left5">\n                        <div class="border-btm padding-bottom5 ln-ght20" text-capitalize>\n                            <p text-left class="margin0">{{job.title}}</p>\n                            <p text-left class="margin0">{{job.employeeName}}</p>\n                            <p text-left class="margin0">{{job.siteProjectName}} - {{job.siteName}}</p>\n                        </div>\n                    </ion-col>\n                    <ion-col col-2 class="padding-left0 ver-center">\n                        <div class="padding-bottom5">\n                            <button ion-button clear color="primary" (click)="open(slidingItem, item ,count)">\n                                <i class="material-icons">more_horiz</i>\n                            </button>\n                        </div>\n                    </ion-col>\n                    <!--\n                    <ion-col col-1>\n                        <p (click)="open(ItemSliding,Item)">f</p>\n                    </ion-col>\n                    -->\n\n                </ion-row>\n                </div>\n            <ion-item-sliding #slidingItem>\n\n                <ion-item #item class="item-fnt padding-left0" >\n                    <!--<div class="padding-left16">-->\n\n                        <div text-capitalize >\n                            <ion-row class="margin0">\n                                <ion-col col-6 class="padding-right5">\n                                    <div *ngIf="job.status ==\'COMPLETED\'">\n                                        <p text-left class="fnt-12"><ion-icon ios="ios-calendar" md="md-calendar" class="green padding-right10"></ion-icon>{{job.actualStartTime | date:\'MMM d, y, h:mm a\' }} </p>\n                                    </div>\n                                    <div *ngIf="job.status !=\'COMPLETED\'">\n                                        <p text-left class="fnt-12"><ion-icon ios="ios-calendar" md="md-calendar" class="green padding-right10"></ion-icon>{{job.plannedStartTime | date:\'MMM d, y, h:mm a\' }} </p>\n                                    </div>\n                                </ion-col>\n                                <ion-col col-6>\n                                    <div *ngIf="job.status ==\'COMPLETED\'">\n                                        <p text-right class="fnt-12"><ion-icon ios="ios-calendar" md="md-calendar" class="red padding-right10"></ion-icon>{{job.actualEndTime | date:\'MMM d, y, h:mm a\' }} </p>\n                                    </div>\n                                    <div *ngIf="job.status !=\'COMPLETED\'">\n                                        <p text-right class="fnt-12"><ion-icon ios="ios-calendar" md="md-calendar" class="red padding-right10"></ion-icon>{{job.plannedEndTime | date:\'MMM d, y, h:mm a\' }} </p>\n                                    </div>\n                                </ion-col>\n                            </ion-row>\n                        </div>\n                    <!--</div>-->\n                </ion-item>\n\n                <ion-item-options (click)="close(slidingItem)">\n                    <div>\n                        <button ion-button clear color="primary"><ion-icon name="md-eye" class="fnt-24"></ion-icon></button>\n                    </div>\n                    <!--<div>-->\n                        <!--<button ion-button clear color="clr-blue"><ion-icon name="md-create" class="fnt-24"></ion-icon></button>-->\n                    <!--</div>-->\n                    <div>\n                        <button ion-button clear color="secondary" *ngIf="job.status !=\'COMPLETED\'" (click)="compeleteJob(job)"><ion-icon name="md-checkmark-circle" class="fnt-24"></ion-icon></button>\n                    </div>\n                    <div>\n                        <button ion-button clear color="danger"><ion-icon name="md-close-circle" class="fnt-24"></ion-icon></button>\n                    </div>\n                </ion-item-options>\n            </ion-item-sliding>\n\n        </div>\n\n            <!--\n            <div class="card" *ngFor="let job of allJobs" [ngClass]="{\'red-card\' : (job.status == \'OVERDUE\'),\n                                                          \'green-card\' : (job.status == \'COMPLETED\'),\n                                                          \'blue-card\' :(job.status ==\'OPEN\' || job.status == \'ASSIGNED\' || job.status == \'INPROGRESS\')}">\n\n                    <div class="card-content padding-bottom0" >\n                        <ion-row class="margin0">\n                            <ion-col col-12 class="padding-right0">\n                                <button ion-button icon-left icon-only clear class="pop-icon" (click)="presentActionSheet(job)">\n                                    <ion-icon name="ios-more" class="fnt-12 padding0"></ion-icon>\n                                </button>\n                            </ion-col>\n                        </ion-row>\n                        <ion-row class="margin0">\n                            <ion-col col-7 class="padding-left0"><p text-left>{{job.title}}</p></ion-col>\n                            <ion-col col-5 class="padding-right0">\n                                <p text-right [ngClass]="{\'red\' : (job.status == \'OVERDUE\'),\n                                                          \'green\' : (job.status == \'COMPLETED\'),\n                                                          \'blue\' :(job.status ==\'OPEN\' || job.status == \'ASSIGNED\' || job.status == \'INPROGRESS\')}" >\n                                    {{job.status}}\n                                </p>\n                            </ion-col>\n                        </ion-row>\n                        <p>{{job.employeeName}}</p>\n                        <p>{{job.siteProjectName}} - {{job.siteName}}</p>\n                    </div>\n\n                    <div class="card-footer">\n                        <div *ngIf="job.status !=\'COMPLETED\'">\n                            <p>{{job.plannedStartTime | date:\'dd/MM/yyyy @ H:mm\' }} - {{job.plannedEndTime | date:\'dd/MM/yyyy @ H:mm\' }} </p>\n                        </div>\n                        <div *ngIf="job.status ==\'COMPLETED\'">\n                            <p>{{job.actualStartTime | date:\'dd/MM/yyyy @ H:mm\' }} - {{job.actualEndTime | date:\'dd/MM/yyyy @ H:mm\' }} </p>\n                        </div>\n                        <div class="stats align-right">\n                            <!--<p class="display-inline">view</p><ion-icon class="primary-clr padding-left5 fnt-12" name="arrow-forward"></ion-icon>-->\n                        <!--</div>-->\n                    <!--</div>-->\n                <!--</div>-->\n\n\n        </ion-list>\n\n    </div>\n\n</ion-content>\n`/*ion-inline-end:"/Users/gnana/techginko/workspace/fms/MobileApp/src/pages/jobs/jobs.html"*/
         }),
         __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["NavController"], __WEBPACK_IMPORTED_MODULE_4__service_componentService__["a" /* componentService */], __WEBPACK_IMPORTED_MODULE_2__service_authService__["a" /* authService */],
             __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["LoadingController"], __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["ActionSheetController"], __WEBPACK_IMPORTED_MODULE_7__service_jobService__["a" /* JobService */], __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["Events"]])
@@ -403,10 +403,10 @@ var SubmittedQuotationPage = (function () {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_http__ = __webpack_require__(49);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_rxjs__ = __webpack_require__(50);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_rxjs___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_rxjs__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__Interceptor_HttpClient__ = __webpack_require__(55);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__Interceptor_HttpClient__ = __webpack_require__(56);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__angular_core__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_ionic_angular__ = __webpack_require__(6);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__app_config__ = __webpack_require__(56);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__app_config__ = __webpack_require__(57);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -472,6 +472,12 @@ var authService = (function () {
             return response;
         });
     };
+    authService.prototype.userRolePermissions = function (searchCriteria) {
+        return this.http.post(this.config.Url + 'api/userRolePermission/search', searchCriteria).map(function (response) {
+            console.log(response.json());
+            return response.json();
+        });
+    };
     authService = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_3__angular_core__["Injectable"])(),
         __param(3, Object(__WEBPACK_IMPORTED_MODULE_3__angular_core__["Inject"])(__WEBPACK_IMPORTED_MODULE_5__app_config__["b" /* MY_CONFIG_TOKEN */])),
@@ -490,10 +496,11 @@ var authService = (function () {
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return TabsPage; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__dashboard_dashboard__ = __webpack_require__(338);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__quotation_quotation__ = __webpack_require__(76);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__customer_detail_customer_detail__ = __webpack_require__(465);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__employee_list_employee_list__ = __webpack_require__(161);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(6);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__dashboard_dashboard__ = __webpack_require__(338);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__quotation_quotation__ = __webpack_require__(76);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__customer_detail_customer_detail__ = __webpack_require__(465);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__employee_list_employee_list__ = __webpack_require__(161);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -508,21 +515,28 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 
 
+
 var TabsPage = (function () {
-    function TabsPage() {
-        this.DashboardTab = __WEBPACK_IMPORTED_MODULE_1__dashboard_dashboard__["a" /* DashboardPage */];
-        this.QuotationTab = __WEBPACK_IMPORTED_MODULE_2__quotation_quotation__["a" /* QuotationPage */];
-        this.CustomerDetailTab = __WEBPACK_IMPORTED_MODULE_3__customer_detail_customer_detail__["a" /* CustomerDetailPage */];
-        this.EmployeeListTab = __WEBPACK_IMPORTED_MODULE_4__employee_list_employee_list__["a" /* EmployeeListPage */];
+    function TabsPage(events) {
+        var _this = this;
+        this.events = events;
+        this.DashboardTab = __WEBPACK_IMPORTED_MODULE_2__dashboard_dashboard__["a" /* DashboardPage */];
+        this.QuotationTab = __WEBPACK_IMPORTED_MODULE_3__quotation_quotation__["a" /* QuotationPage */];
+        this.CustomerDetailTab = __WEBPACK_IMPORTED_MODULE_4__customer_detail_customer_detail__["a" /* CustomerDetailPage */];
+        this.EmployeeListTab = __WEBPACK_IMPORTED_MODULE_5__employee_list_employee_list__["a" /* EmployeeListPage */];
+        this.events.subscribe('userType', function (type) {
+            console.log(type);
+            _this.userType = type;
+        });
     }
     TabsPage.prototype.ionViewDidLoad = function () {
         console.log('ionViewDidLoad TabsPage');
     };
     TabsPage = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
-            selector: 'page-tabs',template:/*ion-inline-start:"/Users/gnana/techginko/workspace/fms/MobileApp/src/pages/tabs/tabs.html"*/`<ion-tabs  tabsPlacement="bottom" color="primary">\n  <ion-tab tabTitle="Dashboard" [root]="DashboardTab"  tabIcon="ios-podium-outline" tabsHideOnSubPages="true"></ion-tab>\n  <ion-tab tabTitle="Quotation" [root]="QuotationTab"  tabIcon="md-paper" tabsHideOnSubPages="true"></ion-tab>\n  <ion-tab tabTitle="Employee" [root]="EmployeeListTab"  tabIcon="list-box" tabsHideOnSubPages="true"></ion-tab>\n</ion-tabs>\n\n\n`/*ion-inline-end:"/Users/gnana/techginko/workspace/fms/MobileApp/src/pages/tabs/tabs.html"*/
+            selector: 'page-tabs',template:/*ion-inline-start:"/Users/gnana/techginko/workspace/fms/MobileApp/src/pages/tabs/tabs.html"*/`<ion-tabs  tabsPlacement="bottom" color="primary">\n  <ion-tab tabTitle="Dashboard" [root]="DashboardTab"  tabIcon="ios-podium-outline" tabsHideOnSubPages="true"></ion-tab>\n  <ion-tab tabTitle="Quotation" [root]="QuotationTab"  tabIcon="md-paper" tabsHideOnSubPages="true"></ion-tab>\n  <ion-tab tabTitle="Employee" [root]="EmployeeListTab" *ngIf="userType === \'ADMIN\' || userType === \'CLIENT\' || userType === \'FACILITYMANAGER\' || userType === \'SUPERVISOR\'"  tabIcon="list-box" tabsHideOnSubPages="true"></ion-tab>\n</ion-tabs>\n\n\n`/*ion-inline-end:"/Users/gnana/techginko/workspace/fms/MobileApp/src/pages/tabs/tabs.html"*/
         }),
-        __metadata("design:paramtypes", [])
+        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["Events"]])
     ], TabsPage);
     return TabsPage;
 }());
@@ -632,7 +646,7 @@ var CreateRateCardPage = (function () {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__jobs__ = __webpack_require__(100);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__service_jobService__ = __webpack_require__(40);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__service_attendanceService__ = __webpack_require__(42);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__service_siteService__ = __webpack_require__(34);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__service_siteService__ = __webpack_require__(30);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -814,7 +828,7 @@ var CreateJobPage = (function () {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(6);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__service_authService__ = __webpack_require__(11);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__ionic_native_camera__ = __webpack_require__(33);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__ionic_native_camera__ = __webpack_require__(34);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__ionic_native_geolocation__ = __webpack_require__(41);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__jobs__ = __webpack_require__(100);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__service_jobService__ = __webpack_require__(40);
@@ -930,15 +944,14 @@ var CompleteJobPage = (function () {
         console.log(this.jobDetails.checklistItems[i].status);
         this.jobDetails.checklistItems[i].status = true;
         console.log("Count:" + this.count);
-        if (this.sLength == this.count) {
-            this.onButton = true;
-        }
+        console.log("Slength" + this.sLength);
+        this.onButton = true;
     };
     CompleteJobPage.prototype.call = function () {
     };
     CompleteJobPage = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
-            selector: 'page-complete-job',template:/*ion-inline-start:"/Users/gnana/techginko/workspace/fms/MobileApp/src/pages/jobs/completeJob.html"*/`<ion-header>\n    <ion-navbar>\n        <button ion-button menuToggle>\n            <ion-icon name="menu"></ion-icon>\n        </button>\n        <ion-title>Complete Job</ion-title>\n    </ion-navbar>\n</ion-header>\n\n<ion-content padding>\n\n    <ion-list >\n        <ion-row class="margin0 white-bg padding10">\n            <ion-col col-6 class="label-on-left">Job Id</ion-col>\n            <ion-col col-6>\n                <p text-right>{{jobDetails.id}}</p>\n            </ion-col>\n            <ion-col col-6 class="label-on-left">Name</ion-col>\n            <ion-col col-6>\n                <p text-right>{{jobDetails.title}}</p>\n            </ion-col>\n            <ion-col col-6 class="label-on-left">Status</ion-col>\n            <ion-col col-6>\n                <p text-right>{{jobDetails.status}}</p>\n            </ion-col>\n        </ion-row>\n\n        <div class="margin-tp25 white-bg padding10">\n            <ion-row class="margin0">\n                <ion-col col-6 class="label-on-left">\n                    <p class="line-height">Photo (Before)</p>\n                </ion-col>\n                <ion-col col-6 text-right>\n                    <button class="ion-button" round (click)="viewCamera(\'beforeJob\',jobDetails)" class="camera-btn"><ion-icon name="ios-camera"></ion-icon></button>\n                </ion-col>\n            </ion-row>\n            <ion-row>\n                <ion-col col-3 *ngFor="let image of takenImages;let i of index" class="">\n                    <img [src]="image" class="job-img margin-bottom25" (click)="viewImage(i,image)">\n                </ion-col>\n            </ion-row>\n        </div>\n\n        <ion-row class="margin-tp25 white-bg padding10" >\n            <div *ngIf="jobDetails.checklistItems?.length > 0">\n                <ion-item *ngFor="let list of jobDetails.checklistItems;let i = index">\n                    <ion-label style="color: black">{{list.checklistItemName}}</ion-label>\n                    <ion-checkbox [(ngModel)]="list.status"  (ionChange)="changeStatus(i)" checked="list.status"></ion-checkbox>\n                </ion-item>\n            </div>\n            <div *ngIf="!jobDetails.checklistItems?.length > 0" class="align-center">\n                <p text-center>No Checklist Found</p>\n            </div>\n        </ion-row>\n    </ion-list>\n\n</ion-content>\n\n<ion-footer>\n    <ion-toolbar class="align-center">\n        <button class="btn btn-warning center" [disabled]="!onButton" (click)="completeJob(jobDetails,takenImages)">\n            complete job\n        </button>\n    </ion-toolbar>\n</ion-footer>`/*ion-inline-end:"/Users/gnana/techginko/workspace/fms/MobileApp/src/pages/jobs/completeJob.html"*/
+            selector: 'page-complete-job',template:/*ion-inline-start:"/Users/gnana/techginko/workspace/fms/MobileApp/src/pages/jobs/completeJob.html"*/`<ion-header>\n    <ion-navbar>\n        <button ion-button menuToggle>\n            <ion-icon name="menu"></ion-icon>\n        </button>\n        <ion-title>Complete Job</ion-title>\n    </ion-navbar>\n</ion-header>\n\n<ion-content padding>\n\n    <ion-list >\n        <ion-row class="margin0 white-bg padding10">\n            <ion-col col-6 class="label-on-left">Job Id</ion-col>\n            <ion-col col-6>\n                <p text-right>{{jobDetails.id}}</p>\n            </ion-col>\n            <ion-col col-6 class="label-on-left">Name</ion-col>\n            <ion-col col-6>\n                <p text-right>{{jobDetails.title}}</p>\n            </ion-col>\n            <ion-col col-6 class="label-on-left">Status</ion-col>\n            <ion-col col-6>\n                <p text-right>{{jobDetails.status}}</p>\n            </ion-col>\n        </ion-row>\n\n        <div class="margin-tp25 white-bg padding10">\n            <ion-row class="margin0">\n                <ion-col col-6 class="label-on-left">\n                    <p class="line-height">Photo (Before)</p>\n                </ion-col>\n                <ion-col col-6 text-right>\n                    <button class="ion-button" round (click)="viewCamera(\'beforeJob\',jobDetails)" class="camera-btn"><ion-icon name="ios-camera"></ion-icon></button>\n                </ion-col>\n            </ion-row>\n            <ion-row>\n                <ion-col col-3 *ngFor="let image of takenImages;let i of index" class="">\n                    <img [src]="image" class="job-img margin-bottom25" (click)="viewImage(i,image)">\n                </ion-col>\n            </ion-row>\n        </div>\n\n        <ion-row class="margin-tp25 white-bg padding10" >\n            <div *ngIf="jobDetails.checklistItems?.length > 0">\n                <ion-item *ngFor="let list of jobDetails.checklistItems;let i = index">\n                    <ion-label style="color: black">{{list.checklistItemName}}</ion-label>\n                    <ion-checkbox [(ngModel)]="list.status"  (ionChange)="changeStatus(i)" checked="list.status"></ion-checkbox>\n                </ion-item>\n            </div>\n            <div *ngIf="!jobDetails.checklistItems?.length > 0" class="align-center">\n                <p text-center>No Checklist Found</p>\n            </div>\n        </ion-row>\n    </ion-list>\n\n</ion-content>\n\n<ion-footer>\n    <ion-toolbar class="align-center">\n        <button class="btn btn-warning center" (click)="completeJob(jobDetails,takenImages)">\n            complete job\n        </button>\n    </ion-toolbar>\n</ion-footer>`/*ion-inline-end:"/Users/gnana/techginko/workspace/fms/MobileApp/src/pages/jobs/completeJob.html"*/
         }),
         __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["NavController"], __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["NavParams"], __WEBPACK_IMPORTED_MODULE_2__service_authService__["a" /* authService */],
             __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["LoadingController"], __WEBPACK_IMPORTED_MODULE_3__ionic_native_camera__["a" /* Camera */], __WEBPACK_IMPORTED_MODULE_4__ionic_native_geolocation__["a" /* Geolocation */], __WEBPACK_IMPORTED_MODULE_6__service_jobService__["a" /* JobService */],
@@ -1017,7 +1030,7 @@ var QuotationPopoverPage = (function () {
     };
     QuotationPopoverPage = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
-            selector: 'page-quotation-popover',template:/*ion-inline-start:"/Users/gnana/techginko/workspace/fms/MobileApp/src/pages/quotation/quotation-popover.html"*/`<ion-content >\n    <ion-list >\n        <ion-row class="margin0 white-bg padding10">\n            <ion-col col-12>\n                <div class="form-group">\n                        <ion-select style="color: black" interface="action-sheet" [(ngModel)]="type" class="select-box" placeholder="Choose Site">\n                            <ion-option style="color: black" *ngFor="let type of rateCardTypes" [value]="type.name" (ionSelect)="selectUOMType(type)" >{{type.name}}</ion-option>\n                        </ion-select>\n                </div>\n            </ion-col>\n\n            <ion-col col-12>\n\n                <div class="form-group label-floating" [ngClass]="{\'has-error\': eMsg==\'all\'||eMsg==\'name\'}">\n                    <label class="control-label">Name</label>\n                    <input class="form-control" type="text" [(ngModel)]="name" id="name" name="name" #nme="ngModel" required [ngClass]="{\'has-error\': nme.errors || eMsg==\'all\'|| eMsg==\'title\'}">\n                    <div *ngIf="nme.errors && (nme.dirty || nme.touched)" class="error-msg">\n\n                    </div>\n\n                    <div *ngIf="nme.errors && (nme.untouched )" class="error-msg">\n\n                    </div>\n                </div>\n\n\n            </ion-col>\n\n            <ion-col col-12>\n                <div class="form-group label-floating" [ngClass]="{\'has-error\': eMsg==\'all\'||eMsg==\'cost\'}">\n                    <label class="control-label">Cost</label>\n                    <input class="form-control" type="number" [(ngModel)]="cost" id="cost" name="cost" #cst="ngModel" required [ngClass]="{\'has-error\': cst.errors || eMsg==\'all\'|| eMsg==\'cost\'}">\n                    <div *ngIf="cst.errors && (cst.dirty || cst.touched)" class="error-msg">\n\n                    </div>\n\n                    <div *ngIf="cst.errors && (cst.untouched )" class="error-msg">\n\n                    </div>\n                </div>\n            </ion-col>\n\n            <button type="submit" class="btn btn-warning pull-right margin-auto" (click)="addRates()">Ok</button>\n        </ion-row>\n    </ion-list>\n</ion-content>\n`/*ion-inline-end:"/Users/gnana/techginko/workspace/fms/MobileApp/src/pages/quotation/quotation-popover.html"*/
+            selector: 'page-quotation-popover',template:/*ion-inline-start:"/Users/gnana/techginko/workspace/fms/MobileApp/src/pages/quotation/quotation-popover.html"*/`<ion-content >\n    <ion-list >\n        <ion-row class="margin0 white-bg padding10">\n            <ion-col col-12>\n                <div class="form-group">\n                        <ion-select style="color: black" interface="action-sheet" [(ngModel)]="type" class="select-box" placeholder="Choose Type">\n                            <ion-option style="color: black" *ngFor="let type of rateCardTypes" [value]="type.name" (ionSelect)="selectUOMType(type)" >{{type.name}}</ion-option>\n                        </ion-select>\n                </div>\n            </ion-col>\n\n            <ion-col col-12>\n\n                <div class="form-group label-floating" [ngClass]="{\'has-error\': eMsg==\'all\'||eMsg==\'name\'}">\n                    <label class="control-label">Name</label>\n                    <input class="form-control" type="text" [(ngModel)]="name" id="name" name="name" #nme="ngModel" required [ngClass]="{\'has-error\': nme.errors || eMsg==\'all\'|| eMsg==\'title\'}">\n                    <div *ngIf="nme.errors && (nme.dirty || nme.touched)" class="error-msg">\n\n                    </div>\n\n                    <div *ngIf="nme.errors && (nme.untouched )" class="error-msg">\n\n                    </div>\n                </div>\n\n\n            </ion-col>\n\n            <ion-col col-12>\n                <div class="form-group label-floating" [ngClass]="{\'has-error\': eMsg==\'all\'||eMsg==\'cost\'}">\n                    <label class="control-label">Cost</label>\n                    <input class="form-control" type="number" [(ngModel)]="cost" id="cost" name="cost" #cst="ngModel" required [ngClass]="{\'has-error\': cst.errors || eMsg==\'all\'|| eMsg==\'cost\'}">\n                    <div *ngIf="cst.errors && (cst.dirty || cst.touched)" class="error-msg">\n\n                    </div>\n\n                    <div *ngIf="cst.errors && (cst.untouched )" class="error-msg">\n\n                    </div>\n                </div>\n            </ion-col>\n\n            <button type="submit" class="btn btn-warning pull-right margin-auto" (click)="addRates()">Ok</button>\n        </ion-row>\n    </ion-list>\n</ion-content>\n`/*ion-inline-end:"/Users/gnana/techginko/workspace/fms/MobileApp/src/pages/quotation/quotation-popover.html"*/
         }),
         __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["NavController"], __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["PopoverController"], __WEBPACK_IMPORTED_MODULE_2__service_authService__["a" /* authService */], __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["ViewController"],
             __WEBPACK_IMPORTED_MODULE_3__service_quotationService__["a" /* QuotationService */]])
@@ -1037,10 +1050,12 @@ var QuotationPopoverPage = (function () {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(6);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__service_authService__ = __webpack_require__(11);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__ionic_native_camera__ = __webpack_require__(33);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__ionic_native_camera__ = __webpack_require__(34);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__ionic_native_geolocation__ = __webpack_require__(41);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__ionic_native_geofence__ = __webpack_require__(59);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__service_componentService__ = __webpack_require__(19);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__service_siteService__ = __webpack_require__(30);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__service_employeeService__ = __webpack_require__(51);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -1057,6 +1072,8 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 
 
+
+
 /**
  * Generated class for the EmployeeList page.
  *
@@ -1064,7 +1081,8 @@ var __metadata = (this && this.__metadata) || function (k, v) {
  * Ionic pages and navigation.
  */
 var CreateEmployeePage = (function () {
-    function CreateEmployeePage(navCtrl, component, myService, navParams, authService, camera, loadingCtrl, geolocation, toastCtrl, geoFence) {
+    function CreateEmployeePage(navCtrl, component, myService, navParams, authService, camera, loadingCtrl, geolocation, toastCtrl, siteService, employeeService, geoFence) {
+        var _this = this;
         this.navCtrl = navCtrl;
         this.component = component;
         this.myService = myService;
@@ -1074,8 +1092,17 @@ var CreateEmployeePage = (function () {
         this.loadingCtrl = loadingCtrl;
         this.geolocation = geolocation;
         this.toastCtrl = toastCtrl;
+        this.siteService = siteService;
+        this.employeeService = employeeService;
         this.geoFence = geoFence;
         this.categories = 'basic';
+        this.getAllProjects();
+        this.employeeService.getAllDesignations().subscribe(function (response) {
+            _this.designations = response;
+        });
+        this.employeeService.getAllEmployees().subscribe(function (response) {
+            _this.manager = response;
+        });
     }
     CreateEmployeePage.prototype.ionViewDidLoad = function () {
     };
@@ -1093,10 +1120,66 @@ var CreateEmployeePage = (function () {
             // error
         });
     };
+    CreateEmployeePage.prototype.getAllProjects = function () {
+        var _this = this;
+        this.component.showLoader('Getting Clients..');
+        this.siteService.getAllProjects().subscribe(function (response) {
+            console.log(response);
+            _this.projects = response;
+            _this.component.closeLoader();
+        }, function (err) {
+            console.log(err);
+            _this.component.closeLoader();
+            _this.component.showToastMessage('Unable to get Clients, please try again..', 'bottom');
+        });
+    };
+    CreateEmployeePage.prototype.getSites = function (projectId, projectName) {
+        var _this = this;
+        this.component.showLoader('Getting Sites of Client ' + projectName + '..');
+        this.siteService.findSitesByProject(projectId).subscribe(function (response) {
+            console.log(response);
+            _this.sites = response;
+            _this.component.closeLoader();
+        }, function (err) {
+            console.log(err);
+            _this.component.closeLoader();
+            _this.component.showToastMessage('Unable to get Clients, please try again..', 'bottom');
+        });
+    };
+    CreateEmployeePage.prototype.addProjectSites = function () {
+        var projSite = {
+            "projectId": this.selectedProject.id,
+            "projectName": this.selectedProject.name,
+            "siteId": this.selectedSite.id,
+            "siteName": this.selectedSite.name
+        };
+        this.projectSites.push(projSite);
+    };
     CreateEmployeePage.prototype.addJob = function () {
         console.log('form submitted');
-        if (this.firstname && this.lastname && this.number && this.mail && this.eId && this.address) {
+        if (this.firstname && this.lastname && this.eId) {
             // Save Employee
+            this.employee = {
+                name: this.firstname,
+                lastName: this.lastname,
+                designation: this.designation,
+                empId: this.eId,
+                projectId: this.selectedProject.id,
+                siteId: this.selectedSite.id,
+                projectSites: this.projectSites,
+                managerId: this.selectedManager.id
+            };
+            console.log("Employee Details");
+            console.log(this.employee);
+            this.component.showLoader('Creating Employee');
+            // this.employeeService.createEmployee(this.employee).subscribe(
+            //     response=>{
+            //         console.log(response)
+            //         this.component.closeLoader();
+            //         this.component.showToastMessage('Employee Created','bottom');
+            //         this.navCtrl.setRoot(EmployeeListPage);
+            //     }
+            // )
             this.component.showToastMessage(this.msg, 'bottom');
         }
         else {
@@ -1142,10 +1225,10 @@ var CreateEmployeePage = (function () {
     };
     CreateEmployeePage = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
-            selector: 'page-create-employee',template:/*ion-inline-start:"/Users/gnana/techginko/workspace/fms/MobileApp/src/pages/employee-list/create-employee.html"*/`<!--\n  Generated template for the SiteListPage page.\n\n  See http://ionicframework.com/docs/components/#navigation for more info on\n  Ionic pages and navigation.\n-->\n<ion-header>\n  <ion-navbar no-border>\n    <button ion-button menuToggle>\n      <ion-icon name="menu"></ion-icon>\n    </button>\n    <ion-title>Create Employee</ion-title>\n  </ion-navbar>\n    <ion-segment [(ngModel)]="categories" class="segmnt margin-auto" color="clr-blue">\n      <ion-segment-button value="basic">\n        Basic\n      </ion-segment-button>\n      <ion-segment-button value="login" >\n        Login\n      </ion-segment-button>\n    </ion-segment>\n\n</ion-header>\n\n<ion-content padding>\n  <div [ngSwitch]="categories">\n\n    <ion-list *ngSwitchCase="\'basic\'">\n      <div class="card">\n        <div class="card-content">\n          <ion-row>\n\n            <ion-col col-12>\n                <div class="margin-auto empl-round" (click)="viewCamera()">\n                  <img src="img/user.png">\n                </div>\n            </ion-col>\n\n            <ion-col col-12>\n\n              <div class="form-group label-floating" [ngClass]="{\'has-error\': eMsg==\'all\'||eMsg==\'firstname\'}">\n                <label class="control-label">First Name</label>\n                <input class="form-control" type="text" [(ngModel)]="firstname" id="firstname" name="firstname" #fname="ngModel" required [ngClass]="{\'has-error\': fname.errors || eMsg==\'all\'|| eMsg==\'firstname\'}">\n                <div *ngIf="fname.errors && (fname.dirty || fname.touched)" class="error-msg">\n\n                </div>\n\n                <div *ngIf="fname.errors && (fname.untouched )" class="error-msg">\n\n                </div>\n              </div>\n\n            </ion-col>\n\n            <ion-col col-12>\n\n              <div class="form-group label-floating" [ngClass]="{\'has-error\': eMsg==\'all\'||eMsg==\'lastname\'}">\n                <label class="control-label">Last Name</label>\n                <input class="form-control" type="text" [(ngModel)]="lastname" id="lastname" name="lastname" #lname="ngModel" required [ngClass]="{\'has-error\': lname.errors || eMsg==\'all\'|| eMsg==\'lastname\'}">\n                <div *ngIf="lname.errors && (lname.dirty || lname.touched)" class="error-msg">\n\n                </div>\n\n                <div *ngIf="lname.errors && (lname.untouched )" class="error-msg">\n\n                </div>\n              </div>\n\n            </ion-col>\n\n            <ion-col col-12>\n              <div class="form-group label-floating" [ngClass]="{\'has-error\': eMsg==\'all\'||eMsg==\'number\'}">\n                <label class="control-label">Mobile Number</label>\n                <input class="form-control" type="number" [(ngModel)]="number" id="number" name="number" #num="ngModel" required [ngClass]="{\'has-error\': num.errors || eMsg==\'all\'|| eMsg==\'number\'}">\n                <div *ngIf="num.errors && (num.dirty || num.touched)" class="error-msg">\n\n                </div>\n                <div *ngIf="num.errors && (num.untouched )" class="error-msg">\n\n                </div>\n              </div>\n            </ion-col>\n\n            <ion-col col-12>\n              <div class="form-group label-floating" [ngClass]="{\'has-error\': eMsg==\'all\'||eMsg==\'mail\'}">\n                <label class="control-label">Mail Id</label>\n                <input class="form-control" type="email" [(ngModel)]="mail" id="mail" name="mail" #mid="ngModel" required [ngClass]="{\'has-error\': mid.errors || eMsg==\'all\'|| eMsg==\'number\'}">\n                <div *ngIf="mid.errors && (mid.dirty || mid.touched)" class="error-msg">\n\n                </div>\n                <div *ngIf="mid.errors && (mid.untouched )" class="error-msg">\n\n                </div>\n              </div>\n            </ion-col>\n\n\n            <ion-col col-12>\n              <div class="form-group label-floating" [ngClass]="{\'has-error\': eMsg==\'all\'||eMsg==\'eId\'}">\n                <label class="control-label">Employee Id</label>\n                <input class="form-control" type="text" [(ngModel)]="eId" id="eId" name="number" #id="ngModel" required [ngClass]="{\'has-error\': id.errors || eMsg==\'all\'|| eMsg==\'eId\'}">\n                <div *ngIf="id.errors && (id.dirty || id.touched)" class="error-msg">\n\n                </div>\n\n                <div *ngIf="id.errors && (id.untouched )" class="error-msg">\n\n                </div>\n              </div>\n            </ion-col>\n\n            <ion-col col-12>\n\n              <div class="form-group label-floating" [ngClass]="{\'has-error\': eMsg==\'all\'||eMsg==\'address\'}">\n                <label class="control-label">Address</label>\n                <input class="form-control" type="text" [(ngModel)]="address" id="address" name="address" #add="ngModel" required [ngClass]="{\'has-error\': add.errors || eMsg==\'all\'|| eMsg==\'address\'}">\n                <div *ngIf="add.errors && (add.dirty || add.touched)" class="error-msg">\n\n                </div>\n\n                <div *ngIf="add.errors && (add.untouched )" class="error-msg">\n\n                </div>\n              </div>\n\n\n            </ion-col>\n\n            <button type="submit" class="btn btn-warning  margin-auto" (click)="addJob()">Next</button>\n\n            <div class="clearfix"></div>\n          </ion-row>\n        </div>\n      </div>\n    </ion-list>\n    <ion-list *ngSwitchCase="\'login\'">\n      <div class="card">\n        <div class="card-content">\n          <ion-row>\n            <ion-col col-12>\n              <div class="form-group label-floating">\n\n                <div class="form-group label-floating" [ngClass]="{\'has-error\': eMsg==\'all\'||eMsg==\'username\'}">\n                  <label class="control-label">User Name</label>\n                  <input class="form-control" type="text" [(ngModel)]="username" id="username" name="username" #uname="ngModel" required [ngClass]="{\'has-error\': uname.errors || eMsg==\'all\'|| eMsg==\'username\'}">\n                  <div *ngIf="uname.errors && (uname.dirty || uname.touched)" class="error-msg">\n\n                  </div>\n\n                  <div *ngIf="uname.errors && (uname.untouched )" class="error-msg">\n\n                  </div>\n                </div>\n              </div>\n\n            </ion-col>\n\n            <ion-col col-12>\n\n              <div class="form-group label-floating" [ngClass]="{\'has-error\': eMsg==\'all\'||eMsg==\'password\'}">\n                <label class="control-label">Password</label>\n                <input class="form-control" type="text" [(ngModel)]="password" id="password" name="password" #pass="ngModel" required [ngClass]="{\'has-error\': pass.errors || eMsg==\'all\'|| eMsg==\'password\'}">\n                <div *ngIf="pass.errors && (pass.dirty || pass.touched)" class="error-msg">\n\n                </div>\n\n                <div *ngIf="pass.errors && (pass.untouched )" class="error-msg">\n\n                </div>\n              </div>\n\n\n            </ion-col>\n\n\n            <button type="submit" class="btn btn-warning  margin-auto" (click)="login()">Next</button>\n\n            <div class="clearfix"></div>\n          </ion-row>\n        </div>\n      </div>\n    </ion-list>\n  </div>\n</ion-content>`/*ion-inline-end:"/Users/gnana/techginko/workspace/fms/MobileApp/src/pages/employee-list/create-employee.html"*/,
+            selector: 'page-create-employee',template:/*ion-inline-start:"/Users/gnana/techginko/workspace/fms/MobileApp/src/pages/employee-list/create-employee.html"*/`<!--\n  Generated template for the SiteListPage page.\n\n  See http://ionicframework.com/docs/components/#navigation for more info on\n  Ionic pages and navigation.\n-->\n<ion-header>\n  <ion-navbar no-border>\n    <button ion-button menuToggle>\n      <ion-icon name="menu"></ion-icon>\n    </button>\n    <ion-title>Create Employee</ion-title>\n  </ion-navbar>\n    <ion-segment [(ngModel)]="categories" class="segmnt margin-auto" color="clr-blue">\n      <ion-segment-button value="basic">\n        Basic\n      </ion-segment-button>\n      <ion-segment-button value="login" >\n        Login\n      </ion-segment-button>\n    </ion-segment>\n\n</ion-header>\n\n<ion-content padding>\n  <div [ngSwitch]="categories">\n\n    <ion-list *ngSwitchCase="\'basic\'">\n      <div class="card">\n        <div class="card-content">\n          <ion-row>\n\n            <ion-col col-12>\n                <div class="margin-auto empl-round" (click)="viewCamera()">\n                  <img src="img/user.png">\n                </div>\n            </ion-col>\n\n              <ion-col col-12>\n                  <div class="form-group label-floating" [ngClass]="{\'has-error\': eMsg==\'all\'||eMsg==\'eId\'}">\n                      <label class="control-label">Employee Id</label>\n                      <input class="form-control" type="text" [(ngModel)]="eId" id="eId" name="number" #id="ngModel" required [ngClass]="{\'has-error\': id.errors || eMsg==\'all\'|| eMsg==\'eId\'}">\n                      <div *ngIf="id.errors && (id.dirty || id.touched)" class="error-msg">\n\n                      </div>\n\n                      <div *ngIf="id.errors && (id.untouched )" class="error-msg">\n\n                      </div>\n                  </div>\n              </ion-col>\n\n\n            <ion-col col-12>\n\n              <div class="form-group label-floating" [ngClass]="{\'has-error\': eMsg==\'all\'||eMsg==\'firstname\'}">\n                <label class="control-label">First Name</label>\n                <input class="form-control" type="text" [(ngModel)]="firstname" id="firstname" name="firstname" #fname="ngModel" required [ngClass]="{\'has-error\': fname.errors || eMsg==\'all\'|| eMsg==\'firstname\'}">\n                <div *ngIf="fname.errors && (fname.dirty || fname.touched)" class="error-msg">\n\n                </div>\n\n                <div *ngIf="fname.errors && (fname.untouched )" class="error-msg">\n\n                </div>\n              </div>\n\n            </ion-col>\n\n            <ion-col col-12>\n\n              <div class="form-group label-floating" [ngClass]="{\'has-error\': eMsg==\'all\'||eMsg==\'lastname\'}">\n                <label class="control-label">Last Name</label>\n                <input class="form-control" type="text" [(ngModel)]="lastname" id="lastname" name="lastname" #lname="ngModel" required [ngClass]="{\'has-error\': lname.errors || eMsg==\'all\'|| eMsg==\'lastname\'}">\n                <div *ngIf="lname.errors && (lname.dirty || lname.touched)" class="error-msg">\n\n                </div>\n\n                <div *ngIf="lname.errors && (lname.untouched )" class="error-msg">\n\n                </div>\n              </div>\n\n            </ion-col>\n\n              <!--<ion-col col-12>-->\n                  <!--<div class="form-group">-->\n                      <!--<ion-select [(ngModel)]="designation" class="select-box" id="designation" placeholder="Choose Designation" name="designation" #designation="ngModel" required >-->\n                          <!--<ion-option *ngFor="let designation of designations" [value]="designation.designation" >{{designation.designation}}</ion-option>-->\n                      <!--</ion-select>-->\n                  <!--</div>-->\n              <!--</ion-col>-->\n\n            <ion-col col-12>\n              <div class="form-group label-floating" [ngClass]="{\'has-error\': eMsg==\'all\'||eMsg==\'number\'}">\n                <label class="control-label">Mobile Number</label>\n                <input class="form-control" type="number" [(ngModel)]="number" id="number" name="number" #num="ngModel" required [ngClass]="{\'has-error\': num.errors || eMsg==\'all\'|| eMsg==\'number\'}">\n                <div *ngIf="num.errors && (num.dirty || num.touched)" class="error-msg">\n\n                </div>\n                <div *ngIf="num.errors && (num.untouched )" class="error-msg">\n\n                </div>\n              </div>\n            </ion-col>\n\n              <ion-col col-12>\n                  <div class="form-group">\n                      <ion-select [(ngModel)]="selectedProject" class="select-box" id="selectedProject" placeholder="Choose Project" name="selectedProject" #selectedPeoject="ngModel" required >\n                          <ion-option *ngFor="let project of projects" [value]="project.name" (ionSelect)="getSites(project.id,project.name)">{{project.name}}</ion-option>\n                      </ion-select>\n                  </div>\n              </ion-col>\n\n              <ion-col col-12>\n                  <div class="form-group">\n                      <ion-select [(ngModel)]="selectedSite" class="select-box" id="siteName" placeholder="Choose Site" name="siteName" #site="ngModel" required >\n                          <ion-option *ngFor="let site of sites" [value]="site.name" (ionSelect)="addProjectSites()">{{site.name}}</ion-option>\n                      </ion-select>\n                  </div>\n              </ion-col>\n\n              <!--<ion-col col-12>-->\n                  <!--<div class="form-group">-->\n                      <!--<ion-select [(ngModel)]="selectedManager" class="select-box" id="selectedManager" placeholder="Choose Manager" name="selectedManager" #selectedManager="ngModel" required >-->\n                          <!--<ion-option *ngFor="let manager of manager" [value]="manager.name" >{{manager.name}}</ion-option>-->\n                      <!--</ion-select>-->\n                  <!--</div>-->\n              <!--</ion-col>-->\n\n              <!--<ion-col col-12>-->\n              <!--<div class="form-group label-floating" [ngClass]="{\'has-error\': eMsg==\'all\'||eMsg==\'mail\'}">-->\n                <!--<label class="control-label">Mail Id</label>-->\n                <!--<input class="form-control" type="email" [(ngModel)]="mail" id="mail" name="mail" #mid="ngModel" required [ngClass]="{\'has-error\': mid.errors || eMsg==\'all\'|| eMsg==\'number\'}">-->\n                <!--<div *ngIf="mid.errors && (mid.dirty || mid.touched)" class="error-msg">-->\n\n                <!--</div>-->\n                <!--<div *ngIf="mid.errors && (mid.untouched )" class="error-msg">-->\n\n                <!--</div>-->\n              <!--</div>-->\n            <!--</ion-col>-->\n\n\n\n\n            <!--<ion-col col-12>-->\n\n              <!--<div class="form-group label-floating" [ngClass]="{\'has-error\': eMsg==\'all\'||eMsg==\'address\'}">-->\n                <!--<label class="control-label">Address</label>-->\n                <!--<input class="form-control" type="text" [(ngModel)]="address" id="address" name="address" #add="ngModel" required [ngClass]="{\'has-error\': add.errors || eMsg==\'all\'|| eMsg==\'address\'}">-->\n                <!--<div *ngIf="add.errors && (add.dirty || add.touched)" class="error-msg">-->\n\n                <!--</div>-->\n\n                <!--<div *ngIf="add.errors && (add.untouched )" class="error-msg">-->\n\n                <!--</div>-->\n              <!--</div>-->\n\n\n            <!--</ion-col>-->\n\n            <button type="submit" class="btn btn-warning  margin-auto" (click)="addJob()">Next</button>\n\n            <div class="clearfix"></div>\n          </ion-row>\n        </div>\n      </div>\n    </ion-list>\n    <ion-list *ngSwitchCase="\'login\'">\n      <div class="card">\n        <div class="card-content">\n          <ion-row>\n            <ion-col col-12>\n              <div class="form-group label-floating">\n\n                <div class="form-group label-floating" [ngClass]="{\'has-error\': eMsg==\'all\'||eMsg==\'username\'}">\n                  <label class="control-label">User Name</label>\n                  <input class="form-control" type="text" [(ngModel)]="username" id="username" name="username" #uname="ngModel" required [ngClass]="{\'has-error\': uname.errors || eMsg==\'all\'|| eMsg==\'username\'}">\n                  <div *ngIf="uname.errors && (uname.dirty || uname.touched)" class="error-msg">\n\n                  </div>\n\n                  <div *ngIf="uname.errors && (uname.untouched )" class="error-msg">\n\n                  </div>\n                </div>\n              </div>\n\n            </ion-col>\n\n            <ion-col col-12>\n\n              <div class="form-group label-floating" [ngClass]="{\'has-error\': eMsg==\'all\'||eMsg==\'password\'}">\n                <label class="control-label">Password</label>\n                <input class="form-control" type="text" [(ngModel)]="password" id="password" name="password" #pass="ngModel" required [ngClass]="{\'has-error\': pass.errors || eMsg==\'all\'|| eMsg==\'password\'}">\n                <div *ngIf="pass.errors && (pass.dirty || pass.touched)" class="error-msg">\n\n                </div>\n\n                <div *ngIf="pass.errors && (pass.untouched )" class="error-msg">\n\n                </div>\n              </div>\n\n\n            </ion-col>\n\n\n            <button type="submit" class="btn btn-warning  margin-auto" (click)="login()">Next</button>\n\n            <div class="clearfix"></div>\n          </ion-row>\n        </div>\n      </div>\n    </ion-list>\n  </div>\n</ion-content>`/*ion-inline-end:"/Users/gnana/techginko/workspace/fms/MobileApp/src/pages/employee-list/create-employee.html"*/,
         }),
         __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["NavController"], __WEBPACK_IMPORTED_MODULE_6__service_componentService__["a" /* componentService */], __WEBPACK_IMPORTED_MODULE_2__service_authService__["a" /* authService */], __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["NavParams"], __WEBPACK_IMPORTED_MODULE_2__service_authService__["a" /* authService */], __WEBPACK_IMPORTED_MODULE_3__ionic_native_camera__["a" /* Camera */],
-            __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["LoadingController"], __WEBPACK_IMPORTED_MODULE_4__ionic_native_geolocation__["a" /* Geolocation */], __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["ToastController"],
+            __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["LoadingController"], __WEBPACK_IMPORTED_MODULE_4__ionic_native_geolocation__["a" /* Geolocation */], __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["ToastController"], __WEBPACK_IMPORTED_MODULE_7__service_siteService__["a" /* SiteService */], __WEBPACK_IMPORTED_MODULE_8__service_employeeService__["a" /* EmployeeService */],
             __WEBPACK_IMPORTED_MODULE_5__ionic_native_geofence__["a" /* Geofence */]])
     ], CreateEmployeePage);
     return CreateEmployeePage;
@@ -1257,12 +1340,12 @@ var AttendancePage = (function () {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(6);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__attendance_list_attendance_list__ = __webpack_require__(78);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__service_authService__ = __webpack_require__(11);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__ionic_native_camera__ = __webpack_require__(33);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__ionic_native_camera__ = __webpack_require__(34);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__ionic_native_geolocation__ = __webpack_require__(41);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__ionic_native_geofence__ = __webpack_require__(59);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__service_employeeService__ = __webpack_require__(58);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__service_employeeService__ = __webpack_require__(51);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__service_jobService__ = __webpack_require__(40);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__service_siteService__ = __webpack_require__(34);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__service_siteService__ = __webpack_require__(30);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__service_attendanceService__ = __webpack_require__(42);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__service_componentService__ = __webpack_require__(19);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -1473,6 +1556,7 @@ var EmployeeList = (function () {
                                             if (response && response.status === 200) {
                                                 var msg = 'Face Verified and Attendance marked Successfully';
                                                 _this.showSuccessToast(msg);
+                                                // employee.attendanceId = response.
                                             }
                                         }, function (error) {
                                             var msg = 'Attendance Not Marked';
@@ -1511,7 +1595,6 @@ var EmployeeList = (function () {
                                             if (response && response.status === 200) {
                                                 var msg = 'Face Verified and Attendance marked Successfully';
                                                 _this.showSuccessToast(msg);
-                                                window.location.reload();
                                             }
                                         }, function (error) {
                                             var msg = 'Attendance Not Marked';
@@ -1605,13 +1688,13 @@ var EmployeeList = (function () {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(6);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__service_authService__ = __webpack_require__(11);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__ionic_native_camera__ = __webpack_require__(33);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__ionic_native_camera__ = __webpack_require__(34);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__ionic_native_geolocation__ = __webpack_require__(41);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__ionic_native_geofence__ = __webpack_require__(59);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__service_componentService__ = __webpack_require__(19);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__employee_detail__ = __webpack_require__(466);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__create_employee__ = __webpack_require__(158);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__service_employeeService__ = __webpack_require__(58);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__service_employeeService__ = __webpack_require__(51);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__ionic_native_toast__ = __webpack_require__(99);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -1792,7 +1875,7 @@ var EmployeeListPage = (function () {
     };
     EmployeeListPage = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
-            selector: 'page-employee-list',template:/*ion-inline-start:"/Users/gnana/techginko/workspace/fms/MobileApp/src/pages/employee-list/employee-list.html"*/`<!--\n  Generated template for the SiteListPage page.\n\n  See http://ionicframework.com/docs/components/#navigation for more info on\n  Ionic pages and navigation.\n-->\n<ion-header>\n  <ion-navbar>\n    <button ion-button menuToggle>\n      <ion-icon name="menu"></ion-icon>\n    </button>\n    <ion-title>Employee List</ion-title>\n  </ion-navbar>\n</ion-header>\n\n<ion-content>\n  <ion-fab bottom right>\n    <button (click)="createEmployee($event)"  ion-fab><ion-icon name="add"></ion-icon></button>\n  </ion-fab>\n\n  <ion-list class="emp-list">\n\n    <div *ngFor="let emp of employees;let i of index">\n    <ion-item-sliding #slidingItem (ionDrag)="drag(menu,$event)">\n      <ion-item #item  class="bottom-border emp padding-left0"  >\n        <ion-row class="margin0">\n          <ion-col col-2>\n            <ion-avatar item-start *ngIf="emp.enrolled_face" >\n              <img  [src]="emp.enrolled_face" >\n            </ion-avatar>\n            <p *ngIf="!emp.enrolled_face && first(emp.name)"></p>\n            <ion-avatar item-start *ngIf="!emp.enrolled_face" class="emp-round">\n              <p class="margin-auto">{{firstLetter}}</p>\n            </ion-avatar>\n          </ion-col>\n          <ion-col col-9 class="ver-center" (click)="viewEmployee(emp)">\n              <p text-left class="fnt-wt" text-capitalize>{{emp.name}}</p>\n          </ion-col>\n          <ion-col col-1 class="ver-center">\n              <button #menu ion-button icon-left icon-only clear class="pop-icon" (click)="open(slidingItem, item ,count,menu)">\n                <ion-icon name="md-more" class="fnt-18 padding0"></ion-icon>\n              </button>\n          </ion-col>\n        </ion-row>\n      </ion-item>\n\n      <ion-item-options side="right" (click)="close(slidingItem,menu)">\n        <button ion-button clear color="danger"><ion-icon name="close" class="fnt-24 padding-bottom0"></ion-icon></button>\n        <button ion-button clear color="primary"><i class="material-icons fnt-24">transfer_within_a_station</i></button>\n        <button ion-button clear color="clr-blue"><i class="material-icons fnt-24">assignment_ind</i></button>\n      </ion-item-options>\n    </ion-item-sliding>\n    </div>\n  </ion-list>\n\n  <ion-infinite-scroll *ngIf="page<totalPages"  (ionInfinite)="doInfinite($event)">\n    <ion-infinite-scroll-content></ion-infinite-scroll-content>\n  </ion-infinite-scroll>\n</ion-content>`/*ion-inline-end:"/Users/gnana/techginko/workspace/fms/MobileApp/src/pages/employee-list/employee-list.html"*/,
+            selector: 'page-employee-list',template:/*ion-inline-start:"/Users/gnana/techginko/workspace/fms/MobileApp/src/pages/employee-list/employee-list.html"*/`<!--\n  Generated template for the SiteListPage page.\n\n  See http://ionicframework.com/docs/components/#navigation for more info on\n  Ionic pages and navigation.\n-->\n<ion-header>\n  <ion-navbar>\n    <button ion-button menuToggle>\n      <ion-icon name="menu"></ion-icon>\n    </button>\n    <ion-title>Employee List</ion-title>\n  </ion-navbar>\n</ion-header>\n\n<ion-content>\n  <ion-fab bottom right>\n    <button (click)="createEmployee($event)"  ion-fab><ion-icon name="add"></ion-icon></button>\n  </ion-fab>\n\n  <ion-list class="emp-list">\n\n    <div *ngFor="let emp of employees;let i of index">\n    <ion-item-sliding #slidingItem (ionDrag)="drag(menu,$event)">\n      <ion-item #item  class="bottom-border emp padding-left0"  >\n        <ion-row class="margin0">\n          <ion-col col-2>\n            <ion-avatar item-start *ngIf="emp.enrolled_face" >\n              <img  [src]="emp.enrolled_face" >\n            </ion-avatar>\n            <p *ngIf="!emp.enrolled_face && first(emp.name)"></p>\n            <ion-avatar item-start *ngIf="!emp.enrolled_face" class="emp-round">\n              <p class="margin-auto">{{firstLetter}}</p>\n            </ion-avatar>\n          </ion-col>\n          <ion-col col-8 class="ver-center" (click)="viewEmployee(emp)">\n              <p text-left class="fnt-wt" text-capitalize>{{emp.name}}</p>\n          </ion-col>\n          <ion-col col-1 class="ver-center">\n              <button #menu ion-button icon-left icon-only clear class="pop-icon" (click)="open(slidingItem, item ,count,menu)">\n                <ion-icon name="md-more" class="fnt-18 padding0"></ion-icon>\n              </button>\n          </ion-col>\n        </ion-row>\n      </ion-item>\n\n      <ion-item-options side="right" (click)="close(slidingItem,menu)">\n        <button ion-button clear color="danger"><ion-icon name="close" class="fnt-24 padding-bottom0"></ion-icon></button>\n        <button ion-button clear color="primary"><i class="material-icons fnt-24">transfer_within_a_station</i></button>\n        <button ion-button clear color="clr-blue"><i class="material-icons fnt-24">assignment_ind</i></button>\n      </ion-item-options>\n    </ion-item-sliding>\n    </div>\n  </ion-list>\n\n  <ion-infinite-scroll *ngIf="page<totalPages"  (ionInfinite)="doInfinite($event)">\n    <ion-infinite-scroll-content></ion-infinite-scroll-content>\n  </ion-infinite-scroll>\n</ion-content>`/*ion-inline-end:"/Users/gnana/techginko/workspace/fms/MobileApp/src/pages/employee-list/employee-list.html"*/,
         }),
         __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["NavController"], __WEBPACK_IMPORTED_MODULE_6__service_componentService__["a" /* componentService */], __WEBPACK_IMPORTED_MODULE_2__service_authService__["a" /* authService */], __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["NavParams"], __WEBPACK_IMPORTED_MODULE_2__service_authService__["a" /* authService */], __WEBPACK_IMPORTED_MODULE_3__ionic_native_camera__["a" /* Camera */],
             __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["LoadingController"], __WEBPACK_IMPORTED_MODULE_4__ionic_native_geolocation__["a" /* Geolocation */], __WEBPACK_IMPORTED_MODULE_10__ionic_native_toast__["a" /* Toast */],
@@ -1817,6 +1900,7 @@ var EmployeeListPage = (function () {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__service_componentService__ = __webpack_require__(19);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__angular_forms__ = __webpack_require__(29);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__ionic_native_toast__ = __webpack_require__(99);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__service_employeeService__ = __webpack_require__(51);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -1833,6 +1917,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 
 
+
 /**
  * Generated class for the LoginPage page.
  *
@@ -1840,7 +1925,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
  * Ionic pages and navigation.
  */
 var LoginPage = (function () {
-    function LoginPage(navCtrl, component, formBuilder, menuCtrl, toastCtrl, toast, navParams, myService) {
+    function LoginPage(navCtrl, component, formBuilder, menuCtrl, toastCtrl, toast, navParams, myService, employeeService, events) {
         this.navCtrl = navCtrl;
         this.component = component;
         this.formBuilder = formBuilder;
@@ -1849,6 +1934,12 @@ var LoginPage = (function () {
         this.toast = toast;
         this.navParams = navParams;
         this.myService = myService;
+        this.employeeService = employeeService;
+        this.events = events;
+        this.permission = [
+            { module: null,
+                action: null }
+        ];
     }
     LoginPage.prototype.ionViewDidLoad = function () {
         console.log('ionViewDidLoad LoginPage');
@@ -1863,6 +1954,27 @@ var LoginPage = (function () {
             this.myService.login(this.username, this.password).subscribe(function (response) {
                 console.log(response);
                 console.log(response.json());
+                _this.employeeService.getUser(response.json().employee.userId).subscribe(function (response) {
+                    console.log("User response");
+                    console.log(response);
+                    var module = {};
+                    window.localStorage.setItem('userType', response.userRole.name.toUpperCase());
+                    _this.events.publish('userType', response.userRole.name.toUpperCase());
+                    if (response.name.toUpperCase() === 'ADMIN') {
+                    }
+                    for (var _i = 0, _a = response.userRole.rolePermissions; _i < _a.length; _i++) {
+                        var userRole = _a[_i];
+                        // this.permissionService.addPermission([userRole.moduleName])
+                        module = { module: userRole.moduleName,
+                            action: userRole.actionName };
+                        _this.permission.push(module);
+                    }
+                    _this.events.publish('permissions:set', _this.permission);
+                    console.log("Modules and permissions");
+                    console.log(_this.permission);
+                }, function (err) {
+                    _this.events.publish('userType', 'ADMIN');
+                });
                 window.localStorage.setItem('session', response.json().token);
                 window.localStorage.setItem('userGroup', response.json().employee.userUserGroupName);
                 window.localStorage.setItem('employeeId', response.json().employee.id);
@@ -1932,7 +2044,7 @@ var LoginPage = (function () {
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
             selector: 'page-login',template:/*ion-inline-start:"/Users/gnana/techginko/workspace/fms/MobileApp/src/pages/login/login.html"*/`<!--\n  Generated template for the LoginPage page.\n\n  See http://ionicframework.com/docs/components/#navigation for more info on\n  Ionic pages and navigation.\n-->\n\n\n<ion-content class="login">\n    <div class="wrapper wrapper-full-page">\n        <div class="full-page login-page" filter-color="black" data-image="img/login.jpeg">\n            <!--   you can change the color of the filter page using: data-color="blue | purple | green | orange | red | rose " -->\n            <div class="content padding-top40">\n              <div class="container">\n                <div class="row">\n                    <div class="col-md-4 col-sm-6 col-md-offset-4 col-sm-offset-3">\n\n                              <div class="width90 margin-auto align-center">\n                                  <div class="margin-bottom">\n                                      <img src="img/logo.png">\n                                  </div>\n\n                                  <div class="card card-login">\n                                    <div class="card-header text-center" data-background-color="orange">\n                                      <h4 class="card-title">Login</h4>\n                                    </div>\n                                    <div class="card-content padding-top25">\n                                      <div class="input-group">\n                                          <span class="input-group-addon">\n                                              <i class="material-icons">face</i>\n                                          </span>\n                                        <div class="form-group label-floating" [ngClass]="{\'has-error\': eMsg==\'all\'||eMsg==\'username\'}">\n                                          <label class="control-label">User Name</label>\n                                                <input class="form-control" type="text" [(ngModel)]="username" id="username" name="username" #uname="ngModel" required [ngClass]="{\'has-error\': uname.errors || eMsg==\'all\'|| eMsg==\'username\'}">\n                                                <div *ngIf="uname.errors && (uname.dirty || uname.touched)" class="error-msg">\n\n                                                </div>\n\n                                                <div *ngIf="uname.errors && (uname.untouched )" class="error-msg">\n\n                                                </div>\n                                        </div>\n                                      </div>\n                                      <div class="input-group">\n                                          <span class="input-group-addon">\n                                              <i class="material-icons">lock_outline</i>\n                                          </span>\n                                        <div class="form-group label-floating" [ngClass]="{\'has-error\': eMsg==\'all\'|| eMsg==\'password\'}">\n                                          <label class="control-label">Password</label>\n                                            <input class="form-control" type="password" [(ngModel)]="password" id="password" name="password" #pass="ngModel" required [ngClass]="{\'has-error\':eMsg==\'all\' || eMsg==\'password\'}">\n                                            <div *ngIf="pass.errors && (pass.dirty || pass.touched)" class="error-msg">\n\n                                            </div>\n                                            <div *ngIf="pass.errors && (pass.untouched )" class="error-msg">\n\n                                            </div>\n                                        </div>\n                                      </div>\n                                    </div>\n                                    <div class="footer text-center">\n                                      <button class="btn btn-warning btn-simple btn-wd btn-lg" (click)="signin()">Sign In</button>\n                                    </div>\n                                  </div>\n\n                                  <div class="">\n                                      <p class="copyright align-center icon-color">\n                                          &copy;<a href="" class="clr-white"><span class="clr-blk">Powered By</span> <span class="icon-color">T</span>ech<span class="icon-color">G</span>inko</a>\n                                      </p>\n                                  </div>\n                              </div>\n\n                    </div>\n                </div>\n            </div>\n        </div>\n        </div>\n    </div>\n\n\n\n\n\n<!--\n  <div text-center class="margin-top25 margn-btom20">\n    <img src="img/logo.png">\n  </div>\n\n  <div>\n    <ion-item class="width80 margin-auto bg-grey">\n      <ion-input type="text" placeholder="Username" class="round" [(ngModel)]="username"></ion-input>\n    </ion-item>\n\n    <ion-item class="width80 margin-auto padding-top10 bg-grey">\n      <ion-input type="password"  placeholder="Password" class="round" [(ngModel)]="password"></ion-input>\n    </ion-item>\n  </div>\n\n  <div padding text-center>\n    <button ion-button color="primary" round >Sign In</button>\n  </div>\n-->\n\n</ion-content>`/*ion-inline-end:"/Users/gnana/techginko/workspace/fms/MobileApp/src/pages/login/login.html"*/,
         }),
-        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["NavController"], __WEBPACK_IMPORTED_MODULE_4__service_componentService__["a" /* componentService */], __WEBPACK_IMPORTED_MODULE_5__angular_forms__["a" /* FormBuilder */], __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["MenuController"], __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["ToastController"], __WEBPACK_IMPORTED_MODULE_6__ionic_native_toast__["a" /* Toast */], __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["NavParams"], __WEBPACK_IMPORTED_MODULE_2__service_authService__["a" /* authService */]])
+        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["NavController"], __WEBPACK_IMPORTED_MODULE_4__service_componentService__["a" /* componentService */], __WEBPACK_IMPORTED_MODULE_5__angular_forms__["a" /* FormBuilder */], __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["MenuController"], __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["ToastController"], __WEBPACK_IMPORTED_MODULE_6__ionic_native_toast__["a" /* Toast */], __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["NavParams"], __WEBPACK_IMPORTED_MODULE_2__service_authService__["a" /* authService */], __WEBPACK_IMPORTED_MODULE_7__service_employeeService__["a" /* EmployeeService */], __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["Events"]])
     ], LoginPage);
     return LoginPage;
 }());
@@ -1950,11 +2062,11 @@ var LoginPage = (function () {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(6);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__attendance_list_attendance_list__ = __webpack_require__(78);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__service_authService__ = __webpack_require__(11);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__ionic_native_camera__ = __webpack_require__(33);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__ionic_native_camera__ = __webpack_require__(34);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__ionic_native_geolocation__ = __webpack_require__(41);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__employee_employee_list__ = __webpack_require__(160);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__service_attendanceService__ = __webpack_require__(42);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__service_siteService__ = __webpack_require__(34);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__service_siteService__ = __webpack_require__(30);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__service_componentService__ = __webpack_require__(19);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -2070,12 +2182,12 @@ var SiteListPage = (function () {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(6);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__attendance_list_attendance_list__ = __webpack_require__(78);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__service_authService__ = __webpack_require__(11);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__ionic_native_camera__ = __webpack_require__(33);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__ionic_native_camera__ = __webpack_require__(34);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__ionic_native_geolocation__ = __webpack_require__(41);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__employee_employee_list__ = __webpack_require__(160);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__service_attendanceService__ = __webpack_require__(42);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__service_siteService__ = __webpack_require__(34);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__service_employeeService__ = __webpack_require__(58);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__service_siteService__ = __webpack_require__(30);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__service_employeeService__ = __webpack_require__(51);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -2500,6 +2612,100 @@ module.exports = webpackAsyncContext;
 
 /***/ }),
 
+/***/ 30:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return SiteService; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_http__ = __webpack_require__(49);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_rxjs__ = __webpack_require__(50);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_rxjs___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_rxjs__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__Interceptor_HttpClient__ = __webpack_require__(56);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__angular_core__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_ionic_angular__ = __webpack_require__(6);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__app_config__ = __webpack_require__(57);
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+var __param = (this && this.__param) || function (paramIndex, decorator) {
+    return function (target, key) { decorator(target, key, paramIndex); }
+};
+
+
+
+
+
+
+var SiteService = (function () {
+    function SiteService(http, https, loadingCtrl, config) {
+        this.http = http;
+        this.https = https;
+        this.loadingCtrl = loadingCtrl;
+        this.config = config;
+    }
+    SiteService.prototype.searchSite = function () {
+        return this.http.get(this.config.Url + 'api/site').map(function (response) {
+            return response;
+        });
+    };
+    SiteService.prototype.findSitesByProject = function (projectId) {
+        return this.http.get(this.config.Url + 'api/project/' + projectId + '/sites').map(function (response) {
+            console.log(response.json());
+            return response.json();
+        });
+    };
+    SiteService.prototype.searchProjects = function (searchCriteria) {
+        return this.http.post(this.config.Url + 'api/project/search', searchCriteria).map(function (response) {
+            console.log(response.json());
+            return response.json();
+        });
+    };
+    SiteService.prototype.getAllProjects = function () {
+        return this.http.get(this.config.Url + 'api/project/').map(function (response) {
+            console.log(response.json());
+            return response.json();
+        });
+    };
+    SiteService.prototype.findSites = function (projectId) {
+        return this.http.get(this.config.Url + 'api/project/' + projectId + '/sites').map(function (response) {
+            return response;
+        });
+    };
+    SiteService.prototype.searchSiteEmployee = function (siteId) {
+        return this.http.get(this.config.Url + 'api/employee/site/' + siteId).map(function (response) {
+            return response;
+        });
+    };
+    SiteService.prototype.getSites = function (employeeId) {
+        return this.http.get(this.config.Url + 'api/site/employee/' + employeeId).map(function (response) {
+            console.log(response);
+            return response;
+        });
+    };
+    SiteService.prototype.createSite = function (site) {
+        return this.http.post(this.config.Url + 'api/site', site).map(function (response) {
+            console.log(response);
+            return response;
+        });
+    };
+    SiteService = __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_3__angular_core__["Injectable"])(),
+        __param(3, Object(__WEBPACK_IMPORTED_MODULE_3__angular_core__["Inject"])(__WEBPACK_IMPORTED_MODULE_5__app_config__["b" /* MY_CONFIG_TOKEN */])),
+        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_2__Interceptor_HttpClient__["a" /* HttpClient */], __WEBPACK_IMPORTED_MODULE_0__angular_http__["b" /* Http */], __WEBPACK_IMPORTED_MODULE_4_ionic_angular__["LoadingController"], Object])
+    ], SiteService);
+    return SiteService;
+}());
+
+//# sourceMappingURL=siteService.js.map
+
+/***/ }),
+
 /***/ 338:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -2511,8 +2717,8 @@ module.exports = webpackAsyncContext;
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_ionic2_date_picker__ = __webpack_require__(339);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_ionic2_date_picker___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_ionic2_date_picker__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__service_componentService__ = __webpack_require__(19);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__service_siteService__ = __webpack_require__(34);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__service_employeeService__ = __webpack_require__(58);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__service_siteService__ = __webpack_require__(30);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__service_employeeService__ = __webpack_require__(51);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__service_jobService__ = __webpack_require__(40);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__rate_card_create_rate_card__ = __webpack_require__(154);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__jobs_add_job__ = __webpack_require__(155);
@@ -2719,7 +2925,7 @@ var DashboardPage = (function () {
     ], DashboardPage.prototype, "MyCalendar", void 0);
     DashboardPage = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
-            selector: 'page-dashboard',template:/*ion-inline-start:"/Users/gnana/techginko/workspace/fms/MobileApp/src/pages/dashboard/dashboard.html"*/`<ion-header>\n  <ion-navbar>\n    <button ion-button menuToggle>\n      <ion-icon name="menu"></ion-icon>\n    </button>\n    <ion-title>Dashboard</ion-title>\n  </ion-navbar>\n</ion-header>\n\n<ion-content>\n\n    <ion-fab right bottom>\n        <button ion-fab color="dark">\n            <ion-icon name="md-add" class="clr-orange"></ion-icon>\n        </button>\n        <ion-fab-list side="top" fab-list-margin >\n            <ion-label color="dark" class="margin0" *ngIf="userType === \'ADMIN\' || userType === \'TECHNICIAN\' || userType === \'FACILITYMANAGER\' || userType === \'SUPERVISOR\'">Quotation</ion-label>\n            <button ion-fab color="primary" *ngIf="userType === \'ADMIN\' || userType === \'TECHNICIAN\' || userType === \'FACILITYMANAGER\' || userType === \'SUPERVISOR\'" (click)="fabClick(\'quotation\')">\n                <i class="material-icons clr-blk">receipt</i>\n            </button>\n            <ion-label color="dark"  class="margin0">Job</ion-label>\n            <button ion-fab color="primary" (click)="fabClick(\'job\')">\n                <i class="material-icons clr-blk">description</i>\n            </button>\n\n            <ion-label *ngIf="userType === \'ADMIN\' || userType === \'TECHNICIAN\' || userType === \'FACILITYMANAGER\' || userType === \'SUPERVISOR\'"  color="dark"  class="margin0">Attendance</ion-label>\n            <button *ngIf="userType === \'ADMIN\' || userType === \'TECHNICIAN\' || userType === \'FACILITYMANAGER\' || userType === \'SUPERVISOR\'"  ion-fab color="primary" (click)="fabClick(\'attendance\')">\n                <i class="material-icons clr-blk">content_paste</i>\n            </button>\n            <ion-label color="dark" *ngIf="userType === \'ADMIN\' || userType === \'FACILITYMANAGER\' || userType === \'SUPERVISOR\'" class="margin0">Employee</ion-label>\n            <button ion-fab color="primary" *ngIf="userType === \'ADMIN\' || userType === \'FACILITYMANAGER\' || userType === \'SUPERVISOR\'" (click)="fabClick(\'employee\')">\n                <i class="material-icons clr-blk">people</i>\n            </button>\n            <ion-label *ngIf="userType === \'ADMIN\' || userType === \'TECHNICIAN\' || userType === \'FACILITYMANAGER\' || userType === \'SUPERVISOR\'"   color="dark" class="margin0">Rate Card</ion-label>\n            <button *ngIf="userType === \'ADMIN\' || userType === \'TECHNICIAN\' || userType === \'FACILITYMANAGER\' || userType === \'SUPERVISOR\'"  ion-fab color="primary" (click)="fabClick(\'ratecard\')">\n                <i class="material-icons clr-blk">description</i>\n            </button>\n        </ion-fab-list>\n    </ion-fab>\n\n    <!--\n    <ion-fab right bottom>\n        <button ion-fab color="dark"><ion-icon name="arrow-dropleft"></ion-icon></button>\n        <ion-fab-list side="top">\n            <button ion-fab><i class="material-icons">receipt</i>Add Quotation</button>\n            <button ion-fab><i class="material-icons">description</i>Add</button>\n            <button ion-fab><i class="material-icons">description</i>Add</button>\n        </ion-fab-list>\n    </ion-fab>\n    -->\n    <ion-row class="margin0 padding-top15">\n        <ion-col col-8 class="align-right">\n            <p  text-right class="fnt-18 date-txt" (click)="showCalendar()">\n                <ion-icon ios="ios-calendar" md="md-calendar" class="green fnt-25 padding-right10"></ion-icon>\n                <span class="clr-black">{{selectDate | date:\'d\' }}</span>\n                <span class="clr-orange">{{selectDate | date:\'MMM\' }}</span>\n                <span class="clr-black">{{selectDate | date:\'y\' }}</span>\n            </p>\n        </ion-col>\n        <ion-col col-4 class="padding-right5 align-right">\n            <!--<p text-right class="fnt-18" (click)="showCalendar()"><ion-icon ios="ios-calendar" md="md-calendar" class="green fnt-25 padding-right10"></ion-icon></p>-->\n        </ion-col>\n    </ion-row>\n\n <!--\n  <div class="wrapper">\n    <ion-toolbar>\n      <ion-segment  color="secondary">\n        <ion-segment-button value="camera">\n          <ion-icon name="camera"></ion-icon>\n        </ion-segment-button>\n      </ion-segment>\n    </ion-toolbar>\n-->\n    <!--\nTip 1: You can change the color of the sidebar using: data-color="purple | blue | green | orange | red"\n\nTip 2: you can also add an image using data-image tag\n-->\n\n\n\n\n\n    <!--\n    <ion-row >\n        <ion-col col-6 class="margin-auto">\n            <div class="form-group label-floating">\n                <ion-select [(ngModel)]="empName" class="select-box" placeholder="Choose Employee">\n                    <ion-option *ngFor="let emp of employee;let i of index" [value]="emp.name">{{emp.name}}</ion-option>\n                </ion-select>\n            </div>\n        </ion-col>\n\n    </ion-row>\n    -->\n\n    <div class="SiteCon">\n        <div text-center>\n            <p class="margin0"><span class="margin-right15">Sites</span><span class="padding-left5" *ngIf="spinner"><ion-spinner name="bubbles"></ion-spinner></span></p>\n        </div>\n        <div class="container-fluid container-scroll hariz-scroll-con">\n\n            <div class="row">\n                <button class="siteBtn" ion-button round color="light"  *ngFor="let site of sites;let i of index" (click)="activeSite(site.id)" [ngClass]="{\'bg-orange\':selectSite}">\n                    <p class="siteName">{{site.name}}</p>\n                </button>\n            </div>\n        </div>\n    </div>\n\n    <div class="EmpCon" style="padding-bottom:10px;">\n\n        <div text-center>\n            <p class="margin0"><span class="margin-right15">Employees</span><span class="padding-left5" *ngIf="empSpinner"><ion-spinner name="bubbles"></ion-spinner></span></p>\n\n        </div>\n        <div class="container-fluid container-scroll hariz-scroll-con">\n            <div *ngIf="empSelect">\n                <p text-center class="margin0 clr-orange">No Employee</p>\n            </div>\n            <div class="row">\n\n            <span *ngFor="let emp of employee;let i of index" class="Nametxt">\n                <!--<ion-avatar item-start *ngIf="emp.enrolled_face" class="emp-round width-round">-->\n                <!--<img  [src]="emp.enrolled_face" >-->\n                <!--</ion-avatar>-->\n                <!--<p *ngIf="!emp.enrolled_face && first(emp.name)"></p>-->\n                <p *ngIf="first(emp.name)"></p>\n                <ion-avatar item-start *ngIf="!emp.enrolled_face" class="emp-round">\n                    <p class="margin-auto"> {{firstLetter}}</p>\n                </ion-avatar>\n                <!--<p text-left>{{emp.name}}</p>-->\n            </span>\n            </div>\n        </div>\n\n    </div>\n\n\n\n\n    <!--\n        <ion-segment [(ngModel)]="cat" class="" color="clr-blue">\n            <div *ngFor="let c of categories">\n                <ion-segment-button [value]="c" (click)="getAllJobs()">\n                    {{c}}\n                </ion-segment-button>\n            </div>\n        </ion-segment>\n     -->\n\n\n\n\n        <ion-segment [(ngModel)]="categories" class="" color="clr-blue">\n            <ion-segment-button value="overdue">\n                Overdue\n            </ion-segment-button>\n            <ion-segment-button value="upcoming">\n                Upcoming\n            </ion-segment-button>\n            <ion-segment-button value="completed">\n                Completed\n            </ion-segment-button>\n        </ion-segment>\n\n    <div class="main-panel" >\n\n      <div class="content margin-top0 padding0">\n        <div class="container-fluid padding0">\n\n          <div class="row margin0">\n            <ion-col col-12 class="margin-auto">\n\n<!--\n                <div [ngSwitch]="cat">\n                    <div *ngFor="let c of categories">\n                            <ion-list *ngSwitchCase="c">\n                                    <div *ngFor="let job of allJobs">\n                                        <div class="card"  *ngIf="(c | uppercase) == job.status" [ngClass]="{\'red-card\' : (job.status == \'OVERDUE\'),\n                                                          \'green-card\' : (job.status == \'COMPLETED\'),\n                                                          \'blue-card\' :(job.status ==\'OPEN\' || job.status == \'ASSIGNED\' || job.status == \'INPROGRESS\')}">\n\n                                            <div class="card-content padding-bottom0" >\n                                                <ion-row class="margin0">\n                                                    <ion-col col-12 class="padding-right0">\n                                                        <button ion-button icon-left icon-only clear class="pop-icon">\n                                                            <ion-icon name="md-create" class="fnt-12 padding0"></ion-icon>\n                                                        </button>\n                                                    </ion-col>\n                                                </ion-row>\n                                                <ion-row class="margin0">\n                                                    <ion-col col-8 class="padding-left0"><p text-left>{{job.title}}</p></ion-col>\n                                                    <ion-col col-4 class="padding-right0">\n                                                        <p text-right [ngClass]="{\'red\' : (job.status == \'OVERDUE\'),\n                                                          \'green\' : (job.status == \'COMPLETED\'),\n                                                          \'blue\' :(job.status ==\'OPEN\' || job.status == \'ASSIGNED\' || job.status == \'INPROGRESS\')}" >\n                                                            {{job.status}}\n                                                        </p>\n                                                    </ion-col>\n                                                </ion-row>\n                                                <p>{{job.employeeName}}</p>\n                                                <p>{{job.siteProjectName}} - {{job.siteName}}</p>\n                                            </div>\n\n                                            <div class="card-footer">\n                                                <div *ngIf="job.status !=\'COMPLETED\'">\n                                                    <p>{{job.plannedStartTime | date:\'dd/MM/yyyy @ H:mm\' }} - {{job.plannedEndTime | date:\'dd/MM/yyyy @ H:mm\' }} </p>\n                                                </div>\n                                                <div *ngIf="job.status ==\'COMPLETED\'">\n                                                    <p>{{job.actualStartTime | date:\'dd/MM/yyyy @ H:mm\' }} - {{job.actualEndTime | date:\'dd/MM/yyyy @ H:mm\' }} </p>\n                                                </div>\n                                                <div class="stats align-right">\n\n                                                </div>\n                                            </div>\n                                        </div>\n                                    </div>\n\n                            </ion-list>\n                    </div>\n                </div>\n\n                -->\n\n\n\n\n                <div [ngSwitch]="categories">\n                        <ion-list *ngSwitchCase="\'overdue\'">\n                            <ion-refresher (ionRefresh)="doRefresh($event,all)">\n                                <ion-refresher-content></ion-refresher-content>\n                            </ion-refresher>\n                            <div  class="white-bg" *ngFor="let job of allJobs; let i = index" >\n                                <div *ngIf="job.status == \'OVERDUE\'">\n\n                                <div class="padding-left16 padding-top5">\n                                    <ion-row class="margin0">\n\n                                        <ion-col col-2 class="ver-center">\n                                            <button ion-button clear color="primary" class="icon-round"\n                                                    [ngClass]="{\'icon-round-red\' : (job.status == \'OVERDUE\'),\n                                                          \'icon-round-green\' : (job.status == \'COMPLETED\'),\n                                                          \'icon-round-blue\' :(job.status ==\'OPEN\' || job.status == \'ASSIGNED\' || job.status == \'INPROGRESS\')}">\n                                                <ion-icon name="ios-construct-outline" class="fnt-24"></ion-icon>\n                                            </button>\n                                        </ion-col>\n                                        <ion-col col-10 class="padding-left5">\n                                            <div class="border-btm padding-bottom5 ln-ght20" text-capitalize (click)="compeleteJob(job)">\n                                                <p text-left class="margin0">{{job.title}}</p>\n                                                <p text-left class="margin0">{{job.employeeName}}</p>\n                                                <p text-left class="margin0">{{job.siteProjectName}} - {{job.siteName}}</p>\n                                            </div>\n                                        </ion-col>\n                                        <!--\n                                        <ion-col col-1>\n                                            <p (click)="open(ItemSliding,Item)">f</p>\n                                        </ion-col>\n                                        -->\n\n                                    </ion-row>\n                                </div>\n\n                                    <ion-item class="item-fnt padding-left0" >\n                                        <!--<div class="padding-left16">-->\n\n                                        <div text-capitalize >\n                                            <ion-row class="margin0">\n                                                <ion-col col-6 class="padding-right5">\n                                                    <div *ngIf="job.status ==\'COMPLETED\'">\n                                                        <p text-left class="fnt-12"><ion-icon ios="ios-calendar" md="md-calendar" class="green padding-right10"></ion-icon>{{job.actualStartTime | date:\'MMM d, y, h:mm a\' }} </p>\n                                                    </div>\n                                                    <div *ngIf="job.status !=\'COMPLETED\'">\n                                                        <p text-left class="fnt-12"><ion-icon ios="ios-calendar" md="md-calendar" class="green padding-right10"></ion-icon>{{job.plannedStartTime | date:\'MMM d, y, h:mm a\' }} </p>\n                                                    </div>\n                                                </ion-col>\n                                                <ion-col col-6>\n                                                    <div *ngIf="job.status ==\'COMPLETED\'">\n                                                        <p text-right class="fnt-12"><ion-icon ios="ios-calendar" md="md-calendar" class="red padding-right10"></ion-icon>{{job.actualEndTime | date:\'MMM d, y, h:mm a\' }} </p>\n                                                    </div>\n                                                    <div *ngIf="job.status !=\'COMPLETED\'">\n                                                        <p text-right class="fnt-12"><ion-icon ios="ios-calendar" md="md-calendar" class="red padding-right10"></ion-icon>{{job.plannedEndTime | date:\'MMM d, y, h:mm a\' }} </p>\n                                                    </div>\n                                                </ion-col>\n                                            </ion-row>\n                                        </div>\n                                        <!--</div>-->\n                                    </ion-item>\n\n                                </div>\n                            </div>\n                        </ion-list>\n\n\n\n                    <ion-list *ngSwitchCase="\'upcoming\'">\n                        <ion-refresher (ionRefresh)="doRefresh($event,all)">\n                            <ion-refresher-content></ion-refresher-content>\n                        </ion-refresher>\n                        <div  class="white-bg" *ngFor="let job of allJobs" >\n                            <div *ngIf="job.status ==\'OPEN\' || job.status == \'ASSIGNED\' || job.status == \'INPROGRESS\'">\n                            <div class="padding-left16 padding-top5" >\n                                <ion-row class="margin0">\n\n                                    <ion-col col-2 class="ver-center">\n                                        <button ion-button clear color="primary" class="icon-round"\n                                                [ngClass]="{\'icon-round-red\' : (job.status == \'OVERDUE\'),\n                                                          \'icon-round-green\' : (job.status == \'COMPLETED\'),\n                                                          \'icon-round-blue\' :(job.status ==\'OPEN\' || job.status == \'ASSIGNED\' || job.status == \'INPROGRESS\')}">\n                                            <ion-icon name="ios-construct-outline" class="fnt-24"></ion-icon>\n                                        </button>\n                                    </ion-col>\n                                    <ion-col col-10 class="padding-left5">\n                                        <div class="border-btm padding-bottom5 ln-ght20" text-capitalize (click)="completeJob(job)">\n                                            <p text-left class="margin0">{{job.title}}</p>\n                                            <p text-left class="margin0">{{job.employeeName}}</p>\n                                            <p text-left class="margin0">{{job.siteProjectName}} - {{job.siteName}}</p>\n                                        </div>\n                                    </ion-col>\n\n                                </ion-row>\n                            </div>\n\n                            <ion-item class="item-fnt padding-left0" >\n                                <!--<div class="padding-left16">-->\n\n                                <div text-capitalize >\n                                    <ion-row class="margin0">\n                                        <ion-col col-6 class="padding-right5">\n                                            <div *ngIf="job.status ==\'COMPLETED\'">\n                                                <p text-left class="fnt-12"><ion-icon ios="ios-calendar" md="md-calendar" class="green padding-right10"></ion-icon>{{job.actualStartTime | date:\'MMM d, y, h:mm a\' }} </p>\n                                            </div>\n                                            <div *ngIf="job.status !=\'COMPLETED\'">\n                                                <p text-left class="fnt-12"><ion-icon ios="ios-calendar" md="md-calendar" class="green padding-right10"></ion-icon>{{job.plannedStartTime | date:\'MMM d, y, h:mm a\' }} </p>\n                                            </div>\n                                        </ion-col>\n                                        <ion-col col-6>\n                                            <div *ngIf="job.status ==\'COMPLETED\'">\n                                                <p text-right class="fnt-12"><ion-icon ios="ios-calendar" md="md-calendar" class="red padding-right10"></ion-icon>{{job.actualEndTime | date:\'MMM d, y, h:mm a\' }} </p>\n                                            </div>\n                                            <div *ngIf="job.status !=\'COMPLETED\'">\n                                                <p text-right class="fnt-12"><ion-icon ios="ios-calendar" md="md-calendar" class="red padding-right10"></ion-icon>{{job.plannedEndTime | date:\'MMM d, y, h:mm a\' }} </p>\n                                            </div>\n                                        </ion-col>\n                                    </ion-row>\n                                </div>\n                                <!--</div>-->\n                            </ion-item>\n\n                            </div>\n                        </div>\n                    </ion-list>\n\n\n                    <ion-list *ngSwitchCase="\'completed\'">\n                        <ion-refresher (ionRefresh)="doRefresh($event,all)">\n                            <ion-refresher-content></ion-refresher-content>\n                        </ion-refresher>\n                        <div  class="white-bg" *ngFor="let job of allJobs" >\n                            <div *ngIf="job.status ==\'COMPLETED\'">\n                            <div class="padding-left16 padding-top5">\n                                <ion-row class="margin0">\n\n                                    <ion-col col-2 class="ver-center">\n\n                                        <button ion-button clear color="primary" class="icon-round"\n                                                [ngClass]="{\'icon-round-red\' : (job.status == \'OVERDUE\'),\n                                                          \'icon-round-green\' : (job.status == \'COMPLETED\'),\n                                                          \'icon-round-blue\' :(job.status ==\'OPEN\' || job.status == \'ASSIGNED\' || job.status == \'INPROGRESS\')}">\n                                            <ion-icon name="ios-construct-outline" class="fnt-24"></ion-icon>\n                                        </button>\n                                    </ion-col>\n                                    <ion-col col-10 class="padding-left5">\n                                        <div class="border-btm padding-bottom5 ln-ght20" text-capitalize>\n                                            <p text-left class="margin0">{{job.title}}</p>\n                                            <p text-left class="margin0">{{job.employeeName}}</p>\n                                            <p text-left class="margin0">{{job.siteProjectName}} - {{job.siteName}}</p>\n                                        </div>\n                                    </ion-col>\n                                    <!--\n                                    <ion-col col-1>\n                                        <p (click)="open(ItemSliding,Item)">f</p>\n                                    </ion-col>\n                                    -->\n\n                                </ion-row>\n                            </div>\n\n                            <ion-item class="item-fnt padding-left0" >\n                                <!--<div class="padding-left16">-->\n\n                                <div text-capitalize >\n                                    <ion-row class="margin0">\n                                        <ion-col col-6 class="padding-right5">\n                                            <div *ngIf="job.status ==\'COMPLETED\'">\n                                                <p text-left class="fnt-12"><ion-icon ios="ios-calendar" md="md-calendar" class="green padding-right10"></ion-icon>{{job.actualStartTime | date:\'MMM d, y, h:mm a\' }} </p>\n                                            </div>\n                                            <div *ngIf="job.status !=\'COMPLETED\'">\n                                                <p text-left class="fnt-12"><ion-icon ios="ios-calendar" md="md-calendar" class="green padding-right10"></ion-icon>{{job.plannedStartTime | date:\'MMM d, y, h:mm a\' }} </p>\n                                            </div>\n                                        </ion-col>\n                                        <ion-col col-6>\n                                            <div *ngIf="job.status ==\'COMPLETED\'">\n                                                <p text-right class="fnt-12"><ion-icon ios="ios-calendar" md="md-calendar" class="red padding-right10"></ion-icon>{{job.actualEndTime | date:\'MMM d, y, h:mm a\' }} </p>\n                                            </div>\n                                            <div *ngIf="job.status !=\'COMPLETED\'">\n                                                <p text-right class="fnt-12"><ion-icon ios="ios-calendar" md="md-calendar" class="red padding-right10"></ion-icon>{{job.plannedEndTime | date:\'MMM d, y, h:mm a\' }} </p>\n                                            </div>\n                                        </ion-col>\n                                    </ion-row>\n                                </div>\n                                <!--</div>-->\n                            </ion-item>\n\n                            </div>\n                        </div>\n                    </ion-list>\n                </div>\n            </ion-col>\n          </div>\n        </div>\n      </div>\n    </div>\n\n</ion-content>\n<!--\n<script type="text/javascript">\n    $(document).ready(function() {\n        demo.initFullCalendar();\n    });\n</script>\n-->`/*ion-inline-end:"/Users/gnana/techginko/workspace/fms/MobileApp/src/pages/dashboard/dashboard.html"*/
+            selector: 'page-dashboard',template:/*ion-inline-start:"/Users/gnana/techginko/workspace/fms/MobileApp/src/pages/dashboard/dashboard.html"*/`<ion-header>\n  <ion-navbar>\n    <button ion-button menuToggle>\n      <ion-icon name="menu"></ion-icon>\n    </button>\n    <ion-title>Dashboard</ion-title>\n  </ion-navbar>\n</ion-header>\n\n<ion-content>\n\n    <ion-fab right bottom>\n        <button ion-fab color="dark">\n            <ion-icon name="md-add" class="clr-orange"></ion-icon>\n        </button>\n        <ion-fab-list side="top" fab-list-margin >\n            <ion-label color="dark" class="margin0" *ngIf="userType === \'ADMIN\' || userType === \'TECHNICIAN\' || userType === \'FACILITYMANAGER\' || userType === \'SUPERVISOR\'">Quotation</ion-label>\n            <button ion-fab color="primary" *ngIf="userType === \'ADMIN\' || userType === \'TECHNICIAN\' || userType === \'FACILITYMANAGER\' || userType === \'SUPERVISOR\'" (click)="fabClick(\'quotation\')">\n                <i class="material-icons clr-blk">receipt</i>\n            </button>\n            <ion-label color="dark"  class="margin0">Job</ion-label>\n            <button ion-fab color="primary" (click)="fabClick(\'job\')">\n                <i class="material-icons clr-blk">description</i>\n            </button>\n\n            <ion-label *ngIf="userType === \'ADMIN\' || userType === \'TECHNICIAN\' || userType === \'FACILITYMANAGER\' || userType === \'SUPERVISOR\'"  color="dark"  class="margin0">Attendance</ion-label>\n            <button *ngIf="userType === \'ADMIN\' || userType === \'TECHNICIAN\' || userType === \'FACILITYMANAGER\' || userType === \'SUPERVISOR\'"  ion-fab color="primary" (click)="fabClick(\'attendance\')">\n                <i class="material-icons clr-blk">content_paste</i>\n            </button>\n            <ion-label color="dark" *ngIf="userType === \'ADMIN\' || userType === \'FACILITYMANAGER\' || userType === \'SUPERVISOR\'" class="margin0">Employee</ion-label>\n            <button ion-fab color="primary" *ngIf="userType === \'ADMIN\' || userType === \'FACILITYMANAGER\' || userType === \'SUPERVISOR\'" (click)="fabClick(\'employee\')">\n                <i class="material-icons clr-blk">people</i>\n            </button>\n            <ion-label *ngIf="userType === \'ADMIN\' || userType === \'TECHNICIAN\' || userType === \'FACILITYMANAGER\' || userType === \'SUPERVISOR\'"   color="dark" class="margin0">Rate Card</ion-label>\n            <button *ngIf="userType === \'ADMIN\' || userType === \'TECHNICIAN\' || userType === \'FACILITYMANAGER\' || userType === \'SUPERVISOR\'"  ion-fab color="primary" (click)="fabClick(\'ratecard\')">\n                <i class="material-icons clr-blk">description</i>\n            </button>\n        </ion-fab-list>\n    </ion-fab>\n\n    <!--\n    <ion-fab right bottom>\n        <button ion-fab color="dark"><ion-icon name="arrow-dropleft"></ion-icon></button>\n        <ion-fab-list side="top">\n            <button ion-fab><i class="material-icons">receipt</i>Add Quotation</button>\n            <button ion-fab><i class="material-icons">description</i>Add</button>\n            <button ion-fab><i class="material-icons">description</i>Add</button>\n        </ion-fab-list>\n    </ion-fab>\n    -->\n    <ion-row class="margin0 padding-top15">\n        <ion-col col-8 class="align-right">\n            <p  text-right class="fnt-18 date-txt" (click)="showCalendar()">\n                <ion-icon ios="ios-calendar" md="md-calendar" class="green fnt-25 padding-right10"></ion-icon>\n                <span class="clr-black">{{selectDate | date:\'d\' }}</span>\n                <span class="clr-orange">{{selectDate | date:\'MMM\' }}</span>\n                <span class="clr-black">{{selectDate | date:\'y\' }}</span>\n            </p>\n        </ion-col>\n        <ion-col col-4 class="padding-right5 align-right">\n            <!--<p text-right class="fnt-18" (click)="showCalendar()"><ion-icon ios="ios-calendar" md="md-calendar" class="green fnt-25 padding-right10"></ion-icon></p>-->\n        </ion-col>\n    </ion-row>\n\n <!--\n  <div class="wrapper">\n    <ion-toolbar>\n      <ion-segment  color="secondary">\n        <ion-segment-button value="camera">\n          <ion-icon name="camera"></ion-icon>\n        </ion-segment-button>\n      </ion-segment>\n    </ion-toolbar>\n-->\n    <!--\nTip 1: You can change the color of the sidebar using: data-color="purple | blue | green | orange | red"\n\nTip 2: you can also add an image using data-image tag\n-->\n\n\n\n\n\n    <!--\n    <ion-row >\n        <ion-col col-6 class="margin-auto">\n            <div class="form-group label-floating">\n                <ion-select [(ngModel)]="empName" class="select-box" placeholder="Choose Employee">\n                    <ion-option *ngFor="let emp of employee;let i of index" [value]="emp.name">{{emp.name}}</ion-option>\n                </ion-select>\n            </div>\n        </ion-col>\n\n    </ion-row>\n    -->\n\n    <div class="SiteCon">\n        <div text-center>\n            <p class="margin0"><span class="margin-right15">Sites</span><span class="padding-left5" *ngIf="spinner"><ion-spinner name="bubbles"></ion-spinner></span></p>\n        </div>\n        <div class="container-fluid container-scroll hariz-scroll-con">\n\n            <div class="row">\n                <button class="siteBtn" ion-button round color="light"  *ngFor="let site of sites;let i of index" (click)="activeSite(site.id)" [ngClass]="{\'bg-orange\':selectSite}">\n                    <p class="siteName">{{site.name}}</p>\n                </button>\n            </div>\n        </div>\n    </div>\n\n    <div class="EmpCon" style="padding-bottom:10px;">\n\n        <div text-center>\n            <p class="margin0"><span class="margin-right15">Employees</span><span class="padding-left5" *ngIf="empSpinner"><ion-spinner name="bubbles"></ion-spinner></span></p>\n\n        </div>\n        <div class="container-fluid container-scroll hariz-scroll-con">\n            <div *ngIf="empSelect">\n                <p text-center class="margin0 clr-orange">No Employee</p>\n            </div>\n            <div class="row">\n\n            <span *ngFor="let emp of employee;let i of index" class="Nametxt">\n                <!--<ion-avatar item-start *ngIf="emp.enrolled_face" class="emp-round width-round">-->\n                <!--<img  [src]="emp.enrolled_face" >-->\n                <!--</ion-avatar>-->\n                <!--<p *ngIf="!emp.enrolled_face && first(emp.name)"></p>-->\n                <p *ngIf="first(emp.name)"></p>\n                <ion-avatar item-start *ngIf="!emp.enrolled_face" class="emp-round">\n                    <p class="margin-auto"> {{firstLetter}}</p>\n                </ion-avatar>\n                <!--<p text-left>{{emp.name}}</p>-->\n            </span>\n            </div>\n        </div>\n\n    </div>\n\n\n\n\n    <!--\n        <ion-segment [(ngModel)]="cat" class="" color="clr-blue">\n            <div *ngFor="let c of categories">\n                <ion-segment-button [value]="c" (click)="getAllJobs()">\n                    {{c}}\n                </ion-segment-button>\n            </div>\n        </ion-segment>\n     -->\n\n\n\n\n        <ion-segment [(ngModel)]="categories" class="" color="clr-blue">\n            <ion-segment-button value="overdue">\n                Overdue\n            </ion-segment-button>\n            <ion-segment-button value="upcoming">\n                Upcoming\n            </ion-segment-button>\n            <ion-segment-button value="completed">\n                Completed\n            </ion-segment-button>\n        </ion-segment>\n\n    <div class="main-panel" >\n\n      <div class="content margin-top0 padding0">\n        <div class="container-fluid padding0">\n\n          <div class="row margin0">\n            <ion-col col-12 class="margin-auto">\n\n<!--\n                <div [ngSwitch]="cat">\n                    <div *ngFor="let c of categories">\n                            <ion-list *ngSwitchCase="c">\n                                    <div *ngFor="let job of allJobs">\n                                        <div class="card"  *ngIf="(c | uppercase) == job.status" [ngClass]="{\'red-card\' : (job.status == \'OVERDUE\'),\n                                                          \'green-card\' : (job.status == \'COMPLETED\'),\n                                                          \'blue-card\' :(job.status ==\'OPEN\' || job.status == \'ASSIGNED\' || job.status == \'INPROGRESS\')}">\n\n                                            <div class="card-content padding-bottom0" >\n                                                <ion-row class="margin0">\n                                                    <ion-col col-12 class="padding-right0">\n                                                        <button ion-button icon-left icon-only clear class="pop-icon">\n                                                            <ion-icon name="md-create" class="fnt-12 padding0"></ion-icon>\n                                                        </button>\n                                                    </ion-col>\n                                                </ion-row>\n                                                <ion-row class="margin0">\n                                                    <ion-col col-8 class="padding-left0"><p text-left>{{job.title}}</p></ion-col>\n                                                    <ion-col col-4 class="padding-right0">\n                                                        <p text-right [ngClass]="{\'red\' : (job.status == \'OVERDUE\'),\n                                                          \'green\' : (job.status == \'COMPLETED\'),\n                                                          \'blue\' :(job.status ==\'OPEN\' || job.status == \'ASSIGNED\' || job.status == \'INPROGRESS\')}" >\n                                                            {{job.status}}\n                                                        </p>\n                                                    </ion-col>\n                                                </ion-row>\n                                                <p>{{job.employeeName}}</p>\n                                                <p>{{job.siteProjectName}} - {{job.siteName}}</p>\n                                            </div>\n\n                                            <div class="card-footer">\n                                                <div *ngIf="job.status !=\'COMPLETED\'">\n                                                    <p>{{job.plannedStartTime | date:\'dd/MM/yyyy @ H:mm\' }} - {{job.plannedEndTime | date:\'dd/MM/yyyy @ H:mm\' }} </p>\n                                                </div>\n                                                <div *ngIf="job.status ==\'COMPLETED\'">\n                                                    <p>{{job.actualStartTime | date:\'dd/MM/yyyy @ H:mm\' }} - {{job.actualEndTime | date:\'dd/MM/yyyy @ H:mm\' }} </p>\n                                                </div>\n                                                <div class="stats align-right">\n\n                                                </div>\n                                            </div>\n                                        </div>\n                                    </div>\n\n                            </ion-list>\n                    </div>\n                </div>\n\n                -->\n\n\n\n\n                <div [ngSwitch]="categories">\n                        <ion-list *ngSwitchCase="\'overdue\'">\n                            <ion-refresher (ionRefresh)="doRefresh($event,all)">\n                                <ion-refresher-content></ion-refresher-content>\n                            </ion-refresher>\n                            <div  class="white-bg" *ngFor="let job of allJobs; let i = index" >\n                                <div *ngIf="job.status == \'OVERDUE\'">\n\n                                <div class="padding-left16 padding-top5">\n                                    <ion-row class="margin0">\n\n                                        <ion-col col-2 class="ver-center">\n                                            <button ion-button clear color="primary" class="icon-round"\n                                                    [ngClass]="{\'icon-round-red\' : (job.status == \'OVERDUE\'),\n                                                          \'icon-round-green\' : (job.status == \'COMPLETED\'),\n                                                          \'icon-round-blue\' :(job.status ==\'OPEN\' || job.status == \'ASSIGNED\' || job.status == \'INPROGRESS\')}">\n                                                <ion-icon name="ios-construct-outline" class="fnt-24"></ion-icon>\n                                            </button>\n                                        </ion-col>\n                                        <ion-col col-10 class="padding-left5">\n                                            <div class="border-btm padding-bottom5 ln-ght20" text-capitalize (click)="compeleteJob(job)">\n                                                <p text-left class="margin0">{{job.title}}</p>\n                                                <p text-left class="margin0">{{job.employeeName}}</p>\n                                                <p text-left class="margin0">{{job.siteProjectName}} - {{job.siteName}}</p>\n                                            </div>\n                                        </ion-col>\n                                        <!--\n                                        <ion-col col-1>\n                                            <p (click)="open(ItemSliding,Item)">f</p>\n                                        </ion-col>\n                                        -->\n\n                                    </ion-row>\n                                </div>\n\n                                    <ion-item class="item-fnt padding-left0" >\n                                        <!--<div class="padding-left16">-->\n\n                                        <div text-capitalize >\n                                            <ion-row class="margin0">\n                                                <ion-col col-6 class="padding-right5">\n                                                    <div *ngIf="job.status ==\'COMPLETED\'">\n                                                        <p text-left class="fnt-12"><ion-icon ios="ios-calendar" md="md-calendar" class="green padding-right10"></ion-icon>{{job.actualStartTime | date:\'MMM d, y, h:mm a\' }} </p>\n                                                    </div>\n                                                    <div *ngIf="job.status !=\'COMPLETED\'">\n                                                        <p text-left class="fnt-12"><ion-icon ios="ios-calendar" md="md-calendar" class="green padding-right10"></ion-icon>{{job.plannedStartTime | date:\'MMM d, y, h:mm a\' }} </p>\n                                                    </div>\n                                                </ion-col>\n                                                <ion-col col-6>\n                                                    <div *ngIf="job.status ==\'COMPLETED\'">\n                                                        <p text-right class="fnt-12"><ion-icon ios="ios-calendar" md="md-calendar" class="red padding-right10"></ion-icon>{{job.actualEndTime | date:\'MMM d, y, h:mm a\' }} </p>\n                                                    </div>\n                                                    <div *ngIf="job.status !=\'COMPLETED\'">\n                                                        <p text-right class="fnt-12"><ion-icon ios="ios-calendar" md="md-calendar" class="red padding-right10"></ion-icon>{{job.plannedEndTime | date:\'MMM d, y, h:mm a\' }} </p>\n                                                    </div>\n                                                </ion-col>\n                                            </ion-row>\n                                        </div>\n                                        <!--</div>-->\n                                    </ion-item>\n\n                                </div>\n                            </div>\n                        </ion-list>\n\n\n\n                    <ion-list *ngSwitchCase="\'upcoming\'">\n                        <ion-refresher (ionRefresh)="doRefresh($event,all)">\n                            <ion-refresher-content></ion-refresher-content>\n                        </ion-refresher>\n                        <div  class="white-bg" *ngFor="let job of allJobs" >\n                            <div *ngIf="job.status ==\'OPEN\' || job.status == \'ASSIGNED\' || job.status == \'INPROGRESS\'">\n                            <div class="padding-left16 padding-top5" >\n                                <ion-grid>\n                                <ion-row class="margin0">\n\n                                    <ion-col col-2 class="ver-center">\n                                        <button ion-button clear color="primary" class="icon-round ion-circle-icons"\n                                                [ngClass]="{\'icon-round-red\' : (job.status == \'OVERDUE\'),\n                                                          \'icon-round-green\' : (job.status == \'COMPLETED\'),\n                                                          \'icon-round-blue\' :(job.status ==\'OPEN\' || job.status == \'ASSIGNED\' || job.status == \'INPROGRESS\')}">\n                                            <ion-icon name="ios-construct-outline" class="fnt-24"></ion-icon>\n                                        </button>\n                                    </ion-col>\n                                    <ion-col col-9 class="padding-left15">\n                                        <div class="border-btm padding-bottom5 ln-ght20" text-capitalize (click)="completeJob(job)">\n                                            <p text-left class="margin0">{{job.title}}</p>\n                                            <p text-left class="margin0">{{job.employeeName}}</p>\n                                            <p text-left class="margin0">{{job.siteProjectName}} - {{job.siteName}}</p>\n                                        </div>\n                                    </ion-col>\n\n                                </ion-row>\n                                </ion-grid>\n                            </div>\n\n                            <ion-item class="item-fnt padding-left0" >\n                                <!--<div class="padding-left16">-->\n\n                                <div text-capitalize >\n                                    <ion-row class="margin0">\n                                        <ion-col col-5 class="">\n                                            <div *ngIf="job.status ==\'COMPLETED\'">\n                                                <p text-left class="fnt-12"><ion-icon ios="ios-calendar" md="md-calendar" class="green padding-right10"></ion-icon>{{job.actualStartTime | date:\'MMM d, y, h:mm a\' }} </p>\n                                            </div>\n                                            <div *ngIf="job.status !=\'COMPLETED\'">\n                                                <p text-left class="fnt-12"><ion-icon ios="ios-calendar" md="md-calendar" class="green padding-right10"></ion-icon>{{job.plannedStartTime | date:\'MMM d, y, h:mm a\' }} </p>\n                                            </div>\n                                        </ion-col>\n                                        <ion-col col-6>\n                                            <div *ngIf="job.status ==\'COMPLETED\'">\n                                                <p text-right class="fnt-12"><ion-icon ios="ios-calendar" md="md-calendar" class="red padding-right10"></ion-icon>{{job.actualEndTime | date:\'MMM d, y, h:mm a\' }} </p>\n                                            </div>\n                                            <div *ngIf="job.status !=\'COMPLETED\'">\n                                                <p text-right class="fnt-12"><ion-icon ios="ios-calendar" md="md-calendar" class="red padding-right10"></ion-icon>{{job.plannedEndTime | date:\'MMM d, y, h:mm a\' }} </p>\n                                            </div>\n                                        </ion-col>\n                                    </ion-row>\n                                </div>\n                                <!--</div>-->\n                            </ion-item>\n\n                            </div>\n                        </div>\n                    </ion-list>\n\n\n                    <ion-list *ngSwitchCase="\'completed\'">\n                        <ion-refresher (ionRefresh)="doRefresh($event,all)">\n                            <ion-refresher-content></ion-refresher-content>\n                        </ion-refresher>\n                        <div  class="white-bg" *ngFor="let job of allJobs" >\n                            <div *ngIf="job.status ==\'COMPLETED\'">\n                            <div class="padding-left16 padding-top5">\n                                <ion-row class="margin0">\n\n                                    <ion-col col-2 class="ver-center">\n\n                                        <button ion-button clear color="primary" class="icon-round"\n                                                [ngClass]="{\'icon-round-red\' : (job.status == \'OVERDUE\'),\n                                                          \'icon-round-green\' : (job.status == \'COMPLETED\'),\n                                                          \'icon-round-blue\' :(job.status ==\'OPEN\' || job.status == \'ASSIGNED\' || job.status == \'INPROGRESS\')}">\n                                            <ion-icon name="ios-construct-outline" class="fnt-24"></ion-icon>\n                                        </button>\n                                    </ion-col>\n                                    <ion-col col-10 class="padding-left5">\n                                        <div class="border-btm padding-bottom5 ln-ght20" text-capitalize>\n                                            <p text-left class="margin0">{{job.title}}</p>\n                                            <p text-left class="margin0">{{job.employeeName}}</p>\n                                            <p text-left class="margin0">{{job.siteProjectName}} - {{job.siteName}}</p>\n                                        </div>\n                                    </ion-col>\n                                    <!--\n                                    <ion-col col-1>\n                                        <p (click)="open(ItemSliding,Item)">f</p>\n                                    </ion-col>\n                                    -->\n\n                                </ion-row>\n                            </div>\n\n                            <ion-item class="item-fnt padding-left0" >\n                                <!--<div class="padding-left16">-->\n\n                                <div text-capitalize >\n                                    <ion-row class="margin0">\n                                        <ion-col col-6 class="padding-right5">\n                                            <div *ngIf="job.status ==\'COMPLETED\'">\n                                                <p text-left class="fnt-12"><ion-icon ios="ios-calendar" md="md-calendar" class="green padding-right10"></ion-icon>{{job.actualStartTime | date:\'MMM d, y, h:mm a\' }} </p>\n                                            </div>\n                                            <div *ngIf="job.status !=\'COMPLETED\'">\n                                                <p text-left class="fnt-12"><ion-icon ios="ios-calendar" md="md-calendar" class="green padding-right10"></ion-icon>{{job.plannedStartTime | date:\'MMM d, y, h:mm a\' }} </p>\n                                            </div>\n                                        </ion-col>\n                                        <ion-col col-6>\n                                            <div *ngIf="job.status ==\'COMPLETED\'">\n                                                <p text-right class="fnt-12"><ion-icon ios="ios-calendar" md="md-calendar" class="red padding-right10"></ion-icon>{{job.actualEndTime | date:\'MMM d, y, h:mm a\' }} </p>\n                                            </div>\n                                            <div *ngIf="job.status !=\'COMPLETED\'">\n                                                <p text-right class="fnt-12"><ion-icon ios="ios-calendar" md="md-calendar" class="red padding-right10"></ion-icon>{{job.plannedEndTime | date:\'MMM d, y, h:mm a\' }} </p>\n                                            </div>\n                                        </ion-col>\n                                    </ion-row>\n                                </div>\n                                <!--</div>-->\n                            </ion-item>\n\n                            </div>\n                        </div>\n                    </ion-list>\n                </div>\n            </ion-col>\n          </div>\n        </div>\n      </div>\n    </div>\n\n</ion-content>\n<!--\n<script type="text/javascript">\n    $(document).ready(function() {\n        demo.initFullCalendar();\n    });\n</script>\n-->`/*ion-inline-end:"/Users/gnana/techginko/workspace/fms/MobileApp/src/pages/dashboard/dashboard.html"*/
         }),
         __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_0__angular_core__["Renderer"], __WEBPACK_IMPORTED_MODULE_2__service_authService__["a" /* authService */], __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["LoadingController"], __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["NavController"], __WEBPACK_IMPORTED_MODULE_4__service_componentService__["a" /* componentService */], __WEBPACK_IMPORTED_MODULE_2__service_authService__["a" /* authService */], __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["ModalController"],
             __WEBPACK_IMPORTED_MODULE_3_ionic2_date_picker__["DatePickerProvider"], __WEBPACK_IMPORTED_MODULE_5__service_siteService__["a" /* SiteService */], __WEBPACK_IMPORTED_MODULE_6__service_employeeService__["a" /* EmployeeService */], __WEBPACK_IMPORTED_MODULE_7__service_jobService__["a" /* JobService */], __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["Events"]])
@@ -2731,77 +2937,6 @@ var DashboardPage = (function () {
 
 /***/ }),
 
-/***/ 34:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return SiteService; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_http__ = __webpack_require__(49);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_rxjs__ = __webpack_require__(50);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_rxjs___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_rxjs__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__Interceptor_HttpClient__ = __webpack_require__(55);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__angular_core__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_ionic_angular__ = __webpack_require__(6);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__app_config__ = __webpack_require__(56);
-var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
-var __metadata = (this && this.__metadata) || function (k, v) {
-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-};
-var __param = (this && this.__param) || function (paramIndex, decorator) {
-    return function (target, key) { decorator(target, key, paramIndex); }
-};
-
-
-
-
-
-
-var SiteService = (function () {
-    function SiteService(http, https, loadingCtrl, config) {
-        this.http = http;
-        this.https = https;
-        this.loadingCtrl = loadingCtrl;
-        this.config = config;
-    }
-    SiteService.prototype.searchSite = function () {
-        return this.http.get(this.config.Url + 'api/site').map(function (response) {
-            return response;
-        });
-    };
-    SiteService.prototype.searchSiteEmployee = function (siteId) {
-        return this.http.get(this.config.Url + 'api/employee/site/' + siteId).map(function (response) {
-            return response;
-        });
-    };
-    SiteService.prototype.getSites = function (employeeId) {
-        return this.http.get(this.config.Url + 'api/site/employee/' + employeeId).map(function (response) {
-            console.log(response);
-            return response;
-        });
-    };
-    SiteService.prototype.createSite = function (site) {
-        return this.http.post(this.config.Url + 'api/site', site).map(function (response) {
-            console.log(response);
-            return response;
-        });
-    };
-    SiteService = __decorate([
-        Object(__WEBPACK_IMPORTED_MODULE_3__angular_core__["Injectable"])(),
-        __param(3, Object(__WEBPACK_IMPORTED_MODULE_3__angular_core__["Inject"])(__WEBPACK_IMPORTED_MODULE_5__app_config__["b" /* MY_CONFIG_TOKEN */])),
-        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_2__Interceptor_HttpClient__["a" /* HttpClient */], __WEBPACK_IMPORTED_MODULE_0__angular_http__["b" /* Http */], __WEBPACK_IMPORTED_MODULE_4_ionic_angular__["LoadingController"], Object])
-    ], SiteService);
-    return SiteService;
-}());
-
-//# sourceMappingURL=siteService.js.map
-
-/***/ }),
-
 /***/ 35:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -2810,10 +2945,10 @@ var SiteService = (function () {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_http__ = __webpack_require__(49);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_rxjs__ = __webpack_require__(50);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_rxjs___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_rxjs__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__Interceptor_HttpClient__ = __webpack_require__(55);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__Interceptor_HttpClient__ = __webpack_require__(56);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__angular_core__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_ionic_angular__ = __webpack_require__(6);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__app_config__ = __webpack_require__(56);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__app_config__ = __webpack_require__(57);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -2840,61 +2975,61 @@ var QuotationService = (function () {
         this.config = config;
     }
     QuotationService.prototype.getRateCardTypes = function () {
-        return this.http.get(this.config.NodeUrl + 'api/rateCardTypes').map(function (response) {
+        return this.http.get(this.config.QuotationServiceUrl + 'api/rateCardTypes').map(function (response) {
             console.log(response);
             return response.json();
         });
     };
     QuotationService.prototype.getRateTypes = function () {
-        return this.http.get(this.config.NodeUrl + 'api/rateCard/types').map(function (response) {
+        return this.http.get(this.config.QuotationServiceUrl + 'api/rateCard/types').map(function (response) {
             console.log(response);
             return response;
         });
     };
     QuotationService.prototype.getUOMTypes = function () {
-        return this.http.get(this.config.NodeUrl + 'api/rateCard/uom').map(function (response) {
+        return this.http.get(this.config.QuotationServiceUrl + 'api/rateCard/uom').map(function (response) {
             console.log(response);
             return response;
         });
     };
     QuotationService.prototype.createRateCard = function (rateCard) {
-        return this.http.post(this.config.NodeUrl + 'api/rateCard/create', rateCard).map(function (response) {
+        return this.http.post(this.config.QuotationServiceUrl + 'api/rateCard/create', rateCard).map(function (response) {
             console.log(response);
             return response.json();
         });
     };
     QuotationService.prototype.getRateCards = function () {
-        return this.http.get(this.config.NodeUrl + 'api/rateCard').map(function (response) {
+        return this.http.get(this.config.QuotationServiceUrl + 'api/rateCard').map(function (response) {
             console.log(response.json());
             return response.json();
         });
     };
     QuotationService.prototype.getQuotations = function (id) {
-        return this.http.get(this.config.NodeUrl + 'api/quotation/' + id).map(function (response) {
+        return this.http.get(this.config.QuotationServiceUrl + 'api/quotation/' + id).map(function (response) {
             console.log(response.json());
             return response.json();
         });
     };
     QuotationService.prototype.createQuotation = function (quotation) {
-        return this.http.post(this.config.NodeUrl + 'api/quotation/create', quotation).map(function (response) {
+        return this.http.post(this.config.QuotationServiceUrl + 'api/quotation/create', quotation).map(function (response) {
             console.log(response.json());
             return response.json();
         });
     };
     QuotationService.prototype.editQuotation = function (quotation) {
-        return this.http.post(this.config.NodeUrl + 'api/quotation/edit', quotation).map(function (response) {
+        return this.http.post(this.config.QuotationServiceUrl + 'api/quotation/edit', quotation).map(function (response) {
             console.log(response.json());
             return response.json();
         });
     };
     QuotationService.prototype.sendQuotation = function (quotation) {
-        return this.http.post(this.config.NodeUrl + 'api/quotation/send', quotation).map(function (response) {
+        return this.http.post(this.config.QuotationServiceUrl + 'api/quotation/send', quotation).map(function (response) {
             console.log(response.json());
             return response.json();
         });
     };
     QuotationService.prototype.approveQuotation = function (quotation) {
-        return this.http.post(this.config.NodeUrl + 'api/quotation/approve', quotation).map(function (response) {
+        return this.http.post(this.config.QuotationServiceUrl + 'api/quotation/approve', quotation).map(function (response) {
             console.log(response.json());
             return response.json();
         });
@@ -2919,10 +3054,10 @@ var QuotationService = (function () {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_http__ = __webpack_require__(49);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_rxjs__ = __webpack_require__(50);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_rxjs___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_rxjs__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__Interceptor_HttpClient__ = __webpack_require__(55);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__Interceptor_HttpClient__ = __webpack_require__(56);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__angular_core__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_ionic_angular__ = __webpack_require__(6);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__app_config__ = __webpack_require__(56);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__app_config__ = __webpack_require__(57);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -2949,13 +3084,13 @@ var JobService = (function () {
         this.config = config;
     }
     JobService.prototype.getTodayJobs = function () {
-        return this.http.post(this.config.Url + 'api/jobs/date/search', { checkInDateTimeFrom: new Date() }).map(function (response) {
+        return this.http.post(this.config.Url + 'api/jobs/search', { checkInDateTimeFrom: new Date() }).map(function (response) {
             console.log(response);
             return response.json();
         });
     };
     JobService.prototype.getJobs = function (searchCriteria) {
-        return this.http.post(this.config.Url + 'api/jobs/search', { searchCriteria: searchCriteria }).map(function (response) {
+        return this.http.post(this.config.Url + 'api/jobs/search', searchCriteria).map(function (response) {
             console.log(response);
             var allJobs = response.json();
             return allJobs.transactions;
@@ -2998,10 +3133,10 @@ var JobService = (function () {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_http__ = __webpack_require__(49);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_rxjs__ = __webpack_require__(50);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_rxjs___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_rxjs__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__Interceptor_HttpClient__ = __webpack_require__(55);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__Interceptor_HttpClient__ = __webpack_require__(56);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__angular_core__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_ionic_angular__ = __webpack_require__(6);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__app_config__ = __webpack_require__(56);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__app_config__ = __webpack_require__(57);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -3068,8 +3203,14 @@ var AttendanceService = (function () {
             return response.json();
         }));
     };
+    AttendanceService.prototype.searchAttendances = function (searchCriteria) {
+        return this.http.post(this.config.Url + 'api/attendance/search', searchCriteria).map(function (response) {
+            console.log(response.json());
+            return response.json();
+        });
+    };
     AttendanceService.prototype.checkSiteProximity = function (siteId, lat, lng) {
-        return this.http.get('http://ec2-52-77-216-21.ap-southeast-1.compute.amazonaws.com:8000/api/site/nearby?' + 'siteId=' + siteId + '&' + 'lat=' + lat + '&lng=' + lng).map(function (response) {
+        return this.http.get(this.config.LocationServiceUrl + 'api/site/nearby?' + 'siteId=' + siteId + '&' + 'lat=' + lat + '&lng=' + lng).map(function (response) {
             console.log(response);
             return response;
         }, function (error) {
@@ -3186,7 +3327,7 @@ var JobPopoverPage = (function () {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__quotation__ = __webpack_require__(76);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__service_componentService__ = __webpack_require__(19);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__service_quotationService__ = __webpack_require__(35);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__service_siteService__ = __webpack_require__(34);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__service_siteService__ = __webpack_require__(30);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -3367,7 +3508,7 @@ var CreateQuotationPage2 = (function () {
     };
     CreateQuotationPage2 = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
-            selector: 'page-create-quotation-step2',template:/*ion-inline-start:"/Users/gnana/techginko/workspace/fms/MobileApp/src/pages/quotation/create-quotation-step-2.html"*/`<ion-header>\n    <ion-navbar>\n        <button ion-button menuToggle>\n            <ion-icon name="menu"></ion-icon>\n        </button>\n        <ion-title>Add-Rates</ion-title>\n    </ion-navbar>\n</ion-header>\n\n<ion-content padding>\n    <ion-fab bottom right>\n        <button mini (click)="addRates($event)"  ion-fab><ion-icon name="add"></ion-icon></button>\n    </ion-fab>\n\n    <ion-col col-10>\n        <div class="card-content white-bg">\n                <div class="form-group label-floating width80 margin-auto padding-bottom3">\n                    <ion-select style="color: black" [(ngModel)]="selectedSite" class="select-box" placeholder="Choose Site">\n                        <ion-option style="color: black;" *ngFor="let site of allSites" [value]="site.name" (ionSelect)="selectSite(site)" >{{site.name}}</ion-option>\n                    </ion-select>\n                </div>\n        </div>\n    </ion-col>\n\n    <div class="card-content white-bg">\n        <div class="table-responsive">\n            <table class="table table-scroll">\n                <thead>\n                <tr>\n                    <th class="text-center">Type</th>\n                    <th class="text-center">Name</th>\n                    <th class="text-center">Rate</th>\n                    <th class="text-center">No</th>\n                    <th class="text-center">Uom</th>\n                    <th class="text-center">Total</th>\n                    <th class="text-center">&nbsp;&nbsp;&nbsp;&nbsp;</th>\n                </tr>\n                </thead>\n                <tbody>\n                <tr *ngFor="let rate of rates;let i = index ">\n                    <td class="text-center">{{rate.type}}</td>\n                    <td class="text-center table-data">{{rate.name}}</td>\n                    <td class="text-center">{{rate.cost}}</td>\n                    <td class="text-center">\n                        <input type="number" class="form-control align-center width15" [(ngModel)]="rate.no" (change)="addTotal(i,rate.no,rate.cost)">\n                    </td>\n                    <td class="text-center">{{rate.uom}}</td>\n                    <td class="text-center">{{rate.total}}</td>\n                    <td class="td-actions text-center">\n                        <i class="material-icons clr-red" (click)="remove(i)">close</i>\n                    </td>\n                </tr>\n                <tr>\n                    <td></td>\n                    <td></td>\n                    <td></td>\n                    <td></td>\n                    <td class="text-center">Grand Total</td>\n                    <td class="text-center">{{grandTotal}}</td>\n                    <td></td>\n                </tr>\n                </tbody>\n            </table>\n        </div>\n    </div>\n\n</ion-content>\n\n<ion-footer>\n    <ion-toolbar class="align-right" >\n        <button class="btn btn-warning center pull-left" >\n            Save\n        </button>\n        <button class="btn btn-success center pull-right" (click)="saveRates()">\n            Submitted <ion-icon name="ios-arrow-forward-outline"></ion-icon>\n        </button>\n    </ion-toolbar>\n</ion-footer>`/*ion-inline-end:"/Users/gnana/techginko/workspace/fms/MobileApp/src/pages/quotation/create-quotation-step-2.html"*/
+            selector: 'page-create-quotation-step2',template:/*ion-inline-start:"/Users/gnana/techginko/workspace/fms/MobileApp/src/pages/quotation/create-quotation-step-2.html"*/`<ion-header>\n    <ion-navbar>\n        <button ion-button menuToggle>\n            <ion-icon name="menu"></ion-icon>\n        </button>\n        <ion-title>Add-Rates</ion-title>\n    </ion-navbar>\n</ion-header>\n\n<ion-content padding>\n    <ion-fab bottom right>\n        <button mini (click)="addRates($event)"  ion-fab><ion-icon name="add"></ion-icon></button>\n    </ion-fab>\n\n    <ion-col col-10>\n        <div class="card-content white-bg">\n                <div class="form-group label-floating width80 margin-auto padding-bottom3">\n                    <ion-select style="color: black" [(ngModel)]="selectedSite" class="select-box" placeholder="Choose Site">\n                        <ion-option style="color: black;" *ngFor="let site of allSites" [value]="site.name" (ionSelect)="selectSite(site)" >{{site.name}}</ion-option>\n                    </ion-select>\n                </div>\n        </div>\n    </ion-col>\n\n    <div class="card-content white-bg">\n        <div class="table-responsive">\n            <table class="table table-scroll">\n                <thead>\n                <tr>\n                    <th class="text-center">Type</th>\n                    <th class="text-center">Name</th>\n                    <th class="text-center">Rate</th>\n                    <th class="text-center">No</th>\n                    <th class="text-center">Uom</th>\n                    <th class="text-center">Total</th>\n                    <th class="text-center">&nbsp;&nbsp;&nbsp;&nbsp;</th>\n                </tr>\n                </thead>\n                <tbody>\n                <tr *ngFor="let rate of rates;let i = index ">\n                    <td class="text-center">{{rate.type}}</td>\n                    <td class="text-center table-data">{{rate.name}}</td>\n                    <td class="text-center">{{rate.cost}}</td>\n                    <td class="text-center">\n                        <input type="number" class="form-control align-center width15" [(ngModel)]="rate.no" (change)="addTotal(i,rate.no,rate.cost)">\n                    </td>\n                    <td class="text-center">{{rate.uom}}</td>\n                    <td class="text-center">{{rate.total}}</td>\n                    <td class="td-actions text-center">\n                        <i class="material-icons clr-red" (click)="remove(i)">close</i>\n                    </td>\n                </tr>\n                <tr>\n                    <td></td>\n                    <td></td>\n                    <td></td>\n                    <td></td>\n                    <td class="text-center">Grand Total</td>\n                    <td class="text-center">{{grandTotal}}</td>\n                    <td></td>\n                </tr>\n                </tbody>\n            </table>\n        </div>\n    </div>\n\n</ion-content>\n\n<ion-footer>\n    <ion-toolbar class="align-right" >\n        <button class="btn btn-warning center pull-left"  >\n            Save\n        </button>\n        <button class="btn btn-success center pull-right" (click)="saveRates()">\n            Submit <ion-icon name="ios-arrow-forward-outline"></ion-icon>\n        </button>\n    </ion-toolbar>\n</ion-footer>`/*ion-inline-end:"/Users/gnana/techginko/workspace/fms/MobileApp/src/pages/quotation/create-quotation-step-2.html"*/
         }),
         __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["NavController"], __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["ModalController"], __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["NavParams"], __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["PopoverController"], __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["Events"], __WEBPACK_IMPORTED_MODULE_2__service_authService__["a" /* authService */], __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["AlertController"], __WEBPACK_IMPORTED_MODULE_5__service_componentService__["a" /* componentService */],
             __WEBPACK_IMPORTED_MODULE_6__service_quotationService__["a" /* QuotationService */], __WEBPACK_IMPORTED_MODULE_7__service_siteService__["a" /* SiteService */]])
@@ -3425,7 +3566,7 @@ var AttendancePopoverPage = (function () {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(6);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__service_authService__ = __webpack_require__(11);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__ionic_native_camera__ = __webpack_require__(33);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__ionic_native_camera__ = __webpack_require__(34);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__ionic_native_geolocation__ = __webpack_require__(41);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__ionic_native_geofence__ = __webpack_require__(59);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__service_componentService__ = __webpack_require__(19);
@@ -3503,7 +3644,7 @@ var CustomerDetailPage = (function () {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(6);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__service_authService__ = __webpack_require__(11);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__ionic_native_camera__ = __webpack_require__(33);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__ionic_native_camera__ = __webpack_require__(34);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__ionic_native_geolocation__ = __webpack_require__(41);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__ionic_native_geofence__ = __webpack_require__(59);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__service_componentService__ = __webpack_require__(19);
@@ -3753,7 +3894,7 @@ var EmployeeDetailPage = (function () {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__service_authService__ = __webpack_require__(11);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__service_componentService__ = __webpack_require__(19);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__site_view__ = __webpack_require__(509);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__service_siteService__ = __webpack_require__(34);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__service_siteService__ = __webpack_require__(30);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -3819,14 +3960,14 @@ var SitePage = (function () {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__service_componentService__ = __webpack_require__(19);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__service_jobService__ = __webpack_require__(40);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__service_attendanceService__ = __webpack_require__(42);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__service_employeeService__ = __webpack_require__(58);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__service_employeeService__ = __webpack_require__(51);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__quotation_submittedQuotations__ = __webpack_require__(104);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__quotation_draftedQuotations__ = __webpack_require__(103);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__quotation_archivedQuotations__ = __webpack_require__(102);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__quotation_approvedQuotations__ = __webpack_require__(101);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__quotation_create_quotation__ = __webpack_require__(75);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__service_quotationService__ = __webpack_require__(35);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_13__service_siteService__ = __webpack_require__(34);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_13__service_siteService__ = __webpack_require__(30);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -3851,7 +3992,8 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 
 var SiteViewPage = (function () {
-    function SiteViewPage(navCtrl, component, employeeService, navParams, siteService, myService, authService, toastCtrl, jobService, attendanceService, quotationService) {
+    function SiteViewPage(navCtrl, component, employeeService, navParams, siteService, myService, authService, toastCtrl, jobService, attendanceService, quotationService, events) {
+        var _this = this;
         this.navCtrl = navCtrl;
         this.component = component;
         this.employeeService = employeeService;
@@ -3863,6 +4005,7 @@ var SiteViewPage = (function () {
         this.jobService = jobService;
         this.attendanceService = attendanceService;
         this.quotationService = quotationService;
+        this.events = events;
         this.ref = false;
         this.job = "job";
         this.employ = "employee";
@@ -3871,6 +4014,7 @@ var SiteViewPage = (function () {
         this.siteDetail = this.navParams.get('site');
         console.log('ionViewDidLoad SiteViewPage');
         console.log(this.siteDetail.name);
+        this.isAdmin = true;
         this.draftedQuotationsCount = 0;
         this.approvedQuotationsCount = 0;
         this.submittedQuotationsCount = 0;
@@ -3880,6 +4024,12 @@ var SiteViewPage = (function () {
         this.approvedQuotations = [];
         this.submittedQuotations = [];
         this.archivedQuotations = [];
+        this.loadEmployee();
+        this.events.subscribe('userType', function (type) {
+            console.log("User type event");
+            console.log(type);
+            _this.userType = type;
+        });
     }
     SiteViewPage.prototype.ionViewDidLoad = function () {
     };
@@ -3957,7 +4107,15 @@ var SiteViewPage = (function () {
             console.log(response.json());
             if (response.json().length !== 0) {
                 _this.employee = response.json();
+                console.log("total Employees");
+                console.log(_this.employee.length);
                 console.log(_this.employee);
+                if (_this.employee.length > 1) {
+                    _this.isAdmin = true;
+                }
+                else {
+                    _this.isAdmin = false;
+                }
                 _this.component.closeLoader();
             }
             else {
@@ -4051,10 +4209,10 @@ var SiteViewPage = (function () {
     };
     SiteViewPage = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
-            selector: 'page-site-view',template:/*ion-inline-start:"/Users/gnana/techginko/workspace/fms/MobileApp/src/pages/site/site-view.html"*/`<ion-header>\n  <ion-navbar>\n    <button ion-button menuToggle>\n      <ion-icon name="menu"></ion-icon>\n    </button>\n    <ion-title>{{siteDetail.name}}</ion-title>\n  </ion-navbar>\n\n      <!--<ion-scroll scrollX="true" style="width:355px;height:50px">-->\n    <ion-segment [(ngModel)]="categories" color="clr-blue" class="segmnt margin-auto">\n        <ion-segment-button value="detail">\n            Detail\n        </ion-segment-button>\n        <ion-segment-button value="jobs" (click)="getJobs(false)">\n            Jobs\n        </ion-segment-button>\n        <ion-segment-button value="quotation">\n            Quotation\n        </ion-segment-button>\n        <ion-segment-button value="employee" (click)="getEmployee(false)">\n            Employee\n        </ion-segment-button>\n    </ion-segment>\n      <!--</ion-scroll>-->\n\n\n</ion-header>\n\n<ion-content>\n\n  <div [ngSwitch]="categories">\n    <ion-list *ngSwitchCase="\'detail\'">\n          <ion-row class="margin0 white-bg padding10">\n            <ion-col col-6 class="label-on-left">Site Name</ion-col>\n            <ion-col col-6>\n              <p text-right>{{siteDetail.name}}</p>\n            </ion-col>\n            <ion-col col-6 class="label-on-left">Client Name</ion-col>\n            <ion-col col-6>\n              <p text-right>{{siteDetail.projectName}}</p>\n            </ion-col>\n            <ion-col col-6 class="label-on-left">Address</ion-col>\n            <ion-col col-6>\n              <p text-right>{{siteDetail.address}}</p>\n            </ion-col>\n            <ion-col col-6 class="label-on-left">Address Co-ordinates</ion-col>\n            <ion-col col-6>\n              <p text-right>{{siteDetail.addressLat}},{{siteDetail.addressLng}}</p>\n            </ion-col>\n          </ion-row>\n    </ion-list>\n    <ion-list *ngSwitchCase="\'jobs\'" class="align-center">\n      <ion-refresher (ionRefresh)="doRefresh($event,job)">\n        <ion-refresher-content></ion-refresher-content>\n      </ion-refresher>\n      <div  class="white-bg" *ngFor="let job of jobs" >\n        <div class="padding-left16 padding-top5">\n          <ion-row class="margin0">\n\n            <ion-col col-2 class="ver-center">\n              <button ion-button clear color="primary" class="icon-round"\n                      [ngClass]="{\'icon-round-red\' : (job.status == \'OVERDUE\'),\n                                                          \'icon-round-green\' : (job.status == \'COMPLETED\'),\n                                                          \'icon-round-blue\' :(job.status ==\'OPEN\' || job.status == \'ASSIGNED\' || job.status == \'INPROGRESS\')}">\n                <ion-icon name="ios-construct-outline" class="fnt-24"></ion-icon>\n              </button>\n            </ion-col>\n            <ion-col col-8 class="padding-left5">\n              <div class="border-btm padding-bottom5 ln-ght20" text-capitalize>\n                <p text-left class="margin0">{{job.title}}</p>\n                <p text-left class="margin0">{{job.employeeName}}</p>\n                <p text-left class="margin0">{{job.siteProjectName}} - {{job.siteName}}</p>\n              </div>\n            </ion-col>\n            <ion-col col-2 class="padding-left0 ver-center">\n              <div class="padding-bottom5">\n                <button ion-button clear color="primary" (click)="open(slidingItem, item ,count)">\n                  <i class="material-icons">more_horiz</i>\n                </button>\n              </div>\n            </ion-col>\n            <!--\n            <ion-col col-1>\n                <p (click)="open(ItemSliding,Item)">f</p>\n            </ion-col>\n            -->\n\n          </ion-row>\n        </div>\n        <ion-item-sliding #slidingItem>\n\n          <ion-item #item class="item-fnt padding-left0" >\n            <!--<div class="padding-left16">-->\n\n            <div text-capitalize >\n              <ion-row class="margin0">\n                <ion-col col-6 class="padding-right5">\n                  <div *ngIf="job.status ==\'COMPLETED\'">\n                    <p text-left class="fnt-12"><ion-icon ios="ios-calendar" md="md-calendar" class="green padding-right10"></ion-icon>{{job.actualStartTime | date:\'MMM d, y, h:mm a\' }} </p>\n                  </div>\n                  <div *ngIf="job.status !=\'COMPLETED\'">\n                    <p text-left class="fnt-12"><ion-icon ios="ios-calendar" md="md-calendar" class="green padding-right10"></ion-icon>{{job.plannedStartTime | date:\'MMM d, y, h:mm a\' }} </p>\n                  </div>\n                </ion-col>\n                <ion-col col-6>\n                  <div *ngIf="job.status ==\'COMPLETED\'">\n                    <p text-right class="fnt-12"><ion-icon ios="ios-calendar" md="md-calendar" class="red padding-right10"></ion-icon>{{job.actualEndTime | date:\'MMM d, y, h:mm a\' }} </p>\n                  </div>\n                  <div *ngIf="job.status !=\'COMPLETED\'">\n                    <p text-right class="fnt-12"><ion-icon ios="ios-calendar" md="md-calendar" class="red padding-right10"></ion-icon>{{job.plannedEndTime | date:\'MMM d, y, h:mm a\' }} </p>\n                  </div>\n                </ion-col>\n              </ion-row>\n            </div>\n            <!--</div>-->\n          </ion-item>\n\n          <ion-item-options (click)="close(slidingItem)">\n            <div>\n              <button ion-button clear color="primary"><ion-icon name="md-eye" class="fnt-24"></ion-icon></button>\n            </div>\n            <div>\n              <button ion-button clear color="clr-blue"><ion-icon name="md-create" class="fnt-24"></ion-icon></button>\n            </div>\n            <div>\n              <button ion-button clear color="secondary" *ngIf="job.status !=\'COMPLETED\'" (click)="compeleteJob(job)"><ion-icon name="md-checkmark-circle" class="fnt-24"></ion-icon></button>\n            </div>\n            <div>\n              <button ion-button clear color="danger"><ion-icon name="md-close-circle" class="fnt-24"></ion-icon></button>\n            </div>\n          </ion-item-options>\n        </ion-item-sliding>\n\n      </div>\n\n    </ion-list>\n    <ion-list *ngSwitchCase="\'quotation\'">\n\n      <ion-row class="margin0 white-bg border-btm padding10 paddding-top20" (click)="gotoDraftedQuotation()">\n        <ion-col col-2 class="ver-center">\n          <div class="q-round ver-center">\n            <button ion-button clear color="primary" class="q-round icon-round-orange">\n              <ion-icon name="mail" class="fnt-24"></ion-icon>\n            </button>\n          </div>\n        </ion-col>\n        <ion-col col-9 class="padding-left10">\n          <div>\n            <p text-left class="fnt-18 margin-bottom5">Drafted</p>\n          </div>\n          <div>\n            <span class="clr-green padding-right2">(</span><span class="clr-orange">{{draftedQuotationsCount}}</span><span class="clr-green padding-left2">)</span>\n          </div>\n        </ion-col>\n        <ion-col col-1 class="ver-center">\n          <ion-icon class="primary-clr fnt-24" name="ios-arrow-forward-outline"></ion-icon>\n        </ion-col>\n      </ion-row>\n      <ion-row class="margin0 white-bg border-btm padding10" (click)="gotoSubmittedQuotation()">\n        <ion-col col-2 class="ver-center">\n          <div class="q-round ver-center">\n            <button ion-button clear color="primary" class="q-round icon-round-blue">\n              <ion-icon name="arrow-round-forward" class="fnt-24"></ion-icon>\n            </button>\n          </div>\n        </ion-col>\n        <ion-col col-9 class="padding-left10">\n          <div>\n            <p text-left class="fnt-18 margin-bottom5">Submitted</p>\n          </div>\n          <div>\n            <span class="clr-green padding-right2">(</span><span class="clr-blue">{{submittedQuotationsCount}}</span><span class="clr-green padding-left2">)</span>\n          </div>\n        </ion-col>\n        <ion-col col-1 class="ver-center">\n          <ion-icon class="primary-clr fnt-24" name="ios-arrow-forward-outline"></ion-icon>\n        </ion-col>\n      </ion-row>\n      <ion-row class="margin0 white-bg border-btm padding10" (click)="gotoApprovedQuotation()">\n        <ion-col col-2 class="ver-center">\n          <div class="q-round ver-center">\n            <button ion-button clear color="primary" class="q-round icon-round-green">\n              <ion-icon name="checkmark" class="fnt-24"></ion-icon>\n            </button>\n          </div>\n        </ion-col>\n        <ion-col col-9 class="padding-left10">\n          <div>\n            <p text-left class="fnt-18 margin-bottom5">Approved</p>\n          </div>\n          <div>\n            <span class="clr-green padding-right2">(</span><span class="green">{{approvedQuotationsCount}}</span><span class="clr-green padding-left2">)</span>\n          </div>\n        </ion-col>\n        <ion-col col-1 class="ver-center">\n          <ion-icon class="primary-clr fnt-24" name="ios-arrow-forward-outline"></ion-icon>\n        </ion-col>\n      </ion-row>\n      <ion-row class="margin0 white-bg border-btm padding10" (click)="gotoArchivedQuotation()">\n        <ion-col col-2 class="ver-center">\n          <div class="q-round ver-center">\n            <button ion-button clear color="primary" class="q-round icon-round-red">\n              <i class="material-icons">archive</i>\n            </button>\n          </div>\n        </ion-col>\n        <ion-col col-9 class="padding-left10">\n          <div>\n            <p text-left class="fnt-18 margin-bottom5">Archieved</p>\n          </div>\n          <div>\n            <span class="clr-green padding-right2">(</span><span class="clr-red">{{archivedQuotationsCount}}</span><span class="padding-left2">)</span>\n          </div>\n        </ion-col>\n        <ion-col col-1 class="ver-center">\n          <ion-icon class="primary-clr fnt-24" name="ios-arrow-forward-outline"></ion-icon>\n        </ion-col>\n      </ion-row>\n    </ion-list>\n    <ion-list *ngSwitchCase="\'employee\'">\n      <ion-refresher (ionRefresh)="doRefresh($event,employee)">\n        <ion-refresher-content></ion-refresher-content>\n      </ion-refresher>\n\n        <ion-item *ngFor="let emp of employee;let i of index" class="bottom-border emp" >\n            <ion-avatar item-start *ngIf="emp.enrolled_face">\n                <img  [src]="emp.enrolled_face" >\n            </ion-avatar>\n            <p *ngIf="!emp.enrolled_face && first(emp.name)"></p>\n            <ion-avatar item-start *ngIf="!emp.enrolled_face" class="emp-round">\n                <p class="margin-auto">{{firstLetter}}</p>\n            </ion-avatar>\n            <p text-left class="fnt-wt">{{emp.name}}</p>\n        </ion-item>\n    </ion-list>\n\n  </div>\n\n</ion-content>\n`/*ion-inline-end:"/Users/gnana/techginko/workspace/fms/MobileApp/src/pages/site/site-view.html"*/
+            selector: 'page-site-view',template:/*ion-inline-start:"/Users/gnana/techginko/workspace/fms/MobileApp/src/pages/site/site-view.html"*/`<ion-header>\n  <ion-navbar>\n    <button ion-button menuToggle>\n      <ion-icon name="menu"></ion-icon>\n    </button>\n    <ion-title>{{siteDetail.name}}</ion-title>\n  </ion-navbar>\n\n      <!--<ion-scroll scrollX="true" style="width:355px;height:50px">-->\n    <ion-segment [(ngModel)]="categories" color="clr-blue" class="segmnt margin-auto">\n        <ion-segment-button value="detail">\n            Detail\n        </ion-segment-button>\n        <ion-segment-button value="jobs" (click)="getJobs(false)">\n            Jobs\n        </ion-segment-button>\n        <ion-segment-button value="quotation">\n            Quotation\n        </ion-segment-button>\n        <ion-segment-button value="employee" (click)="getEmployee(false)" *ngIf="userType === \'ADMIN\' || userType === \'FACILITYMANAGER\' || userType === \'SUPERVISOR\' || userType === \'CLIENT\'">\n            Employee\n        </ion-segment-button>\n    </ion-segment>\n      <!--</ion-scroll>-->\n\n\n</ion-header>\n\n<ion-content>\n\n  <div [ngSwitch]="categories">\n    <ion-list *ngSwitchCase="\'detail\'">\n          <ion-row class="margin0 white-bg padding10">\n            <ion-col col-6 class="label-on-left">Site Name</ion-col>\n            <ion-col col-6>\n              <p text-right>{{siteDetail.name}}</p>\n            </ion-col>\n            <ion-col col-6 class="label-on-left">Client Name</ion-col>\n            <ion-col col-6>\n              <p text-right>{{siteDetail.projectName}}</p>\n            </ion-col>\n            <ion-col col-6 class="label-on-left">Address</ion-col>\n            <ion-col col-6>\n              <p text-right>{{siteDetail.address}}</p>\n            </ion-col>\n            <ion-col col-6 class="label-on-left">Address Co-ordinates</ion-col>\n            <ion-col col-6>\n              <p text-right>{{siteDetail.addressLat}},{{siteDetail.addressLng}}</p>\n            </ion-col>\n          </ion-row>\n    </ion-list>\n    <ion-list *ngSwitchCase="\'jobs\'" class="align-center">\n      <ion-refresher (ionRefresh)="doRefresh($event,job)">\n        <ion-refresher-content></ion-refresher-content>\n      </ion-refresher>\n      <div  class="white-bg" *ngFor="let job of jobs" >\n        <div class="padding-left16 padding-top5">\n          <ion-row class="margin0">\n\n            <ion-col col-2 class="ver-center">\n              <button ion-button clear color="primary" class="icon-round"\n                      [ngClass]="{\'icon-round-red\' : (job.status == \'OVERDUE\'),\n                                                          \'icon-round-green\' : (job.status == \'COMPLETED\'),\n                                                          \'icon-round-blue\' :(job.status ==\'OPEN\' || job.status == \'ASSIGNED\' || job.status == \'INPROGRESS\')}">\n                <ion-icon name="ios-construct-outline" class="fnt-24"></ion-icon>\n              </button>\n            </ion-col>\n            <ion-col col-8 class="padding-left5">\n              <div class="border-btm padding-bottom5 ln-ght20" text-capitalize>\n                <p text-left class="margin0">{{job.title}}</p>\n                <p text-left class="margin0">{{job.employeeName}}</p>\n                <p text-left class="margin0">{{job.siteProjectName}} - {{job.siteName}}</p>\n              </div>\n            </ion-col>\n            <ion-col col-2 class="padding-left0 ver-center">\n              <div class="padding-bottom5">\n                <button ion-button clear color="primary" (click)="open(slidingItem, item ,count)">\n                  <i class="material-icons">more_horiz</i>\n                </button>\n              </div>\n            </ion-col>\n            <!--\n            <ion-col col-1>\n                <p (click)="open(ItemSliding,Item)">f</p>\n            </ion-col>\n            -->\n\n          </ion-row>\n        </div>\n        <ion-item-sliding #slidingItem>\n\n          <ion-item #item class="item-fnt padding-left0" >\n            <!--<div class="padding-left16">-->\n\n            <div text-capitalize >\n              <ion-row class="margin0">\n                <ion-col col-6 class="padding-right5">\n                  <div *ngIf="job.status ==\'COMPLETED\'">\n                    <p text-left class="fnt-12"><ion-icon ios="ios-calendar" md="md-calendar" class="green padding-right10"></ion-icon>{{job.actualStartTime | date:\'MMM d, y, h:mm a\' }} </p>\n                  </div>\n                  <div *ngIf="job.status !=\'COMPLETED\'">\n                    <p text-left class="fnt-12"><ion-icon ios="ios-calendar" md="md-calendar" class="green padding-right10"></ion-icon>{{job.plannedStartTime | date:\'MMM d, y, h:mm a\' }} </p>\n                  </div>\n                </ion-col>\n                <ion-col col-6>\n                  <div *ngIf="job.status ==\'COMPLETED\'">\n                    <p text-right class="fnt-12"><ion-icon ios="ios-calendar" md="md-calendar" class="red padding-right10"></ion-icon>{{job.actualEndTime | date:\'MMM d, y, h:mm a\' }} </p>\n                  </div>\n                  <div *ngIf="job.status !=\'COMPLETED\'">\n                    <p text-right class="fnt-12"><ion-icon ios="ios-calendar" md="md-calendar" class="red padding-right10"></ion-icon>{{job.plannedEndTime | date:\'MMM d, y, h:mm a\' }} </p>\n                  </div>\n                </ion-col>\n              </ion-row>\n            </div>\n            <!--</div>-->\n          </ion-item>\n\n          <ion-item-options (click)="close(slidingItem)">\n            <div>\n              <button ion-button clear color="primary"><ion-icon name="md-eye" class="fnt-24"></ion-icon></button>\n            </div>\n            <div>\n              <button ion-button clear color="clr-blue"><ion-icon name="md-create" class="fnt-24"></ion-icon></button>\n            </div>\n            <div>\n              <button ion-button clear color="secondary" *ngIf="job.status !=\'COMPLETED\'" (click)="compeleteJob(job)"><ion-icon name="md-checkmark-circle" class="fnt-24"></ion-icon></button>\n            </div>\n            <div>\n              <button ion-button clear color="danger"><ion-icon name="md-close-circle" class="fnt-24"></ion-icon></button>\n            </div>\n          </ion-item-options>\n        </ion-item-sliding>\n\n      </div>\n\n    </ion-list>\n    <ion-list *ngSwitchCase="\'quotation\'">\n\n      <ion-row class="margin0 white-bg border-btm padding10 paddding-top20" (click)="gotoDraftedQuotation()">\n        <ion-col col-2 class="ver-center">\n          <div class="q-round ver-center">\n            <button ion-button clear color="primary" class="q-round icon-round-orange">\n              <ion-icon name="mail" class="fnt-24"></ion-icon>\n            </button>\n          </div>\n        </ion-col>\n        <ion-col col-9 class="padding-left10">\n          <div>\n            <p text-left class="fnt-18 margin-bottom5">Drafted</p>\n          </div>\n          <div>\n            <span class="clr-green padding-right2">(</span><span class="clr-orange">{{draftedQuotationsCount}}</span><span class="clr-green padding-left2">)</span>\n          </div>\n        </ion-col>\n        <ion-col col-1 class="ver-center">\n          <ion-icon class="primary-clr fnt-24" name="ios-arrow-forward-outline"></ion-icon>\n        </ion-col>\n      </ion-row>\n      <ion-row class="margin0 white-bg border-btm padding10" (click)="gotoSubmittedQuotation()">\n        <ion-col col-2 class="ver-center">\n          <div class="q-round ver-center">\n            <button ion-button clear color="primary" class="q-round icon-round-blue">\n              <ion-icon name="arrow-round-forward" class="fnt-24"></ion-icon>\n            </button>\n          </div>\n        </ion-col>\n        <ion-col col-9 class="padding-left10">\n          <div>\n            <p text-left class="fnt-18 margin-bottom5">Submitted</p>\n          </div>\n          <div>\n            <span class="clr-green padding-right2">(</span><span class="clr-blue">{{submittedQuotationsCount}}</span><span class="clr-green padding-left2">)</span>\n          </div>\n        </ion-col>\n        <ion-col col-1 class="ver-center">\n          <ion-icon class="primary-clr fnt-24" name="ios-arrow-forward-outline"></ion-icon>\n        </ion-col>\n      </ion-row>\n      <ion-row class="margin0 white-bg border-btm padding10" (click)="gotoApprovedQuotation()">\n        <ion-col col-2 class="ver-center">\n          <div class="q-round ver-center">\n            <button ion-button clear color="primary" class="q-round icon-round-green">\n              <ion-icon name="checkmark" class="fnt-24"></ion-icon>\n            </button>\n          </div>\n        </ion-col>\n        <ion-col col-9 class="padding-left10">\n          <div>\n            <p text-left class="fnt-18 margin-bottom5">Approved</p>\n          </div>\n          <div>\n            <span class="clr-green padding-right2">(</span><span class="green">{{approvedQuotationsCount}}</span><span class="clr-green padding-left2">)</span>\n          </div>\n        </ion-col>\n        <ion-col col-1 class="ver-center">\n          <ion-icon class="primary-clr fnt-24" name="ios-arrow-forward-outline"></ion-icon>\n        </ion-col>\n      </ion-row>\n      <ion-row class="margin0 white-bg border-btm padding10" (click)="gotoArchivedQuotation()">\n        <ion-col col-2 class="ver-center">\n          <div class="q-round ver-center">\n            <button ion-button clear color="primary" class="q-round icon-round-red">\n              <i class="material-icons">archive</i>\n            </button>\n          </div>\n        </ion-col>\n        <ion-col col-9 class="padding-left10">\n          <div>\n            <p text-left class="fnt-18 margin-bottom5">Archieved</p>\n          </div>\n          <div>\n            <span class="clr-green padding-right2">(</span><span class="clr-red">{{archivedQuotationsCount}}</span><span class="padding-left2">)</span>\n          </div>\n        </ion-col>\n        <ion-col col-1 class="ver-center">\n          <ion-icon class="primary-clr fnt-24" name="ios-arrow-forward-outline"></ion-icon>\n        </ion-col>\n      </ion-row>\n    </ion-list>\n    <ion-list *ngSwitchCase="\'employee\'">\n      <ion-refresher (ionRefresh)="doRefresh($event,employee)">\n        <ion-refresher-content></ion-refresher-content>\n      </ion-refresher>\n\n        <ion-item *ngFor="let emp of employee;let i of index" class="bottom-border emp" >\n            <ion-avatar item-start *ngIf="emp.enrolled_face">\n                <img  [src]="emp.enrolled_face" >\n            </ion-avatar>\n            <p *ngIf="!emp.enrolled_face && first(emp.name)"></p>\n            <ion-avatar item-start *ngIf="!emp.enrolled_face" class="emp-round">\n                <p class="margin-auto">{{firstLetter}}</p>\n            </ion-avatar>\n            <p text-left class="fnt-wt">{{emp.name}}</p>\n        </ion-item>\n    </ion-list>\n\n  </div>\n\n</ion-content>\n`/*ion-inline-end:"/Users/gnana/techginko/workspace/fms/MobileApp/src/pages/site/site-view.html"*/
         }),
         __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["NavController"], __WEBPACK_IMPORTED_MODULE_3__service_componentService__["a" /* componentService */], __WEBPACK_IMPORTED_MODULE_6__service_employeeService__["a" /* EmployeeService */], __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["NavParams"], __WEBPACK_IMPORTED_MODULE_13__service_siteService__["a" /* SiteService */], __WEBPACK_IMPORTED_MODULE_2__service_authService__["a" /* authService */], __WEBPACK_IMPORTED_MODULE_2__service_authService__["a" /* authService */], __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["ToastController"],
-            __WEBPACK_IMPORTED_MODULE_4__service_jobService__["a" /* JobService */], __WEBPACK_IMPORTED_MODULE_5__service_attendanceService__["a" /* AttendanceService */], __WEBPACK_IMPORTED_MODULE_12__service_quotationService__["a" /* QuotationService */]])
+            __WEBPACK_IMPORTED_MODULE_4__service_jobService__["a" /* JobService */], __WEBPACK_IMPORTED_MODULE_5__service_attendanceService__["a" /* AttendanceService */], __WEBPACK_IMPORTED_MODULE_12__service_quotationService__["a" /* QuotationService */], __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["Events"]])
     ], SiteViewPage);
     return SiteViewPage;
 }());
@@ -4063,13 +4221,18 @@ var SiteViewPage = (function () {
 
 /***/ }),
 
-/***/ 510:
+/***/ 51:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return ReportsPage; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(6);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return EmployeeService; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_http__ = __webpack_require__(49);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_rxjs__ = __webpack_require__(50);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_rxjs___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_rxjs__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__Interceptor_HttpClient__ = __webpack_require__(56);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__angular_core__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_ionic_angular__ = __webpack_require__(6);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__app_config__ = __webpack_require__(57);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -4079,26 +4242,83 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
+var __param = (this && this.__param) || function (paramIndex, decorator) {
+    return function (target, key) { decorator(target, key, paramIndex); }
+};
 
 
-var ReportsPage = (function () {
-    function ReportsPage(navCtrl) {
-        this.navCtrl = navCtrl;
+
+
+
+
+var EmployeeService = (function () {
+    function EmployeeService(http, https, loadingCtrl, config) {
+        this.http = http;
+        this.https = https;
+        this.loadingCtrl = loadingCtrl;
+        this.config = config;
     }
-    ReportsPage = __decorate([
-        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
-            selector: 'page-reports',template:/*ion-inline-start:"/Users/gnana/techginko/workspace/fms/MobileApp/src/pages/reports/reports.html"*/`<ion-header>\n  <ion-navbar>\n    <button ion-button menuToggle>\n      <ion-icon name="menu"></ion-icon>\n    </button>\n    <ion-title>Home</ion-title>\n  </ion-navbar>\n</ion-header>\n\n<ion-content padding>\n  <h3>Ionic Menu Starter</h3>\n\n  <p>\n    If you get lost, the <a href="http://ionicframework.com/docs/v2">docs</a> will show you the way.\n  </p>\n\n  <button ion-button secondary menuToggle>Toggle Menu</button>\n</ion-content>\n`/*ion-inline-end:"/Users/gnana/techginko/workspace/fms/MobileApp/src/pages/reports/reports.html"*/
-        }),
-        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["NavController"]])
-    ], ReportsPage);
-    return ReportsPage;
+    EmployeeService.prototype.getAllEmployees = function () {
+        return this.http.get(this.config.Url + 'api/employee').map(function (response) {
+            return response.json();
+        });
+    };
+    EmployeeService.prototype.searchEmployees = function (searchCriteria) {
+        return this.http.post(this.config.Url + 'api/employee/search', searchCriteria).map(function (response) {
+            return response.json();
+        });
+    };
+    EmployeeService.prototype.getAllDesignations = function () {
+        return this.http.get(this.config.Url + 'api/designation').map(function (response) {
+            return response.json();
+        });
+    };
+    EmployeeService.prototype.markEnrolled = function (employee) {
+        return this.http.post(this.config.Url + 'api/employee/enroll', { id: employee.id, enrolled_face: employee.imageData }).map(function (response) {
+            console.log(response);
+            return response;
+        }, function (error) {
+            console.log(error);
+            return error;
+        });
+    };
+    EmployeeService.prototype.createEmployee = function (employee) {
+        return this.http.post(this.config.Url + 'api/employee', employee).map(function (response) {
+            console.log(response.json());
+            return response.json();
+        });
+    };
+    EmployeeService.prototype.getUserRole = function (employeeId) {
+        return this.http.get(this.config.Url + 'api/userRole/' + employeeId).map(function (response) {
+            console.log(response.json());
+            return response.json();
+        });
+    };
+    EmployeeService.prototype.getUser = function (employeeId) {
+        return this.http.get(this.config.Url + 'api/users/' + employeeId).map(function (response) {
+            console.log(response.json());
+            return response.json();
+        });
+    };
+    EmployeeService.prototype.getUserRolePermissions = function (searchCriteria) {
+        return this.http.post(this.config.Url + 'api/userRolePermission/search', searchCriteria).map(function (response) {
+            console.log(response.json());
+            return response.json();
+        });
+    };
+    EmployeeService = __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_3__angular_core__["Injectable"])(),
+        __param(3, Object(__WEBPACK_IMPORTED_MODULE_3__angular_core__["Inject"])(__WEBPACK_IMPORTED_MODULE_5__app_config__["b" /* MY_CONFIG_TOKEN */])),
+        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_2__Interceptor_HttpClient__["a" /* HttpClient */], __WEBPACK_IMPORTED_MODULE_0__angular_http__["b" /* Http */], __WEBPACK_IMPORTED_MODULE_4_ionic_angular__["LoadingController"], Object])
+    ], EmployeeService);
+    return EmployeeService;
 }());
 
-//# sourceMappingURL=reports.js.map
+//# sourceMappingURL=employeeService.js.map
 
 /***/ }),
 
-/***/ 511:
+/***/ 510:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -4157,14 +4377,14 @@ var RateCardPage = (function () {
 
 /***/ }),
 
-/***/ 513:
+/***/ 512:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return IonSimpleWizard; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(6);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__ion_simple_wizard_animations__ = __webpack_require__(514);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__ion_simple_wizard_animations__ = __webpack_require__(513);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -4279,7 +4499,7 @@ var IonSimpleWizard = (function () {
 
 /***/ }),
 
-/***/ 514:
+/***/ 513:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -4471,7 +4691,7 @@ var WizardAnimations = (function () {
 
 /***/ }),
 
-/***/ 516:
+/***/ 515:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -4520,13 +4740,13 @@ var AttendanceViewPage = (function () {
 
 /***/ }),
 
-/***/ 517:
+/***/ 516:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_platform_browser_dynamic__ = __webpack_require__(518);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__app_module__ = __webpack_require__(522);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_platform_browser_dynamic__ = __webpack_require__(517);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__app_module__ = __webpack_require__(521);
 
 
 Object(__WEBPACK_IMPORTED_MODULE_0__angular_platform_browser_dynamic__["a" /* platformBrowserDynamic */])().bootstrapModule(__WEBPACK_IMPORTED_MODULE_1__app_module__["a" /* AppModule */]);
@@ -4534,7 +4754,7 @@ Object(__WEBPACK_IMPORTED_MODULE_0__angular_platform_browser_dynamic__["a" /* pl
 
 /***/ }),
 
-/***/ 522:
+/***/ 521:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -4543,14 +4763,14 @@ Object(__WEBPACK_IMPORTED_MODULE_0__angular_platform_browser_dynamic__["a" /* pl
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_core__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_ionic_angular__ = __webpack_require__(6);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__angular_http__ = __webpack_require__(49);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__pages_Interceptor_HttpClient__ = __webpack_require__(55);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__app_component__ = __webpack_require__(853);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__pages_home_home__ = __webpack_require__(854);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__pages_list_list__ = __webpack_require__(855);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__ionic_native_camera__ = __webpack_require__(33);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__pages_Interceptor_HttpClient__ = __webpack_require__(56);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__app_component__ = __webpack_require__(852);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__pages_home_home__ = __webpack_require__(853);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__pages_list_list__ = __webpack_require__(854);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__ionic_native_camera__ = __webpack_require__(34);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__ionic_native_status_bar__ = __webpack_require__(506);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__ionic_native_splash_screen__ = __webpack_require__(507);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__pages_attendance_view_attendance_view__ = __webpack_require__(516);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__pages_attendance_view_attendance_view__ = __webpack_require__(515);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__pages_login_login__ = __webpack_require__(183);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_13__pages_site_list_site_list__ = __webpack_require__(184);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_14__pages_attendance_list_attendance_list__ = __webpack_require__(78);
@@ -4564,7 +4784,7 @@ Object(__WEBPACK_IMPORTED_MODULE_0__angular_platform_browser_dynamic__["a" /* pl
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_22__pages_tabs_tabs__ = __webpack_require__(152);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_23__pages_site_site__ = __webpack_require__(508);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_24__pages_jobs_jobs__ = __webpack_require__(100);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_25__pages_reports_reports__ = __webpack_require__(510);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_25__pages_reports_reports__ = __webpack_require__(855);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_26__pages_logout_logout__ = __webpack_require__(856);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_27_ionic2_date_picker__ = __webpack_require__(339);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_27_ionic2_date_picker___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_27_ionic2_date_picker__);
@@ -4578,12 +4798,12 @@ Object(__WEBPACK_IMPORTED_MODULE_0__angular_platform_browser_dynamic__["a" /* pl
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_35__pages_jobs_view_job__ = __webpack_require__(461);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_36__pages_employee_list_employee_list__ = __webpack_require__(161);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_37__pages_service_componentService__ = __webpack_require__(19);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_38__pages_rate_card_rate_card__ = __webpack_require__(511);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_38__pages_rate_card_rate_card__ = __webpack_require__(510);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_39__pages_rate_card_create_rate_card__ = __webpack_require__(154);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_40__pages_employee_list_employee_detail__ = __webpack_require__(466);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_41__pages_site_site_view__ = __webpack_require__(509);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_42__pages_jobs_add_job__ = __webpack_require__(155);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_43__pages_ion_simple_wizard_ion_simple_wizard_component__ = __webpack_require__(513);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_43__pages_ion_simple_wizard_ion_simple_wizard_component__ = __webpack_require__(512);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_44__pages_ion_simple_wizard_ion_simple_wizard_step_component__ = __webpack_require__(858);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_45__angular_platform_browser_animations__ = __webpack_require__(859);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_46__pages_jobs_completeJob__ = __webpack_require__(156);
@@ -4595,14 +4815,14 @@ Object(__WEBPACK_IMPORTED_MODULE_0__angular_platform_browser_dynamic__["a" /* pl
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_52__pages_quotation_archivedQuotations__ = __webpack_require__(102);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_53__pages_quotation_viewQuotation__ = __webpack_require__(77);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_54__pages_employee_list_create_employee__ = __webpack_require__(158);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_55__ionic_native_onesignal__ = __webpack_require__(512);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_55__ionic_native_onesignal__ = __webpack_require__(511);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_56__ionic_native_toast__ = __webpack_require__(99);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_57__pages_service_app_config__ = __webpack_require__(56);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_57__pages_service_app_config__ = __webpack_require__(57);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_58__pages_service_attendanceService__ = __webpack_require__(42);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_59__pages_service_employeeService__ = __webpack_require__(58);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_59__pages_service_employeeService__ = __webpack_require__(51);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_60__pages_service_jobService__ = __webpack_require__(40);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_61__pages_service_quotationService__ = __webpack_require__(35);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_62__pages_service_siteService__ = __webpack_require__(34);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_62__pages_service_siteService__ = __webpack_require__(30);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_63__pages_jobs_job_popover__ = __webpack_require__(462);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -4814,7 +5034,7 @@ var AppModule = (function () {
 
 /***/ }),
 
-/***/ 55:
+/***/ 56:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -4898,7 +5118,7 @@ var HttpClient = (function () {
 
 /***/ }),
 
-/***/ 56:
+/***/ 57:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -4908,80 +5128,13 @@ var HttpClient = (function () {
 
 var AppConfig = {
     // Url: "http://192.168.1.4:8088/",
-    // NodeUrl: "http://192.168.1.4:8088/",
-    Url: "http://ec2-52-77-216-21.ap-southeast-1.compute.amazonaws.com:8088/",
-    NodeUrl: "http://ec2-52-77-216-21.ap-southeast-1.compute.amazonaws.com:8000/"
+    // NodeUrl: "http://192.168.1.4:8000/",
+    Url: "http://ec2-54-169-225-123.ap-southeast-1.compute.amazonaws.com:8088/",
+    QuotationServiceUrl: "http://ec2-54-169-225-123.ap-southeast-1.compute.amazonaws.com:8001/",
+    LocationServiceUrl: "http://ec2-54-169-225-123.ap-southeast-1.compute.amazonaws.com:8000/"
 };
 var MY_CONFIG_TOKEN = new __WEBPACK_IMPORTED_MODULE_0__angular_core__["InjectionToken"]('config');
 //# sourceMappingURL=app-config.js.map
-
-/***/ }),
-
-/***/ 58:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return EmployeeService; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_http__ = __webpack_require__(49);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_rxjs__ = __webpack_require__(50);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_rxjs___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_rxjs__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__Interceptor_HttpClient__ = __webpack_require__(55);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__angular_core__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_ionic_angular__ = __webpack_require__(6);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__app_config__ = __webpack_require__(56);
-var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
-var __metadata = (this && this.__metadata) || function (k, v) {
-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-};
-var __param = (this && this.__param) || function (paramIndex, decorator) {
-    return function (target, key) { decorator(target, key, paramIndex); }
-};
-
-
-
-
-
-
-var EmployeeService = (function () {
-    function EmployeeService(http, https, loadingCtrl, config) {
-        this.http = http;
-        this.https = https;
-        this.loadingCtrl = loadingCtrl;
-        this.config = config;
-    }
-    EmployeeService.prototype.getAllEmployees = function () {
-        return this.http.get(this.config.Url + 'api/employee').map(function (response) {
-            return response.json();
-        });
-    };
-    EmployeeService.prototype.searchEmployees = function (searchCriteria) {
-        return this.http.post(this.config.Url + 'api/employee/search', searchCriteria).map(function (response) {
-            return response.json();
-        });
-    };
-    EmployeeService.prototype.markEnrolled = function (employee) {
-        return this.http.post(this.config.Url + 'api/employee/enroll', { id: employee.id, enrolled_face: employee.imageData }).map(function (response) {
-            console.log(response);
-            return response;
-        }, function (error) {
-            console.log(error);
-            return error;
-        });
-    };
-    EmployeeService = __decorate([
-        Object(__WEBPACK_IMPORTED_MODULE_3__angular_core__["Injectable"])(),
-        __param(3, Object(__WEBPACK_IMPORTED_MODULE_3__angular_core__["Inject"])(__WEBPACK_IMPORTED_MODULE_5__app_config__["b" /* MY_CONFIG_TOKEN */])),
-        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_2__Interceptor_HttpClient__["a" /* HttpClient */], __WEBPACK_IMPORTED_MODULE_0__angular_http__["b" /* Http */], __WEBPACK_IMPORTED_MODULE_4_ionic_angular__["LoadingController"], Object])
-    ], EmployeeService);
-    return EmployeeService;
-}());
-
-//# sourceMappingURL=employeeService.js.map
 
 /***/ }),
 
@@ -4994,7 +5147,7 @@ var EmployeeService = (function () {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(6);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__service_authService__ = __webpack_require__(11);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__create_quotation_step_2__ = __webpack_require__(463);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__service_siteService__ = __webpack_require__(34);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__service_siteService__ = __webpack_require__(30);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__service_quotationService__ = __webpack_require__(35);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -5152,11 +5305,12 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 
 var QuotationPage = (function () {
-    function QuotationPage(navCtrl, popoverCtrl, authService, quotationService) {
+    function QuotationPage(navCtrl, popoverCtrl, authService, quotationService, events) {
         this.navCtrl = navCtrl;
         this.popoverCtrl = popoverCtrl;
         this.authService = authService;
         this.quotationService = quotationService;
+        this.events = events;
         this.draftedQuotationsCount = 0;
         this.approvedQuotationsCount = 0;
         this.submittedQuotationsCount = 0;
@@ -5166,6 +5320,10 @@ var QuotationPage = (function () {
         this.approvedQuotations = [];
         this.submittedQuotations = [];
         this.archivedQuotations = [];
+        this.events.subscribe('permissions:set', function (permission) {
+            console.log("Event permissions");
+            console.log(permission);
+        });
     }
     QuotationPage_1 = QuotationPage;
     QuotationPage.prototype.presentPopover = function (myEvent) {
@@ -5235,7 +5393,7 @@ var QuotationPage = (function () {
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
             selector: 'page-quotation',template:/*ion-inline-start:"/Users/gnana/techginko/workspace/fms/MobileApp/src/pages/quotation/quotation.html"*/`<ion-header>\n  <ion-navbar>\n    <button ion-button menuToggle>\n      <ion-icon name="menu"></ion-icon>\n    </button>\n    <ion-title>Quotation</ion-title>\n  </ion-navbar>\n</ion-header>\n\n<ion-content>\n  <ion-fab bottom right>\n    <button (click)="createQuotation()" ion-fab color="dark"><ion-icon name="add" class="clr-orange"></ion-icon></button>\n  </ion-fab>\n\n  <ion-row class="margin0 white-bg border-btm padding10 paddding-top20" (click)="gotoDraftedQuotation()">\n        <ion-col col-2 class="ver-center">\n          <div class="q-round ver-center">\n                <button ion-button clear color="primary" class="q-round icon-round-orange">\n                  <ion-icon name="mail" class="fnt-24"></ion-icon>\n                </button>\n          </div>\n        </ion-col>\n        <ion-col col-9 class="padding-left10">\n                <div>\n                  <p text-left class="fnt-18 margin-bottom5">Drafted</p>\n                </div>\n                <div>\n                  <span class="clr-green padding-right2">(</span><span class="clr-orange">{{draftedQuotationsCount}}</span><span class="clr-green padding-left2">)</span>\n                </div>\n        </ion-col>\n        <ion-col col-1 class="ver-center">\n                <ion-icon class="primary-clr fnt-24" name="ios-arrow-forward-outline"></ion-icon>\n        </ion-col>\n    </ion-row>\n    <ion-row class="margin0 white-bg border-btm padding10" (click)="gotoSubmittedQuotation()">\n        <ion-col col-2 class="ver-center">\n            <div class="q-round ver-center">\n                <button ion-button clear color="primary" class="q-round icon-round-blue">\n                    <ion-icon name="arrow-round-forward" class="fnt-24"></ion-icon>\n                </button>\n            </div>\n        </ion-col>\n        <ion-col col-9 class="padding-left10">\n            <div>\n                <p text-left class="fnt-18 margin-bottom5">Submitted</p>\n            </div>\n            <div>\n                <span class="clr-green padding-right2">(</span><span class="clr-blue">{{submittedQuotationsCount}}</span><span class="clr-green padding-left2">)</span>\n            </div>\n        </ion-col>\n        <ion-col col-1 class="ver-center">\n            <ion-icon class="primary-clr fnt-24" name="ios-arrow-forward-outline"></ion-icon>\n        </ion-col>\n    </ion-row>\n  <ion-row class="margin0 white-bg border-btm padding10" (click)="gotoApprovedQuotation()">\n    <ion-col col-2 class="ver-center">\n      <div class="q-round ver-center">\n        <button ion-button clear color="primary" class="q-round icon-round-green">\n          <ion-icon name="checkmark" class="fnt-24"></ion-icon>\n        </button>\n      </div>\n    </ion-col>\n    <ion-col col-9 class="padding-left10">\n      <div>\n        <p text-left class="fnt-18 margin-bottom5">Approved</p>\n      </div>\n      <div>\n        <span class="clr-green padding-right2">(</span><span class="green">{{approvedQuotationsCount}}</span><span class="clr-green padding-left2">)</span>\n      </div>\n    </ion-col>\n    <ion-col col-1 class="ver-center">\n      <ion-icon class="primary-clr fnt-24" name="ios-arrow-forward-outline"></ion-icon>\n    </ion-col>\n  </ion-row>\n  <ion-row class="margin0 white-bg border-btm padding10" (click)="gotoArchivedQuotation()">\n    <ion-col col-2 class="ver-center">\n      <div class="q-round ver-center">\n        <button ion-button clear color="primary" class="q-round icon-round-red">\n            <i class="material-icons">archive</i>\n        </button>\n      </div>\n    </ion-col>\n    <ion-col col-9 class="padding-left10">\n      <div>\n        <p text-left class="fnt-18 margin-bottom5">Archieved</p>\n      </div>\n      <div>\n        <span class="clr-green padding-right2">(</span><span class="clr-red">{{archivedQuotationsCount}}</span><span class="padding-left2">)</span>\n      </div>\n    </ion-col>\n    <ion-col col-1 class="ver-center">\n      <ion-icon class="primary-clr fnt-24" name="ios-arrow-forward-outline"></ion-icon>\n    </ion-col>\n  </ion-row>\n\n\n\n\n<!--\n            <ion-col col-12 class="padding-top0">\n\n              <div class="table-responsive table-sales">\n\n                <table class="table fnt-18">\n                  <tbody>\n                  <tr (click)="gotoDraftedQuotation()">\n                    <td>Drafted</td>\n                    <td class="text-right">\n                      <span class="clr-orange padding-right2">(</span>{{draftedQuotationsCount}}<span class="clr-orange padding-left2">)</span>\n                    </td>\n                    <td class="text-right">\n                      <ion-icon class="primary-clr padding-left5 fnt-12" name="arrow-forward"></ion-icon>\n                    </td>\n                  </tr>\n                  <tr (click)="gotoSubmittedQuotation()">\n                    <td>Submitted</td>\n                    <td class="text-right">\n                      <span class="clr-orange padding-right2">(</span>{{submittedQuotationsCount}}<span class="clr-orange padding-left2">)</span>\n                    </td>\n                    <td class="text-right">\n                      <ion-icon class="primary-clr padding-left5 fnt-12" name="arrow-forward"></ion-icon>\n                    </td>\n                  </tr>\n                  <tr (click)="gotoApprovedQuotation()">\n                    <td>Approved</td>\n                    <td class="text-right">\n                      <span class="clr-orange padding-right2">(</span>{{approvedQuotationsCount}}<span class="clr-orange padding-left2">)</span>\n                    </td>\n                    <td class="text-right">\n                      <ion-icon class="primary-clr padding-left5 fnt-12" name="arrow-forward"></ion-icon>\n                    </td>\n                  </tr>\n                  <tr (click)="gotoArchivedQuotation()">\n                    <td>Archieved</td>\n                    <td class="text-right">\n                      <span class="clr-orange padding-right2">(</span>{{archivedQuotationsCount}}<span class="clr-orange padding-left2">)</span>\n                    </td>\n                    <td class="text-right">\n                      <ion-icon class="primary-clr padding-left5 fnt-12" name="arrow-forward"></ion-icon>\n                    </td>\n                  </tr>\n                  </tbody>\n                </table>\n              </div>\n            </ion-col>\n-->\n</ion-content>\n`/*ion-inline-end:"/Users/gnana/techginko/workspace/fms/MobileApp/src/pages/quotation/quotation.html"*/
         }),
-        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["NavController"], __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["PopoverController"], __WEBPACK_IMPORTED_MODULE_4__service_authService__["a" /* authService */], __WEBPACK_IMPORTED_MODULE_9__service_quotationService__["a" /* QuotationService */]])
+        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["NavController"], __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["PopoverController"], __WEBPACK_IMPORTED_MODULE_4__service_authService__["a" /* authService */], __WEBPACK_IMPORTED_MODULE_9__service_quotationService__["a" /* QuotationService */], __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["Events"]])
     ], QuotationPage);
     return QuotationPage;
     var QuotationPage_1;
@@ -5307,7 +5465,7 @@ var ViewQuotationPage = (function () {
     };
     ViewQuotationPage = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
-            selector: 'page-view-quotation',template:/*ion-inline-start:"/Users/gnana/techginko/workspace/fms/MobileApp/src/pages/quotation/viewQuotation.html"*/`<ion-header>\n    <ion-navbar>\n        <button ion-button menuToggle>\n            <ion-icon name="menu"></ion-icon>\n        </button>\n        <ion-title> </ion-title>\n    </ion-navbar>\n</ion-header>\n\n<ion-content>\n    <ion-fab bottom right>\n        <button mini  ion-fab><ion-icon name="ios-create"></ion-icon></button>\n    </ion-fab>\n    <ion-row class="margin0 white-bg padding10">\n        <!--<ion-col col-6 class="label-on-left">Quotation Id</ion-col>-->\n        <!--<ion-col col-6>-->\n        <!--<p text-right>{{quotation.id}}</p>-->\n        <!--</ion-col>-->\n        <ion-col col-6 class="label-on-left">Title</ion-col>\n        <ion-col col-6 *ngIf="quotation.title">\n            <p text-right>{{quotation.title}}</p>\n        </ion-col>\n        <ion-col col-6 class="label-on-left">Description</ion-col>\n        <ion-col col-6 *ngIf="quotation.description">\n            <p text-right>{{quotation.description}}</p>\n        </ion-col>\n\n    </ion-row>\n    <div class="card-content white-bg">\n        <div class="table-responsive">\n            <table class="table table-scroll">\n                <thead>\n                <tr>\n                    <th class="text-center">Type</th>\n                    <th class="text-center">Name</th>\n                    <th class="text-center">Rate</th>\n                    <th class="text-center">No</th>\n                    <th class="text-center">Uom</th>\n                    <th class="text-center">Total</th>\n                    <th class="text-center">&nbsp;&nbsp;&nbsp;&nbsp;</th>\n                </tr>\n                </thead>\n                <tbody *ngIf="quotation.rateCardDetails.length>0">\n                <tr *ngFor="let rate of quotation.rateCardDetails;let i = index ">\n                    <td class="text-center">{{rate.type}}</td>\n                    <td class="text-center table-data padding-left0 padding-right0">{{rate.name}}</td>\n                    <td class="text-center">{{rate.cost}}</td>\n                    <td class="text-center">\n                        <!--<input type="number" class="form-control align-center width15" [(ngModel)]="rate.no" (change)="addTotal(i,rate.no,rate.cost)">-->\n                        {{rate.no}}\n                    </td>\n                    <td class="text-center">{{rate.uom}}</td>\n                    <td class="text-center">{{rate.total}}</td>\n                    <!--<td class="td-actions text-center">-->\n                    <!--<i class="material-icons clr-red" (click)="remove(i)">close</i>-->\n                    <!--</td>-->\n                </tr>\n                <tr>\n                    <td></td>\n                    <td></td>\n                    <td></td>\n                    <td></td>\n                    <td class="text-center">Grand Total</td>\n                    <td class="text-center">{{quotation.grandTotal}}</td>\n                    <td></td>\n                </tr>\n                </tbody>\n                <tbody *ngIf="quotation.title.length<0">\n                <div class="card">\n                    <td>No rates added</td>\n                </div>\n                </tbody>\n            </table>\n        </div>\n    </div>\n</ion-content>\n\n<ion-footer >\n    <ion-toolbar class="align-right" >\n\n        <button *ngIf="!quotation.isSubmitted" class="btn btn-success center pull-right" (click)="sendQuotation(quotation)">\n            Send Quotation &nbsp; <ion-icon name="ios-arrow-forward-outline"></ion-icon>\n        </button>\n        <button *ngIf="quotation.isSubmitted" class="btn btn-success center pull-right" (click)="approveQuotation(quotation)">\n            Approve Quotation &nbsp; <ion-icon name="ios-arrow-forward-outline"></ion-icon>\n        </button>\n\n    </ion-toolbar>\n</ion-footer>`/*ion-inline-end:"/Users/gnana/techginko/workspace/fms/MobileApp/src/pages/quotation/viewQuotation.html"*/
+            selector: 'page-view-quotation',template:/*ion-inline-start:"/Users/gnana/techginko/workspace/fms/MobileApp/src/pages/quotation/viewQuotation.html"*/`<ion-header>\n    <ion-navbar>\n        <button ion-button menuToggle>\n            <ion-icon name="menu"></ion-icon>\n        </button>\n        <ion-title>Quotation </ion-title>\n    </ion-navbar>\n</ion-header>\n\n<ion-content>\n    <!--<ion-fab bottom right>-->\n        <!--<button mini  ion-fab><ion-icon name="ios-create"></ion-icon></button>-->\n    <!--</ion-fab>-->\n    <ion-row class="margin0 white-bg padding10">\n        <!--<ion-col col-6 class="label-on-left">Quotation Id</ion-col>-->\n        <!--<ion-col col-6>-->\n        <!--<p text-right>{{quotation.id}}</p>-->\n        <!--</ion-col>-->\n        <ion-col col-6 class="label-on-left">Title</ion-col>\n        <ion-col col-6 *ngIf="quotation.title">\n            <p text-right>{{quotation.title}}</p>\n        </ion-col>\n        <ion-col col-6 class="label-on-left">Description</ion-col>\n        <ion-col col-6 *ngIf="quotation.description">\n            <p text-right>{{quotation.description}}</p>\n        </ion-col>\n\n    </ion-row>\n    <div class="card-content white-bg">\n        <div class="table-responsive">\n            <table class="table table-scroll">\n                <thead>\n                <tr>\n                    <th class="text-center">Type</th>\n                    <th class="text-center">Name</th>\n                    <th class="text-center">Rate</th>\n                    <th class="text-center">No</th>\n                    <th class="text-center">Uom</th>\n                    <th class="text-center">Total</th>\n                    <th class="text-center">&nbsp;&nbsp;&nbsp;&nbsp;</th>\n                </tr>\n                </thead>\n                <tbody *ngIf="quotation.rateCardDetails.length>0">\n                <tr *ngFor="let rate of quotation.rateCardDetails;let i = index ">\n                    <td class="text-center">{{rate.type}}</td>\n                    <td class="text-center table-data padding-left0 padding-right0">{{rate.name}}</td>\n                    <td class="text-center">{{rate.cost}}</td>\n                    <td class="text-center">\n                        <!--<input type="number" class="form-control align-center width15" [(ngModel)]="rate.no" (change)="addTotal(i,rate.no,rate.cost)">-->\n                        {{rate.no}}\n                    </td>\n                    <td class="text-center">{{rate.uom}}</td>\n                    <td class="text-center">{{rate.total}}</td>\n                    <!--<td class="td-actions text-center">-->\n                    <!--<i class="material-icons clr-red" (click)="remove(i)">close</i>-->\n                    <!--</td>-->\n                </tr>\n                <tr>\n                    <td></td>\n                    <td></td>\n                    <td></td>\n                    <td></td>\n                    <td class="text-center">Grand Total</td>\n                    <td class="text-center">{{quotation.grandTotal}}</td>\n                    <td></td>\n                </tr>\n                </tbody>\n                <tbody *ngIf="quotation.title.length<0">\n                <div class="card">\n                    <td>No rates added</td>\n                </div>\n                </tbody>\n            </table>\n        </div>\n    </div>\n</ion-content>\n\n<ion-footer >\n    <ion-toolbar class="align-right" >\n\n        <button *ngIf="!quotation.isSubmitted" class="btn btn-success center pull-right" (click)="sendQuotation(quotation)">\n            Send Quotation &nbsp; <ion-icon name="ios-arrow-forward-outline"></ion-icon>\n        </button>\n        <button *ngIf="quotation.isSubmitted" class="btn btn-success center pull-right" (click)="approveQuotation(quotation)">\n            Approve Quotation &nbsp; <ion-icon name="ios-arrow-forward-outline"></ion-icon>\n        </button>\n\n    </ion-toolbar>\n</ion-footer>`/*ion-inline-end:"/Users/gnana/techginko/workspace/fms/MobileApp/src/pages/quotation/viewQuotation.html"*/
         }),
         __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["NavController"], __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["PopoverController"], __WEBPACK_IMPORTED_MODULE_2__service_authService__["a" /* authService */], __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["NavParams"], __WEBPACK_IMPORTED_MODULE_3__service_componentService__["a" /* componentService */], __WEBPACK_IMPORTED_MODULE_5__service_quotationService__["a" /* QuotationService */]])
     ], ViewQuotationPage);
@@ -5325,7 +5483,7 @@ var ViewQuotationPage = (function () {
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return AttendanceListPage; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(6);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__ionic_native_camera__ = __webpack_require__(33);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__ionic_native_camera__ = __webpack_require__(34);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__service_authService__ = __webpack_require__(11);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -5385,7 +5543,7 @@ var AttendanceListPage = (function () {
 
 /***/ }),
 
-/***/ 832:
+/***/ 831:
 /***/ (function(module, exports, __webpack_require__) {
 
 var map = {
@@ -5642,11 +5800,11 @@ webpackContext.keys = function webpackContextKeys() {
 };
 webpackContext.resolve = webpackContextResolve;
 module.exports = webpackContext;
-webpackContext.id = 832;
+webpackContext.id = 831;
 
 /***/ }),
 
-/***/ 853:
+/***/ 852:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -5658,13 +5816,12 @@ webpackContext.id = 832;
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__pages_login_login__ = __webpack_require__(183);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__pages_site_site__ = __webpack_require__(508);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__pages_jobs_jobs__ = __webpack_require__(100);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__pages_reports_reports__ = __webpack_require__(510);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__pages_attendance_attendance__ = __webpack_require__(159);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__pages_tabs_tabs__ = __webpack_require__(152);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__pages_quotation_quotation__ = __webpack_require__(76);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__pages_employee_list_employee_list__ = __webpack_require__(161);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__pages_rate_card_rate_card__ = __webpack_require__(511);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_13__ionic_native_onesignal__ = __webpack_require__(512);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__pages_attendance_attendance__ = __webpack_require__(159);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__pages_tabs_tabs__ = __webpack_require__(152);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__pages_quotation_quotation__ = __webpack_require__(76);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__pages_employee_list_employee_list__ = __webpack_require__(161);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__pages_rate_card_rate_card__ = __webpack_require__(510);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__ionic_native_onesignal__ = __webpack_require__(511);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -5687,27 +5844,39 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 
 
-
 var MyApp = (function () {
-    function MyApp(platform, statusBar, splashScreen, oneSignal) {
+    function MyApp(platform, statusBar, splashScreen, oneSignal, events) {
+        var _this = this;
         this.platform = platform;
         this.statusBar = statusBar;
         this.splashScreen = splashScreen;
         this.oneSignal = oneSignal;
+        this.events = events;
         this.rootPage = __WEBPACK_IMPORTED_MODULE_4__pages_login_login__["a" /* LoginPage */];
         this.initializeApp();
+        this.events.subscribe('userType', function (type) {
+            console.log("User type event");
+            console.log(type);
+            _this.userType = type;
+        });
         // used for an example of ngFor and navigation
         this.pages = [
-            { title: 'Dashboard', component: __WEBPACK_IMPORTED_MODULE_9__pages_tabs_tabs__["a" /* TabsPage */], active: true, icon: 'dashboard' },
-            { title: 'Site', component: __WEBPACK_IMPORTED_MODULE_5__pages_site_site__["a" /* SitePage */], active: false, icon: 'dns' },
+            { title: 'Dashboard', component: __WEBPACK_IMPORTED_MODULE_8__pages_tabs_tabs__["a" /* TabsPage */], active: true, icon: 'dashboard', avoid: 'none' },
+            { title: 'Site', component: __WEBPACK_IMPORTED_MODULE_5__pages_site_site__["a" /* SitePage */], active: false, icon: 'dns', avoid: 'none' },
             // { title: 'Client', component: CustomerDetailPage,active:false,icon:'person'},
-            { title: 'Employee', component: __WEBPACK_IMPORTED_MODULE_11__pages_employee_list_employee_list__["a" /* EmployeeListPage */], active: false, icon: 'people' },
-            { title: 'Jobs', component: __WEBPACK_IMPORTED_MODULE_6__pages_jobs_jobs__["a" /* JobsPage */], active: false, icon: 'description' },
-            { title: 'Attendance', component: __WEBPACK_IMPORTED_MODULE_8__pages_attendance_attendance__["a" /* AttendancePage */], active: false, icon: 'content_paste' },
-            { title: 'Rate Card', component: __WEBPACK_IMPORTED_MODULE_12__pages_rate_card_rate_card__["a" /* RateCardPage */], active: false, icon: 'description' },
-            { title: 'Quotation', component: __WEBPACK_IMPORTED_MODULE_10__pages_quotation_quotation__["a" /* QuotationPage */], active: false, icon: 'receipt' },
-            { title: 'Reports', component: __WEBPACK_IMPORTED_MODULE_7__pages_reports_reports__["a" /* ReportsPage */], active: false, icon: 'trending_up' },
+            { title: 'Employee', component: __WEBPACK_IMPORTED_MODULE_10__pages_employee_list_employee_list__["a" /* EmployeeListPage */], active: false, icon: 'people', avoid: 'TECHNICIAN' },
+            { title: 'Jobs', component: __WEBPACK_IMPORTED_MODULE_6__pages_jobs_jobs__["a" /* JobsPage */], active: false, icon: 'description', avoid: 'none' },
+            { title: 'Attendance', component: __WEBPACK_IMPORTED_MODULE_7__pages_attendance_attendance__["a" /* AttendancePage */], active: false, icon: 'content_paste', avoid: 'TECHNICIAN' },
+            { title: 'Rate Card', component: __WEBPACK_IMPORTED_MODULE_11__pages_rate_card_rate_card__["a" /* RateCardPage */], active: false, icon: 'description', avoid: 'CLIENT' },
+            { title: 'Quotation', component: __WEBPACK_IMPORTED_MODULE_9__pages_quotation_quotation__["a" /* QuotationPage */], active: false, icon: 'receipt', avoid: 'none' },
         ];
+        console.log("Employee Name");
+        console.log(window.localStorage.getItem('employeeFullName'));
+        this.userName = window.localStorage.getItem('employeeFullName');
+        this.events.subscribe('permissions:set', function (permission) {
+            console.log("Event permission in component");
+            console.log(permission);
+        });
     }
     MyApp.prototype.initializeApp = function () {
         var _this = this;
@@ -5751,9 +5920,9 @@ var MyApp = (function () {
         __metadata("design:type", __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["Nav"])
     ], MyApp.prototype, "nav", void 0);
     MyApp = __decorate([
-        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({template:/*ion-inline-start:"/Users/gnana/techginko/workspace/fms/MobileApp/src/app/app.html"*/`<ion-menu class="menu-width" [content]="content">\n\n\n  <ion-content>\n\n    <div class="wrapper">\n      <div class="sidebar" data-color="rose" data-background-color="black"  data-image="img/sidebar-1.jpg">\n      <!--\n    Tip 1: You can change the color of the sidebar using: data-color="purple | blue | green | orange | red"\n\n    Tip 2: you can also add an image using data-image tag\n  -->\n        <div class="logo">\n          <p text-center>User</p>\n        </div>\n        <div class="sidebar-wrapper">\n          <ul class="nav">\n            <li menuClose *ngFor="let p of pages" (click)="openPage(p)" [ngClass]="{\'active\':p.active}" >\n              <a>\n                <i class="material-icons">{{p.icon}}</i>\n                <p>{{p.title}}</p>\n              </a>\n            </li>\n            <li menuClose (click)="logout()">\n              <a>\n                  <i class="material-icons">exit_to_app</i>\n                  <p>Logout</p>\n              </a>\n            </li>\n          </ul>\n        </div>\n      </div>\n    </div>\n    <!--\n    <ion-list>\n      <button menuClose ion-item *ngFor="let p of pages" (click)="openPage(p)">\n        {{p.title}}\n      </button>\n    </ion-list>-->\n  </ion-content>\n\n</ion-menu>\n\n<!-- Disable swipe-to-go-back because it\'s poor UX to combine STGB with side menus -->\n<ion-nav [root]="rootPage" #content swipeBackEnabled="false"></ion-nav>`/*ion-inline-end:"/Users/gnana/techginko/workspace/fms/MobileApp/src/app/app.html"*/
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({template:/*ion-inline-start:"/Users/gnana/techginko/workspace/fms/MobileApp/src/app/app.html"*/`<ion-menu class="menu-width" [content]="content">\n\n\n  <ion-content>\n\n    <div class="wrapper">\n      <div class="sidebar" data-color="rose" data-background-color="black"  data-image="img/sidebar-1.jpg">\n      <!--\n    Tip 1: You can change the color of the sidebar using: data-color="purple | blue | green | orange | red"\n\n    Tip 2: you can also add an image using data-image tag\n  -->\n        <div class="logo">\n          <p text-center>{{userName}}</p>\n        </div>\n        <div class="sidebar-wrapper">\n          <ul class="nav">\n            <li menuClose *ngFor="let p of pages" (click)="openPage(p)" [ngClass]="{\'active\':p.active}"  >\n              <a>\n                <i class="material-icons">{{p.icon}}</i>\n                <p>{{p.title}}</p>\n              </a>\n            </li>\n            <li menuClose (click)="logout()">\n              <a>\n                  <i class="material-icons">exit_to_app</i>\n                  <p>Logout</p>\n              </a>\n            </li>\n          </ul>\n        </div>\n      </div>\n    </div>\n    <!--\n    <ion-list>\n      <button menuClose ion-item *ngFor="let p of pages" (click)="openPage(p)">\n        {{p.title}}\n      </button>\n    </ion-list>-->\n  </ion-content>\n\n</ion-menu>\n\n<!-- Disable swipe-to-go-back because it\'s poor UX to combine STGB with side menus -->\n<ion-nav [root]="rootPage" #content swipeBackEnabled="false"></ion-nav>`/*ion-inline-end:"/Users/gnana/techginko/workspace/fms/MobileApp/src/app/app.html"*/
         }),
-        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["Platform"], __WEBPACK_IMPORTED_MODULE_2__ionic_native_status_bar__["a" /* StatusBar */], __WEBPACK_IMPORTED_MODULE_3__ionic_native_splash_screen__["a" /* SplashScreen */], __WEBPACK_IMPORTED_MODULE_13__ionic_native_onesignal__["a" /* OneSignal */]])
+        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["Platform"], __WEBPACK_IMPORTED_MODULE_2__ionic_native_status_bar__["a" /* StatusBar */], __WEBPACK_IMPORTED_MODULE_3__ionic_native_splash_screen__["a" /* SplashScreen */], __WEBPACK_IMPORTED_MODULE_12__ionic_native_onesignal__["a" /* OneSignal */], __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["Events"]])
     ], MyApp);
     return MyApp;
 }());
@@ -5762,7 +5931,7 @@ var MyApp = (function () {
 
 /***/ }),
 
-/***/ 854:
+/***/ 853:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -5797,7 +5966,7 @@ var HomePage = (function () {
 
 /***/ }),
 
-/***/ 855:
+/***/ 854:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -5851,6 +6020,41 @@ var ListPage = (function () {
 }());
 
 //# sourceMappingURL=list.js.map
+
+/***/ }),
+
+/***/ 855:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return ReportsPage; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(6);
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+var ReportsPage = (function () {
+    function ReportsPage(navCtrl) {
+        this.navCtrl = navCtrl;
+    }
+    ReportsPage = __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
+            selector: 'page-reports',template:/*ion-inline-start:"/Users/gnana/techginko/workspace/fms/MobileApp/src/pages/reports/reports.html"*/`<ion-header>\n  <ion-navbar>\n    <button ion-button menuToggle>\n      <ion-icon name="menu"></ion-icon>\n    </button>\n    <ion-title>Home</ion-title>\n  </ion-navbar>\n</ion-header>\n\n<ion-content padding>\n  <h3>Ionic Menu Starter</h3>\n\n  <p>\n    If you get lost, the <a href="http://ionicframework.com/docs/v2">docs</a> will show you the way.\n  </p>\n\n  <button ion-button secondary menuToggle>Toggle Menu</button>\n</ion-content>\n`/*ion-inline-end:"/Users/gnana/techginko/workspace/fms/MobileApp/src/pages/reports/reports.html"*/
+        }),
+        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["NavController"]])
+    ], ReportsPage);
+    return ReportsPage;
+}());
+
+//# sourceMappingURL=reports.js.map
 
 /***/ }),
 
@@ -5933,9 +6137,9 @@ var QuotationViewPage = (function () {
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return IonSimpleWizardStep; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__ion_simple_wizard_component__ = __webpack_require__(513);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__ion_simple_wizard_component__ = __webpack_require__(512);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_ionic_angular__ = __webpack_require__(6);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__ion_simple_wizard_animations__ = __webpack_require__(514);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__ion_simple_wizard_animations__ = __webpack_require__(513);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -6031,5 +6235,5 @@ var CreateQuotationPage3 = (function () {
 
 /***/ })
 
-},[517]);
+},[516]);
 //# sourceMappingURL=main.js.map
