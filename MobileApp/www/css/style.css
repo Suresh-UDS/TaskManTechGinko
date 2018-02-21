@@ -197,6 +197,10 @@ button.ion-circle-icons
 {
   margin: 0 !important;
 }
+.IonList p
+{
+  margin:0;
+}
 .ver-center
 {
   display: flex !important;
@@ -679,6 +683,14 @@ a:hover, a:focus
   width: 25px !important;
   height: 25px !important;
 
+}
+.IonList .item-md
+{
+  padding-left:0;
+}
+.orange-icon
+{
+  color:#FFAA22;
 }
 .item-fnt p
 {
