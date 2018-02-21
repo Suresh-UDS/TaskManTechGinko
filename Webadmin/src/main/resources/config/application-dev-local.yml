@@ -1,0 +1,149 @@
+# ===================================================================
+# Spring Boot configuration for the "dev" profile.
+#
+# This configuration overrides the application.yml file.
+# ===================================================================
+
+# ===================================================================
+# Standard Spring Boot properties.
+# Full reference is available at:
+# http://docs.spring.io/spring-boot/docs/current/reference/html/common-application-properties.html
+# ===================================================================
+
+spring:
+    profiles:
+        active: dev
+    devtools:
+        restart:
+            enabled: true
+        livereload:
+            enabled: false # we use Grunt + BrowserSync for livereload
+    datasource:
+        driver-class-name: com.mysql.jdbc.Driver
+        #url: jdbc:mysql://52.77.216.21:3306/TaskMan?useUnicode=true&characterEncoding=utf8
+        url: jdbc:mysql://localhost:3306/TaskMan?useUnicode=true&characterEncoding=utf8
+        name:
+        username: root
+        password: admin
+    jpa:
+        database-platform: org.hibernate.dialect.MySQLInnoDBDialect
+        database: MYSQL
+        show_sql: true
+        hibernate:
+            ddl-auto: update
+        properties:
+            hibernate.cache.use_second_level_cache: true
+            hibernate.cache.use_query_cache: true
+            hibernate.generate_statistics: false
+            hibernate.cache.region.factory_class: org.hibernate.cache.ehcache.SingletonEhCacheRegionFactory
+    mail:
+        host: smtp.gmail.com
+        port: 587
+        username: timesheettestuser1@gmail.com
+        password: Test123#
+        properties:
+            mail.transport.protocol: smtp
+            mail.smtp.auth: true
+            mail.smtp.starttls.enable: true
+            mail.smtp.port: 587
+            mail.debug: true
+
+    messages:
+        cache-seconds: 1
+    thymeleaf:
+        cache: false
+
+liquibase:
+    contexts: dev
+    enabled: false
+
+server:
+    port: 8088
+
+upload:
+    file:
+         path: /opt/uploads
+export:
+    file:
+         path: /opt/exports
+qrcode:
+    file:
+         path: /opt/qrcode
+attendance:
+    file:
+        path:  /opt/attendance
+max:
+    user: 10
+    userGroup: 2
+    device: 30
+
+email:
+    notification:
+        overdue: true
+        eodReports: true
+        enabled: true
+#        schedule1: 0 0 9 * * ?
+#        schedule2: 0 0 18 * * ?
+        url: http://localhost:8088/
+    activation:
+        title: Account activation
+    reset:
+        title: Account password reset
+    report:
+        title: Job reports
+    overdue:
+        report:
+            title: Overdue job report
+    compleed:
+        report:
+            title: Completed job report                        
+
+facedetection:
+    api:
+        url: https://api.kairos.com/detect
+        enrollUrl: https://api.kairos.com/enroll
+        verifyUrl: https://api.kairos.com/verify
+        apiKey: a6ae8363069107177e06c3ca3f76a66b
+        apiId: 2f2877f2
+
+locationService:
+#   url: http://locahost:8000/api/site/location
+#   url: http://ec2-52-77-216-21.ap-southeast-1.compute.amazonaws.com:8000/api/site/location
+   url: http://localhost:8000/api/site/location
+
+quotationService:
+#   url: http://locahost:8000/api/site/location
+#   url: http://ec2-52-77-216-21.ap-southeast-1.compute.amazonaws.com:8000/api/site/location
+   url: http://localhost:8001/
+
+pushService:
+   url: http://localhost:9000/
+
+scheduler:
+   dailyJob:
+      creation: monthly
+
+default.user.password: uds12345
+
+# ===================================================================
+# JHipster specific properties
+# ===================================================================
+
+jhipster:
+    cache: # Hibernate 2nd level cache, used by CacheConfiguration
+        timeToLiveSeconds: 3600
+        ehcache:
+            maxBytesLocalHeap: 256M
+    mail: # specific JHipster mail property, for standard properties see MailProperties
+        from: no-reply@taskman.uds.com
+    metrics: # DropWizard Metrics configuration, used by MetricsConfiguration
+        jmx.enabled: true
+        spark:
+            enabled: false
+            host: localhost
+            port: 9999
+        graphite:
+            enabled: false
+            host: localhost
+            port: 2003
+            prefix: TimeSheet

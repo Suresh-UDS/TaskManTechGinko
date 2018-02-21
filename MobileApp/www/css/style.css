@@ -5,12 +5,22 @@
 }
 @font-face {
     font-family: robotoBold !important;
-    src: url(../assets/font/Roboto-Bold.ttf);
+
 }
 *
 {
     font-family: robotoThin;
 }
+.content-ios p,a,li,label,span
+{
+  font-family:arial !important;
+}
+.content-ios ion-segment-button,ion-col,.header-ios ion-segment-button
+{
+   font-family:arial !important;
+}
+
+
 .sidebar {
   height: 100% !important;
   width: 100% !important;
@@ -213,6 +223,14 @@ button.ion-circle-icons
 {
   color:#000000;
 }
+.list-ios [col-6]
+{
+  width: 49% !important;
+  max-width: 49% !important;
+}
+
+
+
 
 .hariz-scroll-con
 {

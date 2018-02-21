@@ -1,5 +1,5 @@
 import { Component, Input, ViewChild, ElementRef, Renderer } from '@angular/core';
-import {LoadingController, ModalController, NavController} from 'ionic-angular';
+import {Item, ItemSliding, LoadingController, ModalController, NavController} from 'ionic-angular';
 import {authService} from "../service/authService";
 import {DatePickerProvider} from "ionic2-date-picker";
 import {componentService} from "../service/componentService";
@@ -10,6 +10,7 @@ import {CreateRateCardPage} from "../rate-card/create-rate-card";
 import {CreateJobPage} from "../jobs/add-job";
 import {CreateQuotationPage} from "../quotation/create-quotation";
 import {CreateEmployeePage} from "../employee-list/create-employee";
+import {CompleteJobPage} from "../jobs/completeJob";
 declare var demo;
 @Component({
   selector: 'page-dashboard',
@@ -29,12 +30,15 @@ export class DashboardPage {
   empSpinner=false;
   searchCriteria:any;
   index:any;
+  all="all";
+    ref:any;
     firstLetter:any;
     selectDate:any;
     selectSite=false;
     empSelect:any;
     empIndex:any;
     empActive=false;
+    count=0;
   constructor(public renderer: Renderer,public myService:authService,private loadingCtrl:LoadingController,public navCtrl: NavController,public component:componentService,public authService:authService,public modalCtrl: ModalController,
               private datePickerProvider: DatePickerProvider, private siteService:SiteService, private employeeService: EmployeeService, private jobService:JobService) {
 
@@ -221,6 +225,72 @@ export class DashboardPage {
                 console.log(error);
                 console.log(this.employee);
             })
+    }
+
+
+    doRefresh(refresher,segment)
+    {
+        this.ref=true;
+        if(segment=="all")
+        {
+            this.getJobs(this.ref);
+            refresher.complete();
+        }
+
+    }
+
+
+    getJobs(ref)
+    {
+        if(this.allJobs)
+        {
+            if(ref)
+            {
+                this.searchJobs(this.searchCriteria);
+            }
+            else
+            {
+                this.allJobs=this.allJobs;
+            }
+        }
+        else
+        {
+            this.searchJobs(this.searchCriteria);
+        }
+    }
+
+
+    // Slide
+    open(itemSlide: ItemSliding, item: Item,c)
+    {
+        this.count=c;
+        if(c==1)
+        {
+            this.count=0;
+            console.log('------------:'+this.count);
+            this.close(itemSlide);
+        }
+        else
+        {
+            this.count=1;
+            console.log('------------:'+this.count);
+            itemSlide.setElementClass("active-sliding", true);
+            itemSlide.setElementClass("active-slide", true);
+            itemSlide.setElementClass("active-options-right", true);
+            item.setElementStyle("transform", "translate3d(-150px, 0px, 0px)")
+        }
+
+    }
+    close(item: ItemSliding) {
+        item.close();
+        item.setElementClass("active-sliding", false);
+        item.setElementClass("active-slide", false);
+        item.setElementClass("active-options-right", false);
+    }
+
+    compeleteJob(job)
+    {
+        this.navCtrl.push(CompleteJobPage,{job:job})
     }
 
 }

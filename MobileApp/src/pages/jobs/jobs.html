@@ -33,14 +33,14 @@
             <ion-refresher (ionRefresh)="doRefresh($event,today)">
                 <ion-refresher-content></ion-refresher-content>
             </ion-refresher>
-            <div *ngIf="allJobs?.length<0">
+            <div *ngIf="todaysJobs?.length<0">
                 <ion-card>
                     <ion-card-content>
                         No Jobs
                     </ion-card-content>
                 </ion-card>
             </div>
-            <div  class="white-bg" *ngFor="let job of allJobs" >
+            <div  class="white-bg" *ngFor="let job of todaysJobs" >
 
                 <div class="padding-left16 padding-top5">
                     <ion-row class="margin0">
