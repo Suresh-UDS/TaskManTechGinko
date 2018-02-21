@@ -1,5 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
-import { Nav, Platform } from 'ionic-angular';
+import {Events, Nav, Platform} from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 
@@ -30,25 +30,40 @@ export class MyApp {
   @ViewChild(Nav) nav: Nav;
 
   rootPage: any = LoginPage;
+  userName:any;
+  userType :any;
+  pages: Array<{title: string, component: any,active:any,icon:any,avoid:any}>;
 
-  pages: Array<{title: string, component: any,active:any,icon:any}>;
-
-  constructor(public platform: Platform, public statusBar: StatusBar, public splashScreen: SplashScreen, private oneSignal: OneSignal) {
+  constructor(public platform: Platform, public statusBar: StatusBar, public splashScreen: SplashScreen, private oneSignal: OneSignal, public events:Events) {
     this.initializeApp();
-
+      this.events.subscribe('userType',(type)=>{
+          console.log("User type event");
+          console.log(type);
+          this.userType = type;
+      });
     // used for an example of ngFor and navigation
     this.pages = [
-      { title: 'Dashboard', component: TabsPage,active:true,icon:'dashboard'},
-      { title: 'Site', component: SitePage,active:false,icon:'dns'},
+      { title: 'Dashboard', component: TabsPage,active:true,icon:'dashboard',avoid:'none'},
+      { title: 'Site', component: SitePage,active:false,icon:'dns',avoid:'none'},
       // { title: 'Client', component: CustomerDetailPage,active:false,icon:'person'},
-      { title: 'Employee', component: EmployeeListPage,active:false,icon:'people'},
-      { title: 'Jobs', component: JobsPage,active:false,icon:'description'},
-        { title: 'Attendance', component: AttendancePage,active:false,icon:'content_paste'},
-        { title: 'Rate Card', component: RateCardPage,active:false,icon:'description'},
-      { title: 'Quotation', component: QuotationPage,active:false,icon:'receipt'},
-      { title: 'Reports', component: ReportsPage,active:false,icon:'trending_up'},
+      { title: 'Employee', component: EmployeeListPage,active:false,icon:'people',avoid:'TECHNICIAN'},
+      { title: 'Jobs', component: JobsPage,active:false,icon:'description',avoid:'none'},
+        { title: 'Attendance', component: AttendancePage,active:false,icon:'content_paste',avoid:'TECHNICIAN'},
+        { title: 'Rate Card', component: RateCardPage,active:false,icon:'description',avoid:'CLIENT'},
+      { title: 'Quotation', component: QuotationPage,active:false,icon:'receipt',avoid:'none'},
+      // { title: 'Reports', component: ReportsPage,active:false,icon:'trending_up'},
       // { title: 'Logout', component: LogoutPage,active:false,icon:'power_settings_new'}
     ];
+
+    console.log("Employee Name");
+    console.log(window.localStorage.getItem('employeeFullName'));
+    this.userName = window.localStorage.getItem('employeeFullName');
+
+    this.events.subscribe('permissions:set',(permission)=>{
+        console.log("Event permission in component");
+        console.log(permission);
+    })
+
 
 
   }
@@ -75,6 +90,8 @@ export class MyApp {
         this.oneSignal.endInit();
     });
   }
+
+
 
   logout(){
     this.nav.setRoot(LoginPage);

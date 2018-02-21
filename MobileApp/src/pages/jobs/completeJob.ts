@@ -140,11 +140,9 @@ export class CompleteJobPage {
 
         this.jobDetails.checklistItems[i].status=true;
         console.log("Count:"+this.count);
+        console.log("Slength"+this.sLength);
 
-        if(this.sLength==this.count)
-        {
             this.onButton=true;
-        }
 
     }
 

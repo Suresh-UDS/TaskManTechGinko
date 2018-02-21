@@ -73,8 +73,17 @@ export class AttendanceService
         )
     }
 
+    searchAttendances(searchCriteria):Observable<any>{
+        return this.http.post(this.config.Url+'api/attendance/search',searchCriteria).map(
+            response=>{
+                console.log(response.json());
+                return response.json();
+            }
+        )
+    }
+
     checkSiteProximity(siteId,lat,lng):Observable<any>{
-        return this.http.get('http://ec2-52-77-216-21.ap-southeast-1.compute.amazonaws.com:8000/api/site/nearby?'+'siteId='+siteId+'&'+'lat='+lat+'&lng='+lng ).map(
+        return this.http.get(this.config.LocationServiceUrl+'api/site/nearby?'+'siteId='+siteId+'&'+'lat='+lat+'&lng='+lng ).map(
             (response)=>{
                 console.log(response)
                 return response

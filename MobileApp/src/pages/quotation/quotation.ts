@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import {NavController, PopoverController} from 'ionic-angular';
+import {Events, NavController, PopoverController} from 'ionic-angular';
 import {QuotationPopoverPage} from "./quotation-popover";
 import {CreateQuotationPage} from "./create-quotation";
 import {authService} from "../service/authService";
@@ -29,7 +29,7 @@ export class QuotationPage {
     draftedQuotationsPage:DraftedQuotationPage;
     submittedQuotationsPage:SubmittedQuotationPage;
 
-  constructor(public navCtrl: NavController,public popoverCtrl: PopoverController, private authService: authService, private quotationService: QuotationService) {
+  constructor(public navCtrl: NavController,public popoverCtrl: PopoverController, private authService: authService, private quotationService: QuotationService,public events:Events) {
       this.draftedQuotationsCount= 0;
       this.approvedQuotationsCount=0;
       this.submittedQuotationsCount=0;
@@ -39,6 +39,11 @@ export class QuotationPage {
       this.approvedQuotations=[];
       this.submittedQuotations=[];
       this.archivedQuotations=[];
+
+      this.events.subscribe('permissions:set',(permission)=>{
+          console.log("Event permissions");
+          console.log(permission)
+      })
   }
 
 

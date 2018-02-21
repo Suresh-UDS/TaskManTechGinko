@@ -14,7 +14,7 @@ export class JobService {
     }
 
     getTodayJobs(): Observable<any>{
-        return this.http.post(this.config.Url+'api/jobs/date/search',{checkInDateTimeFrom:new Date()}).map(
+        return this.http.post(this.config.Url+'api/jobs/search',{checkInDateTimeFrom:new Date()}).map(
             response=>{
                 console.log(response);
                 return response.json();
@@ -23,7 +23,7 @@ export class JobService {
     }
 
     getJobs(searchCriteria): Observable<any>{
-        return this.http.post(this.config.Url+'api/jobs/search',{searchCriteria}).map(
+        return this.http.post(this.config.Url+'api/jobs/search',searchCriteria).map(
             response=>{
                 console.log(response);
                 var allJobs = response.json();

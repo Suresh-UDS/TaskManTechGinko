@@ -21,6 +21,41 @@ export class SiteService {
         )
     }
 
+    findSitesByProject(projectId):Observable<any>{
+        return this.http.get(this.config.Url+'api/project/'+projectId+'/sites').map(
+            response=>{
+                console.log(response.json());
+                return response.json();
+            }
+        )
+    }
+
+    searchProjects(searchCriteria):Observable<any>{
+        return this.http.post(this.config.Url+'api/project/search',searchCriteria).map(
+            response=>{
+                console.log(response.json());
+                return response.json();
+            }
+        )
+    }
+
+    getAllProjects():Observable<any>{
+        return this.http.get(this.config.Url+'api/project/').map(
+            response=>{
+                console.log(response.json());
+                return response.json();
+            }
+        )
+    }
+
+    findSites(projectId): Observable<any>{
+        return this.http.get(this.config.Url+'api/project/'+projectId+'/sites').map(
+            response=>{
+                return response;
+            }
+        )
+    }
+
     searchSiteEmployee(siteId):Observable<any>{
         return this.http.get(this.config.Url+'api/employee/site/'+siteId).map(
             response=>{

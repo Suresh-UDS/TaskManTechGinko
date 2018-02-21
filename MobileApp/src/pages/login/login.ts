@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import {IonicPage, MenuController, NavController, NavParams, ToastController} from 'ionic-angular';
+import {Events, IonicPage, MenuController, NavController, NavParams, ToastController} from 'ionic-angular';
 import {SiteListPage} from "../site-list/site-list";
 import {EmployeeSiteListPage} from "../site-employeeList/site-employeeList";
 import {authService} from "../service/authService";
@@ -8,7 +8,7 @@ import {TabsPage} from "../tabs/tabs";
 import {componentService} from "../service/componentService";
 import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import { Toast } from '@ionic-native/toast';
-
+import {EmployeeService} from "../service/employeeService";
 
 /**
  * Generated class for the LoginPage page.
@@ -31,7 +31,13 @@ export class LoginPage {
   field:any;
   eMsg:any;
   type : FormGroup;
-  constructor(public navCtrl: NavController,public component:componentService,private formBuilder: FormBuilder,public menuCtrl:MenuController, public toastCtrl:ToastController,private toast: Toast,public navParams: NavParams,public myService:authService) {
+  module:any;
+  permission:any;
+  constructor(public navCtrl: NavController,public component:componentService,private formBuilder: FormBuilder,public menuCtrl:MenuController, public toastCtrl:ToastController,private toast: Toast,public navParams: NavParams,public myService:authService, public employeeService: EmployeeService, public events:Events) {
+      this.permission=[
+          {module:null,
+              action:null}
+      ];
 
   }
 
@@ -49,6 +55,29 @@ export class LoginPage {
         this.myService.login(this.username, this.password).subscribe(response => {
               console.log(response);
               console.log(response.json());
+              this.employeeService.getUser(response.json().employee.userId).subscribe(
+                  response=>{
+                      console.log("User response");
+                      console.log(response);
+                      var module = {};
+                      window.localStorage.setItem('userType',response.userRole.name.toUpperCase());
+                      this.events.publish('userType',response.userRole.name.toUpperCase());
+                      if(response.name.toUpperCase() === 'ADMIN'){
+                        }
+                      for (let userRole of response.userRole.rolePermissions){
+                          // this.permissionService.addPermission([userRole.moduleName])
+                          module = {module:userRole.moduleName,
+                              action:userRole.actionName}
+                          this.permission.push(module);
+                      }
+                      this.events.publish('permissions:set',this.permission);
+
+                      console.log("Modules and permissions");
+                      console.log(this.permission)
+                  },err=>{
+                      this.events.publish('userType','ADMIN');
+                  }
+              );
               window.localStorage.setItem('session', response.json().token);
               window.localStorage.setItem('userGroup', response.json().employee.userUserGroupName);
               window.localStorage.setItem('employeeId', response.json().employee.id);

@@ -224,6 +224,7 @@ export class EmployeeList {
                             if(response && response.status === 200){
                               var msg='Face Verified and Attendance marked Successfully';
                               this.showSuccessToast(msg);
+                              // employee.attendanceId = response.
                             }
                           },error=>{
                             var msg = 'Attendance Not Marked';
@@ -262,7 +263,6 @@ export class EmployeeList {
                           if(response && response.status === 200){
                             var msg='Face Verified and Attendance marked Successfully';
                             this.showSuccessToast(msg);
-                            window.location.reload();
                           }
                         },error=>{
                           var msg = 'Attendance Not Marked';

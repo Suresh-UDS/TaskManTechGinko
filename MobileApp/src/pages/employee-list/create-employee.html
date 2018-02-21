@@ -36,6 +36,21 @@
                 </div>
             </ion-col>
 
+              <ion-col col-12>
+                  <div class="form-group label-floating" [ngClass]="{'has-error': eMsg=='all'||eMsg=='eId'}">
+                      <label class="control-label">Employee Id</label>
+                      <input class="form-control" type="text" [(ngModel)]="eId" id="eId" name="number" #id="ngModel" required [ngClass]="{'has-error': id.errors || eMsg=='all'|| eMsg=='eId'}">
+                      <div *ngIf="id.errors && (id.dirty || id.touched)" class="error-msg">
+
+                      </div>
+
+                      <div *ngIf="id.errors && (id.untouched )" class="error-msg">
+
+                      </div>
+                  </div>
+              </ion-col>
+
+
             <ion-col col-12>
 
               <div class="form-group label-floating" [ngClass]="{'has-error': eMsg=='all'||eMsg=='firstname'}">
@@ -68,6 +83,14 @@
 
             </ion-col>
 
+              <!--<ion-col col-12>-->
+                  <!--<div class="form-group">-->
+                      <!--<ion-select [(ngModel)]="designation" class="select-box" id="designation" placeholder="Choose Designation" name="designation" #designation="ngModel" required >-->
+                          <!--<ion-option *ngFor="let designation of designations" [value]="designation.designation" >{{designation.designation}}</ion-option>-->
+                      <!--</ion-select>-->
+                  <!--</div>-->
+              <!--</ion-col>-->
+
             <ion-col col-12>
               <div class="form-group label-floating" [ngClass]="{'has-error': eMsg=='all'||eMsg=='number'}">
                 <label class="control-label">Mobile Number</label>
@@ -81,50 +104,62 @@
               </div>
             </ion-col>
 
-            <ion-col col-12>
-              <div class="form-group label-floating" [ngClass]="{'has-error': eMsg=='all'||eMsg=='mail'}">
-                <label class="control-label">Mail Id</label>
-                <input class="form-control" type="email" [(ngModel)]="mail" id="mail" name="mail" #mid="ngModel" required [ngClass]="{'has-error': mid.errors || eMsg=='all'|| eMsg=='number'}">
-                <div *ngIf="mid.errors && (mid.dirty || mid.touched)" class="error-msg">
+              <ion-col col-12>
+                  <div class="form-group">
+                      <ion-select [(ngModel)]="selectedProject" class="select-box" id="selectedProject" placeholder="Choose Project" name="selectedProject" #selectedPeoject="ngModel" required >
+                          <ion-option *ngFor="let project of projects" [value]="project.name" (ionSelect)="getSites(project.id,project.name)">{{project.name}}</ion-option>
+                      </ion-select>
+                  </div>
+              </ion-col>
 
-                </div>
-                <div *ngIf="mid.errors && (mid.untouched )" class="error-msg">
+              <ion-col col-12>
+                  <div class="form-group">
+                      <ion-select [(ngModel)]="selectedSite" class="select-box" id="siteName" placeholder="Choose Site" name="siteName" #site="ngModel" required >
+                          <ion-option *ngFor="let site of sites" [value]="site.name" (ionSelect)="addProjectSites()">{{site.name}}</ion-option>
+                      </ion-select>
+                  </div>
+              </ion-col>
 
-                </div>
-              </div>
-            </ion-col>
+              <!--<ion-col col-12>-->
+                  <!--<div class="form-group">-->
+                      <!--<ion-select [(ngModel)]="selectedManager" class="select-box" id="selectedManager" placeholder="Choose Manager" name="selectedManager" #selectedManager="ngModel" required >-->
+                          <!--<ion-option *ngFor="let manager of manager" [value]="manager.name" >{{manager.name}}</ion-option>-->
+                      <!--</ion-select>-->
+                  <!--</div>-->
+              <!--</ion-col>-->
 
+              <!--<ion-col col-12>-->
+              <!--<div class="form-group label-floating" [ngClass]="{'has-error': eMsg=='all'||eMsg=='mail'}">-->
+                <!--<label class="control-label">Mail Id</label>-->
+                <!--<input class="form-control" type="email" [(ngModel)]="mail" id="mail" name="mail" #mid="ngModel" required [ngClass]="{'has-error': mid.errors || eMsg=='all'|| eMsg=='number'}">-->
+                <!--<div *ngIf="mid.errors && (mid.dirty || mid.touched)" class="error-msg">-->
 
-            <ion-col col-12>
-              <div class="form-group label-floating" [ngClass]="{'has-error': eMsg=='all'||eMsg=='eId'}">
-                <label class="control-label">Employee Id</label>
-                <input class="form-control" type="text" [(ngModel)]="eId" id="eId" name="number" #id="ngModel" required [ngClass]="{'has-error': id.errors || eMsg=='all'|| eMsg=='eId'}">
-                <div *ngIf="id.errors && (id.dirty || id.touched)" class="error-msg">
+                <!--</div>-->
+                <!--<div *ngIf="mid.errors && (mid.untouched )" class="error-msg">-->
 
-                </div>
-
-                <div *ngIf="id.errors && (id.untouched )" class="error-msg">
-
-                </div>
-              </div>
-            </ion-col>
-
-            <ion-col col-12>
-
-              <div class="form-group label-floating" [ngClass]="{'has-error': eMsg=='all'||eMsg=='address'}">
-                <label class="control-label">Address</label>
-                <input class="form-control" type="text" [(ngModel)]="address" id="address" name="address" #add="ngModel" required [ngClass]="{'has-error': add.errors || eMsg=='all'|| eMsg=='address'}">
-                <div *ngIf="add.errors && (add.dirty || add.touched)" class="error-msg">
-
-                </div>
-
-                <div *ngIf="add.errors && (add.untouched )" class="error-msg">
-
-                </div>
-              </div>
+                <!--</div>-->
+              <!--</div>-->
+            <!--</ion-col>-->
 
 
-            </ion-col>
+
+
+            <!--<ion-col col-12>-->
+
+              <!--<div class="form-group label-floating" [ngClass]="{'has-error': eMsg=='all'||eMsg=='address'}">-->
+                <!--<label class="control-label">Address</label>-->
+                <!--<input class="form-control" type="text" [(ngModel)]="address" id="address" name="address" #add="ngModel" required [ngClass]="{'has-error': add.errors || eMsg=='all'|| eMsg=='address'}">-->
+                <!--<div *ngIf="add.errors && (add.dirty || add.touched)" class="error-msg">-->
+
+                <!--</div>-->
+
+                <!--<div *ngIf="add.errors && (add.untouched )" class="error-msg">-->
+
+                <!--</div>-->
+              <!--</div>-->
+
+
+            <!--</ion-col>-->
 
             <button type="submit" class="btn btn-warning  margin-auto" (click)="addJob()">Next</button>
 

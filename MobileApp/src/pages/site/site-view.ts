@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import {Item, ItemSliding, NavController, NavParams, ToastController} from 'ionic-angular';
+import {Events, Item, ItemSliding, NavController, NavParams, ToastController} from 'ionic-angular';
 import {authService} from "../service/authService";
 import {componentService} from "../service/componentService";
 import {JobService} from "../service/jobService";
@@ -37,19 +37,20 @@ export class SiteViewPage {
   approvedQuotationsCount:any;
   submittedQuotationsCount:any;
   draftedQuotationsCount:any;
-  archivedQuotationsCount:any;
+  archivedQuotationsCount:any;isAdmin:any;
   approvedQuotationpage:ApprovedQuotationPage;
   archivedQuotationPage:ArchivedQuotationPage;
   draftedQuotationsPage:DraftedQuotationPage;
   submittedQuotationsPage:SubmittedQuotationPage;
+  userType:any;
   constructor(public navCtrl: NavController,public component:componentService,private employeeService: EmployeeService,public navParams:NavParams,private siteService: SiteService,public myService:authService,public authService:authService, public toastCtrl: ToastController,
 
-              private jobService:JobService, private attendanceService: AttendanceService, private quotationService: QuotationService) {
+              private jobService:JobService, private attendanceService: AttendanceService, private quotationService: QuotationService, public events:Events) {
   this.categories='detail';
     this.siteDetail=this.navParams.get('site')
     console.log('ionViewDidLoad SiteViewPage');
     console.log(this.siteDetail.name);
-
+    this.isAdmin = true;
     this.draftedQuotationsCount= 0;
     this.approvedQuotationsCount=0;
     this.submittedQuotationsCount=0;
@@ -59,6 +60,13 @@ export class SiteViewPage {
     this.approvedQuotations=[];
     this.submittedQuotations=[];
     this.archivedQuotations=[];
+    this.loadEmployee();
+
+      this.events.subscribe('userType',(type)=>{
+          console.log("User type event");
+          console.log(type);
+          this.userType = type;
+      })
   }
 
   ionViewDidLoad()
@@ -163,7 +171,14 @@ export class SiteViewPage {
           if(response.json().length !==0)
           {
             this.employee=response.json();
+            console.log("total Employees");
+            console.log(this.employee.length);
             console.log(this.employee);
+            if(this.employee.length>1){
+                this.isAdmin = true;
+            }else{
+                this.isAdmin = false;
+            }
               this.component.closeLoader();
           }
           else
