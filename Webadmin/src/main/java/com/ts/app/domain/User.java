@@ -95,7 +95,7 @@ public class User extends AbstractAuditingEntity implements Serializable {
 	@Column(name = "admin_flag", length = 1)
 	private String adminFlag;
 
-	@OneToOne(fetch = FetchType.EAGER)
+	@OneToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "employeeId", nullable = true)
 	private Employee employee;
 	
@@ -109,7 +109,7 @@ public class User extends AbstractAuditingEntity implements Serializable {
 	@JoinColumn(name = "userRoleId", nullable = false)
 	private UserRole userRole;
 	
-	@ManyToOne(fetch = FetchType.EAGER)
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "projectId", nullable = true)
 	private Project project;
 	

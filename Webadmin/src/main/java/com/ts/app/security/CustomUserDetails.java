@@ -7,6 +7,9 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import com.ts.app.web.rest.dto.UserDTO;
+import com.ts.app.web.rest.dto.UserRoleDTO;
+
 /**
  * Class representing the Spring Security authenticated user.
  * 
@@ -26,6 +29,7 @@ public class CustomUserDetails implements UserDetails {
     private final boolean credentialsNonExpired;
     private final boolean enabled;
     private final boolean pushSubscribed;
+    private final UserDTO user;
 
     /**
      * @param id
@@ -48,7 +52,33 @@ public class CustomUserDetails implements UserDetails {
         this.credentialsNonExpired = credentialsNonExpired;
         this.enabled = enabled;
         this.pushSubscribed = pushSubscribed;
+        this.user = null;
     }
+    
+    /**
+     * @param id
+     * @param username
+     * @param password
+     * @param authorities
+     * @param accountNonExpired
+     * @param accountNonLocked
+     * @param credentialsNonExpired
+     * @param enabled
+     * @param userRole
+     */
+    public CustomUserDetails(Long id, String username, String password, Set<GrantedAuthority> authorities, boolean accountNonExpired, boolean accountNonLocked,
+            boolean credentialsNonExpired, boolean enabled, boolean pushSubscribed, UserDTO user) {
+        this.id = id;
+        this.username = username;
+        this.password = password;
+        this.authorities = authorities;
+        this.accountNonExpired = accountNonExpired;
+        this.accountNonLocked = accountNonLocked;
+        this.credentialsNonExpired = credentialsNonExpired;
+        this.enabled = enabled;
+        this.pushSubscribed = pushSubscribed;
+        this.user = user;
+    }    
 
     public Long getId() {
         return id;
@@ -95,6 +125,10 @@ public class CustomUserDetails implements UserDetails {
     
     public boolean isPushSubscribed() {
 		return pushSubscribed;
+	}
+    
+	public UserDTO getUser() {
+		return user;
 	}
 
 	@Override

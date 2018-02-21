@@ -138,7 +138,7 @@ Desktop.ini
 /MobileApp/node_modules/*
 /MobileApp/platforms/*
 /MobileApp/plugins/*
-
+MobileApp/www/*
 
 /
 
@@ -233,3 +233,5 @@ Webadmin/src/main/webapp/bower_components/*
 MobileApp/.idea/
 QuotationService/.idea/
 QuotationService/package-lock.json
+
+MobileApp/www/build/

@@ -21,16 +21,16 @@ spring:
     datasource:
         driver-class-name: com.mysql.jdbc.Driver
         #url: jdbc:mysql://52.77.216.21:3306/TaskMan?useUnicode=true&characterEncoding=utf8
-        url: jdbc:mysql://localhost:3306/TaskMan?useUnicode=true&characterEncoding=utf8
+        url: jdbc:mysql://localhost:3306/Taskman?useUnicode=true&characterEncoding=utf8
         name:
         username: root
-        password: admin
+        password: tgadmin123#
     jpa:
         database-platform: org.hibernate.dialect.MySQLInnoDBDialect
         database: MYSQL
         show_sql: true
         hibernate:
-            ddl-auto: create
+            ddl-auto: update
         properties:
             hibernate.cache.use_second_level_cache: true
             hibernate.cache.use_query_cache: true

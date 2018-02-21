@@ -261,7 +261,7 @@ public class SchedulerService extends AbstractService {
 		}
 	}
 
-	//@Scheduled(initialDelay = 60000,fixedRate = 300000) //Runs every 15 mins
+	@Scheduled(initialDelay = 60000,fixedRate = 900000) //Runs every 15 mins
 	public void overDueTaskCheck() {
 		Calendar cal = Calendar.getInstance();
 		Setting overdueAlertSetting = settingRepository.findSettingByKey("email.notification.overdue");
@@ -314,7 +314,7 @@ public class SchedulerService extends AbstractService {
 	}
 	
 	//@Scheduled(initialDelay = 60000,fixedRate = 900000) //Runs every 15 mins
-	//@Scheduled(cron="0 0 18 1/1 * ?")
+	@Scheduled(cron="0 0 18 1/1 * ?")
 	public void endOfDayReportSchedule() {
 		Setting eodReports = settingRepository.findSettingByKey("email.notification.eodReports");
 		Setting eodReportEmails = settingRepository.findSettingByKey("email.notification.eodReports.emails");
@@ -354,7 +354,7 @@ public class SchedulerService extends AbstractService {
 	}
 	
 	//@Scheduled(cron="0 0 10 1/1 * ?")
-	//@Scheduled(cron="0 0 19 1/1 * ?")
+	@Scheduled(cron="0 0 19 1/1 * ?")
 	public void attendanceReportSchedule() {
 		Setting attendaceReports = settingRepository.findSettingByKey("email.notification.attedanceReports");
 		Setting attendaceReportEmails = settingRepository.findSettingByKey("email.notification.attendanceReports.emails");
@@ -387,7 +387,7 @@ public class SchedulerService extends AbstractService {
 		
 	}
 	
-	//@Scheduled(cron="0 0 0 1/1 * ?") //Test to run every 30 seconds
+	@Scheduled(cron="0 0 0 1/1 * ?") //Test to run every 30 seconds
 	public void attendanceCheckOutTask() {
 		Calendar startCal = Calendar.getInstance();
 		startCal.set(Calendar.HOUR_OF_DAY,0);

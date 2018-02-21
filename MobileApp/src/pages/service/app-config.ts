@@ -12,9 +12,9 @@ export interface ApplicationConfig
 export const AppConfig: ApplicationConfig={
     // Url: "http://192.168.1.4:8088/",
     // NodeUrl: "http://192.168.1.4:8000/",
-    Url: "http://ec2-52-77-216-21.ap-southeast-1.compute.amazonaws.com:8088/",
-    QuotationServiceUrl: "http://ec2-52-77-216-21.ap-southeast-1.compute.amazonaws.com:8001/",
-    LocationServiceUrl: "http://ec2-52-77-216-21.ap-southeast-1.compute.amazonaws.com:8000/"
+    Url: "http://ec2-54-169-225-123.ap-southeast-1.compute.amazonaws.com:8088/",
+    QuotationServiceUrl: "http://ec2-54-169-225-123.ap-southeast-1.compute.amazonaws.com:8001/",
+    LocationServiceUrl: "http://ec2-54-169-225-123.ap-southeast-1.compute.amazonaws.com:8000/"
 
 
 };
