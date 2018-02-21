@@ -13,8 +13,12 @@
         <button mini (click)="createRate()"  ion-fab><ion-icon name="add"></ion-icon></button>
     </ion-fab>
 
+
+
+
     <ion-list>
         <ion-item *ngFor="let rate of rateCards">
+
             <p text-left style="color: #2e2e2e">{{rate.title}} - {{rate.cost}} - {{rate.uom}}</p>
         </ion-item>
     </ion-list>
