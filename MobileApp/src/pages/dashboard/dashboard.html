@@ -48,7 +48,7 @@
         </ion-fab-list>
     </ion-fab>
     -->
-    <ion-row class="margin0 padding-top15">
+    <ion-row class="margin0 padding-top5">
         <ion-col col-8 class="align-right">
             <p  text-right class="fnt-18 date-txt" (click)="showCalendar()">
                 <ion-icon ios="ios-calendar" md="md-calendar" class="green fnt-25 padding-right10"></ion-icon>
@@ -97,7 +97,7 @@ Tip 2: you can also add an image using data-image tag
 
     <div class="SiteCon">
         <div text-center>
-            <p class="margin0"><span class="margin-right15">Sites</span><span class="padding-left5" *ngIf="spinner"><ion-spinner name="bubbles"></ion-spinner></span></p>
+            <p class="margin0 titleTxt"><span class="margin-right15">Sites</span><span class="padding-left5" *ngIf="spinner"><ion-spinner name="bubbles"></ion-spinner></span></p>
         </div>
         <div class="container-fluid container-scroll hariz-scroll-con">
             <div class="row">
@@ -111,7 +111,7 @@ Tip 2: you can also add an image using data-image tag
     <div class="EmpCon" style="padding-bottom:10px;">
 
         <div text-center>
-            <p class="margin0"><span class="margin-right15">Employees</span><span class="padding-left5" *ngIf="empSpinner"><ion-spinner name="bubbles"></ion-spinner></span></p>
+            <p class="margin0 titleTxt"><span class="margin-right15">Employees</span><span class="padding-left5" *ngIf="empSpinner"><ion-spinner name="bubbles"></ion-spinner></span></p>
         </div>
         <div class="container-fluid container-scroll hariz-scroll-con">
             <div *ngIf="empSelect">
