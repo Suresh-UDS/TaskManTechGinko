@@ -10,6 +10,7 @@ import {JobService} from "../service/jobService";
 import {SiteService} from "../service/siteService";
 import {AttendanceService} from "../service/attendanceService";
 import {componentService} from "../service/componentService";
+import {AttendanceViewPage} from "../attendance-view/attendance-view";
 
 /**
  * Generated class for the EmployeeList page.
@@ -159,18 +160,18 @@ export class EmployeeList {
       let base64Image = 'data:image/jpeg;base64,' + imageData;
       var employeeName = employee.fullName+employee.empId;
 
-      // this.geolocation.getCurrentPosition().then((response)=>{
-      //   console.log("Current location");
-      //   console.log(response);
-      //   this.closeLoader();
-      //   this.showLoader('verifying Location');
-      //   this.lattitude = response.coords.latitude;
-      //   this.longitude = response.coords.longitude;
-      //   this.authService.checkSiteProximity(this.site.id,this.lattitude,this.longitude).subscribe(
-      //     response=>{
-      //       this.closeLoader();
-      //       this.showLoader('');
-      //       console.log(response.json());
+      this.geolocation.getCurrentPosition().then((response)=>{
+        console.log("Current location");
+        console.log(response);
+        this.closeLoader();
+        this.showLoader('verifying Location');
+        this.lattitude = response.coords.latitude;
+        this.longitude = response.coords.longitude;
+        this.attendanceService.checkSiteProximity(this.site.id,this.lattitude,this.longitude).subscribe(
+          response=>{
+            this.closeLoader();
+            this.showLoader('');
+            // console.log(response.json());
 
             this.authService.detectFace(this.employeeFullName,imageData).subscribe(response=>{
               console.log("response in site list");
@@ -303,30 +304,29 @@ export class EmployeeList {
             }
           }
         )
-      // },error=>{
-      //       console.log("errors");
-      //       console.log("errors")
-      //       console.log(error.json());
-      //       if(error.json().status === "false"){
-      //         var msg= "You are currently not at the site location";
-      //         this.showSuccessToast(msg);
-      //         this.closeLoader();
-      //       }else{
-      //         var msg= "You are currently not at the site location";
-      //         this.showSuccessToast(msg);
-      //         this.closeLoader();
-      //       }
-      //     });
-      //
-      // }).catch((error)=>{
-      //
-      //   console.log("Location error")
-      //   this.lattitude = 0;
-      //   this.longitude = 0;
-      //   var msg= "Unable to get location";
-      //   this.showSuccessToast(msg);
-      //   this.closeLoader();
-      // })
+      },error=>{
+            console.log("errors")
+            console.log(error.json());
+            if(error.json().status === "false"){
+              var msg= "You are currently not at the site location";
+              this.showSuccessToast(msg);
+              this.closeLoader();
+            }else{
+              var msg= "You are currently not at the site location";
+              this.showSuccessToast(msg);
+              this.closeLoader();
+            }
+          });
+
+      }).catch((error)=>{
+
+        console.log("Location error")
+        this.lattitude = 0;
+        this.longitude = 0;
+        var msg= "Unable to get location";
+        this.showSuccessToast(msg);
+        this.closeLoader();
+      });
 
 
       // this.navCtrl.push(AttendanceViewPage,imageData)

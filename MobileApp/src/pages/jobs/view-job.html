@@ -50,7 +50,7 @@
 
 </ion-content>
 
-<ion-footer>
+<ion-footer *ngIf="jobDetails.status !='COMPLETED'">
     <ion-toolbar class="align-right">
         <button class="btn btn-success center pull-right" type="submit" (click)="completeJob(jobDetails)">Complete Job</button>
     </ion-toolbar>

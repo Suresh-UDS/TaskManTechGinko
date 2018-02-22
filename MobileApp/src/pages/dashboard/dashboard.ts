@@ -1,5 +1,5 @@
 import { Component, Input, ViewChild, ElementRef, Renderer } from '@angular/core';
-import {Item, ItemSliding, LoadingController, ModalController, NavController} from 'ionic-angular';
+import {Events, Item, ItemSliding, LoadingController, ModalController, NavController} from 'ionic-angular';
 import {authService} from "../service/authService";
 import {DatePickerProvider} from "ionic2-date-picker";
 import {componentService} from "../service/componentService";
@@ -22,6 +22,8 @@ export class DashboardPage {
   @ViewChild('date') MyCalendar: ElementRef;
   todaysJobs: any;
   allJobs:any;
+  selectedSite:any;
+  selectedEmployee:any;
   categories:any;
   loader:any;
   dateView:any;
@@ -43,8 +45,9 @@ export class DashboardPage {
     overdueCount:any;
     upcomingCount:any;
     completeCount:any;
+    userType:any;
   constructor(public renderer: Renderer,public myService:authService,private loadingCtrl:LoadingController,public navCtrl: NavController,public component:componentService,public authService:authService,public modalCtrl: ModalController,
-              private datePickerProvider: DatePickerProvider, private siteService:SiteService, private employeeService: EmployeeService, private jobService:JobService) {
+              private datePickerProvider: DatePickerProvider, private siteService:SiteService, private employeeService: EmployeeService, private jobService:JobService, public events:Events) {
 
     this.categories='overdue';
     this.selectDate=new Date();
@@ -53,6 +56,15 @@ export class DashboardPage {
       'overdue','upcoming','completed'
       ];
       */
+
+   this.events.subscribe('userType',(userType)=>{
+       console.log("user type in dashboard");
+       console.log(userType);
+       this.userType = userType;
+   });
+   console.log("User Role in dashboard");
+   console.log(window.localStorage.getItem('userRole'));
+      this.userType=window.localStorage.getItem('userRole')
   }
 
 /*
@@ -66,15 +78,21 @@ export class DashboardPage {
 */
   ionViewDidLoad()
   {
+
+      this.events.subscribe('userType',(userType)=>{
+          console.log("user type in dashboard");
+          console.log(userType);
+          this.userType = userType;
+      })
    // demo.initFullCalendar();
-    this.siteService.searchSite().subscribe(response=>
-    {
-      console.log(response);
-    },
-    error=>
-    {
-      console.log(error);
-    });
+   //  this.siteService.searchSite().subscribe(response=>
+   //  {
+   //    console.log(response);
+   //  },
+   //  error=>
+   //  {
+   //    console.log(error);
+   //  });
 
 
     // this.employeeService.getAllEmployees().subscribe(
@@ -119,6 +137,17 @@ export class DashboardPage {
 
   searchJobs(searchCriteria){
       this.component.showLoader('Getting Jobs');
+      if(this.selectedEmployee){
+          console.log("employee selected");
+          searchCriteria.employeeId = this.selectedEmployee.id;
+      }
+      if(this.selectedSite){
+          console.log("site selected");
+          searchCriteria.siteId = this.selectedSite;
+      }
+      if(this.selectDate){
+          searchCriteria.checkInDateTimeFrom = this.selectDate;
+      }
       searchCriteria.CheckInDateTimeFrom = new Date(searchCriteria.checkInDateTimeFrom);
       this.jobService.getJobs(searchCriteria).subscribe(
           response=>{
@@ -147,7 +176,7 @@ export class DashboardPage {
               console.log("Count------:"+this.completeCount);
 
               this.upcomingCount=this.allJobs.filter((data,i)=>{
-                  if(data.status=='OPEN' || 'ASSIGNED' || 'INPROGRESS')
+                  if(data.status=='OPEN' || data.status=='ASSIGNED' || data.status=='INPROGRESS')
                   {
                       return data;
                   }
@@ -176,12 +205,10 @@ export class DashboardPage {
       this.allJobs = response;
       this.component.closeLoader();
     })
-
-
-
-
-
   }
+
+
+
 
     first(emp)
     {
@@ -215,11 +242,14 @@ export class DashboardPage {
 
         dateSelected.subscribe(date =>
         {
-            // this.selectDate=date;
+            this.selectDate=date;
+            console.log("Date selected");
+            console.log(date);
+
             this.searchCriteria.checkInDateTimeFrom = date;
             // this.getAllJobs(this.selectDate)
             this.searchJobs(this.searchCriteria);
-            console.log("first date picker: date selected is", date)
+            console.log("first date picker: date selected is", date);
         });
 
     }
@@ -227,8 +257,10 @@ export class DashboardPage {
     selectEmployee(emp,i){
       console.log("Selected Employee");
       console.log(emp.id+" "+ emp.name);
+
       this.searchCriteria={
-          employeeId:emp.id
+          employeeId:emp.id,
+          CheckInDateTimeFrom:this.selectDate,
       };
       this.searchJobs(this.searchCriteria);
       this.empActive=true;
@@ -238,6 +270,7 @@ export class DashboardPage {
     activeSite(id,i)
     {
          var search={siteId:id};
+         this.selectedSite = id;
         this.index=i;
         console.log("Selected Site Id");
         console.log(id);

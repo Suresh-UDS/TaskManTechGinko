@@ -45,9 +45,9 @@
       </ion-item>
 
       <ion-item-options side="right" (click)="close(slidingItem,menu)">
-        <button ion-button clear color="danger"><ion-icon name="close" class="fnt-24 padding-bottom0"></ion-icon></button>
-        <button ion-button clear color="primary"><i class="material-icons fnt-24">transfer_within_a_station</i></button>
-        <button ion-button clear color="clr-blue"><i class="material-icons fnt-24">assignment_ind</i></button>
+        <button ion-button clear color="danger" (click)="markLeft(emp)"><ion-icon name="close" class="fnt-24 padding-bottom0"></ion-icon></button>
+        <button ion-button clear color="primary" (click)="transferEmployee(emp)"><i class="material-icons fnt-24">transfer_within_a_station</i></button>
+        <button ion-button clear color="clr-blue" (click)="relieveEmployee(emp)"><i class="material-icons fnt-24">assignment_ind</i></button>
       </ion-item-options>
     </ion-item-sliding>
     </div>

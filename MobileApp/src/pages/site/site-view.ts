@@ -12,6 +12,8 @@ import {ApprovedQuotationPage} from "../quotation/approvedQuotations";
 import {CreateQuotationPage} from "../quotation/create-quotation";
 import {QuotationService} from "../service/quotationService";
 import {SiteService} from "../service/siteService";
+import {ViewJobPage} from "../jobs/view-job";
+import {CompleteJobPage} from "../jobs/completeJob";
 
 @Component({
   selector: 'page-site-view',
@@ -43,6 +45,11 @@ export class SiteViewPage {
   draftedQuotationsPage:DraftedQuotationPage;
   submittedQuotationsPage:SubmittedQuotationPage;
   userType:any;
+
+    jobPage:1;
+    jobsTotalPages:0;
+    employeePage=1;
+    employeeTotalpages=0;
   constructor(public navCtrl: NavController,public component:componentService,private employeeService: EmployeeService,public navParams:NavParams,private siteService: SiteService,public myService:authService,public authService:authService, public toastCtrl: ToastController,
 
               private jobService:JobService, private attendanceService: AttendanceService, private quotationService: QuotationService, public events:Events) {
@@ -120,10 +127,53 @@ export class SiteViewPage {
     this.jobService.getJobs(search).subscribe(response=>{
       console.log("Job Refresher");
       console.log(response);
-      this.jobs = response;
+      this.jobs = response.transactions;
       this.component.closeLoader();
     })
   }
+
+    doJobInfinite(infiniteScroll){
+        console.log('Begin async operation');
+        console.log(infiniteScroll);
+        console.log(this.jobsTotalPages);
+        console.log(this.jobPage);
+        var searchCriteria ={
+            currPage:this.jobPage+1,
+            siteId:this.siteDetail.id
+        };
+        if(this.jobPage>this.jobsTotalPages){
+            console.log("End of all pages");
+            infiniteScroll.complete();
+            this.component.showToastMessage('All jobs Loaded', 'bottom');
+
+        }else{
+            console.log("Getting pages");
+            console.log(this.jobsTotalPages);
+            console.log(this.jobPage);
+            setTimeout(()=>{
+                this.jobService.getJobs(searchCriteria).subscribe(
+                    response=>{
+                        console.log('ionViewDidLoad Employee list:');
+                        console.log(response);
+                        console.log(response.transactions);
+                        for(var i=0;i<response.transactions.length;i++){
+                            this.jobs.push(response.transactions[i]);
+                        }
+                        this.jobPage = response.currPage;
+                        this.jobsTotalPages = response.totalPages;
+                        this.component.closeLoader();
+                    },
+                    error=>{
+                        console.log('ionViewDidLoad Employee Page:'+error);
+                    }
+                )
+                infiniteScroll.complete();
+            },1000);
+        }
+
+
+    }
+
 
   getEmployee(ref)
   {
@@ -198,7 +248,8 @@ export class SiteViewPage {
   }
 
 
-  /* Quotation */
+
+    /* Quotation */
   gotoApprovedQuotation(){
     this.navCtrl.push(ApprovedQuotationPage,{'quotations':this.approvedQuotations});
   }
@@ -283,5 +334,19 @@ export class SiteViewPage {
     item.setElementClass("active-slide", false);
     item.setElementClass("active-options-right", false);
   }
+
+    viewJob(job)
+    {
+        console.log("========view job ===========");
+        console.log(job);
+        this.navCtrl.push(ViewJobPage,{job:job})
+    }
+
+    compeleteJob(job)
+    {
+        this.navCtrl.push(CompleteJobPage,{job:job})
+    }
+
+
 
 }

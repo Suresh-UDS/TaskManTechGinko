@@ -55,29 +55,40 @@ export class LoginPage {
         this.myService.login(this.username, this.password).subscribe(response => {
               console.log(response);
               console.log(response.json());
-              this.employeeService.getUser(response.json().employee.userId).subscribe(
-                  response=>{
-                      console.log("User response");
-                      console.log(response);
-                      var module = {};
-                      window.localStorage.setItem('userType',response.userRole.name.toUpperCase());
-                      this.events.publish('userType',response.userRole.name.toUpperCase());
-                      if(response.name.toUpperCase() === 'ADMIN'){
-                        }
-                      for (let userRole of response.userRole.rolePermissions){
-                          // this.permissionService.addPermission([userRole.moduleName])
-                          module = {module:userRole.moduleName,
-                              action:userRole.actionName}
-                          this.permission.push(module);
-                      }
-                      this.events.publish('permissions:set',this.permission);
-
-                      console.log("Modules and permissions");
-                      console.log(this.permission)
-                  },err=>{
-                      this.events.publish('userType','ADMIN');
-                  }
-              );
+              console.log("user role");
+              console.log(response.json().user.userRoleName.toUpperCase());
+              if(response.json().user){
+                  console.log("user role found");
+                  window.localStorage.setItem('userRole',response.json().user.userRoleName.toUpperCase());
+                  this.events.publish('userType',response.json().user.userRoleName.toUpperCase());
+              }else{
+                  console.log("User role not found, marking as admin");
+                  this.events.publish('userType','ADMIN');
+                  window.localStorage.setItem('userRole','ADMIN');
+              }
+              // this.employeeService.getUser(response.json().employee.userId).subscribe(
+              //     response=>{
+              //         console.log("User response");
+              //         console.log(response);
+              //         var module = {};
+              //         window.localStorage.setItem('userType',response.userRole.name.toUpperCase());
+              //         this.events.publish('userType',response.userRole.name.toUpperCase());
+              //         if(response.name.toUpperCase() === 'ADMIN'){
+              //           }
+              //         for (let userRole of response.userRole.rolePermissions){
+              //             // this.permissionService.addPermission([userRole.moduleName])
+              //             module = {module:userRole.moduleName,
+              //                 action:userRole.actionName}
+              //             this.permission.push(module);
+              //         }
+              //         this.events.publish('permissions:set',this.permission);
+              //
+              //         console.log("Modules and permissions");
+              //         console.log(this.permission)
+              //     },err=>{
+              //         this.events.publish('userType','ADMIN');
+              //     }
+              // );
               window.localStorage.setItem('session', response.json().token);
               window.localStorage.setItem('userGroup', response.json().employee.userUserGroupName);
               window.localStorage.setItem('employeeId', response.json().employee.id);

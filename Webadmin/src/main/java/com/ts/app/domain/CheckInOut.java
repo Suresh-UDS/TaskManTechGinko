@@ -23,7 +23,7 @@ public class CheckInOut extends AbstractAuditingEntity implements Serializable,C
 	private Employee employee;
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "projectId", nullable = false)
+	@JoinColumn(name = "projectId", nullable = true)
 	private Project project;
 
 	@ManyToOne(fetch = FetchType.LAZY)
