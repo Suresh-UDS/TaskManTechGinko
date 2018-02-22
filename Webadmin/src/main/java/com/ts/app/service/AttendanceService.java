@@ -258,43 +258,84 @@ public class AttendanceService extends AbstractService {
 	}
 
     public SearchResult<AttendanceDTO> findBySearchCrieria(SearchCriteria searchCriteria) {
-    	log.debug("search Criteria"+searchCriteria.getSiteId());
+    	log.debug("search Criteria siteId - "+searchCriteria.getSiteId());
+    	log.debug("search Criteria userId -  "+searchCriteria.getUserId());
+    	log.debug("search Criteria check in date time -  "+searchCriteria.getCheckInDateTimeFrom());
         SearchResult<AttendanceDTO> result = new SearchResult<AttendanceDTO>();
         if(searchCriteria != null) {
             Pageable pageRequest = createPageRequest(searchCriteria.getCurrPage());
             Page<Attendance> page = null;
             List<AttendanceDTO> transactions = null;
             Calendar startCal = Calendar.getInstance();
-            startCal.setTime(searchCriteria.getCheckInDateTimeFrom());
-    		startCal.set(Calendar.HOUR_OF_DAY, 0);
-    		startCal.set(Calendar.MINUTE, 0);
-    		startCal.set(Calendar.SECOND, 0);
-    		Calendar endCal = Calendar.getInstance();
-    		endCal.setTime(searchCriteria.getCheckInDateTimeTo());
-    		endCal.set(Calendar.HOUR_OF_DAY, 23);
-    		endCal.set(Calendar.MINUTE, 59);
-    		endCal.set(Calendar.SECOND, 0);
 
-    		searchCriteria.setCheckInDateTimeFrom(startCal.getTime());
-    		searchCriteria.setCheckInDateTimeTo(endCal.getTime());
+
             if(!searchCriteria.isFindAll()) {
-            	java.sql.Date startDate = new java.sql.Date(searchCriteria.getCheckInDateTimeFrom().getTime());
-            	java.sql.Date toDate = new java.sql.Date(searchCriteria.getCheckInDateTimeTo().getTime());
-                if(searchCriteria.getSiteId() != 0 && StringUtils.isEmpty(searchCriteria.getEmployeeEmpId())) {
-                    page = attendanceRepository.findBySiteIdAndCheckInTime(searchCriteria.getSiteId(), startDate, toDate, pageRequest);
-                }else if(searchCriteria.getSiteId()==0 ){
-                    if (StringUtils.isEmpty(searchCriteria.getEmployeeEmpId())) {
-                        log.debug("no side id and employee id- "+startDate+" - "+toDate);
-                        page = attendanceRepository.findByDateRange(startDate, toDate, pageRequest);
+                if(searchCriteria.getCheckInDateTimeFrom()!=null){
+                    startCal.setTime(searchCriteria.getCheckInDateTimeFrom());
+                    startCal.set(Calendar.HOUR_OF_DAY, 0);
+                    startCal.set(Calendar.MINUTE, 0);
+                    startCal.set(Calendar.SECOND, 0);
+                    searchCriteria.setCheckInDateTimeFrom(startCal.getTime());
 
-                    }else{
-                        log.debug("find by  employee id - "+searchCriteria.getEmployeeEmpId());
-                        page = attendanceRepository.findByEmpIdAndCheckInTime(searchCriteria.getEmployeeEmpId(),startDate, toDate,pageRequest);
-                    }
-                }else {
-                	page = attendanceRepository.findBySiteIdEmpIdAndDate(searchCriteria.getSiteId(),searchCriteria.getEmployeeEmpId(), startDate, toDate, pageRequest);
                 }
 
+                Employee employee = employeeRepository.findByUserId(searchCriteria.getUserId());
+                List<Long> subEmpIds = new ArrayList<Long>();
+                if(employee != null) {
+                    Hibernate.initialize(employee.getSubOrdinates());
+                    findAllSubordinates(employee, subEmpIds);
+                    log.debug("List of subordinate ids -"+ subEmpIds);
+                    searchCriteria.setSubordinateIds(subEmpIds);
+                }
+
+                if(searchCriteria.getCheckInDateTimeTo()!=null){
+                    Calendar endCal = Calendar.getInstance();
+                    endCal.setTime(searchCriteria.getCheckInDateTimeTo());
+                    endCal.set(Calendar.HOUR_OF_DAY, 23);
+                    endCal.set(Calendar.MINUTE, 59);
+                    endCal.set(Calendar.SECOND, 0);
+                    searchCriteria.setCheckInDateTimeTo(endCal.getTime());
+                }else{
+                    Calendar endCal = Calendar.getInstance();
+                    endCal.set(Calendar.HOUR_OF_DAY, 23);
+                    endCal.set(Calendar.MINUTE, 59);
+                    endCal.set(Calendar.SECOND, 0);
+                    searchCriteria.setCheckInDateTimeTo(endCal.getTime());
+                }
+
+                if(searchCriteria.getCheckInDateTimeFrom()!=null){
+                    log.debug("check date and time from available -  "+searchCriteria.getCheckInDateTimeFrom());
+                    java.sql.Date startDate = new java.sql.Date(searchCriteria.getCheckInDateTimeFrom().getTime());
+                    java.sql.Date toDate = new java.sql.Date(searchCriteria.getCheckInDateTimeTo().getTime());
+                    if(searchCriteria.getSiteId() != 0 && StringUtils.isEmpty(searchCriteria.getEmployeeEmpId())) {
+                        log.debug("find by site id and check in  date and time - "+searchCriteria.getSiteId());
+                        page = attendanceRepository.findBySiteIdAndCheckInTime(searchCriteria.getSiteId(), startDate, toDate, pageRequest);
+                    }else if(searchCriteria.getSiteId()!=0){
+                        log.debug("find by site id and employee id date and time - "+searchCriteria.getSiteId()+" - "+searchCriteria.getEmployeeEmpId());
+                        page = attendanceRepository.findBySiteIdEmpIdAndDate(searchCriteria.getSiteId(),searchCriteria.getEmployeeEmpId(), startDate, toDate, pageRequest);
+                    }else if(searchCriteria.getSiteId()==0 ){
+                        if (StringUtils.isEmpty(searchCriteria.getEmployeeEmpId())) {
+                            log.debug("no site id and employee id- "+startDate+" - "+toDate);
+                            page = attendanceRepository.findByDateRange(startDate, toDate, pageRequest);
+
+                        }else{
+                            log.debug("find by  employee id only - "+searchCriteria.getEmployeeEmpId());
+                            page = attendanceRepository.findByEmpIdAndCheckInTime(searchCriteria.getEmployeeEmpId(),startDate, toDate,pageRequest);
+                        }
+                }else{
+                        if(searchCriteria.getSiteId()!=0 && StringUtils.isEmpty(searchCriteria.getEmployeeEmpId())){
+                            log.debug("find by site id  - "+searchCriteria.getSiteId());
+                            page= attendanceRepository.findBySiteId(searchCriteria.getSiteId(),pageRequest);
+                        }else if(searchCriteria.getSiteId()!=0){
+                            log.debug("find by site id and employee id - "+searchCriteria.getSiteId()+" - "+searchCriteria.getEmployeeEmpId());
+                            page =attendanceRepository.findBySiteIdEmpId(searchCriteria.getSiteId(),searchCriteria.getEmployeeEmpId(),pageRequest);
+                        }else{
+                            log.debug("no site id only employee id- ");
+                            page = attendanceRepository.findByEmpId(searchCriteria.getEmployeeEmpId(),pageRequest);
+                        }
+                    }
+
+                }
 
             }else {
             	java.sql.Date startDate = new java.sql.Date(searchCriteria.getCheckInDateTimeFrom().getTime());
