@@ -99,7 +99,7 @@ button.siteBtn
 .EmpCon
 {
   padding: 10px 0;
-  background: #ffa50024;
+  background: #ffa50024 !important;
 }
 .hariz-scroll-con
 {
