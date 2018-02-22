@@ -273,16 +273,16 @@ public class AttendanceService extends AbstractService {
             List<AttendanceDTO> transactions = null;
             Calendar startCal = Calendar.getInstance();
 
+            if(searchCriteria.getCheckInDateTimeFrom()!=null){
+                startCal.setTime(searchCriteria.getCheckInDateTimeFrom());
+                startCal.set(Calendar.HOUR_OF_DAY, 0);
+                startCal.set(Calendar.MINUTE, 0);
+                startCal.set(Calendar.SECOND, 0);
+                searchCriteria.setCheckInDateTimeFrom(startCal.getTime());
 
+            }
             if(!searchCriteria.isFindAll()) {
-                if(searchCriteria.getCheckInDateTimeFrom()!=null){
-                    startCal.setTime(searchCriteria.getCheckInDateTimeFrom());
-                    startCal.set(Calendar.HOUR_OF_DAY, 0);
-                    startCal.set(Calendar.MINUTE, 0);
-                    startCal.set(Calendar.SECOND, 0);
-                    searchCriteria.setCheckInDateTimeFrom(startCal.getTime());
 
-                }
 
                 Employee employee = employeeRepository.findByUserId(searchCriteria.getUserId());
                 List<Long> subEmpIds = new ArrayList<Long>();
