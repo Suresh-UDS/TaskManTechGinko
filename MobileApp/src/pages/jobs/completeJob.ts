@@ -89,7 +89,8 @@ export class CompleteJobPage {
 
         this.camera.getPicture(options).then((imageData) => {
 
-            console.log(imageData);
+            console.log('imageData -' +imageData);
+            imageData = imageData.replace("assets-library://", "cdvfile://localhost/assets-library/")
 
             this.takenImages.push(imageData);
 
