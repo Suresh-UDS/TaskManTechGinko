@@ -59,19 +59,19 @@ public class JobSpecification implements Specification<Job> {
             	predicates.add(builder.equal(root.get("scheduled"),  searchCriteria.isScheduled()));
             }
 
-//            if(searchCriteria.getEmployeeId()!=0){
-//        		predicates.add(builder.equal(root.get("employee").get("id"),  searchCriteria.getEmployeeId()));
-//        	}
+            if(searchCriteria.getEmployeeId()!=0){
+        		predicates.add(builder.equal(root.get("employee").get("id"),  searchCriteria.getEmployeeId()));
+        	}
 
-            
+
             if(searchCriteria.getCheckInDateTimeFrom() != null){
 	            	if(root.get("plannedStartTime") != null) {
 		            	//Date plannedDate = (Date)root.get("plannedStartTime");
 		            	Date checkInDate = searchCriteria.getCheckInDateTimeFrom();
-	
+
 		            	Calendar checkInDateFrom = Calendar.getInstance(TimeZone.getTimeZone("Asia/Kolkata"));
 		            	checkInDateFrom.setTime(checkInDate);
-	
+
 		            	checkInDateFrom.set(Calendar.HOUR_OF_DAY, 0);
 		            	checkInDateFrom.set(Calendar.MINUTE,0);
 		            	checkInDateFrom.set(Calendar.SECOND,0);
@@ -79,18 +79,18 @@ public class JobSpecification implements Specification<Job> {
 		            	//String fromDt = DateUtil.formatUTCToIST(checkInDateFrom);
 		            	Calendar checkInDateTo = Calendar.getInstance(TimeZone.getTimeZone("Asia/Kolkata"));
 		            	checkInDateTo.setTime(checkInDate);
-	
+
 		            	checkInDateTo.set(Calendar.HOUR_OF_DAY, 23);
 		            	checkInDateTo.set(Calendar.MINUTE,59);
 		            	checkInDateTo.set(Calendar.SECOND,0);
 		            	Date toDt = DateUtil.convertUTCToIST(checkInDateTo);
 		            	//String toDt = DateUtil.formatUTCToIST(checkInDateTo);
-	
+
 		            	log.debug("search Criteria - checkInDateTimeFrom - "+ fromDt + " , to Date -" + toDt);
 		        		predicates.add(builder.between(root.get("plannedStartTime"), fromDt,toDt));
 	            	}
 	        	}
-        	
+
     		query.orderBy(builder.desc(root.get("id")));
             //Predicate firstStage = builder.and(predicates.toArray(new Predicate[predicates.size()]));
             List<Predicate> orPredicates = new ArrayList<>();
