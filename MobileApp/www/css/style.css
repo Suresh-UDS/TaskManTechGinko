@@ -920,3 +920,15 @@ ion-spinner{
     top: 92px !important;
     left: 53px !important;
 }
+.abs-btn
+{
+    position: absolute !important;
+    font-size: 20px;
+    top: -3px !important;
+    right: 0px !important;
+    height: 20px !important;
+}
+.select-error
+{
+    border-bottom: 1px solid #f53d3d !important;
+}
