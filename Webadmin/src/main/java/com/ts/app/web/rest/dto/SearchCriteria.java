@@ -96,6 +96,8 @@ public class SearchCriteria extends Paginator {
 	private String columnName;
 	
 	private boolean sortByAsc;
+	
+	private String exportType;
 
 	public long getId() {
 		return id;
@@ -465,5 +467,13 @@ public class SearchCriteria extends Paginator {
 		this.sort = sort;
 	}
 
+	public String getExportType() {
+		return exportType;
+	}
 
+	public void setExportType(String exportType) {
+		this.exportType = exportType;
+	}
+
+	
 }
