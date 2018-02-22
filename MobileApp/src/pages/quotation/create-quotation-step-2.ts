@@ -133,7 +133,7 @@ export class CreateQuotationPage2 {
     }
 
     addRates(eve) {
-        let popover = this.popoverCtrl.create(QuotationPopoverPage);
+        let popover = this.popoverCtrl.create(QuotationPopoverPage,{},{enableBackdropDismiss: false });
         popover.present({
             ev:eve
         });
