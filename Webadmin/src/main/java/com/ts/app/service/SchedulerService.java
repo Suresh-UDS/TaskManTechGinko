@@ -266,7 +266,8 @@ public class SchedulerService extends AbstractService {
 		Calendar cal = Calendar.getInstance();
 		Setting overdueAlertSetting = settingRepository.findSettingByKey("email.notification.overdue");
 		String alertEmailIds = "";
-		if(overdueAlertSetting.getValue().equalsIgnoreCase("true")) {
+		if(overdueAlertSetting != null && StringUtils.isNotEmpty(overdueAlertSetting.getValue()) 
+				&& overdueAlertSetting.getValue().equalsIgnoreCase("true")) {
 			Setting overdueEmails = settingRepository.findSettingByKey("job.overdue.alert.emails");
 			alertEmailIds = overdueEmails.getValue();
 		}

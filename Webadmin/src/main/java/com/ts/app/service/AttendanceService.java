@@ -237,7 +237,7 @@ public class AttendanceService extends AbstractService {
             Long employeeId = searchCriteria.getEmployeeId();
             java.sql.Date startDate = new java.sql.Date(searchCriteria.getCheckInDateTimeFrom().getTime());
             java.sql.Date toDate = new java.sql.Date(searchCriteria.getCheckInDateTimeTo().getTime());
-            transactions = attendanceRepository.findByEmployeeIdAndSiteId(employeeId,startDate,toDate);
+            transactions = attendanceRepository.findBySiteIdEmpId(searchCriteria.getSiteId(), searchCriteria.getEmployeeEmpId());
         }
         return mapperUtil.toModelList(transactions, AttendanceDTO.class);
     }
