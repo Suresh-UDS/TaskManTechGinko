@@ -101,7 +101,9 @@ email:
 reports:
     job-report:
         url: http://localhost:8088/#/job-reports
-
+    attendance-report:
+        url: http://localhost:8088/#/attendance-reports
+        
 facedetection:
     api:
         url: https://api.kairos.com/detect

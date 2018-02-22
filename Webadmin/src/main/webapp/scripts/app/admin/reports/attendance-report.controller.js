@@ -364,22 +364,24 @@ angular.module('timeSheetApp')
 
         };
 
-        $scope.exportAllData = function(){
+        $scope.exportAllData = function(type){
+    			$scope.searchCriteria.exportType = type;
 
-        	AttendanceComponent.exportAllData($scope.searchCriteria).then(function(data){
-        		var result = data.results[0];
-        		console.log(result);
-        		console.log(result.file + ', ' + result.status + ',' + result.msg);
-        		var exportAllStatus = {
-        				fileName : result.file,
-        				exportMsg : 'Exporting All...'
-        		};
-        		$scope.exportStatusMap[0] = exportAllStatus;
-        		console.log('exportStatusMap size - ' + $scope.exportStatusMap.length);
-        		$scope.start();
-              },function(err){
-            	  console.log('error message for export all ')
-            	  console.log(err);
+    			AttendanceComponent.exportAllData($scope.searchCriteria).then(function(data){
+	        		var result = data.results[0];
+	        		console.log(result);
+	        		console.log(result.file + ', ' + result.status + ',' + result.msg);
+	        		var exportAllStatus = {
+	        				fileName : result.file,
+	        				exportMsg : 'Exporting All...',
+	        				url: result.url	
+	        		};
+	        		$scope.exportStatusMap[0] = exportAllStatus;
+	        		console.log('exportStatusMap size - ' + $scope.exportStatusMap.length);
+	        		$scope.start();
+	              },function(err){
+	            	  console.log('error message for export all ')
+	            	  console.log(err);
               });
         };
 
@@ -418,7 +420,11 @@ angular.module('timeSheetApp')
                 		exportStatusObj.exportMsg = data.msg;
                 		console.log('exportMsg - '+ exportStatusObj.exportMsg);
                 		if(exportStatusObj.exportStatus == 'COMPLETED'){
-                    		exportStatusObj.exportFile = data.file;
+                			if($rootScope.exportStatusObj.url) {
+                				$rootScope.exportStatusObj.exportFile = $rootScope.exportStatusObj.url;
+                			}else {
+	                			$rootScope.exportStatusObj.exportFile = data.file;
+                			}
                     		console.log('exportFile - '+ exportStatusObj.exportFile);
                     		$scope.stop();
                 		}else if(exportStatusObj.exportStatus == 'FAILED'){

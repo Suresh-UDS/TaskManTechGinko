@@ -19,10 +19,11 @@ import org.springframework.util.StringUtils;
 import com.ts.app.domain.AbstractAuditingEntity;
 import com.ts.app.domain.Attendance;
 import com.ts.app.domain.Employee;
+import com.ts.app.domain.EmployeeAttendanceReport;
 import com.ts.app.domain.Site;
 import com.ts.app.domain.User;
-import com.ts.app.domain.UserRoleEnum;
 import com.ts.app.domain.UserRole;
+import com.ts.app.domain.UserRoleEnum;
 import com.ts.app.ext.api.FaceRecognitionService;
 import com.ts.app.repository.AttendanceRepository;
 import com.ts.app.repository.EmployeeRepository;
@@ -31,6 +32,7 @@ import com.ts.app.repository.UserRepository;
 import com.ts.app.service.util.ExportUtil;
 import com.ts.app.service.util.FileUploadHelper;
 import com.ts.app.service.util.MapperUtil;
+import com.ts.app.service.util.ReportUtil;
 import com.ts.app.web.rest.dto.AttendanceDTO;
 import com.ts.app.web.rest.dto.BaseDTO;
 import com.ts.app.web.rest.dto.EmployeeDTO;
@@ -72,6 +74,9 @@ public class AttendanceService extends AbstractService {
 
     @Inject
     private UserRepository userRepository;
+    
+    @Inject
+    private ReportUtil reportUtil;
 
     public AttendanceDTO saveCheckOutAttendance(AttendanceDTO attnDto){
         Attendance attn = mapperUtil.toEntity(attnDto, Attendance.class);
@@ -398,6 +403,18 @@ public class AttendanceService extends AbstractService {
             return mapperUtil.toModelList(entities, AttendanceDTO.class);
         }
     }
+    
+	public ExportResult generateReport(List<AttendanceDTO> transactions, SearchCriteria criteria) {
+		List<EmployeeAttendanceReport> attendanceReportList = new ArrayList<EmployeeAttendanceReport>();
+		if(CollectionUtils.isNotEmpty(transactions)) {
+			for(AttendanceDTO attn : transactions) {
+				EmployeeAttendanceReport reportData = new EmployeeAttendanceReport(attn.getEmployeeEmpId(), attn.getEmployeeFullName(), null, attn.getSiteName(), null, attn.getCheckInTime(), attn.getCheckOutTime());
+				attendanceReportList.add(reportData);
+			}
+		}
+		return reportUtil.generateAttendanceReports(attendanceReportList, null, null, criteria);
+	}
+    
 
 	public ExportResult export(List<AttendanceDTO> transactions, String empId) {
 		return exportUtil.writeToCsvFile(transactions, empId, null);
