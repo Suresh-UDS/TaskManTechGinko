@@ -91,7 +91,7 @@ public class JobSpecification implements Specification<Job> {
 	            	}
 	        	}
         	
-    		query.orderBy(builder.desc(root.get("id")));
+    			query.orderBy(builder.desc(root.get("id")));
             //Predicate firstStage = builder.and(predicates.toArray(new Predicate[predicates.size()]));
             List<Predicate> orPredicates = new ArrayList<>();
             log.debug("JobSpecification toPredicate - searchCriteria userId -"+ searchCriteria.getUserId());
