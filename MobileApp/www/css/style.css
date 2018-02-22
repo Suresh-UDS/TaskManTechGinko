@@ -69,14 +69,29 @@
 {
   font-weight: 400;
 }
-.siteName
+p.siteName {
+    font-size: 12px !important;
+    color: #000 !important;
+    padding-top: 0 !important;
+    white-space: pre-line !important;
+    text-transform: capitalize;
+    line-height: 15px;
+    width:70px;
+}
+.scrollCon .label
 {
-  white-space: pre-line;
-  width: 70px;
-  line-height: 15px;
-  font-size: 12px;
-  text-transform: capitalize;
-  padding-top: 10px;
+   padding:0 !important;
+   margin:0 !important;
+   background: none !important;
+   text-transform: capitalize !important;
+}
+.EmplScroll .item
+{
+  background:none !important;
+}
+.EmpNameCon
+{
+  width: 65px;
 }
 button.siteBtn
 {
@@ -267,6 +282,36 @@ button.ion-circle-icons
    width: 74% !important;
    max-width: 74% !important;
 }
+
+/* ion scroll  */
+ion-scroll[scrollX] {
+    white-space: nowrap;
+    height: 65px;
+    overflow: hidden;
+
+    .scroll-item {
+      display: inline-block;
+    }
+
+    .selectable-icon{
+      margin: 10px 20px 10px 20px;
+      color: red;
+      font-size: 100px;
+    }
+
+    ion-avatar img{
+      margin: 10px;
+    }
+  }
+
+  ion-scroll[scroll-avatar]{
+    height: 60px;
+  }
+
+  /* Hide ion-content scrollbar */
+  ::-webkit-scrollbar{
+    display:none;
+  }
 
 
 button.pop-icon
@@ -462,7 +507,7 @@ table tr
   height: 40px;
   border-radius:50%;
   background-color: #000000;
-  margin: 0 auto;
+  margin: 0 auto !important;
 }
 .emp-round p
 {
@@ -853,12 +898,14 @@ ion-spinner{
 }
 .wrap-name
 {
-  font-size: 10px;
-  text-overflow: ellipsis;
-  overflow: hidden;
-  width: 50px;
-  margin: auto !important;
-  white-space: nowrap;
+  font-size: 10px !important;
+      text-overflow: ellipsis;
+      overflow: hidden;
+      width: 50px;
+      margin: auto !important;
+      white-space: nowrap;
+      color: #000 !important;
+      padding-top: 5px;
 }
 .quotation-popover .popover-content
 {

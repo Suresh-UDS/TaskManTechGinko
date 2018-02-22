@@ -95,17 +95,25 @@ Tip 2: you can also add an image using data-image tag
     </ion-row>
     -->
 
+
+
     <div class="SiteCon">
         <div text-center>
             <p class="margin0 titleTxt"><span class="margin-right15">Sites</span><span class="padding-left5" *ngIf="spinner"><ion-spinner name="bubbles"></ion-spinner></span></p>
         </div>
-        <div class="container-fluid container-scroll hariz-scroll-con">
-            <div class="row">
-                <button class="siteBtn" ion-button round  *ngFor="let site of sites;let i of index" (click)="activeSite(site.id,i)" [color]="selectSite && i==index ? 'primary' : 'light'">
-                    <p class="siteName">{{site.name}}</p>
-                </button>
-            </div>
+
+        <div class="scrollCon">
+            <ion-row>
+                <ion-item no-lines>
+                    <ion-scroll scrollX="true">
+                        <button class="siteBtn scroll-item" ion-button round  *ngFor="let site of sites;let i of index" (click)="activeSite(site.id,i)" [color]="selectSite && i==index ? 'primary' : 'light'">
+                            <p class="siteName">{{site.name}}</p>
+                        </button>
+                    </ion-scroll>
+                </ion-item>
+            </ion-row>
         </div>
+
     </div>
 
     <div class="EmpCon" style="padding-bottom:10px;">
@@ -113,32 +121,41 @@ Tip 2: you can also add an image using data-image tag
         <div text-center>
             <p class="margin0 titleTxt"><span class="margin-right15">Employees</span><span class="padding-left5" *ngIf="empSpinner"><ion-spinner name="bubbles"></ion-spinner></span></p>
         </div>
-        <div class="container-fluid container-scroll hariz-scroll-con">
-            <div *ngIf="empSelect">
-                <p text-center class="margin0 clr-orange">No Employee</p>
-            </div>
-            <div *ngIf="!selectSite">
-                <p text-center class="margin0 clr-orange">Please Select a Site</p>
-            </div>
-            <div class="row">
 
-            <span *ngFor="let emp of employee;let i of index" class="Nametxt" >
-                <!--<ion-avatar item-start *ngIf="emp.enrolled_face" class="emp-round width-round">-->
-                <!--<img  [src]="emp.enrolled_face" >-->
-                <!--</ion-avatar>-->
-                <!--<p *ngIf="!emp.enrolled_face && first(emp.name)"></p>-->
-
-                <p *ngIf="first(emp.name)"></p>
-                <div class="align-center">
-                    <ion-avatar item-start class="emp-round margin-auto" (click)="selectEmployee(emp,i)" [ngClass]="{'emp-round-active':empActive && i==empIndex}">
-                        <p class="margin-auto"> {{firstLetter}}</p>
-                    </ion-avatar>
-                    <div class="wrap-name">{{emp.name}}</div>
+            <div class="scrollCon EmplScroll">
+                <div *ngIf="empSelect">
+                    <p text-center class="margin0 clr-orange">No Employee</p>
                 </div>
-                <!--<p text-left>{{emp.name}}</p>-->
-            </span>
+                <div *ngIf="!selectSite">
+                    <p text-center class="margin0 clr-orange">Please Select a Site</p>
+                </div>
+                <ion-row>
+                    <ion-item no-lines>
+                        <ion-scroll scrollX="true">
+
+                             <span *ngFor="let emp of employee;let i of index" class="Nametxt scroll-item" >
+                <!--<ion-avatar item-start *ngIf="emp.enrolled_face" class="emp-round width-round">-->
+                                 <!--<img  [src]="emp.enrolled_face" >-->
+                                 <!--</ion-avatar>-->
+                                 <!--<p *ngIf="!emp.enrolled_face && first(emp.name)"></p>-->
+
+
+
+                            <p *ngIf="first(emp.name)"></p>
+                            <div class="align-center EmpNameCon">
+                                <ion-avatar item-start class="emp-round margin-auto" (click)="selectEmployee(emp,i)" [ngClass]="{'emp-round-active':empActive && i==empIndex}">
+                                    <p class="margin-auto"> {{firstLetter}}</p>
+                                </ion-avatar>
+                                <div class="wrap-name">{{emp.name}}</div>
+                            </div>
+                                             <!--<p text-left>{{emp.name}}</p>-->
+                        </span>
+
+                        </ion-scroll>
+                    </ion-item>
+                </ion-row>
             </div>
-        </div>
+
 
     </div>
 
