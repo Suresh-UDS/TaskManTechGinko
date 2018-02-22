@@ -167,6 +167,10 @@ container-scroll::-webkit-scrollbar-thumb
 {
   margin: auto;
 }
+.margin-top20
+{
+    margin-top:20px !important;
+}
 .margin-top25
 {
   margin-top:25%;
@@ -386,7 +390,7 @@ button.pop-icon
 }
 .clr-orange
 {
-  color: #ff9800;
+  color: #ff9800 !important;
 }
 .clr-black
 {

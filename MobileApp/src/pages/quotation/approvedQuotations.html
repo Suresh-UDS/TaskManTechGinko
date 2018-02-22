@@ -10,6 +10,13 @@
 <ion-content>
 
     <ion-list class="IonList">
+        <div *ngIf="quotations?.length==0" class="align-center margin-top20">
+            <ion-card>
+                <ion-card-content>
+                    <p class="clr-orange">No Data Found</p>
+                </ion-card-content>
+            </ion-card>
+        </div>
         <ion-item *ngFor="let quotation of quotations;let i of index" class="bottom-border emp" (click)="viewQuotation(quotation)">
             <ion-icon name="checkmark" class="orange-icon" item-start></ion-icon>
            {{quotation.title}}
