@@ -99,7 +99,7 @@ button.siteBtn
 .EmpCon
 {
   padding: 10px 0;
-  background: #ffa50024;
+  background: #ffa50024 !important;
 }
 .hariz-scroll-con
 {
@@ -827,4 +827,13 @@ ion-spinner{
 {
   margin-right: 0 !important;
   margin-left: 0 !important;
+}
+.wrap-name
+{
+  font-size: 10px;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  width: 50px;
+  margin: auto !important;
+  white-space: nowrap;
 }

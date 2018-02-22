@@ -13,22 +13,12 @@ export class JobService {
 
     }
 
-    getTodayJobs(): Observable<any>{
-        var search = {checkInDateTimeFrom:new Date()}
-        return this.http.post(this.config.Url+'api/jobs/search',search).map(
-            response=>{
-                console.log(response);
-                return response.json().transactions;
-            }
-        )
-    }
-
     getJobs(searchCriteria): Observable<any>{
         return this.http.post(this.config.Url+'api/jobs/search',searchCriteria).map(
             response=>{
                 console.log(response);
                 var allJobs = response.json();
-                return allJobs.transactions;
+                return allJobs;
             }
         )
     }
