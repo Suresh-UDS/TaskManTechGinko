@@ -15,13 +15,26 @@ export class AttendancePage {
 
   empID:any;
   attendances:any;
+  searchCriteria:any;
+
+    page:1;
+    totalPages:0;
+    pageSort:15;
 
   constructor(public navCtrl: NavController,public myService:authService,public attendanceService:AttendanceService,public popoverCtrl: PopoverController, public component: componentService) {
         this.component.showLoader('');
-        this.attendanceService.getAllAttendances().subscribe(response=>{
+        this.searchCriteria ={
+            // checkInDateTimeFrom: new Date(),
+            currPage:this.page,
+            pageSort: this.pageSort
+        }
+
+        this.attendanceService.searchAttendances(this.searchCriteria).subscribe(response=>{
             console.log("All attendances");
             console.log(response);
-            this.attendances = response;
+            this.attendances = response.transactions;
+            this.page = response.currPage;
+            this.totalPages = response.totalPages;
             this.component.closeLoader();
         })
   }
@@ -64,6 +77,47 @@ export class AttendancePage {
         popover.present({
 
         });
+    }
+
+    doInfinite(infiniteScroll){
+        console.log('Begin async operation');
+        console.log(infiniteScroll);
+        console.log(this.totalPages);
+        console.log(this.page);
+        var searchCriteria ={
+            currPage:this.page+1
+        };
+        if(this.page>this.totalPages){
+            console.log("End of all pages");
+            infiniteScroll.complete();
+            this.component.showToastMessage('All Attendances Loaded', 'bottom');
+
+        }else{
+            console.log("Getting pages");
+            console.log(this.totalPages);
+            console.log(this.page);
+            setTimeout(()=>{
+                this.attendanceService.searchAttendances(searchCriteria).subscribe(
+                    response=>{
+                        console.log('ionViewDidLoad Employee list:');
+                        console.log(response);
+                        console.log(response.transactions);
+                        for(var i=0;i<response.transactions.length;i++){
+                            this.attendances.push(response.transactions[i]);
+                        }
+                        this.page = response.currPage;
+                        this.totalPages = response.totalPages;
+                        this.component.closeLoader();
+                    },
+                    error=>{
+                        console.log('error in attendance Page:'+error);
+                    }
+                )
+                infiniteScroll.complete();
+            },1000);
+        }
+
+
     }
 
 
