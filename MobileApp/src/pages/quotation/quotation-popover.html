@@ -1,11 +1,25 @@
 <ion-content >
     <ion-list >
-        <ion-row class="margin0 white-bg padding10">
+        <ion-row class="margin0 white-bg">
+            <ion-col col-12 >
+                <div>
+                    <button ion-button clear (click)="close()" class="abs-btn">
+                        <ion-icon name="close" class="clr-red"></ion-icon>
+                    </button>
+                </div>
+            </ion-col>
             <ion-col col-12>
                 <div class="form-group">
-                        <ion-select style="color: black" interface="action-sheet" [(ngModel)]="type" class="select-box" placeholder="Choose Type">
+                        <ion-select style="color: black" interface="action-sheet" [(ngModel)]="type" class="select-box" placeholder="Choose Type" id="type" name="type" #ctype="ngModel" required [ngClass]="{'select-error': eMsg=='type'}">
                             <ion-option style="color: black" *ngFor="let type of rateCardTypes" [value]="type.name" (ionSelect)="selectUOMType(type)" >{{type.name}}</ion-option>
                         </ion-select>
+                    <div *ngIf="ctype.errors && (ctype.dirty || ctype.touched)" class="error-msg">
+
+                    </div>
+
+                    <div *ngIf="ctype.errors && (ctype.untouched )" class="error-msg">
+
+                    </div>
                 </div>
             </ion-col>
 
