@@ -41,6 +41,7 @@ export class DashboardPage {
     empActive=false;
     count=0;
     overdueCount:any;
+    upcomingCount:any;
     completeCount:any;
   constructor(public renderer: Renderer,public myService:authService,private loadingCtrl:LoadingController,public navCtrl: NavController,public component:componentService,public authService:authService,public modalCtrl: ModalController,
               private datePickerProvider: DatePickerProvider, private siteService:SiteService, private employeeService: EmployeeService, private jobService:JobService) {
@@ -127,16 +128,32 @@ export class DashboardPage {
               this.component.closeLoader();
 
               this.overdueCount=this.allJobs.filter((data,i)=>{
-                  return data.status=='OVERDUE';
+                  if(data.status=='OVERDUE')
+                  {
+                      return data;
+                  }
+
               }).length
 
               console.log("Count------:"+this.overdueCount);
 
               this.completeCount=this.allJobs.filter((data,i)=>{
-                  return data.status=='COMPLETED';
+                  if(data.status=='COMPLETED')
+                  {
+                      return data;
+                  }
               }).length
 
               console.log("Count------:"+this.completeCount);
+
+              this.upcomingCount=this.allJobs.filter((data,i)=>{
+                  if(data.status=='OPEN' || 'ASSIGNED' || 'INPROGRESS')
+                  {
+                      return data;
+                  }
+              }).length
+
+              console.log("Count------:"+this.upcomingCount);
 
 
           },err=>{
