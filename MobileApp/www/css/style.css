@@ -860,3 +860,8 @@ ion-spinner{
   margin: auto !important;
   white-space: nowrap;
 }
+.quotation-popover .popover-content
+{
+    top: 92px !important;
+    left: 53px !important;
+}
