@@ -55,8 +55,12 @@ if (project.hasProperty('prod')) {
     apply from: 'profile_prod.gradle'
 } else if (project.hasProperty('fast')) {
     apply from: 'profile_fast.gradle'
-} else {
+} else if (project.hasProperty('it')) {
+  apply from: 'profile_it.gradle'
+} else if (project.hasProperty('dev')) {
   apply from: 'profile_dev.gradle'
+} else {
+  apply from: 'profile_dev-local.gradle'
 }
 
 group = 'com.ts.app'

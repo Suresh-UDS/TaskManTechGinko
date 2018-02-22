@@ -5,7 +5,7 @@ angular.module('timeSheetApp')
         $stateProvider
         .state('jobReports', {
                 parent: 'manage',
-                url: '/job-reports',
+                url: '/job-reports/:uid',
                 controller: 'JobReportController',
                 data: {
                     authorities: [],

@@ -98,6 +98,10 @@ email:
         report:
             title: Completed job report                        
 
+reports:
+    job-report:
+        url: http://localhost:8088/#/job-reports
+
 facedetection:
     api:
         url: https://api.kairos.com/detect

@@ -97,7 +97,10 @@ email:
     compleed:
         report:
             title: Completed job report                        
-
+reports:
+    job-report:
+        url: http://ec2-54-169-225-123.ap-southeast-1.compute.amazonaws.com:8088/#/job-reports
+        
 facedetection:
     api:
         url: https://api.kairos.com/detect

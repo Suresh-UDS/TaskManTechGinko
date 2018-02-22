@@ -55,6 +55,7 @@ import com.ts.app.service.util.ImportUtil;
 import com.ts.app.service.util.MapperUtil;
 import com.ts.app.service.util.PagingUtil;
 import com.ts.app.service.util.QRCodeUtil;
+import com.ts.app.service.util.ReportUtil;
 import com.ts.app.web.rest.dto.AssetDTO;
 import com.ts.app.web.rest.dto.BaseDTO;
 import com.ts.app.web.rest.dto.EmployeeDTO;
@@ -124,6 +125,9 @@ public class JobManagementService extends AbstractService {
     
     @Inject
     private ImportUtil importUtil;
+    
+    @Inject
+    private ReportUtil reportUtil;
 
     @Inject
     private PricingRepository priceRepository;
@@ -1259,8 +1263,9 @@ public class JobManagementService extends AbstractService {
     }
 
 
-	public ExportResult export(List<JobDTO> transactions) {
-		return exportUtil.writeJobReportToFile(transactions, null, null);
+	public ExportResult generateReport(List<JobDTO> transactions, SearchCriteria criteria) {
+		//return exportUtil.writeJobReportToFile(transactions, null, null);
+		return reportUtil.generateJobReports(transactions, null, null, criteria);
 	}
 
 

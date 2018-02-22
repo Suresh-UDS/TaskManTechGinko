@@ -255,6 +255,7 @@ angular.module('timeSheetApp')
         };
 
         $scope.search = function () {
+        	var reportUid = $stateParams.uid;
         	var currPageVal = ($scope.pages ? $scope.pages.currPage : 1);
         		var searchCriteria = {
             			currPage : currPageVal
@@ -297,7 +298,8 @@ angular.module('timeSheetApp')
         	$scope.searchCriteria.checkInDateTimeTo = $scope.toDate;
 
         	console.log($scope.searchCriteria);
-        	JobComponent.search($scope.searchCriteria).then(function (data) {
+        	console.log('uid - ' + reportUid);
+        	JobComponent.search($scope.searchCriteria, reportUid).then(function (data) {
         		$scope.jobs = data.transactions
         		console.log('job search result - ' + $scope.jobs);
         		$scope.pages.currPage = data.currPage;
@@ -410,15 +412,16 @@ angular.module('timeSheetApp')
 	    $rootScope.exportStatusObj = {};
 
         
-        $scope.exportAllData = function(){
-
+        $scope.exportAllData = function(type){
+        		$scope.searchCriteria.exportType = type;
 	        	JobComponent.exportAllData($scope.searchCriteria).then(function(data){
 	        		var result = data.results[0];
 	        		console.log(result);
 	        		console.log(result.file + ', ' + result.status + ',' + result.msg);
 	        		var exportAllStatus = {
 	        				fileName : result.file,
-	        				exportMsg : 'Exporting All...'
+	        				exportMsg : 'Exporting All...',
+	        				url: result.url	
 	        		};
 	        		$rootScope.exportStatusObj = exportAllStatus;
 	        		console.log('exportStatusObj size - ' + $rootScope.exportStatusObj.length);
@@ -452,14 +455,19 @@ angular.module('timeSheetApp')
 	    $scope.exportStatus = function() {
 	        	console.log('$rootScope.exportStatusObj -'+$rootScope.exportStatusObj);
 	        		
-	            	EmployeeComponent.exportStatus($rootScope.exportStatusObj.fileName).then(function(data) {
+	            	JobComponent.exportStatus($rootScope.exportStatusObj.fileName).then(function(data) {
+	            		console.log('job export status - data -' + JSON.stringify(data));
 	            		if(data) {
 	            			$rootScope.exportStatusObj.exportStatus = data.status;
-	                		console.log('exportStatus - '+ $rootScope.exportStatusObj);
+	                		console.log('exportStatus - '+ JSON.stringify($rootScope.exportStatusObj));
 	                		$rootScope.exportStatusObj.exportMsg = data.msg;
 	                		console.log('exportMsg - '+ $rootScope.exportStatusObj.exportMsg);
 	                		if($rootScope.exportStatusObj.exportStatus == 'COMPLETED'){
-	                			$rootScope.exportStatusObj.exportFile = data.file;
+	                			if($rootScope.exportStatusObj.url) {
+	                				$rootScope.exportStatusObj.exportFile = $rootScope.exportStatusObj.url;
+	                			}else {
+		                			$rootScope.exportStatusObj.exportFile = data.file;
+	                			}
 	                    		console.log('exportFile - '+ $rootScope.exportStatusObj.exportFile);
 	                    		$scope.stop();
 	                		}else if($rootScope.exportStatusObj.exportStatus == 'FAILED'){
