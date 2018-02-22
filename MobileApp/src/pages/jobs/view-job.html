@@ -41,7 +41,7 @@
         <ion-col col-6><p text-right><ion-icon ios="ios-calendar" md="md-calendar" class="red padding-right10"></ion-icon>{{jobDetails.plannedEndTime | date:'MMM d, y, h:mm a'}}</p></ion-col>
     </ion-row>
 
-    <ion-row class="white-bg padding10" *ngIf="jobDetails.status == 'COMPLETED' ">
+    <ion-row class="white-bg margin0 padding10" *ngIf="jobDetails.status == 'COMPLETED' ">
         <ion-col col-6 class="label-on-left">Actual Start Time</ion-col>
         <ion-col col-6><p text-right><ion-icon ios="ios-calendar" md="md-calendar" class="green padding-right10"></ion-icon>{{jobDetails.actualStartTime | date:'MMM d, y, h:mm a'}}</p></ion-col>
         <ion-col col-6 class="label-on-left">Actual End Time</ion-col>
