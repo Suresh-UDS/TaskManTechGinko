@@ -84,6 +84,7 @@ button.siteBtn
   border-radius: 5px !important;
   padding: 5px 10px !important;
   margin: 0 8px;
+  border-top: 3px solid #FFC107;
 }
 .sidebar .nav li.active>a, .sidebar .nav li.active>a i
 {
@@ -99,7 +100,7 @@ button.siteBtn
 .EmpCon
 {
   padding: 10px 0;
-  background: #ffa50024 !important;
+  background:rgba(255, 165, 0, 0.25) !important;
 }
 .hariz-scroll-con
 {
