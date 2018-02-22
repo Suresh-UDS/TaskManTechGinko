@@ -205,4 +205,17 @@ export class EmployeeListPage {
             menu.setElementStyle("display", "block")
         }
     }
+
+    markLeft(emp){
+        console.log("Mark employee left");
+        this.component.showToastMessage('Employee Mark left is in beta, please try again later','bottom');
+    }
+    transferEmployee(emp){
+        console.log("Transfer employee ");
+        this.component.showToastMessage('Transfer employee is in beta, please try again later','bottom');
+    }
+    relieveEmployee(emp){
+        console.log("Relieve Employee");
+        this.component.showToastMessage('Relieve employee is in beta, please try again later','bottom');
+    }
 }

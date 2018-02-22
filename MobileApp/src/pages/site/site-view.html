@@ -147,21 +147,25 @@
 
           <ion-item-options (click)="close(slidingItem)">
             <div>
-              <button ion-button clear color="primary"><ion-icon name="md-eye" class="fnt-24"></ion-icon></button>
+              <button ion-button clear color="primary"><ion-icon name="md-eye" class="fnt-24" (click)="viewJob(job)"></ion-icon></button>
             </div>
-            <div>
-              <button ion-button clear color="clr-blue"><ion-icon name="md-create" class="fnt-24"></ion-icon></button>
-            </div>
+            <!--<div>-->
+              <!--<button ion-button clear color="clr-blue"><ion-icon name="md-create" class="fnt-24"></ion-icon></button>-->
+            <!--</div>-->
             <div>
               <button ion-button clear color="secondary" *ngIf="job.status !='COMPLETED'" (click)="compeleteJob(job)"><ion-icon name="md-checkmark-circle" class="fnt-24"></ion-icon></button>
             </div>
-            <div>
-              <button ion-button clear color="danger"><ion-icon name="md-close-circle" class="fnt-24"></ion-icon></button>
-            </div>
+            <!--<div>-->
+              <!--<button ion-button clear color="danger"><ion-icon name="md-close-circle" class="fnt-24"></ion-icon></button>-->
+            <!--</div>-->
           </ion-item-options>
         </ion-item-sliding>
 
+
       </div>
+      <ion-infinite-scroll *ngIf="jobPage<jobsTotalPages"  (ionInfinite)="doJobInfinite($event)">
+        <ion-infinite-scroll-content></ion-infinite-scroll-content>
+      </ion-infinite-scroll>
 
     </ion-list>
     <ion-list *ngSwitchCase="'quotation'">

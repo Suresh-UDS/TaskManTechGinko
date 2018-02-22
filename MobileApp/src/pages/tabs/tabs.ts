@@ -26,10 +26,11 @@ export class TabsPage {
     this.CustomerDetailTab=CustomerDetailPage;
     this.EmployeeListTab=EmployeeListPage;
 
-    this.events.subscribe('userType',(type)=>{
-      console.log(type);
-      this.userType = type;
-    })
+    // this.events.subscribe('userType',(type)=>{
+    //   console.log(type);
+    //   this.userType = type;
+    // })
+      this.userType = window.localStorage.getItem('userRole');
   }
   ionViewDidLoad() {
     console.log('ionViewDidLoad TabsPage');
