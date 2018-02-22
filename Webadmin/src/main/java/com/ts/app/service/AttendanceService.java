@@ -237,8 +237,6 @@ public class AttendanceService extends AbstractService {
             endCal.set(Calendar.SECOND, 0);
             searchCriteria.setCheckInDateTimeFrom(startCal.getTime());
             searchCriteria.setCheckInDateTimeTo(endCal.getTime());
-            searchCriteria.setCheckInDateTimeFrom(startCal.getTime());
-            searchCriteria.setCheckInDateTimeTo(endCal.getTime());
             Long employeeId = searchCriteria.getEmployeeId();
             java.sql.Date startDate = new java.sql.Date(searchCriteria.getCheckInDateTimeFrom().getTime());
             java.sql.Date toDate = new java.sql.Date(searchCriteria.getCheckInDateTimeTo().getTime());
