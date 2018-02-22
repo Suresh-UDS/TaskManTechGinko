@@ -294,7 +294,7 @@ ion-scroll[scrollX] {
     overflow: hidden;
 
     .scroll-item {
-      display: inline-block;
+      display: inline-block !important;
     }
 
     .selectable-icon{
@@ -308,6 +308,8 @@ ion-scroll[scrollX] {
     }
   }
 
+
+
   ion-scroll[scroll-avatar]{
     height: 60px;
   }
@@ -317,7 +319,9 @@ ion-scroll[scrollX] {
     display:none;
   }
 
-
+ .scrollCon .scroll-item {
+        display: inline-block !important;
+      }
 button.pop-icon
 {
       border: 1px solid #FFC107 !important;
