@@ -8,9 +8,10 @@
 </ion-header>
 
 <ion-content>
-    <ion-list>
+    <ion-list class="IonList">
         <ion-item *ngFor="let quotation of quotations;let i of index" class="bottom-border emp" (click)="viewQuotation(quotation)">
-            <p text-left>{{quotation.title}}</p>
+            <ion-icon name="md-archive" class="orange-icon" item-start></ion-icon>
+            {{quotation.title}}
         </ion-item>
     </ion-list>
 

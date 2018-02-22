@@ -102,6 +102,9 @@ button.siteBtn
   padding: 10px 0;
   background:rgba(255, 165, 0, 0.25) !important;
 }
+
+
+
 .hariz-scroll-con
 {
     padding:3px 15px;
@@ -205,6 +208,25 @@ button.ion-circle-icons
 .IonList p
 {
   margin:0;
+}
+.IonList  .item
+{
+  padding-left: 10px !important;
+}
+.IonList .item-inner
+{
+   margin-left:0 !important;
+}
+.IonList  .item-icon
+{
+  margin-right: 0 !important;
+  font-size: 20px;
+  line-height: 25px;
+}
+.IonList .label
+{
+    color: #000 !important;
+    text-align: left !important;
 }
 .ver-center
 {
