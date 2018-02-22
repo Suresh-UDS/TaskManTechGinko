@@ -118,6 +118,7 @@ public class AttendanceResource {
     @RequestMapping(value = "/attendance/search",method = RequestMethod.POST)
     public SearchResult<AttendanceDTO> searchAttendance(@RequestBody SearchCriteria searchCriteria) {
         SearchResult<AttendanceDTO> result = null;
+        log.debug("Search Attendance- "+searchCriteria.getCheckInDateTimeFrom());
         if(searchCriteria != null) {
         	searchCriteria.setUserId(SecurityUtils.getCurrentUserId());
             result = attendanceService.findBySearchCrieria(searchCriteria);
