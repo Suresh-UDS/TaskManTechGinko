@@ -11,10 +11,10 @@
       <!--</ion-buttons>-->
   </ion-navbar>
         <ion-segment [(ngModel)]="categories" class="segmnt margin-auto" color="#ff9800">
-            <ion-segment-button value="today" (click)="getTodaysJobs(false)">
+            <ion-segment-button value="today" (click)="loadTodaysJobs()">
                 Today's Jobs
             </ion-segment-button>
-            <ion-segment-button value="jobs" (click)="getAllJobs(false)">
+            <ion-segment-button value="jobs" (click)="loadAllJobs()">
                 All Jobs
             </ion-segment-button>
 
@@ -105,7 +105,7 @@
 
                     <ion-item-options (click)="close(slidingItem)">
                         <div>
-                            <button ion-button clear color="primary"><ion-icon name="md-eye" class="fnt-24"></ion-icon></button>
+                            <button ion-button clear color="primary"><ion-icon name="md-eye" (click)="viewJob(job)" class="fnt-24"></ion-icon></button>
                         </div>
                         <!--<div *ngIf="userType === 'ADMIN' || userType === 'TECHNICIAN' || userType === 'FACILITYMANAGER' || userType === 'SUPERVISOR'">-->
                             <!--<button ion-button clear color="clr-blue"><ion-icon name="md-create" class="fnt-24"></ion-icon></button>-->
@@ -121,50 +121,12 @@
 
             </div>
 
-
-
-            <!--
-                <div class="card" *ngFor="let job of todaysJobs" [ngClass]="{'red-card' : (job.status == 'OVERDUE'),
-                                                          'green-card' : (job.status == 'COMPLETED'),
-                                                          'blue-card' :(job.status =='OPEN' || job.status == 'ASSIGNED' || job.status == 'INPROGRESS')}">
-
-                    <div class="card-content padding-bottom0" >
-                        <ion-row class="margin0">
-                            <ion-col col-12 class="padding-right0">
-                                <button ion-button icon-left icon-only clear class="pop-icon" (click)="presentActionSheet(job)">
-                                    <ion-icon name="ios-more" class="fnt-12 padding0"></ion-icon>
-                                </button>
-                            </ion-col>
-                        </ion-row>
-                        <ion-row class="margin0">
-                            <ion-col col-7 class="padding-left0"><p text-left>{{job.title}}</p></ion-col>
-                            <ion-col col-5 class="padding-right0">
-                                <p text-right [ngClass]="{'red' : (job.status == 'OVERDUE'),
-                                                          'green' : (job.status == 'COMPLETED'),
-                                                          'blue' :(job.status =='OPEN' || job.status == 'ASSIGNED' || job.status == 'INPROGRESS')}" >
-                                    {{job.status}}
-                                </p>
-                            </ion-col>
-                        </ion-row>
-                        <p>{{job.employeeName}}</p>
-                        <p>{{job.siteProjectName}} - {{job.siteName}}</p>
-                    </div>
-
-
-                    <div class="card-footer">
-                        <div *ngIf="job.status !='COMPLETED'">
-                            <p>{{job.plannedStartTime | date:'dd/MM/yyyy @ H:mm' }} - {{job.plannedEndTime | date:'dd/MM/yyyy @ H:mm' }} </p>
-                        </div>
-                        <div *ngIf="job.status =='COMPLETED'">
-                            <p>{{job.actualStartTime | date:'dd/MM/yyyy @ H:mm' }} - {{job.actualEndTime | date:'dd/MM/yyyy @ H:mm' }} </p>
-                        </div>
-                        <div class="stats align-right">
-                            <!--<p class="display-inline">view</p><ion-icon class="primary-clr padding-left5 fnt-12" name="arrow-forward"></ion-icon>-->
-                        <!--</div>-->
-                    <!--</div>-->
-                <!--</div>-->
-
         </ion-list>
+
+        <ion-infinite-scroll *ngIf="todaysPage<todaysTotalPages"  (ionInfinite)="doInfiniteTodaysJobs($event)">
+            <ion-infinite-scroll-content></ion-infinite-scroll-content>
+        </ion-infinite-scroll>
+
         <ion-list *ngSwitchCase="'jobs'">
 
             <ion-refresher (ionRefresh)="doRefresh($event,all)">
@@ -235,7 +197,7 @@
 
                 <ion-item-options (click)="close(slidingItem)">
                     <div>
-                        <button ion-button clear color="primary"><ion-icon name="md-eye" class="fnt-24"></ion-icon></button>
+                        <button ion-button clear color="primary" (click)="viewJob(job)"><ion-icon name="md-eye" class="fnt-24"></ion-icon></button>
                     </div>
                     <!--<div>-->
                         <!--<button ion-button clear color="clr-blue"><ion-icon name="md-create" class="fnt-24"></ion-icon></button>-->
@@ -243,56 +205,18 @@
                     <div>
                         <button ion-button clear color="secondary" *ngIf="job.status !='COMPLETED'" (click)="compeleteJob(job)"><ion-icon name="md-checkmark-circle" class="fnt-24"></ion-icon></button>
                     </div>
-                    <div>
-                        <button ion-button clear color="danger"><ion-icon name="md-close-circle" class="fnt-24"></ion-icon></button>
-                    </div>
+                    <!--<div>-->
+                        <!--<button ion-button clear color="danger"><ion-icon name="md-close-circle" class="fnt-24"></ion-icon></button>-->
+                    <!--</div>-->
                 </ion-item-options>
             </ion-item-sliding>
 
         </div>
-
-            <!--
-            <div class="card" *ngFor="let job of allJobs" [ngClass]="{'red-card' : (job.status == 'OVERDUE'),
-                                                          'green-card' : (job.status == 'COMPLETED'),
-                                                          'blue-card' :(job.status =='OPEN' || job.status == 'ASSIGNED' || job.status == 'INPROGRESS')}">
-
-                    <div class="card-content padding-bottom0" >
-                        <ion-row class="margin0">
-                            <ion-col col-12 class="padding-right0">
-                                <button ion-button icon-left icon-only clear class="pop-icon" (click)="presentActionSheet(job)">
-                                    <ion-icon name="ios-more" class="fnt-12 padding0"></ion-icon>
-                                </button>
-                            </ion-col>
-                        </ion-row>
-                        <ion-row class="margin0">
-                            <ion-col col-7 class="padding-left0"><p text-left>{{job.title}}</p></ion-col>
-                            <ion-col col-5 class="padding-right0">
-                                <p text-right [ngClass]="{'red' : (job.status == 'OVERDUE'),
-                                                          'green' : (job.status == 'COMPLETED'),
-                                                          'blue' :(job.status =='OPEN' || job.status == 'ASSIGNED' || job.status == 'INPROGRESS')}" >
-                                    {{job.status}}
-                                </p>
-                            </ion-col>
-                        </ion-row>
-                        <p>{{job.employeeName}}</p>
-                        <p>{{job.siteProjectName}} - {{job.siteName}}</p>
-                    </div>
-
-                    <div class="card-footer">
-                        <div *ngIf="job.status !='COMPLETED'">
-                            <p>{{job.plannedStartTime | date:'dd/MM/yyyy @ H:mm' }} - {{job.plannedEndTime | date:'dd/MM/yyyy @ H:mm' }} </p>
-                        </div>
-                        <div *ngIf="job.status =='COMPLETED'">
-                            <p>{{job.actualStartTime | date:'dd/MM/yyyy @ H:mm' }} - {{job.actualEndTime | date:'dd/MM/yyyy @ H:mm' }} </p>
-                        </div>
-                        <div class="stats align-right">
-                            <!--<p class="display-inline">view</p><ion-icon class="primary-clr padding-left5 fnt-12" name="arrow-forward"></ion-icon>-->
-                        <!--</div>-->
-                    <!--</div>-->
-                <!--</div>-->
-
-
         </ion-list>
+
+        <ion-infinite-scroll *ngIf="page<totalPages"  (ionInfinite)="doInfiniteAllJobs($event)">
+            <ion-infinite-scroll-content></ion-infinite-scroll-content>
+        </ion-infinite-scroll>
 
     </div>
 

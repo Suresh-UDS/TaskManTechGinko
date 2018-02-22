@@ -1,5 +1,6 @@
 package com.ts.app.web.rest;
 
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -14,6 +15,7 @@ import com.ts.app.repository.UserRepository;
 import com.ts.app.service.JobManagementService;
 import com.ts.app.service.MailService;
 import com.ts.app.service.NotificationService;
+import com.ts.app.service.util.ImportUtil;
 import com.ts.app.service.UserService;
 import com.ts.app.service.util.QRCodeUtil;
 import com.ts.app.web.rest.dto.*;
@@ -62,6 +64,9 @@ public class EmployeeResource {
 
     @Inject
     private NotificationService notificationService;
+	
+	@Inject
+	private ImportUtil importUtil;
     
     @Inject
     private UserService userService;
@@ -376,6 +381,36 @@ public class EmployeeResource {
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
+    @RequestMapping(path="/employee/import", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<ImportResult> importJobData(@RequestParam("employeeFile") MultipartFile file){
+    	log.info("Employee Import Status********************");
+		Calendar cal = Calendar.getInstance();
+		ImportResult result = importUtil.importEmployeeData(file, cal.getTimeInMillis());
+		return new ResponseEntity<ImportResult>(result,HttpStatus.OK);
+	}
+	
+    @RequestMapping(value = "/employee/import/{fileId}/status",method = RequestMethod.GET)
+	public ImportResult importStatus(@PathVariable("fileId") String fileId) {
+		log.debug("ImportStatus -  fileId -"+ fileId);
+		ImportResult result = jobService.getImportStatus(fileId);
+		if(result!=null && result.getStatus() != null) {
+			switch(result.getStatus()) {
+				case "PROCESSING" :
+					result.setMsg("Importing data...");
+					break;
+				case "COMPLETED" :
+					result.setMsg("Completed importing");
+					break;
+				case "FAILED" :
+					result.setMsg("Failed to import. Please try again");
+					break;
+				default :
+					result.setMsg("Completed importing");
+					break;
+			}
+		}
+		return result;
+	}
 
 
 }

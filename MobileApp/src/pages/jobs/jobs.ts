@@ -25,8 +25,16 @@ export class JobsPage {
     count=0;
     userType:any;
 
+    page:1;
+    totalPages:0;
+    todaysPage:1;
+    todaysTotalPages:0;
+    pageSort:15;
+
     constructor(public navCtrl: NavController,public component:componentService, public authService: authService,
                     private loadingCtrl:LoadingController, private actionSheetCtrl: ActionSheetController, private jobService: JobService, public events:Events) {
+        this.allJobs = [];
+        this.todaysJobs =[];
         this.categories = 'today';
         this.loadTodaysJobs();
 
@@ -35,6 +43,7 @@ export class JobsPage {
             console.log(type);
             this.userType = type;
         });
+
     }
 
     ionViewDidLoad() {
@@ -96,16 +105,17 @@ export class JobsPage {
         }
     }
 
-
-
-
-
     loadTodaysJobs(){
+        var searchCriteria = {
+            checkInDateTimeFrom:new Date()
+        }
         this.component.showLoader('Getting Today\'s Jobs');
-        this.jobService.getTodayJobs().subscribe(response=>{
+        this.jobService.getJobs(searchCriteria).subscribe(response=>{
             console.log("Todays jobs of current user");
             console.log(response);
-            this.todaysJobs = response;
+            this.todaysJobs = response.transactions;
+                this.todaysPage= response.currPage;
+                this.todaysTotalPages = response.totalPages;
             this.component.closeLoader();
         },err=>{
             this.component.closeLoader();
@@ -120,7 +130,9 @@ export class JobsPage {
         this.jobService.getJobs(search).subscribe(response=>{
             console.log("All jobs of current user");
             console.log(response);
-            this.allJobs = response;
+            this.allJobs = response.transactions;
+                this.page = response.currPage;
+                this.totalPages = response.totalPages;
             this.component.closeLoader();
         },
             err=>{
@@ -210,5 +222,88 @@ export class JobsPage {
         });
 
         actionSheet.present();
+    }
+
+    doInfiniteAllJobs(infiniteScroll){
+        console.log('Begin async operation');
+        console.log(infiniteScroll);
+        console.log(this.totalPages);
+        console.log(this.page);
+        var searchCriteria ={
+            currPage:this.page+1
+
+        };
+        if(this.page>this.totalPages){
+            console.log("End of all pages");
+            infiniteScroll.complete();
+            this.component.showToastMessage('Todays jobs Loaded', 'bottom');
+
+        }else{
+            console.log("Getting pages");
+            console.log(this.totalPages);
+            console.log(this.page);
+            setTimeout(()=>{
+                this.jobService.getJobs(searchCriteria).subscribe(
+                    response=>{
+                        console.log('ionViewDidLoad jobs list:');
+                        console.log(response);
+                        console.log(response.transactions);
+                        for(var i=0;i<response.transactions.length;i++){
+                            this.allJobs.push(response.transactions[i]);
+                        }
+                        this.page = response.currPage;
+                        this.totalPages = response.totalPages;
+                        this.component.closeLoader();
+                    },
+                    error=>{
+                        console.log('ionViewDidLoad Jobs Page:'+error);
+                    }
+                )
+                infiniteScroll.complete();
+            },1000);
+        }
+
+    }
+
+    doInfiniteTodaysJobs(infiniteScroll){
+        console.log('Begin async operation');
+        console.log(infiniteScroll);
+        console.log(this.todaysTotalPages);
+        console.log(this.todaysPage);
+        var searchCriteria ={
+            checkInDateTimeFrom:new Date(),
+            currPage:this.todaysPage+1
+        };
+        if(this.todaysPage>this.todaysTotalPages){
+            console.log("End of all pages");
+            infiniteScroll.complete();
+            this.component.showToastMessage('All Jobs Loaded', 'bottom');
+
+        }else{
+            console.log("Getting pages");
+            console.log(this.todaysTotalPages);
+            console.log(this.todaysPage);
+            setTimeout(()=>{
+                this.jobService.getJobs(searchCriteria).subscribe(
+                    response=>{
+                        console.log('ionViewDidLoad jobs list:');
+                        console.log(response);
+                        console.log(response.transactions);
+                        for(var i=0;i<response.transactions.length;i++){
+                            this.todaysJobs.push(response.transactions[i]);
+                        }
+                        this.todaysPage = response.currPage;
+                        this.todaysTotalPages = response.totalPages;
+                        this.component.closeLoader();
+                    },
+                    error=>{
+                        console.log('ionViewDidLoad Jobs Page:'+error);
+                    }
+                );
+                infiniteScroll.complete();
+            },1000);
+        }
+
+
     }
 }

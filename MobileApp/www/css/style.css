@@ -83,6 +83,7 @@ button.siteBtn
   height: 60px !important;
   border-radius: 5px !important;
   padding: 5px 10px !important;
+  margin: 0 8px;
 }
 .sidebar .nav li.active>a, .sidebar .nav li.active>a i
 {
@@ -92,10 +93,13 @@ button.siteBtn
 {
   background: #fff;
   padding: 10px 0;
+      /* min-height: 120px; */
+      box-shadow: 0 1px 1px 1px #CCD;
 }
 .EmpCon
 {
   padding: 10px 0;
+  background: #ffa50024;
 }
 .hariz-scroll-con
 {
@@ -196,6 +200,10 @@ button.ion-circle-icons
 .margin0
 {
   margin: 0 !important;
+}
+.IonList p
+{
+  margin:0;
 }
 .ver-center
 {
@@ -350,7 +358,14 @@ table tr
 }
 .Nametxt
 {
-  padding: 0 10px;
+      text-align: center;
+      padding: 0;
+      width: 65px;
+      font-size: 10px;
+      height: 65px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
 }
 .red
 {
@@ -424,6 +439,7 @@ table tr
   height: 40px;
   border-radius:50%;
   background-color: #000000;
+  margin: 0 auto;
 }
 .emp-round p
 {
@@ -432,6 +448,7 @@ table tr
   text-align: center !important;
   vertical-align: middle !important;
   line-height: 38px !important;
+      font-size: 14px;
 }
 .emp-round-active
 {
@@ -680,6 +697,14 @@ a:hover, a:focus
   height: 25px !important;
 
 }
+.IonList .item-md
+{
+  padding-left:0;
+}
+.orange-icon
+{
+  color:#FFAA22;
+}
 .item-fnt p
 {
   font-weight: 300;
@@ -707,6 +732,11 @@ a:hover, a:focus
 .border-btm
 {
   border-bottom: 1px solid #eeeeee;
+}
+p.titleTxt
+{
+  font-weight:600;
+  padding:8px 0;
 }
 .padding-top5
 {

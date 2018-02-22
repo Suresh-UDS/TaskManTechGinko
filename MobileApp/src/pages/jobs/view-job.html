@@ -3,30 +3,55 @@
     <button ion-button menuToggle>
       <ion-icon name="menu"></ion-icon>
     </button>
-    <ion-title>Jobs</ion-title>
+    <ion-title>Job Details</ion-title>
   </ion-navbar>
 </ion-header>
 
 <ion-content padding>
 
+    <ion-row class="margin0 white-bg padding10">
+        <ion-col col-6 class="label-on-left">Job ID</ion-col>
+        <ion-col col-6>
+            <p text-right>{{jobDetails.id}}</p>
+        </ion-col>
+        <ion-col col-6 class="label-on-left">Job Name</ion-col>
+        <ion-col col-6>
+            <p text-right>{{jobDetails.title}}</p>
+        </ion-col>
+        <ion-col col-6 class="label-on-left">Description</ion-col>
+        <ion-col col-6>
+            <p text-right>{{jobDetails.description}}</p>
+        </ion-col>
+        <ion-col col-6 class="label-on-left">Status</ion-col>
+        <ion-col col-6>
+            <p text-right>{{jobDetails.status}}</p>
+        </ion-col>
+    </ion-row>
 
+    <ion-row></ion-row>
 
-    <div class="card" >
+    <ion-row class="margin0 white-bg padding10">
+        <ion-col col-6 class="label-on-left">Employee Name</ion-col>
+        <ion-col col-6><p text-right>{{jobDetails.employeeName}}</p></ion-col>
+        <ion-col col-6 class="label-on-left">Site Name</ion-col>
+        <ion-col col-6><p text-right>{{jobDetails.siteName}}</p></ion-col>
+        <ion-col col-6 class="label-on-left">Planned Start Time</ion-col>
+        <ion-col col-6><p text-right><ion-icon ios="ios-calendar" md="md-calendar" class="green padding-right10"></ion-icon>{{jobDetails.plannedStartTime | date:'MMM d, y, h:mm a'}}</p></ion-col>
+        <ion-col col-6 class="label-on-left">Planned End Time</ion-col>
+        <ion-col col-6><p text-right><ion-icon ios="ios-calendar" md="md-calendar" class="red padding-right10"></ion-icon>{{jobDetails.plannedEndTime | date:'MMM d, y, h:mm a'}}</p></ion-col>
+    </ion-row>
 
-                    <div class="card-content padding-bottom0" >
-                        <div>
-                            {{jobDetails.description}}
-                            {{jobDetails.employeeId}}
-                            {{jobDetails.employeeName}}
-                        </div>
-
-                    </div>
-
-                    <div class="card-footer">
-
-                    </div>
-
-
-    </div>
+    <ion-row class="white-bg padding10" *ngIf="jobDetails.status == 'COMPLETED' ">
+        <ion-col col-6 class="label-on-left">Actual Start Time</ion-col>
+        <ion-col col-6><p text-right><ion-icon ios="ios-calendar" md="md-calendar" class="green padding-right10"></ion-icon>{{jobDetails.actualStartTime | date:'MMM d, y, h:mm a'}}</p></ion-col>
+        <ion-col col-6 class="label-on-left">Actual End Time</ion-col>
+        <ion-col col-6><p text-right><ion-icon ios="ios-calendar" md="md-calendar" class="red padding-right10"></ion-icon>{{jobDetails.actualEndTime | date:'MMM d, y, h:mm a'}}</p></ion-col>
+    </ion-row>
 
 </ion-content>
+
+<ion-footer>
+    <ion-toolbar class="align-right">
+        <button class="btn btn-success center pull-right" type="submit" (click)="completeJob(jobDetails)">Complete Job</button>
+    </ion-toolbar>
+</ion-footer>
