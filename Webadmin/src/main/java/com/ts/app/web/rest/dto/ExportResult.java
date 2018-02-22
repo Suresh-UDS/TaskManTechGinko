@@ -10,6 +10,8 @@ public class ExportResult {
 	
 	private String msg;
 	
+	private String url;
+	
 	
 
 	public String getMsg() {
@@ -42,6 +44,14 @@ public class ExportResult {
 
 	public void setStatus(String status) {
 		this.status = status;
+	}
+
+	public String getUrl() {
+		return url;
+	}
+
+	public void setUrl(String url) {
+		this.url = url;
 	}
 	
 	

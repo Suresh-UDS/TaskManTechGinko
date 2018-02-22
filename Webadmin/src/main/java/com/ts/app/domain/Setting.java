@@ -21,7 +21,7 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
  *
  */
 @Entity
-@Table(name = "setting")
+@Table(name = "settings")
 @Cacheable(true)
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class Setting extends AbstractAuditingEntity implements Serializable {

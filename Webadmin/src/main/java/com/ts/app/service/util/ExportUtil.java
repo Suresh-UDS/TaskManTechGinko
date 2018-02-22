@@ -31,6 +31,7 @@ import com.ts.app.web.rest.dto.EmployeeDTO;
 import com.ts.app.web.rest.dto.ExportResult;
 import com.ts.app.web.rest.dto.JobDTO;
 import com.ts.app.web.rest.dto.ReportResult;
+import com.ts.app.web.rest.dto.SearchCriteria;
 
 @Component
 public class ExportUtil {
@@ -52,7 +53,7 @@ public class ExportUtil {
 	private Environment env;
 
 	private static final Map<String,String> statusMap = new ConcurrentHashMap<String,String>();
-
+	
 	private Lock lock;
 
 	public ExportResult writeConsolidatedJobReportToFile(String projName, List<ReportResult> content, final String empId, ExportResult result) {
@@ -173,7 +174,7 @@ public class ExportUtil {
 		result.setStatus(getExportStatus(fileName));
 		return result;
 	}
-
+	
 	public ExportResult writeJobReportToFile(List<JobDTO> content, final String empId, ExportResult result) {
 		boolean isAppend = (result != null);
 		log.debug("result = " + result + ", isAppend=" + isAppend);
@@ -611,6 +612,10 @@ public class ExportUtil {
 		result.setFile(fileName.substring(0,fileName.indexOf('.')));
 		result.setStatus(getExportStatus(fileName));
 		return result;
+	}
+	
+	public void updateExportStatus(String uid, String status) {
+		statusMap.put(uid, status);
 	}
 
 	public String getExportStatus(String fileName) {

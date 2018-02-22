@@ -12,6 +12,7 @@ import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import javax.websocket.server.PathParam;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -37,8 +38,10 @@ import com.ts.app.service.JobManagementService;
 import com.ts.app.service.PushService;
 import com.ts.app.service.SchedulerService;
 import com.ts.app.service.UserService;
+import com.ts.app.service.util.CacheUtil;
 import com.ts.app.service.util.ImportUtil;
 import com.ts.app.service.util.MapperUtil;
+import com.ts.app.service.util.ReportUtil;
 import com.ts.app.web.rest.dto.AssetDTO;
 import com.ts.app.web.rest.dto.BaseDTO;
 import com.ts.app.web.rest.dto.EmployeeDTO;
@@ -82,6 +85,12 @@ public class JobManagementResource {
 
 	@Inject
 	private ImportUtil importUtil;
+
+	@Inject
+	private CacheUtil cacheUtil;
+	
+	@Inject
+	private ReportUtil reportUtil;
 
 	@RequestMapping(path="/site/{id}/job", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public Paginator<JobDTO> getSiteJobs(@PathVariable("id") Long siteId, @RequestParam(name="currPage",required=false) int page){
@@ -206,7 +215,19 @@ public class JobManagementResource {
 		}
 		return result;
 	}
-	
+
+	@RequestMapping(value = "/jobs/report/{uid}",method = RequestMethod.POST)
+	public SearchResult<JobDTO> jobReport(@PathVariable("uid") String uid) {
+		SearchResult<JobDTO> result = null;
+		SearchCriteria searchCriteria = reportUtil.getJobReportCriteria(uid);
+		if(searchCriteria != null) {
+			searchCriteria.setUserId(SecurityUtils.getCurrentUserId());
+			//jobService.updateJobStatus(searchCriteria.getSiteId(), searchCriteria.getJobStatus());
+			result = jobService.findBySearchCrieria(searchCriteria,true);
+		}
+		return result;
+	}
+
 	@RequestMapping(value = "/jobs/report",method = RequestMethod.POST)
 	public List<ReportResult> jobReport(@RequestBody SearchCriteria searchCriteria) {
 		List<ReportResult> result = null;
@@ -397,7 +418,7 @@ public class JobManagementResource {
 			searchCriteria.setUserId(SecurityUtils.getCurrentUserId());
 			SearchResult<JobDTO> result = jobService.findBySearchCrieria(searchCriteria, true);
 			List<JobDTO> results = result.getTransactions();
-			resp.addResult(jobService.export(results));
+			resp.addResult(jobService.generateReport(results, searchCriteria));
 		}
 		return resp;
 	}

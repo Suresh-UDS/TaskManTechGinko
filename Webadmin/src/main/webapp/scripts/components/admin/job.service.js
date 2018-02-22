@@ -64,10 +64,19 @@ angular.module('timeSheetApp')
 		              return response.data;
 		          });
 		    },
-            search: function(searchCriteria) {
-            	return $http.post('api/jobs/search', searchCriteria).then(function (response) {
-            		return response.data;
-            	});
+            search: function(searchCriteria,uid) {
+            		console.log('uid in search call - ' + uid); 
+	            	if(uid) {
+		            	return $http.post('api/jobs/report/'+uid).then(function (response) {
+		            		return response.data;
+		            	});
+	            		
+	            	}else {
+	                	return $http.post('api/jobs/search', searchCriteria).then(function (response) {
+	                		return response.data;
+	                	});
+	            		
+	            	}
             },
             
             generateReport: function(searchCriteria) {
@@ -91,11 +100,9 @@ angular.module('timeSheetApp')
 	            	});
 	        },
 	        exportStatus: function(fileName) {
-	            	if(empId == 0) {
-	                	return $http.get('api/job/export/'+fileName+"/status").then(function (response) {
-	                		return response.data;
-	                	});
-	            	}
+                	return $http.get('api/job/export/'+fileName+"/status").then(function (response) {
+                		return response.data;
+                	});
 	        },
 	
 	        getExportFile: function(fileName) {
