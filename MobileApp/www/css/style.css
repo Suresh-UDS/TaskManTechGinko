@@ -15,7 +15,7 @@
 {
   font-family:arial !important;
 }
-.content-ios ion-segment-button,ion-col,.header-ios ion-segment-button
+.content-ios ion-segment-button,ion-col,ion-card-content,.header-ios ion-segment-button,.toolbar-title,.content-ios .wrap-name,.content-ios .table tr th,.content-ios .table tr td
 {
    font-family:arial !important;
 }
