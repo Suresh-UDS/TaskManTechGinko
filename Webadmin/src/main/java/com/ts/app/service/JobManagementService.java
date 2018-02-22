@@ -1262,7 +1262,6 @@ public class JobManagementService extends AbstractService {
 
     }
 
-
 	public ExportResult generateReport(List<JobDTO> transactions, SearchCriteria criteria) {
 		//return exportUtil.writeJobReportToFile(transactions, null, null);
 		return reportUtil.generateJobReports(transactions, null, null, criteria);

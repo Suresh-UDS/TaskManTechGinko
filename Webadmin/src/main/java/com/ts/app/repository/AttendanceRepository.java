@@ -32,6 +32,9 @@ public interface AttendanceRepository extends JpaRepository<Attendance, Long>,Jp
 	Page<Attendance> findBySiteIdEmpIdAndDate(@Param("siteId") Long siteId, @Param("empId") String empId, @Param("startDate") Date startDate, @Param("endDate") Date endDate, Pageable pageRequest);
 
     @Query("SELECT a from Attendance a where a.site.id = :siteId and a.employee.empId = :empId order by a.checkInTime desc")
+    List<Attendance> findBySiteIdEmpId(@Param("siteId") Long siteId, @Param("empId") String empId);
+
+	@Query("SELECT a from Attendance a where a.site.id = :siteId and a.employee.empId = :empId order by a.checkInTime desc")
     Page<Attendance> findBySiteIdEmpId(@Param("siteId") Long siteId, @Param("empId") String empId,  Pageable pageRequest);
 
     @Query("SELECT a from Attendance a where a.checkInTime between :startDate and :endDate order by a.checkInTime desc")

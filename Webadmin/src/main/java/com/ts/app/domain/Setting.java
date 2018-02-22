@@ -26,7 +26,7 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class Setting extends AbstractAuditingEntity implements Serializable {
 
-    /**
+    /**a
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;

@@ -102,10 +102,10 @@ public class Job extends AbstractAuditingEntity implements Serializable{
 
 	private String frequency;
 
-    @OneToMany(mappedBy ="job", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy ="job", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private List<JobChecklist> checklistItems;
 
-    @ManyToOne(cascade={CascadeType.ALL})
+    @ManyToOne(cascade={CascadeType.ALL}, fetch = FetchType.LAZY)
 	@JoinColumn(name="parent_job_id")
     private Job parentJob;
 

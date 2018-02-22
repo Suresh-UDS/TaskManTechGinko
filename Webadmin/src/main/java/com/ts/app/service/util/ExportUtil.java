@@ -23,15 +23,18 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.env.Environment;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
+import com.ts.app.domain.AbstractAuditingEntity;
 import com.ts.app.domain.EmployeeAttendanceReport;
+import com.ts.app.domain.Job;
 import com.ts.app.web.rest.dto.AttendanceDTO;
+import com.ts.app.web.rest.dto.BaseDTO;
 import com.ts.app.web.rest.dto.EmployeeDTO;
 import com.ts.app.web.rest.dto.ExportResult;
 import com.ts.app.web.rest.dto.JobDTO;
 import com.ts.app.web.rest.dto.ReportResult;
-import com.ts.app.web.rest.dto.SearchCriteria;
 
 @Component
 public class ExportUtil {
@@ -55,6 +58,9 @@ public class ExportUtil {
 	private static final Map<String,String> statusMap = new ConcurrentHashMap<String,String>();
 	
 	private Lock lock;
+	
+	@Inject
+	private MapperUtil<AbstractAuditingEntity, BaseDTO> mapperUtil;
 
 	public ExportResult writeConsolidatedJobReportToFile(String projName, List<ReportResult> content, final String empId, ExportResult result) {
 		boolean isAppend = false;
@@ -173,6 +179,23 @@ public class ExportUtil {
 		result.setFile(fileName.substring(0,fileName.indexOf('.')));
 		result.setStatus(getExportStatus(fileName));
 		return result;
+	}
+	
+	//@Async
+	public ExportResult writeJobReportToFile(List<Job> content, ExportResult result) {
+		List<JobDTO> jobs = new ArrayList<JobDTO>();
+		for(Job job : content) {
+			JobDTO jobDto = new JobDTO();
+			jobDto.setSiteName(job.getSite().getName());
+			jobDto.setTitle(job.getTitle());
+			jobDto.setEmployeeName(job.getEmployee().getName());
+			jobDto.setJobType(job.getType());
+			jobDto.setPlannedStartTime(job.getPlannedStartTime());
+			jobDto.setActualEndTime(job.getActualEndTime());
+			jobDto.setJobStatus(job.getStatus());
+			jobs.add(jobDto);
+		}
+		return writeJobReportToFile(jobs, null, result);
 	}
 	
 	public ExportResult writeJobReportToFile(List<JobDTO> content, final String empId, ExportResult result) {
