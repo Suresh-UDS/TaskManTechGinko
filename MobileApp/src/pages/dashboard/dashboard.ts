@@ -40,7 +40,7 @@ export class DashboardPage {
     empActive=false;
     count=0;
     overdueCount:any;
-    cnt:any;
+    completeCount:any;
   constructor(public renderer: Renderer,public myService:authService,private loadingCtrl:LoadingController,public navCtrl: NavController,public component:componentService,public authService:authService,public modalCtrl: ModalController,
               private datePickerProvider: DatePickerProvider, private siteService:SiteService, private employeeService: EmployeeService, private jobService:JobService) {
 
@@ -124,6 +124,20 @@ export class DashboardPage {
               console.log(response);
               this.allJobs = response;
               this.component.closeLoader();
+
+              this.overdueCount=this.allJobs.filter((data,i)=>{
+                  return data.status=='OVERDUE';
+              }).length
+
+              console.log("Count------:"+this.overdueCount);
+
+              this.completeCount=this.allJobs.filter((data,i)=>{
+                  return data.status=='COMPLETED';
+              }).length
+
+              console.log("Count------:"+this.completeCount);
+
+
           },err=>{
               console.log("Error in getting josb");
               this.component.closeLoader();
@@ -146,13 +160,9 @@ export class DashboardPage {
     })
 
 
-      /*
-      this.cnt=this.allJobs.filter((data,i)=>{
-          return data.status=='OVERDUE';
-      }).length
 
-      console.log("Count------:"+this.count);
-*/
+
+
   }
 
     first(emp)

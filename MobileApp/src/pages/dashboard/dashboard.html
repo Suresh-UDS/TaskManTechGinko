@@ -126,10 +126,12 @@ Tip 2: you can also add an image using data-image tag
                 <!--<p *ngIf="!emp.enrolled_face && first(emp.name)"></p>-->
 
                 <p *ngIf="first(emp.name)"></p>
-                <ion-avatar item-start class="emp-round" (click)="selectEmployee(emp,i)" [ngClass]="{'emp-round-active':empActive && i==empIndex}">
-                    <p class="margin-auto"> {{firstLetter}}</p>
-                </ion-avatar>
-                {{emp.name}}
+                <div class="align-center">
+                    <ion-avatar item-start class="emp-round margin-auto" (click)="selectEmployee(emp,i)" [ngClass]="{'emp-round-active':empActive && i==empIndex}">
+                        <p class="margin-auto"> {{firstLetter}}</p>
+                    </ion-avatar>
+                    <div class="wrap-name">{{emp.name}}</div>
+                </div>
                 <!--<p text-left>{{emp.name}}</p>-->
             </span>
             </div>
@@ -232,7 +234,9 @@ Tip 2: you can also add an image using data-image tag
                             <ion-refresher (ionRefresh)="doRefresh($event,all)">
                                 <ion-refresher-content></ion-refresher-content>
                             </ion-refresher>
-                            <div  class="white-bg" *ngFor="let job of allJobs; let i = index" >
+
+
+                            <div  class="white-bg" *ngIf="overdueCount!=0" *ngFor="let job of allJobs; let i = index" >
 
                                 <div *ngIf="job.status == 'OVERDUE'">
 
@@ -300,6 +304,8 @@ Tip 2: you can also add an image using data-image tag
                             <ion-refresher-content></ion-refresher-content>
                         </ion-refresher>
                         <div  class="white-bg" *ngFor="let job of allJobs" >
+
+
                             <div *ngIf="job.status =='OPEN' || job.status == 'ASSIGNED' || job.status == 'INPROGRESS'">
                             <div class="padding-left16 padding-top5" >
                                 <ion-grid>
@@ -361,6 +367,7 @@ Tip 2: you can also add an image using data-image tag
                             <ion-refresher-content></ion-refresher-content>
                         </ion-refresher>
                         <div  class="white-bg" *ngFor="let job of allJobs" >
+
                             <div *ngIf="job.status =='COMPLETED'">
                             <div class="padding-left16 padding-top5">
                                 <ion-row class="margin0">

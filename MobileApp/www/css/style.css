@@ -798,3 +798,12 @@ ion-spinner{
   margin-right: 0 !important;
   margin-left: 0 !important;
 }
+.wrap-name
+{
+  font-size: 10px;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  width: 50px;
+  /* height: 17px; */
+  white-space: nowrap;
+}
