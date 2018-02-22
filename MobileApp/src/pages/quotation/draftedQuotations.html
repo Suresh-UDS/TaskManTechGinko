@@ -17,7 +17,7 @@
             </ion-card>
         </div>
 
-        <ion-item *ngFor="let quotation of quotations;let i of index" class="bottom-border emp " (click)="viewQuotation(quotation)">
+        <ion-item *ngFor="let quotation of quotations;let i of index" class="bottom-border emp QuotationListContent" (click)="viewQuotation(quotation)">
 
             <ion-icon name="mail" class="orange-icon" item-start></ion-icon>
             {{quotation.title}}

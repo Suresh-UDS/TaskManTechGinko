@@ -87,7 +87,7 @@ export class EmployeeList {
   }
 
   getEmployeeAttendance(employeeId){
-    this.attendanceService.getAttendances(employeeId).subscribe(
+    this.attendanceService.getAttendances(employeeId,this.site.id).subscribe(
       response=>{
         console.log(response)
         this.navCtrl.push(AttendanceListPage,{'attendances':response.json()});
@@ -106,7 +106,7 @@ export class EmployeeList {
       this.employeeFullName = window.localStorage.getItem('employeeFullName');
       this.employeeEmpId = window.localStorage.getItem('employeeEmpId');
       for(let employee of this.employeeList) {
-        this.attendanceService.getAttendances(employee.id).subscribe(
+        this.attendanceService.getAttendances(employee.id,this.site.id).subscribe(
           response =>{
             console.log(response.json());
             var result = response.json()
@@ -126,7 +126,7 @@ export class EmployeeList {
   }
 
   isEmployeeCheckedIn(employeeId){
-    this.attendanceService.getAttendances(employeeId).subscribe(
+    this.attendanceService.getAttendances(employeeId,this.site.id).subscribe(
       response =>{
         console.log(response.json());
         var result = response.json()
@@ -148,7 +148,8 @@ export class EmployeeList {
       quality: 50,
       destinationType: this.camera.DestinationType.DATA_URL,
       encodingType: this.camera.EncodingType.JPEG,
-      mediaType: this.camera.MediaType.PICTURE
+      mediaType: this.camera.MediaType.PICTURE,
+      cameraDirection:1
     };
 
     this.camera.getPicture(options).then((imageData) => {

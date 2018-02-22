@@ -100,21 +100,21 @@ export class EmployeeSiteListPage {
         this.employee = employeeDetails.employee;
         console.log("Employee details from localstorage");
         console.log(this.employee.userId);
-        this.attendanceService.getAttendances(this.employeeId).subscribe(
-          response =>{
-            console.log(response.json());
-            var result = response.json()
-            if(result[0]){
-              console.log("already checked in ");
-              this.checkedIn = true;
-              this.attendanceId=result[0].id;
-
-            }else{
-              console.log("Not yet checked in ");
-              this.checkedIn = false;
-            }
-          }
-        );
+        // this.attendanceService.getAttendances(this.employeeId, this.site).subscribe(
+        //   response =>{
+        //     console.log(response.json());
+        //     var result = response.json()
+        //     if(result[0]){
+        //       console.log("already checked in ");
+        //       this.checkedIn = true;
+        //       this.attendanceId=result[0].id;
+        //
+        //     }else{
+        //       console.log("Not yet checked in ");
+        //       this.checkedIn = false;
+        //     }
+        //   }
+        // );
       })
 
 

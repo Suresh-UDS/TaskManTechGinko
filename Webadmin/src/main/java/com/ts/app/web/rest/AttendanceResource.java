@@ -152,8 +152,8 @@ public class AttendanceResource {
         return frResponse;
     }
 
-    @RequestMapping(value = "/attendance/{employeeId}",method = RequestMethod.POST)
-    public List<AttendanceDTO> searchAttendanceByUserId (@PathVariable("employeeId") Long employeeId){
+    @RequestMapping(value = "/attendance/site/{siteId}/employee/{employeeId}",method = RequestMethod.POST)
+    public List<AttendanceDTO> searchAttendanceByUserId (@PathVariable("siteId") long siteId, @PathVariable("employeeId") long employeeId){
         List<AttendanceDTO> result = null;
         EmployeeDTO employee = new EmployeeDTO();
         log.debug("employeeId"+employeeId);
@@ -161,6 +161,7 @@ public class AttendanceResource {
         SearchCriteria sc = new SearchCriteria();
         sc.setEmployeeEmpId(employee.getEmpId());
         sc.setEmployeeId(employeeId);
+        sc.setSiteId(siteId);
         result = attendanceService.findByEmpId(sc);
         return result;
     }

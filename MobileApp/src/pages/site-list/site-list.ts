@@ -78,20 +78,20 @@ export class SiteListPage {
         console.log(window.localStorage.getItem('responseImageDetails'));
       })
 
-    this.attendanceService.getAttendances(this.employeeId).subscribe(
-      response =>{
-        console.log(response.json());
-        var result = response.json()
-        if(result[0]){
-          console.log("already checked in ");
-          this.checkedIn = true;
-
-        }else{
-          console.log("Not yet checked in ");
-          this.checkedIn = false;
-        }
-      }
-    );
+    // this.attendanceService.getAttendances(this.employeeId).subscribe(
+    //   response =>{
+    //     console.log(response.json());
+    //     var result = response.json()
+    //     if(result[0]){
+    //       console.log("already checked in ");
+    //       this.checkedIn = true;
+    //
+    //     }else{
+    //       console.log("Not yet checked in ");
+    //       this.checkedIn = false;
+    //     }
+    //   }
+    // );
   }
 
   gotoEmployeeList(site){
