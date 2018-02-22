@@ -3,7 +3,7 @@
         <button ion-button menuToggle>
             <ion-icon name="menu"></ion-icon>
         </button>
-        <ion-title>Add-Rates</ion-title>
+        <ion-title>Add Quotation</ion-title>
     </ion-navbar>
 </ion-header>
 
@@ -68,7 +68,7 @@
 
 <ion-footer>
     <ion-toolbar class="align-right" >
-        <button class="btn btn-warning center pull-left"  >
+        <button class="btn btn-warning center pull-left"  (click)="saveRates()" >
             Save
         </button>
         <button class="btn btn-success center pull-right" (click)="saveRates()">
