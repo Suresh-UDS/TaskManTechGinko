@@ -502,6 +502,11 @@ table tr
    text-transform: capitalize !important;
    font-weight: normal !important;
 }
+span.EmpNameTxt
+{
+   line-height: 33px;
+   text-transform: capitalize;
+}
 .padding10
 {
   padding: 10px;
