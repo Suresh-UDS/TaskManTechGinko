@@ -239,7 +239,7 @@ Tip 2: you can also add an image using data-image tag
                             </ion-refresher>
 
 
-                            <div  class="white-bg" *ngIf="overdueCount!=0" *ngFor="let job of allJobs; let i = index" >
+                            <div  class="white-bg" *ngFor="let job of allJobs; let i = index" >
 
                                 <div *ngIf="job.status == 'OVERDUE'">
 
