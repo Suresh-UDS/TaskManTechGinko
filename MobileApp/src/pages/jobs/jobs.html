@@ -120,12 +120,12 @@
                 </ion-item-sliding>
 
             </div>
-
+            <ion-infinite-scroll *ngIf="todaysPage<todaysTotalPages"  (ionInfinite)="doInfiniteTodaysJobs($event)">
+                <ion-infinite-scroll-content></ion-infinite-scroll-content>
+            </ion-infinite-scroll>
         </ion-list>
 
-        <ion-infinite-scroll *ngIf="todaysPage<todaysTotalPages"  (ionInfinite)="doInfiniteTodaysJobs($event)">
-            <ion-infinite-scroll-content></ion-infinite-scroll-content>
-        </ion-infinite-scroll>
+
 
         <ion-list *ngSwitchCase="'jobs'">
 
@@ -212,11 +212,12 @@
             </ion-item-sliding>
 
         </div>
+            <ion-infinite-scroll *ngIf="page<totalPages"  (ionInfinite)="doInfiniteAllJobs($event)">
+                <ion-infinite-scroll-content></ion-infinite-scroll-content>
+            </ion-infinite-scroll>
         </ion-list>
 
-        <ion-infinite-scroll *ngIf="page<totalPages"  (ionInfinite)="doInfiniteAllJobs($event)">
-            <ion-infinite-scroll-content></ion-infinite-scroll-content>
-        </ion-infinite-scroll>
+
 
     </div>
 
