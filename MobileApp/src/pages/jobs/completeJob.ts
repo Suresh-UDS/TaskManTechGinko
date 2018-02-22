@@ -7,6 +7,7 @@ import {JobsPage} from "./jobs";
 import {JobService} from "../service/jobService";
 import {AttendanceService} from "../service/attendanceService";
 import {JobPopoverPage} from "./job-popover";
+import {componentService} from "../service/componentService";
 
 @Component({
     selector: 'page-complete-job',
@@ -37,7 +38,7 @@ export class CompleteJobPage {
 
     constructor(public navCtrl: NavController,public navParams:NavParams, public authService: authService,
                 private loadingCtrl:LoadingController, public camera: Camera,private geolocation:Geolocation, private jobService: JobService,
-                private attendanceService: AttendanceService,public popoverCtrl: PopoverController,) {
+                private attendanceService: AttendanceService,public popoverCtrl: PopoverController, private component:componentService) {
         this.jobDetails=this.navParams.get('job');
         this.takenImages = [];
         this.checkOutDetails={
@@ -98,7 +99,7 @@ export class CompleteJobPage {
     }
 
     completeJob(job, takenImages){
-
+        this.component.showLoader('Completing Job');
         this.geolocation.getCurrentPosition().then((response)=>{
             console.log("Current location");
             console.log(response);
@@ -120,9 +121,13 @@ export class CompleteJobPage {
         this.jobService.checkOutJob(this.checkOutDetails).subscribe(
             response=>{
                 console.log(response);
+                this.component.closeLoader();
                 this.navCtrl.push(JobsPage);
+                this.component.showToastMessage('Job Completed Successfully','bottom');
                 //TODO
                 //File Upload after successful checkout
+            },err=>{
+                this.component.closeLoader();
             }
         )
 

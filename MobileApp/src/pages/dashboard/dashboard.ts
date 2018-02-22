@@ -11,6 +11,7 @@ import {CreateJobPage} from "../jobs/add-job";
 import {CreateQuotationPage} from "../quotation/create-quotation";
 import {CreateEmployeePage} from "../employee-list/create-employee";
 import {CompleteJobPage} from "../jobs/completeJob";
+import {ViewJobPage} from "../jobs/view-job";
 declare var demo;
 @Component({
   selector: 'page-dashboard',
@@ -75,19 +76,19 @@ export class DashboardPage {
     });
 
 
-    this.employeeService.getAllEmployees().subscribe(
-        response=>{
-          console.log('ionViewDidLoad Employee list:');
-          console.log(response);
-          this.employee=response;
-          this.empSpinner=false;
-          this.component.closeLoader();
-        },
-        error=>{
-          console.log('ionViewDidLoad SitePage:'+error);
-            this.component.closeLoader();
-        }
-    )
+    // this.employeeService.getAllEmployees().subscribe(
+    //     response=>{
+    //       console.log('ionViewDidLoad Employee list:');
+    //       console.log(response);
+    //       this.employee=response;
+    //       this.empSpinner=false;
+    //       this.component.closeLoader();
+    //     },
+    //     error=>{
+    //       console.log('ionViewDidLoad SitePage:'+error);
+    //         this.component.closeLoader();
+    //     }
+    // )
 
     this.siteService.searchSite().subscribe(
         response=>{
@@ -96,7 +97,7 @@ export class DashboardPage {
           );
           this.sites=response.json();
           this.spinner=false;
-          this.empSpinner=true;
+          // this.empSpinner=true;
           this.component.closeLoader();
         },
         error=>{
@@ -122,7 +123,7 @@ export class DashboardPage {
           response=>{
               console.log("Jobs from search criteria");
               console.log(response);
-              this.allJobs = response;
+              this.allJobs = response.transactions;
               this.component.closeLoader();
           },err=>{
               console.log("Error in getting josb");
@@ -308,6 +309,13 @@ export class DashboardPage {
     compeleteJob(job)
     {
         this.navCtrl.push(CompleteJobPage,{job:job})
+    }
+
+    viewJob(job)
+    {
+        console.log("========view job ===========");
+        console.log(job);
+        this.navCtrl.push(ViewJobPage,{job:job})
     }
 
 

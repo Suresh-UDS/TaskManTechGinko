@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import {LoadingController, NavController, NavParams} from 'ionic-angular';
 import {authService} from "../service/authService";
+import {CompleteJobPage} from "./completeJob";
 
 @Component({
   selector: 'page-view-job',
@@ -17,6 +18,11 @@ export class ViewJobPage {
 
     ionViewWillEnter() {
 
+    }
+
+    completeJob(job)
+    {
+        this.navCtrl.push(CompleteJobPage,{job:job})
     }
 
 

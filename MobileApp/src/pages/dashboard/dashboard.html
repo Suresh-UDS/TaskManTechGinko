@@ -117,6 +117,9 @@ Tip 2: you can also add an image using data-image tag
             <div *ngIf="empSelect">
                 <p text-center class="margin0 clr-orange">No Employee</p>
             </div>
+            <div *ngIf="!selectSite">
+                <p text-center class="margin0 clr-orange">Please Select a Site</p>
+            </div>
             <div class="row">
 
             <span *ngFor="let emp of employee;let i of index" class="Nametxt" >
@@ -247,11 +250,19 @@ Tip 2: you can also add an image using data-image tag
                                                 <ion-icon name="ios-construct-outline" class="fnt-24"></ion-icon>
                                             </button>
                                         </ion-col>
-                                        <ion-col col-10 class="padding-left5">
+                                        <ion-col col-8 class="padding-left5">
                                             <div class="border-btm padding-bottom5 ln-ght20" text-capitalize (click)="compeleteJob(job)">
                                                 <p text-left class="margin0">{{job.title}}</p>
                                                 <p text-left class="margin0">{{job.employeeName}}</p>
                                                 <p text-left class="margin0">{{job.siteProjectName}} - {{job.siteName}}</p>
+                                            </div>
+                                        </ion-col>
+
+                                        <ion-col col-2 class="padding-left0 ver-center">
+                                            <div class="padding-bottom5">
+                                                <button ion-button clear color="primary" (click)="open(slidingItem, item ,count)">
+                                                    <i class="material-icons">more_horiz</i>
+                                                </button>
                                             </div>
                                         </ion-col>
                                         <!--
@@ -262,8 +273,8 @@ Tip 2: you can also add an image using data-image tag
 
                                     </ion-row>
                                 </div>
-
-                                    <ion-item class="item-fnt padding-left0" >
+                                <ion-item-sliding #slidingItem>
+                                    <ion-item #item class="item-fnt padding-left0" >
                                         <!--<div class="padding-left16">-->
 
                                         <div text-capitalize >
@@ -288,6 +299,21 @@ Tip 2: you can also add an image using data-image tag
                                         </div>
                                         <!--</div>-->
                                     </ion-item>
+                                    <ion-item-options (click)="close(slidingItem)">
+                                        <div>
+                                            <button ion-button clear color="primary" (click)="viewJob(job)"><ion-icon name="md-eye" class="fnt-24"></ion-icon></button>
+                                        </div>
+                                        <!--<div>-->
+                                        <!--<button ion-button clear color="clr-blue"><ion-icon name="md-create" class="fnt-24"></ion-icon></button>-->
+                                        <!--</div>-->
+                                        <div>
+                                            <button ion-button clear color="secondary" *ngIf="job.status !='COMPLETED'" (click)="compeleteJob(job)"><ion-icon name="md-checkmark-circle" class="fnt-24"></ion-icon></button>
+                                        </div>
+                                        <!--<div>-->
+                                        <!--<button ion-button clear color="danger"><ion-icon name="md-close-circle" class="fnt-24"></ion-icon></button>-->
+                                        <!--</div>-->
+                                    </ion-item-options>
+                                    </ion-item-sliding>
 
                                 </div>
                             </div>
@@ -313,7 +339,7 @@ Tip 2: you can also add an image using data-image tag
                                             <ion-icon name="ios-construct-outline" class="fnt-24"></ion-icon>
                                         </button>
                                     </ion-col>
-                                    <ion-col col-9 class="padding-left15">
+                                    <ion-col col-8 class="padding-left15">
                                         <div class="border-btm padding-bottom5 ln-ght20" text-capitalize (click)="completeJob(job)">
                                             <p text-left class="margin0">{{job.title}}</p>
                                             <p text-left class="margin0">{{job.employeeName}}</p>
@@ -321,11 +347,19 @@ Tip 2: you can also add an image using data-image tag
                                         </div>
                                     </ion-col>
 
+                                    <ion-col col-2 class="padding-left0 ver-center">
+                                        <div class="padding-bottom5">
+                                            <button ion-button clear color="primary" (click)="open(slidingItem, item ,count)">
+                                                <i class="material-icons">more_horiz</i>
+                                            </button>
+                                        </div>
+                                    </ion-col>
+
                                 </ion-row>
                                 </ion-grid>
                             </div>
-
-                            <ion-item class="item-fnt padding-left0" >
+                        <ion-item-sliding #slidingItem>
+                            <ion-item #item class="item-fnt padding-left0" >
                                 <!--<div class="padding-left16">-->
 
                                 <div text-capitalize >
@@ -350,6 +384,21 @@ Tip 2: you can also add an image using data-image tag
                                 </div>
                                 <!--</div>-->
                             </ion-item>
+                            <ion-item-options (click)="close(slidingItem)">
+                                <div>
+                                    <button ion-button clear color="primary" (click)="viewJob(job)"><ion-icon name="md-eye" class="fnt-24"></ion-icon></button>
+                                </div>
+                                <!--<div>-->
+                                <!--<button ion-button clear color="clr-blue"><ion-icon name="md-create" class="fnt-24"></ion-icon></button>-->
+                                <!--</div>-->
+                                <div>
+                                    <button ion-button clear color="secondary" *ngIf="job.status !='COMPLETED'" (click)="compeleteJob(job)"><ion-icon name="md-checkmark-circle" class="fnt-24"></ion-icon></button>
+                                </div>
+                                <!--<div>-->
+                                <!--<button ion-button clear color="danger"><ion-icon name="md-close-circle" class="fnt-24"></ion-icon></button>-->
+                                <!--</div>-->
+                            </ion-item-options>
+                        </ion-item-sliding>
 
                             </div>
                         </div>
@@ -374,11 +423,18 @@ Tip 2: you can also add an image using data-image tag
                                             <ion-icon name="ios-construct-outline" class="fnt-24"></ion-icon>
                                         </button>
                                     </ion-col>
-                                    <ion-col col-10 class="padding-left5">
+                                    <ion-col col-8 class="padding-left5">
                                         <div class="border-btm padding-bottom5 ln-ght20" text-capitalize>
                                             <p text-left class="margin0">{{job.title}}</p>
                                             <p text-left class="margin0">{{job.employeeName}}</p>
                                             <p text-left class="margin0">{{job.siteProjectName}} - {{job.siteName}}</p>
+                                        </div>
+                                    </ion-col>
+                                    <ion-col col-2 class="padding-left0 ver-center">
+                                        <div class="padding-bottom5">
+                                            <button ion-button clear color="primary" (click)="open(slidingItem, item ,count)">
+                                                <i class="material-icons">more_horiz</i>
+                                            </button>
                                         </div>
                                     </ion-col>
                                     <!--
@@ -390,7 +446,8 @@ Tip 2: you can also add an image using data-image tag
                                 </ion-row>
                             </div>
 
-                            <ion-item class="item-fnt padding-left0" >
+                        <ion-item-sliding #slidingItem>
+                            <ion-item #item class="item-fnt padding-left0" >
                                 <!--<div class="padding-left16">-->
 
                                 <div text-capitalize >
@@ -415,6 +472,21 @@ Tip 2: you can also add an image using data-image tag
                                 </div>
                                 <!--</div>-->
                             </ion-item>
+                            <ion-item-options (click)="close(slidingItem)">
+                                <div>
+                                    <button ion-button clear color="primary" (click)="viewJob(job)"><ion-icon name="md-eye" class="fnt-24"></ion-icon></button>
+                                </div>
+                                <!--<div>-->
+                                <!--<button ion-button clear color="clr-blue"><ion-icon name="md-create" class="fnt-24"></ion-icon></button>-->
+                                <!--</div>-->
+                                <div>
+                                    <button ion-button clear color="secondary" *ngIf="job.status !='COMPLETED'" (click)="compeleteJob(job)"><ion-icon name="md-checkmark-circle" class="fnt-24"></ion-icon></button>
+                                </div>
+                                <!--<div>-->
+                                <!--<button ion-button clear color="danger"><ion-icon name="md-close-circle" class="fnt-24"></ion-icon></button>-->
+                                <!--</div>-->
+                            </ion-item-options>
+                        </ion-item-sliding>
 
                             </div>
                         </div>
