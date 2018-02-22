@@ -46,8 +46,8 @@ export class AttendanceService
         )
     }
 
-    getAttendances(employeeId) : Observable <any>{
-        return this.http.post(this.config.Url+'api/attendance/'+employeeId,{employeeId:employeeId}).map(
+    getAttendances(employeeId,siteId) : Observable <any>{
+        return this.http.post(this.config.Url+'api/attendance/site/'+siteId+'/employee/'+employeeId,{employeeId:employeeId}).map(
             (response=>{
                 console.log(response);
                 return response;
