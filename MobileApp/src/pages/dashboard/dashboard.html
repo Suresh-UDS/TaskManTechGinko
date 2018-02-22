@@ -99,7 +99,7 @@ Tip 2: you can also add an image using data-image tag
 
     <div class="SiteCon">
         <div text-center>
-            <p class="margin0 titleTxt"><span class="margin-right15">Sites</span><span class="padding-left5" *ngIf="spinner"><ion-spinner name="bubbles"></ion-spinner></span></p>
+            <p class="margin0 titleTxt"><span class="">Sites</span><span class="padding-left10" *ngIf="spinner"><ion-spinner name="bubbles"></ion-spinner></span></p>
         </div>
 
         <div class="scrollCon">
@@ -119,7 +119,7 @@ Tip 2: you can also add an image using data-image tag
     <div class="EmpCon" style="padding-bottom:10px;">
 
         <div text-center>
-            <p class="margin0 titleTxt"><span class="margin-right15">Employees</span><span class="padding-left5" *ngIf="empSpinner"><ion-spinner name="bubbles"></ion-spinner></span></p>
+            <p class="margin0 titleTxt"><span class="">Employees</span><span class="padding-left10" *ngIf="empSpinner"><ion-spinner name="bubbles"></ion-spinner></span></p>
         </div>
 
             <div class="scrollCon EmplScroll">
@@ -132,6 +132,7 @@ Tip 2: you can also add an image using data-image tag
                 <ion-row>
                     <ion-item no-lines>
                         <ion-scroll scrollX="true">
+
 
                              <span *ngFor="let emp of employee;let i of index" class="Nametxt scroll-item" >
                 <!--<ion-avatar item-start *ngIf="emp.enrolled_face" class="emp-round width-round">-->
