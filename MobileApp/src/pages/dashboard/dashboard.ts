@@ -176,7 +176,7 @@ export class DashboardPage {
               console.log("Count------:"+this.completeCount);
 
               this.upcomingCount=this.allJobs.filter((data,i)=>{
-                  if(data.status=='OPEN' || 'ASSIGNED' || 'INPROGRESS')
+                  if(data.status=='OPEN' || data.status=='ASSIGNED' || data.status=='INPROGRESS')
                   {
                       return data;
                   }
