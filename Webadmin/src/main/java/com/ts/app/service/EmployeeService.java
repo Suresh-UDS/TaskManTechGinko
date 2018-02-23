@@ -403,7 +403,14 @@ public class    EmployeeService extends AbstractService {
 			subEmpIds = findAllSubordinates(user.getEmployee(), subEmpIds);
 			entities = employeeRepository.findAllByIds(subEmpIds);
 		}
-		return mapperUtil.toModelList(entities, EmployeeDTO.class);
+		//return mapperUtil.toModelList(entities, EmployeeDTO.class);
+		List<EmployeeDTO> empList = new ArrayList<EmployeeDTO>();
+		if(CollectionUtils.isNotEmpty(entities)) {
+			for(Employee empEntity : entities) {
+				empList.add(mapToModel(empEntity));
+			}
+		}
+		return empList;
 	}
 
     public List<EmployeeDTO> findAllRelievers(long userId) {
