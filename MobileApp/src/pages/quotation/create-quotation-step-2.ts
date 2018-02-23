@@ -10,6 +10,7 @@ import {QuotationPage} from "./quotation";
 import {componentService} from "../service/componentService";
 import {QuotationService} from "../service/quotationService";
 import {SiteService} from "../service/siteService";
+declare var demo;
 
 
 @Component({
@@ -47,6 +48,7 @@ export class CreateQuotationPage2 {
     authorisedByUserId:any;
     authorisedByUserName:any;
     grandTotal=0;
+    quotationDetails:any;
 
     constructor(public navCtrl: NavController,public modalCtrl: ModalController,public navParams:NavParams,public popoverCtrl: PopoverController, public evts: Events, public authService:authService, public alertCtrl: AlertController, public componentService:componentService,
                 private quotationService: QuotationService, private siteService: SiteService
@@ -179,28 +181,68 @@ export class CreateQuotationPage2 {
         console.log("add total-------:"+this.grandTotal);
 
     }
+
+
     saveRates()
     {
+        if(this.rates.length!=0)
+        {
+
+            if(this.siteDetails){
+                console.log("Save quotation with site id");
+                this.quotationDetails = {
+                    "title":this.quotation.title,
+                    "description":this.quotation.description,
+                    "rateCardDetails":this.rates,
+                    "sentByUserId":this.sentByUserId,
+                    "sentByUserName":this.sentByUserName,
+                    "sentToUserId":this.sentToUserId,
+                    "sentToUserName":this.sentToUserName,
+                    "createdByUserId":this.sentByUserId,
+                    "createdByUserName":this.sentByUserName,
+                    "clientEmailId": this.clientEmailId,
+                    "siteId":this.siteDetails.id,
+                    "clientId":this.siteDetails.projectId,
+                    "clientName":this.siteDetails.projectName,
+                    "siteName":this.siteDetails.name,
+                    "grandTotal":this.grandTotal,
+                    "isDrafted":true
+                };
+
+                this.saveQuotationDetails(this.quotationDetails)
+            }else{
+                console.log("Save Quotation without site id");
+
+
+                this.quotationDetails = {
+                    "title":this.quotation.title,
+                    "description":this.quotation.description,
+                    "rateCardDetails":this.rates,
+                    "sentByUserId":this.sentByUserId,
+                    "sentByUserName":this.sentByUserName,
+                    "sentToUserId":this.sentToUserId,
+                    "sentToUserName":this.sentToUserName,
+                    "createdByUserId":this.sentByUserId,
+                    "createdByUserName":this.sentByUserName,
+                    "grandTotal":this.grandTotal,
+                    "isDrafted":true
+                };
+                this.presentAlert(this.quotationDetails,'Save Without Selecting Site');
+            }
+
+
+        }
+        else
+        {
+            demo.showSwal('basic','Add Quotation')
+
+        }
+    }
+
+    saveQuotationDetails(quotationDetails)
+    {
         console.log("selected site in save Rates");
-        console.log(this.selectedSite);
-        var quotationDetails = {
-            "title":this.quotation.title,
-            "description":this.quotation.description,
-            "rateCardDetails":this.rates,
-            "sentByUserId":this.sentByUserId,
-            "sentByUserName":this.sentByUserName,
-            "sentToUserId":this.sentToUserId,
-            "sentToUserName":this.sentToUserName,
-            "createdByUserId":this.sentByUserId,
-            "createdByUserName":this.sentByUserName,
-            "clientEmailId": this.clientEmailId,
-            "siteId":this.siteDetails.id,
-            "clientId":this.siteDetails.projectId,
-            "clientName":this.siteDetails.projectName,
-            "siteName":this.siteDetails.name,
-            "grandTotal":this.grandTotal,
-            "isDrafted":true
-        };
+        console.log(this.selectedSite,this.rates.type);
 
         console.log("Before saving quotation");
         console.log(quotationDetails);
@@ -214,6 +256,7 @@ export class CreateQuotationPage2 {
                 this.componentService.showToastMessage('Error in drafting quotation, your changes cannot be saved!','bottom');
             }
         )
+
 
 
         // this.navCtrl.push(CreateQuotationPage3,{rate:this.rates,quotation:this.quotation,site:this.selectedSite})
@@ -246,6 +289,29 @@ export class CreateQuotationPage2 {
             }
         )
 
+    }
+
+
+    presentAlert(quotation,msg) {
+        let alert = this.alertCtrl.create({
+            message: msg,
+            buttons: [
+                {
+                    text: 'Cancel',
+                    role: 'cancel',
+                    handler: () => {
+                        console.log('Cancel clicked');
+                    }
+                },
+                {
+                    text: 'Yes',
+                    handler: () => {
+                        this.saveQuotationDetails(quotation)
+                    }
+                }
+            ]
+        });
+        alert.present();
     }
 
 
