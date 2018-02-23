@@ -417,6 +417,11 @@ angular.module('timeSheetApp')
             }
             //$scope.search();
         };
+        
+        $scope.showNotifications= function(position,alignment,color,msg){
+            demo.showNotification(position,alignment,color,msg);
+        }
+
 
         $scope.initCalender();
     });
