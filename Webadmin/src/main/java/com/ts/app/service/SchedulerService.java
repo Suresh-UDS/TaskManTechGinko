@@ -154,163 +154,171 @@ public class SchedulerService extends AbstractService {
 	@Scheduled(initialDelay = 60000,fixedRate = 1800000) //Runs every 30 mins
 	//@Scheduled(cron="30 * * * * ?") //Test to run every 30 seconds
 	public void runDailyTask() {
-		Calendar cal = Calendar.getInstance();
-		cal.set(Calendar.HOUR_OF_DAY,0);
-		cal.set(Calendar.MINUTE,0);
-		List<SchedulerConfig> dailyTasks = schedulerConfigRepository.getDailyTask(cal.getTime());
-		log.debug("Found {} Daily Tasks", dailyTasks.size());
-
-		if(CollectionUtils.isNotEmpty(dailyTasks)) {
-			for (SchedulerConfig dailyTask : dailyTasks) {
-				try {
-					boolean shouldProcess = true;
-					if(dailyTask.isScheduleDailyExcludeWeekend()) {
-						Calendar today = Calendar.getInstance();
-
-						if(today.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY
-								|| today.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY) {
-							shouldProcess = false;
+		if(env.getProperty("scheduler.dailyJob.enabled").equalsIgnoreCase("true")) {
+			Calendar cal = Calendar.getInstance();
+			cal.set(Calendar.HOUR_OF_DAY,0);
+			cal.set(Calendar.MINUTE,0);
+			List<SchedulerConfig> dailyTasks = schedulerConfigRepository.getDailyTask(cal.getTime());
+			log.debug("Found {} Daily Tasks", dailyTasks.size());
+	
+			if(CollectionUtils.isNotEmpty(dailyTasks)) {
+				for (SchedulerConfig dailyTask : dailyTasks) {
+					try {
+						boolean shouldProcess = true;
+						if(dailyTask.isScheduleDailyExcludeWeekend()) {
+							Calendar today = Calendar.getInstance();
+	
+							if(today.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY
+									|| today.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY) {
+								shouldProcess = false;
+							}
 						}
+						if(shouldProcess) {
+							processDailyTasks(dailyTask);
+						}
+					} catch (Exception ex) {
+						log.warn("Failed to create JOB ", ex);
 					}
-					if(shouldProcess) {
-						processDailyTasks(dailyTask);
-					}
-				} catch (Exception ex) {
-					log.warn("Failed to create JOB ", ex);
 				}
+				schedulerConfigRepository.save(dailyTasks);
 			}
-			schedulerConfigRepository.save(dailyTasks);
 		}
 	}
 
 	@Scheduled(initialDelay = 60000, fixedRate = 1800000) //Runs every day at 00:00
 	//@Scheduled(cron="30 * * * * ?") //Test to run every 30 seconds
 	public void runWeeklyTask() {
-		Calendar cal = Calendar.getInstance();
-		cal.set(Calendar.HOUR_OF_DAY,0);
-		cal.set(Calendar.MINUTE,0);
-		List<SchedulerConfig> weeklyTasks = schedulerConfigRepository.getWeeklyTask(cal.getTime());
-		log.debug("Found {} Weekly Tasks", weeklyTasks.size());
-
-		if(CollectionUtils.isNotEmpty(weeklyTasks)) {
-			for (SchedulerConfig weeklyTask : weeklyTasks) {
-				try {
-					boolean shouldProcess = false;
-					Calendar today = Calendar.getInstance();
-					switch(today.get(Calendar.DAY_OF_WEEK)) {
-
-						case Calendar.SUNDAY:
-							shouldProcess = weeklyTask.isScheduleWeeklySunday();
-							break;
-						case Calendar.MONDAY:
-							shouldProcess = weeklyTask.isScheduleWeeklyMonday();
-							break;
-						case Calendar.TUESDAY:
-							shouldProcess = weeklyTask.isScheduleWeeklyTuesday();
-							break;
-						case Calendar.WEDNESDAY:
-							shouldProcess = weeklyTask.isScheduleWeeklyWednesday();
-							break;
-						case Calendar.THURSDAY:
-							shouldProcess = weeklyTask.isScheduleWeeklyThursday();
-							break;
-						case Calendar.FRIDAY:
-							shouldProcess = weeklyTask.isScheduleWeeklyFriday();
-							break;
-						case Calendar.SATURDAY:
-							shouldProcess = weeklyTask.isScheduleWeeklySaturday();
-							break;
-						default:
-							shouldProcess = false;
+		if(env.getProperty("scheduler.weeklyJob.enabled").equalsIgnoreCase("true")) {		
+			Calendar cal = Calendar.getInstance();
+			cal.set(Calendar.HOUR_OF_DAY,0);
+			cal.set(Calendar.MINUTE,0);
+			List<SchedulerConfig> weeklyTasks = schedulerConfigRepository.getWeeklyTask(cal.getTime());
+			log.debug("Found {} Weekly Tasks", weeklyTasks.size());
+	
+			if(CollectionUtils.isNotEmpty(weeklyTasks)) {
+				for (SchedulerConfig weeklyTask : weeklyTasks) {
+					try {
+						boolean shouldProcess = false;
+						Calendar today = Calendar.getInstance();
+						switch(today.get(Calendar.DAY_OF_WEEK)) {
+	
+							case Calendar.SUNDAY:
+								shouldProcess = weeklyTask.isScheduleWeeklySunday();
+								break;
+							case Calendar.MONDAY:
+								shouldProcess = weeklyTask.isScheduleWeeklyMonday();
+								break;
+							case Calendar.TUESDAY:
+								shouldProcess = weeklyTask.isScheduleWeeklyTuesday();
+								break;
+							case Calendar.WEDNESDAY:
+								shouldProcess = weeklyTask.isScheduleWeeklyWednesday();
+								break;
+							case Calendar.THURSDAY:
+								shouldProcess = weeklyTask.isScheduleWeeklyThursday();
+								break;
+							case Calendar.FRIDAY:
+								shouldProcess = weeklyTask.isScheduleWeeklyFriday();
+								break;
+							case Calendar.SATURDAY:
+								shouldProcess = weeklyTask.isScheduleWeeklySaturday();
+								break;
+							default:
+								shouldProcess = false;
+						}
+						if(shouldProcess) {
+							processWeeklyTasks(weeklyTask);
+						}
+					} catch (Exception ex) {
+						log.warn("Failed to create JOB ", ex);
 					}
-					if(shouldProcess) {
-						processWeeklyTasks(weeklyTask);
-					}
-				} catch (Exception ex) {
-					log.warn("Failed to create JOB ", ex);
+	
 				}
-
+				schedulerConfigRepository.save(weeklyTasks);
 			}
-			schedulerConfigRepository.save(weeklyTasks);
 		}
 	}
 	
 	@Scheduled(initialDelay = 60000, fixedRate = 1800000) //Runs every day at 00:00
 	//@Scheduled(cron="30 * * * * ?") //Test to run every 30 seconds
 	public void runMonthlyTask() {
-		Calendar cal = Calendar.getInstance();
-		cal.set(Calendar.HOUR_OF_DAY,0);
-		cal.set(Calendar.MINUTE,0);
-		List<SchedulerConfig> monthlyTasks = schedulerConfigRepository.getMonthlyTask(cal.getTime());
-		log.debug("Found {} Monthly Tasks", monthlyTasks.size());
-
-		if(CollectionUtils.isNotEmpty(monthlyTasks)) {
-			for (SchedulerConfig monthlyTask : monthlyTasks) {
-				try {
-					boolean shouldProcess = false;
-					Calendar today = Calendar.getInstance();
-					if(today.get(Calendar.DAY_OF_WEEK) == monthlyTask.getScheduleMonthlyDay()) {
-						processMonthlyTasks(monthlyTask);
+		if(env.getProperty("scheduler.monthlyJob.enabled").equalsIgnoreCase("true")) {
+			Calendar cal = Calendar.getInstance();
+			cal.set(Calendar.HOUR_OF_DAY,0);
+			cal.set(Calendar.MINUTE,0);
+			List<SchedulerConfig> monthlyTasks = schedulerConfigRepository.getMonthlyTask(cal.getTime());
+			log.debug("Found {} Monthly Tasks", monthlyTasks.size());
+	
+			if(CollectionUtils.isNotEmpty(monthlyTasks)) {
+				for (SchedulerConfig monthlyTask : monthlyTasks) {
+					try {
+						boolean shouldProcess = false;
+						Calendar today = Calendar.getInstance();
+						if(today.get(Calendar.DAY_OF_WEEK) == monthlyTask.getScheduleMonthlyDay()) {
+							processMonthlyTasks(monthlyTask);
+						}
+					} catch (Exception ex) {
+						log.warn("Failed to create JOB ", ex);
 					}
-				} catch (Exception ex) {
-					log.warn("Failed to create JOB ", ex);
+	
 				}
-
+				schedulerConfigRepository.save(monthlyTasks);
 			}
-			schedulerConfigRepository.save(monthlyTasks);
 		}
 	}
 
 	@Scheduled(initialDelay = 60000,fixedRate = 900000) //Runs every 15 mins
 	public void overDueTaskCheck() {
-		Calendar cal = Calendar.getInstance();
-		Setting overdueAlertSetting = settingRepository.findSettingByKey("email.notification.overdue");
-		String alertEmailIds = "";
-		if(overdueAlertSetting != null && StringUtils.isNotEmpty(overdueAlertSetting.getValue()) 
-				&& overdueAlertSetting.getValue().equalsIgnoreCase("true")) {
-			Setting overdueEmails = settingRepository.findSettingByKey("job.overdue.alert.emails");
-			alertEmailIds = overdueEmails.getValue();
-		}
-		
-		List<Job> overDueJobs = jobRepository.findOverdueJobsByStatusAndEndDateTime(cal.getTime());
-		log.debug("Found {} overdue jobs", (overDueJobs != null ? overDueJobs.size() : 0));
-
-		if(CollectionUtils.isNotEmpty(overDueJobs)) {
-			ExportResult exportResult = new ExportResult();
-			exportResult = exportUtil.writeJobReportToFile(overDueJobs, exportResult);
-			for (Job job : overDueJobs) {
-				try {
-					List<Long> pushAlertUserIds = new ArrayList<Long>();
-					Employee assignee = job.getEmployee();
-					if(assignee.getUser() != null) {
-						pushAlertUserIds.add(assignee.getUser().getId()); //add employee user account id for push
-					}
-					int alertCnt = job.getOverdueAlertCount() + 1;
-					Employee manager = assignee;
-					for(int x = 0; x < alertCnt; x++ ) {
-						manager = manager.getManager();
-						if(manager != null && manager.getUser() != null) {
-							alertEmailIds += "," + manager.getUser().getEmail();
-							pushAlertUserIds.add(manager.getUser().getId()); //add manager user account id for push
-						}
-					}
+		if(env.getProperty("scheduler.overdueJob.enabled").equalsIgnoreCase("true")) {
+			Calendar cal = Calendar.getInstance();
+			Setting overdueAlertSetting = settingRepository.findSettingByKey("email.notification.overdue");
+			String alertEmailIds = "";
+			if(overdueAlertSetting != null && StringUtils.isNotEmpty(overdueAlertSetting.getValue()) 
+					&& overdueAlertSetting.getValue().equalsIgnoreCase("true")) {
+				Setting overdueEmails = settingRepository.findSettingByKey("job.overdue.alert.emails");
+				alertEmailIds = overdueEmails.getValue();
+			}
+			
+			List<Job> overDueJobs = jobRepository.findOverdueJobsByStatusAndEndDateTime(cal.getTime());
+			log.debug("Found {} overdue jobs", (overDueJobs != null ? overDueJobs.size() : 0));
+	
+			if(CollectionUtils.isNotEmpty(overDueJobs)) {
+				ExportResult exportResult = new ExportResult();
+				exportResult = exportUtil.writeJobReportToFile(overDueJobs, exportResult);
+				for (Job job : overDueJobs) {
 					try {
-						long[] pushUserIds = Longs.toArray(pushAlertUserIds);
-						String message = "Site - "+ job.getSite().getName() + ", Job - " + job.getTitle() + ", Status - " + JobStatus.OVERDUE.name() + ", Time - "+ job.getPlannedEndTime();
-						pushService.send(pushUserIds, message); //send push to employee and managers.
-						if(overdueAlertSetting.getValue().equalsIgnoreCase("true")) { //send escalation emails to managers and alert emails
-							mailService.sendOverdueJobAlert(assignee.getUser(), alertEmailIds, job.getSite().getName(), job.getId(), job.getTitle(), exportResult.getFile());
-							job.setOverDueEmailAlert(true);
+						List<Long> pushAlertUserIds = new ArrayList<Long>();
+						Employee assignee = job.getEmployee();
+						if(assignee.getUser() != null) {
+							pushAlertUserIds.add(assignee.getUser().getId()); //add employee user account id for push
 						}
-					}catch(Exception e) {
-						log.error("Error while sending push and email notification for overdue job alerts",e);
+						int alertCnt = job.getOverdueAlertCount() + 1;
+						Employee manager = assignee;
+						for(int x = 0; x < alertCnt; x++ ) {
+							manager = manager.getManager();
+							if(manager != null && manager.getUser() != null) {
+								alertEmailIds += "," + manager.getUser().getEmail();
+								pushAlertUserIds.add(manager.getUser().getId()); //add manager user account id for push
+							}
+						}
+						try {
+							long[] pushUserIds = Longs.toArray(pushAlertUserIds);
+							String message = "Site - "+ job.getSite().getName() + ", Job - " + job.getTitle() + ", Status - " + JobStatus.OVERDUE.name() + ", Time - "+ job.getPlannedEndTime();
+							pushService.send(pushUserIds, message); //send push to employee and managers.
+							if(overdueAlertSetting.getValue().equalsIgnoreCase("true")) { //send escalation emails to managers and alert emails
+								mailService.sendOverdueJobAlert(assignee.getUser(), alertEmailIds, job.getSite().getName(), job.getId(), job.getTitle(), exportResult.getFile());
+								job.setOverDueEmailAlert(true);
+							}
+						}catch(Exception e) {
+							log.error("Error while sending push and email notification for overdue job alerts",e);
+						}
+						job.setOverdueAlertCount(alertCnt);
+						job.setStatus(JobStatus.OVERDUE);
+						jobRepository.save(job);
+	
+					} catch (Exception ex) {
+						log.warn("Failed to create JOB ", ex);
 					}
-					job.setOverdueAlertCount(alertCnt);
-					job.setStatus(JobStatus.OVERDUE);
-					jobRepository.save(job);
-
-				} catch (Exception ex) {
-					log.warn("Failed to create JOB ", ex);
 				}
 			}
 		}
@@ -319,39 +327,41 @@ public class SchedulerService extends AbstractService {
 	//@Scheduled(initialDelay = 60000,fixedRate = 900000) //Runs every 15 mins
 	@Scheduled(cron="0 0 18 1/1 * ?")
 	public void endOfDayReportSchedule() {
-		Setting eodReports = settingRepository.findSettingByKey("email.notification.eodReports");
-		Setting eodReportEmails = settingRepository.findSettingByKey("email.notification.eodReports.emails");
-		Calendar cal = Calendar.getInstance();
-		cal.set(Calendar.HOUR_OF_DAY, 0);
-		cal.set(Calendar.MINUTE, 0);
-		List<Project> projects = projectRepository.findAll();
-		for(Project proj : projects) {
-			//Set<Site> sites = proj.getSite();
-			//Iterator<Site> siteItr = sites.iterator();
-			//while(siteItr.hasNext()) {
-				SearchCriteria sc = new SearchCriteria();
-				sc.setCheckInDateTimeFrom(cal.getTime());
-				sc.setProjectId(proj.getId());
-				List<ReportResult> reportResults = jobManagementService.generateConsolidatedReport(sc, true);
-				
-				if(CollectionUtils.isNotEmpty(reportResults)) {
-						//if report generation needed
-		                log.debug("results exists");
-						if(eodReports.getValue().equalsIgnoreCase("true")) {
-						    log.debug("send report");
-							ExportResult exportResult = new ExportResult();
-							exportResult = exportUtil.writeConsolidatedJobReportToFile(proj.getName(), reportResults, null, exportResult);
-							//send reports in email.
-							mailService.sendJobReportEmailFile(eodReportEmails.getValue(), exportResult.getFile(), null, cal.getTime());
-		
-						}
-		
-				}
-				else{
-		    	    		log.debug("no jobs found on the daterange");
-		        }
-		
-			//}
+		if(env.getProperty("scheduler.eodJobReport.enabled").equalsIgnoreCase("true")) {
+			Setting eodReports = settingRepository.findSettingByKey("email.notification.eodReports");
+			Setting eodReportEmails = settingRepository.findSettingByKey("email.notification.eodReports.emails");
+			Calendar cal = Calendar.getInstance();
+			cal.set(Calendar.HOUR_OF_DAY, 0);
+			cal.set(Calendar.MINUTE, 0);
+			List<Project> projects = projectRepository.findAll();
+			for(Project proj : projects) {
+				//Set<Site> sites = proj.getSite();
+				//Iterator<Site> siteItr = sites.iterator();
+				//while(siteItr.hasNext()) {
+					SearchCriteria sc = new SearchCriteria();
+					sc.setCheckInDateTimeFrom(cal.getTime());
+					sc.setProjectId(proj.getId());
+					List<ReportResult> reportResults = jobManagementService.generateConsolidatedReport(sc, true);
+					
+					if(CollectionUtils.isNotEmpty(reportResults)) {
+							//if report generation needed
+			                log.debug("results exists");
+							if(eodReports.getValue().equalsIgnoreCase("true")) {
+							    log.debug("send report");
+								ExportResult exportResult = new ExportResult();
+								exportResult = exportUtil.writeConsolidatedJobReportToFile(proj.getName(), reportResults, null, exportResult);
+								//send reports in email.
+								mailService.sendJobReportEmailFile(eodReportEmails.getValue(), exportResult.getFile(), null, cal.getTime());
+			
+							}
+			
+					}
+					else{
+			    	    		log.debug("no jobs found on the daterange");
+			        }
+			
+				//}
+			}
 		}
 		
 	}

@@ -20,7 +20,7 @@ spring:
             enabled: false # we use Grunt + BrowserSync for livereload
     datasource:
         driver-class-name: com.mysql.jdbc.Driver
-        url: jdbc:mysql://localhost:3306/Zappy-attendance?useUnicode=true&characterEncoding=utf8
+        url: jdbc:mysql://localhost:3306/uds-attendance?useUnicode=true&characterEncoding=utf8
         name:
         username: root
         password: Uds@2018
@@ -92,6 +92,22 @@ email:
         report:
             title: Completed job report    
 
+reports:
+    job-report:
+        url: http://ec2-35-154-182-53.ap-south-1.compute.amazonaws.com:8088/#/job-reports
+        #url: http://ec2-13-127-100-174.ap-south-1.compute.amazonaws.com:8088/#/job-reports
+    attendance-report:
+        url: http://ec2-35-154-182-53.ap-south-1.compute.amazonaws.com:8088/#/attendance-reports
+        #url: http://ec2-13-127-100-174.ap-south-1.compute.amazonaws.com:8088/#/attendance-reports
+        
+facedetection:
+    api:
+        url: https://api.kairos.com/detect
+        enrollUrl: https://api.kairos.com/enroll
+        verifyUrl: https://api.kairos.com/verify
+        apiKey: a6ae8363069107177e06c3ca3f76a66b
+        apiId: 2f2877f2
+
 locationService:
    url: http://localhost:8000/api/site/location
 #   url: http://ec2-52-77-216-21.ap-southeast-1.compute.amazonaws.com:8000/api/site/location
@@ -99,14 +115,23 @@ locationService:
 quotationService:
 #   url: http://locahost:8000/api/site/location
 #   url: http://ec2-52-77-216-21.ap-southeast-1.compute.amazonaws.com:8000/api/site/location
-   url: http://localhost:8000/
+   url: http://localhost:8000/api
 
 pushService:
    url: http://localhost:9000/
 
 scheduler:
    dailyJob:
+      enabled: false
       creation: monthly
+   weeklyJob:
+      enabled: false
+   monthlyJob:
+      enabled: false      
+   overdueJob:
+      enabled: false   
+   eodJobReport:
+      enabled: false
       
 default.user.password: uds12345      
 # ===================================================================
