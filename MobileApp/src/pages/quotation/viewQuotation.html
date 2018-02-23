@@ -24,6 +24,22 @@
         <ion-col col-6 *ngIf="quotation.description">
             <p text-right>{{quotation.description}}</p>
         </ion-col>
+        <ion-col col-6 *ngIf="quotation.clientName" class="label-on-left">Client Name</ion-col>
+        <ion-col col-6 *ngIf="quotation.clientName">
+            <p text-right>{{quotation.clientName}}</p>
+        </ion-col>
+
+        <ion-col col-6 *ngIf="quotation.siteId" class="label-on-left">Site Id</ion-col>
+        <ion-col col-6 *ngIf="quotation.siteId">
+            <p text-right>{{quotation.siteId}}</p>
+        </ion-col>
+
+        <ion-col col-6 *ngIf="quotation.siteName" class="label-on-left">Site Name</ion-col>
+        <ion-col col-6 *ngIf="quotation.siteName">
+            <p text-right>{{quotation.siteName}}</p>
+        </ion-col>
+
+
 
     </ion-row>
     <div class="card-content white-bg">
@@ -78,7 +94,7 @@
 <ion-footer >
     <ion-toolbar class="align-right" >
 
-        <button *ngIf="!quotation.isSubmitted" class="btn btn-success center pull-right" (click)="sendQuotation(quotation)">
+        <button *ngIf="quotation.isDrafted" class="btn btn-success center pull-right" (click)="sendQuotation(quotation)">
             Send Quotation &nbsp; <ion-icon name="ios-arrow-forward-outline"></ion-icon>
         </button>
         <button *ngIf="quotation.isSubmitted" class="btn btn-success center pull-right" (click)="approveQuotation(quotation)">
