@@ -125,7 +125,7 @@ Tip 3: you can change the color of the sidebar with data-background-color="white
                     <p>Import</p>
                 </a>
             </li>
-            <li has-authority="ROLE_ADMIN" ng-class="{active: $state.includes('reports')}">
+            <li has-permission="Reports:List" ng-class="{active: $state.includes('reports')}">
                 <a data-toggle="collapse" data-target="#formsExamples" href="#">
                     <i class="material-icons">content_paste</i>
                     <p> Reports
@@ -134,20 +134,20 @@ Tip 3: you can change the color of the sidebar with data-background-color="white
                 </a>
                 <div class="collapse" id="formsExamples">
                     <ul class="nav SubNav">
-                        <li ui-sref-active="active">
+                        <li ui-sref-active="active" has-permission="EmployeeReports:List">
                             <a ui-sref="employeeReports">
                                 <i class="material-icons">people</i>
                                 <p>Employee</p>
                             </a>
                         </li>
-                        <li ui-sref-active="active">
+                        <li ui-sref-active="active" has-permission="JobReports:List">
                             <a ui-sref="jobReports">
                                 <i class="material-icons">description</i>
                                 <p>Job</p>
                             </a>
                         </li>
                         <li ui-sref-active="active">
-                            <a ui-sref="attendanceReports">
+                            <a ui-sref="attendanceReports" has-permission="AttendanceReports:List">
                                 <i class="material-icons">content_paste</i>
                                 <p>Attendance</p>
                             </a>
@@ -162,19 +162,19 @@ Tip 3: you can change the color of the sidebar with data-background-color="white
                     <p>Rate Card </p>
                 </a>
             </li>
-            <li ui-sref-active="active" has-permission="UserRole:List">
+            <li ui-sref-active="active" has-authority="ROLE_ADMIN"  >
                 <a ui-sref="user-roles">
                     <i class="material-icons">group</i>
                     <p>User Roles</p>
                 </a>
             </li>
-            <li ui-sref-active="active" has-permission="RolePermission:List">
+            <li ui-sref-active="active" has-authority="ROLE_ADMIN"  >
                 <a ui-sref="role-permission">
                     <i class="material-icons">group</i>
                     <p>Role Permission</p>
                 </a>
             </li>
-            <li ui-sref-active="active" has-permission="RolePermission:List">
+            <li ui-sref-active="active" has-authority="ROLE_ADMIN" >
                 <a ui-sref="app-module-actions">
                     <i class="material-icons">view_module</i>
                     <p>App Module & Actions</p>
@@ -196,13 +196,13 @@ Tip 3: you can change the color of the sidebar with data-background-color="white
                                 <p>User</p>
                             </a>
                         </li>
-                        <li ui-sref-active="active">
+                        <li ui-sref-active="active" has-permission="UserGroup:List">
                             <a ui-sref="userGroups">
                                 <i class="material-icons">group</i>
                                 <p>User Group</p>
                             </a>
                         </li>
-                        <li ui-sref-active="active">
+                        <li ui-sref-active="active" has-permission="Settings:List">
                             <a ui-sref="settings-list">
                                 <i class="material-icons">settings</i>
                                 <p>Settings</p>

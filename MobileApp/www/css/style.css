@@ -495,7 +495,17 @@ table tr
 .blue-card
 {
   box-shadow: 0 1px 4px 0 deepskyblue !important;
-
+}
+.QuotationListContent .label
+{
+   font-size: 16px !important;
+   text-transform: capitalize !important;
+   font-weight: normal !important;
+}
+span.EmpNameTxt
+{
+   line-height: 33px;
+   text-transform: capitalize;
 }
 .padding10
 {
@@ -919,4 +929,16 @@ ion-spinner{
 {
     top: 92px !important;
     left: 53px !important;
+}
+.abs-btn
+{
+    position: absolute !important;
+    font-size: 20px;
+    top: -3px !important;
+    right: 0px !important;
+    height: 20px !important;
+}
+.select-error
+{
+    border-bottom: 1px solid #f53d3d !important;
 }

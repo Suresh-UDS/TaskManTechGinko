@@ -24,10 +24,12 @@ import com.codahale.metrics.annotation.Timed;
 import com.ts.app.security.SecurityUtils;
 import com.ts.app.service.AttendanceService;
 import com.ts.app.service.EmployeeService;
+import com.ts.app.service.util.ReportUtil;
 import com.ts.app.web.rest.dto.AttendanceDTO;
 import com.ts.app.web.rest.dto.EmployeeDTO;
 import com.ts.app.web.rest.dto.ExportResponse;
 import com.ts.app.web.rest.dto.ExportResult;
+import com.ts.app.web.rest.dto.JobDTO;
 import com.ts.app.web.rest.dto.SearchCriteria;
 import com.ts.app.web.rest.dto.SearchResult;
 import com.ts.app.web.rest.errors.TimesheetException;
@@ -47,6 +49,8 @@ public class AttendanceResource {
 	@Inject
     private EmployeeService employeeService;
 
+	@Inject
+	private ReportUtil reportUtil;
 
 	/**
 	 * POST /saveAttendance -> Attendance.
@@ -126,6 +130,18 @@ public class AttendanceResource {
         return result;
     }
 
+	@RequestMapping(value = "/attendance/report/{uid}",method = RequestMethod.POST)
+	public SearchResult<AttendanceDTO> jobReport(@PathVariable("uid") String uid) {
+		SearchResult<AttendanceDTO> result = null;
+		SearchCriteria searchCriteria = reportUtil.getJobReportCriteria(uid);
+		if(searchCriteria != null) {
+			searchCriteria.setUserId(SecurityUtils.getCurrentUserId());
+			result = attendanceService.findBySearchCrieria(searchCriteria);			
+		}
+		return result;
+	}
+
+    
     @RequestMapping(value = "/attendance/export",method = RequestMethod.POST)
 	public ExportResponse exportTimesheet(@RequestBody SearchCriteria searchCriteria) {
 		ExportResponse resp = new ExportResponse();
@@ -133,7 +149,7 @@ public class AttendanceResource {
 			searchCriteria.setUserId(SecurityUtils.getCurrentUserId());
 			SearchResult<AttendanceDTO> result = attendanceService.findBySearchCrieria(searchCriteria);
 			List<AttendanceDTO> results = result.getTransactions();
-			resp.addResult(attendanceService.export(results, null));
+			resp.addResult(attendanceService.generateReport(results, searchCriteria));
 		}
 		return resp;
 	}

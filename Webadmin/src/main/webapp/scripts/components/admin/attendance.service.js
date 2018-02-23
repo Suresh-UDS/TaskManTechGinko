@@ -15,10 +15,17 @@ angular.module('timeSheetApp')
                       return response.data;
                   });
             },
-            search: function(searchCriteria) {
-            	return $http.post('api/attendance/search', searchCriteria).then(function (response) {
-            		return response.data;
-            	});
+            search: function(searchCriteria,uid) {
+        		console.log('uid in search call - ' + uid); 
+	            	if(uid) {
+	            		return $http.post('api/attendance/report/'+uid).then(function (response) {
+		            		return response.data;
+		            	});
+	            	}else {
+		            	return $http.post('api/attendance/search', searchCriteria).then(function (response) {
+		            		return response.data;
+		            	});
+	            	}
             },
             exportAllData: function(searchCriteria) {
             	return $http.post('api/attendance/export', searchCriteria).then(function (response) {

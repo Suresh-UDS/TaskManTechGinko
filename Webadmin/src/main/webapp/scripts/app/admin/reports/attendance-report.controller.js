@@ -107,6 +107,7 @@ angular.module('timeSheetApp')
 
 
         $scope.search = function () {
+        	var reportUid = $stateParams.uid;        	
             console.log($scope.datePickerDate);
         	var currPageVal = ($scope.pages ? $scope.pages.currPage : 1);
         	if(!$scope.searchCriteria) {
@@ -158,7 +159,7 @@ angular.module('timeSheetApp')
                 $scope.searchCriteria.findAll = false;
             }
         	console.log(JSON.stringify($scope.searchCriteria));
-        	AttendanceComponent.search($scope.searchCriteria).then(function (data) {
+        	AttendanceComponent.search($scope.searchCriteria, reportUid).then(function (data) {
                 $scope.attendancesData = data.transactions;
                 console.log('Attendance search result list -' + $scope.attendancesData);
                 $scope.pages.currPage = data.currPage;
@@ -420,10 +421,10 @@ angular.module('timeSheetApp')
                 		exportStatusObj.exportMsg = data.msg;
                 		console.log('exportMsg - '+ exportStatusObj.exportMsg);
                 		if(exportStatusObj.exportStatus == 'COMPLETED'){
-                			if($rootScope.exportStatusObj.url) {
-                				$rootScope.exportStatusObj.exportFile = $rootScope.exportStatusObj.url;
+                			if(exportStatusObj.url) {
+                				exportStatusObj.exportFile = exportStatusObj.url;
                 			}else {
-	                			$rootScope.exportStatusObj.exportFile = data.file;
+	                			exportStatusObj.exportFile = data.file;
                 			}
                     		console.log('exportFile - '+ exportStatusObj.exportFile);
                     		$scope.stop();
