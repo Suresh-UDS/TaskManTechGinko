@@ -11,6 +11,7 @@ import {componentService} from "../service/componentService";
 import {QuotationService} from "../service/quotationService";
 import {SiteService} from "../service/siteService";
 
+
 @Component({
     selector: 'page-create-quotation-step2',
     templateUrl: 'create-quotation-step-2.html'
@@ -29,9 +30,8 @@ export class CreateQuotationPage2 {
     rateCardTypes:any;
 
     selectedSite:any;
-
-    showRateInformation:any;
     siteDetails:any;
+    showRateInformation:any;
     quotation:any;
     rates:any
 
@@ -70,7 +70,10 @@ export class CreateQuotationPage2 {
     }
 
     selectSite(site){
+        console.log("Selected Site");
         this.selectedSite = site;
+        this.siteDetails = site;
+        console.log(this.selectedSite);
         this.authService.getClientDetails(site.id).subscribe(
             response=>{
                 console.log(response);
@@ -98,7 +101,7 @@ export class CreateQuotationPage2 {
     }
 
     saveQuotation(quotation){
-        console.log(quotation)
+        console.log(quotation);
         this.quotationService.createQuotation(quotation).subscribe(response=>{
             console.log(response);
         })
@@ -169,6 +172,8 @@ export class CreateQuotationPage2 {
     }
     saveRates()
     {
+        console.log("selected site in save Rates");
+        console.log(this.selectedSite);
         var quotationDetails = {
             "title":this.quotation.title,
             "description":this.quotation.description,
@@ -180,12 +185,16 @@ export class CreateQuotationPage2 {
             "createdByUserId":this.sentByUserId,
             "createdByUserName":this.sentByUserName,
             "clientEmailId": this.clientEmailId,
-            "siteId":this.selectedSite.id,
-            "siteName":this.selectedSite.name,
+            "siteId":this.siteDetails.id,
+            "clientId":this.siteDetails.projectId,
+            "clientName":this.siteDetails.projectName,
+            "siteName":this.siteDetails.name,
             "grandTotal":this.grandTotal,
             "isDrafted":true
         };
 
+        console.log("Before saving quotation");
+        console.log(quotationDetails);
         this.quotationService.createQuotation(quotationDetails).subscribe(
             response=>{
                 console.log(response);
