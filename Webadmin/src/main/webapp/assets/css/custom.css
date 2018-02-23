@@ -345,7 +345,10 @@ textarea.form-control {
       padding-top: 10px;
       border: 1px solid #ff9800;
 }
-
+.SummaryCard table tr td
+{
+    width:50%;
+}
 .tablecard .btn, .navbar .navbar-nav>li>a.btn
 {
      padding: 0px 5px;

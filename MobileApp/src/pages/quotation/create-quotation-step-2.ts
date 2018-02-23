@@ -140,9 +140,18 @@ export class CreateQuotationPage2 {
 
         popover.onDidDismiss(data=>
         {
-            this.rates.push(data);
-            this.grandTotal=this.grandTotal+data.total;
-            console.log(this.rates);
+            console.log("Popover dissmiss");
+            if(data)
+            {
+                this.rates.push(data);
+                this.grandTotal=this.grandTotal+data.total;
+                console.log(this.rates);
+            }
+            else
+            {
+                console.log(data);
+            }
+
         })
     }
 

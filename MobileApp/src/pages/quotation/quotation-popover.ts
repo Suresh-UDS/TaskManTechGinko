@@ -41,7 +41,7 @@ export class QuotationPopoverPage {
   addRates()
   {
 
-    if(this.name && this.cost)
+    if(this.name && this.cost && this.type)
     {
       this.addrates={type:this.type,name:this.name,no:1,cost:this.cost,uom:this.selectedUOM,total:this.cost};
       console.log(this.addrates);
@@ -60,10 +60,20 @@ export class QuotationPopoverPage {
         this.eMsg="cost";
         this.field="cost";
       }
+      else if(!this.type)
+      {
+        this.eMsg="type";
+        this.field="type";
+      }
 
     }
 
 
+  }
+
+  close()
+  {
+    this.viewCtrl.dismiss();
   }
 
 }
