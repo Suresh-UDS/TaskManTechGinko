@@ -1,13 +1,7 @@
 <ion-content >
     <ion-list >
         <ion-row class="margin0 white-bg">
-            <ion-col col-12 >
-                <div>
-                    <button ion-button clear (click)="close()" class="abs-btn">
-                        <ion-icon name="close" class="clr-red"></ion-icon>
-                    </button>
-                </div>
-            </ion-col>
+
             <ion-col col-12>
                 <div class="form-group">
                         <ion-select style="color: black" interface="action-sheet" [(ngModel)]="type" class="select-box" placeholder="Choose Type" id="type" name="type" #ctype="ngModel" required [ngClass]="{'select-error': eMsg=='type'}">
@@ -53,8 +47,12 @@
                     </div>
                 </div>
             </ion-col>
-
-            <button type="submit" class="btn btn-warning pull-right margin-auto" (click)="addRates()">Ok</button>
+            <ion-col col-5 >
+                <button ion-button color="secondary" class="align-right" (click)="addRates()">Ok</button>
+            </ion-col>
+            <ion-col col-7 >
+                <button ion-button color="danger" class="align-left" (click)="close()">Cancel</button>
+            </ion-col>
         </ion-row>
     </ion-list>
 </ion-content>
