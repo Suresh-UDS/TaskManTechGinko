@@ -111,16 +111,16 @@ public class UserResource {
 
 	@Inject
 	private MapperUtil<AbstractAuditingEntity, BaseDTO> mapperUtil;
-	
+
 	@Inject
 	private MailService mailService;
-	
+
 	@Inject
 	private PasswordEncoder passwordEncoder;
-	
+
 	@Inject
 	private EmployeeRepository employeeRepository;
-	
+
 	/**
 	 * POST /users -> Create a new user.
 	 */
@@ -159,14 +159,15 @@ public class UserResource {
 	public ResponseEntity<UserDTO> updateUser(@RequestBody UserDTO userDTO)
 			throws URISyntaxException {
 		log.debug("REST request to update User : {}", userDTO);
+		log.debug("REST request to update User : {}", userDTO.getLogin());
 		return Optional.of(userRepository.findOne(userDTO.getId())).map(user -> {
-			
+
 //			if(userDTO.getUserGroupId() > 0) {
 //            		user.setUserGroup(userGroupRepository.findOne(userDTO.getUserGroupId()));
 //            }else {
 //            		throw new TimesheetException(new IllegalArgumentException("Not a valid User Group"));
 //            }
-			
+
 			if(userDTO.getUserRoleId() > 0) {
 	        		user.setUserRole(userRoleRepository.findOne(userDTO.getUserRoleId()));
 	        }else {
@@ -183,8 +184,8 @@ public class UserResource {
 	        		employee.setUser(user);
 	        		employeeRepository.save(employee);
 	        	}
-			
-			//user.setLogin(userDTO.getLogin());
+
+			user.setLogin(userDTO.getLogin());
 			//user.setClearPassword(userDTO.getClearPassword());
 			//String encryptedPassword = null;
 //            if(StringUtils.isNotEmpty(userDTO.getPassword())){
@@ -211,13 +212,13 @@ public class UserResource {
 			}
 			authorities.clear();
 			Set<String> auths = userDTO.getAuthorities();
-			for(String auth : auths) { 
+			for(String auth : auths) {
 				log.debug("user authorities :"+ auth);
 			}
 			userDTO.setAuthorities(UserUtil.transformAuthorities(auths));
 			userDTO.getAuthorities().stream()
 					.forEach(authority -> authorities.add(authorityRepository.findOne(authority)));
-			
+
 			return ResponseEntity.ok().headers(HeaderUtil.createEntityUpdateAlert("user", userDTO.getLogin()))
 					.body(mapperUtil.toModel(userRepository.findOne(userDTO.getId()), UserDTO.class));
 		}).orElseGet(() -> new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR));
@@ -251,7 +252,7 @@ public class UserResource {
 		HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/users");
 		return new ResponseEntity<>(userDTOList, headers, HttpStatus.OK);
 	}
-	
+
 	/**
 	 * GET /users -> get a user.
 	 */
@@ -263,14 +264,14 @@ public class UserResource {
 		UserDTO userDto = userService.getUserWithAuthorities(id);
 		return new ResponseEntity<UserDTO>(userDto, HttpStatus.OK);
 	}
-	
+
 	@RequestMapping(value = "/users/{id}", method = RequestMethod.DELETE)
 	public ResponseEntity<?> delete(@PathVariable long id) {
 		log.info("Inside Delete" + id);
 		userService.deleteUser(id);
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
-	
+
 
 	@RequestMapping(value = "/users/search",method = RequestMethod.POST)
 	public SearchResult<UserDTO> searchUsers(@RequestBody SearchCriteria searchCriteria) {
