@@ -235,3 +235,5 @@ QuotationService/.idea/
 QuotationService/package-lock.json
 
 MobileApp/www/build/
+
+QuotationService/node_modules
