@@ -9,20 +9,9 @@ var PDFDocument = require('pdfkit');
 var fs = require('fs');
 
 
-// create an export function to encapsulate the controller's methods
-module.exports = {
-
-    ping: function(req, res, next) {
-        res.json(200, {
-            status: 'Location API is running.',
-        });
-    },
-
-    createQuotation: function(req, res,next){
-        console.log("Create quotation function");
+    function populateQuotation(req, quotation) {
         var date = new Date();
-        var quotation = new Quotation();
-        console.log(req.body);
+        if(req.body._id) quotation._id = req.body._id;
         if(req.body.title) quotation.title = req.body.title;
         if(req.body.description) quotation.description = req.body.title;
         if(req.body.rateCardDetails) quotation.rateCardDetails = req.body.rateCardDetails;
@@ -36,18 +25,23 @@ module.exports = {
         if(req.body.approvedByUserName) quotation.approvedByUserName = req.body.approvedByUserName;
         if(req.body.authorisedByUserId) quotation.authorisedByUserId = req.body.authorisedByUserId;
         if(req.body.authorisedByUserName) quotation.authorisedByUserName = req.body.authorisedByUserName;
+        if(req.body.siteId) quotation.siteId = req.body.siteId;
         if(req.body.siteName) quotation.siteName = req.body.siteName;
+        if(req.body.projectId) quotation.projectId = req.body.projectId;
+        if(req.body.projectName) quotation.projectName = req.body.projectName;
         if(req.body.clientEmailId) quotation.clientEmailId = req.body.clientEmailId;
         if(req.body.grandTotal) quotation.grandTotal = req.body.grandTotal;
         if(req.body.isDrafted){
             quotation.isDrafted = true;
             quotation.processHistory.isDrafted = date;
+            quotation.createdDate = date;
         }else{
             quotation.isDrafted = false;
         }
 
         if(req.body.isSubmitted){
             quotation.isSubmitted = true;
+            quotation.submittedDate = date;
             quotation.processHistory.isSubmitted = date;
         }else{
             quotation.isSubmitted = false;
@@ -67,6 +61,26 @@ module.exports = {
             quotation.isArchived = false;
         }
         quotation.lastModifiedDate = date;
+        return quotation;
+
+    }
+
+// create an export function to encapsulate the controller's methods
+module.exports = {
+
+    ping: function(req, res, next) {
+        res.json(200, {
+            status: 'Location API is running.',
+        });
+    },
+
+
+    createQuotation: function(req, res,next){
+        console.log("Create quotation function");
+        var quotation = new Quotation();
+        console.log(req.body);
+
+        quotation = populateQuotation(req,quotation);
 
         quotation.save(function(err,quotation){
             if(!err){
@@ -80,67 +94,30 @@ module.exports = {
         })
     },
 
+
+
     editQuotation: function(req,res,next){
         console.log("Edit Quotation");
         console.log(req.body)
         var date = new Date();
-        Quotation.findById(req.body.id,function(err,quotation){
+        Quotation.findById(req.body._id,function(err,quotation){
+            if(err) {
 
-            if(req.body.title) quotation.title = req.body.title;
-            if(req.body.description) quotation.description = req.body.title;
-            if(req.body.rateCardDetails) quotation.rateCardDetails = req.body.rateCardDetails;
-            if(req.body.sentByUserId) quotation.sentByUserId = req.body.sentByUserId;
-            if(req.body.sentByUserName) quotation.sentByUserName = req.body.sentByUserName;
-            if(req.body.sentToUserId) quotation.sentToUserId = req.body.sentToUserId;
-            if(req.body.sentToUserName) quotation.sentToUserName = req.body.sentToUserName;
-            if(req.body.createdByUserId) quotation.createdByUserId = req.body.createdByUserId;
-            if(req.body.createdByUserName) quotation.createdByUserName = req.body.createdByUserName;
-            if(req.body.approvedByUserId) quotation.approvedByUserId = req.body.approvedByUserId;
-            if(req.body.approvedByUserName) quotation.approvedByUserName = req.body.approvedByUserName;
-            if(req.body.authorisedByUserId) quotation.authorisedByUserId = req.body.authorisedByUserId;
-            if(req.body.authorisedByUserName) quotation.authorisedByUserName = req.body.authorisedByUserName;
-            if(req.body.siteName) quotation.siteName = req.body.siteName;
-            if(req.body.clientEmailId) quotation.clientEmailId = req.body.clientEmailId;
-            if(req.body.grandTotal) quotation.grandTotal = req.body.grandTotal;
-            if(req.body.isDrafted){
-                quotation.isDrafted = true;
-                quotation.processHistory.isDrafted = date;
-            }else{
-                quotation.isDrafted = false;
+            }else if(quotation) {
+                console.log('found quotation -' + JSON.stringify(quotation))
+                quotation = populateQuotation(req,quotation);
+                console.log('values updated to quotation -' + JSON.stringify(quotation))
+                quotation.save(function(err,quotation){
+                    if(!err){
+                        // mailerService.submitQuotation('karthickk@techginko.com',quotation);
+                        res.json(200,quotation)
+                    }else{
+                        console.log("Error in saving quotation");
+                        console.log(err)
+                        res.json(500,err);
+                    }
+                })
             }
-
-            if(req.body.isSubmitted){
-                quotation.isSubmitted = true;
-                quotation.processHistory.isSubmitted = date;
-            }else{
-                quotation.isSubmitted = false;
-            }
-
-            if(req.body.isApproved){
-                quotation.isApproved = true;
-                quotation.processHistory.isApproved = date;
-            }else{
-                quotation.isApproved = false;
-            }
-
-            if(req.body.isArchived){
-                quotation.isArchived = true;
-                quotation.processHistory.isArchived = date;
-            }else{
-                quotation.isArchived = false;
-            }
-            quotation.lastModifiedDate = date;
-
-            quotation.save(function(err,quotation){
-                if(!err){
-                    // mailerService.submitQuotation('karthickk@techginko.com',quotation);
-                    res.json(200,quotation)
-                }else{
-                    console.log("Error in saving quotation");
-                    console.log(err)
-                    res.json(500,err);
-                }
-            })
 
         })
 
@@ -149,6 +126,7 @@ module.exports = {
     sendQuotation: function(req,res,next){
         console.log("Send quotation");
         console.log(req.body)
+        var date = new Date();
         Quotation.findById(req.body._id,function(err,quotation){
                 if(err){
                     console.log('Error in sending mail');
@@ -157,7 +135,9 @@ module.exports = {
                     console.log("Mail successfully sent");
                     quotation.isDrafted = false;
                     quotation.isSubmitted = true;
-                    quotation.processHistory.isSubmitted = new Date();
+                    quotation.processHistory.isSubmitted = date;
+                    quotation.submittedDate = date;
+                    quotation.lastModifiedDate = date;
                     mailerService.submitQuotation(quotation.sentToEmailId,quotation)
 
                     quotation.save(function(err,quotation){
@@ -177,6 +157,7 @@ module.exports = {
 
     approveQuotation: function(req,res,next){
         console.log("Approve Quotation");
+        var date = new Date();
         Quotation.findById(req.body._id,function(err,quotation){
                 if(err){
                     console.log('Error in sending mail');
@@ -185,7 +166,9 @@ module.exports = {
                     console.log("Mail successfully sent");
                     quotation.isSubmitted = false;
                     quotation.isApproved = true;
-                    quotation.processHistory.isApproved = new Date();
+                    quotation.processHistory.isApproved = date;
+                    quotation.approvedDate = date;
+                    quotation.lastModifiedDate = date;
                     mailerService.submitQuotation(quotation.clientEmailId,quotation);
 
                     quotation.save(function(err,quotation){
@@ -206,10 +189,12 @@ module.exports = {
     archiveQuotation: function(req,res,next){
 
         console.log("Archive Quotation");
+        var date = new Date();
         Quotation.findById(req.body.id,function(err,quotation){
             quotation.isApproved = false;
             quotation.isArchived = true;
-            quotation.processHistory.isArchived = new Date();
+            quotation.processHistory.isArchived = date;
+            quotation.lastModifiedDate = date;
             quotation.save(function(err,quotation){
                 if(!err){
                     // mailerService.submitQuotation('karthickk@techginko.com',quotation);
@@ -264,9 +249,24 @@ module.exports = {
               console.log("unable to get Quotations")
               res.send(200,err);
           }else{
+              console.log('Get Quotations response - ' + quotations);
               res.send(200,quotations);
           }
       })
+    },
+
+    getQuotation: function(req,res,next){
+        console.log("Get quotations by id");
+        console.log(req.params.id);
+        Quotation.findById(req.params.id, function(err,quotation){
+            console.log('quotation details - '+ quotation);
+            if(err){
+                res.send(500, err);
+            } else{
+                res.send(200,quotation);
+            }
+
+        })
     },
 
     getQuotationById: function(req,res,next){

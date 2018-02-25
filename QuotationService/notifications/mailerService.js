@@ -8,8 +8,8 @@ var emailTemplates = {};
 registerTemplates();
 
 function registerTemplates(){
-    var templateDir = path.join(__dirname+'../../../', 'templates/email/');
-    var templateDir = path.join('D:/workspace/FMS/QuotationService/templates/');
+    var templateDir = path.join(__dirname+'../../', 'templates/');
+    //var templateDir = path.join('D:/workspace/FMS/QuotationService/templates/');
 
     fs.readdirSync(templateDir).forEach(function (file) {
         fs.readFile(templateDir+file, function(err, buf) {

@@ -6,8 +6,8 @@ import java.util.Map;
 
 import javax.inject.Inject;
 
-import com.fasterxml.jackson.databind.SerializationFeature;
 import org.apache.commons.collections.CollectionUtils;
+import org.json.JSONArray;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,22 +20,25 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
+import org.springframework.util.StringUtils;
+import org.springframework.web.client.RestTemplate;
 
+import com.fasterxml.jackson.databind.SerializationFeature;
 import com.ts.app.domain.AbstractAuditingEntity;
 import com.ts.app.domain.RateCard;
+import com.ts.app.domain.User;
 import com.ts.app.repository.ProjectRepository;
 import com.ts.app.repository.RateCardRepository;
 import com.ts.app.repository.SiteRepository;
 import com.ts.app.repository.UserRepository;
 import com.ts.app.service.util.MapperUtil;
 import com.ts.app.web.rest.dto.BaseDTO;
+import com.ts.app.web.rest.dto.QuotationDTO;
 import com.ts.app.web.rest.dto.RateCardDTO;
 import com.ts.app.web.rest.dto.SearchCriteria;
 import com.ts.app.web.rest.dto.SearchResult;
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
-import org.springframework.util.StringUtils;
-import org.springframework.web.client.RestTemplate;
 
 /**
  * Service class for exposing rate card related operations.
@@ -81,16 +84,11 @@ public class RateCardService extends AbstractService {
 
             headers.setAll(map);
 
-            Map<String,Object> paramMap = new HashMap<String,Object>();
-            paramMap.put("title",rateCardDto.getTitle());
-            paramMap.put("type",rateCardDto.getType());
-            paramMap.put("cost",rateCardDto.getAmount());
-            paramMap.put("uom",rateCardDto.getUom());
-
             JSONObject request = new JSONObject();
             request.put("title",rateCardDto.getTitle());
+            request.put("name",rateCardDto.getTitle());
             request.put("type",rateCardDto.getType());
-            request.put("cost",rateCardDto.getAmount());
+            request.put("cost",rateCardDto.getCost());
             request.put("uom", rateCardDto.getUom());
 
             HttpEntity<?> requestEntity = new HttpEntity<>(request.toString(),headers);
@@ -133,7 +131,7 @@ public class RateCardService extends AbstractService {
 		rateCard.setName(rateCardDTO.getName());
 		rateCard.setType(rateCardDTO.getType());
 		rateCard.setUom(rateCardDTO.getUom());
-		rateCard.setAmount(rateCardDTO.getAmount());
+		rateCard.setAmount(rateCardDTO.getCost());
 	}
 
 	public void deleteRateCard(RateCardDTO rateCardDto) {
@@ -209,8 +207,120 @@ public class RateCardService extends AbstractService {
 //		return mapperUtil.toModelList(entities, RateCardDTO.class);
         return  rateCardDetails;
 	}
+	
+	public QuotationDTO saveQuotation(QuotationDTO quotationDto) {
 
-    public Object getQuotations() {
+        log.debug("Quotation creation");
+
+        try{
+        		//get the user details
+        		User createdUser = userRepository.findOne(quotationDto.getCreatedByUserId());
+        		quotationDto.setCreateByUserName(createdUser.getLogin());
+        		
+        		//calculate the total cost
+        		List<RateCardDTO> rateCardDetails = quotationDto.getRateCardDetails();
+        		if(CollectionUtils.isNotEmpty(rateCardDetails)) {
+        			double grandTotal = 0;
+        			for(RateCardDTO rateCard : rateCardDetails) {
+        				grandTotal += rateCard.getQty() * rateCard.getUnitPrice();
+        			}
+        			quotationDto.setGrandTotal(grandTotal);
+        		}else {
+        			return quotationDto;
+        		}
+        	
+            RestTemplate restTemplate = new RestTemplate();
+            MappingJackson2HttpMessageConverter jsonHttpMessageConverter = new MappingJackson2HttpMessageConverter();
+            jsonHttpMessageConverter.getObjectMapper().configure(SerializationFeature.FAIL_ON_EMPTY_BEANS,false);
+            restTemplate.getMessageConverters().add(jsonHttpMessageConverter);
+
+            MultiValueMap<String, String> headers =new LinkedMultiValueMap<String, String>();
+            Map<String, String> map=  new HashMap<String, String>();
+            map.put("Content-Type", MediaType.APPLICATION_JSON_VALUE);
+
+            headers.setAll(map);
+
+            JSONObject request = new JSONObject();
+            request.put("title",quotationDto.getTitle());
+            request.put("description",quotationDto.getDescription());
+            JSONArray rateCardArr = new JSONArray();
+            if(CollectionUtils.isNotEmpty(quotationDto.getRateCardDetails())) {
+            		for(RateCardDTO rateCard : quotationDto.getRateCardDetails()) {
+            			JSONObject rcObj = new JSONObject();
+            			rcObj.put("title", rateCard.getTitle());
+            			rcObj.put("type", rateCard.getType());
+            			rcObj.put("uom", rateCard.getUom());
+            			rcObj.put("qty", rateCard.getQty());
+            			rcObj.put("unitPrice", rateCard.getUnitPrice());
+            			rcObj.put("cost", rateCard.getCost());
+            			rateCardArr.put(rcObj);
+            		}
+            }
+            request.put("_id", quotationDto.get_id());
+            request.put("rateCardDetails",rateCardArr);
+            request.put("grandTotal", quotationDto.getGrandTotal());
+            request.put("siteId", quotationDto.getSiteId());
+            request.put("siteName", quotationDto.getSiteName());
+            request.put("projectId", quotationDto.getProjectId());
+            request.put("projectName", quotationDto.getProjectName());
+            request.put("siteId", quotationDto.getSiteId());
+            request.put("createdByUserId", quotationDto.getCreatedByUserId());
+            request.put("createdByUserName", quotationDto.getCreateByUserName());
+            request.put("sentByUserId", quotationDto.getSentByUserId());
+            request.put("sentByUserName", quotationDto.getSentByUserName());
+            request.put("isDrafted", quotationDto.isDrafted());
+            request.put("isSubmitted", quotationDto.isSubmitted());
+
+            HttpEntity<?> requestEntity = new HttpEntity<>(request.toString(),headers);
+            log.debug("Request entity quotation save service"+requestEntity);
+            log.debug("quotation save  end point"+quotationSvcEndPoint);
+            String url = quotationSvcEndPoint+"/quotation/create";
+            if(!StringUtils.isEmpty(quotationDto.get_id())) {
+            		url = quotationSvcEndPoint+"/quotation/edit";
+            }
+            ResponseEntity<?> response = restTemplate.postForEntity(url, requestEntity, String.class);
+            log.debug("Response freom push service "+ response.getStatusCode());
+            log.debug("response from push service"+response.getBody());
+
+        }catch(Exception e) {
+            log.error("Error while calling quotation save service ", e);
+            e.printStackTrace();
+        }
+		return quotationDto;
+	}
+
+    public Object getQuotation(String id) {
+
+        log.debug("get Quotation");
+        Object quotationList = "";
+
+        try {
+            RestTemplate restTemplate = new RestTemplate();
+            MappingJackson2HttpMessageConverter jsonHttpMessageConverter = new MappingJackson2HttpMessageConverter();
+            jsonHttpMessageConverter.getObjectMapper().configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
+            restTemplate.getMessageConverters().add(jsonHttpMessageConverter);
+
+            MultiValueMap<String, String> headers = new LinkedMultiValueMap<String, String>();
+            Map<String, String> map = new HashMap<String, String>();
+            map.put("Content-Type", MediaType.APPLICATION_JSON_VALUE);
+
+            HttpEntity<?> requestEntity = new HttpEntity<>(headers);
+            log.debug("quotation service end point"+quotationSvcEndPoint);
+            ResponseEntity<?> response = restTemplate.getForEntity(quotationSvcEndPoint+"/quotation/id/" + id , String.class);
+            log.debug("Response freom push service "+ response.getStatusCode());
+            log.debug("response from push service"+response.getBody());
+//            rateCardDTOList = (List<RateCardDTO>) response.getBody();
+            quotationList = response.getBody();
+
+        }catch(Exception e) {
+            log.error("Error while calling location service ", e);
+            e.printStackTrace();
+        }
+
+        return  quotationList;
+    }
+    
+	public Object getQuotations() {
 
         log.debug("get Quotations");
         Object quotationList = "";

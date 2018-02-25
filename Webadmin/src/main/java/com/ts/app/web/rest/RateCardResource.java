@@ -21,9 +21,11 @@ import org.springframework.web.bind.annotation.RestController;
 import com.codahale.metrics.annotation.Timed;
 import com.ts.app.domain.RateType;
 import com.ts.app.domain.UOMType;
+import com.ts.app.security.SecurityUtils;
 import com.ts.app.service.RateCardService;
-import com.ts.app.web.rest.dto.SearchCriteria;
+import com.ts.app.web.rest.dto.QuotationDTO;
 import com.ts.app.web.rest.dto.RateCardDTO;
+import com.ts.app.web.rest.dto.SearchCriteria;
 import com.ts.app.web.rest.errors.TimesheetException;
 
 /**
@@ -112,6 +114,23 @@ public class RateCardResource {
         return uomTypes;
     }
 
+    @RequestMapping(value = "/rateCard/quotation", method = RequestMethod.POST)
+    public ResponseEntity<QuotationDTO> saveQuotation(@RequestBody QuotationDTO quotationDto) {
+        log.info("--Invoked RateCardResource.Get Quotations --");
+        long currentUserId = SecurityUtils.getCurrentUserId();
+        quotationDto.setCreatedByUserId(currentUserId);
+        QuotationDTO result = rateCardService.saveQuotation(quotationDto);
+        return new ResponseEntity<QuotationDTO>(result, HttpStatus.OK);
+    }
+	
+	@RequestMapping(value = "/rateCard/quotation/id/{id}", method = RequestMethod.GET)
+    public ResponseEntity<?> getQuotation(@PathVariable("id") String id) {
+        log.info("--Invoked RateCardResource.getQuotation --");
+        Object result = rateCardService.getQuotation(id);
+        return new ResponseEntity<>(result, HttpStatus.OK);
+    }
+
+    
     @RequestMapping(value = "/rateCard/quotation/get", method = RequestMethod.GET)
     public Object getQuotations() {
         log.info("--Invoked RateCardResource.Get Quotations --");
