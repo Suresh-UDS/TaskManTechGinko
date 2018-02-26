@@ -15,6 +15,128 @@
         <div class="card margin-TB-5 tablecard appModuleCard">
 
             <div class="card-content">
+            		<div class="SearchTable" ng-init="loadSites()">
+
+                        <form name="searchForm"  ng-submit="search()" novalidate >
+
+                            <table class="table no-padding-tblCon" border="0">
+                                <tr class="filter-row gc-search-row">
+
+
+                                    <td>
+                                        <div class="form-group" >
+                                            <div class="dropdown">
+                                                <input type="text"
+                                                       class="form-control border-bottom-input"
+                                                       placeholder="Quotation Id"
+                                                       ng-model="searchCriteria.quotationSerialId"
+                                                       ng-value="searchCriteria.quotationSerialId"
+                                                        />
+
+                                            </div>
+                                        </div>
+                                    </td>
+
+
+                                    <td>
+                                        <div class="form-group" >
+                                            <div class="dropdown">
+                                                <input type="text"
+                                                       class="form-control border-bottom-input"
+                                                       placeholder="Title"
+                                                       ng-model="searchCriteria.quotationTitle"
+                                                       ng-value="searchCriteria.quotationTitle"
+                                                       />
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="form-group" >
+                                            <div class="dropdown">
+                                                <input type="text"
+                                                       class="form-control border-bottom-input"
+                                                       placeholder="Client"
+                                                       ng-model="searchCriteria.projectName"
+                                                       ng-value="searchCriteria.projectName"
+                                                       />
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="form-group" >
+                                            <div class="dropdown">
+                                                <input type="text"
+                                                       class="form-control border-bottom-input"
+                                                       placeholder="Site"
+                                                       ng-model="searchCriteria.siteName"
+                                                       ng-value="searchCriteria.siteName"
+                                                       />
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="form-group" >
+                                            <div class="dropdown">
+                                                <input type="text"
+                                                       class="form-control searchable-input floatL border-bottom-input"
+                                                       placeholder="Created By"
+                                                       ng-model="searchCriteria.createdBy"
+                                                       ng-value="searchCriteria.createdBy"
+                                                       />
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="form-group" >
+                                            <div class="dropdown">
+                                                <input type="text"
+                                                       class="form-control searchable-input floatL border-bottom-input"
+                                                       placeholder="Submitted By"
+                                                       ng-model="searchCriteria.sentBy"
+                                                       ng-value="searchCriteria.sentBy"
+                                                       />
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="form-group" >
+                                            <div class="dropdown">
+                                                <input type="text"
+                                                       class="form-control searchable-input floatL border-bottom-input"
+                                                       placeholder="Approved By"
+                                                       ng-model="searchCriteria.approvedBy"
+                                                       ng-value="searchCriteria.approvedBy"
+                                                       />
+                                            </div>
+                                        </div>
+                                    </td>
+                                   
+                                    <td>
+                                        <div class="form-group" >
+                                            <div class="dropdown">
+                                                <input type="text"
+                                                       class="form-control searchable-input floatL border-bottom-input"
+                                                       placeholder="Status"
+                                                       ng-model="searchCriteria.status"
+                                                       ng-value="searchCriteria.status"
+                                                       />
+                                            </div>
+                                        </div>
+                                    </td>
+                                    
+                                    <td align="right">
+                                        <div class="floatR form-group">
+                                            <button type="submit" class="btn btn-primary search-button t4"  >
+                                                <i class="fa fa-search"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </table>
+                        </form>
+
+				</div>
+            
 
                 <div class="table-responsive">
                     <table class="table table-striped">
@@ -22,12 +144,14 @@
                         <tr>
                         	    <th>Id</th>
                             <th>Title</th>
+                            <th>Client</th>
+                            <th>Site</th>
                             <th>Created By</th>
-                            <th>Submitted By</th>
-                            <th>Approved By</th>
+                            <!-- <th>Submitted By</th>
+                            <th>Approved By</th> -->
                             <th>Created On</th>
-                            <th>Submitted On</th>
-                            <th>Approved On</th>
+                            <!-- <th>Submitted On</th>
+                            <th>Approved On</th> -->
                             <th>Status</th>
                             <th>Amount</th>
                             <th class="text-right">Actions</th>
@@ -37,12 +161,14 @@
                         <tr ng-repeat="quotation in quotations">
                             <td>{{quotation.serialId}}</td>
                             <td>{{quotation.title}}</td>
+                            <td>{{quotation.projectName}}</td>
+                            <td>{{quotation.siteName}}</td>
                             <td>{{quotation.createdByUserName}}</td>
-                            <td>{{quotation.sentByUserName}}</td>
-                            <td>{{quotation.approvedByUserName}}</td>
+                            <!-- <td>{{quotation.sentByUserName}}</td>
+                            <td>{{quotation.approvedByUserName}}</td> -->
                             <td><label ng-bind="quotation.createdDate | date:'dd-MMM-yyyy hh:mm a'"/></td>
-                            <td><label ng-bind="quotation.submittedDate | date:'dd-MMM-yyyy hh:mm a'"/></td>
-                            <td><label ng-bind="quotation.approvedDate | date:'dd-MMM-yyyy hh:mm a'"/></td>
+                            <!-- <td><label ng-bind="quotation.submittedDate | date:'dd-MMM-yyyy hh:mm a'"/></td>
+                            <td><label ng-bind="quotation.approvedDate | date:'dd-MMM-yyyy hh:mm a'"/></td> -->
                             <td ng-if="quotation.isApproved"><button class="btn btn-success">Approved</button></td>
                             <td ng-if="quotation.isArchived"><button class="btn btn-label">Archived</button></td>
                             <td ng-if="quotation.isDrafted"><button class="btn btn-info">Drafted</button></td>
