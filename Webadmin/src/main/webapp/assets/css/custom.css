@@ -282,7 +282,27 @@ select.siteList
 {
   margin-top: 5px;
 }
+i.CircleButton
+{
+      padding: 5px;
+      border-radius: 50%;
+      background:none;
+}
 
+button.btn.btn-circle {
+    background: none;
+    box-shadow: none;
+    padding: 5px;
+    border-radius: 50%;
+}
+button.btn.btn-circle .material-icons
+{
+   font-size: 22px;
+}
+button.btn.btn-circle:hover
+{
+  color:#000;
+}
 .txt-align-rgt
 {
  text-align:right;
@@ -436,6 +456,22 @@ span.red-star
 {
   background: #4caf50;
   color:#fff;
+}
+.blue-clr
+{
+  color: #00bcd4;
+  border: 2px solid #00bcd4;
+}
+.green-clr
+{
+  color:#4caf50;
+  border: 2px solid #4caf50;
+
+}
+.orange-clr
+{
+  color:#ff9800;
+  border: 2px solid #ff9800;
 }
 
 .form-group.label-floating label.control-label, .form-group.label-placeholder label.control-label

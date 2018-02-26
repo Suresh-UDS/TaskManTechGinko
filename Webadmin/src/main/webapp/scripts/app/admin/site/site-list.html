@@ -1,14 +1,14 @@
 <div>
 
-    <div class="row TopButtonsCon" ng-init="loadSites()">
-        <div class="col-md-8">
-            <!--<h2 class="title">Site</h2>-->
-        </div>
-        <div class="col-md-4 txt-align-rgt">
-            <button ui-sref="add-site"  ng-class="{active: $state.includes('admin')}" has-authority="ROLE_ADMIN" class="btn btn-success align-left"> <i class="material-icons padding-right5">add</i>ADD<div class="ripple-container"></div></button>
-            <button ng-click="refreshPage()" class="btn btn-warning align-left"> <i class="material-icons padding-right5">refresh</i>Reload<div class="ripple-container"></div></button>
-        </div>
-    </div>
+    <!--<div class="row TopButtonsCon" ng-init="loadSites()">-->
+        <!--<div class="col-md-8">-->
+            <!--&lt;!&ndash;<h2 class="title">Site</h2>&ndash;&gt;-->
+        <!--</div>-->
+        <!--<div class="col-md-4 txt-align-rgt">-->
+            <!--<button ui-sref="add-site"  ng-class="{active: $state.includes('admin')}" has-authority="ROLE_ADMIN" class="btn btn-success align-left"> <i class="material-icons padding-right5">add</i>ADD<div class="ripple-container"></div></button>-->
+            <!--<button ng-click="refreshPage()" class="btn btn-warning align-left"> <i class="material-icons padding-right5">refresh</i>Reload<div class="ripple-container"></div></button>-->
+        <!--</div>-->
+    <!--</div>-->
 
 
     <div class="row">
@@ -51,9 +51,17 @@
                                     </td>
                                     <td align="right">
                                         <div class="floatR form-group no-padding">
-                                            <button type="submit" class="btn btn-primary search-button t4"  >
-                                                <i class="fa fa-search"></i>
+
+                                            <button type="submit" class="btn btn-circle blue-clr">
+                                                <i class="material-icons">search</i>
                                             </button>
+                                            <button ui-sref="add-site"  ng-class="{active: $state.includes('admin')}" has-authority="ROLE_ADMIN" class="btn btn-circle green-clr">
+                                                <i class="material-icons">add</i>
+                                            </button>
+                                            <button ng-click="refreshPage()" class="btn btn-circle orange-clr">
+                                                <i class="material-icons">refresh</i>
+                                            </button>
+
                                         </div>
                                     </td>
                                 </tr>
