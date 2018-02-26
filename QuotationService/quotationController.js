@@ -36,7 +36,10 @@ module.exports = {
         if(req.body.approvedByUserName) quotation.approvedByUserName = req.body.approvedByUserName;
         if(req.body.authorisedByUserId) quotation.authorisedByUserId = req.body.authorisedByUserId;
         if(req.body.authorisedByUserName) quotation.authorisedByUserName = req.body.authorisedByUserName;
+        if(req.body.siteId) quotation.siteId = req.body.siteId;
         if(req.body.siteName) quotation.siteName = req.body.siteName;
+        if(req.body.clientId) quotation.clientId = req.body.clientId;
+        if(req.body.clientName) quotation.clientName = req.body.clientName;
         if(req.body.clientEmailId) quotation.clientEmailId = req.body.clientEmailId;
         if(req.body.grandTotal) quotation.grandTotal = req.body.grandTotal;
         if(req.body.isDrafted){
@@ -99,7 +102,10 @@ module.exports = {
             if(req.body.approvedByUserName) quotation.approvedByUserName = req.body.approvedByUserName;
             if(req.body.authorisedByUserId) quotation.authorisedByUserId = req.body.authorisedByUserId;
             if(req.body.authorisedByUserName) quotation.authorisedByUserName = req.body.authorisedByUserName;
+            if(req.body.siteId) quotation.siteId = req.body.siteId;
             if(req.body.siteName) quotation.siteName = req.body.siteName;
+            if(req.body.clientId) quotation.clientId = req.body.clientId;
+            if(req.body.clientName) quotation.clientName = req.body.clientName;
             if(req.body.clientEmailId) quotation.clientEmailId = req.body.clientEmailId;
             if(req.body.grandTotal) quotation.grandTotal = req.body.grandTotal;
             if(req.body.isDrafted){

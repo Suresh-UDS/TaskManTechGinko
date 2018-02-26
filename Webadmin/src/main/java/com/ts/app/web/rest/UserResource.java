@@ -185,15 +185,21 @@ public class UserResource {
 	        		employeeRepository.save(employee);
 	        	}
 
-			user.setLogin(userDTO.getLogin());
-			//user.setClearPassword(userDTO.getClearPassword());
-			//String encryptedPassword = null;
-//            if(StringUtils.isNotEmpty(userDTO.getPassword())){
-//            	encryptedPassword = passwordEncoder.encode(userDTO.getPassword());
-//            }else {
-//            	encryptedPassword = passwordEncoder.encode(RandomUtil.generatePassword());
-//            }
-			//user.setPassword(encryptedPassword);
+	        	if(StringUtils.isNotEmpty(userDTO.getLogin())){
+                    user.setLogin(userDTO.getLogin());
+                }
+
+                if(StringUtils.isNotEmpty(userDTO.getClearPassword())){
+                    user.setClearPassword(userDTO.getClearPassword());
+                }
+			String encryptedPassword = null;
+            if(StringUtils.isNotEmpty(userDTO.getPassword())){
+            	encryptedPassword = passwordEncoder.encode(userDTO.getPassword());
+                user.setPassword(encryptedPassword);
+            }else {
+            	encryptedPassword = passwordEncoder.encode(RandomUtil.generatePassword());
+                user.setPassword(encryptedPassword);
+            }
 			user.setFirstName(userDTO.getFirstName());
 			user.setLastName(userDTO.getLastName());
 			user.setEmail(userDTO.getEmail());
