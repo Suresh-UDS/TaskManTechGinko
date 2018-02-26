@@ -96,7 +96,7 @@
                                                                <!--uib-typeahead="project as project.name for project in projects | filter:$viewValue | limitTo:5"-->
                                                                <!--ng-blur="loadSites()"-->
                                                                <!--ng-minlength=2 ng-maxlength=50 ng-pattern="/^[A-Za-z0-9\s&-/]*$/"  autocomplete="off" />-->
-                                                        <select class=" form-control " ng-model="selectedProject" ng-change="loadSites()" ng-options="project as project.name for project in projects" >
+                                                        <select class=" form-control " ng-model="selectedProject" ng-change="loadSites()" ng-options="project as project.name for project in projects" required>
                                                             <option value="">Please select Client...</option>
                                                         </select>
                                                         <div ng-show="form.$submitted || form.projectName.$touched">
@@ -130,7 +130,7 @@
                                                                <!--uib-typeahead="site as site.name for site in sites | filter:$viewValue | limitTo:5"-->
                                                                <!--ng-minlength=2 ng-maxlength=50 ng-pattern="/^[A-Za-z0-9\s&-/]*$/"  autocomplete="off" />-->
 
-                                                        <select class="form-control " ng-model="selectedSite"  ng-options="site as site.name for site in sites">
+                                                        <select class="form-control " ng-model="selectedSite"  ng-options="site as site.name for site in sites" required>
                                                             <option value="">Please select Site...</option>
                                                         </select>
 
@@ -197,7 +197,7 @@
 															<input ng-model="serviceName"
 																class='form-control' name='serviceName' type='text' value=""
 																ng-minlength='1' ng-maxlength='100'
-																ng-pattern="/^[A-Za-z0-9\s&-/]*$/" autofocus required />
+																ng-pattern="/^[A-Za-z0-9\s&-/]*$/" autofocus />
 
 														</div>
 													</div>
@@ -207,7 +207,7 @@
 															<input id='serviceQty' ng-model="serviceQty"
 																	class='form-control' name='serviceQty' type='text'
 																	value="" ng-minlength='1' ng-maxlength='6'
-																	ng-pattern="/[0-9]*/" autofocus required />
+																	ng-pattern="/[0-9]*/" autofocus />
 														</div>
 													</div>
 													<div class="col-md-2">
@@ -216,7 +216,7 @@
 															<input ng-model="serviceUnitPrice"
 																class='form-control' name='serviceUnitPrice' type='text' value=""
 																ng-minlength='1' ng-maxlength='5'
-																ng-pattern="/[0-9]*/" autofocus required />
+																ng-pattern="/[0-9]*/" autofocus />
 
 														</div>
 													</div>
@@ -284,7 +284,7 @@
 															<input ng-model="labourCategory"
 																class='form-control' name='labourCategory' type='text' value=""
 																ng-minlength='1' ng-maxlength='100'
-																ng-pattern="/^[A-Za-z0-9\s&-/]*$/" autofocus required />
+																ng-pattern="/^[A-Za-z0-9\s&-/]*$/" autofocus  />
 
 														</div>
 													</div>
@@ -294,7 +294,7 @@
 															<input id='labourQty' ng-model="labourQty"
 																	class='form-control' name='labourQty' type='text'
 																	value="" ng-minlength='1' ng-maxlength='6'
-																	ng-pattern="/[0-9]*/" autofocus required />
+																	ng-pattern="/[0-9]*/" autofocus  />
 														</div>
 													</div>
 													<div class="col-md-2">
@@ -303,7 +303,7 @@
 															<input ng-model="labourUnitPrice"
 																class='form-control' name='labourUnitPrice' type='text' value=""
 																ng-minlength='1' ng-maxlength='5'
-																ng-pattern="/[0-9]*/" autofocus required />
+																ng-pattern="/[0-9]*/" autofocus  />
 
 														</div>
 													</div>
@@ -371,7 +371,7 @@
 															<input ng-model="materialName"
 																class='form-control' name='materialName' type='text' value=""
 																ng-minlength='1' ng-maxlength='100'
-																ng-pattern="/^[A-Za-z0-9\s&-/]*$/" autofocus required />
+																ng-pattern="/^[A-Za-z0-9\s&-/]*$/" autofocus  />
 
 														</div>
 													</div>
@@ -381,7 +381,7 @@
 															<input id='materialQty' ng-model="materialQty"
 																	class='form-control' name='materialQty' type='text'
 																	value="" ng-minlength='1' ng-maxlength='6'
-																	ng-pattern="/[0-9]*/" autofocus required />
+																	ng-pattern="/[0-9]*/" autofocus  />
 														</div>
 													</div>
 													<div class="col-md-2">
@@ -390,7 +390,7 @@
 															<input ng-model="materialUnitPrice"
 																class='form-control' name='materialUnitPrice' type='text' value=""
 																ng-minlength='1' ng-maxlength='5'
-																ng-pattern="/[0-9]*/" autofocus required />
+																ng-pattern="/[0-9]*/" autofocus  />
 
 														</div>
 													</div>
@@ -496,12 +496,12 @@
 												<div class="col-md-12 txt-align-rgt">
 													<div class="form-group">
 
-														<button class="btn btn-success" ng-click="saveQuotation()"
+														<button class="btn btn-success" ng-click="saveQuotation('submit')"
 															id="form-button-save" ng-disabled="form.$invalid">
 															<span class="btn-label"><i class="material-icons">check</i></span>
 															Send
 														</button>
-														<button class="btn btn-warning" ng-click="saveQuotation()">
+														<button class="btn btn-warning" ng-click="saveQuotation('create')" ng-disabled="form.$invalid">
 															<span class="btn-label"><i class="material-icons">save</i></span>
 															Save Draft
 														</button>

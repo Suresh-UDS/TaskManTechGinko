@@ -47,6 +47,9 @@ angular.module('timeSheetApp')
                 authorities: [],
                 pageTitle: 'View Quotation'
             },
+            params: {
+                viewOnly: true
+            },
             views: {
                 'content@': {
                     templateUrl: 'scripts/app/admin/quotation/view-quotation.html',

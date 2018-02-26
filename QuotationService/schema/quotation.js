@@ -1,11 +1,13 @@
 // import the necessary modules
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
+var	captainHook  = require('captain-hook');
 
 // model creation
 
 var QuotationModel = function() {
     var QuotationSchema = new Schema({
+        serialId: Number,
         title: String,
         description : String,
         rateCardDetails:[],
@@ -40,10 +42,26 @@ var QuotationModel = function() {
         archivedDate: Date
     });
 
+    QuotationSchema.plugin(captainHook);
+
+    QuotationSchema.preCreate(function(quotation, next){
+      var sequenceGenerator = require('mongoose').model('Sequence');
+      sequenceGenerator.getNext('quotation',function(id){
+        quotation.serialId = id;
+        next();
+      })
+
+    })
+
+    QuotationSchema.preUpdate(function(quotation, next){
+      next();
+    })
 
     // register the mongoose model
     mongoose.model('Quotation', QuotationSchema);
 };
+
+
 
 // create an export function to encapsulate the model creation
 module.exports = QuotationModel;

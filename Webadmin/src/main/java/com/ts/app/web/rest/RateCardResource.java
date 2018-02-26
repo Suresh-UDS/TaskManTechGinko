@@ -118,8 +118,7 @@ public class RateCardResource {
     public ResponseEntity<QuotationDTO> saveQuotation(@RequestBody QuotationDTO quotationDto) {
         log.info("--Invoked RateCardResource.Get Quotations --");
         long currentUserId = SecurityUtils.getCurrentUserId();
-        quotationDto.setCreatedByUserId(currentUserId);
-        QuotationDTO result = rateCardService.saveQuotation(quotationDto);
+        QuotationDTO result = rateCardService.saveQuotation(quotationDto, currentUserId);
         return new ResponseEntity<QuotationDTO>(result, HttpStatus.OK);
     }
 	

@@ -96,7 +96,7 @@
                                                                <!--uib-typeahead="project as project.name for project in projects | filter:$viewValue | limitTo:5"-->
                                                                <!--ng-blur="loadSites()"-->
                                                                <!--ng-minlength=2 ng-maxlength=50 ng-pattern="/^[A-Za-z0-9\s&-/]*$/"  autocomplete="off" />-->
-                                                        <select class=" form-control " ng-model="selectedProject" ng-change="loadSites()" ng-options="project as project.name for project in projects track by project.id" required>
+                                                        <select class=" form-control " id="project" ng-model="selectedProject" ng-change="loadSites()" ng-options="project as project.name for project in projects track by project.id" required>
                                                             <option value="">Please select Client...</option>
                                                         </select>
                                                         <div ng-show="form.$submitted || form.projectName.$touched">
@@ -130,7 +130,7 @@
                                                                <!--uib-typeahead="site as site.name for site in sites | filter:$viewValue | limitTo:5"-->
                                                                <!--ng-minlength=2 ng-maxlength=50 ng-pattern="/^[A-Za-z0-9\s&-/]*$/"  autocomplete="off" />-->
 
-                                                        <select class="form-control " ng-model="selectedSite"  ng-options="site as site.name for site in sites track by site.id" required>
+                                                        <select class="form-control " id="site" ng-model="selectedSite"  ng-options="site as site.name for site in sites track by site.id" required>
                                                             <option value="">Please select Site...</option>
                                                         </select>
 
@@ -189,12 +189,12 @@
 										<div class="tab-content TabsContent" style="">
 											
 											<div class="tab-pane active" id="pill2">
-												<div class="row">
+												<div class="row" id="serviceEntryFields">
 
 													<div class="col-md-5">
 														<div class="form-group">
 															<label class="control-label">Service Name</label> 
-															<input ng-model="serviceName"
+															<input ng-model="serviceName" id="serviceName"
 																class='form-control' name='serviceName' type='text' value=""
 																ng-minlength='1' ng-maxlength='100'
 																ng-pattern="/^[A-Za-z0-9\s&-/]*$/" autofocus  />
@@ -204,7 +204,7 @@
 													<div class="col-md-2">
 														<div class="form-group">
 															<label class="control-label">Quantity</label>
-															<input id='serviceQty' ng-model="serviceQty"
+															<input id='serviceQty' ng-model="serviceQty" 
 																	class='form-control' name='serviceQty' type='text'
 																	value="" ng-minlength='1' ng-maxlength='6'
 																	ng-pattern="/[0-9]*/" autofocus  />
@@ -240,7 +240,7 @@
 																<th>Quantity</th>
 																<th>Unit Price</th>
 																<th>Cost</th>
-																<th class="text-right">Actions</th>
+																
 															</tr>
 														</thead>
 														<tbody>
@@ -251,15 +251,6 @@
 																<td>{{rcDetail.qty}}</td>
 																<td>{{rcDetail.unitPrice}}</td>
 																<td>{{rcDetail.cost}}</td>
-																<td class="text-right"><a
-																	ng-class="{active: $state.includes('admin')}"
-																	has-authority="ROLE_ADMIN"
-																	ng-click="removeService($index)"
-																	onClick="$('#deleteModal').modal()"
-																	data-target="#myModal"
-																	class="btn btn-simple btn-danger"><i
-																		class="material-icons">close</i></a></td>
-
 															</tr>
 
 														</tbody>
@@ -276,7 +267,7 @@
 												</div>
 											</div>
 											<div class="tab-pane" id="pill3">
-												<div class="row">
+												<div class="row" id="labourEntryFields">
 
 													<div class="col-md-5">
 														<div class="form-group">
@@ -328,7 +319,6 @@
 																<th>Quantity</th>
 																<th>Unit Price</th>
 																<th>Cost</th>
-																<th class="text-right">Actions</th>
 															</tr>
 														</thead>
 														<tbody>
@@ -339,15 +329,6 @@
 																<td>{{rcDetail.qty}}</td>
 																<td>{{rcDetail.unitPrice}}</td>
 																<td>{{rcDetail.cost}}</td>
-																<td class="text-right"><a
-																	ng-class="{active: $state.includes('admin')}"
-																	has-authority="ROLE_ADMIN"
-																	ng-click="removeLabour($index)"
-																	onClick="$('#deleteModal').modal()"
-																	data-target="#myModal"
-																	class="btn btn-simple btn-danger"><i
-																		class="material-icons">close</i></a></td>
-
 															</tr>
 														</tbody>
 														<tfoot>
@@ -363,7 +344,7 @@
 												</div>
 											</div>
 											<div class="tab-pane" id="pill1">
-												<div class="row">
+												<div class="row" id="materialEntryFields">
 
 													<div class="col-md-5">
 														<div class="form-group">
@@ -415,7 +396,6 @@
 																<th>Quantity</th>
 																<th>Unit Price</th>
 																<th>Cost</th>
-																<th class="text-right">Actions</th>
 															</tr>
 														</thead>
 														<tbody>
@@ -426,15 +406,6 @@
 																<td>{{rcDetail.qty}}</td>
 																<td>{{rcDetail.unitPrice}}</td>
 																<td>{{rcDetail.cost}}</td>
-																<td class="text-right"><a
-																	ng-class="{active: $state.includes('admin')}"
-																	has-authority="ROLE_ADMIN"
-																	ng-click="removeMaterial($index)"
-																	onClick="$('#deleteModal').modal()"
-																	data-target="#myModal"
-																	class="btn btn-simple btn-danger"><i
-																		class="material-icons">close</i></a></td>
-
 															</tr>
 														</tbody>
 														<tfoot>
@@ -491,7 +462,7 @@
 
 										<div class="">
 
-											<div class="row">
+											<div class="row" id="actionButtons">
 
 												<div class="col-md-12 txt-align-rgt">
 													<div class="form-group">
@@ -508,6 +479,17 @@
 														<button class="btn btn-danger" type="button"
 															ng-click="cancelQuotation()" id="cancel-button">
 															<i class="material-icons">close</i> Cancel
+														</button>
+
+													</div>
+												</div>
+											</div>
+											<div class="row" id="closeButton">
+												<div class="col-md-12 txt-align-rgt">
+													<div class="form-group">
+														<button class="btn btn-danger" type="button"
+															ng-click="cancelQuotation()" id="cancel-button">
+															<i class="material-icons">close</i> Close
 														</button>
 
 													</div>

@@ -132,6 +132,7 @@ module.exports = {
                     console.log('Error in sending mail');
                     res.send(200,'Error in sending Mail, Quotation not Sent');
                 }else{
+                    quotation = populateQuotation(req,quotation);
                     console.log("Mail successfully sent");
                     quotation.isDrafted = false;
                     quotation.isSubmitted = true;
@@ -164,6 +165,8 @@ module.exports = {
                     res.send(200,'Error in sending Mail, Quotation not Sent');
                 }else{
                     console.log("Mail successfully sent");
+                    quotation.approvedByUserId = req.body.approvedByUserId;
+                    quotation.approvedByUserName = req.body.approvedByUserName;
                     quotation.isSubmitted = false;
                     quotation.isApproved = true;
                     quotation.processHistory.isApproved = date;
