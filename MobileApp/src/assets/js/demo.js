@@ -618,7 +618,7 @@ demo = {
     showSwal: function(type,title,txt) {
         if (type == 'basic') {
             swal({
-                title: "Here's a message!",
+                title: title,
                 buttonsStyling: false,
                 confirmButtonClass: "btn btn-success"
             }).catch(swal.noop)
@@ -658,6 +658,7 @@ demo = {
                     confirmButtonClass: "btn btn-success",
                     buttonsStyling: false
                 })
+
             }).catch(swal.noop)
         } else if (type == 'warning-message-and-cancel') {
             swal({
