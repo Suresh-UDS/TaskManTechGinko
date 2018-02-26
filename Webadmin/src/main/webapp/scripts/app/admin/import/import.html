@@ -17,19 +17,24 @@
                             <div class="form-group label-floating" >
                                 <div class="col-md-6 pdng-top13" >
                                     <input type="file"
-                                           class="form-control" style="opacity:100;position:relative"
+                                           class="form-control" style="opacity:100;position:relative" file-model
                                            ng-model="selectedClientFile"
                                            name="clientFile"
                                     />
 
                                 </div>
                                 <div class="col-md-6">
-                                    <button class="btn btn-success" ng-click="" >
+                                    <button class="btn btn-success" ng-click="uploadClients()" >
                                         <span class="btn-label">
                                        		<i class="material-icons">file_upload</i>
                                    		</span>Import Clients
                                     </button>
                                 </div>
+							<div class="col-md-2">
+                                  </div>
+                                  <div class="col-md-3" ng-hide="!clientImportMsg()">
+                                  	<span class="card-title">Status - {{clientImportMsg()}}</span>
+                                  </div>
                             </div>
                         </div>
 

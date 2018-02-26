@@ -21,8 +21,12 @@
                         <thead>
                         <tr>
                             <th>Title</th>
-                            <th>Create By</th>
-                            <th>Date</th>
+                            <th>Created By</th>
+                            <th>Submitted By</th>
+                            <th>Approved By</th>
+                            <th>Created On</th>
+                            <th>Submitted On</th>
+                            <th>Approved On</th>
                             <th>Status</th>
                             <th>Amount</th>
                             <th class="text-right">Actions</th>
@@ -32,15 +36,19 @@
                         <tr ng-repeat="quotation in quotations">
                             <td>{{quotation.title}}</td>
                             <td>{{quotation.createdByUserName}}</td>
-                            <td>{{quotation.lastModifiedDate}} </td>
-                            <td ng-if="quotation.isApproved"> Approved</td>
-                            <td ng-if="quotation.isArchived"> Archived</td>
-                            <td ng-if="quotation.isDrafted">Drafted </td>
-                            <td ng-if="quotation.isSubmitted">Submitted </td>
+                            <td>{{quotation.submittedByUserName}}</td>
+                            <td>{{quotation.approvedByUserName}}</td>
+                            <td><label ng-bind="quotation.createdDate | date:'dd-MMM-yyyy hh:mm a'"/></td>
+                            <td><label ng-bind="quotation.submittedDate | date:'dd-MMM-yyyy hh:mm a'"/></td>
+                            <td><label ng-bind="quotation.approvedDate | date:'dd-MMM-yyyy hh:mm a'"/></td>
+                            <td ng-if="quotation.isApproved"><button class="btn btn-success">Approved</button></td>
+                            <td ng-if="quotation.isArchived"><button class="btn btn-label">Archived</button></td>
+                            <td ng-if="quotation.isDrafted"><button class="btn btn-info">Drafted</button></td>
+                            <td ng-if="quotation.isSubmitted"><button class="btn btn-warning">Submitted</button></td>
                             <td>{{quotation.grandTotal}} </td>
                             <td class="text-right">
                                 <a name="View Quotation" ng-class="{active: $state.includes('admin')}" has-authority="ROLE_ADMIN" ui-sref="view-rateCard"  class="btn btn-simple btn-info"><i class="material-icons">remove_red_eye</i></a>
-                                <a name="Edit Quotation"  ng-class="{active: $state.includes('admin')}" has-authority="ROLE_ADMIN" ui-sref="edit-rateCard"  class="btn btn-simple btn-success"><i class="material-icons">edit</i></a>
+                                <a name="Edit Quotation"  ng-class="{active: $state.includes('admin')}" has-authority="ROLE_ADMIN" ui-sref="edit-quotation({ id: quotation._id })"  class="btn btn-simple btn-success"><i class="material-icons">edit</i></a>
                                 <a name="Approve Quotation"  ng-class="{active: $state.includes('admin')}" has-authority="ROLE_ADMIN" ng-click="approveQuotation(quotation)"  class="btn btn-simple btn-success"></a>
                                 <button  title="Approve Quotation"   has-authority="ROLE_ADMIN"  data-toggle="modal" data-target="#approveQuotationModal" data-dismiss="#approveQuotationModal" ng-click="selectQuotation(quotation)"  class="btn btn-simple btn-info btn-icon like"> <i class="material-icons">done</i> </button>
                                 <a name="Delete Quotation" ng-class="{active: $state.includes('admin')}" has-authority="ROLE_ADMIN"  ng-click="deleteConfirm(site)"  onClick="$('#deleteModal').modal()" data-target="#myModal"  class="btn btn-simple btn-danger"><i class="material-icons">close</i></a>
@@ -60,7 +68,7 @@
 
 <div class="card margin-TB-5 txt-align-center" ng-hide="quotations">
 
-    <div class="card-content">
+    <div class="card-content" ng-hide="quotations">
         <div class="" style="text-align:center;padding: 10px 0;">
             <div loader-css="ball-pulse"></div>
         </div>

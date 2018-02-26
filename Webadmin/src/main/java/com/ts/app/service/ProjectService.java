@@ -15,6 +15,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.ts.app.domain.AbstractAuditingEntity;
 import com.ts.app.domain.Employee;
@@ -23,8 +24,10 @@ import com.ts.app.domain.Site;
 import com.ts.app.domain.User;
 import com.ts.app.repository.ProjectRepository;
 import com.ts.app.repository.UserRepository;
+import com.ts.app.service.util.ImportUtil;
 import com.ts.app.service.util.MapperUtil;
 import com.ts.app.web.rest.dto.BaseDTO;
+import com.ts.app.web.rest.dto.ImportResult;
 import com.ts.app.web.rest.dto.ProjectDTO;
 import com.ts.app.web.rest.dto.SearchCriteria;
 import com.ts.app.web.rest.dto.SearchResult;
@@ -49,6 +52,9 @@ public class ProjectService extends AbstractService {
 
 	@Inject
 	private MapperUtil<AbstractAuditingEntity, BaseDTO> mapperUtil;
+	
+	@Inject 
+	private ImportUtil importUtil;
 
 	public boolean isDuplicate(ProjectDTO projectDto) {
 	    log.debug("Project duplicate get"+projectDto.getUserId());
@@ -238,6 +244,21 @@ public class ProjectService extends AbstractService {
 
 		}
 		return subEmpIds;
+	}
+	
+	public ImportResult importFile(MultipartFile file, long dateTime) {
+		return importUtil.importClientData(file, dateTime);
+	}
+	
+	public ImportResult getImportStatus(String fileId) {
+		ImportResult er = new ImportResult();
+		//fileId += ".csv";
+		if(!StringUtils.isEmpty(fileId)) {
+			String status = importUtil.getImportStatus(fileId);
+			er.setFile(fileId);
+			er.setStatus(status);
+		}
+		return er;
 	}
 
 }

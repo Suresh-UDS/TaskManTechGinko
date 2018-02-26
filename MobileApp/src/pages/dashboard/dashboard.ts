@@ -12,6 +12,7 @@ import {CreateQuotationPage} from "../quotation/create-quotation";
 import {CreateEmployeePage} from "../employee-list/create-employee";
 import {CompleteJobPage} from "../jobs/completeJob";
 import {ViewJobPage} from "../jobs/view-job";
+import {LoginPage} from "../login/login";
 declare var demo;
 @Component({
   selector: 'page-dashboard',
@@ -132,6 +133,10 @@ export class DashboardPage {
 
 
 
+
+  }
+
+  ionViewWillEnter(){
 
   }
 

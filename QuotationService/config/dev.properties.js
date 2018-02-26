@@ -9,7 +9,7 @@ module.exports = {
 	},
 
 	server:{
-		port:8000,
+		port:8001,
 		logs : {
 			folder: __dirname+'./../logs'
 		}

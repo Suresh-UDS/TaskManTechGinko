@@ -70,6 +70,22 @@ angular.module('timeSheetApp')
                     return response.data;
                 });
             },
+            
+            createQuotation: function(quotation) {
+                return $http.post('api/rateCard/quotation', quotation).then(function (response) {
+                    console.log("Saving Quotation");
+                    console.log(response.data);
+                    return response.data;
+                })
+            },
+            
+            findQuotation: function(id) {
+                return $http.get('api/rateCard/quotation/id/' + id).then(function (response) {
+                    console.log("Retrieving Quotation");
+                    console.log(response.data);
+                    return response.data;
+                })
+            },
 
             getAllQuotations: function(){
                 return $http.get('api/rateCard/quotation/get').then(function (response) {

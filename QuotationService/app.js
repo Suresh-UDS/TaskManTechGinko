@@ -65,10 +65,10 @@ function startup(){
 
 
   // Define routes
-  app.get('/', controllers.ping);
-  app.get('/api/site/nearby', controllers.isSiteNearby);
-  app.post('/api/site/location', controllers.saveSiteLocation);
-  app.get('/api/site/location', controllers.findSiteLocation);
+  //app.get('/', controllers.ping);
+  //app.get('/api/site/nearby', controllers.isSiteNearby);
+  //app.post('/api/site/location', controllers.saveSiteLocation);
+  //app.get('/api/site/location', controllers.findSiteLocation);
 
 
   app.post('/api/quotation/create', quotationController.createQuotation);
@@ -77,6 +77,7 @@ function startup(){
   app.post('/api/quotation/approve',quotationController.approveQuotation);
   app.post('/api/rateCard/create', quotationController.createRateCard);
 
+  app.get('/api/quotation/id/:id',quotationController.getQuotation);
   app.get('/api/quotation/:id',quotationController.getQuotationById);
   app.get('/api/quotation/search',quotationController.search);
   app.get('/api/quotation', quotationController.getQuotations);

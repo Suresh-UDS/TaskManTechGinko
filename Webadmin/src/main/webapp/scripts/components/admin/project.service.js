@@ -58,7 +58,25 @@ angular.module('timeSheetApp')
                 return $http.post('api/project/search', searchCriteria).then(function (response) {
                     return response.data;
                 });
-            }
+            },
+	        
+	        importFile: function(file) {
+	        		var fileFormData = new FormData();
+	            fileFormData.append('clientFile', file);
+	            	return $http.post('api/clients/import', fileFormData, {
+	                    transformRequest: angular.identity,
+	                    headers: {'Content-Type': undefined}
+	     
+	                }).then(function (response) {
+	            			return response.data;
+	                });
+	        		
+	        },
+	        importStatus: function(fileName) {
+                	return $http.get('api/clients/import/'+fileName+"/status").then(function (response) {
+                		return response.data;
+                	});
+	        }
 
         };
     });
