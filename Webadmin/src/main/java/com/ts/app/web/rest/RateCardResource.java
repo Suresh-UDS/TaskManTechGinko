@@ -139,10 +139,10 @@ public class RateCardResource {
     }
 
     @RequestMapping(value = "/rateCard/quotation/approve",method = RequestMethod.POST)
-    public Object approveQuotation(@RequestBody RateCardDTO rateCardDTO){
+    public Object approveQuotation(@RequestBody QuotationDTO quotationDTO){
 	    log.info("Approve Quotations");
 	    Object result = null;
-	    rateCardService.approveQuotation(rateCardDTO);
+	    rateCardService.approveQuotation(quotationDTO);
 	    return result;
     }
 

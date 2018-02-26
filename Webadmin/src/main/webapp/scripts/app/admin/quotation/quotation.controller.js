@@ -4,7 +4,7 @@ angular
 		.module('timeSheetApp')
 		.controller(
 				'QuotationController',
-				function($scope, $rootScope, $state, $timeout, $http, $document,
+				function($scope, $rootScope, $state, $timeout, $http, $document, $window,
 						$stateParams, $location, RateCardComponent, ProjectComponent, SiteComponent) {
 
 					$scope.selectedProject;
@@ -57,16 +57,19 @@ angular
 					
 					$scope.init = function() {
 						console.log('readonly value -'+ $stateParams.viewOnly);
-						$scope.viewOnly = $stateParams.viewOnly;
-						$document[0].getElementById('quotationTitle').disabled = $stateParams.viewOnly;
-						$document[0].getElementById('quotationDescription').disabled = $stateParams.viewOnly;
-						$document[0].getElementById('project').disabled = $stateParams.viewOnly;
-						$document[0].getElementById('site').disabled = $stateParams.viewOnly;
-						$document[0].getElementById('serviceEntryFields').style.visibility = $stateParams.viewOnly ? 'hidden' : 'visible';
-						$document[0].getElementById('labourEntryFields').style.visibility = $stateParams.viewOnly ? 'hidden' : 'visible';
-						$document[0].getElementById('materialEntryFields').style.visibility = $stateParams.viewOnly ? 'hidden' : 'visible';
-						$document[0].getElementById('actionButtons').style.visibility = $stateParams.viewOnly ? 'hidden' : 'visible';
-						$document[0].getElementById('closeButton').style.visibility = $stateParams.viewOnly ? 'visible' : 'hidden';
+						if($state.current.name == 'view-quotation') {
+							$scope.viewOnly = $stateParams.viewOnly;
+							$document[0].getElementById('quotationTitle').disabled = $stateParams.viewOnly;
+							$document[0].getElementById('quotationDescription').disabled = $stateParams.viewOnly;
+							$document[0].getElementById('project').disabled = $stateParams.viewOnly;
+							$document[0].getElementById('site').disabled = $stateParams.viewOnly;
+							$document[0].getElementById('serviceEntryFields').style.visibility = $stateParams.viewOnly ? 'hidden' : 'visible';
+							$document[0].getElementById('labourEntryFields').style.visibility = $stateParams.viewOnly ? 'hidden' : 'visible';
+							$document[0].getElementById('materialEntryFields').style.visibility = $stateParams.viewOnly ? 'hidden' : 'visible';
+							$document[0].getElementById('actionButtons').style.visibility = $stateParams.viewOnly ? 'hidden' : 'visible';
+							$document[0].getElementById('closeButton').style.visibility = $stateParams.viewOnly ? 'visible' : 'hidden';							
+						}
+
 						$scope.loadProjects();
 					}
 
@@ -254,8 +257,10 @@ angular
 						RateCardComponent.approveQuotation(quotation).then(
 								function(response) {
 									console.log(response);
-									// $scope.quotation = response
-									$scope.loadAllQuotations();
+									$scope.showNotifications('top','center','success','Quotation approved Successfully');									
+									//$scope.loadAllQuotations();
+									//$location.path('/quotation-list');
+									$scope.refreshPage();
 								})
 					}
 					
@@ -284,5 +289,8 @@ angular
 			           $scope.loadQuotations();
 			        };
 
+			        $scope.clearFilter = function() {
+			        		$scope.searchCriteria = {};
+			        }
 
 				});

@@ -280,12 +280,16 @@ public class RateCardService extends AbstractService {
             		url = quotationSvcEndPoint+"/quotation/edit";
             }else if(!StringUtils.isEmpty(quotationDto.get_id()) && quotationDto.getMode().equalsIgnoreCase("submit")) {
             		url = quotationSvcEndPoint+"/quotation/send";
+            		quotationDto.setDrafted(false);
+            		quotationDto.setSubmitted(true);
             		quotationDto.setSentByUserId(currUserId);
 	        		quotationDto.setSentByUserName(currUser.getLogin());
                 request.put("sentByUserId", quotationDto.getSentByUserId());
                 request.put("sentByUserName", quotationDto.getSentByUserName());
             }else if(!StringUtils.isEmpty(quotationDto.get_id()) && quotationDto.getMode().equalsIgnoreCase("approve")) {
             		url = quotationSvcEndPoint+"/quotation/approve";
+            		quotationDto.setSubmitted(false);
+            		quotationDto.setApproved(true);
             		quotationDto.setApprovedByUserId(currUserId);
 	        		quotationDto.setApprovedByUserName(currUser.getLogin());
                 request.put("approvedByUserId", quotationDto.getApprovedByUserId());
@@ -370,7 +374,7 @@ public class RateCardService extends AbstractService {
         return  quotationList;
     }
 
-    public Object approveQuotation(RateCardDTO quotation) {
+    public Object approveQuotation(QuotationDTO quotation) {
         log.debug("Approve Quotations");
         Object approvedQuotation = "";
 
@@ -388,10 +392,10 @@ public class RateCardService extends AbstractService {
             headers.setAll(map);
 
             Map<String,Object> paramMap = new HashMap<String,Object>();
-            paramMap.put("id",quotation.getId());
+            paramMap.put("_id",quotation.get_id());
 
             JSONObject request = new JSONObject();
-            request.put("id",quotation.getId());
+            request.put("_id",quotation.get_id());
 
             HttpEntity<?> requestEntity = new HttpEntity<>(request.toString(),headers);
             log.debug("Request entity rate card service"+requestEntity);

@@ -157,7 +157,7 @@ module.exports = {
     },
 
     approveQuotation: function(req,res,next){
-        console.log("Approve Quotation");
+        console.log("Approve Quotation - " + req.body._id);
         var date = new Date();
         Quotation.findById(req.body._id,function(err,quotation){
                 if(err){
@@ -172,11 +172,11 @@ module.exports = {
                     quotation.processHistory.isApproved = date;
                     quotation.approvedDate = date;
                     quotation.lastModifiedDate = date;
-                    mailerService.submitQuotation(quotation.clientEmailId,quotation);
 
                     quotation.save(function(err,quotation){
                         if(!err){
                             // mailerService.submitQuotation('karthickk@techginko.com',quotation);
+                            mailerService.submitQuotation(quotation.clientEmailId,quotation);
                             notificationService.sendNotification('e678b6d8-9747-4528-864d-911a24cd786a','Quotation Approved by Client')
                             res.json(200,quotation)
                         }else{
