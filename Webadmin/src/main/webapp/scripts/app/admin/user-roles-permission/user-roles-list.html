@@ -2,7 +2,7 @@
 <div class="">
 	<div class="success-message hidden"></div>
 
-    <div class="row">
+    <div class="row TopButtonsCon">
 
         <div class="col-md-8">
             <!--<h2 class="title">User Roles</h2>-->
@@ -29,7 +29,7 @@
 
                         <form name="searchForm"  ng-submit="search()" novalidate >
 
-                            <table class="table" border="0">
+                            <table class="table no-padding-tblCon" border="0">
                                 <tr class="filter-row gc-search-row">
                                     <!--<td>-->
                                     <!--<div class="form-group" ng-init="loadUsers()">-->
@@ -43,7 +43,7 @@
                                     <td>
                                         <div class="form-group" ng-init="loadUserRoles()">
                                             <div class="dropdown">
-                                                <input type="text" class="form-control searchable-input floatL" placeholder="Role ID"
+                                                <input type="text" class="form-control searchable-input floatL border-bottom-input" placeholder="Role ID"
                                                        ng-model="selectedUser" ng-value="searchCriteria.userRoleId" name="userRoleId" uib-typeahead="userRule as userRole.id for userRole in userRoles | filter:$viewValue | limitTo:5" />
 
                                             </div>
@@ -52,7 +52,7 @@
                                     <td>
                                         <div class="form-group" ng-init="loadUserRoles()">
                                             <div class="dropdown">
-                                                <input type="text" class="form-control searchable-input floatL" placeholder="Role Name"
+                                                <input type="text" class="form-control searchable-input floatL border-bottom-input" placeholder="Role Name"
                                                        ng-model="selectedUser" ng-value="searchCriteria.name" name="name" uib-typeahead="userRule as userRole.name for userRole in userRoles | filter:$viewValue | limitTo:5" />
 
                                             </div>
@@ -70,7 +70,7 @@
                                     <td>
                                         <div class="form-group" ng-init="loadUserRoles()">
                                             <div class="dropdown">
-                                                <input type="text" class="form-control searchable-input floatL" placeholder="Role Level"
+                                                <input type="text" class="form-control searchable-input floatL border-bottom-input" placeholder="Role Level"
                                                        ng-model="selectedUser" ng-value="searchCriteria.roleLevel" name="roleLevel" uib-typeahead="userRule as userRole.roleLevel for userRole in userRoles | filter:$viewValue | limitTo:5" />
 
                                             </div>

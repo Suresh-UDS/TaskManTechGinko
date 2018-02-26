@@ -2,7 +2,7 @@
 	<div class="success-message hidden"></div>
 
 
-    <div class="row">
+    <div class="row TopButtonsCon">
         <div class="col-md-6">
             <!--<h2 class="title">Job Report</h2>-->
         </div>
@@ -27,21 +27,21 @@
                     <div class="SearchTable">
                         <form name="searchForm" ng-submit="loadJobs()">
 
-                            <table class="table" border="0">
+                            <table class="table no-padding-tblCon" border="0">
                                 <tr class="filter-row gc-search-row">
                                     <td>
                                         <div class="form-group" ng-init="loadProjects();loadAllSites();loadAssets()">
                                             <div class="dropdown col-xs-4 col-md-2" >
 
-                                                <input id="dateFilterFrom" type="text" class="form-control datepicker"   value={{now}} placeholder="From Date" />
+                                                <input id="dateFilterFrom" type="text" class="form-control datepicker border-bottom-input"   value={{now}} placeholder="From Date" />
                                             </div>
                                             <div class="dropdown col-xs-4 col-md-2" >
 
-                                                <input id="dateFilterTo" type="text" class="form-control datepicker"   value={{now}} placeholder="To Date" />
+                                                <input id="dateFilterTo" type="text" class="form-control datepicker border-bottom-input"   value={{now}} placeholder="To Date" />
                                             </div>
                                             <div class="dropdown col-xs-4 col-md-2">
                                                 <input type="text"
-                                                       class="form-control searchable-input floatL"
+                                                       class="form-control searchable-input floatL border-bottom-input"
                                                        placeholder="Search Project" ng-model="selectedProject"
 
                                                        name="projectId"
@@ -49,7 +49,7 @@
                                             </div>
                                             <div class="dropdown col-xs-4 col-md-3">
                                                 <input type="text"
-                                                       class="form-control searchable-input floatL"
+                                                       class="form-control searchable-input floatL border-bottom-input"
                                                        placeholder="Search Site" ng-model="selectedSite"
                                                        uib-typeahead="site as site.name for site in sites | filter:$viewValue | limitTo:5" />
                                             </div>
@@ -57,7 +57,7 @@
                                             <div class="dropdown col-xs-4 col-md-3">
 
                                                 <input type="text"
-                                                       class="form-control searchable-input floatL"
+                                                       class="form-control searchable-input floatL border-bottom-input"
                                                        placeholder="Search Status" ng-model="selectedStatus"
                                                        uib-typeahead="stat as stat.name for stat in status | filter:$viewValue | limitTo:5" />
                                             </div>

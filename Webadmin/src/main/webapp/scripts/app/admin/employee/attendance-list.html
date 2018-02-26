@@ -1,6 +1,6 @@
 <div ng-init="loadAttendances()">
 
-    <div class="row" >
+    <div class="row TopButtonsCon" >
         <!--<div class="col-md-4">-->
             <!--<h2 class="title" style="margin-bottom: 0px">Attendance</h2>-->
         <!--</div>-->
@@ -29,19 +29,19 @@
                     <div class="SearchTable">
                         <form name="searchForm"  ng-submit="search()" novalidate >
 
-                            <table class="table" border="0">
+                            <table class="table no-padding-tblCon" border="0">
                                 <tr class="filter-row gc-search-row">
                                     <td>
                                         <div class="form-group" >
 
-                                            <input id="dateFilterFrom" type="text" class="form-control datepicker"   value={{now}} placeholder="From Date" />
+                                            <input id="dateFilterFrom" type="text" class="form-control datepicker border-bottom-input"   value={{now}} placeholder="From Date" />
                                         </div>
                                     </td>
 
                                     <td>
                                         <div class="form-group" >
 
-                                            <input id="dateFilterTo" type="text" class="form-control datepicker"   value={{now}} placeholder="To Date" />
+                                            <input id="dateFilterTo" type="text" class="form-control datepicker border-bottom-input"   value={{now}} placeholder="To Date" />
                                         </div>
                                     </td>
 
@@ -49,7 +49,7 @@
                                         <div class="form-group" >
                                             <div class="dropdown">
                                                 <input type="text"
-                                                       class="form-control "
+                                                       class="form-control border-bottom-input"
                                                        placeholder="Search Employee Name"
                                                        ng-model="selectedEmployee"
                                                        ng-value="searchCriteria.employeeFullName"
@@ -62,7 +62,7 @@
                                         <div class="form-group" >
                                             <div class="dropdown">
                                                 <input type="text"
-                                                       class="form-control searchable-input floatL"
+                                                       class="form-control searchable-input floatL border-bottom-input"
                                                        placeholder="Search Site"
                                                        ng-model="selectedSite"
                                                        ng-value="searchCriteria.siteName"
@@ -165,7 +165,7 @@
         <div class="col-md-4"></div>
          <div class="col-md-8 text-right">
 	        <ul class="pagination pagination-warning">
-	
+
 	            <li class="paging-first" ID="first">
 	                <a href="#" id="first" ng-click="first()">
 	                    <i id="first" class=" fa fa-step-backward"></i></a>
@@ -173,7 +173,7 @@
 	            <li class="prev paging-previous" id="previous">
 	                <a id="previous" href="#" ng-click="previous()"> prev</a>
 	            </li>
-	
+
 	            <li ng-class="{active: number == pages.currPage}" class="paging" ng-repeat="number in numberArrays" ng-click="clickNextOrPrev(number)">
 	                <a href="#" style="cursor:pointer">{{number}}</a>
 	            </li>
@@ -183,7 +183,7 @@
 	            <li class="paging-last" id="last">
 	                <a id="last" href="#" ng-click="last()"><i id="last" class="fa fa-step-forward"></i></a>
 	            </li>
-	
+
 	        </ul>
 	    </div>
 

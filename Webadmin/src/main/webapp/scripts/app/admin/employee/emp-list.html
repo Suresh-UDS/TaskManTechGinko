@@ -1,6 +1,6 @@
 <div>
 
-    <div class="row" ng-init="loadEmployees()">
+    <div class="row " ng-init="loadEmployees()">
         <div class="col-md-8" ng-init="loadProjects()">
             <!--<h2 class="title">Employee</h2>-->
         </div>
@@ -30,7 +30,7 @@
 
                         <form name="searchForm"  ng-submit="search()" novalidate >
 
-                            <table class="table" border="0">
+                            <table class="table no-padding-tblCon" border="0">
                                 <tr class="filter-row gc-search-row">
 
 
@@ -38,7 +38,7 @@
                                         <div class="form-group" >
                                             <div class="dropdown">
                                                 <input type="text"
-                                                       class="form-control "
+                                                       class="form-control border-bottom-input"
                                                        placeholder="Search Employee Id"
                                                        ng-model="selectedEmployee"
                                                        ng-value="searchCriteria.employeeEmpId"
@@ -53,7 +53,7 @@
                                         <div class="form-group" >
                                             <div class="dropdown">
                                                 <input type="text"
-                                                       class="form-control "
+                                                       class="form-control border-bottom-input"
                                                        placeholder="Search Employee Name"
                                                        ng-model="selectedEmployee"
                                                        ng-value="searchCriteria.employeeFullName"
@@ -66,7 +66,7 @@
                                         <div class="form-group" >
                                             <div class="dropdown">
                                                 <input type="text"
-                                                       class="form-control searchable-input floatL"
+                                                       class="form-control searchable-input floatL border-bottom-input"
                                                        placeholder="Search Site"
                                                        ng-model="selectedSite"
                                                        ng-value="searchCriteria.siteName"
@@ -94,16 +94,16 @@
                             <thead>
                             <tr>
                                 <th>ID <a href="#">
-                                
+
                                 <span ng-click="columnAscOrder('empId')"  class=""><i class="fa fa-caret-up"></i></span>
           						<span ng-click="columnDescOrder('empId')" class=""><i class="fa fa-caret-down"></i></span>
-          						
+
     							 </a></th>
                                 <th>Name<a href="#">
-                                
+
                                 <span ng-click="columnAscOrder('name')" class=""><i class="fas fa-caret-up"></i></span>
           						<span ng-click="columnDescOrder('name')" class=""><i class="fas fa-caret-down"></i></span>
-          						
+
     							 </a></th>
                                 <th>Enrolled Face Id</th>
                                 <th>Authorize Face Id</th>

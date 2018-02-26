@@ -4,7 +4,6 @@
 
     <div class="row">
 
-
         <div class="col-md-6">
 
             <div class="panel panel-default">
@@ -30,9 +29,8 @@
                                    		</span>Import Clients
                                     </button>
                                 </div>
-							<div class="col-md-2">
-                                  </div>
-                                  <div class="col-md-3" ng-hide="!clientImportMsg()">
+
+                                  <div class="col-md-12" ng-hide="!clientImportMsg()">
                                   	<span class="card-title">Status - {{clientImportMsg()}}</span>
                                   </div>
                             </div>
@@ -46,8 +44,6 @@
             </div>
 
         </div>
-
-
 
         <div class="col-md-6">
 
@@ -84,7 +80,6 @@
                 </div>
             </div>
 
-
         </div>
 
         <div class="col-md-6">
@@ -103,7 +98,7 @@
                                              file-model ng-model="selectedEmployeeFile"
                                              name="employeeFile"
                                       />
-                                  
+
                                   </div>
                                   <div class="col-md-6">
                                    <button class="btn btn-success" ng-click="uploadEmployeeFile()" >
@@ -127,8 +122,6 @@
         </div>
 
         <div class="col-md-6">
-
-
 
             <div class="panel panel-default">
                 <div class="panel-heading">Jobs</div>
@@ -165,8 +158,6 @@
                     </form>
                 </div>
             </div>
-
-
 
         </div>
 

@@ -1,6 +1,6 @@
 <div>
 
-    <div class="row" ng-init="loadSites()">
+    <div class="row TopButtonsCon" ng-init="loadSites()">
         <div class="col-md-8">
             <!--<h2 class="title">Site</h2>-->
         </div>
@@ -21,7 +21,7 @@
 
                         <form name="searchForm"  ng-submit="search()" novalidate >
 
-                            <table class="table" border="0">
+                            <table class="table no-padding-tblCon" border="0">
                                 <tr class="filter-row gc-search-row">
 
 
@@ -29,7 +29,7 @@
                                         <div class="form-group no-padding" >
                                             <div class="dropdown">
                                                 <input type="text"
-                                                       class="form-control searchable-input floatL"
+                                                       class="form-control searchable-input floatL border-bottom-input"
                                                        placeholder="Search Client" ng-model="selectedProject"
 
                                                        name="projectId"
@@ -41,7 +41,7 @@
                                         <div class="form-group no-padding" >
                                             <div class="dropdown">
                                                 <input type="text"
-                                                       class="form-control searchable-input floatL"
+                                                       class="form-control searchable-input floatL border-bottom-input"
                                                        placeholder="Search Site"
                                                        ng-model="selectedSite"
                                                        ng-value="searchCriteria.siteName"
