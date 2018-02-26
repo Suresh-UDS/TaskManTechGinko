@@ -615,10 +615,10 @@ demo = {
         }
     },
 
-    showSwal: function(type) {
+    showSwal: function(type,title,txt) {
         if (type == 'basic') {
             swal({
-                title: "Here's a message!",
+                title: title,
                 buttonsStyling: false,
                 confirmButtonClass: "btn btn-success"
             }).catch(swal.noop)
@@ -633,8 +633,8 @@ demo = {
 
         } else if (type == 'success-message') {
             swal({
-                title: "Good job!",
-                text: "You clicked the button!",
+                title: title,
+                text: txt,
                 buttonsStyling: false,
                 confirmButtonClass: "btn btn-success",
                 type: "success"
@@ -642,13 +642,13 @@ demo = {
 
         } else if (type == 'warning-message-and-confirmation') {
             swal({
-                title: 'Are you sure?',
-                text: "You won't be able to revert this!",
+                title: title,
+                text: txt,
                 type: 'warning',
                 showCancelButton: true,
                 confirmButtonClass: 'btn btn-success',
                 cancelButtonClass: 'btn btn-danger',
-                confirmButtonText: 'Yes, delete it!',
+                confirmButtonText: 'Yes',
                 buttonsStyling: false
             }).then(function() {
                 swal({
@@ -658,6 +658,7 @@ demo = {
                     confirmButtonClass: "btn btn-success",
                     buttonsStyling: false
                 })
+
             }).catch(swal.noop)
         } else if (type == 'warning-message-and-cancel') {
             swal({
