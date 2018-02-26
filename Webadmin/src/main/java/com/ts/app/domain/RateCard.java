@@ -44,7 +44,7 @@ public class RateCard extends AbstractAuditingEntity implements Serializable {
     @NotNull
     @Size(min = 1, max = 250)
     @Column(length = 250, nullable = false)
-    private String amount;
+    private double amount;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "siteId", nullable = true)
@@ -73,15 +73,14 @@ public class RateCard extends AbstractAuditingEntity implements Serializable {
         this.name = name;
     }
 
-    public String getAmount() {
-        return amount;
-    }
-
-    public void setAmount(String amount) {
-        this.amount = amount;
-    }
-
-    public Site getSite() { return site;   }
+    public double getAmount() {
+		return amount;
+	}
+	public void setAmount(double amount) {
+		this.amount = amount;
+	}
+	
+	public Site getSite() { return site;   }
 
     public void setSite(Site site){  this.site = site;   }
 	public RateType getType() {

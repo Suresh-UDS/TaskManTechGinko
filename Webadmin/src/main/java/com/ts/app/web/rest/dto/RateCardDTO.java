@@ -22,8 +22,12 @@ public class RateCardDTO extends BaseDTO implements Serializable {
     private RateType type;
 
     private UOMType uom;
+    
+    private long qty;
+    
+    private double unitPrice;
 
-    private String amount;
+    private double cost;
 
     private long siteId;
 
@@ -48,14 +52,6 @@ public class RateCardDTO extends BaseDTO implements Serializable {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public String getAmount() {
-        return amount;
-    }
-
-    public void setAmount(String amount) {
-        this.amount = amount;
     }
 
 	public RateType getType() {
@@ -103,4 +99,24 @@ public class RateCardDTO extends BaseDTO implements Serializable {
     public void setTitle(String title) {
         this.title = title;
     }
+	public long getQty() {
+		return qty;
+	}
+	public void setQty(long qty) {
+		this.qty = qty;
+	}
+	public double getUnitPrice() {
+		return unitPrice;
+	}
+	public double getCost() {
+		return cost;
+	}
+	public void setCost(double cost) {
+		this.cost = cost;
+	}
+	public void setUnitPrice(double unitPrice) {
+		this.unitPrice = unitPrice;
+	}
+
+    
 }

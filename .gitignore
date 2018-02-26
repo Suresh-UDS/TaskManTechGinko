@@ -236,3 +236,5 @@ QuotationService/package-lock.json
 QuotationService/node_modules/*
 
 MobileApp/www/build/
+
+QuotationService/node_modules

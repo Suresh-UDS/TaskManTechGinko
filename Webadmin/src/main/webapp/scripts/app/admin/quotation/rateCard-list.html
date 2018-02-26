@@ -31,7 +31,7 @@
                         <tr ng-repeat="rateCard in rateCards">
                             <td>{{rateCard.type}}</td>
                             <td>{{rateCard.name}}</td>
-                            <td>{{rateCard.amount}}</td>
+                            <td>{{rateCard.cost}}</td>
                             <td>{{rateCard.uom}}</td>
                             <td class="text-right">
                                 <a  ng-class="{active: $state.includes('admin')}" has-authority="ROLE_ADMIN" ng-click="loadRateCard(rateCard)" data-toggle="modal" data-target="#RightModal-view" class="btn btn-simple btn-info"><i class="material-icons">remove_red_eye</i></a>

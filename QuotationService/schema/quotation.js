@@ -19,6 +19,8 @@ var QuotationModel = function() {
         clientId:Number,
         clientName:String,
         siteName:String,
+        projectId:String,
+        projectName:String,
         clientEmailId:String,
         sentToEmailId:String,
         createdByUserId:String,
@@ -31,7 +33,11 @@ var QuotationModel = function() {
         authorisedByUserName:String,
         sentToUserId:String,
         sentToUserName:String,
-        lastModifiedDate: Date
+        lastModifiedDate: Date,
+        createdDate: Date,
+        submittedDate: Date,
+        approvedDate: Date,
+        archivedDate: Date
     });
 
 

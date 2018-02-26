@@ -1,29 +1,276 @@
 'use strict';
 
-angular.module('timeSheetApp')
-    .controller('QuotationController', function ($scope, $rootScope, $state, $timeout,$http,$stateParams,$location, RateCardComponent) {
+angular
+		.module('timeSheetApp')
+		.controller(
+				'QuotationController',
+				function($scope, $rootScope, $state, $timeout, $http,
+						$stateParams, $location, RateCardComponent, ProjectComponent, SiteComponent) {
 
-    	$scope.quotations;
+					$scope.selectedProject;
 
-        $scope.loadAllQuotations = function() {
-            RateCardComponent.getAllQuotations().then(function (response) {
-                console.log(response);
-                $scope.quotations = response;
-            })
+					$scope.selectedSite;
 
-        };
+					$scope.quotations;
 
-        $scope.selectQuotation = function(quotation){
+					$scope.materialName;
 
-            $scope.quotation = quotation;
-        }
+					$scope.materialQty;
 
-        $scope.approveQuotation = function(quotation){
-            RateCardComponent.approveQuotation(quotation).then(function (response) {
-                console.log(response);
-                // $scope.quotation = response
-                $scope.loadAllQuotations();
-            })
-        }
+					$scope.materialUnitPrice;
 
-    });
+					$scope.materialItemCost;
+
+					$scope.materialTotalCost = 0;
+
+					$scope.serviceName;
+
+					$scope.serviceQty;
+
+					$scope.serviceUnitPrice;
+
+					$scope.serviceItemCost;
+
+					$scope.serviceTotalCost = 0;
+
+					$scope.labourCategory;
+
+					$scope.labourQty;
+
+					$scope.labourUnitPrice;
+
+					$scope.labourItemCost;
+
+					$scope.labourTotalCost = 0;
+
+					$scope.quotation = {};
+
+					$scope.rateCardDetails = [];
+
+					$scope.materialRateCardDetails = [];
+
+					$scope.serviceRateCardDetails = [];
+
+					$scope.labourRateCardDetails = [];
+
+					$scope.totalCost = 0;
+					
+					$scope.init = function() {
+						$scope.loadProjects();
+					}
+
+					$scope.loadProjects = function() {
+						ProjectComponent.findAll().then(function(data) {
+							console.log("Loading all projects")
+							$scope.projects = data;
+						});
+					};
+					
+			        $scope.loadSelectedProject = function(projectId) {
+				        	ProjectComponent.findOne(projectId).then(function (data) {
+				                $scope.selectedProject = data;
+				                $scope.loadSites();
+			            });
+			        };
+
+					
+			        $scope.loadSites = function () {
+			            $scope.showLoader();
+				        	console.log('selected project - ' + JSON.stringify($scope.selectedProject));
+				        	if($scope.selectedProject) {
+				            	ProjectComponent.findSites($scope.selectedProject.id).then(function (data) {
+				                    $scope.sites = data;
+				                    $scope.hideLoader();
+	
+				                });
+				        	}else {
+				            	SiteComponent.findAll().then(function (data) {
+				                    $scope.sites = data;
+				                    $scope.hideLoader();
+	
+				                });
+				        	}
+			        };					
+
+					$scope.loadAllQuotations = function() {
+						RateCardComponent.getAllQuotations().then(
+								function(response) {
+									console.log('quotations - '+ response);
+									$scope.quotations = response;
+								})
+
+					};
+
+					$scope.addMaterial = function() {
+						console.log('material cost - '
+								+ parseInt($scope.materialQty) + ', '
+								+ parseFloat($scope.materialUnitPrice))
+						$scope.materialItemCost = parseInt($scope.materialQty)
+								* parseFloat($scope.materialUnitPrice);
+						var rateCardDetail = {};
+						rateCardDetail.title = $scope.materialName
+						rateCardDetail.type = 'MATERIAL'
+						rateCardDetail.cost = $scope.materialItemCost
+						rateCardDetail.uom = 'PER_QTY'
+						rateCardDetail.qty = $scope.materialQty
+						rateCardDetail.unitPrice = $scope.materialUnitPrice
+						$scope.materialTotalCost += parseFloat($scope.materialItemCost)
+						$scope.totalCost += parseFloat($scope.materialItemCost)
+						$scope.materialRateCardDetails.push(rateCardDetail);
+					}
+
+					$scope.removeMaterial = function(ind) {
+						$scope.materialTotalCost -= parseFloat($scope.materialRateCardDetails[ind].cost);
+						$scope.totalCost -= parseFloat($scope.materialRateCardDetails[ind].cost);
+						$scope.materialRateCardDetails.splice(ind, 1);
+					}
+
+					$scope.addService = function() {
+						console.log('service cost - '
+								+ parseInt($scope.serviceQty) + ', '
+								+ parseFloat($scope.serviceUnitPrice))
+						$scope.serviceItemCost = parseInt($scope.serviceQty)
+								* parseFloat($scope.serviceUnitPrice);
+						var rateCardDetail = {};
+						rateCardDetail.title = $scope.serviceName
+						rateCardDetail.type = 'SERVICE'
+						rateCardDetail.cost = $scope.serviceItemCost
+						rateCardDetail.uom = 'FIXED'
+						rateCardDetail.qty = $scope.serviceQty
+						rateCardDetail.unitPrice = $scope.serviceUnitPrice
+						$scope.serviceTotalCost += parseFloat($scope.serviceItemCost)
+						$scope.totalCost += parseFloat($scope.serviceItemCost)
+						$scope.serviceRateCardDetails.push(rateCardDetail);
+					}
+
+					$scope.removeService = function(ind) {
+						$scope.serviceTotalCost -= parseFloat($scope.serviceRateCardDetails[ind].cost);
+						$scope.totalCost -= parseFloat($scope.serviceRateCardDetails[ind].cost);
+						$scope.serviceRateCardDetails.splice(ind, 1);
+					}
+
+					$scope.addLabour = function() {
+						console.log('Labour cost - '
+								+ parseInt($scope.labourQty) + ', '
+								+ parseFloat($scope.labourUnitPrice))
+						$scope.labourItemCost = parseInt($scope.labourQty)
+								* parseFloat($scope.labourUnitPrice);
+						var rateCardDetail = {};
+						rateCardDetail.title = $scope.labourCategory
+						rateCardDetail.type = 'LABOUR'
+						rateCardDetail.cost = $scope.labourItemCost
+						rateCardDetail.uom = 'PER_HOUR'
+						rateCardDetail.qty = $scope.labourQty
+						rateCardDetail.unitPrice = $scope.labourUnitPrice
+						$scope.labourTotalCost += parseFloat($scope.labourItemCost)
+						$scope.totalCost += parseFloat($scope.labourItemCost)
+						$scope.labourRateCardDetails.push(rateCardDetail);
+					}
+
+					$scope.removeLabour = function(ind) {
+						$scope.labourTotalCost -= parseFloat($scope.labourRateCardDetails[ind].cost);
+						$scope.totalCost -= parseFloat($scope.labourRateCardDetails[ind].cost);
+						$scope.labourRateCardDetails.splice(ind, 1);
+					}
+
+					$scope.saveQuotation = function() {
+						$scope.quotation.siteId = $scope.selectedSite.id;
+						$scope.quotation.siteName = $scope.selectedSite.name;
+						$scope.quotation.projectId = $scope.selectedProject.id;
+						$scope.quotation.projectName = $scope.selectedProject.name;
+						
+						$scope.rateCardDetails = $scope.serviceRateCardDetails
+								.concat($scope.labourRateCardDetails,
+										$scope.materialRateCardDetails);
+						$scope.quotation.rateCardDetails = $scope.rateCardDetails;
+						$scope.quotation.drafted = true;
+						RateCardComponent.createQuotation($scope.quotation)
+								.then(function(response) {
+									console.log(response);
+									$scope.showNotifications('top','center','success','Quotation saved Successfully');									
+									//$scope.loadAllQuotations();
+									$location.path('/quotation-list');
+								}).catch(function (response) {
+			                        $scope.success = null;
+			                        console.log('Error - '+ JSON.stringify(response.data));
+			                        if (response.status === 400 && response.data.message === 'error.duplicateRecordError') {
+			                            $scope.errorEmployeeExists = true;
+			                            $scope.errorMessage = response.data.description;
+			                            $scope.showNotifications('top','center','danger', $scope.errorMessage);
+			                        } else {
+			                            $scope.error = 'ERROR';
+			                            $scope.showNotifications('top','center','danger', response.data.description);
+			                            
+			                        }
+			                    });
+					}
+
+					$scope.selectQuotation = function(quotation) {
+
+						$scope.quotation = quotation;
+					}
+					
+			        $scope.loadQuotation = function() {
+			        		console.log('quotation id - ' + $stateParams.id);
+			        		RateCardComponent.findQuotation($stateParams.id).then(function (data) {
+			        				console.log('quotation response - '+ JSON.stringify(data))
+				                $scope.quotation = data;
+			        				var rateCardDetails = $scope.quotation.rateCardDetails;
+			        				for(var i =0;i < rateCardDetails.length; i++) {
+			        					var rateCardDetail = rateCardDetails[i];
+			        					if(rateCardDetail.type == 'SERVICE') {
+			        						$scope.serviceTotalCost += rateCardDetail.cost;
+			        						$scope.serviceRateCardDetails.push(rateCardDetail);
+			        					}else if(rateCardDetail.type == 'LABOUR') {
+			        						$scope.labourTotalCost += rateCardDetail.cost;
+			        						$scope.labourRateCardDetails.push(rateCardDetail);
+			        					}else if(rateCardDetail.type == 'MATERIAL') {
+			        						$scope.materialTotalCost += rateCardDetail.cost;
+			        						$scope.materialRateCardDetails.push(rateCardDetail);
+			        					} 
+			        					$scope.totalCost += rateCardDetail.cost;
+			        				}
+				                $scope.loadSelectedProject($scope.quotation.projectId);
+				                $scope.selectedSite = {};
+				                $scope.selectedSite.id = $scope.quotation.siteId;
+				                $scope.selectedSite.name = $scope.quotation.siteName;
+				            });
+			        };
+
+
+					$scope.approveQuotation = function(quotation) {
+						RateCardComponent.approveQuotation(quotation).then(
+								function(response) {
+									console.log(response);
+									// $scope.quotation = response
+									$scope.loadAllQuotations();
+								})
+					}
+					
+			        $scope.showLoader = function(){
+			            console.log("Show Loader");
+			            $scope.loading = true;
+			            $scope.notLoading=false;
+			        };
+
+			        $scope.hideLoader = function(){
+			            console.log("Show Loader");
+			            $scope.loading = false;
+			            $scope.notLoading=true;
+			        };
+
+			        $scope.showNotifications= function(position,alignment,color,msg){
+			            demo.showNotification(position,alignment,color,msg);
+			        }
+			        
+			        $scope.cancelQuotation = function () {
+			        		$location.path('/quotation-list');
+			        };
+
+			        $scope.refreshPage = function() {
+			           $scope.clearFilter();
+			           $scope.loadQuotations();
+			        };
+
+
+				});

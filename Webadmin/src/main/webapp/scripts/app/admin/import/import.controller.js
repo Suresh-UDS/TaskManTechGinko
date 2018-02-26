@@ -13,15 +13,15 @@ angular.module('timeSheetApp')
         
         $scope.selectedJobFile;
         $scope.selectedEmployeeFile;
+        //client file
+        $scope.selectedClientFile;
+        $rootScope.clientImportStatus = {};
         $rootScope.jobImportStatus = {};
         $rootScope.employeeImportStatus = {};
         $scope.importStatus;
         $scope.importEmployeeStatus;
         $scope.selectFile = function() {
         		console.log($scope.selectedJobFile);
-        }
-        $scope.selectFile = function() {
-    		console.log('Selected Employeesss File - ' +$scope.selectedEmployeeFile);
         }
         // upload Job File
         $scope.uploadJobFile = function() {
@@ -153,5 +153,56 @@ angular.module('timeSheetApp')
 	        return ('employeeMsg - '+$rootScope.employeeImportStatus ? $rootScope.employeeImportStatus.importMsg : '');
 	    }; 
 	    
+       //client upload file
+	    $scope.uploadClients = function() {
+    		console.log('selected Client file - ' + $scope.selectedClientFile);
+    		ProjectComponent.importFile($scope.selectedClientFile).then(function(data){
+    			console.log(data);
+    			var result = data;
+    			console.log(result.file + ', ' + result.status + ',' + result.msg);
+    			var importStatus = {
+        				fileName : result.file,
+        				importMsg : result.msg
+        		};
+        		$rootScope.clientImportStatus = importStatus;
+        		$rootScope.start();
+         },function(err){
+            	  console.log('Client Import error')
+            	  console.log(err);
+         });
+    		
+    }
+
+	    $scope.clientImportStatus = function() {
+        	console.log('$rootScope.clientImportStatus -'+JSON.stringify($rootScope.clientImportStatus));
+        		
+            	ProjectComponent.importStatus($rootScope.clientImportStatus.fileName).then(function(data) {
+            		if(data) {
+            			$rootScope.clientImportStatus.importStatus = data.status;
+                		console.log('importStatus - '+ $rootScope.clientImportStatus);
+                		$rootScope.clientImportStatus.importMsg = data.msg;
+                		console.log('importMsg - '+ $rootScope.clientImportStatus.importMsg);
+                		if($rootScope.clientImportStatus.importStatus == 'COMPLETED'){
+                			$rootScope.clientImportStatus.fileName = data.file;
+                    		console.log('importFile - '+ $rootScope.clientImportStatus.fileName);
+                    		$scope.stop();
+                		}else if($rootScope.clientImportStatus.importStatus == 'FAILED'){
+                    		$scope.stop();
+                		}else if(!$rootScope.clientImportStatus.importStatus){
+                			$scope.stop();
+                		}else {
+                			$rootScope.clientImportStatus.fileName = '#';
+                		}
+            		}
+
+            	});
+
+    }
+
+
+	    $scope.clientImportMsg = function() {
+	        return ($rootScope.clientImportStatus ? $rootScope.clientImportStatus.importMsg : '');
+	    };  
+        
         
     });

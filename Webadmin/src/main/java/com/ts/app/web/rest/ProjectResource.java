@@ -1,5 +1,6 @@
 package com.ts.app.web.rest;
 
+import java.util.Calendar;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -21,14 +22,18 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.codahale.metrics.annotation.Timed;
 import com.ts.app.security.SecurityUtils;
 import com.ts.app.service.ProjectService;
 import com.ts.app.service.SiteService;
+import com.ts.app.service.util.ImportUtil;
+import com.ts.app.web.rest.dto.ImportResult;
 import com.ts.app.web.rest.dto.ProjectDTO;
 import com.ts.app.web.rest.dto.SiteDTO;
 import com.ts.app.web.rest.errors.ErrorConstants;
@@ -49,6 +54,9 @@ public class ProjectResource {
 
 	@Inject
 	private SiteService siteService;
+	
+	@Inject
+	private ImportUtil importUtil;
 
 
 	@Inject
@@ -135,6 +143,36 @@ public class ProjectResource {
         List<SiteDTO> sites = siteService.findSites(projectId, SecurityUtils.getCurrentUserId());
         return sites;
     }
+
+    @RequestMapping(path="/clients/import", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<ImportResult> importJobData(@RequestParam("clientFile") MultipartFile file){
+		Calendar cal = Calendar.getInstance();
+		ImportResult result = importUtil.importClientData(file, cal.getTimeInMillis());
+		return new ResponseEntity<ImportResult>(result,HttpStatus.OK);
+	}
+	
+    @RequestMapping(value = "/clients/import/{fileId}/status",method = RequestMethod.GET)
+	public ImportResult importStatus(@PathVariable("fileId") String fileId) {
+		log.debug("ImportStatus -  fileId -"+ fileId);
+		ImportResult result = projectService.getImportStatus(fileId);
+		if(result!=null && result.getStatus() != null) {
+			switch(result.getStatus()) {
+				case "PROCESSING" :
+					result.setMsg("Importing data...");
+					break;
+				case "COMPLETED" :
+					result.setMsg("Completed importing");
+					break;
+				case "FAILED" :
+					result.setMsg("Failed to import. Please try again");
+					break;
+				default :
+					result.setMsg("Completed importing");
+					break;
+			}
+		}
+		return result;
+	}
 
 
 
