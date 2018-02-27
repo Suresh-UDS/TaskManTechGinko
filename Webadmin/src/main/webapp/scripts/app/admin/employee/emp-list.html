@@ -1,28 +1,26 @@
 <div>
 
+    <!--<div class="row " >-->
+        <!--<div class="col-md-8" >-->
+            <!--&lt;!&ndash;<h2 class="title">Employee</h2>&ndash;&gt;-->
+        <!--</div>-->
+        <!--<div class="col-md-4 txt-align-rgt">-->
+            <!--<button ui-sref="add-employee"  ng-class="{active: $state.includes('admin')}" has-authority="ROLE_ADMIN" class="btn btn-success align-left"> <i class="material-icons padding-right5">add</i>ADD<div class="ripple-container"></div></button>-->
+            <!--<button ng-click="refreshPage()" class="btn btn-warning align-left"> <i class="material-icons padding-right5">refresh</i>Reload<div class="ripple-container"></div></button>-->
+        <!--</div>-->
+    <!--</div>-->
+
+
+	<!--<div class="row" style="padding-left:10px">-->
+
+	<!--<label>number of entries</label>-->
+
+	<!--</div>-->
+
+
     <div class="row" ng-init="loadEmployees()">
-        <div class="col-md-8" ng-init="loadProjects()">
-            <!--<h2 class="title">Employee</h2>-->
-        </div>
-        <div class="col-md-4 txt-align-rgt">
-            <button ui-sref="add-employee"  ng-class="{active: $state.includes('admin')}" has-authority="ROLE_ADMIN" class="btn btn-success align-left"> <i class="material-icons padding-right5">add</i>ADD<div class="ripple-container"></div></button>
-            <button ng-click="refreshPage()" class="btn btn-warning align-left"> <i class="material-icons padding-right5">refresh</i>Reload<div class="ripple-container"></div></button>
-        </div>
-    </div>
 
-
-	<div class="row" style="padding-left:10px">
-	<label>Show</label>
-	<select class="siteList" ng-model="sort" ng-change="hasChanged()" ng-options="paging.value for paging in pageSizes" value="{{paging.value}}">
-	</select>
-	<label>number of entries</label>
-
-	</div>
-
-
-    <div class="row">
-
-        <div class="col-md-12">
+        <div class="col-md-12" ng-init="loadProjects()">
             <div class="card TableCard">
                 <div class="card-content" ng-init="loadAllEmployees()">
 
@@ -30,15 +28,21 @@
 
                         <form name="searchForm"  ng-submit="search()" novalidate >
 
-                            <table class="table" border="0">
+                            <table class="table no-padding-tblCon" border="0">
                                 <tr class="filter-row gc-search-row">
+
+                                    <td>
+                                        <label>Show</label>
+                                        <select class="siteList margin0" ng-model="sort" ng-change="hasChanged()" ng-options="paging.value for paging in pageSizes" value="{{paging.value}}">
+                                        </select>
+                                    </td>
 
 
                                     <td>
                                         <div class="form-group" >
                                             <div class="dropdown">
                                                 <input type="text"
-                                                       class="form-control "
+                                                       class="form-control border-bottom-input"
                                                        placeholder="Search Employee Id"
                                                        ng-model="selectedEmployee"
                                                        ng-value="searchCriteria.employeeEmpId"
@@ -53,7 +57,7 @@
                                         <div class="form-group" >
                                             <div class="dropdown">
                                                 <input type="text"
-                                                       class="form-control "
+                                                       class="form-control border-bottom-input"
                                                        placeholder="Search Employee Name"
                                                        ng-model="selectedEmployee"
                                                        ng-value="searchCriteria.employeeFullName"
@@ -66,7 +70,7 @@
                                         <div class="form-group" >
                                             <div class="dropdown">
                                                 <input type="text"
-                                                       class="form-control searchable-input floatL"
+                                                       class="form-control searchable-input floatL border-bottom-input"
                                                        placeholder="Search Site"
                                                        ng-model="selectedSite"
                                                        ng-value="searchCriteria.siteName"
@@ -76,8 +80,15 @@
                                     </td>
                                     <td align="right">
                                         <div class="floatR form-group">
-                                            <button type="submit" class="btn btn-primary search-button t4"  >
-                                                <i class="fa fa-search"></i>
+
+                                            <button type="submit" class="btn btn-circle blue-clr">
+                                                <i class="material-icons">search</i>
+                                            </button>
+                                            <button ui-sref="add-employee"  ng-class="{active: $state.includes('admin')}" has-authority="ROLE_ADMIN" class="btn btn-circle green-clr">
+                                                <i class="material-icons">add</i>
+                                            </button>
+                                            <button ng-click="refreshPage()" class="btn btn-circle orange-clr">
+                                                <i class="material-icons">refresh</i>
                                             </button>
                                         </div>
                                     </td>
@@ -94,16 +105,16 @@
                             <thead>
                             <tr>
                                 <th>ID <a href="#">
-                                
+
                                 <span ng-click="columnAscOrder('empId')"  class=""><i class="fa fa-caret-up"></i></span>
           						<span ng-click="columnDescOrder('empId')" class=""><i class="fa fa-caret-down"></i></span>
-          						
+
     							 </a></th>
                                 <th>Name<a href="#">
-                                
+
                                 <span ng-click="columnAscOrder('name')" class=""><i class="fas fa-caret-up"></i></span>
           						<span ng-click="columnDescOrder('name')" class=""><i class="fas fa-caret-down"></i></span>
-          						
+
     							 </a></th>
                                 <th>Enrolled Face Id</th>
                                 <th>Authorize Face Id</th>

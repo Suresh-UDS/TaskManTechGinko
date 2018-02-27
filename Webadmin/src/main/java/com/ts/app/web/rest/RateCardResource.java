@@ -118,8 +118,7 @@ public class RateCardResource {
     public ResponseEntity<QuotationDTO> saveQuotation(@RequestBody QuotationDTO quotationDto) {
         log.info("--Invoked RateCardResource.Get Quotations --");
         long currentUserId = SecurityUtils.getCurrentUserId();
-        quotationDto.setCreatedByUserId(currentUserId);
-        QuotationDTO result = rateCardService.saveQuotation(quotationDto);
+        QuotationDTO result = rateCardService.saveQuotation(quotationDto, currentUserId);
         return new ResponseEntity<QuotationDTO>(result, HttpStatus.OK);
     }
 	
@@ -140,10 +139,10 @@ public class RateCardResource {
     }
 
     @RequestMapping(value = "/rateCard/quotation/approve",method = RequestMethod.POST)
-    public Object approveQuotation(@RequestBody RateCardDTO rateCardDTO){
+    public Object approveQuotation(@RequestBody QuotationDTO quotationDTO){
 	    log.info("Approve Quotations");
 	    Object result = null;
-	    rateCardService.approveQuotation(rateCardDTO);
+	    rateCardService.approveQuotation(quotationDTO);
 	    return result;
     }
 

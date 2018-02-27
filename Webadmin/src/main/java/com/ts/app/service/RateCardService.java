@@ -208,14 +208,13 @@ public class RateCardService extends AbstractService {
         return  rateCardDetails;
 	}
 	
-	public QuotationDTO saveQuotation(QuotationDTO quotationDto) {
+	public QuotationDTO saveQuotation(QuotationDTO quotationDto, long currUserId) {
 
         log.debug("Quotation creation");
 
         try{
         		//get the user details
-        		User createdUser = userRepository.findOne(quotationDto.getCreatedByUserId());
-        		quotationDto.setCreateByUserName(createdUser.getLogin());
+        		User currUser = userRepository.findOne(currUserId);
         		
         		//calculate the total cost
         		List<RateCardDTO> rateCardDetails = quotationDto.getRateCardDetails();
@@ -264,20 +263,41 @@ public class RateCardService extends AbstractService {
             request.put("projectId", quotationDto.getProjectId());
             request.put("projectName", quotationDto.getProjectName());
             request.put("siteId", quotationDto.getSiteId());
-            request.put("createdByUserId", quotationDto.getCreatedByUserId());
-            request.put("createdByUserName", quotationDto.getCreateByUserName());
             request.put("sentByUserId", quotationDto.getSentByUserId());
             request.put("sentByUserName", quotationDto.getSentByUserName());
             request.put("isDrafted", quotationDto.isDrafted());
             request.put("isSubmitted", quotationDto.isSubmitted());
 
-            HttpEntity<?> requestEntity = new HttpEntity<>(request.toString(),headers);
-            log.debug("Request entity quotation save service"+requestEntity);
             log.debug("quotation save  end point"+quotationSvcEndPoint);
             String url = quotationSvcEndPoint+"/quotation/create";
-            if(!StringUtils.isEmpty(quotationDto.get_id())) {
+            if(quotationDto.getMode().equalsIgnoreCase("create")) {
+            		quotationDto.setCreatedByUserId(currUserId);
+	        		quotationDto.setCreateByUserName(currUser.getLogin());
+                request.put("createdByUserId", quotationDto.getCreatedByUserId());
+                request.put("createdByUserName", quotationDto.getCreateByUserName());
+            }	
+            if(!StringUtils.isEmpty(quotationDto.get_id()) && quotationDto.getMode().equalsIgnoreCase("edit")) {
             		url = quotationSvcEndPoint+"/quotation/edit";
+            }else if(!StringUtils.isEmpty(quotationDto.get_id()) && quotationDto.getMode().equalsIgnoreCase("submit")) {
+            		url = quotationSvcEndPoint+"/quotation/send";
+            		quotationDto.setDrafted(false);
+            		quotationDto.setSubmitted(true);
+            		quotationDto.setSentByUserId(currUserId);
+	        		quotationDto.setSentByUserName(currUser.getLogin());
+                request.put("sentByUserId", quotationDto.getSentByUserId());
+                request.put("sentByUserName", quotationDto.getSentByUserName());
+            }else if(!StringUtils.isEmpty(quotationDto.get_id()) && quotationDto.getMode().equalsIgnoreCase("approve")) {
+            		url = quotationSvcEndPoint+"/quotation/approve";
+            		quotationDto.setSubmitted(false);
+            		quotationDto.setApproved(true);
+            		quotationDto.setApprovedByUserId(currUserId);
+	        		quotationDto.setApprovedByUserName(currUser.getLogin());
+                request.put("approvedByUserId", quotationDto.getApprovedByUserId());
+                request.put("approvedByUserName", quotationDto.getApprovedByUserName());
+	        		
             }
+            HttpEntity<?> requestEntity = new HttpEntity<>(request.toString(),headers);
+            log.debug("Request entity quotation save service"+requestEntity);
             ResponseEntity<?> response = restTemplate.postForEntity(url, requestEntity, String.class);
             log.debug("Response freom push service "+ response.getStatusCode());
             log.debug("response from push service"+response.getBody());
@@ -354,7 +374,7 @@ public class RateCardService extends AbstractService {
         return  quotationList;
     }
 
-    public Object approveQuotation(RateCardDTO quotation) {
+    public Object approveQuotation(QuotationDTO quotation) {
         log.debug("Approve Quotations");
         Object approvedQuotation = "";
 
@@ -372,10 +392,10 @@ public class RateCardService extends AbstractService {
             headers.setAll(map);
 
             Map<String,Object> paramMap = new HashMap<String,Object>();
-            paramMap.put("id",quotation.getId());
+            paramMap.put("_id",quotation.get_id());
 
             JSONObject request = new JSONObject();
-            request.put("id",quotation.getId());
+            request.put("_id",quotation.get_id());
 
             HttpEntity<?> requestEntity = new HttpEntity<>(request.toString(),headers);
             log.debug("Request entity rate card service"+requestEntity);

@@ -9,6 +9,7 @@ var quotation = require('./schema/quotation')();
 var rateCard = require('./schema/rateCard')();
 var rateCardType = require('./schema/rateCardType')();
 var notification = require('./schema/notification')();
+var sequence = require('./schema/sequence');
 //var controllers = require('./controller');
 var quotationController = require('./quotationController');
 var notificationService = require('./notifications/notificationService');
@@ -16,6 +17,7 @@ var Location = mongoose.model('Quotation');
 var RateCard = mongoose.model('RateCard');
 var RateCardType = mongoose.model('RateCardType');
 var Notification = mongoose.model('Notification');
+var Sequence = mongoose.model('Sequence');
 var fs = require('fs');
 var path = require('path');
 

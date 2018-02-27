@@ -4,7 +4,7 @@ angular
 		.module('timeSheetApp')
 		.controller(
 				'QuotationController',
-				function($scope, $rootScope, $state, $timeout, $http,
+				function($scope, $rootScope, $state, $timeout, $http, $document, $window,
 						$stateParams, $location, RateCardComponent, ProjectComponent, SiteComponent) {
 
 					$scope.selectedProject;
@@ -56,6 +56,20 @@ angular
 					$scope.totalCost = 0;
 					
 					$scope.init = function() {
+						console.log('readonly value -'+ $stateParams.viewOnly);
+						if($state.current.name == 'view-quotation') {
+							$scope.viewOnly = $stateParams.viewOnly;
+							$document[0].getElementById('quotationTitle').disabled = $stateParams.viewOnly;
+							$document[0].getElementById('quotationDescription').disabled = $stateParams.viewOnly;
+							$document[0].getElementById('project').disabled = $stateParams.viewOnly;
+							$document[0].getElementById('site').disabled = $stateParams.viewOnly;
+							$document[0].getElementById('serviceEntryFields').style.visibility = $stateParams.viewOnly ? 'hidden' : 'visible';
+							$document[0].getElementById('labourEntryFields').style.visibility = $stateParams.viewOnly ? 'hidden' : 'visible';
+							$document[0].getElementById('materialEntryFields').style.visibility = $stateParams.viewOnly ? 'hidden' : 'visible';
+							$document[0].getElementById('actionButtons').style.visibility = $stateParams.viewOnly ? 'hidden' : 'visible';
+							$document[0].getElementById('closeButton').style.visibility = $stateParams.viewOnly ? 'visible' : 'hidden';							
+						}
+
 						$scope.loadProjects();
 					}
 
@@ -173,7 +187,7 @@ angular
 						$scope.labourRateCardDetails.splice(ind, 1);
 					}
 
-					$scope.saveQuotation = function() {
+					$scope.saveQuotation = function(mode) {
 						$scope.quotation.siteId = $scope.selectedSite.id;
 						$scope.quotation.siteName = $scope.selectedSite.name;
 						$scope.quotation.projectId = $scope.selectedProject.id;
@@ -184,6 +198,7 @@ angular
 										$scope.materialRateCardDetails);
 						$scope.quotation.rateCardDetails = $scope.rateCardDetails;
 						$scope.quotation.drafted = true;
+						$scope.quotation.mode = mode;
 						RateCardComponent.createQuotation($scope.quotation)
 								.then(function(response) {
 									console.log(response);
@@ -242,8 +257,10 @@ angular
 						RateCardComponent.approveQuotation(quotation).then(
 								function(response) {
 									console.log(response);
-									// $scope.quotation = response
-									$scope.loadAllQuotations();
+									$scope.showNotifications('top','center','success','Quotation approved Successfully');									
+									//$scope.loadAllQuotations();
+									//$location.path('/quotation-list');
+									$scope.refreshPage();
 								})
 					}
 					
@@ -272,5 +289,8 @@ angular
 			           $scope.loadQuotations();
 			        };
 
+			        $scope.clearFilter = function() {
+			        		$scope.searchCriteria = {};
+			        }
 
 				});

@@ -1,32 +1,165 @@
 
-<div class="row">
-    <div class="col-md-8">
-        <!--<h2 class="title">Quotation</h2>-->
-    </div>
-    <div class="col-md-4 txt-align-rgt" ng-init="loadAllQuotations()">
-        <button ui-sref="add-quotation"  ng-class="{active: $state.includes('admin')}" has-authority="ROLE_ADMIN" class="btn btn-success align-left"> <i class="material-icons padding-right5">add</i>ADD<div class="ripple-container"></div></button>
-        <button ng-click="refreshPage()" class="btn btn-warning align-left"> <i class="material-icons padding-right5">refresh</i>Reload<div class="ripple-container"></div></button>
-    </div>
-</div>
+<!--<div class="row TopButtonsCon">-->
+    <!--<div class="col-md-8">-->
+        <!--&lt;!&ndash;<h2 class="title">Quotation</h2>&ndash;&gt;-->
+    <!--</div>-->
+    <!--<div class="col-md-4 txt-align-rgt" ng-init="loadAllQuotations()">-->
+        <!--<button ui-sref="add-quotation"  ng-class="{active: $state.includes('admin')}" has-authority="ROLE_ADMIN" class="btn btn-success align-left"> <i class="material-icons padding-right5">add</i>ADD<div class="ripple-container"></div></button>-->
+        <!--<button ng-click="refreshPage()" class="btn btn-warning align-left"> <i class="material-icons padding-right5">refresh</i>Reload<div class="ripple-container"></div></button>-->
+    <!--</div>-->
+<!--</div>-->
 
-<div class="row" >
+<div class="row" ng-init="loadAllQuotations()">
 
     <div class="col-md-12">
         <div class="card margin-TB-5 tablecard appModuleCard">
 
             <div class="card-content">
+            		<div class="SearchTable" ng-init="loadSites()">
+
+                        <form name="searchForm"  ng-submit="search()" novalidate >
+
+                            <table class="table no-padding-tblCon" border="0">
+                                <tr class="filter-row gc-search-row">
+
+
+                                    <td>
+                                        <div class="form-group" >
+                                            <div class="dropdown">
+                                                <input type="text"
+                                                       class="form-control border-bottom-input"
+                                                       placeholder="Id"
+                                                       ng-model="searchCriteria.quotationSerialId"
+                                                       ng-value="searchCriteria.quotationSerialId"
+                                                        />
+
+                                            </div>
+                                        </div>
+                                    </td>
+
+
+                                    <td>
+                                        <div class="form-group" >
+                                            <div class="dropdown">
+                                                <input type="text"
+                                                       class="form-control border-bottom-input"
+                                                       placeholder="Title"
+                                                       ng-model="searchCriteria.quotationTitle"
+                                                       ng-value="searchCriteria.quotationTitle"
+                                                       />
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="form-group" >
+                                            <div class="dropdown">
+                                                <input type="text"
+                                                       class="form-control border-bottom-input"
+                                                       placeholder="Client"
+                                                       ng-model="searchCriteria.projectName"
+                                                       ng-value="searchCriteria.projectName"
+                                                       />
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="form-group" >
+                                            <div class="dropdown">
+                                                <input type="text"
+                                                       class="form-control border-bottom-input"
+                                                       placeholder="Site"
+                                                       ng-model="searchCriteria.siteName"
+                                                       ng-value="searchCriteria.siteName"
+                                                       />
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="form-group" >
+                                            <div class="dropdown">
+                                                <input type="text"
+                                                       class="form-control searchable-input floatL border-bottom-input"
+                                                       placeholder="Created By"
+                                                       ng-model="searchCriteria.createdBy"
+                                                       ng-value="searchCriteria.createdBy"
+                                                       />
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="form-group" >
+                                            <div class="dropdown">
+                                                <input type="text"
+                                                       class="form-control searchable-input floatL border-bottom-input"
+                                                       placeholder="Submitted By"
+                                                       ng-model="searchCriteria.sentBy"
+                                                       ng-value="searchCriteria.sentBy"
+                                                       />
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="form-group" >
+                                            <div class="dropdown">
+                                                <input type="text"
+                                                       class="form-control searchable-input floatL border-bottom-input"
+                                                       placeholder="Approved By"
+                                                       ng-model="searchCriteria.approvedBy"
+                                                       ng-value="searchCriteria.approvedBy"
+                                                       />
+                                            </div>
+                                        </div>
+                                    </td>
+
+                                    <td>
+                                        <div class="form-group" >
+                                            <div class="dropdown">
+                                                <input type="text"
+                                                       class="form-control searchable-input floatL border-bottom-input"
+                                                       placeholder="Status"
+                                                       ng-model="searchCriteria.status"
+                                                       ng-value="searchCriteria.status"
+                                                       />
+                                            </div>
+                                        </div>
+                                    </td>
+
+                                    <td align="right" width="15%">
+                                        <div class="floatR form-group">
+
+                                            <button type="submit" class="btn btn-circle blue-clr">
+                                                <i class="material-icons">search</i>
+                                            </button>
+                                            <button ui-sref="add-quotation"  ng-class="{active: $state.includes('admin')}" has-authority="ROLE_ADMIN" class="btn btn-circle green-clr">
+                                                <i class="material-icons">add</i>
+                                            </button>
+                                            <button ng-click="refreshPage()" class="btn btn-circle orange-clr">
+                                                <i class="material-icons">refresh</i>
+                                            </button>
+
+                                        </div>
+                                    </td>
+                                </tr>
+                            </table>
+                        </form>
+
+				</div>
+
 
                 <div class="table-responsive">
                     <table class="table table-striped">
                         <thead>
                         <tr>
+                        	    <th>Id</th>
                             <th>Title</th>
+                            <th>Client</th>
+                            <th>Site</th>
                             <th>Created By</th>
-                            <th>Submitted By</th>
-                            <th>Approved By</th>
+                            <!-- <th>Submitted By</th>
+                            <th>Approved By</th> -->
                             <th>Created On</th>
-                            <th>Submitted On</th>
-                            <th>Approved On</th>
+                            <!-- <th>Submitted On</th>
+                            <th>Approved On</th> -->
                             <th>Status</th>
                             <th>Amount</th>
                             <th class="text-right">Actions</th>
@@ -34,24 +167,33 @@
                         </thead>
                         <tbody>
                         <tr ng-repeat="quotation in quotations">
+                            <td>{{quotation.serialId}}</td>
                             <td>{{quotation.title}}</td>
+                            <td>{{quotation.projectName}}</td>
+                            <td>{{quotation.siteName}}</td>
                             <td>{{quotation.createdByUserName}}</td>
-                            <td>{{quotation.submittedByUserName}}</td>
-                            <td>{{quotation.approvedByUserName}}</td>
+                            <!-- <td>{{quotation.sentByUserName}}</td>
+                            <td>{{quotation.approvedByUserName}}</td> -->
                             <td><label ng-bind="quotation.createdDate | date:'dd-MMM-yyyy hh:mm a'"/></td>
-                            <td><label ng-bind="quotation.submittedDate | date:'dd-MMM-yyyy hh:mm a'"/></td>
-                            <td><label ng-bind="quotation.approvedDate | date:'dd-MMM-yyyy hh:mm a'"/></td>
+                            <!-- <td><label ng-bind="quotation.submittedDate | date:'dd-MMM-yyyy hh:mm a'"/></td>
+                            <td><label ng-bind="quotation.approvedDate | date:'dd-MMM-yyyy hh:mm a'"/></td> -->
                             <td ng-if="quotation.isApproved"><button class="btn btn-success">Approved</button></td>
                             <td ng-if="quotation.isArchived"><button class="btn btn-label">Archived</button></td>
                             <td ng-if="quotation.isDrafted"><button class="btn btn-info">Drafted</button></td>
                             <td ng-if="quotation.isSubmitted"><button class="btn btn-warning">Submitted</button></td>
                             <td>{{quotation.grandTotal}} </td>
                             <td class="text-right">
-                                <a name="View Quotation" ng-class="{active: $state.includes('admin')}" has-authority="ROLE_ADMIN" ui-sref="view-rateCard"  class="btn btn-simple btn-info"><i class="material-icons">remove_red_eye</i></a>
+                                <a name="View Quotation" ng-class="{active: $state.includes('admin')}" has-authority="ROLE_ADMIN" ui-sref="view-quotation({ id: quotation._id })"  class="btn btn-simple btn-info"><i class="material-icons">remove_red_eye</i></a>
+                            </td>
+                            <td class="text-right">
                                 <a name="Edit Quotation"  ng-class="{active: $state.includes('admin')}" has-authority="ROLE_ADMIN" ui-sref="edit-quotation({ id: quotation._id })"  class="btn btn-simple btn-success"><i class="material-icons">edit</i></a>
-                                <a name="Approve Quotation"  ng-class="{active: $state.includes('admin')}" has-authority="ROLE_ADMIN" ng-click="approveQuotation(quotation)"  class="btn btn-simple btn-success"></a>
-                                <button  title="Approve Quotation"   has-authority="ROLE_ADMIN"  data-toggle="modal" data-target="#approveQuotationModal" data-dismiss="#approveQuotationModal" ng-click="selectQuotation(quotation)"  class="btn btn-simple btn-info btn-icon like"> <i class="material-icons">done</i> </button>
-                                <a name="Delete Quotation" ng-class="{active: $state.includes('admin')}" has-authority="ROLE_ADMIN"  ng-click="deleteConfirm(site)"  onClick="$('#deleteModal').modal()" data-target="#myModal"  class="btn btn-simple btn-danger"><i class="material-icons">close</i></a>
+							</td>
+							<td class="text-right">
+                                <!-- <a name="Approve Quotation" ng-if="quotation.isSubmitted" ng-class="{active: $state.includes('admin')}" has-authority="ROLE_ADMIN" ng-click="approveQuotation(quotation)"  class="btn btn-simple btn-success"></a> -->
+                                <button  title="Approve Quotation" ng-if="quotation.isSubmitted"  has-authority="ROLE_ADMIN"  data-toggle="modal" data-target="#approveQuotationModal" data-dismiss="#approveQuotationModal" ng-click="selectQuotation(quotation)"  class="btn btn-simple btn-info btn-icon like"> <i class="material-icons">done</i> </button>
+                             </td>
+                             <td>
+                                <a name="Delete Quotation" ng-if="quotation.isApproved || quotation.isDrafted" ng-class="{active: $state.includes('admin')}" has-authority="ROLE_ADMIN"  ng-click="deleteConfirm(site)"  onClick="$('#deleteModal').modal()" data-target="#myModal"  class="btn btn-simple btn-danger"><i class="material-icons">close</i></a>
                             </td>
 
                         </tr>

@@ -118,6 +118,10 @@ ul.checkList li
 {
   margin-top:40px !important;
 }
+.margin0
+{
+   margin:0 !important;
+}
 .pdng-top13
 {
   padding-top:13px;
@@ -137,6 +141,10 @@ ul.checkList li
 .no-padding
 {
   padding:0 !important;
+}
+.no-padding-tblCon tr td
+{
+   padding:2px !important;
 }
 .card .card-content
 {
@@ -207,8 +215,8 @@ ul.chatlinesList
     padding-top: 30px;
 }
 .card img {
-    width: 50px !important;
-    height: 50px !important;
+    width: 30px !important;
+    height: 30px !important;
     border-radius: 50%;
 }
 .navbar .dropdown-menu li a:hover, .navbar .dropdown-menu li a:focus, .navbar .dropdown-menu li a:active, .navbar.navbar-default .dropdown-menu li a:hover, .navbar.navbar-default .dropdown-menu li a:focus, .navbar.navbar-default .dropdown-menu li a:active
@@ -258,7 +266,7 @@ span.calender-icon
 }
 .download-btn
 {
-  line-height:60px;
+  line-height:40px;
   font-size: 16px;
   font-weight: bold;
 
@@ -274,7 +282,32 @@ select.siteList
 {
   margin-top: 5px;
 }
+i.CircleButton
+{
+      padding: 5px;
+      border-radius: 50%;
+      background:none;
+}
 
+button.btn.btn-circle {
+    background: none;
+    box-shadow: none;
+    padding: 5px;
+    border-radius: 50%;
+    margin: 3px;
+}
+button.btn.btn-circle .material-icons
+{
+   font-size: 22px;
+}
+button.btn.btn-circle:hover
+{
+  color:#000;
+}
+.no-padding-tblCon .btn:hover, .btn:focus, .btn:active, .btn.active, .btn:active:focus, .btn:active:hover
+{
+  color:#333;
+}
 .txt-align-rgt
 {
  text-align:right;
@@ -354,6 +387,11 @@ textarea.form-control {
      padding: 0px 5px;
      margin: 0px 1px;
 }
+.TopButtonsCon .btn
+{
+ margin:0 !important;
+}
+
 /*.alert.alert-info*/
 /*{*/
   /*background-color: #fff;*/
@@ -424,6 +462,22 @@ span.red-star
   background: #4caf50;
   color:#fff;
 }
+.blue-clr
+{
+  color: #00bcd4;
+  border: 2px solid #00bcd4;
+}
+.green-clr
+{
+  color:#4caf50;
+  border: 2px solid #4caf50;
+
+}
+.orange-clr
+{
+  color:#ff9800;
+  border: 2px solid #ff9800;
+}
 
 .form-group.label-floating label.control-label, .form-group.label-placeholder label.control-label
 {
@@ -491,9 +545,18 @@ button.btn.btn-outline {
 }
 .SearchTable
 {
-      border-bottom: 1px solid #dfdfdf;
+      /*border-bottom: 1px solid #dfdfdf;*/
 }
-
+.form-group .border-bottom-input
+{
+  border:none;
+  border-bottom: 1px solid #ccc;
+}
+.form-group.is-focused .border-bottom-input
+{
+  border:none;
+  border-bottom: 1px solid #FFAA22;
+}
 .form-group.has-error .form-control
 {
   border: 1px solid red;

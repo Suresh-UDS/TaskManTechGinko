@@ -53,6 +53,8 @@ public class QuotationDTO extends BaseDTO implements Serializable {
     private Date approvedDate;
     
     private Date archivedDate;
+    
+    private String mode;
 
     public String getId() {
         return id;
@@ -236,6 +238,14 @@ public class QuotationDTO extends BaseDTO implements Serializable {
 
 	public void set_id(String _id) {
 		this._id = _id;
+	}
+
+	public String getMode() {
+		return mode;
+	}
+
+	public void setMode(String mode) {
+		this.mode = mode;
 	}
 	
     

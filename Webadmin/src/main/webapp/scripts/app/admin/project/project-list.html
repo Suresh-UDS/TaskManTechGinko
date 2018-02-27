@@ -1,13 +1,11 @@
 <div ng-init="loadProjects()">
 
-    <div class="row">
-        <div class="col-md-12 txt-align-rgt">
-                <button ui-sref="add-project" class="btn btn-success align-left"> <i class="material-icons padding-right5">add</i>ADD<div class="ripple-container"></div></button>
-                <button ng-click="refreshPage()" class="btn btn-warning align-left"> <i class="material-icons padding-right5">refresh</i>Reload<div class="ripple-container"></div></button>
-        </div>
-    </div>
-
-
+    <!--<div class="row TopButtonsCon">-->
+        <!--<div class="col-md-12 txt-align-rgt">-->
+                <!--<button ui-sref="add-project" class="btn btn-success align-left"> <i class="material-icons padding-right5">add</i>ADD<div class="ripple-container"></div></button>-->
+                <!--<button ng-click="refreshPage()" class="btn btn-warning align-left"> <i class="material-icons padding-right5">refresh</i>Reload<div class="ripple-container"></div></button>-->
+        <!--</div>-->
+    <!--</div>-->
 
     <div class="row">
         <div class="col-md-12">
@@ -18,13 +16,13 @@
 
                         <form name="searchForm"  ng-submit="search()" novalidate >
 
-                            <table class="table" border="0">
+                            <table class="table no-padding-tblCon" border="0">
                                 <tr class="filter-row gc-search-row">
                                     <td>
                                         <div class="form-group no-padding" >
                                             <div class="dropdown">
                                                 <input type="text"
-                                                       class="form-control searchable-input floatL"
+                                                       class="form-control searchable-input floatL border-bottom-input"
                                                        placeholder="Search Client" ng-model="selectedProject"
 
                                                        name="projectId"
@@ -35,9 +33,18 @@
 
                                     <td align="right">
                                         <div class="floatR form-group no-padding">
-                                            <button type="submit" class="btn btn-primary search-button t4"  >
-                                                <i class="fa fa-search"></i>
+
+                                            <button type="submit" class="btn btn-circle blue-clr">
+                                                <i class="material-icons">search</i>
                                             </button>
+                                            <button ui-sref="add-project"  ng-class="{active: $state.includes('admin')}" has-authority="ROLE_ADMIN" class="btn btn-circle green-clr">
+                                                <i class="material-icons">add</i>
+                                            </button>
+                                            <button ng-click="refreshPage()" class="btn btn-circle orange-clr">
+                                                <i class="material-icons">refresh</i>
+                                            </button>
+
+
                                         </div>
                                     </td>
                                 </tr>
@@ -114,7 +121,7 @@
         <div class="col-md-4"></div>
          <div class="col-md-8 text-right">
 	        <ul class="pagination pagination-warning">
-	
+
 	            <li class="paging-first" ID="first">
 	                <a href="#" id="first" ng-click="first()">
 	                    <i id="first" class=" fa fa-step-backward"></i></a>
@@ -122,7 +129,7 @@
 	            <li class="prev paging-previous" id="previous">
 	                <a id="previous" href="#" ng-click="previous()"> prev</a>
 	            </li>
-	
+
 	            <li ng-class="{active: number == pages.currPage}" class="paging" ng-repeat="number in numberArrays" ng-click="clickNextOrPrev(number)">
 	                <a href="#" style="cursor:pointer">{{number}}</a>
 	            </li>
@@ -132,7 +139,7 @@
 	            <li class="paging-last" id="last">
 	                <a id="last" href="#" ng-click="last()"><i id="last" class="fa fa-step-forward"></i></a>
 	            </li>
-	
+
 	        </ul>
 	    </div>
     </div>
