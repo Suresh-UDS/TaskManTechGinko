@@ -1,15 +1,15 @@
 
-<div class="row TopButtonsCon">
-    <div class="col-md-8">
-        <!--<h2 class="title">Quotation</h2>-->
-    </div>
-    <div class="col-md-4 txt-align-rgt" ng-init="loadAllQuotations()">
-        <button ui-sref="add-quotation"  ng-class="{active: $state.includes('admin')}" has-authority="ROLE_ADMIN" class="btn btn-success align-left"> <i class="material-icons padding-right5">add</i>ADD<div class="ripple-container"></div></button>
-        <button ng-click="refreshPage()" class="btn btn-warning align-left"> <i class="material-icons padding-right5">refresh</i>Reload<div class="ripple-container"></div></button>
-    </div>
-</div>
+<!--<div class="row TopButtonsCon">-->
+    <!--<div class="col-md-8">-->
+        <!--&lt;!&ndash;<h2 class="title">Quotation</h2>&ndash;&gt;-->
+    <!--</div>-->
+    <!--<div class="col-md-4 txt-align-rgt" ng-init="loadAllQuotations()">-->
+        <!--<button ui-sref="add-quotation"  ng-class="{active: $state.includes('admin')}" has-authority="ROLE_ADMIN" class="btn btn-success align-left"> <i class="material-icons padding-right5">add</i>ADD<div class="ripple-container"></div></button>-->
+        <!--<button ng-click="refreshPage()" class="btn btn-warning align-left"> <i class="material-icons padding-right5">refresh</i>Reload<div class="ripple-container"></div></button>-->
+    <!--</div>-->
+<!--</div>-->
 
-<div class="row" >
+<div class="row" ng-init="loadAllQuotations()">
 
     <div class="col-md-12">
         <div class="card margin-TB-5 tablecard appModuleCard">
@@ -28,7 +28,7 @@
                                             <div class="dropdown">
                                                 <input type="text"
                                                        class="form-control border-bottom-input"
-                                                       placeholder="Quotation Id"
+                                                       placeholder="Id"
                                                        ng-model="searchCriteria.quotationSerialId"
                                                        ng-value="searchCriteria.quotationSerialId"
                                                         />
@@ -110,7 +110,7 @@
                                             </div>
                                         </div>
                                     </td>
-                                   
+
                                     <td>
                                         <div class="form-group" >
                                             <div class="dropdown">
@@ -123,12 +123,20 @@
                                             </div>
                                         </div>
                                     </td>
-                                    
-                                    <td align="right">
+
+                                    <td align="right" width="15%">
                                         <div class="floatR form-group">
-                                            <button type="submit" class="btn btn-primary search-button t4"  >
-                                                <i class="fa fa-search"></i>
+
+                                            <button type="submit" class="btn btn-circle blue-clr">
+                                                <i class="material-icons">search</i>
                                             </button>
+                                            <button ui-sref="add-quotation"  ng-class="{active: $state.includes('admin')}" has-authority="ROLE_ADMIN" class="btn btn-circle green-clr">
+                                                <i class="material-icons">add</i>
+                                            </button>
+                                            <button ng-click="refreshPage()" class="btn btn-circle orange-clr">
+                                                <i class="material-icons">refresh</i>
+                                            </button>
+
                                         </div>
                                     </td>
                                 </tr>
@@ -136,7 +144,7 @@
                         </form>
 
 				</div>
-            
+
 
                 <div class="table-responsive">
                     <table class="table table-striped">
@@ -184,7 +192,7 @@
                                 <!-- <a name="Approve Quotation" ng-if="quotation.isSubmitted" ng-class="{active: $state.includes('admin')}" has-authority="ROLE_ADMIN" ng-click="approveQuotation(quotation)"  class="btn btn-simple btn-success"></a> -->
                                 <button  title="Approve Quotation" ng-if="quotation.isSubmitted"  has-authority="ROLE_ADMIN"  data-toggle="modal" data-target="#approveQuotationModal" data-dismiss="#approveQuotationModal" ng-click="selectQuotation(quotation)"  class="btn btn-simple btn-info btn-icon like"> <i class="material-icons">done</i> </button>
                              </td>
-                             <td>   
+                             <td>
                                 <a name="Delete Quotation" ng-if="quotation.isApproved || quotation.isDrafted" ng-class="{active: $state.includes('admin')}" has-authority="ROLE_ADMIN"  ng-click="deleteConfirm(site)"  onClick="$('#deleteModal').modal()" data-target="#myModal"  class="btn btn-simple btn-danger"><i class="material-icons">close</i></a>
                             </td>
 
