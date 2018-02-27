@@ -46,10 +46,9 @@
 
                         <ion-col col-12>
 
-                            <div class="form-group label-floating" [ngClass]="{'has-error': eMsg=='all'||eMsg=='siteName'}">
-                                <label class="control-label" *ngIf="!site.errors">Site</label>
-
-                                <ion-select [(ngModel)]="siteName" class="select-box" id="siteName" placeholder="Choose Site" name="siteName" #site="ngModel" required [ngClass]="{'has-error': site.errors || eMsg=='all'|| eMsg=='siteName'}">
+                            <div class="form-group label-floating">
+                                <label class="control-label" *ngIf="siteName">Site</label>
+                                <ion-select [(ngModel)]="siteName" class="select-box padding-left0" id="siteName" placeholder="Choose Site" name="siteName" #site="ngModel" required [ngClass]="{'select-error': eMsg=='siteName'}">
                                     <ion-option *ngFor="let site of sites" [value]="site.name" (ionSelect)="getEmployee(site.id)">{{site.name}}</ion-option>
                                 </ion-select>
 
@@ -67,9 +66,9 @@
 
                         <ion-col col-12>
 
-                            <div class="form-group label-floating" [ngClass]="{'has-error': eMsg=='all'||eMsg=='siteName'}">
-                                <label class="control-label" *ngIf="empSelect">Employee</label>
-                                    <ion-select [(ngModel)]="employ" [disabled]="empSelect" class="select-box" id="employ" name="employ" [placeholder]="empPlace" #emp="ngModel" required [ngClass]="{'has-error': emp.errors || eMsg=='all'|| eMsg=='employ'}">
+                            <div class="form-group label-floating">
+                                <label class="control-label" *ngIf="employ">Employee</label>
+                                    <ion-select [(ngModel)]="employ" [disabled]="empSelect" class="select-box padding-left0" id="employ" name="employ" [placeholder]="empPlace" #emp="ngModel" required [ngClass]="{'select-error': eMsg=='employ'}">
                                         <ion-option  *ngFor="let emp of employee" [value]="emp.id" >{{emp.fullName}}</ion-option>
                                     </ion-select>
 
@@ -96,7 +95,7 @@
                             <div class="form-group label-floating" [ngClass]="{'has-error': eMsg=='all'||eMsg=='startDate'}">
                                 <label class="control-label" *ngIf="!sDate.errors">Start Date</label>
 
-                                <ion-datetime displayFormat="MM/DD/YYYY" class="form-control" placeholder="Select Date" [(ngModel)]="startDate" id="startDate" name="startDate" #sDate="ngModel" required [ngClass]="{'has-error': sDate.errors || eMsg=='all'|| eMsg=='startDate'}"></ion-datetime>
+                                <ion-datetime displayFormat="MM/DD/YYYY" class="form-control padding-left0" placeholder="Select Date" [(ngModel)]="startDate" id="startDate" name="startDate" #sDate="ngModel" required [ngClass]="{'has-error': sDate.errors || eMsg=='all'|| eMsg=='startDate'}"></ion-datetime>
 
                                 <div *ngIf="sDate.errors && (sDate.dirty || sDate.touched)" class="error-msg">
 
@@ -120,7 +119,7 @@
                             <div class="form-group label-floating" [ngClass]="{'has-error': eMsg=='all'||eMsg=='startTime'}">
                                 <label class="control-label" *ngIf="!sTime.errors">Start Time</label>
 
-                                <ion-datetime displayFormat="hh:mm a" class="form-control" [(ngModel)]="startTime" id="startTime" placeholder="Select Time" name="startTime" #sTime="ngModel" required [ngClass]="{'has-error': sDate.errors || eMsg=='all'|| eMsg=='startTime'}"></ion-datetime>
+                                <ion-datetime displayFormat="hh:mm a" class="form-control padding-left0" [(ngModel)]="startTime" id="startTime" placeholder="Select Time" name="startTime" #sTime="ngModel" required [ngClass]="{'has-error': sDate.errors || eMsg=='all'|| eMsg=='startTime'}"></ion-datetime>
 
                                 <div *ngIf="sTime.errors && (sTime.dirty || sTime.touched)" class="error-msg">
 
@@ -136,7 +135,7 @@
                             <div class="form-group label-floating" [ngClass]="{'has-error': eMsg=='all'||eMsg=='endDate'}">
                                 <label class="control-label" *ngIf="!eDate.errors">End Time</label>
 
-                                <ion-datetime displayFormat="MM/DD/YYYY" class="form-control" [(ngModel)]="endDate" id="endDate" placeholder="End Date" name="endDate" #eDate="ngModel" required [ngClass]="{'has-error': sDate.errors || eMsg=='all'|| eMsg=='endDate'}"></ion-datetime>
+                                <ion-datetime displayFormat="MM/DD/YYYY" class="form-control padding-left0" [(ngModel)]="endDate" id="endDate" placeholder="End Date" name="endDate" #eDate="ngModel" required [ngClass]="{'has-error': sDate.errors || eMsg=='all'|| eMsg=='endDate'}"></ion-datetime>
 
                                 <div *ngIf="eDate.errors && (eDate.dirty || eDate.touched)" class="error-msg">
 
@@ -151,7 +150,7 @@
                             <div class="form-group label-floating" [ngClass]="{'has-error': eMsg=='all'||eMsg=='endTime'}">
                                 <label class="control-label" *ngIf="!eTime.errors">Start Time</label>
 
-                                <ion-datetime displayFormat="hh:mm a" class="form-control" [(ngModel)]="endTime" id="endTime" placeholder="End Time" name="endTime" #eTime="ngModel" required [ngClass]="{'has-error': sDate.errors || eMsg=='all'|| eMsg=='endTime'}"></ion-datetime>
+                                <ion-datetime displayFormat="hh:mm a" class="form-control padding-left0" [(ngModel)]="endTime" id="endTime" placeholder="End Time" name="endTime" #eTime="ngModel" required [ngClass]="{'has-error': sDate.errors || eMsg=='all'|| eMsg=='endTime'}"></ion-datetime>
 
                                 <div *ngIf="eTime.errors && (eTime.dirty || eTime.touched)" class="error-msg">
 
