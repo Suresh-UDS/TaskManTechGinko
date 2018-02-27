@@ -39,6 +39,7 @@ export class CreateJobPage {
     field:any;
     checklists:any;
     empPlace:any;
+    msg:any;
     constructor(public navCtrl: NavController,public component:componentService,public navParams:NavParams,public myService:authService, public authService: authService, private loadingCtrl:LoadingController, private jobService: JobService, private attendanceService: AttendanceService, private siteService: SiteService) {
         this.jobDetails=this.navParams.get('job');
 
@@ -68,6 +69,13 @@ export class CreateJobPage {
             },
             error=>{
                 console.log('ionViewDidLoad SitePage:'+error);
+                this.component.closeLoader();
+                if(error.type==3)
+                {
+                    this.msg='Server Unreachable'
+                }
+
+                this.component.showToastMessage(this.msg,'bottom');
             }
         )
 
@@ -76,6 +84,7 @@ export class CreateJobPage {
     {
         if(this.title && this.description && this.siteName && this.employ && this.startDate && this.startTime && this.endDate && this.endTime)
         {
+            this.eMsg="";
             this.siteId=window.localStorage.getItem('site')
             console.log( this.siteId);
             var sDate = moment(this.startDate).format("MM/DD/YYYY");
@@ -112,6 +121,12 @@ export class CreateJobPage {
                 },
                 error=>{
                     console.log(error);
+                    if(error.type==3)
+                    {
+                        this.msg='Server Unreachable'
+                    }
+
+                    this.component.showToastMessage(this.msg,'bottom');
                 }
                 )
         }
@@ -137,7 +152,7 @@ export class CreateJobPage {
                 this.eMsg="siteName";
                 this.field="siteName";
             }
-            else if(!this.employ)
+            else if(!this.employ && this.empPlace=="Employee")
             {
                 console.log("============employ");
                 this.eMsg="employ";
