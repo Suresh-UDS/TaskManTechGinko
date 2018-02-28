@@ -1,22 +1,22 @@
 <div ng-init="loadAttendances()">
 
-    <div class="row TopButtonsCon">
-        <div class="col-md-4">
-            <!--<h2 class="title" style="margin-bottom: 0px">Attendance Report</h2>-->
-        </div>
-        <div class="col-md-8 txt-align-rgt">
-            <a class="download-btn" href="{{exportFile(0)}}">{{exportMsg(0)}}</a>
-            <button ng-show="attendancesData.length" type="button" class="btn btn-success" ng-click=exportAllData('html')>
-                <i class="material-icons">file_upload</i> Export HTML</button>
-            <button ng-show="attendancesData.length" type="button" class="btn btn-success" ng-click=exportAllData('csv')>
-                <i class="material-icons">file_upload</i> Export CSV</button>
-            <button ng-click="refreshPage()" type="submit" class="btn btn-warning">
-                <i class="material-icons padding-right5">refresh</i>Reload
-            </button>
+    <!--<div class="row TopButtonsCon">-->
+        <!--<div class="col-md-4">-->
+            <!--&lt;!&ndash;<h2 class="title" style="margin-bottom: 0px">Attendance Report</h2>&ndash;&gt;-->
+        <!--</div>-->
+        <!--<div class="col-md-8 txt-align-rgt">-->
+            <!--<a class="download-btn" href="{{exportFile(0)}}">{{exportMsg(0)}}</a>-->
+            <!--<button ng-show="attendancesData.length" type="button" class="btn btn-success" ng-click=exportAllData('html')>-->
+                <!--<i class="material-icons">file_upload</i> Export HTML</button>-->
+            <!--<button ng-show="attendancesData.length" type="button" class="btn btn-success" ng-click=exportAllData('csv')>-->
+                <!--<i class="material-icons">file_upload</i> Export CSV</button>-->
+            <!--<button ng-click="refreshPage()" type="submit" class="btn btn-warning">-->
+                <!--<i class="material-icons padding-right5">refresh</i>Reload-->
+            <!--</button>-->
 
-        </div>
+        <!--</div>-->
 
-    </div>
+    <!--</div>-->
 
 
     <div class="row">
@@ -72,11 +72,21 @@
                                             </div>
                                         </div>
                                     </td>
-                                    <td align="right">
+                                    <td align="right" width="25%">
                                         <div class="floatR form-group">
-                                            <button type="submit" class="btn btn-primary search-button t4"  ng-disabled="searchForm.$invalid">
-                                                <i class="fa fa-search"></i>
+                                            <button type="submit" class="btn btn-circle blue-clr" ng-disabled="searchForm.$invalid">
+                                                <i class="material-icons">search</i>
                                             </button>
+                                            <button ng-show="attendancesData.length" type="button" title="Export HTML"  ng-click=exportAllData('html') class="btn btn-circle green-clr">
+                                                <i class="material-icons">file_upload</i>
+                                            </button>
+                                            <button ng-show="attendancesData.length" type="button"  title="Export CSV"  ng-click=exportAllData('csv') class="btn btn-circle green-clr">
+                                                <i class="material-icons">file_upload</i>
+                                            </button>
+                                            <button ng-click="refreshPage()" class="btn btn-circle orange-clr">
+                                                <i class="material-icons">refresh</i>
+                                            </button>
+                                            <a class="download-btn" href="{{exportFile()}}">{{exportMsg()}}</a>
                                         </div>
                                     </td>
                                 </tr>
