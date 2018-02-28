@@ -131,7 +131,7 @@ export class CreateEmployeePage {
 
   addJob() {
     console.log('form submitted');
-    if (this.firstname && this.lastname && this.eId  )
+    if (this.firstname && this.lastname && this.eId && this.number && this.selectedProject && this.selectedSite)
     {
         // Save Employee
         this.employee = {
@@ -160,35 +160,43 @@ export class CreateEmployeePage {
     }
     else
     {
-      if(!this.firstname)
-      {
-        this.eMsg = "firstname";
-      }
+        console.log("============else");
+        if(!this.eId)
+        {
+            this.eMsg = "eId";
+            console.log("============else:"+this.eMsg);
+        }
+        else if(!this.firstname)
+        {
+            this.eMsg = "firstname";
+            console.log("============else:"+this.eMsg);
+        }
       else if(!this.lastname)
       {
         this.eMsg = "lastname";
+        console.log("============else:"+this.eMsg);
       }
       else if(!this.number)
       {
         this.eMsg = "number";
+          console.log("============else:"+this.eMsg);
       }
-      else if(!this.mail)
+      else if(!this.selectedProject)
       {
-        this.eMsg = "mail";
+          this.eMsg = "selectedProject";
+          console.log("============else:"+this.eMsg);
       }
-      else if(!this.eId)
+      else if(!this.selectedSite)
       {
-        this.eMsg = "eId";
-      }
-      else if(!this.address)
-      {
-        this.eMsg = "address";
+          this.eMsg = "selectedSite";
+          console.log("============else:"+this.eMsg);
       }
       else
       {
         this.eMsg = "all";
+          console.log("============else:"+this.eMsg);
       }
-      this.component.showToastMessage(this.msg,'bottom');
+
     }
   }
   login() {

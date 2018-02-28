@@ -103,8 +103,8 @@
 
               <ion-col col-12>
                   <div class="form-group">
-                    <label class="control-label">Projrct</label>
-                      <ion-select [(ngModel)]="selectedProject" class="select-box" id="selectedProject" placeholder="Choose Project" name="selectedProject" #selectedPrcjt="ngModel" required [ngClass]="{'select-error': eMsg=='selectedProject'}">
+                    <label class="control-label" *ngIf="selectedProject">Project</label>
+                      <ion-select [(ngModel)]="selectedProject" class="select-box  padding-left0" id="selectedProject" placeholder="Choose Project" name="selectedProject" #selectedPrcjt="ngModel" required [ngClass]="{'select-error': eMsg=='selectedProject'}">
                           <ion-option *ngFor="let project of projects" [value]="project.name" (ionSelect)="getSites(project.id,project.name)">{{project.name}}</ion-option>
                       </ion-select>
 
@@ -120,8 +120,8 @@
 
               <ion-col col-12>
                   <div class="form-group">
-                    <label class="control-label">Site</label>
-                      <ion-select [(ngModel)]="selectedSite" class="select-box" id="siteName" placeholder="Choose Site" name="siteName" #sitee="ngModel" required [ngClass]="{'select-error': eMsg=='selectedSite'}">
+                    <label class="control-label" *ngIf="selectedSite">Site</label>
+                      <ion-select [(ngModel)]="selectedSite" class="select-box  padding-left0" id="siteName" placeholder="Choose Site" name="siteName" #sitee="ngModel" required [ngClass]="{'select-error': eMsg=='selectedSite'}">
                           <ion-option *ngFor="let site of sites" [value]="site.name" (ionSelect)="addProjectSites()">{{site.name}}</ion-option>
                       </ion-select>
                     <div *ngIf="sitee.errors && (sitee.dirty || sitee.touched)" class="error-msg">
