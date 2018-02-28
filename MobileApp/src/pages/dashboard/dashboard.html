@@ -13,7 +13,7 @@
         <button ion-fab color="dark">
             <ion-icon name="md-add" class="clr-orange"></ion-icon>
         </button>
-        <ion-fab-list side="top" fab-list-margin >
+        <ion-fab-list side="top" fab-list-margin class="" >
             <ion-label color="dark" class="margin0" *ngIf="userType === 'ADMIN' || userType === 'TECHNICIAN' || userType === 'FACILITYMANAGER' || userType === 'SUPERVISOR'">Quotation</ion-label>
             <button ion-fab color="primary" *ngIf="userType === 'ADMIN' || userType === 'TECHNICIAN' || userType === 'FACILITYMANAGER' || userType === 'SUPERVISOR'" (click)="fabClick('quotation')">
                 <i class="material-icons clr-blk">receipt</i>
@@ -290,7 +290,7 @@ Tip 2: you can also add an image using data-image tag
 
                                         <ion-col col-2 class="padding-left0 ver-center">
                                             <div class="padding-bottom5">
-                                                <button ion-button clear color="primary"  (click)="open(slidingItem, item ,count)">
+                                                <button ion-button clear color="primary" (tap)="open(slidingItem, item ,count)">
                                                     <i class="material-icons">more_horiz</i>
                                                 </button>
                                             </div>
@@ -329,7 +329,7 @@ Tip 2: you can also add an image using data-image tag
                                         </div>
                                         <!--</div>-->
                                     </ion-item>
-                                    <ion-item-options (click)="close(slidingItem)">
+                                    <ion-item-options (tap)="close(slidingItem)">
                                         <div>
                                             <button ion-button clear color="primary" (click)="viewJob(job)"><ion-icon name="md-eye" class="fnt-24"></ion-icon></button>
                                         </div>
