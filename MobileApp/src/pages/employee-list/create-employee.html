@@ -11,6 +11,7 @@
     </button>
     <ion-title>Create Employee</ion-title>
   </ion-navbar>
+  <!--
     <ion-segment [(ngModel)]="categories" class="segmnt margin-auto" color="clr-blue">
       <ion-segment-button value="basic">
         Basic
@@ -19,13 +20,15 @@
         Login
       </ion-segment-button>
     </ion-segment>
-
+-->
 </ion-header>
 
 <ion-content padding>
-  <div [ngSwitch]="categories">
 
-    <ion-list *ngSwitchCase="'basic'">
+  <!--<div [ngSwitch]="categories">-->
+
+    <!--<ion-list *ngSwitchCase="'basic'">-->
+  <ion-list>
       <div class="card">
         <div class="card-content">
           <ion-row>
@@ -52,7 +55,6 @@
 
 
             <ion-col col-12>
-
               <div class="form-group label-floating" [ngClass]="{'has-error': eMsg=='all'||eMsg=='firstname'}">
                 <label class="control-label">First Name</label>
                 <input class="form-control" type="text" [(ngModel)]="firstname" id="firstname" name="firstname" #fname="ngModel" required [ngClass]="{'has-error': fname.errors || eMsg=='all'|| eMsg=='firstname'}">
@@ -64,11 +66,9 @@
 
                 </div>
               </div>
-
             </ion-col>
 
             <ion-col col-12>
-
               <div class="form-group label-floating" [ngClass]="{'has-error': eMsg=='all'||eMsg=='lastname'}">
                 <label class="control-label">Last Name</label>
                 <input class="form-control" type="text" [(ngModel)]="lastname" id="lastname" name="lastname" #lname="ngModel" required [ngClass]="{'has-error': lname.errors || eMsg=='all'|| eMsg=='lastname'}">
@@ -80,9 +80,7 @@
 
                 </div>
               </div>
-
             </ion-col>
-
               <!--<ion-col col-12>-->
                   <!--<div class="form-group">-->
                       <!--<ion-select [(ngModel)]="designation" class="select-box" id="designation" placeholder="Choose Designation" name="designation" #designation="ngModel" required >-->
@@ -90,7 +88,6 @@
                       <!--</ion-select>-->
                   <!--</div>-->
               <!--</ion-col>-->
-
             <ion-col col-12>
               <div class="form-group label-floating" [ngClass]="{'has-error': eMsg=='all'||eMsg=='number'}">
                 <label class="control-label">Mobile Number</label>
@@ -106,19 +103,37 @@
 
               <ion-col col-12>
                   <div class="form-group">
-                      <ion-select [(ngModel)]="selectedProject" class="select-box" id="selectedProject" placeholder="Choose Project" name="selectedProject" #selectedPeoject="ngModel" required >
+                    <label class="control-label">Projrct</label>
+                      <ion-select [(ngModel)]="selectedProject" class="select-box" id="selectedProject" placeholder="Choose Project" name="selectedProject" #selectedPrcjt="ngModel" required [ngClass]="{'select-error': eMsg=='selectedProject'}">
                           <ion-option *ngFor="let project of projects" [value]="project.name" (ionSelect)="getSites(project.id,project.name)">{{project.name}}</ion-option>
                       </ion-select>
+
+                    <div *ngIf="selectedPrcjt.errors && (selectedPrcjt.dirty || selectedPrcjt.touched)" class="error-msg">
+
+                    </div>
+
+                    <div *ngIf="selectedPrcjt.errors && (selectedPrcjt.untouched )" class="error-msg">
+
+                    </div>
                   </div>
               </ion-col>
 
               <ion-col col-12>
                   <div class="form-group">
-                      <ion-select [(ngModel)]="selectedSite" class="select-box" id="siteName" placeholder="Choose Site" name="siteName" #site="ngModel" required >
+                    <label class="control-label">Site</label>
+                      <ion-select [(ngModel)]="selectedSite" class="select-box" id="siteName" placeholder="Choose Site" name="siteName" #sitee="ngModel" required [ngClass]="{'select-error': eMsg=='selectedSite'}">
                           <ion-option *ngFor="let site of sites" [value]="site.name" (ionSelect)="addProjectSites()">{{site.name}}</ion-option>
                       </ion-select>
+                    <div *ngIf="sitee.errors && (sitee.dirty || sitee.touched)" class="error-msg">
+
+                    </div>
+
+                    <div *ngIf="sitee.errors && (sitee.untouched )" class="error-msg">
+
+                    </div>
                   </div>
               </ion-col>
+
 
               <!--<ion-col col-12>-->
                   <!--<div class="form-group">-->
@@ -161,13 +176,14 @@
 
             <!--</ion-col>-->
 
-            <button type="submit" class="btn btn-warning  margin-auto" (click)="addJob()">Next</button>
+            <button type="submit" class="btn btn-warning  margin-auto" (click)="addJob()">Create Empolyee</button>
 
             <div class="clearfix"></div>
           </ion-row>
         </div>
       </div>
     </ion-list>
+  <!--
     <ion-list *ngSwitchCase="'login'">
       <div class="card">
         <div class="card-content">
@@ -215,5 +231,6 @@
         </div>
       </div>
     </ion-list>
-  </div>
+
+  </div> -->
 </ion-content>
