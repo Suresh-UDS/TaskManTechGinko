@@ -42,7 +42,7 @@
               <ion-col col-12>
                   <div class="form-group label-floating" [ngClass]="{'has-error': eMsg=='all'||eMsg=='eId'}">
                       <label class="control-label">Employee Id</label>
-                      <input class="form-control" type="text" [(ngModel)]="eId" id="eId" name="number" #id="ngModel" required [ngClass]="{'has-error': id.errors || eMsg=='all'|| eMsg=='eId'}">
+                      <input class="form-control" type="text" [(ngModel)]="eId" id="eId" name="number" #id="ngModel" required min="3" max="10" [ngClass]="{'has-error': id.errors || eMsg=='all'|| eMsg=='eId'}">
                       <div *ngIf="id.errors && (id.dirty || id.touched)" class="error-msg">
 
                       </div>
@@ -121,7 +121,7 @@
               <ion-col col-12>
                   <div class="form-group">
                     <label class="control-label" *ngIf="selectedSite">Site</label>
-                      <ion-select [(ngModel)]="selectedSite" class="select-box  padding-left0" id="siteName" placeholder="Choose Site" name="siteName" #sitee="ngModel" required [ngClass]="{'select-error': eMsg=='selectedSite'}">
+                      <ion-select [(ngModel)]="selectedSite" class="select-box padding-left0" [placeholder]="sitePlace" id="siteName" placeholder="Choose Site" name="siteName" #sitee="ngModel" required [ngClass]="{'select-error': eMsg=='selectedSite'}">
                           <ion-option *ngFor="let site of sites" [value]="site.name" (ionSelect)="addProjectSites()">{{site.name}}</ion-option>
                       </ion-select>
                     <div *ngIf="sitee.errors && (sitee.dirty || sitee.touched)" class="error-msg">
