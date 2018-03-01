@@ -64,10 +64,10 @@ public class EmployeeResource {
 
     @Inject
     private NotificationService notificationService;
-	
+
 	@Inject
 	private ImportUtil importUtil;
-    
+
     @Inject
     private UserService userService;
 
@@ -90,7 +90,7 @@ public class EmployeeResource {
 
 		try {
 			EmployeeDTO employeeDto = employeeService.createEmployeeInformation(employeeDTO);
-			
+
 			/*
 			if(employeeDto.isCreateUser()) {
 				UserDTO userDto = new UserDTO();
@@ -100,9 +100,9 @@ public class EmployeeResource {
 				userDto.setEmployeeId(employeeDto.getId());
 				userDto.setEmployeeName(employeeDto.getName());
 				userService.createUserInformation(userDto);
-			}	
+			}
 			*/
-			
+
 		}catch(Exception e) {
 			throw new TimesheetException(e, employeeDTO);
 		}
@@ -112,7 +112,7 @@ public class EmployeeResource {
 	@RequestMapping(value = "/employee", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE)
 	@Timed
 	public ResponseEntity<?> updateEmployee(@Valid @RequestBody EmployeeDTO employee, HttpServletRequest request) {
-		log.info("Inside Update" + employee.getName() + " , "+ employee.getProjectId());
+		log.info("Inside Update" + employee.getName() + " , "+ employee.getProjectId()+ " , "+ employee.isLeft());
 		try {
 			employeeService.updateEmployee(employee,false);
 		}catch(Exception e) {
@@ -361,6 +361,22 @@ public class EmployeeResource {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+    @RequestMapping(value = "/employee/deleteJobsAndMarkLeft", method = RequestMethod.POST)
+    public ResponseEntity<?> deleteJobsAndMarkLeft(@RequestBody RelieverDTO reliever) {
+
+        log.info("Inside mark left Reliever" + reliever.getEmployeeId() + " , "+reliever.getEmployeeEmpId());
+
+        EmployeeDTO selectedEmployee = employeeService.findByEmpId(reliever.getEmployeeEmpId());
+        selectedEmployee.setLeft(true);
+        try {
+            employeeService.updateEmployee(selectedEmployee,false);
+            jobService.deleteJobsForEmployee(selectedEmployee,reliever.getRelievedFromDate());
+        }catch(Exception e) {
+            throw new TimesheetException(e, selectedEmployee);
+        }
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
     @RequestMapping(value = "/designation", method = RequestMethod.GET)
     public List<DesignationDTO> findAllDesignations() {
         log.info("--Invoked EmployeeResource.findAllDesignations --");
@@ -388,7 +404,7 @@ public class EmployeeResource {
 		ImportResult result = importUtil.importEmployeeData(file, cal.getTimeInMillis());
 		return new ResponseEntity<ImportResult>(result,HttpStatus.OK);
 	}
-	
+
     @RequestMapping(value = "/employee/import/{fileId}/status",method = RequestMethod.GET)
 	public ImportResult importStatus(@PathVariable("fileId") String fileId) {
 		log.debug("ImportStatus -  fileId -"+ fileId);

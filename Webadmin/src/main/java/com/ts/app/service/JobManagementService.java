@@ -122,10 +122,10 @@ public class JobManagementService extends AbstractService {
 
     @Inject
     private FileUploadHelper fileUploadHelper;
-    
+
     @Inject
     private ImportUtil importUtil;
-    
+
     @Inject
     private ReportUtil reportUtil;
 
@@ -198,7 +198,7 @@ public class JobManagementService extends AbstractService {
 	        	    log.debug("check in date is not null");
 		        	Calendar checkInDateFrom = Calendar.getInstance(TimeZone.getTimeZone("Asia/Kolkata"));
 		        	checkInDateFrom.setTime(checkInDate);
-	
+
 		        	checkInDateFrom.set(Calendar.HOUR_OF_DAY, 0);
 		        	checkInDateFrom.set(Calendar.MINUTE,0);
 		        	checkInDateFrom.set(Calendar.SECOND,0);
@@ -210,17 +210,17 @@ public class JobManagementService extends AbstractService {
 		        	}else {
 		        		checkInDateTo.setTime(checkInDate);
 		        	}
-	
+
 		        	checkInDateTo.set(Calendar.HOUR_OF_DAY, 23);
 		        	checkInDateTo.set(Calendar.MINUTE,59);
 		        	checkInDateTo.set(Calendar.SECOND,0);
 		        	java.sql.Date toDt = DateUtil.convertToSQLDate(DateUtil.convertUTCToIST(checkInDateTo));
-	
+
 	//				page = jobRepository.findByDateRange(searchCriteria.getSiteId(), searchCriteria.getUserId(), subEmpIds, searchCriteria.getJobStatus(),
 	//												fromDt, toDt, searchCriteria.isScheduled(), pageRequest);
-	
+
 		        	if(!searchCriteria.isConsolidated()) {
-	
+
 		        		/*
 		                if(searchCriteria.getJobStatus().toString().equalsIgnoreCase("OVERDUE")) {
 		                    log.debug("getting overdue jobs");
@@ -281,14 +281,14 @@ public class JobManagementService extends AbstractService {
 		            		}
 		            		allJobsList.addAll(page.getContent());
 		            	}
-	
+
 		        	}else {
 		        	    log.debug("site reporsitory find all");
 		        		List<Site> allSites = siteRepository.findAll();
 		        		for(Site site : allSites) {
 		        			reportResults.add(reportService.jobCountBySiteAndStatusAndDateRange(site.getId(),fromDt, toDt));
 		        		}
-	
+
 		        	}
 	        	}else {
 	        		if(!searchCriteria.isConsolidated()) {
@@ -303,7 +303,7 @@ public class JobManagementService extends AbstractService {
 		            			page = jobRepository.findByStartDateAndSites(siteIds, pageRequest);
 		            			allJobsList.addAll(page.getContent());
 		            		}
-	        				
+
 	        			}else {
 	            			allJobsList.addAll(page.getContent());
 	            		}
@@ -312,7 +312,7 @@ public class JobManagementService extends AbstractService {
 		        		for(Site site : allSites) {
 		        			reportResults.add(reportService.jobCountBySiteAndStatus(site.getId()));
 		        		}
-	
+
 	        		}
 	        	}
 
@@ -346,7 +346,7 @@ public class JobManagementService extends AbstractService {
         	    log.debug("no jobs found on the daterange");
             }
 
-			
+
 			if(CollectionUtils.isNotEmpty(reportResults)) {
 				//if report generation needed
                 log.debug("report resulsts");
@@ -382,8 +382,8 @@ public class JobManagementService extends AbstractService {
 	}
 		return result;
 	}
-	
-	
+
+
 	public List<ReportResult> generateConsolidatedReport(SearchCriteria searchCriteria, boolean isAdmin) {
 		List<ReportResult> reportResults = new ArrayList<ReportResult>();
 		if(searchCriteria != null) {
@@ -419,13 +419,13 @@ public class JobManagementService extends AbstractService {
             log.debug("JobSpecification toPredicate - searchCriteria get overdue status -"+ searchCriteria.isOverdueStatus());
             log.debug("JobSpecification toPredicate - searchCriteria get consolidated status -"+ searchCriteria.isConsolidated());
 
-            
+
             log.debug("JobSpecification toPredicate - searchCriteria checkInDateFrom -"+ checkInDate);
         		if(checkInDate != null) {
 	        	    log.debug("check in date is not null");
 		        	Calendar checkInDateFrom = Calendar.getInstance(TimeZone.getTimeZone("Asia/Kolkata"));
 		        	checkInDateFrom.setTime(checkInDate);
-	
+
 		        	checkInDateFrom.set(Calendar.HOUR_OF_DAY, 0);
 		        	checkInDateFrom.set(Calendar.MINUTE,0);
 		        	checkInDateFrom.set(Calendar.SECOND,0);
@@ -437,14 +437,14 @@ public class JobManagementService extends AbstractService {
 		        	}else {
 		        		checkInDateTo.setTime(checkInDate);
 		        	}
-	
+
 		        	checkInDateTo.set(Calendar.HOUR_OF_DAY, 23);
 		        	checkInDateTo.set(Calendar.MINUTE,59);
 		        	checkInDateTo.set(Calendar.SECOND,0);
 		        	java.sql.Date toDt = DateUtil.convertToSQLDate(DateUtil.convertUTCToIST(checkInDateTo));
-	
+
 		        	if(searchCriteria.isConsolidated()) {
-	
+
 		        	    log.debug("site reporsitory find all");
 		        		List<Site> allSites = siteRepository.findAll();
 		        		for(Site site : allSites) {
@@ -454,7 +454,7 @@ public class JobManagementService extends AbstractService {
 		        				reportResults.add(reportService.jobCountBySiteAndStatusAndDateRange(site.getId(),fromDt, toDt));
 		        			}
 		        		}
-	
+
 		        	}
 	        	}else {
 	        		if(!searchCriteria.isConsolidated()) {
@@ -465,17 +465,17 @@ public class JobManagementService extends AbstractService {
 		        		for(Site site : allSites) {
 		        			reportResults.add(reportService.jobCountBySiteAndStatus(site.getId()));
 		        		}
-	
+
 	        		}
 	        	}
 
 		}
 		return reportResults;
 	}
-	
-	
-	
-	
+
+
+
+
 
     public SearchResult<JobDTO> findByDateSelected(SearchCriteria searchCriteria, boolean isAdmin) {
         SearchResult<JobDTO> result = new SearchResult<JobDTO>();
@@ -524,7 +524,7 @@ public class JobManagementService extends AbstractService {
 	    			if(transactions == null) {
 	    				transactions = new ArrayList<JobDTO>();
 	    			}
-            	
+
             		if(CollectionUtils.isNotEmpty(page.getContent())) {
 	            		for(Job job : page.getContent()) {
 	            			transactions.add(mapToModel(job));
@@ -1257,7 +1257,10 @@ public class JobManagementService extends AbstractService {
         checkInDateFrom.set(Calendar.SECOND,0);
         java.sql.Date fromDt = DateUtil.convertToSQLDate(DateUtil.convertUTCToIST(checkInDateFrom));
 
-        jobRepository.deleteEmployeeUpcomingJobs(employee.getId(),fromDt);
+        List<Job> jobList = new ArrayList<Job>();
+        jobList = jobRepository.findByStartDateAndEmployee(employee.getId(),fromDt);
+
+        jobRepository.deleteInBatch(jobList);
 
 
     }
@@ -1286,7 +1289,7 @@ public class JobManagementService extends AbstractService {
 	public ImportResult importFile(MultipartFile file, long dateTime) {
 		return importUtil.importJobData(file, dateTime);
 	}
-	
+
 	public ImportResult getImportStatus(String fileId) {
 		ImportResult er = new ImportResult();
 		//fileId += ".csv";

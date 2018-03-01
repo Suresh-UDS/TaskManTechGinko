@@ -1,20 +1,20 @@
 <div ng-init="loadAttendances()">
 
-    <div class="row TopButtonsCon" >
-        <!--<div class="col-md-4">-->
-            <!--<h2 class="title" style="margin-bottom: 0px">Attendance</h2>-->
+    <!--<div class="row TopButtonsCon" >-->
+        <!--&lt;!&ndash;<div class="col-md-4">&ndash;&gt;-->
+            <!--&lt;!&ndash;<h2 class="title" style="margin-bottom: 0px">Attendance</h2>&ndash;&gt;-->
+        <!--&lt;!&ndash;</div>&ndash;&gt;-->
+        <!--<div class="col-md-12 txt-align-rgt">-->
+            <!--<a class="download-btn" href="{{exportFile(0)}}">{{exportMsg(0)}}</a>-->
+            <!--<button ng-click="refreshPage()" type="submit" class="btn btn-warning">-->
+                <!--<i class="material-icons padding-right5">refresh</i>Reload-->
+            <!--</button>-->
+            <!--<button ng-show="attendancesData.length" type="button" class="btn btn-success" ng-click=exportAllData()>-->
+                <!--<i class="material-icons">file_upload</i> Export</button>-->
+
         <!--</div>-->
-        <div class="col-md-12 txt-align-rgt">
-            <a class="download-btn" href="{{exportFile(0)}}">{{exportMsg(0)}}</a>
-            <button ng-click="refreshPage()" type="submit" class="btn btn-warning">
-                <i class="material-icons padding-right5">refresh</i>Reload
-            </button>
-            <button ng-show="attendancesData.length" type="button" class="btn btn-success" ng-click=exportAllData()>
-                <i class="material-icons">file_upload</i> Export</button>
 
-        </div>
-
-    </div>
+    <!--</div>-->
 
 
     <div class="row">
@@ -70,11 +70,19 @@
                                             </div>
                                         </div>
                                     </td>
-                                    <td align="right">
+                                    <td align="right" width="25%">
                                         <div class="floatR form-group">
-                                            <button type="submit" class="btn btn-primary search-button t4"  ng-disabled="searchForm.$invalid">
-                                                <i class="fa fa-search"></i>
+                                            <button type="submit" class="btn btn-circle blue-clr" ng-disabled="searchForm.$invalid">
+                                                <i class="material-icons">search</i>
                                             </button>
+                                            <button ng-show="attendancesData.length" type="button"  ng-click=exportAllData() class="btn btn-circle green-clr">
+                                                <i class="material-icons">file_upload</i>
+                                            </button>
+                                            <button ng-click="refreshPage()" class="btn btn-circle orange-clr">
+                                                <i class="material-icons">refresh</i>
+                                            </button>
+                                            <a class="download-btn" href="{{exportFile(0)}}">{{exportMsg(0)}}</a>
+
                                         </div>
                                     </td>
                                 </tr>

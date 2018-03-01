@@ -1,28 +1,26 @@
 <div>
 
-    <div class="row " ng-init="loadEmployees()">
-        <div class="col-md-8" ng-init="loadProjects()">
-            <!--<h2 class="title">Employee</h2>-->
-        </div>
-        <div class="col-md-4 txt-align-rgt">
-            <button ui-sref="add-employee"  ng-class="{active: $state.includes('admin')}" has-authority="ROLE_ADMIN" class="btn btn-success align-left"> <i class="material-icons padding-right5">add</i>ADD<div class="ripple-container"></div></button>
-            <button ng-click="refreshPage()" class="btn btn-warning align-left"> <i class="material-icons padding-right5">refresh</i>Reload<div class="ripple-container"></div></button>
-        </div>
-    </div>
+    <!--<div class="row " >-->
+        <!--<div class="col-md-8" >-->
+            <!--&lt;!&ndash;<h2 class="title">Employee</h2>&ndash;&gt;-->
+        <!--</div>-->
+        <!--<div class="col-md-4 txt-align-rgt">-->
+            <!--<button ui-sref="add-employee"  ng-class="{active: $state.includes('admin')}" has-authority="ROLE_ADMIN" class="btn btn-success align-left"> <i class="material-icons padding-right5">add</i>ADD<div class="ripple-container"></div></button>-->
+            <!--<button ng-click="refreshPage()" class="btn btn-warning align-left"> <i class="material-icons padding-right5">refresh</i>Reload<div class="ripple-container"></div></button>-->
+        <!--</div>-->
+    <!--</div>-->
 
 
-	<div class="row" style="padding-left:10px">
-	<label>Show</label>
-	<select class="siteList" ng-model="sort" ng-change="hasChanged()" ng-options="paging.value for paging in pageSizes" value="{{paging.value}}">
-	</select>
-	<label>number of entries</label>
+	<!--<div class="row" style="padding-left:10px">-->
 
-	</div>
+	<!--<label>number of entries</label>-->
+
+	<!--</div>-->
 
 
-    <div class="row">
+    <div class="row" ng-init="loadEmployees()">
 
-        <div class="col-md-12">
+        <div class="col-md-12" ng-init="loadProjects()">
             <div class="card TableCard">
                 <div class="card-content" ng-init="loadAllEmployees()">
 
@@ -32,6 +30,12 @@
 
                             <table class="table no-padding-tblCon" border="0">
                                 <tr class="filter-row gc-search-row">
+
+                                    <td>
+                                        <label>Show</label>
+                                        <select class="siteList margin0" ng-model="sort" ng-change="hasChanged()" ng-options="paging.value for paging in pageSizes" value="{{paging.value}}">
+                                        </select>
+                                    </td>
 
 
                                     <td>
@@ -76,8 +80,15 @@
                                     </td>
                                     <td align="right">
                                         <div class="floatR form-group">
-                                            <button type="submit" class="btn btn-primary search-button t4"  >
-                                                <i class="fa fa-search"></i>
+
+                                            <button type="submit" class="btn btn-circle blue-clr">
+                                                <i class="material-icons">search</i>
+                                            </button>
+                                            <button ui-sref="add-employee"  ng-class="{active: $state.includes('admin')}" has-authority="ROLE_ADMIN" class="btn btn-circle green-clr">
+                                                <i class="material-icons">add</i>
+                                            </button>
+                                            <button ng-click="refreshPage()" class="btn btn-circle orange-clr">
+                                                <i class="material-icons">refresh</i>
                                             </button>
                                         </div>
                                     </td>
@@ -143,7 +154,7 @@
                                         <i style="font-size: 20px !important;" class="fa fa-edit"></i>
                                     </button>
                                     <button ng-disabled="employee.left" title="Mark Left"   has-authority="ROLE_ADMIN"  data-toggle="modal" data-target="#leftModal" data-dismiss="#leftModal" ng-click="employeeDetails(employee.id)"  class="btn btn-simple btn-info btn-icon like"> <i style="font-size: 20px !important; color: #942a25" class="fas fa-user-times"></i></button>
-                                    <button ng-disabled="employee.left" title="Site Transfer"   has-authority="ROLE_ADMIN"  data-toggle="modal" data-target="#siteTransferModal" data-dismiss="#siteTransferModal"   class="btn btn-simple btn-info btn-icon like" ng-click="siteTransferDetails(employee);loadSites()" > <i style="font-size: 20px; color: orangered" class="material-icons">transfer_within_a_station</i></button>
+                                    <!--<button ng-disabled="employee.left" title="Site Transfer"   has-authority="ROLE_ADMIN"  data-toggle="modal" data-target="#siteTransferModal" data-dismiss="#siteTransferModal"   class="btn btn-simple btn-info btn-icon like" ng-click="siteTransferDetails(employee);loadSites()" > <i style="font-size: 20px; color: orangered" class="material-icons">transfer_within_a_station</i></button>-->
                                     <button ng-if="!employee.reliever" ng-disabled="employee.left" title="Relieve Employee"   has-authority="ROLE_ADMIN"  data-toggle="modal" data-target="#relieverConfirmation" data-dismiss="#relieverConfirmation" ng-click="getRelievers(employee)"   class="btn btn-simple btn-info btn-icon like"> <i style="font-size: 20px" class="material-icons">assignment_ind</i></button>
                                 </td>
 
@@ -268,6 +279,18 @@
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="material-icons">clear</i></button>
                 <h5 class="modal-title" id="isLeftModal">Mark Employee as Left ?</h5>
+                <div>
+                    <input type="radio" data-toggle="collapse" data-parent="#accordian" data-target="#delete" ng-model="markLeftOptions" value="delete">Delete Jobs and Mark Left
+                    <input type="radio" data-toggle="collapse" data-parent="#accordian" data-target="#assign" ng-model="markLeftOptions" value="assign">Assign Jobs to New Employee and Mark Left
+                </div>
+                <div class="collapse" id="delete">
+
+                </div>
+                <div class="collapse" id="assign">
+                    <select class="siteList" ng-model="transferringEmployee"  ng-options="emp as emp.fullName for emp in allEmployees">
+                        <option value="">Please select..</option>
+                    </select>
+                </div>
             </div>
             <div class="modal-footer ">
                 <button type="button" class="btn btn-info btn-round" data-dismiss="modal" ng-click="updateEmployeeLeft(employee)">Yes</button>
@@ -399,6 +422,11 @@
                                            uib-typeahead="employee as employee.fullName for employee in relievers | filter:$viewValue | limitTo:5" />
                                 </div>
                             </div>
+                        </td>
+                        <td>
+                            <select class="siteList" ng-model="selectedReliever"  ng-options="emp as emp.fullName for emp in relievers">
+                                <option value="">Please select..</option>
+                            </select>
                         </td>
                     </tr>
                 </table>

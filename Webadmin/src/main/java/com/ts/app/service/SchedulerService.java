@@ -40,7 +40,7 @@ import com.ts.app.repository.AttendanceRepository;
 import com.ts.app.repository.JobRepository;
 import com.ts.app.repository.ProjectRepository;
 import com.ts.app.repository.SchedulerConfigRepository;
-import com.ts.app.repository.SettingRepository;
+import com.ts.app.repository.SettingsRepository;
 import com.ts.app.repository.SiteRepository;
 import com.ts.app.service.util.DateUtil;
 import com.ts.app.service.util.ExportUtil;
@@ -103,7 +103,7 @@ public class SchedulerService extends AbstractService {
 	private PushService pushService;
 	
 	@Inject
-	private SettingRepository settingRepository;
+	private SettingsRepository settingRepository;
 	
 	@Inject
 	private Environment env;
@@ -267,16 +267,17 @@ public class SchedulerService extends AbstractService {
 		}
 	}
 
-	@Scheduled(initialDelay = 60000,fixedRate = 900000) //Runs every 15 mins
+	@Scheduled(initialDelay = 60000,fixedRate = 300000) //Runs every 15 mins
 	public void overDueTaskCheck() {
 		if(env.getProperty("scheduler.overdueJob.enabled").equalsIgnoreCase("true")) {
 			Calendar cal = Calendar.getInstance();
 			Setting overdueAlertSetting = settingRepository.findSettingByKey("email.notification.overdue");
 			String alertEmailIds = "";
-			if(overdueAlertSetting != null && StringUtils.isNotEmpty(overdueAlertSetting.getValue()) 
-					&& overdueAlertSetting.getValue().equalsIgnoreCase("true")) {
-				Setting overdueEmails = settingRepository.findSettingByKey("job.overdue.alert.emails");
-				alertEmailIds = overdueEmails.getValue();
+			Setting overdueEmails = null;
+			if(overdueAlertSetting != null && StringUtils.isNotEmpty(overdueAlertSetting.getSettingValue()) 
+					&& overdueAlertSetting.getSettingValue().equalsIgnoreCase("true")) {
+				overdueEmails = settingRepository.findSettingByKey("email.notification.overdue.emails");
+				alertEmailIds = overdueEmails.getSettingValue();
 			}
 			
 			List<Job> overDueJobs = jobRepository.findOverdueJobsByStatusAndEndDateTime(cal.getTime());
@@ -286,6 +287,17 @@ public class SchedulerService extends AbstractService {
 				ExportResult exportResult = new ExportResult();
 				exportResult = exportUtil.writeJobReportToFile(overDueJobs, exportResult);
 				for (Job job : overDueJobs) {
+					long siteId = job.getSite().getId();
+					long projId = job.getSite().getProject().getId();
+					if(siteId > 0) {
+						overdueAlertSetting = settingRepository.findSettingByKeyAndSiteId(SettingsService.EMAIL_NOTIFICATION_OVERDUE, siteId);
+						overdueEmails = settingRepository.findSettingByKeyAndSiteId(SettingsService.EMAIL_NOTIFICATION_OVERDUE_EMAILS, siteId);
+						alertEmailIds = overdueEmails.getSettingValue();
+					}else if(projId > 0) {
+						overdueAlertSetting = settingRepository.findSettingByKeyAndProjectId(SettingsService.EMAIL_NOTIFICATION_OVERDUE, projId);
+						overdueEmails = settingRepository.findSettingByKeyAndProjectId(SettingsService.EMAIL_NOTIFICATION_OVERDUE_EMAILS, projId);
+						alertEmailIds = overdueEmails.getSettingValue();
+					}
 					try {
 						List<Long> pushAlertUserIds = new ArrayList<Long>();
 						Employee assignee = job.getEmployee();
@@ -305,7 +317,7 @@ public class SchedulerService extends AbstractService {
 							long[] pushUserIds = Longs.toArray(pushAlertUserIds);
 							String message = "Site - "+ job.getSite().getName() + ", Job - " + job.getTitle() + ", Status - " + JobStatus.OVERDUE.name() + ", Time - "+ job.getPlannedEndTime();
 							pushService.send(pushUserIds, message); //send push to employee and managers.
-							if(overdueAlertSetting.getValue().equalsIgnoreCase("true")) { //send escalation emails to managers and alert emails
+							if(overdueAlertSetting.getSettingValue().equalsIgnoreCase("true")) { //send escalation emails to managers and alert emails
 								mailService.sendOverdueJobAlert(assignee.getUser(), alertEmailIds, job.getSite().getName(), job.getId(), job.getTitle(), exportResult.getFile());
 								job.setOverDueEmailAlert(true);
 							}
@@ -346,12 +358,12 @@ public class SchedulerService extends AbstractService {
 					if(CollectionUtils.isNotEmpty(reportResults)) {
 							//if report generation needed
 			                log.debug("results exists");
-							if(eodReports.getValue().equalsIgnoreCase("true")) {
+							if(eodReports.getSettingValue().equalsIgnoreCase("true")) {
 							    log.debug("send report");
 								ExportResult exportResult = new ExportResult();
 								exportResult = exportUtil.writeConsolidatedJobReportToFile(proj.getName(), reportResults, null, exportResult);
 								//send reports in email.
-								mailService.sendJobReportEmailFile(eodReportEmails.getValue(), exportResult.getFile(), null, cal.getTime());
+								mailService.sendJobReportEmailFile(eodReportEmails.getSettingValue(), exportResult.getFile(), null, cal.getTime());
 			
 							}
 			
@@ -386,12 +398,12 @@ public class SchedulerService extends AbstractService {
 			while(siteItr.hasNext()) {
 				Site site = siteItr.next();
 				List<EmployeeAttendanceReport> empAttnList = attendanceRepository.findBySiteId(site.getId(), DateUtil.convertToSQLDate(cal.getTime()), DateUtil.convertToSQLDate(cal.getTime()));
-				if(attendaceReports.getValue().equalsIgnoreCase("true")) {
+				if(attendaceReports.getSettingValue().equalsIgnoreCase("true")) {
 				    log.debug("send report");
 					ExportResult exportResult = new ExportResult();
 					exportResult = exportUtil.writeAttendanceReportToFile(proj.getName(), empAttnList, null, exportResult);
 					//send reports in email.
-					mailService.sendJobReportEmailFile(attendaceReportEmails.getValue(), exportResult.getFile(), null, cal.getTime());
+					mailService.sendJobReportEmailFile(attendaceReportEmails.getSettingValue(), exportResult.getFile(), null, cal.getTime());
 
 				}
 			}

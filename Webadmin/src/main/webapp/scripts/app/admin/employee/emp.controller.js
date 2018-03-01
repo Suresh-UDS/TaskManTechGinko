@@ -8,6 +8,8 @@ angular.module('timeSheetApp')
         $scope.doNotMatch = null;
         $scope.errorEmployeeExists = null;
 
+        $scope.markLeftOptions = 'delete';
+
         // $scope.employeeDesignations=null;
 
         $timeout(function (){angular.element('[ng-model="name"]').focus();});
@@ -85,7 +87,7 @@ angular.module('timeSheetApp')
         $scope.removeProjectSite = function(ind) {
         		$scope.projectSiteList.splice(ind,1);
         };
-        
+
         $scope.initAddEdit = function() {
         		$scope.loadAllManagers();
         		$scope.loadProjects();
@@ -187,7 +189,7 @@ angular.module('timeSheetApp')
         		}
         	}
         };
-        
+
 //        $scope.init() {
 //        		$scope.loadEmployees();
 //        		$scope.loadProjects();
@@ -334,12 +336,12 @@ angular.module('timeSheetApp')
                 		$scope.employee.projectSites = $scope.projectSiteList;
                 	}
                 	EmployeeComponent.createEmployee($scope.employee).then(function () {
-                    	$scope.success = 'OK';
-                    	$scope.selectedProject = {};
-                    	$scope.selectedSite = {};
-                    	//$scope.loadEmployees();
-                        $scope.showNotifications('top','center','success','Employee Created Successfully');
-                    	$location.path('/employees');
+	                    	$scope.success = 'OK';
+	                    	$scope.selectedProject = {};
+	                    	$scope.selectedSite = {};
+	                    	//$scope.loadEmployees();
+	                        $scope.showNotifications('top','center','success','Employee Created Successfully');
+	                    	$location.path('/employees');
                     }).catch(function (response) {
                         $scope.success = null;
                         console.log('Error - '+ JSON.stringify(response.data));
@@ -374,15 +376,40 @@ angular.module('timeSheetApp')
        };
 
        $scope.updateEmployeeLeft= function(employee){
+           console.log("Current Employee");
            console.log(employee);
+           console.log("Transferring employee");
+           console.log($scope.transferringEmployee);
            employee.left = true;
-          EmployeeComponent.updateEmployee(employee).then(function(data){
-              $scope.showNotifications('top','center','success','Employee Successfully Marked Left');
-              $scope.search();
-          }).catch(function(response){
-              console.log(response);
-              $scope.showNotifications('top','center','danger','Error in marking Left');
-          })
+
+           console.log("Employee Left options");
+           console.log($scope.markLeftOptions);
+
+           if($scope.markLeftOptions == 'delete'){
+               console.log("delete and mark left");
+               EmployeeComponent.updateEmployee(employee).then(function(data){
+                   EmployeeComponent.deleteJobsAndMarkEmployeeLeft(employee,new Date());
+                   console.log("Delete jobs and transfer this employee");
+                   $scope.showNotifications('top','center','success','Employee Successfully Marked Left');
+                   $scope.search();
+               }).catch(function(response){
+                   console.log(response);
+                   $scope.showNotifications('top','center','danger','Error in marking Left');
+               })
+           }else if ($scope.markLeftOptions == 'assign'){
+               console.log("assign and mark left");
+               EmployeeComponent.updateEmployee(employee).then(function(data){
+                   EmployeeComponent.assignJobsAndTransferEmployee(employee,$scope.transferringEmployee,new Date())
+                   console.log("Assign jobs to another employee and transfer this employee");
+                   $scope.showNotifications('top','center','success','Employee Successfully Marked Left');
+                   $scope.search();
+               }).catch(function(response){
+                   console.log(response);
+                   $scope.showNotifications('top','center','danger','Error in marking Left');
+               })
+           }
+
+
         };
 
 
@@ -396,7 +423,8 @@ angular.module('timeSheetApp')
 
         $scope.loadEmployee = function() {
         	EmployeeComponent.findOne($stateParams.id).then(function (data) {
-        	    	console.log('employee data -'+JSON.stringify(data));
+        	    	console.log('employee data -');
+        	    	console.log(data);
                 $scope.employee = data;
                 $scope.projectSiteList = $scope.employee.projectSites;
                 $scope.employee.code = pad($scope.employee.code , 4);
@@ -495,6 +523,8 @@ angular.module('timeSheetApp')
         	$scope.errorEmployeeExists = null;
         	$scope.errorProject = null;
         	$scope.errorSite = null;
+        	console.log("Employee details");
+        	console.log($scope.employee);
         	/*
         	if(!$scope.selectedProject.id){
         		$scope.errorProject = "true";
@@ -592,15 +622,15 @@ angular.module('timeSheetApp')
         	$scope.pages.currPage = number;
         	$scope.search();
         }
-        
-        $scope.columnAscOrder = function(field){ 
-        	$scope.selectedColumn = field; 
+
+        $scope.columnAscOrder = function(field){
+        	$scope.selectedColumn = field;
         	$scope.isAscOrder = true;
         	$scope.search();
         }
-        
-        $scope.columnDescOrder = function(field){ 
-        	$scope.selectedColumn = field; 
+
+        $scope.columnDescOrder = function(field){
+        	$scope.selectedColumn = field;
         	$scope.isAscOrder = false;
         	$scope.search();
         }
@@ -674,17 +704,18 @@ angular.module('timeSheetApp')
         	if($scope.pageSort){
         		$scope.searchCriteria.sort = $scope.pageSort;
         	}
-        	
+
         	if($scope.selectedColumn){
-        		
+
         		$scope.searchCriteria.columnName = $scope.selectedColumn;
         		$scope.searchCriteria.sortByAsc = $scope.isAscOrder;
-        		
-        	} 
-        	
+
+        	}
+
         	EmployeeComponent.search($scope.searchCriteria).then(function (data) {
                 $scope.employees = data.transactions;
-                console.log('Employee search result list -' + $scope.employees);
+                console.log('Employee search result list -');
+                console.log($scope.employees);
                 $scope.pages.currPage = data.currPage;
                 $scope.pages.totalPages = data.totalPages;
 //                alert($scope.pages.totalPages);

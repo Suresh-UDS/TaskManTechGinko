@@ -179,8 +179,21 @@ angular.module('timeSheetApp')
                     employeeId:employee.id,
                     employeeEmpId:employee.empId,
                     relievedFromDate: fromDate
-                }
+                };
+
                 return $http.post('api/employee/deleteJobsAndTransfer',data).then(function (response) {
+                    console.log(response.data);
+                    return response.data;
+                })
+            },
+
+            deleteJobsAndMarkEmployeeLeft: function(employee, fromDate){
+                var data ={
+                    employeeId:employee.id,
+                    employeeEmpId:employee.empId,
+                    relievedFromDate: fromDate
+                };
+                return $http.post('api/employee/deleteJobsAndMarkLeft',data).then(function (response) {
                     console.log(response.data);
                     return response.data;
                 })
@@ -220,17 +233,17 @@ angular.module('timeSheetApp')
             	return $http.post('api/employee/import', fileFormData, {
                     transformRequest: angular.identity,
                     headers: {'Content-Type': undefined}
-     
+
                 }).then(function (response) {
             			return response.data;
                 });
-        		
+
             },
             importEmployeeStatus: function(fileName) {
             	return $http.get('api/employee/import/'+fileName+"/status").then(function (response) {
             		return response.data;
             	});
-            }	
+            }
 
         };
     });
