@@ -83,13 +83,14 @@
 
             </ion-col>
 
-              <!--<ion-col col-12>-->
-                  <!--<div class="form-group">-->
-                      <!--<ion-select [(ngModel)]="designation" class="select-box" id="designation" placeholder="Choose Designation" name="designation" #designation="ngModel" required >-->
-                          <!--<ion-option *ngFor="let designation of designations" [value]="designation.designation" >{{designation.designation}}</ion-option>-->
-                      <!--</ion-select>-->
-                  <!--</div>-->
-              <!--</ion-col>-->
+              <ion-col col-12>
+                  <div class="form-group">
+                      <ion-select [(ngModel)]="designation" class="select-box" id="selectedDesignation" placeholder="Choose Designation" name="selectedDesignation"  required >
+                          <ion-option *ngFor="let designation of designations" [value]="designation.designation" (ionSelect)="setDesignations(designation)">{{designation.designation}}</ion-option>
+                      </ion-select>
+                  </div>
+              </ion-col>
+
 
             <ion-col col-12>
               <div class="form-group label-floating" [ngClass]="{'has-error': eMsg=='all'||eMsg=='number'}">
@@ -107,7 +108,7 @@
               <ion-col col-12>
                   <div class="form-group">
                       <ion-select [(ngModel)]="selectedProject" class="select-box" id="selectedProject" placeholder="Choose Project" name="selectedProject" #selectedPeoject="ngModel" required >
-                          <ion-option *ngFor="let project of projects" [value]="project.name" (ionSelect)="getSites(project.id,project.name)">{{project.name}}</ion-option>
+                          <ion-option *ngFor="let project of projects" [value]="project.name" (ionSelect)="getSites(project.id,project.name,project)">{{project.name}}</ion-option>
                       </ion-select>
                   </div>
               </ion-col>
@@ -115,18 +116,18 @@
               <ion-col col-12>
                   <div class="form-group">
                       <ion-select [(ngModel)]="selectedSite" class="select-box" id="siteName" placeholder="Choose Site" name="siteName" #site="ngModel" required >
-                          <ion-option *ngFor="let site of sites" [value]="site.name" (ionSelect)="addProjectSites()">{{site.name}}</ion-option>
+                          <ion-option *ngFor="let site of sites" [value]="site.name" (ionSelect)="addProjectSites(site)">{{site.name}}</ion-option>
                       </ion-select>
                   </div>
               </ion-col>
 
-              <!--<ion-col col-12>-->
-                  <!--<div class="form-group">-->
-                      <!--<ion-select [(ngModel)]="selectedManager" class="select-box" id="selectedManager" placeholder="Choose Manager" name="selectedManager" #selectedManager="ngModel" required >-->
-                          <!--<ion-option *ngFor="let manager of manager" [value]="manager.name" >{{manager.name}}</ion-option>-->
-                      <!--</ion-select>-->
-                  <!--</div>-->
-              <!--</ion-col>-->
+              <ion-col col-12>
+                  <div class="form-group">
+                      <ion-select [(ngModel)]="selectedManager" class="select-box" id="selectedManager" placeholder="Choose Manager" name="selectedManager"  required >
+                          <ion-option *ngFor="let manager of manager" (ionSelect)="selectManager(manager)" [value]="manager.name" >{{manager.name}}</ion-option>
+                      </ion-select>
+                  </div>
+              </ion-col>
 
               <!--<ion-col col-12>-->
               <!--<div class="form-group label-floating" [ngClass]="{'has-error': eMsg=='all'||eMsg=='mail'}">-->
@@ -161,7 +162,7 @@
 
             <!--</ion-col>-->
 
-            <button type="submit" class="btn btn-warning  margin-auto" (click)="addJob()">Next</button>
+            <button type="submit" class="btn btn-warning  margin-auto" (click)="createEmployee()">Next</button>
 
             <div class="clearfix"></div>
           </ion-row>

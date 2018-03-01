@@ -8,6 +8,8 @@ import {AttendancePage} from "../attendance/attendance";
 import {CustomerDetailPage} from "../customer-detail/customer-detail";
 import {EmployeeDetailPage} from "../employee-list/employee-detail";
 import {EmployeeListPage} from "../employee-list/employee-list";
+import {LoginPage} from "../login/login";
+import {componentService} from "../service/componentService";
 
 @Component({
   selector: 'page-tabs',
@@ -20,7 +22,7 @@ export class TabsPage {
   EmployeeListTab:any;
   userType:any;
 
-  constructor(public events:Events) {
+  constructor(public events:Events, private navCtrl:NavController, private component:componentService) {
     this.DashboardTab=DashboardPage;
     this.QuotationTab=QuotationPage;
     this.CustomerDetailTab=CustomerDetailPage;
@@ -34,6 +36,18 @@ export class TabsPage {
   }
   ionViewDidLoad() {
     console.log('ionViewDidLoad TabsPage');
+      if(window.localStorage.getItem('session')){
+          console.log("Session available");
+          this.component.showToastMessage('Previous Login Detected, Login automatically','bottom');
+      }else{
+          console.log("Session not Available");
+          this.component.showToastMessage('Session not available, please login','bottom');
+          this.navCtrl.setRoot(LoginPage);
+      }
+  }
+
+  ionViewEnter(){
+
   }
 
 

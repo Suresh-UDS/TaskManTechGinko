@@ -47,15 +47,21 @@ export class CreateEmployeePage {
   designation:any;
   manager:any;
   selectedManager:any;
+  managerDetails:any;
+  siteDetails:any;
+  projectDetails:any;
   constructor(public navCtrl: NavController,public component:componentService,public myService:authService, public navParams: NavParams, private  authService: authService, public camera: Camera,
               private loadingCtrl:LoadingController, private geolocation:Geolocation, private toastCtrl:ToastController, private siteService:SiteService, private employeeService: EmployeeService,
               private geoFence:Geofence) {
 
     this.categories = 'basic';
     this.getAllProjects();
+    this.projectSites=[];
 
     this.employeeService.getAllDesignations().subscribe(
         response=>{
+            console.log("all Designations");
+            console.log(response);
             this.designations = response;
         }
     );
@@ -105,8 +111,9 @@ export class CreateEmployeePage {
       )
   }
 
-  getSites(projectId,projectName){
+  getSites(projectId,projectName,project){
       this.component.showLoader('Getting Sites of Client '+projectName+'..');
+      this.projectDetails = project;
       this.siteService.findSitesByProject(projectId).subscribe(
           response=>{
           console.log(response);
@@ -119,43 +126,66 @@ export class CreateEmployeePage {
       })
   }
 
-  addProjectSites(){
+  addProjectSites(site){
+      this.siteDetails =site;
+      console.log("adding project and sites");
+      console.log(this.projectDetails);
+      console.log(this.selectedSite);
       var projSite = {
-          "projectId":this.selectedProject.id,
-          "projectName":this.selectedProject.name,
-          "siteId":this.selectedSite.id,
-          "siteName":this.selectedSite.name
+          "projectId":this.projectDetails.id,
+          "projectName":this.projectDetails.name,
+          "siteId":site.id,
+          "siteName":site.name
       };
-      this.projectSites.push(projSite);
+      this.projectSites[0]=projSite;
   }
 
-  addJob() {
+  setDesignations(designation){
+      console.log(designation);
+  }
+
+    selectManager(manager){
+      console.log("Selected Manager");
+      console.log(manager);
+      this.managerDetails = manager;
+
+    }
+
+    createEmployee() {
     console.log('form submitted');
-    if (this.firstname && this.lastname && this.eId  )
+    if (this.firstname && this.lastname && this.eId && this.designation && this.selectedProject && this.selectedSite && this.selectedManager )
     {
         // Save Employee
+        console.log(this.projectSites);
+        console.log(this.selectedManager);
         this.employee = {
                 name:this.firstname,
                 lastName:this.lastname,
                 designation:this.designation,
                 empId:this.eId,
-                projectId: this.selectedProject.id,
-                siteId: this.selectedSite.id,
+                projectId: this.projectDetails.id,
+                siteId: this.siteDetails.id,
                 projectSites:this.projectSites,
-                managerId:this.selectedManager.id
+                managerId:this.managerDetails.id
         };
 
         console.log("Employee Details");
         console.log(this.employee);
         this.component.showLoader('Creating Employee');
-        // this.employeeService.createEmployee(this.employee).subscribe(
-        //     response=>{
-        //         console.log(response)
-        //         this.component.closeLoader();
-        //         this.component.showToastMessage('Employee Created','bottom');
-        //         this.navCtrl.setRoot(EmployeeListPage);
-        //     }
-        // )
+        this.employeeService.createEmployee(this.employee).subscribe(
+            response=>{
+                console.log("Employee Creation success response")
+                console.log(response)
+                this.component.closeLoader();
+                this.component.showToastMessage('Employee Created','bottom');
+                this.navCtrl.setRoot(EmployeeListPage);
+            },err=>{
+                console.log("Employee creation failure response");
+                console.log(err);
+                this.component.closeLoader();
+                this.component.showToastMessage('Error in creating employee','bottom');
+            }
+        )
       this.component.showToastMessage(this.msg,'bottom');
     }
     else
@@ -183,6 +213,15 @@ export class CreateEmployeePage {
       else if(!this.address)
       {
         this.eMsg = "address";
+      }
+      else if(!this.designation){
+          this.eMsg ="Designation";
+      }else if(!this.selectedProject){
+          this.eMsg ="Project";
+      }else if(!this.selectedSite){
+          this.eMsg ="Site";
+      }else if(!this.manager){
+          this.eMsg ="Manager";
       }
       else
       {

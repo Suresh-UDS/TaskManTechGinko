@@ -1,5 +1,8 @@
 import { Component, Input, ViewChild, ElementRef, Renderer } from '@angular/core';
-import {Events, Item, ItemSliding, LoadingController, ModalController, NavController} from 'ionic-angular';
+import {
+    ActionSheetController, Events, Item, ItemSliding, LoadingController, ModalController,
+    NavController
+} from 'ionic-angular';
 import {authService} from "../service/authService";
 import {DatePickerProvider} from "ionic2-date-picker";
 import {componentService} from "../service/componentService";
@@ -47,8 +50,10 @@ export class DashboardPage {
     upcomingCount:any;
     completeCount:any;
     userType:any;
+    openMore:any;
+    closeMore:any;
   constructor(public renderer: Renderer,public myService:authService,private loadingCtrl:LoadingController,public navCtrl: NavController,public component:componentService,public authService:authService,public modalCtrl: ModalController,
-              private datePickerProvider: DatePickerProvider, private siteService:SiteService, private employeeService: EmployeeService, private jobService:JobService, public events:Events) {
+              private datePickerProvider: DatePickerProvider, private siteService:SiteService, private employeeService: EmployeeService, private jobService:JobService, public events:Events, private actionSheetCtrl:ActionSheetController) {
 
     this.categories='overdue';
     this.selectDate=new Date();
@@ -381,6 +386,47 @@ export class DashboardPage {
         console.log("========view job ===========");
         console.log(job);
         this.navCtrl.push(ViewJobPage,{job:job})
+    }
+
+    presentActionSheet(){
+        let actionSheet = this.actionSheetCtrl.create({
+            title:'Add',
+            buttons:[
+                {
+                    text:'Quotation',
+                    handler:()=>{
+                        console.log("Quotation sheet Controller");
+                        this.navCtrl.push(CreateQuotationPage);
+
+                    }
+                },
+                {
+                    text:'Job',
+                    handler:()=>{
+                    this.navCtrl.push(CreateJobPage);
+                }
+                },
+
+                {
+                    text:'Employee',
+                    handler:()=>{
+                        console.log('Complete job');
+                    this.navCtrl.push(CreateEmployeePage);
+
+                }
+                },
+
+                {
+                    text:'Cancel',
+                    role:'cancel',
+                    handler:()=>{
+                        console.log("Cancel clicker");
+                    }
+                }
+            ]
+        });
+
+        actionSheet.present();
     }
 
 

@@ -53,8 +53,8 @@ export class EmployeeService {
     createEmployee(employee):Observable<any>{
         return this.http.post(this.config.Url+'api/employee',employee).map(
             response=>{
-                console.log(response.json());
-                return response.json();
+                console.log(response);
+                return response;
             }
         )
     }
