@@ -28,13 +28,13 @@ public class SettingsService extends AbstractService {
 
 	private final Logger log = LoggerFactory.getLogger(SettingsService.class);
 
-	private static final String EMAIL_NOTIFICATION_OVERDUE = "email.notification.overdue";
+	public static final String EMAIL_NOTIFICATION_OVERDUE = "email.notification.overdue";
 	
-	private static final String EMAIL_NOTIFICATION_OVERDUE_EMAILS = "email.notification.overdue.emails";
+	public static final String EMAIL_NOTIFICATION_OVERDUE_EMAILS = "email.notification.overdue.emails";
 	
-	private static final String EMAIL_NOTIFICATION_EODREPORTS = "email.notification.eodReports";
+	public static final String EMAIL_NOTIFICATION_EODREPORTS = "email.notification.eodReports";
 	
-	private static final String EMAIL_NOTIFICATION_EODREPORTS_EMAILS = "email.notification.eodReports.emails";
+	public static final String EMAIL_NOTIFICATION_EODREPORTS_EMAILS = "email.notification.eodReports.emails";
 	
 	@Inject
 	private SettingsRepository settingsRepository;

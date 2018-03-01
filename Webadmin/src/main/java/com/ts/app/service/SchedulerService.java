@@ -267,15 +267,16 @@ public class SchedulerService extends AbstractService {
 		}
 	}
 
-	@Scheduled(initialDelay = 60000,fixedRate = 900000) //Runs every 15 mins
+	@Scheduled(initialDelay = 60000,fixedRate = 300000) //Runs every 15 mins
 	public void overDueTaskCheck() {
 		if(env.getProperty("scheduler.overdueJob.enabled").equalsIgnoreCase("true")) {
 			Calendar cal = Calendar.getInstance();
 			Setting overdueAlertSetting = settingRepository.findSettingByKey("email.notification.overdue");
 			String alertEmailIds = "";
+			Setting overdueEmails = null;
 			if(overdueAlertSetting != null && StringUtils.isNotEmpty(overdueAlertSetting.getSettingValue()) 
 					&& overdueAlertSetting.getSettingValue().equalsIgnoreCase("true")) {
-				Setting overdueEmails = settingRepository.findSettingByKey("email.notification.overdue.emails");
+				overdueEmails = settingRepository.findSettingByKey("email.notification.overdue.emails");
 				alertEmailIds = overdueEmails.getSettingValue();
 			}
 			
@@ -286,6 +287,17 @@ public class SchedulerService extends AbstractService {
 				ExportResult exportResult = new ExportResult();
 				exportResult = exportUtil.writeJobReportToFile(overDueJobs, exportResult);
 				for (Job job : overDueJobs) {
+					long siteId = job.getSite().getId();
+					long projId = job.getSite().getProject().getId();
+					if(siteId > 0) {
+						overdueAlertSetting = settingRepository.findSettingByKeyAndSiteId(SettingsService.EMAIL_NOTIFICATION_OVERDUE, siteId);
+						overdueEmails = settingRepository.findSettingByKeyAndSiteId(SettingsService.EMAIL_NOTIFICATION_OVERDUE_EMAILS, siteId);
+						alertEmailIds = overdueEmails.getSettingValue();
+					}else if(projId > 0) {
+						overdueAlertSetting = settingRepository.findSettingByKeyAndProjectId(SettingsService.EMAIL_NOTIFICATION_OVERDUE, projId);
+						overdueEmails = settingRepository.findSettingByKeyAndProjectId(SettingsService.EMAIL_NOTIFICATION_OVERDUE_EMAILS, projId);
+						alertEmailIds = overdueEmails.getSettingValue();
+					}
 					try {
 						List<Long> pushAlertUserIds = new ArrayList<Long>();
 						Employee assignee = job.getEmployee();

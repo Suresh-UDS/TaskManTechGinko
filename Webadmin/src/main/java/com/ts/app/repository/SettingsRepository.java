@@ -19,6 +19,11 @@ public interface SettingsRepository extends JpaRepository<Setting, Long>,JpaSpec
     @Query("SELECT s from Setting s where s.settingKey = :key")
     Setting findSettingByKey(@Param("key") String key);
 
+    @Query("SELECT s from Setting s where s.settingKey = :key and s.projectId = :projectId")
+    Setting findSettingByKeyAndProjectId(@Param("key") String key,@Param("projectId") long projectId);
+
+    @Query("SELECT s from Setting s where s.settingKey = :key and s.siteId = :siteId")
+    Setting findSettingByKeyAndSiteId(@Param("key") String key,@Param("siteId") long siteId);
 
     @Query("SELECT s from Setting s where s.projectId = :projectId")
     List<Setting> findSettingByProjectId(@Param("projectId") long projectId);
