@@ -66,7 +66,7 @@ export class CreateEmployeePage {
             this.manager = response;
         }
     )
-
+      this.sitePlace="site"
   }
 
 
