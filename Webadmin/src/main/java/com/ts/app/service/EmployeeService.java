@@ -550,11 +550,11 @@ public class    EmployeeService extends AbstractService {
 		List<EmployeeHistory> empHistory = employeeHistoryRepository.findByEmployeeId(empId);
 		return mapperUtil.toModelList(empHistory, EmployeeHistoryDTO.class);
 	}
-	
+
 	private Sort orderByASC(String columnName) {
 	    return new Sort(Sort.Direction.ASC, columnName);
 	}
-//	
+//
 	private Sort orderByDESC(String columnName) {
 	    return new Sort(Sort.Direction.DESC, columnName);
 	}
@@ -564,7 +564,7 @@ public class    EmployeeService extends AbstractService {
 		SearchResult<EmployeeDTO> result = new SearchResult<EmployeeDTO>();
 		if(searchCriteria != null) {
 			Pageable pageRequest = createPageRequest(searchCriteria.getCurrPage());
-			
+
 			Page<Employee> page = null;
 			List<EmployeeDTO> transactions = null;
 
@@ -640,14 +640,14 @@ public class    EmployeeService extends AbstractService {
 	        		subEmpIds = findAllSubordinates(user.getEmployee(), subEmpIds);
 	        		page = employeeRepository.findByProjectName(searchCriteria.getProjectName(), subEmpIds, pageRequest);
 	        }else if(StringUtils.isNotEmpty(searchCriteria.getColumnName())){
-	        	if(searchCriteria.isSortByAsc() == true){  
+	        	if(searchCriteria.isSortByAsc() == true){
 	        		Pageable pageable = createPageSort(searchCriteria.getCurrPage(), 10, orderByASC(searchCriteria.getColumnName()));
 		        	page = employeeRepository.findByOrder(pageable);
-	        	}else if(searchCriteria.isSortByAsc() == false){ 
+	        	}else if(searchCriteria.isSortByAsc() == false){
 	        		Pageable pageable = createPageSort(searchCriteria.getCurrPage(), 10, orderByDESC(searchCriteria.getColumnName()));
 		        	page = employeeRepository.findByOrder(pageable);
-	        	}	
-	        	
+	        	}
+
 	        }else {
 	            	if(user.getUserRole().getName().equalsIgnoreCase(UserRoleEnum.ADMIN.toValue())) {
 	            		page = employeeRepository.findAll(pageRequest);
@@ -662,7 +662,7 @@ public class    EmployeeService extends AbstractService {
 	            		}else {
 		            		List<Long> subEmpIds = null;
 		            		subEmpIds = findAllSubordinates(user.getEmployee(), subEmpIds);
-						if(CollectionUtils.isNotEmpty(subEmpIds)) {	
+						if(CollectionUtils.isNotEmpty(subEmpIds)) {
 		            			page = employeeRepository.findAllByEmpIds(subEmpIds, pageRequest);
 						}
 	            		}
@@ -762,6 +762,9 @@ public class    EmployeeService extends AbstractService {
     		empDto.setFaceIdEnrolled(employee.isFaceIdEnrolled());
     		empDto.setDesignation(employee.getDesignation());
     		empDto.setEnrolled_face(employee.getEnrolled_face());
+    		empDto.setLeft(employee.isLeft());
+    		empDto.setReliever(employee.isReliever());
+    		empDto.setRelieved(employee.isRelieved());
     		return empDto;
     }
 
