@@ -42,11 +42,12 @@
               <ion-col col-12>
                   <div class="form-group label-floating" [ngClass]="{'has-error': eMsg=='all'||eMsg=='eId'}">
                       <label class="control-label">Employee Id</label>
-                      <input class="form-control" type="text" [(ngModel)]="eId" id="eId" name="number" #id="ngModel" required min="3" max="10" [ngClass]="{'has-error': id.errors || eMsg=='all'|| eMsg=='eId'}">
+                      <input class="form-control" type="text" [(ngModel)]="eId" id="eId" name="number" #id="ngModel" required
+                             maxlength="10" [ngClass]="{'has-error': id.errors || eMsg=='all'|| eMsg=='eId'}">
                       <div *ngIf="id.errors && (id.dirty || id.touched)" class="error-msg">
 
                       </div>
-
+                      <div [hidden]="!id.hasError('maxlength')" class="error-msg">Maximum 10 digit</div>
                       <div *ngIf="id.errors && (id.untouched )" class="error-msg">
 
                       </div>

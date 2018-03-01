@@ -336,12 +336,12 @@ angular.module('timeSheetApp')
                 		$scope.employee.projectSites = $scope.projectSiteList;
                 	}
                 	EmployeeComponent.createEmployee($scope.employee).then(function () {
-                    	$scope.success = 'OK';
-                    	$scope.selectedProject = {};
-                    	$scope.selectedSite = {};
-                    	//$scope.loadEmployees();
-                        $scope.showNotifications('top','center','success','Employee Created Successfully');
-                    	$location.path('/employees');
+	                    	$scope.success = 'OK';
+	                    	$scope.selectedProject = {};
+	                    	$scope.selectedSite = {};
+	                    	//$scope.loadEmployees();
+	                        $scope.showNotifications('top','center','success','Employee Created Successfully');
+	                    	$location.path('/employees');
                     }).catch(function (response) {
                         $scope.success = null;
                         console.log('Error - '+ JSON.stringify(response.data));

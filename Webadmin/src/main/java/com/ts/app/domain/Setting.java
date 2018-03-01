@@ -33,41 +33,51 @@ public class Setting extends AbstractAuditingEntity implements Serializable {
 
 	@Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+    private long id;
 
-    @NotNull
+	private long projectId;
+	
+	private String projectName;
+	
+	private long siteId;
+	
+	private String siteName;
+	
+	@NotNull
     @Size(min = 1, max = 250)
     @Column(length = 250, nullable = false, unique = true)
-    private String key;
+    private String settingKey;
 
     @NotNull
     @Size(min = 1, max = 2000)
     @Column(length = 2000, nullable = false)
-    private String value;
+    private String settingValue;
 
-    @NotNull
     @Size(min = 1, max = 2500)
     private String description;
 
-    public Long getId() {
+    public long getId() {
         return id;
     }
-    public void setId(Long id) {
+    public void setId(long id) {
         this.id = id;
     }
     
-    public String getKey() {
-		return key;
+    public String getSettingKey() {
+		return settingKey;
 	}
-	public void setKey(String key) {
-		this.key = key;
+	public void setSettingKey(String key) {
+		this.settingKey = key;
 	}
-	public String getValue() {
-		return value;
+
+	public String getSettingValue() {
+		return settingValue;
 	}
-	public void setValue(String value) {
-		this.value = value;
+
+	public void setSettingValue(String settingValue) {
+		this.settingValue = settingValue;
 	}
+	
 	public String getDescription() {
         return description;
     }
@@ -75,7 +85,30 @@ public class Setting extends AbstractAuditingEntity implements Serializable {
     public void setDescription(String description) {
         this.description = description;
     }
-
-    
+	public long getProjectId() {
+		return projectId;
+	}
+	public void setProjectId(long projectId) {
+		this.projectId = projectId;
+	}
+	public String getProjectName() {
+		return projectName;
+	}
+	public void setProjectName(String projectName) {
+		this.projectName = projectName;
+	}
+	public long getSiteId() {
+		return siteId;
+	}
+	public void setSiteId(long siteId) {
+		this.siteId = siteId;
+	}
+	public String getSiteName() {
+		return siteName;
+	}
+	public void setSiteName(String siteName) {
+		this.siteName = siteName;
+	}
+	
 }
 
