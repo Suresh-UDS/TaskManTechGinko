@@ -167,6 +167,7 @@ public class    EmployeeService extends AbstractService {
 			if(employeeDto.isCreateUser() && employeeDto.getUserRoleId() > 0) {
 				UserDTO user = new UserDTO();
 				user.setLogin(employee.getEmpId());
+				user.setPassword(employee.getEmpId());
 				user.setFirstName(employee.getName());
 				user.setLastName(employee.getLastName());
 				user.setAdminFlag("N");

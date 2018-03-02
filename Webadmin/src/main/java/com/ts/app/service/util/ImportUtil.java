@@ -39,15 +39,19 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.ts.app.domain.AbstractAuditingEntity;
 import com.ts.app.domain.Employee;
+import com.ts.app.domain.EmployeeProjectSite;
 import com.ts.app.domain.JobStatus;
 import com.ts.app.domain.JobType;
 import com.ts.app.domain.Location;
 import com.ts.app.domain.Project;
 import com.ts.app.domain.Site;
+import com.ts.app.domain.User;
 import com.ts.app.repository.EmployeeRepository;
 import com.ts.app.repository.LocationRepository;
 import com.ts.app.repository.ProjectRepository;
 import com.ts.app.repository.SiteRepository;
+import com.ts.app.repository.UserRepository;
+import com.ts.app.repository.UserRoleRepository;
 import com.ts.app.security.SecurityUtils;
 import com.ts.app.service.JobManagementService;
 import com.ts.app.service.UserService;
@@ -64,12 +68,12 @@ public class ImportUtil {
 
 	private static final Logger log = LoggerFactory.getLogger(ImportUtil.class);
 
-	private static final String NEW_IMPORT_FOLDER = "E:\\fms";
+	private static final String NEW_IMPORT_FOLDER = "/opt/imports/new";
 	private static final String JOB_FOLDER = "job";
 	private static final String EMPLOYEE_FOLDER = "employee";
 	private static final String CLIENT_FOLDER = "client";
 	private static final String SITE_FOLDER = "site";
-	private static final String COMPLETED_IMPORT_FOLDER = "E:\\fms\\complete";
+	private static final String COMPLETED_IMPORT_FOLDER = "/opt/imports/completed";
 	private static final String SEPARATOR = System.getProperty("file.separator");
 
 	private static final Map<String,String> statusMap = new ConcurrentHashMap<String,String>();
@@ -79,6 +83,12 @@ public class ImportUtil {
 
 	@Autowired
 	private UserService userService;
+
+	@Autowired
+	private UserRepository userRepository;
+	
+	@Autowired
+	private UserRoleRepository userRoleRepository;
 
 	@Autowired
 	private LocationRepository locationRepo;
@@ -470,22 +480,23 @@ public class ImportUtil {
 					
 				}
 				else {*/
+				Project newProj = projectRepo.findOne(Long.valueOf(currentRow.getCell(0).getStringCellValue()));
+				Site newSite = siteRepo.findOne(Long.valueOf(currentRow.getCell(1).getStringCellValue()));
+				employee.setEmpId(currentRow.getCell(2).getStringCellValue());
+				employee.setName(currentRow.getCell(3).getStringCellValue());
+				employee.setFullName(currentRow.getCell(3).getStringCellValue());
+				employee.setLastName(currentRow.getCell(4).getStringCellValue());
+				employee.setPhone(currentRow.getCell(5).getStringCellValue());
 				employee.setDesignation(currentRow.getCell(7).getStringCellValue());
-				employee.setName(currentRow.getCell(2).getStringCellValue());
-				employee.setEmpId("12345"+r);
-				employee.setLastName(currentRow.getCell(3).getStringCellValue());
-				employee.setFullName(currentRow.getCell(2).getStringCellValue());
 				// email, phone number missing
 				ZoneId  zone = ZoneId.of("Asia/Singapore");
 				ZonedDateTime zdt   = ZonedDateTime.of(LocalDateTime.now(), zone);
 				employee.setCreatedDate(zdt);
 				employee.setActive(Employee.ACTIVE_YES);
-				if(StringUtils.isNotEmpty(currentRow.getCell(7).getStringCellValue())) {
-					Employee manager =  employeeRepo.findOne(Long.valueOf(currentRow.getCell(7).getStringCellValue()));
+				if(StringUtils.isNotEmpty(currentRow.getCell(8).getStringCellValue())) {
+					Employee manager =  employeeRepo.findOne(Long.valueOf(currentRow.getCell(8).getStringCellValue()));
 					employee.setManager(manager);
 		        }
-				Project newProj = projectRepo.findOne(Long.valueOf(currentRow.getCell(0).getStringCellValue()));
-				Site newSite = siteRepo.findOne(Long.valueOf(currentRow.getCell(1).getStringCellValue()));
 				List<Project> projects = new ArrayList<Project>();
 				projects.add(newProj);
 				List<Site> sites = new ArrayList<Site>();
@@ -497,22 +508,36 @@ public class ImportUtil {
 				employee.setLeft(false);
 				employee.setRelieved(false);
 				employee.setReliever(false);
+				List<EmployeeProjectSite> projectSites = new ArrayList<EmployeeProjectSite>();
+				EmployeeProjectSite projectSite = new EmployeeProjectSite();
+				projectSite.setProjectId(newProj.getId());
+				projectSite.setProjectName(newProj.getName());
+				projectSite.setSiteId(newSite.getId());
+				projectSite.setSiteName(newSite.getName());
+				projectSite.setEmployee(employee);
+				projectSites.add(projectSite);
+				employee.setProjectSites(projectSites);
 				
 				employeeRepo.save(employee);
 				//create user if opted.
-				String createUser = currentRow.getCell(8).getStringCellValue();
-				long userRoleId = Long.valueOf(currentRow.getCell(8).getStringCellValue());
+				String createUser = currentRow.getCell(9).getStringCellValue();
+				long userRoleId = (long)currentRow.getCell(10).getNumericCellValue();
+				UserDTO user = new UserDTO();
 				if(StringUtils.isNotEmpty(createUser) && createUser.equalsIgnoreCase("Y") && userRoleId > 0) {
-					UserDTO user = new UserDTO();
 					user.setLogin(employee.getEmpId());
+					user.setPassword(employee.getEmpId());
 					user.setFirstName(employee.getName());
 					user.setLastName(employee.getLastName());
 					user.setAdminFlag("N");
 					user.setUserRoleId(userRoleId);
 					user.setEmployeeId(employee.getId());
 					user.setActivated(true);
-					userService.createUserInformation(user);
-				}				
+					user.setEmail(currentRow.getCell(6).getStringCellValue());
+					user = userService.createUserInformation(user);
+					User userObj = userRepository.findOne(user.getId());
+					employee.setUser(userObj);
+					employeeRepo.save(employee);
+				}
 				log.debug("Created Information for Employee: {}", employee);
 				
 			/*}*/
