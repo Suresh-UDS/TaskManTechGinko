@@ -180,6 +180,12 @@ Tip 3: you can change the color of the sidebar with data-background-color="white
                     <p>App Module & Actions</p>
                 </a>
             </li>
+            <li ui-sref-active="active" has-authority="ROLE_ADMIN" >
+                <a ui-sref="feedbackquestions">
+                    <i class="material-icons">feedback</i>
+                    <p>Feedback Master</p>
+                </a>
+            </li>
 
             <li has-authority="ROLE_ADMIN" ng-class="{active: $state.includes('admin')}">
                 <a data-toggle="collapse" data-target="#formsExamples1" href="#">
