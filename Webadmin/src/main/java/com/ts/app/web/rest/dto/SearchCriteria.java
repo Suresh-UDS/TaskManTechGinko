@@ -98,6 +98,14 @@ public class SearchCriteria extends Paginator {
 	private boolean sortByAsc;
 	
 	private String exportType;
+	
+	private String block;
+	
+	private String floor;
+	
+	private String zone;
+	
+	private String feedbackName;
 
 	public long getId() {
 		return id;
@@ -473,6 +481,38 @@ public class SearchCriteria extends Paginator {
 
 	public void setExportType(String exportType) {
 		this.exportType = exportType;
+	}
+
+	public String getBlock() {
+		return block;
+	}
+
+	public void setBlock(String block) {
+		this.block = block;
+	}
+
+	public String getFloor() {
+		return floor;
+	}
+
+	public void setFloor(String floor) {
+		this.floor = floor;
+	}
+
+	public String getZone() {
+		return zone;
+	}
+
+	public void setZone(String zone) {
+		this.zone = zone;
+	}
+
+	public String getFeedbackName() {
+		return feedbackName;
+	}
+
+	public void setFeedbackName(String feedbackName) {
+		this.feedbackName = feedbackName;
 	}
 
 	
