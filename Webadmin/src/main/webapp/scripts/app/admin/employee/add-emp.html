@@ -197,33 +197,46 @@
 
                             </div>
 
+							
                        		<div class="col-md-6">
-                                 <div class="form-group">
-                                     <label class="control-label">User Role <span class="red-star">*</span> </label>
-                                     <!--<input type="text" class="form-control"-->
-                                             <!--ng-model="selectedRole"-->
-                                            <!--uib-typeahead="role as role.name for role in userRoles | filter:$viewValue | limitTo:5"-->
-                                            <!--name="UserRole" ng-minlength="5" ng-maxlength="50" autofocus-->
-                                            <!--required >-->
-                                     <select class="form-control " ng-model="selectedRole"  ng-options="role as role.name for role in userRoles">
-                                         <option value="">Please select role...</option>
-                                     </select>
+                       		
+								<div class="panel panel-default">
+                                    <div class="panel-heading">Identity and Name</div>
+                                    <div class="panel-body">
 
-                                     <div ng-show="form.$submitted || form.UserRole.$touched">
-                                         <div ng-show="form.UserRole.$dirty || form.UserRole.$invalid">
-                                             <p class="help-block" style="color: maroon"
-                                                ng-show="form.UserRole.$error.required">User Role is
-                                                 required.</p>
-                                             <p class="help-block" style="color: maroon"
-                                                ng-show="form.UserRole.$error.minlength">User Role is
-                                                 required to be at least 5 character.</p>
-                                             <p class="help-block" style="color: maroon"
-                                                ng-show="form.UserRole.$error.maxlength">User Role
-                                                 cannot be longer than 50 characters.</p>
-                                         </div>
-                                     </div>
-
-                                 </div>
+                                        <div class="row">          
+                                        		<div class="col-md-6">             		
+			                                 <div class="form-group">
+			                                     <label class="control-label">User Role <span class="red-star">*</span> </label>
+			                                     <!--<input type="text" class="form-control"-->
+			                                             <!--ng-model="selectedRole"-->
+			                                            <!--uib-typeahead="role as role.name for role in userRoles | filter:$viewValue | limitTo:5"-->
+			                                            <!--name="UserRole" ng-minlength="5" ng-maxlength="50" autofocus-->
+			                                            <!--required >-->
+			                                     <select class="form-control " ng-model="selectedRole"  ng-options="role as role.name for role in userRoles">
+			                                         <option value="">Please select role...</option>
+			                                     </select>
+			
+			                                     <div ng-show="form.$submitted || form.UserRole.$touched">
+			                                         <div ng-show="form.UserRole.$dirty || form.UserRole.$invalid">
+			                                             <p class="help-block" style="color: maroon"
+			                                                ng-show="form.UserRole.$error.required">User Role is
+			                                                 required.</p>
+			                                             <p class="help-block" style="color: maroon"
+			                                                ng-show="form.UserRole.$error.minlength">User Role is
+			                                                 required to be at least 5 character.</p>
+			                                             <p class="help-block" style="color: maroon"
+			                                                ng-show="form.UserRole.$error.maxlength">User Role
+			                                                 cannot be longer than 50 characters.</p>
+			                                         </div>
+			                                     </div>
+			
+			                                 </div>
+			                                 </div>
+			                           </div>
+			                       </div>
+			                       </div>
+			                                 
                              </div>
 
                        </div>

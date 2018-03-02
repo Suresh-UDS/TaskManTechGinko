@@ -510,6 +510,7 @@ public class ImportUtil {
 					user.setAdminFlag("N");
 					user.setUserRoleId(userRoleId);
 					user.setEmployeeId(employee.getId());
+					user.setActivated(true);
 					userService.createUserInformation(user);
 				}				
 				log.debug("Created Information for Employee: {}", employee);

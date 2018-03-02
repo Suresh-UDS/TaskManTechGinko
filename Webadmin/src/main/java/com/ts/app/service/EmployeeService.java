@@ -172,6 +172,7 @@ public class    EmployeeService extends AbstractService {
 				user.setAdminFlag("N");
 				user.setUserRoleId(employeeDto.getUserRoleId());
 				user.setEmployeeId(employee.getId());
+				user.setActivated(true);
 				userService.createUserInformation(user);
 			}
 

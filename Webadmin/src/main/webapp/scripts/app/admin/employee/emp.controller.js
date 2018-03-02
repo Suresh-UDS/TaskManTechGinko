@@ -341,6 +341,7 @@ angular.module('timeSheetApp')
                 		$scope.employee.managerId = $scope.selectedManager.id;
                 	}
                 	if($scope.selectedRole) {
+                		$scope.employee.createUser = true;
                 		$scope.employee.userRoleId = $scope.selectedRole.id;
                 	}
                 	if($scope.projectSiteList) {
