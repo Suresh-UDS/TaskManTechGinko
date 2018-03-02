@@ -12,6 +12,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 import java.util.TimeZone;
+import java.util.TreeSet;
 
 import javax.inject.Inject;
 
@@ -75,6 +76,9 @@ public class    EmployeeService extends AbstractService {
 
 	@Inject
 	private UserRepository userRepository;
+
+	@Inject
+	private UserRoleRepository userRoleRepository;
 
 	@Inject
 	private ProjectRepository projectRepository;
@@ -156,7 +160,21 @@ public class    EmployeeService extends AbstractService {
 					projSite.setEmployee(employee);
 				}
 			}
-			employeeRepository.save(employee);
+			
+			
+			employee = employeeRepository.save(employee);
+			//create user if opted.
+			if(employeeDto.isCreateUser() && employeeDto.getUserRoleId() > 0) {
+				UserDTO user = new UserDTO();
+				user.setLogin(employee.getEmpId());
+				user.setFirstName(employee.getName());
+				user.setLastName(employee.getLastName());
+				user.setAdminFlag("N");
+				user.setUserRoleId(employeeDto.getUserRoleId());
+				user.setEmployeeId(employee.getId());
+				userService.createUserInformation(user);
+			}
+
 			log.debug("Created Information for Employee: {}", employee);
 			employeeDto = mapperUtil.toModel(employee, EmployeeDTO.class);
 		}

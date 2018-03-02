@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('timeSheetApp')
-    .controller('EmployeeController', function ($rootScope,$window, $scope, $state, $timeout, ProjectComponent, SiteComponent, EmployeeComponent, $http,$stateParams,$location) {
+    .controller('EmployeeController', function ($rootScope,$window, $scope, $state, $timeout, ProjectComponent, SiteComponent, EmployeeComponent,UserRoleComponent, $http,$stateParams,$location) {
         $scope.success = null;
         $scope.error = null;
         $scope.errorMessage = null;
@@ -42,8 +42,9 @@ angular.module('timeSheetApp')
 
         $scope.notLoading = true;
 
+        $scope.userRoles;
 
-
+        $scope.selectedRole;
 
         $scope.initCalender = function(){
 
@@ -101,6 +102,13 @@ angular.module('timeSheetApp')
                 $scope.projects = data;
             });
         };
+        
+        $scope.loadUserRoles = function () {
+        		UserRoleComponent.findAll().then(function (data) {
+                $scope.userRoles = data;
+            });
+        };
+        
 
         $scope.searchProjects = function(value){
             var projectName = {
@@ -332,6 +340,9 @@ angular.module('timeSheetApp')
                 	if($scope.selectedManager) {
                 		$scope.employee.managerId = $scope.selectedManager.id;
                 	}
+                	if($scope.selectedRole) {
+                		$scope.employee.userRoleId = $scope.selectedRole.id;
+                	}
                 	if($scope.projectSiteList) {
                 		$scope.employee.projectSites = $scope.projectSiteList;
                 	}
@@ -431,6 +442,7 @@ angular.module('timeSheetApp')
                 $scope.loadSelectedProject($scope.employee.projectId);
                 $scope.loadSelectedSite($scope.employee.siteId);
                 $scope.loadSelectedManager($scope.employee.managerId);
+                $scope.loadSelectedRole($scope.employee.userRoleId);
                 $scope.sites = $scope.employee.sites;
             });
 
@@ -444,6 +456,7 @@ angular.module('timeSheetApp')
                 $scope.loadSelectedProject($scope.employee.projectId);
                 $scope.loadSelectedSite($scope.employee.siteId);
                 $scope.loadSelectedManager($scope.employee.managerId);
+                $scope.loadSelectedRole($scope.employee.userRoleId);
                 $scope.sites = $scope.employee.sites;
             });
         };
@@ -476,6 +489,13 @@ angular.module('timeSheetApp')
 
         };
 
+        $scope.loadSelectedRole = function(roleId) {
+        		UserRoleComponent.findOne(roleId).then(function (data) {
+                $scope.selectedRole = data;
+            });
+
+        };
+        
         $scope.loadSelectedManager = function(managerId) {
         		console.log('manager id - ' + managerId);
         	EmployeeComponent.findOne(managerId).then(function (data) {

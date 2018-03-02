@@ -50,10 +50,12 @@ import com.ts.app.repository.ProjectRepository;
 import com.ts.app.repository.SiteRepository;
 import com.ts.app.security.SecurityUtils;
 import com.ts.app.service.JobManagementService;
+import com.ts.app.service.UserService;
 import com.ts.app.web.rest.dto.BaseDTO;
 import com.ts.app.web.rest.dto.ImportResult;
 import com.ts.app.web.rest.dto.JobDTO;
 import com.ts.app.web.rest.dto.ProjectDTO;
+import com.ts.app.web.rest.dto.UserDTO;
 
 
 @Component
@@ -74,6 +76,9 @@ public class ImportUtil {
 	
 	@Autowired
 	private JobManagementService jobService;
+
+	@Autowired
+	private UserService userService;
 
 	@Autowired
 	private LocationRepository locationRepo;
@@ -494,6 +499,19 @@ public class ImportUtil {
 				employee.setReliever(false);
 				
 				employeeRepo.save(employee);
+				//create user if opted.
+				String createUser = currentRow.getCell(8).getStringCellValue();
+				long userRoleId = Long.valueOf(currentRow.getCell(8).getStringCellValue());
+				if(StringUtils.isNotEmpty(createUser) && createUser.equalsIgnoreCase("Y") && userRoleId > 0) {
+					UserDTO user = new UserDTO();
+					user.setLogin(employee.getEmpId());
+					user.setFirstName(employee.getName());
+					user.setLastName(employee.getLastName());
+					user.setAdminFlag("N");
+					user.setUserRoleId(userRoleId);
+					user.setEmployeeId(employee.getId());
+					userService.createUserInformation(user);
+				}				
 				log.debug("Created Information for Employee: {}", employee);
 				
 			/*}*/

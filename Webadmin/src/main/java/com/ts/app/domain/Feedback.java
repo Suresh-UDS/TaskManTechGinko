@@ -44,8 +44,7 @@ public class Feedback extends AbstractAuditingEntity implements Serializable {
     @JoinColumn(name = "projectId", nullable = true)
     private Project project;
 
-    @OneToMany(mappedBy = "feedbackQuestion", cascade = {CascadeType.ALL})
-    @Cascade(org.hibernate.annotations.CascadeType.DELETE_ORPHAN)
+    @OneToMany(mappedBy = "feedback", cascade = {CascadeType.ALL}, orphanRemoval = true)
     private Set<FeedbackQuestion> questions;
 
     @Column(name = "block")

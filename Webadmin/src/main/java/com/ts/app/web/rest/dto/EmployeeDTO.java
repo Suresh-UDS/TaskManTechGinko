@@ -80,6 +80,10 @@ public class EmployeeDTO extends BaseDTO {
 
     @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property="@id")
     private EmployeeDTO manager;
+    
+	private long userRoleId;
+	
+	private String userRoleName;
 
 	public long getId() {
 		return id;
@@ -354,6 +358,22 @@ public class EmployeeDTO extends BaseDTO {
 
 	public void setPhone(String phone) {
 		this.phone = phone;
+	}
+
+	public long getUserRoleId() {
+		return userRoleId;
+	}
+
+	public void setUserRoleId(long userRoleId) {
+		this.userRoleId = userRoleId;
+	}
+
+	public String getUserRoleName() {
+		return userRoleName;
+	}
+
+	public void setUserRoleName(String userRoleName) {
+		this.userRoleName = userRoleName;
 	}
 
 	
