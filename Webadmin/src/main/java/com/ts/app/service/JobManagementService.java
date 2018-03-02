@@ -1259,7 +1259,12 @@ public class JobManagementService extends AbstractService {
 
         List<Job> jobList = new ArrayList<Job>();
         jobList = jobRepository.findByStartDateAndEmployee(employee.getId(),fromDt);
-
+        if(CollectionUtils.isNotEmpty(jobList)) {
+        		for(Job job : jobList) {
+        			job.getChecklistItems().clear();
+        			jobRepository.saveAndFlush(job);
+        		}
+        }
         jobRepository.deleteInBatch(jobList);
 
 
