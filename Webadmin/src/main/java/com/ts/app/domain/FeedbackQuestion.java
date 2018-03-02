@@ -20,7 +20,7 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 @Table(name = "feedback_questions")
 @Cacheable(true)
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-public class feedbackQuestions extends AbstractAuditingEntity implements Serializable {
+public class FeedbackQuestion extends AbstractAuditingEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -29,10 +29,45 @@ public class feedbackQuestions extends AbstractAuditingEntity implements Seriali
     @Column(name = "id")
     private long id;
 
-    @Column(name = "name")
-    private String name;
+    @Column(name = "question")
+    private String question;
+
+    @Column(name = "answer")
+    private Boolean answer;
 
     @ManyToOne()
     @JoinColumn(name = "feedback_id")
     private Feedback feedback;
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public Feedback getFeedback() {
+        return feedback;
+    }
+
+    public void setFeedback(Feedback feedback) {
+        this.feedback = feedback;
+    }
+
+    public Boolean getAnswer() {
+        return answer;
+    }
+
+    public void setAnswer(Boolean answer) {
+        this.answer = answer;
+    }
+
+    public String getQuestion() {
+        return question;
+    }
+
+    public void setQuestion(String question) {
+        this.question = question;
+    }
 }
