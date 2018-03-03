@@ -3,22 +3,23 @@
 angular.module('timeSheetApp')
     .config(function ($stateProvider) {
         $stateProvider
-            .state('feedback-questions', {
+            .state('feedback', {
                 parent: 'manage',
-                url: '/feedback-questions',
-                controller: 'FeedbackQueController',
+                url: '/feedback',
+                controller: 'FeedbackController',
                 data: {
                     authorities: [],
-                    pageTitle: 'Feedback Questions'
+                    pageTitle: 'Feedback'
                 },
                 views: {
                     'content@': {
-                        templateUrl: 'scripts/app/admin/feedback/feedback-questions.html',
-                        controller: 'FeedbackQueController'
+                        templateUrl: 'scripts/app/admin/feedback/feedback-list.html',
+                        controller: 'FeedbackController'
                     }
                 },
                 resolve: {
 
                 }
-            })
+            });
+
     });

@@ -1,0 +1,65 @@
+<ion-header>
+  <ion-navbar>
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>Initiate Feedback</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content>
+
+   <div class="InitFeedbackCon">
+
+        <div class="InputCon">
+
+            <ion-list>
+                <ion-item>
+                    <ion-label>Project</ion-label>
+                    <ion-select [(ngModel)]="project">
+                        <ion-option *ngFor="let p of projects" [value]="p.id" (ionSelect)="selectSite(p.id)"> {{p.name}}</ion-option>
+                    </ion-select>
+                </ion-item>
+                <ion-item>
+                    <ion-label>Site</ion-label>
+                    <ion-select [(ngModel)]="site">
+                        <ion-option *ngFor="let s of sites" [value]="s.id" (ionSelect)="selectBlock(s.id)">{{s.name}}</ion-option>
+                    </ion-select>
+                </ion-item>
+                <ion-item>
+                    <ion-label>Block</ion-label>
+                    <ion-select [(ngModel)]="block">
+                        <ion-option *ngFor="let b of blocks" [value]="b.id" (ionSelect)="selectZone(b.id)">{{b.name}}</ion-option>
+                    </ion-select>
+                </ion-item>
+                <ion-item>
+                    <ion-label>Floor</ion-label>
+                    <ion-select [(ngModel)]="floor">
+                        <ion-option >floor</ion-option>
+                    </ion-select>
+                </ion-item>
+                <ion-item>
+                    <ion-label>zone</ion-label>
+                    <ion-select [(ngModel)]="zone">
+                        <ion-option *ngFor="let z of zones" [value]="z.id">{{z.name}}</ion-option>
+                    </ion-select>
+                </ion-item>
+                <ion-item>
+                    <ion-label>Feedback Name</ion-label>
+                    <ion-select>
+                        <ion-option value="n1">Name 1</ion-option>
+                        <ion-option value="n2">Name 2</ion-option>
+                    </ion-select>
+                </ion-item>
+            </ion-list>
+
+
+            <button class="btn btn-warning btn-wd btn-lg" (click)="start()" style="">Submit</button>
+
+        </div>
+
+   </div>
+
+
+
+</ion-content>

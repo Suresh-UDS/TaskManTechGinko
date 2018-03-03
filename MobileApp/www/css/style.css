@@ -560,15 +560,30 @@ span.EmpNameTxt
   font-size:40px;
   margin:10px;
 }
-/*
-.AnsCon ion-icon.icon.icon-md.ion-ios-checkmark-circle-outline.item-icon {
+.AnsCon ion-icon.icon.icon-md.ion-ios-checkmark-circle-outline.item-icon.active {
     color: green !important;
 }
-.AnsCon ion-icon.icon.icon-md.ion-ios-close-circle-outline.item-icon {
+.AnsCon ion-icon.icon.icon-md.ion-ios-close-circle-outline.item-icon.active {
     color: red !important;
 }
-*/
-
+.InitFeedbackCon .InputCon ion-list ion-item
+{
+  padding-left:0;
+}
+.InitFeedbackCon .InputCon ion-item.item.item-block.item-md.item-select {
+    margin: 15px auto;
+    padding-left: 0;
+    width: 90%;
+    border-radius: 10px;
+}
+.InitFeedbackCon .InputCon ion-item ion-label
+{
+  text-align:left;
+}
+.InitFeedbackCon .InputCon
+{
+  text-align:center;
+}
 .FeedbackCon
 {
   width: 70%;

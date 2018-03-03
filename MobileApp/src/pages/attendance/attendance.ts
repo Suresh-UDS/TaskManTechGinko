@@ -36,6 +36,11 @@ export class AttendancePage {
             this.page = response.currPage;
             this.totalPages = response.totalPages;
             this.component.closeLoader();
+        },
+        error=>
+        {
+                console.log('error in attendance Page:'+error);
+                this.component.closeLoader();
         })
   }
     presentPopover(myEvent) {
@@ -111,6 +116,7 @@ export class AttendancePage {
                     },
                     error=>{
                         console.log('error in attendance Page:'+error);
+                        this.component.closeLoader();
                     }
                 )
                 infiniteScroll.complete();

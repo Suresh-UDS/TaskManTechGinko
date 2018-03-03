@@ -1,0 +1,178 @@
+<div class="crud-form"
+     data-unique-hash="a2ad475d60b22954085c657a73309b8f">
+    <div class="">
+
+        <div class="row">
+            <div class="col-mod-12">
+                <!--<div class="alert alert-success" ng-show="success">-->
+                    <!--<strong>Quotation saved!</strong>-->
+                <!--</div>-->
+
+                <!--<div class="alert alert-danger" ng-show="error">-->
+                    <!--<strong>Quotation Not Saved!</strong> Please try again later.-->
+                <!--</div>-->
+                <!--<div class="alert alert-danger" ng-show="errorQuotationExists">-->
+                    <!--<strong>Quotation already registered!</strong> Please choose another one.-->
+                <!--</div>-->
+            </div>
+            <div class="col-md-12">
+
+                <div class="form-container table-container">
+                    <form ng-show="!success" name="form" role="form" novalidate
+                          ng-submit=""  class="form-horizontal">
+
+                        <div class="row">
+                            <div class="col-md-8 col-md-offset-2">
+                                <div class="card formcard">
+
+                                    <div class="card-content">
+
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label class="control-label">Client<span class="red-star">*</span> </label>
+
+                                                    <select class="form-control " ng-model="selectedRole"  ng-options="">
+                                                        <option value="">Please select Client...</option>
+                                                    </select>
+
+
+
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label class="control-label">Site<span class="red-star">*</span> </label>
+                                                    <!--<input type="text" class="form-control"-->
+                                                    <!--ng-model="selectedRole"-->
+                                                    <!--uib-typeahead="role as role.name for role in userRoles | filter:$viewValue | limitTo:5"-->
+                                                    <!--name="UserRole" ng-minlength="5" ng-maxlength="50" autofocus-->
+                                                    <!--required >-->
+                                                    <select class="form-control " ng-model="selectedRole"  ng-options="">
+                                                        <option value="">Please select Site...</option>
+                                                    </select>
+
+
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label class="control-label">Block<span class="red-star">*</span> </label>
+                                                    <!--<input type="text" class="form-control"-->
+                                                    <!--ng-model="selectedRole"-->
+                                                    <!--uib-typeahead="role as role.name for role in userRoles | filter:$viewValue | limitTo:5"-->
+                                                    <!--name="UserRole" ng-minlength="5" ng-maxlength="50" autofocus-->
+                                                    <!--required >-->
+                                                    <select class="form-control " ng-model="selectedRole"  ng-options="">
+                                                        <option value="">Please select Block...</option>
+                                                    </select>
+
+
+
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label class="control-label">Floor<span class="red-star">*</span> </label>
+                                                    <!--<input type="text" class="form-control"-->
+                                                    <!--ng-model="selectedRole"-->
+                                                    <!--uib-typeahead="role as role.name for role in userRoles | filter:$viewValue | limitTo:5"-->
+                                                    <!--name="UserRole" ng-minlength="5" ng-maxlength="50" autofocus-->
+                                                    <!--required >-->
+                                                    <select class="form-control " ng-model="selectedRole"  ng-options="">
+                                                        <option value="">Please select Floor...</option>
+                                                    </select>
+
+
+
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label class="control-label">Zone<span class="red-star">*</span> </label>
+                                                    <!--<input type="text" class="form-control"-->
+                                                    <!--ng-model="selectedRole"-->
+                                                    <!--uib-typeahead="role as role.name for role in userRoles | filter:$viewValue | limitTo:5"-->
+                                                    <!--name="UserRole" ng-minlength="5" ng-maxlength="50" autofocus-->
+                                                    <!--required >-->
+                                                    <select class="form-control " ng-model="selectedRole"  ng-options="">
+                                                        <option value="">Please select Zone...</option>
+                                                    </select>
+
+
+
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label class="control-label">Feedback Name<span class="red-star">*</span> </label>
+                                                    <!--<input type="text" class="form-control"-->
+                                                    <!--ng-model="selectedRole"-->
+                                                    <!--uib-typeahead="role as role.name for role in userRoles | filter:$viewValue | limitTo:5"-->
+                                                    <!--name="UserRole" ng-minlength="5" ng-maxlength="50" autofocus-->
+                                                    <!--required >-->
+                                                    <select class="form-control " ng-model="selectedRole"  ng-options="">
+                                                        <option value="">Please select Name...</option>
+                                                    </select>
+
+
+
+                                                </div>
+                                            </div>
+                                        </div>
+
+
+
+                                        <div class="row">
+
+                                            <div class="col-md-12 txt-align-rgt">
+                                                <div class="form-group">
+
+                                                    <button class="btn btn-success" type="submit" ng-click="saveRateCard(rateCard)"
+                                                            id="form-button-save" ng-disabled="form.$invalid">
+                                                        <span class="btn-label"><i class="material-icons">check</i></span> Save
+                                                    </button>
+                                                    <button class="btn btn-danger" type="button"
+                                                            ng-click="cancelRateCard()" id="cancel-button">
+                                                        <i class="material-icons">close</i> Cancel
+                                                    </button>
+
+                                                </div>
+                                            </div>
+                                        </div>
+
+
+
+
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class='small-loading hidden' id='FormLoading'>Loading,
+                            saving data...</div>
+
+                        <div class="form-group">
+                            <div id='report-error' class='report-div error bg-danger'
+                                 style="display: none"></div>
+                            <div id='report-success' class='report-div success bg-success'
+                                 style="display: none"></div>
+                        </div>
+
+                    </form>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+
+
+</div>

@@ -19,9 +19,13 @@
 
                <div class="AnsCon">
 
-                   <ion-icon name="ios-checkmark-circle-outline"></ion-icon>
+                   <ion-icon *ngIf="!check" (click)="check=true;close=false" name="ios-checkmark-circle-outline"></ion-icon>
 
-                   <ion-icon name="ios-close-circle-outline"></ion-icon>
+                   <ion-icon *ngIf="check" (click)="check=false"   name="ios-checkmark-circle"></ion-icon>
+
+                   <ion-icon *ngIf="!close"  (click)="close=true;check=false" name="ios-close-circle-outline"></ion-icon>
+
+                   <ion-icon  *ngIf="close" (click)="close=false"  name="ios-close-circle"></ion-icon>
 
                </div>
 
