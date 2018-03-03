@@ -53,6 +53,10 @@ import {DraftedQuotationPage} from "../pages/quotation/draftedQuotations";
 import {SubmittedQuotationPage} from "../pages/quotation/submittedQuotations";
 import {ArchivedQuotationPage} from "../pages/quotation/archivedQuotations";
 import {ViewQuotationPage} from "../pages/quotation/viewQuotation";
+import {FeedbackPage} from "../pages/feedback/feedback";
+import {FeedbackQuestionPage} from "../pages/feedback/feedback-questions";
+
+
 
 import {CreateEmployeePage} from "../pages/employee-list/create-employee";
 import {OneSignal} from "@ionic-native/onesignal";
@@ -109,7 +113,9 @@ import {JobPopoverPage} from "../pages/jobs/job-popover";
       IonSimpleWizard,
     CreateQuotationPage3,
     CreateEmployeePage,
-    JobPopoverPage
+    FeedbackPage,
+    JobPopoverPage,
+    FeedbackQuestionPage
   ],
   imports: [
     BrowserModule,
@@ -161,7 +167,10 @@ import {JobPopoverPage} from "../pages/jobs/job-popover";
       IonSimpleWizard,
     CreateQuotationPage3,
     CreateEmployeePage,
+    FeedbackPage,
+    FeedbackQuestionPage,
     JobPopoverPage
+
 
   ],
   providers: [
