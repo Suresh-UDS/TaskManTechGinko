@@ -296,7 +296,9 @@ public class SchedulerService extends AbstractService {
 					}else if(projId > 0) {
 						overdueAlertSetting = settingRepository.findSettingByKeyAndProjectId(SettingsService.EMAIL_NOTIFICATION_OVERDUE, projId);
 						overdueEmails = settingRepository.findSettingByKeyAndProjectId(SettingsService.EMAIL_NOTIFICATION_OVERDUE_EMAILS, projId);
-						alertEmailIds = overdueEmails.getSettingValue();
+						if(overdueEmails != null) {
+							alertEmailIds = overdueEmails.getSettingValue();
+						}
 					}
 					try {
 						List<Long> pushAlertUserIds = new ArrayList<Long>();
@@ -317,7 +319,7 @@ public class SchedulerService extends AbstractService {
 							long[] pushUserIds = Longs.toArray(pushAlertUserIds);
 							String message = "Site - "+ job.getSite().getName() + ", Job - " + job.getTitle() + ", Status - " + JobStatus.OVERDUE.name() + ", Time - "+ job.getPlannedEndTime();
 							pushService.send(pushUserIds, message); //send push to employee and managers.
-							if(overdueAlertSetting.getSettingValue().equalsIgnoreCase("true")) { //send escalation emails to managers and alert emails
+							if(overdueAlertSetting != null && overdueAlertSetting.getSettingValue().equalsIgnoreCase("true")) { //send escalation emails to managers and alert emails
 								mailService.sendOverdueJobAlert(assignee.getUser(), alertEmailIds, job.getSite().getName(), job.getId(), job.getTitle(), exportResult.getFile());
 								job.setOverDueEmailAlert(true);
 							}
@@ -358,12 +360,14 @@ public class SchedulerService extends AbstractService {
 					if(CollectionUtils.isNotEmpty(reportResults)) {
 							//if report generation needed
 			                log.debug("results exists");
-							if(eodReports.getSettingValue().equalsIgnoreCase("true")) {
+							if(eodReports != null && eodReports.getSettingValue().equalsIgnoreCase("true")) {
 							    log.debug("send report");
 								ExportResult exportResult = new ExportResult();
 								exportResult = exportUtil.writeConsolidatedJobReportToFile(proj.getName(), reportResults, null, exportResult);
 								//send reports in email.
-								mailService.sendJobReportEmailFile(eodReportEmails.getSettingValue(), exportResult.getFile(), null, cal.getTime());
+								if(eodReportEmails != null) {
+									mailService.sendJobReportEmailFile(eodReportEmails.getSettingValue(), exportResult.getFile(), null, cal.getTime());
+								}
 			
 							}
 			
@@ -381,8 +385,8 @@ public class SchedulerService extends AbstractService {
 	//@Scheduled(cron="0 0 10 1/1 * ?")
 	@Scheduled(cron="0 0 19 1/1 * ?")
 	public void attendanceReportSchedule() {
-		Setting attendaceReports = settingRepository.findSettingByKey("email.notification.attedanceReports");
-		Setting attendaceReportEmails = settingRepository.findSettingByKey("email.notification.attendanceReports.emails");
+		Setting attendanceReports = settingRepository.findSettingByKey("email.notification.attedanceReports");
+		Setting attendanceReportEmails = settingRepository.findSettingByKey("email.notification.attendanceReports.emails");
 		Calendar cal = Calendar.getInstance();
 		cal.set(Calendar.HOUR_OF_DAY, 0);
 		cal.set(Calendar.MINUTE, 0);
@@ -398,12 +402,14 @@ public class SchedulerService extends AbstractService {
 			while(siteItr.hasNext()) {
 				Site site = siteItr.next();
 				List<EmployeeAttendanceReport> empAttnList = attendanceRepository.findBySiteId(site.getId(), DateUtil.convertToSQLDate(cal.getTime()), DateUtil.convertToSQLDate(cal.getTime()));
-				if(attendaceReports.getSettingValue().equalsIgnoreCase("true")) {
+				if(attendanceReports != null && attendanceReports.getSettingValue().equalsIgnoreCase("true")) {
 				    log.debug("send report");
 					ExportResult exportResult = new ExportResult();
 					exportResult = exportUtil.writeAttendanceReportToFile(proj.getName(), empAttnList, null, exportResult);
 					//send reports in email.
-					mailService.sendJobReportEmailFile(attendaceReportEmails.getSettingValue(), exportResult.getFile(), null, cal.getTime());
+					if(attendanceReportEmails != null) {
+						mailService.sendJobReportEmailFile(attendanceReportEmails.getSettingValue(), exportResult.getFile(), null, cal.getTime());
+					}
 
 				}
 			}
