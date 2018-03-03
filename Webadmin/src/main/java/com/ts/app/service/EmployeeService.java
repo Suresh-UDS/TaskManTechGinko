@@ -447,6 +447,7 @@ public class    EmployeeService extends AbstractService {
     }
 
     public List<EmployeeDTO> findBySiteId(long userId,long siteId) {
+    		List<EmployeeDTO> employeeDtos = null;
         User user = userRepository.findOne(userId);
         List<Employee> entities = null;
         if(user.getUserRole().getName().equalsIgnoreCase(UserRoleEnum.ADMIN.toValue())) {
@@ -456,7 +457,14 @@ public class    EmployeeService extends AbstractService {
 	    		subEmpIds = findAllSubordinates(user.getEmployee(), subEmpIds);
             entities = employeeRepository.findBySiteIdAndEmpIds(siteId, subEmpIds);
         }
-        return mapperUtil.toModelList(entities, EmployeeDTO.class);
+        //return mapperUtil.toModelList(entities, EmployeeDTO.class);
+		if(CollectionUtils.isNotEmpty(entities)) {
+			employeeDtos = new ArrayList<EmployeeDTO>();
+			for(Employee emp : entities) {
+				employeeDtos.add(mapToModel(emp));
+			}
+		}
+		return employeeDtos;
     }
 
 	public List<EmployeeDTO> findAllEligibleManagers(long empId) {
