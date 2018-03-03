@@ -52,7 +52,7 @@ export class MyApp {
         { title: 'Attendance', component: AttendancePage,active:false,icon:'content_paste',avoid:'TECHNICIAN'},
         { title: 'Rate Card', component: RateCardPage,active:false,icon:'description',avoid:'CLIENT'},
       { title: 'Quotation', component: QuotationPage,active:false,icon:'receipt',avoid:'none'},
-       { title: 'Feedback', component: FeedbackPage,active:false,icon:'receipt',avoid:'none'},
+       { title: 'Feedback', component: FeedbackPage,active:false,icon:'feedback',avoid:'none'},
       // { title: 'Reports', component: ReportsPage,active:false,icon:'trending_up'},
       // { title: 'Logout', component: LogoutPage,active:false,icon:'power_settings_new'}
     ];
