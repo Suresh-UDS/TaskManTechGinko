@@ -256,14 +256,13 @@ Tip 2: you can also add an image using data-image tag
                                 <ion-refresher-content></ion-refresher-content>
                             </ion-refresher>
 
-                            <div *ngIf="overdueCount == 0" class="align-center">
+                            <div *ngIf="overdueCount == 0 || !allJobs" class="align-center">
                                 <ion-card>
                                     <ion-card-content>
                                         No Jobs
                                     </ion-card-content>
                                 </ion-card>
                             </div>
-
 
                             <div  class="white-bg" *ngFor="let job of allJobs; let i = index" >
 
@@ -356,7 +355,7 @@ Tip 2: you can also add an image using data-image tag
                             <ion-refresher-content></ion-refresher-content>
                         </ion-refresher>
 
-                        <div *ngIf="upcomingCount == 0"  class="align-center">
+                        <div *ngIf="upcomingCount == 0 || !allJobs"  class="align-center">
                             <ion-card>
                                 <ion-card-content>
                                     No Jobs
@@ -450,7 +449,7 @@ Tip 2: you can also add an image using data-image tag
                             <ion-refresher-content></ion-refresher-content>
                         </ion-refresher>
 
-                        <div *ngIf="completeCount == 0"  class="align-center">
+                        <div *ngIf="completeCount == 0 || !allJobs"  class="align-center">
                             <ion-card>
                                 <ion-card-content>
                                     No Jobs
