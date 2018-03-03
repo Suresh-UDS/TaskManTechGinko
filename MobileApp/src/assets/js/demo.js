@@ -640,7 +640,16 @@ demo = {
                 type: "success"
             }).catch(swal.noop)
 
-        } else if (type == 'warning-message-and-confirmation') {
+        }else if (type == 'feedback-success') {
+              swal({
+                  title: title,
+                  text: txt,
+                  buttonsStyling: false,
+                  confirmButtonClass: "btn btn-success",
+                  type: "success"
+              }).catch(swal.noop)
+
+         } else if (type == 'warning-message-and-confirmation') {
             swal({
                 title: title,
                 text: txt,
