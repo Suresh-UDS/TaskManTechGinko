@@ -13,7 +13,8 @@ export class FeedbackQuestionPage {
   userId:any;
   employeeId: any;
   sites:any;
-
+   check=false;
+   close=false;
 
   constructor(public navCtrl: NavController,public myService:authService,public component:componentService, private siteService: SiteService) {
 
