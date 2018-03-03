@@ -58,6 +58,19 @@ angular.module('timeSheetApp')
                 return $http.post('http://ec2-52-77-216-21.ap-southeast-1.compute.amazonaws.com:8000/api/site/location?'+'userId='+userId+'&siteId='+siteId+'&lat='+lat+'&lng='+lng).then(function (response) {
                     return response.data
                 })
+            }, 
+            importSiteFile: function(file){
+            	var fileFormData = new FormData();
+        		fileFormData.append('siteFile', file);
+            	return $http.post('api/site/import', fileFormData, {
+                    transformRequest: angular.identity,
+                    headers: {'Content-Type': undefined}
+     
+                }).then(function (response) {
+            			return response.data;
+                });
+        		
+            
             }
         };
     });
