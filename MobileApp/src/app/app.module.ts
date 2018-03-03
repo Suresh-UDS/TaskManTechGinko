@@ -55,6 +55,7 @@ import {ArchivedQuotationPage} from "../pages/quotation/archivedQuotations";
 import {ViewQuotationPage} from "../pages/quotation/viewQuotation";
 import {FeedbackPage} from "../pages/feedback/feedback";
 import {FeedbackQuestionPage} from "../pages/feedback/feedback-questions";
+import {InitFeedbackPage} from "../pages/feedback/init-feedback";
 
 
 
@@ -115,7 +116,8 @@ import {JobPopoverPage} from "../pages/jobs/job-popover";
     CreateEmployeePage,
     FeedbackPage,
     JobPopoverPage,
-    FeedbackQuestionPage
+    FeedbackQuestionPage,
+    InitFeedbackPage
   ],
   imports: [
     BrowserModule,
@@ -169,9 +171,8 @@ import {JobPopoverPage} from "../pages/jobs/job-popover";
     CreateEmployeePage,
     FeedbackPage,
     FeedbackQuestionPage,
+    InitFeedbackPage,
     JobPopoverPage
-
-
   ],
   providers: [
     StatusBar,

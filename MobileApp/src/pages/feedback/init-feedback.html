@@ -1,0 +1,70 @@
+<ion-header>
+  <ion-navbar>
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>Initiate Feedback</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content>
+
+   <div class="InitFeedbackCon">
+
+        <div class="InputCon">
+
+            <ion-list>
+                <ion-item>
+                    <ion-label>Project</ion-label>
+                    <ion-select>
+                        <ion-option value="p1">Project 1</ion-option>
+                        <ion-option value="p2">Project 2</ion-option>
+                    </ion-select>
+                </ion-item>
+                <ion-item>
+                    <ion-label>Site</ion-label>
+                    <ion-select>
+                        <ion-option value="s1">Site 1</ion-option>
+                        <ion-option value="s2">Site 2</ion-option>
+                    </ion-select>
+                </ion-item>
+                <ion-item>
+                    <ion-label>Block</ion-label>
+                    <ion-select>
+                        <ion-option value="b1">Block 1</ion-option>
+                        <ion-option value="b2">Block 2</ion-option>
+                    </ion-select>
+                </ion-item>
+                <ion-item>
+                    <ion-label>Floor</ion-label>
+                    <ion-select>
+                        <ion-option value="f1">Floor 1</ion-option>
+                        <ion-option value="f2">Floor 2</ion-option>
+                    </ion-select>
+                </ion-item>
+                <ion-item>
+                    <ion-label>zone</ion-label>
+                    <ion-select>
+                        <ion-option value="z1">zone 1</ion-option>
+                        <ion-option value="z2">zone 2</ion-option>
+                    </ion-select>
+                </ion-item>
+                <ion-item>
+                    <ion-label>Feedback Name</ion-label>
+                    <ion-select>
+                        <ion-option value="n1">Name 1</ion-option>
+                        <ion-option value="n2">Name 2</ion-option>
+                    </ion-select>
+                </ion-item>
+            </ion-list>
+
+
+            <button class="btn btn-warning btn-wd btn-lg" (click)="start()" style="">Submit</button>
+
+        </div>
+
+   </div>
+
+
+
+</ion-content>
