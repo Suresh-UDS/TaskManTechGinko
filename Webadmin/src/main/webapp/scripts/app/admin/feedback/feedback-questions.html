@@ -1,5 +1,5 @@
 
-<div class="" ng-controller="ChecklistController">
+<div class="" ng-controller="FeedbackQueController">
 	<div class="success-message hidden"></div>
 
     <div class="row">
@@ -26,7 +26,7 @@
 
                             <div class="form-group pdng-top15">
                                 <label class="control-label">Title</label>
-                                <input type="text" class="form-control" ng-model="checklist.name">
+                                <input type="text" class="form-control" ng-model="feedbackItem.name">
                             </div>
 
                         </div>
@@ -34,13 +34,13 @@
 
                             <div class="form-group pdng-top15">
                                 <label class="control-label">Questions</label>
-                                <input type="text" class="form-control" ng-model="newChecklistItem.name">
+                                <input type="text" class="form-control" ng-model="newFeedbackItem.question">
                             </div>
 
                         </div>
                         <div class="col-md-3">
 
-                            <button class="btn btn-success margn-top30" ng-click="addChecklistItem()">
+                            <button class="btn btn-success margn-top30" ng-click="addFeedbackItem(newFeedbackItem)">
                                 <span class="btn-label">
                                     <i class="material-icons">add</i>
                                 </span>
@@ -54,7 +54,7 @@
 
 
 
-                    <div class="row col-md-5 addedActionList pdng-top15" ng-hide="!(checklistItems.length > 0)">
+                    <div class="row col-md-5 addedActionList pdng-top15" ng-hide="!(feedbackItems.length > 0)">
 
 
                         <div class="form-group">
@@ -63,8 +63,8 @@
 
                             <ul class="listOfActions list-group">
 
-                                <li class="list-group-item justify-content-between" ng-repeat=" item in checklistItems" ng-bind-html-unsafe="item.text">
-                                    {{item.name}}
+                                <li class="list-group-item justify-content-between" ng-repeat=" item in feedbackItems" ng-bind-html-unsafe="item.text">
+                                    {{item.question}}
                                     <span class="badge badge-default badge-pill" ng-click="removeItem($index)"><i class="material-icons">remove_circle</i></span>
                                 </li>
 
@@ -77,7 +77,7 @@
 
 	                       <div class="col-md-10">
 	                           <div class="form-group">
-	                               <button class="btn btn-success" type="submit" ng-click="saveChecklist()"
+	                               <button class="btn btn-success" type="submit" ng-click="saveFeedback()"
 	                                       id="form-button-save">
 	                                  <span class="btn-label">
 	                        <i class="material-icons">check</i>
@@ -102,7 +102,7 @@
 
 
 
-    <div class="row" ng-init="loadChecklists()">
+    <div class="row" ng-init="loadFeedbackItems()">
 
         <div class="col-md-12">
             <div class="card margin-TB-5 tablecard appModuleCard">
@@ -120,31 +120,18 @@
                             </tr>
                             </thead>
                             <tbody>
-                            <tr>
-                               <td>003</td>
-                                <td>cleaning</td>
+                            <tr ng-repeat=" feedbackMaster in feedbackMasterList">
+                               <td>{{feedbackMaster.id}}</td>
+                                <td>{{feedbackMaster.name}}</td>
                                 <td>
-                                    Questions one
-                                </td>
-                                <td>
-                                    <a  ng-class="{active: $state.includes('admin')}" has-authority="ROLE_ADMIN" ng-click="loadChecklist(checklist.id)"  class="btn btn-simple btn-info"><i class="material-icons">edit</i></a>
-                                </td>
+                                	<label  ng-repeat=" item in feedbackMaster.questions">{{item.question}}</label>
 
-                            </tr>
-                            <tr>
-                                <td>003</td>
-                                <td>cleaning</td>
-                                <td>
-                                    Questions two
                                 </td>
                                 <td>
-                                    <a  ng-class="{active: $state.includes('admin')}" has-authority="ROLE_ADMIN" ng-click="loadChecklist(checklist.id)"  class="btn btn-simple btn-info"><i class="material-icons">edit</i></a>
+                                    <a  ng-class="{active: $state.includes('admin')}" has-authority="ROLE_ADMIN" ng-click="loadFeedback(feedbackMaster.id)"  class="btn btn-simple btn-info"><i class="material-icons">edit</i></a>
                                 </td>
 
                             </tr>
-
-
-
                             </tbody>
                         </table>
 
@@ -154,13 +141,14 @@
         </div>
     </div>
 
-    <div class="card margin-TB-5 txt-align-center" ng-hide="!checklists">
+<!--     <div class="" style="text-align:center;padding: 10px 0;" ng-show="loading">
+        <div loader-css="ball-pulse"></div>
+    </div> -->
+
+    <div class="card margin-TB-5 txt-align-center" ng-hide="!feedbackMasterList">
 
         <div class="card-content">
 
-            <div class="" style="text-align:center;padding: 10px 0;">
-                <div loader-css="ball-pulse"></div>
-            </div>
             <h3>No data Found</h3>
 
         </div>

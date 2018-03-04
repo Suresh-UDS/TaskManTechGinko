@@ -4,7 +4,6 @@ package com.ts.app.domain;
 import java.io.Serializable;
 
 import javax.persistence.Cacheable;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -32,9 +31,6 @@ public class FeedbackQuestion extends AbstractAuditingEntity implements Serializ
     @Column(name = "question")
     private String question;
 
-    @Column(name = "answer")
-    private Boolean answer;
-
     @ManyToOne()
     @JoinColumn(name = "feedback_id")
     private Feedback feedback;
@@ -47,22 +43,6 @@ public class FeedbackQuestion extends AbstractAuditingEntity implements Serializ
         this.id = id;
     }
 
-    public Feedback getFeedback() {
-        return feedback;
-    }
-
-    public void setFeedback(Feedback feedback) {
-        this.feedback = feedback;
-    }
-
-    public Boolean getAnswer() {
-        return answer;
-    }
-
-    public void setAnswer(Boolean answer) {
-        this.answer = answer;
-    }
-
     public String getQuestion() {
         return question;
     }
@@ -70,4 +50,13 @@ public class FeedbackQuestion extends AbstractAuditingEntity implements Serializ
     public void setQuestion(String question) {
         this.question = question;
     }
+
+	public Feedback getFeedback() {
+		return feedback;
+	}
+
+	public void setFeedback(Feedback feedback) {
+		this.feedback = feedback;
+	}
+    
 }

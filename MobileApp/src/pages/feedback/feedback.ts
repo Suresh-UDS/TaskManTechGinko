@@ -24,4 +24,9 @@ export class FeedbackPage {
         this.navCtrl.push(FeedbackQuestionPage);
     }
 
+    skip()
+    {
+        this.navCtrl.push(FeedbackQuestionPage);
+    }
+
 }
