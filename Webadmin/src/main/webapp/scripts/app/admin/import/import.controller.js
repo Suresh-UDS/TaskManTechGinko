@@ -114,6 +114,21 @@ angular.module('timeSheetApp')
         	});
         }
         
+        // upload Site File
+        $scope.uploadSitesFile = function(){
+        	console.log('selected site file -'+ $scope.selectedSiteFile);
+        	SiteComponent.importSiteFile($scope.selectedSiteFile).then(function(data){
+        		console.log(data);
+        		var result = data;
+        		console.log(result.file + ', '+result.status + ',' + result.msg);
+        		
+        	},function(err){
+        		console.log();
+        	});
+        }
+        
+        
+        
         // employee job status by prem
 	    $scope.employeeImportStatus = function() {
         	console.log('$rootScope.employeeImportStatus -'+JSON.stringify($rootScope.employeeImportStatus));

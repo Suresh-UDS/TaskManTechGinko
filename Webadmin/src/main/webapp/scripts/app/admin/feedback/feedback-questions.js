@@ -3,7 +3,7 @@
 angular.module('timeSheetApp')
     .config(function ($stateProvider) {
         $stateProvider
-            .state('feedbackquestions', {
+            .state('feedback-questions', {
                 parent: 'manage',
                 url: '/feedback-questions',
                 controller: 'FeedbackQueController',

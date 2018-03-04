@@ -19,8 +19,8 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 @Entity
 @Table(name = "attendance")
-@Cacheable(true)
-@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+//@Cacheable(true)
+//@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class Attendance extends AbstractAuditingEntity implements Serializable{
 
 	/**
