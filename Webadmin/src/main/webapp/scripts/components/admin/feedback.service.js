@@ -32,7 +32,12 @@ angular.module('timeSheetApp')
                 return $http.post('api/feedbackquestions/search', searchCriteria).then(function (response) {
                     return response.data;
                 });
-            },            
+            },
+            findOneFeedbackMaster: function(id){
+                return $http.get('api/feedbackquestions/'+id).then(function (response) {
+                    return response.data;
+                });
+            },
             createFeedback: function (feedback, callback) {
                 var cb = callback || angular.noop;
                 console.log('Feedback -' + feedback.title);

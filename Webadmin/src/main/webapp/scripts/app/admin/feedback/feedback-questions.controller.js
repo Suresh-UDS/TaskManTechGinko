@@ -46,6 +46,7 @@ angular.module('timeSheetApp')
         };
 
         $scope.loadFeedbackItems = function () {
+        		console.log('called loadFeedbackItems');
         		$scope.search();
         };
 
@@ -58,10 +59,11 @@ angular.module('timeSheetApp')
 
         $scope.loadFeedback = function(id) {
         	console.log('loadFeedback -' + id);
-        	FeedbackComponent.findOne(id).then(function (data) {
-        		$scope.feedbackItem = data;
+        		FeedbackComponent.findOneFeedbackMaster(id).then(function (data) {
+        			$scope.feedbackItem = data;
+        			console.log('Feedback retrieved - ' + JSON.stringify($scope.feedbackItem));
                 for(var i in data.questions) {
-                	$scope.feedbackItems.push(data.items[i]);	
+                	$scope.feedbackItems.push(data.questions[i]);	
                 }
                 
             });
@@ -75,7 +77,7 @@ angular.module('timeSheetApp')
             	$scope.success = 'OK';
             	$scope.feedbackItems = [];
             	$scope.feedbackItem = {};
-            	$scope.loadFeedbackItems();
+            	//$scope.loadFeedbackItems();
             	$location.path('/feedback-questions');
             }).catch(function (response) {
                 $scope.success = null;
@@ -94,7 +96,7 @@ angular.module('timeSheetApp')
         $scope.saveFeedback = function(){
           console.log($scope.feedbackItems);
           $scope.feedbackItem.questions= $scope.feedbackItems;
-          console.log("Before pushing to server");
+          console.log("Before pushing feedback to server");
           console.log($scope.feedbackItem);
           FeedbackComponent.createFeedbackMaster($scope.feedbackItem).then(function(){
             console.log("success");

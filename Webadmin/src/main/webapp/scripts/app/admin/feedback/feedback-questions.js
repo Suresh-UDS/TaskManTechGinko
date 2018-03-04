@@ -9,7 +9,7 @@ angular.module('timeSheetApp')
                 controller: 'FeedbackQueController',
                 data: {
                     authorities: [],
-                    pageTitle: 'Feedback Questions'
+                    pageTitle: 'Feedback Master'
                 },
                 views: {
                     'content@': {
