@@ -1,10 +1,11 @@
 package com.ts.app.web.rest;
 
+import java.util.List;
+
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
-import com.ts.app.web.rest.dto.ChecklistDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -17,13 +18,14 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.codahale.metrics.annotation.Timed;
+import com.ts.app.service.FeedbackService;
 import com.ts.app.service.FeedbackTransactionService;
+import com.ts.app.web.rest.dto.FeedbackDTO;
+import com.ts.app.web.rest.dto.FeedbackMappingDTO;
 import com.ts.app.web.rest.dto.FeedbackTransactionDTO;
 import com.ts.app.web.rest.dto.SearchCriteria;
 import com.ts.app.web.rest.dto.SearchResult;
 import com.ts.app.web.rest.errors.TimesheetException;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/api")
@@ -32,6 +34,9 @@ public class FeedbackResource {
     private final Logger log = LoggerFactory.getLogger(ChecklistResource.class);
 
     @Inject
+    private FeedbackService feedbackService;
+    
+    @Inject
     private FeedbackTransactionService feedbackTransactionService;
 
     @Inject
@@ -39,6 +44,77 @@ public class FeedbackResource {
         this.feedbackTransactionService = feedbackTransactionService;
     }
 
+    @RequestMapping(value = "/feedbackquestions", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+    @Timed
+    public ResponseEntity<?> saveFeedbackQuestions(@Valid @RequestBody FeedbackDTO feedbackDTO, HttpServletRequest request) {
+        log.info("Inside the save feedback -" + feedbackDTO.getName());
+        FeedbackDTO createdFeedback = null;
+        try {
+            createdFeedback  = feedbackService.saveFeebdackQuestions(feedbackDTO);
+        }catch (Exception e) {
+            String msg = "Error while creating feedback, please check the information";
+            throw new TimesheetException(e, feedbackDTO);
+
+        }
+        return new ResponseEntity<>(HttpStatus.CREATED);
+    }
+    
+    @RequestMapping(value = "/feedbackquestions", method = RequestMethod.GET)
+    public List<FeedbackDTO> findAllFeedbackQuestions(@RequestBody SearchCriteria searchCriteria) {
+        log.info("--Invoked FeedbackResource.findAllFeedbackQuestions --");
+        return feedbackService.findAll(searchCriteria.getCurrPage());
+    }
+
+    @RequestMapping(value = "/feedbackquestions/{id}", method = RequestMethod.GET)
+    public FeedbackDTO getFeedbackQuestions(@PathVariable Long id) {
+        return feedbackService.findOne(id);
+    }    
+    
+    @RequestMapping(value = "/feedbackquestions/search",method = RequestMethod.POST)
+    public SearchResult<FeedbackDTO> searchFeedbackQuestions(@RequestBody SearchCriteria searchCriteria) {
+        SearchResult<FeedbackDTO> result = null;
+        if(searchCriteria != null) {
+            result = feedbackService.findBySearchCrieria(searchCriteria);
+        }
+        return result;
+    }   
+    
+    @RequestMapping(value = "/feedbackmapping", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+    @Timed
+    public ResponseEntity<?> saveFeedbackMapping(@Valid @RequestBody FeedbackMappingDTO feedbackMappingDTO, HttpServletRequest request) {
+        log.info("Inside the save feedback -" + feedbackMappingDTO.getId());
+        FeedbackMappingDTO createdFeedback = null;
+        try {
+            createdFeedback  = feedbackService.saveFeebdackMapping(feedbackMappingDTO);
+        }catch (Exception e) {
+            String msg = "Error while creating feedback mapping , please check the information";
+            throw new TimesheetException(e, feedbackMappingDTO);
+
+        }
+        return new ResponseEntity<>(HttpStatus.CREATED);
+    }
+    
+    @RequestMapping(value = "/feedbackmapping", method = RequestMethod.GET)
+    public List<FeedbackMappingDTO> findAllFeedbackMapping(@RequestBody SearchCriteria searchCriteria) {
+        log.info("--Invoked FeedbackResource.findAllFeedbackMapping --");
+        return feedbackService.findAllMapping(searchCriteria.getCurrPage());
+    }
+
+    @RequestMapping(value = "/feedbackmapping/{id}", method = RequestMethod.GET)
+    public FeedbackMappingDTO getFeedbackMapping(@PathVariable Long id) {
+        return feedbackService.findOneMapping(id);
+    }    
+    
+    @RequestMapping(value = "/feedbackmapping/search",method = RequestMethod.POST)
+    public SearchResult<FeedbackMappingDTO> searchFeedbackMapping(@RequestBody SearchCriteria searchCriteria) {
+        SearchResult<FeedbackMappingDTO> result = null;
+        if(searchCriteria != null) {
+            result = feedbackService.findMappingBySearchCrieria(searchCriteria);
+        }
+        return result;
+    }   
+    
+    
     @RequestMapping(value = "/feedback", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
     public ResponseEntity<?> saveFeedback(@Valid @RequestBody FeedbackTransactionDTO feedbackTransactionDTO, HttpServletRequest request) {

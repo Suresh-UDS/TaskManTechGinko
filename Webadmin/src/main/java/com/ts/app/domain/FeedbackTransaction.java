@@ -46,7 +46,7 @@ public class FeedbackTransaction extends AbstractAuditingEntity implements Seria
     
     @ManyToOne()
     @JoinColumn(name = "feedback_id")
-    private Feedback feedback;
+    private FeedbackMapping feedback;
 
     @OneToMany(mappedBy = "feedbackTransaction", cascade = {CascadeType.ALL}, orphanRemoval=true)
     private Set<FeedbackTransactionResult> results;
@@ -142,11 +142,11 @@ public class FeedbackTransaction extends AbstractAuditingEntity implements Seria
 		this.projectName = projectName;
 	}
 
-	public Feedback getFeedback() {
+	public FeedbackMapping getFeedback() {
 		return feedback;
 	}
 
-	public void setFeedback(Feedback feedback) {
+	public void setFeedback(FeedbackMapping feedback) {
 		this.feedback = feedback;
 	}
 

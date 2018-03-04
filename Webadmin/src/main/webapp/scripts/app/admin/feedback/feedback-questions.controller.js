@@ -14,6 +14,8 @@ angular.module('timeSheetApp')
 
         $scope.pages = { currPage : 1};
 
+        $scope.feedbackMasterList;
+
         $scope.feedbackItem=null;
         $scope.newFeedbackItem=null;
         $scope.feedbackItems = [];
@@ -30,7 +32,63 @@ angular.module('timeSheetApp')
             console.log(newItem);
             $scope.feedbackItems.push(newItem);
             $scope.newFeedbackItem = null;
-            console.log($scope.feedbackItem);
+            console.log($scope.feedbackItems);
+        };
+        
+        $scope.removeItem = function(ind) {
+        		$scope.feedbackItems.splice(ind,1);
+        }
+
+        
+        $scope.cancelFeedbackQuestions = function () {
+	        	$scope.feedbackItems = [];
+	        	$scope.feedback = {};
+        };
+
+        $scope.loadFeedbackItems = function () {
+        		$scope.search();
+        };
+
+        $scope.refreshPage = function() {
+        		$scope.clearFilter();
+        		$scope.loadFeedbackItems();
+        }
+
+
+
+        $scope.loadFeedback = function(id) {
+        	console.log('loadFeedback -' + id);
+        	FeedbackComponent.findOne(id).then(function (data) {
+        		$scope.feedbackItem = data;
+                for(var i in data.questions) {
+                	$scope.feedbackItems.push(data.items[i]);	
+                }
+                
+            });
+
+        };
+
+        $scope.updateFeebackQuestions = function () {
+        	console.log('Feedback questions details - ' + JSON.stringify($scope.feedbackItem));
+
+        	FeedbackComponent.updateFeedbackMaster($scope.feedbackItem).then(function () {
+            	$scope.success = 'OK';
+            	$scope.feedbackItems = [];
+            	$scope.feedbackItem = {};
+            	$scope.loadFeedbackItems();
+            	$location.path('/feedback-questions');
+            }).catch(function (response) {
+                $scope.success = null;
+                console.log('Error - '+ response.data);
+                if (response.status === 400 && response.data.message === 'error.duplicateRecordError') {
+                    $scope.errorChecklistExists = true;
+                } else if(response.status === 400 && response.data.message === 'error.validation'){
+                	$scope.validationError = true;
+                	$scope.validationErrorMsg = response.data.description;
+                } else {
+                    $scope.error = 'ERROR';
+                }
+            });
         };
 
         $scope.saveFeedback = function(){
@@ -38,11 +96,24 @@ angular.module('timeSheetApp')
           $scope.feedbackItem.questions= $scope.feedbackItems;
           console.log("Before pushing to server");
           console.log($scope.feedbackItem);
-          FeedbackComponent.createFeedback($scope.feedbackItem).then(function(){
-              console.log("success");
-
-          })
-        };
+          FeedbackComponent.createFeedbackMaster($scope.feedbackItem).then(function(){
+            console.log("success");
+          	$scope.feedbackItems = [];
+	        	$scope.feedbackItem = {};
+	        	$location.path('/feedback-questions');
+	        }).catch(function (response) {
+	            $scope.success = null;
+	            console.log(response.data);
+	            if (response.status === 400 && response.data.message === 'error.duplicateRecordError') {
+	                $scope.errorChecklistExists = true;
+	            } else if(response.status === 400 && response.data.message === 'error.validation'){
+	            	$scope.validationError = true;
+	            	$scope.validationErrorMsg = response.data.description;
+	            } else {
+	                $scope.error = 'ERROR';
+	            }
+	        });              
+          }
 
         $scope.search = function () {
             var currPageVal = ($scope.pages ? $scope.pages.currPage : 1);
@@ -74,13 +145,13 @@ angular.module('timeSheetApp')
                 }
             }
             console.log($scope.searchCriteria);
-            FeedbackComponent.search($scope.searchCriteria).then(function (data) {
-                $scope.feedbackItems = data.transactions;
-                console.log($scope.feedbackItems);
+            FeedbackComponent.searchFeedbackMaster($scope.searchCriteria).then(function (data) {
+                $scope.feedbackMasterList = data.transactions;
+                console.log($scope.feedbackMasterList);
                 $scope.pages.currPage = data.currPage;
                 $scope.pages.totalPages = data.totalPages;
                 $scope.loading = false;
-                if($scope.feedbackItems == null){
+                if($scope.feedbackMasterList == null){
                     $scope.pages.startInd = 0;
                 }else{
                     $scope.pages.startInd = (data.currPage - 1) * 10 + 1;
