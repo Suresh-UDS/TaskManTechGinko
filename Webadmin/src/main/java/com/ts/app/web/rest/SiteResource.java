@@ -1,5 +1,6 @@
 package com.ts.app.web.rest;
 
+import java.util.Calendar;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -16,12 +17,16 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.codahale.metrics.annotation.Timed;
 import com.ts.app.security.SecurityUtils;
 import com.ts.app.service.SiteService;
+import com.ts.app.service.util.ImportUtil;
 import com.ts.app.web.rest.dto.EmployeeDTO;
+import com.ts.app.web.rest.dto.ImportResult;
 import com.ts.app.web.rest.dto.SearchCriteria;
 import com.ts.app.web.rest.dto.SearchResult;
 import com.ts.app.web.rest.dto.SiteDTO;
@@ -40,6 +45,9 @@ public class SiteResource {
 
 	@Inject
 	private SiteService siteService;
+	
+	@Inject
+	private ImportUtil importUtil;
 
 	@Inject
 	public SiteResource(SiteService siteService) {
@@ -130,6 +138,23 @@ public class SiteResource {
         log.info("--Invoked EmployeeResource.findAll --");
         return siteService.findByEmployeeId(employeeId);
     }
+    
+    
+    
+    @RequestMapping(value = "/site/import", method = RequestMethod.POST)
+    public ResponseEntity<ImportResult> importJobData(@RequestParam("siteFile") MultipartFile file){
+    	log.info("--Invoked Site Import --");
+		Calendar cal = Calendar.getInstance();
+		ImportResult result = importUtil.importSiteData(file, cal.getTimeInMillis());
+		return new ResponseEntity<ImportResult>(result,HttpStatus.OK);
+	}
+    
+    
+    
+    
+    
+    
+    
 
 
 }

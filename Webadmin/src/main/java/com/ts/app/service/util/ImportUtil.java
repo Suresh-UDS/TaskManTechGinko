@@ -54,11 +54,13 @@ import com.ts.app.repository.UserRepository;
 import com.ts.app.repository.UserRoleRepository;
 import com.ts.app.security.SecurityUtils;
 import com.ts.app.service.JobManagementService;
+import com.ts.app.service.SiteLocationService;
 import com.ts.app.service.UserService;
 import com.ts.app.web.rest.dto.BaseDTO;
 import com.ts.app.web.rest.dto.ImportResult;
 import com.ts.app.web.rest.dto.JobDTO;
 import com.ts.app.web.rest.dto.ProjectDTO;
+import com.ts.app.web.rest.dto.SiteDTO;
 import com.ts.app.web.rest.dto.UserDTO;
 
 
@@ -107,6 +109,9 @@ public class ImportUtil {
 	
 	@Inject
 	private MapperUtil<AbstractAuditingEntity, BaseDTO> mapperUtil;
+	
+	@Inject
+	private SiteLocationService siteLocationService;
 	
 	public ImportResult importJobData(MultipartFile file, long dateTime) {
         String fileName = dateTime + ".xlsx";
@@ -205,6 +210,9 @@ public class ImportUtil {
 						break;
 					case "client" :
 						importClientFromFile(fileObj.getPath());
+						break;
+					case "site" :
+						importSiteFromFile(fileObj.getPath());
 						break;
 						
 				}
@@ -381,74 +389,28 @@ public class ImportUtil {
 			Sheet datatypeSheet = workbook.getSheetAt(0);
 			Iterator<Row> iterator = datatypeSheet.iterator();
 			int lastRow = datatypeSheet.getLastRowNum();
-			int r = 0;
-			Row projectRow = datatypeSheet.getRow(r);
-			long projectId = (long) projectRow.getCell(2).getNumericCellValue();
-			r++;
-			Row siteRow = datatypeSheet.getRow(r);
-			long siteId = (long) siteRow.getCell(2).getNumericCellValue();
-			r++;
-			Row managerRow = datatypeSheet.getRow(r);
-			String managerId = String.valueOf(managerRow.getCell(2).getNumericCellValue());
-			String supervisorId = String.valueOf(managerRow.getCell(5).getNumericCellValue());
-			r = 4;
+			int r = 1;
 			for (; r < lastRow; r++) {
-				log.debug("Current Row number -" + r);
+				log.debug("Current Row number -" + r+"Last Row : "+lastRow);
 				Row currentRow = datatypeSheet.getRow(r);
-				JobDTO jobDto = new JobDTO();
-				jobDto.setTitle(currentRow.getCell(1).getStringCellValue());
-				jobDto.setDesc(currentRow.getCell(1).getStringCellValue());
-				jobDto.setSiteId(siteId);
-				String location = currentRow.getCell(2).getStringCellValue();
-				Location loc = locationRepo.findByName(location);
-				if (loc == null) {
-					loc = new Location();
-					loc.setName(location);
-					loc.setActive("Y");
-					loc = locationRepo.save(loc);
+				log.debug("cell type =" + currentRow.getCell(0).getStringCellValue()+"\t"+currentRow.getCell(9).getStringCellValue());
+				SiteDTO siteDTO = new SiteDTO();
+				siteDTO.setProjectId(Long.valueOf(currentRow.getCell(0).getStringCellValue()));
+				siteDTO.setName(currentRow.getCell(0).getStringCellValue());
+				siteDTO.setAddressLat(Double.valueOf(currentRow.getCell(7).getStringCellValue()));
+				siteDTO.setAddressLng(Double.valueOf(currentRow.getCell(8).getStringCellValue()));
+				siteDTO.setRadius(Double.valueOf(currentRow.getCell(9).getStringCellValue()));
+				siteDTO.setAddress(currentRow.getCell(6).getStringCellValue());
+				siteDTO.setUserId(SecurityUtils.getCurrentUserId());
+				Site site = mapperUtil.toEntity(siteDTO, Site.class);
+		        site.setActive(Site.ACTIVE_YES);
+				site = siteRepo.save(site);
+				log.debug("Created Information for Site: {}", site);
+				//update the site location by calling site location service
+				siteLocationService.save(site.getUser().getId(), site.getId(), site.getAddressLat(), site.getAddressLng(), site.getRadius());
+				
 				}
-				jobDto.setLocationId(loc.getId());
-				String jobType = currentRow.getCell(3).getStringCellValue();
-				String empId = null;
-				log.debug("cell type =" + currentRow.getCell(5).getCellType());
-				if (currentRow.getCell(5).getCellType() == CellFormatType.NUMBER.ordinal()) {
-					try {
-						empId = String.valueOf(currentRow.getCell(5).getNumericCellValue());
-					} catch (IllegalStateException ise) {
-						empId = currentRow.getCell(5).getStringCellValue();
-					}
-				} else {
-					try {
-						empId = currentRow.getCell(5).getStringCellValue();
-					} catch (IllegalStateException ise) {
-						empId = String.valueOf(currentRow.getCell(5).getNumericCellValue());
-					}
-
-				}
-				log.debug("Employee id =" + empId);
-				Employee emp = employeeRepo.findByEmpId(empId);
-				log.debug("Employee obj =" + emp);
-				if (emp != null) {
-					jobDto.setEmployeeId(emp.getId());
-					jobDto.setEmployeeName(emp.getFullName());
-					jobDto.setStatus(JobStatus.ASSIGNED.name());
-					jobDto.setJobType(JobType.valueOf(jobType));
-					String schedule = currentRow.getCell(6).getStringCellValue();
-					jobDto.setSchedule(schedule);
-					Date startDate = currentRow.getCell(7).getDateCellValue();
-					Date startTime = currentRow.getCell(9).getDateCellValue();
-					Date endDate = currentRow.getCell(8).getDateCellValue();
-					Date endTime = currentRow.getCell(10).getDateCellValue();
-					jobDto.setPlannedStartTime(DateUtil.convertToDateTime(startDate, startTime));
-					jobDto.setPlannedEndTime(DateUtil.convertToDateTime(startDate, endTime));
-					jobDto.setScheduleEndDate(DateUtil.convertToDateTime(endDate, endTime));
-					jobDto.setFrequency(currentRow.getCell(11).getStringCellValue());
-					jobDto.setActive("Y");
-					jobService.saveJob(jobDto);
-
-				}
-			}
-
+			
 		} catch (FileNotFoundException e) {
 			log.error("Error while reading the job data file for import", e);
 		} catch (IOException e) {
