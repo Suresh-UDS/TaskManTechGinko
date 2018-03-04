@@ -14,19 +14,26 @@ export class FeedbackPage {
   userId:any;
   employeeId: any;
   sites:any;
+  userName:any;
 
-  constructor(public navCtrl: NavController,public myService:authService,public component:componentService, private siteService: SiteService) {
+  constructor(public navCtrl: NavController,public myService:authService,public component:componentService, private siteService: SiteService,) {
+
 
   }
 
-    start()
+    start(userName)
     {
-        this.navCtrl.push(FeedbackQuestionPage);
+        console.log("User name");
+        console.log(userName);
+        this.navCtrl.push(FeedbackQuestionPage,{username:userName});
     }
 
     skip()
     {
-        this.navCtrl.push(FeedbackQuestionPage);
+        this.userName = "Anonymous"+new Date().getMilliseconds();
+        console.log("anonymous user");
+        console.log(this.userName);
+        this.navCtrl.push(FeedbackQuestionPage, {userName:this.userName});
     }
 
 }
