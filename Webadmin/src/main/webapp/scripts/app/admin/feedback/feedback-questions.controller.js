@@ -78,7 +78,8 @@ angular.module('timeSheetApp')
             	$scope.feedbackItems = [];
             	$scope.feedbackItem = {};
             	//$scope.loadFeedbackItems();
-            	$location.path('/feedback-questions');
+            	//$location.path('/feedback-questions');
+            	$scope.loadFeedbackItems();
             }).catch(function (response) {
                 $scope.success = null;
                 console.log('Error - '+ response.data);
@@ -102,7 +103,8 @@ angular.module('timeSheetApp')
             console.log("success");
           	$scope.feedbackItems = [];
 	        	$scope.feedbackItem = {};
-	        	$location.path('/feedback-questions');
+	        	//$location.path('/feedback-questions');
+	        	$scope.loadFeedbackItems();
 	        }).catch(function (response) {
 	            $scope.success = null;
 	            console.log(response.data);
