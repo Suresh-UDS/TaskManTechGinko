@@ -1,5 +1,5 @@
 
-<div class="" ng-controller="FeedbackQueController">
+<div class="" ng-controller="FeedbackQueController" ng-init="init()">
 	<div class="success-message hidden"></div>
 
     <div class="row">
@@ -20,6 +20,36 @@
 
                 <div class="card-content">
 
+					<div class="row">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label class="control-label">Client<span class="red-star">*</span> </label>
+
+                                <select class="form-control " ng-model="selectedProject"  ng-change="loadSites()"  ng-options="project as project.name for project in projects">
+                                    <option value="">Please select Client...</option>
+                                </select>
+
+
+
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label class="control-label">Site<span class="red-star">*</span> </label>
+                                <!--<input type="text" class="form-control"-->
+                                <!--ng-model="selectedRole"-->
+                                <!--uib-typeahead="role as role.name for role in userRoles | filter:$viewValue | limitTo:5"-->
+                                <!--name="UserRole" ng-minlength="5" ng-maxlength="50" autofocus-->
+                                <!--required >-->
+                                <select class="form-control " ng-model="selectedSite"   ng-options="site as site.name for site in sites">
+                                    <option value="">Please select Site...</option>
+                                </select>
+
+
+
+                            </div>
+                        </div>                        
+                    </div>
                     <div class="row">
 
                         <div class="col-md-4">
@@ -114,6 +144,8 @@
                             <thead>
                             <tr>
                                 <th>ID</th>
+                                <th>Client</th>
+                                <th>Site</th>
                                 <th>Title</th>
                                 <th>Questions</th>
                                 <th>Edit</th>
@@ -122,6 +154,8 @@
                             <tbody>
                             <tr ng-repeat=" feedbackMaster in feedbackMasterList">
                                <td>{{feedbackMaster.id}}</td>
+                               <td>{{feedbackMaster.projectName}}</td>
+                               <td>{{feedbackMaster.siteName}}</td>
                                 <td>{{feedbackMaster.name}}</td>
                                 <td>
                                 	<label  ng-repeat=" item in feedbackMaster.questions">{{item.question}}</label>

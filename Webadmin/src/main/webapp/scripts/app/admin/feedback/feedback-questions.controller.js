@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('timeSheetApp')
-    .controller('FeedbackQueController', function ($rootScope, $scope, $state, $timeout, FeedbackComponent,EmployeeComponent, $http, $stateParams, $location, JobComponent) {
+    .controller('FeedbackQueController', function ($rootScope, $scope, $state, $timeout, FeedbackComponent,ProjectComponent,SiteComponent, $http, $stateParams, $location) {
         $scope.success = null;
         $scope.error = null;
         $scope.doNotMatch = null;
@@ -21,11 +21,31 @@ angular.module('timeSheetApp')
         $scope.feedbackItems = [];
         $scope.selectedFeedback=null;
         $rootScope.searchCriteriaFeedback = null;
+        
+        $scope.selectedProject;
+        
+        $scope.selectedSite;
+        
 
         $scope.init = function(){
           $scope.loading = true;
+          $scope.loadProjects();          
           $scope.search();
         };
+
+        $scope.loadProjects = function () {
+	    		ProjectComponent.findAll().then(function (data) {
+	            $scope.projects = data;
+	        });
+	    };
+	    
+	    $scope.loadSites = function () {
+	    		ProjectComponent.findSites($scope.selectedProject.id).then(function (data) {
+	    			$scope.selectedSite = null;
+	            $scope.sites = data;
+	        });
+	    };
+
 
         $scope.addFeedbackItem = function(newItem){
             console.log("Adding feedback questions");
@@ -96,6 +116,11 @@ angular.module('timeSheetApp')
 
         $scope.saveFeedback = function(){
           console.log($scope.feedbackItems);
+  		$scope.feedbackItem.projectName = $scope.selectedProject.name;
+		$scope.feedbackItem.projectId = $scope.selectedProject.id;
+		$scope.feedbackItem.siteId = $scope.selectedSite.id;
+		$scope.feedbackItem.siteName = $scope.selectedSite.name;
+          
           $scope.feedbackItem.questions= $scope.feedbackItems;
           console.log("Before pushing feedback to server");
           console.log($scope.feedbackItem);

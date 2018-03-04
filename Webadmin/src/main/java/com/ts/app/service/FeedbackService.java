@@ -75,7 +75,7 @@ public class FeedbackService extends AbstractService {
 			Set<FeedbackQuestion> itemsSet = new HashSet<FeedbackQuestion>();
 			itemsSet.addAll(items);
 			feedback.setQuestions(itemsSet);
-			/*
+			
 			if(feedbackDto.getProjectId() > 0) {
 				Project project = projectRepository.findOne(feedbackDto.getProjectId());
 				feedback.setProject(project);
@@ -88,7 +88,7 @@ public class FeedbackService extends AbstractService {
 			}else {
 				feedback.setSite(null);
 			}
-			*/
+			
 			feedback.setActive(Feedback.ACTIVE_YES);
 	        feedback = feedbackRepository.save(feedback);
 			log.debug("Created Information for Feedback: {}", feedback);
