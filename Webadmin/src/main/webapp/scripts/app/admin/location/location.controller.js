@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('timeSheetApp')
-    .controller('FeedbackSetupController', function ($rootScope, $scope, $state, $timeout, FeedbackComponent,ProjectComponent,SiteComponent, LocationComponent, $http, $stateParams, $location) {
+    .controller('LocationController', function ($rootScope, $scope, $state, $timeout, LocationComponent,ProjectComponent, SiteComponent, $http, $stateParams, $location) {
 
     		$scope.success = null;
         $scope.error = null;
@@ -14,13 +14,7 @@ angular.module('timeSheetApp')
         $timeout(function (){angular.element('[ng-model="name"]').focus();});
 
         $scope.pages = { currPage : 1};
-        
-        $scope.searchCriteria = {
-        		
-        }
 
-        $scope.feedbackMappingList;
-        
         $scope.selectedProject;
         
         $scope.selectedSite;
@@ -31,9 +25,9 @@ angular.module('timeSheetApp')
         
         $scope.selectedZone;
         
-        $scope.selectedFeedbackMaster;
+        $scope.selectedLocation;
         
-        $scope.feedbackMapping ={};
+        $scope.location = {};
         
         $scope.projects;
         
@@ -45,12 +39,12 @@ angular.module('timeSheetApp')
         
         $scope.zones;
         
-        $scope.feedbackMasterList;
+        $scope.locations;
         
         $scope.init = function(){
 	        $scope.loading = true;
 	        $scope.loadProjects();
-	        //$scope.loadFeedbackMasters();
+	        $scope.loadLocations();
 	        //$scope.search();
         };
         
@@ -67,72 +61,39 @@ angular.module('timeSheetApp')
             });
         };
         
-        $scope.loadBlocks = function () {
-        		console.log('selected project -' + $scope.selectedProject.id + ', site -' + $scope.selectedSite.id)
-	    		LocationComponent.findBlocks($scope.selectedProject.id,$scope.selectedSite.id).then(function (data) {
-	    			$scope.selectedBlock = null;
-	            $scope.blocks = data;
-	        });
-	    };
-        
-        $scope.loadFloors = function () {
-	    		LocationComponent.findFloors($scope.selectedProject.id,$scope.selectedSite.id,$scope.selectedBlock).then(function (data) {
-	    			$scope.selectedFloor = null;
-	            $scope.floors = data;
-	        });
-	    };
-	    
-        $scope.loadZones = function () {
-        		console.log('load zones - ' + $scope.selectedProject.id +',' +$scope.selectedSite.id +',' +$scope.selectedBlock +','+$scope.selectedFloor);
-	    		LocationComponent.findZones($scope.selectedProject.id,$scope.selectedSite.id,$scope.selectedBlock, $scope.selectedFloor).then(function (data) {
-	    			$scope.selectedZone = null;
-	            $scope.zones = data;
-	        });
-	    };
-	    
-
-	    $scope.loadFeedbackMasters = function() {
-	    		if($scope.selectedProject) {
-		    		$scope.searchCriteria.projectId = $scope.selectedProject.id; 
-	    		}
-	    		if($scope.selectedSite) {
-		    		$scope.searchCriteria.siteId = $scope.selectedSite.id; 
-	    		}
-	    		if(!$scope.selectedProject && !$scope.selectedSite) {
-	    			$scope.searchCriteria.findAll = true;
-	    		}
-        		FeedbackComponent.searchFeedbackMaster($scope.searchCriteria).then(function(data) {
-        			$scope.feedbackMasterList = data.transactions;
+        $scope.loadLocations = function() {
+        		LocationComponent.findAll().then(function(data) {
+        			$scope.locations = data;
         		})
         }
 
         
         $scope.refreshPage = function() {
     			$scope.clearFilter();
-    			$scope.loadFeedbackItems();
+    			$scope.loadLocations();
         }	
         
-        $scope.loadFeedbackMappings = function () {
-	    		console.log('called loadFeedbackMappings');
+        $scope.loadLocations = function () {
+	    		console.log('called loadLocations');
 	    		$scope.search();
 	    };        
         
-        $scope.loadFeedbackMapping = function(id) {
-        		console.log('loadFeedbackMapping -' + id);
-        		FeedbackComponent.findOneFeedbackMapping(id).then(function (data) {
-        			$scope.feedbackMapping = data;
-        			console.log('Feedback mapping retrieved - ' + JSON.stringify($scope.feedbackMapping));
+        $scope.loadLocation = function(id) {
+        		console.log('loadLocation -' + id);
+        		LocationComponent.findOneLocation(id).then(function (data) {
+        			$scope.location = data;
+        			console.log('Location mapping retrieved - ' + JSON.stringify($scope.location));
                 
             });
 
         };
         
-        $scope.updateFeebackMapping = function () {
-        		console.log('Feedback mapping details - ' + JSON.stringify($scope.feedbackMapping));
+        $scope.updateLocation = function () {
+        		console.log('Location mapping details - ' + JSON.stringify($scope.location));
         		
-        		FeedbackComponent.updateFeedbackMapping($scope.feedbackMapping).then(function () {
+        		LocationComponent.updateLocation($scope.location).then(function () {
 	            	$scope.success = 'OK';
-	            	$location.path('/feedback-setup');
+	            	$location.path('/locations');
 	            }).catch(function (response) {
 	                $scope.success = null;
 	                console.log('Error - '+ response.data);
@@ -147,26 +108,25 @@ angular.module('timeSheetApp')
             });
         };
         
-        $scope.saveFeedbackMapping = function(){
-        		$scope.feedbackMapping.projectName = $scope.selectedProject.name;
-        		$scope.feedbackMapping.projectId = $scope.selectedProject.id;
-        		$scope.feedbackMapping.siteId = $scope.selectedSite.id;
-        		$scope.feedbackMapping.siteName = $scope.selectedSite.name;
-        		$scope.feedbackMapping.block = $scope.selectedBlock;
-        		$scope.feedbackMapping.floor = $scope.selectedFloor;
-        		$scope.feedbackMapping.zone = $scope.selectedZone;
-        		$scope.feedbackMapping.feedback = $scope.selectedFeedback;
-            console.log("Before pushing feedback mapping to server");
-            console.log(JSON.stringify($scope.feedbackMapping));
-            FeedbackComponent.createFeedbackMapping($scope.feedbackMapping).then(function(){
+        $scope.saveLocation = function(){
+        		$scope.location.projectName = $scope.selectedProject.name;
+        		$scope.location.projectId = $scope.selectedProject.id;
+        		$scope.location.siteId = $scope.selectedSite.id;
+        		$scope.location.siteName = $scope.selectedSite.name;
+        		$scope.location.block = $scope.selectedBlock;
+        		$scope.location.floor = $scope.selectedFloor;
+        		$scope.location.zone = $scope.selectedZone;
+            console.log("Before pushing location to server");
+            console.log(JSON.stringify($scope.location));
+            LocationComponent.createLocation($scope.location).then(function(){
             		console.log("success");
-  	        		$location.path('/feedback-setup');
-  	        		//$scope.loadFeedbackItems();
+  	        		$location.path('/locations');
+  	        		//$scope.loadLocationItems();
   	        }).catch(function (response) {
   	            $scope.success = null;
   	            console.log(response.data);
   	            if (response.status === 400 && response.data.message === 'error.duplicateRecordError') {
-  	                $scope.errorFeedbackMappingExists = true;
+  	                $scope.errorLocationExists = true;
   	            } else if(response.status === 400 && response.data.message === 'error.validation'){
   	            	$scope.validationError = true;
   	            	$scope.validationErrorMsg = response.data.description;
@@ -186,33 +146,35 @@ angular.module('timeSheetApp')
             }
 
             $scope.searchCriteria.currPage = currPageVal;
-            console.log('Selected feedback' + $scope.selectedFeedback);
+            console.log('Selected feedback' + $scope.selectedLocation);
 
-            if(!$scope.selectedFeedback) {
-                if($rootScope.searchCriteriaFeedback) {
-                    $scope.searchCriteria = $rootScope.searchCriteriaFeedback;
+            if(!$scope.selectedLocation) {
+                if($rootScope.searchCriteriaLocation) {
+                    $scope.searchCriteria = $rootScope.searchCriteriaLocation;
                 }else {
                     $scope.searchCriteria.findAll = true;
                 }
 
             }else {
-                if($scope.selectedFeedback) {
+                if($scope.selectedProject) {
                     $scope.searchCriteria.findAll = false;
-                    $scope.searchCriteria.feedbackId = $scope.selectedFeedback.id;
-                    $scope.searchCriteria.title = $scope.selectedFeedback.title;
-                    console.log('selected user role id ='+ $scope.selectedFeedback);
+                    $scope.searchCriteria.projectId = $scope.selectedProject.id;
+                    $scope.searchCriteria.siteId = $scope.selectedSite.id;
+                    $scope.searchCriteria.block = $scope.selectedBlock;
+                    $scope.searchCriteria.floor = $scope.selectedFloor;
+                    $scope.searchCriteria.zone = $scope.selectedZone;
                 }else {
-                    $scope.searchCriteria.feedbackId = 0;
+                    $scope.searchCriteria.projectId = 0;
                 }
             }
             console.log($scope.searchCriteria);
-            FeedbackComponent.searchFeedbackMapping($scope.searchCriteria).then(function (data) {
-                $scope.feedbackMappingList = data.transactions;
-                console.log($scope.feedbackMappingList);
+            LocationComponent.search($scope.searchCriteria).then(function (data) {
+                $scope.locations = data.transactions;
+                console.log($scope.locations);
                 $scope.pages.currPage = data.currPage;
                 $scope.pages.totalPages = data.totalPages;
                 $scope.loading = false;
-                if($scope.feedbackMasterList == null){
+                if($scope.locations == null){
                     $scope.pages.startInd = 0;
                 }else{
                     $scope.pages.startInd = (data.currPage - 1) * 10 + 1;
@@ -222,7 +184,7 @@ angular.module('timeSheetApp')
                 $scope.pages.totalCnt = data.totalCount;
                 $scope.hide = true;
             });
-            $rootScope.searchCriteriaFeedback = $scope.searchCriteria;
+            $rootScope.searchCriteriaLocation = $scope.searchCriteria;
             if($scope.pages.currPage == 1) {
                 $scope.firstStyle();
             }
@@ -337,8 +299,8 @@ angular.module('timeSheetApp')
             $scope.search();
         };
         
-        $scope.cancelFeedbackMapping = function () {
-        		$location.path('/feedback-setup');
+        $scope.cancelLocation = function () {
+        		$location.path('/locations');
         };
 
 

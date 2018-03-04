@@ -31,7 +31,7 @@ import com.ts.app.web.rest.errors.TimesheetException;
 @RequestMapping("/api")
 public class FeedbackResource {
 
-    private final Logger log = LoggerFactory.getLogger(ChecklistResource.class);
+    private final Logger log = LoggerFactory.getLogger(FeedbackResource.class);
 
     @Inject
     private FeedbackService feedbackService;

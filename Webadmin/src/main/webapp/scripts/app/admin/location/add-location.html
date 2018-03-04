@@ -28,7 +28,7 @@
                                     <div class="card-content">
 
                                         <div class="row">
-                                            <div class="col-md-6 col-md-offset-3">
+                                            <div class="col-md-6">
                                                 <div class="form-group">
                                                     <label class="control-label">Client<span class="red-star">*</span> </label>
 
@@ -42,7 +42,7 @@
                                             </div>
                                         </div>
                                         <div class="row">    
-                                            <div class="col-md-6 col-md-offset-3">
+                                            <div class="col-md-6">
                                                 <div class="form-group">
                                                     <label class="control-label">Site<span class="red-star">*</span> </label>
                                                     <!--<input type="text" class="form-control"-->
@@ -50,7 +50,7 @@
                                                     <!--uib-typeahead="role as role.name for role in userRoles | filter:$viewValue | limitTo:5"-->
                                                     <!--name="UserRole" ng-minlength="5" ng-maxlength="50" autofocus-->
                                                     <!--required >-->
-                                                    <select class="form-control " ng-model="selectedSite"  ng-change="loadBlocks();loadFeedbackMasters();" ng-options="site as site.name for site in sites">
+                                                    <select class="form-control " ng-model="selectedSite"  ng-options="site as site.name for site in sites">
                                                         <option value="">Please select Site...</option>
                                                     </select>
 
@@ -60,72 +60,36 @@
                                             </div>
                                         </div>
                                         <div class="row">
-                                            <div class="col-md-6 col-md-offset-3">
+                                            <div class="col-md-6">
                                                 <div class="form-group">
                                                     <label class="control-label">Block<span class="red-star">*</span> </label>
-                                                    <!--<input type="text" class="form-control"-->
-                                                    <!--ng-model="selectedRole"-->
-                                                    <!--uib-typeahead="role as role.name for role in userRoles | filter:$viewValue | limitTo:5"-->
-                                                    <!--name="UserRole" ng-minlength="5" ng-maxlength="50" autofocus-->
-                                                    <!--required >-->
-                                                    <select class="form-control " ng-model="selectedBlock" ng-change="loadFloors()"  ng-options="block as block for  block in  blocks">
-                                                        <option value="">Please select Block...</option>
-                                                    </select>
+                                                    <input type="text" class="form-control"
+                                                    ng-model="selectedBlock"
+                                                    name="UserRole" ng-minlength="1" ng-maxlength="50" autofocus
+                                                    required />
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="row">    
-                                            <div class="col-md-6 col-md-offset-3">
+                                            <div class="col-md-6">
                                                 <div class="form-group">
                                                     <label class="control-label">Floor<span class="red-star">*</span> </label>
-                                                    <!--<input type="text" class="form-control"-->
-                                                    <!--ng-model="selectedRole"-->
-                                                    <!--uib-typeahead="role as role.name for role in userRoles | filter:$viewValue | limitTo:5"-->
-                                                    <!--name="UserRole" ng-minlength="5" ng-maxlength="50" autofocus-->
-                                                    <!--required >-->
-                                                    <select class="form-control " ng-model="selectedFloor" ng-change="loadZones()"  ng-options="floor as floor for floor in floors">
-                                                        <option value="">Please select Floor...</option>
-                                                    </select>
-
-
-
+                                                    <input type="text" class="form-control"
+                                                    ng-model="selectedFloor"
+                                                    name="UserRole" ng-minlength="1" ng-maxlength="50" autofocus
+                                                    required />
                                                 </div>
                                             </div>
                                         </div>
 
                                         <div class="row">
-                                            <div class="col-md-6 col-md-offset-3">
+                                            <div class="col-md-6">
                                                 <div class="form-group">
                                                     <label class="control-label">Zone<span class="red-star">*</span> </label>
-                                                    <!--<input type="text" class="form-control"-->
-                                                    <!--ng-model="selectedRole"-->
-                                                    <!--uib-typeahead="role as role.name for role in userRoles | filter:$viewValue | limitTo:5"-->
-                                                    <!--name="UserRole" ng-minlength="5" ng-maxlength="50" autofocus-->
-                                                    <!--required >-->
-                                                    <select class="form-control " ng-model="selectedZone"  ng-options="zone as zone for zone in zones">
-                                                        <option value="">Please select Zone...</option>
-                                                    </select>
-
-
-
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="row">    
-                                            
-                                            <div class="col-md-6 col-md-offset-3">
-                                                <div class="form-group">
-                                                    <label class="control-label">Feedback Name<span class="red-star">*</span> </label>
-                                                    <!--<input type="text" class="form-control"-->
-                                                    <!--ng-model="selectedRole"-->
-                                                    <!--uib-typeahead="role as role.name for role in userRoles | filter:$viewValue | limitTo:5"-->
-                                                    <!--name="UserRole" ng-minlength="5" ng-maxlength="50" autofocus-->
-                                                    <!--required >-->
-                                                    <select class="form-control " ng-model="selectedFeedback"  ng-options="feedbackMaster as feedbackMaster.name for feedbackMaster in feedbackMasterList">
-                                                        <option value="">Please select feedback name...</option>
-                                                    </select>
-
-
+                                                    <input type="text" class="form-control"
+                                                    ng-model="selectedZone"
+                                                    name="UserRole" ng-minlength="1" ng-maxlength="50" autofocus
+                                                    required />
 
                                                 </div>
                                             </div>
@@ -135,15 +99,15 @@
 
                                         <div class="row">
 
-                                            <div class="col-md-9 txt-align-rgt">
+                                            <div class="col-md-6 txt-align-rgt">
                                                 <div class="form-group">
 
-                                                    <button class="btn btn-success" type="submit" ng-click="saveFeedbackMapping()"
+                                                    <button class="btn btn-success" type="submit" ng-click="saveLocation()"
                                                             id="form-button-save" ng-disabled="form.$invalid">
                                                         <span class="btn-label"><i class="material-icons">check</i></span> Save
                                                     </button>
                                                     <button class="btn btn-danger" type="button"
-                                                            ng-click="cancelFeedbackMapping()" id="cancel-button">
+                                                            ng-click="cancelLocation()" id="cancel-button">
                                                         <i class="material-icons">close</i> Cancel
                                                     </button>
 

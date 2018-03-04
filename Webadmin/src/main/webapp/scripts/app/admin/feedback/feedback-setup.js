@@ -9,7 +9,7 @@ angular.module('timeSheetApp')
                 controller: 'FeedbackSetupController',
                 data: {
                     authorities: [],
-                    pageTitle: 'Feedback Setup'
+                    pageTitle: 'Feedback Mapping'
                 },
                 views: {
                     'content@': {
@@ -27,7 +27,7 @@ angular.module('timeSheetApp')
                 controller: 'FeedbackSetupController',
                 data: {
                     authorities: [],
-                    pageTitle: 'Add Feedback Setup'
+                    pageTitle: 'Add Feedback Mapping'
                 },
                 views: {
                     'content@': {
