@@ -56,6 +56,22 @@ export class SiteService {
         )
     }
 
+    findBlock(siteId): Observable<any>{
+        return this.http.get(this.config.Url+'api/block/'+siteId).map(
+            response=>{
+                return response;
+            }
+        )
+    }
+
+    findZone(blockId): Observable<any>{
+        return this.http.get(this.config.Url+'api/zone/'+blockId).map(
+            response=>{
+                return response;
+            }
+        )
+    }
+
     searchSiteEmployee(siteId):Observable<any>{
         return this.http.get(this.config.Url+'api/employee/site/'+siteId).map(
             response=>{
@@ -81,5 +97,6 @@ export class SiteService {
             }
         )
     }
+
 
 }
