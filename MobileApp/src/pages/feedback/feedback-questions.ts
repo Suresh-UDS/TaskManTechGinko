@@ -1,8 +1,9 @@
 import { Component } from '@angular/core';
-import { NavController } from 'ionic-angular';
+import {NavController, NavParams} from 'ionic-angular';
 import {authService} from "../service/authService";
 import {componentService} from "../service/componentService";
 import {SiteService} from "../service/siteService";
+import {FeedbackService} from "../service/feedbackService";
 
 @Component({
   selector: 'page-feedback-questions',
@@ -16,7 +17,21 @@ export class FeedbackQuestionPage {
    check=false;
    close=false;
 
-  constructor(public navCtrl: NavController,public myService:authService,public component:componentService, private siteService: SiteService) {
+  constructor(public navCtrl: NavController,public myService:authService,public feedbackService:FeedbackService,public component:componentService, private siteService: SiteService, private navParams:NavParams) {
+    console.log("username from feedback");
+    console.log(this.navParams.data.userName);
+    var search ={};
+    this.feedbackService.getAllFeedbackQuestions(search).subscribe(
+        response=>{
+
+            console.log(response);
+
+        },
+        error=>
+        {
+            console.log(error);
+        }
+    )
 
   }
 
