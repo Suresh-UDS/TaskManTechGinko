@@ -132,6 +132,11 @@ angular.module('timeSheetApp')
                 return $http.post('api/feedback/search', searchCriteria).then(function (response) {
                     return response.data;
                 });
+            },
+            reports: function(searchCriteria) {
+                return $http.post('api/feedback/reports', searchCriteria).then(function (response) {
+                    return response.data;
+                });
             }
         };
     });

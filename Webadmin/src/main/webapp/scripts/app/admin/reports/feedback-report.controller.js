@@ -1,33 +1,33 @@
 'use strict';
 
 angular.module('timeSheetApp')
-    .controller('FeedbackReportController', function ($rootScope, $scope, $state, $timeout, ProjectComponent, SiteComponent, EmployeeComponent,AttendanceComponent, $http,$stateParams,$location,$interval) {
+    .controller('FeedbackReportController', function ($rootScope, $scope, $state, $timeout, ProjectComponent, SiteComponent, LocationComponent,$http,$stateParams,$location,$interval) {
         $scope.success = null;
         $scope.error = null;
         $scope.errorMessage = null;
         $scope.doNotMatch = null;
         $scope.errorEmployeeExists = null;
 
-        $scope.employeeDesignations = ["MD","Operations Manger","Supervisor"]
-
         $timeout(function (){angular.element('[ng-model="name"]').focus();});
 
         $scope.pages = { currPage : 1};
-
-        $scope.selectedEmployee;
-
+        
+        $scope.searchCriteria = {
+        		
+        }
+        
+        $scope.feedbackList;
+        
         $scope.selectedProject;
-
+        
         $scope.selectedSite;
-
-        $scope.existingEmployee;
-
-        $scope.selectedManager;
-
-        $scope.selectedAttendance;
-
-        $scope.searchCriteriaAttendance;
-
+        
+        $scope.selectedBlock;
+        
+        $scope.selectedFloor;
+        
+        $scope.selectedZone;
+        
         $scope.now = new Date()
 
         $scope.initCalender = function(){
@@ -50,121 +50,95 @@ angular.module('timeSheetApp')
 
         });
 
-        $scope.loadAllAttendances = function () {
-        	if(!$scope.allAttendances) {
-            	AttendanceComponent.findAll().then(function (data) {
-            	console.log(data)
-            		$scope.allAttendances = data;
-            	// $scope.attendanceSites();
-            	$scope.employeeSearch();
-            	})
-        	}
-        }
-
-        $scope.loadAttendances = function () {
-//        	if($rootScope.searchCriteriaEmployees) {
-//        		$scope.search();
-//        	}else {
-//            	EmployeeComponent.findAll().then(function (data) {
-//                    $scope.employees = data;
-//                });
-//        	}
-            $scope.search();
+        $scope.init = function(){
+	        $scope.loading = true;
+	        $scope.loadProjects();
         };
-
-        $scope.attendanceSites = function () {
-            SiteComponent.findAll().then(function (data) {
-                console.log("site attendances");
-                $scope.allSites = data;
-            });
-        };
-
-        $scope.employeeSearch = function () {
-            if(!$scope.allEmployees) {
-                EmployeeComponent.findAll().then(function (data) {
-                    console.log(data)
-                    $scope.allEmployees = data;
-                })
-            }
-        };
-
-        $scope.allSites=[{name:'UDS'},{name:'Zappy'}]
-
-
-
-       $scope.refreshPage = function() {
-           $scope.clearFilter();
-           $scope.loadEmployees();
-       }
-
-
-        $scope.loadAttendance = function() {
-        	AttendanceComponent.findOne($stateParams.id).then(function (data) {
-                $scope.attendance = data;
-            });
-
-        };
-
-
-        $scope.search = function () {
-        	var reportUid = $stateParams.uid;
-            console.log($scope.datePickerDate);
-        	var currPageVal = ($scope.pages ? $scope.pages.currPage : 1);
-        	if(!$scope.searchCriteria) {
-            	var searchCriteria = {
-            			currPage : currPageVal
-            	}
-            	$scope.searchCriteria = searchCriteria;
-        	}
-    		console.log('criteria in root scope -'+JSON.stringify($rootScope.searchCriteriaAttendances));
-    		console.log('criteria in scope -'+JSON.stringify($scope.searchCriteria));
-
-        	console.log('Selected  project -' + $scope.selectedEmployee + ", " + $scope.selectedProject +" , "+ $scope.selectedSite);
-        	console.log('Selected  date range -' + $scope.checkInDateTimeFrom + ", " + $scope.checkInDateTimeTo);
-        	$scope.searchCriteria.currPage = currPageVal;
-        	$scope.searchCriteria.findAll = true;
-        	if($scope.selectedDateFrom){
-                $scope.searchCriteria.checkInDateTimeFrom = $scope.selectedDateFrom;
-                $scope.searchCriteria.findAll = false;
-                console.log("From date found");
-                console.log($scope.searchCriteria.checkInDateTimeFrom)
-
-
-            }else{
-                $scope.searchCriteria.checkInDateTimeFrom = new Date();
-                console.log("From date not found")
-                console.log($scope.searchCriteria.checkInDateTimeFrom)
-
+        
+        $scope.loadProjects = function () {
+	    		ProjectComponent.findAll().then(function (data) {
+	            $scope.projects = data;
+	        });
+	    };
+	    
+	    $scope.loadSites = function () {
+	    		ProjectComponent.findSites($scope.selectedProject.id).then(function (data) {
+	    			$scope.selectedSite = null;
+	            $scope.sites = data;
+	        });
+	    };
+	    
+	    $scope.loadBlocks = function () {
+	    		console.log('selected project -' + $scope.selectedProject.id + ', site -' + $scope.selectedSite.id)
+	    		LocationComponent.findBlocks($scope.selectedProject.id,$scope.selectedSite.id).then(function (data) {
+	    			$scope.selectedBlock = null;
+	            $scope.blocks = data;
+	        });
+	    };
+	    
+	    $scope.loadFloors = function () {
+	    		LocationComponent.findFloors($scope.selectedProject.id,$scope.selectedSite.id,$scope.selectedBlock).then(function (data) {
+	    			$scope.selectedFloor = null;
+	            $scope.floors = data;
+	        });
+	    };
+	    
+	    $scope.loadZones = function () {
+	    		console.log('load zones - ' + $scope.selectedProject.id +',' +$scope.selectedSite.id +',' +$scope.selectedBlock +','+$scope.selectedFloor);
+	    		LocationComponent.findZones($scope.selectedProject.id,$scope.selectedSite.id,$scope.selectedBlock, $scope.selectedFloor).then(function (data) {
+	    			$scope.selectedZone = null;
+	            $scope.zones = data;
+	        });
+	    };       
+	    
+	    $scope.refreshPage = function() {
+			$scope.clearFilter();
+			$scope.loadFeedbacks();
+	    }	
+	    
+	    $scope.loadFeedbacks = function () {
+	    		console.log('called loadFeedbacks');
+	    		$scope.search();
+	    };      
+	    
+	    $scope.search = function () {
+            var currPageVal = ($scope.pages ? $scope.pages.currPage : 1);
+            if(!$scope.searchCriteria) {
+                var searchCriteria = {
+                    currPage : currPageVal
+                }
+                $scope.searchCriteria = searchCriteria;
             }
 
-            if($scope.selectedDateTo){
-                $scope.searchCriteria.checkInDateTimeTo = $scope.selectedDateTo;
-                $scope.searchCriteria.findAll = false;
-                console.log("To date found")
-                console.log($scope.searchCriteria.checkInDateTimeTo)
+            $scope.searchCriteria.currPage = currPageVal;
+            console.log('Selected feedback' + $scope.selectedLocation);
 
-            }else{
-                $scope.searchCriteria.checkInDateTimeTo= new Date();
-                console.log("To date not found")
-                console.log($scope.searchCriteria.checkInDateTimeTo)
-            }
+            if(!$scope.selectedProject) {
+                if($rootScope.searchCriteriaFeedback) {
+                    $scope.searchCriteria = $rootScope.searchCriteriaFeedback;
+                }else {
+                    $scope.searchCriteria.findAll = true;
+                }
 
-        	if($scope.selectedEmployee){
-        	    console.log($scope.selectedEmployee);
-                $scope.searchCriteria.employeeEmpId = $scope.selectedEmployee.empId;
-                $scope.searchCriteria.findAll = false;
+            }else {
+                if($scope.selectedProject) {
+                    $scope.searchCriteria.findAll = false;
+                    $scope.searchCriteria.projectId = $scope.selectedProject.id;
+                    $scope.searchCriteria.siteId = $scope.selectedSite.id;
+                    $scope.searchCriteria.block = $scope.selectedBlock;
+                    $scope.searchCriteria.floor = $scope.selectedFloor;
+                    $scope.searchCriteria.zone = $scope.selectedZone;
+                }else {
+                    $scope.searchCriteria.projectId = 0;
+                }
             }
-            if($scope.selectedSite){
-        	    $scope.searchCriteria.siteId = $scope.selectedSite.id;
-                $scope.searchCriteria.findAll = false;
-            }
-        	console.log(JSON.stringify($scope.searchCriteria));
-        	AttendanceComponent.search($scope.searchCriteria, reportUid).then(function (data) {
-                $scope.attendancesData = data.transactions;
-                console.log('Attendance search result list -' + $scope.attendancesData);
+            console.log($scope.searchCriteria);
+            FeedbackComponent.search($scope.searchCriteria).then(function (data) {
+                $scope.feedbackList = data.transactions;
                 $scope.pages.currPage = data.currPage;
                 $scope.pages.totalPages = data.totalPages;
-                if($scope.employees == null){
+                $scope.loading = false;
+                if($scope.feedbackList == null){
                     $scope.pages.startInd = 0;
                 }else{
                     $scope.pages.startInd = (data.currPage - 1) * 10 + 1;
@@ -172,197 +146,125 @@ angular.module('timeSheetApp')
 
                 $scope.pages.endInd = data.totalCount > 10  ? (data.currPage) * 10 : data.totalCount ;
                 $scope.pages.totalCnt = data.totalCount;
-            	$scope.hide = true;
+                $scope.hide = true;
             });
-        	$rootScope.searchCriteriaAttendances = $scope.searchCriteria;
-    		console.log('criteria in root scope -'+JSON.stringify($rootScope.searchCriteriaAttendances));
+            $rootScope.searchCriteriaFeedback = $scope.searchCriteria;
             if($scope.pages.currPage == 1) {
-                        	$scope.firstStyle();
-                    	}
+                $scope.firstStyle();
+            }
         };
-
-
-
-
+        
         $scope.first = function() {
-        	if($scope.pages.currPage > 1) {
-            	$scope.pages.currPage = 1;
-            	$scope.firstStyle();
-            	$scope.search();
-        	}
+            if($scope.pages.currPage > 1) {
+                $scope.pages.currPage = 1;
+                $scope.firstStyle();
+                $scope.search();
+            }
         };
 
         $scope.firstStyle = function() {
-       	 var ele = angular.element('#first');
-    	 ele.addClass('disabledLink');
-    	 ele = angular.element('#previous');
-    	 ele.addClass('disabledLink');
-    	 if($scope.pages.totalPages > 1) {
- 	       	 var ele = angular.element('#next');
-	    	 ele.removeClass('disabledLink');
-	    	 ele = angular.element('#last');
-	    	 ele.removeClass('disabledLink');
-    	 }
+            var first = document.getElementById('#first');
+            var ele = angular.element(first);
+            ele.addClass('disabledLink');
+            var previous = document.getElementById('#previous');
+            ele = angular.element(previous);
+            ele.addClass('disabledLink');
+            if($scope.pages.totalPages > 1) {
+                var nextSitePage = document.getElementById('#next');
+                var ele = angular.element(next);
+                ele.removeClass('disabledLink');
+                var lastSitePage = document.getElementById('#lastSitePage');
+                ele = angular.element(lastSitePage);
+                ele.removeClass('disabledLink');
+            }
 
         }
 
         $scope.previous = function() {
-        	if($scope.pages.currPage > 1) {
-            	$scope.pages.currPage = $scope.pages.currPage - 1;
-            	if($scope.pages.currPage == 1) {
-	       	       	 var ele = angular.element('#first');
-	    	    	 ele.addClass('disabled');
-	    	    	 ele = angular.element('#previous');
-	    	    	 ele.addClass('disabled');
-            	}
-     	       	 var ele = angular.element('#next');
-    	    	 ele.removeClass('disabled');
-    	    	 ele = angular.element('#last');
-    	    	 ele.removeClass('disabled');
-	    		$scope.search();
-        	}
+            console.log("Calling previous")
 
-        };
-
-        $scope.loadImagesNew = function( image) {
-            var eleId = 'photoOutImg';
-            var ele = document.getElementById(eleId);
-            ele.setAttribute('src',image);
-
-        };
-
-        $scope.initMap = function(container, latIn, lngIn, containerOut, latOut, lngOut) {
-            // Create a map object and specify the DOM element for display.
-            var myLatLng = {lat: latIn, lng: lngIn};
-            var myLatLngOut = {lat:latOut, lng:lngOut};
-            console.log(myLatLng);
-            console.log(myLatLngOut);
-            console.log("Container");
-            console.log(document.getElementById(container));
-            if (latIn == 0 && lngIn == 0) {
-                var mapInEle = document.getElementById(container);
-                mapInEle.innerHTML = '<img id="mapInImg" width="250" height="250" src="//placehold.it/250x250" class="img-responsive">';
-            } else {
-
-                var mapIn = new google.maps.Map(document.getElementById(container), {
-                    center: myLatLng,
-                    scrollwheel: false,
-                    streetViewControl: false,
-                    zoom: 14,
-                    mapTypeControlOptions: {
-                        mapTypeIds: []
-                    },
-                    mapTypeId: google.maps.MapTypeId.ROADMAP,
-                    zoomControl: true,
-                    draggable: true
-                });
-
-                // Create a marker and set its position.
-                var marker = new google.maps.Marker({
-                    map: mapIn,
-                    position: myLatLng,
-                    title: 'Checked-in',
-                    draggable: false
-                });
-
+            if($scope.pages.currPage > 1) {
+                $scope.pages.currPage = $scope.pages.currPage - 1;
+                if($scope.pages.currPage == 1) {
+                    var first = document.getElementById('#first');
+                    var ele = angular.element(first);
+                    ele.addClass('disabled');
+                    var previous = document.getElementById('#previous');
+                    ele = angular.element(previous);
+                    ele.addClass('disabled');
+                }
+                var next = document.getElementById('#next');
+                var ele = angular.element(next);
+                ele.removeClass('disabled');
+                var lastSitePage = document.getElementById('#last');
+                ele = angular.element(last);
+                ele.removeClass('disabled');
+                $scope.search();
             }
 
-            if (latOut == 0 && lngOut == 0) {
-                var mapInEle = document.getElementById(containerOut);
-                mapInEle.innerHTML = '<img id="mapInImg" width="250" height="250" src="//placehold.it/250x250" class="img-responsive">';
-            } else {
-
-                var mapOut = new google.maps.Map(document.getElementById(containerOut), {
-                    center: myLatLngOut,
-                    scrollwheel: false,
-                    streetViewControl: false,
-                    zoom: 14,
-                    mapTypeControlOptions: {
-                        mapTypeIds: []
-                    },
-                    mapTypeId: google.maps.MapTypeId.ROADMAP,
-                    zoomControl: true,
-                    draggable: true
-                });
-
-                // Create a marker and set its position.
-                var marker = new google.maps.Marker({
-                    map: mapOut,
-                    position: myLatLngOut,
-                    title: 'checked-out',
-                    draggable: false
-                });
-            }
-
-
         };
-
-        $scope.newInitMap = function( container, latIn, lngIn, containerOut, latOut, lngOut){
-            window.setTimeout(function( ){
-                    $scope.initMap(container, latIn, lngIn, containerOut, latOut, lngOut)
-                },1000
-            )
-        }
 
         $scope.next = function() {
-        	if($scope.pages.currPage < $scope.pages.totalPages) {
-            	$scope.pages.currPage = $scope.pages.currPage + 1;
-            	if($scope.pages.currPage == $scope.pages.totalPages) {
-	       	       	 var ele = angular.element('#next');
-	    	    	 ele.addClass('disabled');
-	    	    	 ele = angular.element('#last');
-	    	    	 ele.addClass('disabled');
-            	}
-     	       	 var ele = angular.element('#first');
-    	    	 ele.removeClass('disabled');
-    	    	 ele = angular.element('#previous');
-    	    	 ele.removeClass('disabled');
-	    		$scope.search();
-        	}
+            console.log("Calling next")
+
+            if($scope.pages.currPage < $scope.pages.totalPages) {
+                $scope.pages.currPage = $scope.pages.currPage + 1;
+                if($scope.pages.currPage == $scope.pages.totalPages) {
+                    var next = document.getElementById('#next');
+                    var ele = angular.element(next);
+                    ele.addClass('disabled');
+                    var last = document.getElementById('#last');
+                    ele = angular.element(last);
+                    ele.addClass('disabled');
+                }
+                var first = document.getElementById('#first')
+                var ele = angular.element(first);
+                ele.removeClass('disabled');
+                var previous = document.getElementById('#previous')
+                ele = angular.element(previous);
+                ele.removeClass('disabled');
+                $scope.search();
+            }
 
         };
 
         $scope.last = function() {
-        	if($scope.pages.currPage < $scope.pages.totalPages) {
-            	$scope.pages.currPage = $scope.pages.totalPages;
-            	if($scope.pages.currPage == $scope.pages.totalPages) {
-	       	       	 var ele = angular.element('#next');
-	    	    	 ele.addClass('disabled');
-	    	    	 ele = angular.element('#last');
-	    	    	 ele.addClass('disabled');
-            	}
-      	       	var ele = angular.element('#first');
-    	    	ele.removeClass('disabled');
-    	    	ele = angular.element('#previous');
-    	    	ele.removeClass('disabled');
-    	    	$scope.search();
-        	}
+            console.log("Calling last")
+            if($scope.pages.currPage < $scope.pages.totalPages) {
+                $scope.pages.currPage = $scope.pages.totalPages;
+                if($scope.pages.currPage == $scope.pages.totalPages) {
+                    var next = document.getElementById('#next');
+                    var ele = angular.element(next);
+                    ele.addClass('disabled');
+                    var last = document.getElementById('#last');
+                    ele = angular.element(last);
+                    ele.addClass('disabled');
+                }
+                var first = document.getElementById('#first');
+                var ele = angular.element(first);
+                ele.removeClass('disabled');
+                var previous = document.getElementById('#previous');
+                ele = angular.element(previous);
+                ele.removeClass('disabled');
+                $scope.search();
+            }
 
         };
 
         $scope.clearFilter = function() {
-            $scope.selectedEmployee = null;
-            $scope.selectedProject = null;
             $scope.selectedSite = null;
+            $scope.selectedProject = null;
             $scope.searchCriteria = {};
-            $rootScope.searchCriteriaAttendances   = null;
+            $rootScope.searchCriteriaSite = null;
             $scope.pages = {
                 currPage: 1,
                 totalPages: 0
             }
             $scope.search();
         };
-
-        function pad(num, size) {
-            var s = num+"";
-            while (s.length < size) s = "0" + s;
-            return s;
-        }
-
-        $scope.loadAttendanceImage = function(checkInImage) {
-            console.log(checkInImage)
-            $('.modal-body img').attr('src',checkInImage);
-
+        
+        $scope.cancelFeedback = function () {
+        		$location.path('/feedbackReports');
         };
 
         $scope.exportAllData = function(type){

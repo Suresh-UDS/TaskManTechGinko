@@ -22,6 +22,7 @@ import com.ts.app.service.FeedbackService;
 import com.ts.app.service.FeedbackTransactionService;
 import com.ts.app.web.rest.dto.FeedbackDTO;
 import com.ts.app.web.rest.dto.FeedbackMappingDTO;
+import com.ts.app.web.rest.dto.FeedbackReportResult;
 import com.ts.app.web.rest.dto.FeedbackTransactionDTO;
 import com.ts.app.web.rest.dto.SearchCriteria;
 import com.ts.app.web.rest.dto.SearchResult;
@@ -146,6 +147,15 @@ public class FeedbackResource {
         SearchResult<FeedbackTransactionDTO> result = null;
         if(searchCriteria != null) {
             result = feedbackTransactionService.findBySearchCrieria(searchCriteria);
+        }
+        return result;
+    }
+    
+    @RequestMapping(value = "/feedback/reports",method = RequestMethod.POST)
+    public FeedbackReportResult generateReport(@RequestBody SearchCriteria searchCriteria) {
+        FeedbackReportResult result = null;
+        if(searchCriteria != null) {
+            result = feedbackTransactionService.generateReport(searchCriteria);
         }
         return result;
     }
