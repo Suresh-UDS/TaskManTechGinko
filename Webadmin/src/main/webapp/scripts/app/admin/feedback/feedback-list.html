@@ -19,127 +19,110 @@
 
     <div class="row">
         <div class="col-md-12">
-            <div class="card margin-TB-5 TableCard" >
+
+
+            <div class="card">
+
+                <div class="card-content">
+
+                    <div class="row">
+
+                        <div class="col-md-6">
+
+                            <div class="row">
+
+                                <div class="col-md-6">
+                                    <h3>No of Feedbacks</h3>
+                                </div>
+                                <div class="col-md-6">
+                                    <h3>100</h3>
+                                </div>
+
+                            </div>
+
+                        </div>
+                        <div class="col-md-6">
+
+                            <div class="row">
+
+                                <div class="col-md-6">
+                                    <h3>Overall rating  </h3>
+                                </div>
+                                <div class="col-md-6">
+                                    <h3>4.5</h3>
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="card margin-TB-5 TableCard">
+
                 <!--<div class="card-header card-header-icon" data-background-color="purple">-->
                 <!--<i class="material-icons">assignment</i>-->
                 <!--</div>-->
                 <div class="card-content">
                     <!--<h4 class="card-title">DataTables.net</h4>-->
 
-                    <div class="SearchTable">
-                        <form name="searchForm"  ng-submit="search()" novalidate >
 
-                            <table class=" no-padding-tblCon" border="0">
-                                <tr class="filter-row gc-search-row">
-                                    <td>
-                                        <div class="form-group" >
-
-                                            <input id="dateFilterFrom" type="text" class="form-control datepicker border-bottom-input"   value={{now}} placeholder="From Date" />
-                                        </div>
-                                    </td>
-
-                                    <td>
-                                        <div class="form-group" >
-
-                                            <input id="dateFilterTo" type="text" class="form-control datepicker border-bottom-input"   value={{now}} placeholder="To Date" />
-                                        </div>
-                                    </td>
-								</tr>
-								<tr class="filter-row gc-search-row">
-                                    <td>
-                                        <div class="form-group">
-                                            <label class="control-label">Client<span class="red-star">*</span> </label>
-
-                                            <select class="form-control " ng-model="selectedProject"  ng-change="loadSites()"  ng-options="project as project.name for project in projects">
-                                                <option value="">Please select Client...</option>
-                                            </select>
-
-                                        </div>
-                                    </td>
-
-                                    <td>
-                                        <div class="form-group">
-                                             <label class="control-label">Site<span class="red-star">*</span> </label>
-                                             <select class="form-control " ng-model="selectedSite"  ng-change="loadBlocks();loadFeedbackMasters();" ng-options="site as site.name for site in sites">
-                                                 <option value="">Please select Site...</option>
-                                             </select>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div class="form-group">
-                                             <label class="control-label">Block<span class="red-star">*</span> </label>
-                                             <select class="form-control " ng-model="selectedBlock" ng-change="loadFloors()"  ng-options="block as block for  block in  blocks">
-                                                 <option value="">Please select Block...</option>
-                                             </select>
-                                         </div>
-                                    </td>
-                                     <td>
-                                        <div class="form-group">
-                                             <label class="control-label">Floor<span class="red-star">*</span> </label>
-                                             <select class="form-control " ng-model="selectedFloor" ng-change="loadZones()"  ng-options="floor as floor for floor in floors">
-                                                  <option value="">Please select Floor...</option>
-                                              </select>
-                                         </div>
-                                    </td>
-                                    <td>
-                                        <div class="form-group">
-                                             <label class="control-label">Zone<span class="red-star">*</span> </label>
-  											<select class="form-control " ng-model="selectedZone"  ng-options="zone as zone for zone in zones">
-                                             	<option value="">Please select Zone...</option>
-                                             </select>
-                                         </div>
-                                    </td>
-                                    <td align="right" width="25%">
-                                        <div class="floatR form-group">
-                                            <button type="submit" class="btn btn-circle blue-clr" ng-disabled="searchForm.$invalid">
-                                                <i class="material-icons">search</i>
-                                            </button>
-                                            <button ng-show="attendancesData.length" type="button"  ng-click=exportAllData() class="btn btn-circle green-clr">
-                                                <i class="material-icons">file_upload</i>
-                                            </button>
-                                            <button ng-click="refreshPage()" class="btn btn-circle orange-clr">
-                                                <i class="material-icons">refresh</i>
-                                            </button>
-                                            <a class="download-btn" href="{{exportFile(0)}}">{{exportMsg(0)}}</a>
-
-                                        </div>
-                                    </td>
-                                </tr>
-                            </table>
-                        </form>
-                    </div>
-
-                    <!-- <div class="table-responsive tablecard">
+               <div class="table-responsive tablecard">
                         <table class="table table-striped">
                             <thead>
                             <tr>
-                                <th>Site</th>
-                                <th>Block</th>
-                                <th>Floor</th>
-                                <th>Zone</th>
-                                <th>Feedback</th>
-                                <th>Name</th>
-                                <th>Rating</th>
-                                <th>Date</th>
+
+                                <th>Question</th>
+                                <th>Yes</th>
+                                <th>No</th>
                             </tr>
                             </thead>
                             <tbody>
-                            <tr ng-repeat="feedback in feedbackList">
-                                <td>{{feedback.siteName}}</td>
-                                <td>{{feedback.block}}</td>
-                                <td>{{feedback.floor}}</td>
-                                <td>{{feedback.zone}}</td>
-                                <td>{{feedback.feedbackName}}</td>
-                                <td>{{feedback.rating}}</td>
-                                <td>{{feedback.createdDate | date:'MM/dd/yyyy @ h:mma'}}</td>
+                            <tr>
+                                <td>Was the restroom floor clean when you visited last time?</td>
+                                <td>10</td>
+                                <td>2</td>
                             </tr>
+                            <tr>
+                                <td>Was the restroom floor clean when you visited last time?</td>
+                                <td>10</td>
+                                <td>2</td>
+                            </tr>
+                            <tr ng-repeat="">
+                                <td>Was the restroom floor clean when you visited last time?</td>
+                                <td>10</td>
+                                <td>2</td>
+                            </tr>
+                            <tr>
+                                <td>Was the restroom floor clean when you visited last time?</td>
+                                <td>10</td>
+                                <td>2</td>
+                            </tr>
+                            <tr>
+                                <td>Was the restroom floor clean when you visited last time?</td>
+                                <td>10</td>
+                                <td>2</td>
+                            </tr>
+                            <tr>
+                                <td>Was the restroom floor clean when you visited last time?</td>
+                                <td>10</td>
+                                <td>2</td>
+
+
+                            </tr>
+                            </thead>
+                            <tbody>
 
                             </tbody>
                         </table>
 
 
 
-                    </div> -->
+                    </div> 
 
 
 

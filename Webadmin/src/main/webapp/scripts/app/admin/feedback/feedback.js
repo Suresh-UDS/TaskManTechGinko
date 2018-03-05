@@ -3,13 +3,13 @@
 angular.module('timeSheetApp')
     .config(function ($stateProvider) {
         $stateProvider
-            .state('feedback', {
+            .state('feedbacks', {
                 parent: 'manage',
-                url: '/feedback',
+                url: '/feedbacks',
                 controller: 'FeedbackController',
                 data: {
                     authorities: [],
-                    pageTitle: 'Feedback'
+                    pageTitle: 'Feedbacks   '
                 },
                 views: {
                     'content@': {
