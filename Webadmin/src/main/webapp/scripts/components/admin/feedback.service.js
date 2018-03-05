@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('timeSheetApp')
-    .factory('FeedbackComponent', function FeedbackComponent(Feedback,FeedbackQuestions, $http,FeedbackDelete) {
+    .factory('FeedbackComponent', function FeedbackComponent(Feedback,FeedbackQuestions,FeedbackMapping, $http,FeedbackDelete) {
         return {
         		createFeedbackMaster: function(feedbackquestions, callback) {
                     var cb = callback || angular.noop;
@@ -38,6 +38,49 @@ angular.module('timeSheetApp')
                     return response.data;
                 });
             },
+            findAllFeedbackMaster: function () {
+                return $http.get('api/feedbackquestions').then(function (response) {
+                    return response.data;
+                });
+            },            
+            
+            
+            createFeedbackMapping: function(feedbackMapping, callback) {
+                var cb = callback || angular.noop;
+                console.log('Feedback -' + feedbackMapping.name);
+                return FeedbackMapping.save(feedbackMapping,
+                    function () {
+                        return cb(feedbackMapping);
+                    },
+                    function (err) {
+                        //this.logout();
+                        return cb(err);
+                    }.bind(this)).$promise;
+    			
+	    		},
+	        updateFeedbackMapping: function (feedbackMapping, callback) {
+	            var cb = callback || angular.noop;
+	
+	            return FeedbackMapping.update(feedbackMapping,
+	                function () {
+	                    return cb(feedbackMapping);
+	                },
+	                function (err) {
+	                    this.logout();
+	                    return cb(err);
+	                }.bind(this)).$promise;
+	        },  
+        		searchFeedbackMapping: function(searchCriteria) {
+                return $http.post('api/feedbackmapping/search', searchCriteria).then(function (response) {
+                    return response.data;
+                });
+            },
+            findOneFeedbackMapping: function(id){
+                return $http.get('api/feedbackmapping/'+id).then(function (response) {
+                    return response.data;
+                });
+            },
+            
             createFeedback: function (feedback, callback) {
                 var cb = callback || angular.noop;
                 console.log('Feedback -' + feedback.title);
@@ -87,6 +130,11 @@ angular.module('timeSheetApp')
             },
             search: function(searchCriteria) {
                 return $http.post('api/feedback/search', searchCriteria).then(function (response) {
+                    return response.data;
+                });
+            },
+            reports: function(searchCriteria) {
+                return $http.post('api/feedback/reports', searchCriteria).then(function (response) {
                     return response.data;
                 });
             }

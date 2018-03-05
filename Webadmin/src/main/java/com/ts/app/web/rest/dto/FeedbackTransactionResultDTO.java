@@ -12,8 +12,6 @@ public class FeedbackTransactionResultDTO extends BaseDTO implements Serializabl
 
     private Boolean answer;
 
-    private FeedbackTransactionDTO feedbackTransaction;
-
     public long getId() {
         return id;
     }
@@ -21,14 +19,6 @@ public class FeedbackTransactionResultDTO extends BaseDTO implements Serializabl
     public void setId(long id) {
         this.id = id;
     }
-
-    public FeedbackTransactionDTO getFeedbackTransaction() {
-		return feedbackTransaction;
-	}
-
-	public void setFeedbackTransaction(FeedbackTransactionDTO feedbackTransaction) {
-		this.feedbackTransaction = feedbackTransaction;
-	}
 
 	public Boolean getAnswer() {
         return answer;

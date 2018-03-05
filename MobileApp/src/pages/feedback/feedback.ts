@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NavController } from 'ionic-angular';
+import {NavController, NavParams} from 'ionic-angular';
 import {authService} from "../service/authService";
 import {componentService} from "../service/componentService";
 import {SiteService} from "../service/siteService";
@@ -14,19 +14,29 @@ export class FeedbackPage {
   userId:any;
   employeeId: any;
   sites:any;
+  userName:any;
+  feedback:any;
 
-  constructor(public navCtrl: NavController,public myService:authService,public component:componentService, private siteService: SiteService) {
+  constructor(public navCtrl: NavController,public navParams: NavParams,public myService:authService,public component:componentService, private siteService: SiteService) {
+
+      this.feedback = this.navParams.data.feedback;
+      console.log(this.feedback);
 
   }
 
-    start()
+    start(userName)
     {
-        this.navCtrl.push(FeedbackQuestionPage);
+        console.log("User name");
+        console.log(userName);
+        this.navCtrl.push(FeedbackQuestionPage,{username:userName,feedback:this.feedback});
     }
 
     skip()
     {
-        this.navCtrl.push(FeedbackQuestionPage);
+        this.userName = "Anonymous"+new Date().getMilliseconds();
+        console.log("anonymous user");
+        console.log(this.userName);
+        this.navCtrl.push(FeedbackQuestionPage, {userName:this.userName,feedback:this.feedback});
     }
 
 }

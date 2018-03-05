@@ -53,6 +53,7 @@ public class FeedbackService extends AbstractService {
 	@Inject
 	private SiteRepository siteRepository;
 	
+	@Inject
 	private FeedbackMappingRepository feedbackMappingRepository;
 
 	@Inject
@@ -74,7 +75,7 @@ public class FeedbackService extends AbstractService {
 			Set<FeedbackQuestion> itemsSet = new HashSet<FeedbackQuestion>();
 			itemsSet.addAll(items);
 			feedback.setQuestions(itemsSet);
-			/*
+			
 			if(feedbackDto.getProjectId() > 0) {
 				Project project = projectRepository.findOne(feedbackDto.getProjectId());
 				feedback.setProject(project);
@@ -87,7 +88,7 @@ public class FeedbackService extends AbstractService {
 			}else {
 				feedback.setSite(null);
 			}
-			*/
+			
 			feedback.setActive(Feedback.ACTIVE_YES);
 	        feedback = feedbackRepository.save(feedback);
 			log.debug("Created Information for Feedback: {}", feedback);
@@ -152,9 +153,17 @@ public class FeedbackService extends AbstractService {
 			Pageable pageRequest = createPageRequest(searchCriteria.getCurrPage());
 			Page<Feedback> page = null;
 			List<FeedbackDTO> transitems = null;
-			page = feedbackRepository.findAll(pageRequest);
+			List<Feedback> feedbackList = null;
+			if(searchCriteria.getProjectId() > 0 || searchCriteria.getSiteId() > 0) {
+				feedbackList = feedbackRepository.findBySite(searchCriteria.getProjectId(), searchCriteria.getSiteId());
+			}else {
+				page = feedbackRepository.findAll(pageRequest);
+			}
 			if(page != null) {
-				transitems = mapperUtil.toModelList(page.getContent(), FeedbackDTO.class);
+				feedbackList = page.getContent();
+			}
+			if(CollectionUtils.isNotEmpty(feedbackList)) {
+				transitems = mapperUtil.toModelList(feedbackList, FeedbackDTO.class);
 				if(CollectionUtils.isNotEmpty(transitems)) {
 					buildSearchResult(searchCriteria, page, transitems,result);
 				}
@@ -166,11 +175,11 @@ public class FeedbackService extends AbstractService {
 	private void buildSearchResult(SearchCriteria searchCriteria, Page<Feedback> page, List<FeedbackDTO> transactions, SearchResult<FeedbackDTO> result) {
 		if(page != null) {
 			result.setTotalPages(page.getTotalPages());
+			result.setCurrPage(page.getNumber() + 1);
+			result.setTotalCount(page.getTotalElements());
+	        result.setStartInd((result.getCurrPage() - 1) * 10 + 1);
+	        result.setEndInd((result.getTotalCount() > 10  ? (result.getCurrPage()) * 10 : result.getTotalCount()));
 		}
-		result.setCurrPage(page.getNumber() + 1);
-		result.setTotalCount(page.getTotalElements());
-        result.setStartInd((result.getCurrPage() - 1) * 10 + 1);
-        result.setEndInd((result.getTotalCount() > 10  ? (result.getCurrPage()) * 10 : result.getTotalCount()));
 
 		result.setTransactions(transactions);
 		return;

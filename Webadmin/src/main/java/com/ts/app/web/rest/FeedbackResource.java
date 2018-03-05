@@ -22,6 +22,7 @@ import com.ts.app.service.FeedbackService;
 import com.ts.app.service.FeedbackTransactionService;
 import com.ts.app.web.rest.dto.FeedbackDTO;
 import com.ts.app.web.rest.dto.FeedbackMappingDTO;
+import com.ts.app.web.rest.dto.FeedbackReportResult;
 import com.ts.app.web.rest.dto.FeedbackTransactionDTO;
 import com.ts.app.web.rest.dto.SearchCriteria;
 import com.ts.app.web.rest.dto.SearchResult;
@@ -31,7 +32,7 @@ import com.ts.app.web.rest.errors.TimesheetException;
 @RequestMapping("/api")
 public class FeedbackResource {
 
-    private final Logger log = LoggerFactory.getLogger(ChecklistResource.class);
+    private final Logger log = LoggerFactory.getLogger(FeedbackResource.class);
 
     @Inject
     private FeedbackService feedbackService;
@@ -146,6 +147,15 @@ public class FeedbackResource {
         SearchResult<FeedbackTransactionDTO> result = null;
         if(searchCriteria != null) {
             result = feedbackTransactionService.findBySearchCrieria(searchCriteria);
+        }
+        return result;
+    }
+    
+    @RequestMapping(value = "/feedback/reports",method = RequestMethod.POST)
+    public FeedbackReportResult generateReport(@RequestBody SearchCriteria searchCriteria) {
+        FeedbackReportResult result = null;
+        if(searchCriteria != null) {
+            result = feedbackTransactionService.generateReport(searchCriteria);
         }
         return result;
     }

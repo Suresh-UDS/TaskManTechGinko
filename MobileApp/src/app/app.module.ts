@@ -66,6 +66,7 @@ import {Toast} from "@ionic-native/toast";
 import {AppConfig, MY_CONFIG_TOKEN} from "../pages/service/app-config";
 import {AttendanceService} from "../pages/service/attendanceService";
 import {EmployeeService} from "../pages/service/employeeService";
+import {FeedbackService} from "../pages/service/feedbackService";
 import {JobService} from "../pages/service/jobService";
 import {QuotationService} from "../pages/service/quotationService";
 import {SiteService} from "../pages/service/siteService";
@@ -180,6 +181,7 @@ import {JobPopoverPage} from "../pages/jobs/job-popover";
     Camera,
       AttendanceService,
       EmployeeService,
+      FeedbackService,
       JobService,
       QuotationService,
       SiteService,
