@@ -123,7 +123,7 @@ export class CompleteJobPage {
             response=>{
                 console.log(response);
                 this.component.closeLoader();
-                this.navCtrl.push(JobsPage);
+                this.navCtrl.setRoot(JobsPage);
                 this.component.showToastMessage('Job Completed Successfully','bottom');
                 //TODO
                 //File Upload after successful checkout

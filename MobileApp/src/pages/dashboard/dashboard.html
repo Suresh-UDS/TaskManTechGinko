@@ -8,35 +8,48 @@
 </ion-header>
 
 <ion-content>
+        <ion-fab right bottom *ngIf="platform==='android'">
+            <button ion-fab color="dark">
+                <ion-icon name="md-add" class="clr-orange"></ion-icon>
+            </button>
+            <ion-fab-list side="top" fab-list-margin >
 
-    <ion-fab right bottom>
-        <button ion-fab color="dark" (tap)="presentActionSheet()">
-            <ion-icon name="md-add" class="clr-orange"></ion-icon>
-        </button>
-        <!--<ion-fab-list side="top" fab-list-margin >-->
-            <!--<ion-label color="dark" class="margin0" *ngIf="userType === 'ADMIN' || userType === 'TECHNICIAN' || userType === 'FACILITYMANAGER' || userType === 'SUPERVISOR'">Quotation</ion-label>-->
-            <!--<button ion-fab color="primary" *ngIf="userType === 'ADMIN' || userType === 'TECHNICIAN' || userType === 'FACILITYMANAGER' || userType === 'SUPERVISOR'" (click)="fabClick('quotation')">-->
-                <!--<i class="material-icons clr-blk">receipt</i>-->
-            <!--</button>-->
-            <!--<ion-label color="dark"  class="margin0">Job</ion-label>-->
-            <!--<button ion-fab color="primary" (click)="fabClick('job')">-->
-                <!--<i class="material-icons clr-blk">description</i>-->
-            <!--</button>-->
+                <ion-label color="dark" class="margin0" *ngIf="userType === 'ADMIN' || userType === 'TECHNICIAN' || userType === 'FACILITYMANAGER' || userType === 'SUPERVISOR'">Quotation</ion-label>
+                <button ion-fab color="primary" *ngIf="userType === 'ADMIN' || userType === 'TECHNICIAN' || userType === 'FACILITYMANAGER' || userType === 'SUPERVISOR'" [navPush]="addQuotation">
+                    <i class="material-icons clr-blk">receipt</i>
+                </button>
 
-            <!--<ion-label *ngIf="userType === 'ADMIN' || userType === 'TECHNICIAN' || userType === 'FACILITYMANAGER' || userType === 'SUPERVISOR'"  color="dark"  class="margin0">Attendance</ion-label>-->
-            <!--<button *ngIf="userType === 'ADMIN' || userType === 'TECHNICIAN' || userType === 'FACILITYMANAGER' || userType === 'SUPERVISOR'"  ion-fab color="primary" (click)="fabClick('attendance')">-->
-                <!--<i class="material-icons clr-blk">content_paste</i>-->
-            <!--</button>-->
-            <!--<ion-label color="dark" *ngIf="userType === 'ADMIN' || userType === 'FACILITYMANAGER' || userType === 'SUPERVISOR'" class="margin0">Employee</ion-label>-->
-            <!--<button ion-fab color="primary" *ngIf="userType === 'ADMIN' || userType === 'FACILITYMANAGER' || userType === 'SUPERVISOR'" (click)="fabClick('employee')">-->
-                <!--<i class="material-icons clr-blk">people</i>-->
-            <!--</button>-->
-            <!--<ion-label *ngIf="userType === 'ADMIN' || userType === 'TECHNICIAN' || userType === 'FACILITYMANAGER' || userType === 'SUPERVISOR'"   color="dark" class="margin0">Rate Card</ion-label>-->
-            <!--<button *ngIf="userType === 'ADMIN' || userType === 'TECHNICIAN' || userType === 'FACILITYMANAGER' || userType === 'SUPERVISOR'"  ion-fab color="primary" (click)="fabClick('ratecard')">-->
-                <!--<i class="material-icons clr-blk">description</i>-->
-            <!--</button>-->
-        <!--</ion-fab-list>-->
-    </ion-fab>
+                <ion-label color="dark"  class="margin0">Job</ion-label>
+                <button ion-fab color="primary" [navPush]="addJob">
+                    <i class="material-icons clr-blk">description</i>
+                </button>
+
+                <ion-label *ngIf="userType === 'ADMIN' || userType === 'TECHNICIAN' || userType === 'FACILITYMANAGER' || userType === 'SUPERVISOR'"  color="dark"  class="margin0">Attendance</ion-label>
+                <button *ngIf="userType === 'ADMIN' || userType === 'TECHNICIAN' || userType === 'FACILITYMANAGER' || userType === 'SUPERVISOR'"  ion-fab color="primary">
+                    <i class="material-icons clr-blk">content_paste</i>
+                </button>
+
+                <ion-label color="dark" *ngIf="userType === 'ADMIN' || userType === 'FACILITYMANAGER' || userType === 'SUPERVISOR'" class="margin0">Employee</ion-label>
+                <button ion-fab color="primary" *ngIf="userType === 'ADMIN' || userType === 'FACILITYMANAGER' || userType === 'SUPERVISOR'" [navPush]="addEmployee">
+                    <i class="material-icons clr-blk">people</i>
+                </button>
+
+                <ion-label *ngIf="userType === 'ADMIN' || userType === 'TECHNICIAN' || userType === 'FACILITYMANAGER' || userType === 'SUPERVISOR'"   color="dark" class="margin0">Rate Card</ion-label>
+                <button *ngIf="userType === 'ADMIN' || userType === 'TECHNICIAN' || userType === 'FACILITYMANAGER' || userType === 'SUPERVISOR'"  ion-fab color="primary" [navPush]="rateCard">
+                    <i class="material-icons clr-blk">description</i>
+                </button>
+            </ion-fab-list>
+        </ion-fab>
+
+        <ion-fab right bottom *ngIf="platform==='ios'">
+            <button ion-fab color="dark" (tap)="presentActionSheet()">
+                <ion-icon name="md-add" class="clr-orange"></ion-icon>
+            </button>
+        </ion-fab>
+
+
+
+
 
     <!--
     <ion-fab right bottom>
