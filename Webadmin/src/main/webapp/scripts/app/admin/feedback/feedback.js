@@ -5,11 +5,11 @@ angular.module('timeSheetApp')
         $stateProvider
             .state('feedbacks', {
                 parent: 'manage',
-                url: '/feedback',
+                url: '/feedbacks',
                 controller: 'FeedbackController',
                 data: {
                     authorities: [],
-                    pageTitle: 'Feedback'
+                    pageTitle: 'Feedbacks   '
                 },
                 views: {
                     'content@': {
