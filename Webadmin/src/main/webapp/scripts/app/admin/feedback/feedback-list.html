@@ -19,6 +19,48 @@
 
     <div class="row">
         <div class="col-md-12">
+
+            <div class="card">
+
+                <div class="card-content">
+
+                    <div class="row">
+
+                        <div class="col-md-6">
+
+                            <div class="row">
+
+                                <div class="col-md-6">
+                                    <h3>No of Feedbacks</h3>
+                                </div>
+                                <div class="col-md-6">
+                                    <h3>100</h3>
+                                </div>
+
+                            </div>
+
+                        </div>
+                        <div class="col-md-6">
+
+                            <div class="row">
+
+                                <div class="col-md-6">
+                                    <h3>Overall rating  </h3>
+                                </div>
+                                <div class="col-md-6">
+                                    <h3>4.5</h3>
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
             <div class="card margin-TB-5 TableCard" ng-init="loadAllAttendances()">
                 <!--<div class="card-header card-header-icon" data-background-color="purple">-->
                 <!--<i class="material-icons">assignment</i>-->
@@ -26,115 +68,48 @@
                 <div class="card-content">
                     <!--<h4 class="card-title">DataTables.net</h4>-->
 
-                    <div class="SearchTable">
-                        <form name="searchForm"  ng-submit="search()" novalidate >
 
-                            <table class="table no-padding-tblCon" border="0">
-                                <tr class="filter-row gc-search-row">
-                                    <td>
-                                        <div class="form-group" >
-
-                                            <input id="dateFilterFrom" type="text" class="form-control datepicker border-bottom-input"   value={{now}} placeholder="From Date" />
-                                        </div>
-                                    </td>
-
-                                    <td>
-                                        <div class="form-group" >
-
-                                            <input id="dateFilterTo" type="text" class="form-control datepicker border-bottom-input"   value={{now}} placeholder="To Date" />
-                                        </div>
-                                    </td>
-
-                                    <td>
-                                        <div class="form-group" >
-                                            <div class="dropdown">
-                                                <input type="text"
-                                                       class="form-control border-bottom-input"
-                                                       placeholder="Search Employee Name"
-                                                       ng-model="selectedEmployee"
-                                                       ng-value="searchCriteria.employeeFullName"
-                                                       uib-typeahead="employee as employee.fullName for employee in allEmployees | filter:$viewValue | limitTo:5" />
-                                            </div>
-                                        </div>
-                                    </td>
-
-                                    <td>
-                                        <div class="form-group" >
-                                            <div class="dropdown">
-                                                <input type="text"
-                                                       class="form-control searchable-input floatL border-bottom-input"
-                                                       placeholder="Search Site"
-                                                       ng-model="selectedSite"
-                                                       ng-value="searchCriteria.siteName"
-                                                       uib-typeahead="site as site.name for site in allSites | filter:$viewValue | limitTo:5"/>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td align="right" width="25%">
-                                        <div class="floatR form-group">
-                                            <button type="submit" class="btn btn-circle blue-clr" ng-disabled="searchForm.$invalid">
-                                                <i class="material-icons">search</i>
-                                            </button>
-                                            <button ng-show="attendancesData.length" type="button"  ng-click=exportAllData() class="btn btn-circle green-clr">
-                                                <i class="material-icons">file_upload</i>
-                                            </button>
-                                            <button ng-click="refreshPage()" class="btn btn-circle orange-clr">
-                                                <i class="material-icons">refresh</i>
-                                            </button>
-                                            <a class="download-btn" href="{{exportFile(0)}}">{{exportMsg(0)}}</a>
-
-                                        </div>
-                                    </td>
-                                </tr>
-                            </table>
-                        </form>
-                    </div>
 
                     <div class="table-responsive tablecard">
                         <table class="table table-striped">
                             <thead>
                             <tr>
-                                <th>Employee ID</th>
-                                <th>Employee Name</th>
-                                <th>Site Name</th>
-                                <th>Check-In time</th>
-                                <th>Check-In Image</th>
-                                <th>Check-Out time</th>
-                                <th>Check-Out Image</th>
-                                <th>Location</th>
+                                <th>Question</th>
+                                <th>Yes</th>
+                                <th>No</th>
                             </tr>
                             </thead>
                             <tbody>
-                            <tr ng-repeat="attendance in attendancesData">
-                                <td>{{attendance.employeeId}}</td>
-                                <td>{{attendance.employeeFullName}}</td>
-                                <td>{{attendance.siteName}}</td>
-                                <td>{{attendance.checkInTime | date:'MM/dd/yyyy @ h:mma'}}</td>
-                                <td ng-if="attendance.checkInImage">
-                                    <a id="images" href="#" onClick="$('#myModal').modal()" data-target="#myModal" data-dismiss="#myModal" ng-click="loadImagesNew(attendance.checkInImage)">
-                                        <img src={{attendance.checkInImage}} width="30px" height="30px"/>
-                                    </a>
-                                </td>
-                                <td ng-if="!attendance.checkInImage">
-                                    <img src="assets/img/user.png" width="30px" height="30px"/>
-                                </td>
-
-                                <td>{{attendance.checkOutTime | date:'MM/dd/yyyy @ h:mma'}}</td>
-
-                                <td ng-if="attendance.checkOutImage"><a id="images" href="#" onClick="$('#myModal').modal()" data-target="#myModal" data-dismiss="#myModal" ng-click="loadImagesNew(attendance.checkOutImage)">
-                                    <img src={{attendance.checkOutImage}} width="30px" height="30px"/>
-                                </a>
-                                </td>
-                                <td ng-if="!attendance.checkOutImage">
-                                    <img src="assets/img/user.png" width="30px" height="30px"/>
-                                </td>
-                                <td align="center">
-                                    <a id="maps" href="#" ng-click="newInitMap('mapIn',attendance.latitudeIn, attendance.longitudeIn, 'mapOut', attendance.latitudeOut, attendance.longitudeOut)" onClick="$('#mapModal').modal()" data-target="#mapModal" >
-                                        <img src="assets/img/map-icon-2-1.jpg" width="30px" height="30px" />
-                                    </a>
-                                </td>
+                            <tr>
+                                <td>Was the restroom floor clean when you visited last time?</td>
+                                <td>10</td>
+                                <td>2</td>
                             </tr>
-
+                            <tr>
+                                <td>Was the restroom floor clean when you visited last time?</td>
+                                <td>10</td>
+                                <td>2</td>
+                            </tr>
+                            <tr ng-repeat="">
+                                <td>Was the restroom floor clean when you visited last time?</td>
+                                <td>10</td>
+                                <td>2</td>
+                            </tr>
+                            <tr>
+                                <td>Was the restroom floor clean when you visited last time?</td>
+                                <td>10</td>
+                                <td>2</td>
+                            </tr>
+                            <tr>
+                                <td>Was the restroom floor clean when you visited last time?</td>
+                                <td>10</td>
+                                <td>2</td>
+                            </tr>
+                            <tr>
+                                <td>Was the restroom floor clean when you visited last time?</td>
+                                <td>10</td>
+                                <td>2</td>
+                            </tr>
                             </tbody>
                         </table>
 
