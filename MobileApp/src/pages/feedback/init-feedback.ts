@@ -35,7 +35,7 @@ export class InitFeedbackPage {
     {
         var feedback =fb.feedback;
         if(feedback){
-            this.navCtrl.push(FeedbackPage,{feedback:feedback});
+            this.navCtrl.push(FeedbackPage,{feedback:feedback,fb:fb});
 
         }else{
             this.component.showToastMessage('Please select feedback','bottom');

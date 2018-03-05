@@ -28,7 +28,7 @@ export class FeedbackPage {
     {
         console.log("User name");
         console.log(userName);
-        this.navCtrl.push(FeedbackQuestionPage,{username:userName,feedback:this.feedback});
+        this.navCtrl.push(FeedbackQuestionPage,{userName:userName,feedback:this.feedback,fb:this.navParams.data.fb});
     }
 
     skip()
@@ -36,7 +36,7 @@ export class FeedbackPage {
         this.userName = "Anonymous"+new Date().getMilliseconds();
         console.log("anonymous user");
         console.log(this.userName);
-        this.navCtrl.push(FeedbackQuestionPage, {userName:this.userName,feedback:this.feedback});
+        this.navCtrl.push(FeedbackQuestionPage, {userName:this.userName,feedback:this.feedback, fb:this.navParams.data.fb});
     }
 
 }

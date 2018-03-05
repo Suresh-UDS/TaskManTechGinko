@@ -13,19 +13,19 @@
 
 
        <ion-list>
-           <ion-item *ngFor="let q of questions">
+           <ion-item *ngFor="let q of questions;let i of index">
 
                <h3>{{q.question}}</h3>
 
                <div class="AnsCon">
 
-                   <ion-icon *ngIf="!check" (click)="check=true;close=false" name="ios-checkmark-circle-outline"></ion-icon>
+                   <ion-icon *ngIf="!q.answer" (click)="markAnswer(i,true)" name="ios-checkmark-circle-outline"></ion-icon>
 
-                   <ion-icon *ngIf="check" (click)="check=false"   name="ios-checkmark-circle"></ion-icon>
+                   <ion-icon *ngIf="q.answer" (click)="markAnswer(i,false)"   name="ios-checkmark-circle"></ion-icon>
 
-                   <ion-icon *ngIf="!close"  (click)="close=true;check=false" name="ios-close-circle-outline"></ion-icon>
+                   <ion-icon *ngIf="!q.answer"  (click)="markAnswer(i,true)" name="ios-close-circle-outline"></ion-icon>
 
-                   <ion-icon  *ngIf="close" (click)="close=false"  name="ios-close-circle"></ion-icon>
+                   <ion-icon  *ngIf="q.answer" (click)="markAnswer(i,false)"  name="ios-close-circle"></ion-icon>
 
                </div>
 
@@ -42,6 +42,6 @@
 </ion-content>
 <ion-footer>
     <ion-toolbar>
-        <button ion-button full onclick="demo.showSwal('feedback-success','Thank you!','For your Feedback')">Submit</button>
+        <button ion-button full (click)="submitFeedback()" onclick="demo.showSwal('feedback-success','Thank you!','For your Feedback')">Submit</button>
     </ion-toolbar>
 </ion-footer>
