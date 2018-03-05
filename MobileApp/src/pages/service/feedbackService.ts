@@ -25,5 +25,54 @@ export class FeedbackService {
         )
     }
 
+    loadBlocks(projectId, siteId):Observable<any>{
+        return this.http.get(this.config.Url+'api/location/project/' + projectId +'/site/' + siteId +'/block').map(
+            response=>{
+                console.log("Blocks");
+                console.log(response.json());
+                return response.json();
+            }
+        )
+    }
+
+    loadFloors(projectId, siteId, block):Observable<any>{
+        return this.http.get(this.config.Url+'api/location/project/' + projectId +'/site/' + siteId + '/block/' + block + '/floor').map(
+            response=>{
+                console.log("Floor");
+                console.log(response.json());
+                return response.json();
+            }
+        )
+    }
+
+    loadZones(projectId, siteId, block, floor): Observable<any>{
+        return this.http.get(this.config.Url+'api/location/project/' + projectId +'/site/' + siteId + '/block/' + block + '/floor/' + floor + '/zone').map(
+            response=>{
+                console.log("Zones");
+                console.log(response.json());
+                return response.json();
+            }
+        )
+    }
+
+    loadLocations(search):Observable<any>{
+        return this.http.post(this.config.Url+'api/location/search', search).map(
+            response=>{
+                console.log("Loading locations");
+                console.log(response.json());
+                return response.json();
+            }
+        )
+    }
+
+    searchFeedbackMappings(search):Observable<any>{
+        return this.http.post(this.config.Url+'api/feedbackmapping/search', search).map(
+            response=>{
+                console.log("Getting feedbacks");
+                console.log(response.json());
+                return response.json();
+            }
+        )
+    }
 
 }

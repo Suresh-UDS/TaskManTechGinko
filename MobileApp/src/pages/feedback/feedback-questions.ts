@@ -16,23 +16,20 @@ export class FeedbackQuestionPage {
   sites:any;
    check=false;
    close=false;
+   questions:any;
+   feedback:any;
 
   constructor(public navCtrl: NavController,public myService:authService,public feedbackService:FeedbackService,public component:componentService, private siteService: SiteService, private navParams:NavParams) {
     console.log("username from feedback");
-    console.log(this.navParams.data.userName);
-    var search ={};
-    this.feedbackService.getAllFeedbackQuestions(search).subscribe(
-        response=>{
+    console.log(this.navParams.data);
 
-            console.log(response);
 
-        },
-        error=>
-        {
-            console.log(error);
-        }
-    )
-
+      this.feedback = this.navParams.data.feedback;
+      console.log("feedback");
+      console.log(this.feedback);
+      this.questions = this.feedback.questions;
+        console.log("questions");
+        console.log(this.questions);
   }
 
 

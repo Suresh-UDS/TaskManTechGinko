@@ -4,6 +4,7 @@ import {authService} from "../service/authService";
 import {componentService} from "../service/componentService";
 import {SiteService} from "../service/siteService";
 import {FeedbackPage} from "../feedback/feedback";
+import {FeedbackService} from "../service/feedbackService";
 
 @Component({
   selector: 'page-init-feedback',
@@ -17,15 +18,28 @@ export class InitFeedbackPage {
   projects:any;
   msg:any;
   blocks:any;
+  floors:any;
   zones:any;
+  selectedProject:any;
+  selectedSite:any;
+  selectedBlock:any;
+  selectedFloor:any;
+  selectedZone:any;
+  feedbacks:any;
 
-  constructor(public navCtrl: NavController,public myService:authService,public component:componentService, private siteService: SiteService) {
-
+  constructor(public navCtrl: NavController,public myService:authService,public component:componentService, private siteService: SiteService, private feedbackService: FeedbackService) {
+        this.loadFeedbackMappings();
   }
 
-    start()
+    start(fb)
     {
-        this.navCtrl.push(FeedbackPage);
+        var feedback =fb.feedback;
+        if(feedback){
+            this.navCtrl.push(FeedbackPage,{feedback:feedback});
+
+        }else{
+            this.component.showToastMessage('Please select feedback','bottom');
+        }
     }
 
   ionViewDidLoad() {
@@ -47,10 +61,10 @@ export class InitFeedbackPage {
     )
   }
 
-    selectSite(projectId)
+    selectSite(project)
     {
-
-        this.siteService.findSitesByProject(projectId).subscribe(
+        this.selectedProject = project;
+        this.siteService.findSitesByProject(project.id).subscribe(
             response=>{
                 console.log("====Site By ProjectId======");
                 console.log(response);
@@ -67,9 +81,10 @@ export class InitFeedbackPage {
         )
     }
 
-    selectBlock(siteId)
+    selectBlock(site)
     {
-        this.siteService.findBlock(siteId).subscribe(
+        this.selectedSite = site;
+        this.feedbackService.loadBlocks(this.selectedProject.id,site.id).subscribe(
             response=>{
                 console.log("====Block By SiteId======");
                 console.log(response);
@@ -81,14 +96,34 @@ export class InitFeedbackPage {
                 {
                     this.msg='Server Unreachable'
                 }
+                this.msg="Error in getting blocks";
                 this.component.showToastMessage(this.msg,'bottom');
             }
         )
     }
 
-    selectZone(blockId)
+    selectFloor(block){
+      this.selectedBlock = block;
+      this.feedbackService.loadFloors(this.selectedProject.id,this.selectedSite.id,this.selectedBlock).subscribe(
+          response=>{
+              console.log("=====floors=====");
+              console.log(response);
+              this.floors = response;
+          },error=>{
+            if(error.type==3)
+            {
+                this.msg='Server Unreachable'
+            }
+            this.msg="Error in getting zones";
+            this.component.showToastMessage(this.msg,'bottom');
+        }
+      )
+    }
+
+    selectZone(floor)
     {
-            this.siteService.findBlock(blockId).subscribe(
+        this.selectedFloor = floor;
+            this.feedbackService.loadZones(this.selectedProject.id,this.selectedSite.id,this.selectedBlock, floor).subscribe(
             response=>{
             console.log("====Zone By BlockId======");
             console.log(response);
@@ -100,9 +135,26 @@ export class InitFeedbackPage {
             {
                 this.msg='Server Unreachable'
             }
+            this.msg="Error in getting zones";
             this.component.showToastMessage(this.msg,'bottom');
         }
         )
+    }
+
+    loadFeedbackMappings(){
+        var currPageVal = 1;
+        var searchCriteria = {
+            currPage:currPageVal,
+            findAll:true
+        }
+
+        this.feedbackService.searchFeedbackMappings(searchCriteria).subscribe(
+            response=>{
+                console.log(response.transactions);
+                this.feedbacks=response.transactions;
+            }
+        )
+
     }
 
 }
