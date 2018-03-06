@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.ts.app.security.SecurityUtils;
 import com.ts.app.service.ReportService;
 import com.ts.app.web.rest.dto.ReportResult;
 
@@ -29,12 +30,14 @@ public class ReportResource {
 
 	@RequestMapping(value = "/reports/attendance/site/{siteId}/selectedDate/{selectedDate}", method = RequestMethod.GET)
 	public ReportResult getAttendanceStatusBySite(@PathVariable Long siteId, @PathVariable("selectedDate") Date selectedDate) {
-		return reportService.getAttendanceStatsDateRange(siteId, selectedDate, selectedDate);
+		long userId = SecurityUtils.getCurrentUserId();
+		return reportService.getAttendanceStatsDateRange(userId, siteId, selectedDate, selectedDate);
 	}
 	
 	@RequestMapping(value = "/reports/attendance/project/{projectId}/selectedDate/{selectedDate}", method = RequestMethod.GET)
 	public ReportResult getAttendanceStatusByProject(@PathVariable Long projectId, @PathVariable("selectedDate") Date selectedDate) {
-		return reportService.getAttendanceStatsByProjectIdDateRange(projectId, selectedDate, selectedDate);
+		long userId = SecurityUtils.getCurrentUserId();
+		return reportService.getAttendanceStatsByProjectIdDateRange(userId, projectId, selectedDate, selectedDate);
 	}
 
 	

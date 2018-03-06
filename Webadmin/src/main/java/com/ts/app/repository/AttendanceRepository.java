@@ -58,6 +58,10 @@ public interface AttendanceRepository extends JpaRepository<Attendance, Long>,Jp
     @Query("SELECT count(a) from Attendance a where a.checkInTime between :startDate and :endDate order by a.checkInTime desc")
 	long findCountByCheckInTime(@Param("startDate") Date startDate, @Param("endDate") Date endDate);
 
+    @Query("SELECT count(a) from Attendance a where a.site.id IN (:siteIds) and  a.checkInTime between :startDate and :endDate order by a.checkInTime desc")
+	long findCountByCheckInTime(@Param("siteIds") List<Long> siteIds, @Param("startDate") Date startDate, @Param("endDate") Date endDate);
+
+    
     @Query("SELECT count(a) from Attendance a where a.site.id = :siteId and a.checkInTime between :startDate and :endDate order by a.checkInTime desc")
 	long findCountBySiteAndCheckInTime(@Param("siteId") Long siteId, @Param("startDate") Date startDate, @Param("endDate") Date endDate);
 
