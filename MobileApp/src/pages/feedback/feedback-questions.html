@@ -8,47 +8,23 @@
 </ion-header>
 
 <ion-content class="FeedbackQuesCon">
-
-   <div>
-
-
-       <ion-list>
-           <ion-item *ngFor="let q of questions;let i of index">
-
-               <h3>{{q.question}}</h3>
-
-               <div class="AnsCon">
-
-                   <div class="cc-selector">
-                       <input id="yes{{id}}" type="radio" name="ans" value="yes" />
-                       <label class="check-btn yes" for="yes{{id}}"></label>
-                       <input id="no{{id}}" type="radio" name="ans" value="no" />
-                       <label class="check-btn no"for="no{{id}}"></label>
-                   </div>
-
-                   <!--<ion-icon *ngIf="!q.answer" (click)="markAnswer(i,true)" name="ios-checkmark-circle-outline"></ion-icon>-->
-
-                   <!--<ion-icon *ngIf="q.answer" (click)="markAnswer(i,false)"   name="ios-checkmark-circle"></ion-icon>-->
-
-                   <!--<ion-icon *ngIf="!q.answer"  (click)="markAnswer(i,true)" name="ios-close-circle-outline"></ion-icon>-->
-
-                   <!--<ion-icon  *ngIf="q.answer" (click)="markAnswer(i,false)"  name="ios-close-circle"></ion-icon>-->
-
-               </div>
-
-           </ion-item>
-
-       </ion-list>
-
-
-
-
-   </div>
-
+   <ion-item *ngFor="let q of questions;let i of index" class="bg-trans">
+       <h3 text-center="" class="clr-white">{{q.question}}</h3>
+    <ion-list radio-group [(ngModel)]="q.answer" class="width50 margin-auto">
+        <ion-item class="padding-left0 inline-block width20 cc-selector align-left" no-lines>
+            <label class="check-btn yes" ></label>
+            <ion-radio value="true" class="true"></ion-radio>
+        </ion-item>
+        <ion-item class="padding-left0 inline-block width20 cc-selector align-right" no-lines>
+            <label class="check-btn no"></label>
+            <ion-radio value="false" class="true"></ion-radio>
+        </ion-item>
+    </ion-list>
+   </ion-item>
 
 </ion-content>
 <ion-footer>
-    <ion-toolbar class="txt-center">
-        <button class="btn btn-warning" ion-button (click)="submitFeedback()" onclick="demo.showSwal('feedback-success','Thank you!','For your Feedback')">Submit</button>
+    <ion-toolbar>
+        <button ion-button full (click)="submitFeedback()" onclick="demo.showSwal('feedback-success','Thank you!','For your Feedback')">Submit</button>
     </ion-toolbar>
 </ion-footer>

@@ -50,6 +50,9 @@ export class CreateEmployeePage {
   managerDetails:any;
   siteDetails:any;
   projectDetails:any;
+    siteSelect:any;
+    sitePlace:any;
+    selectOptions:any;
   constructor(public navCtrl: NavController,public component:componentService,public myService:authService, public navParams: NavParams, private  authService: authService, public camera: Camera,
               private loadingCtrl:LoadingController, private geolocation:Geolocation, private toastCtrl:ToastController, private siteService:SiteService, private employeeService: EmployeeService,
               private geoFence:Geofence) {
@@ -57,7 +60,7 @@ export class CreateEmployeePage {
     this.categories = 'basic';
     this.getAllProjects();
     this.projectSites=[];
-
+      this.sitePlace="Site"
     this.employeeService.getAllDesignations().subscribe(
         response=>{
             console.log("all Designations");
@@ -77,8 +80,14 @@ export class CreateEmployeePage {
 
   ionViewDidLoad()
   {
+      this.siteSelect=true;
 
+      this.selectOptions={
+          cssClass: 'selectbox-popover'
+      }
   }
+
+
 
   viewCamera()
   {
@@ -117,14 +126,33 @@ export class CreateEmployeePage {
       this.siteService.findSitesByProject(projectId).subscribe(
           response=>{
           console.log(response);
-          this.sites = response;
+
+          if(response.length !==0)
+          {
+              this.sites = response;
+              this.sitePlace="Site";
+              this.siteSelect=false;
+          }
+          else
+          {
+              this.sites = [];
+              this.sitePlace="No Site";
+              this.siteSelect=true;
+          }
               this.component.closeLoader();
+
           },err=>{
               console.log(err);
               this.component.closeLoader();
               this.component.showToastMessage('Unable to get Clients, please try again..','bottom');
       })
   }
+
+    callToast()
+    {
+
+        this.component.showToastMessage('Select Project','bottom');
+    }
 
   addProjectSites(site){
       this.siteDetails =site;
@@ -140,7 +168,8 @@ export class CreateEmployeePage {
       this.projectSites[0]=projSite;
   }
 
-  setDesignations(designation){
+  setDesignations(designation)
+  {
       console.log(designation);
   }
 
