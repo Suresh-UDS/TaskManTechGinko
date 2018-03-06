@@ -1053,7 +1053,7 @@ ion-spinner{
 }
 .bg-trans
 {
-    background: transparent;
+    background: transparent !important;
 }
 
 .wrap-name
