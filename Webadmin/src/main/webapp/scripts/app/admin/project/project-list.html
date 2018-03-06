@@ -37,7 +37,7 @@
                                             <button type="submit" class="btn btn-circle blue-clr">
                                                 <i class="material-icons">search</i>
                                             </button>
-                                            <button ui-sref="add-project" has-permission="Project:Create"  ng-class="{active: $state.includes('admin')}" has-authority="ROLE_ADMIN" class="btn btn-circle green-clr">
+                                            <button ui-sref="add-project" has-permission="Project:Create"  ng-class="{active: $state.includes('admin')}"  class="btn btn-circle green-clr">
                                                 <i class="material-icons">add</i>
                                             </button>
                                             <button ng-click="refreshPage()" class="btn btn-circle orange-clr">
@@ -79,7 +79,7 @@
 							   <td>{{project.email}}</td>
                                 <td class="text-right">
 
-                                    <a  ng-class="{active: $state.includes('admin')}" has-authority="ROLE_ADMIN" has-permission="Project:Edit" ui-sref="edit-project({ id: project.id })"  class="btn btn-simple btn-info"><i class="material-icons">edit</i></a>
+                                    <a  ng-class="{active: $state.includes('admin')}"  has-permission="Project:Edit" ui-sref="edit-project({ id: project.id })"  class="btn btn-simple btn-info"><i class="material-icons">edit</i></a>
 
                                     <!-- <a ng-class="{active: $state.includes('admin')}" has-authority="ROLE_ADMIN"  ng-click="deleteConfirm(project)"  onClick="$('#deleteModal').modal()" data-target="#myModal"   class="btn btn-simple btn-danger"><i class="material-icons">close</i></a> -->
 

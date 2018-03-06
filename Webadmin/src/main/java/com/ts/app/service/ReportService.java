@@ -1,22 +1,30 @@
 package com.ts.app.service;
 
-import com.ts.app.domain.Attendance;
-import com.ts.app.domain.JobStatus;
-import com.ts.app.domain.JobType;
-import com.ts.app.repository.AttendanceRepository;
-import com.ts.app.repository.EmployeeRepository;
-import com.ts.app.repository.JobRepository;
-import com.ts.app.repository.SiteRepository;
-import com.ts.app.web.rest.dto.ReportResult;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+
+import javax.inject.Inject;
+
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.time.DateUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
-import javax.inject.Inject;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.Map;
+import com.ts.app.domain.Employee;
+import com.ts.app.domain.EmployeeProjectSite;
+import com.ts.app.domain.JobStatus;
+import com.ts.app.domain.JobType;
+import com.ts.app.domain.User;
+import com.ts.app.repository.AttendanceRepository;
+import com.ts.app.repository.EmployeeRepository;
+import com.ts.app.repository.JobRepository;
+import com.ts.app.repository.SiteRepository;
+import com.ts.app.repository.UserRepository;
+import com.ts.app.web.rest.dto.ReportResult;
 
 @Service
 public class ReportService extends AbstractService {
@@ -31,6 +39,9 @@ public class ReportService extends AbstractService {
 
     @Inject
     private EmployeeRepository employeeRepository;
+    
+    @Inject
+    private UserRepository userRepository;
 
     @Inject
     private AttendanceRepository attendanceRepository;
@@ -100,7 +111,7 @@ public class ReportService extends AbstractService {
         long assignedJobCount = jobRepository.findJobCountBySiteIdAndStatusDateRange(siteId, sqlDate,sqlEndDate, JobStatus.ASSIGNED);
         long completedJobCount = jobRepository.findJobCountBySiteIdAndStatusDateRange(siteId,sqlDate,sqlEndDate, JobStatus.COMPLETED);
         long overdueJobCount = jobRepository.findJobCountBySiteIdAndStatusDateRange(siteId, sqlDate,sqlEndDate, JobStatus.OVERDUE);
-        long totalJobCount = jobRepository.findTotalJobCountBySiteIdAndDateRange(siteId, sqlDate);
+        long totalJobCount = jobRepository.findTotalJobCountBySiteIdAndDateRange(siteId, sqlDate, sqlEndDate);
         long completedJobTAT = jobRepository.jobCountTAT(siteId, JobStatus.COMPLETED);
 
         ReportResult reportResult = new ReportResult();
@@ -229,7 +240,7 @@ public class ReportService extends AbstractService {
         return reportResult;
     }
 
-    public ReportResult getAttendanceStatsDateRange(Long siteId, Date selectedDate, Date endDate) {
+    public ReportResult getAttendanceStatsDateRange(long userId, Long siteId, Date selectedDate, Date endDate) {
         log.info("Attendance report params : siteId - "+ siteId + ", selectedDate - " + selectedDate + ", endDate -" + endDate );
         Calendar startCal = DateUtils.toCalendar(selectedDate);
 	    	startCal.set(Calendar.HOUR_OF_DAY, 0);
@@ -246,12 +257,47 @@ public class ReportService extends AbstractService {
         if(siteId > 0) {
             totalEmployeeCount = employeeRepository.findCountBySiteId(siteId);
         }else {
-            totalEmployeeCount = employeeRepository.findTotalCount();
+        		if(userId > 0) {
+        			User user = userRepository.findOne(userId);
+        			if(!user.isAdmin()) {
+	        			Employee emp = user.getEmployee();
+	        			List<EmployeeProjectSite> projSites = emp.getProjectSites();
+	        			List<Long> projIds = new ArrayList<Long>(); 
+	        			if(CollectionUtils.isNotEmpty(projSites)) {
+	        				for(EmployeeProjectSite projSite : projSites) {
+	        					projIds.add(projSite.getProjectId());
+	        				}
+	        			}
+	        			totalEmployeeCount = employeeRepository.findTotalCount(projIds);
+        			}else {
+        				totalEmployeeCount = employeeRepository.findTotalCount();	
+        			}
+        		}else {
+        			totalEmployeeCount = employeeRepository.findTotalCount();
+        		}
         }
         if(siteId > 0) {
             presentEmployeeCount = attendanceRepository.findCountBySiteAndCheckInTime(siteId, sqlDate, sqlEndDate);
         }else {
-            presentEmployeeCount = attendanceRepository.findCountByCheckInTime(sqlDate, sqlEndDate);
+        		if(userId > 0) {
+        			User user = userRepository.findOne(userId);
+        			if(!user.isAdmin()) {
+	        			Employee emp = user.getEmployee();
+	        			List<EmployeeProjectSite> projSites = emp.getProjectSites();
+	        			List<Long> siteIds = new ArrayList<Long>(); 
+	        			if(CollectionUtils.isNotEmpty(projSites)) {
+	        				for(EmployeeProjectSite projSite : projSites) {
+	        					siteIds.add(projSite.getSiteId());
+	        				}
+	        			}
+	        			presentEmployeeCount = attendanceRepository.findCountByCheckInTime(siteIds, sqlDate, sqlEndDate);
+        			}else {
+        				presentEmployeeCount = attendanceRepository.findCountByCheckInTime(sqlDate, sqlEndDate);
+        			}
+        		}else {
+        			presentEmployeeCount = attendanceRepository.findCountByCheckInTime(sqlDate, sqlEndDate);
+        		}
+
         }
         absentEmployeeCount = totalEmployeeCount - presentEmployeeCount;
         ReportResult reportResult = new ReportResult();
@@ -262,7 +308,7 @@ public class ReportService extends AbstractService {
         return reportResult;
     }
     
-    public ReportResult getAttendanceStatsByProjectIdDateRange(Long projectId, Date selectedDate, Date endDate) {
+    public ReportResult getAttendanceStatsByProjectIdDateRange(long userId, Long projectId, Date selectedDate, Date endDate) {
         log.info("Attendance report params : projectId - "+ projectId + ", selectedDate - " + selectedDate + ", endDate -" + endDate );
         Calendar startCal = DateUtils.toCalendar(selectedDate);
 	    	startCal.set(Calendar.HOUR_OF_DAY, 0);
@@ -279,12 +325,38 @@ public class ReportService extends AbstractService {
         if(projectId > 0) {
             totalEmployeeCount = employeeRepository.findCountBySiteId(projectId);
         }else {
-            totalEmployeeCount = employeeRepository.findTotalCount();
+        		if(userId > 0) {
+        			User user = userRepository.findOne(userId);
+        			Employee emp = user.getEmployee();
+        			List<EmployeeProjectSite> projSites = emp.getProjectSites();
+        			List<Long> projIds = new ArrayList<Long>(); 
+        			if(CollectionUtils.isNotEmpty(projSites)) {
+        				for(EmployeeProjectSite projSite : projSites) {
+        					projIds.add(projSite.getProjectId());
+        				}
+        			}
+        			totalEmployeeCount = employeeRepository.findTotalCount(projIds);	
+        		}else {
+        			totalEmployeeCount = employeeRepository.findTotalCount();
+        		}
         }
         if(projectId > 0) {
             presentEmployeeCount = attendanceRepository.findCountBySiteAndCheckInTime(projectId, sqlDate, sqlEndDate);
         }else {
-            presentEmployeeCount = attendanceRepository.findCountByCheckInTime(sqlDate, sqlEndDate);
+        		if(userId > 0) {
+        			User user = userRepository.findOne(userId);
+        			Employee emp = user.getEmployee();
+        			List<EmployeeProjectSite> projSites = emp.getProjectSites();
+        			List<Long> siteIds = new ArrayList<Long>(); 
+        			if(CollectionUtils.isNotEmpty(projSites)) {
+        				for(EmployeeProjectSite projSite : projSites) {
+        					siteIds.add(projSite.getSiteId());
+        				}
+        			}
+        			presentEmployeeCount = attendanceRepository.findCountByCheckInTime(siteIds, sqlDate, sqlEndDate);	
+        		}else {
+        			presentEmployeeCount = attendanceRepository.findCountByCheckInTime(sqlDate, sqlEndDate);
+        		}
         }
         absentEmployeeCount = totalEmployeeCount - presentEmployeeCount;
         ReportResult reportResult = new ReportResult();

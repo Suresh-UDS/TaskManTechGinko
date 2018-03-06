@@ -446,7 +446,13 @@ public class JobManagementService extends AbstractService {
 		        	if(searchCriteria.isConsolidated()) {
 
 		        	    log.debug("site reporsitory find all");
-		        		List<Site> allSites = siteRepository.findAll();
+		        		List<Site> allSites = null; 
+		        		if(isAdmin) {
+		        			allSites = siteRepository.findAll();
+		        		}else {
+		        			User user = userRepository.findOne(searchCriteria.getUserId());
+		        			allSites = siteRepository.findSiteByEmployeeId(user.getEmployee().getId());
+		        		}
 		        		for(Site site : allSites) {
 		        			if(searchCriteria.isGraphRequest()) {
 		        				reportResults.add(reportService.jobCountGroupByDate(site.getId(), fromDt, toDt));
@@ -461,7 +467,13 @@ public class JobManagementService extends AbstractService {
 	        			page = jobRepository.findAll(new JobSpecification(searchCriteria,isAdmin),pageRequest);
 	        			allJobsList.addAll(page.getContent());
 	        		}else {
-		        		List<Site> allSites = siteRepository.findAll();
+	        			List<Site> allSites = null;
+	        			if(isAdmin) {
+	        				allSites = siteRepository.findAll();
+	        			}else {
+		        			User user = userRepository.findOne(searchCriteria.getUserId());
+		        			allSites = siteRepository.findSiteByEmployeeId(user.getEmployee().getId());
+	        			}
 		        		for(Site site : allSites) {
 		        			reportResults.add(reportService.jobCountBySiteAndStatus(site.getId()));
 		        		}

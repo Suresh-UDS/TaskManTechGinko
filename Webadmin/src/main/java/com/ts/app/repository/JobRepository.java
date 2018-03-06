@@ -32,8 +32,8 @@ public interface JobRepository extends JpaRepository<Job, Long>,JpaSpecification
     @Query("SELECT count(j.id) from Job j where j.site.id = :siteId and j.plannedStartTime = :selDate and j.status = :currentJobStatus")
     long findJobCountBySiteIdAndStatus(@Param("siteId") Long siteId, @Param("selDate") Date selDate, @Param("currentJobStatus") JobStatus currentJobStatus);
 
-    @Query("SELECT count(j.id) from Job j where j.site.id = :siteId and j.plannedStartTime = :selDate")
-    long findTotalJobCountBySiteIdAndDateRange(@Param("siteId") Long siteId, @Param("selDate") Date selDate);
+    @Query("SELECT count(j.id) from Job j where j.site.id = :siteId and (j.plannedStartTime between :selDate and :endDate)")
+    long findTotalJobCountBySiteIdAndDateRange(@Param("siteId") Long siteId, @Param("selDate") Date selDate, @Param("endDate") Date endDate);
 
     @Query("SELECT count(j.id) from Job j where j.site.id = :siteId and (j.plannedStartTime between :selDate and :endDate) and j.status = :currentJobStatus")
     long findJobCountBySiteIdAndStatusDateRange(@Param("siteId") Long siteId, @Param("selDate") Date selDate, @Param("endDate") Date endDate, @Param("currentJobStatus") JobStatus currentJobStatus);

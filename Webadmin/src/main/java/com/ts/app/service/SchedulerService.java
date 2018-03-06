@@ -292,7 +292,9 @@ public class SchedulerService extends AbstractService {
 					if(siteId > 0) {
 						overdueAlertSetting = settingRepository.findSettingByKeyAndSiteId(SettingsService.EMAIL_NOTIFICATION_OVERDUE, siteId);
 						overdueEmails = settingRepository.findSettingByKeyAndSiteId(SettingsService.EMAIL_NOTIFICATION_OVERDUE_EMAILS, siteId);
-						alertEmailIds = overdueEmails.getSettingValue();
+						if(overdueEmails != null) {
+							alertEmailIds = overdueEmails.getSettingValue();
+						}
 					}else if(projId > 0) {
 						overdueAlertSetting = settingRepository.findSettingByKeyAndProjectId(SettingsService.EMAIL_NOTIFICATION_OVERDUE, projId);
 						overdueEmails = settingRepository.findSettingByKeyAndProjectId(SettingsService.EMAIL_NOTIFICATION_OVERDUE_EMAILS, projId);
