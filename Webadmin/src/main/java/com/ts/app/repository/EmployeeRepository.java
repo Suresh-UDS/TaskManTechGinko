@@ -27,22 +27,22 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long> {
 	@Query("SELECT e FROM Employee e join e.sites s WHERE s.id = :siteId")
 	List<Employee> findBySiteId(@Param("siteId") long siteId);
 
-	@Query("SELECT e FROM Employee e join e.projectSites s WHERE s.siteId IN (:siteIds)")
+	@Query("SELECT distinct e FROM Employee e join e.projectSites s WHERE s.siteId IN (:siteIds)")
 	List<Employee> findBySiteIds(@Param("siteIds") List<Long> siteIds);
 
-	@Query("SELECT e FROM Employee e join e.projectSites s WHERE s.siteId IN (:siteIds)")
+	@Query("SELECT distinct e FROM Employee e join e.projectSites s WHERE s.siteId IN (:siteIds)")
 	Page<Employee> findBySiteIds(@Param("siteIds") List<Long> siteIds, Pageable pageRequest);
 
-	@Query("SELECT e FROM Employee e join e.sites s WHERE s.id = :siteId and e.id IN (:empIds)")
+	@Query("SELECT distinct e FROM Employee e join e.sites s WHERE s.id = :siteId and e.id IN (:empIds)")
 	List<Employee> findBySiteIdAndEmpIds(@Param("siteId") long siteId, @Param("empIds") List<Long> empIds);
 
 	@Query("SELECT e FROM Employee e join e.projects p WHERE p.id = :projectId")
 	List<Employee> findByProjectId(@Param("projectId") long projectId);
 
-	@Query("SELECT e FROM Employee e WHERE e.empId IN :empIds order by e.empId")
+	@Query("SELECT distinct e FROM Employee e WHERE e.empId IN :empIds order by e.empId")
 	List<Employee> findAllByEmpIds(@Param("empIds") List<String> empIds);
 	
-	@Query("SELECT e FROM Employee e WHERE e.id IN :empIds order by e.empId")
+	@Query("SELECT distinct e FROM Employee e WHERE e.id IN :empIds order by e.empId")
 	Page<Employee> findAllByEmpIds(@Param("empIds") List<Long> empIds, Pageable PageRequest);
 
     @Query("SELECT e FROM Employee e WHERE e.id = :employeeId")
@@ -51,7 +51,7 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long> {
 	@Query("SELECT e FROM Employee e WHERE e.active='Y' order by e.createdDate desc")
     Page<Employee> findAll(Pageable pageRequest);
 
-	@Query("SELECT e FROM Employee e WHERE e.id IN :empIds and e.active='Y' order by e.createdDate desc")
+	@Query("SELECT distinct e FROM Employee e WHERE e.id IN :empIds and e.active='Y' order by e.createdDate desc")
     List<Employee> findAllByIds(@Param("empIds") List<Long> empIds);
 
 	@Query("SELECT e FROM Employee e WHERE e.id <> :empId and e.active='Y' order by e.empId")
@@ -63,7 +63,7 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long> {
     @Query("SELECT e FROM Employee e  WHERE  e.isReliever=true and e.active='Y' order by e.empId")
     List<Employee> findAllRelievers();
 
-    @Query("SELECT e FROM Employee e  WHERE e.id IN :empIds and  e.isReliever=true and e.active='Y' order by e.empId")
+    @Query("SELECT distinct e FROM Employee e  WHERE e.id IN :empIds and  e.isReliever=true and e.active='Y' order by e.empId")
     List<Employee> findAllRelieversByIds(@Param("empIds") List<Long> empIds);
 
     @Query("SELECT e FROM Employee e join e.projectSites ps WHERE ((e.id = :employeeId and ps.projectId = :projectId) or ps.siteId = :siteId) and e.active='Y' order by e.empId")
@@ -122,7 +122,7 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long> {
 	@Query("SELECT e FROM Employee e where e.user.id = :userId ")
 	List<Employee> findListByUserId(@Param("userId") Long userId);
 
-	@Query("SELECT u FROM Employee e join e.user u where e.id IN :employeeIds")
+	@Query("SELECT distinct u FROM Employee e join e.user u where e.id IN :employeeIds")
 	List<User> findUsersByEmployeeIds(@Param("employeeIds") List<Long> employeeIds);
 
 	@Query("SELECT count(e) FROM Employee e join e.sites s WHERE s.id = :siteId and e.active = 'Y'")
