@@ -50,7 +50,12 @@ export class QuotationPopoverPage {
     }
     else
     {
-      if(!this.name)
+      if(!this.type)
+      {
+        this.eMsg="type";
+        this.field="type";
+      }
+      else  if(!this.name)
       {
         this.eMsg="name";
         this.field="name";
@@ -59,11 +64,6 @@ export class QuotationPopoverPage {
       {
         this.eMsg="cost";
         this.field="cost";
-      }
-      else if(!this.type)
-      {
-        this.eMsg="type";
-        this.field="type";
       }
 
     }
