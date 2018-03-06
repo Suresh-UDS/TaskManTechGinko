@@ -84,7 +84,7 @@
                                             <button type="submit" class="btn btn-circle blue-clr">
                                                 <i class="material-icons">search</i>
                                             </button>
-                                            <button ui-sref="add-employee"  ng-class="{active: $state.includes('admin')}" has-authority="ROLE_ADMIN" class="btn btn-circle green-clr">
+                                            <button ui-sref="add-employee" has-permission="Employee:Create"  ng-class="{active: $state.includes('admin')}" has-authority="ROLE_ADMIN" class="btn btn-circle green-clr">
                                                 <i class="material-icons">add</i>
                                             </button>
                                             <button ng-click="refreshPage()" class="btn btn-circle orange-clr">
@@ -138,7 +138,7 @@
                                 </td>
 
                                 <td ng-if="!employee.faceAuthorised && employee.faceIdEnrolled">
-                                    <button class="btn btn-success btn-sm" ng-click="approveImage(employee)">Approve</button>
+                                    <button class="btn btn-success btn-sm" has-permission="Employee:Create" ng-click="approveImage(employee)">Approve</button>
                                 </td>
                                 <td ng-if="employee.faceAuthorised && employee.faceIdEnrolled"><p style="color:green">Face Id Approved</p> </td>
                                 <td ng-if="!employee.faceAuthorised && !employee.faceIdEnrolled"><p style="color:red">Face Id not enrolled</p> </td>
@@ -149,8 +149,8 @@
                                 </td>
                                 <td class="text-right">
                                     <button ng-disabled="employee.left" title="View" has-authority="ROLE_ADMIN" ng-click="getCheckInDetails(employee.id)" ui-sref="view-employee({ id: employee.id })"   class="btn btn-simple btn-info btn-icon like"><i style="font-size: 20px" class="material-icons">remove_red_eye</i></button>
-                                    <button ng-disabled="employee.left" title="Mark Attendance " has-authority="ROLE_ADMIN" data-toggle="modal" data-target="#noticeModal" ng-click="getEmployeeDetails(employee.id)"  class="btn btn-simple btn-info btn-icon like"><i style="font-size: 20px" class="material-icons">date_range</i></button>
-                                    <button ng-disabled="employee.left" ng-class="{active: $state.includes('admin')}" has-authority="ROLE_ADMIN"  ui-sref="edit-employee({ id: employee.id })" type="button" rel="tooltip" title="Edit Profile" class="btn btn-success btn-simple btn-xs">
+                                    <button ng-disabled="employee.left" title="Mark Attendance "  has-authority="ROLE_ADMIN" data-toggle="modal" data-target="#noticeModal" ng-click="getEmployeeDetails(employee.id)"  class="btn btn-simple btn-info btn-icon like"><i style="font-size: 20px" class="material-icons">date_range</i></button>
+                                    <button ng-disabled="employee.left" ng-class="{active: $state.includes('admin')}" has-authority="ROLE_ADMIN" has-permission="Employee:Edit"  ui-sref="edit-employee({ id: employee.id })" type="button" rel="tooltip" title="Edit Profile" class="btn btn-success btn-simple btn-xs">
                                         <i style="font-size: 20px !important;" class="fa fa-edit"></i>
                                     </button>
                                     <button ng-disabled="employee.left" title="Mark Left"   has-authority="ROLE_ADMIN"  data-toggle="modal" data-target="#leftModal" data-dismiss="#leftModal" ng-click="employeeDetails(employee.id)"  class="btn btn-simple btn-info btn-icon like"> <i style="font-size: 20px !important; color: #942a25" class="fas fa-user-times"></i></button>
@@ -159,10 +159,6 @@
                                 </td>
 
                             </tr>
-
-
-
-
 
 
                             </tbody>
