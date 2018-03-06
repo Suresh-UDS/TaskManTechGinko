@@ -536,7 +536,7 @@ span.EmpNameTxt
   line-height: 38px !important;
       font-size: 14px;
 }
-.FeedbackQuesCon
+.FeedbackQuesCon .scroll-content
 {
   background:url("../img/Form-bg.jpg");
 }
@@ -661,7 +661,10 @@ span.EmpNameTxt
   margin-left: auto !important;
   margin-right: auto !important;
 }
-
+.ActionBtns button.act-btn-view
+{
+   padding-right:
+}
 
 .item-label .label-md
 {
@@ -972,6 +975,49 @@ ion-spinner{
   margin-right: 0 !important;
   margin-left: 0 !important;
 }
+
+/* Custom radio Button */
+.cc-selector
+{
+  padding:10px 0;
+}
+.cc-selector input{
+    margin:0;padding:0;
+    -webkit-appearance:none;
+       -moz-appearance:none;
+            appearance:none;
+}
+.yes{background-image:url(../img/green-check-01.png);}
+.no{background-image:url(../img/red-cross-01.png);}
+
+.cc-selector input:active +.check-btn{opacity: .9;}
+.cc-selector input:checked +.check-btn{
+    -webkit-filter: none;
+       -moz-filter: none;
+            filter: none;
+}
+.check-btn{
+    cursor:pointer;
+    background-size:contain;
+    background-repeat:no-repeat;
+    display:inline-block;
+       width: 40px;
+       height: 40px;
+       margin-right: 15px;
+    -webkit-transition: all 100ms ease-in;
+       -moz-transition: all 100ms ease-in;
+            transition: all 100ms ease-in;
+    -webkit-filter: brightness(1.8) grayscale(1) opacity(.7);
+       -moz-filter: brightness(1.8) grayscale(1) opacity(.7);
+            filter: brightness(1.8) grayscale(1) opacity(.7);
+}
+.check-btn:hover{
+    -webkit-filter: brightness(1.2) grayscale(.5) opacity(.9);
+       -moz-filter: brightness(1.2) grayscale(.5) opacity(.9);
+            filter: brightness(1.2) grayscale(.5) opacity(.9);
+}
+
+
 .wrap-name
 {
   font-size: 10px !important;
