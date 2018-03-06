@@ -1057,7 +1057,37 @@ ion-spinner{
 }
 .bg-trans
 {
-    background: transparent;
+    background: transparent !important;
+}
+
+
+
+.QuesContent ion-list
+{
+       width: 60% !important;
+       padding-top: 10px !important;
+}
+.QuesContent ion-list ion-item
+{
+      width: 48% !important;
+      border-radius: 30px !important;
+      border: 2px solid #FFF !important;
+      /* height: 20px !important; */
+      height: 35px !important;
+      min-height: 35px !important;
+}
+.QuesContent ion-list ion-item.item-radio-checked
+{
+      border: 2px solid #FFC107 !important;
+}
+.QuesContent ion-list ion-item ion-radio
+{
+   margin-top: 4px !important;
+}
+.QuesContent ion-list ion-item label
+{
+       color: #fff !important;
+       margin-top: 4px !important;
 }
 
 .wrap-name
