@@ -30,7 +30,7 @@
                         </div>
                         <div class="col-md-4 txt-align-rgt">
 
-                            <button ui-sref="add-location"  ng-class="{active: $state.includes('admin')}" has-authority="ROLE_ADMIN" class="btn btn-circle green-clr">
+                            <button ui-sref="add-location"  has-permission="Location:Create" ng-class="{active: $state.includes('admin')}" has-authority="ROLE_ADMIN" class="btn btn-circle green-clr">
                                 <i class="material-icons">add</i>
                             </button>
                             <button ng-click="refreshPage()" class="btn btn-circle orange-clr">
