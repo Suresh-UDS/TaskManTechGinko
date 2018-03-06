@@ -12,7 +12,7 @@
    <div>
 
 
-       <ion-list radio-group>
+       <ion-list>
            <ion-item *ngFor="let q of questions;let i of index">
 
                <h3>{{q.question}}</h3>
@@ -48,7 +48,7 @@
 
 </ion-content>
 <ion-footer>
-    <ion-toolbar>
-        <button ion-button full (click)="submitFeedback()" onclick="demo.showSwal('feedback-success','Thank you!','For your Feedback')">Submit</button>
+    <ion-toolbar class="txt-center">
+        <button class="btn btn-warning" ion-button (click)="submitFeedback()" onclick="demo.showSwal('feedback-success','Thank you!','For your Feedback')">Submit</button>
     </ion-toolbar>
 </ion-footer>
