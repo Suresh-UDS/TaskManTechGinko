@@ -257,16 +257,7 @@ button.ion-circle-icons
 {
   display: none;
 }
-.popover-md .popover-content
-{
-  /*
-  top: 90px !important;
-  left: 100px !important;
-  padding: 0;
-  width: 250px !important;
-  padding-right: 10px !important;
-  */
-}
+
 .lable-clr .label
 {
   color:#000000;
@@ -999,4 +990,22 @@ ion-spinner{
 .select-error
 {
     border-bottom: 1px solid #f53d3d !important;
+}
+.selectbox-popover .popover-md .popover-content
+{
+    padding: 0 !important;
+    bottom: 6px !important;
+}
+.selectbox-popover .item-md
+{
+    padding-left: 0 !important;
+}
+.selectbox-popover .label
+{
+    color: #000000;
+    text-align: left;
+}
+.popover-content
+{
+    padding: 0 !important;
 }
