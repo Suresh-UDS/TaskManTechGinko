@@ -130,7 +130,7 @@
                                             <button type="submit" class="btn btn-circle blue-clr">
                                                 <i class="material-icons">search</i>
                                             </button>
-                                            <button ui-sref="add-quotation" has-permission="Quotation:Create"  ng-class="{active: $state.includes('admin')}" has-authority="ROLE_ADMIN" class="btn btn-circle green-clr">
+                                            <button ui-sref="add-quotation" has-permission="Quotation:Create"  ng-class="{active: $state.includes('admin')}"  class="btn btn-circle green-clr">
                                                 <i class="material-icons">add</i>
                                             </button>
                                             <button ng-click="refreshPage()" class="btn btn-circle orange-clr">
@@ -183,17 +183,17 @@
                             <td ng-if="quotation.isSubmitted"><button class="btn btn-warning">Submitted</button></td>
                             <td>{{quotation.grandTotal}} </td>
                             <td class="text-right">
-                                <a name="View Quotation" ng-class="{active: $state.includes('admin')}" has-authority="ROLE_ADMIN" ui-sref="view-quotation({ id: quotation._id })"  class="btn btn-simple btn-info"><i class="material-icons">remove_red_eye</i></a>
+                                <a name="View Quotation" ng-class="{active: $state.includes('admin')}"  ui-sref="view-quotation({ id: quotation._id })"  class="btn btn-simple btn-info"><i class="material-icons">remove_red_eye</i></a>
                             </td>
                             <td class="text-right">
-                                <a name="Edit Quotation" has-permission="Quotation:Edit"  ng-class="{active: $state.includes('admin')}" has-authority="ROLE_ADMIN" ui-sref="edit-quotation({ id: quotation._id })"  class="btn btn-simple btn-success"><i class="material-icons">edit</i></a>
+                                <a name="Edit Quotation" has-permission="Quotation:Edit"  ng-class="{active: $state.includes('admin')}"  ui-sref="edit-quotation({ id: quotation._id })"  class="btn btn-simple btn-success"><i class="material-icons">edit</i></a>
 							</td>
 							<td class="text-right">
                                 <!-- <a name="Approve Quotation" ng-if="quotation.isSubmitted" ng-class="{active: $state.includes('admin')}" has-authority="ROLE_ADMIN" ng-click="approveQuotation(quotation)"  class="btn btn-simple btn-success"></a> -->
-                                <button  title="Approve Quotation" ng-if="quotation.isSubmitted"  has-authority="ROLE_ADMIN"  data-toggle="modal" data-target="#approveQuotationModal" data-dismiss="#approveQuotationModal" ng-click="selectQuotation(quotation)"  class="btn btn-simple btn-info btn-icon like"> <i class="material-icons">done</i> </button>
+                                <button  title="Approve Quotation" ng-if="quotation.isSubmitted"    data-toggle="modal" data-target="#approveQuotationModal" data-dismiss="#approveQuotationModal" ng-click="selectQuotation(quotation)"  class="btn btn-simple btn-info btn-icon like"> <i class="material-icons">done</i> </button>
                              </td>
                              <td>
-                                <a name="Delete Quotation" ng-if="quotation.isApproved || quotation.isDrafted" ng-class="{active: $state.includes('admin')}" has-authority="ROLE_ADMIN"  ng-click="deleteConfirm(site)"  onClick="$('#deleteModal').modal()" data-target="#myModal"  class="btn btn-simple btn-danger"><i class="material-icons">close</i></a>
+                                <a name="Delete Quotation" ng-if="quotation.isApproved || quotation.isDrafted" ng-class="{active: $state.includes('admin')}"   ng-click="deleteConfirm(site)"  onClick="$('#deleteModal').modal()" data-target="#myModal"  class="btn btn-simple btn-danger"><i class="material-icons">close</i></a>
                             </td>
 
                         </tr>
