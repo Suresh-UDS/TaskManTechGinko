@@ -1,7 +1,7 @@
 import { Component, Input, ViewChild, ElementRef, Renderer } from '@angular/core';
 import {
     ActionSheetController, Events, Item, ItemSliding, LoadingController, ModalController,
-    NavController
+    NavController, Platform
 } from 'ionic-angular';
 import {authService} from "../service/authService";
 import {DatePickerProvider} from "ionic2-date-picker";
@@ -52,8 +52,21 @@ export class DashboardPage {
     userType:any;
     openMore:any;
     closeMore:any;
-  constructor(public renderer: Renderer,public myService:authService,private loadingCtrl:LoadingController,public navCtrl: NavController,public component:componentService,public authService:authService,public modalCtrl: ModalController,
+    rateCard:any;
+    addJob:any;
+    addQuotation:any;
+    platform:any;
+    addEmployee:any;
+    slideIndex:any;
+
+  constructor(public renderer: Renderer,public plt: Platform,public myService:authService,private loadingCtrl:LoadingController,public navCtrl: NavController,public component:componentService,public authService:authService,public modalCtrl: ModalController,
               private datePickerProvider: DatePickerProvider, private siteService:SiteService, private employeeService: EmployeeService, private jobService:JobService, public events:Events, private actionSheetCtrl:ActionSheetController) {
+
+
+      this.rateCard=CreateQuotationPage;
+      this.addJob=CreateJobPage;
+      this.addQuotation=CreateQuotationPage;
+      this.addEmployee=CreateEmployeePage
 
     this.categories='overdue';
     this.selectDate=new Date();
@@ -84,6 +97,16 @@ export class DashboardPage {
 */
   ionViewDidLoad()
   {
+
+      if (this.plt.is('android')) {
+          this.platform="android"
+          console.log("=====Platform=====:"+this.platform);
+      }
+      else if (this.plt.is('ios')) {
+          this.platform="ios"
+          console.log("=====Platform=====:"+this.platform);
+      }
+
 
       this.events.subscribe('userType',(userType)=>{
           console.log("user type in dashboard");
@@ -165,7 +188,8 @@ export class DashboardPage {
               console.log(response);
               this.allJobs = response.transactions;
               this.component.closeLoader();
-
+              console.log("====Jobs=====:");
+              console.log(this.allJobs);
               this.overdueCount=this.allJobs.filter((data,i)=>{
                   if(data.status=='OVERDUE')
                   {
@@ -226,25 +250,7 @@ export class DashboardPage {
     }
 
 
-    fabClick(fab)
-    {
-        if(fab=='ratecard')
-        {
-            this.navCtrl.push(CreateRateCardPage);
-        }
-        else if(fab=='job')
-        {
-            this.navCtrl.push(CreateJobPage);
-        }
-        else if(fab=='quotation')
-        {
-            this.navCtrl.push(CreateQuotationPage);
-        }
-        else if(fab=='employee')
-        {
-            this.navCtrl.push(CreateEmployeePage);
-        }
-    }
+
 
     showCalendar() {
         const dateSelected =
@@ -367,9 +373,9 @@ export class DashboardPage {
             itemSlide.setElementClass("active-options-right", true);
             item.setElementStyle("transform", "translate3d(-150px, 0px, 0px)")
         }
-
     }
     close(item: ItemSliding) {
+        this.count=0;
         item.close();
         item.setElementClass("active-sliding", false);
         item.setElementClass("active-slide", false);

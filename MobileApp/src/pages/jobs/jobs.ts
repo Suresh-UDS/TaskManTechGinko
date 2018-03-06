@@ -179,6 +179,7 @@ export class JobsPage {
 
     }
     close(item: ItemSliding) {
+        this.count=0;
         item.close();
         item.setElementClass("active-sliding", false);
         item.setElementClass("active-slide", false);
