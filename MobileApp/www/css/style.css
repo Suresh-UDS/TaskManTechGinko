@@ -247,6 +247,10 @@ button.ion-circle-icons
     color: #000 !important;
     text-align: left !important;
 }
+.txt-center
+{
+  text-align:center;
+}
 .ver-center
 {
   display: flex !important;
