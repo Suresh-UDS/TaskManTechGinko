@@ -79,7 +79,7 @@
                                             <button type="submit" class="btn btn-circle blue-clr" ng-disabled="searchForm.$invalid">
                                                 <i class="material-icons">search</i>
                                             </button>
-                                            <button ui-sref="add-user" has-permission="User:Create"  ng-class="{active: $state.includes('admin')}" has-authority="ROLE_ADMIN" class="btn btn-circle green-clr">
+                                            <button ui-sref="add-user" has-permission="User:Create"  ng-class="{active: $state.includes('admin')}"  class="btn btn-circle green-clr">
                                                 <i class="material-icons">add</i>
                                             </button>
                                             <button ng-click="refreshPage()" class="btn btn-circle orange-clr">
@@ -126,7 +126,7 @@
 
 
                                 <td class="text-right">
-                                    <a   has-authority="ROLE_ADMIN" has-permission="User:Edit" ui-sref="edit-user({ id: user.id })"   class="btn btn-simple btn-info btn-icon like"><i class="material-icons">edit</i></a>
+                                    <a    has-permission="User:Edit" ui-sref="edit-user({ id: user.id })"   class="btn btn-simple btn-info btn-icon like"><i class="material-icons">edit</i></a>
                                 </td>
                             </tr>
 

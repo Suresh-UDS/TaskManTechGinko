@@ -14,7 +14,7 @@
                     </div>
                     <div class="col-md-4 txt-align-rgt">
 
-                        <button ui-sref="add-rateCard" has-permission="RateCard:Create"  ng-class="{active: $state.includes('admin')}" has-authority="ROLE_ADMIN" class="btn btn-circle green-clr">
+                        <button ui-sref="add-rateCard" has-permission="RateCard:Create"  ng-class="{active: $state.includes('admin')}"  class="btn btn-circle green-clr">
                             <i class="material-icons">add</i>
                         </button>
                         <button ng-click="refreshPage()" class="btn btn-circle orange-clr">
@@ -44,9 +44,9 @@
                             <td>{{rateCard.cost}}</td>
                             <td>{{rateCard.uom}}</td>
                             <td class="text-right">
-                                <a  ng-class="{active: $state.includes('admin')}" has-authority="ROLE_ADMIN" ng-click="loadRateCard(rateCard)" data-toggle="modal" data-target="#RightModal-view" class="btn btn-simple btn-info"><i class="material-icons">remove_red_eye</i></a>
+                                <a  ng-class="{active: $state.includes('admin')}"  ng-click="loadRateCard(rateCard)" data-toggle="modal" data-target="#RightModal-view" class="btn btn-simple btn-info"><i class="material-icons">remove_red_eye</i></a>
                                 <!--<a  ng-class="{active: $state.includes('admin')}" has-authority="ROLE_ADMIN"data-toggle="modal" data-target="#RightModal-edit"  class="btn btn-simple btn-success"><i class="material-icons">edit</i></a>-->
-                                <a ng-class="{active: $state.includes('admin')}" has-authority="ROLE_ADMIN"  ng-click="deleteConfirm(rateCard)"  onClick="$('#deleteModal').modal()" data-target="#myModal"  class="btn btn-simple btn-danger"><i class="material-icons">close</i></a>
+                                <a ng-class="{active: $state.includes('admin')}"  ng-click="deleteConfirm(rateCard)"  onClick="$('#deleteModal').modal()" data-target="#myModal"  class="btn btn-simple btn-danger"><i class="material-icons">close</i></a>
                             </td>
 
                         </tr>
