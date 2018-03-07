@@ -124,7 +124,7 @@
                                     <h3>No of Feedbacks</h3>
                                 </div>
                                 <div class="col-md-6">
-                                    <h3>100</h3>
+                                    <h3>{{feedbackCount}}</h3>
                                 </div>
 
                             </div>
@@ -138,7 +138,7 @@
                                     <h3>Overall rating  </h3>
                                 </div>
                                 <div class="col-md-6">
-                                    <h3>4.5</h3>
+                                    <h3>{{overallRating}}</h3>
                                 </div>
 
                             </div>
@@ -171,37 +171,10 @@
                             </tr>
                             </thead>
                             <tbody>
-                            <tr>
-                                <td>Was the restroom floor clean when you visited last time?</td>
-                                <td>10</td>
-                                <td>2</td>
-                            </tr>
-                            <tr>
-                                <td>Was the restroom floor clean when you visited last time?</td>
-                                <td>10</td>
-                                <td>2</td>
-                            </tr>
-                            <tr ng-repeat="">
-                                <td>Was the restroom floor clean when you visited last time?</td>
-                                <td>10</td>
-                                <td>2</td>
-                            </tr>
-                            <tr>
-                                <td>Was the restroom floor clean when you visited last time?</td>
-                                <td>10</td>
-                                <td>2</td>
-                            </tr>
-                            <tr>
-                                <td>Was the restroom floor clean when you visited last time?</td>
-                                <td>10</td>
-                                <td>2</td>
-                            </tr>
-                            <tr>
-                                <td>Was the restroom floor clean when you visited last time?</td>
-                                <td>10</td>
-                                <td>2</td>
-
-
+                            <tr ng-repeat="questionRating in feedbackReport.questionRatings">
+                                <td>{{questionRating.question}}</td>
+                                <td>{{questionRating.yesCount}}</td>
+                                <td>{{questionRating.noCount}}</td>
                             </tr>
                             </thead>
                             <tbody>
