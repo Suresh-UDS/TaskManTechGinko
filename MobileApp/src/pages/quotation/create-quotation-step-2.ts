@@ -258,7 +258,7 @@ export class CreateQuotationPage2 {
             response=>{
                 console.log(response);
                 this.componentService.showToastMessage('Quotation Successfully Drafted','bottom');
-                this.navCtrl.push(QuotationPage);
+                this.navCtrl.setRoot(QuotationPage);
 
             },err=>{
                 this.componentService.showToastMessage('Error in drafting quotation, your changes cannot be saved!','bottom');
