@@ -71,6 +71,7 @@ import {JobService} from "../pages/service/jobService";
 import {QuotationService} from "../pages/service/quotationService";
 import {SiteService} from "../pages/service/siteService";
 import {JobPopoverPage} from "../pages/jobs/job-popover";
+import {BatteryStatus, BatteryStatusResponse} from "@ionic-native/battery-status";
 
 
 @NgModule({
@@ -194,6 +195,7 @@ import {JobPopoverPage} from "../pages/jobs/job-popover";
       OneSignal,
     componentService,
       OneSignal,
+      BatteryStatus,
     Toast,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
       {provide:MY_CONFIG_TOKEN, useValue: AppConfig}
