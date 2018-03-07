@@ -56,8 +56,8 @@ import {ViewQuotationPage} from "../pages/quotation/viewQuotation";
 import {FeedbackPage} from "../pages/feedback/feedback";
 import {FeedbackQuestionPage} from "../pages/feedback/feedback-questions";
 import {InitFeedbackPage} from "../pages/feedback/init-feedback";
-
-
+import { FileTransfer, FileUploadOptions, FileTransferObject } from '@ionic-native/file-transfer';
+import { File } from '@ionic-native/file';
 
 import {CreateEmployeePage} from "../pages/employee-list/create-employee";
 import {OneSignal} from "@ionic-native/onesignal";
@@ -195,6 +195,8 @@ import {JobPopoverPage} from "../pages/jobs/job-popover";
     componentService,
       OneSignal,
     Toast,
+    FileTransfer,
+    File,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
       {provide:MY_CONFIG_TOKEN, useValue: AppConfig}
   ]
