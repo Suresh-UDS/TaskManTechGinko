@@ -126,7 +126,7 @@
                             <tbody>
                             <tr ng-repeat="employee in employees" repeat-done="initDataTables()">
                                 <td>{{employee.empId}}</td>
-                                <td>{{employee.fullName}}</td>
+                                <td>{{employee.fullName}} {{employee.lastName}}</td>
 
                                 <td ng-if="employee.enrolled_face">
                                     <a id="images" href="#" onClick="$('#enrollImageModal').modal()" data-target="#enrollImageModal" data-dismiss="#enrollImageModal" ng-click="loadEnrolledImage(employee.enrolled_face)">
