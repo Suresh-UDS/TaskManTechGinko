@@ -25,7 +25,7 @@ export class ViewQuotationPage {
             response=>{
                 console.log(response);
                 this.componentService.showToastMessage('Quotation Sent Successfully','bottom');
-                this.navCtrl.push(QuotationPage);
+                this.navCtrl.setRoot(QuotationPage);
             },err=>{
                 console.log("Unable to send quotation, please try again later")
                 this.componentService.showToastMessage('Error in sending Quotation, Please try again later','bottom');
@@ -38,7 +38,7 @@ export class ViewQuotationPage {
             response=>{
                 console.log(response);
                 this.componentService.showToastMessage('Quotation Approved','bottom');
-                this.navCtrl.push(QuotationPage);
+                this.navCtrl.setRoot(QuotationPage);
             },err=>{
                 console.log("Unable to send quotation");
                 console.log(err);

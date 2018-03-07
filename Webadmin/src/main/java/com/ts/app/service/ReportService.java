@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.inject.Inject;
+import javax.transaction.Transactional;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.time.DateUtils;
@@ -27,6 +28,7 @@ import com.ts.app.repository.UserRepository;
 import com.ts.app.web.rest.dto.ReportResult;
 
 @Service
+@Transactional
 public class ReportService extends AbstractService {
 
 	private final Logger log = LoggerFactory.getLogger(ReportService.class);
@@ -323,19 +325,23 @@ public class ReportService extends AbstractService {
         long presentEmployeeCount = 0;
         long absentEmployeeCount = 0;
         if(projectId > 0) {
-            totalEmployeeCount = employeeRepository.findCountBySiteId(projectId);
+            totalEmployeeCount = employeeRepository.findCountByProjectId(projectId);
         }else {
         		if(userId > 0) {
         			User user = userRepository.findOne(userId);
-        			Employee emp = user.getEmployee();
-        			List<EmployeeProjectSite> projSites = emp.getProjectSites();
-        			List<Long> projIds = new ArrayList<Long>(); 
-        			if(CollectionUtils.isNotEmpty(projSites)) {
-        				for(EmployeeProjectSite projSite : projSites) {
-        					projIds.add(projSite.getProjectId());
-        				}
+        			if(user.getUserRole().getName().equalsIgnoreCase("Admin")) {
+        				totalEmployeeCount = employeeRepository.findTotalCount();
+        			}else {
+	        			Employee emp = user.getEmployee();
+	        			List<EmployeeProjectSite> projSites = emp.getProjectSites();
+	        			List<Long> projIds = new ArrayList<Long>(); 
+	        			if(CollectionUtils.isNotEmpty(projSites)) {
+	        				for(EmployeeProjectSite projSite : projSites) {
+	        					projIds.add(projSite.getProjectId());
+	        				}
+	        			}
+	        			totalEmployeeCount = employeeRepository.findTotalCount(projIds);
         			}
-        			totalEmployeeCount = employeeRepository.findTotalCount(projIds);	
         		}else {
         			totalEmployeeCount = employeeRepository.findTotalCount();
         		}
@@ -345,15 +351,19 @@ public class ReportService extends AbstractService {
         }else {
         		if(userId > 0) {
         			User user = userRepository.findOne(userId);
-        			Employee emp = user.getEmployee();
-        			List<EmployeeProjectSite> projSites = emp.getProjectSites();
-        			List<Long> siteIds = new ArrayList<Long>(); 
-        			if(CollectionUtils.isNotEmpty(projSites)) {
-        				for(EmployeeProjectSite projSite : projSites) {
-        					siteIds.add(projSite.getSiteId());
-        				}
+        			if(user.getUserRole().getName().equalsIgnoreCase("Admin")) {
+        				presentEmployeeCount = attendanceRepository.findCountByCheckInTime(sqlDate, sqlEndDate);	
+        			}else {	
+	        			Employee emp = user.getEmployee();
+	        			List<EmployeeProjectSite> projSites = emp.getProjectSites();
+	        			List<Long> siteIds = new ArrayList<Long>(); 
+	        			if(CollectionUtils.isNotEmpty(projSites)) {
+	        				for(EmployeeProjectSite projSite : projSites) {
+	        					siteIds.add(projSite.getSiteId());
+	        				}
+	        			}
+	        			presentEmployeeCount = attendanceRepository.findCountByCheckInTime(siteIds, sqlDate, sqlEndDate);
         			}
-        			presentEmployeeCount = attendanceRepository.findCountByCheckInTime(siteIds, sqlDate, sqlEndDate);	
         		}else {
         			presentEmployeeCount = attendanceRepository.findCountByCheckInTime(sqlDate, sqlEndDate);
         		}

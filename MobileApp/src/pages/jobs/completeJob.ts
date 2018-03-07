@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Inject } from '@angular/core';
 import {LoadingController, NavController, NavParams, PopoverController} from 'ionic-angular';
 import {authService} from "../service/authService";
 import {Camera, CameraOptions} from "@ionic-native/camera";
@@ -8,7 +8,9 @@ import {JobService} from "../service/jobService";
 import {AttendanceService} from "../service/attendanceService";
 import {JobPopoverPage} from "./job-popover";
 import {componentService} from "../service/componentService";
-
+import { FileTransfer, FileUploadOptions, FileTransferObject } from '@ionic-native/file-transfer';
+import { File } from '@ionic-native/file';
+import {ApplicationConfig, MY_CONFIG_TOKEN} from "../service/app-config";
 @Component({
     selector: 'page-complete-job',
     templateUrl: 'completeJob.html'
@@ -34,11 +36,11 @@ export class CompleteJobPage {
     count:any;
     sLength:any;
     onButton:any;
+    fileTransfer: FileTransferObject = this.transfer.create();
 
-
-    constructor(public navCtrl: NavController,public navParams:NavParams, public authService: authService,
+    constructor(public navCtrl: NavController,public navParams:NavParams, public authService: authService, @Inject(MY_CONFIG_TOKEN) private config:ApplicationConfig,
                 private loadingCtrl:LoadingController, public camera: Camera,private geolocation:Geolocation, private jobService: JobService,
-                private attendanceService: AttendanceService,public popoverCtrl: PopoverController, private component:componentService) {
+                private attendanceService: AttendanceService,public popoverCtrl: PopoverController, private component:componentService,private transfer: FileTransfer, private file: File) {
         this.jobDetails=this.navParams.get('job');
         this.takenImages = [];
         this.checkOutDetails={
@@ -127,6 +129,39 @@ export class CompleteJobPage {
                 this.component.showToastMessage('Job Completed Successfully','bottom');
                 //TODO
                 //File Upload after successful checkout
+
+
+
+                for(let i in takenImages) {
+
+                    console.log("image loop");
+                    console.log(i)
+                    console.log(takenImages[i]);
+                    console.log(takenImages[i].file);
+                    console.log(this.jobDetails.id);
+                    console.log(this.jobDetails.id+i);
+
+                    let options: FileUploadOptions = {
+                        fileKey: 'file',
+                        fileName:this.jobDetails.id+i,
+                        headers:{
+
+                        },
+                        params:{
+
+                        }
+                    }
+
+                    this.fileTransfer.upload(takenImages[i], this.config+'api/employee/image/upload', options)
+                        .then((data) => {
+                            console.log(data);
+                            console.log("image upload");
+                        }, (err) => {
+                            console.log(err);
+                            console.log("image upload fail");
+                        })
+
+                }
             },err=>{
                 this.component.closeLoader();
             }
