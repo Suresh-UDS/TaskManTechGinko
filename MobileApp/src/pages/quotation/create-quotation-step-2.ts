@@ -49,6 +49,7 @@ export class CreateQuotationPage2 {
     authorisedByUserName:any;
     grandTotal=0;
     quotationDetails:any;
+    selectOptions:any;
 
     constructor(public navCtrl: NavController,public modalCtrl: ModalController,public navParams:NavParams,public popoverCtrl: PopoverController, public evts: Events, public authService:authService, public alertCtrl: AlertController, public componentService:componentService,
                 private quotationService: QuotationService, private siteService: SiteService
@@ -69,6 +70,13 @@ export class CreateQuotationPage2 {
         this.sentByUserId = employeeDetails.employee.id;
         this.sentByUserName = employeeDetails.employee.fullName;
 
+    }
+
+    ionViewDidLoad()
+    {
+        this.selectOptions={
+            cssClass: 'selectbox-popover'
+        }
     }
 
     selectSite(site){

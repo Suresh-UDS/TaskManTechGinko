@@ -148,12 +148,6 @@ export class CreateEmployeePage {
       })
   }
 
-    callToast()
-    {
-
-        this.component.showToastMessage('Select Project','bottom');
-    }
-
   addProjectSites(site){
       this.siteDetails =site;
       console.log("adding project and sites");
@@ -259,22 +253,5 @@ export class CreateEmployeePage {
       this.component.showToastMessage(this.msg,'bottom');
     }
   }
-  login() {
-    console.log('form submitted');
-    if (this.username && this.password) {
 
-
-    }
-    else {
-      if (this.username) {
-        this.eMsg = "password";
-      }
-      else if (this.password) {
-        this.eMsg = "username";
-      }
-      else if (!this.username && !this.password) {
-        this.eMsg = "all";
-      }
-    }
-  }
 }
