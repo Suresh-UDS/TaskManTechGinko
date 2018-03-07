@@ -247,6 +247,10 @@ button.ion-circle-icons
     color: #000 !important;
     text-align: left !important;
 }
+.txt-center
+{
+  text-align:center;
+}
 .ver-center
 {
   display: flex !important;
@@ -606,6 +610,10 @@ span.EmpNameTxt
 {
   float: right;
 }
+.align-left
+{
+    float: left;
+}
 .add-btn
 {
   width: 40px;
@@ -647,6 +655,7 @@ span.EmpNameTxt
 {
   width:98%;
 }
+
 .margin-side-auto
 {
   margin-left: auto !important;
@@ -669,6 +678,10 @@ span.EmpNameTxt
 .width50
 {
   width: 50% !important;
+}
+.width20
+{
+    width: 20% !important;
 }
 .inline-block
 {
@@ -972,17 +985,26 @@ ion-spinner{
 {
   padding:10px 0;
 }
-.cc-selector input{
+.cc-selector ion-radio{
     margin:0;padding:0;
     -webkit-appearance:none;
        -moz-appearance:none;
             appearance:none;
 }
-.yes{background-image:url(../img/green-check-01.png);}
-.no{background-image:url(../img/red-cross-01.png);}
+.yes
+{
+    background-image:url(../img/green-check-01.png);
+}
+.no
+{
+    background-image:url(../img/red-cross-01.png);
+}
 
-.cc-selector input:active +.check-btn{opacity: .9;}
-.cc-selector input:checked +.check-btn{
+.cc-selector ion-radio:active +.check-btn
+{
+    opacity: .9;
+}
+.cc-selector ion-radio:checked +.check-btn{
     -webkit-filter: none;
        -moz-filter: none;
             filter: none;
@@ -1008,6 +1030,66 @@ ion-spinner{
             filter: brightness(1.2) grayscale(.5) opacity(.9);
 }
 
+
+.true .radio-icon {
+    left: 0;
+    top: 0;
+    margin: 0;
+    border-radius:0 !important;
+    position: relative;
+    display: block;
+    width: 40px !important;
+    height: 40px !important;
+    border-width:0;
+    border-style: none !important;
+    background-image: url(../img/green-check-01.png) !important;
+    background-repeat: no-repeat !important;
+}
+
+.true .radio-checked
+{
+    background-image: url(../img/red-cross-01.png) !important;
+}
+.true .radio-inner
+{
+    width:0 !important;
+    height:0 !important;
+}
+.bg-trans
+{
+    background: transparent !important;
+}
+
+
+
+.QuesContent ion-list
+{
+       width: 60% !important;
+       padding-top: 10px !important;
+}
+.QuesContent ion-list ion-item
+{
+      width: 48% !important;
+      border-radius: 30px !important;
+      border: 2px solid #FFF !important;
+      /* height: 20px !important; */
+      height: 35px !important;
+      min-height: 35px !important;
+}
+.QuesContent ion-list ion-item.item-radio-checked
+{
+      border: 2px solid #FFC107 !important;
+}
+.QuesContent ion-list ion-item ion-radio
+{
+   margin-top: 4px !important;
+}
+.QuesContent ion-list ion-item label
+{
+       color: #fff !important;
+       margin-top: 4px !important;
+
+}
 
 .wrap-name
 {

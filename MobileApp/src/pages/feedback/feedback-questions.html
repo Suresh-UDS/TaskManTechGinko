@@ -8,43 +8,19 @@
 </ion-header>
 
 <ion-content class="FeedbackQuesCon">
-
-   <div>
-
-
-       <ion-list radio-group>
-           <ion-item *ngFor="let q of questions;let i of index">
-
-               <h3>{{q.question}}</h3>
-
-               <div class="AnsCon">
-
-                   <div class="cc-selector">
-                       <input id="yes{{id}}" type="radio" name="ans" value="yes" />
-                       <label class="check-btn yes" for="yes{{id}}"></label>
-                       <input id="no{{id}}" type="radio" name="ans" value="no" />
-                       <label class="check-btn no"for="no{{id}}"></label>
-                   </div>
-
-                   <!--<ion-icon *ngIf="!q.answer" (click)="markAnswer(i,true)" name="ios-checkmark-circle-outline"></ion-icon>-->
-
-                   <!--<ion-icon *ngIf="q.answer" (click)="markAnswer(i,false)"   name="ios-checkmark-circle"></ion-icon>-->
-
-                   <!--<ion-icon *ngIf="!q.answer"  (click)="markAnswer(i,true)" name="ios-close-circle-outline"></ion-icon>-->
-
-                   <!--<ion-icon  *ngIf="q.answer" (click)="markAnswer(i,false)"  name="ios-close-circle"></ion-icon>-->
-
-               </div>
-
-           </ion-item>
-
-       </ion-list>
-
-
-
-
-   </div>
-
+   <ion-item *ngFor="let q of questions;let i of index" class="bg-trans QuesContent">
+       <h3 text-center="" class="clr-white">{{q.question}}</h3>
+    <ion-list radio-group [(ngModel)]="q.answer" class="margin-auto">
+        <ion-item class="padding-left0 inline-block  align-left" align-left no-lines>
+            <ion-radio  value="true" class="">Yes</ion-radio>
+            <label item-right class="" >Yes</label>
+        </ion-item>
+        <ion-item class="padding-left0 inline-block  align-right" align-right no-lines>
+            <ion-radio value="false" class="">No</ion-radio>
+            <label item-right class="">No</label>
+        </ion-item>
+    </ion-list>
+   </ion-item>
 
 </ion-content>
 <ion-footer>
