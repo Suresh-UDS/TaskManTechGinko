@@ -26,6 +26,7 @@ export class InitFeedbackPage {
   selectedFloor:any;
   selectedZone:any;
   feedbacks:any;
+  selectOptions:any;
 
   constructor(public navCtrl: NavController,public myService:authService,public component:componentService, private siteService: SiteService, private feedbackService: FeedbackService) {
         this.loadFeedbackMappings();
@@ -42,8 +43,13 @@ export class InitFeedbackPage {
         }
     }
 
+
   ionViewDidLoad() {
     console.log('ionViewDidLoad Init Feedback');
+
+      this.selectOptions={
+          cssClass: 'selectbox-popover'
+      }
 
     this.siteService.getAllProjects().subscribe(
         response=>{

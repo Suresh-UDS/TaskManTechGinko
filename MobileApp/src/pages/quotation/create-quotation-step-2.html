@@ -15,7 +15,7 @@
     <ion-col col-10>
         <div class="card-content white-bg">
                 <div class="form-group label-floating width80 margin-auto padding-bottom3">
-                    <ion-select style="color: black" [(ngModel)]="selectedSite" class="select-box" placeholder="Choose Site">
+                    <ion-select [selectOptions]="selectOptions" interface="popover" style="color: black" [(ngModel)]="selectedSite" class="select-box" placeholder="Choose Site">
                         <ion-option style="color: black;" *ngFor="let site of allSites" [value]="site.name" (ionSelect)="selectSite(site)" >{{site.name}}</ion-option>
                     </ion-select>
                 </div>
@@ -61,6 +61,7 @@
                 </tr>
                 </tbody>
             </table>
+
         </div>
     </div>
 
@@ -68,7 +69,7 @@
 
 <ion-footer>
     <ion-toolbar class="align-right" >
-        <button class="btn btn-warning center pull-left"  (click)="saveRates()" >
+        <button class="btn btn-warning center pull-left"  >
             Save
         </button>
         <button class="btn btn-success center pull-right" (click)="saveRates()">

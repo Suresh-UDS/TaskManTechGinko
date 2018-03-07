@@ -32,6 +32,7 @@ export class SiteViewPage {
   firstLetter:any;
   quotations:any;
   count=0;
+  msg:any;
   approvedQuotations:any;
   submittedQuotations:any;
   draftedQuotations:any;
@@ -129,7 +130,18 @@ export class SiteViewPage {
       console.log(response);
       this.jobs = response.transactions;
       this.component.closeLoader();
-    })
+    },
+        error=>{
+            console.log(error);
+            this.component.closeLoader();
+            if(error.type==3)
+            {
+                this.msg='Server Unreachable'
+            }
+
+            this.component.showToastMessage(this.msg,'bottom');
+        }
+    )
   }
 
     doJobInfinite(infiniteScroll){
@@ -165,6 +177,13 @@ export class SiteViewPage {
                     },
                     error=>{
                         console.log('ionViewDidLoad Employee Page:'+error);
+                        this.component.closeLoader();
+                        if(error.type==3)
+                        {
+                            this.msg='Server Unreachable'
+                        }
+
+                        this.component.showToastMessage(this.msg,'bottom');
                     }
                 )
                 infiniteScroll.complete();
@@ -235,10 +254,18 @@ export class SiteViewPage {
           {
             this.employee=[]
             this.component.closeLoader();
+
           }
         },
         error=>{
           console.log(error);
+            this.component.closeLoader();
+            if(error.type==3)
+            {
+                this.msg='Server Unreachable'
+            }
+
+            this.component.showToastMessage(this.msg,'bottom');
           console.log(this.employee);
         })
   }

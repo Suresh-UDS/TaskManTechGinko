@@ -14,6 +14,7 @@ export class SitePage {
   userId:any;
   employeeId: any;
   sites:any;
+  msg:any;
 
   constructor(public navCtrl: NavController,public myService:authService,public component:componentService, private siteService: SiteService) {
 
@@ -34,6 +35,13 @@ export class SitePage {
       },
       error=>{
         console.log('ionViewDidLoad SitePage:'+error);
+          this.component.closeLoader();
+          if(error.type==3)
+          {
+              this.msg='Server Unreachable'
+          }
+
+          this.component.showToastMessage(this.msg,'bottom');
       }
     )
   }

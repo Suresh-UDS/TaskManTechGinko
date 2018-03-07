@@ -1060,8 +1060,6 @@ ion-spinner{
     background: transparent !important;
 }
 
-
-
 .QuesContent ion-list
 {
        width: 60% !important;
@@ -1132,8 +1130,4 @@ ion-spinner{
 {
     color: #000000;
     text-align: left;
-}
-.popover-content
-{
-    padding: 0 !important;
 }
