@@ -27,34 +27,33 @@
 
                                     <div class="card-content">
 										<div class="row">
-											<div class="col-md-10">
+											<div class="col-md-12">
 	                                           <div class="form-group">
-	                                               <label class="control-label">Client Name </label>
+	                                               <label class="control-label">Client</label>
 
-	                                               <input type="text" class="form-control"   name='projectName'
-	                                                      ng-model="selectedProject" uib-typeahead="project as project.name for project in projects | filter:$viewValue | limitTo:5"
-	                                                      ng-minlength='2' ng-maxlength='50' ng-pattern="/^[A-Za-z0-9\s&-/]*$/"
-	                                                      autofocus  required autocomplete="off"/>
-	                                               <div ng-show="form.$submitted || form.projectName.$touched">
-	                                                   <div ng-show="form.projectName.$dirty || form.projectName.$invalid">
-	                                                       <p class="help-block" style="color:maroon"
-	                                                          ng-show="form.projectName.$error.required">
-	                                                           Client name is required.
-	                                                       </p>
-	                                                       <p class="help-block" style="color:maroon"
-	                                                          ng-show="form.projectName.$error.minlength">
-	                                                           Client name is required to be at least 2 character.
-	                                                       </p>
-	                                                       <p class="help-block" style="color:maroon"
-	                                                          ng-show="form.projectName.$error.maxlength">
-	                                                           Client name cannot be longer than 50 characters.
-	                                                       </p>
-	                                                       <p class="help-block" style="color:maroon"
-	                                                          ng-show="form.projectName.$error.pattern">
-	                                                           Client name can only contain letters, digits and space.
-	                                                       </p>
-	                                                   </div>
-	                                               </div>
+	                                               <select class=" form-control " ng-model="selectedProject" ng-change="loadSites()" ng-options="project as project.name for project in projects" required>
+                                                       <option value="">Please select Client...</option>
+                                                   </select>
+                                                   <div ng-show="form.$submitted || form.projectName.$touched">
+                                                       <div ng-show="form.projectName.$dirty || form.projectName.$invalid">
+                                                           <p class="help-block" style="color:maroon"
+                                                              ng-show="form.projectName.$error.required">
+                                                               Client name is required.
+                                                           </p>
+                                                           <p class="help-block" style="color:maroon"
+                                                              ng-show="form.projectName.$error.minlength">
+                                                               Client name is required to be at least 2 character.
+                                                           </p>
+                                                           <p class="help-block" style="color:maroon"
+                                                              ng-show="form.projectName.$error.maxlength">
+                                                               Client name cannot be longer than 50 characters.
+                                                           </p>
+                                                           <p class="help-block" style="color:maroon"
+                                                              ng-show="form.projectName.$error.pattern">
+                                                               Client name can only contain letters, digits and space.
+                                                           </p>
+                                                       </div>
+                                                   </div>
 
 
 	                                           </div>
@@ -64,12 +63,12 @@
 										</div>
                                         <div class="row">
 
-                                            <div class="col-md-10">
+                                            <div class="col-md-12">
                                             	<div class="form-group">
                                                 	<label class="control-label">Type</label>
 
-                                                	<select ng-model="rateCard.type" ng-options="type as type for type in rateCardTypes" class="selectpicker" data-style="btn btn-primary btn-round" title="Select Type" data-size="7">
-					                                	<!-- <option value="{{action.id}}" ng-repeat="action in masterActions">{{action.name}}</option> -->
+                                                	<select ng-model="rateCard.type" ng-options="type as type.name for type in rateCardTypes" class="form-control" data-style="btn btn-primary btn-round" title="Select Type" data-size="7">
+					                                	<option value="">Please select rate card type...</option>
 					                            	</select>
 
                                                 <!-- <select class="selectpicker" data-style="btn btn-primary" ng-model="rateCard.type" title="Single Select" data-size="7">
@@ -85,7 +84,7 @@
                                         </div>
 
                                         <div class="row">
-	                                         <div class="col-md-10">
+	                                         <div class="col-md-12">
                                                 <div class="form-group">
                                                     <label class="control-label">Name</label>
                                                     <input ng-model="rateCard.name" class='form-control' name='name' type='text' value=""
@@ -96,24 +95,11 @@
 
                                         </div>
 
-
-                                        <div class="row">
-
-                                            <div class="col-md-10">
-                                                <div class="form-group">
-                                                    <label class="control-label"> Cost</label>
-                                                    <input   class='form-control' ng-model="rateCard.amount" name='amount' type='number' value=""
-                                                             ng-minlength='2' ng-maxlength='50' autofocus required/>
-
-                                                </div>
-                                            </div>
-
-                                        </div>
-                                        <div class="row">
+									<div class="row">
 	                                        <div class="col-md-10">
                                                 <div class="form-group">
                                                     <label class="control-label">UOM Type</label>
-	                                                <select ng-model="rateCard.uom" ng-options="uom as uom for uom in uomTypes" class="selectpicker" data-style="btn btn-primary btn-round" title="Select UOM" data-size="7">
+	                                                <select ng-model="rateCard.uom" ng-options="uom as uom for uom in uomTypes" class="form-control" data-style="btn btn-primary btn-round" title="Select UOM" data-size="7">
 						                                <!-- <option value="{{action.id}}" ng-repeat="action in masterActions">{{action.name}}</option> -->
 						                            </select>
 
@@ -125,10 +111,24 @@
 
                                         <div class="row">
 
+                                            <div class="col-md-10">
+                                                <div class="form-group">
+                                                    <label class="control-label"> Cost</label>
+                                                    <input   class='form-control' ng-model="rateCard.cost" name='cost' type='number' value=""
+                                                             ng-minlength='2' ng-maxlength='50' autofocus required/>
+
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                        
+
+                                        <div class="row">
+
                                             <div class="col-md-12 txt-align-rgt">
                                                 <div class="form-group">
 
-                                                    <button class="btn btn-success" type="submit" ng-click="saveRateCard(rateCard)"
+                                                    <button class="btn btn-success" type="submit"
                                                             id="form-button-save" ng-disabled="form.$invalid">
                                                         <span class="btn-label"><i class="material-icons">check</i></span> Save
                                                     </button>

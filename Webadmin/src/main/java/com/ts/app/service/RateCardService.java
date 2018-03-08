@@ -85,8 +85,9 @@ public class RateCardService extends AbstractService {
             headers.setAll(map);
 
             JSONObject request = new JSONObject();
-            request.put("title",rateCardDto.getTitle());
-            request.put("name",rateCardDto.getTitle());
+            request.put("projectId", rateCardDto.getProjectId());
+            request.put("title",rateCardDto.getName());
+            request.put("name",rateCardDto.getName());
             request.put("type",rateCardDto.getType());
             request.put("cost",rateCardDto.getCost());
             request.put("uom", rateCardDto.getUom());
@@ -194,6 +195,41 @@ public class RateCardService extends AbstractService {
             ResponseEntity<?> response = restTemplate.getForEntity(quotationSvcEndPoint+"/rateCard", String.class);
             log.debug("Response freom push service "+ response.getStatusCode());
             log.debug("response from push service"+response.getBody());
+//            rateCardDTOList = (List<RateCardDTO>) response.getBody();
+            rateCardDetails = response.getBody();
+
+        }catch(Exception e) {
+            log.error("Error while calling location service ", e);
+            e.printStackTrace();
+        }
+
+//		List<RateCard> entities = new ArrayList<RateCard>();
+//		entities = rateCardRepository.findAll();
+//		return mapperUtil.toModelList(entities, RateCardDTO.class);
+        return  rateCardDetails;
+	}
+	
+	public Object findAllTypes() {
+
+        log.debug("Find all rate card types");
+        List<RateCardDTO> rateCardDTOList = null;
+        Object rateCardDetails = "";
+
+        try {
+            RestTemplate restTemplate = new RestTemplate();
+            MappingJackson2HttpMessageConverter jsonHttpMessageConverter = new MappingJackson2HttpMessageConverter();
+            jsonHttpMessageConverter.getObjectMapper().configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
+            restTemplate.getMessageConverters().add(jsonHttpMessageConverter);
+
+            MultiValueMap<String, String> headers = new LinkedMultiValueMap<String, String>();
+            Map<String, String> map = new HashMap<String, String>();
+            map.put("Content-Type", MediaType.APPLICATION_JSON_VALUE);
+
+            HttpEntity<?> requestEntity = new HttpEntity<>(headers);
+            log.debug("Rate card service end point"+quotationSvcEndPoint);
+            ResponseEntity<?> response = restTemplate.getForEntity(quotationSvcEndPoint+"/rateCardTypes", String.class);
+            log.debug("Response freom rateCardTypes service"+ response.getStatusCode());
+            log.debug("response from rateCardTypes service"+response.getBody());
 //            rateCardDTOList = (List<RateCardDTO>) response.getBody();
             rateCardDetails = response.getBody();
 

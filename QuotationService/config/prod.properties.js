@@ -1,30 +1,38 @@
 module.exports = {
 
 	db:{
-		//url:'mongodb://localhost:27017/delivery',
-		url:'mongodb://ec2-54-254-131-235.ap-southeast-1.compute.amazonaws.com:27017,ec2-54-179-132-59.ap-southeast-1.compute.amazonaws.com:27017/delivery?replicaSet=amd1',
-		schema : '/../app/schema',
-        user:'askmedrivers', 
-        password:'AmdUser123#'
+		url:'mongodb://localhost:27017/quotation_svc'
+		schema : '/../app/schema'
 	},
 
 	server:{
-		port:8000,
-		logs : {
-			folder: __dirname+'./../logs'
-		}
-	},
+    		port:8001,
+    		logs : {
+    			folder: __dirname+'./../logs'
+    		}
+    	},
 
-	mailer : {
-			service : 'Godaddy',
-			smtp: {
-					host: "smtpout.asia.secureserver.net",
-					secureConnection: true,
-					port:465
-			},
-			username :'info@askmedrivers.com',
-			password :'askmedrivers',
-			from:'AskMeDrivers <no-reply@askmedrivers.com>'
-	}
+    	mailer : {
+    		service : 'gmail',
+    		smtp: {
+    			host: "smtp.gmail.com",
+    			secureConnection: true,
+    			port: 465
+    		},
+    		username :'karthickkumararajak@gmail.com',
+    		password :'0838010059',
+    		from:'UDS TaskMan'
+    	},
+
+    	pushService : {
+    		 baseUrl:'http://localhost:8001'
+    	},
+    	oneSignal : {
+    	    customer: {
+    	        app_id: '7de11221-460c-4640-a30b-84f2ba0cee5f',
+                gcm_id: 935098247956
+    	    }
+
+    	}
 
 };
