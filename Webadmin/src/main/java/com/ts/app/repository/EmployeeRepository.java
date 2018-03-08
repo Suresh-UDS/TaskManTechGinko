@@ -131,7 +131,7 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long> {
 	@Query("SELECT count(e) FROM Employee e join e.projectSites ps WHERE ps.projectId = :projectId and e.active = 'Y'")
 	long findCountByProjectId(@Param("projectId") long projectId);
 
-	@Query("SELECT count(e) FROM Employee e join e.projectSites ps where ps.projectId IN (:projIds) and e.active = 'Y'")
+	@Query("SELECT count(distinct e) FROM Employee e join e.projectSites ps where ps.projectId IN (:projIds) and e.active = 'Y'")
 	long findTotalCount(@Param("projIds") List<Long> projectIds);
 
 	@Query("SELECT count(e) FROM Employee e")
