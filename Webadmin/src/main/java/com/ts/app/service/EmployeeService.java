@@ -452,6 +452,28 @@ public class    EmployeeService extends AbstractService {
         return imagesDeleted;
     }
 
+    @Transactional(readOnly = true)
+    public SearchResult<CheckInOutDTO> findCheckInOut(Long employeeId, int currPage, boolean findAll){
+        SearchResult<CheckInOutDTO> result = new SearchResult<CheckInOutDTO>();
+        if(!findAll) {
+            Pageable pageRequest = createPageRequest(currPage);
+            Page<CheckInOut> page = checkInOutRepository.findByEmployeeId(employeeId, pageRequest);
+            List<CheckInOutDTO> dtoList = mapperUtil.toModelList(page.getContent(), CheckInOutDTO.class);
+            result.setTotalPages(page.getTotalPages());
+            result.setCurrPage(page.getNumber() + 1);
+            result.setTotalCount(page.getTotalElements());
+            result.setTransactions(dtoList);
+        }else {
+            List<CheckInOut> transactions = checkInOutRepository.findByEmployeeIdOrderByCheckInDateTime(employeeId);
+            List<CheckInOutDTO> dtoList = mapperUtil.toModelList(transactions, CheckInOutDTO.class);
+            result.setTransactions(dtoList);
+            if(CollectionUtils.isNotEmpty(dtoList)) {
+                result.setTotalCount(dtoList.size());
+            }
+        }
+        return result;
+    }
+
 	public List<EmployeeDTO> findAll(long userId) {
 		User user = userRepository.findOne(userId);
 		List<Employee> entities = null;

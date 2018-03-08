@@ -129,16 +129,18 @@ public class EmployeeResource {
     }
 
     @RequestMapping(value = "/employee/image/upload", method = RequestMethod.POST)
-    public ResponseEntity<?> upload(@RequestParam("employeeEmpId") String employeeEmpId, @RequestParam("employeeId") long employeeId,@RequestParam("projectId") long projectId,@RequestParam("siteId") long siteId,@RequestParam("checkInOutId") long checkInOutId, @RequestParam("action") String action, @RequestParam("photoOutFile") MultipartFile file) {
+    public ResponseEntity<?> upload(@RequestParam("employeeEmpId") String employeeEmpId, @RequestParam("employeeId") String employeeId,@RequestParam("jobId") String jobId,@RequestParam("siteId") String siteId,@RequestParam("checkInOutId") String checkInOutId, @RequestParam("action") String action, @RequestParam("photoOutFile") MultipartFile file) {
         CheckInOutImageDTO checkInOutImage = new CheckInOutImageDTO();
+
         checkInOutImage.setEmployeeEmpId(employeeEmpId);
-        checkInOutImage.setEmployeeId(employeeId);
-        checkInOutImage.setProjectId(projectId);
-        checkInOutImage.setSiteId(siteId);
+        checkInOutImage.setEmployeeId(Long.parseLong(employeeId));
+//        checkInOutImage.setProjectId(projectId);
+        checkInOutImage.setJobId(Long.parseLong(jobId));
+        checkInOutImage.setSiteId(Long.parseLong(siteId));
         checkInOutImage.setAction(action);
         checkInOutImage.setPhotoOutFile(file);
-        checkInOutImage.setCheckInOutId(checkInOutId);
-        log.debug("Check in out image service called from resource with the parameters::::::"+employeeEmpId+" ,"+employeeId+" ,"+projectId+" ,"+siteId);
+        checkInOutImage.setCheckInOutId(Long.parseLong(checkInOutId));
+        log.debug("Check in out image service called from resource with the parameters::::::"+employeeEmpId+" ,"+employeeId+" ,"+jobId+" ,"+siteId);
         employeeService.uploadFile(checkInOutImage);
         return new ResponseEntity<String>("{ \"empId\" : "+checkInOutImage.getEmployeeEmpId() + ", \"status\" : \"success\"}", HttpStatus.OK);
     }
@@ -160,6 +162,19 @@ public class EmployeeResource {
         return employeeService.findAllCheckInOut(searchCriteria);
     }
 
+    @RequestMapping(value = "/employee/{id}/checkInOut", method = RequestMethod.GET)
+    public SearchResult<CheckInOutDTO> findCheckInOutByEmployee(@PathVariable("id") Long employeeId, @RequestParam(name="findAll",required=false) Boolean findAll, @RequestParam(name="currPage",required=false) Integer currPage) {
+        log.info("--Invoked findCheckInOut By employeeId --"+employeeId);
+        if(findAll == null || !findAll) {
+            if(currPage == null) {
+                currPage = 1;
+            }
+            findAll = false;
+        }else {
+            currPage = 0;
+        }
+        return employeeService.findCheckInOut(employeeId, currPage, findAll);
+    }
 
     @RequestMapping(value = "/employee/enroll", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> enrollEmployeeFace(@Valid @RequestBody EmployeeDTO employee, HttpServletRequest request) {
