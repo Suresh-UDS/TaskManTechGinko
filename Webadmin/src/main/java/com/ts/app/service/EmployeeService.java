@@ -160,8 +160,8 @@ public class    EmployeeService extends AbstractService {
 					projSite.setEmployee(employee);
 				}
 			}
-			
-			
+
+
 			employee = employeeRepository.save(employee);
 			//create user if opted.
 			if(employeeDto.isCreateUser() && employeeDto.getUserRoleId() > 0) {
@@ -393,6 +393,24 @@ public class    EmployeeService extends AbstractService {
 
     }
 
+    @Transactional
+    public CheckInOutImageDTO uploadFile(CheckInOutImageDTO checkInOutImageDto) {
+        log.debug("EmployeeService.uploadFile - action - "+checkInOutImageDto.getAction());
+        log.debug("Employee list from check in out images"+checkInOutImageDto.getEmployeeEmpId());
+        String fileName = fileUploadHelper.uploadFile(checkInOutImageDto.getEmployeeEmpId(), checkInOutImageDto.getAction(), checkInOutImageDto.getPhotoOutFile(), System.currentTimeMillis());
+        checkInOutImageDto.setPhotoOut(fileName);
+        CheckInOutImage checkInOutImage = new CheckInOutImage();
+        checkInOutImage.setPhotoOut(fileName);
+        checkInOutImage.setCheckInOut(checkInOutRepository.findOne(checkInOutImageDto.getCheckInOutId()));
+        checkInOutImage.setProject(projectRepository.findOne(checkInOutImageDto.getProjectId()));
+        checkInOutImage.setEmployee(employeeRepository.findOne(checkInOutImageDto.getEmployeeId()));
+        checkInOutImage.setSite(siteRepository.findOne(checkInOutImageDto.getSiteId()));
+        checkInOutImage.setJob(jobRepository.findOne((checkInOutImageDto.getJobId())));
+        log.debug("Before save image::::::"+checkInOutImage);
+        checkInOutImage = checkInOutImageRepository.save(checkInOutImage);
+        return checkInOutImageDto;
+    }
+
     @Transactional(readOnly = true)
     public SearchResult findAllCheckInOut(SearchCriteria searchCriteria) {
         Timestamp checkInDt = new Timestamp(System.currentTimeMillis());
@@ -411,6 +429,27 @@ public class    EmployeeService extends AbstractService {
         result.setTotalCount(page.getTotalElements());
         result.setTransactions(dtoList);
         return result;
+    }
+
+    public String getEmployeeCheckInImage(String employeeEmpId, String imageId) {
+        return fileUploadHelper.readImageFile(employeeEmpId, imageId);
+    }
+
+    @Transactional
+    public List<String> deleteImages(String employeeEmpId, ImageDeleteRequest deleteRequest) {
+        List<String> imagesDeleted = fileUploadHelper.deleteImages(employeeEmpId, deleteRequest.getImageIds());
+        List<Long> transIds = deleteRequest.getTransIds();
+        if(CollectionUtils.isNotEmpty(transIds)) {
+            for(Long transId : transIds) {
+                CheckInOut transaction = checkInOutRepository.findOne(transId);
+                if(transaction != null) {
+                    transaction.setPhotoIn(null);
+                    transaction.setPhotoOut(null);
+                    checkInOutRepository.save(transaction);
+                }
+            }
+        }
+        return imagesDeleted;
     }
 
 	public List<EmployeeDTO> findAll(long userId) {

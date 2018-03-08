@@ -23,7 +23,8 @@ public class CheckInOutImage extends AbstractAuditingEntity implements Serializa
     private Employee employee;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "projectId", nullable = false)
+    @JoinColumn(name = "projectId", nullable = true)
+
     private Project project;
 
     @ManyToOne(fetch = FetchType.LAZY)

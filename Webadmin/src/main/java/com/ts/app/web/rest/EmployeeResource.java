@@ -128,6 +128,32 @@ public class EmployeeResource {
         return new ResponseEntity<String>("{ \"empId\" : "+'"'+checkInOut.getEmployeeEmpId() + '"'+", \"status\" : \"success\", \"transactionId\" : \"" + checkInOut.getId() +"\" }", HttpStatus.OK);
     }
 
+    @RequestMapping(value = "/employee/image/upload", method = RequestMethod.POST)
+    public ResponseEntity<?> upload(@RequestParam("employeeEmpId") String employeeEmpId, @RequestParam("employeeId") long employeeId,@RequestParam("projectId") long projectId,@RequestParam("siteId") long siteId,@RequestParam("checkInOutId") long checkInOutId, @RequestParam("action") String action, @RequestParam("photoOutFile") MultipartFile file) {
+        CheckInOutImageDTO checkInOutImage = new CheckInOutImageDTO();
+        checkInOutImage.setEmployeeEmpId(employeeEmpId);
+        checkInOutImage.setEmployeeId(employeeId);
+        checkInOutImage.setProjectId(projectId);
+        checkInOutImage.setSiteId(siteId);
+        checkInOutImage.setAction(action);
+        checkInOutImage.setPhotoOutFile(file);
+        checkInOutImage.setCheckInOutId(checkInOutId);
+        log.debug("Check in out image service called from resource with the parameters::::::"+employeeEmpId+" ,"+employeeId+" ,"+projectId+" ,"+siteId);
+        employeeService.uploadFile(checkInOutImage);
+        return new ResponseEntity<String>("{ \"empId\" : "+checkInOutImage.getEmployeeEmpId() + ", \"status\" : \"success\"}", HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/employee/{id}/checkInOut/{imageId}",method = RequestMethod.GET)
+    public String findCheckInOutByEmployee(@PathVariable("id") String employeeEmpId,@PathVariable("imageId") String imageId) {
+        return employeeService.getEmployeeCheckInImage(employeeEmpId, imageId);
+    }
+
+    @RequestMapping(value = "/employee/{id}/checkInOut/image",method = RequestMethod.DELETE)
+    public List<String> deleteCheckInOutImages(@PathVariable("id") String employeeEmpId,@RequestBody ImageDeleteRequest deleteRequest) {
+        log.debug("images ids -"+deleteRequest.getImageIds() + " , trans ids -" + deleteRequest.getTransIds());
+        return employeeService.deleteImages(employeeEmpId, deleteRequest);
+    }
+
     @RequestMapping(value = "/employee/checkInOut", method = RequestMethod.POST)
     public SearchResult findAllCheckInOut(@RequestBody SearchCriteria searchCriteria) {
         log.info("--Invoked findAllCheckInOut --");
