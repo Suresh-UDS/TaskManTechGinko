@@ -6,7 +6,9 @@ var Schema = mongoose.Schema;
 
 var RateCardModel = function() {
     var RateCardSchema = new Schema({
+        projectId: Number,
         title: String,
+        name: String,
         type: String,
         cost: Number,
         uom: String,
