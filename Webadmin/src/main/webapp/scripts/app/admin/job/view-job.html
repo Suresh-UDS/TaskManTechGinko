@@ -186,16 +186,26 @@
 
                         </div>
 
+                        <div class="row">
+                            <div class="col-md-12" ng-show="job.images.length>0">
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">Completed Images </div>
+                                    <div class="panel-body">
+                                        <div class="col-md-2" ng-repeat="image in completedImages">
+                                            <!--{{image}}-->
+                                            <!--<a id="{{ 'jobPhoto-' + $index }}" href="#" onClick="$('#myModal').modal()" data-target="#myModal" data-dismiss="#myModal" ng-click="loadImages(job.employeeEmpId,image.photoOut, $index)">-->
+                                            <!--<img data-ng-src="/api/employee/{{job.employeeEmpId}}/checkInOut/{{image.photoOut}}" width="30px" height="30px"/>-->
+                                            <!--</a>-->
+                                            <a onClick="$('#myModal').modal()" data-target="#myModal" data-dismiss="#myModal" ng-click="loadCompletedJob(image)" >
+                                                <img src="{{image}}" width="150px" height="150px">
 
-						<div class="row">
-							<div class="col-md-2" ng-repeat="image in job.images">
-								
-								<a id="{{ 'jobPhoto-' + $index }}" href="#" onClick="$('#myModal').modal()" data-target="#myModal" data-dismiss="#myModal" ng-click="loadImages(job.employeeEmpId,image.photoOut, $index)">
-									<img data-ng-src="/api/employee/{{job.employeeEmpId}}/checkInOut/{{image.photoOut}}" width="30px" height="30px"/>
-								</a>
-							</div>
-						
-						</div>	
+                                            </a>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
 
 
 
@@ -241,7 +251,7 @@
 </div>
 
 <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-notice">
+    <div class="modal-dialog modal-notice" style="width: 400px;">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="material-icons">clear</i></button>
@@ -249,30 +259,9 @@
             </div>
             <div class="modal-body">
 
-
-                <table >
-                    <thead>
-                    <tr >
-                        <th style="text-align: center">START</th>
-                        <td>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
-                        <th style="text-align: center">STOP</th>
-                    </tr>
-
-                    </thead>
-                    <tr>
-                        <td><br/></td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <img id="photoStart" style="width:250px;height:250px" />
-                            		
-                        </td>
-                        <td>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
-                        <td>
-                            <img id="photoStop" style="width:250px;height:250px" />
-                        </td>
-                    </tr>
-                </table>
+                <div class="txt-align-center">
+                    <img id="photoStart" style="width:300px;height:300px" />
+                </div>
 
 
             </div>
