@@ -261,7 +261,7 @@ public class ReportService extends AbstractService {
         }else {
         		if(userId > 0) {
         			User user = userRepository.findOne(userId);
-        			if(!user.isAdmin()) {
+        			if(!user.getUserRole().getName().equalsIgnoreCase("Admin")) {
 	        			Employee emp = user.getEmployee();
 	        			List<EmployeeProjectSite> projSites = emp.getProjectSites();
 	        			List<Long> projIds = new ArrayList<Long>(); 
@@ -283,7 +283,7 @@ public class ReportService extends AbstractService {
         }else {
         		if(userId > 0) {
         			User user = userRepository.findOne(userId);
-        			if(!user.isAdmin()) {
+        			if(!user.getUserRole().getName().equalsIgnoreCase("Admin")) {
 	        			Employee emp = user.getEmployee();
 	        			List<EmployeeProjectSite> projSites = emp.getProjectSites();
 	        			List<Long> siteIds = new ArrayList<Long>(); 

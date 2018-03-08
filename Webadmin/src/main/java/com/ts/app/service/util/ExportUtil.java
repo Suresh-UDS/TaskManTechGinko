@@ -29,6 +29,7 @@ import org.springframework.stereotype.Component;
 import com.ts.app.domain.AbstractAuditingEntity;
 import com.ts.app.domain.EmployeeAttendanceReport;
 import com.ts.app.domain.Job;
+import com.ts.app.domain.JobStatus;
 import com.ts.app.web.rest.dto.AttendanceDTO;
 import com.ts.app.web.rest.dto.BaseDTO;
 import com.ts.app.web.rest.dto.EmployeeDTO;
@@ -277,13 +278,13 @@ public class ExportUtil {
 							record.add(transaction.getJobType());
 							record.add(transaction.getPlannedStartTime());
 							record.add(transaction.getActualEndTime());
-							record.add(transaction.getJobStatus().toString());
+							record.add(transaction.getJobStatus() != null ? transaction.getJobStatus().name() : JobStatus.OPEN.name());
 							csvFilePrinter.printRecord(record);
 						}
 						log.info(exportFileName + " CSV file was created successfully !!!");
 						statusMap.put(exportFileName, "COMPLETED");
 					} catch (Exception e) {
-						log.error("Error in CsvFileWriter !!!");
+						log.error("Error in CsvFileWriter !!! " + e,e);
 						statusMap.put(exportFileName, "FAILED");
 					} finally {
 						try {
