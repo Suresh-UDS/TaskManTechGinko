@@ -29,6 +29,30 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.ts.app.domain.AbstractAuditingEntity;
+import com.ts.app.domain.Asset;
+import com.ts.app.domain.CheckInOutImage;
+import com.ts.app.domain.Employee;
+import com.ts.app.domain.EmployeeProjectSite;
+import com.ts.app.domain.Job;
+import com.ts.app.domain.JobChecklist;
+import com.ts.app.domain.JobStatus;
+import com.ts.app.domain.Location;
+import com.ts.app.domain.NotificationLog;
+import com.ts.app.domain.Price;
+import com.ts.app.domain.Site;
+import com.ts.app.domain.User;
+import com.ts.app.domain.UserRoleEnum;
+import com.ts.app.repository.AssetRepository;
+import com.ts.app.repository.CheckInOutImageRepository;
+import com.ts.app.repository.EmployeeRepository;
+import com.ts.app.repository.JobRepository;
+import com.ts.app.repository.JobSpecification;
+import com.ts.app.repository.LocationRepository;
+import com.ts.app.repository.NotificationRepository;
+import com.ts.app.repository.PricingRepository;
+import com.ts.app.repository.SiteRepository;
+import com.ts.app.repository.UserRepository;
 import com.ts.app.service.util.DateUtil;
 import com.ts.app.service.util.ExportUtil;
 import com.ts.app.service.util.FileUploadHelper;
@@ -37,6 +61,22 @@ import com.ts.app.service.util.MapperUtil;
 import com.ts.app.service.util.PagingUtil;
 import com.ts.app.service.util.QRCodeUtil;
 import com.ts.app.service.util.ReportUtil;
+import com.ts.app.web.rest.dto.AssetDTO;
+import com.ts.app.web.rest.dto.BaseDTO;
+import com.ts.app.web.rest.dto.CheckInOutDTO;
+import com.ts.app.web.rest.dto.CheckInOutImageDTO;
+import com.ts.app.web.rest.dto.EmployeeDTO;
+import com.ts.app.web.rest.dto.ExportResult;
+import com.ts.app.web.rest.dto.ImportResult;
+import com.ts.app.web.rest.dto.JobChecklistDTO;
+import com.ts.app.web.rest.dto.JobDTO;
+import com.ts.app.web.rest.dto.LocationDTO;
+import com.ts.app.web.rest.dto.NotificationLogDTO;
+import com.ts.app.web.rest.dto.PriceDTO;
+import com.ts.app.web.rest.dto.ReportResult;
+import com.ts.app.web.rest.dto.SchedulerConfigDTO;
+import com.ts.app.web.rest.dto.SearchCriteria;
+import com.ts.app.web.rest.dto.SearchResult;
 import com.ts.app.web.rest.errors.TimesheetException;
 
 /**
@@ -101,6 +141,9 @@ public class JobManagementService extends AbstractService {
 
     @Inject
     private PricingRepository priceRepository;
+
+    @Inject
+    private CheckInOutImageRepository checkInOutImageRepository;
 
     public void updateJobStatus(long siteId, JobStatus toBeJobStatus) {
 		//UPDATE ALL OVERDUE JOB STATUS
@@ -745,6 +788,15 @@ public class JobManagementService extends AbstractService {
 		jobDto.setActive(job.getActive());
 		jobDto.setLocationId(job.getLocation().getId());
 		jobDto.setLocationName(job.getLocation().getName());
+		List<CheckInOutImage> images = checkInOutImageRepository.findAll(job.getId());
+		List<CheckInOutImageDTO> imageDtos = new ArrayList<CheckInOutImageDTO>();
+		if(CollectionUtils.isNotEmpty(images)) {
+			for(CheckInOutImage image : images) {
+				imageDtos.add(mapperUtil.toModel(image, CheckInOutImageDTO.class));
+			}
+		}
+		jobDto.setImages(imageDtos);
+
 		return jobDto;
 	}
 

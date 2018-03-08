@@ -456,6 +456,24 @@ angular.module('timeSheetApp')
             demo.showNotification(position,alignment,color,msg);
         }
 
+        $scope.loadImages = function(employeeEmpId, jobPhotoId, ind) {
+	        	if(jobPhotoId) {
+	            	var uri = '/api/employee/' + employeeEmpId +'/checkInOut/' + jobPhotoId;
+	                $http.get(uri).then(function (response) {
+	                		console.log('image response - ' + response.data);
+	                    var ele = document.getElementById('photoStop');
+	                		ele.setAttribute('src',response.data);
+	                }, function(response) {
+	                		console.log('image response error -' + JSON.stringify(response))
+	                    var ele = document.getElementById('photoStop');
+	                		ele.setAttribute('src',"//placehold.it/250x250");
+	                });
+	        	}else {
+	                var ele = document.getElementById('photoStop');
+	            	ele.setAttribute('src',"//placehold.it/250x250");
+	        	}
+        }
+        
 
         $scope.initCalender();
     });
