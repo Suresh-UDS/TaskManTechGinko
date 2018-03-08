@@ -14,7 +14,10 @@ import java.util.List;
 public interface CheckInOutImageRepository extends PagingAndSortingRepository<CheckInOutImage, Long> {
 
 
-    @Query("select c from CheckInOut c where c.employee.id= :empId order by c.checkInDateTime desc" )
+    @Query("select c from CheckInOutImage c where c.employee.id= :empId order by c.checkInOut.checkInDateTime desc" )
     List<CheckInOutImage> findByEmployeeIdOrderByCheckInDateTime(@Param("empId") long empId);
+    
+    @Query("select c from CheckInOutImage c where c.job.id = :jobId")
+    List<CheckInOutImage> findAll(@Param("jobId") long jobId);
 
 }

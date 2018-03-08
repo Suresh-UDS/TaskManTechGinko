@@ -21,6 +21,7 @@ public class JobDTO extends BaseDTO {
 	private String siteName;
 
 	private Long employeeId;
+	private String employeeEmpId;
 	private String employeeName;
 
 	private Long relieverId;
@@ -66,6 +67,8 @@ public class JobDTO extends BaseDTO {
 	private String frequency;
 
 	private List<JobChecklistDTO> checklistItems;
+	
+	private List<CheckInOutImageDTO> images;
 
 	public String getTitle() {
 		return title;
@@ -345,6 +348,18 @@ public class JobDTO extends BaseDTO {
 	}
 	public void setScheduleMonthlyDay(int scheduleMonthlyDay) {
 		this.scheduleMonthlyDay = scheduleMonthlyDay;
+	}
+	public String getEmployeeEmpId() {
+		return employeeEmpId;
+	}
+	public void setEmployeeEmpId(String employeeEmpId) {
+		this.employeeEmpId = employeeEmpId;
+	}
+	public List<CheckInOutImageDTO> getImages() {
+		return images;
+	}
+	public void setImages(List<CheckInOutImageDTO> images) {
+		this.images = images;
 	}
     
     

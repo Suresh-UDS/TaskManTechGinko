@@ -104,7 +104,7 @@ public class Job extends AbstractAuditingEntity implements Serializable{
 
     @OneToMany(mappedBy ="job", cascade = {CascadeType.ALL}, fetch = FetchType.LAZY, orphanRemoval = true)
 	private List<JobChecklist> checklistItems;
-
+    
     @ManyToOne(cascade={CascadeType.ALL}, fetch = FetchType.LAZY)
 	@JoinColumn(name="parent_job_id")
     private Job parentJob;
@@ -327,7 +327,7 @@ public class Job extends AbstractAuditingEntity implements Serializable{
 	public void setOverdueAlertCount(int overdueAlertCount) {
 		this.overdueAlertCount = overdueAlertCount;
 	}
-
+	
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
 		sb.append("Job Details - {" + StringUtil.SPACE);
