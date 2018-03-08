@@ -9,6 +9,9 @@ import java.util.TimeZone;
 
 import javax.inject.Inject;
 
+import com.ts.app.domain.*;
+import com.ts.app.repository.*;
+import com.ts.app.web.rest.dto.*;
 import org.apache.commons.collections.CollectionUtils;
 import org.hibernate.Hibernate;
 import org.joda.time.DateTime;
@@ -89,6 +92,9 @@ public class JobManagementService extends AbstractService {
 	private JobRepository jobRepository;
 
     @Inject
+    private CheckInOutRepository checkInOutRepository;
+
+    @Inject
     private AssetRepository assetRepository;
 
     @Inject
@@ -135,7 +141,7 @@ public class JobManagementService extends AbstractService {
 
     @Inject
     private PricingRepository priceRepository;
-    
+
     @Inject
     private CheckInOutImageRepository checkInOutImageRepository;
 
@@ -150,6 +156,13 @@ public class JobManagementService extends AbstractService {
 			}
 		}
 
+    }
+
+    @Transactional(readOnly = true)
+    public List<CheckInOutDTO> findCheckInOutByJob(Long jobId){
+        List<CheckInOut> dtoList = checkInOutRepository.getCheckInOutByJobId(jobId);
+        List<CheckInOutDTO> result = mapperUtil.toModelList(dtoList,CheckInOutDTO.class);
+        return result;
     }
 
 	public SearchResult<JobDTO> findBySearchCrieria(SearchCriteria searchCriteria, boolean isAdmin) {
@@ -453,7 +466,7 @@ public class JobManagementService extends AbstractService {
 		        	if(searchCriteria.isConsolidated()) {
 
 		        	    log.debug("site reporsitory find all");
-		        		List<Site> allSites = null; 
+		        		List<Site> allSites = null;
 		        		if(isAdmin) {
 		        			allSites = siteRepository.findAll();
 		        		}else {
@@ -783,7 +796,7 @@ public class JobManagementService extends AbstractService {
 			}
 		}
 		jobDto.setImages(imageDtos);
-		
+
 		return jobDto;
 	}
 

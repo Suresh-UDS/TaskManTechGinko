@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import javax.websocket.server.PathParam;
 
+import com.ts.app.web.rest.dto.*;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -42,21 +43,6 @@ import com.ts.app.service.util.CacheUtil;
 import com.ts.app.service.util.ImportUtil;
 import com.ts.app.service.util.MapperUtil;
 import com.ts.app.service.util.ReportUtil;
-import com.ts.app.web.rest.dto.AssetDTO;
-import com.ts.app.web.rest.dto.BaseDTO;
-import com.ts.app.web.rest.dto.EmployeeDTO;
-import com.ts.app.web.rest.dto.ExportResponse;
-import com.ts.app.web.rest.dto.ExportResult;
-import com.ts.app.web.rest.dto.GraphResponse;
-import com.ts.app.web.rest.dto.ImportResult;
-import com.ts.app.web.rest.dto.JobDTO;
-import com.ts.app.web.rest.dto.LocationDTO;
-import com.ts.app.web.rest.dto.NotificationLogDTO;
-import com.ts.app.web.rest.dto.Paginator;
-import com.ts.app.web.rest.dto.PriceDTO;
-import com.ts.app.web.rest.dto.ReportResult;
-import com.ts.app.web.rest.dto.SearchCriteria;
-import com.ts.app.web.rest.dto.SearchResult;
 
 /**
  * REST controller for managing the Site information.
@@ -88,7 +74,7 @@ public class JobManagementResource {
 
 	@Inject
 	private CacheUtil cacheUtil;
-	
+
 	@Inject
 	private ReportUtil reportUtil;
 
@@ -237,7 +223,7 @@ public class JobManagementResource {
 		}
 		return result;
 	}
-	
+
 	@RequestMapping(value = "/jobs/graph",method = RequestMethod.POST)
 	public GraphResponse jobGraph(@RequestBody SearchCriteria searchCriteria) {
 		GraphResponse result = null;
@@ -272,7 +258,7 @@ public class JobManagementResource {
 			}
 		}
 		return result;
-	}	
+	}
 
     @RequestMapping(value = "/jobs/date/search",method = RequestMethod.POST)
     public List<JobDTO> findByDate(@RequestBody SearchCriteria searchCriteria) {
@@ -374,7 +360,7 @@ public class JobManagementResource {
 		ImportResult result = importUtil.importJobData(file, cal.getTimeInMillis());
 		return new ResponseEntity<ImportResult>(result,HttpStatus.OK);
 	}
-	
+
     @RequestMapping(value = "/jobs/import/{fileId}/status",method = RequestMethod.GET)
 	public ImportResult importStatus(@PathVariable("fileId") String fileId) {
 		log.debug("ImportStatus -  fileId -"+ fileId);
@@ -456,5 +442,11 @@ public class JobManagementResource {
 		response.setHeader("Content-Disposition","attachment; filename=\"" + fileId + ".txt\"");
 		return content;
 	}
+
+    @RequestMapping(value = "/job/{id}/checkInOut", method = RequestMethod.GET)
+    public List<CheckInOutDTO> findCheckInOutByEmployee(@PathVariable("id") Long jobId) {
+        log.info("--Invoked findCheckInOut By JobId--"+jobId);
+        return jobService.findCheckInOutByJob(jobId);
+    }
 
 }
