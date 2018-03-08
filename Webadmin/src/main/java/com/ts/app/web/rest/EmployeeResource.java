@@ -129,13 +129,13 @@ public class EmployeeResource {
     }
 
     @RequestMapping(value = "/employee/image/upload", method = RequestMethod.POST)
-    public ResponseEntity<?> upload(@RequestParam("employeeEmpId") String employeeEmpId, @RequestParam("employeeId") String employeeId,@RequestParam("jobId") String jobId,@RequestParam("siteId") String siteId,@RequestParam("checkInOutId") String checkInOutId, @RequestParam("action") String action, @RequestParam("photoOutFile") MultipartFile file) {
+    public ResponseEntity<?> upload(@RequestParam("employeeEmpId") String employeeEmpId, @RequestParam("employeeId") String employeeId,@RequestParam("jobId") Long jobId,@RequestParam("siteId") String siteId,@RequestParam("checkInOutId") String checkInOutId, @RequestParam("action") String action, @RequestParam("photoOutFile") MultipartFile file) {
         CheckInOutImageDTO checkInOutImage = new CheckInOutImageDTO();
 
         checkInOutImage.setEmployeeEmpId(employeeEmpId);
         checkInOutImage.setEmployeeId(Long.parseLong(employeeId));
 //        checkInOutImage.setProjectId(projectId);
-        checkInOutImage.setJobId(Long.parseLong(jobId));
+        checkInOutImage.setJobId(jobId);
         checkInOutImage.setSiteId(Long.parseLong(siteId));
         checkInOutImage.setAction(action);
         checkInOutImage.setPhotoOutFile(file);
