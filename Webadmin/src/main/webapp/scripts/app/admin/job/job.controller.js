@@ -21,7 +21,7 @@ angular.module('timeSheetApp')
         $scope.checklists;
         $scope.selectedChecklist;
         $scope.jobChecklistItems =[];
-        
+
         $scope.monthDays = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31];
 
         $scope.initCalender = function(){
@@ -65,9 +65,45 @@ angular.module('timeSheetApp')
             });
         };
 
+            $scope.getJobImages = function(){
+                console.log()
+            };
+
+        $scope.getJobDetails = function(){
+            JobComponent.findById($stateParams.id).then(function(jobData){
+                console.log(jobData);
+                if(jobData.jobStatus == "COMPLETED"){
+                    JobComponent.getCompletedDetails($stateParams.id).then(function (data) {
+                        console.log(data);
+                        console.log(data.length);
+                        for(var i=0;i<data.length;i++){
+                            console.log(data[i].checkInOutImages);
+                            $scope.checkInOutImages = data[i].checkInOutImages;
+                            // for(var j=0;j<data[i].checkInOutImages.length;j++){
+                            //     console.log(data[i].checkInOutImages[j].photoOut);
+                            //     if(data[i].checkInOutImages[j].photoOut){
+                            //         console.log("photo image id available");
+                            //         JobComponent.getCompleteImage(jobData.employeeId,data[i].checkInOutImages[j].photoOut).then(function (imageResponse) {
+                            //             console.log(imageResponse);
+                            //             $scope.completedImage = imageResponse;
+                            //         })
+                            //     }else{
+                            //         console.log("Photo image id not available");
+                            //     }
+                            // }
+                        }
+                    });
+                }
+            });
+
+
+
+        };
+
         $scope.editJob = function(){
         	JobComponent.findById($stateParams.id).then(function(data){
-        		console.log(JSON.stringify(data));
+        		console.log("Job details");
+        	    console.log(data);
         		$scope.job=data;
         		$scope.selectedSite = {id : data.siteId,name : data.siteName};
         		$scope.selectedEmployee = {id : data.employeeId,name : data.employeeName};
@@ -89,8 +125,27 @@ angular.module('timeSheetApp')
         			checklist.items = items;
             		$scope.selectedChecklist = checklist;
         		}
+
+        		if(data.images){
+        		    $scope.completedImages = [];
+        		    for(var i=0;i<data.images.length;i++){
+        		        console.log(data.images[i]);
+                        JobComponent.getCompleteImage(data.images[i].employeeEmpId,data.images[i].photoOut).then(function (imageResponse) {
+                            // console.log(imageResponse);
+                            $scope.completedImages.push(imageResponse);
+                        });
+                    }
+
+                }
         	});
-        }
+        };
+
+        $scope.loadCompletedJob = function(image) {
+            var eleId = 'photoStart';
+            var ele = document.getElementById(eleId);
+            ele.setAttribute('src',image);
+
+        };
         $scope.loadJobs = function(){
         	$scope.search();
         }
@@ -236,7 +291,7 @@ angular.module('timeSheetApp')
         };
 
         $scope.search = function () {
-        	
+
         		console.log('$scope.pages - ' + $scope.pages + ', $scope.pages.currPage - ' + $scope.pages.currPage);
 	        	var currPageVal = ($scope.pages ? $scope.pages.currPage : 1);
 	        		var searchCriteria = {
@@ -244,38 +299,38 @@ angular.module('timeSheetApp')
 	            	}
 	            	$scope.searchCriteria = searchCriteria;
 	        	// }
-	
+
 	        	$scope.searchCriteria.currPage = currPageVal;
 	        	console.log('Selected  project -' + $scope.selectedProject);
 	        	console.log('Selected  job -' + $scope.selectedJob);
 	        	console.log('search criteria - '+JSON.stringify($rootScope.searchCriteriaProject));
-	
+
 	        	if(!$scope.selectedProject && !$scope.selectedSite && !$scope.selectedStatus && !$scope.selectedJob){
 	        		$scope.searchCriteria.findAll = true;
 	        	}
-	
+
 	        	if($scope.selectedProject) {
 	        		$scope.searchCriteria.projectId = $scope.selectedProject.id;
 	        	}
-	
+
 	        	if($scope.selectedSite) {
 	        		$scope.searchCriteria.siteId = $scope.selectedSite.id;
 		        }
-	
+
 	        	if($scope.selectedStatus){
 		        		$scope.searchCriteria.jobStatus = $scope.selectedStatus.name;
 		        }
-	
+
 	        	if($scope.selectedJob){
 	        		$scope.searchCriteria.jobTitle = $scope.selectedJob;
 	        	}
-	
+
 	        	console.log(JSON.stringify($scope.searchCriteria));
 	        	JobComponent.search($scope.searchCriteria).then(function (data) {
 	        		$scope.jobs = data.transactions
 	        		$scope.pages.currPage = data.currPage;
 	                $scope.pages.totalPages = data.totalPages;
-	                
+
 	                $scope.numberArrays = [];
 	                var startPage = 1;
 	                if(($scope.pages.totalPages - $scope.pages.currPage) >= 10) {
@@ -305,8 +360,8 @@ angular.module('timeSheetApp')
 	                    	$scope.pageStartIntex =  (data.currPage - 1) * $scope.pageSort + 1;
 	                    	$scope.pageEndIntex = $scope.totalCountPages;
 	                    }
-	                }	                
-	
+	                }
+
 	                if($scope.jobs == null){
 	                    $scope.pages.startInd = 0;
 	                }else{
@@ -315,9 +370,9 @@ angular.module('timeSheetApp')
 
 	                $scope.pages.endInd = data.totalCount > 10  ? (data.currPage) * 10 : data.totalCount ;
 	                $scope.pages.totalCnt = data.totalCount;
-	
+
 	        	});
-	
+
 	        	if($scope.pages.currPage == 1) {
 	            	$scope.firstStyle();
 	        	}
@@ -417,9 +472,27 @@ angular.module('timeSheetApp')
             }
             //$scope.search();
         };
-        
+
         $scope.showNotifications= function(position,alignment,color,msg){
             demo.showNotification(position,alignment,color,msg);
+        }
+
+        $scope.loadImages = function(employeeEmpId, jobPhotoId, ind) {
+	        	if(jobPhotoId) {
+	            	var uri = '/api/employee/' + employeeEmpId +'/checkInOut/' + jobPhotoId;
+	                $http.get(uri).then(function (response) {
+	                		console.log('image response - ' + response.data);
+	                    var ele = document.getElementById('photoStop');
+	                		ele.setAttribute('src',response.data);
+	                }, function(response) {
+	                		console.log('image response error -' + JSON.stringify(response))
+	                    var ele = document.getElementById('photoStop');
+	                		ele.setAttribute('src',"//placehold.it/250x250");
+	                });
+	        	}else {
+	                var ele = document.getElementById('photoStop');
+	            	ele.setAttribute('src',"//placehold.it/250x250");
+	        	}
         }
 
 

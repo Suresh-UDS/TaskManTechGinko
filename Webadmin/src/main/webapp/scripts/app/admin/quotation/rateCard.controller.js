@@ -54,7 +54,9 @@ angular.module('timeSheetApp')
         	$scope.error = null;
         	$scope.success =null;
         	$scope.errorRateCardExists = null;
-        	// $scope.rateCard.projectId = $scope.selectedProject.id;
+        	$scope.rateCard.projectId = $scope.selectedProject.id;
+        	$scope.rateCard.type = $scope.rateCard.type.name;
+        	console.log('rateCard details - ' +JSON.stringify($scope.rateCard));
         	RateCardComponent.createRateCard($scope.rateCard).then(function () {
                 $scope.success = 'OK';
             	$scope.loadRateCards();

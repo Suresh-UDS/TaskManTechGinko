@@ -213,9 +213,11 @@ module.exports = {
     },
 
     createRateCard: function(req,res,next){
-        console.log("Create rate card");
+        console.log("Create rate card - " + req.body.name + ' , ' + req.body.title);
         var rateCard = new RateCard();
         if(req.body.title) rateCard.title = req.body.title;
+        if(req.body.name) rateCard.name = req.body.name;
+        if(req.body.projectId) rateCard.projectId = req.body.projectId;
         if(req.body.type) rateCard.type = req.body.type;
         if(req.body.cost) rateCard.cost = req.body.cost;
         if(req.body.uom) rateCard.uom = req.body.uom;

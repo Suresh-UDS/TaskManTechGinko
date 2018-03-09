@@ -9,6 +9,9 @@ import java.util.TimeZone;
 
 import javax.inject.Inject;
 
+import com.ts.app.domain.*;
+import com.ts.app.repository.*;
+import com.ts.app.web.rest.dto.*;
 import org.apache.commons.collections.CollectionUtils;
 import org.hibernate.Hibernate;
 import org.joda.time.DateTime;
@@ -28,6 +31,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.ts.app.domain.AbstractAuditingEntity;
 import com.ts.app.domain.Asset;
+import com.ts.app.domain.CheckInOutImage;
 import com.ts.app.domain.Employee;
 import com.ts.app.domain.EmployeeProjectSite;
 import com.ts.app.domain.Job;
@@ -40,6 +44,7 @@ import com.ts.app.domain.Site;
 import com.ts.app.domain.User;
 import com.ts.app.domain.UserRoleEnum;
 import com.ts.app.repository.AssetRepository;
+import com.ts.app.repository.CheckInOutImageRepository;
 import com.ts.app.repository.EmployeeRepository;
 import com.ts.app.repository.JobRepository;
 import com.ts.app.repository.JobSpecification;
@@ -58,6 +63,8 @@ import com.ts.app.service.util.QRCodeUtil;
 import com.ts.app.service.util.ReportUtil;
 import com.ts.app.web.rest.dto.AssetDTO;
 import com.ts.app.web.rest.dto.BaseDTO;
+import com.ts.app.web.rest.dto.CheckInOutDTO;
+import com.ts.app.web.rest.dto.CheckInOutImageDTO;
 import com.ts.app.web.rest.dto.EmployeeDTO;
 import com.ts.app.web.rest.dto.ExportResult;
 import com.ts.app.web.rest.dto.ImportResult;
@@ -83,6 +90,9 @@ public class JobManagementService extends AbstractService {
 
 	@Inject
 	private JobRepository jobRepository;
+
+    @Inject
+    private CheckInOutRepository checkInOutRepository;
 
     @Inject
     private AssetRepository assetRepository;
@@ -132,6 +142,9 @@ public class JobManagementService extends AbstractService {
     @Inject
     private PricingRepository priceRepository;
 
+    @Inject
+    private CheckInOutImageRepository checkInOutImageRepository;
+
     public void updateJobStatus(long siteId, JobStatus toBeJobStatus) {
 		//UPDATE ALL OVERDUE JOB STATUS
 		if(!StringUtils.isEmpty(toBeJobStatus) &&
@@ -143,6 +156,13 @@ public class JobManagementService extends AbstractService {
 			}
 		}
 
+    }
+
+    @Transactional(readOnly = true)
+    public List<CheckInOutDTO> findCheckInOutByJob(Long jobId){
+        List<CheckInOut> dtoList = checkInOutRepository.getCheckInOutByJobId(jobId);
+        List<CheckInOutDTO> result = mapperUtil.toModelList(dtoList,CheckInOutDTO.class);
+        return result;
     }
 
 	public SearchResult<JobDTO> findBySearchCrieria(SearchCriteria searchCriteria, boolean isAdmin) {
@@ -446,7 +466,7 @@ public class JobManagementService extends AbstractService {
 		        	if(searchCriteria.isConsolidated()) {
 
 		        	    log.debug("site reporsitory find all");
-		        		List<Site> allSites = null; 
+		        		List<Site> allSites = null;
 		        		if(isAdmin) {
 		        			allSites = siteRepository.findAll();
 		        		}else {
@@ -765,9 +785,21 @@ public class JobManagementService extends AbstractService {
 	public JobDTO getJob(long id){
 		Job job = jobRepository.findOne(id);
 		JobDTO jobDto = mapperUtil.toModel(job,JobDTO.class);
+		CheckInOut checkInOutDTO= checkInOutRepository.getByJobId(id);
+        jobDto.setActualEndTime(checkInOutDTO.getCheckOutDateTime());
+        log.debug("Actual End time"+jobDto.getActualEndTime());
 		jobDto.setActive(job.getActive());
 		jobDto.setLocationId(job.getLocation().getId());
 		jobDto.setLocationName(job.getLocation().getName());
+		List<CheckInOutImage> images = checkInOutImageRepository.findAll(job.getId());
+		List<CheckInOutImageDTO> imageDtos = new ArrayList<CheckInOutImageDTO>();
+		if(CollectionUtils.isNotEmpty(images)) {
+			for(CheckInOutImage image : images) {
+				imageDtos.add(mapperUtil.toModel(image, CheckInOutImageDTO.class));
+			}
+		}
+		jobDto.setImages(imageDtos);
+
 		return jobDto;
 	}
 
