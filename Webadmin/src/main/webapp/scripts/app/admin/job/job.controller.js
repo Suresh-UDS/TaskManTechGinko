@@ -78,18 +78,19 @@ angular.module('timeSheetApp')
                         console.log(data.length);
                         for(var i=0;i<data.length;i++){
                             console.log(data[i].checkInOutImages);
-                            for(var j=0;j<data[i].checkInOutImages.length;j++){
-                                console.log(data[i].checkInOutImages[j].photoOut);
-                                if(data[i].checkInOutImages[j].photoOut){
-                                    console.log("photo image id available");
-                                    JobComponent.getCompleteImage(jobData.employeeId,data[i].checkInOutImages[j].photoOut).then(function (imageResponse) {
-                                        console.log(imageResponse);
-                                        $scope.completedImage = imageResponse;
-                                    })
-                                }else{
-                                    console.log("Photo image id not available");
-                                }
-                            }
+                            $scope.checkInOutImages = data[i].checkInOutImages;
+                            // for(var j=0;j<data[i].checkInOutImages.length;j++){
+                            //     console.log(data[i].checkInOutImages[j].photoOut);
+                            //     if(data[i].checkInOutImages[j].photoOut){
+                            //         console.log("photo image id available");
+                            //         JobComponent.getCompleteImage(jobData.employeeId,data[i].checkInOutImages[j].photoOut).then(function (imageResponse) {
+                            //             console.log(imageResponse);
+                            //             $scope.completedImage = imageResponse;
+                            //         })
+                            //     }else{
+                            //         console.log("Photo image id not available");
+                            //     }
+                            // }
                         }
                     });
                 }
@@ -101,7 +102,8 @@ angular.module('timeSheetApp')
 
         $scope.editJob = function(){
         	JobComponent.findById($stateParams.id).then(function(data){
-        		console.log(JSON.stringify(data));
+        		console.log("Job details");
+        	    console.log(data.images);
         		$scope.job=data;
         		$scope.selectedSite = {id : data.siteId,name : data.siteName};
         		$scope.selectedEmployee = {id : data.employeeId,name : data.employeeName};
@@ -123,8 +125,27 @@ angular.module('timeSheetApp')
         			checklist.items = items;
             		$scope.selectedChecklist = checklist;
         		}
+
+        		if(data.images){
+        		    $scope.completedImages = [];
+        		    for(var i=0;i<data.images.length;i++){
+        		        console.log(data.images[i]);
+                        JobComponent.getCompleteImage(data.images[i].employeeId,data.images[i].photoOut).then(function (imageResponse) {
+                            // console.log(imageResponse);
+                            $scope.completedImages.push(imageResponse);
+                        });
+                    }
+
+                }
         	});
-        }
+        };
+
+        $scope.loadCompletedJob = function(image) {
+            var eleId = 'photoStart';
+            var ele = document.getElementById(eleId);
+            ele.setAttribute('src',image);
+
+        };
         $scope.loadJobs = function(){
         	$scope.search();
         }
@@ -473,7 +494,7 @@ angular.module('timeSheetApp')
 	            	ele.setAttribute('src',"//placehold.it/250x250");
 	        	}
         }
-        
+
 
         $scope.initCalender();
     });

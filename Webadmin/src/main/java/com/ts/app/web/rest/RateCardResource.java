@@ -101,10 +101,13 @@ public class RateCardResource {
 	}
 
 	@RequestMapping(value = "/rateCard/types", method = RequestMethod.GET)
-	public List<RateType> getRateCardTypes() {
+	public Object getRateCardTypes() {
 		log.info("--Invoked RateCardResource.getRateCardTypes --");
-		List<RateType> rateTypes = Arrays.asList(RateType.values());
-		return rateTypes;
+		//List<RateType> rateTypes = Arrays.asList(RateType.values());
+		//return rateTypes;
+		Object result = null;
+		result = rateCardService.findAllTypes();
+		return result;
 	}
 
 	@RequestMapping(value = "/rateCard/uom", method = RequestMethod.GET)
