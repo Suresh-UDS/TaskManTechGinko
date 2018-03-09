@@ -94,6 +94,10 @@ ul.checkList li
 {
     background: #ffba00 !important;
 }
+.margn-top0
+{
+  margin-top:0 !important;
+}
 .margn-top10
 {
   margin-top:10px !important;
@@ -250,7 +254,10 @@ h2.title
 {
   margin: 5px 0;
 }
-
+.ViewTables tr td
+{
+  width:50%;
+}
 .card.attendance
 {
   margin-top:5px;
@@ -627,7 +634,7 @@ button.btn.btn-outline {
 }
 .input-desc
 {
-  width: 80%;
+  width: 79%;
   padding-top: 10px;
   margin-top: 5px;
 }
