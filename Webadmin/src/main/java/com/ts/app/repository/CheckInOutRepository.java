@@ -69,4 +69,7 @@ public interface CheckInOutRepository extends PagingAndSortingRepository<CheckIn
     @Query("select c from CheckInOut c where c.job.id = :jobId order by c.checkOutDateTime asc")
     List<CheckInOut> getCheckInOutByJobId(@Param("jobId") long jobId);
 
+    @Query("select c from CheckInOut c where c.job.id = :jobId order by c.checkOutDateTime asc")
+    CheckInOut getByJobId(@Param("jobId") long jobId);
+
 }
