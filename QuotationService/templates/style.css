@@ -1,0 +1,44 @@
+.content
+{
+    width: 80%;
+    margin: auto;
+}
+.header-left
+{
+    width: 50%;
+    float: left;
+    text-align: left;
+}
+.header-right
+{
+    width: 50%;
+    float: left;
+    text-align: right;
+}
+.clear
+{
+    clear: both;
+}
+table, td, th {
+    border: 1px solid black;
+}
+
+table {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+th {
+    height: 50px;
+}
+tr:last-child td {
+    border :none;
+}
+table:last-child
+{
+    border :none;
+}
+.border
+{
+    border: 1px solid black !important;
+}

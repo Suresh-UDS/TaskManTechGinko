@@ -330,14 +330,67 @@ module.exports = {
     },
 
     createPDF: function(req,res,next){
-        var doc=new PDFDocument;
-        doc.pipe= fs.createWriteStream('./templates/output.pdf');
-        doc.font('fonts/PalatinoBold.ttf')
-            .fontSize(25)
-            .text(req.body,100,100)
 
-        doc.end();
-        res.send(200);
+        var quotation;
+
+        console.log("Calling create pdf");
+        Quotation.find({},function (err, quotations) {
+           if(err){
+               console.log("Error in getting quotaions");
+           } else{
+               // console.log("Quotation");
+               // console.log(quotations);
+
+
+               mailerService.getPdfDetail(quotations[0],function(err,response){
+                   if(err){
+                       console.log("Error in getting html template");
+                       console.log(err);
+                   }else{
+                       console.log("Html template success");
+                       console.log(response);
+
+
+                       var htmlToPdf = require('html-to-pdf');
+                       htmlToPdf.convertHTMLFile(response, './templates/output.pdf',
+                           function (error, success) {
+                               if (error) {
+                                   console.log('PDF Fail');
+                                   console.log(error);
+                               } else {
+                                   console.log('PDF Success!');
+                                   console.log(success);
+                               }
+                           }
+                       );
+
+
+
+                   }
+               })
+
+/*
+
+               var PDFDocument, doc;
+               var fs = require('fs');
+               PDFDocument = require('pdfkit');
+               doc = new PDFDocument;
+               doc.pipe(fs.createWriteStream('./templates/output.pdf'));
+               doc.fontSize(15)
+               doc.text("quotation:"+JSON.stringify(quotations), {
+                   width: 500,
+                   align: 'left'
+               });
+               doc.end();
+               res.send(200);
+               */
+           }
+        });
+
+
+
+
+
     },
 
     getQuotationsPagewise: function(req,res,next){

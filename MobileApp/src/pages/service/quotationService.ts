@@ -105,4 +105,15 @@ export class QuotationService {
         )
     }
 
+    createPDF():Observable<any>{
+        return this.http.get(this.config.QuotationServiceUrl+'api/pdf/create').map(
+            response=>{
+                console.log(response);
+                return response.json();
+            }
+        )
+    }
+
+
+
 }
