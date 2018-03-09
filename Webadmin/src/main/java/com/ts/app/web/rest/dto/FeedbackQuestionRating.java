@@ -12,9 +12,9 @@ public class FeedbackQuestionRating implements Serializable {
 
     private float rating;
     
-    private int yesCount;
+    private long yesCount;
     
-    private int noCount;
+    private long noCount;
 
     public long getId() {
         return id;
@@ -40,19 +40,19 @@ public class FeedbackQuestionRating implements Serializable {
 		this.rating = rating;
 	}
 
-	public int getYesCount() {
+	public long getYesCount() {
 		return yesCount;
 	}
 
-	public void setYesCount(int yesCount) {
+	public void setYesCount(long yesCount) {
 		this.yesCount = yesCount;
 	}
 
-	public int getNoCount() {
+	public long getNoCount() {
 		return noCount;
 	}
 
-	public void setNoCount(int noCount) {
+	public void setNoCount(long noCount) {
 		this.noCount = noCount;
 	}
     

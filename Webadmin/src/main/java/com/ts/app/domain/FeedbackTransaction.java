@@ -7,6 +7,7 @@ import javax.persistence.Cacheable;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
@@ -48,7 +49,7 @@ public class FeedbackTransaction extends AbstractAuditingEntity implements Seria
     @JoinColumn(name = "feedback_id")
     private FeedbackMapping feedback;
 
-    @OneToMany(mappedBy = "feedbackTransaction", cascade = {CascadeType.ALL}, orphanRemoval=true)
+    @OneToMany(mappedBy = "feedbackTransaction", cascade = {CascadeType.ALL}, fetch = FetchType.EAGER, orphanRemoval=true)
     private Set<FeedbackTransactionResult> results;
 
     @Column(name = "block")
