@@ -103,7 +103,7 @@ angular.module('timeSheetApp')
         $scope.editJob = function(){
         	JobComponent.findById($stateParams.id).then(function(data){
         		console.log("Job details");
-        	    console.log(data.images);
+        	    console.log(data);
         		$scope.job=data;
         		$scope.selectedSite = {id : data.siteId,name : data.siteName};
         		$scope.selectedEmployee = {id : data.employeeId,name : data.employeeName};
@@ -130,7 +130,7 @@ angular.module('timeSheetApp')
         		    $scope.completedImages = [];
         		    for(var i=0;i<data.images.length;i++){
         		        console.log(data.images[i]);
-                        JobComponent.getCompleteImage(data.images[i].employeeId,data.images[i].photoOut).then(function (imageResponse) {
+                        JobComponent.getCompleteImage(data.images[i].employeeEmpId,data.images[i].photoOut).then(function (imageResponse) {
                             // console.log(imageResponse);
                             $scope.completedImages.push(imageResponse);
                         });

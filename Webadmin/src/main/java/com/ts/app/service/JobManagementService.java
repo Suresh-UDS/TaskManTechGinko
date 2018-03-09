@@ -785,6 +785,9 @@ public class JobManagementService extends AbstractService {
 	public JobDTO getJob(long id){
 		Job job = jobRepository.findOne(id);
 		JobDTO jobDto = mapperUtil.toModel(job,JobDTO.class);
+		CheckInOut checkInOutDTO= checkInOutRepository.getByJobId(id);
+        jobDto.setActualEndTime(checkInOutDTO.getCheckOutDateTime());
+        log.debug("Actual End time"+jobDto.getActualEndTime());
 		jobDto.setActive(job.getActive());
 		jobDto.setLocationId(job.getLocation().getId());
 		jobDto.setLocationName(job.getLocation().getName());

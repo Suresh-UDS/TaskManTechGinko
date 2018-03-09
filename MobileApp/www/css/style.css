@@ -663,7 +663,7 @@ span.EmpNameTxt
 }
 .ActionBtns button.act-btn-view
 {
-   padding-right:
+   padding-right:10px;
 }
 
 .item-label .label-md

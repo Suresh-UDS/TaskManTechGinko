@@ -136,7 +136,9 @@ angular.module('timeSheetApp')
             },
 
             getCompleteImage: function(employeeId,imageId){
-        	    return $http.get('api/employee/'+1000+'/checkInOut/'+imageId).then(function (response) {
+        	    console.log("Get completed images");
+        	    console.log(employeeId);
+        	    return $http.get('api/employee/'+employeeId+'/checkInOut/'+imageId).then(function (response) {
         	        console.log(response);
                     return response.data;
                 })
