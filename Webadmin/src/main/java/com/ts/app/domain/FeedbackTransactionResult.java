@@ -4,8 +4,10 @@ package com.ts.app.domain;
 import java.io.Serializable;
 
 import javax.persistence.Cacheable;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
@@ -34,8 +36,8 @@ public class FeedbackTransactionResult extends AbstractAuditingEntity implements
     @Column(name = "answer")
     private boolean answer;
 
-    @ManyToOne()
-    @JoinColumn(name = "feedback_transaction_id")
+    @ManyToOne(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER)
+    @JoinColumn(name = "feedback_transaction_id", referencedColumnName = "id")
     private FeedbackTransaction feedbackTransaction;
 
     public long getId() {

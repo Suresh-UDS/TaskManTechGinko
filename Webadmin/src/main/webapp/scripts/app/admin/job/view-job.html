@@ -98,11 +98,11 @@
                                                 <tbody>
                                                 <tr>
                                                     <td>Start date</td>
-                                                    <td>{{job.plannedStartTime}}</td>
+                                                    <td>{{job.plannedStartTime | date:'dd-MMM-yyyy hh:mm a'}}</td>
                                                 </tr>
                                                 <tr>
                                                     <td>End date</td>
-                                                    <td>{{job.plannedEndTime}}</td>
+                                                    <td>{{job.plannedEndTime | date:'dd-MMM-yyyy hh:mm a'}}</td>
 
                                                 </tr>
                                                 <tr>
@@ -159,11 +159,11 @@
                                                 <tbody>
                                                 <tr>
                                                     <td>Start date</td>
-                                                    <td>{{job.actualStartTime}}</td>
+                                                    <td>{{job.plannedStartTime | date:'dd-MMM-yyyy hh:mm a'}}</td>
                                                 </tr>
                                                 <tr>
                                                     <td>End date</td>
-                                                    <td>{{job.actualEndTime}}</td>
+                                                    <td>{{job.actualEndTimee  | date:'dd-MMM-yyyy hh:mm a'}}</td>
 
                                                 </tr>
                                                 <tr>

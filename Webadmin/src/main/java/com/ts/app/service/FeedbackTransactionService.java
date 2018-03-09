@@ -5,7 +5,9 @@ import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.TimeZone;
 
 import javax.inject.Inject;
@@ -64,21 +66,25 @@ public class FeedbackTransactionService extends AbstractService {
 
 	public FeedbackTransactionDTO saveFeebdackInformation(FeedbackTransactionDTO feedbackTransDto) {
 		FeedbackTransaction feedbackTrans = mapperUtil.toEntity(feedbackTransDto, FeedbackTransaction.class);
+		feedbackTrans.setId(0);
+		feedbackTrans.setResults(null);
 		List<FeedbackTransactionResultDTO> itemDtos = feedbackTransDto.getResults();
-		List<FeedbackTransactionResult> items = new ArrayList<FeedbackTransactionResult>();
+		Set<FeedbackTransactionResult> items = new HashSet<FeedbackTransactionResult>();
 		float rating = 0f;
 		int positiveCnt = 0;
 		for(FeedbackTransactionResultDTO itemDto : itemDtos) {
 			FeedbackTransactionResult item = mapperUtil.toEntity(itemDto, FeedbackTransactionResult.class);
+			item.setId(0);
 			if(item.isAnswer()) {
 				positiveCnt++;
 			}
 			item.setFeedbackTransaction(feedbackTrans);
 			items.add(item);
 		}
-		rating = positiveCnt / items.size(); //calculate the overall rating.
+		rating = (positiveCnt / items.size()) * 10; //calculate the overall rating.
 		feedbackTrans.setRating(rating);
-        feedbackTrans = feedbackTransactionRepository.save(feedbackTrans);
+		feedbackTrans.setResults(items);
+        feedbackTrans = feedbackTransactionRepository.save(feedbackTrans);        
 		log.debug("Created Information for FeedbackTransaction: {}", feedbackTrans);
 		feedbackTransDto = mapperUtil.toModel(feedbackTrans, FeedbackTransactionDTO.class);
 		return feedbackTransDto;
@@ -163,6 +169,9 @@ public class FeedbackTransactionService extends AbstractService {
 	        	checkInDateTo.set(Calendar.SECOND,0);
 	        	java.sql.Date toDt = DateUtil.convertToSQLDate(DateUtil.convertUTCToIST(checkInDateTo));
 	        	ZonedDateTime toTime = toDt.toLocalDate().atStartOfDay(ZoneId.of("Asia/Kolkata"));
+	        	toTime = toTime.withHour(23);
+	        	toTime = toTime.withMinute(59);
+	        	toTime = toTime.withSecond(59);
 			if(searchCriteria.getProjectId() > 0) {
 				FeedbackMapping feedbackMapping = feedbackMappingRepository.findOneByLocation(searchCriteria.getSiteId(), searchCriteria.getBlock(), searchCriteria.getFloor(), searchCriteria.getZone());
 				if(feedbackMapping != null) {
@@ -184,10 +193,10 @@ public class FeedbackTransactionService extends AbstractService {
 						for(Object[] row : questionRatings) {
 							FeedbackQuestionRating qrating = new FeedbackQuestionRating();
 							qrating.setQuestion(String.valueOf(row[0]));
-							if(row[1] != null && String.valueOf(row[1]).equals("1")) {
-								qrating.setYesCount(Integer.parseInt((String)row[2]));
+							if(row[1] != null && (boolean)row[1]) {
+								qrating.setYesCount((Long)row[2]);
 							}else {
-								qrating.setNoCount(Integer.parseInt((String)row[2]));
+								qrating.setNoCount((Long)row[2]);
 							}
 							qratings.add(qrating);
 						}

@@ -75,7 +75,7 @@ angular.module('timeSheetApp')
 
         $scope.loadRateCardTypes = function() {
         	RateCardComponent.getRateTypes().then(function(data) {
-        		console.log('rateCard types - ' + data);
+        		console.log('rateCard types - ' + JSON.stringify(data));
         		$scope.rateCardTypes = data;
         	})
         }
