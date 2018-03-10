@@ -118,5 +118,20 @@ export class QuotationPage {
       this.navCtrl.push(CreateQuotationPage);
   }
 
+  createPDF(){
+      this.quotationService.createPDF().subscribe(
+          response=>
+          {
+              console.log("PDF")
+              console.log(response)
+          },
+          error=>
+          {
+              console.log("PDF ERROR")
+              console.log(error)
+          })
+
+  }
+
 
 }

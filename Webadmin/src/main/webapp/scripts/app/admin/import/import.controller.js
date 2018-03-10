@@ -13,6 +13,7 @@ angular.module('timeSheetApp')
         
         $scope.selectedJobFile;
         $scope.selectedEmployeeFile;
+        $scope.selectedChecklistFile;
         //client file
         $scope.selectedClientFile;
         $rootScope.clientImportStatus = {};
@@ -187,6 +188,33 @@ angular.module('timeSheetApp')
          });
     		
     }
+	    
+	    
+	    //Checklist upload file
+	    $scope.uploadChecklist = function() {
+    		console.log('selected Client file - ' + $scope.selectedChecklistFile);
+    		ChecklistComponent.importChecklistFile($scope.selectedChecklistFile).then(function(data){
+    			console.log(data);
+    			var result = data;
+    			console.log(result.file + ', ' + result.status + ',' + result.msg);
+    		/*	var importStatus = {
+        				fileName : result.file,
+        				importMsg : result.msg
+        		};*/
+        	//	$rootScope.clientImportStatus = importStatus;
+        	//	$rootScope.start();
+         },function(err){
+            	  console.log('Client Import error')
+            	  console.log(err);
+         });
+    		
+    }
+	    
+	    
+	    
+	    
+	    
+	    
 
 	    $scope.clientImportStatus = function() {
         	console.log('$rootScope.clientImportStatus -'+JSON.stringify($rootScope.clientImportStatus));
