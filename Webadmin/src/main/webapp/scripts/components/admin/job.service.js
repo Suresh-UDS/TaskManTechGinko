@@ -14,7 +14,14 @@ angular.module('timeSheetApp')
                     return response.data;
                 })
         	},
-            loadLocations : function(){
+	    loadJobStatuses : function(){
+		    console.log("Loading job statuses")
+		    return $http.get('api/job/lookup/status').then(function (response) {
+	            console.log(response)
+		        return response.data;
+	        })
+	    },
+        	loadLocations : function(){
         	    console.log("Load locations")
         	    return $http.get('api/location').then(function (response) {
                     console.log(response)

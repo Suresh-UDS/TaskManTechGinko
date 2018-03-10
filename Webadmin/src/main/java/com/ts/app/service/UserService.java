@@ -272,6 +272,32 @@ public class UserService extends AbstractService {
 			log.debug("Changed Information for User1: {}", u);
 		});
 	}
+	
+	public void updateUserInformation(UserDTO userDto) {
+		userRepository.findOneByLogin(SecurityUtils.getCurrentUserLogin()).ifPresent(u -> {
+			u.setFirstName(userDto.getFirstName());
+			u.setLastName(userDto.getLastName());
+			u.setEmail(userDto.getEmail());
+			u.setLangKey(userDto.getLangKey());
+			u.setEmailSubscribed(userDto.isEmailSubscribed());
+			u.setLogin(userDto.getLogin());
+			if (userDto.getUserRoleId() > 0) {
+				u.setUserRole(userRoleRepository.findOne(userDto.getUserRoleId()));
+			} 			
+			User updatedUser = userRepository.save(u);
+			if (userDto.getEmployeeId() > 0) {
+				Employee employee = employeeRepository.findOne(userDto.getEmployeeId());
+				if (employee != null) {
+					employee.setUser(updatedUser);
+					employeeRepository.save(employee);
+					updatedUser.setEmployee(employee);
+					userRepository.save(updatedUser);
+				}
+
+			}
+			log.debug("Changed Information for User1: {}", u);
+		});
+	}
 
 	public void updatePushSubscription(long userId, boolean pushSubscribed) {
 		User u = userRepository.findOne(userId);

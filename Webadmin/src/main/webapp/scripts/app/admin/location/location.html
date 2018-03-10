@@ -17,7 +17,7 @@
 
 
 
-    <div class="row" ng-init="loadLocations()">
+    <div class="row" ng-init="init()">
 
         <div class="col-md-12">
             <div class="card margin-TB-5 tablecard appModuleCard">
@@ -25,21 +25,107 @@
                 <div class="card-content">
 
                     <div class="row">
-                        <div class="col-md-8">
-                            <!--<h2 class="title">Rate Cards</h2>-->
-                        </div>
-                        <div class="col-md-4 txt-align-rgt">
+                        <div class="col-md-12">
+                                <div class="card formcard">
 
-                            <button ui-sref="add-location"  has-permission="Location:Create" ng-class="{active: $state.includes('admin')}"  class="btn btn-circle green-clr">
-                                <i class="material-icons">add</i>
-                            </button>
-                            <button ng-click="refreshPage()" class="btn btn-circle orange-clr">
-                                <i class="material-icons">refresh</i>
-                            </button>
+                                    <div class="card-content">
+									<form name="searchForm"  ng-submit="search()" novalidate >
+                                        <div class="row">
+                                            <div class="dropdown col-xs-2 col-md-2">
+                                                <div class="form-group">
+                                                    <label class="control-label">Client<span class="red-star">*</span> </label>
 
-                            <!--<button ui-sref="add-rateCard"  ng-class="{active: $state.includes('admin')}" has-authority="ROLE_ADMIN" class="btn btn-success align-left"> <i class="material-icons padding-right5">add</i>ADD<div class="ripple-container"></div></button>-->
-                            <!--<button ng-click="refreshPage()" class="btn btn-warning align-left"> <i class="material-icons padding-right5">refresh</i>Reload<div class="ripple-container"></div></button>-->
-                        </div>
+                                                    <select class="form-control " ng-model="selectedProject"  ng-change="loadSites()"  ng-options="project as project.name for project in projects">
+                                                        <option value="">Select Client...</option>
+                                                    </select>
+
+
+
+                                                </div>
+                                            </div>
+                                            <div class="dropdown col-xs-2 col-md-2">
+                                                <div class="form-group">
+                                                    <label class="control-label">Site<span class="red-star">*</span> </label>
+                                                    <!--<input type="text" class="form-control"-->
+                                                    <!--ng-model="selectedRole"-->
+                                                    <!--uib-typeahead="role as role.name for role in userRoles | filter:$viewValue | limitTo:5"-->
+                                                    <!--name="UserRole" ng-minlength="5" ng-maxlength="50" autofocus-->
+                                                    <!--required >-->
+                                                    <select class="form-control " ng-model="selectedSite"  ng-change="loadBlocks();loadFeedbackMasters();" ng-options="site as site.name for site in sites">
+                                                        <option value="">Select Site...</option>
+                                                    </select>
+
+
+
+                                                </div>
+                                            </div>
+                                            <div class="dropdown col-xs-2 col-md-2">
+                                                <div class="form-group">
+                                                    <label class="control-label">Block<span class="red-star">*</span> </label>
+                                                    <!--<input type="text" class="form-control"-->
+                                                    <!--ng-model="selectedRole"-->
+                                                    <!--uib-typeahead="role as role.name for role in userRoles | filter:$viewValue | limitTo:5"-->
+                                                    <!--name="UserRole" ng-minlength="5" ng-maxlength="50" autofocus-->
+                                                    <!--required >-->
+                                                    <select class="form-control " ng-model="selectedBlock" ng-change="loadFloors()"  ng-options="block as block for  block in  blocks">
+                                                        <option value="">Select Block...</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="dropdown col-xs-2 col-md-2">
+                                                <div class="form-group">
+                                                    <label class="control-label">Floor<span class="red-star">*</span> </label>
+                                                    <!--<input type="text" class="form-control"-->
+                                                    <!--ng-model="selectedRole"-->
+                                                    <!--uib-typeahead="role as role.name for role in userRoles | filter:$viewValue | limitTo:5"-->
+                                                    <!--name="UserRole" ng-minlength="5" ng-maxlength="50" autofocus-->
+                                                    <!--required >-->
+                                                    <select class="form-control " ng-model="selectedFloor" ng-change="loadZones()"  ng-options="floor as floor for floor in floors">
+                                                        <option value="">Select Floor...</option>
+                                                    </select>
+
+
+
+                                                </div>
+                                            </div>
+                                            <div class="dropdown col-xs-2 col-md-2">
+                                                <div class="form-group">
+                                                    <label class="control-label">Zone<span class="red-star">*</span> </label>
+                                                    <!--<input type="text" class="form-control"-->
+                                                    <!--ng-model="selectedRole"-->
+                                                    <!--uib-typeahead="role as role.name for role in userRoles | filter:$viewValue | limitTo:5"-->
+                                                    <!--name="UserRole" ng-minlength="5" ng-maxlength="50" autofocus-->
+                                                    <!--required >-->
+                                                    <select class="form-control " ng-model="selectedZone"  ng-options="zone as zone for zone in zones">
+                                                        <option value="">Select Zone...</option>
+                                                    </select>
+
+
+
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="col-md-2 txt-align-rgt ">
+	                                            <button type="submit" class="btn btn-circle blue-clr">
+	                                                <i class="material-icons">search</i>
+	                                            </button>
+
+					                            <button ui-sref="add-location"  has-permission="Location:Create" ng-class="{active: $state.includes('admin')}"  class="btn btn-circle green-clr">
+					                                <i class="material-icons">add</i>
+					                            </button>
+					                            <button ng-click="refreshPage()" class="btn btn-circle orange-clr">
+					                                <i class="material-icons">refresh</i>
+					                            </button>
+					
+					                            <!--<button ui-sref="add-rateCard"  ng-class="{active: $state.includes('admin')}" has-authority="ROLE_ADMIN" class="btn btn-success align-left"> <i class="material-icons padding-right5">add</i>ADD<div class="ripple-container"></div></button>-->
+					                            <!--<button ng-click="refreshPage()" class="btn btn-warning align-left"> <i class="material-icons padding-right5">refresh</i>Reload<div class="ripple-container"></div></button>-->
+					                        </div>
+                                        </div>
+                                       </form> 
+                        			</div>
+                        		</div>
+                        	</div>		
+                        
                     </div>
 
                     <div class="table-responsive">

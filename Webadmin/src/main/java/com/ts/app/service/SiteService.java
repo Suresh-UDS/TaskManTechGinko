@@ -220,7 +220,7 @@ public class SiteService extends AbstractService {
 						List<Long> subEmpIds = findSubOrdinates(user.getEmployee(), empId);
 						page = siteRepository.findSitesByIdOrProjectId(searchCriteria.getSiteId(), searchCriteria.getSiteName(), searchCriteria.getProjectId(), searchCriteria.getProjectName(), subEmpIds, pageRequest);
 					}else {
-						page = siteRepository.findSitesByIdOrProjectId(searchCriteria.getSiteId(), searchCriteria.getProjectId(), searchCriteria.getProjectName(), pageRequest);
+						page = siteRepository.findSitesByIdOrProjectId(searchCriteria.getSiteId(), searchCriteria.getSiteName(), searchCriteria.getProjectId(), searchCriteria.getProjectName(), pageRequest);
 					}
 				}
 			}else {

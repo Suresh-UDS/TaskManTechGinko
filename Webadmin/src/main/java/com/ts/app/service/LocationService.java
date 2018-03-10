@@ -122,6 +122,8 @@ public class LocationService extends AbstractService {
 					page = locationRepository.findByBlock(searchCriteria.getSiteId(), searchCriteria.getBlock(), pageRequest);
 				}else if(searchCriteria.getSiteId() > 0) {
 					page = locationRepository.findBySite(searchCriteria.getSiteId(), pageRequest);
+				}else {
+					page = locationRepository.findBySite(searchCriteria.getProjectId(), pageRequest);
 				}
 			}else {
 				page = locationRepository.findAll(pageRequest);

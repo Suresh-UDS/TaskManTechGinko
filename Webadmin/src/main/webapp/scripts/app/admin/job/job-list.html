@@ -1,4 +1,4 @@
-<div class="gc-container">
+<div class="gc-container" ng-init="init()">
 	<div class="success-message hidden"></div>
 
 
@@ -28,35 +28,40 @@
                                     <td width="85%">
                                         <div class="form-group" ng-init="loadProjects();loadAllSites();loadAssets()">
                                             <div class="col-xs-4 col-md-3">
-                                                <input type="text"
-                                                       class="form-control searchable-input floatL border-bottom-input"
-                                                       placeholder="Search Job" ng-model="selectedJob"
-
-                                                       name="jobTitle"
-                                                />
+                                            	<div class="form-group">
+					                            <label class="label-control">Job date</label>
+					                            <span class="form-control-feedback calender-icon"><i class="material-icons">date_range</i></span>
+					                            <input type="text" class="form-control datepicker"  id="selectedJobDate"  placeholder="{{selectedJobDate | date:'dd-MMM-yyyy'}}"/>
+											</div>
                                             </div>
                                             <div class="dropdown col-xs-4 col-md-3">
-                                                <input type="text"
-                                                       class="form-control searchable-input floatL border-bottom-input"
-                                                       placeholder="Search Project" ng-model="selectedProject"
-
-                                                       name="projectId"
-                                                       uib-typeahead="project as project.name for project in projects | filter:$viewValue | limitTo:5" />
+                                                 <div class="dropdown">
+						                            <label class="label-control">Select Client</label>
+						                            <select class="form-control " ng-model="selectedProject" ng-change="loadSites()" ng-options="project as project.name for project in projects" >
+						                                <option value="">Select Client...</option>
+						                            </select>
+						                        </div>
+						                                                
                                             </div>
                                             <div class="dropdown col-xs-4 col-md-3">
-                                                <input type="text"
-                                                       class="form-control searchable-input floatL border-bottom-input"
-                                                       placeholder="Search Site" ng-model="selectedSite"
-                                                       uib-typeahead="site as site.name for site in sites | filter:$viewValue | limitTo:5" />
+                                                <div class="dropdown ">
+						                            <label class="label-control">Select Site</label>
+						                            <select class="form-control " ng-model="selectedSite" ng-change="loadEmployees()" ng-options="site as site.name for site in sites">
+						                                <option value="">Select Site...</option>
+						                            </select>
+						                        </div>
                                             </div>
-
+                                            
                                             <div class="dropdown col-xs-4 col-md-3">
-
-                                                <input type="text"
-                                                       class="form-control searchable-input floatL border-bottom-input"
-                                                       placeholder="Search Status" ng-model="selectedStatus"
-                                                       uib-typeahead="stat as stat.name for stat in status | filter:$viewValue | limitTo:5" />
+                                                <div class="dropdown ">
+						                            <label class="label-control">Select Employee</label>
+						                            <select class="form-control " ng-model="selectedEmployee"  ng-options="emp as emp.fullName for emp in employees">
+						                                <option value="">Select Employee...</option>
+						                            </select>
+						                        </div>
                                             </div>
+
+                                           
                                         </div>
                                     </td>
                                     <td>
@@ -75,7 +80,21 @@
                                         </div>
                                     </td>
                                 </tr>
+								<tr class="filter-row gc-search-row">
+                                    <td width="85%">
+                                        <div class="form-group" ng-init="loadProjects();loadAllSites();loadAssets()">
+                                        		<div class="dropdown col-xs-4 col-md-3">
 
+                                                <div class="dropdown ">
+						                            <label class="label-control">Select Status</label>
+						                            <select class="form-control " ng-model="selectedStatus"  ng-options="status as status for status in statuses">
+						                                <option value="">Select Status...</option>
+						                            </select>
+						                        </div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                 </tr>       
                             </table>
 
                         </form>
