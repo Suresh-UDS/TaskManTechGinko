@@ -18,6 +18,7 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.StringTokenizer;
 import java.util.concurrent.ConcurrentHashMap;
 
 import javax.inject.Inject;
@@ -53,15 +54,19 @@ import com.ts.app.repository.SiteRepository;
 import com.ts.app.repository.UserRepository;
 import com.ts.app.repository.UserRoleRepository;
 import com.ts.app.security.SecurityUtils;
+import com.ts.app.service.ChecklistService;
 import com.ts.app.service.JobManagementService;
 import com.ts.app.service.SiteLocationService;
 import com.ts.app.service.UserService;
 import com.ts.app.web.rest.dto.BaseDTO;
+import com.ts.app.web.rest.dto.ChecklistDTO;
+import com.ts.app.web.rest.dto.ChecklistItemDTO;
 import com.ts.app.web.rest.dto.ImportResult;
 import com.ts.app.web.rest.dto.JobDTO;
 import com.ts.app.web.rest.dto.ProjectDTO;
 import com.ts.app.web.rest.dto.SiteDTO;
 import com.ts.app.web.rest.dto.UserDTO;
+import com.ts.app.web.rest.errors.TimesheetException;
 
 
 @Component
@@ -112,6 +117,9 @@ public class ImportUtil {
 	
 	@Inject
 	private SiteLocationService siteLocationService;
+	
+	@Inject
+	private ChecklistService checklistService;
 	
 	public ImportResult importJobData(MultipartFile file, long dateTime) {
         String fileName = dateTime + ".xlsx";
@@ -190,6 +198,26 @@ public class ImportUtil {
 
 	}
 	
+	public ImportResult importChecklistData(MultipartFile file, long dateTime) {
+        String fileName = dateTime + ".xlsx";
+		String filePath = NEW_IMPORT_FOLDER + SEPARATOR +  EMPLOYEE_FOLDER;
+		String uploadedFileName = fileUploadHelper.uploadJobImportFile(file, filePath, fileName);
+		String targetFilePath = COMPLETED_IMPORT_FOLDER + SEPARATOR +  EMPLOYEE_FOLDER;
+		String fileKey = fileName.substring(0, fileName.indexOf(".xlsx"));
+		if(statusMap.containsKey(fileKey)) {
+			String status = statusMap.get(fileKey);
+			log.debug("Current status for filename -"+fileKey+", status -" + status);
+		}else {
+			statusMap.put(fileKey, "PROCESSING");
+		}
+		importNewFiles("checklist",filePath, fileName, targetFilePath);
+		ImportResult result = new ImportResult();
+		result.setFile(fileKey);
+		result.setStatus("PROCESSING");
+		return result;
+
+	}
+	
 	@Async
 	private void importNewFiles(String domain, String sourceFilePath,String fileName, String targetFilePath) {
 		// get new files in the imports folder
@@ -213,6 +241,9 @@ public class ImportUtil {
 						break;
 					case "site" :
 						importSiteFromFile(fileObj.getPath());
+						break;
+					case "checklist" :
+						importChecklistFromFile(fileObj.getPath());
 						break;
 						
 				}
@@ -417,6 +448,55 @@ public class ImportUtil {
 			log.error("Error while reading the job data file for import", e);
 		}
 	}
+	
+	
+	private void importChecklistFromFile(String path) {
+		// TODO Auto-generated method stub		
+		try{
+			FileInputStream excelFile = new FileInputStream(new File(path));
+			Workbook workbook = new XSSFWorkbook(excelFile);
+			Sheet datatypeSheet = workbook.getSheetAt(0);
+			Iterator<Row> iterator = datatypeSheet.iterator();
+			int lastRow = datatypeSheet.getLastRowNum();
+			int r = 1;
+			for (; r <= lastRow; r++) {
+				Row currentRow = datatypeSheet.getRow(r);
+				log.debug("cell type =" + currentRow.getCell(0).getStringCellValue()+"\t"+currentRow.getCell(1).getStringCellValue());
+				ChecklistDTO checklistDTO = new ChecklistDTO();
+				List<ChecklistItemDTO> checkListItems = new ArrayList<ChecklistItemDTO>();
+				StringTokenizer items = new StringTokenizer(currentRow.getCell(1).getStringCellValue(), ",");
+				while(items.hasMoreTokens()){
+					String itemName = items.nextToken();
+					log.debug("Items -"+itemName);
+					ChecklistItemDTO checkListItemDTO = new ChecklistItemDTO();
+					//checkListItemDTO.setId(i);
+					checkListItemDTO.setName(itemName);					
+					checkListItems.add(checkListItemDTO);
+				}				
+				checklistDTO.setName(currentRow.getCell(0).getStringCellValue());
+				checklistDTO.setItems(checkListItems);
+				ChecklistDTO createdChecklist = null;
+				try {
+					createdChecklist = checklistService.createChecklistInformation(checklistDTO);
+				}catch (Exception e) {
+					e.getMessage();
+					String msg = "Error while creating checklist, please check the information";
+					throw new TimesheetException(e, checklistDTO);
+
+				}
+				
+			}
+			
+		}catch (FileNotFoundException e) {
+			// TODO: handle exception
+			log.error("Error while reading the job data file for import", e);
+		} catch(IOException e){
+			log.error("Error while reading the job data file for import", e);
+		}
+		
+		
+	}
+
 	
 	private void importEmployeeFromFile(String path) {
 		try {
