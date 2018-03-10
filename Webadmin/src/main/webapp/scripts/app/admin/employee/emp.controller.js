@@ -17,6 +17,10 @@ angular.module('timeSheetApp')
         $scope.pages = { currPage : 1};
 
         $scope.selectedEmployee;
+        
+        $scope.selectedEmployeeId;
+        
+        $scope.selectedEmployeeName;
 
         $scope.selectedProject;
 
@@ -377,7 +381,7 @@ angular.module('timeSheetApp')
 
        $scope.refreshPage = function() {
            $scope.clearFilter();
-           $scope.loadEmployees();
+           $scope.loadAllEmployees();
        };
 
        $scope.employeeDetails= function(id){
@@ -667,25 +671,19 @@ angular.module('timeSheetApp')
     		console.log('criteria in root scope -'+JSON.stringify($rootScope.searchCriteriaEmployees));
     		console.log('criteria in scope -'+JSON.stringify($scope.searchCriteria));
 
-        	console.log('Selected  project -' + $scope.selectedEmployee + ", " + $scope.selectedProject +" , "+ $scope.selectedSite);
+        	console.log('Selected  project -' + $scope.selectedEmployeeName + ", " + $scope.selectedProject +" , "+ $scope.selectedSite);
 
-        	if(!$scope.selectedEmployee && !$scope.selectedSite && !$scope.selectedProject) {
-        		console.log('criteria in root scope -'+JSON.stringify($rootScope.searchCriteriaEmployees));
-        		if($rootScope.searchCriteriaEmployees) {
-            		$scope.searchCriteria = $rootScope.searchCriteriaEmployees;
-        		}else{
-        		        $scope.searchCriteria.findAll = true;
-        		}
+        	if($scope.selectedEmployeeId || $scope.selectedEmployeeName || $scope.selectedSite || $scope.selectedProject) {
+	        	console.log('selected emp name ='+ $scope.selectedEmployeeName);
 
-        	}else if($scope.selectedEmployee || $scope.selectedSite || $scope.selectedProject) {
-
-        		if($scope.selectedEmployee)
+        		if($scope.selectedEmployeeId)
 	        	{
-	        		$scope.searchCriteria.employeeEmpId = $scope.selectedEmployee.empId;
-		        	$scope.searchCriteria.name = $scope.selectedEmployee.name;
-		        	$scope.searchCriteria.fullName = $scope.selectedEmployee.fullName;
-		        	$scope.searchCriteria.employeeId = $scope.selectedEmployee.id;
+	        		$scope.searchCriteria.employeeEmpId = $scope.selectedEmployeeId;
 		        	console.log('selected emp id ='+ $scope.searchCriteria.employeeEmpId);
+	        	}else if($scope.selectedEmployeeName)
+	        	{
+	        		$scope.searchCriteria.name = $scope.selectedEmployeeName;
+		        	console.log('selected emp name ='+ $scope.searchCriteria.name);
 	        	}else {
 	        		$scope.searchCriteria.employeeEmpId = '';
 	        		$scope.searchCriteria.name = '';
@@ -718,6 +716,13 @@ angular.module('timeSheetApp')
 	        	}else {
 	        		$scope.searchCriteria.projectId = 0;
 	        	}
+        	}else {
+        		console.log('criteria in root scope -'+JSON.stringify($rootScope.searchCriteriaEmployees));
+        		if($rootScope.searchCriteriaEmployees) {
+            		$scope.searchCriteria = $rootScope.searchCriteriaEmployees;
+        		}else{
+        		        $scope.searchCriteria.findAll = true;
+        		}
         	}
         	$scope.searchCriteria.currPage = currPageVal;
         	console.log(JSON.stringify($scope.searchCriteria));
@@ -1023,7 +1028,8 @@ angular.module('timeSheetApp')
         $scope.clearFilter = function() {
             $scope.selectedSite = null;
             $scope.selectedProject = null;
-            $scope.selectedEmployee = null;
+            $scope.selectedEmployeeName = null;
+            $scope.selectedEmployeeId = null;
             $scope.searchCriteria = {};
             $rootScope.searchCriteriaEmployees = null;
             $scope.pages = {

@@ -40,7 +40,7 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long> {
 	List<Employee> findByProjectId(@Param("projectId") long projectId);
 
 	@Query("SELECT distinct e FROM Employee e WHERE e.empId IN :empIds order by e.empId")
-	List<Employee> findAllByEmpIds(@Param("empIds") List<String> empIds);
+	Page<Employee> findAllByEmpCodes(@Param("empIds") List<String> empIds, Pageable pageRequest);
 	
 	@Query("SELECT distinct e FROM Employee e WHERE e.id IN :empIds order by e.empId")
 	Page<Employee> findAllByEmpIds(@Param("empIds") List<Long> empIds, Pageable PageRequest);
@@ -102,6 +102,18 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long> {
     @Query("SELECT e FROM Employee e join e.projectSites ps WHERE ps.projectName like '%' || :projectName || '%' and e.id in (:empIds) and e.active='Y' order by e.empId")
 	Page<Employee> findByProjectName(@Param("projectName") String projectName, @Param("empIds") List<Long> empIds, Pageable pageRequest);
     
+    @Query("SELECT e FROM Employee e join e.projectSites ps WHERE ps.siteId = :siteId and ps.projectId = :projectId and e.empId = :empId and e.active='Y' order by e.empId")
+	Page<Employee> findByProjectSiteAndEmployeeEmpId(@Param("projectId") long projectId, @Param("siteId") long siteId, @Param("empId") String empId, Pageable pageRequest);
+
+    @Query("SELECT e FROM Employee e join e.projectSites ps WHERE ps.siteId = :siteId and ps.projectId = :projectId and e.name like '%' || :empName || '%' and e.active='Y' order by e.empId")
+	Page<Employee> findByProjectSiteAndEmployeeName(@Param("projectId") long projectId, @Param("siteId") long siteId, @Param("empName") String empName, Pageable pageRequest);
+
+    @Query("SELECT e FROM Employee e join e.projectSites ps WHERE ps.projectId = :projectId and e.name like '%' || :empName || '%' and e.active='Y' order by e.empId")
+	Page<Employee> findByProjectAndEmployeeName(@Param("projectId") long projectId, @Param("empName") String empName, Pageable pageRequest);
+
+    @Query("SELECT e FROM Employee e WHERE e.name like '%' || :empName || '%' and e.active='Y' order by e.empId")
+	Page<Employee> findByEmployeeName(@Param("empName") String empName, Pageable pageRequest);
+
     /*
     @Query("SELECT e FROM Employee e , User u WHERE ((e.id = :employeeId and e.project.id = :projectId) or e.site.id = :siteId) and e.user.id = u.id and u.userGroup.id = :userGroupId and e.active='Y' order by e.empId")
 	Page<Employee> findEmployeesByIdAndProjectIdOrSiteId(@Param("employeeId") long employeeId, @Param("projectId") long projectId, @Param("siteId") long siteId, @Param("userGroupId") long userGroupId, Pageable pageRequest);
