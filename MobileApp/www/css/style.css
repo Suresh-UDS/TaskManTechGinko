@@ -7,6 +7,8 @@
     font-family: robotoBold !important;
 
 }
+
+
 *
 {
     font-family: robotoThin;
@@ -1038,17 +1040,61 @@ ion-spinner{
     border-radius:0 !important;
     position: relative;
     display: block;
-    width: 40px !important;
-    height: 40px !important;
+    width: 32px !important;
+    height: 32px !important;
     border-width:0;
     border-style: none !important;
-    background-image: url(../img/green-check-01.png) !important;
-    background-repeat: no-repeat !important;
+    /*font-family: "Material Icons";*/
+    /*content: "link";*/
+    /*-webkit-font-feature-settings: 'liga';*/
+    /*background-image: url(../img/sad.png) !important;*/
+    /*background-repeat: no-repeat !important;*/
+    /*background-color: transparent;*/
+    border-radius: 50% !important;
 }
-
-.true .radio-checked
+.a .radio-icon
 {
-    background-image: url(../img/red-cross-01.png) !important;
+    background: linear-gradient(0deg,rgba(255,0,150,0.3),rgba(255,0,150,0.3)),url(../img/sad.png) !important;
+    background-repeat: no-repeat !important;
+    background-color: transparent;
+}
+.b .radio-icon
+{
+    background: linear-gradient(0deg,rgba(255,0,150,0.3),rgba(255,0,150,0.3)),url(../img/confused.png) !important;
+    background-repeat: no-repeat !important;
+    background-color: transparent;
+}
+.c .radio-icon
+{
+    background: linear-gradient(0deg,rgba(255,0,150,0.3),rgba(255,0,150,0.3)),url(../img/happy.png) !important;
+    background-repeat: no-repeat !important;
+    background-color: transparent;
+}
+.d .radio-icon
+{
+    background: linear-gradient(0deg,rgba(255,0,150,0.3),rgba(255,0,150,0.3)),url(../img/happy1.png) !important;
+    background-repeat: no-repeat !important;
+    background-color: transparent;
+}
+.a .radio-checked
+{
+    background: url(../img/sad.png) !important;
+    background-color:red;
+}
+.b .radio-checked
+{
+    background: url(../img/confused.png) !important;
+    background-color:red;
+}
+.c .radio-checked
+{
+    background: url(../img/happy.png) !important;
+    background-color:red;
+}
+.d .radio-checked
+{
+    background: url(../img/happy1.png) !important;
+    background-color:red;
 }
 .true .radio-inner
 {
