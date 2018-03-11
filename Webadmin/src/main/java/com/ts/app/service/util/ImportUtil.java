@@ -75,12 +75,12 @@ public class ImportUtil {
 
 	private static final Logger log = LoggerFactory.getLogger(ImportUtil.class);
 
-	private static final String NEW_IMPORT_FOLDER = "/opt/imports/new";
+	private static final String NEW_IMPORT_FOLDER = "D://fms//imports";
 	private static final String JOB_FOLDER = "job";
 	private static final String EMPLOYEE_FOLDER = "employee";
 	private static final String CLIENT_FOLDER = "client";
 	private static final String SITE_FOLDER = "site";
-	private static final String COMPLETED_IMPORT_FOLDER = "/opt/imports/completed";
+	private static final String COMPLETED_IMPORT_FOLDER = "D://fms//imports//completed";
 	private static final String SEPARATOR = System.getProperty("file.separator");
 
 	private static final Map<String,String> statusMap = new ConcurrentHashMap<String,String>();
@@ -155,7 +155,8 @@ public class ImportUtil {
 		importNewFiles("client",filePath, fileName, targetFilePath);
 		ImportResult result = new ImportResult();
 		result.setFile(fileKey);
-		result.setStatus(getImportStatus(fileKey));
+		//result.setStatus(getImportStatus(fileKey));
+		result.setStatus("PROCESSING");
 		return result;
 	}
 	
@@ -174,7 +175,7 @@ public class ImportUtil {
 		importNewFiles("site",filePath, fileName, targetFilePath);
 		ImportResult result = new ImportResult();
 		result.setFile(fileKey);
-		result.setStatus(getImportStatus(fileKey));
+		result.setStatus("PROCESSING");
 		return result;
 	}
 	
@@ -297,7 +298,7 @@ public class ImportUtil {
 
 	private void importJobFromFile(String path) {
 		try {
-
+			log.debug("JobFromFile -" + path);
 			FileInputStream excelFile = new FileInputStream(new File(path));
 			Workbook workbook = new XSSFWorkbook(excelFile);
 			Sheet datatypeSheet = workbook.getSheetAt(0);
@@ -394,7 +395,7 @@ public class ImportUtil {
 				projectDto.setName(currentRow.getCell(0).getStringCellValue());
 				projectDto.setContactFirstName(currentRow.getCell(1).getStringCellValue());
 				projectDto.setContactLastName(currentRow.getCell(2).getStringCellValue());
-				projectDto.setPhone(String.valueOf(currentRow.getCell(3).getNumericCellValue()));
+				projectDto.setPhone(String.valueOf(currentRow.getCell(3).getStringCellValue()));
 				projectDto.setEmail(currentRow.getCell(4).getStringCellValue());
 				projectDto.setAddress(currentRow.getCell(5).getStringCellValue());
 				projectDto.setUserId(SecurityUtils.getCurrentUserId());

@@ -66,6 +66,12 @@ angular.module('timeSheetApp')
             			return response.data;
                 });
             	
-            }
+            },
+            importStatus: function(fileName) {
+	        	console.log('import checklist service file name : '+fileName);
+                	return $http.get('api/site/import/'+fileName+"/status").then(function (response) {
+                		return response.data;
+                	});
+	        }
         };
     });

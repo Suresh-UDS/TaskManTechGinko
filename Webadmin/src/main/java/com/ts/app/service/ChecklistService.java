@@ -15,6 +15,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import com.ts.app.domain.AbstractAuditingEntity;
 import com.ts.app.domain.Checklist;
@@ -25,10 +26,12 @@ import com.ts.app.repository.ChecklistItemRepository;
 import com.ts.app.repository.ChecklistRepository;
 import com.ts.app.repository.ProjectRepository;
 import com.ts.app.repository.SiteRepository;
+import com.ts.app.service.util.ImportUtil;
 import com.ts.app.service.util.MapperUtil;
 import com.ts.app.web.rest.dto.BaseDTO;
 import com.ts.app.web.rest.dto.ChecklistDTO;
 import com.ts.app.web.rest.dto.ChecklistItemDTO;
+import com.ts.app.web.rest.dto.ImportResult;
 import com.ts.app.web.rest.dto.SearchCriteria;
 import com.ts.app.web.rest.dto.SearchResult;
 
@@ -56,6 +59,9 @@ public class ChecklistService extends AbstractService {
 	
 	@Inject
 	private MapperUtil<AbstractAuditingEntity, BaseDTO> mapperUtil;
+	
+	@Inject 
+	private ImportUtil importUtil;
 
 	public ChecklistDTO createChecklistInformation(ChecklistDTO checklistDto) {
 		if(checklistDto.getId() > 0) {
@@ -182,6 +188,18 @@ public class ChecklistService extends AbstractService {
 		result.setTransactions(transactions);
 		return;
 	}
+	
+	public ImportResult getImportStatus(String fileId) {
+		ImportResult er = new ImportResult();
+		//fileId += ".csv";
+		if(!StringUtils.isEmpty(fileId)) {
+			String status = importUtil.getImportStatus(fileId);
+			er.setFile(fileId);
+			er.setStatus(status);
+		}
+		return er;
+	}
 
+	
 
 }
