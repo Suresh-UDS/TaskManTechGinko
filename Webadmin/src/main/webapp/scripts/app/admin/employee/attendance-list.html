@@ -1,4 +1,4 @@
-<div ng-init="loadAttendances()">
+<div ng-init="init()">
 
     <!--<div class="row TopButtonsCon" >-->
         <!--&lt;!&ndash;<div class="col-md-4">&ndash;&gt;-->
@@ -19,7 +19,7 @@
 
     <div class="row">
         <div class="col-md-12">
-            <div class="card margin-TB-5 TableCard" ng-init="loadAllAttendances()">
+            <div class="card margin-TB-5 TableCard" >
                 <!--<div class="card-header card-header-icon" data-background-color="purple">-->
                 <!--<i class="material-icons">assignment</i>-->
                 <!--</div>-->
@@ -30,7 +30,7 @@
                         <form name="searchForm"  ng-submit="search()" novalidate >
 
                             <table class="table no-padding-tblCon" border="0">
-                                <tr class="filter-row gc-search-row">
+                                <tr class="filter-row gc-search-row" >
                                     <td>
                                         <div class="form-group" >
 
@@ -44,8 +44,71 @@
                                             <input id="dateFilterTo" type="text" class="form-control datepicker border-bottom-input"   value={{now}} placeholder="To Date" />
                                         </div>
                                     </td>
+								</tr>
+								<tr class="filter-row gc-search-row">
+                                    <td>
+								   			<div class="dropdown">
+                                                <div class="form-group">
+                                                    <!-- <label class="control-label">Select Client</label> -->
+
+                                                    <select class="form-control " ng-model="selectedProject"  ng-change="loadSites()"  ng-options="project as project.name for project in projects">
+                                                        <option value="">Select Client...</option>
+                                                    </select>
+
+
+
+                                                </div>
+                                            </div>
+                                    </td>
+                                    <td>
+                                            
+                                            <div class="dropdown">
+                                                <div class="form-group">
+                                                    <!-- <label class="control-label">Select Site</label> -->
+                                                    <!--<input type="text" class="form-control"-->
+                                                    <!--ng-model="selectedRole"-->
+                                                    <!--uib-typeahead="role as role.name for role in userRoles | filter:$viewValue | limitTo:5"-->
+                                                    <!--name="UserRole" ng-minlength="5" ng-maxlength="50" autofocus-->
+                                                    <!--required >-->
+                                                    <select class="form-control " ng-model="selectedSite"  ng-options="site as site.name for site in sites">
+                                                        <option value="">Select Site...</option>
+                                                    </select>
+
+
+
+                                                </div>
+                                            </div>
+								   
+								   		
+								   </td>
+                                    <td>
+                                        <div class="form-group" >
+                                            <div class="dropdown">
+                                                <input type="text"
+                                                       class="form-control border-bottom-input"
+                                                       placeholder="Search Employee Id"
+                                                       ng-model="selectedEmployeeId"
+												/>
+
+                                            </div>
+                                        </div>
+                                    </td>
+
 
                                     <td>
+                                        <div class="form-group" >
+                                            <div class="dropdown">
+                                                <input type="text"
+                                                       class="form-control border-bottom-input"
+                                                       placeholder="Search Employee Name"
+                                                       ng-model="selectedEmployeeName"
+                                                       />
+                                            </div>
+                                        </div>
+                                    </td>
+                                    
+                                    
+                                    <!-- <td>
                                         <div class="form-group" >
                                             <div class="dropdown">
                                                 <input type="text"
@@ -69,8 +132,8 @@
                                                        uib-typeahead="site as site.name for site in allSites | filter:$viewValue | limitTo:5"/>
                                             </div>
                                         </div>
-                                    </td>
-                                    <td align="right" width="25%">
+                                    </td> -->
+                                    <td align="right">
                                         <div class="floatR form-group">
                                             <button type="submit" class="btn btn-circle blue-clr" ng-disabled="searchForm.$invalid">
                                                 <i class="material-icons">search</i>
