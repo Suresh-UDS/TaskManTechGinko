@@ -131,6 +131,7 @@ angular.module('timeSheetApp')
 
 	        },
 	        importStatus: function(fileName) {
+	        	console.log('import job service file name : '+fileName);
                 	return $http.get('api/jobs/import/'+fileName+"/status").then(function (response) {
                 		return response.data;
                 	});

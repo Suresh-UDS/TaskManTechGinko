@@ -30,7 +30,6 @@
                                            ng-model="selectedClientFile"
                                            name="clientFile"
                                     />
-
                                 </div>
                                 <div class="col-md-6">
                                     <button class="btn btn-success" ng-click="uploadClients()" >
@@ -38,13 +37,11 @@
                                        		<i class="material-icons">file_upload</i>
                                    		</span>Import Clients
                                     </button>
-                                    <!-- <i class="fa fa-circle-o-notch fa-spin" style="font-size:12px"></i> ng-hide="!clientImportMsg()"-->
-                                   		<span ng-hide="!jobImportMsg()"> <i class="fa fa-spinner fa-spin" style="font-size:15px"></i> </span>
-                                    	
+                                   		<span ng-hide="!clientImportStatusLoad()"> <i class="fa fa-spinner fa-spin" style="font-size:15px"></i> </span>                                    	
                                 </div>
-                                  <div class="col-md-12" ng-hide="!clientImportMsg()">
+                                 <!--  <div class="col-md-12" ng-hide="!clientImportMsg()">
                                   	<span class="card-title">Status - {{clientImportMsg()}}</span>
-                                  </div>
+                                  </div> -->
                             </div>
                         </div>
                     </form>
@@ -56,7 +53,6 @@
         
 
         <div class="col-md-6">
-
             <div class="panel panel-default">
                 <div class="panel-heading">Sites</div>
                 <div class="panel-body">
@@ -79,7 +75,7 @@
                                        		<i class="material-icons">file_upload</i>
                                    		</span>Import Sites
                                     </button>
-                                    <span ng-hide="!jobImportMsg()"> <i class="fa fa-spinner fa-spin" style="font-size:15px"></i> </span>
+                                    <span ng-hide="!siteImportStatusLoad()"> <i class="fa fa-spinner fa-spin" style="font-size:15px"></i> </span>
                                 </div>
                             </div>
                         </div>
@@ -110,7 +106,7 @@
                                        		<i class="material-icons">file_upload</i>
                                    		</span>Import Employees
                                    </button>
-                                   <span ng-hide="!jobImportMsg()"> <i class="fa fa-spinner fa-spin" style="font-size:15px"></i> </span>
+                                   <span ng-hide="!empImportStatusLoad()"> <i class="fa fa-spinner fa-spin" style="font-size:15px"></i> </span>
                                   </div>
                                   <div class="col-md-2">
                                   </div>
@@ -147,19 +143,17 @@
                                        		<i class="material-icons">file_upload</i>
                                    		</span>Import Jobs
                                     </button>
-                                    <span ng-hide="!jobImportMsg()"> <i class="fa fa-spinner fa-spin" style="font-size:15px"></i> </span>
+                                    <span ng-hide="!jobImportStatusLoad()"> <i class="fa fa-spinner fa-spin" style="font-size:15px"></i> </span>
                                 </div>
-                                <div class="col-md-12" ng-hide="!jobImportMsg()">
+                                <!-- <div class="col-md-12" ng-hide="!jobImportMsg()">
                                     <span class="card-title">Status - {{jobImportMsg()}}</span>
-                                </div>
+                                </div> -->
                             </div>
                         </div>
                     </form>
                 </div>
             </div>
         </div>
-        
-        
         
         <div class="col-md-6">
             <div class="panel panel-default">
@@ -181,11 +175,11 @@
                                        		<i class="material-icons">file_upload</i>
                                    		</span>Import Checklist
                                     </button>
-                                    <span ng-hide="!jobImportMsg()"> <i class="fa fa-spinner fa-spin" style="font-size:15px"></i> </span>
+                                    <span ng-hide="!checklistImportStatusLoad()"> <i class="fa fa-spinner fa-spin" style="font-size:15px"></i> </span>
                                 </div>
-                                  <div class="col-md-12" ng-hide="!clientImportMsg()">
+                                  <!-- <div class="col-md-12" ng-hide="!clientImportMsg()">
                                   	<span class="card-title">Status - {{clientImportMsg()}}</span>
-                                  </div>
+                                  </div> -->
                             </div>
                         </div>
                     </form>

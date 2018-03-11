@@ -150,6 +150,29 @@ public class SiteResource {
 	}
     
     
+    @RequestMapping(value = "/site/import/{fileId}/status",method = RequestMethod.GET)
+	public ImportResult importStatus(@PathVariable("fileId") String fileId) {
+		log.debug("ImportStatus -  fileId -"+ fileId);
+		ImportResult result = siteService.getImportStatus(fileId);
+		if(result!=null && result.getStatus() != null) {
+			switch(result.getStatus()) {
+				case "PROCESSING" :
+					result.setMsg("Importing data...");
+					break;
+				case "COMPLETED" :
+					result.setMsg("Completed importing");
+					break;
+				case "FAILED" :
+					result.setMsg("Failed to import. Please try again");
+					break;
+				default :
+					result.setMsg("Completed importing");
+					break;
+			}
+		}
+		return result;
+	}
+    
     
     
     
