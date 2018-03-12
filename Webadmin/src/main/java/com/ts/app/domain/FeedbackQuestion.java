@@ -30,6 +30,9 @@ public class FeedbackQuestion extends AbstractAuditingEntity implements Serializ
 
     @Column(name = "question")
     private String question;
+    
+    @Column(name = "answer_type")
+    private FeedbackAnswerType answerType;
 
     @ManyToOne()
     @JoinColumn(name = "feedback_id")
@@ -57,6 +60,14 @@ public class FeedbackQuestion extends AbstractAuditingEntity implements Serializ
 
 	public void setFeedback(Feedback feedback) {
 		this.feedback = feedback;
+	}
+
+	public FeedbackAnswerType getAnswerType() {
+		return answerType;
+	}
+
+	public void setAnswerType(FeedbackAnswerType answerType) {
+		this.answerType = answerType;
 	}
     
 }

@@ -40,7 +40,7 @@ angular.module('timeSheetApp')
 	    };
 	    
 	    $scope.loadSites = function () {
-	    		ProjectComponent.findSites($scope.selectedProject.id).then(function (data) {
+	    		return ProjectComponent.findSites($scope.selectedProject.id).then(function (data) {
 	    			$scope.selectedSite = null;
 	            $scope.sites = data;
 	        });
@@ -82,13 +82,18 @@ angular.module('timeSheetApp')
         		FeedbackComponent.findOneFeedbackMaster(id).then(function (data) {
         			$scope.feedbackItem = data;
         			console.log('Feedback retrieved - ' + JSON.stringify($scope.feedbackItem));
-                for(var i in data.questions) {
-                	$scope.feedbackItems.push(data.questions[i]);	
+                    for(var i in data.questions) {
+                		$scope.feedbackItems.push(data.questions[i]);	
                 }
+                $scope.selectedProject = {id: data.projectId, name: data.projectName};
+                $scope.loadSites().then(function(){
+                    $scope.selectedSite = {id: data.siteId, name: data.siteName};
+                })
                 
             });
 
         };
+        
 
         $scope.updateFeebackQuestions = function () {
         	console.log('Feedback questions details - ' + JSON.stringify($scope.feedbackItem));

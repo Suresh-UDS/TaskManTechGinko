@@ -22,6 +22,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.ts.app.domain.AbstractAuditingEntity;
+import com.ts.app.domain.FeedbackAnswerType;
 import com.ts.app.domain.FeedbackMapping;
 import com.ts.app.domain.FeedbackTransaction;
 import com.ts.app.domain.FeedbackTransactionResult;
@@ -72,16 +73,20 @@ public class FeedbackTransactionService extends AbstractService {
 		Set<FeedbackTransactionResult> items = new HashSet<FeedbackTransactionResult>();
 		float rating = 0f;
 		int positiveCnt = 0;
+		float cumRating = 0f; 
 		for(FeedbackTransactionResultDTO itemDto : itemDtos) {
 			FeedbackTransactionResult item = mapperUtil.toEntity(itemDto, FeedbackTransactionResult.class);
 			item.setId(0);
-			if(item.isAnswer()) {
-				positiveCnt++;
+			if(item.getAnswerType().equals(FeedbackAnswerType.YESNO) && item.getAnswer().equalsIgnoreCase("Yes")) {
+				cumRating += 5;
+			}else if(item.getAnswerType().equals(FeedbackAnswerType.RATING)) {
+				cumRating += Float.parseFloat(item.getAnswer());
 			}
+			
 			item.setFeedbackTransaction(feedbackTrans);
 			items.add(item);
 		}
-		rating = (positiveCnt / items.size()) * 10; //calculate the overall rating.
+		rating = (cumRating / items.size()) * 10; //calculate the overall rating.
 		feedbackTrans.setRating(rating);
 		feedbackTrans.setResults(items);
         feedbackTrans = feedbackTransactionRepository.save(feedbackTrans);        

@@ -34,7 +34,10 @@ public class FeedbackTransactionResult extends AbstractAuditingEntity implements
     private String question;
 
     @Column(name = "answer")
-    private boolean answer;
+    private String answer;
+    
+    @Column(name = "answer_type")
+    private FeedbackAnswerType answerType;
 
     @ManyToOne(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER)
     @JoinColumn(name = "feedback_transaction_id", referencedColumnName = "id")
@@ -56,11 +59,11 @@ public class FeedbackTransactionResult extends AbstractAuditingEntity implements
 		this.feedbackTransaction = feedbackTransaction;
 	}
 
-    public boolean isAnswer() {
+	public String getAnswer() {
 		return answer;
 	}
 
-	public void setAnswer(boolean answer) {
+	public void setAnswer(String answer) {
 		this.answer = answer;
 	}
 
@@ -71,4 +74,14 @@ public class FeedbackTransactionResult extends AbstractAuditingEntity implements
     public void setQuestion(String question) {
         this.question = question;
     }
+
+	public FeedbackAnswerType getAnswerType() {
+		return answerType;
+	}
+
+	public void setAnswerType(FeedbackAnswerType answerType) {
+		this.answerType = answerType;
+	}
+    
+    
 }
