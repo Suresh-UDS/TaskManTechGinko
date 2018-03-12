@@ -106,7 +106,15 @@ public class SearchCriteria extends Paginator {
 	private String zone;
 	
 	private String feedbackName;
-
+	
+	private String userLogin;
+	
+	private String userFirstName;
+	
+	private String userLastName;
+	
+	private String userEmail;
+	
 	public long getId() {
 		return id;
 	}
@@ -513,6 +521,38 @@ public class SearchCriteria extends Paginator {
 
 	public void setFeedbackName(String feedbackName) {
 		this.feedbackName = feedbackName;
+	}
+
+	public String getUserLogin() {
+		return userLogin;
+	}
+
+	public void setUserLogin(String userLogin) {
+		this.userLogin = userLogin;
+	}
+
+	public String getUserFirstName() {
+		return userFirstName;
+	}
+
+	public void setUserFirstName(String userFirstName) {
+		this.userFirstName = userFirstName;
+	}
+
+	public String getUserLastName() {
+		return userLastName;
+	}
+
+	public void setUserLastName(String userLastName) {
+		this.userLastName = userLastName;
+	}
+
+	public String getUserEmail() {
+		return userEmail;
+	}
+
+	public void setUserEmail(String userEmail) {
+		this.userEmail = userEmail;
 	}
 
 	

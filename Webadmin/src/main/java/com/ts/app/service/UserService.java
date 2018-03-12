@@ -408,6 +408,9 @@ public class UserService extends AbstractService {
 			if (!searchCriteria.isFindAll()) {
 				if (searchCriteria.getUserId() != 0) {
 					page = userRepository.findUsersById(searchCriteria.getUserId(), pageRequest);
+				}else {
+					page = userRepository.findByLoginOrFirsNameOrLastNameOrRole(searchCriteria.getUserLogin(),searchCriteria.getUserFirstName(), 
+												searchCriteria.getUserLastName(),searchCriteria.getUserEmail(), searchCriteria.getUserRoleId(), pageRequest);
 				}
 			} else {
 				page = userRepository.findUsers(loggedInUserId, pageRequest);
@@ -417,13 +420,14 @@ public class UserService extends AbstractService {
 				transactions = new ArrayList<UserDTO>();
 				List<User> users = page.getContent();
 				for (User user : users) {
-					UserDTO userDto = mapperUtil.toModel(user, UserDTO.class);
-					Set<Authority> authorities = user.getAuthorities();
-					Set<String> authNames = new HashSet<String>();
-					for (Authority auth : authorities) {
-						authNames.add(auth.getName());
-					}
-					userDto.setAuthorities(authNames);
+					//UserDTO userDto = mapperUtil.toModel(user, UserDTO.class);
+					UserDTO userDto = mapToModel(user);
+//					Set<Authority> authorities = user.getAuthorities();
+//					Set<String> authNames = new HashSet<String>();
+//					for (Authority auth : authorities) {
+//						authNames.add(auth.getName());
+//					}
+//					userDto.setAuthorities(authNames);
 
 					transactions.add(userDto);
 				}
@@ -448,6 +452,19 @@ public class UserService extends AbstractService {
 
 		result.setTransactions(transactions);
 		return;
+	}
+	
+	private UserDTO mapToModel(User user) {
+		UserDTO userDto = new UserDTO();
+		userDto.setId(user.getId());
+		userDto.setLogin(user.getLogin());
+		userDto.setFirstName(user.getFirstName());
+		userDto.setLastName(user.getLastName());
+		userDto.setEmail(user.getEmail());
+		userDto.setUserRoleId(user.getUserRole().getId());
+		userDto.setUserRoleName(user.getUserRole().getName());
+		userDto.setActivated(user.getActivated());
+		return userDto;
 	}
 
 }
