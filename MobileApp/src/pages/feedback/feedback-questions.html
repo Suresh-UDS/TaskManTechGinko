@@ -23,20 +23,20 @@
     </ion-list>
 
 
-       <ion-list radio-group [(ngModel)]="q.answer" class="margin-auto width90 q-type2"  *ngIf="q.answerType=='RATING'">
-           <ion-item class="inline-block width18" align-c no-lines >
+       <ion-list radio-group [(ngModel)]="q.answer" class="margin-auto width-full q-type2 padding-left10"  *ngIf="q.answerType=='RATING'">
+           <ion-item class="inline-block width18" align-center no-lines >
                <ion-radio  value="1" class="true a">Yes</ion-radio>
            </ion-item>
-           <ion-item class="inline-block width18" align-right no-lines>
+           <ion-item class="inline-block width18" align-center no-lines>
                <ion-radio value="2" class="true b">No</ion-radio>
            </ion-item>
-           <ion-item class="inline-block width18 " align-left no-lines>
+           <ion-item class="inline-block width18 " align-center no-lines>
                <ion-radio  value="3" class="true c">Yes</ion-radio>
            </ion-item>
-           <ion-item class="inline-block width18" align-right no-lines>
+           <ion-item class="inline-block width18" align-center no-lines>
                <ion-radio value="4" class="true d">No</ion-radio>
            </ion-item>
-           <ion-item class="inline-block width18" align-right no-lines>
+           <ion-item class="inline-block width18" align-center no-lines>
                <ion-radio value="5" class="true e">No</ion-radio>
            </ion-item>
        </ion-list>
