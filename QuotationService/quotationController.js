@@ -6,6 +6,8 @@ var RateCardType = mongoose.model('RateCardType');
 var mailerService = require('./notifications/mailerService');
 var notificationService = require('./notifications/notificationService');
 var PDFDocument = require('pdfkit');
+var htmlToPdf = require('html-to-pdf');
+
 var fs = require('fs');
 
 
@@ -349,10 +351,9 @@ module.exports = {
                    }else{
                        console.log("Html template success");
                        console.log(response);
+                       console.log(JSON.stringify(response))
 
-
-                       var htmlToPdf = require('html-to-pdf');
-                       htmlToPdf.convertHTMLFile(response, './templates/output.pdf',
+                       htmlToPdf.convertHTMLString(response, './templates/output.pdf',
                            function (error, success) {
                                if (error) {
                                    console.log('PDF Fail');
@@ -363,8 +364,6 @@ module.exports = {
                                }
                            }
                        );
-
-
 
                    }
                })
