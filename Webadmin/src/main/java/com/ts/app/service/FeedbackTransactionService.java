@@ -86,7 +86,7 @@ public class FeedbackTransactionService extends AbstractService {
 			item.setFeedbackTransaction(feedbackTrans);
 			items.add(item);
 		}
-		rating = (cumRating / items.size()) * 10; //calculate the overall rating.
+		rating = (cumRating / items.size()) * 5; //calculate the overall rating.
 		feedbackTrans.setRating(rating);
 		feedbackTrans.setResults(items);
         feedbackTrans = feedbackTransactionRepository.save(feedbackTrans);        
@@ -198,10 +198,14 @@ public class FeedbackTransactionService extends AbstractService {
 						for(Object[] row : questionRatings) {
 							FeedbackQuestionRating qrating = new FeedbackQuestionRating();
 							qrating.setQuestion(String.valueOf(row[0]));
-							if(row[1] != null && (boolean)row[1]) {
-								qrating.setYesCount((Long)row[2]);
-							}else {
-								qrating.setNoCount((Long)row[2]);
+							if(row[1] != null && (row[1] instanceof Boolean)) {
+								if((boolean)row[1]) {
+									qrating.setYesCount((Long)row[2]);
+								}else {
+									qrating.setNoCount((Long)row[2]);	
+								}
+							}else if(row[1] != null && (row[1] instanceof Float)) {
+								qrating.setRating((float)row[1]);
 							}
 							qratings.add(qrating);
 						}
