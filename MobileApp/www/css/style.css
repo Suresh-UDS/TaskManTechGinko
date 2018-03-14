@@ -1204,3 +1204,10 @@ ion-spinner{
     color: #000000;
     text-align: left;
 }
+.InitFeedbackCon ion-select
+{
+  width:70% !important;
+    
+  max-width:70% !important;
+  text-align:right !important;
+}
