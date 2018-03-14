@@ -61,7 +61,7 @@ public class FeedbackTransactionService extends AbstractService {
 
 	@Inject
 	private SiteRepository siteRepository;
-	
+
 	@Inject
 	private MapperUtil<AbstractAuditingEntity, BaseDTO> mapperUtil;
 
@@ -73,23 +73,26 @@ public class FeedbackTransactionService extends AbstractService {
 		Set<FeedbackTransactionResult> items = new HashSet<FeedbackTransactionResult>();
 		float rating = 0f;
 		int positiveCnt = 0;
-		float cumRating = 0f; 
+		float cumRating = 0f;
 		for(FeedbackTransactionResultDTO itemDto : itemDtos) {
+
 			FeedbackTransactionResult item = mapperUtil.toEntity(itemDto, FeedbackTransactionResult.class);
 			item.setId(0);
+			log.debug("answer type - "+item.getAnswerType());
+			log.debug("answer type - "+item.getAnswer());
 			if(item.getAnswerType().equals(FeedbackAnswerType.YESNO) && item.getAnswer().equalsIgnoreCase("Yes")) {
 				cumRating += 5;
 			}else if(item.getAnswerType().equals(FeedbackAnswerType.RATING)) {
 				cumRating += Float.parseFloat(item.getAnswer());
 			}
-			
+
 			item.setFeedbackTransaction(feedbackTrans);
 			items.add(item);
 		}
 		rating = (cumRating / items.size()) * 10; //calculate the overall rating.
 		feedbackTrans.setRating(rating);
 		feedbackTrans.setResults(items);
-        feedbackTrans = feedbackTransactionRepository.save(feedbackTrans);        
+        feedbackTrans = feedbackTransactionRepository.save(feedbackTrans);
 		log.debug("Created Information for FeedbackTransaction: {}", feedbackTrans);
 		feedbackTransDto = mapperUtil.toModel(feedbackTrans, FeedbackTransactionDTO.class);
 		return feedbackTransDto;
@@ -148,14 +151,14 @@ public class FeedbackTransactionService extends AbstractService {
 		result.setTransactions(transactions);
 		return;
 	}
-	
+
 	public FeedbackReportResult generateReport(SearchCriteria searchCriteria) {
 		FeedbackReportResult reportResult = new FeedbackReportResult();
 		if(searchCriteria != null) {
 			Date checkInDate = searchCriteria.getCheckInDateTimeFrom();
 			Calendar checkInDateFrom = Calendar.getInstance(TimeZone.getTimeZone("Asia/Kolkata"));
 	        	checkInDateFrom.setTime(checkInDate);
-	
+
 	        	checkInDateFrom.set(Calendar.HOUR_OF_DAY, 0);
 	        	checkInDateFrom.set(Calendar.MINUTE,0);
 	        	checkInDateFrom.set(Calendar.SECOND,0);
@@ -168,7 +171,7 @@ public class FeedbackTransactionService extends AbstractService {
 	        	}else {
 	        		checkInDateTo.setTime(checkInDate);
 	        	}
-	
+
 	        	checkInDateTo.set(Calendar.HOUR_OF_DAY, 23);
 	        	checkInDateTo.set(Calendar.MINUTE,59);
 	        	checkInDateTo.set(Calendar.SECOND,0);
@@ -206,14 +209,14 @@ public class FeedbackTransactionService extends AbstractService {
 							qratings.add(qrating);
 						}
 						reportResult.setQuestionRatings(qratings);
-						
+
 					}
 				}
 			}
 		}
 		return reportResult;
-		
-		
+
+
 	}
 
 

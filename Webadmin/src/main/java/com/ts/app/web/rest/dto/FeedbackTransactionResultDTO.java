@@ -10,7 +10,9 @@ public class FeedbackTransactionResultDTO extends BaseDTO implements Serializabl
 
     private String question;
 
-    private Boolean answer;
+    private String answer;
+
+    private String answerType;
 
     public long getId() {
         return id;
@@ -20,19 +22,27 @@ public class FeedbackTransactionResultDTO extends BaseDTO implements Serializabl
         this.id = id;
     }
 
-	public Boolean getAnswer() {
-        return answer;
-    }
-
-    public void setAnswer(Boolean answer) {
-        this.answer = answer;
-    }
-
     public String getQuestion() {
         return question;
     }
 
     public void setQuestion(String question) {
         this.question = question;
+    }
+
+    public String getAnswer() {
+        return answer;
+    }
+
+    public void setAnswer(String answer) {
+        this.answer = answer;
+    }
+
+    public String getAnswerType() {
+        return answerType;
+    }
+
+    public void setAnswerType(String answerType) {
+        this.answerType = answerType;
     }
 }
