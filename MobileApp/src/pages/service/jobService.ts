@@ -47,5 +47,22 @@ export class JobService {
             }
         )
     }
+    getJobDetails(jobId):Observable<any>{
+        return this.http.get(this.config.Url+'api/job/'+jobId).map(
+            response=>{
+                console.log(response);
+                return response.json();
+            }
+        )
+    }
+
+    getCompletedImage(employeeId,imageId):Observable<any>{
+        return this.http.get(this.config.Url+'api/employee/'+employeeId+'/checkInOut/'+imageId).map(
+            response=>{
+                console.log(response);
+                return response;
+            }
+        )
+    }
 
 }

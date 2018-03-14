@@ -2,6 +2,7 @@ import { Component, ViewChild } from '@angular/core';
 import {Events, Nav, Platform} from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
+import {BatteryStatus, BatteryStatusResponse} from "@ionic-native/battery-status";
 
 import { HomePage } from '../pages/home/home';
 import { ListPage } from '../pages/list/list';
@@ -31,13 +32,21 @@ import{OneSignal} from "@ionic-native/onesignal";
 export class MyApp {
   @ViewChild(Nav) nav: Nav;
 
-  rootPage: any = LoginPage;
+  rootPage: any = TabsPage;
   userName:any;
   userType :any;
   pages: Array<{title: string, component: any,active:any,icon:any,avoid:any}>;
 
-  constructor(public platform: Platform, public statusBar: StatusBar, public splashScreen: SplashScreen, private oneSignal: OneSignal, public events:Events) {
+  constructor(public platform: Platform, public statusBar: StatusBar, public splashScreen: SplashScreen, private oneSignal: OneSignal, public events:Events, private batteryStatus: BatteryStatus) {
     this.initializeApp();
+
+      let subscription = this.batteryStatus.onChange().subscribe(
+          (status:BatteryStatusResponse)=>{
+              console.log("Battery level");
+              console.log(status.level,status.isPlugged);
+          }
+      );
+
       this.events.subscribe('userType',(type)=>{
           console.log("User type event");
           console.log(type);
@@ -66,6 +75,7 @@ export class MyApp {
         console.log("Event permission in component");
         console.log(permission);
     })
+
 
 
 
@@ -100,6 +110,8 @@ export class MyApp {
     this.nav.setRoot(LoginPage);
     window.localStorage.clear();
   }
+
+
 
   openPage(page) {
     // Reset the content nav to have just this page

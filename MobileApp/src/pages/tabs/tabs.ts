@@ -38,7 +38,7 @@ export class TabsPage {
     console.log('ionViewDidLoad TabsPage');
       if(window.localStorage.getItem('session')){
           console.log("Session available");
-          this.component.showToastMessage('Previous Login Detected, Login automatically','bottom');
+          // this.component.showToastMessage('Previous Login Detected, Login automatically','bottom');
       }else{
           console.log("Session not Available");
           this.component.showToastMessage('Session not available, please login','bottom');

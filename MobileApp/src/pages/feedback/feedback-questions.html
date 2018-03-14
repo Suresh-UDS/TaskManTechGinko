@@ -7,10 +7,11 @@
   </ion-navbar>
 </ion-header>
 
-<ion-content class="FeedbackQuesCon">
+<ion-content class="FeedbackQuesCon" >
    <ion-item *ngFor="let q of questions;let i of index" class="bg-trans QuesContent">
        <h3 text-center="" class="clr-white">{{q.question}}</h3>
-    <ion-list radio-group [(ngModel)]="q.answer" class="margin-auto">
+
+    <ion-list radio-group [(ngModel)]="q.answer" class="margin-auto q-type1" *ngIf="q.answerType!='RATING'">
         <ion-item class="padding-left0 inline-block  align-left" align-left no-lines>
             <ion-radio  value="true" class="">Yes</ion-radio>
             <label item-right class="" >Yes</label>
@@ -20,23 +21,30 @@
             <label item-right class="">No</label>
         </ion-item>
     </ion-list>
+
+
+       <ion-list radio-group [(ngModel)]="q.answer" class="margin-auto width-full q-type2 padding-left10"  *ngIf="q.answerType=='RATING'">
+           <ion-item class="inline-block width18" align-center no-lines >
+               <ion-radio  value="1" class="true a">Yes</ion-radio>
+           </ion-item>
+           <ion-item class="inline-block width18" align-center no-lines>
+               <ion-radio value="2" class="true b">No</ion-radio>
+           </ion-item>
+           <ion-item class="inline-block width18 " align-center no-lines>
+               <ion-radio  value="3" class="true c">Yes</ion-radio>
+           </ion-item>
+           <ion-item class="inline-block width18" align-center no-lines>
+               <ion-radio value="4" class="true d">No</ion-radio>
+           </ion-item>
+           <ion-item class="inline-block width18" align-center no-lines>
+               <ion-radio value="5" class="true e">No</ion-radio>
+           </ion-item>
+       </ion-list>
+
    </ion-item>
 
 
-    <ion-list radio-group [(ngModel)]="a" class="margin-auto width90">
-        <ion-item class="inline-block width20" align-left no-lines >
-            <ion-radio  value="a" class="true a">Yes</ion-radio>
-        </ion-item>
-        <ion-item class="inline-block width20" align-right no-lines>
-            <ion-radio value="b" class="true b">No</ion-radio>
-        </ion-item>
-        <ion-item class="inline-block width20 " align-left no-lines>
-            <ion-radio  value="c" class="true c">Yes</ion-radio>
-        </ion-item>
-        <ion-item class="inline-block width20" align-right no-lines>
-            <ion-radio value="d" class="true d">No</ion-radio>
-        </ion-item>
-    </ion-list>
+
 
 
 </ion-content>

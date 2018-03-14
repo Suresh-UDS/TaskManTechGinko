@@ -123,45 +123,69 @@ export class CompleteJobPage {
         console.log(this.checkOutDetails);
         this.jobService.checkOutJob(this.checkOutDetails).subscribe(
             response=>{
+                console.log("complete job response");
                 console.log(response);
+                console.log(job);
                 this.component.closeLoader();
-                this.navCtrl.setRoot(JobsPage);
                 this.component.showToastMessage('Job Completed Successfully','bottom');
+                // this.component.showLoader('Uploading Images');
                 //TODO
                 //File Upload after successful checkout
-
-
-
                 for(let i in takenImages) {
 
                     console.log("image loop");
-                    console.log(i)
+                    console.log(i);
                     console.log(takenImages[i]);
                     console.log(takenImages[i].file);
                     console.log(this.jobDetails.id);
                     console.log(this.jobDetails.id+i);
-
+                    console.log(this.checkOutDetails.employeeId);
+                    console.log(this.checkOutDetails.employeeEmpId);
+                    console.log(this.checkOutDetails.projectId);
+                    console.log(this.checkOutDetails.siteId);
+                    console.log(this.checkOutDetails.jobId);
+                    var employeeId=Number;
+                    console.log(typeof employeeId);
+                    employeeId=this.checkOutDetails.employeeId;
+                    console.log(typeof employeeId);
+                    console.log(employeeId);
+                    console.log(typeof this.checkOutDetails.jobId);
+                    console.log(typeof this.checkOutDetails.projectId);
+                    console.log(typeof this.checkOutDetails.employeeEmpId);
+                    console.log(typeof this.checkOutDetails.employeeId);
+                    console.log(typeof response.transactionId);
+                    let token_header=window.localStorage.getItem('session');
                     let options: FileUploadOptions = {
-                        fileKey: 'file',
-                        fileName:this.jobDetails.id+i,
+                        fileKey: 'photoOutFile',
+                        fileName:this.checkOutDetails.employeeId+'_photoOutFile_'+response.transactionId,
                         headers:{
-
+                            'X-Auth-Token':token_header
                         },
                         params:{
-
+                            employeeEmpId: this.checkOutDetails.employeeEmpId,
+                            employeeId: this.checkOutDetails.employeeId,
+                            projectId:this.checkOutDetails.projectId,
+                            siteId:this.checkOutDetails.siteId,
+                            checkInOutId:response.transactionId,
+                            jobId:this.checkOutDetails.jobId,
+                            action:"OUT"
                         }
-                    }
+                    };
 
-                    this.fileTransfer.upload(takenImages[i], this.config+'api/employee/image/upload', options)
+                    this.fileTransfer.upload(takenImages[i], this.config.Url+'api/employee/image/upload', options)
                         .then((data) => {
                             console.log(data);
                             console.log("image upload");
+                            this.component.closeLoader();
                         }, (err) => {
                             console.log(err);
                             console.log("image upload fail");
+                            this.component.closeLoader();
                         })
 
                 }
+                this.navCtrl.setRoot(JobsPage);
+
             },err=>{
                 this.component.closeLoader();
             }

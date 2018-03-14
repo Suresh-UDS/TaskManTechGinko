@@ -75,4 +75,14 @@ export class FeedbackService {
         )
     }
 
+    saveFeedback(transactionData):Observable<any>{
+        return this.http.post(this.config.Url+'api/feedback',transactionData).map(
+            response=>{
+                console.log("Feedback saved");
+                console.log(response);
+                return response;
+            }
+        )
+    }
+
 }

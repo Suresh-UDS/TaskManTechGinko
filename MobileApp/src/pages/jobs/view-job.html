@@ -38,6 +38,7 @@
         <ion-col col-6 class="label-on-left">Planned Start Time</ion-col>
         <ion-col col-6><p text-right><ion-icon ios="ios-calendar" md="md-calendar" class="green padding-right10"></ion-icon>{{jobDetails.plannedStartTime | date:'MMM d, y, h:mm a'}}</p></ion-col>
         <ion-col col-6 class="label-on-left">Planned End Time</ion-col>
+
         <ion-col col-6><p text-right><ion-icon ios="ios-calendar" md="md-calendar" class="red padding-right10"></ion-icon>{{jobDetails.plannedEndTime | date:'MMM d, y, h:mm a'}}</p></ion-col>
     </ion-row>
 
@@ -46,6 +47,9 @@
         <ion-col col-6><p text-right><ion-icon ios="ios-calendar" md="md-calendar" class="green padding-right10"></ion-icon>{{jobDetails.actualStartTime | date:'MMM d, y, h:mm a'}}</p></ion-col>
         <ion-col col-6 class="label-on-left">Actual End Time</ion-col>
         <ion-col col-6><p text-right><ion-icon ios="ios-calendar" md="md-calendar" class="red padding-right10"></ion-icon>{{jobDetails.actualEndTime | date:'MMM d, y, h:mm a'}}</p></ion-col>
+        <ion-col col-3 *ngFor="let image of completedImages">
+            <img src="{{image}}" wdith="80px" height="80px" (click)="viewImage(image)">
+        </ion-col>
     </ion-row>
 
 </ion-content>
