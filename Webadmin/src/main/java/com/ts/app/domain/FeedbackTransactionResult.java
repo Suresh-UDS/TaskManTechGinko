@@ -35,7 +35,7 @@ public class FeedbackTransactionResult extends AbstractAuditingEntity implements
 
     @Column(name = "answer")
     private String answer;
-    
+
     @Column(name = "answer_type")
     private FeedbackAnswerType answerType;
 
@@ -75,13 +75,14 @@ public class FeedbackTransactionResult extends AbstractAuditingEntity implements
         this.question = question;
     }
 
-	public FeedbackAnswerType getAnswerType() {
+	public FeedbackAnswerType
+    getAnswerType() {
 		return answerType;
 	}
 
 	public void setAnswerType(FeedbackAnswerType answerType) {
 		this.answerType = answerType;
 	}
-    
-    
+
+
 }

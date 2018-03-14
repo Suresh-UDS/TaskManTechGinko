@@ -41,18 +41,18 @@ import com.ts.app.web.rest.dto.SearchResult;
 @Service
 @Transactional
 public class FeedbackService extends AbstractService {
-	
+
 	private final Logger log = LoggerFactory.getLogger(FeedbackService.class);
-	
+
 	@Inject
 	private FeedbackRepository feedbackRepository;
-	
+
 	@Inject
 	private ProjectRepository projectRepository;
 
 	@Inject
 	private SiteRepository siteRepository;
-	
+
 	@Inject
 	private FeedbackMappingRepository feedbackMappingRepository;
 
@@ -60,7 +60,7 @@ public class FeedbackService extends AbstractService {
 	private MapperUtil<AbstractAuditingEntity, BaseDTO> mapperUtil;
 
 	public FeedbackDTO saveFeebdackQuestions(FeedbackDTO feedbackDto) {
-		
+
 		if(feedbackDto.getId() > 0) {
 			updateFeedback(feedbackDto);
 		}else {
@@ -75,7 +75,7 @@ public class FeedbackService extends AbstractService {
 			Set<FeedbackQuestion> itemsSet = new HashSet<FeedbackQuestion>();
 			itemsSet.addAll(items);
 			feedback.setQuestions(itemsSet);
-			
+
 			if(feedbackDto.getProjectId() > 0) {
 				Project project = projectRepository.findOne(feedbackDto.getProjectId());
 				feedback.setProject(project);
@@ -88,17 +88,17 @@ public class FeedbackService extends AbstractService {
 			}else {
 				feedback.setSite(null);
 			}
-			
+
 			feedback.setActive(Feedback.ACTIVE_YES);
 	        feedback = feedbackRepository.save(feedback);
 			log.debug("Created Information for Feedback: {}", feedback);
 			feedbackDto = mapperUtil.toModel(feedback, FeedbackDTO.class);
 		}
-		
-		
+
+
 		return feedbackDto;
 	}
-	
+
 	public void updateFeedback(FeedbackDTO feedback) {
 		log.debug("Inside Update");
 		Feedback feedbackUpdate = feedbackRepository.findOne(feedback.getId());
@@ -130,7 +130,7 @@ public class FeedbackService extends AbstractService {
 				newItem.setFeedback(feedbackUpdate);
 				feedbackUpdate.getQuestions().add(newItem);
 			}
-		}	
+		}
 		log.debug("before save ="+feedbackUpdate.getQuestions());
 		feedbackRepository.save(feedbackUpdate);
 		log.debug("updated Feedback: {}", feedbackUpdate);
@@ -146,7 +146,7 @@ public class FeedbackService extends AbstractService {
 		Feedback entity = feedbackRepository.findOne(id);
 		return mapperUtil.toModel(entity, FeedbackDTO.class);
 	}
-	
+
 	public SearchResult<FeedbackDTO> findBySearchCrieria(SearchCriteria searchCriteria) {
 		SearchResult<FeedbackDTO> result = new SearchResult<FeedbackDTO>();
 		if(searchCriteria != null) {
@@ -183,16 +183,16 @@ public class FeedbackService extends AbstractService {
 
 		result.setTransactions(transactions);
 		return;
-	}	
-	
-	
+	}
+
+
 	public FeedbackMappingDTO saveFeebdackMapping(FeedbackMappingDTO feedbackMappingDto) {
-		
+
 		if(feedbackMappingDto.getId() > 0) {
 			updateFeedbackMapping(feedbackMappingDto);
 		}else {
 			FeedbackMapping feedbackMapping = mapperUtil.toEntity(feedbackMappingDto, FeedbackMapping.class);
-			
+
 			if(feedbackMappingDto.getProjectId() > 0) {
 				Project project = projectRepository.findOne(feedbackMappingDto.getProjectId());
 				feedbackMapping.setProject(project);
@@ -212,11 +212,11 @@ public class FeedbackService extends AbstractService {
 			log.debug("Created Information for Feedback: {}", feedbackMapping);
 			feedbackMappingDto = mapperUtil.toModel(feedbackMapping, FeedbackMappingDTO.class);
 		}
-		
-		
+
+
 		return feedbackMappingDto;
 	}
-	
+
 	public void updateFeedbackMapping(FeedbackMappingDTO feedbackMappingDto) {
 		log.debug("Inside Update");
 		FeedbackMapping feedbackMappingUpdate = feedbackMappingRepository.findOne(feedbackMappingDto.getId());
@@ -236,9 +236,10 @@ public class FeedbackService extends AbstractService {
 		FeedbackMapping entity = feedbackMappingRepository.findOne(id);
 		return mapperUtil.toModel(entity, FeedbackMappingDTO.class);
 	}
-	
+
 	public SearchResult<FeedbackMappingDTO> findMappingBySearchCrieria(SearchCriteria searchCriteria) {
 		SearchResult<FeedbackMappingDTO> result = new SearchResult<FeedbackMappingDTO>();
+		log.debug("search Criteria - "+searchCriteria.getSiteId()+" - "+searchCriteria.getBlock()+" - "+searchCriteria.getFloor());
 		if(searchCriteria != null) {
 			Pageable pageRequest = createPageRequest(searchCriteria.getCurrPage());
 			Page<FeedbackMapping> page = null;
@@ -271,5 +272,5 @@ public class FeedbackService extends AbstractService {
 
 		result.setTransactions(transactions);
 		return;
-	}	
+	}
 }
