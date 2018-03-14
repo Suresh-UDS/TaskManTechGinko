@@ -16,6 +16,10 @@ angular.module('timeSheetApp')
 
         $scope.selectedEmployee;
 
+        $scope.selectedEmployeeId;
+        
+        $scope.selectedEmployeeName;
+
         $scope.selectedProject;
 
         $scope.selectedSite;
@@ -49,6 +53,11 @@ angular.module('timeSheetApp')
             $scope.selectedDateTo=e.date._d;
 
         });
+        
+        $scope.init = function() {
+        		$scope.loadProjects();
+        		$scope.loadAttendances();
+        }
 
         $scope.loadAllAttendances = function () {
         	if(!$scope.allAttendances) {
@@ -78,6 +87,31 @@ angular.module('timeSheetApp')
                 $scope.allSites = data;
             });
         };
+        
+        $scope.loadProjects = function () {
+    	    console.log("Loading all projects")
+    	    		ProjectComponent.findAll().then(function (data) {
+                $scope.projects = data;
+            });
+        };
+        
+        $scope.loadSites = function () {
+            $scope.showLoader();
+	        	console.log('selected project - ' + JSON.stringify($scope.selectedProject));
+	        	if($scope.selectedProject) {
+	            	ProjectComponent.findSites($scope.selectedProject.id).then(function (data) {
+	                    $scope.sites = data;
+	                    $scope.hideLoader();
+	
+	                });
+	        	}else {
+	            	SiteComponent.findAll().then(function (data) {
+	                    $scope.sites = data;
+	                    $scope.hideLoader();
+	
+	                });
+	        	}
+        };        
 
         $scope.employeeSearch = function () {
             if(!$scope.allEmployees) {
@@ -94,7 +128,7 @@ angular.module('timeSheetApp')
 
        $scope.refreshPage = function() {
            $scope.clearFilter();
-           $scope.loadEmployees();
+           $scope.loadAttendances();
        }
 
 
@@ -104,7 +138,24 @@ angular.module('timeSheetApp')
             });
 
         };
-
+        
+        $scope.loadSites = function () {
+            $scope.showLoader();
+	        	console.log('selected project - ' + JSON.stringify($scope.selectedProject));
+	        	if($scope.selectedProject) {
+	            	ProjectComponent.findSites($scope.selectedProject.id).then(function (data) {
+	                    $scope.sites = data;
+	                    $scope.hideLoader();
+	
+	                });
+	        	}else {
+	            	SiteComponent.findAll().then(function (data) {
+	                    $scope.sites = data;
+	                    $scope.hideLoader();
+	
+	                });
+	        	}
+        };
 
         $scope.search = function () {
             console.log($scope.datePickerDate);
@@ -148,15 +199,68 @@ angular.module('timeSheetApp')
                 console.log($scope.searchCriteria.checkInDateTimeTo)
             }
 
-        	if($scope.selectedEmployee){
-        	    console.log($scope.selectedEmployee);
-                $scope.searchCriteria.employeeEmpId = $scope.selectedEmployee.empId;
-                $scope.searchCriteria.findAll = false;
-            }
-            if($scope.selectedSite){
-        	    $scope.searchCriteria.siteId = $scope.selectedSite.id;
-                $scope.searchCriteria.findAll = false;
-            }
+//        	if($scope.selectedEmployee){
+//        	    console.log($scope.selectedEmployee);
+//                $scope.searchCriteria.employeeEmpId = $scope.selectedEmployee.empId;
+//                $scope.searchCriteria.findAll = false;
+//            }
+//            if($scope.selectedSite){
+//        	    $scope.searchCriteria.siteId = $scope.selectedSite.id;
+//                $scope.searchCriteria.findAll = false;
+//            }
+            
+        	if($scope.selectedEmployeeId || $scope.selectedEmployeeName || $scope.selectedSite || $scope.selectedProject) {
+	        	console.log('selected emp name ='+ $scope.selectedEmployeeName);
+
+        		if($scope.selectedEmployeeId)
+	        	{
+	        		$scope.searchCriteria.employeeEmpId = $scope.selectedEmployeeId;
+		        	console.log('selected emp id ='+ $scope.searchCriteria.employeeEmpId);
+	        	}else if($scope.selectedEmployeeName)
+	        	{
+	        		$scope.searchCriteria.name = $scope.selectedEmployeeName;
+		        	console.log('selected emp name ='+ $scope.searchCriteria.name);
+	        	}else {
+	        		$scope.searchCriteria.employeeEmpId = '';
+	        		$scope.searchCriteria.name = '';
+	        		$scope.searchCriteria.fullName = '';
+	        		$scope.searchCriteria.employeeId = 0;
+	        	}
+
+	        	if($scope.selectedSite) {
+		        	$scope.searchCriteria.siteId = $scope.selectedSite.id;
+		        	if(!$scope.searchCriteria.siteId) {
+		        		$scope.searchCriteria.siteName = $scope.selectedSite;
+		        	}else {
+			        	$scope.searchCriteria.siteName = $scope.selectedSite.name;
+		        	}
+		        	console.log('selected site id ='+ $scope.searchCriteria.siteId);
+	        	}else {
+	        		$scope.searchCriteria.siteId = 0;
+	        	}
+
+	        	if($scope.selectedProject) {
+		        	$scope.searchCriteria.projectId = $scope.selectedProject.id;
+		        	if(!$scope.searchCriteria.projectId) {
+		        		$scope.searchCriteria.projectName = $scope.selectedProject;
+		        		console.log('selected project name ='+ $scope.selectedProject + ', ' +$scope.searchCriteria.projectName);
+		        	}else {
+			        	$scope.searchCriteria.projectName = $scope.selectedProject.name;
+		        	}
+
+		        	console.log('selected project id ='+ $scope.searchCriteria.projectId);
+	        	}else {
+	        		$scope.searchCriteria.projectId = 0;
+	        	}
+        	}else {
+        		console.log('criteria in root scope -'+JSON.stringify($rootScope.searchCriteriaAttendances));
+        		if($rootScope.searchCriteriaAttendances) {
+            		$scope.searchCriteria = $rootScope.searchCriteriaAttendances;
+        		}else{
+        		    $scope.searchCriteria.findAll = true;
+        		}
+        	}            
+            
         	console.log(JSON.stringify($scope.searchCriteria));
         	AttendanceComponent.search($scope.searchCriteria).then(function (data) {
                 $scope.attendancesData = data.transactions;
@@ -504,6 +608,19 @@ angular.module('timeSheetApp')
 
         };
 
+        $scope.showLoader = function(){
+            console.log("Show Loader");
+            $scope.loading = true;
+            $scope.notLoading=false;
+        };
+
+        $scope.hideLoader = function(){
+            console.log("Show Loader");
+            $scope.loading = false;
+            $scope.notLoading=true;
+        };
+        
+        
         $scope.initCalender();
 
     });

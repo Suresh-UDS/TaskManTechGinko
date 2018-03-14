@@ -7,9 +7,10 @@ var fs = require('fs');
 var emailTemplates = {};
 registerTemplates();
 
+
 function registerTemplates(){
-    var templateDir = path.join(__dirname+'../../', 'templates/');
-    //var templateDir = path.join('D:/workspace/FMS/QuotationService/templates/');
+    // var templateDir = path.join(__dirname+'../../', 'templates/');
+    var templateDir = path.join('D:/usha/ionic/FMS-NEW/QuotationService/templates/');
 
     fs.readdirSync(templateDir).forEach(function (file) {
         fs.readFile(templateDir+file, function(err, buf) {
@@ -42,6 +43,9 @@ function sendMail(from,to,subject,template,data){
         });
 }
 
+
+
+
 var defaultFrom = config.mailer.from;
 module.exports = {
     submitQuotation: function(emailId, data) {
@@ -53,6 +57,19 @@ module.exports = {
                 {clientName: data.sentToUserName,
                     siteName: data.siteName,
                     createdByUserName:data.createdByUserName})
-        }
+        },
 
-}
+    getPdfDetail:function (data,callback) {
+        console.log("Get pdf details");
+        console.log(data);
+        var template='quotation';
+        var testData =emailTemplates[template](data);
+        console.log("pdf tempalte data");
+        console.log(data);
+        console.log(testData);
+
+        callback(null,testData)
+
+    }
+
+};

@@ -33,6 +33,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.codahale.metrics.annotation.Timed;
 import com.ts.app.domain.AbstractAuditingEntity;
+import com.ts.app.domain.JobStatus;
 import com.ts.app.domain.User;
 import com.ts.app.security.SecurityUtils;
 import com.ts.app.service.JobManagementService;
@@ -78,6 +79,12 @@ public class JobManagementResource {
 	@Inject
 	private ReportUtil reportUtil;
 
+	
+	@RequestMapping(path="/job/lookup/status", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	public JobStatus[] getJobStatuses() {
+		return JobStatus.values();
+	}
+	
 	@RequestMapping(path="/site/{id}/job", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public Paginator<JobDTO> getSiteJobs(@PathVariable("id") Long siteId, @RequestParam(name="currPage",required=false) int page){
 		return jobService.getSiteJobs(siteId,page);

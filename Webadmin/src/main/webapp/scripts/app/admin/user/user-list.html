@@ -16,7 +16,7 @@
     <!--</div>-->
 
 
-    <div class="row" ng-init="loadUsers()">
+    <div class="row" ng-init="init()">
 
         <div class="col-md-12">
             <div class="card margin-TB-5 TableCard">
@@ -39,41 +39,51 @@
                                     <!--</div>-->
                                     <!--</td>-->
                                     <td>
-                                        <div class="form-group" ng-init="loadUsers()">
+                                        <div class="form-group" >
                                             <div class="dropdown">
                                                 <input type="text" class="form-control searchable-input floatL border-bottom-input" placeholder="Search Username"
-                                                       ng-model="selectedUser" ng-value="searchCriteria.userLogin" name="userLogin" uib-typeahead="user as user.login for user in users | filter:$viewValue | limitTo:5" />
+                                                       ng-model="searchCriteria.userLogin" ng-value="searchCriteria.userLogin" name="userLogin" />
 
                                             </div>
                                         </div>
                                     </td>
                                     <td>
-                                        <div class="form-group" ng-init="loadUsers()">
+                                        <div class="form-group" >
                                             <div class="dropdown">
                                                 <input type="text" class="form-control searchable-input floatL border-bottom-input" placeholder="Search First Name"
-                                                       ng-model="selectedUser" ng-value="searchCriteria.userFirstName" name="userFirstName" uib-typeahead="user as user.firstName for user in users | filter:$viewValue | limitTo:5" />
+                                                       ng-model="searchCriteria.userFirstName" ng-value="searchCriteria.userFirstName" name="userFirstName"  />
 
                                             </div>
                                         </div>
                                     </td>
                                     <td>
-                                        <div class="form-group" ng-init="loadUsers()">
+                                        <div class="form-group" >
                                             <div class="dropdown">
                                                 <input type="text" class="form-control searchable-input floatL border-bottom-input" placeholder="Search Last Name"
-                                                       ng-model="selectedUser" ng-value="searchCriteria.userLastName" name="userLastName" uib-typeahead="user as user.lastName for user in users | filter:$viewValue | limitTo:5" />
+                                                       ng-model="searchCriteria.userLastName" ng-value="searchCriteria.userLastName" name="userLastName" />
 
                                             </div>
                                         </div>
                                     </td>
                                     <td>
-                                        <div class="form-group" ng-init="loadUsers()">
+                                        <div class="form-group" >
                                             <div class="dropdown">
                                                 <input type="text" class="form-control searchable-input floatL border-bottom-input" placeholder="Search Email"
-                                                       ng-model="selectedUser" ng-value="searchCriteria.userEmail" name="userEmail" uib-typeahead="user as user.email for user in users | filter:$viewValue | limitTo:5" />
+                                                       ng-model="searchCriteria.userEmail" ng-value="searchCriteria.userEmail" name="userEmail" />
 
                                             </div>
                                         </div>
                                     </td>
+                                    <td>
+										<div class="dropdown">
+                                                <div class="form-group">
+                                                    <select class="form-control " ng-model="selectedRole"  ng-options="role as role.name for role in userRoles">
+                                                        <option value="">Select Role...</option>
+                                                    </select>
+
+                                                </div>
+                                            </div>
+                                    </td>                                    
                                     <td align="right">
                                         <div class="floatR form-group">
                                             <button type="submit" class="btn btn-circle blue-clr" ng-disabled="searchForm.$invalid">

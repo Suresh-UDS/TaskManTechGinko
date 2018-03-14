@@ -31,22 +31,54 @@
                             <table class="table no-padding-tblCon" border="0">
                                 <tr class="filter-row gc-search-row">
 
-                                    <td>
+<!--                                     <td>
                                         <label>Show</label>
                                         <select class="siteList margin0" ng-model="sort" ng-change="hasChanged()" ng-options="paging.value for paging in pageSizes" value="{{paging.value}}">
                                         </select>
                                     </td>
+ -->								   <td>
+								   			<div class="dropdown">
+                                                <div class="form-group">
+                                                    <label class="control-label">Select Client</label>
+
+                                                    <select class="form-control " ng-model="selectedProject"  ng-change="loadSites()"  ng-options="project as project.name for project in projects">
+                                                        <option value="">Select Client...</option>
+                                                    </select>
 
 
+
+                                                </div>
+                                            </div>
+                                    </td>
+                                    <td>
+                                            
+                                            <div class="dropdown">
+                                                <div class="form-group">
+                                                    <label class="control-label">Select Site</label>
+                                                    <!--<input type="text" class="form-control"-->
+                                                    <!--ng-model="selectedRole"-->
+                                                    <!--uib-typeahead="role as role.name for role in userRoles | filter:$viewValue | limitTo:5"-->
+                                                    <!--name="UserRole" ng-minlength="5" ng-maxlength="50" autofocus-->
+                                                    <!--required >-->
+                                                    <select class="form-control " ng-model="selectedSite"  ng-options="site as site.name for site in sites">
+                                                        <option value="">Select Site...</option>
+                                                    </select>
+
+
+
+                                                </div>
+                                            </div>
+								   
+								   		
+								   </td>
                                     <td>
                                         <div class="form-group" >
                                             <div class="dropdown">
                                                 <input type="text"
                                                        class="form-control border-bottom-input"
                                                        placeholder="Search Employee Id"
-                                                       ng-model="selectedEmployee"
-                                                       ng-value="searchCriteria.employeeEmpId"
-                                                       uib-typeahead="employee as employee.empId for employee in allEmployees | filter:$viewValue | limitTo:5" />
+                                                       ng-model="selectedEmployeeId"
+												/>
 
                                             </div>
                                         </div>
@@ -59,25 +91,13 @@
                                                 <input type="text"
                                                        class="form-control border-bottom-input"
                                                        placeholder="Search Employee Name"
-                                                       ng-model="selectedEmployee"
-                                                       ng-value="searchCriteria.employeeFullName"
-                                                       uib-typeahead="employee as employee.fullName for employee in allEmployees | filter:$viewValue | limitTo:5" />
+                                                       ng-model="selectedEmployeeName"
+                                                       />
                                             </div>
                                         </div>
                                     </td>
 
-                                    <td>
-                                        <div class="form-group" >
-                                            <div class="dropdown">
-                                                <input type="text"
-                                                       class="form-control searchable-input floatL border-bottom-input"
-                                                       placeholder="Search Site"
-                                                       ng-model="selectedSite"
-                                                       ng-value="searchCriteria.siteName"
-                                                       uib-typeahead="site as site.name for site in sites | filter:$viewValue | limitTo:5"/>
-                                            </div>
-                                        </div>
-                                    </td>
+                                    
                                     <td align="right">
                                         <div class="floatR form-group">
 
@@ -116,6 +136,7 @@
           						<span ng-click="columnDescOrder('name')" class=""><i class="fas fa-caret-down"></i></span>
 
     							 </a></th>
+                                <th>Client</th>
                                 <th>Enrolled Face Id</th>
                                 <th>Authorize Face Id</th>
                                 <th>Status</th>
@@ -127,7 +148,7 @@
                             <tr ng-repeat="employee in employees" repeat-done="initDataTables()">
                                 <td>{{employee.empId}}</td>
                                 <td>{{employee.name}} {{employee.lastName}}</td>
-
+							   <td>{{employee.projectName}}</td>
                                 <td ng-if="employee.enrolled_face">
                                     <a id="images" href="#" onClick="$('#enrollImageModal').modal()" data-target="#enrollImageModal" data-dismiss="#enrollImageModal" ng-click="loadEnrolledImage(employee.enrolled_face)">
                                         <img src={{employee.enrolled_face}} width="30px" height="30px"/>

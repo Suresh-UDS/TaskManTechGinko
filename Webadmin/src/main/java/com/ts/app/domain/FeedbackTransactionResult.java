@@ -4,8 +4,10 @@ package com.ts.app.domain;
 import java.io.Serializable;
 
 import javax.persistence.Cacheable;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
@@ -32,10 +34,13 @@ public class FeedbackTransactionResult extends AbstractAuditingEntity implements
     private String question;
 
     @Column(name = "answer")
-    private boolean answer;
+    private String answer;
+    
+    @Column(name = "answer_type")
+    private FeedbackAnswerType answerType;
 
-    @ManyToOne()
-    @JoinColumn(name = "feedback_transaction_id")
+    @ManyToOne(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER)
+    @JoinColumn(name = "feedback_transaction_id", referencedColumnName = "id")
     private FeedbackTransaction feedbackTransaction;
 
     public long getId() {
@@ -54,11 +59,11 @@ public class FeedbackTransactionResult extends AbstractAuditingEntity implements
 		this.feedbackTransaction = feedbackTransaction;
 	}
 
-    public boolean isAnswer() {
+	public String getAnswer() {
 		return answer;
 	}
 
-	public void setAnswer(boolean answer) {
+	public void setAnswer(String answer) {
 		this.answer = answer;
 	}
 
@@ -69,4 +74,14 @@ public class FeedbackTransactionResult extends AbstractAuditingEntity implements
     public void setQuestion(String question) {
         this.question = question;
     }
+
+	public FeedbackAnswerType getAnswerType() {
+		return answerType;
+	}
+
+	public void setAnswerType(FeedbackAnswerType answerType) {
+		this.answerType = answerType;
+	}
+    
+    
 }

@@ -14,6 +14,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 import com.ts.app.domain.AbstractAuditingEntity;
 import com.ts.app.domain.Employee;
@@ -22,8 +23,10 @@ import com.ts.app.domain.User;
 import com.ts.app.repository.ProjectRepository;
 import com.ts.app.repository.SiteRepository;
 import com.ts.app.repository.UserRepository;
+import com.ts.app.service.util.ImportUtil;
 import com.ts.app.service.util.MapperUtil;
 import com.ts.app.web.rest.dto.BaseDTO;
+import com.ts.app.web.rest.dto.ImportResult;
 import com.ts.app.web.rest.dto.SearchCriteria;
 import com.ts.app.web.rest.dto.SearchResult;
 import com.ts.app.web.rest.dto.SiteDTO;
@@ -55,6 +58,9 @@ public class SiteService extends AbstractService {
 	@Inject
 	private SiteLocationService siteLocationService;
 
+	@Inject 
+	private ImportUtil importUtil;
+	
 	public SiteDTO createSiteInformation(SiteDTO siteDto) {
 		// log.info("The admin Flag value is " +adminFlag);
 		Site site = mapperUtil.toEntity(siteDto, Site.class);
@@ -220,7 +226,7 @@ public class SiteService extends AbstractService {
 						List<Long> subEmpIds = findSubOrdinates(user.getEmployee(), empId);
 						page = siteRepository.findSitesByIdOrProjectId(searchCriteria.getSiteId(), searchCriteria.getSiteName(), searchCriteria.getProjectId(), searchCriteria.getProjectName(), subEmpIds, pageRequest);
 					}else {
-						page = siteRepository.findSitesByIdOrProjectId(searchCriteria.getSiteId(), searchCriteria.getProjectId(), searchCriteria.getProjectName(), pageRequest);
+						page = siteRepository.findSitesByIdOrProjectId(searchCriteria.getSiteId(), searchCriteria.getSiteName(), searchCriteria.getProjectId(), searchCriteria.getProjectName(), pageRequest);
 					}
 				}
 			}else {
@@ -288,6 +294,17 @@ public class SiteService extends AbstractService {
         entities = siteRepository.findSiteByEmployeeId(id);
         return mapperUtil.toModelList(entities, SiteDTO.class);
     }
+	
+	public ImportResult getImportStatus(String fileId) {
+		ImportResult er = new ImportResult();
+		//fileId += ".csv";
+		if(!StringUtils.isEmpty(fileId)) {
+			String status = importUtil.getImportStatus(fileId);
+			er.setFile(fileId);
+			er.setStatus(status);
+		}
+		return er;
+	}
 
 
 }

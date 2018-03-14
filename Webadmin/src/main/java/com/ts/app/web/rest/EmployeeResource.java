@@ -290,7 +290,7 @@ public class EmployeeResource {
     @RequestMapping(value = "/employee/search",method = RequestMethod.POST)
     public SearchResult<EmployeeDTO> searchEmployees(@RequestBody SearchCriteria searchCriteria) {
         if(searchCriteria != null) {
-            log.debug("search criteria - " + searchCriteria.getEmployeeId() + " , " + searchCriteria.getProjectId() + " , " + searchCriteria.getSiteId());
+            log.debug("search criteria - " + searchCriteria.getEmployeeEmpId() + " , " + searchCriteria.getProjectId() + " , " + searchCriteria.getSiteId());
             searchCriteria.setUserId(SecurityUtils.getCurrentUserId());
         }
         SearchResult<EmployeeDTO> result = null;

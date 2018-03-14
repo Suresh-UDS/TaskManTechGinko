@@ -311,16 +311,20 @@ public class SchedulerService extends AbstractService {
 						int alertCnt = job.getOverdueAlertCount() + 1;
 						Employee manager = assignee;
 						for(int x = 0; x < alertCnt; x++ ) {
-							manager = manager.getManager();
-							if(manager != null && manager.getUser() != null) {
-								alertEmailIds += "," + manager.getUser().getEmail();
-								pushAlertUserIds.add(manager.getUser().getId()); //add manager user account id for push
+							if(manager != null) {
+								manager = manager.getManager();
+								if(manager != null && manager.getUser() != null) {
+									alertEmailIds += "," + manager.getUser().getEmail();
+									pushAlertUserIds.add(manager.getUser().getId()); //add manager user account id for push
+								}
 							}
 						}
 						try {
-							long[] pushUserIds = Longs.toArray(pushAlertUserIds);
-							String message = "Site - "+ job.getSite().getName() + ", Job - " + job.getTitle() + ", Status - " + JobStatus.OVERDUE.name() + ", Time - "+ job.getPlannedEndTime();
-							pushService.send(pushUserIds, message); //send push to employee and managers.
+							if(CollectionUtils.isNotEmpty(pushAlertUserIds)) {
+								long[] pushUserIds = Longs.toArray(pushAlertUserIds);
+								String message = "Site - "+ job.getSite().getName() + ", Job - " + job.getTitle() + ", Status - " + JobStatus.OVERDUE.name() + ", Time - "+ job.getPlannedEndTime();
+								pushService.send(pushUserIds, message); //send push to employee and managers.
+							}
 							if(overdueAlertSetting != null && overdueAlertSetting.getSettingValue().equalsIgnoreCase("true")) { //send escalation emails to managers and alert emails
 								mailService.sendOverdueJobAlert(assignee.getUser(), alertEmailIds, job.getSite().getName(), job.getId(), job.getTitle(), exportResult.getFile());
 								job.setOverDueEmailAlert(true);

@@ -683,32 +683,51 @@ public class    EmployeeService extends AbstractService {
 			if((searchCriteria.getSiteId() != 0 && searchCriteria.getProjectId() != 0)) {
 				if(searchCriteria.getFromDate() != null) {
 					page = employeeRepository.findBySiteIdAndProjectId(searchCriteria.getProjectId(), searchCriteria.getSiteId(),startDate, toDate, pageRequest);
+				}else if(StringUtils.isNotEmpty(searchCriteria.getName())) {
+					page = employeeRepository.findByProjectSiteAndEmployeeName(searchCriteria.getProjectId(), searchCriteria.getSiteId(), searchCriteria.getName(), pageRequest);
 				}else {
 					page = employeeRepository.findBySiteIdAndProjectId(searchCriteria.getProjectId(), searchCriteria.getSiteId(), pageRequest);
 				}
-			}else if((searchCriteria.getSiteId() != 0 && searchCriteria.getEmployeeId() != 0)) {
-				log.debug("findBySearchCriteria - "+searchCriteria.getSiteId() +", "+searchCriteria.getEmployeeId() +", "+searchCriteria.getProjectId());
-				if(searchCriteria.getFromDate() != null) {
-					page = employeeRepository.findEmployeesByIdAndSiteIdOrProjectId(searchCriteria.getEmployeeId(), searchCriteria.getProjectId(), searchCriteria.getSiteId(), startDate, toDate, pageRequest);
-				}else {
-					page = employeeRepository.findEmployeesByIdAndSiteIdOrProjectId(searchCriteria.getEmployeeId(), searchCriteria.getProjectId(), searchCriteria.getSiteId(), pageRequest);
-				}
-			}else if((searchCriteria.getEmployeeId() != 0 && searchCriteria.getProjectId() != 0)) {
-				if(searchCriteria.getFromDate() != null) {
-					page = employeeRepository.findEmployeesByIdAndProjectIdOrSiteId(searchCriteria.getEmployeeId(), searchCriteria.getProjectId(), searchCriteria.getSiteId(), startDate, toDate, pageRequest);
-				}else {
-					page = employeeRepository.findEmployeesByIdAndProjectIdOrSiteId(searchCriteria.getEmployeeId(), searchCriteria.getProjectId(), searchCriteria.getSiteId(), pageRequest);
-				}
-			}else if (searchCriteria.getEmployeeId() != 0 && searchCriteria.getProjectId() != 0 && searchCriteria.getSiteId() != 0) {
-				if(searchCriteria.getFromDate() != null) {
-					page = employeeRepository.findEmployeesByIdAndSiteIdAndProjectId(searchCriteria.getEmployeeId(), searchCriteria.getProjectId(), searchCriteria.getSiteId(), startDate, toDate,pageRequest);
-				}else {
-					page = employeeRepository.findEmployeesByIdAndSiteIdAndProjectId(searchCriteria.getEmployeeId(), searchCriteria.getProjectId(), searchCriteria.getSiteId(), pageRequest);
-				}
-            }else if (searchCriteria.getEmployeeId() != 0) {
-			    page = employeeRepository.findByEmployeeId(searchCriteria.getEmployeeId(),pageRequest);
-            	//page = employeeRepository.findEmployeesByIdOrSiteIdAndProjectId(searchCriteria.getEmployeeId(), searchCriteria.getProjectId(), searchCriteria.getSiteId(), userGroupId, pageRequest);
-            }else if (searchCriteria.getProjectId() != 0) {
+			}else if(searchCriteria.getSiteId() != 0 && StringUtils.isNotEmpty(searchCriteria.getName())) {
+				List<String> empIds = new ArrayList<String>();
+				empIds.add(searchCriteria.getEmployeeEmpId());
+				page = employeeRepository.findByProjectSiteAndEmployeeName(searchCriteria.getProjectId(), searchCriteria.getSiteId(), searchCriteria.getName(), pageRequest);;
+			}else if(searchCriteria.getProjectId() != 0 && StringUtils.isNotEmpty(searchCriteria.getName())) {
+				List<String> empIds = new ArrayList<String>();
+				empIds.add(searchCriteria.getEmployeeEmpId());
+				page = employeeRepository.findByProjectAndEmployeeName(searchCriteria.getProjectId(), searchCriteria.getName(), pageRequest);;
+			}else if(StringUtils.isNotEmpty(searchCriteria.getEmployeeEmpId())) {
+				List<String> empIds = new ArrayList<String>();
+				empIds.add(searchCriteria.getEmployeeEmpId());
+				page = employeeRepository.findAllByEmpCodes(empIds, pageRequest);
+			}
+			else if(StringUtils.isNotEmpty(searchCriteria.getName())) {
+				page = employeeRepository.findByEmployeeName(searchCriteria.getName(), pageRequest);
+			}
+//			else if((searchCriteria.getSiteId() != 0 && searchCriteria.getEmployeeId() != 0)) {
+//				log.debug("findBySearchCriteria - "+searchCriteria.getSiteId() +", "+searchCriteria.getEmployeeId() +", "+searchCriteria.getProjectId());
+//				if(searchCriteria.getFromDate() != null) {
+//					page = employeeRepository.findEmployeesByIdAndSiteIdOrProjectId(searchCriteria.getEmployeeId(), searchCriteria.getProjectId(), searchCriteria.getSiteId(), startDate, toDate, pageRequest);
+//				}else {
+//					page = employeeRepository.findEmployeesByIdAndSiteIdOrProjectId(searchCriteria.getEmployeeId(), searchCriteria.getProjectId(), searchCriteria.getSiteId(), pageRequest);
+//				}
+//			}else if((searchCriteria.getEmployeeId() != 0 && searchCriteria.getProjectId() != 0)) {
+//				if(searchCriteria.getFromDate() != null) {
+//					page = employeeRepository.findEmployeesByIdAndProjectIdOrSiteId(searchCriteria.getEmployeeId(), searchCriteria.getProjectId(), searchCriteria.getSiteId(), startDate, toDate, pageRequest);
+//				}else {
+//					page = employeeRepository.findEmployeesByIdAndProjectIdOrSiteId(searchCriteria.getEmployeeId(), searchCriteria.getProjectId(), searchCriteria.getSiteId(), pageRequest);
+//				}
+//			}else if (searchCriteria.getEmployeeId() != 0 && searchCriteria.getProjectId() != 0 && searchCriteria.getSiteId() != 0) {
+//				if(searchCriteria.getFromDate() != null) {
+//					page = employeeRepository.findEmployeesByIdAndSiteIdAndProjectId(searchCriteria.getEmployeeId(), searchCriteria.getProjectId(), searchCriteria.getSiteId(), startDate, toDate,pageRequest);
+//				}else {
+//					page = employeeRepository.findEmployeesByIdAndSiteIdAndProjectId(searchCriteria.getEmployeeId(), searchCriteria.getProjectId(), searchCriteria.getSiteId(), pageRequest);
+//				}
+//            }else if (searchCriteria.getEmployeeId() != 0) {
+//			    page = employeeRepository.findByEmployeeId(searchCriteria.getEmployeeId(),pageRequest);
+//            	//page = employeeRepository.findEmployeesByIdOrSiteIdAndProjectId(searchCriteria.getEmployeeId(), searchCriteria.getProjectId(), searchCriteria.getSiteId(), userGroupId, pageRequest);
+//            }
+            else if (searchCriteria.getProjectId() != 0) {
             		if(searchCriteria.getFromDate() != null) {
             			page = employeeRepository.findEmployeesByIdAndSiteIdOrProjectId(searchCriteria.getEmployeeId(), searchCriteria.getProjectId(), searchCriteria.getSiteId(), startDate, toDate, pageRequest);
             		}else {
@@ -854,6 +873,8 @@ public class    EmployeeService extends AbstractService {
     		empDto.setLeft(employee.isLeft());
     		empDto.setReliever(employee.isReliever());
     		empDto.setRelieved(employee.isRelieved());
+    		empDto.setProjectName(CollectionUtils.isNotEmpty(employee.getProjectSites()) ? employee.getProjectSites().get(0).getProjectName() : "");
+    		empDto.setSiteName(CollectionUtils.isNotEmpty(employee.getProjectSites()) ? employee.getProjectSites().get(0).getSiteName() : "");
     		return empDto;
     }
 

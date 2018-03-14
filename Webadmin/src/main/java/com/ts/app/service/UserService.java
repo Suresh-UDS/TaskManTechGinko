@@ -272,6 +272,32 @@ public class UserService extends AbstractService {
 			log.debug("Changed Information for User1: {}", u);
 		});
 	}
+	
+	public void updateUserInformation(UserDTO userDto) {
+		userRepository.findOneByLogin(SecurityUtils.getCurrentUserLogin()).ifPresent(u -> {
+			u.setFirstName(userDto.getFirstName());
+			u.setLastName(userDto.getLastName());
+			u.setEmail(userDto.getEmail());
+			u.setLangKey(userDto.getLangKey());
+			u.setEmailSubscribed(userDto.isEmailSubscribed());
+			u.setLogin(userDto.getLogin());
+			if (userDto.getUserRoleId() > 0) {
+				u.setUserRole(userRoleRepository.findOne(userDto.getUserRoleId()));
+			} 			
+			User updatedUser = userRepository.save(u);
+			if (userDto.getEmployeeId() > 0) {
+				Employee employee = employeeRepository.findOne(userDto.getEmployeeId());
+				if (employee != null) {
+					employee.setUser(updatedUser);
+					employeeRepository.save(employee);
+					updatedUser.setEmployee(employee);
+					userRepository.save(updatedUser);
+				}
+
+			}
+			log.debug("Changed Information for User1: {}", u);
+		});
+	}
 
 	public void updatePushSubscription(long userId, boolean pushSubscribed) {
 		User u = userRepository.findOne(userId);
@@ -382,6 +408,9 @@ public class UserService extends AbstractService {
 			if (!searchCriteria.isFindAll()) {
 				if (searchCriteria.getUserId() != 0) {
 					page = userRepository.findUsersById(searchCriteria.getUserId(), pageRequest);
+				}else {
+					page = userRepository.findByLoginOrFirsNameOrLastNameOrRole(searchCriteria.getUserLogin(),searchCriteria.getUserFirstName(), 
+												searchCriteria.getUserLastName(),searchCriteria.getUserEmail(), searchCriteria.getUserRoleId(), pageRequest);
 				}
 			} else {
 				page = userRepository.findUsers(loggedInUserId, pageRequest);
@@ -391,13 +420,14 @@ public class UserService extends AbstractService {
 				transactions = new ArrayList<UserDTO>();
 				List<User> users = page.getContent();
 				for (User user : users) {
-					UserDTO userDto = mapperUtil.toModel(user, UserDTO.class);
-					Set<Authority> authorities = user.getAuthorities();
-					Set<String> authNames = new HashSet<String>();
-					for (Authority auth : authorities) {
-						authNames.add(auth.getName());
-					}
-					userDto.setAuthorities(authNames);
+					//UserDTO userDto = mapperUtil.toModel(user, UserDTO.class);
+					UserDTO userDto = mapToModel(user);
+//					Set<Authority> authorities = user.getAuthorities();
+//					Set<String> authNames = new HashSet<String>();
+//					for (Authority auth : authorities) {
+//						authNames.add(auth.getName());
+//					}
+//					userDto.setAuthorities(authNames);
 
 					transactions.add(userDto);
 				}
@@ -422,6 +452,19 @@ public class UserService extends AbstractService {
 
 		result.setTransactions(transactions);
 		return;
+	}
+	
+	private UserDTO mapToModel(User user) {
+		UserDTO userDto = new UserDTO();
+		userDto.setId(user.getId());
+		userDto.setLogin(user.getLogin());
+		userDto.setFirstName(user.getFirstName());
+		userDto.setLastName(user.getLastName());
+		userDto.setEmail(user.getEmail());
+		userDto.setUserRoleId(user.getUserRole().getId());
+		userDto.setUserRoleName(user.getUserRole().getName());
+		userDto.setActivated(user.getActivated());
+		return userDto;
 	}
 
 }

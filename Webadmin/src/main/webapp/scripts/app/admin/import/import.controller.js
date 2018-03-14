@@ -13,19 +13,34 @@ angular.module('timeSheetApp')
         
         $scope.selectedJobFile;
         $scope.selectedEmployeeFile;
+        $scope.selectedChecklistFile;
         //client file
         $scope.selectedClientFile;
         $rootScope.clientImportStatus = {};
+        $rootScope.checklistImportStatus = {};
+        $rootScope.siteImportStatus = {};
         $rootScope.jobImportStatus = {};
+        $rootScope.jobImportStatusLoad = false;
+        $rootScope.empImportStatusLoad = false;
+        $rootScope.checklistImportStatusLoad = false;
+        $rootScope.clientImportStatusLoad = false;
+        $rootScope.siteImportStatusLoad = false;
         $rootScope.employeeImportStatus = {};
         $scope.importStatus;
         $scope.importEmployeeStatus;
         $scope.selectFile = function() {
         		console.log($scope.selectedJobFile);
         }
+        
+        
+        
         // upload Job File
         $scope.uploadJobFile = function() {
-        		console.log('selected job file - ' + $scope.selectedJobFile);
+        	console.log('selected job file - ' + $scope.selectedJobFile);
+        	if($scope.selectedJobFile){
+        	$rootScope.jobImportStatusLoad = true;
+        	console.log('$rootScope.jobImportStatus msg - '+$rootScope.jobImportStatus);
+        		
         		JobComponent.importFile($scope.selectedJobFile).then(function(data){
         			console.log(data);
         			var result = data;
@@ -35,38 +50,19 @@ angular.module('timeSheetApp')
 	        				importMsg : result.msg
 	        		};
 	        		$rootScope.jobImportStatus = importStatus;
-	        		$rootScope.start();
+	        		$rootScope.start('job');
 	         },function(err){
 	            	  console.log('Import error')
 	            	  console.log(err);
-	         });
+	         });        		
+        	}else {
+        		console.log('Choose a file!!!');
+        	}		
         		
-        }
-        
-	    
-	 // store the interval promise in this variable
-	    var promise;
-	
-	 // starts the interval
-	    $rootScope.start = function() {
-	      // stops any running interval to avoid two intervals running at the same time
-	    	$rootScope.stop();
-	
-	      // store the interval promise
-	      promise = $interval($scope.jobImportStatus, 5000);
-	      console.log('promise -'+promise);
-	    };
-	
-	    // stops the interval
-	    $rootScope.stop = function() {
-	      $interval.cancel(promise);
-	    };
-	    
-	   
+        }	       
 	    // Job Import Status
 	    $scope.jobImportStatus = function() {
-	        	console.log('$rootScope.jobImportStatus -'+JSON.stringify($rootScope.jobImportStatus));
-	        		
+	        	console.log('$rootScope.jobImportStatus import controller -'+JSON.stringify($rootScope.jobImportStatus));	        		
 	            	JobComponent.importStatus($rootScope.jobImportStatus.fileName).then(function(data) {
 	            		if(data) {
 	            			$rootScope.jobImportStatus.importStatus = data.status;
@@ -76,11 +72,15 @@ angular.module('timeSheetApp')
 	                		if($rootScope.jobImportStatus.importStatus == 'COMPLETED'){
 	                			$rootScope.jobImportStatus.fileName = data.file;
 	                    		console.log('jobimportFile - '+ $rootScope.jobImportStatus.fileName);
-	                    		$scope.stop();
+	                    		$scope.stop('job');
+	                    		$rootScope.jobImportStatusLoad = false;
+	                    		$timeout(function() {
+	                    			$rootScope.jobImportStatus = {};
+	                    	      }, 3000);
 	                		}else if($rootScope.jobImportStatus.importStatus == 'FAILED'){
-	                    		$scope.stop();
+	                    		$scope.stop('job');
 	                		}else if(!$rootScope.jobImportStatus.importStatus){
-	                			$scope.stop();
+	                			$scope.stop('job');
 	                		}else {
 	                			$rootScope.jobImportStatus.fileName = '#';
 	                		}
@@ -90,13 +90,21 @@ angular.module('timeSheetApp')
 	
 	    }
 	    $scope.jobImportMsg = function() {
+	    	console.log('$rootScope.jobImportStatus message - '+ JSON.stringify($rootScope.jobImportStatus));
 		return (' Job msg - '+$rootScope.jobImportStatus ? $rootScope.jobImportStatus.importMsg : '');
 	    };
+	    $scope.jobImportStatusLoad = function(){
+	    	console.log('$rootScope.jobImportStatusLoad message '+ $rootScope.jobImportStatusLoad);
+	    	return ($rootScope.jobImportStatusLoad ? $rootScope.jobImportStatusLoad : '');
+	    };
+	    // Job end
 	    
 	    
 	    
-	    // upload Employee File by prem
+	    // upload Employee File  start
         $scope.uploadEmployeeFile = function(){
+        	if($scope.selectedEmployeeFile){
+        	$rootScope.empImportStatusLoad = true;
         	console.log('selected employee file - ' + $scope.selectedEmployeeFile);
         	EmployeeComponent.importEmployeeFile($scope.selectedEmployeeFile).then(function(data){
         		console.log(data);
@@ -107,32 +115,17 @@ angular.module('timeSheetApp')
         			importMsg : result.msg
         		};
         		$rootScope.employeeImportStatus = importStatus;
-        		$rootScope.start();
+        		$rootScope.start('employee');
         	},function(err){
         		console.log('Import error');
         		console.log(err);
         	});
+        	}else{
+        		console.log('select a file');
+        	}	
         }
         
-        // upload Site File
-        $scope.uploadSitesFile = function(){
-        	console.log('selected site file -'+ $scope.selectedSiteFile);
-        	SiteComponent.importSiteFile($scope.selectedSiteFile).then(function(data){
-        		console.log(data);
-        		var result = data;
-        		console.log(result.file + ', '+result.status + ',' + result.msg);
-        		
-        	},function(err){
-        		console.log();
-        	});
-        }
-        
-        
-        
-        // employee job status by prem
-	    $scope.employeeImportStatus = function() {
-        	console.log('$rootScope.employeeImportStatus -'+JSON.stringify($rootScope.employeeImportStatus));
-        		
+	    $scope.employeeImportStatus = function() {        	       		
         	EmployeeComponent.importEmployeeStatus($rootScope.employeeImportStatus.fileName).then(function(data) {
             		if(data) {
             			$rootScope.employeeImportStatus.importStatus = data.status;
@@ -142,35 +135,36 @@ angular.module('timeSheetApp')
                 		if($rootScope.employeeImportStatus.importStatus == 'COMPLETED'){
                 			$rootScope.employeeImportStatus.fileName = data.file;
                     		console.log('importEmployeeFile - '+ $rootScope.employeeImportStatus.fileName);
-                    		$scope.stop();
+                    		$scope.stop('employee');
+                    		$rootScope.empImportStatusLoad = false;
+                    		$timeout(function() {
+                    			$rootScope.employeeImportStatus = {};
+                    	      }, 3000);
                 		}else if($rootScope.employeeImportStatus.importStatus == 'FAILED'){
-                    		$scope.stop();
+                    		$scope.stop('employee');
                 		}else if(!$rootScope.employeeImportStatus.importStatus){
-                			$scope.stop();
+                			$scope.stop('employee');
                 		}else {
                 			$rootScope.employeeImportStatus.fileName = '#';
                 		}
             		}
             	});
-    }
-	   // starts the employee interval by prem
-	    $rootScope.start = function() {
-	      // stops any running interval to avoid two intervals running at the same time
-	    	$rootScope.stop();
-	
-	      // store the interval promise
-	      promise = $interval($scope.employeeImportStatus, 5000);
-	      console.log('promise -'+promise);
-	    };    
+	    }
 	    
-	    
-	    $scope.employeeImportMsg = function() {
-	        return ('employeeMsg - '+$rootScope.employeeImportStatus ? $rootScope.employeeImportStatus.importMsg : '');
-	    }; 
-	    
-       //client upload file
+	  $scope.employeeImportMsg = function() {
+        return ('employeeMsg - '+$rootScope.employeeImportStatus ? $rootScope.employeeImportStatus.importMsg : '');
+	  }; 
+	  $scope.empImportStatusLoad = function(){
+	    	console.log('$scope.empImportStatusLoad message '+ $rootScope.empImportStatusLoad);
+	    	return ($rootScope.empImportStatusLoad ? $rootScope.empImportStatusLoad : '');
+	   };  
+	  //Employee end
+        
+      //client upload file start
 	    $scope.uploadClients = function() {
-    		console.log('selected Client file - ' + $scope.selectedClientFile);
+	    	if($scope.selectedClientFile){
+	    		$rootScope.clientImportStatusLoad = true;
+    		console.log('************************selected Client file - ' + $scope.selectedClientFile);
     		ProjectComponent.importFile($scope.selectedClientFile).then(function(data){
     			console.log(data);
     			var result = data;
@@ -180,44 +174,242 @@ angular.module('timeSheetApp')
         				importMsg : result.msg
         		};
         		$rootScope.clientImportStatus = importStatus;
-        		$rootScope.start();
+        		$rootScope.start('client');
          },function(err){
             	  console.log('Client Import error')
             	  console.log(err);
          });
+	    }	
     		
     }
-
+	
 	    $scope.clientImportStatus = function() {
-        	console.log('$rootScope.clientImportStatus -'+JSON.stringify($rootScope.clientImportStatus));
-        		
-            	ProjectComponent.importStatus($rootScope.clientImportStatus.fileName).then(function(data) {
+	        	console.log('$rootScope.clientImportStatus -'+JSON.stringify($rootScope.clientImportStatus));
+	        		
+	            	ProjectComponent.importStatus($rootScope.clientImportStatus.fileName).then(function(data) {
+	            		if(data) {
+	            			$rootScope.clientImportStatus.importStatus = data.status;
+	                		console.log('*****************importStatus - '+ JSON.stringify($rootScope.clientImportStatus));
+	                		$rootScope.clientImportStatus.importMsg = data.msg;
+	                		console.log('**************importMsg - '+ $rootScope.clientImportStatus.importMsg);
+	                		if($rootScope.clientImportStatus.importStatus == 'COMPLETED'){
+	                			$rootScope.clientImportStatus.fileName = data.file;
+	                    		console.log('importFile - '+ $rootScope.clientImportStatus.fileName);
+	                    		$scope.stop('client');
+	                    		$rootScope.clientImportStatusLoad = false;
+	                    		$timeout(function() {
+	                    			$rootScope.clientImportStatus = {};
+	                    	    }, 3000);
+	                		}else if($rootScope.clientImportStatus.importStatus == 'FAILED'){
+	                    		$scope.stop('client');
+	                		}else if(!$rootScope.clientImportStatus.importStatus){
+	                			$scope.stop('client');
+	                		}else {
+	                			$rootScope.clientImportStatus.fileName = '#';
+	                		}
+	            		}
+
+	            	});
+
+	    }
+	    $scope.clientImportMsg = function() {
+		   return ($rootScope.clientImportStatus ? $rootScope.clientImportStatus.importMsg : '');
+		};  
+		$scope.clientImportStatusLoad = function(){
+		    	console.log('$scope.clientImportStatusLoad message '+ $rootScope.clientImportStatusLoad);
+		    	return ($rootScope.clientImportStatusLoad ? $rootScope.clientImportStatusLoad : '');
+		}; 
+	   // client upload end 
+		
+		 // upload Site File start
+	     $scope.uploadSitesFile = function(){
+	    	 if($scope.selectedSiteFile){
+	    		 $rootScope.siteImportStatusLoad = true;
+	        	console.log('selected site file -'+ $scope.selectedSiteFile);
+	        	SiteComponent.importSiteFile($scope.selectedSiteFile).then(function(data){
+	        		console.log(data);
+	        		var result = data;
+	        		console.log(result.file + ', '+result.status + ',' + result.msg);
+	        		var importStatus = {
+	        				fileName : result.file,
+	        				importMsg : result.msg
+	        		};
+	        		$rootScope.siteImportStatus = importStatus;
+	        		$rootScope.start('site');	        		
+	        	},function(err){
+	        		console.log();
+	        	});
+	    	 }
+	     }
+	     
+	     $scope.siteImportStatus = function() {
+	        	console.log('$rootScope.siteImportStatus -'+JSON.stringify($rootScope.siteImportStatus));
+	        		
+	        	SiteComponent.importStatus($rootScope.siteImportStatus.fileName).then(function(data) {
+	            		if(data) {
+	            			$rootScope.siteImportStatus.importStatus = data.status;
+	                		console.log('*****************importStatus - '+ JSON.stringify($rootScope.siteImportStatus));
+	                		$rootScope.siteImportStatus.importMsg = data.msg;
+	                		console.log('**************importMsg - '+ $rootScope.siteImportStatus.importMsg);
+	                		if($rootScope.siteImportStatus.importStatus == 'COMPLETED'){
+	                			$rootScope.siteImportStatus.fileName = data.file;
+	                    		console.log('importFile - '+ $rootScope.siteImportStatus.fileName);
+	                    		$scope.stop('site');
+	                    		$rootScope.siteImportStatusLoad = false;
+	                    		$timeout(function() {
+	                    			$rootScope.siteImportStatus = {};
+	                    	    }, 3000);
+	                		}else if($rootScope.siteImportStatus.importStatus == 'FAILED'){
+	                    		$scope.stop('client');
+	                		}else if(!$rootScope.siteImportStatus.importStatus){
+	                			$scope.stop('client');
+	                		}else {
+	                			$rootScope.siteImportStatus.fileName = '#';
+	                		}
+	            		}
+	            	});
+	    }
+	    
+	     /*$scope.siteImportMsg = function() {
+			   return ($rootScope.siteImportStatus ? $rootScope.siteImportStatus.importMsg : '');
+			};  */
+			$scope.siteImportStatusLoad = function(){
+			    	console.log('$scope.siteImportStatusLoad message '+ $rootScope.siteImportStatusLoad);
+			    	return ($rootScope.siteImportStatusLoad ? $rootScope.siteImportStatusLoad : '');
+			}; 
+	     
+	     
+	        
+	        
+	      // site file end  
+	    
+	    //Checklist upload file start
+	    $scope.uploadChecklist = function() {
+	    	if($scope.selectedChecklistFile){
+	    		$rootScope.checklistImportStatusLoad = true;
+    		console.log('************************selected checklist file - ' + $scope.selectedChecklistFile);
+    		ChecklistComponent.importChecklistFile($scope.selectedChecklistFile).then(function(data){
+    			console.log(data);
+    			var result = data;
+    			console.log(result.file + ', ' + result.status + ',' + result.msg);
+    			var importStatus = {
+        				fileName : result.file,
+        				importMsg : result.msg
+        		};
+        		$rootScope.checklistImportStatus = importStatus;
+        		$rootScope.start('checklist');
+         },function(err){
+            	  console.log('Client Import error')
+            	  console.log(err);
+         });
+	  
+	  }
+    }
+	
+	    $scope.checklistImportStatus = function() {
+        	console.log('$rootScope.checklistImportStatus -'+JSON.stringify($rootScope.checklistImportStatus));        		
+        	ChecklistComponent.importStatus($rootScope.checklistImportStatus.fileName).then(function(data) {
             		if(data) {
-            			$rootScope.clientImportStatus.importStatus = data.status;
-                		console.log('importStatus - '+ $rootScope.clientImportStatus);
-                		$rootScope.clientImportStatus.importMsg = data.msg;
-                		console.log('importMsg - '+ $rootScope.clientImportStatus.importMsg);
-                		if($rootScope.clientImportStatus.importStatus == 'COMPLETED'){
-                			$rootScope.clientImportStatus.fileName = data.file;
-                    		console.log('importFile - '+ $rootScope.clientImportStatus.fileName);
-                    		$scope.stop();
-                		}else if($rootScope.clientImportStatus.importStatus == 'FAILED'){
-                    		$scope.stop();
-                		}else if(!$rootScope.clientImportStatus.importStatus){
-                			$scope.stop();
+            			$rootScope.checklistImportStatus.importStatus = data.status;
+                		console.log('*****************importStatus - '+ JSON.stringify($rootScope.checklistImportStatus));
+                		$rootScope.checklistImportStatus.importMsg = data.msg;
+                		console.log('**************importMsg - '+ $rootScope.checklistImportStatus.importMsg);
+                		if($rootScope.checklistImportStatus.importStatus == 'COMPLETED'){
+                			$rootScope.checklistImportStatus.fileName = data.file;
+                    		console.log('importFile - '+ $rootScope.checklistImportStatus.fileName);
+                    		$scope.stop('checklist');
+                    		$rootScope.checklistImportStatusLoad = false;
+                    		$timeout(function() {
+                    			$rootScope.checklistImportStatus = {};
+                    	    }, 3000);
+                		}else if($rootScope.checklistImportStatus.importStatus == 'FAILED'){
+                    		$scope.stop('checklist');
+                		}else if(!$rootScope.checklistImportStatus.importStatus){
+                			$scope.stop('checklist');
                 		}else {
-                			$rootScope.clientImportStatus.fileName = '#';
+                			$rootScope.checklistImportStatus.fileName = '#';
                 		}
             		}
 
             	});
 
-    }
+    }    
+	    
+	   
+	   $scope.checklistImportStatusLoad = function(){
+		   	console.log('$scope.checklistImportStatusLoad message '+ $rootScope.checklistImportStatusLoad);
+		   	return ($rootScope.checklistImportStatusLoad ? $rootScope.checklistImportStatusLoad : '');
+	   };   
+	    
+	    
+	    
+	    
+	   // checklist end 
+	    
+	 // store the interval promise in this variable
+	 var promiseJob;
+	 var promiseEmployee;
+	 var promiseClient;
+	 var promiseSite;
+	 var promiseChecklist;
+	 // starts the interval
+	    $rootScope.start = function(typeImport) {
+	      // stops any running interval to avoid two intervals running at the same time
+	    	//$rootScope.stop('job');
+	
+	      // store the interval promise
+	    	if(typeImport == 'job'){
+	    		$rootScope.stop('job');
+	    		console.log('Import Job Start Method');
+	    		promiseJob = $interval($scope.jobImportStatus, 5000);
+	    		console.log('promise -'+promiseJob);
+	    	}
+	    	if(typeImport == 'employee'){
+	    		$rootScope.stop('employee');
+	    		console.log('Import Employee Start Method');
+	    		promiseEmployee = $interval($scope.employeeImportStatus, 5000);
+	    		console.log('promise -'+promiseEmployee);
+	    	}
+	    	if(typeImport == 'client'){
+	    		$rootScope.stop('client');
+	    		console.log('Import Client Start Method');
+	    		promiseClient = $interval($scope.clientImportStatus, 5000);
+	    		console.log('promise -'+promiseClient);
+	    	}
+	    	if(typeImport == 'site'){
+	    		$rootScope.stop('site');
+	    		console.log('Import Site Start Method');
+	    		promiseSite = $interval($scope.siteImportStatus, 5000);
+	    		console.log('promise -'+promiseSite);	    		
+	    	}
+	    	if(typeImport == 'checklist'){
+	    		$rootScope.stop('checklist');
+	    		console.log('Import checklist Start Method');
+	    		promiseChecklist = $interval($scope.checklistImportStatus, 5000);
+	    		console.log('promise -'+promiseChecklist);
+	    	}
+	    };	
+	    // stops the interval
+	    $rootScope.stop = function(stopInterval) {
+	      if(stopInterval == 'job'){	
+	    	  $interval.cancel(promiseJob);
+	      }
+	      if(stopInterval == 'employee'){
+	    	  $interval.cancel(promiseEmployee);
+	      }
+	      if(stopInterval == 'client'){
+	    	  $interval.cancel(promiseClient);
+	      }
+	      if(stopInterval == 'site'){
+	    	  $interval.cancel(promiseSite);
+	      }
+	      if(stopInterval == 'checklist'){
+	    	  $interval.cancel(promiseChecklist);
+	      }
+	    };	   
+	    
+	    
 
-
-	    $scope.clientImportMsg = function() {
-	        return ($rootScope.clientImportStatus ? $rootScope.clientImportStatus.importMsg : '');
-	    };  
         
         
     });

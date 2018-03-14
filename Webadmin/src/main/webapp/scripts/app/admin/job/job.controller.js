@@ -12,6 +12,7 @@ angular.module('timeSheetApp')
         $scope.errorProjectExists = null;
         $scope.selectedProject = null;
         $scope.selectedSite = null;
+        $scope.selectedJobDate = null;
         $scope.selectedStatus = null;
         $scope.selectedLocation = null;
         $scope.searchCriteria = {};
@@ -28,14 +29,18 @@ angular.module('timeSheetApp')
             demo.initFormExtendedDatetimepickers();
         };
 
+        $scope.init = function() {
+        		$scope.loadJobStatuses();
+        }
+        
         $scope.loadProjects = function () {
         	ProjectComponent.findAll().then(function (data) {
                 $scope.projects = data;
             });
         };
 
-        $('#dateFilterFrom').on('dp.change', function(e){
-                $scope.job.plannedStartTime = e.date._d;
+        $('#selectedJobDate').on('dp.change', function(e){
+                $scope.selectedJobDate = e.date._d;
         });
 
         $scope.loadChecklists = function () {
@@ -57,11 +62,26 @@ angular.module('timeSheetApp')
                 $scope.sites = data;
             });
         };
+        
+        $scope.loadEmployees = function () {
+        		$scope.searchCriteria.siteId = $scope.selectedSite.id;
+        		EmployeeComponent.search($scope.searchCriteria).then(function (data) {
+        			$scope.selectedEmployee = null;
+                $scope.employees = data.transactions;
+            });
+        };
 
-            $scope.loadLocations = function(){
+        $scope.loadLocations = function(){
             JobComponent.loadLocations().then(function(data){
                $scope.selectedLocation = null;
                $scope.locations = data;
+            });
+        };
+        
+        $scope.loadJobStatuses = function(){
+            JobComponent.loadJobStatuses().then(function(data){
+               $scope.selectedLocation = null;
+               $scope.statuses = data;
             });
         };
 
@@ -316,14 +336,18 @@ angular.module('timeSheetApp')
 	        	if($scope.selectedSite) {
 	        		$scope.searchCriteria.siteId = $scope.selectedSite.id;
 		        }
-
+	        	console.log('selected status - '+ JSON.stringify($scope.selectedStatus));
 	        	if($scope.selectedStatus){
-		        		$scope.searchCriteria.jobStatus = $scope.selectedStatus.name;
+		        		$scope.searchCriteria.jobStatus = $scope.selectedStatus;
 		        }
 
 	        	if($scope.selectedJob){
 	        		$scope.searchCriteria.jobTitle = $scope.selectedJob;
 	        	}
+	        	
+	        	if($scope.selectedJobDate) {
+	        		$scope.searchCriteria.checkInDateTimeFrom = $scope.selectedJobDate;
+	        	}	        	
 
 	        	console.log(JSON.stringify($scope.searchCriteria));
 	        	JobComponent.search($scope.searchCriteria).then(function (data) {

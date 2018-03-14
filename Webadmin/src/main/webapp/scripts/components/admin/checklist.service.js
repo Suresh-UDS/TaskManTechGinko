@@ -54,6 +54,24 @@ angular.module('timeSheetApp')
             	return $http.post('api/checklist/search', searchCriteria).then(function (response) {
             		return response.data;
             	});
-            }        
+            },
+            importChecklistFile: function(file){
+            	var fileFormData = new FormData();
+        		fileFormData.append('checklistFile', file);
+            	return $http.post('api/checklist/import', fileFormData, {
+                    transformRequest: angular.identity,
+                    headers: {'Content-Type': undefined}
+     
+                }).then(function (response) {
+            			return response.data;
+                });
+            	
+            },
+            importStatus: function(fileName) {
+	        	console.log('import checklist service file name : '+fileName);
+                	return $http.get('api/site/import/'+fileName+"/status").then(function (response) {
+                		return response.data;
+                	});
+	        }
         };
     });

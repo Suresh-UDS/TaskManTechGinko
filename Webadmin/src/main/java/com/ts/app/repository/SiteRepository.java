@@ -62,8 +62,8 @@ public interface SiteRepository extends JpaRepository<Site, Long> {
 	@Query("SELECT distinct s FROM Site s join s.employees e  WHERE (s.id = :siteId or s.name like '%' || :siteName || '%' ) or (s.project.id = :projectId or s.project.name like '%' || :projectName || '%' ) and e.id in (:empIds)  and s.active='Y'")
 	Page<Site> findSitesByIdOrProjectId(@Param("siteId") long siteId, @Param("siteName") String siteName, @Param("projectId") long projectId, @Param("projectName") String projectName,  @Param("empIds") List<Long> empIds, Pageable pageRequest);
 
-	@Query("SELECT s FROM Site s WHERE (s.id = :siteId or (s.project.id = :projectId or s.project.name like '%' || :projectName || '%' )) and s.active='Y'")
-	Page<Site> findSitesByIdOrProjectId(@Param("siteId") long siteId, @Param("projectId") long projectId, @Param("projectName") String projectName, Pageable pageRequest);
+	@Query("SELECT s FROM Site s WHERE ((s.id = :siteId or s.name like '%' || :siteName || '%' ) or  (s.project.id = :projectId or s.project.name like '%' || :projectName || '%' )) and s.active='Y'")
+	Page<Site> findSitesByIdOrProjectId(@Param("siteId") long siteId,  @Param("siteName") String siteName, @Param("projectId") long projectId, @Param("projectName") String projectName, Pageable pageRequest);
 
 
     @Query("SELECT s FROM Site s WHERE s.name like %:name% and s.active='Y'")

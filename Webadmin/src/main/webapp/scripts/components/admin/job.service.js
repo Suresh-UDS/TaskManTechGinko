@@ -14,7 +14,14 @@ angular.module('timeSheetApp')
                     return response.data;
                 })
         	},
-            loadLocations : function(){
+	    loadJobStatuses : function(){
+		    console.log("Loading job statuses")
+		    return $http.get('api/job/lookup/status').then(function (response) {
+	            console.log(response)
+		        return response.data;
+	        })
+	    },
+        	loadLocations : function(){
         	    console.log("Load locations")
         	    return $http.get('api/location').then(function (response) {
                     console.log(response)
@@ -124,6 +131,7 @@ angular.module('timeSheetApp')
 
 	        },
 	        importStatus: function(fileName) {
+	        	console.log('import job service file name : '+fileName);
                 	return $http.get('api/jobs/import/'+fileName+"/status").then(function (response) {
                 		return response.data;
                 	});

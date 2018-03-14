@@ -105,15 +105,15 @@ export class QuotationService {
         )
     }
 
-    getAllRateCards():Observable<any>{
-        return this.http.get(this.config.Url+'api/rateCard').map(
+    createPDF():Observable<any>{
+        return this.http.get(this.config.QuotationServiceUrl+'api/pdf/create').map(
             response=>{
                 console.log(response);
-                console.log(response.json());
                 return response.json();
-
             }
         )
     }
+
+
 
 }

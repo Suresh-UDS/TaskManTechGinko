@@ -7,6 +7,8 @@
     font-family: robotoBold !important;
 
 }
+
+
 *
 {
     font-family: robotoThin;
@@ -683,6 +685,10 @@ span.EmpNameTxt
 {
     width: 20% !important;
 }
+.width18
+{
+    width: 18% !important;
+}
 .inline-block
 {
   display: inline-block !important;
@@ -711,6 +717,10 @@ span.EmpNameTxt
 .width100
 {
   width: 100px;
+}
+.width-full
+{
+    width: 100%;
 }
 .table-data
 {
@@ -1030,7 +1040,11 @@ ion-spinner{
             filter: brightness(1.2) grayscale(.5) opacity(.9);
 }
 
-
+.true.a,.true.b,.true.c,.true.d,.true.e
+{
+   margin:0 auto;
+   text-align:center;
+}
 .true .radio-icon {
     left: 0;
     top: 0;
@@ -1038,17 +1052,76 @@ ion-spinner{
     border-radius:0 !important;
     position: relative;
     display: block;
-    width: 40px !important;
-    height: 40px !important;
+    width: 32px !important;
+    height: 32px !important;
     border-width:0;
     border-style: none !important;
-    background-image: url(../img/green-check-01.png) !important;
+    /*font-family: "Material Icons";*/
+    /*content: "link";*/
+    /*-webkit-font-feature-settings: 'liga';*/
+    /*background-image: url(../img/sad.png) !important;*/
+    /*background-repeat: no-repeat !important;*/
+    /*background-color: transparent;*/
+    border-radius: 50% !important;
+    background-position:center !important;
+
+}
+.a .radio-icon
+{
+    background: linear-gradient(0deg,rgba(255,0,150,0.3),rgba(255,0,150,0.3)),url(../img/unhappy.png) !important;
     background-repeat: no-repeat !important;
+    background-color: transparent;
+
+}
+.b .radio-icon
+{
+    background: linear-gradient(0deg,rgba(255,0,150,0.3),rgba(255,0,150,0.3)),url(../img/sad.png) !important;
+    background-repeat: no-repeat !important;
+    background-color: transparent;
+}
+.c .radio-icon
+{
+    background: linear-gradient(0deg,rgba(255,0,150,0.3),rgba(255,0,150,0.3)),url(../img/confused.png) !important;
+    background-repeat: no-repeat !important;
+    background-color: transparent;
+}
+.d .radio-icon
+{
+    background: linear-gradient(0deg,rgba(255,0,150,0.3),rgba(255,0,150,0.3)),url(../img/happy.png) !important;
+    background-repeat: no-repeat !important;
+    background-color: transparent;
+}
+.e .radio-icon
+{
+    background: linear-gradient(0deg,rgba(255,0,150,0.3),rgba(255,0,150,0.3)),url(../img/happy1.png) !important;
+    background-repeat: no-repeat !important;
+    background-color: transparent;
 }
 
-.true .radio-checked
+.a .radio-checked
 {
-    background-image: url(../img/red-cross-01.png) !important;
+    background: url(../img/unhappy.png) !important;
+    background-color:red;
+}
+.b .radio-checked
+{
+    background: url(../img/sad.png) !important;
+    background-color:red;
+}
+.c .radio-checked
+{
+    background: url(../img/confused.png) !important;
+    background-color:red;
+}
+.d .radio-checked
+{
+    background: url(../img/happy.png) !important;
+    background-color:red;
+}
+.e .radio-checked
+{
+    background: url(../img/happy1.png) !important;
+    background-color:red;
 }
 .true .radio-inner
 {
@@ -1059,13 +1132,12 @@ ion-spinner{
 {
     background: transparent !important;
 }
-
-.QuesContent ion-list
+.q-type1
 {
        width: 60% !important;
        padding-top: 10px !important;
 }
-.QuesContent ion-list ion-item
+.q-type1 ion-item
 {
       width: 48% !important;
       border-radius: 30px !important;
@@ -1074,20 +1146,21 @@ ion-spinner{
       height: 35px !important;
       min-height: 35px !important;
 }
-.QuesContent ion-list ion-item.item-radio-checked
+.q-type1 ion-item.item-radio-checked
 {
       border: 2px solid #FFC107 !important;
 }
-.QuesContent ion-list ion-item ion-radio
+.q-type1 ion-item ion-radio
 {
    margin-top: 4px !important;
 }
-.QuesContent ion-list ion-item label
+.q-type1 ion-item label
 {
        color: #fff !important;
        margin-top: 4px !important;
-
 }
+
+
 
 .wrap-name
 {

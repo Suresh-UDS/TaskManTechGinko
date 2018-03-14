@@ -66,6 +66,29 @@ angular.module('timeSheetApp')
         			$scope.locations = data;
         		})
         }
+        
+        $scope.loadBlocks = function () {
+	    		console.log('selected project -' + $scope.selectedProject.id + ', site -' + $scope.selectedSite.id)
+	    		LocationComponent.findBlocks($scope.selectedProject.id,$scope.selectedSite.id).then(function (data) {
+	    			$scope.selectedBlock = null;
+	            $scope.blocks = data;
+	        });
+	    };
+	    
+	    $scope.loadFloors = function () {
+	    		LocationComponent.findFloors($scope.selectedProject.id,$scope.selectedSite.id,$scope.selectedBlock).then(function (data) {
+	    			$scope.selectedFloor = null;
+	            $scope.floors = data;
+	        });
+	    };
+	    
+	    $scope.loadZones = function () {
+	    		console.log('load zones - ' + $scope.selectedProject.id +',' +$scope.selectedSite.id +',' +$scope.selectedBlock +','+$scope.selectedFloor);
+	    		LocationComponent.findZones($scope.selectedProject.id,$scope.selectedSite.id,$scope.selectedBlock, $scope.selectedFloor).then(function (data) {
+	    			$scope.selectedZone = null;
+	            $scope.zones = data;
+	        });
+	    };
 
         
         $scope.refreshPage = function() {
@@ -148,7 +171,7 @@ angular.module('timeSheetApp')
             $scope.searchCriteria.currPage = currPageVal;
             console.log('Selected feedback' + $scope.selectedLocation);
 
-            if(!$scope.selectedLocation) {
+            if(!$scope.selectedProject) {
                 if($rootScope.searchCriteriaLocation) {
                     $scope.searchCriteria = $rootScope.searchCriteriaLocation;
                 }else {
@@ -159,10 +182,18 @@ angular.module('timeSheetApp')
                 if($scope.selectedProject) {
                     $scope.searchCriteria.findAll = false;
                     $scope.searchCriteria.projectId = $scope.selectedProject.id;
-                    $scope.searchCriteria.siteId = $scope.selectedSite.id;
-                    $scope.searchCriteria.block = $scope.selectedBlock;
-                    $scope.searchCriteria.floor = $scope.selectedFloor;
-                    $scope.searchCriteria.zone = $scope.selectedZone;
+                    if($scope.selectedSite) {
+                        $scope.searchCriteria.siteId = $scope.selectedSite.id;
+                    }
+                    if($scope.selectedBlock) {
+                        $scope.searchCriteria.block = $scope.selectedBlock;
+                    }
+                    if($scope.selectedFloor) {
+                        $scope.searchCriteria.floor = $scope.selectedFloor;
+                    }
+                    if($scope.selectedZone) {
+                        $scope.searchCriteria.zone = $scope.selectedZone;
+                    }
                 }else {
                     $scope.searchCriteria.projectId = 0;
                 }
@@ -290,6 +321,9 @@ angular.module('timeSheetApp')
         $scope.clearFilter = function() {
             $scope.selectedSite = null;
             $scope.selectedProject = null;
+            $scope.selectedBlock = null;
+            $scope.selectedFloor = null;
+            $scope.selectedZone = null;
             $scope.searchCriteria = {};
             $rootScope.searchCriteriaSite = null;
             $scope.pages = {
