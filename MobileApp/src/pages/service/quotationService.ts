@@ -105,4 +105,15 @@ export class QuotationService {
         )
     }
 
+    getAllRateCards():Observable<any>{
+        return this.http.get(this.config.Url+'api/rateCard').map(
+            response=>{
+                console.log(response);
+                console.log(response.json());
+                return response.json();
+
+            }
+        )
+    }
+
 }

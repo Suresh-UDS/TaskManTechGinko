@@ -4,6 +4,7 @@ import {authService} from "../service/authService";
 import {componentService} from "../service/componentService";
 import {SiteService} from "../service/siteService";
 import {FeedbackService} from "../service/feedbackService";
+import {FeedbackPage} from "./feedback";
 
 @Component({
   selector: 'page-feedback-questions',
@@ -60,8 +61,19 @@ this.username = this.navParams.data.userName;
       console.log(this.navParams.data.feedback);
       console.log(this.navParams.data.userName);
       console.log(this.questions);
+
+      var results = [];
+      for(let q of this.questions){
+          let result ={
+              id:q.id,
+              question:q.question,
+              answer:q.answer,
+          };
+          results.push(result);
+          console.log(typeof q.answer);
+      }
       this.feedbackTransaction = {
-          results:this.questions,
+          results:results,
           reviewerName:this.navParams.data.userName,
           siteId:this.navParams.data.fb.siteId,
           siteName:this.navParams.data.fb.siteName,
@@ -71,10 +83,21 @@ this.username = this.navParams.data.userName;
           feedbackName:this.navParams.data.feedback.name,
           block:this.navParams.data.fb.block,
           floor:this.navParams.data.fb.floor,
-          zone:this.navParams.data.fb.zone,
-      }
+          zone:this.navParams.data.fb.zone
+      };
 
       console.log(this.feedbackTransaction);
+
+      this.feedbackService.saveFeedback(this.feedbackTransaction).subscribe(
+          response=>{
+              console.log("Saving feeback");
+              console.log(response);
+              this.navCtrl.push(FeedbackPage);
+          },err=>{
+              console.log("error in saving feedback");
+              console.log(err)
+          }
+      )
 
     }
 
