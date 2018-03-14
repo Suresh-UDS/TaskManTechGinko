@@ -89,7 +89,7 @@ public class FeedbackTransactionService extends AbstractService {
 			item.setFeedbackTransaction(feedbackTrans);
 			items.add(item);
 		}
-		rating = (cumRating / items.size()) * 10; //calculate the overall rating.
+		rating = (cumRating / items.size()) * 5; //calculate the overall rating.
 		feedbackTrans.setRating(rating);
 		feedbackTrans.setResults(items);
         feedbackTrans = feedbackTransactionRepository.save(feedbackTrans);
@@ -185,7 +185,6 @@ public class FeedbackTransactionService extends AbstractService {
 				if(feedbackMapping != null) {
 					long feedbackCount = feedbackTransactionRepository.getFeedbackCount(searchCriteria.getSiteId(), searchCriteria.getBlock(), searchCriteria.getFloor(), searchCriteria.getZone(), fromTime, toTime);
 					Float overallRating = feedbackTransactionRepository.getFeedbackOverallRating(searchCriteria.getSiteId(), searchCriteria.getBlock(), searchCriteria.getFloor(), searchCriteria.getZone(), fromTime, toTime);
-					List<Object[]> questionRatings = feedbackTransactionRepository.getFeedbackQuestionRating(feedbackMapping.getFeedback().getId(), fromTime, toTime);
 					reportResult.setFeedbackCount(feedbackCount);
 					reportResult.setOverallRating(overallRating == null ? 0 : overallRating);
 					reportResult.setFeedbackName(feedbackMapping.getFeedback().getName());
@@ -196,21 +195,33 @@ public class FeedbackTransactionService extends AbstractService {
 					reportResult.setBlock(searchCriteria.getBlock());
 					reportResult.setFloor(searchCriteria.getFloor());
 					reportResult.setZone(searchCriteria.getZone());
+					List<Object[]> questionRatings = feedbackTransactionRepository.getFeedbackAnswersCountForYesNo(feedbackMapping.getFeedback().getId(), fromTime, toTime);
+					List<FeedbackQuestionRating> qratings = new ArrayList<FeedbackQuestionRating>();
 					if(CollectionUtils.isNotEmpty(questionRatings)) {
-						List<FeedbackQuestionRating> qratings = new ArrayList<FeedbackQuestionRating>();
 						for(Object[] row : questionRatings) {
 							FeedbackQuestionRating qrating = new FeedbackQuestionRating();
 							qrating.setQuestion(String.valueOf(row[0]));
-							if(row[1] != null && (boolean)row[1]) {
+							if(row[1] != null && ((String)row[1]).equalsIgnoreCase("Yes")) {
 								qrating.setYesCount((Long)row[2]);
 							}else {
 								qrating.setNoCount((Long)row[2]);
 							}
 							qratings.add(qrating);
 						}
-						reportResult.setQuestionRatings(qratings);
-
 					}
+					questionRatings = feedbackTransactionRepository.getFeedbackAnswersCountForRating(feedbackMapping.getFeedback().getId(), fromTime, toTime);
+					if(CollectionUtils.isNotEmpty(questionRatings)) {
+						for(Object[] row : questionRatings) {
+							FeedbackQuestionRating qrating = new FeedbackQuestionRating();
+							qrating.setQuestion(String.valueOf(row[0]));
+							if(row[2] != null) {
+								qrating.setRating((double)row[2]);
+							}
+							qratings.add(qrating);
+						}
+					}
+					reportResult.setQuestionRatings(qratings);
+
 				}
 			}
 		}

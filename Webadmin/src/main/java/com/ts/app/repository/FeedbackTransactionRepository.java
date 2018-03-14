@@ -51,7 +51,10 @@ public interface FeedbackTransactionRepository extends JpaRepository<FeedbackTra
 	@Query("SELECT avg(ft.rating) FROM FeedbackTransaction ft WHERE ft.siteId = :siteId and ft.block = :block and ft.floor = :floor and ft.zone = :zone and ft.createdDate between :startDate and :endDate")
 	Float getFeedbackOverallRating(@Param("siteId") long siteId, @Param("block") String block, @Param("floor") String floor, @Param("zone") String zone, @Param("startDate") ZonedDateTime startDate, @Param("endDate") ZonedDateTime endDate);
 
-	@Query("SELECT ftr.question as question, ftr.answer as answer, count(ftr.answer) as count FROM FeedbackTransactionResult ftr WHERE ftr.feedbackTransaction.feedback.id = :feedbackMasterId and ftr.createdDate between :startDate and :endDate group by ftr.question, ftr.answer")
-	List<Object[]> getFeedbackQuestionRating(@Param("feedbackMasterId") long feedbackMasterId, @Param("startDate") ZonedDateTime startDate, @Param("endDate") ZonedDateTime endDate);
+	@Query("SELECT ftr.question as question, ftr.answer as answer, count(ftr.answer) as count FROM FeedbackTransactionResult ftr WHERE ftr.feedbackTransaction.feedback.id = :feedbackMasterId and ftr.createdDate between :startDate and :endDate and ftr.answerType = 0 group by ftr.question, ftr.answer")
+	List<Object[]> getFeedbackAnswersCountForYesNo(@Param("feedbackMasterId") long feedbackMasterId, @Param("startDate") ZonedDateTime startDate, @Param("endDate") ZonedDateTime endDate);
+
+	@Query("SELECT ftr.question as question, ftr.answer as answer, avg(ftr.answer) as avg FROM FeedbackTransactionResult ftr WHERE ftr.feedbackTransaction.feedback.id = :feedbackMasterId and ftr.createdDate between :startDate and :endDate and ftr.answerType = 1 group by ftr.question, ftr.answer")
+	List<Object[]> getFeedbackAnswersCountForRating(@Param("feedbackMasterId") long feedbackMasterId, @Param("startDate") ZonedDateTime startDate, @Param("endDate") ZonedDateTime endDate);
 
 }

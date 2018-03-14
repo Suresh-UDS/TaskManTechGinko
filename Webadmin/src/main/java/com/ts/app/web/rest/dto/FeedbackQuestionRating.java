@@ -10,7 +10,7 @@ public class FeedbackQuestionRating implements Serializable {
 
     private String question;
 
-    private float rating;
+    private double rating;
     
     private long yesCount;
     
@@ -32,11 +32,11 @@ public class FeedbackQuestionRating implements Serializable {
         this.question = question;
     }
 
-	public float getRating() {
+	public double getRating() {
 		return rating;
 	}
 
-	public void setRating(float rating) {
+	public void setRating(double rating) {
 		this.rating = rating;
 	}
 
