@@ -2,10 +2,10 @@ var mailer = require('../config/mailer');
 var config = require('../config/'+ process.argv[2] + '.properties');
 var uuid = require('node-uuid');
 var handlebars = require('handlebars');
-var handlebarsStatic = require('handlebars-static');
 var path = require('path');
 var fs = require('fs');
 var emailTemplates = {};
+var handlebarsStatic = require('handlebars-static');
 registerTemplates();
 
 
@@ -16,19 +16,17 @@ function registerTemplates(){
     fs.readdirSync(templateDir).forEach(function (file) {
         fs.readFile(templateDir+file, function(err, buf) {
             var templateName = file.replace(/.html/g, "")
-
-
-            handlebars.registerHelper('static', handlebarsStatic('D:/usha/ionic/FMS-NEW/QuotationService/config/logo.png'));
+            handlebars.registerHelper('static', handlebarsStatic(''));
 
             emailTemplates[templateName] =  handlebars.compile( buf.toString());
         });
     });
     /*setTimeout(function(){
-        sendMail( config.mailer.from,
-                'balasubhramanian@gmail.com',
-                'Verify you email',
-                'signup',{code:55678,firstname:'Bala',lastname:'Muthuvelu'})
-   },2000);*/
+     sendMail( config.mailer.from,
+     'balasubhramanian@gmail.com',
+     'Verify you email',
+     'signup',{code:55678,firstname:'Bala',lastname:'Muthuvelu'})
+     },2000);*/
 }
 
 
@@ -40,12 +38,12 @@ function getContent(template,data){
 function sendMail(from,to,subject,template,data){
     // logger.info("sending mail - template - "+template);
     data.logo = './config/logo.png';
-        mailer.sendMail({
-            from: from,
-            to: to,
-            subject: subject,
-            html: getContent(template,data)
-        });
+    mailer.sendMail({
+        from: from,
+        to: to,
+        subject: subject,
+        html: getContent(template,data)
+    });
 }
 
 
@@ -54,15 +52,14 @@ function sendMail(from,to,subject,template,data){
 var defaultFrom = config.mailer.from;
 module.exports = {
     submitQuotation: function(emailId, data) {
-            sendMail( config.mailer.from,
-                emailId,
-                'Quotation',
-                'submit_quotation_template',
-
-                {clientName: data.sentToUserName,
-                    siteName: data.siteName,
-                    createdByUserName:data.createdByUserName})
-        },
+        sendMail( config.mailer.from,
+            emailId,
+            'Quotation',
+            'submit_quotation_template',
+            {clientName: data.sentToUserName,
+                siteName: data.siteName,
+                createdByUserName:data.createdByUserName})
+    },
 
     getPdfDetail:function (data,callback) {
         console.log("Get pdf details");
@@ -72,9 +69,20 @@ module.exports = {
         console.log("pdf tempalte data");
         console.log(data);
         console.log(testData);
-
         callback(null,testData)
+    },
 
+    submitQuotationDetail:function (mail) {
+        mailer.sendMail({
+            from: config.mailer.from,
+            to: mail,
+            subject:'Quotation',
+            attachments: [{
+                filename: 'output.pdf',
+                path: './templates/output.pdf',
+                contentType: 'application/pdf'
+            }]
+        });
     }
 
 };

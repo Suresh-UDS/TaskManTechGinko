@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:align="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
     <title>Title - {{title}}</title>
@@ -7,10 +7,6 @@
 
 
     <style type="text/css">
-
-
-
-
 
     </style>
 
@@ -62,7 +58,7 @@
 
     <div class="QuoteCon">
 
-         <div class="header">
+         <div class="header" style="height:150px">
 
              <div style="float: left">
 
@@ -76,8 +72,7 @@
              <div style="float: right">
 
                  <div class="logo">
-                       <!--<img src="http://www.uds.in/images/logo.jpg">-->
-                     <h1>UDS</h1>
+                       <img src="https://goo.gl/tsom7L" width="120px" height="120px">
                  </div>
 
 
@@ -86,7 +81,7 @@
 
          </div>
 
-          <div class="CustomerDetails">
+          <div class="CustomerDetails" style="height:150px">
 
               <div style="float: left">
 
@@ -127,59 +122,35 @@
           <div class="ItemsListCon">
 
 
-              <table cellpadding="10" cellspacing="0" border="0">
+              <table cellpadding="10" cellspacing="0" border="0" width="100%">
                   <thead>
                   <tr style="background: #dfdfdf;">
-                      <th>QTY</th>
-                      <th>Description</th>
-                      <th>Unite Price</th>
-                      <th>Amount</th>
+                      <th class="text-center">Type</th>
+                      <th class="text-center">Name</th>
+                      <th class="text-center">Rate</th>
+                      <th class="text-center">No</th>
+                      <th class="text-center">Total</th>
                   </tr>
                   </thead>
                   <tbody>
+                  {{#rateCardDetails}}
                   <tr>
-                      <td>1</td>
-                      <td>Desc 1</td>
-                      <td align="right">500</td>
-                      <td align="right">500</td>
+                      <td>{{type}}</td>
+                      <td>{{title}}</td>
+                      <td>{{cost}}</td>
+                      <td align="right">{{qty}}</td>
+                      <td align="right">{{unitPrice}}</td>
                   </tr>
-                  <tr>
-                      <td>2</td>
-                      <td>Desc 1</td>
-                      <td align="right">500</td>
-                      <td align="right">500</td>
-                  </tr>
-                  <tr>
-                      <td>3</td>
-                      <td>Desc 1</td>
-                      <td align="right">500</td>
-                      <td align="right">500</td>
-                  </tr>
-                  <tr>
-                      <td>4</td>
-                      <td>Desc 1</td>
-                      <td align="right">500</td>
-                      <td align="right">500</td>
-                  </tr>
+                  {{/rateCardDetails}}
+
                   </tbody>
                   <tfoot>
                       <tr align="right">
                           <td style="border: none;"></td>
                           <td style="border: none;"></td>
-                          <td style="font-weight: bold">SubTotal</td>
-                          <td style="font-weight: bold">500</td>
-                      </tr>
-                      <tr align="right">
                           <td style="border: none;"></td>
-                          <td style="border: none;"></td>
-                          <td style="font-weight: bold">Tax</td>
-                          <td style="font-weight: bold">50</td>
-                      </tr>
-                      <tr align="right">
-                          <td style="border: none;"></td>
-                          <td style="border: none;"></td>
-                          <td style="font-weight: bold">Total</td>
-                          <td style="font-weight: bold;background: #dfdfdf;">500</td>
+                          <td align="right" style="font-weight: bold">Total</td>
+                          <td align="right" style="font-weight: bold;background: #dfdfdf;">{{grandTotal}}</td>
                       </tr>
                   </tfoot>
 
