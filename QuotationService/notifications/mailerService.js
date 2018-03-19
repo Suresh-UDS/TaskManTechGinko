@@ -2,6 +2,7 @@ var mailer = require('../config/mailer');
 var config = require('../config/'+ process.argv[2] + '.properties');
 var uuid = require('node-uuid');
 var handlebars = require('handlebars');
+var handlebarsStatic = require('handlebars-static');
 var path = require('path');
 var fs = require('fs');
 var emailTemplates = {};
@@ -15,6 +16,10 @@ function registerTemplates(){
     fs.readdirSync(templateDir).forEach(function (file) {
         fs.readFile(templateDir+file, function(err, buf) {
             var templateName = file.replace(/.html/g, "")
+
+
+            handlebars.registerHelper('static', handlebarsStatic('D:/usha/ionic/FMS-NEW/QuotationService/config/logo.png'));
+
             emailTemplates[templateName] =  handlebars.compile( buf.toString());
         });
     });
