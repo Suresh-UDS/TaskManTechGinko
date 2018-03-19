@@ -4,62 +4,12 @@
     <meta charset="UTF-8">
     <title>Title - {{title}}</title>
     <link rel="stylesheet" type="text/css" href="style.css">
-
-
-
-    <style>
-        .content
-        {
-            width: 80%;
-            margin: auto;
-        }
-        .header-left
-        {
-            width: 50%;
-            float: left;
-            text-align: left;
-        }
-        .header-right
-        {
-            width: 50%;
-            float: left;
-            text-align: right;
-        }
-        .clear
-        {
-            clear: both;
-        }
-        table, td, th {
-            border: 1px solid black;
-        }
-
-        table {
-            border-collapse: collapse;
-            width: 100%;
-        }
-
-        th {
-            height: 50px;
-        }
-        tr:last-child td {
-            border :none;
-        }
-        table:last-child
-        {
-            border :none;
-        }
-        .border
-        {
-            border: 1px solid black !important;
-        }
-    </style>
-
 </head>
 <body>
 
 <div class="content">
     <div class="logo">
-        <img src="/config/logo.png">
+        <img> src='{{static '/config/logo.png'}}' </img>
     </div>
 
 
@@ -82,6 +32,7 @@
             <th class="text-center">No</th>
             <th class="text-center">Total</th>
         </tr>
+        {{#rateCardDetails}}
         <tr>
             <td>{{rateCardDetails.type}}</td>
             <td>{{rateCardDetails.title}}</td>
@@ -89,6 +40,7 @@
             <td>{{rateCardDetails.qty}}</td>
             <td>{{rateCardDetails.unitPrice}}</td>
         </tr>
+        {{/rateCardDetails}}
         <tr>
             <td></td>
             <td></td>
