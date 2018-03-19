@@ -27,6 +27,10 @@ export class InitFeedbackPage {
   selectedZone:any;
   feedbacks:any;
   selectOptions:any;
+  scrollSite=false;
+  activeSite:any;
+  scrollSites:any;
+  blockDetail:any;
 
   constructor(public navCtrl: NavController,public myService:authService,public component:componentService, private siteService: SiteService, private feedbackService: FeedbackService) {
         this.loadFeedbackMappings();
@@ -87,65 +91,66 @@ export class InitFeedbackPage {
         )
     }
 
-    selectBlock(site)
-    {
-        this.selectedSite = site;
-        this.feedbackService.loadBlocks(this.selectedProject.id,site.id).subscribe(
-            response=>{
-                console.log("====Block By SiteId======");
-                console.log(response);
-                this.blocks=response;
-                console.log(this.blocks);
-            },
-            error=>{
-                if(error.type==3)
-                {
-                    this.msg='Server Unreachable'
-                }
-                this.msg="Error in getting blocks";
-                this.component.showToastMessage(this.msg,'bottom');
-            }
-        )
-    }
-
-    selectFloor(block){
-      this.selectedBlock = block;
-      this.feedbackService.loadFloors(this.selectedProject.id,this.selectedSite.id,this.selectedBlock).subscribe(
-          response=>{
-              console.log("=====floors=====");
-              console.log(response);
-              this.floors = response;
-          },error=>{
-            if(error.type==3)
-            {
-                this.msg='Server Unreachable'
-            }
-            this.msg="Error in getting zones";
-            this.component.showToastMessage(this.msg,'bottom');
-        }
-      )
-    }
-
-    selectZone(floor)
-    {
-        this.selectedFloor = floor;
-            this.feedbackService.loadZones(this.selectedProject.id,this.selectedSite.id,this.selectedBlock, floor).subscribe(
-            response=>{
-            console.log("====Zone By BlockId======");
-            console.log(response);
-            this.zones=response;
-            console.log(this.zones);
-        },
-        error=>{
-            if(error.type==3)
-            {
-                this.msg='Server Unreachable'
-            }
-            this.msg="Error in getting zones";
-            this.component.showToastMessage(this.msg,'bottom');
-        }
-        )
-    }
+    // selectBlock(site)
+    // {
+    //     this.selectedSite = site;
+    //
+    //     this.feedbackService.loadBlocks(this.selectedProject.id,site.id).subscribe(
+    //         response=>{
+    //             console.log("====Block By SiteId======");
+    //             console.log(response);
+    //             this.blocks=response;
+    //             console.log(this.blocks);
+    //         },
+    //         error=>{
+    //             if(error.type==3)
+    //             {
+    //                 this.msg='Server Unreachable'
+    //             }
+    //             this.msg="Error in getting blocks";
+    //             this.component.showToastMessage(this.msg,'bottom');
+    //         }
+    //     )
+    // }
+    //
+    // selectFloor(block){
+    //   this.selectedBlock = block;
+    //   this.feedbackService.loadFloors(this.selectedProject.id,this.selectedSite.id,this.selectedBlock).subscribe(
+    //       response=>{
+    //           console.log("=====floors=====");
+    //           console.log(response);
+    //           this.floors = response;
+    //       },error=>{
+    //         if(error.type==3)
+    //         {
+    //             this.msg='Server Unreachable'
+    //         }
+    //         this.msg="Error in getting zones";
+    //         this.component.showToastMessage(this.msg,'bottom');
+    //     }
+    //   )
+    // }
+    //
+    // selectZone(floor)
+    // {
+    //     this.selectedFloor = floor;
+    //         this.feedbackService.loadZones(this.selectedProject.id,this.selectedSite.id,this.selectedBlock, floor).subscribe(
+    //         response=>{
+    //         console.log("====Zone By BlockId======");
+    //         console.log(response);
+    //         this.zones=response;
+    //         console.log(this.zones);
+    //     },
+    //     error=>{
+    //         if(error.type==3)
+    //         {
+    //             this.msg='Server Unreachable'
+    //         }
+    //         this.msg="Error in getting zones";
+    //         this.component.showToastMessage(this.msg,'bottom');
+    //     }
+    //     )
+    // }
 
     loadFeedbackMappings(){
         var currPageVal = 1;
@@ -162,5 +167,19 @@ export class InitFeedbackPage {
         )
 
     }
+
+
+
+
+    selectBlockDetail(index)
+    {
+        this.scrollSite=true;
+        this.activeSite=index;
+
+        console.log(this.scrollSite);
+        console.log(this.activeSite);
+
+    }
+
 
 }
