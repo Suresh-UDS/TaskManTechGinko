@@ -25,6 +25,17 @@ export class FeedbackService {
         )
     }
 
+    findFeedback(id):Observable<any>{
+        console.log("Feedback id in service");
+        console.log(id);
+        return this.http.get(this.config.Url+'api/feedbackmapping/'+id).map(
+            response=>{
+                console.log("Feedback");
+                console.log(response.json());
+            }
+        )
+    }
+
     loadBlocks(projectId, siteId):Observable<any>{
         return this.http.get(this.config.Url+'api/location/project/' + projectId +'/site/' + siteId +'/block').map(
             response=>{
