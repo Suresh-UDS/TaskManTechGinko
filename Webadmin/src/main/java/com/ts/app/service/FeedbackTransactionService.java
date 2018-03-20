@@ -1,5 +1,6 @@
 package com.ts.app.service;
 
+import java.text.DecimalFormat;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
@@ -71,7 +72,7 @@ public class FeedbackTransactionService extends AbstractService {
 		feedbackTrans.setResults(null);
 		List<FeedbackTransactionResultDTO> itemDtos = feedbackTransDto.getResults();
 		Set<FeedbackTransactionResult> items = new HashSet<FeedbackTransactionResult>();
-		float rating = 0f;
+		float rating = 0;
 		int positiveCnt = 0;
 		float cumRating = 0f;
 		for(FeedbackTransactionResultDTO itemDto : itemDtos) {
@@ -89,7 +90,7 @@ public class FeedbackTransactionService extends AbstractService {
 			item.setFeedbackTransaction(feedbackTrans);
 			items.add(item);
 		}
-		rating = (cumRating / items.size()) * 5; //calculate the overall rating.
+		rating = (cumRating / items.size()); //calculate the overall rating.
 		feedbackTrans.setRating(rating);
 		feedbackTrans.setResults(items);
         feedbackTrans = feedbackTransactionRepository.save(feedbackTrans);
@@ -180,13 +181,14 @@ public class FeedbackTransactionService extends AbstractService {
 	        	toTime = toTime.withHour(23);
 	        	toTime = toTime.withMinute(59);
 	        	toTime = toTime.withSecond(59);
+			DecimalFormat df = new DecimalFormat("#.0"); 
 			if(searchCriteria.getProjectId() > 0) {
 				FeedbackMapping feedbackMapping = feedbackMappingRepository.findOneByLocation(searchCriteria.getSiteId(), searchCriteria.getBlock(), searchCriteria.getFloor(), searchCriteria.getZone());
 				if(feedbackMapping != null) {
 					long feedbackCount = feedbackTransactionRepository.getFeedbackCount(searchCriteria.getSiteId(), searchCriteria.getBlock(), searchCriteria.getFloor(), searchCriteria.getZone(), fromTime, toTime);
 					Float overallRating = feedbackTransactionRepository.getFeedbackOverallRating(searchCriteria.getSiteId(), searchCriteria.getBlock(), searchCriteria.getFloor(), searchCriteria.getZone(), fromTime, toTime);
 					reportResult.setFeedbackCount(feedbackCount);
-					reportResult.setOverallRating(overallRating == null ? 0 : overallRating);
+					reportResult.setOverallRating(overallRating == null ? "0" : df.format(overallRating));
 					reportResult.setFeedbackName(feedbackMapping.getFeedback().getName());
 					reportResult.setSiteId(searchCriteria.getSiteId());
 					reportResult.setSiteName(searchCriteria.getSiteName());
