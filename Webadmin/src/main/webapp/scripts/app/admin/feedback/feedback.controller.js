@@ -34,6 +34,11 @@ angular.module('timeSheetApp')
             }
         };
 
+
+        $scope.label = ["Download Sales", "In-Store Sales", "Mail-Order Sales"];
+        $scope.datas = [300, 500, 100];
+
+
     		$scope.pages = { currPage : 1};
 
         $scope.searchCriteria = {
