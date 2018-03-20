@@ -512,6 +512,16 @@ button.btn.btn-outline {
 {
   color: #444;
 }
+.RatingCon
+{
+    padding-top: 17px;
+}
+.jk-rating-stars-container .star-button.star-on .material-icons {
+    color: #ff9800;
+}
+.jk-rating-stars-container .button .material-icons {
+    font-size: 35px;
+}
 .appModuleCard table label
 {
    padding: 2px 5px;
@@ -519,7 +529,7 @@ button.btn.btn-outline {
    color: #fff;
    border-radius: 5px;
    font-size: 12px;
-   margin: 0 2px;
+   margin: 2px 2px;
 }
 .addedActionList .list-group-item>.badge
 {
@@ -527,7 +537,14 @@ button.btn.btn-outline {
       background: #fff;
       color: #777;
 }
-
+.checkbox-inline, .radio-inline
+{
+    padding-left: 10px;
+}
+.checkbox, .radio
+{
+    margin-top: 5px;
+}
 .form-control, .form-group .form-control
 {
       border: 1px solid #d6d6d6;
