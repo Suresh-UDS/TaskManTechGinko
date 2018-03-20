@@ -3,7 +3,7 @@
 angular.module('timeSheetApp')
     .controller('FeedbackController', function ($rootScope, $scope, $state, $timeout, ProjectComponent, SiteComponent, LocationComponent,FeedbackComponent, $http,$stateParams,$location,$interval) {
 
-
+        $scope.readOnly = true;
         $scope.colors = ['#45b7cd', '#ff6384', '#ff8e72'];
         $scope.labels = ["January", "February", "March", "April", "May", "June", "July"];
         $scope.series = ['Series A', 'Series B'];

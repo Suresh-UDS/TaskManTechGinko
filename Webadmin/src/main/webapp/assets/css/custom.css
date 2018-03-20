@@ -512,6 +512,10 @@ button.btn.btn-outline {
 {
   color: #444;
 }
+.RatingCon
+{
+    padding-top: 20px;
+}
 .appModuleCard table label
 {
    padding: 2px 5px;

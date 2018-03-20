@@ -139,8 +139,17 @@
                                 </div>
                                 <div class="col-md-6">
                                     <!-- USE COMPONENT HERE-->
-                                    <star-rating-comp  [labelPosition]="'top'" [staticColor]="'ok'" [starType]="'svg'"  [readOnly]="true"></star-rating-comp>
-                                    <h3>{{feedbackReport.overallRating}}</h3>
+
+                                    <div class="RatingCon">
+
+                                        <jk-rating-stars max-rating="5" rating="{{feedbackReport.overallRating}}" read-only="readOnly" >
+                                        </jk-rating-stars>
+
+                                    </div>
+
+
+
+
                                 </div>
 
                             </div>
