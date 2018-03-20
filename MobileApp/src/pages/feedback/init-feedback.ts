@@ -31,6 +31,7 @@ export class InitFeedbackPage {
   activeSite:any;
   scrollSites:any;
   blockDetail:any;
+searchCriteria:any;
 
   constructor(public navCtrl: NavController,public myService:authService,public component:componentService, private siteService: SiteService, private feedbackService: FeedbackService) {
         this.loadFeedbackMappings();
@@ -168,17 +169,32 @@ export class InitFeedbackPage {
 
     }
 
-
-
-
-    selectBlockDetail(index)
+    selectBlockDetail(index,site)
     {
         this.scrollSite=true;
         this.activeSite=index;
-
+        this.loadLocations(site.id);
         console.log(this.scrollSite);
         console.log(this.activeSite);
 
+
+
+    }
+
+    loadLocations(siteId){
+        var currPageVal = 1;
+        this.searchCriteria = {
+            currPage:currPageVal,
+            findAll:false,
+            siteId:siteId
+        };
+
+        this.feedbackService.loadLocations(this.searchCriteria).subscribe(
+            response=>{
+                console.log("Loading Locations");
+                console.log(response);
+            }
+        )
     }
 
 

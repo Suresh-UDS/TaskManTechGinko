@@ -58,7 +58,7 @@
                 <ion-grid>
                     <ion-row>
                         <ion-col col-4 *ngFor="let site of sites;let i of index" >
-                            <button ion-button clear (click)="selectBlockDetail(i)">
+                            <button ion-button clear (click)="selectBlockDetail(i,site)">
                                 <p class="siteName SiteListTails">{{site.name}}</p>
                             </button>
                         </ion-col>
