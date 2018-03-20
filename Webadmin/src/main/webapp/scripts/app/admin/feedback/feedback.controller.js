@@ -39,6 +39,25 @@ angular.module('timeSheetApp')
         $scope.datas = [300, 500, 100];
 
 
+        var vm = this;
+        vm.numRecords = 6;
+        vm.page = 1;
+
+        vm.items = []
+        for (var i = 0; i < 100; ++i) {
+            vm.items.push('item : ' + i);
+        }
+
+        vm.next = function(){
+            vm.page = vm.page + 1;
+        };
+
+        vm.back = function(){
+            vm.page = vm.page - 1;
+        };
+
+
+
     		$scope.pages = { currPage : 1};
 
         $scope.searchCriteria = {

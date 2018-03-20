@@ -26,7 +26,7 @@
                 <div class="card-content">
 
                 		<div class="SearchTable">
-                        <form name="searchForm"  ng-submit="search()" novalidate >
+                          <form name="searchForm"  ng-submit="search()" novalidate >
 
                             <table class=" no-padding-tblCon" border="0">
                                 <tr class="filter-row gc-search-row">
@@ -106,7 +106,27 @@
                                 </tr>
                             </table>
                         </form>
-                    </div>
+
+                            <div class="TailsCon">
+
+
+                                <div class="TailsContent" ng-controller="FeedbackController as vm">
+                                    <ul class="blocksListCon">
+                                        <li ng-repeat="item in vm.items track by $index" ng-show="(($index < (vm.page * vm.numRecords)) && ($index >= ((vm.page - 1) * vm.numRecords)))">{{ item }}</li>
+                                    </ul>
+
+                                   <div class="clear"></div>
+                                    <div class="pos-abs next"><button ng-click="vm.next()"><i class="material-icons">keyboard_arrow_right</i></button></div>
+                                    <div class="pos-abs back"><button ng-click="vm.back()"><i class="material-icons">keyboard_arrow_left</i></button></div>
+                                </div>
+
+
+
+                            </div>
+
+                         </div>
+
+
                  </div>
             </div>
 
