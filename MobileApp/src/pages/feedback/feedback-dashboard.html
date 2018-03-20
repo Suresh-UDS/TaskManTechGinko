@@ -1,0 +1,39 @@
+<ion-header>
+  <ion-navbar>
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>Feedback Dashboard</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content class="feedback-dashboard">
+    <div class="align-center">
+        <ion-card>
+            <ion-card-header class="chart-head">
+                Bar Chart
+            </ion-card-header>
+            <ion-card-content>
+                <canvas #barCanvas></canvas>
+            </ion-card-content>
+        </ion-card>
+
+        <ion-card>
+            <ion-card-header class="chart-head">
+                Doughnut Chart
+            </ion-card-header>
+            <ion-card-content>
+                <canvas #doughnutCanvas></canvas>
+            </ion-card-content>
+        </ion-card>
+
+        <ion-card>
+            <ion-card-header class="chart-head">
+                Line Chart
+            </ion-card-header>
+            <ion-card-content>
+                <canvas #lineCanvas></canvas>
+            </ion-card-content>
+        </ion-card>
+    </div>
+</ion-content>

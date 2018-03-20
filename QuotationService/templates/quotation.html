@@ -1,102 +1,173 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:align="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
     <title>Title - {{title}}</title>
     <link rel="stylesheet" type="text/css" href="style.css">
 
 
+    <style type="text/css">
 
-    <style>
-        .content
-        {
-            width: 80%;
-            margin: auto;
-        }
-        .header-left
-        {
-            width: 50%;
-            float: left;
-            text-align: left;
-        }
-        .header-right
-        {
-            width: 50%;
-            float: left;
-            text-align: right;
-        }
-        .clear
-        {
-            clear: both;
-        }
-        table, td, th {
-            border: 1px solid black;
-        }
-
-        table {
-            border-collapse: collapse;
-            width: 100%;
-        }
-
-        th {
-            height: 50px;
-        }
-        tr:last-child td {
-            border :none;
-        }
-        table:last-child
-        {
-            border :none;
-        }
-        .border
-        {
-            border: 1px solid black !important;
-        }
     </style>
 
 </head>
 <body>
 
 <div class="content">
-    <div class="logo">
-        <img src="/config/logo.png">
+    <!--<div class="logo">-->
+        <!--<img> src='{{static '/config/logo.png'}}' </img>-->
+    <!--</div>-->
+
+
+    <!--<table style="border: none !important;">-->
+        <!--<tr>-->
+            <!--<td style="border: none !important;">{{siteName}}</td>-->
+            <!--<td style="border: none !important;">Date</td>-->
+        <!--</tr>-->
+        <!--<tr>-->
+            <!--<td style="border: none !important;">Manager Name</td>-->
+            <!--<td style="border: none !important;">Client Name</td>-->
+        <!--</tr>-->
+    <!--</table>-->
+
+    <!--<table>-->
+        <!--<tr>-->
+            <!--<th class="text-center">Type</th>-->
+            <!--<th class="text-center">Name</th>-->
+            <!--<th class="text-center">Rate</th>-->
+            <!--<th class="text-center">No</th>-->
+            <!--<th class="text-center">Total</th>-->
+        <!--</tr>-->
+        <!--{{#rateCardDetails}}-->
+        <!--<tr>-->
+            <!--<td>{{rateCardDetails.type}}</td>-->
+            <!--<td>{{rateCardDetails.title}}</td>-->
+            <!--<td>{{rateCardDetails.rate}}</td>-->
+            <!--<td>{{rateCardDetails.qty}}</td>-->
+            <!--<td>{{rateCardDetails.unitPrice}}</td>-->
+        <!--</tr>-->
+        <!--{{/rateCardDetails}}-->
+        <!--<tr>-->
+            <!--<td></td>-->
+            <!--<td></td>-->
+            <!--<td></td>-->
+            <!--<td style="border: none !important;">Grand Total</td>-->
+            <!--<td style="border: none !important;">{{grandTotal}}</td>-->
+        <!--</tr>-->
+    <!--</table>-->
+
+    <div class="QuoteCon">
+
+         <div class="header" style="height:150px">
+
+             <div style="float: left">
+
+                 <h4>Updater Services (P) Limited</h4>
+
+                 <p># 2/302A, UDS Salai, <br>
+                     Off Old Mahabalipuram Road,<br>
+                     Thoraipakkam, Chennai - 600 097 (TN)</p>
+
+             </div>
+             <div style="float: right">
+
+                 <div class="logo">
+                       <img src="https://goo.gl/tsom7L" width="120px" height="120px">
+                 </div>
+
+
+             </div>
+             <div style="clear: both;"></div>
+
+         </div>
+
+          <div class="CustomerDetails" style="height:150px">
+
+              <div style="float: left">
+
+                  <h4>Name</h4>
+
+                  <p># 2/302A, UDS Salai, <br>
+                      Off Old Mahabalipuram Road,<br>
+                      Thoraipakkam, Chennai - 600 097 (TN)</p>
+
+              </div>
+              <div style="float: right">
+
+                 <table cellpadding="5" cellspacing="0" border="0">
+                     <tr>
+                         <td style="border: none;font-weight: bold">Quote</td>
+                         <td style="border: none">0034</td>
+                     </tr>
+                     <tr>
+                         <td style="border: none;font-weight: bold">Date</td>
+                         <td style="border: none">01/03/2018</td>
+                     </tr>
+                     <tr>
+                         <td style="border: none;font-weight: bold">P.O.C</td>
+                         <td style="border: none">01/03/2018</td>
+                     </tr>
+                     <tr>
+                         <td style="border: none;font-weight: bold">P.O.C</td>
+                         <td style="border: none">01/03/2018</td>
+                     </tr>
+                 </table>
+
+
+              </div>
+              <div style="clear: both;"></div>
+
+          </div>
+
+          <div class="ItemsListCon">
+
+
+              <table cellpadding="10" cellspacing="0" border="0" width="100%">
+                  <thead>
+                  <tr style="background: #dfdfdf;">
+                      <th class="text-center">Type</th>
+                      <th class="text-center">Name</th>
+                      <th class="text-center">Rate</th>
+                      <th class="text-center">No</th>
+                      <th class="text-center">Total</th>
+                  </tr>
+                  </thead>
+                  <tbody>
+                  {{#rateCardDetails}}
+                  <tr>
+                      <td>{{type}}</td>
+                      <td>{{title}}</td>
+                      <td>{{cost}}</td>
+                      <td align="right">{{qty}}</td>
+                      <td align="right">{{unitPrice}}</td>
+                  </tr>
+                  {{/rateCardDetails}}
+
+                  </tbody>
+                  <tfoot>
+                      <tr align="right">
+                          <td style="border: none;"></td>
+                          <td style="border: none;"></td>
+                          <td style="border: none;"></td>
+                          <td align="right" style="font-weight: bold">Total</td>
+                          <td align="right" style="font-weight: bold;background: #dfdfdf;">{{grandTotal}}</td>
+                      </tr>
+                  </tfoot>
+
+
+
+
+              </table>
+
+
+
+          </div>
+
+
+
     </div>
 
 
-    <table style="border: none !important;">
-        <tr>
-            <td style="border: none !important;">{{siteName}}</td>
-            <td style="border: none !important;">Date</td>
-        </tr>
-        <tr>
-            <td style="border: none !important;">Manager Name</td>
-            <td style="border: none !important;">Client Name</td>
-        </tr>
-    </table>
-
-    <table>
-        <tr>
-            <th class="text-center">Type</th>
-            <th class="text-center">Name</th>
-            <th class="text-center">Rate</th>
-            <th class="text-center">No</th>
-            <th class="text-center">Total</th>
-        </tr>
-        <tr>
-            <td>{{rateCardDetails.type}}</td>
-            <td>{{rateCardDetails.title}}</td>
-            <td>{{rateCardDetails.rate}}</td>
-            <td>{{rateCardDetails.qty}}</td>
-            <td>{{rateCardDetails.unitPrice}}</td>
-        </tr>
-        <tr>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td style="border: none !important;">Grand Total</td>
-            <td style="border: none !important;">{{grandTotal}}</td>
-        </tr>
-    </table>
 
 </div>
 

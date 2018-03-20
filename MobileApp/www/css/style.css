@@ -283,6 +283,10 @@ button.ion-circle-icons
    width: 74% !important;
    max-width: 74% !important;
 }
+ion-footer.footer-md::before
+{
+    background: none;
+}
 
 /* ion scroll  */
 ion-scroll[scrollX] {
@@ -590,6 +594,36 @@ span.EmpNameTxt
 .TopImageCon
 {
   padding: 35px 0;
+}
+.TailsCon ion-col.col {
+    min-height: 80px;
+    border: 1px solid #dfdfdf;
+    background: #fff;
+    padding: 20px 10px 10px 10px;
+    text-align: center;
+}
+.SiteListTails
+{
+    color: #444 !important;
+    font-size: 11px !important;
+    text-shadow: 0px 1px 1px rgba(150, 150, 150, 1) !important;
+}
+.BlocksList .BlockBtns
+{
+    width: 100% !important;
+    min-height: 50px;
+}
+.BlocksList .BlockBtns .SiteListTails
+{
+    font-size: 10px !important;
+    line-height: 15px;
+}
+.BlocksList a.SiteListTails {
+    display: block;
+}
+.TailsCon ion-col.BlocksList
+{
+  padding: 10px;
 }
 .emp-round-active
 {
@@ -1135,7 +1169,7 @@ ion-spinner{
 .q-type1
 {
        width: 60% !important;
-       padding-top: 10px !important;
+       /*padding-top: 10px !important;*/
 }
 .q-type1 ion-item
 {
@@ -1153,6 +1187,7 @@ ion-spinner{
 .q-type1 ion-item ion-radio
 {
    margin-top: 4px !important;
+   margin-left: 4px !important;
 }
 .q-type1 ion-item label
 {
@@ -1203,4 +1238,15 @@ ion-spinner{
 {
     color: #000000;
     text-align: left;
+}
+.InitFeedbackCon ion-select
+{
+  width:70% !important;
+    
+  max-width:70% !important;
+  text-align:right !important;
+}
+.fnt-35
+{
+    font-size: 35px !important;
 }

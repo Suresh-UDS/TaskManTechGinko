@@ -4,6 +4,11 @@
       <ion-icon name="menu"></ion-icon>
     </button>
     <ion-title>Initiate Feedback</ion-title>
+      <ion-buttons right>
+          <button ion-button color="primary" icon-only (click)="goDashboard()">
+              <i class="material-icons">dashboard</i>
+          </button>
+      </ion-buttons>
   </ion-navbar>
 </ion-header>
 
@@ -20,44 +25,82 @@
                         <ion-option *ngFor="let p of projects" [value]="p.id" (ionSelect)="selectSite(p)"> {{p.name}}</ion-option>
                     </ion-select>
                 </ion-item>
-                <ion-item>
-                    <ion-label>Site</ion-label>
-                    <ion-select [selectOptions]="selectOptions" interface="popover" [(ngModel)]="site">
-                        <ion-option *ngFor="let s of sites" [value]="s.id" (ionSelect)="selectBlock(s)">{{s.name}}</ion-option>
-                    </ion-select>
-                </ion-item>
-                <ion-item>
-                    <ion-label>Block</ion-label>
-                    <ion-select [selectOptions]="selectOptions" interface="popover" [(ngModel)]="block">
-                        <ion-option *ngFor="let b of blocks" [value]="b" (ionSelect)="selectFloor(b)">{{b}}</ion-option>
-                    </ion-select>
-                </ion-item>
-                <ion-item>
-                    <ion-label>Floor</ion-label>
-                    <ion-select [selectOptions]="selectOptions" interface="popover" [(ngModel)]="floor">
-                        <ion-option *ngFor="let f of floors" [value]="f" (ionSelect)="selectZone(f)" >{{f}}</ion-option>
-                    </ion-select>
-                </ion-item>
-                <ion-item>
-                    <ion-label>zone</ion-label>
-                    <ion-select [selectOptions]="selectOptions" interface="popover" [(ngModel)]="zone">
-                        <ion-option *ngFor="let z of zones" [value]="z">{{z}}</ion-option>
-                    </ion-select>
-                </ion-item>
-                <ion-item>
-                    <ion-label>Feedback Name</ion-label>
-                    <ion-select [selectOptions]="selectOptions" interface="popover">
-                        <ion-option *ngFor="let fb of feedbacks" [value]="fb" (ionSelect)="start(fb)">{{fb.projectName}} - {{fb.siteName}} - {{fb.Zone}}</ion-option>
-                    </ion-select>
-                </ion-item>
+
+                <!--<ion-item>-->
+                    <!--<ion-label>Site</ion-label>-->
+                    <!--<ion-select [selectOptions]="selectOptions" interface="popover" [(ngModel)]="site">-->
+                        <!--<ion-option *ngFor="let s of sites" [value]="s.id" (ionSelect)="selectBlock(s)">{{s.name}}</ion-option>-->
+                    <!--</ion-select>-->
+                <!--</ion-item>-->
+                <!--<ion-item>-->
+                    <!--<ion-label>Block</ion-label>-->
+                    <!--<ion-select [selectOptions]="selectOptions" interface="popover" [(ngModel)]="block">-->
+                        <!--<ion-option *ngFor="let b of blocks" [value]="b" (ionSelect)="selectFloor(b)">{{b}}</ion-option>-->
+                    <!--</ion-select>-->
+                <!--</ion-item>-->
+                <!--<ion-item>-->
+                    <!--<ion-label>Floor</ion-label>-->
+                    <!--<ion-select [selectOptions]="selectOptions" interface="popover" [(ngModel)]="floor">-->
+                        <!--<ion-option *ngFor="let f of floors" [value]="f" (ionSelect)="selectZone(f)" >{{f}}</ion-option>-->
+                    <!--</ion-select>-->
+                <!--</ion-item>-->
+                <!--<ion-item>-->
+                    <!--<ion-label>zone</ion-label>-->
+                    <!--<ion-select [selectOptions]="selectOptions" interface="popover" [(ngModel)]="zone">-->
+                        <!--<ion-option *ngFor="let z of zones" [value]="z">{{z}}</ion-option>-->
+                    <!--</ion-select>-->
+                <!--</ion-item>-->
+                <!--<ion-item>-->
+                    <!--<ion-label>Feedback Name</ion-label>-->
+                    <!--<ion-select [selectOptions]="selectOptions" interface="popover">-->
+                        <!--<ion-option *ngFor="let fb of feedbacks" [value]="fb" (ionSelect)="start(fb)">{{fb.projectName}} - {{fb.siteName}} - {{fb.Zone}}</ion-option>-->
+                    <!--</ion-select>-->
+                <!--</ion-item>-->
+
             </ion-list>
 
-            <button class="btn btn-warning btn-wd btn-lg" (click)="start()" style="">Submit</button>
+            <div class="TailsCon" *ngIf="!scrollSite">
+                <ion-grid>
+                    <ion-row>
+                        <ion-col col-4 *ngFor="let site of sites;let i of index" >
+                            <button ion-button clear (click)="selectBlockDetail(i,site)">
+                                <p class="siteName SiteListTails">{{site.name}}</p>
+                            </button>
+                        </ion-col>
+                    </ion-row>
+                </ion-grid>
+            </div>
 
+            <div class="SiteAndBlockCOn" *ngIf="scrollSite">
+                <div class="SiteCon">
+                    <div class="scrollCon">
+                        <ion-row>
+                            <ion-item no-lines>
+                                <ion-scroll scrollX="true">
+                                    <button class="siteBtn scroll-item" ion-button round  *ngFor="let s of sites;let i of index" (click)="selectBlockDetail(i,s)" [color]="i==activeSite ? 'primary' : 'light'">
+                                        <p class="siteName">{{s.name}}</p>
+                                    </button>
+                                </ion-scroll>
+                            </ion-item>
+                        </ion-row>
+                    </div>
+                </div>
+
+                <div class="TailsCon">
+                    <ion-grid>
+                        <ion-row>
+                            <ion-col col-4 class="BlocksList" *ngFor="let l of locations;let i of index">
+                                <button ion-button clear class="BlockBtns" (click)="loadFeedbackMappings(l)">
+                                    <p class="SiteListTails">{{l.block}} <br> {{l.floor}} <br> {{l.zone}}</p>
+                                </button>
+                            </ion-col>
+                        </ion-row>
+                    </ion-grid>
+                </div>
+            </div>
         </div>
-
    </div>
-
-
-
 </ion-content>
+<ion-footer class="txt-center">
+    <button class="btn btn-warning btn-wd" (click)="start()" style="">Submit</button>
+</ion-footer>

@@ -2,28 +2,82 @@
 
 angular.module('timeSheetApp')
     .controller('FeedbackController', function ($rootScope, $scope, $state, $timeout, ProjectComponent, SiteComponent, LocationComponent,FeedbackComponent, $http,$stateParams,$location,$interval) {
-    		
-    	
-    		$scope.pages = { currPage : 1};
-        
-        $scope.searchCriteria = {
-        		
+
+        $scope.readOnly = true;
+        $scope.colors = ['#45b7cd', '#ff6384', '#ff8e72'];
+        $scope.labels = ["January", "February", "March", "April", "May", "June", "July"];
+        $scope.series = ['Series A', 'Series B'];
+        $scope.data = [
+            [65, 59, 80, 81, 56, 55, 40],
+            [28, 48, 40, 19, 86, 27, 90]
+        ];
+        $scope.onClick = function (points, evt) {
+            console.log(points, evt);
+        };
+        $scope.datasetOverride = [{ yAxisID: 'y-axis-1' }, { yAxisID: 'y-axis-2' }];
+        $scope.options = {
+            scales: {
+                yAxes: [
+                    {
+                        id: 'y-axis-1',
+                        type: 'linear',
+                        display: true,
+                        position: 'left'
+                    },
+                    {
+                        id: 'y-axis-2',
+                        type: 'linear',
+                        display: true,
+                        position: 'right'
+                    }
+                ]
+            }
+        };
+
+
+        $scope.label = ["Download Sales", "In-Store Sales", "Mail-Order Sales"];
+        $scope.datas = [300, 500, 100];
+
+
+        var vm = this;
+        vm.numRecords = 6;
+        vm.page = 1;
+
+        vm.items = []
+        for (var i = 0; i < 100; ++i) {
+            vm.items.push('item : ' + i);
         }
-        
+
+        vm.next = function(){
+            vm.page = vm.page + 1;
+        };
+
+        vm.back = function(){
+            vm.page = vm.page - 1;
+        };
+
+
+
+    		$scope.pages = { currPage : 1};
+
+        $scope.searchCriteria = {
+
+        }
+
         $scope.feedbackList;
-        
+
         $scope.selectedProject;
-        
+
         $scope.selectedSite;
-        
+
         $scope.selectedBlock;
-        
+
         $scope.selectedFloor;
-        
+
         $scope.selectedZone;
-        
+
         $scope.feedbackReport;
-        
+
         $scope.now = new Date()
 
         $scope.initCalender = function(){
@@ -44,26 +98,26 @@ angular.module('timeSheetApp')
             console.log(e.date._d);
             $scope.selectedDateTo=e.date._d;
 
-        });        
-        
+        });
+
         $scope.init = function(){
 	        $scope.loading = true;
 	        $scope.loadProjects();
         };
-        
+
         $scope.loadProjects = function () {
 	    		ProjectComponent.findAll().then(function (data) {
 	            $scope.projects = data;
 	        });
 	    };
-	    
+
 	    $scope.loadSites = function () {
 	    		ProjectComponent.findSites($scope.selectedProject.id).then(function (data) {
 	    			$scope.selectedSite = null;
 	            $scope.sites = data;
 	        });
 	    };
-	    
+
 	    $scope.loadBlocks = function () {
 	    		console.log('selected project -' + $scope.selectedProject.id + ', site -' + $scope.selectedSite.id)
 	    		LocationComponent.findBlocks($scope.selectedProject.id,$scope.selectedSite.id).then(function (data) {
@@ -71,32 +125,32 @@ angular.module('timeSheetApp')
 	            $scope.blocks = data;
 	        });
 	    };
-	    
+
 	    $scope.loadFloors = function () {
 	    		LocationComponent.findFloors($scope.selectedProject.id,$scope.selectedSite.id,$scope.selectedBlock).then(function (data) {
 	    			$scope.selectedFloor = null;
 	            $scope.floors = data;
 	        });
 	    };
-	    
+
 	    $scope.loadZones = function () {
 	    		console.log('load zones - ' + $scope.selectedProject.id +',' +$scope.selectedSite.id +',' +$scope.selectedBlock +','+$scope.selectedFloor);
 	    		LocationComponent.findZones($scope.selectedProject.id,$scope.selectedSite.id,$scope.selectedBlock, $scope.selectedFloor).then(function (data) {
 	    			$scope.selectedZone = null;
 	            $scope.zones = data;
 	        });
-	    };       
-	    
+	    };
+
 	    $scope.refreshPage = function() {
 			$scope.clearFilter();
 			$scope.loadFeedbacks();
-	    }	
-	    
+	    }
+
 	    $scope.loadFeedbacks = function () {
 	    		console.log('called loadFeedbacks');
 	    		$scope.search();
-	    };      
-	    
+	    };
+
 	    $scope.search = function () {
             var currPageVal = ($scope.pages ? $scope.pages.currPage : 1);
             if(!$scope.searchCriteria) {
@@ -134,8 +188,8 @@ angular.module('timeSheetApp')
                 console.log("To date not found")
                 console.log($scope.searchCriteria.checkInDateTimeTo)
             }
-            
-            
+
+
             if(!$scope.selectedProject) {
                 if($rootScope.searchCriteriaFeedback) {
                     $scope.searchCriteria = $rootScope.searchCriteriaFeedback;
@@ -178,7 +232,7 @@ angular.module('timeSheetApp')
                 $scope.firstStyle();
             }
         };
-        
+
         $scope.first = function() {
             if($scope.pages.currPage > 1) {
                 $scope.pages.currPage = 1;
@@ -287,11 +341,11 @@ angular.module('timeSheetApp')
             }
             $scope.search();
         };
-        
+
         $scope.cancelFeedback = function () {
         		$location.path('/feedback');
         };
-        
+
         $scope.initCalender();
 
     })

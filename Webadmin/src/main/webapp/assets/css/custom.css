@@ -423,8 +423,73 @@ span.red-star
   background: #fff;*/
   padding:10px 30px;
 }
+.TailsCon
+{
+    width: 98%;
+    margin: 0 auto;
+}
+.BlockList
+{
+    min-width: 100px;
+    min-height: 100px;
+    border: 1px solid #dfdfdf;
+    text-align: center;
+}
+.BlockList button
+{
+    background: none;
+    box-shadow: none;
+    border: none;
+    padding: 5px;
+    min-width: 100%;
+    min-height: 100px;
 
+}
+.TailsContent
+{
+    position: relative;
+}
+.pos-abs
+{
+    position: absolute;
+}
+.TailsContent .next
+{
+    right: 0;
+    top: 40px;
+}
+.TailsContent .back
+{
+    top: 40px;
+}
+.blocksListCon li:hover
+{
+    background: #EEEEEE;
+}
+.clear
+{
+    clear: both;
+}
+.TailsContent button
+{
+    background: none;
+    box-shadow: none;
+    border: none;
+    padding: 5px;
+}
+.BlockList button:hover
+{
+    background: #EEEEEE;
+}
 
+.blocksListCon li {
+    width: 120px;
+    height: 120px;
+    float: left;
+    border: 1px solid #dfdfdf;
+    margin: 5px;
+    padding: 15px;
+}
 
 .jobcards .card [data-background-color] .card-title {
     /*color:#ff9800;*/
@@ -512,6 +577,16 @@ button.btn.btn-outline {
 {
   color: #444;
 }
+.RatingCon
+{
+    padding-top: 17px;
+}
+.jk-rating-stars-container .star-button.star-on .material-icons {
+    color: #ff9800;
+}
+.jk-rating-stars-container .button .material-icons {
+    font-size: 35px;
+}
 .appModuleCard table label
 {
    padding: 2px 5px;
@@ -519,7 +594,7 @@ button.btn.btn-outline {
    color: #fff;
    border-radius: 5px;
    font-size: 12px;
-   margin: 0 2px;
+   margin: 2px 2px;
 }
 .addedActionList .list-group-item>.badge
 {
@@ -527,7 +602,14 @@ button.btn.btn-outline {
       background: #fff;
       color: #777;
 }
-
+.checkbox-inline, .radio-inline
+{
+    padding-left: 10px;
+}
+.checkbox, .radio
+{
+    margin-top: 5px;
+}
 .form-control, .form-group .form-control
 {
       border: 1px solid #d6d6d6;
