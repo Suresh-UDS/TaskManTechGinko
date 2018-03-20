@@ -32,10 +32,10 @@ export class InitFeedbackPage {
   scrollSites:any;
   blockDetail:any;
   searchCriteria:any;
-  location:any;
+  locations:any;
 
   constructor(public navCtrl: NavController,public myService:authService,public component:componentService, private siteService: SiteService, private feedbackService: FeedbackService) {
-        this.loadFeedbackMappings();
+        // this.loadFeedbackMappings();
   }
 
     start(fb)
@@ -45,7 +45,7 @@ export class InitFeedbackPage {
             this.navCtrl.push(FeedbackPage,{feedback:feedback,fb:fb});
 
         }else{
-            this.component.showToastMessage('Please select feedback','bottom');
+            this.component.showToastMessage('No Feedback form available','bottom');
         }
     }
 
@@ -154,17 +154,25 @@ export class InitFeedbackPage {
     //     )
     // }
 
-    loadFeedbackMappings(){
+    loadFeedbackMappings(location){
+      console.log("Selected location");
+      console.log(location);
         var currPageVal = 1;
         var searchCriteria = {
             currPage:currPageVal,
-            findAll:true
+            findAll:false,
+            block:location.block,
+            floor:location.floor,
+            zone:location.zone,
+            siteId:location.siteId
+
         }
 
         this.feedbackService.searchFeedbackMappings(searchCriteria).subscribe(
             response=>{
                 console.log(response.transactions);
                 this.feedbacks=response.transactions;
+                this.start(response.transactions[0]);
             }
         )
 
@@ -191,7 +199,7 @@ export class InitFeedbackPage {
             response=>{
                 console.log("Loading Locations");
                 console.log(response);
-                this.location=response.transactions;
+                this.locations=response.transactions;
             }
         )
     }

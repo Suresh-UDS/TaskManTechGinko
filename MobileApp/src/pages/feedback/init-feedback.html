@@ -84,8 +84,8 @@
                 <div class="TailsCon">
                     <ion-grid>
                         <ion-row>
-                            <ion-col col-4 class="BlocksList" *ngFor="let l of location;let i of index">
-                                <button ion-button clear>
+                            <ion-col col-4 class="BlocksList" *ngFor="let l of locations;let i of index">
+                                <button ion-button clear (click)="loadFeedbackMappings(l)">
                                     <p class="siteName SiteListTails">{{l.block}}</p>
                                     <p class="siteName SiteListTails">{{l.floor}}</p>
                                     <p class="siteName SiteListTails">{{l.zone}}</p>
