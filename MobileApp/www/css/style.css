@@ -283,6 +283,10 @@ button.ion-circle-icons
    width: 74% !important;
    max-width: 74% !important;
 }
+ion-footer.footer-md::before
+{
+    background: none;
+}
 
 /* ion scroll  */
 ion-scroll[scrollX] {
@@ -590,6 +594,26 @@ span.EmpNameTxt
 .TopImageCon
 {
   padding: 35px 0;
+}
+.TailsCon ion-col.col {
+    min-height: 80px;
+    border: 1px solid #dfdfdf;
+    background: #fff;
+    padding: 20px 10px 10px 10px;
+    text-align: center;
+}
+.SiteListTails
+{
+    color: #444 !important;
+    font-size: 11px !important;
+    text-shadow: 0px 1px 1px rgba(150, 150, 150, 1) !important;
+}
+.BlocksList a.SiteListTails {
+    display: block;
+}
+.TailsCon ion-col.BlocksList
+{
+  padding: 10px;
 }
 .emp-round-active
 {

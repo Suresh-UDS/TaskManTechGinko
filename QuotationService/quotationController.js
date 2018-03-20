@@ -87,6 +87,7 @@ module.exports = {
         quotation.save(function(err,quotation){
             if(!err){
                 // mailerService.submitQuotation('karthickk@techginko.com',quotation);
+                this.createPDF(quotation);
                 res.json(200,quotation)
             }else{
                 console.log("Error in saving quotation");
@@ -340,8 +341,8 @@ module.exports = {
            if(err){
                console.log("Error in getting quotaions");
            } else{
-               // console.log("Quotation");
-               // console.log(quotations);
+               console.log("Quotation");
+               console.log(quotations[0]);
 
 
                mailerService.getPdfDetail(quotations[0],function(err,response){
@@ -355,12 +356,15 @@ module.exports = {
 
                        htmlToPdf.convertHTMLString(response, './templates/output.pdf',
                            function (error, success) {
-                               if (error) {
+                               if (error)
+                               {
                                    console.log('PDF Fail');
                                    console.log(error);
-                               } else {
+                               } else
+                               {
                                    console.log('PDF Success!');
                                    console.log(success);
+                                   mailerService.submitQuotationDetail('praveens@techginko.com');
                                }
                            }
                        );
