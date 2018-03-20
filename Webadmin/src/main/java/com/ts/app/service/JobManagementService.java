@@ -753,7 +753,7 @@ public class JobManagementService extends AbstractService {
 		return employee;
 	}
 
-	private Location getLocation(Long locationId){
+	private Location getLocation(long locationId){
 	    Location location =null;
 	    if(locationId > 0) {
 	        location = locationRepository.findOne(locationId);
@@ -1063,9 +1063,12 @@ public class JobManagementService extends AbstractService {
         return assetDto;
     }
 
+    public Asset getAsset(long id){
+        Asset asset = assetRepository.findOne(id);
+        return asset;
+    }
 
-
-    public AssetDTO getAsset(long id){
+    public AssetDTO getAssetDTO(long id){
         Asset asset = assetRepository.findOne(id);
         AssetDTO assetDTO = mapperUtil.toModel(asset,AssetDTO.class);
         Site site = getSite(assetDTO.getSiteId());

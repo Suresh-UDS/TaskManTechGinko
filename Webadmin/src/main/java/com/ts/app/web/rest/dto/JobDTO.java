@@ -9,7 +9,7 @@ import com.ts.app.domain.util.StringUtil;
 
 public class JobDTO extends BaseDTO {
 
-	private Long id;
+	private long id;
 	private String title;
 	private String description;
 	private String comments;
@@ -17,22 +17,22 @@ public class JobDTO extends BaseDTO {
 	private String siteProjectId;
 	private String siteProjectName;
 
-	private Long siteId;
+	private long siteId;
 	private String siteName;
 
-	private Long employeeId;
+	private long employeeId;
 	private String employeeEmpId;
 	private String employeeName;
 
-	private Long relieverId;
+	private long relieverId;
 	private String relieverName;
 
 	private boolean relieved;
 
-	private Long locationId;
+	private long locationId;
 	private String locationName;
 
-	private Long assetId;
+	private long assetId;
 	private String assetTitle;
 
 	private Date plannedStartTime;
@@ -114,10 +114,10 @@ public class JobDTO extends BaseDTO {
 	public void setSiteName(String siteName) {
 		this.siteName = siteName;
 	}
-	public Long getEmployeeId() {
+	public long getEmployeeId() {
 		return employeeId;
 	}
-	public void setEmployeeId(Long employeeId) {
+	public void setEmployeeId(long employeeId) {
 		this.employeeId = employeeId;
 	}
 	public String getEmployeeName() {
@@ -126,10 +126,10 @@ public class JobDTO extends BaseDTO {
 	public void setEmployeeName(String employeeName) {
 		this.employeeName = employeeName;
 	}
-	public Long getLocationId(){
+	public long getLocationId(){
 	    return locationId;
     }
-    public void setLocationId(Long locationId){
+    public void setLocationId(long locationId){
 	    this.locationId = locationId;
     }
 	public JobStatus getJobStatus() {
@@ -140,16 +140,16 @@ public class JobDTO extends BaseDTO {
 	}
 	public JobType getJobType(){ return jobType;}
 	public void setJobType(JobType jobType){this.jobType = jobType;}
-	public Long getSiteId() {
+	public long getSiteId() {
 		return siteId;
 	}
-	public void setSiteId(Long siteId) {
+	public void setSiteId(long siteId) {
 		this.siteId = siteId;
 	}
-	public Long getId() {
+	public long getId() {
 		return id;
 	}
-	public void setId(Long id) {
+	public void setId(long id) {
 		this.id = id;
 	}
 	public String getSiteProjectId() {
@@ -290,11 +290,11 @@ public class JobDTO extends BaseDTO {
         this.locationName = locationName;
     }
 
-    public Long getAssetId() {
+    public long getAssetId() {
         return assetId;
     }
 
-    public void setAssetId(Long assetId) {
+    public void setAssetId(long assetId) {
         this.assetId = assetId;
     }
 
@@ -320,11 +320,11 @@ public class JobDTO extends BaseDTO {
 	}
 
 
-    public Long getRelieverId() {
+    public long getRelieverId() {
         return relieverId;
     }
 
-    public void setRelieverId(Long relieverId) {
+    public void setRelieverId(long relieverId) {
         this.relieverId = relieverId;
     }
 

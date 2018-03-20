@@ -38,6 +38,11 @@ angular.module('timeSheetApp')
                 $scope.projects = data;
             });
         };
+        
+        
+        $('#dateFilterFrom').on('dp.change', function(e){
+        		$scope.job.plannedStartTime = e.date._d;
+        });
 
         $('#selectedJobDate').on('dp.change', function(e){
                 $scope.selectedJobDate = e.date._d;
@@ -250,7 +255,9 @@ angular.module('timeSheetApp')
 	        	}
 
 	        	$scope.job.siteId = $scope.selectedSite.id
-	            $scope.job.locationId = $scope.selectedLocation.id;
+	        	if($scope.selectedLocation) {
+	    	        $scope.job.locationId = $scope.selectedLocation.id;
+	        	}
 	        	$scope.job.checklistItems = $scope.jobChecklistItems;
 	        	if($scope.selectedAsset) {
 	            	$scope.job.assetId = $scope.selectedAsset.id;
