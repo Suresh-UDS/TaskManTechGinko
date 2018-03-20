@@ -72,7 +72,7 @@
                         <ion-row>
                             <ion-item no-lines>
                                 <ion-scroll scrollX="true">
-                                    <button class="siteBtn scroll-item" ion-button round  *ngFor="let s of sites;let i of index" (click)="selectBlockDetail(i)" [color]="i==activeSite ? 'primary' : 'light'">
+                                    <button class="siteBtn scroll-item" ion-button round  *ngFor="let s of sites;let i of index" (click)="selectBlockDetail(i,s)" [color]="i==activeSite ? 'primary' : 'light'">
                                         <p class="siteName">{{s.name}}</p>
                                     </button>
                                 </ion-scroll>
@@ -84,86 +84,19 @@
                 <div class="TailsCon">
                     <ion-grid>
                         <ion-row>
-                            <ion-col col-4 class="BlocksList">
-                                <a href="" class="SiteListTails">Block</a>
-                                <a href="" class="SiteListTails">Floor</a>
-                                <a href="" class="SiteListTails">Zone</a>
+                            <ion-col col-4 class="BlocksList" *ngFor="let l of location;let i of index">
+                                <button ion-button clear>
+                                    <p class="siteName SiteListTails">{{l.block}}</p>
+                                    <p class="siteName SiteListTails">{{l.floor}}</p>
+                                    <p class="siteName SiteListTails">{{l.zone}}</p>
+                                </button>
                             </ion-col>
-                            <ion-col col-4 class="BlocksList">
-                                <a href="" class="SiteListTails">Block</a>
-                                <a href="" class="SiteListTails">Floor</a>
-                                <a href="" class="SiteListTails">Zone</a>
-                            </ion-col>
-                            <ion-col col-4 class="BlocksList">
-                                <a href="" class="SiteListTails">Block</a>
-                                <a href="" class="SiteListTails">Floor</a>
-                                <a href="" class="SiteListTails">Zone</a>
-                            </ion-col>
-                            <ion-col col-4 class="BlocksList">
-                                <a href="" class="SiteListTails">Block</a>
-                                <a href="" class="SiteListTails">Floor</a>
-                                <a href="" class="SiteListTails">Zone</a>
-                            </ion-col>
-                            <ion-col col-4 class="BlocksList">
-                                <a href="" class="SiteListTails">Block</a>
-                                <a href="" class="SiteListTails">Floor</a>
-                                <a href="" class="SiteListTails">Zone</a>
-                            </ion-col>
-                            <ion-col col-4 class="BlocksList">
-                                <a href="" class="SiteListTails">Block</a>
-                                <a href="" class="SiteListTails">Floor</a>
-                                <a href="" class="SiteListTails">Zone</a>
-                            </ion-col>
-                            <ion-col col-4 class="BlocksList">
-                                <a href="" class="SiteListTails">Block</a>
-                                <a href="" class="SiteListTails">Floor</a>
-                                <a href="" class="SiteListTails">Zone</a>
-                            </ion-col>
-                            <ion-col col-4 class="BlocksList">
-                                <a href="" class="SiteListTails">Block</a>
-                                <a href="" class="SiteListTails">Floor</a>
-                                <a href="" class="SiteListTails">Zone</a>
-                            </ion-col>
-                            <ion-col col-4 class="BlocksList">
-                                <a href="" class="SiteListTails">Block</a>
-                                <a href="" class="SiteListTails">Floor</a>
-                                <a href="" class="SiteListTails">Zone</a>
-                            </ion-col>
-                            <ion-col col-4 class="BlocksList">
-                                <a href="" class="SiteListTails">Block</a>
-                                <a href="" class="SiteListTails">Floor</a>
-                                <a href="" class="SiteListTails">Zone</a>
-                            </ion-col>
-                            <ion-col col-4 class="BlocksList">
-                                <a href="" class="SiteListTails">Block</a>
-                                <a href="" class="SiteListTails">Floor</a>
-                                <a href="" class="SiteListTails">Zone</a>
-                            </ion-col>
-                            <ion-col col-4 class="BlocksList">
-                                <a href="" class="SiteListTails">Block</a>
-                                <a href="" class="SiteListTails">Floor</a>
-                                <a href="" class="SiteListTails">Zone</a>
-                            </ion-col>
-                            <ion-col col-4 class="BlocksList">
-                                <a href="" class="SiteListTails">Block</a>
-                                <a href="" class="SiteListTails">Floor</a>
-                                <a href="" class="SiteListTails">Zone</a>
-                            </ion-col>
-
                         </ion-row>
                     </ion-grid>
                 </div>
             </div>
-
-
         </div>
-
-
-
    </div>
-
-
-
 </ion-content>
 <ion-footer class="txt-center">
     <button class="btn btn-warning btn-wd" (click)="start()" style="">Submit</button>

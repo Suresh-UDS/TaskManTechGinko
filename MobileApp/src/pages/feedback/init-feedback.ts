@@ -31,7 +31,8 @@ export class InitFeedbackPage {
   activeSite:any;
   scrollSites:any;
   blockDetail:any;
-searchCriteria:any;
+  searchCriteria:any;
+  location:any;
 
   constructor(public navCtrl: NavController,public myService:authService,public component:componentService, private siteService: SiteService, private feedbackService: FeedbackService) {
         this.loadFeedbackMappings();
@@ -176,9 +177,6 @@ searchCriteria:any;
         this.loadLocations(site.id);
         console.log(this.scrollSite);
         console.log(this.activeSite);
-
-
-
     }
 
     loadLocations(siteId){
@@ -193,6 +191,7 @@ searchCriteria:any;
             response=>{
                 console.log("Loading Locations");
                 console.log(response);
+                this.location=response.transactions;
             }
         )
     }
