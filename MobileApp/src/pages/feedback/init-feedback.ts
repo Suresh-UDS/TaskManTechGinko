@@ -5,7 +5,7 @@ import {componentService} from "../service/componentService";
 import {SiteService} from "../service/siteService";
 import {FeedbackPage} from "../feedback/feedback";
 import {FeedbackService} from "../service/feedbackService";
-
+import {FeedbackDashboardPage} from "./feedback-dashboard";
 @Component({
   selector: 'page-init-feedback',
   templateUrl: 'init-feedback.html'
@@ -204,5 +204,9 @@ export class InitFeedbackPage {
         )
     }
 
+    goDashboard()
+    {
+        this.navCtrl.push(FeedbackDashboardPage)
+    }
 
 }
