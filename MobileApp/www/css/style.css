@@ -608,6 +608,16 @@ span.EmpNameTxt
     font-size: 11px !important;
     text-shadow: 0px 1px 1px rgba(150, 150, 150, 1) !important;
 }
+.BlocksList .BlockBtns
+{
+    width: 100% !important;
+    min-height: 50px;
+}
+.BlocksList .BlockBtns .SiteListTails
+{
+    font-size: 10px !important;
+    line-height: 15px;
+}
 .BlocksList a.SiteListTails {
     display: block;
 }
