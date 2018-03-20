@@ -72,6 +72,8 @@ import {QuotationService} from "../pages/service/quotationService";
 import {SiteService} from "../pages/service/siteService";
 import {JobPopoverPage} from "../pages/jobs/job-popover";
 import {BatteryStatus, BatteryStatusResponse} from "@ionic-native/battery-status";
+import {Ionic2RatingModule} from "ionic2-rating";
+import {FeedbackDashboardPage} from "../pages/feedback/feedback-dashboard";
 
 
 @NgModule({
@@ -119,12 +121,14 @@ import {BatteryStatus, BatteryStatusResponse} from "@ionic-native/battery-status
     FeedbackPage,
     JobPopoverPage,
     FeedbackQuestionPage,
-    InitFeedbackPage
+    InitFeedbackPage,
+    FeedbackDashboardPage
   ],
   imports: [
     BrowserModule,
     HttpModule,
     DatePickerModule,
+    Ionic2RatingModule,
     BrowserAnimationsModule,
     IonicModule.forRoot(MyApp),
     IonicStorageModule.forRoot()
@@ -174,7 +178,8 @@ import {BatteryStatus, BatteryStatusResponse} from "@ionic-native/battery-status
     FeedbackPage,
     FeedbackQuestionPage,
     InitFeedbackPage,
-    JobPopoverPage
+    JobPopoverPage,
+    FeedbackDashboardPage
   ],
   providers: [
     StatusBar,
