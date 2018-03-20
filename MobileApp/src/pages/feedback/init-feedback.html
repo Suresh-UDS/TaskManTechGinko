@@ -85,10 +85,8 @@
                     <ion-grid>
                         <ion-row>
                             <ion-col col-4 class="BlocksList" *ngFor="let l of location;let i of index">
-                                <button ion-button clear>
-                                    <p class="siteName SiteListTails">{{l.block}}</p>
-                                    <p class="siteName SiteListTails">{{l.floor}}</p>
-                                    <p class="siteName SiteListTails">{{l.zone}}</p>
+                                <button ion-button clear class="BlockBtns">
+                                    <p class="SiteListTails">{{l.block}} <br> {{l.floor}} <br> {{l.zone}}</p>
                                 </button>
                             </ion-col>
                         </ion-row>
