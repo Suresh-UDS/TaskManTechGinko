@@ -5,16 +5,14 @@ import {componentService} from "../service/componentService";
 import {SiteService} from "../service/siteService";
 import {FeedbackService} from "../service/feedbackService";
 import {FeedbackPage} from "./feedback";
-declare var demo;
-import {ViewChild } from '@angular/core';
-import { Content } from 'ionic-angular';
-
+import {InitFeedbackPage} from "./init-feedback";
+declare  var demo ;
 @Component({
   selector: 'page-feedback-questions',
   templateUrl: 'feedback-questions.html'
 })
 export class FeedbackQuestionPage {
-    @ViewChild(Content) content: Content;
+
   userId:any;
   employeeId: any;
   sites:any;
@@ -33,6 +31,13 @@ export class FeedbackQuestionPage {
     console.log(this.navParams.data);
 
 this.username = this.navParams.data.userName;
+    console.log(this.navParams.data.feedback);
+    this.feedbackService.findFeedback(this.navParams.data.feedback.id).subscribe(
+        response=>{
+            console.log("Response of selected feedback");
+            console.log(response);
+        }
+    )
 
       this.feedback = this.navParams.data.feedback;
       console.log("feedback");
@@ -59,6 +64,7 @@ this.username = this.navParams.data.userName;
   }
 
     submitFeedback(){
+      this.component.showLoader("Saving Feedback");
       console.log("feedback details");
       console.log(this.navParams.data.fb);
       console.log(this.navParams.data.feedback);
@@ -71,12 +77,13 @@ this.username = this.navParams.data.userName;
               id:q.id,
               question:q.question,
               answer:q.answer,
+              answerType:q.answerType
           };
           results.push(result);
           console.log(typeof q.answer);
       }
       this.feedbackTransaction = {
-          results:results,
+          results:this.questions,
           reviewerName:this.navParams.data.userName,
           siteId:this.navParams.data.fb.siteId,
           siteName:this.navParams.data.fb.siteName,
@@ -95,22 +102,21 @@ this.username = this.navParams.data.userName;
           response=>{
               console.log("Saving feeback");
               console.log(response);
-              demo.showSwal('feedback-success','Thank you!','For your Feedback')
-              this.navCtrl.push(FeedbackPage);
+              this.questions = null;
+              this.component.closeLoader();
+              demo.showSwal('feedback-success','Thank you!','For your Feedback');
+              this.navCtrl.setRoot(InitFeedbackPage,{feedback:this.navParams.data.feedback});
           },err=>{
               console.log("error in saving feedback");
+              this.component.closeLoader();
               demo.showSwal('warning-message-and-confirmation','Failed to Save','Unable to save feedback');
-              console.log(err);
+              console.log(err)
           }
       )
 
     }
 
-    focus(i)
-    {
-        console.log("Scroll to top")
-        this.content.scrollToTop();
-    }
+
 
 
 }
