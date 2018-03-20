@@ -1169,7 +1169,7 @@ ion-spinner{
 .q-type1
 {
        width: 60% !important;
-       padding-top: 10px !important;
+       /*padding-top: 10px !important;*/
 }
 .q-type1 ion-item
 {
@@ -1187,6 +1187,7 @@ ion-spinner{
 .q-type1 ion-item ion-radio
 {
    margin-top: 4px !important;
+   margin-left: 4px !important;
 }
 .q-type1 ion-item label
 {
@@ -1244,4 +1245,8 @@ ion-spinner{
     
   max-width:70% !important;
   text-align:right !important;
+}
+.fnt-35
+{
+    font-size: 35px !important;
 }

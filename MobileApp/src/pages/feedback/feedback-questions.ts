@@ -1,5 +1,5 @@
-import { Component } from '@angular/core';
-import {NavController, NavParams} from 'ionic-angular';
+import {Component, ViewChild} from '@angular/core';
+import {NavController, NavParams, Slides} from 'ionic-angular';
 import {authService} from "../service/authService";
 import {componentService} from "../service/componentService";
 import {SiteService} from "../service/siteService";
@@ -12,6 +12,8 @@ declare  var demo ;
   templateUrl: 'feedback-questions.html'
 })
 export class FeedbackQuestionPage {
+
+    @ViewChild('slides') slides: Slides;
 
   userId:any;
   employeeId: any;
@@ -116,7 +118,13 @@ this.username = this.navParams.data.userName;
 
     }
 
+    next() {
+        this.slides.slideNext();
+    }
 
+    prev() {
+        this.slides.slidePrev();
+    }
 
 
 }
