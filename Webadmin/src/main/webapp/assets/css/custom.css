@@ -514,7 +514,13 @@ button.btn.btn-outline {
 }
 .RatingCon
 {
-    padding-top: 20px;
+    padding-top: 17px;
+}
+.jk-rating-stars-container .star-button.star-on .material-icons {
+    color: #ff9800;
+}
+.jk-rating-stars-container .button .material-icons {
+    font-size: 35px;
 }
 .appModuleCard table label
 {
