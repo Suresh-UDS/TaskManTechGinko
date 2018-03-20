@@ -5,13 +5,16 @@ import {componentService} from "../service/componentService";
 import {SiteService} from "../service/siteService";
 import {FeedbackService} from "../service/feedbackService";
 import {FeedbackPage} from "./feedback";
+declare var demo;
+import {ViewChild } from '@angular/core';
+import { Content } from 'ionic-angular';
 
 @Component({
   selector: 'page-feedback-questions',
   templateUrl: 'feedback-questions.html'
 })
 export class FeedbackQuestionPage {
-
+    @ViewChild(Content) content: Content;
   userId:any;
   employeeId: any;
   sites:any;
@@ -92,16 +95,22 @@ this.username = this.navParams.data.userName;
           response=>{
               console.log("Saving feeback");
               console.log(response);
+              demo.showSwal('feedback-success','Thank you!','For your Feedback')
               this.navCtrl.push(FeedbackPage);
           },err=>{
               console.log("error in saving feedback");
-              console.log(err)
+              demo.showSwal('warning-message-and-confirmation','Failed to Save','Unable to save feedback');
+              console.log(err);
           }
       )
 
     }
 
-
+    focus(i)
+    {
+        console.log("Scroll to top")
+        this.content.scrollToTop();
+    }
 
 
 }
