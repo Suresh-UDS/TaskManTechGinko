@@ -41,13 +41,13 @@
                 <ion-item>
                     <ion-label>zone</ion-label>
                     <ion-select [selectOptions]="selectOptions" interface="popover" [(ngModel)]="zone">
-                        <ion-option *ngFor="let z of zones" [value]="z">{{z}}</ion-option>
+                        <ion-option *ngFor="let z of zones" [value]="z" (ionSelect)="loadFeedbackMappings(zone)">{{z}}</ion-option>
                     </ion-select>
                 </ion-item>
                 <ion-item>
                     <ion-label>Feedback Name</ion-label>
                     <ion-select [selectOptions]="selectOptions" interface="popover">
-                        <ion-option *ngFor="let fb of feedbacks" [value]="fb" (ionSelect)="start(fb)">{{fb.projectName}} - {{fb.siteName}} - {{fb.Zone}}</ion-option>
+                        <ion-option *ngFor="let fb of feedbacks" [value]="fb" (ionSelect)="start(fb)">{{fb.feedback.name}}</ion-option>
                     </ion-select>
                 </ion-item>
             </ion-list>

@@ -27,9 +27,10 @@ export class InitFeedbackPage {
   selectedZone:any;
   feedbacks:any;
   selectOptions:any;
+  searchCriteria:any;
 
   constructor(public navCtrl: NavController,public myService:authService,public component:componentService, private siteService: SiteService, private feedbackService: FeedbackService) {
-        this.loadFeedbackMappings();
+        // this.loadFeedbackMappings();
   }
 
     start(fb)
@@ -90,6 +91,7 @@ export class InitFeedbackPage {
     selectBlock(site)
     {
         this.selectedSite = site;
+        this.loadLocations(site.id);
         this.feedbackService.loadBlocks(this.selectedProject.id,site.id).subscribe(
             response=>{
                 console.log("====Block By SiteId======");
@@ -147,20 +149,52 @@ export class InitFeedbackPage {
         )
     }
 
-    loadFeedbackMappings(){
+    loadFeedbackMappings(zone){
         var currPageVal = 1;
-        var searchCriteria = {
+        this.searchCriteria = {
             currPage:currPageVal,
-            findAll:true
-        }
+            findAll:false
+        };
 
-        this.feedbackService.searchFeedbackMappings(searchCriteria).subscribe(
+        if(this.selectedBlock){
+            this.searchCriteria.block= this.selectedBlock;
+        }
+        if(this.selectedSite){
+            this.searchCriteria.siteId = this.selectedSite.id;
+        }
+        if(this.selectedFloor){
+            this.searchCriteria.floor = this.selectedFloor;
+        }
+        if(zone){
+            this.searchCriteria.zone = zone;
+        }
+        console.log("Search Criteria");
+        console.log(this.searchCriteria);
+
+        this.feedbackService.searchFeedbackMappings(this.searchCriteria).subscribe(
             response=>{
+                console.log("Transaction response");
                 console.log(response.transactions);
                 this.feedbacks=response.transactions;
             }
         )
 
+    }
+
+    loadLocations(siteId){
+        var currPageVal = 1;
+        this.searchCriteria = {
+            currPage:currPageVal,
+            findAll:false,
+            siteId:siteId
+        };
+
+        this.feedbackService.loadLocations(this.searchCriteria).subscribe(
+            response=>{
+                console.log("Loading Locations");
+                console.log(response);
+            }
+        )
     }
 
 }
