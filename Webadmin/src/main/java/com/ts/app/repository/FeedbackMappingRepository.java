@@ -14,6 +14,7 @@ import com.ts.app.domain.FeedbackMapping;
 public interface FeedbackMappingRepository extends JpaRepository<FeedbackMapping, Long> {
 
 
+
 	@Query("SELECT ft FROM FeedbackMapping ft")
 	Page<FeedbackMapping> findAll(Pageable pageRequest);
 
@@ -22,5 +23,8 @@ public interface FeedbackMappingRepository extends JpaRepository<FeedbackMapping
 
 	@Query("SELECT ft FROM FeedbackMapping ft WHERE ft.site.id = :siteId and ft.block = :block and ft.floor = :floor and ft.zone = :zone")
 	FeedbackMapping findOneByLocation(@Param("siteId") long siteId, @Param("block") String block, @Param("floor") String floor, @Param("zone") String zone);
+	
+	@Query("SELECT ft FROM FeedbackMapping ft WHERE ft.site.id = :siteId")
+	FeedbackMapping findSiteByLocation(@Param("siteId") long siteId);
 
 }

@@ -111,7 +111,7 @@ this.username = this.navParams.data.userName;
           },err=>{
               console.log("error in saving feedback");
               this.component.closeLoader();
-              demo.showSwal('warning-message-and-confirmation','Failed to Save','Unable to save feedback');
+              demo.showSwal('warning-message-and-confirmation-ok','Failed to Save','Unable to save feedback');
               console.log(err)
           }
       )
