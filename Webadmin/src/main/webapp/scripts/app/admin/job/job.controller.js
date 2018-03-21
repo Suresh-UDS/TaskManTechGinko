@@ -4,7 +4,7 @@ angular.module('timeSheetApp')
 		    .controller(
 				'JobController',
 				function($scope, $rootScope, $state, $timeout, JobComponent,AssetComponent,
-						ProjectComponent, SiteComponent,EmployeeComponent,ChecklistComponent, $http, $stateParams,
+						ProjectComponent, SiteComponent,EmployeeComponent,ChecklistComponent, LocationComponent, $http, $stateParams,
 						$location) {
         $scope.success = null;
         $scope.error = null;
@@ -83,6 +83,33 @@ angular.module('timeSheetApp')
             });
         };
         
+        $scope.loadBlocks = function () {
+	    		console.log('selected project -' + ($scope.selectedProject ? $scope.selectedProject.id : 0) + ', site -' + ($scope.selectedSite ? $scope.selectedSite.id : 0))
+	    		var projectId = $scope.selectedProject ? $scope.selectedProject.id : 0;
+	    		LocationComponent.findBlocks(projectId,$scope.selectedSite.id).then(function (data) {
+	    			$scope.selectedBlock = null;
+	            $scope.blocks = data;
+	        });
+	    };
+        
+        
+        $scope.loadFloors = function () {
+        		var projectId = $scope.selectedProject ? $scope.selectedProject.id : 0;
+	    		LocationComponent.findFloors(projectId,$scope.selectedSite.id,$scope.selectedBlock).then(function (data) {
+	    			$scope.selectedFloor = null;
+	            $scope.floors = data;
+	        });
+	    };
+	    
+	    $scope.loadZones = function () {
+	    		console.log('load zones - ' + $scope.selectedSite.id +',' +$scope.selectedBlock +','+$scope.selectedFloor);
+	    		var projectId = $scope.selectedProject ? $scope.selectedProject.id : 0;
+	    		LocationComponent.findZones(projectId,$scope.selectedSite.id,$scope.selectedBlock, $scope.selectedFloor).then(function (data) {
+	    			$scope.selectedZone = null;
+	            $scope.zones = data;
+	        });
+	    };        
+        
         $scope.loadJobStatuses = function(){
             JobComponent.loadJobStatuses().then(function(data){
                $scope.selectedLocation = null;
@@ -132,7 +159,13 @@ angular.module('timeSheetApp')
         		$scope.job=data;
         		$scope.selectedSite = {id : data.siteId,name : data.siteName};
         		$scope.selectedEmployee = {id : data.employeeId,name : data.employeeName};
-        		$scope.selectedLocation = {id:data.locationId,name:data.locationName};
+        		//$scope.selectedLocation = {id:data.locationId,name:data.locationName};
+        		$scope.loadBlocks();
+        		$scope.selectedBlock = data.block;
+        		$scope.loadFloors();
+        		$scope.selectedFloor = data.floor;
+        		$scope.loadZones();
+        		$scope.selectedZone = data.zone;
         		$scope.selectedAsset = {id:data.assetId,title:data.assetTitle};
         		if(data.checklistItems) {
         			var checklist = {};
@@ -206,7 +239,7 @@ angular.module('timeSheetApp')
         $scope.initPage=function (){
         	$scope.loadEmployee();
         	$scope.loadAllSites();
-        	$scope.loadLocations();
+        	//$scope.loadLocations();
         	$scope.loadAssets();
         	$scope.loadPrice();
         	$scope.loadChecklists();
@@ -264,6 +297,15 @@ angular.module('timeSheetApp')
 	        	}
 	        	if($scope.selectedEmployee) {
 	        		$scope.job.employeeId = $scope.selectedEmployee.id
+	        	}
+	        	if($scope.selectedBlock) {
+	        		$scope.job.block = $scope.selectedBlock;
+	        	}
+	        	if($scope.selectedFloor) {
+	        		$scope.job.floor = $scope.selectedFloor;
+	        	}
+	        	if($scope.selectedZone) {
+	        		$scope.job.zone = $scope.selectedZone;
 	        	}
 	        	// $scope.job.jobStatus = $scope.selectedStatus.name;
 	        	var post = $scope.isEdit ? JobComponent.update : JobComponent.create
