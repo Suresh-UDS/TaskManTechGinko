@@ -1,7 +1,5 @@
 package com.ts.app.web.rest.dto;
 
-import java.util.Date;
-
 public class WeeklyZone {
 	
 	private double rating;
@@ -27,6 +25,5 @@ public class WeeklyZone {
 	public void setDate(String date) {
 		this.date = date;
 	}
-	
 
 }
