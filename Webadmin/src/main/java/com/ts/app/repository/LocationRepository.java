@@ -35,9 +35,18 @@ public interface LocationRepository extends JpaRepository<Location, Long>  {
 	@Query("SELECT distinct loc.block FROM Location loc WHERE loc.project.id = :projectId and loc.site.id = :siteId")
 	List<String> findBlocks(@Param("projectId") long projectId, @Param("siteId") long siteId);
 
+	@Query("SELECT distinct loc.block FROM Location loc WHERE loc.site.id = :siteId")
+	List<String> findBlocks(@Param("siteId") long siteId);
+
 	@Query("SELECT distinct loc.floor FROM Location loc WHERE loc.project.id = :projectId and loc.site.id = :siteId and loc.block = :block")
 	List<String> findFloors(@Param("projectId") long projectId, @Param("siteId") long siteId, @Param("block") String block);
 
+	@Query("SELECT distinct loc.floor FROM Location loc WHERE loc.site.id = :siteId and loc.block = :block")
+	List<String> findFloors(@Param("siteId") long siteId, @Param("block") String block);
+
 	@Query("SELECT distinct loc.zone FROM Location loc WHERE loc.project.id = :projectId and loc.site.id = :siteId and loc.block = :block and loc.floor = :floor")
 	List<String> findZones(@Param("projectId") long projectId, @Param("siteId") long siteId, @Param("block") String block, @Param("floor") String floor);
+
+	@Query("SELECT distinct loc.zone FROM Location loc WHERE loc.site.id = :siteId and loc.block = :block and loc.floor = :floor")
+	List<String> findZones(@Param("siteId") long siteId, @Param("block") String block, @Param("floor") String floor);
 }
