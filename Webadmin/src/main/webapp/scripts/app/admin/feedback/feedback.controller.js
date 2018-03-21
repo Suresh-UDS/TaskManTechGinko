@@ -2,19 +2,17 @@
 
 angular.module('timeSheetApp')
     .controller('FeedbackController', function ($rootScope, $scope, $state, $timeout, ProjectComponent, SiteComponent, LocationComponent,FeedbackComponent, $http,$stateParams,$location,$interval) {
-
+    	
         $scope.readOnly = true;
         $scope.colors = ['#45b7cd', '#ff6384', '#ff8e72'];
-        $scope.labels = ["January", "February", "March", "April", "May", "June", "July"];
-        $scope.series = ['Series A', 'Series B'];
+        $scope.labels = [];
+        $scope.series = ['Series A'];
         $scope.data = [
-            [65, 59, 80, 81, 56, 55, 40],
-            [28, 48, 40, 19, 86, 27, 90]
         ];
         $scope.onClick = function (points, evt) {
             console.log(points, evt);
         };
-        $scope.datasetOverride = [{ yAxisID: 'y-axis-1' }, { yAxisID: 'y-axis-2' }];
+        $scope.datasetOverride = [{ yAxisID: 'y-axis-1' }];
         $scope.options = {
             scales: {
                 yAxes: [
@@ -23,20 +21,14 @@ angular.module('timeSheetApp')
                         type: 'linear',
                         display: true,
                         position: 'left'
-                    },
-                    {
-                        id: 'y-axis-2',
-                        type: 'linear',
-                        display: true,
-                        position: 'right'
                     }
                 ]
             }
         };
 
 
-        $scope.label = ["Download Sales", "In-Store Sales", "Mail-Order Sales"];
-        $scope.datas = [300, 500, 100];
+        $scope.label = [];
+        $scope.datas = [];
 
 
         var vm = this;
@@ -99,6 +91,7 @@ angular.module('timeSheetApp')
             $scope.selectedDateTo=e.date._d;
 
         });
+               
 
         $scope.init = function(){
 	        $scope.loading = true;
@@ -157,6 +150,15 @@ angular.module('timeSheetApp')
 
 	    $scope.loadFeedbacks = function () {
 	    		console.log('called loadFeedbacks');
+	    		$scope.search();
+	    };
+	    
+	    $scope.genZoneReport = function(block, floor, zone, $form) {
+	    		$scope.selectedBlock = block;
+	    		$scope.selectedFloor = floor;
+	    		$scope.selectedZone = zone;
+	    		//document.getElementById('searchForm').submit()
+
 	    		$scope.search();
 	    };
 
@@ -235,6 +237,47 @@ angular.module('timeSheetApp')
 //                $scope.pages.endInd = data.totalCount > 10  ? (data.currPage) * 10 : data.totalCount ;
 //                $scope.pages.totalCnt = data.totalCount;
                 $scope.hide = true;
+                console.log('weeklyZone data - ' + $scope.feedbackReport.weeklyZone.length);
+                $scope.labels = [];
+                $scope.data = [];
+                $scope.label = [];
+                $scope.datas = [];
+                if($scope.feedbackReport.weeklyZone && $scope.feedbackReport.weeklyZone.length > 0) {
+                    var zoneDateWiseRating = $scope.feedbackReport.weeklyZone;
+                    var zoneDateWiseDataArr = [];
+                    for(var i =0;i<zoneDateWiseRating.length; i++) {
+                    		$scope.labels.push(zoneDateWiseRating[i].date);
+                    		zoneDateWiseDataArr.push(zoneDateWiseRating[i].rating);
+                    }
+                    $scope.data.push(zoneDateWiseDataArr);
+                    
+                    console.log('labels - ' + JSON.stringify($scope.labels));
+                    console.log('data - ' + JSON.stringify($scope.data));
+                    var zoneOverallRating = $scope.feedbackReport.weeklyZone;
+                    for(var i =0;i<zoneOverallRating.length; i++) {
+                    		$scope.label.push(zoneOverallRating[i].date);
+                    		$scope.datas.push(zoneOverallRating[i].rating);
+                    }
+                    console.log('doughnut labels - ' + JSON.stringify($scope.label));
+                    console.log('doughnut data - ' + JSON.stringify($scope.datas));
+                	
+                }else {
+                    var zoneWiseRating = $scope.feedbackReport.weeklySite;
+                    var zoneWiseDataArr = [];
+                    for(var i =0;i<zoneWiseRating.length; i++) {
+                    		$scope.labels.push(zoneWiseRating[i].zoneName);
+                    		zoneWiseDataArr.push(zoneWiseRating[i].rating);
+                    }
+                    $scope.data.push(zoneWiseDataArr);
+                    var zoneDateWiseRating = $scope.feedbackReport.weeklySite;
+                    var zoneDateWiseDataArr = [];
+                    for(var i =0;i<zoneDateWiseRating.length; i++) {
+                    		$scope.label.push(zoneDateWiseRating[i].zoneName);
+                    		$scope.datas.push(zoneDateWiseRating[i].rating);
+                    }
+                    //$scope.datas.push(zoneDateWiseDataArr);
+                	
+                }
             });
             $rootScope.searchCriteriaFeedback = $scope.searchCriteria;
             if($scope.pages.currPage == 1) {

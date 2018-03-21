@@ -5,22 +5,6 @@ import java.util.List;
 
 public class FeedbackReportResult implements Serializable {
 
-	public List<WeeklyZone> getWeeklyZone() {
-		return weeklyZone;
-	}
-
-	public void setWeeklyZone(List<WeeklyZone> weeklyZone) {
-		this.weeklyZone = weeklyZone;
-	}
-
-	public List<WeeklySite> getWeeklySite() {
-		return weeklySite;
-	}
-
-	public void setWeeklySite(List<WeeklySite> weeklySite) {
-		this.weeklySite = weeklySite;
-	}
-
 	long projectId;
 	
 	String projectName;
@@ -136,6 +120,21 @@ public class FeedbackReportResult implements Serializable {
 		this.feedbackCount = feedbackCount;
 	}
 	
-	
+	public List<WeeklyZone> getWeeklyZone() {
+		return weeklyZone;
+	}
+
+	public void setWeeklyZone(List<WeeklyZone> weeklyZone) {
+		this.weeklyZone = weeklyZone;
+	}
+
+	public List<WeeklySite> getWeeklySite() {
+		return weeklySite;
+	}
+
+	public void setWeeklySite(List<WeeklySite> weeklySite) {
+		this.weeklySite = weeklySite;
+	}
+
     
 }
