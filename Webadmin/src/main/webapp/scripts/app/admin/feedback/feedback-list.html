@@ -116,7 +116,11 @@
                                 <div class="TailsContent" ng-controller="FeedbackController as vm">
                                     <ul class="blocksListCon">
                                         <li ng-repeat="item in filteredLocations track by $index" ng-show="(($index < (vm.page * vm.numRecords)) && ($index >= ((vm.page - 1) * vm.numRecords)))">
-                                            <p class="blocktxt">{{ item.block }}<br/>{{item.floor}}<br/>{{item.zone}}</p>
+                                            <p class="blocktxt">
+                                                <label>{{ item.block }}</label><br/>
+                                                <label>{{item.floor}}</label><br/>
+                                                <label>{{item.zone}}</label>
+                                            </p>
                                         </li>
                                     </ul>
 
