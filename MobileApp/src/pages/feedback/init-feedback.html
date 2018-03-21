@@ -21,8 +21,8 @@
             <ion-list>
                 <ion-item>
                     <ion-label>Project</ion-label>
-                    <ion-select [selectOptions]="selectOptions" interface="popover" [(ngModel)]="project">
-                        <ion-option *ngFor="let p of projects" [value]="p.id" (ionSelect)="selectSite(p)"> {{p.name}}</ion-option>
+                    <ion-select [selectOptions]="selectOptions" interface="popover" [(ngModel)]="selectedProject">
+                        <ion-option *ngFor="let p of projects;let i=index" [value]="p" (ionSelect)="selectSite(p)"> {{p.name}}</ion-option>
                     </ion-select>
                 </ion-item>
 
@@ -71,7 +71,7 @@
                 </ion-grid>
             </div>
 
-            <div class="SiteAndBlockCOn" *ngIf="scrollSite">
+            <div class="SiteAndBlockCOn"  *ngIf="scrollSite">
                 <div class="SiteCon">
                     <div class="scrollCon">
                         <ion-row>
@@ -86,7 +86,7 @@
                     </div>
                 </div>
 
-                <div class="TailsCon">
+                <div class="TailsCon" *ngIf="selectedProjectId==siteProjectId">
                     <ion-grid>
                         <ion-row>
                             <ion-col col-4 class="BlocksList" *ngFor="let l of locations;let i of index">
@@ -101,6 +101,4 @@
         </div>
    </div>
 </ion-content>
-<ion-footer class="txt-center">
-    <button class="btn btn-warning btn-wd" (click)="start()" style="">Submit</button>
-</ion-footer>
+

@@ -33,9 +33,13 @@ export class InitFeedbackPage {
   blockDetail:any;
   searchCriteria:any;
   locations:any;
+  project="te";
+    selectedProjectId:any;
+    siteProjectId:any;
 
   constructor(public navCtrl: NavController,public myService:authService,public component:componentService, private siteService: SiteService, private feedbackService: FeedbackService) {
         // this.loadFeedbackMappings();
+
   }
 
     start(fb)
@@ -62,6 +66,10 @@ export class InitFeedbackPage {
           console.log("====project======");
           console.log(response);
           this.projects=response;
+          this.selectedProject = this.projects[0];
+          this.selectSite(this.selectedProject);
+          console.log('select default value:')
+          console.log(this.project)
         },
         error=>{
           if(error.type==3)
@@ -76,12 +84,14 @@ export class InitFeedbackPage {
     selectSite(project)
     {
         this.selectedProject = project;
+        this.selectedProjectId=project.id;
         this.siteService.findSitesByProject(project.id).subscribe(
             response=>{
                 console.log("====Site By ProjectId======");
                 console.log(response);
                 this.sites=response;
                 console.log(this.sites);
+                this.selectBlockDetail(this.sites[0],this.sites[0]);
             },
             error=>{
                 if(error.type==3)
@@ -180,8 +190,11 @@ export class InitFeedbackPage {
 
     selectBlockDetail(index,site)
     {
+        console.log("index");
+        console.log(index);
         this.scrollSite=true;
         this.activeSite=index;
+        this.siteProjectId=site.projectId;
         this.loadLocations(site.id);
         console.log(this.scrollSite);
         console.log(this.activeSite);
