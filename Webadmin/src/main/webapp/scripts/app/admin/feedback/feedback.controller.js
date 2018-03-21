@@ -44,7 +44,7 @@ angular.module('timeSheetApp')
         vm.page = 1;
 
         vm.items = []
-        for (var i = 0; i < 100; ++i) {
+        for (var i = 0; i < 1000; ++i) {
             vm.items.push('item : ' + i);
         }
 
