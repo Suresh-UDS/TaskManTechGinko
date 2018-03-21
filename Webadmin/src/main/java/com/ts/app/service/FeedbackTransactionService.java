@@ -243,8 +243,8 @@ public class FeedbackTransactionService extends AbstractService {
 						for(Object[] row: weeklyZone){
 							WeeklyZone zone = new WeeklyZone();
 							zone.setRating((Double)row[0]);
-							zone.setDay(Long.valueOf(String.valueOf(row[1])));
-							
+							//zone.setDay(Long.valueOf(String.valueOf(row[1])));
+							zone.setDate(DateUtil.convertToDateTime(String.valueOf(row[1]), ""));
 							weeklyZoneList.add(zone);
 						}
 					}

@@ -96,15 +96,27 @@ public class LocationService extends AbstractService {
 	}
 	
 	public List<String> findBlocks(long projectId, long siteId) {
-		return locationRepository.findBlocks(projectId, siteId);
+		if(projectId > 0) {
+			return locationRepository.findBlocks(projectId, siteId);
+		}else {
+			return locationRepository.findBlocks(siteId);
+		}
 	}
 	
 	public List<String> findFloors(long projectId, long siteId, String block) {
-		return locationRepository.findFloors(projectId, siteId, block);
+		if(projectId > 0) {
+			return locationRepository.findFloors(projectId, siteId, block);
+		}else {
+			return locationRepository.findFloors(siteId, block);
+		}
 	}
 
 	public List<String> findZones(long projectId, long siteId, String block, String floor) {
-		return locationRepository.findZones(projectId, siteId, block, floor);
+		if(projectId > 0) {
+			return locationRepository.findZones(projectId, siteId, block, floor);
+		}else {
+			return locationRepository.findZones(siteId, block, floor);
+		}
 	}
 
 	public SearchResult<LocationDTO> findBySearchCrieria(SearchCriteria searchCriteria) {

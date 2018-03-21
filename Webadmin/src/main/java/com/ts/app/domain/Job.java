@@ -109,7 +109,11 @@ public class Job extends AbstractAuditingEntity implements Serializable{
 	@JoinColumn(name="parent_job_id")
     private Job parentJob;
 
-
+    private String block;
+    
+    private String floor;
+    
+    private String zone;
 
 	public Long getId() {
 		return id;
@@ -328,6 +332,24 @@ public class Job extends AbstractAuditingEntity implements Serializable{
 		this.overdueAlertCount = overdueAlertCount;
 	}
 	
+	public String getBlock() {
+		return block;
+	}
+	public void setBlock(String block) {
+		this.block = block;
+	}
+	public String getFloor() {
+		return floor;
+	}
+	public void setFloor(String floor) {
+		this.floor = floor;
+	}
+	public String getZone() {
+		return zone;
+	}
+	public void setZone(String zone) {
+		this.zone = zone;
+	}
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
 		sb.append("Job Details - {" + StringUtil.SPACE);

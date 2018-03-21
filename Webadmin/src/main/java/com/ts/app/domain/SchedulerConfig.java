@@ -45,11 +45,11 @@ public class SchedulerConfig extends AbstractAuditingEntity implements
 
 	private Date lastRun;
 
-	@OneToOne(fetch = FetchType.LAZY, cascade=CascadeType.ALL)
+	@OneToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "jobId", nullable = true)
 	private Job job;
 
-    @OneToOne(fetch = FetchType.LAZY, cascade=CascadeType.ALL)
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "assetId", nullable = true)
     private Asset asset;
 
