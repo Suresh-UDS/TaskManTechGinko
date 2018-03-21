@@ -423,10 +423,14 @@ span.red-star
   background: #fff;*/
   padding:10px 30px;
 }
+.FeedbackDashboardCon .card
+{
+    margin: 5px 0;
+}
 .TailsCon
 {
-    width: 98%;
-    margin: 0 auto;
+    width: 100%;
+    margin: 10px auto;
 }
 .BlockList
 {
@@ -455,12 +459,13 @@ span.red-star
 }
 .TailsContent .next
 {
-    right: 0;
+    right: -25px;
     top: 40px;
 }
 .TailsContent .back
 {
     top: 40px;
+    left: -25px;
 }
 .blocksListCon li:hover
 {
@@ -481,16 +486,26 @@ span.red-star
 {
     background: #EEEEEE;
 }
-
+ul.blocksListCon
+{
+    width: 100%;
+    margin: 0;
+    padding: 0;
+}
 .blocksListCon li {
-    width: 120px;
+    width: 16%;
     height: 120px;
     float: left;
     border: 1px solid #dfdfdf;
-    margin: 5px;
+    margin: 3px;
     padding: 15px;
+    text-align: center;
+    cursor: pointer;
 }
-
+.blocksListCon li:hover
+{
+    border: 1px solid #545454;
+}
 .jobcards .card [data-background-color] .card-title {
     /*color:#ff9800;*/
 }

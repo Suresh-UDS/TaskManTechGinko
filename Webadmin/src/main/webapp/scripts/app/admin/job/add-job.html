@@ -119,64 +119,11 @@
                                                 </div>
 
                                             </div>
-                                            <div class="col-md-6">
-                                                <div class="form-group ">
-                                                    <label class="control-label">Site </label>
-                                                    <div class="dropdown">
-                                                        <!--<input type="text"-->
-                                                        <!--class="form-control"-->
-                                                        <!--name='siteName'-->
-                                                        <!--ng-model="selectedSite"-->
-                                                        <!--uib-typeahead="site as site.name for site in sites | filter:$viewValue | limitTo:5"-->
-                                                        <!--required-->
-                                                        <!--autocomplete="off" />-->
-                                                        <select class="form-control " ng-model="selectedSite"  ng-options="site as site.name for site in sites">
-                                                            <option value="">Please select Site...</option>
-                                                        </select>
-                                                        <div ng-show="form.$submitted || form.siteName.$touched">
-                                                            <div
-                                                                ng-show="form.siteName.$dirty || form.siteName.$invalid">
-                                                                <p class="help-block" style="color: maroon"
-                                                                   ng-show="form.siteName.$error.required">Site
-                                                                    is required.</p>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                            </div>
+                                            
 
                                         </div>
                                         <div class="row">
-
-
-                                            <div class="col-md-6">
-                                                <div class="form-group ">
-                                                    <label class="control-label">Location </label>
-                                                    <div class="dropdown">
-                                                        <!--<input type="text"-->
-                                                        <!--class="form-control"-->
-                                                        <!--name='location'-->
-                                                        <!--ng-model="selectedLocation"-->
-                                                        <!--uib-typeahead="location as location.name for location in locations | filter:$viewValue | limitTo:5"-->
-                                                        <!--required-->
-                                                        <!--autocomplete="off" />-->
-                                                        <select class="form-control " ng-model="selectedLocation"  ng-options="location as location.name for location in locations">
-                                                            <option value="">Please select Location...</option>
-                                                        </select>
-                                                        <div ng-show="form.$submitted || form.location.$touched">
-                                                            <div
-                                                                ng-show="form.location.$dirty || form.location.$invalid">
-                                                                <p class="help-block" style="color: maroon"
-                                                                   ng-show="form.location.$error.required">Location
-                                                                    is required.</p>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-
-                                            </div>
+                                            
                                             <div class="col-md-6">
                                                 <div class="form-group">
                                                     <label class="control-label">Employee </label>
@@ -239,6 +186,110 @@
 
 
                             </div>
+                            
+                            <div class="col-md-6">
+                            
+                            		<div class="panel panel-default">
+                            			<div class="panel-heading">Location</div>
+                            			<div class="panel-body">
+                            				<div class="row">
+                            					<div class="col-md-6">
+                                                <div class="form-group ">
+                                                    <label class="control-label">Site </label>
+                                                    <div class="dropdown">
+                                                        <!--<input type="text"-->
+                                                        <!--class="form-control"-->
+                                                        <!--name='siteName'-->
+                                                        <!--ng-model="selectedSite"-->
+                                                        <!--uib-typeahead="site as site.name for site in sites | filter:$viewValue | limitTo:5"-->
+                                                        <!--required-->
+                                                        <!--autocomplete="off" />-->
+                                                        <select class="form-control " ng-model="selectedSite" ng-change="loadBlocks();" ng-options="site as site.name for site in sites">
+                                                            <option value="">Please select Site...</option>
+                                                        </select>
+                                                        <div ng-show="form.$submitted || form.siteName.$touched">
+                                                            <div
+                                                                ng-show="form.siteName.$dirty || form.siteName.$invalid">
+                                                                <p class="help-block" style="color: maroon"
+                                                                   ng-show="form.siteName.$error.required">Site
+                                                                    is required.</p>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                            					
+                            				</div>
+                            				<div class="row">
+                            				<div class="col-md-4">
+                                                <div class="form-group ">
+                                                    <label class="control-label">Block </label>
+                                                    <div class="dropdown">
+                                                       <select class="form-control " ng-model="selectedBlock" ng-change="loadFloors()"  ng-options="block as block for  block in  blocks">
+                                                        	<option value="">Select Block...</option>
+                                                    	  </select>
+                                                        <div ng-show="form.$submitted || form.block.$touched">
+                                                            <div
+                                                                ng-show="form.block.$dirty || form.block.$invalid">
+                                                                <p class="help-block" style="color: maroon"
+                                                                   ng-show="form.location.$error.required">Block
+                                                                    is required.</p>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="col-md-4">
+                                                <div class="form-group ">
+                                                    <label class="control-label">Floor </label>
+                                                    <div class="dropdown">
+													<select class="form-control " ng-model="selectedFloor" ng-change="loadZones()"  ng-options="floor as floor for floor in floors">
+                                                        <option value="">Select Floor...</option>
+                                                    	</select>
+                                                   	 <div ng-show="form.$submitted || form.floor.$touched">
+                                                            <div
+                                                                ng-show="form.floor.$dirty || form.floor.$invalid">
+                                                                <p class="help-block" style="color: maroon"
+                                                                   ng-show="form.floor.$error.required">Floor
+                                                                    is required.</p>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="col-md-4">
+                                                <div class="form-group ">
+                                                    <label class="control-label">Zone </label>
+                                                    <div class="dropdown">
+													<select class="form-control " ng-model="selectedZone"  ng-options="zone as zone for zone in zones">
+                                                        <option value="">Select Zone...</option>
+                                                    </select>
+                                                   	 <div ng-show="form.$submitted || form.floor.$touched">
+                                                            <div
+                                                                ng-show="form.zone.$dirty || form.zone.$invalid">
+                                                                <p class="help-block" style="color: maroon"
+                                                                   ng-show="form.zone.$error.required">Zone
+                                                                    is required.</p>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                            				</div>
+                            			
+                            			</div>
+                            		</div>
+                            </div>
+                            
+                            
+
+                        </div>
+
+                        <div class="row">
+
                             <div class="col-md-6">
 
                                 <div class="panel panel-default">
@@ -418,105 +469,8 @@
 
 
                             </div>
-
-                        </div>
-
-                        <div class="row">
-
-                            <!--<div class="col-md-6">-->
-                                <!--<div class="card formcard minhgt430">-->
-                                    <!--<div class="card-header card-header-text" data-background-color="orange">-->
-                                        <!--<h4 class="card-title">Actual status</h4>-->
-                                    <!--</div>-->
-                                    <!--<div class="card-content">-->
-
-                                        <!--<div class="row">-->
-                                            <!--<div class="col-md-12">-->
-                                                <!--<div class="form-group label-floating">-->
-                                                    <!--<label class="control-label">Start Date </label>-->
-                                                    <!--<p class="input-group">-->
-                                                        <!--<input-->
-                                                            <!--ng-model="job.actualStartTime"-->
-                                                            <!--class='form-control'-->
-                                                            <!--name='actualStartDate'-->
-                                                            <!--datetime-picker="dd-MMM-yyyy HH:mm"-->
-                                                            <!--is-open="calendar.actualStart" />-->
-									<!--<span class="input-group-btn">-->
-										<!--<button type="button" class="btn btn-default"-->
-                                                <!--ng-click="openCalendar($event, 'actualStart')">-->
-											<!--<i class="fa fa-calendar"></i>-->
-										<!--</button>-->
-									<!--</span>-->
-                                                    <!--</p>-->
-
-                                                    <!--<div ng-show="form.$submitted || form.actualStartDate.$touched">-->
-                                                        <!--<div ng-show="form.actualStartDate.$dirty || form.actualStartDate.$invalid">-->
-                                                            <!--<p class="help-block" style="color: maroon"-->
-                                                               <!--ng-show="form.actualStartDate.$error.required">Required.</p>-->
-                                                            <!--&lt;!&ndash;-->
-                                                            <!--<p class="help-block" style="color:maroon"-->
-                                                                   <!--ng-show="form.actualStartDate.$error.pattern">-->
-                                                                <!--job name can only contain letters, digits and space.-->
-                                                            <!--</p> &ndash;&gt;-->
-                                                        <!--</div>-->
-                                                    <!--</div>-->
-                                                <!--</div>-->
-
-                                            <!--</div>-->
-                                            <!--<div class="col-md-12">-->
-                                                <!--<div class="form-group label-floating">-->
-                                                    <!--<label class="control-label">End Date-->
-                                                    <!--</label>-->
-                                                    <!--<p class="input-group">-->
-                                                        <!--<input-->
-                                                            <!--ng-model="job.actualEndTime"-->
-                                                            <!--class='form-control'-->
-                                                            <!--name='actualEndDate'-->
-                                                            <!--datetime-picker="dd-MMM-yyyy HH:mm"-->
-                                                            <!--is-open="calendar.actualEnd" />-->
-									<!--<span class="input-group-btn">-->
-										<!--<button type="button" class="btn btn-default"-->
-                                                <!--ng-click="openCalendar($event, 'actualEnd')">-->
-											<!--<i class="fa fa-calendar"></i>-->
-										<!--</button>-->
-									<!--</span>-->
-                                                    <!--</p>-->
-
-                                                    <!--<div ng-show="form.$submitted || form.actualEndDate.$touched">-->
-                                                        <!--<div ng-show="form.actualEndDate.$dirty || form.actualEndDate.$invalid">-->
-
-                                                        <!--</div>-->
-                                                    <!--</div>-->
-                                                <!--</div>-->
-
-                                            <!--</div>-->
-                                            <!--<div class="col-md-12">-->
-                                                <!--<div class="form-group label-floating">-->
-                                                    <!--<label class="control-label">Hours </label>-->
-                                                    <!--<input-->
-                                                        <!--ng-model="job.actualHours"-->
-                                                        <!--class='form-control'-->
-                                                        <!--name='actualHours'-->
-                                                        <!--type="number"-->
-                                                    <!--&gt;</textarea>-->
-
-                                                    <!--<div ng-show="form.$submitted || form.actualHours.$touched">-->
-                                                        <!--<div-->
-                                                            <!--ng-show="form.actualHours.$dirty || form.actualHours.$invalid">-->
-
-                                                            <!--&lt;!&ndash; <p class="help-block" style="color: maroon"-->
-                                                                <!--ng-show="form.actualHours.$error.pattern">job name can-->
-                                                                <!--only contain letters, digits and space.</p> &ndash;&gt;-->
-                                                        <!--</div>-->
-                                                    <!--</div>-->
-                                                <!--</div>-->
-
-                                            <!--</div>-->
-                                        <!--</div>-->
-
-                                    <!--</div>-->
-                                <!--</div>-->
-                            <!--</div>-->
+                            
+                            
                             <div class="col-md-6">
 
                                 <div class="panel panel-default">
