@@ -496,7 +496,7 @@ ul.blocksListCon
     width: 16%;
     height: 120px;
     float: left;
-    border: 2px solid #dfdfdf;
+    border: 1px solid #dfdfdf;
     margin: 3px;
     padding: 15px;
     text-align: center;
@@ -504,7 +504,7 @@ ul.blocksListCon
 }
 .blocksListCon li:hover
 {
-    border: 2px solid #545454;
+    border: 1px solid #545454;
 }
 .jobcards .card [data-background-color] .card-title {
     /*color:#ff9800;*/
