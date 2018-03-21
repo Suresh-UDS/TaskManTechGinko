@@ -128,7 +128,7 @@ public class JobManagementResource {
 	@RequestMapping(path="/job/{id}",method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE)
 	@Timed
 	public ResponseEntity<?> updateJob(@Valid @RequestBody JobDTO jobDTO, HttpServletRequest request, @PathVariable("id") Long id) {
-		if(jobDTO.getId()==null) jobDTO.setId(id);
+		if(jobDTO.getId() == 0) jobDTO.setId(id);
 		log.debug("Job Details in updateJob = "+ jobDTO);
 		JobDTO response = jobService.updateJob(jobDTO);
         if(response != null) {
@@ -339,7 +339,7 @@ public class JobManagementResource {
 
     @RequestMapping(path="/asset/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public AssetDTO getAsset(@PathVariable("id") Long id){
-        return jobService.getAsset(id);
+        return jobService.getAssetDTO(id);
     }
 
     @RequestMapping(path="/asset/code/{code}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)

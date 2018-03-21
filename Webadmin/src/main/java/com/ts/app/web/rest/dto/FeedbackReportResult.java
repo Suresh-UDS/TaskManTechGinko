@@ -23,7 +23,7 @@ public class FeedbackReportResult implements Serializable {
 	
 	long feedbackCount;
 	
-	float overallRating;
+	String overallRating;
 	
 	List<FeedbackQuestionRating> questionRatings;
 	
@@ -92,11 +92,11 @@ public class FeedbackReportResult implements Serializable {
 		this.feedbackName = feedbackName;
 	}
 
-	public float getOverallRating() {
+	public String getOverallRating() {
 		return overallRating;
 	}
 
-	public void setOverallRating(float overallRating) {
+	public void setOverallRating(String overallRating) {
 		this.overallRating = overallRating;
 	}
 
