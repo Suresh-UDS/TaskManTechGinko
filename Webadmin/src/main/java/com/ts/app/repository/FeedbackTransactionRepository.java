@@ -66,7 +66,7 @@ public interface FeedbackTransactionRepository extends JpaRepository<FeedbackTra
 	@Query("SELECT avg(ft.rating), ft.zone FROM FeedbackTransaction ft WHERE ft.siteId = :siteId and ft.createdDate between :startDate and :endDate group by ft.zone")
 	List<Object[]> getWeeklySite(@Param("siteId") long siteId, @Param("startDate") ZonedDateTime startDate, @Param("endDate") ZonedDateTime endDate);
 
-	@Query("SELECT avg(ft.rating),  ft.createdDate FROM FeedbackTransaction ft WHERE ft.siteId = :siteId and ft.zone= :zone and ft.createdDate between :startDate and :endDate group by DAY(ft.createdDate)")
+	@Query("SELECT avg(ft.rating), date_format(ft.createdDate,'%d-%M-%Y') as reportDate FROM FeedbackTransaction ft WHERE ft.siteId = :siteId and ft.zone= :zone and ft.createdDate between :startDate and :endDate group by date_format(ft.createdDate,'%d-%M-%Y')")
 	List<Object[]> getWeeklyZone(@Param("siteId") long siteId, @Param("zone") String zone, @Param("startDate") ZonedDateTime startDate, @Param("endDate") ZonedDateTime endDate);
 	
 	//weekly feedback count
