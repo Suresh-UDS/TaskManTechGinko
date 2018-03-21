@@ -209,7 +209,7 @@ angular.module('timeSheetApp')
                     $scope.searchCriteria.projectId = 0;
                 }
             }
-            console.log($scope.searchCriteria);
+            console.log("Search Criteria : "+$scope.searchCriteria);
             FeedbackComponent.reports($scope.searchCriteria).then(function (data) {
                 //$scope.feedbackList = data.transactions;
             		$scope.feedbackReport = data;

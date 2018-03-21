@@ -1,9 +1,14 @@
 package com.ts.app.service;
 
+import java.text.DateFormat;
 import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashSet;
@@ -40,6 +45,8 @@ import com.ts.app.web.rest.dto.FeedbackTransactionDTO;
 import com.ts.app.web.rest.dto.FeedbackTransactionResultDTO;
 import com.ts.app.web.rest.dto.SearchCriteria;
 import com.ts.app.web.rest.dto.SearchResult;
+import com.ts.app.web.rest.dto.WeeklySite;
+import com.ts.app.web.rest.dto.WeeklyZone;
 
 
 /**
@@ -181,12 +188,30 @@ public class FeedbackTransactionService extends AbstractService {
 	        	toTime = toTime.withHour(23);
 	        	toTime = toTime.withMinute(59);
 	        	toTime = toTime.withSecond(59);
-			DecimalFormat df = new DecimalFormat("#.0"); 
+	        DecimalFormat df = new DecimalFormat("#.0"); 
+			// Calcualte a weekly date need to modify
+				DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSSSSS");
+		        Date date = new Date();
+		        String todate = dateFormat.format(date);
+		        String pattern = "yyyy-MM-dd HH:mm:ss.SSSSSS";
+		        DateTimeFormatter parser = DateTimeFormatter.ofPattern(pattern).withZone(ZoneId.systemDefault());
+		        ZonedDateTime weeklyToDate = ZonedDateTime.parse(todate, parser);
+		        Calendar cal = Calendar.getInstance();
+		        cal.add(Calendar.DATE, -7);
+		        Date todate1 = cal.getTime();    
+		        String fromdate = dateFormat.format(todate1);
+		        ZonedDateTime weeklyFromDate = ZonedDateTime.parse(fromdate, parser);
+		        // end
 			if(searchCriteria.getProjectId() > 0) {
-				FeedbackMapping feedbackMapping = feedbackMappingRepository.findOneByLocation(searchCriteria.getSiteId(), searchCriteria.getBlock(), searchCriteria.getFloor(), searchCriteria.getZone());
+				log.debug("***************"+searchCriteria.getSiteId()+"\t block: "+ searchCriteria.getBlock()+"\t floor : "+ searchCriteria.getFloor()+"\t zone : " +searchCriteria.getZone()+"fromTime: \t"+fromTime+"toTime \t"+toTime);
+				
+				FeedbackMapping feedbackMapping = getFeedbackMappingByLocation(searchCriteria);
+				
 				if(feedbackMapping != null) {
-					long feedbackCount = feedbackTransactionRepository.getFeedbackCount(searchCriteria.getSiteId(), searchCriteria.getBlock(), searchCriteria.getFloor(), searchCriteria.getZone(), fromTime, toTime);
-					Float overallRating = feedbackTransactionRepository.getFeedbackOverallRating(searchCriteria.getSiteId(), searchCriteria.getBlock(), searchCriteria.getFloor(), searchCriteria.getZone(), fromTime, toTime);
+					long feedbackCount = getFeedbackCount(searchCriteria,fromTime,toTime,weeklyFromDate,weeklyToDate); 
+					Float overallRating = getOverallRating(searchCriteria,fromTime,toTime,weeklyFromDate,weeklyToDate); 
+					log.debug("feedback count : \t"+ feedbackCount);
+					log.debug("overallRating: \t"+overallRating);
 					reportResult.setFeedbackCount(feedbackCount);
 					reportResult.setOverallRating(overallRating == null ? "0" : df.format(overallRating));
 					reportResult.setFeedbackName(feedbackMapping.getFeedback().getName());
@@ -197,7 +222,36 @@ public class FeedbackTransactionService extends AbstractService {
 					reportResult.setBlock(searchCriteria.getBlock());
 					reportResult.setFloor(searchCriteria.getFloor());
 					reportResult.setZone(searchCriteria.getZone());
-					List<Object[]> questionRatings = feedbackTransactionRepository.getFeedbackAnswersCountForYesNo(feedbackMapping.getFeedback().getId(), fromTime, toTime);
+					List<Object[]> questionRatings = getQuestionRatings(searchCriteria,feedbackMapping,fromTime,toTime,weeklyFromDate,weeklyToDate); 
+					
+					// weekly
+					List<Object[]> weeklySite = feedbackTransactionRepository.getWeeklySite(searchCriteria.getSiteId(),weeklyFromDate,weeklyToDate);
+					List<Object[]> weeklyZone = feedbackTransactionRepository.getWeeklyZone(searchCriteria.getSiteId(), searchCriteria.getZone(),weeklyFromDate,weeklyToDate);
+					
+					List<WeeklySite> weeklySiteList = new ArrayList<WeeklySite>();
+					if(CollectionUtils.isNotEmpty(weeklySite)){
+						for(Object[] row: weeklySite){
+							WeeklySite site= new WeeklySite();
+							site.setRating((Double)row[0]);
+							site.setZoneName((String)row[1]);
+							weeklySiteList.add(site);
+						}						
+					}
+					
+					List<WeeklyZone> weeklyZoneList = new ArrayList<WeeklyZone>();
+					if(CollectionUtils.isNotEmpty(weeklyZone)){
+						for(Object[] row: weeklyZone){
+							WeeklyZone zone = new WeeklyZone();
+							zone.setRating((Double)row[0]);
+							zone.setDay(Long.valueOf(String.valueOf(row[1])));
+							
+							weeklyZoneList.add(zone);
+						}
+					}
+					reportResult.setWeeklyZone(weeklyZoneList);
+					reportResult.setWeeklySite(weeklySiteList);
+					// end
+					
 					List<FeedbackQuestionRating> qratings = new ArrayList<FeedbackQuestionRating>();
 					if(CollectionUtils.isNotEmpty(questionRatings)) {
 						for(Object[] row : questionRatings) {
@@ -211,7 +265,9 @@ public class FeedbackTransactionService extends AbstractService {
 							qratings.add(qrating);
 						}
 					}
-					questionRatings = feedbackTransactionRepository.getFeedbackAnswersCountForRating(feedbackMapping.getFeedback().getId(), fromTime, toTime);
+					log.debug("feedbackMapping.getFeedback().getId(): \t"+feedbackMapping.getFeedback().getId());
+					questionRatings = getquestionRatings(searchCriteria,feedbackMapping,fromTime,toTime,weeklyFromDate,weeklyToDate); 
+					
 					if(CollectionUtils.isNotEmpty(questionRatings)) {
 						for(Object[] row : questionRatings) {
 							FeedbackQuestionRating qrating = new FeedbackQuestionRating();
@@ -230,6 +286,71 @@ public class FeedbackTransactionService extends AbstractService {
 		return reportResult;
 
 
+	}
+
+	private List<Object[]> getquestionRatings(SearchCriteria searchCriteria, FeedbackMapping feedbackMapping,
+			ZonedDateTime fromTime, ZonedDateTime toTime, ZonedDateTime weeklyFromDate, ZonedDateTime weeklyToDate) {
+		// TODO Auto-generated method stub
+		List<Object[]> questionsRating = null;
+		
+		if(StringUtils.isNotEmpty(searchCriteria.getBlock()) && StringUtils.isNotEmpty(searchCriteria.getZone())){
+			questionsRating = feedbackTransactionRepository.getFeedbackAnswersCountForRating(feedbackMapping.getFeedback().getId(), fromTime, toTime);
+		} else {
+			questionsRating = feedbackTransactionRepository.getWeeklyFeedbackAnswersCountForRating(feedbackMapping.getFeedback().getId(), weeklyFromDate, weeklyToDate);
+		}
+		return questionsRating;
+	}
+
+	private List<Object[]> getQuestionRatings(SearchCriteria searchCriteria, FeedbackMapping feedbackMapping, ZonedDateTime fromTime,
+			ZonedDateTime toTime, ZonedDateTime weeklyFromDate, ZonedDateTime weeklyToDate) {
+		// TODO Auto-generated method stub
+		List<Object[]> questionRatings = null;
+		
+		if(StringUtils.isNotEmpty(searchCriteria.getBlock()) && StringUtils.isNotEmpty(searchCriteria.getZone())){
+			questionRatings = feedbackTransactionRepository.getFeedbackAnswersCountForYesNo(feedbackMapping.getFeedback().getId(), fromTime, toTime);
+		} else {
+			questionRatings = feedbackTransactionRepository.getWeeklyFeedbackAnswersCountForYesNo(feedbackMapping.getFeedback().getId(), weeklyFromDate, weeklyToDate);
+		}
+		
+		return questionRatings;
+	}
+
+	private Float getOverallRating(SearchCriteria searchCriteria, ZonedDateTime fromTime, ZonedDateTime toTime,
+			ZonedDateTime weeklyFromDate, ZonedDateTime weeklyToDate) {
+		// TODO Auto-generated method stub
+		Float overallRating;
+		if(StringUtils.isNotEmpty(searchCriteria.getBlock()) && StringUtils.isNotEmpty(searchCriteria.getZone())){
+			overallRating = feedbackTransactionRepository.getFeedbackOverallRating(searchCriteria.getSiteId(), searchCriteria.getBlock(), searchCriteria.getFloor(), searchCriteria.getZone(), fromTime, toTime);
+		} else {
+			overallRating = feedbackTransactionRepository.getWeeklyOverallRating(searchCriteria.getSiteId(),weeklyFromDate,weeklyToDate);
+		}
+		return overallRating;
+	}
+
+	private long getFeedbackCount(SearchCriteria searchCriteria, ZonedDateTime fromTime, ZonedDateTime toTime,
+			ZonedDateTime weeklyFromDate, ZonedDateTime weeklyToDate) {
+		// TODO Auto-generated method stub
+		long feedbackCount=0;
+		if(StringUtils.isNotEmpty(searchCriteria.getBlock()) && StringUtils.isNotEmpty(searchCriteria.getZone())){
+			feedbackCount = feedbackTransactionRepository.getFeedbackCount(searchCriteria.getSiteId(), searchCriteria.getBlock(), searchCriteria.getFloor(), searchCriteria.getZone(), fromTime, toTime);
+		} else {
+			feedbackCount = feedbackTransactionRepository.getWeeklyFeedbackCount(searchCriteria.getSiteId(),weeklyFromDate,weeklyToDate);
+		}
+		
+		return feedbackCount;
+	}
+
+	private FeedbackMapping getFeedbackMappingByLocation(SearchCriteria searchCriteria) {
+		// TODO Auto-generated method stub
+		FeedbackMapping feedbackMapping=null;
+		/*if(StringUtils.isNotEmpty(searchCriteria.getBlock()) && StringUtils.isNotEmpty(searchCriteria.getZone())){*/
+			log.debug("***************zone***********");
+			feedbackMapping = feedbackMappingRepository.findOneByLocation(searchCriteria.getSiteId(), searchCriteria.getBlock(), searchCriteria.getFloor(), searchCriteria.getZone());
+		/*} else{
+			log.debug("***************feedback site***********");
+			feedbackMapping = feedbackMappingRepository.findSiteByLocation(searchCriteria.getSiteId());
+		}*/
+		return feedbackMapping;
 	}
 
 
