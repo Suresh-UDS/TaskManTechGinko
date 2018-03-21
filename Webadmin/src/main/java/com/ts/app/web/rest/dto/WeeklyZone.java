@@ -6,6 +6,7 @@ public class WeeklyZone {
 	
 	private double rating;
 	private Long day;
+	
 	private Date date;
 	
 	public double getRating() {
@@ -27,5 +28,5 @@ public class WeeklyZone {
 		this.date = date;
 	}
 	
-	
+
 }
