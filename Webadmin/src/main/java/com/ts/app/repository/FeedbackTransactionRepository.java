@@ -63,10 +63,10 @@ public interface FeedbackTransactionRepository extends JpaRepository<FeedbackTra
 	@Query("SELECT avg(ft.rating),  DAY(ft.createdDate) FROM FeedbackTransaction ft WHERE ft.siteId = :siteId and ft.zone= :zone and ft.createdDate >= DATE(NOW()) - INTERVAL 7 DAY")
 	List<Object[]> getWeeklyZone(@Param("siteId") long siteId, @Param("zone") String zone);*/
 
-	@Query("SELECT avg(ft.rating), ft.zone FROM FeedbackTransaction ft WHERE ft.siteId = :siteId and ft.createdDate between :startDate and :endDate")
+	@Query("SELECT avg(ft.rating), ft.zone FROM FeedbackTransaction ft WHERE ft.siteId = :siteId and ft.createdDate between :startDate and :endDate group by ft.zone")
 	List<Object[]> getWeeklySite(@Param("siteId") long siteId, @Param("startDate") ZonedDateTime startDate, @Param("endDate") ZonedDateTime endDate);
 
-	@Query("SELECT avg(ft.rating),  DAY(ft.createdDate) FROM FeedbackTransaction ft WHERE ft.siteId = :siteId and ft.zone= :zone and ft.createdDate between :startDate and :endDate")
+	@Query("SELECT avg(ft.rating),  ft.createdDate FROM FeedbackTransaction ft WHERE ft.siteId = :siteId and ft.zone= :zone and ft.createdDate between :startDate and :endDate group by DAY(ft.createdDate)")
 	List<Object[]> getWeeklyZone(@Param("siteId") long siteId, @Param("zone") String zone, @Param("startDate") ZonedDateTime startDate, @Param("endDate") ZonedDateTime endDate);
 	
 	//weekly feedback count
