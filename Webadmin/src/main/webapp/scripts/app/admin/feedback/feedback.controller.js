@@ -126,6 +126,15 @@ angular.module('timeSheetApp')
 	            $scope.sites = data;
 	        });
 	    };
+	    
+	    $scope.searchLocations = function () {
+	    		console.log('searchLocations- '+ $scope.selectedSite.id);
+	    		$scope.searchCriteria.siteId = $scope.selectedSite.id;
+	    		LocationComponent.search($scope.searchCriteria).then(function (data) {
+	    			$scope.filteredLocations = data.transactions;
+	        });
+	    };
+	    
 
 	    $scope.loadBlocks = function () {
 	    		console.log('selected project -' + $scope.selectedProject.id + ', site -' + $scope.selectedSite.id)

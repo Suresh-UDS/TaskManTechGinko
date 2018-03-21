@@ -50,7 +50,7 @@
                                             <label class="control-label">Client<span class="red-star">*</span> </label>
 
                                             <select class="form-control " ng-model="selectedProject"  ng-change="loadSites()"  ng-options="project as project.name for project in projects">
-                                                <option value="">Please select Client...</option>
+                                                <option value="">Select Client...</option>
                                             </select>
 
                                         </div>
@@ -59,12 +59,12 @@
                                     <td>
                                         <div class="form-group">
                                              <label class="control-label">Site<span class="red-star">*</span> </label>
-                                             <select class="form-control " ng-model="selectedSite"  ng-change="loadBlocks();loadFeedbackMasters();" ng-options="site as site.name for site in sites">
-                                                 <option value="">Please select Site...</option>
+                                             <select class="form-control " ng-model="selectedSite"  ng-change="searchLocations();loadFeedbackMasters();" ng-options="site as site.name for site in sites">
+                                                 <option value="">Select Site...</option>
                                              </select>
                                         </div>
                                     </td>
-                                    <td>
+                                    <!-- td>
                                         <div class="form-group">
                                              <label class="control-label">Block<span class="red-star">*</span> </label>
                                              <select class="form-control " ng-model="selectedBlock" ng-change="loadFloors()"  ng-options="block as block for  block in  blocks">
@@ -87,7 +87,7 @@
                                              	<option value="">Please select Zone...</option>
                                              </select>
                                          </div>
-                                    </td>
+                                    </td-->
                                     <td align="right" width="25%">
                                         <div class="floatR form-group">
                                             <button type="submit" class="btn btn-circle blue-clr" ng-disabled="searchForm.$invalid">
@@ -112,7 +112,7 @@
 
                                 <div class="TailsContent" ng-controller="FeedbackController as vm">
                                     <ul class="blocksListCon">
-                                        <li ng-repeat="item in vm.items track by $index" ng-show="(($index < (vm.page * vm.numRecords)) && ($index >= ((vm.page - 1) * vm.numRecords)))">{{ item }}</li>
+                                        <li ng-repeat="item in filteredLocations track by $index" ng-show="(($index < (vm.page * vm.numRecords)) && ($index >= ((vm.page - 1) * vm.numRecords)))">{{ item.block }}<br/>{{item.floor}}<br/>{{item.zone}}</li>
                                     </ul>
 
                                    <div class="clear"></div>
