@@ -649,7 +649,8 @@ demo = {
                   type: "success"
               }).catch(swal.noop)
 
-         } else if (type == 'warning-message-and-confirmation') {
+         } else if (type == 'warning-message-and-confirmation')
+         {
             swal({
                 title: title,
                 text: txt,
@@ -669,7 +670,21 @@ demo = {
                 })
 
             }).catch(swal.noop)
-        } else if (type == 'warning-message-and-cancel') {
+        }
+        else if (type == 'warning-message-and-confirmation-ok')
+        {
+            swal({
+                title: title,
+                text: txt,
+                type: 'warning',
+                showCancelButton: false,
+                confirmButtonClass: 'btn btn-danger',
+                cancelButtonClass: 'btn btn-danger',
+                confirmButtonText: 'Ok',
+                buttonsStyling: false
+            }).catch(swal.noop)
+        }
+        else if (type == 'warning-message-and-cancel') {
             swal({
                 title: 'Are you sure?',
                 text: 'You will not be able to recover this imaginary file!',

@@ -69,6 +69,12 @@ public class JobDTO extends BaseDTO {
 	private List<JobChecklistDTO> checklistItems;
 	
 	private List<CheckInOutImageDTO> images;
+	
+	private String block;
+	
+	private String floor;
+	
+	private String zone;
 
 	public String getTitle() {
 		return title;
@@ -244,7 +250,6 @@ public class JobDTO extends BaseDTO {
 		this.scheduleWeeklySaturday = scheduleWeeklySaturday;
 	}
 
-
 	public Date getScheduleEndDate() {
 		return scheduleEndDate;
 	}
@@ -252,34 +257,11 @@ public class JobDTO extends BaseDTO {
 		this.scheduleEndDate = scheduleEndDate;
 	}
 
-
-
 	public boolean isScheduled() {
 		return scheduled;
 	}
 	public void setScheduled(boolean scheduled) {
 		this.scheduled = scheduled;
-	}
-	public String toString() {
-		StringBuilder sb = new StringBuilder();
-		sb.append("Job Details - {" + StringUtil.SPACE);
-		sb.append("Id :" + id + StringUtil.SPACE);
-		sb.append("title :" + title + StringUtil.SPACE);
-		sb.append("description :" + description + StringUtil.SPACE);
-		sb.append("comments :" + comments + StringUtil.SPACE);
-		sb.append("siteId :" + siteId + StringUtil.SPACE);
-		sb.append("siteName :" + siteName + StringUtil.SPACE);
-		sb.append("employeeId :" + employeeId + StringUtil.SPACE);
-		sb.append("employeeName :" + employeeName + StringUtil.SPACE);
-		sb.append("jobStatus :" + jobStatus + StringUtil.SPACE);
-		sb.append("location :" + locationId + StringUtil.SPACE);
-		sb.append("relieverId:"+relieverId+StringUtil.SPACE);
-		sb.append("relieverName:"+relieverName+StringUtil.SPACE);
-		sb.append("asset :" + assetId + StringUtil.SPACE);
-		sb.append("active :" + getActive() + StringUtil.SPACE);
-		sb.append("relieved:"+relieved+ StringUtil.SPACE);
-		sb.append(" } ");
-		return sb.toString();
 	}
 
     public String getLocationName() {
@@ -361,6 +343,44 @@ public class JobDTO extends BaseDTO {
 	public void setImages(List<CheckInOutImageDTO> images) {
 		this.images = images;
 	}
+	public String getBlock() {
+		return block;
+	}
+	public void setBlock(String block) {
+		this.block = block;
+	}
+	public String getFloor() {
+		return floor;
+	}
+	public void setFloor(String floor) {
+		this.floor = floor;
+	}
+	public String getZone() {
+		return zone;
+	}
+	public void setZone(String zone) {
+		this.zone = zone;
+	}
     
-    
+	public String toString() {
+		StringBuilder sb = new StringBuilder();
+		sb.append("Job Details - {" + StringUtil.SPACE);
+		sb.append("Id :" + id + StringUtil.SPACE);
+		sb.append("title :" + title + StringUtil.SPACE);
+		sb.append("description :" + description + StringUtil.SPACE);
+		sb.append("comments :" + comments + StringUtil.SPACE);
+		sb.append("siteId :" + siteId + StringUtil.SPACE);
+		sb.append("siteName :" + siteName + StringUtil.SPACE);
+		sb.append("employeeId :" + employeeId + StringUtil.SPACE);
+		sb.append("employeeName :" + employeeName + StringUtil.SPACE);
+		sb.append("jobStatus :" + jobStatus + StringUtil.SPACE);
+		sb.append("location :" + locationId + StringUtil.SPACE);
+		sb.append("relieverId:"+relieverId+StringUtil.SPACE);
+		sb.append("relieverName:"+relieverName+StringUtil.SPACE);
+		sb.append("asset :" + assetId + StringUtil.SPACE);
+		sb.append("active :" + getActive() + StringUtil.SPACE);
+		sb.append("relieved:"+relieved+ StringUtil.SPACE);
+		sb.append(" } ");
+		return sb.toString();
+	}
 }

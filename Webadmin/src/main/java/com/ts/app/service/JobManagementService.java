@@ -723,8 +723,11 @@ public class JobManagementService extends AbstractService {
 		job.setScheduleWeeklySaturday(jobDTO.isScheduleWeeklySaturday());
 		job.setScheduled(jobDTO.isScheduled());
 		job.setFrequency(jobDTO.getFrequency());
-
+		job.setBlock(jobDTO.getBlock());
+		job.setFloor(jobDTO.getFloor());
+		job.setZone(jobDTO.getZone());
 		//add the job checklist items
+		job.getChecklistItems().clear();
 		if(CollectionUtils.isNotEmpty(jobDTO.getChecklistItems())) {
 			List<JobChecklistDTO> jobclDtoList = jobDTO.getChecklistItems();
 			List<JobChecklist> checklistItems = new ArrayList<JobChecklist>();
@@ -733,7 +736,7 @@ public class JobManagementService extends AbstractService {
 				checklist.setJob(job);
 				checklistItems.add(checklist);
 			}
-			job.setChecklistItems(checklistItems);
+			job.getChecklistItems().addAll(checklistItems);
 		}
 
 	}
@@ -786,11 +789,13 @@ public class JobManagementService extends AbstractService {
 		Job job = jobRepository.findOne(id);
 		JobDTO jobDto = mapperUtil.toModel(job,JobDTO.class);
 		CheckInOut checkInOutDTO= checkInOutRepository.getByJobId(id);
-        jobDto.setActualEndTime(checkInOutDTO.getCheckOutDateTime());
+		if(checkInOutDTO != null) {
+			jobDto.setActualEndTime(checkInOutDTO.getCheckOutDateTime());
+		}
         log.debug("Actual End time"+jobDto.getActualEndTime());
 		jobDto.setActive(job.getActive());
-		jobDto.setLocationId(job.getLocation().getId());
-		jobDto.setLocationName(job.getLocation().getName());
+		//jobDto.setLocationId(job.getLocation().getId());
+		//jobDto.setLocationName(job.getLocation().getName());
 		List<CheckInOutImage> images = checkInOutImageRepository.findAll(job.getId());
 		List<CheckInOutImageDTO> imageDtos = new ArrayList<CheckInOutImageDTO>();
 		if(CollectionUtils.isNotEmpty(images)) {
@@ -885,7 +890,7 @@ public class JobManagementService extends AbstractService {
 			}
 		}else {
 			//delete any existing job schedule if
-			schedulerService.deleteCurrentSchedule(jobDTO.getId());
+			//schedulerService.deleteCurrentSchedule(jobDTO.getId());
 		}
 
 
