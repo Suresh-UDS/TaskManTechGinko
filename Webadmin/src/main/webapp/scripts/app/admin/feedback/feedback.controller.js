@@ -78,6 +78,15 @@ angular.module('timeSheetApp')
 
         $scope.feedbackReport;
 
+        $scope.yesCount = 0;
+        $scope.noCount= 0;
+        $scope.oneCount= 0;
+        $scope.twoCount= 0;
+        $scope.threeCount= 0;
+        $scope.fourCount= 0;
+        $scope.fiveCount= 0;
+
+
         $scope.now = new Date()
 
         $scope.initCalender = function(){
@@ -214,6 +223,16 @@ angular.module('timeSheetApp')
                 //$scope.feedbackList = data.transactions;
             		$scope.feedbackReport = data;
             		console.log('feedback report - ' + JSON.stringify($scope.feedbackReport));
+                    console.log($scope.feedbackReport);
+                    console.log($scope.feedbackReport.questionRatings.length);
+
+            		for (var i=0;i<$scope.feedbackReport.questionRatings.length;i++){
+            		    $scope.yesCount = $scope.yesCount+$scope.feedbackReport.questionRatings[i].yesCount;
+            		    $scope.noCount = $scope.noCount+$scope.feedbackReport.questionRatings[i].noCount;
+            		    if($scope.feedbackReport.questionRatings[i].noCount;)
+                    }
+                    console.log($scope.yesCount);
+                console.log($scope.noCount);
 //                $scope.pages.currPage = data.currPage;
 //                $scope.pages.totalPages = data.totalPages;
 //                $scope.loading = false;
@@ -232,6 +251,8 @@ angular.module('timeSheetApp')
                 $scope.firstStyle();
             }
         };
+
+
 
         $scope.first = function() {
             if($scope.pages.currPage > 1) {
