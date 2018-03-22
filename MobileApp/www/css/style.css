@@ -1194,12 +1194,9 @@ ion-spinner{
        color: #fff !important;
        margin-top: 4px !important;
 }
-
-
-
 .wrap-name
 {
-  font-size: 10px !important;
+      font-size: 10px !important;
       text-overflow: ellipsis;
       overflow: hidden;
       width: 50px;
@@ -1249,4 +1246,12 @@ ion-spinner{
 .fnt-35
 {
     font-size: 35px !important;
+}
+.feedback-dashboard .scroll-content
+{
+    background-color:#f4f4f4;
+}
+.chart-head
+{
+    font-weight: bold;
 }

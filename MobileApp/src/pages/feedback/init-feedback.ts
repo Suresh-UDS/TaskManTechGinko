@@ -33,7 +33,6 @@ export class InitFeedbackPage {
   blockDetail:any;
   searchCriteria:any;
   locations:any;
-  project="te";
     selectedProjectId:any;
     siteProjectId:any;
 
@@ -46,7 +45,7 @@ export class InitFeedbackPage {
     {
         var feedback =fb.feedback;
         if(feedback){
-            this.navCtrl.push(FeedbackPage,{feedback:feedback,fb:fb});
+            this.navCtrl.setRoot(FeedbackPage,{feedback:feedback,fb:fb});
 
         }else{
             this.component.showToastMessage('No Feedback form available','bottom');
@@ -60,7 +59,7 @@ export class InitFeedbackPage {
       this.selectOptions={
           cssClass: 'selectbox-popover'
       }
-
+      this.component.showLoader('Getting Project');
     this.siteService.getAllProjects().subscribe(
         response=>{
           console.log("====project======");
@@ -69,7 +68,7 @@ export class InitFeedbackPage {
           this.selectedProject = this.projects[0];
           this.selectSite(this.selectedProject);
           console.log('select default value:')
-          console.log(this.project)
+            this.component.closeLoader();
         },
         error=>{
           if(error.type==3)
@@ -77,6 +76,7 @@ export class InitFeedbackPage {
             this.msg='Server Unreachable'
           }
           this.component.showToastMessage(this.msg,'bottom');
+            this.component.closeLoader();
         }
     )
   }
@@ -85,6 +85,7 @@ export class InitFeedbackPage {
     {
         this.selectedProject = project;
         this.selectedProjectId=project.id;
+        this.locations=[];
         this.siteService.findSitesByProject(project.id).subscribe(
             response=>{
                 console.log("====Site By ProjectId======");
@@ -195,6 +196,7 @@ export class InitFeedbackPage {
         this.scrollSite=true;
         this.activeSite=index;
         this.siteProjectId=site.projectId;
+        this.selectedSite = site;
         this.loadLocations(site.id);
         console.log(this.scrollSite);
         console.log(this.activeSite);
@@ -217,9 +219,11 @@ export class InitFeedbackPage {
         )
     }
 
-    goDashboard()
+    goDashboard(selectedSite)
     {
-        this.navCtrl.push(FeedbackDashboardPage)
+        console.log("selected site");
+        console.log(selectedSite);
+        this.navCtrl.push(FeedbackDashboardPage,{site:selectedSite});
     }
 
 }

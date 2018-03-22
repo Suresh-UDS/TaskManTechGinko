@@ -5,7 +5,7 @@
     </button>
     <ion-title>Initiate Feedback</ion-title>
       <ion-buttons right>
-          <button ion-button color="primary" icon-only (click)="goDashboard()">
+          <button *ngIf="selectedSite" ion-button color="primary" icon-only (click)="goDashboard(selectedSite)">
               <i class="material-icons">dashboard</i>
           </button>
       </ion-buttons>
@@ -60,6 +60,11 @@
             </ion-list>
 
             <div class="TailsCon" *ngIf="!scrollSite">
+
+                <div *ngIf="sites?.length<0">
+                    <h4 text-center>No Data Found</h4>
+                </div>
+
                 <ion-grid>
                     <ion-row>
                         <ion-col col-4 *ngFor="let site of sites;let i of index" >
@@ -72,11 +77,15 @@
             </div>
 
             <div class="SiteAndBlockCOn"  *ngIf="scrollSite">
+
                 <div class="SiteCon">
                     <div class="scrollCon">
                         <ion-row>
                             <ion-item no-lines>
                                 <ion-scroll scrollX="true">
+                                    <div *ngIf="sites?.length==0" class="padding-top15">
+                                        <h4 text-center class="clr-blk">No Data Found</h4>
+                                    </div>
                                     <button class="siteBtn scroll-item" ion-button round  *ngFor="let s of sites;let i of index" (click)="selectBlockDetail(i,s)" [color]="i==activeSite ? 'primary' : 'light'">
                                         <p class="siteName">{{s.name}}</p>
                                     </button>
