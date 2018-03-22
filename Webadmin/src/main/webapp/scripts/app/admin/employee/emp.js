@@ -69,5 +69,22 @@ angular.module('timeSheetApp').config(function($stateProvider) {
 		resolve : {
 
 		}
-	});
+	}).state('employee-location', {
+        parent : 'manage',
+        url : '/employee-location',
+        controller : 'EmployeeController',
+        data : {
+            authorities : [],
+            pageTitle : 'Employee Location'
+        },
+        views : {
+            'content@' : {
+                templateUrl : 'scripts/app/admin/employee/emp-location.html',
+                controller : 'EmployeeController'
+            }
+        },
+        resolve : {
+
+        }
+    });
 });
