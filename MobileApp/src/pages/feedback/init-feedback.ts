@@ -33,16 +33,19 @@ export class InitFeedbackPage {
   blockDetail:any;
   searchCriteria:any;
   locations:any;
+    selectedProjectId:any;
+    siteProjectId:any;
 
   constructor(public navCtrl: NavController,public myService:authService,public component:componentService, private siteService: SiteService, private feedbackService: FeedbackService) {
         // this.loadFeedbackMappings();
+
   }
 
     start(fb)
     {
         var feedback =fb.feedback;
         if(feedback){
-            this.navCtrl.push(FeedbackPage,{feedback:feedback,fb:fb});
+            this.navCtrl.setRoot(FeedbackPage,{feedback:feedback,fb:fb});
 
         }else{
             this.component.showToastMessage('No Feedback form available','bottom');
@@ -56,12 +59,16 @@ export class InitFeedbackPage {
       this.selectOptions={
           cssClass: 'selectbox-popover'
       }
-
+      this.component.showLoader('Getting Project');
     this.siteService.getAllProjects().subscribe(
         response=>{
           console.log("====project======");
           console.log(response);
           this.projects=response;
+          this.selectedProject = this.projects[0];
+          this.selectSite(this.selectedProject);
+          console.log('select default value:')
+            this.component.closeLoader();
         },
         error=>{
           if(error.type==3)
@@ -69,6 +76,7 @@ export class InitFeedbackPage {
             this.msg='Server Unreachable'
           }
           this.component.showToastMessage(this.msg,'bottom');
+            this.component.closeLoader();
         }
     )
   }
@@ -76,12 +84,15 @@ export class InitFeedbackPage {
     selectSite(project)
     {
         this.selectedProject = project;
+        this.selectedProjectId=project.id;
+        this.locations=[];
         this.siteService.findSitesByProject(project.id).subscribe(
             response=>{
                 console.log("====Site By ProjectId======");
                 console.log(response);
                 this.sites=response;
                 console.log(this.sites);
+                this.selectBlockDetail(this.sites[0],this.sites[0]);
             },
             error=>{
                 if(error.type==3)
@@ -180,8 +191,12 @@ export class InitFeedbackPage {
 
     selectBlockDetail(index,site)
     {
+        console.log("index");
+        console.log(index);
         this.scrollSite=true;
         this.activeSite=index;
+        this.siteProjectId=site.projectId;
+        this.selectedSite = site;
         this.loadLocations(site.id);
         console.log(this.scrollSite);
         console.log(this.activeSite);
@@ -204,9 +219,11 @@ export class InitFeedbackPage {
         )
     }
 
-    goDashboard()
+    goDashboard(selectedSite)
     {
-        this.navCtrl.push(FeedbackDashboardPage)
+        console.log("selected site");
+        console.log(selectedSite);
+        this.navCtrl.push(FeedbackDashboardPage,{site:selectedSite});
     }
 
 }

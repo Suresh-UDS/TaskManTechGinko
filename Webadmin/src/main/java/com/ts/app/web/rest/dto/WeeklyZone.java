@@ -1,13 +1,11 @@
 package com.ts.app.web.rest.dto;
 
-import java.util.Date;
-
 public class WeeklyZone {
 	
 	private double rating;
-	private Long day;
+	private long day;
 	
-	private Date date;
+	private String date;
 	
 	public double getRating() {
 		return rating;
@@ -18,15 +16,14 @@ public class WeeklyZone {
 	public long getDay() {
 		return day;
 	}
-	public void setDay(Long day) {
+	public void setDay(long day) {
 		this.day = day;
 	}
-	public Date getDate() {
+	public String getDate() {
 		return date;
 	}
-	public void setDate(Date date) {
+	public void setDate(String date) {
 		this.date = date;
 	}
-	
 
 }

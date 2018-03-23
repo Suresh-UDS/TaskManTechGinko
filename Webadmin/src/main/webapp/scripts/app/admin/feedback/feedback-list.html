@@ -30,23 +30,21 @@
 
                             <table class=" no-padding-tblCon" border="0">
                                 <tr class="filter-row gc-search-row">
-                                    <td>
-                                        <div class="form-group" >
+                                    <td width="15%">
+                                        <div class="form-group" style="padding-top: 20px" >
 
                                             <input id="dateFilterFrom" type="text" class="form-control datepicker border-bottom-input"   value={{now}} placeholder="From Date" />
                                         </div>
                                     </td>
 
-                                    <td>
-                                        <div class="form-group" >
+                                    <td width="15%">
+                                        <div class="form-group" style="padding-top: 20px" >
 
                                             <input id="dateFilterTo" type="text" class="form-control datepicker border-bottom-input"   value={{now}} placeholder="To Date" />
                                         </div>
                                     </td>
-								</tr>
-								<tr class="filter-row gc-search-row">
-                                    <td>
-                                        <div class="form-group">
+                                    <td width="25%">
+                                        <div class="form-group" style="padding-left: 10px">
                                             <label class="control-label">Client<span class="red-star">*</span> </label>
 
                                             <select class="form-control " ng-model="selectedProject"  ng-change="loadSites()"  ng-options="project as project.name for project in projects">
@@ -56,14 +54,33 @@
                                         </div>
                                     </td>
 
-                                    <td>
+                                    <td width="20%">
                                         <div class="form-group">
-                                             <label class="control-label">Site<span class="red-star">*</span> </label>
-                                             <select class="form-control " ng-model="selectedSite"  ng-change="searchLocations();loadFeedbackMasters();" ng-options="site as site.name for site in sites">
-                                                 <option value="">Select Site...</option>
-                                             </select>
+                                            <label class="control-label">Site<span class="red-star">*</span> </label>
+                                            <select class="form-control " ng-model="selectedSite"  ng-change="searchLocations();loadFeedbackMasters();" ng-options="site as site.name for site in sites">
+                                                <option value="">Select Site...</option>
+                                            </select>
                                         </div>
                                     </td>
+                                    <td align="right" width="15%">
+                                        <div class="floatR form-group">
+                                            <button type="submit" class="btn btn-circle blue-clr" ng-disabled="searchForm.$invalid">
+                                                <i class="material-icons">search</i>
+                                            </button>
+                                            <button ng-show="attendancesData.length" type="button"  ng-click=exportAllData() class="btn btn-circle green-clr">
+                                                <i class="material-icons">file_upload</i>
+                                            </button>
+                                            <button ng-click="refreshPage()" class="btn btn-circle orange-clr">
+                                                <i class="material-icons">refresh</i>
+                                            </button>
+                                            <a class="download-btn" href="{{exportFile(0)}}">{{exportMsg(0)}}</a>
+
+                                        </div>
+                                    </td>
+								</tr>
+								<tr class="filter-row gc-search-row">
+
+
                                     <!-- td>
                                         <div class="form-group">
                                              <label class="control-label">Block<span class="red-star">*</span> </label>
@@ -88,31 +105,16 @@
                                              </select>
                                          </div>
                                     </td-->
-                                    <td align="right" width="25%">
-                                        <div class="floatR form-group">
-                                            <button type="submit" class="btn btn-circle blue-clr" ng-disabled="searchForm.$invalid">
-                                                <i class="material-icons">search</i>
-                                            </button>
-                                            <button ng-show="attendancesData.length" type="button"  ng-click=exportAllData() class="btn btn-circle green-clr">
-                                                <i class="material-icons">file_upload</i>
-                                            </button>
-                                            <button ng-click="refreshPage()" class="btn btn-circle orange-clr">
-                                                <i class="material-icons">refresh</i>
-                                            </button>
-                                            <a class="download-btn" href="{{exportFile(0)}}">{{exportMsg(0)}}</a>
 
-                                        </div>
-                                    </td>
                                 </tr>
                             </table>
-                        </form>
 
                             <div class="TailsCon">
 
 
                                 <div class="TailsContent" ng-controller="FeedbackController as vm">
                                     <ul class="blocksListCon">
-                                        <li ng-repeat="item in filteredLocations track by $index" ng-show="(($index < (vm.page * vm.numRecords)) && ($index >= ((vm.page - 1) * vm.numRecords)))">{{ item.block }}<br/>{{item.floor}}<br/>{{item.zone}}</li>
+                                        <button type="submit" ng-click="genZoneReport(item.block, item.floor,item.zone,searchForm )" ng-repeat="item in filteredLocations track by $index" ng-show="(($index < (vm.page * vm.numRecords)) && ($index >= ((vm.page - 1) * vm.numRecords)))">{{ item.block }}<br/>{{item.floor}}<br/>{{item.zone}}</button>
                                     </ul>
 
                                    <div class="clear"></div>
@@ -123,6 +125,7 @@
 
 
                             </div>
+                        </form>
 
                          </div>
 
@@ -162,7 +165,7 @@
 
                                     <div class="RatingCon">
 
-                                        <jk-rating-stars max-rating="5" rating="{{feedbackReport.overallRating}}" read-only="readOnly" >
+                                        <jk-rating-stars max-rating="5" rating="feedbackReport.overallRating" read-only="readOnly" >
                                         </jk-rating-stars>
 
                                     </div>
@@ -202,7 +205,7 @@
 
                         <div style="" class="col-md-6">
 
-                            <h3>Monthly Feedbacks</h3>
+                            <h3>Rating pattern</h3>
 
                             <canvas id="doughnut" class="chart chart-doughnut"
                                     chart-data="datas" chart-labels="label">
