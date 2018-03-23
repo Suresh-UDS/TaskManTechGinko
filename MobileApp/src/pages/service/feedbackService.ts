@@ -96,4 +96,14 @@ export class FeedbackService {
         )
     }
 
+    generateFeedback(searchCriteria):Observable<any>{
+        return this.http.post(this.config.Url+'api/feedback/reports',searchCriteria).map(
+            response=>{
+                console.log("Feedback reports");
+                console.log(response.json());
+                return response.json();
+            }
+        )
+    }
+
 }
