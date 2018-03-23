@@ -2,7 +2,7 @@
 
 angular.module('timeSheetApp')
     .controller('FeedbackController', function ($rootScope, $scope, $state, $timeout, ProjectComponent, SiteComponent, LocationComponent,FeedbackComponent, $http,$stateParams,$location,$interval) {
-    	
+
         $scope.readOnly = true;
         $scope.colors = ['#45b7cd', '#ff6384', '#ff8e72'];
         $scope.labels = [];
@@ -70,15 +70,6 @@ angular.module('timeSheetApp')
 
         $scope.feedbackReport;
 
-        $scope.yesCount = 0;
-        $scope.noCount= 0;
-        $scope.oneCount= 0;
-        $scope.twoCount= 0;
-        $scope.threeCount= 0;
-        $scope.fourCount= 0;
-        $scope.fiveCount= 0;
-
-
         $scope.now = new Date()
 
         $scope.initCalender = function(){
@@ -100,7 +91,7 @@ angular.module('timeSheetApp')
             $scope.selectedDateTo=e.date._d;
 
         });
-               
+
 
         $scope.init = function(){
 	        $scope.loading = true;
@@ -119,7 +110,7 @@ angular.module('timeSheetApp')
 	            $scope.sites = data;
 	        });
 	    };
-	    
+
 	    $scope.searchLocations = function () {
 	    		console.log('searchLocations- '+ $scope.selectedSite.id);
 	    		$scope.searchCriteria.siteId = $scope.selectedSite.id;
@@ -127,7 +118,7 @@ angular.module('timeSheetApp')
 	    			$scope.filteredLocations = data.transactions;
 	        });
 	    };
-	    
+
 
 	    $scope.loadBlocks = function () {
 	    		console.log('selected project -' + $scope.selectedProject.id + ', site -' + $scope.selectedSite.id)
@@ -161,7 +152,7 @@ angular.module('timeSheetApp')
 	    		console.log('called loadFeedbacks');
 	    		$scope.search();
 	    };
-	    
+
 	    $scope.genZoneReport = function(block, floor, zone, $form) {
 	    		$scope.selectedBlock = block;
 	    		$scope.selectedFloor = floor;
@@ -234,16 +225,6 @@ angular.module('timeSheetApp')
                 //$scope.feedbackList = data.transactions;
             		$scope.feedbackReport = data;
             		console.log('feedback report - ' + JSON.stringify($scope.feedbackReport));
-                    console.log($scope.feedbackReport);
-                    console.log($scope.feedbackReport.questionRatings.length);
-
-            		for (var i=0;i<$scope.feedbackReport.questionRatings.length;i++){
-            		    $scope.yesCount = $scope.yesCount+$scope.feedbackReport.questionRatings[i].yesCount;
-            		    $scope.noCount = $scope.noCount+$scope.feedbackReport.questionRatings[i].noCount;
-            		    if($scope.feedbackReport.questionRatings[i].noCount;)
-                    }
-                    console.log($scope.yesCount);
-                console.log($scope.noCount);
 //                $scope.pages.currPage = data.currPage;
 //                $scope.pages.totalPages = data.totalPages;
 //                $scope.loading = false;
@@ -269,7 +250,7 @@ angular.module('timeSheetApp')
                     		zoneDateWiseDataArr.push(zoneDateWiseRating[i].rating);
                     }
                     $scope.data.push(zoneDateWiseDataArr);
-                    
+
                     console.log('labels - ' + JSON.stringify($scope.labels));
                     console.log('data - ' + JSON.stringify($scope.data));
                     var zoneOverallRating = $scope.feedbackReport.weeklyZone;
@@ -279,7 +260,7 @@ angular.module('timeSheetApp')
                     }
                     console.log('doughnut labels - ' + JSON.stringify($scope.label));
                     console.log('doughnut data - ' + JSON.stringify($scope.datas));
-                	
+
                 }else {
                     var zoneWiseRating = $scope.feedbackReport.weeklySite;
                     var zoneWiseDataArr = [];
@@ -295,7 +276,7 @@ angular.module('timeSheetApp')
                     		$scope.datas.push(zoneDateWiseRating[i].rating);
                     }
                     //$scope.datas.push(zoneDateWiseDataArr);
-                	
+
                 }
             });
             $rootScope.searchCriteriaFeedback = $scope.searchCriteria;
