@@ -31,6 +31,13 @@ angular.module('timeSheetApp')
             that.calendar[cmp] = true;
         };
 
+        $scope.initMaterialWizard = function(){
+
+            demo.initMaterialWizard();
+
+
+        }
+
 
         $scope.loadAllSites = function () {
             SiteComponent.findAll().then(function (data) {
@@ -38,6 +45,8 @@ angular.module('timeSheetApp')
                 $scope.sites = data;
             });
         };
+
+        $scope.initMaterialWizard();
 
         $scope.editAsset = function(){
         	AssetComponent.findById($stateParams.id).then(function(data){
