@@ -52,7 +52,7 @@
                                                     </div>
                                                     <div class="tab-content">
                                                         <div class="tab-pane" id="about">
-
+                                                            <h4 class="info-text"> Basic Details </h4>
 
                                                             <div class="row" ng-init="">
 
@@ -414,13 +414,79 @@
 
                                                         </div>
                                                         <div class="tab-pane" id="account">
-                                                            <h4 class="info-text"> What are you doing? (checkboxes) </h4>
+                                                            <h4 class="info-text"> QR code Generation </h4>
 
                                                         </div>
                                                         <div class="tab-pane" id="pmcschedule">
                                                             <div class="row">
                                                                 <div class="col-sm-12">
-                                                                    <h4 class="info-text"> Are you living in a nice area? </h4>
+                                                                    <h4 class="info-text"> PPM Schedule details </h4>
+                                                                </div>
+
+                                                            </div>
+                                                            <div class="row">
+
+                                                                <div class="col-md-2">
+                                                                    <div class="form-group">
+                                                                        <label class="control-label">Schedule</label>
+                                                                        <select class="form-control" ng-model="" ng-options="">
+                                                                            <option value="">Select Schedule ..</option>
+                                                                        </select>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-md-2">
+                                                                    <div class="form-group">
+                                                                        <label class="control-label">From Date</label>
+                                                                        <span class="form-control-feedback calender-icon"><i class="material-icons">date_range</i></span>
+                                                                        <input type="text" class="form-control datepicker"  id="dateFilterFrom"  placeholder="{{dateFilterFrom | date:'dd-MMM-yyyy'}}"/>
+
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-md-2">
+                                                                    <div class="form-group">
+                                                                        <label class="control-label">To Date</label>
+                                                                        <span class="form-control-feedback calender-icon"><i class="material-icons">date_range</i></span>
+                                                                        <input type="text" class="form-control datepicker"  id="dateFilterFrom"  placeholder="{{dateFilterFrom | date:'dd-MMM-yyyy'}}"/>
+
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-md-4">
+                                                                    <div class="form-group selectcon" style="padding-top:25px;">
+
+                                                                        <div class="" style="float:left;width:80%;">
+                                                                            <select class="form-control" ng-model="" ng-options="">
+                                                                                <option value="">Please select ..</option>
+                                                                            </select>
+                                                                        </div>
+                                                                        <div class="" style="float:left;">
+                                                                            <a href="javascript:;"  data-toggle="collapse" data-parent="#accordian" data-target="#addDesignation1" class="btn btn-round btn-fab btn-fab-mini btn-simple" aria-expanded="false" aria-controls="collapseExample">
+                                                                                <i class="material-icons">add</i>
+                                                                            </a>
+                                                                        </div>
+
+                                                                    </div>
+
+                                                                </div>
+                                                                <div class="col-md-2 txt-align-rgt">
+
+                                                                    <div class="form-group" style="padding-top: 20px;">
+                                                                        <div class="checkbox">
+                                                                            <label>
+                                                                                <input type="checkbox" name="terms"> Active
+                                                                            </label>
+                                                                        </div>
+                                                                    </div>
+
+                                                                </div>
+                                                                <div class="col-md-5">
+                                                                    <div class="collapse" id="addDesignation1">
+
+                                                                        <div class="">
+                                                                            <input class="input-desc" id='' ng-model=""
+                                                                                   name='' type='text' value=""/>
+                                                                            <a class="btn btn-success add-btn margn-top0"  ng-click="">Add</a>
+                                                                        </div>
+                                                                    </div>
                                                                 </div>
 
                                                             </div>
@@ -428,7 +494,73 @@
                                                         <div class="tab-pane" id="amcschedule">
                                                             <div class="row">
                                                                 <div class="col-sm-12">
-                                                                    <h4 class="info-text"> Are you living in a nice area? </h4>
+                                                                    <h4 class="info-text"> AMC Schedule Details </h4>
+                                                                </div>
+
+                                                            </div>
+                                                            <div class="row">
+
+                                                                <div class="col-md-2">
+                                                                    <div class="form-group">
+                                                                        <label class="control-label">Schedule</label>
+                                                                        <select class="form-control" ng-model="" ng-options="">
+                                                                            <option value="">Select Schedule ..</option>
+                                                                        </select>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-md-2">
+                                                                    <div class="form-group">
+                                                                        <label class="control-label">From Date</label>
+                                                                        <span class="form-control-feedback calender-icon"><i class="material-icons">date_range</i></span>
+                                                                        <input type="text" class="form-control datepicker"  id="dateFilterFrom"  placeholder="{{dateFilterFrom | date:'dd-MMM-yyyy'}}"/>
+
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-md-2">
+                                                                    <div class="form-group">
+                                                                        <label class="control-label">To Date</label>
+                                                                        <span class="form-control-feedback calender-icon"><i class="material-icons">date_range</i></span>
+                                                                        <input type="text" class="form-control datepicker"  id="dateFilterFrom"  placeholder="{{dateFilterFrom | date:'dd-MMM-yyyy'}}"/>
+
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-md-4">
+                                                                    <div class="form-group selectcon" style="padding-top:25px;">
+
+                                                                        <div class="" style="float:left;width:80%;">
+                                                                            <select class="form-control" ng-model="" ng-options="">
+                                                                                <option value="">Please select ..</option>
+                                                                            </select>
+                                                                        </div>
+                                                                        <div class="" style="float:left;">
+                                                                            <a href="javascript:;"  data-toggle="collapse" data-parent="#accordian" data-target="#addDesignation1" class="btn btn-round btn-fab btn-fab-mini btn-simple" aria-expanded="false" aria-controls="collapseExample">
+                                                                                <i class="material-icons">add</i>
+                                                                            </a>
+                                                                        </div>
+
+                                                                    </div>
+
+                                                                </div>
+                                                                <div class="col-md-2 txt-align-rgt">
+
+                                                                    <div class="form-group" style="padding-top: 20px;">
+                                                                        <div class="checkbox">
+                                                                            <label>
+                                                                                <input type="checkbox" name="terms"> Active
+                                                                            </label>
+                                                                        </div>
+                                                                    </div>
+
+                                                                </div>
+                                                                <div class="col-md-5">
+                                                                    <div class="collapse" id="addDesignation1">
+
+                                                                        <div class="">
+                                                                            <input class="input-desc" id='' ng-model=""
+                                                                                   name='' type='text' value=""/>
+                                                                            <a class="btn btn-success add-btn margn-top0"  ng-click="">Add</a>
+                                                                        </div>
+                                                                    </div>
                                                                 </div>
 
                                                             </div>
@@ -436,7 +568,7 @@
                                                         <div class="tab-pane" id="documents">
                                                             <div class="row">
                                                                 <div class="col-sm-12">
-                                                                    <h4 class="info-text"> Are you living in a nice area? </h4>
+                                                                    <h4 class="info-text"> Documents Upload section </h4>
                                                                 </div>
 
                                                             </div>
