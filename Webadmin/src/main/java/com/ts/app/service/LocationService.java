@@ -1,5 +1,6 @@
 package com.ts.app.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -14,6 +15,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.ts.app.domain.AbstractAuditingEntity;
+import com.ts.app.domain.EmployeeLocation;
 import com.ts.app.domain.Feedback;
 import com.ts.app.domain.Location;
 import com.ts.app.domain.Project;
@@ -23,6 +25,7 @@ import com.ts.app.repository.ProjectRepository;
 import com.ts.app.repository.SiteRepository;
 import com.ts.app.service.util.MapperUtil;
 import com.ts.app.web.rest.dto.BaseDTO;
+import com.ts.app.web.rest.dto.EmployeeLocationDTO;
 import com.ts.app.web.rest.dto.LocationDTO;
 import com.ts.app.web.rest.dto.SearchCriteria;
 import com.ts.app.web.rest.dto.SearchResult;
@@ -133,9 +136,27 @@ public class LocationService extends AbstractService {
 				}else if(StringUtils.isNotEmpty(searchCriteria.getBlock())) {
 					page = locationRepository.findByBlock(searchCriteria.getSiteId(), searchCriteria.getBlock(), pageRequest);
 				}else if(searchCriteria.getSiteId() > 0) {
-					page = locationRepository.findBySite(searchCriteria.getSiteId(), pageRequest);
+					if(searchCriteria.getEmployeeId() > 0) {
+						List<EmployeeLocation> empLocs  = locationRepository.findBySiteAndEmployee(searchCriteria.getSiteId(), searchCriteria.getEmployeeId());
+						if(empLocs != null && CollectionUtils.isNotEmpty(empLocs)) {
+							List<EmployeeLocationDTO> empDtos = mapperUtil.toModelList(empLocs, EmployeeLocationDTO.class);
+							List<LocationDTO> locDtos = new ArrayList<LocationDTO>();
+							for(EmployeeLocationDTO empLocDto : empDtos) {
+								LocationDTO locDto = new LocationDTO();
+								locDto.setProjectId(empLocDto.getProjectId());
+								locDto.setSiteId(empLocDto.getSiteId());
+								locDto.setBlock(empLocDto.getBlock());
+								locDto.setFloor(empLocDto.getFloor());
+								locDto.setZone(empLocDto.getZone());
+								locDtos.add(locDto);
+							}
+							buildSearchResultForEmployeeLocation(searchCriteria, empLocs, locDtos, result);
+						}
+					}else {
+						page = locationRepository.findBySite(searchCriteria.getSiteId(), pageRequest);
+					}
 				}else {
-					page = locationRepository.findBySite(searchCriteria.getProjectId(), pageRequest);
+					page = locationRepository.findByProject(searchCriteria.getProjectId(), pageRequest);
 				}
 			}else {
 				page = locationRepository.findAll(pageRequest);
@@ -156,6 +177,19 @@ public class LocationService extends AbstractService {
 		}
 		result.setCurrPage(page.getNumber() + 1);
 		result.setTotalCount(page.getTotalElements());
+        result.setStartInd((result.getCurrPage() - 1) * 10 + 1);
+        result.setEndInd((result.getTotalCount() > 10  ? (result.getCurrPage()) * 10 : result.getTotalCount()));
+
+		result.setTransactions(transactions);
+		return;
+	}	
+	
+	private void buildSearchResultForEmployeeLocation(SearchCriteria searchCriteria, List<EmployeeLocation> results, List<LocationDTO> transactions, SearchResult<LocationDTO> result) {
+		if(CollectionUtils.isNotEmpty(results)) {
+			result.setTotalPages(results.size());
+		}
+		result.setCurrPage(1);
+		result.setTotalCount(results.size());
         result.setStartInd((result.getCurrPage() - 1) * 10 + 1);
         result.setEndInd((result.getTotalCount() > 10  ? (result.getCurrPage()) * 10 : result.getTotalCount()));
 

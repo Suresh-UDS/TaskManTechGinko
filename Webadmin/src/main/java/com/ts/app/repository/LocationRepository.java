@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import com.ts.app.domain.EmployeeLocation;
 import com.ts.app.domain.Location;
 
 /**
@@ -23,6 +24,9 @@ public interface LocationRepository extends JpaRepository<Location, Long>  {
 	@Query("SELECT loc FROM Location loc WHERE loc.site.id = :siteId")
 	Page<Location> findBySite(@Param("siteId") long siteId, Pageable pageRequest);
 	
+	@Query("SELECT loc FROM EmployeeLocation loc WHERE loc.siteId = :siteId and loc.employee.id = :employeeId")
+	List<EmployeeLocation> findBySiteAndEmployee(@Param("siteId") long siteId, @Param("employeeId") long employeeId);
+
 	@Query("SELECT loc FROM Location loc WHERE loc.project.id = :projectId and loc.site.id = :siteId and loc.block = :block")
 	Page<Location> findByBlock(@Param("siteId") long siteId, @Param("block") String block,Pageable pageRequest);
 
