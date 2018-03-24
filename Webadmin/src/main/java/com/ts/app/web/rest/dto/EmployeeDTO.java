@@ -68,6 +68,8 @@ public class EmployeeDTO extends BaseDTO {
 
     private List<EmployeeProjectSiteDTO> projectSites;
 
+    private List<EmployeeLocationDTO> locations;
+
     private boolean isLeft;
 
     private boolean isReliever;
@@ -374,6 +376,14 @@ public class EmployeeDTO extends BaseDTO {
 
 	public void setUserRoleName(String userRoleName) {
 		this.userRoleName = userRoleName;
+	}
+
+	public List<EmployeeLocationDTO> getLocations() {
+		return locations;
+	}
+
+	public void setLocations(List<EmployeeLocationDTO> locations) {
+		this.locations = locations;
 	}
 
 	

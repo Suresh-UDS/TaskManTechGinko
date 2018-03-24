@@ -94,9 +94,11 @@ public class Employee extends AbstractAuditingEntity implements Serializable {
         inverseJoinColumns = {@JoinColumn(name = "site_id", referencedColumnName = "id")})
 	private List<Site> sites;
 
-	@OneToMany(mappedBy="employee",cascade={CascadeType.ALL}, fetch = FetchType.LAZY)
-	@Cascade(org.hibernate.annotations.CascadeType.DELETE_ORPHAN)
+	@OneToMany(mappedBy="employee",cascade={CascadeType.ALL}, fetch = FetchType.LAZY, orphanRemoval = true)
     private List<EmployeeProjectSite> projectSites;
+
+	@OneToMany(mappedBy="employee",cascade={CascadeType.ALL}, fetch = FetchType.LAZY, orphanRemoval = true)
+    private List<EmployeeLocation> locations;
 
 	@NotNull
 	@Column(length = 10, nullable = true)
@@ -300,6 +302,14 @@ public class Employee extends AbstractAuditingEntity implements Serializable {
 
 	public void setPhone(String phone) {
 		this.phone = phone;
+	}
+
+	public List<EmployeeLocation> getLocations() {
+		return locations;
+	}
+
+	public void setLocations(List<EmployeeLocation> locations) {
+		this.locations = locations;
 	}
 
 	

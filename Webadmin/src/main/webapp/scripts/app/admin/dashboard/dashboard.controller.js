@@ -147,7 +147,7 @@ angular.module('timeSheetApp')
         $scope.refreshReportByProject = function() {
              $scope.selectedFromDate.setHours(0,0,0,0);
              $scope.selectedToDate.setHours(23,59,59,0);
-             DashboardComponent.loadAttendanceReportByProject($scope.selectedProject,$scope.selectedFromDate,$scope.selectedToDate).then(function(data){
+             DashboardComponent.loadAttendanceReportByProject($scope.selectedProject.id,$scope.selectedFromDate,$scope.selectedToDate).then(function(data){
                 console.log(data)
                 $scope.employeeCount = data.totalEmployeeCount;
                 $scope.presentCount = data.presentEmployeeCount;
@@ -159,7 +159,7 @@ angular.module('timeSheetApp')
         $scope.refreshReportBySite = function() {
             $scope.selectedFromDate.setHours(0,0,0,0);
             $scope.selectedToDate.setHours(23,59,59,0);
-            DashboardComponent.loadAttendanceReport($scope.selectedSite,$scope.selectedFromDate,$scope.selectedToDate).then(function(data){
+            DashboardComponent.loadAttendanceReport($scope.selectedSite.id,$scope.selectedFromDate,$scope.selectedToDate).then(function(data){
                console.log(data)
                $scope.employeeCount = data.totalEmployeeCount;
                $scope.presentCount = data.presentEmployeeCount;
