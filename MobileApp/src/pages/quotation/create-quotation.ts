@@ -4,6 +4,9 @@ import {authService} from "../service/authService";
 import {CreateQuotationPage2} from "./create-quotation-step-2";
 import {SiteService} from "../service/siteService";
 import {QuotationService} from "../service/quotationService";
+import {Camera, CameraOptions} from "@ionic-native/camera";
+import {JobPopoverPage} from "../jobs/job-popover";
+import {QuotationImagePopoverPage} from "./quotation-image-popover";
 
 @Component({
     selector: 'page-create-quotation',
@@ -30,7 +33,7 @@ export class CreateQuotationPage {
     rateCardUom:any;
     rateCardName:any;
     rateCardCost:any;
-
+    takenImages:any;
     uom:any;
 
     empSelect:any;
@@ -45,9 +48,10 @@ export class CreateQuotationPage {
     eMsg:any;
 
 
-    constructor(public navCtrl: NavController,public popoverCtrl: PopoverController, public evts: Events, public authService:authService, public alertCtrl: AlertController,
+    constructor(public navCtrl: NavController,public camera: Camera,public popoverCtrl: PopoverController, public evts: Events, public authService:authService, public alertCtrl: AlertController,
                 private siteService: SiteService, private quotationService: QuotationService) {
 
+        this.takenImages = [];
         this.quotationDetails ={
             title:'',
             description:'',
@@ -109,7 +113,7 @@ export class CreateQuotationPage {
                 "description":this.description
             }
             console.log(quotation)
-            this.navCtrl.push(CreateQuotationPage2,{quotationDetails:quotation});
+            this.navCtrl.push(CreateQuotationPage2,{quotationDetails:quotation,quotationImg:this.takenImages});
         }
         else
         {
@@ -147,7 +151,38 @@ export class CreateQuotationPage {
         console.log(this.quotationDetails);
     }
 
+    viewImage(index,img)
+    {
+        let popover = this.popoverCtrl.create(QuotationImagePopoverPage,{i:img,ind:index},{cssClass:'view-img',showBackdrop:true});
+        popover.present({
 
+        });
+
+        popover.onDidDismiss(data=>
+        {
+            this.takenImages.pop(data);
+        })
+    }
+    viewCamera() {
+
+        const options: CameraOptions = {
+            quality: 50,
+            destinationType: this.camera.DestinationType.NATIVE_URI,
+            encodingType: this.camera.EncodingType.JPEG,
+            mediaType: this.camera.MediaType.PICTURE
+        };
+
+        this.camera.getPicture(options).then((imageData) => {
+
+            console.log('imageData -' +imageData);
+            imageData = imageData.replace("assets-library://", "cdvfile://localhost/assets-library/")
+
+            this.takenImages.push(imageData);
+
+
+        })
+
+    }
 
 
 }
