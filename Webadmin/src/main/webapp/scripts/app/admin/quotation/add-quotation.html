@@ -20,7 +20,7 @@
 				<!--<div class="titleCon">-->
 				<!--<h3>Add Quotation</h3>-->
 				<!--</div>-->
-				<div class="form-container table-container AddQuotationContent">
+				<div class="form-container table-container AddQuotationContent ">
 					<form ng-show="!success" name="form" role="form" novalidate
 						 class="form-horizontal">
 
@@ -157,18 +157,15 @@
                                                     </div>
                                                 </div>
                                             </div>
-									
+
 									</div>
 									</div>
 								</div>
-								
-								
+
+
 							</div>
 							<div class="col-md-12">
-
-
-
-								<div class="panel panel-default">
+								<div class="panel panel-default TabsContainer">
 									<!--<div class="panel-heading">Panel Heading</div>-->
 									<div class="panel-body">
 
@@ -187,13 +184,13 @@
 												data-target="#pill4" aria-expanded="false">Summary</a></li>
 										</ul>
 										<div class="tab-content TabsContent" style="">
-											
+
 											<div class="tab-pane active" id="pill2">
 												<div class="row">
 
 													<div class="col-md-5">
 														<div class="form-group">
-															<label class="control-label">Service Name</label> 
+															<label class="control-label">Service Name</label>
 															<input ng-model="serviceName"
 																class='form-control' name='serviceName' type='text' value=""
 																ng-minlength='1' ng-maxlength='100'
@@ -212,7 +209,7 @@
 													</div>
 													<div class="col-md-2">
 														<div class="form-group">
-															<label class="control-label">Cost(Fixed)</label> 
+															<label class="control-label">Cost(Fixed)</label>
 															<input ng-model="serviceUnitPrice"
 																class='form-control' name='serviceUnitPrice' type='text' value=""
 																ng-minlength='1' ng-maxlength='5'
@@ -280,7 +277,7 @@
 
 													<div class="col-md-5">
 														<div class="form-group">
-															<label class="control-label">Labour Category</label> 
+															<label class="control-label">Labour Category</label>
 															<input ng-model="labourCategory"
 																class='form-control' name='labourCategory' type='text' value=""
 																ng-minlength='1' ng-maxlength='100'
@@ -299,7 +296,7 @@
 													</div>
 													<div class="col-md-2">
 														<div class="form-group">
-															<label class="control-label">Cost(Per Hr)</label> 
+															<label class="control-label">Cost(Per Hr)</label>
 															<input ng-model="labourUnitPrice"
 																class='form-control' name='labourUnitPrice' type='text' value=""
 																ng-minlength='1' ng-maxlength='5'
@@ -367,7 +364,7 @@
 
 													<div class="col-md-5">
 														<div class="form-group">
-															<label class="control-label">Material Name</label> 
+															<label class="control-label">Material Name</label>
 															<input ng-model="materialName"
 																class='form-control' name='materialName' type='text' value=""
 																ng-minlength='1' ng-maxlength='100'
@@ -386,7 +383,7 @@
 													</div>
 													<div class="col-md-2">
 														<div class="form-group">
-															<label class="control-label">Cost</label> 
+															<label class="control-label">Cost</label>
 															<input ng-model="materialUnitPrice"
 																class='form-control' name='materialUnitPrice' type='text' value=""
 																ng-minlength='1' ng-maxlength='5'
@@ -449,7 +446,7 @@
 
 													</table>
 												</div>
-											</div>											
+											</div>
 											<div class="tab-pane" id="pill4">
 
 												<div class="table-responsive tablecard SummaryCard">
