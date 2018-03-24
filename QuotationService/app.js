@@ -27,7 +27,7 @@ var cors = require('cors');
 function startup(){
 
   // Bootstrap mongoose and load dummy data
-  mongoose.connect('mongodb://localhost:27017/quotation_svc', function(err) {
+  mongoose.connect('mongodb://admin:Tgadmin123#@localhost:27017/quotation_svc', function(err) {
     if (err) throw err;
 
     /*
