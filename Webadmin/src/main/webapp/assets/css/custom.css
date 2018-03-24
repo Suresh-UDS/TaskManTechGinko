@@ -366,21 +366,21 @@ textarea.form-control {
   background-color: #ff9800;
 }
 
-.AddQuotationContent  .nav-pills:not(.nav-pills-icons)>li>a {
+.TabsContainer  .nav-pills:not(.nav-pills-icons)>li>a {
     border-radius: 5px 5px 0px 0px;
         box-shadow: none !important;
 }
-.AddQuotationContent .nav-pills>li i
+.TabsContainer .nav-pills>li i
 {
       display: inline;
       font-size: 16px;
       padding: 0;
 }
-.AddQuotationContent  .tab-pane
+.TabsContainer  .tab-pane
 {
    padding:10px;
 }
-.AddQuotationContent .TabsContent
+.TabsContainer .TabsContent
 {
       padding-top: 10px;
       border: 1px solid #ff9800;
@@ -398,6 +398,21 @@ textarea.form-control {
 {
  margin:0 !important;
 }
+a.add-btn,button.add-btn
+{
+    padding: 8px 15px !important;
+}
+.panel-body .table-responsive table tr:first-child td {
+    border-top: none !important;
+}
+
+
+.table>tbody>tr>td, .table>tbody>tr>th, .table>tfoot>tr>td, .table>tfoot>tr>th, .table>thead>tr>td, .table>thead>tr>th
+{
+    border-top: 1px solid #f9f9f9;
+}
+
+
 
 /*.alert.alert-info*/
 /*{*/

@@ -27,9 +27,13 @@
                     <label class="control-label">Name</label>
                     <input class="form-control" [(ngModel)]="userName" type="text" id="" name="" >
                 </div>
+                <div class="form-group label-floating">
+                    <label class="control-label">Name</label>
+                    <input class="form-control" [(ngModel)]="userCode" type="text" name="" >
+                </div>
             </div>
 
-            <button class="btn btn-warning btn-wd btn-lg" (click)="start(userName)" style="margin-top: 80px;">Start</button>
+            <button class="btn btn-warning btn-wd btn-lg" (click)="start(userName,userCode)" style="margin-top: 80px;">Start</button>
 
 
             <div class="align-center">
