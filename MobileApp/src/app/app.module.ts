@@ -72,8 +72,8 @@ import {QuotationService} from "../pages/service/quotationService";
 import {SiteService} from "../pages/service/siteService";
 import {JobPopoverPage} from "../pages/jobs/job-popover";
 import {BatteryStatus, BatteryStatusResponse} from "@ionic-native/battery-status";
-import {Ionic2RatingModule} from "ionic2-rating";
 import {FeedbackDashboardPage} from "../pages/feedback/feedback-dashboard";
+import {QuotationImagePopoverPage} from "../pages/quotation/quotation-image-popover";
 
 
 @NgModule({
@@ -96,6 +96,7 @@ import {FeedbackDashboardPage} from "../pages/feedback/feedback-dashboard";
     QuotationPage,
     QuotationPopoverPage,
     QuotationViewPage,
+    QuotationImagePopoverPage,
     CreateQuotationPage,
       CreateQuotationPage2,
       ApprovedQuotationPage,
@@ -128,9 +129,12 @@ import {FeedbackDashboardPage} from "../pages/feedback/feedback-dashboard";
     BrowserModule,
     HttpModule,
     DatePickerModule,
-    Ionic2RatingModule,
     BrowserAnimationsModule,
-    IonicModule.forRoot(MyApp),
+    IonicModule.forRoot(MyApp,{
+        backButtonText: '',
+        backButtonIcon: 'ios-arrow-back',
+        iconMode: 'md'
+    }),
     IonicStorageModule.forRoot()
   ],
   bootstrap: [IonicApp],
@@ -152,6 +156,7 @@ import {FeedbackDashboardPage} from "../pages/feedback/feedback-dashboard";
     LogoutPage,
     QuotationPage,
     QuotationPopoverPage,
+    QuotationImagePopoverPage,
     QuotationViewPage,
     CreateQuotationPage,
       CreateQuotationPage2,

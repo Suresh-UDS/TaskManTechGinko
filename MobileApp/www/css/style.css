@@ -197,9 +197,25 @@ container-scroll::-webkit-scrollbar-thumb
 {
   padding-left: 5px !important;
 }
+.padding-left7
+{
+    padding-left: 7px;
+}
+.margin-bottom15
+{
+    margin-bottom: 15px;
+}
 .padding-left15
 {
   padding-left: 15px !important;
+}
+.margin-left15
+{
+    margin-left: 15px !important;
+}
+.padng-left0
+{
+    padding: 5px 5px 5px 0 !important;
 }
 button.ion-circle-icons
 {
@@ -1254,4 +1270,8 @@ ion-spinner{
 .chart-head
 {
     font-weight: bold;
+}
+.top-border
+{
+    border-top:1px solid #eeeeee !important;
 }

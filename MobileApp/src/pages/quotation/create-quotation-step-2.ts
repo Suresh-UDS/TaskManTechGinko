@@ -57,6 +57,7 @@ export class CreateQuotationPage2 {
     open=false;
     openSites:any;
     viewSiteName:any;
+    selectSiteIndex:any;
 
     constructor(public navCtrl: NavController,public camera: Camera,public modalCtrl: ModalController,public navParams:NavParams,public popoverCtrl: PopoverController, public evts: Events, public authService:authService, public alertCtrl: AlertController, public componentService:componentService,
                 private quotationService: QuotationService, private siteService: SiteService
@@ -368,13 +369,11 @@ export class CreateQuotationPage2 {
     {
         this.open=true;
     }
-    openSite()
-    {
-        this.openSites=true;
-    }
-    viewSite(site)
+
+    viewSite(site,i)
     {
         this.selectedSite=site;
-        this.openSites=false;
+        this.openSites=true;
+        this.selectSiteIndex=i;
     }
 }

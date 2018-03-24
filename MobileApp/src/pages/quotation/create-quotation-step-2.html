@@ -17,76 +17,79 @@
             <p class="clr-black">Site Name</p>
         </div>
         <div class="white-bg">
-
-            <div padding>
-                <!--<input type="text"  [(ngModel)]="viewSiteName" (click)="openSite()">-->
-                <p *ngIf="selectedSite" (click)="openSite()" >{{selectedSite}}</p>
+            <div data-toggle="collapse" data-target="#Open" padding>
+               <p class="margin0">{{selectedSite}}</p>
             </div>
-            <div *ngFor="let site of allSites;let i=index" >
-                <p *ngIf="i!=0 && openSites" padding-left (click)="viewSite(site.name)">{{site.name}}</p>
+
+            <div id="Open" class="collapse top-border">
+                <div  *ngFor="let site of allSites;let i=index" data-toggle="collapse" data-target="#Open">
+                    <p  padding-left padding-top (click)="viewSite(site.name,i)" [ngClass]="{'clr-orange':selectSiteIndex==i}">{{site.name}}</p>
+                </div>
             </div>
         </div>
         <div class="padding-left15 padding-top15">
             <p class="clr-black">Quotation</p>
         </div>
-        <div class="white-bg padding-left15">
-            <ion-row class="bottom-border margin0 ">
-                <ion-col col-4>
-                    <p>Type</p>
+        <div class="white-bg ">
+            <ion-row class="bottom-border margin0 " padding>
+                <ion-col col-4 class="padding0">
+                    <p class="margin0 clr-orange">Type</p>
                 </ion-col>
-                <ion-col col-4>
-                    <p>Name</p>
+                <ion-col col-4 class="padding0">
+                    <p class="margin0 clr-orange">Name</p>
                 </ion-col>
-                <ion-col col-4>
-                    <p>Total</p>
+                <ion-col col-3 class="padding0">
+                    <p class="margin0 clr-orange">Total</p>
+                </ion-col>
+                <ion-col col-1 class="padding0">
                 </ion-col>
             </ion-row>
-            <ion-row *ngFor="let rate of rates;let i = index ">
-                <ion-col col-4>
+            <ion-row *ngFor="let rate of rates;let i = index " class="margin0" padding="">
+                <ion-col col-4 class="padding0">
                     <p>{{rate.type}}</p>
                 </ion-col>
-                <ion-col col-4>
+                <ion-col col-4 class="padding0">
                     <p>{{rate.name}}</p>
                 </ion-col>
-                <ion-col col-4>
+                <ion-col col-3 class="padding0">
                     <p>{{rate.total}}</p>
-                    <p (click)="openDiv()">d</p>
+                </ion-col>
+                <ion-col col-1 class="padding0 align-right">
+                    <ion-icon name="arrow-down" data-toggle="collapse" [attr.data-target]="'#' + i"></ion-icon>
                 </ion-col>
 
-                <ion-col col-12 *ngIf="open">
-                    <tr>
-                        <td class=""><p>Cost</p></td>
-                        <td class=""><p>{{rate.cost}}</p></td>
-                    </tr>
-                    <tr>
-                        <td class=""><p>No</p></td>
-                        <td class=""><p><input type="number" class="form-control align-center width15" [(ngModel)]="rate.no" (change)="addTotal(i,rate.no,rate.cost)"></p></td>
-                    </tr>
-                    <tr>
-                        <td class="text-center"><p>UOM</p></td>
-                        <td class="text-center table-data"><p>{{rate.uom}}</p></td>
-                    </tr>
-                    <tr>
-                        <td class="text-center">{{rate.type}}</td>
-                        <td class="text-center table-data">{{rate.name}}</td>
-                    </tr>
-                    <tr>
-                        <p><i class="material-icons clr-red" (click)="remove(i)">close</i></p>
-                    </tr>
+                <ion-col col-12 id="{{i}}" class="collapse padding-left0">
+                    <table>
+                        <tr>
+                            <td width="30%" class="clr-orange">Cost</td>
+                            <td width="30%" class="clr-orange">No</td>
+                            <td width="30%" class="clr-orange">UOM</td>
+                            <td width="10%" class="clr-orange">Action</td>
+                        </tr>
+                        <tr>
+                            <td class=""><p>{{rate.cost}}</p></td>
+                            <td class=""><p><input type="number" class="form-control align-center width15" [(ngModel)]="rate.no" (change)="addTotal(i,rate.no,rate.cost)"></p></td>
+                            <td class=""><p>{{rate.uom}}</p></td>
+                            <td> <p><i class="material-icons clr-red" (click)="remove(i)">close</i></p></td>
+                        </tr>
+                    </table>
                 </ion-col>
             </ion-row>
         </div>
 
-        <div class="padding-left15">
-            <p class="clr-black">Quotation Images</p>
+        <div padding="">
+            <p class="clr-black margin0">Quotation Images</p>
         </div>
         <div class="white-bg margin-bottom15">
             <ion-row class="margin-right15 margin-left15">
-                <ion-col col-12 text-center class="padding-top5">
+                <ion-col col-6 class="label-on-left">
+                    <p class="line-height">Photo</p>
+                </ion-col>
+                <ion-col col-6 text-right>
                     <button class="ion-button" round (click)="viewCamera()" class="camera-btn"><ion-icon name="ios-camera"></ion-icon></button>
                 </ion-col>
             </ion-row>
-            <ion-row>
+            <ion-row class="margin0">
                 <ion-col col-3 *ngFor="let image of takenImages;let i of index" class="">
                     <img [src]="image" class="job-img margin-bottom25" (click)="viewImage(i,image)">
                 </ion-col>
@@ -97,14 +100,14 @@
             <p class="clr-black">Issue Images</p>
         </div>
 
-        <div class="white-bg">
+        <div class="white-bg margin0">
             <ion-row class="margin-right15 margin-left15">
                 <ion-col col-6 class="label-on-left padng-left0 ver-center padding-top15">
                     <p class="" *ngIf="takenImages?.length!=0">Issue Images</p>
                     <p class="" *ngIf="takenImages?.length==0">No Images</p>
                 </ion-col>
             </ion-row>
-            <ion-row>
+            <ion-row class="margin0">
                 <ion-col col-3 *ngFor="let image of quotationImg;let i of index" class="">
                     <img [src]="image" class="job-img margin-bottom25" (click)="viewImage(i,image)">
                 </ion-col>
@@ -113,63 +116,62 @@
 
     </div>
 
-    <ion-col col-10>
-        <div class="card-content white-bg">
-                <div class="form-group label-floating width80 margin-auto padding-bottom3">
-                    <ion-select [selectOptions]="selectOptions" interface="popover" style="color: black" [(ngModel)]="selectedSite" class="select-box" placeholder="Choose Site">
-                        <ion-option style="color: black;" *ngFor="let site of allSites" [value]="site.name" (ionSelect)="selectSite(site)" >{{site.name}}</ion-option>
-                    </ion-select>
-                </div>
-        </div>
-    </ion-col>
+    <!--<ion-col col-10>-->
+        <!--<div class="card-content white-bg">-->
+                <!--<div class="form-group label-floating width80 margin-auto padding-bottom3">-->
+                    <!--<ion-select [selectOptions]="selectOptions" interface="popover" style="color: black" [(ngModel)]="selectedSite" class="select-box" placeholder="Choose Site">-->
+                        <!--<ion-option style="color: black;" *ngFor="let site of allSites" [value]="site.name" (ionSelect)="selectSite(site)" >{{site.name}}</ion-option>-->
+                    <!--</ion-select>-->
+                <!--</div>-->
+        <!--</div>-->
+    <!--</ion-col>-->
 
-    <div class="card-content white-bg">
-        <div class="table-responsive">
-            <table class="table table-scroll">
-                <thead>
-                <tr>
-                    <th class="text-center">Type</th>
-                    <th class="text-center">Name</th>
-                    <th class="text-center">Rate</th>
-                    <th class="text-center">No</th>
-                    <th class="text-center">Uom</th>
-                    <th class="text-center">Total</th>
-                    <th class="text-center">&nbsp;&nbsp;&nbsp;&nbsp;</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr *ngFor="let rate of rates;let i = index ">
-                    <td class="text-center">{{rate.type}}</td>
-                    <td class="text-center table-data">{{rate.name}}</td>
-                    <td class="text-center">{{rate.cost}}</td>
-                    <td class="text-center">
-                        <input type="number" class="form-control align-center width15" [(ngModel)]="rate.no" (change)="addTotal(i,rate.no,rate.cost)">
-                    </td>
-                    <td class="text-center">{{rate.uom}}</td>
-                    <td class="text-center">{{rate.total}}</td>
-                    <td class="td-actions text-center">
-                        <i class="material-icons clr-red" (click)="remove(i)">close</i>
-                    </td>
-                </tr>
-                <tr>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td class="text-center">Grand Total</td>
-                    <td class="text-center">{{grandTotal}}</td>
-                    <td></td>
-                </tr>
-                </tbody>
-            </table>
-
-        </div>
-    </div>
+    <!--<div class="card-content white-bg">-->
+        <!--<div class="table-responsive">-->
+            <!--<table class="table table-scroll">-->
+                <!--<thead>-->
+                <!--<tr>-->
+                    <!--<th class="text-center">Type</th>-->
+                    <!--<th class="text-center">Name</th>-->
+                    <!--<th class="text-center">Rate</th>-->
+                    <!--<th class="text-center">No</th>-->
+                    <!--<th class="text-center">Uom</th>-->
+                    <!--<th class="text-center">Total</th>-->
+                    <!--<th class="text-center">&nbsp;&nbsp;&nbsp;&nbsp;</th>-->
+                <!--</tr>-->
+                <!--</thead>-->
+                <!--<tbody>-->
+                <!--<tr *ngFor="let rate of rates;let i = index ">-->
+                    <!--<td class="text-center">{{rate.type}}</td>-->
+                    <!--<td class="text-center table-data">{{rate.name}}</td>-->
+                    <!--<td class="text-center">{{rate.cost}}</td>-->
+                    <!--<td class="text-center">-->
+                        <!--<input type="number" class="form-control align-center width15" [(ngModel)]="rate.no" (change)="addTotal(i,rate.no,rate.cost)">-->
+                    <!--</td>-->
+                    <!--<td class="text-center">{{rate.uom}}</td>-->
+                    <!--<td class="text-center">{{rate.total}}</td>-->
+                    <!--<td class="td-actions text-center">-->
+                        <!--<i class="material-icons clr-red" (click)="remove(i)">close</i>-->
+                    <!--</td>-->
+                <!--</tr>-->
+                <!--<tr>-->
+                    <!--<td></td>-->
+                    <!--<td></td>-->
+                    <!--<td></td>-->
+                    <!--<td></td>-->
+                    <!--<td class="text-center">Grand Total</td>-->
+                    <!--<td class="text-center">{{grandTotal}}</td>-->
+                    <!--<td></td>-->
+                <!--</tr>-->
+                <!--</tbody>-->
+            <!--</table>-->
+        <!--</div>-->
+    <!--</div>-->
 </ion-content>
 
-<ion-footer>
-    <ion-toolbar class="align-right" >0
-        <button class="btn btn-warning center pull-left"  >
+<ion-footer >
+    <ion-toolbar class="align-right" padding-left padding-right >
+        <button class="btn btn-warning center pull-left">
             Save
         </button>
         <button class="btn btn-success center pull-right" (click)="saveRates()">
