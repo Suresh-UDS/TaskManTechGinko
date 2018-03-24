@@ -10,6 +10,8 @@ import {QuotationPage} from "./quotation";
 import {componentService} from "../service/componentService";
 import {QuotationService} from "../service/quotationService";
 import {SiteService} from "../service/siteService";
+import {Camera, CameraOptions} from "@ionic-native/camera";
+import {QuotationImagePopoverPage} from "./quotation-image-popover";
 declare var demo;
 
 
@@ -50,11 +52,18 @@ export class CreateQuotationPage2 {
     grandTotal=0;
     quotationDetails:any;
     selectOptions:any;
+    takenImages:any;
+    quotationImg:any;
+    open=false;
+    openSites:any;
+    viewSiteName:any;
 
-    constructor(public navCtrl: NavController,public modalCtrl: ModalController,public navParams:NavParams,public popoverCtrl: PopoverController, public evts: Events, public authService:authService, public alertCtrl: AlertController, public componentService:componentService,
+    constructor(public navCtrl: NavController,public camera: Camera,public modalCtrl: ModalController,public navParams:NavParams,public popoverCtrl: PopoverController, public evts: Events, public authService:authService, public alertCtrl: AlertController, public componentService:componentService,
                 private quotationService: QuotationService, private siteService: SiteService
                 ) {
 
+        this.takenImages = [];
+        this.quotationImg=this.navParams.get('quotationImg');
        console.log(this.navParams.get('quotationDetails'));
        var quotationDetails = this.navParams.get('quotationDetails');
        this.quotation=this.navParams.get('quotationDetails');
@@ -98,6 +107,7 @@ export class CreateQuotationPage2 {
         this.siteService.searchSite().subscribe(response=>{
             console.log(response.json());
             this.allSites = response.json();
+            this.selectedSite=this.allSites[0].name;
         })
 
         this.getRateCardTypes();
@@ -322,5 +332,49 @@ export class CreateQuotationPage2 {
         alert.present();
     }
 
+    viewImage(index,img)
+    {
+        let popover = this.popoverCtrl.create(QuotationImagePopoverPage,{i:img,ind:index},{cssClass:'view-img',showBackdrop:true});
+        popover.present({
 
+        });
+
+        popover.onDidDismiss(data=>
+        {
+            this.takenImages.pop(data);
+        })
+    }
+    viewCamera() {
+
+        const options: CameraOptions = {
+            quality: 50,
+            destinationType: this.camera.DestinationType.NATIVE_URI,
+            encodingType: this.camera.EncodingType.JPEG,
+            mediaType: this.camera.MediaType.PICTURE
+        };
+
+        this.camera.getPicture(options).then((imageData) => {
+
+            console.log('imageData -' +imageData);
+            imageData = imageData.replace("assets-library://", "cdvfile://localhost/assets-library/")
+
+            this.takenImages.push(imageData);
+
+
+        })
+
+    }
+    openDiv()
+    {
+        this.open=true;
+    }
+    openSite()
+    {
+        this.openSites=true;
+    }
+    viewSite(site)
+    {
+        this.selectedSite=site;
+        this.openSites=false;
+    }
 }
