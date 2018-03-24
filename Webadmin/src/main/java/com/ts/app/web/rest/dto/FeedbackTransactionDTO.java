@@ -14,16 +14,18 @@ public class FeedbackTransactionDTO extends BaseDTO implements Serializable {
 
     private String reviewerName;
 
+    private String reviewerCode;
+
     private long siteId;
-    
+
     private String siteName;
 
     private long projectId;
-    
+
     private String projectName;
-    
+
     private long feedbackId;
-    
+
     private String feedbackName;
 
     private List<FeedbackTransactionResultDTO> results;
@@ -33,7 +35,7 @@ public class FeedbackTransactionDTO extends BaseDTO implements Serializable {
     private String floor;
 
     private String zone;
-    
+
     private float rating;
 
     public long getId() {
@@ -148,5 +150,12 @@ public class FeedbackTransactionDTO extends BaseDTO implements Serializable {
 		this.results = results;
 	}
 
-	
+
+    public String getReviewerCode() {
+        return reviewerCode;
+    }
+
+    public void setReviewerCode(String reviewerCode) {
+        this.reviewerCode = reviewerCode;
+    }
 }

@@ -67,7 +67,7 @@ export class InitFeedbackPage {
           this.projects=response;
           this.selectedProject = this.projects[0];
           this.selectSite(this.selectedProject);
-          console.log('select default value:')
+          console.log('select default value:');
             this.component.closeLoader();
         },
         error=>{
