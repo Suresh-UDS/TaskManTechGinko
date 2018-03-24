@@ -32,27 +32,26 @@
                                                        <!---->
                                                     <!--</div>-->
                                                     <div class="wizard-navigation">
-                                                        <ul>
-                                                            <li>
-                                                                <a data-toggle="tab" data-target="#about">General</a>
+                                                        <ul class="arrow-steps">
+                                                            <li class="step active">
+                                                                <a data-toggle="tab" data-target="#general">General</a>
                                                             </li>
-                                                            <li>
-                                                                <a data-toggle="tab" data-target="#account">QR Code</a>
+                                                            <li class="step">
+                                                                <a data-toggle="tab" data-target="#qrcode">QR Code</a>
                                                             </li>
-                                                            <li>
+                                                            <li class="step">
                                                                 <a data-toggle="tab" data-target="#pmcschedule">PPM Schedule</a>
                                                             </li>
-                                                            <li>
+                                                            <li class="step">
                                                                 <a data-toggle="tab" data-target="#amcschedule">AMC schedule</a>
                                                             </li>
-                                                            <li>
+                                                            <li class="step">
                                                                 <a data-toggle="tab" data-target="#documents">Documents</a>
                                                             </li>
                                                         </ul>
                                                     </div>
                                                     <div class="tab-content">
-                                                        <div class="tab-pane" id="about">
-                                                            <h4 class="info-text"> Basic Details </h4>
+                                                        <div class="tab-pane" id="general">
 
                                                             <div class="row" ng-init="">
 
@@ -413,155 +412,358 @@
                                                             </div>
 
                                                         </div>
-                                                        <div class="tab-pane" id="account">
-                                                            <h4 class="info-text"> QR code Generation </h4>
+                                                        <div class="tab-pane" id="qrcode">
+
+                                                            <div class="panel panel-default" style="min-height: 300px;">
+                                                                <div class="panel-heading">
+
+                                                                    <div class="row">
+
+                                                                        <div class="col-md-8">
+
+                                                                        </div>
+                                                                        <div class="col-md-4" style="text-align: right">
+
+                                                                            <button class="btn btn-success add-btn margn-tb0">
+                                                                                <i class="material-icons">print</i> Print
+                                                                            </button>
+                                                                            <button class="btn btn-warning add-btn margn-tb0">
+                                                                                <i class="material-icons">autorenew</i> Refresh
+                                                                            </button>
+
+                                                                        </div>
+
+                                                                    </div>
+
+                                                                </div>
+                                                                <div class="panel-body">
+
+                                                                    <div class="row">
+
+                                                                        <div class="col-md-4 col-md-offset-4">
+
+
+                                                                            <div class="form-group is-empty">
+                                                                                <label class="control-label">Asset Code </label>
+                                                                                <input id="assetcode" ng-model="asset.assetcode" class="form-control" name="assetcode" type="text" value="" ng-minlength="5" ng-maxlength="250" ng-pattern="/^[A-Za-z0-9\s]*$/" autofocus="" required="" tabindex="0" aria-required="true" aria-invalid="true" autocomplete="off">
+
+
+
+                                                                                <span class="material-input"></span>
+
+                                                                            </div>
+
+                                                                            <div style="text-align: center">
+
+                                                                                <button class="btn btn-success add-btn margn-tb0">
+                                                                                    <i class="material-icons">autorenew</i> Generate
+                                                                                </button>
+
+                                                                            </div>
+
+
+                                                                        </div>
+
+                                                                    </div>
+
+
+                                                                </div>
+                                                            </div>
+
 
                                                         </div>
                                                         <div class="tab-pane" id="pmcschedule">
-                                                            <div class="row">
-                                                                <div class="col-sm-12">
-                                                                    <h4 class="info-text"> PPM Schedule details </h4>
-                                                                </div>
+                                                            <div class="panel panel-default">
+                                                                <div class="panel-heading">New Schedule</div>
+                                                                <div class="panel-body">
+                                                                    <div class="row">
 
-                                                            </div>
-                                                            <div class="row">
-
-                                                                <div class="col-md-2">
-                                                                    <div class="form-group">
-                                                                        <label class="control-label">Schedule</label>
-                                                                        <select class="form-control" ng-model="" ng-options="">
-                                                                            <option value="">Select Schedule ..</option>
-                                                                        </select>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="col-md-2">
-                                                                    <div class="form-group">
-                                                                        <label class="control-label">From Date</label>
-                                                                        <span class="form-control-feedback calender-icon"><i class="material-icons">date_range</i></span>
-                                                                        <input type="text" class="form-control datepicker"  id="dateFilterFrom"  placeholder="{{dateFilterFrom | date:'dd-MMM-yyyy'}}"/>
-
-                                                                    </div>
-                                                                </div>
-                                                                <div class="col-md-2">
-                                                                    <div class="form-group">
-                                                                        <label class="control-label">To Date</label>
-                                                                        <span class="form-control-feedback calender-icon"><i class="material-icons">date_range</i></span>
-                                                                        <input type="text" class="form-control datepicker"  id="dateFilterFrom"  placeholder="{{dateFilterFrom | date:'dd-MMM-yyyy'}}"/>
-
-                                                                    </div>
-                                                                </div>
-                                                                <div class="col-md-4">
-                                                                    <div class="form-group selectcon" style="padding-top:25px;">
-
-                                                                        <div class="" style="float:left;width:80%;">
-                                                                            <select class="form-control" ng-model="" ng-options="">
-                                                                                <option value="">Please select ..</option>
-                                                                            </select>
+                                                                        <div class="col-md-2">
+                                                                            <div class="form-group">
+                                                                                <label class="control-label">Schedule</label>
+                                                                                <select class="form-control" ng-model="" ng-options="">
+                                                                                    <option value="">Select Schedule ..</option>
+                                                                                </select>
+                                                                            </div>
                                                                         </div>
-                                                                        <div class="" style="float:left;">
-                                                                            <a href="javascript:;"  data-toggle="collapse" data-parent="#accordian" data-target="#addDesignation1" class="btn btn-round btn-fab btn-fab-mini btn-simple" aria-expanded="false" aria-controls="collapseExample">
-                                                                                <i class="material-icons">add</i>
-                                                                            </a>
+                                                                        <div class="col-md-2">
+                                                                            <div class="form-group">
+                                                                                <label class="control-label">From Date</label>
+                                                                                <span class="form-control-feedback calender-icon"><i class="material-icons">date_range</i></span>
+                                                                                <input type="text" class="form-control datepicker"  id="dateFilterFrom"  placeholder="{{dateFilterFrom | date:'dd-MMM-yyyy'}}"/>
+
+                                                                            </div>
                                                                         </div>
+                                                                        <div class="col-md-2">
+                                                                            <div class="form-group">
+                                                                                <label class="control-label">To Date</label>
+                                                                                <span class="form-control-feedback calender-icon"><i class="material-icons">date_range</i></span>
+                                                                                <input type="text" class="form-control datepicker"  id="dateFilterFrom"  placeholder="{{dateFilterFrom | date:'dd-MMM-yyyy'}}"/>
 
-                                                                    </div>
-
-                                                                </div>
-                                                                <div class="col-md-2 txt-align-rgt">
-
-                                                                    <div class="form-group" style="padding-top: 20px;">
-                                                                        <div class="checkbox">
-                                                                            <label>
-                                                                                <input type="checkbox" name="terms"> Active
-                                                                            </label>
+                                                                            </div>
                                                                         </div>
-                                                                    </div>
+                                                                        <div class="col-md-3">
+                                                                            <div class="form-group selectcon" style="padding-top:25px;">
 
-                                                                </div>
-                                                                <div class="col-md-5">
-                                                                    <div class="collapse" id="addDesignation1">
+                                                                                <div class="" style="float:left;width:80%;">
+                                                                                    <select class="form-control" ng-model="" ng-options="">
+                                                                                        <option value="">Please select ..</option>
+                                                                                    </select>
+                                                                                </div>
+                                                                                <div class="" style="float:left;">
+                                                                                    <a href="javascript:;"  data-toggle="collapse" data-parent="#accordian" data-target="#addDesignation1" class="btn btn-round btn-fab btn-fab-mini btn-simple" aria-expanded="false" aria-controls="collapseExample">
+                                                                                        <i class="material-icons">add</i>
+                                                                                    </a>
+                                                                                </div>
 
-                                                                        <div class="">
-                                                                            <input class="input-desc" id='' ng-model=""
-                                                                                   name='' type='text' value=""/>
+                                                                            </div>
+
+                                                                        </div>
+                                                                        <div class="col-md-2">
+
+                                                                            <div class="form-group" style="padding-top: 20px;">
+                                                                                <div class="checkbox">
+                                                                                    <label>
+                                                                                        <input type="checkbox" name="terms"> Active
+                                                                                    </label>
+                                                                                </div>
+                                                                            </div>
+
+
+                                                                        </div>
+                                                                        <div class="col-md-1" style="padding-top: 25px;">
                                                                             <a class="btn btn-success add-btn margn-top0"  ng-click="">Add</a>
                                                                         </div>
+                                                                        <div class="col-md-5">
+                                                                            <div class="collapse" id="addDesignation1">
+
+                                                                                <div class="">
+                                                                                    <input class="input-desc" id='' ng-model=""
+                                                                                           name='' type='text' value=""/>
+                                                                                    <a class="btn btn-success add-btn margn-top0"  ng-click="">Add</a>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+
                                                                     </div>
                                                                 </div>
+                                                            </div>
+                                                            <div class="table-responsive tablecard">
+                                                                <table class="table table-striped">
+
+                                                                    <thead>
+                                                                    <tr>
+                                                                        <th>Schedule Type</th>
+                                                                        <th>From Date</th>
+                                                                        <th>To Date</th>
+                                                                        <th>Active</th>
+                                                                        <th align="right">Actions</th>
+                                                                    </tr>
+
+                                                                    </thead>
+
+                                                                    <tbody>
+                                                                    <tr>
+                                                                        <td>Weekly</td>
+                                                                        <td>03/03/2018</td>
+                                                                        <td>03/03/2018</td>
+                                                                        <td>Yes</td>
+                                                                        <td class="text-right">
+                                                                            <a  ng-class="{active: $state.includes('admin')}"  has-permission="" ui-sref=""  class="btn btn-simple btn-info"><i class="material-icons">edit</i></a>
+
+                                                                        </td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td>Weekly</td>
+                                                                        <td>03/03/2018</td>
+                                                                        <td>03/03/2018</td>
+                                                                        <td>Yes</td>
+                                                                        <td class="text-right">
+                                                                            <a  ng-class="{active: $state.includes('admin')}"  has-permission="" ui-sref=""  class="btn btn-simple btn-info"><i class="material-icons">edit</i></a>
+
+                                                                        </td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td>Weekly</td>
+                                                                        <td>03/03/2018</td>
+                                                                        <td>03/03/2018</td>
+                                                                        <td>Yes</td>
+                                                                        <td class="text-right">
+                                                                            <a  ng-class="{active: $state.includes('admin')}"  has-permission="" ui-sref=""  class="btn btn-simple btn-info"><i class="material-icons">edit</i></a>
+
+                                                                        </td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td>Weekly</td>
+                                                                        <td>03/03/2018</td>
+                                                                        <td>03/03/2018</td>
+                                                                        <td>Yes</td>
+                                                                        <td class="text-right">
+                                                                            <a  ng-class="{active: $state.includes('admin')}"  has-permission="" ui-sref=""  class="btn btn-simple btn-info"><i class="material-icons">edit</i></a>
+
+                                                                        </td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td>Weekly</td>
+                                                                        <td>03/03/2018</td>
+                                                                        <td>03/03/2018</td>
+                                                                        <td>Yes</td>
+                                                                        <td class="text-right">
+                                                                            <a  ng-class="{active: $state.includes('admin')}"  has-permission="" ui-sref=""  class="btn btn-simple btn-info"><i class="material-icons">edit</i></a>
+
+                                                                        </td>
+                                                                    </tr>
+
+
+                                                                    </tbody>
+                                                                </table>
 
                                                             </div>
                                                         </div>
                                                         <div class="tab-pane" id="amcschedule">
-                                                            <div class="row">
-                                                                <div class="col-sm-12">
-                                                                    <h4 class="info-text"> AMC Schedule Details </h4>
-                                                                </div>
+                                                            <div class="panel panel-default">
+                                                                <div class="panel-heading">New Schedule</div>
+                                                                <div class="panel-body">
+                                                                    <div class="row">
 
-                                                            </div>
-                                                            <div class="row">
-
-                                                                <div class="col-md-2">
-                                                                    <div class="form-group">
-                                                                        <label class="control-label">Schedule</label>
-                                                                        <select class="form-control" ng-model="" ng-options="">
-                                                                            <option value="">Select Schedule ..</option>
-                                                                        </select>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="col-md-2">
-                                                                    <div class="form-group">
-                                                                        <label class="control-label">From Date</label>
-                                                                        <span class="form-control-feedback calender-icon"><i class="material-icons">date_range</i></span>
-                                                                        <input type="text" class="form-control datepicker"  id="dateFilterFrom"  placeholder="{{dateFilterFrom | date:'dd-MMM-yyyy'}}"/>
-
-                                                                    </div>
-                                                                </div>
-                                                                <div class="col-md-2">
-                                                                    <div class="form-group">
-                                                                        <label class="control-label">To Date</label>
-                                                                        <span class="form-control-feedback calender-icon"><i class="material-icons">date_range</i></span>
-                                                                        <input type="text" class="form-control datepicker"  id="dateFilterFrom"  placeholder="{{dateFilterFrom | date:'dd-MMM-yyyy'}}"/>
-
-                                                                    </div>
-                                                                </div>
-                                                                <div class="col-md-4">
-                                                                    <div class="form-group selectcon" style="padding-top:25px;">
-
-                                                                        <div class="" style="float:left;width:80%;">
-                                                                            <select class="form-control" ng-model="" ng-options="">
-                                                                                <option value="">Please select ..</option>
-                                                                            </select>
+                                                                        <div class="col-md-2">
+                                                                            <div class="form-group">
+                                                                                <label class="control-label">Schedule</label>
+                                                                                <select class="form-control" ng-model="" ng-options="">
+                                                                                    <option value="">Select Schedule ..</option>
+                                                                                </select>
+                                                                            </div>
                                                                         </div>
-                                                                        <div class="" style="float:left;">
-                                                                            <a href="javascript:;"  data-toggle="collapse" data-parent="#accordian" data-target="#addDesignation1" class="btn btn-round btn-fab btn-fab-mini btn-simple" aria-expanded="false" aria-controls="collapseExample">
-                                                                                <i class="material-icons">add</i>
-                                                                            </a>
+                                                                        <div class="col-md-2">
+                                                                            <div class="form-group">
+                                                                                <label class="control-label">From Date</label>
+                                                                                <span class="form-control-feedback calender-icon"><i class="material-icons">date_range</i></span>
+                                                                                <input type="text" class="form-control datepicker"  id="dateFilterFrom"  placeholder="{{dateFilterFrom | date:'dd-MMM-yyyy'}}"/>
+
+                                                                            </div>
                                                                         </div>
+                                                                        <div class="col-md-2">
+                                                                            <div class="form-group">
+                                                                                <label class="control-label">To Date</label>
+                                                                                <span class="form-control-feedback calender-icon"><i class="material-icons">date_range</i></span>
+                                                                                <input type="text" class="form-control datepicker"  id="dateFilterFrom"  placeholder="{{dateFilterFrom | date:'dd-MMM-yyyy'}}"/>
 
-                                                                    </div>
-
-                                                                </div>
-                                                                <div class="col-md-2 txt-align-rgt">
-
-                                                                    <div class="form-group" style="padding-top: 20px;">
-                                                                        <div class="checkbox">
-                                                                            <label>
-                                                                                <input type="checkbox" name="terms"> Active
-                                                                            </label>
+                                                                            </div>
                                                                         </div>
-                                                                    </div>
+                                                                        <div class="col-md-3">
+                                                                            <div class="form-group selectcon" style="padding-top:25px;">
 
-                                                                </div>
-                                                                <div class="col-md-5">
-                                                                    <div class="collapse" id="addDesignation1">
+                                                                                <div class="" style="float:left;width:80%;">
+                                                                                    <select class="form-control" ng-model="" ng-options="">
+                                                                                        <option value="">Please select ..</option>
+                                                                                    </select>
+                                                                                </div>
+                                                                                <div class="" style="float:left;">
+                                                                                    <a href="javascript:;"  data-toggle="collapse" data-parent="#accordian" data-target="#addDesignation1" class="btn btn-round btn-fab btn-fab-mini btn-simple" aria-expanded="false" aria-controls="collapseExample">
+                                                                                        <i class="material-icons">add</i>
+                                                                                    </a>
+                                                                                </div>
 
-                                                                        <div class="">
-                                                                            <input class="input-desc" id='' ng-model=""
-                                                                                   name='' type='text' value=""/>
+                                                                            </div>
+
+                                                                        </div>
+                                                                        <div class="col-md-2">
+
+                                                                            <div class="form-group" style="padding-top: 20px;">
+                                                                                <div class="checkbox">
+                                                                                    <label>
+                                                                                        <input type="checkbox" name="terms"> Active
+                                                                                    </label>
+                                                                                </div>
+                                                                            </div>
+
+                                                                        </div>
+                                                                        <div class="col-md-1" style="padding-top: 25px;">
                                                                             <a class="btn btn-success add-btn margn-top0"  ng-click="">Add</a>
                                                                         </div>
+                                                                        <div class="col-md-5">
+                                                                            <div class="collapse" id="addDesignation1">
+
+                                                                                <div class="">
+                                                                                    <input class="input-desc" id='' ng-model=""
+                                                                                           name='' type='text' value=""/>
+                                                                                    <a class="btn btn-success add-btn margn-top0"  ng-click="">Add</a>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+
                                                                     </div>
                                                                 </div>
+                                                            </div>
+                                                            <div class="table-responsive tablecard">
+                                                                <table class="table table-striped">
+
+                                                                    <thead>
+                                                                    <tr>
+                                                                        <th>Schedule Type</th>
+                                                                        <th>From Date</th>
+                                                                        <th>To Date</th>
+                                                                        <th>Active</th>
+                                                                        <th align="right">Actions</th>
+                                                                    </tr>
+
+                                                                    </thead>
+
+                                                                    <tbody>
+                                                                    <tr>
+                                                                        <td>Weekly</td>
+                                                                        <td>03/03/2018</td>
+                                                                        <td>03/03/2018</td>
+                                                                        <td>Yes</td>
+                                                                        <td class="text-right">
+                                                                            <a  ng-class="{active: $state.includes('admin')}"  has-permission="" ui-sref=""  class="btn btn-simple btn-info"><i class="material-icons">edit</i></a>
+
+                                                                        </td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td>Weekly</td>
+                                                                        <td>03/03/2018</td>
+                                                                        <td>03/03/2018</td>
+                                                                        <td>Yes</td>
+                                                                        <td class="text-right">
+                                                                            <a  ng-class="{active: $state.includes('admin')}"  has-permission="" ui-sref=""  class="btn btn-simple btn-info"><i class="material-icons">edit</i></a>
+
+                                                                        </td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td>Weekly</td>
+                                                                        <td>03/03/2018</td>
+                                                                        <td>03/03/2018</td>
+                                                                        <td>Yes</td>
+                                                                        <td class="text-right">
+                                                                            <a  ng-class="{active: $state.includes('admin')}"  has-permission="" ui-sref=""  class="btn btn-simple btn-info"><i class="material-icons">edit</i></a>
+
+                                                                        </td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td>Weekly</td>
+                                                                        <td>03/03/2018</td>
+                                                                        <td>03/03/2018</td>
+                                                                        <td>Yes</td>
+                                                                        <td class="text-right">
+                                                                            <a  ng-class="{active: $state.includes('admin')}"  has-permission="" ui-sref=""  class="btn btn-simple btn-info"><i class="material-icons">edit</i></a>
+
+                                                                        </td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td>Weekly</td>
+                                                                        <td>03/03/2018</td>
+                                                                        <td>03/03/2018</td>
+                                                                        <td>Yes</td>
+                                                                        <td class="text-right">
+                                                                            <a  ng-class="{active: $state.includes('admin')}"  has-permission="" ui-sref=""  class="btn btn-simple btn-info"><i class="material-icons">edit</i></a>
+
+                                                                        </td>
+                                                                    </tr>
+
+
+                                                                    </tbody>
+                                                                </table>
 
                                                             </div>
                                                         </div>

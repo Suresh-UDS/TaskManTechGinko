@@ -48,11 +48,11 @@
 
 
                             </div>
-                        </div>                        
+                        </div>
                     </div>
                     <div class="row">
 
-                        <div class="col-md-3">
+                        <div class="col-md-4">
 
                             <div class="form-group pdng-top15">
                                 <label class="control-label">Title</label>
@@ -60,18 +60,19 @@
                             </div>
 
                         </div>
-                        <div class="col-md-4">
+                        <div class="col-md-8">
 
                             <div class="form-group pdng-top15">
                                 <label class="control-label">Question</label>
                                 <input type="text" class="form-control" ng-model="newFeedbackItem.question">
                             </div>
                         </div>
-                        <div class="col-md-3">
+
+                        <div class="col-md-10">
                             <div class="form-group pdng-top15">
                                 <label class="control-label">Answer Type</label>
                                 <div>
-                                    <div class="radio radio-inline">
+                                    <div class="radio radio-inline" data-toggle="collapse" data-target="#YesOrNo">
                                         <label>
                                             <input type="radio" id="answerType" name="answerType" ng-model="newFeedbackItem.answerType" value="YESNO" checked="checked" required> Yes/No
                                         </label>
@@ -81,11 +82,37 @@
                                             <input type="radio" id="answerType" name="answerType" ng-model="newFeedbackItem.answerType" value="RATING" required > Rating
                                         </label>
                                     </div>
-                                </div>    
+                                    <div  id="YesOrNo" class="collapse">
+
+                                       <div class="radio">
+                                           <label>Yes</label>
+                                           <label>
+                                               <input type="radio" id="" name="yes" value="+ve" checked="checked"> +ve
+                                           </label>
+                                           <label><input type="radio" id="" name="yes"  value="-ve" checked=""> -ve</label>
+                                       </div>
+
+                                        <div class="radio">
+                                            <label>No</label>
+                                            <label>
+                                                <input type="radio" id="" name="no"  value="+ve" checked=""> +ve
+                                            </label>
+                                            <label>
+                                                <input type="radio" id="" name="no"  value="-ve" checked="checked"> -ve
+                                            </label>
+                                        </div>
+
+
+
+
+                                    </div>
+
+                                </div>
                             </div>
 
                         </div>
-                        <div class="col-md-1">
+
+                        <div class="col-md-2" style="text-align: right">
 
                             <button class="btn btn-success margn-top30" ng-click="addFeedbackItem(newFeedbackItem)">
                                 <span class="btn-label">

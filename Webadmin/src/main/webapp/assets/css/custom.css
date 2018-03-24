@@ -98,6 +98,11 @@ ul.checkList li
 {
   margin-top:0 !important;
 }
+.margn-tb0
+{
+    margin-top:0 !important;
+    margin-bottom:0 !important;
+}
 .margn-top10
 {
   margin-top:10px !important;
@@ -603,6 +608,8 @@ p.blocktxt
   border: 2px solid #ff9800;
 }
 
+
+
 .form-group.label-floating label.control-label, .form-group.label-placeholder label.control-label
 {
   top: -2px;
@@ -761,6 +768,122 @@ button.btn.btn-outline {
   border-bottom: 1px solid #ddd;
   padding:10px;
 }
+
+/* wizard triangle */
+
+
+
+/* Breadcrups CSS */
+
+.arrow-steps .step {
+    font-size: 14px;
+    text-align: center;
+    color: #666;
+    cursor: default;
+    margin: 0 3px;
+    padding: 0;
+    min-width: 160px;
+    float: left;
+    position: relative;
+    background-color: #d9e3f7;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    transition: background-color 0.2s ease;
+}
+
+.arrow-steps .step:after,
+.arrow-steps .step:before {
+    content: " ";
+    position: absolute;
+    top: 0;
+    right: -17px;
+    width: 0;
+    height: 0;
+    border-top: 19px solid transparent;
+    border-bottom: 17px solid transparent;
+    border-left: 17px solid #d9e3f7;
+    z-index: 2;
+    transition: border-color 0.2s ease;
+}
+
+.arrow-steps .step:before {
+    right: auto;
+    left: 0;
+    border-left: 17px solid #fff;
+    z-index: 0;
+}
+
+.arrow-steps .step:first-child:before {
+    border: none;
+}
+
+.arrow-steps .step:first-child {
+    border-top-left-radius: 4px;
+    border-bottom-left-radius: 4px;
+}
+
+.arrow-steps .step a {
+    position: relative;
+}
+
+.arrow-steps .step a:before {
+    opacity: 0;
+    content: "✔";
+    position: absolute;
+    top: -2px;
+    left: -20px;
+}
+
+.arrow-steps .step.done a:before {
+    opacity: 1;
+    -webkit-transition: opacity 0.3s ease 0.5s;
+    -moz-transition: opacity 0.3s ease 0.5s;
+    -ms-transition: opacity 0.3s ease 0.5s;
+    transition: opacity 0.3s ease 0.5s;
+}
+
+.arrow-steps .step.active {
+    background-color: #ff9800;
+}
+.arrow-steps .step.active a
+{
+    color: #fff !important;
+    margin-left: 20px !important;
+}
+.arrow-steps .step.active:after {
+    border-left: 17px solid #ff9800;
+}
+.wizard-card
+{
+    margin: 0;
+}
+.wizard-card .nav-pills {
+    background-color: rgb(255, 255, 255);
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+.wizard-card .nav-pills>li>a:focus
+{
+    background: none !important;
+    border-radius: 0 ;
+}
+.moving-tab
+{
+    display: none;
+}
+.wizard-card .tab-content
+{
+    margin-top: 0 !important;
+}
+
+.wizard-card .nav-pills>li.active>a, .wizard-card .nav-pills>li.active>a:hover, .wizard-card .nav-pills>li.active>a:focus, .wizard-card .nav-pills>li>a:hover, .wizard-card .nav-pills>li>a:focus
+{
+    background: none !important;
+}
+
 
 .listOfActions li.list-group-item
 {
