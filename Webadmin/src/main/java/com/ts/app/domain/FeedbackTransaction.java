@@ -37,14 +37,16 @@ public class FeedbackTransaction extends AbstractAuditingEntity implements Seria
 
     private String reviewerName;
 
+    private String reviewerCode;
+
     private long siteId;
-    
+
     private String siteName;
 
     private long projectId;
-    
+
     private String projectName;
-    
+
     @ManyToOne()
     @JoinColumn(name = "feedback_id")
     private FeedbackMapping feedback;
@@ -60,7 +62,7 @@ public class FeedbackTransaction extends AbstractAuditingEntity implements Seria
 
     @Column(name = "zone")
     private String zone;
-    
+
     private float rating;
 
     public long getId() {
@@ -166,5 +168,12 @@ public class FeedbackTransaction extends AbstractAuditingEntity implements Seria
 	public void setResults(Set<FeedbackTransactionResult> results) {
 		this.results = results;
 	}
-    
+
+    public String getReviewerCode() {
+        return reviewerCode;
+    }
+
+    public void setReviewerCode(String reviewerCode) {
+        this.reviewerCode = reviewerCode;
+    }
 }

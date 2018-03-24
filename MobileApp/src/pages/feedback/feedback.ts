@@ -12,6 +12,7 @@ import {FeedbackQuestionPage} from "../feedback/feedback-questions";
 export class FeedbackPage {
 
   userId:any;
+  userCode:any;
   employeeId: any;
   sites:any;
   userName:any;
@@ -20,15 +21,16 @@ export class FeedbackPage {
   constructor(public navCtrl: NavController,public navParams: NavParams,public myService:authService,public component:componentService, private siteService: SiteService) {
 
       this.feedback = this.navParams.data.feedback;
+      this.userCode="";
       console.log(this.feedback);
 
   }
 
-    start(userName)
+    start(userName,userCode)
     {
         console.log("User name");
-        console.log(userName);
-        this.navCtrl.push(FeedbackQuestionPage,{userName:userName,feedback:this.feedback,fb:this.navParams.data.fb});
+        console.log(userName+" - "+userCode);
+        this.navCtrl.push(FeedbackQuestionPage,{userName:userName,userCode:userCode,feedback:this.feedback,fb:this.navParams.data.fb});
     }
 
     skip()
@@ -36,7 +38,8 @@ export class FeedbackPage {
         this.userName = "Anonymous"+new Date().getMilliseconds();
         console.log("anonymous user");
         console.log(this.userName);
-        this.navCtrl.push(FeedbackQuestionPage, {userName:this.userName,feedback:this.feedback, fb:this.navParams.data.fb});
+        console.log(this.userCode);
+        this.navCtrl.push(FeedbackQuestionPage, {userName:this.userName,userCode:this.userCode,feedback:this.feedback, fb:this.navParams.data.fb});
     }
 
 }

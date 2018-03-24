@@ -26,13 +26,15 @@ export class FeedbackQuestionPage {
    noMode:any;
    feedbackTransaction:any;
    username:any;
+   userCode:any;
    answer:any;
 
   constructor(public navCtrl: NavController,public myService:authService,public feedbackService:FeedbackService,public component:componentService, private siteService: SiteService, private navParams:NavParams) {
     console.log("username from feedback");
     console.log(this.navParams.data);
 
-this.username = this.navParams.data.userName;
+    this.username = this.navParams.data.userName;
+    this.userCode = this.navParams.data.userCode;
     console.log(this.navParams.data.feedback);
     this.feedbackService.findFeedback(this.navParams.data.feedback.id).subscribe(
         response=>{
@@ -87,6 +89,7 @@ this.username = this.navParams.data.userName;
       this.feedbackTransaction = {
           results:this.questions,
           reviewerName:this.navParams.data.userName,
+          reviewerCode:this.navParams.data.userCode,
           siteId:this.navParams.data.fb.siteId,
           siteName:this.navParams.data.fb.siteName,
           projectId:this.navParams.data.fb.projectId,
