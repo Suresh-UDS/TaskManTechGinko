@@ -226,7 +226,7 @@ demo = {
 
         function refreshAnimation($wizard, index) {
             $total = $wizard.find('.nav li').length;
-            $li_width = 100 / $total;
+            $li_width = 95 / $total;
 
             total_steps = $wizard.find('.nav li').length;
             move_distance = $wizard.width() / total_steps;
