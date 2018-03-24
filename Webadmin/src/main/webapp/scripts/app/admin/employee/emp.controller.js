@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('timeSheetApp')
-    .controller('EmployeeController', function ($rootScope,$window, $scope, $state, $timeout, ProjectComponent, SiteComponent, EmployeeComponent,UserRoleComponent, $http,$stateParams,$location) {
+    .controller('EmployeeController', function ($rootScope,$window, $scope, $state, $timeout, ProjectComponent, SiteComponent, EmployeeComponent,LocationComponent, UserRoleComponent, $http,$stateParams,$location) {
         $scope.success = null;
         $scope.error = null;
         $scope.errorMessage = null;
@@ -92,6 +92,31 @@ angular.module('timeSheetApp')
         $scope.removeProjectSite = function(ind) {
         		$scope.projectSiteList.splice(ind,1);
         };
+        
+        $scope.locationList = [];
+
+        $scope.addLocation = function() {
+	        	console.log('selected block -' + $scope.selectedBlock);
+	        	console.log('selected floor -' + $scope.selectedFloor);
+	        	console.log('selected zone -' + $scope.selectedZone);
+	        	var loc = {
+	        		"block" : $scope.selectedBlock,
+	        		"floor" : $scope.selectedFloor,
+	        		"zone" : $scope.selectedZone
+	        	}
+	        	if($scope.employee) {
+	        		loc.projectId = $scope.selectedProject.id;
+	        		loc.siteId = $scope.selectedSite.id;
+	        		loc.employeeId = $scope.employee.id
+	        		loc.employeeName = $scope.employee.name
+	        	}
+	        	$scope.locationList.push(loc);
+	        	console.log('loc list -' + $scope.locationList)
+        };
+
+        $scope.removeLocation = function(ind) {
+        		$scope.locationList.splice(ind,1);
+        };        
 
         $scope.initAddEdit = function() {
         		$scope.loadAllManagers();
@@ -106,6 +131,33 @@ angular.module('timeSheetApp')
                 $scope.projects = data;
             });
         };
+        
+        $scope.loadBlocks = function () {
+	    		console.log('selected project -' + ($scope.selectedProject ? $scope.selectedProject.id : 0) + ', site -' + ($scope.selectedSite ? $scope.selectedSite.id : 0))
+	    		var projectId = $scope.selectedProject ? $scope.selectedProject.id : 0;
+	    		LocationComponent.findBlocks(projectId,$scope.selectedSite.id).then(function (data) {
+	    			$scope.selectedBlock = null;
+	            $scope.blocks = data;
+	        });
+	    };
+	    
+	    
+	    $scope.loadFloors = function () {
+	    		var projectId = $scope.selectedProject ? $scope.selectedProject.id : 0;
+	    		LocationComponent.findFloors(projectId,$scope.selectedSite.id,$scope.selectedBlock).then(function (data) {
+	    			$scope.selectedFloor = null;
+	            $scope.floors = data;
+	        });
+	    };
+	    
+	    $scope.loadZones = function () {
+	    		console.log('load zones - ' + $scope.selectedSite.id +',' +$scope.selectedBlock +','+$scope.selectedFloor);
+	    		var projectId = $scope.selectedProject ? $scope.selectedProject.id : 0;
+	    		LocationComponent.findZones(projectId,$scope.selectedSite.id,$scope.selectedBlock, $scope.selectedFloor).then(function (data) {
+	    			$scope.selectedZone = null;
+	            $scope.zones = data;
+	        });
+	    };              
         
         $scope.loadUserRoles = function () {
         		UserRoleComponent.findAll().then(function (data) {
@@ -350,6 +402,9 @@ angular.module('timeSheetApp')
                 	}
                 	if($scope.projectSiteList) {
                 		$scope.employee.projectSites = $scope.projectSiteList;
+                	}
+                	if($scope.locationList) {
+                		$scope.employee.locations = $scope.locationList;
                 	}
                 	EmployeeComponent.createEmployee($scope.employee).then(function () {
 	                    	$scope.success = 'OK';

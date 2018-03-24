@@ -160,7 +160,12 @@ public class    EmployeeService extends AbstractService {
 					projSite.setEmployee(employee);
 				}
 			}
-
+			List<EmployeeLocation> locations = employee.getLocations();
+			if(CollectionUtils.isNotEmpty(locations)) {
+				for(EmployeeLocation loc : locations) {
+					loc.setEmployee(employee);
+				}
+			}
 
 			employee = employeeRepository.save(employee);
 			//create user if opted.
