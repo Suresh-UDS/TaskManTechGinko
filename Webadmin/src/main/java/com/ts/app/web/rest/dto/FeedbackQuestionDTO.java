@@ -14,6 +14,8 @@ public class FeedbackQuestionDTO extends BaseDTO implements Serializable {
     private String question;
     
     private FeedbackAnswerType answerType;
+    
+    private String scoreType;
 
     public long getId() {
         return id;
@@ -38,6 +40,14 @@ public class FeedbackQuestionDTO extends BaseDTO implements Serializable {
 
 	public void setAnswerType(FeedbackAnswerType answerType) {
 		this.answerType = answerType;
+	}
+
+	public String getScoreType() {
+		return scoreType;
+	}
+
+	public void setScoreType(String scoreType) {
+		this.scoreType = scoreType;
 	}
     
     
