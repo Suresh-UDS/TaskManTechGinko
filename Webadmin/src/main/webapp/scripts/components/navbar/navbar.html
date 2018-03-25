@@ -77,6 +77,7 @@ Tip 3: you can change the color of the sidebar with data-background-color="white
                     <p>Client </p>
                 </a>
             </li>
+
             <li ui-sref-active="active" has-permission="Client:List" >
                 <a ui-sref="assets">
                     <i class="material-icons">people</i>
@@ -136,6 +137,33 @@ Tip 3: you can change the color of the sidebar with data-background-color="white
                     <i class="material-icons">file_upload</i>
                     <p>Import</p>
                 </a>
+            </li>
+            <li has-permission="Feedback:List" ng-class="{active: $state.includes('admin')}">
+                <a data-toggle="collapse" data-target="#Inventory" href="#">
+                    <i class="material-icons">location_city</i>
+                    <p> Inventory
+                        <b class="caret"></b>
+                    </p>
+                </a>
+                <div class="collapse" id="Inventory">
+                    <ul class="nav SubNav">
+
+                        <li ui-sref-active="active" has-authority="ROLE_ADMIN" >
+                            <a ui-sref="inventory-list">
+                                <i class="material-icons">location_city</i>
+                                <p>Inventory Master</p>
+                            </a>
+                        </li>
+                        <li ui-sref-active="active" has-authority="ROLE_ADMIN" >
+                            <a ui-sref="inventory-transaction">
+                                <i class="material-icons">location_city</i>
+                                <p>Inventory Transaction</p>
+                            </a>
+                        </li>
+
+
+                    </ul>
+                </div>
             </li>
             <li has-permission="Reports:List" ng-class="{active: $state.includes('reports')}">
                 <a data-toggle="collapse" data-target="#formsExamples" href="#">
