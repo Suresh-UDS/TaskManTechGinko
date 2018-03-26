@@ -171,6 +171,9 @@ public class JobManagementService extends AbstractService {
 			log.debug("findBYSearchCriteria search criteria -"+ (searchCriteria.getJobStatus() != null && searchCriteria.getJobStatus().equals(JobStatus.OVERDUE)));
 
 			Employee employee = employeeRepository.findByUserId(searchCriteria.getUserId());
+
+			//log.debug(""+employee.getEmpId());
+
 			List<Long> subEmpIds = new ArrayList<Long>();
 			if(employee != null) {
 				searchCriteria.setDesignation(employee.getDesignation());
@@ -1322,15 +1325,21 @@ public class JobManagementService extends AbstractService {
 
     }
 
-	public ExportResult generateReport(List<JobDTO> transactions, SearchCriteria criteria) {
-		//return exportUtil.writeJobReportToFile(transactions, null, null);
-		return reportUtil.generateJobReports(transactions, null, null, criteria);
-	}
+    public ExportResult generateReport(List<JobDTO> transactions, SearchCriteria criteria) {
+        //return exportUtil.writeJobReportToFile(transactions, null, null);
+        //log.debug("REPORT GENERATION PROCESSING HERE ***********");
+        //log.debug("CRIITERIA *******"+criteria+"TRANSACTION *********"+transactions);
+
+        return reportUtil.generateJobReports(transactions, null, null, criteria);
+    }
 
 
 	public ExportResult getExportStatus(String fileId) {
 		ExportResult er = new ExportResult();
-		fileId += ".csv";
+
+		fileId += ".xlsx";
+        //log.debug("FILE ID INSIDE OF getExportStatus CALL ***********"+fileId);
+
 		if(!StringUtils.isEmpty(fileId)) {
 			String status = exportUtil.getExportStatus(fileId);
 			er.setFile(fileId);
@@ -1340,7 +1349,8 @@ public class JobManagementService extends AbstractService {
 	}
 
 	public byte[] getExportFile(String fileName) {
-		return exportUtil.readExportFile(fileName);
+		//return exportUtil.readExportFile(fileName);
+		return exportUtil.readJobExportFile(fileName);
 	}
 
 	public ImportResult importFile(MultipartFile file, long dateTime) {
