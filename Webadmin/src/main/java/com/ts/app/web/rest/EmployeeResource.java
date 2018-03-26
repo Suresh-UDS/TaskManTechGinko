@@ -2,6 +2,7 @@ package com.ts.app.web.rest;
 
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -308,28 +309,32 @@ public class EmployeeResource {
 
     @RequestMapping(value = "/employee/export",method = RequestMethod.POST)
 	public ExportResponse exportEmployee(@RequestBody SearchCriteria searchCriteria) {
-		ExportResponse resp = new ExportResponse();
+	    ExportResponse resp = new ExportResponse();
 		if(searchCriteria != null) {
 			searchCriteria.setUserId(SecurityUtils.getCurrentUserId());
 			SearchResult<EmployeeDTO> result = employeeService.findBySearchCrieria(searchCriteria);
 			List<EmployeeDTO> results = result.getTransactions();
-			resp.addResult(employeeService.export(results));
+			//log.debug("VALUES OF RESULTS ******************"+results);
+            resp.addResult(employeeService.export(results));
 		}
-		return resp;
+    	return resp;
 	}
 
     @RequestMapping(value = "/employee/export/{fileId}/status",method = RequestMethod.GET)
 	public ExportResult exportStatus(@PathVariable("fileId") String fileId) {
-		log.debug("ExportStatus -  fileId -"+ fileId);
+		//log.debug("ExportStatus -  fileId -"+ fileId);
 		ExportResult result = employeeService.getExportStatus(fileId);
 		if(result!=null && result.getStatus() != null) {
+		    //log.info("result.getSTATUS----------"+result.getStatus());
 			switch(result.getStatus()) {
 				case "PROCESSING" :
 					result.setMsg("Exporting...");
 					break;
 				case "COMPLETED" :
 					result.setMsg("Download");
+					//log.info("FILE-ID--------"+fileId);
 					result.setFile("/api/employee/export/"+fileId);
+					//log.info("FILE-ID AFTER RESULT--------"+result);
 					break;
 				case "FAILED" :
 					result.setMsg("Failed to export. Please try again");
@@ -344,11 +349,13 @@ public class EmployeeResource {
 
 	@RequestMapping(value = "/employee/export/{fileId}",method = RequestMethod.GET)
 	public byte[] getExportFile(@PathVariable("fileId") String fileId, HttpServletResponse response) {
+	   // log.debug("FILE-ID++++++++++++"+fileId);
 		byte[] content = employeeService.getExportFile(fileId);
-		response.setContentType("application/force-download");
+		//log.debug("GET EXPORT FILE FILE-ID----"+content);
+		response.setContentType("Application/x-msexcel");
 		response.setContentLength(content.length);
 		response.setHeader("Content-Transfer-Encoding", "binary");
-		response.setHeader("Content-Disposition","attachment; filename=\"" + fileId + ".txt\"");
+		response.setHeader("Content-Disposition","attachment; filename=\"" + fileId + ".xlsx\"");
 		return content;
 	}
 

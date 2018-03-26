@@ -79,12 +79,12 @@ public class JobManagementResource {
 	@Inject
 	private ReportUtil reportUtil;
 
-	
+
 	@RequestMapping(path="/job/lookup/status", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public JobStatus[] getJobStatuses() {
 		return JobStatus.values();
 	}
-	
+
 	@RequestMapping(path="/site/{id}/job", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public Paginator<JobDTO> getSiteJobs(@PathVariable("id") Long siteId, @RequestParam(name="currPage",required=false) int page){
 		return jobService.getSiteJobs(siteId,page);
@@ -370,7 +370,7 @@ public class JobManagementResource {
 
     @RequestMapping(value = "/jobs/import/{fileId}/status",method = RequestMethod.GET)
 	public ImportResult importStatus(@PathVariable("fileId") String fileId) {
-		log.debug("ImportStatus -  fileId -"+ fileId);
+		//log.debug("ImportStatus -  fileId -"+ fileId);
 		ImportResult result = jobService.getImportStatus(fileId);
 		if(result!=null && result.getStatus() != null) {
 			switch(result.getStatus()) {
@@ -405,21 +405,28 @@ public class JobManagementResource {
     }
 
     @RequestMapping(value = "/job/export",method = RequestMethod.POST)
-	public ExportResponse exportJob(@RequestBody SearchCriteria searchCriteria) {
-		ExportResponse resp = new ExportResponse();
-		if(searchCriteria != null) {
-			searchCriteria.setUserId(SecurityUtils.getCurrentUserId());
-			SearchResult<JobDTO> result = jobService.findBySearchCrieria(searchCriteria, true);
-			List<JobDTO> results = result.getTransactions();
-			resp.addResult(jobService.generateReport(results, searchCriteria));
-		}
-		return resp;
-	}
+    public ExportResponse exportJob(@RequestBody SearchCriteria searchCriteria) {
+	    //log.debug("JOB EXPORT STARTS HERE **********");
+        ExportResponse resp = new ExportResponse();
+        if(searchCriteria != null) {
+            searchCriteria.setUserId(SecurityUtils.getCurrentUserId());
+            SearchResult<JobDTO> result = jobService.findBySearchCrieria(searchCriteria, true);
+            List<JobDTO> results = result.getTransactions();
+            resp.addResult(jobService.generateReport(results, searchCriteria));
+
+           // log.debug("RESPONSE FOR OBJECT resp *************"+resp);
+        }
+        return resp;
+    }
 
     @RequestMapping(value = "/job/export/{fileId}/status",method = RequestMethod.GET)
 	public ExportResult exportStatus(@PathVariable("fileId") String fileId) {
-		log.debug("ExportStatus -  fileId -"+ fileId);
+		//log.debug("ExportStatus -  fileId -"+ fileId);
 		ExportResult result = jobService.getExportStatus(fileId);
+
+		//log.debug("RESULT NOW **********"+result);
+		//log.debug("RESULT GET STATUS **********"+result.getStatus());
+
 		if(result!=null && result.getStatus() != null) {
 			switch(result.getStatus()) {
 				case "PROCESSING" :
@@ -427,7 +434,10 @@ public class JobManagementResource {
 					break;
 				case "COMPLETED" :
 					result.setMsg("Download");
+					//log.debug("DOWNLOAD FILE PROCESSING HERE ************"+result.getMsg());
+					//log.debug("FILE ID IN API CALLING ************"+fileId);
 					result.setFile("/api/job/export/"+fileId);
+					//log.debug("DOWNLOADED FILE IS ************"+result.getFile());
 					break;
 				case "FAILED" :
 					result.setMsg("Failed to export. Please try again");
@@ -443,10 +453,10 @@ public class JobManagementResource {
 	@RequestMapping(value = "/job/export/{fileId}",method = RequestMethod.GET)
 	public byte[] getExportFile(@PathVariable("fileId") String fileId, HttpServletResponse response) {
 		byte[] content = jobService.getExportFile(fileId);
-		response.setContentType("application/force-download");
+		response.setContentType("Application/x-msexcel");
 		response.setContentLength(content.length);
 		response.setHeader("Content-Transfer-Encoding", "binary");
-		response.setHeader("Content-Disposition","attachment; filename=\"" + fileId + ".txt\"");
+		response.setHeader("Content-Disposition","attachment; filename=\"" + fileId + ".xlsx\"");
 		return content;
 	}
 
