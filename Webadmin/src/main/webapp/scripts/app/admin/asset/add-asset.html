@@ -18,15 +18,15 @@
                 <div class="">
                     <div class="">
                         <div class="form-container table-container">
-                            <form ng-show="!success" name="form" role="form" novalidate
-                                  ng-submit="saveAsset()"  class="form-horizontal">
+
 
                                 <div class="row">
                                     <div class="col-md-12">
                                         <!--      Wizard container        -->
                                         <div class="wizard-container">
                                             <div class="card wizard-card active" data-color="orange" id="wizardProfile">
-                                                <form action="" method="">
+                                                <form ng-show="!success" name="form" role="form" novalidate
+                                                      ng-submit="saveAsset()"  class="form-horizontal" >
                                                     <!--        You can switch " data-color="purple" "  with one of the next bright colors: "green", "orange", "red", "blue"       -->
                                                     <!--<div class="wizard-header">-->
                                                        <!---->
@@ -830,7 +830,7 @@
                                          style="display: none"></div>
                                 </div>
 
-                            </form>
+
                         </div>
 
                     </div>

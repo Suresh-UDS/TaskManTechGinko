@@ -37,6 +37,9 @@ public class FeedbackQuestion extends AbstractAuditingEntity implements Serializ
     @ManyToOne()
     @JoinColumn(name = "feedback_id")
     private Feedback feedback;
+    
+    @Column(name = "score_type")
+    private String scoreType;
 
     public long getId() {
         return id;
@@ -68,6 +71,14 @@ public class FeedbackQuestion extends AbstractAuditingEntity implements Serializ
 
 	public void setAnswerType(FeedbackAnswerType answerType) {
 		this.answerType = answerType;
+	}
+
+	public String getScoreType() {
+		return scoreType;
+	}
+
+	public void setScoreType(String scoreType) {
+		this.scoreType = scoreType;
 	}
     
 }

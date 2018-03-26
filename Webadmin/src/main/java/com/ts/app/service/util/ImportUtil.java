@@ -78,6 +78,7 @@ public class ImportUtil {
 	private static final String NEW_IMPORT_FOLDER = "D://fms//imports";
 	private static final String JOB_FOLDER = "job";
 	private static final String EMPLOYEE_FOLDER = "employee";
+	private static final String CHECKLIST_FOLDER = "checklist";
 	private static final String CLIENT_FOLDER = "client";
 	private static final String SITE_FOLDER = "site";
 	private static final String COMPLETED_IMPORT_FOLDER = "D://fms//imports//completed";
@@ -201,9 +202,9 @@ public class ImportUtil {
 	
 	public ImportResult importChecklistData(MultipartFile file, long dateTime) {
         String fileName = dateTime + ".xlsx";
-		String filePath = NEW_IMPORT_FOLDER + SEPARATOR +  EMPLOYEE_FOLDER;
+		String filePath = NEW_IMPORT_FOLDER + SEPARATOR +  CHECKLIST_FOLDER;
 		String uploadedFileName = fileUploadHelper.uploadJobImportFile(file, filePath, fileName);
-		String targetFilePath = COMPLETED_IMPORT_FOLDER + SEPARATOR +  EMPLOYEE_FOLDER;
+		String targetFilePath = COMPLETED_IMPORT_FOLDER + SEPARATOR +  CHECKLIST_FOLDER;
 		String fileKey = fileName.substring(0, fileName.indexOf(".xlsx"));
 		if(statusMap.containsKey(fileKey)) {
 			String status = statusMap.get(fileKey);

@@ -381,6 +381,15 @@ textarea.form-control {
       font-size: 16px;
       padding: 0;
 }
+.TabsContainer .nav-pills>li a
+{
+    background-color: #eee;
+}
+.TabsContainer .nav-pills>li a:hover
+{
+    background-color: #ff9800;
+    color: #fff;
+}
 .TabsContainer  .tab-pane
 {
    padding:10px;
