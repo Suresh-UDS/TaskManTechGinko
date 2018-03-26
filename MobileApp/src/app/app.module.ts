@@ -74,7 +74,7 @@ import {JobPopoverPage} from "../pages/jobs/job-popover";
 import {BatteryStatus, BatteryStatusResponse} from "@ionic-native/battery-status";
 import {FeedbackDashboardPage} from "../pages/feedback/feedback-dashboard";
 import {QuotationImagePopoverPage} from "../pages/quotation/quotation-image-popover";
-
+import { BackgroundMode } from '@ionic-native/background-mode';
 
 @NgModule({
   declarations: [
@@ -199,6 +199,7 @@ import {QuotationImagePopoverPage} from "../pages/quotation/quotation-image-popo
     authService,
     HttpClient,
     Geolocation,
+      BackgroundMode,
     Geofence,
       // GoogleMaps,
       Toast,

@@ -1,9 +1,9 @@
 import { Component, ViewChild } from '@angular/core';
-import {Events, Nav, Platform} from 'ionic-angular';
+import {Events, Nav, Platform, ToastController} from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import {BatteryStatus, BatteryStatusResponse} from "@ionic-native/battery-status";
-
+import { BackgroundMode } from '@ionic-native/background-mode';
 import { HomePage } from '../pages/home/home';
 import { ListPage } from '../pages/list/list';
 import {LoginPage} from "../pages/login/login";
@@ -25,6 +25,7 @@ import {FeedbackPage} from "../pages/feedback/feedback";
 import {InitFeedbackPage} from "../pages/feedback/init-feedback";
 
 import{OneSignal} from "@ionic-native/onesignal";
+import {componentService} from "../pages/service/componentService";
 
 @Component({
   templateUrl: 'app.html'
@@ -35,18 +36,28 @@ export class MyApp {
   rootPage: any = TabsPage;
   userName:any;
   userType :any;
+    counter=0;
   pages: Array<{title: string, component: any,active:any,icon:any,avoid:any}>;
 
-  constructor(public platform: Platform, public statusBar: StatusBar, public splashScreen: SplashScreen, private oneSignal: OneSignal, public events:Events, private batteryStatus: BatteryStatus) {
+  constructor(public platform: Platform,private backgroundMode: BackgroundMode, public statusBar: StatusBar,public component:componentService,public toastCtrl: ToastController, public splashScreen: SplashScreen, private oneSignal: OneSignal, public events:Events, private batteryStatus: BatteryStatus) {
     this.initializeApp();
-
+      this.backgroundMode.enable();
       let subscription = this.batteryStatus.onChange().subscribe(
           (status:BatteryStatusResponse)=>{
               console.log("Battery level");
               console.log(status.level,status.isPlugged);
           }
       );
-
+      platform.registerBackButtonAction(() => {
+          if (this.counter == 0) {
+              this.counter++;
+              this.component.showToastMessage('Press again to exit','center');
+              setTimeout(() => { this.counter = 0 }, 3000)
+          } else {
+              // console.log("exitapp");
+              platform.exitApp();
+          }
+      }, 0);
       this.events.subscribe('userType',(type)=>{
           console.log("User type event");
           console.log(type);
@@ -75,12 +86,7 @@ export class MyApp {
         console.log("Event permission in component");
         console.log(permission);
     })
-
-
-
-
   }
-
   initializeApp() {
     this.platform.ready().then(() => {
       // Okay, so the platform is ready and our plugins are available.
@@ -128,6 +134,5 @@ export class MyApp {
       }
     }
   }
-
 
 }
