@@ -17,6 +17,8 @@ export class FeedbackPage {
   sites:any;
   userName:any;
   feedback:any;
+    eMsg:any;
+    field:any;
 
   constructor(public navCtrl: NavController,public navParams: NavParams,public myService:authService,public component:componentService, private siteService: SiteService) {
 
@@ -29,8 +31,20 @@ export class FeedbackPage {
     start(userName,userCode)
     {
         console.log("User name");
-        console.log(userName+" - "+userCode);
-        this.navCtrl.push(FeedbackQuestionPage,{userName:userName,userCode:userCode,feedback:this.feedback,fb:this.navParams.data.fb});
+        if(this.userName)
+        {
+            console.log(userName + " - " + userCode);
+            this.navCtrl.push(FeedbackQuestionPage, {
+                userName: userName,
+                userCode: userCode,
+                feedback: this.feedback,
+                fb: this.navParams.data.fb
+            });
+        }
+        else
+        {
+            this.eMsg="username";
+        }
     }
 
     skip()

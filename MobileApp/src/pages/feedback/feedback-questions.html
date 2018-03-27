@@ -32,7 +32,7 @@
                             <ion-col col-6>
                                 <ion-item class="padding-left0 inline-block align-left" no-lines>
                                     <ion-radio value="false" class="q-radio" (ionSelect)="next()">No</ion-radio>
-                                    <label item-right class="">No</label>
+                                    <label item-right class="">No&nbsp;</label>
                                 </ion-item>
                             </ion-col>
                         </ion-row>
@@ -74,18 +74,18 @@
             <ion-row class="margin0">
                 <ion-col col-1 class="ver-center">
                     <button float-left ion-button clear color="primary" class="btnPrev padding0" (click)="prev()" >
-                        <i class="material-icons fnt-35">keyboard_arrow_left</i>
+                        <i class="material-icons  q-arrow">keyboard_arrow_left</i>
                     </button>
                 </ion-col>
                 <ion-col col-10>
-                    <ion-item class="bg-trans QuesContent" no-lines>
+                    <ion-item class="bg-trans QuesContent r-item-font" no-lines>
                         <ion-input type="text" placeholder="remarks" class="remark"></ion-input>
                     </ion-item>
                 </ion-col>
             </ion-row>
 
-            <ion-toolbar position="bottom" transparent class="txt-center">
-                <button class="btn btn-warning" style="width:40%;" ion-button (click)="submitFeedback()">Submit</button>
+            <ion-toolbar position="bottom" transparent class="txt-center r-tool">
+                <button class="btn btn-warning r-button" style="width:40%;" ion-button (click)="submitFeedback()">Submit</button>
             </ion-toolbar>
 
         </ion-slide>
