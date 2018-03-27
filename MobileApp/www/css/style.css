@@ -1001,7 +1001,7 @@ ion-fab-list
 }
 .paddding-top20
 {
-  padding-top: 20px;
+  padding-top: 20px !important;
 }
 ion-spinner{
   width: 20px !important;
@@ -1284,15 +1284,25 @@ ion-spinner{
 }
 .slide-height
 {
-    height: 500px;
+    height: 500px !important;
 }
 .q-arrow
 {
     font-size: 35px !important;
 }
-
-
-@media only screen and (min-width: 601px) {
+.error-height
+{
+    height: 15px !important;
+}
+/*.input-group .input-group-addon*/
+/*{*/
+    /*padding: 0 !important;*/
+/*}*/
+/*.input-group-addon*/
+/*{*/
+    /*padding: 6px 0 !important;*/
+/*}*/
+@media only screen and (min-width: 600px ){
     h2
     {
         font-size: 4.4rem !important;
@@ -1306,10 +1316,6 @@ ion-spinner{
     {
         font-size: 30px !important;
     }
-    .q-type1 ion-item
-    {
-        width: 35% !important;
-    }
     .q-radio .radio-icon
     {
         width: 30px !important;
@@ -1317,7 +1323,7 @@ ion-spinner{
     }
     .q-type1 ion-item
     {
-        width: 50% !important;
+        width: 52% !important;
         height: 100% !important;
     }
     .q-radio .radio-checked .radio-inner
@@ -1344,20 +1350,20 @@ ion-spinner{
     /* Smily */
     .a .radio-icon
     {
-        background: linear-gradient(0deg,rgba(255,0,150,0.3),rgba(255,0,150,0.3)),url(../img/unhappy.png) !important;
+        background: linear-gradient(0deg,rgba(255,0,150,0.3),rgba(255,0,150,0.3)),url(../img/runhappy.png) !important;
         background-repeat: no-repeat !important;
         background-color: transparent;
 
     }
     .b .radio-icon
     {
-        background: linear-gradient(0deg,rgba(255,0,150,0.3),rgba(255,0,150,0.3)),url(../img/sad.png) !important;
+        background: linear-gradient(0deg,rgba(255,0,150,0.3),rgba(255,0,150,0.3)),url(../img/rsad.png) !important;
         background-repeat: no-repeat !important;
         background-color: transparent;
     }
     .c .radio-icon
     {
-        background: linear-gradient(0deg,rgba(255,0,150,0.3),rgba(255,0,150,0.3)),url(../img/confused.png) !important;
+        background: linear-gradient(0deg,rgba(255,0,150,0.3),rgba(255,0,150,0.3)),url(../img/rconfused.png) !important;
         background-repeat: no-repeat !important;
         background-color: transparent;
     }
@@ -1369,40 +1375,66 @@ ion-spinner{
     }
     .e .radio-icon
     {
-        background: linear-gradient(0deg,rgba(255,0,150,0.3),rgba(255,0,150,0.3)),url(../img/happy1.png) !important;
+        background: linear-gradient(0deg,rgba(255,0,150,0.3),rgba(255,0,150,0.3)),url(../img/rhappy1.png) !important;
         background-repeat: no-repeat !important;
         background-color: transparent;
     }
 
     .a .radio-checked
     {
-        background: url(../img/unhappy.png) !important;
+        background: url(../img/runhappy.png) !important;
         background-color:red;
+        background-repeat: no-repeat !important;
     }
     .b .radio-checked
     {
-        background: url(../img/sad.png) !important;
+        background: url(../img/rsad.png) !important;
         background-color:red;
+        background-repeat: no-repeat !important;
     }
     .c .radio-checked
     {
-        background: url(../img/confused.png) !important;
+        background: url(../img/rconfused.png) !important;
         background-color:red;
+        background-repeat: no-repeat !important;
     }
     .d .radio-checked
     {
         background: url(../img/rhappy.png) !important;
         background-color:red;
+        background-repeat: no-repeat !important;
     }
     .e .radio-checked
     {
-        background: url(../img/happy1.png) !important;
+        background: url(../img/rhappy1.png) !important;
         background-color:red;
+        background-repeat: no-repeat !important;
     }
     .true .radio-icon
     {
         width: 66px !important;
         height: 66px !important;
     }
-
+    .r-tool
+    {
+        min-height: 80px !important;
+    }
+    .r-button
+    {
+        height: 5.6rem !important;
+        font-size: 2.4rem !important;
+    }
+    .r-item-font
+    {
+        font-size: 3.6rem !important;
+    }
+    .error-height
+    {
+        height: 25px !important;
+    }
+    .e-msg
+    {
+        font-size: 16px !important;
+    }
 }
+
