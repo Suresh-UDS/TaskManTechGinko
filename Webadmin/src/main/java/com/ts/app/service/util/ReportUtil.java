@@ -82,16 +82,17 @@ public class ReportUtil {
 			result.setFile(uuidVal);
 			String reportUrl = env.getProperty("reports.attendance-report.url");
 			result.setUrl(reportUrl + "/" + uuidVal);
-			uuidVal += ".csv";
+			uuidVal += ".xlsx";
 			exportUtil.updateExportStatus(uuidVal, "COMPLETED");
 			result.setEmpId(empId);
 			result.setStatus("COMPLETED");
 			return result;
 
-		}else if(criteria.getExportType().equalsIgnoreCase("csv")) {
-			return exportUtil.writeAttendanceReportToFile(criteria.getProjectName(), content, empId, result);
+		}else if(criteria.getExportType().equalsIgnoreCase("xlsx")) {
+			//return exportUtil.writeAttendanceReportToFile(criteria.getProjectName(), content, empId, result);
+            return exportUtil.writeAttendanceExcelReportToFile(criteria.getProjectName(), content, empId, result);
 		}
-		return null;
+		return result;
 	}
 
 	public SearchCriteria getAttendanceReportCriteria(String uid) {

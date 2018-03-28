@@ -74,7 +74,7 @@ public class AttendanceService extends AbstractService {
 
     @Inject
     private UserRepository userRepository;
-    
+
     @Inject
     private ReportUtil reportUtil;
 
@@ -300,7 +300,7 @@ public class AttendanceService extends AbstractService {
                     log.debug("check date and time from available -  "+searchCriteria.getCheckInDateTimeFrom());
                     java.sql.Date startDate = new java.sql.Date(searchCriteria.getCheckInDateTimeFrom().getTime());
                     java.sql.Date toDate = new java.sql.Date(searchCriteria.getCheckInDateTimeTo().getTime());
-                    
+
                     if(!StringUtils.isEmpty(searchCriteria.getEmployeeEmpId())) {
                         log.debug("find by  employee id only - "+searchCriteria.getEmployeeEmpId());
                         page = attendanceRepository.findByEmpIdAndCheckInTime(searchCriteria.getEmployeeEmpId(),startDate, toDate,pageRequest);
@@ -309,8 +309,8 @@ public class AttendanceService extends AbstractService {
                     			page = attendanceRepository.findBySiteIdEmpNameAndDate(searchCriteria.getSiteId(), searchCriteria.getName(),startDate, toDate,pageRequest);
                     		}
                     }
-                    
-                    
+
+
                     if(searchCriteria.getSiteId() != 0 && StringUtils.isEmpty(searchCriteria.getEmployeeEmpId())) {
                         log.debug("find by site id and check in  date and time - "+searchCriteria.getSiteId());
                         page = attendanceRepository.findBySiteIdAndCheckInTime(searchCriteria.getSiteId(), startDate, toDate, pageRequest);
@@ -362,7 +362,7 @@ public class AttendanceService extends AbstractService {
 	            					}
 	            					attendanceRepository.findByMultipleSitesAndCheckInTime(siteIds, startDate, toDate, pageRequest);
 	            				}else {
-	
+
 	            				}
 	            			}
 	            		}
@@ -402,18 +402,17 @@ public class AttendanceService extends AbstractService {
             return mapperUtil.toModelList(entities, AttendanceDTO.class);
         }
     }
-    
-	public ExportResult generateReport(List<AttendanceDTO> transactions, SearchCriteria criteria) {
-		List<EmployeeAttendanceReport> attendanceReportList = new ArrayList<EmployeeAttendanceReport>();
-		if(CollectionUtils.isNotEmpty(transactions)) {
-			for(AttendanceDTO attn : transactions) {
-				EmployeeAttendanceReport reportData = new EmployeeAttendanceReport(attn.getEmployeeEmpId(), attn.getEmployeeFullName(), null, attn.getSiteName(), null, attn.getCheckInTime(), attn.getCheckOutTime());
-				attendanceReportList.add(reportData);
-			}
-		}
-		return reportUtil.generateAttendanceReports(attendanceReportList, null, null, criteria);
-	}
-    
+
+    public ExportResult generateReport(List<AttendanceDTO> transactions, SearchCriteria criteria) {
+        List<EmployeeAttendanceReport> attendanceReportList = new ArrayList<EmployeeAttendanceReport>();
+        if(CollectionUtils.isNotEmpty(transactions)) {
+            for(AttendanceDTO attn : transactions) {
+                EmployeeAttendanceReport reportData = new EmployeeAttendanceReport(attn.getEmployeeEmpId(), attn.getEmployeeFullName(), null, attn.getSiteName(), null, attn.getCheckInTime(), attn.getCheckOutTime());
+                attendanceReportList.add(reportData);
+            }
+        }
+        return reportUtil.generateAttendanceReports(attendanceReportList, null, null, criteria);
+    }
 
 	public ExportResult export(List<AttendanceDTO> transactions, String empId) {
 		return exportUtil.writeToCsvFile(transactions, empId, null);
@@ -421,7 +420,7 @@ public class AttendanceService extends AbstractService {
 
 	public ExportResult getExportStatus(String empId,String fileId) {
 		ExportResult er = new ExportResult();
-		fileId += ".csv";
+		fileId += ".xlsx";
 		if(!StringUtils.isEmpty(fileId)) {
 			String status = exportUtil.getExportStatus(fileId);
 			er.setFile(fileId);
@@ -432,7 +431,8 @@ public class AttendanceService extends AbstractService {
 	}
 
 	public byte[] getExportFile(String empId, String fileName) {
-		return exportUtil.readExportFile(empId, fileName);
+		//return exportUtil.readExportFile(empId, fileName);
+		return  exportUtil.readAttendanceExportFile(empId,fileName);
 	}
 
 }

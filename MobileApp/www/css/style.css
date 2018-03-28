@@ -666,6 +666,10 @@ span.EmpNameTxt
 {
     float: left;
 }
+.InputCon ion-label
+{
+    color: #444444;
+}
 .add-btn
 {
   width: 40px;
