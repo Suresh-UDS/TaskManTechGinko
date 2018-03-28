@@ -1,17 +1,22 @@
 package com.ts.app.service.util;
 
+import java.awt.image.BufferedImage;
 import java.io.*;
 import java.nio.file.FileSystem;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.sql.Blob;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+import javax.imageio.ImageIO;
 import javax.inject.Inject;
+import javax.swing.*;
 
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVPrinter;
@@ -56,6 +61,8 @@ public class ExportUtil {
 
     private String[] EMP_HEADER = { "EMPLOYEE ID", "EMPLOYEE NAME", "DESIGNATION", "REPORTING TO", "CLIENT", "SITE", "ACTIVE"};
     private String[] JOB_HEADER = { "SITE", "TITLE", "EMPLOYEE", "TYPE", "PLANNED START TIME", "COMPLETED TIME", "STATUS"};
+    private String[] ATTD_HEADER = {"EMPLOYEE ID", "EMPLOYEE NAME", "SITE", "CLIENT", "CHECK IN", "CHECK OUT","CHECK OUT IMAGE"};
+
 
 
 
@@ -316,6 +323,129 @@ public class ExportUtil {
     }
 
 
+    public ExportResult writeAttendanceExcelReportToFile(String projName, List<EmployeeAttendanceReport> content, final String empId, ExportResult result){
+        boolean isAppend = (result != null);
+        log.debug("result = " + result + ", isAppend = " + isAppend);
+        if (result == null) {
+            result = new ExportResult();
+        }
+        String file_Name = null;
+        if(StringUtils.isEmpty(result.getFile())) {
+            if(StringUtils.isNotEmpty(empId)) {
+                file_Name = empId + System.currentTimeMillis() + ".xlsx";
+            }else {
+                file_Name = System.currentTimeMillis() + ".xlsx";
+            }
+        }	else {
+            file_Name = result.getFile() + ".xlsx";
+        }
+
+        if (statusMap.containsKey((file_Name))) {
+            String status = statusMap.get(file_Name);
+            //log.debug("Current status for filename -" + file_Name + ", status -" + status);
+        } else {
+            statusMap.put(file_Name, "PROCESSING");
+        }
+
+        final String export_File_Name = file_Name;
+        if (lock == null) {
+            lock = new Lock();
+        }
+        try {
+            lock.lock();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        Thread writer_Thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                String file_Path = env.getProperty("export.file.path");
+                FileSystem fileSystem = FileSystems.getDefault();
+                if (StringUtils.isNotEmpty(empId)) {
+                    file_Path += "/" + empId;
+                }
+                Path path = fileSystem.getPath(file_Path);
+                if (!Files.exists(path)) {
+                    Path newEmpPath = Paths.get(file_Path);
+                    try {
+                        Files.createDirectory(newEmpPath);
+                    } catch (IOException e) {
+                        log.error("Error While Creating Path " + newEmpPath);
+                    }
+                }
+
+
+                file_Path += "/" + export_File_Name;
+                // create workbook
+                XSSFWorkbook xssfWorkbook = new XSSFWorkbook();
+                // create worksheet with title
+                XSSFSheet xssfSheet = xssfWorkbook.createSheet("JOB_REPORT");
+
+                Row headerRow = xssfSheet.createRow(0);
+
+                for (int i = 0; i < ATTD_HEADER.length; i++) {
+                    Cell cell = headerRow.createCell(i);
+                    cell.setCellValue(ATTD_HEADER[i]);
+                }
+
+                int rowNum = 1;
+
+                for (EmployeeAttendanceReport transaction : content) {
+
+                    Row dataRow = xssfSheet.createRow(rowNum++);
+
+                    dataRow.createCell(0).setCellValue(transaction.getEmployeeIds());
+                    dataRow.createCell(1).setCellValue(transaction.getName()+transaction.getLastName());
+                    dataRow.createCell(2).setCellValue(transaction.getSiteName());
+                    dataRow.createCell(3).setCellValue(transaction.getProjectName());
+                    dataRow.createCell(4).setCellValue(transaction.getCheckInTime());
+                    dataRow.createCell(5).setCellValue(String.valueOf(transaction.getCheckOutTime()));
+                    /*Blob blob = null;
+                    byte[] img = blob.getBytes(1,(int)blob.length());
+                    BufferedImage i = null;
+                    try {
+                        i = ImageIO.read(new ByteArrayInputStream(img));
+                    } catch (IOException e) {
+                    e.printStackTrace();
+                    }*/
+
+                    //dataRow.createCell(6).setCellValue(String.valueOf(transaction.getImage()));
+
+                }
+
+                for (int i = 0; i < ATTD_HEADER.length; i++) {
+                    xssfSheet.autoSizeColumn(i);
+                }
+                log.info(export_File_Name + " Excel file was created successfully !!!");
+                statusMap.put(export_File_Name, "COMPLETED");
+
+                FileOutputStream fileOutputStream = null;
+                try {
+                    fileOutputStream = new FileOutputStream(file_Path);
+                    xssfWorkbook.write(fileOutputStream);
+                    fileOutputStream.close();
+                } catch (IOException e) {
+                    log.error("Error while flushing/closing  !!!");
+                    statusMap.put(export_File_Name, "FAILED");
+                }
+            }
+        });
+
+        writer_Thread.start();
+
+        result.setEmpId(empId);
+        result.setFile(file_Name.substring(0, file_Name.indexOf('.')));
+        result.setStatus(getExportStatus(file_Name));
+        return result;
+
+    }
+
+
+
+
+
+
     public ExportResult writeAttendanceReportToFile(String projName, List<EmployeeAttendanceReport> content, final String empId, ExportResult result) {
         boolean isAppend = (result != null);
         log.debug("result = " + result + ", isAppend=" + isAppend);
@@ -327,14 +457,14 @@ public class ExportUtil {
         String fileName = null;
         if(StringUtils.isEmpty(result.getFile())) {
             if(StringUtils.isNotEmpty(empId)) {
-                fileName = empId + System.currentTimeMillis() + ".csv";
+                fileName = empId + System.currentTimeMillis() + ".xlsx";
             }else if(StringUtils.isNotEmpty(projName)) {
-                fileName = projName  +  "_" + System.currentTimeMillis() + ".csv";
+                fileName = projName  +  "_" + System.currentTimeMillis() + ".xlsx";
             }else {
-                fileName = System.currentTimeMillis() + ".csv";
+                fileName = System.currentTimeMillis() + ".xlsx";
             }
         }	else {
-            fileName = result.getFile() + ".csv";
+            fileName = result.getFile() + ".xlsx";
         }
         if(statusMap.containsKey(fileName)) {
             String status = statusMap.get(fileName);
@@ -887,6 +1017,50 @@ public class ExportUtil {
         }
         return csvData;
     }
+
+
+    public byte[] readAttendanceExportFile(String empId, String fileName){
+        //log.info("INSIDE OF readExportFILE **********");
+
+        String filePath = env.getProperty("export.file.path");
+        //filePath += "/" + fileName +".xlsx";
+
+        filePath +="/"+fileName+ ".xlsx";
+
+        //log.debug("PATH OF THE READ EXPORT FILE*********"+filePath);
+        File file = new File(filePath);
+        //log.debug("NAME OF THE READ EXPORT FILE*********"+file);
+
+        FileInputStream fileInputStream = null;
+        byte attd_excelData[] = null;
+
+        try {
+
+            File readJobFile = new File(filePath);
+            attd_excelData = new byte[(int) readJobFile.length()];
+
+            //read file into bytes[]
+            fileInputStream = new FileInputStream(file);
+            fileInputStream.read(attd_excelData);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (fileInputStream != null) {
+                try {
+                    fileInputStream.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+
+        }
+
+        return attd_excelData;
+
+    }
+
+
 
     public byte[] readExportFile(String empId, String fileName) {
         String filePath = env.getProperty("export.file.path");
