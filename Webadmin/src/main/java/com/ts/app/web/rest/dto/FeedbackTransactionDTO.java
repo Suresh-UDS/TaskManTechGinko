@@ -38,6 +38,8 @@ public class FeedbackTransactionDTO extends BaseDTO implements Serializable {
 
     private float rating;
 
+    private String remarks;
+
     public long getId() {
         return id;
     }
@@ -157,5 +159,13 @@ public class FeedbackTransactionDTO extends BaseDTO implements Serializable {
 
     public void setReviewerCode(String reviewerCode) {
         this.reviewerCode = reviewerCode;
+    }
+
+    public String getRemarks() {
+        return remarks;
+    }
+
+    public void setRemarks(String remarks) {
+        this.remarks = remarks;
     }
 }
