@@ -14,8 +14,6 @@ export class SelectFeedbackPage {
 
 
   feedback:any;
-  happyFeedback:any;
-  sadFeedback:any;
   fb:any;
 
 
@@ -23,19 +21,18 @@ export class SelectFeedbackPage {
 
       this.feedback = this.navParams.data.feedback;
       this.fb=this.navParams.data.fb;
-      this.happyFeedback=1;
-      this.sadFeedback=0;
+
 
 
   }
 
   sad()
   {
-      this.navCtrl.setRoot(FeedbackQuestionPage,{feedback:this.feedback,fb:this.fb,status:this.sadFeedback});
+      this.navCtrl.push(FeedbackQuestionPage,{feedback:this.feedback,fb:this.fb});
   }
   happy()
   {
-      this.navCtrl.setRoot(FeedbackPage,{feedback:this.feedback,status:this.happyFeedback,fb:this.fb,question:null});
+      this.navCtrl.setRoot(FeedbackPage,{feedback:this.feedback,fb:this.fb,question:[]});
   }
 
 }

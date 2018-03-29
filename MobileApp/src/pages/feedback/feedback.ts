@@ -31,7 +31,6 @@ export class FeedbackPage {
       this.feedback = this.navParams.data.feedback;
       this.questions= this.navParams.data.question;
       this.remarks= this.navParams.data.remarks;
-      this.status=this.navParams.data.status;
       this.userCode="";
       console.log(this.feedback);
   }

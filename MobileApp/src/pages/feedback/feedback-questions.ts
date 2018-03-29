@@ -37,7 +37,6 @@ export class FeedbackQuestionPage {
 
     this.username = this.navParams.data.userName;
     this.userCode = this.navParams.data.userCode;
-    this.status=this.navParams.data.status;
 
     console.log(this.navParams.data.feedback);
     this.feedbackService.findFeedback(this.navParams.data.feedback.id).subscribe(
