@@ -37,8 +37,7 @@ export class FeedbackPage {
 
     start(userName,userCode)
     {
-        if(this.userName,this.userCode)
-        {
+
         this.component.showLoader("Saving Feedback");
         console.log("feedback details");
 
@@ -78,11 +77,7 @@ export class FeedbackPage {
         )
 
     }
-        else
-        {
-            this.eMsg="username";
-        }
-    }
+
 
 
     // skip()
