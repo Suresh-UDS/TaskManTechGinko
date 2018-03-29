@@ -76,6 +76,8 @@ import {FeedbackDashboardPage} from "../pages/feedback/feedback-dashboard";
 import {QuotationImagePopoverPage} from "../pages/quotation/quotation-image-popover";
 import { BackgroundMode } from '@ionic-native/background-mode';
 
+import {FeedbackZone} from "../pages/feedback/feedbackZone";
+
 @NgModule({
   declarations: [
     MyApp,
@@ -123,7 +125,8 @@ import { BackgroundMode } from '@ionic-native/background-mode';
     JobPopoverPage,
     FeedbackQuestionPage,
     InitFeedbackPage,
-    FeedbackDashboardPage
+    FeedbackDashboardPage,
+      FeedbackZone
   ],
   imports: [
     BrowserModule,
@@ -184,7 +187,8 @@ import { BackgroundMode } from '@ionic-native/background-mode';
     FeedbackQuestionPage,
     InitFeedbackPage,
     JobPopoverPage,
-    FeedbackDashboardPage
+      FeedbackZone,
+      FeedbackDashboardPage
   ],
   providers: [
     StatusBar,

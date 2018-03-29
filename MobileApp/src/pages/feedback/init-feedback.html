@@ -26,24 +26,24 @@
                     </ion-select>
                 </ion-item>
 
-                <!--<ion-item>-->
-                    <!--<ion-label>Site</ion-label>-->
-                    <!--<ion-select [selectOptions]="selectOptions" interface="popover" [(ngModel)]="site">-->
-                        <!--<ion-option *ngFor="let s of sites" [value]="s.id" (ionSelect)="selectBlock(s)">{{s.name}}</ion-option>-->
-                    <!--</ion-select>-->
-                <!--</ion-item>-->
-                <!--<ion-item>-->
-                    <!--<ion-label>Block</ion-label>-->
-                    <!--<ion-select [selectOptions]="selectOptions" interface="popover" [(ngModel)]="block">-->
-                        <!--<ion-option *ngFor="let b of blocks" [value]="b" (ionSelect)="selectFloor(b)">{{b}}</ion-option>-->
-                    <!--</ion-select>-->
-                <!--</ion-item>-->
-                <!--<ion-item>-->
-                    <!--<ion-label>Floor</ion-label>-->
-                    <!--<ion-select [selectOptions]="selectOptions" interface="popover" [(ngModel)]="floor">-->
-                        <!--<ion-option *ngFor="let f of floors" [value]="f" (ionSelect)="selectZone(f)" >{{f}}</ion-option>-->
-                    <!--</ion-select>-->
-                <!--</ion-item>-->
+                <ion-item>
+                    <ion-label>Site</ion-label>
+                    <ion-select [selectOptions]="selectOptions" interface="popover" [(ngModel)]="selectedSite">
+                        <ion-option *ngFor="let s of sites" [value]="s.id" (ionSelect)="selectBlock(s)">{{s.name}}</ion-option>
+                    </ion-select>
+                </ion-item>
+                <ion-item>
+                    <ion-label>Block</ion-label>
+                    <ion-select [selectOptions]="selectOptions" interface="popover" [(ngModel)]="selectedBlock">
+                        <ion-option *ngFor="let b of blocks" [value]="b" (ionSelect)="selectFloor(b)">{{b}}</ion-option>
+                    </ion-select>
+                </ion-item>
+                <ion-item>
+                    <ion-label>Floor</ion-label>
+                    <ion-select [selectOptions]="selectOptions" interface="popover" [(ngModel)]="selectedFloor">
+                        <ion-option *ngFor="let f of floors" [value]="f" (ionSelect)="selectZone(f)" >{{f}}</ion-option>
+                    </ion-select>
+                </ion-item>
                 <!--<ion-item>-->
                     <!--<ion-label>zone</ion-label>-->
                     <!--<ion-select [selectOptions]="selectOptions" interface="popover" [(ngModel)]="zone">-->
@@ -59,54 +59,54 @@
 
             </ion-list>
 
-            <div class="TailsCon" *ngIf="!scrollSite">
+            <!--<div class="TailsCon" *ngIf="!scrollSite">-->
 
-                <div *ngIf="sites?.length<0">
-                    <h4 text-center>No Data Found</h4>
-                </div>
+                <!--<div *ngIf="sites?.length<0">-->
+                    <!--<h4 text-center>No Data Found</h4>-->
+                <!--</div>-->
 
-                <ion-grid>
-                    <ion-row>
-                        <ion-col col-4 *ngFor="let site of sites;let i of index" >
-                            <button ion-button clear (click)="selectBlockDetail(i,site)">
-                                <p class="siteName SiteListTails">{{site.name}}</p>
-                            </button>
-                        </ion-col>
-                    </ion-row>
-                </ion-grid>
-            </div>
+                <!--<ion-grid>-->
+                    <!--<ion-row>-->
+                        <!--<ion-col col-4 *ngFor="let site of sites;let i of index" >-->
+                            <!--<button ion-button clear (click)="selectBlockDetail(i,site)">-->
+                                <!--<p class="siteName SiteListTails">{{site.name}}</p>-->
+                            <!--</button>-->
+                        <!--</ion-col>-->
+                    <!--</ion-row>-->
+                <!--</ion-grid>-->
+            <!--</div>-->
 
-            <div class="SiteAndBlockCOn"  *ngIf="scrollSite">
+            <!--<div class="SiteAndBlockCOn"  *ngIf="scrollSite">-->
 
-                <div class="SiteCon">
-                    <div class="scrollCon">
-                        <ion-row>
-                            <ion-item no-lines>
-                                <ion-scroll scrollX="true">
-                                    <div *ngIf="sites?.length==0" class="padding-top15">
-                                        <h4 text-center class="clr-blk">No Data Found</h4>
-                                    </div>
-                                    <button class="siteBtn scroll-item" ion-button round  *ngFor="let s of sites;let i of index" (click)="selectBlockDetail(i,s)" [color]="i==activeSite ? 'primary' : 'light'">
-                                        <p class="siteName">{{s.name}}</p>
-                                    </button>
-                                </ion-scroll>
-                            </ion-item>
-                        </ion-row>
-                    </div>
-                </div>
+                <!--<div class="SiteCon">-->
+                    <!--<div class="scrollCon">-->
+                        <!--<ion-row>-->
+                            <!--<ion-item no-lines>-->
+                                <!--<ion-scroll scrollX="true">-->
+                                    <!--<div *ngIf="sites?.length==0" class="padding-top15">-->
+                                        <!--<h4 text-center class="clr-blk">No Data Found</h4>-->
+                                    <!--</div>-->
+                                    <!--<button class="siteBtn scroll-item" ion-button round  *ngFor="let s of sites;let i of index" (click)="selectBlockDetail(i,s)" [color]="i==activeSite ? 'primary' : 'light'">-->
+                                        <!--<p class="siteName">{{s.name}}</p>-->
+                                    <!--</button>-->
+                                <!--</ion-scroll>-->
+                            <!--</ion-item>-->
+                        <!--</ion-row>-->
+                    <!--</div>-->
+                <!--</div>-->
 
-                <div class="TailsCon" *ngIf="selectedProjectId==siteProjectId">
-                    <ion-grid>
-                        <ion-row>
-                            <ion-col col-4 class="BlocksList" *ngFor="let l of locations;let i of index">
-                                <button ion-button clear class="BlockBtns" (click)="loadFeedbackMappings(l)">
-                                    <p class="SiteListTails">{{l.block}} <br> {{l.floor}} <br> {{l.zone}}</p>
-                                </button>
-                            </ion-col>
-                        </ion-row>
-                    </ion-grid>
-                </div>
-            </div>
+                <!--<div class="TailsCon" *ngIf="selectedProjectId==siteProjectId">-->
+                    <!--<ion-grid>-->
+                        <!--<ion-row>-->
+                            <!--<ion-col col-4 class="BlocksList" *ngFor="let l of locations;let i of index">-->
+                                <!--<button ion-button clear class="BlockBtns" (click)="loadFeedbackMappings(l)">-->
+                                    <!--<p class="SiteListTails">{{l.block}} <br> {{l.floor}} <br> {{l.zone}}</p>-->
+                                <!--</button>-->
+                            <!--</ion-col>-->
+                        <!--</ion-row>-->
+                    <!--</ion-grid>-->
+                <!--</div>-->
+            <!--</div>-->
         </div>
    </div>
 </ion-content>
