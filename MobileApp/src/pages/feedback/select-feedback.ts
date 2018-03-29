@@ -16,11 +16,13 @@ export class SelectFeedbackPage {
   feedback:any;
   happyFeedback:any;
   sadFeedback:any;
+  fb:any;
 
 
   constructor(public navCtrl: NavController,public navParams: NavParams,public myService:authService,public component:componentService, private siteService: SiteService) {
 
       this.feedback = this.navParams.data.feedback;
+      this.fb=this.navParams.data.fb;
       this.happyFeedback=1;
       this.sadFeedback=0;
 
@@ -29,11 +31,11 @@ export class SelectFeedbackPage {
 
   sad()
   {
-      this.navCtrl.setRoot(FeedbackPage,{feedback:this.feedback,status:this.sadFeedback});
+      this.navCtrl.setRoot(FeedbackQuestionPage,{feedback:this.feedback,fb:this.fb,status:this.sadFeedback});
   }
   happy()
   {
-      this.navCtrl.setRoot(FeedbackPage,{feedback:this.feedback,status:this.happyFeedback});
+      this.navCtrl.setRoot(FeedbackPage,{feedback:this.feedback,status:this.happyFeedback,fb:this.fb,question:null});
   }
 
 }
