@@ -83,38 +83,42 @@ public class FeedbackTransactionService extends AbstractService {
 		float rating = 0;
 		int positiveCnt = 0;
 		float cumRating = 0f;
-		for(FeedbackTransactionResultDTO itemDto : itemDtos) {
-
-			FeedbackTransactionResult item = mapperUtil.toEntity(itemDto, FeedbackTransactionResult.class);
-			item.setId(0);
-			log.debug("answer type - "+item.getAnswerType());
-			log.debug("answer type - "+item.getAnswer());
-			log.debug("score type - "+item.getScoreType());
-			if(item.getAnswerType().equals(FeedbackAnswerType.YESNO) && item.getAnswer().equalsIgnoreCase("Yes")) {
-			    log.debug("answer type yes ");
-
-			    if(StringUtils.isNotEmpty(item.getScoreType()) && item.getScoreType().equalsIgnoreCase("yes:1")){
-			        log.debug("answer score type yes:1");
-                    cumRating += 5;
-                }else{
-                    log.debug("answer score type yes:0");
-                }
-			}else if(item.getAnswerType().equals(FeedbackAnswerType.YESNO) && item.getAnswer().equalsIgnoreCase("no")){
-                log.debug("answer score type no");
-                if(StringUtils.isNotEmpty(item.getScoreType()) && item.getScoreType().equalsIgnoreCase("no:1")){
-                    log.debug("answer score type no:1");
-                    cumRating += 5;
-                }else{
-                    log.debug("answer score type no:0");
-                }
-            }else if(item.getAnswerType().equals(FeedbackAnswerType.RATING)) {
-				cumRating += Float.parseFloat(item.getAnswer());
+		if(!feedbackTransDto.isOverallFeedback()) {
+			for(FeedbackTransactionResultDTO itemDto : itemDtos) {
+	
+				FeedbackTransactionResult item = mapperUtil.toEntity(itemDto, FeedbackTransactionResult.class);
+				item.setId(0);
+				log.debug("answer type - "+item.getAnswerType());
+				log.debug("answer type - "+item.getAnswer());
+				log.debug("score type - "+item.getScoreType());
+				if(item.getAnswerType().equals(FeedbackAnswerType.YESNO) && item.getAnswer().equalsIgnoreCase("Yes")) {
+				    log.debug("answer type yes ");
+	
+				    if(StringUtils.isNotEmpty(item.getScoreType()) && item.getScoreType().equalsIgnoreCase("yes:1")){
+				        log.debug("answer score type yes:1");
+	                    cumRating += 5;
+	                }else{
+	                    log.debug("answer score type yes:0");
+	                }
+				}else if(item.getAnswerType().equals(FeedbackAnswerType.YESNO) && item.getAnswer().equalsIgnoreCase("no")){
+	                log.debug("answer score type no");
+	                if(StringUtils.isNotEmpty(item.getScoreType()) && item.getScoreType().equalsIgnoreCase("no:1")){
+	                    log.debug("answer score type no:1");
+	                    cumRating += 5;
+	                }else{
+	                    log.debug("answer score type no:0");
+	                }
+	            }else if(item.getAnswerType().equals(FeedbackAnswerType.RATING)) {
+					cumRating += Float.parseFloat(item.getAnswer());
+				}
+	
+				item.setFeedbackTransaction(feedbackTrans);
+				items.add(item);
 			}
-
-			item.setFeedbackTransaction(feedbackTrans);
-			items.add(item);
+			rating = (cumRating / items.size()); //calculate the overall rating.
+		}else {
+			rating = 5;
 		}
-		rating = (cumRating / items.size()); //calculate the overall rating.
 		feedbackTrans.setRating(rating);
 		feedbackTrans.setResults(items);
         feedbackTrans = feedbackTransactionRepository.save(feedbackTrans);

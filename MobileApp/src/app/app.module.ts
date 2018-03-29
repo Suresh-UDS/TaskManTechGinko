@@ -75,6 +75,7 @@ import {BatteryStatus, BatteryStatusResponse} from "@ionic-native/battery-status
 import {FeedbackDashboardPage} from "../pages/feedback/feedback-dashboard";
 import {QuotationImagePopoverPage} from "../pages/quotation/quotation-image-popover";
 import { BackgroundMode } from '@ionic-native/background-mode';
+import {SelectFeedbackPage} from "../pages/feedback/select-feedback";
 
 import {FeedbackZone} from "../pages/feedback/feedbackZone";
 
@@ -126,7 +127,11 @@ import {FeedbackZone} from "../pages/feedback/feedbackZone";
     FeedbackQuestionPage,
     InitFeedbackPage,
     FeedbackDashboardPage,
+<<<<<<< HEAD
       FeedbackZone
+=======
+      SelectFeedbackPage
+>>>>>>> 5f72eb3136a2abf093ea84858b0926beb3df1c55
   ],
   imports: [
     BrowserModule,
@@ -187,8 +192,13 @@ import {FeedbackZone} from "../pages/feedback/feedbackZone";
     FeedbackQuestionPage,
     InitFeedbackPage,
     JobPopoverPage,
+<<<<<<< HEAD
       FeedbackZone,
       FeedbackDashboardPage
+=======
+    FeedbackDashboardPage,
+      SelectFeedbackPage
+>>>>>>> 5f72eb3136a2abf093ea84858b0926beb3df1c55
   ],
   providers: [
     StatusBar,

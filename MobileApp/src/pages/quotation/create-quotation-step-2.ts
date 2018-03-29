@@ -367,11 +367,6 @@ export class CreateQuotationPage2 {
         })
 
     }
-    openDiv()
-    {
-        this.open=true;
-    }
-
     viewSite(site,i)
     {
         this.selectedSite=site;
