@@ -14,7 +14,7 @@ export class QuotationService {
     }
 
     getRateCardTypes():Observable<any>{
-        return this.http.get(this.config.QuotationServiceUrl+'api/rateCardTypes').map(
+        return this.http.get(this.config.Url+'api/rateCard/types').map(
             response=>{
                 console.log(response);
                 return response.json();
@@ -23,7 +23,7 @@ export class QuotationService {
     }
 
     getRateTypes(): Observable<any>{
-        return this.http.get(this.config.QuotationServiceUrl+'api/rateCard/types').map(
+        return this.http.get(this.config.Url+'api/rateCard/types').map(
             response=>{
                 console.log(response);
                 return response;
@@ -32,7 +32,7 @@ export class QuotationService {
     }
 
     getUOMTypes(): Observable<any>{
-        return this.http.get(this.config.QuotationServiceUrl+'api/rateCard/uom').map(
+        return this.http.get(this.config.Url+'api/rateCard/uom').map(
             response=>{
                 console.log(response);
                 return response;
@@ -41,7 +41,7 @@ export class QuotationService {
     }
 
     createRateCard(rateCard):Observable<any>{
-        return this.http.post(this.config.QuotationServiceUrl+'api/rateCard/create',rateCard).map(
+        return this.http.post(this.config.Url+'api/rateCard/create',rateCard).map(
             response=>{
                 console.log(response);
                 return response.json();
@@ -50,7 +50,7 @@ export class QuotationService {
     }
 
     getRateCards(): Observable<any>{
-        return this.http.get(this.config.QuotationServiceUrl+'api/rateCard').map(
+        return this.http.get(this.config.Url+'api/rateCard').map(
             response=>{
                 console.log(response.json());
                 return response.json();
@@ -61,7 +61,7 @@ export class QuotationService {
 
 
     getQuotations(id): Observable<any>{
-        return this.http.get(this.config.QuotationServiceUrl+'api/quotation/'+id).map(
+        return this.http.get(this.config.Url+'api/rateCard/quotation/id/'+id).map(
             response=>{
                 console.log(response.json());
                 return response.json();
@@ -70,7 +70,7 @@ export class QuotationService {
     }
 
     createQuotation(quotation): Observable<any>{
-        return this.http.post(this.config.QuotationServiceUrl+'api/quotation/create',quotation).map(
+        return this.http.post(this.config.Url+'api/rateCard/quotation',quotation).map(
             response=>{
                 console.log(response.json());
                 return response.json();
@@ -79,7 +79,7 @@ export class QuotationService {
     }
 
     editQuotation(quotation): Observable<any>{
-        return this.http.post(this.config.QuotationServiceUrl+'api/quotation/edit',quotation).map(
+        return this.http.post(this.config.Url+'api/quotation/edit',quotation).map(
             response=>{
                 console.log(response.json());
                 return response.json();
@@ -88,7 +88,7 @@ export class QuotationService {
     }
 
     sendQuotation(quotation): Observable<any>{
-        return this.http.post(this.config.QuotationServiceUrl+'api/quotation/send',quotation).map(
+        return this.http.post(this.config.Url+'api/quotation/send',quotation).map(
             response=>{
                 console.log(response.json());
                 return response.json();
@@ -97,7 +97,7 @@ export class QuotationService {
     }
 
     approveQuotation(quotation): Observable<any>{
-        return this.http.post(this.config.QuotationServiceUrl+'api/quotation/approve',quotation).map(
+        return this.http.post(this.config.Url+'api/rateCard/quotation/approve',quotation).map(
             response=>{
                 console.log(response.json());
                 return response.json();
@@ -106,7 +106,7 @@ export class QuotationService {
     }
 
     createPDF():Observable<any>{
-        return this.http.get(this.config.QuotationServiceUrl+'api/pdf/create').map(
+        return this.http.get(this.config.Url+'api/pdf/create').map(
             response=>{
                 console.log(response);
                 return response.json();

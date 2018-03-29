@@ -89,9 +89,25 @@ public class FeedbackTransactionService extends AbstractService {
 			item.setId(0);
 			log.debug("answer type - "+item.getAnswerType());
 			log.debug("answer type - "+item.getAnswer());
+			log.debug("score type - "+item.getScoreType());
 			if(item.getAnswerType().equals(FeedbackAnswerType.YESNO) && item.getAnswer().equalsIgnoreCase("Yes")) {
-				cumRating += 5;
-			}else if(item.getAnswerType().equals(FeedbackAnswerType.RATING)) {
+			    log.debug("answer type yes ");
+
+			    if(StringUtils.isNotEmpty(item.getScoreType()) && item.getScoreType().equalsIgnoreCase("yes:1")){
+			        log.debug("answer score type yes:1");
+                    cumRating += 5;
+                }else{
+                    log.debug("answer score type yes:0");
+                }
+			}else if(item.getAnswerType().equals(FeedbackAnswerType.YESNO) && item.getAnswer().equalsIgnoreCase("no")){
+                log.debug("answer score type no");
+                if(StringUtils.isNotEmpty(item.getScoreType()) && item.getScoreType().equalsIgnoreCase("no:1")){
+                    log.debug("answer score type no:1");
+                    cumRating += 5;
+                }else{
+                    log.debug("answer score type no:0");
+                }
+            }else if(item.getAnswerType().equals(FeedbackAnswerType.RATING)) {
 				cumRating += Float.parseFloat(item.getAnswer());
 			}
 

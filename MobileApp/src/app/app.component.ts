@@ -70,7 +70,7 @@ export class MyApp {
       // { title: 'Client', component: CustomerDetailPage,active:false,icon:'person'},
       { title: 'Employee', component: EmployeeListPage,active:false,icon:'people',avoid:'TECHNICIAN'},
       { title: 'Jobs', component: JobsPage,active:false,icon:'description',avoid:'none'},
-        { title: 'Attendance', component: AttendancePage,active:false,icon:'content_paste',avoid:'TECHNICIAN'},
+        { title: 'Attendance', component: SiteListPage,active:false,icon:'content_paste',avoid:'TECHNICIAN'},
         { title: 'Rate Card', component: RateCardPage,active:false,icon:'description',avoid:'CLIENT'},
       { title: 'Quotation', component: QuotationPage,active:false,icon:'receipt',avoid:'none'},
        { title: 'Feedback', component: InitFeedbackPage,active:false,icon:'feedback',avoid:'none'},

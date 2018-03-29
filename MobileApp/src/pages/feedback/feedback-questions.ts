@@ -29,6 +29,7 @@ export class FeedbackQuestionPage {
    userCode:any;
    answer:any;
    status:any;
+   remarks:any;
 
   constructor(public navCtrl: NavController,public myService:authService,public feedbackService:FeedbackService,public component:componentService, private siteService: SiteService, private navParams:NavParams) {
     console.log("username from feedback");
@@ -83,7 +84,8 @@ export class FeedbackQuestionPage {
               id:q.id,
               question:q.question,
               answer:q.answer,
-              answerType:q.answerType
+              answerType:q.answerType,
+              scoreType:q.scoreType
           };
           results.push(result);
           console.log(typeof q.answer);
@@ -100,7 +102,8 @@ export class FeedbackQuestionPage {
           feedbackName:this.navParams.data.feedback.name,
           block:this.navParams.data.fb.block,
           floor:this.navParams.data.fb.floor,
-          zone:this.navParams.data.fb.zone
+          zone:this.navParams.data.fb.zone,
+          remarks:this.remarks
       };
 
       console.log(this.feedbackTransaction);

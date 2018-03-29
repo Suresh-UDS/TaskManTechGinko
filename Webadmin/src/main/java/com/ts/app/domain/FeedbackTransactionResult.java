@@ -39,6 +39,9 @@ public class FeedbackTransactionResult extends AbstractAuditingEntity implements
     @Column(name = "answer_type")
     private FeedbackAnswerType answerType;
 
+    @Column(name = "score_type")
+    private String scoreType;
+
     @ManyToOne(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER)
     @JoinColumn(name = "feedback_transaction_id", referencedColumnName = "id")
     private FeedbackTransaction feedbackTransaction;
@@ -85,4 +88,11 @@ public class FeedbackTransactionResult extends AbstractAuditingEntity implements
 	}
 
 
+    public String getScoreType() {
+        return scoreType;
+    }
+
+    public void setScoreType(String scoreType) {
+        this.scoreType = scoreType;
+    }
 }
