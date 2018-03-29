@@ -83,7 +83,12 @@ export class AttendanceService
     }
 
     checkSiteProximity(siteId,lat,lng):Observable<any>{
-        return this.http.get(this.config.LocationServiceUrl+'api/site/nearby?'+'siteId='+siteId+'&'+'lat='+lat+'&lng='+lng ).map(
+        var siteDetails = {
+            siteId:siteId,
+            lat:lat,
+            lng:lng
+        };
+        return this.http.post(this.config.Url+'api/site/siteProximity',siteDetails ).map(
             (response)=>{
                 console.log(response)
                 return response

@@ -7,6 +7,8 @@ import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
+import com.ts.app.domain.util.StringUtil;
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -45,7 +47,7 @@ public class SiteResource {
 
 	@Inject
 	private SiteService siteService;
-	
+
 	@Inject
 	private ImportUtil importUtil;
 
@@ -138,9 +140,9 @@ public class SiteResource {
         log.info("--Invoked EmployeeResource.findAll --");
         return siteService.findByEmployeeId(employeeId);
     }
-    
-    
-    
+
+
+
     @RequestMapping(value = "/site/import", method = RequestMethod.POST)
     public ResponseEntity<ImportResult> importJobData(@RequestParam("siteFile") MultipartFile file){
     	log.info("--Invoked Site Import --");
@@ -148,8 +150,21 @@ public class SiteResource {
 		ImportResult result = importUtil.importSiteData(file, cal.getTimeInMillis());
 		return new ResponseEntity<ImportResult>(result,HttpStatus.OK);
 	}
-    
-    
+
+	@RequestMapping(value = "/site/siteProximity", method = RequestMethod.POST)
+    public String checksiteProximity(@RequestBody SearchCriteria siteDetails){
+        log.debug("check site proximity - "+siteDetails.getSiteId());
+        log.debug("check site proximity - "+siteDetails.getLat());
+        log.debug("check site proximity - "+siteDetails.getLng());
+//        String result = siteService.checkProximity(siteDetails.getSiteId(),siteDetails.getLat(),siteDetails.getLng());
+        String result = "Success";
+        if(StringUtils.isNotEmpty(result)){
+            return "Success";
+        }else{
+            return "failure";
+        }
+    }
+
     @RequestMapping(value = "/site/import/{fileId}/status",method = RequestMethod.GET)
 	public ImportResult importStatus(@PathVariable("fileId") String fileId) {
 		log.debug("ImportStatus -  fileId -"+ fileId);
@@ -172,12 +187,14 @@ public class SiteResource {
 		}
 		return result;
 	}
-    
-    
-    
-    
-    
-    
+
+
+
+
+
+
+
+
 
 
 }
