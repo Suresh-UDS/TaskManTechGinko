@@ -8,16 +8,14 @@
 </ion-header>
 
 <ion-content class="FeedbackQuesCon" id="scrollDiv">
-
    <div>
        <ion-row>
-           <ion-col col-6>
+           <ion-col col-6 (click)="happy()">
                <img src="../../assets/imgs/select-happy.png.png">
            </ion-col>
-           <ion-col col-6>
+           <ion-col col-6 (click)="sad()">
                <img src="../../assets/imgs/select-sad.png.png">
            </ion-col>
        </ion-row>
    </div>
-
 </ion-content>
