@@ -6,6 +6,7 @@ import {SiteService} from "../service/siteService";
 import {FeedbackPage} from "../feedback/feedback";
 import {FeedbackService} from "../service/feedbackService";
 import {FeedbackDashboardPage} from "./feedback-dashboard";
+import {SelectFeedbackPage} from "./select-feedback";
 @Component({
   selector: 'page-init-feedback',
   templateUrl: 'init-feedback.html'
@@ -45,8 +46,8 @@ export class InitFeedbackPage {
     {
         var feedback =fb.feedback;
         if(feedback){
-            this.navCtrl.setRoot(FeedbackPage,{feedback:feedback,fb:fb});
-
+            // this.navCtrl.setRoot(FeedbackPage,{feedback:feedback,fb:fb});
+            this.navCtrl.setRoot(SelectFeedbackPage,{feedback:feedback,fb:fb});
         }else{
             this.component.showToastMessage('No Feedback form available','bottom');
         }

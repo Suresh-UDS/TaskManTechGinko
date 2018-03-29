@@ -28,6 +28,7 @@ export class FeedbackQuestionPage {
    username:any;
    userCode:any;
    answer:any;
+   status:any;
 
   constructor(public navCtrl: NavController,public myService:authService,public feedbackService:FeedbackService,public component:componentService, private siteService: SiteService, private navParams:NavParams) {
     console.log("username from feedback");
@@ -35,6 +36,7 @@ export class FeedbackQuestionPage {
 
     this.username = this.navParams.data.userName;
     this.userCode = this.navParams.data.userCode;
+    this.status=this.navParams.data.status;
     console.log(this.navParams.data.feedback);
     this.feedbackService.findFeedback(this.navParams.data.feedback.id).subscribe(
         response=>{

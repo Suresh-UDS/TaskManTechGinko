@@ -75,6 +75,7 @@ import {BatteryStatus, BatteryStatusResponse} from "@ionic-native/battery-status
 import {FeedbackDashboardPage} from "../pages/feedback/feedback-dashboard";
 import {QuotationImagePopoverPage} from "../pages/quotation/quotation-image-popover";
 import { BackgroundMode } from '@ionic-native/background-mode';
+import {SelectFeedbackPage} from "../pages/feedback/select-feedback";
 
 @NgModule({
   declarations: [
@@ -123,7 +124,8 @@ import { BackgroundMode } from '@ionic-native/background-mode';
     JobPopoverPage,
     FeedbackQuestionPage,
     InitFeedbackPage,
-    FeedbackDashboardPage
+    FeedbackDashboardPage,
+      SelectFeedbackPage
   ],
   imports: [
     BrowserModule,
@@ -184,7 +186,8 @@ import { BackgroundMode } from '@ionic-native/background-mode';
     FeedbackQuestionPage,
     InitFeedbackPage,
     JobPopoverPage,
-    FeedbackDashboardPage
+    FeedbackDashboardPage,
+      SelectFeedbackPage
   ],
   providers: [
     StatusBar,

@@ -19,13 +19,14 @@ export class FeedbackPage {
   feedback:any;
     eMsg:any;
     field:any;
+    status:any;
 
   constructor(public navCtrl: NavController,public navParams: NavParams,public myService:authService,public component:componentService, private siteService: SiteService) {
 
       this.feedback = this.navParams.data.feedback;
+      this.status=this.navParams.data.status;
       this.userCode="";
       console.log(this.feedback);
-
   }
 
     start(userName,userCode)
@@ -38,7 +39,8 @@ export class FeedbackPage {
                 userName: userName,
                 userCode: userCode,
                 feedback: this.feedback,
-                fb: this.navParams.data.fb
+                fb: this.navParams.data.fb,
+                status:this.status
             });
         }
         else
@@ -53,7 +55,7 @@ export class FeedbackPage {
         console.log("anonymous user");
         console.log(this.userName);
         console.log(this.userCode);
-        this.navCtrl.push(FeedbackQuestionPage, {userName:this.userName,userCode:this.userCode,feedback:this.feedback, fb:this.navParams.data.fb});
+        this.navCtrl.push(FeedbackQuestionPage, {userName:this.userName,userCode:this.userCode,feedback:this.feedback, fb:this.navParams.data.fb, status:this.status});
     }
 
 }
