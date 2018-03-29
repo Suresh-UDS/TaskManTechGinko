@@ -4,7 +4,9 @@ import {authService} from "../service/authService";
 import {componentService} from "../service/componentService";
 import {SiteService} from "../service/siteService";
 import {FeedbackQuestionPage} from "../feedback/feedback-questions";
-
+import {InitFeedbackPage} from "./init-feedback";
+import {FeedbackService} from "../service/feedbackService";
+declare  var demo ;
 @Component({
   selector: 'page-feedback',
   templateUrl: 'feedback.html'
@@ -17,29 +19,80 @@ export class FeedbackPage {
   sites:any;
   userName:any;
   feedback:any;
+    eMsg:any;
+    field:any;
+    status:any;
+    feedbackTransaction:any;
+    questions:any;
+    remarks:any;
 
-  constructor(public navCtrl: NavController,public navParams: NavParams,public myService:authService,public component:componentService, private siteService: SiteService) {
+  constructor(public navCtrl: NavController,public feedbackService:FeedbackService,public navParams: NavParams,public myService:authService,public component:componentService, private siteService: SiteService) {
 
       this.feedback = this.navParams.data.feedback;
+      this.questions= this.navParams.data.question;
+      this.remarks= this.navParams.data.remarks;
+      this.status=this.navParams.data.status;
       this.userCode="";
       console.log(this.feedback);
-
   }
 
     start(userName,userCode)
     {
-        console.log("User name");
-        console.log(userName+" - "+userCode);
-        this.navCtrl.push(FeedbackQuestionPage,{userName:userName,userCode:userCode,feedback:this.feedback,fb:this.navParams.data.fb});
+        if(this.userName,this.userCode)
+        {
+        this.component.showLoader("Saving Feedback");
+        console.log("feedback details");
+
+        this.questions=this.questions;
+        this.feedbackTransaction = {
+            results:this.questions,
+            reviewerName:this.userName,
+            reviewerCode:this.userCode,
+            siteId:this.navParams.data.fb.siteId,
+            siteName:this.navParams.data.fb.siteName,
+            projectId:this.navParams.data.fb.projectId,
+            projectName:this.navParams.data.fb.projectName,
+            feedbackId:this.navParams.data.feedback.id,
+            feedbackName:this.navParams.data.feedback.name,
+            block:this.navParams.data.fb.block,
+            floor:this.navParams.data.fb.floor,
+            zone:this.navParams.data.fb.zone,
+            remarks:this.remarks
+        };
+
+        console.log(this.feedbackTransaction);
+
+        this.feedbackService.saveFeedback(this.feedbackTransaction).subscribe(
+            response=>{
+                console.log("Saving feeback");
+                console.log(response);
+                this.questions = null;
+                this.component.closeLoader();
+                demo.showSwal('feedback-success','Thank you!','For your Feedback');
+                this.navCtrl.setRoot(InitFeedbackPage,{feedback:this.navParams.data.feedback});
+            },err=>{
+                console.log("error in saving feedback");
+                this.component.closeLoader();
+                demo.showSwal('warning-message-and-confirmation-ok','Failed to Save','Unable to save feedback');
+                console.log(err)
+            }
+        )
+
+    }
+        else
+        {
+            this.eMsg="username";
+        }
     }
 
-    skip()
-    {
-        this.userName = "Anonymous"+new Date().getMilliseconds();
-        console.log("anonymous user");
-        console.log(this.userName);
-        console.log(this.userCode);
-        this.navCtrl.push(FeedbackQuestionPage, {userName:this.userName,userCode:this.userCode,feedback:this.feedback, fb:this.navParams.data.fb});
-    }
+
+    // skip()
+    // {
+    //     this.userName = "Anonymous"+new Date().getMilliseconds();
+    //     console.log("anonymous user");
+    //     console.log(this.userName);
+    //     console.log(this.userCode);
+    //     this.navCtrl.push(FeedbackQuestionPage, {userName:this.userName,userCode:this.userCode,feedback:this.feedback, fb:this.navParams.data.fb, status:this.status});
+    // }
 
 }

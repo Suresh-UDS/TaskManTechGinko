@@ -21,6 +21,7 @@
     "@angular/http": "5.0.0",
     "@angular/platform-browser": "5.0.0",
     "@angular/platform-browser-dynamic": "5.0.0",
+    "@ionic-native/background-mode": "^4.6.0",
     "@ionic-native/battery-status": "^4.6.0",
     "@ionic-native/calendar": "^4.5.2",
     "@ionic-native/camera": "^4.5.3",
@@ -40,6 +41,7 @@
     "chart.js": "^2.7.2",
     "cordova-android": "^6.4.0",
     "cordova-ios": "^4.5.4",
+    "cordova-plugin-background-mode": "^0.7.2",
     "cordova-plugin-battery-status": "^2.0.1",
     "cordova-plugin-camera": "^4.0.1",
     "cordova-plugin-device": "^1.1.4",
@@ -93,7 +95,8 @@
       "cordova-plugin-file-transfer": {},
       "cordova-plugin-filepath": {},
       "cordova-plugin-file": {},
-      "cordova-plugin-battery-status": {}
+      "cordova-plugin-battery-status": {},
+      "cordova-plugin-background-mode": {}
     },
     "platforms": [
       "android"

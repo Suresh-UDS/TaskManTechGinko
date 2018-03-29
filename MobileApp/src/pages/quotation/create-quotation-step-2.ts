@@ -221,11 +221,12 @@ export class CreateQuotationPage2 {
                     "createdByUserName":this.sentByUserName,
                     "clientEmailId": this.clientEmailId,
                     "siteId":this.siteDetails.id,
-                    "clientId":this.siteDetails.projectId,
-                    "clientName":this.siteDetails.projectName,
+                    "projectId":this.siteDetails.projectId,
+                    "projectName":this.siteDetails.projectName,
                     "siteName":this.siteDetails.name,
                     "grandTotal":this.grandTotal,
-                    "isDrafted":true
+                    "isDrafted":true,
+                    "mode":"create"
                 };
 
                 this.saveQuotationDetails(this.quotationDetails)
@@ -297,7 +298,8 @@ export class CreateQuotationPage2 {
             "siteId":this.selectedSite.id,
             "siteName":this.selectedSite.name,
             "grandTotal":this.grandTotal,
-            "isSubmitted":true
+            "isSubmitted":true,
+            "mode":"create"
         };
 
         this.quotationService.editQuotation(quotationDetails).subscribe(
@@ -365,14 +367,10 @@ export class CreateQuotationPage2 {
         })
 
     }
-    openDiv()
-    {
-        this.open=true;
-    }
-
     viewSite(site,i)
     {
         this.selectedSite=site;
+        this.siteDetails = site;
         this.openSites=true;
         this.selectSiteIndex=i;
     }

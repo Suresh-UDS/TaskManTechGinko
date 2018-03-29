@@ -15,9 +15,7 @@
 <ion-content>
 
    <div class="InitFeedbackCon">
-
         <div class="InputCon">
-
             <ion-list>
                 <ion-item>
                     <ion-label>Project</ion-label>
@@ -60,11 +58,9 @@
             </ion-list>
 
             <div class="TailsCon" *ngIf="!scrollSite">
-
                 <div *ngIf="sites?.length<0">
                     <h4 text-center>No Data Found</h4>
                 </div>
-
                 <ion-grid>
                     <ion-row>
                         <ion-col col-4 *ngFor="let site of sites;let i of index" >
@@ -77,7 +73,6 @@
             </div>
 
             <div class="SiteAndBlockCOn"  *ngIf="scrollSite">
-
                 <div class="SiteCon">
                     <div class="scrollCon">
                         <ion-row>
@@ -110,4 +105,3 @@
         </div>
    </div>
 </ion-content>
-

@@ -136,18 +136,20 @@ public class AttendanceResource {
 		SearchCriteria searchCriteria = reportUtil.getJobReportCriteria(uid);
 		if(searchCriteria != null) {
 			searchCriteria.setUserId(SecurityUtils.getCurrentUserId());
-			result = attendanceService.findBySearchCrieria(searchCriteria);			
+			result = attendanceService.findBySearchCrieria(searchCriteria);
 		}
 		return result;
 	}
 
-    
+
     @RequestMapping(value = "/attendance/export",method = RequestMethod.POST)
 	public ExportResponse exportTimesheet(@RequestBody SearchCriteria searchCriteria) {
 		ExportResponse resp = new ExportResponse();
 		if(searchCriteria != null) {
 			searchCriteria.setUserId(SecurityUtils.getCurrentUserId());
 			SearchResult<AttendanceDTO> result = attendanceService.findBySearchCrieria(searchCriteria);
+			log.debug("Attendance RESULT ***********"+result);
+
 			List<AttendanceDTO> results = result.getTransactions();
 			resp.addResult(attendanceService.generateReport(results, searchCriteria));
 		}
@@ -209,10 +211,10 @@ public class AttendanceResource {
 	@RequestMapping(value = "/attendance/export/{fileId}",method = RequestMethod.GET)
 	public byte[] getExportFile(@PathVariable("fileId") String fileId, HttpServletResponse response) {
 		byte[] content = attendanceService.getExportFile(null, fileId);
-		response.setContentType("application/force-download");
+		response.setContentType("Application/x-msexcel");
 		response.setContentLength(content.length);
 		response.setHeader("Content-Transfer-Encoding", "binary");
-		response.setHeader("Content-Disposition","attachment; filename=\"" + fileId + ".txt\"");
+		response.setHeader("Content-Disposition","attachment; filename=\"" + fileId + ".xlsx\"");
 		return content;
 	}
 

@@ -47,6 +47,8 @@ public class FeedbackTransaction extends AbstractAuditingEntity implements Seria
 
     private String projectName;
 
+    private String remarks;
+
     @ManyToOne()
     @JoinColumn(name = "feedback_id")
     private FeedbackMapping feedback;
@@ -175,5 +177,13 @@ public class FeedbackTransaction extends AbstractAuditingEntity implements Seria
 
     public void setReviewerCode(String reviewerCode) {
         this.reviewerCode = reviewerCode;
+    }
+
+    public String getRemarks() {
+        return remarks;
+    }
+
+    public void setRemarks(String remarks) {
+        this.remarks = remarks;
     }
 }

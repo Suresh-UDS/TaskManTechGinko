@@ -14,6 +14,8 @@ public class FeedbackTransactionResultDTO extends BaseDTO implements Serializabl
 
     private String answerType;
 
+    private String scoreType;
+
     public long getId() {
         return id;
     }
@@ -44,5 +46,13 @@ public class FeedbackTransactionResultDTO extends BaseDTO implements Serializabl
 
     public void setAnswerType(String answerType) {
         this.answerType = answerType;
+    }
+
+    public String getScoreType() {
+        return scoreType;
+    }
+
+    public void setScoreType(String scoreType) {
+        this.scoreType = scoreType;
     }
 }

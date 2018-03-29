@@ -14,48 +14,60 @@ import com.ts.app.web.rest.dto.ExportResult;
 import com.ts.app.web.rest.dto.JobDTO;
 import com.ts.app.web.rest.dto.SearchCriteria;
 
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 @Component
 public class ReportUtil {
-	
-	@Inject
+
+    private static final Logger log = LoggerFactory.getLogger(ReportUtil.class);
+
+
+    @Inject
 	private ExportUtil exportUtil;
-	
+
 	@Inject
 	private CacheUtil cacheUtil;
-	
+
 	@Inject
 	private Environment env;
 
-	public ExportResult generateJobReports(List<JobDTO> content, final String empId, ExportResult result, SearchCriteria criteria) {
-		if(criteria.getExportType().equalsIgnoreCase("html")) {
-			if(result == null) {
-				result = new ExportResult();
-			}
-			String uuidVal = null;
-			if(StringUtils.isNotEmpty(criteria.getExportType()) && criteria.getExportType().equalsIgnoreCase("html")) {
-				UUID uuid = UUID.randomUUID();
-				uuidVal = uuid.toString();
-				cacheUtil.putSearchCriteria(uuidVal, criteria);
-			}
-			result.setFile(uuidVal);
-			String reportUrl = env.getProperty("reports.job-report.url");
-			result.setUrl(reportUrl + "/" + uuidVal);
-			uuidVal += ".csv";
-			exportUtil.updateExportStatus(uuidVal, "COMPLETED");
-			result.setEmpId(empId);
-			result.setStatus("COMPLETED");
-			return result;
+    public ExportResult generateJobReports(List<JobDTO> content, final String empId, ExportResult result, SearchCriteria criteria) {
+        if(criteria.getExportType().equalsIgnoreCase("html")) {
+            if(result == null) {
+                result = new ExportResult();
+            }
+            String uuidVal = null;
+            if(StringUtils.isNotEmpty(criteria.getExportType()) && criteria.getExportType().equalsIgnoreCase("html")) {
+                UUID uuid = UUID.randomUUID();
+                uuidVal = uuid.toString();
+                cacheUtil.putSearchCriteria(uuidVal, criteria);
+            }
+            result.setFile(uuidVal);
+            String reportUrl = env.getProperty("reports.job-report.url");
+            result.setUrl(reportUrl + "/" + uuidVal);
 
-		}else if(criteria.getExportType().equalsIgnoreCase("csv")) {
-			return exportUtil.writeJobReportToFile(content, empId, result);
-		}
-		return null;
-	}
-	
+            //log.debug("UUID VALUE **********"+uuidVal);
+            uuidVal += ".xlsx";
+            exportUtil.updateExportStatus(uuidVal, "COMPLETED");
+
+            result.setEmpId(empId);
+            result.setStatus("COMPLETED");
+           // log.debug("RESULT OBJECT VALUES HERE *************"+result);
+            return result;
+
+        }else if(criteria.getExportType().equalsIgnoreCase("xlsx")) {
+            //return exportUtil.writeJobReportToFile(content, empId, result);
+            return exportUtil.writeJobExcelReportToFile(content,empId,result);
+        }
+        return result;
+    }
+
 	public SearchCriteria getJobReportCriteria(String uid) {
 		return cacheUtil.getSearchCriteria(uid);
 	}
-	
+
 	public ExportResult generateAttendanceReports(List<EmployeeAttendanceReport> content, final String empId, ExportResult result, SearchCriteria criteria) {
 		if(criteria.getExportType().equalsIgnoreCase("html")) {
 			if(result == null) {
@@ -70,18 +82,19 @@ public class ReportUtil {
 			result.setFile(uuidVal);
 			String reportUrl = env.getProperty("reports.attendance-report.url");
 			result.setUrl(reportUrl + "/" + uuidVal);
-			uuidVal += ".csv";
+			uuidVal += ".xlsx";
 			exportUtil.updateExportStatus(uuidVal, "COMPLETED");
 			result.setEmpId(empId);
 			result.setStatus("COMPLETED");
 			return result;
 
-		}else if(criteria.getExportType().equalsIgnoreCase("csv")) {
-			return exportUtil.writeAttendanceReportToFile(criteria.getProjectName(), content, empId, result);
+		}else if(criteria.getExportType().equalsIgnoreCase("xlsx")) {
+			//return exportUtil.writeAttendanceReportToFile(criteria.getProjectName(), content, empId, result);
+            return exportUtil.writeAttendanceExcelReportToFile(criteria.getProjectName(), content, empId, result);
 		}
-		return null;
+		return result;
 	}
-	
+
 	public SearchCriteria getAttendanceReportCriteria(String uid) {
 		return cacheUtil.getSearchCriteria(uid);
 	}

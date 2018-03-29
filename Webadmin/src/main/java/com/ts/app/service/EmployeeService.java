@@ -836,12 +836,13 @@ public class    EmployeeService extends AbstractService {
 	}
 
 	public ExportResult export(List<EmployeeDTO> transactions) {
-		return exportUtil.writeToCsvFile(transactions, null);
+		//return exportUtil.writeToCsvFile(transactions, null);
+        return exportUtil.writeToExcelFile(transactions,null);
 	}
 
 	public ExportResult getExportStatus(String fileId) {
 		ExportResult er = new ExportResult();
-		fileId += ".csv";
+		fileId += ".xlsx";
 		if(!StringUtils.isEmpty(fileId)) {
 			String status = exportUtil.getExportStatus(fileId);
 			er.setFile(fileId);
@@ -852,7 +853,7 @@ public class    EmployeeService extends AbstractService {
 	}
 
 	public byte[] getExportFile(String fileName) {
-		return exportUtil.readExportFile(fileName);
+		return exportUtil.readEmployeeExportExcelFile(fileName);
 	}
 
 

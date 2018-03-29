@@ -40,7 +40,7 @@ public class SearchCriteria extends Paginator {
 	private long locationId;
 
 	private long siteId;
-	
+
 	private String siteName;
 
 	private long projectId;
@@ -90,31 +90,35 @@ public class SearchCriteria extends Paginator {
 	private String rateCardType;
 
 	private boolean graphRequest;
-	
+
 	private int sort;
-	
+
 	private String columnName;
-	
+
 	private boolean sortByAsc;
-	
+
 	private String exportType;
-	
+
 	private String block;
-	
+
 	private String floor;
-	
+
 	private String zone;
-	
+
 	private String feedbackName;
-	
+
 	private String userLogin;
-	
+
 	private String userFirstName;
-	
+
 	private String userLastName;
-	
+
 	private String userEmail;
-	
+
+	private Long lat;
+
+	private Long lng;
+
 	public long getId() {
 		return id;
 	}
@@ -458,7 +462,7 @@ public class SearchCriteria extends Paginator {
 	public void setSiteName(String siteName) {
 		this.siteName = siteName;
 	}
-	
+
 	public boolean isSortByAsc() {
 		return sortByAsc;
 	}
@@ -555,5 +559,20 @@ public class SearchCriteria extends Paginator {
 		this.userEmail = userEmail;
 	}
 
-	
+
+    public Long getLat() {
+        return lat;
+    }
+
+    public void setLat(Long lat) {
+        this.lat = lat;
+    }
+
+    public Long getLng() {
+        return lng;
+    }
+
+    public void setLng(Long lng) {
+        this.lng = lng;
+    }
 }
