@@ -28,11 +28,11 @@ export class SelectFeedbackPage {
 
   sad()
   {
-      this.navCtrl.push(FeedbackQuestionPage,{feedback:this.feedback,fb:this.fb});
+      this.navCtrl.push(FeedbackQuestionPage,{feedback:this.feedback,fb:this.fb,overallFeedback:false});
   }
   happy()
   {
-      this.navCtrl.setRoot(FeedbackPage,{feedback:this.feedback,fb:this.fb,question:[]});
+      this.navCtrl.setRoot(FeedbackPage,{feedback:this.feedback,fb:this.fb,question:[],overallFeedback:true});
   }
 
 }

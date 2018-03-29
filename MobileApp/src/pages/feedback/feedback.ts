@@ -6,6 +6,7 @@ import {SiteService} from "../service/siteService";
 import {FeedbackQuestionPage} from "../feedback/feedback-questions";
 import {InitFeedbackPage} from "./init-feedback";
 import {FeedbackService} from "../service/feedbackService";
+import {FeedbackZone} from "./feedbackZone";
 declare  var demo ;
 @Component({
   selector: 'page-feedback',
@@ -25,6 +26,7 @@ export class FeedbackPage {
     feedbackTransaction:any;
     questions:any;
     remarks:any;
+    overallFeedback:any;
 
   constructor(public navCtrl: NavController,public feedbackService:FeedbackService,public navParams: NavParams,public myService:authService,public component:componentService, private siteService: SiteService) {
 
@@ -32,6 +34,7 @@ export class FeedbackPage {
       this.questions= this.navParams.data.question;
       this.remarks= this.navParams.data.remarks;
       this.userCode="";
+      this.overallFeedback = this.navParams.data.overallFeedback;
       console.log(this.feedback);
   }
 
@@ -55,7 +58,8 @@ export class FeedbackPage {
             block:this.navParams.data.fb.block,
             floor:this.navParams.data.fb.floor,
             zone:this.navParams.data.fb.zone,
-            remarks:this.remarks
+            remarks:this.remarks,
+            overallFeedback:this.overallFeedback
         };
 
         console.log(this.feedbackTransaction);
@@ -67,7 +71,7 @@ export class FeedbackPage {
                 this.questions = null;
                 this.component.closeLoader();
                 demo.showSwal('feedback-success','Thank you!','For your Feedback');
-                this.navCtrl.setRoot(InitFeedbackPage,{feedback:this.navParams.data.feedback});
+                this.navCtrl.setRoot(FeedbackZone,{feedback:this.navParams.data.feedback});
             },err=>{
                 console.log("error in saving feedback");
                 this.component.closeLoader();

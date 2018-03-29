@@ -127,11 +127,8 @@ import {FeedbackZone} from "../pages/feedback/feedbackZone";
     FeedbackQuestionPage,
     InitFeedbackPage,
     FeedbackDashboardPage,
-<<<<<<< HEAD
-      FeedbackZone
-=======
+      FeedbackZone,
       SelectFeedbackPage
->>>>>>> 5f72eb3136a2abf093ea84858b0926beb3df1c55
   ],
   imports: [
     BrowserModule,
@@ -192,13 +189,9 @@ import {FeedbackZone} from "../pages/feedback/feedbackZone";
     FeedbackQuestionPage,
     InitFeedbackPage,
     JobPopoverPage,
-<<<<<<< HEAD
       FeedbackZone,
-      FeedbackDashboardPage
-=======
     FeedbackDashboardPage,
       SelectFeedbackPage
->>>>>>> 5f72eb3136a2abf093ea84858b0926beb3df1c55
   ],
   providers: [
     StatusBar,
