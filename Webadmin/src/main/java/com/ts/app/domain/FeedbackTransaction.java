@@ -66,6 +66,8 @@ public class FeedbackTransaction extends AbstractAuditingEntity implements Seria
     private String zone;
 
     private float rating;
+    
+    private boolean overallFeedback;
 
     public long getId() {
         return id;
@@ -186,4 +188,13 @@ public class FeedbackTransaction extends AbstractAuditingEntity implements Seria
     public void setRemarks(String remarks) {
         this.remarks = remarks;
     }
+
+	public boolean isOverallFeedback() {
+		return overallFeedback;
+	}
+
+	public void setOverallFeedback(boolean overallFeedback) {
+		this.overallFeedback = overallFeedback;
+	}
+    
 }

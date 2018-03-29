@@ -26,7 +26,7 @@
     "@ionic-native/calendar": "^4.5.2",
     "@ionic-native/camera": "^4.5.3",
     "@ionic-native/core": "^4.5.3",
-    "@ionic-native/file": "^4.5.3",
+    "@ionic-native/file": "^4.6.0",
     "@ionic-native/file-path": "^4.5.3",
     "@ionic-native/file-transfer": "^4.5.3",
     "@ionic-native/geofence": "^4.5.2",
