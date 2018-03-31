@@ -26,6 +26,10 @@ public class SettingsDTO extends BaseDTO implements Serializable {
     
     private boolean eodJobEmailAlert;
     
+    private long feedbackEmailAlertId;
+    
+    private boolean feedbackEmailAlert;
+
     private long overdueEmailsId;
     
     private List<String> overdueEmailIds;
@@ -34,7 +38,11 @@ public class SettingsDTO extends BaseDTO implements Serializable {
     
     private List<String> eodJobEmailIds;
 
-	public long getSiteId() {
+    private long feedbackEmailsId;
+    
+    private List<String> feedbackEmailIds;
+
+    public long getSiteId() {
 		return siteId;
 	}
 
@@ -128,6 +136,38 @@ public class SettingsDTO extends BaseDTO implements Serializable {
 
 	public void setEodJobEmailIds(List<String> eodJobEmailIds) {
 		this.eodJobEmailIds = eodJobEmailIds;
+	}
+
+	public long getFeedbackEmailAlertId() {
+		return feedbackEmailAlertId;
+	}
+
+	public void setFeedbackEmailAlertId(long feedbackEmailAlertId) {
+		this.feedbackEmailAlertId = feedbackEmailAlertId;
+	}
+
+	public boolean isFeedbackEmailAlert() {
+		return feedbackEmailAlert;
+	}
+
+	public void setFeedbackEmailAlert(boolean feedbackEmailAlert) {
+		this.feedbackEmailAlert = feedbackEmailAlert;
+	}
+
+	public long getFeedbackEmailsId() {
+		return feedbackEmailsId;
+	}
+
+	public void setFeedbackEmailsId(long feedbackEmailsId) {
+		this.feedbackEmailsId = feedbackEmailsId;
+	}
+
+	public List<String> getFeedbackEmailIds() {
+		return feedbackEmailIds;
+	}
+
+	public void setFeedbackEmailIds(List<String> feedbackEmailIds) {
+		this.feedbackEmailIds = feedbackEmailIds;
 	}
 
 	

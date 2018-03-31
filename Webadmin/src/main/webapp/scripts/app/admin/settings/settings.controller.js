@@ -10,7 +10,8 @@ angular.module('timeSheetApp')
     		$scope.settings = {
     				
     			overdueEmailIds : [],
-    			eodJobEmailIds : []
+    			eodJobEmailIds : [],
+    			feedbackEmailIds : []
     		};
     		
     	
@@ -37,6 +38,19 @@ angular.module('timeSheetApp')
 	    		$scope.settings.eodJobEmailIds.splice(ind,1);
 	    }
     		
+        $scope.addFeedbackEmail = function() {
+	        	var email = $scope.feedbackEmail;
+	        	if(!$scope.settings.feedbackEmailIds) {
+	        		$scope.settings.feedbackEmailIds = [];
+	        	}
+	        	$scope.settings.feedbackEmailIds.push(email);
+        		$scope.feedbackEmail = '';
+	        	
+	    }
+	    
+	    $scope.removeFeedbackEmail = function(ind) {
+	    		$scope.settings.feedbackEmailIds.splice(ind,1);
+	    }
     		
         $scope.loadProjects = function () {
 			console.log("Loading all projects")
@@ -87,7 +101,6 @@ angular.module('timeSheetApp')
             		$scope.settings.siteId = $scope.selectedSite.id;
             		$scope.settings.siteName = $scope.selectedSite.name;
         		}
-        		
         		SettingsComponent.saveSettings($scope.settings).then(function() {
         			$scope.hideLoader();  
         			$scope.showNotifications('top','center','success','Settings updated successfully');

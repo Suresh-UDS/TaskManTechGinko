@@ -3,6 +3,7 @@ package com.ts.app.service;
 import java.io.File;
 import java.util.Date;
 import java.util.Enumeration;
+import java.util.List;
 import java.util.Locale;
 import java.util.Properties;
 
@@ -206,6 +207,20 @@ public class MailService {
         String content = templateEngine.process("completedJobEmailAlert", context);
         String subject = messageSource.getMessage("email.completed.report.title", null, locale);
         sendEmail(user.getEmail(), subject, content, true, true,fileName);
+    }
+    
+    @Async
+    public void sendFeedbackAlert(String emailIds,  String feedbackName, String feedbackLocation, Date feedbackDate, List<String> feedbackItems) {
+        log.debug("Sending feedback alert e-mail to '{}'", emailIds);
+        Locale locale = Locale.forLanguageTag("en-US");
+        Context context = new Context(locale);
+        context.setVariable("feedbackName", feedbackName);
+        context.setVariable("feedbackLocation", feedbackLocation);
+        context.setVariable("feedbackDate", feedbackDate);
+        context.setVariable("feedbacks", feedbackItems);
+        String content = templateEngine.process("feedbackEmailAlert", context);
+        String subject = messageSource.getMessage("email.feedback.alert.title", null, locale);
+        sendEmail(emailIds, subject, content, true, true, null);
     }
     
     @Async

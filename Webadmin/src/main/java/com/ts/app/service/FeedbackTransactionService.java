@@ -32,9 +32,11 @@ import com.ts.app.domain.FeedbackAnswerType;
 import com.ts.app.domain.FeedbackMapping;
 import com.ts.app.domain.FeedbackTransaction;
 import com.ts.app.domain.FeedbackTransactionResult;
+import com.ts.app.domain.Setting;
 import com.ts.app.repository.FeedbackMappingRepository;
 import com.ts.app.repository.FeedbackTransactionRepository;
 import com.ts.app.repository.ProjectRepository;
+import com.ts.app.repository.SettingsRepository;
 import com.ts.app.repository.SiteRepository;
 import com.ts.app.service.util.DateUtil;
 import com.ts.app.service.util.MapperUtil;
@@ -66,12 +68,18 @@ public class FeedbackTransactionService extends AbstractService {
 
 	@Inject
 	private ProjectRepository projectRepository;
+	
+	@Inject
+	private SettingsRepository settingsRepository;
 
 	@Inject
 	private SiteRepository siteRepository;
 
 	@Inject
 	private MapperUtil<AbstractAuditingEntity, BaseDTO> mapperUtil;
+	
+	@Inject
+	private MailService mailService;
 
 	public FeedbackTransactionDTO saveFeebdackInformation(FeedbackTransactionDTO feedbackTransDto) {
 	    log.debug("user code- "+feedbackTransDto.getReviewerCode());
@@ -84,6 +92,7 @@ public class FeedbackTransactionService extends AbstractService {
 		int positiveCnt = 0;
 		float cumRating = 0f;
 		if(!feedbackTransDto.isOverallFeedback()) {
+			List<String> feedbackAlertItems = new ArrayList<String>();
 			for(FeedbackTransactionResultDTO itemDto : itemDtos) {
 	
 				FeedbackTransactionResult item = mapperUtil.toEntity(itemDto, FeedbackTransactionResult.class);
@@ -98,6 +107,7 @@ public class FeedbackTransactionService extends AbstractService {
 				        log.debug("answer score type yes:1");
 	                    cumRating += 5;
 	                }else{
+	                		feedbackAlertItems.add(item.getQuestion());
 	                    log.debug("answer score type yes:0");
 	                }
 				}else if(item.getAnswerType().equals(FeedbackAnswerType.YESNO) && item.getAnswer().equalsIgnoreCase("no")){
@@ -106,6 +116,7 @@ public class FeedbackTransactionService extends AbstractService {
 	                    log.debug("answer score type no:1");
 	                    cumRating += 5;
 	                }else{
+	                	feedbackAlertItems.add(item.getQuestion());
 	                    log.debug("answer score type no:0");
 	                }
 	            }else if(item.getAnswerType().equals(FeedbackAnswerType.RATING)) {
@@ -116,6 +127,34 @@ public class FeedbackTransactionService extends AbstractService {
 				items.add(item);
 			}
 			rating = (cumRating / items.size()); //calculate the overall rating.
+			//send notifications
+			Setting feedbackAlertSetting = settingsRepository.findSettingByKey("email.notification.feedback");
+			Setting feedbackEmails = null;
+			String alertEmailIds = "";
+			if(feedbackTransDto.getSiteId() > 0) {
+				feedbackAlertSetting = settingsRepository.findSettingByKeyAndSiteId(SettingsService.EMAIL_NOTIFICATION_FEEDBACK, feedbackTransDto.getSiteId());
+				feedbackEmails = settingsRepository.findSettingByKeyAndSiteId(SettingsService.EMAIL_NOTIFICATION_FEEDBACK_EMAILS, feedbackTransDto.getSiteId());
+				if(feedbackEmails != null) {
+					alertEmailIds = feedbackEmails.getSettingValue();
+				}
+			}else if(feedbackTransDto.getProjectId() > 0) {
+				feedbackAlertSetting = settingsRepository.findSettingByKeyAndProjectId(SettingsService.EMAIL_NOTIFICATION_OVERDUE, feedbackTransDto.getProjectId());
+				feedbackEmails = settingsRepository.findSettingByKeyAndProjectId(SettingsService.EMAIL_NOTIFICATION_OVERDUE_EMAILS, feedbackTransDto.getProjectId());
+				if(feedbackEmails != null) {
+					alertEmailIds = feedbackEmails.getSettingValue();
+				}
+			}
+			if(feedbackAlertSetting != null && feedbackAlertSetting.getSettingValue().equalsIgnoreCase("true")) { //send escalation emails to managers and alert emails
+				StringBuilder feedbackLocation = new StringBuilder();
+				feedbackLocation.append(feedbackTransDto.getSiteName());
+				feedbackLocation.append("-");
+				feedbackLocation.append(feedbackTransDto.getBlock());
+				feedbackLocation.append("-");
+				feedbackLocation.append(feedbackTransDto.getFloor());
+				feedbackLocation.append("-");
+				feedbackLocation.append(feedbackTransDto.getZone());
+				mailService.sendFeedbackAlert(alertEmailIds, feedbackTransDto.getFeedbackName(), feedbackLocation.toString(), new Date(), feedbackAlertItems);
+			}
 		}else {
 			rating = 5;
 		}

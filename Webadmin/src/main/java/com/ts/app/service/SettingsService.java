@@ -12,9 +12,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import com.ts.app.domain.Setting;
-import com.ts.app.repository.ProjectRepository;
 import com.ts.app.repository.SettingsRepository;
-import com.ts.app.repository.SiteRepository;
 import com.ts.app.service.util.CommonUtil;
 import com.ts.app.web.rest.dto.SettingsDTO;
 
@@ -36,6 +34,10 @@ public class SettingsService extends AbstractService {
 	
 	public static final String EMAIL_NOTIFICATION_EODREPORTS_EMAILS = "email.notification.eodReports.emails";
 	
+	public static final String EMAIL_NOTIFICATION_FEEDBACK = "email.notification.feedback";
+	
+	public static final String EMAIL_NOTIFICATION_FEEDBACK_EMAILS = "email.notification.feedback.emails";
+
 	@Inject
 	private SettingsRepository settingsRepository;
 	
@@ -100,11 +102,44 @@ public class SettingsService extends AbstractService {
 		eodJobEmailsSetting.setSiteName(settingsDto.getSiteName());
 		eodJobEmailsSetting.setActive("Y");
 		
+		//feedback notification setting
+		Setting feedbackAlertSetting = null;
+		if(settingsDto.getFeedbackEmailAlertId() > 0) {
+			feedbackAlertSetting = settingsRepository.findOne(settingsDto.getFeedbackEmailAlertId());
+		}else {
+			feedbackAlertSetting = new Setting();
+		}
+		feedbackAlertSetting.setSettingKey(EMAIL_NOTIFICATION_FEEDBACK);
+		feedbackAlertSetting.setSettingValue(String.valueOf(settingsDto.isFeedbackEmailAlert()));
+		feedbackAlertSetting.setProjectId(settingsDto.getProjectId());
+		feedbackAlertSetting.setProjectName(settingsDto.getProjectName());
+		feedbackAlertSetting.setSiteId(settingsDto.getSiteId());
+		feedbackAlertSetting.setSiteName(settingsDto.getSiteName());
+		feedbackAlertSetting.setActive("Y");
+
+		Setting feedbackEmailsSetting = null;
+		if(settingsDto.getFeedbackEmailsId() > 0) {
+			feedbackEmailsSetting = settingsRepository.findOne(settingsDto.getFeedbackEmailsId());
+		}else {
+			feedbackEmailsSetting = new Setting();
+		}
+		feedbackEmailsSetting.setSettingKey(EMAIL_NOTIFICATION_FEEDBACK_EMAILS);
+		if(CollectionUtils.isNotEmpty(settingsDto.getFeedbackEmailIds())) {
+			feedbackEmailsSetting.setSettingValue(CommonUtil.convertToString(settingsDto.getFeedbackEmailIds()));
+		}	
+		feedbackEmailsSetting.setProjectId(settingsDto.getProjectId());
+		feedbackEmailsSetting.setProjectName(settingsDto.getProjectName());
+		feedbackEmailsSetting.setSiteId(settingsDto.getSiteId());
+		feedbackEmailsSetting.setSiteName(settingsDto.getSiteName());
+		feedbackEmailsSetting.setActive("Y");
+		
 		List<Setting> settingList = new ArrayList<Setting>();
 		settingList.add(overdueAlertSetting);
 		settingList.add(overdueEmailsSetting);
 		settingList.add(eodJobAlertSetting);
 		settingList.add(eodJobEmailsSetting);
+		settingList.add(feedbackAlertSetting);
+		settingList.add(feedbackEmailsSetting);
 		settingsRepository.save(settingList);
 		
 		return settingsDto;
@@ -139,6 +174,12 @@ public class SettingsService extends AbstractService {
 				}else if(setting.getSettingKey().equalsIgnoreCase(EMAIL_NOTIFICATION_EODREPORTS_EMAILS)) {
 					settingDto.setEodJobEmailsId(setting.getId());
 					settingDto.setEodJobEmailIds(CommonUtil.convertToList(setting.getSettingValue(), ","));
+				}else if(setting.getSettingKey().equalsIgnoreCase(EMAIL_NOTIFICATION_FEEDBACK)) {
+					settingDto.setFeedbackEmailAlertId(setting.getId());
+					settingDto.setFeedbackEmailAlert(Boolean.valueOf(setting.getSettingValue()));
+				}else if(setting.getSettingKey().equalsIgnoreCase(EMAIL_NOTIFICATION_FEEDBACK_EMAILS)) {
+					settingDto.setFeedbackEmailsId(setting.getId());
+					settingDto.setFeedbackEmailIds(CommonUtil.convertToList(setting.getSettingValue(), ","));
 				}
 				//settings.add(settingDto);
 			}
