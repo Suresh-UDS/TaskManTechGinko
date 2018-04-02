@@ -39,14 +39,92 @@ $colors: (
   danger:     #f44336,
   light:      #f4f4f4,
   dark:       #222,
-        clr-blue:#00bcd4
+  clr-blue:#00bcd4
 );
+
+$clr-white:#ffffff;
+$clr-black:#191919;
+
 
 $text-input-md-highlight-color-invalid: transparent;
 $text-input-md-highlight-color-valid: transparent;
 $text-input-md-show-invalid-highlight: transparent;
 $text-input-md-highlight-color: transparent;
 $text-input-md-show-valid-highlight: transparent;
+
+
+ion-segment .segment-button.segment-activated
+{
+  color: $clr-white !important;
+  background-color: $clr-black !important;
+}
+ion-segment .segment-button
+{
+  color: color($colors, primary) !important;
+}
+
+
+button.button-md-primary,button.button-ios-primary
+{
+  border: 1px solid color($colors, primary) !important;
+  background: color($colors, primary) !important;
+}
+button.button-md-primary p.siteName
+{
+  color: $clr-white !important;
+}
+.InitFeedbackCon
+{
+  background: $clr-white;
+}
+.bg-white
+{
+
+  .scroll-content
+  {
+    background: $clr-white !important;
+
+    ion-label
+    {
+      color: $clr-black !important;
+    }
+
+
+  }
+
+}
+
+.FeedBackContainer
+{
+
+  .CheckboxList
+  {
+    ion-item
+    {
+      ion-label
+      {
+        text-align: left;
+        line-height: 16px;
+      }
+      ion-checkbox
+      {
+        margin-right: 5px !important;
+      }
+
+    }
+
+
+
+
+
+  }
+
+
+}
+
+
+
+
 
 // App iOS Variables
 // --------------------------------------------------
