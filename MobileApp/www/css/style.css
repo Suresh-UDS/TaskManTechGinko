@@ -1,7 +1,11 @@
 
 @font-face {
     font-family: robotoThin !important;
-    src: url(../assets/font/Roboto-Thin.ttf);
+    src: url("../assets/fonts/Roboto-Thin.ttf");
+}
+@font-face {
+    font-family: robotoLight !important;
+    src: url("../assets/fonts/roboto-light.woff");
 }
 @font-face {
     font-family: robotoBold !important;
@@ -46,7 +50,7 @@
 {
   border-bottom: none !important;
   background-color: #00bcd4 !important;
-  color: #FFFFFF !important;
+  /*color: #FFFFFF !important;*/
 }
 
 /*
@@ -307,7 +311,7 @@ ion-footer.footer-md::before
 /* ion scroll  */
 ion-scroll[scrollX] {
     white-space: nowrap;
-    height: 65px;
+    height: 75px;
     overflow: hidden;
 
     .scroll-item {
@@ -386,6 +390,29 @@ button.pop-icon
 .fc button, .fc button:hover, .fc button:focus, .fc button:active, .fc button.active, .fc button:active:focus, .fc button:active:hover, .fc button.active:focus, .fc button.active:hover, .open>.fc button.dropdown-toggle, .open>.fc button.dropdown-toggle:focus, .open>.fc button.dropdown-toggle:hover, .fc button.btn-primary, .fc button.btn-primary:hover, .fc button.btn-primary:focus, .fc button.btn-primary:active, .fc button.btn-primary.active, .fc button.btn-primary:active:focus, .fc button.btn-primary:active:hover, .fc button.btn-primary.active:focus, .fc button.btn-primary.active:hover, .open>.fc button.btn-primary.dropdown-toggle, .open>.fc button.btn-primary.dropdown-toggle:focus, .open>.fc button.btn-primary.dropdown-toggle:hover
 {
     background-color: #ff9800;
+}
+ion-list.FiltercontentList ion-item .item-inner
+{
+   margin: 0 !important;
+   padding: 0 !important;
+}
+.scrollItemsCon button.site-scroll
+{
+    background: none;
+    border: 1px solid #C3C2C1;
+    border-radius: 4px;
+    width: 32%;
+    height: 45px;
+    box-shadow: none;
+}
+.scrollItemsCon ion-item ion-label
+{
+    padding: 0 !important;
+    margin: 0 !important;
+}
+.scrollItemsCon ion-label .scroll-content
+{
+  padding: 10px 0 !important;
 }
 
 .icon-right
@@ -488,15 +515,6 @@ table tr
 {
   margin: 5px 0 15px 0 !important;
 }
-.segment-button.segment-activated
-{
-  background-color: #191919 !important;
-}
-
-.segment-md .segment-button
-{
-  color: orange !important;
-}
 .clr-red
 {
   color:#f53d3d;
@@ -595,7 +613,10 @@ span.EmpNameTxt
 }
 .InitFeedbackCon .InputCon ion-item ion-label
 {
+  font-family: robotoLight !important;
   text-align:left;
+  margin: 0;
+  padding: 5px 0;
 }
 .InitFeedbackCon .InputCon
 {
@@ -613,21 +634,22 @@ span.EmpNameTxt
 }
 .TailsCon ion-col.col {
     min-height: 80px;
-    border: 1px solid #dfdfdf;
-    background: #fff;
     padding: 20px 10px 10px 10px;
     text-align: center;
 }
 .SiteListTails
 {
-    color: #444 !important;
+    color: #fff !important;
     font-size: 11px !important;
-    text-shadow: 0px 1px 1px rgba(150, 150, 150, 1) !important;
+    white-space: pre-line !important;
+    text-transform: capitalize;
+    width: 100px;
 }
 .BlocksList .BlockBtns
 {
     width: 100% !important;
     min-height: 50px;
+    padding: 0;
 }
 .BlocksList .BlockBtns .SiteListTails
 {
@@ -639,7 +661,7 @@ span.EmpNameTxt
 }
 .TailsCon ion-col.BlocksList
 {
-  padding: 10px;
+  padding: 5px;
 }
 .emp-round-active
 {
@@ -1298,6 +1320,9 @@ ion-spinner{
 {
     height: 15px !important;
 }
+
+
+
 /*.input-group .input-group-addon*/
 /*{*/
     /*padding: 0 !important;*/

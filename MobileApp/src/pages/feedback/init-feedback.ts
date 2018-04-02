@@ -6,8 +6,6 @@ import {SiteService} from "../service/siteService";
 import {FeedbackPage} from "../feedback/feedback";
 import {FeedbackService} from "../service/feedbackService";
 import {FeedbackDashboardPage} from "./feedback-dashboard";
-import {FeedbackZone} from "./feedbackZone";
-import {SelectFeedbackPage} from "./select-feedback";
 @Component({
   selector: 'page-init-feedback',
   templateUrl: 'init-feedback.html'
@@ -35,11 +33,18 @@ export class InitFeedbackPage {
   blockDetail:any;
   searchCriteria:any;
   locations:any;
+    open=false;
+    openProjects:any;
     selectedProjectId:any;
     siteProjectId:any;
-
+    selectProjectIndex:any;
+    bgClr:any;
   constructor(public navCtrl: NavController,public myService:authService,public component:componentService, private siteService: SiteService, private feedbackService: FeedbackService) {
         // this.loadFeedbackMappings();
+
+      this.bgClr=["#552D56","#673553","#AF5E6C","#DE8275","#FFAB88","#FF6C54","#FF8A54","#FFA754","#FFC153","#552D56"]
+
+
 
   }
 
@@ -47,8 +52,8 @@ export class InitFeedbackPage {
     {
         var feedback =fb.feedback;
         if(feedback){
-            // this.navCtrl.setRoot(FeedbackPage,{feedback:feedback,fb:fb});
-            this.navCtrl.setRoot(SelectFeedbackPage,{feedback:feedback,fb:fb});
+            this.navCtrl.setRoot(FeedbackPage,{feedback:feedback,fb:fb});
+
         }else{
             this.component.showToastMessage('No Feedback form available','bottom');
         }
@@ -94,9 +99,7 @@ export class InitFeedbackPage {
                 console.log(response);
                 this.sites=response;
                 console.log(this.sites);
-
-
-                // this.selectBlockDetail(this.sites[0],this.sites[0]);
+                this.selectBlockDetail(this.sites[0],this.sites[0]);
             },
             error=>{
                 if(error.type==3)
@@ -108,70 +111,66 @@ export class InitFeedbackPage {
         )
     }
 
-    selectBlock(site)
-    {
-        this.selectedSite = site;
-
-        this.feedbackService.loadBlocks(this.selectedProject.id,site.id).subscribe(
-            response=>{
-                console.log("====Block By SiteId======");
-                console.log(response);
-                this.blocks=response;
-                console.log(this.blocks);
-
-            },
-            error=>{
-                if(error.type==3)
-                {
-                    this.msg='Server Unreachable'
-                }
-                this.msg="Error in getting blocks";
-                this.component.showToastMessage(this.msg,'bottom');
-            }
-        )
-    }
-
-    selectFloor(block){
-      this.selectedBlock = block;
-      this.feedbackService.loadFloors(this.selectedProject.id,this.selectedSite.id,this.selectedBlock).subscribe(
-          response=>{
-              console.log("=====floors=====");
-              console.log(response);
-              this.floors = response;
-
-          },error=>{
-            if(error.type==3)
-            {
-                this.msg='Server Unreachable'
-            }
-            this.msg="Error in getting zones";
-            this.component.showToastMessage(this.msg,'bottom');
-        }
-      )
-    }
-
-    selectZone(floor)
-    {
-        this.selectedFloor = floor;
-            this.feedbackService.loadZones(this.selectedProject.id,this.selectedSite.id,this.selectedBlock, floor).subscribe(
-            response=>{
-            console.log("====Zone By BlockId======");
-            console.log(response);
-            this.scrollSite=true;
-            this.zones=response;
-            console.log(this.zones);
-            this.navCtrl.setRoot(FeedbackZone,{selectedBlock:this.selectedBlock,selectedFloor:this.selectedFloor,selectedSite:this.selectedSite,zones:this.zones})
-        },
-        error=>{
-            if(error.type==3)
-            {
-                this.msg='Server Unreachable'
-            }
-            this.msg="Error in getting zones";
-            this.component.showToastMessage(this.msg,'bottom');
-        }
-        )
-    }
+    // selectBlock(site)
+    // {
+    //     this.selectedSite = site;
+    //
+    //     this.feedbackService.loadBlocks(this.selectedProject.id,site.id).subscribe(
+    //         response=>{
+    //             console.log("====Block By SiteId======");
+    //             console.log(response);
+    //             this.blocks=response;
+    //             console.log(this.blocks);
+    //         },
+    //         error=>{
+    //             if(error.type==3)
+    //             {
+    //                 this.msg='Server Unreachable'
+    //             }
+    //             this.msg="Error in getting blocks";
+    //             this.component.showToastMessage(this.msg,'bottom');
+    //         }
+    //     )
+    // }
+    //
+    // selectFloor(block){
+    //   this.selectedBlock = block;
+    //   this.feedbackService.loadFloors(this.selectedProject.id,this.selectedSite.id,this.selectedBlock).subscribe(
+    //       response=>{
+    //           console.log("=====floors=====");
+    //           console.log(response);
+    //           this.floors = response;
+    //       },error=>{
+    //         if(error.type==3)
+    //         {
+    //             this.msg='Server Unreachable'
+    //         }
+    //         this.msg="Error in getting zones";
+    //         this.component.showToastMessage(this.msg,'bottom');
+    //     }
+    //   )
+    // }
+    //
+    // selectZone(floor)
+    // {
+    //     this.selectedFloor = floor;
+    //         this.feedbackService.loadZones(this.selectedProject.id,this.selectedSite.id,this.selectedBlock, floor).subscribe(
+    //         response=>{
+    //         console.log("====Zone By BlockId======");
+    //         console.log(response);
+    //         this.zones=response;
+    //         console.log(this.zones);
+    //     },
+    //     error=>{
+    //         if(error.type==3)
+    //         {
+    //             this.msg='Server Unreachable'
+    //         }
+    //         this.msg="Error in getting zones";
+    //         this.component.showToastMessage(this.msg,'bottom');
+    //     }
+    //     )
+    // }
 
     loadFeedbackMappings(location){
       console.log("Selected location");
@@ -184,32 +183,6 @@ export class InitFeedbackPage {
             floor:location.floor,
             zone:location.zone,
             siteId:location.siteId
-
-        }
-
-        this.feedbackService.searchFeedbackMappings(searchCriteria).subscribe(
-            response=>{
-                console.log(response.transactions);
-                this.feedbacks=response.transactions;
-                this.start(response.transactions[0]);
-            }
-        )
-
-    }
-
-    getzoneFeedbacks(index,zone){
-        console.log(zone);
-        this.scrollSite = true;
-        this.activeSite = index;
-
-        var currPageVal = 1;
-        var searchCriteria = {
-            currPage:currPageVal,
-            findAll:false,
-            block:this.selectedBlock,
-            floor:this.selectedFloor,
-            zone:zone,
-            siteId:this.selectedSite.id
 
         }
 
@@ -259,5 +232,14 @@ export class InitFeedbackPage {
         console.log(selectedSite);
         this.navCtrl.push(FeedbackDashboardPage,{site:selectedSite});
     }
+
+    viewProject(p,i)
+    {
+        console.log(p);
+        this.selectedProject=p.name;
+        this.openProjects=true;
+        this.selectProjectIndex=i;
+    }
+
 
 }
