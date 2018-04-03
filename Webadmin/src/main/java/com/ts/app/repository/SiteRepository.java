@@ -20,25 +20,22 @@ public interface SiteRepository extends JpaRepository<Site, Long> {
 	@Query("SELECT s FROM Site s WHERE s.active='Y' order by s.name")
 	List<Site> findAll();
 
-	@Query("SELECT s FROM Site s join s.employees e WHERE e.id = :empId and s.active='Y' order by s.name")
+	@Query("SELECT s FROM Site s join s.employeeProjSites e WHERE e.employee.id = :empId and s.active='Y' order by s.name")
 	List<Site> findAll(@Param("empId") long empId);
 
-	@Query("SELECT distinct s FROM Site s join s.employees e WHERE e.id in (:empIds) and s.active='Y' order by s.name")
+	@Query("SELECT distinct s FROM Site s join s.employeeProjSites e WHERE e.employee.id in (:empIds) and s.active='Y' order by s.name")
 	List<Site> findAll(@Param("empIds") List<Long> empIds);
 
-    @Query("SELECT distinct s FROM Site s join s.employees e WHERE e.id=:empId")
+    @Query("SELECT distinct s FROM Site s join s.employeeProjSites e WHERE e.employee.id=:empId")
     List<Site> findSiteByEmployeeId(@Param("empId") Long empId);
 
-	@Query("SELECT e FROM Site s join s.employees e WHERE s.id = :siteId and s.active='Y'")
-	List<Employee> findEmployees(@Param("siteId") long siteId);
-
-	@Query("SELECT u FROM Site s join s.employees e join e.user u WHERE s.id = :siteId and s.active='Y'")
+	@Query("SELECT u FROM Site s join s.employeeProjSites e join e.employee.user u WHERE s.id = :siteId and s.active='Y'")
 	List<User> findUsers(@Param("siteId") long siteId);
 
-	@Query("SELECT s FROM Site s join s.employees e WHERE e.id = :empId and s.active='Y'")
+	@Query("SELECT s FROM Site s join s.employeeProjSites e WHERE e.employee.id = :empId and s.active='Y'")
 	Page<Site> findSites(@Param("empId") long empId, Pageable pageRequest);
 
-	@Query("SELECT distinct s FROM Site s join s.employees e WHERE e.id in (:empIds) and s.active='Y'")
+	@Query("SELECT distinct s FROM Site s join s.employeeProjSites e WHERE e.employee.id in (:empIds) and s.active='Y'")
 	Page<Site> findSites(@Param("empIds") List<Long> empIds, Pageable pageRequest);
 
 	@Query("SELECT s FROM Site s WHERE s.active='Y'")
@@ -47,19 +44,19 @@ public interface SiteRepository extends JpaRepository<Site, Long> {
 	@Query("SELECT s FROM Site s WHERE s.project.id = :projectId and s.active='Y'")
 	List<Site> findSites(@Param("projectId") long projectId);
 
-	@Query("SELECT s FROM Site s join s.employees e WHERE s.project.id = :projectId and e.id = :empId and s.active='Y'")
+	@Query("SELECT s FROM Site s join s.employeeProjSites e WHERE s.project.id = :projectId and e.employee.id = :empId and s.active='Y'")
 	List<Site> findSites(@Param("projectId") long projectId, @Param("empId") long empId);
 
-	@Query("SELECT distinct s FROM Site s join s.employees e WHERE s.project.id = :projectId and e.id in (:empIds) and s.active='Y'")
+	@Query("SELECT distinct s FROM Site s join s.employeeProjSites e WHERE s.project.id = :projectId and e.employee.id in (:empIds) and s.active='Y'")
 	List<Site> findSites(@Param("projectId") long projectId, @Param("empIds") List<Long> empId);
 
-	@Query("SELECT distinct s FROM Site s join s.employees e WHERE (s.id = :siteId or s.name like '%' || :siteName || '%' ) and (s.project.id = :projectId or s.project.name like '%' || :projectName || '%' ) and e.id in (:empIds) and s.active='Y'")
+	@Query("SELECT distinct s FROM Site s join s.employeeProjSites e WHERE (s.id = :siteId or s.name like '%' || :siteName || '%' ) and (s.project.id = :projectId or s.project.name like '%' || :projectName || '%' ) and e.employee.id in (:empIds) and s.active='Y'")
 	Page<Site> findSitesByIdAndProjectId(@Param("siteId") long siteId, @Param("siteName") String siteName, @Param("projectId") long projectId, @Param("projectName") String projectName, @Param("empIds") List<Long> empIds, Pageable pageRequest);
 
 	@Query("SELECT s FROM Site s WHERE s.id = :siteId and (s.project.id = :projectId or s.project.name like '%' || :projectName || '%' ) and s.active='Y'")
 	Page<Site> findSitesByIdAndProjectId(@Param("siteId") long siteId, @Param("projectId") long projectId, @Param("projectName") String projectName, Pageable pageRequest);
 
-	@Query("SELECT distinct s FROM Site s join s.employees e  WHERE (s.id = :siteId or s.name like '%' || :siteName || '%' ) or (s.project.id = :projectId or s.project.name like '%' || :projectName || '%' ) and e.id in (:empIds)  and s.active='Y'")
+	@Query("SELECT distinct s FROM Site s join s.employeeProjSites e  WHERE (s.id = :siteId or s.name like '%' || :siteName || '%' ) or (s.project.id = :projectId or s.project.name like '%' || :projectName || '%' ) and e.employee.id in (:empIds)  and s.active='Y'")
 	Page<Site> findSitesByIdOrProjectId(@Param("siteId") long siteId, @Param("siteName") String siteName, @Param("projectId") long projectId, @Param("projectName") String projectName,  @Param("empIds") List<Long> empIds, Pageable pageRequest);
 
 	@Query("SELECT s FROM Site s WHERE ((s.id = :siteId or s.name like '%' || :siteName || '%' ) or  (s.project.id = :projectId or s.project.name like '%' || :projectName || '%' )) and s.active='Y'")
