@@ -171,11 +171,12 @@ public class UserService extends AbstractService {
 		User newUser = new User();
 		newUser.setClearPassword(env.getProperty("default.user.password"));
 		String encryptedPassword = null;
-		if (StringUtils.isNotEmpty(userDto.getPassword())) {
-			encryptedPassword = passwordEncoder.encode(userDto.getPassword());
-		} else {
-			encryptedPassword = passwordEncoder.encode(RandomUtil.generatePassword());
-		}
+		//if (StringUtils.isNotEmpty(userDto.getPassword())) {
+		//	encryptedPassword = passwordEncoder.encode(userDto.getPassword());
+		//} else {
+		//	encryptedPassword = passwordEncoder.encode(RandomUtil.generatePassword());
+		//}
+		encryptedPassword = passwordEncoder.encode(newUser.getClearPassword());
 		// new user gets initially a generated password
 		newUser.setPassword(encryptedPassword);
 		newUser.setLogin(userDto.getLogin());
