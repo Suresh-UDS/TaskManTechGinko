@@ -9,7 +9,7 @@ import {InitFeedbackPage} from "./init-feedback";
 declare  var demo ;
 @Component({
   selector: 'page-feedback-questions',
-  templateUrl: 'feedback-questions.html'
+  templateUrl: 'feedback-questions-form.html'
 })
 export class FeedbackQuestionPage {
 
