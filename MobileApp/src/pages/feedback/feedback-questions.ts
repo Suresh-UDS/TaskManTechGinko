@@ -80,18 +80,18 @@ export class FeedbackQuestionPage {
 
       var results = [];
       for(let q of this.questions){
-          let result ={
-              id:q.id,
-              question:q.question,
-              answer:q.answer,
-              answerType:q.answerType,
-              scoreType:q.scoreType
-          };
+          let result = {};
+          if(q.answer){
+               q.answer = true;
+          }else{
+              q.answer = false;
+          }
+
           results.push(result);
-          console.log(typeof q.answer);
+          console.log(results)
       }
 
-        this.navCtrl.push(FeedbackPage,{feedback:this.navParams.data.feedback,fb:this.navParams.data.fb,question:this.questions,remarks:this.remarks});
+        this.navCtrl.push(FeedbackPage,{feedback:this.navParams.data.feedback,fb:this.navParams.data.fb,question:this.questions,remarks:this.remarks,overallFeedback:this.navParams.data.overallFeedback,project:this.navParams.data.project,site:this.navParams.data.site,location:this.navParams.data.location});
       // this.feedbackTransaction = {
       //     results:this.questions,
       //     reviewerName:this.navParams.data.userName,

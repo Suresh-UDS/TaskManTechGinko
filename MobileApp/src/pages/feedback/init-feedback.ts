@@ -6,6 +6,8 @@ import {SiteService} from "../service/siteService";
 import {FeedbackPage} from "../feedback/feedback";
 import {FeedbackService} from "../service/feedbackService";
 import {FeedbackDashboardPage} from "./feedback-dashboard";
+import {SelectFeedbackPage} from "./select-feedback";
+import {InitFeedbackZone} from "./init-feedback-zone";
 @Component({
   selector: 'page-init-feedback',
   templateUrl: 'init-feedback.html'
@@ -52,7 +54,7 @@ export class InitFeedbackPage {
     {
         var feedback =fb.feedback;
         if(feedback){
-            this.navCtrl.setRoot(FeedbackPage,{feedback:feedback,fb:fb});
+            this.navCtrl.setRoot(SelectFeedbackPage,{feedback:feedback,fb:fb});
 
         }else{
             this.component.showToastMessage('No Feedback form available','bottom');
@@ -111,66 +113,66 @@ export class InitFeedbackPage {
         )
     }
 
-    // selectBlock(site)
-    // {
-    //     this.selectedSite = site;
-    //
-    //     this.feedbackService.loadBlocks(this.selectedProject.id,site.id).subscribe(
-    //         response=>{
-    //             console.log("====Block By SiteId======");
-    //             console.log(response);
-    //             this.blocks=response;
-    //             console.log(this.blocks);
-    //         },
-    //         error=>{
-    //             if(error.type==3)
-    //             {
-    //                 this.msg='Server Unreachable'
-    //             }
-    //             this.msg="Error in getting blocks";
-    //             this.component.showToastMessage(this.msg,'bottom');
-    //         }
-    //     )
-    // }
-    //
-    // selectFloor(block){
-    //   this.selectedBlock = block;
-    //   this.feedbackService.loadFloors(this.selectedProject.id,this.selectedSite.id,this.selectedBlock).subscribe(
-    //       response=>{
-    //           console.log("=====floors=====");
-    //           console.log(response);
-    //           this.floors = response;
-    //       },error=>{
-    //         if(error.type==3)
-    //         {
-    //             this.msg='Server Unreachable'
-    //         }
-    //         this.msg="Error in getting zones";
-    //         this.component.showToastMessage(this.msg,'bottom');
-    //     }
-    //   )
-    // }
-    //
-    // selectZone(floor)
-    // {
-    //     this.selectedFloor = floor;
-    //         this.feedbackService.loadZones(this.selectedProject.id,this.selectedSite.id,this.selectedBlock, floor).subscribe(
-    //         response=>{
-    //         console.log("====Zone By BlockId======");
-    //         console.log(response);
-    //         this.zones=response;
-    //         console.log(this.zones);
-    //     },
-    //     error=>{
-    //         if(error.type==3)
-    //         {
-    //             this.msg='Server Unreachable'
-    //         }
-    //         this.msg="Error in getting zones";
-    //         this.component.showToastMessage(this.msg,'bottom');
-    //     }
-    //     )
-    // }
+    selectBlock(site)
+    {
+        this.selectedSite = site;
+
+        this.feedbackService.loadBlocks(this.selectedProject.id,site.id).subscribe(
+            response=>{
+                console.log("====Block By SiteId======");
+                console.log(response);
+                this.blocks=response;
+                console.log(this.blocks);
+            },
+            error=>{
+                if(error.type==3)
+                {
+                    this.msg='Server Unreachable'
+                }
+                this.msg="Error in getting blocks";
+                this.component.showToastMessage(this.msg,'bottom');
+            }
+        )
+    }
+
+    selectFloor(block){
+      this.selectedBlock = block;
+      this.feedbackService.loadFloors(this.selectedProject.id,this.selectedSite.id,this.selectedBlock).subscribe(
+          response=>{
+              console.log("=====floors=====");
+              console.log(response);
+              this.floors = response;
+          },error=>{
+            if(error.type==3)
+            {
+                this.msg='Server Unreachable'
+            }
+            this.msg="Error in getting zones";
+            this.component.showToastMessage(this.msg,'bottom');
+        }
+      )
+    }
+
+    selectZone(floor)
+    {
+        this.selectedFloor = floor;
+            this.feedbackService.loadZones(this.selectedProject.id,this.selectedSite.id,this.selectedBlock, floor).subscribe(
+            response=>{
+            console.log("====Zone By BlockId======");
+            console.log(response);
+            this.zones=response;
+            console.log(this.zones);
+        },
+        error=>{
+            if(error.type==3)
+            {
+                this.msg='Server Unreachable'
+            }
+            this.msg="Error in getting zones";
+            this.component.showToastMessage(this.msg,'bottom');
+        }
+        )
+    }
 
     loadFeedbackMappings(location){
       console.log("Selected location");
@@ -186,13 +188,15 @@ export class InitFeedbackPage {
 
         }
 
-        this.feedbackService.searchFeedbackMappings(searchCriteria).subscribe(
-            response=>{
-                console.log(response.transactions);
-                this.feedbacks=response.transactions;
-                this.start(response.transactions[0]);
-            }
-        )
+        this.selectZonePage(location);
+
+        // this.feedbackService.searchFeedbackMappings(searchCriteria).subscribe(
+        //     response=>{
+        //         console.log(response.transactions);
+        //         this.feedbacks=response.transactions;
+        //         this.start(response.transactions[0]);
+        //     }
+        // )
 
     }
 
@@ -239,6 +243,14 @@ export class InitFeedbackPage {
         this.selectedProject=p.name;
         this.openProjects=true;
         this.selectProjectIndex=i;
+    }
+
+    selectZonePage(location){
+        if(location){
+            this.navCtrl.setRoot(InitFeedbackZone,{project:this.selectedProject,site:this.selectedSite,location:location});
+        }else{
+            this.component.showToastMessage('No Locations configured','bottom');
+        }
     }
 
 
