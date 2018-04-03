@@ -12,8 +12,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -49,9 +49,11 @@ public class Site extends AbstractAuditingEntity implements Serializable {
 	@JoinColumn(name = "userId", nullable = false)
 	private User user;
 
-    @ManyToMany(mappedBy="sites")
-	private List<Employee> employees;
+//    @ManyToMany(mappedBy="sites")
+//	private List<Employee> employees;
 
+	@OneToMany(fetch = FetchType.LAZY)
+	private List<EmployeeProjectSite> employeeProjSites;
 
 	private Date startDate;
 	private Date endDate;
@@ -154,13 +156,13 @@ public class Site extends AbstractAuditingEntity implements Serializable {
 		this.state = state;
 	}
 
-	public List<Employee> getEmployees() {
-		return employees;
-	}
-
-	public void setEmployees(List<Employee> employees) {
-		this.employees = employees;
-	}
+//	public List<Employee> getEmployees() {
+//		return employees;
+//	}
+//
+//	public void setEmployees(List<Employee> employees) {
+//		this.employees = employees;
+//	}
 
 
     public double getRadius() {
@@ -170,4 +172,14 @@ public class Site extends AbstractAuditingEntity implements Serializable {
     public void setRadius(double radius) {
         this.radius = radius;
     }
+
+	public List<EmployeeProjectSite> getEmployeeProjSites() {
+		return employeeProjSites;
+	}
+
+	public void setEmployeeProjSites(List<EmployeeProjectSite> employeeProjSites) {
+		this.employeeProjSites = employeeProjSites;
+	}
+    
+    
 }

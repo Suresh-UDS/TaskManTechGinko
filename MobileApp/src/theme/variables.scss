@@ -39,11 +39,16 @@ $colors: (
   danger:     #f44336,
   light:      #f4f4f4,
   dark:       #222,
-  clr-blue:#00bcd4
+  clr-blue:#00bcd4,
+  grey:#EEEEEE,
+  clr-orange:#ff9800,
+  green:green
 );
 
 $clr-white:#ffffff;
 $clr-black:#191919;
+$margn5:5px;
+$fontSize10:10px;
 
 
 $text-input-md-highlight-color-invalid: transparent;
@@ -52,7 +57,30 @@ $text-input-md-show-invalid-highlight: transparent;
 $text-input-md-highlight-color: transparent;
 $text-input-md-show-valid-highlight: transparent;
 
-
+.red
+{
+  color: color($colors, danger);
+}
+.green
+{
+  color: color($colors, green);
+}
+.font-size12 p
+{
+  font-size:$fontSize10 + 2;
+}
+.clr-orange
+{
+  color: color($colors, clr-orange) !important;
+}
+.bg-grey
+{
+  background-color:color($colors, grey) !important;
+}
+.white-bg
+{
+  background-color: $clr-white;
+}
 ion-segment .segment-button.segment-activated
 {
   color: $clr-white !important;
@@ -93,6 +121,21 @@ button.button-md-primary p.siteName
   }
 
 }
+
+// Margin Adjus
+
+.margin-top5
+{
+  margin-top:$margn5 !important;
+}
+.margin-top3
+{
+  margin-top:$margn5 - 2  !important;
+}
+
+
+
+
 
 .FeedBackContainer
 {
