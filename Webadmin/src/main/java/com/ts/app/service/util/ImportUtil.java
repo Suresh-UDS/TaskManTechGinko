@@ -554,10 +554,14 @@ public class ImportUtil {
 				employee.setReliever(false);
 				List<EmployeeProjectSite> projectSites = new ArrayList<EmployeeProjectSite>();
 				EmployeeProjectSite projectSite = new EmployeeProjectSite();
+				/*
 				projectSite.setProjectId(newProj.getId());
 				projectSite.setProjectName(newProj.getName());
 				projectSite.setSiteId(newSite.getId());
 				projectSite.setSiteName(newSite.getName());
+				*/
+				projectSite.setProject(newProj);
+				projectSite.setSite(newSite);
 				projectSite.setEmployee(employee);
 				projectSites.add(projectSite);
 				employee.setProjectSites(projectSites);

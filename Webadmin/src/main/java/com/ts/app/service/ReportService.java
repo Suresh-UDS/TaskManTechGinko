@@ -267,7 +267,7 @@ public class ReportService extends AbstractService {
 	        			List<Long> projIds = new ArrayList<Long>(); 
 	        			if(CollectionUtils.isNotEmpty(projSites)) {
 	        				for(EmployeeProjectSite projSite : projSites) {
-	        					projIds.add(projSite.getProjectId());
+	        					projIds.add(projSite.getProject().getId());
 	        				}
 	        			}
 	        			totalEmployeeCount = employeeRepository.findTotalCount(projIds);
@@ -289,7 +289,7 @@ public class ReportService extends AbstractService {
 	        			List<Long> siteIds = new ArrayList<Long>(); 
 	        			if(CollectionUtils.isNotEmpty(projSites)) {
 	        				for(EmployeeProjectSite projSite : projSites) {
-	        					siteIds.add(projSite.getSiteId());
+	        					siteIds.add(projSite.getSite().getId());
 	        				}
 	        			}
 	        			presentEmployeeCount = attendanceRepository.findCountByCheckInTime(siteIds, sqlDate, sqlEndDate);
@@ -337,7 +337,7 @@ public class ReportService extends AbstractService {
 	        			List<Long> projIds = new ArrayList<Long>(); 
 	        			if(CollectionUtils.isNotEmpty(projSites)) {
 	        				for(EmployeeProjectSite projSite : projSites) {
-	        					projIds.add(projSite.getProjectId());
+	        					projIds.add(projSite.getProject().getId());
 	        				}
 	        			}
 	        			totalEmployeeCount = employeeRepository.findTotalCount(projIds);
@@ -359,7 +359,7 @@ public class ReportService extends AbstractService {
 	        			List<Long> siteIds = new ArrayList<Long>(); 
 	        			if(CollectionUtils.isNotEmpty(projSites)) {
 	        				for(EmployeeProjectSite projSite : projSites) {
-	        					siteIds.add(projSite.getSiteId());
+	        					siteIds.add(projSite.getSite().getId());
 	        				}
 	        			}
 	        			presentEmployeeCount = attendanceRepository.findCountByCheckInTime(siteIds, sqlDate, sqlEndDate);

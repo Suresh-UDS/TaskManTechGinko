@@ -52,7 +52,7 @@ public class Site extends AbstractAuditingEntity implements Serializable {
 //    @ManyToMany(mappedBy="sites")
 //	private List<Employee> employees;
 
-	@OneToMany(fetch = FetchType.LAZY)
+	@OneToMany(mappedBy="site", fetch = FetchType.LAZY)
 	private List<EmployeeProjectSite> employeeProjSites;
 
 	private Date startDate;
