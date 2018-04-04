@@ -42,9 +42,12 @@ public class Feedback extends AbstractAuditingEntity implements Serializable {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "projectId", nullable = true)
     private Project project;
-    
+
     @OneToMany(mappedBy = "feedback", cascade = {CascadeType.ALL}, orphanRemoval = true)
     private Set<FeedbackQuestion> questions;
+
+    @Column(name = "displayType")
+    private String displayType;
 
     public long getId() {
         return id;
@@ -85,7 +88,13 @@ public class Feedback extends AbstractAuditingEntity implements Serializable {
 	public void setProject(Project project) {
 		this.project = project;
 	}
-    
-    
 
+
+    public String getDisplayType() {
+        return displayType;
+    }
+
+    public void setDisplayType(String displayType) {
+        this.displayType = displayType;
+    }
 }

@@ -80,6 +80,8 @@ import {SelectFeedbackPage} from "../pages/feedback/select-feedback";
 import {FeedbackZone} from "../pages/feedback/feedbackZone";
 
 import {InitFeedbackZone} from "../pages/feedback/init-feedback-zone";
+import {WizardFeedbackEntry} from "../pages/feedback/wizard-feedback-entry";
+import {FeedbackQuestionsForm} from "../pages/feedback/feedback-questions-form";
 
 @NgModule({
   declarations: [
@@ -131,7 +133,9 @@ import {InitFeedbackZone} from "../pages/feedback/init-feedback-zone";
     FeedbackDashboardPage,
       FeedbackZone,
       SelectFeedbackPage,
-      InitFeedbackZone
+      InitFeedbackZone,
+      FeedbackQuestionsForm,
+      WizardFeedbackEntry
   ],
   imports: [
     BrowserModule,
@@ -195,7 +199,9 @@ import {InitFeedbackZone} from "../pages/feedback/init-feedback-zone";
       FeedbackZone,
     FeedbackDashboardPage,
       SelectFeedbackPage,
-      InitFeedbackZone
+      InitFeedbackZone,
+      FeedbackQuestionsForm,
+      WizardFeedbackEntry
   ],
   providers: [
     StatusBar,

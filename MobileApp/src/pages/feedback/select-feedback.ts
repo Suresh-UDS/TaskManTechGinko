@@ -5,6 +5,7 @@ import {componentService} from "../service/componentService";
 import {SiteService} from "../service/siteService";
 import {FeedbackQuestionPage} from "../feedback/feedback-questions";
 import {FeedbackPage} from "./feedback";
+import {FeedbackQuestionsForm} from "./feedback-questions-form";
 
 @Component({
   selector: 'page-select-feedback',
@@ -28,7 +29,7 @@ export class SelectFeedbackPage {
 
   sad()
   {
-      this.navCtrl.push(FeedbackQuestionPage,{feedback:this.feedback,fb:this.fb,overallFeedback:false,project:this.navParams.data.project,site:this.navParams.data.site,location:this.navParams.data.location});
+      this.navCtrl.push(FeedbackQuestionsForm,{feedback:this.feedback,fb:this.fb,overallFeedback:false,project:this.navParams.data.project,site:this.navParams.data.site,location:this.navParams.data.location});
   }
   happy()
   {

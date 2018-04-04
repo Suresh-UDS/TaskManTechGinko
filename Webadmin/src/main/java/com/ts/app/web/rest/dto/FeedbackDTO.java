@@ -12,16 +12,18 @@ public class FeedbackDTO extends BaseDTO implements Serializable {
     private long id;
 
     private String name;
-    
+
     private long projectId;
-    
+
     private String projectName;
-    
+
     private long siteId;
-    
+
     private String siteName;
 
     private List<FeedbackQuestionDTO> questions;
+
+    private String displayType;
 
     public long getId() {
         return id;
@@ -39,7 +41,7 @@ public class FeedbackDTO extends BaseDTO implements Serializable {
         this.name = name;
     }
 
-    
+
 	public long getProjectId() {
 		return projectId;
 	}
@@ -80,4 +82,11 @@ public class FeedbackDTO extends BaseDTO implements Serializable {
 		this.questions = questions;
 	}
 
+    public String getDisplayType() {
+        return displayType;
+    }
+
+    public void setDisplayType(String displayType) {
+        this.displayType = displayType;
+    }
 }

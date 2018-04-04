@@ -12,9 +12,9 @@ public class FeedbackQuestionDTO extends BaseDTO implements Serializable {
     private long id;
 
     private String question;
-    
+
     private FeedbackAnswerType answerType;
-    
+
     private String scoreType;
 
     public long getId() {
@@ -49,6 +49,6 @@ public class FeedbackQuestionDTO extends BaseDTO implements Serializable {
 	public void setScoreType(String scoreType) {
 		this.scoreType = scoreType;
 	}
-    
-    
+
+
 }

@@ -21,15 +21,17 @@ angular.module('timeSheetApp')
         $scope.feedbackItems = [];
         $scope.selectedFeedback=null;
         $rootScope.searchCriteriaFeedback = null;
-        
+
         $scope.selectedProject;
-        
+
         $scope.selectedSite;
-        
+
 
         $scope.init = function(){
-          $scope.loading = true;
-          $scope.loadProjects();          
+            $scope.feedbackItem = {};
+            $scope.feedbackItem.displayType = 'wizard';
+            $scope.loading = true;
+          $scope.loadProjects();
           $scope.search();
         };
 
@@ -38,7 +40,7 @@ angular.module('timeSheetApp')
 	            $scope.projects = data;
 	        });
 	    };
-	    
+
 	    $scope.loadSites = function () {
 	    		return ProjectComponent.findSites($scope.selectedProject.id).then(function (data) {
 	    			$scope.selectedSite = null;
@@ -54,12 +56,12 @@ angular.module('timeSheetApp')
             $scope.newFeedbackItem = null;
             console.log($scope.feedbackItems);
         };
-        
+
         $scope.removeItem = function(ind) {
         		$scope.feedbackItems.splice(ind,1);
         }
 
-        
+
         $scope.cancelFeedbackQuestions = function () {
 	        	$scope.feedbackItems = [];
 	        	$scope.feedback = {};
@@ -83,17 +85,17 @@ angular.module('timeSheetApp')
         			$scope.feedbackItem = data;
         			console.log('Feedback retrieved - ' + JSON.stringify($scope.feedbackItem));
                     for(var i in data.questions) {
-                		$scope.feedbackItems.push(data.questions[i]);	
+                		$scope.feedbackItems.push(data.questions[i]);
                 }
                 $scope.selectedProject = {id: data.projectId, name: data.projectName};
                 $scope.loadSites().then(function(){
                     $scope.selectedSite = {id: data.siteId, name: data.siteName};
                 })
-                
+
             });
 
         };
-        
+
 
         $scope.updateFeebackQuestions = function () {
         	console.log('Feedback questions details - ' + JSON.stringify($scope.feedbackItem));
@@ -125,7 +127,7 @@ angular.module('timeSheetApp')
 		$scope.feedbackItem.projectId = $scope.selectedProject.id;
 		$scope.feedbackItem.siteId = $scope.selectedSite.id;
 		$scope.feedbackItem.siteName = $scope.selectedSite.name;
-          
+
           $scope.feedbackItem.questions= $scope.feedbackItems;
           console.log("Before pushing feedback to server");
           console.log($scope.feedbackItem);
@@ -146,7 +148,7 @@ angular.module('timeSheetApp')
 	            } else {
 	                $scope.error = 'ERROR';
 	            }
-	        });              
+	        });
           }
 
         $scope.search = function () {

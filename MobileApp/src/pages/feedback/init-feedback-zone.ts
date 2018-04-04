@@ -8,6 +8,7 @@ import {FeedbackService} from "../service/feedbackService";
 import {FeedbackDashboardPage} from "./feedback-dashboard";
 import {FeedbackZone} from "./feedbackZone";
 import {SelectFeedbackPage} from "./select-feedback";
+import {WizardFeedbackEntry} from "./wizard-feedback-entry";
 @Component({
     selector: 'page-init-feedback-zone',
     templateUrl: 'init-feedback-zone.html'
@@ -35,9 +36,15 @@ export class InitFeedbackZone {
 
     start(fb,site,project,location)
     {
+        console.log("feedback details before entering");
+        console.log(fb);
         var feedback =fb.feedback;
         if(feedback){
-            this.navCtrl.setRoot(SelectFeedbackPage,{feedback:feedback,fb:fb,project:project,site:site,location:location});
+            if(feedback.displayType == 'form'){
+                this.navCtrl.setRoot(SelectFeedbackPage,{feedback:feedback,fb:fb,project:project,site:site,location:location});
+            }else{
+                this.navCtrl.setRoot(WizardFeedbackEntry,{feedback:feedback,fb:fb,project:project,site:site,location:location});
+            }
 
         }else{
             this.component.showToastMessage('No Feedback form available','bottom');

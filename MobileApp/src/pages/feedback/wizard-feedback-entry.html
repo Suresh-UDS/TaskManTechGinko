@@ -1,0 +1,110 @@
+<ion-header>
+<ion-navbar>
+<button ion-button menuToggle>
+<ion-icon name="menu"></ion-icon>
+</button>
+<ion-title>Feedback</ion-title>
+</ion-navbar>
+</ion-header>
+
+<ion-content>
+
+    <div class="FeedbackCon">
+
+        <div class="TopImageCon">
+
+        <img src="img/feedback.png"  alt="feedback image">
+
+        </div>
+
+        <div class="InputCon" style="padding-top: 30px;">
+
+            <div class="input-group width-full">
+
+                <ion-row>
+                    <ion-col col-2 class="paddding-top20">
+                        <span class="input-group-addon">
+                            <i class="material-icons">face</i>
+                        </span>
+                    </ion-col>
+                    <ion-col col-10>
+                        <div class="form-group label-floating">
+                            <label class="control-label">Name</label>
+                            <input class="form-control" type="text" [(ngModel)]="userName" name="username" >
+                        </div>
+                    </ion-col>
+                </ion-row>
+
+
+
+                <!--<div class="form-group label-floating">-->
+                <!--<label class="control-label">Name</label>-->
+                <!--<input class="form-control" [(ngModel)]="userName" type="text" id="" name="" >-->
+                <!--</div>-->
+
+
+            </div>
+            <div class="input-group width-full">
+
+                <ion-row>
+                    <ion-col col-2 class="paddding-top20">
+                        <span class="input-group-addon">
+                            <i class="material-icons">person</i>
+                        </span>
+                    </ion-col>
+                    <ion-col col-10>
+                        <div class="form-group label-floating">
+                            <label class="control-label">Code</label>
+                            <input class="form-control" [(ngModel)]="userCode" type="text" name="" >
+                            <div class="error-height">
+
+                            </div>
+                        </div>
+                    </ion-col>
+                </ion-row>
+
+
+            </div>
+
+            <!--<div class="input-group width-full">-->
+
+                <!--<ion-row>-->
+                    <!--<ion-col col-2 class="paddding-top20">-->
+                        <!--<span class="input-group-addon">-->
+                          <!--<i class="material-icons">feedback</i>-->
+                        <!--</span>-->
+                    <!--</ion-col>-->
+                    <!--<ion-col col-10>-->
+                        <!--<div class="form-group label-floating">-->
+                            <!--<label class="control-label">Remarks</label>-->
+                            <!--<input class="form-control" [(ngModel)]="remarks" type="text" name="" >-->
+                            <!--<div class="error-height">-->
+
+                            <!--</div>-->
+                        <!--</div>-->
+                    <!--</ion-col>-->
+                <!--</ion-row>-->
+
+
+            <!--</div>-->
+
+
+            <button class="btn btn-warning btn-wd btn-lg" (click)="feedbackQuestions(userName,userCode)" style="margin-top: 80px;">
+                Start
+            </button>
+
+
+            <!--<div class="align-center">-->
+            <!--<p class="clr-red" (click)="skip()">Skip</p>-->
+            <!--</div>-->
+
+        </div>
+
+
+
+
+    </div>
+
+
+
+</ion-content>
