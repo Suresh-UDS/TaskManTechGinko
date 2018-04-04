@@ -28,21 +28,21 @@ public class EmployeeProjectSite extends AbstractAuditingEntity implements Seria
 	@JoinColumn(name = "employeeId", referencedColumnName = "id", nullable = true)
 	private Employee employee;
 	
-//	@ManyToOne(fetch = FetchType.EAGER)
-//	@JoinColumn(name = "projectId", referencedColumnName = "id", nullable = true)
-//	private Project project;
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "projectId", referencedColumnName = "id", nullable = true)
+	private Project project;
+
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "siteId", referencedColumnName = "id", nullable = true)
+	private Site site;
+	
+//	private long projectId;
 //	
-//	@ManyToOne(fetch = FetchType.EAGER)
-//	@JoinColumn(name = "siteId", referencedColumnName = "id", nullable = true)
-//	private Site site;
-	
-	private long projectId;
-	
-	private String projectName;
-	
-	private long siteId;
-	
-	private String siteName;
+//	private String projectName;
+//	
+//	private long siteId;
+//	
+//	private String siteName;
 
 	public Employee getEmployee() {
 		return employee;
@@ -60,37 +60,55 @@ public class EmployeeProjectSite extends AbstractAuditingEntity implements Seria
 		this.id = id;
 	}
 
-	public long getProjectId() {
-		return projectId;
+	public Project getProject() {
+		return project;
 	}
 
-	public void setProjectId(long projectId) {
-		this.projectId = projectId;
+	public void setProject(Project project) {
+		this.project = project;
 	}
 
-	public long getSiteId() {
-		return siteId;
+	public Site getSite() {
+		return site;
 	}
 
-	public void setSiteId(long siteId) {
-		this.siteId = siteId;
+	public void setSite(Site site) {
+		this.site = site;
 	}
+	
+	
 
-	public String getProjectName() {
-		return projectName;
-	}
-
-	public void setProjectName(String projectName) {
-		this.projectName = projectName;
-	}
-
-	public String getSiteName() {
-		return siteName;
-	}
-
-	public void setSiteName(String siteName) {
-		this.siteName = siteName;
-	}
+//	public long getProjectId() {
+//		return projectId;
+//	}
+//
+//	public void setProjectId(long projectId) {
+//		this.projectId = projectId;
+//	}
+//
+//	public long getSiteId() {
+//		return siteId;
+//	}
+//
+//	public void setSiteId(long siteId) {
+//		this.siteId = siteId;
+//	}
+//
+//	public String getProjectName() {
+//		return projectName;
+//	}
+//
+//	public void setProjectName(String projectName) {
+//		this.projectName = projectName;
+//	}
+//
+//	public String getSiteName() {
+//		return siteName;
+//	}
+//
+//	public void setSiteName(String siteName) {
+//		this.siteName = siteName;
+//	}
 
 //	public Project getProject() {
 //		return project;

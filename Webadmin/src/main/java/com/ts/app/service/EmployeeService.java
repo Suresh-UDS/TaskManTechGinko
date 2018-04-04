@@ -556,12 +556,14 @@ public class    EmployeeService extends AbstractService {
 		entity.setSites(sites);
 		Hibernate.initialize(entity.getProjectSites());
 		if(CollectionUtils.isNotEmpty(entity.getProjectSites())) {
+			/*
 			for(EmployeeProjectSite projSite : entity.getProjectSites()) {
 				Project proj =  projectRepository.findOne(projSite.getProjectId());
 				projSite.setProjectName(proj.getName());
 				Site site =  siteRepository.findOne(projSite.getSiteId());
 				projSite.setSiteName(site.getName());
 			}
+			*/
 		}
 		log.debug("Employee retrieved by findOne - "+ entity );
 		EmployeeDTO dto =  mapperUtil.toModel(entity, EmployeeDTO.class);
@@ -769,7 +771,7 @@ public class    EmployeeService extends AbstractService {
 	            		if(CollectionUtils.isNotEmpty(projectSites)) {
 	            			List<Long> siteIds = new ArrayList<Long>();
 	            			for(EmployeeProjectSite projSite : projectSites) {
-	            				siteIds.add(projSite.getSiteId());
+	            				siteIds.add(projSite.getSite().getId());
 	            			}
 	            			page = employeeRepository.findBySiteIds(siteIds, pageRequest);
 	            		}else {
@@ -879,8 +881,8 @@ public class    EmployeeService extends AbstractService {
     		empDto.setLeft(employee.isLeft());
     		empDto.setReliever(employee.isReliever());
     		empDto.setRelieved(employee.isRelieved());
-    		empDto.setProjectName(CollectionUtils.isNotEmpty(employee.getProjectSites()) ? employee.getProjectSites().get(0).getProjectName() : "");
-    		empDto.setSiteName(CollectionUtils.isNotEmpty(employee.getProjectSites()) ? employee.getProjectSites().get(0).getSiteName() : "");
+    		empDto.setProjectName(CollectionUtils.isNotEmpty(employee.getProjectSites()) ? employee.getProjectSites().get(0).getProject().getName() : "");
+    		empDto.setSiteName(CollectionUtils.isNotEmpty(employee.getProjectSites()) ? employee.getProjectSites().get(0).getSite().getName() : "");
     		return empDto;
     }
 

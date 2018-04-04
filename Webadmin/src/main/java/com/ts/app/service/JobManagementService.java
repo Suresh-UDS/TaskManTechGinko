@@ -321,7 +321,7 @@ public class JobManagementService extends AbstractService {
 		            		if(CollectionUtils.isNotEmpty(projectSites)) {
 		            			List<Long> siteIds = new ArrayList<Long>();
 		            			for(EmployeeProjectSite projSite : projectSites) {
-		            				siteIds.add(projSite.getSiteId());
+		            				siteIds.add(projSite.getSite().getId());
 		            			}
 		            			page = jobRepository.findByStartDateAndSites(siteIds, pageRequest);
 		            			allJobsList.addAll(page.getContent());
