@@ -79,6 +79,8 @@ import {SelectFeedbackPage} from "../pages/feedback/select-feedback";
 
 import {FeedbackZone} from "../pages/feedback/feedbackZone";
 
+import {InitFeedbackZone} from "../pages/feedback/init-feedback-zone";
+
 @NgModule({
   declarations: [
     MyApp,
@@ -128,7 +130,8 @@ import {FeedbackZone} from "../pages/feedback/feedbackZone";
     InitFeedbackPage,
     FeedbackDashboardPage,
       FeedbackZone,
-      SelectFeedbackPage
+      SelectFeedbackPage,
+      InitFeedbackZone
   ],
   imports: [
     BrowserModule,
@@ -191,7 +194,8 @@ import {FeedbackZone} from "../pages/feedback/feedbackZone";
     JobPopoverPage,
       FeedbackZone,
     FeedbackDashboardPage,
-      SelectFeedbackPage
+      SelectFeedbackPage,
+      InitFeedbackZone
   ],
   providers: [
     StatusBar,

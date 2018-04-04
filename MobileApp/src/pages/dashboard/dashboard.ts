@@ -169,7 +169,6 @@ export class DashboardPage {
   }
 
   searchJobs(searchCriteria){
-      this.component.showLoader('Getting Jobs');
       if(this.selectedEmployee){
           console.log("employee selected");
           searchCriteria.employeeId = this.selectedEmployee.id;

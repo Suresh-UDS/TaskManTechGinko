@@ -28,11 +28,11 @@ export class SelectFeedbackPage {
 
   sad()
   {
-      this.navCtrl.push(FeedbackQuestionPage,{feedback:this.feedback,fb:this.fb,overallFeedback:false});
+      this.navCtrl.push(FeedbackQuestionPage,{feedback:this.feedback,fb:this.fb,overallFeedback:false,project:this.navParams.data.project,site:this.navParams.data.site,location:this.navParams.data.location});
   }
   happy()
   {
-      this.navCtrl.setRoot(FeedbackPage,{feedback:this.feedback,fb:this.fb,question:[],overallFeedback:true});
+      this.navCtrl.setRoot(FeedbackPage,{feedback:this.feedback,fb:this.fb,question:[],overallFeedback:true,project:this.navParams.data.project,site:this.navParams.data.site,location:this.navParams.data.location});
   }
 
 }
