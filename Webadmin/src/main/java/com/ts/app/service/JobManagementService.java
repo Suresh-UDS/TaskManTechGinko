@@ -730,7 +730,9 @@ public class JobManagementService extends AbstractService {
 		job.setFloor(jobDTO.getFloor());
 		job.setZone(jobDTO.getZone());
 		//add the job checklist items
-		job.getChecklistItems().clear();
+		if(CollectionUtils.isNotEmpty(job.getChecklistItems())) {
+			job.getChecklistItems().clear();
+		}
 		if(CollectionUtils.isNotEmpty(jobDTO.getChecklistItems())) {
 			List<JobChecklistDTO> jobclDtoList = jobDTO.getChecklistItems();
 			List<JobChecklist> checklistItems = new ArrayList<JobChecklist>();
@@ -739,7 +741,11 @@ public class JobManagementService extends AbstractService {
 				checklist.setJob(job);
 				checklistItems.add(checklist);
 			}
-			job.getChecklistItems().addAll(checklistItems);
+			if(CollectionUtils.isNotEmpty(job.getChecklistItems())) {
+				job.getChecklistItems().addAll(checklistItems);
+			}else {
+				job.setChecklistItems(checklistItems);
+			}
 		}
 
 	}
