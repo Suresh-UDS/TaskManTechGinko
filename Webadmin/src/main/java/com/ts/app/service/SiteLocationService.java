@@ -27,7 +27,10 @@ SiteLocationService {
     @Value("${locationService.url}")
     private String locSvcEndpoint;
 
-	private final Logger log = LoggerFactory.getLogger(SiteLocationService.class);
+    @Value("${locationService.proximityUrl}")
+    private String locProximitySvcEndpoint;
+
+    private final Logger log = LoggerFactory.getLogger(SiteLocationService.class);
 
 //	private static final String locSvcEndpoint = exportPath;
 
@@ -74,29 +77,43 @@ SiteLocationService {
 		}
 	}
 
-//    public String checkProximity(Long id, Long lat, Long lng){
-//
-//	    try {
-//            RestTemplate restTemplate = new RestTemplate();
-//            MappingJackson2HttpMessageConverter jsonHttpMessageConverter = new MappingJackson2HttpMessageConverter();
-//            jsonHttpMessageConverter.getObjectMapper().configure(SerializationFeature.FAIL_ON_EMPTY_BEANS,false);
-//            restTemplate.getMessageConverters().add(jsonHttpMessageConverter);
-//
-//            MultiValueMap<String, String> headers =new LinkedMultiValueMap<String, String>();
-//            Map<String, String> map=  new HashMap<String, String>();
-//            map.put("Content-Type", MediaType.APPLICATION_JSON_VALUE);
-//
-//            headers.setAll(map);
-//
-//            Map<String,Object> paramMap = new HashMap<String,Object>();
-////            paramMap.put("title",searchCriteria.get`());
-//
-//            JSONObject request = new JSONObject();
-//
-//            HttpEntity<?> requestEntity = new HttpEntity<>(request.toString(),headers);
-//            ResponseEntity<?> response = restTemplate.getForEntity(locSvcEndpoint,  String.class);
-//
-//        }
-//    }
+    public String checkProximity(Long siteId, Long lat, Long lng){
+    	try {
+			RestTemplate restTemplate = new RestTemplate();
+			MappingJackson2HttpMessageConverter jsonHttpMessageConverter = new MappingJackson2HttpMessageConverter();
+			jsonHttpMessageConverter.getObjectMapper().configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
+			restTemplate.getMessageConverters().add(jsonHttpMessageConverter);
+
+			//restTemplate.postForLocation(pushEndpoint, request);
+
+			MultiValueMap<String, String> headers = new LinkedMultiValueMap<String, String>();
+	        Map<String,String> map = new HashMap<String, String>();
+	        map.put("Content-Type", MediaType.APPLICATION_JSON_VALUE);
+
+	        headers.setAll(map);
+
+	        //MultiValueMap<String, Object> params = new LinkedMultiValueMap<String, Object>();
+	        Map<String,Object> paramMap = new HashMap<String,Object>();
+	        paramMap.put("siteId", siteId);
+	        paramMap.put("lat", lat);
+	        paramMap.put("lng", lng);
+
+            JSONObject request = new JSONObject();
+            request.put("siteId", siteId);
+            request.put("lat", lat);
+            request.put("lng",lng);
+
+	        HttpEntity<?> requestEntity = new HttpEntity<>(request.toString(), headers);
+            log.debug("Before invoking site location service -" + requestEntity);
+            log.debug("location service end point -"+ locProximitySvcEndpoint);
+	        ResponseEntity<?> response = restTemplate.postForEntity(locProximitySvcEndpoint, requestEntity, String.class);
+	        log.debug("response from push service="+response.getStatusCode());
+	        log.debug("response from push service="+response.getBody());
+	        return response.getBody().toString();
+		}catch(Exception e) {
+		    log.error("Error while calling location service ", e);
+		}
+    		return null;
+    }
 
 }

@@ -20,7 +20,7 @@ spring:
             enabled: false # we use Grunt + BrowserSync for livereload
     datasource:
         driver-class-name: com.mysql.jdbc.Driver
-        url: jdbc:mysql://localhost:3306/uds-attendance?useUnicode=true&characterEncoding=utf8
+        url: jdbc:mysql://localhost:3306/Zappy-attendance?useUnicode=true&characterEncoding=utf8
         name:
         username: root
         password: Uds@2018
@@ -110,6 +110,7 @@ facedetection:
 
 locationService:
    url: http://localhost:8000/api/site/location
+   proximityUrl: http://localhost:8000/api/site/nearby
 #   url: http://ec2-52-77-216-21.ap-southeast-1.compute.amazonaws.com:8000/api/site/location
 
 quotationService:

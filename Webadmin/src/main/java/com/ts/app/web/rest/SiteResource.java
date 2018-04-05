@@ -151,18 +151,13 @@ public class SiteResource {
 		return new ResponseEntity<ImportResult>(result,HttpStatus.OK);
 	}
 
-	@RequestMapping(value = "/site/siteProximity", method = RequestMethod.POST)
+	@RequestMapping(value = "/site/proxmity/check", method = RequestMethod.POST)
     public String checksiteProximity(@RequestBody SearchCriteria siteDetails){
         log.debug("check site proximity - "+siteDetails.getSiteId());
         log.debug("check site proximity - "+siteDetails.getLat());
         log.debug("check site proximity - "+siteDetails.getLng());
-//        String result = siteService.checkProximity(siteDetails.getSiteId(),siteDetails.getLat(),siteDetails.getLng());
-        String result = "Success";
-        if(StringUtils.isNotEmpty(result)){
-            return "Success";
-        }else{
-            return "failure";
-        }
+        String result = siteService.checkProximity(siteDetails.getSiteId(),siteDetails.getLat(),siteDetails.getLng());
+        return result;
     }
 
     @RequestMapping(value = "/site/import/{fileId}/status",method = RequestMethod.GET)
