@@ -74,4 +74,29 @@ SiteLocationService {
 		}
 	}
 
+//    public String checkProximity(Long id, Long lat, Long lng){
+//
+//	    try {
+//            RestTemplate restTemplate = new RestTemplate();
+//            MappingJackson2HttpMessageConverter jsonHttpMessageConverter = new MappingJackson2HttpMessageConverter();
+//            jsonHttpMessageConverter.getObjectMapper().configure(SerializationFeature.FAIL_ON_EMPTY_BEANS,false);
+//            restTemplate.getMessageConverters().add(jsonHttpMessageConverter);
+//
+//            MultiValueMap<String, String> headers =new LinkedMultiValueMap<String, String>();
+//            Map<String, String> map=  new HashMap<String, String>();
+//            map.put("Content-Type", MediaType.APPLICATION_JSON_VALUE);
+//
+//            headers.setAll(map);
+//
+//            Map<String,Object> paramMap = new HashMap<String,Object>();
+////            paramMap.put("title",searchCriteria.get`());
+//
+//            JSONObject request = new JSONObject();
+//
+//            HttpEntity<?> requestEntity = new HttpEntity<>(request.toString(),headers);
+//            ResponseEntity<?> response = restTemplate.getForEntity(locSvcEndpoint,  String.class);
+//
+//        }
+//    }
+
 }

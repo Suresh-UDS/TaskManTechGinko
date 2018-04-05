@@ -58,9 +58,9 @@ public class SiteService extends AbstractService {
 	@Inject
 	private SiteLocationService siteLocationService;
 
-	@Inject 
+	@Inject
 	private ImportUtil importUtil;
-	
+
 	public SiteDTO createSiteInformation(SiteDTO siteDto) {
 		// log.info("The admin Flag value is " +adminFlag);
 		Site site = mapperUtil.toEntity(siteDto, Site.class);
@@ -260,7 +260,7 @@ public class SiteService extends AbstractService {
 		result.setTransactions(transactions);
 		return;
 	}
-	
+
 	private List<Long> findSubOrdinates(Employee employee, long empId) {
 		List<Long> subEmpIds = new ArrayList<Long>();
 		subEmpIds.add(empId);
@@ -294,7 +294,7 @@ public class SiteService extends AbstractService {
         entities = siteRepository.findSiteByEmployeeId(id);
         return mapperUtil.toModelList(entities, SiteDTO.class);
     }
-	
+
 	public ImportResult getImportStatus(String fileId) {
 		ImportResult er = new ImportResult();
 		//fileId += ".csv";
@@ -305,6 +305,16 @@ public class SiteService extends AbstractService {
 		}
 		return er;
 	}
+
+//	public String checkProximity(Long id,Long lat, Long lng){
+//        String result = SiteLocationService.checkProximity(id,lat,lng);
+//
+//        if(StringUtils.isEmpty(result)){
+//            return "failure";
+//        }else{
+//            return "success";
+//        }
+//    }
 
 
 }
