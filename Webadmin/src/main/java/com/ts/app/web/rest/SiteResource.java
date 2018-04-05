@@ -7,8 +7,6 @@ import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
-import com.ts.app.domain.util.StringUtil;
-import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -151,13 +149,16 @@ public class SiteResource {
 		return new ResponseEntity<ImportResult>(result,HttpStatus.OK);
 	}
 
-	@RequestMapping(value = "/site/proxmity/check", method = RequestMethod.POST)
-    public String checksiteProximity(@RequestBody SearchCriteria siteDetails){
+	@RequestMapping(value = "/proximityCheck", method = RequestMethod.POST)
+    public ResponseEntity<String> checksiteProximity(@RequestBody SearchCriteria siteDetails){
         log.debug("check site proximity - "+siteDetails.getSiteId());
         log.debug("check site proximity - "+siteDetails.getLat());
         log.debug("check site proximity - "+siteDetails.getLng());
         String result = siteService.checkProximity(siteDetails.getSiteId(),siteDetails.getLat(),siteDetails.getLng());
-        return result;
+        if(result.equalsIgnoreCase("failure")) {
+        		return new ResponseEntity<String>(result,HttpStatus.UNAUTHORIZED);
+        }
+        return new ResponseEntity<String>(result,HttpStatus.OK);
     }
 
     @RequestMapping(value = "/site/import/{fileId}/status",method = RequestMethod.GET)

@@ -306,7 +306,7 @@ public class SiteService extends AbstractService {
 		return er;
 	}
 
-	public String checkProximity(Long id,Long lat, Long lng){
+	public String checkProximity(long id,double lat, double lng){
         String result = siteLocationService.checkProximity(id,lat,lng);
         if(StringUtils.isEmpty(result)){
             return "failure";

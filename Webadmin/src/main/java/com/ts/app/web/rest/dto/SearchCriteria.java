@@ -115,9 +115,9 @@ public class SearchCriteria extends Paginator {
 
 	private String userEmail;
 
-	private Long lat;
+	private double lat;
 
-	private Long lng;
+	private double lng;
 
 	public long getId() {
 		return id;
@@ -560,19 +560,19 @@ public class SearchCriteria extends Paginator {
 	}
 
 
-    public Long getLat() {
+    public double getLat() {
         return lat;
     }
 
-    public void setLat(Long lat) {
+    public void setLat(double lat) {
         this.lat = lat;
     }
 
-    public Long getLng() {
+    public double getLng() {
         return lng;
     }
 
-    public void setLng(Long lng) {
+    public void setLng(double lng) {
         this.lng = lng;
     }
 }

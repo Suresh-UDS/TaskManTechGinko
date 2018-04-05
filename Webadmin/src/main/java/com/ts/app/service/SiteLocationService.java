@@ -77,7 +77,7 @@ SiteLocationService {
 		}
 	}
 
-    public String checkProximity(Long siteId, Long lat, Long lng){
+    public String checkProximity(long siteId, double lat, double lng){
     	try {
 			RestTemplate restTemplate = new RestTemplate();
 			MappingJackson2HttpMessageConverter jsonHttpMessageConverter = new MappingJackson2HttpMessageConverter();
@@ -105,8 +105,16 @@ SiteLocationService {
 
 	        HttpEntity<?> requestEntity = new HttpEntity<>(request.toString(), headers);
             log.debug("Before invoking site location service -" + requestEntity);
-            log.debug("location service end point -"+ locProximitySvcEndpoint);
-	        ResponseEntity<?> response = restTemplate.postForEntity(locProximitySvcEndpoint, requestEntity, String.class);
+            
+            //append params to url
+            StringBuffer proximitySvcUrl = new StringBuffer(locProximitySvcEndpoint);
+            proximitySvcUrl.append("?");
+            proximitySvcUrl.append("siteId="+siteId);
+            proximitySvcUrl.append("&lat="+lat);
+            proximitySvcUrl.append("&lng="+lng);
+            
+            log.debug("location service end point -"+ proximitySvcUrl.toString());
+	        ResponseEntity<?> response = restTemplate.getForEntity(proximitySvcUrl.toString(), String.class);
 	        log.debug("response from push service="+response.getStatusCode());
 	        log.debug("response from push service="+response.getBody());
 	        return response.getBody().toString();
