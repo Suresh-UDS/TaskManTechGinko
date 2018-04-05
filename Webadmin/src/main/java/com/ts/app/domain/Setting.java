@@ -50,7 +50,7 @@ public class Setting extends AbstractAuditingEntity implements Serializable {
 
     @NotNull
     @Size(min = 1, max = 2000)
-    @Column(length = 2000, nullable = false)
+    @Column(length = 2000)
     private String settingValue;
 
     @Size(min = 1, max = 2500)

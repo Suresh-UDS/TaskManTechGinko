@@ -8,21 +8,52 @@ angular.module('timeSheetApp')
     		$scope.selectedSite;
     		
     		$scope.settings = {
-    				
+    			attendanceEmailIds : [],	
     			overdueEmailIds : [],
     			eodJobEmailIds : [],
+    			quotationEmailIds : [],
     			feedbackEmailIds : []
     		};
     		
     	
     		$scope.init = function() {
     			$scope.loadProjects();
-    			$scope.loadSettings();
+    			//$scope.loadSettings();
     		}
     		
+    		$scope.addQuotationEmail = function() {
+	        	var email = $scope.quotationEmail;
+	        	if(!$scope.settings.quotationEmailIds) {
+	        		$scope.settings.quotationEmailIds = [];
+	        	}
+	        	$scope.settings.quotationEmailIds.push(email);
+	        	$scope.quotationEmail = '';
+        }
+        
+        $scope.removeQuotationEmail = function(ind) {
+        		$scope.settings.quotationEmailIds.splice(ind,1);
+        }
+        
+        $scope.addAttendanceEmail = function() {
+	        	var email = $scope.attendanceEmail;
+	        	if(!$scope.settings.attendanceEmailIds) {
+	        		$scope.settings.attendanceEmailIds = [];
+	        	}
+	        	$scope.settings.attendanceEmailIds.push(email);
+	        	$scope.attendanceEmail = '';
+        }
+        
+        $scope.removeAttendanceEmail = function(ind) {
+        		$scope.settings.attendanceEmailIds.splice(ind,1);
+        }
+
         $scope.addOverdueEmail = function() {
 	        	var email = $scope.overdueEmail;
+	        	if(!$scope.settings.overdueEmailIds) {
+	        		$scope.settings.overdueEmailIds = [];
+	        	}	        	
 	        	$scope.settings.overdueEmailIds.push(email);
+	        	$scope.overdueEmail = '';
         }
         
         $scope.removeOverdueEmail = function(ind) {
@@ -31,7 +62,11 @@ angular.module('timeSheetApp')
         
         $scope.addEodJobEmail = function() {
 	        	var email = $scope.eodJobEmail;
+	        	if(!$scope.settings.eodJobEmailIds) {
+	        		$scope.settings.eodJobEmailIds = [];
+	        	}	        	
 	        	$scope.settings.eodJobEmailIds.push(email);
+	        	$scope.eodJobEmail = '';
 	    }
     
 	    $scope.removeEodJobEmail = function(ind) {

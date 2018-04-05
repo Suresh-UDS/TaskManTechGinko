@@ -18,6 +18,10 @@ public class SettingsDTO extends BaseDTO implements Serializable {
     
     private String projectName; 
     
+    private long attendanceEmailAlertId;
+    
+    private boolean attendanceEmailAlert;
+
     private long overdueEmailAlertId;
     
     private boolean overdueEmailAlert;
@@ -30,6 +34,14 @@ public class SettingsDTO extends BaseDTO implements Serializable {
     
     private boolean feedbackEmailAlert;
 
+    private long quotationEmailAlertId;
+    
+    private boolean quotationEmailAlert;
+
+    private long attendanceEmailsId;
+    
+    private List<String> attendanceEmailIds;
+
     private long overdueEmailsId;
     
     private List<String> overdueEmailIds;
@@ -41,6 +53,10 @@ public class SettingsDTO extends BaseDTO implements Serializable {
     private long feedbackEmailsId;
     
     private List<String> feedbackEmailIds;
+
+    private long quotationEmailsId;
+    
+    private List<String> quotationEmailIds;
 
     public long getSiteId() {
 		return siteId;
@@ -168,6 +184,70 @@ public class SettingsDTO extends BaseDTO implements Serializable {
 
 	public void setFeedbackEmailIds(List<String> feedbackEmailIds) {
 		this.feedbackEmailIds = feedbackEmailIds;
+	}
+
+	public long getAttendanceEmailAlertId() {
+		return attendanceEmailAlertId;
+	}
+
+	public void setAttendanceEmailAlertId(long attendanceEmailAlertId) {
+		this.attendanceEmailAlertId = attendanceEmailAlertId;
+	}
+
+	public boolean isAttendanceEmailAlert() {
+		return attendanceEmailAlert;
+	}
+
+	public void setAttendanceEmailAlert(boolean attendanceEmailAlert) {
+		this.attendanceEmailAlert = attendanceEmailAlert;
+	}
+
+	public long getAttendanceEmailsId() {
+		return attendanceEmailsId;
+	}
+
+	public void setAttendanceEmailsId(long attendanceEmailsId) {
+		this.attendanceEmailsId = attendanceEmailsId;
+	}
+
+	public List<String> getAttendanceEmailIds() {
+		return attendanceEmailIds;
+	}
+
+	public void setAttendanceEmailIds(List<String> attendanceEmailIds) {
+		this.attendanceEmailIds = attendanceEmailIds;
+	}
+
+	public long getQuotationEmailAlertId() {
+		return quotationEmailAlertId;
+	}
+
+	public void setQuotationEmailAlertId(long quotationEmailAlertId) {
+		this.quotationEmailAlertId = quotationEmailAlertId;
+	}
+
+	public boolean isQuotationEmailAlert() {
+		return quotationEmailAlert;
+	}
+
+	public void setQuotationEmailAlert(boolean quotationEmailAlert) {
+		this.quotationEmailAlert = quotationEmailAlert;
+	}
+
+	public long getQuotationEmailsId() {
+		return quotationEmailsId;
+	}
+
+	public void setQuotationEmailsId(long quotationEmailsId) {
+		this.quotationEmailsId = quotationEmailsId;
+	}
+
+	public List<String> getQuotationEmailIds() {
+		return quotationEmailIds;
+	}
+
+	public void setQuotationEmailIds(List<String> quotationEmailIds) {
+		this.quotationEmailIds = quotationEmailIds;
 	}
 
 	

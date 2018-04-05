@@ -26,6 +26,10 @@ public class SettingsService extends AbstractService {
 
 	private final Logger log = LoggerFactory.getLogger(SettingsService.class);
 
+	public static final String EMAIL_NOTIFICATION_ATTENDANCE = "email.notification.attendance";
+	
+	public static final String EMAIL_NOTIFICATION_ATTENDANCE_EMAILS = "email.notification.attendance.emails";
+
 	public static final String EMAIL_NOTIFICATION_OVERDUE = "email.notification.overdue";
 	
 	public static final String EMAIL_NOTIFICATION_OVERDUE_EMAILS = "email.notification.overdue.emails";
@@ -38,10 +42,46 @@ public class SettingsService extends AbstractService {
 	
 	public static final String EMAIL_NOTIFICATION_FEEDBACK_EMAILS = "email.notification.feedback.emails";
 
+	public static final String EMAIL_NOTIFICATION_QUOTATION = "email.notification.quotation";
+	
+	public static final String EMAIL_NOTIFICATION_QUOTATION_EMAILS = "email.notification.quotation.emails";
+
 	@Inject
 	private SettingsRepository settingsRepository;
 	
 	public SettingsDTO saveSettings(SettingsDTO settingsDto) {
+		Setting attendanceAlertSetting = null;
+		if(settingsDto.getAttendanceEmailAlertId() > 0) {
+			attendanceAlertSetting = settingsRepository.findOne(settingsDto.getAttendanceEmailAlertId());
+		}else {
+			attendanceAlertSetting = new Setting();
+		}
+		attendanceAlertSetting.setSettingKey(EMAIL_NOTIFICATION_ATTENDANCE);
+		attendanceAlertSetting.setSettingValue(String.valueOf(settingsDto.isAttendanceEmailAlert()));
+		attendanceAlertSetting.setProjectId(settingsDto.getProjectId());
+		attendanceAlertSetting.setProjectName(settingsDto.getProjectName());
+		attendanceAlertSetting.setSiteId(settingsDto.getSiteId());
+		attendanceAlertSetting.setSiteName(settingsDto.getSiteName());
+		attendanceAlertSetting.setActive("Y");
+
+		Setting attendanceEmailsSetting = null;
+		if(settingsDto.getAttendanceEmailsId() > 0) {
+			attendanceEmailsSetting = settingsRepository.findOne(settingsDto.getAttendanceEmailsId());
+		}else {
+			attendanceEmailsSetting = new Setting();
+		}
+		attendanceEmailsSetting.setSettingKey(EMAIL_NOTIFICATION_ATTENDANCE_EMAILS);
+		if(CollectionUtils.isNotEmpty(settingsDto.getAttendanceEmailIds())) {
+			attendanceEmailsSetting.setSettingValue(CommonUtil.convertToString(settingsDto.getAttendanceEmailIds()));
+		}
+		attendanceEmailsSetting.setProjectId(settingsDto.getProjectId());
+		attendanceEmailsSetting.setProjectName(settingsDto.getProjectName());
+		attendanceEmailsSetting.setSiteId(settingsDto.getSiteId());
+		attendanceEmailsSetting.setSiteName(settingsDto.getSiteName());
+		attendanceEmailsSetting.setActive("Y");
+
+		
+		
 		Setting overdueAlertSetting = null;
 		if(settingsDto.getOverdueEmailAlertId() > 0) {
 			overdueAlertSetting = settingsRepository.findOne(settingsDto.getOverdueEmailAlertId());
@@ -133,13 +173,48 @@ public class SettingsService extends AbstractService {
 		feedbackEmailsSetting.setSiteName(settingsDto.getSiteName());
 		feedbackEmailsSetting.setActive("Y");
 		
+		//quotation notification setting
+		Setting quotationAlertSetting = null;
+		if(settingsDto.getQuotationEmailAlertId() > 0) {
+			quotationAlertSetting = settingsRepository.findOne(settingsDto.getQuotationEmailAlertId());
+		}else {
+			quotationAlertSetting = new Setting();
+		}
+		quotationAlertSetting.setSettingKey(EMAIL_NOTIFICATION_QUOTATION);
+		quotationAlertSetting.setSettingValue(String.valueOf(settingsDto.isQuotationEmailAlert()));
+		quotationAlertSetting.setProjectId(settingsDto.getProjectId());
+		quotationAlertSetting.setProjectName(settingsDto.getProjectName());
+		quotationAlertSetting.setSiteId(settingsDto.getSiteId());
+		quotationAlertSetting.setSiteName(settingsDto.getSiteName());
+		quotationAlertSetting.setActive("Y");
+
+		Setting quotationEmailsSetting = null;
+		if(settingsDto.getQuotationEmailsId() > 0) {
+			quotationEmailsSetting = settingsRepository.findOne(settingsDto.getQuotationEmailsId());
+		}else {
+			quotationEmailsSetting = new Setting();
+		}
+		quotationEmailsSetting.setSettingKey(EMAIL_NOTIFICATION_QUOTATION_EMAILS);
+		if(CollectionUtils.isNotEmpty(settingsDto.getQuotationEmailIds())) {
+			quotationEmailsSetting.setSettingValue(CommonUtil.convertToString(settingsDto.getQuotationEmailIds()));
+		}	
+		quotationEmailsSetting.setProjectId(settingsDto.getProjectId());
+		quotationEmailsSetting.setProjectName(settingsDto.getProjectName());
+		quotationEmailsSetting.setSiteId(settingsDto.getSiteId());
+		quotationEmailsSetting.setSiteName(settingsDto.getSiteName());
+		quotationEmailsSetting.setActive("Y");
+		
 		List<Setting> settingList = new ArrayList<Setting>();
+		settingList.add(attendanceAlertSetting);
+		settingList.add(attendanceEmailsSetting);
 		settingList.add(overdueAlertSetting);
 		settingList.add(overdueEmailsSetting);
 		settingList.add(eodJobAlertSetting);
 		settingList.add(eodJobEmailsSetting);
 		settingList.add(feedbackAlertSetting);
 		settingList.add(feedbackEmailsSetting);
+		settingList.add(quotationAlertSetting);
+		settingList.add(quotationEmailsSetting);
 		settingsRepository.save(settingList);
 		
 		return settingsDto;
@@ -162,7 +237,13 @@ public class SettingsService extends AbstractService {
 		settingDto.setSiteId(siteId);
 		if(CollectionUtils.isNotEmpty(entities)) {
 			for(Setting setting : entities) {
-				if(setting.getSettingKey().equalsIgnoreCase(EMAIL_NOTIFICATION_OVERDUE)) {
+				if(setting.getSettingKey().equalsIgnoreCase(EMAIL_NOTIFICATION_ATTENDANCE)) {
+					settingDto.setAttendanceEmailAlertId(setting.getId());
+					settingDto.setAttendanceEmailAlert(Boolean.valueOf(setting.getSettingValue()));
+				}else if(setting.getSettingKey().equalsIgnoreCase(EMAIL_NOTIFICATION_ATTENDANCE_EMAILS)) {
+					settingDto.setAttendanceEmailsId(setting.getId());
+					settingDto.setAttendanceEmailIds(CommonUtil.convertToList(setting.getSettingValue(), ","));
+				}else if(setting.getSettingKey().equalsIgnoreCase(EMAIL_NOTIFICATION_OVERDUE)) {
 					settingDto.setOverdueEmailAlertId(setting.getId());
 					settingDto.setOverdueEmailAlert(Boolean.valueOf(setting.getSettingValue()));
 				}else if(setting.getSettingKey().equalsIgnoreCase(EMAIL_NOTIFICATION_OVERDUE_EMAILS)) {
@@ -180,6 +261,12 @@ public class SettingsService extends AbstractService {
 				}else if(setting.getSettingKey().equalsIgnoreCase(EMAIL_NOTIFICATION_FEEDBACK_EMAILS)) {
 					settingDto.setFeedbackEmailsId(setting.getId());
 					settingDto.setFeedbackEmailIds(CommonUtil.convertToList(setting.getSettingValue(), ","));
+				}else if(setting.getSettingKey().equalsIgnoreCase(EMAIL_NOTIFICATION_QUOTATION)) {
+					settingDto.setQuotationEmailAlertId(setting.getId());
+					settingDto.setQuotationEmailAlert(Boolean.valueOf(setting.getSettingValue()));
+				}else if(setting.getSettingKey().equalsIgnoreCase(EMAIL_NOTIFICATION_QUOTATION_EMAILS)) {
+					settingDto.setQuotationEmailsId(setting.getId());
+					settingDto.setQuotationEmailIds(CommonUtil.convertToList(setting.getSettingValue(), ","));
 				}
 				//settings.add(settingDto);
 			}

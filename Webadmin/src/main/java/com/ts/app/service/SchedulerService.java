@@ -185,7 +185,7 @@ public class SchedulerService extends AbstractService {
 		}
 	}
 
-	@Scheduled(initialDelay = 60000, fixedRate = 1800000) //Runs every day at 00:00
+	@Scheduled(initialDelay = 60000, fixedRate = 1800000) //Runs every 30 mins
 	//@Scheduled(cron="30 * * * * ?") //Test to run every 30 seconds
 	public void runWeeklyTask() {
 		if(env.getProperty("scheduler.weeklyJob.enabled").equalsIgnoreCase("true")) {		
@@ -239,7 +239,7 @@ public class SchedulerService extends AbstractService {
 		}
 	}
 	
-	@Scheduled(initialDelay = 60000, fixedRate = 1800000) //Runs every day at 00:00
+	@Scheduled(initialDelay = 60000, fixedRate = 1800000) //Runs every 30 mins
 	//@Scheduled(cron="30 * * * * ?") //Test to run every 30 seconds
 	public void runMonthlyTask() {
 		if(env.getProperty("scheduler.monthlyJob.enabled").equalsIgnoreCase("true")) {
@@ -267,7 +267,7 @@ public class SchedulerService extends AbstractService {
 		}
 	}
 
-	@Scheduled(initialDelay = 60000,fixedRate = 300000) //Runs every 15 mins
+	@Scheduled(initialDelay = 60000,fixedRate = 900000) //Runs every 15 mins
 	public void overDueTaskCheck() {
 		if(env.getProperty("scheduler.overdueJob.enabled").equalsIgnoreCase("true")) {
 			Calendar cal = Calendar.getInstance();
@@ -345,7 +345,7 @@ public class SchedulerService extends AbstractService {
 	}
 	
 	//@Scheduled(initialDelay = 60000,fixedRate = 900000) //Runs every 15 mins
-	@Scheduled(cron="0 0 18 1/1 * ?")
+	@Scheduled(cron="0 0 20 1/1 * ?")
 	public void endOfDayReportSchedule() {
 		if(env.getProperty("scheduler.eodJobReport.enabled").equalsIgnoreCase("true")) {
 			Setting eodReports = settingRepository.findSettingByKey("email.notification.eodReports");
@@ -388,8 +388,8 @@ public class SchedulerService extends AbstractService {
 		
 	}
 	
-	//@Scheduled(cron="0 0 10 1/1 * ?")
-	@Scheduled(cron="0 0 19 1/1 * ?")
+	@Scheduled(cron="0 0 10 1/1 * ?")
+	@Scheduled(cron="0 0 20 1/1 * ?")
 	public void attendanceReportSchedule() {
 		Setting attendanceReports = settingRepository.findSettingByKey("email.notification.attedanceReports");
 		Setting attendanceReportEmails = settingRepository.findSettingByKey("email.notification.attendanceReports.emails");
@@ -424,7 +424,7 @@ public class SchedulerService extends AbstractService {
 		
 	}
 	
-	@Scheduled(cron="0 0 0 1/1 * ?") //Test to run every 30 seconds
+	//@Scheduled(cron="0 0 0 1/1 * ?") //Test to run every 30 seconds
 	public void attendanceCheckOutTask() {
 		Calendar startCal = Calendar.getInstance();
 		startCal.set(Calendar.HOUR_OF_DAY,0);
