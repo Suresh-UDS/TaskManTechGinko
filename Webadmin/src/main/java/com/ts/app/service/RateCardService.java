@@ -28,9 +28,11 @@ import org.springframework.web.client.RestTemplate;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.ts.app.domain.AbstractAuditingEntity;
 import com.ts.app.domain.RateCard;
+import com.ts.app.domain.Setting;
 import com.ts.app.domain.User;
 import com.ts.app.repository.ProjectRepository;
 import com.ts.app.repository.RateCardRepository;
+import com.ts.app.repository.SettingsRepository;
 import com.ts.app.repository.SiteRepository;
 import com.ts.app.repository.UserRepository;
 import com.ts.app.service.util.MapperUtil;
@@ -66,6 +68,12 @@ public class RateCardService extends AbstractService {
 
 	@Inject
 	private MapperUtil<AbstractAuditingEntity, BaseDTO> mapperUtil;
+	
+	@Inject
+	private SettingsRepository settingRepository;
+	
+	@Inject
+	private MailService mailService;
 
 	public RateCardDTO createRateCardInformation(RateCardDTO rateCardDto) {
 		// log.info("The admin Flag value is " +adminFlag);
@@ -315,6 +323,13 @@ public class RateCardService extends AbstractService {
             if(!StringUtils.isEmpty(quotationDto.get_id()) && quotationDto.getMode().equalsIgnoreCase("edit")) {
             		url = quotationSvcEndPoint+"/quotation/edit";
             }else if(!StringUtils.isEmpty(quotationDto.get_id()) && quotationDto.getMode().equalsIgnoreCase("submit")) {
+				Setting quotationAlertSetting = settingRepository.findSettingByKeyAndSiteId(SettingsService.EMAIL_NOTIFICATION_OVERDUE, quotationDto.getSiteId());
+				Setting overdueEmails = settingRepository.findSettingByKeyAndSiteId(SettingsService.EMAIL_NOTIFICATION_OVERDUE_EMAILS, quotationDto.getSiteId());
+				String alertEmailIds =  "";
+				if(overdueEmails != null) {
+					alertEmailIds = overdueEmails.getSettingValue();
+				}
+            	
             		url = quotationSvcEndPoint+"/quotation/send";
             		quotationDto.setDrafted(false);
             		quotationDto.setSubmitted(true);
@@ -322,7 +337,18 @@ public class RateCardService extends AbstractService {
 	        		quotationDto.setSentByUserName(currUser.getLogin());
                 request.put("sentByUserId", quotationDto.getSentByUserId());
                 request.put("sentByUserName", quotationDto.getSentByUserName());
+                if(quotationAlertSetting != null && quotationAlertSetting.getSettingValue().equalsIgnoreCase("true")) { //send escalation emails to managers and alert emails
+                		request.put("clientEmailId", alertEmailIds);
+				}                
+                
             }else if(!StringUtils.isEmpty(quotationDto.get_id()) && quotationDto.getMode().equalsIgnoreCase("approve")) {
+				Setting quotationAlertSetting = settingRepository.findSettingByKeyAndSiteId(SettingsService.EMAIL_NOTIFICATION_OVERDUE, quotationDto.getSiteId());
+				Setting overdueEmails = settingRepository.findSettingByKeyAndSiteId(SettingsService.EMAIL_NOTIFICATION_OVERDUE_EMAILS, quotationDto.getSiteId());
+				String alertEmailIds =  "";
+				if(overdueEmails != null) {
+					alertEmailIds = overdueEmails.getSettingValue();
+				}
+            	
             		url = quotationSvcEndPoint+"/quotation/approve";
             		quotationDto.setSubmitted(false);
             		quotationDto.setApproved(true);
@@ -330,6 +356,9 @@ public class RateCardService extends AbstractService {
 	        		quotationDto.setApprovedByUserName(currUser.getLogin());
                 request.put("approvedByUserId", quotationDto.getApprovedByUserId());
                 request.put("approvedByUserName", quotationDto.getApprovedByUserName());
+                if(quotationAlertSetting != null && quotationAlertSetting.getSettingValue().equalsIgnoreCase("true")) { //send escalation emails to managers and alert emails
+                		request.put("clientEmailId", alertEmailIds);
+                }                
 	        		
             }
             HttpEntity<?> requestEntity = new HttpEntity<>(request.toString(),headers);

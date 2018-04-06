@@ -32,6 +32,7 @@ var fs = require('fs');
         if(req.body.projectId) quotation.projectId = req.body.projectId;
         if(req.body.projectName) quotation.projectName = req.body.projectName;
         if(req.body.clientEmailId) quotation.clientEmailId = req.body.clientEmailId;
+        if(req.body.sentToEmailId) quotation.clientEmailId = req.body.clientEmailId;
         if(req.body.grandTotal) quotation.grandTotal = req.body.grandTotal;
         if(req.body.isDrafted){
             quotation.isDrafted = true;

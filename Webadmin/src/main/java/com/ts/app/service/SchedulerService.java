@@ -271,14 +271,15 @@ public class SchedulerService extends AbstractService {
 	public void overDueTaskCheck() {
 		if(env.getProperty("scheduler.overdueJob.enabled").equalsIgnoreCase("true")) {
 			Calendar cal = Calendar.getInstance();
-			Setting overdueAlertSetting = settingRepository.findSettingByKey("email.notification.overdue");
+			//Setting overdueAlertSetting = settingRepository.findSettingByKey("email.notification.overdue");
+			Setting overdueAlertSetting = null;
 			String alertEmailIds = "";
 			Setting overdueEmails = null;
-			if(overdueAlertSetting != null && StringUtils.isNotEmpty(overdueAlertSetting.getSettingValue()) 
-					&& overdueAlertSetting.getSettingValue().equalsIgnoreCase("true")) {
-				overdueEmails = settingRepository.findSettingByKey("email.notification.overdue.emails");
-				alertEmailIds = overdueEmails.getSettingValue();
-			}
+//			if(overdueAlertSetting != null && StringUtils.isNotEmpty(overdueAlertSetting.getSettingValue()) 
+//					&& overdueAlertSetting.getSettingValue().equalsIgnoreCase("true")) {
+//				overdueEmails = settingRepository.findSettingByKey("email.notification.overdue.emails");
+//				alertEmailIds = overdueEmails.getSettingValue();
+//			}
 			
 			List<Job> overDueJobs = jobRepository.findOverdueJobsByStatusAndEndDateTime(cal.getTime());
 			log.debug("Found {} overdue jobs", (overDueJobs != null ? overDueJobs.size() : 0));
@@ -348,16 +349,23 @@ public class SchedulerService extends AbstractService {
 	@Scheduled(cron="0 0 20 1/1 * ?")
 	public void endOfDayReportSchedule() {
 		if(env.getProperty("scheduler.eodJobReport.enabled").equalsIgnoreCase("true")) {
-			Setting eodReports = settingRepository.findSettingByKey("email.notification.eodReports");
-			Setting eodReportEmails = settingRepository.findSettingByKey("email.notification.eodReports.emails");
 			Calendar cal = Calendar.getInstance();
 			cal.set(Calendar.HOUR_OF_DAY, 0);
 			cal.set(Calendar.MINUTE, 0);
 			List<Project> projects = projectRepository.findAll();
 			for(Project proj : projects) {
-				//Set<Site> sites = proj.getSite();
-				//Iterator<Site> siteItr = sites.iterator();
-				//while(siteItr.hasNext()) {
+				Set<Site> sites = proj.getSite();
+				Iterator<Site> siteItr = sites.iterator();
+				while(siteItr.hasNext()) {
+					Site site = siteItr.next();
+					Setting eodReports = settingRepository.findSettingByKeyAndSiteId("email.notification.eodReports", site.getId());
+					if(eodReports == null) {
+						eodReports = settingRepository.findSettingByKeyAndProjectId("email.notification.eodReports", proj.getId());
+					}
+					Setting eodReportEmails = settingRepository.findSettingByKeyAndSiteId("email.notification.eodReports.emails", site.getId());
+					if(eodReportEmails == null) {
+						eodReportEmails = settingRepository.findSettingByKeyAndProjectId("email.notification.eodReports.emails", proj.getId());
+					}
 					SearchCriteria sc = new SearchCriteria();
 					sc.setCheckInDateTimeFrom(cal.getTime());
 					sc.setProjectId(proj.getId());
@@ -382,7 +390,7 @@ public class SchedulerService extends AbstractService {
 			    	    		log.debug("no jobs found on the daterange");
 			        }
 			
-				//}
+				}
 			}
 		}
 		
@@ -391,8 +399,6 @@ public class SchedulerService extends AbstractService {
 	@Scheduled(cron="0 0 10 1/1 * ?")
 	@Scheduled(cron="0 0 20 1/1 * ?")
 	public void attendanceReportSchedule() {
-		Setting attendanceReports = settingRepository.findSettingByKey("email.notification.attedanceReports");
-		Setting attendanceReportEmails = settingRepository.findSettingByKey("email.notification.attendanceReports.emails");
 		Calendar cal = Calendar.getInstance();
 		cal.set(Calendar.HOUR_OF_DAY, 0);
 		cal.set(Calendar.MINUTE, 0);
@@ -408,8 +414,17 @@ public class SchedulerService extends AbstractService {
 			while(siteItr.hasNext()) {
 				Site site = siteItr.next();
 				List<EmployeeAttendanceReport> empAttnList = attendanceRepository.findBySiteId(site.getId(), DateUtil.convertToSQLDate(cal.getTime()), DateUtil.convertToSQLDate(cal.getTime()));
+				Setting attendanceReports = settingRepository.findSettingByKeyAndSiteId("email.notification.attedanceReports", site.getId());
+				if(attendanceReports == null) {
+					attendanceReports = settingRepository.findSettingByKeyAndProjectId("email.notification.attedanceReports", proj.getId());
+				}
 				if(attendanceReports != null && attendanceReports.getSettingValue().equalsIgnoreCase("true")) {
 				    log.debug("send report");
+					Setting attendanceReportEmails = settingRepository.findSettingByKeyAndSiteId("email.notification.attendanceReports.emails", site.getId());
+				    if(attendanceReportEmails == null) {
+				    		attendanceReportEmails = settingRepository.findSettingByKeyAndProjectId("email.notification.attendanceReports.emails", proj.getId());
+				    }
+				    
 					ExportResult exportResult = new ExportResult();
 					exportResult = exportUtil.writeAttendanceReportToFile(proj.getName(), empAttnList, null, exportResult);
 					//send reports in email.
