@@ -1,4 +1,4 @@
-<div>
+<div ng-init="initLoad()">
 
     <!--<div class="row TopButtonsCon" ng-init="loadSites()">-->
         <!--<div class="col-md-8">-->
@@ -207,10 +207,10 @@
     </div>
     <!-- end row -->
 
-    <div class="card margin-TB-5 txt-align-center" ng-hide="sites">
+    <div class="card margin-TB-5 txt-align-center" ng-hide="inventorylist">
 
         <div class="card-content">
-            <div class="" style="text-align:center;padding: 10px 0;">
+            <div class="" style="text-align:center;padding: 10px 0;"  ng-hide="inventoryLoaderlist">
                 <div loader-css="ball-pulse"></div>
             </div>
 

@@ -1,4 +1,4 @@
-<div class="gc-container">
+<div class="gc-container" ng-init="initLoad()">
 	<div class="success-message hidden"></div>
 
 
@@ -134,7 +134,7 @@
 
         <div class="card-content">
 
-            <div class="" style="text-align:center;padding: 10px 0;">
+            <div class="" style="text-align:center;padding: 10px 0;" ng-hide="jobsLoader">
                 <div loader-css="ball-pulse"></div>
             </div>
 

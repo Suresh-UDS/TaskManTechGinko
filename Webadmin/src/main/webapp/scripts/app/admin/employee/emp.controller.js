@@ -504,6 +504,7 @@ angular.module('timeSheetApp')
                 $scope.loadSelectedManager($scope.employee.managerId);
                 $scope.loadSelectedRole($scope.employee.userRoleId);
                 $scope.sites = $scope.employee.sites;
+                $scope.loadingStop();
             });
 
         };
@@ -795,6 +796,7 @@ angular.module('timeSheetApp')
 
         	EmployeeComponent.search($scope.searchCriteria).then(function (data) {
                 $scope.employees = data.transactions;
+                $scope.employeesLoader = true;
                 console.log('Employee search result list -');
                 console.log($scope.employees);
                 $scope.pages.currPage = data.currPage;
@@ -1144,6 +1146,38 @@ angular.module('timeSheetApp')
 
         $scope.initCalender();
 
+       //init load
+        $scope.initLoad = function(){ 
+             $scope.loadPageTop(); 
+             $scope.initAddEdit();
+         }
+
+       //Loading Page go to top position
+        $scope.loadPageTop = function(){
+            //alert("test");
+            //$("#loadPage").scrollTop();
+            $("#loadPage").animate({scrollTop: 0}, 2000);
+        }
+
+         // Page Loader Function
+
+        $scope.loadingStart = function(){ $('.pageCenter').show();}
+        $scope.loadingAuto = function(){
+            $scope.loadingStart(); 
+            $scope.loadtimeOut = $timeout(function(){
+            
+            //console.log("Calling loader stop");
+            $('.pageCenter').hide();
+                    
+        }, 2000);
+           // alert('hi');
+        }
+        $scope.loadingStop = function(){
+            
+            console.log("Calling loader");
+            $('.pageCenter').hide();
+                    
+        }
 
 
     });

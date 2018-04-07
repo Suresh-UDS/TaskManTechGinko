@@ -173,7 +173,8 @@ angular.module('timeSheetApp')
         	console.log($scope.searchCriteria);
         	RateCardComponent.search($scope.searchCriteria).then(function (data) {
                 $scope.rateCards = data;
-                console.log($scope.rateCards);
+                $scope.rateCardsLoader = true;
+                console.log('Ratecard' + $scope.rateCards);
                 $scope.pages.currPage = data.currPage;
                 $scope.pages.totalPages = data.totalPages;
                 if($scope.rateCards == null){
@@ -279,5 +280,19 @@ angular.module('timeSheetApp')
             }
             $scope.search();
         };
+
+          //init load
+        $scope.initLoad = function(){ 
+             $scope.loadPageTop(); 
+            
+          
+         }
+
+       //Loading Page go to top position
+        $scope.loadPageTop = function(){
+            //alert("test");
+            //$("#loadPage").scrollTop();
+            $("#loadPage").animate({scrollTop: 0}, 2000);
+        }
 
     });

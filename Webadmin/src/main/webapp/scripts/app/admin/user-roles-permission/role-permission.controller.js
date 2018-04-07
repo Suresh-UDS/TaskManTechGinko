@@ -153,6 +153,7 @@ angular.module('timeSheetApp')
         	}
         	ModuleActionComponent.search(searchCriteria).then(function (data) {
         		$scope.moduleActions = data.transactions;
+        		$scope.moduleActionsLoader = true;
         	})
         };
 
@@ -442,6 +443,20 @@ angular.module('timeSheetApp')
 
                         }
 
+                        
+                        //init load
+                        $scope.initLoad = function(){ 
+                             $scope.loadPageTop(); 
+                            
+                          
+                         }
+
+                       //Loading Page go to top position
+                        $scope.loadPageTop = function(){
+                            //alert("test");
+                            //$("#loadPage").scrollTop();
+                            $("#loadPage").animate({scrollTop: 0}, 2000);
+                        }
 
 
     });

@@ -980,3 +980,23 @@ button.btn.btn-outline {
 	.modal.right.fade.in .modal-dialog {
 		right: 0;
 	}
+   .user div a{
+
+    cursor:pointer;
+  }
+
+  .pageCenter{
+      top: calc(100% / 3);
+      left: calc(100% / 2.5);
+      z-index: 100000;
+      position: absolute;
+      display: none;
+  }
+  .white{
+      color:#fff;
+      line-height: 40px;
+      text-align: left;
+  }
+  a.logout{
+     padding-left: 0px !important; 
+  }

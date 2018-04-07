@@ -300,7 +300,8 @@ angular.module('timeSheetApp')
         	console.log($scope.searchCriteria);
         	console.log('uid - ' + reportUid);
         	JobComponent.search($scope.searchCriteria, reportUid).then(function (data) {
-        		$scope.jobs = data.transactions
+                $scope.jobs = data.transactions;
+        		$scope.jobsLoader = true;
         		console.log('job search result - ' + $scope.jobs);
         		$scope.pages.currPage = data.currPage;
                 $scope.pages.totalPages = data.totalPages;
@@ -495,5 +496,19 @@ angular.module('timeSheetApp')
         
         
         $scope.initCalender();
+
+          //init load
+        $scope.initLoad = function(){ 
+             $scope.loadPageTop(); 
+            
+          
+         }
+
+       //Loading Page go to top position
+        $scope.loadPageTop = function(){
+            //alert("test");
+            //$("#loadPage").scrollTop();
+            $("#loadPage").animate({scrollTop: 0}, 2000);
+        }
 
     });
