@@ -103,7 +103,7 @@ public class Employee extends AbstractAuditingEntity implements Serializable {
 	@NotNull
 	@Column(length = 10, nullable = true)
 	private long code;
-
+	
 	private boolean isFaceIdEnrolled;
 
 	private boolean isFaceAuthorised;
@@ -312,5 +312,5 @@ public class Employee extends AbstractAuditingEntity implements Serializable {
 		this.locations = locations;
 	}
 
-	
+
 }

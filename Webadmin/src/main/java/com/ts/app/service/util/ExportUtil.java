@@ -57,7 +57,7 @@ public class ExportUtil {
     private static final Object[] CONSOLIDATED_REPORT_FILE_HEADER = { "SITE", "LOCATION", "ASSIGNED JOBS", "COMPLETED JOBS", "OVERDUE JOBS","TAT"};
     private static final Object[] DETAIL_REPORT_FILE_HEADER = { "SITE", "DATE", "EMPLOYEE ID", "EMPLOYEE NAME", "CHECK IN TIME", "CHECK OUT TIME"};
     private static final Object[] EMPLOYEE_DETAIL_REPORT_FILE_HEADER = { "EMPLOYEE ID", "EMPLOYEE NAME", "DESIGNATION", "REPORTING TO", "CLIENT", "SITE", "ACTIVE"};
-    private static final Object[] ATTENDANCE_DETAIL_REPORT_FILE_HEADER = { "EMPLOYEE ID", "EMPLOYEE NAME", "SITE", "CLIENT", "CHECK IN", "CHECK OUT"};
+    private static final Object[] ATTENDANCE_DETAIL_REPORT_FILE_HEADER = { "EMPLOYEE ID", "EMPLOYEE NAME", "SITE", "CLIENT", "CHECK IN", "CHECK OUT", "SHIFT START", "SHIFT END"};
 
     private String[] EMP_HEADER = { "EMPLOYEE ID", "EMPLOYEE NAME", "DESIGNATION", "REPORTING TO", "CLIENT", "SITE", "ACTIVE"};
     private String[] JOB_HEADER = { "SITE", "TITLE", "EMPLOYEE", "TYPE", "PLANNED START TIME", "COMPLETED TIME", "STATUS"};
@@ -527,6 +527,8 @@ public class ExportUtil {
                         record.add(transaction.getProjectName());
                         record.add(transaction.getCheckInTime());
                         record.add(transaction.getCheckOutTime());
+                        record.add(transaction.getShiftStartTime());
+                        record.add(transaction.getShiftEndTime());
                         csvFilePrinter.printRecord(record);
                     }
                     log.info(exportFileName + " CSV file was created successfully !!!");

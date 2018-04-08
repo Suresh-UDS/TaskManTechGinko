@@ -32,10 +32,13 @@ public class EmployeeAttendanceReport implements Serializable {
 
     private Date checkOutTime;
 
+    private String shiftStartTime;
+    
+    private String shiftEndTime;
 
 
-
-    public EmployeeAttendanceReport(/*byte[] image,*/ String employeeId, String name, String lastName, String siteName, String projectName, Date checkInTime, Date checkOutTime) {
+    public EmployeeAttendanceReport(/*byte[] image,*/ String employeeId, String name, String lastName, String siteName, 
+    								String projectName, Date checkInTime, Date checkOutTime, String shiftStartTime, String shiftEndTime) {
        // this.Image = image;
         this.employeeId = employeeId;
         this.name = name;
@@ -44,7 +47,8 @@ public class EmployeeAttendanceReport implements Serializable {
         this.projectName = projectName;
         this.checkInTime = checkInTime;
         this.checkOutTime = checkOutTime;
-
+        this.shiftStartTime = shiftStartTime;
+        this.shiftEndTime = shiftEndTime;
 
     }
 
@@ -117,4 +121,28 @@ public class EmployeeAttendanceReport implements Serializable {
     }
 
 
+
+	public String getShiftStartTime() {
+		return shiftStartTime;
+	}
+
+
+
+	public void setShiftStartTime(String shiftStartTime) {
+		this.shiftStartTime = shiftStartTime;
+	}
+
+
+
+	public String getShiftEndTime() {
+		return shiftEndTime;
+	}
+
+
+
+	public void setShiftEndTime(String shiftEndTime) {
+		this.shiftEndTime = shiftEndTime;
+	}
+
+    
 }
