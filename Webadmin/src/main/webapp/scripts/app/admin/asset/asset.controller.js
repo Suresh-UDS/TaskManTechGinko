@@ -43,6 +43,7 @@ angular.module('timeSheetApp')
             SiteComponent.findAll().then(function (data) {
                 $scope.selectedSite = null;
                 $scope.sites = data;
+                $scope.loadingStop();
             });
         };
 
@@ -77,6 +78,8 @@ angular.module('timeSheetApp')
             AssetComponent.search().then(function (data) {
                 console.log(data);
                 $scope.assets = data;
+                $scope.assetsLoader = true;
+                $scope.loadingStop();
                 $scope.pages.currPage = data.currPage;
                 $scope.pages.totalPages = data.totalPages;
                 if($scope.assets == null){
@@ -261,4 +264,28 @@ angular.module('timeSheetApp')
             }
             $scope.search();
         };
+
+        //init load
+        $scope.initLoad = function(){ 
+             $scope.loadPageTop(); 
+             $scope.initPage(); 
+          
+         }
+
+       //Loading Page go to top position
+        $scope.loadPageTop = function(){
+            //alert("test");
+            //$("#loadPage").scrollTop();
+            $("#loadPage").animate({scrollTop: 0}, 2000);
+        }
+
+        // Page Loader Function
+
+        $scope.loadingStart = function(){ $('.pageCenter').show();}
+        $scope.loadingStop = function(){
+            
+            console.log("Calling loader");
+            $('.pageCenter').hide();
+                    
+        }
     });

@@ -17,6 +17,11 @@ angular.module('timeSheetApp')
              }
 
              $scope.initscrollbar();
-
+             
+             Principal.identity().then(function(response)
+             {
+                 console.log('current user' +JSON.stringify(response.login));
+                 $scope.accountName = response.login;
+             });
 
     });

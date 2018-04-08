@@ -222,8 +222,9 @@ angular.module('timeSheetApp')
             }
             console.log("Search Criteria : "+$scope.searchCriteria);
             FeedbackComponent.reports($scope.searchCriteria).then(function (data) {
-                //$scope.feedbackList = data.transactions;
+                $scope.feedbackList = data.transactions;
             		$scope.feedbackReport = data;
+            		$scope.feedbackListLoader = true;
             		console.log('feedback report - ' + JSON.stringify($scope.feedbackReport));
 //                $scope.pages.currPage = data.currPage;
 //                $scope.pages.totalPages = data.totalPages;
@@ -401,5 +402,20 @@ angular.module('timeSheetApp')
         };
 
         $scope.initCalender();
+        
+        //init load
+        $scope.initLoad = function(){ 
+             $scope.loadPageTop(); 
+             $scope.init();
+            
+          
+         }
+
+       //Loading Page go to top position
+        $scope.loadPageTop = function(){
+            //alert("test");
+            //$("#loadPage").scrollTop();
+            $("#loadPage").animate({scrollTop: 0}, 2000);
+        }
 
     })

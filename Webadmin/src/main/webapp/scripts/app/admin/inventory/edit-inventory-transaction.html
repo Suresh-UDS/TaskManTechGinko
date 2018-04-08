@@ -6,7 +6,7 @@
         <!--<h3 class="title">Edit Site</h3>-->
     </div>
 
-    <div ng-init="loadInventory()">
+    <div ng-init="loadInventory();loadingStart();">
             <div class="cardsCon editSiteCon" ng-init="loadSite()">
                 <form ng-show="!success" name="form" role="form" novalidate
                       ng-submit="updateInventory()"  >

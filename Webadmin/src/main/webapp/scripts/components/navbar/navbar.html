@@ -19,24 +19,37 @@ Tip 3: you can change the color of the sidebar with data-background-color="white
     <div class="sidebar-wrapper" id="sidebarWrapper" >
         <div class="user">
 
-            <div class="photo">
+            <div class="photo pull-left">
                 <img src="../assets/img/faces/avatar.png" />
             </div>
 
-            <div class="info" ng-switch-when="true" >
+            <!-- <div class="info" ng-switch-when="true" >
                 <a ng-click="logout()" >
-                    <!--<span class="sidebar-mini">L</span>-->
+                    <span class="sidebar-mini">L</span>
                     <span class="sidebar-normal">Logout</span>
                 </a>
 
 
-            </div >
+            </div > -->
+             <div class="info pull-left" ng-switch-when="true">
+                  <div class="collapsed white" data-toggle="collapse" data-target="#userPanel">
+                    <span class="sidebar-normal">{{accountName}} </span>
+                    <i class="fa fa-fw fa-chevron-down"></i>
+                  </div>
+                  <div class="collapse" id="userPanel">
+                      <a ng-click="logout()" class='logout'>
+                        <!--<span class="sidebar-mini">L</span>-->
+                        <span class="sidebar-normal" >Logout</span>
+                     </a>
+                  </div>
+            </div>
             <div class="info" ng-switch-when="false">
                 <a ui-sref="login" >
                     <!--<span class="sidebar-mini">L</span>-->
                     <span class="sidebar-normal">Login</span>
                 </a>
             </div>
+            <dir class="clearfix"></dir>
             <!--<div class="info">-->
                 <!--<a data-toggle="collapse" data-target="#collapseExample" href="#" class="collapsed">-->
                             <!--<span>-->

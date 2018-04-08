@@ -201,6 +201,7 @@ angular.module('timeSheetApp')
             console.log($scope.searchCriteria);
             LocationComponent.search($scope.searchCriteria).then(function (data) {
                 $scope.locations = data.transactions;
+                $scope.locationsLoader = true;
                 console.log($scope.locations);
                 $scope.pages.currPage = data.currPage;
                 $scope.pages.totalPages = data.totalPages;
@@ -337,6 +338,34 @@ angular.module('timeSheetApp')
         		$location.path('/locations');
         };
 
+      
+      //init load
+        $scope.initLoad = function(){ 
+             $scope.loadPageTop(); 
+             $scope.init(); 
+         }
+
+       //Loading Page go to top position
+        $scope.loadPageTop = function(){
+            //alert("test");
+            //$("#loadPage").scrollTop();
+            $("#loadPage").animate({scrollTop: 0}, 2000);
+
+        }
+
+        // Page Loader Function
+
+        $scope.loadingStart = function(){ $('.pageCenter').show();}
+        $scope.loadingStop = function(){
+            
+            console.log("Calling loader");
+            $('.pageCenter').hide();
+                    
+        }
+
+        $timeout(function() {
+              $scope.loadingStop() ;
+            }, 2000);
 
     });
 

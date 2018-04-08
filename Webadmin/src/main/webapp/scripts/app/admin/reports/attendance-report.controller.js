@@ -161,6 +161,7 @@ angular.module('timeSheetApp')
         	console.log(JSON.stringify($scope.searchCriteria));
         	AttendanceComponent.search($scope.searchCriteria, reportUid).then(function (data) {
                 $scope.attendancesData = data.transactions;
+                $scope.attendancesDataLoader = true;
                 console.log('Attendance search result list -' + $scope.attendancesData);
                 $scope.pages.currPage = data.currPage;
                 $scope.pages.totalPages = data.totalPages;
@@ -475,5 +476,22 @@ angular.module('timeSheetApp')
         };
 
         $scope.initCalender();
+
+
+
+          //init load
+        $scope.initLoad = function(){ 
+             $scope.loadPageTop(); 
+             $scope.loadAttendances(); 
+            
+          
+         }
+
+       //Loading Page go to top position
+        $scope.loadPageTop = function(){
+            //alert("test");
+            //$("#loadPage").scrollTop();
+            $("#loadPage").animate({scrollTop: 0}, 2000);
+        }
 
     });

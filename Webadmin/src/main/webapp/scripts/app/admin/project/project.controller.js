@@ -197,6 +197,7 @@ angular.module('timeSheetApp')
         	console.log($scope.searchCriteria);
         	ProjectComponent.search($scope.searchCriteria).then(function (data) {
                 $scope.projects = data.transactions;
+                $scope.projectsLoader = true;
                 console.log($scope.projects);
                 $scope.pages.currPage = data.currPage;
                 $scope.pages.totalPages = data.totalPages;
@@ -340,6 +341,19 @@ angular.module('timeSheetApp')
             }
             $scope.search();
         };
+
+        //init load
+        $scope.initLoad = function(){ 
+             $scope.loadPageTop(); 
+             $scope.loadProjects();
+         }
+
+       //Loading Page go to top position
+        $scope.loadPageTop = function(){
+            //alert("test");
+            //$("#loadPage").scrollTop();
+            $("#loadPage").animate({scrollTop: 0}, 2000);
+        }
 
 
 

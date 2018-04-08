@@ -409,7 +409,19 @@ angular.module('timeSheetApp')
 	    };	   
 	    
 	    
+         //init load
+        $scope.initLoad = function(){ 
+             $scope.loadPageTop(); 
+             $scope.initPage(); 
+          
+         }
 
+       //Loading Page go to top position
+        $scope.loadPageTop = function(){
+            //alert("test");
+            //$("#loadPage").scrollTop();
+            $("#loadPage").animate({scrollTop: 0}, 2000);
+        }
         
         
     });

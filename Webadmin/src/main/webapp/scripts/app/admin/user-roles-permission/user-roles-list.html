@@ -1,5 +1,5 @@
 
-<div class="">
+<div class="" ng-init="initLoad();loadingStop();">
 	<div class="success-message hidden"></div>
 
     <!--<div class="row TopButtonsCon">-->
@@ -140,7 +140,7 @@
 
         <div class="card-content">
 
-            <div class="" style="text-align:center;padding: 10px 0;">
+            <div class="" style="text-align:center;padding: 10px 0;" ng-hide="userRolesLoader">
                 <div loader-css="ball-pulse"></div>
             </div>
 

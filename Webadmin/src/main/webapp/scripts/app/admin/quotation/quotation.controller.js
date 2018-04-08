@@ -228,6 +228,7 @@ angular
 			        $scope.loadQuotation = function() {
 			        		console.log('quotation id - ' + $stateParams.id);
 			        		RateCardComponent.findQuotation($stateParams.id).then(function (data) {
+			        			$scope.loadingStart();
 			        				console.log('quotation response - '+ JSON.stringify(data))
 				                $scope.quotation = data;
 			        				var rateCardDetails = $scope.quotation.rateCardDetails;
@@ -292,5 +293,96 @@ angular
 			        $scope.clearFilter = function() {
 			        		$scope.searchCriteria = {};
 			        }
+
+
+			        $scope.search = function () {
+		        	var currPageVal = ($scope.pages ? $scope.pages.currPage : 1);
+		        	if(!$scope.searchCriteria) {
+		            	var searchCriteria = {
+		            			currPage : currPageVal
+		            	}
+		            	$scope.searchCriteria = searchCriteria;
+		        	}
+
+		        	$scope.searchCriteria.currPage = currPageVal;
+		        	console.log('Selected  module action -' + $scope.selectedQuotations);
+
+		        	if(!$scope.selectedQuotations) {
+		        		if($rootScope.searchCriteriaChecklist) {
+		            		$scope.searchCriteria = $rootScope.searchCriteriaChecklist;
+		        		}else {
+		        			$scope.searchCriteria.findAll = true;
+		        		}
+
+		        	}else {
+			        	if($scope.selectedQuotations) {
+			        		$scope.searchCriteria.findAll = false;
+				        	$scope.searchCriteria.checklistId = $scope.selectedQuotations.id;
+				        	$scope.searchCriteria.name = $scope.selectedQuotations.name;
+				        	$scope.searchCriteria.activeFlag = $scope.selectedQuotations.activeFlag;
+				        	console.log('selected user role id ='+ $scope.searchCriteria.checklistId);
+			        	}else {
+			        		$scope.searchCriteria.checklistId = 0;
+			        	}
+		        	}
+		        	console.log($scope.searchCriteria);
+		        	QuotationsComponent.search($scope.searchCriteria).then(function (data) {
+		                $scope.quotations = data.transactions;
+		                $scope.quotationsLoader = true;
+		                console.log($scope.quotations);
+		                $scope.pages.currPage = data.currPage;
+		                $scope.pages.totalPages = data.totalPages;
+		                if($scope.quotations == null){
+		                    $scope.pages.startInd = 0;
+		                }else{
+		                    $scope.pages.startInd = (data.currPage - 1) * 10 + 1;
+		                }
+
+		                $scope.pages.endInd = data.totalCount > 10  ? (data.currPage) * 10 : data.totalCount ;
+		                $scope.pages.totalCnt = data.totalCount;
+		            	$scope.hide = true;
+		            });
+		        	$rootScope.searchQuotations = $scope.searchCriteria;
+		        	if($scope.pages.currPage == 1) {
+		            	$scope.firstStyle();
+		        	}
+		        };
+
+			        
+
+			         //init load
+                        $scope.initLoad = function(){ 
+                             $scope.loadPageTop(); 
+                             $scope.loadAllQuotations(); 
+                             $scope.init(); 
+                          
+                         }
+
+                       //Loading Page go to top position
+                        $scope.loadPageTop = function(){
+                            //alert("test");
+                            //$("#loadPage").scrollTop();
+                            $("#loadPage").animate({scrollTop: 0}, 2000);
+                        }
+
+                           // Page Loader Function
+
+					        $scope.loadingStart = function(){ $('.pageCenter').show();}
+					        $scope.loadingAuto = function(){
+					            $scope.loadingStart(); 
+					            $scope.loadtimeOut = $timeout(function(){
+					            
+					            //console.log("Calling loader stop");
+					            $('.pageCenter').hide();
+					                    
+					        }, 2000);
+					           // alert('hi');
+					        }
+					        $scope.loadingStop = function(){
+					            
+					            console.log("Calling loader");
+					            $('.pageCenter').hide();
+					                    
+					        }
 
 				});

@@ -81,7 +81,9 @@ angular.module('timeSheetApp')
 
         $scope.loadFeedback = function(id) {
         	console.log('loadFeedback -' + id);
+               $scope.loadingStart();
         		FeedbackComponent.findOneFeedbackMaster(id).then(function (data) {
+                    $scope.loadingStop();
         			$scope.feedbackItem = data;
         			console.log('Feedback retrieved - ' + JSON.stringify($scope.feedbackItem));
                     for(var i in data.questions) {
@@ -93,7 +95,8 @@ angular.module('timeSheetApp')
                 })
 
             });
-
+        		
+          $scope.loadPageTop();
         };
 
 
@@ -183,6 +186,7 @@ angular.module('timeSheetApp')
             console.log($scope.searchCriteria);
             FeedbackComponent.searchFeedbackMaster($scope.searchCriteria).then(function (data) {
                 $scope.feedbackMasterList = data.transactions;
+                $scope.feedbackMasterListLoader = true;
                 console.log($scope.feedbackMasterList);
                 $scope.pages.currPage = data.currPage;
                 $scope.pages.totalPages = data.totalPages;
@@ -329,7 +333,30 @@ angular.module('timeSheetApp')
         }
 
 
+        //init load
+        $scope.initLoad = function(){ 
+             $scope.loadPageTop(); 
+             $scope.init();
+            
+          
+         }
 
+       //Loading Page go to top position
+        $scope.loadPageTop = function(){
+            //alert("test");
+            //$("#loadPage").scrollTop();
+            $("#loadPage").animate({scrollTop: 0}, 2000);
+        }
+
+        // Page Loader Function
+
+        $scope.loadingStart = function(){ $('.pageCenter').show();}
+        $scope.loadingStop = function(){
+            
+            console.log("Calling loader");
+            $('.pageCenter').hide();
+                    
+        }
 
     });
 
