@@ -2,7 +2,6 @@ package com.ts.app.service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 import javax.inject.Inject;
 
@@ -18,6 +17,7 @@ import org.springframework.util.StringUtils;
 
 import com.ts.app.domain.AbstractAuditingEntity;
 import com.ts.app.domain.Employee;
+import com.ts.app.domain.Shift;
 import com.ts.app.domain.Site;
 import com.ts.app.domain.User;
 import com.ts.app.repository.ProjectRepository;
@@ -26,9 +26,11 @@ import com.ts.app.repository.UserRepository;
 import com.ts.app.service.util.ImportUtil;
 import com.ts.app.service.util.MapperUtil;
 import com.ts.app.web.rest.dto.BaseDTO;
+import com.ts.app.web.rest.dto.EmployeeDTO;
 import com.ts.app.web.rest.dto.ImportResult;
 import com.ts.app.web.rest.dto.SearchCriteria;
 import com.ts.app.web.rest.dto.SearchResult;
+import com.ts.app.web.rest.dto.ShiftDTO;
 import com.ts.app.web.rest.dto.SiteDTO;
 
 /**
@@ -65,10 +67,19 @@ public class SiteService extends AbstractService {
 		// log.info("The admin Flag value is " +adminFlag);
 		Site site = mapperUtil.toEntity(siteDto, Site.class);
         site.setActive(Site.ACTIVE_YES);
+        List<Shift> shifts = new ArrayList<Shift>();
+        List<ShiftDTO> shiftDtos = siteDto.getShifts();
+        for(ShiftDTO shiftDto : shiftDtos) {
+        		Shift shift = mapperUtil.toEntity(shiftDto, Shift.class);
+        		shift.setSite(site);
+        		shift.setProject(null);
+        		shifts.add(shift);
+        }
+        site.setShifts(shifts);
 		site = siteRepository.save(site);
 		log.debug("Created Information for Site: {}", site);
 		//update the site location by calling site location service
-		siteLocationService.save(site.getUser().getId(), site.getId(), site.getAddressLat(), site.getAddressLng(), site.getRadius());
+		//siteLocationService.save(site.getUser().getId(), site.getId(), site.getAddressLat(), site.getAddressLng(), site.getRadius());
 		siteDto = mapperUtil.toModel(site, SiteDTO.class);
 		return siteDto;
 	}
@@ -80,7 +91,7 @@ public class SiteService extends AbstractService {
 		siteUpdate.setProject(projectRespository.findOne(site.getProjectId()));
 		siteRepository.saveAndFlush(siteUpdate);
         //update the site location by calling site location service
-        siteLocationService.save(siteUpdate.getUser().getId(), site.getId(), site.getAddressLat(), site.getAddressLng(), site.getRadius());
+//        siteLocationService.save(siteUpdate.getUser().getId(), site.getId(), site.getAddressLat(), site.getAddressLng(), site.getRadius());
 	}
 
 	private void mapToEntity(SiteDTO siteDTO, Site site) {
@@ -93,6 +104,44 @@ public class SiteService extends AbstractService {
 		site.setStartDate(siteDTO.getStartDate());
 		site.setEndDate(siteDTO.getEndDate());
 		site.setRadius(siteDTO.getRadius());
+		List<Shift> shiftEntities = site.getShifts();
+		if(CollectionUtils.isNotEmpty(shiftEntities)) {
+			shiftEntities.clear();
+		}else {
+			shiftEntities = new ArrayList<Shift>();
+		}
+		List<ShiftDTO> shifts = siteDTO.getShifts();
+		for(ShiftDTO shift : shifts) {
+			Shift shiftEntity = mapperUtil.toEntity(shift, Shift.class);
+			shiftEntity.setSite(site);
+			shiftEntity.setProject(site.getProject());
+			shiftEntities.add(shiftEntity);
+		}
+	}
+	
+	private SiteDTO mapToModel(Site site, boolean includeShifts) {
+		SiteDTO siteDTO = new SiteDTO();
+		siteDTO.setId(site.getId());
+		siteDTO.setName(site.getName());
+		siteDTO.setAddress(site.getAddress());
+		siteDTO.setCountry(site.getCountry());
+		siteDTO.setState(site.getState());
+		siteDTO.setAddressLat(site.getAddressLat());
+		siteDTO.setAddressLng(site.getAddressLng());
+		siteDTO.setStartDate(site.getStartDate());
+		siteDTO.setEndDate(site.getEndDate());
+		siteDTO.setRadius(site.getRadius());
+		siteDTO.setProjectId(site.getProject().getId());
+		siteDTO.setProjectName(site.getProject().getName());
+		if(includeShifts) {
+			List<ShiftDTO> shifts = siteDTO.getShifts();
+			for(Shift shift : site.getShifts()) {
+				ShiftDTO shiftDto = mapperUtil.toModel(shift, ShiftDTO.class);
+				shifts.add(shiftDto);
+			}
+			siteDTO.setShifts(shifts);
+		}
+		return siteDTO;
 	}
 
 
@@ -183,6 +232,7 @@ public class SiteService extends AbstractService {
 		if(entity != null) {
 			Hibernate.initialize(entity.getProject());
 			Hibernate.initialize(entity.getUser());
+			Hibernate.initialize(entity.getShifts());
 		}
 		return mapperUtil.toModel(entity, SiteDTO.class);
 	}
@@ -238,7 +288,16 @@ public class SiteService extends AbstractService {
 				}
 			}
 			if(page != null) {
-				transactions = mapperUtil.toModelList(page.getContent(), SiteDTO.class);
+				//transactions = mapperUtil.toModelList(page.getContent(), SiteDTO.class);
+				if(transactions == null) {
+					transactions = new ArrayList<SiteDTO>();
+				}
+				List<Site> siteList =  page.getContent();
+				if(CollectionUtils.isNotEmpty(siteList)) {
+					for(Site site : siteList) {
+						transactions.add(mapToModel(site, false));
+					}
+				}
 				if(CollectionUtils.isNotEmpty(transactions)) {
 					buildSearchResult(searchCriteria, page, transactions,result);
 				}

@@ -399,44 +399,45 @@ public class SchedulerService extends AbstractService {
 	@Scheduled(cron="0 0 10 1/1 * ?")
 	@Scheduled(cron="0 0 20 1/1 * ?")
 	public void attendanceReportSchedule() {
-		Calendar cal = Calendar.getInstance();
-		cal.set(Calendar.HOUR_OF_DAY, 0);
-		cal.set(Calendar.MINUTE, 0);
-		List<Project> projects = projectRepository.findAll();
-		for(Project proj : projects) {
-			SearchCriteria sc = new SearchCriteria();
-			sc.setCheckInDateTimeFrom(cal.getTime());
-			sc.setCheckInDateTimeTo(cal.getTime());
-			sc.setProjectId(proj.getId());			
-			//SearchResult<AttendanceDTO> searchResults = attendanceService.findBySearchCrieria(sc);
-			Set<Site> sites = proj.getSite();
-			Iterator<Site> siteItr = sites.iterator();
-			while(siteItr.hasNext()) {
-				Site site = siteItr.next();
-				List<EmployeeAttendanceReport> empAttnList = attendanceRepository.findBySiteId(site.getId(), DateUtil.convertToSQLDate(cal.getTime()), DateUtil.convertToSQLDate(cal.getTime()));
-				Setting attendanceReports = settingRepository.findSettingByKeyAndSiteId("email.notification.attedanceReports", site.getId());
-				if(attendanceReports == null) {
-					attendanceReports = settingRepository.findSettingByKeyAndProjectId("email.notification.attedanceReports", proj.getId());
-				}
-				if(attendanceReports != null && attendanceReports.getSettingValue().equalsIgnoreCase("true")) {
-				    log.debug("send report");
-					Setting attendanceReportEmails = settingRepository.findSettingByKeyAndSiteId("email.notification.attendanceReports.emails", site.getId());
-				    if(attendanceReportEmails == null) {
-				    		attendanceReportEmails = settingRepository.findSettingByKeyAndProjectId("email.notification.attendanceReports.emails", proj.getId());
-				    }
-				    
-					ExportResult exportResult = new ExportResult();
-					exportResult = exportUtil.writeAttendanceReportToFile(proj.getName(), empAttnList, null, exportResult);
-					//send reports in email.
-					if(attendanceReportEmails != null) {
-						mailService.sendJobReportEmailFile(attendanceReportEmails.getSettingValue(), exportResult.getFile(), null, cal.getTime());
+		if(env.getProperty("scheduler.attendanceDetailReport.enabled").equalsIgnoreCase("true")) {
+			Calendar cal = Calendar.getInstance();
+			cal.set(Calendar.HOUR_OF_DAY, 0);
+			cal.set(Calendar.MINUTE, 0);
+			List<Project> projects = projectRepository.findAll();
+			for(Project proj : projects) {
+				SearchCriteria sc = new SearchCriteria();
+				sc.setCheckInDateTimeFrom(cal.getTime());
+				sc.setCheckInDateTimeTo(cal.getTime());
+				sc.setProjectId(proj.getId());			
+				//SearchResult<AttendanceDTO> searchResults = attendanceService.findBySearchCrieria(sc);
+				Set<Site> sites = proj.getSite();
+				Iterator<Site> siteItr = sites.iterator();
+				while(siteItr.hasNext()) {
+					Site site = siteItr.next();
+					List<EmployeeAttendanceReport> empAttnList = attendanceRepository.findBySiteId(site.getId(), DateUtil.convertToSQLDate(cal.getTime()), DateUtil.convertToSQLDate(cal.getTime()));
+					Setting attendanceReports = settingRepository.findSettingByKeyAndSiteId("email.notification.attedanceReports", site.getId());
+					if(attendanceReports == null) {
+						attendanceReports = settingRepository.findSettingByKeyAndProjectId("email.notification.attedanceReports", proj.getId());
 					}
-
+					if(attendanceReports != null && attendanceReports.getSettingValue().equalsIgnoreCase("true")) {
+					    log.debug("send report");
+						Setting attendanceReportEmails = settingRepository.findSettingByKeyAndSiteId("email.notification.attendanceReports.emails", site.getId());
+					    if(attendanceReportEmails == null) {
+					    		attendanceReportEmails = settingRepository.findSettingByKeyAndProjectId("email.notification.attendanceReports.emails", proj.getId());
+					    }
+					    
+						ExportResult exportResult = new ExportResult();
+						exportResult = exportUtil.writeAttendanceReportToFile(proj.getName(), empAttnList, null, exportResult);
+						//send reports in email.
+						if(attendanceReportEmails != null) {
+							mailService.sendJobReportEmailFile(attendanceReportEmails.getSettingValue(), exportResult.getFile(), null, cal.getTime());
+						}
+	
+					}
 				}
+				
 			}
-			
-		}
-		
+		}	
 	}
 	
 	//@Scheduled(cron="0 0 0 1/1 * ?") //Test to run every 30 seconds

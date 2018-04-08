@@ -133,7 +133,11 @@ scheduler:
       enabled: false   
    eodJobReport:
       enabled: false
-      
+   attendanceDetailReport:
+      enabled: false      
+   attendanceConsolidatedReport:
+      enabled: false
+            
 default.user.password: uds12345      
 # ===================================================================
 # JHipster specific properties

@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.List;
 
 import javax.persistence.Cacheable;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -54,6 +55,9 @@ public class Site extends AbstractAuditingEntity implements Serializable {
 
 	@OneToMany(mappedBy="site", fetch = FetchType.LAZY)
 	private List<EmployeeProjectSite> employeeProjSites;
+
+	@OneToMany(mappedBy="site", fetch = FetchType.LAZY, cascade= CascadeType.ALL, orphanRemoval= true)
+	private List<Shift> shifts;
 
 	private Date startDate;
 	private Date endDate;
@@ -179,6 +183,14 @@ public class Site extends AbstractAuditingEntity implements Serializable {
 
 	public void setEmployeeProjSites(List<EmployeeProjectSite> employeeProjSites) {
 		this.employeeProjSites = employeeProjSites;
+	}
+
+	public List<Shift> getShifts() {
+		return shifts;
+	}
+
+	public void setShifts(List<Shift> shifts) {
+		this.shifts = shifts;
 	}
     
     
