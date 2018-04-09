@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title th:text="#{email.report.title}">TaskMan Attendance Consolidated Report</title>
+    <title th:text="#{email.attendance.report.title}">TaskMan Attendance Consolidated Report</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 </head>
 <body>
@@ -10,14 +10,13 @@
 </p>
 
 
-<p th:text="#{email.report.text1(${date})}">
+<p th:text="#{email.attendance.report.text1(${date})}">
 
 </p>
-<p>
-   ${reportData}
+<p th:text="#{email.attendance.report.content(${reportData})}">
 </p>
 <p>
-    <span th:text="#{email.report.text2}">Regards,</span>
+    <span th:text="#{email.attendance.report.text2}">Regards,</span>
     <br/>
     <em th:text="#{email.signature}">UDS.</em>
 </p>

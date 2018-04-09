@@ -65,6 +65,8 @@ public class SchedulerService extends AbstractService {
 	private final Logger log = LoggerFactory.getLogger(SchedulerService.class);
 
 	private static final String FREQ_ONCE_EVERY_HOUR = "Once in an hour";
+	
+	private static final String LINE_SEPARATOR = "      \n\n";
 
 	@Inject
 	private ProjectRepository projectRepository;
@@ -402,6 +404,7 @@ public class SchedulerService extends AbstractService {
 	//@Scheduled(cron="0 0 10 1/1 * ?")
 	//@Scheduled(cron="0 0 20 1/1 * ?")
 	@Scheduled(initialDelay = 60000,fixedRate = 3600000)	 //run every 1 hr to generate consolidated report.
+	//@Scheduled(initialDelay = 60000,fixedRate = 300000) //run every 5 mins for testing
 	public void attendanceReportSchedule() {
 		if(env.getProperty("scheduler.attendanceDetailReport.enabled").equalsIgnoreCase("true")) {
 			Calendar cal = Calendar.getInstance();
@@ -418,14 +421,14 @@ public class SchedulerService extends AbstractService {
 				Iterator<Site> siteItr = sites.iterator();
 				while(siteItr.hasNext()) {
 					Site site = siteItr.next();
-					Setting attendanceReports = settingRepository.findSettingByKeyAndSiteId("email.notification.attedanceReports", site.getId());
+					Setting attendanceReports = settingRepository.findSettingByKeyAndSiteId(SettingsService.EMAIL_NOTIFICATION_ATTENDANCE, site.getId());
 					if(attendanceReports == null) {
-						attendanceReports = settingRepository.findSettingByKeyAndProjectId("email.notification.attedanceReports", proj.getId());
+						attendanceReports = settingRepository.findSettingByKeyAndProjectId(SettingsService.EMAIL_NOTIFICATION_ATTENDANCE, proj.getId());
 					}
 					if(attendanceReports != null && attendanceReports.getSettingValue().equalsIgnoreCase("true")) {
-						Setting attendanceReportEmails = settingRepository.findSettingByKeyAndSiteId("email.notification.attendanceReports.emails", site.getId());
+						Setting attendanceReportEmails = settingRepository.findSettingByKeyAndSiteId(SettingsService.EMAIL_NOTIFICATION_ATTENDANCE_EMAILS, site.getId());
 					    if(attendanceReportEmails == null) {
-					    		attendanceReportEmails = settingRepository.findSettingByKeyAndProjectId("email.notification.attendanceReports.emails", proj.getId());
+					    		attendanceReportEmails = settingRepository.findSettingByKeyAndProjectId(SettingsService.EMAIL_NOTIFICATION_ATTENDANCE_EMAILS, proj.getId());
 					    }						
 						if(CollectionUtils.isNotEmpty(site.getShifts())) {
 							List<Shift> shifts = site.getShifts();
@@ -459,13 +462,13 @@ public class SchedulerService extends AbstractService {
 									//exportResult = exportUtil.writeAttendanceReportToFile(proj.getName(), empAttnList, null, exportResult);
 									//send reports in email.
 									if(attendanceReportEmails != null) {
-										StringBuilder content = new StringBuilder("Site Name - " + site.getName() + "\n\n");
-										content.append("Shift - "+ shift.getStartTime() + " - " + shift.getEndTime() + "\n\n");
-										content.append("Total employees - " + empCntInShift + "\n\n");
-										content.append("Present - " + attendanceCount + "\n\n");
-										content.append("Absent - " + absentCount + "\n\n");
+										StringBuilder content = new StringBuilder("Site Name - " + site.getName() + LINE_SEPARATOR);
+										content.append("Shift - "+ shift.getStartTime() + " - " + shift.getEndTime() + LINE_SEPARATOR);
+										content.append("Total employees - " + empCntInShift + LINE_SEPARATOR);
+										content.append("Present - " + attendanceCount + LINE_SEPARATOR);
+										content.append("Absent - " + absentCount + LINE_SEPARATOR);
 										//mailService.sendJobReportEmailFile(attendanceReportEmails.getSettingValue(), exportResult.getFile(), null, cal.getTime());
-										mailService.sendAttendanceConsolidatedReportEmail(attendanceReportEmails.getSettingValue(), content.toString(), null, cal.getTime());
+										mailService.sendAttendanceConsolidatedReportEmail(site.getName(), attendanceReportEmails.getSettingValue(), content.toString(), null, cal.getTime());
 									}
 								}	
 							}
@@ -474,12 +477,12 @@ public class SchedulerService extends AbstractService {
 							long attendanceCount = attendanceRepository.findCountBySiteAndCheckInTime(site.getId(), DateUtil.convertToSQLDate(cal.getTime()), DateUtil.convertToSQLDate(cal.getTime()));
 						    long absentCount = empCntInShift - attendanceCount;
 						    if(attendanceReportEmails != null) {
-								StringBuilder content = new StringBuilder("Site Name - " + site.getName() + "\n\n");
-								content.append("Shift - "+ cal.getTime() + " - " + cal.getTime() + "\n\n");
-								content.append("Total employees - " + empCntInShift + "\n\n");
-								content.append("Present - " + attendanceCount + "\n\n");
-								content.append("Absent - " + absentCount + "\n\n");
-								mailService.sendAttendanceConsolidatedReportEmail(attendanceReportEmails.getSettingValue(), content.toString(), null, cal.getTime());
+								StringBuilder content = new StringBuilder("Site Name - " + site.getName() + LINE_SEPARATOR);
+								content.append("Shift - General Shift" + LINE_SEPARATOR);
+								content.append("Total employees - " + empCntInShift + LINE_SEPARATOR);
+								content.append("Present - " + attendanceCount + LINE_SEPARATOR);
+								content.append("Absent - " + absentCount + LINE_SEPARATOR);
+								mailService.sendAttendanceConsolidatedReportEmail(site.getName(),attendanceReportEmails.getSettingValue(), content.toString(), null, new Date());
 							}
 	 					}
 					}
@@ -540,11 +543,11 @@ public class SchedulerService extends AbstractService {
 									//ExportResult exportResult = new ExportResult();
 									//exportResult = exportUtil.writeAttendanceReportToFile(proj.getName(), empAttnList, null, exportResult);
 									//send reports in email.
-									content = new StringBuilder("Site Name - " + site.getName() + "\n\n");
-									content.append("Shift - "+ shift.getStartTime() + " - " + shift.getEndTime() + "\n\n");
-									content.append("Total employees - " + empCntInShift + "\n\n");
-									content.append("Present - " + attendanceCount + "\n\n");
-									content.append("Absent - " + absentCount + "\n\n");
+									content = new StringBuilder("Site Name - " + site.getName() + LINE_SEPARATOR);
+									content.append("Shift - "+ shift.getStartTime() + " - " + shift.getEndTime() + LINE_SEPARATOR);
+									content.append("Total employees - " + empCntInShift + LINE_SEPARATOR);
+									content.append("Present - " + attendanceCount + LINE_SEPARATOR);
+									content.append("Absent - " + absentCount + LINE_SEPARATOR);
 								//}	
 							}
 	 					}else {
@@ -557,10 +560,10 @@ public class SchedulerService extends AbstractService {
 							//ExportResult exportResult = new ExportResult();
 							//exportResult = exportUtil.writeAttendanceReportToFile(proj.getName(), empAttnList, null, exportResult);
 							//send reports in email.
-							content = new StringBuilder("Site Name - " + site.getName() + "\n\n");
-							content.append("Total employees - " + empCntInShift + "\n\n");
-							content.append("Present - " + attendanceCount + "\n\n");
-							content.append("Absent - " + absentCount + "\n\n");
+							content = new StringBuilder("Site Name - " + site.getName() + LINE_SEPARATOR);
+							content.append("Total employees - " + empCntInShift + LINE_SEPARATOR);
+							content.append("Present - " + attendanceCount + LINE_SEPARATOR);
+							content.append("Absent - " + absentCount + LINE_SEPARATOR);
 	 					}
 						List<EmployeeAttendanceReport> empAttnList = attendanceRepository.findBySiteId(site.getId(), DateUtil.convertToSQLDate(cal.getTime()), DateUtil.convertToSQLDate(cal.getTime()));
 						
@@ -572,7 +575,7 @@ public class SchedulerService extends AbstractService {
 						ExportResult exportResult = new ExportResult();
 						exportResult = exportUtil.writeAttendanceReportToFile(proj.getName(), empAttnList, null, exportResult);
 						//send reports in email.
-						mailService.sendAttendanceDetailedReportEmail(attendanceReportEmails.getSettingValue(), content.toString(), exportResult.getFile(),null, cal.getTime());
+						mailService.sendAttendanceDetailedReportEmail(site.getName(),attendanceReportEmails.getSettingValue(), content.toString(), exportResult.getFile(),null, cal.getTime());
 					}
 				}
 			}

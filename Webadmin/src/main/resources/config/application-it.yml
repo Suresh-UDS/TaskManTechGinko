@@ -123,7 +123,7 @@ pushService:
 
 scheduler:
    dailyJob:
-      enabled: false
+      enabled: true
       creation: monthly
    weeklyJob:
       enabled: false
@@ -134,9 +134,9 @@ scheduler:
    eodJobReport:
       enabled: false
    attendanceDetailReport:
-      enabled: false      
+      enabled: true      
    attendanceConsolidatedReport:
-      enabled: false
+      enabled: true
             
 default.user.password: uds12345      
 # ===================================================================

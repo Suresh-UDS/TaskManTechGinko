@@ -152,7 +152,7 @@ public class MailService {
     }
 
     @Async
-    public void sendAttendanceConsolidatedReportEmail(String emailIds, String reportData,  String baseUrl, Date currDate) {
+    public void sendAttendanceConsolidatedReportEmail(String siteName, String emailIds, String reportData,  String baseUrl, Date currDate) {
         log.debug("Sending attendance consolidated report e-mail to '{}'", emailIds);
         Locale locale = Locale.forLanguageTag("en-US");
         Context context = new Context(locale);
@@ -161,12 +161,13 @@ public class MailService {
         context.setVariable("date", currDate);
         context.setVariable("reportData", reportData);
         String content = templateEngine.process("attendanceConsolidatedReportEmail", context);
-        String subject = messageSource.getMessage("email.report.title", null, locale);
+        String subject = messageSource.getMessage("email.attendance.report.title", null, locale);
+        subject += " - " + siteName;
         sendEmail(emailIds, subject, content, true, true,null);
     }
     
     @Async
-    public void sendAttendanceDetailedReportEmail(String emailIds, String reportData, String file, String baseUrl, Date currDate) {
+    public void sendAttendanceDetailedReportEmail(String siteName, String emailIds, String reportData, String file, String baseUrl, Date currDate) {
         log.debug("Sending attendance detailed report e-mail to '{}'", emailIds);
         Locale locale = Locale.forLanguageTag("en-US");
         Context context = new Context(locale);
@@ -175,7 +176,8 @@ public class MailService {
         context.setVariable("date", currDate);
         context.setVariable("reportData", reportData);
         String content = templateEngine.process("attendanceDetailedReportEmail", context);
-        String subject = messageSource.getMessage("email.report.title", null, locale);
+        String subject = messageSource.getMessage("email.attendance.detailed.report.title", null, locale);
+        subject += " - " + siteName;
         sendEmail(emailIds, subject, content, true, true,file);
     }    
     
