@@ -70,6 +70,7 @@ angular.module('timeSheetApp')
         $scope.cancelChecklist = function () {
         	$scope.checklistItems = [];
         	$scope.checklist = {};
+        	$scope.loadPageTop(); 
         };
 
         $scope.loadChecklists = function () {
@@ -92,6 +93,23 @@ angular.module('timeSheetApp')
                 }
                 
             });
+        	
+        	// Page Loader Function
+
+            $('.pageCenter').show();
+            $scope.loader = function(){
+                
+                console.log("Calling loader");
+                $('.pageCenter').hide();
+                        
+            }
+            
+            $scope.loadPageTop();
+        	
+        	$timeout(function() {
+                $scope.loader() ;
+              }, 8000);
+
 
         };
 
@@ -165,6 +183,7 @@ angular.module('timeSheetApp')
         	console.log($scope.searchCriteria);
         	ChecklistComponent.search($scope.searchCriteria).then(function (data) {
                 $scope.checklists = data.transactions;
+                $scope.checklistsLoader = true;
                 console.log($scope.checklists);
                 $scope.pages.currPage = data.currPage;
                 $scope.pages.totalPages = data.totalPages;
@@ -354,6 +373,21 @@ angular.module('timeSheetApp')
 
                             $('.card .material-datatables label').addClass('form-group');
 
+                        }
+
+                         //init load
+                        $scope.initLoad = function(){ 
+                             
+                             $scope.initPage(); 
+                             $scope.loadPageTop(); 
+                          
+                         }
+
+                       //Loading Page go to top position
+                        $scope.loadPageTop = function(){
+                            //alert("test");
+                            //$("#loadPage").scrollTop();
+                            $("#loadPage").animate({scrollTop: 0}, 2000);
                         }
 
 

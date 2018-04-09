@@ -1,5 +1,5 @@
 
-<div class="" ng-controller="ChecklistController">
+<div class="" ng-controller="ChecklistController" ng-init="initLoad()">
 	<div class="success-message hidden"></div>
 
     <div class="row">
@@ -144,11 +144,11 @@
         </div>
     </div>
 
-    <div class="card margin-TB-5 txt-align-center" ng-hide="!checklists">
+    <div class="card margin-TB-5 txt-align-center" ng-hide="checklists">
 
         <div class="card-content">
 
-            <div class="" style="text-align:center;padding: 10px 0;">
+            <div class="" style="text-align:center;padding: 10px 0;" ng-hide="checklistsLoader">
                 <div loader-css="ball-pulse"></div>
             </div>
             <h3>No data Found</h3>

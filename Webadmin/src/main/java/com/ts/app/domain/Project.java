@@ -74,6 +74,9 @@ public class Project extends AbstractAuditingEntity implements Serializable {
 	
 	private float addressLat;
 	private float addressLng;
+	
+	@OneToMany(mappedBy="project", fetch = FetchType.LAZY)
+	private List<Shift> shifts;
 
 	public Long getId() {
 		return id;
@@ -261,6 +264,18 @@ public class Project extends AbstractAuditingEntity implements Serializable {
 
 	public void setContactLastName(String contactLastName) {
 		this.contactLastName = contactLastName;
+	}
+
+
+
+	public List<Shift> getShifts() {
+		return shifts;
+	}
+
+
+
+	public void setShifts(List<Shift> shifts) {
+		this.shifts = shifts;
 	}
 
 	

@@ -7,6 +7,7 @@ import javax.inject.Inject;
 import javax.transaction.Transactional;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -205,16 +206,36 @@ public class SettingsService extends AbstractService {
 		quotationEmailsSetting.setActive("Y");
 		
 		List<Setting> settingList = new ArrayList<Setting>();
-		settingList.add(attendanceAlertSetting);
-		settingList.add(attendanceEmailsSetting);
-		settingList.add(overdueAlertSetting);
-		settingList.add(overdueEmailsSetting);
-		settingList.add(eodJobAlertSetting);
-		settingList.add(eodJobEmailsSetting);
-		settingList.add(feedbackAlertSetting);
-		settingList.add(feedbackEmailsSetting);
-		settingList.add(quotationAlertSetting);
-		settingList.add(quotationEmailsSetting);
+		if(StringUtils.isNotEmpty(attendanceAlertSetting.getSettingValue())) {
+			settingList.add(attendanceAlertSetting);
+		}
+		if(StringUtils.isNotEmpty(attendanceEmailsSetting.getSettingValue())) {
+			settingList.add(attendanceEmailsSetting);
+		}
+		if(StringUtils.isNotEmpty(overdueAlertSetting.getSettingValue())) {
+			settingList.add(overdueAlertSetting);
+		}
+		if(StringUtils.isNotEmpty(overdueEmailsSetting.getSettingValue())) {
+			settingList.add(overdueEmailsSetting);
+		}
+		if(StringUtils.isNotEmpty(eodJobAlertSetting.getSettingValue())) {
+			settingList.add(eodJobAlertSetting);
+		}
+		if(StringUtils.isNotEmpty(eodJobEmailsSetting.getSettingValue())) {
+			settingList.add(eodJobEmailsSetting);
+		}
+		if(StringUtils.isNotEmpty(feedbackAlertSetting.getSettingValue())) {
+			settingList.add(feedbackAlertSetting);
+		}
+		if(StringUtils.isNotEmpty(feedbackEmailsSetting.getSettingValue())) {
+			settingList.add(feedbackEmailsSetting);
+		}
+		if(StringUtils.isNotEmpty(quotationAlertSetting.getSettingValue())) {
+			settingList.add(quotationAlertSetting);
+		}
+		if(StringUtils.isNotEmpty(quotationEmailsSetting.getSettingValue())) {
+			settingList.add(quotationEmailsSetting);
+		}
 		settingsRepository.save(settingList);
 		
 		return settingsDto;

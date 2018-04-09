@@ -165,6 +165,35 @@ public class MailService {
         sendEmail(user.getEmail(), subject, content, false, true,null);
     }
 
+    public void sendAttendanceConsolidatedReportEmail(String siteName, String emailIds, String reportData,  String baseUrl, Date currDate) {
+        log.debug("Sending attendance consolidated report e-mail to '{}'", emailIds);
+        Locale locale = Locale.forLanguageTag("en-US");
+        Context context = new Context(locale);
+        context.setVariable("baseUrl", baseUrl);
+        //context.setVariable("fileName",file);
+        context.setVariable("date", currDate);
+        context.setVariable("reportData", reportData);
+        String content = templateEngine.process("attendanceConsolidatedReportEmail", context);
+        String subject = messageSource.getMessage("email.attendance.report.title", null, locale);
+        subject += " - " + siteName;
+        sendEmail(emailIds, subject, content, true, true,null);
+    }
+
+    @Async
+    public void sendAttendanceDetailedReportEmail(String siteName, String emailIds, String reportData, String file, String baseUrl, Date currDate) {
+        log.debug("Sending attendance detailed report e-mail to '{}'", emailIds);
+        Locale locale = Locale.forLanguageTag("en-US");
+        Context context = new Context(locale);
+        context.setVariable("baseUrl", baseUrl);
+        context.setVariable("fileName",file);
+        context.setVariable("date", currDate);
+        context.setVariable("reportData", reportData);
+        String content = templateEngine.process("attendanceDetailedReportEmail", context);
+        String subject = messageSource.getMessage("email.attendance.detailed.report.title", null, locale);
+        subject += " - " + siteName;
+        sendEmail(emailIds, subject, content, true, true,file);
+    }
+
     @Async
     public void sendJobReportEmailFile(String emailIds, String file,  String baseUrl, Date currDate) {
         log.debug("Sending job report e-mail to '{}'", emailIds);

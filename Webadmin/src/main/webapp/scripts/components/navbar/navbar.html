@@ -19,24 +19,37 @@ Tip 3: you can change the color of the sidebar with data-background-color="white
     <div class="sidebar-wrapper" id="sidebarWrapper" >
         <div class="user">
 
-            <div class="photo">
+            <div class="photo pull-left">
                 <img src="../assets/img/faces/avatar.png" />
             </div>
 
-            <div class="info" ng-switch-when="true" >
+            <!-- <div class="info" ng-switch-when="true" >
                 <a ng-click="logout()" >
-                    <!--<span class="sidebar-mini">L</span>-->
+                    <span class="sidebar-mini">L</span>
                     <span class="sidebar-normal">Logout</span>
                 </a>
 
 
-            </div >
+            </div > -->
+             <div class="info pull-left" ng-switch-when="true">
+                  <div class="collapsed white" data-toggle="collapse" data-target="#userPanel">
+                    <span class="sidebar-normal">{{accountName}} </span>
+                    <i class="fa fa-fw fa-chevron-down"></i>
+                  </div>
+                  <div class="collapse" id="userPanel">
+                      <a ng-click="logout()" class='logout'>
+                        <!--<span class="sidebar-mini">L</span>-->
+                        <span class="sidebar-normal" >Logout</span>
+                     </a>
+                  </div>
+            </div>
             <div class="info" ng-switch-when="false">
                 <a ui-sref="login" >
                     <!--<span class="sidebar-mini">L</span>-->
                     <span class="sidebar-normal">Login</span>
                 </a>
             </div>
+            <dir class="clearfix"></dir>
             <!--<div class="info">-->
                 <!--<a data-toggle="collapse" data-target="#collapseExample" href="#" class="collapsed">-->
                             <!--<span>-->
@@ -78,7 +91,7 @@ Tip 3: you can change the color of the sidebar with data-background-color="white
                 </a>
             </li>
 
-            <li ui-sref-active="active" has-permission="Client:List" >
+            <li ui-sref-active="active" has-permission="Asset:List" >
                 <a ui-sref="assets">
                     <i class="material-icons">people</i>
                     <p>Assets </p>
@@ -145,16 +158,16 @@ Tip 3: you can change the color of the sidebar with data-background-color="white
                         <b class="caret"></b>
                     </p>
                 </a>
-                <div class="collapse" id="Inventory">
+                <div class="collapse" id="Inventory" has-permission="Inventory:List">
                     <ul class="nav SubNav">
 
-                        <li ui-sref-active="active" has-authority="ROLE_ADMIN" >
+                        <li ui-sref-active="active"  >
                             <a ui-sref="inventory-list">
                                 <i class="material-icons">location_city</i>
                                 <p>Inventory Master</p>
                             </a>
                         </li>
-                        <li ui-sref-active="active" has-authority="ROLE_ADMIN" >
+                        <li ui-sref-active="active"  >
                             <a ui-sref="inventory-transaction-list">
                                 <i class="material-icons">location_city</i>
                                 <p>Inventory Transaction</p>
@@ -234,22 +247,22 @@ Tip 3: you can change the color of the sidebar with data-background-color="white
                         <b class="caret"></b>
                     </p>
                 </a>
-                <div class="collapse" id="formsExamples2">
+                <div class="collapse" id="formsExamples2" has-permission="Feedback:List">
                     <ul class="nav SubNav">
 
-                        <li ui-sref-active="active" has-authority="ROLE_ADMIN" >
+                        <li ui-sref-active="active"  >
                             <a ui-sref="feedbacks">
                                 <i class="material-icons">feedback</i>
                                 <p>Feedbacks</p>
                             </a>
                         </li>
-                        <li ui-sref-active="active" has-authority="ROLE_ADMIN" >
+                        <li ui-sref-active="active"  >
                             <a ui-sref="feedback-questions">
                                 <i class="material-icons">feedback</i>
                                 <p>Feedback Master</p>
                             </a>
                         </li>
-                        <li ui-sref-active="active" has-authority="ROLE_ADMIN" >
+                        <li ui-sref-active="active"  >
                             <a ui-sref="feedback-setup">
                                 <i class="material-icons">feedback</i>
                                 <p>Feedback Setup</p>

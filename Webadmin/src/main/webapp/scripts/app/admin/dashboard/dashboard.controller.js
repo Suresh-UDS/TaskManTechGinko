@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('timeSheetApp')
-    .controller('DashboardController', function ($scope,$rootScope,DashboardComponent,JobComponent, $state,$http,$stateParams,$location) {
+    .controller('DashboardController', function ($timeout,$scope,$rootScope,DashboardComponent,JobComponent, $state,$http,$stateParams,$location) {
 
     		$scope.selectedProject;
         $scope.selectedSite;
@@ -31,14 +31,16 @@ angular.module('timeSheetApp')
         		$scope.loadAllProjects();
         		$scope.loadAllSites();
         		$scope.loadQuotationReport();
-        		$scope.loadJobReport();
+                $scope.loadJobReport();
+                $scope.loadingStart();
+        		
         }
 
         $scope.loadJobs = function(siteId){
             var siteId = 176;
             //var selectedDate = new Date();
             DashboardComponent.loadJobs(siteId,$scope.selectedFromDate).then(function (data) {
-                console.log(data)
+                console.log(data);
             })
         }
 
@@ -106,7 +108,8 @@ angular.module('timeSheetApp')
 
         $scope.loadAllSites = function () {
             DashboardComponent.loadAllSites().then(function (data) {
-                console.log(data)
+                console.log(data);
+                $scope.loadingStop();
                 $scope.sites = data;
                 $scope.siteCount = data.length;
             })
@@ -201,6 +204,7 @@ angular.module('timeSheetApp')
 	
 	        	console.log($scope.searchCriteria);
 	        	JobComponent.generateReport($scope.searchCriteria).then(function (data) {
+                    
 	        		for(var i = 0; i < data.length; i++) {
 	        			$scope.result.assignedJobCount += data[i].assignedJobCount; 
 	        			$scope.result.completedJobCount += data[i].completedJobCount;
@@ -214,6 +218,8 @@ angular.module('timeSheetApp')
 	        		console.log('job report - ' + $scope.result.totalJobCount);
 	
 	        	});
+
+                
 	        	
         };
 
@@ -254,6 +260,24 @@ angular.module('timeSheetApp')
 
         $scope.showNotifications= function(position,alignment,color,msg){
             demo.showNotification(position,alignment,color,msg);
+        }
+
+
+        // Page Loader Function
+
+        $scope.loadingStart = function(){ $('.pageCenter').show();}
+        $scope.loadingStop = function(){
+            
+            console.log("Calling loader");
+            $('.pageCenter').hide();
+                    
+        }
+
+        //Loading Page go to top position
+        $scope.loadPageTop = function(){
+            //alert("test");
+            //$("#loadPage").scrollTop();
+            $("#loadPage").animate({scrollTop: 0}, 2000);
         }
 
     });

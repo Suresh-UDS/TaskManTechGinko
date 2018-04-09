@@ -2,6 +2,7 @@ package com.ts.app.web.rest.dto;
 
 
 import java.util.Date;
+import java.util.List;
 
 import javax.validation.constraints.Size;
 
@@ -35,6 +36,8 @@ public class SiteDTO extends BaseDTO {
 	private double addressLng;
 
 	private double radius;
+	
+	private List<ShiftDTO> shifts;
 
 	public long getId() {
 		return id;
@@ -153,4 +156,14 @@ public class SiteDTO extends BaseDTO {
     public void setRadius(double radius) {
         this.radius = radius;
     }
+
+	public List<ShiftDTO> getShifts() {
+		return shifts;
+	}
+
+	public void setShifts(List<ShiftDTO> shifts) {
+		this.shifts = shifts;
+	}
+    
+    
 }

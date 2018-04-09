@@ -105,7 +105,9 @@ angular.module('timeSheetApp')
 
         $scope.loadModuleAction = function(id) {
         	console.log('loadModuleAction -' + id);
+            $scope.loadingStart();
         	ModuleActionComponent.findOne(id).then(function (data) {
+                $scope.loadingStop();
         		$scope.moduleId = data.id;
                 $scope.moduleName = data.name;
                 for(var i in data.moduleActions) {
@@ -113,6 +115,8 @@ angular.module('timeSheetApp')
                 }
                 
             });
+        	
+        	$scope.initLoad(); 
 
         };
 
@@ -187,6 +191,7 @@ angular.module('timeSheetApp')
         	console.log($scope.searchCriteria);
         	ModuleActionComponent.search($scope.searchCriteria).then(function (data) {
                 $scope.moduleActions = data.transactions;
+                $scope.moduleActionsLoader = true;
                 console.log($scope.moduleActions);
                 $scope.pages.currPage = data.currPage;
                 $scope.pages.totalPages = data.totalPages;
@@ -376,6 +381,30 @@ angular.module('timeSheetApp')
 
                             $('.card .material-datatables label').addClass('form-group');
 
+                        }
+                        
+                        //init load
+                        $scope.initLoad = function(){ 
+                             $scope.loadPageTop(); 
+                            
+                          
+                         }
+
+                       //Loading Page go to top position
+                        $scope.loadPageTop = function(){
+                            //alert("test");
+                            //$("#loadPage").scrollTop();
+                            $("#loadPage").animate({scrollTop: 0}, 2000);
+                        }
+
+                        // Page Loader Function
+
+                        $scope.loadingStart = function(){ $('.pageCenter').show();}
+                        $scope.loadingStop = function(){
+                            
+                            console.log("Calling loader");
+                            $('.pageCenter').hide();
+                                    
                         }
 
 

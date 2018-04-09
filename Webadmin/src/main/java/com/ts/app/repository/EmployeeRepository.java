@@ -152,7 +152,8 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long> {
 	@Query( "SELECT e FROM Employee e")
 	Page<Employee> findByOrder(Pageable pageRequest);
 	
-
+	@Query("SELECT count(e) FROM Employee e join e.projectSites eps join eps.shifts es  WHERE eps.employee.id = e.id and eps.id = es.employeeProjectSite.id and eps.site.id = :siteId and es.startTime = :startTime and es.endTime = :endTime and e.active = 'Y'")
+	long findEmployeeCountBySiteAndShift(@Param("siteId") long siteId, @Param("startTime") String startTime, @Param("endTime") String endTime);
 
 
 }

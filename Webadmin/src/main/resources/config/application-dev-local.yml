@@ -72,6 +72,11 @@ qrcode:
 attendance:
     file:
         path:  /opt/attendance
+import:
+    file:
+        path:
+            new: /opt/imports/new
+            completed: /opt/imports/completed                    
 max:
     user: 10
     userGroup: 2
@@ -127,17 +132,21 @@ pushService:
 
 scheduler:
    dailyJob:
-      enabled: true
+      enabled: false
       creation: monthly
    weeklyJob:
-      enabled: true
+      enabled: false
    monthlyJob:
-      enabled: true      
+      enabled: false     
    overdueJob:
       enabled: false   
    eodJobReport:
+      enabled: false
+   attendanceDetailReport: 
+      enabled: true      
+   attendanceConsolidatedReport:
       enabled: true
-
+      
 default.user.password: uds12345
 
 # ===================================================================

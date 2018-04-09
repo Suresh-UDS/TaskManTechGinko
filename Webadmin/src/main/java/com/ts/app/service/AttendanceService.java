@@ -20,6 +20,7 @@ import com.ts.app.domain.AbstractAuditingEntity;
 import com.ts.app.domain.Attendance;
 import com.ts.app.domain.Employee;
 import com.ts.app.domain.EmployeeAttendanceReport;
+import com.ts.app.domain.Shift;
 import com.ts.app.domain.Site;
 import com.ts.app.domain.User;
 import com.ts.app.domain.UserRole;
@@ -95,6 +96,29 @@ public class AttendanceService extends AbstractService {
         }
         dbAttn.setLatitudeOut(attn.getLatitudeOut());
         dbAttn.setLongitudeOut(attn.getLongitudeOut());
+        
+        long siteId = attnDto.getSiteId();
+        Site site = siteRepository.findOne(siteId);
+        List<Shift> shifts = site.getShifts();
+        if(CollectionUtils.isNotEmpty(shifts)) {
+        		for(Shift shift : shifts) {
+				String startTime = shift.getStartTime();
+				String[] startTimeUnits = startTime.split(":");
+				Calendar startCal = Calendar.getInstance();
+				startCal.set(Calendar.HOUR_OF_DAY, Integer.parseInt(startTimeUnits[0]));
+				startCal.set(Calendar.MINUTE, Integer.parseInt(startTimeUnits[1]));
+				String endTime = shift.getEndTime();
+				String[] endTimeUnits = endTime.split(":");
+				Calendar endCal = Calendar.getInstance();
+				endCal.set(Calendar.HOUR_OF_DAY, Integer.parseInt(endTimeUnits[0]));
+				endCal.set(Calendar.MINUTE, Integer.parseInt(endTimeUnits[1]));
+				if((startCal.before(dbAttn.getCheckInTime()) && endCal.after(dbAttn.getCheckInTime())) || startCal.equals(dbAttn.getCheckInTime())) {
+					dbAttn.setShiftStartTime(startTime);
+					dbAttn.setShiftEndTime(endTime);
+					break;
+				}
+        		}
+        }
         dbAttn = attendanceRepository.save(dbAttn);
         attnDto = mapperUtil.toModel(dbAttn, AttendanceDTO.class);
 
@@ -407,7 +431,7 @@ public class AttendanceService extends AbstractService {
         List<EmployeeAttendanceReport> attendanceReportList = new ArrayList<EmployeeAttendanceReport>();
         if(CollectionUtils.isNotEmpty(transactions)) {
             for(AttendanceDTO attn : transactions) {
-                EmployeeAttendanceReport reportData = new EmployeeAttendanceReport(attn.getEmployeeEmpId(), attn.getEmployeeFullName(), null, attn.getSiteName(), null, attn.getCheckInTime(), attn.getCheckOutTime());
+                EmployeeAttendanceReport reportData = new EmployeeAttendanceReport(attn.getEmployeeEmpId(), attn.getEmployeeFullName(), null, attn.getSiteName(), null, attn.getCheckInTime(), attn.getCheckOutTime(), attn.getShiftStartTime(), attn.getShiftEndTime());
                 attendanceReportList.add(reportData);
             }
         }

@@ -72,6 +72,11 @@ qrcode:
 attendance:
     file:
         path:  /opt/attendance
+import:
+    file:
+        path:
+            new: /opt/imports/new
+            completed: /opt/imports/completed
 max:
     user: 10
     userGroup: 2
@@ -96,13 +101,13 @@ email:
             title: Overdue job report
     compleed:
         report:
-            title: Completed job report
+            title: Completed job report                        
 reports:
     job-report:
         url: http://ec2-54-169-225-123.ap-southeast-1.compute.amazonaws.com:8088/#/job-reports
     attendance-report:
         url: http://ec2-54-169-225-123.ap-southeast-1.compute.amazonaws.com:8088/#/attendance-reports
-
+        
 facedetection:
     api:
         url: https://api.kairos.com/detect
@@ -115,7 +120,6 @@ locationService:
 #   url: http://locahost:8000/api/site/location
 #   url: http://ec2-52-77-216-21.ap-southeast-1.compute.amazonaws.com:8000/api/site/location
    url: http://localhost:8000/api/site/location
-   proximityUrl: http://localhost:8000/api/site/nearby
 
 quotationService:
 #   url: http://locahost:8000/api/site/location
@@ -132,12 +136,16 @@ scheduler:
    weeklyJob:
       enabled: true
    monthlyJob:
-      enabled: true
+      enabled: true      
    overdueJob:
-      enabled: true
+      enabled: true   
    eodJobReport:
       enabled: true
-
+   attendanceDetailReport:
+      enabled: true      
+   attendanceConsolidatedReport:
+      enabled: true      
+      
 default.user.password: uds12345
 
 # ===================================================================

@@ -1,6 +1,6 @@
 
 
-<div class="row">
+<div class="row" ng-init="loadPageTop()">
     <div class="col-md-4 col-sm-6 col-md-offset-4 col-sm-offset-3">
         <form method="#" action="#" role="form" ng-submit="login($event)">
             <div class="card card-login card-hidden">
@@ -25,6 +25,11 @@
                     <!--Or Be Classical-->
                 <!--</p>-->
                 <div class="card-content">
+                    <div ng-show="resLoader" class="text-center" >
+                        <!-- <img src="/assets/img/spinner.gif">Login… -->
+                       <span>Login </span><span  loader-css="ball-pulse"></span>
+                       
+                    </div>
                     <div class="input-group">
                                             <span class="input-group-addon">
                                                 <i class="material-icons">face</i>

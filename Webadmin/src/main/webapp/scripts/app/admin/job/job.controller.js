@@ -36,6 +36,7 @@ angular.module('timeSheetApp')
         $scope.loadProjects = function () {
         	ProjectComponent.findAll().then(function (data) {
                 $scope.projects = data;
+
             });
         };
         
@@ -114,6 +115,7 @@ angular.module('timeSheetApp')
             JobComponent.loadJobStatuses().then(function(data){
                $scope.selectedLocation = null;
                $scope.statuses = data;
+
             });
         };
 
@@ -154,6 +156,7 @@ angular.module('timeSheetApp')
 
         $scope.editJob = function(){
         	JobComponent.findById($stateParams.id).then(function(data){
+                $scope.loadingStop();
         		console.log("Job details");
         	    console.log(data);
         		$scope.job=data;
@@ -400,7 +403,9 @@ angular.module('timeSheetApp')
 
 	        	console.log(JSON.stringify($scope.searchCriteria));
 	        	JobComponent.search($scope.searchCriteria).then(function (data) {
-	        		$scope.jobs = data.transactions
+                    $scope.jobs = data.transactions;
+	        		$scope.jobsLoader = true;
+
 	        		$scope.pages.currPage = data.currPage;
 	                $scope.pages.totalPages = data.totalPages;
 
@@ -570,4 +575,39 @@ angular.module('timeSheetApp')
 
 
         $scope.initCalender();
+
+        //init load
+        $scope.initLoad = function(){ 
+             $scope.loadPageTop(); 
+             $scope.init(); 
+             $scope.initPage(); 
+          
+         }
+
+       //Loading Page go to top position
+        $scope.loadPageTop = function(){
+            //alert("test");
+            //$("#loadPage").scrollTop();
+            $("#loadPage").animate({scrollTop: 0}, 2000);
+        }
+
+         // Page Loader Function
+
+        $scope.loadingStart = function(){ $('.pageCenter').show();}
+        $scope.loadingStop = function(){
+            
+            console.log("Calling loader");
+            $('.pageCenter').hide();
+                    
+        }
+
+        $scope.loadingAuto = function(){
+            $scope.loadingStart(); 
+            $scope.loadtimeOut = $timeout(function(){
+            
+            //console.log("Calling loader stop");
+            $('.pageCenter').hide();
+                    
+        }, 2000);}
+
     });

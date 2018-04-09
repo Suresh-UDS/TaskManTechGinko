@@ -34,9 +34,10 @@ import com.ts.app.domain.JobStatus;
 import com.ts.app.domain.Project;
 import com.ts.app.domain.SchedulerConfig;
 import com.ts.app.domain.Setting;
+import com.ts.app.domain.Shift;
 import com.ts.app.domain.Site;
-import com.ts.app.domain.User;
 import com.ts.app.repository.AttendanceRepository;
+import com.ts.app.repository.EmployeeRepository;
 import com.ts.app.repository.JobRepository;
 import com.ts.app.repository.ProjectRepository;
 import com.ts.app.repository.SchedulerConfigRepository;
@@ -45,7 +46,6 @@ import com.ts.app.repository.SiteRepository;
 import com.ts.app.service.util.DateUtil;
 import com.ts.app.service.util.ExportUtil;
 import com.ts.app.service.util.MapperUtil;
-import com.ts.app.web.rest.dto.AttendanceDTO;
 import com.ts.app.web.rest.dto.BaseDTO;
 import com.ts.app.web.rest.dto.ExportResult;
 import com.ts.app.web.rest.dto.JobDTO;
@@ -65,6 +65,8 @@ public class SchedulerService extends AbstractService {
 	private final Logger log = LoggerFactory.getLogger(SchedulerService.class);
 
 	private static final String FREQ_ONCE_EVERY_HOUR = "Once in an hour";
+	
+	private static final String LINE_SEPARATOR = "      \n\n";
 
 	@Inject
 	private ProjectRepository projectRepository;
@@ -98,6 +100,9 @@ public class SchedulerService extends AbstractService {
 
 	@Inject
 	private AttendanceRepository attendanceRepository;
+
+	@Inject
+	private EmployeeRepository employeeRepository;
 
 	@Inject
 	private PushService pushService;
@@ -396,47 +401,185 @@ public class SchedulerService extends AbstractService {
 		
 	}
 	
-	@Scheduled(cron="0 0 10 1/1 * ?")
-	@Scheduled(cron="0 0 20 1/1 * ?")
+	//@Scheduled(cron="0 0 10 1/1 * ?")
+	//@Scheduled(cron="0 0 20 1/1 * ?")
+	@Scheduled(initialDelay = 60000,fixedRate = 3600000)	 //run every 1 hr to generate consolidated report.
+	//@Scheduled(initialDelay = 60000,fixedRate = 300000) //run every 5 mins for testing
 	public void attendanceReportSchedule() {
-		Calendar cal = Calendar.getInstance();
-		cal.set(Calendar.HOUR_OF_DAY, 0);
-		cal.set(Calendar.MINUTE, 0);
-		List<Project> projects = projectRepository.findAll();
-		for(Project proj : projects) {
-			SearchCriteria sc = new SearchCriteria();
-			sc.setCheckInDateTimeFrom(cal.getTime());
-			sc.setCheckInDateTimeTo(cal.getTime());
-			sc.setProjectId(proj.getId());			
-			//SearchResult<AttendanceDTO> searchResults = attendanceService.findBySearchCrieria(sc);
-			Set<Site> sites = proj.getSite();
-			Iterator<Site> siteItr = sites.iterator();
-			while(siteItr.hasNext()) {
-				Site site = siteItr.next();
-				List<EmployeeAttendanceReport> empAttnList = attendanceRepository.findBySiteId(site.getId(), DateUtil.convertToSQLDate(cal.getTime()), DateUtil.convertToSQLDate(cal.getTime()));
-				Setting attendanceReports = settingRepository.findSettingByKeyAndSiteId("email.notification.attedanceReports", site.getId());
-				if(attendanceReports == null) {
-					attendanceReports = settingRepository.findSettingByKeyAndProjectId("email.notification.attedanceReports", proj.getId());
-				}
-				if(attendanceReports != null && attendanceReports.getSettingValue().equalsIgnoreCase("true")) {
-				    log.debug("send report");
-					Setting attendanceReportEmails = settingRepository.findSettingByKeyAndSiteId("email.notification.attendanceReports.emails", site.getId());
-				    if(attendanceReportEmails == null) {
-				    		attendanceReportEmails = settingRepository.findSettingByKeyAndProjectId("email.notification.attendanceReports.emails", proj.getId());
-				    }
-				    
-					ExportResult exportResult = new ExportResult();
-					exportResult = exportUtil.writeAttendanceReportToFile(proj.getName(), empAttnList, null, exportResult);
-					//send reports in email.
-					if(attendanceReportEmails != null) {
-						mailService.sendJobReportEmailFile(attendanceReportEmails.getSettingValue(), exportResult.getFile(), null, cal.getTime());
+		if(env.getProperty("scheduler.attendanceDetailReport.enabled").equalsIgnoreCase("true")) {
+			Calendar cal = Calendar.getInstance();
+			cal.set(Calendar.HOUR_OF_DAY, 0);
+			cal.set(Calendar.MINUTE, 0);
+			List<Project> projects = projectRepository.findAll();
+			for(Project proj : projects) {
+				SearchCriteria sc = new SearchCriteria();
+				sc.setCheckInDateTimeFrom(cal.getTime());
+				sc.setCheckInDateTimeTo(cal.getTime());
+				sc.setProjectId(proj.getId());			
+				//SearchResult<AttendanceDTO> searchResults = attendanceService.findBySearchCrieria(sc);
+				Set<Site> sites = proj.getSite();
+				Iterator<Site> siteItr = sites.iterator();
+				while(siteItr.hasNext()) {
+					Site site = siteItr.next();
+					Setting attendanceReports = settingRepository.findSettingByKeyAndSiteId(SettingsService.EMAIL_NOTIFICATION_ATTENDANCE, site.getId());
+					if(attendanceReports == null) {
+						attendanceReports = settingRepository.findSettingByKeyAndProjectId(SettingsService.EMAIL_NOTIFICATION_ATTENDANCE, proj.getId());
 					}
-
+					if(attendanceReports != null && attendanceReports.getSettingValue().equalsIgnoreCase("true")) {
+						Setting attendanceReportEmails = settingRepository.findSettingByKeyAndSiteId(SettingsService.EMAIL_NOTIFICATION_ATTENDANCE_EMAILS, site.getId());
+					    if(attendanceReportEmails == null) {
+					    		attendanceReportEmails = settingRepository.findSettingByKeyAndProjectId(SettingsService.EMAIL_NOTIFICATION_ATTENDANCE_EMAILS, proj.getId());
+					    }						
+						if(CollectionUtils.isNotEmpty(site.getShifts())) {
+							List<Shift> shifts = site.getShifts();
+							for(Shift shift : shifts) {
+								String startTime = shift.getStartTime();
+								String[] startTimeUnits = startTime.split(":");
+								Calendar startCal = Calendar.getInstance();
+								startCal.set(Calendar.HOUR_OF_DAY, Integer.parseInt(startTimeUnits[0]));
+								startCal.set(Calendar.MINUTE, Integer.parseInt(startTimeUnits[1]));
+								String endTime = shift.getEndTime();
+								String[] endTimeUnits = endTime.split(":");
+								Calendar endCal = Calendar.getInstance();
+								endCal.set(Calendar.HOUR_OF_DAY, Integer.parseInt(endTimeUnits[0]));
+								endCal.set(Calendar.MINUTE, Integer.parseInt(endTimeUnits[1]));
+								Calendar currCal = Calendar.getInstance();
+								currCal.add(Calendar.HOUR_OF_DAY,  1);
+								long timeDiff = currCal.getTimeInMillis() - startCal.getTimeInMillis();
+								if(currCal.equals(startCal) || (timeDiff >= 0 && timeDiff <= 3600000)) {
+									long empCntInShift = employeeRepository.findEmployeeCountBySiteAndShift(site.getId(), shift.getStartTime(), shift.getEndTime());
+									if(empCntInShift == 0) {
+										empCntInShift = employeeRepository.findCountBySiteId(site.getId());
+									}
+									
+									long attendanceCount = attendanceRepository.findCountBySiteAndCheckInTime(site.getId(), DateUtil.convertToSQLDate(startCal.getTime()), DateUtil.convertToSQLDate(endCal.getTime()));
+									//List<EmployeeAttendanceReport> empAttnList = attendanceRepository.findBySiteId(site.getId(), DateUtil.convertToSQLDate(cal.getTime()), DateUtil.convertToSQLDate(cal.getTime()));
+								    long absentCount = empCntInShift - attendanceCount;
+									log.debug("send consolidated report");
+									
+								    
+									//ExportResult exportResult = new ExportResult();
+									//exportResult = exportUtil.writeAttendanceReportToFile(proj.getName(), empAttnList, null, exportResult);
+									//send reports in email.
+									if(attendanceReportEmails != null) {
+										StringBuilder content = new StringBuilder("Site Name - " + site.getName() + LINE_SEPARATOR);
+										content.append("Shift - "+ shift.getStartTime() + " - " + shift.getEndTime() + LINE_SEPARATOR);
+										content.append("Total employees - " + empCntInShift + LINE_SEPARATOR);
+										content.append("Present - " + attendanceCount + LINE_SEPARATOR);
+										content.append("Absent - " + absentCount + LINE_SEPARATOR);
+										//mailService.sendJobReportEmailFile(attendanceReportEmails.getSettingValue(), exportResult.getFile(), null, cal.getTime());
+										mailService.sendAttendanceConsolidatedReportEmail(site.getName(), attendanceReportEmails.getSettingValue(), content.toString(), null, cal.getTime());
+									}
+								}	
+							}
+	 					}else {
+							long empCntInShift = employeeRepository.findCountBySiteId(site.getId());
+							long attendanceCount = attendanceRepository.findCountBySiteAndCheckInTime(site.getId(), DateUtil.convertToSQLDate(cal.getTime()), DateUtil.convertToSQLDate(cal.getTime()));
+						    long absentCount = empCntInShift - attendanceCount;
+						    if(attendanceReportEmails != null) {
+								StringBuilder content = new StringBuilder("Site Name - " + site.getName() + LINE_SEPARATOR);
+								content.append("Shift - General Shift" + LINE_SEPARATOR);
+								content.append("Total employees - " + empCntInShift + LINE_SEPARATOR);
+								content.append("Present - " + attendanceCount + LINE_SEPARATOR);
+								content.append("Absent - " + absentCount + LINE_SEPARATOR);
+								mailService.sendAttendanceConsolidatedReportEmail(site.getName(),attendanceReportEmails.getSettingValue(), content.toString(), null, new Date());
+							}
+	 					}
+					}
 				}
 			}
-			
-		}
-		
+		}	
+	}
+	
+	@Scheduled(cron="0 0 20 1/1 * ?") //send detailed attendance report
+	public void attendanceDetailReportSchedule() {
+		if(env.getProperty("scheduler.attendanceDetailReport.enabled").equalsIgnoreCase("true")) {
+			Calendar cal = Calendar.getInstance();
+			cal.set(Calendar.HOUR_OF_DAY, 0);
+			cal.set(Calendar.MINUTE, 0);
+			List<Project> projects = projectRepository.findAll();
+			for(Project proj : projects) {
+				SearchCriteria sc = new SearchCriteria();
+				sc.setCheckInDateTimeFrom(cal.getTime());
+				sc.setCheckInDateTimeTo(cal.getTime());
+				sc.setProjectId(proj.getId());			
+				//SearchResult<AttendanceDTO> searchResults = attendanceService.findBySearchCrieria(sc);
+				Set<Site> sites = proj.getSite();
+				Iterator<Site> siteItr = sites.iterator();
+				while(siteItr.hasNext()) {
+					Site site = siteItr.next();
+					Setting attendanceReports = settingRepository.findSettingByKeyAndSiteId("email.notification.attedanceReports", site.getId());
+					if(attendanceReports == null) {
+						attendanceReports = settingRepository.findSettingByKeyAndProjectId("email.notification.attedanceReports", proj.getId());
+					}
+					if(attendanceReports != null && attendanceReports.getSettingValue().equalsIgnoreCase("true")) {
+						StringBuilder content = new StringBuilder();
+						if(CollectionUtils.isNotEmpty(site.getShifts())) {
+							List<Shift> shifts = site.getShifts();
+							for(Shift shift : shifts) {
+								String startTime = shift.getStartTime();
+								String[] startTimeUnits = startTime.split(":");
+								Calendar startCal = Calendar.getInstance();
+								startCal.set(Calendar.HOUR_OF_DAY, Integer.parseInt(startTimeUnits[0]));
+								startCal.set(Calendar.MINUTE, Integer.parseInt(startTimeUnits[1]));
+								String endTime = shift.getEndTime();
+								String[] endTimeUnits = endTime.split(":");
+								Calendar endCal = Calendar.getInstance();
+								endCal.set(Calendar.HOUR_OF_DAY, Integer.parseInt(endTimeUnits[0]));
+								endCal.set(Calendar.MINUTE, Integer.parseInt(endTimeUnits[1]));
+								Calendar currCal = Calendar.getInstance();
+								currCal.add(Calendar.HOUR_OF_DAY,  1);
+								long timeDiff = currCal.getTimeInMillis() - startCal.getTimeInMillis();
+								//if(currCal.equals(startCal) || (timeDiff >= 0 && timeDiff <= 3600000)) {
+									long empCntInShift = employeeRepository.findEmployeeCountBySiteAndShift(site.getId(), shift.getStartTime(), shift.getEndTime());
+									if(empCntInShift == 0) {
+										empCntInShift = employeeRepository.findCountBySiteId(site.getId());
+									}
+									
+									long attendanceCount = attendanceRepository.findCountBySiteAndCheckInTime(site.getId(), DateUtil.convertToSQLDate(startCal.getTime()), DateUtil.convertToSQLDate(endCal.getTime()));
+									//List<EmployeeAttendanceReport> empAttnList = attendanceRepository.findBySiteId(site.getId(), DateUtil.convertToSQLDate(cal.getTime()), DateUtil.convertToSQLDate(cal.getTime()));
+								    long absentCount = empCntInShift - attendanceCount;
+								    
+									//ExportResult exportResult = new ExportResult();
+									//exportResult = exportUtil.writeAttendanceReportToFile(proj.getName(), empAttnList, null, exportResult);
+									//send reports in email.
+									content = new StringBuilder("Site Name - " + site.getName() + LINE_SEPARATOR);
+									content.append("Shift - "+ shift.getStartTime() + " - " + shift.getEndTime() + LINE_SEPARATOR);
+									content.append("Total employees - " + empCntInShift + LINE_SEPARATOR);
+									content.append("Present - " + attendanceCount + LINE_SEPARATOR);
+									content.append("Absent - " + absentCount + LINE_SEPARATOR);
+								//}	
+							}
+	 					}else {
+							long empCntInShift = employeeRepository.findCountBySiteId(site.getId());
+							
+							long attendanceCount = attendanceRepository.findCountBySiteAndCheckInTime(site.getId(), DateUtil.convertToSQLDate(cal.getTime()), DateUtil.convertToSQLDate(cal.getTime()));
+							//List<EmployeeAttendanceReport> empAttnList = attendanceRepository.findBySiteId(site.getId(), DateUtil.convertToSQLDate(cal.getTime()), DateUtil.convertToSQLDate(cal.getTime()));
+						    long absentCount = empCntInShift - attendanceCount;
+						    
+							//ExportResult exportResult = new ExportResult();
+							//exportResult = exportUtil.writeAttendanceReportToFile(proj.getName(), empAttnList, null, exportResult);
+							//send reports in email.
+							content = new StringBuilder("Site Name - " + site.getName() + LINE_SEPARATOR);
+							content.append("Total employees - " + empCntInShift + LINE_SEPARATOR);
+							content.append("Present - " + attendanceCount + LINE_SEPARATOR);
+							content.append("Absent - " + absentCount + LINE_SEPARATOR);
+	 					}
+						List<EmployeeAttendanceReport> empAttnList = attendanceRepository.findBySiteId(site.getId(), DateUtil.convertToSQLDate(cal.getTime()), DateUtil.convertToSQLDate(cal.getTime()));
+						
+						log.debug("send detailed report");
+						Setting attendanceReportEmails = settingRepository.findSettingByKeyAndSiteId("email.notification.attendanceReports.emails", site.getId());
+					    if(attendanceReportEmails == null) {
+					    		attendanceReportEmails = settingRepository.findSettingByKeyAndProjectId("email.notification.attendanceReports.emails", proj.getId());
+					    }
+						ExportResult exportResult = new ExportResult();
+						exportResult = exportUtil.writeAttendanceReportToFile(proj.getName(), empAttnList, null, exportResult);
+						//send reports in email.
+						mailService.sendAttendanceDetailedReportEmail(site.getName(),attendanceReportEmails.getSettingValue(), content.toString(), exportResult.getFile(),null, cal.getTime());
+					}
+				}
+			}
+		}	
 	}
 	
 	//@Scheduled(cron="0 0 0 1/1 * ?") //Test to run every 30 seconds

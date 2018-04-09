@@ -19,51 +19,108 @@ angular.module('timeSheetApp')
         		start : false,
         		end : false,
         }
+        
+        $scope.newShiftItem ={}
+        
+        $scope.shiftFrom = new Date();
+        $scope.shiftTo = new Date();
+        
+        
         $scope.loadProjects = function () {
         	ProjectComponent.findAll().then(function (data) {
                 $scope.projects = data;
+                 $scope.loadingStop();
             });
         };
+        
+        $scope.initCalender = function(){
+            demo.initFormExtendedDatetimepickers();
+        }
+
+        $('#shiftFrom').on('dp.change', function(e){
+
+            console.log(e.date._d);
+            if(e.date._d > $scope.newShiftItem.endTime) {
+            		$scope.showNotifications('top','center','danger','From time cannot be after To time');
+            		$scope.shiftFrom = $scope.newShiftItem.startTime;
+            		return false;
+            }else {
+                $scope.newShiftItem.startTime = e.date._d.getHours() + ':' + e.date._d.getMinutes();
+            }
+        });
+        
+        $('#shiftTo').on('dp.change', function(e){
+
+            console.log(e.date._d);
+            if($scope.newShiftItem.startTime > e.date._d) {
+            		$scope.showNotifications('top','center','danger','To time cannot be before From time');
+            		$scope.shiftTo = $scope.newShiftItem.endTime;
+            		return false;
+            }else {
+                $scope.newShiftItem.endTime = e.date._d.getHours() + ':' + e.date._d.getMinutes();
+            }
+
+        });
+        $scope.initCalender();
 
         $scope.saveSite = function () {
-        	$scope.error = null;
-        	$scope.success = null;
-        	$scope.errorSitesExists = null;
-        	$scope.errorProject = null;
-        	if(!$scope.selectedProject.id){
-        		$scope.errorProject = "true";
-        	}else{
-        		$scope.site.projectId = $scope.selectedProject.id;
-            	SiteComponent.createSite($scope.site).then(function() {
-                    $scope.success = 'OK';
-                    $scope.showNotifications('top','center','success','Site Added');
-                    $scope.selectedProject = null;
-                	$scope.loadSites();
-                	$location.path('/sites');
-                }).catch(function (response) {
-                    $scope.success = null;
-                    console.log('Error - '+ response.data);
-                    console.log('status - '+ response.status + ' , message - ' + response.data.message);
-                    if (response.status === 400 && response.data.message === 'error.duplicateRecordError') {
-                            $scope.errorSitesExists = 'ERROR';
-                        $scope.showNotifications('top','center','danger','Site Already Exists');
-
-                        console.log($scope.errorSitesExists);
-                    } else {
-                        $scope.showNotifications('top','center','danger','Error in creating Site. Please try again later..');
-                        $scope.error = 'ERROR';
-                    }
-                });
-        	}
+	        	$scope.error = null;
+	        	$scope.success = null;
+	        	$scope.errorSitesExists = null;
+	        	$scope.errorProject = null;
+	        	if(!$scope.selectedProject.id){
+	        		$scope.errorProject = "true";
+	        	}else{
+	        		$scope.site.projectId = $scope.selectedProject.id;
+	        		console.log('shifts - ' + JSON.stringify($scope.shiftItems));
+	        		$scope.site.shifts = $scope.shiftItems;
+	            	SiteComponent.createSite($scope.site).then(function() {
+	                    $scope.success = 'OK';
+	                    $scope.showNotifications('top','center','success','Site Added');
+	                    $scope.selectedProject = null;
+	                	$scope.loadSites();
+	                	$location.path('/sites');
+	                }).catch(function (response) {
+	                    $scope.success = null;
+	                    console.log('Error - '+ response.data);
+	                    console.log('status - '+ response.status + ' , message - ' + response.data.message);
+	                    if (response.status === 400 && response.data.message === 'error.duplicateRecordError') {
+	                            $scope.errorSitesExists = 'ERROR';
+	                        $scope.showNotifications('top','center','danger','Site Already Exists');
+	
+	                        console.log($scope.errorSitesExists);
+	                    } else {
+	                        $scope.showNotifications('top','center','danger','Error in creating Site. Please try again later..');
+	                        $scope.error = 'ERROR';
+	                    }
+	                });
+	        	}
 
         };
+        
+        $scope.shiftItems=[];
+        
+        $scope.newshiftItem = {};
+        
+        $scope.addShiftItem = function(event) {
+        		event.preventDefault();
+        		console.log('new shift item - ' + JSON.stringify($scope.newShiftItem));
+        		$scope.shiftItems.push($scope.newShiftItem);
+        		//$scope.newShiftItem = {};
+        }
+        
+        $scope.removeItem = function(ind) {
+        		$scope.shiftItems.splice(ind,1);
+        }
+        
 
         $scope.cancelSite = function () {
-        	$location.path('/sites');
+        		$location.path('/sites');
         };
 
         $scope.loadAllSites = function () {
         	SiteComponent.findAll().then(function (data) {
+
         		$scope.allSites = data;
         	});
         };
@@ -89,6 +146,8 @@ angular.module('timeSheetApp')
         $scope.loadSite = function() {
         	SiteComponent.findOne($stateParams.id).then(function (data) {
                 $scope.site = data;
+                console.log('$scope.site.shifts - '+$scope.site.shifts);
+                $scope.shiftItems = $scope.site.shifts;
                 $scope.loadSelectedProject($scope.site.projectId);
             });
         };
@@ -114,6 +173,7 @@ angular.module('timeSheetApp')
         	    console.log("update site");
         	    console.log($scope.site);
         		$scope.site.projectId = $scope.selectedProject.id;
+        		$scope.site.shifts = $scope.shiftItems;
 	        	SiteComponent.updateSite($scope.site).then(function() {
 	                $scope.success = 'OK';
 	                $scope.showNotifications('top','center','success','Site updated');
@@ -209,6 +269,7 @@ angular.module('timeSheetApp')
         	console.log($scope.searchCriteria);
         	SiteComponent.search($scope.searchCriteria).then(function (data) {
                 $scope.sites = data.transactions;
+                $scope.sitesLoader = true;
                 console.log($scope.sites);
                 $scope.pages.currPage = data.currPage;
                 $scope.pages.totalPages = data.totalPages;
@@ -420,5 +481,29 @@ angular.module('timeSheetApp')
 
             $('.card .material-datatables label').addClass('form-group');
 
+        }
+
+      //init load
+        $scope.initLoad = function(){ 
+             $scope.loadPageTop(); 
+             $scope.loadProjects();
+          
+         }
+
+       //Loading Page go to top position
+        $scope.loadPageTop = function(){
+            //alert("test");
+            //$("#loadPage").scrollTop();
+            $("#loadPage").animate({scrollTop: 0}, 2000);
+        }
+
+        // Page Loader Function
+
+        $scope.loadingStart = function(){ $('.pageCenter').show();}
+        $scope.loadingStop = function(){
+            
+            console.log("Calling loader");
+            $('.pageCenter').hide();
+                    
         }
     });

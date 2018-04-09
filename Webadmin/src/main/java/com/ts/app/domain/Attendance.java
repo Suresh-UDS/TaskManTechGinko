@@ -2,9 +2,7 @@ package com.ts.app.domain;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
-import java.util.Date;
 
-import javax.persistence.Cacheable;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -13,9 +11,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 @Entity
 @Table(name = "attendance")
@@ -59,6 +54,10 @@ public class Attendance extends AbstractAuditingEntity implements Serializable{
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "employeeId", nullable = false)
 	private Employee employee;
+	
+	private String shiftStartTime;
+	
+	private String shiftEndTime;
 
 	public Long getId() {
 		return id;
@@ -167,4 +166,22 @@ public class Attendance extends AbstractAuditingEntity implements Serializable{
     public void setLatitudeOut(double latitudeOut) {
         this.latitudeOut = latitudeOut;
     }
+
+	public String getShiftStartTime() {
+		return shiftStartTime;
+	}
+
+	public void setShiftStartTime(String shiftStartTime) {
+		this.shiftStartTime = shiftStartTime;
+	}
+
+	public String getShiftEndTime() {
+		return shiftEndTime;
+	}
+
+	public void setShiftEndTime(String shiftEndTime) {
+		this.shiftEndTime = shiftEndTime;
+	}
+    
+    
 }

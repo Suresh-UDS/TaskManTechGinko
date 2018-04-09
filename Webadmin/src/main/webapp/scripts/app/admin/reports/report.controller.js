@@ -444,6 +444,7 @@ angular.module('timeSheetApp')
 
         	EmployeeComponent.search($scope.searchCriteria).then(function (data) {
                 $scope.employees = data.transactions;
+                $scope.employeesLoader = true;
 
                 console.log('Employee search result list -' + $scope.employees);
                 $scope.pages.currPage = data.currPage;
@@ -829,6 +830,20 @@ angular.module('timeSheetApp')
 
 
         $scope.initCalender();
+
+          //init load
+        $scope.initLoad = function(){ 
+             $scope.loadPageTop(); 
+            
+          
+         }
+
+       //Loading Page go to top position
+        $scope.loadPageTop = function(){
+            //alert("test");
+            //$("#loadPage").scrollTop();
+            $("#loadPage").animate({scrollTop: 0}, 2000);
+        }
 
 
     });

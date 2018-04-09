@@ -66,6 +66,14 @@ export:
 qrcode:
     file:
          path: /opt/qrcode
+attendance:
+    file:
+        path:  /opt/attendance
+import:
+    file:
+        path:
+            new: /opt/imports/new
+            completed: /opt/imports/completed  
 max:
     user: 10
     userGroup: 2
@@ -123,7 +131,7 @@ pushService:
 
 scheduler:
    dailyJob:
-      enabled: false
+      enabled: true
       creation: monthly
    weeklyJob:
       enabled: false
@@ -133,7 +141,11 @@ scheduler:
       enabled: false   
    eodJobReport:
       enabled: false
-      
+   attendanceDetailReport:
+      enabled: true      
+   attendanceConsolidatedReport:
+      enabled: true
+            
 default.user.password: uds12345      
 # ===================================================================
 # JHipster specific properties

@@ -53,6 +53,11 @@ public class AttendanceDTO extends BaseDTO implements Serializable{
     private String attendanceIn;
 
     private String attendanceOut;
+    
+	private String shiftStartTime;
+	
+	private String shiftEndTime;
+
 
 	public Long getId() {
 		return id;
@@ -198,4 +203,22 @@ public class AttendanceDTO extends BaseDTO implements Serializable{
     public void setCheckOutTime(Timestamp checkOutTime) {
         this.checkOutTime = checkOutTime;
     }
+
+	public String getShiftStartTime() {
+		return shiftStartTime;
+	}
+
+	public void setShiftStartTime(String shiftStartTime) {
+		this.shiftStartTime = shiftStartTime;
+	}
+
+	public String getShiftEndTime() {
+		return shiftEndTime;
+	}
+
+	public void setShiftEndTime(String shiftEndTime) {
+		this.shiftEndTime = shiftEndTime;
+	}
+    
+    
 }
