@@ -152,6 +152,19 @@ public class MailService {
     }
 
     @Async
+    public void sendTicketCreatedMail(User user,String emailIds, String siteName, long ticketId, String ticketNumber, String createdBy, String sentTo, String ticketTitle, String ticketDescription){
+        Locale locale = Locale.forLanguageTag(user.getLangKey() != null ? user.getLangKey() : "en-US");
+        Context context = new Context(locale);
+        context.setVariable("user", user);
+        context.setVariable("siteName", siteName);
+        context.setVariable("ticketNumber", ticketNumber);
+        context.setVariable("ticketTitle", ticketTitle);
+        context.setVariable("ticketDescription", ticketDescription);
+        String content = templateEngine.process("ticketCreation", context);
+        String subject = messageSource.getMessage("email.ticket.alert.title", null, locale);
+        sendEmail(user.getEmail(), subject, content, false, true,null);
+    }
+
     public void sendAttendanceConsolidatedReportEmail(String siteName, String emailIds, String reportData,  String baseUrl, Date currDate) {
         log.debug("Sending attendance consolidated report e-mail to '{}'", emailIds);
         Locale locale = Locale.forLanguageTag("en-US");
@@ -165,7 +178,7 @@ public class MailService {
         subject += " - " + siteName;
         sendEmail(emailIds, subject, content, true, true,null);
     }
-    
+
     @Async
     public void sendAttendanceDetailedReportEmail(String siteName, String emailIds, String reportData, String file, String baseUrl, Date currDate) {
         log.debug("Sending attendance detailed report e-mail to '{}'", emailIds);
@@ -179,8 +192,8 @@ public class MailService {
         String subject = messageSource.getMessage("email.attendance.detailed.report.title", null, locale);
         subject += " - " + siteName;
         sendEmail(emailIds, subject, content, true, true,file);
-    }    
-    
+    }
+
     @Async
     public void sendJobReportEmailFile(String emailIds, String file,  String baseUrl, Date currDate) {
         log.debug("Sending job report e-mail to '{}'", emailIds);
@@ -238,7 +251,7 @@ public class MailService {
         String subject = messageSource.getMessage("email.completed.report.title", null, locale);
         sendEmail(user.getEmail(), subject, content, true, true,fileName);
     }
-    
+
     @Async
     public void sendFeedbackAlert(String emailIds,  String feedbackName, String feedbackLocation, Date feedbackDate, List<String> feedbackItems) {
         log.debug("Sending feedback alert e-mail to '{}'", emailIds);
@@ -252,8 +265,8 @@ public class MailService {
         String subject = messageSource.getMessage("email.feedback.alert.title", null, locale);
         sendEmail(emailIds, subject, content, true, true, null);
     }
-    
-    
+
+
     @Async
     public String sendEmail(String emailId, String subject, String message,
 			String fileName) {
