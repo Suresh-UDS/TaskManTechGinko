@@ -8,6 +8,7 @@ import java.util.Locale;
 import java.util.Properties;
 
 import javax.inject.Inject;
+import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
 import org.apache.commons.lang.CharEncoding;
@@ -70,15 +71,20 @@ public class MailService {
         Properties props = javaMailSender.getJavaMailProperties();
         Enumeration<Object> keys = props.keys();
         while(keys.hasMoreElements()) {
-        	String key = (String)keys.nextElement();
-        	log.debug(key + ", "+ props.getProperty(key));
+        		String key = (String)keys.nextElement();
+        		log.debug(key + ", "+ props.getProperty(key));
+        }
+        //split the to address if more than 1
+        String[] toEmails = null;
+        if(!StringUtils.isEmpty(to)) {
+        		toEmails = to.split(",");
         }
         // Prepare message using a Spring helper
         MimeMessage mimeMessage = javaMailSender.createMimeMessage();
         try {
             MimeMessageHelper message = new MimeMessageHelper(mimeMessage, isMultipart, CharEncoding.UTF_8);
-            message.setTo(to);
-            message.setFrom(jHipsterProperties.getMail().getFrom());
+            message.setTo(toEmails);
+            message.setFrom(new InternetAddress(jHipsterProperties.getMail().getFrom()));
             message.setSubject(subject);
             message.setText(content, isHtml);
             if(isMultipart){
@@ -107,12 +113,18 @@ public class MailService {
             String key = (String)keys.nextElement();
             log.debug(key + ", "+ props.getProperty(key));
         }
+        //split the to address if more than 1
+        String[] toEmails = null;
+        if(!StringUtils.isEmpty(to)) {
+        		toEmails = to.split(",");
+        }
+        
         // Prepare message using a Spring helper
         MimeMessage mimeMessage = javaMailSender.createMimeMessage();
         try {
             MimeMessageHelper message = new MimeMessageHelper(mimeMessage, isMultipart, CharEncoding.UTF_8);
-            message.setTo(to);
-            message.setFrom(jHipsterProperties.getMail().getFrom());
+            message.setTo(toEmails);
+            message.setFrom(new InternetAddress(jHipsterProperties.getMail().getFrom()));
             message.setSubject(subject);
             message.setText(content, isHtml);
             if(isMultipart){

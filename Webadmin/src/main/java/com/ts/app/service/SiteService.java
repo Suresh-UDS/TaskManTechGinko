@@ -117,6 +117,7 @@ public class SiteService extends AbstractService {
 			shiftEntity.setProject(site.getProject());
 			shiftEntities.add(shiftEntity);
 		}
+		site.getShifts().addAll(shiftEntities);
 	}
 	
 	private SiteDTO mapToModel(Site site, boolean includeShifts) {

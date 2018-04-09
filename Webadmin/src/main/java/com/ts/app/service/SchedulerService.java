@@ -430,7 +430,7 @@ public class SchedulerService extends AbstractService {
 						Setting attendanceReportEmails = settingRepository.findSettingByKeyAndSiteId(SettingsService.EMAIL_NOTIFICATION_ATTENDANCE_EMAILS, site.getId());
 					    if(attendanceReportEmails == null) {
 					    		attendanceReportEmails = settingRepository.findSettingByKeyAndProjectId(SettingsService.EMAIL_NOTIFICATION_ATTENDANCE_EMAILS, proj.getId());
-					    }						
+					    }
 						if(CollectionUtils.isNotEmpty(site.getShifts())) {
 							List<Shift> shifts = site.getShifts();
 							for(Shift shift : shifts) {
@@ -447,7 +447,7 @@ public class SchedulerService extends AbstractService {
 								Calendar currCal = Calendar.getInstance();
 								currCal.add(Calendar.HOUR_OF_DAY,  1);
 								long timeDiff = currCal.getTimeInMillis() - startCal.getTimeInMillis();
-								if(currCal.equals(startCal) || (timeDiff >= 0 && timeDiff <= 3600000)) {
+								if(currCal.equals(startCal) || (timeDiff >= 0 && timeDiff <= 7200000)) { //within 2 hours of the shift start timing.
 									long empCntInShift = employeeRepository.findEmployeeCountBySiteAndShift(site.getId(), shift.getStartTime(), shift.getEndTime());
 									if(empCntInShift == 0) {
 										empCntInShift = employeeRepository.findCountBySiteId(site.getId());

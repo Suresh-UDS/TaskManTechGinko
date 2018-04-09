@@ -106,7 +106,8 @@ angular.module('timeSheetApp')
         		event.preventDefault();
         		console.log('new shift item - ' + JSON.stringify($scope.newShiftItem));
         		$scope.shiftItems.push($scope.newShiftItem);
-        		//$scope.newShiftItem = {};
+        		console.log('shiftItems - '+ JSON.stringify($scope.shiftItems));
+        		$scope.newShiftItem = {};
         }
         
         $scope.removeItem = function(ind) {

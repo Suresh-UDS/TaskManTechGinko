@@ -6,6 +6,8 @@ import javax.inject.Inject;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -13,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.ts.app.security.SecurityUtils;
 import com.ts.app.service.ReportService;
+import com.ts.app.service.SchedulerService;
 import com.ts.app.web.rest.dto.ReportResult;
 
 /**
@@ -26,6 +29,9 @@ public class ReportResource {
 
 	@Inject
 	private ReportService reportService;
+	
+	@Inject
+	private SchedulerService schedulerService;
 
 
 	@RequestMapping(value = "/reports/attendance/site/{siteId}/selectedDate/{selectedDate}", method = RequestMethod.GET)
@@ -38,6 +44,18 @@ public class ReportResource {
 	public ReportResult getAttendanceStatusByProject(@PathVariable Long projectId, @PathVariable("selectedDate") Date selectedDate) {
 		long userId = SecurityUtils.getCurrentUserId();
 		return reportService.getAttendanceStatsByProjectIdDateRange(userId, projectId, selectedDate, selectedDate);
+	}
+	
+	@RequestMapping(value = "/reports/attendance/consolidated", method = RequestMethod.GET)
+	public ResponseEntity<?> sendConsolidatedAttendanceReport() {
+		schedulerService.attendanceReportSchedule();
+		return new ResponseEntity<>(HttpStatus.OK);
+	}
+	
+	@RequestMapping(value = "/reports/attendance/detailed", method = RequestMethod.GET)
+	public ResponseEntity<?> sendDetailedAttendanceReport() {
+		schedulerService.attendanceDetailReportSchedule();
+		return new ResponseEntity<>(HttpStatus.OK);
 	}
 
 	
