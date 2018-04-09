@@ -403,8 +403,9 @@ public class SchedulerService extends AbstractService {
 	
 	//@Scheduled(cron="0 0 10 1/1 * ?")
 	//@Scheduled(cron="0 0 20 1/1 * ?")
-	@Scheduled(initialDelay = 60000,fixedRate = 3600000)	 //run every 1 hr to generate consolidated report.
+	//@Scheduled(initialDelay = 60000,fixedRate = 3600000)	 //run every 1 hr to generate consolidated report.
 	//@Scheduled(initialDelay = 60000,fixedRate = 300000) //run every 5 mins for testing
+	@Scheduled(cron="0 0 0/1 * * ?")
 	public void attendanceReportSchedule() {
 		if(env.getProperty("scheduler.attendanceDetailReport.enabled").equalsIgnoreCase("true")) {
 			Calendar cal = Calendar.getInstance();
@@ -491,7 +492,7 @@ public class SchedulerService extends AbstractService {
 		}	
 	}
 	
-	@Scheduled(cron="0 0 20 1/1 * ?") //send detailed attendance report
+	@Scheduled(cron="0 0 22 1/1 * ?") //send detailed attendance report
 	public void attendanceDetailReportSchedule() {
 		if(env.getProperty("scheduler.attendanceDetailReport.enabled").equalsIgnoreCase("true")) {
 			Calendar cal = Calendar.getInstance();
