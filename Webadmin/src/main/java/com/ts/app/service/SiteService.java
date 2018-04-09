@@ -79,7 +79,7 @@ public class SiteService extends AbstractService {
 		site = siteRepository.save(site);
 		log.debug("Created Information for Site: {}", site);
 		//update the site location by calling site location service
-		//siteLocationService.save(site.getUser().getId(), site.getId(), site.getAddressLat(), site.getAddressLng(), site.getRadius());
+		siteLocationService.save(site.getUser().getId(), site.getId(), site.getAddressLat(), site.getAddressLng(), site.getRadius());
 		siteDto = mapperUtil.toModel(site, SiteDTO.class);
 		return siteDto;
 	}
@@ -91,7 +91,7 @@ public class SiteService extends AbstractService {
 		siteUpdate.setProject(projectRespository.findOne(site.getProjectId()));
 		siteRepository.saveAndFlush(siteUpdate);
         //update the site location by calling site location service
-//        siteLocationService.save(siteUpdate.getUser().getId(), site.getId(), site.getAddressLat(), site.getAddressLng(), site.getRadius());
+		siteLocationService.save(siteUpdate.getUser().getId(), site.getId(), site.getAddressLat(), site.getAddressLng(), site.getRadius());
 	}
 
 	private void mapToEntity(SiteDTO siteDTO, Site site) {

@@ -34,6 +34,7 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
@@ -75,13 +76,13 @@ public class ImportUtil {
 
 	private static final Logger log = LoggerFactory.getLogger(ImportUtil.class);
 
-	private static final String NEW_IMPORT_FOLDER = "D://fms//imports";
+	private static final String NEW_IMPORT_FOLDER = "import.file.path.new";
 	private static final String JOB_FOLDER = "job";
 	private static final String EMPLOYEE_FOLDER = "employee";
 	private static final String CHECKLIST_FOLDER = "checklist";
 	private static final String CLIENT_FOLDER = "client";
 	private static final String SITE_FOLDER = "site";
-	private static final String COMPLETED_IMPORT_FOLDER = "D://fms//imports//completed";
+	private static final String COMPLETED_IMPORT_FOLDER = "import.file.path.completed";
 	private static final String SEPARATOR = System.getProperty("file.separator");
 
 	private static final Map<String,String> statusMap = new ConcurrentHashMap<String,String>();
@@ -122,11 +123,15 @@ public class ImportUtil {
 	@Inject
 	private ChecklistService checklistService;
 	
+	@Inject
+	private Environment env;
+	
+	
 	public ImportResult importJobData(MultipartFile file, long dateTime) {
         String fileName = dateTime + ".xlsx";
-		String filePath = NEW_IMPORT_FOLDER + SEPARATOR +  JOB_FOLDER;
+		String filePath = env.getProperty(NEW_IMPORT_FOLDER) + SEPARATOR +  JOB_FOLDER;
 		String uploadedFileName = fileUploadHelper.uploadJobImportFile(file, filePath, fileName);
-		String targetFilePath = COMPLETED_IMPORT_FOLDER + SEPARATOR +  JOB_FOLDER;
+		String targetFilePath = env.getProperty(COMPLETED_IMPORT_FOLDER) + SEPARATOR +  JOB_FOLDER;
 		String fileKey = fileName.substring(0, fileName.indexOf(".xlsx"));
 		if(statusMap.containsKey(fileKey)) {
 			String status = statusMap.get(fileKey);
@@ -143,9 +148,9 @@ public class ImportUtil {
 	
 	public ImportResult importClientData(MultipartFile file, long dateTime) {
         String fileName = dateTime + ".xlsx";
-		String filePath = NEW_IMPORT_FOLDER + SEPARATOR +  CLIENT_FOLDER;
+		String filePath = env.getProperty(NEW_IMPORT_FOLDER) + SEPARATOR +  CLIENT_FOLDER;
 		String uploadedFileName = fileUploadHelper.uploadJobImportFile(file, filePath, fileName);
-		String targetFilePath = COMPLETED_IMPORT_FOLDER + SEPARATOR +  CLIENT_FOLDER;
+		String targetFilePath = env.getProperty(COMPLETED_IMPORT_FOLDER) + SEPARATOR +  CLIENT_FOLDER;
 		String fileKey = fileName.substring(0, fileName.indexOf(".xlsx"));
 		if(statusMap.containsKey(fileKey)) {
 			String status = statusMap.get(fileKey);
@@ -163,9 +168,9 @@ public class ImportUtil {
 	
 	public ImportResult importSiteData(MultipartFile file, long dateTime) {
         String fileName = dateTime + ".xlsx";
-		String filePath = NEW_IMPORT_FOLDER + SEPARATOR +  SITE_FOLDER;
+		String filePath = env.getProperty(NEW_IMPORT_FOLDER) + SEPARATOR +  SITE_FOLDER;
 		String uploadedFileName = fileUploadHelper.uploadJobImportFile(file, filePath, fileName);
-		String targetFilePath = COMPLETED_IMPORT_FOLDER + SEPARATOR +  SITE_FOLDER;
+		String targetFilePath = env.getProperty(COMPLETED_IMPORT_FOLDER) + SEPARATOR +  SITE_FOLDER;
 		String fileKey = fileName.substring(0, fileName.indexOf(".xlsx"));
 		if(statusMap.containsKey(fileKey)) {
 			String status = statusMap.get(fileKey);
@@ -182,9 +187,9 @@ public class ImportUtil {
 	
 	public ImportResult importEmployeeData(MultipartFile file, long dateTime) {
         String fileName = dateTime + ".xlsx";
-		String filePath = NEW_IMPORT_FOLDER + SEPARATOR +  EMPLOYEE_FOLDER;
+		String filePath = env.getProperty(NEW_IMPORT_FOLDER) + SEPARATOR +  EMPLOYEE_FOLDER;
 		String uploadedFileName = fileUploadHelper.uploadJobImportFile(file, filePath, fileName);
-		String targetFilePath = COMPLETED_IMPORT_FOLDER + SEPARATOR +  EMPLOYEE_FOLDER;
+		String targetFilePath = env.getProperty(COMPLETED_IMPORT_FOLDER) + SEPARATOR +  EMPLOYEE_FOLDER;
 		String fileKey = fileName.substring(0, fileName.indexOf(".xlsx"));
 		if(statusMap.containsKey(fileKey)) {
 			String status = statusMap.get(fileKey);
@@ -202,9 +207,9 @@ public class ImportUtil {
 	
 	public ImportResult importChecklistData(MultipartFile file, long dateTime) {
         String fileName = dateTime + ".xlsx";
-		String filePath = NEW_IMPORT_FOLDER + SEPARATOR +  CHECKLIST_FOLDER;
+		String filePath = env.getProperty(NEW_IMPORT_FOLDER) + SEPARATOR +  CHECKLIST_FOLDER;
 		String uploadedFileName = fileUploadHelper.uploadJobImportFile(file, filePath, fileName);
-		String targetFilePath = COMPLETED_IMPORT_FOLDER + SEPARATOR +  CHECKLIST_FOLDER;
+		String targetFilePath = env.getProperty(COMPLETED_IMPORT_FOLDER) + SEPARATOR +  CHECKLIST_FOLDER;
 		String fileKey = fileName.substring(0, fileName.indexOf(".xlsx"));
 		if(statusMap.containsKey(fileKey)) {
 			String status = statusMap.get(fileKey);
