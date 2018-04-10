@@ -16,7 +16,6 @@ export class JobService {
     getJobs(searchCriteria): Observable<any>{
         return this.http.post(this.config.Url+'api/jobs/search',searchCriteria).map(
             response=>{
-                console.log(response);
                 var allJobs = response.json();
                 return allJobs;
             }
@@ -33,7 +32,6 @@ export class JobService {
     checkOutJob(job):Observable<any>{
         return this.http.post(this.config.Url+'api/employee/out',job).map(
             response=>{
-                console.log(response.json());
                 return response.json();
             }
         )
@@ -42,7 +40,6 @@ export class JobService {
     loadCheckLists(): Observable<any>{
         return this.http.get(this.config.Url+'api/checklist').map(
             response=>{
-                console.log(response);
                 return response.json();
             }
         )
@@ -50,7 +47,6 @@ export class JobService {
     getJobDetails(jobId):Observable<any>{
         return this.http.get(this.config.Url+'api/job/'+jobId).map(
             response=>{
-                console.log(response);
                 return response.json();
             }
         )
@@ -59,8 +55,32 @@ export class JobService {
     getCompletedImage(employeeId,imageId):Observable<any>{
         return this.http.get(this.config.Url+'api/employee/'+employeeId+'/checkInOut/'+imageId).map(
             response=>{
-                console.log(response);
                 return response;
+            }
+        )
+    }
+
+    //Tickets
+    searchTickets(searchCriteria):Observable<any>{
+        return this.http.post(this.config.Url+'api/tickets/search',searchCriteria).map(
+            response=>{
+                return response.json();
+            }
+        )
+    }
+
+    createTicket(ticket):Observable<any>{
+        return this.http.post(this.config.Url+'api/ticket',ticket).map(
+            response=>{
+                return response.json();
+            }
+        )
+    }
+
+    updateTicket(ticket):Observable<any>{
+        return this.http.post(this.config.Url+'api/ticket/update',ticket).map(
+            response=>{
+                return response.json();
             }
         )
     }

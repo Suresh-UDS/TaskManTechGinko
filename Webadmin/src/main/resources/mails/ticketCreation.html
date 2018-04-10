@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title th:text="#{email.ticket.alert.title}">TaskMan New Ticket Raised</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+<body>
+<p th:text="#{email.ticket.alert.greeting(${user.login})}">
+    Dear
+</p>
+
+
+<p th:text="#{email.completed.report.text1(${ticketNumber},${ticketTitle})}">
+
+</p>
+<p th:text = "#{email.completed.report.text2(${ticketDescription})}">>
+
+</p>
+<p>
+    <span th:text="#{email.report.text2}">Regards, </span>
+    <br/>
+    <em th:text="#{email.ticket.alert.signature(${user.login})}">.</em>
+</p>
+</body>
+</html>

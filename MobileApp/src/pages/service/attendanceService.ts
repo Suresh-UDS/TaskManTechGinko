@@ -88,7 +88,7 @@ export class AttendanceService
             lat:lat,
             lng:lng
         };
-        return this.http.post(this.config.Url+'api/site/siteProximity',siteDetails ).map(
+        return this.http.post(this.config.Url+'api/proximityCheck',siteDetails ).map(
             (response)=>{
                 console.log(response)
                 return response

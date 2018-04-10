@@ -1,0 +1,41 @@
+<!--
+  Generated template for the Ticket page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+
+    <ion-navbar>
+        <button ion-button menuToggle>
+            <ion-icon name="menu"></ion-icon>
+        </button>
+        <ion-title>Tickets</ion-title>
+    </ion-navbar>
+
+</ion-header>
+
+
+<ion-content padding>
+    <ion-fab bottom right>
+        <button (click)="createTicket()" ion-fab><ion-icon name="add"></ion-icon></button>
+    </ion-fab>
+
+    <ion-list *ngIf="tickets.length>0">
+        <ion-item *ngFor="let ticket of tickets;let i of index" class="bottom-border emp" (click)="viewTicket(ticket)">
+            <ion-icon ios="ios-warning" md="md-warning" item-start class="icon-color"></ion-icon>
+            <p text-left  class="fnt-wt" text-capitalize>{{ticket.title}}</p>
+        </ion-item>
+    </ion-list>
+
+    <ion-list *ngIf="tickets.length<=0">
+        <ion-item>
+            <ion-card>
+                <div class="card-title">No Tickets found</div>
+                <div class="card-subtitle">Create new Tickets using the + icon at bottom</div>
+            </ion-card>
+        </ion-item>
+
+    </ion-list>
+
+</ion-content>

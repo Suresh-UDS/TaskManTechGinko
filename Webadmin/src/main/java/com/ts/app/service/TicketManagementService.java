@@ -1,0 +1,144 @@
+package com.ts.app.service;
+
+import com.ts.app.domain.*;
+import com.ts.app.repository.*;
+import com.ts.app.service.util.DateUtil;
+import com.ts.app.service.util.MapperUtil;
+import com.ts.app.web.rest.dto.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.core.env.Environment;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import javax.inject.Inject;
+import java.util.Calendar;
+import java.util.List;
+import java.util.TimeZone;
+
+@Service
+@Transactional
+public class TicketManagementService extends AbstractService {
+
+    private final Logger log = LoggerFactory.getLogger(JobManagementService.class);
+
+    @Inject
+    private TicketRepository ticketRepository;
+
+    @Inject
+    private EmployeeRepository employeeRepository;
+
+    @Inject
+    private LocationRepository locationRepository;
+
+    @Inject
+    private MapperUtil<AbstractAuditingEntity, BaseDTO> mapperUtil;
+
+    @Inject
+    private SiteRepository siteRepository;
+
+    @Inject
+    private UserRepository userRepository;
+
+    @Inject
+    private NotificationRepository notificationRepository;
+
+    @Inject
+    private SchedulerService schedulerService;
+
+    @Inject
+    private MailService mailService;
+
+    @Inject
+    private ReportService reportService;
+
+    @Inject
+    private Environment env;
+
+    public TicketDTO saveTicket(TicketDTO ticketDTO){
+        Ticket ticket = mapperUtil.toEntity(ticketDTO,Ticket.class);
+
+        Site site = siteRepository.findOne(ticketDTO.getSiteId());
+        ticket.setSite(site);
+
+        Employee employee = employeeRepository.findOne(ticketDTO.getEmployeeId());
+        ticket.setEmployee(employee);
+        ticket.setStatus("Open");
+
+        ticket = ticketRepository.save(ticket);
+
+        ticketDTO = mapperUtil.toModel(ticket, TicketDTO.class);
+
+        Employee employee1 = employeeRepository.findOne(ticketDTO.getEmployeeId());
+
+//        mailService.sendTicketCreatedMail();
+
+        return ticketDTO;
+
+    }
+
+    public TicketDTO updateTicket(TicketDTO ticketDTO){
+        Ticket ticket = ticketRepository.findOne(ticketDTO.getId());
+        Site site = siteRepository.findOne(ticket.getSite().getId());
+        ticket.setSite(site);
+
+        Employee employee = employeeRepository.findOne(ticket.getEmployee().getId());
+        ticket.setEmployee(employee);
+
+        ticket.setStatus(ticketDTO.getStatus());
+
+        ticket = ticketRepository.saveAndFlush(ticket);
+
+        ticketDTO = mapperUtil.toModel(ticket, TicketDTO.class);
+
+        return ticketDTO;
+    }
+
+    public List<Ticket> listAllTickets(){
+        List<TicketDTO> ticketDTOList = null;
+        List<Ticket> tickets = null;
+        tickets = ticketRepository.findAll();
+
+        return tickets;
+    }
+
+    public List<Ticket> findBySearchCrieria(SearchCriteria searchCriteria) {
+        User user = userRepository.findOne(searchCriteria.getUserId());
+        SearchResult<TicketDTO> result = new SearchResult<TicketDTO>();
+        List<Ticket> tickets = null;
+        if(searchCriteria != null) {
+            Pageable pageRequest = createPageRequest(searchCriteria.getCurrPage());
+
+            Page<Ticket> page = null;
+            List<TicketDTO> transactions = null;
+
+            Calendar startCal = Calendar.getInstance(TimeZone.getTimeZone("Asia/Kolkata"));
+            if (searchCriteria.getFromDate() != null) {
+                startCal.setTime(searchCriteria.getFromDate());
+            }
+            startCal.set(Calendar.HOUR_OF_DAY, 0);
+            startCal.set(Calendar.MINUTE, 0);
+            startCal.set(Calendar.SECOND, 0);
+            Calendar endCal = Calendar.getInstance(TimeZone.getTimeZone("Asia/Kolkata"));
+            if (searchCriteria.getToDate() != null) {
+                endCal.setTime(searchCriteria.getToDate());
+            }
+            endCal.set(Calendar.HOUR_OF_DAY, 23);
+            endCal.set(Calendar.MINUTE, 59);
+            endCal.set(Calendar.SECOND, 0);
+            //searchCriteria.setFromDate(startCal.getTime());
+            //searchCriteria.setToDate(endCal.getTime());
+
+            java.sql.Date startDate = DateUtil.convertToSQLDate(DateUtil.convertUTCToIST(startCal));
+            java.sql.Date toDate = DateUtil.convertToSQLDate(DateUtil.convertUTCToIST(endCal));
+
+              tickets = ticketRepository.findByUserId(searchCriteria.getUserId());
+
+
+
+        }
+        return tickets;
+    }
+}
