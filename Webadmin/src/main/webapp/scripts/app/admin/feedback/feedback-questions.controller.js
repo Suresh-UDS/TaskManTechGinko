@@ -29,12 +29,68 @@ angular.module('timeSheetApp')
 
         $scope.init = function(){
             $scope.feedbackItem = {};
-            $scope.feedbackItem.displayType = 'wizard';
+            $scope.feedbackItem.displayType = 'form';
             $scope.loading = true;
           $scope.loadProjects();
           $scope.search();
+          $scope.qType();
+          $scope.ratRadioActive();
         };
-
+        
+        
+        // Question option types y/n and rating
+        
+        $scope.qType = function(){
+        	
+            var quesType = $('#displayType:checked').val();
+        
+            if(quesType == 'form'){
+            	$('#answerType1').prop('checked', true);
+            	
+            }else if(quesType == 'wizard'){
+            	
+            	$('#answerType2').prop('checked', true);
+            	
+            }
+            $("#YesOrNo").removeClass("in", 2000);
+            //alert($('#answerType2:checked').val());
+        }
+        
+         // Question option type rating
+        
+        $scope.ratRadio = function(){
+        	
+        	$("#YesOrNo").removeClass("in");
+        }
+        
+       $scope.ratRadioActive = function(){
+        	
+        	$("#YesOrNo").addClass("in");
+        }
+        
+       $scope.yesMarkP = function(){
+    	  
+    	   $('#noMarkP').prop('checked', false);
+    	   $('#noMarkN').prop('checked', true);
+        }
+       $scope.yesMarkN = function(){
+    	  
+    	   $('#noMarkP').prop('checked', true);
+    	   $('#noMarkN').prop('checked', false);
+        }
+       $scope.noMarkP = function(){
+    	   
+    	   $('#yesMarkN').prop('checked', true);
+    	   $('#yesMarkP').prop('checked', false);
+       }
+       
+       $scope.noMarkN = function(){
+    	   
+    	   $('#yesMarkP').prop('checked', true);
+    	   $('#yesMarkN').prop('checked', false);
+       }
+        
+        
         $scope.loadProjects = function () {
 	    		ProjectComponent.findAll().then(function (data) {
 	            $scope.projects = data;
@@ -357,7 +413,8 @@ angular.module('timeSheetApp')
             $('.pageCenter').hide();
                     
         }
-
+        
+        
     });
 
 

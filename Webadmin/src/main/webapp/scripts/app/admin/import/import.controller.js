@@ -285,6 +285,9 @@ angular.module('timeSheetApp')
 	    
 	    //Checklist upload file start
 	    $scope.uploadChecklist = function() {
+	    	var extn = checklistFile.substr(fileName.lastIndexOf('.')+1);
+	    	alert(extn);
+	    	return false;
 	    	if($scope.selectedChecklistFile){
 	    		$rootScope.checklistImportStatusLoad = true;
     		console.log('************************selected checklist file - ' + $scope.selectedChecklistFile);
