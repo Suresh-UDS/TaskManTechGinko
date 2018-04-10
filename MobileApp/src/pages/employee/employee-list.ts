@@ -306,9 +306,11 @@ export class EmployeeList {
           }
         )
       },error=>{
-            console.log("errors")
-            console.log(error.json());
-            if(error.json().status === "false"){
+            console.log("errors");
+            this.closeLoader();
+            var msg= "You are currently not at the site location";
+            this.showSuccessToast(msg);
+                if(error.json().status === "false"){
               var msg= "You are currently not at the site location";
               this.showSuccessToast(msg);
               this.closeLoader();

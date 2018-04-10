@@ -1,0 +1,51 @@
+<!--
+  Generated template for the ViewTicket page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+
+    <ion-navbar>
+        <button ion-button menuToggle>
+            <ion-icon name="menu"></ion-icon>
+        </button>
+        <ion-title>Ticket Details</ion-title>
+    </ion-navbar>
+
+</ion-header>
+
+
+<ion-content padding>
+
+  <ion-row class="margin0 white-bg padding10">
+    <ion-col col-6 class="label-on-left">Ticket ID</ion-col>
+    <ion-col col-6>
+      <p text-right>{{ticketDetails.id}}</p>
+    </ion-col>
+    <ion-col col-6 class="label-on-left">Ticket Title</ion-col>
+    <ion-col col-6>
+      <p text-right>{{ticketDetails.title}}</p>
+    </ion-col>
+    <ion-col col-6 class="label-on-left">Description</ion-col>
+    <ion-col col-6>
+      <p text-right>{{ticketDetails.description}}</p>
+    </ion-col>
+    <ion-col col-6 class="label-on-left">Status</ion-col>
+    <ion-col col-6>
+      <p text-right>{{ticketDetails.status}}</p>
+    </ion-col>
+  </ion-row>
+</ion-content>
+
+
+<ion-footer *ngIf="ticketDetails.status != 'Closed'" >
+    <ion-toolbar class="align-right" padding-left padding-right  >
+        <button class="btn btn-warning center pull-left" (click)="createJob()">
+            Create Job
+        </button>
+        <button class="btn btn-success center pull-right" (click)="closeTicket()">
+            Close Ticket <ion-icon name="ios-arrow-forward-outline"></ion-icon>
+        </button>
+    </ion-toolbar>
+</ion-footer>

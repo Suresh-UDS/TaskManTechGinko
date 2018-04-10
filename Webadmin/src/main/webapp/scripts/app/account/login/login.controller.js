@@ -36,4 +36,31 @@ angular.module('timeSheetApp')
             //$("#loadPage").scrollTop();
             $("#loadPage").animate({scrollTop: 0}, 2000);
         }
+        
+        
+        // Username and Password validations
+        
+        	var msg="";
+        	var elements = document.getElementsByTagName("INPUT");
+
+        	for (var i = 0; i < elements.length; i++) {
+        	   elements[i].oninvalid =function(e) {
+        	        if (!e.target.validity.valid) {
+        	        switch(e.target.id){
+        	            case 'password' : 
+        	            e.target.setCustomValidity("Password cannot be blank");break;
+        	            case 'username' : 
+        	            e.target.setCustomValidity("Username cannot be blank");break;
+        	        default : e.target.setCustomValidity("");break;
+
+        	        }
+        	       }
+        	    };
+        	   elements[i].oninput = function(e) {
+        	        e.target.setCustomValidity(msg);
+        	    };
+        	} 
+        
+        	
+        	
     });

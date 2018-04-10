@@ -62,6 +62,18 @@ export class CompleteJobPage {
         )
         */
 
+        this.jobService.getJobDetails(this.jobDetails.id).subscribe(
+            response=>{
+                console.log("Response on job details");
+                console.log(response);
+                this.jobDetails = response;
+            },error=>{
+                console.log("Error in getting job details");
+                console.log(error);
+                this.component.showToastMessage("Errror in getting job details","bottom");
+            }
+        )
+
     }
 
     ionViewDidLoad() {

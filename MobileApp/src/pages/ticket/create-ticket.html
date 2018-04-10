@@ -1,0 +1,100 @@
+<!--
+  Generated template for the CreateTicket page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+
+  <ion-navbar>
+    <ion-title>create-ticket</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content padding>
+    <div class="row">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-content">
+                    <ion-row>
+                        <ion-col col-12>
+
+                            <div class="form-group label-floating" [ngClass]="{'has-error': eMsg=='all'||eMsg=='title'}">
+                                <label class="control-label">Title</label>
+                                <input class="form-control" type="text" [(ngModel)]="title" id="title" name="title" #titl="ngModel" required [ngClass]="{'has-error': titl.errors || eMsg=='all'|| eMsg=='title'}">
+                                <div *ngIf="titl.errors && (titl.dirty || titl.touched)" class="error-msg">
+
+                                </div>
+
+                                <div *ngIf="titl.errors && (titl.untouched )" class="error-msg">
+
+                                </div>
+                            </div>
+
+                        </ion-col>
+
+                        <ion-col col-12>
+                            <div class="form-group label-floating" [ngClass]="{'has-error': eMsg=='all'||eMsg=='description'}">
+                                <label class="control-label">Description</label>
+                                <input class="form-control" type="text" [(ngModel)]="description" id="description" name="title" #desc="ngModel" required [ngClass]="{'has-error': desc.errors || eMsg=='all'|| eMsg=='description'}">
+                                <div *ngIf="desc.errors && (desc.dirty || desc.touched)" class="error-msg">
+
+                                </div>
+
+                                <div *ngIf="desc.errors && (desc.untouched )" class="error-msg">
+
+                                </div>
+                            </div>
+
+                        </ion-col>
+
+                        <ion-col col-12>
+
+                            <div class="form-group label-floating">
+                                <label class="control-label" *ngIf="siteName">Site</label>
+                                <ion-select [(ngModel)]="siteName" class="select-box padding-left0" id="siteName" placeholder="Choose Site" name="siteName" #site="ngModel" required [ngClass]="{'select-error': eMsg=='siteName'}">
+                                    <ion-option *ngFor="let site of sites" [value]="site.name" (ionSelect)="getEmployee(site.id)">{{site.name}}</ion-option>
+                                </ion-select>
+
+                                <div *ngIf="site.errors && (site.dirty || site.touched)" class="error-msg">
+
+                                </div>
+
+                                <div *ngIf="site.errors && (site.untouched )" class="error-msg">
+
+                                </div>
+                            </div>
+
+
+                        </ion-col>
+
+                        <ion-col col-12>
+
+                            <div class="form-group label-floating">
+                                <label class="control-label" *ngIf="employ">Employee</label>
+                                <ion-select [(ngModel)]="employ" [disabled]="empSelect" class="select-box padding-left0" id="employ" name="employ" [placeholder]="empPlace" #emp="ngModel" required [ngClass]="{'select-error': eMsg=='employ'}">
+                                    <ion-option  *ngFor="let emp of employee" [value]="emp.id" >{{emp.fullName}}</ion-option>
+                                </ion-select>
+
+                                <div *ngIf="emp.errors && (emp.dirty || emp.touched)" class="error-msg">
+
+                                </div>
+
+                                <div *ngIf="emp.errors && (emp.untouched )" class="error-msg">
+
+                                </div>
+                            </div>
+
+                        </ion-col>
+
+                        <button type="submit" class="btn btn-warning pull-right margin-auto" (click)="createTicket()">Add</button>
+
+                        <div class="clearfix"></div>
+                    </ion-row>
+                </div>
+            </div>
+        </div>
+    </div>
+</ion-content>

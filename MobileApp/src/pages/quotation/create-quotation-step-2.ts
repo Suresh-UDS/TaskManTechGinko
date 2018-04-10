@@ -225,7 +225,7 @@ export class CreateQuotationPage2 {
                     "projectName":this.siteDetails.projectName,
                     "siteName":this.siteDetails.name,
                     "grandTotal":this.grandTotal,
-                    "isDrafted":true,
+                    "drafted":true,
                     "mode":"create"
                 };
 
@@ -245,7 +245,7 @@ export class CreateQuotationPage2 {
                     "createdByUserId":this.sentByUserId,
                     "createdByUserName":this.sentByUserName,
                     "grandTotal":this.grandTotal,
-                    "isDrafted":true
+                    "drafted":true
                 };
                 this.presentAlert(this.quotationDetails,'Save Without Selecting Site');
             }
