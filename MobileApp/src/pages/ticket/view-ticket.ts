@@ -22,7 +22,7 @@ export class ViewTicket {
   ticketDetails:any;
   constructor(public navCtrl: NavController, public navParams: NavParams,private cs:componentService, private jobService:JobService) {
     this.ticketDetails = this.navParams.data.ticket;
-    this.ticketDetails.status = "Closed";
+
   }
 
   ionViewDidLoad() {
@@ -32,6 +32,7 @@ export class ViewTicket {
 
     closeTicket(){
       this.cs.showLoader("Closing Job");
+      this.ticketDetails.status = "Closed";
       this.jobService.updateTicket(this.ticketDetails).subscribe(
           response=>{
               console.log(response);

@@ -39,7 +39,7 @@
 </ion-content>
 
 
-<ion-footer >
+<ion-footer *ngIf="ticketDetails.status != 'Closed'" >
     <ion-toolbar class="align-right" padding-left padding-right  >
         <button class="btn btn-warning center pull-left" (click)="createJob()">
             Create Job
