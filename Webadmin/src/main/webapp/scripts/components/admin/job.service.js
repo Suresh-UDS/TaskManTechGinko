@@ -150,7 +150,34 @@ angular.module('timeSheetApp')
         	        console.log(response);
                     return response.data;
                 })
-            }
+            },
 
+            createTicket: function(ticket){
+                return $http.post('api/ticket',ticket).then(function (response) {
+                    console.log(response);
+                    return response.data;
+                })
+            },
+
+            updateTicket: function (ticket) {
+                return $http.post('api/ticket/update',ticket).then(function (response) {
+                    console.log(response);
+                    return response.data;
+                })
+            },
+
+            getTicketDetails:function (id) {
+                return $http.get('api/ticket/details/'+id).then(function (response) {
+                    console.log(response);
+                    return response.data;
+                })
+            },
+
+            searchTickets:function(search){
+                return $http.post('api/ticket/search',search).then(function (response) {
+                    console.log(response);
+                    return response.data;
+                })
+            }
         };
     });
