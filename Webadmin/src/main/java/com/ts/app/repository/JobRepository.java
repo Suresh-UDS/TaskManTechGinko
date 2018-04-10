@@ -124,7 +124,7 @@ public interface JobRepository extends JpaRepository<Job, Long>,JpaSpecification
     @Query("SELECT j from Job j where j.parentJob.id = :parentJobId and j.plannedStartTime between :startDate and :endDate ")
     List<Job> findJobsByParentJobIdAndDate(@Param("parentJobId") long parentJobId, @Param("startDate") Date startDate, @Param("endDate") Date endDate);
 
-    @Query("SELECT j from Job j where j.parentJob.id = :parentJobId order j.plannedStartTime desc")
+    @Query("SELECT j from Job j where j.parentJob.id = :parentJobId order by j.plannedStartTime desc")
     List<Job> findLastJobByParentJobId(@Param("parentJobId") long parentJobId, Pageable pageRequest);
     
     @Query("DELETE from Job j where j.parentJob.id = :parentJobId and j.plannedStartTime between :startDate and :endDate ")
