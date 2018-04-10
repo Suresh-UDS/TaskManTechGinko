@@ -135,8 +135,10 @@ scheduler:
       creation: monthly
    weeklyJob:
       enabled: true
+      creation: monthly
    monthlyJob:
       enabled: true      
+      creation: yearly
    overdueJob:
       enabled: true   
    eodJobReport:

@@ -1,5 +1,6 @@
 package com.ts.app.service;
 
+import java.awt.print.Pageable;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -18,7 +19,9 @@ import org.apache.commons.lang3.time.DateUtils;
 import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.boot.autoconfigure.jdbc.DataSourceInitializedEvent;
 import org.springframework.core.env.Environment;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -67,6 +70,10 @@ public class SchedulerService extends AbstractService {
 	private static final String FREQ_ONCE_EVERY_HOUR = "Once in an hour";
 	
 	private static final String LINE_SEPARATOR = "      \n\n";
+	
+	private static final String DAILY = "Daily";
+	private static final String WEEKLY = "Weekly";
+	private static final String MONTHLY = "Monthly";
 
 	@Inject
 	private ProjectRepository projectRepository;
@@ -163,26 +170,36 @@ public class SchedulerService extends AbstractService {
 			Calendar cal = Calendar.getInstance();
 			cal.set(Calendar.HOUR_OF_DAY,0);
 			cal.set(Calendar.MINUTE,0);
+			Calendar endCal = Calendar.getInstance();
+			cal.set(Calendar.HOUR_OF_DAY,23);
+			cal.set(Calendar.MINUTE,59);
 			List<SchedulerConfig> dailyTasks = schedulerConfigRepository.getDailyTask(cal.getTime());
 			log.debug("Found {} Daily Tasks", dailyTasks.size());
 	
 			if(CollectionUtils.isNotEmpty(dailyTasks)) {
 				for (SchedulerConfig dailyTask : dailyTasks) {
-					try {
-						boolean shouldProcess = true;
-						if(dailyTask.isScheduleDailyExcludeWeekend()) {
-							Calendar today = Calendar.getInstance();
-	
-							if(today.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY
-									|| today.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY) {
-								shouldProcess = false;
+					long parentJobId = dailyTask.getJob().getId();
+					List<Job> job = jobRepository.findJobsByParentJobIdAndDate(parentJobId,  DateUtil.convertToSQLDate(cal.getTime()), DateUtil.convertToSQLDate(endCal.getTime()));
+					if(CollectionUtils.isEmpty(job)) {
+						createJobs(dailyTask);
+						/*
+						try {
+							boolean shouldProcess = true;
+							if(dailyTask.isScheduleDailyExcludeWeekend()) {
+								Calendar today = Calendar.getInstance();
+		
+								if(today.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY
+										|| today.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY) {
+									shouldProcess = false;
+								}
 							}
+							if(shouldProcess) {
+								processDailyTasks(dailyTask);
+							}
+						} catch (Exception ex) {
+							log.warn("Failed to create JOB ", ex);
 						}
-						if(shouldProcess) {
-							processDailyTasks(dailyTask);
-						}
-					} catch (Exception ex) {
-						log.warn("Failed to create JOB ", ex);
+						*/
 					}
 				}
 				schedulerConfigRepository.save(dailyTasks);
@@ -232,7 +249,8 @@ public class SchedulerService extends AbstractService {
 								shouldProcess = false;
 						}
 						if(shouldProcess) {
-							processWeeklyTasks(weeklyTask);
+							//processWeeklyTasks(weeklyTask);
+							createJobs(weeklyTask);
 						}
 					} catch (Exception ex) {
 						log.warn("Failed to create JOB ", ex);
@@ -260,7 +278,8 @@ public class SchedulerService extends AbstractService {
 						boolean shouldProcess = false;
 						Calendar today = Calendar.getInstance();
 						if(today.get(Calendar.DAY_OF_WEEK) == monthlyTask.getScheduleMonthlyDay()) {
-							processMonthlyTasks(monthlyTask);
+							//processMonthlyTasks(monthlyTask);
+							createJobs(monthlyTask);
 						}
 					} catch (Exception ex) {
 						log.warn("Failed to create JOB ", ex);
@@ -447,7 +466,7 @@ public class SchedulerService extends AbstractService {
 								Calendar currCal = Calendar.getInstance();
 								currCal.add(Calendar.HOUR_OF_DAY,  1);
 								long timeDiff = currCal.getTimeInMillis() - startCal.getTimeInMillis();
-								if(currCal.equals(startCal) || (timeDiff > 900000 && timeDiff <= 7200000)) { //within 2 hours of the shift start timing.
+								if(currCal.equals(startCal) || (timeDiff >= 3600000 && timeDiff <= 7200000)) { //within 2 hours of the shift start timing.
 									long empCntInShift = employeeRepository.findEmployeeCountBySiteAndShift(site.getId(), shift.getStartTime(), shift.getEndTime());
 									if(empCntInShift == 0) {
 										empCntInShift = employeeRepository.findCountBySiteId(site.getId());
@@ -509,9 +528,9 @@ public class SchedulerService extends AbstractService {
 				Iterator<Site> siteItr = sites.iterator();
 				while(siteItr.hasNext()) {
 					Site site = siteItr.next();
-					Setting attendanceReports = settingRepository.findSettingByKeyAndSiteId("email.notification.attedanceReports", site.getId());
+					Setting attendanceReports = settingRepository.findSettingByKeyAndSiteId(SettingsService.EMAIL_NOTIFICATION_ATTENDANCE, site.getId());
 					if(attendanceReports == null) {
-						attendanceReports = settingRepository.findSettingByKeyAndProjectId("email.notification.attedanceReports", proj.getId());
+						attendanceReports = settingRepository.findSettingByKeyAndProjectId(SettingsService.EMAIL_NOTIFICATION_ATTENDANCE, proj.getId());
 					}
 					if(attendanceReports != null && attendanceReports.getSettingValue().equalsIgnoreCase("true")) {
 						StringBuilder content = new StringBuilder();
@@ -569,9 +588,9 @@ public class SchedulerService extends AbstractService {
 						List<EmployeeAttendanceReport> empAttnList = attendanceRepository.findBySiteId(site.getId(), DateUtil.convertToSQLDate(cal.getTime()), DateUtil.convertToSQLDate(cal.getTime()));
 						
 						log.debug("send detailed report");
-						Setting attendanceReportEmails = settingRepository.findSettingByKeyAndSiteId("email.notification.attendanceReports.emails", site.getId());
+						Setting attendanceReportEmails = settingRepository.findSettingByKeyAndSiteId(SettingsService.EMAIL_NOTIFICATION_ATTENDANCE_EMAILS, site.getId());
 					    if(attendanceReportEmails == null) {
-					    		attendanceReportEmails = settingRepository.findSettingByKeyAndProjectId("email.notification.attendanceReports.emails", proj.getId());
+					    		attendanceReportEmails = settingRepository.findSettingByKeyAndProjectId(SettingsService.EMAIL_NOTIFICATION_ATTENDANCE_EMAILS, proj.getId());
 					    }
 						ExportResult exportResult = new ExportResult();
 						exportResult = exportUtil.writeAttendanceReportToFile(proj.getName(), empAttnList, null, exportResult);
@@ -613,18 +632,58 @@ public class SchedulerService extends AbstractService {
 
 	public void createJobs(SchedulerConfig dailyTask) {
 		if ("CREATE_JOB".equals(dailyTask.getType())) {
-			String creationPolicy = env.getProperty("scheduler.dailyJob.creation");
-			if(creationPolicy.equalsIgnoreCase("monthly")) { //if the creation policy is set to monthly, create jobs for the rest of the month
-				DateTime currDate = DateTime.now();
-		        DateTime lastDate = currDate.dayOfMonth().withMaximumValue();
-				while(currDate.isBefore(lastDate) || currDate.isEqual(lastDate)) {
-					jobCreationTask(dailyTask.getJob(), dailyTask.getData(), currDate.toDate());
-					currDate = currDate.plusDays(1);
+			if(dailyTask.getSchedule().equalsIgnoreCase(DAILY)) {
+				String creationPolicy = env.getProperty("scheduler.dailyJob.creation");
+				if(creationPolicy.equalsIgnoreCase("monthly")) { //if the creation policy is set to monthly, create jobs for the rest of the month
+					DateTime currDate = DateTime.now();
+			        DateTime lastDate = currDate.dayOfMonth().withMaximumValue();
+					while(currDate.isBefore(lastDate) || currDate.isEqual(lastDate)) {
+						jobCreationTask(dailyTask, dailyTask.getJob(), dailyTask.getData(), currDate.toDate());
+						currDate = currDate.plusDays(1);
+					}
+				}else if(creationPolicy.equalsIgnoreCase("daily")) {
+					jobCreationTask(dailyTask,dailyTask.getJob(), dailyTask.getData(), new Date());
 				}
-			}else if(creationPolicy.equalsIgnoreCase("daily")) {
-				jobCreationTask(dailyTask.getJob(), dailyTask.getData(), new Date());
+				//dailyTask.setLastRun(new Date());
+			}else if(dailyTask.getSchedule().equalsIgnoreCase(WEEKLY)) {
+				String creationPolicy = env.getProperty("scheduler.weeklyJob.creation");
+				if(creationPolicy.equalsIgnoreCase("monthly")) { //if the creation policy is set to monthly, create jobs for the rest of the month
+					PageRequest pageRequest = new PageRequest(1, 1); 
+					List<Job> prevJobs = jobRepository.findLastJobByParentJobId(dailyTask.getJob().getId(), pageRequest);
+					DateTime currDate = DateTime.now();
+					if(CollectionUtils.isNotEmpty(prevJobs)) {
+						Job prevJob = prevJobs.get(0);
+						if(prevJob.getPlannedStartTime().before(currDate.toDate())) {
+					        DateTime lastDate = currDate.dayOfMonth().withMaximumValue();
+					        currDate = currDate.plusDays(7);
+							while(currDate.isBefore(lastDate) || currDate.isEqual(lastDate)) {
+								jobCreationTask(dailyTask, dailyTask.getJob(), dailyTask.getData(), currDate.toDate());
+								dailyTask.setLastRun(currDate.toDate());
+								currDate = currDate.plusDays(7); //create for every week.
+							}
+						}
+					}
+				}
+			}else if(dailyTask.getSchedule().equalsIgnoreCase(MONTHLY)) {
+				String creationPolicy = env.getProperty("scheduler.monthlyJob.creation");
+				if(creationPolicy.equalsIgnoreCase("yearly")) { //if the creation policy is set to monthly, create jobs for the rest of the month
+					PageRequest pageRequest = new PageRequest(1, 1); 
+					List<Job> prevJobs = jobRepository.findLastJobByParentJobId(dailyTask.getJob().getId(), pageRequest);
+					DateTime currDate = DateTime.now();
+					if(CollectionUtils.isNotEmpty(prevJobs)) {
+						Job prevJob = prevJobs.get(0);
+						if(prevJob.getPlannedStartTime().before(currDate.toDate())) {
+					        DateTime lastDate = currDate.dayOfMonth().withMaximumValue();
+					        currDate = currDate.plusDays(currDate.dayOfMonth().getMaximumValue());
+							while(currDate.isBefore(lastDate) || currDate.isEqual(lastDate)) {
+								jobCreationTask(dailyTask, dailyTask.getJob(), dailyTask.getData(), currDate.toDate());
+								dailyTask.setLastRun(currDate.toDate());
+								currDate = currDate.plusDays(currDate.dayOfMonth().getMaximumValue()); //create for every month.
+							}
+						}
+					}
+				}
 			}
-			dailyTask.setLastRun(new Date());
 		} else {
 			log.warn("Unknown scheduler config type job" + dailyTask);
 		}
@@ -649,7 +708,7 @@ public class SchedulerService extends AbstractService {
 	
 	private void processDailyTasks(SchedulerConfig dailyTask) {
 		if ("CREATE_JOB".equals(dailyTask.getType())) {
-			jobCreationTask(dailyTask.getJob(), dailyTask.getData(), new Date());
+			jobCreationTask(dailyTask, dailyTask.getJob(), dailyTask.getData(), new Date());
 			dailyTask.setLastRun(new Date());
 		} else {
 			log.warn("Unknown scheduler config type job" + dailyTask);
@@ -659,7 +718,7 @@ public class SchedulerService extends AbstractService {
 	private void processWeeklyTasks(SchedulerConfig weeklyTask) {
 		if ("CREATE_JOB".equals(weeklyTask.getType())) {
 
-			jobCreationTask(weeklyTask.getJob(), weeklyTask.getData(),new Date());
+			jobCreationTask(weeklyTask, weeklyTask.getJob(), weeklyTask.getData(),new Date());
 			weeklyTask.setLastRun(new Date());
 		} else {
 			log.warn("Unknown scheduler config type job" + weeklyTask);
@@ -669,14 +728,14 @@ public class SchedulerService extends AbstractService {
 	private void processMonthlyTasks(SchedulerConfig monthlyTask) {
 		if ("CREATE_JOB".equals(monthlyTask.getType())) {
 
-			jobCreationTask(monthlyTask.getJob(), monthlyTask.getData(),new Date());
+			jobCreationTask(monthlyTask, monthlyTask.getJob(), monthlyTask.getData(),new Date());
 			monthlyTask.setLastRun(new Date());
 		} else {
 			log.warn("Unknown scheduler config type job" + monthlyTask);
 		}
 	}
 
-	private void jobCreationTask(Job parentJob, String data, Date jobDate){
+	private void jobCreationTask(SchedulerConfig dailyTask, Job parentJob, String data, Date jobDate){
 		log.debug("Creating Job : "+data);
 		Map<String, String> dataMap = Splitter.on("&").withKeyValueSeparator("=").split(data);
 		String sTime = dataMap.get("plannedStartTime");
@@ -685,7 +744,24 @@ public class SchedulerService extends AbstractService {
 		try {
 			Date sHrs = sdf.parse(sTime);
 			Date eHrs = sdf.parse(eTime);
-			createJob(parentJob, dataMap, jobDate, eHrs, sHrs, eHrs);
+			
+			try {
+				boolean shouldProcess = true;
+				if(dailyTask.isScheduleDailyExcludeWeekend()) {
+					Calendar today = Calendar.getInstance();
+
+					if(today.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY
+							|| today.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY) {
+						shouldProcess = false;
+					}
+				}
+				if(shouldProcess) {
+					createJob(parentJob, dataMap, jobDate, eHrs, sHrs, eHrs);
+				}
+			} catch (Exception ex) {
+				log.warn("Failed to create JOB ", ex);
+			}
+			
 		}catch(Exception e) {
 			log.error("Error while creating scheduled job ",e);
 		}
