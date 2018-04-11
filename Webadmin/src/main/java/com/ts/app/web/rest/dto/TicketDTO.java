@@ -31,6 +31,8 @@ public class TicketDTO extends BaseDTO {
 
     private String jobName;
 
+    private String severity;
+
 
     public long getId() {
         return id;
@@ -150,5 +152,13 @@ public class TicketDTO extends BaseDTO {
 
     public void setJobName(String jobName) {
         this.jobName = jobName;
+    }
+
+    public String getSeverity() {
+        return severity;
+    }
+
+    public void setSeverity(String severity) {
+        this.severity = severity;
     }
 }

@@ -20,6 +20,9 @@ public class JobDTO extends BaseDTO {
 	private long siteId;
 	private String siteName;
 
+	private long ticketId;
+	private String ticketName;
+
 	private long employeeId;
 	private String employeeEmpId;
 	private String employeeName;
@@ -59,7 +62,7 @@ public class JobDTO extends BaseDTO {
 	private boolean scheduleWeeklyThursday;
 	private boolean scheduleWeeklyFriday;
 	private boolean scheduleWeeklySaturday;
-	
+
 	private int scheduleMonthlyDay;
 
 	private boolean scheduled;
@@ -67,13 +70,13 @@ public class JobDTO extends BaseDTO {
 	private String frequency;
 
 	private List<JobChecklistDTO> checklistItems;
-	
+
 	private List<CheckInOutImageDTO> images;
-	
+
 	private String block;
-	
+
 	private String floor;
-	
+
 	private String zone;
 
 	public String getTitle() {
@@ -361,7 +364,7 @@ public class JobDTO extends BaseDTO {
 	public void setZone(String zone) {
 		this.zone = zone;
 	}
-    
+
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
 		sb.append("Job Details - {" + StringUtil.SPACE);
@@ -383,4 +386,20 @@ public class JobDTO extends BaseDTO {
 		sb.append(" } ");
 		return sb.toString();
 	}
+
+    public long getTicketId() {
+        return ticketId;
+    }
+
+    public void setTicketId(long ticketId) {
+        this.ticketId = ticketId;
+    }
+
+    public String getTicketName() {
+        return ticketName;
+    }
+
+    public void setTicketName(String ticketName) {
+        this.ticketName = ticketName;
+    }
 }

@@ -98,6 +98,9 @@ public class JobManagementService extends AbstractService {
     private AssetRepository assetRepository;
 
     @Inject
+    private TicketRepository ticketRepository;
+
+    @Inject
 	private EmployeeRepository employeeRepository;
 
     @Inject
@@ -629,6 +632,8 @@ public class JobManagementService extends AbstractService {
 		//log.debug("Existing job -"+ existingJobs);
 		//if(CollectionUtils.isEmpty(existingJobs)) {
 			job = jobRepository.save(job);
+
+
 		//}
 
 		//if the job is scheduled for recurrence create a scheduled task
@@ -689,6 +694,8 @@ public class JobManagementService extends AbstractService {
 		Location location = getLocation(jobDTO.getLocationId());
 		Asset asset = getAsset(jobDTO.getAssetId());
 
+		Ticket ticket = getTicket(jobDTO.getTicketId());
+
 		job.setTitle(jobDTO.getTitle());
 		job.setDescription(jobDTO.getDescription());
 		job.setStatus(jobDTO.getJobStatus());
@@ -698,6 +705,10 @@ public class JobManagementService extends AbstractService {
 		}
 		if(asset!=null){
 		    job.setAsset(asset);
+        }
+
+        if(ticket!=null){
+		    job.setTicket(ticket);
         }
 		job.setActive(jobDTO.getActive());
 
@@ -1081,6 +1092,13 @@ public class JobManagementService extends AbstractService {
         Asset asset = assetRepository.findOne(id);
         return asset;
     }
+
+    public Ticket getTicket(long id){
+        Ticket ticket= ticketRepository.findOne(id);
+        return ticket;
+    }
+
+
 
     public AssetDTO getAssetDTO(long id){
         Asset asset = assetRepository.findOne(id);

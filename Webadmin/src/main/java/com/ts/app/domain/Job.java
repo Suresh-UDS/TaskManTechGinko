@@ -4,17 +4,7 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -63,6 +53,10 @@ public class Job extends AbstractAuditingEntity implements Serializable{
     @JoinColumn(name = "assetId")
     private Asset asset;
 
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "ticketId")
+    private Ticket ticket;
+
 	private String comments;
 	private JobStatus status;
 	private JobType type;
@@ -104,15 +98,15 @@ public class Job extends AbstractAuditingEntity implements Serializable{
 
     @OneToMany(mappedBy ="job", cascade = {CascadeType.ALL}, fetch = FetchType.LAZY, orphanRemoval = true)
 	private List<JobChecklist> checklistItems;
-    
+
     @ManyToOne(cascade={CascadeType.ALL}, fetch = FetchType.LAZY)
 	@JoinColumn(name="parent_job_id")
     private Job parentJob;
 
     private String block;
-    
+
     private String floor;
-    
+
     private String zone;
 
 	public Long getId() {
@@ -331,7 +325,7 @@ public class Job extends AbstractAuditingEntity implements Serializable{
 	public void setOverdueAlertCount(int overdueAlertCount) {
 		this.overdueAlertCount = overdueAlertCount;
 	}
-	
+
 	public String getBlock() {
 		return block;
 	}
@@ -368,4 +362,11 @@ public class Job extends AbstractAuditingEntity implements Serializable{
 		return sb.toString();
 	}
 
+    public Ticket getTicket() {
+        return ticket;
+    }
+
+    public void setTicket(Ticket ticket) {
+        this.ticket = ticket;
+    }
 }

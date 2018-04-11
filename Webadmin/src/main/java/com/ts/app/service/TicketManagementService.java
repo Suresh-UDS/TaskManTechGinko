@@ -104,6 +104,13 @@ public class TicketManagementService extends AbstractService {
         return tickets;
     }
 
+    public TicketDTO getTicketDetails(long id){
+        Ticket ticket = ticketRepository.findOne(id);
+        TicketDTO ticketDTO1 = mapperUtil.toModel(ticket,TicketDTO.class);
+
+        return ticketDTO1;
+    }
+
     public List<Ticket> findBySearchCrieria(SearchCriteria searchCriteria) {
         User user = userRepository.findOne(searchCriteria.getUserId());
         SearchResult<TicketDTO> result = new SearchResult<TicketDTO>();

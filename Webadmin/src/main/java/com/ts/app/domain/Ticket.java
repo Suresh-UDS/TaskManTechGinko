@@ -38,9 +38,9 @@ public class Ticket extends AbstractAuditingEntity implements Serializable {
 //    @JoinColumn(name = "locationId")
 //    private Location location;
 
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "jobId")
-//    private Job job;
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "jobId")
+    private Job job;
 
     private String reportingTo;
 
@@ -51,6 +51,8 @@ public class Ticket extends AbstractAuditingEntity implements Serializable {
     private String status;
 
     private String type;
+
+    private String severity;
 
     public Long getId() {
         return id;
@@ -100,13 +102,13 @@ public class Ticket extends AbstractAuditingEntity implements Serializable {
 //        this.location = location;
 //    }
 
-//    public Job getJob() {
-//        return job;
-//    }
-//
-//    public void setJob(Job job) {
-//        this.job = job;
-//    }
+    public Job getJob() {
+        return job;
+    }
+
+    public void setJob(Job job) {
+        this.job = job;
+    }
 
     public String getImage() {
         return image;
@@ -154,5 +156,13 @@ public class Ticket extends AbstractAuditingEntity implements Serializable {
 
     public void setType(String type) {
         this.type = type;
+    }
+
+    public String getSeverity() {
+        return severity;
+    }
+
+    public void setSeverity(String severity) {
+        this.severity = severity;
     }
 }

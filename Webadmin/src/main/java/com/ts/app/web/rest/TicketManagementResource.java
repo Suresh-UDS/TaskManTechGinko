@@ -75,4 +75,9 @@ public class TicketManagementResource {
         return result;
     }
 
+    @RequestMapping(path="/ticket/details/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    public TicketDTO getTicket(@PathVariable("id") Long id){
+        return ticketService.getTicketDetails(id);
+    }
+
 }
