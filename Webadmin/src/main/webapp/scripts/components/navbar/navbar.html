@@ -103,7 +103,7 @@ Tip 3: you can change the color of the sidebar with data-background-color="white
                     <p>Sites</p>
                 </a>
             </li>
-            <li ui-sref-active="active" has-permission="Site:List">
+            <li ui-sref-active="active" has-permission="Location:List">
                 <a ui-sref="locations">
                     <i class="material-icons">dns</i>
                     <p>Locations</p>
@@ -149,6 +149,12 @@ Tip 3: you can change the color of the sidebar with data-background-color="white
                 <a ui-sref="imports">
                     <i class="material-icons">file_upload</i>
                     <p>Import</p>
+                </a>
+            </li>
+            <li ui-sref-active="active" has-permission="Site:List"> 
+                <a ui-sref="tickets">
+                    <i class="material-icons">tab</i>
+                    <p>Tickets</p>
                 </a>
             </li>
             <li has-permission="Feedback:List" ng-class="{active: $state.includes('admin')}">

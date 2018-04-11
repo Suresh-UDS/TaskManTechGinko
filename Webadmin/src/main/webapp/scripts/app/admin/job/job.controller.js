@@ -324,7 +324,7 @@ angular.module('timeSheetApp')
                 } else {
                     $scope.error = 'ERROR';
                 }
-            });;
+            });
 
         };
 

@@ -1,0 +1,454 @@
+<div class="crud-form"
+     data-unique-hash="a2ad475d60b22954085c657a73309b8f">
+    <div ng-controller="TicketController" ng-init="initLoad()">
+
+
+        <div class="col-md-8">
+            <!--<h2 class="title">Add Ticket</h2>-->
+        </div>
+
+
+            <!--<div class="card-header" data-background-color="red">-->
+                <!--<h4 class="title">Add Ticket</h4>-->
+                <!--<p class="category"></p>-->
+            <!--</div>-->
+
+           <div class="cardsCon addTicketCon">
+               <form ng-show="!success" name="form" role="form" novalidate
+                     ng-submit="saveTicket()">
+
+                   <div class="row">
+
+                       <div class="col-md-6">
+
+
+                           <div class="panel panel-default">
+                               <div class="panel-heading">Ticket Details</div>
+                               <div class="panel-body">
+
+                                   <div class="row">
+
+                                       <div class="col-md-12">
+                                           <div class="form-group">
+                                               <label class="control-label">Title </label>
+
+                                               <input type="text" class="form-control"   name='title'
+                                                      ng-model="tickets.title" ng-minlength=1 ng-maxlength=50
+                                                      autofocus  required autocomplete="off"/>
+                                               <div ng-show="form.$submitted || form.title.$touched">
+                                                   <div ng-show="form.title.$dirty || form.title.$invalid">
+                                                       <p class="help-block" style="color:maroon"
+                                                          ng-show="form.title.$error.required">
+                                                           Title is required.
+                                                       </p>
+                                                       
+                                                   </div>
+                                               </div>
+
+
+                                           </div>
+                                       </div>
+                                       <div class="col-md-12">
+                                           <div class="form-group">
+                                               <label class="control-label">Description </label>
+                                               <input id='description' ng-model="tickets.description" class='form-control'
+                                                      name='description' type='text' value=""
+                                                       autofocus required/>
+                                               <div ng-show="form.$submitted || form.description.$touched">
+                                                   <div ng-show="form.description.$dirty || form.description.$invalid">
+                                                       <p class="help-block" style="color:maroon"
+                                                          ng-show="form.description.$error.required">
+                                                           Description is required.
+                                                       </p>
+                                                       
+                                                   </div>
+                                               </div>
+                                           </div>
+                                       </div>
+                                       <div class="col-md-6">
+                                          <div class="form-group">
+                                            <label class="control-label">Severity </label>
+                                            <select
+                                                required
+                                                name="severity"
+                                                ng-model="tickets.severity"
+                                                class="form-control searchable-input floatL">
+                                                <option value=''>Select severity</option>
+                                                <option value='1' selected>Low</option>
+                                                <option value='2'>Medium</option>
+                                                <option value='3'>High</option>
+                                             
+                                            </select>
+                                        
+                                            <div ng-show="form.$submitted || form.severity.$touched">
+                                                <div
+                                                    ng-show="form.severity.$dirty || form.severity.$invalid">
+
+                                                    <p class="help-block" style="color:maroon"
+                                                       ng-show="form.severity.$error.required">
+                                                        Required
+                                                </div>
+                                            </div>
+                                          </div>
+
+                                        </div>
+
+                                   </div>
+                                   
+                                   
+
+                               </div>
+                           </div>
+
+
+                       </div>
+                       <div class="col-md-6">
+                        <div class="panel panel-default">
+                              <div class="panel-heading">Site & Employee</div>
+                          <div class="panel-body">
+                           <div class="row">
+                           <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label class="control-label">Site </label>
+                                        <select
+                                            required
+                                            ng-model="selectedSite"
+                                            ng-change="loadEmployees()"
+                                            class="form-control searchable-input floatL" ng-options="site as site.name for site in sites">
+                                            <option value="">Select Site</option>
+                       
+                                       
+                                        </select>
+                                    
+                                        <div ng-show="form.$submitted || form.site.$touched">
+                                            <div
+                                                ng-show="form.site.$dirty || form.site.$invalid">
+
+                                                <p class="help-block" style="color:maroon"
+                                                   ng-show="form.site.$error.required" >
+                                                    Required
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label class="control-label">Employee </label>
+                                        <select
+                                            required
+                                            name="employee"
+                                            ng-model="selectedEmployee"
+                                            class="form-control searchable-input floatL" ng-options="emp as emp.fullName for emp in employees">
+                                            <option value="">Select Employee</option>
+                                         
+                                        </select>
+                                    
+                                        <div ng-show="form.$submitted || form.employee.$touched">
+                                            <div
+                                                ng-show="form.employee.$dirty || form.employee.$invalid">
+
+                                                <p class="help-block" style="color:maroon"
+                                                   ng-show="form.employee.$error.required">
+                                                    Required
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                           </div>
+                          </div>
+                         </div>
+                       </div>
+                   </div>
+                   <div class="row">
+                     
+                     <div class="col-md-6">
+                        <div class="panel panel-default">
+                              
+                          <div class="panel-heading">Comments</div>
+                          <div class="panel-body">
+                            <div class="row">
+                              
+                             <div class="col-md-6">
+                                 <div class="form-group">
+                                     <label class="control-label">Comments</label>
+                                     <input type="text" ng-model="tickets.comments" class="form-control">
+                                 </div>
+                             </div>
+                           </div>
+
+                         </div>
+                        </div>
+                     </div>
+                   </div>
+                  
+                   <div class="row">
+
+                       <div class="col-md-12">
+
+
+                           <button type="submit" ng-click="cancelTicket()"
+                                   id="cancel-button"   class="btn btn-danger pull-right"> <i class="material-icons">close</i> Cancel</button>
+
+                           <button type="submit" type="submit"
+                                   id="form-button-save" ng-disabled="form.$invalid"  class="btn btn-success pull-right"><span class="btn-label">
+                                            <i class="material-icons">check</i>
+                                        </span>Create ticket</button>
+
+                           <div class="clearfix"></div>
+                       </div>
+
+                   </div>
+
+
+
+               </form>
+           </div>
+
+
+    </div>
+
+    <div class="">
+        <div class="row">
+            <div class="col-mod-12">
+                <div class="alert alert-success" ng-show="success">
+                    <strong>Ticket saved!</strong>
+                </div>
+                <div class="alert alert-danger" ng-show="errorTicketsExists">
+                    <strong>Ticket already registered!</strong> Please choose another one.
+                </div>
+                <div class="alert alert-danger" ng-show="error">
+                    <strong>Ticket Not Saved!</strong> Please try again later.
+                </div>
+                <div class="alert alert-danger" ng-show="errorProject">
+                    <strong>Invalid Client</strong> Please choose another one.
+                </div>
+            </div>
+            <div class="col-md-12">
+
+
+
+            </div>
+
+        </div>
+    </div>
+
+
+</div>
+
+
+<!--<div class="crud-form"-->
+<!--data-unique-hash="a2ad475d60b22954085c657a73309b8f">-->
+<!--<div class="container" ng-controller="TicketController">-->
+<!--<div class="row">-->
+<!--<div class="col-md-12">-->
+
+<!--<div class="alert alert-success" ng-show="success">-->
+<!--<strong>Ticket saved!</strong>-->
+<!--</div>-->
+<!--<div class="alert alert-danger" ng-show="errorTicketsExists">-->
+<!--<strong>Ticket already registered!</strong> Please choose another one.-->
+<!--</div>-->
+<!--<div class="alert alert-danger" ng-show="error">-->
+<!--<strong>Ticket Not Saved!</strong> Please try again later.-->
+<!--</div>-->
+<!--<div class="alert alert-danger" ng-show="errorProject">-->
+<!--<strong>Invalid Project</strong> Please choose another one.-->
+<!--</div>-->
+<!--</div>-->
+<!--<div class="col-md-12">-->
+<!--<div class="titleCon">-->
+<!--<h3>Add Ticket</h3>-->
+<!--</div>-->
+
+<!--<div class="form-container table-container">-->
+<!--<form ng-show="!success" name="form" role="form" novalidate-->
+<!--ng-submit="saveTicket()" class="form-horizontal">-->
+
+<!--<div class="form-group ">-->
+<!--<label class="col-sm-3 control-label"> Ticket </label>-->
+<!--<div class="col-sm-5">-->
+<!--<input id='ticketName' ng-model="ticket.name" class='form-control'-->
+<!--name='ticketName' type='text' value=""-->
+<!--ng-minlength=1 ng-maxlength=50 ng-pattern="/^[A-Za-z0-9\s&-/]*$/" autofocus required/>-->
+<!--<div ng-show="form.$submitted || form.ticketName.$touched">-->
+<!--<div ng-show="form.ticketName.$dirty || form.ticketName.$invalid">-->
+<!--<p class="help-block" style="color:maroon"-->
+<!--ng-show="form.ticketName.$error.required">-->
+<!--Ticket name is required.-->
+<!--</p>-->
+<!--<p class="help-block" style="color:maroon"-->
+<!--ng-show="form.ticketName.$error.minlength">-->
+<!--Ticket name is required to be at least 5 character.-->
+<!--</p>-->
+<!--<p class="help-block" style="color:maroon"-->
+<!--ng-show="form.ticketName.$error.maxlength">-->
+<!--Ticket name cannot be longer than 50 characters.-->
+<!--</p>-->
+<!--<p class="help-block" style="color:maroon"-->
+<!--ng-show="form.ticketName.$error.pattern">-->
+<!--Ticket name can only contain letters, digits and space.-->
+<!--</p>-->
+<!--</div>-->
+<!--</div>-->
+<!--</div>-->
+<!--</div>-->
+<!--&lt;!&ndash;<div class="form-group ">&ndash;&gt;-->
+<!--&lt;!&ndash;<label class="col-sm-3 control-label"> Country </label>&ndash;&gt;-->
+<!--&lt;!&ndash;<div class="col-sm-5">&ndash;&gt;-->
+<!--&lt;!&ndash;<input id='country' ng-model="ticket.country" class='form-control'&ndash;&gt;-->
+<!--&lt;!&ndash;name='country' type='text' value=""&ndash;&gt;-->
+<!--&lt;!&ndash;ng-maxlength=50&ndash;&gt;-->
+<!--&lt;!&ndash;ng-pattern="/^[A-Za-z0-9\s&-/]*$/"/>&ndash;&gt;-->
+<!--&lt;!&ndash;<div ng-show="form.$submitted || form.country.$touched">&ndash;&gt;-->
+<!--&lt;!&ndash;<div ng-show="form.country.$dirty || form.country.$invalid">&ndash;&gt;-->
+<!--&lt;!&ndash;<p class="help-block" style="color:maroon"&ndash;&gt;-->
+<!--&lt;!&ndash;ng-show="form.country.$error.maxlength">&ndash;&gt;-->
+<!--&lt;!&ndash;Country cannot be longer than 50 characters.&ndash;&gt;-->
+<!--&lt;!&ndash;</p>&ndash;&gt;-->
+<!--&lt;!&ndash;<p class="help-block" style="color:maroon"&ndash;&gt;-->
+<!--&lt;!&ndash;ng-show="form.country.$error.pattern">&ndash;&gt;-->
+<!--&lt;!&ndash;Country can only contain letters and space.&ndash;&gt;-->
+<!--&lt;!&ndash;</p>&ndash;&gt;-->
+<!--&lt;!&ndash;</div>&ndash;&gt;-->
+<!--&lt;!&ndash;</div>&ndash;&gt;-->
+<!--&lt;!&ndash;</div>&ndash;&gt;-->
+<!--&lt;!&ndash;</div>&ndash;&gt;-->
+<!--&lt;!&ndash;<div class="form-group ">&ndash;&gt;-->
+<!--&lt;!&ndash;<label class="col-sm-3 control-label"> State </label>&ndash;&gt;-->
+<!--&lt;!&ndash;<div class="col-sm-5">&ndash;&gt;-->
+<!--&lt;!&ndash;<input id='state' ng-model="ticket.state" class='form-control'&ndash;&gt;-->
+<!--&lt;!&ndash;name='state' type='text' value=""&ndash;&gt;-->
+<!--&lt;!&ndash;ng-maxlength=50&ndash;&gt;-->
+<!--&lt;!&ndash;/>&ndash;&gt;-->
+<!--&lt;!&ndash;<div ng-show="form.$submitted || form.state.$touched">&ndash;&gt;-->
+<!--&lt;!&ndash;<div ng-show="form.state.$dirty || form.state.$invalid">&ndash;&gt;-->
+<!--&lt;!&ndash;<p class="help-block" style="color:maroon"&ndash;&gt;-->
+<!--&lt;!&ndash;ng-show="form.state.$error.maxlength">&ndash;&gt;-->
+<!--&lt;!&ndash;State cannot be longer than 200 characters.&ndash;&gt;-->
+<!--&lt;!&ndash;</p>&ndash;&gt;-->
+
+<!--&lt;!&ndash;</div>&ndash;&gt;-->
+<!--&lt;!&ndash;</div>&ndash;&gt;-->
+<!--&lt;!&ndash;</div>&ndash;&gt;-->
+<!--&lt;!&ndash;</div>&ndash;&gt;-->
+
+<!--&lt;!&ndash;<div class="form-group ">&ndash;&gt;-->
+<!--&lt;!&ndash;<label class="col-sm-3 control-label"> Address </label>&ndash;&gt;-->
+<!--&lt;!&ndash;<div class="col-sm-5">&ndash;&gt;-->
+<!--&lt;!&ndash;<textarea id='ticketName' ng-model="ticket.address"&ndash;&gt;-->
+<!--&lt;!&ndash;class='form-control'&ndash;&gt;-->
+<!--&lt;!&ndash;name='address'&ndash;&gt;-->
+<!--&lt;!&ndash;ng-maxlength='2500' >&ndash;&gt;-->
+<!--&lt;!&ndash;</textarea>&ndash;&gt;-->
+<!--&lt;!&ndash;<div ng-show="form.$submitted || form.address.$touched">&ndash;&gt;-->
+<!--&lt;!&ndash;<div ng-show="form.address.$dirty || form.address.$invalid">&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash; <p class="help-block" style="color:maroon"&ndash;&gt;-->
+<!--&lt;!&ndash;ng-show="form.ticketName.$error.pattern">&ndash;&gt;-->
+<!--&lt;!&ndash;Project name can only contain letters, digits and space.&ndash;&gt;-->
+<!--&lt;!&ndash;</p> &ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;</div>&ndash;&gt;-->
+<!--&lt;!&ndash;</div>&ndash;&gt;-->
+
+<!--&lt;!&ndash;</div>&ndash;&gt;-->
+<!--&lt;!&ndash;</div>&ndash;&gt;-->
+<!--&lt;!&ndash;<div class="form-group ">&ndash;&gt;-->
+<!--&lt;!&ndash;<label class="col-sm-3 control-label">Start Date</label>&ndash;&gt;-->
+<!--&lt;!&ndash;<div class="col-sm-5">&ndash;&gt;-->
+<!--&lt;!&ndash;<p class="input-group">&ndash;&gt;-->
+<!--&lt;!&ndash;<input ng-model="ticket.startDate" class='form-control'&ndash;&gt;-->
+<!--&lt;!&ndash;name='startDate' datetime-picker="dd-MMM-yyyy HH:mm"&ndash;&gt;-->
+<!--&lt;!&ndash;is-open="calendar.start"> <span&ndash;&gt;-->
+<!--&lt;!&ndash;class="input-group-btn">&ndash;&gt;-->
+<!--&lt;!&ndash;<button type="button" class="btn btn-default"&ndash;&gt;-->
+<!--&lt;!&ndash;ng-click="openCalendar($event, 'start')">&ndash;&gt;-->
+<!--&lt;!&ndash;<i class="fa fa-calendar"></i>&ndash;&gt;-->
+<!--&lt;!&ndash;</button>&ndash;&gt;-->
+<!--&lt;!&ndash;</span>&ndash;&gt;-->
+<!--&lt;!&ndash;</p>&ndash;&gt;-->
+<!--&lt;!&ndash;<div ng-show="form.$submitted || form.startDate.$touched">&ndash;&gt;-->
+<!--&lt;!&ndash;<div ng-show="form.startDate.$dirty || form.startDate.$invalid">&ndash;&gt;-->
+<!--&lt;!&ndash;<p class="help-block" style="color:maroon"&ndash;&gt;-->
+<!--&lt;!&ndash;ng-show="form.startDate.$error.required">&ndash;&gt;-->
+<!--&lt;!&ndash;Start Date is required.&ndash;&gt;-->
+<!--&lt;!&ndash;</p>&ndash;&gt;-->
+
+<!--&lt;!&ndash;<p class="help-block" style="color:maroon"&ndash;&gt;-->
+<!--&lt;!&ndash;ng-show="form.startDate.$error.pattern">&ndash;&gt;-->
+<!--&lt;!&ndash;Invalid Date Format&ndash;&gt;-->
+<!--&lt;!&ndash;</p>&ndash;&gt;-->
+<!--&lt;!&ndash;</div>&ndash;&gt;-->
+<!--&lt;!&ndash;</div>&ndash;&gt;-->
+
+<!--&lt;!&ndash;</div>&ndash;&gt;-->
+<!--&lt;!&ndash;</div>&ndash;&gt;-->
+
+<!--&lt;!&ndash;<div class="form-group ">&ndash;&gt;-->
+<!--&lt;!&ndash;<label class="col-sm-3 control-label">End Date</label>&ndash;&gt;-->
+<!--&lt;!&ndash;<div class="col-sm-5">&ndash;&gt;-->
+<!--&lt;!&ndash;<p class="input-group">&ndash;&gt;-->
+<!--&lt;!&ndash;<input ng-model="ticket.endDate" class='form-control'&ndash;&gt;-->
+<!--&lt;!&ndash;name='endDate' datetime-picker="dd-MMM-yyyy HH:mm"&ndash;&gt;-->
+<!--&lt;!&ndash;is-open="calendar.end" /> <span&ndash;&gt;-->
+<!--&lt;!&ndash;class="input-group-btn">&ndash;&gt;-->
+<!--&lt;!&ndash;<button type="button" class="btn btn-default"&ndash;&gt;-->
+<!--&lt;!&ndash;ng-click="openCalendar($event, 'end')">&ndash;&gt;-->
+<!--&lt;!&ndash;<i class="fa fa-calendar"></i>&ndash;&gt;-->
+<!--&lt;!&ndash;</button>&ndash;&gt;-->
+<!--&lt;!&ndash;</span>&ndash;&gt;-->
+<!--&lt;!&ndash;</p>&ndash;&gt;-->
+<!--&lt;!&ndash;<div ng-show="form.$submitted || form.endDate.$touched">&ndash;&gt;-->
+<!--&lt;!&ndash;<div ng-show="form.endDate.$dirty || form.endDate.$invalid">&ndash;&gt;-->
+<!--&lt;!&ndash;<p class="help-block" style="color:maroon"&ndash;&gt;-->
+<!--&lt;!&ndash;ng-show="form.endDate.$error.required">&ndash;&gt;-->
+<!--&lt;!&ndash;End Date is required.&ndash;&gt;-->
+<!--&lt;!&ndash;</p>&ndash;&gt;-->
+
+<!--&lt;!&ndash;<p class="help-block" style="color:maroon"&ndash;&gt;-->
+<!--&lt;!&ndash;ng-show="form.endDate.$error.pattern">&ndash;&gt;-->
+<!--&lt;!&ndash;Invalid Date Format&ndash;&gt;-->
+<!--&lt;!&ndash;</p>&ndash;&gt;-->
+<!--&lt;!&ndash;</div>&ndash;&gt;-->
+<!--&lt;!&ndash;</div>&ndash;&gt;-->
+
+<!--&lt;!&ndash;</div>&ndash;&gt;-->
+<!--&lt;!&ndash;</div>&ndash;&gt;-->
+
+
+
+<!--&lt;!&ndash; Start of hidden inputs &ndash;&gt;-->
+<!--&lt;!&ndash; End of hidden inputs &ndash;&gt;-->
+
+<!--<div class='small-loading hidden' id='FormLoading'>Loading,-->
+<!--saving data...</div>-->
+
+<!--<div class="form-group">-->
+<!--<div id='report-error' class='report-div error bg-danger'-->
+<!--style="display: none"></div>-->
+<!--<div id='report-success' class='report-div success bg-success'-->
+<!--style="display: none"></div>-->
+<!--</div>-->
+<!--<div class="form-group">-->
+<!--<div class="col-sm-offset-3 col-sm-7">-->
+<!--<button class="btn btn-default btn-success b10" type="submit"-->
+<!--id="form-button-save" ng-disabled="form.$invalid">-->
+<!--<i class="fa fa-check"></i> Save-->
+<!--</button>-->
+<!--<button class="btn btn-info b10" type="submit"-->
+<!--id="save-and-go-back-button" ng-disabled="form.$invalid">-->
+<!--<i class="fa fa-rotate-left"></i> Save and go back to list-->
+<!--</button>-->
+<!--<button class="btn btn-default cancel-button b10" type="button"-->
+<!--ng-click="cancelTicket()" id="cancel-button">-->
+<!--<i class="fa fa-warning"></i> Cancel-->
+<!--</button>-->
+<!--</div>-->
+<!--</div>-->
+<!--</form>-->
+<!--</div>-->
+<!--</div>-->
+<!--</div>-->
+<!--</div>-->
+
+<!--</div>-->

@@ -1,0 +1,163 @@
+<div class="crud-form"
+	data-unique-hash="a2ad475d60b22954085c657a73309b8f" ng-init="initLoad();loadingStart();">
+	<div class="" ng-init="editTicket();">
+		<div class="row">
+        	<div class="col-md-12">
+
+                <div class="titleCon">
+                    <!--<h3>View Job</h3>-->
+                </div>
+
+				<div class="form-container table-container">
+					<form ng-show="!success" name="form" role="form" novalidate
+						class="form-horizontal">
+
+
+
+
+                        <div class="row">
+
+                            <div class="col-md-4">
+
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">Ticket Details</div>
+                                    <div class="panel-body">
+
+
+                                        <div class="table-responsive">
+                                            <table class="table">
+                                                <tbody>
+                                                <tr>
+                                                    <td>Title</td>
+                                                    <td>{{tickets.title}}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Description</td>
+                                                    <td>{{tickets.description}}</td>
+
+                                                </tr>
+                                                <tr>
+                                                    <td>Severity</td>
+                                                    <td>
+                                                        
+                                                     {{tickets.severity}}
+                                                    
+                                                    </td>
+
+                                                </tr>
+                                             
+
+
+                                                </tbody>
+                                            </table>
+                                        </div>
+
+
+
+                                    </div>
+                                </div>
+
+
+                            </div>
+                            <div class="col-md-4">
+
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">Site & Employee</div>
+                                    <div class="panel-body">
+
+
+                                        <div class="table-responsive">
+                                            <table class="table">
+                                                <tbody>
+                                                <tr>
+                                                    <td>Site</td>
+                                                    <td>{{tickets.selectedSite}}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Employee</td>
+                                                    <td>{{tickets.selectedEmployee}}</td>
+
+                                                </tr>
+                                          
+                                                </tbody>
+                                            </table>
+                                        </div>
+
+                                    </div>
+                                </div>
+
+
+                            </div>
+                            <div class="col-md-4">
+
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">Comments </div>
+                                    <div class="panel-body">
+
+                                        <div class="table-responsive">
+                                            <table class="table">
+                                                <tbody>
+                                                <tr>
+                                                    <td>Comments</td>
+                                                    <td>{{tickets.Comments}}</td>
+                                                </tr>
+                                                
+
+                                                </tbody>
+                                            </table>
+                                        </div>
+
+                                    </div>
+                                </div>
+
+
+                            </div>
+
+                        </div>
+
+                        
+
+
+
+                        <!--<div class="titleCon">-->
+                            <!--<h5>Actual Start and End</h5>-->
+                        <!--</div>-->
+
+
+
+
+
+
+						<!-- Start of hidden inputs -->
+						<!-- End of hidden inputs -->
+
+						<div class='small-loading hidden' id='FormLoading'>Loading,
+							saving data...</div>
+
+						<div class="form-group">
+							<div id='report-error' class='report-div error bg-danger'
+								style="display: none"></div>
+							<div id='report-success' class='report-div success bg-success'
+								style="display: none"></div>
+						</div>
+						<div class="form-group">
+							<div class="col-sm-12 txt-align-rgt">
+
+								<button class="btn btn-default " type="button"
+									ui-sref="tickets" id="cancel-button">
+									<i class=""></i> Back
+								</button>
+							</div>
+						</div>
+					</form>
+					<script type="text/javascript">
+					$('.form-control').attr('readonly',true)
+					</script>
+				</div>
+			</div>
+		</div>
+	</div>
+
+</div>
+
+

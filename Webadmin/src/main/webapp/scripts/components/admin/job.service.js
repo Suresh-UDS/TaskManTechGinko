@@ -174,7 +174,7 @@ angular.module('timeSheetApp')
             },
 
             searchTickets:function(search){
-                return $http.post('api/ticket/search',search).then(function (response) {
+                return $http.post('api/tickets/search',search).then(function (response) {
                     console.log(response);
                     return response.data;
                 })
