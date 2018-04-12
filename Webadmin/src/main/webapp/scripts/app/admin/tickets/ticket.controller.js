@@ -121,6 +121,7 @@ angular.module('timeSheetApp')
         $scope.loadSites = function () {
             SiteComponent.findAll().then(function (data) {
                 $scope.sites = data;
+                $scope.loadingStop();
             });
         };
 
@@ -129,6 +130,7 @@ angular.module('timeSheetApp')
                 EmployeeComponent.search($scope.searchCriteria).then(function (data) {
                     $scope.selectedEmployee = null;
                 $scope.employees = data.transactions;
+
             });
         };
 
@@ -139,6 +141,7 @@ angular.module('timeSheetApp')
             JobComponent.getTicketDetails(sId).then(function (data) {
                 var siteId = parseInt(data.siteId);
                 $scope.selectedSite(siteId);
+
                 
             });
             
@@ -149,7 +152,7 @@ angular.module('timeSheetApp')
             SiteComponent.findOne(siteId).then(function (data) {
                    var data = parseInt(data);
                var selectedSite = {id : data.siteId,name : data.siteName};
-                console.log("Muthu==" + selectedSite);
+                console.log("Sites==" + selectedSite);
                 
                 
             });
