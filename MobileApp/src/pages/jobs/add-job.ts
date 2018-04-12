@@ -40,9 +40,13 @@ export class CreateJobPage {
     checklists:any;
     empPlace:any;
     msg:any;
+    ticket:any;
     constructor(public navCtrl: NavController,public component:componentService,public navParams:NavParams,public myService:authService, public authService: authService, private loadingCtrl:LoadingController, private jobService: JobService, private attendanceService: AttendanceService, private siteService: SiteService) {
         this.jobDetails=this.navParams.get('job');
-
+        console.log(this.navParams.get('ticketDetails'));
+        if(this.navParams.get('ticketDetails')){
+            this.ticket = this.navParams.get('ticketDetails');
+        }
         this.jobService.loadCheckLists().subscribe(
             response=>{
                 console.log(response);
@@ -56,7 +60,9 @@ export class CreateJobPage {
 
     ionViewDidLoad() {
         this.empSelect=true;
+        if(this.ticket){
 
+        }
 
         this.component.showLoader('Getting All Sites');
         this.siteService.searchSite().subscribe(
@@ -110,7 +116,8 @@ export class CreateJobPage {
                 "siteId":this.siteId,
                 "employeeId":this.employ,
                 "userId":this.userId,
-                "locationId":1
+                "locationId":1,
+                "ticketId":this.ticket.id
             }
 
 

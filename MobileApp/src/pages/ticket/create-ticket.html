@@ -89,6 +89,27 @@
 
                         </ion-col>
 
+                        <ion-col col-12>
+
+                            <div class="form-group label-floating">
+                                <label class="control-label" >Severity</label>
+                                <ion-select [(ngModel)]="severity" class="select-box padding-left0" id="severity" name="severity" [placeholder]="empPlace" >
+                                    <ion-option  *ngFor="let s of severities" [value]="s" >{{s}}</ion-option>
+                                </ion-select>
+
+                            </div>
+
+                        </ion-col>
+
+                        <ion-col col-12>
+                            <div>
+                                <label class="control-label">Title</label>
+                                <input class="form-control" type="text" [(ngModel)]="comments" >
+                            </div>
+                        </ion-col>
+
+
+
                         <button type="submit" class="btn btn-warning pull-right margin-auto" (click)="createTicket()">Add</button>
 
                         <div class="clearfix"></div>

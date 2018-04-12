@@ -27,7 +27,7 @@ var cors = require('cors');
 function startup(){
 
   // Bootstrap mongoose and load dummy data
-  mongoose.connect('mongodb://admin:Tgadmin123#@localhost:27017/quotation_svc', function(err) {
+  mongoose.connect('mongodb://admin:Tgadmin123#@ec2-54-169-225-123.ap-southeast-1.compute.amazonaws.com:27017/quotation_svc', function(err) {
     if (err) throw err;
 
     /*
@@ -94,7 +94,22 @@ function startup(){
   // app.post('/api/oneSignal/subscribe', notificationService.subscribe);
 
   // app.get('/api/rateCard/search',quotationController.getRateCardsPageWise);
+
+    setupMasterData();
   listen(server);
+}
+
+function setupMasterData(){
+    var Sequence = require('mongoose').model('Sequence');
+
+    Sequence.findOne({type : 'quotation'}, function(err, result) {
+        if(!result) {
+            Sequence.create({
+                "type" : "quotation",
+                "value" : 1
+            });
+        }
+    })
 }
 
 function listen(server){

@@ -21,13 +21,25 @@ export class ViewTicket {
 
   ticketDetails:any;
   constructor(public navCtrl: NavController, public navParams: NavParams,private cs:componentService, private jobService:JobService) {
-    this.ticketDetails = this.navParams.data.ticket;
+    // this.ticketDetails = this.navParams.data.ticket;
+      console.log(this.navParams.data.ticket);
+      this.ticketDetails ={};
 
   }
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad ViewTicket');
-    console.log(this.ticketDetails);
+    // console.log(this.ticketDetails);
+    this.getTicketDetails(this.navParams.data.ticket);
+  }
+
+  getTicketDetails(ticketDetails){
+      this.jobService.getTicketDetails(ticketDetails.id).subscribe(
+          response=>{
+              console.log(response);
+              this.ticketDetails = response;
+          }
+      )
   }
 
     closeTicket(){

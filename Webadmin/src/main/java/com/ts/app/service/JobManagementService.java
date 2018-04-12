@@ -148,6 +148,9 @@ public class JobManagementService extends AbstractService {
     @Inject
     private CheckInOutImageRepository checkInOutImageRepository;
 
+    @Inject
+    private TicketManagementService ticketManagementService;
+
     public void updateJobStatus(long siteId, JobStatus toBeJobStatus) {
 		//UPDATE ALL OVERDUE JOB STATUS
 		if(!StringUtils.isEmpty(toBeJobStatus) &&
@@ -633,6 +636,13 @@ public class JobManagementService extends AbstractService {
 		//if(CollectionUtils.isEmpty(existingJobs)) {
 			job = jobRepository.save(job);
 
+			if(job.getTicket()!=null){
+			    Ticket ticket = job.getTicket();
+			    TicketDTO ticketDTO= mapperUtil.toModel(ticket,TicketDTO.class);
+			    ticketDTO.setJobId(job.getId());
+			    ticketManagementService.updateTicket(ticketDTO);
+            }
+
 
 		//}
 
@@ -816,6 +826,8 @@ public class JobManagementService extends AbstractService {
 		jobDto.setActive(job.getActive());
 		//jobDto.setLocationId(job.getLocation().getId());
 		//jobDto.setLocationName(job.getLocation().getName());
+        jobDto.setTicketId(job.getTicket().getId());
+        jobDto.setTicketName(job.getTicket().getTitle());
 		List<CheckInOutImage> images = checkInOutImageRepository.findAll(job.getId());
 		List<CheckInOutImageDTO> imageDtos = new ArrayList<CheckInOutImageDTO>();
 		if(CollectionUtils.isNotEmpty(images)) {

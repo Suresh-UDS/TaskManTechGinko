@@ -34,10 +34,14 @@ export class CreateTicket {
     private empPlace: any;
     private empSelect: any;
     private employee: any;
+    private severities: any;
+    private severity: any;
 
   constructor(public navCtrl: NavController, public navParams: NavParams, public siteService:SiteService, public jobService:JobService, public cs:componentService) {
       this.sites=[];
       this.employee=[];
+      this.severities = ['Low','Medium','High'];
+      this.severity = this.severities[0];
   }
 
   ionViewDidLoad() {
@@ -112,6 +116,7 @@ export class CreateTicket {
                   "siteId":this.siteId,
                   "employeeId":this.employ,
                   "userId":this.userId,
+                  "severity":this.severity,
               }
 
 
