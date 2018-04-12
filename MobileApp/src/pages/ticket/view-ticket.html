@@ -35,7 +35,48 @@
     <ion-col col-6>
       <p text-right>{{ticketDetails.status}}</p>
     </ion-col>
+      <ion-col col-6 class="label-on-left">Severity</ion-col>
+    <ion-col col-6>
+      <p text-right>{{ticketDetails.severity}}</p>
+    </ion-col>
   </ion-row>
+
+    <br>
+
+    <ion-row class="margin0 white-bg padding10">
+        <ion-col col-6 class="label-on-left">Site Name</ion-col>
+        <ion-col col-6>
+            <p text-right>{{ticketDetails.siteName}}</p>
+        </ion-col>
+        <ion-col col-6 class="label-on-left">Assigned To</ion-col>
+        <ion-col col-6>
+            <p text-right>{{ticketDetails.employeeName}}</p>
+        </ion-col>
+        <ion-col col-6 class="label-on-left">Assigned By</ion-col>
+        <ion-col col-6>
+            <p text-right>{{ticketDetails.createdBy}}</p>
+        </ion-col>
+        <ion-col col-6 class="label-on-left">Created At</ion-col>
+        <ion-col col-6>
+            <p text-right>{{ticketDetails.createdDate | date:"longDate"}}</p>
+        </ion-col>
+    </ion-row>
+
+    <br>
+
+    <ion-row class="margin0 white-bg padding10"  *ngIf="ticketDetails.status == 'Closed'">
+        <ion-col col-6 class="label-on-left">Completed By</ion-col>
+        <ion-col col-6>
+            <p text-right>{{ticketDetails.lastModifiedBy}}</p>
+        </ion-col>
+        <ion-col col-6 class="label-on-left">Completed At</ion-col>
+        <ion-col col-6>
+            <p text-right>{{ticketDetails.lastModifiedDate}}</p>
+        </ion-col>
+    </ion-row>
+
+    <br>
+
 </ion-content>
 
 

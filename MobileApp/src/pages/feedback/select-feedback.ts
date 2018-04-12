@@ -33,7 +33,7 @@ export class SelectFeedbackPage {
   }
   happy()
   {
-      this.navCtrl.setRoot(FeedbackPage,{feedback:this.feedback,fb:this.fb,question:[],overallFeedback:true,project:this.navParams.data.project,site:this.navParams.data.site,location:this.navParams.data.location});
+      this.navCtrl.push(FeedbackPage,{feedback:this.feedback,fb:this.fb,question:[],overallFeedback:true,project:this.navParams.data.project,site:this.navParams.data.site,location:this.navParams.data.location});
   }
 
 }

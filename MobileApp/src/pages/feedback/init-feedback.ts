@@ -8,6 +8,7 @@ import {FeedbackService} from "../service/feedbackService";
 import {FeedbackDashboardPage} from "./feedback-dashboard";
 import {SelectFeedbackPage} from "./select-feedback";
 import {InitFeedbackZone} from "./init-feedback-zone";
+import {LoginPage} from "../login/login";
 @Component({
   selector: 'page-init-feedback',
   templateUrl: 'init-feedback.html'
@@ -54,41 +55,51 @@ export class InitFeedbackPage {
     {
         var feedback =fb.feedback;
         if(feedback){
-            this.navCtrl.setRoot(SelectFeedbackPage,{feedback:feedback,fb:fb});
+            this.navCtrl.push(SelectFeedbackPage,{feedback:feedback,fb:fb});
 
         }else{
             this.component.showToastMessage('No Feedback form available','bottom');
         }
     }
 
+    ionViewDidLoad() {
+        console.log('ionViewDidLoad TabsPage');
+        if(window.localStorage.getItem('session')){
+            console.log("Session available");
+            // this.component.showToastMessage('Previous Login Detected, Login automatically','bottom');
+            console.log('ionViewDidLoad Init Feedback');
 
-  ionViewDidLoad() {
-    console.log('ionViewDidLoad Init Feedback');
-
-      this.selectOptions={
-          cssClass: 'selectbox-popover'
-      }
-      this.component.showLoader('Getting Project');
-    this.siteService.getAllProjects().subscribe(
-        response=>{
-          console.log("====project======");
-          console.log(response);
-          this.projects=response;
-          this.selectedProject = this.projects[0];
-          this.selectSite(this.selectedProject);
-          console.log('select default value:');
-            this.component.closeLoader();
-        },
-        error=>{
-          if(error.type==3)
-          {
-            this.msg='Server Unreachable'
-          }
-          this.component.showToastMessage(this.msg,'bottom');
-            this.component.closeLoader();
+            this.selectOptions={
+                cssClass: 'selectbox-popover'
+            }
+            this.component.showLoader('Getting Project');
+            this.siteService.getAllProjects().subscribe(
+                response=>{
+                    console.log("====project======");
+                    console.log(response);
+                    this.projects=response;
+                    this.selectedProject = this.projects[0];
+                    this.selectSite(this.selectedProject);
+                    console.log('select default value:');
+                    this.component.closeLoader();
+                },
+                error=>{
+                    if(error.type==3)
+                    {
+                        this.msg='Server Unreachable'
+                    }
+                    this.component.showToastMessage(this.msg,'bottom');
+                    this.component.closeLoader();
+                }
+            )
+        }else{
+            console.log("Session not Available");
+            this.component.showToastMessage('Session not available, please login','bottom');
+            this.navCtrl.setRoot(LoginPage);
         }
-    )
-  }
+    }
+
+
 
     selectSite(project)
     {
@@ -247,7 +258,7 @@ export class InitFeedbackPage {
 
     selectZonePage(location){
         if(location){
-            this.navCtrl.setRoot(InitFeedbackZone,{project:this.selectedProject,site:this.selectedSite,location:location});
+            this.navCtrl.push(InitFeedbackZone,{project:this.selectedProject,site:this.selectedSite,location:location});
         }else{
             this.component.showToastMessage('No Locations configured','bottom');
         }

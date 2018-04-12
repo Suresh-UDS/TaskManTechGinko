@@ -41,9 +41,9 @@ export class InitFeedbackZone {
         var feedback =fb.feedback;
         if(feedback){
             if(feedback.displayType == 'form'){
-                this.navCtrl.setRoot(SelectFeedbackPage,{feedback:feedback,fb:fb,project:project,site:site,location:location});
+                this.navCtrl.push(SelectFeedbackPage,{feedback:feedback,fb:fb,project:project,site:site,location:location});
             }else{
-                this.navCtrl.setRoot(WizardFeedbackEntry,{feedback:feedback,fb:fb,project:project,site:site,location:location});
+                this.navCtrl.push(WizardFeedbackEntry,{feedback:feedback,fb:fb,project:project,site:site,location:location});
             }
 
         }else{

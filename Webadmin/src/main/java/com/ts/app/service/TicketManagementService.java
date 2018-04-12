@@ -43,6 +43,9 @@ public class TicketManagementService extends AbstractService {
     private UserRepository userRepository;
 
     @Inject
+    private JobRepository jobRepository;
+
+    @Inject
     private NotificationRepository notificationRepository;
 
     @Inject
@@ -67,6 +70,10 @@ public class TicketManagementService extends AbstractService {
         ticket.setEmployee(employee);
         ticket.setStatus("Open");
 
+        ticket.setJob(null);
+
+        log.debug("Job id in ticket service"+ticket.getJob());
+
         ticket = ticketRepository.save(ticket);
 
         ticketDTO = mapperUtil.toModel(ticket, TicketDTO.class);
@@ -82,10 +89,20 @@ public class TicketManagementService extends AbstractService {
     public TicketDTO updateTicket(TicketDTO ticketDTO){
         Ticket ticket = ticketRepository.findOne(ticketDTO.getId());
         Site site = siteRepository.findOne(ticket.getSite().getId());
-        ticket.setSite(site);
+        if(site!=null){
+            ticket.setSite(site);
+        }
 
         Employee employee = employeeRepository.findOne(ticket.getEmployee().getId());
-        ticket.setEmployee(employee);
+        if(employee!=null){
+            ticket.setEmployee(employee);
+        }
+
+        Job job = jobRepository.findOne(ticketDTO.getJobId());
+        if(job!=null){
+            ticket.setJob(job);
+        }
+
 
         ticket.setStatus(ticketDTO.getStatus());
 

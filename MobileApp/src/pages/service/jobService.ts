@@ -85,4 +85,12 @@ export class JobService {
         )
     }
 
+    getTicketDetails(id):Observable<any>{
+        return this.http.get(this.config.Url+'api/ticket/details/'+id).map(
+            response=>{
+                return response.json();
+            }
+        )
+    }
+
 }

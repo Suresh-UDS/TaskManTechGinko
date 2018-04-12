@@ -1,7 +1,7 @@
 module.exports = {
 
 	db:{
-		url:'mongodb://localhost:27017/quotation_svc',
+		url:'mongodb://ec2-52-221-245-74.ap-southeast-1.compute.amazonaws.com:27017/quotation_svc',
 		//url:'mongodb://ec2-52-221-245-74.ap-southeast-1.compute.amazonaws.com:27017/delivery',
 		schema : '/../app/schema',
 		user:'admin',
