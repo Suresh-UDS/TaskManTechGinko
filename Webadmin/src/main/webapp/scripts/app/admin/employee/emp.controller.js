@@ -1161,13 +1161,13 @@ angular.module('timeSheetApp')
 
          // Page Loader Function
 
-        $scope.loadingStart = function(){ $('.pageCenter').show();}
+        $scope.loadingStart = function(){ $('.pageCenter').show(); $('.overlay').show();}
         $scope.loadingAuto = function(){
             $scope.loadingStart(); 
             $scope.loadtimeOut = $timeout(function(){
             
             //console.log("Calling loader stop");
-            $('.pageCenter').hide();
+            $('.pageCenter').hide(); $('.overlay').hide();
                     
         }, 2000);
            // alert('hi');
@@ -1175,7 +1175,7 @@ angular.module('timeSheetApp')
         $scope.loadingStop = function(){
             
             console.log("Calling loader");
-            $('.pageCenter').hide();
+            $('.pageCenter').hide(); $('.overlay').hide();
                     
         }
 

@@ -6,7 +6,7 @@
         <!--<h3 class="title">Edit ticket</h3>-->
     </div>
 
-    <div ng-controller="TicketController" ng-init="loadProjects();editTicket();">
+    <div ng-controller="TicketController" ng-init="editTicket();">
             <div class="cardsCon editTicketCon" ng-init="loadTicket()">
                 <form ng-show="!success" name="form" role="form" novalidate
                       ng-submit="updatedTicket()"  >

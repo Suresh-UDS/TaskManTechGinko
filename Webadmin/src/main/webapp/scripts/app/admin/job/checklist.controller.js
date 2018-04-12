@@ -96,11 +96,11 @@ angular.module('timeSheetApp')
         	
         	// Page Loader Function
 
-            $('.pageCenter').show();
+            $('.pageCenter').show();$('.overlay').show();
             $scope.loader = function(){
                 
                 console.log("Calling loader");
-                $('.pageCenter').hide();
+                $('.pageCenter').hide();$('.overlay').hide();
                         
             }
             

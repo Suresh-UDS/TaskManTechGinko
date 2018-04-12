@@ -23,14 +23,9 @@ angular.module('timeSheetApp')
         }
         
 
-        
-        
-        $scope.loadTickets = function () {
-        	JobComponent.findAll().then(function (data) {
-                $scope.tickets = data;
-                 $scope.loadingStop();
-            });
-        };
+        $scope.loadTickets = function(){
+            $scope.search();
+        }
         
         $scope.initCalender = function(){
             demo.initFormExtendedDatetimepickers();
@@ -103,33 +98,19 @@ angular.module('timeSheetApp')
         
        
         
-        $scope.removeItem = function(ind) {
-        		$scope.shiftItems.splice(ind,1);
-        }
-        
 
         $scope.cancelTicket = function () {
         		$location.path('/tickets');
         };
 
-        $scope.loadAllTickets = function () {
-        	SiteComponent.findAll().then(function (data) {
-
-        		$scope.allTickets = data;
-        	});
+        $scope.loadAllSites = function () {
+            SiteComponent.findAll().then(function (data) {
+                // $scope.selectedSite = null;
+                $scope.sites = data;
+            });
         };
 
-        $scope.loadSites = function () {
-	        	$scope.clearFilter();
-	//        	if($rootScope.searchCriteriaTicket) {
-	//        		$scope.search();
-	//        	}else {
-	//            	TicketComponent.findAll().then(function (data) {
-	//                    $scope.Tickets = data;
-	//                });
-	//        	}
-	        	$scope.search();
-        };
+       
 
         $scope.refreshPage = function(){
                $scope.clearFilter();
@@ -151,9 +132,26 @@ angular.module('timeSheetApp')
             });
         };
 
-        $scope.loadSelectedProject = function(projectId) {
-        	ProjectComponent.findOne(projectId).then(function (data) {
-                $scope.selectedProject = data;
+
+
+          $scope.loadselectedSite = function() {
+           var sId = parseInt($stateParams.id);
+            JobComponent.getTicketDetails(sId).then(function (data) {
+                var siteId = parseInt(data.siteId);
+                $scope.selectedSite(siteId);
+                
+            });
+            
+        };
+        
+        $scope.selectedSite = function(siteId) {
+          
+            SiteComponent.findOne(siteId).then(function (data) {
+                   var data = parseInt(data);
+               var selectedSite = {id : data.siteId,name : data.siteName};
+                console.log("Muthu==" + selectedSite);
+                
+                
             });
         };
 
@@ -173,6 +171,23 @@ angular.module('timeSheetApp')
                 $scope.selectedEmployee = {id : data.employeeId,name : data.employeeName};
                 $scope.tickets.severity = $scope.tickets.severity;
                 $scope.tickets.comments = $scope.tickets.comments;
+
+              
+            });
+        };
+        
+        $scope.viewTicket = function(id){
+            var tId =parseInt(id);
+            JobComponent.getTicketDetails(tId).then(function(data){
+                console.log("Ticket details List==" + JSON.stringify(data));
+                var tlist= data;
+                $scope.listId = tlist.id;
+                $scope.listTitle = tlist.title;
+                $scope.listDescription = tlist.description;
+                $scope.listSite = tlist.siteName;
+                $scope.listEmployee = tlist.employeeName;
+                $scope.listseverity = tlist.severity;
+                $scope.listcomments = tlist.comments;
 
               
             });
@@ -525,6 +540,7 @@ angular.module('timeSheetApp')
              $scope.loadPageTop(); 
              $scope.loadSites();
              $scope.loadEmployees();
+             $scope.loadselectedSite();
           
          }
 
@@ -537,11 +553,11 @@ angular.module('timeSheetApp')
 
         // Page Loader Function
 
-        $scope.loadingStart = function(){ $('.pageCenter').show();}
+        $scope.loadingStart = function(){ $('.pageCenter').show();$('.overlay').show();}
         $scope.loadingStop = function(){
             
             console.log("Calling loader");
-            $('.pageCenter').hide();
+            $('.pageCenter').hide();$('.overlay').hide();
                     
         }
     });

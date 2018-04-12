@@ -114,7 +114,8 @@
 
 
                                 <td class="text-right">
-                                    <a ng-class="{active: $state.includes('admin')}" ui-sref="view-ticket({ id: ticket.id })"   class="btn btn-simple btn-info btn-icon like"><i class="material-icons">remove_red_eye</i></a>
+                                    <!-- <a ng-class="{active: $state.includes('admin')}" ui-sref="view-ticket({ id: ticket.id })"   class="btn btn-simple btn-info btn-icon like"><i class="material-icons">remove_red_eye</i></a> -->
+                                    <a  ng-class="{active: $state.includes('admin')}"  ng-click="viewTicket(ticket.id)" data-toggle="modal" data-target="#RightModal-view" class="btn btn-simple btn-info"><i class="material-icons">remove_red_eye</i></a>
 
                                     <a  ng-class="{active: $state.includes('admin')}"  ui-sref="edit-ticket({ id: ticket.id })"  class="btn btn-simple btn-info"><i class="material-icons">edit</i></a>
 
@@ -232,3 +233,114 @@
 
 </div>
 </div>
+
+<div class="modal right fade" id="RightModal-view" tabindex="-1" role="dialog" aria-labelledby="RightModal">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel2">Ticket Details - Ticket id - {{listId}}</h4>
+            </div>
+
+            <div class="modal-body">
+
+                <div class="card">
+
+                    <div class="card-content">
+
+                        <div class="table-responsive">
+                             <table class="table">
+                                 <tbody>
+                                 <tr>
+                                     <td>Title</td>
+                                     <td>{{listTitle}}</td>
+                                 </tr>
+                                 <tr>
+                                     <td>Description</td>
+                                     <td>{{listDescription}}</td>
+
+                                 </tr>
+                                 <tr>
+                                     <td>Severity</td>
+                                     <td>
+                                         
+                                      {{listSeverity}}
+                                     
+                                     </td>
+
+                                 </tr>
+                              
+
+
+                                 </tbody>
+                             </table>
+                         </div>
+                          <div class="panel panel-default">
+                                <div class="panel-heading">Site & Employee</div>
+                                <div class="panel-body">
+
+
+                                    <div class="table-responsive">
+                                        <table class="table">
+                                            <tbody>
+                                            <tr>
+                                                <td>Site</td>
+                                                <td>{{listSite}}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Employee</td>
+                                                <td>{{listEmployee}}</td>
+
+                                            </tr>
+                                      
+                                            </tbody>
+                                        </table>
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div class="panel panel-default">
+                                    <div class="panel-heading">Comments </div>
+                                    <div class="panel-body">
+
+                                        <div class="table-responsive">
+                                            <table class="table">
+                                                <tbody>
+                                                <tr>
+                                                    <td>Comments</td>
+                                                    <td>{{listComments}}</td>
+                                                </tr>
+                                                
+
+                                                </tbody>
+                                            </table>
+                                        </div>
+
+                                    </div>
+                                </div>
+
+
+                        <div class="row">
+
+                            <div class="col-md-4 col-md-offset-4">
+                                <button class="btn btn-default close-button-right b10" type="button"
+                                        data-dismiss="modal">
+                                    <!-- <i class="material-icons">keyboard_arrow_left</i> Back -->
+                                     Close
+                                </button>
+                            </div>
+
+                        </div>
+
+
+                    </div>
+
+                </div>
+
+
+            </div>
+
+        </div><!-- modal-content -->
+    </div><!-- modal-dialog -->
+</div><!--End View modal -->

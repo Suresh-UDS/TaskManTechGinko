@@ -986,11 +986,12 @@ button.btn.btn-outline {
   }
 
   .pageCenter{
-      top: calc(100% / 3);
-      left: calc(100% / 2.5);
+      top: calc(100% / 2.5);
+      left: calc(100% / 2.3);
       z-index: 100000;
       position: absolute;
       display: none;
+      width:4%;
   }
   .white{
       color:#fff;
@@ -999,4 +1000,15 @@ button.btn.btn-outline {
   }
   a.logout{
      padding-left: 0px !important; 
+  }
+  .overlay{
+    background: rgba(255,255,255,0.3);
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 10000;
+    display: none;
+  
   }

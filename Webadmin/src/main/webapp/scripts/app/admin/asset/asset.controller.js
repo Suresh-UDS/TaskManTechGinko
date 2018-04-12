@@ -281,11 +281,12 @@ angular.module('timeSheetApp')
 
         // Page Loader Function
 
-        $scope.loadingStart = function(){ $('.pageCenter').show();}
+        $scope.loadingStart = function(){ $('.pageCenter').show();
+        $('.overlay').show();}
         $scope.loadingStop = function(){
             
             console.log("Calling loader");
-            $('.pageCenter').hide();
+            $('.pageCenter').hide(); $('.overlay').hide();
                     
         }
     });
