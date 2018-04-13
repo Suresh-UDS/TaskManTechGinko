@@ -8,6 +8,8 @@ angular.module('timeSheetApp')
         $scope.errorTicketsExists = null;
         $scope.searchCriteria = {};
         $scope.selectedSite = null;
+        $scope.cTicket ={};
+
 
         $timeout(function (){angular.element('[ng-model="name"]').focus();});
 
@@ -174,6 +176,7 @@ angular.module('timeSheetApp')
                 $scope.selectedEmployee = {id : data.employeeId,name : data.employeeName};
                 $scope.tickets.severity = $scope.tickets.severity;
                 $scope.tickets.comments = $scope.tickets.comments;
+                $scope.tickets.status = $scope.tickets.status;
 
               
             });
@@ -181,6 +184,7 @@ angular.module('timeSheetApp')
         
         $scope.viewTicket = function(id){
             var tId =parseInt(id);
+
             JobComponent.getTicketDetails(tId).then(function(data){
                 console.log("Ticket details List==" + JSON.stringify(data));
                 var tlist= data;
@@ -242,23 +246,21 @@ angular.module('timeSheetApp')
         	}
         };
 
-        $scope.closeTicket = function (ticket){
-            $scope.cTicket ={};
-            $scope.cTicket.id  = ticket;
-            $scope.cTicket.status ='Closed';
-            $scope.closeTicketConfirm =function(){
-            JobComponent.updateTicket($scope.cTicket).then(function() {
+            $scope.closeTicket = function (ticket){
+                
+                $scope.cTicket={id :ticket,status :'Closed'};
+            }
+
+            $scope.closeTicketConfirm =function(cTicket){
+                
+            JobComponent.updateTicket(cTicket).then(function() {
                     $scope.success = 'OK';
                     $scope.showNotifications('top','center','success','Ticket status updated');
                     $(".fade").removeClass("modal-backdrop");
-                    $state.reload();
-
-                       
-                });
-                  
-                    
+                    $state.reload();        
+                });        
             }
-        }
+       
 
         $scope.deleteConfirm = function (ticket){
         	$scope.confirmTicket = ticket;
