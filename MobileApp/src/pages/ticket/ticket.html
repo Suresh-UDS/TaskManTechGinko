@@ -21,7 +21,7 @@
         <button (click)="createTicket()" ion-fab><ion-icon name="add"></ion-icon></button>
     </ion-fab>
 
-    <div  class="white-bg" *ngFor="let ticket of tickets" >
+    <div  class="white-bg" *ngFor="let ticket of tickets" (click)="viewTicket(ticket)">
         <div class="padding-left16 padding-top5">
             <ion-row class="margin0">
 
