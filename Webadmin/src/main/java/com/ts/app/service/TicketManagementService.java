@@ -14,6 +14,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.inject.Inject;
+
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.TimeZone;
@@ -70,9 +72,9 @@ public class TicketManagementService extends AbstractService {
         ticket.setEmployee(employee);
         ticket.setStatus("Open");
 
-        ticket.setJob(null);
+//        ticket.setJob(null);
 
-        log.debug("Job id in ticket service"+ticket.getJob());
+//        log.debug("Job id in ticket service"+ticket.getJob());
 
         ticket = ticketRepository.save(ticket);
 
@@ -98,10 +100,10 @@ public class TicketManagementService extends AbstractService {
             ticket.setEmployee(employee);
         }
 
-        Job job = jobRepository.findOne(ticketDTO.getJobId());
-        if(job!=null){
-            ticket.setJob(job);
-        }
+//        Job job = jobRepository.findOne(ticketDTO.getJobId());
+//        if(job!=null){
+//            ticket.setJob(job);
+//        }
 
 
         ticket.setStatus(ticketDTO.getStatus());
@@ -113,17 +115,25 @@ public class TicketManagementService extends AbstractService {
         return ticketDTO;
     }
 
-    public List<Ticket> listAllTickets(){
-        List<TicketDTO> ticketDTOList = null;
+    public List<TicketDTO> listAllTickets(){
+        List<TicketDTO> ticketDTOList = new ArrayList<TicketDTO>();
         List<Ticket> tickets = null;
         tickets = ticketRepository.findAll();
+        for(Ticket ticket : tickets) {
+			ticketDTOList.add(mapperUtil.toModel(ticket,TicketDTO.class));
+		}
 
-        return tickets;
+        return ticketDTOList;
     }
 
     public TicketDTO getTicketDetails(long id){
         Ticket ticket = ticketRepository.findOne(id);
         TicketDTO ticketDTO1 = mapperUtil.toModel(ticket,TicketDTO.class);
+        Job job = jobRepository.findByTicketId(id);
+        log.debug("JOb details in ticket"+job.getId());
+        log.debug("Job detail in ticket"+job.getTitle());
+        ticketDTO1.setJobId(job.getId());
+        ticketDTO1.setJobName(job.getTitle());
 
         return ticketDTO1;
     }

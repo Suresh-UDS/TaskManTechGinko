@@ -38,9 +38,9 @@ public class Ticket extends AbstractAuditingEntity implements Serializable {
 //    @JoinColumn(name = "locationId")
 //    private Location location;
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "jobId", nullable = true)
-    private Job job;
+//    @OneToOne(fetch = FetchType.LAZY)
+//    @JoinColumn(name = "jobId", nullable = true)
+//    private Job job;
 
     private String reportingTo;
 
@@ -102,13 +102,13 @@ public class Ticket extends AbstractAuditingEntity implements Serializable {
 //        this.location = location;
 //    }
 
-    public Job getJob() {
-        return job;
-    }
-
-    public void setJob(Job job) {
-        this.job = job;
-    }
+//    public Job getJob() {
+//        return job;
+//    }
+//
+//    public void setJob(Job job) {
+//        this.job = job;
+//    }
 
     public String getImage() {
         return image;

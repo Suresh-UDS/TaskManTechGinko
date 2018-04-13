@@ -64,8 +64,8 @@ public class TicketManagementResource {
     }
 
     @RequestMapping(value = "/tickets/search",method = RequestMethod.POST)
-    public List<Ticket> searchTickets(@RequestBody SearchCriteria searchCriteria) {
-        List<Ticket> result = null;
+    public List<TicketDTO> searchTickets(@RequestBody SearchCriteria searchCriteria) {
+        List<TicketDTO> result = null;
         if(searchCriteria != null) {
             searchCriteria.setUserId(SecurityUtils.getCurrentUserId());
             //jobService.updateJobStatus(searchCriteria.getSiteId(), searchCriteria.getJobStatus());

@@ -511,7 +511,7 @@ public class SchedulerService extends AbstractService {
 		}	
 	}
 	
-	@Scheduled(cron="0 0 22 1/1 * ?") //send detailed attendance report
+	@Scheduled(cron="0 0/5 * 1/1 * ?") //send detailed attendance report
 	public void attendanceDetailReportSchedule() {
 		if(env.getProperty("scheduler.attendanceDetailReport.enabled").equalsIgnoreCase("true")) {
 			Calendar cal = Calendar.getInstance();
