@@ -130,10 +130,11 @@ public class TicketManagementService extends AbstractService {
         Ticket ticket = ticketRepository.findOne(id);
         TicketDTO ticketDTO1 = mapperUtil.toModel(ticket,TicketDTO.class);
         Job job = jobRepository.findByTicketId(id);
-        log.debug("JOb details in ticket"+job.getId());
-        log.debug("Job detail in ticket"+job.getTitle());
-        ticketDTO1.setJobId(job.getId());
-        ticketDTO1.setJobName(job.getTitle());
+        if(job!=null) {
+        		ticketDTO1.setJobId(job.getId());
+            ticketDTO1.setJobName(job.getTitle());	
+        }
+        
 
         return ticketDTO1;
     }

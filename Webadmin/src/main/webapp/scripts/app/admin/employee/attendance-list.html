@@ -164,6 +164,7 @@
                                 <th>Check-In Image</th>
                                 <th>Check-Out time</th>
                                 <th>Check-Out Image</th>
+                                <th>Shift (Start - End) time</th>
                                 <th>Location</th>
                             </tr>
                             </thead>
@@ -181,6 +182,7 @@
                                 <td ng-if="!attendance.checkInImage">
                                     <img src="assets/img/user.png" width="30px" height="30px"/>
                                 </td>
+                                
 
                                 <td>{{attendance.checkOutTime | date:'MM/dd/yyyy @ h:mma'}}</td>
 
@@ -191,6 +193,8 @@
                                 <td ng-if="!attendance.checkOutImage">
                                     <img src="assets/img/user.png" width="30px" height="30px"/>
                                 </td>
+                                
+                                <td>{{attendance.shift}}</td>
                                 <td align="center">
                                     <a id="maps" href="#" ng-click="newInitMap('mapIn',attendance.latitudeIn, attendance.longitudeIn, 'mapOut', attendance.latitudeOut, attendance.longitudeOut)" onClick="$('#mapModal').modal()" data-target="#mapModal" >
                                         <img src="assets/img/map-icon-2-1.jpg" width="30px" height="30px" />

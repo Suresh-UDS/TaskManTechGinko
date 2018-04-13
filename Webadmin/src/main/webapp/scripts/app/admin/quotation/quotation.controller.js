@@ -63,11 +63,11 @@ angular
 							$document[0].getElementById('quotationDescription').disabled = $stateParams.viewOnly;
 							$document[0].getElementById('project').disabled = $stateParams.viewOnly;
 							$document[0].getElementById('site').disabled = $stateParams.viewOnly;
-							$document[0].getElementById('serviceEntryFields').style.visibility = $stateParams.viewOnly ? 'hidden' : 'visible';
-							$document[0].getElementById('labourEntryFields').style.visibility = $stateParams.viewOnly ? 'hidden' : 'visible';
-							$document[0].getElementById('materialEntryFields').style.visibility = $stateParams.viewOnly ? 'hidden' : 'visible';
-							$document[0].getElementById('actionButtons').style.visibility = $stateParams.viewOnly ? 'hidden' : 'visible';
-							$document[0].getElementById('closeButton').style.visibility = $stateParams.viewOnly ? 'visible' : 'hidden';							
+							$document[0].getElementById('serviceEntryFields').style.display = $stateParams.viewOnly ? 'none' : 'block';
+							$document[0].getElementById('labourEntryFields').style.display = $stateParams.viewOnly ? 'none' : 'block';
+							$document[0].getElementById('materialEntryFields').style.display = $stateParams.viewOnly ? 'none' : 'block';
+							$document[0].getElementById('actionButtons').style.display = $stateParams.viewOnly ? 'none' : 'block';
+							$document[0].getElementById('closeButton').style.display = $stateParams.viewOnly ? 'visible' : 'none';							
 						}
 
 						$scope.loadProjects();
@@ -226,6 +226,7 @@ angular
 					}
 					
 			        $scope.loadQuotation = function() {
+	
 			        		console.log('quotation id - ' + $stateParams.id);
 			        		RateCardComponent.findQuotation($stateParams.id).then(function (data) {
 			        			$scope.loadingStop();

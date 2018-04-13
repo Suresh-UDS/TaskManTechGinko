@@ -4,6 +4,9 @@ import {Injectable, InjectionToken} from "@angular/core";
 export interface ApplicationConfig
 {
     Url:String;
+    //QuotationServiceUrl:String;
+    //LocationServiceUrl:String;
+
 
 }
 

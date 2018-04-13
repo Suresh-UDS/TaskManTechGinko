@@ -98,8 +98,9 @@
                                 <th>Ticket ID</th>
                                 <th>Title</th>
                                 <th>Description</th>
-                                <!-- <th>Site</th>
-                                <th>Employee</th> -->
+                                <th>Created by</th>
+                                <th>Created Date</th>
+                                <th>status</th>
                                 <th class="text-right">Actions</th>
                             </tr>
                             </thead>
@@ -108,8 +109,9 @@
                                 <td>{{ticket.id}}</td>
                                 <td>{{ticket.title}}</td>
                                 <td>{{ticket.description}}</td>
-                                <!-- <td>{{ticket.site}}</td>
-                                <td>{{ticket.employee}}</td> -->
+                                <td>{{ticket.createdBy}}</td>
+                                <td>{{ticket.createdDate}}</td>
+                                <td>{{ticket.status}}</td>
 
 
 
@@ -263,10 +265,10 @@
                                  </tr>
                                  <tr>
                                      <td>Severity</td>
-                                     <td>
-                                         
-                                      {{listSeverity}}
-                                     
+                                     <td ng-switch="listSeverity">
+                                       <span ng-switch-when="1">Low</span>  
+                                       <span ng-switch-when="2">Medium</span>
+                                       <span ng-switch-when="3">High</span>
                                      </td>
 
                                  </tr>
@@ -277,6 +279,21 @@
                                  <tr>
                                     <td>Employee</td>
                                     <td>{{listEmployee}}</td>
+
+                                  </tr>
+                                  <tr>
+                                    <td>Created by</td>
+                                    <td>{{listCreatedBy}}</td>
+
+                                  </tr>
+                                  <tr>
+                                    <td>Created Date</td>
+                                    <td>{{listCreatedDate}}</td>
+
+                                  </tr>
+                                  <tr>
+                                    <td>Status</td>
+                                    <td>{{listStatus}}</td>
 
                                   </tr>
 
