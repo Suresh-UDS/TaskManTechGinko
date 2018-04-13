@@ -124,6 +124,31 @@ public class AttendanceService extends AbstractService {
 
         return attnDto;
     }
+    
+    private void findShiftTiming(AttendanceDTO attnDto,Attendance dbAttn) {
+    		long siteId = attnDto.getSiteId();
+        Site site = siteRepository.findOne(siteId);
+        List<Shift> shifts = site.getShifts();
+        if(CollectionUtils.isNotEmpty(shifts)) {
+        		for(Shift shift : shifts) {
+				String startTime = shift.getStartTime();
+				String[] startTimeUnits = startTime.split(":");
+				Calendar startCal = Calendar.getInstance();
+				startCal.set(Calendar.HOUR_OF_DAY, Integer.parseInt(startTimeUnits[0]));
+				startCal.set(Calendar.MINUTE, Integer.parseInt(startTimeUnits[1]));
+				String endTime = shift.getEndTime();
+				String[] endTimeUnits = endTime.split(":");
+				Calendar endCal = Calendar.getInstance();
+				endCal.set(Calendar.HOUR_OF_DAY, Integer.parseInt(endTimeUnits[0]));
+				endCal.set(Calendar.MINUTE, Integer.parseInt(endTimeUnits[1]));
+				if((startCal.before(dbAttn.getCheckInTime()) && endCal.after(dbAttn.getCheckInTime())) || startCal.equals(dbAttn.getCheckInTime())) {
+					dbAttn.setShiftStartTime(startTime);
+					dbAttn.setShiftEndTime(endTime);
+					break;
+				}
+        		}
+        }
+    }
 
 	public AttendanceDTO saveAttendance(AttendanceDTO attnDto) {
         log.debug("Attendance latitude in "+attnDto.getLatitudeIn());
@@ -162,6 +187,9 @@ public class AttendanceService extends AbstractService {
                 log.debug("check in image available");
                 attn.setCheckInImage("data:image/jpeg;base64,"+attn.getCheckInImage());
             }
+            //mark the shift timings
+            findShiftTiming(attnDto, attn);
+            
 			attn = attendanceRepository.save(attn);
 			log.debug("Attendance marked: {}", attn);
 			attnDto = mapperUtil.toModel(attn, AttendanceDTO.class);
