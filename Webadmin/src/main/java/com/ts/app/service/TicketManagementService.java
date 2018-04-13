@@ -120,6 +120,7 @@ public class TicketManagementService extends AbstractService {
         List<Ticket> tickets = null;
         tickets = ticketRepository.findAll();
         for(Ticket ticket : tickets) {
+        		log.debug("ticket status in list all-- "+ticket.getStatus());
 			ticketDTOList.add(mapperUtil.toModel(ticket,TicketDTO.class));
 		}
 
