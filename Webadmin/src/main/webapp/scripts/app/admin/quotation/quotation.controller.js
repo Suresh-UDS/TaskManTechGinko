@@ -226,6 +226,7 @@ angular
 					}
 					
 			        $scope.loadQuotation = function() {
+			        	
 			        		console.log('quotation id - ' + $stateParams.id);
 			        		RateCardComponent.findQuotation($stateParams.id).then(function (data) {
 			        			$scope.loadingStop();

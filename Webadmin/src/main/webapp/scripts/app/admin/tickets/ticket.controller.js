@@ -189,8 +189,11 @@ angular.module('timeSheetApp')
                 $scope.listDescription = tlist.description;
                 $scope.listSite = tlist.siteName;
                 $scope.listEmployee = tlist.employeeName;
-                $scope.listseverity = tlist.severity;
-                $scope.listcomments = tlist.comments;
+                $scope.listSeverity = tlist.severity;
+                $scope.listComments = tlist.comments;
+                $scope.listCreatedBy = tlist.created_by;
+                $scope.listCreatedDate = tlist.created_date;
+                $scope.listStatus = tlist.status;
 
               
             });
@@ -207,10 +210,13 @@ angular.module('timeSheetApp')
         	    console.log("update ticket");
         	    $scope.tickets.title = $scope.tickets.title;
                 $scope.tickets.description = $scope.tickets.description;
-                $scope.tickets.siteId = $scope.selectedSite.id;
-                $scope.tickets.employeeId = $scope.selectedEmployee.id; 
+                $scope.tickets.site = $scope.siteName;
+                $scope.tickets.employee = $scope.employeeName; 
                 $scope.tickets.severity = $scope.tickets.severity;
                 $scope.tickets.comments = $scope.tickets.comments;
+                $scope.tickets.createdBy = $scope.tickets.created_by;
+                $scope.tickets.createdDate = $scope.tickets.created_date;
+                $scope.tickets.status = $scope.tickets.status;
                 console.log('Tickets - ' + JSON.stringify($scope.tickets));
 	        	SiteComponent.updateTicket($scope.tickets).then(function() {
 	                $scope.success = 'OK';
