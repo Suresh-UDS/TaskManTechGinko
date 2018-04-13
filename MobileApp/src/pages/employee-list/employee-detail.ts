@@ -189,7 +189,7 @@ export class EmployeeDetailPage {
   }
 
   getQuotations(){
-    this.quotationService.getQuotations(window.localStorage.getItem('employeeId')).subscribe(
+    this.quotationService.getQuotations().subscribe(
         response=>{
           console.log(response);
 
