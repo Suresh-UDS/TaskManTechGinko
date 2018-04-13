@@ -381,6 +381,10 @@ angular.module('timeSheetApp')
             	$scope.firstStyle();
         	}
         };
+        
+        $scope.closeTicket = function(ticket){
+        		
+        }
 
         $scope.clickNextOrPrev = function(number){
 	        	$scope.pages.currPage = number;
