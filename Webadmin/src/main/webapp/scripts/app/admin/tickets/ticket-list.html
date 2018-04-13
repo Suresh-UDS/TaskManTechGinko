@@ -235,7 +235,7 @@
 </div>
 
 <div class="modal right fade" id="RightModal-view" tabindex="-1" role="dialog" aria-labelledby="RightModal">
-    <div class="modal-dialog" role="document">
+    <div class="modal-dialogNew" role="document">
         <div class="modal-content">
 
             <div class="modal-header">
@@ -270,60 +270,74 @@
                                      </td>
 
                                  </tr>
-                              
+                                  <tr>
+                                    <td>Site</td>
+                                    <td>{{listSite}}</td>
+                                 </tr>
+                                 <tr>
+                                    <td>Employee</td>
+                                    <td>{{listEmployee}}</td>
 
+                                  </tr>
 
                                  </tbody>
                              </table>
                          </div>
-                          <div class="panel panel-default">
-                                <div class="panel-heading">Site & Employee</div>
-                                <div class="panel-body">
+                          
+                        <div class="container-fluid">
+                            <div class="text-center">
+                                <h4 class="title">Comments</h4>
+                            </div>
 
-
-                                    <div class="table-responsive">
-                                        <table class="table">
-                                            <tbody>
-                                            <tr>
-                                                <td>Site</td>
-                                                <td>{{listSite}}</td>
-                                            </tr>
-                                            <tr>
-                                                <td>Employee</td>
-                                                <td>{{listEmployee}}</td>
-
-                                            </tr>
-                                      
-                                            </tbody>
-                                        </table>
-                                    </div>
-
+                         <div class="row">
+                            <div class="col-md-12">
+                                
+                                <ul class="timeline">
+                                    <li class="timeline-inverted">
+                                        <div class="timeline-badge danger">
+                                            <i class="material-icons">card_travel</i>
+                                        </div>
+                                        <div class="timeline-panel">
+                                            <div class="timeline-heading">
+                                                <span class="label label-danger">Admin{{listModified}}</span>
+                                            </div>
+                                            <div class="timeline-body">
+                                                <p>What the root cause{{listComments}}</p>
+                                            </div>
+                                            <h6>
+                                                <i class="ti-time">12-04-2018 04:32:04 {{listTime}}</i> 
+                                            </h6>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="timeline-badge success">
+                                            <i class="material-icons">extension</i>
+                                        </div>
+                                        <div class="timeline-panel">
+                                            <div class="timeline-heading">
+                                                <span class="label label-success">User{{listModified}}</span>
+                                            </div>
+                                            <div class="timeline-body">
+                                                <p>Power not supply{{listComments}}</p>
+                                            </div>
+                                            <h6>
+                                                <i class="ti-time">12-04-2018 05:32:04 {{listTime}}</i>
+                                            </h6>
+                                        </div>
+                                    </li>
+                                    
+                                    
+                                    </ul>
+                            
                                 </div>
                             </div>
-                            <div class="panel panel-default">
-                                    <div class="panel-heading">Comments </div>
-                                    <div class="panel-body">
-
-                                        <div class="table-responsive">
-                                            <table class="table">
-                                                <tbody>
-                                                <tr>
-                                                    <td>Comments</td>
-                                                    <td>{{listComments}}</td>
-                                                </tr>
-                                                
-
-                                                </tbody>
-                                            </table>
-                                        </div>
-
-                                    </div>
-                                </div>
+                        </div>
+                         
 
 
                         <div class="row">
 
-                            <div class="col-md-4 col-md-offset-4">
+                            <div class="col-md-4 col-md-offset-8">
                                 <button class="btn btn-default close-button-right b10" type="button"
                                         data-dismiss="modal">
                                     <!-- <i class="material-icons">keyboard_arrow_left</i> Back -->

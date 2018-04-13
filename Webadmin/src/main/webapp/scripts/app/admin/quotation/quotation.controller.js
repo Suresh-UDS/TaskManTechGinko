@@ -228,7 +228,7 @@ angular
 			        $scope.loadQuotation = function() {
 			        		console.log('quotation id - ' + $stateParams.id);
 			        		RateCardComponent.findQuotation($stateParams.id).then(function (data) {
-			        			$scope.loadingStart();
+			        			$scope.loadingStop();
 			        				console.log('quotation response - '+ JSON.stringify(data))
 				                $scope.quotation = data;
 			        				var rateCardDetails = $scope.quotation.rateCardDetails;
