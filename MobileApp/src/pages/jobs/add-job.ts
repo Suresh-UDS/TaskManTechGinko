@@ -61,6 +61,8 @@ export class CreateJobPage {
     ionViewDidLoad() {
         this.empSelect=true;
         if(this.ticket){
+            this.title = this.ticket.title;
+            this.description = this.ticket.description;
 
         }
 
