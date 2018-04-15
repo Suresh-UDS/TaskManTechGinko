@@ -353,6 +353,9 @@ angular.module('timeSheetApp')
                 $scope.ticketsLoader = true;
                 $scope.loadingStop();
                 console.log('Ticket List -' + JSON.stringify($scope.tickets));
+                $scope.tickets.forEach(function(ticket){
+                		console.log('ticket status - ' + ticket.status);
+                })
                 $scope.pages.currPage = data.currPage;
                 $scope.pages.totalPages = data.totalPages;
                 

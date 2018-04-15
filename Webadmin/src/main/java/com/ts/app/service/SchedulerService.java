@@ -16,6 +16,7 @@ import javax.inject.Inject;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateUtils;
+import org.hibernate.Hibernate;
 import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -57,6 +58,8 @@ import com.ts.app.web.rest.dto.SchedulerConfigDTO;
 import com.ts.app.web.rest.dto.SearchCriteria;
 import com.ts.app.web.rest.dto.SearchResult;
 import com.ts.app.web.rest.errors.TimesheetException;
+
+import net.sf.ehcache.hibernate.HibernateUtil;
 
 /**
  * Service class for managing Device information.
@@ -534,6 +537,7 @@ public class SchedulerService extends AbstractService {
 					}
 					if(attendanceReports != null && attendanceReports.getSettingValue().equalsIgnoreCase("true")) {
 						StringBuilder content = new StringBuilder();
+						Hibernate.initialize(site.getShifts());
 						if(CollectionUtils.isNotEmpty(site.getShifts())) {
 							List<Shift> shifts = site.getShifts();
 							for(Shift shift : shifts) {
