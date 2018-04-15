@@ -117,6 +117,8 @@ public class Employee extends AbstractAuditingEntity implements Serializable {
 	private boolean isReliever;
 	
 	private String phone;
+	
+	private String email;
 
 	public Long getId() {
 		return id;
@@ -312,5 +314,13 @@ public class Employee extends AbstractAuditingEntity implements Serializable {
 		this.locations = locations;
 	}
 
+	public String getEmail() {
+		return email;
+	}
 
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	
 }

@@ -12,13 +12,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 import java.util.TimeZone;
-import java.util.TreeSet;
 
 import javax.inject.Inject;
 
-import com.ts.app.domain.*;
-import com.ts.app.repository.*;
-import com.ts.app.web.rest.dto.*;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.Hibernate;
@@ -26,17 +22,58 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.env.Environment;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.ts.app.domain.AbstractAuditingEntity;
+import com.ts.app.domain.CheckInOut;
+import com.ts.app.domain.CheckInOutImage;
+import com.ts.app.domain.Designation;
+import com.ts.app.domain.Device;
+import com.ts.app.domain.Employee;
+import com.ts.app.domain.EmployeeHistory;
+import com.ts.app.domain.EmployeeLocation;
+import com.ts.app.domain.EmployeeProjectSite;
+import com.ts.app.domain.EmployeeShift;
+import com.ts.app.domain.Job;
+import com.ts.app.domain.Project;
+import com.ts.app.domain.Site;
+import com.ts.app.domain.User;
+import com.ts.app.domain.UserRoleEnum;
+import com.ts.app.repository.AttendanceRepository;
+import com.ts.app.repository.CheckInOutImageRepository;
+import com.ts.app.repository.CheckInOutRepository;
+import com.ts.app.repository.DesignationRepository;
+import com.ts.app.repository.DeviceRepository;
+import com.ts.app.repository.EmployeeHistoryRepository;
+import com.ts.app.repository.EmployeeRepository;
+import com.ts.app.repository.JobRepository;
+import com.ts.app.repository.ProjectRepository;
+import com.ts.app.repository.SiteRepository;
+import com.ts.app.repository.UserRepository;
+import com.ts.app.repository.UserRoleRepository;
 import com.ts.app.service.util.DateUtil;
 import com.ts.app.service.util.ExportUtil;
 import com.ts.app.service.util.FileUploadHelper;
 import com.ts.app.service.util.MapperUtil;
 import com.ts.app.service.util.QRCodeUtil;
+import com.ts.app.web.rest.dto.BaseDTO;
+import com.ts.app.web.rest.dto.CheckInOutDTO;
+import com.ts.app.web.rest.dto.CheckInOutImageDTO;
+import com.ts.app.web.rest.dto.DesignationDTO;
+import com.ts.app.web.rest.dto.EmployeeDTO;
+import com.ts.app.web.rest.dto.EmployeeHistoryDTO;
+import com.ts.app.web.rest.dto.EmployeeProjectSiteDTO;
+import com.ts.app.web.rest.dto.ExportResult;
+import com.ts.app.web.rest.dto.ImageDeleteRequest;
+import com.ts.app.web.rest.dto.JobDTO;
+import com.ts.app.web.rest.dto.ProjectDTO;
+import com.ts.app.web.rest.dto.SearchCriteria;
+import com.ts.app.web.rest.dto.SearchResult;
+import com.ts.app.web.rest.dto.SiteDTO;
+import com.ts.app.web.rest.dto.UserDTO;
 
 /**
  * Service class for managing employee information.
@@ -175,6 +212,7 @@ public class    EmployeeService extends AbstractService {
 				user.setPassword(employee.getEmpId());
 				user.setFirstName(employee.getName());
 				user.setLastName(employee.getLastName());
+				user.setEmail(employee.getEmail());
 				user.setAdminFlag("N");
 				user.setUserRoleId(employeeDto.getUserRoleId());
 				user.setEmployeeId(employee.getId());
@@ -254,6 +292,8 @@ public class    EmployeeService extends AbstractService {
         employeeUpdate.setLeft(employee.isLeft());
         employeeUpdate.setReliever(employee.isReliever());
         employeeUpdate.setRelieved(employee.isRelieved());
+        employeeUpdate.setPhone(employee.getPhone());
+        employeeUpdate.setEmail(employee.getEmail());
         if(employee.getManagerId() > 0) {
             Employee manager =  employeeRepository.findOne(employee.getManagerId());
             employeeUpdate.setManager(manager);
@@ -264,14 +304,24 @@ public class    EmployeeService extends AbstractService {
 		}
 		List<EmployeeProjectSite> projectSites =  employeeUpdate.getProjectSites();
 		projectSites.clear();
+		List<EmployeeProjectSite> updatedProjSites = new ArrayList<EmployeeProjectSite>();
 		if(CollectionUtils.isNotEmpty(employee.getProjectSites())) {
 			for(EmployeeProjectSiteDTO projSiteDto : employee.getProjectSites()) {
 				EmployeeProjectSite projSite = mapperUtil.toEntity(projSiteDto, EmployeeProjectSite.class);
+				if(CollectionUtils.isEmpty(projSite.getShifts())) {
+					projSite.setShifts(new ArrayList<EmployeeShift>());
+				}
 				projSite.setEmployee(employeeUpdate);
-				projectSites.add(projSite);
+				updatedProjSites.add(projSite);
 			}
 		}
-
+		employeeUpdate.getProjectSites().addAll(updatedProjSites);
+		Hibernate.initialize(employeeUpdate.getUser());
+		User user = employeeUpdate.getUser();
+		if(user != null) {
+			user.setEmail(employeeUpdate.getEmail());
+		}
+		employeeUpdate.setUser(user);
 		employeeRepository.saveAndFlush(employeeUpdate);
 		employee = mapperUtil.toModel(employeeUpdate, EmployeeDTO.class);
 		return employee;
@@ -873,6 +923,8 @@ public class    EmployeeService extends AbstractService {
     		empDto.setName(employee.getName());
     		empDto.setFullName(employee.getFullName());
     		empDto.setLastName(employee.getLastName());
+    		empDto.setPhone(employee.getPhone());
+    		empDto.setEmail(employee.getEmail());
     		empDto.setActive(employee.getActive());
     		empDto.setFaceAuthorised(employee.isFaceAuthorised());
     		empDto.setFaceIdEnrolled(employee.isFaceIdEnrolled());

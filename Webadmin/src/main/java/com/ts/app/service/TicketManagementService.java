@@ -115,7 +115,7 @@ public class TicketManagementService extends AbstractService {
         ticketDTO = mapperUtil.toModel(ticket, TicketDTO.class);
 
         if(employee != null) {
-        		sendNotifications(employee, ticket, site);
+        		sendNotifications(employee, ticket, site, true);
         }
 
         return ticketDTO;
@@ -149,7 +149,7 @@ public class TicketManagementService extends AbstractService {
 
         ticketDTO = mapperUtil.toModel(ticket, TicketDTO.class);
         if(employee != null) {
-        		sendNotifications(employee, ticket, site);
+        		sendNotifications(employee, ticket, site, false);
         }
         
         return ticketDTO;
@@ -250,7 +250,7 @@ public class TicketManagementService extends AbstractService {
 		return;
 	}
 	
-	private void sendNotifications(Employee employee, Ticket ticket, Site site) {
+	private void sendNotifications(Employee employee, Ticket ticket, Site site, boolean isNew) {
 		User user = employee.getUser();
 		Setting ticketReports = settingsRepository.findSettingByKeyAndSiteId(SettingsService.EMAIL_NOTIFICATION_TICKET, site.getId());
 		if(ticketReports == null) {
@@ -263,10 +263,16 @@ public class TicketManagementService extends AbstractService {
 		    		ticketReportEmails = settingsRepository.findSettingByKeyAndProjectId(SettingsService.EMAIL_NOTIFICATION_TICKET_EMAILS, site.getProject().getId());
 		    }
 		}        
-	    String ticketEmails = ticketReportEmails != null ? ticketReportEmails.getSettingValue() : (employee.getUser() != null ? employee.getUser().getEmail() : "");    
+	    String ticketEmails = (user != null ? user.getEmail() : "");
+	    ticketEmails += ticketReportEmails != null ? ticketReportEmails.getSettingValue() : "";
 	    if(StringUtils.isNotEmpty(ticket.getStatus()) && (ticket.getStatus().equalsIgnoreCase("Open") || ticket.getStatus().equalsIgnoreCase("Assigned"))) { 
-	    		mailService.sendTicketUpdatedMail(employee.getUser(),ticketEmails,site.getName(),ticket.getId(), String.valueOf(ticket.getId()),
-		        				user.getFirstName(), employee.getName(),ticket.getTitle(),ticket.getDescription(), ticket.getStatus());
+	    		if(isNew) {
+		    		mailService.sendTicketCreatedMail(employee.getUser(),ticketEmails,site.getName(),ticket.getId(), String.valueOf(ticket.getId()),
+	        				user.getFirstName(), employee.getName(),ticket.getTitle(),ticket.getDescription(), ticket.getStatus(), ticket.getSeverity());
+	    		}else {
+		    		mailService.sendTicketUpdatedMail(employee.getUser(),ticketEmails,site.getName(),ticket.getId(), String.valueOf(ticket.getId()),
+			        				user.getFirstName(), employee.getName(),ticket.getTitle(),ticket.getDescription(), ticket.getStatus());
+	    		}
     		}else if(StringUtils.isNotEmpty(ticket.getStatus()) && (ticket.getStatus().equalsIgnoreCase("Closed"))) {    			
 		    mailService.sendTicketClosedMail(ticket.getEmployee().getUser(),ticketEmails,site.getName(),ticket.getId(), String.valueOf(ticket.getId()),
         				user.getFirstName(), employee.getName(),ticket.getTitle(),ticket.getDescription(), ticket.getStatus());

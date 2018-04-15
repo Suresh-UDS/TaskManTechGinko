@@ -114,7 +114,7 @@
                                             required
                                             ng-model="selectedSite"
                                             ng-change="loadEmployees()"
-                                            class="form-control searchable-input floatL" ng-options="site as site.name for site in sites">
+                                            class="form-control searchable-input floatL" ng-options="site as site.name for site in sites track by site.id">
                                             <option value="">Select Site</option>
                        
                                        
@@ -139,7 +139,7 @@
                                             required
                                             name="employee"
                                             ng-model="selectedEmployee"
-                                            class="form-control searchable-input floatL" ng-options="emp as emp.fullName for emp in employees">
+                                            class="form-control searchable-input floatL" ng-options="emp as emp.fullName for emp in employees track by emp.id">
                                             <option value="">Select Employee</option>
                                          
                                         </select>

@@ -89,7 +89,7 @@ public class MailService {
             message.setText(content, isHtml);
             if(isMultipart){
             	if(!StringUtils.isEmpty(fileName)) {
-	                FileSystemResource file =new FileSystemResource(exportPath+"/" +fileName+".csv");
+	                FileSystemResource file =new FileSystemResource(exportPath+"/" +fileName+".xlsx");
 	                message.addAttachment(file.getFilename(),file);
             	}
             }
@@ -129,7 +129,7 @@ public class MailService {
             message.setText(content, isHtml);
             if(isMultipart){
                 log.debug("file path seperator"+File.pathSeparator);
-                FileSystemResource file =new FileSystemResource(exportPath+"/" +fileName+".csv");
+                FileSystemResource file =new FileSystemResource(exportPath+"/" +fileName+".xlsx");
                 message.addAttachment(file.getFilename(),file);
             }
             javaMailSender.send(mimeMessage);
@@ -164,11 +164,12 @@ public class MailService {
     }
 
     @Async
-    public void sendTicketCreatedMail(User user,String emailIds, String siteName, long ticketId, String ticketNumber, String createdBy, String sentTo, String ticketTitle, String ticketDescription, String status){
+    public void sendTicketCreatedMail(User user,String emailIds, String siteName, long ticketId, String ticketNumber, String createdBy, String sentTo, String ticketTitle, String ticketDescription, String status, String severity){
         Locale locale = Locale.forLanguageTag(user.getLangKey() != null ? user.getLangKey() : "en-US");
         Context context = new Context(locale);
         context.setVariable("user", user);
         context.setVariable("siteName", siteName);
+        context.setVariable("severity", severity);
         context.setVariable("ticketNumber", ticketNumber);
         context.setVariable("ticketTitle", ticketTitle);
         context.setVariable("ticketDescription", ticketDescription);

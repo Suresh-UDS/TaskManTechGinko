@@ -514,7 +514,7 @@ public class SchedulerService extends AbstractService {
 		}	
 	}
 	
-	@Scheduled(cron="0 0/5 * 1/1 * ?") //send detailed attendance report
+	@Scheduled(cron="0 0 7 1/1 * ?") //send detailed attendance report
 	public void attendanceDetailReportSchedule() {
 		if(env.getProperty("scheduler.attendanceDetailReport.enabled").equalsIgnoreCase("true")) {
 			Calendar cal = Calendar.getInstance();
@@ -596,7 +596,7 @@ public class SchedulerService extends AbstractService {
 					    if(attendanceReportEmails == null) {
 					    		attendanceReportEmails = settingRepository.findSettingByKeyAndProjectId(SettingsService.EMAIL_NOTIFICATION_ATTENDANCE_EMAILS, proj.getId());
 					    }
-						ExportResult exportResult = new ExportResult();
+						ExportResult exportResult = null;
 						exportResult = exportUtil.writeAttendanceReportToFile(proj.getName(), empAttnList, null, exportResult);
 						//send reports in email.
 						mailService.sendAttendanceDetailedReportEmail(site.getName(),attendanceReportEmails.getSettingValue(), content.toString(), exportResult.getFile(),null, cal.getTime());
