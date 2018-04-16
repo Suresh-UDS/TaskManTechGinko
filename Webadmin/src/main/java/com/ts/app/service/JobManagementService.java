@@ -826,8 +826,10 @@ public class JobManagementService extends AbstractService {
 		jobDto.setActive(job.getActive());
 		//jobDto.setLocationId(job.getLocation().getId());
 		//jobDto.setLocationName(job.getLocation().getName());
-        jobDto.setTicketId(job.getTicket().getId());
-        jobDto.setTicketName(job.getTicket().getTitle());
+		if(job.getTicket() != null) {
+			jobDto.setTicketId(job.getTicket().getId());
+			jobDto.setTicketName(job.getTicket().getTitle());
+		}
 		List<CheckInOutImage> images = checkInOutImageRepository.findAll(job.getId());
 		List<CheckInOutImageDTO> imageDtos = new ArrayList<CheckInOutImageDTO>();
 		if(CollectionUtils.isNotEmpty(images)) {
