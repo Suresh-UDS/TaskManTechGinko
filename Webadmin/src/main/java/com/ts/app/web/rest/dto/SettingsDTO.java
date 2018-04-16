@@ -38,6 +38,10 @@ public class SettingsDTO extends BaseDTO implements Serializable {
     
     private boolean quotationEmailAlert;
 
+    private long ticketEmailAlertId;
+    
+    private boolean ticketEmailAlert;
+
     private long attendanceEmailsId;
     
     private List<String> attendanceEmailIds;
@@ -57,6 +61,10 @@ public class SettingsDTO extends BaseDTO implements Serializable {
     private long quotationEmailsId;
     
     private List<String> quotationEmailIds;
+    
+    private long ticketEmailsId;
+    
+    private List<String> ticketEmailIds;
 
     public long getSiteId() {
 		return siteId;
@@ -250,5 +258,36 @@ public class SettingsDTO extends BaseDTO implements Serializable {
 		this.quotationEmailIds = quotationEmailIds;
 	}
 
-	
+	public long getTicketEmailAlertId() {
+		return ticketEmailAlertId;
+	}
+
+	public void setTicketEmailAlertId(long ticketEmailAlertId) {
+		this.ticketEmailAlertId = ticketEmailAlertId;
+	}
+
+	public boolean isTicketEmailAlert() {
+		return ticketEmailAlert;
+	}
+
+	public void setTicketEmailAlert(boolean ticketEmailAlert) {
+		this.ticketEmailAlert = ticketEmailAlert;
+	}
+
+	public long getTicketEmailsId() {
+		return ticketEmailsId;
+	}
+
+	public void setTicketEmailsId(long ticketEmailsId) {
+		this.ticketEmailsId = ticketEmailsId;
+	}
+
+	public List<String> getTicketEmailIds() {
+		return ticketEmailIds;
+	}
+
+	public void setTicketEmailIds(List<String> ticketEmailIds) {
+		this.ticketEmailIds = ticketEmailIds;
+	}
+
 }

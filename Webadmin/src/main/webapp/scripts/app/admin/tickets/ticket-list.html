@@ -54,7 +54,7 @@
                                             <div class="dropdown col-xs-4 col-md-3">
                                                 <div class="dropdown ">
                                                     <label class="label-control">Select Site</label>
-                                                    <select class="form-control " ng-model="selectedSite" ng-change="loadEmployees()" ng-options="site as site.name for site in sites">
+                                                    <select class="form-control " ng-model="selectedSite" ng-change="loadEmployees()" ng-options="site as site.name for site in sites track by site.id">
                                                         <option value="">Select Site...</option>
                                                     </select>
                                                 </div>
@@ -63,7 +63,7 @@
                                             <div class="dropdown col-xs-4 col-md-3">
                                                 <div class="dropdown ">
                                                     <label class="label-control">Select Employee</label>
-                                                    <select class="form-control " ng-model="tickets.employeeId"  ng-options="emp as emp.fullName for emp in employees">
+                                                    <select class="form-control " ng-model="tickets.employeeId"  ng-options="emp as emp.fullName for emp in employees track by emp.id">
                                                         <option value="">Select Employee...</option>
                                                     </select>
                                                 </div>
@@ -96,11 +96,12 @@
                             <thead>
                             <tr>
                                 <th>Ticket ID</th>
-                                <th>Title</th>
+                                <th>Issue</th>
                                 <th>Description</th>
-                                <th>Created by</th>
+                                <th>Initiator</th>
                                 <th>Created Date</th>
-                                <th>status</th>
+                                <th>Assigned To</th>
+                                <th>Status</th>
                                 <th class="text-right">Actions</th>
                             </tr>
                             </thead>
@@ -110,7 +111,8 @@
                                 <td>{{ticket.title}}</td>
                                 <td>{{ticket.description}}</td>
                                 <td>{{ticket.createdBy}}</td>
-                                <td>{{ticket.createdDate}}</td>
+                                <td>{{ticket.createdDate | date:'MM/dd/yyyy @ h:mma'}}</td>
+                                <td>{{ticket.assignedToName}}</td>
                                 <td>{{ticket.status}}</td>
 
 
@@ -121,9 +123,10 @@
 
                                     <a  ng-class="{active: $state.includes('admin')}"  ui-sref="edit-ticket({ id: ticket.id })"  class="btn btn-simple btn-info"><i class="material-icons">edit</i></a>
 
-                                    <a ng-class="{active: $state.includes('admin')}" ui-sref="add-job"  ng-click=""  onClick="" data-target="#myModal"  class="btn btn-simple btn-info">create job</a>
+                                    <a ng-if="(ticket.status != 'Closed')" ng-class="{active: $state.includes('admin')}" ui-sref="add-job"  ng-click=""  onClick="" data-target="#myModal"  class="btn btn-simple btn-info">create job</a>
 
-                                    <a ng-class="{active: $state.includes('admin')}"   ng-click="closeTicket(ticket)"  onClick="" data-target="#myModal"  class="btn btn-simple btn-info">close ticket</a>
+                                    <a ng-if="(ticket.status != 'Closed')" ng-class="{active: $state.includes('admin')}"   ng-click="closeTicket(ticket.id)"   onClick="$('#deleteModalNew').modal()" data-target="#myModal"   class="btn btn-simple btn-info">close ticket</a>
+                                    <a ng-if="ticket.status == 'Closed'"class="btn btn-simple btn-info">Reopen ticket</a>
 
 
                                 </td>
@@ -187,7 +190,7 @@
 
 
 <!-- Delete confirmation dialog -->
-<div id="deleteModal" class="delete-confirmation modal fade">
+<!-- <div id="deleteModal" class="delete-confirmation modal fade">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -205,7 +208,7 @@
             </div>
         </div>
     </div>
-</div>
+</div> -->
 <!-- End of Delete confirmation dialog -->
 
 <!-- Delete Multiple confirmation dialog -->
@@ -255,7 +258,7 @@
                              <table class="table">
                                  <tbody>
                                  <tr>
-                                     <td>Title</td>
+                                     <td>Issue</td>
                                      <td>{{listTitle}}</td>
                                  </tr>
                                  <tr>
@@ -319,7 +322,7 @@
                                                 <span class="label label-danger">Admin{{listModified}}</span>
                                             </div>
                                             <div class="timeline-body">
-                                                <p>What the root cause{{listComments}}</p>
+                                                <p>Whats the root cause{{listComments}}</p>
                                             </div>
                                             <h6>
                                                 <i class="ti-time">12-04-2018 04:32:04 {{listTime}}</i> 
@@ -375,3 +378,25 @@
         </div><!-- modal-content -->
     </div><!-- modal-dialog -->
 </div><!--End View modal -->
+
+<!-- Ticket Close confirmation dialog -->
+<div id="deleteModalNew" class="delete-confirmation modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"
+                        aria-hidden="true">&times;</button>
+                <h4 class="modal-title">Close Ticket</h4>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure that you want to close ticket?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                <button type="button"
+                        class="btn btn-success delete-confirmation-button" ng-click="closeTicketConfirm(cTicket)">Close Ticket</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- End of Ticket Close confirmation dialog -->

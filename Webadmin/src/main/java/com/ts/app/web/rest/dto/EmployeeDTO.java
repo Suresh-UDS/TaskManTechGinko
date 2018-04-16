@@ -79,6 +79,8 @@ public class EmployeeDTO extends BaseDTO {
     private boolean createUser;
     
     private String phone;
+    
+    private String email;
 
     @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property="@id")
     private EmployeeDTO manager;
@@ -384,6 +386,14 @@ public class EmployeeDTO extends BaseDTO {
 
 	public void setLocations(List<EmployeeLocationDTO> locations) {
 		this.locations = locations;
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
 	}
 
 	

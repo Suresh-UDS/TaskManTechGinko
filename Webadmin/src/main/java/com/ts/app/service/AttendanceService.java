@@ -129,8 +129,15 @@ public class AttendanceService extends AbstractService {
     		long siteId = attnDto.getSiteId();
         Site site = siteRepository.findOne(siteId);
         List<Shift> shifts = site.getShifts();
+        if(log.isDebugEnabled()) {
+        		log.debug("shift timings - " + shifts);
+        }
         if(CollectionUtils.isNotEmpty(shifts)) {
         		for(Shift shift : shifts) {
+        	        if(log.isDebugEnabled()) {
+                		log.debug("shift timing - " + shift.getStartTime() + " - " + shift.getEndTime());
+                		log.debug("check in time - " + dbAttn.getCheckInTime());
+                }
 				String startTime = shift.getStartTime();
 				String[] startTimeUnits = startTime.split(":");
 				Calendar startCal = Calendar.getInstance();

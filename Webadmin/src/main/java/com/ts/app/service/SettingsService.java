@@ -47,6 +47,10 @@ public class SettingsService extends AbstractService {
 	
 	public static final String EMAIL_NOTIFICATION_QUOTATION_EMAILS = "email.notification.quotation.emails";
 
+	public static final String EMAIL_NOTIFICATION_TICKET = "email.notification.ticket";
+	
+	public static final String EMAIL_NOTIFICATION_TICKET_EMAILS = "email.notification.ticket.emails";
+
 	@Inject
 	private SettingsRepository settingsRepository;
 	
@@ -205,6 +209,37 @@ public class SettingsService extends AbstractService {
 		quotationEmailsSetting.setSiteName(settingsDto.getSiteName());
 		quotationEmailsSetting.setActive("Y");
 		
+		//quotation notification setting
+		Setting ticketAlertSetting = null;
+		if(settingsDto.getQuotationEmailAlertId() > 0) {
+			ticketAlertSetting = settingsRepository.findOne(settingsDto.getQuotationEmailAlertId());
+		}else {
+			ticketAlertSetting = new Setting();
+		}
+		ticketAlertSetting.setSettingKey(EMAIL_NOTIFICATION_TICKET);
+		ticketAlertSetting.setSettingValue(String.valueOf(settingsDto.isQuotationEmailAlert()));
+		ticketAlertSetting.setProjectId(settingsDto.getProjectId());
+		ticketAlertSetting.setProjectName(settingsDto.getProjectName());
+		ticketAlertSetting.setSiteId(settingsDto.getSiteId());
+		ticketAlertSetting.setSiteName(settingsDto.getSiteName());
+		ticketAlertSetting.setActive("Y");
+
+		Setting ticketEmailsSetting = null;
+		if(settingsDto.getQuotationEmailsId() > 0) {
+			ticketEmailsSetting = settingsRepository.findOne(settingsDto.getQuotationEmailsId());
+		}else {
+			ticketEmailsSetting = new Setting();
+		}
+		ticketEmailsSetting.setSettingKey(EMAIL_NOTIFICATION_TICKET_EMAILS);
+		if(CollectionUtils.isNotEmpty(settingsDto.getQuotationEmailIds())) {
+			ticketEmailsSetting.setSettingValue(CommonUtil.convertToString(settingsDto.getQuotationEmailIds()));
+		}	
+		ticketEmailsSetting.setProjectId(settingsDto.getProjectId());
+		ticketEmailsSetting.setProjectName(settingsDto.getProjectName());
+		ticketEmailsSetting.setSiteId(settingsDto.getSiteId());
+		ticketEmailsSetting.setSiteName(settingsDto.getSiteName());
+		ticketEmailsSetting.setActive("Y");
+		
 		List<Setting> settingList = new ArrayList<Setting>();
 		if(StringUtils.isNotEmpty(attendanceAlertSetting.getSettingValue())) {
 			settingList.add(attendanceAlertSetting);
@@ -235,6 +270,12 @@ public class SettingsService extends AbstractService {
 		}
 		if(StringUtils.isNotEmpty(quotationEmailsSetting.getSettingValue())) {
 			settingList.add(quotationEmailsSetting);
+		}
+		if(StringUtils.isNotEmpty(ticketAlertSetting.getSettingValue())) {
+			settingList.add(ticketAlertSetting);
+		}
+		if(StringUtils.isNotEmpty(ticketEmailsSetting.getSettingValue())) {
+			settingList.add(ticketEmailsSetting);
 		}
 		settingsRepository.save(settingList);
 		
