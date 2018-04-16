@@ -19,20 +19,20 @@ angular.module('timeSheetApp')
         		start : false,
         		end : false,
         }
-        
+
         $scope.newShiftItem ={}
-        
+
         $scope.shiftFrom = new Date();
         $scope.shiftTo = new Date();
-        
-        
+
+
         $scope.loadProjects = function () {
         	ProjectComponent.findAll().then(function (data) {
                 $scope.projects = data;
                  $scope.loadingStop();
             });
         };
-        
+
         $scope.initCalender = function(){
             demo.initFormExtendedDatetimepickers();
         }
@@ -48,7 +48,7 @@ angular.module('timeSheetApp')
                 $scope.newShiftItem.startTime = e.date._d.getHours() + ':' + e.date._d.getMinutes();
             }
         });
-        
+
         $('#shiftTo').on('dp.change', function(e){
 
             console.log(e.date._d);
@@ -87,7 +87,7 @@ angular.module('timeSheetApp')
 	                    if (response.status === 400 && response.data.message === 'error.duplicateRecordError') {
 	                            $scope.errorSitesExists = 'ERROR';
 	                        $scope.showNotifications('top','center','danger','Site Already Exists');
-	
+
 	                        console.log($scope.errorSitesExists);
 	                    } else {
 	                        $scope.showNotifications('top','center','danger','Error in creating Site. Please try again later..');
@@ -97,11 +97,11 @@ angular.module('timeSheetApp')
 	        	}
 
         };
-        
+
         $scope.shiftItems=[];
-        
+
         $scope.newshiftItem = {};
-        
+
         $scope.addShiftItem = function(event) {
         		event.preventDefault();
         		console.log('new shift item - ' + JSON.stringify($scope.newShiftItem));
@@ -109,11 +109,11 @@ angular.module('timeSheetApp')
         		console.log('shiftItems - '+ JSON.stringify($scope.shiftItems));
         		$scope.newShiftItem = {};
         }
-        
+
         $scope.removeItem = function(ind) {
         		$scope.shiftItems.splice(ind,1);
         }
-        
+
 
         $scope.cancelSite = function () {
         		$location.path('/sites');
@@ -219,6 +219,38 @@ angular.module('timeSheetApp')
         };
 
 
+        $scope.pageSizes = [{
+            value: 10
+        }, {
+            value: 15
+        }, {
+            value: 20
+        }];
+
+        $scope.sort = $scope.pageSizes[0];
+        $scope.pageSort = $scope.pageSizes[0].value;
+
+        $scope.hasChanged = function(){
+            alert($scope.sort.value)
+            $scope.pageSort = $scope.sort.value;
+            $scope.search();
+        }
+
+        $scope.columnAscOrder = function(field){
+            $scope.selectedColumn = field;
+            $scope.isAscOrder = true;
+            $scope.search();
+        }
+
+        $scope.columnDescOrder = function(field){
+            $scope.selectedColumn = field;
+            $scope.isAscOrder = false;
+            $scope.search();
+        }
+
+
+
+
 
         $scope.search = function () {
         	var currPageVal = ($scope.pages ? $scope.pages.currPage : 1);
@@ -268,13 +300,25 @@ angular.module('timeSheetApp')
 
         	}
         	console.log($scope.searchCriteria);
-        	SiteComponent.search($scope.searchCriteria).then(function (data) {
+
+            if($scope.pageSort){
+                $scope.searchCriteria.sort = $scope.pageSort;
+            }
+
+            if($scope.selectedColumn){
+
+                $scope.searchCriteria.columnName = $scope.selectedColumn;
+                $scope.searchCriteria.sortByAsc = $scope.isAscOrder;
+
+            }
+
+            console.log("search Criteria to be sent - "+JSON.stringify($rootScope.searchCriteriaSite));
+            SiteComponent.search($scope.searchCriteria).then(function (data) {
                 $scope.sites = data.transactions;
                 $scope.sitesLoader = true;
-                console.log($scope.sites);
                 $scope.pages.currPage = data.currPage;
                 $scope.pages.totalPages = data.totalPages;
-                
+
                 $scope.numberArrays = [];
                 var startPage = 1;
                 if(($scope.pages.totalPages - $scope.pages.currPage) >= 10) {
@@ -305,7 +349,7 @@ angular.module('timeSheetApp')
                     	$scope.pageEndIntex = $scope.totalCountPages;
                     }
                 }
-                
+
                 if($scope.sites == null){
                     $scope.pages.startInd = 0;
                 }else{
@@ -326,7 +370,7 @@ angular.module('timeSheetApp')
 	        	$scope.pages.currPage = number;
 	        	$scope.search();
 	    }
-        
+
 
         $scope.first = function() {
         	if($scope.pages.currPage > 1) {
@@ -485,10 +529,10 @@ angular.module('timeSheetApp')
         }
 
       //init load
-        $scope.initLoad = function(){ 
-             $scope.loadPageTop(); 
+        $scope.initLoad = function(){
+             $scope.loadPageTop();
              $scope.loadProjects();
-          
+
          }
 
        //Loading Page go to top position
@@ -502,10 +546,10 @@ angular.module('timeSheetApp')
 
         $scope.loadingStart = function(){ $('.pageCenter').show();$('.overlay').show();}
         $scope.loadingStop = function(){
-            
+
             console.log("Calling loader");
             $('.pageCenter').hide();
             $('.overlay').hide();
-                    
+
         }
     });
