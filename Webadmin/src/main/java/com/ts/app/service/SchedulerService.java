@@ -518,6 +518,7 @@ public class SchedulerService extends AbstractService {
 	public void attendanceDetailReportSchedule() {
 		if(env.getProperty("scheduler.attendanceDetailReport.enabled").equalsIgnoreCase("true")) {
 			Calendar cal = Calendar.getInstance();
+			cal.add(Calendar.DAY_OF_MONTH, -1);
 			cal.set(Calendar.HOUR_OF_DAY, 0);
 			cal.set(Calendar.MINUTE, 0);
 			List<Project> projects = projectRepository.findAll();
@@ -544,11 +545,13 @@ public class SchedulerService extends AbstractService {
 								String startTime = shift.getStartTime();
 								String[] startTimeUnits = startTime.split(":");
 								Calendar startCal = Calendar.getInstance();
+								startCal.add(Calendar.DAY_OF_MONTH, -1);
 								startCal.set(Calendar.HOUR_OF_DAY, Integer.parseInt(startTimeUnits[0]));
 								startCal.set(Calendar.MINUTE, Integer.parseInt(startTimeUnits[1]));
 								String endTime = shift.getEndTime();
 								String[] endTimeUnits = endTime.split(":");
 								Calendar endCal = Calendar.getInstance();
+								endCal.add(Calendar.DAY_OF_MONTH, -1);
 								endCal.set(Calendar.HOUR_OF_DAY, Integer.parseInt(endTimeUnits[0]));
 								endCal.set(Calendar.MINUTE, Integer.parseInt(endTimeUnits[1]));
 								Calendar currCal = Calendar.getInstance();
