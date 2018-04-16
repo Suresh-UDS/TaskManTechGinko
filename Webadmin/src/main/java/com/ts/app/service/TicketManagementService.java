@@ -251,6 +251,7 @@ public class TicketManagementService extends AbstractService {
 	}
 	
 	private void sendNotifications(Employee employee, Ticket ticket, Site site, boolean isNew) {
+		Hibernate.initialize(employee.getUser());
 		User user = employee.getUser();
 		Setting ticketReports = settingsRepository.findSettingByKeyAndSiteId(SettingsService.EMAIL_NOTIFICATION_TICKET, site.getId());
 		if(ticketReports == null) {
