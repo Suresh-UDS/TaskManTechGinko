@@ -31,8 +31,8 @@ import org.hibernate.annotations.Cascade;
 
 @Entity
 @Table(name = "employee")
-@Cacheable(true)
-@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+//@Cacheable(true)
+//@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class Employee extends AbstractAuditingEntity implements Serializable {
 
 	/**
