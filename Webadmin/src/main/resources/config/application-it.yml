@@ -102,10 +102,10 @@ email:
 
 reports:
     job-report:
-        url: http://ec2-35-154-182-53.ap-south-1.compute.amazonaws.com:8088/#/job-reports
+        url: https://taskmanadmin.uds.in/#/job-reports
         #url: http://ec2-13-127-100-174.ap-south-1.compute.amazonaws.com:8088/#/job-reports
     attendance-report:
-        url: http://ec2-35-154-182-53.ap-south-1.compute.amazonaws.com:8088/#/attendance-reports
+        url: https://taskmanadmin.uds.in/#/attendance-reports
         #url: http://ec2-13-127-100-174.ap-south-1.compute.amazonaws.com:8088/#/attendance-reports
         
 facedetection:

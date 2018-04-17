@@ -399,7 +399,7 @@ public class ExportUtil {
                     dataRow.createCell(1).setCellValue(transaction.getName()+transaction.getLastName());
                     dataRow.createCell(2).setCellValue(transaction.getSiteName());
                     dataRow.createCell(3).setCellValue(transaction.getProjectName());
-                    dataRow.createCell(4).setCellValue(transaction.getCheckInTime());
+                    dataRow.createCell(4).setCellValue(String.valueOf(transaction.getCheckInTime()));
                     dataRow.createCell(5).setCellValue(String.valueOf(transaction.getCheckOutTime()));
                     /*Blob blob = null;
                     byte[] img = blob.getBytes(1,(int)blob.length());
