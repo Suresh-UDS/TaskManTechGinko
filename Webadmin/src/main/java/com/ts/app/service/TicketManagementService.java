@@ -1,9 +1,10 @@
 package com.ts.app.service;
 
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
-import java.util.TimeZone;
 
 import javax.inject.Inject;
 
@@ -34,7 +35,6 @@ import com.ts.app.repository.SettingsRepository;
 import com.ts.app.repository.SiteRepository;
 import com.ts.app.repository.TicketRepository;
 import com.ts.app.repository.UserRepository;
-import com.ts.app.service.util.DateUtil;
 import com.ts.app.service.util.MapperUtil;
 import com.ts.app.web.rest.dto.BaseDTO;
 import com.ts.app.web.rest.dto.SearchCriteria;
@@ -138,7 +138,11 @@ public class TicketManagementService extends AbstractService {
         } else {
         		employee = employeeRepository.findOne(ticket.getEmployee().getId());
         }
-        ticket.setStatus(ticketDTO.getStatus());
+        //ticket.setStatus(ticketDTO.getStatus());
+        ticket.setTitle(ticketDTO.getTitle());
+        ticket.setDescription(ticketDTO.getDescription());
+        ticket.setSeverity(ticketDTO.getSeverity());
+        ticket.setComments(ticketDTO.getComments());
         
         if(StringUtils.isNotEmpty(ticket.getStatus()) && (ticket.getStatus().equalsIgnoreCase("Closed"))) {
         		ticket.setClosedBy(user.getEmployee());
@@ -189,14 +193,14 @@ public class TicketManagementService extends AbstractService {
             Page<Ticket> page = null;
             List<TicketDTO> transactions = null;
 
-            Calendar startCal = Calendar.getInstance(TimeZone.getTimeZone("Asia/Kolkata"));
+            Calendar startCal = Calendar.getInstance();
             if (searchCriteria.getFromDate() != null) {
                 startCal.setTime(searchCriteria.getFromDate());
             }
             startCal.set(Calendar.HOUR_OF_DAY, 0);
             startCal.set(Calendar.MINUTE, 0);
             startCal.set(Calendar.SECOND, 0);
-            Calendar endCal = Calendar.getInstance(TimeZone.getTimeZone("Asia/Kolkata"));
+            Calendar endCal = Calendar.getInstance();
             if (searchCriteria.getToDate() != null) {
                 endCal.setTime(searchCriteria.getToDate());
             }
@@ -205,9 +209,8 @@ public class TicketManagementService extends AbstractService {
             endCal.set(Calendar.SECOND, 0);
             //searchCriteria.setFromDate(startCal.getTime());
             //searchCriteria.setToDate(endCal.getTime());
-
-            java.sql.Date startDate = DateUtil.convertToSQLDate(DateUtil.convertUTCToIST(startCal));
-            java.sql.Date toDate = DateUtil.convertToSQLDate(DateUtil.convertUTCToIST(endCal));
+            ZonedDateTime startDate = ZonedDateTime.ofInstant(startCal.toInstant(), ZoneId.systemDefault());
+            ZonedDateTime endDate = ZonedDateTime.ofInstant(endCal.toInstant(), ZoneId.systemDefault());
             
             if(user != null) {
 	        		Hibernate.initialize(user.getUserRole());
@@ -228,7 +231,7 @@ public class TicketManagementService extends AbstractService {
                     searchCriteria.setSubordinateIds(subEmpIds);
                 }
 
-            		page = ticketRepository.findByEmpId(searchCriteria.getSubordinateIds(), startDate, toDate,pageRequest);
+            		page = ticketRepository.findByEmpId(searchCriteria.getSubordinateIds(), startDate, endDate,pageRequest);
             }
             transactions = mapperUtil.toModelList(page.getContent(), TicketDTO.class);
             buildSearchResult(searchCriteria, page, transactions, result);
@@ -251,6 +254,7 @@ public class TicketManagementService extends AbstractService {
 	}
 	
 	private void sendNotifications(Employee employee, Ticket ticket, Site site, boolean isNew) {
+		Hibernate.initialize(employee.getUser());
 		User user = employee.getUser();
 		Setting ticketReports = settingsRepository.findSettingByKeyAndSiteId(SettingsService.EMAIL_NOTIFICATION_TICKET, site.getId());
 		if(ticketReports == null) {

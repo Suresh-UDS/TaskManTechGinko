@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('timeSheetApp')
-    .controller('AttendanceReportController', function ($rootScope, $scope, $state, $timeout, ProjectComponent, SiteComponent, EmployeeComponent,AttendanceComponent, $http,$stateParams,$location,$interval) {
+    .controller('AttendanceReportController', function ($rootScope, $scope, $state, $timeout, ProjectComponent, SiteComponent, EmployeeComponent,AttendanceComponent,DashboardComponent, $http,$stateParams,$location,$interval) {
         $scope.success = null;
         $scope.error = null;
         $scope.errorMessage = null;
@@ -29,6 +29,13 @@ angular.module('timeSheetApp')
         $scope.searchCriteriaAttendance;
 
         $scope.now = new Date()
+        
+        $scope.selectedFromDate;
+        $scope.selectedToDate;
+
+        $scope.dateFilterFrom = new Date();
+        $scope.dateFilterTo = new Date();
+        
 
         $scope.initCalender = function(){
 
@@ -38,25 +45,53 @@ angular.module('timeSheetApp')
 
         $('#dateFilterFrom').on('dp.change', function(e){
             console.log(e.date);
-            console.log(e.date._d);
-            $scope.selectedDateFrom=e.date._d;
 
+            console.log(e.date._d);
+            if(e.date._d > $scope.selectedToDate) {
+            		$scope.showNotifications('top','center','danger','From date cannot be greater than To date');
+            		$scope.dateFilterFrom = $scope.selectedFromDate;
+            		return false;
+            }else {
+                $scope.selectedFromDate = e.date._d;
+                $scope.refreshReport();
+            }
         });
+        
         $('#dateFilterTo').on('dp.change', function(e){
             console.log(e.date);
 
             console.log(e.date._d);
-            $scope.selectedDateTo=e.date._d;
+            if($scope.selectedFromDate > e.date._d) {
+            		$scope.showNotifications('top','center','danger','To date cannot be lesser than From date');
+            		$scope.dateFilterTo = $scope.selectedToDate;
+            		return false;
+            }else {
+                $scope.selectedToDate = e.date._d;
+                $scope.refreshReport();
+            }
 
         });
+        
+        $scope.refreshReport = function() {
+	    		$scope.search();
+	    }
+
+        
+        $scope.init = function() {
+        		$scope.loadPageTop();        	
+	    		$scope.selectedFromDate = $scope.dateFilterFrom;
+	    		$scope.selectedToDate = $scope.dateFilterTo;
+	    		$scope.loadAllProjects();
+	    		//$scope.loadAllSites();
+	    }
 
         $scope.loadAllAttendances = function () {
         	if(!$scope.allAttendances) {
             	AttendanceComponent.findAll().then(function (data) {
             	console.log(data)
             		$scope.allAttendances = data;
-            	// $scope.attendanceSites();
-            	$scope.employeeSearch();
+	            	// $scope.attendanceSites();
+	            	//$scope.employeeSearch();
             	})
         	}
         }
@@ -75,9 +110,32 @@ angular.module('timeSheetApp')
         $scope.attendanceSites = function () {
             SiteComponent.findAll().then(function (data) {
                 console.log("site attendances");
-                $scope.allSites = data;
+                $scope.sites = data;
             });
         };
+        
+        $scope.loadAllProjects = function () {
+            ProjectComponent.findAll().then(function (data) {
+                console.log("projects");
+                $scope.projects = data;
+            });
+        };
+        
+        $scope.changeProject = function() {
+	    		console.log('selected project - ' + JSON.stringify($scope.selectedProject));
+	    		$scope.loadSites($scope.selectedProject.id);
+	    		$scope.selectedSite = null;
+	    		$scope.refreshReport();
+	    }
+
+        
+        $scope.loadSites = function(projectId){
+	    		console.log('projectid - ' + projectId);
+	        DashboardComponent.loadSites(projectId).then(function(data){
+	            console.log('sites ' + JSON.stringify(data));
+	            $scope.sites = data;
+	        })
+	    }
 
         $scope.employeeSearch = function () {
             if(!$scope.allEmployees) {
@@ -88,7 +146,7 @@ angular.module('timeSheetApp')
             }
         };
 
-        $scope.allSites=[{name:'UDS'},{name:'Zappy'}]
+        $scope.sites=[]
 
 
 
@@ -149,15 +207,20 @@ angular.module('timeSheetApp')
                 console.log($scope.searchCriteria.checkInDateTimeTo)
             }
 
-        	if($scope.selectedEmployee){
-        	    console.log($scope.selectedEmployee);
+        		if($scope.selectedEmployee){
+        			console.log($scope.selectedEmployee);
                 $scope.searchCriteria.employeeEmpId = $scope.selectedEmployee.empId;
                 $scope.searchCriteria.findAll = false;
             }
             if($scope.selectedSite){
-        	    $scope.searchCriteria.siteId = $scope.selectedSite.id;
+        	    		$scope.searchCriteria.siteId = $scope.selectedSite.id;
                 $scope.searchCriteria.findAll = false;
             }
+            if($scope.selectedProject){
+			    	$scope.searchCriteria.projectId = $scope.selectedProject.id;
+		        $scope.searchCriteria.findAll = false;
+		    }
+            $scope.searchCriteria.report = true;
         	console.log(JSON.stringify($scope.searchCriteria));
         	AttendanceComponent.search($scope.searchCriteria, reportUid).then(function (data) {
                 $scope.attendancesData = data.transactions;
@@ -368,7 +431,7 @@ angular.module('timeSheetApp')
 
         $scope.exportAllData = function(type){
     			$scope.searchCriteria.exportType = type;
-
+    			$scope.searchCriteria.report = true;
     			AttendanceComponent.exportAllData($scope.searchCriteria).then(function(data){
 	        		var result = data.results[0];
 	        		console.log(result);
@@ -482,7 +545,7 @@ angular.module('timeSheetApp')
           //init load
         $scope.initLoad = function(){ 
              $scope.loadPageTop(); 
-             $scope.loadAttendances(); 
+             //$scope.loadAttendances(); 
             
           
          }

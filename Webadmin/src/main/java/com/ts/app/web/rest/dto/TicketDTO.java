@@ -46,6 +46,8 @@ public class TicketDTO extends BaseDTO {
     private String closedByName;
     
     private Date closedOn;
+    
+    private String comments;
 
 
     public long getId() {
@@ -222,6 +224,14 @@ public class TicketDTO extends BaseDTO {
 
 	public void setClosedOn(Date closedOn) {
 		this.closedOn = closedOn;
+	}
+
+	public String getComments() {
+		return comments;
+	}
+
+	public void setComments(String comments) {
+		this.comments = comments;
 	}
     
     

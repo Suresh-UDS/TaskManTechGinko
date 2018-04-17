@@ -299,7 +299,7 @@ public class AttendanceService extends AbstractService {
             Long employeeId = searchCriteria.getEmployeeId();
             java.sql.Date startDate = new java.sql.Date(searchCriteria.getCheckInDateTimeFrom().getTime());
             java.sql.Date toDate = new java.sql.Date(searchCriteria.getCheckInDateTimeTo().getTime());
-            transactions = attendanceRepository.findBySiteIdEmpId(searchCriteria.getSiteId(), searchCriteria.getEmployeeEmpId());
+            transactions = attendanceRepository.findBySiteIdEmpId(searchCriteria.getProjectId(), searchCriteria.getSiteId(), searchCriteria.getEmployeeEmpId());
         }
         return mapperUtil.toModelList(transactions, AttendanceDTO.class);
     }
@@ -345,6 +345,9 @@ public class AttendanceService extends AbstractService {
             endCal.set(Calendar.MINUTE, 59);
             endCal.set(Calendar.SECOND, 0);
             searchCriteria.setCheckInDateTimeTo(endCal.getTime());
+            if(searchCriteria.isReport()) {
+            		pageRequest = null;
+            }
             if(!searchCriteria.isFindAll()) {
                 Employee employee = employeeRepository.findByUserId(searchCriteria.getUserId());
                 List<Long> subEmpIds = new ArrayList<Long>();
@@ -365,19 +368,21 @@ public class AttendanceService extends AbstractService {
                         page = attendanceRepository.findByEmpIdAndCheckInTime(searchCriteria.getEmployeeEmpId(),startDate, toDate,pageRequest);
                     }else if(!StringUtils.isEmpty(searchCriteria.getName())) {
                     		if(searchCriteria.getSiteId() != 0) {
-                    			page = attendanceRepository.findBySiteIdEmpNameAndDate(searchCriteria.getSiteId(), searchCriteria.getName(),startDate, toDate,pageRequest);
+                    			page = attendanceRepository.findBySiteIdEmpNameAndDate(searchCriteria.getProjectId(), searchCriteria.getSiteId(), searchCriteria.getName(),startDate, toDate,pageRequest);
                     		}
                     }
 
 
                     if(searchCriteria.getSiteId() != 0 && StringUtils.isEmpty(searchCriteria.getEmployeeEmpId())) {
                         log.debug("find by site id and check in  date and time - "+searchCriteria.getSiteId());
-                        page = attendanceRepository.findBySiteIdAndCheckInTime(searchCriteria.getSiteId(), startDate, toDate, pageRequest);
+                        page = attendanceRepository.findBySiteIdAndCheckInTime(searchCriteria.getProjectId(), searchCriteria.getSiteId(), startDate, toDate, pageRequest);
                     }else if(searchCriteria.getSiteId()!=0){
                         log.debug("find by site id and employee id date and time - "+searchCriteria.getSiteId()+" - "+searchCriteria.getEmployeeEmpId());
-                        page = attendanceRepository.findBySiteIdEmpIdAndDate(searchCriteria.getSiteId(),searchCriteria.getEmployeeEmpId(), startDate, toDate, pageRequest);
-                    }else if(searchCriteria.getSiteId()==0 ){
-                        if (StringUtils.isEmpty(searchCriteria.getEmployeeEmpId())) {
+                        page = attendanceRepository.findBySiteIdEmpIdAndDate(searchCriteria.getProjectId(), searchCriteria.getSiteId(),searchCriteria.getEmployeeEmpId(), startDate, toDate, pageRequest);
+                    }else if(searchCriteria.getSiteId()==0){
+                    		if (searchCriteria.getProjectId() > 0) {
+                    			page = attendanceRepository.findBySiteIdEmpIdAndDate(searchCriteria.getProjectId(), searchCriteria.getSiteId(),searchCriteria.getEmployeeEmpId(), startDate, toDate, pageRequest);
+                    		}else if (StringUtils.isEmpty(searchCriteria.getEmployeeEmpId())) {
                             log.debug("no site id and employee id- "+startDate+" - "+toDate);
                             page = attendanceRepository.findByDateRange(startDate, toDate, pageRequest);
 
@@ -391,7 +396,7 @@ public class AttendanceService extends AbstractService {
                             page= attendanceRepository.findBySiteId(searchCriteria.getSiteId(),pageRequest);
                         }else if(searchCriteria.getSiteId()!=0){
                             log.debug("find by site id and employee id - "+searchCriteria.getSiteId()+" - "+searchCriteria.getEmployeeEmpId());
-                            page =attendanceRepository.findBySiteIdEmpId(searchCriteria.getSiteId(),searchCriteria.getEmployeeEmpId(),pageRequest);
+                            page =attendanceRepository.findBySiteIdEmpId(searchCriteria.getProjectId(), searchCriteria.getSiteId(),searchCriteria.getEmployeeEmpId(),pageRequest);
                         }else{
                             log.debug("no site id only employee id- ");
                             page = attendanceRepository.findByEmpId(searchCriteria.getEmployeeEmpId(),pageRequest);

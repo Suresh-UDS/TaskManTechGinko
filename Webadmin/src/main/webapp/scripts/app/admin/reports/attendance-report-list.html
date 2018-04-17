@@ -1,4 +1,4 @@
-<div ng-init="initLoad()" >
+<div ng-init="init()" >
 
     <!--<div class="row TopButtonsCon">-->
         <!--<div class="col-md-4">-->
@@ -21,7 +21,7 @@
 
     <div class="row">
         <div class="col-md-12">
-            <div class="card margin-TB-5 TableCard" ng-init="loadAllAttendances()">
+            <div class="card margin-TB-5 TableCard" >
                 <!--<div class="card-header card-header-icon" data-background-color="purple">-->
                 <!--<i class="material-icons">assignment</i>-->
                 <!--</div>-->
@@ -31,17 +31,81 @@
 
                         <form name="searchForm"  ng-submit="search()" novalidate >
 
-                            <table class="table no-padding-tblCon" border="0">
+							<div class="row" >
+
+			                    <div class="col-md-2">
+			
+			                        <!--<div class="form-group label-floating">-->
+			                        <!--<label class="control-label">Date</label>-->
+			                        <!--<input class="datepicker form-control" type="text" value="03/01/2018"/>-->
+			
+			                        <!--</div>-->
+			
+			                        <div class="form-group">
+			                            <label class="label-control">From date</label>
+			                            <span class="form-control-feedback calender-icon"><i class="material-icons">date_range</i></span>
+			                            <input type="text" class="form-control datepicker"  id="dateFilterFrom"  placeholder="{{dateFilterFrom | date:'dd-MMM-yyyy'}}"/>
+			
+			                        </div>
+			
+			                    </div>
+			                    <div class="col-md-2">
+			
+			                        <div class="form-group">
+			                            <label class="label-control">To date</label>
+			                            <span class="form-control-feedback calender-icon"><i class="material-icons">date_range</i></span>
+			                            <input type="text" class="form-control datepicker"  id="dateFilterTo"  placeholder="{{dateFilterTo | date:'dd-MMM-yyyy'}}"/>
+			
+			                        </div>
+			
+			                    </div>
+			                    <div class="col-md-3">
+			                        <div class="dropdown">
+			                            <label class="label-control">Select Client</label>
+			                            <select class="form-control " ng-model="selectedProject" ng-change="changeProject()" ng-options="project as project.name for project in projects" >
+			                                <option value="">Please select Client...</option>
+			                            </select>
+			                        </div>
+			                    </div>
+			                    <div class="col-md-3">
+			                        <div class="dropdown ">
+			                            <label class="label-control">Select Site</label>
+			                            <select class="form-control " ng-model="selectedSite" ng-change="refreshReport()" ng-options="site as site.name for site in sites">
+			                                <option value="">Please select Site...</option>
+			                            </select>
+			                        </div>
+			                    </div>
+			
+								<div class="col-md-2">
+								<div class="form-group ">
+			                         <button type="submit" class="btn btn-circle blue-clr" ng-disabled="searchForm.$invalid">
+			                             <i class="material-icons">search</i>
+			                         </button>
+			                         <button ng-show="attendancesData.length" type="button" title="Export HTML"  ng-click=exportAllData('html') class="btn btn-circle green-clr">
+			                             <i class="material-icons">description</i>
+			                         </button>
+			                         <button ng-show="attendancesData.length" type="button"  title="Export CSV"  ng-click=exportAllData('xlsx') class="btn btn-circle green-clr">
+			                             <i class="material-icons">import_contacts</i>
+			                         </button>
+			                         <button ng-click="refreshPage()" class="btn btn-circle orange-clr">
+			                             <i class="material-icons">refresh</i>
+			                         </button>
+			                         <a class="download-btn" href="{{exportFile(0)}}">{{exportMsg(0)}}</a>
+			                     </div>
+			                     </div>
+			                </div>
+
+                            <!-- <table class="table no-padding-tblCon" border="0">
                                 <tr class="filter-row gc-search-row">
                                     <td>
-                                        <div class="form-group" >
+                                        <div class="form-group " >
 
                                             <input id="dateFilterFrom" type="text" class="form-control datepicker border-bottom-input"   value={{now}} placeholder="From Date" />
                                         </div>
                                     </td>
 
                                     <td>
-                                        <div class="form-group" >
+                                        <div class="form-group col-md-12" >
 
                                             <input id="dateFilterTo" type="text" class="form-control datepicker border-bottom-input"   value={{now}} placeholder="To Date" />
                                         </div>
@@ -49,10 +113,10 @@
 
                                     <td>
                                         <div class="form-group" >
-                                            <div class="dropdown">
+                                            <div class="dropdown col-md-12" >
                                                 <input type="text"
                                                        class="form-control border-bottom-input"
-                                                       placeholder="Search Employee Name"
+                                                       placeholder="Employee Name"
                                                        ng-model="selectedEmployee"
                                                        ng-value="searchCriteria.employeeFullName"
                                                        uib-typeahead="employee as employee.fullName for employee in allEmployees | filter:$viewValue | limitTo:5" />
@@ -62,15 +126,26 @@
 
                                     <td>
                                         <div class="form-group" >
-                                            <div class="dropdown">
+                                            <div class="dropdown col-md-12">
                                                 <input type="text"
                                                        class="form-control searchable-input floatL border-bottom-input"
-                                                       placeholder="Search Site"
-                                                       ng-model="selectedSite"
-                                                       ng-value="searchCriteria.siteName"
-                                                       uib-typeahead="site as site.name for site in allSites | filter:$viewValue | limitTo:5"/>
+                                                       placeholder="Client" ng-model="selectedProject"
+
+                                                       name="projectId"
+                                                       uib-typeahead="project as project.name for project in projects | filter:$viewValue | limitTo:5" />
                                             </div>
+                                           
                                         </div>
+                                    </td>
+                                    <td>
+                                    	<div class="form-group" >
+                                    		 <div class="dropdown col-md-12">
+                                                <input type="text"
+                                                       class="form-control searchable-input floatL border-bottom-input"
+                                                       placeholder="Site" ng-model="selectedSite"
+                                                       uib-typeahead="site as site.name for site in sites | filter:$viewValue | limitTo:5" />
+                                            </div>
+                                    	</div>
                                     </td>
                                     <td align="right" width="25%">
                                         <div class="floatR form-group">
@@ -90,7 +165,7 @@
                                         </div>
                                     </td>
                                 </tr>
-                            </table>
+                            </table> -->
                         </form>
 
                     </div>

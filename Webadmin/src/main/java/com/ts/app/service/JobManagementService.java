@@ -762,7 +762,7 @@ public class JobManagementService extends AbstractService {
 				checklist.setJob(job);
 				checklistItems.add(checklist);
 			}
-			if(CollectionUtils.isNotEmpty(job.getChecklistItems())) {
+			if(job.getChecklistItems() != null) {
 				job.getChecklistItems().addAll(checklistItems);
 			}else {
 				job.setChecklistItems(checklistItems);

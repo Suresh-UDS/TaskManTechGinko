@@ -1,6 +1,7 @@
 package com.ts.app.repository;
 
 import java.sql.Date;
+import java.time.ZonedDateTime;
 import java.util.List;
 
 import org.springframework.data.domain.Page;
@@ -21,14 +22,14 @@ public interface TicketRepository extends JpaRepository<Ticket,Long>, JpaSpecifi
     Page<Ticket> findByUserId(@Param("userId") Long userId, Pageable pageRequest);
 
     @Query("SELECT t FROM Ticket t where (t.employee.id in (:empIds) or t.assignedTo.id in (:empIds)) and t.createdDate between :startDate and :endDate")
-    Page<Ticket> findByEmpId(@Param("empIds") List<Long> empIds,@Param("startDate") Date startDate,@Param("endDate") Date endDate, Pageable pageRequest);
+    Page<Ticket> findByEmpId(@Param("empIds") List<Long> empIds,@Param("startDate") ZonedDateTime startDate,@Param("endDate") ZonedDateTime endDate, Pageable pageRequest);
 
     @Query("SELECT t FROM Ticket t where t.site.id = :siteId and (t.employee.id in (:empIds) or t.assignedTo.id in (:empIds) ) and t.createdDate between :startDate and :endDate")
-    Page<Ticket> findBySiteIdUserIdAndEmpId(@Param("siteId") long siteId,@Param("empIds") List<Long> empIds,@Param("startDate") Date startDate,@Param("endDate") Date endDate, Pageable pageRequest);
+    Page<Ticket> findBySiteIdUserIdAndEmpId(@Param("siteId") long siteId,@Param("empIds") List<Long> empIds,@Param("startDate") ZonedDateTime startDate,@Param("endDate") ZonedDateTime endDate, Pageable pageRequest);
 
     @Query("SELECT t FROM Ticket t where t.site.id = :siteId and t.status = :status and (t.employee.id in (:empIds) or t.assignedTo.id in (:empIds) ) and t.createdDate between :startDate and :endDate")
-    Page<Ticket> findBySiteIdUserIdAndEmpId(@Param("siteId") long siteId,@Param("status") String status,@Param("empIds") List<Long> empIds,@Param("startDate") Date startDate,@Param("endDate") Date endDate, Pageable pageRequest);
+    Page<Ticket> findBySiteIdUserIdAndEmpId(@Param("siteId") long siteId,@Param("status") String status,@Param("empIds") List<Long> empIds,@Param("startDate") ZonedDateTime startDate,@Param("endDate") ZonedDateTime endDate, Pageable pageRequest);
 
     @Query("SELECT t FROM Ticket t where t.status = :status and (t.employee.id in (:empIds) or t.assignedTo.id in (:empIds) ) and t.createdDate between :startDate and :endDate")
-    Page<Ticket> findBySiteIdUserIdAndEmpId(@Param("status") String status,@Param("empIds") List<Long> empIds,@Param("startDate") Date startDate,@Param("endDate") Date endDate, Pageable pageRequest);
+    Page<Ticket> findBySiteIdUserIdAndEmpId(@Param("status") String status,@Param("empIds") List<Long> empIds,@Param("startDate") ZonedDateTime startDate,@Param("endDate") ZonedDateTime endDate, Pageable pageRequest);
 }

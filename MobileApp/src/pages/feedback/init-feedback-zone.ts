@@ -25,6 +25,7 @@ export class InitFeedbackZone {
         // this.loadFeedbackMappings();
 
         this.bgClr=["#552D56","#673553","#AF5E6C","#DE8275","#FFAB88","#FF6C54","#FF8A54","#FFA754","#FFC153","#552D56"]
+        console.log("Init feedback zone page");
         console.log(this.navParams.data);
         this.locations = this.navParams.data.location;
 
@@ -39,6 +40,10 @@ export class InitFeedbackZone {
     {
         console.log("feedback details before entering");
         console.log(fb);
+        console.log(site);
+        console.log(project);
+        console.log(location);
+
         var feedback =fb.feedback;
         if(feedback){
             //remove
