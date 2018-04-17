@@ -1,0 +1,40 @@
+<ion-header>
+  <ion-navbar>
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>Feedback</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+
+  <ion-grid fixed="" >
+    <ion-row>
+      <ion-col col-4 col-md-4 col-lg-3 *ngFor="let grid of grids;let i=index" no-padding="">
+        <!--<div text-center>-->
+          <!--<img [src]="grid.img">-->
+        <!--</div>-->
+        <!--<div text-center padding-top [ngClass]="{'select-grid':grid.checked}">-->
+          <!--{{grid.title}}-->
+        <!--</div>-->
+        <!--<div text-center>-->
+          <!--<ion-checkbox class="grid-check" (ionChange)="selectGrid(i)"></ion-checkbox>-->
+        <!--</div>-->
+        <div [ngClass]="{'select-grid':grid.checked}" class="padding5 height100 width-full border-radius" class="card-design">
+            <div class="height70" padding-top text-center="" padding="">
+              <img [src]="grid.img" class="margin-auto grid-img">
+              <!--<img src="img/smell.png">-->
+            </div>
+            <div text-center padding-bottom="" padding-top="" class="height30">
+              <h3 text-center text-md-center text-lg-center  padding-top="" >{{grid.title}}</h3>
+            </div>
+            <ion-checkbox class="grid-check" (ionChange)="selectGrid(i)"></ion-checkbox>
+        </div>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+
+</ion-content>
+

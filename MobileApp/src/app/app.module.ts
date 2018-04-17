@@ -75,6 +75,7 @@ import {BatteryStatus, BatteryStatusResponse} from "@ionic-native/battery-status
 import {FeedbackDashboardPage} from "../pages/feedback/feedback-dashboard";
 import {QuotationImagePopoverPage} from "../pages/quotation/quotation-image-popover";
 import { BackgroundMode } from '@ionic-native/background-mode';
+import { NativeAudio } from '@ionic-native/native-audio';
 import {SelectFeedbackPage} from "../pages/feedback/select-feedback";
 
 import {FeedbackZone} from "../pages/feedback/feedbackZone";
@@ -85,6 +86,7 @@ import {FeedbackQuestionsForm} from "../pages/feedback/feedback-questions-form";
 import {Ticket} from "../pages/ticket/ticket";
 import {CreateTicket} from "../pages/ticket/create-ticket";
 import {ViewTicket} from "../pages/ticket/view-ticket";
+import {FeedbackGridPage} from "../pages/feedback/feedback-grid";
 
 @NgModule({
   declarations: [
@@ -138,6 +140,7 @@ import {ViewTicket} from "../pages/ticket/view-ticket";
       SelectFeedbackPage,
       InitFeedbackZone,
       FeedbackQuestionsForm,
+      FeedbackGridPage,
       WizardFeedbackEntry,
       Ticket,
       CreateTicket,
@@ -201,6 +204,7 @@ import {ViewTicket} from "../pages/ticket/view-ticket";
     FeedbackPage,
     FeedbackQuestionPage,
     InitFeedbackPage,
+    FeedbackGridPage,
     JobPopoverPage,
       FeedbackZone,
     FeedbackDashboardPage,
@@ -216,6 +220,7 @@ import {ViewTicket} from "../pages/ticket/view-ticket";
     StatusBar,
     SplashScreen,
     Camera,
+      NativeAudio,
       AttendanceService,
       EmployeeService,
       FeedbackService,

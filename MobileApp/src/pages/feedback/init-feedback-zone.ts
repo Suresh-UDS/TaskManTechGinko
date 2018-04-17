@@ -9,6 +9,7 @@ import {FeedbackDashboardPage} from "./feedback-dashboard";
 import {FeedbackZone} from "./feedbackZone";
 import {SelectFeedbackPage} from "./select-feedback";
 import {WizardFeedbackEntry} from "./wizard-feedback-entry";
+import {FeedbackGridPage} from "./feedback-grid";
 @Component({
     selector: 'page-init-feedback-zone',
     templateUrl: 'init-feedback-zone.html'
@@ -45,9 +46,15 @@ export class InitFeedbackZone {
 
         var feedback =fb.feedback;
         if(feedback){
+            //remove
+            // feedback.displayType='grid';
             if(feedback.displayType == 'form'){
                 this.navCtrl.push(SelectFeedbackPage,{feedback:feedback,fb:fb,project:project,site:site,location:location});
-            }else{
+            }
+            else if(feedback.displayType == 'grid'){
+                this.navCtrl.push(SelectFeedbackPage,{feedback:feedback,fb:fb,project:project,site:site,location:location});
+            }
+            else{
                 this.navCtrl.push(WizardFeedbackEntry,{feedback:feedback,fb:fb,project:project,site:site,location:location});
             }
 
