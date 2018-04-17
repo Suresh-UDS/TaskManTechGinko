@@ -345,6 +345,9 @@ public class AttendanceService extends AbstractService {
             endCal.set(Calendar.MINUTE, 59);
             endCal.set(Calendar.SECOND, 0);
             searchCriteria.setCheckInDateTimeTo(endCal.getTime());
+            if(searchCriteria.isReport()) {
+            		pageRequest = null;
+            }
             if(!searchCriteria.isFindAll()) {
                 Employee employee = employeeRepository.findByUserId(searchCriteria.getUserId());
                 List<Long> subEmpIds = new ArrayList<Long>();

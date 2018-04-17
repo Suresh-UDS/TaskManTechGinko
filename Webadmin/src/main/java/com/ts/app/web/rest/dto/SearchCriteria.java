@@ -118,6 +118,8 @@ public class SearchCriteria extends Paginator {
 	private double lat;
 
 	private double lng;
+	
+	private boolean report;
 
 	public long getId() {
 		return id;
@@ -637,4 +639,14 @@ public class SearchCriteria extends Paginator {
     public void setLng(double lng) {
         this.lng = lng;
     }
+
+	public boolean isReport() {
+		return report;
+	}
+
+	public void setReport(boolean report) {
+		this.report = report;
+	}
+    
+    
 }

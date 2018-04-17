@@ -220,6 +220,7 @@ angular.module('timeSheetApp')
 			    	$scope.searchCriteria.projectId = $scope.selectedProject.id;
 		        $scope.searchCriteria.findAll = false;
 		    }
+            searchCriteria.report = true;
         	console.log(JSON.stringify($scope.searchCriteria));
         	AttendanceComponent.search($scope.searchCriteria, reportUid).then(function (data) {
                 $scope.attendancesData = data.transactions;
@@ -430,7 +431,7 @@ angular.module('timeSheetApp')
 
         $scope.exportAllData = function(type){
     			$scope.searchCriteria.exportType = type;
-
+    			$scope.searchCriteria.report = true;
     			AttendanceComponent.exportAllData($scope.searchCriteria).then(function(data){
 	        		var result = data.results[0];
 	        		console.log(result);
