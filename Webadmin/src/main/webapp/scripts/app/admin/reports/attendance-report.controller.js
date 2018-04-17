@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('timeSheetApp')
-    .controller('AttendanceReportController', function ($rootScope, $scope, $state, $timeout, ProjectComponent, SiteComponent, EmployeeComponent,AttendanceComponent, $http,$stateParams,$location,$interval) {
+    .controller('AttendanceReportController', function ($rootScope, $scope, $state, $timeout, ProjectComponent, SiteComponent, EmployeeComponent,AttendanceComponent,DashboardComponent, $http,$stateParams,$location,$interval) {
         $scope.success = null;
         $scope.error = null;
         $scope.errorMessage = null;
@@ -146,7 +146,7 @@ angular.module('timeSheetApp')
             }
         };
 
-        $scope.sites=[{name:'UDS'},{name:'Zappy'}]
+        $scope.sites=[]
 
 
 
