@@ -34,14 +34,14 @@
                             <table class="table no-padding-tblCon" border="0">
                                 <tr class="filter-row gc-search-row">
                                     <td>
-                                        <div class="form-group" >
+                                        <div class="form-group " >
 
                                             <input id="dateFilterFrom" type="text" class="form-control datepicker border-bottom-input"   value={{now}} placeholder="From Date" />
                                         </div>
                                     </td>
 
                                     <td>
-                                        <div class="form-group" >
+                                        <div class="form-group col-md-12" >
 
                                             <input id="dateFilterTo" type="text" class="form-control datepicker border-bottom-input"   value={{now}} placeholder="To Date" />
                                         </div>
@@ -49,10 +49,10 @@
 
                                     <td>
                                         <div class="form-group" >
-                                            <div class="dropdown">
+                                            <div class="dropdown col-md-12" >
                                                 <input type="text"
                                                        class="form-control border-bottom-input"
-                                                       placeholder="Search Employee Name"
+                                                       placeholder="Employee Name"
                                                        ng-model="selectedEmployee"
                                                        ng-value="searchCriteria.employeeFullName"
                                                        uib-typeahead="employee as employee.fullName for employee in allEmployees | filter:$viewValue | limitTo:5" />
@@ -62,15 +62,26 @@
 
                                     <td>
                                         <div class="form-group" >
-                                            <div class="dropdown">
+                                            <div class="dropdown col-md-12">
                                                 <input type="text"
                                                        class="form-control searchable-input floatL border-bottom-input"
-                                                       placeholder="Search Site"
-                                                       ng-model="selectedSite"
-                                                       ng-value="searchCriteria.siteName"
-                                                       uib-typeahead="site as site.name for site in allSites | filter:$viewValue | limitTo:5"/>
+                                                       placeholder="Client" ng-model="selectedProject"
+
+                                                       name="projectId"
+                                                       uib-typeahead="project as project.name for project in projects | filter:$viewValue | limitTo:5" />
                                             </div>
+                                           
                                         </div>
+                                    </td>
+                                    <td>
+                                    	<div class="form-group" >
+                                    		 <div class="dropdown col-md-12">
+                                                <input type="text"
+                                                       class="form-control searchable-input floatL border-bottom-input"
+                                                       placeholder="Site" ng-model="selectedSite"
+                                                       uib-typeahead="site as site.name for site in sites | filter:$viewValue | limitTo:5" />
+                                            </div>
+                                    	</div>
                                     </td>
                                     <td align="right" width="25%">
                                         <div class="floatR form-group">

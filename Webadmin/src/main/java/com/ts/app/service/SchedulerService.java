@@ -521,6 +521,11 @@ public class SchedulerService extends AbstractService {
 			cal.add(Calendar.DAY_OF_MONTH, -1);
 			cal.set(Calendar.HOUR_OF_DAY, 0);
 			cal.set(Calendar.MINUTE, 0);
+			Calendar dayEndcal = Calendar.getInstance();
+			dayEndcal.add(Calendar.DAY_OF_MONTH, -1);
+			dayEndcal.set(Calendar.HOUR_OF_DAY, 23);
+			dayEndcal.set(Calendar.MINUTE, 59);
+
 			List<Project> projects = projectRepository.findAll();
 			for(Project proj : projects) {
 				SearchCriteria sc = new SearchCriteria();
@@ -580,7 +585,7 @@ public class SchedulerService extends AbstractService {
 	 					}else {
 							long empCntInShift = employeeRepository.findCountBySiteId(site.getId());
 							
-							long attendanceCount = attendanceRepository.findCountBySiteAndCheckInTime(site.getId(), DateUtil.convertToSQLDate(cal.getTime()), DateUtil.convertToSQLDate(cal.getTime()));
+							long attendanceCount = attendanceRepository.findCountBySiteAndCheckInTime(site.getId(), DateUtil.convertToSQLDate(cal.getTime()), DateUtil.convertToSQLDate(dayEndcal.getTime()));
 							//List<EmployeeAttendanceReport> empAttnList = attendanceRepository.findBySiteId(site.getId(), DateUtil.convertToSQLDate(cal.getTime()), DateUtil.convertToSQLDate(cal.getTime()));
 						    long absentCount = empCntInShift - attendanceCount;
 						    
@@ -592,7 +597,7 @@ public class SchedulerService extends AbstractService {
 							content.append("Present - " + attendanceCount + LINE_SEPARATOR);
 							content.append("Absent - " + absentCount + LINE_SEPARATOR);
 	 					}
-						List<EmployeeAttendanceReport> empAttnList = attendanceRepository.findBySiteId(site.getId(), DateUtil.convertToSQLDate(cal.getTime()), DateUtil.convertToSQLDate(cal.getTime()));
+						List<EmployeeAttendanceReport> empAttnList = attendanceRepository.findBySiteId(site.getId(), DateUtil.convertToSQLDate(cal.getTime()), DateUtil.convertToSQLDate(dayEndcal.getTime()));
 						
 						log.debug("send detailed report");
 						Setting attendanceReportEmails = settingRepository.findSettingByKeyAndSiteId(SettingsService.EMAIL_NOTIFICATION_ATTENDANCE_EMAILS, site.getId());

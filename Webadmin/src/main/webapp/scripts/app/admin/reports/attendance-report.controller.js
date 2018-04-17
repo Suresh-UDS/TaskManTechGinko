@@ -75,7 +75,14 @@ angular.module('timeSheetApp')
         $scope.attendanceSites = function () {
             SiteComponent.findAll().then(function (data) {
                 console.log("site attendances");
-                $scope.allSites = data;
+                $scope.sites = data;
+            });
+        };
+        
+        $scope.attendanceProjects = function () {
+            ProjectComponent.findAll().then(function (data) {
+                console.log("projects");
+                $scope.projects = data;
             });
         };
 
@@ -88,7 +95,7 @@ angular.module('timeSheetApp')
             }
         };
 
-        $scope.allSites=[{name:'UDS'},{name:'Zappy'}]
+        $scope.sites=[{name:'UDS'},{name:'Zappy'}]
 
 
 
@@ -149,15 +156,19 @@ angular.module('timeSheetApp')
                 console.log($scope.searchCriteria.checkInDateTimeTo)
             }
 
-        	if($scope.selectedEmployee){
-        	    console.log($scope.selectedEmployee);
+        		if($scope.selectedEmployee){
+        			console.log($scope.selectedEmployee);
                 $scope.searchCriteria.employeeEmpId = $scope.selectedEmployee.empId;
                 $scope.searchCriteria.findAll = false;
             }
             if($scope.selectedSite){
-        	    $scope.searchCriteria.siteId = $scope.selectedSite.id;
+        	    		$scope.searchCriteria.siteId = $scope.selectedSite.id;
                 $scope.searchCriteria.findAll = false;
             }
+            if($scope.selectedProject){
+			    	$scope.searchCriteria.projectId = $scope.selectedProject.id;
+		        $scope.searchCriteria.findAll = false;
+		    }
         	console.log(JSON.stringify($scope.searchCriteria));
         	AttendanceComponent.search($scope.searchCriteria, reportUid).then(function (data) {
                 $scope.attendancesData = data.transactions;
