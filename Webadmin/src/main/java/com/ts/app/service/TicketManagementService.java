@@ -138,7 +138,11 @@ public class TicketManagementService extends AbstractService {
         } else {
         		employee = employeeRepository.findOne(ticket.getEmployee().getId());
         }
-        ticket.setStatus(ticketDTO.getStatus());
+        //ticket.setStatus(ticketDTO.getStatus());
+        ticket.setTitle(ticketDTO.getTitle());
+        ticket.setDescription(ticketDTO.getDescription());
+        ticket.setSeverity(ticketDTO.getSeverity());
+        ticket.setComments(ticketDTO.getComments());
         
         if(StringUtils.isNotEmpty(ticket.getStatus()) && (ticket.getStatus().equalsIgnoreCase("Closed"))) {
         		ticket.setClosedBy(user.getEmployee());

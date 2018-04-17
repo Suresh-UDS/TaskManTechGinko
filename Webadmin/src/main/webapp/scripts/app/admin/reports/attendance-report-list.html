@@ -1,4 +1,4 @@
-<div ng-init="initLoad()" >
+<div ng-init="init()" >
 
     <!--<div class="row TopButtonsCon">-->
         <!--<div class="col-md-4">-->
@@ -31,7 +31,69 @@
 
                         <form name="searchForm"  ng-submit="search()" novalidate >
 
-                            <table class="table no-padding-tblCon" border="0">
+							<div class="row" ng-init="init()">
+
+			                    <div class="col-md-3">
+			
+			                        <!--<div class="form-group label-floating">-->
+			                        <!--<label class="control-label">Date</label>-->
+			                        <!--<input class="datepicker form-control" type="text" value="03/01/2018"/>-->
+			
+			                        <!--</div>-->
+			
+			                        <div class="form-group">
+			                            <label class="label-control">From date</label>
+			                            <span class="form-control-feedback calender-icon"><i class="material-icons">date_range</i></span>
+			                            <input type="text" class="form-control datepicker"  id="dateFilterFrom"  placeholder="{{dateFilterFrom | date:'dd-MMM-yyyy'}}"/>
+			
+			                        </div>
+			
+			                    </div>
+			                    <div class="col-md-3">
+			
+			                        <div class="form-group">
+			                            <label class="label-control">To date</label>
+			                            <span class="form-control-feedback calender-icon"><i class="material-icons">date_range</i></span>
+			                            <input type="text" class="form-control datepicker"  id="dateFilterTo"  placeholder="{{dateFilterTo | date:'dd-MMM-yyyy'}}"/>
+			
+			                        </div>
+			
+			                    </div>
+			                    <div class="col-md-3">
+			                        <div class="dropdown">
+			                            <label class="label-control">Select Client</label>
+			                            <select class="form-control " ng-model="selectedProject" ng-change="changeProject()" ng-options="project as project.name for project in projects" >
+			                                <option value="">Please select Client...</option>
+			                            </select>
+			                        </div>
+			                    </div>
+			                    <div class="col-md-3">
+			                        <div class="dropdown ">
+			                            <label class="label-control">Select Site</label>
+			                            <select class="form-control " ng-model="selectedSite" ng-change="refreshReport()" ng-options="site as site.name for site in sites">
+			                                <option value="">Please select Site...</option>
+			                            </select>
+			                        </div>
+			                    </div>
+			
+								<div class="floatR form-group">
+			                         <button type="submit" class="btn btn-circle blue-clr" ng-disabled="searchForm.$invalid">
+			                             <i class="material-icons">search</i>
+			                         </button>
+			                         <button ng-show="attendancesData.length" type="button" title="Export HTML"  ng-click=exportAllData('html') class="btn btn-circle green-clr">
+			                             <i class="material-icons">description</i>
+			                         </button>
+			                         <button ng-show="attendancesData.length" type="button"  title="Export CSV"  ng-click=exportAllData('xlsx') class="btn btn-circle green-clr">
+			                             <i class="material-icons">import_contacts</i>
+			                         </button>
+			                         <button ng-click="refreshPage()" class="btn btn-circle orange-clr">
+			                             <i class="material-icons">refresh</i>
+			                         </button>
+			                         <a class="download-btn" href="{{exportFile(0)}}">{{exportMsg(0)}}</a>
+			                     </div>
+			                </div>
+
+                            <!-- <table class="table no-padding-tblCon" border="0">
                                 <tr class="filter-row gc-search-row">
                                     <td>
                                         <div class="form-group " >
@@ -101,7 +163,7 @@
                                         </div>
                                     </td>
                                 </tr>
-                            </table>
+                            </table> -->
                         </form>
 
                     </div>
