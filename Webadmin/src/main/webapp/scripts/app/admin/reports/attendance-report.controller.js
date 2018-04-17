@@ -220,7 +220,7 @@ angular.module('timeSheetApp')
 			    	$scope.searchCriteria.projectId = $scope.selectedProject.id;
 		        $scope.searchCriteria.findAll = false;
 		    }
-            searchCriteria.report = true;
+            $scope.searchCriteria.report = true;
         	console.log(JSON.stringify($scope.searchCriteria));
         	AttendanceComponent.search($scope.searchCriteria, reportUid).then(function (data) {
                 $scope.attendancesData = data.transactions;
