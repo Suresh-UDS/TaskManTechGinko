@@ -30,8 +30,8 @@ angular.module('timeSheetApp')
 
         $scope.now = new Date()
         
-        $scope.selectedFromDate;
-        $scope.selectedToDate;
+        $scope.selectedDateFrom;
+        $scope.selectedDateTo;
 
         $scope.dateFilterFrom = new Date();
         $scope.dateFilterTo = new Date();
@@ -49,10 +49,10 @@ angular.module('timeSheetApp')
             console.log(e.date._d);
             if(e.date._d > $scope.selectedToDate) {
             		$scope.showNotifications('top','center','danger','From date cannot be greater than To date');
-            		$scope.dateFilterFrom = $scope.selectedFromDate;
+            		$scope.dateFilterFrom = $scope.selectedDateFrom;
             		return false;
             }else {
-                $scope.selectedFromDate = e.date._d;
+                $scope.selectedDateFrom = e.date._d;
                 $scope.refreshReport();
             }
         });
@@ -63,10 +63,10 @@ angular.module('timeSheetApp')
             console.log(e.date._d);
             if($scope.selectedFromDate > e.date._d) {
             		$scope.showNotifications('top','center','danger','To date cannot be lesser than From date');
-            		$scope.dateFilterTo = $scope.selectedToDate;
+            		$scope.dateFilterTo = $scope.selectedDateTo;
             		return false;
             }else {
-                $scope.selectedToDate = e.date._d;
+                $scope.selectedDateTo = e.date._d;
                 $scope.refreshReport();
             }
 
