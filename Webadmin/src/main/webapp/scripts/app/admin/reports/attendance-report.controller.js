@@ -221,11 +221,13 @@ angular.module('timeSheetApp')
 		        $scope.searchCriteria.findAll = false;
 		    }
             $scope.searchCriteria.report = true;
-        	console.log(JSON.stringify($scope.searchCriteria));
-        	AttendanceComponent.search($scope.searchCriteria, reportUid).then(function (data) {
+        	console.log('criterians' + JSON.stringify($scope.searchCriteria) + 'user' + reportUid);
+             $scope.attendancesData = '';
+                $scope.attendancesDataLoader = false;
+            AttendanceComponent.search($scope.searchCriteria, reportUid).then(function (data) {
                 $scope.attendancesData = data.transactions;
                 $scope.attendancesDataLoader = true;
-                console.log('Attendance search result list -' + $scope.attendancesData);
+                console.log('Attendance search result list -' + JSON.stringify($scope.attendancesData));
                 $scope.pages.currPage = data.currPage;
                 $scope.pages.totalPages = data.totalPages;
                 if($scope.employees == null){
