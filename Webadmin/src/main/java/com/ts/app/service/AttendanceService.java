@@ -384,7 +384,7 @@ public class AttendanceService extends AbstractService {
                     			page = attendanceRepository.findBySiteIdEmpIdAndDate(searchCriteria.getProjectId(), searchCriteria.getSiteId(),searchCriteria.getEmployeeEmpId(), startDate, toDate, pageRequest);
                     		}else if (StringUtils.isEmpty(searchCriteria.getEmployeeEmpId())) {
                             log.debug("no site id and employee id- "+startDate+" - "+toDate);
-                            page = attendanceRepository.findByDateRange(startDate, toDate, pageRequest);
+                            page = attendanceRepository.findByEmpIdsAndDateRange(searchCriteria.getSubordinateIds(), startDate, toDate, pageRequest);
 
                         }else{
                             log.debug("find by  employee id only - "+searchCriteria.getEmployeeEmpId());

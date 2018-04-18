@@ -43,6 +43,9 @@ public interface AttendanceRepository extends JpaRepository<Attendance, Long>,Jp
     @Query("SELECT a from Attendance a where a.checkInTime between :startDate and :endDate order by a.checkInTime desc")
     Page<Attendance> findByDateRange(@Param("startDate") Date startDate, @Param("endDate") Date endDate, Pageable pageRequest);
 
+    @Query("SELECT a from Attendance a where a.employee.id IN (:empIds) and a.checkInTime between :startDate and :endDate order by a.checkInTime desc")
+    Page<Attendance> findByEmpIdsAndDateRange(@Param("empIds") List<Long> empIds, @Param("startDate") Date startDate, @Param("endDate") Date endDate, Pageable pageRequest);
+
     @Query("SELECT a from Attendance a where  a.employee.empId = :empId and a.checkInTime between :startDate and :endDate order by a.checkInTime desc")
     Page<Attendance> findByEmpIdAndCheckInTime( @Param("empId") String empId, @Param("startDate") Date startDate, @Param("endDate") Date endDate, Pageable pageRequest);
 
