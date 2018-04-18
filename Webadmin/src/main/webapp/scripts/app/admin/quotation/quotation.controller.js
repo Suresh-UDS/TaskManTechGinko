@@ -107,10 +107,16 @@ angular
 			        };					
 
 					$scope.loadAllQuotations = function() {
+						 $scope.quotations = '';
+                         $scope.quotationsLoader = false;
 						RateCardComponent.getAllQuotations().then(
 								function(response) {
-									console.log('quotations - '+ response);
+									console.log('quotations - '+ JSON.stringify(response));
 									$scope.quotations = response;
+									$scope.quotationsLoader = true;
+									$scope.selectedProject= {id:response.projectId,name:response.projectName};
+						             $scope.selectedSite = {id:response.siteId,name:response.siteName};
+						            
 								})
 
 					};
@@ -288,7 +294,7 @@ angular
 
 			        $scope.refreshPage = function() {
 			           $scope.clearFilter();
-			           $scope.loadQuotations();
+			           $scope.loadAllQuotations();
 			        };
 
 			        $scope.clearFilter = function() {
@@ -327,7 +333,7 @@ angular
 			        	}
 		        	}
 		        	console.log($scope.searchCriteria);
-		        	QuotationsComponent.search($scope.searchCriteria).then(function (data) {
+		        	RateCardComponent.search($scope.searchCriteria).then(function (data) {
 		                $scope.quotations = data.transactions;
 		                $scope.quotationsLoader = true;
 		                console.log($scope.quotations);
