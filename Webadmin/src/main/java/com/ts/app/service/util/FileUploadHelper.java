@@ -147,6 +147,27 @@ public class FileUploadHelper {
 		}
 		return imageDataString;
 	}
+	
+	public String readQuestionImageFile(long feedbackQuestionsId, String imageFileName) {
+		String filePath = env.getProperty("upload.file.path");
+		filePath += "/" + feedbackQuestionsId;
+		filePath += "/" + imageFileName +".png";
+		File file = new File(filePath);
+		String imageDataString = "data:image/png;base64,";
+		try {
+			FileInputStream imageFile = new FileInputStream(file);
+	        byte imageData[] = new byte[(int) file.length()];
+	        imageFile.read(imageData);
+
+	        // Converting Image byte array into Base64 String
+	        imageDataString += Base64.getEncoder().encodeToString(imageData);
+			imageFile.close();
+
+		}catch(IOException io) {
+			log.error("Error while reading the image file ,"+ imageFileName , io);
+		}
+		return imageDataString;
+	}
 
 	public String readQrCodeFile(String imageFileName) {
 		String filePath = env.getProperty("qrcode.file.path");
