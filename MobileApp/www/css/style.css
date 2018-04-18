@@ -39,6 +39,10 @@
 {
   height: 30%;
 }
+.bg-white
+{
+    background-color: #FFFFFF !important;
+}
 /*
 .segmnt
 {

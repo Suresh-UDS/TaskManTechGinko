@@ -50,7 +50,15 @@ export class MyApp {
           }
       );
       platform.registerBackButtonAction(() => {
-          if (this.counter == 0) {
+          let view = this.nav.getActive();
+          console.log("Back button event");
+          console.log(view);
+          console.log(this.nav.canGoBack());
+          if(this.nav.canGoBack())
+          {
+                this.nav.pop();
+          }
+          else if (this.counter == 0) {
               this.counter++;
               this.component.showToastMessage('Press again to exit','center');
               setTimeout(() => { this.counter = 0 }, 3000)
