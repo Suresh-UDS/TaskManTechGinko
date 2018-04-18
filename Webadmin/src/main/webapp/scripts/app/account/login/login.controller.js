@@ -2,6 +2,11 @@
 
 angular.module('timeSheetApp')
     .controller('LoginController', function ($rootScope, $scope, $state, $timeout, Auth) {
+        $rootScope.loginView = true;
+        if($rootScope.loginView == true){
+            $(".content").addClass("remove-mr");
+            $(".main-panel").addClass("remove-hght");
+        }
         $scope.user = {};
         $scope.errors = {};
         $scope.resLoader=false;

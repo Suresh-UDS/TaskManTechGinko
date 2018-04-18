@@ -2,8 +2,12 @@
 
 angular.module('timeSheetApp')
     .controller('DashboardController', function ($timeout,$scope,$rootScope,DashboardComponent,JobComponent, $state,$http,$stateParams,$location) {
-
-    		$scope.selectedProject;
+        $rootScope.loginView = false;
+        if($rootScope.loginView == false){
+            $(".content").removeClass("remove-mr");
+            $(".main-panel").removeClass("remove-hght");
+        }
+    	$scope.selectedProject;
         $scope.selectedSite;
         $scope.siteCount;
         $scope.totalEmployeeCount;
