@@ -2,7 +2,7 @@
 
 angular.module('timeSheetApp')
     .controller('SiteController', function ($rootScope, $scope, $state, $timeout, ProjectComponent, SiteComponent,$http,$stateParams,$location) {
-        
+        $rootScope.loginView = false;
         $scope.success = null;
         $scope.error = null;
         $scope.doNotMatch = null;
@@ -263,12 +263,9 @@ angular.module('timeSheetApp')
         	}
 
         	$scope.searchCriteria.currPage = currPageVal;
-        	/*console.log('Selected  project -' + JSON.stringify($scope.selectedProject) +" , "+ $scope.selectedSite);
+        	console.log('Selected  project -' + JSON.stringify($scope.selectedProject) +" , "+ $scope.selectedSite);
         	console.log('search criteria - '+JSON.stringify($rootScope.searchCriteriaSite));
 
-*/
-
-            console.log("Current page is -"+JSON.stringify($scope.currPage));
         	if(!$scope.selectedSite && !$scope.selectedProject) {
         		if($rootScope.searchCriteriaSite) {
             		$scope.searchCriteria = $rootScope.searchCriteriaSite;
@@ -293,11 +290,11 @@ angular.module('timeSheetApp')
 		        	$scope.searchCriteria.projectId = $scope.selectedProject.id;
 		        	if(!$scope.searchCriteria.projectId) {
 		        		$scope.searchCriteria.projectName = $scope.selectedProject;
-		        		//console.log('selected project name ='+ $scope.selectedProject + ', ' +$scope.searchCriteria.projectName);
+		        		console.log('selected project name ='+ $scope.selectedProject + ', ' +$scope.searchCriteria.projectName);
 		        	}else {
 			        	$scope.searchCriteria.projectName = $scope.selectedProject.name;
 		        	}
-		        	//console.log('selected project id ='+ $scope.searchCriteria.projectId);
+		        	console.log('selected project id ='+ $scope.searchCriteria.projectId);
 	        	}else {
 	        		$scope.searchCriteria.projectId = 0;
 	        	}
