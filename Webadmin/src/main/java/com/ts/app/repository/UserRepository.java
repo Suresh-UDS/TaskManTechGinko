@@ -33,7 +33,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
 	@Query("SELECT u FROM User u WHERE u.id = :userId")
 	Page<User> findUsersById(@Param("userId") long userId, Pageable pageRequest);
 
-	@Query("SELECT u FROM User u WHERE u.id <> :userId and u.login <> 'admin' order by last_modified_date desc")
+	@Query("SELECT u FROM User u WHERE u.id <> :userId and u.login <> 'admin'")
 	Page<User> findUsers(@Param("userId") long loggedInUserId, Pageable pageRequest);
 
 	@Query("SELECT u FROM User u WHERE u.emailSubscribed = 1")
@@ -43,11 +43,17 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     @Query("SELECT u FROM User u WHERE u.emailSubscribed=1 and u.id=:id")
 	User findByEmailSubscribedById(@Param("id") Long id);
-    
+
 	@Query("SELECT u FROM User u WHERE u.login like '%' || :userLogin || '%' order by u.id")
 	Page<User> findByLogin(@Param("userLogin") String userLogin, Pageable pageRequest);
 
-	@Query("SELECT u FROM User u WHERE u.login like '%' || :userLogin || '%' or u.firstName like '%' || :userFirstName || '%' or u.lastName like '%' || :userLastName || '%' or u.email like '%' || :userEmail || '%' or u.userRole.id = :userRoleId order by u.id")
-	Page<User> findByLoginOrFirsNameOrLastNameOrRole(@Param("userLogin") String userLogin,@Param("userFirstName") String userFirstName,@Param("userLastName") String userLastName,@Param("userEmail") String email,@Param("userRoleId") long userRoleId, Pageable pageRequest);
+    @Query("SELECT u FROM User u WHERE u.login like '%' || :userLogin || '%' or u.firstName like '%' || :userFirstName || '%' or u.lastName like '%' || :userLastName || '%' or u.email like '%' || :userEmail || '%' or u.userRole.id = :userRoleId")
+    Page<User> findByLoginOrFirsNameOrLastNameOrRole(@Param("userLogin") String userLogin,@Param("userFirstName") String userFirstName,@Param("userLastName") String userLastName,@Param("userEmail") String email,@Param("userRoleId") long userRoleId, Pageable pageRequest);
+
+	/*@Query("SELECT u FROM User u WHERE u.login like '%' || :userLogin || '%' or u.firstName like '%' || :userFirstName || '%' or u.lastName like '%' || :userLastName || '%' or u.email like '%' || :userEmail || '%' or u.userRole.id = :userRoleId order by u.id")
+	Page<User> findByLoginOrFirsNameOrLastNameOrRole(@Param("userLogin") String userLogin,@Param("userFirstName") String userFirstName,@Param("userLastName") String userLastName,@Param("userEmail") String email,@Param("userRoleId") long userRoleId, Pageable pageRequest);*/
+
+
+
 
 }

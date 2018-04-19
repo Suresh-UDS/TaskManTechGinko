@@ -203,7 +203,20 @@ public class JobManagementService extends AbstractService {
 			}
 			log.debug("SearchCriteria ="+ searchCriteria);
 
-			Pageable pageRequest = createPageRequest(searchCriteria.getCurrPage());
+			//Pageable pageRequest = createPageRequest(searchCriteria.getCurrPage());
+			//------
+            Pageable pageRequest = null;
+            if(!StringUtils.isEmpty(searchCriteria.getColumnName())){
+                Sort sort = new Sort(searchCriteria.isSortByAsc() ? Sort.Direction.ASC : Sort.Direction.DESC, searchCriteria.getColumnName());
+                log.debug("Sorting object" +sort);
+                pageRequest = createPageSort(searchCriteria.getCurrPage(), searchCriteria.getSort(), sort);
+
+            }else{
+                pageRequest = createPageRequest(searchCriteria.getCurrPage());
+            }
+
+
+
 			//Pageable pageRequest = new PageRequest(searchCriteria.getCurrPage(), PagingUtil.PAGE_SIZE, new Sort(Direction.DESC,"id"));
 			Page<Job> page = null;
 			List<Job> allJobsList = new ArrayList<Job>();

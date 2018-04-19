@@ -31,7 +31,7 @@ angular.module('timeSheetApp')
 
         //$scope.user = {};
         //$scope.user.emailSubscribed = true;
-        
+
         $scope.init = function() {
     		$scope.loadUserRoles();
         		$scope.loadUsers();
@@ -158,6 +158,44 @@ angular.module('timeSheetApp')
         	$state.reload();
         };
 
+        //-----
+        $scope.pageSizes = [{
+            value: 10
+        }, {
+            value: 15
+        }, {
+            value: 20
+        }];
+
+        $scope.sort = $scope.pageSizes[0];
+        $scope.pageSort = $scope.pageSizes[0].value;
+
+        $scope.hasChanged = function(){
+            alert($scope.sort.value)
+            $scope.pageSort = $scope.sort.value;
+            $scope.search();
+        }
+
+        $scope.columnAscOrder = function(field){
+            $scope.selectedColumn = field;
+            $scope.isAscOrder = true;
+            $scope.search();
+        }
+
+        $scope.columnDescOrder = function(field){
+            $scope.selectedColumn = field;
+            $scope.isAscOrder = false;
+            $scope.search();
+        }
+
+
+
+
+
+
+
+
+
         $scope.search = function () {
 	        	var currPageVal = ($scope.pages ? $scope.pages.currPage : 1);
 	        	if(!$scope.searchCriteria) {
@@ -166,17 +204,21 @@ angular.module('timeSheetApp')
 	            	}
 	            	$scope.searchCriteria = searchCriteria;
 	        	}
-	
+
 	        	$scope.searchCriteria.currPage = currPageVal;
-	
-	        	if(!$scope.searchCriteria.userLogin && !$scope.searchCriteria.userFirstName 
+
+	        	//------
+            console.log('Selected  user -' + JSON.stringify($scope.searchCriteria.userLogin));
+            console.log('search criteria - '+JSON.stringify($rootScope.searchCriteriaUser));
+
+	        	if(!$scope.searchCriteria.userLogin && !$scope.searchCriteria.userFirstName
 	        			&& !$scope.searchCriteria.userLastName && !$scope.searchCriteria.userEmail && !$scope.selectedRole) {
 	        		if($rootScope.searchCriteriaUser) {
 	            		$scope.searchCriteria = $rootScope.searchCriteriaUser;
 	        		}else {
 	        			$scope.searchCriteria.findAll = true;
 	        		}
-	
+
 	        	}else {
 	        		$scope.searchCriteria.findAll = false;
 		        	//$scope.searchCriteria.userId = $scope.selectedUser.id;
@@ -191,18 +233,76 @@ angular.module('timeSheetApp')
 		        	}
 		        	//console.log('selected user id ='+ $scope.searchCriteria.userId);
 	        	}
-	        	UserComponent.search($scope.searchCriteria).then(function (data) {
+
+	        	//----
+            if($scope.pageSort){
+                $scope.searchCriteria.sort = $scope.pageSort;
+            }
+
+            if($scope.selectedColumn){
+
+                $scope.searchCriteria.columnName = $scope.selectedColumn;
+                $scope.searchCriteria.sortByAsc = $scope.isAscOrder;
+
+            }
+
+            console.log("search Criteria to be sent - "+JSON.stringify($rootScope.searchCriteriaUser));
+
+
+            UserComponent.search($scope.searchCriteria).then(function (data) {
 	        		$scope.loadEmployee();
+	        		console.log("Employee details---"+JSON.stringify($scope.loadEmployee()));
 	                $scope.users = data.transactions;
+	                for(var i=0;i<$scope.users.length;i++) console.log($scope.users[i].id);
+
                     $scope.usersLoader = true;
 	                $scope.pages.currPage = data.currPage;
 	                $scope.pages.totalPages = data.totalPages;
-	                if($scope.users == null){
+
+	                //---
+                    $scope.numberArrays = [];
+                    var startPage = 1;
+                    if(($scope.pages.totalPages - $scope.pages.currPage) >= 10) {
+                        startPage = $scope.pages.currPage;
+                    }else if($scope.pages.totalPages > 10) {
+                        startPage = $scope.pages.totalPages - 10;
+                    }
+                    var cnt = 0;
+                    for(var i=startPage; i<=$scope.pages.totalPages; i++){
+                        cnt++;
+                        if(cnt <= 10) {
+                            $scope.numberArrays.push(i);
+                        }
+                    }
+
+
+                    //--------
+
+                if($scope.users && $scope.users.length > 0 ){
+                    $scope.showCurrPage = data.currPage;
+                    $scope.pageEntries = $scope.users.length;
+                    $scope.totalCountPages = data.totalCount;
+
+                    if($scope.showCurrPage != data.totalPages){
+                        $scope.pageStartIntex =  (data.currPage - 1) * $scope.pageSort + 1; // 1 to // 11 to
+
+                        $scope.pageEndIntex = $scope.pageEntries * $scope.showCurrPage; // 10 entries of 52 // 10 * 2 = 20 of 52 entries
+
+                    }else if($scope.showCurrPage === data.totalPages){
+                        $scope.pageStartIntex =  (data.currPage - 1) * $scope.pageSort + 1;
+                        $scope.pageEndIntex = $scope.totalCountPages;
+                    }
+                }
+
+
+
+
+                if($scope.users == null){
 	                    $scope.pages.startInd = 0;
 	                }else{
 	                    $scope.pages.startInd = (data.currPage - 1) * 10 + 1;
 	                }
-	
+
 	                $scope.pages.endInd = data.totalCount > 10  ? (data.currPage) * 10 : data.totalCount ;
 	                $scope.pages.totalCnt = data.totalCount;
 	            	$scope.hide = true;
@@ -212,6 +312,14 @@ angular.module('timeSheetApp')
 	            	$scope.firstStyle();
 	        	}
         };
+
+
+
+        $scope.clickNextOrPrev = function(number){
+            $scope.pages.currPage = number;
+            $scope.search();
+        }
+
 
 
         $scope.first = function() {
@@ -387,10 +495,10 @@ angular.module('timeSheetApp')
                         }
 
         //init load
-        $scope.initLoad = function(){ 
-             $scope.loadPageTop(); 
-            
-          
+        $scope.initLoad = function(){
+             $scope.loadPageTop();
+
+
          }
 
        //Loading Page go to top position
@@ -404,20 +512,20 @@ angular.module('timeSheetApp')
 
                 $scope.loadingStart = function(){ $('.pageCenter').show();$('.overlay').show();}
                 $scope.loadingAuto = function(){
-                    $scope.loadingStart(); 
+                    $scope.loadingStart();
                     $scope.loadtimeOut = $timeout(function(){
-                    
+
                     //console.log("Calling loader stop");
                     $('.pageCenter').hide();$('.overlay').hide();
-                            
+
                 }, 2000);
                    // alert('hi');
                 }
                 $scope.loadingStop = function(){
-                    
+
                     console.log("Calling loader");
                     $('.pageCenter').hide();$('.overlay').hide();
-                            
+
                 }
 
 

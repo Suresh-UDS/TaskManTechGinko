@@ -33,15 +33,15 @@ angular.module('timeSheetApp')
         $scope.init = function() {
         		$scope.loadJobStatuses();
         }
-        
+
         $scope.loadProjects = function () {
         	ProjectComponent.findAll().then(function (data) {
                 $scope.projects = data;
 
             });
         };
-        
-        
+
+
         $('#dateFilterFrom').on('dp.change', function(e){
         		$scope.job.plannedStartTime = e.date._d;
         });
@@ -69,7 +69,7 @@ angular.module('timeSheetApp')
                 $scope.sites = data;
             });
         };
-        
+
         $scope.loadEmployees = function () {
         		$scope.searchCriteria.siteId = $scope.selectedSite.id;
         		EmployeeComponent.search($scope.searchCriteria).then(function (data) {
@@ -84,7 +84,7 @@ angular.module('timeSheetApp')
                $scope.locations = data;
             });
         };
-        
+
         $scope.loadBlocks = function () {
 	    		console.log('selected project -' + ($scope.selectedProject ? $scope.selectedProject.id : 0) + ', site -' + ($scope.selectedSite ? $scope.selectedSite.id : 0))
 	    		var projectId = $scope.selectedProject ? $scope.selectedProject.id : 0;
@@ -93,8 +93,8 @@ angular.module('timeSheetApp')
 	            $scope.blocks = data;
 	        });
 	    };
-        
-        
+
+
         $scope.loadFloors = function () {
         		var projectId = $scope.selectedProject ? $scope.selectedProject.id : 0;
 	    		LocationComponent.findFloors(projectId,$scope.selectedSite.id,$scope.selectedBlock).then(function (data) {
@@ -102,7 +102,7 @@ angular.module('timeSheetApp')
 	            $scope.floors = data;
 	        });
 	    };
-	    
+
 	    $scope.loadZones = function () {
 	    		console.log('load zones - ' + $scope.selectedSite.id +',' +$scope.selectedBlock +','+$scope.selectedFloor);
 	    		var projectId = $scope.selectedProject ? $scope.selectedProject.id : 0;
@@ -110,8 +110,8 @@ angular.module('timeSheetApp')
 	    			$scope.selectedZone = null;
 	            $scope.zones = data;
 	        });
-	    };        
-        
+	    };
+
         $scope.loadJobStatuses = function(){
             JobComponent.loadJobStatuses().then(function(data){
                $scope.selectedLocation = null;
@@ -363,7 +363,37 @@ angular.module('timeSheetApp')
         	});
         };
 
-        $scope.search = function () {
+        //------
+                    $scope.pageSizes = [{
+                        value: 10
+                    }, {
+                        value: 15
+                    }, {
+                        value: 20
+                    }];
+
+                    $scope.sort = $scope.pageSizes[0];
+                    $scope.pageSort = $scope.pageSizes[0].value;
+
+                    $scope.hasChanged = function(){
+                        alert($scope.sort.value)
+                        $scope.pageSort = $scope.sort.value;
+                        $scope.search();
+                    }
+
+                    $scope.columnAscOrder = function(field){
+                        $scope.selectedColumn = field;
+                        $scope.isAscOrder = true;
+                        $scope.search();
+                    }
+
+                    $scope.columnDescOrder = function(field){
+                        $scope.selectedColumn = field;
+                        $scope.isAscOrder = false;
+                        $scope.search();
+                    }
+
+                    $scope.search = function () {
 
         		console.log('$scope.pages - ' + $scope.pages + ', $scope.pages.currPage - ' + $scope.pages.currPage);
 	        	var currPageVal = ($scope.pages ? $scope.pages.currPage : 1);
@@ -374,6 +404,7 @@ angular.module('timeSheetApp')
 	        	// }
 
 	        	$scope.searchCriteria.currPage = currPageVal;
+	        	console.log("Current page is -"+JSON.stringify($scope.currPage));
 	        	console.log('Selected  project -' + $scope.selectedProject);
 	        	console.log('Selected  job -' + $scope.selectedJob);
 	        	console.log('search criteria - '+JSON.stringify($rootScope.searchCriteriaProject));
@@ -397,13 +428,30 @@ angular.module('timeSheetApp')
 	        	if($scope.selectedJob){
 	        		$scope.searchCriteria.jobTitle = $scope.selectedJob;
 	        	}
-	        	
+
 	        	if($scope.selectedJobDate) {
 	        		$scope.searchCriteria.checkInDateTimeFrom = $scope.selectedJobDate;
-	        	}	        	
+	        	}
 
 	        	console.log(JSON.stringify($scope.searchCriteria));
-	        	JobComponent.search($scope.searchCriteria).then(function (data) {
+
+	        	//-----
+                        if($scope.pageSort){
+                            $scope.searchCriteria.sort = $scope.pageSort;
+                        }
+
+                        if($scope.selectedColumn){
+
+                            $scope.searchCriteria.columnName = $scope.selectedColumn;
+                            $scope.searchCriteria.sortByAsc = $scope.isAscOrder;
+
+                        }
+
+
+                        //console.log("search Criteria to be sent - "+JSON.stringify($rootScope.searchCriteriaSite));
+
+
+                        JobComponent.search($scope.searchCriteria).then(function (data) {
                     $scope.jobs = data.transactions;
 	        		$scope.jobsLoader = true;
 
@@ -578,11 +626,11 @@ angular.module('timeSheetApp')
         $scope.initCalender();
 
         //init load
-        $scope.initLoad = function(){ 
-             $scope.loadPageTop(); 
-             $scope.init(); 
-             $scope.initPage(); 
-          
+        $scope.initLoad = function(){
+             $scope.loadPageTop();
+             $scope.init();
+             $scope.initPage();
+
          }
 
        //Loading Page go to top position
@@ -596,19 +644,19 @@ angular.module('timeSheetApp')
 
         $scope.loadingStart = function(){ $('.pageCenter').show();$('.overlay').show();}
         $scope.loadingStop = function(){
-            
+
             console.log("Calling loader");
             $('.pageCenter').hide();$('.overlay').hide();
-                    
+
         }
 
         $scope.loadingAuto = function(){
-            $scope.loadingStart(); 
+            $scope.loadingStart();
             $scope.loadtimeOut = $timeout(function(){
-            
+
             //console.log("Calling loader stop");
             $('.pageCenter').hide();$('.overlay').hide();
-                    
+
         }, 2000);}
 
     });

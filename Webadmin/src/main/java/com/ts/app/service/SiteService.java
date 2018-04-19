@@ -265,8 +265,10 @@ public class SiteService extends AbstractService {
 		if(searchCriteria != null) {
             Pageable pageRequest = null;
             if(!StringUtils.isEmpty(searchCriteria.getColumnName())){
-                Sort sort = new Sort(searchCriteria.isSortByAsc()?Sort.Direction.ASC:Sort.Direction.DESC,searchCriteria.getColumnName());
-                pageRequest = createPageSort(searchCriteria.getCurrPage(),searchCriteria.getSort(),sort);
+                Sort sort = new Sort(searchCriteria.isSortByAsc() ? Sort.Direction.ASC : Sort.Direction.DESC, searchCriteria.getColumnName());
+                log.debug("Sorting object" +sort);
+                pageRequest = createPageSort(searchCriteria.getCurrPage(), searchCriteria.getSort(), sort);
+
             }else{
                 pageRequest = createPageRequest(searchCriteria.getCurrPage());
             }
