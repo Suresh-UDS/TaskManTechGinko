@@ -546,6 +546,7 @@ public class SchedulerService extends AbstractService {
 						Hibernate.initialize(site.getShifts());
 						if(CollectionUtils.isNotEmpty(site.getShifts())) {
 							List<Shift> shifts = site.getShifts();
+							content = new StringBuilder("Site Name - " + site.getName() + LINE_SEPARATOR);
 							for(Shift shift : shifts) {
 								String startTime = shift.getStartTime();
 								String[] startTimeUnits = startTime.split(":");
@@ -575,7 +576,6 @@ public class SchedulerService extends AbstractService {
 									//ExportResult exportResult = new ExportResult();
 									//exportResult = exportUtil.writeAttendanceReportToFile(proj.getName(), empAttnList, null, exportResult);
 									//send reports in email.
-									content = new StringBuilder("Site Name - " + site.getName() + LINE_SEPARATOR);
 									content.append("Shift - "+ shift.getStartTime() + " - " + shift.getEndTime() + LINE_SEPARATOR);
 									content.append("Total employees - " + empCntInShift + LINE_SEPARATOR);
 									content.append("Present - " + attendanceCount + LINE_SEPARATOR);
