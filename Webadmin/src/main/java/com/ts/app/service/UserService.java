@@ -18,6 +18,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.core.env.Environment;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -80,7 +81,7 @@ public class UserService extends AbstractService {
 
 	@Inject
 	private MapperUtil<AbstractAuditingEntity, BaseDTO> mapperUtil;
-	
+
 	@Inject
 	private Environment env;
 
@@ -273,7 +274,7 @@ public class UserService extends AbstractService {
 			log.debug("Changed Information for User1: {}", u);
 		});
 	}
-	
+
 	public void updateUserInformation(UserDTO userDto) {
 		userRepository.findOneByLogin(SecurityUtils.getCurrentUserLogin()).ifPresent(u -> {
 			u.setFirstName(userDto.getFirstName());
@@ -284,7 +285,7 @@ public class UserService extends AbstractService {
 			u.setLogin(userDto.getLogin());
 			if (userDto.getUserRoleId() > 0) {
 				u.setUserRole(userRoleRepository.findOne(userDto.getUserRoleId()));
-			} 			
+			}
 			User updatedUser = userRepository.save(u);
 			if (userDto.getEmployeeId() > 0) {
 				Employee employee = employeeRepository.findOne(userDto.getEmployeeId());
@@ -360,7 +361,7 @@ public class UserService extends AbstractService {
 		UserDTO userDto = mapperUtil.toModel(user, UserDTO.class);
 		userDto.setAuthorities(user.getAuthorities().stream().map(Authority::getName)
 							.collect(Collectors.toSet()));
-    
+
 		return userDto;
 	}
 
@@ -400,17 +401,39 @@ public class UserService extends AbstractService {
 		}
 	}
 
-	public SearchResult<UserDTO> findBySearchCrieria(SearchCriteria searchCriteria, long loggedInUserId) {
+
+    private Sort orderByASC(String columnName) {
+        return new Sort(Sort.Direction.ASC, columnName);
+    }
+
+    private Sort orderByDESC(String columnName) {
+        return new Sort(Sort.Direction.DESC, columnName);
+    }
+
+
+    public SearchResult<UserDTO> findBySearchCrieria(SearchCriteria searchCriteria, long loggedInUserId) {
 		SearchResult<UserDTO> result = new SearchResult<UserDTO>();
 		if (searchCriteria != null) {
-			Pageable pageRequest = createPageRequest(searchCriteria.getCurrPage());
+
+            Pageable pageRequest = null;
+            if(!StringUtils.isEmpty(searchCriteria.getColumnName())){
+                //log.debug("columnName----->>>>>>>"+searchCriteria.getColumnName());
+                Sort sort = new Sort(searchCriteria.isSortByAsc()?Sort.Direction.ASC:Sort.Direction.DESC,searchCriteria.getColumnName());
+                pageRequest = createPageSort(searchCriteria.getCurrPage(),searchCriteria.getSort(),sort);
+            }else{
+                pageRequest = createPageRequest(searchCriteria.getCurrPage());
+            }
+
+
+
+			//Pageable pageRequest = createPageRequest(searchCriteria.getCurrPage());
 			Page<User> page = null;
 			List<UserDTO> transactions = null;
 			if (!searchCriteria.isFindAll()) {
 				if (searchCriteria.getUserId() != 0) {
 					page = userRepository.findUsersById(searchCriteria.getUserId(), pageRequest);
 				}else {
-					page = userRepository.findByLoginOrFirsNameOrLastNameOrRole(searchCriteria.getUserLogin(),searchCriteria.getUserFirstName(), 
+					page = userRepository.findByLoginOrFirsNameOrLastNameOrRole(searchCriteria.getUserLogin(),searchCriteria.getUserFirstName(),
 												searchCriteria.getUserLastName(),searchCriteria.getUserEmail(), searchCriteria.getUserRoleId(), pageRequest);
 				}
 			} else {
@@ -454,7 +477,7 @@ public class UserService extends AbstractService {
 		result.setTransactions(transactions);
 		return;
 	}
-	
+
 	private UserDTO mapToModel(User user) {
 		UserDTO userDto = new UserDTO();
 		userDto.setId(user.getId());
