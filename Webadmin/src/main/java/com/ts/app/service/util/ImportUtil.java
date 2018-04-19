@@ -26,7 +26,9 @@ import javax.transaction.Transactional;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
+import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.ss.format.CellFormatType;
+import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -555,21 +557,21 @@ public class ImportUtil {
 					
 				}
 				else {*/
-				Project newProj = projectRepo.findOne(Long.valueOf(currentRow.getCell(0).getStringCellValue()));
-				Site newSite = siteRepo.findOne(Long.valueOf(currentRow.getCell(1).getStringCellValue()));
-				employee.setEmpId(currentRow.getCell(2).getStringCellValue());
-				employee.setName(currentRow.getCell(3).getStringCellValue());
-				employee.setFullName(currentRow.getCell(3).getStringCellValue());
-				employee.setLastName(currentRow.getCell(4).getStringCellValue());
-				employee.setPhone(currentRow.getCell(5).getStringCellValue());
-				employee.setDesignation(currentRow.getCell(7).getStringCellValue());
+				Project newProj = projectRepo.findOne(Long.valueOf(getCellValue(currentRow.getCell(0))));
+				Site newSite = siteRepo.findOne(Long.valueOf(getCellValue(currentRow.getCell(1))));
+				employee.setEmpId(getCellValue(currentRow.getCell(2)));
+				employee.setName(getCellValue(currentRow.getCell(3)));
+				employee.setFullName(getCellValue(currentRow.getCell(3)));
+				employee.setLastName(getCellValue(currentRow.getCell(4)));
+				employee.setPhone(getCellValue(currentRow.getCell(5)));
+				employee.setDesignation(getCellValue(currentRow.getCell(7)));
 				// email, phone number missing
 				ZoneId  zone = ZoneId.of("Asia/Singapore");
 				ZonedDateTime zdt   = ZonedDateTime.of(LocalDateTime.now(), zone);
 				employee.setCreatedDate(zdt);
 				employee.setActive(Employee.ACTIVE_YES);
-				if(StringUtils.isNotEmpty(currentRow.getCell(8).getStringCellValue())) {
-					Employee manager =  employeeRepo.findOne(Long.valueOf(currentRow.getCell(8).getStringCellValue()));
+				if(StringUtils.isNotEmpty(getCellValue(currentRow.getCell(8)))) {
+					Employee manager =  employeeRepo.findOne(Long.valueOf(getCellValue(currentRow.getCell(8))));
 					employee.setManager(manager);
 		        }
 				List<Project> projects = new ArrayList<Project>();
@@ -599,8 +601,8 @@ public class ImportUtil {
 				
 				employeeRepo.save(employee);
 				//create user if opted.
-				String createUser = currentRow.getCell(9).getStringCellValue();
-				long userRoleId = (long)currentRow.getCell(10).getNumericCellValue();
+				String createUser = getCellValue(currentRow.getCell(9));
+				long userRoleId = Long.parseLong(getCellValue(currentRow.getCell(10)));
 				UserDTO user = new UserDTO();
 				if(StringUtils.isNotEmpty(createUser) && createUser.equalsIgnoreCase("Y") && userRoleId > 0) {
 					user.setLogin(employee.getEmpId());
@@ -628,5 +630,28 @@ public class ImportUtil {
 			log.error("Error while reading the job data file for import", e);
 		}
 	}	
+	
+	private String getCellValue(Cell cell) {
+		String value = null;
+		switch(cell.getCellType()) {
+			case HSSFCell.CELL_TYPE_BLANK:
+	        case HSSFCell.CELL_TYPE_ERROR:
+	            // ignore all blank or error cells
+	            break;
+	        case HSSFCell.CELL_TYPE_NUMERIC:
+	        		value = Long.toString((long)cell
+	                    .getNumericCellValue());
+	            break;
+	        case HSSFCell.CELL_TYPE_BOOLEAN:
+	        	value = Boolean.toString(cell
+	                    .getBooleanCellValue());
+	            break;
+	        case HSSFCell.CELL_TYPE_STRING:
+	        default:
+	        	value = cell.getStringCellValue();
+	            break;
+		}
+		return value;
+	}
 
 }
