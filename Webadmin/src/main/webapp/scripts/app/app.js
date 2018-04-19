@@ -5,14 +5,25 @@ angular.module('timeSheetApp', ['LocalStorageModule',
     'ngResource', 'ui.router', 'ngCookies', 'ngAria', 'ngCacheBuster', 'ngFileUpload', 'infinite-scroll', 'App.filters','uiGmapgoogle-maps','checklist-model','alexjoffroy.angular-loaders','chart.js','jkAngularRatingStars'])
 
     .run(function ($rootScope, $location, $window, $http, $state,  Auth, Principal, ENV, VERSION) {
+        $rootScope.loginView = true;
         $rootScope.ENV = ENV;
         $rootScope.VERSION = VERSION;
+        Principal.identity().then(function(response)
+             {
+                 console.log('current user' +JSON.stringify(response.login));
+                 $rootScope.accountName = response.login;
+             });
+        $rootScope.logout = function () {
+            Auth.logout();
+            $state.go('login');
+        };
         $rootScope.$on('$stateChangeStart', function (event, toState, toStateParams) {
             $rootScope.toState = toState;
             $rootScope.toStateParams = toStateParams;
             console.log("state change start")
             if (Principal.isIdentityResolved()) {
                 Auth.authorize();
+                $scope.isLoggedIn = true;
             }
 
         });
