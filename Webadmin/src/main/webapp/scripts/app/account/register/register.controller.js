@@ -2,6 +2,7 @@
 
 angular.module('timeSheetApp')
     .controller('RegisterController', function ($scope, $timeout, Auth) {
+        $rootScope.loginView = false;
         $scope.success = null;
         $scope.error = null;
         $scope.doNotMatch = null;

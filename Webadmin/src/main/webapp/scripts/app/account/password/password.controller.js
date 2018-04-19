@@ -2,6 +2,7 @@
 
 angular.module('timeSheetApp')
     .controller('PasswordController', function ($scope, Auth, Principal) {
+        $rootScope.loginView = false;
         Principal.identity().then(function(account) {
             $scope.account = account;
         });

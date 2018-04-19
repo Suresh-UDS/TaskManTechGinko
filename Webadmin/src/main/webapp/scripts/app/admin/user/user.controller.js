@@ -2,6 +2,7 @@
 
 angular.module('timeSheetApp')
     .controller('UserController', function ($rootScope, $scope, $state, $timeout, UserGroupComponent,EmployeeComponent, UserComponent, UserRoleComponent, $http, $stateParams, $location, JobComponent) {
+        $rootScope.loginView = false;
         $scope.success = null;
         $scope.error = null;
         $scope.doNotMatch = null;

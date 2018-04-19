@@ -2,6 +2,7 @@
 
 angular.module('timeSheetApp')
     .controller('HealthController', function ($scope, MonitoringService, $modal) {
+        $rootScope.loginView = false;
         $scope.updatingHealth = true;
         $scope.separator = '.';
 

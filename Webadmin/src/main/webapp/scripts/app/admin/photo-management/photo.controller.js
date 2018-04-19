@@ -7,7 +7,7 @@ angular.module('timeSheetApp')
                 $scope.employees = data;
             });
         };
-
+        $rootScope.loginView = false;
         $scope.code = 0;
         $scope.page = 1
         $scope.totalPages = 0;
