@@ -47,7 +47,7 @@ angular.module('timeSheetApp')
             console.log(e.date);
 
             console.log(e.date._d);
-            if(e.date._d > $scope.selectedToDate) {
+            if(e.date._d > $scope.selectedDateTo) {
             		$scope.showNotifications('top','center','danger','From date cannot be greater than To date');
             		$scope.dateFilterFrom = $scope.selectedDateFrom;
             		return false;
@@ -61,7 +61,7 @@ angular.module('timeSheetApp')
             console.log(e.date);
 
             console.log(e.date._d);
-            if($scope.selectedFromDate > e.date._d) {
+            if($scope.selectedDateFrom > e.date._d) {
             		$scope.showNotifications('top','center','danger','To date cannot be lesser than From date');
             		$scope.dateFilterTo = $scope.selectedDateTo;
             		return false;
@@ -79,8 +79,8 @@ angular.module('timeSheetApp')
         
         $scope.init = function() {
         		$scope.loadPageTop();        	
-	    		$scope.selectedFromDate = $scope.dateFilterFrom;
-	    		$scope.selectedToDate = $scope.dateFilterTo;
+	    		$scope.selectedDateFrom = $scope.dateFilterFrom;
+	    		$scope.selectedDateTo = $scope.dateFilterTo;
 	    		$scope.loadAllProjects();
 	    		//$scope.loadAllSites();
 	    }
@@ -525,18 +525,18 @@ angular.module('timeSheetApp')
 
 
         $scope.exportMsg = function(empId) {
-        	if(empId != 0) {
-    			var exportMsg = '';
-	        	angular.forEach($scope.exportStatusMap, function(exportStatusObj, index){
-	        		if(empId == exportStatusObj.empId){
-	        			exportMsg = exportStatusObj.exportMsg;
-	        			return exportMsg;
-	        		}
-	        	});
-	        	return exportMsg;
-        	}else {
-            	return ($scope.exportStatusMap[empId] ? $scope.exportStatusMap[empId].exportMsg : '');
-        	}
+	        	if(empId != 0) {
+	    			var exportMsg = '';
+		        	angular.forEach($scope.exportStatusMap, function(exportStatusObj, index){
+		        		if(empId == exportStatusObj.empId){
+		        			exportMsg = exportStatusObj.exportMsg;
+		        			return exportMsg;
+		        		}
+		        	});
+		        	return exportMsg;
+	        	}else {
+	            	return ($scope.exportStatusMap[empId] ? $scope.exportStatusMap[empId].exportMsg : '');
+	        	}
 
         };
 
