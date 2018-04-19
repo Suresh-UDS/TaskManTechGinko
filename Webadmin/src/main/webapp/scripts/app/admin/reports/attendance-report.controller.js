@@ -42,33 +42,45 @@ angular.module('timeSheetApp')
             demo.initFormExtendedDatetimepickers();
 
         };
+        
+        $scope.showNotifications= function(position,alignment,color,msg){
+                    demo.showNotification(position,alignment,color,msg);
+                }
 
-        $('#dateFilterFrom').on('dp.change', function(e){
+
+        $('input#dateFilterFrom').on('dp.change', function(e){
             console.log(e.date);
-
             console.log(e.date._d);
-            if(e.date._d > $scope.selectedDateTo) {
-            		$scope.showNotifications('top','center','danger','From date cannot be greater than To date');
-            		$scope.dateFilterFrom = $scope.selectedDateFrom;
-            		return false;
-            }else {
+            
+            var from_date =e.date._d;
+            
+            /*if(from_date > $scope.selectedToDate) {
+                    //$scope.showNotifications('top','center','danger','From date cannot be greater than To date');
+                    $scope.dateFilterFrom = $scope.selectedDateFrom;
+                    return false;
+            }else {*/
                 $scope.selectedDateFrom = e.date._d;
                 $scope.refreshReport();
-            }
+            /*}*/
         });
-        
-        $('#dateFilterTo').on('dp.change', function(e){
+       
+        $('input#dateFilterTo').on('dp.change', function(e){
+            
             console.log(e.date);
 
             console.log(e.date._d);
-            if($scope.selectedDateFrom > e.date._d) {
-            		$scope.showNotifications('top','center','danger','To date cannot be lesser than From date');
-            		$scope.dateFilterTo = $scope.selectedDateTo;
-            		return false;
-            }else {
+
+            var to_date =e.date._d;
+
+
+            /*if(to_date < $scope.selectedFromDate) {
+                    //$scope.showNotifications('top','center','danger','To date cannot be lesser than From date');
+                    $scope.dateFilterTo = $scope.selectedDateTo;
+                    return false;
+            }else {*/
                 $scope.selectedDateTo = e.date._d;
                 $scope.refreshReport();
-            }
+            /*}*/
 
         });
         
