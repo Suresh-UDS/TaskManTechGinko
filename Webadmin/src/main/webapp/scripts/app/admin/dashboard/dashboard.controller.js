@@ -59,7 +59,7 @@ angular.module('timeSheetApp')
                     demo.initCharts();
         }
 
-        $('#dateFilterFrom').on('dp.change', function(e){
+        $('input#dateFilterFrom').on('dp.change', function(e){
             console.log(e.date);
 
             console.log(e.date._d);
@@ -73,7 +73,7 @@ angular.module('timeSheetApp')
             }
         });
         
-        $('#dateFilterTo').on('dp.change', function(e){
+        $('input#dateFilterTo').on('dp.change', function(e){
             console.log(e.date);
 
             console.log(e.date._d);

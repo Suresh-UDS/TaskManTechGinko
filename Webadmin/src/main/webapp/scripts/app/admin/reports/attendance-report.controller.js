@@ -50,37 +50,30 @@ angular.module('timeSheetApp')
 
         $('input#dateFilterFrom').on('dp.change', function(e){
             console.log(e.date);
+
             console.log(e.date._d);
-            
-            var from_date =e.date._d;
-            
-            /*if(from_date > $scope.selectedToDate) {
-                    //$scope.showNotifications('top','center','danger','From date cannot be greater than To date');
-                    $scope.dateFilterFrom = $scope.selectedDateFrom;
+            if(e.date._d > $scope.selectedToDate) {
+                    $scope.showNotifications('top','center','danger','From date cannot be greater than To date');
+                    $scope.dateFilterFrom = $scope.selectedFromDate;
                     return false;
-            }else {*/
-                $scope.selectedDateFrom = e.date._d;
+            }else {
+                $scope.selectedFromDate = e.date._d;
                 $scope.refreshReport();
-            /*}*/
+            }
         });
-       
+        
         $('input#dateFilterTo').on('dp.change', function(e){
-            
             console.log(e.date);
 
             console.log(e.date._d);
-
-            var to_date =e.date._d;
-
-
-            /*if(to_date < $scope.selectedFromDate) {
-                    //$scope.showNotifications('top','center','danger','To date cannot be lesser than From date');
-                    $scope.dateFilterTo = $scope.selectedDateTo;
+            if($scope.selectedFromDate > e.date._d) {
+                    $scope.showNotifications('top','center','danger','To date cannot be lesser than From date');
+                    $scope.dateFilterTo = $scope.selectedToDate;
                     return false;
-            }else {*/
-                $scope.selectedDateTo = e.date._d;
+            }else {
+                $scope.selectedToDate = e.date._d;
                 $scope.refreshReport();
-            /*}*/
+            }
 
         });
         
