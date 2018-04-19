@@ -41,7 +41,7 @@
 						                                <option value="">Select Client...</option>
 						                            </select>
 						                        </div>
-						                                                
+
                                             </div>
                                             <div class="dropdown col-xs-4 col-md-3">
                                                 <div class="dropdown ">
@@ -51,7 +51,7 @@
 						                            </select>
 						                        </div>
                                             </div>
-                                            
+
                                             <div class="dropdown col-xs-4 col-md-3">
                                                 <div class="dropdown ">
 						                            <label class="label-control">Select Employee</label>
@@ -61,7 +61,7 @@
 						                        </div>
                                             </div>
 
-                                           
+
                                         </div>
                                     </td>
                                     <td>
@@ -94,7 +94,7 @@
                                             </div>
                                         </div>
                                     </td>
-                                 </tr>       
+                                 </tr>
                             </table>
 
                         </form>
@@ -106,17 +106,51 @@
 
                             <thead>
                             <tr>
-                                <th>Job Id</th>
-                                <th>Job Title</th>
-                                <th>Start Time</th>
-                                <th>Employee</th>
-                                <th>Status</th>
-                                <th>Project</th>
-                                <th>Site</th>
+                                <th>Job Id<a href="#">
+
+                                    <span ng-click="columnAscOrder('id')"  class=""><i class="fa fa-caret-up"></i></span>
+                                    <span ng-click="columnDescOrder('id')" class=""><i class="fa fa-caret-down"></i></span>
+
+                                </a></th>
+                                <th>Job Title<a href="#">
+
+                                    <span ng-click="columnAscOrder('title')"  class=""><i class="fa fa-caret-up"></i></span>
+                                    <span ng-click="columnDescOrder('title')" class=""><i class="fa fa-caret-down"></i></span>
+
+                                </a></th>
+                                <th>Start Time<a href="#">
+
+                                    <span ng-click="columnAscOrder('plannedStartTime')"  class=""><i class="fa fa-caret-up"></i></span>
+                                    <span ng-click="columnDescOrder('plannedStartTime')" class=""><i class="fa fa-caret-down"></i></span>
+
+                                </a></th>
+                                <th>Employee<a href="#">
+
+                                    <span ng-click="columnAscOrder('employee.name')"  class=""><i class="fa fa-caret-up"></i></span>
+                                    <span ng-click="columnDescOrder('employee.name')" class=""><i class="fa fa-caret-down"></i></span>
+
+                                </a></th>
+                                <th>Status<a href="#">
+
+                                    <span ng-click="columnAscOrder('status')"  class=""><i class="fa fa-caret-up"></i></span>
+                                    <span ng-click="columnDescOrder('status')" class=""><i class="fa fa-caret-down"></i></span>
+
+                                </a></th>
+                                <th>Project<a href="#">
+
+                                    <span ng-click="columnAscOrder('project.name')"  class=""><i class="fa fa-caret-up"></i></span>
+                                    <span ng-click="columnDescOrder('project.name')" class=""><i class="fa fa-caret-down"></i></span>
+
+                                </a></th>
+                                <th>Site<a href="#">
+
+                                    <span ng-click="columnAscOrder('site.name')"  class=""><i class="fa fa-caret-up"></i></span>
+                                    <span ng-click="columnDescOrder('site.name')" class=""><i class="fa fa-caret-down"></i></span>
+
+                                </a></th>
                                 <th class="disabled-sorting text-right">Actions</th>
                             </tr>
                             </thead>
-
                             <tbody>
                             <tr ng-repeat="job in jobs">
                                 <td>{{job.id}}</td>
