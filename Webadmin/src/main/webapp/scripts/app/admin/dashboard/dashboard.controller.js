@@ -208,7 +208,10 @@ angular.module('timeSheetApp')
 	
 	        	console.log($scope.searchCriteria);
 	        	JobComponent.generateReport($scope.searchCriteria).then(function (data) {
-                    
+	        		$scope.result.assignedJobCount = 0;
+	        		$scope.result.completedJobCount = 0;
+	        		$scope.result.overdueJobCount = 0;
+	        		$scope.result.totalJobCount = 0;
 	        		for(var i = 0; i < data.length; i++) {
 	        			$scope.result.assignedJobCount += data[i].assignedJobCount; 
 	        			$scope.result.completedJobCount += data[i].completedJobCount;

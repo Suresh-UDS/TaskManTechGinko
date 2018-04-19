@@ -264,13 +264,13 @@ public class ReportService extends AbstractService {
         			if(!user.getUserRole().getName().equalsIgnoreCase("Admin")) {
 	        			Employee emp = user.getEmployee();
 	        			List<EmployeeProjectSite> projSites = emp.getProjectSites();
-	        			List<Long> projIds = new ArrayList<Long>(); 
+	        			List<Long> siteIds = new ArrayList<Long>(); 
 	        			if(CollectionUtils.isNotEmpty(projSites)) {
 	        				for(EmployeeProjectSite projSite : projSites) {
-	        					projIds.add(projSite.getProject().getId());
+	        					siteIds.add(projSite.getSite().getId());
 	        				}
 	        			}
-	        			totalEmployeeCount = employeeRepository.findTotalCount(projIds);
+	        			totalEmployeeCount = employeeRepository.findTotalCountBySites(siteIds);
         			}else {
         				totalEmployeeCount = employeeRepository.findTotalCount();	
         			}
