@@ -424,7 +424,7 @@ public class AttendanceService extends AbstractService {
 	            					for(Site site : sites) {
 	            						siteIds.add(site.getId());
 	            					}
-	            					attendanceRepository.findByMultipleSitesAndCheckInTime(siteIds, startDate, toDate, pageRequest);
+	            					page = attendanceRepository.findByMultipleSitesAndCheckInTime(siteIds, startDate, toDate, pageRequest);
 	            				}else {
 
 	            				}

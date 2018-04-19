@@ -47,6 +47,7 @@ import com.ts.app.web.rest.dto.FeedbackTransactionDTO;
 import com.ts.app.web.rest.dto.FeedbackTransactionResultDTO;
 import com.ts.app.web.rest.dto.SearchCriteria;
 import com.ts.app.web.rest.dto.SearchResult;
+import com.ts.app.web.rest.dto.TicketDTO;
 import com.ts.app.web.rest.dto.WeeklySite;
 import com.ts.app.web.rest.dto.WeeklyZone;
 
@@ -80,6 +81,9 @@ public class FeedbackTransactionService extends AbstractService {
 	
 	@Inject
 	private MailService mailService;
+	
+	@Inject
+	private TicketManagementService ticketManagementService;
 
 	public FeedbackTransactionDTO saveFeebdackInformation(FeedbackTransactionDTO feedbackTransDto) {
 	    log.debug("user code- "+feedbackTransDto.getReviewerCode());
@@ -91,8 +95,8 @@ public class FeedbackTransactionService extends AbstractService {
 		float rating = 0;
 		int positiveCnt = 0;
 		float cumRating = 0f;
+		List<String> feedbackAlertItems = new ArrayList<String>();
 		if(!feedbackTransDto.isOverallFeedback()) {
-			List<String> feedbackAlertItems = new ArrayList<String>();
 			for(FeedbackTransactionResultDTO itemDto : itemDtos) {
 	
 				FeedbackTransactionResult item = mapperUtil.toEntity(itemDto, FeedbackTransactionResult.class);
@@ -161,6 +165,24 @@ public class FeedbackTransactionService extends AbstractService {
 		feedbackTrans.setRating(rating);
 		feedbackTrans.setResults(items);
         feedbackTrans = feedbackTransactionRepository.save(feedbackTrans);
+        if(rating < 5 ) { //create a ticket
+        		TicketDTO ticketDTO = new TicketDTO();
+        		ticketDTO.setTitle("Feedback received for " +feedbackTransDto.getSiteName() + " - " +feedbackTransDto.getBlock() + "-" + feedbackTransDto.getFloor() + "-" + feedbackTransDto.getZone());
+        		if(CollectionUtils.isNotEmpty(feedbackAlertItems)) {
+        			StringBuffer sb = new StringBuffer();
+        			for(String item : feedbackAlertItems) {
+        				sb.append(item +",\n");
+        			}
+        			sb.append("Received a rating of "+ rating);
+        			ticketDTO.setDescription(sb.toString());
+        		}else {
+        			ticketDTO.setDescription("Received a rating of "+ rating);
+        		}
+        		ticketDTO.setSeverity("High");
+        		ticketDTO.setSiteId(feedbackTransDto.getSiteId());
+        		ticketDTO.setSiteName(feedbackTransDto.getSiteName());
+        		ticketManagementService.saveTicket(ticketDTO);
+        }
 		log.debug("Created Information for FeedbackTransaction: {}", feedbackTrans);
 		feedbackTransDto = mapperUtil.toModel(feedbackTrans, FeedbackTransactionDTO.class);
 		return feedbackTransDto;
