@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import {NavController, NavParams} from 'ionic-angular';
+import {NavController, NavParams, Platform} from 'ionic-angular';
 import {authService} from "../service/authService";
 import {componentService} from "../service/componentService";
 import {SiteService} from "../service/siteService";
@@ -29,7 +29,7 @@ export class FeedbackPage {
     remarks:any;
     overallFeedback:any;
 
-  constructor(public navCtrl: NavController,public feedbackService:FeedbackService,public navParams: NavParams,public myService:authService,public component:componentService, private siteService: SiteService) {
+  constructor(public platform: Platform,public navCtrl: NavController,public feedbackService:FeedbackService,public navParams: NavParams,public myService:authService,public component:componentService, private siteService: SiteService) {
 
       this.feedback = this.navParams.data.feedback;
       this.questions= this.navParams.data.question;
@@ -38,6 +38,9 @@ export class FeedbackPage {
       this.overallFeedback = this.navParams.data.overallFeedback;
       console.log("Feedback page");
       console.log(this.navParams.data);
+
+
+
   }
 
     start(userName,userCode)

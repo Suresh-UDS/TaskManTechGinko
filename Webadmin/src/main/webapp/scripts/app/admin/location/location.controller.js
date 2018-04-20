@@ -2,8 +2,8 @@
 
 angular.module('timeSheetApp')
     .controller('LocationController', function ($rootScope, $scope, $state, $timeout, LocationComponent,ProjectComponent, SiteComponent, $http, $stateParams, $location) {
-
-    		$scope.success = null;
+        $rootScope.loginView = false;
+    	$scope.success = null;
         $scope.error = null;
         $scope.doNotMatch = null;
         $scope.errorUserExists = null;

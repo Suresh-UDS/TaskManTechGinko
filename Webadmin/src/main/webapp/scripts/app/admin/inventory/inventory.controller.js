@@ -4,7 +4,7 @@ angular.module('timeSheetApp')
     .controller('InventoryController', function ($rootScope, $scope, $state, $timeout, ProjectComponent, SiteComponent,$http,$stateParams,$location) {
 
           
-    	
+    	$rootScope.loginView = false;
     	$scope.search = function () {
         	var currPageVal = ($scope.pages ? $scope.pages.currPage : 1);
         	if(!$scope.searchCriteria) {

@@ -38,16 +38,16 @@
                     </ion-list>
                     <ion-list radio-group [(ngModel)]="q.answer" class="margin-auto width-full q-type2 padding-left10"  *ngIf="q.answerType=='RATING'">
                         <ion-item class="inline-block width18" align-center no-lines >
-                            <ion-radio  value="1" class="true a" (ionSelect)="next()">1</ion-radio>
+                            <ion-radio  value="1" class="true a" (ionSelect)="questions?.length-1!=i?next():submitFeedback()">1</ion-radio>
                         </ion-item>
                         <ion-item class="inline-block width18" align-center no-lines>
-                            <ion-radio value="2" class="true b" (ionSelect)="next()">2</ion-radio>
+                            <ion-radio value="2" class="true b" (ionSelect)="questions?.length-1!=i?next():submitFeedback()">2</ion-radio>
                         </ion-item>
                         <ion-item class="inline-block width18 " align-center no-lines>
-                            <ion-radio  value="3" class="true c" (ionSelect)="next()">3</ion-radio>
+                            <ion-radio  value="3" class="true c" (ionSelect)="questions?.length-1!=i?next():submitFeedback()">3</ion-radio>
                         </ion-item>
                         <ion-item class="inline-block width18" align-center no-lines>
-                            <ion-radio value="4" class="true d" (ionSelect)="next()">4</ion-radio>
+                            <ion-radio value="4" class="true d" (ionSelect)="questions?.length-1!=i?next():submitFeedback()">4</ion-radio>
                         </ion-item>
                         <ion-item class="inline-block width18" align-center no-lines>
                             <ion-radio value="5" class="true e" (ionSelect)="questions?.length-1!=i?next():submitFeedback()">5</ion-radio>

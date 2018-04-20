@@ -2,6 +2,7 @@
 
 angular.module('timeSheetApp')
     .controller('FeedbackQueController', function ($rootScope, $scope, $state, $timeout, FeedbackComponent,ProjectComponent,SiteComponent, $http, $stateParams, $location) {
+        $rootScope.loginView = false;
         $scope.success = null;
         $scope.error = null;
         $scope.doNotMatch = null;

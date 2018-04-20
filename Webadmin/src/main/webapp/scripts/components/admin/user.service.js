@@ -51,7 +51,8 @@ angular.module('timeSheetApp')
             	return $http.post('api/users/search', searchCriteria).then(function (response) {
             		return response.data;
             	});
+
             }
-        
+
         };
     });

@@ -2,6 +2,7 @@
 
 angular.module('timeSheetApp')
     .controller('ChecklistController', function ($rootScope, $scope, $state, $timeout, ChecklistComponent,EmployeeComponent, $http, $stateParams, $location, JobComponent) {
+        $rootScope.loginView = false;
         $scope.success = null;
         $scope.error = null;
         $scope.doNotMatch = null;

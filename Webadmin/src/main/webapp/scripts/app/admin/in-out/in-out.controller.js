@@ -2,6 +2,7 @@
 
 angular.module('timeSheetApp')
     .controller('CheckInOutController', function ($rootScope, $scope, $state, $timeout, ProjectComponent, SiteComponent, EmployeeComponent, CheckInOutComponent,$http,$stateParams,$location, $interval) {
+        $rootScope.loginView = false;
         $scope.success = null;
         $scope.error = null;
         $scope.doNotMatch = null;
