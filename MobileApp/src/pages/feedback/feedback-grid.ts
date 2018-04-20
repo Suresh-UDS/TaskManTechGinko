@@ -19,6 +19,7 @@ export class FeedbackGridPage {
     grids:any;
     selectedIndex:any;
     questions:any;
+    spinner=true;
 
   constructor(public navCtrl: NavController,private nativeAudio: NativeAudio,public myService:authService,public navParams:NavParams,public component:componentService, private siteService: SiteService, private feedbackService: FeedbackService, private sanitizer:DomSanitizer) {
       this.feedback = this.navParams.data.feedback;
@@ -51,6 +52,7 @@ export class FeedbackGridPage {
         //
         // }
 
+
         var image = this.feedbackService.getImage(this.questions[i].image,this.feedback.id).subscribe(
             response=>{
                 var checkImg=response.split(',');
@@ -62,9 +64,11 @@ export class FeedbackGridPage {
                 {
                     this.questions[i].img = this.sanitizer.bypassSecurityTrustUrl(response);
                 }
-
+                this.spinner=false;
             }
         )
+
+
     }
     console.log(this.questions);
   }

@@ -1,16 +1,7 @@
-<ion-header>
-  <ion-navbar>
-    <button ion-button menuToggle>
-      <ion-icon name="menu"></ion-icon>
-    </button>
-    <ion-title>Feedback</ion-title>
-  </ion-navbar>
-</ion-header>
-
 <ion-content padding>
 
   <ion-grid>
-    <ion-row>
+    <ion-row class="feedback-grid">
       <ion-col col-4 col-md-4 col-lg-3 *ngFor="let question of questions;let i=index" no-padding="" align-self-stretch>
         <!--<div text-center>-->
           <!--<img [src]="grid.img">-->
@@ -23,8 +14,9 @@
         <!--</div>-->
         <div [ngClass]="{'select-grid':question.answer}" class="padding5 height100 width-full border-radius card-design" >
             <div class="height70" padding-top text-center="" padding="">
+              <!--<span *ngIf="spinner"><ion-spinner name="circles" class="margin-auto grid-img"></ion-spinner></span>-->
               <img *ngIf="question.img!=''" [src]="question.img" class="margin-auto grid-img">
-              <img *ngIf="question.img==''" src="img/placeholder.png" class="margin-auto grid-img">
+              <img *ngIf="question.img==''" src="assets/imgs/placeholder.png" class="margin-auto grid-img">
             </div>
             <div text-center padding-bottom="" padding-top="" class="height30">
               <h3 text-center text-md-center text-lg-center  padding-top="" >{{question.question}}</h3>
@@ -34,9 +26,8 @@
       </ion-col>
     </ion-row>
     <ion-row>
-
         <ion-col col-6 text-left="">
-                <button class="btn btn-warning" style="width: 50%" ion-button (click)="cancel()">Cancel</button>
+            <button class="btn btn-warning" style="width: 50%" ion-button (click)="cancel()">Cancel</button>
         </ion-col>
         <ion-col col-6 text-right="">
             <button class="btn btn-success" ion-button style="width: 50%" (click)="submitFeedback()">Submit</button>

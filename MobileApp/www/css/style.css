@@ -1406,6 +1406,26 @@ ion-spinner{
 {
     width: 50%;
 }
+ion-grid .row:before
+{
+    width: 0px !important;
+}
+.feed-back-grid
+{
+    background: url(../assets/imgs/feedback.jpg) !important;
+    background: no-repeat;
+}
+.glow
+{
+    box-shadow: 120px 80px 40px 20px #0ff;
+}
+.border-radius5
+{
+    border-radius: 5px;
+}
+
+
+
 /*.input-group .input-group-addon*/
 /*{*/
     /*padding: 0 !important;*/
