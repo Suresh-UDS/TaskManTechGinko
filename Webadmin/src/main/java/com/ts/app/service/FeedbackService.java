@@ -76,9 +76,9 @@ public class FeedbackService extends AbstractService {
 				item.setFeedback(feedback);
 				items.add(item);
 			}
-			Set<FeedbackQuestion> itemsSet = new HashSet<FeedbackQuestion>();
-			itemsSet.addAll(items);
-			feedback.setQuestions(itemsSet);
+			List<FeedbackQuestion> itemsList = new ArrayList<FeedbackQuestion>();
+			itemsList.addAll(items);
+			feedback.setQuestions(itemsList);
 
 			if(feedbackDto.getProjectId() > 0) {
 				Project project = projectRepository.findOne(feedbackDto.getProjectId());
@@ -110,7 +110,7 @@ public class FeedbackService extends AbstractService {
 		//feedbackUpdate = feedbackRepository.save(feedbackUpdate);
 		List<FeedbackQuestionDTO> itemDtos = feedback.getQuestions();
 		List<FeedbackQuestion> items = new ArrayList<FeedbackQuestion>();
-		Set<FeedbackQuestion> itemEntities = feedbackUpdate.getQuestions();
+		List<FeedbackQuestion> itemEntities = feedbackUpdate.getQuestions();
 		Iterator<FeedbackQuestion> itemsItr = itemEntities.iterator();
 		while(itemsItr.hasNext()) {
 			boolean itemFound = false;
