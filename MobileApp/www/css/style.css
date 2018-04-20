@@ -217,6 +217,10 @@ container-scroll::-webkit-scrollbar-thumb
 {
   padding-left: 15px !important;
 }
+.padding25
+{
+    padding: 25px !important;
+}
 .margin-left15
 {
     margin-left: 15px !important;
@@ -455,6 +459,10 @@ ion-list.FiltercontentList ion-item .item-inner
 .height100
 {
     height: 100% !important;
+}
+.height10
+{
+    height: 10%;
 }
 .padding-top0
 {
@@ -773,6 +781,10 @@ span.EmpNameTxt
 {
     width: 20% !important;
 }
+.width85
+{
+    width: 85%;
+}
 .width18
 {
     width: 18% !important;
@@ -859,7 +871,7 @@ span.EmpNameTxt
 }
 .clr-white
 {
-  color: #FFFFFF;
+  color: #FFFFFF !important;
 }
 .margin-bottom
 {
@@ -1080,16 +1092,22 @@ ion-spinner{
 {
     height: 70%;
 }
-.grid-img
+/*.grid-img*/
+/*{*/
+    /*height: 100px !important;*/
+/*}*/
+.width65
 {
-    height: 170px !important;
+    width:65%;
 }
 .card-design
 {
+
     background: #fff;
     -webkit-box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
     box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
 }
+
 .map
 {
   height: 50%;
@@ -1368,15 +1386,7 @@ ion-spinner{
 {
     border:1px solid #ccc;
 }
-.select-grid
-{
-    /*border:2px solid orange;*/
-    color:orange !important;
-    /*box-shadow: 0 2px 2px 0 orange, 0 3px 1px -2px orange, 0 1px 5px 0 orange !important;*/
-    -moz-box-shadow:    inset 0 0 10px orange !important;
-    -webkit-box-shadow: inset 0 0 10px orange !important;
-    box-shadow:         inset 0 0 10px orange !important;
-}
+
 .grid-check
 {
     position: absolute !important;
@@ -1406,18 +1416,61 @@ ion-spinner{
 {
     width: 50%;
 }
+.width60
+{
+    width: 60%;
+}
+.width95
+{
+    width: 95%;
+}
 ion-grid .row:before
 {
     width: 0px !important;
 }
-.feed-back-grid
+.width70
 {
-    background: url(../assets/imgs/feedback.jpg) !important;
-    background: no-repeat;
+    width: 70%;
 }
-.glow
+.select-grid
 {
-    box-shadow: 120px 80px 40px 20px #0ff;
+    background-color: orange !important;
+    border-radius: 10px !important;
+    /*border:2px solid orange;*/
+    /*box-shadow: 0 2px 2px 0 orange, 0 3px 1px -2px orange, 0 1px 5px 0 orange !important;*/
+    /*-moz-box-shadow:    inset 0 0 10px #0ff !important;*/
+    /*-webkit-box-shadow: inset 0 0 10px #0ff !important;*/
+    /*box-shadow:         inset 0 0 10px #0ff !important;*/
+}
+.grid-card-img
+{
+    /*background: url("../img/grid-card.png") !important;*/
+    background-image:url(../img/grid-card.png);
+    background-color: transparent;
+    background-position: center !important;
+    background-repeat: no-repeat !important;
+    background-size: 100% 100% !important;
+}
+.feed-back-grid .scroll-content
+{
+    background: url("../img/grid.jpg") !important;
+    background-position: center;
+    background-repeat: no-repeat !important;
+    background-size: 100% 100% !important;
+}
+.btn-bg
+{
+    background: url("../img/button.png") !important;
+    background-position: center;
+    background-repeat: no-repeat !important;
+    background-size: 100% 100% !important;
+}
+.btn1-bg
+{
+    background: url("../img/button1.png") !important;
+    background-position: center;
+    background-repeat: no-repeat !important;
+    background-size: 100% 100% !important;
 }
 .border-radius5
 {

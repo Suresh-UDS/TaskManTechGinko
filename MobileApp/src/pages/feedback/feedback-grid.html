@@ -1,9 +1,9 @@
-<ion-content padding>
-
-  <ion-grid>
-    <ion-row class="feedback-grid">
-      <ion-col col-4 col-md-4 col-lg-3 *ngFor="let question of questions;let i=index" no-padding="" align-self-stretch>
+<ion-content class="feed-back-grid height100">
+  <ion-grid class="width80 margin-auto">
+    <ion-row >
+      <ion-col col-4 col-md-4 col-lg-3 *ngFor="let question of questions;let i=index" padding="" align-self-stretch text-center>
         <!--<div text-center>-->
+          <!--<img [src]="grid.img">-->
           <!--<img [src]="grid.img">-->
         <!--</div>-->
         <!--<div text-center padding-top [ngClass]="{'select-grid':grid.checked}">-->
@@ -12,29 +12,36 @@
         <!--<div text-center>-->
           <!--<ion-checkbox class="grid-check" (ionChange)="selectGrid(i)"></ion-checkbox>-->
         <!--</div>-->
-        <div [ngClass]="{'select-grid':question.answer}" class="padding5 height100 width-full border-radius card-design" >
-            <div class="height70" padding-top text-center="" padding="">
+        <div [ngClass]="{'select-grid':question.answer}" class="width95 grid-card-img height100" >
+            <div class="height70 margin-auto" padding-top text-center="" padding="">
+                <div class="height10 ">
+                    <img *ngIf="question.img!=''" [src]="question.img" class="margin-auto grid-img">
+                    <img *ngIf="question.img==''" src="assets/imgs/placeholder.png" class="margin-auto grid-img">
+                </div>
               <!--<span *ngIf="spinner"><ion-spinner name="circles" class="margin-auto grid-img"></ion-spinner></span>-->
-              <img *ngIf="question.img!=''" [src]="question.img" class="margin-auto grid-img">
-              <img *ngIf="question.img==''" src="assets/imgs/placeholder.png" class="margin-auto grid-img">
             </div>
-            <div text-center padding-bottom="" padding-top="" class="height30">
-              <h3 text-center text-md-center text-lg-center  padding-top="" >{{question.question}}</h3>
+            <div text-center padding class="height30 fnt-height">
+              <h5 text-center text-md-center text-lg-center class="clr-white res-fnt">{{question.question}}</h5>
             </div>
             <ion-checkbox class="grid-check" (ionChange)="selectGrid(i)"></ion-checkbox>
         </div>
       </ion-col>
     </ion-row>
     <ion-row>
-        <ion-col col-6 text-left="">
-            <button class="btn btn-warning" style="width: 50%" ion-button (click)="cancel()">Cancel</button>
+        <ion-col col-4 col-md-4 col-lg-3 text-center padding="">
+            <button ion-button clear class="btn-bg clr-white width90 margin-auto padding25"  ion-button (click)="cancel()">Cancel</button>
         </ion-col>
-        <ion-col col-6 text-right="">
-            <button class="btn btn-success" ion-button style="width: 50%" (click)="submitFeedback()">Submit</button>
+        <ion-col col-4 col-md-4 col-lg-3>
+
+        </ion-col>
+        <ion-col col-4 col-md-4 col-lg-3>
+
+        </ion-col>
+        <ion-col col-4 col-md-4 col-lg-3 text-center="" padding="">
+            <button ion-button clear class="width90 margin-auto btn1-bg clr-white padding25" ion-button  (click)="submitFeedback()">Submit</button>
         </ion-col>
     </ion-row>
   </ion-grid>
-
 
 </ion-content>
 
