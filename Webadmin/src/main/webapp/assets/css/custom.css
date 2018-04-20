@@ -638,7 +638,7 @@ button.btn.btn-outline {
 
 .main-panel>.content
 {
-   margin-top: 45px;
+   margin-top:70px;
    padding: 10px 15px;
 }
 .permissioncard .checkbox label
@@ -694,6 +694,7 @@ button.btn.btn-outline {
 .navbar.navbar-transparent
 {
   border-bottom: 1px solid #ccc;
+  
 }
 .form-group.is-focused .form-control
 {
@@ -943,6 +944,17 @@ button.btn.btn-outline {
 		     -o-transform: translate3d(0%, 0, 0);
 		        transform: translate3d(0%, 0, 0);
 	}
+	
+	.modal.right .modal-dialogNew {
+		position: fixed;
+		margin: auto;
+		width: 900px;
+		height: 100%;
+		-webkit-transform: translate3d(0%, 0, 0);
+		    -ms-transform: translate3d(0%, 0, 0);
+		     -o-transform: translate3d(0%, 0, 0);
+		        transform: translate3d(0%, 0, 0);
+	}
 
 	.modal.left .modal-content,
 	.modal.right .modal-content {
@@ -976,8 +988,19 @@ button.btn.btn-outline {
 		     -o-transition: opacity 0.3s linear, right 0.3s ease-out;
 		        transition: opacity 0.3s linear, right 0.3s ease-out;
 	}
+	/*Right*/
+	.modal.right.fade .modal-dialogNew {
+		right: -900px;
+		-webkit-transition: opacity 0.3s linear, right 0.3s ease-out;
+		   -moz-transition: opacity 0.3s linear, right 0.3s ease-out;
+		     -o-transition: opacity 0.3s linear, right 0.3s ease-out;
+		        transition: opacity 0.3s linear, right 0.3s ease-out;
+	}
 
 	.modal.right.fade.in .modal-dialog {
+		right: 0;
+	}
+	.modal.right.fade.in .modal-dialogNew {
 		right: 0;
 	}
    .user div a{
@@ -998,6 +1021,19 @@ button.btn.btn-outline {
       line-height: 40px;
       text-align: left;
   }
+  .loginPage a{
+    color:#000;
+    line-height: 60px;
+    text-transform: uppercase;
+    padding: 15px 10px;
+    display: inline-block;
+    font-size: 18px;
+    color: #3C4858;
+    white-space: nowrap;
+    font-weight: 400;
+    line-height: 30px;
+    overflow: hidden;
+  }
   a.logout{
      padding-left: 0px !important; 
   }
@@ -1012,3 +1048,24 @@ button.btn.btn-outline {
     display: none;
   
   }
+  .timeline:before {
+  background:none !important;
+  }
+  .remove-mr{
+    padding: 0px !important;
+    margin: 0px !important;
+  }
+  .remove-hght{
+    height:auto !important;
+    max-height:inherit; !important;
+  }
+  .navbar{
+    padding: 0px !important;
+  }
+  .navbar-minimize{
+    padding-top: 10px !important;
+  }
+  .navbar .navbar-brand{
+    line-height: 43px !important;
+  }
+

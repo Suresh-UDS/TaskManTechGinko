@@ -203,7 +203,20 @@ public class JobManagementService extends AbstractService {
 			}
 			log.debug("SearchCriteria ="+ searchCriteria);
 
-			Pageable pageRequest = createPageRequest(searchCriteria.getCurrPage());
+			//Pageable pageRequest = createPageRequest(searchCriteria.getCurrPage());
+			//------
+            Pageable pageRequest = null;
+            if(!StringUtils.isEmpty(searchCriteria.getColumnName())){
+                Sort sort = new Sort(searchCriteria.isSortByAsc() ? Sort.Direction.ASC : Sort.Direction.DESC, searchCriteria.getColumnName());
+                log.debug("Sorting object" +sort);
+                pageRequest = createPageSort(searchCriteria.getCurrPage(), searchCriteria.getSort(), sort);
+
+            }else{
+                pageRequest = createPageRequest(searchCriteria.getCurrPage());
+            }
+
+
+
 			//Pageable pageRequest = new PageRequest(searchCriteria.getCurrPage(), PagingUtil.PAGE_SIZE, new Sort(Direction.DESC,"id"));
 			Page<Job> page = null;
 			List<Job> allJobsList = new ArrayList<Job>();
@@ -762,7 +775,7 @@ public class JobManagementService extends AbstractService {
 				checklist.setJob(job);
 				checklistItems.add(checklist);
 			}
-			if(CollectionUtils.isNotEmpty(job.getChecklistItems())) {
+			if(job.getChecklistItems() != null) {
 				job.getChecklistItems().addAll(checklistItems);
 			}else {
 				job.setChecklistItems(checklistItems);
@@ -826,8 +839,10 @@ public class JobManagementService extends AbstractService {
 		jobDto.setActive(job.getActive());
 		//jobDto.setLocationId(job.getLocation().getId());
 		//jobDto.setLocationName(job.getLocation().getName());
-        jobDto.setTicketId(job.getTicket().getId());
-        jobDto.setTicketName(job.getTicket().getTitle());
+		if(job.getTicket() != null) {
+			jobDto.setTicketId(job.getTicket().getId());
+			jobDto.setTicketName(job.getTicket().getTitle());
+		}
 		List<CheckInOutImage> images = checkInOutImageRepository.findAll(job.getId());
 		List<CheckInOutImageDTO> imageDtos = new ArrayList<CheckInOutImageDTO>();
 		if(CollectionUtils.isNotEmpty(images)) {

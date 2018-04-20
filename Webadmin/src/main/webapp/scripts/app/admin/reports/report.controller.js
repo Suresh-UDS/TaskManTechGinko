@@ -2,6 +2,7 @@
 
 angular.module('timeSheetApp')
     .controller('ReportController', function ($rootScope, $scope, $state, $timeout, ProjectComponent, SiteComponent, EmployeeComponent, $http,$stateParams,$location,$interval) {
+        $rootScope.loginView = false;
         $scope.success = null;
         $scope.error = null;
         $scope.errorMessage = null;
@@ -36,14 +37,14 @@ angular.module('timeSheetApp')
 
         };
 
-        $('#dateFilterFrom').on('dp.change', function(e){
+        $('input#dateFilterFrom').on('dp.change', function(e){
             console.log(e.date);
             $scope.fromDate = e.date._d;
             console.log(e.date._d);
 
         });
 
-        $('#dateFilterTo').on('dp.change', function(e){
+        $('input#dateFilterTo').on('dp.change', function(e){
             console.log(e.date);
             $scope.toDate = e.date._d;
             console.log(e.date._d);

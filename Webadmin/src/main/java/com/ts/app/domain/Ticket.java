@@ -1,9 +1,19 @@
 package com.ts.app.domain;
 
-import javax.persistence.*;
+import java.io.Serializable;
+import java.sql.Date;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import java.io.Serializable;
 
 @Entity
 @Table(name = "ticket")
@@ -38,10 +48,22 @@ public class Ticket extends AbstractAuditingEntity implements Serializable {
 //    @JoinColumn(name = "locationId")
 //    private Location location;
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "jobId", nullable = true)
-    private Job job;
+//    @OneToOne(fetch = FetchType.LAZY)
+//    @JoinColumn(name = "jobId", nullable = true)
+//    private Job job;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "assigned_to_id", nullable = true)
+    private Employee assignedTo;
+    
+    private Date assignedOn;
+    
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "closed_by_id", nullable = true)
+    private Employee closedBy;
+    
+    private Date closedOn;
+    
     private String reportingTo;
 
     private String image;
@@ -102,13 +124,13 @@ public class Ticket extends AbstractAuditingEntity implements Serializable {
 //        this.location = location;
 //    }
 
-    public Job getJob() {
-        return job;
-    }
-
-    public void setJob(Job job) {
-        this.job = job;
-    }
+//    public Job getJob() {
+//        return job;
+//    }
+//
+//    public void setJob(Job job) {
+//        this.job = job;
+//    }
 
     public String getImage() {
         return image;
@@ -165,4 +187,38 @@ public class Ticket extends AbstractAuditingEntity implements Serializable {
     public void setSeverity(String severity) {
         this.severity = severity;
     }
+
+	public Employee getAssignedTo() {
+		return assignedTo;
+	}
+
+	public void setAssignedTo(Employee assignedTo) {
+		this.assignedTo = assignedTo;
+	}
+
+	public Date getAssignedOn() {
+		return assignedOn;
+	}
+
+	public void setAssignedOn(Date assignedOn) {
+		this.assignedOn = assignedOn;
+	}
+
+	public Employee getClosedBy() {
+		return closedBy;
+	}
+
+	public void setClosedBy(Employee closedBy) {
+		this.closedBy = closedBy;
+	}
+
+	public Date getClosedOn() {
+		return closedOn;
+	}
+
+	public void setClosedOn(Date closedOn) {
+		this.closedOn = closedOn;
+	}
+    
+    
 }

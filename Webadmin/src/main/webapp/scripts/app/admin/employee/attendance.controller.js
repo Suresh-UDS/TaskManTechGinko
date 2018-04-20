@@ -2,6 +2,7 @@
 
 angular.module('timeSheetApp')
     .controller('AttendanceController', function ($rootScope, $scope, $state, $timeout, ProjectComponent, SiteComponent, EmployeeComponent,AttendanceComponent, $http,$stateParams,$location,$interval) {
+        $rootScope.loginView = false;
         $scope.success = null;
         $scope.error = null;
         $scope.errorMessage = null;
@@ -265,7 +266,7 @@ angular.module('timeSheetApp')
         	AttendanceComponent.search($scope.searchCriteria).then(function (data) {
                 $scope.attendancesData = data.transactions;
                 $scope.attendancesDataLoader = true;
-                console.log('Attendance search result list -' + $scope.attendancesData);
+                console.log('Attendance search result list -' + JSON.stringify($scope.attendancesData));
                 $scope.pages.currPage = data.currPage;
                 $scope.pages.totalPages = data.totalPages;
                 

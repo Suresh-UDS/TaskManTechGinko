@@ -1,7 +1,8 @@
 'use strict';
 
 angular.module('timeSheetApp')
-    .controller('AttendanceReportController', function ($rootScope, $scope, $state, $timeout, ProjectComponent, SiteComponent, EmployeeComponent,AttendanceComponent, $http,$stateParams,$location,$interval) {
+    .controller('AttendanceReportController', function ($rootScope, $scope, $state, $timeout, ProjectComponent, SiteComponent, EmployeeComponent,AttendanceComponent,DashboardComponent, $http,$stateParams,$location,$interval) {
+        $rootScope.loginView = false;
         $scope.success = null;
         $scope.error = null;
         $scope.errorMessage = null;
@@ -29,34 +30,73 @@ angular.module('timeSheetApp')
         $scope.searchCriteriaAttendance;
 
         $scope.now = new Date()
+        
+        $scope.selectedDateFrom;
+        $scope.selectedDateTo;
+       
+        $scope.dateFilterFrom = new Date();
+        $scope.dateFilterTo = new Date();
+        
 
         $scope.initCalender = function(){
 
             demo.initFormExtendedDatetimepickers();
 
         };
+        $scope.showNotifications= function(position,alignment,color,msg){
+                    demo.showNotification(position,alignment,color,msg);
+                }
 
-        $('#dateFilterFrom').on('dp.change', function(e){
-            console.log(e.date);
-            console.log(e.date._d);
-            $scope.selectedDateFrom=e.date._d;
 
-        });
-        $('#dateFilterTo').on('dp.change', function(e){
+         $('input#dateFilterFrom').on('dp.change', function(e){
             console.log(e.date);
 
             console.log(e.date._d);
-            $scope.selectedDateTo=e.date._d;
+            if(e.date._d > $scope.selectedDateTo) {
+                    $scope.showNotifications('top','center','danger','From date cannot be greater than To date');
+                    $scope.dateFilterFrom = $scope.selectedDateFrom;
+                    return false;
+            }else {
+                $scope.selectedDateFrom = e.date._d;
+                $scope.refreshReport();
+            }
+        });
+        
+        $('input#dateFilterTo').on('dp.change', function(e){
+            console.log(e.date);
+
+            console.log(e.date._d);
+            if($scope.selectedDateFrom > e.date._d) {
+                    $scope.showNotifications('top','center','danger','To date cannot be lesser than From date');
+                    $scope.dateFilterTo = $scope.selectedDateTo;
+                    return false;
+            }else {
+                $scope.selectedDateTo = e.date._d;
+                $scope.refreshReport();
+            }
 
         });
+        
+        $scope.refreshReport = function() {
+	    		$scope.search();
+	    }
+
+        
+        $scope.init = function() {
+        		$scope.loadPageTop();        	
+	    		$scope.selectedDateFrom = $scope.dateFilterFrom;
+	    		$scope.selectedDateTo = $scope.dateFilterTo;
+	    		$scope.loadAllProjects();
+	    		//$scope.loadAllSites();
+	    }
 
         $scope.loadAllAttendances = function () {
         	if(!$scope.allAttendances) {
             	AttendanceComponent.findAll().then(function (data) {
             	console.log(data)
             		$scope.allAttendances = data;
-            	// $scope.attendanceSites();
-            	$scope.employeeSearch();
+	            	// $scope.attendanceSites();
+	            	//$scope.employeeSearch();
             	})
         	}
         }
@@ -75,9 +115,32 @@ angular.module('timeSheetApp')
         $scope.attendanceSites = function () {
             SiteComponent.findAll().then(function (data) {
                 console.log("site attendances");
-                $scope.allSites = data;
+                $scope.sites = data;
             });
         };
+        
+        $scope.loadAllProjects = function () {
+            ProjectComponent.findAll().then(function (data) {
+                console.log("projects");
+                $scope.projects = data;
+            });
+        };
+        
+        $scope.changeProject = function() {
+	    		console.log('selected project - ' + JSON.stringify($scope.selectedProject));
+	    		$scope.loadSites($scope.selectedProject.id);
+	    		$scope.selectedSite = null;
+	    		$scope.refreshReport();
+	    }
+
+        
+        $scope.loadSites = function(projectId){
+	    		console.log('projectid - ' + projectId);
+	        DashboardComponent.loadSites(projectId).then(function(data){
+	            console.log('sites ' + JSON.stringify(data));
+	            $scope.sites = data;
+	        })
+	    }
 
         $scope.employeeSearch = function () {
             if(!$scope.allEmployees) {
@@ -88,7 +151,7 @@ angular.module('timeSheetApp')
             }
         };
 
-        $scope.allSites=[{name:'UDS'},{name:'Zappy'}]
+        $scope.sites=[]
 
 
 
@@ -124,6 +187,7 @@ angular.module('timeSheetApp')
         	$scope.searchCriteria.currPage = currPageVal;
         	$scope.searchCriteria.findAll = true;
         	if($scope.selectedDateFrom){
+                $scope.selectedDateFrom.setHours(0,0,0,0);
                 $scope.searchCriteria.checkInDateTimeFrom = $scope.selectedDateFrom;
                 $scope.searchCriteria.findAll = false;
                 console.log("From date found");
@@ -138,6 +202,7 @@ angular.module('timeSheetApp')
             }
 
             if($scope.selectedDateTo){
+                $scope.selectedDateTo.setHours(23,59,59,0);
                 $scope.searchCriteria.checkInDateTimeTo = $scope.selectedDateTo;
                 $scope.searchCriteria.findAll = false;
                 console.log("To date found")
@@ -149,20 +214,27 @@ angular.module('timeSheetApp')
                 console.log($scope.searchCriteria.checkInDateTimeTo)
             }
 
-        	if($scope.selectedEmployee){
-        	    console.log($scope.selectedEmployee);
+        		if($scope.selectedEmployee){
+        			console.log($scope.selectedEmployee);
                 $scope.searchCriteria.employeeEmpId = $scope.selectedEmployee.empId;
                 $scope.searchCriteria.findAll = false;
             }
             if($scope.selectedSite){
-        	    $scope.searchCriteria.siteId = $scope.selectedSite.id;
+        	    		$scope.searchCriteria.siteId = $scope.selectedSite.id;
                 $scope.searchCriteria.findAll = false;
             }
-        	console.log(JSON.stringify($scope.searchCriteria));
-        	AttendanceComponent.search($scope.searchCriteria, reportUid).then(function (data) {
+            if($scope.selectedProject){
+			    	$scope.searchCriteria.projectId = $scope.selectedProject.id;
+		        $scope.searchCriteria.findAll = false;
+		    }
+            $scope.searchCriteria.report = true;
+        	console.log('criterians' + JSON.stringify($scope.searchCriteria) + 'user' + reportUid);
+             $scope.attendancesData = '';
+                $scope.attendancesDataLoader = false;
+            AttendanceComponent.search($scope.searchCriteria, reportUid).then(function (data) {
                 $scope.attendancesData = data.transactions;
                 $scope.attendancesDataLoader = true;
-                console.log('Attendance search result list -' + $scope.attendancesData);
+                console.log('Attendance search result list -' + JSON.stringify($scope.attendancesData));
                 $scope.pages.currPage = data.currPage;
                 $scope.pages.totalPages = data.totalPages;
                 if($scope.employees == null){
@@ -368,7 +440,7 @@ angular.module('timeSheetApp')
 
         $scope.exportAllData = function(type){
     			$scope.searchCriteria.exportType = type;
-
+    			$scope.searchCriteria.report = true;
     			AttendanceComponent.exportAllData($scope.searchCriteria).then(function(data){
 	        		var result = data.results[0];
 	        		console.log(result);
@@ -460,18 +532,18 @@ angular.module('timeSheetApp')
 
 
         $scope.exportMsg = function(empId) {
-        	if(empId != 0) {
-    			var exportMsg = '';
-	        	angular.forEach($scope.exportStatusMap, function(exportStatusObj, index){
-	        		if(empId == exportStatusObj.empId){
-	        			exportMsg = exportStatusObj.exportMsg;
-	        			return exportMsg;
-	        		}
-	        	});
-	        	return exportMsg;
-        	}else {
-            	return ($scope.exportStatusMap[empId] ? $scope.exportStatusMap[empId].exportMsg : '');
-        	}
+	        	if(empId != 0) {
+	    			var exportMsg = '';
+		        	angular.forEach($scope.exportStatusMap, function(exportStatusObj, index){
+		        		if(empId == exportStatusObj.empId){
+		        			exportMsg = exportStatusObj.exportMsg;
+		        			return exportMsg;
+		        		}
+		        	});
+		        	return exportMsg;
+	        	}else {
+	            	return ($scope.exportStatusMap[empId] ? $scope.exportStatusMap[empId].exportMsg : '');
+	        	}
 
         };
 
@@ -482,7 +554,7 @@ angular.module('timeSheetApp')
           //init load
         $scope.initLoad = function(){ 
              $scope.loadPageTop(); 
-             $scope.loadAttendances(); 
+             //$scope.loadAttendances(); 
             
           
          }

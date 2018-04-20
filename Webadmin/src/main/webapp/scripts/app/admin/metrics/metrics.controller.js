@@ -2,6 +2,7 @@
 
 angular.module('timeSheetApp')
     .controller('MetricsController', function ($scope, MonitoringService, $modal) {
+        $rootScope.loginView = false;
         $scope.metrics = {};
         $scope.updatingMetrics = true;
 

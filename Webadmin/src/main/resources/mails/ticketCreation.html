@@ -10,16 +10,23 @@
 </p>
 
 
-<p th:text="#{email.completed.report.text1(${ticketNumber},${ticketTitle})}">
+<p th:text="#{email.ticket.alert.text1(${siteName}, ${ticketNumber}, ${severity})}">
 
 </p>
-<p th:text = "#{email.completed.report.text2(${ticketDescription})}">>
+<p th:text = "#{email.ticket.alert.text2(${ticketTitle})}">>
 
 </p>
+<p th:text = "#{email.ticket.alert.text3(${ticketDescription})}">>
+
+</p>
+<p th:text = "#{email.ticket.alert.text4(${status})}">>
+
+</p>
+
 <p>
     <span th:text="#{email.report.text2}">Regards, </span>
     <br/>
-    <em th:text="#{email.ticket.alert.signature(${user.login})}">.</em>
+    <em th:text="#{email.ticket.alert.signature('UDS')}">.</em>
 </p>
 </body>
 </html>

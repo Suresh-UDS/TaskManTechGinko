@@ -162,6 +162,8 @@ public class ChecklistService extends AbstractService {
 			if(!searchCriteria.isFindAll()) {
 				if(searchCriteria.getProjectId() != 0) {
 					page = checklistRepository.findByProjectId(searchCriteria.getProjectId(), pageRequest);
+				}else if(!StringUtils.isEmpty(searchCriteria.getName())) {
+					page = checklistRepository.findByName(searchCriteria.getName(), pageRequest);
 				}
 			}else {
 				page = checklistRepository.findActiveChecklists(pageRequest);

@@ -60,10 +60,10 @@ export class QuotationService {
 
 
 
-    getQuotations(id): Observable<any>{
-        return this.http.get(this.config.Url+'api/rateCard/quotation/id/'+id).map(
+    getQuotations(): Observable<any>{
+        return this.http.get(this.config.Url+'api/rateCard/quotation').map(
             response=>{
-                console.log(response.json());
+                console.log(response);
                 return response.json();
             }
         )

@@ -54,7 +54,7 @@
                                             <div class="dropdown col-xs-4 col-md-3">
                                                 <div class="dropdown ">
                                                     <label class="label-control">Select Site</label>
-                                                    <select class="form-control " ng-model="selectedSite" ng-change="loadEmployees()" ng-options="site as site.name for site in sites">
+                                                    <select class="form-control " ng-model="selectedSite" ng-change="loadEmployees()" ng-options="site as site.name for site in sites track by site.id">
                                                         <option value="">Select Site...</option>
                                                     </select>
                                                 </div>
@@ -63,7 +63,7 @@
                                             <div class="dropdown col-xs-4 col-md-3">
                                                 <div class="dropdown ">
                                                     <label class="label-control">Select Employee</label>
-                                                    <select class="form-control " ng-model="tickets.employeeId"  ng-options="emp as emp.fullName for emp in employees">
+                                                    <select class="form-control " ng-model="tickets.employeeId"  ng-options="emp as emp.fullName for emp in employees track by emp.id">
                                                         <option value="">Select Employee...</option>
                                                     </select>
                                                 </div>
@@ -96,10 +96,12 @@
                             <thead>
                             <tr>
                                 <th>Ticket ID</th>
-                                <th>Title</th>
+                                <th>Issue</th>
                                 <th>Description</th>
-                                <!-- <th>Site</th>
-                                <th>Employee</th> -->
+                                <th>Initiator</th>
+                                <th>Created Date</th>
+                                <th>Assigned To</th>
+                                <th>Status</th>
                                 <th class="text-right">Actions</th>
                             </tr>
                             </thead>
@@ -108,8 +110,10 @@
                                 <td>{{ticket.id}}</td>
                                 <td>{{ticket.title}}</td>
                                 <td>{{ticket.description}}</td>
-                                <!-- <td>{{ticket.site}}</td>
-                                <td>{{ticket.employee}}</td> -->
+                                <td>{{ticket.createdBy}}</td>
+                                <td>{{ticket.createdDate | date:'MM/dd/yyyy @ h:mma'}}</td>
+                                <td>{{ticket.assignedToName}}</td>
+                                <td>{{ticket.status}}</td>
 
 
 
@@ -119,9 +123,10 @@
 
                                     <a  ng-class="{active: $state.includes('admin')}"  ui-sref="edit-ticket({ id: ticket.id })"  class="btn btn-simple btn-info"><i class="material-icons">edit</i></a>
 
-                                    <a ng-class="{active: $state.includes('admin')}" ui-sref="add-job"  ng-click=""  onClick="" data-target="#myModal"  class="btn btn-simple btn-info">create job</a>
+                                    <a ng-if="(ticket.status != 'Closed')" ng-class="{active: $state.includes('admin')}" ui-sref="add-job"  ng-click=""  onClick="" data-target="#myModal"  class="btn btn-simple btn-info">create job</a>
 
-                                    <a ng-class="{active: $state.includes('admin')}"   ng-click=""  onClick="" data-target="#myModal"  class="btn btn-simple btn-info">close ticket</a>
+                                    <a ng-if="(ticket.status != 'Closed')" ng-class="{active: $state.includes('admin')}"   ng-click="closeTicket(ticket.id)"   onClick="$('#deleteModalNew').modal()" data-target="#myModal"   class="btn btn-simple btn-info">close ticket</a>
+                                    <a ng-if="ticket.status == 'Closed'"class="btn btn-simple btn-info">Reopen ticket</a>
 
 
                                 </td>
@@ -185,7 +190,7 @@
 
 
 <!-- Delete confirmation dialog -->
-<div id="deleteModal" class="delete-confirmation modal fade">
+<!-- <div id="deleteModal" class="delete-confirmation modal fade">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -203,7 +208,7 @@
             </div>
         </div>
     </div>
-</div>
+</div> -->
 <!-- End of Delete confirmation dialog -->
 
 <!-- Delete Multiple confirmation dialog -->
@@ -235,7 +240,7 @@
 </div>
 
 <div class="modal right fade" id="RightModal-view" tabindex="-1" role="dialog" aria-labelledby="RightModal">
-    <div class="modal-dialog" role="document">
+    <div class="modal-dialogNew" role="document">
         <div class="modal-content">
 
             <div class="modal-header">
@@ -253,7 +258,7 @@
                              <table class="table">
                                  <tbody>
                                  <tr>
-                                     <td>Title</td>
+                                     <td>Issue</td>
                                      <td>{{listTitle}}</td>
                                  </tr>
                                  <tr>
@@ -263,67 +268,96 @@
                                  </tr>
                                  <tr>
                                      <td>Severity</td>
-                                     <td>
-                                         
-                                      {{listSeverity}}
-                                     
+                                     <td ng-switch="listSeverity">
+                                       <span ng-switch-when="1">Low</span>  
+                                       <span ng-switch-when="2">Medium</span>
+                                       <span ng-switch-when="3">High</span>
                                      </td>
 
                                  </tr>
-                              
+                                  <tr>
+                                    <td>Site</td>
+                                    <td>{{listSite}}</td>
+                                 </tr>
+                                 <tr>
+                                    <td>Employee</td>
+                                    <td>{{listEmployee}}</td>
 
+                                  </tr>
+                                  <tr>
+                                    <td>Created by</td>
+                                    <td>{{listCreatedBy}}</td>
+
+                                  </tr>
+                                  <tr>
+                                    <td>Created Date</td>
+                                    <td>{{listCreatedDate}}</td>
+
+                                  </tr>
+                                  <tr>
+                                    <td>Status</td>
+                                    <td>{{listStatus}}</td>
+
+                                  </tr>
 
                                  </tbody>
                              </table>
                          </div>
-                          <div class="panel panel-default">
-                                <div class="panel-heading">Site & Employee</div>
-                                <div class="panel-body">
+                          
+                        <div class="container-fluid">
+                            <div class="text-center">
+                                <h4 class="title">Comments</h4>
+                            </div>
 
-
-                                    <div class="table-responsive">
-                                        <table class="table">
-                                            <tbody>
-                                            <tr>
-                                                <td>Site</td>
-                                                <td>{{listSite}}</td>
-                                            </tr>
-                                            <tr>
-                                                <td>Employee</td>
-                                                <td>{{listEmployee}}</td>
-
-                                            </tr>
-                                      
-                                            </tbody>
-                                        </table>
-                                    </div>
-
+                         <div class="row">
+                            <div class="col-md-12">
+                                
+                                <ul class="timeline">
+                                    <li class="timeline-inverted">
+                                        <div class="timeline-badge danger">
+                                            <i class="material-icons">card_travel</i>
+                                        </div>
+                                        <div class="timeline-panel">
+                                            <div class="timeline-heading">
+                                                <span class="label label-danger">Admin{{listModified}}</span>
+                                            </div>
+                                            <div class="timeline-body">
+                                                <p>Whats the root cause{{listComments}}</p>
+                                            </div>
+                                            <h6>
+                                                <i class="ti-time">12-04-2018 04:32:04 {{listTime}}</i> 
+                                            </h6>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="timeline-badge success">
+                                            <i class="material-icons">extension</i>
+                                        </div>
+                                        <div class="timeline-panel">
+                                            <div class="timeline-heading">
+                                                <span class="label label-success">User{{listModified}}</span>
+                                            </div>
+                                            <div class="timeline-body">
+                                                <p>Power not supply{{listComments}}</p>
+                                            </div>
+                                            <h6>
+                                                <i class="ti-time">12-04-2018 05:32:04 {{listTime}}</i>
+                                            </h6>
+                                        </div>
+                                    </li>
+                                    
+                                    
+                                    </ul>
+                            
                                 </div>
                             </div>
-                            <div class="panel panel-default">
-                                    <div class="panel-heading">Comments </div>
-                                    <div class="panel-body">
-
-                                        <div class="table-responsive">
-                                            <table class="table">
-                                                <tbody>
-                                                <tr>
-                                                    <td>Comments</td>
-                                                    <td>{{listComments}}</td>
-                                                </tr>
-                                                
-
-                                                </tbody>
-                                            </table>
-                                        </div>
-
-                                    </div>
-                                </div>
+                        </div>
+                         
 
 
                         <div class="row">
 
-                            <div class="col-md-4 col-md-offset-4">
+                            <div class="col-md-4 col-md-offset-8">
                                 <button class="btn btn-default close-button-right b10" type="button"
                                         data-dismiss="modal">
                                     <!-- <i class="material-icons">keyboard_arrow_left</i> Back -->
@@ -344,3 +378,25 @@
         </div><!-- modal-content -->
     </div><!-- modal-dialog -->
 </div><!--End View modal -->
+
+<!-- Ticket Close confirmation dialog -->
+<div id="deleteModalNew" class="delete-confirmation modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"
+                        aria-hidden="true">&times;</button>
+                <h4 class="modal-title">Close Ticket</h4>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure that you want to close ticket?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                <button type="button"
+                        class="btn btn-success delete-confirmation-button" ng-click="closeTicketConfirm(cTicket)">Close Ticket</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- End of Ticket Close confirmation dialog -->

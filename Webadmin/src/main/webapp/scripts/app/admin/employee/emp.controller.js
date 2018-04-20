@@ -2,6 +2,8 @@
 
 angular.module('timeSheetApp')
     .controller('EmployeeController', function ($rootScope,$window, $scope, $state, $timeout, ProjectComponent, SiteComponent, EmployeeComponent,LocationComponent, UserRoleComponent, $http,$stateParams,$location) {
+        
+        $rootScope.loginView = false;
         $scope.success = null;
         $scope.error = null;
         $scope.errorMessage = null;

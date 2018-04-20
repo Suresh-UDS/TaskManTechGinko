@@ -16,6 +16,8 @@ public class FeedbackQuestionDTO extends BaseDTO implements Serializable {
     private FeedbackAnswerType answerType;
 
     private String scoreType;
+    
+    private String image;
 
     public long getId() {
         return id;
@@ -48,6 +50,14 @@ public class FeedbackQuestionDTO extends BaseDTO implements Serializable {
 
 	public void setScoreType(String scoreType) {
 		this.scoreType = scoreType;
+	}
+
+	public String getImage() {
+		return image;
+	}
+
+	public void setImage(String image) {
+		this.image = image;
 	}
 
 

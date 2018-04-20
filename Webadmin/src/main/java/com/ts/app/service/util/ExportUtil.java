@@ -399,7 +399,7 @@ public class ExportUtil {
                     dataRow.createCell(1).setCellValue(transaction.getName()+transaction.getLastName());
                     dataRow.createCell(2).setCellValue(transaction.getSiteName());
                     dataRow.createCell(3).setCellValue(transaction.getProjectName());
-                    dataRow.createCell(4).setCellValue(transaction.getCheckInTime());
+                    dataRow.createCell(4).setCellValue(String.valueOf(transaction.getCheckInTime()));
                     dataRow.createCell(5).setCellValue(String.valueOf(transaction.getCheckOutTime()));
                     /*Blob blob = null;
                     byte[] img = blob.getBytes(1,(int)blob.length());
@@ -474,6 +474,7 @@ public class ExportUtil {
         }
         final String exportFileName = fileName;
 
+        /*
         if(lock == null) {
             lock = new Lock();
         }
@@ -483,74 +484,67 @@ public class ExportUtil {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
+        */
 
-        Thread writerThread = new Thread(new Runnable() {
 
-            FileWriter fileWriter = null;
-            CSVPrinter csvFilePrinter = null;
+        FileWriter fileWriter = null;
+        CSVPrinter csvFilePrinter = null;
 
-            @Override
-            public void run() {
-                // TODO Auto-generated method stub
-                String filePath = env.getProperty("export.file.path");
-                FileSystem fileSystem = FileSystems.getDefault();
-                if(StringUtils.isNotEmpty(empId)) {
-                    filePath += "/" + empId;
-                }
-                Path path = fileSystem.getPath(filePath);
-                // path = path.resolve(String.valueOf(empId));
-                if (!Files.exists(path)) {
-                    Path newEmpPath = Paths.get(filePath);
-                    try {
-                        Files.createDirectory(newEmpPath);
-                    } catch (IOException e) {
-                        log.error("Error while creating path " + newEmpPath);
-                    }
-                }
-                filePath += "/" + exportFileName;
-                try {
-                    // initialize FileWriter object
-                    log.debug("filePath = " + filePath + ", isAppend=" + isAppend);
-                    fileWriter = new FileWriter( filePath,isAppend);
-                    // initialize CSVPrinter object
-                    csvFilePrinter = new CSVPrinter(fileWriter, csvFileFormat);
-                    if(!isAppend) {
-                        // Create CSV file header
-                        csvFilePrinter.printRecord(ATTENDANCE_DETAIL_REPORT_FILE_HEADER);
-                    }
-                    for (EmployeeAttendanceReport transaction : content) {
-                        List record = new ArrayList();
-                        log.debug("Writing transaction record for site :"+ transaction.getSiteName());
-                        record.add(transaction.getEmployeeIds());
-                        record.add(transaction.getName() + transaction.getLastName());
-                        record.add(transaction.getSiteName());
-                        record.add(transaction.getProjectName());
-                        record.add(transaction.getCheckInTime());
-                        record.add(transaction.getCheckOutTime());
-                        record.add(transaction.getShiftStartTime());
-                        record.add(transaction.getShiftEndTime());
-                        csvFilePrinter.printRecord(record);
-                    }
-                    log.info(exportFileName + " CSV file was created successfully !!!");
-                    statusMap.put(exportFileName, "COMPLETED");
-                } catch (Exception e) {
-                    log.error("Error in CsvFileWriter !!!");
-                    statusMap.put(exportFileName, "FAILED");
-                } finally {
-                    try {
-                        fileWriter.flush();
-                        fileWriter.close();
-                        csvFilePrinter.close();
-                    } catch (IOException e) {
-                        log.error("Error while flushing/closing fileWriter/csvPrinter !!!");
-                        statusMap.put(exportFileName, "FAILED");
-                    }
-                }
-                lock.unlock();
+        // TODO Auto-generated method stub
+        String filePath = env.getProperty("export.file.path");
+        FileSystem fileSystem = FileSystems.getDefault();
+        if(StringUtils.isNotEmpty(empId)) {
+            filePath += "/" + empId;
+        }
+        Path path = fileSystem.getPath(filePath);
+        // path = path.resolve(String.valueOf(empId));
+        if (!Files.exists(path)) {
+            Path newEmpPath = Paths.get(filePath);
+            try {
+                Files.createDirectory(newEmpPath);
+            } catch (IOException e) {
+                log.error("Error while creating path " + newEmpPath);
             }
-
-        });
-        writerThread.start();
+        }
+        filePath += "/" + exportFileName;
+        try {
+            // initialize FileWriter object
+            log.debug("filePath = " + filePath + ", isAppend=" + isAppend);
+            fileWriter = new FileWriter( filePath,isAppend);
+            // initialize CSVPrinter object
+            csvFilePrinter = new CSVPrinter(fileWriter, csvFileFormat);
+            if(!isAppend) {
+                // Create CSV file header
+                csvFilePrinter.printRecord(ATTENDANCE_DETAIL_REPORT_FILE_HEADER);
+            }
+            for (EmployeeAttendanceReport transaction : content) {
+                List record = new ArrayList();
+                log.debug("Writing transaction record for site :"+ transaction.getSiteName());
+                record.add(transaction.getEmployeeIds());
+                record.add(transaction.getName() + transaction.getLastName());
+                record.add(transaction.getSiteName());
+                record.add(transaction.getProjectName());
+                record.add(transaction.getCheckInTime());
+                record.add(transaction.getCheckOutTime());
+                record.add(transaction.getShiftStartTime());
+                record.add(transaction.getShiftEndTime());
+                csvFilePrinter.printRecord(record);
+            }
+            log.info(exportFileName + " CSV file was created successfully !!!");
+            statusMap.put(exportFileName, "COMPLETED");
+        } catch (Exception e) {
+            log.error("Error in CsvFileWriter !!!");
+            statusMap.put(exportFileName, "FAILED");
+        } finally {
+            try {
+                fileWriter.flush();
+                fileWriter.close();
+                csvFilePrinter.close();
+            } catch (IOException e) {
+                log.error("Error while flushing/closing fileWriter/csvPrinter !!!");
+                statusMap.put(exportFileName, "FAILED");
+            }
+        }
 
         result.setEmpId(empId);
         result.setFile(fileName.substring(0,fileName.indexOf('.')));

@@ -6,7 +6,8 @@ angular
 				'QuotationController',
 				function($scope, $rootScope, $state, $timeout, $http, $document, $window,
 						$stateParams, $location, RateCardComponent, ProjectComponent, SiteComponent) {
-
+                    $rootScope.loginView = false;
+                    
 					$scope.selectedProject;
 
 					$scope.selectedSite;
@@ -63,11 +64,11 @@ angular
 							$document[0].getElementById('quotationDescription').disabled = $stateParams.viewOnly;
 							$document[0].getElementById('project').disabled = $stateParams.viewOnly;
 							$document[0].getElementById('site').disabled = $stateParams.viewOnly;
-							$document[0].getElementById('serviceEntryFields').style.visibility = $stateParams.viewOnly ? 'hidden' : 'visible';
-							$document[0].getElementById('labourEntryFields').style.visibility = $stateParams.viewOnly ? 'hidden' : 'visible';
-							$document[0].getElementById('materialEntryFields').style.visibility = $stateParams.viewOnly ? 'hidden' : 'visible';
-							$document[0].getElementById('actionButtons').style.visibility = $stateParams.viewOnly ? 'hidden' : 'visible';
-							$document[0].getElementById('closeButton').style.visibility = $stateParams.viewOnly ? 'visible' : 'hidden';							
+							$document[0].getElementById('serviceEntryFields').style.display = $stateParams.viewOnly ? 'none' : 'block';
+							$document[0].getElementById('labourEntryFields').style.display = $stateParams.viewOnly ? 'none' : 'block';
+							$document[0].getElementById('materialEntryFields').style.display = $stateParams.viewOnly ? 'none' : 'block';
+							$document[0].getElementById('actionButtons').style.display = $stateParams.viewOnly ? 'none' : 'block';
+							$document[0].getElementById('closeButton').style.display = $stateParams.viewOnly ? 'visible' : 'none';							
 						}
 
 						$scope.loadProjects();
@@ -107,10 +108,16 @@ angular
 			        };					
 
 					$scope.loadAllQuotations = function() {
+						 $scope.quotations = '';
+                         $scope.quotationsLoader = false;
 						RateCardComponent.getAllQuotations().then(
 								function(response) {
-									console.log('quotations - '+ response);
+									console.log('quotations - '+ JSON.stringify(response));
 									$scope.quotations = response;
+									$scope.quotationsLoader = true;
+									$scope.selectedProject= {id:response.projectId,name:response.projectName};
+						             $scope.selectedSite = {id:response.siteId,name:response.siteName};
+						            
 								})
 
 					};
@@ -226,9 +233,10 @@ angular
 					}
 					
 			        $scope.loadQuotation = function() {
+	
 			        		console.log('quotation id - ' + $stateParams.id);
 			        		RateCardComponent.findQuotation($stateParams.id).then(function (data) {
-			        			$scope.loadingStart();
+			        			$scope.loadingStop();
 			        				console.log('quotation response - '+ JSON.stringify(data))
 				                $scope.quotation = data;
 			        				var rateCardDetails = $scope.quotation.rateCardDetails;
@@ -287,7 +295,7 @@ angular
 
 			        $scope.refreshPage = function() {
 			           $scope.clearFilter();
-			           $scope.loadQuotations();
+			           $scope.loadAllQuotations();
 			        };
 
 			        $scope.clearFilter = function() {
@@ -326,7 +334,7 @@ angular
 			        	}
 		        	}
 		        	console.log($scope.searchCriteria);
-		        	QuotationsComponent.search($scope.searchCriteria).then(function (data) {
+		        	RateCardComponent.search($scope.searchCriteria).then(function (data) {
 		                $scope.quotations = data.transactions;
 		                $scope.quotationsLoader = true;
 		                console.log($scope.quotations);

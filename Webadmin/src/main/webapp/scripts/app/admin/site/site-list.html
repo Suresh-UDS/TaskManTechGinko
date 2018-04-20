@@ -74,9 +74,24 @@
                         <table class="table table-striped">
                             <thead>
                             <tr>
-                                <th>ID</th>
-                                <th>Name</th>
-                                <th>Client</th>
+                                <th>ID<a href="#">
+
+                                    <span ng-click="columnAscOrder('id')"  class=""><i class="fa fa-caret-up"></i></span>
+                                    <span ng-click="columnDescOrder('id')" class=""><i class="fa fa-caret-down"></i></span>
+
+                                </a></th>
+                                <th>Name<a href="#">
+
+                                    <span ng-click="columnAscOrder('name')"  class=""><i class="fa fa-caret-up"></i></span>
+                                    <span ng-click="columnDescOrder('name')" class=""><i class="fa fa-caret-down"></i></span>
+
+                                </a></th>
+                                <th>Client<a href="#">
+
+                                    <span ng-click="columnAscOrder('project.name')"  class=""><i class="fa fa-caret-up"></i></span>
+                                    <span ng-click="columnDescOrder('project.name')" class=""><i class="fa fa-caret-down"></i></span>
+
+                                </a></th>
                                 <th class="text-right">Actions</th>
                             </tr>
                             </thead>

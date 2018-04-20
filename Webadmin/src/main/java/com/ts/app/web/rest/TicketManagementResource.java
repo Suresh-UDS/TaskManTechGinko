@@ -42,7 +42,7 @@ public class TicketManagementResource {
     @RequestMapping(path="/ticket",method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
     public ResponseEntity<?> saveTicket(@Valid @RequestBody TicketDTO ticketDTO, HttpServletRequest request) {
-
+    		ticketDTO.setUserId(SecurityUtils.getCurrentUserId());
         TicketDTO response = ticketService.saveTicket(ticketDTO);
 
         if(response!=null){
@@ -54,7 +54,7 @@ public class TicketManagementResource {
     @RequestMapping(path="/ticket/update",method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
     public ResponseEntity<?> updateTicket(@Valid @RequestBody TicketDTO ticketDTO, HttpServletRequest request) {
-
+    		ticketDTO.setUserId(SecurityUtils.getCurrentUserId());
         TicketDTO response = ticketService.updateTicket(ticketDTO);
 
         if(response!=null){
@@ -64,13 +64,12 @@ public class TicketManagementResource {
     }
 
     @RequestMapping(value = "/tickets/search",method = RequestMethod.POST)
-    public List<Ticket> searchTickets(@RequestBody SearchCriteria searchCriteria) {
-        List<Ticket> result = null;
+    public List<TicketDTO> searchTickets(@RequestBody SearchCriteria searchCriteria) {
+        List<TicketDTO> result = null;
         if(searchCriteria != null) {
             searchCriteria.setUserId(SecurityUtils.getCurrentUserId());
-            //jobService.updateJobStatus(searchCriteria.getSiteId(), searchCriteria.getJobStatus());
-//            result = ticketService.findBySearchCrieria(searchCriteria);
-            result = ticketService.listAllTickets();
+            result = ticketService.findBySearchCrieria(searchCriteria);
+//            result = ticketService.listAllTickets();
         }
         return result;
     }

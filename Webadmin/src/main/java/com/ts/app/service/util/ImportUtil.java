@@ -63,8 +63,11 @@ import com.ts.app.web.rest.dto.BaseDTO;
 import com.ts.app.web.rest.dto.ChecklistDTO;
 import com.ts.app.web.rest.dto.ChecklistItemDTO;
 import com.ts.app.web.rest.dto.ImportResult;
+import com.ts.app.web.rest.dto.JobChecklistDTO;
 import com.ts.app.web.rest.dto.JobDTO;
 import com.ts.app.web.rest.dto.ProjectDTO;
+import com.ts.app.web.rest.dto.SearchCriteria;
+import com.ts.app.web.rest.dto.SearchResult;
 import com.ts.app.web.rest.dto.SiteDTO;
 import com.ts.app.web.rest.dto.UserDTO;
 import com.ts.app.web.rest.errors.TimesheetException;
@@ -373,6 +376,29 @@ public class ImportUtil {
 					jobDto.setScheduleEndDate(DateUtil.convertToDateTime(endDate, endTime));
 					jobDto.setFrequency(currentRow.getCell(11).getStringCellValue());
 					jobDto.setActive("Y");
+					if(currentRow.getCell(12) != null) {
+						String checkListName = currentRow.getCell(12).getStringCellValue();
+						if(StringUtils.isNotBlank(checkListName)) {
+							SearchCriteria searchCriteria = new SearchCriteria();
+							searchCriteria.setName(checkListName);
+							SearchResult<ChecklistDTO> result = checklistService.findBySearchCrieria(searchCriteria);
+							List<ChecklistDTO> checkListDtos = result.getTransactions();
+							if(CollectionUtils.isNotEmpty(checkListDtos)) {
+								ChecklistDTO checklistDto = checkListDtos.get(0);
+								List<ChecklistItemDTO> checkListItems = checklistDto.getItems();
+								List<JobChecklistDTO> jobCheckListItems = new ArrayList<JobChecklistDTO>();
+								for(ChecklistItemDTO checklistItemDto : checkListItems) {
+									JobChecklistDTO jobChecklistDto = new JobChecklistDTO();
+									jobChecklistDto.setChecklistId(String.valueOf(checklistDto.getId()));
+									jobChecklistDto.setChecklistName(checklistDto.getName());
+									jobChecklistDto.setChecklistItemId(String.valueOf(checklistItemDto.getId()));
+									jobChecklistDto.setChecklistItemName(checklistItemDto.getName());
+									jobCheckListItems.add(jobChecklistDto);
+								}
+								jobDto.setChecklistItems(jobCheckListItems);
+							}
+						}
+					}
 					jobService.saveJob(jobDto);
 
 				}

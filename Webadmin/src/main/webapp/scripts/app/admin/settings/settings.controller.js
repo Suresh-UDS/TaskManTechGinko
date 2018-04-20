@@ -2,7 +2,7 @@
 
 angular.module('timeSheetApp')
     .controller('SettingsController', function ($rootScope, $scope, $state, $timeout, $http, $stateParams, $location, ProjectComponent, SettingsComponent) {
-
+            $rootScope.loginView = false;
     		$scope.selectedProject;
     		
     		$scope.selectedSite;

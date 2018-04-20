@@ -17,8 +17,8 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 @Entity
 @Table(name = "feedback_questions")
-@Cacheable(true)
-@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+//@Cacheable(true)
+//@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class FeedbackQuestion extends AbstractAuditingEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -40,6 +40,9 @@ public class FeedbackQuestion extends AbstractAuditingEntity implements Serializ
     
     @Column(name = "score_type")
     private String scoreType;
+    
+    @Column(name ="image")
+    private String image;
 
     public long getId() {
         return id;
@@ -79,6 +82,14 @@ public class FeedbackQuestion extends AbstractAuditingEntity implements Serializ
 
 	public void setScoreType(String scoreType) {
 		this.scoreType = scoreType;
+	}
+
+	public String getImage() {
+		return image;
+	}
+
+	public void setImage(String image) {
+		this.image = image;
 	}
     
 }

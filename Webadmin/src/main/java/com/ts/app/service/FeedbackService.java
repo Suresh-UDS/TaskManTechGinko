@@ -27,6 +27,7 @@ import com.ts.app.repository.FeedbackMappingRepository;
 import com.ts.app.repository.FeedbackRepository;
 import com.ts.app.repository.ProjectRepository;
 import com.ts.app.repository.SiteRepository;
+import com.ts.app.service.util.FileUploadHelper;
 import com.ts.app.service.util.MapperUtil;
 import com.ts.app.web.rest.dto.BaseDTO;
 import com.ts.app.web.rest.dto.FeedbackDTO;
@@ -58,6 +59,9 @@ public class FeedbackService extends AbstractService {
 
 	@Inject
 	private MapperUtil<AbstractAuditingEntity, BaseDTO> mapperUtil;
+	
+	@Inject
+	private FileUploadHelper fileUploadHelper;
 
 	public FeedbackDTO saveFeebdackQuestions(FeedbackDTO feedbackDto) {
 
@@ -260,6 +264,10 @@ public class FeedbackService extends AbstractService {
 		}
 		return result;
 	}
+	
+    public String getFeedbackQuestionImage(long feedbackQuestionsId, String imageId) {
+        return fileUploadHelper.readQuestionImageFile(feedbackQuestionsId, imageId);
+    }
 
 	private void buildSearchResultForMapping(SearchCriteria searchCriteria, Page<FeedbackMapping> page, List<FeedbackMappingDTO> transactions, SearchResult<FeedbackMappingDTO> result) {
 		if(page != null) {

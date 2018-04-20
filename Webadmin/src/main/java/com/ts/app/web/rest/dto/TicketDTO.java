@@ -1,5 +1,7 @@
 package com.ts.app.web.rest.dto;
 
+import java.util.Date;
+
 public class TicketDTO extends BaseDTO {
     private long id;
 
@@ -32,6 +34,20 @@ public class TicketDTO extends BaseDTO {
     private String jobName;
 
     private String severity;
+    
+    private long assignedToId;
+    
+    private String assignedToName;
+    
+    private Date assignedOn;
+    
+    private long closedById;
+    
+    private String closedByName;
+    
+    private Date closedOn;
+    
+    private String comments;
 
 
     public long getId() {
@@ -161,4 +177,62 @@ public class TicketDTO extends BaseDTO {
     public void setSeverity(String severity) {
         this.severity = severity;
     }
+
+	public long getAssignedToId() {
+		return assignedToId;
+	}
+
+	public void setAssignedToId(long assignedToId) {
+		this.assignedToId = assignedToId;
+	}
+
+	public String getAssignedToName() {
+		return assignedToName;
+	}
+
+	public void setAssignedToName(String assignedToName) {
+		this.assignedToName = assignedToName;
+	}
+
+	public Date getAssignedOn() {
+		return assignedOn;
+	}
+
+	public void setAssignedOn(Date assignedOn) {
+		this.assignedOn = assignedOn;
+	}
+
+	public long getClosedById() {
+		return closedById;
+	}
+
+	public void setClosedById(long closedById) {
+		this.closedById = closedById;
+	}
+
+	public String getClosedByName() {
+		return closedByName;
+	}
+
+	public void setClosedByName(String closedByName) {
+		this.closedByName = closedByName;
+	}
+
+	public Date getClosedOn() {
+		return closedOn;
+	}
+
+	public void setClosedOn(Date closedOn) {
+		this.closedOn = closedOn;
+	}
+
+	public String getComments() {
+		return comments;
+	}
+
+	public void setComments(String comments) {
+		this.comments = comments;
+	}
+    
+    
 }

@@ -16,6 +16,7 @@ import javax.inject.Inject;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateUtils;
+import org.hibernate.Hibernate;
 import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -57,6 +58,8 @@ import com.ts.app.web.rest.dto.SchedulerConfigDTO;
 import com.ts.app.web.rest.dto.SearchCriteria;
 import com.ts.app.web.rest.dto.SearchResult;
 import com.ts.app.web.rest.errors.TimesheetException;
+
+import net.sf.ehcache.hibernate.HibernateUtil;
 
 /**
  * Service class for managing Device information.
@@ -511,12 +514,18 @@ public class SchedulerService extends AbstractService {
 		}	
 	}
 	
-	@Scheduled(cron="0 0 22 1/1 * ?") //send detailed attendance report
+	@Scheduled(cron="0 0 7 1/1 * ?") //send detailed attendance report
 	public void attendanceDetailReportSchedule() {
 		if(env.getProperty("scheduler.attendanceDetailReport.enabled").equalsIgnoreCase("true")) {
 			Calendar cal = Calendar.getInstance();
+			cal.add(Calendar.DAY_OF_MONTH, -1);
 			cal.set(Calendar.HOUR_OF_DAY, 0);
 			cal.set(Calendar.MINUTE, 0);
+			Calendar dayEndcal = Calendar.getInstance();
+			dayEndcal.add(Calendar.DAY_OF_MONTH, -1);
+			dayEndcal.set(Calendar.HOUR_OF_DAY, 23);
+			dayEndcal.set(Calendar.MINUTE, 59);
+
 			List<Project> projects = projectRepository.findAll();
 			for(Project proj : projects) {
 				SearchCriteria sc = new SearchCriteria();
@@ -534,17 +543,21 @@ public class SchedulerService extends AbstractService {
 					}
 					if(attendanceReports != null && attendanceReports.getSettingValue().equalsIgnoreCase("true")) {
 						StringBuilder content = new StringBuilder();
+						Hibernate.initialize(site.getShifts());
 						if(CollectionUtils.isNotEmpty(site.getShifts())) {
 							List<Shift> shifts = site.getShifts();
+							content = new StringBuilder("Site Name - " + site.getName() + LINE_SEPARATOR);
 							for(Shift shift : shifts) {
 								String startTime = shift.getStartTime();
 								String[] startTimeUnits = startTime.split(":");
 								Calendar startCal = Calendar.getInstance();
+								startCal.add(Calendar.DAY_OF_MONTH, -1);
 								startCal.set(Calendar.HOUR_OF_DAY, Integer.parseInt(startTimeUnits[0]));
 								startCal.set(Calendar.MINUTE, Integer.parseInt(startTimeUnits[1]));
 								String endTime = shift.getEndTime();
 								String[] endTimeUnits = endTime.split(":");
 								Calendar endCal = Calendar.getInstance();
+								endCal.add(Calendar.DAY_OF_MONTH, -1);
 								endCal.set(Calendar.HOUR_OF_DAY, Integer.parseInt(endTimeUnits[0]));
 								endCal.set(Calendar.MINUTE, Integer.parseInt(endTimeUnits[1]));
 								Calendar currCal = Calendar.getInstance();
@@ -563,7 +576,6 @@ public class SchedulerService extends AbstractService {
 									//ExportResult exportResult = new ExportResult();
 									//exportResult = exportUtil.writeAttendanceReportToFile(proj.getName(), empAttnList, null, exportResult);
 									//send reports in email.
-									content = new StringBuilder("Site Name - " + site.getName() + LINE_SEPARATOR);
 									content.append("Shift - "+ shift.getStartTime() + " - " + shift.getEndTime() + LINE_SEPARATOR);
 									content.append("Total employees - " + empCntInShift + LINE_SEPARATOR);
 									content.append("Present - " + attendanceCount + LINE_SEPARATOR);
@@ -573,7 +585,7 @@ public class SchedulerService extends AbstractService {
 	 					}else {
 							long empCntInShift = employeeRepository.findCountBySiteId(site.getId());
 							
-							long attendanceCount = attendanceRepository.findCountBySiteAndCheckInTime(site.getId(), DateUtil.convertToSQLDate(cal.getTime()), DateUtil.convertToSQLDate(cal.getTime()));
+							long attendanceCount = attendanceRepository.findCountBySiteAndCheckInTime(site.getId(), DateUtil.convertToSQLDate(cal.getTime()), DateUtil.convertToSQLDate(dayEndcal.getTime()));
 							//List<EmployeeAttendanceReport> empAttnList = attendanceRepository.findBySiteId(site.getId(), DateUtil.convertToSQLDate(cal.getTime()), DateUtil.convertToSQLDate(cal.getTime()));
 						    long absentCount = empCntInShift - attendanceCount;
 						    
@@ -585,14 +597,14 @@ public class SchedulerService extends AbstractService {
 							content.append("Present - " + attendanceCount + LINE_SEPARATOR);
 							content.append("Absent - " + absentCount + LINE_SEPARATOR);
 	 					}
-						List<EmployeeAttendanceReport> empAttnList = attendanceRepository.findBySiteId(site.getId(), DateUtil.convertToSQLDate(cal.getTime()), DateUtil.convertToSQLDate(cal.getTime()));
+						List<EmployeeAttendanceReport> empAttnList = attendanceRepository.findBySiteId(site.getId(), DateUtil.convertToSQLDate(cal.getTime()), DateUtil.convertToSQLDate(dayEndcal.getTime()));
 						
 						log.debug("send detailed report");
 						Setting attendanceReportEmails = settingRepository.findSettingByKeyAndSiteId(SettingsService.EMAIL_NOTIFICATION_ATTENDANCE_EMAILS, site.getId());
 					    if(attendanceReportEmails == null) {
 					    		attendanceReportEmails = settingRepository.findSettingByKeyAndProjectId(SettingsService.EMAIL_NOTIFICATION_ATTENDANCE_EMAILS, proj.getId());
 					    }
-						ExportResult exportResult = new ExportResult();
+						ExportResult exportResult = null;
 						exportResult = exportUtil.writeAttendanceReportToFile(proj.getName(), empAttnList, null, exportResult);
 						//send reports in email.
 						mailService.sendAttendanceDetailedReportEmail(site.getName(),attendanceReportEmails.getSettingValue(), content.toString(), exportResult.getFile(),null, cal.getTime());

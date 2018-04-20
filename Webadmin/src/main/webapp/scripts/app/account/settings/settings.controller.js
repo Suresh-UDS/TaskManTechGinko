@@ -2,6 +2,7 @@
 
 angular.module('timeSheetApp')
     .controller('SettingsController', function ($scope, Principal, Auth) {
+        $rootScope.loginView = false;
         $scope.success = null;
         $scope.error = null;
         Principal.identity(true).then(function(account) {

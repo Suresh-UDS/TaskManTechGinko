@@ -11,6 +11,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
@@ -119,7 +120,7 @@ public class SiteService extends AbstractService {
 		}
 		site.getShifts().addAll(shiftEntities);
 	}
-	
+
 	private SiteDTO mapToModel(Site site, boolean includeShifts) {
 		SiteDTO siteDTO = new SiteDTO();
 		siteDTO.setId(site.getId());
@@ -258,10 +259,20 @@ public class SiteService extends AbstractService {
 			empId = user.getEmployee().getId();
 		}
     	//long userGroupId = user.getUserGroup().getId();
+
+        //-------
 		SearchResult<SiteDTO> result = new SearchResult<SiteDTO>();
 		if(searchCriteria != null) {
-			Pageable pageRequest = createPageRequest(searchCriteria.getCurrPage());
-			Page<Site> page = null;
+            Pageable pageRequest = null;
+            if(!StringUtils.isEmpty(searchCriteria.getColumnName())){
+                Sort sort = new Sort(searchCriteria.isSortByAsc() ? Sort.Direction.ASC : Sort.Direction.DESC, searchCriteria.getColumnName());
+                log.debug("Sorting object" +sort);
+                pageRequest = createPageSort(searchCriteria.getCurrPage(), searchCriteria.getSort(), sort);
+
+            }else{
+                pageRequest = createPageRequest(searchCriteria.getCurrPage());
+            }
+            Page<Site> page = null;
 			List<SiteDTO> transactions = null;
 			log.debug("Site id = "+ searchCriteria.getSiteId() + ", projectId = "+ searchCriteria.getProjectId() + " ,  empId = "+ empId);
 			if(!searchCriteria.isFindAll()) {

@@ -107,10 +107,10 @@
                                         <select
                                             required
                                             ng-model="selectedSite"
-                                            name=""
+                                            name="site"
                                             ng-change="loadEmployees()"
                                             ng-init="selectedSite = selected"
-                                            class="form-control searchable-input floatL" ng-options="site as site.name for site in sites">
+                                            class="form-control searchable-input floatL" ng-options="site as site.name for site in sites track by site.id">
                                             <option value="">Select Site</option>
                        
                                        
@@ -136,7 +136,7 @@
                                             name="employee"
                                             ng-model="selectedEmployee"
                                             ng-init="selectedEmployee = selected"
-                                            class="form-control searchable-input floatL" ng-options="emp as emp.fullName for emp in employees">
+                                            class="form-control searchable-input floatL" ng-options="emp as emp.fullName for emp in employees track by emp.id">
                                             <option value="">Select Employee</option>
                                          
                                         </select>

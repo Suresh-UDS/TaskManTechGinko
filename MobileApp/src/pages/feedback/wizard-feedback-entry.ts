@@ -87,10 +87,10 @@ export class WizardFeedbackEntry{
     feedbackQuestions(userName,userCode){
         if(userName){
             this.userName = userName;
-            this.navCtrl.push(FeedbackQuestionPage,{userName:this.userName,userCode:this.userCode,feedback:this.feedback,fb:this.navParams.data.fb,status:this.status})
+            this.navCtrl.push(FeedbackQuestionPage,{userName:this.userName,userCode:this.userCode,feedback:this.feedback,fb:this.navParams.data.fb,status:this.status,project:this.navParams.data.project,site:this.navParams.data.site,location:this.navParams.data.location})
         }else{
             this.userName = "Anonymous"+new Date().getMilliseconds();
-            this.navCtrl.push(FeedbackQuestionPage,{userName:this.userName,userCode:this.userCode,feedback:this.feedback,fb:this.navParams.data.fb,status:this.status})
+            this.navCtrl.push(FeedbackQuestionPage,{userName:this.userName,userCode:this.userCode,feedback:this.feedback,fb:this.navParams.data.fb,status:this.status,project:this.navParams.data.project,site:this.navParams.data.site,location:this.navParams.data.location})
         }
 
     }

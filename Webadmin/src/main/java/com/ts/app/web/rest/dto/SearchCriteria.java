@@ -118,6 +118,8 @@ public class SearchCriteria extends Paginator {
 	private double lat;
 
 	private double lng;
+	
+	private boolean report;
 
 	public long getId() {
 		return id;
@@ -341,12 +343,74 @@ public class SearchCriteria extends Paginator {
 		this.overdueStatus = overdueStatus;
 	}
 
-	public String toString() {
+	/*public String toString() {
 		StringBuilder sb = new StringBuilder();
 		sb.append("userId="+ userId);
 		sb.append("subordinates="+ subordinateIds);
 		return sb.toString();
-	}
+	}*/
+
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("SearchCriteria{");
+        sb.append("id=").append(id);
+        sb.append(", jobTitle='").append(jobTitle).append('\'');
+        sb.append(", AssetTitle='").append(AssetTitle).append('\'');
+        sb.append(", assetType=").append(assetType);
+        sb.append(", assetStatus=").append(assetStatus);
+        sb.append(", employeeId=").append(employeeId);
+        sb.append(", employeeEmpId='").append(employeeEmpId).append('\'');
+        sb.append(", name='").append(name).append('\'');
+        sb.append(", fullName='").append(fullName).append('\'');
+        sb.append(", checkInDateTimeFrom=").append(checkInDateTimeFrom);
+        sb.append(", checkInDateTimeTo=").append(checkInDateTimeTo);
+        sb.append(", fromDate=").append(fromDate);
+        sb.append(", toDate=").append(toDate);
+        sb.append(", jobStatus=").append(jobStatus);
+        sb.append(", locationId=").append(locationId);
+        sb.append(", siteId=").append(siteId);
+        sb.append(", siteName='").append(siteName).append('\'');
+        sb.append(", projectId=").append(projectId);
+        sb.append(", projectName='").append(projectName).append('\'');
+        sb.append(", userGroupId=").append(userGroupId);
+        sb.append(", userId=").append(userId);
+        sb.append(", deviceId=").append(deviceId);
+        sb.append(", deviceUniqueId='").append(deviceUniqueId).append('\'');
+        sb.append(", employeeEmpIds=").append(employeeEmpIds);
+        sb.append(", findAll=").append(findAll);
+        sb.append(", role='").append(role).append('\'');
+        sb.append(", subordinateIds=").append(subordinateIds);
+        sb.append(", designation='").append(designation).append('\'');
+        sb.append(", scheduled=").append(scheduled);
+        sb.append(", sendReport=").append(sendReport);
+        sb.append(", consolidated=").append(consolidated);
+        sb.append(", assignedStatus=").append(assignedStatus);
+        sb.append(", completedStatus=").append(completedStatus);
+        sb.append(", overdueStatus=").append(overdueStatus);
+        sb.append(", userRoleId=").append(userRoleId);
+        sb.append(", applicationModuleId=").append(applicationModuleId);
+        sb.append(", applicationActionId=").append(applicationActionId);
+        sb.append(", userRolePermissionId=").append(userRolePermissionId);
+        sb.append(", rateCardTitle='").append(rateCardTitle).append('\'');
+        sb.append(", rateCardType='").append(rateCardType).append('\'');
+        sb.append(", graphRequest=").append(graphRequest);
+        sb.append(", sort=").append(sort);
+        sb.append(", columnName='").append(columnName).append('\'');
+        sb.append(", sortByAsc=").append(sortByAsc);
+        sb.append(", exportType='").append(exportType).append('\'');
+        sb.append(", block='").append(block).append('\'');
+        sb.append(", floor='").append(floor).append('\'');
+        sb.append(", zone='").append(zone).append('\'');
+        sb.append(", feedbackName='").append(feedbackName).append('\'');
+        sb.append(", userLogin='").append(userLogin).append('\'');
+        sb.append(", userFirstName='").append(userFirstName).append('\'');
+        sb.append(", userLastName='").append(userLastName).append('\'');
+        sb.append(", userEmail='").append(userEmail).append('\'');
+        sb.append(", lat=").append(lat);
+        sb.append(", lng=").append(lng);
+        sb.append('}');
+        return sb.toString();
+    }
 
     public AssetStatus getAssetStatus() {
         return assetStatus;
@@ -575,4 +639,14 @@ public class SearchCriteria extends Paginator {
     public void setLng(double lng) {
         this.lng = lng;
     }
+
+	public boolean isReport() {
+		return report;
+	}
+
+	public void setReport(boolean report) {
+		this.report = report;
+	}
+    
+    
 }

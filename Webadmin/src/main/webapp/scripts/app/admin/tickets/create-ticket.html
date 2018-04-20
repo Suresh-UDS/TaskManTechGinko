@@ -30,7 +30,7 @@
 
                                        <div class="col-md-12">
                                            <div class="form-group">
-                                               <label class="control-label">Title </label>
+                                               <label class="control-label">Issue </label>
 
                                                <input type="text" class="form-control"   name='title'
                                                       ng-model="tickets.title" ng-minlength=1 ng-maxlength=50
@@ -114,7 +114,7 @@
                                             required
                                             ng-model="selectedSite"
                                             ng-change="loadEmployees()"
-                                            class="form-control searchable-input floatL" ng-options="site as site.name for site in sites">
+                                            class="form-control searchable-input floatL" ng-options="site as site.name for site in sites track by site.id">
                                             <option value="">Select Site</option>
                        
                                        
@@ -139,7 +139,7 @@
                                             required
                                             name="employee"
                                             ng-model="selectedEmployee"
-                                            class="form-control searchable-input floatL" ng-options="emp as emp.fullName for emp in employees">
+                                            class="form-control searchable-input floatL" ng-options="emp as emp.fullName for emp in employees track by emp.id">
                                             <option value="">Select Employee</option>
                                          
                                         </select>

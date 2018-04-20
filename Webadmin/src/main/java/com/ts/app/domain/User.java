@@ -20,8 +20,8 @@ import java.time.ZonedDateTime;
  */
 @Entity
 @Table(name = "jhi_user")
-@Cacheable(true)
-@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+//@Cacheable(true)
+//@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class User extends AbstractAuditingEntity implements Serializable {
 
 	@Id

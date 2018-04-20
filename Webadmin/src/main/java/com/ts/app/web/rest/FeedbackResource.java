@@ -159,5 +159,11 @@ public class FeedbackResource {
         }
         return result;
     }
+    
+    @RequestMapping(value = "/feedbackquestions/{id}/image/{imageId}",method = RequestMethod.GET)
+    public String findCheckInOutByEmployee(@PathVariable("id") long feedbackQuestionsId,@PathVariable("imageId") String imageId) {
+        return feedbackService.getFeedbackQuestionImage(feedbackQuestionsId, imageId);
+    }
+
 
 }
