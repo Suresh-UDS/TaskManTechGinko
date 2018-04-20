@@ -2,6 +2,7 @@
 
 angular.module('timeSheetApp')
     .controller('RateCardController', function ($scope, $rootScope, $state, $timeout,$http,$stateParams,$location, RateCardComponent,ProjectComponent    ) {
+        $rootScope.loginView = false;
         $scope.success = null;
         $scope.error = null;
         $scope.doNotMatch = null;

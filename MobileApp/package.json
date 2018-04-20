@@ -85,7 +85,9 @@
     "plugins": {
       "ionic-plugin-keyboard": {},
       "cordova-plugin-whitelist": {},
-      "cordova-plugin-device": {},
+      "cordova-plugin-device": {
+        "DEVICE_USAGE_DESCRIPTION": "to get the device details"
+      },
       "cordova-plugin-splashscreen": {},
       "cordova-plugin-ionic-webview": {},
       "cordova-plugin-camera": {},

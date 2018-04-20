@@ -6,7 +6,8 @@ angular
 				'QuotationController',
 				function($scope, $rootScope, $state, $timeout, $http, $document, $window,
 						$stateParams, $location, RateCardComponent, ProjectComponent, SiteComponent) {
-
+                    $rootScope.loginView = false;
+                    
 					$scope.selectedProject;
 
 					$scope.selectedSite;

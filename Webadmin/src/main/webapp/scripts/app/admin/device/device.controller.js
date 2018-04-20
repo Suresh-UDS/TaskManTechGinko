@@ -2,6 +2,7 @@
 
 angular.module('timeSheetApp')
     .controller('DeviceController', function ($rootScope, $scope, $state, $timeout, ProjectComponent, DeviceComponent,$http,$stateParams,$location) {
+        $rootScope.loginView = false;
         $scope.success = null;
         $scope.error = null;
         $scope.doNotMatch = null;

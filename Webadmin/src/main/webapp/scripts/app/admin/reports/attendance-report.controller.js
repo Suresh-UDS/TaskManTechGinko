@@ -2,6 +2,7 @@
 
 angular.module('timeSheetApp')
     .controller('AttendanceReportController', function ($rootScope, $scope, $state, $timeout, ProjectComponent, SiteComponent, EmployeeComponent,AttendanceComponent,DashboardComponent, $http,$stateParams,$location,$interval) {
+        $rootScope.loginView = false;
         $scope.success = null;
         $scope.error = null;
         $scope.errorMessage = null;
@@ -32,7 +33,7 @@ angular.module('timeSheetApp')
         
         $scope.selectedDateFrom;
         $scope.selectedDateTo;
-
+       
         $scope.dateFilterFrom = new Date();
         $scope.dateFilterTo = new Date();
         
@@ -42,22 +43,21 @@ angular.module('timeSheetApp')
             demo.initFormExtendedDatetimepickers();
 
         };
-        
         $scope.showNotifications= function(position,alignment,color,msg){
                     demo.showNotification(position,alignment,color,msg);
                 }
 
 
-        $('input#dateFilterFrom').on('dp.change', function(e){
+         $('input#dateFilterFrom').on('dp.change', function(e){
             console.log(e.date);
 
             console.log(e.date._d);
-            if(e.date._d > $scope.selectedToDate) {
+            if(e.date._d > $scope.selectedDateTo) {
                     $scope.showNotifications('top','center','danger','From date cannot be greater than To date');
-                    $scope.dateFilterFrom = $scope.selectedFromDate;
+                    $scope.dateFilterFrom = $scope.selectedDateFrom;
                     return false;
             }else {
-                $scope.selectedFromDate = e.date._d;
+                $scope.selectedDateFrom = e.date._d;
                 $scope.refreshReport();
             }
         });
@@ -66,12 +66,12 @@ angular.module('timeSheetApp')
             console.log(e.date);
 
             console.log(e.date._d);
-            if($scope.selectedFromDate > e.date._d) {
+            if($scope.selectedDateFrom > e.date._d) {
                     $scope.showNotifications('top','center','danger','To date cannot be lesser than From date');
-                    $scope.dateFilterTo = $scope.selectedToDate;
+                    $scope.dateFilterTo = $scope.selectedDateTo;
                     return false;
             }else {
-                $scope.selectedToDate = e.date._d;
+                $scope.selectedDateTo = e.date._d;
                 $scope.refreshReport();
             }
 
@@ -187,6 +187,7 @@ angular.module('timeSheetApp')
         	$scope.searchCriteria.currPage = currPageVal;
         	$scope.searchCriteria.findAll = true;
         	if($scope.selectedDateFrom){
+                $scope.selectedDateFrom.setHours(0,0,0,0);
                 $scope.searchCriteria.checkInDateTimeFrom = $scope.selectedDateFrom;
                 $scope.searchCriteria.findAll = false;
                 console.log("From date found");
@@ -201,6 +202,7 @@ angular.module('timeSheetApp')
             }
 
             if($scope.selectedDateTo){
+                $scope.selectedDateTo.setHours(23,59,59,0);
                 $scope.searchCriteria.checkInDateTimeTo = $scope.selectedDateTo;
                 $scope.searchCriteria.findAll = false;
                 console.log("To date found")

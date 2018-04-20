@@ -12,6 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.ts.app.domain.AbstractAuditingEntity;
@@ -36,15 +37,15 @@ import com.ts.app.web.rest.dto.SearchResult;
 @Service
 @Transactional
 public class LocationService extends AbstractService {
-	
+
 	private final Logger log = LoggerFactory.getLogger(LocationService.class);
-	
+
 	@Inject
 	private ProjectRepository projectRepository;
 
 	@Inject
 	private SiteRepository siteRepository;
-	
+
 	@Inject
 	private LocationRepository locationRepository;
 
@@ -52,12 +53,12 @@ public class LocationService extends AbstractService {
 	private MapperUtil<AbstractAuditingEntity, BaseDTO> mapperUtil;
 
 	public LocationDTO saveLocation(LocationDTO locationDto) {
-		
+
 		if(locationDto.getId() > 0) {
 			updateLocation(locationDto);
 		}else {
 			Location location = mapperUtil.toEntity(locationDto, Location.class);
-			
+
 			if(locationDto.getProjectId() > 0) {
 				Project project = projectRepository.findOne(locationDto.getProjectId());
 				location.setProject(project);
@@ -75,11 +76,11 @@ public class LocationService extends AbstractService {
 			log.debug("Created Information for Feedback: {}", location);
 			locationDto = mapperUtil.toModel(location, LocationDTO.class);
 		}
-		
-		
+
+
 		return locationDto;
 	}
-	
+
 	public void updateLocation(LocationDTO locationDto) {
 		log.debug("Inside Update");
 		Location locationUpdate = locationRepository.findOne(locationDto.getId());
@@ -97,7 +98,7 @@ public class LocationService extends AbstractService {
 		Location entity = locationRepository.findOne(id);
 		return mapperUtil.toModel(entity, LocationDTO.class);
 	}
-	
+
 	public List<String> findBlocks(long projectId, long siteId) {
 		if(projectId > 0) {
 			return locationRepository.findBlocks(projectId, siteId);
@@ -105,7 +106,7 @@ public class LocationService extends AbstractService {
 			return locationRepository.findBlocks(siteId);
 		}
 	}
-	
+
 	public List<String> findFloors(long projectId, long siteId, String block) {
 		if(projectId > 0) {
 			return locationRepository.findFloors(projectId, siteId, block);
@@ -125,8 +126,18 @@ public class LocationService extends AbstractService {
 	public SearchResult<LocationDTO> findBySearchCrieria(SearchCriteria searchCriteria) {
 		SearchResult<LocationDTO> result = new SearchResult<LocationDTO>();
 		if(searchCriteria != null) {
-			Pageable pageRequest = createPageRequest(searchCriteria.getCurrPage());
-			Page<Location> page = null;
+            Pageable pageRequest = null;
+            if(!StringUtils.isEmpty(searchCriteria.getColumnName())){
+                Sort sort = new Sort(searchCriteria.isSortByAsc() ? Sort.Direction.ASC : Sort.Direction.DESC, searchCriteria.getColumnName());
+                log.debug("Sorting object" +sort);
+                pageRequest = createPageSort(searchCriteria.getCurrPage(), searchCriteria.getSort(), sort);
+
+            }else{
+                pageRequest = createPageRequest(searchCriteria.getCurrPage());
+            }
+
+
+            Page<Location> page = null;
 			List<LocationDTO> transitems = null;
 			if(!searchCriteria.isFindAll()) {
 				if(StringUtils.isNotEmpty(searchCriteria.getZone())) {
@@ -182,8 +193,8 @@ public class LocationService extends AbstractService {
 
 		result.setTransactions(transactions);
 		return;
-	}	
-	
+	}
+
 	private void buildSearchResultForEmployeeLocation(SearchCriteria searchCriteria, List<EmployeeLocation> results, List<LocationDTO> transactions, SearchResult<LocationDTO> result) {
 		if(CollectionUtils.isNotEmpty(results)) {
 			result.setTotalPages(results.size());
@@ -195,5 +206,5 @@ public class LocationService extends AbstractService {
 
 		result.setTransactions(transactions);
 		return;
-	}	
+	}
 }

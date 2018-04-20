@@ -2,6 +2,7 @@
 
 angular.module('timeSheetApp')
     .controller('AuditsController', function ($scope, $filter, AuditsService) {
+        $rootScope.loginView = false;
         $scope.onChangeDate = function () {
             var dateFormat = 'yyyy-MM-dd';
             var fromDate = $filter('date')($scope.fromDate, dateFormat);
