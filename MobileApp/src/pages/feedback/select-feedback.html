@@ -1,18 +1,20 @@
-<ion-header>
-  <ion-navbar transparent>
+<ion-header no-border="" class="bg-white" padding-top="">
+  <ion-navbar transparent >
     <button ion-button menuToggle>
-      <ion-icon name="menu"></ion-icon>
+      <ion-icon name="menu" class="fnt-18"></ion-icon>
     </button>
-    <ion-title></ion-title>
+    <ion-title text-center="">
+        <img src="img/logo.png"  alt="feedback image" width="10%">
+    </ion-title>
   </ion-navbar>
 </ion-header>
 
 <ion-content class="FeedbackQuesCon bg-white" id="scrollDiv">
 
-   <div style="padding-top:25%;" class="SelectFeedback">
+   <div class="SelectFeedback">
        <ion-row padding>
            <ion-col col-12 text-center="">
-               <img src="img/feedback.png"  alt="feedback image" width="60%">
+               <img src="img/feedback.png"  alt="feedback image" width="30%">
            </ion-col>
        </ion-row>
        <ion-row>
@@ -20,16 +22,17 @@
 
            </ion-col>
            <ion-col text-center col-4 col-sm-4 (click)="happy()">
-               <img src="assets/imgs/select-happy.png" width="60%">
+               <img src="assets/imgs/select-happy.png" width="40%">
                <ion-label style="display: block;font-size: 14px;margin-right: 0;">I am Happy</ion-label>
            </ion-col>
            <ion-col text-center col-4 col-sm-4 (click)="sad()">
-               <img src="assets/imgs/select-sad.png" width="60%">
+               <img src="assets/imgs/select-sad.png" width="40%">
                <ion-label style="display: block;font-size: 14px;margin-right: 0;">I am not Happy</ion-label>
            </ion-col>
            <ion-col col-2 col-sm-2>
 
            </ion-col>
        </ion-row>
+
    </div>
 </ion-content>

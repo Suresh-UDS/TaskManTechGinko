@@ -106,4 +106,14 @@ export class FeedbackService {
         )
     }
 
+    getImage(imageId,id){
+        return this.http.get(this.config.Url+'api/feedbackquestions/'+id+'/image/'+imageId).map(
+            response=>{
+                console.log(response);
+                console.log(response.text());
+                return response.text();
+            }
+        )
+    }
+
 }
