@@ -13,6 +13,7 @@ angular.module('timeSheetApp')
         $scope.errorProjectExists = null;
         $scope.selectedProject = null;
         $scope.selectedSite = null;
+        $scope.selectedEmployee = null;
         $scope.selectedJobDate = null;
         $scope.selectedStatus = null;
         $scope.selectedLocation = null;
@@ -23,8 +24,22 @@ angular.module('timeSheetApp')
         $scope.checklists;
         $scope.selectedChecklist;
         $scope.jobChecklistItems =[];
-
+        $scope.jobTypeName = "r&m";
         $scope.monthDays = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31];
+        
+        /*
+        **
+        Job type based records function.
+        @param :string
+        **
+        */
+        $scope.jobType = function(type){
+
+           $scope.jobTypeName = type;
+           //alert($scope.jobTypeName);
+           $scope.search();
+
+        };
 
         $scope.initCalender = function(){
             demo.initFormExtendedDatetimepickers();
@@ -43,10 +58,12 @@ angular.module('timeSheetApp')
         
         
         $('#dateFilterFrom').on('dp.change', function(e){
+            
         		$scope.job.plannedStartTime = e.date._d;
         });
 
-        $('#selectedJobDate').on('dp.change', function(e){
+        $('input#selectedJobDate').on('dp.change', function(e){
+            
                 $scope.selectedJobDate = e.date._d;
         });
 
@@ -372,10 +389,12 @@ angular.module('timeSheetApp')
 	            	}
 	            	$scope.searchCriteria = searchCriteria;
 	        	// }
-
+                $scope.searchCriteria.jobTypeName = $scope.jobTypeName;
 	        	$scope.searchCriteria.currPage = currPageVal;
 	        	console.log('Selected  project -' + $scope.selectedProject);
-	        	console.log('Selected  job -' + $scope.selectedJob);
+                console.log('Selected  job -' + $scope.selectedJob);
+                console.log('Selected  site -' + $scope.selectedSite);
+	        	console.log('Selected  employee -' + $scope.selectedEmployee);
 	        	console.log('search criteria - '+JSON.stringify($rootScope.searchCriteriaProject));
 
 	        	if(!$scope.selectedProject && !$scope.selectedSite && !$scope.selectedStatus && !$scope.selectedJob){
@@ -385,7 +404,7 @@ angular.module('timeSheetApp')
 	        	if($scope.selectedProject) {
 	        		$scope.searchCriteria.projectId = $scope.selectedProject.id;
 	        	}
-
+                  
 	        	if($scope.selectedSite) {
 	        		$scope.searchCriteria.siteId = $scope.selectedSite.id;
 		        }
@@ -397,12 +416,15 @@ angular.module('timeSheetApp')
 	        	if($scope.selectedJob){
 	        		$scope.searchCriteria.jobTitle = $scope.selectedJob;
 	        	}
+                if($scope.selectedEmployee){
+                    $scope.searchCriteria.empId = $scope.selectedEmployee.id;
+                }
 	        	
 	        	if($scope.selectedJobDate) {
 	        		$scope.searchCriteria.checkInDateTimeFrom = $scope.selectedJobDate;
 	        	}	        	
 
-	        	console.log(JSON.stringify($scope.searchCriteria));
+	        	console.log('search criterias - '+ JSON.stringify($scope.searchCriteria));
 	        	JobComponent.search($scope.searchCriteria).then(function (data) {
                     $scope.jobs = data.transactions;
 	        		$scope.jobsLoader = true;
@@ -545,6 +567,7 @@ angular.module('timeSheetApp')
             $scope.selectedSite = null;
             $scope.selectedStatus = null;
             $scope.selectedJob = null;
+            $scope.selectedEmployee = null;
             $scope.pages = {
                 currPage: 1,
                 totalPages: 0
