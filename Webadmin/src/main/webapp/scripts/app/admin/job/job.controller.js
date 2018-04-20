@@ -423,8 +423,10 @@ angular.module('timeSheetApp')
 	        	if($scope.selectedJobDate) {
 	        		$scope.searchCriteria.checkInDateTimeFrom = $scope.selectedJobDate;
 	        	}	        	
-
+                
 	        	console.log('search criterias - '+ JSON.stringify($scope.searchCriteria));
+                $scope.jobs = '';
+                $scope.jobsLoader = false;
 	        	JobComponent.search($scope.searchCriteria).then(function (data) {
                     $scope.jobs = data.transactions;
 	        		$scope.jobsLoader = true;
