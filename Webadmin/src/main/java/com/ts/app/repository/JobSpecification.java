@@ -12,6 +12,7 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.jpa.domain.Specification;
@@ -60,9 +61,12 @@ public class JobSpecification implements Specification<Job> {
             }
 
             if(searchCriteria.getEmployeeId()!=0){
-        		predicates.add(builder.equal(root.get("employee").get("id"),  searchCriteria.getEmployeeId()));
-        	}
+        			predicates.add(builder.equal(root.get("employee").get("id"),  searchCriteria.getEmployeeId()));
+        		}
 
+            if(StringUtils.isNotEmpty(searchCriteria.getJobTypeName())){
+        			predicates.add(builder.equal(root.get("type"),  searchCriteria.getJobTypeName()));
+        		}
 
             if(searchCriteria.getCheckInDateTimeFrom() != null){
 	            	if(root.get("plannedStartTime") != null) {
