@@ -11,34 +11,36 @@ page-feedback-grid
   {
     .grid-img
     {
-      height: 100px !important;
+      height: 50px !important;
     }
     .res-fnt
     {
-      font-size: 16px;
+      font-size: 10px;
     }
     .fnt-height
     {
+      padding: 0 !important;
       height:70px !important;
     }
   }
 
-  ///* Small devices (portrait tablets and large phones, 600px and up) */
-  //@media only screen and (min-width: 600px)
-  //{
-  //  .grid-img
-  //  {
-  //    height: 80px !important;
-  //  }
-  //  .res-fnt
-  //  {
-  //    font-size: 16px;
-  //  }
-  //  .fnt-height
-  //  {
-  //    height:48px !important;
-  //  }
-  //}
+  /* Small devices (portrait tablets and large phones, 600px and up) */
+  @media only screen and (min-width: 600px)
+  {
+    .grid-img
+    {
+      height: 50px !important;
+    }
+    .res-fnt
+    {
+      font-size: 10px;
+    }
+    .fnt-height
+    {
+      padding: 0 !important;
+      height:48px !important;
+    }
+  }
 
   /* Medium devices (landscape tablets, 768px and up) */
   @media only screen and (min-width: 768px)
