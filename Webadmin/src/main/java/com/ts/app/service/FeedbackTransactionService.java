@@ -7,7 +7,6 @@ import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -24,6 +23,7 @@ import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.core.env.Environment;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -85,6 +85,9 @@ public class FeedbackTransactionService extends AbstractService {
 	
 	@Inject
 	private TicketManagementService ticketManagementService;
+	
+	@Inject
+	private Environment env;
 
 	public FeedbackTransactionDTO saveFeebdackInformation(FeedbackTransactionDTO feedbackTransDto) {
 	    log.debug("user code- "+feedbackTransDto.getReviewerCode());
@@ -113,7 +116,7 @@ public class FeedbackTransactionService extends AbstractService {
 				        log.debug("answer score type yes:1");
 	                    cumRating += 5;
 	                }else{
-	                		feedbackAlertItems.add(item.getQuestion());
+	                		feedbackAlertItems.add(item.getQuestion() + " - " + item.getAnswer());
 	                    log.debug("answer score type yes:0");
 	                }
 				}else if(item.getAnswerType().equals(FeedbackAnswerType.YESNO) && item.getAnswer().equalsIgnoreCase("no")){
@@ -122,11 +125,15 @@ public class FeedbackTransactionService extends AbstractService {
 	                    log.debug("answer score type no:1");
 	                    cumRating += 5;
 	                }else{
-	                	feedbackAlertItems.add(item.getQuestion());
+	                		feedbackAlertItems.add(item.getQuestion()  + " - " + item.getAnswer());
 	                    log.debug("answer score type no:0");
 	                }
 	            }else if(item.getAnswerType().equals(FeedbackAnswerType.RATING)) {
-					cumRating += Float.parseFloat(item.getAnswer());
+	            		float currRating = Float.parseFloat(item.getAnswer());
+	            		if(currRating < 5) {
+	            			feedbackAlertItems.add(item.getQuestion()  + " - Rating - " + item.getAnswer());
+	            		}
+					cumRating += currRating;
 				}
 	
 				item.setFeedbackTransaction(feedbackTrans);
@@ -157,9 +164,9 @@ public class FeedbackTransactionService extends AbstractService {
 				feedbackLocation.append(feedbackTransDto.getBlock());
 				feedbackLocation.append("-");
 				feedbackLocation.append(feedbackTransDto.getFloor());
-				feedbackLocation.append("-");
-				feedbackLocation.append(feedbackTransDto.getZone());
-				mailService.sendFeedbackAlert(alertEmailIds, feedbackTransDto.getFeedbackName(), feedbackLocation.toString(), new Date(), feedbackAlertItems);
+				
+				String feedbackReportUrl = env.getProperty("reports.feedback-report.url");
+				mailService.sendFeedbackAlert(alertEmailIds, feedbackTransDto.getZone(), feedbackLocation.toString(), new Date(), feedbackAlertItems, feedbackReportUrl);
 			}
 		}else {
 			rating = 5;
@@ -371,7 +378,7 @@ public class FeedbackTransactionService extends AbstractService {
 							qrating.setQuestion(String.valueOf(row[0]));
 							if(row[2] != null) {
 								Map<String,Long> ratingsMap = null;
-								if(qrating.getRating() != null ) {
+								if(qrating.getRating() != null ) { 
 									ratingsMap = qrating.getRating();
 								}else {
 									ratingsMap = new HashMap<String,Long>();

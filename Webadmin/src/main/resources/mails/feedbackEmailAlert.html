@@ -6,7 +6,7 @@
 </head>
 <body>
 	
-<p th:text="#{email.feedback.alert.text1(${feedback.name},${feedback.location},${feedback.dateTime})}">
+<p th:text="#{email.feedback.alert.text1(${feedbackName},${feedbackLocation},${feedbackDate})}">
 </p>
  
 	
@@ -14,19 +14,20 @@
       <tr>
       	<th>Feedback List</th>
       </tr>
-      <tr th:each="feedback,iterationStatus  : ${feeebacks}">
+      <tr th:each="feedback,iterationStatus  : ${feedbacks}">
       	<td th:text="${iterationStatus.count}">1</td>
         <td th:text="${feedback}"></td>
       </tr>
     </table>
-
+    <br/>
+	<span th:text="#{email.feedback.alert.text2(${feedbackReport})}"></span>
 
 <p>
 </p>
 <p>
-    <span th:text="#{email.report.text2}">Thanks, </span>
+    <span th:text="#{email.feedback.alert.text3}">Thanks, </span>
     <br/>
-    <em th:text="#{email.signature}">Feedback management system.</em>
+    <em th:text="#{email.signature}">TaskMan Feedback.</em>
 </p>
 </body>
 </html>
