@@ -14,4 +14,15 @@ public enum FeedbackAnswerType {
     private FeedbackAnswerType(String val){
         value = val;
     }
+    
+    public static FeedbackAnswerType fromValue(String val) {
+    		switch(val) {
+    			case "YesNo" :
+    				return FeedbackAnswerType.YESNO;
+    			case "Rating" :
+    				return FeedbackAnswerType.RATING;
+    			default :
+    				return FeedbackAnswerType.YESNO;
+    		}
+    }
 }

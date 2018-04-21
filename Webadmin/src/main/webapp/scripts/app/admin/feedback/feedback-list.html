@@ -196,7 +196,7 @@
 
                             <h3>Weekly Feedbacks</h3>
 
-                            <canvas id="line" class="chart chart-line" chart-data="data"
+                            <canvas id="line" class="chart chart-bar" chart-data="data"
                                     chart-labels="labels" chart-series="series" chart-options="options"
                                     chart-dataset-override="datasetOverride" chart-colors="colors" chart-click="onClick">
                             </canvas>
@@ -245,7 +245,14 @@
                                 <td>{{questionRating.question}}</td>
                                 <td>{{questionRating.yesCount}}</td>
                                 <td>{{questionRating.noCount}}</td>
-                                <td>{{questionRating.rating}}</td>
+                                <td>
+	                                <div ng-repeat ="(key, value) in questionRating.rating">
+								       <jk-rating-stars max-rating="5" rating="key" read-only="readOnly" >
+                                        </jk-rating-stars>
+                                        {{value}}
+                                        
+								    </div>
+							    </td>
                             </tr>
                             </thead>
                             <tbody>

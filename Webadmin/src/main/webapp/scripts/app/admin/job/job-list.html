@@ -15,22 +15,22 @@
 
     <div class="row">
 
-        <div class="col-md-12">
+       <!-- <div class="col-md-12">
             <div class="panel panel-default TabsContainer">
                 <div class="panel-body">
                     <ul class="nav nav-pills nav-pills-warning">
                         <li class="active"><a href="" data-toggle="tab"
-                            data-target="#pill2" aria-expanded="false" ng-click="jobType('r&m')"> R & M</a></li>
+                            data-target="#pill2" aria-expanded="false" ng-click="jobType('MAINTENANCE')"> R & M</a></li>
                         <li class=""><a href="" data-toggle="tab"
-                            data-target="#pill3" aria-expanded="false" ng-click="jobType('it')"> IT</a></li>
+                            data-target="#pill3" aria-expanded="false" ng-click="jobType('HOUSEKEEPING')"> HK</a></li>-->
                        <!--  <li class=""><a href="" data-toggle="tab"
                             data-target="#pill1" aria-expanded="true">Material</a></li>
                         <li class=""><a href="" data-toggle="tab"
                             data-target="#pill4" aria-expanded="false">Summary</a></li> -->
-                    </ul>
+                    <!--</ul>
                 </div>
             </div>
-        </div>
+        </div>-->
         <div class="col-md-12">
             <div class="card TableCard">
                 <div class="card-content">
@@ -116,6 +116,16 @@
                         </form>
 
                     </div>
+                    <div class="panel panel-default TabsContainer mar10px jobType">
+                        <div class="panel-body pad0px">
+                            <ul class="nav nav-pills nav-pills-warning mar0px">
+                                <li class="active"><a href="" data-toggle="tab"
+                                    data-target="#pill2" aria-expanded="false" ng-click="jobType('')"> All</a></li>
+                                <li class=""><a href="" data-toggle="tab"
+                                    data-target="#pill3" aria-expanded="false" ng-click="jobType('MAINTENANCE')"> R & M</a></li>
+                            </ul>
+                       </div>
+                    </div> 
 
                     <div class="table-responsive tablecard">
                         <table class="table table-striped" ng-init="search();">

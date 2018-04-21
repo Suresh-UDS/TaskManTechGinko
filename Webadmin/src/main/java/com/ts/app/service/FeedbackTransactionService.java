@@ -3,7 +3,6 @@ package com.ts.app.service;
 import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
@@ -11,8 +10,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.TimeZone;
 
@@ -100,6 +101,7 @@ public class FeedbackTransactionService extends AbstractService {
 			for(FeedbackTransactionResultDTO itemDto : itemDtos) {
 	
 				FeedbackTransactionResult item = mapperUtil.toEntity(itemDto, FeedbackTransactionResult.class);
+				//item.setAnswerType(FeedbackAnswerType.fromValue(itemDto.getAnswerType()));
 				item.setId(0);
 				log.debug("answer type - "+item.getAnswerType());
 				log.debug("answer type - "+item.getAnswer());
@@ -132,7 +134,7 @@ public class FeedbackTransactionService extends AbstractService {
 			}
 			rating = (cumRating / items.size()); //calculate the overall rating.
 			//send notifications
-			Setting feedbackAlertSetting = settingsRepository.findSettingByKey("email.notification.feedback");
+			Setting feedbackAlertSetting = null;
 			Setting feedbackEmails = null;
 			String alertEmailIds = "";
 			if(feedbackTransDto.getSiteId() > 0) {
@@ -167,6 +169,7 @@ public class FeedbackTransactionService extends AbstractService {
         feedbackTrans = feedbackTransactionRepository.save(feedbackTrans);
         if(rating < 5 ) { //create a ticket
         		TicketDTO ticketDTO = new TicketDTO();
+        		ticketDTO.setUserId(feedbackTransDto.getUserId());
         		ticketDTO.setTitle("Feedback received for " +feedbackTransDto.getSiteName() + " - " +feedbackTransDto.getBlock() + "-" + feedbackTransDto.getFloor() + "-" + feedbackTransDto.getZone());
         		if(CollectionUtils.isNotEmpty(feedbackAlertItems)) {
         			StringBuffer sb = new StringBuffer();
@@ -335,33 +338,53 @@ public class FeedbackTransactionService extends AbstractService {
 					reportResult.setWeeklySite(weeklySiteList);
 					// end
 
-					List<FeedbackQuestionRating> qratings = new ArrayList<FeedbackQuestionRating>();
+					Map<String, FeedbackQuestionRating> qratings = new HashMap<String,FeedbackQuestionRating>();
 					if(CollectionUtils.isNotEmpty(questionRatings)) {
 						for(Object[] row : questionRatings) {
-							FeedbackQuestionRating qrating = new FeedbackQuestionRating();
-							qrating.setQuestion(String.valueOf(row[0]));
+							FeedbackQuestionRating qrating = null;
+							String question = String.valueOf(row[0]);
+							if(qratings.containsKey(question)) {
+								qrating = qratings.get(question);
+							}else {
+								qrating = new FeedbackQuestionRating();
+							}
+							qrating.setQuestion(question);
 							if(row[1] != null && ((String)row[1]).equalsIgnoreCase("Yes")) {
 								qrating.setYesCount((Long)row[2]);
 							}else {
 								qrating.setNoCount((Long)row[2]);
 							}
-							qratings.add(qrating);
+							qratings.put(qrating.getQuestion(), qrating);
 						}
 					}
 					//log.debug("feedbackMapping.getFeedback().getId(): \t"+feedbackMapping.getFeedback().getId());
 					questionRatings = getquestionRatings(searchCriteria,feedbackMapping,fromTime,toTime,weeklyFromDate,weeklyToDate);
-
 					if(CollectionUtils.isNotEmpty(questionRatings)) {
 						for(Object[] row : questionRatings) {
-							FeedbackQuestionRating qrating = new FeedbackQuestionRating();
+							FeedbackQuestionRating qrating = null;
+							String question = String.valueOf(row[0]);
+							if(qratings.containsKey(question)) {
+								qrating = qratings.get(question);
+							}else {
+								qrating = new FeedbackQuestionRating();
+							}
 							qrating.setQuestion(String.valueOf(row[0]));
 							if(row[2] != null) {
-								qrating.setRating((double)row[2]);
+								Map<String,Long> ratingsMap = null;
+								if(qrating.getRating() != null ) {
+									ratingsMap = qrating.getRating();
+								}else {
+									ratingsMap = new HashMap<String,Long>();
+								}
+								ratingsMap.put(String.valueOf(row[1]), (long)row[2]);
+								qrating.setRating(ratingsMap);
 							}
-							qratings.add(qrating);
+							qratings.put(question, qrating);
 						}
 					}
-					reportResult.setQuestionRatings(qratings);
+					List<FeedbackQuestionRating> asList = new ArrayList<FeedbackQuestionRating>();
+					asList.addAll(qratings.values());
+					reportResult.setQuestionRatings(asList);
 
 				//}
 			}
