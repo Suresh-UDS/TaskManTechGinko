@@ -54,7 +54,7 @@ public interface FeedbackTransactionRepository extends JpaRepository<FeedbackTra
 	@Query("SELECT distinct ftr.question as question, ftr.answer as answer, count(ftr.answer) as count FROM FeedbackTransactionResult ftr WHERE ftr.feedbackTransaction.feedback.id = :feedbackMasterId and ftr.createdDate between :startDate and :endDate and ftr.answerType = 0 group by ftr.question, ftr.answer")
 	List<Object[]> getFeedbackAnswersCountForYesNo(@Param("feedbackMasterId") long feedbackMasterId, @Param("startDate") ZonedDateTime startDate, @Param("endDate") ZonedDateTime endDate);
 
-	@Query("SELECT distinct ftr.question as question, ftr.answer as answer, avg(ftr.answer) as avg FROM FeedbackTransactionResult ftr WHERE ftr.feedbackTransaction.feedback.id = :feedbackMasterId and ftr.createdDate between :startDate and :endDate and ftr.answerType = 1 group by ftr.question, ftr.answer")
+	@Query("SELECT distinct ftr.question as question, ftr.answer as answer, count(ftr.answer) as avg FROM FeedbackTransactionResult ftr WHERE ftr.feedbackTransaction.feedback.id = :feedbackMasterId and ftr.createdDate between :startDate and :endDate and ftr.answerType = 1 group by ftr.question, ftr.answer")
 	List<Object[]> getFeedbackAnswersCountForRating(@Param("feedbackMasterId") long feedbackMasterId, @Param("startDate") ZonedDateTime startDate, @Param("endDate") ZonedDateTime endDate);
 
 	@Query("SELECT distinct ftr.question as question, ftr.answer as answer, count(ftr.answer) as count FROM FeedbackTransactionResult ftr WHERE ftr.feedbackTransaction.siteId = :siteId and ftr.createdDate between :startDate and :endDate and ftr.answerType = 0 group by ftr.question, ftr.answer")
@@ -86,7 +86,7 @@ public interface FeedbackTransactionRepository extends JpaRepository<FeedbackTra
 	List<Object[]> getWeeklyFeedbackAnswersCountForYesNo(@Param("siteId") long siteId, @Param("startDate") ZonedDateTime startDate, @Param("endDate") ZonedDateTime endDate);
 
 	// weekly getWeeklyFeedbackAnswersCountForRating
-	@Query("SELECT distinct ftr.question as question, ftr.answer as answer, avg(ftr.answer) as avg FROM FeedbackTransactionResult ftr WHERE ftr.feedbackTransaction.siteId = :siteId and ftr.createdDate between :startDate and :endDate and ftr.answerType = 1 group by ftr.question, ftr.answer")
+	@Query("SELECT distinct ftr.question as question, ftr.answer as answer, count(ftr.answer) as avg FROM FeedbackTransactionResult ftr WHERE ftr.feedbackTransaction.siteId = :siteId and ftr.createdDate between :startDate and :endDate and ftr.answerType = 1 group by ftr.question, ftr.answer")
 	List<Object[]> getWeeklyFeedbackAnswersCountForRating(@Param("siteId") long feedbackMasterId, @Param("startDate") ZonedDateTime startDate, @Param("endDate") ZonedDateTime endDate);
 
 	// weekly getWeeklyFeedbackAnswersCountForYesNo

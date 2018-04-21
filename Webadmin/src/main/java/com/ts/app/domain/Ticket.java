@@ -26,8 +26,8 @@ public class Ticket extends AbstractAuditingEntity implements Serializable {
     private Long id;
 
     @NotNull
-    @Size(min = 1, max = 50)
-    @Column(length = 50, unique = false, nullable = false)
+    @Size(min = 1, max = 255)
+    @Column(length = 255, unique = false, nullable = false)
     private String title;
 
     @NotNull
