@@ -295,6 +295,7 @@ angular.module('timeSheetApp')
 	        	$scope.error = null;
 	        	$scope.success =null;
 	        	$scope.errorProjectExists = null;
+	        	$scope.job.ticketId = $stateParams.ticketId;
 	        	if($scope.selectedChecklist) {
 		        	var items = $scope.selectedChecklist.items;
 		        	for(var i =0; i<items.length;i++) {
@@ -610,7 +611,6 @@ angular.module('timeSheetApp')
              $scope.loadPageTop(); 
              $scope.init(); 
              $scope.initPage(); 
-          
          }
 
        //Loading Page go to top position

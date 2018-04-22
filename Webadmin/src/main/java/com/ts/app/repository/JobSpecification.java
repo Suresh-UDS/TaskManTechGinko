@@ -18,6 +18,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.data.jpa.domain.Specification;
 
 import com.ts.app.domain.Job;
+import com.ts.app.domain.JobType;
 import com.ts.app.service.util.DateUtil;
 import com.ts.app.web.rest.dto.SearchCriteria;
 
@@ -65,7 +66,7 @@ public class JobSpecification implements Specification<Job> {
         		}
 
             if(StringUtils.isNotEmpty(searchCriteria.getJobTypeName())){
-        			predicates.add(builder.equal(root.get("type"),  searchCriteria.getJobTypeName()));
+        			predicates.add(builder.equal(root.get("type"),  JobType.valueOf(searchCriteria.getJobTypeName())));
         		}
 
             if(searchCriteria.getCheckInDateTimeFrom() != null){

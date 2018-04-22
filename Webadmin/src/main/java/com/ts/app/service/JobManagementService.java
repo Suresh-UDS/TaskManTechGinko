@@ -651,14 +651,21 @@ public class JobManagementService extends AbstractService {
 		//List<Job> existingJobs = jobRepository.findJobByTitleSiteAndDate(jobDTO.getTitle(), jobDTO.getSiteId(), startDate, endDate);
 		//log.debug("Existing job -"+ existingJobs);
 		//if(CollectionUtils.isEmpty(existingJobs)) {
-			job = jobRepository.save(job);
+		//if job is created against a ticket
+		if(jobDTO.getTicketId() > 0) {
+			Ticket ticket = ticketRepository.findOne(jobDTO.getTicketId());
+			job.setTicket(ticket);
+			ticket.setStatus(TicketStatus.ASSIGNED.toValue());
+			ticketRepository.save(ticket);
+		}
+		job = jobRepository.save(job);
 
-			if(job.getTicket()!=null){
-			    Ticket ticket = job.getTicket();
-			    TicketDTO ticketDTO= mapperUtil.toModel(ticket,TicketDTO.class);
-			    ticketDTO.setJobId(job.getId());
-			    ticketManagementService.updateTicket(ticketDTO);
-            }
+		if(job.getTicket()!=null){
+		    Ticket ticket = job.getTicket();
+		    TicketDTO ticketDTO= mapperUtil.toModel(ticket,TicketDTO.class);
+		    ticketDTO.setJobId(job.getId());
+		    ticketManagementService.updateTicket(ticketDTO);
+        }
 
 
 		//}
