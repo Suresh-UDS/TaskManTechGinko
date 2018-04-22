@@ -75,6 +75,8 @@ public class Ticket extends AbstractAuditingEntity implements Serializable {
     private String type;
 
     private String severity;
+    
+    private String category;
 
     public Long getId() {
         return id;
@@ -219,6 +221,13 @@ public class Ticket extends AbstractAuditingEntity implements Serializable {
 	public void setClosedOn(Date closedOn) {
 		this.closedOn = closedOn;
 	}
-    
+
+	public String getCategory() {
+		return category;
+	}
+
+	public void setCategory(String category) {
+		this.category = category;
+	}
     
 }

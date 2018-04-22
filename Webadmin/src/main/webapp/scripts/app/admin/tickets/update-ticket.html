@@ -27,7 +27,7 @@
                                                <label class="control-label">Title </label>
 
                                                <input type="text" class="form-control"   name='title'
-                                                      ng-model="tickets.title" ng-minlength=1 ng-maxlength=50
+                                                      ng-model="tickets.title" ng-minlength=1 ng-maxlength=100
                                                       autofocus  required autocomplete="off"/>
                                                <div ng-show="form.$submitted || form.title.$touched">
                                                    <div ng-show="form.title.$dirty || form.title.$invalid">
@@ -58,6 +58,36 @@
                                                    </div>
                                                </div>
                                            </div>
+                                       </div>
+                                       <div class="col-md-5">
+                                           <div class="form-group">
+                                               <label class="control-label">Category </label>
+                                               <select
+                                                   required
+                                                   name="category"
+                                                   ng-model="tickets.category"
+                                                   class="form-control searchable-input floatL">
+                                                   <option value=''>Select Category</option>
+                                                   <option>HOUSEKEEPING</option>
+                                                   <option>ELECTRICAL</option>
+                                                   <option>AC</option>
+                                                   <option>CARPENTRY</option>
+                                                   <option>PEST</option>
+                                                   <option>PLUMBING</option>
+                                                   <option>MAINTENANCE</option>
+                                                   <option></option>
+                                               </select>
+                                               <div ng-show="form.$submitted || form.category.$touched">
+                                                   <div
+                                                       ng-show="form.category.$dirty || form.category.$invalid">
+
+                                                       <p class="help-block" style="color:maroon"
+                                                          ng-show="form.category.$error.required">
+                                                           Required
+                                                   </div>
+                                               </div>
+                                           </div>
+
                                        </div>
                                        <div class="col-md-6">
                                           <div class="form-group">
@@ -132,7 +162,6 @@
                                     <div class="form-group">
                                         <label class="control-label">Employee </label>
                                         <select
-                                            required
                                             name="employee"
                                             ng-model="selectedEmployee"
                                             ng-init="selectedEmployee = selected"
@@ -184,7 +213,7 @@
                         <div class="col-md-12">
 
 
-                            <button type="submit" ng-click="cancelTicket()"
+                            <button type="button" ng-click="cancelTicket()"
                                     id="cancel-button"   class="btn btn-danger pull-right"> <i class="material-icons">close</i> Cancel</button>
 
                             <button type="submit" type="submit"
@@ -231,117 +260,3 @@
 
 
 
-<!--<div class="crud-form"-->
-<!--data-unique-hash="a2ad475d60b22954085c657a73309b8f">-->
-<!--<div class="container">-->
-<!--<div class="row">-->
-<!--<div class="col-md-12">-->
-
-<!--<div class="titleCon">-->
-<!--<h3>Edit Ticket</h3>-->
-<!--</div>-->
-
-<!--<div class="form-container table-container" ng-init="loadTicket()">-->
-<!--<form ng-show="!success" name="form" role="form" novalidate-->
-<!--ng-submit="updateTicket()"  class="form-horizontal">-->
-<!--<div class="form-group">-->
-<!--<label class="col-sm-3 control-label"> ID </label>-->
-<!--<div class="col-sm-2">-->
-<!--<input id='ticketID' ng-model="ticket.id" class='form-control'-->
-<!--name='ticketID' type='text' maxlength='50' readonly />-->
-<!--</div>-->
-<!--</div>-->
-
-
-<!--<div class="form-group" ng-init="loadProjects()">-->
-<!--<label class="col-sm-3 control-label"> Project </label>-->
-<!--<div class="col-sm-5">-->
-<!--<div class="dropdown">-->
-<!--<input id="projectName" type="text" class="form-control" placeholder="Enter project name"  ng-value="ticket.projectName" name="projectName"-->
-<!--ng-model="selectedProject" uib-typeahead="project as project.name for project in projects | filter:$viewValue | limitTo:5"-->
-<!--ng-minlength=2 ng-maxlength=50 ng-pattern="/^[A-Za-z0-9\s&-/]*$/" autofocus required autocomplete="off"-->
-<!--/>-->
-<!--<div ng-show="form.$submitted || form.projectName.$touched">-->
-<!--<div ng-show="form.projectName.$dirty || form.projectName.$invalid">-->
-<!--<p class="help-block" style="color:maroon"-->
-<!--ng-show="form.projectName.$error.required">-->
-<!--Project name is required.-->
-<!--</p>-->
-<!--<p class="help-block" style="color:maroon"-->
-<!--ng-show="form.projectName.$error.minlength">-->
-<!--Project name is required to be at least 2 character.-->
-<!--</p>-->
-<!--<p class="help-block" style="color:maroon"-->
-<!--ng-show="form.projectName.$error.maxlength">-->
-<!--Project name cannot be longer than 50 characters.-->
-<!--</p>-->
-<!--<p class="help-block" style="color:maroon"-->
-<!--ng-show="form.projectName.$error.pattern">-->
-<!--Project name can only contain letters, digits and space.-->
-<!--</p>-->
-<!--</div>-->
-<!--</div>-->
-<!--</div>-->
-<!--</div>-->
-<!--</div>-->
-<!--<div class="form-group ">-->
-<!--<label class="col-sm-3 control-label"> Name </label>-->
-<!--<div class="col-sm-5">-->
-<!--<input id="ticketName" ng-model="ticket.name" class="form-control"-->
-<!--name="ticketName" type="text"-->
-<!--ng-minlength=1 ng-maxlength=50 ng-pattern="/^[A-Za-z0-9\s&-/]*$/"  required/>-->
-<!--<div ng-show="form.$submitted || form.ticketName.$touched">-->
-<!--<div ng-show="form.ticketName.$dirty || form.ticketName.$invalid">-->
-<!--<p class="help-block" style="color:maroon"-->
-<!--ng-show="form.ticketName.$error.required">-->
-<!--Ticket name is required.-->
-<!--</p>-->
-<!--<p class="help-block" style="color:maroon"-->
-<!--ng-show="form.ticketName.$error.minlength">-->
-<!--Ticket name is required to be at least 5 character.-->
-<!--</p>-->
-<!--<p class="help-block" style="color:maroon"-->
-<!--ng-show="form.ticketName.$error.maxlength">-->
-<!--Ticket name cannot be longer than 50 characters.-->
-<!--</p>-->
-<!--<p class="help-block" style="color:maroon"-->
-<!--ng-show="form.ticketName.$error.pattern">-->
-<!--Ticket name can only contain letters, digits and space.-->
-<!--</p>-->
-<!--</div>-->
-<!--</div>-->
-<!--</div>-->
-<!--</div>-->
-
-<!--<div class='small-loading hidden' id='FormLoading'>Loading,-->
-<!--saving data...</div>-->
-
-<!--<div class="form-group">-->
-<!--<div id='report-error' class='report-div error bg-danger'-->
-<!--style="display: none"></div>-->
-<!--<div id='report-success' class='report-div success bg-success'-->
-<!--style="display: none"></div>-->
-<!--</div>-->
-<!--<div class="form-group">-->
-<!--<div class="col-sm-offset-3 col-sm-7">-->
-<!--<button class="btn btn-default btn-success b10" type="submit"-->
-<!--id="form-button-save" ng-disabled="form.$invalid">-->
-<!--<i class="fa fa-check" ></i> Save-->
-<!--</button>-->
-<!--<button class="btn btn-info b10" type="submit"-->
-<!--id="save-and-go-back-button" ng-disabled="form.$invalid">-->
-<!--<i class="fa fa-rotate-left" ></i> Save and go back to list-->
-<!--</button>-->
-<!--<button class="btn btn-default cancel-button b10" type="button"-->
-<!--ng-click="cancelTicket()" id="cancel-button">-->
-<!--<i class="fa fa-warning"></i> Cancel-->
-<!--</button>-->
-<!--</div>-->
-<!--</div>-->
-<!--</form>-->
-<!--</div>-->
-<!--</div>-->
-<!--</div>-->
-<!--</div>-->
-
-<!--</div>-->

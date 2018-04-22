@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Direction;
 
 import com.ts.app.domain.Employee;
 import com.ts.app.service.util.PagingUtil;
@@ -24,7 +25,7 @@ public abstract class AbstractService {
 			page = 1;
 		}
 		page -= 1;
-        return new PageRequest(page, PagingUtil.PAGE_SIZE); 
+        return createPageRequest(page, PagingUtil.PAGE_SIZE); 
     }
 	
 	protected Pageable createPageRequest(int page, int pageSize) {
@@ -32,7 +33,8 @@ public abstract class AbstractService {
 			page = 1;
 		}
 		page -= 1;
-        return new PageRequest(page, pageSize); 
+		Sort s = new Sort(Sort.Direction.DESC, "createdDate");
+        return createPageSort(page, pageSize, s); 
     }
 	
 	public Pageable createPageSort(int page, int pageSize, Sort s) {

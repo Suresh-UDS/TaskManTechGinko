@@ -6,6 +6,8 @@ import java.util.UUID;
 import javax.inject.Inject;
 
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
@@ -13,10 +15,7 @@ import com.ts.app.domain.EmployeeAttendanceReport;
 import com.ts.app.web.rest.dto.ExportResult;
 import com.ts.app.web.rest.dto.JobDTO;
 import com.ts.app.web.rest.dto.SearchCriteria;
-
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.ts.app.web.rest.dto.TicketDTO;
 
 @Component
 public class ReportUtil {
@@ -63,6 +62,39 @@ public class ReportUtil {
         }
         return result;
     }
+    
+    public ExportResult generateTicketReports(List<TicketDTO> content, final String empId, ExportResult result, SearchCriteria criteria) {
+        if(criteria.getExportType().equalsIgnoreCase("html")) {
+            if(result == null) {
+                result = new ExportResult();
+            }
+            String uuidVal = null;
+            if(StringUtils.isNotEmpty(criteria.getExportType()) && criteria.getExportType().equalsIgnoreCase("html")) {
+                UUID uuid = UUID.randomUUID();
+                uuidVal = uuid.toString();
+                cacheUtil.putSearchCriteria(uuidVal, criteria);
+            }
+            result.setFile(uuidVal);
+            String reportUrl = env.getProperty("reports.ticket-report.url");
+            result.setUrl(reportUrl + "/" + uuidVal);
+
+            //log.debug("UUID VALUE **********"+uuidVal);
+            uuidVal += ".xlsx";
+            exportUtil.updateExportStatus(uuidVal, "COMPLETED");
+
+            result.setEmpId(empId);
+            result.setStatus("COMPLETED");
+           // log.debug("RESULT OBJECT VALUES HERE *************"+result);
+            return result;
+
+        }else if(criteria.getExportType().equalsIgnoreCase("xlsx")) {
+            //return exportUtil.writeJobReportToFile(content, empId, result);
+            return exportUtil.writeTicketExcelReportToFile(content,empId,result);
+        }
+        return result;
+    }
+    
+    
 
 	public SearchCriteria getJobReportCriteria(String uid) {
 		return cacheUtil.getSearchCriteria(uid);

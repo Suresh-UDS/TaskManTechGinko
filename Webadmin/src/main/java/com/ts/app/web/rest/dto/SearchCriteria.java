@@ -122,6 +122,8 @@ public class SearchCriteria extends Paginator {
 	private boolean report;
 	
 	private String jobTypeName;
+	
+	private String ticketStatus;
 
 	public long getId() {
 		return id;
@@ -656,6 +658,14 @@ public class SearchCriteria extends Paginator {
 
 	public void setReport(boolean report) {
 		this.report = report;
+	}
+
+	public String getTicketStatus() {
+		return ticketStatus;
+	}
+
+	public void setTicketStatus(String ticketStatus) {
+		this.ticketStatus = ticketStatus;
 	}
     
     

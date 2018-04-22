@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('timeSheetApp')
-    .controller('TicketController', function ($rootScope, $scope, $state, $timeout, SiteComponent, JobComponent,EmployeeComponent,$http,$stateParams,$location) {
+    .controller('TicketController', function ($rootScope, $scope, $state, $timeout, SiteComponent, JobComponent,EmployeeComponent,TicketComponent,$http,$stateParams,$location) {
         $rootScope.loginView = false;
         $scope.success = null;
         $scope.error = null;
@@ -30,34 +30,53 @@ angular.module('timeSheetApp')
             $scope.search();
         }
         
-        $scope.initCalender = function(){
-            demo.initFormExtendedDatetimepickers();
-        }
+        
+        $scope.selectedDateFrom;
+        $scope.selectedDateTo;
+       
+        $scope.dateFilterFrom = new Date();
+        $scope.dateFilterTo = new Date();
+        
 
-        $('#shiftFrom').on('dp.change', function(e){
+        $scope.initCalender = function(){
+
+            demo.initFormExtendedDatetimepickers();
+
+        };
+        $scope.showNotifications= function(position,alignment,color,msg){
+                    demo.showNotification(position,alignment,color,msg);
+                }
+
+
+         $('input#dateFilterFrom').on('dp.change', function(e){
+            console.log(e.date);
 
             console.log(e.date._d);
-            if(e.date._d > $scope.newShiftItem.endTime) {
-            		$scope.showNotifications('top','center','danger','From time cannot be after To time');
-            		$scope.shiftFrom = $scope.newShiftItem.startTime;
-            		return false;
+            if(e.date._d > $scope.selectedDateTo) {
+                    $scope.showNotifications('top','center','danger','From date cannot be greater than To date');
+                    $scope.dateFilterFrom = $scope.selectedDateFrom;
+                    return false;
             }else {
-                $scope.newShiftItem.startTime = e.date._d.getHours() + ':' + e.date._d.getMinutes();
+                $scope.selectedDateFrom = e.date._d;
+                $scope.refreshReport();
             }
         });
         
-        $('#shiftTo').on('dp.change', function(e){
+        $('input#dateFilterTo').on('dp.change', function(e){
+            console.log(e.date);
 
             console.log(e.date._d);
-            if($scope.newShiftItem.startTime > e.date._d) {
-            		$scope.showNotifications('top','center','danger','To time cannot be before From time');
-            		$scope.shiftTo = $scope.newShiftItem.endTime;
-            		return false;
+            if($scope.selectedDateFrom > e.date._d) {
+                    $scope.showNotifications('top','center','danger','To date cannot be lesser than From date');
+                    $scope.dateFilterTo = $scope.selectedDateTo;
+                    return false;
             }else {
-                $scope.newShiftItem.endTime = e.date._d.getHours() + ':' + e.date._d.getMinutes();
+                $scope.selectedDateTo = e.date._d;
+                $scope.refreshReport();
             }
 
         });
+        
         $scope.initCalender();
 
         $scope.saveTicket = function () {
@@ -174,7 +193,7 @@ angular.module('timeSheetApp')
                 $scope.tickets.title = $scope.tickets.title;
                 $scope.tickets.description = $scope.tickets.description;
                 $scope.selectedSite = {id : data.siteId,name : data.siteName};
-                $scope.selectedEmployee = {id : data.employeeId,name : data.employeeName};
+                $scope.selectedEmployee = {id : data.assignedToId,name : data.assignedToName};
                 $scope.tickets.severity = $scope.tickets.severity;
                 $scope.tickets.comments = $scope.tickets.comments;
                 $scope.tickets.status = $scope.tickets.status;
@@ -193,11 +212,11 @@ angular.module('timeSheetApp')
                 $scope.listTitle = tlist.title;
                 $scope.listDescription = tlist.description;
                 $scope.listSite = tlist.siteName;
-                $scope.listEmployee = tlist.employeeName;
+                $scope.listEmployee = tlist.assignedToName;
                 $scope.listSeverity = tlist.severity;
                 $scope.listComments = tlist.comments;
-                $scope.listCreatedBy = tlist.created_by;
-                $scope.listCreatedDate = tlist.created_date;
+                $scope.listCreatedBy = tlist.createdBy;
+                $scope.listCreatedDate = tlist.createdDate;
                 $scope.listStatus = tlist.status;
 
               
@@ -215,13 +234,16 @@ angular.module('timeSheetApp')
         	    console.log("update ticket");
         	    $scope.tickets.title = $scope.tickets.title;
                 $scope.tickets.description = $scope.tickets.description;
-                $scope.tickets.site = $scope.siteName;
-                $scope.tickets.employee = $scope.employeeName; 
-                $scope.tickets.severity = $scope.tickets.severity;
+                if($scope.selectedSite) {
+                    $scope.tickets.siteId = $scope.selectedSite.id;
+                    $scope.tickets.siteName = $scope.selectedSite.name;
+                }
+                console.log('selected employee - ' + JSON.stringify($scope.selectedEmployee));
+                if($scope.selectedEmployee) {
+                    $scope.tickets.employeeId = $scope.selectedEmployee.id;
+                    $scope.tickets.employeeName = $scope.selectedEmployee.name;
+                }
                 $scope.tickets.comments = $scope.tickets.comments;
-                $scope.tickets.createdBy = $scope.tickets.created_by;
-                $scope.tickets.createdDate = $scope.tickets.created_date;
-                $scope.tickets.status = $scope.tickets.status;
                 console.log('Tickets - ' + JSON.stringify($scope.tickets));
 	        	JobComponent.updateTicket($scope.tickets).then(function() {
 	                $scope.success = 'OK';
@@ -231,7 +253,8 @@ angular.module('timeSheetApp')
 	            }).catch(function (response) {
 	                $scope.success = null;
 	                // console.log('Error - '+ response.data);
-	                // console.log('status - '+ response.status + ' , message - ' + response.data.message);
+	                // console.log('status - '+ response.status + ' , message -
+					// ' + response.data.message);
 
 	                if (response.status === 400 && response.data.message === 'error.duplicateRecordError') {
 	                	$scope.$apply(function() {
@@ -283,7 +306,11 @@ angular.module('timeSheetApp')
         };
 
 
-
+        $scope.loadTicketStatuses = function() {
+	    		TicketComponent.loadTicketStatuses().then(function(data){
+	    			$scope.ticketStatuses = data;
+	    		})
+	    }
         $scope.search = function () {
         	var currPageVal = ($scope.pages ? $scope.pages.currPage : 1);
         	if(!$scope.searchCriteria) {
@@ -297,7 +324,37 @@ angular.module('timeSheetApp')
         	console.log('Selected  filters' + JSON.stringify($scope.selectedSite) +" , "+ $scope.selectedEmployee
                 +" , "+ $scope.selectedTitle+" , "+ $scope.selectedDescription);
         	console.log('search criteria - '+JSON.stringify($rootScope.searchCriteriaTicket));
+        	$scope.searchCriteria.ticketStatus = $scope.selectedStatus;
+        	if($scope.selectedDateFrom){
+                $scope.selectedDateFrom.setHours(0,0,0,0);
+                $scope.searchCriteria.fromDate = $scope.selectedDateFrom;
+                $scope.searchCriteria.findAll = false;
+                console.log("From date found");
+                console.log($scope.searchCriteria.fromDate)
 
+
+            }else{
+                $scope.searchCriteria.fromDate = new Date();
+                console.log("From date not found")
+                console.log($scope.searchCriteria.fromDate)
+
+            }
+
+            if($scope.selectedDateTo){
+                $scope.selectedDateTo.setHours(23,59,59,0);
+                $scope.searchCriteria.toDate = $scope.selectedDateTo;
+                $scope.searchCriteria.findAll = false;
+                console.log("To date found")
+                console.log($scope.searchCriteria.toDate)
+
+            }else{
+                $scope.searchCriteria.toDate= new Date();
+                console.log("To date not found")
+                console.log($scope.searchCriteria.toDate)
+            }
+        	
+        	
+        	
         	if(!$scope.selectedTitle && !$scope.selectedDescription && !$scope.selectedSite && !$scope.selectedEmployee) {
         		if($rootScope.searchCriteriaTicket) {
             		$scope.searchCriteria = $rootScope.searchCriteriaTicket;
@@ -350,8 +407,8 @@ angular.module('timeSheetApp')
             
         	console.log('criterias -' + JSON.stringify($scope.searchCriteria));
         	JobComponent.searchTickets($scope.searchCriteria).then(function (data) {
-                $scope.tickets = data;
-                $scope.ticketsLoader = true;
+                $scope.tickets = data.transactions;
+            		$scope.ticketsLoader = true;
                 $scope.loadingStop();
                 console.log('Ticket List -' + JSON.stringify($scope.tickets));
                 $scope.tickets.forEach(function(ticket){
@@ -381,9 +438,22 @@ angular.module('timeSheetApp')
                     $scope.totalCountPages = data.totalCount;
 
                     if($scope.showCurrPage != data.totalPages){
-                    	$scope.pageStartIntex =  (data.currPage - 1) * $scope.pageSort + 1; // 1 to // 11 to
+                    	$scope.pageStartIntex =  (data.currPage - 1) * $scope.pageSort + 1; // 1 to
+																							// //
+																							// 11
+																							// to
 
-                        $scope.pageEndIntex = $scope.pageEntries * $scope.showCurrPage; // 10 entries of 52 // 10 * 2 = 20 of 52 entries
+                        $scope.pageEndIntex = $scope.pageEntries * $scope.showCurrPage; // 10
+																						// entries
+																						// of
+																						// 52
+																						// //
+																						// 10 *
+																						// 2 =
+																						// 20
+																						// of
+																						// 52
+																						// entries
 
                     }else if($scope.showCurrPage === data.totalPages){
                     	$scope.pageStartIntex =  (data.currPage - 1) * $scope.pageSort + 1;
@@ -521,7 +591,7 @@ angular.module('timeSheetApp')
         		currPage: 1,
         		totalPages: 0
         	}
-        	//$scope.search();
+        	// $scope.search();
         };
 
 
@@ -562,7 +632,7 @@ angular.module('timeSheetApp')
                 e.preventDefault();
             });
 
-            //Like record
+            // Like record
             table.on('click', '.like', function() {
                 alert('You clicked on Like button');
             });
@@ -571,19 +641,20 @@ angular.module('timeSheetApp')
 
         }
 
-      //init load
+      // init load
         $scope.initLoad = function(){ 
              $scope.loadPageTop(); 
              $scope.loadSites();
              $scope.loadEmployees();
-             $scope.loadselectedSite();
+             $scope.loadTicketStatuses();
+             //$scope.loadselectedSite();
           
          }
 
-       //Loading Page go to top position
+       // Loading Page go to top position
         $scope.loadPageTop = function(){
-            //alert("test");
-            //$("#loadPage").scrollTop();
+            // alert("test");
+            // $("#loadPage").scrollTop();
             $("#loadPage").animate({scrollTop: 0}, 2000);
         }
 
