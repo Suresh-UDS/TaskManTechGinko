@@ -295,18 +295,21 @@ angular.module('timeSheetApp')
 	        	$scope.error = null;
 	        	$scope.success =null;
 	        	$scope.errorProjectExists = null;
-	        	var items = $scope.selectedChecklist.items;
-	        	for(var i =0; i<items.length;i++) {
-	        		var checklistItem = {
-	        			"checklistId" : $scope.selectedChecklist.id,
-	        			"checklistName" : $scope.selectedChecklist.name,
-	        			"checklistItemId" : items[i].id,
-	        			"checklistItemName" : items[i].name,
-	        			"jobId" : $scope.job.id,
-	        			"jobTitle" : $scope.job.title
-	        		}
-	        		$scope.jobChecklistItems.push(checklistItem);
+	        	if($scope.selectedChecklist) {
+		        	var items = $scope.selectedChecklist.items;
+		        	for(var i =0; i<items.length;i++) {
+		        		var checklistItem = {
+		        			"checklistId" : $scope.selectedChecklist.id,
+		        			"checklistName" : $scope.selectedChecklist.name,
+		        			"checklistItemId" : items[i].id,
+		        			"checklistItemName" : items[i].name,
+		        			"jobId" : $scope.job.id,
+		        			"jobTitle" : $scope.job.title
+		        		}
+		        		$scope.jobChecklistItems.push(checklistItem);
+		        	}	        		
 	        	}
+
 
 	        	$scope.job.siteId = $scope.selectedSite.id
 	        	if($scope.selectedLocation) {
