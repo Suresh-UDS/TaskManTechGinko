@@ -112,7 +112,10 @@ public class TicketManagementService extends AbstractService {
 		        Calendar assignedCal = Calendar.getInstance();
 		        ticket.setAssignedOn(new java.sql.Date(assignedCal.getTimeInMillis()));
 	        }
+        }else {
+        		ticket.setAssignedTo(null);
         }
+        ticket.setClosedBy(null);
         /*if(employee != null) {
         		ticket.setStatus("Assigned");
         }else {
