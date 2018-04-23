@@ -24,4 +24,27 @@ angular.module('timeSheetApp')
                  $scope.accountName = response.login;
              });
 
+        $('#minimizeSidebar').click(function() {
+            var $btn = $(this);
+
+            if (md.misc.sidebar_mini_active == true) {
+                $('body').removeClass('sidebar-mini');
+                md.misc.sidebar_mini_active = false;
+            } else {
+                $('body').addClass('sidebar-mini');
+                md.misc.sidebar_mini_active = true;
+            }
+
+            // we simulate the window Resize so the charts will get updated in realtime.
+            var simulateWindowResize = setInterval(function() {
+                window.dispatchEvent(new Event('resize'));
+            }, 180);
+
+            // we stop the simulation of Window Resize after the animations are completed
+            setTimeout(function() {
+                clearInterval(simulateWindowResize);
+            }, 1000);
+        });
+   
+
     });
