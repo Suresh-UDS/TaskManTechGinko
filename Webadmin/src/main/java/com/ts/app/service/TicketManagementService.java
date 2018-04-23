@@ -115,6 +115,7 @@ public class TicketManagementService extends AbstractService {
         }else {
         		ticket.setAssignedTo(null);
         }
+        ticket.setJob(null);
         ticket.setClosedBy(null);
         /*if(employee != null) {
         		ticket.setStatus("Assigned");
