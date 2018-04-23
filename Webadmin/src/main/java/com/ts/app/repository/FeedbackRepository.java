@@ -22,5 +22,7 @@ public interface FeedbackRepository extends JpaRepository<Feedback, Long> {
 	@Query("SELECT ft FROM Feedback ft WHERE ft.project.id = :projectId and ft.site.id = :siteId")
 	List<Feedback> findBySite(@Param("projectId") long projectId, @Param("siteId") long siteId);
 
+	@Query("SELECT ft FROM Feedback ft WHERE ft.site.id in (:siteIds)")
+	Page<Feedback> findBySites(@Param("siteIds") List<Long> siteIds, Pageable pageRequest);
 
 }

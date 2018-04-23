@@ -76,6 +76,7 @@ public class FeedbackResource {
     public SearchResult<FeedbackDTO> searchFeedbackQuestions(@RequestBody SearchCriteria searchCriteria) {
         SearchResult<FeedbackDTO> result = null;
         if(searchCriteria != null) {
+        		searchCriteria.setUserId(SecurityUtils.getCurrentUserId());
             result = feedbackService.findBySearchCrieria(searchCriteria);
         }
         return result;

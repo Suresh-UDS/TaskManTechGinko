@@ -109,7 +109,7 @@ public class FeedbackTransactionService extends AbstractService {
 				log.debug("answer type - "+item.getAnswerType());
 				log.debug("answer type - "+item.getAnswer());
 				log.debug("score type - "+item.getScoreType());
-				if(item.getAnswerType().equals(FeedbackAnswerType.YESNO) && item.getAnswer().equalsIgnoreCase("Yes")) {
+				if(item.getAnswerType().equals(FeedbackAnswerType.YESNO) && item.getAnswer().equalsIgnoreCase("true")) {
 				    log.debug("answer type yes ");
 	
 				    if(StringUtils.isNotEmpty(item.getScoreType()) && item.getScoreType().equalsIgnoreCase("yes:1")){
@@ -119,7 +119,7 @@ public class FeedbackTransactionService extends AbstractService {
 	                		feedbackAlertItems.add(item.getQuestion() + " - " + item.getAnswer());
 	                    log.debug("answer score type yes:0");
 	                }
-				}else if(item.getAnswerType().equals(FeedbackAnswerType.YESNO) && item.getAnswer().equalsIgnoreCase("no")){
+				}else if(item.getAnswerType().equals(FeedbackAnswerType.YESNO) && item.getAnswer().equalsIgnoreCase("false")){
 	                log.debug("answer score type no");
 	                if(StringUtils.isNotEmpty(item.getScoreType()) && item.getScoreType().equalsIgnoreCase("no:1")){
 	                    log.debug("answer score type no:1");
@@ -356,7 +356,7 @@ public class FeedbackTransactionService extends AbstractService {
 								qrating = new FeedbackQuestionRating();
 							}
 							qrating.setQuestion(question);
-							if(row[1] != null && ((String)row[1]).equalsIgnoreCase("Yes")) {
+							if(row[1] != null && ((String)row[1]).equalsIgnoreCase("true")) {
 								qrating.setYesCount((Long)row[2]);
 							}else {
 								qrating.setNoCount((Long)row[2]);
