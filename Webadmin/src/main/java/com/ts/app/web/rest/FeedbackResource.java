@@ -112,6 +112,7 @@ public class FeedbackResource {
     public SearchResult<FeedbackMappingDTO> searchFeedbackMapping(@RequestBody SearchCriteria searchCriteria) {
         SearchResult<FeedbackMappingDTO> result = null;
         if(searchCriteria != null) {
+        		searchCriteria.setUserId(SecurityUtils.getCurrentUserId());
             result = feedbackService.findMappingBySearchCrieria(searchCriteria);
         }
         return result;
