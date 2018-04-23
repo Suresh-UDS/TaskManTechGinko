@@ -124,6 +124,8 @@ public class SearchCriteria extends Paginator {
 	private String jobTypeName;
 	
 	private String ticketStatus;
+	
+	private boolean admin;
 
 	public long getId() {
 		return id;
@@ -666,6 +668,14 @@ public class SearchCriteria extends Paginator {
 
 	public void setTicketStatus(String ticketStatus) {
 		this.ticketStatus = ticketStatus;
+	}
+
+	public boolean isAdmin() {
+		return admin;
+	}
+
+	public void setAdmin(boolean admin) {
+		this.admin = admin;
 	}
     
     

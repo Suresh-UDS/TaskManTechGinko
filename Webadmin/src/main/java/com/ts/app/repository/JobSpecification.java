@@ -61,7 +61,7 @@ public class JobSpecification implements Specification<Job> {
             	predicates.add(builder.equal(root.get("scheduled"),  searchCriteria.isScheduled()));
             }
 
-            if(searchCriteria.getEmployeeId()!=0){
+            if(searchCriteria.getEmployeeId()!=0 && !searchCriteria.isAdmin()){
         			predicates.add(builder.equal(root.get("employee").get("id"),  searchCriteria.getEmployeeId()));
         		}
 
@@ -101,18 +101,20 @@ public class JobSpecification implements Specification<Job> {
             List<Predicate> orPredicates = new ArrayList<>();
             log.debug("JobSpecification toPredicate - searchCriteria userId -"+ searchCriteria.getUserId());
             //if(isAdmin){
-	            if(searchCriteria.getSiteId() == 0){
-	            	orPredicates.add(builder.equal(root.get("employee").get("user").get("id"),  searchCriteria.getUserId()));
+	            if(searchCriteria.getSiteId() == 0 && !searchCriteria.isAdmin()){
+	            		orPredicates.add(builder.equal(root.get("employee").get("user").get("id"),  searchCriteria.getUserId()));
 	            }else if(searchCriteria.getSiteId() > 0) {
-	            	orPredicates.add(builder.equal(root.get("employee").get("user").get("id"),  searchCriteria.getUserId()));
+	            		if(!searchCriteria.isAdmin()) {
+	            			orPredicates.add(builder.equal(root.get("employee").get("user").get("id"),  searchCriteria.getUserId()));
+	            		}
 	                if(CollectionUtils.isNotEmpty(searchCriteria.getSubordinateIds())){
-	                	orPredicates.add(root.get("employee").get("id").in(searchCriteria.getSubordinateIds()));
+	                		orPredicates.add(root.get("employee").get("id").in(searchCriteria.getSubordinateIds()));
 	                }
 	            }
             //}
 	        log.debug("JobSpecification toPredicate - searchCriteria subordinateIds -"+ searchCriteria.getSubordinateIds());
             if(searchCriteria.getSiteId() == 0 && CollectionUtils.isNotEmpty(searchCriteria.getSubordinateIds())){
-            	orPredicates.add(root.get("employee").get("id").in(searchCriteria.getSubordinateIds()));
+            		orPredicates.add(root.get("employee").get("id").in(searchCriteria.getSubordinateIds()));
             }
             Predicate finalExp = null;
             if(orPredicates.size() > 0) {

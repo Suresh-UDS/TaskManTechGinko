@@ -176,12 +176,13 @@ public class JobManagementService extends AbstractService {
 		if(searchCriteria != null) {
 			log.debug("findBYSearchCriteria search criteria -"+ (searchCriteria.getJobStatus() != null && searchCriteria.getJobStatus().equals(JobStatus.OVERDUE)));
 
-			Employee employee = employeeRepository.findByUserId(searchCriteria.getUserId());
+			User user = userRepository.findOne(searchCriteria.getUserId());
+			Employee employee = user.getEmployee();
 
 			//log.debug(""+employee.getEmpId());
 
 			List<Long> subEmpIds = new ArrayList<Long>();
-			if(employee != null) {
+			if(employee != null && !user.isAdmin()) {
 				searchCriteria.setDesignation(employee.getDesignation());
 				Hibernate.initialize(employee.getSubOrdinates());
 				/*
@@ -200,6 +201,8 @@ public class JobManagementService extends AbstractService {
 					subEmpIds.add(employee.getId());
 				}
 				searchCriteria.setSubordinateIds(subEmpIds);
+			}else if(user.isAdmin()){
+				searchCriteria.setAdmin(true);
 			}
 			log.debug("SearchCriteria ="+ searchCriteria);
 
@@ -658,13 +661,12 @@ public class JobManagementService extends AbstractService {
 			ticket.setStatus(TicketStatus.ASSIGNED.toValue());
 			ticketRepository.save(ticket);
 		}
-		job = jobRepository.save(job);
+		job = jobRepository.saveAndFlush(job);
 
-		if(job.getTicket()!=null){
-		    Ticket ticket = job.getTicket();
-		    TicketDTO ticketDTO= mapperUtil.toModel(ticket,TicketDTO.class);
-		    ticketDTO.setJobId(job.getId());
-		    ticketManagementService.updateTicket(ticketDTO);
+		if(jobDTO.getTicketId() > 0) {
+			Ticket ticket = ticketRepository.findOne(jobDTO.getTicketId());
+			ticket.setJob(job);
+			ticketRepository.saveAndFlush(ticket);
         }
 
 
@@ -750,7 +752,7 @@ public class JobManagementService extends AbstractService {
 		job.setEmployee(employee);
 		job.setComments(jobDTO.getComments());
 		job.setPlannedStartTime(jobDTO.getPlannedStartTime());
-		if(jobDTO.getPlannedEndTime() != null) {
+		if(jobDTO.getPlannedEndTime() == null) {
 			Calendar endTimeCal = Calendar.getInstance();
 			endTimeCal.setTime(jobDTO.getPlannedStartTime());
 			endTimeCal.add(Calendar.HOUR_OF_DAY, jobDTO.getPlannedHours());

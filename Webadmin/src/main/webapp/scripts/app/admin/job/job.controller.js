@@ -57,9 +57,10 @@ angular.module('timeSheetApp')
         };
         
         
-        $('#dateFilterFrom').on('dp.change', function(e){
+        $('input#dateFilterFrom').on('dp.change', function(e){
             
         		$scope.job.plannedStartTime = e.date._d;
+        		console.log('job start time - ' + $scope.job.plannedStartTime);
         });
 
         $('input#selectedJobDate').on('dp.change', function(e){
@@ -333,6 +334,7 @@ angular.module('timeSheetApp')
 	        		$scope.job.zone = $scope.selectedZone;
 	        	}
 	        	// $scope.job.jobStatus = $scope.selectedStatus.name;
+	        	console.log('job details to save - ' + JSON.stringify($scope.job));
 	        	var post = $scope.isEdit ? JobComponent.update : JobComponent.create
 	        	post($scope.job).then(function () {
 	                $scope.success = 'OK';
