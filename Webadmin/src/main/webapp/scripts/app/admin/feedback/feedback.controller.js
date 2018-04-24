@@ -3,6 +3,7 @@
 angular.module('timeSheetApp')
     .controller('FeedbackController', function ($rootScope, $scope, $state, $timeout, ProjectComponent, SiteComponent, LocationComponent,FeedbackComponent, $http,$stateParams,$location,$interval) {
         $rootScope.loginView = false;
+        $scope.averageRating ='0';
         $scope.readOnly = true;
         $scope.colors = ['#45b7cd', '#ff6384', '#ff8e72'];
         $scope.labels = [];
@@ -226,6 +227,8 @@ angular.module('timeSheetApp')
             		$scope.feedbackReport = data;
             		$scope.feedbackListLoader = true;
             		console.log('feedback report - ' + JSON.stringify($scope.feedbackReport));
+                    $scope.averageRating = $scope.feedbackReport.overallRating;
+                    
 //                $scope.pages.currPage = data.currPage;
 //                $scope.pages.totalPages = data.totalPages;
 //                $scope.loading = false;
@@ -418,4 +421,22 @@ angular.module('timeSheetApp')
             $("#loadPage").animate({scrollTop: 0}, 2000);
         }
 
-    })
+    });
+
+/*.controller("RatingCtrl", function($scope) {
+  $scope.user1 = {rating:5};
+  $scope.user2 = {rating:2};
+  $scope.user3 = {rating:1};  
+  $scope.averageRating = 0;
+  
+  $scope.$watch(function(){return $scope.user1.rating + $scope.user2.rating + $scope.user3.rating;}, function(oldVal, newVal) {
+        if (newVal) { updateAverageRating(); }
+  });
+    
+  function updateAverageRating(){ $scope.averageRating = ($scope.user1.rating + $scope.user2.rating + $scope.user3.rating) / 3; }
+  
+  $scope.isReadonly = true;
+  $scope.rateFunction = function(rating) {
+    console.log("Rating selected: " + rating);
+  };
+})*/
