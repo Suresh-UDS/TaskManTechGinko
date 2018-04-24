@@ -126,7 +126,20 @@ public class LocationService extends AbstractService {
 	public SearchResult<LocationDTO> findBySearchCrieria(SearchCriteria searchCriteria) {
 		SearchResult<LocationDTO> result = new SearchResult<LocationDTO>();
 		if(searchCriteria != null) {
+
+		    //----
             Pageable pageRequest = null;
+            if(!StringUtils.isEmpty(searchCriteria.getColumnName())){
+                Sort sort = new Sort(searchCriteria.isSortByAsc() ? Sort.Direction.ASC : Sort.Direction.DESC, searchCriteria.getColumnName());
+                log.debug("Sorting object" +sort);
+                pageRequest = createPageSort(searchCriteria.getCurrPage(), searchCriteria.getSort(), sort);
+
+            }else{
+                pageRequest = createPageRequest(searchCriteria.getCurrPage());
+            }
+
+
+            //Pageable pageRequest = null;
             if(!StringUtils.isEmpty(searchCriteria.getColumnName())){
                 Sort sort = new Sort(searchCriteria.isSortByAsc() ? Sort.Direction.ASC : Sort.Direction.DESC, searchCriteria.getColumnName());
                 log.debug("Sorting object" +sort);
