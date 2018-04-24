@@ -176,6 +176,10 @@ public class JobManagementService extends AbstractService {
 		if(searchCriteria != null) {
 			log.debug("findBYSearchCriteria search criteria -"+ (searchCriteria.getJobStatus() != null && searchCriteria.getJobStatus().equals(JobStatus.OVERDUE)));
 
+			//-----
+
+
+
 			User user = userRepository.findOne(searchCriteria.getUserId());
 			Employee employee = user.getEmployee();
 
