@@ -126,6 +126,8 @@ public class SearchCriteria extends Paginator {
 	private String ticketStatus;
 	
 	private boolean admin;
+	
+	private boolean list;
 
 	public long getId() {
 		return id;
@@ -676,6 +678,14 @@ public class SearchCriteria extends Paginator {
 
 	public void setAdmin(boolean admin) {
 		this.admin = admin;
+	}
+
+	public boolean isList() {
+		return list;
+	}
+
+	public void setList(boolean list) {
+		this.list = list;
 	}
     
     

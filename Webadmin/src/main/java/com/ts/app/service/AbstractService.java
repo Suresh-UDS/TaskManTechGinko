@@ -11,7 +11,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.data.domain.Sort.Direction;
 
 import com.ts.app.domain.Employee;
 import com.ts.app.service.util.PagingUtil;
@@ -28,6 +27,18 @@ public abstract class AbstractService {
         return createPageRequest(page, PagingUtil.PAGE_SIZE); 
     }
 	
+	protected Pageable createPageRequest(int page, boolean isAll) {
+		if(page == 0) {
+			page = 1;
+		}
+		page -= 1;
+		if(isAll) {
+	        return createPageRequest(page, Integer.MAX_VALUE); 
+		}else {
+			return createPageRequest(page, PagingUtil.PAGE_SIZE);
+		}
+    }
+
 	protected Pageable createPageRequest(int page, int pageSize) {
 		if(page == 0) {
 			page = 1;
