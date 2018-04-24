@@ -50,7 +50,8 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Query("SELECT u FROM User u WHERE u.login like '%' || :userLogin || '%' or u.firstName like '%' || :userFirstName || '%' or u.lastName like '%' || :userLastName || '%' or u.email like '%' || :userEmail || '%' or u.userRole.id = :userRoleId")
     Page<User> findByLoginOrFirsNameOrLastNameOrRole(@Param("userLogin") String userLogin,@Param("userFirstName") String userFirstName,@Param("userLastName") String userLastName,@Param("userEmail") String email,@Param("userRoleId") long userRoleId, Pageable pageRequest);
 
-	/*@Query("SELECT u FROM User u WHERE u.login like '%' || :userLogin || '%' or u.firstName like '%' || :userFirstName || '%' or u.lastName like '%' || :userLastName || '%' or u.email like '%' || :userEmail || '%' or u.userRole.id = :userRoleId order by u.id")
+
+    /*@Query("SELECT u FROM User u WHERE u.login like '%' || :userLogin || '%' or u.firstName like '%' || :userFirstName || '%' or u.lastName like '%' || :userLastName || '%' or u.email like '%' || :userEmail || '%' or u.userRole.id = :userRoleId order by u.id")
 	Page<User> findByLoginOrFirsNameOrLastNameOrRole(@Param("userLogin") String userLogin,@Param("userFirstName") String userFirstName,@Param("userLastName") String userLastName,@Param("userEmail") String email,@Param("userRoleId") long userRoleId, Pageable pageRequest);*/
 
 
