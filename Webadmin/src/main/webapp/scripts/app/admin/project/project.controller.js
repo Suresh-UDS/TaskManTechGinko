@@ -159,6 +159,42 @@ angular.module('timeSheetApp')
             that.calendar[cmp] = true;
         };
 
+
+        //--------
+        $scope.pageSizes = [{
+            value: 10
+        }, {
+            value: 15
+        }, {
+            value: 20
+        }];
+
+        $scope.sort = $scope.pageSizes[0];
+        $scope.pageSort = $scope.pageSizes[0].value;
+
+        $scope.hasChanged = function(){
+            alert($scope.sort.value)
+            $scope.pageSort = $scope.sort.value;
+            $scope.search();
+        }
+
+        $scope.columnAscOrder = function(field){
+            $scope.selectedColumn = field;
+            $scope.isAscOrder = true;
+            $scope.search();
+        }
+
+        $scope.columnDescOrder = function(field){
+            $scope.selectedColumn = field;
+            $scope.isAscOrder = false;
+            $scope.search();
+        }
+
+
+
+
+
+
         $scope.search = function () {
         	var currPageVal = ($scope.pages ? $scope.pages.currPage : 1);
         	if(!$scope.searchCriteria) {
@@ -196,13 +232,28 @@ angular.module('timeSheetApp')
 
         	}
         	console.log($scope.searchCriteria);
-        	ProjectComponent.search($scope.searchCriteria).then(function (data) {
+
+        	//------
+            if($scope.pageSort){
+                $scope.searchCriteria.sort = $scope.pageSort;
+            }
+
+            if($scope.selectedColumn){
+
+                $scope.searchCriteria.columnName = $scope.selectedColumn;
+                $scope.searchCriteria.sortByAsc = $scope.isAscOrder;
+
+            }
+
+
+
+            ProjectComponent.search($scope.searchCriteria).then(function (data) {
                 $scope.projects = data.transactions;
                 $scope.projectsLoader = true;
                 console.log($scope.projects);
                 $scope.pages.currPage = data.currPage;
                 $scope.pages.totalPages = data.totalPages;
-                
+
                 $scope.numberArrays = [];
                 var startPage = 1;
                 if(($scope.pages.totalPages - $scope.pages.currPage) >= 10) {
@@ -233,8 +284,8 @@ angular.module('timeSheetApp')
                     	$scope.pageEndIntex = $scope.totalCountPages;
                     }
                 }
-                
-                
+
+
                 if($scope.projects == null){
                     $scope.pages.startInd = 0;
                 }else{
@@ -344,8 +395,8 @@ angular.module('timeSheetApp')
         };
 
         //init load
-        $scope.initLoad = function(){ 
-             $scope.loadPageTop(); 
+        $scope.initLoad = function(){
+             $scope.loadPageTop();
              $scope.loadProjects();
          }
 

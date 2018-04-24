@@ -59,12 +59,42 @@
 
                             <thead>
                             <tr>
-                                <th>ID</th>
-                                <th>Name</th>
-                                <th>Address</th>
-                                <th>Contact Person</th>
-                                <th>Phone</th>
-                                <th>Email</th>
+                                <th>ID<a href="#">
+
+                                    <span ng-click="columnAscOrder('id')"  class=""><i class="fa fa-caret-up"></i></span>
+                                    <span ng-click="columnDescOrder('id')" class=""><i class="fa fa-caret-down"></i></span>
+
+                                </a></th>
+                                <th>Name<a href="#">
+
+                                    <span ng-click="columnAscOrder('name')"  class=""><i class="fa fa-caret-up"></i></span>
+                                    <span ng-click="columnDescOrder('name')" class=""><i class="fa fa-caret-down"></i></span>
+
+                                </a></th>
+                                <th>Address<a href="#">
+
+                                    <span ng-click="columnAscOrder('address')"  class=""><i class="fa fa-caret-up"></i></span>
+                                    <span ng-click="columnDescOrder('address')" class=""><i class="fa fa-caret-down"></i></span>
+
+                                </a></th>
+                                <th>Contact Person<a href="#">
+
+                                    <span ng-click="columnAscOrder('contactFirstName')"  class=""><i class="fa fa-caret-up"></i></span>
+                                    <span ng-click="columnDescOrder('contactFirstName')" class=""><i class="fa fa-caret-down"></i></span>
+
+                                </a></th>
+                                <th>Phone<a href="#">
+
+                                    <span ng-click="columnAscOrder('phone')"  class=""><i class="fa fa-caret-up"></i></span>
+                                    <span ng-click="columnDescOrder('phone')" class=""><i class="fa fa-caret-down"></i></span>
+
+                                </a></th>
+                                <th>Email<a href="#">
+
+                                    <span ng-click="columnAscOrder('email')"  class=""><i class="fa fa-caret-up"></i></span>
+                                    <span ng-click="columnDescOrder('email')" class=""><i class="fa fa-caret-down"></i></span>
+
+                                </a></th>
                                 <th class="disabled-sorting text-right">Actions</th>
                             </tr>
                             </thead>
