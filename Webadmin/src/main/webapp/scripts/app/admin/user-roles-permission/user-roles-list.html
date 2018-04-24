@@ -101,12 +101,37 @@
                         <table class="table table-striped">
                             <thead>
                             <tr>
-                                <th>Role ID</th>
-                                <th>Role Name</th>
-                                <th>Role Description</th>
-                                <th>Role Level</th>
+                                <th>Role ID<a href="#">
+
+                                    <span ng-click="columnAscOrder('id')"  class=""><i class="fa fa-caret-up"></i></span>
+                                    <span ng-click="columnDescOrder('id')" class=""><i class="fa fa-caret-down"></i></span>
+
+                                </a></th>
+                                <th>Role Name<a href="#">
+
+                                    <span ng-click="columnAscOrder('name')"  class=""><i class="fa fa-caret-up"></i></span>
+                                    <span ng-click="columnDescOrder('name')" class=""><i class="fa fa-caret-down"></i></span>
+
+                                </a></th>
+                                <th>Role Description<a href="#">
+
+                                    <span ng-click="columnAscOrder('description')"  class=""><i class="fa fa-caret-up"></i></span>
+                                    <span ng-click="columnDescOrder('description')" class=""><i class="fa fa-caret-down"></i></span>
+
+                                </a></th>
+                                <th>Role Level<a href="#">
+
+                                    <span ng-click="columnAscOrder('roleLevel')"  class=""><i class="fa fa-caret-up"></i></span>
+                                    <span ng-click="columnDescOrder('roleLevel')" class=""><i class="fa fa-caret-down"></i></span>
+
+                                </a></th>
                                 <th>Active</th>
-                                <th>Created Date</th>
+                                <th>Created Date<a href="#">
+
+                                    <span ng-click="columnAscOrder('createdDate')"  class=""><i class="fa fa-caret-up"></i></span>
+                                    <span ng-click="columnDescOrder('createdDate')" class=""><i class="fa fa-caret-down"></i></span>
+
+                                </a></th>
                                 <th class="disabled-sorting text-right">Actions</th>
                             </tr>
                             </thead>
