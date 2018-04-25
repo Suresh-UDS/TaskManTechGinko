@@ -107,7 +107,10 @@ reports:
     attendance-report:
         url: https://taskmanadmin.uds.in/#/attendance-reports
         #url: http://ec2-13-127-100-174.ap-south-1.compute.amazonaws.com:8088/#/attendance-reports
-        
+    feedback-report:
+        url: https://taskmanadmin.uds.in/#/feedbacks        
+    ticket-report:
+        url: https://taskmanadmin.uds.in/#/ticket-reports
 facedetection:
     api:
         url: https://api.kairos.com/detect

@@ -48,6 +48,8 @@ public class TicketDTO extends BaseDTO {
     private Date closedOn;
     
     private String comments;
+    
+    private String category;
 
 
     public long getId() {
@@ -233,6 +235,13 @@ public class TicketDTO extends BaseDTO {
 	public void setComments(String comments) {
 		this.comments = comments;
 	}
-    
+
+	public String getCategory() {
+		return category;
+	}
+
+	public void setCategory(String category) {
+		this.category = category;
+	}
     
 }

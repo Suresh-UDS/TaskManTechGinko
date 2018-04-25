@@ -120,6 +120,14 @@ public class SearchCriteria extends Paginator {
 	private double lng;
 	
 	private boolean report;
+	
+	private String jobTypeName;
+	
+	private String ticketStatus;
+	
+	private boolean admin;
+	
+	private boolean list;
 
 	public long getId() {
 		return id;
@@ -342,7 +350,7 @@ public class SearchCriteria extends Paginator {
 	public void setOverdueStatus(boolean overdueStatus) {
 		this.overdueStatus = overdueStatus;
 	}
-
+	
 	/*public String toString() {
 		StringBuilder sb = new StringBuilder();
 		sb.append("userId="+ userId);
@@ -350,7 +358,15 @@ public class SearchCriteria extends Paginator {
 		return sb.toString();
 	}*/
 
-    @Override
+    public String getJobTypeName() {
+		return jobTypeName;
+	}
+
+	public void setJobTypeName(String jobTypeName) {
+		this.jobTypeName = jobTypeName;
+	}
+
+	@Override
     public String toString() {
         final StringBuilder sb = new StringBuilder("SearchCriteria{");
         sb.append("id=").append(id);
@@ -646,6 +662,30 @@ public class SearchCriteria extends Paginator {
 
 	public void setReport(boolean report) {
 		this.report = report;
+	}
+
+	public String getTicketStatus() {
+		return ticketStatus;
+	}
+
+	public void setTicketStatus(String ticketStatus) {
+		this.ticketStatus = ticketStatus;
+	}
+
+	public boolean isAdmin() {
+		return admin;
+	}
+
+	public void setAdmin(boolean admin) {
+		this.admin = admin;
+	}
+
+	public boolean isList() {
+		return list;
+	}
+
+	public void setList(boolean list) {
+		this.list = list;
 	}
     
     

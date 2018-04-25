@@ -158,15 +158,20 @@
                             <div class="row">
 
                                 <div class="col-md-6">
-                                    <h3>Overall rating  </h3>
+                                    <h3>Overall rating ({{averageRating}})</h3>
                                 </div>
                                 <div class="col-md-6">
                                     <!-- USE COMPONENT HERE-->
 
-                                    <div class="RatingCon">
+                                    <!-- <div class="RatingCon"> -->
+                                    <div class="average">
 
-                                        <jk-rating-stars max-rating="5" rating="feedbackReport.overallRating" read-only="readOnly" >
-                                        </jk-rating-stars>
+                                        <!-- <jk-rating-stars max-rating="5" rating="feedbackReport.overallRating" read-only="readOnly" >
+                                        </jk-rating-stars> -->
+
+                                        <average-star-rating ng-model="averageRating" max="5"><average-star-rating> 
+
+                                        
 
                                     </div>
 
@@ -196,7 +201,7 @@
 
                             <h3>Weekly Feedbacks</h3>
 
-                            <canvas id="line" class="chart chart-line" chart-data="data"
+                            <canvas id="line" class="chart chart-bar" chart-data="data"
                                     chart-labels="labels" chart-series="series" chart-options="options"
                                     chart-dataset-override="datasetOverride" chart-colors="colors" chart-click="onClick">
                             </canvas>
@@ -245,7 +250,14 @@
                                 <td>{{questionRating.question}}</td>
                                 <td>{{questionRating.yesCount}}</td>
                                 <td>{{questionRating.noCount}}</td>
-                                <td>{{questionRating.rating}}</td>
+                                <td>
+	                                <div ng-repeat ="(key, value) in questionRating.rating">
+								       <jk-rating-stars max-rating="5" rating="key" read-only="readOnly" >
+                                        </jk-rating-stars>
+                                        {{value}}
+                                        
+								    </div>
+							    </td>
                             </tr>
                             </thead>
                             <tbody>

@@ -12,11 +12,13 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.jpa.domain.Specification;
 
 import com.ts.app.domain.Job;
+import com.ts.app.domain.JobType;
 import com.ts.app.service.util.DateUtil;
 import com.ts.app.web.rest.dto.SearchCriteria;
 
@@ -59,10 +61,13 @@ public class JobSpecification implements Specification<Job> {
             	predicates.add(builder.equal(root.get("scheduled"),  searchCriteria.isScheduled()));
             }
 
-            if(searchCriteria.getEmployeeId()!=0){
-        		predicates.add(builder.equal(root.get("employee").get("id"),  searchCriteria.getEmployeeId()));
-        	}
+            if(searchCriteria.getEmployeeId()!=0 && !searchCriteria.isAdmin()){
+        			predicates.add(builder.equal(root.get("employee").get("id"),  searchCriteria.getEmployeeId()));
+        		}
 
+            if(StringUtils.isNotEmpty(searchCriteria.getJobTypeName())){
+        			predicates.add(builder.equal(root.get("type"),  JobType.valueOf(searchCriteria.getJobTypeName())));
+        		}
 
             if(searchCriteria.getCheckInDateTimeFrom() != null){
 	            	if(root.get("plannedStartTime") != null) {
@@ -96,18 +101,20 @@ public class JobSpecification implements Specification<Job> {
             List<Predicate> orPredicates = new ArrayList<>();
             log.debug("JobSpecification toPredicate - searchCriteria userId -"+ searchCriteria.getUserId());
             //if(isAdmin){
-	            if(searchCriteria.getSiteId() == 0){
-	            	orPredicates.add(builder.equal(root.get("employee").get("user").get("id"),  searchCriteria.getUserId()));
+	            if(searchCriteria.getSiteId() == 0 && !searchCriteria.isAdmin()){
+	            		orPredicates.add(builder.equal(root.get("employee").get("user").get("id"),  searchCriteria.getUserId()));
 	            }else if(searchCriteria.getSiteId() > 0) {
-	            	orPredicates.add(builder.equal(root.get("employee").get("user").get("id"),  searchCriteria.getUserId()));
+	            		if(!searchCriteria.isAdmin()) {
+	            			orPredicates.add(builder.equal(root.get("employee").get("user").get("id"),  searchCriteria.getUserId()));
+	            		}
 	                if(CollectionUtils.isNotEmpty(searchCriteria.getSubordinateIds())){
-	                	orPredicates.add(root.get("employee").get("id").in(searchCriteria.getSubordinateIds()));
+	                		orPredicates.add(root.get("employee").get("id").in(searchCriteria.getSubordinateIds()));
 	                }
 	            }
             //}
 	        log.debug("JobSpecification toPredicate - searchCriteria subordinateIds -"+ searchCriteria.getSubordinateIds());
             if(searchCriteria.getSiteId() == 0 && CollectionUtils.isNotEmpty(searchCriteria.getSubordinateIds())){
-            	orPredicates.add(root.get("employee").get("id").in(searchCriteria.getSubordinateIds()));
+            		orPredicates.add(root.get("employee").get("id").in(searchCriteria.getSubordinateIds()));
             }
             Predicate finalExp = null;
             if(orPredicates.size() > 0) {

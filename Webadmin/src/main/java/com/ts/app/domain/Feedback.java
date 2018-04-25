@@ -1,6 +1,7 @@
 package com.ts.app.domain;
 
 import java.io.Serializable;
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.Cacheable;
@@ -44,7 +45,7 @@ public class Feedback extends AbstractAuditingEntity implements Serializable {
     private Project project;
 
     @OneToMany(mappedBy = "feedback", cascade = {CascadeType.ALL}, orphanRemoval = true)
-    private Set<FeedbackQuestion> questions;
+    private List<FeedbackQuestion> questions;
 
     @Column(name = "displayType")
     private String displayType;
@@ -65,11 +66,11 @@ public class Feedback extends AbstractAuditingEntity implements Serializable {
         this.name = name;
     }
 
-    public Set<FeedbackQuestion> getQuestions() {
+    public List<FeedbackQuestion> getQuestions() {
         return questions;
     }
 
-    public void setQuestions(Set<FeedbackQuestion> questions) {
+    public void setQuestions(List<FeedbackQuestion> questions) {
         this.questions = questions;
     }
 

@@ -5,6 +5,11 @@ import java.util.List;
 
 public class FeedbackReportResult implements Serializable {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	long projectId;
 	
 	String projectName;

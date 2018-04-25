@@ -24,15 +24,28 @@ public abstract class AbstractService {
 			page = 1;
 		}
 		page -= 1;
-        return new PageRequest(page, PagingUtil.PAGE_SIZE); 
+        return createPageRequest(page, PagingUtil.PAGE_SIZE); 
     }
 	
+	protected Pageable createPageRequest(int page, boolean isAll) {
+		if(page == 0) {
+			page = 1;
+		}
+		page -= 1;
+		if(isAll) {
+	        return createPageRequest(page, Integer.MAX_VALUE); 
+		}else {
+			return createPageRequest(page, PagingUtil.PAGE_SIZE);
+		}
+    }
+
 	protected Pageable createPageRequest(int page, int pageSize) {
 		if(page == 0) {
 			page = 1;
 		}
 		page -= 1;
-        return new PageRequest(page, pageSize); 
+		Sort s = new Sort(Sort.Direction.DESC, "createdDate");
+        return createPageSort(page, pageSize, s); 
     }
 	
 	public Pageable createPageSort(int page, int pageSize, Sort s) {

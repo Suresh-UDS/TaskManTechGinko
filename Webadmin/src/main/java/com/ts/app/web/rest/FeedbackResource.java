@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.codahale.metrics.annotation.Timed;
+import com.ts.app.security.SecurityUtils;
 import com.ts.app.service.FeedbackService;
 import com.ts.app.service.FeedbackTransactionService;
 import com.ts.app.web.rest.dto.FeedbackDTO;
@@ -75,6 +76,7 @@ public class FeedbackResource {
     public SearchResult<FeedbackDTO> searchFeedbackQuestions(@RequestBody SearchCriteria searchCriteria) {
         SearchResult<FeedbackDTO> result = null;
         if(searchCriteria != null) {
+        		searchCriteria.setUserId(SecurityUtils.getCurrentUserId());
             result = feedbackService.findBySearchCrieria(searchCriteria);
         }
         return result;
@@ -110,6 +112,7 @@ public class FeedbackResource {
     public SearchResult<FeedbackMappingDTO> searchFeedbackMapping(@RequestBody SearchCriteria searchCriteria) {
         SearchResult<FeedbackMappingDTO> result = null;
         if(searchCriteria != null) {
+        		searchCriteria.setUserId(SecurityUtils.getCurrentUserId());
             result = feedbackService.findMappingBySearchCrieria(searchCriteria);
         }
         return result;
@@ -122,6 +125,7 @@ public class FeedbackResource {
         log.info("Inside the save feedback -" + feedbackTransactionDTO.getName());
         FeedbackTransactionDTO createdFeedback = null;
         try {
+        		feedbackTransactionDTO.setUserId(SecurityUtils.getCurrentUserId());
             createdFeedback  = feedbackTransactionService.saveFeebdackInformation(feedbackTransactionDTO);
         }catch (Exception e) {
             String msg = "Error while creating feedback, please check the information";

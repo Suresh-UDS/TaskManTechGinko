@@ -352,8 +352,8 @@ public class Job extends AbstractAuditingEntity implements Serializable{
 		sb.append("description :" + description + StringUtil.SPACE);
 		sb.append("planned start time :" + plannedStartTime + StringUtil.SPACE);
 		sb.append("comments :" + comments + StringUtil.SPACE);
-		sb.append("siteId :" + site.getId() + StringUtil.SPACE);
-		sb.append("siteName :" + site.getName() + StringUtil.SPACE);
+		//sb.append("siteId :" + site.getId() + StringUtil.SPACE);
+		//sb.append("siteName :" + site.getName() + StringUtil.SPACE);
 		//sb.append("employeeId :" + employee.getId() + StringUtil.SPACE);
 		//sb.append("employeeName :" + employee.getName() + StringUtil.SPACE);
 		sb.append("jobStatus :" + status + StringUtil.SPACE);

@@ -1,5 +1,7 @@
 package com.ts.app.repository;
 
+import java.util.List;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -26,5 +28,8 @@ public interface FeedbackMappingRepository extends JpaRepository<FeedbackMapping
 	
 	@Query("SELECT ft FROM FeedbackMapping ft WHERE ft.site.id = :siteId")
 	FeedbackMapping findSiteByLocation(@Param("siteId") long siteId);
+
+	@Query("SELECT ft FROM FeedbackMapping ft WHERE ft.site.id in (:siteIds)")
+	Page<FeedbackMapping> findBySites(@Param("siteIds") List<Long> siteIds, Pageable pageRequest);
 
 }

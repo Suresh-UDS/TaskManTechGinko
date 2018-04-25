@@ -185,7 +185,29 @@
                             </div>
 
                         </div>
+						<div class="row">
 
+                            <div class="col-md-4">
+
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">Ticket Details</div>
+                                    <div class="panel-body">
+
+
+                                        <div class="table-responsive">
+                                            <table class="table">
+                                                <tbody>
+                                                <tr>
+                                                    <td>Ticket Id</td>
+                                                    <td><a ng-if="(job.ticketId > 0)" ng-class="{active: $state.includes('admin')}" ui-sref="view-ticket({id : job.ticketId})"  ng-click=""  onClick="" data-target="#myModal"  class="btn btn-simple btn-info">View Ticket</a></td>
+                                                </tr>
+                                                </tbody>
+                                            </table>
+                                         </div>
+                                    </div>
+                                </div>
+                             </div>
+                        </div>                        
                         <div class="row">
                             <div class="col-md-12" ng-show="job.images.length>0">
                                 <div class="panel panel-default">

@@ -1068,4 +1068,24 @@ button.btn.btn-outline {
   .navbar .navbar-brand{
     line-height: 43px !important;
   }
+  .pad0px
+  {
+    padding:0px !important;
+  }
+  .mar0px
+  {
+    margin:0px !important;
+  }
+  .mar10px{
+   margin-top:10px !important;
+  }
+  .jobType{
+    border: none;
+    border-bottom:1px solid #ddd;
+    margin-bottom:0px;
+  }
+  .jobType ul li a {
+    line-height: 15px;
+    min-width: 80px;
+  }
 

@@ -176,12 +176,17 @@ public class JobManagementService extends AbstractService {
 		if(searchCriteria != null) {
 			log.debug("findBYSearchCriteria search criteria -"+ (searchCriteria.getJobStatus() != null && searchCriteria.getJobStatus().equals(JobStatus.OVERDUE)));
 
-			Employee employee = employeeRepository.findByUserId(searchCriteria.getUserId());
+			//-----
+
+
+
+			User user = userRepository.findOne(searchCriteria.getUserId());
+			Employee employee = user.getEmployee();
 
 			//log.debug(""+employee.getEmpId());
 
 			List<Long> subEmpIds = new ArrayList<Long>();
-			if(employee != null) {
+			if(employee != null && !user.isAdmin()) {
 				searchCriteria.setDesignation(employee.getDesignation());
 				Hibernate.initialize(employee.getSubOrdinates());
 				/*
@@ -200,6 +205,8 @@ public class JobManagementService extends AbstractService {
 					subEmpIds.add(employee.getId());
 				}
 				searchCriteria.setSubordinateIds(subEmpIds);
+			}else if(user.isAdmin()){
+				searchCriteria.setAdmin(true);
 			}
 			log.debug("SearchCriteria ="+ searchCriteria);
 
@@ -306,6 +313,8 @@ public class JobManagementService extends AbstractService {
 		            			page = jobRepository.findByStartDateAndSite(searchCriteria.getSiteId(), fromDt, toDt, pageRequest);
 		            		}else if(searchCriteria.getSiteId() == 0 && searchCriteria.getEmployeeId() > 0) {
 		            			page = jobRepository.findByStartDateAndEmployee(searchCriteria.getEmployeeId(), fromDt, toDt, pageRequest);
+		            		}else if(searchCriteria.getSiteId() > 0 && !StringUtils.isEmpty(searchCriteria.getJobTypeName())) {
+		            			page = jobRepository.findByStartDateAndSiteAndJobType(searchCriteria.getSiteId(),  searchCriteria.getJobTypeName(), fromDt, toDt, pageRequest);
 		            		}else {
 			        			page = jobRepository.findAll(new JobSpecification(searchCriteria,isAdmin),pageRequest);
 		            		}
@@ -318,6 +327,8 @@ public class JobManagementService extends AbstractService {
 		            			page = jobRepository.findByStartDateAndSite(searchCriteria.getSiteId(), fromDt, toDt, pageRequest);
 		            		}else if(searchCriteria.getSiteId() == 0 && searchCriteria.getEmployeeId() > 0) {
 		            			page = jobRepository.findByStartDateAndEmployee(searchCriteria.getEmployeeId(), fromDt, toDt, pageRequest);
+		            		}else if(searchCriteria.getSiteId() > 0 && !StringUtils.isEmpty(searchCriteria.getJobTypeName())) {
+		            			page = jobRepository.findByStartDateAndSiteAndJobType(searchCriteria.getSiteId(),  searchCriteria.getJobTypeName(), fromDt, toDt, pageRequest);
 		            		}else {
 		            			page = jobRepository.findByDateRange(searchCriteria.getUserId(), subEmpIds, fromDt, toDt, pageRequest);
 		            		}
@@ -647,14 +658,20 @@ public class JobManagementService extends AbstractService {
 		//List<Job> existingJobs = jobRepository.findJobByTitleSiteAndDate(jobDTO.getTitle(), jobDTO.getSiteId(), startDate, endDate);
 		//log.debug("Existing job -"+ existingJobs);
 		//if(CollectionUtils.isEmpty(existingJobs)) {
-			job = jobRepository.save(job);
+		//if job is created against a ticket
+		if(jobDTO.getTicketId() > 0) {
+			Ticket ticket = ticketRepository.findOne(jobDTO.getTicketId());
+			job.setTicket(ticket);
+			ticket.setStatus(TicketStatus.ASSIGNED.toValue());
+			ticketRepository.save(ticket);
+		}
+		job = jobRepository.saveAndFlush(job);
 
-			if(job.getTicket()!=null){
-			    Ticket ticket = job.getTicket();
-			    TicketDTO ticketDTO= mapperUtil.toModel(ticket,TicketDTO.class);
-			    ticketDTO.setJobId(job.getId());
-			    ticketManagementService.updateTicket(ticketDTO);
-            }
+		if(jobDTO.getTicketId() > 0) {
+			Ticket ticket = ticketRepository.findOne(jobDTO.getTicketId());
+			ticket.setJob(job);
+			ticketRepository.saveAndFlush(ticket);
+        }
 
 
 		//}
@@ -739,10 +756,12 @@ public class JobManagementService extends AbstractService {
 		job.setEmployee(employee);
 		job.setComments(jobDTO.getComments());
 		job.setPlannedStartTime(jobDTO.getPlannedStartTime());
-		Calendar endTimeCal = Calendar.getInstance();
-		endTimeCal.setTime(jobDTO.getPlannedStartTime());
-		endTimeCal.add(Calendar.HOUR_OF_DAY, jobDTO.getPlannedHours());
-		job.setPlannedEndTime(endTimeCal.getTime());
+		if(jobDTO.getPlannedEndTime() == null) {
+			Calendar endTimeCal = Calendar.getInstance();
+			endTimeCal.setTime(jobDTO.getPlannedStartTime());
+			endTimeCal.add(Calendar.HOUR_OF_DAY, jobDTO.getPlannedHours());
+			job.setPlannedEndTime(endTimeCal.getTime());
+		}
 		job.setPlannedHours(jobDTO.getPlannedHours());
 
 		job.setActualStartTime(jobDTO.getActualStartTime());

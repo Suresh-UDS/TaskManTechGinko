@@ -1,6 +1,7 @@
 package com.ts.app.web.rest.dto;
 
 import java.io.Serializable;
+import java.util.Map;
 
 public class FeedbackQuestionRating implements Serializable {
 
@@ -10,7 +11,7 @@ public class FeedbackQuestionRating implements Serializable {
 
     private String question;
 
-    private double rating;
+    private Map<String, Long> rating;
     
     private long yesCount;
     
@@ -32,11 +33,11 @@ public class FeedbackQuestionRating implements Serializable {
         this.question = question;
     }
 
-	public double getRating() {
+	public Map<String, Long> getRating() {
 		return rating;
 	}
 
-	public void setRating(double rating) {
+	public void setRating(Map<String, Long> rating) {
 		this.rating = rating;
 	}
 

@@ -1,22 +1,21 @@
 package com.ts.app.service.util;
 
-import java.awt.image.BufferedImage;
-import java.io.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.nio.file.FileSystem;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.sql.Blob;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import javax.imageio.ImageIO;
 import javax.inject.Inject;
-import javax.swing.*;
 
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVPrinter;
@@ -29,7 +28,6 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.env.Environment;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
 import com.ts.app.domain.AbstractAuditingEntity;
@@ -42,6 +40,7 @@ import com.ts.app.web.rest.dto.EmployeeDTO;
 import com.ts.app.web.rest.dto.ExportResult;
 import com.ts.app.web.rest.dto.JobDTO;
 import com.ts.app.web.rest.dto.ReportResult;
+import com.ts.app.web.rest.dto.TicketDTO;
 
 @Component
 public class ExportUtil {
@@ -62,6 +61,7 @@ public class ExportUtil {
     private String[] EMP_HEADER = { "EMPLOYEE ID", "EMPLOYEE NAME", "DESIGNATION", "REPORTING TO", "CLIENT", "SITE", "ACTIVE"};
     private String[] JOB_HEADER = { "SITE", "TITLE", "EMPLOYEE", "TYPE", "PLANNED START TIME", "COMPLETED TIME", "STATUS"};
     private String[] ATTD_HEADER = {"EMPLOYEE ID", "EMPLOYEE NAME", "SITE", "CLIENT", "CHECK IN", "CHECK OUT","CHECK OUT IMAGE"};
+    private String[] TICKET_HEADER = { "SITE", "ISSUE", "STATUS", "CATEGORY", "SEVERITY", "INITIATOR", "INITIATED ON", "ASSIGNED TO", "ASSIGNED ON", "CLOSED BY", "CLOSED ON" };
 
 
 
@@ -1169,6 +1169,117 @@ public class ExportUtil {
                     xssfSheet.autoSizeColumn(i);
                 }
                 log.info(export_File_Name + " Excel file was created successfully !!!");
+                statusMap.put(export_File_Name, "COMPLETED");
+
+                FileOutputStream fileOutputStream = null;
+                try {
+                    fileOutputStream = new FileOutputStream(file_Path);
+                    xssfWorkbook.write(fileOutputStream);
+                    fileOutputStream.close();
+                } catch (IOException e) {
+                    log.error("Error while flushing/closing  !!!");
+                    statusMap.put(export_File_Name, "FAILED");
+                }
+            }
+        });
+
+        writer_Thread.start();
+
+        result.setEmpId(empId);
+        result.setFile(file_Name.substring(0, file_Name.indexOf('.')));
+        result.setStatus(getExportStatus(file_Name));
+        return result;
+    }
+    
+    public ExportResult writeTicketExcelReportToFile(List<TicketDTO> content, String empId, ExportResult result) {
+        boolean isAppend = (result != null);
+        log.debug("result = " + result + ", isAppend = " + isAppend);
+        if (result == null) {
+            result = new ExportResult();
+        }
+        String file_Name = null;
+        if(StringUtils.isEmpty(result.getFile())) {
+            if(StringUtils.isNotEmpty(empId)) {
+                file_Name = empId + System.currentTimeMillis() + ".xlsx";
+            }else {
+                file_Name = System.currentTimeMillis() + ".xlsx";
+            }
+        }	else {
+            file_Name = result.getFile() + ".xlsx";
+        }
+
+        if (statusMap.containsKey((file_Name))) {
+            String status = statusMap.get(file_Name);
+            //log.debug("Current status for filename -" + file_Name + ", status -" + status);
+        } else {
+            statusMap.put(file_Name, "PROCESSING");
+        }
+
+        final String export_File_Name = file_Name;
+        if (lock == null) {
+            lock = new Lock();
+        }
+        try {
+            lock.lock();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        Thread writer_Thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                String file_Path = env.getProperty("export.file.path");
+                FileSystem fileSystem = FileSystems.getDefault();
+                if (StringUtils.isNotEmpty(empId)) {
+                    file_Path += "/" + empId;
+                }
+                Path path = fileSystem.getPath(file_Path);
+                if (!Files.exists(path)) {
+                    Path newEmpPath = Paths.get(file_Path);
+                    try {
+                        Files.createDirectory(newEmpPath);
+                    } catch (IOException e) {
+                        log.error("Error While Creating Path " + newEmpPath);
+                    }
+                }
+
+
+                file_Path += "/" + export_File_Name;
+                // create workbook
+                XSSFWorkbook xssfWorkbook = new XSSFWorkbook();
+                // create worksheet with title
+                XSSFSheet xssfSheet = xssfWorkbook.createSheet("TICKET_REPORT");
+
+                Row headerRow = xssfSheet.createRow(0);
+
+                for (int i = 0; i < TICKET_HEADER.length; i++) {
+                    Cell cell = headerRow.createCell(i);
+                    cell.setCellValue(TICKET_HEADER[i]);
+                }
+
+                int rowNum = 1;
+
+                for (TicketDTO transaction : content) {
+
+                    Row dataRow = xssfSheet.createRow(rowNum++);
+
+                    dataRow.createCell(0).setCellValue(transaction.getSiteName());
+                    dataRow.createCell(1).setCellValue(transaction.getTitle());
+                    dataRow.createCell(2).setCellValue(transaction.getStatus());
+                    dataRow.createCell(3).setCellValue(transaction.getCategory());
+                    dataRow.createCell(4).setCellValue(transaction.getSeverity());
+                    dataRow.createCell(5).setCellValue(transaction.getCreatedBy());
+                    dataRow.createCell(6).setCellValue(String.valueOf(transaction.getCreatedDate()));
+                    dataRow.createCell(7).setCellValue(transaction.getAssignedToName());
+                    dataRow.createCell(8).setCellValue(String.valueOf(transaction.getAssignedOn()));
+                    dataRow.createCell(9).setCellValue(transaction.getClosedByName());
+                    dataRow.createCell(10).setCellValue(transaction.getClosedOn() != null ? String.valueOf(transaction.getClosedOn()) : "");
+                }
+
+                for (int i = 0; i < TICKET_HEADER.length; i++) {
+                    xssfSheet.autoSizeColumn(i);
+                }
+                log.info(export_File_Name + " Ticket export file was created successfully !!!");
                 statusMap.put(export_File_Name, "COMPLETED");
 
                 FileOutputStream fileOutputStream = null;

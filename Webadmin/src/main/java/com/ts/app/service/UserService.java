@@ -424,8 +424,6 @@ public class UserService extends AbstractService {
                 pageRequest = createPageRequest(searchCriteria.getCurrPage());
             }
 
-
-
 			//Pageable pageRequest = createPageRequest(searchCriteria.getCurrPage());
 			Page<User> page = null;
 			List<UserDTO> transactions = null;

@@ -11,6 +11,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -26,8 +27,8 @@ public class Ticket extends AbstractAuditingEntity implements Serializable {
     private Long id;
 
     @NotNull
-    @Size(min = 1, max = 50)
-    @Column(length = 50, unique = false, nullable = false)
+    @Size(min = 1, max = 255)
+    @Column(length = 255, unique = false, nullable = false)
     private String title;
 
     @NotNull
@@ -48,9 +49,9 @@ public class Ticket extends AbstractAuditingEntity implements Serializable {
 //    @JoinColumn(name = "locationId")
 //    private Location location;
 
-//    @OneToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "jobId", nullable = true)
-//    private Job job;
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "jobId", nullable = true)
+    private Job job;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "assigned_to_id", nullable = true)
@@ -75,6 +76,8 @@ public class Ticket extends AbstractAuditingEntity implements Serializable {
     private String type;
 
     private String severity;
+    
+    private String category;
 
     public Long getId() {
         return id;
@@ -219,6 +222,22 @@ public class Ticket extends AbstractAuditingEntity implements Serializable {
 	public void setClosedOn(Date closedOn) {
 		this.closedOn = closedOn;
 	}
+
+	public String getCategory() {
+		return category;
+	}
+
+	public void setCategory(String category) {
+		this.category = category;
+	}
+
+	public Job getJob() {
+		return job;
+	}
+
+	public void setJob(Job job) {
+		this.job = job;
+	}
     
-    
+	
 }

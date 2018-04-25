@@ -12,6 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
@@ -52,8 +53,8 @@ public class ProjectService extends AbstractService {
 
 	@Inject
 	private MapperUtil<AbstractAuditingEntity, BaseDTO> mapperUtil;
-	
-	@Inject 
+
+	@Inject
 	private ImportUtil importUtil;
 
 	public boolean isDuplicate(ProjectDTO projectDto) {
@@ -178,7 +179,20 @@ public class ProjectService extends AbstractService {
     	log.debug("empId is :",empId);
         SearchResult<ProjectDTO> result = new SearchResult<ProjectDTO>();
         if(searchCriteria != null) {
-            Pageable pageRequest = createPageRequest(searchCriteria.getCurrPage());
+
+            //----
+            Pageable pageRequest = null;
+            if(!StringUtils.isEmpty(searchCriteria.getColumnName())){
+                Sort sort = new Sort(searchCriteria.isSortByAsc() ? Sort.Direction.ASC : Sort.Direction.DESC, searchCriteria.getColumnName());
+                log.debug("Sorting object" +sort);
+                pageRequest = createPageSort(searchCriteria.getCurrPage(), searchCriteria.getSort(), sort);
+
+            }else{
+                pageRequest = createPageRequest(searchCriteria.getCurrPage());
+            }
+
+
+            //Pageable pageRequest = createPageRequest(searchCriteria.getCurrPage());
             Page<Project> page = null;
             List<ProjectDTO> transactions = null;
             if(!searchCriteria.isFindAll()) {
@@ -245,11 +259,11 @@ public class ProjectService extends AbstractService {
 		}
 		return subEmpIds;
 	}
-	
+
 	public ImportResult importFile(MultipartFile file, long dateTime) {
 		return importUtil.importClientData(file, dateTime);
 	}
-	
+
 	public ImportResult getImportStatus(String fileId) {
 		ImportResult er = new ImportResult();
 		//fileId += ".csv";

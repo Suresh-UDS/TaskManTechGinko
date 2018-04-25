@@ -9,6 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,6 +21,7 @@ import com.ts.app.web.rest.dto.BaseDTO;
 import com.ts.app.web.rest.dto.SearchCriteria;
 import com.ts.app.web.rest.dto.SearchResult;
 import com.ts.app.web.rest.dto.UserRoleDTO;
+import org.springframework.util.StringUtils;
 
 /**
  * Service class for managing user role information.
@@ -74,7 +76,19 @@ public class UserRoleService extends AbstractService {
 	public SearchResult<UserRoleDTO> findBySearchCrieria(SearchCriteria searchCriteria) {
 		SearchResult<UserRoleDTO> result = new SearchResult<UserRoleDTO>();
 		if(searchCriteria != null) {
-			Pageable pageRequest = createPageRequest(searchCriteria.getCurrPage());
+
+		    //----
+            Pageable pageRequest = null;
+            if(!StringUtils.isEmpty(searchCriteria.getColumnName())){
+                Sort sort = new Sort(searchCriteria.isSortByAsc() ? Sort.Direction.ASC : Sort.Direction.DESC, searchCriteria.getColumnName());
+                log.debug("Sorting object" +sort);
+                pageRequest = createPageSort(searchCriteria.getCurrPage(), searchCriteria.getSort(), sort);
+
+            }else{
+                pageRequest = createPageRequest(searchCriteria.getCurrPage());
+            }
+
+			//Pageable pageRequest = createPageRequest(searchCriteria.getCurrPage());
 			Page<UserRole> page = null;
 			List<UserRoleDTO> transactions = null;
 			if(!searchCriteria.isFindAll()) {

@@ -1,10 +1,8 @@
 package com.ts.app.service;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Set;
 
 import javax.inject.Inject;
 import javax.transaction.Transactional;
@@ -18,15 +16,19 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.ts.app.domain.AbstractAuditingEntity;
+import com.ts.app.domain.Employee;
+import com.ts.app.domain.EmployeeProjectSite;
 import com.ts.app.domain.Feedback;
 import com.ts.app.domain.FeedbackMapping;
 import com.ts.app.domain.FeedbackQuestion;
 import com.ts.app.domain.Project;
 import com.ts.app.domain.Site;
+import com.ts.app.domain.User;
 import com.ts.app.repository.FeedbackMappingRepository;
 import com.ts.app.repository.FeedbackRepository;
 import com.ts.app.repository.ProjectRepository;
 import com.ts.app.repository.SiteRepository;
+import com.ts.app.repository.UserRepository;
 import com.ts.app.service.util.FileUploadHelper;
 import com.ts.app.service.util.MapperUtil;
 import com.ts.app.web.rest.dto.BaseDTO;
@@ -53,6 +55,9 @@ public class FeedbackService extends AbstractService {
 
 	@Inject
 	private SiteRepository siteRepository;
+	
+	@Inject
+	private UserRepository userRepository;
 
 	@Inject
 	private FeedbackMappingRepository feedbackMappingRepository;
@@ -76,9 +81,9 @@ public class FeedbackService extends AbstractService {
 				item.setFeedback(feedback);
 				items.add(item);
 			}
-			Set<FeedbackQuestion> itemsSet = new HashSet<FeedbackQuestion>();
-			itemsSet.addAll(items);
-			feedback.setQuestions(itemsSet);
+			List<FeedbackQuestion> itemsList = new ArrayList<FeedbackQuestion>();
+			itemsList.addAll(items);
+			feedback.setQuestions(itemsList);
 
 			if(feedbackDto.getProjectId() > 0) {
 				Project project = projectRepository.findOne(feedbackDto.getProjectId());
@@ -110,7 +115,7 @@ public class FeedbackService extends AbstractService {
 		//feedbackUpdate = feedbackRepository.save(feedbackUpdate);
 		List<FeedbackQuestionDTO> itemDtos = feedback.getQuestions();
 		List<FeedbackQuestion> items = new ArrayList<FeedbackQuestion>();
-		Set<FeedbackQuestion> itemEntities = feedbackUpdate.getQuestions();
+		List<FeedbackQuestion> itemEntities = feedbackUpdate.getQuestions();
 		Iterator<FeedbackQuestion> itemsItr = itemEntities.iterator();
 		while(itemsItr.hasNext()) {
 			boolean itemFound = false;
@@ -154,6 +159,9 @@ public class FeedbackService extends AbstractService {
 	public SearchResult<FeedbackDTO> findBySearchCrieria(SearchCriteria searchCriteria) {
 		SearchResult<FeedbackDTO> result = new SearchResult<FeedbackDTO>();
 		if(searchCriteria != null) {
+			User user = userRepository.findOne(searchCriteria.getUserId());
+			Employee employee = user.getEmployee();
+			
 			Pageable pageRequest = createPageRequest(searchCriteria.getCurrPage());
 			Page<Feedback> page = null;
 			List<FeedbackDTO> transitems = null;
@@ -161,7 +169,19 @@ public class FeedbackService extends AbstractService {
 			if(searchCriteria.getProjectId() > 0 || searchCriteria.getSiteId() > 0) {
 				feedbackList = feedbackRepository.findBySite(searchCriteria.getProjectId(), searchCriteria.getSiteId());
 			}else {
-				page = feedbackRepository.findAll(pageRequest);
+				if(user.isAdmin()) {
+					page = feedbackRepository.findAll(pageRequest);
+
+				}else {
+					List<EmployeeProjectSite> projectSites = employee.getProjectSites();
+		        		if(CollectionUtils.isNotEmpty(projectSites)) {
+		        			List<Long> siteIds = new ArrayList<Long>();
+		        			for(EmployeeProjectSite projSite : projectSites) {
+		        				siteIds.add(projSite.getSite().getId());
+		        			}
+		        			page = feedbackRepository.findBySites(siteIds, pageRequest);
+		        		}
+				}	
 			}
 			if(page != null) {
 				feedbackList = page.getContent();
@@ -245,6 +265,9 @@ public class FeedbackService extends AbstractService {
 		SearchResult<FeedbackMappingDTO> result = new SearchResult<FeedbackMappingDTO>();
 		log.debug("search Criteria - "+searchCriteria.getSiteId()+" - "+searchCriteria.getBlock()+" - "+searchCriteria.getFloor());
 		if(searchCriteria != null) {
+			User user = userRepository.findOne(searchCriteria.getUserId());
+			Employee employee = user.getEmployee();
+			
 			Pageable pageRequest = createPageRequest(searchCriteria.getCurrPage());
 			Page<FeedbackMapping> page = null;
 			List<FeedbackMappingDTO> transitems = null;
@@ -253,7 +276,21 @@ public class FeedbackService extends AbstractService {
 					page = feedbackMappingRepository.findByLocation(searchCriteria.getSiteId(), searchCriteria.getBlock(), searchCriteria.getFloor(), searchCriteria.getZone(), pageRequest);
 				}
 			}else {
-				page = feedbackMappingRepository.findAll(pageRequest);
+				
+				if(user.isAdmin()) {
+					page = feedbackMappingRepository.findAll(pageRequest);
+
+				}else {
+					List<EmployeeProjectSite> projectSites = employee.getProjectSites();
+		        		if(CollectionUtils.isNotEmpty(projectSites)) {
+		        			List<Long> siteIds = new ArrayList<Long>();
+		        			for(EmployeeProjectSite projSite : projectSites) {
+		        				siteIds.add(projSite.getSite().getId());
+		        			}
+		        			page = feedbackMappingRepository.findBySites(siteIds, pageRequest);
+		        		}
+				}	
+
 			}
 			if(page != null) {
 				transitems = mapperUtil.toModelList(page.getContent(), FeedbackMappingDTO.class);

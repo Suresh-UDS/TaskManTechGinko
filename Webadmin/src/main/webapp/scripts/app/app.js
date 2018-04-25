@@ -2,7 +2,7 @@
 
 angular.module('timeSheetApp', ['LocalStorageModule',
                'ui.bootstrap', 'ui.bootstrap.datetimepicker', // for modal dialogs
-    'ngResource', 'ui.router', 'ngCookies', 'ngAria', 'ngCacheBuster', 'ngFileUpload', 'infinite-scroll', 'App.filters','uiGmapgoogle-maps','checklist-model','alexjoffroy.angular-loaders','chart.js','jkAngularRatingStars'])
+    'ngResource', 'ui.router', 'ngCookies', 'ngAria', 'ngCacheBuster', 'ngFileUpload', 'infinite-scroll', 'App.filters','uiGmapgoogle-maps','checklist-model','alexjoffroy.angular-loaders','chart.js','jkAngularRatingStars','angular-star-rating-new'])
 
     .run(function ($rootScope, $location, $window, $http, $state,  Auth, Principal, ENV, VERSION) {
         $rootScope.loginView = true;
@@ -82,6 +82,8 @@ angular.module('timeSheetApp', ['LocalStorageModule',
                 $state.go($rootScope.previousStateName, $rootScope.previousStateParams);
             }
         };
+
+       
     })
     .config(function ($stateProvider, $urlRouterProvider, $httpProvider, $locationProvider,  httpRequestInterceptorCacheBusterProvider,uiGmapGoogleMapApiProvider) {
     	uiGmapGoogleMapApiProvider.configure({
@@ -98,9 +100,17 @@ angular.module('timeSheetApp', ['LocalStorageModule',
         $stateProvider.state('site', {
             'abstract': true,
             views: {
+                'header@': {
+                    templateUrl: 'scripts/components/header/header.html',
+                    controller: 'HeaderController'
+                },
                 'navbar@': {
                     templateUrl: 'scripts/components/navbar/navbar.html',
                     controller: 'NavbarController'
+                },
+                'footer@': {
+                    templateUrl: 'scripts/components/footer/footer.html',
+                    controller: 'FooterController'
                 }
             },
             resolve: {
@@ -111,6 +121,8 @@ angular.module('timeSheetApp', ['LocalStorageModule',
                 ]
             }
         });
+
+        
 
         $httpProvider.interceptors.push('errorHandlerInterceptor');
         $httpProvider.interceptors.push('authExpiredInterceptor');

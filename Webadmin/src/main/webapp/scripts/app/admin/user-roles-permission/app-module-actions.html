@@ -120,8 +120,18 @@
                         <table class="table table-striped">
                             <thead>
                             <tr>
-                                <th>ID</th>
-                                <th>Module Name</th>
+                                <th>ID<a href="#">
+
+                                    <span ng-click="columnAscOrder('id')"  class=""><i class="fa fa-caret-up"></i></span>
+                                    <span ng-click="columnDescOrder('id')" class=""><i class="fa fa-caret-down"></i></span>
+
+                                </a></th>
+                                <th>Module Name<a href="#">
+
+                                    <span ng-click="columnAscOrder('name')"  class=""><i class="fa fa-caret-up"></i></span>
+                                    <span ng-click="columnDescOrder('name')" class=""><i class="fa fa-caret-down"></i></span>
+
+                                </a></th>
                                 <th>Actions</th>
                                 <th>Edit</th>
                             </tr>
