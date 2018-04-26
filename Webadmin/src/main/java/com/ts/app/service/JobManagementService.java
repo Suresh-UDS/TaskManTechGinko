@@ -531,7 +531,7 @@ public class JobManagementService extends AbstractService {
 	        			if(isAdmin) {
 	        				allSites = siteRepository.findAll();
 	        			}else {
-		        			User user = userRepository.findOne(searchCriteria.getUserId());
+		        			user = userRepository.findOne(searchCriteria.getUserId());
 		        			allSites = siteRepository.findSiteByEmployeeId(user.getEmployee().getId());
 	        			}
 		        		for(Site site : allSites) {
