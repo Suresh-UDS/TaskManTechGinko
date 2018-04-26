@@ -436,18 +436,22 @@ public class JobManagementService extends AbstractService {
 	public List<ReportResult> generateConsolidatedReport(SearchCriteria searchCriteria, boolean isAdmin) {
 		List<ReportResult> reportResults = new ArrayList<ReportResult>();
 		if(searchCriteria != null) {
-
-			Employee employee = employeeRepository.findByUserId(searchCriteria.getUserId());
-			List<Long> subEmpIds = new ArrayList<Long>();
-			if(employee != null) {
-				searchCriteria.setDesignation(employee.getDesignation());
-				Hibernate.initialize(employee.getSubOrdinates());
-				findAllSubordinates(employee, subEmpIds);
-				log.debug("List of subordinate ids -"+ subEmpIds);
-				if(CollectionUtils.isEmpty(subEmpIds)) {
-					subEmpIds.add(employee.getId());
+			User user = null;
+			if(searchCriteria.getUserId() > 0) {
+				Employee employee = employeeRepository.findByUserId(searchCriteria.getUserId());
+				user = userRepository.findOne(searchCriteria.getUserId());
+				isAdmin = user.isAdmin();
+				List<Long> subEmpIds = new ArrayList<Long>();
+				if(employee != null) {
+					searchCriteria.setDesignation(employee.getDesignation());
+					Hibernate.initialize(employee.getSubOrdinates());
+					findAllSubordinates(employee, subEmpIds);
+					log.debug("List of subordinate ids -"+ subEmpIds);
+					if(CollectionUtils.isEmpty(subEmpIds)) {
+						subEmpIds.add(employee.getId());
+					}
+					searchCriteria.setSubordinateIds(subEmpIds);
 				}
-				searchCriteria.setSubordinateIds(subEmpIds);
 			}
 			log.debug("SearchCriteria ="+ searchCriteria);
 
@@ -499,15 +503,18 @@ public class JobManagementService extends AbstractService {
 		        		if(isAdmin) {
 		        			allSites = siteRepository.findAll();
 		        		}else {
-		        			User user = userRepository.findOne(searchCriteria.getUserId());
-		        			allSites = siteRepository.findSiteByEmployeeId(user.getEmployee().getId());
-		        		}
-		        		for(Site site : allSites) {
-		        			if(searchCriteria.isGraphRequest()) {
-		        				reportResults.add(reportService.jobCountGroupByDate(site.getId(), fromDt, toDt));
-		        			}else {
-		        				reportResults.add(reportService.jobCountBySiteAndStatusAndDateRange(site.getId(),fromDt, toDt));
+		        			if(user != null) {
+		        				allSites = siteRepository.findSiteByEmployeeId(user.getEmployee().getId());
 		        			}
+		        		}
+		        		if(CollectionUtils.isNotEmpty(allSites)) {
+			        		for(Site site : allSites) {
+			        			if(searchCriteria.isGraphRequest()) {
+			        				reportResults.add(reportService.jobCountGroupByDate(site.getId(), fromDt, toDt));
+			        			}else {
+			        				reportResults.add(reportService.jobCountBySiteAndStatusAndDateRange(site.getId(),fromDt, toDt));
+			        			}
+			        		}
 		        		}
 
 		        	}
@@ -757,6 +764,8 @@ public class JobManagementService extends AbstractService {
 			endTimeCal.setTime(jobDTO.getPlannedStartTime());
 			endTimeCal.add(Calendar.HOUR_OF_DAY, jobDTO.getPlannedHours());
 			job.setPlannedEndTime(endTimeCal.getTime());
+		}else {
+			job.setPlannedEndTime(jobDTO.getPlannedEndTime());
 		}
 		job.setPlannedHours(jobDTO.getPlannedHours());
 

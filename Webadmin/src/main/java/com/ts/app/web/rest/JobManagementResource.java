@@ -226,7 +226,7 @@ public class JobManagementResource {
 		List<ReportResult> result = null;
 		if(searchCriteria != null) {
 			searchCriteria.setUserId(SecurityUtils.getCurrentUserId());
-			result = jobService.generateConsolidatedReport(searchCriteria, true);
+			result = jobService.generateConsolidatedReport(searchCriteria, false);
 		}
 		return result;
 	}

@@ -39,8 +39,8 @@ public class EmployeeProjectSite extends AbstractAuditingEntity implements Seria
 	@JoinColumn(name = "siteId", referencedColumnName = "id", nullable = true)
 	private Site site;
 	
-	@OneToMany(mappedBy="employeeProjectSite",cascade={CascadeType.ALL}, fetch = FetchType.LAZY, orphanRemoval = true)
-    private List<EmployeeShift> shifts;
+//	@OneToMany(mappedBy="employeeProjectSite",cascade={CascadeType.ALL}, fetch = FetchType.LAZY, orphanRemoval = true)
+//    private List<EmployeeShift> shifts;
 	
 //	private long projectId;
 //	
@@ -82,14 +82,14 @@ public class EmployeeProjectSite extends AbstractAuditingEntity implements Seria
 		this.site = site;
 	}
 
-	public List<EmployeeShift> getShifts() {
-		return shifts;
-	}
-
-	public void setShifts(List<EmployeeShift> shifts) {
-		this.shifts = shifts;
-	}
-	
+//	public List<EmployeeShift> getShifts() {
+//		return shifts;
+//	}
+//
+//	public void setShifts(List<EmployeeShift> shifts) {
+//		this.shifts = shifts;
+//	}
+//	
 	
 
 //	public long getProjectId() {

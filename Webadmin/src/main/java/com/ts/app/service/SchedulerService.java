@@ -396,7 +396,7 @@ public class SchedulerService extends AbstractService {
 					SearchCriteria sc = new SearchCriteria();
 					sc.setCheckInDateTimeFrom(cal.getTime());
 					sc.setProjectId(proj.getId());
-					List<ReportResult> reportResults = jobManagementService.generateConsolidatedReport(sc, true);
+					List<ReportResult> reportResults = jobManagementService.generateConsolidatedReport(sc, false);
 					
 					if(CollectionUtils.isNotEmpty(reportResults)) {
 							//if report generation needed
@@ -467,10 +467,11 @@ public class SchedulerService extends AbstractService {
 								endCal.set(Calendar.HOUR_OF_DAY, Integer.parseInt(endTimeUnits[0]));
 								endCal.set(Calendar.MINUTE, Integer.parseInt(endTimeUnits[1]));
 								Calendar currCal = Calendar.getInstance();
-								currCal.add(Calendar.HOUR_OF_DAY,  1);
+								//currCal.add(Calendar.HOUR_OF_DAY,  1);
 								long timeDiff = currCal.getTimeInMillis() - startCal.getTimeInMillis();
 								if(timeDiff >= 3600000 && timeDiff < 7200000) { //within 2 hours of the shift start timing.
-									long empCntInShift = employeeRepository.findEmployeeCountBySiteAndShift(site.getId(), shift.getStartTime(), shift.getEndTime());
+									//long empCntInShift = employeeRepository.findEmployeeCountBySiteAndShift(site.getId(), shift.getStartTime(), shift.getEndTime());
+									long empCntInShift = 0;
 									if(empCntInShift == 0) {
 										empCntInShift = employeeRepository.findCountBySiteId(site.getId());
 									}
@@ -564,7 +565,7 @@ public class SchedulerService extends AbstractService {
 								currCal.add(Calendar.HOUR_OF_DAY,  1);
 								long timeDiff = currCal.getTimeInMillis() - startCal.getTimeInMillis();
 								//if(currCal.equals(startCal) || (timeDiff >= 0 && timeDiff <= 3600000)) {
-									long empCntInShift = employeeRepository.findEmployeeCountBySiteAndShift(site.getId(), shift.getStartTime(), shift.getEndTime());
+									long empCntInShift = 0; //employeeRepository.findEmployeeCountBySiteAndShift(site.getId(), shift.getStartTime(), shift.getEndTime());
 									if(empCntInShift == 0) {
 										empCntInShift = employeeRepository.findCountBySiteId(site.getId());
 									}

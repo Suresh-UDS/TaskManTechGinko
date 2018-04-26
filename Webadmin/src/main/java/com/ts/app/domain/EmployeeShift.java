@@ -1,8 +1,8 @@
 package com.ts.app.domain;
 
 import java.io.Serializable;
+import java.sql.Date;
 
-import javax.persistence.Cacheable;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -12,13 +12,10 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
-
 @Entity
 @Table(name = "employee_shift")
-@Cacheable(true)
-@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+//@Cacheable(true)
+//@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class EmployeeShift extends AbstractAuditingEntity implements Serializable {
 
 	/**
@@ -29,14 +26,22 @@ public class EmployeeShift extends AbstractAuditingEntity implements Serializabl
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
-
-	private String startTime;
-	
-	private String endTime;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "employeeProjectSiteId", nullable = true)
-	private EmployeeProjectSite employeeProjectSite;
+	@JoinColumn(name = "employeeId")
+	private Employee employee;
+	
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "siteId")
+	private Site site;
+
+	private Date startTime;
+	
+	private Date endTime;
+	
+//	@ManyToOne(fetch = FetchType.LAZY)
+//	@JoinColumn(name = "employeeProjectSiteId", nullable = true)
+//	private EmployeeProjectSite employeeProjectSite;
 	
 
 	public Long getId() {
@@ -47,28 +52,46 @@ public class EmployeeShift extends AbstractAuditingEntity implements Serializabl
 		this.id = id;
 	}
 
-	public String getStartTime() {
+	public Date getStartTime() {
 		return startTime;
 	}
 
-	public void setStartTime(String startTime) {
+	public void setStartTime(Date startTime) {
 		this.startTime = startTime;
 	}
 
-	public String getEndTime() {
+	public Date getEndTime() {
 		return endTime;
 	}
 
-	public void setEndTime(String endTime) {
+	public void setEndTime(Date endTime) {
 		this.endTime = endTime;
 	}
 
-	public EmployeeProjectSite getEmployeeProjectSite() {
-		return employeeProjectSite;
+	public Employee getEmployee() {
+		return employee;
 	}
 
-	public void setEmployeeProjectSite(EmployeeProjectSite employeeProjectSite) {
-		this.employeeProjectSite = employeeProjectSite;
+	public void setEmployee(Employee employee) {
+		this.employee = employee;
 	}
+
+	public Site getSite() {
+		return site;
+	}
+
+	public void setSite(Site site) {
+		this.site = site;
+	}
+
+	
+
+//	public EmployeeProjectSite getEmployeeProjectSite() {
+//		return employeeProjectSite;
+//	}
+//
+//	public void setEmployeeProjectSite(EmployeeProjectSite employeeProjectSite) {
+//		this.employeeProjectSite = employeeProjectSite;
+//	}
 
 }

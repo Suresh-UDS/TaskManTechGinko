@@ -308,9 +308,9 @@ public class    EmployeeService extends AbstractService {
 		if(CollectionUtils.isNotEmpty(employee.getProjectSites())) {
 			for(EmployeeProjectSiteDTO projSiteDto : employee.getProjectSites()) {
 				EmployeeProjectSite projSite = mapperUtil.toEntity(projSiteDto, EmployeeProjectSite.class);
-				if(CollectionUtils.isEmpty(projSite.getShifts())) {
-					projSite.setShifts(new ArrayList<EmployeeShift>());
-				}
+//				if(CollectionUtils.isEmpty(projSite.getShifts())) {
+//					projSite.setShifts(new ArrayList<EmployeeShift>());
+//				}
 				projSite.setEmployee(employeeUpdate);
 				updatedProjSites.add(projSite);
 			}
