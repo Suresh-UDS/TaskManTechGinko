@@ -44,6 +44,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.ts.app.domain.AbstractAuditingEntity;
 import com.ts.app.domain.Employee;
 import com.ts.app.domain.EmployeeProjectSite;
+import com.ts.app.domain.EmployeeShift;
 import com.ts.app.domain.JobStatus;
 import com.ts.app.domain.JobType;
 import com.ts.app.domain.Location;
@@ -51,6 +52,7 @@ import com.ts.app.domain.Project;
 import com.ts.app.domain.Site;
 import com.ts.app.domain.User;
 import com.ts.app.repository.EmployeeRepository;
+import com.ts.app.repository.EmployeeShiftRepository;
 import com.ts.app.repository.LocationRepository;
 import com.ts.app.repository.ProjectRepository;
 import com.ts.app.repository.SiteRepository;
@@ -85,6 +87,7 @@ public class ImportUtil {
 	private static final String JOB_FOLDER = "job";
 	private static final String EMPLOYEE_FOLDER = "employee";
 	private static final String CHECKLIST_FOLDER = "checklist";
+	private static final String EMP_SHIFT_FOLDER = "empshift";
 	private static final String CLIENT_FOLDER = "client";
 	private static final String SITE_FOLDER = "site";
 	private static final String COMPLETED_IMPORT_FOLDER = "import.file.path.completed";
@@ -130,6 +133,9 @@ public class ImportUtil {
 	
 	@Inject
 	private Environment env;
+	
+	@Inject
+	private EmployeeShiftRepository empShiftRepo;
 	
 	
 	public ImportResult importJobData(MultipartFile file, long dateTime) {
@@ -230,6 +236,26 @@ public class ImportUtil {
 
 	}
 	
+	public ImportResult importEmployeeShiftData(MultipartFile file, long dateTime) {
+        String fileName = dateTime + ".xlsx";
+		String filePath = env.getProperty(NEW_IMPORT_FOLDER) + SEPARATOR +  EMP_SHIFT_FOLDER;
+		String uploadedFileName = fileUploadHelper.uploadJobImportFile(file, filePath, fileName);
+		String targetFilePath = env.getProperty(COMPLETED_IMPORT_FOLDER) + SEPARATOR +  EMP_SHIFT_FOLDER;
+		String fileKey = fileName.substring(0, fileName.indexOf(".xlsx"));
+		if(statusMap.containsKey(fileKey)) {
+			String status = statusMap.get(fileKey);
+			log.debug("Current status for filename -"+fileKey+", status -" + status);
+		}else {
+			statusMap.put(fileKey, "PROCESSING");
+		}
+		importNewFiles("employeeshift",filePath, fileName, targetFilePath);
+		ImportResult result = new ImportResult();
+		result.setFile(fileKey);
+		result.setStatus("PROCESSING");
+		return result;
+
+	}
+	
 	@Async
 	private void importNewFiles(String domain, String sourceFilePath,String fileName, String targetFilePath) {
 		// get new files in the imports folder
@@ -256,6 +282,9 @@ public class ImportUtil {
 						break;
 					case "checklist" :
 						importChecklistFromFile(fileObj.getPath());
+						break;
+					case "employeeshift" :
+						importEmployeeShiftMasterFromFile(fileObj.getPath());
 						break;
 						
 				}
@@ -628,6 +657,53 @@ public class ImportUtil {
 			log.error("Error while reading the job data file for import", e);
 		} catch (IOException e) {
 			log.error("Error while reading the job data file for import", e);
+		}
+	}	
+	
+	private void importEmployeeShiftMasterFromFile(String path) {
+		try {
+
+			FileInputStream excelFile = new FileInputStream(new File(path));
+			Workbook workbook = new XSSFWorkbook(excelFile);
+			Sheet datatypeSheet = workbook.getSheetAt(0);
+			//Iterator<Row> iterator = datatypeSheet.iterator();
+			int lastRow = datatypeSheet.getLastRowNum();
+			int r = 1;
+			
+			log.debug("Last Row number -" + lastRow);
+			for (; r <= lastRow; r++) {
+				log.debug("Current Row number -" + r);
+				Row currentRow = datatypeSheet.getRow(r);
+				
+				EmployeeShift shift = new EmployeeShift();
+				
+				
+				//Project newProj = projectRepo.findOne(Long.valueOf(getCellValue(currentRow.getCell(0))));
+				Site site = siteRepo.findOne(Long.valueOf(getCellValue(currentRow.getCell(1))));
+				String empId = getCellValue(currentRow.getCell(2));
+				Employee employee = employeeRepo.findByEmpId(empId);
+				shift.setEmployee(employee);
+				shift.setSite(site);
+				//String startTime = getCellValue(currentRow.getCell(4));
+				shift.setStartTime(DateUtil.convertToSQLDate(currentRow.getCell(4).getDateCellValue()));
+				//String endTime = getCellValue(currentRow.getCell(5));
+				shift.setEndTime(DateUtil.convertToSQLDate(currentRow.getCell(5).getDateCellValue()));
+				// email, phone number missing
+				ZoneId  zone = ZoneId.of("Asia/Singapore");
+				ZonedDateTime zdt   = ZonedDateTime.of(LocalDateTime.now(), zone);
+				shift.setCreatedDate(zdt);
+				shift.setActive(Employee.ACTIVE_YES);
+				empShiftRepo.save(shift);
+
+				log.debug("Created Information for EmployeeShift: {}", shift);
+				
+			/*}*/
+			}
+
+		} catch (FileNotFoundException e) {
+			log.error("Error while reading the employee shift data file for import", e);
+		} catch (IOException e) {
+			log.error("Error while reading the employee shift data file for import", e);
 		}
 	}	
 	

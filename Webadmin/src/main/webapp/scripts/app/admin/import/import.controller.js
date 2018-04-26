@@ -15,10 +15,12 @@ angular.module('timeSheetApp')
         $scope.selectedJobFile;
         $scope.selectedEmployeeFile;
         $scope.selectedChecklistFile;
+        $scope.selectedEmployeeShiftFile;
         //client file
         $scope.selectedClientFile;
         $rootScope.clientImportStatus = {};
         $rootScope.checklistImportStatus = {};
+        $rootScope.employeeShiftImportStatus = {};
         $rootScope.siteImportStatus = {};
         $rootScope.jobImportStatus = {};
         $rootScope.jobImportStatusLoad = false;
@@ -27,6 +29,7 @@ angular.module('timeSheetApp')
         $rootScope.clientImportStatusLoad = false;
         $rootScope.siteImportStatusLoad = false;
         $rootScope.employeeImportStatus = {};
+        $rootScope.employeeShiftImportStatusLoad = false;
         $scope.importStatus;
         $scope.importEmployeeStatus;
         $scope.selectFile = function() {
@@ -286,9 +289,9 @@ angular.module('timeSheetApp')
 	    
 	    //Checklist upload file start
 	    $scope.uploadChecklist = function() {
-	    	var extn = checklistFile.substr(fileName.lastIndexOf('.')+1);
-	    	alert(extn);
-	    	return false;
+	    	//var extn = checklistFile.substr(fileName.lastIndexOf('.')+1);
+	    	//alert(extn);
+	    	//return false;
 	    	if($scope.selectedChecklistFile){
 	    		$rootScope.checklistImportStatusLoad = true;
     		console.log('************************selected checklist file - ' + $scope.selectedChecklistFile);
@@ -345,11 +348,65 @@ angular.module('timeSheetApp')
 		   	return ($rootScope.checklistImportStatusLoad ? $rootScope.checklistImportStatusLoad : '');
 	   };   
 	    
+	   //Checklist upload file start
+	    $scope.uploadEmployeeShift = function() {
+		    	if($scope.selectedEmployeeShiftFile){
+		    		$rootScope.employeeShiftImportStatusLoad = true;
+	   		console.log('************************selected employee shift file - ' + $scope.selectedEmployeeShiftFile);
+	   		EmployeeComponent.importEmployeeShiftFile($scope.selectedEmployeeShiftFile).then(function(data){
+	   			console.log(data);
+	   			var result = data;
+	   			console.log(result.file + ', ' + result.status + ',' + result.msg);
+	   			var importStatus = {
+	       				fileName : result.file,
+	       				importMsg : result.msg
+	       		};
+	       		$rootScope.employeeShiftImportStatus = importStatus;
+	       		$rootScope.start('employeeShift');
+	        },function(err){
+	           	  console.log('Client Import error')
+	           	  console.log(err);
+	        });
+		  
+		  }
+	   }
+	
+	    $scope.employeeShiftImportStatus = function() {
+	    		console.log('$rootScope.employeeShiftImportStatus -'+JSON.stringify($rootScope.employeeShiftImportStatus));        		
+       		EmployeeComponent.importEmployeeShiftStatus($rootScope.employeeShiftImportStatus.fileName).then(function(data) {
+           		if(data) {
+           			$rootScope.employeeShiftImportStatus.importStatus = data.status;
+               		console.log('*****************importStatus - '+ JSON.stringify($rootScope.employeeShiftImportStatus));
+               		$rootScope.employeeShiftImportStatus.importMsg = data.msg;
+               		console.log('**************importMsg - '+ $rootScope.employeeShiftImportStatus.importMsg);
+               		if($rootScope.employeeShiftImportStatus.importStatus == 'COMPLETED'){
+               			$rootScope.employeeShiftImportStatus.fileName = data.file;
+                   		console.log('importFile - '+ $rootScope.employeeShiftImportStatus.fileName);
+                   		$scope.stop('employeeShift');
+                   		$rootScope.employeeShiftImportStatusLoad = false;
+                   		$timeout(function() {
+                   			$rootScope.employeeShiftImportStatus = {};
+                   	    }, 3000);
+               		}else if($rootScope.employeeShiftImportStatus.importStatus == 'FAILED'){
+                   		$scope.stop('employeeShift');
+               		}else if(!$rootScope.employeeShiftImportStatus.importStatus){
+               			$scope.stop('employeeShift');
+               		}else {
+               			$rootScope.employeeShiftImportStatus.fileName = '#';
+               		}
+           		}
+
+           	});
+
+	    }    
 	    
+	   
+	   $scope.employeeShiftImportStatusLoad = function(){
+		   	console.log('$scope.employeeShiftImportStatusLoad message '+ $rootScope.employeeShiftImportStatusLoad);
+		   	return ($rootScope.employeeShiftImportStatusLoad ? $rootScope.employeeShiftImportStatusLoad : '');
+	   };     
 	    
-	    
-	   // checklist end 
-	    
+	    	    
 	 // store the interval promise in this variable
 	 var promiseJob;
 	 var promiseEmployee;

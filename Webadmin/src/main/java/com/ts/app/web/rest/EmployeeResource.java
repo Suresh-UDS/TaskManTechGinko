@@ -475,6 +475,37 @@ public class EmployeeResource {
 		}
 		return result;
 	}
+    
+    @RequestMapping(path="/employee/shift/import", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<ImportResult> importShiftData(@RequestParam("employeeShiftFile") MultipartFile file){
+    	log.info("Employee Shift Import Status********************");
+		Calendar cal = Calendar.getInstance();
+		ImportResult result = importUtil.importEmployeeShiftData(file, cal.getTimeInMillis());
+		return new ResponseEntity<ImportResult>(result,HttpStatus.OK);
+	}
+
+    @RequestMapping(value = "/employee/shift/import/{fileId}/status",method = RequestMethod.GET)
+	public ImportResult importShiftStatus(@PathVariable("fileId") String fileId) {
+		log.debug("ImportShiftStatus -  fileId -"+ fileId);
+		ImportResult result = jobService.getImportStatus(fileId);
+		if(result!=null && result.getStatus() != null) {
+			switch(result.getStatus()) {
+				case "PROCESSING" :
+					result.setMsg("Importing shift information...");
+					break;
+				case "COMPLETED" :
+					result.setMsg("Completed importing");
+					break;
+				case "FAILED" :
+					result.setMsg("Failed to import employee shift . Please try again");
+					break;
+				default :
+					result.setMsg("Completed importing");
+					break;
+			}
+		}
+		return result;
+	}
 
 
 }

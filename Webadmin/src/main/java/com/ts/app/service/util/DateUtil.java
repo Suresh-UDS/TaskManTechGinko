@@ -67,6 +67,20 @@ public class DateUtil {
 
 	}
 	
+	public static Date convertToDate(String date) {
+        DateFormat formatter = new SimpleDateFormat("yyyy-dd-MM HH:mm");
+        Date dateTime = null;
+		try {
+			dateTime = formatter.parse(date);
+		} catch (ParseException e) {
+			log.error("Error while parsing date and time - date -"+ date,e);
+		}
+        
+        return dateTime;
+
+	}
+
+	
 	public static Date convertToDateTime(Date date, Date time) {
         DateFormat dtFormat = new SimpleDateFormat("yyyy-dd-MM");
         DateFormat timeFormat = new SimpleDateFormat("HH:mm:ss");

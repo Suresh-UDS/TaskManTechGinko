@@ -243,7 +243,24 @@ angular.module('timeSheetApp')
             	return $http.get('api/employee/import/'+fileName+"/status").then(function (response) {
             		return response.data;
             	});
-            }
+            },
+            importEmployeeShiftFile: function(file) {
+	        		var fileFormData = new FormData();
+	            fileFormData.append('employeeShiftFile', file);
+	            	return $http.post('api/employee/shift/import', fileFormData, {
+	                    transformRequest: angular.identity,
+	                    headers: {'Content-Type': undefined}
+	
+	                }).then(function (response) {
+	            			return response.data;
+	                });
+
+            },
+            importEmployeeShiftStatus: function(fileName) {
+	            	return $http.get('api/employee/shift/import/'+fileName+"/status").then(function (response) {
+	            		return response.data;
+	            	});
+            }            
 
         };
     });

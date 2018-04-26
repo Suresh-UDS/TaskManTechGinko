@@ -33,6 +33,7 @@ import com.ts.app.domain.AbstractAuditingEntity;
 import com.ts.app.domain.Attendance;
 import com.ts.app.domain.Employee;
 import com.ts.app.domain.EmployeeAttendanceReport;
+import com.ts.app.domain.EmployeeShift;
 import com.ts.app.domain.Job;
 import com.ts.app.domain.JobStatus;
 import com.ts.app.domain.Project;
@@ -42,6 +43,7 @@ import com.ts.app.domain.Shift;
 import com.ts.app.domain.Site;
 import com.ts.app.repository.AttendanceRepository;
 import com.ts.app.repository.EmployeeRepository;
+import com.ts.app.repository.EmployeeShiftRepository;
 import com.ts.app.repository.JobRepository;
 import com.ts.app.repository.ProjectRepository;
 import com.ts.app.repository.SchedulerConfigRepository;
@@ -119,6 +121,9 @@ public class SchedulerService extends AbstractService {
 	
 	@Inject
 	private SettingsRepository settingRepository;
+	
+	@Inject
+	private EmployeeShiftRepository empShiftRepo;
 	
 	@Inject
 	private Environment env;
@@ -471,7 +476,7 @@ public class SchedulerService extends AbstractService {
 								long timeDiff = currCal.getTimeInMillis() - startCal.getTimeInMillis();
 								if(timeDiff >= 3600000 && timeDiff < 7200000) { //within 2 hours of the shift start timing.
 									//long empCntInShift = employeeRepository.findEmployeeCountBySiteAndShift(site.getId(), shift.getStartTime(), shift.getEndTime());
-									long empCntInShift = 0;
+									long empCntInShift = empShiftRepo.findEmployeeCountBySiteAndShift(site.getId(), DateUtil.convertToSQLDate(startCal.getTime()), DateUtil.convertToSQLDate(endCal.getTime()));
 									if(empCntInShift == 0) {
 										empCntInShift = employeeRepository.findCountBySiteId(site.getId());
 									}

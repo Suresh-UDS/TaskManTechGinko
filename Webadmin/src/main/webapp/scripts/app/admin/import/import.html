@@ -155,6 +155,41 @@
             </div>
         </div>
         
+        </div>
+        
+        <div class="row">
+        <div class="col-md-6">
+            <div class="panel panel-default">
+                <div class="panel-heading">Employee Shift</div>
+                <div class="panel-body">
+                    <form name="importEmployeeShiftForm" >
+                        <div class="row">
+                            <div class="form-group label-floating" >
+                                <div class="col-md-6 pdng-top13" >
+                                    <input type="file"
+                                           class="form-control" style="opacity:100;position:relative" file-model
+                                           ng-model="selectedEmployeeShiftFile"
+                                           name="employeeShiftFile"
+                                    />
+                                </div>
+                                <div class="col-md-6">
+                                    <button class="btn btn-success" ng-click="uploadEmployeeShift()" >
+                                        <span class="btn-label">
+                                       		<i class="material-icons">file_upload</i>
+                                   		</span>Import Employee Shift
+                                    </button>
+                                    <span ng-hide="!employeeShiftImportStatusLoad()"> <i class="fa fa-spinner fa-spin" style="font-size:15px"></i> </span>
+                                </div>
+                                  <!-- <div class="col-md-12" ng-hide="!clientImportMsg()">
+                                  	<span class="card-title">Status - {{clientImportMsg()}}</span>
+                                  </div> -->
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>    
+        
         <div class="col-md-6">
             <div class="panel panel-default">
                 <div class="panel-heading">Checklist</div>
@@ -185,7 +220,9 @@
                     </form>
                 </div>
             </div>
-        </div>        
+        </div>    
+        
+            
         
 
     </div>
