@@ -279,6 +279,7 @@ public class UserResource {
 	}
 
 
+
 	@RequestMapping(value = "/users/search",method = RequestMethod.POST)
 	public SearchResult<UserDTO> searchUsers(@RequestBody SearchCriteria searchCriteria) {
 		SearchResult<UserDTO> result = null;

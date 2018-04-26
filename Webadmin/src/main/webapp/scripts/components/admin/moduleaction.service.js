@@ -5,7 +5,7 @@ angular.module('timeSheetApp')
         return {
         	createModuleAction: function (moduleAction, callback) {
                 var cb = callback || angular.noop;
-                console.log('moduleAction -' + moduleAction.name);	
+                console.log('moduleAction -' + moduleAction.name);
                 return ModuleAction.save(moduleAction,
                     function () {
                         return cb(moduleAction);
@@ -38,7 +38,7 @@ angular.module('timeSheetApp')
                     }.bind(this)).$promise;
             },
             deleteModuleAction: function (moduleAction, callback) {
-            	
+
                 var cb = callback || angular.noop;
 
                 return ModuleActionDelete.deleteModuleAction(moduleAction,
@@ -52,6 +52,7 @@ angular.module('timeSheetApp')
             },
             search: function(searchCriteria) {
             	return $http.post('api/applicationModule/search', searchCriteria).then(function (response) {
+            	    //console.log("response of app-module -"+JSON.stringify(response));
             		return response.data;
             	});
             },
@@ -60,6 +61,6 @@ angular.module('timeSheetApp')
                     return response.data;
                 });
             }
-        
+
         };
     });

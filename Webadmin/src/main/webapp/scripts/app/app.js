@@ -2,7 +2,7 @@
 
 angular.module('timeSheetApp', ['LocalStorageModule',
                'ui.bootstrap', 'ui.bootstrap.datetimepicker', // for modal dialogs
-    'ngResource', 'ui.router', 'ngCookies', 'ngAria', 'ngCacheBuster', 'ngFileUpload', 'infinite-scroll', 'App.filters','uiGmapgoogle-maps','checklist-model','alexjoffroy.angular-loaders','chart.js','jkAngularRatingStars'])
+    'ngResource', 'ui.router', 'ngCookies', 'ngAria', 'ngCacheBuster', 'ngFileUpload', 'infinite-scroll', 'App.filters','uiGmapgoogle-maps','checklist-model','alexjoffroy.angular-loaders','chart.js','jkAngularRatingStars','angular-star-rating-new'])
 
     .run(function ($rootScope, $location, $window, $http, $state,  Auth, Principal, ENV, VERSION) {
         $rootScope.loginView = true;
