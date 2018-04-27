@@ -26,7 +26,6 @@ angular.module('timeSheetApp')
         $scope.jobChecklistItems =[];
         $scope.jobTypeName = "";
         $scope.monthDays = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31];
-
         /*
         **
         Job type based records function.
@@ -417,6 +416,10 @@ angular.module('timeSheetApp')
                         $scope.search();
                     }
 
+         $scope.searchFilter = function () {
+            $scope.setPage(1);
+            //$scope.search();
+         }
 
 
         $scope.search = function () {
@@ -464,156 +467,58 @@ angular.module('timeSheetApp')
 	        	}
 
 	        	console.log('search criterias - '+ JSON.stringify($scope.searchCriteria));
-                $scope.jobs = '';
-                $scope.jobsLoader = false;
+                //$scope.jobs = '';
+                //$scope.jobsLoader = false;
 
                 //----
             if($scope.pageSort){
                 $scope.searchCriteria.sort = $scope.pageSort;
             }
+            
 
             if($scope.selectedColumn){
 
                 $scope.searchCriteria.columnName = $scope.selectedColumn;
                 $scope.searchCriteria.sortByAsc = $scope.isAscOrder;
 
+            }else{
+                $scope.searchCriteria.columnName ="id";
             }
-
+                    
+                   
+                     console.log("search criteria",$scope.searchCriteria);
+                     $scope.jobs = '';
+                     $scope.jobsLoader = false;
+                     $scope.loadPageTop();
 
 	        	JobComponent.search($scope.searchCriteria).then(function (data) {
                     $scope.jobs = data.transactions;
 	        		$scope.jobsLoader = true;
 
-	        		$scope.pages.currPage = data.currPage;
+                    /*
+                        ** Call page navigation  main function **
+                    */
+                     $scope.pager = {};
+                     $scope.pager = $scope.GetPager(data.totalCount, $scope.pages.currPage);
+                     $scope.totalCountPages = data.totalCount;
+                     console.log("Page navigation",$scope.pager);
+                     console.log("jobs",$scope.jobs);
+
+	        		$scope.pages.currPage = $scope.pages.currPage;
 	                $scope.pages.totalPages = data.totalPages;
-
-	                $scope.numberArrays = [];
-	                var startPage = 1;
-	                if(($scope.pages.totalPages - $scope.pages.currPage) >= 10) {
-	                		startPage = $scope.pages.currPage;
-	                }else if($scope.pages.totalPages > 10) {
-	                		startPage = $scope.pages.totalPages - 10;
-	                }
-	                var cnt = 0;
-	                for(var i=startPage; i<=$scope.pages.totalPages; i++){
-	                		cnt++;
-	                		if(cnt <= 10) {
-		                		$scope.numberArrays.push(i);
-	                		}
-	                }
-
+               
 	                if($scope.jobs && $scope.jobs.length > 0 ){
 	                    $scope.showCurrPage = data.currPage;
 	                    $scope.pageEntries = $scope.jobs.length;
 	                    $scope.totalCountPages = data.totalCount;
+                        $scope.pageSort = 10;
 
-	                    if($scope.showCurrPage != data.totalPages){
-	                    	$scope.pageStartIntex =  (data.currPage - 1) * $scope.pageSort + 1; // 1 to // 11 to
-
-	                        $scope.pageEndIntex = $scope.pageEntries * $scope.showCurrPage; // 10 entries of 52 // 10 * 2 = 20 of 52 entries
-
-	                    }else if($scope.showCurrPage === data.totalPages){
-	                    	$scope.pageStartIntex =  (data.currPage - 1) * $scope.pageSort + 1;
-	                    	$scope.pageEndIntex = $scope.totalCountPages;
-	                    }
+	                   
 	                }
 
-	                if($scope.jobs == null){
-	                    $scope.pages.startInd = 0;
-	                }else{
-	                    $scope.pages.startInd = (data.currPage - 1) * 10 + 1;
-	                }
-
-	                $scope.pages.endInd = data.totalCount > 10  ? (data.currPage) * 10 : data.totalCount ;
-	                $scope.pages.totalCnt = data.totalCount;
-
+	           
 	        	});
-
-	        	if($scope.pages.currPage == 1) {
-	            	$scope.firstStyle();
-	        	}
-        };
-
-        $scope.clickNextOrPrev = function(number){
-	        	$scope.pages.currPage = number;
-	        	$scope.search();
-        }
-
-        $scope.first = function() {
-	        	if($scope.pages.currPage > 1) {
-	            	$scope.pages.currPage = 1;
-	            	$scope.firstStyle();
-	            	$scope.search();
-	        	}
-        };
-
-        $scope.firstStyle = function() {
-       	 var ele = angular.element('#first');
-	    	 ele.addClass('disabledLink');
-	    	 ele = angular.element('#previous');
-	    	 ele.addClass('disabledLink');
-	    	 if($scope.pages.totalPages > 1) {
-	 	       	 var ele = angular.element('#next');
-		    	 ele.removeClass('disabledLink');
-		    	 ele = angular.element('#last');
-		    	 ele.removeClass('disabledLink');
-	    	 }
-
-        }
-
-        $scope.previous = function() {
-	        	if($scope.pages.currPage > 1) {
-	            	$scope.pages.currPage = $scope.pages.currPage - 1;
-		    		$scope.search();
-	            	if($scope.pages.currPage == 1) {
-	            		var ele = angular.element('#first');
-		    	    	 	ele.addClass('disabled');
-		    	    	 	ele = angular.element('#previous');
-		    	    	 	ele.addClass('disabled');
-	            	}
-	            	var ele = angular.element('#next');
-	    	    	 	ele.removeClass('disabled');
-	    	    	 	ele = angular.element('#last');
-	    	    	 	ele.removeClass('disabled');
-	        	}
-
-        };
-
-        $scope.next = function() {
-        		console.log('curr page - ' + $scope.pages.currPage + ', total pages - ' +$scope.pages.totalPages);
-	        	if($scope.pages.currPage < $scope.pages.totalPages) {
-	            	$scope.pages.currPage = $scope.pages.currPage + 1;
-		    		$scope.search();
-	            	if($scope.pages.currPage == $scope.pages.totalPages) {
-		       	       	 var ele = angular.element('#next');
-		    	    	 ele.addClass('disabled');
-		    	    	 ele = angular.element('#last');
-		    	    	 ele.addClass('disabled');
-	            	}
-	     	     var ele = angular.element('#first');
-		    	    	 ele.removeClass('disabled');
-		    	    	 ele = angular.element('#previous');
-		    	    	 ele.removeClass('disabled');
-	        	}
-
-        };
-
-        $scope.last = function() {
-	        	if($scope.pages.currPage < $scope.pages.totalPages) {
-	            	$scope.pages.currPage = $scope.pages.totalPages;
-	            	$scope.search();
-	            	if($scope.pages.currPage == $scope.pages.totalPages) {
-	            		var ele = angular.element('#next');
-		    	    	 	ele.addClass('disabled');
-		    	    	 	ele = angular.element('#last');
-		    	    	 	ele.addClass('disabled');
-	            	}
-	            	var ele = angular.element('#first');
-	    	    		ele.removeClass('disabled');
-	    	    		ele = angular.element('#previous');
-	    	    		ele.removeClass('disabled');
-	        	}
-
+ 	
         };
 
         $scope.clearFilter = function() {
@@ -660,6 +565,8 @@ angular.module('timeSheetApp')
              $scope.loadPageTop();
              $scope.init();
              $scope.initPage();
+             $scope.initController();
+             $scope.setPage(1);
          }
 
        //Loading Page go to top position
@@ -688,4 +595,101 @@ angular.module('timeSheetApp')
 
         }, 2000);}
 
+
+    /*
+        ** Page navigation init function **
+        @Params:integer
+
+    */
+
+        $scope.setPage = function (page) {
+
+            if (page < 1 || page > $scope.pager.totalPages) {
+                return;
+            }
+
+            //alert(page);
+            $scope.pages.currPage = page;
+            $scope.search();
+            //alert($scope.totalCountPages);
+        
+        };
+
+    /*
+        ** Page navigation main function**
+        @Params:integer
+        sort:10
+    */
+
+        $scope.GetPager = function(totalItems, currentPage, pageSize) {
+            // default to first page
+            currentPage = currentPage || 1;
+
+            // default page size is 10
+            pageSize = pageSize || 10;
+
+            // calculate total pages
+            var totalPages = Math.ceil(totalItems / pageSize);
+
+            var startPage, endPage;
+
+            if(totalPages > 0) {
+                    if (totalPages <= 5) {
+                        // less than 5 total pages so show all
+                        startPage = 1;
+                        endPage = totalPages;
+                    } 
+                    else {
+                        // more than 5 total pages so calculate start and end pages
+                        if (currentPage <= 4) {
+                            startPage = 1;
+                            endPage = 5;
+                        } else if (currentPage + 1 >= totalPages) {
+                            startPage = totalPages - 4;
+                            endPage = totalPages;
+                        } else {
+                            startPage = currentPage - 2;
+                            endPage = currentPage + 2;
+                        }
+                    }
+
+                    // calculate start and end item indexes
+                    if(currentPage == 1){
+                        var startIndex = 1;
+                        if(totalItems < 10){
+                            var endIndex = Math.min(totalItems);
+                        }
+                        else{
+                            var endIndex = Math.min(startIndex + pageSize-1 , totalItems);
+                        }
+                        
+                        
+                    }else{
+                       // var startIndex = (currentPage - 1) * pageSize;  
+                        var startIndex =   ((currentPage - 1) * pageSize) + 1;
+                        var endIndex = Math.min(startIndex + pageSize - 1 , totalItems);
+                    }
+        }else{
+                var startIndex = 0;  
+                var endIndex = 0;
+        }
+            
+
+            // create an array of pages to ng-repeat in the pager control
+            var pages = _.range(startPage, endPage + 1);
+
+            // return object with all pager properties required by the view
+            return {
+                totalItems: totalItems,
+                currentPage: currentPage,
+                pageSize: pageSize,
+                totalPages: totalPages,
+                startPage: startPage,
+                endPage: endPage,
+                startIndex: startIndex,
+                endIndex: endIndex,
+                pages: pages
+            };
+        }
+        
     });
