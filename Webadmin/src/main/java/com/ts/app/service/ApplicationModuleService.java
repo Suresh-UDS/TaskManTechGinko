@@ -115,7 +115,7 @@ public class ApplicationModuleService extends AbstractService {
                 pageRequest = createPageSort(searchCriteria.getCurrPage(), searchCriteria.getSort(), sort);
 
             }else{
-                pageRequest = createPageRequest(searchCriteria.getCurrPage());
+                pageRequest = createPageRequest(searchCriteria.getCurrPage(),100);
             }
 
 			//Pageable pageRequest = createPageRequest(searchCriteria.getCurrPage(),100);
