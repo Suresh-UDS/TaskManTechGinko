@@ -580,6 +580,7 @@ ul.blocksListCon
 .pagination>li>a, .pagination>li>span
 {
   background: #fff;
+  cursor: pointer;
 }
 .pagination>li>a:hover
 {
