@@ -76,25 +76,28 @@
                                             </div>
                                             <div class="col-md-6">
                                                 <div class="form-group selectcon" style="padding-top:25px;">
-
-                                                    <div class="" style="float:left;width:80%;">
-                                                        <select class="form-control" ng-model="employee.designation" ng-options="designation.designation as designation.designation for designation in designations">
-                                                            <option value="">Please select Designation..</option>
-                                                        </select>
-                                                    </div>
-                                                    <div class="" style="float:left;">
-                                                        <a href="javascript:;"  data-toggle="collapse" data-parent="#accordian" data-target="#addDesignation" class="btn btn-round btn-fab btn-fab-mini btn-simple" aria-expanded="false" aria-controls="collapseExample">
-                                                            <i class="material-icons">add</i>
-                                                        </a>
-                                                    </div>
-                                                    <div class="collapse" id="addDesignation">
-                                                        <div class="">
-
-                                                            <input class="input-desc" id='designationName' ng-model="designation"
-                                                                   name='designation' type='text' value=""/>
-                                                            <a class="btn btn-success"  ng-click="addDesignation()">Add</a>
-
+                                                     <div class="row"> 
+                                                        <div class="col-md-10 pad-r-0px" >
+                                                            <span class="form-control-feedback d-big-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
+                                                            <select class="form-control" ng-model="employee.designation" ng-options="designation.designation as designation.designation for designation in designations">
+                                                                <option value="">Select Designation..</option>
+                                                            </select>
                                                         </div>
+                                                        <div class="col-md-2 pad0px">
+                                                            <a href="javascript:;"  data-toggle="collapse" data-parent="#accordian" data-target="#addDesignation" class="btn btn-round btn-fab btn-fab-mini btn-simple" aria-expanded="false" aria-controls="collapseExample">
+                                                                <i class="material-icons">add</i>
+                                                            </a>
+                                                        </div>
+                                                        <div class="collapse" id="addDesignation">
+                                                            <div class="">
+
+                                                                <input class="input-desc" id='designationName' ng-model="designation"
+                                                                       name='designation' type='text' value=""/>
+                                                                <a class="btn btn-success"  ng-click="addDesignation()">Add</a>
+
+                                                            </div>
+                                                        </div>
+                                                        
                                                     </div>
                                                 </div>
                                             </div>
@@ -165,7 +168,7 @@
                                                 <div class="form-group">
                                                     <label class="control-label">Phone Number</label>
                                                     <input id='employeePhone' ng-model="employee.phone" class='form-control'
-                                                           name='employeePhone' type='number' value=""
+                                                           name='employeePhone' type='text' value=""
                                                            ng-minlength=10 ng-maxlength=13 ng-pattern="/^[A-Za-z0-9\s&-/]*$/"  />
                                                     <div ng-show="form.$submitted || form.employeePhone.$touched">
                                                         <div ng-show="form.employeeName.$dirty || form.employeePhone.$invalid">
@@ -240,8 +243,9 @@
 			                                            <!--uib-typeahead="role as role.name for role in userRoles | filter:$viewValue | limitTo:5"-->
 			                                            <!--name="UserRole" ng-minlength="5" ng-maxlength="50" autofocus-->
 			                                            <!--required >-->
+                                                 <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
 			                                     <select class="form-control " ng-model="selectedRole"  ng-options="role as role.name for role in userRoles">
-			                                         <option value="">Please select role...</option>
+			                                         <option value="">Select role...</option>
 			                                     </select>
 
 			                                     <div ng-show="form.$submitted || form.UserRole.$touched">
@@ -288,8 +292,9 @@
                                                                <!--uib-typeahead="project as project.name for project in projects | filter:$viewValue | limitTo:5"-->
                                                                <!--ng-blur="loadSites()"-->
                                                                <!--ng-minlength=2 ng-maxlength=50 ng-pattern="/^[A-Za-z0-9\s&-/]*$/"  autocomplete="off" />-->
+                                                        <span class="form-control-feedback d-big-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
                                                         <select class=" form-control " ng-model="selectedProject" ng-change="loadSites()" ng-options="project as project.name for project in projects" >
-                                                            <option value="">Please select Client...</option>
+                                                            <option value="">Select Client...</option>
                                                         </select>
                                                         <div ng-show="form.$submitted || form.projectName.$touched">
                                                             <div ng-show="form.projectName.$dirty || form.projectName.$invalid">
@@ -321,9 +326,9 @@
                                                         <!--<input ng-focus="loadSites()" type="text" class="form-control"  ng-model="selectedSite" name="siteName" ng-value="selectedSite.name"-->
                                                                <!--uib-typeahead="site as site.name for site in sites | filter:$viewValue | limitTo:5"-->
                                                                <!--ng-minlength=2 ng-maxlength=50 ng-pattern="/^[A-Za-z0-9\s&-/]*$/"  autocomplete="off" />-->
-
+                                                        <span class="form-control-feedback d-big-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
                                                         <select class="form-control " ng-model="selectedSite" ng-change="loadBlocks()" ng-options="site as site.name for site in sites">
-                                                            <option value="">Please select Site...</option>
+                                                            <option value="">Select Site...</option>
                                                         </select>
 
                                                         <div ng-show="form.$submitted || form.siteName.$touched">
@@ -406,9 +411,9 @@
                                                         <!--<input ng-focus="loadAllManagers()" type="text" class="form-control" ng-model="selectedManager" name="manager"-->
                                                                <!--uib-typeahead="employee as employee.name for employee in allManagers | filter:$viewValue | limitTo:10"-->
                                                                <!--ng-minlength=1 ng-maxlength=50 ng-pattern="/^[A-Za-z0-9\s]*$/"  autocomplete="off" />-->
-
+                                                        <span class="form-control-feedback d-big-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
                                                         <select class=" form-control " ng-model="selectedManager"  ng-options="manager as manager.name for manager in allManagers" >
-                                                            <option value="">Please select Manager...</option>
+                                                            <option value="">Select Manager...</option>
                                                         </select>
                                                         <div ng-show="form.$submitted || form.manager.$touched">
                                                             <div ng-show="form.manager.$dirty || form.manager.$invalid">
@@ -496,6 +501,7 @@
                                                 <div class="form-group ">
                                                     <label class="control-label">Block </label>
                                                     <div class="dropdown">
+                                                        <span class="form-control-feedback d-big-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
                                                        <select class="form-control " ng-model="selectedBlock" ng-change="loadFloors()"  ng-options="block as block for  block in  blocks">
                                                         	<option value="">Select Block...</option>
                                                     	  </select>
@@ -515,6 +521,7 @@
                                                 <div class="form-group ">
                                                     <label class="control-label">Floor </label>
                                                     <div class="dropdown">
+                                                        <span class="form-control-feedback d-big-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
 													<select class="form-control " ng-model="selectedFloor" ng-change="loadZones()"  ng-options="floor as floor for floor in floors">
                                                         <option value="">Select Floor...</option>
                                                     	</select>
@@ -534,6 +541,7 @@
                                                 <div class="form-group ">
                                                     <label class="control-label">Zone </label>
                                                     <div class="dropdown">
+                                                        <span class="form-control-feedback d-big-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
 													<select class="form-control " ng-model="selectedZone"  ng-options="zone as zone for zone in zones">
                                                         <option value="">Select Zone...</option>
                                                     </select>

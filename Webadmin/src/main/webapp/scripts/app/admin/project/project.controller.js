@@ -245,8 +245,9 @@ angular.module('timeSheetApp')
 
             }
 
-
-
+                /*$scope.projects = '';
+                $scope.projectsLoader = false;
+                $scope.loadPageTop();*/
             ProjectComponent.search($scope.searchCriteria).then(function (data) {
                 $scope.projects = data.transactions;
                 $scope.projectsLoader = true;
@@ -269,7 +270,7 @@ angular.module('timeSheetApp')
                 		}
                 }
 
-                if($scope.jobs && $scope.projects.length > 0 ){
+                if($scope.projects && $scope.projects.length > 0 ){
                     $scope.showCurrPage = data.currPage;
                     $scope.pageEntries = $scope.projects.length;
                     $scope.totalCountPages = data.totalCount;
@@ -300,6 +301,23 @@ angular.module('timeSheetApp')
                         	$scope.firstStyle();
                     	}
         };
+
+         $scope.pageSizes = [{
+            value: 10
+          }, {
+              value: 15
+          }, {
+              value: 20
+          }];
+
+        $scope.sort = $scope.pageSizes[0];
+        $scope.pageSort = $scope.pageSizes[0].value;
+
+        $scope.hasChanged = function(){
+            alert($scope.sort.value)
+            $scope.pageSort = $scope.sort.value;
+            $scope.search();
+        }
 
         $scope.clickNextOrPrev = function(number){
 	        	$scope.pages.currPage = number;

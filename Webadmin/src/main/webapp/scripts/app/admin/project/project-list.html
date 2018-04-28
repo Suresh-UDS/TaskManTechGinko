@@ -55,7 +55,7 @@
 
 
                     <div class="table-responsive tablecard">
-                        <table class="table table-striped" ng-init="search();">
+                        <table class="table table-striped">
 
                             <thead>
                             <tr>
@@ -148,8 +148,10 @@
 
     <div class="row">
 
-        <div class="col-md-4"></div>
-         <div class="col-md-8 text-right">
+        <div class="col-md-6">
+            Showing {{pageStartIntex}} to {{pageEndIntex}} of {{totalCountPages}} entries
+        </div>
+        <div class="col-md-6 text-right">
 	        <ul class="pagination pagination-warning">
 
 	            <li class="paging-first" ID="first">
