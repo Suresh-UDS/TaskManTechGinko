@@ -141,7 +141,7 @@
     							 </a></th>
                                 <th>Client</th>
                                 <th>Enrolled Face Id</th>
-                                <th>Authorize Face Id</th>
+                                <th has-permission="Employee:Edit">Authorize Face Id</th>
                                 <th>Status</th>
                                 <th class="disabled-sorting text-right">Actions</th>
                             </tr>
@@ -161,11 +161,11 @@
                                     <img src="assets/img/user.png" width="30px" height="30px"/>
                                 </td>
 
-                                <td ng-if="!employee.faceAuthorised && employee.faceIdEnrolled">
+                                <td has-permission="Employee:Edit" ng-if="!employee.faceAuthorised && employee.faceIdEnrolled">
                                     <button class="btn btn-success btn-sm" has-permission="Employee:Create" ng-click="approveImage(employee)">Approve</button>
                                 </td>
-                                <td ng-if="employee.faceAuthorised && employee.faceIdEnrolled"><p style="color:green">Face Id Approved</p> </td>
-                                <td ng-if="!employee.faceAuthorised && !employee.faceIdEnrolled"><p style="color:red">Face Id not enrolled</p> </td>
+                                <td has-permission="Employee:Edit" ng-if="employee.faceAuthorised && employee.faceIdEnrolled"><p style="color:green">Face Id Approved</p> </td>
+                                <td has-permission="Employee:Edit" ng-if="!employee.faceAuthorised && !employee.faceIdEnrolled"><p style="color:red">Face Id not enrolled</p> </td>
                                 <td>
                                     <button class="btn btn-primary btn-xs btn-warning"  ng-if="employee.reliever">Reliever</button>
                                     <button class="btn btn-primary btn-xs btn-danger" disabled ng-if="employee.left">InActive</button>
