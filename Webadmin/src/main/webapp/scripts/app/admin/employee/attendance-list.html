@@ -61,7 +61,7 @@
                                             </div>
                                     </td>
                                     <td>
-                                            
+
                                             <div class="dropdown">
                                                 <div class="form-group">
                                                     <!-- <label class="control-label">Select Site</label> -->
@@ -78,8 +78,8 @@
 
                                                 </div>
                                             </div>
-								   
-								   		
+
+
 								   </td>
                                     <td>
                                         <div class="form-group" >
@@ -106,8 +106,8 @@
                                             </div>
                                         </div>
                                     </td>
-                                    
-                                    
+
+
                                     <!-- <td>
                                         <div class="form-group" >
                                             <div class="dropdown">
@@ -157,15 +157,50 @@
                         <table class="table table-striped">
                             <thead>
                             <tr>
-                                <th>Employee ID</th>
-                                <th>Employee Name</th>
-                                <th>Site Name</th>
-                                <th>Check-In time</th>
+                                <th>Employee ID<a href="#">
+
+                                    <span ng-click="columnAscOrder('employee.id')"  class=""><i class="fa fa-caret-up"></i></span>
+                                    <span ng-click="columnDescOrder('employee.id')" class=""><i class="fa fa-caret-down"></i></span>
+
+                                </a></th>
+                                <th>Employee Name<a href="#">
+
+                                    <span ng-click="columnAscOrder('employee.fullName')"  class=""><i class="fa fa-caret-up"></i></span>
+                                    <span ng-click="columnDescOrder('employee.fullName')" class=""><i class="fa fa-caret-down"></i></span>
+
+                                </a></th>
+                                <th>Site Name<a href="#">
+
+                                    <span ng-click="columnAscOrder('site.name')"  class=""><i class="fa fa-caret-up"></i></span>
+                                    <span ng-click="columnDescOrder('site.name')" class=""><i class="fa fa-caret-down"></i></span>
+
+                                </a></th>
+                                <th>Check-In time<a href="#">
+
+                                    <span ng-click="columnAscOrder('checkInTime')"  class=""><i class="fa fa-caret-up"></i></span>
+                                    <span ng-click="columnDescOrder('checkInTime')" class=""><i class="fa fa-caret-down"></i></span>
+
+                                </a></th>
                                 <th>Check-In Image</th>
-                                <th>Check-Out time</th>
+                                <th>Check-Out time<a href="#">
+
+                                    <span ng-click="columnAscOrder('checkOutTime')"  class=""><i class="fa fa-caret-up"></i></span>
+                                    <span ng-click="columnDescOrder('checkOutTime')" class=""><i class="fa fa-caret-down"></i></span>
+
+                                </a></th>
                                 <th>Check-Out Image</th>
-                                <th>Shift (Start - End) time</th>
-                                <th>Location</th>
+                                <th>Shift (Start - End) time<!--<a href="#">
+
+                                    <span ng-click="columnAscOrder('shift')"  class=""><i class="fa fa-caret-up"></i></span>
+                                    <span ng-click="columnDescOrder('shift')" class=""><i class="fa fa-caret-down"></i></span>
+
+                                </a>--></th>
+                                <th>Location<!--<a href="#">
+
+                                    <span ng-click="columnAscOrder('project.name')"  class=""><i class="fa fa-caret-up"></i></span>
+                                    <span ng-click="columnDescOrder('project.name')" class=""><i class="fa fa-caret-down"></i></span>
+
+                                </a>--></th>
                             </tr>
                             </thead>
                             <tbody>
@@ -182,7 +217,7 @@
                                 <td ng-if="!attendance.checkInImage">
                                     <img src="assets/img/user.png" width="30px" height="30px"/>
                                 </td>
-                                
+
 
                                 <td>{{attendance.checkOutTime | date:'MM/dd/yyyy @ h:mma'}}</td>
 
@@ -193,7 +228,7 @@
                                 <td ng-if="!attendance.checkOutImage">
                                     <img src="assets/img/user.png" width="30px" height="30px"/>
                                 </td>
-                                
+
                                 <td>{{attendance.shift}}</td>
                                 <td align="center">
                                     <a id="maps" href="#" ng-click="newInitMap('mapIn',attendance.latitudeIn, attendance.longitudeIn, 'mapOut', attendance.latitudeOut, attendance.longitudeOut)" onClick="$('#mapModal').modal()" data-target="#mapModal" >

@@ -28,19 +28,18 @@
 
                         <form name="searchForm"  ng-submit="search()" novalidate >
 
-                            <table class="table no-padding-tblCon" border="0">
-                                <tr class="filter-row gc-search-row">
+                            <div class="row">
 
 <!--                                     <td>
                                         <label>Show</label>
                                         <select class="siteList margin0" ng-model="sort" ng-change="hasChanged()" ng-options="paging.value for paging in pageSizes" value="{{paging.value}}">
                                         </select>
                                     </td>
- -->								   <td>
+ -->								  <div class="col-md-2">
 								   			<div class="dropdown">
                                                 <div class="form-group">
                                                     <label class="control-label">Select Client</label>
-
+                                                     <span class="form-control-feedback d-sm-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
                                                     <select class="form-control " ng-model="selectedProject"  ng-change="loadSites()"  ng-options="project as project.name for project in projects">
                                                         <option value="">Select Client...</option>
                                                     </select>
@@ -49,8 +48,8 @@
 
                                                 </div>
                                             </div>
-                                    </td>
-                                    <td>
+                                    </div>
+                                    <div class="col-md-2">
 
                                             <div class="dropdown">
                                                 <div class="form-group">
@@ -60,6 +59,7 @@
                                                     <!--uib-typeahead="role as role.name for role in userRoles | filter:$viewValue | limitTo:5"-->
                                                     <!--name="UserRole" ng-minlength="5" ng-maxlength="50" autofocus-->
                                                     <!--required >-->
+                                                    <span class="form-control-feedback d-sm-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
                                                     <select class="form-control " ng-model="selectedSite"  ng-options="site as site.name for site in sites">
                                                         <option value="">Select Site...</option>
                                                     </select>
@@ -70,36 +70,35 @@
                                             </div>
 
 
-								   </td>
-                                    <td>
-                                        <div class="form-group" style="padding-top: 20px;" >
+								   </div>
+                                    <div class="col-md-2">                                        <div class="form-group" style="padding-top: 20px;" >
                                             <div class="dropdown">
                                                 <input type="text"
                                                        class="form-control border-bottom-input"
-                                                       placeholder="Search Employee Id"
+                                                       placeholder="Employee Id"
                                                        ng-model="selectedEmployeeId"
 												/>
 
                                             </div>
                                         </div>
-                                    </td>
+                                    </div>
 
 
-                                    <td>
+                                    <div class="col-md-2">
                                         <div class="form-group" style="padding-top: 20px;" >
                                             <div class="dropdown">
                                                 <input type="text"
                                                        class="form-control border-bottom-input"
-                                                       placeholder="Search Employee Name"
+                                                       placeholder="Employee Name"
                                                        ng-model="selectedEmployeeName"
                                                        />
                                             </div>
                                         </div>
-                                    </td>
+                                    </div>
 
 
-                                    <td align="right">
-                                        <div class="floatR form-group" style="padding-top: 10px;">
+                                    <div class="col-md-4">
+                                        <div class="form-group pull-right" style="padding-top: 10px;">
 
                                             <button type="submit" class="btn btn-circle blue-clr">
                                                 <i class="material-icons">search</i>
@@ -114,9 +113,10 @@
                                                 <i class="material-icons">refresh</i>
                                             </button>
                                         </div>
-                                    </td>
-                                </tr>
-                            </table>
+                                        <div class="clearfix"></div>
+                                    </div>
+
+                              </div>
                         </form>
 
                     </div>
@@ -141,7 +141,7 @@
     							 </a></th>
                                 <th>Client</th>
                                 <th>Enrolled Face Id</th>
-                                <th>Authorize Face Id</th>
+                                <th has-permission="Employee:Edit">Authorize Face Id</th>
                                 <th>Status</th>
                                 <th class="disabled-sorting text-right">Actions</th>
                             </tr>
@@ -161,11 +161,11 @@
                                     <img src="assets/img/user.png" width="30px" height="30px"/>
                                 </td>
 
-                                <td ng-if="!employee.faceAuthorised && employee.faceIdEnrolled">
+                                <td has-permission="Employee:Edit" ng-if="!employee.faceAuthorised && employee.faceIdEnrolled">
                                     <button class="btn btn-success btn-sm" has-permission="Employee:Create" ng-click="approveImage(employee)">Approve</button>
                                 </td>
-                                <td ng-if="employee.faceAuthorised && employee.faceIdEnrolled"><p style="color:green">Face Id Approved</p> </td>
-                                <td ng-if="!employee.faceAuthorised && !employee.faceIdEnrolled"><p style="color:red">Face Id not enrolled</p> </td>
+                                <td has-permission="Employee:Edit" ng-if="employee.faceAuthorised && employee.faceIdEnrolled"><p style="color:green">Face Id Approved</p> </td>
+                                <td has-permission="Employee:Edit" ng-if="!employee.faceAuthorised && !employee.faceIdEnrolled"><p style="color:red">Face Id not enrolled</p> </td>
                                 <td>
                                     <button class="btn btn-primary btn-xs btn-warning"  ng-if="employee.reliever">Reliever</button>
                                     <button class="btn btn-primary btn-xs btn-danger" disabled ng-if="employee.left">InActive</button>
@@ -307,9 +307,14 @@
 
                 </div>
                 <div class="collapse" id="assign">
-                    <select class="siteList" ng-model="transferringEmployee"  ng-options="emp as emp.fullName for emp in allEmployees">
-                        <option value="">Please select..</option>
-                    </select>
+                    <div class="form-group" >
+                        <div class="dropdown">
+                            <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
+                            <select class="siteList" ng-model="transferringEmployee"  ng-options="emp as emp.fullName for emp in allEmployees">
+                                <option value="">Select..</option>
+                            </select>
+                        </div>
+                    </div>
                 </div>
             </div>
             <div class="modal-footer ">
@@ -342,9 +347,12 @@
 
                 <div class="col-md-12">
                     <div class="form-group selectcon">
-                        <label class="control-label">To Site</label>
-                        <select class="siteList" ng-model="transferSite" ng-options="site as site.name for site in sites" >
-                        </select>
+                        <div class="dropdown">
+                            <label class="control-label">To Site</label>
+                            <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
+                            <select class="siteList" ng-model="transferSite" ng-options="site as site.name for site in sites" >
+                            </select>
+                        </div>
                     </div>
                 </div>
                 <div class="row" ng-hide="!(transferEmployeeDetails.projectSites.length > 0)">
@@ -358,10 +366,13 @@
 
                             <div ng-switch="transferEmployeeOptions" class="col-md-12">
                                     <div class="form-group selectcon" ng-switch-when="assign">
-                                        <label class="control-label">Assign Employee</label>
-                                        <select ng-options="employee.id as employee.fullName for employee in allEmployees" ng-model="transferringEmployee" required random-directive>
-                                            <option value="">Please select...</option>
-                                        </select>
+                                        <div class="dropdown">
+                                            <label class="control-label">Assign Employee</label>
+                                            <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
+                                            <select ng-options="employee.id as employee.fullName for employee in allEmployees" ng-model="transferringEmployee" required random-directive>
+                                                <option value="">Select...</option>
+                                            </select>
+                                        </div>
                                     </div>
                             </div>
                          </div>
@@ -415,23 +426,24 @@
             </div>
 
             <div class="modal-body">
-                <table class="table" border="0">
-                    <tr class="filter-row gc-search-row">
-                        <td>
+                <div class="row">
+                        <div class="col-md-6">
                             <div class="form-group" >
-
+                                <span class="form-control-feedback calender-big-icon"><i class="material-icons">date_range</i></span>
                                 <input id="dateFilterFrom" type="text" class="form-control datepicker" ng-model="relieverDateFrom" value={{now}} placeholder="From Date" />
                             </div>
-                        </td>
+                        </div>
 
-                        <td>
+                        <div class="col-md-6">
                             <div class="form-group" >
-
+                                <span class="form-control-feedback calender-big-icon"><i class="material-icons">date_range</i></span>
                                 <input id="dateFilterTo" type="text" class="form-control datepicker" ng-model="relieverDateTo"  value={{now}} placeholder="To Date" />
                             </div>
-                        </td>
+                        </div>
+                </div>
+                <div class="row">
 
-                        <td>
+                        <div class="col-md-6">
                             <div class="form-group" >
                                 <div class="dropdown">
                                     <input type="text"
@@ -442,14 +454,18 @@
                                            uib-typeahead="employee as employee.fullName for employee in relievers | filter:$viewValue | limitTo:5" />
                                 </div>
                             </div>
-                        </td>
-                        <td>
-                            <select class="siteList" ng-model="selectedReliever"  ng-options="emp as emp.fullName for emp in relievers">
-                                <option value="">Please select..</option>
-                            </select>
-                        </td>
-                    </tr>
-                </table>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group" >
+                                <div class="dropdown">
+                                    <span class="form-control-feedback d-big-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
+                                    <select class="form-control" ng-model="selectedReliever"  ng-options="emp as emp.fullName for emp in relievers">
+                                        <option value="">Select..</option>
+                                    </select>
+                                </div>
+                           </div>
+                        </div>
+                  </div>
             </div>
 
             <div class="modal-footer ">

@@ -15,33 +15,33 @@
 							<div class="row" >
 
 			                    <div class="col-md-2">
-			
+
 			                        <!--<div class="form-group label-floating">-->
 			                        <!--<label class="control-label">Date</label>-->
 			                        <!--<input class="datepicker form-control" type="text" value="03/01/2018"/>-->
-			
+
 			                        <!--</div>-->
-			
+
 			                        <div class="form-group">
 			                            <label class="label-control">From date</label>
 			                            <span class="form-control-feedback calender-icon"><i class="material-icons">date_range</i></span>
 			                            <input type="text" class="form-control datepicker"  id="dateFilterFrom"  placeholder="{{dateFilterFrom | date:'dd-MMM-yyyy'}}" />
-			                           
+
 			                        </div>
-			
+
 			                    </div>
 			                    <div class="col-md-2">
-			
+
 			                        <div class="form-group">
 			                            <label class="label-control">To date</label>
 			                            <span class="form-control-feedback calender-icon"><i class="material-icons">date_range</i></span>
 			                            <input type="text" class="form-control datepicker"  id="dateFilterTo"  placeholder="{{dateFilterTo | date:'dd-MMM-yyyy'}}"/>
-			
+
 			                        </div>
-			
+
 			                    </div>
 			                    <div class="col-md-6">
-			                    		
+
 			                    </div>
 			                    <div class="col-md-2">
 									<div class="form-group ">
@@ -61,7 +61,7 @@
 				                     </div>
 			                     </div>
 			               </div>
-			               <div class="row">     
+			               <div class="row">
 			                    <div class="col-md-3">
 			                        <div class="dropdown">
 			                            <label class="label-control">Select Client</label>
@@ -86,11 +86,11 @@
 			                            </select>
 			                        </div>
 			                    </div>
-			
-								
+
+
 			                </div>
 
-                            
+
                         </form>
 
                     </div>
@@ -99,16 +99,66 @@
                         <table class="table table-striped">
                             <thead>
                             <tr>
-                                <th>Ticket Id</th>
-                                <th>Issue</th>
-                                <th>Description</th>
-                                <th>Initiator</th>
-                                <th>Initiated at</th>
-                                <th>Assigned To</th>
-                                <th>Assigned at</th>
-                                <th>Closed by</th>
-                                <th>Closed at</th>
-                                <th>Status</th>
+                                <th>Ticket Id<a href="#">
+
+                                    <span ng-click="columnAscOrder('id')"  class=""><i class="fa fa-caret-up"></i></span>
+                                    <span ng-click="columnDescOrder('id')" class=""><i class="fa fa-caret-down"></i></span>
+
+                                </a></th>
+                                <th>Issue<a href="#">
+
+                                    <span ng-click="columnAscOrder('title')"  class=""><i class="fa fa-caret-up"></i></span>
+                                    <span ng-click="columnDescOrder('title')" class=""><i class="fa fa-caret-down"></i></span>
+
+                                </a></th>
+                                <th>Description<a href="#">
+
+                                    <span ng-click="columnAscOrder('description')"  class=""><i class="fa fa-caret-up"></i></span>
+                                    <span ng-click="columnDescOrder('description')" class=""><i class="fa fa-caret-down"></i></span>
+
+                                </a></th>
+                                <th>Initiator<a href="#">
+
+                                    <span ng-click="columnAscOrder('createdBy')"  class=""><i class="fa fa-caret-up"></i></span>
+                                    <span ng-click="columnDescOrder('createdBy')" class=""><i class="fa fa-caret-down"></i></span>
+
+                                </a></th>
+                                <th>Initiated at<a href="#">
+
+                                    <span ng-click="columnAscOrder('createdDate')"  class=""><i class="fa fa-caret-up"></i></span>
+                                    <span ng-click="columnDescOrder('createdDate')" class=""><i class="fa fa-caret-down"></i></span>
+
+                                </a></th>
+                                <th>Assigned To<a href="#">
+
+                                    <span ng-click="columnAscOrder('assignedTo.name')"  class=""><i class="fa fa-caret-up"></i></span>
+                                    <span ng-click="columnDescOrder('assignedTo.name')" class=""><i class="fa fa-caret-down"></i></span>
+
+                                </a></th>
+                                <th>Assigned at<a href="#">
+
+                                    <span ng-click="columnAscOrder('assignedOn')"  class=""><i class="fa fa-caret-up"></i></span>
+                                    <span ng-click="columnDescOrder('assignedOn')" class=""><i class="fa fa-caret-down"></i></span>
+
+                                </a></th>
+                                <th>Closed by<a href="#">
+
+                                    <span ng-click="columnAscOrder('closedBy.name')"  class=""><i class="fa fa-caret-up"></i></span>
+                                    <span ng-click="columnDescOrder('closedBy.name')" class=""><i class="fa fa-caret-down"></i></span>
+
+                                </a></th>
+                                <th>Closed at<a href="#">
+
+                                    <span ng-click="columnAscOrder('closedOn')"  class=""><i class="fa fa-caret-up"></i></span>
+                                    <span ng-click="columnDescOrder('closedOn')" class=""><i class="fa fa-caret-down"></i></span>
+
+                                </a></th>
+                                <th>Status<a href="#">
+
+                                    <span ng-click="columnAscOrder('status')"  class=""><i class="fa fa-caret-up"></i></span>
+                                    <span ng-click="columnDescOrder('status')" class=""><i class="fa fa-caret-down"></i></span>
+
+                                </a></th>
                                 <th>TAT</th>
                             </tr>
                             </thead>

@@ -145,6 +145,8 @@ angular.module('timeSheetApp')
 
             exportAllData: function(searchCriteria) {
 	            	return $http.post('api/employee/export', searchCriteria).then(function (response) {
+
+	            	    console.log("Emp - Export------>"+JSON.stringify(response));
 	            		return response.data;
 	            	});
             },
@@ -250,7 +252,7 @@ angular.module('timeSheetApp')
 	            	return $http.post('api/employee/shift/import', fileFormData, {
 	                    transformRequest: angular.identity,
 	                    headers: {'Content-Type': undefined}
-	
+
 	                }).then(function (response) {
 	            			return response.data;
 	                });
@@ -260,7 +262,7 @@ angular.module('timeSheetApp')
 	            	return $http.get('api/employee/shift/import/'+fileName+"/status").then(function (response) {
 	            		return response.data;
 	            	});
-            }            
+            }
 
         };
     });

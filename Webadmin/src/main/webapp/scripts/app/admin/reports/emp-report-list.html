@@ -92,13 +92,48 @@
 
                             <thead>
                             <tr>
-                                <th>Emp ID</th>
-                                <th>Name</th>
-                                <th>Designation</th>
-                                <th>Reporting To</th>
-                                <th>Client</th>
-                                <th>Site</th>
-                                <th>Joining Date</th>
+                                <th>Emp ID<a href="#">
+
+                                    <span ng-click="columnAscOrder('empId')"  class=""><i class="fa fa-caret-up"></i></span>
+                                    <span ng-click="columnDescOrder('empId')" class=""><i class="fa fa-caret-down"></i></span>
+
+                                </a></th>
+                                <th>Name<a href="#">
+
+                                    <span ng-click="columnAscOrder('fullName')"  class=""><i class="fa fa-caret-up"></i></span>
+                                    <span ng-click="columnDescOrder('fullName')" class=""><i class="fa fa-caret-down"></i></span>
+
+                                </a></th>
+                                <th>Designation<a href="#">
+
+                                    <span ng-click="columnAscOrder('designation')"  class=""><i class="fa fa-caret-up"></i></span>
+                                    <span ng-click="columnDescOrder('designation')" class=""><i class="fa fa-caret-down"></i></span>
+
+                                </a></th>
+                                <th>Reporting To<a href="#">
+
+                                    <span ng-click="columnAscOrder('managerName')"  class=""><i class="fa fa-caret-up"></i></span>
+                                    <span ng-click="columnDescOrder('managerName')" class=""><i class="fa fa-caret-down"></i></span>
+
+                                </a></th>
+                                <th>Client<a href="#">
+
+                                    <span ng-click="columnAscOrder('project.name')"  class=""><i class="fa fa-caret-up"></i></span>
+                                    <span ng-click="columnDescOrder('project.name')" class=""><i class="fa fa-caret-down"></i></span>
+
+                                </a></th>
+                                <th>Site<a href="#">
+
+                                    <span ng-click="columnAscOrder('site.name')"  class=""><i class="fa fa-caret-up"></i></span>
+                                    <span ng-click="columnDescOrder('site.name')" class=""><i class="fa fa-caret-down"></i></span>
+
+                                </a></th>
+                                <th>Joining Date<a href="#">
+
+                                    <span ng-click="columnAscOrder('createdDate')"  class=""><i class="fa fa-caret-up"></i></span>
+                                    <span ng-click="columnDescOrder('createdDate')" class=""><i class="fa fa-caret-down"></i></span>
+
+                                </a> </th>
                                 <th>Active</th>
                             </tr>
                             </thead>

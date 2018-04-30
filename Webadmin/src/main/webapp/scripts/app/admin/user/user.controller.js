@@ -239,6 +239,8 @@ angular.module('timeSheetApp')
                 $scope.searchCriteria.columnName = $scope.selectedColumn;
                 $scope.searchCriteria.sortByAsc = $scope.isAscOrder;
 
+            }else{
+                $scope.searchCriteria.columnName ="id";
             }
 
             console.log("search Criteria to be sent - "+JSON.stringify($rootScope.searchCriteriaUser));
@@ -248,7 +250,7 @@ angular.module('timeSheetApp')
 	        		$scope.loadEmployee();
 	        		console.log("Employee details---"+JSON.stringify($scope.loadEmployee()));
 	                $scope.users = data.transactions;
-	                for(var i=0;i<$scope.users.length;i++) console.log($scope.users[i].id);
+	                //for(var i=0;i<$scope.users.length;i++) console.log($scope.users[i].id);
 
                     $scope.usersLoader = true;
 	                $scope.pages.currPage = data.currPage;

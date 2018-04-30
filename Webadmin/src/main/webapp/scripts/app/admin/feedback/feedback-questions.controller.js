@@ -37,61 +37,61 @@ angular.module('timeSheetApp')
           $scope.qType();
           $scope.ratRadioActive();
         };
-        
-        
+
+
         // Question option types y/n and rating
-        
+
         $scope.qType = function(){
-        	
+
             var quesType = $('#displayType:checked').val();
-        
+
             if(quesType == 'form'){
             	$('#answerType1').prop('checked', true);
-            	
+
             }else if(quesType == 'wizard'){
-            	
+
             	$('#answerType2').prop('checked', true);
-            	
+
             }
             $("#YesOrNo").removeClass("in", 2000);
             //alert($('#answerType2:checked').val());
         }
-        
+
          // Question option type rating
-        
+
         $scope.ratRadio = function(){
-        	
+
         	$("#YesOrNo").removeClass("in");
         }
-        
+
        $scope.ratRadioActive = function(){
-        	
+
         	$("#YesOrNo").addClass("in");
         }
-        
+
        $scope.yesMarkP = function(){
-    	  
+
     	   $('#noMarkP').prop('checked', false);
     	   $('#noMarkN').prop('checked', true);
         }
        $scope.yesMarkN = function(){
-    	  
+
     	   $('#noMarkP').prop('checked', true);
     	   $('#noMarkN').prop('checked', false);
         }
        $scope.noMarkP = function(){
-    	   
+
     	   $('#yesMarkN').prop('checked', true);
     	   $('#yesMarkP').prop('checked', false);
        }
-       
+
        $scope.noMarkN = function(){
-    	   
+
     	   $('#yesMarkP').prop('checked', true);
     	   $('#yesMarkN').prop('checked', false);
        }
-        
-        
+
+
         $scope.loadProjects = function () {
 	    		ProjectComponent.findAll().then(function (data) {
 	            $scope.projects = data;
@@ -152,7 +152,7 @@ angular.module('timeSheetApp')
                 })
 
             });
-        		
+
           $scope.loadPageTop();
         };
 
@@ -211,6 +211,39 @@ angular.module('timeSheetApp')
 	        });
           }
 
+          //-------
+        $scope.pageSizes = [{
+            value: 10
+        }, {
+            value: 15
+        }, {
+            value: 20
+        }];
+
+        $scope.sort = $scope.pageSizes[0];
+        $scope.pageSort = $scope.pageSizes[0].value;
+
+        $scope.hasChanged = function(){
+            alert($scope.sort.value)
+            $scope.pageSort = $scope.sort.value;
+            $scope.search();
+        }
+
+        $scope.columnAscOrder = function(field){
+            $scope.selectedColumn = field;
+            $scope.isAscOrder = true;
+            $scope.search();
+        }
+
+        $scope.columnDescOrder = function(field){
+            $scope.selectedColumn = field;
+            $scope.isAscOrder = false;
+            $scope.search();
+        }
+
+
+
+
         $scope.search = function () {
             var currPageVal = ($scope.pages ? $scope.pages.currPage : 1);
             if(!$scope.searchCriteria) {
@@ -241,6 +274,20 @@ angular.module('timeSheetApp')
                 }
             }
             console.log($scope.searchCriteria);
+            //-------
+            if($scope.pageSort){
+                $scope.searchCriteria.sort = $scope.pageSort;
+            }
+
+            if($scope.selectedColumn){
+
+                $scope.searchCriteria.columnName = $scope.selectedColumn;
+                $scope.searchCriteria.sortByAsc = $scope.isAscOrder;
+
+            }else{
+                $scope.searchCriteria.columnName ="id";
+            }
+
             FeedbackComponent.searchFeedbackMaster($scope.searchCriteria).then(function (data) {
                 $scope.feedbackMasterList = data.transactions;
                 $scope.feedbackMasterListLoader = true;
@@ -263,6 +310,15 @@ angular.module('timeSheetApp')
                 $scope.firstStyle();
             }
         };
+
+
+        //----
+        $scope.clickNextOrPrev = function(number){
+            $scope.pages.currPage = number;
+            $scope.search();
+        }
+
+
 
         $scope.first = function() {
             if($scope.pages.currPage > 1) {
@@ -391,11 +447,11 @@ angular.module('timeSheetApp')
 
 
         //init load
-        $scope.initLoad = function(){ 
-             $scope.loadPageTop(); 
+        $scope.initLoad = function(){
+             $scope.loadPageTop();
              $scope.init();
-            
-          
+
+
          }
 
        //Loading Page go to top position
@@ -409,13 +465,13 @@ angular.module('timeSheetApp')
 
         $scope.loadingStart = function(){ $('.pageCenter').show();}
         $scope.loadingStop = function(){
-            
+
             console.log("Calling loader");
             $('.pageCenter').hide();
-                    
+
         }
-        
-        
+
+
     });
 
 

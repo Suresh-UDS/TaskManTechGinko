@@ -311,10 +311,12 @@ public class EmployeeResource {
 	public ExportResponse exportEmployee(@RequestBody SearchCriteria searchCriteria) {
 	    ExportResponse resp = new ExportResponse();
 		if(searchCriteria != null) {
+		    log.debug("Emp - control comes here....");
 			searchCriteria.setUserId(SecurityUtils.getCurrentUserId());
 			SearchResult<EmployeeDTO> result = employeeService.findBySearchCrieria(searchCriteria);
+			log.debug("Everything is FINE------->");
 			List<EmployeeDTO> results = result.getTransactions();
-			//log.debug("VALUES OF RESULTS ******************"+results);
+			log.debug("VALUES OF RESULTS --------->"+results);
             resp.addResult(employeeService.export(results));
 		}
     	return resp;
@@ -475,7 +477,7 @@ public class EmployeeResource {
 		}
 		return result;
 	}
-    
+
     @RequestMapping(path="/employee/shift/import", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<ImportResult> importShiftData(@RequestParam("employeeShiftFile") MultipartFile file){
     	log.info("Employee Shift Import Status********************");
