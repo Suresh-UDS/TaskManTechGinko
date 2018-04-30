@@ -5,9 +5,9 @@ angular
 		.controller(
 				'QuotationController',
 				function($scope, $rootScope, $state, $timeout, $http, $document, $window,
-						$stateParams, $location, RateCardComponent, ProjectComponent, SiteComponent) {
+						$stateParams, $location, RateCardComponent,TicketComponent, ProjectComponent, SiteComponent) {
                     $rootScope.loginView = false;
-                    
+
 					$scope.selectedProject;
 
 					$scope.selectedSite;
@@ -55,8 +55,28 @@ angular
 					$scope.labourRateCardDetails = [];
 
 					$scope.totalCost = 0;
-					
+
 					$scope.init = function() {
+
+                        console.log("State parameters");
+                        console.log($stateParams);
+                        if($stateParams.ticketId){
+                            TicketComponent.getTicketDetails($stateParams.ticketId).then(function(data){
+                                console.log("Ticket details");
+                                console.log(data);
+                                $scope.quotation.title =data.title;
+                                $scope.quotation.description = data.description;
+                                $scope.quotation.ticketId = data.id;
+                                if(data.siteId){
+                                    SiteComponent.findOne(data.siteID).then(function (data) {
+                                        console.log(data);
+                                        $scope.selectedSite = data;
+                                    })
+                                }
+                            })
+                        }
+
+
 						console.log('readonly value -'+ $stateParams.viewOnly);
 						if($state.current.name == 'view-quotation') {
 							$scope.viewOnly = $stateParams.viewOnly;
@@ -68,7 +88,7 @@ angular
 							$document[0].getElementById('labourEntryFields').style.display = $stateParams.viewOnly ? 'none' : 'block';
 							$document[0].getElementById('materialEntryFields').style.display = $stateParams.viewOnly ? 'none' : 'block';
 							$document[0].getElementById('actionButtons').style.display = $stateParams.viewOnly ? 'none' : 'block';
-							$document[0].getElementById('closeButton').style.display = $stateParams.viewOnly ? 'visible' : 'none';							
+							$document[0].getElementById('closeButton').style.display = $stateParams.viewOnly ? 'visible' : 'none';
 						}
 
 						$scope.loadProjects();
@@ -80,7 +100,7 @@ angular
 							$scope.projects = data;
 						});
 					};
-					
+
 			        $scope.loadSelectedProject = function(projectId) {
 				        	ProjectComponent.findOne(projectId).then(function (data) {
 				                $scope.selectedProject = data;
@@ -88,7 +108,7 @@ angular
 			            });
 			        };
 
-					
+
 			        $scope.loadSites = function () {
 			            $scope.showLoader();
 				        	console.log('selected project - ' + JSON.stringify($scope.selectedProject));
@@ -96,16 +116,16 @@ angular
 				            	ProjectComponent.findSites($scope.selectedProject.id).then(function (data) {
 				                    $scope.sites = data;
 				                    $scope.hideLoader();
-	
+
 				                });
 				        	}else {
 				            	SiteComponent.findAll().then(function (data) {
 				                    $scope.sites = data;
 				                    $scope.hideLoader();
-	
+
 				                });
 				        	}
-			        };					
+			        };
 
 					$scope.loadAllQuotations = function() {
 						 $scope.quotations = '';
@@ -117,7 +137,7 @@ angular
 									$scope.quotationsLoader = true;
 									$scope.selectedProject= {id:response.projectId,name:response.projectName};
 						             $scope.selectedSite = {id:response.siteId,name:response.siteName};
-						            
+
 								})
 
 					};
@@ -199,7 +219,7 @@ angular
 						$scope.quotation.siteName = $scope.selectedSite.name;
 						$scope.quotation.projectId = $scope.selectedProject.id;
 						$scope.quotation.projectName = $scope.selectedProject.name;
-						
+
 						$scope.rateCardDetails = $scope.serviceRateCardDetails
 								.concat($scope.labourRateCardDetails,
 										$scope.materialRateCardDetails);
@@ -209,7 +229,7 @@ angular
 						RateCardComponent.createQuotation($scope.quotation)
 								.then(function(response) {
 									console.log(response);
-									$scope.showNotifications('top','center','success','Quotation saved Successfully');									
+									$scope.showNotifications('top','center','success','Quotation saved Successfully');
 									//$scope.loadAllQuotations();
 									$location.path('/quotation-list');
 								}).catch(function (response) {
@@ -222,7 +242,7 @@ angular
 			                        } else {
 			                            $scope.error = 'ERROR';
 			                            $scope.showNotifications('top','center','danger', response.data.description);
-			                            
+
 			                        }
 			                    });
 					}
@@ -231,9 +251,9 @@ angular
 
 						$scope.quotation = quotation;
 					}
-					
+
 			        $scope.loadQuotation = function() {
-	
+
 			        		console.log('quotation id - ' + $stateParams.id);
 			        		RateCardComponent.findQuotation($stateParams.id).then(function (data) {
 			        			$scope.loadingStop();
@@ -251,7 +271,7 @@ angular
 			        					}else if(rateCardDetail.type == 'MATERIAL') {
 			        						$scope.materialTotalCost += rateCardDetail.cost;
 			        						$scope.materialRateCardDetails.push(rateCardDetail);
-			        					} 
+			        					}
 			        					$scope.totalCost += rateCardDetail.cost;
 			        				}
 				                $scope.loadSelectedProject($scope.quotation.projectId);
@@ -266,13 +286,13 @@ angular
 						RateCardComponent.approveQuotation(quotation).then(
 								function(response) {
 									console.log(response);
-									$scope.showNotifications('top','center','success','Quotation approved Successfully');									
+									$scope.showNotifications('top','center','success','Quotation approved Successfully');
 									//$scope.loadAllQuotations();
 									//$location.path('/quotation-list');
 									$scope.refreshPage();
 								})
 					}
-					
+
 			        $scope.showLoader = function(){
 			            console.log("Show Loader");
 			            $scope.loading = true;
@@ -288,7 +308,7 @@ angular
 			        $scope.showNotifications= function(position,alignment,color,msg){
 			            demo.showNotification(position,alignment,color,msg);
 			        }
-			        
+
 			        $scope.cancelQuotation = function () {
 			        		$location.path('/quotation-list');
 			        };
@@ -356,14 +376,14 @@ angular
 		        	}
 		        };
 
-			        
+
 
 			         //init load
-                        $scope.initLoad = function(){ 
-                             $scope.loadPageTop(); 
-                             $scope.loadAllQuotations(); 
-                             $scope.init(); 
-                          
+                        $scope.initLoad = function(){
+                             $scope.loadPageTop();
+                             $scope.loadAllQuotations();
+                             $scope.init();
+
                          }
 
                        //Loading Page go to top position
@@ -377,20 +397,20 @@ angular
 
 					        $scope.loadingStart = function(){ $('.pageCenter').show();$('.overlay').show();}
 					        $scope.loadingAuto = function(){
-					            $scope.loadingStart(); 
+					            $scope.loadingStart();
 					            $scope.loadtimeOut = $timeout(function(){
-					            
+
 					            //console.log("Calling loader stop");
 					            $('.pageCenter').hide();$('.overlay').hide();
-					                    
+
 					        }, 2000);
 					           // alert('hi');
 					        }
 					        $scope.loadingStop = function(){
-					            
+
 					            console.log("Calling loader");
 					            $('.pageCenter').hide();$('.overlay').hide();
-					                    
+
 					        }
 
 				});

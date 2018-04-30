@@ -18,9 +18,9 @@ angular.module('timeSheetApp')
                     }
                 },
                 resolve: {
-                    
+
                 }
-            })       
+            })
         .state('edit-job', {
             parent: 'manage',
             url: '/edit-job:id',
@@ -36,8 +36,8 @@ angular.module('timeSheetApp')
                 }
             },
             resolve: {
-            	 
-                
+
+
             }
         }).state('view-job', {
             parent: 'manage',
@@ -54,8 +54,8 @@ angular.module('timeSheetApp')
                 }
             },
             resolve: {
-            	 
-                
+
+
             }
         })
         .state('jobs', {
@@ -73,7 +73,7 @@ angular.module('timeSheetApp')
                     }
                 },
                 resolve: {
-                    
+
                 }
             });
     });

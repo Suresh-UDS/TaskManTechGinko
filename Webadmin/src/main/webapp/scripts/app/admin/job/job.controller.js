@@ -4,7 +4,7 @@ angular.module('timeSheetApp')
 		    .controller(
 				'JobController',
 				function($scope, $rootScope, $state, $timeout, JobComponent,AssetComponent,
-						ProjectComponent, SiteComponent,EmployeeComponent,ChecklistComponent, LocationComponent, $http, $stateParams,
+						ProjectComponent, SiteComponent,EmployeeComponent,ChecklistComponent, LocationComponent,TicketComponent, $http, $stateParams,
 						$location) {
         $rootScope.loginView = false;
         $scope.success = null;
@@ -46,7 +46,24 @@ angular.module('timeSheetApp')
 
         $scope.init = function() {
         		$scope.loadJobStatuses();
-        }
+        		console.log("State parameters");
+        		console.log($stateParams);
+        		if($stateParams.ticketId){
+                    TicketComponent.getTicketDetails($stateParams.ticketId).then(function(data){
+                        console.log("Ticket details");
+                        console.log(data);
+                        $scope.job={};
+                        $scope.job.title =data.title;
+                        $scope.job.description = data.description;
+                        if(data.siteId){
+                            SiteComponent.findOne(data.siteID).then(function (data) {
+                                console.log(data);
+                                $scope.selectedSite = data;
+                            })
+                        }
+                    })
+                }
+        };
 
         $scope.loadProjects = function () {
         	ProjectComponent.findAll().then(function (data) {
@@ -474,7 +491,7 @@ angular.module('timeSheetApp')
             if($scope.pageSort){
                 $scope.searchCriteria.sort = $scope.pageSort;
             }
-            
+
 
             if($scope.selectedColumn){
 
@@ -484,8 +501,8 @@ angular.module('timeSheetApp')
             }else{
                 $scope.searchCriteria.columnName ="id";
             }
-                    
-                   
+
+
                      console.log("search criteria",$scope.searchCriteria);
                      $scope.jobs = '';
                      $scope.jobsLoader = false;
@@ -506,19 +523,19 @@ angular.module('timeSheetApp')
 
 	        		$scope.pages.currPage = $scope.pages.currPage;
 	                $scope.pages.totalPages = data.totalPages;
-               
+
 	                if($scope.jobs && $scope.jobs.length > 0 ){
 	                    $scope.showCurrPage = data.currPage;
 	                    $scope.pageEntries = $scope.jobs.length;
 	                    $scope.totalCountPages = data.totalCount;
                         $scope.pageSort = 10;
 
-	                   
+
 	                }
 
-	           
+
 	        	});
- 	
+
         };
 
         $scope.clearFilter = function() {
@@ -612,7 +629,7 @@ angular.module('timeSheetApp')
             $scope.pages.currPage = page;
             $scope.search();
             //alert($scope.totalCountPages);
-        
+
         };
 
     /*
@@ -638,7 +655,7 @@ angular.module('timeSheetApp')
                         // less than 5 total pages so show all
                         startPage = 1;
                         endPage = totalPages;
-                    } 
+                    }
                     else {
                         // more than 5 total pages so calculate start and end pages
                         if (currentPage <= 4) {
@@ -662,18 +679,18 @@ angular.module('timeSheetApp')
                         else{
                             var endIndex = Math.min(startIndex + pageSize-1 , totalItems);
                         }
-                        
-                        
+
+
                     }else{
-                       // var startIndex = (currentPage - 1) * pageSize;  
+                       // var startIndex = (currentPage - 1) * pageSize;
                         var startIndex =   ((currentPage - 1) * pageSize) + 1;
                         var endIndex = Math.min(startIndex + pageSize - 1 , totalItems);
                     }
         }else{
-                var startIndex = 0;  
+                var startIndex = 0;
                 var endIndex = 0;
         }
-            
+
 
             // create an array of pages to ng-repeat in the pager control
             var pages = _.range(startPage, endPage + 1);
@@ -691,5 +708,5 @@ angular.module('timeSheetApp')
                 pages: pages
             };
         }
-        
+
     });

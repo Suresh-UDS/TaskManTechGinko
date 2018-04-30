@@ -5,7 +5,7 @@ angular.module('timeSheetApp')
         $stateProvider
             .state('add-quotation', {
                 parent: 'manage',
-                url: '/add-quotation',
+                url: '/add-quotation:ticketId',
                 controller: 'QuotationController',
                 data: {
                     authorities: [],
