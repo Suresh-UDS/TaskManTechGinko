@@ -894,6 +894,7 @@ public class    EmployeeService extends AbstractService {
 
 	public ExportResult export(List<EmployeeDTO> transactions) {
 		//return exportUtil.writeToCsvFile(transactions, null);
+        log.debug("ready to EXPORT EXCEL-------->");
         return exportUtil.writeToExcelFile(transactions,null);
 	}
 

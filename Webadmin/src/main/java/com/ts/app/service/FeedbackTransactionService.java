@@ -26,6 +26,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.core.env.Environment;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.ts.app.domain.AbstractAuditingEntity;
@@ -70,7 +71,7 @@ public class FeedbackTransactionService extends AbstractService {
 
 	@Inject
 	private ProjectRepository projectRepository;
-	
+
 	@Inject
 	private SettingsRepository settingsRepository;
 
@@ -79,13 +80,13 @@ public class FeedbackTransactionService extends AbstractService {
 
 	@Inject
 	private MapperUtil<AbstractAuditingEntity, BaseDTO> mapperUtil;
-	
+
 	@Inject
 	private MailService mailService;
-	
+
 	@Inject
 	private TicketManagementService ticketManagementService;
-	
+
 	@Inject
 	private Environment env;
 
@@ -102,7 +103,7 @@ public class FeedbackTransactionService extends AbstractService {
 		List<String> feedbackAlertItems = new ArrayList<String>();
 		if(!feedbackTransDto.isOverallFeedback()) {
 			for(FeedbackTransactionResultDTO itemDto : itemDtos) {
-	
+
 				FeedbackTransactionResult item = mapperUtil.toEntity(itemDto, FeedbackTransactionResult.class);
 				//item.setAnswerType(FeedbackAnswerType.fromValue(itemDto.getAnswerType()));
 				item.setId(0);
@@ -111,7 +112,7 @@ public class FeedbackTransactionService extends AbstractService {
 				log.debug("score type - "+item.getScoreType());
 				if(item.getAnswerType().equals(FeedbackAnswerType.YESNO) && item.getAnswer().equalsIgnoreCase("true")) {
 				    log.debug("answer type yes ");
-	
+
 				    if(StringUtils.isNotEmpty(item.getScoreType()) && (item.getScoreType().equalsIgnoreCase("yes:1") || item.getScoreType().equalsIgnoreCase("no:0"))){
 				        log.debug("answer score type yes:1");
 	                    cumRating += 5;
@@ -121,7 +122,7 @@ public class FeedbackTransactionService extends AbstractService {
 	                }
 				}else if(item.getAnswerType().equals(FeedbackAnswerType.YESNO) && item.getAnswer().equalsIgnoreCase("false")){
 	                log.debug("answer score type no");
-	                if(StringUtils.isNotEmpty(item.getScoreType()) && (item.getScoreType().equalsIgnoreCase("no:1") || item.getScoreType().equalsIgnoreCase("yes:1"))){ 
+	                if(StringUtils.isNotEmpty(item.getScoreType()) && (item.getScoreType().equalsIgnoreCase("no:1") || item.getScoreType().equalsIgnoreCase("yes:1"))){
 	                    log.debug("answer score type no:1");
 	                    cumRating += 5;
 	                }else{
@@ -135,7 +136,7 @@ public class FeedbackTransactionService extends AbstractService {
 	            		}
 					cumRating += currRating;
 				}
-	
+
 				item.setFeedbackTransaction(feedbackTrans);
 				items.add(item);
 			}
@@ -164,7 +165,7 @@ public class FeedbackTransactionService extends AbstractService {
 				feedbackLocation.append(feedbackTransDto.getBlock());
 				feedbackLocation.append("-");
 				feedbackLocation.append(feedbackTransDto.getFloor());
-				
+
 				String feedbackReportUrl = env.getProperty("reports.feedback-report.url");
 				mailService.sendFeedbackAlert(alertEmailIds, feedbackTransDto.getZone(), feedbackLocation.toString(), new Date(), feedbackAlertItems, feedbackReportUrl);
 			}
@@ -213,7 +214,20 @@ public class FeedbackTransactionService extends AbstractService {
 	public SearchResult<FeedbackTransactionDTO> findBySearchCrieria(SearchCriteria searchCriteria) {
 		SearchResult<FeedbackTransactionDTO> result = new SearchResult<FeedbackTransactionDTO>();
 		if(searchCriteria != null) {
-			Pageable pageRequest = createPageRequest(searchCriteria.getCurrPage());
+
+		    //----
+            Pageable pageRequest = null;
+            if(!StringUtils.isEmpty(searchCriteria.getColumnName())){
+                Sort sort = new Sort(searchCriteria.isSortByAsc() ? Sort.Direction.ASC : Sort.Direction.DESC, searchCriteria.getColumnName());
+                log.debug("Sorting object" +sort);
+                pageRequest = createPageSort(searchCriteria.getCurrPage(), searchCriteria.getSort(), sort);
+
+            }else{
+                pageRequest = createPageRequest(searchCriteria.getCurrPage());
+            }
+
+
+
 			Page<FeedbackTransaction> page = null;
 			List<FeedbackTransactionDTO> transitems = null;
 			if(!searchCriteria.isFindAll()) {
@@ -378,7 +392,7 @@ public class FeedbackTransactionService extends AbstractService {
 							qrating.setQuestion(String.valueOf(row[0]));
 							if(row[2] != null) {
 								Map<String,Long> ratingsMap = null;
-								if(qrating.getRating() != null ) { 
+								if(qrating.getRating() != null ) {
 									ratingsMap = qrating.getRating();
 								}else {
 									ratingsMap = new HashMap<String,Long>();

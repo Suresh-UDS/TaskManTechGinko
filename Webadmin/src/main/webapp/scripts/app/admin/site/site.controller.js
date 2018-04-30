@@ -311,7 +311,10 @@ angular.module('timeSheetApp')
                 $scope.searchCriteria.columnName = $scope.selectedColumn;
                 $scope.searchCriteria.sortByAsc = $scope.isAscOrder;
 
+            }else{
+                $scope.searchCriteria.columnName ="id";
             }
+
 
             console.log("search Criteria to be sent - "+JSON.stringify($rootScope.searchCriteriaSite));
             SiteComponent.search($scope.searchCriteria).then(function (data) {
@@ -553,4 +556,114 @@ angular.module('timeSheetApp')
             $('.overlay').hide();
 
         }
+
+        //-------
+        /*$scope.loadingAuto = function(){
+            $scope.loadingStart();
+            $scope.loadtimeOut = $timeout(function(){
+
+                //console.log("Calling loader stop");
+                $('.pageCenter').hide();$('.overlay').hide();
+
+            }, 2000);}
+
+
+        /!*
+            ** Page navigation init function **
+            @Params:integer
+
+        *!/
+
+        $scope.setPage = function (page) {
+
+            if (page < 1 || page > $scope.pager.totalPages) {
+                return;
+            }
+
+            //alert(page);
+            $scope.pages.currPage = page;
+            $scope.search();
+            //alert($scope.totalCountPages);
+
+        };
+
+        /!*
+            ** Page navigation main function**
+            @Params:integer
+            sort:10
+        *!/
+
+        $scope.GetPager = function(totalItems, currentPage, pageSize) {
+            // default to first page
+            currentPage = currentPage || 1;
+
+            // default page size is 10
+            pageSize = pageSize || 10;
+
+            // calculate total pages
+            var totalPages = Math.ceil(totalItems / pageSize);
+
+            var startPage, endPage;
+
+            if(totalPages > 0) {
+                if (totalPages <= 5) {
+                    // less than 5 total pages so show all
+                    startPage = 1;
+                    endPage = totalPages;
+                }
+                else {
+                    // more than 5 total pages so calculate start and end pages
+                    if (currentPage <= 4) {
+                        startPage = 1;
+                        endPage = 5;
+                    } else if (currentPage + 1 >= totalPages) {
+                        startPage = totalPages - 4;
+                        endPage = totalPages;
+                    } else {
+                        startPage = currentPage - 2;
+                        endPage = currentPage + 2;
+                    }
+                }
+
+                // calculate start and end item indexes
+                if(currentPage == 1){
+                    var startIndex = 1;
+                    if(totalItems < 10){
+                        var endIndex = Math.min(totalItems);
+                    }
+                    else{
+                        var endIndex = Math.min(startIndex + pageSize-1 , totalItems);
+                    }
+
+
+                }else{
+                    // var startIndex = (currentPage - 1) * pageSize;
+                    var startIndex =   ((currentPage - 1) * pageSize) + 1;
+                    var endIndex = Math.min(startIndex + pageSize - 1 , totalItems);
+                }
+            }else{
+                var startIndex = 0;
+                var endIndex = 0;
+            }
+
+
+            // create an array of pages to ng-repeat in the pager control
+            var pages = _.range(startPage, endPage + 1);
+
+            // return object with all pager properties required by the view
+            return {
+                totalItems: totalItems,
+                currentPage: currentPage,
+                pageSize: pageSize,
+                totalPages: totalPages,
+                startPage: startPage,
+                endPage: endPage,
+                startIndex: startIndex,
+                endIndex: endIndex,
+                pages: pages
+            };
+        }
+
+*/
+
     });

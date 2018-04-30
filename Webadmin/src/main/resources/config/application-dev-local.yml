@@ -16,17 +16,15 @@ spring:
     devtools:
         restart:
             enabled: true
-
         livereload:
             enabled: false # we use Grunt + BrowserSync for livereload
     datasource:
         driver-class-name: com.mysql.jdbc.Driver
         #url: jdbc:mysql://52.77.216.21:3306/TaskMan?useUnicode=true&characterEncoding=utf8
-        url: jdbc:mysql://ec2-54-169-225-123.ap-southeast-1.compute.amazonaws.com:3306/Taskman?useUnicode=true&characterEncoding=utf8
-#        url: jdbc:mysql://192.168.1.12:3306/Taskman?useUnicode=true&characterEncoding=utf8
+        url: jdbc:mysql://localhost:3306/TaskMan?useUnicode=true&characterEncoding=utf8
         name:
         username: root
-        password: tgadmin123#
+        password: techginko123*
     jpa:
         database-platform: org.hibernate.dialect.MySQLInnoDBDialect
         database: MYSQL
@@ -67,18 +65,13 @@ upload:
          path: /opt/uploads
 export:
     file:
-         path: /opt/exports
+         path: F:\Export
 qrcode:
     file:
          path: /opt/qrcode
 attendance:
     file:
         path:  /opt/attendance
-import:
-    file:
-        path:
-            new: /opt/imports/new
-            completed: /opt/imports/completed
 max:
     user: 10
     userGroup: 2
@@ -123,7 +116,7 @@ locationService:
 #   url: http://locahost:8000/api/site/location
 #   url: http://ec2-52-77-216-21.ap-southeast-1.compute.amazonaws.com:8000/api/site/location
    url: http://localhost:8000/api/site/location
-   proximityUrl: http://localhost:8000/api/site/nearby
+
 quotationService:
 #   url: http://locahost:8000/api/site/location
 #   url: http://ec2-52-77-216-21.ap-southeast-1.compute.amazonaws.com:8000/api/site/location
@@ -134,21 +127,15 @@ pushService:
 
 scheduler:
    dailyJob:
-      enabled: false
+      enabled: true
       creation: monthly
    weeklyJob:
-      enabled: false
-      creation: monthly
+      enabled: true
    monthlyJob:
-      enabled: false
-      creation: yearly
+      enabled: true
    overdueJob:
       enabled: false
    eodJobReport:
-      enabled: false
-   attendanceDetailReport:
-      enabled: true
-   attendanceConsolidatedReport:
       enabled: true
 
 default.user.password: uds12345
@@ -163,7 +150,7 @@ jhipster:
         ehcache:
             maxBytesLocalHeap: 256M
     mail: # specific JHipster mail property, for standard properties see MailProperties
-        from: no-reply@taskmanadmin.uds.in
+        from: no-reply@taskman.uds.com
     metrics: # DropWizard Metrics configuration, used by MetricsConfiguration
         jmx.enabled: true
         spark:

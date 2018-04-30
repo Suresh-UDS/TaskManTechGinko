@@ -21,9 +21,9 @@ angular.module('timeSheetApp')
         $scope.checklists;
         $scope.selectedChecklist;
         $scope.jobChecklistItems =[];
-        
+
         $scope.fromDate;
-        
+
         $scope.toDate;
 
         $scope.initCalender = function(){
@@ -51,7 +51,7 @@ angular.module('timeSheetApp')
                 $scope.projects = data;
             });
         };
-        
+
         $scope.loadChecklists = function () {
         		ChecklistComponent.findAll().then(function (data) {
         			console.log('retrieved checklists - ' + JSON.stringify(data));
@@ -164,7 +164,7 @@ angular.module('timeSheetApp')
         	var items = $scope.selectedChecklist.items;
         	for(var i =0; i<items.length;i++) {
         		var checklistItem = {
-        			"checklistId" : $scope.selectedChecklist.id,	
+        			"checklistId" : $scope.selectedChecklist.id,
         			"checklistName" : $scope.selectedChecklist.name,
         			"checklistItemId" : items[i].id,
         			"checklistItemName" : items[i].name,
@@ -184,7 +184,7 @@ angular.module('timeSheetApp')
 	        	var items = $scope.selectedChecklist.items;
 	        	for(var i =0; i<items.length;i++) {
 	        		var checklistItem = {
-	        			"checklistId" : $scope.selectedChecklist.id,	
+	        			"checklistId" : $scope.selectedChecklist.id,
 	        			"checklistName" : $scope.selectedChecklist.name,
 	        			"checklistItemId" : items[i].id,
 	        			"checklistItemName" : items[i].name,
@@ -193,7 +193,7 @@ angular.module('timeSheetApp')
 	        		}
 	        		$scope.jobChecklistItems.push(checklistItem);
 	        	}
-	        	
+
 	        	$scope.job.siteId = $scope.selectedSite.id
 	            $scope.job.locationId = $scope.selectedLocation.id;
 	        	$scope.job.checklistItems = $scope.jobChecklistItems;
@@ -254,6 +254,38 @@ angular.module('timeSheetApp')
         	});
         };
 
+        //--------
+                    $scope.pageSizes = [{
+                        value: 10
+                    }, {
+                        value: 15
+                    }, {
+                        value: 20
+                    }];
+
+                    $scope.sort = $scope.pageSizes[0];
+                    $scope.pageSort = $scope.pageSizes[0].value;
+
+                    $scope.hasChanged = function(){
+                        alert($scope.sort.value)
+                        $scope.pageSort = $scope.sort.value;
+                        $scope.search();
+                    }
+
+                    $scope.columnAscOrder = function(field){
+                        $scope.selectedColumn = field;
+                        $scope.isAscOrder = true;
+                        $scope.search();
+                    }
+
+                    $scope.columnDescOrder = function(field){
+                        $scope.selectedColumn = field;
+                        $scope.isAscOrder = false;
+                        $scope.search();
+                    }
+
+
+
         $scope.search = function () {
         	var reportUid = $stateParams.uid;
         	var currPageVal = ($scope.pages ? $scope.pages.currPage : 1);
@@ -281,9 +313,9 @@ angular.module('timeSheetApp')
 	        	if($scope.selectedStatus.name == 'ASSIGNED'){
 	        		$scope.searchCriteria.assignedStatus = true;
 	        	}else if($scope.selectedStatus.name == 'OPEN'){
-	        		
+
 	        	}else if($scope.selectedStatus.name == 'INPROGRESS'){
-	        		
+
 	        	}else if($scope.selectedStatus.name == 'COMPLETED'){
 	        		$scope.searchCriteria.completedStatus = true;
 	        	}else if($scope.selectedStatus.name == 'OVERDUE'){
@@ -299,12 +331,32 @@ angular.module('timeSheetApp')
 
         	console.log($scope.searchCriteria);
         	console.log('uid - ' + reportUid);
-        	JobComponent.search($scope.searchCriteria, reportUid).then(function (data) {
+        	//-----
+            if($scope.pageSort){
+                $scope.searchCriteria.sort = $scope.pageSort;
+            }
+
+            if($scope.selectedColumn){
+
+                $scope.searchCriteria.columnName = $scope.selectedColumn;
+                $scope.searchCriteria.sortByAsc = $scope.isAscOrder;
+
+            }else{
+                $scope.searchCriteria.columnName ="id";
+            }
+
+
+
+            JobComponent.search($scope.searchCriteria, reportUid).then(function (data) {
                 $scope.jobs = data.transactions;
         		$scope.jobsLoader = true;
         		console.log('job search result - ' + $scope.jobs);
         		$scope.pages.currPage = data.currPage;
                 $scope.pages.totalPages = data.totalPages;
+
+
+
+
                 if($scope.jobs == null){
                     $scope.pages.startInd = 0;
                 }else{
@@ -321,8 +373,14 @@ angular.module('timeSheetApp')
         	}
         };
 
+                    //---------
+                    $scope.clickNextOrPrev = function(number){
+                        $scope.pages.currPage = number;
+                        $scope.search();
+                    }
 
-                $scope.first = function() {
+
+                    $scope.first = function() {
                 	if($scope.pages.currPage > 1) {
                     	$scope.pages.currPage = 1;
                     	$scope.firstStyle();
@@ -409,10 +467,10 @@ angular.module('timeSheetApp')
             }
             $scope.search();
         };
-        
+
 	    $rootScope.exportStatusObj = {};
 
-        
+
         $scope.exportAllData = function(type){
         		$scope.searchCriteria.exportType = type;
 	        	JobComponent.exportAllData($scope.searchCriteria).then(function(data){
@@ -422,7 +480,7 @@ angular.module('timeSheetApp')
 	        		var exportAllStatus = {
 	        				fileName : result.file,
 	        				exportMsg : 'Exporting All...',
-	        				url: result.url	
+	        				url: result.url
 	        		};
 	        		$rootScope.exportStatusObj = exportAllStatus;
 	        		console.log('exportStatusObj size - ' + $rootScope.exportStatusObj.length);
@@ -432,30 +490,30 @@ angular.module('timeSheetApp')
 	            	  console.log(err);
 	              });
 	    };
-	    
+
 	 // store the interval promise in this variable
 	    var promise;
-	
+
 	 // starts the interval
 	    $scope.start = function() {
 	      // stops any running interval to avoid two intervals running at the same time
 	      $scope.stop();
-	
+
 	      // store the interval promise
 	      promise = $interval($scope.exportStatus, 5000);
 	      console.log('promise -'+promise);
 	    };
-	
+
 	    // stops the interval
 	    $scope.stop = function() {
 	      $interval.cancel(promise);
 	    };
-	    
-	
-	
+
+
+
 	    $scope.exportStatus = function() {
 	        	console.log('$rootScope.exportStatusObj -'+$rootScope.exportStatusObj);
-	        		
+
 	            	JobComponent.exportStatus($rootScope.exportStatusObj.fileName).then(function(data) {
 	            		console.log('job export status - data -' + JSON.stringify(data));
 	            		if(data) {
@@ -479,29 +537,29 @@ angular.module('timeSheetApp')
 	                			$rootScope.exportStatusObj.exportFile = '#';
 	                		}
 	            		}
-	
+
 	            	});
-	
+
 	    }
-	
+
 	    $scope.exportFile = function() {
 	        return ($rootScope.exportStatusObj ? $rootScope.exportStatusObj.exportFile : '#');
 	    }
-	
-	
+
+
 	    $scope.exportMsg = function() {
 	        return ($rootScope.exportStatusObj ? $rootScope.exportStatusObj.exportMsg : '');
 	    };
-        
-        
-        
+
+
+
         $scope.initCalender();
 
           //init load
-        $scope.initLoad = function(){ 
-             $scope.loadPageTop(); 
-            
-          
+        $scope.initLoad = function(){
+             $scope.loadPageTop();
+
+
          }
 
        //Loading Page go to top position

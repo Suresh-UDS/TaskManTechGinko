@@ -13,6 +13,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.ts.app.domain.AbstractAuditingEntity;
@@ -55,7 +56,7 @@ public class FeedbackService extends AbstractService {
 
 	@Inject
 	private SiteRepository siteRepository;
-	
+
 	@Inject
 	private UserRepository userRepository;
 
@@ -64,7 +65,7 @@ public class FeedbackService extends AbstractService {
 
 	@Inject
 	private MapperUtil<AbstractAuditingEntity, BaseDTO> mapperUtil;
-	
+
 	@Inject
 	private FileUploadHelper fileUploadHelper;
 
@@ -161,8 +162,22 @@ public class FeedbackService extends AbstractService {
 		if(searchCriteria != null) {
 			User user = userRepository.findOne(searchCriteria.getUserId());
 			Employee employee = user.getEmployee();
-			
-			Pageable pageRequest = createPageRequest(searchCriteria.getCurrPage());
+
+
+			//-----
+            Pageable pageRequest = null;
+            if(!StringUtils.isEmpty(searchCriteria.getColumnName())){
+                Sort sort = new Sort(searchCriteria.isSortByAsc() ? Sort.Direction.ASC : Sort.Direction.DESC, searchCriteria.getColumnName());
+                log.debug("Sorting object" +sort);
+                pageRequest = createPageSort(searchCriteria.getCurrPage(), searchCriteria.getSort(), sort);
+
+            }else{
+                pageRequest = createPageRequest(searchCriteria.getCurrPage());
+            }
+
+
+
+			//Pageable pageRequest = createPageRequest(searchCriteria.getCurrPage());
 			Page<Feedback> page = null;
 			List<FeedbackDTO> transitems = null;
 			List<Feedback> feedbackList = null;
@@ -181,7 +196,7 @@ public class FeedbackService extends AbstractService {
 		        			}
 		        			page = feedbackRepository.findBySites(siteIds, pageRequest);
 		        		}
-				}	
+				}
 			}
 			if(page != null) {
 				feedbackList = page.getContent();
@@ -267,8 +282,20 @@ public class FeedbackService extends AbstractService {
 		if(searchCriteria != null) {
 			User user = userRepository.findOne(searchCriteria.getUserId());
 			Employee employee = user.getEmployee();
-			
-			Pageable pageRequest = createPageRequest(searchCriteria.getCurrPage());
+
+			//----
+            Pageable pageRequest = null;
+            if(!StringUtils.isEmpty(searchCriteria.getColumnName())){
+                Sort sort = new Sort(searchCriteria.isSortByAsc() ? Sort.Direction.ASC : Sort.Direction.DESC, searchCriteria.getColumnName());
+                log.debug("Sorting object" +sort);
+                pageRequest = createPageSort(searchCriteria.getCurrPage(), searchCriteria.getSort(), sort);
+
+            }else{
+                pageRequest = createPageRequest(searchCriteria.getCurrPage());
+            }
+
+
+			//Pageable pageRequest = createPageRequest(searchCriteria.getCurrPage());
 			Page<FeedbackMapping> page = null;
 			List<FeedbackMappingDTO> transitems = null;
 			if(!searchCriteria.isFindAll()) {
@@ -276,7 +303,7 @@ public class FeedbackService extends AbstractService {
 					page = feedbackMappingRepository.findByLocation(searchCriteria.getSiteId(), searchCriteria.getBlock(), searchCriteria.getFloor(), searchCriteria.getZone(), pageRequest);
 				}
 			}else {
-				
+
 				if(user.isAdmin()) {
 					page = feedbackMappingRepository.findAll(pageRequest);
 
@@ -289,7 +316,7 @@ public class FeedbackService extends AbstractService {
 		        			}
 		        			page = feedbackMappingRepository.findBySites(siteIds, pageRequest);
 		        		}
-				}	
+				}
 
 			}
 			if(page != null) {
@@ -301,7 +328,7 @@ public class FeedbackService extends AbstractService {
 		}
 		return result;
 	}
-	
+
     public String getFeedbackQuestionImage(long feedbackQuestionsId, String imageId) {
         return fileUploadHelper.readQuestionImageFile(feedbackQuestionsId, imageId);
     }

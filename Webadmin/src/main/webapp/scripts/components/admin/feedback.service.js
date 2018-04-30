@@ -14,7 +14,7 @@ angular.module('timeSheetApp')
                             //this.logout();
                             return cb(err);
                         }.bind(this)).$promise;
-        			
+
         		},
             updateFeedbackMaster: function (feedback, callback) {
                 var cb = callback || angular.noop;
@@ -27,7 +27,7 @@ angular.module('timeSheetApp')
                         this.logout();
                         return cb(err);
                     }.bind(this)).$promise;
-            },  
+            },
             searchFeedbackMaster: function(searchCriteria) {
                 return $http.post('api/feedbackquestions/search', searchCriteria).then(function (response) {
                     return response.data;
@@ -42,9 +42,9 @@ angular.module('timeSheetApp')
                 return $http.get('api/feedbackquestions').then(function (response) {
                     return response.data;
                 });
-            },            
-            
-            
+            },
+
+
             createFeedbackMapping: function(feedbackMapping, callback) {
                 var cb = callback || angular.noop;
                 console.log('Feedback -' + feedbackMapping.name);
@@ -56,11 +56,11 @@ angular.module('timeSheetApp')
                         //this.logout();
                         return cb(err);
                     }.bind(this)).$promise;
-    			
+
 	    		},
 	        updateFeedbackMapping: function (feedbackMapping, callback) {
 	            var cb = callback || angular.noop;
-	
+
 	            return FeedbackMapping.update(feedbackMapping,
 	                function () {
 	                    return cb(feedbackMapping);
@@ -69,7 +69,7 @@ angular.module('timeSheetApp')
 	                    this.logout();
 	                    return cb(err);
 	                }.bind(this)).$promise;
-	        },  
+	        },
         		searchFeedbackMapping: function(searchCriteria) {
                 return $http.post('api/feedbackmapping/search', searchCriteria).then(function (response) {
                     return response.data;
@@ -80,7 +80,7 @@ angular.module('timeSheetApp')
                     return response.data;
                 });
             },
-            
+
             createFeedback: function (feedback, callback) {
                 var cb = callback || angular.noop;
                 console.log('Feedback -' + feedback.title);
@@ -130,6 +130,7 @@ angular.module('timeSheetApp')
             },
             search: function(searchCriteria) {
                 return $http.post('api/feedback/search', searchCriteria).then(function (response) {
+                    console.log("response of feedback -"+JSON.stringify(response));
                     return response.data;
                 });
             },

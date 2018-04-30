@@ -22,35 +22,35 @@
                         <form name="searchForm"  ng-submit="search()" novalidate >
 
                             <table class="table no-padding-tblCon" border="0">
-                            
+
                             	   <tr class="filter-row gc-search-row">
                             	   		<div class="row" >
 
 					                    <div class="col-md-2">
-					
+
 					                        <!--<div class="form-group label-floating">-->
 					                        <!--<label class="control-label">Date</label>-->
 					                        <!--<input class="datepicker form-control" type="text" value="03/01/2018"/>-->
-					
+
 					                        <!--</div>-->
-					
+
 					                        <div class="form-group">
 					                            <label class="label-control">From date</label>
 					                            <span class="form-control-feedback calender-icon"><i class="material-icons">date_range</i></span>
 					                            <input type="text" class="form-control datepicker"  id="dateFilterFrom"  placeholder="{{dateFilterFrom | date:'dd-MMM-yyyy'}}" />
-					                           
+
 					                        </div>
-					
+
 					                    </div>
 					                    <div class="col-md-2">
-					
+
 					                        <div class="form-group">
 					                            <label class="label-control">To date</label>
 					                            <span class="form-control-feedback calender-icon"><i class="material-icons">date_range</i></span>
 					                            <input type="text" class="form-control datepicker"  id="dateFilterTo"  placeholder="{{dateFilterTo | date:'dd-MMM-yyyy'}}"/>
-					
+
 					                        </div>
-					
+
 					                    </div>
 					                    <div class="dropdown col-xs-4 col-md-3">
                                                 <div class="dropdown ">
@@ -60,7 +60,7 @@
                                                     </select>
                                                 </div>
                                             </div>
-                                            
+
                                             <div class="dropdown col-xs-4 col-md-3">
                                                 <div class="dropdown ">
                                                     <label class="label-control">Select Employee</label>
@@ -70,19 +70,19 @@
                                                 </div>
                                             </div>
 					                    <div class="col-md-6">
-					                    		
+
 					                    </div>
-					                   
+
 					               </div>
-                            	   </tr>	
-                            
+                            	   </tr>
+
                                 <tr class="filter-row gc-search-row">
 
 
                                     <td width="85%">
                                        <div class="form-group no-padding" >
-                                    
-                                            
+
+
                                             <div class="col-xs-4 col-md-3">
                                                 <div class="form-group">
                                                 <input type="text"
@@ -93,8 +93,8 @@
                                                        uib-typeahead="project as project.name for project in projects | filter:$viewValue | limitTo:5" />
                                                 </div>
                                             </div>
-                                           
-                                    
+
+
                                              <div class="col-xs-4 col-md-3">
                                                <div class="form-group">
                                                 <input type="text"
@@ -140,13 +140,48 @@
                         <table class="table table-striped" ng-init="search();">
                             <thead>
                             <tr>
-                                <th>Ticket ID</th>
-                                <th>Issue</th>
-                                <th>Description</th>
-                                <th>Initiator</th>
-                                <th>Created Date</th>
-                                <th>Assigned To</th>
-                                <th>Status</th>
+                                <th>Ticket ID<a href="#">
+
+                                    <span ng-click="columnAscOrder('id')"  class=""><i class="fa fa-caret-up"></i></span>
+                                    <span ng-click="columnDescOrder('id')" class=""><i class="fa fa-caret-down"></i></span>
+
+                                </a></th>
+                                <th>Issue<a href="#">
+
+                                    <span ng-click="columnAscOrder('title')"  class=""><i class="fa fa-caret-up"></i></span>
+                                    <span ng-click="columnDescOrder('title')" class=""><i class="fa fa-caret-down"></i></span>
+
+                                </a></th>
+                                <th>Description<a href="#">
+
+                                    <span ng-click="columnAscOrder('description')"  class=""><i class="fa fa-caret-up"></i></span>
+                                    <span ng-click="columnDescOrder('description')" class=""><i class="fa fa-caret-down"></i></span>
+
+                                </a></th>
+                                <th>Initiator<a href="#">
+
+                                    <span ng-click="columnAscOrder('createdBy')"  class=""><i class="fa fa-caret-up"></i></span>
+                                    <span ng-click="columnDescOrder('createdBy')" class=""><i class="fa fa-caret-down"></i></span>
+
+                                </a></th>
+                                <th>Created Date<a href="#">
+
+                                    <span ng-click="columnAscOrder('createdDate')"  class=""><i class="fa fa-caret-up"></i></span>
+                                    <span ng-click="columnDescOrder('createdDate')" class=""><i class="fa fa-caret-down"></i></span>
+
+                                </a></th>
+                                <th>Assigned To<a href="#">
+
+                                    <span ng-click="columnAscOrder('assignedTo.name')"  class=""><i class="fa fa-caret-up"></i></span>
+                                    <span ng-click="columnDescOrder('assignedTo.name')" class=""><i class="fa fa-caret-down"></i></span>
+
+                                </a></th>
+                                <th>Status<a href="#">
+
+                                    <span ng-click="columnAscOrder('status')"  class=""><i class="fa fa-caret-up"></i></span>
+                                    <span ng-click="columnDescOrder('status')" class=""><i class="fa fa-caret-down"></i></span>
+
+                                </a></th>
                                 <th class="text-right">Actions</th>
                             </tr>
                             </thead>
@@ -169,7 +204,7 @@
                                     <a  ng-class="{active: $state.includes('admin')}"  ui-sref="edit-ticket({ id: ticket.id })"  class="btn btn-simple btn-info"><i class="material-icons">edit</i></a>
 
                                     <a ng-if="(ticket.status != 'Closed' && ticket.jobId == 0)" ng-class="{active: $state.includes('admin')}" ui-sref="add-job({ticketId : ticket.id})"  ng-click=""  onClick="" data-target="#myModal"  class="btn btn-simple btn-info">create job</a>
-                                    
+
                                     <a ng-if="(ticket.jobId > 0)" ng-class="{active: $state.includes('admin')}" ui-sref="view-job({id : ticket.jobId})"  ng-click=""  onClick="" data-target="#myModal"  class="btn btn-simple btn-info">View job</a>
 
                                     <a ng-if="(ticket.status != 'Closed')" ng-class="{active: $state.includes('admin')}"   ng-click="closeTicket(ticket.id)"   onClick="$('#deleteModalNew').modal()" data-target="#myModal"   class="btn btn-simple btn-info">close ticket</a>
@@ -316,7 +351,7 @@
                                  <tr>
                                      <td>Severity</td>
                                      <td ng-switch="listSeverity">
-                                       <span ng-switch-when="1">Low</span>  
+                                       <span ng-switch-when="1">Low</span>
                                        <span ng-switch-when="2">Medium</span>
                                        <span ng-switch-when="3">High</span>
                                      </td>
@@ -350,7 +385,7 @@
                                  </tbody>
                              </table>
                          </div>
-                          
+
                         <div class="container-fluid">
                             <div class="text-center">
                                 <h4 class="title">Comments</h4>
@@ -358,7 +393,7 @@
 
                          <div class="row">
                             <div class="col-md-12">
-                                
+
                                 <ul class="timeline">
                                     <li class="timeline-inverted">
                                         <div class="timeline-badge danger">
@@ -372,7 +407,7 @@
                                                 <p>Whats the root cause{{listComments}}</p>
                                             </div>
                                             <h6>
-                                                <i class="ti-time">12-04-2018 04:32:04 {{listTime}}</i> 
+                                                <i class="ti-time">12-04-2018 04:32:04 {{listTime}}</i>
                                             </h6>
                                         </div>
                                     </li>
@@ -392,14 +427,14 @@
                                             </h6>
                                         </div>
                                     </li>
-                                    
-                                    
+
+
                                     </ul>
-                            
+
                                 </div>
                             </div>
                         </div>
-                         
+
 
 
                         <div class="row">

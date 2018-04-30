@@ -186,6 +186,8 @@ angular.module('timeSheetApp')
                 $scope.searchCriteria.columnName = $scope.selectedColumn;
                 $scope.searchCriteria.sortByAsc = $scope.isAscOrder;
 
+            }else{
+                $scope.searchCriteria.columnName ="id";
             }
 
 

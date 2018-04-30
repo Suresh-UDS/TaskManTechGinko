@@ -96,16 +96,16 @@
                                             <input type="radio" id="answerType1" name="answerType"  ng-model="newFeedbackItem.answerType1" value="YESNO"  required  ng-checked="feedbackItem.displayType"> Yes/No
                                             <b class="caret"></b>
                                         </label>
-                                        
+
                                     </div>
                                     <div class="radio radio-inline" ng-if="feedbackItem.displayType == 'wizard' ">
                                         <label>
                                             <input type="radio" id="answerType2" name="answerType"  ng-model="newFeedbackItem.answerType2" ng-click ='ratRadio()'  value="RATING"  > Rating
                                         </label>
-                                         
+
                                     </div>
                                     <div  id="YesOrNo" class="collapse">
-	                                   
+
 	                                       <div class="radio radio-inline">
 	                                           <label>Yes</label>
 	                                           <label>
@@ -113,7 +113,7 @@
 	                                           </label>
 	                                           <label><input type="radio" id="yesMarkN" ng-click="yesMarkN()" ng-model="newFeedbackItem.scoreTypeYes" name="yes" value="yes:-1" > -ve</label>
 	                                       </div>
-	
+
 	                                        <div class="radio radio-inline">
 	                                            <label>No</label>
 	                                            <label>
@@ -122,10 +122,10 @@
 	                                            <label>
 	                                                <input type="radio" id="noMarkN" name="no" ng-click="noMarkN()"  ng-model="newFeedbackItem.scoreTypeNo" ng-checked="true" value="no:-1"> -ve
 	                                            </label>
-	                                        </div> 
-	                                        
-	                                   
-	                                    
+	                                        </div>
+
+
+
                                     </div>
 
                                 </div>
@@ -210,10 +210,30 @@
                         <table class="table table-striped">
                             <thead>
                             <tr>
-                                <th>ID</th>
-                                <th>Client</th>
-                                <th>Site</th>
-                                <th>Title</th>
+                                <th>ID<a href="#">
+
+                                    <span ng-click="columnAscOrder('id')"  class=""><i class="fa fa-caret-up"></i></span>
+                                    <span ng-click="columnDescOrder('id')" class=""><i class="fa fa-caret-down"></i></span>
+
+                                </a></th>
+                                <th>Client<a href="#">
+
+                                    <span ng-click="columnAscOrder('project.name')"  class=""><i class="fa fa-caret-up"></i></span>
+                                    <span ng-click="columnDescOrder('project.name')" class=""><i class="fa fa-caret-down"></i></span>
+
+                                </a></th>
+                                <th>Site<a href="#">
+
+                                    <span ng-click="columnAscOrder('site.name')"  class=""><i class="fa fa-caret-up"></i></span>
+                                    <span ng-click="columnDescOrder('site.name')" class=""><i class="fa fa-caret-down"></i></span>
+
+                                </a></th>
+                                <th>Title<a href="#">
+
+                                    <span ng-click="columnAscOrder('name')"  class=""><i class="fa fa-caret-up"></i></span>
+                                    <span ng-click="columnDescOrder('name')" class=""><i class="fa fa-caret-down"></i></span>
+
+                                </a></th>
                                 <th>Questions</th>
                                 <th>Edit</th>
                             </tr>
@@ -242,7 +262,7 @@
         </div>
     </div>
 
-  
+
     <div class="card margin-TB-5 txt-align-center" ng-hide="feedbackMasterList">
 
         <div class="card-content">

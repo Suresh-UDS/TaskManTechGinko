@@ -662,6 +662,8 @@ public class ExportUtil {
     }
 
     public ExportResult writeToExcelFile(List<EmployeeDTO> content, ExportResult result) {
+        log.debug("Welcome here to EXPORT-------->");
+
         boolean isAppend = (result != null);
        // log.debug("result === " + result + ", isAppend === " + isAppend);
         if(result == null) {
@@ -734,6 +736,8 @@ public class ExportUtil {
                 int rowNum = 1;
 
                 for (EmployeeDTO transaction : content) {
+
+                    log.info("Entered into EMP-FOR Loop--------->");
 
                     Row dataRow = xssfSheet.createRow(rowNum++);
 
@@ -1190,7 +1194,7 @@ public class ExportUtil {
         result.setStatus(getExportStatus(file_Name));
         return result;
     }
-    
+
     public ExportResult writeTicketExcelReportToFile(List<TicketDTO> content, String empId, ExportResult result) {
         boolean isAppend = (result != null);
         log.debug("result = " + result + ", isAppend = " + isAppend);

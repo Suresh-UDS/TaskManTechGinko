@@ -98,6 +98,11 @@ public class UserRoleService extends AbstractService {
 			}else {
 				page = userRoleRepository.findUserRoles(pageRequest);
 			}
+			//-----
+
+
+
+
 			if(page != null) {
 				transactions = mapperUtil.toModelList(page.getContent(), UserRoleDTO.class);
 				if(CollectionUtils.isNotEmpty(transactions)) {

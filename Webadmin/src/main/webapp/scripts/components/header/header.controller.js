@@ -4,6 +4,7 @@ angular.module('timeSheetApp')
     .controller('HeaderController', function ($scope, $location, $state, Auth, Principal, ENV) {
         $scope.isAuthenticated = Principal.isAuthenticated;
         $scope.$state = $state;
+        $scope.accountName ="";
         $scope.inProduction = ENV === 'prod';
         console.log('admin -'+$state.includes('admin'));
         $scope.logout = function () {
@@ -21,7 +22,15 @@ angular.module('timeSheetApp')
              Principal.identity().then(function(response)
              {
                  console.log('current user' +JSON.stringify(response.login));
-                 $scope.accountName = response.login;
+                 if(response.firstName != null){
+                  $scope.accountName = response.firstName
+                    if(response.lastName != null){
+                     $scope.accountName += " " + response.lastName;
+                   }
+                 }else{
+                    $scope.accountName = response.login;
+                 }
+                 
              });
 
         $('#minimizeSidebar').click(function() {

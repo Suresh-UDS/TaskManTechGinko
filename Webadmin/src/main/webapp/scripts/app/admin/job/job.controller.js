@@ -175,8 +175,7 @@ angular.module('timeSheetApp')
         $scope.editJob = function(){
         	JobComponent.findById($stateParams.id).then(function(data){
                 $scope.loadingStop();
-        		console.log("Job details");
-        	    console.log(data);
+        	    console.log("Job details",data);
         		$scope.job=data;
         		$scope.selectedSite = {id : data.siteId,name : data.siteName};
         		$scope.selectedEmployee = {id : data.employeeId,name : data.employeeName};
@@ -418,7 +417,7 @@ angular.module('timeSheetApp')
 
          $scope.searchFilter = function () {
             $scope.setPage(1);
-            //$scope.search();
+            $scope.search();
          }
 
 
@@ -461,6 +460,7 @@ angular.module('timeSheetApp')
                 if($scope.selectedEmployee){
                     $scope.searchCriteria.empId = $scope.selectedEmployee.id;
                 }
+               
 
 	        	if($scope.selectedJobDate) {
 	        		$scope.searchCriteria.checkInDateTimeFrom = $scope.selectedJobDate;
@@ -522,6 +522,7 @@ angular.module('timeSheetApp')
         };
 
         $scope.clearFilter = function() {
+            //$scope.selectedJobDate = null;
             $scope.selectedProject = null;
             $scope.searchCriteria = {};
             $scope.selectedSite = null;
