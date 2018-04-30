@@ -8,6 +8,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import com.ts.app.domain.util.StringUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.Hibernate;
 import org.slf4j.Logger;
@@ -83,7 +84,7 @@ public class TicketManagementService extends AbstractService {
 
     @Inject
     private ReportService reportService;
-    
+
     @Inject
     private SettingsRepository settingsRepository;
 
@@ -92,17 +93,17 @@ public class TicketManagementService extends AbstractService {
 
     @Inject
     private ReportUtil reportUtil;
-    
+
 	@Inject
 	private ExportUtil exportUtil;
-    
+
     public TicketDTO saveTicket(TicketDTO ticketDTO){
     		User user = userRepository.findOne(ticketDTO.getUserId());
         Ticket ticket = mapperUtil.toEntity(ticketDTO,Ticket.class);
 
         Site site = siteRepository.findOne(ticketDTO.getSiteId());
         ticket.setSite(site);
-        
+
         ticket.setEmployee(user.getEmployee());
         Employee employee = null;
         if(ticketDTO.getEmployeeId() > 0) {
@@ -150,17 +151,27 @@ public class TicketManagementService extends AbstractService {
         }
         Calendar currCal = Calendar.getInstance();
         Employee employee = null;
-        if(ticket.getEmployee().getId() != ticketDTO.getEmployeeId()) {
-	        employee = employeeRepository.findOne(ticketDTO.getEmployeeId());
-	        ticket.setStatus("Assigned");
-	        ticket.setAssignedTo(employee);
-	        ticket.setAssignedOn(new java.sql.Date(currCal.getTimeInMillis()));
-        } else {
-        		employee = employeeRepository.findOne(ticket.getEmployee().getId());
+        if(ticketDTO.getEmployeeId()!=0) {
+            if (ticket.getEmployee().getId() != ticketDTO.getEmployeeId()) {
+                employee = employeeRepository.findOne(ticketDTO.getEmployeeId());
+                ticket.setStatus("Assigned");
+                ticket.setAssignedTo(employee);
+                ticket.setAssignedOn(new java.sql.Date(currCal.getTimeInMillis()));
+            } else {
+                employee = employeeRepository.findOne(ticket.getEmployee().getId());
+            }
         }
-        //ticket.setStatus(ticketDTO.getStatus());
-        ticket.setTitle(ticketDTO.getTitle());
-        ticket.setDescription(ticketDTO.getDescription());
+        ticket.setStatus(ticketDTO.getStatus());
+        if (StringUtils.isNotEmpty(ticketDTO.getTitle())) {
+            ticket.setTitle(ticketDTO.getTitle());
+        }else{
+            ticket.setTitle(ticket.getTitle());
+        }
+        if (StringUtils.isNotEmpty(ticketDTO.getDescription())) {
+            ticket.setDescription(ticketDTO.getDescription());
+        }else{
+            ticket.setDescription(ticket.getDescription());
+        }
         ticket.setSeverity(ticketDTO.getSeverity());
         ticket.setComments(ticketDTO.getComments());
         ticket.setCategory(ticketDTO.getCategory());
@@ -175,10 +186,10 @@ public class TicketManagementService extends AbstractService {
         if(employee != null) {
         		sendNotifications(employee, ticket, site, false);
         }
-        
+
         return ticketDTO;
     }
-    
+
     public List<TicketDTO> listAllTickets(){
         List<TicketDTO> ticketDTOList = new ArrayList<TicketDTO>();
         List<Ticket> tickets = null;
@@ -197,9 +208,9 @@ public class TicketManagementService extends AbstractService {
         Job job = jobRepository.findByTicketId(id);
         if(job!=null) {
         		ticketDTO1.setJobId(job.getId());
-            ticketDTO1.setJobName(job.getTitle());	
+            ticketDTO1.setJobName(job.getTitle());
         }
-        
+
 
         return ticketDTO1;
     }
@@ -231,7 +242,7 @@ public class TicketManagementService extends AbstractService {
             //searchCriteria.setToDate(endCal.getTime());
             ZonedDateTime startDate = ZonedDateTime.ofInstant(startCal.toInstant(), ZoneId.systemDefault());
             ZonedDateTime endDate = ZonedDateTime.ofInstant(endCal.toInstant(), ZoneId.systemDefault());
-            
+
             if(user != null) {
 	        		Hibernate.initialize(user.getUserRole());
 	        		UserRole userRole = user.getUserRole();
@@ -288,16 +299,16 @@ public class TicketManagementService extends AbstractService {
 	            		}else {
 	            			page = ticketRepository.findByEmpId(searchCriteria.getSubordinateIds(), startDate, endDate,pageRequest);
 	            		}
-                	
+
                 }
             }
             transactions = mapperUtil.toModelList(page.getContent(), TicketDTO.class);
             buildSearchResult(searchCriteria, page, transactions, result);
-            
+
         }
         return result;
     }
-    
+
 	private void buildSearchResult(SearchCriteria searchCriteria, Page<Ticket> page, List<TicketDTO> transactions, SearchResult<TicketDTO> result) {
 		if(page != null) {
 			result.setTotalPages(page.getTotalPages());
@@ -310,7 +321,7 @@ public class TicketManagementService extends AbstractService {
 		result.setTransactions(transactions);
 		return;
 	}
-	
+
 	private void sendNotifications(Employee employee, Ticket ticket, Site site, boolean isNew) {
 		Hibernate.initialize(employee.getUser());
 		User user = employee.getUser();
@@ -324,10 +335,10 @@ public class TicketManagementService extends AbstractService {
 		    if(ticketReportEmails == null) {
 		    		ticketReportEmails = settingsRepository.findSettingByKeyAndProjectId(SettingsService.EMAIL_NOTIFICATION_TICKET_EMAILS, site.getProject().getId());
 		    }
-		}        
+		}
 	    String ticketEmails = (user != null ? user.getEmail() : "");
 	    ticketEmails += ticketReportEmails != null ? ticketReportEmails.getSettingValue() : "";
-	    if(StringUtils.isNotEmpty(ticket.getStatus()) && (ticket.getStatus().equalsIgnoreCase("Open") || ticket.getStatus().equalsIgnoreCase("Assigned"))) { 
+	    if(StringUtils.isNotEmpty(ticket.getStatus()) && (ticket.getStatus().equalsIgnoreCase("Open") || ticket.getStatus().equalsIgnoreCase("Assigned"))) {
 	    		if(isNew) {
 		    		mailService.sendTicketCreatedMail(employee.getUser(),ticketEmails,site.getName(),ticket.getId(), String.valueOf(ticket.getId()),
 	        				user.getFirstName(), employee.getName(),ticket.getTitle(),ticket.getDescription(), ticket.getStatus(), ticket.getSeverity());
@@ -335,12 +346,12 @@ public class TicketManagementService extends AbstractService {
 		    		mailService.sendTicketUpdatedMail(employee.getUser(),ticketEmails,site.getName(),ticket.getId(), String.valueOf(ticket.getId()),
 			        				user.getFirstName(), employee.getName(),ticket.getTitle(),ticket.getDescription(), ticket.getStatus());
 	    		}
-    		}else if(StringUtils.isNotEmpty(ticket.getStatus()) && (ticket.getStatus().equalsIgnoreCase("Closed"))) {    			
+    		}else if(StringUtils.isNotEmpty(ticket.getStatus()) && (ticket.getStatus().equalsIgnoreCase("Closed"))) {
 		    mailService.sendTicketClosedMail(ticket.getEmployee().getUser(),ticketEmails,site.getName(),ticket.getId(), String.valueOf(ticket.getId()),
         				user.getFirstName(), employee.getName(),ticket.getTitle(),ticket.getDescription(), ticket.getStatus());
     		}
 	}
-	
+
 	public ExportResult generateReport(List<TicketDTO> transactions, SearchCriteria criteria) {
         //return exportUtil.writeJobReportToFile(transactions, null, null);
         //log.debug("REPORT GENERATION PROCESSING HERE ***********");
