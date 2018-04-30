@@ -30,13 +30,13 @@ angular.module('timeSheetApp')
         $scope.searchCriteriaAttendance;
 
         $scope.now = new Date()
-        
+
         $scope.selectedDateFrom;
         $scope.selectedDateTo;
-       
+
         $scope.dateFilterFrom = new Date();
         $scope.dateFilterTo = new Date();
-        
+
 
         $scope.initCalender = function(){
 
@@ -61,7 +61,7 @@ angular.module('timeSheetApp')
                 $scope.refreshReport();
             }
         });
-        
+
         $('input#dateFilterTo').on('dp.change', function(e){
             console.log(e.date);
 
@@ -76,14 +76,14 @@ angular.module('timeSheetApp')
             }
 
         });
-        
+
         $scope.refreshReport = function() {
 	    		$scope.search();
 	    }
 
-        
+
         $scope.init = function() {
-        		$scope.loadPageTop();        	
+        		$scope.loadPageTop();
 	    		$scope.selectedDateFrom = $scope.dateFilterFrom;
 	    		$scope.selectedDateTo = $scope.dateFilterTo;
 	    		$scope.loadAllProjects();
@@ -118,14 +118,14 @@ angular.module('timeSheetApp')
                 $scope.sites = data;
             });
         };
-        
+
         $scope.loadAllProjects = function () {
             ProjectComponent.findAll().then(function (data) {
                 console.log("projects");
                 $scope.projects = data;
             });
         };
-        
+
         $scope.changeProject = function() {
 	    		console.log('selected project - ' + JSON.stringify($scope.selectedProject));
 	    		$scope.loadSites($scope.selectedProject.id);
@@ -133,7 +133,7 @@ angular.module('timeSheetApp')
 	    		$scope.refreshReport();
 	    }
 
-        
+
         $scope.loadSites = function(projectId){
 	    		console.log('projectid - ' + projectId);
 	        DashboardComponent.loadSites(projectId).then(function(data){
@@ -169,8 +169,40 @@ angular.module('timeSheetApp')
         };
 
 
+        //--------
+        $scope.pageSizes = [{
+            value: 10
+        }, {
+            value: 15
+        }, {
+            value: 20
+        }];
+
+        $scope.sort = $scope.pageSizes[0];
+        $scope.pageSort = $scope.pageSizes[0].value;
+
+        $scope.hasChanged = function(){
+            alert($scope.sort.value)
+            $scope.pageSort = $scope.sort.value;
+            $scope.search();
+        }
+
+        $scope.columnAscOrder = function(field){
+            $scope.selectedColumn = field;
+            $scope.isAscOrder = true;
+            $scope.search();
+        }
+
+        $scope.columnDescOrder = function(field){
+            $scope.selectedColumn = field;
+            $scope.isAscOrder = false;
+            $scope.search();
+        }
+
+
+
         $scope.search = function () {
-        	var reportUid = $stateParams.uid;        	
+        	var reportUid = $stateParams.uid;
             console.log($scope.datePickerDate);
         	var currPageVal = ($scope.pages ? $scope.pages.currPage : 1);
         	if(!$scope.searchCriteria) {
@@ -231,6 +263,22 @@ angular.module('timeSheetApp')
         	console.log('criterians' + JSON.stringify($scope.searchCriteria) + 'user' + reportUid);
              $scope.attendancesData = '';
                 $scope.attendancesDataLoader = false;
+
+            //-----
+            if($scope.pageSort){
+                $scope.searchCriteria.sort = $scope.pageSort;
+            }
+
+            if($scope.selectedColumn){
+
+                $scope.searchCriteria.columnName = $scope.selectedColumn;
+                $scope.searchCriteria.sortByAsc = $scope.isAscOrder;
+
+            }else{
+                $scope.searchCriteria.columnName ="employeeId";
+            }
+
+
             AttendanceComponent.search($scope.searchCriteria, reportUid).then(function (data) {
                 $scope.attendancesData = data.transactions;
                 $scope.attendancesDataLoader = true;
@@ -254,7 +302,11 @@ angular.module('timeSheetApp')
                     	}
         };
 
-
+//---------
+        $scope.clickNextOrPrev = function(number){
+            $scope.pages.currPage = number;
+            $scope.search();
+        }
 
 
         $scope.first = function() {
@@ -448,7 +500,7 @@ angular.module('timeSheetApp')
 	        		var exportAllStatus = {
 	        				fileName : result.file,
 	        				exportMsg : 'Exporting All...',
-	        				url: result.url	
+	        				url: result.url
 	        		};
 	        		$scope.exportStatusMap[0] = exportAllStatus;
 	        		console.log('exportStatusMap size - ' + $scope.exportStatusMap.length);
@@ -552,11 +604,11 @@ angular.module('timeSheetApp')
 
 
           //init load
-        $scope.initLoad = function(){ 
-             $scope.loadPageTop(); 
-             //$scope.loadAttendances(); 
-            
-          
+        $scope.initLoad = function(){
+             $scope.loadPageTop();
+             //$scope.loadAttendances();
+
+
          }
 
        //Loading Page go to top position

@@ -12,6 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
@@ -96,7 +97,7 @@ public class AttendanceService extends AbstractService {
         }
         dbAttn.setLatitudeOut(attn.getLatitudeOut());
         dbAttn.setLongitudeOut(attn.getLongitudeOut());
-        
+
         long siteId = attnDto.getSiteId();
         Site site = siteRepository.findOne(siteId);
         List<Shift> shifts = site.getShifts();
@@ -124,7 +125,7 @@ public class AttendanceService extends AbstractService {
 
         return attnDto;
     }
-    
+
     private void findShiftTiming(AttendanceDTO attnDto,Attendance dbAttn) {
     		long siteId = attnDto.getSiteId();
         Site site = siteRepository.findOne(siteId);
@@ -196,7 +197,7 @@ public class AttendanceService extends AbstractService {
             }
             //mark the shift timings
             findShiftTiming(attnDto, attn);
-            
+
 			attn = attendanceRepository.save(attn);
 			log.debug("Attendance marked: {}", attn);
 			attnDto = mapperUtil.toModel(attn, AttendanceDTO.class);
@@ -325,7 +326,19 @@ public class AttendanceService extends AbstractService {
     	log.debug("search Criteria check in date time -  "+searchCriteria.getCheckInDateTimeFrom());
         SearchResult<AttendanceDTO> result = new SearchResult<AttendanceDTO>();
         if(searchCriteria != null) {
-            Pageable pageRequest = createPageRequest(searchCriteria.getCurrPage());
+            //-------
+            Pageable pageRequest = null;
+            if(!StringUtils.isEmpty(searchCriteria.getColumnName())){
+                Sort sort = new Sort(searchCriteria.isSortByAsc() ? Sort.Direction.ASC : Sort.Direction.DESC, searchCriteria.getColumnName());
+                log.debug("Sorting object" +sort);
+                pageRequest = createPageSort(searchCriteria.getCurrPage(), searchCriteria.getSort(), sort);
+
+            }else{
+                pageRequest = createPageRequest(searchCriteria.getCurrPage());
+            }
+
+
+            //Pageable pageRequest = createPageRequest(searchCriteria.getCurrPage());
             Page<Attendance> page = null;
             List<AttendanceDTO> transactions = null;
             Calendar startCal = Calendar.getInstance();
