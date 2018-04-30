@@ -213,6 +213,7 @@ angular.module('timeSheetApp')
             		$scope.searchCriteria = $rootScope.searchCriteriaProject;
         		}else {
         			$scope.searchCriteria.findAll = true;
+        			//console.log("-------211--------");
         		}
         	}else if($scope.selectedProject) {
         		$scope.searchCriteria.findAll = false;
@@ -240,16 +241,22 @@ angular.module('timeSheetApp')
 
             if($scope.selectedColumn){
 
+                //console.log("-----244 - selected column--------"+$scope.selectedColumn);
+
                 $scope.searchCriteria.columnName = $scope.selectedColumn;
                 $scope.searchCriteria.sortByAsc = $scope.isAscOrder;
 
+            }else{
+                $scope.searchCriteria.columnName ="id";
             }
+
 
 
 
             ProjectComponent.search($scope.searchCriteria).then(function (data) {
                 $scope.projects = data.transactions;
                 $scope.projectsLoader = true;
+                console.log('Project search result list -');
                 console.log($scope.projects);
                 $scope.pages.currPage = data.currPage;
                 $scope.pages.totalPages = data.totalPages;
