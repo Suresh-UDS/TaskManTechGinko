@@ -58,7 +58,7 @@ angular.module('timeSheetApp')
                     return false;
             }else {
                 $scope.selectedDateFrom = e.date._d;
-                $scope.refreshReport();
+               // $scope.refreshReport();
             }
         });
 
@@ -72,7 +72,7 @@ angular.module('timeSheetApp')
                     return false;
             }else {
                 $scope.selectedDateTo = e.date._d;
-                $scope.refreshReport();
+                //$scope.refreshReport();
             }
 
         });
