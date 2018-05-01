@@ -5,7 +5,7 @@ angular.module("paginations", [])
         return {
    restrict : "EA",
    scope: false,
-   templateUrl: 'scripts/components/angular-pagination_directive/pagination.html'
+   templateUrl: 'scripts/components/angular-pagination-directive/pagination.html'
    
         };
         
