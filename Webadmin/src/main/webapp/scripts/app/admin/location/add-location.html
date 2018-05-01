@@ -17,7 +17,7 @@
             </div>
             <div class="col-md-12">
 
-                <div class="form-container table-container">
+                <div class="form-container table-container" ng-init="loadProjectsList();">
                     <form ng-show="!success" name="form" role="form" novalidate
                           ng-submit=""  class="form-horizontal">
 
@@ -31,8 +31,8 @@
                                             <div class="col-md-6">
                                                 <div class="form-group">
                                                     <label class="control-label">Client<span class="red-star">*</span> </label>
-                                                    <span class="form-control-feedback d-sm-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                                    <select class="form-control " ng-model="selectedProject"  ng-change="loadSites()"  ng-options="project as project.name for project in projects">
+                                                    <span class="form-control-feedback d-big-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
+                                                    <select class="form-control " ng-model="selectedProject"  ng-change="loadDepSites()"  ng-options="project as project.name for project in projectsList">
                                                         <option value="">Please select Client...</option>
                                                     </select>
 
@@ -45,13 +45,9 @@
                                             <div class="col-md-6">
                                                 <div class="form-group">
                                                     <label class="control-label">Site<span class="red-star">*</span> </label>
-                                                    <!--<input type="text" class="form-control"-->
-                                                    <!--ng-model="selectedRole"-->
-                                                    <!--uib-typeahead="role as role.name for role in userRoles | filter:$viewValue | limitTo:5"-->
-                                                    <!--name="UserRole" ng-minlength="5" ng-maxlength="50" autofocus-->
-                                                    <!--required >-->
-                                                    <span class="form-control-feedback d-sm-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                                    <select class="form-control " ng-model="selectedSite"  ng-options="site as site.name for site in sites">
+                                     
+                                                    <span class="form-control-feedback d-big-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
+                                                    <select class="form-control " ng-model="selectedSite"  ng-options="site as site.name for site in sitesList">
                                                         <option value="">Select Site...</option>
                                                     </select>
 

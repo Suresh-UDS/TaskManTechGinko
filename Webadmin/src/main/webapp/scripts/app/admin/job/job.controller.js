@@ -4,8 +4,9 @@ angular.module('timeSheetApp')
 		    .controller(
 				'JobController',
 				function($scope, $rootScope, $state, $timeout, JobComponent,AssetComponent,
-						ProjectComponent, SiteComponent,EmployeeComponent,ChecklistComponent, LocationComponent,TicketComponent, $http, $stateParams,
-						$location) {
+						ProjectComponent, SiteComponent,EmployeeComponent,ChecklistComponent, 
+                        LocationComponent, $http, $stateParams,
+						$location,PaginationComponent) {
         $rootScope.loginView = false;
         $scope.success = null;
         $scope.error = null;
@@ -35,8 +36,8 @@ angular.module('timeSheetApp')
         $scope.jobType = function(type){
 
            $scope.jobTypeName = type;
-           //alert($scope.jobTypeName);
-           $scope.search();
+           $scope.setPage(1);
+           //$scope.search();
 
         };
 
@@ -46,24 +47,7 @@ angular.module('timeSheetApp')
 
         $scope.init = function() {
         		$scope.loadJobStatuses();
-        		console.log("State parameters");
-        		console.log($stateParams);
-        		if($stateParams.ticketId){
-                    TicketComponent.getTicketDetails($stateParams.ticketId).then(function(data){
-                        console.log("Ticket details");
-                        console.log(data);
-                        $scope.job={};
-                        $scope.job.title =data.title;
-                        $scope.job.description = data.description;
-                        if(data.siteId){
-                            SiteComponent.findOne(data.siteID).then(function (data) {
-                                console.log(data);
-                                $scope.selectedSite = data;
-                            })
-                        }
-                    })
-                }
-        };
+        }
 
         $scope.loadProjects = function () {
         	ProjectComponent.findAll().then(function (data) {
@@ -241,9 +225,7 @@ angular.module('timeSheetApp')
             ele.setAttribute('src',image);
 
         };
-        $scope.loadJobs = function(){
-        	$scope.search();
-        }
+       
 
         $scope.loadAllSites = function () {
         	SiteComponent.findAll().then(function (data) {
@@ -382,11 +364,13 @@ angular.module('timeSheetApp')
 
             that.calendar[cmp] = true;
         };
+         $scope.loadJobs = function(){
+            $scope.clearFilter();
+            $scope.search();
+        }
 
-        $scope.refreshPage = function(){
-                $scope.clearFilter();
-                // $scope.loadJobs();
-                $scope.search();
+        $scope.refreshPage = function(){   
+            $scope.loadJobs();
         }
 
         $scope.deleteConfirm = function (job){
@@ -402,23 +386,9 @@ angular.module('timeSheetApp')
         };
 
 
-        //------
-                    $scope.pageSizes = [{
-                        value: 10
-                    }, {
-                        value: 15
-                    }, {
-                        value: 20
-                    }];
+       
+                    $scope.pageSort = 10;
 
-                    $scope.sort = $scope.pageSizes[0];
-                    $scope.pageSort = $scope.pageSizes[0].value;
-
-                    $scope.hasChanged = function(){
-                        alert($scope.sort.value)
-                        $scope.pageSort = $scope.sort.value;
-                        $scope.search();
-                    }
 
                     $scope.columnAscOrder = function(field){
                         $scope.selectedColumn = field;
@@ -491,7 +461,7 @@ angular.module('timeSheetApp')
             if($scope.pageSort){
                 $scope.searchCriteria.sort = $scope.pageSort;
             }
-
+            
 
             if($scope.selectedColumn){
 
@@ -500,9 +470,10 @@ angular.module('timeSheetApp')
 
             }else{
                 $scope.searchCriteria.columnName ="id";
+                $scope.searchCriteria.sortByAsc = true;
             }
-
-
+                    
+                   
                      console.log("search criteria",$scope.searchCriteria);
                      $scope.jobs = '';
                      $scope.jobsLoader = false;
@@ -513,29 +484,30 @@ angular.module('timeSheetApp')
 	        		$scope.jobsLoader = true;
 
                     /*
-                        ** Call page navigation  main function **
+                        ** Call pagination  main function **
                     */
                      $scope.pager = {};
-                     $scope.pager = $scope.GetPager(data.totalCount, $scope.pages.currPage);
+                     $scope.pager = PaginationComponent.GetPager(data.totalCount, $scope.pages.currPage);
                      $scope.totalCountPages = data.totalCount;
-                     console.log("Page navigation",$scope.pager);
+
+                     console.log("Pagination",$scope.pager);
                      console.log("jobs",$scope.jobs);
 
 	        		$scope.pages.currPage = $scope.pages.currPage;
 	                $scope.pages.totalPages = data.totalPages;
-
+               
 	                if($scope.jobs && $scope.jobs.length > 0 ){
 	                    $scope.showCurrPage = data.currPage;
 	                    $scope.pageEntries = $scope.jobs.length;
 	                    $scope.totalCountPages = data.totalCount;
                         $scope.pageSort = 10;
 
-
+	                   
 	                }
 
-
+	           
 	        	});
-
+ 	
         };
 
         $scope.clearFilter = function() {
@@ -546,6 +518,7 @@ angular.module('timeSheetApp')
             $scope.selectedStatus = null;
             $scope.selectedJob = null;
             $scope.selectedEmployee = null;
+            $scope.searchCriteria.columnName =null;
             $scope.pages = {
                 currPage: 1,
                 totalPages: 0
@@ -583,7 +556,6 @@ angular.module('timeSheetApp')
              $scope.loadPageTop();
              $scope.init();
              $scope.initPage();
-             $scope.initController();
              $scope.setPage(1);
          }
 
@@ -615,8 +587,8 @@ angular.module('timeSheetApp')
 
 
     /*
-        ** Page navigation init function **
-        @Params:integer
+        ** Pagination init function **
+        @Param:integer
 
     */
 
@@ -625,89 +597,9 @@ angular.module('timeSheetApp')
             if (page < 1 || page > $scope.pager.totalPages) {
                 return;
             }
-
             //alert(page);
             $scope.pages.currPage = page;
             $scope.search();
-            //alert($scope.totalCountPages);
-
         };
-
-    /*
-        ** Page navigation main function**
-        @Params:integer
-        sort:10
-    */
-
-        $scope.GetPager = function(totalItems, currentPage, pageSize) {
-            // default to first page
-            currentPage = currentPage || 1;
-
-            // default page size is 10
-            pageSize = pageSize || 10;
-
-            // calculate total pages
-            var totalPages = Math.ceil(totalItems / pageSize);
-
-            var startPage, endPage;
-
-            if(totalPages > 0) {
-                    if (totalPages <= 5) {
-                        // less than 5 total pages so show all
-                        startPage = 1;
-                        endPage = totalPages;
-                    }
-                    else {
-                        // more than 5 total pages so calculate start and end pages
-                        if (currentPage <= 4) {
-                            startPage = 1;
-                            endPage = 5;
-                        } else if (currentPage + 1 >= totalPages) {
-                            startPage = totalPages - 4;
-                            endPage = totalPages;
-                        } else {
-                            startPage = currentPage - 2;
-                            endPage = currentPage + 2;
-                        }
-                    }
-
-                    // calculate start and end item indexes
-                    if(currentPage == 1){
-                        var startIndex = 1;
-                        if(totalItems < 10){
-                            var endIndex = Math.min(totalItems);
-                        }
-                        else{
-                            var endIndex = Math.min(startIndex + pageSize-1 , totalItems);
-                        }
-
-
-                    }else{
-                       // var startIndex = (currentPage - 1) * pageSize;
-                        var startIndex =   ((currentPage - 1) * pageSize) + 1;
-                        var endIndex = Math.min(startIndex + pageSize - 1 , totalItems);
-                    }
-        }else{
-                var startIndex = 0;
-                var endIndex = 0;
-        }
-
-
-            // create an array of pages to ng-repeat in the pager control
-            var pages = _.range(startPage, endPage + 1);
-
-            // return object with all pager properties required by the view
-            return {
-                totalItems: totalItems,
-                currentPage: currentPage,
-                pageSize: pageSize,
-                totalPages: totalPages,
-                startPage: startPage,
-                endPage: endPage,
-                startIndex: startIndex,
-                endIndex: endIndex,
-                pages: pages
-            };
-        }
-
+        
     });

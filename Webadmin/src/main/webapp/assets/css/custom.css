@@ -289,7 +289,7 @@ span.d-arrow-icon
   padding-top: 32px;
 }
 span.d-big-arrow-icon {
-    padding-top: 7px;
+    padding-top: 38px;
 }
 .download-btn
 {
@@ -1096,6 +1096,9 @@ button.btn.btn-outline {
   .mar0px
   {
     margin:0px !important;
+  }
+  .pad10px{
+   padding-top:10px !important;
   }
   .mar10px{
    margin-top:10px !important;

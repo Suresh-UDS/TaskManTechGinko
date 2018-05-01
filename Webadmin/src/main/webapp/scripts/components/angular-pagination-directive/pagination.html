@@ -1,0 +1,25 @@
+<div class="row">
+    <div class="col-md-6">
+        Showing {{pager.startIndex}} to {{pager.endIndex}} of {{pager.totalItems}} entries
+    </div>
+    <div class="col-md-6 text-right">
+       
+        <ul ng-if="pager.pages.length" class="pagination pagination-warning">
+            <li class="paging-first" ng-class="{disabled:pager.currentPage === 1}">
+                <a ng-click="setPage(1)">First</a>
+            </li>
+            <li class="prev" ng-class="{disabled:pager.currentPage === 1}">
+                <a ng-click="setPage(pager.currentPage - 1)"><i id="first" class="fa fa-angle-left"></i></a>
+            </li>
+            <li class="paging" ng-repeat="page in pager.pages" ng-class="{active:pager.currentPage === page}">
+                <a ng-click="setPage(page)">{{page}}</a>
+            </li>                
+            <li class="next" ng-class="{disabled:pager.currentPage === pager.totalPages}" >
+                <a ng-click="setPage(pager.currentPage + 1)"><i id="last" class="fa fa-angle-right"></i></a>
+            </li>
+            <li class="paging-last" ng-class="{disabled:pager.currentPage === pager.totalPages}">
+                <a ng-click="setPage(pager.totalPages)">Last</a>
+            </li>
+        </ul>
+    </div>
+</div>

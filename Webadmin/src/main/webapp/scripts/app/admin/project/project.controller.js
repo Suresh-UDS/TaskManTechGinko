@@ -1,20 +1,19 @@
 'use strict';
 
 angular.module('timeSheetApp')
-    .controller('ProjectController', function ($scope, $rootScope, $state, $timeout, ProjectComponent,$http,$stateParams,$location) {
+    .controller('ProjectController', function ($scope, $rootScope, $state, $timeout,
+     ProjectComponent,$http,$stateParams,$location,PaginationComponent) {
         $rootScope.loginView = false;
         $scope.success = null;
         $scope.error = null;
         $scope.doNotMatch = null;
         $scope.errorProjectExists = null;
-
-
+        $scope.selectedProject = null;
+        $scope.searchCriteria = {};
+        $scope.pages = { currPage : 1};
+        
 
         $timeout(function (){angular.element('[ng-model="name"]').focus();});
-
-        $scope.pages = { currPage : 1};
-
-        $scope.selectedProject;
 
         $scope.project = $scope.project || {};
         $scope.project.addressLat = $scope.project.addressLat || 0;
@@ -25,50 +24,7 @@ angular.module('timeSheetApp')
         		end : false,
         };
 
-        $scope.initDataTables = function(){
-
-        console.log("Data tables function")
-
-        $('#datatables').DataTable({
-                    "pagingType": "full_numbers",
-                    "lengthMenu": [
-                        [10, 25, 50, -1],
-                        [10, 25, 50, "All"]
-                    ],
-                    responsive: true,
-                    language: {
-                            search: "_INPUT_",
-                        searchPlaceholder: "Search records",
-                    }
-
-                });
-
-
-                var table = $('#datatables').DataTable();
-
-                // Edit record
-                table.on('click', '.edit', function() {
-                    $tr = $(this).closest('tr');
-
-                    var data = table.row($tr).data();
-                    alert('You press on Row: ' + data[0] + ' ' + data[1] + ' ' + data[2] + '\'s row.');
-                });
-
-                // Delete a record
-                table.on('click', '.remove', function(e) {
-                    $tr = $(this).closest('tr');
-                    table.row($tr).remove().draw();
-                    e.preventDefault();
-                });
-
-                //Like record
-                table.on('click', '.like', function() {
-                    alert('You clicked on Like button');
-                });
-
-                $('.card .material-datatables label').addClass('form-group');
-
-        }
+      
 
         $scope.saveProject = function () {
         	console.log("-------")
@@ -97,21 +53,19 @@ angular.module('timeSheetApp')
         	$location.path('/projects');
         };
 
-        $scope.loadAllProjects = function () {
-        	ProjectComponent.findAll().then(function (data) {
-        		$scope.allProjects = data;
-        	});
+        $scope.loadProjectsList = function () {
+            ProjectComponent.findAll().then(function (data) {
+                $scope.projectsList = data;
+
+            });
         };
 
         $scope.loadProjects = function () {
-//        	ProjectComponent.findAll().then(function (data) {
-//                $scope.projects = data;
-//            });
+            $scope.clearFilter();
             $scope.search();
         };
         $scope.refreshPage = function(){
-                $scope.clearFilter();
-                $scope.loadProjects();
+            $scope.loadProjects();
         }
 
 
@@ -160,24 +114,6 @@ angular.module('timeSheetApp')
         };
 
 
-        //--------
-        $scope.pageSizes = [{
-            value: 10
-        }, {
-            value: 15
-        }, {
-            value: 20
-        }];
-
-        $scope.sort = $scope.pageSizes[0];
-        $scope.pageSort = $scope.pageSizes[0].value;
-
-        $scope.hasChanged = function(){
-            alert($scope.sort.value)
-            $scope.pageSort = $scope.sort.value;
-            $scope.search();
-        }
-
         $scope.columnAscOrder = function(field){
             $scope.selectedColumn = field;
             $scope.isAscOrder = true;
@@ -191,7 +127,10 @@ angular.module('timeSheetApp')
         }
 
 
-
+        $scope.searchFilter = function () {
+            $scope.setPage(1);
+            $scope.search();
+         }
 
 
 
@@ -213,7 +152,6 @@ angular.module('timeSheetApp')
             		$scope.searchCriteria = $rootScope.searchCriteriaProject;
         		}else {
         			$scope.searchCriteria.findAll = true;
-        			//console.log("-------211--------");
         		}
         	}else if($scope.selectedProject) {
         		$scope.searchCriteria.findAll = false;
@@ -240,179 +178,52 @@ angular.module('timeSheetApp')
             }
 
             if($scope.selectedColumn){
-
-                //console.log("-----244 - selected column--------"+$scope.selectedColumn);
-
+              
                 $scope.searchCriteria.columnName = $scope.selectedColumn;
                 $scope.searchCriteria.sortByAsc = $scope.isAscOrder;
 
             }else{
                 $scope.searchCriteria.columnName ="id";
+                $scope.searchCriteria.sortByAsc = true;
             }
-
-<<<<<<< HEAD
-
-
-
-=======
-                /*$scope.projects = '';
+                 
+                console.log("search criteria",$scope.searchCriteria);
+                $scope.projects = '';
                 $scope.projectsLoader = false;
-                $scope.loadPageTop();*/
->>>>>>> 4cf3768fda35b3c8b2c3dab856eac6981c22a61b
+                $scope.loadPageTop();
             ProjectComponent.search($scope.searchCriteria).then(function (data) {
                 $scope.projects = data.transactions;
                 $scope.projectsLoader = true;
-                console.log('Project search result list -');
-                console.log($scope.projects);
+
+                /*
+                    ** Call pagination  main function **
+                */
+                 $scope.pager = {};
+                 $scope.pager = PaginationComponent.GetPager(data.totalCount, $scope.pages.currPage);
+                 $scope.totalCountPages = data.totalCount;
+
+                 console.log("Pagination",$scope.pager);
+                 console.log($scope.projects);
+
                 $scope.pages.currPage = data.currPage;
                 $scope.pages.totalPages = data.totalPages;
 
-                $scope.numberArrays = [];
-                var startPage = 1;
-                if(($scope.pages.totalPages - $scope.pages.currPage) >= 10) {
-                		startPage = $scope.pages.currPage;
-                }else if($scope.pages.totalPages > 10) {
-                		startPage = $scope.pages.totalPages - 10;
-                }
-                var cnt = 0;
-                for(var i=startPage; i<=$scope.pages.totalPages; i++){
-                		cnt++;
-                		if(cnt <= 10) {
-	                		$scope.numberArrays.push(i);
-                		}
-                }
-
+          
                 if($scope.projects && $scope.projects.length > 0 ){
                     $scope.showCurrPage = data.currPage;
                     $scope.pageEntries = $scope.projects.length;
                     $scope.totalCountPages = data.totalCount;
-
-                    if($scope.showCurrPage != data.totalPages){
-                    	$scope.pageStartIntex =  (data.currPage - 1) * $scope.pageSort + 1; // 1 to // 11 to
-
-                        $scope.pageEndIntex = $scope.pageEntries * $scope.showCurrPage; // 10 entries of 52 // 10 * 2 = 20 of 52 entries
-
-                    }else if($scope.showCurrPage === data.totalPages){
-                    	$scope.pageStartIntex =  (data.currPage - 1) * $scope.pageSort + 1;
-                    	$scope.pageEndIntex = $scope.totalCountPages;
-                    }
+                    $scope.pageSort = 10; 
                 }
 
-
-                if($scope.projects == null){
-                    $scope.pages.startInd = 0;
-                }else{
-                    $scope.pages.startInd = (data.currPage - 1) * 10 + 1;
-                }
-                $scope.pages.endInd = data.totalCount > 10  ? (data.currPage) * 10 : data.totalCount ;
-                $scope.pages.totalCnt = data.totalCount;
-            	$scope.hide = true;
             });
-        	$rootScope.searchCriteriaProject = $scope.searchCriteria;
-        	if($scope.pages.currPage == 1) {
-                        	$scope.firstStyle();
-                    	}
+        	
         };
 
-         $scope.pageSizes = [{
-            value: 10
-          }, {
-              value: 15
-          }, {
-              value: 20
-          }];
+     
+        $scope.pageSort = 10;
 
-        $scope.sort = $scope.pageSizes[0];
-        $scope.pageSort = $scope.pageSizes[0].value;
-
-        $scope.hasChanged = function(){
-            alert($scope.sort.value)
-            $scope.pageSort = $scope.sort.value;
-            $scope.search();
-        }
-
-        $scope.clickNextOrPrev = function(number){
-	        	$scope.pages.currPage = number;
-	        	$scope.search();
-	    }
-
-
-                $scope.first = function() {
-                	if($scope.pages.currPage > 1) {
-                    	$scope.pages.currPage = 1;
-                    	$scope.firstStyle();
-                    	$scope.search();
-                	}
-                };
-
-                $scope.firstStyle = function() {
-               	 var ele = angular.element('#first');
-	            	 ele.addClass('disabledLink');
-	            	 ele = angular.element('#previous');
-	            	 ele.addClass('disabledLink');
-	            	 if($scope.pages.totalPages > 1) {
-	         	       	 var ele = angular.element('#next');
-	        	    	 ele.removeClass('disabledLink');
-	        	    	 ele = angular.element('#last');
-	        	    	 ele.removeClass('disabledLink');
-	            	 }
-
-                }
-
-                $scope.previous = function() {
-                	if($scope.pages.currPage > 1) {
-                    	$scope.pages.currPage = $scope.pages.currPage - 1;
-                    	$scope.search();
-                    	if($scope.pages.currPage == 1) {
-        	       	       	 var ele = angular.element('#first');
-        	    	    	 ele.addClass('disabled');
-        	    	    	 ele = angular.element('#previous');
-        	    	    	 ele.addClass('disabled');
-                    	}
-             	       	 var ele = angular.element('#next');
-            	    	 ele.removeClass('disabled');
-            	    	 ele = angular.element('#last');
-            	    	 ele.removeClass('disabled');
-                	}
-
-                };
-
-                $scope.next = function() {
-                	if($scope.pages.currPage < $scope.pages.totalPages) {
-                    	$scope.pages.currPage = $scope.pages.currPage + 1;
-                    	$scope.search();
-                    	if($scope.pages.currPage == $scope.pages.totalPages) {
-        	       	       	 var ele = angular.element('#next');
-        	    	    	 ele.addClass('disabled');
-        	    	    	 ele = angular.element('#last');
-        	    	    	 ele.addClass('disabled');
-                    	}
-             	       	 var ele = angular.element('#first');
-            	    	 ele.removeClass('disabled');
-            	    	 ele = angular.element('#previous');
-            	    	 ele.removeClass('disabled');
-                	}
-
-                };
-
-                $scope.last = function() {
-                	if($scope.pages.currPage < $scope.pages.totalPages) {
-                    	$scope.pages.currPage = $scope.pages.totalPages;
-                    	$scope.search();
-                    	if($scope.pages.currPage == $scope.pages.totalPages) {
-        	       	       	 var ele = angular.element('#next');
-        	    	    	 ele.addClass('disabled');
-        	    	    	 ele = angular.element('#last');
-        	    	    	 ele.addClass('disabled');
-                    	}
-              	       	var ele = angular.element('#first');
-            	    	ele.removeClass('disabled');
-            	    	ele = angular.element('#previous');
-            	    	ele.removeClass('disabled');
-                	}
-
-                };
-
+       
         $scope.clearFilter = function() {
             $scope.selectedProject = null;
             $scope.searchCriteria = {};
@@ -421,13 +232,15 @@ angular.module('timeSheetApp')
                 currPage: 1,
                 totalPages: 0
             }
-            $scope.search();
+            //$scope.search();
         };
 
         //init load
         $scope.initLoad = function(){
              $scope.loadPageTop();
              $scope.loadProjects();
+             $scope.setPage(1);
+             
          }
 
        //Loading Page go to top position
@@ -437,6 +250,21 @@ angular.module('timeSheetApp')
             $("#loadPage").animate({scrollTop: 0}, 2000);
         }
 
+       /*
+        ** Pagination init function **
+        @Param:integer
 
+       */
+
+        $scope.setPage = function (page) {
+
+            if (page < 1 || page > $scope.pager.totalPages) {
+                return;
+            }
+
+            //alert(page);
+            $scope.pages.currPage = page;
+            $scope.search();
+        };
 
     });

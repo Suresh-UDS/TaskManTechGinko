@@ -11,63 +11,63 @@
     <!--</div>-->
 
 
-    <div class="row"  ng-init="loadSites()">
+    <div class="row">
         <div class="col-md-12">
-            <div class="card TableCard">
+            <div class="card margin-TB-5 tablecard appModuleCard">
+
                 <div class="card-content">
-                    <!--<h4 class="card-title">Striped Table</h4>-->
+                    <div class="row" ng-init="loadProjectsList();loadSitesList();">
+                        <div class="col-md-12">
+                            <div class="card formcard">
+                                <div class="card-content">
+                                    <form name="searchForm"  ng-submit="searchFilter();" novalidate >
+                                        <div class="row" >
+                                            <div class="col-xs-12 col-md-4">
+                                                <div class="form-group no-padding" >
+                                                    <div class="dropdown">
+                                                        <div class="form-group">
+                                                            <label class="control-label">Select Client</label>
+                                                             <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
+                                                            <select class="form-control " ng-model="selectedProject" ng-change="loadDepSites()"   ng-options="project as project.name for project in projectsList">
+                                                                <option value="">Select Client...</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-xs-12 col-md-4">
+                                                <div class="form-group no-padding" >
+                                                    <div class="dropdown">
+                                                        <div class="form-group">
+                                                            <label class="control-label">Select Site</label>
+                                                             <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
+                                                            <select class="form-control " ng-model="selectedSite"  ng-options="site as site.name for site in sitesList">
+                                                                <option value="">Select Site...</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
 
-                    <div class="SearchTable" init="loadProjects()">
-
-                        <form name="searchForm"  ng-submit="search()" novalidate >
-
-                            <table class="table no-padding-tblCon" border="0">
-                                <tr class="filter-row gc-search-row">
-
-
-                                    <td>
-                                        <div class="form-group no-padding" >
-                                            <div class="dropdown">
-                                                <input type="text"
-                                                       class="form-control searchable-input floatL border-bottom-input"
-                                                       placeholder="Search Client" ng-model="selectedProject"
-
-                                                       name="projectId"
-                                                       uib-typeahead="project as project.name for project in projects | filter:$viewValue | limitTo:5" />
+                                             <div class="col-xs-12 col-md-4 pad10px">
+                                                <div class="floatR form-group pull-right">
+                                                        <button type="submit" class="btn btn-circle blue-clr">
+                                                            <i class="material-icons">search</i>
+                                                        </button>
+                                                        <button ui-sref="add-site" has-permission="Site:Create" ng-class="{active: $state.includes('admin')}"  class="btn btn-circle green-clr">
+                                                            <i class="material-icons">add</i>
+                                                        </button>
+                                                        <button ng-click="refreshPage()" class="btn btn-circle orange-clr">
+                                                            <i class="material-icons">refresh</i>
+                                                        </button>
+                                                </div>
+                                                <div class="clearfix"></div>
                                             </div>
                                         </div>
-                                    </td>
-                                    <td>
-                                        <div class="form-group no-padding" >
-                                            <div class="dropdown">
-                                                <input type="text"
-                                                       class="form-control searchable-input floatL border-bottom-input"
-                                                       placeholder="Search Site"
-                                                       ng-model="selectedSite"
-                                                       ng-value="searchCriteria.siteName"
-                                                       uib-typeahead="site as site.name for site in allSites | filter:$viewValue | limitTo:5"/>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td align="right">
-                                        <div class="floatR form-group no-padding">
-
-                                            <button type="submit" class="btn btn-circle blue-clr">
-                                                <i class="material-icons">search</i>
-                                            </button>
-                                            <button ui-sref="add-site" has-permission="Site:Create" ng-class="{active: $state.includes('admin')}"  class="btn btn-circle green-clr">
-                                                <i class="material-icons">add</i>
-                                            </button>
-                                            <button ng-click="refreshPage()" class="btn btn-circle orange-clr">
-                                                <i class="material-icons">refresh</i>
-                                            </button>
-
-                                        </div>
-                                    </td>
-                                </tr>
-                            </table>
-                        </form>
-
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
                     </div>
 
                     <div class="table-responsive tablecard">
@@ -133,98 +133,12 @@
     </div>
 
 
+    <!-- Pagination directive start -->
 
+    <pagination-new></pagination-new> 
 
+    <!-- Pagination directive end -->
 
-    <!--<div class="row">
-
-        <div class="col-md-6">
-            Showing {{pager.startIndex}} to {{pager.endIndex}} of {{totalCountPages}} entries
-        </div>
-        <div class="col-md-6 text-right">
-            &lt;!&ndash; <ul class="pagination pagination-warning">
-
-                <li class="paging-first" ID="first">
-                    <a href="#" id="first" ng-click="first()">
-                        <i id="first" class=" fa fa-step-backward"></i></a>
-                </li>
-                <li class="prev paging-previous" id="previous">
-                    <a id="previous" href="#" ng-click="previous()"> prev</a>
-                </li>
-
-                <li ng-class="{active: number == pages.currPage}" class="paging" ng-repeat="number in numberArrays" ng-click="clickNextOrPrev(number)">
-                    <a href="#" style="cursor:pointer">{{number}}</a>
-                </li>
-                <li class="next paging-next" id="next">
-                    <a id="next" href="#" ng-click="next()" >next</a>
-                </li>
-                <li class="paging-last" id="last">
-                    <a id="last" href="#" ng-click="last()"><i id="last" class="fa fa-step-forward"></i></a>
-                </li>
-
-            </ul> &ndash;&gt;
-            &lt;!&ndash; pager &ndash;&gt;
-            <ul ng-if="pager.pages.length" class="pagination pagination-warning">
-                <li class="paging-first" ng-class="{disabled:pager.currentPage === 1}">
-                    <a ng-click="setPage(1)">First</a>
-                </li>
-                <li class="prev ng-class="{disabled:pager.currentPage === 1}">
-                <a ng-click="setPage(pager.currentPage - 1)"><i id="first" class=" fa fa-step-backward"></i></a>
-                </li>
-                <li class="paging" ng-repeat="page in pager.pages" ng-class="{active:pager.currentPage === page}">
-                    <a ng-click="setPage(page)">{{page}}</a>
-                </li>
-                <li class="next ng-class="{disabled:pager.currentPage === pager.totalPages}" >
-                <a ng-click="setPage(pager.currentPage + 1)"><i id="last" class="fa fa-step-forward"></i></a>
-                </li>
-                <li class="paging-last" ng-class="{disabled:pager.currentPage === pager.totalPages}">
-                    <a ng-click="setPage(pager.totalPages)">Last</a>
-                </li>
-            </ul>
-        </div>
--->
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    <div class="row">
-
-        <div class="col-md-4"></div>
-         <div class="col-md-8 text-right">
-        <ul class="pagination pagination-warning">
-
-            <li class="paging-first" ID="first">
-                <a href="#" id="first" ng-click="first()">
-                    <i id="first" class=" fa fa-step-backward"></i></a>
-            </li>
-            <li class="prev paging-previous" id="previous">
-                <a id="previous" href="#" ng-click="previous()"> prev</a>
-            </li>
-
-            <li ng-class="{active: number == pages.currPage}" class="paging" ng-repeat="number in numberArrays" ng-click="clickNextOrPrev(number)">
-                <a href="#" style="cursor:pointer">{{number}}</a>
-            </li>
-            <li class="next paging-next" id="next">
-                <a id="next" href="#" ng-click="next()" >next</a>
-            </li>
-            <li class="paging-last" id="last">
-                <a id="last" href="#" ng-click="last()"><i id="last" class="fa fa-step-forward"></i></a>
-            </li>
-
-        </ul>
-    </div>
-
-    </div>
 
 
 

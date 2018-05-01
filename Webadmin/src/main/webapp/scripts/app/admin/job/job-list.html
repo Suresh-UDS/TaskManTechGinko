@@ -45,10 +45,10 @@
                                         <div class="form-group" ng-init="loadProjects();loadAllSites();loadAssets()">
                                             <div class="col-xs-4 col-md-3">
                                             	<div class="form-group">
-					                            <label class="label-control">Job date</label>
-					                            <span class="form-control-feedback calender-icon"><i class="material-icons">date_range</i></span>
-					                            <input type="text" class="form-control datepicker"  id="selectedJobDate"  placeholder="{{selectedJobDate | date:'dd-MMM-yyyy'}}"/>
-											</div>
+    					                            <label class="label-control">Job date</label>
+    					                            <span class="form-control-feedback calender-icon"><i class="material-icons">date_range</i></span>
+    					                            <input type="text" class="form-control datepicker"  id="selectedJobDate"  placeholder="{{selectedJobDate | date:'dd-MMM-yyyy'}}"/>
+											    </div>
                                             </div>
                                             <div class="dropdown col-xs-4 col-md-3">
                                                  <div class="dropdown">
@@ -230,54 +230,11 @@
 
     </div>
 
-    <div class="row">
+    <!-- Pagination directive start -->
 
-        <div class="col-md-6">
-            Showing {{pager.startIndex}} to {{pager.endIndex}} of {{totalCountPages}} entries
-        </div>
-        <div class="col-md-6 text-right">
-        <!-- <ul class="pagination pagination-warning">
+    <pagination-new></pagination-new> 
 
-            <li class="paging-first" ID="first">
-                <a href="#" id="first" ng-click="first()">
-                    <i id="first" class=" fa fa-step-backward"></i></a>
-            </li>
-            <li class="prev paging-previous" id="previous">
-                <a id="previous" href="#" ng-click="previous()"> prev</a>
-            </li>
-
-            <li ng-class="{active: number == pages.currPage}" class="paging" ng-repeat="number in numberArrays" ng-click="clickNextOrPrev(number)">
-                <a href="#" style="cursor:pointer">{{number}}</a>
-            </li>
-            <li class="next paging-next" id="next">
-                <a id="next" href="#" ng-click="next()" >next</a>
-            </li>
-            <li class="paging-last" id="last">
-                <a id="last" href="#" ng-click="last()"><i id="last" class="fa fa-step-forward"></i></a>
-            </li>
-
-        </ul> -->
-        <!-- pager -->
-            <ul ng-if="pager.pages.length" class="pagination pagination-warning">
-                <li class="paging-first" ng-class="{disabled:pager.currentPage === 1}">
-                    <a ng-click="setPage(1)">First</a>
-                </li>
-                <li class="prev" ng-class="{disabled:pager.currentPage === 1}">
-                    <a ng-click="setPage(pager.currentPage - 1)"><i id="first" class="fa fa-angle-left"></i></a>
-                </li>
-                <li class="paging" ng-repeat="page in pager.pages" ng-class="{active:pager.currentPage === page}">
-                    <a ng-click="setPage(page)">{{page}}</a>
-                </li>                
-                <li class="next" ng-class="{disabled:pager.currentPage === pager.totalPages}" >
-                    <a ng-click="setPage(pager.currentPage + 1)"><i id="last" class="fa fa-angle-right"></i></a>
-                </li>
-                <li class="paging-last" ng-class="{disabled:pager.currentPage === pager.totalPages}">
-                    <a ng-click="setPage(pager.totalPages)">Last</a>
-                </li>
-            </ul>
-    </div>
-
-    </div>
+    <!-- Pagination directive end -->
 
 
 
