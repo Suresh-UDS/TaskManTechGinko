@@ -276,13 +276,21 @@ span.calender-icon
 {
   padding-top: 30px;
 }
+span.calender-mid-icon
+{
+  padding-top: 10px;
+}
 span.calender-big-icon
 {
   padding-top: 7px;
 }
 span.d-sm-arrow-icon
 {
-  padding-top: 27px;
+  padding-top: 7px;
+}
+span.d-mid-arrow-icon
+{
+  padding-top: 10px;
 }
 span.d-arrow-icon
 {
