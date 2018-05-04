@@ -11,7 +11,7 @@ angular.module('timeSheetApp')
         $scope.selectedProject = null;
         $scope.searchCriteria = {};
         $scope.pages = { currPage : 1};
-        
+
 
         $timeout(function (){angular.element('[ng-model="name"]').focus();});
 
@@ -24,7 +24,7 @@ angular.module('timeSheetApp')
         		end : false,
         };
 
-      
+
 
         $scope.saveProject = function () {
         	console.log("-------")
@@ -113,8 +113,12 @@ angular.module('timeSheetApp')
             that.calendar[cmp] = true;
         };
 
+        $scope.isActiveAsc = false;
+        $scope.isActiveDesc = false;
 
         $scope.columnAscOrder = function(field){
+            $scope.isActiveAsc = true;
+            $scope.isActiveDesc = false;
             $scope.selectedColumn = field;
             $scope.isAscOrder = true;
             $scope.search();
@@ -124,6 +128,8 @@ angular.module('timeSheetApp')
             $scope.selectedColumn = field;
             $scope.isAscOrder = false;
             $scope.search();
+            $scope.isActiveDesc = true;
+            $scope.isActiveAsc = false;
         }
 
 
@@ -178,7 +184,7 @@ angular.module('timeSheetApp')
             }
 
             if($scope.selectedColumn){
-              
+
                 $scope.searchCriteria.columnName = $scope.selectedColumn;
                 $scope.searchCriteria.sortByAsc = $scope.isAscOrder;
 
@@ -186,7 +192,7 @@ angular.module('timeSheetApp')
                 $scope.searchCriteria.columnName ="id";
                 $scope.searchCriteria.sortByAsc = true;
             }
-                 
+
                 console.log("search criteria",$scope.searchCriteria);
                 $scope.projects = '';
                 $scope.projectsLoader = false;
@@ -208,22 +214,22 @@ angular.module('timeSheetApp')
                 $scope.pages.currPage = data.currPage;
                 $scope.pages.totalPages = data.totalPages;
 
-          
+
                 if($scope.projects && $scope.projects.length > 0 ){
                     $scope.showCurrPage = data.currPage;
                     $scope.pageEntries = $scope.projects.length;
                     $scope.totalCountPages = data.totalCount;
-                    $scope.pageSort = 10; 
+                    $scope.pageSort = 10;
                 }
 
             });
-        	
+
         };
 
-     
+
         $scope.pageSort = 10;
 
-       
+
         $scope.clearFilter = function() {
             $scope.selectedProject = null;
             $scope.searchCriteria = {};
@@ -240,7 +246,7 @@ angular.module('timeSheetApp')
              $scope.loadPageTop();
              $scope.loadProjects();
              $scope.setPage(1);
-             
+
          }
 
        //Loading Page go to top position
