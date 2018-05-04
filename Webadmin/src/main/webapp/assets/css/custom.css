@@ -462,7 +462,7 @@ th span.sortingIcons svg
 }
 th span.sortingIcons .active svg
 {
-    color: red;
+    color: #ff9800;
 }
 
 /*.alert.alert-info*/
