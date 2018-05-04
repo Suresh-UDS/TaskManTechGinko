@@ -1,32 +1,45 @@
 'use strict';
 
 angular.module('timeSheetApp')
-    .controller('TicketController', function ($rootScope, $scope, $state, $timeout, SiteComponent, JobComponent,EmployeeComponent,TicketComponent,$http,$stateParams,$location) {
+    .controller('TicketController', function ($rootScope, $scope,
+     $state, $timeout,ProjectComponent, SiteComponent,JobComponent,
+     EmployeeComponent,TicketComponent,$http,
+     $stateParams,$location,PaginationComponent,$filter) {
         $rootScope.loginView = false;
         $scope.success = null;
         $scope.error = null;
         $scope.doNotMatch = null;
         $scope.errorTicketsExists = null;
         $scope.searchCriteria = {};
+        $scope.selectedProject = null;
         $scope.selectedSite = null;
+        $scope.selectedStatus = null;
+        $scope.searchCriteria = {};
+        $scope.selectedEmployee = null;
+        $scope.pages = { currPage : 1};
         $scope.cTicket ={};
+        $scope.selectedDateFrom = $filter('date')(new Date(), 'dd/MM/yyyy'); 
+        $scope.selectedDateTo = $filter('date')(new Date(), 'dd/MM/yyyy');
+        $scope.selectedDateFromSer= new Date();
+        $scope.selectedDateToSer= new Date();
 
 
         $timeout(function (){angular.element('[ng-model="name"]').focus();});
 
         $scope.pages = { currPage : 1};
 
-        $scope.selectedProject;
+        $scope.selectedProject = null;
 
-        $scope.selectedTicket;
+        $scope.selectedTicket = null;
 
         $scope.calendar = {
-        		start : false,
-        		end : false,
+                start : false,
+                end : false,
         }
 
 
         $scope.loadTickets = function(){
+            $scope.clearFilter();
             $scope.search();
         }
 
@@ -48,7 +61,7 @@ angular.module('timeSheetApp')
                 }
 
 
-         $('input#dateFilterFrom').on('dp.change', function(e){
+      /*   $('input#dateFilterFrom').on('dp.change', function(e){
             console.log(e.date);
 
             console.log(e.date._d);
@@ -75,46 +88,84 @@ angular.module('timeSheetApp')
                 //$scope.refreshReport();
             }
 
+        });*/
+
+        $('input#dateFilterFrom').on('dp.change', function(e){
+            console.log(e.date);
+            console.log(e.date._d);
+            $scope.selectedDateFromSer= e.date._d; 
+            
+            $.notifyClose();
+             
+            if($scope.selectedDateFromSer > $scope.selectedDateToSer) {
+
+                    $scope.showNotifications('top','center','danger','From date cannot be greater than To date');
+                    $scope.selectedDateFrom =$filter('date')(new Date(), 'dd/MM/yyyy');
+                    return false;
+            }else {
+               $scope.selectedDateFrom= $filter('date')(e.date._d, 'dd/MM/yyyy');
+               // $scope.refreshReport();
+            }
+            
+            
+
+        });
+        $('input#dateFilterTo').on('dp.change', function(e){
+            console.log(e.date);
+            console.log(e.date._d);
+            $scope.selectedDateToSer= e.date._d;
+
+            $.notifyClose();
+            
+            if($scope.selectedDateFromSer > $scope.selectedDateToSer) {
+                    $scope.showNotifications('top','center','danger','To date cannot be lesser than From date');
+                    $scope.selectedDateTo=$filter('date')(new Date(), 'dd/MM/yyyy');
+                    return false;
+            }else {
+                $scope.selectedDateTo= $filter('date')(e.date._d, 'dd/MM/yyyy');
+                //$scope.refreshReport();
+            }
+
         });
 
         $scope.initCalender();
 
         $scope.saveTicket = function () {
-	        	$scope.error = null;
-	        	$scope.success = null;
-	        	$scope.errorTicketsExists = null;
-	        	$scope.errorSite = null;
-	        	if(!$scope.selectedSite.id){
-	        		$scope.errorSite = "true";
-	        	}else{
+                $scope.error = null;
+                $scope.success = null;
+                $scope.errorTicketsExists = null;
+                $scope.errorSite = null;
+                if(!$scope.selectedSite.id){
+                    $scope.errorSite = "true";
+                }else{
                     $scope.tickets.title = $scope.tickets.title;
                     $scope.tickets.description = $scope.tickets.description;
                     $scope.tickets.siteId = $scope.selectedSite.id;
                     $scope.tickets.employeeId = $scope.selectedEmployee.id;
                     $scope.tickets.severity = $scope.tickets.severity;
-	        		$scope.tickets.comments = $scope.tickets.comments;
+                    $scope.tickets.comments = $scope.tickets.comments;
                     console.log('Tickets - ' + JSON.stringify($scope.tickets));
-	            	JobComponent.createTicket($scope.tickets).then(function() {
-	                    $scope.success = 'OK';
-	                    $scope.showNotifications('top','center','success','Ticket Added');
-	                    $scope.selectedSite = null;
-	                	$scope.loadTickets();
-	                	$location.path('/tickets');
-	                }).catch(function (response) {
-	                    $scope.success = null;
-	                    console.log('Error - '+ response.data);
-	                    console.log('status - '+ response.status + ' , message - ' + response.data.message);
-	                    if (response.status === 400 && response.data.message === 'error.duplicateRecordError') {
-	                            $scope.errorTicketsExists = 'ERROR';
-	                        $scope.showNotifications('top','center','danger','Ticket Already Exists');
+                    JobComponent.createTicket($scope.tickets).then(function() {
+                        $scope.success = 'OK';
+                        $scope.showNotifications('top','center','success','Ticket Added');
+                        $scope.selectedSite = null;
+                        $scope.loadTickets();
+                        $location.path('/tickets');
+                    }).catch(function (response) {
+                        $scope.success = null;
+                        console.log('Error - '+ response.data);
+                        console.log('status - '+ response.status + ' , message - ' + response.data.message);
+                        if (response.status === 400 && response.data.message === 'error.duplicateRecordError') {
+                                $scope.errorTicketsExists = 'ERROR';
+                            $scope.showNotifications('top','center','danger','Ticket Already Exists');
 
-	                        console.log($scope.errorTicketsExists);
-	                    } else {
-	                        $scope.showNotifications('top','center','danger','Error in creating Ticket. Please try again later..');
-	                        $scope.error = 'ERROR';
-	                    }
-	                });
-	        	}
+                            console.log($scope.errorTicketsExists);
+                        } else {
+                            $scope.showNotifications('top','center','danger','Error in creating Ticket. Please try again later..');
+                            $scope.error = 'ERROR';
+                        }
+                    });
+                }
 
         };
 
@@ -122,7 +173,7 @@ angular.module('timeSheetApp')
 
 
         $scope.cancelTicket = function () {
-        		$location.path('/tickets');
+                $location.path('/tickets');
         };
 
         $scope.loadAllSites = function () {
@@ -135,9 +186,16 @@ angular.module('timeSheetApp')
 
 
         $scope.refreshPage = function(){
-               $scope.clearFilter();
-               $scope.search();
+               
+               $scope.loadTickets();
         }
+
+         $scope.loadProjects = function () {
+            console.log("Loading all projects");
+                    ProjectComponent.findAll().then(function (data) {
+                $scope.projects = data;
+            });
+        };
 
 
         $scope.loadSites = function () {
@@ -149,11 +207,9 @@ angular.module('timeSheetApp')
 
         $scope.loadEmployees = function () {
                 $scope.searchCriteria.siteId = $scope.selectedSite.id;
-                $scope.searchCriteria.list = true;
                 EmployeeComponent.search($scope.searchCriteria).then(function (data) {
                     $scope.selectedEmployee = null;
                 $scope.employees = data.transactions;
-
             });
         };
 
@@ -162,8 +218,9 @@ angular.module('timeSheetApp')
           $scope.loadselectedSite = function() {
            var sId = parseInt($stateParams.id);
             JobComponent.getTicketDetails(sId).then(function (data) {
-                var siteId = parseInt(data.siteId);
-                $scope.selectedSite(siteId);
+                //var siteId = parseInt(data.siteId);
+                //$scope.selectedSite(siteId);
+                $scope.sites = data;
 
 
             });
@@ -226,14 +283,14 @@ angular.module('timeSheetApp')
 
 
         $scope.updatedTicket = function () {
-        	$scope.error = null;
-        	$scope.success = null;
-        	$scope.errorProject = null;
-        	if(!$scope.selectedSite.id){
+            $scope.error = null;
+            $scope.success = null;
+            $scope.errorProject = null;
+            if(!$scope.selectedSite.id){
                     $scope.errorSite = "true";
                 }else{
-        	    console.log("update ticket");
-        	    $scope.tickets.title = $scope.tickets.title;
+                console.log("update ticket");
+                $scope.tickets.title = $scope.tickets.title;
                 $scope.tickets.description = $scope.tickets.description;
                 if($scope.selectedSite) {
                     $scope.tickets.siteId = $scope.selectedSite.id;
@@ -246,29 +303,30 @@ angular.module('timeSheetApp')
                 }
                 $scope.tickets.comments = $scope.tickets.comments;
                 console.log('Tickets - ' + JSON.stringify($scope.tickets));
-	        	JobComponent.updateTicket($scope.tickets).then(function() {
-	                $scope.success = 'OK';
-	                $scope.showNotifications('top','center','success','Ticket updated');
+                JobComponent.updateTicket($scope.tickets).then(function() {
+                    $scope.success = 'OK';
+                    //$(".fadeInDown").setAttribute("aria-hidden", "false");
+                    $scope.showNotifications('top','center','success','Ticket updated');
                     $scope.search();
                     $location.path('/tickets');
-	            }).catch(function (response) {
-	                $scope.success = null;
-	                // console.log('Error - '+ response.data);
-	                // console.log('status - '+ response.status + ' , message -
-					// ' + response.data.message);
+                }).catch(function (response) {
+                    $scope.success = null;
+                    // console.log('Error - '+ response.data);
+                    // console.log('status - '+ response.status + ' , message -
+                    // ' + response.data.message);
 
-	                if (response.status === 400 && response.data.message === 'error.duplicateRecordError') {
-	                	$scope.$apply(function() {
-	                        $scope.errorTicketsExists = 'ERROR';
-	                		$scope.success = 'OK';
+                    if (response.status === 400 && response.data.message === 'error.duplicateRecordError') {
+                        $scope.$apply(function() {
+                            $scope.errorTicketsExists = 'ERROR';
+                            $scope.success = 'OK';
                             $scope.showNotifications('top','center','danger','Ticket Already Exists');
-	                	})
-	                    console.log($scope.errorTicketsExists);
-	                } else {
-	                    $scope.error = 'ERROR';
-	                }
-	            });;
-        	}
+                        })
+                        console.log($scope.errorTicketsExists);
+                    } else {
+                        $scope.error = 'ERROR';
+                    }
+                });;
+            }
         };
 
             $scope.closeTicket = function (ticket){
@@ -288,13 +346,13 @@ angular.module('timeSheetApp')
 
 
         $scope.deleteConfirm = function (ticket){
-        	$scope.confirmTicket = ticket;
+            $scope.confirmTicket = ticket;
         }
 
         $scope.deleteTicket = function (ticket) {
-        	JobComponent.deleteTicket($scope.confirmTicket);
-        	$scope.success = 'OK';
-        	$state.reload();
+            JobComponent.deleteTicket($scope.confirmTicket);
+            $scope.success = 'OK';
+            $state.reload();
         };
 
         var that =  $scope;
@@ -308,30 +366,13 @@ angular.module('timeSheetApp')
 
 
         $scope.loadTicketStatuses = function() {
-	    		TicketComponent.loadTicketStatuses().then(function(data){
-	    			$scope.ticketStatuses = data;
-	    		})
-	    }
-
-
-	    //------
-        $scope.pageSizes = [{
-            value: 10
-        }, {
-            value: 15
-        }, {
-            value: 20
-        }];
-
-        $scope.sort = $scope.pageSizes[0];
-        $scope.pageSort = $scope.pageSizes[0].value;
-
-        $scope.hasChanged = function(){
-            alert($scope.sort.value)
-            $scope.pageSort = $scope.sort.value;
-            $scope.search();
+                TicketComponent.loadTicketStatuses().then(function(data){
+                    $scope.ticketStatuses = data;
+                })
         }
 
+
+     
         $scope.columnAscOrder = function(field){
             $scope.selectedColumn = field;
             $scope.isAscOrder = true;
@@ -344,105 +385,72 @@ angular.module('timeSheetApp')
             $scope.search();
         }
 
-
+        $scope.searchFilter = function () {
+            $scope.setPage(1);
+            $scope.search();
+         }
 
 
         $scope.search = function () {
-        	var currPageVal = ($scope.pages ? $scope.pages.currPage : 1);
-        	if(!$scope.searchCriteria) {
-            	var searchCriteria = {
-            			currPage : currPageVal
-            	}
-            	$scope.searchCriteria = searchCriteria;
-        	}
-
-        	$scope.searchCriteria.currPage = currPageVal;
-        	console.log('Selected  filters' + JSON.stringify($scope.selectedSite) +" , "+ $scope.selectedEmployee
-                +" , "+ $scope.selectedTitle+" , "+ $scope.selectedDescription);
-        	console.log('search criteria - '+JSON.stringify($rootScope.searchCriteriaTicket));
-        	$scope.searchCriteria.ticketStatus = $scope.selectedStatus;
-        	if($scope.selectedDateFrom){
-                $scope.selectedDateFrom.setHours(0,0,0,0);
-                $scope.searchCriteria.fromDate = $scope.selectedDateFrom;
-                $scope.searchCriteria.findAll = false;
-                console.log("From date found");
-                console.log($scope.searchCriteria.fromDate)
-
-
-            }else{
-                $scope.searchCriteria.fromDate = new Date();
-                console.log("From date not found")
-                console.log($scope.searchCriteria.fromDate)
-
+            var currPageVal = ($scope.pages ? $scope.pages.currPage : 1);
+            if(!$scope.searchCriteria) {
+                var searchCriteria = {
+                        currPage : currPageVal
+                }
+                $scope.searchCriteria = searchCriteria;
             }
 
-            if($scope.selectedDateTo){
-                $scope.selectedDateTo.setHours(23,59,59,0);
-                $scope.searchCriteria.toDate = $scope.selectedDateTo;
-                $scope.searchCriteria.findAll = false;
-                console.log("To date found")
-                console.log($scope.searchCriteria.toDate)
+            $scope.searchCriteria.currPage = currPageVal;
+            $scope.searchCriteria.findAll = false;
 
-            }else{
-                $scope.searchCriteria.toDate= new Date();
-                console.log("To date not found")
-                console.log($scope.searchCriteria.toDate)
+             if(!$scope.selectedTitle && !$scope.selectedDescription && !$scope.selectedProject && !$scope.selectedSite 
+                && !$scope.selectedEmployee && !$scope.selectedStatus) {
+                $scope.searchCriteria.findAll = true;
             }
 
+            if($scope.selectedDateFrom) {
+                    $scope.searchCriteria.fromDate = $scope.selectedDateFromSer;
+                }
+                if($scope.selectedDateTo) {
+                    $scope.searchCriteria.toDate = $scope.selectedDateToSer;
+                }
 
-
-        	if(!$scope.selectedTitle && !$scope.selectedDescription && !$scope.selectedSite && !$scope.selectedEmployee) {
-        		if($rootScope.searchCriteriaTicket) {
-            		$scope.searchCriteria = $rootScope.searchCriteriaTicket;
-        		}else {
-        			$scope.searchCriteria.findAll = true;
-        		}
-        	}else if($scope.selectedTitle || $scope.selectedDescription || $scope.selectedSite || $scope.selectedEmployee) {
-        		$scope.searchCriteria.findAll = false;
-	        	if($scope.selectedTitle) {
-		        	$scope.searchCriteria.ticketTitle = $scope.selectedTitle;
-
-	        	}else {
-	        		$scope.searchCriteria.ticketTitle = '';
-	        	}
-
-                if($scope.selectedDescription) {
+           
+                if($scope.selectedTitle)
+                {
+                    $scope.searchCriteria.ticketTitle = $scope.selectedTitle;
+                    console.log('selected Title ='+ $scope.searchCriteria.ticketTitle);
+                }
+                if($scope.selectedDescription)
+                {
                     $scope.searchCriteria.ticketDescription = $scope.selectedDescription;
+                    console.log('selected ticket Description ='+ $scope.searchCriteria.ticketDescription);
+                }
+                
 
-                }else {
-                    $scope.searchCriteria.ticketDescription = '';
+                if($scope.selectedProject) {
+                    $scope.searchCriteria.projectId = $scope.selectedProject.id;
+                
                 }
 
-	        	if($scope.selectedSite) {
-		        	$scope.searchCriteria.siteId = $scope.selectedSite.id;
-		        	if(!$scope.searchCriteria.siteId) {
-		        		$scope.searchCriteria.siteName = $scope.selectedSite.name;
-		        		console.log('selected site name ='+ $scope.selectedSite.id + ', ' +$scope.searchCriteria.siteName);
-		        	}else {
-			        	$scope.searchCriteria.siteName = $scope.selectedSite.name;
-		        	}
-		        	console.log('selected site id ='+ $scope.searchCriteria.siteId);
-	        	}else {
-	        		$scope.searchCriteria.siteId = 0;
-	        	}
-
-                if($scope.selectedEmployee) {
-                    $scope.searchCriteria.employeeId = $scope.selectedEmployee.id;
-                    if(!$scope.searchCriteria.employeeId) {
-                        $scope.searchCriteria.employeeName = $scope.selectedEmployee.name;
-                        console.log('selected employee name ='+ $scope.selectedEmployee + ', ' +$scope.searchCriteria.employeeName);
-                    }else {
-                        $scope.searchCriteria.employeeName = $scope.selectedEmployee.name;
+                if($scope.selectedSite.id) {
+                    $scope.searchCriteria.siteId = $scope.selectedSite.id;
                     }
-                    console.log('selected employee id ='+ $scope.searchCriteria.employeeId);
-                }else {
-                    $scope.searchCriteria.employeeId = 0;
+                    
+                if($scope.selectedEmployee)
+                {
+                   $scope.searchCriteria.employeeId = $scope.selectedEmployee.id;
                 }
 
-        	}
+                if($scope.selectedStatus)
+                {
 
-        	console.log('criterias -' + JSON.stringify($scope.searchCriteria));
-            //-----
+                   $scope.searchCriteria.ticketStatus = $scope.selectedStatus;
+                }
+                
+            
+            console.log('search criterias - ',JSON.stringify($scope.searchCriteria));
+            //-------
             if($scope.pageSort){
                 $scope.searchCriteria.sort = $scope.pageSort;
             }
@@ -452,198 +460,65 @@ angular.module('timeSheetApp')
                 $scope.searchCriteria.columnName = $scope.selectedColumn;
                 $scope.searchCriteria.sortByAsc = $scope.isAscOrder;
 
-            }else{
-                $scope.searchCriteria.columnName ="id";
             }
+            /*else{
+                $scope.searchCriteria.columnName ="id";
+                $scope.searchCriteria.sortByAsc = true;
+            }*/
 
+               console.log("search criteria",$scope.searchCriteria);
+                     $scope.tickets = '';
+                     $scope.ticketsLoader = false;
+                     $scope.loadPageTop();
 
-
-        	JobComponent.searchTickets($scope.searchCriteria).then(function (data) {
+            JobComponent.searchTickets($scope.searchCriteria).then(function (data) {
                 $scope.tickets = data.transactions;
-            		$scope.ticketsLoader = true;
+                $scope.ticketsLoader = true;
                 $scope.loadingStop();
                 console.log('Ticket List -' + JSON.stringify($scope.tickets));
                 $scope.tickets.forEach(function(ticket){
-                		console.log('ticket status - ' + ticket.status);
-                })
+                        console.log('ticket status - ' + ticket.status);
+                });
+
+                /*
+                    ** Call pagination  main function **
+                */
+                 $scope.pager = {};
+                 $scope.pager = PaginationComponent.GetPager(data.totalCount, $scope.pages.currPage);
+                 $scope.totalCountPages = data.totalCount;
+
+                console.log("Pagination",$scope.pager);
+                console.log('Ticket search result list -' + JSON.stringify($scope.tickets));
                 $scope.pages.currPage = data.currPage;
                 $scope.pages.totalPages = data.totalPages;
 
-                $scope.numberArrays = [];
-                var startPage = 1;
-                if(($scope.pages.totalPages - $scope.pages.currPage) >= 10) {
-                		startPage = $scope.pages.currPage;
-                }else if($scope.pages.totalPages > 10) {
-                		startPage = $scope.pages.totalPages - 10;
-                }
-                var cnt = 0;
-                for(var i=startPage; i<=$scope.pages.totalPages; i++){
-                		cnt++;
-                		if(cnt <= 10) {
-	                		$scope.numberArrays.push(i);
-                		}
-                }
-
-                if($scope.jobs && $scope.tickets.length > 0 ){
+                if($scope.tickets && $scope.tickets.length > 0 ){
                     $scope.showCurrPage = data.currPage;
                     $scope.pageEntries = $scope.tickets.length;
                     $scope.totalCountPages = data.totalCount;
-
-                    if($scope.showCurrPage != data.totalPages){
-                    	$scope.pageStartIntex =  (data.currPage - 1) * $scope.pageSort + 1; // 1 to
-																							// //
-																							// 11
-																							// to
-
-                        $scope.pageEndIntex = $scope.pageEntries * $scope.showCurrPage; // 10
-																						// entries
-																						// of
-																						// 52
-																						// //
-																						// 10 *
-																						// 2 =
-																						// 20
-																						// of
-																						// 52
-																						// entries
-
-                    }else if($scope.showCurrPage === data.totalPages){
-                    	$scope.pageStartIntex =  (data.currPage - 1) * $scope.pageSort + 1;
-                    	$scope.pageEndIntex = $scope.totalCountPages;
-                    }
+                    $scope.pageSort = 10;
                 }
 
-                if($scope.tickets == null){
-                    $scope.pages.startInd = 0;
-                }else{
-                    $scope.pages.startInd = (data.currPage - 1) * 10 + 1;
-                }
-
-                $scope.pages.endInd = data.totalCount > 10  ? (data.currPage) * 10 : data.totalCount ;
-                $scope.pages.totalCnt = data.totalCount;
-            	$scope.hide = true;
             });
-        	$rootScope.searchCriteriaTicket = $scope.searchCriteria;
-        	if($scope.pages.currPage == 1) {
-            	$scope.firstStyle();
-        	}
-        };
-
-
-
-        $scope.clickNextOrPrev = function(number){
-	        	$scope.pages.currPage = number;
-	        	$scope.search();
-	    }
-
-
-        $scope.first = function() {
-        	if($scope.pages.currPage > 1) {
-            	$scope.pages.currPage = 1;
-            	$scope.firstStyle();
-            	$scope.search();
-        	}
-        };
-
-        $scope.firstStyle = function() {
-         var first = document.getElementById('#first');
-       	 var ele = angular.element(first);
-    	 ele.addClass('disabledLink');
-         var previous = document.getElementById('#previous');
-    	 ele = angular.element(previous);
-    	 ele.addClass('disabledLink');
-    	 if($scope.pages.totalPages > 1) {
-             var nextTicketPage = document.getElementById('#next');
- 	       	 var ele = angular.element(next);
-	    	 ele.removeClass('disabledLink');
-             var lastTicketPage = document.getElementById('#lastTicketPage');
-	    	 ele = angular.element(lastTicketPage);
-	    	 ele.removeClass('disabledLink');
-    	 }
-
-        }
-
-        $scope.previous = function() {
-            console.log("Calling previous")
-
-            if($scope.pages.currPage > 1) {
-            	$scope.pages.currPage = $scope.pages.currPage - 1;
-	    		$scope.search();
-            	if($scope.pages.currPage == 1) {
-                    var first = document.getElementById('#first');
-	       	       	 var ele = angular.element(first);
-	    	    	 ele.addClass('disabled');
-                    var previous = document.getElementById('#previous');
-	    	    	 ele = angular.element(previous);
-	    	    	 ele.addClass('disabled');
-            	}
-                var next = document.getElementById('#next');
-     	       	 var ele = angular.element(next);
-    	    	 ele.removeClass('disabled');
-                var lastTicketPage = document.getElementById('#last');
-    	    	 ele = angular.element(last);
-    	    	 ele.removeClass('disabled');
-        	}
-
-        };
-
-        $scope.next = function() {
-            console.log("Calling next")
-
-            if($scope.pages.currPage < $scope.pages.totalPages) {
-            	$scope.pages.currPage = $scope.pages.currPage + 1;
-	    		$scope.search();
-            	if($scope.pages.currPage == $scope.pages.totalPages) {
-            	    var next = document.getElementById('#next');
-	       	       	 var ele = angular.element(next);
-	    	    	 ele.addClass('disabled');
-                    var last = document.getElementById('#last');
-	    	    	 ele = angular.element(last);
-	    	    	 ele.addClass('disabled');
-            	}
-                var first = document.getElementById('#first')
-                var ele = angular.element(first);
-    	    	 ele.removeClass('disabled');
-                var previous = document.getElementById('#previous')
-                ele = angular.element(previous);
-    	    	 ele.removeClass('disabled');
-        	}
-
-        };
-
-        $scope.last = function() {
-            console.log("Calling last")
-        	if($scope.pages.currPage < $scope.pages.totalPages) {
-            	$scope.pages.currPage = $scope.pages.totalPages;
-            	$scope.search();
-            	if($scope.pages.currPage == $scope.pages.totalPages) {
-                    var next = document.getElementById('#next');
-            	    var ele = angular.element(next);
-	    	    	 ele.addClass('disabled');
-                    var last = document.getElementById('#last');
-                    ele = angular.element(last);
-	    	    	 ele.addClass('disabled');
-            	}
-                var first = document.getElementById('#first');
-      	       	var ele = angular.element(first);
-    	    	ele.removeClass('disabled');
-                var previous = document.getElementById('#previous');
-    	    	ele = angular.element(previous);
-    	    	ele.removeClass('disabled');
-        	}
-
+      
         };
 
         $scope.clearFilter = function() {
-        	$scope.selectedTicket = null;
-        	$scope.selectedProject = null;
-        	$scope.searchCriteria = {};
-        	$rootScope.searchCriteriaTicket = null;
-        	$scope.pages = {
-        		currPage: 1,
-        		totalPages: 0
-        	}
-        	// $scope.search();
+            $scope.selectedDateFrom = $filter('date')(new Date(), 'dd/MM/yyyy'); 
+            $scope.selectedDateTo = $filter('date')(new Date(), 'dd/MM/yyyy');
+            $scope.selectedDateFromSer = new Date(); 
+            $scope.selectedDateToSer = new Date();
+            $scope.selectedTicket = null;
+            $scope.selectedProject = null;
+            $scope.selectedEmployee = null;
+            $scope.selectedStatus = null;
+            $scope.searchCriteria = {};
+            $rootScope.searchCriteriaTicket = null;
+            $scope.pages = {
+                currPage: 1,
+                totalPages: 0
+            }
+            // $scope.search();
         };
 
 
@@ -696,9 +571,11 @@ angular.module('timeSheetApp')
       // init load
         $scope.initLoad = function(){
              $scope.loadPageTop();
-             $scope.loadSites();
+             /*$scope.loadSites();
              $scope.loadEmployees();
              $scope.loadTicketStatuses();
+             $scope.setPage(1);*/
+             $scope.loadTickets();
              //$scope.loadselectedSite();
 
          }
@@ -718,5 +595,22 @@ angular.module('timeSheetApp')
             console.log("Calling loader");
             $('.pageCenter').hide();$('.overlay').hide();
 
-        }
+        };
+
+    /*
+    
+    ** Pagination init function **
+    @Param:integer
+
+    */
+
+        $scope.setPage = function (page) {
+
+            if (page < 1 || page > $scope.pager.totalPages) {
+                return;
+            }
+            //alert(page);
+            $scope.pages.currPage = page;
+            $scope.search();
+        };
     });

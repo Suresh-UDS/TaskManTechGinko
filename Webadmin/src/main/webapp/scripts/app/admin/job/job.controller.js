@@ -47,6 +47,7 @@ angular.module('timeSheetApp')
 
         $scope.init = function() {
         		$scope.loadJobStatuses();
+                $scope.loadJobs();
         }
 
         $scope.loadProjects = function () {
