@@ -276,13 +276,21 @@ span.calender-icon
 {
   padding-top: 30px;
 }
+span.calender-mid-icon
+{
+  padding-top: 10px;
+}
 span.calender-big-icon
 {
-  padding-top: 7px;
+  padding-top: 38px;
 }
 span.d-sm-arrow-icon
 {
-  padding-top: 27px;
+  padding-top: 7px;
+}
+span.d-mid-arrow-icon
+{
+  padding-top: 10px;
 }
 span.d-arrow-icon
 {
@@ -440,8 +448,22 @@ a.add-btn,button.add-btn
 {
     border-top: 1px solid #f9f9f9;
 }
+th span.sortingIcons
+{
+    float: right;
+    width: 12px;
+}
 
-
+th span.sortingIcons svg
+{
+  display: block !important;
+  color: #dfdfdf;
+  cursor: pointer;
+}
+th span.sortingIcons .active svg
+{
+    color: #ff9800;
+}
 
 /*.alert.alert-info*/
 /*{*/
@@ -711,7 +733,7 @@ button.btn.btn-outline {
 .navbar.navbar-transparent
 {
   border-bottom: 1px solid #ccc;
-  
+
 }
 .form-group.is-focused .form-control
 {
@@ -961,7 +983,7 @@ button.btn.btn-outline {
 		     -o-transform: translate3d(0%, 0, 0);
 		        transform: translate3d(0%, 0, 0);
 	}
-	
+
 	.modal.right .modal-dialogNew {
 		position: fixed;
 		margin: auto;
@@ -1052,7 +1074,7 @@ button.btn.btn-outline {
     overflow: hidden;
   }
   a.logout{
-     padding-left: 0px !important; 
+     padding-left: 0px !important;
   }
   .overlay{
     background: rgba(255,255,255,0.3);
@@ -1063,7 +1085,7 @@ button.btn.btn-outline {
     left: 0;
     z-index: 10000;
     display: none;
-  
+
   }
   .timeline:before {
   background:none !important;
@@ -1116,7 +1138,7 @@ button.btn.btn-outline {
   /*
      DataTable sorting css
   */
-  th a.sort-by { 
+  th a.sort-by {
   padding-right: 18px;
   position: relative;
 }

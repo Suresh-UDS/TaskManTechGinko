@@ -11,133 +11,147 @@
     <!--</div>-->
 
 
-    <div class="row"  ng-init="loadSites()">
+    <div class="row"   ng-init="loadProjects();loadSites();loadEmployees();loadTicketStatuses();">
         <div class="col-md-12">
             <div class="card TableCard">
-                <div class="card-content">
-                    <!--<h4 class="card-title">Striped Table</h4>-->
+                <div class="card-content" >
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="card formcard">
+                                <div class="card-content">
+                                    <form name="searchForm"  ng-submit="searchFilter()" novalidate >
+                                        <div class="row" >
+                                            <div class="col-xs-12 col-md-2">
+                                                <div class="dropdown" >
 
-                    <div class="SearchTable" init="loadTickets()">
+            					                        <!--<div class="form-group label-floating">-->
+            					                        <!--<label class="control-label">Date</label>-->
+            					                        <!--<input class="datepicker form-control" type="text" value="03/01/2018"/>-->
 
-                        <form name="searchForm"  ng-submit="search()" novalidate >
+            					                        <!--</div>-->
 
-                            <table class="table no-padding-tblCon" border="0">
+        					                        <div class="form-group">
+        					                            <label class="label-control">From date</label>
+        					                            <span class="form-control-feedback calender-big-icon"><i class="material-icons">date_range</i></span>
+        					                            <input type="text" class="form-control datepicker"  id="dateFilterFrom"  ng-model="selectedDateFrom" />
 
-                            	   <tr class="filter-row gc-search-row">
-                            	   		<div class="row" >
+                                                    </div>
+                    					       </div>
 
-					                    <div class="col-md-2">
+            					           </div>
+            					            <div class="col-xs-12 col-md-2">
+                                                <div class="dropdown" >
 
-					                        <!--<div class="form-group label-floating">-->
-					                        <!--<label class="control-label">Date</label>-->
-					                        <!--<input class="datepicker form-control" type="text" value="03/01/2018"/>-->
+        					                        <div class="form-group">
+        					                            <label class="label-control">To date</label>
+        					                            <span class="form-control-feedback calender-big-icon"><i class="material-icons">date_range</i></span>
+        					                            <input type="text" class="form-control datepicker"  id="dateFilterTo"   ng-model="selectedDateTo"/>
 
-					                        <!--</div>-->
+        					                        </div>
 
-					                        <div class="form-group">
-					                            <label class="label-control">From date</label>
-					                            <span class="form-control-feedback calender-icon"><i class="material-icons">date_range</i></span>
-					                            <input type="text" class="form-control datepicker"  id="dateFilterFrom"  placeholder="{{dateFilterFrom | date:'dd-MMM-yyyy'}}" />
-
-					                        </div>
-
-					                    </div>
-					                    <div class="col-md-2">
-
-					                        <div class="form-group">
-					                            <label class="label-control">To date</label>
-					                            <span class="form-control-feedback calender-icon"><i class="material-icons">date_range</i></span>
-					                            <input type="text" class="form-control datepicker"  id="dateFilterTo"  placeholder="{{dateFilterTo | date:'dd-MMM-yyyy'}}"/>
-
-					                        </div>
-
-					                    </div>
-					                    <div class="dropdown col-xs-4 col-md-3">
-                                                <div class="dropdown ">
-                                                    <label class="label-control">Select Site</label>
-                                                    <select class="form-control " ng-model="selectedSite" ng-change="loadEmployees()" ng-options="site as site.name for site in sites track by site.id">
-                                                        <option value="">Select Site...</option>
-                                                    </select>
+                                                </div>
+            					            </div>
+                                            <div class="col-xs-12 col-md-2">
+                                                <div class="dropdown">
+                                                    <div class="form-group">
+                                                        <label class="label-control">Select Client</label>
+                                                        <span class="form-control-feedback d-big-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
+                                                        <select class="form-control " ng-model="selectedProject"  ng-change="loadSites()"  ng-options="project as project.name for project in projects">
+                                                            <option value="">Select Client...</option>
+                                                        </select>
+                                                    </div>
+                                                 </div>
+                                            </div>
+            					           <div class="col-xs-12 col-md-3">
+                                                <div class="dropdown" >
+                                                    <div class="form-group">
+                                                        <label class="label-control">Select Site</label>
+                                                        <span class="form-control-feedback d-big-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
+                                                        <select class="form-control " ng-model="selectedSite" ng-change="loadEmployees()" ng-options="site as site.name for site in sites track by site.id">
+                                                            <option value="">Select Site...</option>
+                                                        </select>
+                                                    </div>
                                                 </div>
                                             </div>
 
-                                            <div class="dropdown col-xs-4 col-md-3">
-                                                <div class="dropdown ">
-                                                    <label class="label-control">Select Employee</label>
-                                                    <select class="form-control " ng-model="tickets.employeeId"  ng-options="emp as emp.fullName for emp in employees track by emp.id">
-                                                        <option value="">Select Employee...</option>
-                                                    </select>
+                                            <div class="col-xs-12 col-md-3">
+                                                <div class="dropdown" >
+                                                    <div class="form-group">
+                                                        <label class="label-control">Select Employee</label>
+                                                        <span class="form-control-feedback d-big-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
+                                                        <select class="form-control " ng-model="selectedEmployee"  ng-options="emp as emp.fullName for emp in employees track by emp.id">
+                                                            <option value="">Select Employee...</option>
+                                                        </select>
+                                                    </div>
                                                 </div>
                                             </div>
-					                    <div class="col-md-6">
-
-					                    </div>
-
-					               </div>
-                            	   </tr>
-
-                                <tr class="filter-row gc-search-row">
-
-
-                                    <td width="85%">
-                                       <div class="form-group no-padding" >
-
-
-                                            <div class="col-xs-4 col-md-3">
-                                                <div class="form-group">
-                                                <input type="text"
-                                                       class="form-control searchable-input floatL border-bottom-input"
-                                                       placeholder="Search ticket title" ng-model="selectedTitle"
-
-                                                       name="ticketId"
-                                                       uib-typeahead="project as project.name for project in projects | filter:$viewValue | limitTo:5" />
-                                                </div>
-                                            </div>
-
-
-                                             <div class="col-xs-4 col-md-3">
-                                               <div class="form-group">
-                                                <input type="text"
-                                                       class="form-control searchable-input floatL border-bottom-input"
-                                                       placeholder="Search ticket description"
-                                                       ng-model="selectedDescription"
-                                                       ng-value="searchCriteria.ticketName"
-                                                       uib-typeahead="ticket as ticket.name for ticket in allTickets | filter:$viewValue | limitTo:5"/>
-                                               </div>
-                                            </div>
-                                            <div class="col-md-3">
-						                        <div class="dropdown ">
-						                            <label class="label-control">Status</label>
-						                            <select class="form-control " ng-model="selectedStatus" ng-change="refreshReport()" ng-options="status as status for status in ticketStatuses">
-						                                <option value="">Select status...</option>
-						                            </select>
-						                        </div>
-						                    </div>
                                         </div>
-                                    </td>
-                                    <td align="right">
-                                        <div class="floatR form-group no-padding">
 
-                                            <button type="submit" class="btn btn-circle blue-clr">
-                                                <i class="material-icons">search</i>
-                                            </button>
-                                            <button ui-sref="create-ticket"  ng-class="{active: $state.includes('admin')}"  class="btn btn-circle green-clr">
-                                                <i class="material-icons">add</i>
-                                            </button>
-                                            <button ng-click="refreshPage()" class="btn btn-circle orange-clr">
-                                                <i class="material-icons">refresh</i>
-                                            </button>
 
+                                        <div class="row" >
+                                            <div class="col-xs-12 col-md-3 pdng-top25">
+                                                <div class="dropdown" >
+                                                    <div class="form-group">
+                                                          <input type="text"
+                                                           class="form-control searchable-input floatL border-bottom-input"
+                                                           placeholder="Search ticket title" ng-model="selectedTitle"
+
+                                                           name="ticketId"
+                                                           uib-typeahead="project as project.name for project in projects | filter:$viewValue | limitTo:5" />
+                                                    </div>
+                                                </div>
+                                            </div>
+
+
+                                            <div class="col-xs-12 col-md-3 pdng-top25">
+                                                <div class="dropdown" >
+                                                   <div class="form-group">
+                                                           <input type="text"
+                                                           class="form-control searchable-input floatL border-bottom-input"
+                                                           placeholder="Search ticket description"
+                                                           ng-model="selectedDescription"
+                                                           ng-value="searchCriteria.ticketName"
+                                                           uib-typeahead="ticket as ticket.name for ticket in allTickets | filter:$viewValue | limitTo:5"/>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-xs-12 col-md-3">
+                                                <div class="dropdown" >
+                                                   <div class="form-group">
+    						                          <label class="label-control">Status</label>
+                                                        <span class="form-control-feedback d-big-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
+    						                            <select class="form-control " ng-model="selectedStatus" ng-change="refreshReport()" ng-options="status as status for status in ticketStatuses">
+    						                                <option value="">Select status...</option>
+    						                            </select>
+                                                    </div>
+            						            </div>
+            						        </div>
+
+                                            <div class="col-xs-12 col-md-3 pdng-top25">
+                                                <div class="floatR form-group no-padding">
+
+                                                    <button type="submit" class="btn btn-circle blue-clr">
+                                                        <i class="material-icons">search</i>
+                                                    </button>
+                                                    <button ui-sref="create-ticket"  ng-class="{active: $state.includes('admin')}"  class="btn btn-circle green-clr">
+                                                        <i class="material-icons">add</i>
+                                                    </button>
+                                                    <button ng-click="refreshPage()" class="btn btn-circle orange-clr">
+                                                        <i class="material-icons">refresh</i>
+                                                    </button>
+
+                                                </div>
+                                            </div>
+                                            <div class="clearfix"></div>
                                         </div>
-                                    </td>
-                                </tr>
-                            </table>
-                        </form>
-
+                                    </form>
+                                </div>
+                             </div>
+                        </div>
                     </div>
 
                     <div class="table-responsive tablecard">
-                        <table class="table table-striped" ng-init="search();">
+                        <table class="table table-striped" ng-init="searchFilter();">
                             <thead>
                             <tr>
                                 <th>Ticket ID<a href="#">
@@ -204,7 +218,6 @@
                                     <a  ng-class="{active: $state.includes('admin')}"  ui-sref="edit-ticket({ id: ticket.id })"  class="btn btn-simple btn-info"><i class="material-icons">edit</i></a>
 
                                     <a ng-if="(ticket.status != 'Closed' && ticket.jobId == 0)" ng-class="{active: $state.includes('admin')}" ui-sref="add-job({ticketId : ticket.id})"  ng-click=""  onClick="" data-target="#myModal"  class="btn btn-simple btn-info">create job</a>
-
                                     <a ng-if="(ticket.status != 'Closed' && ticket.jobId == 0)" ng-class="{active: $state.includes('admin')}" ui-sref="add-quotation({ticketId : ticket.id})"  ng-click=""  onClick="" data-target="#myModal"  class="btn btn-simple btn-info">Add Quotation</a>
 
                                     <a ng-if="(ticket.jobId > 0)" ng-class="{active: $state.includes('admin')}" ui-sref="view-job({id : ticket.jobId})"  ng-click=""  onClick="" data-target="#myModal"  class="btn btn-simple btn-info">View job</a>
@@ -241,34 +254,11 @@
     </div>
 
 
-    <div class="row">
+    <!-- Pagination directive start -->
 
-        <div class="col-md-4"></div>
-         <div class="col-md-8 text-right">
-        <ul class="pagination pagination-warning">
+    <pagination-new></pagination-new>
 
-            <li class="paging-first" ID="first">
-                <a href="#" id="first" ng-click="first()">
-                    <i id="first" class=" fa fa-step-backward"></i></a>
-            </li>
-            <li class="prev paging-previous" id="previous">
-                <a id="previous" href="#" ng-click="previous()"> prev</a>
-            </li>
-
-            <li ng-class="{active: number == pages.currPage}" class="paging" ng-repeat="number in numberArrays" ng-click="clickNextOrPrev(number)">
-                <a href="#" style="cursor:pointer">{{number}}</a>
-            </li>
-            <li class="next paging-next" id="next">
-                <a id="next" href="#" ng-click="next()" >next</a>
-            </li>
-            <li class="paging-last" id="last">
-                <a id="last" href="#" ng-click="last()"><i id="last" class="fa fa-step-forward"></i></a>
-            </li>
-
-        </ul>
-    </div>
-
-    </div>
+    <!-- Pagination directive end -->
 
 
 

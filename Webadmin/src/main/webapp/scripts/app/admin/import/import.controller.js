@@ -413,6 +413,7 @@ angular.module('timeSheetApp')
 	 var promiseClient;
 	 var promiseSite;
 	 var promiseChecklist;
+	 var promiseEmployeeShift;
 	 // starts the interval
 	    $rootScope.start = function(typeImport) {
 	      // stops any running interval to avoid two intervals running at the same time
@@ -449,6 +450,12 @@ angular.module('timeSheetApp')
 	    		promiseChecklist = $interval($scope.checklistImportStatus, 5000);
 	    		console.log('promise -'+promiseChecklist);
 	    	}
+	    	if(typeImport == 'employeeShift'){
+	    		$rootScope.stop('employeeShift');
+	    		console.log('Import employeeShift Start Method');
+	    		promiseEmployeeShift = $interval($scope.employeeShiftImportStatus, 5000);
+	    		console.log('promise -'+promiseEmployeeShift);
+	    	}
 	    };	
 	    // stops the interval
 	    $rootScope.stop = function(stopInterval) {
@@ -466,6 +473,9 @@ angular.module('timeSheetApp')
 	      }
 	      if(stopInterval == 'checklist'){
 	    	  $interval.cancel(promiseChecklist);
+	      }
+	      if(stopInterval == 'employeeShift'){
+	    	  $interval.cancel(promiseEmployeeShift);
 	      }
 	    };	   
 	    

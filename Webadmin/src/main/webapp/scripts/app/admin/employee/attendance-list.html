@@ -24,133 +24,131 @@
                 <!--<i class="material-icons">assignment</i>-->
                 <!--</div>-->
                 <div class="card-content">
-                    <!--<h4 class="card-title">DataTables.net</h4>-->
+                    <div class="row" ng-init="loadProjects();">
+                        <div class="col-md-12">
+                            <div class="card formcard">
+                                <div class="card-content">
+                                    <form name="searchForm"  ng-submit="searchFilter()" novalidate >
 
-                    <div class="SearchTable">
-                        <form name="searchForm"  ng-submit="search()" novalidate >
+                                        <div class="row" >
+                                            <div class="col-xs-12 col-md-3">
+                                                    <div class="form-group" >
+                                                        
+                                                        <span class="form-control-feedback calender-mid-icon"><i class="material-icons">date_range</i></span>
+                                                        <input  type="text" class="form-control datepicker" id="dateFilterFrom" ng-model="selectedDateFrom" />
+                                                    </div>
+                                                </div>
 
-                            <table class="table no-padding-tblCon" border="0">
-                                <tr class="filter-row gc-search-row" >
-                                    <td>
-                                        <div class="form-group" >
+                                                <div class="col-xs-12 col-md-3">
+                                                    <div class="form-group" >
+                                                         
+                                                        <span class="form-control-feedback calender-mid-icon"><i class="material-icons">date_range</i></span>
+                                                        <input  type="text" class="form-control datepicker"  id="dateFilterTo" ng-model="selectedDateTo"  />
+                                                    </div>
+                                                 </div>
+            								<div class="col-xs-12 col-md-3">
+            								   			<div class="dropdown">
+                                                            <div class="form-group">
+                                                                <!-- <label class="control-label">Select Client</label> -->
+                                                                <span class="form-control-feedback d-mid-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
+                                                                <select class="form-control " ng-model="selectedProject"  ng-change="loadSites()"  ng-options="project as project.name for project in projects">
+                                                                    <option value="">Select Client...</option>
+                                                                </select>
+                                                            </div>
+                                                         </div>
+                                                 </div>
+                                                <div class="col-xs-12 col-md-3">
 
-                                            <input id="dateFilterFrom" type="text" class="form-control datepicker border-bottom-input"   value={{now}} placeholder="From Date" />
-                                        </div>
-                                    </td>
+                                                        <div class="dropdown">
+                                                            <div class="form-group">
+                                                                <!-- <label class="control-label">Select Site</label> -->
+                                                                <!--<input type="text" class="form-control"-->
+                                                                <!--ng-model="selectedRole"-->
+                                                                <!--uib-typeahead="role as role.name for role in userRoles | filter:$viewValue | limitTo:5"-->
+                                                                <!--name="UserRole" ng-minlength="5" ng-maxlength="50" autofocus-->
+                                                                <!--required >-->
+                                                                 <span class="form-control-feedback d-mid-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
+                                                                <select class="form-control " ng-model="selectedSite"  ng-options="site as site.name for site in sites">
+                                                                    <option value="">Select Site...</option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                               </div>
+            								</div>
+                                            <div class="row" >
+                                                <div class="col-xs-12 col-md-3">
+                                                    <div class="form-group" >
+                                                        <div class="dropdown">
+                                                            <input type="text"
+                                                                   class="form-control border-bottom-input"
+                                                                   placeholder="Search Employee Id"
+                                                                   ng-model="selectedEmployeeId"
+            												/>
 
-                                    <td>
-                                        <div class="form-group" >
-
-                                            <input id="dateFilterTo" type="text" class="form-control datepicker border-bottom-input"   value={{now}} placeholder="To Date" />
-                                        </div>
-                                    </td>
-								</tr>
-								<tr class="filter-row gc-search-row">
-                                    <td>
-								   			<div class="dropdown">
-                                                <div class="form-group">
-                                                    <!-- <label class="control-label">Select Client</label> -->
-
-                                                    <select class="form-control " ng-model="selectedProject"  ng-change="loadSites()"  ng-options="project as project.name for project in projects">
-                                                        <option value="">Select Client...</option>
-                                                    </select>
+                                                        </div>
+                                                    </div>
+                                            </div>
 
 
-
+                                            <div class="col-xs-12 col-md-3">
+                                                <div class="form-group" >
+                                                    <div class="dropdown">
+                                                        <input type="text"
+                                                               class="form-control border-bottom-input"
+                                                               placeholder="Search Employee Name"
+                                                               ng-model="selectedEmployeeName"
+                                                               />
+                                                    </div>
                                                 </div>
                                             </div>
-                                    </td>
-                                    <td>
-
-                                            <div class="dropdown">
-                                                <div class="form-group">
-                                                    <!-- <label class="control-label">Select Site</label> -->
-                                                    <!--<input type="text" class="form-control"-->
-                                                    <!--ng-model="selectedRole"-->
-                                                    <!--uib-typeahead="role as role.name for role in userRoles | filter:$viewValue | limitTo:5"-->
-                                                    <!--name="UserRole" ng-minlength="5" ng-maxlength="50" autofocus-->
-                                                    <!--required >-->
-                                                    <select class="form-control " ng-model="selectedSite"  ng-options="site as site.name for site in sites">
-                                                        <option value="">Select Site...</option>
-                                                    </select>
 
 
+                                                <!-- <td>
+                                                    <div class="form-group" >
+                                                        <div class="dropdown">
+                                                            <input type="text"
+                                                                   class="form-control border-bottom-input"
+                                                                   placeholder="Search Employee Name"
+                                                                   ng-model="selectedEmployee"
+                                                                   ng-value="searchCriteria.employeeFullName"
+                                                                   uib-typeahead="employee as employee.fullName for employee in allEmployees | filter:$viewValue | limitTo:5" />
+                                                        </div>
+                                                    </div>
+                                                </td>
 
-                                                </div>
-                                            </div>
+                                                <td>
+                                                    <div class="form-group" >
+                                                        <div class="dropdown">
+                                                            <input type="text"
+                                                                   class="form-control searchable-input floatL border-bottom-input"
+                                                                   placeholder="Search Site"
+                                                                   ng-model="selectedSite"
+                                                                   ng-value="searchCriteria.siteName"
+                                                                   uib-typeahead="site as site.name for site in allSites | filter:$viewValue | limitTo:5"/>
+                                                        </div>
+                                                    </div>
+                                                </td> -->
+                                            <div class="col-xs-12 col-md-6">
+                                                <div class="floatR form-group pull-right">
+                                                    <button type="submit" class="btn btn-circle blue-clr" ng-disabled="searchForm.$invalid">
+                                                        <i class="material-icons">search</i>
+                                                    </button>
+                                                    <button ng-show="attendancesData.length" type="button"  ng-click=exportAllData() class="btn btn-circle green-clr">
+                                                        <i class="material-icons">file_upload</i>
+                                                    </button>
+                                                    <button ng-click="refreshPage()" class="btn btn-circle orange-clr">
+                                                        <i class="material-icons">refresh</i>
+                                                    </button>
+                                                    <a class="download-btn" href="{{exportFile(0)}}">{{exportMsg(0)}}</a>
 
-
-								   </td>
-                                    <td>
-                                        <div class="form-group" >
-                                            <div class="dropdown">
-                                                <input type="text"
-                                                       class="form-control border-bottom-input"
-                                                       placeholder="Search Employee Id"
-                                                       ng-model="selectedEmployeeId"
-												/>
-
-                                            </div>
-                                        </div>
-                                    </td>
-
-
-                                    <td>
-                                        <div class="form-group" >
-                                            <div class="dropdown">
-                                                <input type="text"
-                                                       class="form-control border-bottom-input"
-                                                       placeholder="Search Employee Name"
-                                                       ng-model="selectedEmployeeName"
-                                                       />
+                                                 </div>
+                                                 <div class="clearfix"></div>
                                             </div>
                                         </div>
-                                    </td>
-
-
-                                    <!-- <td>
-                                        <div class="form-group" >
-                                            <div class="dropdown">
-                                                <input type="text"
-                                                       class="form-control border-bottom-input"
-                                                       placeholder="Search Employee Name"
-                                                       ng-model="selectedEmployee"
-                                                       ng-value="searchCriteria.employeeFullName"
-                                                       uib-typeahead="employee as employee.fullName for employee in allEmployees | filter:$viewValue | limitTo:5" />
-                                            </div>
-                                        </div>
-                                    </td>
-
-                                    <td>
-                                        <div class="form-group" >
-                                            <div class="dropdown">
-                                                <input type="text"
-                                                       class="form-control searchable-input floatL border-bottom-input"
-                                                       placeholder="Search Site"
-                                                       ng-model="selectedSite"
-                                                       ng-value="searchCriteria.siteName"
-                                                       uib-typeahead="site as site.name for site in allSites | filter:$viewValue | limitTo:5"/>
-                                            </div>
-                                        </div>
-                                    </td> -->
-                                    <td align="right">
-                                        <div class="floatR form-group">
-                                            <button type="submit" class="btn btn-circle blue-clr" ng-disabled="searchForm.$invalid">
-                                                <i class="material-icons">search</i>
-                                            </button>
-                                            <button ng-show="attendancesData.length" type="button"  ng-click=exportAllData() class="btn btn-circle green-clr">
-                                                <i class="material-icons">file_upload</i>
-                                            </button>
-                                            <button ng-click="refreshPage()" class="btn btn-circle orange-clr">
-                                                <i class="material-icons">refresh</i>
-                                            </button>
-                                            <a class="download-btn" href="{{exportFile(0)}}">{{exportMsg(0)}}</a>
-
-                                        </div>
-                                    </td>
-                                </tr>
-                            </table>
-                        </form>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
                     </div>
 
                     <div class="table-responsive tablecard">
@@ -269,37 +267,11 @@
 
     </div>
 
+   <!-- Pagination directive start -->
 
-    <div class="row">
+    <pagination-new></pagination-new> 
 
-        <div class="col-md-4"></div>
-         <div class="col-md-8 text-right">
-	        <ul class="pagination pagination-warning">
-
-	            <li class="paging-first" ID="first">
-	                <a href="#" id="first" ng-click="first()">
-	                    <i id="first" class=" fa fa-step-backward"></i></a>
-	            </li>
-	            <li class="prev paging-previous" id="previous">
-	                <a id="previous" href="#" ng-click="previous()"> prev</a>
-	            </li>
-
-	            <li ng-class="{active: number == pages.currPage}" class="paging" ng-repeat="number in numberArrays" ng-click="clickNextOrPrev(number)">
-	                <a href="#" style="cursor:pointer">{{number}}</a>
-	            </li>
-	            <li class="next paging-next" id="next">
-	                <a id="next" href="#" ng-click="next()" >next</a>
-	            </li>
-	            <li class="paging-last" id="last">
-	                <a id="last" href="#" ng-click="last()"><i id="last" class="fa fa-step-forward"></i></a>
-	            </li>
-
-	        </ul>
-	    </div>
-
-    </div>
-
-
+    <!-- Pagination directive end -->
 
 </div>
 

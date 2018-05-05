@@ -48,7 +48,7 @@ public class DateUtil {
 	}
 	
 	public static java.sql.Date convertToSQLDate(Date utilDate) {
-		Calendar cal = Calendar.getInstance();
+		Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("Asia/Kolkata"));
 		cal.setTime(utilDate);
 		java.sql.Date sqlDate = new java.sql.Date(cal.getTimeInMillis());
 		return sqlDate;
@@ -67,16 +67,25 @@ public class DateUtil {
 
 	}
 	
-	public static Date convertToDate(String date) {
-        DateFormat formatter = new SimpleDateFormat("yyyy-dd-MM HH:mm");
+	public static Date convertToDateTime(String date) {
+        DateFormat formatter = new SimpleDateFormat("yyyy-dd-MM HH:mm:ss");
         Date dateTime = null;
 		try {
 			dateTime = formatter.parse(date);
 		} catch (ParseException e) {
-			log.error("Error while parsing date and time - date -"+ date,e);
+			log.error("Error while parsing date and time - date -"+ date ,e);
 		}
         
         return dateTime;
+
+	}
+	
+	public static Timestamp convertToTimestamp(Date date) {
+		Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("Asia/Kolkata"));
+		cal.setTime(date);
+        Timestamp ts = new Timestamp(cal.getTimeInMillis());
+        		
+        return ts;
 
 	}
 

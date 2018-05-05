@@ -54,7 +54,7 @@
                     </div>
                 </div>
 
-                   
+
 
 
                 <div class="table-responsive tablecard">
@@ -62,42 +62,68 @@
 
                             <thead>
                             <tr>
-                                <th>ID<a href="#">
+                                <th width="6%">ID
+                                    <span class="sortingIcons">
+                                        <span ng-click="columnAscOrder('id')" ng-class="isActiveAsc ? 'active' : ''" >
+                                            <i  class="fa fa-caret-up"></i>
+                                        </span>
+                                        <span ng-click="columnDescOrder('id')" ng-class="isActiveDesc ? 'active' : ''" >
+                                             <i  ng-class="class" class="fa fa-caret-down"></i>
+                                        </span>
+                                    </span>
+                                    </th>
+                                <th>Name
+                                    <span class="sortingIcons">
+                                        <span ng-click="columnAscOrder('name')">
+                                            <i  class="fa fa-caret-up"></i>
+                                        </span>
+                                        <span ng-click="columnDescOrder('name')">
+                                             <i  ng-class="class" class="fa fa-caret-down"></i>
+                                        </span>
+                                    </span>
+                                </th>
+                                <th>Address
 
-                                    <span ng-click="columnAscOrder('id')"  class=""><i class="fa fa-caret-up"></i></span>
-                                    <span ng-click="columnDescOrder('id')" class=""><i class="fa fa-caret-down"></i></span>
+                                    <span class="sortingIcons">
+                                        <span ng-click="columnAscOrder('address')">
+                                             <i  class="fa fa-caret-up"></i>
+                                        </span>
+                                        <span ng-click="columnDescOrder('address')">
+                                            <i  class="fa fa-caret-down"></i>
+                                        </span>
+                                    </span>
+                                   </th>
+                                <th width="15%">Contact Person
+                                    <span class="sortingIcons">
+                                        <span ng-click="columnAscOrder('contactFirstName')">
+                                            <i  class="fa fa-caret-up"></i>
+                                        </span>
+                                         <span ng-click="columnDescOrder('contactFirstName')">
+                                            <i  class="fa fa-caret-down"></i>
+                                        </span>
+                                    </span>
+                                   </th>
+                                <th>Phone
+                                    <span class="sortingIcons">
+                                        <span>
+                                             <i ng-click="columnAscOrder('phone')" class="fa fa-caret-up"></i>
+                                        </span>
+                                         <span>
+                                             <i ng-click="columnDescOrder('phone')" class="fa fa-caret-down"></i>
+                                         </span>
+                                    </span>
+                                    </th>
+                                <th>Email
 
-                                </a></th>
-                                <th>Name<a href="#">
-
-                                    <span ng-click="columnAscOrder('name')"  class=""><i class="fa fa-caret-up"></i></span>
-                                    <span ng-click="columnDescOrder('name')" class=""><i class="fa fa-caret-down"></i></span>
-
-                                </a></th>
-                                <th>Address<a href="#">
-
-                                    <span ng-click="columnAscOrder('address')"  class=""><i class="fa fa-caret-up"></i></span>
-                                    <span ng-click="columnDescOrder('address')" class=""><i class="fa fa-caret-down"></i></span>
-
-                                </a></th>
-                                <th>Contact Person<a href="#">
-
-                                    <span ng-click="columnAscOrder('contactFirstName')"  class=""><i class="fa fa-caret-up"></i></span>
-                                    <span ng-click="columnDescOrder('contactFirstName')" class=""><i class="fa fa-caret-down"></i></span>
-
-                                </a></th>
-                                <th>Phone<a href="#">
-
-                                    <span ng-click="columnAscOrder('phone')"  class=""><i class="fa fa-caret-up"></i></span>
-                                    <span ng-click="columnDescOrder('phone')" class=""><i class="fa fa-caret-down"></i></span>
-
-                                </a></th>
-                                <th>Email<a href="#">
-
-                                    <span ng-click="columnAscOrder('email')"  class=""><i class="fa fa-caret-up"></i></span>
-                                    <span ng-click="columnDescOrder('email')" class=""><i class="fa fa-caret-down"></i></span>
-
-                                </a></th>
+                                    <span class="sortingIcons">
+                                        <span ng-click="columnAscOrder('email')">
+                                             <i  class="fa fa-caret-up"></i>
+                                        </span>
+                                          <span ng-click="columnDescOrder('email')">
+                                              <i  class="fa fa-caret-down"></i>
+                                        </span>
+                                    </span>
+                                    </th>
                                 <th class="disabled-sorting text-right">Actions</th>
                             </tr>
                             </thead>
@@ -151,7 +177,7 @@
 
     <!-- Pagination directive start -->
 
-    <pagination-new></pagination-new> 
+    <pagination-new></pagination-new>
 
     <!-- Pagination directive end -->
 

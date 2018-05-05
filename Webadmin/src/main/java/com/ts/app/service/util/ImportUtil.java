@@ -671,12 +671,13 @@ public class ImportUtil {
 			int r = 1;
 			
 			log.debug("Last Row number -" + lastRow);
+			boolean canSave = true;
 			for (; r <= lastRow; r++) {
 				log.debug("Current Row number -" + r);
 				Row currentRow = datatypeSheet.getRow(r);
 				
 				EmployeeShift shift = new EmployeeShift();
-				
+				canSave = true;
 				
 				//Project newProj = projectRepo.findOne(Long.valueOf(getCellValue(currentRow.getCell(0))));
 				Site site = siteRepo.findOne(Long.valueOf(getCellValue(currentRow.getCell(1))));
@@ -685,15 +686,27 @@ public class ImportUtil {
 				shift.setEmployee(employee);
 				shift.setSite(site);
 				//String startTime = getCellValue(currentRow.getCell(4));
-				shift.setStartTime(DateUtil.convertToSQLDate(currentRow.getCell(4).getDateCellValue()));
+				try {
+					shift.setStartTime(DateUtil.convertToTimestamp(currentRow.getCell(4).getDateCellValue()));
+				}catch (IllegalStateException ise) {
+					canSave = false;
+					log.error("Error while reading the shift start time from the file", ise);
+				}
 				//String endTime = getCellValue(currentRow.getCell(5));
-				shift.setEndTime(DateUtil.convertToSQLDate(currentRow.getCell(5).getDateCellValue()));
+				try {
+					shift.setEndTime(DateUtil.convertToTimestamp(currentRow.getCell(5).getDateCellValue()));
+				}catch (IllegalStateException ise) {
+					canSave = false;
+					log.error("Error while reading the shift end time from the file", ise);
+				}
 				// email, phone number missing
 				ZoneId  zone = ZoneId.of("Asia/Singapore");
 				ZonedDateTime zdt   = ZonedDateTime.of(LocalDateTime.now(), zone);
 				shift.setCreatedDate(zdt);
 				shift.setActive(Employee.ACTIVE_YES);
-				empShiftRepo.save(shift);
+				if(canSave) {
+					empShiftRepo.saveAndFlush(shift);
+				}
 
 				log.debug("Created Information for EmployeeShift: {}", shift);
 				
@@ -703,6 +716,8 @@ public class ImportUtil {
 		} catch (FileNotFoundException e) {
 			log.error("Error while reading the employee shift data file for import", e);
 		} catch (IOException e) {
+			log.error("Error while reading the employee shift data file for import", e);
+		} catch (Exception e) {
 			log.error("Error while reading the employee shift data file for import", e);
 		}
 	}	

@@ -35,86 +35,94 @@
             <div class="card TableCard">
                 <div class="card-content">
 
-                    <div class="SearchTable">
+                    <div class="row" ng-init="loadProjectsList();">
+                        <div class="col-md-12">
+                            <div class="card formcard">
+                                <div class="card-content">
 
-                        <form name="searchForm" ng-submit="searchFilter()">
+                                    <form name="searchForm" ng-submit="searchFilter()">
 
-                            <table class="table no-padding-tblCon" border="0">
-                                <tr class="filter-row gc-search-row">
-                                    <td width="85%">
-                                        <div class="form-group" ng-init="loadProjects();loadAllSites();loadAssets()">
-                                            <div class="col-xs-4 col-md-3">
-                                            	<div class="form-group">
-    					                            <label class="label-control">Job date</label>
-    					                            <span class="form-control-feedback calender-icon"><i class="material-icons">date_range</i></span>
-    					                            <input type="text" class="form-control datepicker"  id="selectedJobDate"  placeholder="{{selectedJobDate | date:'dd-MMM-yyyy'}}"/>
-											    </div>
-                                            </div>
-                                            <div class="dropdown col-xs-4 col-md-3">
-                                                 <div class="dropdown">
-						                            <label class="label-control">Select Client</label>
-						                            <select class="form-control " ng-model="selectedProject" ng-change="loadSites()" ng-options="project as project.name for project in projects" >
-						                                <option value="">Select Client...</option>
-						                            </select>
-						                        </div>
-
-                                            </div>
-                                            <div class="dropdown col-xs-4 col-md-3">
-                                                <div class="dropdown ">
-						                            <label class="label-control">Select Site</label>
-						                            <select class="form-control " ng-model="selectedSite" ng-change="loadEmployees()" ng-options="site as site.name for site in sites">
-						                                <option value="">Select Site...</option>
-						                            </select>
-						                        </div>
+                                        <div class="row" >
+                                            <div class="col-xs-12 col-md-4">
+                                                <div class="form-group no-padding" ng-init="loadProjects();loadAllSites();loadAssets()">
+                                                    <div class="dropdown">
+        					                            <label class="label-control">Job date</label>
+        					                            <span class="form-control-feedback calender-icon"><i class="material-icons">date_range</i></span>
+        					                            <input type="text" class="form-control datepicker"  id="selectedJobDate"  ng-model="selectedJobDate"/>
+                                                    </div>
+                                                </div>
                                             </div>
 
-                                            <div class="dropdown col-xs-4 col-md-3">
-                                                <div class="dropdown ">
-						                            <label class="label-control">Select Employee</label>
-						                            <select class="form-control " ng-model="selectedEmployee"  ng-options="emp as emp.fullName for emp in employees">
-						                                <option value="">Select Employee...</option>
-						                            </select>
-						                        </div>
+                                            <div class="col-xs-12 col-md-4">
+                                                <div class="form-group no-padding" >
+                                                    <div class="dropdown">
+    						                            <label class="label-control">Select Client</label>
+                                                        <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
+    						                            <select class="form-control " ng-model="selectedProject" ng-change="loadSites()" ng-options="project as project.name for project in projects" >
+    						                                <option value="">Select Client...</option>
+    						                            </select>
+            						                </div>
+                                                </div>
                                             </div>
 
-
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div class="floatL form-group">
-
-                                            <button type="submit" class="btn btn-circle blue-clr" ng-disabled="searchForm.$invalid">
-                                                <i class="material-icons">search</i>
-                                            </button>
-                                            <button ui-sref="add-job" has-permission="Job:Create"  ng-class="{active: $state.includes('admin')}" class="btn btn-circle green-clr">
-                                                <i class="material-icons">add</i>
-                                            </button>
-                                            <button ng-click="refreshPage()" class="btn btn-circle orange-clr">
-                                                <i class="material-icons">refresh</i>
-                                            </button>
-
-                                        </div>
-                                    </td>
-                                </tr>
-								<tr class="filter-row gc-search-row">
-                                    <td width="85%">
-                                        <div class="form-group" ng-init="loadProjects();loadAllSites();loadAssets()">
-                                        		<div class="dropdown col-xs-4 col-md-3">
-
-                                                <div class="dropdown ">
-						                            <label class="label-control">Select Status</label>
-						                            <select class="form-control " ng-model="selectedStatus"  ng-options="status as status for status in statuses">
-						                                <option value="">Select Status...</option>
-						                            </select>
-						                        </div>
+                                            <div class="col-xs-12 col-md-4">
+                                                <div class="form-group no-padding" >
+                                                    <div class="dropdown">
+    						                            <label class="label-control">Select Site</label>
+                                                        <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
+    						                            <select class="form-control " ng-model="selectedSite" ng-change="loadEmployees()" ng-options="site as site.name for site in sites">
+    						                                <option value="">Select Site...</option>
+    						                            </select>
+            						                </div>
+                                                </div>
                                             </div>
                                         </div>
-                                    </td>
-                                 </tr>
-                            </table>
+                                        <div class="row" >
+                                            <div class="col-xs-12 col-md-4">
+                                                <div class="form-group" >
+                                                    <div class="dropdown">
+    						                            <label class="label-control">Select Employee</label>
+                                                        <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
+    						                            <select class="form-control " ng-model="selectedEmployee"  ng-options="emp as emp.fullName for emp in employees">
+    						                                <option value="">Select Employee...</option>
+    						                            </select>
+            						              </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-xs-12 col-md-4">
+                                                <div class="form-group">
+                                                    <div class="dropdown ">
+                                                        <label class="label-control">Select Status</label>
+                                                        <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
+                                                        <select class="form-control " ng-model="selectedStatus"  ng-options="status as status for status in statuses">
+                                                            <option value="">Select Status...</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-xs-12 col-md-4">
+                                                <div class="form-group no-padding" >
+                                                    <div class="pull-right pdng-top25">
 
-                        </form>
+                                                        <button type="submit" class="btn btn-circle blue-clr" ng-disabled="searchForm.$invalid">
+                                                            <i class="material-icons">search</i>
+                                                        </button>
+                                                        <button ui-sref="add-job" has-permission="Job:Create"  ng-class="{active: $state.includes('admin')}" class="btn btn-circle green-clr">
+                                                            <i class="material-icons">add</i>
+                                                        </button>
+                                                        <button ng-click="refreshPage()" class="btn btn-circle orange-clr">
+                                                            <i class="material-icons">refresh</i>
+                                                        </button>
 
+                                                    </div>
+                                                    <div class="clearfix"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                     <div class="panel panel-default TabsContainer mar10px jobType">
                         <div class="panel-body pad0px">
@@ -127,55 +135,83 @@
                                     data-target="#pill3" aria-expanded="false" ng-click="jobType('HOUSEKEEPING')">House Keeping</a></li>
                             </ul>
                        </div>
-                    </div> 
+                    </div>
 
                     <div class="table-responsive tablecard">
                         <table class="table table-striped" ng-init="search();">
 
                             <thead>
                             <tr>
-                                <th>Job Id<a href="#">
-
-                                    <span ng-click="columnAscOrder('id')"  class=""><i class="fa fa-caret-up"></i></span>
-                                    <span ng-click="columnDescOrder('id')" class=""><i class="fa fa-caret-down"></i></span>
-
-                                </a></th>
-                                <th>Job Title<a href="#">
-
-                                    <span ng-click="columnAscOrder('title')"  class=""><i class="fa fa-caret-up"></i></span>
-                                    <span ng-click="columnDescOrder('title')" class=""><i class="fa fa-caret-down"></i></span>
-
-                                </a></th>
-                                <th>Start Time<a href="#">
-
-                                    <span ng-click="columnAscOrder('plannedStartTime')"  class=""><i class="fa fa-caret-up"></i></span>
-                                    <span ng-click="columnDescOrder('plannedStartTime')" class=""><i class="fa fa-caret-down"></i></span>
-
-                                </a></th>
-                                <th>Employee<a href="#">
-
-                                    <span ng-click="columnAscOrder('employee.name')"  class=""><i class="fa fa-caret-up"></i></span>
-                                    <span ng-click="columnDescOrder('employee.name')" class=""><i class="fa fa-caret-down"></i></span>
-
-                                </a></th>
-                                <th>Status<a href="#">
-
-                                    <span ng-click="columnAscOrder('status')"  class=""><i class="fa fa-caret-up"></i></span>
-                                    <span ng-click="columnDescOrder('status')" class=""><i class="fa fa-caret-down"></i></span>
-
-                                </a></th>
-                                <th>Project<a href="#">
-
-                                    <span ng-click="columnAscOrder('project.name')"  class=""><i class="fa fa-caret-up"></i></span>
-                                    <span ng-click="columnDescOrder('project.name')" class=""><i class="fa fa-caret-down"></i></span>
-
-                                </a></th>
-                                <th>Site<a href="#">
-
-                                    <span ng-click="columnAscOrder('site.name')"  class=""><i class="fa fa-caret-up"></i></span>
-                                    <span ng-click="columnDescOrder('site.name')" class=""><i class="fa fa-caret-down"></i></span>
-
-                                </a></th>
+                                <th>Job Id
+                                    <span class="sortingIcons">
+                                        <span ng-click="columnAscOrder('id')">
+                                             <i  class="fa fa-caret-up"></i>
+                                        </span>
+                                          <span ng-click="columnDescOrder('id')">
+                                              <i  class="fa fa-caret-down"></i>
+                                        </span>
+                                    </span>
+                                    </th>
+                                <th>Job Title
+                                    <span class="sortingIcons">
+                                        <span ng-click="columnAscOrder('title')">
+                                             <i  class="fa fa-caret-up"></i>
+                                        </span>
+                                          <span ng-click="columnDescOrder('title')">
+                                              <i  class="fa fa-caret-down"></i>
+                                        </span>
+                                    </span>
+                                   </th>
+                                <th>Start Time
+                                    <span class="sortingIcons">
+                                        <span ng-click="columnAscOrder('plannedStartTime')">
+                                             <i  class="fa fa-caret-up"></i>
+                                        </span>
+                                          <span ng-click="columnDescOrder('plannedStartTime')">
+                                              <i  class="fa fa-caret-down"></i>
+                                        </span>
+                                    </span>
+                                    </th>
+                                <th>Employee
+                                    <span class="sortingIcons">
+                                        <span ng-click="columnAscOrder('employee.name')">
+                                             <i  class="fa fa-caret-up"></i>
+                                        </span>
+                                          <span ng-click="columnDescOrder('employee.name')">
+                                              <i  class="fa fa-caret-down"></i>
+                                        </span>
+                                    </span>
+                                    </th>
+                                <th>Status
+                                    <span class="sortingIcons">
+                                        <span ng-click="columnAscOrder('status')">
+                                             <i  class="fa fa-caret-up"></i>
+                                        </span>
+                                          <span ng-click="columnDescOrder('status')">
+                                              <i  class="fa fa-caret-down"></i>
+                                        </span>
+                                    </span>
+                                    </th>
+                                <th>Project
+                                    <span class="sortingIcons">
+                                        <span ng-click="columnAscOrder('project.name')">
+                                             <i  class="fa fa-caret-up"></i>
+                                        </span>
+                                          <span ng-click="columnDescOrder('project.name')">
+                                              <i  class="fa fa-caret-down"></i>
+                                        </span>
+                                    </span>
+                                    </th>
+                                <th>Site
+                                    <span class="sortingIcons">
+                                        <span ng-click="columnAscOrder('site.name')">
+                                             <i  class="fa fa-caret-up"></i>
+                                        </span>
+                                          <span ng-click="columnDescOrder('site.name')">
+                                              <i  class="fa fa-caret-down"></i>
+                                        </span>
+                                    </span>
+                                    </th>
                                 <th class="disabled-sorting text-right">Actions</th>
                             </tr>
                             </thead>
@@ -232,7 +268,7 @@
 
     <!-- Pagination directive start -->
 
-    <pagination-new></pagination-new> 
+    <pagination-new></pagination-new>
 
     <!-- Pagination directive end -->
 
