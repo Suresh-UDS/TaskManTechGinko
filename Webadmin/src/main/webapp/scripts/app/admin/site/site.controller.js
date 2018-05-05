@@ -155,6 +155,7 @@ angular.module('timeSheetApp')
         $scope.loadSelectedProject = function(projectId) {
         	ProjectComponent.findOne(projectId).then(function (data) {
                 $scope.selectedProject = data;
+
             });
         };
 
@@ -164,6 +165,7 @@ angular.module('timeSheetApp')
 
 
         $scope.updateSite = function () {
+
         	$scope.error = null;
         	$scope.success = null;
         	$scope.errorProject = null;
