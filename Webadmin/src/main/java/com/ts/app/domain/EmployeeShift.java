@@ -2,6 +2,7 @@ package com.ts.app.domain;
 
 import java.io.Serializable;
 import java.sql.Date;
+import java.sql.Timestamp;
 
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -35,9 +36,9 @@ public class EmployeeShift extends AbstractAuditingEntity implements Serializabl
 	@JoinColumn(name = "siteId")
 	private Site site;
 
-	private Date startTime;
+	private Timestamp startTime;
 	
-	private Date endTime;
+	private Timestamp endTime;
 	
 //	@ManyToOne(fetch = FetchType.LAZY)
 //	@JoinColumn(name = "employeeProjectSiteId", nullable = true)
@@ -52,19 +53,19 @@ public class EmployeeShift extends AbstractAuditingEntity implements Serializabl
 		this.id = id;
 	}
 
-	public Date getStartTime() {
+	public Timestamp getStartTime() {
 		return startTime;
 	}
 
-	public void setStartTime(Date startTime) {
+	public void setStartTime(Timestamp startTime) {
 		this.startTime = startTime;
 	}
 
-	public Date getEndTime() {
+	public Timestamp getEndTime() {
 		return endTime;
 	}
 
-	public void setEndTime(Date endTime) {
+	public void setEndTime(Timestamp endTime) {
 		this.endTime = endTime;
 	}
 
