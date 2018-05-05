@@ -52,7 +52,7 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                    
+
                                             <div class="col-xs-12 col-md-4">
                                                 <div class="form-group no-padding" >
                                                     <div class="dropdown">
@@ -64,7 +64,7 @@
             						                </div>
                                                 </div>
                                             </div>
-                                        
+
                                             <div class="col-xs-12 col-md-4">
                                                 <div class="form-group no-padding" >
                                                     <div class="dropdown">
@@ -90,20 +90,20 @@
                                                 </div>
                                             </div>
                                             <div class="col-xs-12 col-md-4">
-                                                <div class="form-group">       
+                                                <div class="form-group">
                                                     <div class="dropdown ">
                                                         <label class="label-control">Select Status</label>
                                                         <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
                                                         <select class="form-control " ng-model="selectedStatus"  ng-options="status as status for status in statuses">
                                                             <option value="">Select Status...</option>
                                                         </select>
-                                                    </div> 
+                                                    </div>
                                                 </div>
                                             </div>
                                             <div class="col-xs-12 col-md-4">
                                                 <div class="form-group no-padding" >
                                                     <div class="pull-right pdng-top25">
-                                                        
+
                                                         <button type="submit" class="btn btn-circle blue-clr" ng-disabled="searchForm.$invalid">
                                                             <i class="material-icons">search</i>
                                                         </button>
@@ -117,7 +117,7 @@
                                                     </div>
                                                     <div class="clearfix"></div>
                                                 </div>
-                                            </div>	
+                                            </div>
                                         </div>
                                     </form>
                                 </div>
@@ -135,55 +135,83 @@
                                     data-target="#pill3" aria-expanded="false" ng-click="jobType('HOUSEKEEPING')">House Keeping</a></li>
                             </ul>
                        </div>
-                    </div> 
+                    </div>
 
                     <div class="table-responsive tablecard">
                         <table class="table table-striped" ng-init="search();">
 
                             <thead>
                             <tr>
-                                <th>Job Id<a href="#">
-
-                                    <span ng-click="columnAscOrder('id')"  class=""><i class="fa fa-caret-up"></i></span>
-                                    <span ng-click="columnDescOrder('id')" class=""><i class="fa fa-caret-down"></i></span>
-
-                                </a></th>
-                                <th>Job Title<a href="#">
-
-                                    <span ng-click="columnAscOrder('title')"  class=""><i class="fa fa-caret-up"></i></span>
-                                    <span ng-click="columnDescOrder('title')" class=""><i class="fa fa-caret-down"></i></span>
-
-                                </a></th>
-                                <th>Start Time<a href="#">
-
-                                    <span ng-click="columnAscOrder('plannedStartTime')"  class=""><i class="fa fa-caret-up"></i></span>
-                                    <span ng-click="columnDescOrder('plannedStartTime')" class=""><i class="fa fa-caret-down"></i></span>
-
-                                </a></th>
-                                <th>Employee<a href="#">
-
-                                    <span ng-click="columnAscOrder('employee.name')"  class=""><i class="fa fa-caret-up"></i></span>
-                                    <span ng-click="columnDescOrder('employee.name')" class=""><i class="fa fa-caret-down"></i></span>
-
-                                </a></th>
-                                <th>Status<a href="#">
-
-                                    <span ng-click="columnAscOrder('status')"  class=""><i class="fa fa-caret-up"></i></span>
-                                    <span ng-click="columnDescOrder('status')" class=""><i class="fa fa-caret-down"></i></span>
-
-                                </a></th>
-                                <th>Project<a href="#">
-
-                                    <span ng-click="columnAscOrder('project.name')"  class=""><i class="fa fa-caret-up"></i></span>
-                                    <span ng-click="columnDescOrder('project.name')" class=""><i class="fa fa-caret-down"></i></span>
-
-                                </a></th>
-                                <th>Site<a href="#">
-
-                                    <span ng-click="columnAscOrder('site.name')"  class=""><i class="fa fa-caret-up"></i></span>
-                                    <span ng-click="columnDescOrder('site.name')" class=""><i class="fa fa-caret-down"></i></span>
-
-                                </a></th>
+                                <th>Job Id
+                                    <span class="sortingIcons">
+                                        <span ng-click="columnAscOrder('id')">
+                                             <i  class="fa fa-caret-up"></i>
+                                        </span>
+                                          <span ng-click="columnDescOrder('id')">
+                                              <i  class="fa fa-caret-down"></i>
+                                        </span>
+                                    </span>
+                                    </th>
+                                <th>Job Title
+                                    <span class="sortingIcons">
+                                        <span ng-click="columnAscOrder('title')">
+                                             <i  class="fa fa-caret-up"></i>
+                                        </span>
+                                          <span ng-click="columnDescOrder('title')">
+                                              <i  class="fa fa-caret-down"></i>
+                                        </span>
+                                    </span>
+                                   </th>
+                                <th>Start Time
+                                    <span class="sortingIcons">
+                                        <span ng-click="columnAscOrder('plannedStartTime')">
+                                             <i  class="fa fa-caret-up"></i>
+                                        </span>
+                                          <span ng-click="columnDescOrder('plannedStartTime')">
+                                              <i  class="fa fa-caret-down"></i>
+                                        </span>
+                                    </span>
+                                    </th>
+                                <th>Employee
+                                    <span class="sortingIcons">
+                                        <span ng-click="columnAscOrder('employee.name')">
+                                             <i  class="fa fa-caret-up"></i>
+                                        </span>
+                                          <span ng-click="columnDescOrder('employee.name')">
+                                              <i  class="fa fa-caret-down"></i>
+                                        </span>
+                                    </span>
+                                    </th>
+                                <th>Status
+                                    <span class="sortingIcons">
+                                        <span ng-click="columnAscOrder('status')">
+                                             <i  class="fa fa-caret-up"></i>
+                                        </span>
+                                          <span ng-click="columnDescOrder('status')">
+                                              <i  class="fa fa-caret-down"></i>
+                                        </span>
+                                    </span>
+                                    </th>
+                                <th>Project
+                                    <span class="sortingIcons">
+                                        <span ng-click="columnAscOrder('project.name')">
+                                             <i  class="fa fa-caret-up"></i>
+                                        </span>
+                                          <span ng-click="columnDescOrder('project.name')">
+                                              <i  class="fa fa-caret-down"></i>
+                                        </span>
+                                    </span>
+                                    </th>
+                                <th>Site
+                                    <span class="sortingIcons">
+                                        <span ng-click="columnAscOrder('site.name')">
+                                             <i  class="fa fa-caret-up"></i>
+                                        </span>
+                                          <span ng-click="columnDescOrder('site.name')">
+                                              <i  class="fa fa-caret-down"></i>
+                                        </span>
+                                    </span>
+                                    </th>
                                 <th class="disabled-sorting text-right">Actions</th>
                             </tr>
                             </thead>
@@ -240,7 +268,7 @@
 
     <!-- Pagination directive start -->
 
-    <pagination-new></pagination-new> 
+    <pagination-new></pagination-new>
 
     <!-- Pagination directive end -->
 
