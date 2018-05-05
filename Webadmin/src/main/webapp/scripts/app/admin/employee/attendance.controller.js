@@ -402,10 +402,10 @@ angular.module('timeSheetApp')
         }
 
         $scope.clearFilter = function() {
-            $scope.selectedDateFrom = $filter('date')(new Date(), 'dd/MM/yyyy'); 
+             $scope.selectedDateFrom = $filter('date')('01/01/2018', 'dd/MM/yyyy'); 
             $scope.selectedDateTo = $filter('date')(new Date(), 'dd/MM/yyyy');
-            $scope.selectedDateFromSer = new Date(); 
-            $scope.selectedDateToSer = new Date();
+            $scope.selectedDateFromSer = d;
+            $scope.selectedDateToSer =  new Date();
             $scope.selectedEmployee = null;
             $scope.selectedProject = null;
             $scope.selectedSite = null;
