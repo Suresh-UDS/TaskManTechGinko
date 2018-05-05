@@ -307,6 +307,8 @@ public class RateCardService extends AbstractService {
             request.put("projectId", quotationDto.getProjectId());
             request.put("projectName", quotationDto.getProjectName());
             request.put("siteId", quotationDto.getSiteId());
+            request.put("ticketId", quotationDto.getTicketId());
+            request.put("jobId", quotationDto.getJobId());
             request.put("sentByUserId", quotationDto.getSentByUserId());
             request.put("sentByUserName", quotationDto.getSentByUserName());
             request.put("isDrafted", quotationDto.isDrafted());
@@ -319,7 +321,7 @@ public class RateCardService extends AbstractService {
 	        		quotationDto.setCreateByUserName(currUser.getLogin());
                 request.put("createdByUserId", quotationDto.getCreatedByUserId());
                 request.put("createdByUserName", quotationDto.getCreateByUserName());
-            }	
+            }
             if(!StringUtils.isEmpty(quotationDto.get_id()) && quotationDto.getMode().equalsIgnoreCase("edit")) {
             		url = quotationSvcEndPoint+"/quotation/edit";
             }else if(!StringUtils.isEmpty(quotationDto.get_id()) && quotationDto.getMode().equalsIgnoreCase("submit")) {
@@ -329,7 +331,7 @@ public class RateCardService extends AbstractService {
 				if(overdueEmails != null) {
 					alertEmailIds = overdueEmails.getSettingValue();
 				}
-            	
+
             		url = quotationSvcEndPoint+"/quotation/send";
             		quotationDto.setDrafted(false);
             		quotationDto.setSubmitted(true);
@@ -339,8 +341,8 @@ public class RateCardService extends AbstractService {
                 request.put("sentByUserName", quotationDto.getSentByUserName());
                 if(quotationAlertSetting != null && quotationAlertSetting.getSettingValue().equalsIgnoreCase("true")) { //send escalation emails to managers and alert emails
                 		request.put("clientEmailId", alertEmailIds);
-				}                
-                
+				}
+
             }else if(!StringUtils.isEmpty(quotationDto.get_id()) && quotationDto.getMode().equalsIgnoreCase("approve")) {
 				Setting quotationAlertSetting = settingRepository.findSettingByKeyAndSiteId(SettingsService.EMAIL_NOTIFICATION_OVERDUE, quotationDto.getSiteId());
 				Setting overdueEmails = settingRepository.findSettingByKeyAndSiteId(SettingsService.EMAIL_NOTIFICATION_OVERDUE_EMAILS, quotationDto.getSiteId());
@@ -348,7 +350,7 @@ public class RateCardService extends AbstractService {
 				if(overdueEmails != null) {
 					alertEmailIds = overdueEmails.getSettingValue();
 				}
-            	
+
             		url = quotationSvcEndPoint+"/quotation/approve";
             		quotationDto.setSubmitted(false);
             		quotationDto.setApproved(true);
@@ -358,8 +360,8 @@ public class RateCardService extends AbstractService {
                 request.put("approvedByUserName", quotationDto.getApprovedByUserName());
                 if(quotationAlertSetting != null && quotationAlertSetting.getSettingValue().equalsIgnoreCase("true")) { //send escalation emails to managers and alert emails
                 		request.put("clientEmailId", alertEmailIds);
-                }                
-	        		
+                }
+
             }
             HttpEntity<?> requestEntity = new HttpEntity<>(request.toString(),headers);
             log.debug("Request entity quotation save service"+requestEntity);
@@ -404,7 +406,7 @@ public class RateCardService extends AbstractService {
 
         return  quotationList;
     }
-    
+
 	public Object getQuotations() {
 
         log.debug("get Quotations");

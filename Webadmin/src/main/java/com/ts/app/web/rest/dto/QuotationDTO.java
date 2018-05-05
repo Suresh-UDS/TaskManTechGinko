@@ -9,7 +9,7 @@ public class QuotationDTO extends BaseDTO implements Serializable {
     private static final long serialVersionUID = 1L;
 
     private String id;
-    
+
     private String _id;
 
     private String title;
@@ -29,31 +29,35 @@ public class QuotationDTO extends BaseDTO implements Serializable {
     private long approvedByUserId;
 
     private String description;
-    
+
     private List<RateCardDTO> rateCardDetails;
-    
+
     private long siteId;
-    
+
     private String siteName;
-    
+
     private long projectId;
-    
+
     private String projectName;
-    
+
+    private long ticketId;
+
+    private long jobId;
+
     private boolean drafted;
-    
+
     private boolean submitted;
-    
+
     private boolean approved;
-    
+
     private boolean archived;
-    
+
     private Date submittedDate;
-    
+
     private Date approvedDate;
-    
+
     private Date archivedDate;
-    
+
     private String mode;
 
     public String getId() {
@@ -247,6 +251,21 @@ public class QuotationDTO extends BaseDTO implements Serializable {
 	public void setMode(String mode) {
 		this.mode = mode;
 	}
-	
-    
+
+
+    public long getTicketId() {
+        return ticketId;
+    }
+
+    public void setTicketId(long ticketId) {
+        this.ticketId = ticketId;
+    }
+
+    public long getJobId() {
+        return jobId;
+    }
+
+    public void setJobId(long jobId) {
+        this.jobId = jobId;
+    }
 }

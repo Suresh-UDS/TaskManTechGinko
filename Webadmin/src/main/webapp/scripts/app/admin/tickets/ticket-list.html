@@ -23,7 +23,7 @@
                                         <div class="row" >
                                             <div class="col-xs-12 col-md-2">
                                                 <div class="dropdown" >
-                    
+
             					                        <!--<div class="form-group label-floating">-->
             					                        <!--<label class="control-label">Date</label>-->
             					                        <!--<input class="datepicker form-control" type="text" value="03/01/2018"/>-->
@@ -54,7 +54,7 @@
                                             <div class="col-xs-12 col-md-2">
                                                 <div class="dropdown">
                                                     <div class="form-group">
-                                                        <label class="label-control">Select Client</label> 
+                                                        <label class="label-control">Select Client</label>
                                                         <span class="form-control-feedback d-big-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
                                                         <select class="form-control " ng-model="selectedProject"  ng-change="loadSites()"  ng-options="project as project.name for project in projects">
                                                             <option value="">Select Client...</option>
@@ -86,7 +86,7 @@
                                                 </div>
                                             </div>
                                         </div>
-            					                    
+
 
                                         <div class="row" >
                                             <div class="col-xs-12 col-md-3 pdng-top25">
@@ -126,7 +126,7 @@
                                                     </div>
             						            </div>
             						        </div>
-                                                
+
                                             <div class="col-xs-12 col-md-3 pdng-top25">
                                                 <div class="floatR form-group no-padding">
 
@@ -218,10 +218,7 @@
                                     <a  ng-class="{active: $state.includes('admin')}"  ui-sref="edit-ticket({ id: ticket.id })"  class="btn btn-simple btn-info"><i class="material-icons">edit</i></a>
 
                                     <a ng-if="(ticket.status != 'Closed' && ticket.jobId == 0)" ng-class="{active: $state.includes('admin')}" ui-sref="add-job({ticketId : ticket.id})"  ng-click=""  onClick="" data-target="#myModal"  class="btn btn-simple btn-info">create job</a>
-
-
                                     <a ng-if="(ticket.status != 'Closed' && ticket.jobId == 0)" ng-class="{active: $state.includes('admin')}" ui-sref="add-quotation({ticketId : ticket.id})"  ng-click=""  onClick="" data-target="#myModal"  class="btn btn-simple btn-info">Add Quotation</a>
-
 
                                     <a ng-if="(ticket.jobId > 0)" ng-class="{active: $state.includes('admin')}" ui-sref="view-job({id : ticket.jobId})"  ng-click=""  onClick="" data-target="#myModal"  class="btn btn-simple btn-info">View job</a>
 
@@ -259,7 +256,7 @@
 
     <!-- Pagination directive start -->
 
-    <pagination-new></pagination-new> 
+    <pagination-new></pagination-new>
 
     <!-- Pagination directive end -->
 
