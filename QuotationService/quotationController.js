@@ -23,8 +23,11 @@ var fs = require('fs');
         if(req.body.sentToUserName) quotation.sentToUserName = req.body.sentToUserName;
         if(req.body.createdByUserId) quotation.createdByUserId = req.body.createdByUserId;
         if(req.body.createdByUserName) quotation.createdByUserName = req.body.createdByUserName;
+        if(req.body.createdByEmail) quotation.createdByEmail = req.body.createdByEmail;
         if(req.body.approvedByUserId) quotation.approvedByUserId = req.body.approvedByUserId;
         if(req.body.approvedByUserName) quotation.approvedByUserName = req.body.approvedByUserName;
+        if(req.body.rejectedByUserId) quotation.rejectedByUserId = req.body.rejectedByUserId;
+        if(req.body.rejectedByUserName) quotation.rejectedByUserName = req.body.rejectedByUserName;
         if(req.body.authorisedByUserId) quotation.authorisedByUserId = req.body.authorisedByUserId;
         if(req.body.authorisedByUserName) quotation.authorisedByUserName = req.body.authorisedByUserName;
         if(req.body.siteId) quotation.siteId = req.body.siteId;
@@ -37,6 +40,7 @@ var fs = require('fs');
         if(req.body.isDrafted){
             quotation.isDrafted = true;
             quotation.processHistory.isDrafted = date;
+            quotation.status = 'Pending';
             quotation.createdDate = date;
         }else{
             quotation.isDrafted = false;
@@ -46,6 +50,7 @@ var fs = require('fs');
             quotation.isSubmitted = true;
             quotation.submittedDate = date;
             quotation.processHistory.isSubmitted = date;
+            quotation.status = 'Waiting for approval';
         }else{
             quotation.isSubmitted = false;
         }
@@ -53,6 +58,15 @@ var fs = require('fs');
         if(req.body.isApproved){
             quotation.isApproved = true;
             quotation.processHistory.isApproved = date;
+            quotation.status = 'Approved';
+        }else{
+            quotation.isApproved = false;
+        }
+
+        if(req.body.isRejected){
+            quotation.isRejected = true;
+            quotation.processHistory.isRejected = date;
+            quotation.status = 'Rejected';
         }else{
             quotation.isApproved = false;
         }
@@ -60,6 +74,7 @@ var fs = require('fs');
         if(req.body.isArchived){
             quotation.isArchived = true;
             quotation.processHistory.isArchived = date;
+            quotation.status = 'Archived';
         }else{
             quotation.isArchived = false;
         }
@@ -180,8 +195,42 @@ module.exports = {
                     quotation.save(function(err,quotation){
                         if(!err){
                             // mailerService.submitQuotation('karthickk@techginko.com',quotation);
-                            mailerService.qpproveQuotation(quotation.clientEmailId,quotation);
+                            mailerService.qpproveQuotation(quotation.createdByEmail,quotation);
                             notificationService.sendNotification('e678b6d8-9747-4528-864d-911a24cd786a','Quotation Approved by Client')
+                            res.json(200,quotation)
+                        }else{
+                            console.log("Error in saving quotation");
+                            console.log(err)
+                            res.json(500,err);
+                        }
+                    })
+                }
+            });
+    },
+
+    rejectQuotation: function(req,res,next){
+        console.log("Reject Quotation - " + req.body._id);
+        var date = new Date();
+        Quotation.findById(req.body._id,function(err,quotation){
+                if(err){
+                    console.log('Error in sending mail');
+                    res.send(200,'Error in sending Mail, Quotation not Sent');
+                }else{
+                    console.log("Mail successfully sent");
+                    quotation.rejectedByUserId = req.body.rejectedByUserId;
+                    quotation.rejectedByUserName = req.body.rejectedByUserName;
+                    quotation.isSubmitted = false;
+                    quotation.isApproved = false;
+                    quotation.isRejected = true;
+                    quotation.processHistory.isRejected = date;
+                    quotation.rejectedDate = date;
+                    quotation.lastModifiedDate = date;
+
+                    quotation.save(function(err,quotation){
+                        if(!err){
+                            // mailerService.submitQuotation('karthickk@techginko.com',quotation);
+                            mailerService.rejectQuotation(quotation.createdByEmail,quotation);
+                            notificationService.sendNotification('e678b6d8-9747-4528-864d-911a24cd786a','Quotation Rejected by Client')
                             res.json(200,quotation)
                         }else{
                             console.log("Error in saving quotation");

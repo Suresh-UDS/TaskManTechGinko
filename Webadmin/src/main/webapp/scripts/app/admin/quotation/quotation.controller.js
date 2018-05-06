@@ -146,18 +146,21 @@ angular
 						console.log('material cost - '
 								+ parseInt($scope.materialQty) + ', '
 								+ parseFloat($scope.materialUnitPrice))
-						$scope.materialItemCost = parseInt($scope.materialQty)
-								* parseFloat($scope.materialUnitPrice);
-						var rateCardDetail = {};
-						rateCardDetail.title = $scope.materialName
-						rateCardDetail.type = 'MATERIAL'
-						rateCardDetail.cost = $scope.materialItemCost
-						rateCardDetail.uom = 'PER_QTY'
-						rateCardDetail.qty = $scope.materialQty
-						rateCardDetail.unitPrice = $scope.materialUnitPrice
-						$scope.materialTotalCost += parseFloat($scope.materialItemCost)
-						$scope.totalCost += parseFloat($scope.materialItemCost)
-						$scope.materialRateCardDetails.push(rateCardDetail);
+						if($scope.materialQty > 0 && $scope.materialUnitPrice > 0) {
+							$scope.materialItemCost = parseInt($scope.materialQty)
+														* parseFloat($scope.materialUnitPrice);
+							var rateCardDetail = {};
+							rateCardDetail.title = $scope.materialName
+							rateCardDetail.type = 'MATERIAL'
+							rateCardDetail.cost = $scope.materialItemCost
+							rateCardDetail.uom = 'PER_QTY'
+							rateCardDetail.qty = $scope.materialQty
+							rateCardDetail.unitPrice = $scope.materialUnitPrice
+							$scope.materialTotalCost += parseFloat($scope.materialItemCost)
+							$scope.totalCost += parseFloat($scope.materialItemCost)
+							$scope.materialRateCardDetails.push(rateCardDetail);
+							
+						}		
 					}
 
 					$scope.removeMaterial = function(ind) {
@@ -170,18 +173,20 @@ angular
 						console.log('service cost - '
 								+ parseInt($scope.serviceQty) + ', '
 								+ parseFloat($scope.serviceUnitPrice))
-						$scope.serviceItemCost = parseInt($scope.serviceQty)
-								* parseFloat($scope.serviceUnitPrice);
-						var rateCardDetail = {};
-						rateCardDetail.title = $scope.serviceName
-						rateCardDetail.type = 'SERVICE'
-						rateCardDetail.cost = $scope.serviceItemCost
-						rateCardDetail.uom = 'FIXED'
-						rateCardDetail.qty = $scope.serviceQty
-						rateCardDetail.unitPrice = $scope.serviceUnitPrice
-						$scope.serviceTotalCost += parseFloat($scope.serviceItemCost)
-						$scope.totalCost += parseFloat($scope.serviceItemCost)
-						$scope.serviceRateCardDetails.push(rateCardDetail);
+						if($scope.serviceQty > 0 && $scope.serviceUnitPrice > 0) {
+							$scope.serviceItemCost = parseInt($scope.serviceQty)
+									* parseFloat($scope.serviceUnitPrice);
+							var rateCardDetail = {};
+							rateCardDetail.title = $scope.serviceName
+							rateCardDetail.type = 'SERVICE'
+							rateCardDetail.cost = $scope.serviceItemCost
+							rateCardDetail.uom = 'FIXED'
+							rateCardDetail.qty = $scope.serviceQty
+							rateCardDetail.unitPrice = $scope.serviceUnitPrice
+							$scope.serviceTotalCost += parseFloat($scope.serviceItemCost)
+							$scope.totalCost += parseFloat($scope.serviceItemCost)
+							$scope.serviceRateCardDetails.push(rateCardDetail);
+						}
 					}
 
 					$scope.removeService = function(ind) {
@@ -194,18 +199,20 @@ angular
 						console.log('Labour cost - '
 								+ parseInt($scope.labourQty) + ', '
 								+ parseFloat($scope.labourUnitPrice))
-						$scope.labourItemCost = parseInt($scope.labourQty)
-								* parseFloat($scope.labourUnitPrice);
-						var rateCardDetail = {};
-						rateCardDetail.title = $scope.labourCategory
-						rateCardDetail.type = 'LABOUR'
-						rateCardDetail.cost = $scope.labourItemCost
-						rateCardDetail.uom = 'PER_HOUR'
-						rateCardDetail.qty = $scope.labourQty
-						rateCardDetail.unitPrice = $scope.labourUnitPrice
-						$scope.labourTotalCost += parseFloat($scope.labourItemCost)
-						$scope.totalCost += parseFloat($scope.labourItemCost)
-						$scope.labourRateCardDetails.push(rateCardDetail);
+						if($scope.labourQty > 0 && $scope.labourUnitPrice > 0) {
+							$scope.labourItemCost = parseInt($scope.labourQty)
+									* parseFloat($scope.labourUnitPrice);
+							var rateCardDetail = {};
+							rateCardDetail.title = $scope.labourCategory
+							rateCardDetail.type = 'LABOUR'
+							rateCardDetail.cost = $scope.labourItemCost
+							rateCardDetail.uom = 'PER_HOUR'
+							rateCardDetail.qty = $scope.labourQty
+							rateCardDetail.unitPrice = $scope.labourUnitPrice
+							$scope.labourTotalCost += parseFloat($scope.labourItemCost)
+							$scope.totalCost += parseFloat($scope.labourItemCost)
+							$scope.labourRateCardDetails.push(rateCardDetail);
+						}
 					}
 
 					$scope.removeLabour = function(ind) {
@@ -287,6 +294,17 @@ angular
 								function(response) {
 									console.log(response);
 									$scope.showNotifications('top','center','success','Quotation approved Successfully');
+									//$scope.loadAllQuotations();
+									//$location.path('/quotation-list');
+									$scope.refreshPage();
+								})
+					}
+
+					$scope.rejectQuotation = function(quotation) {
+						RateCardComponent.rejectQuotation(quotation).then(
+								function(response) {
+									console.log(response);
+									$scope.showNotifications('top','center','success','Quotation rejected Successfully');
 									//$scope.loadAllQuotations();
 									//$location.path('/quotation-list');
 									$scope.refreshPage();

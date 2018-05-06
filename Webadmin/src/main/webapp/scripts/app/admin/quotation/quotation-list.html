@@ -179,19 +179,20 @@
                             <td><label ng-bind="quotation.approvedDate | date:'dd-MMM-yyyy hh:mm a'"/></td> -->
                             <td ><button class="btn btn-success" ng-if="quotation.isApproved">Approved</button>
                             <button class="btn btn-label"  ng-if="quotation.isArchived">Archived</button>
-                            <button class="btn btn-info" ng-if="quotation.isDrafted">Drafted</button>
-                            <button class="btn btn-warning" ng-if="quotation.isSubmitted">Submitted</button></td>
+                            <button class="btn btn-info" ng-if="quotation.isDrafted">Pending</button>
+                            <button class="btn btn-warning" ng-if="quotation.isSubmitted">Waiting for approval</button></td>
                             <td>{{quotation.grandTotal}} </td>
                             <td class="text-right">
-                                <a name="View Quotation" ng-class="{active: $state.includes('admin')}"  ui-sref="view-quotation({ id: quotation._id })"  class="btn btn-simple btn-info"><i class="material-icons">remove_red_eye</i></a>
+                                <a name="View" ng-class="{active: $state.includes('admin')}"  ui-sref="view-quotation({ id: quotation._id })"  class="btn btn-simple btn-info"><i class="material-icons">remove_red_eye</i></a>
                            
-                                <a name="Edit Quotation" has-permission="Quotation:Edit"  ng-class="{active: $state.includes('admin')}"  ui-sref="edit-quotation({ id: quotation._id })"  class="btn btn-simple btn-success"><i class="material-icons">edit</i></a>
+                                <a name="Edit" ng-if="!quotation.isSubmitted && !quotation.isApproved" has-permission="Quotation:Edit"  ng-class="{active: $state.includes('admin')}"  ui-sref="edit-quotation({ id: quotation._id })"  class="btn btn-simple btn-success"><i class="material-icons">edit</i></a>
 					
                                 <!-- <a name="Approve Quotation" ng-if="quotation.isSubmitted" ng-class="{active: $state.includes('admin')}" has-authority="ROLE_ADMIN" ng-click="approveQuotation(quotation)"  class="btn btn-simple btn-success"></a> -->
-                                <button  title="Approve Quotation" ng-if="quotation.isSubmitted"    data-toggle="modal" data-target="#approveQuotationModal" data-dismiss="#approveQuotationModal" ng-click="selectQuotation(quotation)"  class="btn btn-simple btn-info btn-icon like"> <i class="material-icons">done</i> </button>
+                                <button  title="Approve" ng-if="quotation.isSubmitted && !quotation.isApproved"    data-toggle="modal" data-target="#approveQuotationModal" data-dismiss="#approveQuotationModal" ng-click="selectQuotation(quotation)"  class="btn btn-simple btn-info btn-icon like"> <i class="material-icons">done</i> </button>
+                                <button  title="Reject" ng-if="quotation.isSubmitted && !quotation.isApproved !quotation.isRejected"    data-toggle="modal" data-target="#rejectQuotationModal" data-dismiss="#rejectQuotationModal" ng-click="selectQuotation(quotation)"  class="btn btn-simple btn-info btn-icon like"> <i class="material-icons">done</i> </button>
                              </td>
                              <td>
-                                <a name="Delete Quotation" ng-if="quotation.isApproved || quotation.isDrafted" ng-class="{active: $state.includes('admin')}"   ng-click="deleteConfirm(site)"  onClick="$('#deleteModal').modal()" data-target="#myModal"  class="btn btn-simple btn-danger"><i class="material-icons">close</i></a>
+                                <a name="Delete" ng-if="quotation.isApproved || quotation.isDrafted" ng-class="{active: $state.includes('admin')}"   ng-click="deleteConfirm(site)"  onClick="$('#deleteModal').modal()" data-target="#myModal"  class="btn btn-simple btn-danger"><i class="material-icons">close</i></a>
                             </td>
 
                         </tr>
@@ -228,6 +229,21 @@
             </div>
             <div class="modal-footer ">
                 <button type="button" class="btn btn-info btn-round" data-dismiss="modal" ng-click="approveQuotation(quotation)">Yes</button>
+                <button type="button" class="btn btn-info btn-round" data-dismiss="modal">No</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="rejectQuotationModal" tabindex="-1" role="dialog" aria-labelledby="rejectQuotationModal" aria-hidden="true">
+    <div class="modal-dialog modal-notice">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="material-icons">clear</i></button>
+                <h5 class="modal-title" id="isLeftModal">Reject Quotation ?</h5>
+            </div>
+            <div class="modal-footer ">
+                <button type="button" class="btn btn-info btn-round" data-dismiss="modal" ng-click="rejectQuotation(quotation)">Yes</button>
                 <button type="button" class="btn btn-info btn-round" data-dismiss="modal">No</button>
             </div>
         </div>

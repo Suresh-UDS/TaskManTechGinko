@@ -27,7 +27,7 @@ var cors = require('cors');
 function startup(){
 
   // Bootstrap mongoose and load dummy data
-  mongoose.connect('mongodb://admin:Tgadmin123#@ec2-54-169-225-123.ap-southeast-1.compute.amazonaws.com:27017/quotation_svc', function(err) {
+  mongoose.connect('mongodb://localhost:27017/quotation_svc', function(err) {
     if (err) throw err;
 
     /*
@@ -77,6 +77,7 @@ function startup(){
   app.post('/api/quotation/edit', quotationController.editQuotation);
   app.post('/api/quotation/send', quotationController.sendQuotation);
   app.post('/api/quotation/approve',quotationController.approveQuotation);
+  app.post('/api/quotation/reject',quotationController.rejectQuotation);
   app.post('/api/rateCard/create', quotationController.createRateCard);
 
   app.get('/api/quotation/id/:id',quotationController.getQuotation);

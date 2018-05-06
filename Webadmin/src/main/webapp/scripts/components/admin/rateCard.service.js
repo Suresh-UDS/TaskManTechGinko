@@ -100,6 +100,13 @@ angular.module('timeSheetApp')
                     console.log(response.data);
                     return response.data;
                 })
+            },
+
+            rejectQuotation: function(quotation){
+                return $http.post('api/rateCard/quotation/reject',quotation).then(function(response){
+                    console.log(response.data);
+                    return response.data;
+                })
             }
 
         };
