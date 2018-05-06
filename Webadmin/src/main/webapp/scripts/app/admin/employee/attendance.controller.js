@@ -10,8 +10,12 @@ angular.module('timeSheetApp')
         $scope.errorMessage = null;
         $scope.doNotMatch = null;
         $scope.errorEmployeeExists = null;
-        $scope.selectedDateFrom = $filter('date')(new Date(), 'dd/MM/yyyy'); 
+        $scope.selectedDateFrom = $filter('date')('01/01/2018', 'dd/MM/yyyy'); 
         $scope.selectedDateTo = $filter('date')(new Date(), 'dd/MM/yyyy');
+        var d = new Date();
+        d.setFullYear(2018, 0, 1);
+        $scope.selectedDateFromSer= d;
+        $scope.selectedDateToSer= new Date();
 
         $scope.employeeDesignations = ["MD","Operations Manger","Supervisor"]
 
@@ -48,23 +52,45 @@ angular.module('timeSheetApp')
 
         };
 
-        $('#DateFrom').on('dp.change', function(e){
+        $('input#dateFilterFrom').on('dp.change', function(e){
             console.log(e.date);
             console.log(e.date._d);
-            $scope.selectedDateFrom= $filter('date')(e.date._d, 'dd/MM/yyyy');
-            $scope.selectedDateFromSer= e.date._d;
+            $scope.selectedDateFromSer= e.date._d; 
+            
+            $.notifyClose();
+             
+            if($scope.selectedDateFromSer > $scope.selectedDateToSer) {
+
+                    $scope.showNotifications('top','center','danger','From date cannot be greater than To date');
+                    $scope.selectedDateFrom =$filter('date')(new Date(), 'dd/MM/yyyy');
+                    return false;
+            }else {
+               $scope.selectedDateFrom= $filter('date')(e.date._d, 'dd/MM/yyyy');
+               // $scope.refreshReport();
+            }
+            
+            
 
         });
-        $('#DateTo').on('dp.change', function(e){
+        $('input#dateFilterTo').on('dp.change', function(e){
             console.log(e.date);
             console.log(e.date._d);
-            $scope.selectedDateTo= $filter('date')(e.date._d, 'dd/MM/yyyy');
             $scope.selectedDateToSer= e.date._d;
+
+            $.notifyClose();
+            
+            if($scope.selectedDateFromSer > $scope.selectedDateToSer) {
+                    $scope.showNotifications('top','center','danger','To date cannot be lesser than From date');
+                    $scope.selectedDateTo=$filter('date')(new Date(), 'dd/MM/yyyy');
+                    return false;
+            }else {
+                $scope.selectedDateTo= $filter('date')(e.date._d, 'dd/MM/yyyy');
+                //$scope.refreshReport();
+            }
 
         });
 
         $scope.init = function() {
-        		$scope.loadProjects();
         		$scope.loadAttendances();
         }
 
@@ -376,10 +402,10 @@ angular.module('timeSheetApp')
         }
 
         $scope.clearFilter = function() {
-            $scope.selectedDateFrom = $filter('date')(new Date(), 'dd/MM/yyyy'); 
+             $scope.selectedDateFrom = $filter('date')('01/01/2018', 'dd/MM/yyyy'); 
             $scope.selectedDateTo = $filter('date')(new Date(), 'dd/MM/yyyy');
-            $scope.selectedDateFromSer = new Date(); 
-            $scope.selectedDateToSer = new Date();
+            $scope.selectedDateFromSer = d;
+            $scope.selectedDateToSer =  new Date();
             $scope.selectedEmployee = null;
             $scope.selectedProject = null;
             $scope.selectedSite = null;

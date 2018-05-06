@@ -157,12 +157,17 @@
                                                     </div>
                                                 </div>
                                             </div>
-									
+
+                                            <div class="col-md-4 ">
+                                                <button class="btn btn-primary" ng-if="(quotation.ticketId > 0)" ui-sref="view-ticket({id : quotation.ticketId})">
+                                                    <i class="material-icons">remove_red_eye</i>View Ticket</button>
+                                            </div>
+
 									</div>
 									</div>
 								</div>
-								
-								
+
+
 							</div>
 							<div class="col-md-12">
 
@@ -187,13 +192,13 @@
 												>Summary</a></li>
 										</ul>
 										<div class="tab-content TabsContent" style="">
-											
+
 											<div class="tab-pane fade in active pill2" id="pill2">
 												<div class="row" id="serviceEntryFields">
 
 													<div class="col-md-5">
 														<div class="form-group">
-															<label class="control-label">Service Name</label> 
+															<label class="control-label">Service Name</label>
 															<input ng-model="serviceName" id="serviceName"
 																class='form-control' name='serviceName' type='text' value=""
 																ng-minlength='1' ng-maxlength='100'
@@ -204,7 +209,7 @@
 													<div class="col-md-2">
 														<div class="form-group">
 															<label class="control-label">Quantity</label>
-															<input id='serviceQty' ng-model="serviceQty" 
+															<input id='serviceQty' ng-model="serviceQty"
 																	class='form-control' name='serviceQty' type='text'
 																	value="" ng-minlength='1' ng-maxlength='6'
 																	ng-pattern="/[0-9]*/" autofocus  />
@@ -212,7 +217,7 @@
 													</div>
 													<div class="col-md-2">
 														<div class="form-group">
-															<label class="control-label">Cost(Fixed)</label> 
+															<label class="control-label">Cost(Fixed)</label>
 															<input ng-model="serviceUnitPrice"
 																class='form-control' name='serviceUnitPrice' type='text' value=""
 																ng-minlength='1' ng-maxlength='5'
@@ -240,7 +245,7 @@
 																<th>Quantity</th>
 																<th>Unit Price</th>
 																<th>Cost</th>
-																
+
 															</tr>
 														</thead>
 														<tbody>
@@ -271,7 +276,7 @@
 
 													<div class="col-md-5">
 														<div class="form-group">
-															<label class="control-label">Labour Category</label> 
+															<label class="control-label">Labour Category</label>
 															<input ng-model="labourCategory"
 																class='form-control' name='labourCategory' type='text' value=""
 																ng-minlength='1' ng-maxlength='100'
@@ -290,7 +295,7 @@
 													</div>
 													<div class="col-md-2">
 														<div class="form-group">
-															<label class="control-label">Cost(Per Hr)</label> 
+															<label class="control-label">Cost(Per Hr)</label>
 															<input ng-model="labourUnitPrice"
 																class='form-control' name='labourUnitPrice' type='text' value=""
 																ng-minlength='1' ng-maxlength='5'
@@ -307,7 +312,7 @@
 
 
 
-												</div> 
+												</div>
 
 												<div class="table-responsive tablecard">
 													<table class="table table-striped">
@@ -348,7 +353,7 @@
 
 													<div class="col-md-5">
 														<div class="form-group">
-															<label class="control-label">Material Name</label> 
+															<label class="control-label">Material Name</label>
 															<input ng-model="materialName"
 																class='form-control' name='materialName' type='text' value=""
 																ng-minlength='1' ng-maxlength='100'
@@ -367,7 +372,7 @@
 													</div>
 													<div class="col-md-2">
 														<div class="form-group">
-															<label class="control-label">Cost</label> 
+															<label class="control-label">Cost</label>
 															<input ng-model="materialUnitPrice"
 																class='form-control' name='materialUnitPrice' type='text' value=""
 																ng-minlength='1' ng-maxlength='5'
@@ -384,7 +389,7 @@
 
 
 
-												</div> 
+												</div>
 
 												<div class="table-responsive tablecard">
 													<table class="table table-striped">
@@ -420,7 +425,7 @@
 
 													</table>
 												</div>
-											</div>											
+											</div>
 											<div class="tab-pane fade pill4" id="pill4">
 
 												<div class="table-responsive tablecard SummaryCard">
@@ -467,7 +472,10 @@
 												<div class="col-md-12 txt-align-rgt">
 													<div class="form-group">
 
-														<button class="btn btn-success" ng-click="saveQuotation('submit')"
+
+
+
+                                                        <button class="btn btn-success" ng-click="saveQuotation('submit')"
 															id="form-button-save" ng-disabled="form.$invalid">
 															<span class="btn-label"><i class="material-icons">check</i></span>
 															Send
@@ -476,6 +484,13 @@
 															<span class="btn-label"><i class="material-icons">save</i></span>
 															Save Draft
 														</button>
+
+                                                        <button class="btn btn-success" ng-click="saveQuotation('submit')"
+                                                                id="form-button-approve" ng-disabled="form.$invalid">
+                                                            <span class="btn-label"><i class="material-icons">check</i></span>
+                                                            Send
+                                                        </button>
+
 														<button class="btn btn-danger" type="button"
 															ng-click="cancelQuotation()" id="cancel-button">
 															<i class="material-icons">close</i> Cancel
@@ -487,6 +502,15 @@
 											<div class="row" id="closeButton">
 												<div class="col-md-12 txt-align-rgt">
 													<div class="form-group">
+
+                                                        <button  title="Approve Quotation"
+                                                                 data-toggle="modal" data-target="#approveQuotationModal"
+                                                                 data-dismiss="#approveQuotationModal" ng-click="selectQuotation(quotation)"
+                                                                 class="btn btn-info">
+                                                            <span class="btn-label"><i class="material-icons">done</i></span>
+                                                            Approve
+                                                        </button>
+
 														<button class="btn btn-danger" type="button"
 															ng-click="cancelQuotation()" id="cancel-button">
 															<i class="material-icons">close</i> Close
@@ -532,4 +556,19 @@
 	</div>
 
 
+</div>
+
+<div class="modal fade" id="approveQuotationModal" tabindex="-1" role="dialog" aria-labelledby="approveQuotationModal" aria-hidden="true">
+    <div class="modal-dialog modal-notice">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="material-icons">clear</i></button>
+                <h5 class="modal-title" id="isLeftModal">Approve Quotation ?</h5>
+            </div>
+            <div class="modal-footer ">
+                <button type="button" class="btn btn-info btn-round" data-dismiss="modal" ng-click="approveQuotation(quotation)">Yes</button>
+                <button type="button" class="btn btn-info btn-round" data-dismiss="modal">No</button>
+            </div>
+        </div>
+    </div>
 </div>
