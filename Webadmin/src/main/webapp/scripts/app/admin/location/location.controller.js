@@ -139,17 +139,26 @@ angular.module('timeSheetApp')
   	            }
   	        });
         };
-    
+
+        $scope.isActiveAsc = 'id';
+        $scope.isActiveDesc = '';
+
         $scope.columnAscOrder = function(field){
             $scope.selectedColumn = field;
+            $scope.isActiveAsc = field;
+            $scope.isActiveDesc = '';
             $scope.isAscOrder = true;
-            $scope.search();
+            //$scope.search();
+            $scope.loadLocations();
         }
 
         $scope.columnDescOrder = function(field){
             $scope.selectedColumn = field;
+            $scope.isActiveDesc = field;
+            $scope.isActiveAsc = '';
             $scope.isAscOrder = false;
-            $scope.search();
+            //$scope.search();
+            $scope.loadLocations();
         }
 
         $scope.searchFilter = function () {
