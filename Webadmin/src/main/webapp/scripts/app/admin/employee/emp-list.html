@@ -39,7 +39,7 @@
 								   			<div class="dropdown">
                                                 <div class="form-group">
                                                     <label class="control-label">Select Client</label>
-                                                     <span class="form-control-feedback d-sm-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
+                                                     <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
                                                     <select class="form-control " ng-model="selectedProject"  ng-change="loadSites()"  ng-options="project as project.name for project in projects">
                                                         <option value="">Select Client...</option>
                                                     </select>
@@ -59,7 +59,7 @@
                                                     <!--uib-typeahead="role as role.name for role in userRoles | filter:$viewValue | limitTo:5"-->
                                                     <!--name="UserRole" ng-minlength="5" ng-maxlength="50" autofocus-->
                                                     <!--required >-->
-                                                    <span class="form-control-feedback d-sm-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
+                                                    <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
                                                     <select class="form-control " ng-model="selectedSite"  ng-options="site as site.name for site in sites">
                                                         <option value="">Select Site...</option>
                                                     </select>
@@ -172,7 +172,9 @@
                                     <button class="btn btn-primary btn-xs btn-success"  ng-if="!employee.left">Active</button>
                                 </td>
                                 <td class="text-right">
-                                    <button ng-disabled="employee.left" title="View"  ng-click="getCheckInDetails(employee.id)" has-permission="Employee:Edit" ui-sref="view-employee({ id: employee.id })"   class="btn btn-simple btn-info btn-icon like"><i style="font-size: 20px" class="material-icons">remove_red_eye</i></button>
+
+                                    <button ng-disabled="employee.left" title="View"  ng-click="getCheckInDetails(employee.id)" has-permission="Employee:Edit" data-toggle="modal" data-target="#ViewModal"    class="btn btn-simple btn-info btn-icon like"><i style="font-size: 20px" class="material-icons">remove_red_eye</i></button>
+                                    <!--<button ng-disabled="employee.left" title="View"  ng-click="getCheckInDetails(employee.id)" has-permission="Employee:Edit" ui-sref="view-employee({ id: employee.id })"   class="btn btn-simple btn-info btn-icon like"><i style="font-size: 20px" class="material-icons">remove_red_eye</i></button>-->
                                     <button ng-disabled="employee.left" title="Mark Attendance "   data-toggle="modal" has-permission="Employee:Edit" data-target="#noticeModal" ng-click="getEmployeeDetails(employee.id)"  class="btn btn-simple btn-info btn-icon like"><i style="font-size: 20px" class="material-icons">date_range</i></button>
                                     <button ng-disabled="employee.left" ng-class="{active: $state.includes('admin')}"  has-permission="Employee:Edit"  ui-sref="edit-employee({ id: employee.id })" type="button" rel="tooltip" title="Edit Profile" class="btn btn-success btn-simple btn-xs">
                                         <i style="font-size: 20px !important;" class="fa fa-edit"></i>
@@ -242,6 +244,99 @@
     </div>
 
 </div>
+
+
+
+<!-- Modal -->
+<div class="modal right fade" id="ViewModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel2">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel2">View Employee Details</h4>
+            </div>
+
+            <div class="modal-body">
+                <div class="row" ng-init="loadEmployee()">
+                    <div class="col-md-12">
+
+                        <div class="col-md-12 margn-top30">
+
+                            <div class="panel panel-default">
+                                <div class="panel-heading">Employee Details</div>
+                                <div class="panel-body">
+
+                                    <div class="table-responsive">
+                                        <table class="table">
+
+                                            <tbody>
+                                            <tr>
+
+                                                <td>ID</td>
+                                                <td>{{employee.id}}</td>
+
+                                            </tr>
+                                            <tr>
+
+                                                <td>Employee ID</td>
+                                                <td>{{employee.empId}}</td>
+
+                                            </tr>
+                                            <tr>
+
+                                                <td>Firstname</td>
+                                                <td>{{employee.name}}</td>
+
+                                            </tr>
+                                            <tr>
+
+                                                <td>Lastname</td>
+                                                <td>{{employee.lastName}}</td>
+
+                                            </tr>
+                                            <tr>
+
+                                                <td>Site</td>
+                                                <td><a data-toggle="modal" data-target="#noticeModal" href="#">List Of Sites</a></td>
+
+                                            </tr>
+                                            <tr>
+                                                <td>User Account Linked</td>
+                                                <td><a href="#/view-user/{{employee.userId}}">View User Account</a></td>
+                                            </tr>
+
+                                            </tbody>
+                                        </table>
+                                    </div>
+
+                                    <div class="txt-align-rgt">
+
+                                        <button  data-dismiss="modal"  class="btn btn-default close-button-right b10" type="button"
+                                                 id="close-button-right">
+                                            <!-- <i class="fa fa-warning"></i> --> Back
+                                        </button>
+
+                                    </div>
+
+                                </div>
+                            </div>
+
+                        </div>
+
+
+
+                    </div>
+
+                </div>
+            </div>
+
+        </div><!-- modal-content -->
+    </div><!-- modal-dialog -->
+</div><!-- modal -->
+
+
+
 
 <div class="modal fade" id="noticeModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-notice">
