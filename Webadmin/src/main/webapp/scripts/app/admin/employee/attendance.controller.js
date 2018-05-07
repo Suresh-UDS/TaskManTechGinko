@@ -10,12 +10,11 @@ angular.module('timeSheetApp')
         $scope.errorMessage = null;
         $scope.doNotMatch = null;
         $scope.errorEmployeeExists = null;
-        $scope.selectedDateFrom = $filter('date')('01/01/2018', 'dd/MM/yyyy'); 
+        $scope.selectedDateFrom = $filter('date')(new Date(), 'dd/MM/yyyy'); 
         $scope.selectedDateTo = $filter('date')(new Date(), 'dd/MM/yyyy');
-        var d = new Date();
-        d.setFullYear(2018, 0, 1);
-        $scope.selectedDateFromSer= d;
+        $scope.selectedDateFromSer=  new Date();
         $scope.selectedDateToSer= new Date();
+        $scope.pageSort = 10;
 
         $scope.employeeDesignations = ["MD","Operations Manger","Supervisor"]
 
@@ -185,21 +184,25 @@ angular.module('timeSheetApp')
 	        	}
         };
 
-
-        $scope.pageSort = 10;
-
-      
+        $scope.isActiveAsc = 'employee.id';
+        $scope.isActiveDesc = '';
 
         $scope.columnAscOrder = function(field){
             $scope.selectedColumn = field;
+            $scope.isActiveAsc = field;
+            $scope.isActiveDesc = '';
             $scope.isAscOrder = true;
             $scope.search();
+            //$scope.loadAttendances();
         }
 
         $scope.columnDescOrder = function(field){
             $scope.selectedColumn = field;
+            $scope.isActiveDesc = field;
+            $scope.isActiveAsc = '';
             $scope.isAscOrder = false;
             $scope.search();
+            //$scope.loadAttendances();
         }
 
 
@@ -320,12 +323,27 @@ angular.module('timeSheetApp')
     
         };
 
+        $scope.loadEnrImage = function(enrollId) {
 
-        $scope.loadImagesNew = function( image) {
+        //Employee Enrolled Image
+            EmployeeComponent.findOne(enrollId).then(function (data) {
+                console.log(data);
+                var enrollImg = data.enrolled_face;
+                
+                var eleId1 = 'photoEnrolled';
+                var ele1 = document.getElementById(eleId1);
+                ele1.setAttribute('src',enrollImg);
+           });
+        }
+
+
+        $scope.loadImagesNew = function(image,enrollId) {
+
+            $scope.loadEnrImage(enrollId);
+            //Attendance Image
             var eleId = 'photoOutImg';
             var ele = document.getElementById(eleId);
             ele.setAttribute('src',image);
-
         };
 
         $scope.initMap = function(container, latIn, lngIn, containerOut, latOut, lngOut) {
@@ -402,9 +420,9 @@ angular.module('timeSheetApp')
         }
 
         $scope.clearFilter = function() {
-             $scope.selectedDateFrom = $filter('date')('01/01/2018', 'dd/MM/yyyy'); 
+             $scope.selectedDateFrom = $filter('date')(new Date(), 'dd/MM/yyyy'); 
             $scope.selectedDateTo = $filter('date')(new Date(), 'dd/MM/yyyy');
-            $scope.selectedDateFromSer = d;
+            $scope.selectedDateFromSer =  new Date();
             $scope.selectedDateToSer =  new Date();
             $scope.selectedEmployee = null;
             $scope.selectedProject = null;

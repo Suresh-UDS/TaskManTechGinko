@@ -113,23 +113,25 @@ angular.module('timeSheetApp')
             that.calendar[cmp] = true;
         };
 
-        $scope.isActiveAsc = false;
-        $scope.isActiveDesc = false;
+        $scope.isActiveAsc = 'id';
+        $scope.isActiveDesc = '';
 
         $scope.columnAscOrder = function(field){
-            $scope.isActiveAsc = true;
-            $scope.isActiveDesc = false;
             $scope.selectedColumn = field;
+            $scope.isActiveAsc = field;
+            $scope.isActiveDesc = '';
             $scope.isAscOrder = true;
-            $scope.search();
+            //$scope.search();
+            $scope.loadProjects();
         }
 
         $scope.columnDescOrder = function(field){
             $scope.selectedColumn = field;
+            $scope.isActiveDesc = field;
+            $scope.isActiveAsc = '';
             $scope.isAscOrder = false;
-            $scope.search();
-            $scope.isActiveDesc = true;
-            $scope.isActiveAsc = false;
+            //$scope.search();
+            $scope.loadProjects();
         }
 
 

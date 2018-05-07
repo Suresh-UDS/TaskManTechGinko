@@ -138,80 +138,82 @@
                     </div>
 
                     <div class="table-responsive tablecard">
-                        <table class="table table-striped" ng-init="search();">
+                        <table class="table table-striped table-hover" ng-init="search();">
 
                             <thead>
                             <tr>
                                 <th>Job Id
                                     <span class="sortingIcons">
-                                        <span ng-click="columnAscOrder('id')">
-                                             <i  class="fa fa-caret-up"></i>
+                                        <span ng-click="columnAscOrder('id')" ng-class="isActiveAsc == 'id' ? 'active' : ''" >
+                                            <i  class="fa fa-caret-up"></i>
                                         </span>
-                                          <span ng-click="columnDescOrder('id')">
-                                              <i  class="fa fa-caret-down"></i>
+                                        <span ng-click="columnDescOrder('id')" ng-class="isActiveDesc == 'id' ? 'active' : ''">
+                                             <i  ng-class="class" class="fa fa-caret-down"></i>
                                         </span>
                                     </span>
-                                    </th>
+                                </th>
                                 <th>Job Title
                                     <span class="sortingIcons">
-                                        <span ng-click="columnAscOrder('title')">
-                                             <i  class="fa fa-caret-up"></i>
+                                        <span ng-click="columnAscOrder('title')" ng-class="isActiveAsc == 'title' ? 'active' : ''" >
+                                            <i  class="fa fa-caret-up"></i>
                                         </span>
-                                          <span ng-click="columnDescOrder('title')">
-                                              <i  class="fa fa-caret-down"></i>
+                                        <span ng-click="columnDescOrder('title')" ng-class="isActiveDesc == 'title' ? 'active' : ''">
+                                             <i  ng-class="class" class="fa fa-caret-down"></i>
                                         </span>
                                     </span>
-                                   </th>
+                                </th>
                                 <th>Start Time
+                                
                                     <span class="sortingIcons">
-                                        <span ng-click="columnAscOrder('plannedStartTime')">
-                                             <i  class="fa fa-caret-up"></i>
+                                        <span ng-click="columnAscOrder('plannedStartTime')" ng-class="isActiveAsc == 'plannedStartTime' ? 'active' : ''" >
+                                            <i  class="fa fa-caret-up"></i>
                                         </span>
-                                          <span ng-click="columnDescOrder('plannedStartTime')">
-                                              <i  class="fa fa-caret-down"></i>
+                                        <span ng-click="columnDescOrder('plannedStartTime')" ng-class="isActiveDesc == 'plannedStartTime' ? 'active' : ''">
+                                             <i  ng-class="class" class="fa fa-caret-down"></i>
                                         </span>
                                     </span>
-                                    </th>
+
+                                </th>
                                 <th>Employee
                                     <span class="sortingIcons">
-                                        <span ng-click="columnAscOrder('employee.name')">
-                                             <i  class="fa fa-caret-up"></i>
+                                        <span ng-click="columnAscOrder('employee.name')" ng-class="isActiveAsc == 'employee.name' ? 'active' : ''" >
+                                            <i  class="fa fa-caret-up"></i>
                                         </span>
-                                          <span ng-click="columnDescOrder('employee.name')">
-                                              <i  class="fa fa-caret-down"></i>
+                                        <span ng-click="columnDescOrder('employee.name')" ng-class="isActiveDesc == 'employee.name' ? 'active' : ''">
+                                             <i  ng-class="class" class="fa fa-caret-down"></i>
                                         </span>
                                     </span>
-                                    </th>
+                                </th>
                                 <th>Status
                                     <span class="sortingIcons">
-                                        <span ng-click="columnAscOrder('status')">
-                                             <i  class="fa fa-caret-up"></i>
+                                        <span ng-click="columnAscOrder('status')" ng-class="isActiveAsc == 'status' ? 'active' : ''" >
+                                            <i  class="fa fa-caret-up"></i>
                                         </span>
-                                          <span ng-click="columnDescOrder('status')">
-                                              <i  class="fa fa-caret-down"></i>
+                                        <span ng-click="columnDescOrder('status')" ng-class="isActiveDesc == 'status' ? 'active' : ''">
+                                             <i  ng-class="class" class="fa fa-caret-down"></i>
                                         </span>
                                     </span>
-                                    </th>
+                                </th>
                                 <th>Project
                                     <span class="sortingIcons">
-                                        <span ng-click="columnAscOrder('project.name')">
-                                             <i  class="fa fa-caret-up"></i>
+                                        <span ng-click="columnAscOrder('project.name')" ng-class="isActiveAsc == 'project.name' ? 'active' : ''" >
+                                            <i  class="fa fa-caret-up"></i>
                                         </span>
-                                          <span ng-click="columnDescOrder('project.name')">
-                                              <i  class="fa fa-caret-down"></i>
+                                        <span ng-click="columnDescOrder('project.name')" ng-class="isActiveDesc == 'project.name' ? 'active' : ''">
+                                             <i  ng-class="class" class="fa fa-caret-down"></i>
                                         </span>
                                     </span>
-                                    </th>
+                                </th>
                                 <th>Site
                                     <span class="sortingIcons">
-                                        <span ng-click="columnAscOrder('site.name')">
-                                             <i  class="fa fa-caret-up"></i>
+                                        <span ng-click="columnAscOrder('site.name')" ng-class="isActiveAsc == 'site.name' ? 'active' : ''" >
+                                            <i  class="fa fa-caret-up"></i>
                                         </span>
-                                          <span ng-click="columnDescOrder('site.name')">
-                                              <i  class="fa fa-caret-down"></i>
+                                        <span ng-click="columnDescOrder('site.name')" ng-class="isActiveDesc == 'site.name' ? 'active' : ''">
+                                             <i  ng-class="class" class="fa fa-caret-down"></i>
                                         </span>
                                     </span>
-                                    </th>
+                                </th>
                                 <th class="disabled-sorting text-right">Actions</th>
                             </tr>
                             </thead>

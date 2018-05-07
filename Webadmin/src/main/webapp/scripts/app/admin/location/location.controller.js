@@ -2,7 +2,8 @@
 
 angular.module('timeSheetApp')
     .controller('LocationController', function ($rootScope, $scope, $state, $timeout, 
-        LocationComponent,ProjectComponent, SiteComponent, $http, $stateParams, $location,PaginationComponent ) {
+        LocationComponent,ProjectComponent, SiteComponent, $http, $stateParams,
+         $location,PaginationComponent ) {
         $rootScope.loginView = false;
     	$scope.success = null;
         $scope.error = null;
@@ -18,6 +19,7 @@ angular.module('timeSheetApp')
         $scope.selectedFloor = null;
         $scope.selectedZone = null;
         $scope.selectedLocation = null;
+        $scope.pageSort = 10;
 
         $timeout(function (){angular.element('[ng-model="name"]').focus();});
 
@@ -138,20 +140,25 @@ angular.module('timeSheetApp')
   	        });
         };
 
-      
-        $scope.pageSort = 10;
+        $scope.isActiveAsc = 'id';
+        $scope.isActiveDesc = '';
 
-    
         $scope.columnAscOrder = function(field){
             $scope.selectedColumn = field;
+            $scope.isActiveAsc = field;
+            $scope.isActiveDesc = '';
             $scope.isAscOrder = true;
-            $scope.search();
+            //$scope.search();
+            $scope.loadLocations();
         }
 
         $scope.columnDescOrder = function(field){
             $scope.selectedColumn = field;
+            $scope.isActiveDesc = field;
+            $scope.isActiveAsc = '';
             $scope.isAscOrder = false;
-            $scope.search();
+            //$scope.search();
+            $scope.loadLocations();
         }
 
         $scope.searchFilter = function () {

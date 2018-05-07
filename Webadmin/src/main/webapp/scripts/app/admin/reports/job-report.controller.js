@@ -299,17 +299,26 @@ angular.module('timeSheetApp')
         };
 
 
-                    $scope.columnAscOrder = function(field){
-                        $scope.selectedColumn = field;
-                        $scope.isAscOrder = true;
-                        $scope.search();
-                    }
+        $scope.isActiveAsc = 'id';
+        $scope.isActiveDesc = '';
 
-                    $scope.columnDescOrder = function(field){
-                        $scope.selectedColumn = field;
-                        $scope.isAscOrder = false;
-                        $scope.search();
-                    }
+        $scope.columnAscOrder = function(field){
+            $scope.selectedColumn = field;
+            $scope.isActiveAsc = field;
+            $scope.isActiveDesc = '';
+            $scope.isAscOrder = true;
+            $scope.search();
+            //$scope.loadJobs();
+        }
+
+        $scope.columnDescOrder = function(field){
+            $scope.selectedColumn = field;
+            $scope.isActiveDesc = field;
+            $scope.isActiveAsc = '';
+            $scope.isAscOrder = false;
+            $scope.search();
+            //$scope.loadJobs();
+        }
 
          $scope.searchFilter = function () {
             $scope.setPage(1);

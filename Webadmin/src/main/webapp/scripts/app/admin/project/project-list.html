@@ -58,68 +58,68 @@
 
 
                 <div class="table-responsive tablecard">
-                        <table class="table table-striped">
+                        <table class="table table-striped table-hover">
 
                             <thead>
                             <tr>
                                 <th width="6%">ID
                                     <span class="sortingIcons">
-                                        <span ng-click="columnAscOrder('id')" ng-class="isActiveAsc ? 'active' : ''" >
+                                        <span ng-click="columnAscOrder('id')" ng-class="isActiveAsc == 'id' ? 'active' : ''" >
                                             <i  class="fa fa-caret-up"></i>
                                         </span>
-                                        <span ng-click="columnDescOrder('id')" ng-class="isActiveDesc ? 'active' : ''" >
+                                        <span ng-click="columnDescOrder('id')" ng-class="isActiveDesc == 'id' ? 'active' : ''" >
                                              <i  ng-class="class" class="fa fa-caret-down"></i>
                                         </span>
                                     </span>
                                     </th>
                                 <th>Name
                                     <span class="sortingIcons">
-                                        <span ng-click="columnAscOrder('name')">
+                                        <span ng-click="columnAscOrder('name')" ng-class="isActiveAsc == 'name' ? 'active' : ''" >
                                             <i  class="fa fa-caret-up"></i>
                                         </span>
-                                        <span ng-click="columnDescOrder('name')">
+                                        <span ng-click="columnDescOrder('name')" ng-class="isActiveDesc == 'name' ? 'active' : ''">
                                              <i  ng-class="class" class="fa fa-caret-down"></i>
                                         </span>
                                     </span>
                                 </th>
-                                <th>Address
+                                <th width="25%">Address
 
                                     <span class="sortingIcons">
-                                        <span ng-click="columnAscOrder('address')">
+                                        <span ng-click="columnAscOrder('address')" ng-class="isActiveAsc == 'address' ? 'active' : ''" >
                                              <i  class="fa fa-caret-up"></i>
                                         </span>
-                                        <span ng-click="columnDescOrder('address')">
+                                        <span ng-click="columnDescOrder('address')" ng-class="isActiveDesc == 'address' ? 'active' : ''">
                                             <i  class="fa fa-caret-down"></i>
                                         </span>
                                     </span>
                                    </th>
                                 <th width="15%">Contact Person
                                     <span class="sortingIcons">
-                                        <span ng-click="columnAscOrder('contactFirstName')">
+                                        <span ng-click="columnAscOrder('contactFirstName')" ng-class="isActiveAsc == 'contactFirstName' ? 'active' : ''">
                                             <i  class="fa fa-caret-up"></i>
                                         </span>
-                                         <span ng-click="columnDescOrder('contactFirstName')">
+                                         <span ng-click="columnDescOrder('contactFirstName')" ng-class="isActiveDesc == 'contactFirstName' ? 'active' : ''">
                                             <i  class="fa fa-caret-down"></i>
                                         </span>
                                     </span>
                                    </th>
                                 <th>Phone
                                     <span class="sortingIcons">
-                                        <span>
-                                             <i ng-click="columnAscOrder('phone')" class="fa fa-caret-up"></i>
+                                        <span ng-click="columnAscOrder('phone')" ng-class="isActiveAsc == 'phone' ? 'active' : ''">
+                                             <i  class="fa fa-caret-up"></i>
                                         </span>
-                                         <span>
-                                             <i ng-click="columnDescOrder('phone')" class="fa fa-caret-down"></i>
+                                         <span ng-click="columnDescOrder('phone')" ng-class="isActiveDesc == 'phone' ? 'active' : ''">
+                                             <i  class="fa fa-caret-down"></i>
                                          </span>
                                     </span>
                                     </th>
                                 <th>Email
 
                                     <span class="sortingIcons">
-                                        <span ng-click="columnAscOrder('email')">
+                                        <span ng-click="columnAscOrder('email')" ng-class="isActiveAsc == 'email' ? 'active' : ''">
                                              <i  class="fa fa-caret-up"></i>
                                         </span>
-                                          <span ng-click="columnDescOrder('email')">
+                                          <span ng-click="columnDescOrder('email')" ng-class="isActiveDesc == 'email' ? 'active' : ''">
                                               <i  class="fa fa-caret-down"></i>
                                         </span>
                                     </span>

@@ -14,7 +14,8 @@ angular.module('timeSheetApp')
         $scope.pages = { currPage : 1};
 
         $timeout(function (){angular.element('[ng-model="name"]').focus();});
-
+        
+        $scope.pageSort = 10;
      
 
         $scope.calendar = {
@@ -219,19 +220,25 @@ angular.module('timeSheetApp')
             that.calendar[cmp] = true;
         };
 
-
-        $scope.pageSort = 10;
+        $scope.isActiveAsc = 'id';
+        $scope.isActiveDesc = '';
 
         $scope.columnAscOrder = function(field){
             $scope.selectedColumn = field;
+            $scope.isActiveAsc = field;
+            $scope.isActiveDesc = '';
             $scope.isAscOrder = true;
-            $scope.search();
+            //$scope.search();
+            $scope.loadSites();
         }
 
         $scope.columnDescOrder = function(field){
             $scope.selectedColumn = field;
+            $scope.isActiveDesc = field;
+            $scope.isActiveAsc = '';
             $scope.isAscOrder = false;
-            $scope.search();
+            //$scope.search();
+            $scope.loadSites();
         }
 
         $scope.searchFilter = function () {

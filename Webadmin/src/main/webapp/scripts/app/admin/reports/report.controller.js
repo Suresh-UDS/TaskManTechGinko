@@ -408,18 +408,26 @@ angular.module('timeSheetApp')
         	$state.reload();
         };
 
+        $scope.isActiveAsc = 'empId';
+        $scope.isActiveDesc = '';
+
         $scope.columnAscOrder = function(field){
             $scope.selectedColumn = field;
+            $scope.isActiveAsc = field;
+            $scope.isActiveDesc = '';
             $scope.isAscOrder = true;
             $scope.search();
+            //$scope.loadEmployees();
         }
 
         $scope.columnDescOrder = function(field){
             $scope.selectedColumn = field;
+            $scope.isActiveDesc = field;
+            $scope.isActiveAsc = '';
             $scope.isAscOrder = false;
             $scope.search();
+            //$scope.loadEmployees();
         }
-
 
        $scope.searchFilter = function () {
             $scope.setPage(1);
