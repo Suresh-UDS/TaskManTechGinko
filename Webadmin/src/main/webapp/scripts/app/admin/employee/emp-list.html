@@ -123,23 +123,42 @@
 
 
                     <div class="table-responsive tablecard">
-                        <table id="" class="table table-striped">
+                        <table id="" class="table table-striped table-hover">
 
                             <thead>
                             <tr>
-                                <th>ID <a href="#">
+                                <th>ID 
+                            
+                                    <span class="sortingIcons">
+                                        <span ng-click="columnAscOrder('empId')" ng-class="isActiveAsc == 'empId' ? 'active' : ''" >
+                                            <i  class="fa fa-caret-up"></i>
+                                        </span>
+                                        <span ng-click="columnDescOrder('empId')" ng-class="isActiveDesc == 'empId' ? 'active' : ''" >
+                                             <i  ng-class="class" class="fa fa-caret-down"></i>
+                                        </span>
+                                    </span>
+                                </th>
+                                <th>Name
+                                    <span class="sortingIcons">
+                                        <span ng-click="columnAscOrder('name')" ng-class="isActiveAsc == 'name' ? 'active' : ''" >
+                                            <i  class="fa fa-caret-up"></i>
+                                        </span>
+                                        <span ng-click="columnDescOrder('name')" ng-class="isActiveDesc == 'name' ? 'active' : ''" >
+                                             <i  ng-class="class" class="fa fa-caret-down"></i>
+                                        </span>
+                                    </span>
+                                </th>
+                                <th>Client
+                                    <span class="sortingIcons">
+                                        <span ng-click="columnAscOrder('project.name')" ng-class="isActiveAsc == 'project.name' ? 'active' : ''" >
+                                            <i  class="fa fa-caret-up"></i>
+                                        </span>
+                                        <span ng-click="columnDescOrder('project.name')" ng-class="isActiveDesc == 'project.name' ? 'active' : ''" >
+                                             <i  ng-class="class" class="fa fa-caret-down"></i>
+                                        </span>
+                                    </span>
 
-                                <span ng-click="columnAscOrder('empId')"  class=""><i class="fa fa-caret-up"></i></span>
-          						<span ng-click="columnDescOrder('empId')" class=""><i class="fa fa-caret-down"></i></span>
-
-    							 </a></th>
-                                <th>Name<a href="#">
-
-                                <span ng-click="columnAscOrder('name')" class=""><i class="fas fa-caret-up"></i></span>
-          						<span ng-click="columnDescOrder('name')" class=""><i class="fas fa-caret-down"></i></span>
-
-    							 </a></th>
-                                <th>Client</th>
+                                </th>
                                 <th>Enrolled Face Id</th>
                                 <th has-permission="Employee:Edit">Authorize Face Id</th>
                                 <th>Status</th>
