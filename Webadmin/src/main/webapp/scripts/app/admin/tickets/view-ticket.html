@@ -147,6 +147,8 @@
 									ui-sref="tickets" id="cancel-button">
 									<i class=""></i> Back
 								</button>
+								<a ng-if="(tickets.status != 'Closed')" ng-class="{active: $state.includes('admin')}"   ng-click="closeTicket(tickets.id)"   onClick="$('#deleteModalNew').modal()" data-target="#myModal"   class="btn btn-simple btn-info">close ticket</a>
+                                 <a ng-if="tickets.status == 'Closed'"class="btn btn-simple btn-info">Reopen ticket</a>								
 							</div>
 						</div>
 					</form>

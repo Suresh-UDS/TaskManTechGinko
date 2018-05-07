@@ -16,6 +16,7 @@ var QuotationModel = function() {
         isDrafted:Boolean,
         isSubmitted:Boolean,
         isApproved:Boolean,
+        isRejected:Boolean,
         isArchived:Boolean,
         siteId:Number,
         clientId:Number,
@@ -27,10 +28,13 @@ var QuotationModel = function() {
         sentToEmailId:String,
         createdByUserId:String,
         createdByUserName:String,
+        createdByEmail:String,
         sentByUserId:String,
         sentByUserName:String,
         approvedByUserId:String,
         approvedByUserName:String,
+        rejectedByUserId:String,
+        rejectedByUserName:String,
         authorisedByUserId:String,
         authorisedByUserName:String,
         sentToUserId:String,
@@ -39,7 +43,9 @@ var QuotationModel = function() {
         createdDate: Date,
         submittedDate: Date,
         approvedDate: Date,
-        archivedDate: Date
+        rejectedDate: Date,
+        archivedDate: Date,
+        status:String
     });
 
     QuotationSchema.plugin(captainHook);

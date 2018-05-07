@@ -1,7 +1,8 @@
 'use strict';
 
 angular.module('timeSheetApp')
-    .controller('FeedbackQueController', function ($rootScope, $scope, $state, $timeout, FeedbackComponent,ProjectComponent,SiteComponent, $http, $stateParams, $location) {
+    .controller('FeedbackQueController', function ($rootScope, $scope, $state, $timeout,
+     FeedbackComponent,ProjectComponent,SiteComponent, $http, $stateParams, $location,PaginationComponent) {
         $rootScope.loginView = false;
         $scope.success = null;
         $scope.error = null;
@@ -16,7 +17,6 @@ angular.module('timeSheetApp')
         $scope.pages = { currPage : 1};
 
         $scope.feedbackMasterList;
-
         $scope.feedbackItem=null;
         $scope.newFeedbackItem=null;
         $scope.feedbackItems = [];
@@ -24,8 +24,9 @@ angular.module('timeSheetApp')
         $rootScope.searchCriteriaFeedback = null;
 
         $scope.selectedProject;
-
         $scope.selectedSite;
+
+        $scope.pageSort = 10;
 
 
         $scope.init = function(){
@@ -211,23 +212,8 @@ angular.module('timeSheetApp')
 	        });
           }
 
-          //-------
-        $scope.pageSizes = [{
-            value: 10
-        }, {
-            value: 15
-        }, {
-            value: 20
-        }];
-
-        $scope.sort = $scope.pageSizes[0];
-        $scope.pageSort = $scope.pageSizes[0].value;
-
-        $scope.hasChanged = function(){
-            alert($scope.sort.value)
-            $scope.pageSort = $scope.sort.value;
-            $scope.search();
-        }
+   
+     
 
         $scope.columnAscOrder = function(field){
             $scope.selectedColumn = field;
@@ -291,131 +277,31 @@ angular.module('timeSheetApp')
             FeedbackComponent.searchFeedbackMaster($scope.searchCriteria).then(function (data) {
                 $scope.feedbackMasterList = data.transactions;
                 $scope.feedbackMasterListLoader = true;
-                console.log($scope.feedbackMasterList);
+                 /*
+                    ** Call pagination  main function **
+                */
+                 $scope.pager = {};
+                 $scope.pager = PaginationComponent.GetPager(data.totalCount, $scope.pages.currPage);
+                 $scope.totalCountPages = data.totalCount;
+
+                console.log("Pagination",$scope.pager);
+                console.log('feedback Question list -' + JSON.stringify($scope.feedbackMasterList));
                 $scope.pages.currPage = data.currPage;
                 $scope.pages.totalPages = data.totalPages;
                 $scope.loading = false;
-                if($scope.feedbackMasterList == null){
-                    $scope.pages.startInd = 0;
-                }else{
-                    $scope.pages.startInd = (data.currPage - 1) * 10 + 1;
-                }
 
-                $scope.pages.endInd = data.totalCount > 10  ? (data.currPage) * 10 : data.totalCount ;
-                $scope.pages.totalCnt = data.totalCount;
-                $scope.hide = true;
+                if($scope.feedbackMasterList && $scope.feedbackMasterList.length > 0 ){
+                    $scope.showCurrPage = data.currPage;
+                    $scope.pageEntries = $scope.feedbackMasterList.length;
+                    $scope.totalCountPages = data.totalCount;
+                    $scope.pageSort = 10;
+                }
             });
-            $rootScope.searchCriteriaFeedback = $scope.searchCriteria;
-            if($scope.pages.currPage == 1) {
-                $scope.firstStyle();
-            }
+            
         };
 
 
-        //----
-        $scope.clickNextOrPrev = function(number){
-            $scope.pages.currPage = number;
-            $scope.search();
-        }
-
-
-
-        $scope.first = function() {
-            if($scope.pages.currPage > 1) {
-                $scope.pages.currPage = 1;
-                $scope.firstStyle();
-                $scope.search();
-            }
-        };
-
-        $scope.firstStyle = function() {
-            var first = document.getElementById('#first');
-            var ele = angular.element(first);
-            ele.addClass('disabledLink');
-            var previous = document.getElementById('#previous');
-            ele = angular.element(previous);
-            ele.addClass('disabledLink');
-            if($scope.pages.totalPages > 1) {
-                var nextSitePage = document.getElementById('#next');
-                var ele = angular.element(next);
-                ele.removeClass('disabledLink');
-                var lastSitePage = document.getElementById('#lastSitePage');
-                ele = angular.element(lastSitePage);
-                ele.removeClass('disabledLink');
-            }
-
-        }
-
-        $scope.previous = function() {
-            console.log("Calling previous")
-
-            if($scope.pages.currPage > 1) {
-                $scope.pages.currPage = $scope.pages.currPage - 1;
-                if($scope.pages.currPage == 1) {
-                    var first = document.getElementById('#first');
-                    var ele = angular.element(first);
-                    ele.addClass('disabled');
-                    var previous = document.getElementById('#previous');
-                    ele = angular.element(previous);
-                    ele.addClass('disabled');
-                }
-                var next = document.getElementById('#next');
-                var ele = angular.element(next);
-                ele.removeClass('disabled');
-                var lastSitePage = document.getElementById('#last');
-                ele = angular.element(last);
-                ele.removeClass('disabled');
-                $scope.search();
-            }
-
-        };
-
-        $scope.next = function() {
-            console.log("Calling next")
-
-            if($scope.pages.currPage < $scope.pages.totalPages) {
-                $scope.pages.currPage = $scope.pages.currPage + 1;
-                if($scope.pages.currPage == $scope.pages.totalPages) {
-                    var next = document.getElementById('#next');
-                    var ele = angular.element(next);
-                    ele.addClass('disabled');
-                    var last = document.getElementById('#last');
-                    ele = angular.element(last);
-                    ele.addClass('disabled');
-                }
-                var first = document.getElementById('#first')
-                var ele = angular.element(first);
-                ele.removeClass('disabled');
-                var previous = document.getElementById('#previous')
-                ele = angular.element(previous);
-                ele.removeClass('disabled');
-                $scope.search();
-            }
-
-        };
-
-        $scope.last = function() {
-            console.log("Calling last")
-            if($scope.pages.currPage < $scope.pages.totalPages) {
-                $scope.pages.currPage = $scope.pages.totalPages;
-                if($scope.pages.currPage == $scope.pages.totalPages) {
-                    var next = document.getElementById('#next');
-                    var ele = angular.element(next);
-                    ele.addClass('disabled');
-                    var last = document.getElementById('#last');
-                    ele = angular.element(last);
-                    ele.addClass('disabled');
-                }
-                var first = document.getElementById('#first');
-                var ele = angular.element(first);
-                ele.removeClass('disabled');
-                var previous = document.getElementById('#previous');
-                ele = angular.element(previous);
-                ele.removeClass('disabled');
-                $scope.search();
-            }
-
-        };
+       
 
         $scope.clearFilter = function() {
             $scope.selectedSite = null;
@@ -470,6 +356,23 @@ angular.module('timeSheetApp')
             $('.pageCenter').hide();
 
         }
+
+   /*
+    
+    ** Pagination init function **
+    @Param:integer
+
+    */
+
+        $scope.setPage = function (page) {
+
+            if (page < 1 || page > $scope.pager.totalPages) {
+                return;
+            }
+            //alert(page);
+            $scope.pages.currPage = page;
+            $scope.search();
+        };
 
 
     });

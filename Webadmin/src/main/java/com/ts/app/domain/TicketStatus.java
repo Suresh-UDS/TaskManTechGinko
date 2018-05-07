@@ -4,6 +4,7 @@ public enum TicketStatus {
 	
 	OPEN("Open"),
 	ASSIGNED("Assigned"),
+	INPROGRESS("In Progress"),
 	CLOSED("Closed");
 	
 	private String val;

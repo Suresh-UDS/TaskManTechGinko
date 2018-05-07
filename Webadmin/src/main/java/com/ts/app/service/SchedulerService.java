@@ -604,7 +604,26 @@ public class SchedulerService extends AbstractService {
 							content.append("Absent - " + absentCount + LINE_SEPARATOR);
 	 					}
 						List<EmployeeAttendanceReport> empAttnList = attendanceRepository.findBySiteId(site.getId(), DateUtil.convertToSQLDate(cal.getTime()), DateUtil.convertToSQLDate(dayEndcal.getTime()));
-						
+						List<Long> empPresentList = new ArrayList<Long>();
+						if(CollectionUtils.isNotEmpty(empAttnList)) {
+							for(EmployeeAttendanceReport empAttn : empAttnList) {
+								empPresentList.add(empAttn.getEmpId());
+							}
+							if(CollectionUtils.isNotEmpty(empPresentList)) {
+								List<Employee> empNotMarkedAttn = employeeRepository.findNonMatchingBySiteId(site.getId(), empPresentList);
+								if(CollectionUtils.isNotEmpty(empNotMarkedAttn)) {
+									for(Employee emp : empNotMarkedAttn) {
+										EmployeeAttendanceReport empAttnRep = new EmployeeAttendanceReport();
+										empAttnRep.setEmpId(emp.getId());
+										empAttnRep.setEmployeeId(emp.getEmpId());
+										empAttnRep.setName(emp.getName());
+										empAttnRep.setLastName(emp.getLastName());
+										empAttnRep.setStatus(EmployeeAttendanceReport.ABSENT_STATUS);
+										empAttnList.add(empAttnRep);
+									}
+								}
+							}
+						}
 						log.debug("send detailed report");
 						Setting attendanceReportEmails = settingRepository.findSettingByKeyAndSiteId(SettingsService.EMAIL_NOTIFICATION_ATTENDANCE_EMAILS, site.getId());
 					    if(attendanceReportEmails == null) {

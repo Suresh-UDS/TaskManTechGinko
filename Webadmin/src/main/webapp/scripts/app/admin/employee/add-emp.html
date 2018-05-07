@@ -78,7 +78,7 @@
                                                 <div class="form-group selectcon" style="padding-top:25px;">
                                                      <div class="row"> 
                                                         <div class="col-md-10 pad-r-0px" >
-                                                            <span class="form-control-feedback d-big-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
+                                                            <span class="form-control-feedback d-sm-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
                                                             <select class="form-control" ng-model="employee.designation" ng-options="designation.designation as designation.designation for designation in designations">
                                                                 <option value="">Select Designation..</option>
                                                             </select>
@@ -292,7 +292,7 @@
                                                                <!--uib-typeahead="project as project.name for project in projects | filter:$viewValue | limitTo:5"-->
                                                                <!--ng-blur="loadSites()"-->
                                                                <!--ng-minlength=2 ng-maxlength=50 ng-pattern="/^[A-Za-z0-9\s&-/]*$/"  autocomplete="off" />-->
-                                                        <span class="form-control-feedback d-big-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
+                                                        <span class="form-control-feedback d-sm-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
                                                         <select class=" form-control " ng-model="selectedProject" ng-change="loadSites()" ng-options="project as project.name for project in projects" >
                                                             <option value="">Select Client...</option>
                                                         </select>
@@ -326,7 +326,7 @@
                                                         <!--<input ng-focus="loadSites()" type="text" class="form-control"  ng-model="selectedSite" name="siteName" ng-value="selectedSite.name"-->
                                                                <!--uib-typeahead="site as site.name for site in sites | filter:$viewValue | limitTo:5"-->
                                                                <!--ng-minlength=2 ng-maxlength=50 ng-pattern="/^[A-Za-z0-9\s&-/]*$/"  autocomplete="off" />-->
-                                                        <span class="form-control-feedback d-big-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
+                                                        <span class="form-control-feedback d-sm-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
                                                         <select class="form-control " ng-model="selectedSite" ng-change="loadBlocks()" ng-options="site as site.name for site in sites">
                                                             <option value="">Select Site...</option>
                                                         </select>
@@ -411,7 +411,7 @@
                                                         <!--<input ng-focus="loadAllManagers()" type="text" class="form-control" ng-model="selectedManager" name="manager"-->
                                                                <!--uib-typeahead="employee as employee.name for employee in allManagers | filter:$viewValue | limitTo:10"-->
                                                                <!--ng-minlength=1 ng-maxlength=50 ng-pattern="/^[A-Za-z0-9\s]*$/"  autocomplete="off" />-->
-                                                        <span class="form-control-feedback d-big-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
+                                                        <span class="form-control-feedback d-sm-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
                                                         <select class=" form-control " ng-model="selectedManager"  ng-options="manager as manager.name for manager in allManagers" >
                                                             <option value="">Select Manager...</option>
                                                         </select>
@@ -501,7 +501,7 @@
                                                 <div class="form-group ">
                                                     <label class="control-label">Block </label>
                                                     <div class="dropdown">
-                                                        <span class="form-control-feedback d-big-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
+                                                        <span class="form-control-feedback d-sm-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
                                                        <select class="form-control " ng-model="selectedBlock" ng-change="loadFloors()"  ng-options="block as block for  block in  blocks">
                                                         	<option value="">Select Block...</option>
                                                     	  </select>
@@ -521,7 +521,7 @@
                                                 <div class="form-group ">
                                                     <label class="control-label">Floor </label>
                                                     <div class="dropdown">
-                                                        <span class="form-control-feedback d-big-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
+                                                        <span class="form-control-feedback d-sm-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
 													<select class="form-control " ng-model="selectedFloor" ng-change="loadZones()"  ng-options="floor as floor for floor in floors">
                                                         <option value="">Select Floor...</option>
                                                     	</select>
@@ -541,7 +541,7 @@
                                                 <div class="form-group ">
                                                     <label class="control-label">Zone </label>
                                                     <div class="dropdown">
-                                                        <span class="form-control-feedback d-big-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
+                                                        <span class="form-control-feedback d-sm-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
 													<select class="form-control " ng-model="selectedZone"  ng-options="zone as zone for zone in zones">
                                                         <option value="">Select Zone...</option>
                                                     </select>

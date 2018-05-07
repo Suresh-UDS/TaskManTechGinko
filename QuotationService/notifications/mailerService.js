@@ -70,6 +70,16 @@ module.exports = {
                 createdByUserName:data.createdByUserName})
     },
 
+    rejectQuotation: function(emailId, data) {
+        sendMail( config.mailer.from,
+            emailId,
+            'Quotation Rejected',
+            'rejected_quotation_template',
+            {clientName: data.sentToUserName,
+                siteName: data.siteName,
+                createdByUserName:data.createdByUserName})
+    },
+
     getPdfDetail:function (data,callback) {
         console.log("Get pdf details");
         console.log(data);

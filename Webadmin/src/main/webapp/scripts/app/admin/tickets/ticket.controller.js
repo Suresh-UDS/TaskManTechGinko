@@ -18,9 +18,11 @@ angular.module('timeSheetApp')
         $scope.selectedEmployee = null;
         $scope.pages = { currPage : 1};
         $scope.cTicket ={};
-        $scope.selectedDateFrom = $filter('date')(new Date(), 'dd/MM/yyyy'); 
+        $scope.selectedDateFrom = $filter('date')('01/01/2018', 'dd/MM/yyyy'); 
         $scope.selectedDateTo = $filter('date')(new Date(), 'dd/MM/yyyy');
-        $scope.selectedDateFromSer= new Date();
+        var d = new Date();
+        d.setFullYear(2018, 0, 1);
+        $scope.selectedDateFromSer= d;
         $scope.selectedDateToSer= new Date();
 
 
@@ -44,13 +46,6 @@ angular.module('timeSheetApp')
         }
 
 
-        $scope.selectedDateFrom;
-        $scope.selectedDateTo;
-
-        $scope.dateFilterFrom = new Date();
-        $scope.dateFilterTo = new Date();
-
-
         $scope.initCalender = function(){
 
             demo.initFormExtendedDatetimepickers();
@@ -59,36 +54,6 @@ angular.module('timeSheetApp')
         $scope.showNotifications= function(position,alignment,color,msg){
                     demo.showNotification(position,alignment,color,msg);
                 }
-
-
-      /*   $('input#dateFilterFrom').on('dp.change', function(e){
-            console.log(e.date);
-
-            console.log(e.date._d);
-            if(e.date._d > $scope.selectedDateTo) {
-                    $scope.showNotifications('top','center','danger','From date cannot be greater than To date');
-                    $scope.dateFilterFrom = $scope.selectedDateFrom;
-                    return false;
-            }else {
-                $scope.selectedDateFrom = e.date._d;
-               // $scope.refreshReport();
-            }
-        });
-
-        $('input#dateFilterTo').on('dp.change', function(e){
-            console.log(e.date);
-
-            console.log(e.date._d);
-            if($scope.selectedDateFrom > e.date._d) {
-                    $scope.showNotifications('top','center','danger','To date cannot be lesser than From date');
-                    $scope.dateFilterTo = $scope.selectedDateTo;
-                    return false;
-            }else {
-                $scope.selectedDateTo = e.date._d;
-                //$scope.refreshReport();
-            }
-
-        });*/
 
         $('input#dateFilterFrom').on('dp.change', function(e){
             console.log(e.date);
@@ -504,10 +469,10 @@ angular.module('timeSheetApp')
         };
 
         $scope.clearFilter = function() {
-            $scope.selectedDateFrom = $filter('date')(new Date(), 'dd/MM/yyyy'); 
+            $scope.selectedDateFrom = $filter('date')('01/01/2018', 'dd/MM/yyyy'); 
             $scope.selectedDateTo = $filter('date')(new Date(), 'dd/MM/yyyy');
-            $scope.selectedDateFromSer = new Date(); 
-            $scope.selectedDateToSer = new Date();
+            $scope.selectedDateFromSer = d;
+            $scope.selectedDateToSer =  new Date();
             $scope.selectedTicket = null;
             $scope.selectedProject = null;
             $scope.selectedEmployee = null;

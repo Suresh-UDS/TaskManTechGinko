@@ -14,10 +14,15 @@ public class EmployeeAttendanceReport implements Serializable {
      *
      */
     private static final long serialVersionUID = 1L;
+    
+    public static final String PRESENT_STATUS = "PRESENT";
+    public static final String ABSENT_STATUS = "ABSENT";
 
 
     //private final byte[] Image;
 
+    private long empId;
+    
     private String employeeId;
 
     private String name;
@@ -35,11 +40,18 @@ public class EmployeeAttendanceReport implements Serializable {
     private String shiftStartTime;
     
     private String shiftEndTime;
+    
+    private String status = "PRESENT";
+    
+    public EmployeeAttendanceReport() {
+    	
+    }
 
 
-    public EmployeeAttendanceReport(/*byte[] image,*/ String employeeId, String name, String lastName, String siteName, 
+    public EmployeeAttendanceReport(long empId, String employeeId, String name, String lastName, String siteName, 
     								String projectName, Date checkInTime, Date checkOutTime, String shiftStartTime, String shiftEndTime) {
        // this.Image = image;
+    		this.empId = empId;
         this.employeeId = employeeId;
         this.name = name;
         this.lastName = lastName;
@@ -52,11 +64,19 @@ public class EmployeeAttendanceReport implements Serializable {
 
     }
 
-
-
     // public byte[] getImage() { return Image; }
 
-    public String getEmployeeIds() {
+    public long getEmpId() {
+		return empId;
+	}
+
+	public void setEmpId(long empId) {
+		this.empId = empId;
+	}
+
+
+
+	public String getEmployeeIds() {
         return employeeId;
     }
 
@@ -142,6 +162,16 @@ public class EmployeeAttendanceReport implements Serializable {
 
 	public void setShiftEndTime(String shiftEndTime) {
 		this.shiftEndTime = shiftEndTime;
+	}
+
+
+	public String getStatus() {
+		return status;
+	}
+
+
+	public void setStatus(String status) {
+		this.status = status;
 	}
 
     

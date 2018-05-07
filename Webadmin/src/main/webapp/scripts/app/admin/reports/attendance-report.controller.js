@@ -10,6 +10,12 @@ angular.module('timeSheetApp')
         $scope.errorMessage = null;
         $scope.doNotMatch = null;
         $scope.errorEmployeeExists = null;
+        $scope.selectedDateFrom = $filter('date')('01/01/2018', 'dd/MM/yyyy'); 
+        $scope.selectedDateTo = $filter('date')(new Date(), 'dd/MM/yyyy');
+        var d = new Date();
+        d.setFullYear(2018, 0, 1);
+        $scope.selectedDateFromSer= d;
+        $scope.selectedDateToSer =  new Date();
 
         $scope.employeeDesignations = ["MD","Operations Manger","Supervisor"]
 
@@ -34,12 +40,6 @@ angular.module('timeSheetApp')
         $scope.now = new Date();
 
         $scope.searchCriteria = {};
-        $scope.selectedDateFrom = $filter('date')('01/01/2018', 'dd/MM/yyyy'); 
-        $scope.selectedDateTo = $filter('date')(new Date(), 'dd/MM/yyyy');
-        var d = new Date();
-        d.setFullYear(2018, 0, 1);
-        $scope.selectedDateFromSer= d;
-        $scope.selectedDateToSer= new Date();
 
          $scope.pageSort = 10;  
 
@@ -207,10 +207,10 @@ angular.module('timeSheetApp')
             $scope.searchCriteria.findAll = false;
 
                if($scope.selectedDateFrom) {
-                    $scope.searchCriteria.checkInDateTimeFrom = $scope.selectedDateFromSer;
+                    $scope.searchCriteria.fromDate = $scope.selectedDateFromSer;
                 }
                 if($scope.selectedDateTo) {
-                    $scope.searchCriteria.checkInDateTimeTo = $scope.selectedDateToSer;
+                    $scope.searchCriteria.toDate = $scope.selectedDateToSer;
                 }
             
 

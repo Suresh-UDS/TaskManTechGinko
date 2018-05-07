@@ -2,7 +2,8 @@
 
 angular.module('timeSheetApp')
     .controller('LocationController', function ($rootScope, $scope, $state, $timeout, 
-        LocationComponent,ProjectComponent, SiteComponent, $http, $stateParams, $location,PaginationComponent ) {
+        LocationComponent,ProjectComponent, SiteComponent, $http, $stateParams,
+         $location,PaginationComponent ) {
         $rootScope.loginView = false;
     	$scope.success = null;
         $scope.error = null;
@@ -18,6 +19,7 @@ angular.module('timeSheetApp')
         $scope.selectedFloor = null;
         $scope.selectedZone = null;
         $scope.selectedLocation = null;
+        $scope.pageSort = 10;
 
         $timeout(function (){angular.element('[ng-model="name"]').focus();});
 
@@ -137,10 +139,6 @@ angular.module('timeSheetApp')
   	            }
   	        });
         };
-
-      
-        $scope.pageSort = 10;
-
     
         $scope.columnAscOrder = function(field){
             $scope.selectedColumn = field;
