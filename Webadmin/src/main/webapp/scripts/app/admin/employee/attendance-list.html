@@ -208,7 +208,7 @@
                                 <td>{{attendance.siteName}}</td>
                                 <td>{{attendance.checkInTime | date:'MM/dd/yyyy @ h:mma'}}</td>
                                 <td ng-if="attendance.checkInImage">
-                                    <a id="images" href="#" onClick="$('#myModal').modal()" data-target="#myModal" data-dismiss="#myModal" ng-click="loadImagesNew(attendance.checkInImage)">
+                                    <a id="images" href="#" onClick="$('#myModal').modal()" data-target="#myModal" data-dismiss="#myModal" ng-click="loadImagesNew(attendance.checkInImage,attendance.employeeId)">
                                         <img src={{attendance.checkInImage}} width="30px" height="30px"/>
                                     </a>
                                 </td>
@@ -219,7 +219,7 @@
 
                                 <td>{{attendance.checkOutTime | date:'MM/dd/yyyy @ h:mma'}}</td>
 
-                                <td ng-if="attendance.checkOutImage"><a id="images" href="#" onClick="$('#myModal').modal()" data-target="#myModal" data-dismiss="#myModal" ng-click="loadImagesNew(attendance.checkOutImage)">
+                                <td ng-if="attendance.checkOutImage"><a id="images" href="#" onClick="$('#myModal').modal()" data-target="#myModal" data-dismiss="#myModal" ng-click="loadImagesNew(attendance.checkOutImage)" >
                                     <img src={{attendance.checkOutImage}} width="30px" height="30px"/>
                                 </a>
                                 </td>
