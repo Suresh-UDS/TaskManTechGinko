@@ -1,4 +1,4 @@
-<div ng-init="loadPageTop();">
+<div ng-init="loadPageTop()">
 
     <!--<div class="row " >-->
         <!--<div class="col-md-8" >-->
@@ -218,24 +218,24 @@
 
     <!-- Pagination directive start -->
 
-    <pagination-new></pagination-new> 
+    <pagination-new></pagination-new>
 
     <!-- Pagination directive end -->
 
 
 
 <!-- Modal -->
-<div class="modal right fade" id="ViewModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel2">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
+<div class="modal right fade" id="ViewModal" tabindex="-1" role="dialog" aria-labelledby="ViewModal12">
+    <div class="modal-dialog" role="document" ng-init="initLoad()">
+        <div class="modal-content" ng-init="loadEmployee()">
 
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="myModalLabel2">View Employee Details</h4>
+                <h4 class="modal-title" id="ViewModal12">View Employee Details</h4>
             </div>
 
             <div class="modal-body">
-                <div class="row" ng-init="loadEmployee()">
+                <div class="row">
                     <div class="col-md-12">
 
                         <div class="col-md-12 margn-top30">

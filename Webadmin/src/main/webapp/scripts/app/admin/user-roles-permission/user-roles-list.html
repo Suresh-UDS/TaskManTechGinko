@@ -146,7 +146,7 @@
                                 <td>{{userRole.createdDate | date:'MM/dd/yyyy @ h:mma'}}</td>
 
                                 <td class="text-right">
-                                    <a   has-authority="ROLE_ADMIN" ui-sref="view-user-role({ id: userRole.id })"   class="btn btn-simple btn-info btn-icon like"><i class="material-icons">remove_red_eye</i></a>
+                                    <a   has-authority="ROLE_ADMIN" data-toggle="modal" data-target="#ViewModal"  class="btn btn-simple btn-info btn-icon like"><i class="material-icons">remove_red_eye</i></a>
                                     <a   has-authority="ROLE_ADMIN" ui-sref="edit-user-role({ id: userRole.id })"  class="btn btn-simple btn-info btn-icon like"><i class="material-icons">edit</i></a>
                                     <!-- <a ng-class="{active: $state.includes('admin')}" has-authority="ROLE_ADMIN"  ng-click="deleteConfirm(site)"  onClick="$('#deleteModal').modal()" data-target="#myModal"  class="btn btn-simple btn-danger"><i class="material-icons">close</i></a> -->
                                 </td>
@@ -258,3 +258,97 @@
 
 	</div>
 </div>
+
+
+<!-- Modal -->
+<div class="modal right fade" id="ViewModal" tabindex="-1" role="dialog" aria-labelledby="ViewModal12">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="ViewModal12">View User Role Details</h4>
+            </div>
+
+            <div class="modal-body" ng-init="loadUserRole()">
+                <div class="row">
+                    <div class="col-md-12">
+
+                        <div class="col-md-12 margn-top30">
+
+                            <div class="panel panel-default">
+                                <div class="panel-heading">User Role Details</div>
+                                <div class="panel-body">
+
+                                    <div class="table-responsive">
+                                        <table class="table">
+
+                                            <tbody>
+                                            <tr>
+
+
+                                                <td>Id</td>
+                                                <td>{{userRole.id}}</td>
+
+                                            </tr>
+                                            <tr>
+
+                                                <td>Name</td>
+                                                <td>{{userRole.name}}</td>
+
+
+                                            </tr>
+                                            <tr>
+                                                <td>Description </td>
+
+                                                <td>{{userRole.description}}</td>
+
+                                            </tr>
+                                            <tr>
+
+                                                <td>Level </td>
+                                                <td>{{userRole.roleLevel}}</td>
+
+                                            </tr>
+                                            <tr>
+
+                                                <td>Active </td>
+                                                <td>{{userRole.active}}</td>
+
+                                            </tr>
+                                            <tr>
+
+                                                <td>Created Date </td>
+                                                <td>{{userRole.createdDate}}</td>
+
+                                            </tr>
+
+
+                                            </tbody>
+                                        </table>
+                                    </div>
+
+                                    <div class="txt-align-rgt">
+
+                                        <button  data-dismiss="modal"  class="btn btn-default close-button-right b10" type="button"
+                                                 id="close-button-right">
+                                            <!-- <i class="fa fa-warning"></i> --> Back
+                                        </button>
+
+                                    </div>
+
+                                </div>
+                            </div>
+
+                        </div>
+
+
+
+                    </div>
+
+                </div>
+            </div>
+
+        </div><!-- modal-content -->
+    </div><!-- modal-dialog -->
+</div><!-- modal -->
