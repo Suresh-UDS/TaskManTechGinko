@@ -1,4 +1,4 @@
-<div ng-init="init();search();" >
+<div ng-init="init();" >
 
     <div class="row">
         <div class="col-md-12">
@@ -8,93 +8,98 @@
                 <!--</div>-->
                 <div class="card-content">
                     <!--<h4 class="card-title">DataTables.net</h4>-->
-                    <div class="SearchTable">
 
-                        <form name="searchForm"  ng-submit="search()" novalidate >
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="card formcard">
+                                <div class="card-content">
+                                    <form name="searchForm"  ng-submit="searchFilter()" novalidate >
+                                        <div class="row" >
+                                            <div class="col-xs-12 col-md-2">
+                                                <div class="dropdown" >
 
-							<div class="row" >
+                                                    <div class="form-group">
+                                                        <label class="label-control">From date</label>
+                                                        <span class="form-control-feedback calender-big-icon"><i class="material-icons">date_range</i></span>
+                                                        <input type="text" class="form-control datepicker"  id="dateFilterFrom"  ng-model="selectedDateFrom" />
 
-			                    <div class="col-md-2">
+                                                    </div>
+                                               </div>
 
-			                        <!--<div class="form-group label-floating">-->
-			                        <!--<label class="control-label">Date</label>-->
-			                        <!--<input class="datepicker form-control" type="text" value="03/01/2018"/>-->
+                                           </div>
+                                            <div class="col-xs-12 col-md-2">
+                                                <div class="dropdown" >
 
-			                        <!--</div>-->
+                                                    <div class="form-group">
+                                                        <label class="label-control">To date</label>
+                                                        <span class="form-control-feedback calender-big-icon"><i class="material-icons">date_range</i></span>
+                                                        <input type="text" class="form-control datepicker"  id="dateFilterTo"   ng-model="selectedDateTo"/>
 
-			                        <div class="form-group">
-			                            <label class="label-control">From date</label>
-			                            <span class="form-control-feedback calender-icon"><i class="material-icons">date_range</i></span>
-			                            <input type="text" class="form-control datepicker"  id="dateFilterFrom"  placeholder="{{dateFilterFrom | date:'dd-MMM-yyyy'}}" />
+                                                    </div>
 
-			                        </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-xs-12 col-md-2">
+                                                <div class="dropdown">
+                                                    <div class="form-group">
+                                                        <label class="label-control">Select Client</label> 
+                                                        <span class="form-control-feedback d-big-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
+                                                        <select class="form-control " ng-model="selectedProject"  ng-change="loadSites()"  ng-options="project as project.name for project in projects">
+                                                            <option value="">Select Client...</option>
+                                                        </select>
+                                                    </div>
+                                                 </div>
+                                            </div>
+                                           <div class="col-xs-12 col-md-2">
+                                                <div class="dropdown" >
+                                                    <div class="form-group">
+                                                        <label class="label-control">Select Site</label>
+                                                        <span class="form-control-feedback d-big-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
+                                                        <select class="form-control " ng-model="selectedSite" ng-options="site as site.name for site in sites track by site.id">
+                                                            <option value="">Select Site...</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </div>
 
-			                    </div>
-			                    <div class="col-md-2">
+                                            <div class="col-xs-12 col-md-2">
+                                                <div class="dropdown" >
+                                                   <div class="form-group">
+                                                      <label class="label-control">Status</label>
+                                                        <span class="form-control-feedback d-big-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
+                                                        <select class="form-control " ng-model="selectedStatus" ng-options="status as status for status in ticketStatuses">
+                                                            <option value="">Select status...</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                                
+                                            <div class="col-xs-12 col-md-2 pdng-top25">
+                                                <div class="floatR form-group no-padding">
 
-			                        <div class="form-group">
-			                            <label class="label-control">To date</label>
-			                            <span class="form-control-feedback calender-icon"><i class="material-icons">date_range</i></span>
-			                            <input type="text" class="form-control datepicker"  id="dateFilterTo"  placeholder="{{dateFilterTo | date:'dd-MMM-yyyy'}}"/>
+                                                    <button type="submit" class="btn btn-circle blue-clr" ng-disabled="searchForm.$invalid">
+                                                         <i class="material-icons">search</i>
+                                                     </button>
+                                                     <button ng-show="ticketsData.length" type="button" title="Export HTML"  ng-click=exportAllData('html') class="btn btn-circle green-clr">
+                                                         <i class="material-icons">description</i>
+                                                     </button>
+                                                     <button ng-show="ticketsData.length" type="button"  title="Export CSV"  ng-click=exportAllData('xlsx') class="btn btn-circle green-clr">
+                                                         <i class="material-icons">import_contacts</i>
+                                                     </button>
+                                                     <button ng-click="refreshPage()" class="btn btn-circle orange-clr">
+                                                         <i class="material-icons">refresh</i>
+                                                     </button>
+                                                     <a class="download-btn" href="{{exportFile(0)}}">{{exportMsg(0)}}</a>
 
-			                        </div>
-
-			                    </div>
-			                    <div class="col-md-6">
-
-			                    </div>
-			                    <div class="col-md-2">
-									<div class="form-group ">
-				                         <button type="submit" class="btn btn-circle blue-clr" ng-disabled="searchForm.$invalid">
-				                             <i class="material-icons">search</i>
-				                         </button>
-				                         <button ng-show="ticketsData.length" type="button" title="Export HTML"  ng-click=exportAllData('html') class="btn btn-circle green-clr">
-				                             <i class="material-icons">description</i>
-				                         </button>
-				                         <button ng-show="ticketsData.length" type="button"  title="Export CSV"  ng-click=exportAllData('xlsx') class="btn btn-circle green-clr">
-				                             <i class="material-icons">import_contacts</i>
-				                         </button>
-				                         <button ng-click="refreshPage()" class="btn btn-circle orange-clr">
-				                             <i class="material-icons">refresh</i>
-				                         </button>
-				                         <a class="download-btn" href="{{exportFile(0)}}">{{exportMsg(0)}}</a>
-				                     </div>
-			                     </div>
-			               </div>
-			               <div class="row">
-			                    <div class="col-md-3">
-			                        <div class="dropdown">
-			                            <label class="label-control">Select Client</label>
-			                            <select class="form-control " ng-model="selectedProject" ng-change="changeProject()" ng-options="project as project.name for project in projects" >
-			                                <option value="">Select Client...</option>
-			                            </select>
-			                        </div>
-			                    </div>
-			                    <div class="col-md-3">
-			                        <div class="dropdown ">
-			                            <label class="label-control">Select Site</label>
-			                            <select class="form-control " ng-model="selectedSite" ng-change="refreshReport()" ng-options="site as site.name for site in sites">
-			                                <option value="">Select Site...</option>
-			                            </select>
-			                        </div>
-			                    </div>
-			                    <div class="col-md-3">
-			                        <div class="dropdown ">
-			                            <label class="label-control">Status</label>
-			                            <select class="form-control " ng-model="selectedStatus" ng-change="refreshReport()" ng-options="status as status for status in ticketStatuses">
-			                                <option value="">Select status...</option>
-			                            </select>
-			                        </div>
-			                    </div>
-
-
-			                </div>
-
-
-                        </form>
-
+                                                </div>
+                                            </div>
+                                            <div class="clearfix"></div>
+                                        </div>
+                                    </form>
+                                </div>
+                             </div>
+                        </div>
                     </div>
-
                     <div class="table-responsive tablecard">
                         <table class="table table-striped">
                             <thead>
@@ -194,7 +199,7 @@
     </div>
     <!-- end row -->
 
-    <div class="card margin-TB-5 txt-align-center" ng-hide="tickets">
+    <div class="card margin-TB-5 txt-align-center" ng-hide="ticketsData">
 
         <div class="card-content">
             <div class="" style="text-align:center;padding: 10px 0;" ng-hide="ticketsDataLoader">
@@ -208,34 +213,11 @@
     </div>
 
 
-    <div class="row">
+   <!-- Pagination directive start -->
 
-        <div class="col-md-6"></div>
-        <div class="col-md-6 text-right">
-            <ul class="pagination pagination-warning">
+    <pagination-new></pagination-new> 
 
-                <li class="paging-first" ID="first">
-                    <a href="#" id="first" ng-click="first()">
-                        <i id="first" class=" fa fa-step-backward"></i></a>
-                </li>
-                <li class="prev paging-previous" id="previous">
-                    <a id="previous" href="#" ng-click="previous()"> prev</a>
-                </li>
-
-                <li class="active">
-                    <a href="javascript:void(0);">{{pages.currPage}}</a>
-                </li>
-                <li class="next paging-next" id="next">
-                    <a id="next" href="#" ng-click="next()" >next</a>
-                </li>
-                <li class="paging-last" id="last">
-                    <a id="last" href="#" ng-click="last()"><i id="last" class="fa fa-step-forward"></i></a>
-                </li>
-
-            </ul>
-        </div>
-
-    </div>
+    <!-- Pagination directive end -->
 
 
 
