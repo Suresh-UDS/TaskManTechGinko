@@ -27,6 +27,7 @@ angular.module('timeSheetApp')
         $scope.jobChecklistItems =[];
         $scope.jobTypeName = "";
         $scope.monthDays = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31];
+        $scope.pageSort = 10;
         /*
         **
         Job type based records function.
@@ -387,22 +388,27 @@ angular.module('timeSheetApp')
         	});
         };
 
+        $scope.isActiveAsc = 'id';
+        $scope.isActiveDesc = '';
 
-       
-                    $scope.pageSort = 10;
+        $scope.columnAscOrder = function(field){
+            $scope.selectedColumn = field;
+            $scope.isActiveAsc = field;
+            $scope.isActiveDesc = '';
+            $scope.isAscOrder = true;
+            $scope.search();
+            //$scope.loadJobs();
+        }
 
+        $scope.columnDescOrder = function(field){
+            $scope.selectedColumn = field;
+            $scope.isActiveDesc = field;
+            $scope.isActiveAsc = '';
+            $scope.isAscOrder = false;
+            $scope.search();
+            //$scope.loadJobs();
+        }
 
-                    $scope.columnAscOrder = function(field){
-                        $scope.selectedColumn = field;
-                        $scope.isAscOrder = true;
-                        $scope.search();
-                    }
-
-                    $scope.columnDescOrder = function(field){
-                        $scope.selectedColumn = field;
-                        $scope.isAscOrder = false;
-                        $scope.search();
-                    }
 
          $scope.searchFilter = function () {
             $scope.setPage(1);
