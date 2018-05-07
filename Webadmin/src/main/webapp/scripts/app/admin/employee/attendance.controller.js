@@ -14,6 +14,7 @@ angular.module('timeSheetApp')
         $scope.selectedDateTo = $filter('date')(new Date(), 'dd/MM/yyyy');
         $scope.selectedDateFromSer=  new Date();
         $scope.selectedDateToSer= new Date();
+        $scope.pageSort = 10;
 
         $scope.employeeDesignations = ["MD","Operations Manger","Supervisor"]
 
@@ -183,21 +184,25 @@ angular.module('timeSheetApp')
 	        	}
         };
 
-
-        $scope.pageSort = 10;
-
-      
+        $scope.isActiveAsc = 'employee.id';
+        $scope.isActiveDesc = '';
 
         $scope.columnAscOrder = function(field){
             $scope.selectedColumn = field;
+            $scope.isActiveAsc = field;
+            $scope.isActiveDesc = '';
             $scope.isAscOrder = true;
             $scope.search();
+            //$scope.loadAttendances();
         }
 
         $scope.columnDescOrder = function(field){
             $scope.selectedColumn = field;
+            $scope.isActiveDesc = field;
+            $scope.isActiveAsc = '';
             $scope.isAscOrder = false;
             $scope.search();
+            //$scope.loadAttendances();
         }
 
 

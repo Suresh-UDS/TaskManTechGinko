@@ -155,37 +155,57 @@
                         <table class="table table-striped">
                             <thead>
                             <tr>
-                                <th>Employee ID<a href="#">
-
-                                    <span ng-click="columnAscOrder('employee.id')"  class=""><i class="fa fa-caret-up"></i></span>
-                                    <span ng-click="columnDescOrder('employee.id')" class=""><i class="fa fa-caret-down"></i></span>
-
-                                </a></th>
-                                <th>Employee Name<a href="#">
-
-                                    <span ng-click="columnAscOrder('employee.fullName')"  class=""><i class="fa fa-caret-up"></i></span>
-                                    <span ng-click="columnDescOrder('employee.fullName')" class=""><i class="fa fa-caret-down"></i></span>
-
-                                </a></th>
-                                <th>Site Name<a href="#">
-
-                                    <span ng-click="columnAscOrder('site.name')"  class=""><i class="fa fa-caret-up"></i></span>
-                                    <span ng-click="columnDescOrder('site.name')" class=""><i class="fa fa-caret-down"></i></span>
-
-                                </a></th>
-                                <th>Check-In time<a href="#">
-
-                                    <span ng-click="columnAscOrder('checkInTime')"  class=""><i class="fa fa-caret-up"></i></span>
-                                    <span ng-click="columnDescOrder('checkInTime')" class=""><i class="fa fa-caret-down"></i></span>
-
-                                </a></th>
+                                <th>Employee ID
+                                   <span class="sortingIcons">
+                                        <span ng-click="columnAscOrder('employee.id')" ng-class="isActiveAsc == 'employee.id' ? 'active' : ''" >
+                                            <i  class="fa fa-caret-up"></i>
+                                        </span>
+                                        <span ng-click="columnDescOrder('employee.id')" ng-class="isActiveDesc == 'employee.id' ? 'active' : ''">
+                                             <i  ng-class="class" class="fa fa-caret-down"></i>
+                                        </span>
+                                    </span>
+                                </th>
+                                <th>Employee Name
+                                    <span class="sortingIcons">
+                                        <span ng-click="columnAscOrder('employee.fullName')" ng-class="isActiveAsc == 'employee.fullName' ? 'active' : ''" >
+                                            <i  class="fa fa-caret-up"></i>
+                                        </span>
+                                        <span ng-click="columnDescOrder('employee.fullName')" ng-class="isActiveDesc == 'employee.fullName' ? 'active' : ''">
+                                             <i  ng-class="class" class="fa fa-caret-down"></i>
+                                        </span>
+                                    </span>
+                                </th>
+                                <th>Site Name
+                                    <span class="sortingIcons">
+                                        <span ng-click="columnAscOrder('site.name')" ng-class="isActiveAsc == 'site.name' ? 'active' : ''" >
+                                            <i  class="fa fa-caret-up"></i>
+                                        </span>
+                                        <span ng-click="columnDescOrder('site.name')" ng-class="isActiveDesc == 'site.name' ? 'active' : ''">
+                                             <i  ng-class="class" class="fa fa-caret-down"></i>
+                                        </span>
+                                    </span>
+                                </th>
+                                <th>Check-In time
+                                    <span class="sortingIcons">
+                                        <span ng-click="columnAscOrder('checkInTime')" ng-class="isActiveAsc == 'checkInTime' ? 'active' : ''" >
+                                            <i  class="fa fa-caret-up"></i>
+                                        </span>
+                                        <span ng-click="columnDescOrder('checkInTime')" ng-class="isActiveDesc == 'checkInTime' ? 'active' : ''">
+                                             <i  ng-class="class" class="fa fa-caret-down"></i>
+                                        </span>
+                                    </span>
+                                </th>
                                 <th>Check-In Image</th>
-                                <th>Check-Out time<a href="#">
-
-                                    <span ng-click="columnAscOrder('checkOutTime')"  class=""><i class="fa fa-caret-up"></i></span>
-                                    <span ng-click="columnDescOrder('checkOutTime')" class=""><i class="fa fa-caret-down"></i></span>
-
-                                </a></th>
+                                <th>Check-Out time
+                                    <span class="sortingIcons">
+                                        <span ng-click="columnAscOrder('checkOutTime')" ng-class="isActiveAsc == 'checkOutTime' ? 'active' : ''" >
+                                            <i  class="fa fa-caret-up"></i>
+                                        </span>
+                                        <span ng-click="columnDescOrder('checkOutTime')" ng-class="isActiveDesc == 'checkOutTime' ? 'active' : ''">
+                                             <i  ng-class="class" class="fa fa-caret-down"></i>
+                                        </span>
+                                    </span>
+                                </th>
                                 <th>Check-Out Image</th>
                                 <th>Shift (Start - End) time<!--<a href="#">
 
