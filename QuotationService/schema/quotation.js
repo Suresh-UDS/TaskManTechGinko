@@ -23,6 +23,8 @@ var QuotationModel = function() {
         siteName:String,
         projectId:String,
         projectName:String,
+        ticketId:Number,
+        jobId:Number,
         clientEmailId:String,
         sentToEmailId:String,
         createdByUserId:String,
