@@ -120,18 +120,26 @@
                         <table class="table table-striped">
                             <thead>
                             <tr>
-                                <th>ID<a href="#">
-
-                                    <span ng-click="columnAscOrder('id')"  class=""><i class="fa fa-caret-up"></i></span>
-                                    <span ng-click="columnDescOrder('id')" class=""><i class="fa fa-caret-down"></i></span>
-
-                                </a></th>
-                                <th>Module Name<a href="#">
-
-                                    <span ng-click="columnAscOrder('name')"  class=""><i class="fa fa-caret-up"></i></span>
-                                    <span ng-click="columnDescOrder('name')" class=""><i class="fa fa-caret-down"></i></span>
-
-                                </a></th>
+                                <th>ID
+                                    <span class="sortingIcons">
+                                        <span ng-click="columnAscOrder('id')" ng-class="isActiveAsc == 'id' ? 'active' : ''" >
+                                            <i  class="fa fa-caret-up"></i>
+                                        </span>
+                                        <span ng-click="columnDescOrder('id')" ng-class="isActiveDesc == 'id' ? 'active' : ''">
+                                             <i  ng-class="class" class="fa fa-caret-down"></i>
+                                        </span>
+                                    </span>
+                                </th>
+                                <th>Module Name
+                                    <span class="sortingIcons">
+                                        <span ng-click="columnAscOrder('name')" ng-class="isActiveAsc == 'name' ? 'active' : ''" >
+                                            <i  class="fa fa-caret-up"></i>
+                                        </span>
+                                        <span ng-click="columnDescOrder('name')" ng-class="isActiveDesc == 'name' ? 'active' : ''">
+                                             <i  ng-class="class" class="fa fa-caret-down"></i>
+                                        </span>
+                                    </span>
+                                </th>
                                 <th>Actions</th>
                                 <th>Edit</th>
                             </tr>

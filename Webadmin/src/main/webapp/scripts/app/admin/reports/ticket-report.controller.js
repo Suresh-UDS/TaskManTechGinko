@@ -180,17 +180,27 @@ angular.module('timeSheetApp')
 
         };
 
+        $scope.isActiveAsc = 'id';
+        $scope.isActiveDesc = '';
+
         $scope.columnAscOrder = function(field){
             $scope.selectedColumn = field;
+            $scope.isActiveAsc = field;
+            $scope.isActiveDesc = '';
             $scope.isAscOrder = true;
             $scope.search();
+            //$scope.loadTickets();
         }
 
         $scope.columnDescOrder = function(field){
             $scope.selectedColumn = field;
+            $scope.isActiveDesc = field;
+            $scope.isActiveAsc = '';
             $scope.isAscOrder = false;
             $scope.search();
+            //$scope.loadTickets();
         }
+
         $scope.searchFilter = function () {
             $scope.setPage(1);
             $scope.search();
