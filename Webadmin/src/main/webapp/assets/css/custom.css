@@ -1229,3 +1229,6 @@ a.sort-by:after {
   border-top-color: #666;
   margin-top: 1px;
 }
+.form-group {
+    padding-bottom: 18px !important;
+}
