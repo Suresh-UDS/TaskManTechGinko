@@ -5,12 +5,13 @@ angular
 		.controller(
 				'QuotationController',
 				function($scope, $rootScope, $state, $timeout, $http, $document, $window,
-						$stateParams, $location, RateCardComponent,TicketComponent, ProjectComponent, SiteComponent) {
+						$stateParams, $location, RateCardComponent,TicketComponent,
+						 ProjectComponent, SiteComponent,PaginationComponent) {
                     $rootScope.loginView = false;
 
-					$scope.selectedProject;
+					 $scope.selectedProject = null;
 
-					$scope.selectedSite;
+                     $scope.selectedSite = null;
 
 					$scope.quotations;
 
@@ -55,6 +56,12 @@ angular
 					$scope.labourRateCardDetails = [];
 
 					$scope.totalCost = 0;
+
+					$scope.searchCriteria = {};
+
+					$scope.pages = { currPage : 1};
+
+					$scope.pageSort = 10;
 
 					$scope.init = function() {
 
@@ -128,7 +135,9 @@ angular
 			        };
 
 					$scope.loadAllQuotations = function() {
-						 $scope.quotations = '';
+						$scope.clearFilter();
+						$scope.search();
+						 /*$scope.quotations = '';
                          $scope.quotationsLoader = false;
 						RateCardComponent.getAllQuotations().then(
 								function(response) {
@@ -138,7 +147,7 @@ angular
 									$scope.selectedProject= {id:response.projectId,name:response.projectName};
 						             $scope.selectedSite = {id:response.siteId,name:response.siteName};
 
-								})
+								})*/
 
 					};
 
@@ -332,13 +341,51 @@ angular
 			        };
 
 			        $scope.refreshPage = function() {
-			           $scope.clearFilter();
+			          
 			           $scope.loadAllQuotations();
 			        };
 
 			        $scope.clearFilter = function() {
-			        		$scope.searchCriteria = {};
+	        		    $scope.selectedProject = null;
+			            $scope.selectedSite = null;
+			            $scope.selectedStatus = null;
+			            $scope.selectedId = null;
+			            $scope.selectedTitle = null;
+			            $scope.selectedCreatedBy = null;
+			            $scope.selectedSentBy = null;
+			            $scope.selectedApprovedBy = null;
+			            $scope.searchCriteria = {};
+			            $scope.pages = {
+			                currPage: 1,
+			                totalPages: 0
+			            }
 			        }
+
+			        $scope.isActiveAsc = 'id';
+			        $scope.isActiveDesc = '';
+
+			        $scope.columnAscOrder = function(field){
+			            $scope.selectedColumn = field;
+			            $scope.isActiveAsc = field;
+			            $scope.isActiveDesc = '';
+			            $scope.isAscOrder = true;
+			            $scope.search();
+			            //$scope.loadTickets();
+			        }
+
+			        $scope.columnDescOrder = function(field){
+			            $scope.selectedColumn = field;
+			            $scope.isActiveDesc = field;
+			            $scope.isActiveAsc = '';
+			            $scope.isAscOrder = false;
+			            $scope.search();
+			            //$scope.loadTickets();
+			        }
+
+			        $scope.searchFilter = function () {
+			            $scope.setPage(1);
+			            $scope.search();
+			         }
 
 
 			        $scope.search = function () {
@@ -351,47 +398,89 @@ angular
 		        	}
 
 		        	$scope.searchCriteria.currPage = currPageVal;
-		        	console.log('Selected  module action -' + $scope.selectedQuotations);
+		        	 $scope.searchCriteria.findAll = false;
 
-		        	if(!$scope.selectedQuotations) {
-		        		if($rootScope.searchCriteriaChecklist) {
-		            		$scope.searchCriteria = $rootScope.searchCriteriaChecklist;
-		        		}else {
-		        			$scope.searchCriteria.findAll = true;
-		        		}
-
-		        	}else {
-			        	if($scope.selectedQuotations) {
-			        		$scope.searchCriteria.findAll = false;
-				        	$scope.searchCriteria.checklistId = $scope.selectedQuotations.id;
-				        	$scope.searchCriteria.name = $scope.selectedQuotations.name;
-				        	$scope.searchCriteria.activeFlag = $scope.selectedQuotations.activeFlag;
-				        	console.log('selected user role id ='+ $scope.searchCriteria.checklistId);
-			        	}else {
-			        		$scope.searchCriteria.checklistId = 0;
+			        	if(!$scope.selectedId && !$scope.selectedTitle  && !$scope.selectedProject && !$scope.selectedSite 
+			        		&& !$scope.selectedCreatedBy && !$scope.selectedSentBy && !$scope.selectedApprovedBy && !$scope.selectedStatus){
+			        		$scope.searchCriteria.findAll = true;
 			        	}
-		        	}
-		        	console.log($scope.searchCriteria);
-		        	RateCardComponent.search($scope.searchCriteria).then(function (data) {
-		                $scope.quotations = data.transactions;
-		                $scope.quotationsLoader = true;
-		                console.log($scope.quotations);
-		                $scope.pages.currPage = data.currPage;
-		                $scope.pages.totalPages = data.totalPages;
-		                if($scope.quotations == null){
-		                    $scope.pages.startInd = 0;
-		                }else{
-		                    $scope.pages.startInd = (data.currPage - 1) * 10 + 1;
-		                }
 
-		                $scope.pages.endInd = data.totalCount > 10  ? (data.currPage) * 10 : data.totalCount ;
-		                $scope.pages.totalCnt = data.totalCount;
-		            	$scope.hide = true;
+			        	if($scope.selectedProject) {
+			        		$scope.searchCriteria.projectId = $scope.selectedProject.id;
+			        	}
+
+			        	if($scope.selectedSite) {
+			        		$scope.searchCriteria.siteId = $scope.selectedSite.id;
+				        }
+			        	if($scope.selectedStatus){
+				        		$scope.searchCriteria.activeFlag = $scope.selectedStatus;
+				        }
+
+			        	if($scope.selectedId){
+			        		$scope.searchCriteria.checklistId = $scope.selectedId;
+			        	}
+		                if($scope.selectedTitle){
+		                    $scope.searchCriteria.name = $scope.selectedTitle;
+		                }
+		               
+			        	/*if($scope.selectedCreatedBy) {
+			        		$scope.searchCriteria.checkInDateTimeFrom = $scope.selectedJobDateSer;
+			        	}
+			        	if($scope.selectedSentBy) {
+			        		$scope.searchCriteria.checkInDateTimeFrom = $scope.selectedJobDateSer;
+			        	}
+			        	if($scope.selectedApprovedBy) {
+			        		$scope.searchCriteria.checkInDateTimeFrom = $scope.selectedJobDateSer;
+			        	}*/
+
+		            if($scope.pageSort){
+		                $scope.searchCriteria.sort = $scope.pageSort;
+		            }
+		            
+
+		            /*if($scope.selectedColumn){
+
+		                $scope.searchCriteria.columnName = $scope.selectedColumn;
+		                $scope.searchCriteria.sortByAsc = $scope.isAscOrder;
+
+		            }else{
+		                $scope.searchCriteria.columnName ="id";
+		                $scope.searchCriteria.sortByAsc = true;
+		            }*/
+
+                     console.log("search criteria",$scope.searchCriteria);
+                     $scope.quotations = '';
+                     $scope.quotationsLoader = false;
+                     $scope.loadPageTop();
+
+		        	//RateCardComponent.search($scope.searchCriteria).then(function (data) {
+		        	RateCardComponent.getAllQuotations().then(function (data) {
+		                $scope.quotations = data;
+		                //$scope.quotations = data.transactions;
+		                $scope.quotationsLoader = true;
+		                  /*
+		                        ** Call pagination  main function **
+		                    */
+		                     $scope.pager = {};
+		                     $scope.pager = PaginationComponent.GetPager(data.totalCount, $scope.pages.currPage);
+		                     $scope.totalCountPages = data.totalCount;
+
+		                     console.log("Pagination",$scope.pager);
+		                     console.log("quotations",$scope.quotations);
+
+			        		$scope.pages.currPage = $scope.pages.currPage;
+			                $scope.pages.totalPages = data.totalPages;
+		               
+			                if($scope.quotations && $scope.quotations.length > 0 ){
+			                    $scope.showCurrPage = data.currPage;
+			                    $scope.pageEntries = $scope.quotations.length;
+			                    $scope.totalCountPages = data.totalCount;
+		                        $scope.pageSort = 10;
+
+			                   
+			                }
 		            });
-		        	$rootScope.searchQuotations = $scope.searchCriteria;
-		        	if($scope.pages.currPage == 1) {
-		            	$scope.firstStyle();
-		        	}
+	
 		        };
 
 
@@ -430,5 +519,22 @@ angular
 					            $('.pageCenter').hide();$('.overlay').hide();
 
 					        }
+
+					        /*
+
+				        ** Pagination init function **
+				        @Param:integer
+
+					    */
+
+					        $scope.setPage = function (page) {
+
+					            if (page < 1 || page > $scope.pager.totalPages) {
+					                return;
+					            }
+					            //alert(page);
+					            $scope.pages.currPage = page;
+					            $scope.search();
+					        };
 
 				});
