@@ -37,7 +37,7 @@
                                             <div class="col-md-12">
 
                                                 <div class="form-group">
-                                                    <label class="control-label">Title </label>
+                                                    <label class="control-label">Title <span class="red-star">*</span></label>
                                                     <input id='jobName'
                                                            ng-model="job.title"
                                                            class='form-control'
@@ -73,7 +73,7 @@
                                             </div>
                                             <div class="col-md-12">
                                                 <div class="form-group">
-                                                    <label class="control-label">Description </label>
+                                                    <label class="control-label">Description<span class="red-star">*</span> </label>
                                             <textarea
                                                 ng-model="job.description"
                                                 class='form-control'
@@ -109,7 +109,7 @@
                                                         <!--ng-change="onSelectChecklist()"-->
                                                         <!--uib-typeahead="checklist as checklist.name for checklist in checklists | filter:$viewValue | limitTo:5"-->
                                                         <!--autocomplete="off" />-->
-
+                                                         <span class="form-control-feedback d-sm-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
                                                         <select class="form-control " ng-model="selectedChecklist"  ng-options="checklist as checklist.name for checklist in checklists">
                                                             <option value="">Please select Checklist...</option>
                                                         </select>
@@ -126,7 +126,7 @@
                                             
                                             <div class="col-md-6">
                                                 <div class="form-group">
-                                                    <label class="control-label">Employee </label>
+                                                    <label class="control-label">Employee<span class="red-star">*</span> </label>
                                                     <div class="dropdown">
                                                         <!--<input type="text"-->
                                                         <!--class="form-control"-->
@@ -135,8 +135,8 @@
                                                         <!--uib-typeahead="emp as emp.name for emp in employees | filter:$viewValue | limitTo:5"-->
                                                         <!--required-->
                                                         <!--autocomplete="off" />-->
-
-                                                        <select class="form-control " ng-model="selectedEmployee"  ng-options="emp as emp.name for emp in employees">
+                                                        <span class="form-control-feedback d-sm-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
+                                                        <select class="form-control " ng-model="selectedEmployee"  ng-options="emp as emp.name for emp in employees" name="employeeName">
                                                             <option value="">Please select Employees...</option>
                                                         </select>
 
@@ -195,7 +195,7 @@
                             				<div class="row">
                             					<div class="col-md-6">
                                                 <div class="form-group ">
-                                                    <label class="control-label">Site </label>
+                                                    <label class="control-label">Site<span class="red-star">*</span> </label>
                                                     <div class="dropdown">
                                                         <!--<input type="text"-->
                                                         <!--class="form-control"-->
@@ -204,8 +204,9 @@
                                                         <!--uib-typeahead="site as site.name for site in sites | filter:$viewValue | limitTo:5"-->
                                                         <!--required-->
                                                         <!--autocomplete="off" />-->
-                                                        <select class="form-control " ng-model="selectedSite" ng-change="loadBlocks();" ng-options="site as site.name for site in sites">
-                                                            <option value="">Please select Site...</option>
+                                                        <span class="form-control-feedback d-sm-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
+                                                        <select class="form-control " ng-model="selectedSite" ng-change="loadBlocks();" ng-options="site as site.name for site in sites" name="siteName" required>
+                                                            <option value="">Select Site...</option>
                                                         </select>
                                                         <div ng-show="form.$submitted || form.siteName.$touched">
                                                             <div
@@ -224,9 +225,10 @@
                             				<div class="row">
                             				<div class="col-md-4">
                                                 <div class="form-group ">
-                                                    <label class="control-label">Block </label>
+                                                    <label class="control-label">Block <!-- <span class="red-star">*</span> --></label>
                                                     <div class="dropdown">
-                                                       <select class="form-control " ng-model="selectedBlock" ng-change="loadFloors()"  ng-options="block as block for  block in  blocks">
+                                                     <span class="form-control-feedback d-sm-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
+                                                       <select class="form-control " ng-model="selectedBlock" ng-change="loadFloors()"  ng-options="block as block for  block in  blocks" name="block" >
                                                         	<option value="">Select Block...</option>
                                                     	  </select>
                                                         <div ng-show="form.$submitted || form.block.$touched">
@@ -243,9 +245,10 @@
                                             
                                             <div class="col-md-4">
                                                 <div class="form-group ">
-                                                    <label class="control-label">Floor </label>
+                                                    <label class="control-label">Floor <!-- <span class="red-star">*</span> --> </label>
                                                     <div class="dropdown">
-													<select class="form-control " ng-model="selectedFloor" ng-change="loadZones()"  ng-options="floor as floor for floor in floors">
+                                                     <span class="form-control-feedback d-sm-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
+													<select class="form-control " ng-model="selectedFloor" ng-change="loadZones()"  ng-options="floor as floor for floor in floors" name="floor" >
                                                         <option value="">Select Floor...</option>
                                                     	</select>
                                                    	 <div ng-show="form.$submitted || form.floor.$touched">
@@ -262,9 +265,10 @@
                                             
                                             <div class="col-md-4">
                                                 <div class="form-group ">
-                                                    <label class="control-label">Zone </label>
+                                                    <label class="control-label">Zone<!--  <span class="red-star">*</span> --> </label>
                                                     <div class="dropdown">
-													<select class="form-control " ng-model="selectedZone"  ng-options="zone as zone for zone in zones">
+                                                    <span class="form-control-feedback d-sm-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
+													<select class="form-control " ng-model="selectedZone"  ng-options="zone as zone for zone in zones" name="zone">
                                                         <option value="">Select Zone...</option>
                                                     </select>
                                                    	 <div ng-show="form.$submitted || form.floor.$touched">
@@ -301,7 +305,7 @@
                                                 <div class="form-group">
                                                     <label class="label-control">Start date</label>
                                                     <span class="form-control-feedback calender-icon"><i class="material-icons">date_range</i></span>
-                                                    <input type="text" class="form-control datetimepicker"  id="dateFilterFrom"  placeholder="{{dateFilterFrom | date:'dd-MMM-yyyy'}}"/>
+                                                    <input type="text" class="form-control datetimepicker"  id="dateFilterFrom"  ng-model="JobDate" />
 
                                                 </div>
                                                 <!--<div class="form-group label-floating">-->
@@ -342,7 +346,7 @@
                                         <div class="row">
                                             <div class="col-md-2">
                                                 <div class="form-group">
-                                                    <label class="control-label">Hours </label>
+                                                    <label class="control-label">Hours<span class="red-star">*</span> </label>
                                                     <input
                                                         ng-model="job.plannedHours"
                                                         class='form-control'
@@ -370,16 +374,17 @@
                                             <div class="col-md-5">
                                                 <div class="form-group">
                                                     <label class="control-label">Status </label>
+                                                    <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
                                                     <select
                                                         required
                                                         name="jobStatus"
                                                         ng-model="job.jobStatus"
                                                         class="form-control searchable-input floatL">
+                                                        <option value="">Select Status...</option>
                                                         <option>OPEN</option>
                                                         <option>ASSIGNED</option>
                                                         <option>INPROGRESS</option>
                                                         <option>COMPLETED</option>
-                                                        <option></option>
                                                     </select>
                                                     <!-- <input type="text"
                                                                     class="form-control searchable-input floatL"
@@ -401,11 +406,13 @@
                                             <div class="col-md-5">
                                                 <div class="form-group">
                                                     <label class="control-label">Type </label>
+                                                    <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
                                                     <select
                                                         required
                                                         name="jobType"
                                                         ng-model="job.jobType"
                                                         class="form-control searchable-input floatL">
+                                                        <option value="">Select Type...</option>
                                                         <option>HOUSEKEEPING</option>
                                                         <option>ELECTRICAL</option>
                                                         <option>AC</option>
@@ -413,7 +420,6 @@
                                                         <option>PEST</option>
                                                         <option>PLUMBING</option>
                                                         <option>MAINTENANCE</option>
-                                                        <option></option>
                                                     </select>
                                                     <!-- <input type="text"
                                                                     class="form-control searchable-input floatL"
@@ -570,6 +576,7 @@
                                                     </div>
                                                     
                                                     <div class="" ng-show="job.schedule == 'MONTHLY'">
+                                                           <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
                                                     		<select class="form-control " ng-model="job.scheduleMonthlyDay"  ng-options="day as day for day in monthDays">
                                                             <option value="">Please select the day of month...</option>
                                                          </select>
