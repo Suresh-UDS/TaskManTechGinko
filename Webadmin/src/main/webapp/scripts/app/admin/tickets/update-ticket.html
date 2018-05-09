@@ -6,7 +6,7 @@
         <!--<h3 class="title">Edit ticket</h3>-->
     </div>
 
-    <div ng-controller="TicketController" ng-init="editTicket();">
+    <div ng-controller="TicketController" ng-init="editTicket();loadSites();loadEmployees();">
             <div class="cardsCon editTicketCon" ng-init="loadTicket()">
                 <form ng-show="!success" name="form" role="form" novalidate
                       ng-submit="updatedTicket()"  >
@@ -24,7 +24,7 @@
 
                                        <div class="col-md-12">
                                            <div class="form-group">
-                                               <label class="control-label">Title </label>
+                                               <label class="control-label">Title<span class="red-star">*</span> </label>
 
                                                <input type="text" class="form-control"   name='title'
                                                       ng-model="tickets.title" ng-minlength=1 ng-maxlength=100
@@ -44,7 +44,7 @@
                                        </div>
                                        <div class="col-md-12">
                                            <div class="form-group">
-                                               <label class="control-label">Description </label>
+                                               <label class="control-label">Description<span class="red-star">*</span> </label>
                                                <input id='description' ng-model="tickets.description" class='form-control'
                                                       name='description' type='text' value=""
                                                        autofocus required/>
@@ -61,7 +61,8 @@
                                        </div>
                                        <div class="col-md-5">
                                            <div class="form-group">
-                                               <label class="control-label">Category </label>
+                                               <label class="control-label">Category<span class="red-star">*</span> </label>
+                                               <span class="form-control-feedback d-md-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
                                                <select
                                                    required
                                                    name="category"
@@ -91,7 +92,8 @@
                                        </div>
                                        <div class="col-md-6">
                                           <div class="form-group">
-                                            <label class="control-label">Severity </label>
+                                            <label class="control-label">Severity<span class="red-star">*</span> </label>
+                                            <span class="form-control-feedback d-md-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
                                             <select
                                                 required
                                                 name="severity"
@@ -133,13 +135,13 @@
                            <div class="row">
                            <div class="col-md-6">
                                     <div class="form-group">
-                                        <label class="control-label">Site </label>
+                                        <label class="control-label">Site<span class="red-star">*</span> </label>
+                                        <span class="form-control-feedback d-md-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
                                         <select
                                             required
                                             ng-model="selectedSite"
                                             name="site"
                                             ng-change="loadEmployees()"
-                                            ng-init="selectedSite = selected"
                                             class="form-control searchable-input floatL" ng-options="site as site.name for site in sites track by site.id">
                                             <option value="">Select Site</option>
                        
@@ -161,11 +163,11 @@
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label class="control-label">Employee </label>
+                                        <span class="form-control-feedback d-md-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
                                         <select
                                             name="employee"
                                             ng-model="selectedEmployee"
-                                            ng-init="selectedEmployee = selected"
-                                            class="form-control searchable-input floatL" ng-options="emp as emp.fullName group by emp.designation for emp in employees track by emp.id">
+                                            class="form-control searchable-input floatL" ng-options="emp as emp.fullName group by emp.designation for emp in employees track by emp.name">
                                             <option value="">Select Employee</option>
                                          
                                         </select>
