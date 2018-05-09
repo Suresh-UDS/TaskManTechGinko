@@ -1,13 +1,17 @@
 'use strict';
 
 angular.module('timeSheetApp')
-    .controller('FeedbackController', function ($rootScope, $scope, $state, $timeout, ProjectComponent, SiteComponent, LocationComponent,FeedbackComponent, $http,$stateParams,$location,$interval) {
+    .controller('FeedbackController', function ($rootScope, $scope, $state, $timeout,
+     ProjectComponent, SiteComponent, LocationComponent,FeedbackComponent,
+      $http,$stateParams,$location,$interval,$filter) {
         $rootScope.loginView = false;
         $scope.averageRating ='0';
         $scope.readOnly = true;
         $scope.colors = ['#45b7cd', '#ff6384', '#ff8e72'];
         $scope.labels = [];
         $scope.series = ['Series A'];
+        $scope.selectedFromDate = $filter('date')(new Date(), 'dd/MM/yyyy'); 
+        $scope.selectedToDate = $filter('date')(new Date(), 'dd/MM/yyyy'); 
         $scope.data = [
         ];
         $scope.onClick = function (points, evt) {

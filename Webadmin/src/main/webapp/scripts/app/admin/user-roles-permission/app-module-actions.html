@@ -30,24 +30,14 @@
                             </div>
 
                         </div>
+                        <div class="col-md-4">
+                            <div class="form-group  pdng-top20">
+                                <span class="form-control-feedback d-md-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
+                                <select ng-model="actionSelector" ng-change="selectAction(actionSelector)" ng-options="action as action.name for action in masterActions" class="form-control"  title="Select Action" >
+                                     <option value="">Select Action...</option>
+                                </select>
 
-                        <div class="col-md-3 form-group  pdng-top20">
-
-                            <select ng-model="actionSelector" ng-change="selectAction(actionSelector)" ng-options="action as action.name for action in masterActions" class="form-control"  title="Select Action" >
-                                 <option value="Please select Action..."></option>
-                            </select>
-
-<!--                             <select ng-model="actionSelector" class="selectpicker" data-style="btn btn-primary" title="Single Select" data-size="7">
-
-                                <option disabled selected>Choose Action</option>
-                                <option value="List">List</option>
-                                <option value="View">View</option>
-                                <option value="Edit">Edit</option>
-                                <option value="Delete">Delete</option>
-                                <option value="Create">Create</option>
-                            </select>
- -->
-
+                            </div>
                         </div>
                         <div class="col-md-3" style="padding-top:5px;">
 
