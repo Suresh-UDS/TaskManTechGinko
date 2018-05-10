@@ -6,7 +6,7 @@ angular.module('timeSheetApp')
 				function($scope, $rootScope, $state, $timeout, JobComponent,AssetComponent,
 						ProjectComponent, SiteComponent,EmployeeComponent,ChecklistComponent, 
                         LocationComponent, $http, $stateParams,
-						$location,PaginationComponent,$filter) {
+						$location,PaginationComponent,$filter, TicketComponent) {
         $rootScope.loginView = false;
         $scope.success = null;
         $scope.error = null;
@@ -48,7 +48,7 @@ angular.module('timeSheetApp')
 
         $scope.init = function() {
         		$scope.loadJobStatuses();
-                $scope.loadJobs();
+            $scope.loadJobs();
         }
 
         $scope.loadProjects = function () {
@@ -259,20 +259,35 @@ angular.module('timeSheetApp')
 
 
         $scope.initPage=function (){
-        	$scope.loadEmployee();
-        	$scope.loadAllSites();
-        	//$scope.loadLocations();
-        	$scope.loadAssets();
-        	$scope.loadPrice();
-        	$scope.loadChecklists();
-        	if($scope.isEdit){
-        		$scope.editJob();
-        	}else {
-            	$scope.job = {};
-            	$scope.job.scheduleDailyExcludeWeekend = true;
-            	$scope.job.schedule = 'ONCE';
-            	$scope.job.active = 'YES';
-        	}
+	        	$scope.loadEmployee();
+	        	$scope.loadAllSites();
+	        	//$scope.loadLocations();
+	        	$scope.loadAssets();
+	        	$scope.loadPrice();
+	        	$scope.loadChecklists();
+	        	if($scope.isEdit){
+	        		$scope.editJob();
+	        	}else {
+	            	$scope.job = {};
+	            	$scope.job.scheduleDailyExcludeWeekend = true;
+	            	$scope.job.schedule = 'ONCE';
+	            	$scope.job.active = 'YES';
+	        	}
+	        	if($stateParams.ticketId){
+                TicketComponent.getTicketDetails($stateParams.ticketId).then(function(data){
+                    console.log("Ticket details");
+                    console.log(data);
+                    $scope.job.title =data.title;
+                    $scope.job.description = data.description;
+                    $scope.job.ticketId = data.id;
+                    if(data.siteId){
+                        SiteComponent.findOne(data.siteID).then(function (data) {
+                            console.log(data);
+                            $scope.selectedSite = data;
+                        })
+                    }
+                })
+            }
         };
 
         $scope.onSelectChecklist = function() {

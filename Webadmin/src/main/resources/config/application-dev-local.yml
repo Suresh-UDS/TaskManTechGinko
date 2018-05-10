@@ -65,13 +65,18 @@ upload:
          path: /opt/uploads
 export:
     file:
-         path: F:\Export
+         path: /opt/exports
 qrcode:
     file:
          path: /opt/qrcode
 attendance:
     file:
         path:  /opt/attendance
+import:
+    file:
+        path:
+            new: /opt/imports/new
+            completed: /opt/imports/completed        
 max:
     user: 10
     userGroup: 2

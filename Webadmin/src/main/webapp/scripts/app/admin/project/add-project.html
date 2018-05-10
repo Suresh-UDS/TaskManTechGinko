@@ -132,7 +132,7 @@
                                                     <label class="control-label">Last Name</label>
                                                     <input id='projectContactLastName' ng-model="project.contactLastName"
                                                            class='form-control' name='projectContactLastName' type='text' value=""
-                                                           ng-minlength='2' ng-maxlength='50' ng-pattern="/^[A-Za-z0-9\s&-/]*$/" autofocus required/>
+                                                           ng-minlength='1' ng-maxlength='50' ng-pattern="/^[A-Za-z0-9\s&-/]*$/" autofocus required/>
                                                     <div ng-show="form.$submitted || form.projectContactLastName.$touched">
                                                         <div ng-show="form.projectContactLastName.$dirty || form.projectContactLastName.$invalid">
                                                             <p class="help-block" style="color:maroon"
@@ -171,12 +171,8 @@
                                                                 Contact phone is required.
                                                             </p>
                                                             <p class="help-block" style="color:maroon"
-                                                               ng-show="form.phone.$error.minlength">
-                                                                Contact phone is required to be at least 2 character.
-                                                            </p>
-                                                            <p class="help-block" style="color:maroon"
                                                                ng-show="form.phone.$error.maxlength">
-                                                                Contact phone cannot be longer than 50 characters.
+                                                                Contact phone cannot be longer than 10 characters.
                                                             </p>
                                                             <p class="help-block" style="color:maroon"
                                                                ng-show="form.phone.$error.pattern">

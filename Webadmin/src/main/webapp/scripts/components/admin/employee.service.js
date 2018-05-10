@@ -259,7 +259,7 @@ angular.module('timeSheetApp')
 
             },
             importEmployeeShiftStatus: function(fileName) {
-	            	return $http.get('api/employee/shift/import/'+fileName+"/status").then(function (response) {
+	            	return $http.get('api/employee/shift/importstatus/'+fileName+"/status").then(function (response) {
 	            		return response.data;
 	            	});
             }

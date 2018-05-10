@@ -511,7 +511,7 @@
                                                             Approve
                                                         </button>
                                                         
-                                                        <button  title="Reject Quotation" ng-if="quotation.isSubmitted && !quotation.isApproved !quotation.isRejected"
+                                                        <button  title="Reject Quotation" ng-if="quotation.isSubmitted && !quotation.isApproved  && !quotation.isRejected"
                                                                  data-toggle="modal" data-target="#approveQuotationModal"
                                                                  data-dismiss="#approveQuotationModal" ng-click="selectQuotation(quotation)"
                                                                  class="btn btn-info">
