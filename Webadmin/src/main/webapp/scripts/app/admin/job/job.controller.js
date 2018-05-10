@@ -223,11 +223,14 @@ angular.module('timeSheetApp')
 
                 }
         		
-        		TicketComponent.getTicketDetails($stateParams.ticketId).then(function(data){
-                    console.log("Ticket details");
-                    console.log(data);
-                    $scope.ticketStatus = data.status;
-        		});       
+        		if($scope.job.ticketId > 0) {
+            		TicketComponent.getTicketDetails($scope.job.ticketId).then(function(data){
+                        console.log("Ticket details");
+                        console.log(data);
+                        $scope.ticketStatus = data.status;
+            		});       
+        			
+        		}
         	});
         };
 

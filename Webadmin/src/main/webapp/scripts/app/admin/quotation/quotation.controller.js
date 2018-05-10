@@ -297,6 +297,15 @@ angular
 				                $scope.selectedSite = {};
 				                $scope.selectedSite.id = $scope.quotation.siteId;
 				                $scope.selectedSite.name = $scope.quotation.siteName;
+				                
+				                if($scope.quotation.ticketId > 0) {
+					                TicketComponent.getTicketDetails($scope.quotation.ticketId).then(function(data){
+					                    console.log("Ticket details");
+					                    console.log(data);
+					                    $scope.ticketStatus = data.status;
+					        			});    
+				                	
+				                }
 				            });
 			        };
 
@@ -551,6 +560,7 @@ angular
 					                $scope.success = 'OK';
 					                $scope.showNotifications('top','center','success','Ticket status updated');
 					                $(".fade").removeClass("modal-backdrop");
+					                $scope.ticketStatus = 'Closed';
 					                $state.reload();
 					            });
 					        }
