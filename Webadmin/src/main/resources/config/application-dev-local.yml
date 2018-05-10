@@ -76,7 +76,7 @@ import:
     file:
         path:
             new: /opt/imports/new
-            completed: /opt/imports/completed        
+            completed: /opt/imports/completed
 max:
     user: 10
     userGroup: 2
@@ -141,6 +141,10 @@ scheduler:
    overdueJob:
       enabled: false
    eodJobReport:
+      enabled: true
+   attendanceDetailReport:
+      enabled: true
+   attendanceConsolidatedReport:
       enabled: true
 
 default.user.password: uds12345
