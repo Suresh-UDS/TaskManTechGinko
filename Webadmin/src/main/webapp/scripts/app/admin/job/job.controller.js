@@ -626,4 +626,20 @@ angular.module('timeSheetApp')
             $scope.search();
         };
         
+        $scope.closeTicket = function (ticket){
+
+            $scope.cTicket={id :ticket,status :'Closed'};
+        }
+
+        $scope.closeTicketConfirm =function(cTicket){
+
+        JobComponent.updateTicket(cTicket).then(function() {
+                $scope.success = 'OK';
+                $scope.showNotifications('top','center','success','Ticket status updated');
+                $(".fade").removeClass("modal-backdrop");
+                $state.reload();
+            });
+        }
+
+        
     });
