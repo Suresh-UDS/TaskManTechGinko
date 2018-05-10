@@ -242,6 +242,8 @@ angular
 						$scope.quotation.rateCardDetails = $scope.rateCardDetails;
 						$scope.quotation.drafted = true;
 						$scope.quotation.mode = mode;
+						$scope.quotation.ticketId = $stateParams.ticketId;
+						
 						console.log('Quotation details - ' + JSON.stringify($scope.quotation));
 						RateCardComponent.createQuotation($scope.quotation)
 								.then(function(response) {
