@@ -192,7 +192,7 @@
                                 </td>
                                 <td class="text-right">
 
-                                    <button ng-disabled="employee.left" title="View"  ng-click="getCheckInDetails(employee.id)" has-permission="Employee:Edit" data-toggle="modal" data-target="#ViewModal"    class="btn btn-simple btn-info btn-icon like"><i style="font-size: 20px" class="material-icons">remove_red_eye</i></button>
+                                    <button ng-disabled="employee.left" title="View"  ng-click="getEmployeeDetails(employee.id)" has-permission="Employee:Edit" data-toggle="modal" data-target="#ViewModal"    class="btn btn-simple btn-info btn-icon like"><i style="font-size: 20px" class="material-icons">remove_red_eye</i></button>
                                     <!--<button ng-disabled="employee.left" title="View"  ng-click="getCheckInDetails(employee.id)" has-permission="Employee:Edit" ui-sref="view-employee({ id: employee.id })"   class="btn btn-simple btn-info btn-icon like"><i style="font-size: 20px" class="material-icons">remove_red_eye</i></button>-->
                                     <button ng-disabled="employee.left" title="Mark Attendance "   data-toggle="modal" has-permission="Employee:Edit" data-target="#noticeModal" ng-click="getEmployeeDetails(employee.id)"  class="btn btn-simple btn-info btn-icon like"><i style="font-size: 20px" class="material-icons">date_range</i></button>
                                     <button ng-disabled="employee.left" ng-class="{active: $state.includes('admin')}"  has-permission="Employee:Edit"  ui-sref="edit-employee({ id: employee.id })" type="button" rel="tooltip" title="Edit Profile" class="btn btn-success btn-simple btn-xs">
