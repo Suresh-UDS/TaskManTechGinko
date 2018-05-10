@@ -35,7 +35,7 @@
 
 											<div class="col-md-4">
 												<div class="form-group">
-													<label class="control-label">Title</label> <input
+													<label class="control-label">Title<span class="red-star">*</span></label> <input
 														id='quotationTitle' ng-model="quotation.title"
 														class='form-control' name='quotationTitle' type='text'
 														value="" ng-minlength='2' ng-maxlength='50'
@@ -90,12 +90,14 @@
                                                 <div class="form-group">
 
                                                     <!--<label class="control-label">Client</label>-->
+                                                    <span class="red-star">*</span>
                                                     <div class="dropdown">
 
                                                         <!--<input type="text" class="form-control" ng-model="selectedProject" name="projectName" ng-value="selectedProject.name"-->
                                                                <!--uib-typeahead="project as project.name for project in projects | filter:$viewValue | limitTo:5"-->
                                                                <!--ng-blur="loadSites()"-->
                                                                <!--ng-minlength=2 ng-maxlength=50 ng-pattern="/^[A-Za-z0-9\s&-/]*$/"  autocomplete="off" />-->
+                                                        <span class="form-control-feedback d-sm-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>       	
                                                         <select class=" form-control " ng-model="selectedProject" ng-change="loadSites()" ng-options="project as project.name for project in projects" required>
                                                             <option value="">Please select Client...</option>
                                                         </select>
@@ -125,11 +127,12 @@
                                             <div class="col-md-4">
                                                 <div class="form-group label-floating">
                                                     <!--<label class="control-label">Site</label>-->
+                                                    <span class="red-star">*</span>
                                                     <div class="dropdown" >
                                                         <!--<input ng-focus="loadSites()" type="text" class="form-control"  ng-model="selectedSite" name="siteName" ng-value="selectedSite.name"-->
                                                                <!--uib-typeahead="site as site.name for site in sites | filter:$viewValue | limitTo:5"-->
                                                                <!--ng-minlength=2 ng-maxlength=50 ng-pattern="/^[A-Za-z0-9\s&-/]*$/"  autocomplete="off" />-->
-
+                                                        <span class="form-control-feedback d-sm-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
                                                         <select class="form-control " ng-model="selectedSite"  ng-options="site as site.name for site in sites" required>
                                                             <option value="">Please select Site...</option>
                                                         </select>
