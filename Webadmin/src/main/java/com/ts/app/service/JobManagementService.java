@@ -743,9 +743,10 @@ public class JobManagementService extends AbstractService {
 
 		Ticket ticket = getTicket(jobDTO.getTicketId());
 		//update ticket status
-		ticket.setStatus(TicketStatus.INPROGRESS.toValue());
-		ticketRepository.save(ticket);
-
+		if(ticket != null) {
+			ticket.setStatus(TicketStatus.INPROGRESS.toValue());
+			ticketRepository.save(ticket);
+		}	
 		job.setTitle(jobDTO.getTitle());
 		job.setDescription(jobDTO.getDescription());
 		job.setStatus(jobDTO.getJobStatus());
