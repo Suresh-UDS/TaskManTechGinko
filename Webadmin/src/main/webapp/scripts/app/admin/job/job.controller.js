@@ -90,7 +90,8 @@ angular.module('timeSheetApp')
         $scope.loadSites = function () {
         	ProjectComponent.findSites($scope.selectedProject.id).then(function (data) {
         		$scope.selectedSite = null;
-                $scope.sites = data;
+                $scope.selectedSite = data;
+                
             });
         };
 
@@ -98,7 +99,7 @@ angular.module('timeSheetApp')
         		$scope.searchCriteria.siteId = $scope.selectedSite.id;
         		EmployeeComponent.search($scope.searchCriteria).then(function (data) {
         			$scope.selectedEmployee = null;
-                $scope.employees = data.transactions;
+                $scope.selectedEmployee = data.transactions;
             });
         };
 
@@ -114,7 +115,7 @@ angular.module('timeSheetApp')
 	    		var projectId = $scope.selectedProject ? $scope.selectedProject.id : 0;
 	    		LocationComponent.findBlocks(projectId,$scope.selectedSite.id).then(function (data) {
 	    			$scope.selectedBlock = null;
-	            $scope.blocks = data;
+	            $scope.selectedBlock = data;
 	        });
 	    };
 
@@ -123,7 +124,7 @@ angular.module('timeSheetApp')
         		var projectId = $scope.selectedProject ? $scope.selectedProject.id : 0;
 	    		LocationComponent.findFloors(projectId,$scope.selectedSite.id,$scope.selectedBlock).then(function (data) {
 	    			$scope.selectedFloor = null;
-	            $scope.floors = data;
+	            $scope.selectedFloor = data;
 	        });
 	    };
 
@@ -132,7 +133,7 @@ angular.module('timeSheetApp')
 	    		var projectId = $scope.selectedProject ? $scope.selectedProject.id : 0;
 	    		LocationComponent.findZones(projectId,$scope.selectedSite.id,$scope.selectedBlock, $scope.selectedFloor).then(function (data) {
 	    			$scope.selectedZone = null;
-	            $scope.zones = data;
+	            $scope.selectedZone = data;
 	        });
 	    };
 
@@ -292,12 +293,23 @@ angular.module('timeSheetApp')
                     $scope.job.title =data.title;
                     $scope.job.description = data.description;
                     $scope.job.ticketId = data.id;
-                    if(data.siteId){
+                   
+                     /*if(data.siteId){
+
                         SiteComponent.findOne(data.siteID).then(function (data) {
                             console.log(data);
-                            $scope.selectedSite = data;
+                            $scope.selectedSite = null;
+                            $scope.selectedSite = data.name;
+                            alert($scope.selectedSite);
                         })
-                    }
+                    }*/
+                       $scope.selectedSite = {id:data.siteId};
+                       $scope.selectedEmployee = {id:data.employeeId};
+                       $scope.selectedBlock = {name:data.block};
+                       $scope.selectedFloor = {name:data.floor};
+                       $scope.selectedZone = {name:data.zone};
+                       
+                   
                 })
             }
         };

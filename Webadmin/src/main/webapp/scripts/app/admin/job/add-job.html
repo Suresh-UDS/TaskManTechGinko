@@ -136,7 +136,10 @@
                                                         <!--required-->
                                                         <!--autocomplete="off" />-->
                                                         <span class="form-control-feedback d-sm-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                                        <select class="form-control " ng-model="selectedEmployee"  ng-options="emp as emp.name for emp in employees" name="employeeName" required>
+
+                                                        <select class="form-control " ng-model="selectedEmployee"  ng-options="emp as emp.name for emp in employees track by emp.id" name="employeeName" required>
+
+
                                                             <option value="">Please select Employees...</option>
                                                         </select>
 
@@ -210,7 +213,7 @@
                                                         <!--required-->
                                                         <!--autocomplete="off" />-->
                                                         <span class="form-control-feedback d-sm-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                                        <select class="form-control " ng-model="selectedSite" ng-change="loadBlocks();" ng-options="site as site.name for site in sites" name="siteName" required>
+                                                        <select class="form-control " ng-model="selectedSite" ng-change="loadBlocks();" ng-options="site as site.name for site in sites track by site.id" name="siteName" required>
                                                             <option value="">Select Site...</option>
                                                         </select>
                                                         <div ng-show="form.$submitted || form.siteName.$touched">
@@ -233,7 +236,7 @@
                                                     <label class="control-label">Block <!-- <span class="red-star">*</span> --></label>
                                                     <div class="dropdown">
                                                      <span class="form-control-feedback d-sm-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                                       <select class="form-control " ng-model="selectedBlock" ng-change="loadFloors()"  ng-options="block as block for  block in  blocks" name="block" >
+                                                       <select class="form-control " ng-model="selectedBlock" ng-change="loadFloors()"  ng-options="block as block for  block in  blocks track by block.name" name="block" >
                                                         	<option value="">Select Block...</option>
                                                     	  </select>
                                                         <div ng-show="form.$submitted || form.block.$touched">
@@ -253,7 +256,7 @@
                                                     <label class="control-label">Floor <!-- <span class="red-star">*</span> --> </label>
                                                     <div class="dropdown">
                                                      <span class="form-control-feedback d-sm-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-													<select class="form-control " ng-model="selectedFloor" ng-change="loadZones()"  ng-options="floor as floor for floor in floors" name="floor" >
+													<select class="form-control " ng-model="selectedFloor" ng-change="loadZones()"  ng-options="floor as floor for floor in floors track by floor.name" name="floor" >
                                                         <option value="">Select Floor...</option>
                                                     	</select>
                                                    	 <div ng-show="form.$submitted || form.floor.$touched">
@@ -273,7 +276,7 @@
                                                     <label class="control-label">Zone<!--  <span class="red-star">*</span> --> </label>
                                                     <div class="dropdown">
                                                     <span class="form-control-feedback d-sm-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-													<select class="form-control " ng-model="selectedZone"  ng-options="zone as zone for zone in zones" name="zone">
+													<select class="form-control " ng-model="selectedZone"  ng-options="zone as zone for zone in zones track by zone.name" name="zone">
                                                         <option value="">Select Zone...</option>
                                                     </select>
                                                    	 <div ng-show="form.$submitted || form.floor.$touched">

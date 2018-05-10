@@ -74,12 +74,16 @@ angular
                                 $scope.quotation.title =data.title;
                                 $scope.quotation.description = data.description;
                                 $scope.quotation.ticketId = data.id;
-                                if(data.siteId){
+                                //$scope.selectedProject = {id:data.employeeId};
+                                $scope.selectedSite = {id:data.siteId};
+                                
+   
+                                /*if(data.siteId){
                                     SiteComponent.findOne(data.siteID).then(function (data) {
                                         console.log(data);
                                         $scope.selectedSite = data;
                                     })
-                                }
+                                }*/
                             })
                         }
 
