@@ -1,5 +1,5 @@
 <div class="crud-form"
-	data-unique-hash="a2ad475d60b22954085c657a73309b8f" ng-init="initLoad();loadingStart();">
+	data-unique-hash="a2ad475d60b22954085c657a73309b8f" ng-init="loadingStart();">
 	<div class="" ng-init="editTicket();">
 		<div class="row">
         	<div class="col-md-12">
@@ -45,7 +45,15 @@
                                                     </td>
 
                                                 </tr>
-                                             
+                                                <tr>
+                                                    <td>Status</td>
+                                                    <td>
+                                                        
+                                                     {{tickets.status}}
+                                                    
+                                                    </td>
+
+                                                </tr>                                             
 
 
                                                 </tbody>
@@ -71,11 +79,11 @@
                                                 <tbody>
                                                 <tr>
                                                     <td>Site</td>
-                                                    <td>{{tickets.selectedSite}}</td>
+                                                    <td>{{selectedSite.name}}</td>
                                                 </tr>
                                                 <tr>
                                                     <td>Employee</td>
-                                                    <td>{{tickets.selectedEmployee}}</td>
+                                                    <td>{{selectedEmployee.name}}</td>
 
                                                 </tr>
                                           
@@ -162,4 +170,24 @@
 
 </div>
 
-
+<!-- Ticket Close confirmation dialog -->
+<div id="deleteModalNew" class="delete-confirmation modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"
+                        aria-hidden="true">&times;</button>
+                <h4 class="modal-title">Close Ticket</h4>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure that you want to close ticket?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                <button type="button"
+                        class="btn btn-success delete-confirmation-button" ng-click="closeTicketConfirm(cTicket)">Close Ticket</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- End of Ticket Close confirmation dialog -->
