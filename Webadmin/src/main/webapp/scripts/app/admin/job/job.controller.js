@@ -28,6 +28,9 @@ angular.module('timeSheetApp')
         $scope.jobTypeName = "";
         $scope.monthDays = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31];
         $scope.pageSort = 10;
+        
+        $scope.ticketStatus;
+        
         /*
         **
         Job type based records function.
@@ -220,6 +223,15 @@ angular.module('timeSheetApp')
                     }
 
                 }
+        		
+        		if($scope.job.ticketId > 0) {
+            		TicketComponent.getTicketDetails($scope.job.ticketId).then(function(data){
+                        console.log("Ticket details");
+                        console.log(data);
+                        $scope.ticketStatus = data.status;
+            		});       
+        			
+        		}
         	});
         };
 
@@ -363,9 +375,13 @@ angular.module('timeSheetApp')
 	        	// $scope.job.jobStatus = $scope.selectedStatus.name;
 	        	console.log('job details to save - ' + JSON.stringify($scope.job));
 	        	var post = $scope.isEdit ? JobComponent.update : JobComponent.create
+	        	var message = 'Job Created Successfully'
+	        	if($scope.job.id) {
+	        		message = 'Job Updated Successfully'
+	        	}		
 	        	post($scope.job).then(function () {
 	                $scope.success = 'OK';
-	                $scope.showNotifications('top','center','success','Job Created Successfully');
+	                $scope.showNotifications('top','center','success',message);
 	            	$location.path('/jobs');
             }).catch(function (response) {
                 $scope.success = null;
@@ -629,13 +645,32 @@ angular.module('timeSheetApp')
     */
 
         $scope.setPage = function (page) {
-
-            if (page < 1 || page > $scope.pager.totalPages) {
-                return;
-            }
+        		if($scope.pager) {
+                if (page < 1 || page > $scope.pager.totalPages) {
+                    return;
+                }
+        		}
             //alert(page);
             $scope.pages.currPage = page;
             $scope.search();
         };
+        
+        $scope.closeTicket = function (ticket){
+
+            $scope.cTicket={id :ticket,status :'Closed'};
+        }
+        
+
+        $scope.closeTicketConfirm =function(cTicket){
+
+	        JobComponent.updateTicket(cTicket).then(function() {
+	                $scope.success = 'OK';
+	                $scope.showNotifications('top','center','success','Ticket status updated');
+	                $(".fade").removeClass("modal-backdrop");
+	                $scope.ticketStatus = 'Closed'
+	                $state.reload();
+	            });
+        }
+
         
     });

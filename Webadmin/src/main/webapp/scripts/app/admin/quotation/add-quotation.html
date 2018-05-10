@@ -38,7 +38,7 @@
 													<label class="control-label">Title<span class="red-star">*</span></label> <input
 														id='quotationTitle' ng-model="quotation.title"
 														class='form-control' name='quotationTitle' type='text'
-														value="" ng-minlength='2' ng-maxlength='50'
+														value="" ng-minlength='2' ng-maxlength='250'
 														ng-pattern="/^[A-Za-z0-9\s&-/]*$/" autofocus required />
 													<div
 														ng-show="form.$submitted || form.quotationTitle.$touched">
@@ -52,7 +52,7 @@
 																Title should be atleast 2 Characters.</p>
 															<p class="help-block" style="color: maroon"
 																ng-show="form.quotationTitle.$error.maxlength">
-																Title cannot be longer than 50 characters.</p>
+																Title cannot be longer than 250 characters.</p>
 															<p class="help-block" style="color: maroon"
 																ng-show="form.quotationTitle.$error.pattern">Title
 																can only contain letters, digits and space.</p>
@@ -65,7 +65,7 @@
 													<label class="control-label">Description</label> <input
 														id='quotationDescription' ng-model="quotation.description"
 														class='form-control' name='quotationDescription'
-														type='text' value="" ng-maxlength=50
+														type='text' value="" ng-maxlength=250
 														ng-pattern="/^[A-Za-z0-9\s&-/]*$/" />
 													<div
 														ng-show="form.$submitted || form.quotationDescription.$touched">

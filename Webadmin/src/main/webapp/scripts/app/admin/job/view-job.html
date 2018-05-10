@@ -199,7 +199,11 @@
                                                 <tbody>
                                                 <tr>
                                                     <td>Ticket Id</td>
-                                                    <td><a ng-if="(job.ticketId > 0)" ng-class="{active: $state.includes('admin')}" ui-sref="view-ticket({id : job.ticketId})"  ng-click=""  onClick="" data-target="#myModal"  class="btn btn-simple btn-info">View Ticket</a></td>
+                                                    <td>
+                                                    <a ng-if="(job.ticketId > 0)" ng-class="{active: $state.includes('admin')}" ui-sref="view-ticket({id : job.ticketId})"  ng-click=""  onClick="" data-target="#myModal"  class="btn btn-simple btn-info">View Ticket {{job.ticketId}}</a>
+                                                    <a ng-if="(job.ticketId > 0) && job.jobStatus == 'COMPLETED' && ticketStatus != 'Closed'" ng-class="{active: $state.includes('admin')}" ng-click="closeTicket(job.ticketId)"   onClick="$('#deleteModalNew').modal()" data-target="#myModal"     class="btn btn-simple btn-info">Close Ticket {{job.ticketId}}</a>
+                                                    <a ng-if="(job.ticketId > 0) && job.jobStatus == 'COMPLETED' && ticketStatus == 'Closed'" ng-class="{active: $state.includes('admin')}" class="btn btn-simple btn-info">Ticket# {{job.ticketId}} Closed </a>
+                                                    </td>
                                                 </tr>
                                                 </tbody>
                                             </table>
@@ -293,3 +297,25 @@
         </div>
     </div>
 </div>
+
+<!-- Ticket Close confirmation dialog -->
+<div id="deleteModalNew" class="delete-confirmation modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"
+                        aria-hidden="true">&times;</button>
+                <h4 class="modal-title">Close Ticket</h4>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure that you want to close ticket?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                <button type="button"
+                        class="btn btn-success delete-confirmation-button" ng-click="closeTicketConfirm(cTicket)">Close Ticket</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- End of Ticket Close confirmation dialog -->

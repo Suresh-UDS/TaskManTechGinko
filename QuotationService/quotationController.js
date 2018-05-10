@@ -85,6 +85,8 @@ var fs = require('fs');
 
     }
 
+
+
 // create an export function to encapsulate the controller's methods
 module.exports = {
 
@@ -105,7 +107,7 @@ module.exports = {
         quotation.save(function(err,quotation){
             if(!err){
                 // mailerService.submitQuotation('karthickk@techginko.com',quotation);
-                this.createPDF(quotation);
+                module.exports.createPDF(quotation);
                 res.json(200,quotation)
             }else{
                 console.log("Error in saving quotation");
@@ -304,7 +306,7 @@ module.exports = {
 
     getQuotations: function(req,res,next){
       console.log("Get Quotations");
-      Quotation.find({}, function(err,quotations){
+      Quotation.find({}).sort({createdDate : -1}, function(err,quotations){
           if(err){
               console.log("unable to get Quotations")
               res.send(200,err);
@@ -384,66 +386,34 @@ module.exports = {
         })
     },
 
-    createPDF: function(req,res,next){
+    createPDF: function(quotation){
 
-        var quotation;
-
-        console.log("Calling create pdf");
-        Quotation.find({},function (err, quotations) {
+       mailerService.getPdfDetail(quotation,function(err,response){
            if(err){
-               console.log("Error in getting quotaions");
-           } else{
-               console.log("Quotation");
-               console.log(quotations[0]);
+               console.log("Error in getting html template");
+               console.log(err);
+           }else{
+               console.log("Html template success");
+               console.log(response);
+               console.log(JSON.stringify(response))
 
-
-               mailerService.getPdfDetail(quotations[0],function(err,response){
-                   if(err){
-                       console.log("Error in getting html template");
-                       console.log(err);
-                   }else{
-                       console.log("Html template success");
-                       console.log(response);
-                       console.log(JSON.stringify(response))
-
-                       htmlToPdf.convertHTMLString(response, './templates/output.pdf',
-                           function (error, success) {
-                               if (error)
-                               {
-                                   console.log('PDF Fail');
-                                   console.log(error);
-                               } else
-                               {
-                                   console.log('PDF Success!');
-                                   console.log(success);
-                                   mailerService.submitQuotationDetail('praveens@techginko.com');
-                               }
-                           }
-                       );
-
+               htmlToPdf.convertHTMLString(response, './templates/output.pdf',
+                   function (error, success) {
+                       if (error)
+                       {
+                           console.log('PDF Fail');
+                           console.log(error);
+                       } else
+                       {
+                           console.log('PDF Success!');
+                           console.log(success);
+                           mailerService.submitQuotationDetail('praveens@techginko.com');
+                       }
                    }
-               })
+               );
 
-/*
-
-               var PDFDocument, doc;
-               var fs = require('fs');
-               PDFDocument = require('pdfkit');
-               doc = new PDFDocument;
-               doc.pipe(fs.createWriteStream('./templates/output.pdf'));
-               doc.fontSize(15)
-               doc.text("quotation:"+JSON.stringify(quotations), {
-                   width: 500,
-                   align: 'left'
-               });
-               doc.end();
-               res.send(200);
-               */
            }
-        });
-
-
-
+       })
 
 
     },

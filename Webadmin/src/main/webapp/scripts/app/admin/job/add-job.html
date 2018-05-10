@@ -136,15 +136,23 @@
                                                         <!--required-->
                                                         <!--autocomplete="off" />-->
                                                         <span class="form-control-feedback d-sm-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                                        <select class="form-control " ng-model="selectedEmployee"  ng-options="emp as emp.name for emp in employees track by emp.id" name="employeeName">
+
+                                                        <select class="form-control " ng-model="selectedEmployee"  ng-options="emp as emp.name for emp in employees track by emp.id" name="employeeName" required>
+
+
                                                             <option value="">Please select Employees...</option>
                                                         </select>
 
                                                         <div ng-show="form.$submitted || form.employeeName.$touched">
                                                             <div
                                                                 ng-show="form.employeeName.$dirty || form.employeeName.$invalid">
+	                                                            <p class="help-block" style="color:maroon"
+	                                                               ng-show="form.employeeName.$error.required">
+	                                                                Employee is required.
+	                                                            </p>
 
                                                             </div>
+                                                            
                                                         </div>
                                                     </div>
                                                     
