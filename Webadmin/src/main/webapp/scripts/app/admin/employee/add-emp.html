@@ -171,7 +171,7 @@
                                                            name='employeePhone' type='text' value=""
                                                            ng-minlength=10 ng-maxlength=13 ng-pattern="/^[A-Za-z0-9\s&-/]*$/"  required/>
                                                     <div ng-show="form.$submitted || form.employeePhone.$touched">
-                                                        <div ng-show="form.employeeName.$dirty || form.employeePhone.$invalid">
+                                                        <div ng-show="form.employeePhone.$dirty || form.employeePhone.$invalid">
                                                             <p class="help-block" style="color:maroon"
                                                                ng-show="form.employeePhone.$error.required">
                                                                 Employee Phone No. is required.
@@ -406,13 +406,13 @@
 
         		                                    <div class="col-md-6">
                                                 <div class="form-group " >
-                                                    <label class="control-label">Manager<span class="red-star">*</span></label>
+                                                    <label class="control-label">Manager<span class="red-star"></span></label>
                                                     <div class="dropdown">
                                                         <!--<input ng-focus="loadAllManagers()" type="text" class="form-control" ng-model="selectedManager" name="manager"-->
                                                                <!--uib-typeahead="employee as employee.name for employee in allManagers | filter:$viewValue | limitTo:10"-->
                                                                <!--ng-minlength=1 ng-maxlength=50 ng-pattern="/^[A-Za-z0-9\s]*$/"  autocomplete="off" />-->
                                                         <span class="form-control-feedback d-sm-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                                        <select class=" form-control " ng-model="selectedManager"  ng-options="manager as manager.name for manager in allManagers" name="manager" required>
+                                                        <select class=" form-control " ng-model="selectedManager"  ng-options="manager as manager.name for manager in allManagers" name="manager" >
                                                             <option value="">Select Manager...</option>
                                                         </select>
                                                         <div ng-show="form.$submitted || form.manager.$touched">
@@ -499,10 +499,10 @@
                             				<div class="row">
                             				<div class="col-md-4">
                                                 <div class="form-group ">
-                                                    <label class="control-label">Block<span class="red-star">*</span> </label>
+                                                    <label class="control-label">Block<span class="red-star"></span> </label>
                                                     <div class="dropdown">
                                                         <span class="form-control-feedback d-sm-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                                       <select class="form-control " ng-model="selectedBlock" ng-change="loadFloors()"  ng-options="block as block for  block in  blocks" name="block" required>
+                                                       <select class="form-control " ng-model="selectedBlock" ng-change="loadFloors()"  ng-options="block as block for  block in  blocks" name="block" >
                                                         	<option value="">Select Block...</option>
                                                     	  </select>
                                                         <div ng-show="form.$submitted || form.block.$touched">
@@ -519,10 +519,10 @@
                                             
                                             <div class="col-md-4">
                                                 <div class="form-group ">
-                                                    <label class="control-label">Floor<span class="red-star">*</span> </label>
+                                                    <label class="control-label">Floor<span class="red-star"></span> </label>
                                                     <div class="dropdown">
                                                         <span class="form-control-feedback d-sm-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-													<select class="form-control " ng-model="selectedFloor" ng-change="loadZones()"  ng-options="floor as floor for floor in floors" name="floor" required>
+													<select class="form-control " ng-model="selectedFloor" ng-change="loadZones()"  ng-options="floor as floor for floor in floors" name="floor" >
                                                         <option value="">Select Floor...</option>
                                                     	</select>
                                                    	 <div ng-show="form.$submitted || form.floor.$touched">
@@ -539,10 +539,10 @@
                                             
                                             <div class="col-md-4">
                                                 <div class="form-group ">
-                                                    <label class="control-label">Zone<span class="red-star">*</span> </label>
+                                                    <label class="control-label">Zone<span class="red-star"></span> </label>
                                                     <div class="dropdown">
                                                         <span class="form-control-feedback d-sm-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-													<select class="form-control " ng-model="selectedZone"  ng-options="zone as zone for zone in zones" name="zone" required>
+													<select class="form-control " ng-model="selectedZone"  ng-options="zone as zone for zone in zones" name="zone" >
                                                         <option value="">Select Zone...</option>
                                                     </select>
                                                    	 <div ng-show="form.$submitted || form.floor.$touched">
