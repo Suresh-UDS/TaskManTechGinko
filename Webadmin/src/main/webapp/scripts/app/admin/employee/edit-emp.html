@@ -207,11 +207,11 @@
                                                             </p>
                                                             <p class="help-block" style="color:maroon"
                                                                ng-show="form.employeePhone.$error.maxlength">
-                                                                Employee Phone No. cannot be longer .
+                                                                Employee Phone No. cannot be longer than 13 characters.
                                                             </p>
                                                             <p class="help-block" style="color:maroon"
                                                                ng-show="form.employeePhone.$error.pattern">
-                                                                Employee Phone No. can only contain letters,numbers and space.
+                                                                Employee Phone No. can only contain numbers.
                                                             </p>
                                                         </div>
                                                     </div>
@@ -396,13 +396,13 @@
 
         		                                    <div class="col-md-6">
                                                 <div class="form-group ">
-                                                    <label class="control-label">Manager<span class="red-star">*</span></label>
+                                                    <label class="control-label">Manager<span class="red-star"></span></label>
                                                     <div class="dropdown">
                                                         <!--<input ng-focus="loadAllManagers()" type="text" class="form-control" ng-model="selectedManager" name="manager"-->
                                                                <!--uib-typeahead="employee as employee.name for employee in allManagers | filter:$viewValue | limitTo:10"-->
                                                                <!--ng-minlength=1 ng-maxlength=50 ng-pattern="/^[A-Za-z0-9\s]*$/"  autocomplete="off" />-->
                                                         <span class="form-control-feedback d-sm-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                                        <select class=" form-control " ng-model="selectedManager" ng-init="selectedManager = selected" ng-options="manager as manager.name for manager in allManagers track by manager.name" name="manager" required>
+                                                        <select class=" form-control " ng-model="selectedManager" ng-init="selectedManager = selected" ng-options="manager as manager.name for manager in allManagers track by manager.name" name="manager" >
                                                             <option value="">Please select Manager...</option>
                                                         </select>
                                                         <div ng-show="form.$submitted || form.manager.$touched">
