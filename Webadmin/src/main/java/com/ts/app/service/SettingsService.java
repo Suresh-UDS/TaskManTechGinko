@@ -329,7 +329,14 @@ public class SettingsService extends AbstractService {
 				}else if(setting.getSettingKey().equalsIgnoreCase(EMAIL_NOTIFICATION_QUOTATION_EMAILS)) {
 					settingDto.setQuotationEmailsId(setting.getId());
 					settingDto.setQuotationEmailIds(CommonUtil.convertToList(setting.getSettingValue(), ","));
+				}else if(setting.getSettingKey().equalsIgnoreCase(EMAIL_NOTIFICATION_TICKET)) {
+					settingDto.setTicketEmailAlertId(setting.getId());
+					settingDto.setTicketEmailAlert(Boolean.valueOf(setting.getSettingValue()));
+				}else if(setting.getSettingKey().equalsIgnoreCase(EMAIL_NOTIFICATION_TICKET_EMAILS)) {
+					settingDto.setTicketEmailsId(setting.getId());
+					settingDto.setTicketEmailIds(CommonUtil.convertToList(setting.getSettingValue(), ","));
 				}
+				
 				//settings.add(settingDto);
 			}
 		}
