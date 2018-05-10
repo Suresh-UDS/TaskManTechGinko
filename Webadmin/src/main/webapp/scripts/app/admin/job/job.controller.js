@@ -637,12 +637,12 @@ angular.module('timeSheetApp')
 
         $scope.closeTicketConfirm =function(cTicket){
 
-        JobComponent.updateTicket(cTicket).then(function() {
-                $scope.success = 'OK';
-                $scope.showNotifications('top','center','success','Ticket status updated');
-                $(".fade").removeClass("modal-backdrop");
-                $state.reload();
-            });
+	        JobComponent.updateTicket(cTicket).then(function() {
+	                $scope.success = 'OK';
+	                $scope.showNotifications('top','center','success','Ticket status updated');
+	                $(".fade").removeClass("modal-backdrop");
+	                $state.reload();
+	            });
         }
 
         
