@@ -141,6 +141,10 @@ scheduler:
       enabled: true
    eodJobReport:
       enabled: true
+   attendanceDetailReport:
+      enabled: true
+   attendanceConsolidatedReport:
+      enabled: true
 
 default.user.password: uds12345
 
