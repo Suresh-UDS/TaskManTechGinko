@@ -28,6 +28,9 @@ angular.module('timeSheetApp')
         $scope.jobTypeName = "";
         $scope.monthDays = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31];
         $scope.pageSort = 10;
+        
+        $scope.ticketStatus;
+        
         /*
         **
         Job type based records function.
@@ -219,6 +222,12 @@ angular.module('timeSheetApp')
                     }
 
                 }
+        		
+        		TicketComponent.getTicketDetails($stateParams.ticketId).then(function(data){
+                    console.log("Ticket details");
+                    console.log(data);
+                    $scope.ticketStatus = data.status;
+        		});       
         	});
         };
 
@@ -621,10 +630,11 @@ angular.module('timeSheetApp')
     */
 
         $scope.setPage = function (page) {
-
-            if (page < 1 || page > $scope.pager.totalPages) {
-                return;
-            }
+        		if($scope.pager) {
+                if (page < 1 || page > $scope.pager.totalPages) {
+                    return;
+                }
+        		}
             //alert(page);
             $scope.pages.currPage = page;
             $scope.search();
@@ -634,6 +644,7 @@ angular.module('timeSheetApp')
 
             $scope.cTicket={id :ticket,status :'Closed'};
         }
+        
 
         $scope.closeTicketConfirm =function(cTicket){
 
@@ -641,6 +652,7 @@ angular.module('timeSheetApp')
 	                $scope.success = 'OK';
 	                $scope.showNotifications('top','center','success','Ticket status updated');
 	                $(".fade").removeClass("modal-backdrop");
+	                $scope.ticketStatus = 'Closed'
 	                $state.reload();
 	            });
         }
