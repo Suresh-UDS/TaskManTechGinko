@@ -438,6 +438,9 @@ public class SchedulerService extends AbstractService {
 			Calendar cal = Calendar.getInstance();
 			cal.set(Calendar.HOUR_OF_DAY, 0);
 			cal.set(Calendar.MINUTE, 0);
+			Calendar genShiftEnd = Calendar.getInstance();
+			genShiftEnd.set(Calendar.HOUR_OF_DAY, 23);
+			genShiftEnd.set(Calendar.MINUTE, 59);
 			List<Project> projects = projectRepository.findAll();
 			for(Project proj : projects) {
 				SearchCriteria sc = new SearchCriteria();
@@ -466,15 +469,19 @@ public class SchedulerService extends AbstractService {
 								Calendar startCal = Calendar.getInstance();
 								startCal.set(Calendar.HOUR_OF_DAY, Integer.parseInt(startTimeUnits[0]));
 								startCal.set(Calendar.MINUTE, Integer.parseInt(startTimeUnits[1]));
+								startCal.set(Calendar.SECOND, 0);
+								startCal.set(Calendar.MILLISECOND, 0);
 								String endTime = shift.getEndTime();
 								String[] endTimeUnits = endTime.split(":");
 								Calendar endCal = Calendar.getInstance();
 								endCal.set(Calendar.HOUR_OF_DAY, Integer.parseInt(endTimeUnits[0]));
 								endCal.set(Calendar.MINUTE, Integer.parseInt(endTimeUnits[1]));
+								endCal.set(Calendar.SECOND, 0);
+								endCal.set(Calendar.MILLISECOND, 0);
 								Calendar currCal = Calendar.getInstance();
 								//currCal.add(Calendar.HOUR_OF_DAY,  1);
 								long timeDiff = currCal.getTimeInMillis() - startCal.getTimeInMillis();
-								if(timeDiff >= 3600000 && timeDiff < 7200000) { //within 2 hours of the shift start timing.
+								//if(timeDiff >= 3600000 && timeDiff < 7200000) { //within 2 hours of the shift start timing.
 									//long empCntInShift = employeeRepository.findEmployeeCountBySiteAndShift(site.getId(), shift.getStartTime(), shift.getEndTime());
 									long empCntInShift = empShiftRepo.findEmployeeCountBySiteAndShift(site.getId(), DateUtil.convertToSQLDate(startCal.getTime()), DateUtil.convertToSQLDate(endCal.getTime()));
 									if(empCntInShift == 0) {
@@ -499,11 +506,11 @@ public class SchedulerService extends AbstractService {
 										//mailService.sendJobReportEmailFile(attendanceReportEmails.getSettingValue(), exportResult.getFile(), null, cal.getTime());
 										mailService.sendAttendanceConsolidatedReportEmail(site.getName(), attendanceReportEmails.getSettingValue(), content.toString(), null, cal.getTime());
 									}
-								}	
+								//}	
 							}
 	 					}else {
 							long empCntInShift = employeeRepository.findCountBySiteId(site.getId());
-							long attendanceCount = attendanceRepository.findCountBySiteAndCheckInTime(site.getId(), DateUtil.convertToSQLDate(cal.getTime()), DateUtil.convertToSQLDate(cal.getTime()));
+							long attendanceCount = attendanceRepository.findCountBySiteAndCheckInTime(site.getId(), DateUtil.convertToSQLDate(cal.getTime()), DateUtil.convertToSQLDate(genShiftEnd.getTime()));
 						    long absentCount = empCntInShift - attendanceCount;
 						    if(attendanceReportEmails != null) {
 								StringBuilder content = new StringBuilder("Site Name - " + site.getName() + LINE_SEPARATOR);
@@ -527,11 +534,14 @@ public class SchedulerService extends AbstractService {
 			cal.add(Calendar.DAY_OF_MONTH, -1);
 			cal.set(Calendar.HOUR_OF_DAY, 0);
 			cal.set(Calendar.MINUTE, 0);
+			cal.set(Calendar.SECOND,0);
+			cal.set(Calendar.MILLISECOND,0);
 			Calendar dayEndcal = Calendar.getInstance();
 			dayEndcal.add(Calendar.DAY_OF_MONTH, -1);
 			dayEndcal.set(Calendar.HOUR_OF_DAY, 23);
 			dayEndcal.set(Calendar.MINUTE, 59);
-
+			dayEndcal.set(Calendar.SECOND, 0);
+			dayEndcal.set(Calendar.MILLISECOND, 0);
 			List<Project> projects = projectRepository.findAll();
 			for(Project proj : projects) {
 				SearchCriteria sc = new SearchCriteria();
@@ -560,17 +570,22 @@ public class SchedulerService extends AbstractService {
 								startCal.add(Calendar.DAY_OF_MONTH, -1);
 								startCal.set(Calendar.HOUR_OF_DAY, Integer.parseInt(startTimeUnits[0]));
 								startCal.set(Calendar.MINUTE, Integer.parseInt(startTimeUnits[1]));
+								startCal.set(Calendar.SECOND, 0);
+								startCal.set(Calendar.MILLISECOND, 0);
 								String endTime = shift.getEndTime();
 								String[] endTimeUnits = endTime.split(":");
 								Calendar endCal = Calendar.getInstance();
 								endCal.add(Calendar.DAY_OF_MONTH, -1);
 								endCal.set(Calendar.HOUR_OF_DAY, Integer.parseInt(endTimeUnits[0]));
 								endCal.set(Calendar.MINUTE, Integer.parseInt(endTimeUnits[1]));
+								endCal.set(Calendar.SECOND, 0);
+								endCal.set(Calendar.MILLISECOND, 0);
 								Calendar currCal = Calendar.getInstance();
 								currCal.add(Calendar.HOUR_OF_DAY,  1);
 								long timeDiff = currCal.getTimeInMillis() - startCal.getTimeInMillis();
 								//if(currCal.equals(startCal) || (timeDiff >= 0 && timeDiff <= 3600000)) {
-									long empCntInShift = 0; //employeeRepository.findEmployeeCountBySiteAndShift(site.getId(), shift.getStartTime(), shift.getEndTime());
+									//long empCntInShift = 0; //employeeRepository.findEmployeeCountBySiteAndShift(site.getId(), shift.getStartTime(), shift.getEndTime());
+									long empCntInShift = empShiftRepo.findEmployeeCountBySiteAndShift(site.getId(), DateUtil.convertToSQLDate(startCal.getTime()), DateUtil.convertToSQLDate(endCal.getTime()));
 									if(empCntInShift == 0) {
 										empCntInShift = employeeRepository.findCountBySiteId(site.getId());
 									}
@@ -609,19 +624,24 @@ public class SchedulerService extends AbstractService {
 							for(EmployeeAttendanceReport empAttn : empAttnList) {
 								empPresentList.add(empAttn.getEmpId());
 							}
-							if(CollectionUtils.isNotEmpty(empPresentList)) {
-								List<Employee> empNotMarkedAttn = employeeRepository.findNonMatchingBySiteId(site.getId(), empPresentList);
-								if(CollectionUtils.isNotEmpty(empNotMarkedAttn)) {
-									for(Employee emp : empNotMarkedAttn) {
-										EmployeeAttendanceReport empAttnRep = new EmployeeAttendanceReport();
-										empAttnRep.setEmpId(emp.getId());
-										empAttnRep.setEmployeeId(emp.getEmpId());
-										empAttnRep.setName(emp.getName());
-										empAttnRep.setLastName(emp.getLastName());
-										empAttnRep.setStatus(EmployeeAttendanceReport.ABSENT_STATUS);
-										empAttnList.add(empAttnRep);
-									}
-								}
+						}
+						List<Employee> empNotMarkedAttn = null;
+						if(CollectionUtils.isNotEmpty(empPresentList)) {
+							empNotMarkedAttn = employeeRepository.findNonMatchingBySiteId(site.getId(), empPresentList);
+						}else {
+							empNotMarkedAttn = employeeRepository.findBySiteId(site.getId());
+						}
+						if(CollectionUtils.isNotEmpty(empNotMarkedAttn)) {
+							for(Employee emp : empNotMarkedAttn) {
+								EmployeeAttendanceReport empAttnRep = new EmployeeAttendanceReport();
+								empAttnRep.setEmpId(emp.getId());
+								empAttnRep.setEmployeeId(emp.getEmpId());
+								empAttnRep.setName(emp.getName());
+								empAttnRep.setLastName(emp.getLastName());
+								empAttnRep.setStatus(EmployeeAttendanceReport.ABSENT_STATUS);
+								empAttnRep.setSiteName(site.getName());
+								empAttnRep.setProjectName(proj.getName());
+								empAttnList.add(empAttnRep);
 							}
 						}
 						log.debug("send detailed report");

@@ -10,6 +10,6 @@ import com.ts.app.domain.EmployeeShift;
 
 public interface EmployeeShiftRepository extends JpaRepository<EmployeeShift, Long> {
 
-	@Query("SELECT count(distinct e) FROM EmployeeShift es where es.site.id = :siteId and es.startTime = :startTime and es.endTime = :endTime")
+	@Query("SELECT count(distinct es) FROM EmployeeShift es where es.site.id = :siteId and es.startTime = :startTime and es.endTime = :endTime")
 	public long findEmployeeCountBySiteAndShift(@Param("siteId") long siteId, @Param("startTime") Date startTime, @Param("endTime") Date endTime);
 }
