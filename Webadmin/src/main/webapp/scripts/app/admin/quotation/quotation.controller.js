@@ -5,7 +5,7 @@ angular
 		.controller(
 				'QuotationController',
 				function($scope, $rootScope, $state, $timeout, $http, $document, $window,
-						$stateParams, $location, RateCardComponent,TicketComponent,
+						$stateParams, $location, RateCardComponent,TicketComponent, JobComponent,
 						 ProjectComponent, SiteComponent,PaginationComponent) {
                     $rootScope.loginView = false;
 
@@ -242,6 +242,9 @@ angular
 						$scope.quotation.rateCardDetails = $scope.rateCardDetails;
 						$scope.quotation.drafted = true;
 						$scope.quotation.mode = mode;
+						$scope.quotation.ticketId = $stateParams.ticketId;
+						
+						console.log('Quotation details - ' + JSON.stringify($scope.quotation));
 						RateCardComponent.createQuotation($scope.quotation)
 								.then(function(response) {
 									console.log(response);
@@ -294,6 +297,15 @@ angular
 				                $scope.selectedSite = {};
 				                $scope.selectedSite.id = $scope.quotation.siteId;
 				                $scope.selectedSite.name = $scope.quotation.siteName;
+				                
+				                if($scope.quotation.ticketId > 0) {
+					                TicketComponent.getTicketDetails($scope.quotation.ticketId).then(function(data){
+					                    console.log("Ticket details");
+					                    console.log(data);
+					                    $scope.ticketStatus = data.status;
+					        			});    
+				                	
+				                }
 				            });
 			        };
 
@@ -536,5 +548,21 @@ angular
 					            $scope.pages.currPage = page;
 					            $scope.search();
 					        };
+					        
+					        $scope.closeTicket = function (ticket){
+
+					            $scope.cTicket={id :ticket,status :'Closed'};
+					        }
+
+					        $scope.closeTicketConfirm =function(cTicket){
+
+					        JobComponent.updateTicket(cTicket).then(function() {
+					                $scope.success = 'OK';
+					                $scope.showNotifications('top','center','success','Ticket status updated');
+					                $(".fade").removeClass("modal-backdrop");
+					                $scope.ticketStatus = 'Closed';
+					                $state.reload();
+					            });
+					        }
 
 				});

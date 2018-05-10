@@ -161,6 +161,9 @@
                                             <div class="col-md-4 ">
                                                 <button class="btn btn-primary" ng-if="(quotation.ticketId > 0)" ui-sref="view-ticket({id : quotation.ticketId})">
                                                     <i class="material-icons">remove_red_eye</i>View Ticket</button>
+                                                <button class="btn btn-primary" ng-if="(quotation.ticketId > 0) && ticketStatus != 'Closed'" ng-click="closeTicket(quotation.ticketId)"   onClick="$('#deleteModalNew').modal()" data-target="#myModal" >
+                                                    <i class="material-icons">remove_red_eye</i>Close Ticket</button>
+                                                <a ng-if="(quotation.ticketId > 0) && ticketStatus == 'Closed'" ng-class="{active: $state.includes('admin')}" class="btn btn-simple btn-info">{{quotation.ticketId}} Closed </a>    
                                             </div>
 
 									</div>
@@ -595,3 +598,25 @@
         </div>
     </div>
 </div>
+
+<!-- Ticket Close confirmation dialog -->
+<div id="deleteModalNew" class="delete-confirmation modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"
+                        aria-hidden="true">&times;</button>
+                <h4 class="modal-title">Close Ticket</h4>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure that you want to close ticket?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                <button type="button"
+                        class="btn btn-success delete-confirmation-button" ng-click="closeTicketConfirm(cTicket)">Close Ticket</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- End of Ticket Close confirmation dialog -->
