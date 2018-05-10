@@ -486,7 +486,7 @@ public class EmployeeResource {
 		return new ResponseEntity<ImportResult>(result,HttpStatus.OK);
 	}
 
-    @RequestMapping(value = "/employee/shift/import/{fileId}/status",method = RequestMethod.GET)
+    @RequestMapping(value = "/employee/shift/importstatus/{fileId}/status",method = RequestMethod.GET)
 	public ImportResult importShiftStatus(@PathVariable("fileId") String fileId) {
 		log.debug("ImportShiftStatus -  fileId -"+ fileId);
 		ImportResult result = jobService.getImportStatus(fileId);

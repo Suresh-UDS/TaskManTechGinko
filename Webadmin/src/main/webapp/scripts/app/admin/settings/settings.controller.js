@@ -12,7 +12,8 @@ angular.module('timeSheetApp')
     			overdueEmailIds : [],
     			eodJobEmailIds : [],
     			quotationEmailIds : [],
-    			feedbackEmailIds : []
+    			feedbackEmailIds : [],
+    			ticketEmailIds : []
     		};
     		
     	
@@ -21,6 +22,19 @@ angular.module('timeSheetApp')
     			//$scope.loadSettings();
     		}
     		
+    		$scope.addTicketEmail = function() {
+	        	var email = $scope.ticketEmail;
+	        	if(!$scope.settings.ticketEmailIds) {
+	        		$scope.settings.ticketEmailIds = [];
+	        	}
+	        	$scope.settings.ticketEmailIds.push(email);
+	        	$scope.ticketEmail = '';
+        }
+        
+        $scope.removeTicketEmail = function(ind) {
+        		$scope.settings.ticketEmailIds.splice(ind,1);
+        }
+        
     		$scope.addQuotationEmail = function() {
 	        	var email = $scope.quotationEmail;
 	        	if(!$scope.settings.quotationEmailIds) {

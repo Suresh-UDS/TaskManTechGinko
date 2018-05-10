@@ -319,6 +319,12 @@ public class    EmployeeService extends AbstractService {
 		Hibernate.initialize(employeeUpdate.getUser());
 		User user = employeeUpdate.getUser();
 		if(user != null) {
+			if(employee.isLeft() || employee.isRelieved() || employeeUpdate.getActive().equalsIgnoreCase(Employee.ACTIVE_NO)) {
+				user.setActivated(false);
+				user.setActive(Employee.ACTIVE_NO);
+			}
+			user.setFirstName(employee.getName());
+			user.setLastName(employee.getLastName());
 			user.setEmail(employeeUpdate.getEmail());
 		}
 		employeeUpdate.setUser(user);
