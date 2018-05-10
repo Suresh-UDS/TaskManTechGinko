@@ -351,9 +351,13 @@ angular.module('timeSheetApp')
 	        	// $scope.job.jobStatus = $scope.selectedStatus.name;
 	        	console.log('job details to save - ' + JSON.stringify($scope.job));
 	        	var post = $scope.isEdit ? JobComponent.update : JobComponent.create
+	        	var message = 'Job Created Successfully'
+	        	if($scope.job.id) {
+	        		message = 'Job Updated Successfully'
+	        	}		
 	        	post($scope.job).then(function () {
 	                $scope.success = 'OK';
-	                $scope.showNotifications('top','center','success','Job Created Successfully');
+	                $scope.showNotifications('top','center','success',message);
 	            	$location.path('/jobs');
             }).catch(function (response) {
                 $scope.success = null;
