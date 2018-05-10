@@ -85,7 +85,6 @@ var fs = require('fs');
 
     }
 
-var _this = this;
 
 
 // create an export function to encapsulate the controller's methods
@@ -108,7 +107,7 @@ module.exports = {
         quotation.save(function(err,quotation){
             if(!err){
                 // mailerService.submitQuotation('karthickk@techginko.com',quotation);
-                self.createPDF(quotation);
+                module.exports.createPDF(quotation);
                 res.json(200,quotation)
             }else{
                 console.log("Error in saving quotation");
