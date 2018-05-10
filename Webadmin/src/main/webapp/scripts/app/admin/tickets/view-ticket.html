@@ -1,5 +1,5 @@
 <div class="crud-form"
-	data-unique-hash="a2ad475d60b22954085c657a73309b8f" ng-init="initLoad();loadingStart();">
+	data-unique-hash="a2ad475d60b22954085c657a73309b8f" ng-init="loadingStart();">
 	<div class="" ng-init="editTicket();">
 		<div class="row">
         	<div class="col-md-12">
@@ -45,7 +45,15 @@
                                                     </td>
 
                                                 </tr>
-                                             
+                                                <tr>
+                                                    <td>Status</td>
+                                                    <td>
+                                                        
+                                                     {{tickets.status}}
+                                                    
+                                                    </td>
+
+                                                </tr>                                             
 
 
                                                 </tbody>
@@ -71,11 +79,11 @@
                                                 <tbody>
                                                 <tr>
                                                     <td>Site</td>
-                                                    <td>{{tickets.selectedSite.name}}</td>
+                                                    <td>{{selectedSite.name}}</td>
                                                 </tr>
                                                 <tr>
                                                     <td>Employee</td>
-                                                    <td>{{tickets.selectedEmployee.name}}</td>
+                                                    <td>{{selectedEmployee.name}}</td>
 
                                                 </tr>
                                           
