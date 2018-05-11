@@ -213,7 +213,7 @@
                                                         <!--required-->
                                                         <!--autocomplete="off" />-->
                                                         <span class="form-control-feedback d-sm-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                                        <select class="form-control " ng-model="selectedSite" ng-change="loadBlocks();" ng-options="site as site.name for site in sites track by site.id" name="siteName" required>
+                                                        <select class="form-control " ng-model="selectedSite" ng-change="loadEmployees();loadBlocks();" ng-options="site as site.name for site in sites track by site.id" name="siteName" required>
                                                             <option value="">Select Site...</option>
                                                         </select>
                                                         <div ng-show="form.$submitted || form.siteName.$touched">
