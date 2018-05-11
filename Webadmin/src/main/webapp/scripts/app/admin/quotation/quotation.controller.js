@@ -109,6 +109,8 @@ angular
 						ProjectComponent.findAll().then(function(data) {
 							console.log("Loading all projects")
 							$scope.projects = data;
+				        		$scope.selectedProject = $scope.projects[0];
+				        		$scope.loadSites();
 						});
 					};
 
