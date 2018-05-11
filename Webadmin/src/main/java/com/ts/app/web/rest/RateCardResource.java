@@ -135,7 +135,7 @@ public class RateCardResource {
     
     @RequestMapping(value = "/rateCard/quotation/search", method = RequestMethod.POST)
     public Object getQuotations(@RequestBody SearchCriteria searchCriteria) {
-        log.info("--Invoked RateCardResource.Get Quotations --");
+        log.info("--Invoked RateCardResource.Get Quotations --" + searchCriteria);
         Object result =null;
         result= rateCardService.getQuotations(searchCriteria);
         return result;
