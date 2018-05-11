@@ -246,7 +246,11 @@ angular
 								.concat($scope.labourRateCardDetails,
 										$scope.materialRateCardDetails);
 						$scope.quotation.rateCardDetails = $scope.rateCardDetails;
-						$scope.quotation.drafted = true;
+						if(mode == 'submit') {
+							$scope.quotation.submitted = true;
+						}else {
+							$scope.quotation.drafted = true;
+						}
 						$scope.quotation.mode = mode;
 						$scope.quotation.ticketId = $stateParams.ticketId;
 						
