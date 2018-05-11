@@ -427,7 +427,9 @@ angular
 
 			        	if($scope.selectedSite) {
 			        		$scope.searchCriteria.siteId = $scope.selectedSite.id;
-				        }
+				    }else if($scope.sites) {
+				    		$scope.searchCriteria.siteId = $scope.sites[0].id;
+				    }
 			        	if($scope.selectedStatus){
 				        		$scope.searchCriteria.activeFlag = $scope.selectedStatus;
 				        }

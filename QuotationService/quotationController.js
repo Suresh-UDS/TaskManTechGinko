@@ -306,7 +306,7 @@ module.exports = {
 
     getQuotations: function(req,res,next){
       console.log("Get Quotations");
-      Quotation.find({}).sort({createdDate : -1}, function(err,quotations){
+      Quotation.find({siteId:req.body.siteId}).sort({createdDate : -1}, function(err,quotations){
           if(err){
               console.log("unable to get Quotations")
               res.send(200,err);

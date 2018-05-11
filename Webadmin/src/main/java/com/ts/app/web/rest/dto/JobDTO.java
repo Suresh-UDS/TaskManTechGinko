@@ -3,6 +3,7 @@ package com.ts.app.web.rest.dto;
 import java.util.Date;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.ts.app.domain.JobStatus;
 import com.ts.app.domain.JobType;
 import com.ts.app.domain.util.StringUtil;
@@ -73,10 +74,13 @@ public class JobDTO extends BaseDTO {
 
 	private List<CheckInOutImageDTO> images;
 
+	@JsonIgnoreProperties
 	private String block;
 
+	@JsonIgnoreProperties
 	private String floor;
 
+	@JsonIgnoreProperties
 	private String zone;
 
 	public String getTitle() {
