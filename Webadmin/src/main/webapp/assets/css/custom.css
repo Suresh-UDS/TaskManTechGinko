@@ -946,7 +946,7 @@ button.btn.btn-outline {
 {
   width: 79%;
   padding-top: 10px;
-  margin-top: 5px;
+  margin-top: 12px;
 }
 
 .table>thead>tr>th, .table>tbody>tr>th
@@ -1235,4 +1235,7 @@ a.sort-by:after {
 }
 .form-group {
     padding-bottom: 18px !important;
+}
+p.help-block{
+  line-height: 15px;
 }
