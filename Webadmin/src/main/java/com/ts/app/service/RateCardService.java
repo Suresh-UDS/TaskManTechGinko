@@ -469,6 +469,8 @@ public class RateCardService extends AbstractService {
             Map<String, String> map = new HashMap<String, String>();
             map.put("Content-Type", MediaType.APPLICATION_JSON_VALUE);
 
+            headers.setAll(map);
+            
             JSONObject request = new JSONObject();
             request.put("projectId",searchCriteria.getProjectId());
             request.put("siteId",searchCriteria.getSiteId());

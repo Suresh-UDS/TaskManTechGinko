@@ -160,7 +160,7 @@ public class RateCardResource {
     public Object rejectQuotation(@RequestBody QuotationDTO quotationDTO){
 	    log.info("Reject Quotations");
 	    Object result = null;
-	    rateCardService.approveQuotation(quotationDTO);
+	    rateCardService.rejectQuotation(quotationDTO);
 	    return result;
     }
 

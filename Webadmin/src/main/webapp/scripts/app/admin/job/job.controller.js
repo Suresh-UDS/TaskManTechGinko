@@ -99,7 +99,7 @@ angular.module('timeSheetApp')
         		$scope.searchCriteria.siteId = $scope.selectedSite.id;
         		EmployeeComponent.search($scope.searchCriteria).then(function (data) {
         			$scope.selectedEmployee = null;
-                $scope.selectedEmployee = data.transactions;
+        			$scope.employees = data.transactions;
             });
         };
 
@@ -272,7 +272,7 @@ angular.module('timeSheetApp')
 
 
         $scope.initPage=function (){
-	        	$scope.loadEmployee();
+	        	//$scope.loadEmployee();
 	        	$scope.loadAllSites();
 	        	//$scope.loadLocations();
 	        	$scope.loadAssets();
