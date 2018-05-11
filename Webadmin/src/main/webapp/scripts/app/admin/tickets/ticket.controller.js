@@ -308,6 +308,21 @@ angular.module('timeSheetApp')
                     $state.reload();
                 });
             }
+            
+            $scope.reopenTicket = function (ticket){
+
+                $scope.cTicket={id :ticket,status :'Reopen'};
+            }
+
+            $scope.reopenTicketConfirm =function(cTicket){
+
+            		JobComponent.updateTicket(cTicket).then(function() {
+                    $scope.success = 'OK';
+                    $scope.showNotifications('top','center','success','Ticket status updated');
+                    $(".fade").removeClass("modal-backdrop");
+                    $state.reload();
+                });
+            }
 
 
         $scope.deleteConfirm = function (ticket){

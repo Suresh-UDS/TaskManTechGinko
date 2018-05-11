@@ -26,6 +26,7 @@ import com.ts.app.domain.Job;
 import com.ts.app.domain.Setting;
 import com.ts.app.domain.Site;
 import com.ts.app.domain.Ticket;
+import com.ts.app.domain.TicketStatus;
 import com.ts.app.domain.User;
 import com.ts.app.domain.UserRole;
 import com.ts.app.domain.UserRoleEnum;
@@ -179,6 +180,10 @@ public class TicketManagementService extends AbstractService {
         if(StringUtils.isNotEmpty(ticket.getStatus()) && (ticket.getStatus().equalsIgnoreCase("Closed"))) {
         		ticket.setClosedBy(user.getEmployee());
         		ticket.setClosedOn(new java.sql.Date(currCal.getTimeInMillis()));
+        }
+        
+        if(StringUtils.isNotEmpty(ticketDTO.getStatus()) && (ticketDTO.getStatus().equalsIgnoreCase("Reopen"))) { 
+        		ticket.setStatus(TicketStatus.OPEN.toValue());
         }
 
         ticket = ticketRepository.saveAndFlush(ticket);

@@ -41,7 +41,7 @@ angular.module('timeSheetApp')
 
            $scope.jobTypeName = type;
            $scope.setPage(1);
-           //$scope.search();
+           $scope.search();
 
         };
 
