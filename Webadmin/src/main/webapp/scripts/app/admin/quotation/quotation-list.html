@@ -270,9 +270,8 @@
                                 <button  title="Approve" ng-if="quotation.isSubmitted && !quotation.isApproved"    data-toggle="modal" data-target="#approveQuotationModal" data-dismiss="#approveQuotationModal" ng-click="selectQuotation(quotation)"  class="btn btn-simple btn-info btn-icon like"> <i class="material-icons">
                                     offline_pin
                                 </i> </button>
-                                <button  title="Reject" ng-if="quotation.isSubmitted && !quotation.isApproved && !quotation.isRejected"    data-toggle="modal" data-target="#rejectQuotationModal" data-dismiss="#rejectQuotationModal" ng-click="selectQuotation(quotation)"  class="btn btn-simple btn-info btn-icon like"> <i class="material-icons">
-                                    highlight_off
-                                </i> </button>
+                                <button  title="Reject" ng-if="quotation.isSubmitted && !quotation.isApproved && !quotation.isRejected"    data-toggle="modal" data-target="#rejectQuotationModal" data-dismiss="#rejectQuotationModal" ng-click="selectQuotation(quotation)"  class="btn btn-simple btn-info btn-icon like">
+                                    <i class="material-icons">highlight_off</i> </button>
                              </td>
                              <td>
                                 <a name="Delete" ng-if="quotation.isApproved || quotation.isDrafted" ng-class="{active: $state.includes('admin')}"   ng-click="deleteConfirm(site)"  onClick="$('#deleteModal').modal()" data-target="#myModal"  class="btn btn-simple btn-danger"><i class="material-icons">close</i></a>
