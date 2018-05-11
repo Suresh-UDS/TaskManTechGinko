@@ -133,7 +133,7 @@ public class RateCardResource {
     }
 
     
-    @RequestMapping(value = "/rateCard/quotation/get", method = RequestMethod.POST)
+    @RequestMapping(value = "/rateCard/quotation/search", method = RequestMethod.POST)
     public Object getQuotations(@RequestBody SearchCriteria searchCriteria) {
         log.info("--Invoked RateCardResource.Get Quotations --");
         Object result =null;

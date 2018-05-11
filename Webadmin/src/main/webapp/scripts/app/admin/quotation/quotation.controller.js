@@ -472,7 +472,7 @@ angular
                      $scope.loadPageTop();
 
 		        	//RateCardComponent.search($scope.searchCriteria).then(function (data) {
-		        	RateCardComponent.getAllQuotations().then(function (data) {
+		        	RateCardComponent.getAllQuotations($scope.searchCriteria).then(function (data) {
 		                $scope.quotations = data;
 		                //$scope.quotations = data.transactions;
 		                $scope.quotationsLoader = true;

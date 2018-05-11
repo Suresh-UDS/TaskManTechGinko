@@ -88,7 +88,7 @@ angular.module('timeSheetApp')
             },
 
             getAllQuotations: function(criteria){
-                return $http.post('api/rateCard/quotation/get', criteria).then(function (response) {
+                return $http.post('api/rateCard/quotation/search', criteria).then(function (response) {
                     console.log("All Quotation");
                     console.log(response.data);
                     return response.data;
