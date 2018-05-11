@@ -377,7 +377,7 @@ public class RateCardService extends AbstractService {
 	            JSONObject qresp = new JSONObject(response.getBody().toString());
 	            //save quotation id in ticket
 	            if(qresp != null) {
-	            		long serialId = qresp.getLong("serialId");
+	            		String serialId = qresp.getString("_id");
 	            		Ticket ticket = ticketRepository.findOne(quotationDto.getTicketId());
 	            		if(ticket != null) {
 	            			ticket.setQuotationId(serialId);
@@ -410,6 +410,37 @@ public class RateCardService extends AbstractService {
             HttpEntity<?> requestEntity = new HttpEntity<>(headers);
             log.debug("quotation service end point"+quotationSvcEndPoint);
             ResponseEntity<?> response = restTemplate.getForEntity(quotationSvcEndPoint+"/quotation/id/" + id , String.class);
+            log.debug("Response freom push service "+ response.getStatusCode());
+            log.debug("response from push service"+response.getBody());
+//            rateCardDTOList = (List<RateCardDTO>) response.getBody();
+            quotationList = response.getBody();
+
+        }catch(Exception e) {
+            log.error("Error while calling location service ", e);
+            e.printStackTrace();
+        }
+
+        return  quotationList;
+    }
+    
+    public Object getQuotation(long serialId) {
+
+        log.debug("get Quotation");
+        Object quotationList = "";
+
+        try {
+            RestTemplate restTemplate = new RestTemplate();
+            MappingJackson2HttpMessageConverter jsonHttpMessageConverter = new MappingJackson2HttpMessageConverter();
+            jsonHttpMessageConverter.getObjectMapper().configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
+            restTemplate.getMessageConverters().add(jsonHttpMessageConverter);
+
+            MultiValueMap<String, String> headers = new LinkedMultiValueMap<String, String>();
+            Map<String, String> map = new HashMap<String, String>();
+            map.put("Content-Type", MediaType.APPLICATION_JSON_VALUE);
+
+            HttpEntity<?> requestEntity = new HttpEntity<>(headers);
+            log.debug("quotation service end point"+quotationSvcEndPoint);
+            ResponseEntity<?> response = restTemplate.getForEntity(quotationSvcEndPoint+"/quotation/id/" + serialId , String.class);
             log.debug("Response freom push service "+ response.getStatusCode());
             log.debug("response from push service"+response.getBody());
 //            rateCardDTOList = (List<RateCardDTO>) response.getBody();

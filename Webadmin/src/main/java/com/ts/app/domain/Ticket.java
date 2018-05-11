@@ -79,7 +79,7 @@ public class Ticket extends AbstractAuditingEntity implements Serializable {
     
     private String category;
     
-    private long quotationId;
+    private String quotationId;
 
     public Long getId() {
         return id;
@@ -241,13 +241,15 @@ public class Ticket extends AbstractAuditingEntity implements Serializable {
 		this.job = job;
 	}
 
-	public long getQuotationId() {
+	public String getQuotationId() {
 		return quotationId;
 	}
 
-	public void setQuotationId(long quotationId) {
+	public void setQuotationId(String quotationId) {
 		this.quotationId = quotationId;
 	}
+
+	
     
 	
 }

@@ -320,16 +320,19 @@ module.exports = {
     getQuotation: function(req,res,next){
         console.log("Get quotations by id");
         console.log(req.params.id);
-        Quotation.findById(req.params.id, function(err,quotation){
-            console.log('quotation details - '+ quotation);
-            if(err){
-                res.send(500, err);
-            } else{
-                res.send(200,quotation);
-            }
+        if(req.params.id) {
+            Quotation.findById(req.params.id, function(err,quotation){
+                console.log('quotation details - '+ quotation);
+                if(err){
+                    res.send(500, err);
+                } else{
+                    res.send(200,quotation);
+                }
 
-        })
+            })
+        }
     },
+
 
     getQuotationById: function(req,res,next){
         console.log("Get quotations by id");

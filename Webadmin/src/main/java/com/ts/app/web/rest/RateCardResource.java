@@ -131,6 +131,13 @@ public class RateCardResource {
         Object result = rateCardService.getQuotation(id);
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
+	
+	@RequestMapping(value = "/rateCard/quotation/serialId/{serialId}", method = RequestMethod.GET)
+    public ResponseEntity<?> getQuotationBySerialId(@PathVariable("serialId") long serialId) {
+        log.info("--Invoked RateCardResource.getQuotation --");
+        Object result = rateCardService.getQuotation(serialId);
+        return new ResponseEntity<>(result, HttpStatus.OK);
+    }
 
     
     @RequestMapping(value = "/rateCard/quotation/search", method = RequestMethod.POST)

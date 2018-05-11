@@ -86,6 +86,7 @@ angular.module('timeSheetApp')
                     return response.data;
                 })
             },
+                       
 
             getAllQuotations: function(criteria){
                 return $http.post('api/rateCard/quotation/search', criteria).then(function (response) {
