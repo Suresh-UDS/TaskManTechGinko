@@ -76,8 +76,8 @@ angular
                                 $scope.quotation.ticketId = data.id;
                                 //$scope.selectedProject = {id:data.employeeId};
                                 $scope.selectedSite = {id:data.siteId};
-                                
-   
+
+
                                 /*if(data.siteId){
                                     SiteComponent.findOne(data.siteID).then(function (data) {
                                         console.log(data);
@@ -128,6 +128,7 @@ angular
 				        	if($scope.selectedProject) {
 				            	ProjectComponent.findSites($scope.selectedProject.id).then(function (data) {
 				                    $scope.sites = data;
+				                    $scope.selectedSite = $scope.sites[0];
 				                    $scope.hideLoader();
 
 				                });
@@ -174,8 +175,8 @@ angular
 							$scope.materialTotalCost += parseFloat($scope.materialItemCost)
 							$scope.totalCost += parseFloat($scope.materialItemCost)
 							$scope.materialRateCardDetails.push(rateCardDetail);
-							
-						}		
+
+						}
 					}
 
 					$scope.removeMaterial = function(ind) {
@@ -253,7 +254,7 @@ angular
 						}
 						$scope.quotation.mode = mode;
 						$scope.quotation.ticketId = $stateParams.ticketId;
-						
+
 						console.log('Quotation details - ' + JSON.stringify($scope.quotation));
 						RateCardComponent.createQuotation($scope.quotation)
 								.then(function(response) {
@@ -307,14 +308,14 @@ angular
 				                $scope.selectedSite = {};
 				                $scope.selectedSite.id = $scope.quotation.siteId;
 				                $scope.selectedSite.name = $scope.quotation.siteName;
-				                
+
 				                if($scope.quotation.ticketId > 0) {
 					                TicketComponent.getTicketDetails($scope.quotation.ticketId).then(function(data){
 					                    console.log("Ticket details");
 					                    console.log(data);
 					                    $scope.ticketStatus = data.status;
-					        			});    
-				                	
+					        			});
+
 				                }
 				            });
 			        };
@@ -363,7 +364,7 @@ angular
 			        };
 
 			        $scope.refreshPage = function() {
-			          
+
 			           $scope.loadAllQuotations();
 			        };
 
@@ -422,7 +423,7 @@ angular
 		        	$scope.searchCriteria.currPage = currPageVal;
 		        	 $scope.searchCriteria.findAll = false;
 
-			        	if(!$scope.selectedId && !$scope.selectedTitle  && !$scope.selectedProject && !$scope.selectedSite 
+			        	if(!$scope.selectedId && !$scope.selectedTitle  && !$scope.selectedProject && !$scope.selectedSite
 			        		&& !$scope.selectedCreatedBy && !$scope.selectedSentBy && !$scope.selectedApprovedBy && !$scope.selectedStatus){
 			        		$scope.searchCriteria.findAll = true;
 			        	}
@@ -446,7 +447,7 @@ angular
 		                if($scope.selectedTitle){
 		                    $scope.searchCriteria.name = $scope.selectedTitle;
 		                }
-		               
+
 			        	/*if($scope.selectedCreatedBy) {
 			        		$scope.searchCriteria.checkInDateTimeFrom = $scope.selectedJobDateSer;
 			        	}
@@ -460,7 +461,7 @@ angular
 		            if($scope.pageSort){
 		                $scope.searchCriteria.sort = $scope.pageSort;
 		            }
-		            
+
 
 		            /*if($scope.selectedColumn){
 
@@ -494,17 +495,17 @@ angular
 
 			        		$scope.pages.currPage = $scope.pages.currPage;
 			                $scope.pages.totalPages = data.totalPages;
-		               
+
 			                if($scope.quotations && $scope.quotations.length > 0 ){
 			                    $scope.showCurrPage = data.currPage;
 			                    $scope.pageEntries = $scope.quotations.length;
 			                    $scope.totalCountPages = data.totalCount;
 		                        $scope.pageSort = 10;
 
-			                   
+
 			                }
 		            });
-	
+
 		        };
 
 
@@ -560,7 +561,7 @@ angular
 					            $scope.pages.currPage = page;
 					            $scope.search();
 					        };
-					        
+
 					        $scope.closeTicket = function (ticket){
 
 					            $scope.cTicket={id :ticket,status :'Closed'};
