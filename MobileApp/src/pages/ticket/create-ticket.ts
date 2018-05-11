@@ -4,6 +4,7 @@ import {SiteService} from "../service/siteService";
 import {JobService} from "../service/jobService";
 import {Ticket} from "./ticket";
 import {componentService} from "../service/componentService";
+import {EmployeeService} from "../service/employeeService";
 
 
 /**
@@ -37,7 +38,7 @@ export class CreateTicket {
     private severities: any;
     private severity: any;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, public siteService:SiteService, public jobService:JobService, public cs:componentService) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, public siteService:SiteService, public jobService:JobService, public cs:componentService, public employeeService:EmployeeService) {
       this.sites=[];
       this.employee=[];
       this.severities = ['Low','Medium','High'];
@@ -73,27 +74,31 @@ export class CreateTicket {
 
             window.localStorage.setItem('site',id);
             console.log(this.empSelect);
-            this.siteService.searchSiteEmployee(id).subscribe(
+            var searchCriteria = {
+                currPage : 1,
+                siteId:id
+            };
+            this.employeeService.searchEmployees(searchCriteria).subscribe(
                 response=> {
-                    console.log(response.json());
-                    if(response.json().length !==0)
+                    console.log(response);
+                    if(response.transactions!==0)
                     {
                         this.empSelect=false;
-                        this.empPlace="Employee"
-                        this.employee=response.json();
+                        this.empPlace="Employee";
+                        this.employee=response.transactions;
                         console.log(this.employee);
                     }
                     else
                     {
                         this.empSelect=true;
-                        this.empPlace="No Employee"
+                        this.empPlace="No Employee";
                         this.employee=[]
                     }
                 },
                 error=>{
                     console.log(error);
                     console.log(this.employee);
-                })
+            })
 
         }
         else
@@ -117,6 +122,7 @@ export class CreateTicket {
                   "employeeId":this.employ,
                   "userId":this.userId,
                   "severity":this.severity,
+
               }
 
 

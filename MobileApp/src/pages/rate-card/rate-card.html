@@ -10,7 +10,7 @@
 <ion-content padding>
 
     <ion-fab bottom right>
-        <button mini (click)="createRate()"  ion-fab><ion-icon name="add"></ion-icon></button>
+        <button mini has-permission="RateCardCreate" (click)="createRate()"  ion-fab><ion-icon name="add"></ion-icon></button>
     </ion-fab>
 
     <div class="table-responsive">

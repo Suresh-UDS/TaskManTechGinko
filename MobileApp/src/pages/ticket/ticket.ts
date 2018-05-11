@@ -34,7 +34,7 @@ export class Ticket {
         response=>{
             console.log("Getting tickets");
             console.log(response);
-            this.tickets=response;
+            this.tickets=response.transactions;
             this.cs.closeLoader();
         },error=>{
             this.cs.closeLoader();

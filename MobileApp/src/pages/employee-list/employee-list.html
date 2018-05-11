@@ -15,7 +15,7 @@
 
 <ion-content>
   <ion-fab bottom right>
-    <button (click)="createEmployee($event)" ion-fab><ion-icon name="add"></ion-icon></button>
+    <button has-permission="EmployeeCreate" (click)="createEmployee($event)" ion-fab><ion-icon name="add"></ion-icon></button>
   </ion-fab>
 
   <ion-list class="emp-list">

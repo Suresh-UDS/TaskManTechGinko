@@ -7,6 +7,7 @@ import {JobsPage} from "./jobs";
 import {JobService} from "../service/jobService";
 import {AttendanceService} from "../service/attendanceService";
 import {SiteService} from "../service/siteService";
+import {EmployeeService} from "../service/employeeService";
 
 @Component({
   selector: 'page-add-job',
@@ -41,7 +42,7 @@ export class CreateJobPage {
     empPlace:any;
     msg:any;
     ticket:any;
-    constructor(public navCtrl: NavController,public component:componentService,public navParams:NavParams,public myService:authService, public authService: authService, private loadingCtrl:LoadingController, private jobService: JobService, private attendanceService: AttendanceService, private siteService: SiteService) {
+    constructor(public navCtrl: NavController,public component:componentService,public navParams:NavParams,public myService:authService, public authService: authService, private loadingCtrl:LoadingController, private jobService: JobService, private attendanceService: AttendanceService, private siteService: SiteService, private employeeService:EmployeeService) {
         this.jobDetails=this.navParams.get('job');
         console.log(this.navParams.get('ticketDetails'));
         if(this.navParams.get('ticketDetails')){
@@ -63,7 +64,6 @@ export class CreateJobPage {
         if(this.ticket){
             this.title = this.ticket.title;
             this.description = this.ticket.description;
-
         }
 
         this.component.showLoader('Getting All Sites');
@@ -119,7 +119,13 @@ export class CreateJobPage {
                 "employeeId":this.employ,
                 "userId":this.userId,
                 "locationId":1,
-                "ticketId":this.ticket.id
+
+            };
+
+            if(this.ticket){
+                this.newJob={
+                    "ticketId":this.ticket.id
+                }
             }
 
 
@@ -208,14 +214,18 @@ export class CreateJobPage {
 
         window.localStorage.setItem('site',id);
         console.log(this.empSelect);
-        this.siteService.searchSiteEmployee(id).subscribe(
+        var search={
+            currPage:1,
+            siteId:id
+        }
+        this.employeeService.searchEmployees(search).subscribe(
             response=> {
-                console.log(response.json());
-                if(response.json().length !==0)
+                console.log(response);
+                if(response.transactions!==null)
                 {
                     this.empSelect=false;
                     this.empPlace="Employee"
-                    this.employee=response.json();
+                    this.employee=response.transactions;
                     console.log(this.employee);
                 }
                 else

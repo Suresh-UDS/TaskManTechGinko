@@ -9,7 +9,7 @@
 
 <ion-content>
   <ion-fab bottom right>
-    <button (click)="createQuotation()" ion-fab color="dark"><ion-icon name="add" class="clr-orange"></ion-icon></button>
+    <button has-permission="QuotationCreate" (click)="createQuotation()" ion-fab color="dark"><ion-icon name="add" class="clr-orange"></ion-icon></button>
   </ion-fab>
 
   <ion-row class="margin0 white-bg border-btm padding10 paddding-top20" (click)="gotoDraftedQuotation()">
