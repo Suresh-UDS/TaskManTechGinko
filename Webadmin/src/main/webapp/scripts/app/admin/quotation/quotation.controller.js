@@ -468,7 +468,7 @@ angular
 		                $scope.searchCriteria.sortByAsc = true;
 		            }*/
 
-                     console.log("search criteria",$scope.searchCriteria);
+                     console.log("search criteria", JSON.stringify($scope.searchCriteria));
                      $scope.quotations = '';
                      $scope.quotationsLoader = false;
                      $scope.loadPageTop();

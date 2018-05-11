@@ -427,7 +427,7 @@ public class RateCardService extends AbstractService {
             request.put("siteId",searchCriteria.getSiteId());
             request.put("id",searchCriteria.getId());
             request.put("title",searchCriteria.getQuotationTitle());
-            
+            log.debug("Request body " + request.toString());
             HttpEntity<?> requestEntity = new HttpEntity<>(request.toString(), headers);
             log.debug("Rate card service end point"+quotationSvcEndPoint);
             ResponseEntity<?> response = restTemplate.postForEntity(quotationSvcEndPoint+"/quotation", requestEntity, String.class);
