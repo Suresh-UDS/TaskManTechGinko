@@ -246,10 +246,10 @@
                                     <a  ng-class="{active: $state.includes('admin')}"  ui-sref="edit-ticket({ id: ticket.id })"  class="btn btn-simple btn-info"><i class="material-icons">edit</i></a>
 
                                     <a ng-if="(ticket.status != 'Closed' && ticket.jobId == 0)" ng-class="{active: $state.includes('admin')}" ui-sref="add-job({ticketId : ticket.id})"  ng-click=""  onClick="" data-target="#myModal"  class="btn btn-simple btn-info">create job</a>
-                                    <a ng-if="(ticket.status != 'Closed' && ticket.jobId == 0 && ticket.quotationId == 0)" ng-class="{active: $state.includes('admin')}" ui-sref="add-quotation({ticketId : ticket.id})"  ng-click=""  onClick="" data-target="#myModal"  class="btn btn-simple btn-info">Add Quotation</a>
+                                    <a ng-if="(ticket.status != 'Closed' && ticket.jobId == 0 && ticket.quotationId == '')" ng-class="{active: $state.includes('admin')}" ui-sref="add-quotation({ticketId : ticket.id})"  ng-click=""  onClick="" data-target="#myModal"  class="btn btn-simple btn-info">Add Quotation</a>
 
                                     <a ng-if="(ticket.jobId > 0)" ng-class="{active: $state.includes('admin')}" ui-sref="view-job({id : ticket.jobId})"  ng-click=""  onClick="" data-target="#myModal"  class="btn btn-simple btn-info">View job</a>
-									<a ng-if="(ticket.quotationId > 0)" ng-class="{active: $state.includes('admin')}" ui-sref="view-quotation({id : ticket.quotationId})"  ng-click=""  onClick="" data-target="#myModal"  class="btn btn-simple btn-info">View Quotation</a>
+									<a ng-if="(ticket.quotationId != '')" ng-class="{active: $state.includes('admin')}" ui-sref="view-quotation({id : ticket.quotationId})"  ng-click=""  onClick="" data-target="#myModal"  class="btn btn-simple btn-info">View Quotation</a>
                                     
                                     <a ng-if="(ticket.status != 'Closed')" ng-class="{active: $state.includes('admin')}"   ng-click="closeTicket(ticket.id)"   onClick="$('#deleteModalNew').modal()" data-target="#myModal"   class="btn btn-simple btn-info">close ticket</a>
                                     <a ng-if="ticket.status == 'Closed'"class="btn btn-simple btn-info">Reopen ticket</a>
