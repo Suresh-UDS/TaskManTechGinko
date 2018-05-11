@@ -364,13 +364,19 @@ angular.module('timeSheetApp')
 	        		$scope.job.employeeId = $scope.selectedEmployee.id
 	        	}
 	        	if($scope.selectedBlock) {
-	        		$scope.job.block = $scope.selectedBlock;
+	        		$scope.job.block = $scope.selectedBlock.name;
+	        	}else {
+	        		$scope.job.block = "";
 	        	}
 	        	if($scope.selectedFloor) {
-	        		$scope.job.floor = $scope.selectedFloor;
+	        		$scope.job.floor = $scope.selectedFloor.name;
+	        	}else {
+	        		$scope.job.floor = "";
 	        	}
 	        	if($scope.selectedZone) {
-	        		$scope.job.zone = $scope.selectedZone;
+	        		$scope.job.zone = $scope.selectedZone.name;
+	        	}else {
+	        		$scope.job.zone = "";	
 	        	}
 	        	// $scope.job.jobStatus = $scope.selectedStatus.name;
 	        	console.log('job details to save - ' + JSON.stringify($scope.job));
