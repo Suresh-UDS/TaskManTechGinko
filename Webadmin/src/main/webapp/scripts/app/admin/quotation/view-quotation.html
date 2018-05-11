@@ -488,12 +488,6 @@
 															Save Draft
 														</button>
 
-                                                        <button class="btn btn-success" ng-click="saveQuotation('submit')"
-                                                                id="form-button-approve" ng-disabled="form.$invalid">
-                                                            <span class="btn-label"><i class="material-icons">check</i></span>
-                                                            Send
-                                                        </button>
-
 														<button class="btn btn-danger" type="button"
 															ng-click="cancelQuotation()" id="cancel-button">
 															<i class="material-icons">close</i> Cancel
@@ -515,11 +509,11 @@
                                                         </button>
                                                         
                                                         <button  title="Reject Quotation" ng-if="quotation.isSubmitted && !quotation.isApproved  && !quotation.isRejected"
-                                                                 data-toggle="modal" data-target="#approveQuotationModal"
-                                                                 data-dismiss="#approveQuotationModal" ng-click="selectQuotation(quotation)"
+                                                                 data-toggle="modal" data-target="#rejectQuotationModal"
+                                                                 data-dismiss="#rejectQuotationModal" ng-click="selectQuotation(quotation)"
                                                                  class="btn btn-info">
                                                             <span class="btn-label"><i class="material-icons">done</i></span>
-                                                            Approve
+                                                            Reject
                                                         </button>
 
 														<button class="btn btn-danger" type="button"
