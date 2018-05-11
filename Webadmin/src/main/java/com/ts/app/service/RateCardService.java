@@ -29,11 +29,13 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import com.ts.app.domain.AbstractAuditingEntity;
 import com.ts.app.domain.RateCard;
 import com.ts.app.domain.Setting;
+import com.ts.app.domain.Ticket;
 import com.ts.app.domain.User;
 import com.ts.app.repository.ProjectRepository;
 import com.ts.app.repository.RateCardRepository;
 import com.ts.app.repository.SettingsRepository;
 import com.ts.app.repository.SiteRepository;
+import com.ts.app.repository.TicketRepository;
 import com.ts.app.repository.UserRepository;
 import com.ts.app.service.util.MapperUtil;
 import com.ts.app.web.rest.dto.BaseDTO;
@@ -74,6 +76,9 @@ public class RateCardService extends AbstractService {
 	
 	@Inject
 	private MailService mailService;
+	
+	@Inject
+	private TicketRepository ticketRepository;
 
 	public RateCardDTO createRateCardInformation(RateCardDTO rateCardDto) {
 		// log.info("The admin Flag value is " +adminFlag);
@@ -368,7 +373,18 @@ public class RateCardService extends AbstractService {
             ResponseEntity<?> response = restTemplate.postForEntity(url, requestEntity, String.class);
             log.debug("Response freom push service "+ response.getStatusCode());
             log.debug("response from push service"+response.getBody());
-
+            if(response.getBody() != null) {
+	            JSONObject qresp = new JSONObject(response.getBody().toString());
+	            //save quotation id in ticket
+	            if(qresp != null) {
+	            		long serialId = qresp.getLong("serialId");
+	            		Ticket ticket = ticketRepository.findOne(quotationDto.getTicketId());
+	            		if(ticket != null) {
+	            			ticket.setQuotationId(serialId);
+	            			ticketRepository.save(ticket);
+	            		}
+	            }
+            }
         }catch(Exception e) {
             log.error("Error while calling quotation save service ", e);
             e.printStackTrace();

@@ -30,6 +30,8 @@ public class TicketDTO extends BaseDTO {
     private String zone;
 
     private long jobId;
+    
+    private long quotationId;
 
     private String jobName;
 
@@ -243,5 +245,14 @@ public class TicketDTO extends BaseDTO {
 	public void setCategory(String category) {
 		this.category = category;
 	}
+
+	public long getQuotationId() {
+		return quotationId;
+	}
+
+	public void setQuotationId(long quotationId) {
+		this.quotationId = quotationId;
+	}
+	
     
 }
