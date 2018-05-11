@@ -18,7 +18,7 @@
 
 <ion-content padding>
     <ion-fab bottom right>
-        <button (click)="createTicket()" ion-fab><ion-icon name="add"></ion-icon></button>
+        <button has-permission="TicketsCreate" (click)="createTicket()" ion-fab><ion-icon name="add"></ion-icon></button>
     </ion-fab>
 
     <div  class="white-bg" *ngFor="let ticket of tickets" (click)="viewTicket(ticket)">
@@ -28,7 +28,7 @@
                 <ion-col col-2 class="ver-center">
                     <ion-icon *ngIf="ticket.status=='Open'" style="color:red" ios="ios-alert" md="md-alert" class="fnt-24"></ion-icon>
                     <ion-icon *ngIf="ticket.status=='Closed'" style="color:green" ios="ios-checkmark-circle" md="md-checkmark-circle" class="fnt-24"></ion-icon>
-                    <ion-icon *ngIf="ticket.status=='OnGoing'" style="color: orangered" ios="ios-help-circle" md="md-help-circle" class="fnt-24"></ion-icon>
+                    <ion-icon *ngIf="ticket.status=='OnGoing' || ticket.status =='Assigned'" style="color: orangered" ios="ios-help-circle" md="md-help-circle" class="fnt-24"></ion-icon>
                 </ion-col>
                 <ion-col col-8 class="padding-left5">
                     <div class="border-btm padding-bottom5 ln-ght20" text-capitalize>

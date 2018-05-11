@@ -87,6 +87,8 @@ import {Ticket} from "../pages/ticket/ticket";
 import {CreateTicket} from "../pages/ticket/create-ticket";
 import {ViewTicket} from "../pages/ticket/view-ticket";
 import {FeedbackGridPage} from "../pages/feedback/feedback-grid";
+import {AppVersion} from "@ionic-native/app-version";
+import {HasPermission} from "../components/has-permission/has-permission";
 
 @NgModule({
   declarations: [
@@ -144,7 +146,8 @@ import {FeedbackGridPage} from "../pages/feedback/feedback-grid";
       WizardFeedbackEntry,
       Ticket,
       CreateTicket,
-      ViewTicket
+      ViewTicket,
+      HasPermission
   ],
   imports: [
     BrowserModule,
@@ -241,6 +244,7 @@ import {FeedbackGridPage} from "../pages/feedback/feedback-grid";
     Toast,
     FileTransfer,
     File,
+      AppVersion,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
       {provide:MY_CONFIG_TOKEN, useValue: AppConfig}
   ]

@@ -25,6 +25,7 @@ export class EmployeeService {
     searchEmployees(searchCriteria):Observable<any>{
         return this.http.post(this.config.Url+'api/employee/search',searchCriteria).map(
             response=>{
+                console.log(response);
                 return response.json();
             }
         )

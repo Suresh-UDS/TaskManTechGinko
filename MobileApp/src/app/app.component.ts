@@ -23,6 +23,7 @@ import {EmployeeListPage} from "../pages/employee-list/employee-list";
 import {RateCardPage} from "../pages/rate-card/rate-card";
 import {FeedbackPage} from "../pages/feedback/feedback";
 import {InitFeedbackPage} from "../pages/feedback/init-feedback";
+import {AppVersion} from "@ionic-native/app-version";
 
 import{OneSignal} from "@ionic-native/onesignal";
 import {componentService} from "../pages/service/componentService";
@@ -38,9 +39,9 @@ export class MyApp {
   userName:any;
   userType :any;
     counter=0;
-  pages: Array<{title: string, component: any,active:any,icon:any,avoid:any}>;
+  pages: Array<{title: string, component: any,active:any,icon:any,permission:any}>;
 
-  constructor(public platform: Platform,private backgroundMode: BackgroundMode, public statusBar: StatusBar,public component:componentService,public toastCtrl: ToastController, public splashScreen: SplashScreen, private oneSignal: OneSignal, public events:Events, private batteryStatus: BatteryStatus) {
+  constructor(public platform: Platform,private backgroundMode: BackgroundMode, public statusBar: StatusBar,public component:componentService,public toastCtrl: ToastController, public splashScreen: SplashScreen, private oneSignal: OneSignal, public events:Events, private batteryStatus: BatteryStatus, private appVersion:AppVersion) {
     this.initializeApp();
       this.backgroundMode.enable();
       let subscription = this.batteryStatus.onChange().subscribe(
@@ -74,16 +75,16 @@ export class MyApp {
       });
     // used for an example of ngFor and navigation
     this.pages = [
-      { title: 'Dashboard', component: TabsPage,active:true,icon:'dashboard',avoid:'none'},
-      { title: 'Site', component: SitePage,active:false,icon:'dns',avoid:'none'},
+      { title: 'Dashboard', component: TabsPage,active:true,icon:'dashboard',permission:'Dashboard'},
+      { title: 'Site', component: SitePage,active:false,icon:'dns',permission:'SiteList'},
       // { title: 'Client', component: CustomerDetailPage,active:false,icon:'person'},
-      { title: 'Employee', component: EmployeeListPage,active:false,icon:'people',avoid:'TECHNICIAN'},
-      { title: 'Jobs', component: JobsPage,active:false,icon:'description',avoid:'none'},
-      { title: 'Tickets', component: Ticket,active:false,icon:'description',avoid:'none'},
-        { title: 'Attendance', component: SiteListPage,active:false,icon:'content_paste',avoid:'TECHNICIAN'},
-        { title: 'Rate Card', component: RateCardPage,active:false,icon:'description',avoid:'CLIENT'},
-      { title: 'Quotation', component: QuotationPage,active:false,icon:'receipt',avoid:'none'},
-       { title: 'Feedback', component: InitFeedbackPage,active:false,icon:'feedback',avoid:'none'},
+      { title: 'Employee', component: EmployeeListPage,active:false,icon:'people',permission:'EmployeeList'},
+      { title: 'Jobs', component: JobsPage,active:false,icon:'description',permission:'JobsList'},
+      { title: 'Tickets', component: Ticket,active:false,icon:'description',permission:'TicketsList'},
+        { title: 'Attendance', component: SiteListPage,active:false,icon:'content_paste',permission:'AttendanceList'},
+        { title: 'Rate Card', component: RateCardPage,active:false,icon:'description',permission:'RateCardList'},
+      { title: 'Quotation', component: QuotationPage,active:false,icon:'receipt',permission:'QuotationList'},
+       { title: 'Feedback', component: InitFeedbackPage,active:false,icon:'feedback',permission:'FeedbackList'},
       // { title: 'Reports', component: ReportsPage,active:false,icon:'trending_up'},
       // { title: 'Logout', component: LogoutPage,active:false,icon:'power_settings_new'}
     ];
@@ -101,6 +102,12 @@ export class MyApp {
     this.platform.ready().then(() => {
       // Okay, so the platform is ready and our plugins are available.
       // Here you can do any higher level native things you might need.
+        console.log("Version details");
+        console.log("current version"+"0.4.0");
+        console.log(this.appVersion.getAppName());
+        console.log(this.appVersion.getPackageName());
+        console.log(this.appVersion.getVersionCode());
+        console.log(this.appVersion.getVersionNumber());
       this.statusBar.styleDefault();
       this.splashScreen.hide();
      // this.statusBar.overlaysWebView(true);
@@ -143,6 +150,10 @@ export class MyApp {
         this.pages[i].active=false;
       }
     }
+  }
+
+  gotoDashboard(){
+      this.nav.setRoot(TabsPage);
   }
 
 }

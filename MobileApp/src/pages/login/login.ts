@@ -60,7 +60,12 @@ export class LoginPage {
               if(response.json().user){
                   console.log("user role found");
                   window.localStorage.setItem('userRole',response.json().user.userRoleName.toUpperCase());
-                  this.events.publish('userType',response.json().user.userRoleName.toUpperCase());
+                  if(response.json().user.userRole.rolePermissions){
+                      console.log("Saving user permissions");
+                      console.log(response.json().user.userRole.rolePermissions);
+                      window.localStorage.setItem('rolePermissions',JSON.stringify(response.json().user.userRole.rolePermissions));
+                  }
+                  this.events.publish('userType',response.json().user.userRole.rolePermissions);
               }else{
                   console.log("User role not found, marking as admin");
                   this.events.publish('userType','ADMIN');
