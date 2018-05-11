@@ -435,7 +435,7 @@ angular
 				        }
 
 			        	if($scope.selectedId){
-			        		$scope.searchCriteria.checklistId = $scope.selectedId;
+			        		$scope.searchCriteria.id = $scope.selectedId;
 			        	}
 		                if($scope.selectedTitle){
 		                    $scope.searchCriteria.name = $scope.selectedTitle;

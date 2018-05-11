@@ -128,6 +128,8 @@ public class SearchCriteria extends Paginator {
 	private boolean admin;
 	
 	private boolean list;
+	
+	private String quotationTitle;
 
 	public long getId() {
 		return id;
@@ -687,6 +689,13 @@ public class SearchCriteria extends Paginator {
 	public void setList(boolean list) {
 		this.list = list;
 	}
-    
+
+	public String getQuotationTitle() {
+		return quotationTitle;
+	}
+
+	public void setQuotationTitle(String quotationTitle) {
+		this.quotationTitle = quotationTitle;
+	}
     
 }

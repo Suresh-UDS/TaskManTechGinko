@@ -133,17 +133,25 @@ public class RateCardResource {
     }
 
     
-    @RequestMapping(value = "/rateCard/quotation/get", method = RequestMethod.GET)
-    public Object getQuotations() {
+    @RequestMapping(value = "/rateCard/quotation/get", method = RequestMethod.POST)
+    public Object getQuotations(@RequestBody SearchCriteria searchCriteria) {
         log.info("--Invoked RateCardResource.Get Quotations --");
         Object result =null;
-        result= rateCardService.getQuotations();
+        result= rateCardService.getQuotations(searchCriteria);
         return result;
     }
 
     @RequestMapping(value = "/rateCard/quotation/approve",method = RequestMethod.POST)
     public Object approveQuotation(@RequestBody QuotationDTO quotationDTO){
 	    log.info("Approve Quotations");
+	    Object result = null;
+	    rateCardService.approveQuotation(quotationDTO);
+	    return result;
+    }
+    
+    @RequestMapping(value = "/rateCard/quotation/reject",method = RequestMethod.POST)
+    public Object rejectQuotation(@RequestBody QuotationDTO quotationDTO){
+	    log.info("Reject Quotations");
 	    Object result = null;
 	    rateCardService.approveQuotation(quotationDTO);
 	    return result;

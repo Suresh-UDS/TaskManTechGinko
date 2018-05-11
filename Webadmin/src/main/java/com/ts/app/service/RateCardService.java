@@ -407,7 +407,7 @@ public class RateCardService extends AbstractService {
         return  quotationList;
     }
 
-	public Object getQuotations() {
+	public Object getQuotations(SearchCriteria searchCriteria) {
 
         log.debug("get Quotations");
         Object quotationList = "";
@@ -422,9 +422,15 @@ public class RateCardService extends AbstractService {
             Map<String, String> map = new HashMap<String, String>();
             map.put("Content-Type", MediaType.APPLICATION_JSON_VALUE);
 
-            HttpEntity<?> requestEntity = new HttpEntity<>(headers);
+            JSONObject request = new JSONObject();
+            request.put("projectId",searchCriteria.getProjectId());
+            request.put("siteId",searchCriteria.getSiteId());
+            request.put("id",searchCriteria.getId());
+            request.put("title",searchCriteria.getQuotationTitle());
+            
+            HttpEntity<?> requestEntity = new HttpEntity<>(request.toString(), headers);
             log.debug("Rate card service end point"+quotationSvcEndPoint);
-            ResponseEntity<?> response = restTemplate.getForEntity(quotationSvcEndPoint+"/quotation", String.class);
+            ResponseEntity<?> response = restTemplate.postForEntity(quotationSvcEndPoint+"/quotation", requestEntity, String.class);
             log.debug("Response freom push service "+ response.getStatusCode());
             log.debug("response from push service"+response.getBody());
 //            rateCardDTOList = (List<RateCardDTO>) response.getBody();
@@ -468,6 +474,48 @@ public class RateCardService extends AbstractService {
             log.debug("Request entity rate card service"+requestEntity);
             log.debug("Rate card service end point"+quotationSvcEndPoint);
             ResponseEntity<?> response = restTemplate.postForEntity(quotationSvcEndPoint+"/quotation/approve", requestEntity, String.class);
+            log.debug("Response from push service "+ response.getStatusCode());
+            log.debug("response from push service"+response.getBody());
+
+
+        }catch(Exception e) {
+            log.error("Error while calling location service ", e);
+            e.printStackTrace();
+        }
+
+//		List<RateCard> entities = new ArrayList<RateCard>();
+//		entities = rateCardRepository.findAll();
+//		return mapperUtil.toModelList(entities, RateCardDTO.class);
+        return  approvedQuotation;
+    }
+    
+    public Object rejectQuotation(QuotationDTO quotation) {
+        log.debug("reject Quotations");
+        Object approvedQuotation = "";
+
+        try {
+
+            RestTemplate restTemplate = new RestTemplate();
+            MappingJackson2HttpMessageConverter jsonHttpMessageConverter = new MappingJackson2HttpMessageConverter();
+            jsonHttpMessageConverter.getObjectMapper().configure(SerializationFeature.FAIL_ON_EMPTY_BEANS,false);
+            restTemplate.getMessageConverters().add(jsonHttpMessageConverter);
+
+            MultiValueMap<String, String> headers =new LinkedMultiValueMap<String, String>();
+            Map<String, String> map=  new HashMap<String, String>();
+            map.put("Content-Type", MediaType.APPLICATION_JSON_VALUE);
+
+            headers.setAll(map);
+
+            Map<String,Object> paramMap = new HashMap<String,Object>();
+            paramMap.put("_id",quotation.get_id());
+
+            JSONObject request = new JSONObject();
+            request.put("_id",quotation.get_id());
+
+            HttpEntity<?> requestEntity = new HttpEntity<>(request.toString(),headers);
+            log.debug("Request entity rate card service"+requestEntity);
+            log.debug("Rate card service end point"+quotationSvcEndPoint);
+            ResponseEntity<?> response = restTemplate.postForEntity(quotationSvcEndPoint+"/quotation/reject", requestEntity, String.class);
             log.debug("Response from push service "+ response.getStatusCode());
             log.debug("response from push service"+response.getBody());
 
