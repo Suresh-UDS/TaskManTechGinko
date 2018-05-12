@@ -2,78 +2,86 @@
 
 
 	<div class="row">
-
-	        <div class="col-md-4 col-md-offset-2">
-	            <div class="form-group">
-	
-	                <!--<label class="control-label">Client</label>-->
-	                <div class="dropdown">
-	
-	                    <!--<input type="text" class="form-control" ng-model="selectedProject" name="projectName" ng-value="selectedProject.name"-->
-	                           <!--uib-typeahead="project as project.name for project in projects | filter:$viewValue | limitTo:5"-->
-	                           <!--ng-blur="loadSites()"-->
-	                           <!--ng-minlength=2 ng-maxlength=50 ng-pattern="/^[A-Za-z0-9\s&-/]*$/"  autocomplete="off" />-->
-	                    <select class=" form-control " ng-model="selectedProject" ng-change="loadSites()" ng-options="project as project.name for project in projects" >
-	                        <option value="">Please select Client...</option>
-	                    </select>
-	                    <div ng-show="form.$submitted || form.projectName.$touched">
-	                        <div ng-show="form.projectName.$dirty || form.projectName.$invalid">
-	                            <p class="help-block" style="color:maroon"
-	                               ng-show="form.projectName.$error.required">
-	                                Client name is required.
-	                            </p>
-	                            <p class="help-block" style="color:maroon"
-	                               ng-show="form.projectName.$error.minlength">
-	                                Client name is required to be at least 2 character.
-	                            </p>
-	                            <p class="help-block" style="color:maroon"
-	                               ng-show="form.projectName.$error.maxlength">
-	                                Client name cannot be longer than 50 characters.
-	                            </p>
-	                            <p class="help-block" style="color:maroon"
-	                               ng-show="form.projectName.$error.pattern">
-	                                Client name can only contain letters, digits and space.
-	                            </p>
-	                        </div>
-	                    </div>
-	                </div>
-	            </div>
-	        </div>
-	        <div class="col-md-4">
-	            <div class="form-group label-floating">
-	                <!--<label class="control-label">Site</label>-->
-	                <div class="dropdown" >
-	                    <!--<input ng-focus="loadSites()" type="text" class="form-control"  ng-model="selectedSite" name="siteName" ng-value="selectedSite.name"-->
-	                           <!--uib-typeahead="site as site.name for site in sites | filter:$viewValue | limitTo:5"-->
-	                           <!--ng-minlength=2 ng-maxlength=50 ng-pattern="/^[A-Za-z0-9\s&-/]*$/"  autocomplete="off" />-->
-	
-	                    <select class="form-control " ng-model="selectedSite"  ng-change="loadSettings()" ng-options="site as site.name for site in sites">
-	                        <option value="">Please select Site...</option>
-	                    </select>
-	
-	                    <div ng-show="form.$submitted || form.siteName.$touched">
-	                        <div ng-show="form.siteName.$dirty || form.siteName.$invalid">
-	                            <p class="help-block" style="color:maroon"
-	                               ng-show="form.siteName.$error.required">
-	                                Site name is required.
-	                            </p>
-	                            <p class="help-block" style="color:maroon"
-	                               ng-show="form.siteName.$error.minlength">
-	                                Site name is required to be at least 2 character.
-	                            </p>
-	                            <p class="help-block" style="color:maroon"
-	                               ng-show="form.siteName.$error.maxlength">
-	                                Site name cannot be longer than 50 characters.
-	                            </p>
-	                            <p class="help-block" style="color:maroon"
-	                               ng-show="form.siteName.$error.pattern">
-	                                Site name can only contain letters, digits and space.
-	                            </p>
-	                        </div>
-	                    </div>
-	                </div>
-	            </div>
-	        </div>
+        <div class="col-md-8 col-md-offset-2">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <div class="row">
+            	        <div class="col-md-4 col-md-offset-2">
+            	            <div class="form-group">
+            	
+            	                <!--<label class="control-label">Client</label>-->
+            	                <div class="dropdown">
+            	
+            	                    <!--<input type="text" class="form-control" ng-model="selectedProject" name="projectName" ng-value="selectedProject.name"-->
+            	                           <!--uib-typeahead="project as project.name for project in projects | filter:$viewValue | limitTo:5"-->
+            	                           <!--ng-blur="loadSites()"-->
+            	                           <!--ng-minlength=2 ng-maxlength=50 ng-pattern="/^[A-Za-z0-9\s&-/]*$/"  autocomplete="off" />-->
+                                    <span class="form-control-feedback d-sm-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
+            	                    <select class=" form-control " ng-model="selectedProject" ng-change="loadSites()" ng-options="project as project.name for project in projects" >
+            	                        <option value="">Please select Client...</option>
+            	                    </select>
+            	                    <div ng-show="form.$submitted || form.projectName.$touched">
+            	                        <div ng-show="form.projectName.$dirty || form.projectName.$invalid">
+            	                            <p class="help-block" style="color:maroon"
+            	                               ng-show="form.projectName.$error.required">
+            	                                Client name is required.
+            	                            </p>
+            	                            <p class="help-block" style="color:maroon"
+            	                               ng-show="form.projectName.$error.minlength">
+            	                                Client name is required to be at least 2 character.
+            	                            </p>
+            	                            <p class="help-block" style="color:maroon"
+            	                               ng-show="form.projectName.$error.maxlength">
+            	                                Client name cannot be longer than 50 characters.
+            	                            </p>
+            	                            <p class="help-block" style="color:maroon"
+            	                               ng-show="form.projectName.$error.pattern">
+            	                                Client name can only contain letters, digits and space.
+            	                            </p>
+            	                        </div>
+            	                    </div>
+            	                </div>
+            	            </div>
+            	        </div>
+            	        <div class="col-md-4">
+            	            <div class="form-group label-floating">
+            	                <!--<label class="control-label">Site</label>-->
+            	                <div class="dropdown" >
+            	                    <!--<input ng-focus="loadSites()" type="text" class="form-control"  ng-model="selectedSite" name="siteName" ng-value="selectedSite.name"-->
+            	                           <!--uib-typeahead="site as site.name for site in sites | filter:$viewValue | limitTo:5"-->
+            	                           <!--ng-minlength=2 ng-maxlength=50 ng-pattern="/^[A-Za-z0-9\s&-/]*$/"  autocomplete="off" />-->
+            	                    <span class="form-control-feedback d-sm-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
+            	                    <select class="form-control " ng-model="selectedSite"  ng-change="loadSettings()" ng-options="site as site.name for site in sites">
+            	                        <option value="">Please select Site...</option>
+            	                    </select>
+            	
+            	                    <div ng-show="form.$submitted || form.siteName.$touched">
+            	                        <div ng-show="form.siteName.$dirty || form.siteName.$invalid">
+            	                            <p class="help-block" style="color:maroon"
+            	                               ng-show="form.siteName.$error.required">
+            	                                Site name is required.
+            	                            </p>
+            	                            <p class="help-block" style="color:maroon"
+            	                               ng-show="form.siteName.$error.minlength">
+            	                                Site name is required to be at least 2 character.
+            	                            </p>
+            	                            <p class="help-block" style="color:maroon"
+            	                               ng-show="form.siteName.$error.maxlength">
+            	                                Site name cannot be longer than 50 characters.
+            	                            </p>
+            	                            <p class="help-block" style="color:maroon"
+            	                               ng-show="form.siteName.$error.pattern">
+            	                                Site name can only contain letters, digits and space.
+            	                            </p>
+            	                        </div>
+            	                    </div>
+            	                </div>
+            	            </div>
+            	        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
 	</div>
 
     <div class="row">

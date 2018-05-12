@@ -1,11 +1,12 @@
 'use strict';
 
 angular.module('timeSheetApp')
-    .controller('SettingsController', function ($rootScope, $scope, $state, $timeout, $http, $stateParams, $location, ProjectComponent, SettingsComponent) {
+    .controller('SettingsController', function ($rootScope, $scope, $state, $timeout, $http, $stateParams,
+     $location, ProjectComponent, SettingsComponent) {
             $rootScope.loginView = false;
-    		$scope.selectedProject;
+    		$scope.selectedProject =null;
     		
-    		$scope.selectedSite;
+    		$scope.selectedSite =null;
     		
     		$scope.settings = {
     			attendanceEmailIds : [],	
@@ -181,6 +182,17 @@ angular.module('timeSheetApp')
 
         $scope.showNotifications= function(position,alignment,color,msg){
             demo.showNotification(position,alignment,color,msg);
+        }
+
+        $scope.cancelEmployee = function() {
+
+                //$location.path('/app_settings');
+
+                $scope.selectedProject =null;
+            
+                $scope.selectedSite =null;
+
+                $scope.settings = "";
         }
 
     });
