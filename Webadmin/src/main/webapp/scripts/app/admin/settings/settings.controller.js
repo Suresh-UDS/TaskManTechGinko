@@ -156,8 +156,9 @@ angular.module('timeSheetApp')
         			$scope.showNotifications('top','center','success','Settings updated successfully');
         			$location.path('/app_settings');
         		}).catch(function (response) {
-        			$scope.showNotifications('top','center','success','Settings updation failed. Invalid input');    
+        			$scope.showNotifications('top','center','danger','Settings updation failed. Invalid input');    
         		});
+                $scope.loadPageTop();
         	
         }
         
@@ -193,6 +194,22 @@ angular.module('timeSheetApp')
                 $scope.selectedSite =null;
 
                 $scope.settings = "";
+
+                $scope.loadPageTop();
+        }
+
+         //init load
+        $scope.initLoad = function(){
+             $scope.loadPageTop();
+
+
+         }
+
+       //Loading Page go to top position
+        $scope.loadPageTop = function(){
+            //alert("test");
+            //$("#loadPage").scrollTop();
+            $("#loadPage").animate({scrollTop: 0}, 2000);
         }
 
     });
