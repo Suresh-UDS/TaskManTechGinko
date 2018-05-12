@@ -17,6 +17,8 @@ angular.module('timeSheetApp')
 
         $scope.selectedGroup;
 
+        $scope.selectedUserRole = null;
+
         $scope.userRoles;
         
         $scope.moduleActions;
@@ -238,6 +240,7 @@ angular.module('timeSheetApp')
         	console.log($scope.searchCriteria);
         	RolePermissionComponent.search($scope.searchCriteria).then(function (data) {
                 $scope.permissions = data;
+                
                 console.log('permissions - ' + JSON.stringify($scope.permissions));
                 
                 if($scope.moduleActions && $scope.permissions) {
@@ -458,6 +461,17 @@ angular.module('timeSheetApp')
                             //$("#loadPage").scrollTop();
                             $("#loadPage").animate({scrollTop: 0}, 2000);
                         }
+
+            $scope.cancelAppModule = function() {
+
+                //$location.path('/role-permission');
+
+                $scope.selectedUserRole =null;
+
+                $scope.permissions = {};
+
+                $scope.refreshPage();
+        }
 
 
     });
