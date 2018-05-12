@@ -815,14 +815,15 @@ public class    EmployeeService extends AbstractService {
 	        		List<Long> subEmpIds = null;
 	        		subEmpIds = findAllSubordinates(user.getEmployee(), subEmpIds);
 	        		page = employeeRepository.findByProjectName(searchCriteria.getProjectName(), subEmpIds, pageRequest);
-	        }else if(StringUtils.isNotEmpty(searchCriteria.getColumnName())){
-	        	if(searchCriteria.isSortByAsc() == true){
-	        		Pageable pageable = createPageSort(searchCriteria.getCurrPage(), 10, orderByASC(searchCriteria.getColumnName()));
-		        	page = employeeRepository.findByOrder(pageable);
-	        	}else if(searchCriteria.isSortByAsc() == false){
-	        		Pageable pageable = createPageSort(searchCriteria.getCurrPage(), 10, orderByDESC(searchCriteria.getColumnName()));
-		        	page = employeeRepository.findByOrder(pageable);
-	        	}
+//	        }
+//            else if(StringUtils.isNotEmpty(searchCriteria.getColumnName())){
+//		        	if(searchCriteria.isSortByAsc() == true){
+//		        		Pageable pageable = createPageSort(searchCriteria.getCurrPage(), 10, orderByASC(searchCriteria.getColumnName()));
+//			        	page = employeeRepository.findByOrder(pageable);
+//		        	}else if(searchCriteria.isSortByAsc() == false){
+//		        		Pageable pageable = createPageSort(searchCriteria.getCurrPage(), 10, orderByDESC(searchCriteria.getColumnName()));
+//			        	page = employeeRepository.findByOrder(pageable);
+//		        	}
 
 	        }else {
 	            	if(user.getUserRole().getName().equalsIgnoreCase(UserRoleEnum.ADMIN.toValue())) {
