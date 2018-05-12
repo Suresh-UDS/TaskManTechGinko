@@ -17,7 +17,7 @@
             <div class="card-content">
                     <div class="row" ng-init="loadProjectsList();">
                         <div class="col-md-12">
-                            <div class="card formcard">
+                            <div class="card formcard FilterCard">
                                 <div class="card-content">
 
                                     <form name="searchForm" ng-submit="searchFilter()">
@@ -256,7 +256,7 @@
                             <td >
                             <button class="btn btn-success" ng-if="quotation.isApproved">Approved</button>
                             <button class="btn btn-success" ng-if="quotation.isRejected">Rejected</button>
-                            
+
                             <button class="btn btn-label"  ng-if="quotation.isArchived">Archived</button>
                             <button class="btn btn-info" ng-if="quotation.isDrafted">Pending</button>
                             <button class="btn btn-warning" ng-if="quotation.isSubmitted">Waiting for approval</button></td>

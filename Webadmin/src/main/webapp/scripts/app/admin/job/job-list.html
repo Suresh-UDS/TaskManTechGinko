@@ -37,7 +37,7 @@
 
                     <div class="row" ng-init="loadProjectsList();">
                         <div class="col-md-12">
-                            <div class="card formcard">
+                            <div class="card formcard FilterCard">
                                 <div class="card-content">
 
                                     <form name="searchForm" ng-submit="searchFilter()">
@@ -163,7 +163,7 @@
                                     </span>
                                 </th>
                                 <th>Start Time
-                                
+
                                     <span class="sortingIcons">
                                         <span ng-click="columnAscOrder('plannedStartTime')" ng-class="isActiveAsc == 'plannedStartTime' ? 'active' : ''" >
                                             <i  class="fa fa-caret-up"></i>
