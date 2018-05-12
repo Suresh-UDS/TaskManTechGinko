@@ -256,11 +256,17 @@ angular.module('timeSheetApp')
 	        		$scope.searchCriteria.employeeEmpId = $scope.selectedEmployeeId;
 		        	console.log('selected emp id ='+ $scope.searchCriteria.employeeEmpId);
 	        	}
+                else{
+                    $scope.searchCriteria.employeeEmpId = null;
+                }
                 if($scope.selectedEmployeeName)
 	        	{
 	        		$scope.searchCriteria.name = $scope.selectedEmployeeName;
 		        	console.log('selected emp name ='+ $scope.searchCriteria.name);
 	        	}
+                else{
+                    $scope.searchCriteria.name = null;
+                }
 
 
 	        	if($scope.selectedSite) {
