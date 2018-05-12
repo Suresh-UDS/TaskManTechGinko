@@ -482,6 +482,12 @@ th span.sortingIcons .active svg
 /*.alert.alert-info .close i {*/
     /*color: #f44336;*/
 /*}*/
+
+.FilterCard
+{
+    margin: 3px !important;
+}
+
 span.red-star
 {
     padding:0 5px;
@@ -681,7 +687,7 @@ button.btn.btn-outline {
 
 .main-panel>.content
 {
-   margin-top:70px;
+   margin-top:50px;
    padding: 10px 15px;
 }
 .permissioncard .checkbox label

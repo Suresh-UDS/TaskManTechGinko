@@ -18,7 +18,7 @@
                 <div class="card-content">
                     <div class="row" ng-init="loadProjectsList();loadSitesList();">
                         <div class="col-md-12">
-                            <div class="card formcard">
+                            <div class="card formcard FilterCard">
                                 <div class="card-content">
                                     <form name="searchForm"  ng-submit="searchFilter();" novalidate >
                                         <div class="row" >
@@ -95,7 +95,7 @@
                                     </span>
                                 </th>
                                 <th>Client
-                                    
+
                                     <span class="sortingIcons">
                                         <span ng-click="columnAscOrder('project.name')" ng-class="isActiveAsc == 'project.name' ? 'active' : ''" >
                                             <i  class="fa fa-caret-up"></i>

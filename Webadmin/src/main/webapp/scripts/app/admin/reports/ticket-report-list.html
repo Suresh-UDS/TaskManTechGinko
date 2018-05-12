@@ -11,7 +11,7 @@
 
                     <div class="row">
                         <div class="col-md-12">
-                            <div class="card formcard">
+                            <div class="card formcard FilterCard">
                                 <div class="card-content">
                                     <form name="searchForm"  ng-submit="searchFilter()" novalidate >
                                         <div class="row" >
@@ -42,7 +42,7 @@
                                             <div class="col-xs-12 col-md-2">
                                                 <div class="dropdown">
                                                     <div class="form-group">
-                                                        <label class="label-control">Select Client</label> 
+                                                        <label class="label-control">Select Client</label>
                                                         <span class="form-control-feedback d-big-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
                                                         <select class="form-control " ng-model="selectedProject"  ng-change="loadSites()"  ng-options="project as project.name for project in projects">
                                                             <option value="">Select Client...</option>
@@ -73,7 +73,7 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                                
+
                                             <div class="col-xs-12 col-md-2 pdng-top25">
                                                 <div class="floatR form-group no-padding">
 
@@ -255,7 +255,7 @@
 
    <!-- Pagination directive start -->
 
-    <pagination-new></pagination-new> 
+    <pagination-new></pagination-new>
 
     <!-- Pagination directive end -->
 
