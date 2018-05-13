@@ -21,7 +21,7 @@ angular.module('timeSheetApp')
 
             var startPage, endPage;
 
-            if(totalPages > 0) {
+           /* if(totalPages > 0) {
                     if (totalPages <= 5) {
                         // less than 5 total pages so show all
                         startPage = 1;
@@ -38,6 +38,47 @@ angular.module('timeSheetApp')
                         } else {
                             startPage = currentPage - 2;
                             endPage = currentPage + 2;
+                        }
+                    }
+
+                    // calculate start and end item indexes
+                    if(currentPage == 1){
+                        var startIndex = 1;
+                        if(totalItems < 10){
+                            var endIndex = Math.min(totalItems);
+                        }
+                        else{
+                            var endIndex = Math.min(startIndex + pageSize-1 , totalItems);
+                        }
+                        
+                        
+                    }else{
+                       // var startIndex = (currentPage - 1) * pageSize;  
+                        var startIndex =   ((currentPage - 1) * pageSize) + 1;
+                        var endIndex = Math.min(startIndex + pageSize - 1 , totalItems);
+                    }
+        }else{
+                var startIndex = 0;  
+                var endIndex = 0;
+        }*/
+
+         if(totalPages > 0) {
+                    if (totalPages <= 3) {
+                        // less than 5 total pages so show all
+                        startPage = 1;
+                        endPage = totalPages;
+                    } 
+                    else {
+                        // more than 5 total pages so calculate start and end pages
+                        if (currentPage <= 2) {
+                            startPage = 1;
+                            endPage = 3;
+                        } else if (currentPage + 1 >= totalPages) {
+                            startPage = totalPages - 2;
+                            endPage = totalPages;
+                        } else {
+                            startPage = currentPage - 1;
+                            endPage = currentPage + 1;
                         }
                     }
 
