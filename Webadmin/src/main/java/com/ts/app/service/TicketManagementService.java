@@ -8,7 +8,6 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import com.ts.app.domain.util.StringUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.Hibernate;
 import org.slf4j.Logger;
@@ -22,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.ts.app.domain.AbstractAuditingEntity;
 import com.ts.app.domain.Employee;
+import com.ts.app.domain.EmployeeProjectSite;
 import com.ts.app.domain.Job;
 import com.ts.app.domain.Setting;
 import com.ts.app.domain.Site;
@@ -43,7 +43,6 @@ import com.ts.app.service.util.MapperUtil;
 import com.ts.app.service.util.ReportUtil;
 import com.ts.app.web.rest.dto.BaseDTO;
 import com.ts.app.web.rest.dto.ExportResult;
-import com.ts.app.web.rest.dto.JobDTO;
 import com.ts.app.web.rest.dto.SearchCriteria;
 import com.ts.app.web.rest.dto.SearchResult;
 import com.ts.app.web.rest.dto.TicketDTO;
@@ -291,6 +290,11 @@ public class TicketManagementService extends AbstractService {
             }
             if(page == null && user != null) {
             		Employee employee = user.getEmployee();
+            		List<EmployeeProjectSite> sites = employee.getProjectSites();
+            		List<Long> siteIds = new ArrayList<Long>();
+            		for(EmployeeProjectSite site : sites) {
+            			siteIds.add(site.getId());
+            		}
                 List<Long> subEmpIds = new ArrayList<Long>();
                 if(employee != null) {
                     Hibernate.initialize(employee.getSubOrdinates());
@@ -312,9 +316,9 @@ public class TicketManagementService extends AbstractService {
 	            		}
                 }else {
 	            		if(StringUtils.isNotEmpty(searchCriteria.getTicketStatus())) {
-	            			page = ticketRepository.findByStatusAndEmpId(searchCriteria.getTicketStatus(),searchCriteria.getSubordinateIds(), startDate, endDate,pageRequest);
+	            			page = ticketRepository.findByStatusAndEmpId(siteIds,searchCriteria.getTicketStatus(),searchCriteria.getSubordinateIds(), startDate, endDate,pageRequest);
 	            		}else {
-	            			page = ticketRepository.findByEmpId(searchCriteria.getSubordinateIds(), startDate, endDate,pageRequest);
+	            			page = ticketRepository.findByEmpId(siteIds,searchCriteria.getSubordinateIds(), startDate, endDate,pageRequest);
 	            		}
 
                 }
