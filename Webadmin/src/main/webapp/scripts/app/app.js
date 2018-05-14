@@ -8,14 +8,15 @@ angular.module('timeSheetApp', ['LocalStorageModule',
      'angular-star-rating-new','paginations'])
 
     .run(function ($rootScope, $location, $window, $http, $state,  Auth, Principal, ENV, VERSION) {
+        $rootScope.isAuthenticated = Principal.isAuthenticated;
         $rootScope.loginView = true;
         $rootScope.ENV = ENV;
         $rootScope.VERSION = VERSION;
-        Principal.identity().then(function(response)
+       /* Principal.identity().then(function(response)
              {
                  console.log('current user' +JSON.stringify(response.login));
                  $rootScope.accountName = response.login;
-             });
+             });*/
         $rootScope.logout = function () {
             Auth.logout();
             $state.go('login');

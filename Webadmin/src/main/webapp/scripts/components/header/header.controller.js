@@ -2,8 +2,8 @@
 
 angular.module('timeSheetApp')
     .controller('HeaderController', function ($rootScope,$scope, $location, $state, 
-        Auth, Principal, ENV, $timeout) {
-        $scope.isAuthenticated = Principal.isAuthenticated;
+        Auth, Principal, ENV, $interval) {
+        $rootScope.isAuthenticated = Principal.isAuthenticated;
         $scope.$state = $state;
         $scope.inProduction = ENV === 'prod';
         console.log('admin -'+$state.includes('admin'));
@@ -13,17 +13,17 @@ angular.module('timeSheetApp')
             $state.go('login');
         };
 
+      // Session timeout
+       $interval(function(){
 
-         $timeout(function(){
-            
-             if($scope.isAuthenticated() == false){  
-
-             Auth.logout();
+        if($rootScope.isAuthenticated() == false){  
+         
+             $scope.loadingStop();
              $state.go('login');
          
             }
 
-        },5 * 60 * 1000);
+        },0);
 
         $scope.initscrollbar = function()
              {
@@ -79,6 +79,13 @@ angular.module('timeSheetApp')
                 clearInterval(simulateWindowResize);
             }, 1000);
         });
+
+         $scope.loadingStop = function(){
+            
+            console.log("Calling loader");
+            $('.pageCenter').hide();$('.overlay').hide();
+                    
+        };
    
 
     });
