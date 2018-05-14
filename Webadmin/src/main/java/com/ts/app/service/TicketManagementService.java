@@ -292,7 +292,7 @@ public class TicketManagementService extends AbstractService {
 	        		}
             }
             if(page == null && user != null) {
-            		boolean hasViewAll = true;
+            		boolean hasViewAll = false;
 	        		Hibernate.initialize(user.getUserRole());
 	        		UserRole userRole = user.getUserRole();
 	        		if(userRole != null) {
@@ -313,7 +313,7 @@ public class TicketManagementService extends AbstractService {
             		List<Long> siteIds = new ArrayList<Long>();
             		if(hasViewAll) {
 	            		for(EmployeeProjectSite site : sites) {
-	            			siteIds.add(site.getId());
+	            			siteIds.add(site.getSite().getId());
 	            		}
             		}
                 List<Long> subEmpIds = new ArrayList<Long>();
@@ -339,7 +339,11 @@ public class TicketManagementService extends AbstractService {
 	            		if(StringUtils.isNotEmpty(searchCriteria.getTicketStatus())) {
 	            			page = ticketRepository.findByStatusAndEmpId(siteIds,searchCriteria.getTicketStatus(),searchCriteria.getSubordinateIds(), startDate, endDate,pageRequest);
 	            		}else {
-	            			page = ticketRepository.findByEmpId(siteIds,searchCriteria.getSubordinateIds(), startDate, endDate,pageRequest);
+	            			if(CollectionUtils.isNotEmpty(siteIds)) {
+	            				page = ticketRepository.findByEmpId(siteIds,searchCriteria.getSubordinateIds(), startDate, endDate,pageRequest);
+	            			}else {
+	            				page = ticketRepository.findByEmpId(searchCriteria.getSubordinateIds(), startDate, endDate,pageRequest);
+	            			}
 	            		}
 
                 }

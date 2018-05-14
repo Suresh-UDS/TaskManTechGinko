@@ -61,7 +61,7 @@ public class ExportUtil {
     private String[] EMP_HEADER = { "EMPLOYEE ID", "EMPLOYEE NAME", "DESIGNATION", "REPORTING TO", "CLIENT", "SITE", "ACTIVE"};
     private String[] JOB_HEADER = { "SITE", "TITLE", "EMPLOYEE", "TYPE", "PLANNED START TIME", "COMPLETED TIME", "STATUS"};
     private String[] ATTD_HEADER = {"EMPLOYEE ID", "EMPLOYEE NAME", "SITE", "CLIENT", "CHECK IN", "CHECK OUT","CHECK OUT IMAGE"};
-    private String[] TICKET_HEADER = { "SITE", "ISSUE", "STATUS", "CATEGORY", "SEVERITY", "INITIATOR", "INITIATED ON", "ASSIGNED TO", "ASSIGNED ON", "CLOSED BY", "CLOSED ON" };
+    private String[] TICKET_HEADER = {"ID", "SITE", "ISSUE", "STATUS", "CATEGORY", "SEVERITY", "INITIATOR", "INITIATED ON", "ASSIGNED TO", "ASSIGNED ON", "CLOSED BY", "CLOSED ON" };
 
 
 
@@ -1267,18 +1267,18 @@ public class ExportUtil {
                 for (TicketDTO transaction : content) {
 
                     Row dataRow = xssfSheet.createRow(rowNum++);
-
-                    dataRow.createCell(0).setCellValue(transaction.getSiteName());
-                    dataRow.createCell(1).setCellValue(transaction.getTitle());
-                    dataRow.createCell(2).setCellValue(transaction.getStatus());
-                    dataRow.createCell(3).setCellValue(transaction.getCategory());
-                    dataRow.createCell(4).setCellValue(transaction.getSeverity());
-                    dataRow.createCell(5).setCellValue(transaction.getCreatedBy());
-                    dataRow.createCell(6).setCellValue(String.valueOf(transaction.getCreatedDate()));
-                    dataRow.createCell(7).setCellValue(transaction.getAssignedToName());
-                    dataRow.createCell(8).setCellValue(String.valueOf(transaction.getAssignedOn()));
-                    dataRow.createCell(9).setCellValue(transaction.getClosedByName());
-                    dataRow.createCell(10).setCellValue(transaction.getClosedOn() != null ? String.valueOf(transaction.getClosedOn()) : "");
+                    dataRow.createCell(0).setCellValue(transaction.getId());
+                    dataRow.createCell(1).setCellValue(transaction.getSiteName());
+                    dataRow.createCell(2).setCellValue(transaction.getTitle());
+                    dataRow.createCell(3).setCellValue(transaction.getStatus());
+                    dataRow.createCell(4).setCellValue(transaction.getCategory());
+                    dataRow.createCell(5).setCellValue(transaction.getSeverity());
+                    dataRow.createCell(6).setCellValue(transaction.getCreatedBy());
+                    dataRow.createCell(7).setCellValue(String.valueOf(transaction.getCreatedDate()));
+                    dataRow.createCell(8).setCellValue(transaction.getAssignedToName());
+                    dataRow.createCell(9).setCellValue(String.valueOf(transaction.getAssignedOn()));
+                    dataRow.createCell(10).setCellValue(transaction.getClosedByName());
+                    dataRow.createCell(11).setCellValue(transaction.getClosedOn() != null ? String.valueOf(transaction.getClosedOn()) : "");
                 }
 
                 for (int i = 0; i < TICKET_HEADER.length; i++) {
