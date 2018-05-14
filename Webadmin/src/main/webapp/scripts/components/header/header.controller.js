@@ -37,7 +37,7 @@ angular.module('timeSheetApp')
         {
                Principal.identity().then(function(response)
             {
-                   alert(response.firstName + response.lastName)
+                   //alert(response.firstName + response.lastName)
                  console.log('current user' +JSON.stringify(response.login));
                  if(response.firstName != null){
 
