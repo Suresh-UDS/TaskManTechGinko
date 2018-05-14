@@ -114,6 +114,8 @@
                                         </span>
                                     </span>
                                 </th>
+                                <th>Site
+                                </th>
                                 <th>Issue
                                     <span class="sortingIcons">
                                         <span ng-click="columnAscOrder('title')" ng-class="isActiveAsc == 'title' ? 'active' : ''" >
@@ -204,12 +206,13 @@
                                         </span>
                                     </span>
                                 </th>
-                                <th>TAT</th>
+                                <!-- <th>TAT</th> -->
                             </tr>
                             </thead>
                             <tbody>
                             <tr ng-repeat="ticket in ticketsData">
                                 <td>{{ticket.id}}</td>
+                                <td>{{ticket.siteName}}</td>
                                 <td>{{ticket.title}}</td>
                                 <td>{{ticket.description}}</td>
                                 <td>{{ticket.createdBy}}</td>
@@ -219,7 +222,7 @@
                                 <td>{{ticket.closedByName}}</td>
                                 <td>{{ticket.closedOn | date:'MM/dd/yyyy @ h:mma'}}</td>
                                 <td>{{ticket.status}}</td>
-                                <td>{{ticket.tat}}</td>
+                                <!-- <td>{{ticket.tat}}</td> -->
                             </tr>
 
                             </tbody>
