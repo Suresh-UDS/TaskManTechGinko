@@ -94,14 +94,14 @@
                                 <div>
                                     <div class="radio radio-inline"  data-toggle="collapse" data-target="#YesOrNo">
                                         <label>
-                                            <input type="radio" id="answerType1" name="answerType"  ng-model="newFeedbackItem.answerType1" value="YESNO"  required  ng-checked="feedbackItem.displayType"> Yes/No
+                                            <input type="radio" id="answerType1" name="answerType"  ng-model="newFeedbackItem.answerType" value="YESNO"  required  ng-checked="feedbackItem.displayType"> Yes/No
                                             <b class="caret"></b>
                                         </label>
 
                                     </div>
                                     <div class="radio radio-inline" ng-if="feedbackItem.displayType == 'wizard' ">
                                         <label>
-                                            <input type="radio" id="answerType2" name="answerType"  ng-model="newFeedbackItem.answerType2" ng-click ='ratRadio()'  value="RATING"  > Rating
+                                            <input type="radio" id="answerType2" name="answerType"  ng-model="newFeedbackItem.answerType" ng-click ='ratRadio()'  value="RATING"  > Rating
                                         </label>
 
                                     </div>
@@ -110,18 +110,18 @@
 	                                       <div class="radio radio-inline">
 	                                           <label>Yes</label>
 	                                           <label>
-	                                               <input type="radio" id="yesMarkP" ng-click="yesMarkP()"  ng-model="newFeedbackItem.scoreTypeYes" name="yes" value="yes:1" ng-checked="true"> +ve
+	                                               <input type="radio" id="yesMarkP" ng-click="yesMarkP()"  ng-model="newFeedbackItem.scoreType" name="yes" value="yes:1" ng-checked="true"> +ve
 	                                           </label>
-	                                           <label><input type="radio" id="yesMarkN" ng-click="yesMarkN()" ng-model="newFeedbackItem.scoreTypeYes" name="yes" value="yes:-1" > -ve</label>
+	                                           <label><input type="radio" id="yesMarkN" ng-click="yesMarkN()" ng-model="newFeedbackItem.scoreType" name="yes" value="yes:-1" > -ve</label>
 	                                       </div>
 
 	                                        <div class="radio radio-inline">
 	                                            <label>No</label>
 	                                            <label>
-	                                                <input type="radio" id="noMarkP" name="no" ng-click="noMarkP()" ng-model="newFeedbackItem.scoreTypeNo" value="no:1"  > +ve
+	                                                <input type="radio" id="noMarkP" name="no" ng-click="noMarkP()" ng-model="newFeedbackItem.scoreType" value="no:1"  > +ve
 	                                            </label>
 	                                            <label>
-	                                                <input type="radio" id="noMarkN" name="no" ng-click="noMarkN()"  ng-model="newFeedbackItem.scoreTypeNo" ng-checked="true" value="no:-1"> -ve
+	                                                <input type="radio" id="noMarkN" name="no" ng-click="noMarkN()"  ng-model="newFeedbackItem.scoreType" ng-checked="true" value="no:-1"> -ve
 	                                            </label>
 	                                        </div>
 
