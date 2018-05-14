@@ -3,7 +3,6 @@
 angular.module('timeSheetApp')
     .controller('HeaderController', function ($rootScope,$scope, $location, $state, 
         Auth, Principal, ENV, $timeout) {
-        $rootScope.accountName;
         $scope.isAuthenticated = Principal.isAuthenticated;
         $scope.$state = $state;
         $scope.inProduction = ENV === 'prod';
@@ -37,22 +36,25 @@ angular.module('timeSheetApp')
         {
                Principal.identity().then(function(response)
             {
-                   alert(response.firstName + response.lastName)
+                   //alert(response.firstName + response.lastName)
                  console.log('current user' +JSON.stringify(response.login));
                  if(response.firstName != null){
 
-                  $rootScope.accountName = response.firstName;
+                  $rootScope.accountNames = response.firstName;
                     if(response.lastName != null){
-                     $rootScope.accountName += " " + response.lastName;
+                     $rootScope.accountNames += " " + response.lastName;
                    }
-                 }else{
-                    $rootScope.accountName = response.login;
+                 }
+                 else{
+                    $rootScope.accountNames = response.login;
                  }
 
                  //alert($rootScope.accountName);
                  
              });
         };
+
+        $rootScope.inits();
              
              
 
