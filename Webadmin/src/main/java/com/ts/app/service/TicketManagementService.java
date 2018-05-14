@@ -5,9 +5,11 @@ import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Set;
 
 import javax.inject.Inject;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.Hibernate;
 import org.slf4j.Logger;
@@ -30,6 +32,7 @@ import com.ts.app.domain.TicketStatus;
 import com.ts.app.domain.User;
 import com.ts.app.domain.UserRole;
 import com.ts.app.domain.UserRoleEnum;
+import com.ts.app.domain.UserRolePermission;
 import com.ts.app.repository.EmployeeRepository;
 import com.ts.app.repository.JobRepository;
 import com.ts.app.repository.LocationRepository;
@@ -289,11 +292,29 @@ public class TicketManagementService extends AbstractService {
 	        		}
             }
             if(page == null && user != null) {
+            		boolean hasViewAll = false;
+	        		Hibernate.initialize(user.getUserRole());
+	        		UserRole userRole = user.getUserRole();
+	        		if(userRole != null) {
+	        			Set<UserRolePermission> permissions = userRole.getRolePermissions();
+	        			if(CollectionUtils.isNotEmpty(permissions)) {
+	        				for(UserRolePermission perm : permissions) {
+	        					if(perm.getModule().getName().equalsIgnoreCase("Tickets")
+	        						&& perm.getAction().getName().equalsIgnoreCase("ViewAll")) {
+	        						hasViewAll = true;
+	        						break;
+	        					}
+	        				}
+	        			}
+	        		}
+            	
             		Employee employee = user.getEmployee();
             		List<EmployeeProjectSite> sites = employee.getProjectSites();
             		List<Long> siteIds = new ArrayList<Long>();
-            		for(EmployeeProjectSite site : sites) {
-            			siteIds.add(site.getId());
+            		if(hasViewAll) {
+	            		for(EmployeeProjectSite site : sites) {
+	            			siteIds.add(site.getId());
+	            		}
             		}
                 List<Long> subEmpIds = new ArrayList<Long>();
                 if(employee != null) {

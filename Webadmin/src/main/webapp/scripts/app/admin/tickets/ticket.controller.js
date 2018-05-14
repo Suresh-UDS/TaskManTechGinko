@@ -421,7 +421,7 @@ angular.module('timeSheetApp')
                 
                 }
 
-                if($scope.selectedSite.id) {
+                if($scope.selectedSite) {
                     $scope.searchCriteria.siteId = $scope.selectedSite.id;
                     }
                     
