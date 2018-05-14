@@ -1,37 +1,60 @@
 'use strict';
 
 angular.module('timeSheetApp')
-    .controller('HeaderController', function ($scope, $location, $state, Auth, Principal, ENV) {
+    .controller('HeaderController', function ($rootScope,$scope, $location, $state, 
+        Auth, Principal, ENV, $timeout) {
+        $rootScope.accountName;
         $scope.isAuthenticated = Principal.isAuthenticated;
         $scope.$state = $state;
-        $scope.accountName ="";
         $scope.inProduction = ENV === 'prod';
         console.log('admin -'+$state.includes('admin'));
         $scope.logout = function () {
+
             Auth.logout();
             $state.go('login');
         };
 
+
+         $timeout(function(){
+            
+             if($scope.isAuthenticated() == false){  
+
+             Auth.logout();
+             $state.go('login');
+         
+            }
+
+        },5 * 60 * 1000);
+
         $scope.initscrollbar = function()
              {
                $('#sidebarWrapper').perfectScrollbar();
-             }
 
-             $scope.initscrollbar();
-             
-             Principal.identity().then(function(response)
-             {
+             }
+              $scope.initscrollbar();
+
+        $rootScope.inits = function()
+        {
+               Principal.identity().then(function(response)
+            {
+                   alert(response.firstName + response.lastName)
                  console.log('current user' +JSON.stringify(response.login));
                  if(response.firstName != null){
-                  $scope.accountName = response.firstName
+
+                  $rootScope.accountName = response.firstName;
                     if(response.lastName != null){
-                     $scope.accountName += " " + response.lastName;
+                     $rootScope.accountName += " " + response.lastName;
                    }
                  }else{
-                    $scope.accountName = response.login;
+                    $rootScope.accountName = response.login;
                  }
+
+                 //alert($rootScope.accountName);
                  
              });
+        };
+             
+             
 
         $('#minimizeSidebar').click(function() {
             var $btn = $(this);

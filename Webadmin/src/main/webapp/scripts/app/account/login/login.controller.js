@@ -28,6 +28,8 @@ angular.module('timeSheetApp')
                     $rootScope.back();
                 }
                 $scope.resLoader=true;
+                $rootScope.inits();
+                
             }).catch(function () {
                 $scope.authenticationError = true;
                 $scope.resLoader=false;
