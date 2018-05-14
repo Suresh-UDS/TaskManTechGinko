@@ -292,7 +292,7 @@ public class TicketManagementService extends AbstractService {
 	        		}
             }
             if(page == null && user != null) {
-            		boolean hasViewAll = false;
+            		boolean hasViewAll = true;
 	        		Hibernate.initialize(user.getUserRole());
 	        		UserRole userRole = user.getUserRole();
 	        		if(userRole != null) {
