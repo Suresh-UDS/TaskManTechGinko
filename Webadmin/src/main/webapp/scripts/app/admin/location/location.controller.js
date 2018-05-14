@@ -13,6 +13,7 @@ angular.module('timeSheetApp')
         $scope.validationErrorMsg = null;
         $scope.authorities = ["User", "Admin"];
         $scope.searchCriteria = {};
+        $scope.location ={};
         $scope.selectedProject = null;
         $scope.selectedSite = null;
         $scope.selectedBlock = null;
