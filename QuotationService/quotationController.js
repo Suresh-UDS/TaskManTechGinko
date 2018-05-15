@@ -107,7 +107,7 @@ module.exports = {
         quotation.save(function(err,quotation){
             if(!err){
                 // mailerService.submitQuotation('karthickk@techginko.com',quotation);
-                module.exports.createPDF(quotation);
+                // module.exports.createPDF(quotation);
                 res.json(200,quotation)
             }else{
                 console.log("Error in saving quotation");
