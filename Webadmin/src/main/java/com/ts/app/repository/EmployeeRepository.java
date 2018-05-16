@@ -5,7 +5,6 @@ import java.util.List;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -24,7 +23,7 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long> {
 	@Query("SELECT e FROM Employee e WHERE e.empId = :empId")
 	Employee findByEmpId(@Param("empId") String empId);
 
-	@Query("SELECT e FROM Employee e join e.sites s WHERE s.id = :siteId and e.active='Y' and e.isLeft = FALSE order by e.name")
+	@Query("SELECT e FROM Employee e join e.projectSites s WHERE s.site.id = :siteId and e.active='Y' and e.isLeft = FALSE order by e.name")
 	List<Employee> findBySiteId(@Param("siteId") long siteId);
 
 	@Query("SELECT distinct e FROM Employee e join e.projectSites s WHERE s.site.id IN (:siteIds) and e.active='Y' and e.isLeft = FALSE order by e.name")
@@ -33,10 +32,10 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long> {
 	@Query("SELECT distinct e FROM Employee e join e.projectSites s WHERE s.site.id IN (:siteIds) and e.active='Y' and e.isLeft = FALSE order by e.name")
 	Page<Employee> findBySiteIds(@Param("siteIds") List<Long> siteIds, Pageable pageRequest);
 
-	@Query("SELECT distinct e FROM Employee e join e.sites s WHERE s.id = :siteId and e.id IN (:empIds) and e.active='Y' and e.isLeft = FALSE order by e.name")
+	@Query("SELECT distinct e FROM Employee e join e.projectSites s WHERE s.site.id = :siteId and e.id IN (:empIds) and e.active='Y' and e.isLeft = FALSE order by e.name")
 	List<Employee> findBySiteIdAndEmpIds(@Param("siteId") long siteId, @Param("empIds") List<Long> empIds);
 
-	@Query("SELECT e FROM Employee e join e.projects p WHERE p.id = :projectId and e.active='Y' and e.isLeft = FALSE order by e.name")
+	@Query("SELECT e FROM Employee e join e.projectSites p WHERE p.project.id = :projectId and e.active='Y' and e.isLeft = FALSE order by e.name")
 	List<Employee> findByProjectId(@Param("projectId") long projectId);
 
 	@Query("SELECT distinct e FROM Employee e WHERE e.empId IN :empIds and e.active='Y' and e.isLeft = FALSE order by e.empId ")

@@ -62,10 +62,6 @@ public class EmployeeDTO extends BaseDTO {
 
     private String jobTitle;
 
-    private List<ProjectDTO> projects;
-
-    private List<SiteDTO> sites;
-
     private List<EmployeeProjectSiteDTO> projectSites;
 
     private List<EmployeeLocationDTO> locations;
@@ -216,16 +212,6 @@ public class EmployeeDTO extends BaseDTO {
             "managerName-"+ (manager!=null ? manager.getName() : "");
         StringBuffer sb = new StringBuffer();
         sb.append(details);
-        if(CollectionUtils.isNotEmpty(projects)) {
-        	for(ProjectDTO proj : projects) {
-        		sb.append(proj);
-        	}
-        }
-        if(CollectionUtils.isNotEmpty(sites)) {
-	        	for(SiteDTO site : sites) {
-	        		sb.append(site);
-	        	}
-        }
         sb.append("userId-" + getUserId() +" ");
         if(CollectionUtils.isNotEmpty(projectSites)) {
         		for(EmployeeProjectSiteDTO projSite : projectSites) {
@@ -249,22 +235,6 @@ public class EmployeeDTO extends BaseDTO {
 
 	public void setJobTitle(String jobTitle) {
 		this.jobTitle = jobTitle;
-	}
-
-	public List<ProjectDTO> getProjects() {
-		return projects;
-	}
-
-	public void setProjects(List<ProjectDTO> projects) {
-		this.projects = projects;
-	}
-
-	public List<SiteDTO> getSites() {
-		return sites;
-	}
-
-	public void setSites(List<SiteDTO> sites) {
-		this.sites = sites;
 	}
 
 	public EmployeeDTO getManager() {

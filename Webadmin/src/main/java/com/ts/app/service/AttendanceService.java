@@ -21,6 +21,7 @@ import com.ts.app.domain.AbstractAuditingEntity;
 import com.ts.app.domain.Attendance;
 import com.ts.app.domain.Employee;
 import com.ts.app.domain.EmployeeAttendanceReport;
+import com.ts.app.domain.EmployeeProjectSite;
 import com.ts.app.domain.Shift;
 import com.ts.app.domain.Site;
 import com.ts.app.domain.User;
@@ -431,11 +432,11 @@ public class AttendanceService extends AbstractService {
 	                    		page = attendanceRepository.findByCheckInTime(startDate, toDate, pageRequest);
 	            			}else {
 	            				Employee emp = user.getEmployee();
-	            				List<Site> sites = emp.getSites();
+	            				List<EmployeeProjectSite> sites = emp.getProjectSites();
 	            				if(CollectionUtils.isNotEmpty(sites)) {
 	            					List<Long> siteIds = new ArrayList<Long>();
-	            					for(Site site : sites) {
-	            						siteIds.add(site.getId());
+	            					for(EmployeeProjectSite site : sites) {
+	            						siteIds.add(site.getSite().getId());
 	            					}
 	            					page = attendanceRepository.findByMultipleSitesAndCheckInTime(siteIds, startDate, toDate, pageRequest);
 	            				}else {

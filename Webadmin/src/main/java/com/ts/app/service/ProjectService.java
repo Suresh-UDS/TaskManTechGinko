@@ -97,6 +97,21 @@ public class ProjectService extends AbstractService {
 		 */
 
 	}
+	
+	private void mapToModel(Project project , ProjectDTO projectDTO) {
+		projectDTO.setId(project.getId());
+		projectDTO.setName(project.getName());
+		projectDTO.setCountry(project.getCountry());
+		projectDTO.setState(project.getState());
+		projectDTO.setAddressLat(project.getAddressLat());
+		projectDTO.setAddressLng(project.getAddressLng());
+		projectDTO.setEmail(project.getEmail());
+		projectDTO.setPhone(project.getPhone());
+		projectDTO.setStartDate(project.getStartDate());
+		projectDTO.setEndDate(project.getEndDate());
+		projectDTO.setContactFirstName(project.getContactFirstName());
+		projectDTO.setContactLastName(project.getContactLastName());	
+	}
 
 	private void mapToEntity(ProjectDTO projectDTO, Project project) {
 		project.setName(projectDTO.getName());
@@ -158,7 +173,15 @@ public class ProjectService extends AbstractService {
 		}else {
 			entities = projectRepository.findAll();
 		}
-		return mapperUtil.toModelList(entities, ProjectDTO.class);
+		List<ProjectDTO> values = new ArrayList<ProjectDTO>();
+		if(CollectionUtils.isNotEmpty(entities)) {
+			for(Project proj : entities) {
+				ProjectDTO projDto = new ProjectDTO();
+				mapToModel(proj, projDto);
+				values.add(projDto);
+			}
+		}
+		return values;
 	}
 
 	public ProjectDTO findOne(Long id) {

@@ -80,19 +80,6 @@ public class Employee extends AbstractAuditingEntity implements Serializable {
     @Column(length = 50, nullable = true)
     private String designation;
 
-    @ManyToMany(cascade={CascadeType.ALL}, fetch = FetchType.LAZY)
-    @JoinTable(
-        name = "employee_project",
-        joinColumns = {@JoinColumn(name = "employee_id", referencedColumnName = "id")},
-        inverseJoinColumns = {@JoinColumn(name = "project_id", referencedColumnName = "id")})
-	private List<Project> projects;
-
-    @ManyToMany(cascade={CascadeType.ALL}, fetch = FetchType.LAZY)
-    @JoinTable(
-        name = "employee_site",
-        joinColumns = {@JoinColumn(name = "employee_id", referencedColumnName = "id")},
-        inverseJoinColumns = {@JoinColumn(name = "site_id", referencedColumnName = "id")})
-	private List<Site> sites;
 
 	@OneToMany(mappedBy="employee",cascade={CascadeType.ALL}, fetch = FetchType.LAZY, orphanRemoval = true)
     private List<EmployeeProjectSite> projectSites;
@@ -168,27 +155,7 @@ public class Employee extends AbstractAuditingEntity implements Serializable {
 		this.user = user;
 	}
 
-	public List<Project> getProjects() {
-		if(projects == null) {
-			projects = new ArrayList<Project>();
-		}
-		return projects;
-	}
-
-	public void setProjects(List<Project> projects) {
-		this.projects = projects;
-	}
-
-	public List<Site> getSites() {
-		return sites;
-	}
-
-	public void setSites(List<Site> sites) {
-		if(sites == null) {
-			sites = new ArrayList<Site>();
-		}
-		this.sites = sites;
-	}
+	
 
 	public long getCode() {
 		return code;
@@ -228,8 +195,6 @@ public class Employee extends AbstractAuditingEntity implements Serializable {
             "name='" + name +
             "managerID -" + (manager != null ? manager.getId() : "")+
             "managerName-"+ (manager != null ? manager.getName() : "")+
-            "projects-" + (projects !=null ? projects.size() : 0) +
-            "sites-" + (sites !=null ? sites.size() : 0) +
             "userId-" + (user!=null ? user.getId() : 0) +
             "}";
     }

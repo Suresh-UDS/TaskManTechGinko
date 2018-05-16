@@ -201,7 +201,14 @@ public class SiteService extends AbstractService {
 		}else {
 			entities = siteRepository.findAll();
 		}
-		return mapperUtil.toModelList(entities, SiteDTO.class);
+		List<SiteDTO> values = new ArrayList<SiteDTO>();
+		if(CollectionUtils.isNotEmpty(entities)) {
+			for(Site site : entities) {
+				SiteDTO siteDto = mapToModel(site, false);
+				values.add(siteDto);
+			}
+		}
+		return values;
 	}
 
 	public List<SiteDTO> findSites(long projectId, long userId) {
@@ -226,7 +233,14 @@ public class SiteService extends AbstractService {
 		}else {
 			entities = siteRepository.findSites(projectId);
 		}
-		return mapperUtil.toModelList(entities, SiteDTO.class);
+		List<SiteDTO> values = new ArrayList<SiteDTO>();
+		if(CollectionUtils.isNotEmpty(entities)) {
+			for(Site site : entities) {
+				SiteDTO siteDto = mapToModel(site, false);
+				values.add(siteDto);
+			}
+		}
+		return values;
 	}
 
 	public SiteDTO findOne(Long id) {
