@@ -607,8 +607,6 @@ public class ImportUtil {
 				projects.add(newProj);
 				List<Site> sites = new ArrayList<Site>();
 				sites.add(newSite);
-				employee.setProjects(projects);
-				employee.setSites(sites);
 				employee.setFaceAuthorised(false);
 				employee.setFaceIdEnrolled(false);
 				employee.setLeft(false);

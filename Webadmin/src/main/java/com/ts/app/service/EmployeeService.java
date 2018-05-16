@@ -184,8 +184,6 @@ public class    EmployeeService extends AbstractService {
 			projects.add(newProj);
 			List<Site> sites = new ArrayList<Site>();
 			sites.add(newSite);
-			employee.setProjects(projects);
-			employee.setSites(sites);
 			employee.setFaceAuthorised(false);
 			employee.setFaceIdEnrolled(false);
 			employee.setLeft(false);
@@ -237,22 +235,6 @@ public class    EmployeeService extends AbstractService {
 		log.debug("Inside Update"+employee);
 		log.debug("Inside Update"+employee.isLeft());
 		Employee employeeUpdate = employeeRepository.findOne(employee.getId());
-		Hibernate.initialize(employeeUpdate.getProjects());
-		List<Project> projects = employeeUpdate.getProjects();
-		boolean projExists = false;
-		for(Project proj : projects) {
-			if(proj.getId() == employee.getProjectId()) {
-				projExists = true;
-			}
-		}
-		Hibernate.initialize(employee.getSites());
-		List<Site> sites = employeeUpdate.getSites();
-		boolean siteExists = false;
-		for(Site site : sites) {
-			if(site.getId() == employee.getSiteId()) {
-				siteExists = true;
-			}
-		}
 		Project newProj = projectRepository.findOne(employee.getProjectId());
 		Site newSite = siteRepository.findOne(employee.getSiteId());
 		/*
@@ -277,14 +259,6 @@ public class    EmployeeService extends AbstractService {
 		employeeUpdate.setFullName(employee.getFullName());
 		employeeUpdate.setName(employee.getName());
 		employeeUpdate.setLastName(employee.getLastName());
-		if(newProj != null && !projExists) {
-			employeeUpdate.getProjects().add(newProj);
-		}
-		if(newSite != null && !siteExists) {
-			employeeUpdate.getSites().add(newSite);
-		}
-		//employeeUpdate.setProject(projectRepository.findOne(employee.getProjectId()));
-		//employeeUpdate.setSite(siteRepository.findOne(employee.getSiteId()));
 	    ZoneId  zone = ZoneId.of("Asia/Kolkata");
 	    ZonedDateTime zdt   = ZonedDateTime.of(LocalDateTime.now(), zone);
 		employeeUpdate.setLastModifiedDate(zdt);
@@ -345,48 +319,17 @@ public class    EmployeeService extends AbstractService {
 	public List<SiteDTO> deleteEmployeeSite(Long id, Long siteId) {
 		log.debug("Inside delete employee site");
 		Employee employeeUpdate = employeeRepository.findOne(id);
-		Hibernate.initialize(employeeUpdate.getSites());
-		List<Site> sites = employeeUpdate.getSites();
-		Iterator<Site> siteItr = sites.iterator();
-		while(siteItr.hasNext()) {
-			Site s = siteItr.next();
-			if(s.getId() == siteId) {
-				siteItr.remove();
-			}
-		}
-		employeeUpdate.setSites(sites);
         Employee employee = employeeRepository.saveAndFlush(employeeUpdate);
 		//employeeRepository.delete(employeeUpdate);
-        Hibernate.initialize(employee.getSites());
-        List<Site> siteListOnUpdate = employee.getSites();
         List<SiteDTO> siteDtos = null;
-        if(CollectionUtils.isNotEmpty(siteListOnUpdate)) {
-        	siteDtos = mapperUtil.toModelList(siteListOnUpdate, SiteDTO.class);
-        }
         return siteDtos;
 	}
 
 	public List<ProjectDTO> deleteEmployeeProject(Long id, Long projectId) {
 		log.debug("Inside delete employee project");
 		Employee employeeUpdate = employeeRepository.findOne(id);
-		Hibernate.initialize(employeeUpdate.getProjects());
-		List<Project> projects = employeeUpdate.getProjects();
-		Iterator<Project> projItr = projects.iterator();
-		while(projItr.hasNext()) {
-			Project p = projItr.next();
-			if(p.getId() == projectId) {
-				projItr.remove();
-			}
-		}
-		employeeUpdate.setProjects(projects);
-		Employee employee = employeeRepository.saveAndFlush(employeeUpdate);
-		//employeeRepository.delete(employeeUpdate);
-		Hibernate.initialize(employeeUpdate.getProjects());
-        List<Project> projListOnUpdate = employee.getProjects();
+
         List<ProjectDTO> projDtos = null;
-        if(CollectionUtils.isNotEmpty(projListOnUpdate)) {
-        	projDtos = mapperUtil.toModelList(projListOnUpdate, ProjectDTO.class);
-        }
         return projDtos;
 
 	}
@@ -600,16 +543,6 @@ public class    EmployeeService extends AbstractService {
 
 	public EmployeeDTO findOne(Long id) {
 		Employee entity = employeeRepository.findOne(id);
-		Hibernate.initialize(entity.getProjects());
-		//List<Project> projects = entity.getProjects();
-		//entity.setProjects(projects);
-		Hibernate.initialize(entity.getSites());
-		List<Site> sites = entity.getSites();
-		for(Site site : sites) {
-			Hibernate.initialize(site.getProject());
-			site.setProject(site.getProject());
-		}
-		entity.setSites(sites);
 		Hibernate.initialize(entity.getProjectSites());
 		if(CollectionUtils.isNotEmpty(entity.getProjectSites())) {
 			/*

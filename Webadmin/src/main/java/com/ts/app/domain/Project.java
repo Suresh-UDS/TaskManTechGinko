@@ -46,16 +46,16 @@ public class Project extends AbstractAuditingEntity implements Serializable {
     @Column(length = 50, unique = true, nullable = false)
     private String name;   
 
-    @OneToMany(mappedBy = "project",fetch=FetchType.EAGER)  
+    @OneToMany(mappedBy = "project",fetch=FetchType.LAZY)  
     private Set<Site> site;  
 
-	@ManyToOne(fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "project",fetch=FetchType.LAZY)  
+    private Set<EmployeeProjectSite> employeeProjSites;  
+
+    @ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "userId", nullable = false)
 	private User user;
 	
-    @ManyToMany(mappedBy="projects")
-	private List<Employee> employees;
-
     @Column(name = "contact_first_name", length = 50)
     private String contactFirstName;
     
@@ -232,18 +232,6 @@ public class Project extends AbstractAuditingEntity implements Serializable {
 
 
 
-	public List<Employee> getEmployees() {
-		return employees;
-	}
-
-
-
-	public void setEmployees(List<Employee> employees) {
-		this.employees = employees;
-	}
-
-
-
 	public String getContactFirstName() {
 		return contactFirstName;
 	}
@@ -276,6 +264,18 @@ public class Project extends AbstractAuditingEntity implements Serializable {
 
 	public void setShifts(List<Shift> shifts) {
 		this.shifts = shifts;
+	}
+
+
+
+	public Set<EmployeeProjectSite> getEmployeeProjSites() {
+		return employeeProjSites;
+	}
+
+
+
+	public void setEmployeeProjSites(Set<EmployeeProjectSite> employeeProjSites) {
+		this.employeeProjSites = employeeProjSites;
 	}
 
 	
