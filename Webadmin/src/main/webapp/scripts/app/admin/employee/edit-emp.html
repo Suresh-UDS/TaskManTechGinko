@@ -110,7 +110,9 @@
                                                         <div class="col-md-10 pad-r-0px" >
 
                                                             <span class="form-control-feedback d-sm-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
+
                                                             <select class="form-control" name="designations" ng-model="SelectedDesig" ng-options="designation as designation.designation for designation in designations track by designation.designation" required>
+
                                                                 <option value="">Select Designation..</option>
                                                             </select>
                                                              <div ng-show="form.$submitted || form.designations.$touched">
