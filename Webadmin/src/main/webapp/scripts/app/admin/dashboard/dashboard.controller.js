@@ -270,21 +270,4 @@ angular.module('timeSheetApp')
         }
 
 
-        // Page Loader Function
-
-        $scope.loadingStart = function(){ $('.pageCenter').show();$('.overlay').show();}
-        $scope.loadingStop = function(){
-            
-            console.log("Calling loader");
-            $('.pageCenter').hide();$('.overlay').hide();
-                    
-        }
-
-        //Loading Page go to top position
-        $scope.loadPageTop = function(){
-            //alert("test");
-            //$("#loadPage").scrollTop();
-            $("#loadPage").animate({scrollTop: 0}, 2000);
-        }
-
     });

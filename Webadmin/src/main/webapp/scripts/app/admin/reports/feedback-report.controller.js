@@ -2,6 +2,7 @@
 
 angular.module('timeSheetApp')
     .controller('FeedbackReportController', function ($rootScope, $scope, $state, $timeout, ProjectComponent, SiteComponent, LocationComponent,$http,$stateParams,$location,$interval) {
+        $rootScope.loadingStop();
         $scope.success = null;
         $scope.error = null;
         $scope.errorMessage = null;
@@ -28,7 +29,9 @@ angular.module('timeSheetApp')
         
         $scope.selectedZone;
         
-        $scope.now = new Date()
+        $scope.now = new Date();
+
+        $scope.pager = {};
 
         $scope.initCalender = function(){
 

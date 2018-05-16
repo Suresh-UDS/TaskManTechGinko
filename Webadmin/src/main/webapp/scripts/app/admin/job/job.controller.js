@@ -7,6 +7,7 @@ angular.module('timeSheetApp')
 						ProjectComponent, SiteComponent,EmployeeComponent,ChecklistComponent, 
                         LocationComponent, $http, $stateParams,
 						$location,PaginationComponent,$filter, TicketComponent) {
+        $rootScope.loadingStop();            
         $rootScope.loginView = false;
         $scope.success = null;
         $scope.error = null;
@@ -28,6 +29,7 @@ angular.module('timeSheetApp')
         $scope.jobTypeName = "";
         $scope.monthDays = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31];
         $scope.pageSort = 10;
+        $scope.pager = {};
         
         $scope.ticketStatus;
         
@@ -617,45 +619,19 @@ angular.module('timeSheetApp')
              $scope.setPage(1);
          }
 
-       //Loading Page go to top position
-        $scope.loadPageTop = function(){
-            //alert("test");
-            //$("#loadPage").scrollTop();
-            $("#loadPage").animate({scrollTop: 0}, 2000);
-        }
-
-         // Page Loader Function
-
-        $scope.loadingStart = function(){ $('.pageCenter').show();$('.overlay').show();}
-        $scope.loadingStop = function(){
-
-            console.log("Calling loader");
-            $('.pageCenter').hide();$('.overlay').hide();
-
-        }
-
-        $scope.loadingAuto = function(){
-            $scope.loadingStart();
-            $scope.loadtimeOut = $timeout(function(){
-
-            //console.log("Calling loader stop");
-            $('.pageCenter').hide();$('.overlay').hide();
-
-        }, 2000);}
-
 
     /*
-        ** Pagination init function **
-        @Param:integer
+    
+    ** Pagination init function **
+    @Param:integer
 
     */
 
         $scope.setPage = function (page) {
-        		if($scope.pager) {
-                if (page < 1 || page > $scope.pager.totalPages) {
-                    return;
-                }
-        		}
+
+            if (page < 1 || page > $scope.pager.totalPages) {
+                return;
+            }
             //alert(page);
             $scope.pages.currPage = page;
             $scope.search();

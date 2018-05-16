@@ -6,11 +6,12 @@ angular.module('timeSheetApp')
 				function($scope, $rootScope, $state, $timeout, AssetComponent,
 						ProjectComponent, SiteComponent,EmployeeComponent, $http, $stateParams,
 						$location) {
+        $rootScope.loadingStop();
         $rootScope.loginView = false;
         $scope.success = null;
         $scope.error = null;
         $scope.doNotMatch = null;
-
+        $scope.pager = {};
         $scope.searchCriteria = {};
         $scope.pages = { currPage : 1};
         $scope.isEdit = !!$stateParams.id;
@@ -272,22 +273,4 @@ angular.module('timeSheetApp')
              $scope.initPage(); 
           
          }
-
-       //Loading Page go to top position
-        $scope.loadPageTop = function(){
-            //alert("test");
-            //$("#loadPage").scrollTop();
-            $("#loadPage").animate({scrollTop: 0}, 2000);
-        }
-
-        // Page Loader Function
-
-        $scope.loadingStart = function(){ $('.pageCenter').show();
-        $('.overlay').show();}
-        $scope.loadingStop = function(){
-            
-            console.log("Calling loader");
-            $('.pageCenter').hide(); $('.overlay').hide();
-                    
-        }
     });

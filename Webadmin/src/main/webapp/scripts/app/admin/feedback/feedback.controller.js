@@ -4,6 +4,7 @@ angular.module('timeSheetApp')
     .controller('FeedbackController', function ($rootScope, $scope, $state, $timeout,
      ProjectComponent, SiteComponent, LocationComponent,FeedbackComponent,
       $http,$stateParams,$location,$interval,$filter) {
+        $rootScope.loadingStop();
         $rootScope.loginView = false;
         $scope.averageRating ='0';
         $scope.readOnly = true;
@@ -12,6 +13,7 @@ angular.module('timeSheetApp')
         $scope.series = ['Series A'];
         $scope.selectedFromDate = $filter('date')(new Date(), 'dd/MM/yyyy'); 
         $scope.selectedToDate = $filter('date')(new Date(), 'dd/MM/yyyy'); 
+        $scope.pager = {};
         $scope.data = [
         ];
         $scope.onClick = function (points, evt) {
@@ -417,13 +419,6 @@ angular.module('timeSheetApp')
             
           
          }
-
-       //Loading Page go to top position
-        $scope.loadPageTop = function(){
-            //alert("test");
-            //$("#loadPage").scrollTop();
-            $("#loadPage").animate({scrollTop: 0}, 2000);
-        }
 
     });
 
