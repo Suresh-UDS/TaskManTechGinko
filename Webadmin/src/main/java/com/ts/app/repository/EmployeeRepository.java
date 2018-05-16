@@ -2,7 +2,7 @@ package com.ts.app.repository;
 
 import java.sql.Date;
 import java.util.List;
- 
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -41,7 +41,7 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long> {
 
 	@Query("SELECT distinct e FROM Employee e WHERE e.empId IN :empIds and e.active='Y' and e.isLeft = FALSE order by e.empId ")
 	Page<Employee> findAllByEmpCodes(@Param("empIds") List<String> empIds, Pageable pageRequest);
-	
+
 	@Query("SELECT distinct e FROM Employee e WHERE e.id IN :empIds and e.active='Y' and e.isLeft = FALSE order by e.empId ")
 	Page<Employee> findAllByEmpIds(@Param("empIds") List<Long> empIds, Pageable PageRequest);
 
@@ -66,49 +66,49 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long> {
     @Query("SELECT distinct e FROM Employee e  WHERE e.id IN :empIds and  e.isReliever=true and e.active='Y' order by e.empId")
     List<Employee> findAllRelieversByIds(@Param("empIds") List<Long> empIds);
 
-    @Query("SELECT e FROM Employee e join e.projectSites ps WHERE ((e.id = :employeeId and ps.project.id = :projectId) or ps.site.id = :siteId) and e.active='Y' and e.isLeft = FALSE order by e.empId")
+    @Query("SELECT distinct e FROM Employee e join e.projectSites ps WHERE ((e.id = :employeeId and ps.project.id = :projectId) or ps.site.id = :siteId) and e.active='Y' and e.isLeft = FALSE order by e.empId")
 	Page<Employee> findEmployeesByIdAndProjectIdOrSiteId(@Param("employeeId") long employeeId, @Param("projectId") long projectId, @Param("siteId") long siteId, Pageable pageRequest);
 
-    @Query("SELECT e FROM Employee e join e.projectSites ps WHERE ((e.id = :employeeId and ps.site.id = :siteId) or ps.project.id = :projectId) and e.active='Y' and e.isLeft = FALSE order by e.empId")
+    @Query("SELECT distinct e FROM Employee e join e.projectSites ps WHERE ((e.id = :employeeId and ps.site.id = :siteId) or ps.project.id = :projectId) and e.active='Y' and e.isLeft = FALSE order by e.empId")
 	Page<Employee> findEmployeesByIdAndSiteIdOrProjectId(@Param("employeeId") long employeeId, @Param("projectId") long projectId, @Param("siteId") long siteId, Pageable pageRequest);
 
-    @Query("SELECT e FROM Employee e join e.projectSites ps WHERE (e.id = :employeeId or (ps.site.id = :siteId and ps.project.id = :projectId)) and e.active='Y' and e.isLeft = FALSE order by e.empId")
+    @Query("SELECT distinct e FROM Employee e join e.projectSites ps WHERE (e.id = :employeeId or (ps.site.id = :siteId and ps.project.id = :projectId)) and e.active='Y' and e.isLeft = FALSE order by e.empId")
 	Page<Employee> findEmployeesByIdOrSiteIdAndProjectId(@Param("employeeId") long employeeId, @Param("projectId") long projectId, @Param("siteId") long siteId, Pageable pageRequest);
 
-    @Query("SELECT e FROM Employee e join e.projectSites ps WHERE (e.id = :employeeId and ps.site.id = :siteId and ps.project.id = :projectId) and e.active='Y' and e.isLeft = FALSE order by e.empId")
+    @Query("SELECT distinct e FROM Employee e join e.projectSites ps WHERE (e.id = :employeeId and ps.site.id = :siteId and ps.project.id = :projectId) and e.active='Y' and e.isLeft = FALSE order by e.empId")
 	Page<Employee> findEmployeesByIdAndSiteIdAndProjectId(@Param("employeeId") long employeeId, @Param("projectId") long projectId, @Param("siteId") long siteId,Pageable pageRequest);
 
-    @Query("SELECT e FROM Employee e join e.projectSites ps WHERE (ps.site.id = :siteId and ps.project.id = :projectId) and e.active='Y' and e.isLeft = FALSE order by e.empId")
+    @Query("SELECT distinct e FROM Employee e join e.projectSites ps WHERE (ps.site.id = :siteId and ps.project.id = :projectId) and e.active='Y' and e.isLeft = FALSE order by e.empId")
 	Page<Employee> findBySiteIdAndProjectId(@Param("projectId") long projectId, @Param("siteId") long siteId, Pageable pageRequest);
 
-    @Query("SELECT e FROM Employee e join e.projectSites ps WHERE ((e.id = :employeeId and ps.project.id = :projectId) or ps.site.id = :siteId) and e.active='Y' and e.isLeft = FALSE and e.createdDate between :startDate and :endDate order by e.empId")
+    @Query("SELECT distinct e FROM Employee e join e.projectSites ps WHERE ((e.id = :employeeId and ps.project.id = :projectId) or ps.site.id = :siteId) and e.active='Y' and e.isLeft = FALSE and e.createdDate between :startDate and :endDate order by e.empId")
 	Page<Employee> findEmployeesByIdAndProjectIdOrSiteId(@Param("employeeId") long employeeId, @Param("projectId") long projectId, @Param("siteId") long siteId, @Param("startDate") Date startDate, @Param("endDate") Date endDate, Pageable pageRequest);
 
-    @Query("SELECT e FROM Employee e join e.projectSites ps WHERE ((e.id = :employeeId and ps.site.id = :siteId) or ps.project.id = :projectId) and e.active='Y' and e.isLeft = FALSE and e.createdDate between :startDate and :endDate order by e.empId")
+    @Query("SELECT distinct e FROM Employee e join e.projectSites ps WHERE ((e.id = :employeeId and ps.site.id = :siteId) or ps.project.id = :projectId) and e.active='Y' and e.isLeft = FALSE and e.createdDate between :startDate and :endDate order by e.empId")
 	Page<Employee> findEmployeesByIdAndSiteIdOrProjectId(@Param("employeeId") long employeeId, @Param("projectId") long projectId, @Param("siteId") long siteId, @Param("startDate") Date startDate, @Param("endDate") Date endDate,Pageable pageRequest);
 
-    @Query("SELECT e FROM Employee e join e.projectSites ps WHERE (e.id = :employeeId or (ps.site.id = :siteId and ps.project.id = :projectId)) and e.active='Y' and e.isLeft = FALSE and e.createdDate between :startDate and :endDate order by e.empId")
+    @Query("SELECT distinct e FROM Employee e join e.projectSites ps WHERE (e.id = :employeeId or (ps.site.id = :siteId and ps.project.id = :projectId)) and e.active='Y' and e.isLeft = FALSE and e.createdDate between :startDate and :endDate order by e.empId")
 	Page<Employee> findEmployeesByIdOrSiteIdAndProjectId(@Param("employeeId") long employeeId, @Param("projectId") long projectId, @Param("siteId") long siteId, @Param("startDate") Date startDate, @Param("endDate") Date endDate,Pageable pageRequest);
 
-    @Query("SELECT e FROM Employee e join e.projectSites ps WHERE (e.id = :employeeId and ps.site.id = :siteId and ps.project.id = :projectId) and e.active='Y' and e.isLeft = FALSE and e.createdDate between :startDate and :endDate order by e.empId")
+    @Query("SELECT distinct e FROM Employee e join e.projectSites ps WHERE (e.id = :employeeId and ps.site.id = :siteId and ps.project.id = :projectId) and e.active='Y' and e.isLeft = FALSE and e.createdDate between :startDate and :endDate order by e.empId")
 	Page<Employee> findEmployeesByIdAndSiteIdAndProjectId(@Param("employeeId") long employeeId, @Param("projectId") long projectId, @Param("siteId") long siteId, @Param("startDate") Date startDate, @Param("endDate") Date endDate,Pageable pageRequest);
 
-    @Query("SELECT e FROM Employee e join e.projectSites ps WHERE (ps.site.id = :siteId and ps.project.id = :projectId) and e.active='Y' and e.isLeft = FALSE and e.createdDate between :startDate and :endDate order by e.empId")
+    @Query("SELECT distinct e FROM Employee e join e.projectSites ps WHERE (ps.site.id = :siteId and ps.project.id = :projectId) and e.active='Y' and e.isLeft = FALSE and e.createdDate between :startDate and :endDate order by e.empId")
 	Page<Employee> findBySiteIdAndProjectId(@Param("projectId") long projectId, @Param("siteId") long siteId, @Param("startDate") Date startDate, @Param("endDate") Date endDate, Pageable pageRequest);
 
-    @Query("SELECT e FROM Employee e join e.projectSites ps WHERE ps.site.name like '%' || :siteName || '%' and e.id in (:empIds) and e.active='Y' and e.isLeft = FALSE order by e.empId")
+    @Query("SELECT distinct e FROM Employee e join e.projectSites ps WHERE ps.site.name like '%' || :siteName || '%' and e.id in (:empIds) and e.active='Y' and e.isLeft = FALSE order by e.empId")
 	Page<Employee> findBySiteName(@Param("siteName") String siteId, @Param("empIds") List<Long> empIds, Pageable pageRequest);
-    
-    @Query("SELECT e FROM Employee e join e.projectSites ps WHERE ps.project.name like '%' || :projectName || '%' and e.id in (:empIds) and e.active='Y' and e.isLeft = FALSE order by e.empId")
+
+    @Query("SELECT distinct e FROM Employee e join e.projectSites ps WHERE ps.project.name like '%' || :projectName || '%' and e.id in (:empIds) and e.active='Y' and e.isLeft = FALSE order by e.empId")
 	Page<Employee> findByProjectName(@Param("projectName") String projectName, @Param("empIds") List<Long> empIds, Pageable pageRequest);
-    
-    @Query("SELECT e FROM Employee e join e.projectSites ps WHERE ps.site.id = :siteId and ps.project.id = :projectId and e.empId = :empId and e.active='Y' and e.isLeft = FALSE order by e.empId")
+
+    @Query("SELECT distinct e FROM Employee e join e.projectSites ps WHERE ps.site.id = :siteId and ps.project.id = :projectId and e.empId = :empId and e.active='Y' and e.isLeft = FALSE order by e.empId")
 	Page<Employee> findByProjectSiteAndEmployeeEmpId(@Param("projectId") long projectId, @Param("siteId") long siteId, @Param("empId") String empId, Pageable pageRequest);
 
-    @Query("SELECT e FROM Employee e join e.projectSites ps WHERE ps.site.id = :siteId and ps.project.id = :projectId and e.name like '%' || :empName || '%' and e.active='Y' and e.isLeft = FALSE order by e.empId")
+    @Query("SELECT distinct e FROM Employee e join e.projectSites ps WHERE ps.site.id = :siteId and ps.project.id = :projectId and e.name like '%' || :empName || '%' and e.active='Y' and e.isLeft = FALSE order by e.empId")
 	Page<Employee> findByProjectSiteAndEmployeeName(@Param("projectId") long projectId, @Param("siteId") long siteId, @Param("empName") String empName, Pageable pageRequest);
 
-    @Query("SELECT e FROM Employee e join e.projectSites ps WHERE ps.project.id = :projectId and e.name like '%' || :empName || '%' and e.active='Y' and e.isLeft = FALSE order by e.empId")
+    @Query("SELECT distinct e FROM Employee e join e.projectSites ps WHERE ps.project.id = :projectId and e.name like '%' || :empName || '%' and e.active='Y' and e.isLeft = FALSE order by e.empId")
 	Page<Employee> findByProjectAndEmployeeName(@Param("projectId") long projectId, @Param("empName") String empName, Pageable pageRequest);
 
     @Query("SELECT e FROM Employee e WHERE e.name like '%' || :empName || '%' and e.active='Y' order by e.empId")
@@ -148,13 +148,13 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long> {
 
 	@Query("SELECT count(distinct e) FROM Employee e join e.projectSites ps where ps.site.id IN (:siteIds) and e.active = 'Y' and e.isLeft = FALSE")
 	long findTotalCountBySites(@Param("siteIds") List<Long> siteIds);
-	
+
 	@Query("SELECT count(e) FROM Employee e where e.active = 'Y' and e.isLeft = FALSE")
 	long findTotalCount();
-	
+
 	@Query( "SELECT e FROM Employee e where e.active = 'Y' and e.isLeft = FALSE")
 	Page<Employee> findByOrder(Pageable pageRequest);
-	
+
 	//@Query("SELECT count(e) FROM Employee e join e.projectSites eps join eps.shifts es  WHERE eps.employee.id = e.id and eps.id = es.employeeProjectSite.id and eps.site.id = :siteId and es.startTime = :startTime and es.endTime = :endTime and e.active = 'Y' and e.isLeft = FALSE")
 	//long findEmployeeCountBySiteAndShift(@Param("siteId") long siteId, @Param("startTime") String startTime, @Param("endTime") String endTime);
 
