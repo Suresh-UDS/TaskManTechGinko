@@ -172,6 +172,7 @@ angular.module('timeSheetApp')
 
         $scope.loadEmployees = function () {
                 $scope.searchCriteria.siteId = $scope.selectedSite.id;
+                $scope.searchCriteria.list = true;
                 EmployeeComponent.search($scope.searchCriteria).then(function (data) {
                     $scope.selectedEmployee = null;
                 $scope.employees = data.transactions;

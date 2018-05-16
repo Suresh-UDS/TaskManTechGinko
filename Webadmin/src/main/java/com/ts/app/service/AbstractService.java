@@ -23,7 +23,6 @@ public abstract class AbstractService {
 		if(page == 0) {
 			page = 1;
 		}
-		page -= 1;
         return createPageRequest(page, PagingUtil.PAGE_SIZE); 
     }
 	
@@ -31,7 +30,6 @@ public abstract class AbstractService {
 		if(page == 0) {
 			page = 1;
 		}
-		page -= 1;
 		if(isAll) {
 	        return createPageRequest(page, Integer.MAX_VALUE); 
 		}else {
@@ -43,7 +41,6 @@ public abstract class AbstractService {
 		if(page == 0) {
 			page = 1;
 		}
-		page -= 1;
 		Sort s = new Sort(Sort.Direction.DESC, "createdDate");
         return createPageSort(page, pageSize, s); 
     }

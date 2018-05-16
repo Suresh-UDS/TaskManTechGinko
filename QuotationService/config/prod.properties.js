@@ -1,7 +1,7 @@
 module.exports = {
 
 	db:{
-		url:'mongodb://localhost:27017/quotation_svc'
+		url:'mongodb://localhost:27017/quotation_svc',
 		schema : '/../app/schema'
 	},
 
