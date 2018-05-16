@@ -215,7 +215,7 @@ angular.module('timeSheetApp')
 
         $scope.loadDesignations = function () {
 
-            console.log("Loading all designations")
+            //console.log("Loading all designations")
             EmployeeComponent.findAllDesginations().then(function (data) {
                 $scope.designations = data;
                 console.log("Loading all Designations" ,$scope.designations);
@@ -509,6 +509,7 @@ angular.module('timeSheetApp')
                 $scope.employee = data;
                 $scope.projectSiteList = $scope.employee.projectSites;
                 $scope.employee.code = pad($scope.employee.code , 4);
+                $scope.SelectedDesig = {designation:$scope.employee.designation};
                 $scope.loadSelectedProject($scope.employee.projectId);
                 $scope.loadSelectedSite($scope.employee.siteId);
                 $scope.loadSelectedManager($scope.employee.managerId);

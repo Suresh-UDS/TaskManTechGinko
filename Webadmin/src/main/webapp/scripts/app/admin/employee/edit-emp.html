@@ -19,7 +19,7 @@
 </div>
 <div class="crud-form"
 	data-unique-hash="a2ad475d60b22954085c657a73309b8f">
-	<div class="" ng-init="initAddEdit()">
+	<div class="" >
 		<div class="row">
 			<div class="col-md-12">
 
@@ -110,7 +110,7 @@
                                                         <div class="col-md-10 pad-r-0px" >
 
                                                             <span class="form-control-feedback d-sm-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                                            <select class="form-control" name="designations" ng-model="employee.designation" ng-options="designation.designation as designation.designation for designation in designations track by designation.designation"" required>
+                                                            <select class="form-control" name="designations" ng-model="SelectedDesig" ng-options="designation as designation.designation for designation in designations track by designation.designation" required>
                                                                 <option value="">Select Designation..</option>
                                                             </select>
                                                              <div ng-show="form.$submitted || form.designations.$touched">
@@ -447,7 +447,7 @@
                                                                <!--ng-minlength=1 ng-maxlength=50 ng-pattern="/^[A-Za-z0-9\s]*$/"  autocomplete="off" />-->
                                                         <span class="form-control-feedback d-sm-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
                                                         <select class=" form-control " ng-model="selectedManager" ng-init="selectedManager = selected" ng-options="manager as manager.name for manager in allManagers track by manager.name" name="manager" >
-                                                            <option value="">Please select Manager...</option>
+                                                            <option value="">Select Manager...</option>
                                                         </select>
                                                         <div ng-show="form.$submitted || form.manager.$touched">
                                                             <div ng-show="form.manager.$dirty || form.manager.$invalid">
