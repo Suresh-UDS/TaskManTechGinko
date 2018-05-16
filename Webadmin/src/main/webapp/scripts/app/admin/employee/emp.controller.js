@@ -57,6 +57,8 @@ angular.module('timeSheetApp')
 
         $scope.selectedRole;
 
+        $scope.SelectedDesig = {};
+
         $scope.pageSort = 10;
 
         $scope.initCalender = function(){
