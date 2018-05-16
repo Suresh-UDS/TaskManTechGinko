@@ -284,7 +284,7 @@ public class FileUploadHelper {
                 try {
                     Files.createDirectory(newEmpPath);
                 } catch (IOException e) {
-                    log.error("Error while creating path for attendance " + newEmpPath);
+                    log.error("Error while creating path for import file " + newEmpPath);
                 }
             }
             try {
@@ -293,12 +293,12 @@ public class FileUploadHelper {
                 BufferedOutputStream stream = new BufferedOutputStream(new FileOutputStream(new File(filePath)));
                 stream.write(bytes);
                 stream.close();
-                log.debug("File uploaded successfully to attendance folder - " + fileName);
+                log.debug("File uploaded successfully to import folder - " + fileName);
             } catch (Exception e) {
-                log.error("File uploaded failed for attendance - " + fileName, e);
+                log.error("File uploaded failed for import - " + fileName, e);
             }
         } else {
-            log.error("Empty file, upload failed for attendance- " + fileName);
+            log.error("Empty file, upload failed for import - " + fileName);
         }
         return fileName;
     }

@@ -481,7 +481,7 @@ public class SchedulerService extends AbstractService {
 								Calendar currCal = Calendar.getInstance();
 								//currCal.add(Calendar.HOUR_OF_DAY,  1);
 								long timeDiff = currCal.getTimeInMillis() - startCal.getTimeInMillis();
-								//if(timeDiff >= 3600000 && timeDiff < 7200000) { //within 2 hours of the shift start timing.
+								if(timeDiff >= 3600000 && timeDiff < 7200000) { //within 2 hours of the shift start timing.
 									//long empCntInShift = employeeRepository.findEmployeeCountBySiteAndShift(site.getId(), shift.getStartTime(), shift.getEndTime());
 									long empCntInShift = empShiftRepo.findEmployeeCountBySiteAndShift(site.getId(), DateUtil.convertToSQLDate(startCal.getTime()), DateUtil.convertToSQLDate(endCal.getTime()));
 									if(empCntInShift == 0) {
@@ -506,7 +506,7 @@ public class SchedulerService extends AbstractService {
 										//mailService.sendJobReportEmailFile(attendanceReportEmails.getSettingValue(), exportResult.getFile(), null, cal.getTime());
 										mailService.sendAttendanceConsolidatedReportEmail(site.getName(), attendanceReportEmails.getSettingValue(), content.toString(), null, cal.getTime());
 									}
-								//}	
+								}	
 							}
 	 					}else {
 							long empCntInShift = employeeRepository.findCountBySiteId(site.getId());
