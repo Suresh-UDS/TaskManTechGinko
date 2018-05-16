@@ -4,6 +4,7 @@ angular.module('timeSheetApp')
     .controller('UserController', function ($rootScope, $scope, $state, $timeout, 
         UserGroupComponent,EmployeeComponent, UserComponent, UserRoleComponent,
          $http, $stateParams, $location, JobComponent, PaginationComponent) {
+        $rootScope.loadingStop();
         $rootScope.loginView = false;
         $scope.success = null;
         $scope.error = null;
@@ -13,6 +14,7 @@ angular.module('timeSheetApp')
         $scope.validationErrorMsg = null;
         $scope.authorities = ["User", "Admin"];
         $scope.pageSort = 10;
+        $scope.pager = {};
 
         $timeout(function (){angular.element('[ng-model="name"]').focus();});
 
@@ -375,51 +377,22 @@ angular.module('timeSheetApp')
 
          }
 
-       //Loading Page go to top position
-        $scope.loadPageTop = function(){
-            //alert("test");
-            //$("#loadPage").scrollTop();
-            $("#loadPage").animate({scrollTop: 0}, 2000);
-        }
+        /*
+            ** Pagination init function **
+            @Param:integer
 
-       // Page Loader Function
+        */
 
-                $scope.loadingStart = function(){ $('.pageCenter').show();$('.overlay').show();}
-                $scope.loadingAuto = function(){
-                    $scope.loadingStart();
-                    $scope.loadtimeOut = $timeout(function(){
-
-                    //console.log("Calling loader stop");
-                    $('.pageCenter').hide();$('.overlay').hide();
-
-                }, 2000);
-                   // alert('hi');
-                }
-                $scope.loadingStop = function(){
-
-                    console.log("Calling loader");
-                    $('.pageCenter').hide();$('.overlay').hide();
-
-                }
-
-
-
-                /*
-                    ** Pagination init function **
-                    @Param:integer
-
-                */
-
-                    $scope.setPage = function (page) {
-                            if($scope.pager) {
-                            if (page < 1 || page > $scope.pager.totalPages) {
-                                return;
-                            }
-                            }
-                        //alert(page);
-                        $scope.pages.currPage = page;
-                        $scope.search();
-                    };
+            $scope.setPage = function (page) {
+                    if($scope.pager) {
+                    if (page < 1 || page > $scope.pager.totalPages) {
+                        return;
+                    }
+                    }
+                //alert(page);
+                $scope.pages.currPage = page;
+                $scope.search();
+            };
 
 
 

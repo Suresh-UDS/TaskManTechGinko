@@ -3,6 +3,7 @@
 angular.module('timeSheetApp')
     .controller('ProjectController', function ($scope, $rootScope, $state, $timeout,
      ProjectComponent,$http,$stateParams,$location,PaginationComponent) {
+        $rootScope.loadingStop();
         $rootScope.loginView = false;
         $scope.success = null;
         $scope.error = null;
@@ -11,6 +12,7 @@ angular.module('timeSheetApp')
         $scope.selectedProject = null;
         $scope.searchCriteria = {};
         $scope.pages = { currPage : 1};
+        $scope.pager = {};
 
 
         $timeout(function (){angular.element('[ng-model="name"]').focus();});
@@ -251,12 +253,6 @@ angular.module('timeSheetApp')
 
          }
 
-       //Loading Page go to top position
-        $scope.loadPageTop = function(){
-            //alert("test");
-            //$("#loadPage").scrollTop();
-            $("#loadPage").animate({scrollTop: 0}, 2000);
-        }
 
        /*
         ** Pagination init function **

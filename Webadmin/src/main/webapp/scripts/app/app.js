@@ -27,7 +27,7 @@ angular.module('timeSheetApp', ['LocalStorageModule',
             console.log("state change start")
             if (Principal.isIdentityResolved()) {
                 Auth.authorize();
-                $scope.isLoggedIn = true;
+                $rootScope.isLoggedIn = true;
             }
 
         });
@@ -86,6 +86,41 @@ angular.module('timeSheetApp', ['LocalStorageModule',
                 $state.go($rootScope.previousStateName, $rootScope.previousStateParams);
             }
         };
+
+
+        // Page Loader Function
+
+        $rootScope.loadingAuto = function(){
+            $scope.loadingStart();
+            $scope.loadtimeOut = $timeout(function(){
+
+            //console.log("Calling loader stop");
+            $('.pageCenter').hide();$('.overlay').hide();
+
+        }, 2000);}
+
+        $rootScope.loadingStart = function(){
+
+         $('.pageCenter').show();
+         $('.overlay').show();
+
+        }
+
+        $rootScope.loadingStop = function(){
+            
+            console.log("Calling loader");
+
+            $('.pageCenter').hide();
+            $('.overlay').hide();
+                    
+        }
+
+        //Loading Page go to top position
+
+        $rootScope.loadPageTop = function(){
+
+            $("#loadPage").animate({scrollTop: 0}, 2000);
+        }
 
        
     })

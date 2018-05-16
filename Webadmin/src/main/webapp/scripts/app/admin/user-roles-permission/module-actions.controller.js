@@ -4,6 +4,7 @@ angular.module('timeSheetApp')
     .controller('ModuleActionsController', function ($rootScope, $scope, $state, $timeout,
      ModuleActionComponent,EmployeeComponent, $http,
       $stateParams, $location, JobComponent,PaginationComponent) {
+        $rootScope.loadingStop();
         $rootScope.loginView = false;
         $scope.success = null;
         $scope.error = null;
@@ -12,6 +13,7 @@ angular.module('timeSheetApp')
         $scope.validationError = null;
         $scope.validationErrorMsg = null;
         $scope.authorities = ["User", "Admin"];
+        $scope.pager = {};
 
         $timeout(function (){angular.element('[ng-model="name"]').focus();});
 
@@ -343,23 +345,6 @@ angular.module('timeSheetApp')
 
 
                          }
-
-                       //Loading Page go to top position
-                        $scope.loadPageTop = function(){
-                            //alert("test");
-                            //$("#loadPage").scrollTop();
-                            $("#loadPage").animate({scrollTop: 0}, 2000);
-                        }
-
-                        // Page Loader Function
-
-                        $scope.loadingStart = function(){ $('.pageCenter').show();$('.overlay').show();}
-                        $scope.loadingStop = function(){
-
-                            console.log("Calling loader");
-                            $('.pageCenter').hide();$('.overlay').hide();
-
-                        }
 
 
                         /*

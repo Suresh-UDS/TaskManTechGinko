@@ -7,6 +7,7 @@ angular.module('timeSheetApp')
 						ProjectComponent, SiteComponent,EmployeeComponent,ChecklistComponent,
                          $http, $stateParams,
 						$location,$interval,PaginationComponent,$filter) {
+        $rootScope.loadingStop();
         $rootScope.loginView = false;           
         $scope.success = null;
         $scope.error = null;
@@ -30,7 +31,7 @@ angular.module('timeSheetApp')
         d.setFullYear(2018, 0, 1);
         $scope.selectedDateFromSer= d;
         $scope.selectedDateToSer= new Date();
-
+        $scope.pager = {};
        
 
         $scope.initCalender = function(){
@@ -539,13 +540,6 @@ angular.module('timeSheetApp')
 
 
          }
-
-       //Loading Page go to top position
-        $scope.loadPageTop = function(){
-            //alert("test");
-            //$("#loadPage").scrollTop();
-            $("#loadPage").animate({scrollTop: 0}, 2000);
-        }
 
     /*
     ** Pagination init function **

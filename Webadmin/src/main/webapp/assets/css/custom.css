@@ -310,6 +310,9 @@ span.d-big-arrow-icon {
   font-weight: bold;
 
 }
+select{
+  padding-right:27px !important; 
+}
 select.siteList
 {
   padding: 5px;

@@ -4,6 +4,7 @@ angular.module('timeSheetApp')
     .controller('TicketReportController', function ($rootScope, $scope, $state, $timeout, 
         ProjectComponent, SiteComponent, EmployeeComponent,TicketComponent,JobComponent,
         DashboardComponent, $http,$stateParams,$location,$interval,PaginationComponent,$filter) {
+        $rootScope.loadingStop();
         $rootScope.loginView = false;
         $scope.success = null;
         $scope.error = null;
@@ -29,6 +30,7 @@ angular.module('timeSheetApp')
         $scope.selectedDateFromSer= d;
         $scope.selectedDateToSer= new Date();
         $scope.pageSort = 10;
+        $scope.pager = {};
 
 
         $scope.initCalender = function(){
@@ -554,13 +556,6 @@ angular.module('timeSheetApp')
 
 
          }
-
-       //Loading Page go to top position
-        $scope.loadPageTop = function(){
-            //alert("test");
-            //$("#loadPage").scrollTop();
-            $("#loadPage").animate({scrollTop: 0}, 2000);
-        }
 
         /*
     

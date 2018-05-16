@@ -3,10 +3,12 @@
 angular.module('timeSheetApp')
     .controller('SettingsController', function ($rootScope, $scope, $state, $timeout, $http, $stateParams,
      $location, ProjectComponent, SettingsComponent) {
+            $rootScope.loadingStop();
             $rootScope.loginView = false;
     		$scope.selectedProject =null;
     		
     		$scope.selectedSite =null;
+            $scope.pager = {};
     		
     		$scope.settings = {
     			attendanceEmailIds : [],	
@@ -204,13 +206,6 @@ angular.module('timeSheetApp')
 
 
          }
-
-       //Loading Page go to top position
-        $scope.loadPageTop = function(){
-            //alert("test");
-            //$("#loadPage").scrollTop();
-            $("#loadPage").animate({scrollTop: 0}, 2000);
-        }
 
     });
 
