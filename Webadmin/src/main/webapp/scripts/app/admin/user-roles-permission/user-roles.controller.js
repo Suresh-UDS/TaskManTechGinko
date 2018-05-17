@@ -36,7 +36,7 @@ angular.module('timeSheetApp')
         	console.log('userRole -'+ $scope.userRole);
         	UserRoleComponent.createUserRole($scope.userRole).then(function () {
             	$scope.success = 'OK';
-            	$scope.loadUsers();
+            	//$scope.loadUsers();
             	$location.path('/user-roles');
             }).catch(function (response) {
                 $scope.success = null;
