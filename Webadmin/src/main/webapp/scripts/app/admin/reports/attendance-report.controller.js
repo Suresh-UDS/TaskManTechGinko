@@ -216,10 +216,10 @@ angular.module('timeSheetApp')
             $scope.searchCriteria.findAll = false;
 
                if($scope.selectedDateFrom) {
-                    $scope.searchCriteria.fromDate = $scope.selectedDateFromSer;
+                    $scope.searchCriteria.checkInDateTimeFrom = $scope.selectedDateFromSer;
                 }
                 if($scope.selectedDateTo) {
-                    $scope.searchCriteria.toDate = $scope.selectedDateToSer;
+                    $scope.searchCriteria.checkInDateTimeTo = $scope.selectedDateToSer;
                 }
             
 
