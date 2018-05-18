@@ -517,6 +517,7 @@ public class ExportUtil {
             Path newEmpPath = Paths.get(filePath);
             try {
                 Files.createDirectory(newEmpPath);
+                
             } catch (IOException e) {
                 log.error("Error while creating path " + newEmpPath);
             }
@@ -525,7 +526,9 @@ public class ExportUtil {
         
         OPCPackage pkg = null;
         try {
-			pkg = OPCPackage.open(new File(filePath));
+        		Path newFilePath = Paths.get(filePath);
+        		Files.createFile(newFilePath);
+			pkg = OPCPackage.open(new FileInputStream(filePath));
             XSSFWorkbook xssfWorkbook = new XSSFWorkbook(pkg);
             // create worksheet with title
             XSSFSheet xssfSheet = xssfWorkbook.createSheet("ATTENDANCE_REPORT");
@@ -560,7 +563,7 @@ public class ExportUtil {
             }
             log.info(filePath + " Excel file was created successfully !!!");
             statusMap.put(filePath, "COMPLETED");
-            
+            pkg.close();
         } catch (InvalidFormatException | IOException e1) {
 			// TODO Auto-generated catch block
 			log.error("Error while creating the attendance excel report file ", e1);
