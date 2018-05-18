@@ -11,36 +11,43 @@
 
                        <div class="TabsCon ">
 
-                           <div class="panel panel-default TabsContainer                                                                                  ">
+                           <div class="panel panel-default TabsContainer assetsTabs">
                                <!--<div class="panel-heading">Panel Heading</div>-->
                                <div class="panel-body">
 
 
                                    <ul class="nav nav-pills nav-pills-warning">
                                        <li class="active">
-                                           <a href=".pill2" data-toggle="tab" > General</a>
+                                           <a href=".General" data-toggle="tab" > General</a>
                                        </li>
                                        <li class="">
-                                           <a href=".pill3" data-toggle="tab"
+                                           <a href=".qr-code" data-toggle="tab"
                                                        > QR Code</a>
                                        </li>
-                                       <li class="">
-                                           <a href=".pill1" data-toggle="tab"
-                                                       > Tickets</a>
-                                       </li>
-                                       <li class=""><a href=".pill4" data-toggle="tab"
-                                                       >PPM tasks</a></li>
-                                       <li class=""><a href=".pill5" data-toggle="tab"
-                                                      >AMC tasks</a></li>
-                                       <li class=""><a href=".pill6" data-toggle="tab"
+                                       <li class=""><a href=".ppm-schedule" data-toggle="tab"
                                                        >PPM Schedule</a></li>
-                                       <li class=""><a href=".pill7" data-toggle="tab"
+                                       <li class=""><a href=".amc-schedule" data-toggle="tab"
                                                        >AMC schedule</a></li>
-                                       <li class=""><a href=".pill8" data-toggle="tab"
+                                       <li class=""><a href=".Config" data-toggle="tab"
+                                       >Config</a></li>
+
+                                       <li class=""><a href=".Documents" data-toggle="tab"
                                                       >Documents</a></li>
+                                       <li class=""><a href=".ppm-tasks" data-toggle="tab"
+                                       >PPM tasks</a></li>
+                                       <li class=""><a href=".amc-tasks" data-toggle="tab"
+                                       >AMC tasks</a></li>
+                                       <li class="">
+                                           <a href=".Tickets" data-toggle="tab"
+                                           > Tickets</a>
+                                       </li>
+                                       <li class=""><a href=".Readings" data-toggle="tab"
+                                       >Readings</a></li>
+
                                    </ul>
                                    <div class="tab-content TabsContent ViewTables" style="">
-                                       <div class="tab-pane fade in active pill2" id="pill2">
+
+                                       <div class="tab-pane fade in active General" id="General">
                                            <div class="row">
 
                                                <div class="col-md-6">
@@ -251,7 +258,7 @@
 
                                            </div>
                                        </div>
-                                       <div class="tab-pane fade pill3" id="pill3">
+                                       <div class="tab-pane fade qr-code" id="qr-code">
 
                                            <div class="panel panel-default" style="">
                                                <div class="panel-heading">
@@ -298,7 +305,7 @@
                                            </div>
 
                                        </div>
-                                       <div class="tab-pane fade pill1" id="pill1">
+                                       <div class="tab-pane fade Tickets" id="Tickets">
 
                                            <div class="table-responsive tablecard">
                                                <table class="table table-striped">
@@ -369,7 +376,7 @@
                                            </div>
 
                                        </div>
-                                       <div class="tab-pane fade pill4" id="pill4">
+                                       <div class="tab-pane fade ppm-tasks" id="ppm-tasks">
 
                                            <div class="table-responsive tablecard">
                                                <table class="table table-striped">
@@ -442,8 +449,7 @@
                                            </div>
 
                                        </div>
-
-                                       <div class="tab-pane in pill5" id="pill5">
+                                       <div class="tab-pane in amc-tasks" id="amc-tasks">
 
                                            <div class="table-responsive tablecard">
                                                <table class="table table-striped">
@@ -516,7 +522,7 @@
                                            </div>
 
                                        </div>
-                                       <div class="tab-pane in pill6" id="pill6">
+                                       <div class="tab-pane in ppm-schedule" id="ppm-schedule">
 
                                            <div class="panel panel-default">
                                                <div class="panel-heading">New Schedule</div>
@@ -665,7 +671,7 @@
                                            </div>
 
                                        </div>
-                                       <div class="tab-pane fade pill7" id="pill7">
+                                       <div class="tab-pane fade amc-schedule" id="amc-schedule">
 
                                            <div class="panel panel-default">
                                                <div class="panel-heading">New Schedule</div>
@@ -812,7 +818,7 @@
                                            </div>
 
                                        </div>
-                                       <div class="tab-pane fade pill8" id="pill8">
+                                       <div class="tab-pane fade Documents" id="Documents">
 
                                              <div class="panel panel-default" style="min-height: 200px;">
 
@@ -839,6 +845,322 @@
                                                </div>
 
                                            </div>
+
+                                       </div>
+                                       <div class="tab-pane fade Config" id="Config">
+                                           <div class="row">
+
+                                               <div class="col-md-6">
+                                                   <div class="panel panel-default" style="min-height: 200px;">
+
+                                                       <div class="panel-heading">
+                                                           Asset Details
+                                                       </div>
+                                                       <div class="panel-body">
+
+                                                           <div class="table-responsive">
+                                                               <table class="table">
+                                                                   <tbody>
+                                                                   <tr>
+                                                                       <td>Asset Type</td>
+                                                                       <td></td>
+                                                                   </tr>
+                                                                   <tr>
+                                                                       <td>Asset Group</td>
+                                                                       <td></td>
+
+                                                                   </tr>
+
+                                                                   </tbody>
+                                                               </table>
+                                                           </div>
+
+                                                       </div>
+
+                                                   </div>
+                                               </div>
+                                               <div class="col-md-6">
+                                                    <div class="panel panel-default" style="min-height: 200px;">
+
+                                                       <div class="panel-heading">
+                                                           Readings
+                                                       </div>
+                                                       <div class="panel-body">
+                                                           <div class="table-responsive tablecard">
+                                                               <table class="table table-striped">
+
+                                                                   <thead>
+                                                                       <tr>
+                                                                           <th>Type</th>
+                                                                           <th>Units</th>
+                                                                           <th>Consumption</th>
+                                                                       </tr>
+                                                                   </thead>
+
+                                                                   <tbody>
+                                                                   <tr>
+                                                                       <td>Power</td>
+                                                                       <td>Watt</td>
+                                                                       <td>
+
+                                                                           <div class="checkbox">
+                                                                               <label>
+                                                                                   <input type="checkbox" checked name="terms" disabled>
+                                                                               </label>
+                                                                           </div>
+                                                                       </td>
+                                                                   </tr>
+                                                                   <tr>
+                                                                       <td>Power</td>
+                                                                       <td>Watt</td>
+                                                                       <td>
+
+                                                                           <div class="checkbox">
+                                                                               <label>
+                                                                                   <input type="checkbox" checked name="terms" disabled>
+                                                                               </label>
+                                                                           </div>
+                                                                       </td>
+                                                                   </tr>
+                                                                   <tr>
+                                                                       <td>Power</td>
+                                                                       <td>Watt</td>
+                                                                       <td>
+
+                                                                           <div class="checkbox">
+                                                                               <label>
+                                                                                   <input type="checkbox" name="terms" disabled>
+                                                                               </label>
+                                                                           </div>
+                                                                       </td>
+                                                                   </tr>
+                                                                   <tr>
+                                                                       <td>Power</td>
+                                                                       <td>Watt</td>
+                                                                       <td>
+
+                                                                           <div class="checkbox">
+                                                                               <label>
+                                                                                   <input type="checkbox" checked name="terms" disabled>
+                                                                               </label>
+                                                                           </div>
+                                                                       </td>
+                                                                   </tr>
+                                                                   <tr>
+                                                                       <td>Power</td>
+                                                                       <td>Watt</td>
+                                                                       <td>
+
+                                                                           <div class="checkbox">
+                                                                               <label>
+                                                                                   <input type="checkbox" name="terms" disabled>
+                                                                               </label>
+                                                                           </div>
+                                                                       </td>
+                                                                   </tr>
+
+                                                                   </tbody>
+                                                               </table>
+
+                                                           </div>
+                                                       </div>
+
+                                                   </div>
+                                               </div>
+
+                                           </div>
+
+                                       </div>
+                                       <div class="tab-pane fade Readings" id="Readings">
+
+                                          <div class="">
+
+                                              <ul class="nav nav-pills nav-pills-warning">
+                                                  <li class="active">
+                                                      <a href=".Fuel" data-toggle="tab" > Fuel</a>
+                                                  </li>
+                                                  <li>
+                                                      <a href=".Power" data-toggle="tab" > Power</a>
+                                                  </li>
+                                                  <li>
+                                                      <a href=".Temperature" data-toggle="tab" > Temperature</a>
+                                                  </li>
+                                              </ul>
+
+                                              <div class="tab-content TabsContent ViewTables" style="">
+
+                                                  <div class="tab-pane fade Fuel active in" id="Fuel">
+                                                      <div class="row">
+                                                          <div class="col-md-8 col-md-offset-2">
+                                                              <div class="table-responsive tablecard">
+                                                                  <table class="table table-striped">
+
+                                                                      <thead>
+                                                                      <tr>
+                                                                          <th width="25%">Date</th>
+                                                                          <th width="25%">Initial Value</th>
+                                                                          <th width="25%">Final Value</th>
+                                                                          <th width="25%">Consumption</th>
+                                                                      </tr>
+                                                                      </thead>
+
+                                                                      <tbody>
+                                                                      <tr>
+                                                                          <td>10-05-2018</td>
+                                                                          <td>10 Watt</td>
+                                                                          <td>30 Watt</td>
+                                                                          <td>20 Watt</td>
+                                                                      </tr>
+                                                                      <tr>
+                                                                          <td>10-05-2018</td>
+                                                                          <td>10 Watt</td>
+                                                                          <td>30 Watt</td>
+                                                                          <td>20 Watt</td>
+                                                                      </tr>
+                                                                      <tr>
+                                                                          <td>10-05-2018</td>
+                                                                          <td>10 Watt</td>
+                                                                          <td>30 Watt</td>
+                                                                          <td>20 Watt</td>
+                                                                      </tr>
+                                                                      <tr>
+                                                                          <td>10-05-2018</td>
+                                                                          <td>10 Watt</td>
+                                                                          <td>30 Watt</td>
+                                                                          <td>20 Watt</td>
+                                                                      </tr>
+                                                                      <tr>
+                                                                          <td>10-05-2018</td>
+                                                                          <td>10 Watt</td>
+                                                                          <td>30 Watt</td>
+                                                                          <td>20 Watt</td>
+                                                                      </tr>
+
+
+
+                                                                      </tbody>
+                                                                  </table>
+
+                                                              </div>
+                                                          </div>
+                                                      </div>
+                                                  </div>
+                                                  <div class="tab-pane fade Power" id="Power">
+                                                      <div class="row">
+                                                          <div class="col-md-8 col-md-offset-2">
+                                                              <div class="table-responsive tablecard">
+                                                                  <table class="table table-striped">
+
+                                                                      <thead>
+                                                                      <tr>
+                                                                          <th width="25%">Date</th>
+                                                                          <th width="25%">Initial Value</th>
+                                                                          <th width="25%">Final Value</th>
+                                                                          <th width="25%">Consumption</th>
+                                                                      </tr>
+                                                                      </thead>
+
+                                                                      <tbody>
+                                                                      <tr>
+                                                                          <td>10-05-2018</td>
+                                                                          <td>10 Watt</td>
+                                                                          <td>30 Watt</td>
+                                                                          <td>20 Watt</td>
+                                                                      </tr>
+                                                                      <tr>
+                                                                          <td>10-05-2018</td>
+                                                                          <td>10 Watt</td>
+                                                                          <td>30 Watt</td>
+                                                                          <td>20 Watt</td>
+                                                                      </tr>
+                                                                      <tr>
+                                                                          <td>10-05-2018</td>
+                                                                          <td>10 Watt</td>
+                                                                          <td>30 Watt</td>
+                                                                          <td>20 Watt</td>
+                                                                      </tr>
+                                                                      <tr>
+                                                                          <td>10-05-2018</td>
+                                                                          <td>10 Watt</td>
+                                                                          <td>30 Watt</td>
+                                                                          <td>20 Watt</td>
+                                                                      </tr>
+                                                                      <tr>
+                                                                          <td>10-05-2018</td>
+                                                                          <td>10 Watt</td>
+                                                                          <td>30 Watt</td>
+                                                                          <td>20 Watt</td>
+                                                                      </tr>
+
+
+
+                                                                      </tbody>
+                                                                  </table>
+
+                                                              </div>
+                                                          </div>
+                                                      </div>
+                                                  </div>
+                                                  <div class="tab-pane fade Temperature" id="Temperature">
+                                                      <div class="row">
+                                                          <div class="col-md-8 col-md-offset-2">
+                                                              <div class="table-responsive tablecard">
+                                                                  <table class="table table-striped">
+
+                                                                      <thead>
+                                                                      <tr>
+                                                                          <th width="25%">Date</th>
+                                                                          <th width="25%">Initial Value</th>
+                                                                          <th width="25%">Final Value</th>
+                                                                          <th width="25%">Consumption</th>
+                                                                      </tr>
+                                                                      </thead>
+
+                                                                      <tbody>
+                                                                      <tr>
+                                                                          <td>10-05-2018</td>
+                                                                          <td>10 Watt</td>
+                                                                          <td>30 Watt</td>
+                                                                          <td>20 Watt</td>
+                                                                      </tr>
+                                                                      <tr>
+                                                                          <td>10-05-2018</td>
+                                                                          <td>10 Watt</td>
+                                                                          <td>30 Watt</td>
+                                                                          <td>20 Watt</td>
+                                                                      </tr>
+                                                                      <tr>
+                                                                          <td>10-05-2018</td>
+                                                                          <td>10 Watt</td>
+                                                                          <td>30 Watt</td>
+                                                                          <td>20 Watt</td>
+                                                                      </tr>
+                                                                      <tr>
+                                                                          <td>10-05-2018</td>
+                                                                          <td>10 Watt</td>
+                                                                          <td>30 Watt</td>
+                                                                          <td>20 Watt</td>
+                                                                      </tr>
+                                                                      <tr>
+                                                                          <td>10-05-2018</td>
+                                                                          <td>10 Watt</td>
+                                                                          <td>30 Watt</td>
+                                                                          <td>20 Watt</td>
+                                                                      </tr>
+
+
+
+                                                                      </tbody>
+                                                                  </table>
+
+                                                              </div>
+                                                          </div>
+                                                      </div>
+                                                  </div>
+
+                                              </div>
+
+                                          </div>
 
                                        </div>
 

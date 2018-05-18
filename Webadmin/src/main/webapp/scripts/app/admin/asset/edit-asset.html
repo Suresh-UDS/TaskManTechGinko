@@ -25,7 +25,7 @@
 
                                 <div class="TabsCon ">
 
-                                    <div class="panel panel-default TabsContainer                                                                                  ">
+                                    <div class="panel panel-default TabsContainer assetsTabs">
                                         <!--<div class="panel-heading">Panel Heading</div>-->
                                         <div class="panel-body">
 
@@ -38,22 +38,29 @@
                                                     <a href=".pill3" data-toggle="tab"
                                                        > QR Code</a>
                                                 </li>
-                                                <li class="">
-                                                    <a href=".pill1" data-toggle="tab"
-                                                       > Tickets</a>
-                                                </li>
-                                                <li class=""><a href=".pill4" data-toggle="tab"
-                                                                >PPM tasks</a></li>
-                                                <li class=""><a href=".pill5" data-toggle="tab"
-                                                                >AMC tasks</a></li>
                                                 <li class=""><a href=".pill6" data-toggle="tab"
                                                                 >PPM Schedule</a></li>
                                                 <li class=""><a href=".pill7" data-toggle="tab"
                                                                 >AMC schedule</a></li>
+                                                <li class=""><a href=".Config" data-toggle="tab"
+                                                >Config</a></li>
+
                                                 <li class=""><a href=".pill8" data-toggle="tab"
                                                                 >Documents</a></li>
+                                                <li class=""><a href=".pill4" data-toggle="tab"
+                                                >PPM tasks</a></li>
+                                                <li class=""><a href=".pill5" data-toggle="tab"
+                                                >AMC tasks</a></li>
+                                                <li class="">
+                                                    <a href=".pill1" data-toggle="tab"
+                                                    > Tickets</a>
+                                                </li>
+                                                <li class=""><a href=".Readings" data-toggle="tab"
+                                                >Readings</a></li>
+
                                             </ul>
                                             <div class="tab-content TabsContent ViewTables" style="">
+
                                                 <div class="tab-pane fade in active pill2" id="pill2">
                                                     <div class="row">
 
@@ -618,7 +625,6 @@
                                                     </div>
 
                                                 </div>
-
                                                 <div class="tab-pane fade pill5" id="pill5">
 
                                                     <div class="table-responsive tablecard">
@@ -988,6 +994,240 @@
                                                     </div>
 
                                                 </div>
+                                                <div class="tab-pane fade Config" id="Config">
+
+                                                    <div class="row">
+
+                                                        <div class="col-md-6">
+                                                            <div class="panel panel-default" style="min-height: 200px;">
+
+                                                                <div class="panel-heading">
+                                                                    Asset Details
+                                                                </div>
+                                                                <div class="panel-body">
+
+                                                                    <div class="row">
+
+                                                                        <div class="col-md-12">
+
+                                                                            <div class="form-group">
+                                                                                <label class="control-label">Asset Type</label>
+                                                                                <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
+                                                                                <select class="form-control " ng-model="assettype"  >
+                                                                                    <option value="">Please select Asset Type..</option>
+                                                                                </select>
+                                                                            </div>
+                                                                            <div class="form-group selectcon is-empty SelectWithAddbtnCon">
+
+                                                                                <div class="" style="float:left;width:90%;">
+                                                                                    <label class="control-label">Asset Group</label>
+                                                                                    <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
+                                                                                    <select class="form-control ng-pristine ng-valid ng-touched"  tabindex="0" aria-invalid="false">
+                                                                                        <option value="" class="" selected="selected">Please select Asset Group ..</option>
+                                                                                    </select>
+                                                                                </div>
+                                                                                <div class="" style="float:left;">
+                                                                                    <a href="javascript:;" data-toggle="collapse" data-parent="#accordian" data-target="#addAssetGroup" class="btn btn-round btn-fab btn-fab-mini btn-simple" aria-expanded="false" aria-controls="collapseExample">
+                                                                                        <i class="material-icons">add</i>
+                                                                                    </a>
+                                                                                </div>
+                                                                                <div class="clear"></div>
+                                                                                <div class="collapse" id="addAssetGroup">
+                                                                                    <div class="">
+                                                                                        <input class="input-desc ng-pristine ng-untouched ng-valid" id="assetgroupName" ng-model="" name="assetgroupName" type="text" value="" tabindex="0" aria-invalid="false">
+                                                                                        <a class="btn btn-success" ng-click="" tabindex="0">Add</a>
+                                                                                    </div>
+                                                                                </div>
+                                                                                <span class="material-input"></span></div>
+
+                                                                            <div class="form-group selectcon is-empty SelectWithAddbtnCon">
+
+                                                                                <div class="" style="float:left;width:90%;">
+                                                                                    <label class="control-label">Select Asset </label>
+                                                                                    <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
+                                                                                    <select class="form-control ng-pristine ng-valid ng-touched"  tabindex="0" aria-invalid="false">
+                                                                                        <option value="" class="" selected="selected">Please select Asset ..</option>
+                                                                                    </select>
+                                                                                </div>
+                                                                                <div class="" style="float:left;">
+                                                                                    <a href="javascript:;" data-toggle="collapse" data-parent="#accordian" data-target="#addAsset" class="btn btn-round btn-fab btn-fab-mini btn-simple" aria-expanded="false" aria-controls="collapseExample">
+                                                                                        <i class="material-icons">add</i>
+                                                                                    </a>
+                                                                                </div>
+                                                                                <div class="clear"></div>
+                                                                                <div class="collapse" id="addAsset">
+                                                                                    <div class="">
+                                                                                        <input class="input-desc ng-pristine ng-untouched ng-valid" id="assetgroupName" ng-model="" name="assetgroupName" type="text" value="" tabindex="0" aria-invalid="false">
+                                                                                        <a class="btn btn-success" ng-click="" tabindex="0">Add</a>
+                                                                                    </div>
+                                                                                </div>
+                                                                                <span class="material-input"></span></div>
+
+                                                                            <div class="form-group selectcon is-empty SelectWithAddbtnCon">
+
+                                                                                <div class="" style="float:left;width:90%;">
+                                                                                    <label class="control-label">Select Units</label>
+                                                                                    <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
+                                                                                    <select class="form-control ng-pristine ng-valid ng-touched"  tabindex="0" aria-invalid="false">
+                                                                                        <option value="" class="" selected="selected">Please select Units ..</option>
+                                                                                    </select>
+                                                                                </div>
+                                                                                <div class="" style="float:left;">
+                                                                                    <a href="javascript:;" data-toggle="collapse" data-parent="#accordian" data-target="#addUnits" class="btn btn-round btn-fab btn-fab-mini btn-simple" aria-expanded="false" aria-controls="collapseExample">
+                                                                                        <i class="material-icons">add</i>
+                                                                                    </a>
+                                                                                </div>
+                                                                                <div class="clear"></div>
+                                                                                <div class="collapse" id="addUnits">
+                                                                                    <div class="">
+                                                                                        <input class="input-desc ng-pristine ng-untouched ng-valid" id="assetgroupName" ng-model="" name="assetgroupName" type="text" value="" tabindex="0" aria-invalid="false">
+                                                                                        <a class="btn btn-success" ng-click="" tabindex="0">Add</a>
+                                                                                    </div>
+                                                                                </div>
+                                                                                <span class="material-input"></span></div>
+
+                                                                            <div class="checkbox">
+                                                                                <label>
+                                                                                    <input type="checkbox" name="terms"> Consumption
+                                                                                </label>
+                                                                            </div>
+
+                                                                        </div>
+
+                                                                    </div>
+
+
+                                                                </div>
+
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-6">
+                                                            <div class="panel panel-default" style="min-height: 200px;">
+
+                                                                <div class="panel-heading">
+                                                                   Readings
+                                                                </div>
+                                                                <div class="panel-body">
+
+                                                                    <div class="table-responsive tablecard">
+                                                                        <table class="table table-striped">
+
+                                                                            <thead>
+                                                                            <tr>
+                                                                                <th>Type</th>
+                                                                                <th>Units</th>
+                                                                                <th>Consumption</th>
+
+                                                                            </tr>
+
+                                                                            </thead>
+
+                                                                            <tbody>
+                                                                            <tr>
+                                                                                <td>Power</td>
+                                                                                <td>watt</td>
+                                                                                <td>
+                                                                                    <div class="checkbox">
+                                                                                        <label>
+                                                                                            <input type="checkbox" name="Consumption" checked disabled >
+                                                                                        </label>
+                                                                                    </div>
+                                                                                </td>
+
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <td>Power</td>
+                                                                                <td>watt</td>
+                                                                                <td>
+                                                                                    <div class="checkbox">
+                                                                                        <label>
+                                                                                            <input type="checkbox" name="Consumption" checked disabled >
+                                                                                        </label>
+                                                                                    </div>
+                                                                                </td>
+
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <td>Power</td>
+                                                                                <td>watt</td>
+                                                                                <td>
+                                                                                    <div class="checkbox">
+                                                                                        <label>
+                                                                                            <input type="checkbox" name="Consumption" checked disabled >
+                                                                                        </label>
+                                                                                    </div>
+                                                                                </td>
+
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <td>Power</td>
+                                                                                <td>watt</td>
+                                                                                <td>
+                                                                                    <div class="checkbox">
+                                                                                        <label>
+                                                                                            <input type="checkbox" name="Consumption" checked disabled >
+                                                                                        </label>
+                                                                                    </div>
+                                                                                </td>
+
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <td>Power</td>
+                                                                                <td>watt</td>
+                                                                                <td>
+                                                                                    <div class="checkbox">
+                                                                                        <label>
+                                                                                            <input type="checkbox" name="Consumption" checked disabled >
+                                                                                        </label>
+                                                                                    </div>
+                                                                                </td>
+
+                                                                            </tr>
+
+
+                                                                            </tbody>
+                                                                        </table>
+
+                                                                    </div>
+
+                                                                </div>
+
+                                                            </div>
+                                                        </div>
+
+                                                    </div>
+
+
+                                                </div>
+                                                <div class="tab-pane fade Readings" id="Readings">
+
+                                                    <div class="panel panel-default" style="min-height: 200px;">
+
+                                                        <div class="panel-heading">
+                                                            Upload Documents
+                                                        </div>
+                                                        <div class="panel-body">
+
+
+
+                                                        </div>
+
+                                                    </div>
+
+                                                    <div class="panel panel-default" style="min-height: 200px;">
+
+                                                        <div class="panel-heading">
+                                                            Documents
+                                                        </div>
+                                                        <div class="panel-body">
+
+
+
+                                                        </div>
+
+                                                    </div>
+
+                                                </div>
                                                 <div class="tab-pane fade pill8" id="pill8">
 
                                                     <div class="panel panel-default" style="min-height: 200px;">
@@ -1017,6 +1257,7 @@
                                                     </div>
 
                                                 </div>
+
 
                                             </div>
 
