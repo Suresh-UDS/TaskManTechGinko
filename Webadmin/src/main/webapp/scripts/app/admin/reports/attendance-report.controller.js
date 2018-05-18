@@ -148,7 +148,7 @@ angular.module('timeSheetApp')
                 console.log('selected project - ' + JSON.stringify($scope.selectedProject));
                 $scope.loadSites($scope.selectedProject.id);
                 $scope.selectedSite = null;
-                $scope.refreshReport();
+                //$scope.refreshReport();
         };
 
         $scope.employeeSearch = function () {
