@@ -411,8 +411,8 @@ public class ExportUtil {
 					dataRow.createCell(1).setCellValue(transaction.getName() + transaction.getLastName());
 					dataRow.createCell(2).setCellValue(transaction.getSiteName());
 					dataRow.createCell(3).setCellValue(transaction.getProjectName());
-					dataRow.createCell(4).setCellValue(String.valueOf(transaction.getCheckInTime()));
-					dataRow.createCell(5).setCellValue(String.valueOf(transaction.getCheckOutTime()));
+					dataRow.createCell(4).setCellValue(transaction.getCheckInTime() != null ? String.valueOf(transaction.getCheckInTime()) : "");
+					dataRow.createCell(5).setCellValue(transaction.getCheckOutTime() != null ? String.valueOf(transaction.getCheckOutTime()) : "");
 					/*
 					 * Blob blob = null; byte[] img = blob.getBytes(1,(int)blob.length());
 					 * BufferedImage i = null; try { i = ImageIO.read(new
@@ -534,10 +534,10 @@ public class ExportUtil {
 			dataRow.createCell(2).setCellValue(transaction.getSiteName());
 			dataRow.createCell(3).setCellValue(transaction.getProjectName());
 			dataRow.createCell(4).setCellValue(transaction.getStatus());
-			dataRow.createCell(5).setCellValue(String.valueOf(transaction.getCheckInTime()));
-			dataRow.createCell(6).setCellValue(String.valueOf(transaction.getCheckOutTime()));
-			dataRow.createCell(7).setCellValue(String.valueOf(transaction.getShiftStartTime()));
-			dataRow.createCell(8).setCellValue(String.valueOf(transaction.getShiftEndTime()));
+			dataRow.createCell(5).setCellValue(transaction.getCheckInTime() != null ? String.valueOf(transaction.getCheckInTime()) : "");
+			dataRow.createCell(6).setCellValue(transaction.getCheckOutTime() != null ? String.valueOf(transaction.getCheckOutTime()) : "");
+			dataRow.createCell(7).setCellValue(transaction.getShiftStartTime() != null ? String.valueOf(transaction.getShiftStartTime()) : "");
+			dataRow.createCell(8).setCellValue(transaction.getShiftEndTime() != null ? String.valueOf(transaction.getShiftEndTime()) : "");
 
 		}
 
