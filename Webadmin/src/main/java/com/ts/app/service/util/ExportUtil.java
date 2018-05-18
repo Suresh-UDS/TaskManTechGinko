@@ -21,6 +21,8 @@ import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVPrinter;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
+import org.apache.poi.openxml4j.opc.OPCPackage;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
@@ -378,57 +380,70 @@ public class ExportUtil {
 
                 file_Path += "/" + export_File_Name;
                 // create workbook
-                XSSFWorkbook xssfWorkbook = new XSSFWorkbook();
-                // create worksheet with title
-                XSSFSheet xssfSheet = xssfWorkbook.createSheet("JOB_REPORT");
-
-                Row headerRow = xssfSheet.createRow(0);
-
-                for (int i = 0; i < ATTD_HEADER.length; i++) {
-                    Cell cell = headerRow.createCell(i);
-                    cell.setCellValue(ATTD_HEADER[i]);
-                }
-
-                int rowNum = 1;
-
-                for (EmployeeAttendanceReport transaction : content) {
-
-                    Row dataRow = xssfSheet.createRow(rowNum++);
-
-                    dataRow.createCell(0).setCellValue(transaction.getEmployeeIds());
-                    dataRow.createCell(1).setCellValue(transaction.getName()+transaction.getLastName());
-                    dataRow.createCell(2).setCellValue(transaction.getSiteName());
-                    dataRow.createCell(3).setCellValue(transaction.getProjectName());
-                    dataRow.createCell(4).setCellValue(String.valueOf(transaction.getCheckInTime()));
-                    dataRow.createCell(5).setCellValue(String.valueOf(transaction.getCheckOutTime()));
-                    /*Blob blob = null;
-                    byte[] img = blob.getBytes(1,(int)blob.length());
-                    BufferedImage i = null;
-                    try {
-                        i = ImageIO.read(new ByteArrayInputStream(img));
-                    } catch (IOException e) {
-                    e.printStackTrace();
-                    }*/
-
-                    //dataRow.createCell(6).setCellValue(String.valueOf(transaction.getImage()));
-
-                }
-
-                for (int i = 0; i < ATTD_HEADER.length; i++) {
-                    xssfSheet.autoSizeColumn(i);
-                }
-                log.info(export_File_Name + " Excel file was created successfully !!!");
-                statusMap.put(export_File_Name, "COMPLETED");
-
-                FileOutputStream fileOutputStream = null;
+                OPCPackage pkg = null;
                 try {
-                    fileOutputStream = new FileOutputStream(file_Path);
-                    xssfWorkbook.write(fileOutputStream);
-                    fileOutputStream.close();
-                } catch (IOException e) {
-                    log.error("Error while flushing/closing  !!!");
+					pkg = OPCPackage.open(new File(file_Path));
+	                XSSFWorkbook xssfWorkbook = new XSSFWorkbook(pkg);
+	                // create worksheet with title
+	                XSSFSheet xssfSheet = xssfWorkbook.createSheet("ATTENDANCE_REPORT");
+	
+	                Row headerRow = xssfSheet.createRow(0);
+	
+	                for (int i = 0; i < ATTD_HEADER.length; i++) {
+	                    Cell cell = headerRow.createCell(i);
+	                    cell.setCellValue(ATTD_HEADER[i]);
+	                }
+	
+	                int rowNum = 1;
+	
+	                for (EmployeeAttendanceReport transaction : content) {
+	
+	                    Row dataRow = xssfSheet.createRow(rowNum++);
+	
+	                    dataRow.createCell(0).setCellValue(transaction.getEmployeeIds());
+	                    dataRow.createCell(1).setCellValue(transaction.getName()+transaction.getLastName());
+	                    dataRow.createCell(2).setCellValue(transaction.getSiteName());
+	                    dataRow.createCell(3).setCellValue(transaction.getProjectName());
+	                    dataRow.createCell(4).setCellValue(String.valueOf(transaction.getCheckInTime()));
+	                    dataRow.createCell(5).setCellValue(String.valueOf(transaction.getCheckOutTime()));
+	                    /*Blob blob = null;
+	                    byte[] img = blob.getBytes(1,(int)blob.length());
+	                    BufferedImage i = null;
+	                    try {
+	                        i = ImageIO.read(new ByteArrayInputStream(img));
+	                    } catch (IOException e) {
+	                    e.printStackTrace();
+	                    }*/
+	
+	                    //dataRow.createCell(6).setCellValue(String.valueOf(transaction.getImage()));
+	
+	                }
+	
+	                for (int i = 0; i < ATTD_HEADER.length; i++) {
+	                    xssfSheet.autoSizeColumn(i);
+	                }
+	                log.info(export_File_Name + " Excel file was created successfully !!!");
+	                statusMap.put(export_File_Name, "COMPLETED");
+	
+	                /*
+	                FileOutputStream fileOutputStream = null;
+	                try {
+	                    fileOutputStream = new FileOutputStream(file_Path);
+	                    xssfWorkbook.write(fileOutputStream);
+	                    fileOutputStream.close();
+	                } catch (IOException e) {
+	                    log.error("Error while flushing/closing  !!!");
+	                    statusMap.put(export_File_Name, "FAILED");
+	                }
+	                */
+	                pkg.close();
+				} catch (InvalidFormatException | IOException e1) {
+					// TODO Auto-generated catch block
+					log.error("Error while creating the attendance excel report file ", e1);
                     statusMap.put(export_File_Name, "FAILED");
-                }
+					
+				}
+                
             }
         });
 
@@ -507,45 +522,92 @@ public class ExportUtil {
             }
         }
         filePath += "/" + exportFileName;
+        
+        OPCPackage pkg = null;
         try {
-            // initialize FileWriter object
-            log.debug("filePath = " + filePath + ", isAppend=" + isAppend);
-            fileWriter = new FileWriter( filePath,isAppend);
-            // initialize CSVPrinter object
-            csvFilePrinter = new CSVPrinter(fileWriter, csvFileFormat);
-            if(!isAppend) {
-                // Create CSV file header
-                csvFilePrinter.printRecord(ATTENDANCE_DETAIL_REPORT_FILE_HEADER);
+			pkg = OPCPackage.open(new File(filePath));
+            XSSFWorkbook xssfWorkbook = new XSSFWorkbook(pkg);
+            // create worksheet with title
+            XSSFSheet xssfSheet = xssfWorkbook.createSheet("ATTENDANCE_REPORT");
+
+            Row headerRow = xssfSheet.createRow(0);
+
+            for (int i = 0; i < ATTENDANCE_DETAIL_REPORT_FILE_HEADER.length; i++) {
+                Cell cell = headerRow.createCell(i);
+                cell.setCellValue((String)ATTENDANCE_DETAIL_REPORT_FILE_HEADER[i]);
             }
+            
+            int rowNum = 1;
+        	
             for (EmployeeAttendanceReport transaction : content) {
-                List record = new ArrayList();
-                log.debug("Writing transaction record for site :"+ transaction.getSiteName());
-                record.add(transaction.getEmployeeIds());
-                record.add(transaction.getName() + transaction.getLastName());
-                record.add(transaction.getSiteName());
-                record.add(transaction.getProjectName());
-                record.add(transaction.getStatus());
-                record.add(transaction.getCheckInTime());
-                record.add(transaction.getCheckOutTime());
-                record.add(transaction.getShiftStartTime());
-                record.add(transaction.getShiftEndTime());
-                csvFilePrinter.printRecord(record);
+
+                Row dataRow = xssfSheet.createRow(rowNum++);
+
+                dataRow.createCell(0).setCellValue(transaction.getEmployeeIds());
+                dataRow.createCell(1).setCellValue(transaction.getName() + " " + transaction.getLastName());
+                dataRow.createCell(2).setCellValue(transaction.getSiteName());
+                dataRow.createCell(3).setCellValue(transaction.getProjectName());
+                dataRow.createCell(4).setCellValue(transaction.getStatus());
+                dataRow.createCell(5).setCellValue(String.valueOf(transaction.getCheckInTime()));
+                dataRow.createCell(6).setCellValue(String.valueOf(transaction.getCheckOutTime()));
+                dataRow.createCell(7).setCellValue(String.valueOf(transaction.getShiftStartTime()));
+                dataRow.createCell(8).setCellValue(String.valueOf(transaction.getShiftEndTime()));
+
             }
-            log.info(exportFileName + " CSV file was created successfully !!!");
-            statusMap.put(exportFileName, "COMPLETED");
-        } catch (Exception e) {
-            log.error("Error in CsvFileWriter !!!");
-            statusMap.put(exportFileName, "FAILED");
-        } finally {
-            try {
-                fileWriter.flush();
-                fileWriter.close();
-                csvFilePrinter.close();
-            } catch (IOException e) {
-                log.error("Error while flushing/closing fileWriter/csvPrinter !!!");
-                statusMap.put(exportFileName, "FAILED");
+
+            for (int i = 0; i < ATTD_HEADER.length; i++) {
+                xssfSheet.autoSizeColumn(i);
             }
-        }
+            log.info(filePath + " Excel file was created successfully !!!");
+            statusMap.put(filePath, "COMPLETED");
+            
+        } catch (InvalidFormatException | IOException e1) {
+			// TODO Auto-generated catch block
+			log.error("Error while creating the attendance excel report file ", e1);
+            statusMap.put(filePath, "FAILED");
+			
+		}
+        
+        
+//        try {
+//            // initialize FileWriter object
+//            log.debug("filePath = " + filePath + ", isAppend=" + isAppend);
+//            fileWriter = new FileWriter( filePath,isAppend);
+//            // initialize CSVPrinter object
+//            csvFilePrinter = new CSVPrinter(fileWriter, csvFileFormat);
+//            if(!isAppend) {
+//                // Create CSV file header
+//                csvFilePrinter.printRecord(ATTENDANCE_DETAIL_REPORT_FILE_HEADER);
+//            }
+//            for (EmployeeAttendanceReport transaction : content) {
+//                List record = new ArrayList();
+//                log.debug("Writing transaction record for site :"+ transaction.getSiteName());
+//                record.add(transaction.getEmployeeIds());
+//                record.add(transaction.getName() + transaction.getLastName());
+//                record.add(transaction.getSiteName());
+//                record.add(transaction.getProjectName());
+//                record.add(transaction.getStatus());
+//                record.add(transaction.getCheckInTime());
+//                record.add(transaction.getCheckOutTime());
+//                record.add(transaction.getShiftStartTime());
+//                record.add(transaction.getShiftEndTime());
+//                csvFilePrinter.printRecord(record);
+//            }
+//            log.info(exportFileName + " CSV file was created successfully !!!");
+//            statusMap.put(exportFileName, "COMPLETED");
+//        } catch (Exception e) {
+//            log.error("Error in CsvFileWriter !!!");
+//            statusMap.put(exportFileName, "FAILED");
+//        } finally {
+//            try {
+//                fileWriter.flush();
+//                fileWriter.close();
+//                csvFilePrinter.close();
+//            } catch (IOException e) {
+//                log.error("Error while flushing/closing fileWriter/csvPrinter !!!");
+//                statusMap.put(exportFileName, "FAILED");
+//            }
+//        }
 
         result.setEmpId(empId);
         result.setFile(fileName.substring(0,fileName.indexOf('.')));
