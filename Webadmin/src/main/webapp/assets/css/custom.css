@@ -311,7 +311,7 @@ span.d-big-arrow-icon {
 
 }
 select{
-  padding-right:27px !important; 
+  padding-right:27px !important;
 }
 select.siteList
 {
@@ -490,12 +490,27 @@ th span.sortingIcons .active svg
 {
     margin: 3px !important;
 }
-
+.assetsTabs ul.nav-pills li a
+{
+    font-size: 11px;
+    font-weight: 400;
+    min-width: 90px;
+    padding: 10px 0px;
+}
 span.red-star
 {
     padding:0 5px;
     color:red;
 }
+.SelectWithAddbtnCon span.d-arrow-icon
+{
+    padding-right: 18%;
+}
+.SelectWithAddbtnCon .btn.btn-fab.btn-fab-mini
+{
+    margin-top: 23px;
+}
+
 .jobcards .card [data-background-color],.cardsCon .card [data-background-color]
 {
  /* border: 1px solid #ccc;
@@ -687,7 +702,10 @@ button.btn.btn-outline {
     background: no-repeat;
     color: #333;
 }
-
+.checkbox label
+{
+    color: #000;
+}
 .main-panel>.content
 {
    margin-top:50px;
