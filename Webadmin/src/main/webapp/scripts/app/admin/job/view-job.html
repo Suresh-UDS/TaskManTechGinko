@@ -12,9 +12,6 @@
 					<form ng-show="!success" name="form" role="form" novalidate
 						class="form-horizontal">
 
-
-
-
                         <div class="row">
 
                             <div class="col-md-4">
@@ -40,7 +37,7 @@
                                                     <td>Checklist</td>
                                                     <td>
                                                         <ul class="checkList">
-                                                            <li ng-repeat="checklist in checklists">
+                                                            <li ng-repeat="checklist in job.checklistItems">
                                                                 {{checklist.name}}
                                                             </li>
                                                         </ul>
@@ -73,7 +70,6 @@
                                                     <td>{{job.assetTitle}}</td>
 
                                                 </tr>
-
 
                                                 </tbody>
                                             </table>
@@ -211,7 +207,7 @@
                                     </div>
                                 </div>
                              </div>
-                        </div>                        
+                        </div>
                         <div class="row">
                             <div class="col-md-12" ng-show="job.images.length>0">
                                 <div class="panel panel-default">
