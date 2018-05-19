@@ -311,7 +311,7 @@
                                         <div class="row">
                                             <div class="col-md-12">
                                                 <div class="form-group">
-                                                    <label class="label-control">Start date</label>
+                                                    <label class="control-label">Start date</label>
                                                     <span class="form-control-feedback calender-icon"><i class="material-icons">date_range</i></span>
                                                     <input type="text" class="form-control datetimepicker"  id="dateFilterFrom"  ng-model="JobDate" />
 
@@ -609,20 +609,22 @@
                                             <div class="col-md-12">
                                                 <div class="form-group">
                                                     <label class="control-label">Schedule End Date </label>
-                                                    <p class="input-group">
+                                                    <!--  --><!-- <p class="input-group">
                                                         <input
                                                             ng-model="job.scheduleEndDate"
                                                             class='form-control'
                                                             name='scheduleEndDate'
                                                             datetime-picker="dd-MMM-yyyy HH:mm"
                                                             is-open="calendar.scheduleEndDate" />
-									<span class="input-group-btn">
-										<button type="button" class="btn btn-default"
+                                    <span class="input-group-btn">
+                                        <button type="button" class="btn btn-default"
                                                 ng-click="openCalendar($event, 'scheduleEndDate')">
-											<i class="fa fa-calendar"></i>
-										</button>
-									</span>
-                                                    </p>
+                                            <i class="fa fa-calendar"></i>
+                                        </button>
+                                    </span>
+                                                    </p> -->
+                                                    <span class="form-control-feedback calender-icon"><i class="material-icons">date_range</i></span>
+                                                    <input type="text" class="form-control datetimepicker" ng-model="job.scheduleEndDate" name='scheduleEndDate' id="dateFilterFrom"  ng-model="JobDate" />
 
 
                                                     <div ng-show="form.$submitted || form.scheduleEndDate.$touched">

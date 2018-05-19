@@ -112,6 +112,11 @@ angular.module('timeSheetApp')
         $scope.addFeedbackItem = function(newItem){
             console.log("Adding feedback questions");
             console.log(newItem);
+            if(newItem.scoreType!=null){
+
+            }else{
+                newItem.scoreType = "yes:1";
+            }
             $scope.feedbackItems.push(newItem);
             $scope.newFeedbackItem = null;
             console.log($scope.feedbackItems);
@@ -135,7 +140,7 @@ angular.module('timeSheetApp')
         $scope.refreshPage = function() {
         		$scope.clearFilter();
         		$scope.loadFeedbackItems();
-        }
+        };
 
 
 
@@ -234,7 +239,7 @@ angular.module('timeSheetApp')
             $scope.search();
             //$scope.loadModuleActions();
         }
-        
+
         $scope.search = function () {
             var currPageVal = ($scope.pages ? $scope.pages.currPage : 1);
             if(!$scope.searchCriteria) {
@@ -302,11 +307,11 @@ angular.module('timeSheetApp')
                     $scope.pageSort = 10;
                 }
             });
-            
+
         };
 
 
-       
+
 
         $scope.clearFilter = function() {
             $scope.selectedSite = null;
@@ -346,7 +351,7 @@ angular.module('timeSheetApp')
          }
 
    /*
-    
+
     ** Pagination init function **
     @Param:integer
 
