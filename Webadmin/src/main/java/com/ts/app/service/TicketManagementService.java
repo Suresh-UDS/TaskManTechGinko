@@ -54,7 +54,7 @@ import com.ts.app.web.rest.dto.TicketDTO;
 @Transactional
 public class TicketManagementService extends AbstractService {
 
-    private final Logger log = LoggerFactory.getLogger(JobManagementService.class);
+    private final Logger log = LoggerFactory.getLogger(TicketManagementService.class);
 
     @Inject
     private TicketRepository ticketRepository;

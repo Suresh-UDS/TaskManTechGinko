@@ -438,7 +438,7 @@ public class ExportUtil {
 					log.error("Error while flushing/closing  !!!");
 					statusMap.put(export_File_Name, "FAILED");
 				}
-
+				lock.unlock();
 			}
 		});
 
@@ -556,7 +556,7 @@ public class ExportUtil {
 			log.error("Error while flushing/closing  !!!");
 			statusMap.put(filePath, "FAILED");
 		}
-
+		lock.unlock();
 		// try {
 		// // initialize FileWriter object
 		// log.debug("filePath = " + filePath + ", isAppend=" + isAppend);
@@ -817,7 +817,7 @@ public class ExportUtil {
 					log.error("Error while flushing/closing  !!!");
 					statusMap.put(exportFileName, "FAILED");
 				}
-
+				lock.unlock();
 			}
 		});
 		writerThread.start();
@@ -1340,6 +1340,7 @@ public class ExportUtil {
 					log.error("Error while flushing/closing  !!!");
 					statusMap.put(export_File_Name, "FAILED");
 				}
+				lock.unlock();
 			}
 		});
 
