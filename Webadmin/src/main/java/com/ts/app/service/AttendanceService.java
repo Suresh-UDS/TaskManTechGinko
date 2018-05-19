@@ -35,6 +35,7 @@ import com.ts.app.repository.UserRepository;
 import com.ts.app.service.util.ExportUtil;
 import com.ts.app.service.util.FileUploadHelper;
 import com.ts.app.service.util.MapperUtil;
+import com.ts.app.service.util.PagingUtil;
 import com.ts.app.service.util.ReportUtil;
 import com.ts.app.web.rest.dto.AttendanceDTO;
 import com.ts.app.web.rest.dto.BaseDTO;
@@ -332,10 +333,18 @@ public class AttendanceService extends AbstractService {
             if(!StringUtils.isEmpty(searchCriteria.getColumnName())){
                 Sort sort = new Sort(searchCriteria.isSortByAsc() ? Sort.Direction.ASC : Sort.Direction.DESC, searchCriteria.getColumnName());
                 log.debug("Sorting object" +sort);
-                pageRequest = createPageSort(searchCriteria.getCurrPage(), searchCriteria.getSort(), sort);
+                if(searchCriteria.isReport()) {
+	            		pageRequest = createPageSort(searchCriteria.getCurrPage(), Integer.MAX_VALUE, sort);
+	            }else {
+	            		pageRequest = createPageSort(searchCriteria.getCurrPage(), PagingUtil.PAGE_SIZE, sort);
+	            }
 
             }else{
-                pageRequest = createPageRequest(searchCriteria.getCurrPage());
+	            	if(searchCriteria.isReport()) {
+	        			pageRequest = createPageRequest(searchCriteria.getCurrPage(), true);
+	        		}else {
+	        			pageRequest = createPageRequest(searchCriteria.getCurrPage());
+	        		}
             }
 
 
