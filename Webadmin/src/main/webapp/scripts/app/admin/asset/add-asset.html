@@ -74,7 +74,7 @@
                                                                                                ng-minlength='5'
                                                                                                ng-maxlength='250'
                                                                                                ng-pattern="/^[A-Za-z0-9\s]*$/" autofocus
-                                                                                               required />
+                                                                                                />
 
                                                                                         <div ng-show="form.$submitted || form.assetName.$touched">
                                                                                             <div ng-show="form.assetName.$dirty || form.assetName.$invalid">
@@ -275,7 +275,7 @@
                                                                                                name=''
                                                                                                type='text' value=""
                                                                                                autofocus
-                                                                                               required />
+                                                                                                />
 
 
                                                                                     </div>
@@ -292,7 +292,7 @@
                                                                                                name=''
                                                                                                type='text' value=""
                                                                                                autofocus
-                                                                                               required />
+                                                                                                />
 
                                                                                     </div>
                                                                                 </div>
@@ -314,7 +314,7 @@
                                                                                                name=''
                                                                                                type='text' value=""
                                                                                                autofocus
-                                                                                               required />
+                                                                                                />
 
                                                                                     </div>
                                                                                 </div>
@@ -328,7 +328,7 @@
                                                                                                name=''
                                                                                                type='text' value=""
                                                                                                autofocus
-                                                                                               required />
+                                                                                                />
 
                                                                                     </div>
                                                                                 </div>
@@ -342,7 +342,7 @@
                                                                                                name=''
                                                                                                type='text' value=""
                                                                                                autofocus
-                                                                                               required />
+                                                                                                />
 
                                                                                     </div>
                                                                                 </div>
@@ -445,7 +445,7 @@
 
                                                                             <div class="form-group is-empty">
                                                                                 <label class="control-label">Asset Code </label>
-                                                                                <input id="assetcode" ng-model="asset.assetcode" class="form-control" name="assetcode" type="text" value="" ng-minlength="5" ng-maxlength="250" ng-pattern="/^[A-Za-z0-9\s]*$/" autofocus="" required="" tabindex="0" aria-required="true" aria-invalid="true" autocomplete="off">
+                                                                                <input id="assetcode" ng-model="asset.assetcode" class="form-control" name="assetcode" type="text" value="" ng-minlength="5" ng-maxlength="250" ng-pattern="/^[A-Za-z0-9\s]*$/" autofocus  tabindex="0" aria-required="true" aria-invalid="true" autocomplete="off">
 
 
 
@@ -478,13 +478,37 @@
                                                                 <div class="panel-body">
                                                                     <div class="row">
 
-                                                                        <div class="col-md-2">
+                                                                        <div class="col-md-4">
                                                                             <div class="form-group">
                                                                                 <label class="control-label">Schedule</label>
                                                                                 <select class="form-control" ng-model="" ng-options="">
                                                                                     <option value="">Select Schedule ..</option>
                                                                                 </select>
                                                                             </div>
+                                                                        </div>
+                                                                        <div class="col-md-4">
+                                                                            <div class="form-group selectcon is-empty SelectWithAddbtnCon">
+
+                                                                                <div class="" style="float:left;width:90%;">
+                                                                                    <label class="control-label">Asset Group</label>
+                                                                                    <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
+                                                                                    <select class="form-control ng-pristine ng-valid ng-touched"  tabindex="0" aria-invalid="false">
+                                                                                        <option value="" class="" selected="selected">Please select Asset Group ..</option>
+                                                                                    </select>
+                                                                                </div>
+                                                                                <div class="" style="float:left;width:10%;">
+                                                                                    <a href="javascript:;" data-toggle="collapse" data-parent="#accordian" data-target="#addAssetGroup" class="btn btn-round btn-fab btn-fab-mini btn-simple" aria-expanded="false" aria-controls="collapseExample">
+                                                                                        <i class="material-icons">add</i>
+                                                                                    </a>
+                                                                                </div>
+                                                                                <div class="clear"></div>
+                                                                                <div class="collapse" id="addAssetGroup">
+                                                                                    <div class="">
+                                                                                        <input class="input-desc ng-pristine ng-untouched ng-valid" id="assetgroupName" ng-model="" name="assetgroupName" type="text" value="" tabindex="0" aria-invalid="false">
+                                                                                        <a class="btn btn-success" ng-click="" tabindex="0">Add</a>
+                                                                                    </div>
+                                                                                </div>
+                                                                                <span class="material-input"></span></div>
                                                                         </div>
                                                                         <div class="col-md-2">
                                                                             <div class="form-group">
@@ -502,38 +526,23 @@
 
                                                                             </div>
                                                                         </div>
-                                                                        <div class="col-md-3">
-                                                                            <div class="form-group selectcon" style="padding-top:25px;">
 
-                                                                                <div class="" style="float:left;width:80%;">
-                                                                                    <select class="form-control" ng-model="" ng-options="">
-                                                                                        <option value="">Please select ..</option>
-                                                                                    </select>
-                                                                                </div>
-                                                                                <div class="" style="float:left;">
-                                                                                    <a href="javascript:;"  data-toggle="collapse" data-parent="#accordian" data-target="#addDesignation1" class="btn btn-round btn-fab btn-fab-mini btn-simple" aria-expanded="false" aria-controls="collapseExample">
-                                                                                        <i class="material-icons">add</i>
-                                                                                    </a>
-                                                                                </div>
+                                                                        <!--<div class="col-md-2">-->
 
-                                                                            </div>
-
-                                                                        </div>
-                                                                        <div class="col-md-2">
-
-                                                                            <div class="form-group" style="padding-top: 20px;">
-                                                                                <div class="checkbox">
-                                                                                    <label>
-                                                                                        <input type="checkbox" name="terms"> Active
-                                                                                    </label>
-                                                                                </div>
-                                                                            </div>
+                                                                            <!--<div class="form-group" style="padding-top: 20px;">-->
+                                                                                <!--<div class="checkbox">-->
+                                                                                    <!--<label>-->
+                                                                                        <!--<input type="checkbox" name="terms"> Active-->
+                                                                                    <!--</label>-->
+                                                                                <!--</div>-->
+                                                                            <!--</div>-->
 
 
-                                                                        </div>
-                                                                        <div class="col-md-1" style="padding-top: 25px;">
-                                                                            <a class="btn btn-success add-btn margn-top0"  ng-click="">Add</a>
-                                                                        </div>
+                                                                        <!--</div>-->
+
+
+                                                                    </div>
+                                                                    <div class="row">
                                                                         <div class="col-md-5">
                                                                             <div class="collapse" id="addDesignation1">
 
@@ -544,10 +553,55 @@
                                                                                 </div>
                                                                             </div>
                                                                         </div>
+                                                                    </div>
+                                                                    <div class="row">
 
+                                                                        <div class="col-md-2">
+                                                                            <div class="dropdown">
+                                                                                <div class="form-group">
+                                                                                    <label class="control-label">Select Frequency</label>
+                                                                                    <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
+                                                                                    <select class="form-control ">
+                                                                                        <option value="">Every</option>
+                                                                                    </select>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="col-md-2">
+                                                                            <div class="form-group">
+                                                                                <label class="control-label">Select number</label>
+                                                                                <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
+                                                                                <select class="form-control ">
+                                                                                    <option value="">1</option>
+                                                                                    <option value="">2</option>
+                                                                                    <option value="">3</option>
+                                                                                </select>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="col-md-3">
+                                                                            <div class="form-group">
+                                                                                <label class="control-label">Select</label>
+                                                                                <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
+                                                                                <select class="form-control ">
+                                                                                    <option value="">Hourly</option>
+                                                                                    <option value="">Daily</option>
+                                                                                    <option value="">Weekly</option>
+                                                                                    <option value="">Fortnightly</option>
+                                                                                    <option value="">Monthly</option>
+                                                                                    <option value="">Quarterly</option>
+                                                                                    <option value="">Halfely</option>
+                                                                                    <option value="">Yearly</option>
+                                                                                </select>
+                                                                            </div>
+                                                                        </div>
+
+                                                                        <div class="col-md-1" style="padding-top: 25px;">
+                                                                            <a class="btn btn-success add-btn margn-top0"  ng-click="">Add</a>
+                                                                        </div>
                                                                     </div>
                                                                 </div>
                                                             </div>
+
                                                             <div class="table-responsive tablecard">
                                                                 <table class="table table-striped">
 
