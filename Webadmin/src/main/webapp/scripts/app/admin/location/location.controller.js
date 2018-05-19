@@ -4,6 +4,7 @@ angular.module('timeSheetApp')
     .controller('LocationController', function ($rootScope, $scope, $state, $timeout, 
         LocationComponent,ProjectComponent, SiteComponent, $http, $stateParams,
          $location,PaginationComponent ) {
+        $rootScope.loadingStop();
         $rootScope.loginView = false;
     	$scope.success = null;
         $scope.error = null;
@@ -21,6 +22,7 @@ angular.module('timeSheetApp')
         $scope.selectedZone = null;
         $scope.selectedLocation = null;
         $scope.pageSort = 10;
+        $scope.pager = {};
 
         $timeout(function (){angular.element('[ng-model="name"]').focus();});
 
@@ -287,27 +289,7 @@ angular.module('timeSheetApp')
              $scope.setPage(1);
          };
 
-       //Loading Page go to top position
-        $scope.loadPageTop = function(){
-            //alert("test");
-            //$("#loadPage").scrollTop();
-            $("#loadPage").animate({scrollTop: 0}, 2000);
-
-        }
-
-        // Page Loader Function
-
-        $scope.loadingStart = function(){ $('.pageCenter').show();}
-        $scope.loadingStop = function(){
-
-            console.log("Calling loader");
-            $('.pageCenter').hide();
-
-        }
-
-        $timeout(function() {
-              $scope.loadingStop() ;
-            }, 2000);
+      
 
        /*
         ** Pagination init function **

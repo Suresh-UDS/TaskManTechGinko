@@ -27,15 +27,15 @@ public class EmployeeProjectSite extends AbstractAuditingEntity implements Seria
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 
-	@ManyToOne(fetch = FetchType.EAGER)
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "employeeId", referencedColumnName = "id", nullable = true)
 	private Employee employee;
 	
-	@ManyToOne(fetch = FetchType.EAGER)
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "projectId", referencedColumnName = "id", nullable = true)
 	private Project project;
 
-	@ManyToOne(fetch = FetchType.EAGER)
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "siteId", referencedColumnName = "id", nullable = true)
 	private Site site;
 	

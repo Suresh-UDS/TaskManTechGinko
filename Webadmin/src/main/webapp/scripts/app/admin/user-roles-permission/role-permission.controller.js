@@ -2,6 +2,7 @@
 
 angular.module('timeSheetApp')
     .controller('RolePermissionController', function ($rootScope, $scope, $state, $timeout, UserRoleComponent, ModuleActionComponent,RolePermissionComponent, $http, $stateParams, $location, JobComponent) {
+        $rootScope.loadingStop();
         $rootScope.loginView = false;
         $scope.success = null;
         $scope.error = null;
@@ -10,6 +11,7 @@ angular.module('timeSheetApp')
         $scope.validationError = null;
         $scope.validationErrorMsg = null;
         $scope.authorities = ["User", "Admin"];
+        $scope.pager = {};
 
         $timeout(function (){angular.element('[ng-model="name"]').focus();});
 
@@ -454,13 +456,6 @@ angular.module('timeSheetApp')
                             
                           
                          }
-
-                       //Loading Page go to top position
-                        $scope.loadPageTop = function(){
-                            //alert("test");
-                            //$("#loadPage").scrollTop();
-                            $("#loadPage").animate({scrollTop: 0}, 2000);
-                        }
 
             $scope.cancelAppModule = function() {
 

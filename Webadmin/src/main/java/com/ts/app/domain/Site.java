@@ -46,7 +46,7 @@ public class Site extends AbstractAuditingEntity implements Serializable {
 	@JoinColumn(name = "projectId", nullable = false)
 	private Project project;
 
-	@ManyToOne(fetch = FetchType.EAGER)
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "userId", nullable = false)
 	private User user;
 

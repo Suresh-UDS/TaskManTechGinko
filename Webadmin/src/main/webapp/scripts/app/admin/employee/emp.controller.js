@@ -4,13 +4,14 @@ angular.module('timeSheetApp')
     .controller('EmployeeController', function ($rootScope,$window, $scope, $state,
      $timeout, ProjectComponent, SiteComponent, EmployeeComponent,LocationComponent,
       UserRoleComponent, $http,$stateParams,$location,PaginationComponent) {
-
+        $rootScope.loadingStop();
         $rootScope.loginView = false;
         $scope.success = null;
         $scope.error = null;
         $scope.errorMessage = null;
         $scope.doNotMatch = null;
         $scope.errorEmployeeExists = null;
+        $scope.pager = {};
 
         $scope.markLeftOptions = 'delete';
 
@@ -55,6 +56,8 @@ angular.module('timeSheetApp')
         $scope.userRoles;
 
         $scope.selectedRole;
+
+        $scope.SelectedDesig = {};
 
         $scope.pageSort = 10;
 
@@ -214,7 +217,7 @@ angular.module('timeSheetApp')
 
         $scope.loadDesignations = function () {
 
-            console.log("Loading all designations")
+            //console.log("Loading all designations")
             EmployeeComponent.findAllDesginations().then(function (data) {
                 $scope.designations = data;
                 console.log("Loading all Designations" ,$scope.designations);
@@ -508,6 +511,7 @@ angular.module('timeSheetApp')
                 $scope.employee = data;
                 $scope.projectSiteList = $scope.employee.projectSites;
                 $scope.employee.code = pad($scope.employee.code , 4);
+                $scope.SelectedDesig = {designation:$scope.employee.designation};
                 $scope.loadSelectedProject($scope.employee.projectId);
                 $scope.loadSelectedSite($scope.employee.siteId);
                 $scope.loadSelectedManager($scope.employee.managerId);
@@ -988,32 +992,6 @@ angular.module('timeSheetApp')
              $scope.loadPageTop();
              $scope.initAddEdit();
          }
-
-       //Loading Page go to top position
-        $scope.loadPageTop = function(){
-
-            $("#loadPage").animate({scrollTop: 0}, 2000);
-        }
-
-         // Page Loader Function
-
-        $scope.loadingStart = function(){ $('.pageCenter').show(); $('.overlay').show();}
-        $scope.loadingAuto = function(){
-            $scope.loadingStart();
-            $scope.loadtimeOut = $timeout(function(){
-
-            //console.log("Calling loader stop");
-            $('.pageCenter').hide(); $('.overlay').hide();
-
-        }, 2000);
-           // alert('hi');
-        }
-        $scope.loadingStop = function(){
-
-            console.log("Calling loader");
-            $('.pageCenter').hide(); $('.overlay').hide();
-
-        }
 
     /*
     

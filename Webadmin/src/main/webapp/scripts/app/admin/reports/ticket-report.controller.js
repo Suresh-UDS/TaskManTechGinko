@@ -4,6 +4,7 @@ angular.module('timeSheetApp')
     .controller('TicketReportController', function ($rootScope, $scope, $state, $timeout, 
         ProjectComponent, SiteComponent, EmployeeComponent,TicketComponent,JobComponent,
         DashboardComponent, $http,$stateParams,$location,$interval,PaginationComponent,$filter) {
+        $rootScope.loadingStop();
         $rootScope.loginView = false;
         $scope.success = null;
         $scope.error = null;
@@ -29,6 +30,7 @@ angular.module('timeSheetApp')
         $scope.selectedDateFromSer= d;
         $scope.selectedDateToSer= new Date();
         $scope.pageSort = 10;
+        $scope.pager = {};
 
 
         $scope.initCalender = function(){
@@ -304,8 +306,6 @@ angular.module('timeSheetApp')
                  $scope.pager = PaginationComponent.GetPager(data.totalCount, $scope.pages.currPage);
                  $scope.totalCountPages = data.totalCount;
 
-                console.log("Pagination",$scope.pager);
-                console.log('Ticket search result list -' + JSON.stringify($scope.ticketsData));
                 $scope.pages.currPage = data.currPage;
                 $scope.pages.totalPages = data.totalPages;
 
@@ -437,9 +437,9 @@ angular.module('timeSheetApp')
         $scope.exportAllData = function(type){
                 $scope.searchCriteria.exportType = type;
                 $scope.searchCriteria.report = true;
+                console.log('calling ticket export api');
                 TicketComponent.exportAllData($scope.searchCriteria).then(function(data){
                     var result = data.results[0];
-                    console.log(result);
                     console.log(result.file + ', ' + result.status + ',' + result.msg);
                     var exportAllStatus = {
                             fileName : result.file,
@@ -554,13 +554,6 @@ angular.module('timeSheetApp')
 
 
          }
-
-       //Loading Page go to top position
-        $scope.loadPageTop = function(){
-            //alert("test");
-            //$("#loadPage").scrollTop();
-            $("#loadPage").animate({scrollTop: 0}, 2000);
-        }
 
         /*
     

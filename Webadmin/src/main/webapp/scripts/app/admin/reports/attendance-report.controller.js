@@ -4,6 +4,7 @@ angular.module('timeSheetApp')
     .controller('AttendanceReportController', function ($rootScope, $scope, $state, $timeout,
      ProjectComponent, SiteComponent, EmployeeComponent,AttendanceComponent,
      DashboardComponent, $http,$stateParams,$location,$interval,PaginationComponent,$filter) {
+        $rootScope.loadingStop();
         $rootScope.loginView = false;
         $scope.success = null;
         $scope.error = null;
@@ -16,6 +17,7 @@ angular.module('timeSheetApp')
         d.setFullYear(2018, 0, 1);
         $scope.selectedDateFromSer= d;
         $scope.selectedDateToSer =  new Date();
+        $scope.pager = {};
 
         $scope.employeeDesignations = ["MD","Operations Manger","Supervisor"]
 
@@ -146,7 +148,7 @@ angular.module('timeSheetApp')
                 console.log('selected project - ' + JSON.stringify($scope.selectedProject));
                 $scope.loadSites($scope.selectedProject.id);
                 $scope.selectedSite = null;
-                $scope.refreshReport();
+                //$scope.refreshReport();
         };
 
         $scope.employeeSearch = function () {
@@ -214,10 +216,10 @@ angular.module('timeSheetApp')
             $scope.searchCriteria.findAll = false;
 
                if($scope.selectedDateFrom) {
-                    $scope.searchCriteria.fromDate = $scope.selectedDateFromSer;
+                    $scope.searchCriteria.checkInDateTimeFrom = $scope.selectedDateFromSer;
                 }
                 if($scope.selectedDateTo) {
-                    $scope.searchCriteria.toDate = $scope.selectedDateToSer;
+                    $scope.searchCriteria.checkInDateTimeTo = $scope.selectedDateToSer;
                 }
             
 
@@ -538,13 +540,6 @@ angular.module('timeSheetApp')
 
 
          }
-
-       //Loading Page go to top position
-        $scope.loadPageTop = function(){
-            //alert("test");
-            //$("#loadPage").scrollTop();
-            $("#loadPage").animate({scrollTop: 0}, 2000);
-        }
 
     /*
         ** Pagination init function **

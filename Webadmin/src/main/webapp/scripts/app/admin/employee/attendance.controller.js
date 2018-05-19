@@ -4,6 +4,7 @@ angular.module('timeSheetApp')
     .controller('AttendanceController', function ($rootScope, $scope, $state, $timeout, 
         ProjectComponent, SiteComponent, EmployeeComponent,AttendanceComponent, $http,
         $stateParams,$location,$interval,PaginationComponent,$filter) {
+        $rootScope.loadingStop();
         $rootScope.loginView = false;
         $scope.success = null;
         $scope.error = null;
@@ -15,6 +16,7 @@ angular.module('timeSheetApp')
         $scope.selectedDateFromSer=  new Date();
         $scope.selectedDateToSer= new Date();
         $scope.pageSort = 10;
+        $scope.pager = {};
 
         $scope.employeeDesignations = ["MD","Operations Manger","Supervisor"]
 
@@ -580,12 +582,6 @@ angular.module('timeSheetApp')
 
          }
 
-       //Loading Page go to top position
-        $scope.loadPageTop = function(){
-            //alert("test");
-            //$("#loadPage").scrollTop();
-            $("#loadPage").animate({scrollTop: 0}, 2000);
-        }
 
     /*
         ** Pagination init function **

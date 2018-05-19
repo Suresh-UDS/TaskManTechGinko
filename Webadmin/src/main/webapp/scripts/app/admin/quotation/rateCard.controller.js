@@ -2,11 +2,13 @@
 
 angular.module('timeSheetApp')
     .controller('RateCardController', function ($scope, $rootScope, $state, $timeout,$http,$stateParams,$location, RateCardComponent,ProjectComponent    ) {
+        $rootScope.loadingStop();
         $rootScope.loginView = false;
         $scope.success = null;
         $scope.error = null;
         $scope.doNotMatch = null;
         $scope.errorRateCardExists = null;
+        $scope.pager = {};
 
 
 
@@ -289,11 +291,5 @@ angular.module('timeSheetApp')
           
          }
 
-       //Loading Page go to top position
-        $scope.loadPageTop = function(){
-            //alert("test");
-            //$("#loadPage").scrollTop();
-            $("#loadPage").animate({scrollTop: 0}, 2000);
-        }
 
     });

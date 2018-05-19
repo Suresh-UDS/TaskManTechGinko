@@ -6,6 +6,7 @@ angular.module('timeSheetApp')
 				function($scope, $rootScope, $state, $timeout, JobComponent,
 						ProjectComponent, SiteComponent,EmployeeComponent,ChecklistComponent, $http, $stateParams,
 						$location,$interval) {
+		$rootScope.loadingStop();
 	    $rootScope.loginView = false;
         $scope.success = null;
         $scope.error = null;
@@ -32,6 +33,7 @@ angular.module('timeSheetApp')
         $rootScope.employeeShiftImportStatusLoad = false;
         $scope.importStatus;
         $scope.importEmployeeStatus;
+        $scope.pager = {};
         $scope.selectFile = function() {
         		console.log($scope.selectedJobFile);
         }
@@ -486,13 +488,6 @@ angular.module('timeSheetApp')
              $scope.initPage(); 
           
          }
-
-       //Loading Page go to top position
-        $scope.loadPageTop = function(){
-            //alert("test");
-            //$("#loadPage").scrollTop();
-            $("#loadPage").animate({scrollTop: 0}, 2000);
-        }
         
         
     });

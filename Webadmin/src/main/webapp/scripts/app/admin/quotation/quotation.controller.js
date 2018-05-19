@@ -7,6 +7,9 @@ angular
 				function($scope, $rootScope, $state, $timeout, $http, $document, $window,
 						$stateParams, $location, RateCardComponent,TicketComponent, JobComponent,
 						 ProjectComponent, SiteComponent,PaginationComponent) {
+                    
+                    $rootScope.loadingStop();
+
                     $rootScope.loginView = false;
 
 					 $scope.selectedProject = null;
@@ -62,6 +65,8 @@ angular
 					$scope.pages = { currPage : 1};
 
 					$scope.pageSort = 10;
+
+					$scope.pager = {};
 
 					$scope.init = function() {
 
@@ -518,33 +523,6 @@ angular
                              $scope.init();
 
                          }
-
-                       //Loading Page go to top position
-                        $scope.loadPageTop = function(){
-                            //alert("test");
-                            //$("#loadPage").scrollTop();
-                            $("#loadPage").animate({scrollTop: 0}, 2000);
-                        }
-
-                           // Page Loader Function
-
-					        $scope.loadingStart = function(){ $('.pageCenter').show();$('.overlay').show();}
-					        $scope.loadingAuto = function(){
-					            $scope.loadingStart();
-					            $scope.loadtimeOut = $timeout(function(){
-
-					            //console.log("Calling loader stop");
-					            $('.pageCenter').hide();$('.overlay').hide();
-
-					        }, 2000);
-					           // alert('hi');
-					        }
-					        $scope.loadingStop = function(){
-
-					            console.log("Calling loader");
-					            $('.pageCenter').hide();$('.overlay').hide();
-
-					        }
 
 					        /*
 

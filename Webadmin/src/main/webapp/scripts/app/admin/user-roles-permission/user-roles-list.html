@@ -1,5 +1,5 @@
 
-<div class="" ng-init="initLoad();loadingStop();">
+<div class="" ng-init="initLoad();">
 	<div class="success-message hidden"></div>
 
     <!--<div class="row TopButtonsCon">-->
@@ -27,7 +27,7 @@
 
                     <div class="SearchTable">
 
-                        <form name="searchForm"  ng-submit="search()" novalidate >
+                        <form name="searchForm"  ng-submit="searchFilter()" novalidate >
 
                             <table class="table no-padding-tblCon" border="0">
                                 <tr class="filter-row gc-search-row">
@@ -44,7 +44,7 @@
                                         <div class="form-group" ng-init="loadUserRoles()">
                                             <div class="dropdown">
                                                 <input type="text" class="form-control searchable-input floatL border-bottom-input" placeholder="Role ID"
-                                                       ng-model="selectedUser" ng-value="searchCriteria.userRoleId" name="userRoleId" uib-typeahead="userRule as userRole.id for userRole in userRoles | filter:$viewValue | limitTo:5" />
+                                                       ng-model="selectedUserRoleId" ng-value="searchCriteria.userRoleId" name="userRoleId" uib-typeahead="userRule as userRole.id for userRole in userRoles | filter:$viewValue | limitTo:5" />
 
                                             </div>
                                         </div>
@@ -53,7 +53,7 @@
                                         <div class="form-group" ng-init="loadUserRoles()">
                                             <div class="dropdown">
                                                 <input type="text" class="form-control searchable-input floatL border-bottom-input" placeholder="Role Name"
-                                                       ng-model="selectedUser" ng-value="searchCriteria.name" name="name" uib-typeahead="userRule as userRole.name for userRole in userRoles | filter:$viewValue | limitTo:5" />
+                                                       ng-model="selectedUserRoleName" ng-value="searchCriteria.name" name="name" uib-typeahead="userRule as userRole.name for userRole in userRoles | filter:$viewValue | limitTo:5" />
 
                                             </div>
                                         </div>
@@ -71,7 +71,7 @@
                                         <div class="form-group" ng-init="loadUserRoles()">
                                             <div class="dropdown">
                                                 <input type="text" class="form-control searchable-input floatL border-bottom-input" placeholder="Role Level"
-                                                       ng-model="selectedUser" ng-value="searchCriteria.roleLevel" name="roleLevel" uib-typeahead="userRule as userRole.roleLevel for userRole in userRoles | filter:$viewValue | limitTo:5" />
+                                                       ng-model="selectedUserRoleLevel" ng-value="searchCriteria.roleLevel" name="roleLevel" uib-typeahead="userRule as userRole.roleLevel for userRole in userRoles | filter:$viewValue | limitTo:5" />
 
                                             </div>
                                         </div>
@@ -101,37 +101,57 @@
                         <table class="table table-striped">
                             <thead>
                             <tr>
-                                <th>Role ID<a href="#">
-
-                                    <span ng-click="columnAscOrder('id')"  class=""><i class="fa fa-caret-up"></i></span>
-                                    <span ng-click="columnDescOrder('id')" class=""><i class="fa fa-caret-down"></i></span>
-
-                                </a></th>
-                                <th>Role Name<a href="#">
-
-                                    <span ng-click="columnAscOrder('name')"  class=""><i class="fa fa-caret-up"></i></span>
-                                    <span ng-click="columnDescOrder('name')" class=""><i class="fa fa-caret-down"></i></span>
-
-                                </a></th>
-                                <th>Role Description<a href="#">
-
-                                    <span ng-click="columnAscOrder('description')"  class=""><i class="fa fa-caret-up"></i></span>
-                                    <span ng-click="columnDescOrder('description')" class=""><i class="fa fa-caret-down"></i></span>
-
-                                </a></th>
-                                <th>Role Level<a href="#">
-
-                                    <span ng-click="columnAscOrder('roleLevel')"  class=""><i class="fa fa-caret-up"></i></span>
-                                    <span ng-click="columnDescOrder('roleLevel')" class=""><i class="fa fa-caret-down"></i></span>
-
-                                </a></th>
+                                <th>Role ID
+                                    <span class="sortingIcons">
+                                        <span ng-click="columnAscOrder('id')" ng-class="isActiveAsc == 'id' ? 'active' : ''" >
+                                            <i  class="fa fa-caret-up"></i>
+                                        </span>
+                                        <span ng-click="columnDescOrder('id')" ng-class="isActiveDesc == 'id' ? 'active' : ''" >
+                                             <i  ng-class="class" class="fa fa-caret-down"></i>
+                                        </span>
+                                    </span>
+                                </th>
+                                <th>Role Name
+                                    <span class="sortingIcons">
+                                        <span ng-click="columnAscOrder('name')" ng-class="isActiveAsc == 'name' ? 'active' : ''" >
+                                            <i  class="fa fa-caret-up"></i>
+                                        </span>
+                                        <span ng-click="columnDescOrder('name')" ng-class="isActiveDesc == 'name' ? 'active' : ''" >
+                                             <i  ng-class="class" class="fa fa-caret-down"></i>
+                                        </span>
+                                    </span>
+                                </th>
+                                <th>Role Description
+                                     <span class="sortingIcons">
+                                        <span ng-click="columnAscOrder('description')" ng-class="isActiveAsc == 'description' ? 'active' : ''" >
+                                            <i  class="fa fa-caret-up"></i>
+                                        </span>
+                                        <span ng-click="columnDescOrder('description')" ng-class="isActiveDesc == 'description' ? 'active' : ''" >
+                                             <i  ng-class="class" class="fa fa-caret-down"></i>
+                                        </span>
+                                    </span>
+                                </th>
+                                <th>Role Level
+                                    <span class="sortingIcons">
+                                        <span ng-click="columnAscOrder('roleLevel')" ng-class="isActiveAsc == 'roleLevel' ? 'active' : ''" >
+                                            <i  class="fa fa-caret-up"></i>
+                                        </span>
+                                        <span ng-click="columnDescOrder('roleLevel')" ng-class="isActiveDesc == 'roleLevel' ? 'active' : ''" >
+                                             <i  ng-class="class" class="fa fa-caret-down"></i>
+                                        </span>
+                                    </span>
+                                </th>
                                 <th>Active</th>
-                                <th>Created Date<a href="#">
-
-                                    <span ng-click="columnAscOrder('createdDate')"  class=""><i class="fa fa-caret-up"></i></span>
-                                    <span ng-click="columnDescOrder('createdDate')" class=""><i class="fa fa-caret-down"></i></span>
-
-                                </a></th>
+                                <th>Created Date
+                                    <span class="sortingIcons">
+                                        <span ng-click="columnAscOrder('createdDate')" ng-class="isActiveAsc == 'createdDate' ? 'active' : ''" >
+                                            <i  class="fa fa-caret-up"></i>
+                                        </span>
+                                        <span ng-click="columnDescOrder('createdDate')" ng-class="isActiveDesc == 'createdDate' ? 'active' : ''" >
+                                             <i  ng-class="class" class="fa fa-caret-down"></i>
+                                        </span>
+                                    </span>
+                                </th>
                                 <th class="disabled-sorting text-right">Actions</th>
                             </tr>
                             </thead>
@@ -176,34 +196,11 @@
     </div>
 
 
-    <div class="row">
+    <!-- Pagination directive start -->
 
-        <div class="col-md-6"></div>
-        <div class="col-md-6 text-right">
-            <ul class="pagination pagination-warning">
+    <pagination-new></pagination-new>
 
-                <li class="paging-first" ID="first">
-                    <a href="#" id="first" ng-click="first()">
-                        <i id="first" class=" fa fa-step-backward"></i></a>
-                </li>
-                <li class="prev paging-previous" id="previous">
-                    <a id="previous" href="#" ng-click="previous()"> prev</a>
-                </li>
-
-                <li class="active">
-                    <a href="javascript:void(0);">{{pages.currPage}}</a>
-                </li>
-                <li class="next paging-next" id="next">
-                    <a id="next" href="#" ng-click="next()" >next</a>
-                </li>
-                <li class="paging-last" id="last">
-                    <a id="last" href="#" ng-click="last()"><i id="last" class="fa fa-step-forward"></i></a>
-                </li>
-
-            </ul>
-        </div>
-
-    </div>
+    <!-- Pagination directive end -->
 
 
 
