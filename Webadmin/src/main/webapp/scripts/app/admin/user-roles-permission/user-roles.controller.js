@@ -84,6 +84,10 @@ angular.module('timeSheetApp')
 
         };
 
+          $scope.showNotifications= function(position,alignment,color,msg){
+            demo.showNotification(position,alignment,color,msg);
+        }
+
         $scope.updateUserRole = function () {
         	console.log('UserRole details - ' + JSON.stringify($scope.userRole));
 
@@ -96,11 +100,14 @@ angular.module('timeSheetApp')
                 console.log('Error - '+ response.data);
                 if (response.status === 400 && response.data.message === 'error.duplicateRecordError') {
                     $scope.errorUserRoleExists = true;
+                    $scope.showNotifications('top','center','warning','Duplicate Record Error');
                 } else if(response.status === 400 && response.data.message === 'error.validation'){
                 	$scope.validationError = true;
                 	$scope.validationErrorMsg = response.data.description;
+                    $scope.showNotifications('top','center','warning','Invalid UserRole');
                 } else {
                     $scope.error = 'ERROR';
+                    $scope.showNotifications('top','center','warning','ERROR');
                 }
             });
         };
