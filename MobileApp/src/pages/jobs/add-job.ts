@@ -123,9 +123,7 @@ export class CreateJobPage {
             };
 
             if(this.ticket){
-                this.newJob={
-                    "ticketId":this.ticket.id
-                }
+                this.newJob.ticketId = this.ticket.id;
             }
 
 
