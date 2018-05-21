@@ -118,9 +118,9 @@ Tip 3: you can change the color of the sidebar with data-background-color="white
                 </a>
             </li>
             <li ui-sref-active="active" has-permission="Assets:List">
-                <a ui-sref="assets" data-toggle="collapse" data-target="#AssetSubMenus">
+                <a ui-sref="#" data-toggle="collapse" data-target="#AssetSubMenus">
                     <i class="material-icons">assessment</i>
-                    <p>Assets </p>
+                    <p>Assets  <b class="caret"></b></p>
                 </a>
                 <div class="collapse" id="AssetSubMenus">
                     <ul class="nav SubNav">
@@ -137,13 +137,13 @@ Tip 3: you can change the color of the sidebar with data-background-color="white
                             </a>
                         </li>
                         <li ui-sref-active="active">
-                            <a ui-sref="config">
+                            <a ui-sref="manufacturer-list">
                                 <i class="material-icons">business</i>
                                 <p>Manufacturer</p>
                             </a>
                         </li>
                         <li ui-sref-active="active">
-                            <a ui-sref="config">
+                            <a ui-sref="vendor-list">
                                 <i class="material-icons">supervisor_account</i>
                                 <p>Vendor</p>
                             </a>
