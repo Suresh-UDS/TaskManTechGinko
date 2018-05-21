@@ -75,5 +75,41 @@ angular.module('timeSheetApp')
                 resolve: {
 
                 }
+            })
+            .state('schedule-list', {
+                parent: 'manage',
+                url: '/schedule-list',
+                controller: 'AssetController',
+                data: {
+                    authorities: [],
+                    pageTitle: 'Schedule List'
+                },
+                views: {
+                    'content@': {
+                        templateUrl: 'scripts/app/admin/asset/schedule-list.html',
+                        controller: 'AssetController'
+                    }
+                },
+                resolve: {
+
+                }
+            })
+            .state('asset-config', {
+                parent: 'manage',
+                url: '/asset-config',
+                controller: 'AssetController',
+                data: {
+                    authorities: [],
+                    pageTitle: 'Configuration'
+                },
+                views: {
+                    'content@': {
+                        templateUrl: 'scripts/app/admin/asset/config.html',
+                        controller: 'AssetController'
+                    }
+                },
+                resolve: {
+
+                }
             });
     });

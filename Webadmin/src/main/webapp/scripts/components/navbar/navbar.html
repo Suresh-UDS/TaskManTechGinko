@@ -99,12 +99,6 @@ Tip 3: you can change the color of the sidebar with data-background-color="white
                 </a>
             </li>
 
-            <!--<li ui-sref-active="active" has-permission="Asset:List" >-->
-                <!--<a ui-sref="assets">-->
-                    <!--<i class="material-icons">people</i>-->
-                    <!--<p>Assets </p>-->
-                <!--</a>-->
-            <!--</li>-->
             <li ui-sref-active="active" has-permission="Site:List">
                 <a ui-sref="sites">
                     <i class="material-icons">device_hub</i>
@@ -124,10 +118,39 @@ Tip 3: you can change the color of the sidebar with data-background-color="white
                 </a>
             </li>
             <li ui-sref-active="active" has-permission="Assets:List">
-                <a ui-sref="assets">
+                <a ui-sref="assets" data-toggle="collapse" data-target="#AssetSubMenus">
                     <i class="material-icons">assessment</i>
                     <p>Assets </p>
                 </a>
+                <div class="collapse" id="AssetSubMenus">
+                    <ul class="nav SubNav">
+                        <li ui-sref-active="active">
+                            <a ui-sref="assets">
+                                <i class="material-icons">dashboard</i>
+                                <p>Master</p>
+                            </a>
+                        </li>
+                        <li ui-sref-active="active">
+                            <a ui-sref="asset-config">
+                                <i class="material-icons">brightness_high</i>
+                                <p>Config</p>
+                            </a>
+                        </li>
+                        <li ui-sref-active="active">
+                            <a ui-sref="config">
+                                <i class="material-icons">business</i>
+                                <p>Manufacturer</p>
+                            </a>
+                        </li>
+                        <li ui-sref-active="active">
+                            <a ui-sref="config">
+                                <i class="material-icons">supervisor_account</i>
+                                <p>Vendor</p>
+                            </a>
+                        </li>
+
+                    </ul>
+                </div>
             </li>
             <li ui-sref-active="active" has-permission="Checklist1:List">
                 <a ui-sref="checklists">
