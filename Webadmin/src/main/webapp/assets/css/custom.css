@@ -1064,7 +1064,7 @@ button.btn.btn-outline {
 		-webkit-transition: opacity 0.3s linear, right 0.3s ease-out;
 		   -moz-transition: opacity 0.3s linear, right 0.3s ease-out;
 		     -o-transition: opacity 0.3s linear, right 0.3s ease-out;
-		        transition: opacity 0.3s linear, right 0.7s ease-out;
+		        transition: opacity 0.7s linear, right 0.7s ease-out;
 	}
 
 	.modal.right.fade.in .modal-dialog {
@@ -1072,7 +1072,7 @@ button.btn.btn-outline {
 	}
 	.modal.right.fade.in .modal-dialogNew {
 		right: 0;
-        transition: opacity 0.3s linear, right 0.7s ease-out;
+        transition: opacity 0.5s linear, right 0.7s ease-out;
 	}
 
 
@@ -1082,7 +1082,15 @@ button.btn.btn-outline {
 
     cursor:pointer;
   }
-
+a.cal-btn
+{
+    padding: 5px 0 !important;
+    margin: 0 !important;
+}
+a.cal-btn i
+{
+    font-size: 30px !important;
+}
   .pageCenter{
       top: calc(100% / 2.5);
       left: calc(100% / 2.3);

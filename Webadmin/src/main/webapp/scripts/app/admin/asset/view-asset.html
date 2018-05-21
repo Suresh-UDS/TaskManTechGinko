@@ -549,6 +549,14 @@
                                        </div>
                                        <div class="tab-pane in ppm-schedule" id="ppm-schedule">
 
+                                           <div class="row">
+                                               <div class="col-md-12 text-right">
+                                                   <a  class="btn btn-simple btn-warning cal-btn" data-toggle="modal" data-target="#RightModal-View" title="Calender" ><i class="material-icons">date_range</i>
+                                                  
+                                                   </a>
+                                               </div>
+                                           </div>
+
                                            <div class="panel panel-default">
                                                <div class="panel-heading">Schedule Filter</div>
                                                <div class="panel-body">
@@ -1166,3 +1174,31 @@
 	</div>
 
 </div>
+
+<div class="modal right fade" id="RightModal-View" tabindex="-1" role="dialog" aria-labelledby="RightModal">
+    <div class="modal-dialogNew" role="document">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="">Calender</h4>
+            </div>
+
+            <div class="modal-body">
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="card card-calendar">
+                            <div class="card-content" class="ps-child">
+                                <div id="fullCalendar"></div>
+                                <!-- <div id="calendar"></div> -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div><!-- modal-content -->
+    </div><!-- modal-dialog -->
+</div><!--End View modal -->
