@@ -157,10 +157,10 @@
                             <tr>
                                 <th>Employee ID
                                    <span class="sortingIcons">
-                                        <span ng-click="columnAscOrder('employee.id')" ng-class="isActiveAsc == 'employee.id' ? 'active' : ''" >
+                                        <span ng-click="columnAscOrder('employee.empId')" ng-class="isActiveAsc == 'employee.empId' ? 'active' : ''" >
                                             <i  class="fa fa-caret-up"></i>
                                         </span>
-                                        <span ng-click="columnDescOrder('employee.id')" ng-class="isActiveDesc == 'employee.id' ? 'active' : ''">
+                                        <span ng-click="columnDescOrder('employee.empId')" ng-class="isActiveDesc == 'employee.empId' ? 'active' : ''">
                                              <i  ng-class="class" class="fa fa-caret-down"></i>
                                         </span>
                                     </span>
@@ -223,7 +223,7 @@
                             </thead>
                             <tbody>
                             <tr ng-repeat="attendance in attendancesData">
-                                <td>{{attendance.employeeId}}</td>
+                                <td>{{attendance.employeeEmpId}}</td>
                                 <td>{{attendance.employeeFullName}}</td>
                                 <td>{{attendance.siteName}}</td>
                                 <td>{{attendance.checkInTime | date:'dd/MM/yyyy @ h:mma'}}</td>
