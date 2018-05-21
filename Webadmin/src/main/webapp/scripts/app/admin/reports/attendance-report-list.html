@@ -82,8 +82,8 @@
                                                     </div>
                                                 </div>
                                             </div>
-            								<div class="col-md-4 pdng-top25">
-                								<div class="floatL form-group pull-right">
+            								<div class="col-md-4 pdng-top25 downloaderMain">
+                								<div class="floatL form-group">
                 			                         <button type="submit" class="btn btn-circle blue-clr" ng-disabled="searchForm.$invalid">
                 			                             <i class="material-icons">search</i>
                 			                         </button>
@@ -97,7 +97,9 @@
                 			                             <i class="material-icons">refresh</i>
                 			                         </button>
                 			                         <a class="download-btn" href="{{exportFile(0)}}">{{exportMsg(0)}}</a>
+
                 			                     </div>
+                                                 <div class="downloaderMd" ng-show="downloader"></div>
                                                  <div class="clearfix"></div>
             			                     </div>
             			                </div>

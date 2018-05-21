@@ -1266,3 +1266,39 @@ a.sort-by:after {
 p.help-block{
   line-height: 15px;
 }
+
+/* Schedule events css(calendar)*/
+
+.fc-button-group button{
+background-color: #ff9800 !important;
+}
+.downloaderMain{
+  position: relative;
+}
+.downloader{
+  width:100%;
+  background: url('downloader.gif') no-repeat ;
+  background-size: 100%;
+  position: absolute;
+  top: -62px;
+  right: 34px;
+  height: 100px;
+}
+.downloaderBig{
+  width:100%;
+  background: url('downloader.gif') no-repeat ;
+  background-size: 100%;
+  position: absolute;
+  top: -83px;
+  right: 35px;
+  height: 100px;
+}
+.downloaderMd{
+  width:100%;
+  background: url('downloader.gif') no-repeat ;
+  background-size: 100%;
+  position: absolute;
+  top: -57px;
+  right: 30px;
+  height: 100px;
+}

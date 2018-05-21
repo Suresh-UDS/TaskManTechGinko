@@ -75,5 +75,25 @@ angular.module('timeSheetApp')
                 resolve: {
 
                 }
+            })
+         .state('view-calendar', {
+                parent: 'manage',
+                url: '/view-calendar',
+                controller: 'AssetController',
+                data: {
+                    authorities: [],
+                    pageTitle: 'Asset Schedule'
+                },
+                views: {
+                    'content@': {
+                        templateUrl: 'scripts/app/admin/asset/view-calendar.html',
+                        controller: 'AssetController'
+                    }
+                },
+                resolve: {
+
+                }
             });
+
+
     });

@@ -31,6 +31,7 @@ angular.module('timeSheetApp')
         $scope.selectedDateToSer= new Date();
         $scope.pageSort = 10;
         $scope.pager = {};
+        $rootScope.exportStatusObj  ={};
 
 
         $scope.initCalender = function(){
@@ -405,6 +406,8 @@ angular.module('timeSheetApp')
         }
 
         $scope.clearFilter = function() {
+            $rootScope.exportStatusObj.exportMsg = '';
+            $scope.downloader=false;
             $scope.selectedDateFrom = $filter('date')('01/01/2018', 'dd/MM/yyyy'); 
             $scope.selectedDateTo = $filter('date')(new Date(), 'dd/MM/yyyy');
             $scope.selectedDateFromSer = d;
@@ -435,8 +438,11 @@ angular.module('timeSheetApp')
         };
 
         $scope.exportAllData = function(type){
+                $rootScope.exportStatusObj.exportMsg = '';
+                $scope.downloader=true;
                 $scope.searchCriteria.exportType = type;
                 $scope.searchCriteria.report = true;
+                
                 console.log('calling ticket export api');
                 TicketComponent.exportAllData($scope.searchCriteria).then(function(data){
                     var result = data.results[0];
@@ -488,6 +494,7 @@ angular.module('timeSheetApp')
                         exportStatusObj.exportStatus = data.status;
                         console.log('exportStatus - '+ exportStatusObj);
                         exportStatusObj.exportMsg = data.msg;
+                        $scope.downloader=false;
                         console.log('exportMsg - '+ exportStatusObj.exportMsg);
                         if(exportStatusObj.exportStatus == 'COMPLETED'){
                             if(exportStatusObj.url) {
