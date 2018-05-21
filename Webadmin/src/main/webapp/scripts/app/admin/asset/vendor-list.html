@@ -1,0 +1,226 @@
+<div ng-init="initLoad()">
+
+
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card margin-TB-5 tablecard appModuleCard">
+
+                <div class="card-content">
+                    <div class="row" ng-init="loadVendorList();">
+                        <div class="col-md-12">
+                            <div class="card formcard FilterCard">
+                                <div class="card-content">
+                                    <form name="searchForm"  ng-submit="searchFilter();" novalidate >
+
+                                        <div class="row" >
+                                            <div class="col-xs-12 col-md-4">
+                                                <div class="form-group no-padding" >
+                                                    <div class="dropdown">
+                                                        <div class="form-group">
+                                                            <label class="control-label">Select type</label>
+                                                            <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
+                                                            <select class="form-control ">
+                                                                <option value="">Select type...</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-xs-12 col-md-4">
+                                                <div class="form-group no-padding" >
+                                                    <div class="dropdown">
+                                                        <div class="form-group">
+                                                            <label class="control-label">Select name</label>
+                                                            <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
+                                                            <select class="form-control ">
+                                                                <option value="">Select name...</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-xs-12 col-md-4 pad10px">
+                                                <div class="floatR form-group pull-right">
+                                                    <button type="submit" class="btn btn-circle blue-clr">
+                                                        <i class="material-icons">search</i>
+                                                    </button>
+                                                    <button ui-sref="add-project" has-permission="Client:Create"  ng-class="{active: $state.includes('admin')}"  class="btn btn-circle green-clr">
+                                                        <i class="material-icons">add</i>
+                                                    </button>
+                                                    <button ng-click="refreshPage()" class="btn btn-circle orange-clr">
+                                                        <i class="material-icons">refresh</i>
+                                                    </button>
+                                                </div>
+                                                <div class="clearfix"></div>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+
+                    <div class="table-responsive tablecard">
+                        <table class="table table-striped table-hover">
+
+                            <thead>
+                            <tr>
+
+                                <th>Name
+                                    <span class="sortingIcons">
+                                        <span ng-click="columnAscOrder('name')" ng-class="isActiveAsc == 'name' ? 'active' : ''" >
+                                            <i  class="fa fa-caret-up"></i>
+                                        </span>
+                                        <span ng-click="columnDescOrder('name')" ng-class="isActiveDesc == 'name' ? 'active' : ''">
+                                             <i  ng-class="class" class="fa fa-caret-down"></i>
+                                        </span>
+                                    </span>
+                                </th>
+                                <th width="25%">First Name
+
+                                    <span class="sortingIcons">
+                                        <span ng-click="columnAscOrder('address')" ng-class="isActiveAsc == 'address' ? 'active' : ''" >
+                                             <i  class="fa fa-caret-up"></i>
+                                        </span>
+                                        <span ng-click="columnDescOrder('address')" ng-class="isActiveDesc == 'address' ? 'active' : ''">
+                                            <i  class="fa fa-caret-down"></i>
+                                        </span>
+                                    </span>
+                                </th>
+                                <th width="15%">Last Name
+                                    <span class="sortingIcons">
+                                        <span ng-click="columnAscOrder('contactFirstName')" ng-class="isActiveAsc == 'contactFirstName' ? 'active' : ''">
+                                            <i  class="fa fa-caret-up"></i>
+                                        </span>
+                                         <span ng-click="columnDescOrder('contactFirstName')" ng-class="isActiveDesc == 'contactFirstName' ? 'active' : ''">
+                                            <i  class="fa fa-caret-down"></i>
+                                        </span>
+                                    </span>
+                                </th>
+                                <th>Phone
+                                    <span class="sortingIcons">
+                                        <span ng-click="columnAscOrder('phone')" ng-class="isActiveAsc == 'phone' ? 'active' : ''">
+                                             <i  class="fa fa-caret-up"></i>
+                                        </span>
+                                         <span ng-click="columnDescOrder('phone')" ng-class="isActiveDesc == 'phone' ? 'active' : ''">
+                                             <i  class="fa fa-caret-down"></i>
+                                         </span>
+                                    </span>
+                                </th>
+                                <th>Email
+
+                                    <span class="sortingIcons">
+                                        <span ng-click="columnAscOrder('email')" ng-class="isActiveAsc == 'email' ? 'active' : ''">
+                                             <i  class="fa fa-caret-up"></i>
+                                        </span>
+                                          <span ng-click="columnDescOrder('email')" ng-class="isActiveDesc == 'email' ? 'active' : ''">
+                                              <i  class="fa fa-caret-down"></i>
+                                        </span>
+                                    </span>
+                                </th>
+                                <th class="disabled-sorting text-right">Actions</th>
+                            </tr>
+                            </thead>
+
+                            <tbody>
+
+                                <tr>
+
+                                    <td>Techginko</td>
+                                    <td>Praveen</td>
+                                    <td>Sekar</td>
+                                    <td>8608463226</td>
+                                    <td>Praveen2491@gmail.com</td>
+                                    <td class="text-right">
+                                        <a   has-permission="" ui-sref=""  class="btn btn-simple btn-info"><i class="material-icons">edit</i></a>
+                                    </td>
+
+                                </tr>
+                                <tr>
+
+                                    <td>Techginko</td>
+                                    <td>Praveen</td>
+                                    <td>Sekar</td>
+                                    <td>8608463226</td>
+                                    <td>Praveen2491@gmail.com</td>
+                                    <td class="text-right">
+                                        <a   has-permission="" ui-sref=""  class="btn btn-simple btn-info"><i class="material-icons">edit</i></a>
+                                    </td>
+
+                                </tr>
+                                <tr>
+
+                                    <td>Techginko</td>
+                                    <td>Praveen</td>
+                                    <td>Sekar</td>
+                                    <td>8608463226</td>
+                                    <td>Praveen2491@gmail.com</td>
+                                    <td class="text-right">
+                                        <a   has-permission="" ui-sref=""  class="btn btn-simple btn-info"><i class="material-icons">edit</i></a>
+                                    </td>
+
+                                </tr>
+                                <tr>
+
+                                    <td>Techginko</td>
+                                    <td>Praveen</td>
+                                    <td>Sekar</td>
+                                    <td>8608463226</td>
+                                    <td>Praveen2491@gmail.com</td>
+                                    <td class="text-right">
+                                        <a   has-permission="" ui-sref=""  class="btn btn-simple btn-info"><i class="material-icons">edit</i></a>
+                                    </td>
+
+                                </tr>
+                                <tr>
+
+                                <td>Techginko</td>
+                                <td>Praveen</td>
+                                <td>Sekar</td>
+                                <td>8608463226</td>
+                                <td>Praveen2491@gmail.com</td>
+                                <td class="text-right">
+                                    <a   has-permission="" ui-sref=""  class="btn btn-simple btn-info"><i class="material-icons">edit</i></a>
+                                </td>
+
+                            </tr>
+
+
+                            </tbody>
+                        </table>
+
+                    </div>
+                </div>
+                <!-- end content-->
+            </div>
+            <!--  end card  -->
+        </div>
+        <!-- end col-md-12 -->
+    </div>
+    <!-- end row -->
+
+    <div class="card margin-TB-5 txt-align-center" ng-hide="manufacturer">
+
+        <div class="card-content">
+            <div class="" style="text-align:center;padding: 10px 0;" ng-hide="projectsLoader">
+                <div loader-css="ball-pulse"></div>
+            </div>
+
+            <h3>No data Found</h3>
+
+        </div>
+
+    </div>
+
+    <!-- Pagination directive start -->
+
+    <pagination-new></pagination-new>
+
+    <!-- Pagination directive end -->
+
+</div>

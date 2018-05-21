@@ -1064,7 +1064,7 @@ button.btn.btn-outline {
 		-webkit-transition: opacity 0.3s linear, right 0.3s ease-out;
 		   -moz-transition: opacity 0.3s linear, right 0.3s ease-out;
 		     -o-transition: opacity 0.3s linear, right 0.3s ease-out;
-		        transition: opacity 0.3s linear, right 0.3s ease-out;
+		        transition: opacity 0.3s linear, right 0.7s ease-out;
 	}
 
 	.modal.right.fade.in .modal-dialog {
@@ -1072,6 +1072,7 @@ button.btn.btn-outline {
 	}
 	.modal.right.fade.in .modal-dialogNew {
 		right: 0;
+        transition: opacity 0.3s linear, right 0.7s ease-out;
 	}
 
 
