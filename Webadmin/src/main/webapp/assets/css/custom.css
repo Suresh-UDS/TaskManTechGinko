@@ -1278,7 +1278,7 @@ background-color: #ff9800 !important;
 .downloader{
   width:100%;
   background: url('downloader.gif') no-repeat ;
-  background-size: 100%;
+  background-size: 192px;
   position: absolute;
   top: -62px;
   right: 34px;
@@ -1287,18 +1287,18 @@ background-color: #ff9800 !important;
 .downloaderBig{
   width:100%;
   background: url('downloader.gif') no-repeat ;
-  background-size: 100%;
+  background-size: 192px;
   position: absolute;
-  top: -83px;
+  top: -64px;
   right: 35px;
   height: 100px;
 }
 .downloaderMd{
   width:100%;
   background: url('downloader.gif') no-repeat ;
-  background-size: 100%;
+  background-size: 192px;
   position: absolute;
-  top: -57px;
+  top: -31px;
   right: 30px;
   height: 100px;
 }
