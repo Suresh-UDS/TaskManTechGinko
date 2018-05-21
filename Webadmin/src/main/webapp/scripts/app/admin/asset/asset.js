@@ -76,24 +76,57 @@ angular.module('timeSheetApp')
 
                 }
             })
-         .state('view-calendar', {
+            .state('schedule-list', {
                 parent: 'manage',
-                url: '/view-calendar',
+                url: '/schedule-list',
                 controller: 'AssetController',
                 data: {
                     authorities: [],
-                    pageTitle: 'Asset Schedule'
+                    pageTitle: 'Schedule List'
                 },
                 views: {
                     'content@': {
-                        templateUrl: 'scripts/app/admin/asset/view-calendar.html',
+                        templateUrl: 'scripts/app/admin/asset/schedule-list.html',
                         controller: 'AssetController'
                     }
                 },
                 resolve: {
 
                 }
-            });
+            })
+            .state('asset-config', {
+                parent: 'manage',
+                url: '/asset-config',
+                controller: 'AssetController',
+                data: {
+                    authorities: [],
+                    pageTitle: 'Configuration'
+                },
+                views: {
+                    'content@': {
+                        templateUrl: 'scripts/app/admin/asset/config.html',
+                        controller: 'AssetController'
+                    }
+                },
+                resolve: {
 
+                }
+            }).state('view-calendar', {
+            parent: 'manage',
+            url: '/view-calendar',
+            controller: 'AssetController',
+            data: {
+                authorities: [],
+                pageTitle: 'Asset Schedule'
+            },
+            views: {
+                'content@': {
+                    templateUrl: 'scripts/app/admin/asset/view-calendar.html',
+                    controller: 'AssetController'
+                }
+            },
+            resolve: {
 
+            }
+        });
     });
