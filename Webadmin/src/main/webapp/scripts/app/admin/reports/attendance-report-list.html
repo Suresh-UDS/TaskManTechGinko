@@ -82,8 +82,8 @@
                                                     </div>
                                                 </div>
                                             </div>
-            								<div class="col-md-4 pdng-top25">
-                								<div class="floatL form-group pull-right">
+            								<div class="col-md-4 pdng-top25 downloaderMain">
+                								<div class="floatL form-group">
                 			                         <button type="submit" class="btn btn-circle blue-clr" ng-disabled="searchForm.$invalid">
                 			                             <i class="material-icons">search</i>
                 			                         </button>
@@ -93,11 +93,13 @@
                 			                         <button ng-show="attendancesData.length" type="button"  title="Export CSV"  ng-click=exportAllData('xlsx') class="btn btn-circle green-clr">
                 			                             <i class="material-icons">import_contacts</i>
                 			                         </button>
-                			                         <button ng-click="refreshPage()" class="btn btn-circle orange-clr">
+                			                         <button ng-click="refreshReport()" class="btn btn-circle orange-clr">
                 			                             <i class="material-icons">refresh</i>
                 			                         </button>
                 			                         <a class="download-btn" href="{{exportFile(0)}}">{{exportMsg(0)}}</a>
+
                 			                     </div>
+                                                 <div class="downloaderMd" ng-show="downloader"></div>
                                                  <div class="clearfix"></div>
             			                     </div>
             			                </div>
@@ -241,7 +243,7 @@
                             </thead>
                             <tbody>
                             <tr ng-repeat="attendance in attendancesData">
-                                <td>{{attendance.employeeId}}</td>
+                                <td>{{attendance.employeeEmpId}}</td>
                                 <td>{{attendance.employeeFullName}}</td>
                                 <td>{{attendance.siteName}}</td>
                                 <td>{{attendance.checkInTime | date:'MM/dd/yyyy @ h:mma'}}</td>

@@ -579,7 +579,9 @@ angular.module('timeSheetApp')
         $rootScope.exportStatusObj = {};
 
         $scope.exportAllData = function(){
-
+               
+                 $rootScope.exportStatusObj.exportMsg = '';
+                  $scope.downloader=true;
 	        	EmployeeComponent.exportAllData($scope.searchCriteria).then(function(data){
 	        		var result = data.results[0];
 	        		console.log(result);
@@ -590,6 +592,7 @@ angular.module('timeSheetApp')
 	        		};
 	        		$rootScope.exportStatusObj = exportAllStatus;
 	        		$scope.start();
+
 	              },function(err){
 	            	  console.log('error message for export all ')
 	            	  console.log(err);
@@ -623,6 +626,7 @@ angular.module('timeSheetApp')
 	            			$rootScope.exportStatusObj.exportStatus = data.status;
 	                		console.log('exportStatus - '+ $rootScope.exportStatusObj);
 	                		$rootScope.exportStatusObj.exportMsg = data.msg;
+                            $scope.downloader=false;
 	                		console.log('exportMsg - '+ $rootScope.exportStatusObj.exportMsg);
 	                		if($rootScope.exportStatusObj.exportStatus == 'COMPLETED'){
 	                			$rootScope.exportStatusObj.exportFile = data.file;
@@ -722,6 +726,8 @@ angular.module('timeSheetApp')
         };
 
         $scope.clearFilter = function() {
+            $rootScope.exportStatusObj.exportMsg = '';
+            $scope.downloader=false;
             $scope.selectedDateFrom = $filter('date')('01/01/2018', 'dd/MM/yyyy'); 
             $scope.selectedDateTo = $filter('date')(new Date(), 'dd/MM/yyyy');
             $scope.selectedDateFromSer = new Date();
