@@ -26,76 +26,16 @@ angular.module('timeSheetApp')
             plannedEnd : false,
         };
 
+        $scope.initCalender = function(){
+
+            demo.initFormExtendedDatetimepickers();
+
+
+        };
+
+        $scope.initCalender();
+
         demo.initFullCalendar();
-
-        $('.calendar').fullCalendar({
-            
-          eventClick: function(event, element) {
-             
-            event.title = "CLICKED!";
-
-            $('#calendar').fullCalendar('updateEvent', event);
-
-          }
-        });
-
-      
-
-         /*var initialize_calendar;
-         initialize_calendar = function (){
-   
-            $("#calendar").fullCalendar({
-             
-             header:{
-              left:'prev,next,today',
-              center:'title',
-              right:'month,agendaWeek,agendaDay'
-             },
-
-             selectable:true,
-
-             selectHelper:true,
-
-             editable:true,
-
-             eventLimit:true,
-
-             eventRender: function(event, element) {
-                    element.attr("categories",event.categoryname)
-                },
-
-             select:function(start,end){
-               $.getScript('/events/new/index.js',function(){
-               $('#events_date_range').val(moment(start).format("DD/MM/YYYY HH:mm")+ '-' +moment(end).format("DD/MM/YYYY HH:mm"));
-               date_range_picker();
-               $('start_hidden').val(moment(start).format("DD/MM/YYYY HH:mm"));
-               $('end_hidden').val(moment(end).format("DD/MM/YYYY HH:mm"));
-
-               });
-
-               $("#calendar").fullCalendar('unselect');
-             },
-            
-            // add event name to title attribute on mouseover
-
-            eventMouseover: function(event, jsEvent, view) {
-                if (view.name !== 'agendaDay') {
-                    $(jsEvent.target).attr('title', event.title);
-                }
-            },
-
-             eventClick: function(calEvent, jsEvent, view) {
-                    var r=confirm("Delete " + calEvent.title);
-                    if (r===true)
-                      {
-                          $('#calendar').fullCalendar('removeEvents', calEvent._id);
-                      }
-                },
-
-            });
-          
-         };
-         initialize_calendar();*/
 
         $scope.openCalendar = function(e,cmp) {
             e.preventDefault();
