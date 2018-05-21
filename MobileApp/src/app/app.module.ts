@@ -89,6 +89,10 @@ import {ViewTicket} from "../pages/ticket/view-ticket";
 import {FeedbackGridPage} from "../pages/feedback/feedback-grid";
 import {AppVersion} from "@ionic-native/app-version";
 import {HasPermission} from "../components/has-permission/has-permission";
+import {AssetList} from "../pages/asset-list/asset-list";
+import {AssetView} from "../pages/asset-view/asset-view";
+import {AssetFilter} from "../pages/asset-list/asset-filter";
+import {QRScanner,QRScannerStatus} from "@ionic-native/qr-scanner";
 
 @NgModule({
   declarations: [
@@ -147,7 +151,10 @@ import {HasPermission} from "../components/has-permission/has-permission";
       Ticket,
       CreateTicket,
       ViewTicket,
-      HasPermission
+      HasPermission,
+      AssetList,
+      AssetView,
+      AssetFilter,
   ],
   imports: [
     BrowserModule,
@@ -217,34 +224,38 @@ import {HasPermission} from "../components/has-permission/has-permission";
       WizardFeedbackEntry,
       Ticket,
       CreateTicket,
-      ViewTicket
+      ViewTicket,
+      AssetList,
+      AssetView,
+      AssetFilter
   ],
   providers: [
     StatusBar,
     SplashScreen,
     Camera,
-      NativeAudio,
-      AttendanceService,
-      EmployeeService,
-      FeedbackService,
-      JobService,
-      QuotationService,
-      SiteService,
+    NativeAudio,
+    AttendanceService,
+    EmployeeService,
+    FeedbackService,
+    JobService,
+    QuotationService,
+    SiteService,
     authService,
     HttpClient,
     Geolocation,
-      BackgroundMode,
+    BackgroundMode,
     Geofence,
-      // GoogleMaps,
-      Toast,
-      OneSignal,
+    // GoogleMaps,
+    Toast,
+    OneSignal,
     componentService,
-      OneSignal,
-      BatteryStatus,
+    OneSignal,
+    BatteryStatus,
     Toast,
     FileTransfer,
     File,
-      AppVersion,
+    AppVersion,
+    QRScanner,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
       {provide:MY_CONFIG_TOKEN, useValue: AppConfig}
   ]
