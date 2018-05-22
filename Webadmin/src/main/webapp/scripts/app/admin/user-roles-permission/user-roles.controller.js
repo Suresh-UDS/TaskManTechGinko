@@ -37,16 +37,20 @@ angular.module('timeSheetApp')
         	UserRoleComponent.createUserRole($scope.userRole).then(function () {
             	$scope.success = 'OK';
             	//$scope.loadUsers();
+                $scope.showNotifications('top','center','success','UserRole Created Successfully');
             	$location.path('/user-roles');
             }).catch(function (response) {
                 $scope.success = null;
                 console.log(response.data);
                 if (response.status === 400 && response.data.message === 'error.duplicateRecordError') {
                     $scope.errorUserRoleExists = true;
+                     $scope.showNotifications('top','center','danger','User role already exists!.. Please choose another one');
                 } else if(response.status === 400 && response.data.message === 'error.validation'){
+                    $scope.showNotifications('top','center','danger','User role invalid!..');
                 	$scope.validationError = true;
                 	$scope.validationErrorMsg = response.data.description;
                 } else {
+                    $scope.showNotifications('top','center','danger','Unable to create user role, Please try again later..');
                     $scope.error = 'ERROR';
                 }
             });
@@ -96,14 +100,14 @@ angular.module('timeSheetApp')
                 console.log('Error - '+ response.data);
                 if (response.status === 400 && response.data.message === 'error.duplicateRecordError') {
                     $scope.errorUserRoleExists = true;
-                    $scope.showNotifications('top','center','danger','Duplicate Record Error');
+                    $scope.showNotifications('top','center','danger','User role already exists!.. Please choose another one');
                 } else if(response.status === 400 && response.data.message === 'error.validation'){
 	                	$scope.validationError = true;
 	                	$scope.validationErrorMsg = response.data.description;
-                    $scope.showNotifications('top','center','danger','User Role already exists!.. Please choose another one');
+                    $scope.showNotifications('top','center','danger','User role invalid!..');
                 } else {
                     $scope.error = 'ERROR';
-                    $scope.showNotifications('top','center','danger','User Role Not Saved!.. Please try again later.');
+                    $scope.showNotifications('top','center','danger','Unable to update user role!.. Please try again later.');
                 }
             });
         };
