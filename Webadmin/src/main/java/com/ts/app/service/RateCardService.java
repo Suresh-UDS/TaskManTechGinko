@@ -356,8 +356,8 @@ public class RateCardService extends AbstractService {
                 }
 
             }else if(!StringUtils.isEmpty(quotationDto.get_id()) && quotationDto.getMode().equalsIgnoreCase("approve")) {
-				Setting quotationAlertSetting = settingRepository.findSettingByKeyAndSiteId(SettingsService.EMAIL_NOTIFICATION_OVERDUE, quotationDto.getSiteId());
-				Setting overdueEmails = settingRepository.findSettingByKeyAndSiteId(SettingsService.EMAIL_NOTIFICATION_OVERDUE_EMAILS, quotationDto.getSiteId());
+				Setting quotationAlertSetting = settingRepository.findSettingByKeyAndSiteId(SettingsService.EMAIL_NOTIFICATION_QUOTATION, quotationDto.getSiteId());
+				Setting overdueEmails = settingRepository.findSettingByKeyAndSiteId(SettingsService.EMAIL_NOTIFICATION_QUOTATION_EMAILS, quotationDto.getSiteId());
 				String alertEmailIds =  "";
 				if(overdueEmails != null) {
 					alertEmailIds = overdueEmails.getSettingValue();
