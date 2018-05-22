@@ -199,7 +199,7 @@ module.exports = {
                     quotation.save(function(err,quotation){
                         if(!err){
                             // mailerService.submitQuotation('karthickk@techginko.com',quotation);
-                            mailerService.qpproveQuotation(quotation.createdByEmail,quotation);
+                            mailerService.approveQuotation(quotation.createdByEmail,quotation);
                             notificationService.sendNotification('e678b6d8-9747-4528-864d-911a24cd786a','Quotation Approved by Client')
                             res.json(200,quotation)
                         }else{
