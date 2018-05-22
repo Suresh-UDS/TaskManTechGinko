@@ -70,13 +70,13 @@ public class RateCardService extends AbstractService {
 
 	@Inject
 	private MapperUtil<AbstractAuditingEntity, BaseDTO> mapperUtil;
-	
+
 	@Inject
 	private SettingsRepository settingRepository;
-	
+
 	@Inject
 	private MailService mailService;
-	
+
 	@Inject
 	private TicketRepository ticketRepository;
 
@@ -221,7 +221,7 @@ public class RateCardService extends AbstractService {
 //		return mapperUtil.toModelList(entities, RateCardDTO.class);
         return  rateCardDetails;
 	}
-	
+
 	public Object findAllTypes() {
 
         log.debug("Find all rate card types");
@@ -256,7 +256,7 @@ public class RateCardService extends AbstractService {
 //		return mapperUtil.toModelList(entities, RateCardDTO.class);
         return  rateCardDetails;
 	}
-	
+
 	public QuotationDTO saveQuotation(QuotationDTO quotationDto, long currUserId) {
 
         log.debug("Quotation creation");
@@ -264,7 +264,7 @@ public class RateCardService extends AbstractService {
         try{
         		//get the user details
         		User currUser = userRepository.findOne(currUserId);
-        		
+
         		//calculate the total cost
         		List<RateCardDTO> rateCardDetails = quotationDto.getRateCardDetails();
         		if(CollectionUtils.isNotEmpty(rateCardDetails)) {
@@ -276,7 +276,7 @@ public class RateCardService extends AbstractService {
         		}else {
         			return quotationDto;
         		}
-        	
+
             RestTemplate restTemplate = new RestTemplate();
             MappingJackson2HttpMessageConverter jsonHttpMessageConverter = new MappingJackson2HttpMessageConverter();
             jsonHttpMessageConverter.getObjectMapper().configure(SerializationFeature.FAIL_ON_EMPTY_BEANS,false);
@@ -345,6 +345,7 @@ public class RateCardService extends AbstractService {
                 request.put("sentByUserId", quotationDto.getSentByUserId());
                 request.put("sentByUserName", quotationDto.getSentByUserName());
                 if(quotationAlertSetting != null && quotationAlertSetting.getSettingValue().equalsIgnoreCase("true")) { //send escalation emails to managers and alert emails
+                        log.debug("Alert email while sending quotation request"+alertEmailIds);
                 		request.put("clientEmailId", alertEmailIds);
 				}
 
@@ -422,7 +423,7 @@ public class RateCardService extends AbstractService {
 
         return  quotationList;
     }
-    
+
     public Object getQuotation(long serialId) {
 
         log.debug("get Quotation");
@@ -470,7 +471,7 @@ public class RateCardService extends AbstractService {
             map.put("Content-Type", MediaType.APPLICATION_JSON_VALUE);
 
             headers.setAll(map);
-            
+
             JSONObject request = new JSONObject();
             request.put("projectId",searchCriteria.getProjectId());
             request.put("siteId",searchCriteria.getSiteId());
@@ -537,7 +538,7 @@ public class RateCardService extends AbstractService {
 //		return mapperUtil.toModelList(entities, RateCardDTO.class);
         return  approvedQuotation;
     }
-    
+
     public Object rejectQuotation(QuotationDTO quotation) {
         log.debug("reject Quotations");
         Object approvedQuotation = "";
