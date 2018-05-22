@@ -130,7 +130,19 @@ public class SearchCriteria extends Paginator {
 	private boolean list;
 	
 	private String quotationTitle;
-
+	
+	private String quotationCreatedBy;
+	
+	private String quotationApprovedBy;
+	
+	private String quotationStatus;
+	
+	private Date quotationCreatedDate;
+	
+	private Date quotationSubmittedDate;
+	
+	private Date quotationApprovedDate;
+	
 	public long getId() {
 		return id;
 	}
@@ -697,5 +709,54 @@ public class SearchCriteria extends Paginator {
 	public void setQuotationTitle(String quotationTitle) {
 		this.quotationTitle = quotationTitle;
 	}
+
+	public String getQuotationCreatedBy() {
+		return quotationCreatedBy;
+	}
+
+	public void setQuotationCreatedBy(String quotationCreatedBy) {
+		this.quotationCreatedBy = quotationCreatedBy;
+	}
+
+	public String getQuotationApprovedBy() {
+		return quotationApprovedBy;
+	}
+
+	public void setQuotationApprovedBy(String quotationApprovedBy) {
+		this.quotationApprovedBy = quotationApprovedBy;
+	}
+
+	public String getQuotationStatus() {
+		return quotationStatus;
+	}
+
+	public void setQuotationStatus(String quotationStatus) {
+		this.quotationStatus = quotationStatus;
+	}
+
+	public Date getQuotationCreatedDate() {
+		return quotationCreatedDate;
+	}
+
+	public void setQuotationCreatedDate(Date quotationCreatedDate) {
+		this.quotationCreatedDate = quotationCreatedDate;
+	}
+
+	public Date getQuotationApprovedDate() {
+		return quotationApprovedDate;
+	}
+
+	public void setQuotationApprovedDate(Date quotationApprovedDate) {
+		this.quotationApprovedDate = quotationApprovedDate;
+	}
+
+	public Date getQuotationSubmittedDate() {
+		return quotationSubmittedDate;
+	}
+
+	public void setQuotationSubmittedDate(Date quotationSubmittedDate) {
+		this.quotationSubmittedDate = quotationSubmittedDate;
+	}
     
+	
 }

@@ -144,6 +144,7 @@ public class RateCardResource {
     public Object getQuotations(@RequestBody SearchCriteria searchCriteria) {
         log.info("--Invoked RateCardResource.Get Quotations --" + searchCriteria);
         Object result =null;
+        searchCriteria.setUserId(SecurityUtils.getCurrentUserId());
         result= rateCardService.getQuotations(searchCriteria);
         return result;
     }

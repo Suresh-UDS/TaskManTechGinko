@@ -1,5 +1,6 @@
 package com.ts.app.service;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -27,6 +28,8 @@ import org.springframework.web.client.RestTemplate;
 
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.ts.app.domain.AbstractAuditingEntity;
+import com.ts.app.domain.Employee;
+import com.ts.app.domain.EmployeeProjectSite;
 import com.ts.app.domain.RateCard;
 import com.ts.app.domain.Setting;
 import com.ts.app.domain.Ticket;
@@ -458,6 +461,15 @@ public class RateCardService extends AbstractService {
 
         log.debug("get Quotations");
         Object quotationList = "";
+		User user = userRepository.findOne(searchCriteria.getUserId());
+		Employee employee = user.getEmployee();
+		List<EmployeeProjectSite> projectSites = employee.getProjectSites();
+		List<Long> siteIds = new ArrayList<Long>();
+		if(CollectionUtils.isNotEmpty(projectSites)) {
+			for(EmployeeProjectSite projSite : projectSites) {
+				siteIds.add(projSite.getSite().getId());
+			}
+		}
 
         try {
             RestTemplate restTemplate = new RestTemplate();
@@ -476,6 +488,12 @@ public class RateCardService extends AbstractService {
             request.put("siteId",searchCriteria.getSiteId());
             request.put("id",searchCriteria.getId());
             request.put("title",searchCriteria.getQuotationTitle());
+            request.put("createdBy",searchCriteria.getQuotationCreatedBy());
+            request.put("approvedBy",searchCriteria.getQuotationApprovedBy());
+            request.put("status",searchCriteria.getQuotationStatus());
+            request.put("submittedDate", searchCriteria.getQuotationSubmittedDate());
+            request.put("approvedDate", searchCriteria.getQuotationApprovedDate());
+            request.put("siteIds", siteIds);
             log.debug("Request body " + request.toString());
             HttpEntity<?> requestEntity = new HttpEntity<>(request.toString(), headers);
             log.debug("Rate card service end point"+quotationSvcEndPoint);
