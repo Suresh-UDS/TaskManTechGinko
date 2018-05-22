@@ -96,11 +96,14 @@ angular.module('timeSheetApp')
                 console.log('Error - '+ response.data);
                 if (response.status === 400 && response.data.message === 'error.duplicateRecordError') {
                     $scope.errorUserRoleExists = true;
+                    $scope.showNotifications('top','center','danger','Duplicate Record Error');
                 } else if(response.status === 400 && response.data.message === 'error.validation'){
-                	$scope.validationError = true;
-                	$scope.validationErrorMsg = response.data.description;
+	                	$scope.validationError = true;
+	                	$scope.validationErrorMsg = response.data.description;
+                    $scope.showNotifications('top','center','danger','User Role already exists!.. Please choose another one');
                 } else {
                     $scope.error = 'ERROR';
+                    $scope.showNotifications('top','center','danger','User Role Not Saved!.. Please try again later.');
                 }
             });
         };
