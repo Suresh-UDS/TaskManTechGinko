@@ -46,19 +46,35 @@ function sendMail(from,to,subject,template,data){
     });
 }
 
+function sendMailWithAttachments(from,to,subject,template,data,attachments){
+    data.logo = './config/logo.png';
+    mailer.sendMail({
+        from: from,
+        to: to,
+        subject: subject,
+        html: getContent(template,data),
+        attachments:attachments
+    });
+}
+
 
 
 
 var defaultFrom = config.mailer.from;
 module.exports = {
     submitQuotation: function(emailId, data) {
-        sendMail( config.mailer.from,
+        sendMailWithAttachments( config.mailer.from,
             emailId,
             'Quotation Submitted',
             'submit_quotation_template',
             {clientName: data.sentToUserName,
                 siteName: data.siteName,
-                createdByUserName:data.createdByUserName})
+                createdByUserName:data.createdByUserName},
+            {
+                filename: 'quotation.pdf',
+                path: './templates/'+data._id+'.pdf',
+                contentType: 'application/pdf'
+            })
     },
     approveQuotation: function(emailId, data) {
         sendMail( config.mailer.from,
