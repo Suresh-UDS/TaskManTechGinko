@@ -162,7 +162,7 @@ module.exports = {
                     quotation.processHistory.isSubmitted = date;
                     quotation.submittedDate = date;
                     quotation.lastModifiedDate = date;
-                    mailerService.submitQuotation(quotation.sentToEmailId,quotation)
+                    mailerService.submitQuotation(quotation.clientEmailId,quotation)
 
                     quotation.save(function(err,quotation){
                         if(!err){
@@ -199,7 +199,7 @@ module.exports = {
                     quotation.save(function(err,quotation){
                         if(!err){
                             // mailerService.submitQuotation('karthickk@techginko.com',quotation);
-                            mailerService.approveQuotation(quotation.createdByEmail,quotation);
+                            mailerService.approveQuotation(quotation.clientEmailId,quotation);
                             notificationService.sendNotification('e678b6d8-9747-4528-864d-911a24cd786a','Quotation Approved by Client')
                             res.json(200,quotation)
                         }else{
@@ -305,7 +305,6 @@ module.exports = {
     },
 
     getQuotations: function(req,res,next){
-      console.log("Get Quotations" + JSON.stringify(req.body));
       Quotation.find({siteId:req.body.siteId}, function(err,quotations){
           if(err){
               console.log("unable to get Quotations")
@@ -363,6 +362,12 @@ module.exports = {
           }
           res.send(200,response);
       })
+    },
+
+    searchQuotations: function(req,res,next){
+      console.log("Search Quotations");
+      console.log(req.body);
+      res.send(200,req.body);
     },
 
     getRateCards: function(req,res,next){

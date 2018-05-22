@@ -37,7 +37,7 @@ function getContent(template,data){
 
 function sendMail(from,to,subject,template,data){
     // logger.info("sending mail - template - "+template);
-    data.logo = './config/logo.png';
+    data.logo = 'http://uds.in/images/logo.jpg';
     mailer.sendMail({
         from: from,
         to: to,
@@ -47,7 +47,7 @@ function sendMail(from,to,subject,template,data){
 }
 
 function sendMailWithAttachments(from,to,subject,template,data,attachments){
-    data.logo = './config/logo.png';
+    data.logo = 'http://uds.in/images/logo.jpg';
     mailer.sendMail({
         from: from,
         to: to,
@@ -67,7 +67,7 @@ module.exports = {
             emailId,
             'Quotation Submitted',
             'submit_quotation_template',
-            {clientName: data.sentToUserName,
+            {clientName: data.projectName,
                 siteName: data.siteName,
                 createdByUserName:data.createdByUserName},
             {

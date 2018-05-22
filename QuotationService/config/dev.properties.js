@@ -24,7 +24,7 @@ module.exports = {
 		},
 		username :'timesheettestuser1@gmail.com',
 		password :'Test123#',
-		from:'UDS FMS'
+        from:'UDS <no-reply@uds.com>'
 	},
 
 	pushService : {
