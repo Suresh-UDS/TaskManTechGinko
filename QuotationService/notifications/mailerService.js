@@ -67,7 +67,7 @@ module.exports = {
             emailId,
             'Quotation Submitted',
             'submit_quotation_template',
-            {clientName: data.sentToUserName,
+            {clientName: data.projectName,
                 siteName: data.siteName,
                 createdByUserName:data.createdByUserName},
             {
