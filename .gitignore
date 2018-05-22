@@ -8,6 +8,7 @@
 # Project Specific
 ######################
 /Webadmin/src/main/webapp/dist
+/Webadmin/src/main/resources/config/**
 
 ######################
 # Node
@@ -225,8 +226,6 @@ Webadmin/src/main/webapp/assets-01/css/bootstrap.min-1.css
 QuotationService/.idea/workspace.xml
 QuotationService/.idea/vcs.xml
 QuotationService/.idea/modules.xml
-
-
 
 Webadmin/src/main/webapp/bower_components/*
 
