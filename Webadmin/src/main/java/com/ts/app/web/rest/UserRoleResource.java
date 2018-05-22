@@ -18,7 +18,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.codahale.metrics.annotation.Timed;
+import com.ts.app.security.SecurityUtils;
 import com.ts.app.service.UserRoleService;
+import com.ts.app.web.rest.dto.ProjectDTO;
 import com.ts.app.web.rest.dto.SearchCriteria;
 import com.ts.app.web.rest.dto.SearchResult;
 import com.ts.app.web.rest.dto.UserRoleDTO;
@@ -48,14 +50,18 @@ public class UserRoleResource {
 	@Timed 
 	public ResponseEntity<?> saveUserRole(@Valid @RequestBody UserRoleDTO userRoleDTO, HttpServletRequest request) {
 		log.info("Inside the saveUserRole -" + userRoleDTO.getName());
-		UserRoleDTO userRoleDto = null;
 		try {
-			userRoleDto = userRoleService.createUserRoleInformation(userRoleDTO);
+			if(!userRoleService.isDuplicate(userRoleDTO)) {
+				userRoleDTO = userRoleService.createUserRoleInformation(userRoleDTO);
+			}
+			else {
+				userRoleDTO.setMessage("error.duplicateRecordError");
+				return new ResponseEntity<>(userRoleDTO,HttpStatus.BAD_REQUEST);
+			}
 		}catch (Exception e) {
 			String msg = "Error while creating user group, please check the information";
 			//return new ResponseEntity<String>(msg , HttpStatus.NOT_ACCEPTABLE);
 			throw new TimesheetException(e, userRoleDTO);
-
 		}
 		return new ResponseEntity<>(HttpStatus.CREATED);
 	}

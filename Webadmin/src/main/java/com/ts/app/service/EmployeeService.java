@@ -74,6 +74,7 @@ import com.ts.app.web.rest.dto.SearchCriteria;
 import com.ts.app.web.rest.dto.SearchResult;
 import com.ts.app.web.rest.dto.SiteDTO;
 import com.ts.app.web.rest.dto.UserDTO;
+import com.ts.app.web.rest.dto.UserRoleDTO;
 
 /**
  * Service class for managing employee information.
@@ -153,10 +154,21 @@ public class    EmployeeService extends AbstractService {
 		return employeeDto;
 	}
 
+	public boolean isDuplicate(EmployeeDTO employeeDTO) {
+	    log.debug("Empid "+employeeDTO.getEmpId());
+		SearchCriteria criteria = new SearchCriteria();
+		criteria.setEmployeeId(Long.valueOf(employeeDTO.getEmpId()));
+		SearchResult<EmployeeDTO> searchResults = findBySearchCrieria(criteria);
+		if(searchResults != null && CollectionUtils.isNotEmpty(searchResults.getTransactions())) {
+			return true;
+		}
+		return false;
+	}
+	
 	public EmployeeDTO createEmployeeInformation(EmployeeDTO employeeDto) {
 		// log.info("The admin Flag value is " +adminFlag);
 		log.debug("EmployeeService.createEmployeeInformation - userId - "+employeeDto.getUserId());
-        Employee existingEmployee = employeeRepository.findByEmpId(employeeDto.getEmpId());
+        /*Employee existingEmployee = employeeRepository.findByEmpId(employeeDto.getEmpId());
 		if(existingEmployee!=null && existingEmployee.getActive().equals(Employee.ACTIVE_NO)) { //existing employee update and activate
 			employeeDto.setId(existingEmployee.getId());
 		    ZoneId  zone = ZoneId.of("Asia/Singapore");
@@ -164,7 +176,7 @@ public class    EmployeeService extends AbstractService {
 		    //update and activate the existing employee.
 
 			employeeDto = updateEmployee(employeeDto, true);
-		}else {
+		}else {*/
 			employeeDto.setFullName(employeeDto.getName());
 			Employee employee = mapperUtil.toEntity(employeeDto, Employee.class);
 			log.debug("EmployeeService.createEmployeeInformation - userId - "+employee.getUser().getId());
@@ -220,7 +232,7 @@ public class    EmployeeService extends AbstractService {
 
 			log.debug("Created Information for Employee: {}", employee);
 			employeeDto = mapperUtil.toModel(employee, EmployeeDTO.class);
-		}
+		//}
 		return employeeDto;
 	}
 
@@ -704,6 +716,9 @@ public class    EmployeeService extends AbstractService {
 			}
 			else if(StringUtils.isNotEmpty(searchCriteria.getName())) {
 				page = employeeRepository.findByEmployeeName(searchCriteria.getName(), pageRequest);
+			}else if (searchCriteria.getEmployeeId() != 0) {
+				log.debug(">>> find empid from service <<<");
+				page = employeeRepository.findEmployeeId(String.valueOf(searchCriteria.getEmployeeId()), pageRequest);
 			}
 //			else if((searchCriteria.getSiteId() != 0 && searchCriteria.getEmployeeId() != 0)) {
 //				log.debug("findBySearchCriteria - "+searchCriteria.getSiteId() +", "+searchCriteria.getEmployeeId() +", "+searchCriteria.getProjectId());
