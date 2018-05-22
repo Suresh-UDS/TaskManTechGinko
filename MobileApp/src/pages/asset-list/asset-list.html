@@ -17,14 +17,12 @@
 <ion-content padding>
 
     <ion-fab right bottom (click)="openFilters()"   >
-        <ion-label color="dark" class="margin0">Apply Filters</ion-label>
         <button ion-fab color="primary"> <ion-icon name="funnel"></ion-icon></button>
     </ion-fab>
 
-    <!--<ion-fab right bottom (click)="scanQRCode()" >-->
-        <!--<ion-label color="dark" class="margin0">Scan QR Code</ion-label>-->
-        <!--<button ion-fab color="primary"> <ion-icon name="camera"></ion-icon></button>-->
-    <!--</ion-fab>-->
+    <ion-fab top right edge (click)="scanQR()" >
+        <button ion-fab color="primary"> <ion-icon name="qr-scanner"></ion-icon></button>
+    </ion-fab>
 
   <ion-list>
     <ion-item *ngFor="let asset of assetList">

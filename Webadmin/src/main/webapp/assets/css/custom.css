@@ -1278,6 +1278,7 @@ a.sort-by:after {
 }
 p.help-block{
   line-height: 15px;
+  display:block !important;
 }
 
 /* Schedule events css(calendar)*/

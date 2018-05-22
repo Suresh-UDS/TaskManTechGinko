@@ -1,4 +1,12 @@
 page-asset-list {
-  $fab-list-margin:20px;
+
+  background: transparent !important;
+  ion-content {
+    background: transparent !important;
+  }
+
+  .transparentBody {
+    background: transparent !important;
+  }
 }
 
