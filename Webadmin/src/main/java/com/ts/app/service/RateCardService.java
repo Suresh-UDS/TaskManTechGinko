@@ -334,8 +334,11 @@ public class RateCardService extends AbstractService {
 				Setting overdueEmails = settingRepository.findSettingByKeyAndSiteId(SettingsService.EMAIL_NOTIFICATION_OVERDUE_EMAILS, quotationDto.getSiteId());
 				String alertEmailIds =  "";
 				if(overdueEmails != null) {
+				    log.debug("Overdue email ids found"+overdueEmails.getSettingValue());
 					alertEmailIds = overdueEmails.getSettingValue();
-				}
+				}else{
+				    log.debug("Overdue email ids not found");
+                }
 
             		url = quotationSvcEndPoint+"/quotation/send";
             		quotationDto.setDrafted(false);
@@ -344,11 +347,13 @@ public class RateCardService extends AbstractService {
 	        		quotationDto.setSentByUserName(currUser.getLogin());
                 request.put("sentByUserId", quotationDto.getSentByUserId());
                 request.put("sentByUserName", quotationDto.getSentByUserName());
-                log.debug("Quotation alert setting"+quotationAlertSetting);
+                log.debug("Quotation alert setting"+quotationAlertSetting.getSettingValue());
                 if(quotationAlertSetting != null && quotationAlertSetting.getSettingValue().equalsIgnoreCase("true")) { //send escalation emails to managers and alert emails
                         log.debug("Alert email while sending quotation request"+alertEmailIds);
                 		request.put("clientEmailId", alertEmailIds);
-				}
+				}else{
+                    log.debug("Alert emails not found while sending quotation");
+                }
 
             }else if(!StringUtils.isEmpty(quotationDto.get_id()) && quotationDto.getMode().equalsIgnoreCase("approve")) {
 				Setting quotationAlertSetting = settingRepository.findSettingByKeyAndSiteId(SettingsService.EMAIL_NOTIFICATION_OVERDUE, quotationDto.getSiteId());
