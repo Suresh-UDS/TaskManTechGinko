@@ -162,7 +162,7 @@ module.exports = {
                     quotation.processHistory.isSubmitted = date;
                     quotation.submittedDate = date;
                     quotation.lastModifiedDate = date;
-                    mailerService.submitQuotation(quotation.sentToEmailId,quotation)
+                    mailerService.submitQuotation(quotation.clientEmailId,quotation)
 
                     quotation.save(function(err,quotation){
                         if(!err){
@@ -305,7 +305,6 @@ module.exports = {
     },
 
     getQuotations: function(req,res,next){
-      console.log("Get Quotations" + JSON.stringify(req.body));
       Quotation.find({siteId:req.body.siteId}, function(err,quotations){
           if(err){
               console.log("unable to get Quotations")
