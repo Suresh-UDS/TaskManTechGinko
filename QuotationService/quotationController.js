@@ -364,6 +364,12 @@ module.exports = {
       })
     },
 
+    searchQuotations: function(req,res,next){
+      console.log("Search Quotations");
+      console.log(req.body);
+      res.send(200,req.body);
+    },
+
     getRateCards: function(req,res,next){
         console.log("Get Quotations");
         RateCard.find({}, function(err,rateCards){
