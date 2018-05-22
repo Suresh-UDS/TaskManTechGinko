@@ -44,9 +44,15 @@
                                                    <input type="text" class="form-control" ng-model="userRole.name"
                                                           name="RoleName"  autofocus
                                                           required autocomplete="off">
-
-
-
+                                                    <div ng-show="form.$submitted || form.RoleName.$touched">
+                                                        <div ng-show="form.RoleName.$dirty || form.RoleName.$invalid">
+                                                            <p class="help-block" style="color:maroon"
+                                                               ng-show="form.RoleName.$error.required">
+                                                                Id is required.
+                                                            </p>
+                                                           
+                                                        </div>
+                                                    </div>      
                                                </div>
                                            </div>
 
@@ -103,7 +109,7 @@
                                            <div class="col-md-12 txt-align-rgt">
                                                <div class="form-group">
                                                    <button class="btn btn-success" type="submit"
-                                                           id="form-button-save">
+                                                           id="form-button-save" ng-disabled="form.RoleName.$invalid">
                                                       <span class="btn-label">
                                             <i class="material-icons">check</i>
                                         </span> Save
