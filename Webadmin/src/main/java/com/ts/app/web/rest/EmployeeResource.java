@@ -88,10 +88,15 @@ public class EmployeeResource {
 		long userId = SecurityUtils.getCurrentUserId();
 		log.info("save Employee call - userId "+userId);
 		employeeDTO.setUserId(userId);
-
 		try {
-			EmployeeDTO employeeDto = employeeService.createEmployeeInformation(employeeDTO);
-
+			if(!employeeService.isDuplicate(employeeDTO)) {
+				log.debug(">>> going to create <<<");
+				employeeDTO = employeeService.createEmployeeInformation(employeeDTO);
+			}else {
+				log.debug(">>> duplicate <<<");
+				employeeDTO.setMessage("error.duplicateRecordError");
+				return new ResponseEntity<>(employeeDTO,HttpStatus.BAD_REQUEST);
+			}
 			/*
 			if(employeeDto.isCreateUser()) {
 				UserDTO userDto = new UserDTO();

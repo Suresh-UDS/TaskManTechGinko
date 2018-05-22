@@ -18,6 +18,7 @@ import com.ts.app.domain.UserRole;
 import com.ts.app.repository.UserRoleRepository;
 import com.ts.app.service.util.MapperUtil;
 import com.ts.app.web.rest.dto.BaseDTO;
+import com.ts.app.web.rest.dto.ProjectDTO;
 import com.ts.app.web.rest.dto.SearchCriteria;
 import com.ts.app.web.rest.dto.SearchResult;
 import com.ts.app.web.rest.dto.UserRoleDTO;
@@ -47,6 +48,17 @@ public class UserRoleService extends AbstractService {
 		return userRoleDto;
 	}
 
+	public boolean isDuplicate(UserRoleDTO userRoleDTO) {
+	    log.debug("Role "+userRoleDTO.getName());
+		SearchCriteria criteria = new SearchCriteria();
+		criteria.setRole(userRoleDTO.getName());
+		SearchResult<UserRoleDTO> searchResults = findBySearchCrieria(criteria);
+		if(searchResults != null && CollectionUtils.isNotEmpty(searchResults.getTransactions())) {
+			return true;
+		}
+		return false;
+	}
+	
 	public void updateUserRole(UserRoleDTO userRole) {
 		log.debug("Inside Update");
 		UserRole userRoleUpdate = userRoleRepository.findOne(userRole.getId());
@@ -94,6 +106,9 @@ public class UserRoleService extends AbstractService {
 			if(!searchCriteria.isFindAll()) {
 				if(searchCriteria.getUserRoleId() != 0) {
 					page = userRoleRepository.findRoleById(searchCriteria.getUserRoleId(), pageRequest);
+				}
+				if(!StringUtils.isEmpty(searchCriteria.getRole())) {
+					page = userRoleRepository.findRoleByName(searchCriteria.getRole(), pageRequest);
 				}
 			}else {
 				page = userRoleRepository.findUserRoles(pageRequest);
