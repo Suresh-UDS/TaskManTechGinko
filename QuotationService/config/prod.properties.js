@@ -19,9 +19,9 @@ module.exports = {
     			secureConnection: true,
     			port: 465
     		},
-    		username :'karthickkumararajak@gmail.com',
-    		password :'0838010059',
-    		from:'UDS TaskMan'
+    		username :'timesheettestuser1@gmail.com',
+    		password :'Test123#',
+    		from:'UDS FMS'
     	},
 
     	pushService : {
