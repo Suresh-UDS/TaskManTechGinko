@@ -81,7 +81,7 @@ export class MyApp {
       // { title: 'Client', component: CustomerDetailPage,active:false,icon:'person'},
       { title: 'Employee', component: EmployeeListPage,active:false,icon:'people',permission:'EmployeeList'},
       { title: 'Jobs', component: JobsPage,active:false,icon:'description',permission:'JobsList'},
-      { title: 'Assets', component: AssetList,active:false,icon:'construct',permission:'AssetsList'},
+      { title: 'Assets', component: AssetList,active:false,icon:'build',permission:'AssetsList'},
       { title: 'Tickets', component: Ticket,active:false,icon:'description',permission:'TicketsList'},
         { title: 'Attendance', component: SiteListPage,active:false,icon:'content_paste',permission:'AttendanceList'},
         { title: 'Rate Card', component: RateCardPage,active:false,icon:'description',permission:'RateCardList'},

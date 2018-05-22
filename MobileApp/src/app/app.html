@@ -15,12 +15,6 @@
         </div>
         <div class="sidebar-wrapper">
           <ul class="nav">
-            <li menuClose (click)="gotoDashboard()" class="active" >
-                <a>
-                    <i class="material-icons">dashboard</i>
-                    <p>Dashboard</p>
-                </a>
-            </li>
             <li #menu menuClose *ngFor="let p of pages" id={{p.permission}} has-permission={{p.permission}} (click)="openPage(p)" [ngClass]="{'active':p.active}"  >
               <a>
                 <i class="material-icons">{{p.icon}}</i>
