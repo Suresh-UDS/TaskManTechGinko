@@ -29,20 +29,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.ts.app.domain.AbstractAuditingEntity;
-import com.ts.app.domain.Asset;
-import com.ts.app.domain.CheckInOutImage;
-import com.ts.app.domain.Employee;
-import com.ts.app.domain.EmployeeProjectSite;
-import com.ts.app.domain.Job;
-import com.ts.app.domain.JobChecklist;
-import com.ts.app.domain.JobStatus;
-import com.ts.app.domain.Location;
-import com.ts.app.domain.NotificationLog;
-import com.ts.app.domain.Price;
-import com.ts.app.domain.Site;
-import com.ts.app.domain.User;
-import com.ts.app.domain.UserRoleEnum;
 import com.ts.app.repository.AssetRepository;
 import com.ts.app.repository.CheckInOutImageRepository;
 import com.ts.app.repository.EmployeeRepository;
@@ -93,9 +79,6 @@ public class JobManagementService extends AbstractService {
 
     @Inject
     private CheckInOutRepository checkInOutRepository;
-
-    @Inject
-    private AssetRepository assetRepository;
 
     @Inject
     private TicketRepository ticketRepository;
@@ -150,6 +133,9 @@ public class JobManagementService extends AbstractService {
 
     @Inject
     private TicketManagementService ticketManagementService;
+    
+    @Inject
+    private AssetRepository assetRepository;
 
     public void updateJobStatus(long siteId, JobStatus toBeJobStatus) {
 		//UPDATE ALL OVERDUE JOB STATUS
@@ -741,7 +727,7 @@ public class JobManagementService extends AbstractService {
 		Employee employee = getEmployee(jobDTO.getEmployeeId());
 		Site site = getSite(jobDTO.getSiteId());
 		Location location = getLocation(jobDTO.getLocationId());
-		Asset asset = getAsset(jobDTO.getAssetId());
+		Asset asset = assetRepository.findOne(jobDTO.getAssetId());
 
 		Ticket ticket = getTicket(jobDTO.getTicketId());
 		//update ticket status
@@ -823,6 +809,11 @@ public class JobManagementService extends AbstractService {
 		if(site == null) throw new TimesheetException("Site not found : "+siteId);
 		return site;
 	}
+	
+    public Ticket getTicket(long id){
+        Ticket ticket= ticketRepository.findOne(id);
+        return ticket;
+    }
 
 	private Employee getEmployee(Long empId) {
 		Employee employee = null;
@@ -840,14 +831,6 @@ public class JobManagementService extends AbstractService {
 	        //throw new TimesheetException("Location not found:"+locationId);
         }
         return location;
-    }
-
-    private Asset getAsset(Long assetId){
-        Asset asset=null;
-        if(assetId != null && assetId > 0) {
-            asset= assetRepository.findOne(assetId);
-        }
-        return asset;
     }
 
 	public void updateJob(){
@@ -1069,173 +1052,6 @@ public class JobManagementService extends AbstractService {
 		}
 		return notifyLogDtos;
 	}
-
-    //Asset
-    public AssetDTO saveAsset(AssetDTO assetDTO) {
-        log.debug("assets service in job services");
-        Asset asset = new Asset();
-        Site site = getSite(assetDTO.getSiteId());
-        asset.setTitle(assetDTO.getTitle());
-        asset.setDescription(assetDTO.getDescription());
-        asset.setSite(site);
-        asset.setCode(assetDTO.getCode());
-        asset.setEndTime(assetDTO.getEndTime());
-        asset.setStartTime(assetDTO.getStartTime());
-        asset.setUdsAsset(assetDTO.isUdsAsset());
-
-
-        List<Asset> existingAssets = assetRepository.findAssetByTitle(assetDTO.getTitle());
-        log.debug("Existing asset -"+ existingAssets);
-        if(CollectionUtils.isEmpty(existingAssets)) {
-            asset = assetRepository.save(asset);
-        }
-
-        return mapperUtil.toModel(asset, AssetDTO.class);
-    }
-
-    public List<AssetDTO> findAllAssets(){
-        log.debug("get all assets");
-        List<Asset> assets = assetRepository.findAll();
-        List<AssetDTO> assetDto = new ArrayList<>();
-        for(Asset loc: assets){
-            AssetDTO dto = new AssetDTO();
-            Long siteId = loc.getSite().getId();
-            Site site = getSite(siteId);
-            dto.setId(loc.getId());
-            dto.setTitle(loc.getTitle());
-            dto.setSiteId(site.getId());
-            dto.setSiteName(site.getName());
-            dto.setStartTime(loc.getStartTime());
-            dto.setEndTime(loc.getEndTime());
-            dto.setUdsAsset(loc.isUdsAsset());
-            dto.setCode(loc.getCode());
-            dto.setDescription(loc.getDescription());
-            assetDto.add(dto);
-        }
-        return assetDto;
-    }
-
-//    public SearchResult<AssetDTO> getSiteAssets(Long siteId,int	 page) {
-//        Pageable pageRequest = new PageRequest(page, PagingUtil.PAGE_SIZE, new Sort(Direction.DESC,"id"));
-//
-//        Page<Asset> assets= assetRepository.findBySiteId(siteId,pageRequest);
-//        SearchResult<AssetDTO> paginatedAssets = new SearchResult<>();
-//        paginatedAssets.setCurrPage(page);
-//        paginatedAssets.setTransactions(mapperUtil.toModelList(assets.getContent(), AssetDTO.class));
-//        paginatedAssets.setTotalCount(assets.getTotalElements());
-//        paginatedAssets.setTotalPages(assets.getTotalPages());
-//        return paginatedAssets;
-//    }
-
-    public List<AssetDTO> getSiteAssets(Long AssetSiteId){
-        log.debug("get site assets");
-        List<Asset> assets = assetRepository.findBySiteId(AssetSiteId);
-        List<AssetDTO> assetDto = new ArrayList<>();
-        for(Asset loc: assets){
-            AssetDTO dto = new AssetDTO();
-            Long siteId = loc.getSite().getId();
-            Site site = getSite(siteId);
-            dto.setId(loc.getId());
-            dto.setTitle(loc.getTitle());
-            dto.setSiteId(site.getId());
-            dto.setSiteName(site.getName());
-            dto.setStartTime(loc.getStartTime());
-            dto.setEndTime(loc.getEndTime());
-            dto.setUdsAsset(loc.isUdsAsset());
-            dto.setCode(loc.getCode());
-            dto.setDescription(loc.getDescription());
-            assetDto.add(dto);
-        }
-        return assetDto;
-    }
-
-    public Asset getAsset(long id){
-        Asset asset = assetRepository.findOne(id);
-        return asset;
-    }
-
-    public Ticket getTicket(long id){
-        Ticket ticket= ticketRepository.findOne(id);
-        return ticket;
-    }
-
-
-
-    public AssetDTO getAssetDTO(long id){
-        Asset asset = assetRepository.findOne(id);
-        AssetDTO assetDTO = mapperUtil.toModel(asset,AssetDTO.class);
-        Site site = getSite(assetDTO.getSiteId());
-        assetDTO.setActive(asset.getActive());
-        assetDTO.setSiteId(assetDTO.getSiteId());
-        assetDTO.setSiteName(assetDTO.getSiteName());
-        assetDTO.setTitle(asset.getTitle());
-        assetDTO.setCode(asset.getCode());
-        assetDTO.setDescription(asset.getDescription());
-        assetDTO.setUdsAsset(asset.isUdsAsset());
-        assetDTO.setStartTime(asset.getStartTime());
-        assetDTO.setEndTime(asset.getEndTime());
-        return assetDTO;
-    }
-
-    public AssetDTO getAssetByCode(String code){
-        Asset asset = assetRepository.findByCode(code);
-        AssetDTO assetDTO = mapperUtil.toModel(asset,AssetDTO.class);
-        Site site = getSite(assetDTO.getSiteId());
-        assetDTO.setActive(asset.getActive());
-        assetDTO.setSiteId(assetDTO.getSiteId());
-        assetDTO.setSiteName(assetDTO.getSiteName());
-        assetDTO.setTitle(asset.getTitle());
-        assetDTO.setCode(asset.getCode());
-        assetDTO.setDescription(asset.getDescription());
-        assetDTO.setUdsAsset(asset.isUdsAsset());
-        assetDTO.setStartTime(asset.getStartTime());
-        assetDTO.setEndTime(asset.getEndTime());
-        return assetDTO;
-    }
-
-
-    private void mapToEntityAssets(AssetDTO assetDTO, Asset asset) {
-        Site site = getSite(assetDTO.getSiteId());
-
-
-        asset.setTitle(assetDTO.getTitle());
-        asset.setDescription(assetDTO.getDescription());
-        asset.setCode(assetDTO.getCode());
-        asset.setStartTime(assetDTO.getStartTime());
-        asset.setEndTime(assetDTO.getEndTime());
-        asset.setUdsAsset(assetDTO.isUdsAsset());
-        asset.setSite(site);
-
-    }
-
-    public AssetDTO updateAsset(AssetDTO assetDTO) {
-        Asset asset = assetRepository.findOne(assetDTO.getId());
-        mapToEntityAssets(assetDTO, asset);
-        asset = assetRepository.save(asset);
-
-        return mapperUtil.toModel(asset, AssetDTO.class);
-    }
-
-    public String generateAssetQRCode(long assetId) {
-        Asset asset= assetRepository.findOne(assetId);
-        byte[] qrCodeImage = null;
-        String qrCodeBase64 = null;
-        if(asset != null) {
-            String code = String.valueOf(asset.getCode());
-            qrCodeImage = QRCodeUtil.generateQRCode(code);
-            String qrCodePath = env.getProperty("qrcode.file.path");
-            String imageFileName = null;
-            if(org.apache.commons.lang3.StringUtils.isNotEmpty(qrCodePath)) {
-                imageFileName = fileUploadHelper.uploadQrCodeFile(code, qrCodeImage);
-                asset.setQrCodeImage(imageFileName);
-                assetRepository.save(asset);
-            }
-            if(qrCodeImage != null && org.apache.commons.lang3.StringUtils.isNotBlank(imageFileName)) {
-                qrCodeBase64 = fileUploadHelper.readQrCodeFile(imageFileName);
-            }
-        }
-        return qrCodeBase64;
-    }
 
     public List<PriceDTO> findAllPrices(){
         log.debug("get all Prices");

@@ -12,9 +12,7 @@ import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
-import javax.websocket.server.PathParam;
 
-import com.ts.app.web.rest.dto.*;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -44,6 +42,21 @@ import com.ts.app.service.util.CacheUtil;
 import com.ts.app.service.util.ImportUtil;
 import com.ts.app.service.util.MapperUtil;
 import com.ts.app.service.util.ReportUtil;
+import com.ts.app.web.rest.dto.BaseDTO;
+import com.ts.app.web.rest.dto.CheckInOutDTO;
+import com.ts.app.web.rest.dto.EmployeeDTO;
+import com.ts.app.web.rest.dto.ExportResponse;
+import com.ts.app.web.rest.dto.ExportResult;
+import com.ts.app.web.rest.dto.GraphResponse;
+import com.ts.app.web.rest.dto.ImportResult;
+import com.ts.app.web.rest.dto.JobDTO;
+import com.ts.app.web.rest.dto.LocationDTO;
+import com.ts.app.web.rest.dto.NotificationLogDTO;
+import com.ts.app.web.rest.dto.Paginator;
+import com.ts.app.web.rest.dto.PriceDTO;
+import com.ts.app.web.rest.dto.ReportResult;
+import com.ts.app.web.rest.dto.SearchCriteria;
+import com.ts.app.web.rest.dto.SearchResult;
 
 /**
  * REST controller for managing the Site information.
@@ -316,50 +329,7 @@ public class JobManagementResource {
 	}
 
 
-    //Asset
-    @RequestMapping(path="/asset",method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-    @Timed
-    public ResponseEntity<?> saveAsset(@Valid @RequestBody AssetDTO assetDTO, HttpServletRequest request) {
-        log.debug("Asset DTO save request ="+ assetDTO);
-        AssetDTO response = jobService.saveAsset(assetDTO);
-        log.debug("Asset save response - "+ response);
-        return new ResponseEntity<>(response,HttpStatus.CREATED);
-    }
-
-    @RequestMapping(value = "/assets/search",method = RequestMethod.POST)
-    public List<AssetDTO> findAllAssets(HttpServletRequest request) {
-        log.info("--Invoked Location.findAll --");
-        return jobService.findAllAssets();
-    }
-
-    @RequestMapping(path="/site/{id}/asset", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public List<AssetDTO> getSiteAssets(@PathVariable("id") Long siteId){
-        return jobService.getSiteAssets(siteId);
-    }
-
-    @RequestMapping(path="/asset/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public AssetDTO getAsset(@PathVariable("id") Long id){
-        return jobService.getAssetDTO(id);
-    }
-
-    @RequestMapping(path="/asset/code/{code}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public AssetDTO getAssetByCode(@PathVariable("code") String code){
-        return jobService.getAssetByCode(code);
-    }
-
-    @RequestMapping(path="/asset/{id}",method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE)
-    @Timed
-    public ResponseEntity<?> updateAsset(@Valid @RequestBody AssetDTO assetDTO, HttpServletRequest request, @PathVariable("id") Long id) {
-        if(assetDTO.getId()==null) assetDTO.setId(id);
-        log.debug("Asset Details in updateAsset = "+ assetDTO);
-        AssetDTO response = jobService.updateAsset(assetDTO);
-        return new ResponseEntity<>(response,HttpStatus.CREATED);
-    }
-
-    @RequestMapping(value = "/asset/{id}/qrcode", method = RequestMethod.GET, produces = MediaType.IMAGE_PNG_VALUE)
-    public String generateAssetQRCode(@PathVariable("id") long assetId) {
-        return jobService.generateAssetQRCode(assetId);
-    }
+    
 
 	@RequestMapping(path="/jobs/import", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<ImportResult> importJobData(@RequestParam("jobFile") MultipartFile file){

@@ -74,8 +74,12 @@ public class Asset extends AbstractAuditingEntity implements Serializable {
     private Date startTime;
     private Date endTime;
     
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "manufacturerId", referencedColumnName = "id", nullable = true)
     private Manufacturer manufacturer;
     
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "manufacturerId", referencedColumnName = "id", nullable = true)
     private Vendor amcVendor;
     
     private String modelNumber;
