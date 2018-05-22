@@ -344,6 +344,7 @@ public class RateCardService extends AbstractService {
 	        		quotationDto.setSentByUserName(currUser.getLogin());
                 request.put("sentByUserId", quotationDto.getSentByUserId());
                 request.put("sentByUserName", quotationDto.getSentByUserName());
+                log.debug("Quotation alert setting"+quotationAlertSetting);
                 if(quotationAlertSetting != null && quotationAlertSetting.getSettingValue().equalsIgnoreCase("true")) { //send escalation emails to managers and alert emails
                         log.debug("Alert email while sending quotation request"+alertEmailIds);
                 		request.put("clientEmailId", alertEmailIds);
