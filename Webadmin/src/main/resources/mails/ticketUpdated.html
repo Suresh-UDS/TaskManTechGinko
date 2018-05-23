@@ -23,9 +23,10 @@
 
 </p>
 
-<p th:text = "#{email.ticket.updated.alert.url(${url})}">>
-
-</p>
+<span th:text = "#{email.ticket.alert.text5}">
+</span>
+<a th:href="${url}" >View Ticket
+</a>
 
 <p>
     <span th:text="#{email.report.text2}">Regards, </span>
