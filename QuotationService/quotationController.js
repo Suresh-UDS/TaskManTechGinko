@@ -596,6 +596,8 @@ module.exports = {
               }
 
           })
+      }else{
+          res.send(200,"Search criteria not found");
       }
     },
 
