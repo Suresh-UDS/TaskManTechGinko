@@ -11,7 +11,8 @@ public enum JobType {
     CARPENTRY(4), 
     PESTCONTROL(5), 
     PLUMBING(6),
-    MAINTENANCE(7);
+    MAINTENANCE(7),
+    ADMIN(8);
 
 	private int value;
     
