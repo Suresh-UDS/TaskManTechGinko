@@ -33,6 +33,9 @@ module.exports = {
                 gcm_id: 935098247956
     	    }
 
-    	}
+    	},
+		url : {
+			quotation_view: https://taskmanadmin.uds.in/#/view-quotation
+		}
 
 };

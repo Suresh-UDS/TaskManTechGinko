@@ -41,6 +41,9 @@ module.exports = {
             gcm_id: 110710812821
         }
 
+	},
+	url : {
+		quotation_view: http://localhost:8088/#/view-quotation
 	}
 
 };
