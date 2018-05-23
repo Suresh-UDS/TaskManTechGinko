@@ -369,8 +369,13 @@ module.exports = {
       console.log("Search Quotations");
       console.log(req.body);
       if(req.body.siteId){
+          console.log("site id");
           if(req.body.title){
+              console.log("site id + title");
+
               if(req.body.status){
+                  console.log("site id + title + status");
+
                   if(req.body.createdBy){
                       if(req.body.approvedBy){
                           Quotation.find({siteId:req.body.siteId,title:{$regex:'^'+req.body.title,$options:"si"},status:{$regex:'^'+req.body.status,$options:"si"},createdByUserName:{$regex:'^'+req.body.createdBy,$options:"si"},approvedByUserName:{$regex:'^'+req.body.approvedBy,$options:"si"}}).sort({'title':1}).exec(function(err,quotations){
@@ -378,10 +383,8 @@ module.exports = {
                                   console.log("Error in finding quotations");
                                   res.send(200,"No quotation found");
                               }else{
-                                  var response = _.map(quotations,function (data) {
-                                      return data.model
-                                  });
-                                  res.send(200,response);
+
+                                  res.send(200,quotations);
                               }
 
                           })
@@ -391,10 +394,8 @@ module.exports = {
                                   console.log("Error in finding quotations");
                                   res.send(200,"No quotation found");
                               }else{
-                                  var response = _.map(quotations,function (data) {
-                                      return data.model
-                                  });
-                                  res.send(200,response);
+
+                                  res.send(200,quotations);
                               }
 
                           })
@@ -406,10 +407,8 @@ module.exports = {
                               console.log("Error in finding quotations");
                               res.send(200,"No quotation found");
                           }else{
-                              var response = _.map(quotations,function (data) {
-                                  return data.model
-                              });
-                              res.send(200,response);
+
+                              res.send(200,quotations);
                           }
 
                       })
@@ -421,39 +420,35 @@ module.exports = {
                           console.log("Error in finding quotations");
                           res.send(200,"No quotation found");
                       }else{
-                          var response = _.map(quotations,function (data) {
-                              return data.model
-                          });
-                          res.send(200,response);
+
+                          res.send(200,quotations);
                       }
 
                   })
               }
 
           }else{
+              console.log("site id no title");
               if(req.body.status){
+                  console.log("site id no title + status");
                   Quotation.find({siteId:req.body.siteId,status:{$regex:'^'+req.body.status,$options:"si"}}).sort({'title':1}).exec(function(err,quotations){
                       if(err){
                           console.log("Error in finding quotations");
                           res.send(200,"No quotation found");
                       }else{
-                          var response = _.map(quotations,function (data) {
-                              return data.model
-                          });
-                          res.send(200,response);
+                          res.send(200,quotations);
                       }
 
                   })
               }else{
+                  console.log("site id only");
                   Quotation.find({siteId:req.body.siteId},function(err,quotations){
+
                       if(err){
                           console.log("Error in finding quotations");
                           res.send(200,"No quotation found");
                       }else{
-                          var response = _.map(quotations,function (data) {
-                              return data.model
-                          });
-                          res.send(200,response);
+                          res.send(200,quotations);
                       }
 
                   })
@@ -470,10 +465,8 @@ module.exports = {
                               console.log("Error in finding quotations");
                               res.send(200,"No quotation found");
                           }else{
-                              var response = _.map(quotations,function (data) {
-                                  return data.model
-                              });
-                              res.send(200,response);
+
+                              res.send(200,quotations);
                           }
 
                       })
@@ -483,10 +476,8 @@ module.exports = {
                               console.log("Error in finding quotations");
                               res.send(200,"No quotation found");
                           }else{
-                              var response = _.map(quotations,function (data) {
-                                  return data.model
-                              });
-                              res.send(200,response);
+
+                              res.send(200,quotations);
                           }
 
                       })
@@ -498,10 +489,8 @@ module.exports = {
                           console.log("Error in finding quotations");
                           res.send(200,"No quotation found");
                       }else{
-                          var response = _.map(quotations,function (data) {
-                              return data.model
-                          });
-                          res.send(200,response);
+
+                          res.send(200,quotations);
                       }
 
                   })
@@ -513,10 +502,8 @@ module.exports = {
                       console.log("Error in finding quotations");
                       res.send(200,"No quotation found");
                   }else{
-                      var response = _.map(quotations,function (data) {
-                          return data.model
-                      });
-                      res.send(200,response);
+
+                      res.send(200,quotations);
                   }
 
               })
@@ -530,10 +517,8 @@ module.exports = {
                           console.log("Error in finding quotations");
                           res.send(200,"No quotation found");
                       }else{
-                          var response = _.map(quotations,function (data) {
-                              return data.model
-                          });
-                          res.send(200,response);
+
+                          res.send(200,quotations);
                       }
 
                   })
@@ -543,10 +528,8 @@ module.exports = {
                           console.log("Error in finding quotations");
                           res.send(200,"No quotation found");
                       }else{
-                          var response = _.map(quotations,function (data) {
-                              return data.model
-                          });
-                          res.send(200,response);
+
+                          res.send(200,quotations);
                       }
 
                   })
@@ -558,10 +541,8 @@ module.exports = {
                       console.log("Error in finding quotations");
                       res.send(200,"No quotation found");
                   }else{
-                      var response = _.map(quotations,function (data) {
-                          return data.model
-                      });
-                      res.send(200,response);
+
+                      res.send(200,quotations);
                   }
 
               })
@@ -574,10 +555,8 @@ module.exports = {
                       console.log("Error in finding quotations");
                       res.send(200,"No quotation found");
                   }else{
-                      var response = _.map(quotations,function (data) {
-                          return data.model
-                      });
-                      res.send(200,response);
+
+                      res.send(200,quotations);
                   }
 
               })
@@ -587,10 +566,8 @@ module.exports = {
                       console.log("Error in finding quotations");
                       res.send(200,"No quotation found");
                   }else{
-                      var response = _.map(quotations,function (data) {
-                          return data.model
-                      });
-                      res.send(200,response);
+
+                      res.send(200,quotations);
                   }
 
               })
@@ -602,10 +579,8 @@ module.exports = {
                   console.log("Error in finding quotations");
                   res.send(200,"No quotation found");
               }else{
-                  var response = _.map(quotations,function (data) {
-                      return data.model
-                  });
-                  res.send(200,response);
+
+                  res.send(200,quotations);
               }
 
           })
