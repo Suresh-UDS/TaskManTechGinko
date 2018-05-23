@@ -436,6 +436,7 @@ module.exports = {
                           console.log("Error in finding quotations");
                           res.send(200,"No quotation found");
                       }else{
+                          console.log(quotations)
                           res.send(200,quotations);
                       }
 
@@ -580,6 +581,17 @@ module.exports = {
                   res.send(200,"No quotation found");
               }else{
 
+                  res.send(200,quotations);
+              }
+
+          })
+      }else if(req.body.siteIds) {
+          Quotation.find({siteId:{$in:req.body.siteIds}},function(err,quotations){
+
+              if(err){
+                  console.log("Error in finding quotations");
+                  res.send(200,"No quotation found");
+              }else{
                   res.send(200,quotations);
               }
 
