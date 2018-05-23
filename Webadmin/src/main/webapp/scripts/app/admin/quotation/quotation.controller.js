@@ -6,7 +6,7 @@ angular
 				'QuotationController',
 				function($scope, $rootScope, $state, $timeout, $http, $document, $window,
 						$stateParams, $location, RateCardComponent,TicketComponent, JobComponent,
-						 ProjectComponent, SiteComponent,PaginationComponent) {
+						 ProjectComponent, SiteComponent,PaginationComponent,$filter) {
                     
                     $rootScope.loadingStop();
 
