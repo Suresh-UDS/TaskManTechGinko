@@ -937,9 +937,208 @@
                                                             </div>
                                                         </div>
                                                         <div class="tab-pane fade documents" id="documents">
-                                                            <div class="row">
-                                                                <div class="col-sm-12">
-                                                                    <h4 class="info-text"> Documents Upload section </h4>
+                                                            <div class="panel panel-default" style="min-height: 200px;">
+
+                                                                <div class="panel-heading">
+                                                                    Upload Documents
+                                                                </div>
+                                                                <div class="panel-body">
+
+                                                                    <form name="importClientForm"  class="ng-pristine ng-valid">
+
+                                                                        <div class="row">
+
+                                                                            <div class="col-md-6">
+
+                                                                                <div class="row">
+
+                                                                                    <div class="col-md-11">
+                                                                                        <div class="form-group">
+                                                                                            <label class="control-label">File Title</label>
+                                                                                            <input id='fileTitle'
+                                                                                                   ng-model="file.title"
+                                                                                                   class='form-control'
+                                                                                                   name='fileTitle'
+                                                                                                   type='text' value=""
+                                                                                                   ng-minlength='5'
+                                                                                                   ng-maxlength='250'
+                                                                                                   ng-pattern="/^[A-Za-z0-9\s]*$/" autofocus
+                                                                                            />
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    <div class="col-md-12">
+                                                                                        <div class="form-group label-floating is-empty is-fileinput row">
+                                                                                            <div class="col-md-6 pdng-top13">
+                                                                                                <input type="file" class="form-control ng-pristine ng-valid ng-touched" style="opacity:100;position:relative" file-model="" ng-model="selectedClientFile" name="clientFile" tabindex="0" aria-invalid="false">
+                                                                                            </div>
+                                                                                            <div class="col-md-6">
+                                                                                                <button class="btn btn-success" tabindex="0">
+                                                                                <span class="btn-label">
+                                                                                    <i class="material-icons">file_upload</i>
+                                                                                </span>Upload Docs
+                                                                                                </button>
+
+                                                                                            </div>
+                                                                                            <!--  <div class="col-md-12" ng-hide="!clientImportMsg()">
+                                                                                                 <span class="card-title">Status - {{clientImportMsg()}}</span>
+                                                                                             </div> -->
+                                                                                            <span class="material-input"></span></div>
+                                                                                    </div>
+
+                                                                                </div>
+
+                                                                            </div>
+                                                                            <div class="col-md-6">
+
+                                                                                <div class="row">
+
+                                                                                    <div class="col-md-11">
+                                                                                        <div class="form-group">
+                                                                                            <label class="control-label">Photo Title</label>
+                                                                                            <input id='fileTitle'
+                                                                                                   ng-model="file.title"
+                                                                                                   class='form-control'
+                                                                                                   name='fileTitle'
+                                                                                                   type='text' value=""
+                                                                                                   ng-minlength='5'
+                                                                                                   ng-maxlength='250'
+                                                                                                   ng-pattern="/^[A-Za-z0-9\s]*$/" autofocus
+                                                                                            />
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    <div class="col-md-12">
+                                                                                        <div class="form-group label-floating is-empty is-fileinput row">
+                                                                                            <div class="col-md-6 pdng-top13">
+                                                                                                <input type="file" class="form-control ng-pristine ng-valid ng-touched" style="opacity:100;position:relative" file-model="" ng-model="selectedClientFile" name="clientFile" tabindex="0" aria-invalid="false">
+                                                                                            </div>
+                                                                                            <div class="col-md-6">
+                                                                                                <button class="btn btn-success" tabindex="0">
+                                                                                <span class="btn-label">
+                                                                                    <i class="material-icons">file_upload</i>
+                                                                                </span>Upload Docs
+                                                                                                </button>
+
+                                                                                            </div>
+                                                                                            <!--  <div class="col-md-12" ng-hide="!clientImportMsg()">
+                                                                                                 <span class="card-title">Status - {{clientImportMsg()}}</span>
+                                                                                             </div> -->
+                                                                                            <span class="material-input"></span></div>
+                                                                                    </div>
+
+                                                                                </div>
+
+
+                                                                            </div>
+
+                                                                        </div>
+
+                                                                    </form>
+
+
+                                                                </div>
+
+                                                            </div>
+
+                                                            <div class="panel panel-default" style="min-height: 200px;">
+
+                                                                <div class="panel-heading">
+                                                                    Documents
+                                                                </div>
+                                                                <div class="panel-body">
+
+                                                                    <div class="row">
+
+                                                                        <div class="col-md-2 txt-align-center">
+                                                                            <a href="#">
+                                                                                <img src="assets/img/Docs-icon.png" alt="docs" />
+                                                                            </a>
+                                                                            <p>File Name</p>
+                                                                        </div>
+                                                                        <div class="col-md-2 txt-align-center">
+                                                                            <a href="#">
+                                                                                <img src="assets/img/Docs-icon.png" alt="docs" />
+                                                                            </a>
+                                                                            <p>File Name</p>
+                                                                        </div>
+                                                                        <div class="col-md-2 txt-align-center">
+                                                                            <a href="#">
+                                                                                <img src="assets/img/Docs-icon.png" alt="docs" />
+                                                                            </a>
+                                                                            <p>File Name</p>
+                                                                        </div>
+                                                                        <div class="col-md-2 txt-align-center">
+                                                                            <a href="#">
+                                                                                <img src="assets/img/Docs-icon.png" alt="docs" />
+                                                                            </a>
+                                                                            <p>File Name</p>
+                                                                        </div>
+                                                                        <div class="col-md-2 txt-align-center">
+                                                                            <a href="#">
+                                                                                <img src="assets/img/Docs-icon.png" alt="docs" />
+                                                                            </a>
+                                                                            <p>File Name</p>
+                                                                        </div>
+                                                                        <div class="col-md-2 txt-align-center">
+                                                                            <a href="#">
+                                                                                <img src="assets/img/Docs-icon.png" alt="docs" />
+                                                                            </a>
+                                                                            <p>File Name</p>
+                                                                        </div>
+
+                                                                    </div>
+
+                                                                </div>
+
+                                                            </div>
+
+                                                            <div class="panel panel-default" style="min-height: 200px;">
+
+                                                                <div class="panel-heading">
+                                                                    Photos
+                                                                </div>
+                                                                <div class="panel-body">
+
+                                                                    <div class="row">
+
+                                                                        <div class="col-md-2 txt-align-center">
+                                                                            <a href="#">
+                                                                                <img src="assets/img/img.png" alt="docs" />
+                                                                            </a>
+                                                                            <p>Photo Name</p>
+                                                                        </div>
+                                                                        <div class="col-md-2 txt-align-center">
+                                                                            <a href="#">
+                                                                                <img src="assets/img/img.png" alt="docs" />
+                                                                            </a>
+                                                                            <p>Photo Name</p>
+                                                                        </div>
+                                                                        <div class="col-md-2 txt-align-center">
+                                                                            <a href="#">
+                                                                                <img src="assets/img/img.png" alt="docs" />
+                                                                            </a>
+                                                                            <p>Photo Name</p>
+                                                                        </div>
+                                                                        <div class="col-md-2 txt-align-center">
+                                                                            <a href="#">
+                                                                                <img src="assets/img/img.png" alt="docs" />
+                                                                            </a>
+                                                                            <p>Photo Name</p>
+                                                                        </div>
+                                                                        <div class="col-md-2 txt-align-center">
+                                                                            <a href="#">
+                                                                                <img src="assets/img/img.png" alt="docs" />
+                                                                            </a>
+                                                                            <p>Photo Name</p>
+                                                                        </div>
+                                                                        <div class="col-md-2 txt-align-center">
+                                                                            <a href="#">
+                                                                                <img src="assets/img/img.png" alt="docs" />
+                                                                            </a>
+                                                                            <p>Photo Name</p>
+                                                                        </div>
+
+                                                                    </div>
+
                                                                 </div>
 
                                                             </div>
