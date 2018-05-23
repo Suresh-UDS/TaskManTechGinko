@@ -1106,6 +1106,12 @@ demo = {
                         '</div>'+
                         '<div class="form-group">' +
                         '<input type "text" class="form-control" placeholder="Schedule Description" id="input-desc" >' +
+                        '</div>'+
+                        '<div class="form-group">' +
+                        '<input type "text" class="form-control" placeholder="DD/MM/YYYY" id="input-fdate" >' +
+                        '</div>'+
+                        '<div class="form-group">' +
+                        '<input type "text" class="form-control" placeholder="DD/MM/YYYY" id="input-tdate" >' +
                         '</div>',
                     showCancelButton: true,
                     confirmButtonClass: 'btn btn-success',
@@ -1199,6 +1205,19 @@ demo = {
             eventClick: function(calEvent, jsEvent, view) {
 
             //alert('Event: ' + calEvent.title);
+            if(calEvent.start !=''){
+                var d = new Date(calEvent.start);
+                var inputFdate=d.toLocaleString(); // 7/25/2016, 1:35:07 PM
+            }else{
+              var inputFdate= '';
+            }
+            if(calEvent.end !=null){
+               var d = new Date(calEvent.end);
+                var inputTdate=d.toLocaleString(); // 7/25/2016, 1:35:07 PM
+            }else{
+              var d = new Date(calEvent.start);
+              var inputTdate=d.toLocaleString(); // 7/25/2016, 1:35:07 PM
+            }
 
             swal({
                     title: 'View schedule',
@@ -1207,6 +1226,12 @@ demo = {
                         '</div>'+
                         '<div class="form-group">' +
                         '<input type "text" class="form-control" placeholder="Schedule Description" id="input-desc" >' +
+                        '</div>'+
+                        '<div class="form-group">' +
+                        '<input type "text" class="form-control" placeholder="DD/MM/YYYY" id="input-fdate" value="'+inputFdate+'" >' +
+                        '</div>'+
+                        '<div class="form-group">' +
+                        '<input type "text" class="form-control" placeholder="DD/MM/YYYY" id="input-tdate" value="'+inputTdate+'">' +
                         '</div>',
                     showCancelButton: true,
                     confirmButtonClass: 'btn btn-success',
