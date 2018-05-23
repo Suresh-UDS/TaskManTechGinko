@@ -43,7 +43,7 @@ module.exports = {
 
 	},
 	url : {
-		quotation_view: http://localhost:8088/#/view-quotation
+		quotation_view: 'http://localhost:8088/#/view-quotation'
 	}
 
 };

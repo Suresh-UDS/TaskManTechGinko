@@ -35,7 +35,7 @@ module.exports = {
 
     	},
 		url : {
-			quotation_view: https://taskmanadmin.uds.in/#/view-quotation
+			quotation_view: 'https://taskmanadmin.uds.in/#/view-quotation'
 		}
 
 };
