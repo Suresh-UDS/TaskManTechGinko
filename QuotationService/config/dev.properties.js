@@ -43,7 +43,7 @@ module.exports = {
 
 	},
 	url : {
-		quotation_view: 'http://localhost:8088/#/view-quotation'
+		quotation_view: 'http://ec2-54-169-225-123.ap-southeast-1.compute.amazonaws.com:8088/#/view-quotation'
 	}
 
 };
