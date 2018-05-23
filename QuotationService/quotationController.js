@@ -9,6 +9,7 @@ var PDFDocument = require('pdfkit');
 var htmlToPdf = require('html-to-pdf');
 
 var fs = require('fs');
+var _ = require('underscore');
 
 
     function populateQuotation(req, quotation) {
