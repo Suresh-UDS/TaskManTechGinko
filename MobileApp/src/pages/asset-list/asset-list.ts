@@ -4,6 +4,7 @@ import {ModalController} from "ionic-angular";
 import {AssetFilter} from "./asset-filter";
 import {QRScanner, QRScannerStatus} from "@ionic-native/qr-scanner";
 import {AssetView} from "../asset-view/asset-view";
+import {ScanQR} from "./scanQR";
 
 /**
  * Generated class for the AssetList page.
@@ -45,7 +46,65 @@ export class AssetList {
               serviceProvider:'cloud tail India',
               warrantyType:'product warranty',
               warrantyEndDate:new Date(),
-              img:'assets/imgs/vaccum-cleaner.jpg'
+              img:'assets/imgs/vaccum-cleaner.jpg',
+              ppms:[{
+                  title:'Vacuum-cleaner Annual',
+                  frequency:'Every 12 Months',
+                  status:'InProgress',
+                  scheduledDate: new Date()
+              },{
+                  title:'Vacuum-cleaner Weekly',
+                  frequency:'Every Week',
+                  status:'Completed',
+                  scheduledDate:new Date()
+              },{
+                  title:'Vacuum-cleaner Monthly',
+                  frequency:'Every Month',
+                  status:'Completed',
+                  scheduledDate:new Date()
+              }],
+              amcs:[{
+                  title:'Vacuum-cleaner Annual',
+                  frequency:'Every 12 Months',
+                  status:'InProgress',
+                  scheduledDate: new Date()
+              },{
+                  title:'Vacuum-cleaner Weekly',
+                  frequency:'Every Week',
+                  status:'Completed',
+                  scheduledDate:new Date()
+              },{
+                  title:'Vacuum-cleaner Monthly',
+                  frequency:'Every Month',
+                  status:'Completed',
+                  scheduledDate:new Date()
+              }],
+              tickets:[{
+                  assignedOn:"2018-05-22",
+                  assignedToName:"MADHURI R",
+                  comments:"CLOSE ASAP",
+                  createdBy:"388038",
+                  createdDate:"2018-05-22",
+                  description:"Issue with the Vaccum cup",
+                  employeeEmpId:"388038",
+                  employeeId:1715,
+                  employeeName:"MAKVANA DISHA",
+                  status:"Open",
+                  title:"Cleaner Issue",
+              },{
+                  assignedOn:"2018-05-21",
+                  assignedToName:"MADHURI R",
+                  comments:"CLOSE ASAP",
+                  createdBy:"388038",
+                  createdDate:"2018-05-22",
+                  description:"No Power supply",
+                  employeeEmpId:"388038",
+                  employeeId:1715,
+                  employeeName:"MAKVANA DISHA",
+                  status:"Open",
+                  title:"Electrical ",
+              }
+              ]
           },
           {
               name:'KOEL Diesel Genset',
@@ -66,7 +125,65 @@ export class AssetList {
               serviceProvider:'KJ Enterprises',
               warrantyType:'Manufacturer',
               warrantyEndDate:new Date(),
-              img:'assets/imgs/dg.jpg'
+              img:'assets/imgs/dg.jpg',
+              ppms:[{
+                  title:'KOEL Diesel Genset Annual',
+                  frequency:'Every 12 Months',
+                  status:'InProgress',
+                  scheduledDate: new Date()
+              },{
+                  title:'KOEL Diesel Genset Weekly',
+                  frequency:'Every Week',
+                  status:'Completed',
+                  scheduledDate:new Date()
+              },{
+                  title:'KOEL Diesel Genset Monthly',
+                  frequency:'Every Month',
+                  status:'Completed',
+                  scheduledDate:new Date()
+              }],
+              amcs:[{
+                  title:'KOEL Diesel Genset Annual',
+                  frequency:'Every 12 Months',
+                  status:'InProgress',
+                  scheduledDate: new Date()
+              },{
+                  title:'KOEL Diesel Genset Weekly',
+                  frequency:'Every Week',
+                  status:'Completed',
+                  scheduledDate:new Date()
+              },{
+                  title:'KOEL Diesel Genset Monthly',
+                  frequency:'Every Month',
+                  status:'Completed',
+                  scheduledDate:new Date()
+              }],
+              tickets:[{
+                  assignedOn:"2018-05-22",
+                  assignedToName:"MADHURI R",
+                  comments:"CLOSE ASAP",
+                  createdBy:"388038",
+                  createdDate:"2018-05-22",
+                  description:"Issue diesel level not upto mark",
+                  employeeEmpId:"388038",
+                  employeeId:1715,
+                  employeeName:"MAKVANA DISHA",
+                  status:"Open",
+                  title:"Diesel Level",
+              },{
+                  assignedOn:"2018-05-21",
+                  assignedToName:"MADHURI R",
+                  comments:"CLOSE ASAP",
+                  createdBy:"388038",
+                  createdDate:"2018-05-22",
+                  description:"Oil leakage",
+                  employeeEmpId:"388038",
+                  employeeId:1715,
+                  employeeName:"MAKVANA DISHA",
+                  status:"Open",
+                  title:"Oil Leakage ",
+              }
+              ]
           }
       ]
   }
@@ -83,14 +200,17 @@ export class AssetList {
   }
 
   scanQRCode(){
+      window.document.querySelector('ion-app').classList.add('transparentBody')
       this.qrScanner.prepare().then((status:QRScannerStatus)=>{
           console.log("Opening Scanner");
+          this.qrScanner.show();
           let scanSub = this.qrScanner.scan().subscribe((text:String)=>{
               console.log('Scanned Something',text);
               this.qrScanner.hide();
               scanSub.unsubscribe();
+              window.document.querySelector('ion-app').classList.add('transparentBody')
               this.navCtrl.push(AssetView);
-          })
+          });
           if(status.authorized){
               console.log("Permission Authorized");
 
@@ -104,9 +224,15 @@ export class AssetList {
           .catch((e:any)=>console.log("error is",e));
   }
 
+  scanQR(){
+      this.navCtrl.push(ScanQR)
+  }
+
     viewAsset(asset){
       this.navCtrl.push(AssetView,{assetDetails:asset});
     }
+
+
 
 
 

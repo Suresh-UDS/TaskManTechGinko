@@ -552,7 +552,7 @@
                                            <div class="row">
                                                <div class="col-md-12 text-right">
                                                    <a  class="btn btn-simple btn-warning cal-btn" data-toggle="modal" data-target="#RightModal-View" title="Calender" ><i class="material-icons">date_range</i>
-                                                  
+
                                                    </a>
                                                </div>
                                            </div>
@@ -565,10 +565,16 @@
 
                                                        <div class="col-md-4">
                                                            <div class="form-group">
-                                                               <label class="control-label">Schedule</label>
-                                                               <select class="form-control" ng-model="" ng-options="">
-                                                                   <option value="">Select Schedule ..</option>
-                                                               </select>
+                                                               <label class="control-label">Title</label>
+                                                               <input id='ppmTitle'
+                                                                      ng-model="asset.title"
+                                                                      class='form-control'
+                                                                      name='ppmTitle'
+                                                                      type='text' value=""
+                                                                      ng-minlength='5'
+                                                                      ng-maxlength='250'
+                                                                      ng-pattern="/^[A-Za-z0-9\s]*$/" autofocus
+                                                               />
                                                            </div>
                                                        </div>
                                                        <div class="col-md-4">
@@ -602,8 +608,10 @@
                                                    <tr>
                                                        <th>Schedule Title</th>
                                                        <th>Schedule Type</th>
+                                                       <th>Checklist</th>
                                                        <th>From Date</th>
                                                        <th>To Date</th>
+                                                       <th>Frequency</th>
 
                                                    </tr>
 
@@ -614,39 +622,73 @@
                                                       <tr>
                                                        <td>Title</td>
                                                        <td>Weekly</td>
+                                                       <td>
+                                                           <div class="bootstrap-tagsinput"><span class="tag label label-info">Item 1<span data-role="remove"></span></span>
+                                                               <span class="tag label label-info">Item 2<span data-role="remove"></span></span>
+                                                               <span class="tag label label-info">Item 3<span data-role="remove"></span></span>
+                                                               <span class="tag label label-info">Item 4<span data-role="remove"></span></span> <input type="text" placeholder=""></div>
+                                                       </td>
                                                        <td>03/03/2018</td>
                                                        <td>03/03/2018</td>
+                                                       <td>Every 2 Hour</td>
 
                                                    </tr>
                                                       <tr>
                                                           <td>Title</td>
                                                           <td>Weekly</td>
+                                                          <td>
+                                                              <div class="bootstrap-tagsinput"><span class="tag label label-info">Item 1<span data-role="remove"></span></span>
+                                                                  <span class="tag label label-info">Item 2<span data-role="remove"></span></span>
+                                                                  <span class="tag label label-info">Item 3<span data-role="remove"></span></span>
+                                                                  <span class="tag label label-info">Item 4<span data-role="remove"></span></span> <input type="text" placeholder=""></div>
+                                                          </td>
                                                           <td>03/03/2018</td>
                                                           <td>03/03/2018</td>
+                                                          <td>Every 2 Hour</td>
 
                                                       </tr>
                                                       <tr>
                                                           <td>Title</td>
                                                           <td>Weekly</td>
+                                                          <td>
+                                                              <div class="bootstrap-tagsinput"><span class="tag label label-info">Item 1<span data-role="remove"></span></span>
+                                                                  <span class="tag label label-info">Item 2<span data-role="remove"></span></span>
+                                                                  <span class="tag label label-info">Item 3<span data-role="remove"></span></span>
+                                                                  <span class="tag label label-info">Item 4<span data-role="remove"></span></span> <input type="text" placeholder=""></div>
+                                                          </td>
                                                           <td>03/03/2018</td>
                                                           <td>03/03/2018</td>
+                                                          <td>Every 2 Hour</td>
 
                                                       </tr>
                                                       <tr>
                                                           <td>Title</td>
                                                           <td>Weekly</td>
+                                                          <td>
+                                                              <div class="bootstrap-tagsinput"><span class="tag label label-info">Item 1<span data-role="remove"></span></span>
+                                                                  <span class="tag label label-info">Item 2<span data-role="remove"></span></span>
+                                                                  <span class="tag label label-info">Item 3<span data-role="remove"></span></span>
+                                                                  <span class="tag label label-info">Item 4<span data-role="remove"></span></span> <input type="text" placeholder=""></div>
+                                                          </td>
                                                           <td>03/03/2018</td>
                                                           <td>03/03/2018</td>
+                                                          <td>Every 2 Hour</td>
 
                                                       </tr>
                                                       <tr>
                                                           <td>Title</td>
                                                           <td>Weekly</td>
+                                                          <td>
+                                                              <div class="bootstrap-tagsinput"><span class="tag label label-info">Item 1<span data-role="remove"></span></span>
+                                                                  <span class="tag label label-info">Item 2<span data-role="remove"></span></span>
+                                                                  <span class="tag label label-info">Item 3<span data-role="remove"></span></span>
+                                                                  <span class="tag label label-info">Item 4<span data-role="remove"></span></span> <input type="text" placeholder=""></div>
+                                                          </td>
                                                           <td>03/03/2018</td>
                                                           <td>03/03/2018</td>
+                                                          <td>Every 2 Hour</td>
 
                                                       </tr>
-
 
                                                    </tbody>
                                                </table>
@@ -664,10 +706,16 @@
 
                                                        <div class="col-md-4">
                                                            <div class="form-group">
-                                                               <label class="control-label">Schedule</label>
-                                                               <select class="form-control" ng-model="" ng-options="">
-                                                                   <option value="">Select Schedule ..</option>
-                                                               </select>
+                                                               <label class="control-label">Title</label>
+                                                               <input id='ppmTitle'
+                                                                      ng-model="asset.title"
+                                                                      class='form-control'
+                                                                      name='ppmTitle'
+                                                                      type='text' value=""
+                                                                      ng-minlength='5'
+                                                                      ng-maxlength='250'
+                                                                      ng-pattern="/^[A-Za-z0-9\s]*$/" autofocus
+                                                               />
                                                            </div>
                                                        </div>
                                                        <div class="col-md-4">
@@ -701,8 +749,10 @@
                                                    <tr>
                                                        <th>Schedule Title</th>
                                                        <th>Schedule Type</th>
+                                                       <th>Checklist</th>
                                                        <th>From Date</th>
                                                        <th>To Date</th>
+                                                       <th>Frequency</th>
 
                                                    </tr>
 
@@ -713,39 +763,73 @@
                                                    <tr>
                                                        <td>Title</td>
                                                        <td>Weekly</td>
+                                                       <td>
+                                                           <div class="bootstrap-tagsinput"><span class="tag label label-info">Item 1<span data-role="remove"></span></span>
+                                                               <span class="tag label label-info">Item 2<span data-role="remove"></span></span>
+                                                               <span class="tag label label-info">Item 3<span data-role="remove"></span></span>
+                                                               <span class="tag label label-info">Item 4<span data-role="remove"></span></span> <input type="text" placeholder=""></div>
+                                                       </td>
                                                        <td>03/03/2018</td>
                                                        <td>03/03/2018</td>
+                                                       <td>Every 2 Hour</td>
 
                                                    </tr>
                                                    <tr>
                                                        <td>Title</td>
                                                        <td>Weekly</td>
+                                                       <td>
+                                                           <div class="bootstrap-tagsinput"><span class="tag label label-info">Item 1<span data-role="remove"></span></span>
+                                                               <span class="tag label label-info">Item 2<span data-role="remove"></span></span>
+                                                               <span class="tag label label-info">Item 3<span data-role="remove"></span></span>
+                                                               <span class="tag label label-info">Item 4<span data-role="remove"></span></span> <input type="text" placeholder=""></div>
+                                                       </td>
                                                        <td>03/03/2018</td>
                                                        <td>03/03/2018</td>
+                                                       <td>Every 2 Hour</td>
 
                                                    </tr>
                                                    <tr>
                                                        <td>Title</td>
                                                        <td>Weekly</td>
+                                                       <td>
+                                                           <div class="bootstrap-tagsinput"><span class="tag label label-info">Item 1<span data-role="remove"></span></span>
+                                                               <span class="tag label label-info">Item 2<span data-role="remove"></span></span>
+                                                               <span class="tag label label-info">Item 3<span data-role="remove"></span></span>
+                                                               <span class="tag label label-info">Item 4<span data-role="remove"></span></span> <input type="text" placeholder=""></div>
+                                                       </td>
                                                        <td>03/03/2018</td>
                                                        <td>03/03/2018</td>
+                                                       <td>Every 2 Hour</td>
 
                                                    </tr>
                                                    <tr>
                                                        <td>Title</td>
                                                        <td>Weekly</td>
+                                                       <td>
+                                                           <div class="bootstrap-tagsinput"><span class="tag label label-info">Item 1<span data-role="remove"></span></span>
+                                                               <span class="tag label label-info">Item 2<span data-role="remove"></span></span>
+                                                               <span class="tag label label-info">Item 3<span data-role="remove"></span></span>
+                                                               <span class="tag label label-info">Item 4<span data-role="remove"></span></span> <input type="text" placeholder=""></div>
+                                                       </td>
                                                        <td>03/03/2018</td>
                                                        <td>03/03/2018</td>
+                                                       <td>Every 2 Hour</td>
 
                                                    </tr>
                                                    <tr>
                                                        <td>Title</td>
                                                        <td>Weekly</td>
+                                                       <td>
+                                                           <div class="bootstrap-tagsinput"><span class="tag label label-info">Item 1<span data-role="remove"></span></span>
+                                                               <span class="tag label label-info">Item 2<span data-role="remove"></span></span>
+                                                               <span class="tag label label-info">Item 3<span data-role="remove"></span></span>
+                                                               <span class="tag label label-info">Item 4<span data-role="remove"></span></span> <input type="text" placeholder=""></div>
+                                                       </td>
                                                        <td>03/03/2018</td>
                                                        <td>03/03/2018</td>
+                                                       <td>Every 2 Hour</td>
 
                                                    </tr>
-
 
                                                    </tbody>
                                                </table>
@@ -755,62 +839,110 @@
                                        </div>
                                        <div class="tab-pane fade Documents" id="Documents">
 
-                                             <div class="panel panel-default" style="min-height: 200px;">
-
-                                                 <div class="panel-heading">
-                                                        Upload Documents
-                                                 </div>
-                                                 <div class="panel-body">
-
-                                                     <div class="row">
-
-                                                         <div class="col-md-8 col-md-offset-2">
-
-                                                             <form name="importClientForm"  class="ng-pristine ng-valid">
-                                                                 <div class="row">
-
-                                                                     <div class="form-group label-floating is-empty is-fileinput">
-                                                                         <div class="col-md-6 pdng-top13">
-                                                                             <input type="file" class="form-control ng-pristine ng-valid ng-touched" style="opacity:100;position:relative" file-model="" ng-model="selectedClientFile" name="clientFile" tabindex="0" aria-invalid="false">
-                                                                         </div>
-                                                                         <div class="col-md-6">
-                                                                             <button class="btn btn-success" tabindex="0">
-                                                                                <span class="btn-label">
-                                                                                    <i class="material-icons">file_upload</i>
-                                                                                </span>Upload Docs
-                                                                             </button>
-
-                                                                         </div>
-                                                                         <!--  <div class="col-md-12" ng-hide="!clientImportMsg()">
-                                                                              <span class="card-title">Status - {{clientImportMsg()}}</span>
-                                                                          </div> -->
-                                                                         <span class="material-input"></span></div>
-                                                                 </div>
-                                                             </form>
-
-                                                         </div>
-
-                                                     </div>
-
-
-
-
-                                                 </div>
-
-                                             </div>
-
-                                             <div class="panel panel-default" style="min-height: 200px;">
+                                           <div class="panel panel-default" style="min-height: 200px;">
 
                                                <div class="panel-heading">
                                                    Documents
                                                </div>
                                                <div class="panel-body">
 
+                                                   <div class="row">
 
+                                                       <div class="col-md-2 txt-align-center">
+                                                           <a href="#">
+                                                               <img src="assets/img/Docs-icon.png" alt="docs" />
+                                                           </a>
+                                                           <p>File Name</p>
+                                                       </div>
+                                                       <div class="col-md-2 txt-align-center">
+                                                           <a href="#">
+                                                               <img src="assets/img/Docs-icon.png" alt="docs" />
+                                                           </a>
+                                                           <p>File Name</p>
+                                                       </div>
+                                                       <div class="col-md-2 txt-align-center">
+                                                           <a href="#">
+                                                               <img src="assets/img/Docs-icon.png" alt="docs" />
+                                                           </a>
+                                                           <p>File Name</p>
+                                                       </div>
+                                                       <div class="col-md-2 txt-align-center">
+                                                           <a href="#">
+                                                               <img src="assets/img/Docs-icon.png" alt="docs" />
+                                                           </a>
+                                                           <p>File Name</p>
+                                                       </div>
+                                                       <div class="col-md-2 txt-align-center">
+                                                           <a href="#">
+                                                               <img src="assets/img/Docs-icon.png" alt="docs" />
+                                                           </a>
+                                                           <p>File Name</p>
+                                                       </div>
+                                                       <div class="col-md-2 txt-align-center">
+                                                           <a href="#">
+                                                               <img src="assets/img/Docs-icon.png" alt="docs" />
+                                                           </a>
+                                                           <p>File Name</p>
+                                                       </div>
+
+                                                   </div>
 
                                                </div>
 
                                            </div>
+
+                                           <div class="panel panel-default" style="min-height: 200px;">
+
+                                               <div class="panel-heading">
+                                                   Photos
+                                               </div>
+                                               <div class="panel-body">
+
+                                                   <div class="row">
+
+                                                       <div class="col-md-2 txt-align-center">
+                                                           <a href="#">
+                                                               <img src="assets/img/img.png" alt="docs" />
+                                                           </a>
+                                                           <p>Photo Name</p>
+                                                       </div>
+                                                       <div class="col-md-2 txt-align-center">
+                                                           <a href="#">
+                                                               <img src="assets/img/img.png" alt="docs" />
+                                                           </a>
+                                                           <p>Photo Name</p>
+                                                       </div>
+                                                       <div class="col-md-2 txt-align-center">
+                                                           <a href="#">
+                                                               <img src="assets/img/img.png" alt="docs" />
+                                                           </a>
+                                                           <p>Photo Name</p>
+                                                       </div>
+                                                       <div class="col-md-2 txt-align-center">
+                                                           <a href="#">
+                                                               <img src="assets/img/img.png" alt="docs" />
+                                                           </a>
+                                                           <p>Photo Name</p>
+                                                       </div>
+                                                       <div class="col-md-2 txt-align-center">
+                                                           <a href="#">
+                                                               <img src="assets/img/img.png" alt="docs" />
+                                                           </a>
+                                                           <p>Photo Name</p>
+                                                       </div>
+                                                       <div class="col-md-2 txt-align-center">
+                                                           <a href="#">
+                                                               <img src="assets/img/img.png" alt="docs" />
+                                                           </a>
+                                                           <p>Photo Name</p>
+                                                       </div>
+
+                                                   </div>
+
+                                               </div>
+
+                                           </div>
+
 
                                        </div>
                                        <div class="tab-pane fade Config" id="Config">

@@ -89,6 +89,12 @@ import {ViewTicket} from "../pages/ticket/view-ticket";
 import {FeedbackGridPage} from "../pages/feedback/feedback-grid";
 import {AppVersion} from "@ionic-native/app-version";
 import {HasPermission} from "../components/has-permission/has-permission";
+import {AssetList} from "../pages/asset-list/asset-list";
+import {AssetFilter} from "../pages/asset-list/asset-filter";
+import {AssetView} from "../pages/asset-view/asset-view";
+import {GetAssetReading} from "../pages/asset-view/get-asset-reading";
+import {QRScanner} from "@ionic-native/qr-scanner";
+import {ScanQR} from "../pages/asset-list/scanQR";
 
 @NgModule({
   declarations: [
@@ -147,7 +153,12 @@ import {HasPermission} from "../components/has-permission/has-permission";
       Ticket,
       CreateTicket,
       ViewTicket,
-      HasPermission
+      HasPermission,
+      AssetList,
+      AssetView,
+      AssetFilter,
+      GetAssetReading,
+      ScanQR
   ],
   imports: [
     BrowserModule,
@@ -217,7 +228,11 @@ import {HasPermission} from "../components/has-permission/has-permission";
       WizardFeedbackEntry,
       Ticket,
       CreateTicket,
-      ViewTicket
+      ViewTicket,
+      AssetView,
+      AssetList,
+      AssetFilter,
+      GetAssetReading,ScanQR
   ],
   providers: [
     StatusBar,
@@ -245,6 +260,7 @@ import {HasPermission} from "../components/has-permission/has-permission";
     FileTransfer,
     File,
       AppVersion,
+      QRScanner,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
       {provide:MY_CONFIG_TOKEN, useValue: AppConfig}
   ]

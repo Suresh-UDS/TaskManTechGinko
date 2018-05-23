@@ -31,11 +31,15 @@
                                                 <div class="form-group no-padding" >
                                                     <div class="dropdown">
                                                         <div class="form-group">
-                                                            <label class="control-label">Select name</label>
-                                                            <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                                            <select class="form-control ">
-                                                                <option value="">Select name...</option>
-                                                            </select>
+                                                            <label class="control-label">Name</label>
+                                                            <input id='name'
+                                                                   class='form-control'
+                                                                   name='name'
+                                                                   type='text' value=""
+                                                                   ng-minlength='5'
+                                                                   ng-maxlength='250'
+                                                                   ng-pattern="/^[A-Za-z0-9\s]*$/" autofocus
+                                                            />
                                                         </div>
                                                     </div>
                                                 </div>
@@ -80,7 +84,7 @@
                                         </span>
                                     </span>
                                 </th>
-                                <th>Name
+                                <th width="15%">Manufacturer  Name
                                     <span class="sortingIcons">
                                         <span ng-click="columnAscOrder('name')" ng-class="isActiveAsc == 'name' ? 'active' : ''" >
                                             <i  class="fa fa-caret-up"></i>
@@ -90,7 +94,7 @@
                                         </span>
                                     </span>
                                 </th>
-                                <th width="15%">First Name
+                                <th width="15%">Person Name
 
                                     <span class="sortingIcons">
                                         <span ng-click="columnAscOrder('address')" ng-class="isActiveAsc == 'address' ? 'active' : ''" >
@@ -101,16 +105,7 @@
                                         </span>
                                     </span>
                                 </th>
-                                <th width="15%">Last Name
-                                    <span class="sortingIcons">
-                                        <span ng-click="columnAscOrder('contactFirstName')" ng-class="isActiveAsc == 'contactFirstName' ? 'active' : ''">
-                                            <i  class="fa fa-caret-up"></i>
-                                        </span>
-                                         <span ng-click="columnDescOrder('contactFirstName')" ng-class="isActiveDesc == 'contactFirstName' ? 'active' : ''">
-                                            <i  class="fa fa-caret-down"></i>
-                                        </span>
-                                    </span>
-                                </th>
+
                                 <th width="">Phone
                                     <span class="sortingIcons">
                                         <span ng-click="columnAscOrder('phone')" ng-class="isActiveAsc == 'phone' ? 'active' : ''">
@@ -131,7 +126,6 @@
                                     <td> diesel generator </td>
                                     <td>Mahindra</td>
                                     <td>Praveen</td>
-                                    <td>Sekar</td>
                                     <td>8608463226</td>
                                     <td class="text-right">
                                         <a data-toggle="modal"  data-target="#RightModal-View"  has-permission="" ui-sref=""  class="btn btn-simple btn-info"><i class="material-icons">visibility</i></a>
@@ -143,7 +137,6 @@
                                     <td> diesel generator </td>
                                     <td>Mahindra</td>
                                     <td>Praveen</td>
-                                    <td>Sekar</td>
                                     <td>8608463226</td>
                                     <td class="text-right">
                                         <a data-toggle="modal"  data-target="#RightModal-View"  has-permission="" ui-sref=""  class="btn btn-simple btn-info"><i class="material-icons">visibility</i></a>
@@ -155,7 +148,6 @@
                                     <td> diesel generator </td>
                                     <td>Mahindra</td>
                                     <td>Praveen</td>
-                                    <td>Sekar</td>
                                     <td>8608463226</td>
                                     <td class="text-right">
                                         <a data-toggle="modal"  data-target="#RightModal-View"  has-permission="" ui-sref=""  class="btn btn-simple btn-info"><i class="material-icons">visibility</i></a>
@@ -167,7 +159,6 @@
                                     <td> diesel generator </td>
                                     <td>Mahindra</td>
                                     <td>Praveen</td>
-                                    <td>Sekar</td>
                                     <td>8608463226</td>
                                     <td class="text-right">
                                         <a data-toggle="modal"  data-target="#RightModal-View"  has-permission="" ui-sref=""  class="btn btn-simple btn-info"><i class="material-icons">visibility</i></a>
@@ -175,6 +166,7 @@
                                     </td>
 
                                 </tr>
+
 
 
                             </tbody>
@@ -189,25 +181,6 @@
         <!-- end col-md-12 -->
     </div>
     <!-- end row -->
-
-    <div class="card margin-TB-5 txt-align-center" ng-hide="manufacturer">
-
-        <div class="card-content">
-            <div class="" style="text-align:center;padding: 10px 0;" ng-hide="projectsLoader">
-                <div loader-css="ball-pulse"></div>
-            </div>
-
-            <h3>No data Found</h3>
-
-        </div>
-
-    </div>
-
-    <!-- Pagination directive start -->
-
-    <pagination-new></pagination-new>
-
-    <!-- Pagination directive end -->
 
 </div>
 

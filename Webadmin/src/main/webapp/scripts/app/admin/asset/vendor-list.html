@@ -7,46 +7,38 @@
             <div class="card margin-TB-5 tablecard appModuleCard">
 
                 <div class="card-content">
-                    <div class="row" ng-init="loadVendorList();">
+                    <div class="row" ng-init="loadManufacturerList();">
                         <div class="col-md-12">
                             <div class="card formcard FilterCard">
                                 <div class="card-content">
                                     <form name="searchForm"  ng-submit="searchFilter();" novalidate >
 
                                         <div class="row" >
+
                                             <div class="col-xs-12 col-md-4">
                                                 <div class="form-group no-padding" >
                                                     <div class="dropdown">
                                                         <div class="form-group">
-                                                            <label class="control-label">Select type</label>
-                                                            <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                                            <select class="form-control ">
-                                                                <option value="">Select type...</option>
-                                                            </select>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-xs-12 col-md-4">
-                                                <div class="form-group no-padding" >
-                                                    <div class="dropdown">
-                                                        <div class="form-group">
-                                                            <label class="control-label">Select name</label>
-                                                            <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                                            <select class="form-control ">
-                                                                <option value="">Select name...</option>
-                                                            </select>
+                                                            <label class="control-label">Name</label>
+                                                            <input id='name'
+                                                                   class='form-control'
+                                                                   name='name'
+                                                                   type='text' value=""
+                                                                   ng-minlength='5'
+                                                                   ng-maxlength='250'
+                                                                   ng-pattern="/^[A-Za-z0-9\s]*$/" autofocus
+                                                            />
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
 
-                                            <div class="col-xs-12 col-md-4 pad10px">
+                                            <div class="col-xs-12 col-md-8 pad10px">
                                                 <div class="floatR form-group pull-right">
                                                     <button type="submit" class="btn btn-circle blue-clr">
                                                         <i class="material-icons">search</i>
                                                     </button>
-                                                    <button ui-sref="add-project" has-permission="Client:Create"  ng-class="{active: $state.includes('admin')}"  class="btn btn-circle green-clr">
+                                                    <button data-toggle="modal" data-target="#RightModal-Add"  class="btn btn-circle green-clr">
                                                         <i class="material-icons">add</i>
                                                     </button>
                                                     <button ng-click="refreshPage()" class="btn btn-circle orange-clr">
@@ -71,7 +63,7 @@
                             <thead>
                             <tr>
 
-                                <th>Name
+                                <th width="15%">Vendor  Name
                                     <span class="sortingIcons">
                                         <span ng-click="columnAscOrder('name')" ng-class="isActiveAsc == 'name' ? 'active' : ''" >
                                             <i  class="fa fa-caret-up"></i>
@@ -81,7 +73,7 @@
                                         </span>
                                     </span>
                                 </th>
-                                <th width="25%">First Name
+                                <th width="15%">Person Name
 
                                     <span class="sortingIcons">
                                         <span ng-click="columnAscOrder('address')" ng-class="isActiveAsc == 'address' ? 'active' : ''" >
@@ -92,17 +84,8 @@
                                         </span>
                                     </span>
                                 </th>
-                                <th width="15%">Last Name
-                                    <span class="sortingIcons">
-                                        <span ng-click="columnAscOrder('contactFirstName')" ng-class="isActiveAsc == 'contactFirstName' ? 'active' : ''">
-                                            <i  class="fa fa-caret-up"></i>
-                                        </span>
-                                         <span ng-click="columnDescOrder('contactFirstName')" ng-class="isActiveDesc == 'contactFirstName' ? 'active' : ''">
-                                            <i  class="fa fa-caret-down"></i>
-                                        </span>
-                                    </span>
-                                </th>
-                                <th>Phone
+
+                                <th width="">Phone
                                     <span class="sortingIcons">
                                         <span ng-click="columnAscOrder('phone')" ng-class="isActiveAsc == 'phone' ? 'active' : ''">
                                              <i  class="fa fa-caret-up"></i>
@@ -112,18 +95,8 @@
                                          </span>
                                     </span>
                                 </th>
-                                <th>Email
-
-                                    <span class="sortingIcons">
-                                        <span ng-click="columnAscOrder('email')" ng-class="isActiveAsc == 'email' ? 'active' : ''">
-                                             <i  class="fa fa-caret-up"></i>
-                                        </span>
-                                          <span ng-click="columnDescOrder('email')" ng-class="isActiveDesc == 'email' ? 'active' : ''">
-                                              <i  class="fa fa-caret-down"></i>
-                                        </span>
-                                    </span>
-                                </th>
-                                <th class="disabled-sorting text-right">Actions</th>
+                                <th>Address</th>
+                                <th class="disabled-sorting text-right" width="10%">Actions</th>
                             </tr>
                             </thead>
 
@@ -131,65 +104,64 @@
 
                                 <tr>
 
-                                    <td>Techginko</td>
+                                    <td>Mahindra</td>
                                     <td>Praveen</td>
-                                    <td>Sekar</td>
                                     <td>8608463226</td>
-                                    <td>Praveen2491@gmail.com</td>
+                                    <td>Vadapalani, chennai</td>
                                     <td class="text-right">
-                                        <a   has-permission="" ui-sref=""  class="btn btn-simple btn-info"><i class="material-icons">edit</i></a>
+                                        <a data-toggle="modal"  data-target="#RightModal-View"  has-permission="" ui-sref=""  class="btn btn-simple btn-info"><i class="material-icons">visibility</i></a>
+                                        <a data-toggle="modal"  data-target="#RightModal-Edit"  has-permission="" ui-sref=""  class="btn btn-simple btn-info"><i class="material-icons">edit</i></a>
                                     </td>
 
                                 </tr>
                                 <tr>
 
-                                    <td>Techginko</td>
+                                    <td>Mahindra</td>
                                     <td>Praveen</td>
-                                    <td>Sekar</td>
                                     <td>8608463226</td>
-                                    <td>Praveen2491@gmail.com</td>
+                                    <td>Vadapalani, chennai</td>
                                     <td class="text-right">
-                                        <a   has-permission="" ui-sref=""  class="btn btn-simple btn-info"><i class="material-icons">edit</i></a>
+                                        <a data-toggle="modal"  data-target="#RightModal-View"  has-permission="" ui-sref=""  class="btn btn-simple btn-info"><i class="material-icons">visibility</i></a>
+                                        <a data-toggle="modal"  data-target="#RightModal-Edit"  has-permission="" ui-sref=""  class="btn btn-simple btn-info"><i class="material-icons">edit</i></a>
                                     </td>
 
                                 </tr>
                                 <tr>
 
-                                    <td>Techginko</td>
+                                    <td>Mahindra</td>
                                     <td>Praveen</td>
-                                    <td>Sekar</td>
                                     <td>8608463226</td>
-                                    <td>Praveen2491@gmail.com</td>
+                                    <td>Vadapalani, chennai</td>
                                     <td class="text-right">
-                                        <a   has-permission="" ui-sref=""  class="btn btn-simple btn-info"><i class="material-icons">edit</i></a>
+                                        <a data-toggle="modal"  data-target="#RightModal-View"  has-permission="" ui-sref=""  class="btn btn-simple btn-info"><i class="material-icons">visibility</i></a>
+                                        <a data-toggle="modal"  data-target="#RightModal-Edit"  has-permission="" ui-sref=""  class="btn btn-simple btn-info"><i class="material-icons">edit</i></a>
                                     </td>
 
                                 </tr>
                                 <tr>
 
-                                    <td>Techginko</td>
+                                    <td>Mahindra</td>
                                     <td>Praveen</td>
-                                    <td>Sekar</td>
                                     <td>8608463226</td>
-                                    <td>Praveen2491@gmail.com</td>
+                                    <td>Vadapalani, chennai</td>
                                     <td class="text-right">
-                                        <a   has-permission="" ui-sref=""  class="btn btn-simple btn-info"><i class="material-icons">edit</i></a>
+                                        <a data-toggle="modal"  data-target="#RightModal-View"  has-permission="" ui-sref=""  class="btn btn-simple btn-info"><i class="material-icons">visibility</i></a>
+                                        <a data-toggle="modal"  data-target="#RightModal-Edit"  has-permission="" ui-sref=""  class="btn btn-simple btn-info"><i class="material-icons">edit</i></a>
                                     </td>
 
                                 </tr>
                                 <tr>
 
-                                <td>Techginko</td>
-                                <td>Praveen</td>
-                                <td>Sekar</td>
-                                <td>8608463226</td>
-                                <td>Praveen2491@gmail.com</td>
-                                <td class="text-right">
-                                    <a   has-permission="" ui-sref=""  class="btn btn-simple btn-info"><i class="material-icons">edit</i></a>
-                                </td>
+                                    <td>Mahindra</td>
+                                    <td>Praveen</td>
+                                    <td>8608463226</td>
+                                    <td>Vadapalani, chennai</td>
+                                    <td class="text-right">
+                                        <a data-toggle="modal"  data-target="#RightModal-View"  has-permission="" ui-sref=""  class="btn btn-simple btn-info"><i class="material-icons">visibility</i></a>
+                                        <a data-toggle="modal"  data-target="#RightModal-Edit"  has-permission="" ui-sref=""  class="btn btn-simple btn-info"><i class="material-icons">edit</i></a>
+                                    </td>
 
-                            </tr>
-
+                                </tr>
 
                             </tbody>
                         </table>
@@ -204,23 +176,422 @@
     </div>
     <!-- end row -->
 
-    <div class="card margin-TB-5 txt-align-center" ng-hide="manufacturer">
 
-        <div class="card-content">
-            <div class="" style="text-align:center;padding: 10px 0;" ng-hide="projectsLoader">
-                <div loader-css="ball-pulse"></div>
-            </div>
-
-            <h3>No data Found</h3>
-
-        </div>
-
-    </div>
-
-    <!-- Pagination directive start -->
-
-    <pagination-new></pagination-new>
-
-    <!-- Pagination directive end -->
 
 </div>
+
+<div class="modal right fade" id="RightModal-Add" tabindex="-1" role="dialog" aria-labelledby="RightModal">
+    <div class="modal-dialogNew Modalwith600" role="document">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="">Add Vendor Details</h4>
+            </div>
+
+            <div class="modal-body">
+
+
+                <div class="row">
+                    <div class="col-md-6">
+
+                        <div class="panel panel-default">
+                            <div class="panel-heading">Vendor Details</div>
+                            <div class="panel-body">
+
+                                <div class="row">
+
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label class="control-label">Vendor Name</label>
+                                            <input id='manufacturerName' ng-model=""
+                                                   class='form-control' name='manufacturerName' type='text' value=""
+                                                   ng-minlength='2' ng-maxlength='50' ng-pattern="/^[A-Za-z0-9\s&-/]*$/" autofocus required/>
+
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label">Contact Name</label>
+                                            <input id='contactName' ng-model=""
+                                                   class='form-control' name='contactName' type='text' value=""
+                                                   ng-minlength='2' ng-maxlength='50' ng-pattern="/^[A-Za-z0-9\s&-/]*$/" autofocus required/>
+
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label class="control-label">Mobile No</label>
+                                            <input id='mobNum' ng-model=""
+                                                   class='form-control' name='mobNum' type='number' value=""
+                                                   ng-minlength='2' ng-maxlength='50' autofocus required/>
+
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label">Email</label>
+                                            <input id='email' ng-model=""
+                                                   class='form-control' name='email' type='email' value=""
+                                                   ng-minlength='2' ng-maxlength='50' autofocus required/>
+
+                                        </div>
+
+                                    </div>
+                                </div>
+
+
+                            </div>
+                        </div>
+
+
+                    </div>
+                    <div class="col-md-6">
+
+                        <div class="panel panel-default">
+                            <div class="panel-heading">Address Details</div>
+                            <div class="panel-body">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label class="control-label">Line 1</label>
+                                            <input id='line1' ng-model=""
+                                                   class='form-control' name='line1' type='text' value=""
+                                                   ng-minlength='2' ng-maxlength='50' ng-pattern="/^[A-Za-z0-9\s&-/]*$/" autofocus required/>
+
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label">Line 2</label>
+                                            <input id='line2' ng-model=""
+                                                   class='form-control' name='line2' type='text' value=""
+                                                   ng-minlength='2' ng-maxlength='50' ng-pattern="/^[A-Za-z0-9\s&-/]*$/" autofocus required/>
+
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label">City</label>
+                                            <input id='City' ng-model=""
+                                                   class='form-control' name='City' type='text' value=""
+                                                   ng-minlength='2' ng-maxlength='50' ng-pattern="/^[A-Za-z0-9\s&-/]*$/" autofocus required/>
+
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label">State</label>
+                                            <input id='state' ng-model=""
+                                                   class='form-control' name='state' type='text' value=""
+                                                   ng-minlength='2' ng-maxlength='50' ng-pattern="/^[A-Za-z0-9\s&-/]*$/" autofocus required/>
+
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label">Pin Code</label>
+                                            <input id='pinCode' ng-model=""
+                                                   class='form-control' name='pinCode' type='number' value=""
+                                                   ng-minlength='2' ng-maxlength='50' ng-pattern="/^[A-Za-z0-9\s&-/]*$/" autofocus required/>
+
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label">Country</label>
+                                            <input id='country' ng-model=""
+                                                   class='form-control' name='country' type='text' value=""
+                                                   ng-minlength='2' ng-maxlength='50' ng-pattern="/^[A-Za-z0-9\s&-/]*$/" autofocus required/>
+
+                                        </div>
+                                    </div>
+                                </div>
+
+
+
+                            </div>
+                        </div>
+
+
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-4 col-md-offset-8 txt-align-rgt">
+                        <div class="form-group">
+
+                            <button class="btn btn-success" type="submit"
+                                    id="form-button-save" ng-disabled="form.$invalid">
+                                <span class="btn-label"><i class="material-icons">check</i></span> Save
+                            </button>
+                            <button class="btn btn-danger"  data-dismiss="modal" aria-label="Close" type="button"
+                                    id="cancel-button">
+                                <i class="material-icons">close</i> Cancel
+                            </button>
+
+                        </div>
+                    </div>
+                </div>
+
+
+
+            </div>
+
+        </div><!-- modal-content -->
+    </div><!-- modal-dialog -->
+</div><!--End Add modal -->
+
+<div class="modal right fade" id="RightModal-Edit" tabindex="-1" role="dialog" aria-labelledby="RightModal">
+    <div class="modal-dialogNew" role="document">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="">Edit Vendor  Details</h4>
+            </div>
+
+            <div class="modal-body">
+
+                <div class="row">
+                    <div class="col-md-6">
+
+                        <div class="panel panel-default">
+                            <div class="panel-heading">Vendor  Details</div>
+                            <div class="panel-body">
+
+                                <div class="row">
+
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label class="control-label">Vendor  Name</label>
+                                            <input id='manufacturerName' ng-model=""
+                                                   class='form-control' name='manufacturerName' type='text' value=""
+                                                   ng-minlength='2' ng-maxlength='50' ng-pattern="/^[A-Za-z0-9\s&-/]*$/" autofocus required/>
+
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label">Contact Name</label>
+                                            <input id='contactName' ng-model=""
+                                                   class='form-control' name='contactName' type='text' value=""
+                                                   ng-minlength='2' ng-maxlength='50' ng-pattern="/^[A-Za-z0-9\s&-/]*$/" autofocus required/>
+
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label class="control-label">Mobile No</label>
+                                            <input id='mobNum' ng-model=""
+                                                   class='form-control' name='mobNum' type='number' value=""
+                                                   ng-minlength='2' ng-maxlength='50' autofocus required/>
+
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label">Email</label>
+                                            <input id='email' ng-model=""
+                                                   class='form-control' name='email' type='email' value=""
+                                                   ng-minlength='2' ng-maxlength='50' autofocus required/>
+
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                            </div>
+                        </div>
+
+
+                    </div>
+                    <div class="col-md-6">
+
+                        <div class="panel panel-default">
+                            <div class="panel-heading">Address Details</div>
+                            <div class="panel-body">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label class="control-label">Line 1</label>
+                                            <input id='line1' ng-model=""
+                                                   class='form-control' name='line1' type='text' value=""
+                                                   ng-minlength='2' ng-maxlength='50' ng-pattern="/^[A-Za-z0-9\s&-/]*$/" autofocus required/>
+
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label">Line 2</label>
+                                            <input id='line2' ng-model=""
+                                                   class='form-control' name='line2' type='text' value=""
+                                                   ng-minlength='2' ng-maxlength='50' ng-pattern="/^[A-Za-z0-9\s&-/]*$/" autofocus required/>
+
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label">City</label>
+                                            <input id='City' ng-model=""
+                                                   class='form-control' name='City' type='text' value=""
+                                                   ng-minlength='2' ng-maxlength='50' ng-pattern="/^[A-Za-z0-9\s&-/]*$/" autofocus required/>
+
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label">State</label>
+                                            <input id='state' ng-model=""
+                                                   class='form-control' name='state' type='text' value=""
+                                                   ng-minlength='2' ng-maxlength='50' ng-pattern="/^[A-Za-z0-9\s&-/]*$/" autofocus required/>
+
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label">Pin Code</label>
+                                            <input id='pinCode' ng-model=""
+                                                   class='form-control' name='pinCode' type='number' value=""
+                                                   ng-minlength='2' ng-maxlength='50' ng-pattern="/^[A-Za-z0-9\s&-/]*$/" autofocus required/>
+
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label">Country</label>
+                                            <input id='country' ng-model=""
+                                                   class='form-control' name='country' type='text' value=""
+                                                   ng-minlength='2' ng-maxlength='50' ng-pattern="/^[A-Za-z0-9\s&-/]*$/" autofocus required/>
+
+                                        </div>
+                                    </div>
+                                </div>
+
+
+
+                            </div>
+                        </div>
+
+
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-12 txt-align-rgt">
+                        <div class="form-group">
+
+                            <button class="btn btn-success" type="submit"
+                                    id="form-button-update" ng-disabled="form.$invalid">
+                                <span class="btn-label"><i class="material-icons">check</i></span> Update
+                            </button>
+                            <button class="btn btn-danger"  data-dismiss="modal" aria-label="Close" type="button"
+                                    id="cancel-button">
+                                <i class="material-icons">close</i> Close
+                            </button>
+
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+
+        </div><!-- modal-content -->
+    </div><!-- modal-dialog -->
+</div><!--End Edit modal -->
+
+<div class="modal right fade" id="RightModal-View" tabindex="-1" role="dialog" aria-labelledby="RightModal">
+    <div class="modal-dialogNew" role="document">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="">View Vendor  Details</h4>
+            </div>
+
+            <div class="modal-body">
+
+                <div class="row">
+                    <div class="col-md-6">
+
+                        <div class="panel panel-default">
+                            <div class="panel-heading">Vendor  Details</div>
+                            <div class="panel-body">
+
+
+                                <div class="table-responsive">
+                                    <table class="table">
+                                        <tbody>
+                                        <tr>
+                                            <td>Vendor  Name</td>
+                                            <td></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Contact Name</td>
+                                            <td></td>
+
+                                        </tr>
+
+                                        <tr>
+                                            <td>Mobile No</td>
+                                            <td></td>
+
+                                        </tr>
+                                        <tr>
+                                            <td>Email</td>
+                                            <td></td>
+
+                                        </tr>
+
+                                        </tbody>
+                                    </table>
+                                </div>
+
+
+
+                            </div>
+                        </div>
+
+
+                    </div>
+                    <div class="col-md-6">
+
+                        <div class="panel panel-default">
+                            <div class="panel-heading">Address Details</div>
+                            <div class="panel-body">
+
+
+                                <div class="table-responsive">
+                                    <table class="table">
+                                        <tbody>
+                                        <tr>
+                                            <td>Line 1 </td>
+                                            <td></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Line 2</td>
+                                            <td></td>
+
+                                        </tr>
+                                        <tr>
+                                            <td>City</td>
+                                            <td>
+
+                                            </td>
+
+                                        </tr>
+                                        <tr>
+
+                                            <td>State</td>
+                                            <td>
+
+                                            </td>
+
+                                        </tr>
+                                        <tr>
+
+                                            <td>Pin Code</td>
+                                            <td>
+
+                                            </td>
+
+                                        </tr>
+                                        <tr>
+
+                                            <td>Country</td>
+                                            <td>
+
+                                            </td>
+
+                                        </tr>
+
+
+
+
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                            </div>
+                        </div>
+
+
+                    </div>
+                </div>
+
+            </div>
+
+        </div><!-- modal-content -->
+    </div><!-- modal-dialog -->
+</div><!--End View modal -->
