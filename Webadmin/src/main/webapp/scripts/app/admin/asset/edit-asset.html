@@ -702,16 +702,45 @@
                                                     <div class="panel panel-default">
                                                         <div class="panel-heading">New Schedule</div>
                                                         <div class="panel-body">
-
                                                             <div class="row">
 
-                                                                <div class="col-md-2">
+                                                                <div class="col-md-4">
                                                                     <div class="form-group">
-                                                                        <label class="control-label">Schedule</label>
-                                                                        <select class="form-control" ng-model="" ng-options="">
-                                                                            <option value="">Select Schedule ..</option>
-                                                                        </select>
+                                                                        <label class="control-label">Title</label>
+                                                                        <input id='ppmTitle'
+                                                                               ng-model="asset.title"
+                                                                               class='form-control'
+                                                                               name='ppmTitle'
+                                                                               type='text' value=""
+                                                                               ng-minlength='5'
+                                                                               ng-maxlength='250'
+                                                                               ng-pattern="/^[A-Za-z0-9\s]*$/" autofocus
+                                                                        />
                                                                     </div>
+                                                                </div>
+                                                                <div class="col-md-4">
+                                                                    <div class="form-group selectcon is-empty SelectWithAddbtnCon">
+
+                                                                        <div class="" style="float:left;width:90%;">
+                                                                            <label class="control-label">Checklist</label>
+                                                                            <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
+                                                                            <select class="form-control ng-pristine ng-valid ng-touched"  tabindex="0" aria-invalid="false">
+                                                                                <option value="" class="" selected="selected">Checklist ..</option>
+                                                                            </select>
+                                                                        </div>
+                                                                        <div class="" style="float:left;width:10%;">
+                                                                            <a href="javascript:;" data-toggle="collapse" data-parent="#accordian" data-target="#addAssetGroup" class="btn btn-round btn-fab btn-fab-mini btn-simple" aria-expanded="false" aria-controls="collapseExample">
+                                                                                <i class="material-icons">add</i>
+                                                                            </a>
+                                                                        </div>
+                                                                        <div class="clear"></div>
+                                                                        <div class="collapse" id="addAssetGroup">
+                                                                            <div class="">
+                                                                                <input class="input-desc ng-pristine ng-untouched ng-valid" id="assetgroupName" ng-model="" name="assetgroupName" type="text" value="" tabindex="0" aria-invalid="false">
+                                                                                <a class="btn btn-success" ng-click="" tabindex="0">Add</a>
+                                                                            </div>
+                                                                        </div>
+                                                                        <span class="material-input"></span></div>
                                                                 </div>
                                                                 <div class="col-md-2">
                                                                     <div class="form-group">
@@ -729,34 +758,23 @@
 
                                                                     </div>
                                                                 </div>
-                                                                <div class="col-md-4">
-                                                                    <div class="form-group selectcon" style="padding-top:25px;">
 
-                                                                        <div class="" style="float:left;width:80%;">
-                                                                            <select class="form-control" ng-model="" ng-options="">
-                                                                                <option value="">Please select ..</option>
-                                                                            </select>
-                                                                        </div>
-                                                                        <div class="" style="float:left;">
-                                                                            <a href="javascript:;"  data-toggle="collapse" data-parent="#accordian" data-target="#addDesignation1" class="btn btn-round btn-fab btn-fab-mini btn-simple" aria-expanded="false" aria-controls="collapseExample">
-                                                                                <i class="material-icons">add</i>
-                                                                            </a>
-                                                                        </div>
+                                                                <!--<div class="col-md-2">-->
 
-                                                                    </div>
+                                                                <!--<div class="form-group" style="padding-top: 20px;">-->
+                                                                <!--<div class="checkbox">-->
+                                                                <!--<label>-->
+                                                                <!--<input type="checkbox" name="terms"> Active-->
+                                                                <!--</label>-->
+                                                                <!--</div>-->
+                                                                <!--</div>-->
 
-                                                                </div>
-                                                                <div class="col-md-2 txt-align-rgt">
 
-                                                                    <div class="form-group" style="padding-top: 20px;">
-                                                                        <div class="checkbox">
-                                                                            <label>
-                                                                                <input type="checkbox" name="terms"> Active
-                                                                            </label>
-                                                                        </div>
-                                                                    </div>
+                                                                <!--</div>-->
 
-                                                                </div>
+
+                                                            </div>
+                                                            <div class="row">
                                                                 <div class="col-md-5">
                                                                     <div class="collapse" id="addDesignation1">
 
@@ -767,9 +785,50 @@
                                                                         </div>
                                                                     </div>
                                                                 </div>
-
                                                             </div>
-
+                                                            <div class="row">
+                                                                <div class="col-md-2">
+                                                                    <div class="dropdown">
+                                                                        <div class="form-group">
+                                                                            <label class="control-label">Select Frequency</label>
+                                                                            <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
+                                                                            <select class="form-control ">
+                                                                                <option value="">Every</option>
+                                                                            </select>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-md-2">
+                                                                    <div class="form-group">
+                                                                        <label class="control-label">&nbsp;</label>
+                                                                        <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
+                                                                        <select class="form-control ">
+                                                                            <option value="">1</option>
+                                                                            <option value="">2</option>
+                                                                            <option value="">3</option>
+                                                                        </select>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-md-3">
+                                                                    <div class="form-group">
+                                                                        <label class="control-label">&nbsp;</label>
+                                                                        <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
+                                                                        <select class="form-control ">
+                                                                            <option value="">Hour</option>
+                                                                            <option value="">Day</option>
+                                                                            <option value="">Week</option>
+                                                                            <option value="">Fortnight</option>
+                                                                            <option value="">Month</option>
+                                                                            <option value="">Quarter</option>
+                                                                            <option value="">Half</option>
+                                                                            <option value="">Year</option>
+                                                                        </select>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-md-1" style="padding-top: 25px;">
+                                                                    <a class="btn btn-success add-btn margn-top0"  ng-click="">Add</a>
+                                                                </div>
+                                                            </div>
                                                         </div>
                                                     </div>
 
@@ -778,67 +837,93 @@
 
                                                             <thead>
                                                             <tr>
-                                                                <th>Schedule Type</th>
+                                                                <th width="15%">Title</th>
+                                                                <th width="30%">Checklist</th>
                                                                 <th>From Date</th>
                                                                 <th>To Date</th>
-                                                                <th>Active</th>
+                                                                <th>Frequency</th>
                                                                 <th align="right">Actions</th>
                                                             </tr>
 
                                                             </thead>
 
                                                             <tbody>
-                                                            <tr>
-                                                                <td>Weekly</td>
-                                                                <td>03/03/2018</td>
-                                                                <td>03/03/2018</td>
-                                                                <td>Yes</td>
-                                                                <td class="text-right">
-                                                                    <a  ng-class="{active: $state.includes('admin')}"  has-permission="" ui-sref=""  class="btn btn-simple btn-info"><i class="material-icons">edit</i></a>
 
+                                                            <tr>
+                                                                <td>Schedule Title</td>
+                                                                <td>
+                                                                    <div class="bootstrap-tagsinput"><span class="tag label label-info">Item 1<span data-role="remove"></span></span>
+                                                                        <span class="tag label label-info">Item 2<span data-role="remove"></span></span>
+                                                                        <span class="tag label label-info">Item 3<span data-role="remove"></span></span>
+                                                                        <span class="tag label label-info">Item 4<span data-role="remove"></span></span> <input type="text" placeholder=""></div>
+                                                                </td>
+                                                                <td>03/03/2018</td>
+                                                                <td>03/03/2018</td>
+                                                                <td>Every 2 Hour</td>
+                                                                <td class="text-right">
+                                                                    <a  ng-class="{active: $state.includes('admin')}"  has-permission="" ui-sref=""  class="btn btn-simple btn-danger"><i class="material-icons">delete_forever</i></a>
                                                                 </td>
                                                             </tr>
                                                             <tr>
-                                                                <td>Weekly</td>
+                                                                <td>Schedule Title</td>
+                                                                <td>
+                                                                    <div class="bootstrap-tagsinput"><span class="tag label label-info">Item 1<span data-role="remove"></span></span>
+                                                                        <span class="tag label label-info">Item 2<span data-role="remove"></span></span>
+                                                                        <span class="tag label label-info">Item 3<span data-role="remove"></span></span>
+                                                                        <span class="tag label label-info">Item 4<span data-role="remove"></span></span> <input type="text" placeholder=""></div>
+                                                                </td>
                                                                 <td>03/03/2018</td>
                                                                 <td>03/03/2018</td>
-                                                                <td>Yes</td>
+                                                                <td>Every 2 Hour</td>
                                                                 <td class="text-right">
-                                                                    <a  ng-class="{active: $state.includes('admin')}"  has-permission="" ui-sref=""  class="btn btn-simple btn-info"><i class="material-icons">edit</i></a>
-
+                                                                    <a  ng-class="{active: $state.includes('admin')}"  has-permission="" ui-sref=""  class="btn btn-simple btn-danger"><i class="material-icons">delete_forever</i></a>
                                                                 </td>
                                                             </tr>
                                                             <tr>
-                                                                <td>Weekly</td>
+                                                                <td>Schedule Title</td>
+                                                                <td>
+                                                                    <div class="bootstrap-tagsinput"><span class="tag label label-info">Item 1<span data-role="remove"></span></span>
+                                                                        <span class="tag label label-info">Item 2<span data-role="remove"></span></span>
+                                                                        <span class="tag label label-info">Item 3<span data-role="remove"></span></span>
+                                                                        <span class="tag label label-info">Item 4<span data-role="remove"></span></span> <input type="text" placeholder=""></div>
+                                                                </td>
                                                                 <td>03/03/2018</td>
                                                                 <td>03/03/2018</td>
-                                                                <td>Yes</td>
+                                                                <td>Every 2 Hour</td>
                                                                 <td class="text-right">
-                                                                    <a  ng-class="{active: $state.includes('admin')}"  has-permission="" ui-sref=""  class="btn btn-simple btn-info"><i class="material-icons">edit</i></a>
-
+                                                                    <a  ng-class="{active: $state.includes('admin')}"  has-permission="" ui-sref=""  class="btn btn-simple btn-danger"><i class="material-icons">delete_forever</i></a>
                                                                 </td>
                                                             </tr>
                                                             <tr>
-                                                                <td>Weekly</td>
+                                                                <td>Schedule Title</td>
+                                                                <td>
+                                                                    <div class="bootstrap-tagsinput"><span class="tag label label-info">Item 1<span data-role="remove"></span></span>
+                                                                        <span class="tag label label-info">Item 2<span data-role="remove"></span></span>
+                                                                        <span class="tag label label-info">Item 3<span data-role="remove"></span></span>
+                                                                        <span class="tag label label-info">Item 4<span data-role="remove"></span></span> <input type="text" placeholder=""></div>
+                                                                </td>
                                                                 <td>03/03/2018</td>
                                                                 <td>03/03/2018</td>
-                                                                <td>Yes</td>
+                                                                <td>Every 2 Hour</td>
                                                                 <td class="text-right">
-                                                                    <a  ng-class="{active: $state.includes('admin')}"  has-permission="" ui-sref=""  class="btn btn-simple btn-info"><i class="material-icons">edit</i></a>
-
+                                                                    <a  ng-class="{active: $state.includes('admin')}"  has-permission="" ui-sref=""  class="btn btn-simple btn-danger"><i class="material-icons">delete_forever</i></a>
                                                                 </td>
                                                             </tr>
                                                             <tr>
-                                                                <td>Weekly</td>
+                                                                <td>Schedule Title</td>
+                                                                <td>
+                                                                    <div class="bootstrap-tagsinput"><span class="tag label label-info">Item 1<span data-role="remove"></span></span>
+                                                                        <span class="tag label label-info">Item 2<span data-role="remove"></span></span>
+                                                                        <span class="tag label label-info">Item 3<span data-role="remove"></span></span>
+                                                                        <span class="tag label label-info">Item 4<span data-role="remove"></span></span> <input type="text" placeholder=""></div>
+                                                                </td>
                                                                 <td>03/03/2018</td>
                                                                 <td>03/03/2018</td>
-                                                                <td>Yes</td>
+                                                                <td>Every 2 Hour</td>
                                                                 <td class="text-right">
-                                                                    <a  ng-class="{active: $state.includes('admin')}"  has-permission="" ui-sref=""  class="btn btn-simple btn-info"><i class="material-icons">edit</i></a>
-
+                                                                    <a  ng-class="{active: $state.includes('admin')}"  has-permission="" ui-sref=""  class="btn btn-simple btn-danger"><i class="material-icons">delete_forever</i></a>
                                                                 </td>
                                                             </tr>
-
 
                                                             </tbody>
                                                         </table>
@@ -851,16 +936,45 @@
                                                     <div class="panel panel-default">
                                                         <div class="panel-heading">New Schedule</div>
                                                         <div class="panel-body">
-
                                                             <div class="row">
 
-                                                                <div class="col-md-2">
+                                                                <div class="col-md-4">
                                                                     <div class="form-group">
-                                                                        <label class="control-label">Schedule</label>
-                                                                        <select class="form-control" ng-model="" ng-options="">
-                                                                            <option value="">Select Schedule ..</option>
-                                                                        </select>
+                                                                        <label class="control-label">Title</label>
+                                                                        <input id='ppmTitle'
+                                                                               ng-model="asset.title"
+                                                                               class='form-control'
+                                                                               name='ppmTitle'
+                                                                               type='text' value=""
+                                                                               ng-minlength='5'
+                                                                               ng-maxlength='250'
+                                                                               ng-pattern="/^[A-Za-z0-9\s]*$/" autofocus
+                                                                        />
                                                                     </div>
+                                                                </div>
+                                                                <div class="col-md-4">
+                                                                    <div class="form-group selectcon is-empty SelectWithAddbtnCon">
+
+                                                                        <div class="" style="float:left;width:90%;">
+                                                                            <label class="control-label">Checklist</label>
+                                                                            <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
+                                                                            <select class="form-control ng-pristine ng-valid ng-touched"  tabindex="0" aria-invalid="false">
+                                                                                <option value="" class="" selected="selected">Checklist ..</option>
+                                                                            </select>
+                                                                        </div>
+                                                                        <div class="" style="float:left;width:10%;">
+                                                                            <a href="javascript:;" data-toggle="collapse" data-parent="#accordian" data-target="#addAssetGroup" class="btn btn-round btn-fab btn-fab-mini btn-simple" aria-expanded="false" aria-controls="collapseExample">
+                                                                                <i class="material-icons">add</i>
+                                                                            </a>
+                                                                        </div>
+                                                                        <div class="clear"></div>
+                                                                        <div class="collapse" id="addAssetGroup">
+                                                                            <div class="">
+                                                                                <input class="input-desc ng-pristine ng-untouched ng-valid" id="assetgroupName" ng-model="" name="assetgroupName" type="text" value="" tabindex="0" aria-invalid="false">
+                                                                                <a class="btn btn-success" ng-click="" tabindex="0">Add</a>
+                                                                            </div>
+                                                                        </div>
+                                                                        <span class="material-input"></span></div>
                                                                 </div>
                                                                 <div class="col-md-2">
                                                                     <div class="form-group">
@@ -878,34 +992,23 @@
 
                                                                     </div>
                                                                 </div>
-                                                                <div class="col-md-4">
-                                                                    <div class="form-group selectcon" style="padding-top:25px;">
 
-                                                                        <div class="" style="float:left;width:80%;">
-                                                                            <select class="form-control" ng-model="" ng-options="">
-                                                                                <option value="">Please select ..</option>
-                                                                            </select>
-                                                                        </div>
-                                                                        <div class="" style="float:left;">
-                                                                            <a href="javascript:;"  data-toggle="collapse" data-parent="#accordian" data-target="#addDesignation1" class="btn btn-round btn-fab btn-fab-mini btn-simple" aria-expanded="false" aria-controls="collapseExample">
-                                                                                <i class="material-icons">add</i>
-                                                                            </a>
-                                                                        </div>
+                                                                <!--<div class="col-md-2">-->
 
-                                                                    </div>
+                                                                <!--<div class="form-group" style="padding-top: 20px;">-->
+                                                                <!--<div class="checkbox">-->
+                                                                <!--<label>-->
+                                                                <!--<input type="checkbox" name="terms"> Active-->
+                                                                <!--</label>-->
+                                                                <!--</div>-->
+                                                                <!--</div>-->
 
-                                                                </div>
-                                                                <div class="col-md-2 txt-align-rgt">
 
-                                                                    <div class="form-group" style="padding-top: 20px;">
-                                                                        <div class="checkbox">
-                                                                            <label>
-                                                                                <input type="checkbox" name="terms"> Active
-                                                                            </label>
-                                                                        </div>
-                                                                    </div>
+                                                                <!--</div>-->
 
-                                                                </div>
+
+                                                            </div>
+                                                            <div class="row">
                                                                 <div class="col-md-5">
                                                                     <div class="collapse" id="addDesignation1">
 
@@ -916,9 +1019,50 @@
                                                                         </div>
                                                                     </div>
                                                                 </div>
-
                                                             </div>
-
+                                                            <div class="row">
+                                                                <div class="col-md-2">
+                                                                    <div class="dropdown">
+                                                                        <div class="form-group">
+                                                                            <label class="control-label">Select Frequency</label>
+                                                                            <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
+                                                                            <select class="form-control ">
+                                                                                <option value="">Every</option>
+                                                                            </select>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-md-2">
+                                                                    <div class="form-group">
+                                                                        <label class="control-label">&nbsp;</label>
+                                                                        <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
+                                                                        <select class="form-control ">
+                                                                            <option value="">1</option>
+                                                                            <option value="">2</option>
+                                                                            <option value="">3</option>
+                                                                        </select>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-md-3">
+                                                                    <div class="form-group">
+                                                                        <label class="control-label">&nbsp;</label>
+                                                                        <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
+                                                                        <select class="form-control ">
+                                                                            <option value="">Hour</option>
+                                                                            <option value="">Day</option>
+                                                                            <option value="">Week</option>
+                                                                            <option value="">Fortnight</option>
+                                                                            <option value="">Month</option>
+                                                                            <option value="">Quarter</option>
+                                                                            <option value="">Half</option>
+                                                                            <option value="">Year</option>
+                                                                        </select>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-md-1" style="padding-top: 25px;">
+                                                                    <a class="btn btn-success add-btn margn-top0"  ng-click="">Add</a>
+                                                                </div>
+                                                            </div>
                                                         </div>
                                                     </div>
 
@@ -927,65 +1071,93 @@
 
                                                             <thead>
                                                             <tr>
-                                                                <th>Schedule Type</th>
-                                                                <th>Schedule Date</th>
-                                                                <th>Job ID</th>
-                                                                <th>Start Date</th>
-                                                                <th>End Date</th>
-                                                                <th>Assigned</th>
-                                                                <th>Status</th>
+                                                                <th width="15%">Title</th>
+                                                                <th width="30%">Checklist</th>
+                                                                <th>From Date</th>
+                                                                <th>To Date</th>
+                                                                <th>Frequency</th>
+                                                                <th align="right">Actions</th>
                                                             </tr>
 
                                                             </thead>
 
                                                             <tbody>
-                                                            <tr>
-                                                                <td>Weekly</td>
-                                                                <td>03/03/2018</td>
-                                                                <td>00045</td>
-                                                                <td>03/03/2018</td>
-                                                                <td>15/03/2018</td>
-                                                                <td>UDS</td>
-                                                                <td>Completed</td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td>Weekly</td>
-                                                                <td>03/03/2018</td>
-                                                                <td>00045</td>
-                                                                <td>03/03/2018</td>
-                                                                <td>15/03/2018</td>
-                                                                <td>UDS</td>
-                                                                <td>Completed</td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td>Weekly</td>
-                                                                <td>03/03/2018</td>
-                                                                <td>00045</td>
-                                                                <td>03/03/2018</td>
-                                                                <td>15/03/2018</td>
-                                                                <td>UDS</td>
-                                                                <td>Completed</td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td>Weekly</td>
-                                                                <td>03/03/2018</td>
-                                                                <td>00045</td>
-                                                                <td>03/03/2018</td>
-                                                                <td>15/03/2018</td>
-                                                                <td>UDS</td>
-                                                                <td>Completed</td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td>Weekly</td>
-                                                                <td>03/03/2018</td>
-                                                                <td>00045</td>
-                                                                <td>03/03/2018</td>
-                                                                <td>15/03/2018</td>
-                                                                <td>UDS</td>
-                                                                <td>Completed</td>
-                                                            </tr>
 
-
+                                                            <tr>
+                                                                <td>Schedule Title</td>
+                                                                <td>
+                                                                    <div class="bootstrap-tagsinput"><span class="tag label label-info">Item 1<span data-role="remove"></span></span>
+                                                                        <span class="tag label label-info">Item 2<span data-role="remove"></span></span>
+                                                                        <span class="tag label label-info">Item 3<span data-role="remove"></span></span>
+                                                                        <span class="tag label label-info">Item 4<span data-role="remove"></span></span> <input type="text" placeholder=""></div>
+                                                                </td>
+                                                                <td>03/03/2018</td>
+                                                                <td>03/03/2018</td>
+                                                                <td>Every 2 Hour</td>
+                                                                <td class="text-right">
+                                                                    <a  ng-class="{active: $state.includes('admin')}"  has-permission="" ui-sref=""  class="btn btn-simple btn-danger"><i class="material-icons">delete_forever</i></a>
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>Schedule Title</td>
+                                                                <td>
+                                                                    <div class="bootstrap-tagsinput"><span class="tag label label-info">Item 1<span data-role="remove"></span></span>
+                                                                        <span class="tag label label-info">Item 2<span data-role="remove"></span></span>
+                                                                        <span class="tag label label-info">Item 3<span data-role="remove"></span></span>
+                                                                        <span class="tag label label-info">Item 4<span data-role="remove"></span></span> <input type="text" placeholder=""></div>
+                                                                </td>
+                                                                <td>03/03/2018</td>
+                                                                <td>03/03/2018</td>
+                                                                <td>Every 2 Hour</td>
+                                                                <td class="text-right">
+                                                                    <a  ng-class="{active: $state.includes('admin')}"  has-permission="" ui-sref=""  class="btn btn-simple btn-danger"><i class="material-icons">delete_forever</i></a>
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>Schedule Title</td>
+                                                                <td>
+                                                                    <div class="bootstrap-tagsinput"><span class="tag label label-info">Item 1<span data-role="remove"></span></span>
+                                                                        <span class="tag label label-info">Item 2<span data-role="remove"></span></span>
+                                                                        <span class="tag label label-info">Item 3<span data-role="remove"></span></span>
+                                                                        <span class="tag label label-info">Item 4<span data-role="remove"></span></span> <input type="text" placeholder=""></div>
+                                                                </td>
+                                                                <td>03/03/2018</td>
+                                                                <td>03/03/2018</td>
+                                                                <td>Every 2 Hour</td>
+                                                                <td class="text-right">
+                                                                    <a  ng-class="{active: $state.includes('admin')}"  has-permission="" ui-sref=""  class="btn btn-simple btn-danger"><i class="material-icons">delete_forever</i></a>
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>Schedule Title</td>
+                                                                <td>
+                                                                    <div class="bootstrap-tagsinput"><span class="tag label label-info">Item 1<span data-role="remove"></span></span>
+                                                                        <span class="tag label label-info">Item 2<span data-role="remove"></span></span>
+                                                                        <span class="tag label label-info">Item 3<span data-role="remove"></span></span>
+                                                                        <span class="tag label label-info">Item 4<span data-role="remove"></span></span> <input type="text" placeholder=""></div>
+                                                                </td>
+                                                                <td>03/03/2018</td>
+                                                                <td>03/03/2018</td>
+                                                                <td>Every 2 Hour</td>
+                                                                <td class="text-right">
+                                                                    <a  ng-class="{active: $state.includes('admin')}"  has-permission="" ui-sref=""  class="btn btn-simple btn-danger"><i class="material-icons">delete_forever</i></a>
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>Schedule Title</td>
+                                                                <td>
+                                                                    <div class="bootstrap-tagsinput"><span class="tag label label-info">Item 1<span data-role="remove"></span></span>
+                                                                        <span class="tag label label-info">Item 2<span data-role="remove"></span></span>
+                                                                        <span class="tag label label-info">Item 3<span data-role="remove"></span></span>
+                                                                        <span class="tag label label-info">Item 4<span data-role="remove"></span></span> <input type="text" placeholder=""></div>
+                                                                </td>
+                                                                <td>03/03/2018</td>
+                                                                <td>03/03/2018</td>
+                                                                <td>Every 2 Hour</td>
+                                                                <td class="text-right">
+                                                                    <a  ng-class="{active: $state.includes('admin')}"  has-permission="" ui-sref=""  class="btn btn-simple btn-danger"><i class="material-icons">delete_forever</i></a>
+                                                                </td>
+                                                            </tr>
 
                                                             </tbody>
                                                         </table>
