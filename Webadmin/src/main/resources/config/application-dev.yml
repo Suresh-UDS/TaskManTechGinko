@@ -72,6 +72,9 @@ qrcode:
 attendance:
     file:
         path:  /opt/attendance
+quotation:
+    file:
+        path:  /opt/quotation
 import:
     file:
         path:
