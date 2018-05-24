@@ -250,6 +250,40 @@ public class FileUploadHelper {
         return name;
     }
 
+    public String uploadQuotationFile(String quotationId, MultipartFile file, long dateTime) {
+        String name = quotationId + "_" + dateTime + ".jpg";
+        log.debug("file =" + file + ",  name=" + name);
+        if (!file.isEmpty()) {
+            // check and create emp directory
+            String filePath = env.getProperty("quotation.file.path");
+            FileSystem fileSystem = FileSystems.getDefault();
+            filePath += "/" + quotationId;
+            Path path = fileSystem.getPath(filePath);
+            // path = path.resolve(String.valueOf(quotationId));
+            if (!Files.exists(path)) {
+                Path newQuotationPath = Paths.get(filePath);
+                try {
+                    Files.createDirectory(newQuotationPath);
+                } catch (IOException e) {
+                    log.error("Error while creating path for quotation " + newQuotationPath);
+                }
+            }
+            try {
+                filePath += "/" + name;
+                byte[] bytes = file.getBytes();
+                BufferedOutputStream stream = new BufferedOutputStream(new FileOutputStream(new File(filePath)));
+                stream.write(bytes);
+                stream.close();
+                log.debug("File uploaded successfully to quotation folder - " + name);
+            } catch (Exception e) {
+                log.error("File uploaded failed for quotation - " + name, e);
+            }
+        } else {
+            log.error("Empty file, upload failed for quotation- " + name);
+        }
+        return name;
+    }
+    
     public String readAttendanceImage(Long id, String empId, String imageFileName) {
         String filePath = env.getProperty("attendance.file.path");
         filePath += "/" + empId;

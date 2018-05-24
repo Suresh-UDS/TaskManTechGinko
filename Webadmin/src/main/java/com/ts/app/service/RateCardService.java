@@ -28,6 +28,7 @@ import org.springframework.web.client.RestTemplate;
 
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.ts.app.domain.AbstractAuditingEntity;
+import com.ts.app.domain.Attendance;
 import com.ts.app.domain.Employee;
 import com.ts.app.domain.EmployeeProjectSite;
 import com.ts.app.domain.RateCard;
@@ -40,7 +41,9 @@ import com.ts.app.repository.SettingsRepository;
 import com.ts.app.repository.SiteRepository;
 import com.ts.app.repository.TicketRepository;
 import com.ts.app.repository.UserRepository;
+import com.ts.app.service.util.FileUploadHelper;
 import com.ts.app.service.util.MapperUtil;
+import com.ts.app.web.rest.dto.AttendanceDTO;
 import com.ts.app.web.rest.dto.BaseDTO;
 import com.ts.app.web.rest.dto.QuotationDTO;
 import com.ts.app.web.rest.dto.RateCardDTO;
@@ -83,6 +86,9 @@ public class RateCardService extends AbstractService {
 	@Inject
 	private TicketRepository ticketRepository;
 
+	@Inject
+	private FileUploadHelper fileUploadHelper;
+	
 	public RateCardDTO createRateCardInformation(RateCardDTO rateCardDto) {
 		// log.info("The admin Flag value is " +adminFlag);
 
@@ -611,6 +617,17 @@ public class RateCardService extends AbstractService {
 		return mapperUtil.toModel(entity, RateCardDTO.class);
 	}
 
+	@Transactional
+    public QuotationDTO uploadFile(QuotationDTO quotationDTO) {
+
+        log.debug("Employee list from check in out images"+quotationDTO.getId());
+        //Attendance attendanceImage = attendanceRepository.findOne(attendanceDto.getId());
+        String quotationFileName = fileUploadHelper.uploadQuotationFile(quotationDTO.getId(), quotationDTO.getQuotationFile(), System.currentTimeMillis());
+        quotationDTO.setQuotationFileName(quotationFileName);
+        //attendanceImage = attendanceRepository.save(attendanceImage);
+		return quotationDTO;
+	}
+	
     public SearchResult<RateCardDTO> findBySearchCriteria(SearchCriteria searchCriteria) {
     	log.debug("search Criteria",searchCriteria);
 
