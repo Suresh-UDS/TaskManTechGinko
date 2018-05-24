@@ -19,6 +19,11 @@ angular.module('timeSheetApp')
         if($rootScope.isAuthenticated() == false){  
          
              $scope.loadingStop();
+             var absUrl = $location.absUrl();
+             var array = absUrl.split("/");
+             if(array[4] != ""){
+                $rootScope.stateValue = array[4];
+             }
              $state.go('login');
          
             }
