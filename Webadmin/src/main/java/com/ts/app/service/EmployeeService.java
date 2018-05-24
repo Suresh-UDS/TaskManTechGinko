@@ -157,14 +157,14 @@ public class    EmployeeService extends AbstractService {
 	public boolean isDuplicate(EmployeeDTO employeeDTO) {
 	    log.debug("Empid "+employeeDTO.getEmpId());
 		SearchCriteria criteria = new SearchCriteria();
-		criteria.setEmployeeId(Long.valueOf(employeeDTO.getEmpId()));
+		criteria.setEmployeeEmpId(employeeDTO.getEmpId());
 		SearchResult<EmployeeDTO> searchResults = findBySearchCrieria(criteria);
 		if(searchResults != null && CollectionUtils.isNotEmpty(searchResults.getTransactions())) {
 			return true;
 		}
 		return false;
 	}
-	
+
 	public EmployeeDTO createEmployeeInformation(EmployeeDTO employeeDto) {
 		// log.info("The admin Flag value is " +adminFlag);
 		log.debug("EmployeeService.createEmployeeInformation - userId - "+employeeDto.getUserId());
@@ -716,7 +716,7 @@ public class    EmployeeService extends AbstractService {
 			}
 			else if(StringUtils.isNotEmpty(searchCriteria.getName())) {
 				page = employeeRepository.findByEmployeeName(searchCriteria.getName(), pageRequest);
-			}else if (searchCriteria.getEmployeeId() != 0) {
+			}else if (StringUtils.isNotEmpty(searchCriteria.getEmployeeEmpId())) {
 				log.debug(">>> find empid from service <<<");
 				page = employeeRepository.findEmployeeId(String.valueOf(searchCriteria.getEmployeeId()), pageRequest);
 			}

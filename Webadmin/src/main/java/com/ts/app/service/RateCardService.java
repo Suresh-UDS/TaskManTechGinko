@@ -88,7 +88,7 @@ public class RateCardService extends AbstractService {
 
 	@Inject
 	private FileUploadHelper fileUploadHelper;
-	
+
 	public RateCardDTO createRateCardInformation(RateCardDTO rateCardDto) {
 		// log.info("The admin Flag value is " +adminFlag);
 
@@ -393,6 +393,8 @@ public class RateCardService extends AbstractService {
 	            //save quotation id in ticket
 	            if(qresp != null) {
 	            		String serialId = qresp.getString("_id");
+	            		log.debug("Quotation id"+serialId);
+	            		quotationDto.set_id(serialId);
 	            		Ticket ticket = ticketRepository.findOne(quotationDto.getTicketId());
 	            		if(ticket != null) {
 	            			ticket.setQuotationId(serialId);
@@ -622,12 +624,12 @@ public class RateCardService extends AbstractService {
 
         log.debug("Employee list from check in out images"+quotationDTO.getId());
         //Attendance attendanceImage = attendanceRepository.findOne(attendanceDto.getId());
-        String quotationFileName = fileUploadHelper.uploadQuotationFile(quotationDTO.getId(), quotationDTO.getQuotationFile(), System.currentTimeMillis());
+        String quotationFileName = fileUploadHelper.uploadQuotationFile(quotationDTO.getId(), quotationDTO.getQuotationFile(), System.currentTimeMillis(),quotationDTO.getQuotationFileName());
         quotationDTO.setQuotationFileName(quotationFileName);
         //attendanceImage = attendanceRepository.save(attendanceImage);
 		return quotationDTO;
 	}
-	
+
     public SearchResult<RateCardDTO> findBySearchCriteria(SearchCriteria searchCriteria) {
     	log.debug("search Criteria",searchCriteria);
 
