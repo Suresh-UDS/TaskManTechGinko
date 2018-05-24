@@ -39,7 +39,16 @@
 
     <!--  Full Calendar css  -->
     <!-- <link rel="stylesheet" href="bower_components/fullcalendar/dist/fullcalendar.min.css"> -->
+    
 
+    
+    <!-- Excel view & download css  start -->
+
+    <link rel="stylesheet" type="text/css" href="bower_components/devextreme/css/dx.spa.css" />
+    <link rel="stylesheet" type="text/css" href="bower_components/devextreme/css/dx.common.css" />
+    <link rel="dx-theme" data-theme="generic.light" href="bower_components/devextreme/css/dx.light.css" />
+
+    <!-- Excel view & download css end -->
 
 </head>
 
@@ -119,6 +128,10 @@
 
     <!-- Pagination script -->
     <script src="scripts/components/angular-pagination-directive/js/index.js"></script>
+
+    <!-- Excel view & download script -->
+    <script src="scripts/components/angular-excel-grid/index.js"></script>
+    <script src="scripts/components/angular-excel-grid/data.js"></script>
 
 
     <!-- endbower -->
@@ -384,6 +397,16 @@
     <script src="scripts/app/admin/tickets/ticket.controller.js"></script>
     <script src="scripts/app/admin/tickets/ticket-list.js"></script>
     <script src="scripts/app/admin/tickets/ticket.js"></script>
+
+     <!-- jquery:min js -->
+    <script src="assets/js/jquery.min.js"></script>
+     
+     <!-- Excel view & download js  start -->
+
+    <script src="bower_components/jszip/dist/jszip.min.js"></script>
+    <script src="bower_components/devextreme/js/dx.all.js"></script>
+
+    <!-- Excel view & download js  end -->
 
 
     <div id="myModal" class="modal fade" data-backdrop="false" tabindex="-1" role="dialog"

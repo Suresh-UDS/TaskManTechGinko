@@ -5,7 +5,7 @@ angular.module('timeSheetApp', ['LocalStorageModule',
     'ngResource', 'ui.router', 'ngCookies', 'ngAria', 'ngCacheBuster', 'ngFileUpload',
      'infinite-scroll', 'App.filters','uiGmapgoogle-maps','checklist-model',
      'alexjoffroy.angular-loaders','chart.js','jkAngularRatingStars',
-     'angular-star-rating-new','paginations'])
+     'angular-star-rating-new','paginations','excelGrid'])
 
     .run(function ($rootScope, $location, $window, $http, $state,  Auth, Principal, ENV, VERSION) {
         $rootScope.isAuthenticated = Principal.isAuthenticated;
@@ -122,6 +122,8 @@ angular.module('timeSheetApp', ['LocalStorageModule',
             $("#loadPage").animate({scrollTop: 0}, 2000);
         }
 
+
+
        
     })
     .config(function ($stateProvider, $urlRouterProvider, $httpProvider, $locationProvider,  httpRequestInterceptorCacheBusterProvider,uiGmapGoogleMapApiProvider) {
@@ -193,5 +195,7 @@ angular.module('timeSheetApp', ['LocalStorageModule',
     		return (zeros + input).slice(-1 * n)
     	};
     });
+
+    
 
 

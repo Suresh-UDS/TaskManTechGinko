@@ -128,8 +128,24 @@ angular.module('timeSheetApp')
             resolve: {
 
             }
-        })
-            .state('manufacturer-list', {
+        }).state('view-grid', {
+            parent: 'manage',
+            url: '/view-grid',
+            controller: 'AssetController',
+            data: {
+                authorities: [],
+                pageTitle: 'Schedule Grid'
+            },
+            views: {
+                'content@': {
+                    templateUrl: 'scripts/app/admin/asset/view-grid.html',
+                    controller: 'AssetController'
+                }
+            },
+            resolve: {
+
+            }
+        }).state('manufacturer-list', {
                 parent: 'manage',
                 url: '/manufacturer-list',
                 controller: 'AssetController',
