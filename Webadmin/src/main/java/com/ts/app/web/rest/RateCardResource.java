@@ -7,6 +7,7 @@ import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
+import org.json.JSONException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -130,11 +131,10 @@ public class RateCardResource {
     }
 
     @RequestMapping(value = "/quotation/image/upload", method = RequestMethod.POST)
-    public ResponseEntity<?> upload(@RequestParam("quotationId") String quotationId,@RequestParam("quotationImageFileName") String quotationImageFileName, @RequestParam("quotationFile") MultipartFile file) {
+    public ResponseEntity<?> upload(@RequestParam("quotationId") String quotationId, @RequestParam("quotationFile") MultipartFile file) throws JSONException {
     	QuotationDTO quotationDTO = new QuotationDTO();
     	quotationDTO.setQuotationFile(file);
         quotationDTO.setId(quotationId);
-        quotationDTO.setQuotationFileName(quotationImageFileName);
         log.debug("quotation resource with parameters"+quotationId);
         rateCardService.uploadFile(quotationDTO);
         return new ResponseEntity<String>("{ \"quotationFileName\" : \""+quotationDTO.getQuotationFileName() + "\", \"status\" : \"success\"}", HttpStatus.OK);
@@ -145,7 +145,7 @@ public class RateCardResource {
         String image = rateCardService.getQuotationImage(quotationId, imageId);
         return new ResponseEntity<String>("{ \"image\":\" "+image+"\"",HttpStatus.OK);
     }
-    
+
 	@RequestMapping(value = "/rateCard/quotation/id/{id}", method = RequestMethod.GET)
     public ResponseEntity<?> getQuotation(@PathVariable("id") String id) {
         log.info("--Invoked RateCardResource.getQuotation --");

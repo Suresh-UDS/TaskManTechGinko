@@ -9,6 +9,7 @@ import javax.inject.Inject;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -620,15 +621,46 @@ public class RateCardService extends AbstractService {
 	}
 
 	@Transactional
-    public QuotationDTO uploadFile(QuotationDTO quotationDTO) {
+    public QuotationDTO uploadFile(QuotationDTO quotationDTO) throws JSONException {
 
         log.debug("Employee list from check in out images"+quotationDTO.getId());
         //Attendance attendanceImage = attendanceRepository.findOne(attendanceDto.getId());
-        String quotationFileName = fileUploadHelper.uploadQuotationFile(quotationDTO.getId(), quotationDTO.getQuotationFile(), System.currentTimeMillis(),quotationDTO.getQuotationFileName());
-//        String quotationFileName = fileUploadHelper.uploadQuotationFile(quotationDTO.getId(), quotationDTO.getQuotationFile(), System.currentTimeMillis());
+        String quotationFileName = fileUploadHelper.uploadQuotationFile(quotationDTO.getId(), quotationDTO.getQuotationFile(), System.currentTimeMillis());
         quotationDTO.setQuotationFileName(quotationFileName);
+
+        String quotationImageUpdateResult = updateImageName(quotationDTO.getId(),quotationFileName);
+
 		return quotationDTO;
 	}
+
+	public String updateImageName(String quotationId, String quotationImageName) throws JSONException {
+
+        RestTemplate restTemplate = new RestTemplate();
+        MappingJackson2HttpMessageConverter jsonHttpMessageConverter = new MappingJackson2HttpMessageConverter();
+        jsonHttpMessageConverter.getObjectMapper().configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
+        restTemplate.getMessageConverters().add(jsonHttpMessageConverter);
+
+        MultiValueMap<String, String> headers = new LinkedMultiValueMap<String, String>();
+        Map<String, String> map = new HashMap<String, String>();
+        map.put("Content-Type", MediaType.APPLICATION_JSON_VALUE);
+
+        headers.setAll(map);
+
+        JSONObject request = new JSONObject();
+        request.put("quotationId",quotationId);
+        request.put("quotationImage",quotationImageName);
+
+        log.debug("quotation save  end point"+quotationSvcEndPoint);
+        String url = quotationSvcEndPoint+"/quotation/uploadImage";
+
+        HttpEntity<?> requestEntity = new HttpEntity<>(request.toString(),headers);
+        log.debug("Request entity quotation image name update service"+requestEntity);
+        ResponseEntity<?> response = restTemplate.postForEntity(url, requestEntity, String.class);
+        log.debug("Response image name update service"+ response.getStatusCode());
+        log.debug("response from image name update service"+response.getBody());
+
+	    return "Success";
+    }
 
 	public String getQuotationImage(String quotationId, String imageId) {
         String quotationBase64 = null;

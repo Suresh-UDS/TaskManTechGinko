@@ -147,7 +147,7 @@ public class FileUploadHelper {
 		}
 		return imageDataString;
 	}
-	
+
 	public String readQuestionImageFile(long feedbackQuestionsId, String imageFileName) {
 		String filePath = env.getProperty("upload.file.path");
 		filePath += "/" + feedbackQuestionsId;
@@ -283,10 +283,10 @@ public class FileUploadHelper {
         }
         return name;
     }
-    
+
     public String readQuotationImages(String quotationId, String imageId) {
         String filePath = env.getProperty("quotation.file.path");
-        filePath += "/" + imageId;
+        filePath += "/"+quotationId+"/" + imageId +".jpg";
         File file = new File(filePath);
         String imageDataString = "";
         try {
@@ -303,7 +303,7 @@ public class FileUploadHelper {
         }
         return imageDataString;
     }
-    
+
     public String readAttendanceImage(Long id, String empId, String imageFileName) {
         String filePath = env.getProperty("attendance.file.path");
         filePath += "/" + empId;
@@ -324,7 +324,7 @@ public class FileUploadHelper {
         }
         return imageDataString;
     }
-    
+
     public String uploadJobImportFile(MultipartFile file, String filePath , String fileName) {
         log.debug("file =" + file + ",  name=" + fileName);
         if (!file.isEmpty()) {

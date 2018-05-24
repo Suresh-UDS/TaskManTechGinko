@@ -685,7 +685,14 @@ module.exports = {
                     console.log(quotation);
                     console.log(req.body.quotationImage);
                     if(quotation.images.length>0){
-                        quotation.push(req.body.quotationImage);
+                        console.log("quotation images available");
+                        quotation.images.push(req.body.quotationImage);
+                        quotation.save();
+                        res.send(200,quotation);
+                    }else{
+                        quotation.images = req.body.quotationImage;
+                        quotation.save();
+                        res.send(200,quotation);
                     }
 
                 }
