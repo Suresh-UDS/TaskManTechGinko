@@ -431,9 +431,10 @@ angular.module('timeSheetApp')
                         if (response.status === 400 && response.data.message === 'error.duplicateRecordError') {
                             $scope.errorEmployeeExists = true;
                             $scope.errorMessage = response.data.description;
-                            $scope.showNotifications('top','center','danger', $scope.errorMessage);
+                            $scope.showNotifications('top','center','danger', 'Employee already exists!.. Please choose another one');
                         } else {
                             $scope.error = 'ERROR';
+                            $scope.showNotifications('top','center','danger', 'Employee Not Saved!.. Please try again later.');
                         }
                     });
                 }

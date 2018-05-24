@@ -88,12 +88,17 @@ angular.module('timeSheetApp')
 
         };
 
+          $scope.showNotifications= function(position,alignment,color,msg){
+            demo.showNotification(position,alignment,color,msg);
+        }
+
         $scope.updateUserRole = function () {
         	console.log('UserRole details - ' + JSON.stringify($scope.userRole));
 
         	UserRoleComponent.updateUserRole($scope.userRole).then(function () {
             	$scope.success = 'OK';
             	$scope.loadUserRoles();
+                $scope.showNotifications('top','center','success','UserRole Created Successfully');
             	$location.path('/user-roles');
             }).catch(function (response) {
                 $scope.success = null;
@@ -102,8 +107,8 @@ angular.module('timeSheetApp')
                     $scope.errorUserRoleExists = true;
                     $scope.showNotifications('top','center','danger','User role already exists!.. Please choose another one');
                 } else if(response.status === 400 && response.data.message === 'error.validation'){
-	                	$scope.validationError = true;
-	                	$scope.validationErrorMsg = response.data.description;
+					$scope.validationError = true;
+					$scope.validationErrorMsg = response.data.description;
                     $scope.showNotifications('top','center','danger','User role invalid!..');
                 } else {
                     $scope.error = 'ERROR';

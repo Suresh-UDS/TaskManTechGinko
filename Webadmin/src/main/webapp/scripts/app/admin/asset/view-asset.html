@@ -34,9 +34,9 @@
                                        <li class=""><a href=".Documents" data-toggle="tab"
                                                       >Documents</a></li>
                                        <li class=""><a href=".ppm-tasks" data-toggle="tab"
-                                       >PPM tasks</a></li>
+                                       >PPM Jobs</a></li>
                                        <li class=""><a href=".amc-tasks" data-toggle="tab"
-                                       >AMC tasks</a></li>
+                                       >AMC Jobs</a></li>
                                        <li class="">
                                            <a href=".Tickets" data-toggle="tab"
                                            > Tickets</a>
@@ -63,6 +63,11 @@
                                                                    <tr>
                                                                        <td>Name</td>
                                                                        <td></td>
+                                                                   </tr>
+                                                                   <tr>
+                                                                       <td>Asset Type</td>
+                                                                       <td>Diesel Generator</td>
+
                                                                    </tr>
                                                                    <tr>
                                                                        <td>Asset Group</td>
@@ -189,30 +194,10 @@
 
                                                                    </tr>
 
-
-                                                                   </tbody>
-                                                               </table>
-                                                           </div>
-
-                                                       </div>
-                                                   </div>
-
-
-                                               </div>
-                                               <div class="col-md-6">
-
-                                                   <div class="panel panel-default">
-                                                       <div class="panel-heading">Manufacturer Details </div>
-                                                       <div class="panel-body">
-
-                                                           <div class="table-responsive">
-                                                               <table class="table">
-                                                                   <tbody>
-
                                                                    <tr>
                                                                        <td>Current Price</td>
                                                                        <td>
-                                                                                         Rs 5000
+                                                                           Rs 5000
                                                                        </td>
 
                                                                    </tr>
@@ -227,7 +212,7 @@
                                                                        <td>
                                                                            Service Provider</td>
                                                                        <td>
-                                                                             UDS
+                                                                           UDS
                                                                        </td>
 
                                                                    </tr>
@@ -241,9 +226,54 @@
                                                                    <tr>
                                                                        <td>Warranty date</td>
                                                                        <td>
-                                                                            03/03/2000
+                                                                           03/03/2000
                                                                        </td>
 
+                                                                   </tr>
+
+
+                                                                   </tbody>
+                                                               </table>
+                                                           </div>
+
+                                                       </div>
+                                                   </div>
+
+
+                                               </div>
+                                               <div class="col-md-6">
+
+                                                   <div class="panel panel-default">
+                                                       <div class="panel-heading">Vendor Details </div>
+                                                       <div class="panel-body">
+
+                                                           <div class="table-responsive">
+                                                               <table class="table">
+                                                                   <tbody>
+
+                                                                   <tr>
+                                                                       <td>Name</td>
+                                                                       <td>
+                                                                           UDS
+                                                                       </td>
+                                                                   </tr>
+                                                                   <tr>
+                                                                       <td>Phone Number</td>
+                                                                       <td>
+
+                                                                       </td>
+                                                                   </tr>
+                                                                   <tr>
+                                                                       <td>Email</td>
+                                                                       <td>
+
+                                                                       </td>
+                                                                   </tr>
+                                                                   <tr>
+                                                                       <td>Address</td>
+                                                                       <td>
+                                                                          Thooraipakkam
+                                                                       </td>
                                                                    </tr>
 
                                                                    </tbody>
@@ -269,14 +299,9 @@
 
                                                        </div>
                                                        <div class="col-md-4" style="text-align: right">
-
                                                            <button class="btn btn-success add-btn margn-tb0">
                                                                <i class="material-icons">print</i> Print
                                                            </button>
-                                                           <button class="btn btn-warning add-btn margn-tb0">
-                                                               <i class="material-icons">autorenew</i> Refresh
-                                                           </button>
-
                                                        </div>
 
                                                    </div>
@@ -524,21 +549,35 @@
                                        </div>
                                        <div class="tab-pane in ppm-schedule" id="ppm-schedule">
 
+                                           <div class="row">
+                                               <div class="col-md-12 text-right">
+                                                   <a  class="btn btn-simple btn-warning cal-btn" data-toggle="modal" data-target="#RightModal-View" title="Calender" ><i class="material-icons">date_range</i>
+
+                                                   </a>
+                                               </div>
+                                           </div>
+
                                            <div class="panel panel-default">
-                                               <div class="panel-heading">New Schedule</div>
+                                               <div class="panel-heading">Schedule Filter</div>
                                                <div class="panel-body">
 
                                                    <div class="row">
 
-                                                       <div class="col-md-2">
+                                                       <div class="col-md-4">
                                                            <div class="form-group">
-                                                               <label class="control-label">Schedule</label>
-                                                               <select class="form-control" ng-model="" ng-options="">
-                                                                   <option value="">Select Schedule ..</option>
-                                                               </select>
+                                                               <label class="control-label">Title</label>
+                                                               <input id='ppmTitle'
+                                                                      ng-model="asset.title"
+                                                                      class='form-control'
+                                                                      name='ppmTitle'
+                                                                      type='text' value=""
+                                                                      ng-minlength='5'
+                                                                      ng-maxlength='250'
+                                                                      ng-pattern="/^[A-Za-z0-9\s]*$/" autofocus
+                                                               />
                                                            </div>
                                                        </div>
-                                                       <div class="col-md-2">
+                                                       <div class="col-md-4">
                                                            <div class="form-group">
                                                                <label class="control-label">From Date</label>
                                                                <span class="form-control-feedback calender-icon"><i class="material-icons">date_range</i></span>
@@ -546,7 +585,7 @@
 
                                                            </div>
                                                        </div>
-                                                       <div class="col-md-2">
+                                                       <div class="col-md-4">
                                                            <div class="form-group">
                                                                <label class="control-label">To Date</label>
                                                                <span class="form-control-feedback calender-icon"><i class="material-icons">date_range</i></span>
@@ -554,44 +593,8 @@
 
                                                            </div>
                                                        </div>
-                                                       <div class="col-md-4">
-                                                           <div class="form-group selectcon" style="padding-top:25px;">
 
-                                                               <div class="" style="float:left;width:80%;">
-                                                                   <select class="form-control" ng-model="" ng-options="">
-                                                                       <option value="">Please select ..</option>
-                                                                   </select>
-                                                               </div>
-                                                               <div class="" style="float:left;">
-                                                                   <a href="javascript:;"  data-toggle="collapse" data-parent="#accordian" data-target="#addDesignation1" class="btn btn-round btn-fab btn-fab-mini btn-simple" aria-expanded="false" aria-controls="collapseExample">
-                                                                       <i class="material-icons">add</i>
-                                                                   </a>
-                                                               </div>
 
-                                                           </div>
-
-                                                       </div>
-                                                       <div class="col-md-2 txt-align-rgt">
-
-                                                           <div class="form-group" style="padding-top: 20px;">
-                                                               <div class="checkbox">
-                                                                   <label>
-                                                                       <input type="checkbox" name="terms"> Active
-                                                                   </label>
-                                                               </div>
-                                                           </div>
-
-                                                       </div>
-                                                       <div class="col-md-5">
-                                                           <div class="collapse" id="addDesignation1">
-
-                                                               <div class="">
-                                                                   <input class="input-desc" id='' ng-model=""
-                                                                          name='' type='text' value=""/>
-                                                                   <a class="btn btn-success add-btn margn-top0"  ng-click="">Add</a>
-                                                               </div>
-                                                           </div>
-                                                       </div>
 
                                                    </div>
 
@@ -603,67 +606,89 @@
 
                                                    <thead>
                                                    <tr>
+                                                       <th>Schedule Title</th>
                                                        <th>Schedule Type</th>
+                                                       <th>Checklist</th>
                                                        <th>From Date</th>
                                                        <th>To Date</th>
-                                                       <th>Active</th>
-                                                       <th align="right">Actions</th>
+                                                       <th>Frequency</th>
+
                                                    </tr>
 
                                                    </thead>
 
                                                    <tbody>
-                                                   <tr>
+
+                                                      <tr>
+                                                       <td>Title</td>
                                                        <td>Weekly</td>
-                                                       <td>03/03/2018</td>
-                                                       <td>03/03/2018</td>
-                                                       <td>Yes</td>
-                                                       <td class="text-right">
-                                                           <a  ng-class="{active: $state.includes('admin')}"  has-permission="" ui-sref=""  class="btn btn-simple btn-info"><i class="material-icons">edit</i></a>
-
+                                                       <td>
+                                                           <div class="bootstrap-tagsinput"><span class="tag label label-info">Item 1<span data-role="remove"></span></span>
+                                                               <span class="tag label label-info">Item 2<span data-role="remove"></span></span>
+                                                               <span class="tag label label-info">Item 3<span data-role="remove"></span></span>
+                                                               <span class="tag label label-info">Item 4<span data-role="remove"></span></span> <input type="text" placeholder=""></div>
                                                        </td>
-                                                   </tr>
-                                                   <tr>
-                                                       <td>Weekly</td>
                                                        <td>03/03/2018</td>
                                                        <td>03/03/2018</td>
-                                                       <td>Yes</td>
-                                                       <td class="text-right">
-                                                           <a  ng-class="{active: $state.includes('admin')}"  has-permission="" ui-sref=""  class="btn btn-simple btn-info"><i class="material-icons">edit</i></a>
+                                                       <td>Every 2 Hour</td>
 
-                                                       </td>
                                                    </tr>
-                                                   <tr>
-                                                       <td>Weekly</td>
-                                                       <td>03/03/2018</td>
-                                                       <td>03/03/2018</td>
-                                                       <td>Yes</td>
-                                                       <td class="text-right">
-                                                           <a  ng-class="{active: $state.includes('admin')}"  has-permission="" ui-sref=""  class="btn btn-simple btn-info"><i class="material-icons">edit</i></a>
+                                                      <tr>
+                                                          <td>Title</td>
+                                                          <td>Weekly</td>
+                                                          <td>
+                                                              <div class="bootstrap-tagsinput"><span class="tag label label-info">Item 1<span data-role="remove"></span></span>
+                                                                  <span class="tag label label-info">Item 2<span data-role="remove"></span></span>
+                                                                  <span class="tag label label-info">Item 3<span data-role="remove"></span></span>
+                                                                  <span class="tag label label-info">Item 4<span data-role="remove"></span></span> <input type="text" placeholder=""></div>
+                                                          </td>
+                                                          <td>03/03/2018</td>
+                                                          <td>03/03/2018</td>
+                                                          <td>Every 2 Hour</td>
 
-                                                       </td>
-                                                   </tr>
-                                                   <tr>
-                                                       <td>Weekly</td>
-                                                       <td>03/03/2018</td>
-                                                       <td>03/03/2018</td>
-                                                       <td>Yes</td>
-                                                       <td class="text-right">
-                                                           <a  ng-class="{active: $state.includes('admin')}"  has-permission="" ui-sref=""  class="btn btn-simple btn-info"><i class="material-icons">edit</i></a>
+                                                      </tr>
+                                                      <tr>
+                                                          <td>Title</td>
+                                                          <td>Weekly</td>
+                                                          <td>
+                                                              <div class="bootstrap-tagsinput"><span class="tag label label-info">Item 1<span data-role="remove"></span></span>
+                                                                  <span class="tag label label-info">Item 2<span data-role="remove"></span></span>
+                                                                  <span class="tag label label-info">Item 3<span data-role="remove"></span></span>
+                                                                  <span class="tag label label-info">Item 4<span data-role="remove"></span></span> <input type="text" placeholder=""></div>
+                                                          </td>
+                                                          <td>03/03/2018</td>
+                                                          <td>03/03/2018</td>
+                                                          <td>Every 2 Hour</td>
 
-                                                       </td>
-                                                   </tr>
-                                                   <tr>
-                                                       <td>Weekly</td>
-                                                       <td>03/03/2018</td>
-                                                       <td>03/03/2018</td>
-                                                       <td>Yes</td>
-                                                       <td class="text-right">
-                                                           <a  ng-class="{active: $state.includes('admin')}"  has-permission="" ui-sref=""  class="btn btn-simple btn-info"><i class="material-icons">edit</i></a>
+                                                      </tr>
+                                                      <tr>
+                                                          <td>Title</td>
+                                                          <td>Weekly</td>
+                                                          <td>
+                                                              <div class="bootstrap-tagsinput"><span class="tag label label-info">Item 1<span data-role="remove"></span></span>
+                                                                  <span class="tag label label-info">Item 2<span data-role="remove"></span></span>
+                                                                  <span class="tag label label-info">Item 3<span data-role="remove"></span></span>
+                                                                  <span class="tag label label-info">Item 4<span data-role="remove"></span></span> <input type="text" placeholder=""></div>
+                                                          </td>
+                                                          <td>03/03/2018</td>
+                                                          <td>03/03/2018</td>
+                                                          <td>Every 2 Hour</td>
 
-                                                       </td>
-                                                   </tr>
+                                                      </tr>
+                                                      <tr>
+                                                          <td>Title</td>
+                                                          <td>Weekly</td>
+                                                          <td>
+                                                              <div class="bootstrap-tagsinput"><span class="tag label label-info">Item 1<span data-role="remove"></span></span>
+                                                                  <span class="tag label label-info">Item 2<span data-role="remove"></span></span>
+                                                                  <span class="tag label label-info">Item 3<span data-role="remove"></span></span>
+                                                                  <span class="tag label label-info">Item 4<span data-role="remove"></span></span> <input type="text" placeholder=""></div>
+                                                          </td>
+                                                          <td>03/03/2018</td>
+                                                          <td>03/03/2018</td>
+                                                          <td>Every 2 Hour</td>
 
+                                                      </tr>
 
                                                    </tbody>
                                                </table>
@@ -674,20 +699,26 @@
                                        <div class="tab-pane fade amc-schedule" id="amc-schedule">
 
                                            <div class="panel panel-default">
-                                               <div class="panel-heading">New Schedule</div>
+                                               <div class="panel-heading">Schedule Filter</div>
                                                <div class="panel-body">
 
                                                    <div class="row">
 
-                                                       <div class="col-md-2">
+                                                       <div class="col-md-4">
                                                            <div class="form-group">
-                                                               <label class="control-label">Schedule</label>
-                                                               <select class="form-control" ng-model="" ng-options="">
-                                                                   <option value="">Select Schedule ..</option>
-                                                               </select>
+                                                               <label class="control-label">Title</label>
+                                                               <input id='ppmTitle'
+                                                                      ng-model="asset.title"
+                                                                      class='form-control'
+                                                                      name='ppmTitle'
+                                                                      type='text' value=""
+                                                                      ng-minlength='5'
+                                                                      ng-maxlength='250'
+                                                                      ng-pattern="/^[A-Za-z0-9\s]*$/" autofocus
+                                                               />
                                                            </div>
                                                        </div>
-                                                       <div class="col-md-2">
+                                                       <div class="col-md-4">
                                                            <div class="form-group">
                                                                <label class="control-label">From Date</label>
                                                                <span class="form-control-feedback calender-icon"><i class="material-icons">date_range</i></span>
@@ -695,7 +726,7 @@
 
                                                            </div>
                                                        </div>
-                                                       <div class="col-md-2">
+                                                       <div class="col-md-4">
                                                            <div class="form-group">
                                                                <label class="control-label">To Date</label>
                                                                <span class="form-control-feedback calender-icon"><i class="material-icons">date_range</i></span>
@@ -703,44 +734,8 @@
 
                                                            </div>
                                                        </div>
-                                                       <div class="col-md-4">
-                                                           <div class="form-group selectcon" style="padding-top:25px;">
 
-                                                               <div class="" style="float:left;width:80%;">
-                                                                   <select class="form-control" ng-model="" ng-options="">
-                                                                       <option value="">Please select ..</option>
-                                                                   </select>
-                                                               </div>
-                                                               <div class="" style="float:left;">
-                                                                   <a href="javascript:;"  data-toggle="collapse" data-parent="#accordian" data-target="#addDesignation1" class="btn btn-round btn-fab btn-fab-mini btn-simple" aria-expanded="false" aria-controls="collapseExample">
-                                                                       <i class="material-icons">add</i>
-                                                                   </a>
-                                                               </div>
 
-                                                           </div>
-
-                                                       </div>
-                                                       <div class="col-md-2 txt-align-rgt">
-
-                                                           <div class="form-group" style="padding-top: 20px;">
-                                                               <div class="checkbox">
-                                                                   <label>
-                                                                       <input type="checkbox" name="terms"> Active
-                                                                   </label>
-                                                               </div>
-                                                           </div>
-
-                                                       </div>
-                                                       <div class="col-md-5">
-                                                           <div class="collapse" id="addDesignation1">
-
-                                                               <div class="">
-                                                                   <input class="input-desc" id='' ng-model=""
-                                                                          name='' type='text' value=""/>
-                                                                   <a class="btn btn-success add-btn margn-top0"  ng-click="">Add</a>
-                                                               </div>
-                                                           </div>
-                                                       </div>
 
                                                    </div>
 
@@ -752,65 +747,89 @@
 
                                                    <thead>
                                                    <tr>
+                                                       <th>Schedule Title</th>
                                                        <th>Schedule Type</th>
-                                                       <th>Schedule Date</th>
-                                                       <th>Job ID</th>
-                                                       <th>Start Date</th>
-                                                       <th>End Date</th>
-                                                       <th>Assigned</th>
-                                                       <th>Status</th>
+                                                       <th>Checklist</th>
+                                                       <th>From Date</th>
+                                                       <th>To Date</th>
+                                                       <th>Frequency</th>
+
                                                    </tr>
 
                                                    </thead>
 
                                                    <tbody>
-                                                   <tr>
-                                                       <td>Weekly</td>
-                                                       <td>03/03/2018</td>
-                                                       <td>00045</td>
-                                                       <td>03/03/2018</td>
-                                                       <td>15/03/2018</td>
-                                                       <td>UDS</td>
-                                                       <td>Completed</td>
-                                                   </tr>
-                                                   <tr>
-                                                       <td>Weekly</td>
-                                                       <td>03/03/2018</td>
-                                                       <td>00045</td>
-                                                       <td>03/03/2018</td>
-                                                       <td>15/03/2018</td>
-                                                       <td>UDS</td>
-                                                       <td>Completed</td>
-                                                   </tr>
-                                                   <tr>
-                                                       <td>Weekly</td>
-                                                       <td>03/03/2018</td>
-                                                       <td>00045</td>
-                                                       <td>03/03/2018</td>
-                                                       <td>15/03/2018</td>
-                                                       <td>UDS</td>
-                                                       <td>Completed</td>
-                                                   </tr>
-                                                   <tr>
-                                                       <td>Weekly</td>
-                                                       <td>03/03/2018</td>
-                                                       <td>00045</td>
-                                                       <td>03/03/2018</td>
-                                                       <td>15/03/2018</td>
-                                                       <td>UDS</td>
-                                                       <td>Completed</td>
-                                                   </tr>
-                                                   <tr>
-                                                       <td>Weekly</td>
-                                                       <td>03/03/2018</td>
-                                                       <td>00045</td>
-                                                       <td>03/03/2018</td>
-                                                       <td>15/03/2018</td>
-                                                       <td>UDS</td>
-                                                       <td>Completed</td>
-                                                   </tr>
 
+                                                   <tr>
+                                                       <td>Title</td>
+                                                       <td>Weekly</td>
+                                                       <td>
+                                                           <div class="bootstrap-tagsinput"><span class="tag label label-info">Item 1<span data-role="remove"></span></span>
+                                                               <span class="tag label label-info">Item 2<span data-role="remove"></span></span>
+                                                               <span class="tag label label-info">Item 3<span data-role="remove"></span></span>
+                                                               <span class="tag label label-info">Item 4<span data-role="remove"></span></span> <input type="text" placeholder=""></div>
+                                                       </td>
+                                                       <td>03/03/2018</td>
+                                                       <td>03/03/2018</td>
+                                                       <td>Every 2 Hour</td>
 
+                                                   </tr>
+                                                   <tr>
+                                                       <td>Title</td>
+                                                       <td>Weekly</td>
+                                                       <td>
+                                                           <div class="bootstrap-tagsinput"><span class="tag label label-info">Item 1<span data-role="remove"></span></span>
+                                                               <span class="tag label label-info">Item 2<span data-role="remove"></span></span>
+                                                               <span class="tag label label-info">Item 3<span data-role="remove"></span></span>
+                                                               <span class="tag label label-info">Item 4<span data-role="remove"></span></span> <input type="text" placeholder=""></div>
+                                                       </td>
+                                                       <td>03/03/2018</td>
+                                                       <td>03/03/2018</td>
+                                                       <td>Every 2 Hour</td>
+
+                                                   </tr>
+                                                   <tr>
+                                                       <td>Title</td>
+                                                       <td>Weekly</td>
+                                                       <td>
+                                                           <div class="bootstrap-tagsinput"><span class="tag label label-info">Item 1<span data-role="remove"></span></span>
+                                                               <span class="tag label label-info">Item 2<span data-role="remove"></span></span>
+                                                               <span class="tag label label-info">Item 3<span data-role="remove"></span></span>
+                                                               <span class="tag label label-info">Item 4<span data-role="remove"></span></span> <input type="text" placeholder=""></div>
+                                                       </td>
+                                                       <td>03/03/2018</td>
+                                                       <td>03/03/2018</td>
+                                                       <td>Every 2 Hour</td>
+
+                                                   </tr>
+                                                   <tr>
+                                                       <td>Title</td>
+                                                       <td>Weekly</td>
+                                                       <td>
+                                                           <div class="bootstrap-tagsinput"><span class="tag label label-info">Item 1<span data-role="remove"></span></span>
+                                                               <span class="tag label label-info">Item 2<span data-role="remove"></span></span>
+                                                               <span class="tag label label-info">Item 3<span data-role="remove"></span></span>
+                                                               <span class="tag label label-info">Item 4<span data-role="remove"></span></span> <input type="text" placeholder=""></div>
+                                                       </td>
+                                                       <td>03/03/2018</td>
+                                                       <td>03/03/2018</td>
+                                                       <td>Every 2 Hour</td>
+
+                                                   </tr>
+                                                   <tr>
+                                                       <td>Title</td>
+                                                       <td>Weekly</td>
+                                                       <td>
+                                                           <div class="bootstrap-tagsinput"><span class="tag label label-info">Item 1<span data-role="remove"></span></span>
+                                                               <span class="tag label label-info">Item 2<span data-role="remove"></span></span>
+                                                               <span class="tag label label-info">Item 3<span data-role="remove"></span></span>
+                                                               <span class="tag label label-info">Item 4<span data-role="remove"></span></span> <input type="text" placeholder=""></div>
+                                                       </td>
+                                                       <td>03/03/2018</td>
+                                                       <td>03/03/2018</td>
+                                                       <td>Every 2 Hour</td>
+
+                                                   </tr>
 
                                                    </tbody>
                                                </table>
@@ -820,66 +839,117 @@
                                        </div>
                                        <div class="tab-pane fade Documents" id="Documents">
 
-                                             <div class="panel panel-default" style="min-height: 200px;">
-
-                                                 <div class="panel-heading">
-                                                        Upload Documents
-                                                 </div>
-                                                 <div class="panel-body">
-
-
-
-                                                 </div>
-
-                                             </div>
-
-                                             <div class="panel panel-default" style="min-height: 200px;">
+                                           <div class="panel panel-default" style="min-height: 200px;">
 
                                                <div class="panel-heading">
                                                    Documents
                                                </div>
                                                <div class="panel-body">
 
+                                                   <div class="row">
 
+                                                       <div class="col-md-2 txt-align-center">
+                                                           <a href="#">
+                                                               <img src="assets/img/Docs-icon.png" alt="docs" />
+                                                           </a>
+                                                           <p>File Name</p>
+                                                       </div>
+                                                       <div class="col-md-2 txt-align-center">
+                                                           <a href="#">
+                                                               <img src="assets/img/Docs-icon.png" alt="docs" />
+                                                           </a>
+                                                           <p>File Name</p>
+                                                       </div>
+                                                       <div class="col-md-2 txt-align-center">
+                                                           <a href="#">
+                                                               <img src="assets/img/Docs-icon.png" alt="docs" />
+                                                           </a>
+                                                           <p>File Name</p>
+                                                       </div>
+                                                       <div class="col-md-2 txt-align-center">
+                                                           <a href="#">
+                                                               <img src="assets/img/Docs-icon.png" alt="docs" />
+                                                           </a>
+                                                           <p>File Name</p>
+                                                       </div>
+                                                       <div class="col-md-2 txt-align-center">
+                                                           <a href="#">
+                                                               <img src="assets/img/Docs-icon.png" alt="docs" />
+                                                           </a>
+                                                           <p>File Name</p>
+                                                       </div>
+                                                       <div class="col-md-2 txt-align-center">
+                                                           <a href="#">
+                                                               <img src="assets/img/Docs-icon.png" alt="docs" />
+                                                           </a>
+                                                           <p>File Name</p>
+                                                       </div>
+
+                                                   </div>
 
                                                </div>
 
                                            </div>
 
+                                           <div class="panel panel-default" style="min-height: 200px;">
+
+                                               <div class="panel-heading">
+                                                   Photos
+                                               </div>
+                                               <div class="panel-body">
+
+                                                   <div class="row">
+
+                                                       <div class="col-md-2 txt-align-center">
+                                                           <a href="#">
+                                                               <img src="assets/img/img.png" alt="docs" />
+                                                           </a>
+                                                           <p>Photo Name</p>
+                                                       </div>
+                                                       <div class="col-md-2 txt-align-center">
+                                                           <a href="#">
+                                                               <img src="assets/img/img.png" alt="docs" />
+                                                           </a>
+                                                           <p>Photo Name</p>
+                                                       </div>
+                                                       <div class="col-md-2 txt-align-center">
+                                                           <a href="#">
+                                                               <img src="assets/img/img.png" alt="docs" />
+                                                           </a>
+                                                           <p>Photo Name</p>
+                                                       </div>
+                                                       <div class="col-md-2 txt-align-center">
+                                                           <a href="#">
+                                                               <img src="assets/img/img.png" alt="docs" />
+                                                           </a>
+                                                           <p>Photo Name</p>
+                                                       </div>
+                                                       <div class="col-md-2 txt-align-center">
+                                                           <a href="#">
+                                                               <img src="assets/img/img.png" alt="docs" />
+                                                           </a>
+                                                           <p>Photo Name</p>
+                                                       </div>
+                                                       <div class="col-md-2 txt-align-center">
+                                                           <a href="#">
+                                                               <img src="assets/img/img.png" alt="docs" />
+                                                           </a>
+                                                           <p>Photo Name</p>
+                                                       </div>
+
+                                                   </div>
+
+                                               </div>
+
+                                           </div>
+
+
                                        </div>
                                        <div class="tab-pane fade Config" id="Config">
                                            <div class="row">
 
-                                               <div class="col-md-6">
-                                                   <div class="panel panel-default" style="min-height: 200px;">
 
-                                                       <div class="panel-heading">
-                                                           Asset Details
-                                                       </div>
-                                                       <div class="panel-body">
-
-                                                           <div class="table-responsive">
-                                                               <table class="table">
-                                                                   <tbody>
-                                                                   <tr>
-                                                                       <td>Asset Type</td>
-                                                                       <td></td>
-                                                                   </tr>
-                                                                   <tr>
-                                                                       <td>Asset Group</td>
-                                                                       <td></td>
-
-                                                                   </tr>
-
-                                                                   </tbody>
-                                                               </table>
-                                                           </div>
-
-                                                       </div>
-
-                                                   </div>
-                                               </div>
-                                               <div class="col-md-6">
+                                               <div class="col-md-6 col-md-offset-3">
                                                     <div class="panel panel-default" style="min-height: 200px;">
 
                                                        <div class="panel-heading">
@@ -894,10 +964,12 @@
                                                                            <th>Type</th>
                                                                            <th>Units</th>
                                                                            <th>Consumption</th>
+                                                                           <th>Actions</th>
                                                                        </tr>
                                                                    </thead>
 
                                                                    <tbody>
+
                                                                    <tr>
                                                                        <td>Power</td>
                                                                        <td>Watt</td>
@@ -909,29 +981,8 @@
                                                                                </label>
                                                                            </div>
                                                                        </td>
-                                                                   </tr>
-                                                                   <tr>
-                                                                       <td>Power</td>
-                                                                       <td>Watt</td>
                                                                        <td>
-
-                                                                           <div class="checkbox">
-                                                                               <label>
-                                                                                   <input type="checkbox" checked name="terms" disabled>
-                                                                               </label>
-                                                                           </div>
-                                                                       </td>
-                                                                   </tr>
-                                                                   <tr>
-                                                                       <td>Power</td>
-                                                                       <td>Watt</td>
-                                                                       <td>
-
-                                                                           <div class="checkbox">
-                                                                               <label>
-                                                                                   <input type="checkbox" name="terms" disabled>
-                                                                               </label>
-                                                                           </div>
+                                                                           <a  has-authority="ROLE_ADMIN" class="btn btn-simple btn-info" ><i class="material-icons">edit</i><div class="ripple-container"></div></a>
                                                                        </td>
                                                                    </tr>
                                                                    <tr>
@@ -945,6 +996,9 @@
                                                                                </label>
                                                                            </div>
                                                                        </td>
+                                                                       <td>
+                                                                           <a  has-authority="ROLE_ADMIN" class="btn btn-simple btn-info" ><i class="material-icons">edit</i><div class="ripple-container"></div></a>
+                                                                       </td>
                                                                    </tr>
                                                                    <tr>
                                                                        <td>Power</td>
@@ -953,11 +1007,45 @@
 
                                                                            <div class="checkbox">
                                                                                <label>
-                                                                                   <input type="checkbox" name="terms" disabled>
+                                                                                   <input type="checkbox" checked name="terms" disabled>
                                                                                </label>
                                                                            </div>
                                                                        </td>
+                                                                       <td>
+                                                                           <a  has-authority="ROLE_ADMIN" class="btn btn-simple btn-info" ><i class="material-icons">edit</i><div class="ripple-container"></div></a>
+                                                                       </td>
                                                                    </tr>
+                                                                   <tr>
+                                                                       <td>Power</td>
+                                                                       <td>Watt</td>
+                                                                       <td>
+
+                                                                           <div class="checkbox">
+                                                                               <label>
+                                                                                   <input type="checkbox" checked name="terms" disabled>
+                                                                               </label>
+                                                                           </div>
+                                                                       </td>
+                                                                       <td>
+                                                                           <a  has-authority="ROLE_ADMIN" class="btn btn-simple btn-info" ><i class="material-icons">edit</i><div class="ripple-container"></div></a>
+                                                                       </td>
+                                                                   </tr>
+                                                                   <tr>
+                                                                       <td>Power</td>
+                                                                       <td>Watt</td>
+                                                                       <td>
+
+                                                                           <div class="checkbox">
+                                                                               <label>
+                                                                                   <input type="checkbox" checked name="terms" disabled>
+                                                                               </label>
+                                                                           </div>
+                                                                       </td>
+                                                                       <td>
+                                                                           <a  has-authority="ROLE_ADMIN" class="btn btn-simple btn-info" ><i class="material-icons">edit</i><div class="ripple-container"></div></a>
+                                                                       </td>
+                                                                   </tr>
+
 
                                                                    </tbody>
                                                                </table>
@@ -1218,3 +1306,31 @@
 	</div>
 
 </div>
+
+<div class="modal right fade" id="RightModal-View" tabindex="-1" role="dialog" aria-labelledby="RightModal">
+    <div class="modal-dialogNew" role="document">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="">Calender</h4>
+            </div>
+
+            <div class="modal-body">
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="card card-calendar">
+                            <div class="card-content" class="ps-child">
+                                <div id="fullCalendar"></div>
+                                <!-- <div id="calendar"></div> -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div><!-- modal-content -->
+    </div><!-- modal-dialog -->
+</div><!--End View modal -->

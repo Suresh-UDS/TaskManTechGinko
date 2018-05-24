@@ -1,0 +1,39 @@
+<!--
+  Generated template for the AssetList page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+  <ion-navbar>
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>Asset List</ion-title>
+  </ion-navbar>
+</ion-header>
+
+
+<ion-content padding>
+
+    <ion-fab right bottom (click)="openFilters()"   >
+        <button ion-fab color="primary"> <ion-icon name="funnel"></ion-icon></button>
+    </ion-fab>
+
+    <ion-fab top right edge (click)="scanQR()" >
+        <button ion-fab color="primary"> <ion-icon name="qr-scanner"></ion-icon></button>
+    </ion-fab>
+
+  <ion-list>
+    <ion-item *ngFor="let asset of assetList">
+      <ion-thumbnail item-start>
+        <img [src]=asset.img>
+      </ion-thumbnail>
+      <h2>{{asset.name}}</h2>
+      <p>{{asset.assetGroup}}</p>
+      <button ion-button clear item-end (click)="viewAsset(asset)" >View</button>
+    </ion-item>
+  </ion-list>
+
+
+</ion-content>

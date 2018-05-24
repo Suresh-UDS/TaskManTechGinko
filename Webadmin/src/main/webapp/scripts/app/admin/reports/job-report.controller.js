@@ -432,6 +432,8 @@ angular.module('timeSheetApp')
         	
 
         $scope.clearFilter = function() {
+            $rootScope.exportStatusObj.exportMsg = '';
+            $scope.downloader=false;
             $scope.selectedDateFrom = $filter('date')('01/01/2018', 'dd/MM/yyyy'); 
             $scope.selectedDateTo = $filter('date')(new Date(), 'dd/MM/yyyy');
             $scope.selectedDateFromSer = d; 
@@ -452,6 +454,8 @@ angular.module('timeSheetApp')
 
         $scope.exportAllData = function(type){
         		$scope.searchCriteria.exportType = type;
+                $rootScope.exportStatusObj.exportMsg = '';
+                $scope.downloader=true;
 	        	JobComponent.exportAllData($scope.searchCriteria).then(function(data){
 	        		var result = data.results[0];
 	        		console.log(result);
@@ -499,6 +503,7 @@ angular.module('timeSheetApp')
 	            			$rootScope.exportStatusObj.exportStatus = data.status;
 	                		console.log('exportStatus - '+ JSON.stringify($rootScope.exportStatusObj));
 	                		$rootScope.exportStatusObj.exportMsg = data.msg;
+                            $scope.downloader=false;
 	                		console.log('exportMsg - '+ $rootScope.exportStatusObj.exportMsg);
 	                		if($rootScope.exportStatusObj.exportStatus == 'COMPLETED'){
 	                			if($rootScope.exportStatusObj.url) {

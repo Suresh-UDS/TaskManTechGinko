@@ -1064,7 +1064,7 @@ button.btn.btn-outline {
 		-webkit-transition: opacity 0.3s linear, right 0.3s ease-out;
 		   -moz-transition: opacity 0.3s linear, right 0.3s ease-out;
 		     -o-transition: opacity 0.3s linear, right 0.3s ease-out;
-		        transition: opacity 0.3s linear, right 0.3s ease-out;
+		        transition: opacity 0.7s linear, right 0.7s ease-out;
 	}
 
 	.modal.right.fade.in .modal-dialog {
@@ -1072,12 +1072,25 @@ button.btn.btn-outline {
 	}
 	.modal.right.fade.in .modal-dialogNew {
 		right: 0;
+        transition: opacity 0.5s linear, right 0.7s ease-out;
 	}
-   .user div a{
+
+
+
+
+.user div a{
 
     cursor:pointer;
   }
-
+a.cal-btn
+{
+    padding: 5px 0 !important;
+    margin: 0 !important;
+}
+a.cal-btn i
+{
+    font-size: 30px !important;
+}
   .pageCenter{
       top: calc(100% / 2.5);
       left: calc(100% / 2.3);
@@ -1266,4 +1279,40 @@ a.sort-by:after {
 p.help-block{
   line-height: 15px;
   display:block !important;
+}
+
+/* Schedule events css(calendar)*/
+
+.fc-button-group button{
+background-color: #ff9800 !important;
+}
+.downloaderMain{
+  position: relative;
+}
+.downloader{
+  width:100%;
+  background: url('downloader.gif') no-repeat ;
+  background-size: 192px;
+  position: absolute;
+  top: -62px;
+  right: 34px;
+  height: 100px;
+}
+.downloaderBig{
+  width:100%;
+  background: url('downloader.gif') no-repeat ;
+  background-size: 192px;
+  position: absolute;
+  top: -64px;
+  right: 35px;
+  height: 100px;
+}
+.downloaderMd{
+  width:100%;
+  background: url('downloader.gif') no-repeat ;
+  background-size: 192px;
+  position: absolute;
+  top: -31px;
+  right: 30px;
+  height: 100px;
 }

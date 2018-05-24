@@ -31,9 +31,16 @@
                                             <button ui-sref="add-asset" has-permission="Site:Create" ng-class="{active: $state.includes('admin')}"  class="btn btn-circle green-clr">
                                                 <i class="material-icons">add</i>
                                             </button>
+                                            <button  class="btn btn-circle orange-clr"  ui-sref="view-calendar" title="Asset events">
+                                                <i class="material-icons">grid_on</i>
+                                            </button>
                                             <button ng-click="refreshPage()" class="btn btn-circle orange-clr">
                                                 <i class="material-icons">refresh</i>
                                             </button>
+                                            <button ui-sref="schedule-list"  class="btn btn-circle orange-clr">
+                                                <i class="material-icons">assignment</i>
+                                            </button>
+
 
                                         </div>
                                     </td>
@@ -147,34 +154,11 @@
 
     </div>
 
-    <div class="row">
+    <!-- Pagination directive start -->
 
-        <div class="col-md-6"></div>
-        <div class="col-md-6 text-right">
-            <ul class="pagination pagination-warning">
+    <pagination-new></pagination-new>
 
-                <li class="paging-first" ID="first">
-                    <a href="#" id="first" ng-click="first()">
-                        <i id="first" class=" fa fa-step-backward"></i></a>
-                </li>
-                <li class="prev paging-previous" id="previous">
-                    <a id="previous" href="#" ng-click="previous()"> prev</a>
-                </li>
-
-                <li class="active">
-                    <a href="javascript:void(0);">{{pages.currPage}}</a>
-                </li>
-                <li class="next paging-next" id="next">
-                    <a id="next" href="#" ng-click="next()" >next</a>
-                </li>
-                <li class="paging-last" id="last">
-                    <a id="last" href="#" ng-click="last()"><i id="last" class="fa fa-step-forward"></i></a>
-                </li>
-
-            </ul>
-        </div>
-
-    </div>
+    <!-- Pagination directive end -->
 
 
 	<div class="row">

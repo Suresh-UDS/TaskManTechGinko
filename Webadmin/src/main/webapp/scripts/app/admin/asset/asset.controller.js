@@ -26,6 +26,17 @@ angular.module('timeSheetApp')
             plannedEnd : false,
         };
 
+        $scope.initCalender = function(){
+
+            demo.initFormExtendedDatetimepickers();
+
+
+        };
+
+        $scope.initCalender();
+
+        demo.initFullCalendar();
+
         $scope.openCalendar = function(e,cmp) {
             e.preventDefault();
             e.stopPropagation();

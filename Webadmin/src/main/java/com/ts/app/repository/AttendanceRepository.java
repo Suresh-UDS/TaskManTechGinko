@@ -31,7 +31,7 @@ public interface AttendanceRepository extends JpaRepository<Attendance, Long>,Jp
 
     @Query("SELECT a from Attendance a where a.site.id = :siteId and a.checkInTime between :startDate and :endDate")
     Page<Attendance> findBySiteIdAndCheckInTime(@Param("siteId") Long siteId, @Param("startDate") Date startDate, @Param("endDate") Date endDate, Pageable pageRequest);
-    
+
     @Query("SELECT a from Attendance a where a.site.project.id = :projectId or a.site.id = :siteId and a.checkInTime between :startDate and :endDate")
     Page<Attendance> findBySiteIdAndCheckInTime(@Param("projectId") Long projectId,@Param("siteId") Long siteId, @Param("startDate") Date startDate, @Param("endDate") Date endDate, Pageable pageRequest);
 
@@ -53,6 +53,7 @@ public interface AttendanceRepository extends JpaRepository<Attendance, Long>,Jp
     Page<Attendance> findByProjectIdAndDate(@Param("projectId") Long projectId, @Param("startDate") Date startDate, @Param("endDate") Date endDate, Pageable pageRequest);
     
 	/*@Query("SELECT a from Attendance a where a.site.project.id = :projectId or a.site.id = :siteId and a.employee.name like '%' || :name || '%' and a.checkInTime between :startDate and :endDate order by a.checkInTime desc")
+
 	Page<Attendance> findBySiteIdEmpNameAndDate(@Param("projectId") Long projectId, @Param("siteId") Long siteId, @Param("name") String name, @Param("startDate") Date startDate, @Param("endDate") Date endDate, Pageable pageRequest);
     */
     @Query("SELECT a from Attendance a where a.site.project.id = :projectId or a.site.id = :siteId and a.employee.name like '%' || :name || '%' and a.checkInTime between :startDate and :endDate")

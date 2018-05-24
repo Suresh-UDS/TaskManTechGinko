@@ -401,7 +401,7 @@ public class AttendanceService extends AbstractService {
                     }else if(searchCriteria.getSiteId() != 0 && StringUtils.isEmpty(searchCriteria.getEmployeeEmpId())) {
                         log.debug("find by site id and check in  date and time - "+searchCriteria.getSiteId());
                         page = attendanceRepository.findBySiteIdAndCheckInTime(searchCriteria.getProjectId(), searchCriteria.getSiteId(), startDate, toDate, pageRequest);
-                    }else if(searchCriteria.getSiteId()!=0){
+                    }else if(searchCriteria.getSiteId() != 0 ){
                         log.debug("find by site id and employee id date and time - "+searchCriteria.getSiteId()+" - "+searchCriteria.getEmployeeEmpId());
                         page = attendanceRepository.findBySiteIdEmpIdAndDate(searchCriteria.getProjectId(), searchCriteria.getSiteId(),searchCriteria.getEmployeeEmpId(), startDate, toDate, pageRequest);
                     }else if (searchCriteria.getProjectId() > 0) {
@@ -415,6 +415,18 @@ public class AttendanceService extends AbstractService {
                     			}
                     		}	
                     }
+//                    else{
+//                        if(searchCriteria.getSiteId()!=0 && StringUtils.isEmpty(searchCriteria.getEmployeeEmpId())){
+//                            log.debug("find by site id  - "+searchCriteria.getSiteId());
+//                            page= attendanceRepository.findBySiteId(searchCriteria.getSiteId(),pageRequest);
+//                        }else if(searchCriteria.getSiteId()!=0){
+//                            log.debug("find by site id and employee id - "+searchCriteria.getSiteId()+" - "+searchCriteria.getEmployeeEmpId());
+//                            page =attendanceRepository.findBySiteIdEmpId(searchCriteria.getProjectId(), searchCriteria.getSiteId(),searchCriteria.getEmployeeEmpId(),pageRequest);
+//                        }else{
+//                            log.debug("no site id only employee id- ");
+//                            page = attendanceRepository.findByEmpId(searchCriteria.getEmployeeEmpId(),pageRequest);
+//                        }
+//                    }
 
                 }
 
