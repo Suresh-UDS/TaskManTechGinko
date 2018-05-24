@@ -12,6 +12,8 @@ angular.module('timeSheetApp', ['LocalStorageModule',
         $rootScope.loginView = true;
         $rootScope.ENV = ENV;
         $rootScope.VERSION = VERSION;
+        $rootScope.stateValue ="";
+
        /* Principal.identity().then(function(response)
              {
                  console.log('current user' +JSON.stringify(response.login));
@@ -27,6 +29,7 @@ angular.module('timeSheetApp', ['LocalStorageModule',
             console.log("state change start")
             if (Principal.isIdentityResolved()) {
                 Auth.authorize();
+
                 $rootScope.isLoggedIn = true;
             }
 
@@ -81,7 +84,19 @@ angular.module('timeSheetApp', ['LocalStorageModule',
         $rootScope.back = function() {
             // If previous state is 'activate' or do not exist go to 'home'
             if ($rootScope.previousStateName === 'activate' || $state.get($rootScope.previousStateName) === null) {
+                
+                if($rootScope.stateValue != ""){
+                    $rootScope.stateValue;
+                    $(".content").removeClass("remove-mr");
+                    $(".main-panel").removeClass("remove-hght");
+                    //$state.go($rootScope.stateValue);
+                    window.location = window.location.href+$rootScope.stateValue;
+                }
+                else{
                 $state.go('dashboard');
+            }
+              
+              $rootScope.stateValue ="";
             } else {
                 $state.go($rootScope.previousStateName, $rootScope.previousStateParams);
             }
@@ -121,6 +136,8 @@ angular.module('timeSheetApp', ['LocalStorageModule',
 
             $("#loadPage").animate({scrollTop: 0}, 2000);
         }
+
+
 
 
 
@@ -196,6 +213,6 @@ angular.module('timeSheetApp', ['LocalStorageModule',
     	};
     });
 
-    
+
 
 
