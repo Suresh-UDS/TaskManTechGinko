@@ -668,6 +668,25 @@ module.exports = {
         })
     },
 
+    updateImages: function (req, res, next) {
+        Quotation.findById({_id:req.body.quotationId},function(err,quotation){
+            if(err){
+                console.log("Error in finding quotation");
+                console.log(err);
+            }else{
+                if(quotation){
+                    console.log("Quotation found");
+                    console.log(quotation);
+                    console.log(req.body.quotationImage);
+                    if(quotation.images.length>0){
+                        quotation.push(req.body.quotationImage);
+                    }
+
+                }
+            }
+        })
+    }
+
 
     
 };
