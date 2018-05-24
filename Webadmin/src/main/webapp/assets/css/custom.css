@@ -1316,3 +1316,50 @@ background-color: #ff9800 !important;
   right: 30px;
   height: 100px;
 }
+
+/* Toop Tip  */
+
+div.bouncing-container {
+    position: fixed;
+    top:8px;
+    right: 80px;
+    animation: bounce 2s ease-in-out infinite;
+    -webkit-animation: bounce 2s ease-in-out infinite;
+    -moz-animation: bounce 2s ease-in-out infinite;
+    -webkit-animation-iteration-count: infinite;
+    -moz-animation-iteration-count: infinite;
+    z-index: 9999;
+}
+div.bouncing-container.asset
+{
+    right: 150px;
+}
+div.bouncing-container .message-container {
+    position: relative;
+    border-radius: 10px;
+    padding: 10px 20px;
+    background: #ff9800;
+    box-shadow: 3px 2px 10px #ddd;
+}
+div.bouncing-container span {
+    font-size: 16px;
+    font-weight: 800;
+    color: #fff;
+}
+div.bouncing-container .arrow-down {
+    position: relative;
+    top: 0;
+    width: 0;
+    margin-left: 90px;
+    height: 0;
+    border-left: 15px solid transparent;
+    border-right: 15px solid transparent;
+    border-top: 15px solid #ff9800;
+}
+@keyframes bounce {
+    50% {
+        transform: translate(0, 20px);
+    }
+}
+
+/* End Tool Tip */
