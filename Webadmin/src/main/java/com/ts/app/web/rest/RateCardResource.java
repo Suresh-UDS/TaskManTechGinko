@@ -140,6 +140,12 @@ public class RateCardResource {
         return new ResponseEntity<String>("{ \"quotationFileName\" : \""+quotationDTO.getQuotationFileName() + "\", \"status\" : \"success\"}", HttpStatus.OK);
     }
 
+    @RequestMapping(value = "/rateCard/quotation/{id}/{imageId}",method = RequestMethod.GET)
+    public ResponseEntity<?> findAttendanceImage(@PathVariable("id") String quotationId, @PathVariable("imageId") String imageId) {
+        String image = rateCardService.getQuotationImage(quotationId, imageId);
+        return new ResponseEntity<String>("{ \"image\":\" "+image+"\"",HttpStatus.OK);
+    }
+    
 	@RequestMapping(value = "/rateCard/quotation/id/{id}", method = RequestMethod.GET)
     public ResponseEntity<?> getQuotation(@PathVariable("id") String id) {
         log.info("--Invoked RateCardResource.getQuotation --");
