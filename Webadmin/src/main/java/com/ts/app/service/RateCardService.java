@@ -621,12 +621,19 @@ public class RateCardService extends AbstractService {
     public QuotationDTO uploadFile(QuotationDTO quotationDTO) {
 
         log.debug("Employee list from check in out images"+quotationDTO.getId());
-        //Attendance attendanceImage = attendanceRepository.findOne(attendanceDto.getId());
         String quotationFileName = fileUploadHelper.uploadQuotationFile(quotationDTO.getId(), quotationDTO.getQuotationFile(), System.currentTimeMillis());
         quotationDTO.setQuotationFileName(quotationFileName);
-        //attendanceImage = attendanceRepository.save(attendanceImage);
+        
 		return quotationDTO;
 	}
+	
+	public String getQuotationImage(String quotationId, String imageId) {
+        String quotationBase64 = null;
+        log.debug("Quotation Image service"+quotationId+" "+imageId);
+        quotationBase64=fileUploadHelper.readQuotationImages(quotationId,imageId);
+        return quotationBase64;
+
+    }
 	
     public SearchResult<RateCardDTO> findBySearchCriteria(SearchCriteria searchCriteria) {
     	log.debug("search Criteria",searchCriteria);

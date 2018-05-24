@@ -284,6 +284,26 @@ public class FileUploadHelper {
         return name;
     }
     
+    public String readQuotationImages(String quotationId, String imageId) {
+        String filePath = env.getProperty("quotation.file.path");
+        filePath += "/" + imageId;
+        File file = new File(filePath);
+        String imageDataString = "";
+        try {
+            FileInputStream imageFile = new FileInputStream(file);
+            byte imageData[] = new byte[(int) file.length()];
+            imageFile.read(imageData);
+
+            // Converting Image byte array into Base64 String
+            imageDataString += Base64.getEncoder().encodeToString(imageData);
+            imageFile.close();
+
+        }catch(IOException io) {
+            log.error("Error while reading the image file ,"+ imageId , io);
+        }
+        return imageDataString;
+    }
+    
     public String readAttendanceImage(Long id, String empId, String imageFileName) {
         String filePath = env.getProperty("attendance.file.path");
         filePath += "/" + empId;
