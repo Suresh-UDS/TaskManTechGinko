@@ -82,8 +82,8 @@ function startup(){
 
   app.get('/api/quotation/id/:id',quotationController.getQuotation);
   app.get('/api/quotation/:id',quotationController.getQuotationById);
-  app.get('/api/quotation/search',quotationController.search);
-  app.post('/api/quotation', quotationController.getQuotations);
+  app.post('/api/quotation',quotationController.searchQuotations);
+  app.post('/api/quotation/search', quotationController.getQuotations);
   app.get('/api/rateCard', quotationController.getRateCards);
   app.post('/api/rateCard', quotationController.getRateCards);
   app.get('/api/pdf/create',quotationController.createPDF);

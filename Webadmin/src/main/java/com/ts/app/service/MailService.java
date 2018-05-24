@@ -164,7 +164,7 @@ public class MailService {
     }
 
     @Async
-    public void sendTicketCreatedMail(User user,String emailIds, String siteName, long ticketId, String ticketNumber, String createdBy, String sentTo, String ticketTitle, String ticketDescription, String status, String severity){
+    public void sendTicketCreatedMail(String ticketUrl,User user,String emailIds, String siteName, long ticketId, String ticketNumber, String createdBy, String sentTo, String ticketTitle, String ticketDescription, String status, String severity){
         Locale locale = Locale.forLanguageTag(user.getLangKey() != null ? user.getLangKey() : "en-US");
         Context context = new Context(locale);
         context.setVariable("user", user);
@@ -174,13 +174,14 @@ public class MailService {
         context.setVariable("ticketTitle", ticketTitle);
         context.setVariable("ticketDescription", ticketDescription);
         context.setVariable("status", status);
+        context.setVariable("url", ticketUrl);
         String content = templateEngine.process("ticketCreation", context);
         String subject = messageSource.getMessage("email.ticket.alert.title", null, locale);
         sendEmail(user.getEmail(), subject, content, false, true,null);
     }
     
     @Async
-    public void sendTicketUpdatedMail(User user,String emailIds, String siteName, long ticketId, String ticketNumber, String createdBy, String sentTo, String ticketTitle, String ticketDescription, String status){
+    public void sendTicketUpdatedMail(String ticketUrl,User user,String emailIds, String siteName, long ticketId, String ticketNumber, String createdBy, String sentTo, String ticketTitle, String ticketDescription, String status){
         Locale locale = Locale.forLanguageTag(user.getLangKey() != null ? user.getLangKey() : "en-US");
         Context context = new Context(locale);
         context.setVariable("user", user);
@@ -189,13 +190,14 @@ public class MailService {
         context.setVariable("ticketTitle", ticketTitle);
         context.setVariable("ticketDescription", ticketDescription);
         context.setVariable("status", status);
+        context.setVariable("url", ticketUrl);
         String content = templateEngine.process("ticketUpdated", context);
         String subject = messageSource.getMessage("email.ticket.updated.alert.title", null, locale);
         sendEmail(user.getEmail(), subject, content, false, true,null);
     }
     
     @Async
-    public void sendTicketClosedMail(User user,String emailIds, String siteName, long ticketId, String ticketNumber, String createdBy, String sentTo, String ticketTitle, String ticketDescription, String status){
+    public void sendTicketClosedMail(String ticketUrl,User user,String emailIds, String siteName, long ticketId, String ticketNumber, String createdBy, String sentTo, String ticketTitle, String ticketDescription, String status){
         Locale locale = Locale.forLanguageTag(user.getLangKey() != null ? user.getLangKey() : "en-US");
         Context context = new Context(locale);
         context.setVariable("user", user);
@@ -204,6 +206,7 @@ public class MailService {
         context.setVariable("ticketTitle", ticketTitle);
         context.setVariable("ticketDescription", ticketDescription);
         context.setVariable("status", status);
+        context.setVariable("url", ticketUrl);
         String content = templateEngine.process("ticketApproved", context);
         String subject = messageSource.getMessage("email.ticket.approved.alert.title", null, locale);
         sendEmail(user.getEmail(), subject, content, false, true,null);

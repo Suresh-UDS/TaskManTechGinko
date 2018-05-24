@@ -19,9 +19,9 @@ module.exports = {
     			secureConnection: true,
     			port: 465
     		},
-    		username :'karthickkumararajak@gmail.com',
-    		password :'0838010059',
-    		from:'UDS TaskMan'
+    		username :'timesheettestuser1@gmail.com',
+    		password :'Test123#',
+            from:'UDS <no-reply@uds.com>'
     	},
 
     	pushService : {
@@ -33,6 +33,9 @@ module.exports = {
                 gcm_id: 935098247956
     	    }
 
-    	}
+    	},
+		url : {
+			quotation_view: 'https://taskmanadmin.uds.in/#/view-quotation'
+		}
 
 };

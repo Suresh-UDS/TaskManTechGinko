@@ -1,5 +1,6 @@
 package com.ts.app.service;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -27,6 +28,8 @@ import org.springframework.web.client.RestTemplate;
 
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.ts.app.domain.AbstractAuditingEntity;
+import com.ts.app.domain.Employee;
+import com.ts.app.domain.EmployeeProjectSite;
 import com.ts.app.domain.RateCard;
 import com.ts.app.domain.Setting;
 import com.ts.app.domain.Ticket;
@@ -70,13 +73,13 @@ public class RateCardService extends AbstractService {
 
 	@Inject
 	private MapperUtil<AbstractAuditingEntity, BaseDTO> mapperUtil;
-	
+
 	@Inject
 	private SettingsRepository settingRepository;
-	
+
 	@Inject
 	private MailService mailService;
-	
+
 	@Inject
 	private TicketRepository ticketRepository;
 
@@ -221,7 +224,7 @@ public class RateCardService extends AbstractService {
 //		return mapperUtil.toModelList(entities, RateCardDTO.class);
         return  rateCardDetails;
 	}
-	
+
 	public Object findAllTypes() {
 
         log.debug("Find all rate card types");
@@ -256,7 +259,7 @@ public class RateCardService extends AbstractService {
 //		return mapperUtil.toModelList(entities, RateCardDTO.class);
         return  rateCardDetails;
 	}
-	
+
 	public QuotationDTO saveQuotation(QuotationDTO quotationDto, long currUserId) {
 
         log.debug("Quotation creation");
@@ -264,7 +267,7 @@ public class RateCardService extends AbstractService {
         try{
         		//get the user details
         		User currUser = userRepository.findOne(currUserId);
-        		
+
         		//calculate the total cost
         		List<RateCardDTO> rateCardDetails = quotationDto.getRateCardDetails();
         		if(CollectionUtils.isNotEmpty(rateCardDetails)) {
@@ -276,7 +279,7 @@ public class RateCardService extends AbstractService {
         		}else {
         			return quotationDto;
         		}
-        	
+
             RestTemplate restTemplate = new RestTemplate();
             MappingJackson2HttpMessageConverter jsonHttpMessageConverter = new MappingJackson2HttpMessageConverter();
             jsonHttpMessageConverter.getObjectMapper().configure(SerializationFeature.FAIL_ON_EMPTY_BEANS,false);
@@ -330,12 +333,15 @@ public class RateCardService extends AbstractService {
             if(!StringUtils.isEmpty(quotationDto.get_id()) && quotationDto.getMode().equalsIgnoreCase("edit")) {
             		url = quotationSvcEndPoint+"/quotation/edit";
             }else if(!StringUtils.isEmpty(quotationDto.get_id()) && quotationDto.getMode().equalsIgnoreCase("submit")) {
-				Setting quotationAlertSetting = settingRepository.findSettingByKeyAndSiteId(SettingsService.EMAIL_NOTIFICATION_OVERDUE, quotationDto.getSiteId());
-				Setting overdueEmails = settingRepository.findSettingByKeyAndSiteId(SettingsService.EMAIL_NOTIFICATION_OVERDUE_EMAILS, quotationDto.getSiteId());
+				Setting quotationAlertSetting = settingRepository.findSettingByKeyAndSiteId(SettingsService.EMAIL_NOTIFICATION_QUOTATION, quotationDto.getSiteId());
+				Setting overdueEmails = settingRepository.findSettingByKeyAndSiteId(SettingsService.EMAIL_NOTIFICATION_QUOTATION_EMAILS, quotationDto.getSiteId());
 				String alertEmailIds =  "";
 				if(overdueEmails != null) {
+				    log.debug("Overdue email ids found"+overdueEmails.getSettingValue());
 					alertEmailIds = overdueEmails.getSettingValue();
-				}
+				}else{
+				    log.debug("Overdue email ids not found");
+                }
 
             		url = quotationSvcEndPoint+"/quotation/send";
             		quotationDto.setDrafted(false);
@@ -345,12 +351,15 @@ public class RateCardService extends AbstractService {
                 request.put("sentByUserId", quotationDto.getSentByUserId());
                 request.put("sentByUserName", quotationDto.getSentByUserName());
                 if(quotationAlertSetting != null && quotationAlertSetting.getSettingValue().equalsIgnoreCase("true")) { //send escalation emails to managers and alert emails
+                        log.debug("Alert email while sending quotation request"+alertEmailIds);
                 		request.put("clientEmailId", alertEmailIds);
-				}
+				}else{
+                    log.debug("Alert emails not found while sending quotation");
+                }
 
             }else if(!StringUtils.isEmpty(quotationDto.get_id()) && quotationDto.getMode().equalsIgnoreCase("approve")) {
-				Setting quotationAlertSetting = settingRepository.findSettingByKeyAndSiteId(SettingsService.EMAIL_NOTIFICATION_OVERDUE, quotationDto.getSiteId());
-				Setting overdueEmails = settingRepository.findSettingByKeyAndSiteId(SettingsService.EMAIL_NOTIFICATION_OVERDUE_EMAILS, quotationDto.getSiteId());
+				Setting quotationAlertSetting = settingRepository.findSettingByKeyAndSiteId(SettingsService.EMAIL_NOTIFICATION_QUOTATION, quotationDto.getSiteId());
+				Setting overdueEmails = settingRepository.findSettingByKeyAndSiteId(SettingsService.EMAIL_NOTIFICATION_QUOTATION_EMAILS, quotationDto.getSiteId());
 				String alertEmailIds =  "";
 				if(overdueEmails != null) {
 					alertEmailIds = overdueEmails.getSettingValue();
@@ -422,7 +431,7 @@ public class RateCardService extends AbstractService {
 
         return  quotationList;
     }
-    
+
     public Object getQuotation(long serialId) {
 
         log.debug("get Quotation");
@@ -458,6 +467,15 @@ public class RateCardService extends AbstractService {
 
         log.debug("get Quotations");
         Object quotationList = "";
+		User user = userRepository.findOne(searchCriteria.getUserId());
+		Employee employee = user.getEmployee();
+		List<EmployeeProjectSite> projectSites = employee.getProjectSites();
+		List<Long> siteIds = new ArrayList<Long>();
+		if(CollectionUtils.isNotEmpty(projectSites)) {
+			for(EmployeeProjectSite projSite : projectSites) {
+				siteIds.add(projSite.getSite().getId());
+			}
+		}
 
         try {
             RestTemplate restTemplate = new RestTemplate();
@@ -470,12 +488,18 @@ public class RateCardService extends AbstractService {
             map.put("Content-Type", MediaType.APPLICATION_JSON_VALUE);
 
             headers.setAll(map);
-            
+
             JSONObject request = new JSONObject();
             request.put("projectId",searchCriteria.getProjectId());
             request.put("siteId",searchCriteria.getSiteId());
             request.put("id",searchCriteria.getId());
             request.put("title",searchCriteria.getQuotationTitle());
+            request.put("createdBy",searchCriteria.getQuotationCreatedBy());
+            request.put("approvedBy",searchCriteria.getQuotationApprovedBy());
+            request.put("status",searchCriteria.getQuotationStatus());
+            request.put("submittedDate", searchCriteria.getQuotationSubmittedDate());
+            request.put("approvedDate", searchCriteria.getQuotationApprovedDate());
+            request.put("siteIds", siteIds);
             log.debug("Request body " + request.toString());
             HttpEntity<?> requestEntity = new HttpEntity<>(request.toString(), headers);
             log.debug("Rate card service end point"+quotationSvcEndPoint);
@@ -537,7 +561,7 @@ public class RateCardService extends AbstractService {
 //		return mapperUtil.toModelList(entities, RateCardDTO.class);
         return  approvedQuotation;
     }
-    
+
     public Object rejectQuotation(QuotationDTO quotation) {
         log.debug("reject Quotations");
         Object approvedQuotation = "";

@@ -107,8 +107,8 @@ angular.module('timeSheetApp')
                     $scope.errorUserRoleExists = true;
                     $scope.showNotifications('top','center','danger','User role already exists!.. Please choose another one');
                 } else if(response.status === 400 && response.data.message === 'error.validation'){
-                	$scope.validationError = true;
-                	$scope.validationErrorMsg = response.data.description;
+					$scope.validationError = true;
+					$scope.validationErrorMsg = response.data.description;
                     $scope.showNotifications('top','center','danger','User role invalid!..');
                 } else {
                     $scope.error = 'ERROR';

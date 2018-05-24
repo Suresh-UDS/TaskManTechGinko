@@ -6,7 +6,7 @@ angular
 				'QuotationController',
 				function($scope, $rootScope, $state, $timeout, $http, $document, $window,
 						$stateParams, $location, RateCardComponent,TicketComponent, JobComponent,
-						 ProjectComponent, SiteComponent,PaginationComponent) {
+						 ProjectComponent, SiteComponent,PaginationComponent,$filter) {
                     
                     $rootScope.loadingStop();
 
@@ -67,7 +67,45 @@ angular
 					$scope.pageSort = 10;
 
 					$scope.pager = {};
+					
+			        $scope.selectedSubmittedDate = $filter('date')(new Date(), 'dd/MM/yyyy'); 
+			        $scope.selectedApprovedDate = $filter('date')(new Date(), 'dd/MM/yyyy');
+					
+			        $scope.selectedSubmittedDateSer = new Date();
+			        $scope.selectedApprovedDateSer = new Date();
 
+			        $scope.initCalender = function(){
+
+			            demo.initFormExtendedDatetimepickers();
+
+			        };
+
+			        $('input#submittedDateFilter').on('dp.change', function(e){
+			            console.log(e.date);
+			            console.log(e.date._d);
+			            $scope.selectedSubmittedDateSer = e.date._d; 
+			            
+			            $.notifyClose();
+			             
+		               $scope.selectedSubmittedDate = $filter('date')(e.date._d, 'dd/MM/yyyy');
+			            
+			            
+
+			        });
+			        $('input#approvedDateFilter').on('dp.change', function(e){
+			            console.log(e.date);
+			            console.log(e.date._d);
+			            $scope.selectedApprovedDateSer = e.date._d;
+
+			            $.notifyClose();
+			            
+		                $scope.selectedApprovedDate = $filter('date')(e.date._d, 'dd/MM/yyyy');
+
+			        });
+			        
+			        $scope.initCalender();
+
+					
 					$scope.init = function() {
 
                         console.log("State parameters");
@@ -444,25 +482,30 @@ angular
 				    		$scope.searchCriteria.siteId = $scope.sites[0].id;
 				    }
 			        	if($scope.selectedStatus){
-				        		$scope.searchCriteria.activeFlag = $scope.selectedStatus;
-				        }
+			        		$scope.searchCriteria.quotationStatus = $scope.selectedStatus;
+			        }
 
 			        	if($scope.selectedId){
 			        		$scope.searchCriteria.id = $scope.selectedId;
 			        	}
-		                if($scope.selectedTitle){
-		                    $scope.searchCriteria.name = $scope.selectedTitle;
-		                }
+	                if($scope.selectedTitle){
+	                    $scope.searchCriteria.quotationTitle = $scope.selectedTitle;
+	                }
 
-			        	/*if($scope.selectedCreatedBy) {
-			        		$scope.searchCriteria.checkInDateTimeFrom = $scope.selectedJobDateSer;
-			        	}
-			        	if($scope.selectedSentBy) {
-			        		$scope.searchCriteria.checkInDateTimeFrom = $scope.selectedJobDateSer;
+			        	if($scope.selectedCreatedBy) {
+			        		$scope.searchCriteria.quotationCreatedBy = $scope.selectedCreatedBy;
 			        	}
 			        	if($scope.selectedApprovedBy) {
-			        		$scope.searchCriteria.checkInDateTimeFrom = $scope.selectedJobDateSer;
-			        	}*/
+			        		$scope.searchCriteria.quotationApprovedBy = $scope.selectedApprovedBy;
+			        	}
+			        	
+			        	if($scope.selectedSubmittedDateSer) {
+			        		$scope.searchCriteria.quotationSubmittedDate = $scope.selectedSubmittedDateSer;
+			        	}
+			        	if($scope.selectedApprovedDateSer) {
+			        		$scope.searchCriteria.quotationApprovedDate = $scope.selectedApprovedDateSer;
+			        	}
+			        	
 
 		            if($scope.pageSort){
 		                $scope.searchCriteria.sort = $scope.pageSort;

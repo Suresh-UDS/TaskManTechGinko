@@ -395,6 +395,7 @@ public class AttendanceService extends AbstractService {
                     		}
                     }
 
+
                     if(searchCriteria.getSiteId() != 0 && searchCriteria.getProjectId() != 0 && StringUtils.isEmpty(searchCriteria.getEmployeeEmpId())) {
                     		page = attendanceRepository.findBySiteIdAndCheckInTime(searchCriteria.getSiteId(), startDate, toDate, pageRequest);
                     }else if(searchCriteria.getSiteId() != 0 && StringUtils.isEmpty(searchCriteria.getEmployeeEmpId())) {
@@ -407,12 +408,12 @@ public class AttendanceService extends AbstractService {
                     		if (StringUtils.isEmpty(searchCriteria.getEmployeeEmpId())) {
                     			page = attendanceRepository.findByProjectIdAndDate(searchCriteria.getProjectId(),  startDate, toDate, pageRequest);
                     		}else  {
-                            log.debug("find by  employee id only - "+searchCriteria.getEmployeeEmpId());
-                            page = attendanceRepository.findBySiteIdEmpIdAndDate(searchCriteria.getProjectId(), searchCriteria.getSiteId(),searchCriteria.getEmployeeEmpId(), startDate, toDate, pageRequest);
-                            if(CollectionUtils.isEmpty(page.getContent())) {
-                            		page = attendanceRepository.findByEmpIdsAndDateRange(searchCriteria.getSubordinateIds(), startDate, toDate, pageRequest);
-                            }
-                        }
+                    			log.debug("find by  employee id only - "+searchCriteria.getEmployeeEmpId());
+                    			page = attendanceRepository.findBySiteIdEmpIdAndDate(searchCriteria.getProjectId(), searchCriteria.getSiteId(),searchCriteria.getEmployeeEmpId(), startDate, toDate, pageRequest);
+                    			if(CollectionUtils.isEmpty(page.getContent())) {
+                    				page = attendanceRepository.findByEmpIdsAndDateRange(searchCriteria.getSubordinateIds(), startDate, toDate, pageRequest);
+                    			}
+                    		}	
                     }
 //                    else{
 //                        if(searchCriteria.getSiteId()!=0 && StringUtils.isEmpty(searchCriteria.getEmployeeEmpId())){

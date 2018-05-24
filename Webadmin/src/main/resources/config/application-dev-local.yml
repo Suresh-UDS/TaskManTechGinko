@@ -109,6 +109,10 @@ reports:
     attendance-report:
         url: http://localhost:8088/#/attendance-reports
 
+url:
+    ticket-view: http://localhost:8088/#/view-ticket
+    quotation-view: http://localhost:8088/#/view-quotation
+    
 facedetection:
     api:
         url: https://api.kairos.com/detect
