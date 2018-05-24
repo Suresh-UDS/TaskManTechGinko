@@ -41,6 +41,9 @@ module.exports = {
             gcm_id: 110710812821
         }
 
+	},
+	url : {
+		quotation_view: 'http://ec2-54-169-225-123.ap-southeast-1.compute.amazonaws.com:8088/#/view-quotation'
 	}
 
 };

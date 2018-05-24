@@ -13,15 +13,21 @@
 <p th:text="#{email.ticket.alert.text1(${siteName}, ${ticketNumber}, ${severity})}">
 
 </p>
-<p th:text = "#{email.ticket.alert.text2(${ticketTitle})}">>
+<p th:text = "#{email.ticket.alert.text2(${ticketTitle})}">
 
 </p>
-<p th:text = "#{email.ticket.alert.text3(${ticketDescription})}">>
+<p th:text = "#{email.ticket.alert.text3(${ticketDescription})}">
 
 </p>
-<p th:text = "#{email.ticket.alert.text4(${status})}">>
+<p th:text = "#{email.ticket.alert.text4(${status})}">
 
 </p>
+
+<span th:text = "#{email.ticket.alert.text5}">
+</span>
+<a th:href="${url}" >View Ticket
+</a>
+
 
 <p>
     <span th:text="#{email.report.text2}">Regards, </span>

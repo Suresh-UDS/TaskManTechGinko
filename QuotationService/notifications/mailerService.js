@@ -69,7 +69,7 @@ module.exports = {
             'submit_quotation_template',
             {clientName: data.projectName,
                 siteName: data.siteName,
-                createdByUserName:data.createdByUserName},
+                createdByUserName:data.createdByUserName, url:config.url.quotation_view + data._id},
             {
                 filename: 'quotation.pdf',
                 path: './templates/'+data._id+'.pdf',
@@ -83,7 +83,7 @@ module.exports = {
             'approved_quotation_template',
             {clientName: data.sentToUserName,
                 siteName: data.siteName,
-                createdByUserName:data.createdByUserName})
+                createdByUserName:data.createdByUserName,url:config.url.quotation_view + data._id})
     },
 
     rejectQuotation: function(emailId, data) {
@@ -93,7 +93,7 @@ module.exports = {
             'rejected_quotation_template',
             {clientName: data.sentToUserName,
                 siteName: data.siteName,
-                createdByUserName:data.createdByUserName})
+                createdByUserName:data.createdByUserName,url:config.url.quotation_view + data._id})
     },
 
     getPdfDetail:function (data,callback) {

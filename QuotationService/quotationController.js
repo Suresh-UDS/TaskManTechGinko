@@ -104,10 +104,16 @@ module.exports = {
         console.log(req.body);
 
         quotation = populateQuotation(req,quotation);
-
+        var date = new Date();
         quotation.save(function(err,quotation){
             if(!err){
-                // mailerService.submitQuotation('karthickk@techginko.com',quotation);
+                if(quotation.isSubmitted) {
+                    quotation.isDrafted = false;
+                    quotation.processHistory.isSubmitted = date;
+                    quotation.submittedDate = date;
+                    quotation.lastModifiedDate = date;
+                    mailerService.submitQuotation(quotation.clientEmailId,quotation)
+                }
                 module.exports.createPDF(quotation);
                 res.json(200,quotation)
             }else{

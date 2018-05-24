@@ -396,6 +396,8 @@ public class TicketManagementService extends AbstractService {
 	private void sendNotifications(Employee employee, Ticket ticket, Site site, boolean isNew) {
 		Hibernate.initialize(employee.getUser());
 		User user = employee.getUser();
+		String ticketUrl = env.getProperty("url.ticket-view");
+		ticketUrl +=  ticket.getId();
 		Setting ticketReports = settingsRepository.findSettingByKeyAndSiteId(SettingsService.EMAIL_NOTIFICATION_TICKET, site.getId());
 		if(ticketReports == null) {
 			ticketReports = settingsRepository.findSettingByKeyAndProjectId(SettingsService.EMAIL_NOTIFICATION_TICKET, site.getProject().getId());
@@ -411,14 +413,14 @@ public class TicketManagementService extends AbstractService {
 	    ticketEmails += ticketReportEmails != null ? ticketReportEmails.getSettingValue() : "";
 	    if(StringUtils.isNotEmpty(ticket.getStatus()) && (ticket.getStatus().equalsIgnoreCase("Open") || ticket.getStatus().equalsIgnoreCase("Assigned"))) {
 	    		if(isNew) {
-		    		mailService.sendTicketCreatedMail(employee.getUser(),ticketEmails,site.getName(),ticket.getId(), String.valueOf(ticket.getId()),
+		    		mailService.sendTicketCreatedMail(ticketUrl,employee.getUser(),ticketEmails,site.getName(),ticket.getId(), String.valueOf(ticket.getId()),
 	        				user.getFirstName(), employee.getName(),ticket.getTitle(),ticket.getDescription(), ticket.getStatus(), ticket.getSeverity());
 	    		}else {
-		    		mailService.sendTicketUpdatedMail(employee.getUser(),ticketEmails,site.getName(),ticket.getId(), String.valueOf(ticket.getId()),
+		    		mailService.sendTicketUpdatedMail(ticketUrl,employee.getUser(),ticketEmails,site.getName(),ticket.getId(), String.valueOf(ticket.getId()),
 			        				user.getFirstName(), employee.getName(),ticket.getTitle(),ticket.getDescription(), ticket.getStatus());
 	    		}
     		}else if(StringUtils.isNotEmpty(ticket.getStatus()) && (ticket.getStatus().equalsIgnoreCase("Closed"))) {
-		    mailService.sendTicketClosedMail(ticket.getEmployee().getUser(),ticketEmails,site.getName(),ticket.getId(), String.valueOf(ticket.getId()),
+		    mailService.sendTicketClosedMail(ticketUrl,ticket.getEmployee().getUser(),ticketEmails,site.getName(),ticket.getId(), String.valueOf(ticket.getId()),
         				user.getFirstName(), employee.getName(),ticket.getTitle(),ticket.getDescription(), ticket.getStatus());
     		}
 	}

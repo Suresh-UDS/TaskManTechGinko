@@ -16,13 +16,17 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.codahale.metrics.annotation.Timed;
 import com.ts.app.domain.RateType;
 import com.ts.app.domain.UOMType;
 import com.ts.app.security.SecurityUtils;
 import com.ts.app.service.RateCardService;
+import com.ts.app.web.rest.dto.AttendanceDTO;
+import com.ts.app.web.rest.dto.CheckInOutImageDTO;
 import com.ts.app.web.rest.dto.QuotationDTO;
 import com.ts.app.web.rest.dto.RateCardDTO;
 import com.ts.app.web.rest.dto.SearchCriteria;
@@ -124,7 +128,17 @@ public class RateCardResource {
         QuotationDTO result = rateCardService.saveQuotation(quotationDto, currentUserId);
         return new ResponseEntity<QuotationDTO>(result, HttpStatus.OK);
     }
-	
+    
+    @RequestMapping(value = "/rateCard/quotation/image/upload", method = RequestMethod.POST)
+    public ResponseEntity<?> upload(@RequestParam("quotationId") String quotationId, @RequestParam("quotationFile") MultipartFile file) {
+    	QuotationDTO quotationDTO = new QuotationDTO();
+    	quotationDTO.setQuotationFile(file);
+        quotationDTO.setId(quotationId);
+        log.debug("quotation resource with parameters"+quotationId);
+        rateCardService.uploadFile(quotationDTO);
+        return new ResponseEntity<String>("{ \"quotationFileName\" : \""+quotationDTO.getQuotationFileName() + "\", \"status\" : \"success\"}", HttpStatus.OK);        
+    }
+
 	@RequestMapping(value = "/rateCard/quotation/id/{id}", method = RequestMethod.GET)
     public ResponseEntity<?> getQuotation(@PathVariable("id") String id) {
         log.info("--Invoked RateCardResource.getQuotation --");

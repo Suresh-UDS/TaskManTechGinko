@@ -4,6 +4,8 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
+import org.springframework.web.multipart.MultipartFile;
+
 public class QuotationDTO extends BaseDTO implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -60,7 +62,27 @@ public class QuotationDTO extends BaseDTO implements Serializable {
 
     private String mode;
 
-    public String getId() {
+    private MultipartFile quotationFile;
+    
+    private String quotationFileName;
+
+	public String getQuotationFileName() {
+		return quotationFileName;
+	}
+
+	public void setQuotationFileName(String quotationFileName) {
+		this.quotationFileName = quotationFileName;
+	}
+
+	public MultipartFile getQuotationFile() {
+		return quotationFile;
+	}
+
+	public void setQuotationFile(MultipartFile quotationFile) {
+		this.quotationFile = quotationFile;
+	}
+
+	public String getId() {
         return id;
     }
 
