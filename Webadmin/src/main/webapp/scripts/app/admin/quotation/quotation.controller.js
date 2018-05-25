@@ -151,6 +151,18 @@ angular
 						$scope.loadProjects();
 					}
 
+					$scope.actionsShow = function() {
+                     $('#approveButton').show();
+                      $('#actionButtons').show();
+					};
+
+					$scope.actionsHide= function() {
+					  $('#approveButton').hide();
+                      $('#actionButtons').hide();
+					};
+
+					
+
 					$scope.loadProjects = function() {
 						ProjectComponent.findAll().then(function(data) {
 							console.log("Loading all projects")
@@ -365,13 +377,20 @@ angular
 				                if($scope.quotation.images.length>0){
 				                    console.log("images found");
 				                    for(var i=0;i<$scope.quotation.images.length;i++){
-				                        RateCardComponent.findQuotationImages($scope.quotation._id,$scope.quotation.images[i]).then(function (response) {
+				                        RateCardComponent.findQuotationImages($scope.quotation._id,$scope.quotation.images[i]).
+				                        then(function (response) {
 				                            console.log(response);
 				                            console.log(response.image);
                                             $scope.quotationImages.push(response);
                                         })
                                     }
                                 }
+
+                                 $scope.loadQImagesNew = function(image,qId) {
+						            var eleId = 'quoImage';
+						            var ele = document.getElementById(eleId);
+						            ele.setAttribute('src',image);
+						        };
 
 				                if($scope.quotation.ticketId > 0) {
 					                TicketComponent.getTicketDetails($scope.quotation.ticketId).then(function(data){
