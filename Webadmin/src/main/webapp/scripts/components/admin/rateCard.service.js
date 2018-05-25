@@ -116,6 +116,12 @@ angular.module('timeSheetApp')
                     console.log(response.data);
                     return response.data;
                 })
+            },
+             upload: function(quotationImage) {
+
+                return $http.post('api/rateCard/quotation/image/upload' ,quotationImage).then(function (response) {
+                    return response.data;
+                });
             }
 
         };

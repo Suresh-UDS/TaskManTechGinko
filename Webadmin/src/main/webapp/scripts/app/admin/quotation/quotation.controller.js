@@ -161,6 +161,27 @@ angular
                       $('#actionButtons').hide();
 					};
 
+					 $scope.stepsModel = [];
+
+					    $scope.imageUpload = function(event){
+
+					    	alert(event);
+					         //var files = event.target.files; //FileList object
+					         
+					        /* for (var i = 0; i < files.length; i++) {
+					             var file = files[i];
+					                 var reader = new FileReader();
+					                 reader.onload = $scope.imageIsLoaded; 
+					                 reader.readAsDataURL(file);
+					         }*/
+					    }
+
+					    $scope.imageIsLoaded = function(e){
+					        $scope.$apply(function() {
+					            $scope.stepsModel.push(e.target.result);
+					        });
+					    }
+
 					
 
 					$scope.loadProjects = function() {
@@ -296,6 +317,9 @@ angular
 					}
 
 					$scope.saveQuotation = function(mode) {
+						
+						console.log("Image file",$scope.selectedImageFile);
+
 						$scope.quotation.siteId = $scope.selectedSite.id;
 						$scope.quotation.siteName = $scope.selectedSite.name;
 						$scope.quotation.projectId = $scope.selectedProject.id;
@@ -317,6 +341,18 @@ angular
 						RateCardComponent.createQuotation($scope.quotation)
 								.then(function(response) {
 									console.log(response);
+
+								if($scope.selectedImageFile !=""){
+
+								RateCardComponent.upload({quotationId:response._id,quotationFile:selectedImageFile})
+								    .then(function(response) {
+									console.log("image uploaded",response);
+
+								}).catch(function (response) {
+									console.log("Failed to image upload",response);
+								});
+
+								}
 									$scope.showNotifications('top','center','success','Quotation saved Successfully');
 									//$scope.loadAllQuotations();
 									$location.path('/quotation-list');
