@@ -628,13 +628,13 @@ public class RateCardService extends AbstractService {
         String quotationFileName = fileUploadHelper.uploadQuotationFile(quotationDTO.getId(), quotationDTO.getQuotationFile(), System.currentTimeMillis());
         quotationDTO.setQuotationFileName(quotationFileName);
 
-        String quotationImageUpdateResult = updateImageName(quotationDTO.getId(),quotationFileName);
+        updateImageName(quotationDTO.getId(),quotationFileName);
 
 		return quotationDTO;
 	}
 
 	public String updateImageName(String quotationId, String quotationImageName) throws JSONException {
-
+        log.debug("update image rest function");
         RestTemplate restTemplate = new RestTemplate();
         MappingJackson2HttpMessageConverter jsonHttpMessageConverter = new MappingJackson2HttpMessageConverter();
         jsonHttpMessageConverter.getObjectMapper().configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);

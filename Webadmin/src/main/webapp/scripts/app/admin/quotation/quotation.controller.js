@@ -7,7 +7,7 @@ angular
 				function($scope, $rootScope, $state, $timeout, $http, $document, $window,
 						$stateParams, $location, RateCardComponent,TicketComponent, JobComponent,
 						 ProjectComponent, SiteComponent,PaginationComponent,$filter) {
-                    
+
                     $rootScope.loadingStop();
 
                     $rootScope.loginView = false;
@@ -17,6 +17,8 @@ angular
                      $scope.selectedSite = null;
 
 					$scope.quotations;
+
+					$scope.quotationImages=[];
 
 					$scope.materialName;
 
@@ -67,10 +69,10 @@ angular
 					$scope.pageSort = 10;
 
 					$scope.pager = {};
-					
-			        $scope.selectedSubmittedDate = $filter('date')(new Date(), 'dd/MM/yyyy'); 
+
+			        $scope.selectedSubmittedDate = $filter('date')(new Date(), 'dd/MM/yyyy');
 			        $scope.selectedApprovedDate = $filter('date')(new Date(), 'dd/MM/yyyy');
-					
+
 			        $scope.selectedSubmittedDateSer = new Date();
 			        $scope.selectedApprovedDateSer = new Date();
 
@@ -83,13 +85,13 @@ angular
 			        $('input#submittedDateFilter').on('dp.change', function(e){
 			            console.log(e.date);
 			            console.log(e.date._d);
-			            $scope.selectedSubmittedDateSer = e.date._d; 
-			            
+			            $scope.selectedSubmittedDateSer = e.date._d;
+
 			            $.notifyClose();
-			             
+
 		               $scope.selectedSubmittedDate = $filter('date')(e.date._d, 'dd/MM/yyyy');
-			            
-			            
+
+
 
 			        });
 			        $('input#approvedDateFilter').on('dp.change', function(e){
@@ -98,14 +100,14 @@ angular
 			            $scope.selectedApprovedDateSer = e.date._d;
 
 			            $.notifyClose();
-			            
+
 		                $scope.selectedApprovedDate = $filter('date')(e.date._d, 'dd/MM/yyyy');
 
 			        });
-			        
+
 			        $scope.initCalender();
 
-					
+
 					$scope.init = function() {
 
                         console.log("State parameters");
@@ -326,6 +328,13 @@ angular
 						$scope.quotation = quotation;
 					}
 
+                    $scope.loadQuotationImage = function(image) {
+                        var eleId = 'photoStart';
+                        var ele = document.getElementById(eleId);
+                        ele.setAttribute('src',image);
+
+                    };
+
 			        $scope.loadQuotation = function() {
 
 			        		console.log('quotation id - ' + $stateParams.id);
@@ -352,6 +361,17 @@ angular
 				                $scope.selectedSite = {};
 				                $scope.selectedSite.id = $scope.quotation.siteId;
 				                $scope.selectedSite.name = $scope.quotation.siteName;
+
+				                if($scope.quotation.images.length>0){
+				                    console.log("images found");
+				                    for(var i=0;i<$scope.quotation.images.length;i++){
+				                        RateCardComponent.findQuotationImages($scope.quotation._id,$scope.quotation.images[i]).then(function (response) {
+				                            console.log(response);
+				                            console.log(response.image);
+                                            $scope.quotationImages.push(response);
+                                        })
+                                    }
+                                }
 
 				                if($scope.quotation.ticketId > 0) {
 					                TicketComponent.getTicketDetails($scope.quotation.ticketId).then(function(data){
@@ -498,14 +518,14 @@ angular
 			        	if($scope.selectedApprovedBy) {
 			        		$scope.searchCriteria.quotationApprovedBy = $scope.selectedApprovedBy;
 			        	}
-			        	
+
 			        	if($scope.selectedSubmittedDateSer) {
 			        		$scope.searchCriteria.quotationSubmittedDate = $scope.selectedSubmittedDateSer;
 			        	}
 			        	if($scope.selectedApprovedDateSer) {
 			        		$scope.searchCriteria.quotationApprovedDate = $scope.selectedApprovedDateSer;
 			        	}
-			        	
+
 
 		            if($scope.pageSort){
 		                $scope.searchCriteria.sort = $scope.pageSort;
