@@ -98,39 +98,81 @@
                                                                                         </div>
 
                                                                                     </div>
-                                                                                </div>
-                                                                                <div class="col-md-12">
-                                                                                    <div class="form-group selectcon" style="padding-top:25px;">
 
-                                                                                        <div class="" style="float:left;width:90%;">
-                                                                                            <select class="form-control" ng-model="employee.designation" ng-options="designation.designation as designation.designation for designation in designations">
-                                                                                                <option value="">Please select Asset Group ..</option>
-                                                                                            </select>
+                                                                                    <div class="form-group selectcon">
+                                                                                        <label class="control-label">Asset Type<span class="red-star">*</span></label>
+                                                                                        <div class="row">
+                                                                                            <div class="col-md-10 pad-r-0px" >
+
+                                                                                                <span class="form-control-feedback d-sm-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
+                                                                                                <select class="form-control" name="assetType"  required>
+                                                                                                    <option value="" >Disel Generator..</option>
+                                                                                                </select>
+
+                                                                                            </div>
+                                                                                            <div class="col-md-2 pad0px">
+                                                                                                <a href="javascript:;"  data-toggle="collapse" data-parent="#accordian" data-target="#addAssetType" class="btn btn-round btn-fab btn-fab-mini btn-simple" aria-expanded="false" aria-controls="collapseExample">
+                                                                                                    <i class="material-icons">add</i>
+                                                                                                </a>
+                                                                                            </div>
                                                                                         </div>
-                                                                                        <div class="" style="float:left;">
-                                                                                            <a href="javascript:;"  data-toggle="collapse" data-parent="#accordian" data-target="#addDesignation" class="btn btn-round btn-fab btn-fab-mini btn-simple" aria-expanded="false" aria-controls="collapseExample">
-                                                                                                <i class="material-icons">add</i>
-                                                                                            </a>
+
+                                                                                        <div class="collapse" id="addAssetType">
+                                                                                            <div class="">
+
+                                                                                                <input class="input-desc" id='assetType' ng-model="assetType"
+                                                                                                       name='assetType' type='text' value=""/>
+                                                                                                <a class="btn btn-success"  >Add</a>
+
+                                                                                            </div>
                                                                                         </div>
 
                                                                                     </div>
-                                                                                    <div class="collapse" id="addDesignation">
-                                                                                        <div class="">
-                                                                                            <input class="input-desc" id='assetgroupName' ng-model=""
-                                                                                                   name='assetgroupName' type='text' value=""/>
-                                                                                            <a class="btn btn-success margn-top0"  ng-click="">Add</a>
+
+                                                                                    <div class="form-group selectcon">
+                                                                                        <label class="control-label">Asset Group<span class="red-star">*</span></label>
+                                                                                        <div class="row">
+                                                                                            <div class="col-md-10 pad-r-0px" >
+
+                                                                                                <span class="form-control-feedback d-sm-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
+                                                                                                <select class="form-control" name="assetGroup"  required>
+                                                                                                    <option value="" >Group 1..</option>
+                                                                                                </select>
+
+                                                                                            </div>
+                                                                                            <div class="col-md-2 pad0px">
+                                                                                                <a href="javascript:;"  data-toggle="collapse" data-parent="#accordian" data-target="#addAssetGroup" class="btn btn-round btn-fab btn-fab-mini btn-simple" aria-expanded="false" aria-controls="collapseExample">
+                                                                                                    <i class="material-icons">add</i>
+                                                                                                </a>
+                                                                                            </div>
                                                                                         </div>
+
+                                                                                        <div class="collapse" id="addAssetGroup">
+                                                                                            <div class="">
+
+                                                                                                <input class="input-desc" id='assetGroup' ng-model="assetGroup"
+                                                                                                       name='assetGroup' type='text' value=""/>
+                                                                                                <a class="btn btn-success"  >Add</a>
+
+                                                                                            </div>
+                                                                                        </div>
+
                                                                                     </div>
                                                                                 </div>
+
                                                                             </div>
 
                                                                             <div class="row">
                                                                                 <div class="col-md-12">
                                                                                     <div class="form-group">
                                                                                         <label class="control-label">Status</label>
-                                                                                        <select class="form-control" ng-model="employee.designation" ng-options="designation.designation as designation.designation for designation in designations">
-                                                                                            <option value="">Please select Status ..</option>
-                                                                                        </select>
+                                                                                        <div class="dropdown">
+                                                                                            <span class="form-control-feedback d-sm-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
+                                                                                            <select class="form-control" >
+                                                                                                <option value="">Please select Status ..</option>
+                                                                                            </select>
+                                                                                        </div>
+
                                                                                     </div>
                                                                                 </div>
 
@@ -150,83 +192,78 @@
 
                                                                             <div class="row">
                                                                                 <div class="col-md-6">
+
                                                                                     <div class="form-group">
-                                                                                        <label class="control-label">Client  <span class="red-star">*</span> </label>
-                                                                                        <!--<input type="text" class="form-control"-->
-                                                                                        <!--ng-model="selectedRole"-->
-                                                                                        <!--uib-typeahead="role as role.name for role in userRoles | filter:$viewValue | limitTo:5"-->
-                                                                                        <!--name="UserRole" ng-minlength="5" ng-maxlength="50" autofocus-->
-                                                                                        <!--required >-->
-                                                                                        <select class="form-control " ng-model=""  ng-options="">
-                                                                                            <option value="">Please select Client ...</option>
-                                                                                        </select>
-
-
+                                                                                        <label class="control-label">Client  <span class="red-star">*</span></label>
+                                                                                        <div class="dropdown">
+                                                                                            <span class="form-control-feedback d-sm-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
+                                                                                            <select class="form-control" >
+                                                                                                <option value="">select Client ..</option>
+                                                                                            </select>
+                                                                                        </div>
 
                                                                                     </div>
+
+
                                                                                 </div>
                                                                                 <div class="col-md-6">
                                                                                     <div class="form-group">
-                                                                                        <label class="control-label">Site   <span class="red-star">*</span> </label>
-                                                                                        <!--<input type="text" class="form-control"-->
-                                                                                        <!--ng-model="selectedRole"-->
-                                                                                        <!--uib-typeahead="role as role.name for role in userRoles | filter:$viewValue | limitTo:5"-->
-                                                                                        <!--name="UserRole" ng-minlength="5" ng-maxlength="50" autofocus-->
-                                                                                        <!--required >-->
-                                                                                        <select class="form-control " ng-model=""  ng-options="">
-                                                                                            <option value="">Please select Site ...</option>
-                                                                                        </select>
-
-
+                                                                                        <label class="control-label">Site  <span class="red-star">*</span></label>
+                                                                                        <div class="dropdown">
+                                                                                            <span class="form-control-feedback d-sm-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
+                                                                                            <select class="form-control" >
+                                                                                                <option value="">select Site ..</option>
+                                                                                            </select>
+                                                                                        </div>
 
                                                                                     </div>
+
+
                                                                                 </div>
 
                                                                             </div>
                                                                             <div class="row">
                                                                                 <div class="col-md-6">
+
                                                                                     <div class="form-group">
-                                                                                        <label class="control-label">Block   <span class="red-star">*</span> </label>
-                                                                                        <!--<input type="text" class="form-control"-->
-                                                                                        <!--ng-model="selectedRole"-->
-                                                                                        <!--uib-typeahead="role as role.name for role in userRoles | filter:$viewValue | limitTo:5"-->
-                                                                                        <!--name="UserRole" ng-minlength="5" ng-maxlength="50" autofocus-->
-                                                                                        <!--required >-->
-                                                                                        <select class="form-control " ng-model=""  ng-options="">
-                                                                                            <option value="">Please select Block ...</option>
-                                                                                        </select>
-
-
+                                                                                        <label class="control-label">Block  <span class="red-star">*</span></label>
+                                                                                        <div class="dropdown">
+                                                                                            <span class="form-control-feedback d-sm-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
+                                                                                            <select class="form-control" >
+                                                                                                <option value="">select Block ..</option>
+                                                                                            </select>
+                                                                                        </div>
 
                                                                                     </div>
+
+
                                                                                 </div>
                                                                                 <div class="col-md-6">
                                                                                     <div class="form-group">
-                                                                                        <label class="control-label">Floor    <span class="red-star">*</span> </label>
-                                                                                        <!--<input type="text" class="form-control"-->
-                                                                                        <!--ng-model="selectedRole"-->
-                                                                                        <!--uib-typeahead="role as role.name for role in userRoles | filter:$viewValue | limitTo:5"-->
-                                                                                        <!--name="UserRole" ng-minlength="5" ng-maxlength="50" autofocus-->
-                                                                                        <!--required >-->
-                                                                                        <select class="form-control " ng-model=""  ng-options="">
-                                                                                            <option value="">Please select Floor ...</option>
-                                                                                        </select>
+                                                                                        <label class="control-label">Floor  <span class="red-star">*</span></label>
+                                                                                        <div class="dropdown">
+                                                                                            <span class="form-control-feedback d-sm-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
+                                                                                            <select class="form-control" >
+                                                                                                <option value="">select Floor ..</option>
+                                                                                            </select>
+                                                                                        </div>
 
                                                                                     </div>
+
                                                                                 </div>
                                                                                 <div class="col-md-6">
+
                                                                                     <div class="form-group">
-                                                                                        <label class="control-label">Zone     <span class="red-star">*</span> </label>
-                                                                                        <!--<input type="text" class="form-control"-->
-                                                                                        <!--ng-model="selectedRole"-->
-                                                                                        <!--uib-typeahead="role as role.name for role in userRoles | filter:$viewValue | limitTo:5"-->
-                                                                                        <!--name="UserRole" ng-minlength="5" ng-maxlength="50" autofocus-->
-                                                                                        <!--required >-->
-                                                                                        <select class="form-control " ng-model=""  ng-options="">
-                                                                                            <option value="">Please select Zone  ...</option>
-                                                                                        </select>
+                                                                                        <label class="control-label">Zone  <span class="red-star">*</span></label>
+                                                                                        <div class="dropdown">
+                                                                                            <span class="form-control-feedback d-sm-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
+                                                                                            <select class="form-control" >
+                                                                                                <option value="">select Zone ..</option>
+                                                                                            </select>
+                                                                                        </div>
 
                                                                                     </div>
+
                                                                                 </div>
 
                                                                             </div>
@@ -244,27 +281,38 @@
 
                                                                             <div class="row">
                                                                                 <div class="col-md-6">
-                                                                                    <div class="form-group selectcon" style="padding-top:25px;">
 
-                                                                                        <div class="" style="float:left;width:90%;">
-                                                                                            <select class="form-control" ng-model="employee.designation" ng-options="designation.designation as designation.designation for designation in designations">
-                                                                                                <option value="">Please select Manufactururer ..</option>
-                                                                                            </select>
+                                                                                    <div class="form-group selectcon">
+                                                                                        <label class="control-label">Asset Manufactururer<span class="red-star">*</span></label>
+                                                                                        <div class="row">
+                                                                                            <div class="col-md-10 pad-r-0px" >
+
+                                                                                                <span class="form-control-feedback d-sm-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
+                                                                                                <select class="form-control" name="assetManufactururer"  required>
+                                                                                                    <option value="" >Mahindra</option>
+                                                                                                </select>
+
+                                                                                            </div>
+                                                                                            <div class="col-md-2 pad0px">
+                                                                                                <a href="javascript:;"  data-toggle="collapse" data-parent="#accordian" data-target="#addAssetManufactururer" class="btn btn-round btn-fab btn-fab-mini btn-simple" aria-expanded="false" aria-controls="collapseExample">
+                                                                                                    <i class="material-icons">add</i>
+                                                                                                </a>
+                                                                                            </div>
                                                                                         </div>
-                                                                                        <div class="" style="float:left;">
-                                                                                            <a href="javascript:;"  data-toggle="collapse" data-parent="#accordian" data-target="#addDesignation1" class="btn btn-round btn-fab btn-fab-mini btn-simple" aria-expanded="false" aria-controls="collapseExample">
-                                                                                                <i class="material-icons">add</i>
-                                                                                            </a>
+
+                                                                                        <div class="collapse" id="addAssetManufactururer">
+                                                                                            <div class="">
+
+                                                                                                <input class="input-desc" id='addAssetManufactururer' ng-model="addAssetManufactururer"
+                                                                                                       name='addAssetManufactururer' type='text' value=""/>
+                                                                                                <a class="btn btn-success"  >Add</a>
+
+                                                                                            </div>
                                                                                         </div>
 
                                                                                     </div>
-                                                                                    <div class="collapse" id="addDesignation1">
-                                                                                        <div class="">
-                                                                                            <input class="input-desc" id='assetgroupName' ng-model=""
-                                                                                                   name='assetgroupName' type='text' value=""/>
-                                                                                            <a class="btn btn-success margn-top0"  ng-click="">Add</a>
-                                                                                        </div>
-                                                                                    </div>
+
+
                                                                                 </div>
                                                                                 <div class="col-md-6">
                                                                                     <div class="form-group">
@@ -348,50 +396,70 @@
                                                                                 </div>
 
                                                                                 <div class="col-md-6">
-                                                                                    <div class="form-group selectcon" style="padding-top:25px;">
 
-                                                                                        <div class="" style="float:left;width:90%;">
-                                                                                            <select class="form-control" ng-model="employee.designation" ng-options="designation.designation as designation.designation for designation in designations">
-                                                                                                <option value="">Please select Service Provider  ..</option>
-                                                                                            </select>
+                                                                                    <div class="form-group selectcon">
+                                                                                        <label class="control-label">Service Provider</label>
+                                                                                        <div class="row">
+                                                                                            <div class="col-md-10 pad-r-0px" >
+
+                                                                                                <span class="form-control-feedback d-sm-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
+                                                                                                <select class="form-control" name="serviceProvider"  required>
+                                                                                                    <option value="" >Service Provider</option>
+                                                                                                </select>
+
+                                                                                            </div>
+                                                                                            <div class="col-md-2 pad0px">
+                                                                                                <a href="javascript:;"  data-toggle="collapse" data-parent="#accordian" data-target="#addserviceProvider" class="btn btn-round btn-fab btn-fab-mini btn-simple" aria-expanded="false" aria-controls="collapseExample">
+                                                                                                    <i class="material-icons">add</i>
+                                                                                                </a>
+                                                                                            </div>
                                                                                         </div>
-                                                                                        <div class="" style="float:left;">
-                                                                                            <a href="javascript:;"  data-toggle="collapse" data-parent="#accordian" data-target="#addServiceProvicer" class="btn btn-round btn-fab btn-fab-mini btn-simple" aria-expanded="false" aria-controls="collapseExample">
-                                                                                                <i class="material-icons">add</i>
-                                                                                            </a>
+
+                                                                                        <div class="collapse" id="addserviceProvider">
+                                                                                            <div class="">
+
+                                                                                                <input class="input-desc" id='serviceProvider' ng-model="serviceProvider"
+                                                                                                       name='serviceProvider' type='text' value=""/>
+                                                                                                <a class="btn btn-success"  >Add</a>
+
+                                                                                            </div>
                                                                                         </div>
 
                                                                                     </div>
-                                                                                    <div class="collapse" id="addServiceProvicer">
-                                                                                        <div class="">
-                                                                                            <input class="input-desc" id='' ng-model=""
-                                                                                                   name='' type='text' value=""/>
-                                                                                            <a class="btn btn-success margn-top0"  ng-click="">Add</a>
-                                                                                        </div>
-                                                                                    </div>
+
                                                                                 </div>
                                                                                 <div class="col-md-6">
-                                                                                    <div class="form-group selectcon" style="padding-top:25px;">
 
-                                                                                        <div class="" style="float:left;width:90%;">
-                                                                                            <select class="form-control" ng-model="employee.designation" ng-options="designation.designation as designation.designation for designation in designations">
-                                                                                                <option value="">Please select Service Warranty Type ..</option>
-                                                                                            </select>
+                                                                                    <div class="form-group selectcon">
+                                                                                        <label class="control-label">Service Warranty Type</label>
+                                                                                        <div class="row">
+                                                                                            <div class="col-md-10 pad-r-0px" >
+
+                                                                                                <span class="form-control-feedback d-sm-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
+                                                                                                <select class="form-control" name="serviceWarrantyType"  required>
+                                                                                                    <option value="" >Service Warranty Type</option>
+                                                                                                </select>
+
+                                                                                            </div>
+                                                                                            <div class="col-md-2 pad0px">
+                                                                                                <a href="javascript:;"  data-toggle="collapse" data-parent="#accordian" data-target="#addserviceWarrantyType" class="btn btn-round btn-fab btn-fab-mini btn-simple" aria-expanded="false" aria-controls="collapseExample">
+                                                                                                    <i class="material-icons">add</i>
+                                                                                                </a>
+                                                                                            </div>
                                                                                         </div>
-                                                                                        <div class="" style="float:left;">
-                                                                                            <a href="javascript:;"  data-toggle="collapse" data-parent="#accordian" data-target="#addWarrantyType" class="btn btn-round btn-fab btn-fab-mini btn-simple" aria-expanded="false" aria-controls="collapseExample">
-                                                                                                <i class="material-icons">add</i>
-                                                                                            </a>
+
+                                                                                        <div class="collapse" id="addserviceWarrantyType">
+                                                                                            <div class="">
+
+                                                                                                <input class="input-desc" id='addserviceWarrantyType' ng-model="addserviceWarrantyType"
+                                                                                                       name='addserviceWarrantyType' type='text' value=""/>
+                                                                                                <a class="btn btn-success"  >Add</a>
+
+                                                                                            </div>
                                                                                         </div>
 
                                                                                     </div>
-                                                                                    <div class="collapse" id="addWarrantyType">
-                                                                                        <div class="">
-                                                                                            <input class="input-desc" id='' ng-model=""
-                                                                                                   name='' type='text' value=""/>
-                                                                                            <a class="btn btn-success margn-top0"  ng-click="">Add</a>
-                                                                                        </div>
-                                                                                    </div>
+
                                                                                 </div>
 
                                                                                 <div class="col-md-6">
@@ -404,6 +472,53 @@
                                                                                 </div>
 
                                                                             </div>
+
+                                                                        </div>
+                                                                    </div>
+
+                                                                </div>
+
+                                                                <div class="col-md-12">
+
+                                                                    <div class="panel panel-default">
+                                                                        <div class="panel-heading">Vendor Details</div>
+                                                                        <div class="panel-body">
+
+                                                                            <div class="row">
+
+                                                                                <div class="col-md-6">
+                                                                                    <div class="form-group">
+                                                                                        <label class="control-label">Name</label>
+                                                                                        <input id='vendorName'
+                                                                                               ng-model="vendor.name"
+                                                                                               class='form-control'
+                                                                                               name='vendorName'
+                                                                                               type='text' value=""
+                                                                                               ng-minlength='5'
+                                                                                               ng-maxlength='250'
+                                                                                               ng-pattern="/^[A-Za-z0-9\s]*$/" autofocus
+                                                                                        />
+
+                                                                                    </div>
+                                                                                </div>
+                                                                                <div class="col-md-6">
+                                                                                    <div class="form-group">
+                                                                                        <label class="control-label">Mobile</label>
+                                                                                        <input id='vendorMob'
+                                                                                               ng-model="vendo.mob"
+                                                                                               class='form-control'
+                                                                                               name='vendorMob'
+                                                                                               type='text' value=""
+                                                                                               ng-minlength='5'
+                                                                                               ng-maxlength='250'
+                                                                                               ng-pattern="/^[A-Za-z0-9\s]*$/" autofocus
+                                                                                        />
+
+                                                                                    </div>
+                                                                                </div>
+
+                                                                            </div>
+
                                                                         </div>
                                                                     </div>
 
@@ -1159,29 +1274,6 @@
                                         </div>
                                         <!-- wizard container -->
                                     </div>
-                                </div>
-
-
-
-                                <div class="row">
-
-                                    <div class="col-sm-offset-8 col-sm-4 txt-align-rgt">
-                                        <button class="btn btn-success" type="submit"
-                                                id="form-button-save" ng-disabled="form.$invalid" >
-                                                    <span class="btn-label">
-                                            				<i class="material-icons">check</i>
-                                        				</span> Save
-                                        </button>
-                                        <!--<button class="btn btn-info" type="submit"-->
-                                        <!--id="save-and-go-back-button" ng-disabled="form.$invalid">-->
-                                        <!--<i class="material-icons">rotate_left</i> Save and go back to list-->
-                                        <!--</button>-->
-                                        <button class="btn btn-danger" type="button"
-                                                ui-sref="assets" id="cancel-button">
-                                            <i class="material-icons">close</i> Cancel
-                                        </button>
-                                    </div>
-
                                 </div>
 
 
