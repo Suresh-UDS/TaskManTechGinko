@@ -1,8 +1,8 @@
 <div class="crud-form" ng-init="initLoad();loadingStart();"
 	data-unique-hash="a2ad475d60b22954085c657a73309b8f">
-	<div class="">
+	<div class="" ng-controller="AssetController">
 		<div class="row">
-            <div class="col-mod-12">
+            <!-- <div class="col-mod-12">
                 <div class="alert alert-success" ng-show="success">
                     <strong>Asset saved!</strong>
                 </div>
@@ -13,7 +13,7 @@
                 <div class="alert alert-danger" ng-show="errorAssetExists">
                     <strong>Asset already registered!</strong> Please choose another one.
                 </div>
-            </div>
+            </div> -->
 			<div class="col-md-12">
                 <div class="">
                     <div class="">
@@ -76,22 +76,22 @@
                                                                                                ng-pattern="/^[A-Za-z0-9\s]*$/" autofocus
                                                                                                 />
 
-                                                                                        <div ng-show="form.$submitted || form.assetName.$touched">
-                                                                                            <div ng-show="form.assetName.$dirty || form.assetName.$invalid">
+                                                                                        <div ng-show="form.$submitted || form.assetTitle.$touched">
+                                                                                            <div ng-show="form.assetTitle.$dirty || form.assetTitle.$invalid">
                                                                                                 <p class="help-block" style="color:maroon"
-                                                                                                   ng-show="form.assetName.$error.required">
+                                                                                                   ng-show="form.assetTitle.$error.required">
                                                                                                     Asset Title is required.
                                                                                                 </p>
                                                                                                 <p class="help-block" style="color:maroon"
-                                                                                                   ng-show="form.assetName.$error.minlength">
+                                                                                                   ng-show="form.assetTitle.$error.minlength">
                                                                                                     Asset Title is required to be at least 5 character.
                                                                                                 </p>
                                                                                                 <p class="help-block" style="color:maroon"
-                                                                                                   ng-show="form.assetName.$error.maxlength">
+                                                                                                   ng-show="form.assetTitle.$error.maxlength">
                                                                                                     Asset Title cannot be longer than 250 characters.
                                                                                                 </p>
                                                                                                 <p class="help-block" style="color:maroon"
-                                                                                                   ng-show="form.assetName.$error.pattern">
+                                                                                                   ng-show="form.assetTitle.$error.pattern">
                                                                                                     asset Title can only contain letters, digits and space.
                                                                                                 </p>
                                                                                             </div>
@@ -103,22 +103,22 @@
                                                                                     <div class="form-group selectcon" style="padding-top:25px;">
 
                                                                                         <div class="" style="float:left;width:90%;">
-                                                                                            <select class="form-control" ng-model="employee.designation" ng-options="designation.designation as designation.designation for designation in designations">
+                                                                                            <select class="form-control" ng-model="asset.group" ng-options="assetgroup.assetgroup as assetgroup.assetgroup for assetgroup in assetgroups">
                                                                                                 <option value="">Please select Asset Group ..</option>
                                                                                             </select>
                                                                                         </div>
                                                                                         <div class="" style="float:left;">
-                                                                                            <a href="javascript:;"  data-toggle="collapse" data-parent="#accordian" data-target="#addDesignation" class="btn btn-round btn-fab btn-fab-mini btn-simple" aria-expanded="false" aria-controls="collapseExample">
+                                                                                            <a href="javascript:;"  data-toggle="collapse" data-parent="#accordian" data-target="#addGroup" class="btn btn-round btn-fab btn-fab-mini btn-simple" aria-expanded="false" aria-controls="collapseExample">
                                                                                                 <i class="material-icons">add</i>
                                                                                             </a>
                                                                                         </div>
 
                                                                                     </div>
-                                                                                    <div class="collapse" id="addDesignation">
+                                                                                    <div class="collapse" id="addGroup">
                                                                                         <div class="">
-                                                                                            <input class="input-desc" id='assetgroupName' ng-model=""
+                                                                                            <input class="input-desc" id='assetgroupName' ng-model="group"
                                                                                                    name='assetgroupName' type='text' value=""/>
-                                                                                            <a class="btn btn-success margn-top0"  ng-click="">Add</a>
+                                                                                            <a class="btn btn-success margn-top0"  ng-click="addGroup">Add</a>
                                                                                         </div>
                                                                                     </div>
                                                                                 </div>
@@ -128,12 +128,12 @@
                                                                                 <div class="col-md-12">
                                                                                     <div class="form-group">
                                                                                         <label class="control-label">Status</label>
-                                                                                        <select class="form-control" ng-model="employee.designation" ng-options="designation.designation as designation.designation for designation in designations">
+                                                                                        <select class="form-control" ng-model="asset.status" ng-options="status.status as status.status for status in statuses">
                                                                                             <option value="">Please select Status ..</option>
                                                                                         </select>
                                                                                     </div>
                                                                                 </div>
-
+																				
                                                                             </div>
 
                                                                         </div>
@@ -157,11 +157,23 @@
                                                                                         <!--uib-typeahead="role as role.name for role in userRoles | filter:$viewValue | limitTo:5"-->
                                                                                         <!--name="UserRole" ng-minlength="5" ng-maxlength="50" autofocus-->
                                                                                         <!--required >-->
-                                                                                        <select class="form-control " ng-model=""  ng-options="">
+                                                                                        <select class="form-control " ng-model="asset.client"  ng-options="client as client.name for client in clients" name="AssetClient" required>
                                                                                             <option value="">Please select Client ...</option>
                                                                                         </select>
-
-
+                                                                                        
+                                                                                        <div ng-show="form.$submitted || form.AssetClient.$touched">
+												                                         <div ng-show="form.AssetClient.$dirty || form.AssetClient.$invalid">
+												                                             <p class="help-block" style="color: maroon"
+												                                                ng-show="form.AssetClient.$error.required">Client is
+												                                                 required.</p>
+												                                             <p class="help-block" style="color: maroon"
+												                                                ng-show="form.AssetClient.$error.minlength">Client is
+												                                                 required to be at least 5 character.</p>
+												                                             <p class="help-block" style="color: maroon"
+												                                                ng-show="form.AssetClient.$error.maxlength">Client
+												                                                 cannot be longer than 50 characters.</p>
+												                                         </div>
+												                                     	</div>
 
                                                                                     </div>
                                                                                 </div>
@@ -173,11 +185,23 @@
                                                                                         <!--uib-typeahead="role as role.name for role in userRoles | filter:$viewValue | limitTo:5"-->
                                                                                         <!--name="UserRole" ng-minlength="5" ng-maxlength="50" autofocus-->
                                                                                         <!--required >-->
-                                                                                        <select class="form-control " ng-model=""  ng-options="">
+                                                                                        <select class="form-control " ng-model="asset.site"  ng-options="site as site.name for site in sites" name="AssetSite" required>
                                                                                             <option value="">Please select Site ...</option>
                                                                                         </select>
 
-
+																						<div ng-show="form.$submitted || form.AssetSite.$touched">
+												                                         <div ng-show="form.AssetSite.$dirty || form.AssetSite.$invalid">
+												                                             <p class="help-block" style="color: maroon"
+												                                                ng-show="form.AssetSite.$error.required">Site is
+												                                                 required.</p>
+												                                             <p class="help-block" style="color: maroon"
+												                                                ng-show="form.AssetSite.$error.minlength">Site is
+												                                                 required to be at least 5 character.</p>
+												                                             <p class="help-block" style="color: maroon"
+												                                                ng-show="form.AssetSite.$error.maxlength">Site
+												                                                 cannot be longer than 50 characters.</p>
+												                                         </div>
+												                                     	</div>
 
                                                                                     </div>
                                                                                 </div>
@@ -192,10 +216,23 @@
                                                                                         <!--uib-typeahead="role as role.name for role in userRoles | filter:$viewValue | limitTo:5"-->
                                                                                         <!--name="UserRole" ng-minlength="5" ng-maxlength="50" autofocus-->
                                                                                         <!--required >-->
-                                                                                        <select class="form-control " ng-model=""  ng-options="">
+                                                                                        <select class="form-control " ng-model="asset.block"  ng-options="block as block.name for block in blocks" name="AssetBlock" required>
                                                                                             <option value="">Please select Block ...</option>
                                                                                         </select>
-
+																						
+																						<div ng-show="form.$submitted || form.AssetBlock.$touched">
+												                                         <div ng-show="form.AssetBlock.$dirty || form.AssetBlock.$invalid">
+												                                             <p class="help-block" style="color: maroon"
+												                                                ng-show="form.AssetBlock.$error.required">Block is
+												                                                 required.</p>
+												                                             <p class="help-block" style="color: maroon"
+												                                                ng-show="form.AssetBlock.$error.minlength">Block is
+												                                                 required to be at least 5 character.</p>
+												                                             <p class="help-block" style="color: maroon"
+												                                                ng-show="form.AssetBlock.$error.maxlength">Block
+												                                                 cannot be longer than 50 characters.</p>
+												                                         </div>
+												                                     	</div>
 
 
                                                                                     </div>
@@ -208,10 +245,24 @@
                                                                                         <!--uib-typeahead="role as role.name for role in userRoles | filter:$viewValue | limitTo:5"-->
                                                                                         <!--name="UserRole" ng-minlength="5" ng-maxlength="50" autofocus-->
                                                                                         <!--required >-->
-                                                                                        <select class="form-control " ng-model=""  ng-options="">
+                                                                                        <select class="form-control " ng-model="asset.floor"  ng-options="floor as floor.name for floor in floors" name="AssetFloor" required>
                                                                                             <option value="">Please select Floor ...</option>
                                                                                         </select>
-
+																						
+																						<div ng-show="form.$submitted || form.AssetFloor.$touched">
+												                                         <div ng-show="form.AssetFloor.$dirty || form.AssetFloor.$invalid">
+												                                             <p class="help-block" style="color: maroon"
+												                                                ng-show="form.AssetFloor.$error.required">Floor is
+												                                                 required.</p>
+												                                             <p class="help-block" style="color: maroon"
+												                                                ng-show="form.AssetFloor.$error.minlength">Floor is
+												                                                 required to be at least 5 character.</p>
+												                                             <p class="help-block" style="color: maroon"
+												                                                ng-show="form.AssetFloor.$error.maxlength">Floor
+												                                                 cannot be longer than 50 characters.</p>
+												                                         </div>
+												                                     	</div>
+												                                     	
                                                                                     </div>
                                                                                 </div>
                                                                                 <div class="col-md-6">
@@ -222,10 +273,24 @@
                                                                                         <!--uib-typeahead="role as role.name for role in userRoles | filter:$viewValue | limitTo:5"-->
                                                                                         <!--name="UserRole" ng-minlength="5" ng-maxlength="50" autofocus-->
                                                                                         <!--required >-->
-                                                                                        <select class="form-control " ng-model=""  ng-options="">
+                                                                                        <select class="form-control " ng-model="asset.zone"  ng-options="zone as zone.name for zone in zones" name="AssetZone" required>
                                                                                             <option value="">Please select Zone  ...</option>
                                                                                         </select>
-
+																						
+																						<div ng-show="form.$submitted || form.AssetZone.$touched">
+												                                         <div ng-show="form.AssetZone.$dirty || form.AssetZone.$invalid">
+												                                             <p class="help-block" style="color: maroon"
+												                                                ng-show="form.AssetZone.$error.required">Site is
+												                                                 required.</p>
+												                                             <p class="help-block" style="color: maroon"
+												                                                ng-show="form.AssetZone.$error.minlength">Site is
+												                                                 required to be at least 5 character.</p>
+												                                             <p class="help-block" style="color: maroon"
+												                                                ng-show="form.AssetZone.$error.maxlength">Site
+												                                                 cannot be longer than 50 characters.</p>
+												                                         </div>
+												                                     	</div>
+												                                     	
                                                                                     </div>
                                                                                 </div>
 
@@ -247,22 +312,22 @@
                                                                                     <div class="form-group selectcon" style="padding-top:25px;">
 
                                                                                         <div class="" style="float:left;width:90%;">
-                                                                                            <select class="form-control" ng-model="employee.designation" ng-options="designation.designation as designation.designation for designation in designations">
-                                                                                                <option value="">Please select Manufactururer ..</option>
+                                                                                            <select class="form-control" ng-model="asset.manufacturer" ng-options="manufacturer.manufacturer as manufacturer.manufacturer for manufacturer in manufacturers">
+                                                                                                <option value="">Please select Manufacturer ..</option>
                                                                                             </select>
                                                                                         </div>
                                                                                         <div class="" style="float:left;">
-                                                                                            <a href="javascript:;"  data-toggle="collapse" data-parent="#accordian" data-target="#addDesignation1" class="btn btn-round btn-fab btn-fab-mini btn-simple" aria-expanded="false" aria-controls="collapseExample">
+                                                                                            <a href="javascript:;"  data-toggle="collapse" data-parent="#accordian" data-target="#addManufacturer" class="btn btn-round btn-fab btn-fab-mini btn-simple" aria-expanded="false" aria-controls="collapseExample">
                                                                                                 <i class="material-icons">add</i>
                                                                                             </a>
                                                                                         </div>
 
                                                                                     </div>
-                                                                                    <div class="collapse" id="addDesignation1">
+                                                                                    <div class="collapse" id="addManufacturer">
                                                                                         <div class="">
-                                                                                            <input class="input-desc" id='assetgroupName' ng-model=""
-                                                                                                   name='assetgroupName' type='text' value=""/>
-                                                                                            <a class="btn btn-success margn-top0"  ng-click="">Add</a>
+                                                                                            <input class="input-desc" id='assetManufacturerName' ng-model="manufacturer"
+                                                                                                   name='assetManufacturerName' type='text' value=""/>
+                                                                                            <a class="btn btn-success margn-top0"  ng-click="addManufacturer()">Add</a>
                                                                                         </div>
                                                                                     </div>
                                                                                 </div>
