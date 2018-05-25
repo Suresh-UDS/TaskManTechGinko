@@ -288,7 +288,7 @@ public class FileUploadHelper {
         String filePath = env.getProperty("quotation.file.path");
         filePath += "/"+quotationId+"/" + imageId +".jpg";
         File file = new File(filePath);
-        String imageDataString = "";
+        String imageDataString = "data:image/png;base64,";
         try {
             FileInputStream imageFile = new FileInputStream(file);
             byte imageData[] = new byte[(int) file.length()];
