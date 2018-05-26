@@ -43,6 +43,15 @@ export class MyApp {
 
   constructor(public platform: Platform,private backgroundMode: BackgroundMode, public statusBar: StatusBar,public component:componentService,public toastCtrl: ToastController, public splashScreen: SplashScreen, private oneSignal: OneSignal, public events:Events, private batteryStatus: BatteryStatus, private appVersion:AppVersion) {
     this.initializeApp();
+      this.events.subscribe('permissions:set',(permission)=>{
+          console.log("Event permission in component");
+          console.log(permission);
+      })
+
+      this.events.subscribe('user:logedin',data=>{
+          console.log("Subsribed to user name");
+          console.log(data);
+      })
       this.backgroundMode.enable();
       let subscription = this.batteryStatus.onChange().subscribe(
           (status:BatteryStatusResponse)=>{
@@ -68,14 +77,10 @@ export class MyApp {
               platform.exitApp();
           }
       }, 0);
-      this.events.subscribe('userType',(type)=>{
-          console.log("User type event");
-          console.log(type);
-          this.userType = type;
-      });
+
     // used for an example of ngFor and navigation
     this.pages = [
-      { title: 'Dashboard', component: TabsPage,active:true,icon:'dashboard',permission:'Dashboard'},
+      { title: 'Dashboard', component: TabsPage,active:true,icon:'dashboard',permission:'DashboardList'},
       { title: 'Site', component: SitePage,active:false,icon:'dns',permission:'SiteList'},
       // { title: 'Client', component: CustomerDetailPage,active:false,icon:'person'},
       { title: 'Employee', component: EmployeeListPage,active:false,icon:'people',permission:'EmployeeList'},
@@ -93,11 +98,10 @@ export class MyApp {
     console.log(window.localStorage.getItem('employeeFullName'));
     this.userName = window.localStorage.getItem('employeeFullName');
 
-    this.events.subscribe('permissions:set',(permission)=>{
-        console.log("Event permission in component");
-        console.log(permission);
-    })
+
   }
+
+
   initializeApp() {
     this.platform.ready().then(() => {
       // Okay, so the platform is ready and our plugins are available.

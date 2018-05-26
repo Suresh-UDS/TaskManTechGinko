@@ -58,7 +58,14 @@ export class QuotationService {
         )
     }
 
-
+    searchQuotations(search):Observable<any>{
+        return this.http.post(this.config.Url+'api/rateCard/quotation/search',search).map(
+            response=>{
+                console.log(response.json());
+                return response.json();
+            }
+        )
+    }
 
     getQuotations(): Observable<any>{
         return this.http.get(this.config.Url+'api/rateCard/quotation').map(
@@ -108,6 +115,16 @@ export class QuotationService {
     createPDF():Observable<any>{
         return this.http.get(this.config.Url+'api/pdf/create').map(
             response=>{
+                console.log(response);
+                return response.json();
+            }
+        )
+    }
+
+    uploadImage():Observable<any>{
+        return this.http.get(this.config.Url+'api/quotation/image/upload').map(
+            response=>{
+                console.log("Image upload response");
                 console.log(response);
                 return response.json();
             }

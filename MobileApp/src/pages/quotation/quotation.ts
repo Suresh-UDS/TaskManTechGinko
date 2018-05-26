@@ -8,6 +8,7 @@ import {ArchivedQuotationPage} from "./archivedQuotations";
 import {DraftedQuotationPage} from "./draftedQuotations";
 import {SubmittedQuotationPage} from "./submittedQuotations";
 import {QuotationService} from "../service/quotationService";
+import {SiteService} from "../service/siteService";
 
 @Component({
   selector: 'page-quotation',
@@ -29,7 +30,12 @@ export class QuotationPage {
     draftedQuotationsPage:DraftedQuotationPage;
     submittedQuotationsPage:SubmittedQuotationPage;
 
-  constructor(public navCtrl: NavController,public popoverCtrl: PopoverController, private authService: authService, private quotationService: QuotationService,public events:Events) {
+    allProjects:any;
+    selectedProject:any;
+    selectedSite:any;
+    sites:any;
+
+  constructor(public navCtrl: NavController,public popoverCtrl: PopoverController, private authService: authService, private quotationService: QuotationService,public events:Events,public siteService:SiteService) {
       this.draftedQuotationsCount= 0;
       this.approvedQuotationsCount=0;
       this.submittedQuotationsCount=0;
@@ -80,7 +86,7 @@ export class QuotationPage {
           response=>{
               console.log(response);
 
-                this.quotations=[];
+              this.quotations=[];
               this.quotations = response;
               console.log(this.quotations)
               for(var i=0; i<this.quotations.length;i++){
@@ -131,6 +137,69 @@ export class QuotationPage {
               console.log(error)
           })
 
+  }
+
+  ionViewDidLoad(){
+      this.getProjects();
+  }
+
+  getProjects(){
+      this.siteService.getAllProjects().subscribe(
+          response=>{
+              this.allProjects = response;
+              this.selectedProject = response[0];
+              this.getSites(this.selectedProject[0].id);
+
+          }
+      )
+  }
+
+  getSites(projectId){
+      this.siteService.findSites(projectId).subscribe(
+          response=>{
+              this.sites = response.json();
+              this.selectedSite = response[0];
+          }
+      )
+  }
+
+  searchQuotations(siteId){
+      this.quotationService.searchQuotations({siteId:siteId}).subscribe(
+          response=>{
+
+              console.log(response);
+
+              this.quotations=[];
+              this.quotations = response;
+              console.log(this.quotations)
+              for(var i=0; i<this.quotations.length;i++){
+                  if(this.quotations[i].isDrafted == true){
+                      console.log("drafted");
+                      console.log(this.quotations[i].isDrafted)
+                      this.draftedQuotationsCount++;
+                      this.draftedQuotations.push(this.quotations[i]);
+                  }else if(this.quotations[i].isArchived == true){
+                      console.log("archived");
+                      console.log(this.quotations[i].isArchived)
+                      this.archivedQuotations.push(this.quotations[i]);
+                      this.archivedQuotationsCount++;
+                  }else if(this.quotations[i].isApproved == true){
+                      console.log("approved");
+                      console.log(this.quotations[i].isApproved)
+                      this.approvedQuotations.push(this.quotations[i]);
+                      this.approvedQuotationsCount++;
+                  }else if(this.quotations[i].isSubmitted == true){
+                      console.log("submitted");
+                      console.log(this.quotations[i].isSubmitted)
+                      this.submittedQuotations.push(this.quotations[i]);
+                      this.submittedQuotationsCount++;
+                  }else{
+                      console.log("all false");
+                      console.log(this.quotations[i].isDrafted)
+                  }
+              }
+          }
+      )
   }
 
 

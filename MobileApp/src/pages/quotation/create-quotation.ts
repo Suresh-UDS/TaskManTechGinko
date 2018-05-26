@@ -113,7 +113,7 @@ export class CreateQuotationPage {
                 "description":this.description
             }
             console.log(quotation)
-            this.navCtrl.push(CreateQuotationPage2,{quotationDetails:quotation,quotationImg:this.takenImages});
+            this.navCtrl.push(CreateQuotationPage2,{quotationDetails:quotation});
         }
         else
         {

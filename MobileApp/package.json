@@ -70,7 +70,8 @@
     "ngx-permissions": "^5.0.0",
     "rxjs": "5.5.2",
     "sw-toolbox": "3.6.0",
-    "zone.js": "0.8.18"
+    "zone.js": "0.8.18",
+    "cordova-plugin-qrscanner": "^2.6.0"
   },
   "devDependencies": {
     "@ionic/app-scripts": "^3.1.9",
@@ -107,7 +108,8 @@
       "cordova-plugin-battery-status": {},
       "cordova-plugin-background-mode": {},
       "cordova-plugin-nativeaudio": {},
-      "cordova-plugin-app-version": {}
+      "cordova-plugin-app-version": {},
+      "cordova-plugin-qrscanner": {}
     },
     "platforms": [
       "android"
