@@ -400,6 +400,32 @@ textarea.form-control {
 {
   background-color: #ff9800;
 }
+.Flt_lft
+{
+    float: left;
+}
+.Flt_rgt
+{
+    float: right;
+}
+/* Checklist css*/
+.checklistLftCon .Flt_lft
+{
+    width: 85%;
+}
+.checklistLftCon .Flt_rgt
+{
+    width: 15%;
+}
+.checklistLftCon .btn.btn-success
+{
+    padding: 5px;
+    margin: 5px;
+}
+
+
+/*End Checklist css */
+
 
 .TabsContainer  .nav-pills:not(.nav-pills-icons)>li>a {
     border-radius: 5px 5px 0px 0px;
