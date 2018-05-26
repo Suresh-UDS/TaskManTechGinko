@@ -20,6 +20,8 @@ angular
 
 					$scope.quotationImages=[];
 
+                    $scope.selectedImageFile;
+
 					$scope.materialName;
 
 					$scope.materialQty;
@@ -167,11 +169,11 @@ angular
 
 					    	alert(event);
 					         //var files = event.target.files; //FileList object
-					         
+
 					        /* for (var i = 0; i < files.length; i++) {
 					             var file = files[i];
 					                 var reader = new FileReader();
-					                 reader.onload = $scope.imageIsLoaded; 
+					                 reader.onload = $scope.imageIsLoaded;
 					                 reader.readAsDataURL(file);
 					         }*/
 					    }
@@ -182,7 +184,7 @@ angular
 					        });
 					    }
 
-					
+
 
 					$scope.loadProjects = function() {
 						ProjectComponent.findAll().then(function(data) {
@@ -317,7 +319,7 @@ angular
 					}
 
 					$scope.saveQuotation = function(mode) {
-						
+
 						console.log("Image file",$scope.selectedImageFile);
 
 						$scope.quotation.siteId = $scope.selectedSite.id;
@@ -341,10 +343,10 @@ angular
 						RateCardComponent.createQuotation($scope.quotation)
 								.then(function(response) {
 									console.log(response);
-
+                                console.log($scope.selectedImageFile);
 								if($scope.selectedImageFile !=""){
 
-								RateCardComponent.upload({quotationId:response._id,quotationFile:selectedImageFile})
+								RateCardComponent.upload(response._id,$scope.selectedImageFile)
 								    .then(function(response) {
 									console.log("image uploaded",response);
 
@@ -369,12 +371,12 @@ angular
 
 			                        }
 			                    });
-					}
+					};
 
 					$scope.selectQuotation = function(quotation) {
 
 						$scope.quotation = quotation;
-					}
+					};
 
                     $scope.loadQuotationImage = function(image) {
                         var eleId = 'photoStart';

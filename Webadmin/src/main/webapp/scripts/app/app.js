@@ -7,7 +7,7 @@ angular.module('timeSheetApp', ['LocalStorageModule',
      'alexjoffroy.angular-loaders','chart.js','jkAngularRatingStars',
      'angular-star-rating-new','paginations'])
 
-    .run(function ($rootScope, $location, $window, $http, $state,  Auth, Principal, ENV, VERSION) {
+    .run(function ($rootScope,$scope, $location, $window, $http, $state,  Auth, Principal, ENV, VERSION) {
         $rootScope.isAuthenticated = Principal.isAuthenticated;
         $rootScope.loginView = true;
         $rootScope.ENV = ENV;
@@ -107,12 +107,12 @@ angular.module('timeSheetApp', ['LocalStorageModule',
         }
 
         $rootScope.loadingStop = function(){
-            
+
             console.log("Calling loader");
 
             $('.pageCenter').hide();
             $('.overlay').hide();
-                    
+
         }
 
         //Loading Page go to top position
@@ -122,7 +122,7 @@ angular.module('timeSheetApp', ['LocalStorageModule',
             $("#loadPage").animate({scrollTop: 0}, 2000);
         }
 
-       
+
     })
     .config(function ($stateProvider, $urlRouterProvider, $httpProvider, $locationProvider,  httpRequestInterceptorCacheBusterProvider,uiGmapGoogleMapApiProvider) {
     	uiGmapGoogleMapApiProvider.configure({
@@ -161,7 +161,7 @@ angular.module('timeSheetApp', ['LocalStorageModule',
             }
         });
 
-        
+
 
         $httpProvider.interceptors.push('errorHandlerInterceptor');
         $httpProvider.interceptors.push('authExpiredInterceptor');

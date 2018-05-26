@@ -117,12 +117,22 @@ angular.module('timeSheetApp')
                     return response.data;
                 })
             },
-             upload: function(quotationImage) {
+             upload: function(quotationId,quotationImage) {
+                console.log(quotationImage);
+                 var fileFormData = new FormData();
+                 fileFormData.append('quotationFile', quotationImage);
+                 fileFormData.append('quotationId', quotationId);
+                 return $http.post('api/quotation/image/upload', fileFormData, {
+                     transformRequest: angular.identity,
+                     headers: {'Content-Type': undefined}
 
-                return $http.post('api/rateCard/quotation/image/upload' ,quotationImage).then(function (response) {
-                    return response.data;
-                });
+                 }).then(function (response) {
+                     return response.data;
+                 });
+
             }
+
+
 
         };
     });

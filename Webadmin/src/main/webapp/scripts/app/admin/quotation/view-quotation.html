@@ -163,7 +163,7 @@
                                                     <i class="material-icons">remove_red_eye</i>View Ticket</button>
                                                 <button class="btn btn-primary" ng-if="(quotation.ticketId > 0) && ticketStatus != 'Closed'" ng-click="closeTicket(quotation.ticketId)"   onClick="$('#deleteModalNew').modal()" data-target="#myModal" >
                                                     <i class="material-icons">remove_red_eye</i>Close Ticket</button>
-                                                <a ng-if="(quotation.ticketId > 0) && ticketStatus == 'Closed'" ng-class="{active: $state.includes('admin')}" class="btn btn-simple btn-info">Ticket# {{quotation.ticketId}} Closed </a>    
+                                                <a ng-if="(quotation.ticketId > 0) && ticketStatus == 'Closed'" ng-class="{active: $state.includes('admin')}" class="btn btn-simple btn-info">Ticket# {{quotation.ticketId}} Closed </a>
                                             </div>
 
 									</div>
@@ -182,7 +182,7 @@
 
 
 										<ul class="nav nav-pills nav-pills-warning">
-											<li class="active"><a href=".pill2" data-toggle="tab" ng-click="actionsShow()" 
+											<li class="active"><a href=".pill2" data-toggle="tab" ng-click="actionsShow()"
 												> <i
 													class="material-icons" >add</i>  Service</a></li>
 											<li class=""><a href=".pill3" data-toggle="tab" ng-click="actionsShow()"
@@ -193,7 +193,7 @@
 													class="material-icons"  >add</i>  Material</a></li>
 											<li class=""><a href=".pill4" data-toggle="tab"  ng-click="actionsShow()"
 												>Summary</a></li>
-											<li class=""><a href=".pill5" data-toggle="tab" ng-click="actionsHide()"
+											<li class="" ng-show="quotationImages.length>0"><a href=".pill5" data-toggle="tab" ng-click="actionsHide()"
 												>Images</a></li>
 										</ul>
 										<div class="tab-content TabsContent" style="">
@@ -469,15 +469,15 @@
 											</div>
 											<div class="tab-pane fade pill5" id="pill5">
 
-												 <div class="row" ng-repeat="url in quotationImages">
+												 <div class="row" ng-repeat="(url,img) in quotationImages">
 
                                                        <div class="col-md-2 txt-align-center">
-                                                           <a id="images" href="#" onClick="$('#myModalNew').modal()" data-target="#myModalNew" data-dismiss="#myModalNew" ng-click="loadQImagesNew(url,quotation._id)">
-                                                               <img  src=url width="100px" height="100px" />
+                                                           <a id="images" href="#" onClick="$('#myModalNew').modal()" data-target="#myModalNew" data-dismiss="#myModalNew" ng-click="loadQImagesNew(img,quotation._id)">
+                                                               <img  src={{img}} width="100px" height="100px" />
                                                            </a>
-                                                           <p>Photo Name</p>
+                                                           <!--<p>Quotation</p>-->
                                                        </div>
-                                   
+
                                                    </div>
 											</div>
 										</div>
@@ -522,7 +522,7 @@
                                                             <span class="btn-label"><i class="material-icons">done</i></span>
                                                             Approve
                                                         </button>
-                                                        
+
                                                         <button  title="Reject Quotation" ng-if="quotation.isSubmitted && !quotation.isApproved  && !quotation.isRejected"
                                                                  data-toggle="modal" data-target="#rejectQuotationModal"
                                                                  data-dismiss="#rejectQuotationModal" ng-click="selectQuotation(quotation)"
@@ -640,14 +640,14 @@
                         <thead>
                         <tr >
                             <th style="text-align: center">Quotation Image</th>
-                         
+
                         </tr>
                         </thead>
                         <tr>
-                  
-                            <td><img id="quoImage" width="500" height="500" src="#"
+
+                            <td><img id="quoImage" width="250" height="250" src="#"
                                      class="img-responsive"></td>
-                        </tr>            
+                        </tr>
 
                     </table>
 

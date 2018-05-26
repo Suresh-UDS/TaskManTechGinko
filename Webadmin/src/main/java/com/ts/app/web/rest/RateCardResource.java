@@ -141,9 +141,9 @@ public class RateCardResource {
     }
 
     @RequestMapping(value = "/quotation/image/{id}/{imageId}",method = RequestMethod.GET)
-    public ResponseEntity<?> findQuotationImage(@PathVariable("id") String quotationId, @PathVariable("imageId") String imageId) {
-        String image = rateCardService.getQuotationImage(quotationId, imageId);
-        return new ResponseEntity<String>("{ \"image\":\" "+image+"\"",HttpStatus.OK);
+    public String findQuotationImage(@PathVariable("id") String quotationId, @PathVariable("imageId") String imageId) {
+        return rateCardService.getQuotationImage(quotationId, imageId);
+//        return ("{ \"image\":\" "+image+"\"",HttpStatus.OK);
     }
 
 	@RequestMapping(value = "/rateCard/quotation/id/{id}", method = RequestMethod.GET)
