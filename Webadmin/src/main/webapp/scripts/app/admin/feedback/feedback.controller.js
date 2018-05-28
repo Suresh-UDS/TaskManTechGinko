@@ -11,8 +11,8 @@ angular.module('timeSheetApp')
         $scope.colors = ['#45b7cd', '#ff6384', '#ff8e72'];
         $scope.labels = [];
         $scope.series = ['Series A'];
-        $scope.selectedFromDate = $filter('date')(new Date(), 'dd/MM/yyyy'); 
-        $scope.selectedToDate = $filter('date')(new Date(), 'dd/MM/yyyy'); 
+        $scope.selectedFromDate = $filter('date')(new Date(), 'dd/MM/yyyy');
+        $scope.selectedToDate = $filter('date')(new Date(), 'dd/MM/yyyy');
         $scope.pager = {};
         $scope.data = [
         ];
@@ -234,7 +234,7 @@ angular.module('timeSheetApp')
             		$scope.feedbackListLoader = true;
             		console.log('feedback report - ' + JSON.stringify($scope.feedbackReport));
                     $scope.averageRating = $scope.feedbackReport.overallRating;
-                    
+
 //                $scope.pages.currPage = data.currPage;
 //                $scope.pages.totalPages = data.totalPages;
 //                $scope.loading = false;
@@ -347,6 +347,14 @@ angular.module('timeSheetApp')
 
         };
 
+        $scope.printDiv = function(printable) {
+            var printContents = document.getElementById(printable).innerHTML;
+            var originalContents = document.body.innerHTML;
+            document.body.innerHTML = printContents;
+            window.print();
+            document.body.innerHTML = originalContents;
+        }
+
         $scope.next = function() {
             console.log("Calling next")
 
@@ -411,13 +419,13 @@ angular.module('timeSheetApp')
         };
 
         $scope.initCalender();
-        
+
         //init load
-        $scope.initLoad = function(){ 
-             $scope.loadPageTop(); 
+        $scope.initLoad = function(){
+             $scope.loadPageTop();
              $scope.init();
-            
-          
+
+
          }
 
     });
@@ -425,15 +433,15 @@ angular.module('timeSheetApp')
 /*.controller("RatingCtrl", function($scope) {
   $scope.user1 = {rating:5};
   $scope.user2 = {rating:2};
-  $scope.user3 = {rating:1};  
+  $scope.user3 = {rating:1};
   $scope.averageRating = 0;
-  
+
   $scope.$watch(function(){return $scope.user1.rating + $scope.user2.rating + $scope.user3.rating;}, function(oldVal, newVal) {
         if (newVal) { updateAverageRating(); }
   });
-    
+
   function updateAverageRating(){ $scope.averageRating = ($scope.user1.rating + $scope.user2.rating + $scope.user3.rating) / 3; }
-  
+
   $scope.isReadonly = true;
   $scope.rateFunction = function(rating) {
     console.log("Rating selected: " + rating);

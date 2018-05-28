@@ -1,4 +1,4 @@
-<div ng-init="initLoad()">
+<div ng-init="initLoad()" id="printable">
 
     <!--<div class="row TopButtonsCon" >-->
     <!--&lt;!&ndash;<div class="col-md-4">&ndash;&gt;-->
@@ -21,7 +21,7 @@
         <div class="col-md-12">
 
 
-            <div class="card">
+            <div class="card"  >
 
                 <div class="card-content">
 
@@ -73,6 +73,9 @@
                                             </button>
                                             <button ng-click="refreshPage()" class="btn btn-circle orange-clr">
                                                 <i class="material-icons">refresh</i>
+                                            </button>
+                                            <button ng-click="printDiv('printable');" class="btn btn-circle orange-clr">
+                                                <i class="material-icons">print</i>
                                             </button>
                                             <a class="download-btn" href="{{exportFile(0)}}">{{exportMsg(0)}}</a>
 
@@ -170,9 +173,9 @@
                                         <!-- <jk-rating-stars max-rating="5" rating="feedbackReport.overallRating" read-only="readOnly" >
                                         </jk-rating-stars> -->
 
-                                        <average-star-rating ng-model="averageRating" max="5"></average-star-rating> 
+                                        <average-star-rating ng-model="averageRating" max="5"></average-star-rating>
 
-                                        
+
 
                                     </div>
 
@@ -256,7 +259,7 @@
 								       <jk-rating-stars max-rating="5" rating="key" read-only="readOnly" >
                                         </jk-rating-stars>
                                         {{value}}
-                                        
+
 								    </div>
 							    </td>
                             </tr>
