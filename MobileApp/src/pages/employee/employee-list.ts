@@ -184,7 +184,6 @@ export class EmployeeList {
 
           },error=>{
               console.log("errors");
-              this.closeLoader();
               this.verifyFaceAndMarkAttendance(employee,mode,attendanceMode,imageData);
 
           })
@@ -193,7 +192,6 @@ export class EmployeeList {
   verifyFaceAndMarkAttendance(employee,mode,attendanceMode,imageData){
       let base64Image = 'data:image/jpeg;base64,' + imageData;
       var employeeName = employee.fullName+employee.empId;
-      this.closeLoader();
       this.showLoader('Detecting Face');
       this.authService.detectFace(this.employeeFullName,imageData).subscribe(response=>{
               console.log("response in site list");
