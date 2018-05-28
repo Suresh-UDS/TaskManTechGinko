@@ -143,6 +143,12 @@ public class SearchCriteria extends Paginator {
 	
 	private Date quotationApprovedDate;
 	
+	private long manufacturerId;
+	
+	private String manufacturerName;
+	
+	private String assetTypeName;
+	
 	public long getId() {
 		return id;
 	}
@@ -756,6 +762,30 @@ public class SearchCriteria extends Paginator {
 
 	public void setQuotationSubmittedDate(Date quotationSubmittedDate) {
 		this.quotationSubmittedDate = quotationSubmittedDate;
+	}
+
+	public long getManufacturerId() {
+		return manufacturerId;
+	}
+
+	public void setManufacturerId(long manufacturerId) {
+		this.manufacturerId = manufacturerId;
+	}
+
+	public String getManufacturerName() {
+		return manufacturerName;
+	}
+
+	public void setManufacturerName(String manufacturerName) {
+		this.manufacturerName = manufacturerName;
+	}
+
+	public String getAssetTypeName() {
+		return assetTypeName;
+	}
+
+	public void setAssetTypeName(String assetTypeName) {
+		this.assetTypeName = assetTypeName;
 	}
     
 	

@@ -17,7 +17,6 @@ import org.springframework.web.multipart.MultipartFile;
 import com.ts.app.domain.AbstractAuditingEntity;
 import com.ts.app.domain.Asset;
 import com.ts.app.domain.Site;
-import com.ts.app.domain.Ticket;
 import com.ts.app.repository.AssetRepository;
 import com.ts.app.repository.CheckInOutImageRepository;
 import com.ts.app.repository.CheckInOutRepository;

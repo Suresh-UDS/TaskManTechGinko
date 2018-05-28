@@ -1,12 +1,12 @@
 'use strict';
 
 angular.module('timeSheetApp')
-    .factory('AssetComponent', function AssetComponent(Asset,$http) {
+    .factory('AssetTypeComponent', function AssetTypeComponent(AssetType,$http) {
         return {
 
-            create : function(asset,callback){
+            create : function(assetType,callback){
                 var cb = callback || angular.noop;
-                return $http.post('api/asset',asset).then(
+                return $http.post('api/assetType',assetType).then(
                     function (response) {
                         return cb(response);
                     }).catch(
@@ -16,9 +16,9 @@ angular.module('timeSheetApp')
                     })
 
             },
-            update : function(asset,callback){
+            update : function(assetType,callback){
                 var cb = callback || angular.noop;
-                return $http.put('api/asset/'+asset.id,asset).then(
+                return $http.put('api/assetType/'+assetType.id,assetType).then(
                     function (response) {
                         return cb(response);
                     }).catch(
@@ -33,7 +33,7 @@ angular.module('timeSheetApp')
 
                 var cb = callback || angular.noop;
 
-                return  $http.delete('api/asset/'+id).then(
+                return  $http.delete('api/assetType/'+id).then(
                     function (response) {
                         return cb(response);
                     }).catch(
@@ -42,13 +42,18 @@ angular.module('timeSheetApp')
                         return cb(err);
                     })
             },
+            findAll: function () {
+				return $http.get('api/assetType').then(function (response) {
+					return response.data;
+				});
+			},            
             findById : function(id){
-                return $http.get('api/asset/'+id).then(function (response) {
+                return $http.get('api/assetType/'+id).then(function (response) {
                     return response.data;
                 });
             },
             search: function() {
-                return $http.post('api/assets/search').then(function (response) {
+                return $http.post('api/assetTypes/search').then(function (response) {
                     return response.data;
                 });
             }

@@ -1,12 +1,12 @@
 'use strict';
 
 angular.module('timeSheetApp')
-    .factory('AssetComponent', function AssetComponent(Asset,$http) {
+    .factory('ManufacturerComponent', function ManufacturerComponent(Manufacturer,$http) {
         return {
 
-            create : function(asset,callback){
+            create : function(manufacturer,callback){
                 var cb = callback || angular.noop;
-                return $http.post('api/asset',asset).then(
+                return $http.post('api/manufacturer',manufacturer).then(
                     function (response) {
                         return cb(response);
                     }).catch(
@@ -16,9 +16,9 @@ angular.module('timeSheetApp')
                     })
 
             },
-            update : function(asset,callback){
+            update : function(manufacturer,callback){
                 var cb = callback || angular.noop;
-                return $http.put('api/asset/'+asset.id,asset).then(
+                return $http.put('api/manufacturer',manufacturer).then(
                     function (response) {
                         return cb(response);
                     }).catch(
@@ -33,7 +33,7 @@ angular.module('timeSheetApp')
 
                 var cb = callback || angular.noop;
 
-                return  $http.delete('api/asset/'+id).then(
+                return  $http.delete('api/manufacturer/'+id).then(
                     function (response) {
                         return cb(response);
                     }).catch(
@@ -42,13 +42,18 @@ angular.module('timeSheetApp')
                         return cb(err);
                     })
             },
+            findAll: function () {
+				return $http.get('api/manufacturer').then(function (response) {
+					return response.data;
+				});
+			},            
             findById : function(id){
-                return $http.get('api/asset/'+id).then(function (response) {
+                return $http.get('api/manufacturer/'+id).then(function (response) {
                     return response.data;
                 });
             },
-            search: function() {
-                return $http.post('api/assets/search').then(function (response) {
+            search: function(searchCriteria) {
+                return $http.post('api/manufacturer/search',searchCriteria).then(function (response) {
                     return response.data;
                 });
             }

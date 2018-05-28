@@ -48,7 +48,7 @@ import com.ts.app.repository.JobRepository;
 import com.ts.app.repository.ProjectRepository;
 import com.ts.app.repository.SchedulerConfigRepository;
 import com.ts.app.repository.SettingsRepository;
-import com.ts.app.repository.SiteRepository;
+import com.ts.app.repository.ManufacturerRepository;
 import com.ts.app.service.util.DateUtil;
 import com.ts.app.service.util.ExportUtil;
 import com.ts.app.service.util.MapperUtil;
@@ -84,7 +84,7 @@ public class SchedulerService extends AbstractService {
 	private ProjectRepository projectRepository;
 	
 	@Inject
-	private SiteRepository siteRepository;
+	private ManufacturerRepository siteRepository;
 
 	@Inject
 	private JobManagementService jobManagementService;

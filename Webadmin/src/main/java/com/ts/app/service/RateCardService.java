@@ -37,7 +37,7 @@ import com.ts.app.domain.User;
 import com.ts.app.repository.ProjectRepository;
 import com.ts.app.repository.RateCardRepository;
 import com.ts.app.repository.SettingsRepository;
-import com.ts.app.repository.SiteRepository;
+import com.ts.app.repository.ManufacturerRepository;
 import com.ts.app.repository.TicketRepository;
 import com.ts.app.repository.UserRepository;
 import com.ts.app.service.util.MapperUtil;
@@ -69,7 +69,7 @@ public class RateCardService extends AbstractService {
 	private UserRepository userRepository;
 
 	@Inject
-	private SiteRepository siteRepository;
+	private ManufacturerRepository siteRepository;
 
 	@Inject
 	private MapperUtil<AbstractAuditingEntity, BaseDTO> mapperUtil;

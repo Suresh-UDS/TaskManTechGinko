@@ -37,7 +37,7 @@ import com.ts.app.repository.JobSpecification;
 import com.ts.app.repository.LocationRepository;
 import com.ts.app.repository.NotificationRepository;
 import com.ts.app.repository.PricingRepository;
-import com.ts.app.repository.SiteRepository;
+import com.ts.app.repository.ManufacturerRepository;
 import com.ts.app.repository.UserRepository;
 import com.ts.app.service.util.DateUtil;
 import com.ts.app.service.util.ExportUtil;
