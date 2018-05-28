@@ -149,6 +149,8 @@ public class SearchCriteria extends Paginator {
 	
 	private String assetTypeName;
 	
+	private String assetName;
+	
 	public long getId() {
 		return id;
 	}
@@ -786,6 +788,14 @@ public class SearchCriteria extends Paginator {
 
 	public void setAssetTypeName(String assetTypeName) {
 		this.assetTypeName = assetTypeName;
+	}
+
+	public String getAssetName() {
+		return assetName;
+	}
+
+	public void setAssetName(String assetName) {
+		this.assetName = assetName;
 	}
     
 	

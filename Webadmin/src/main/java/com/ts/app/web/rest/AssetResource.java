@@ -19,8 +19,11 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.codahale.metrics.annotation.Timed;
+import com.ts.app.security.SecurityUtils;
 import com.ts.app.service.AssetManagementService;
 import com.ts.app.web.rest.dto.AssetDTO;
+import com.ts.app.web.rest.dto.SearchCriteria;
+import com.ts.app.web.rest.dto.SearchResult;
 
 /**
  * REST controller for managing the Asset information.
@@ -50,6 +53,16 @@ public class AssetResource {
         log.info("--Invoked Location.findAll --");
         return assetService.findAllAssets();
     }
+    
+	@RequestMapping(value = "/asset/search",method = RequestMethod.POST)
+	public SearchResult<AssetDTO> searchAssets(@RequestBody SearchCriteria searchCriteria) {
+		SearchResult<AssetDTO> result = null;
+		if(searchCriteria != null) {
+			searchCriteria.setUserId(SecurityUtils.getCurrentUserId());
+			result = assetService.findBySearchCrieria(searchCriteria);
+		}
+		return result;
+	}
 
     @RequestMapping(path="/site/{id}/asset", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public List<AssetDTO> getSiteAssets(@PathVariable("id") Long siteId){
