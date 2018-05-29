@@ -16,16 +16,22 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.ts.app.domain.AbstractAuditingEntity;
 import com.ts.app.domain.Asset;
+import com.ts.app.domain.AssetGroup;
+import com.ts.app.domain.Designation;
+import com.ts.app.domain.Project;
 import com.ts.app.domain.Site;
 import com.ts.app.domain.Ticket;
+import com.ts.app.repository.AssetGroupRepository;
 import com.ts.app.repository.AssetRepository;
 import com.ts.app.repository.CheckInOutImageRepository;
 import com.ts.app.repository.CheckInOutRepository;
+import com.ts.app.repository.DesignationRepository;
 import com.ts.app.repository.EmployeeRepository;
 import com.ts.app.repository.JobRepository;
 import com.ts.app.repository.LocationRepository;
 import com.ts.app.repository.NotificationRepository;
 import com.ts.app.repository.PricingRepository;
+import com.ts.app.repository.ProjectRepository;
 import com.ts.app.repository.SiteRepository;
 import com.ts.app.repository.TicketRepository;
 import com.ts.app.repository.UserRepository;
@@ -37,7 +43,9 @@ import com.ts.app.service.util.MapperUtil;
 import com.ts.app.service.util.QRCodeUtil;
 import com.ts.app.service.util.ReportUtil;
 import com.ts.app.web.rest.dto.AssetDTO;
+import com.ts.app.web.rest.dto.AssetgroupDTO;
 import com.ts.app.web.rest.dto.BaseDTO;
+import com.ts.app.web.rest.dto.DesignationDTO;
 import com.ts.app.web.rest.dto.ExportResult;
 import com.ts.app.web.rest.dto.ImportResult;
 import com.ts.app.web.rest.dto.JobDTO;
@@ -116,23 +124,38 @@ public class AssetManagementService extends AbstractService {
     @Inject
     private TicketManagementService ticketManagementService;
 
-
+    @Inject
+    private AssetGroupRepository assetGroupRepository;
+    
+    @Inject
+    private ProjectRepository projectRepositoy;
+    
     //Asset
     public AssetDTO saveAsset(AssetDTO assetDTO) {
         log.debug("assets service in job services");
         Asset asset = new Asset();
+	        asset.setTitle(assetDTO.getTitle());
+	        asset.setAssetGroup(assetDTO.getAssetGroup());
+	        asset.setDescription(assetDTO.getDescription());
         Site site = getSite(assetDTO.getSiteId());
-        asset.setTitle(assetDTO.getTitle());
-        asset.setDescription(assetDTO.getDescription());
-        asset.setSite(site);
-        asset.setCode(assetDTO.getCode());
-        asset.setEndTime(DateUtil.convertToSQLDate(assetDTO.getEndTime()));
-        asset.setStartTime(DateUtil.convertToSQLDate(assetDTO.getStartTime()));
-        asset.setUdsAsset(assetDTO.isUdsAsset());
+	        asset.setSite(site);
+	        asset.setBlock(assetDTO.getBlock());
+        	asset.setFloor(assetDTO.getFloor());
+        	asset.setZone(assetDTO.getZone());
+        	asset.setModelNumber(assetDTO.getModelNumber());
+        	asset.setSerialNumber(assetDTO.getSerialNumber());
+        	asset.setPurchasePrice(assetDTO.getPurchasePrice());
+        	asset.setCurrentPrice(assetDTO.getCurrentPrice());
+        	asset.setEstimatedDisposePrice(assetDTO.getEstimatedDisposePrice());
+	        asset.setCode(assetDTO.getCode());
+	        //asset.setEndTime(DateUtil.convertToSQLDate(assetDTO.getEndTime()));
+	        //asset.setStartTime(DateUtil.convertToSQLDate(assetDTO.getStartTime()));
+	        asset.setUdsAsset(assetDTO.isUdsAsset());
 
         List<Asset> existingAssets = assetRepository.findAssetByTitle(assetDTO.getTitle());
         log.debug("Existing asset -"+ existingAssets);
         if(CollectionUtils.isEmpty(existingAssets)) {
+        	log.debug(">>> save! <<<");
             asset = assetRepository.save(asset);
         }
 
@@ -203,7 +226,7 @@ public class AssetManagementService extends AbstractService {
     public AssetDTO getAssetDTO(long id){
         Asset asset = assetRepository.findOne(id);
         AssetDTO assetDTO = mapperUtil.toModel(asset,AssetDTO.class);
-        Site site = getSite(assetDTO.getSiteId());
+        /*Site site = getSite(assetDTO.getSiteId());
         assetDTO.setActive(asset.getActive());
         assetDTO.setSiteId(assetDTO.getSiteId());
         assetDTO.setSiteName(assetDTO.getSiteName());
@@ -212,7 +235,23 @@ public class AssetManagementService extends AbstractService {
         assetDTO.setDescription(asset.getDescription());
         assetDTO.setUdsAsset(asset.isUdsAsset());
         assetDTO.setStartTime(asset.getStartTime());
-        assetDTO.setEndTime(asset.getEndTime());
+        assetDTO.setEndTime(asset.getEndTime());*/
+        
+        assetDTO.setTitle(assetDTO.getTitle());
+        assetDTO.setAssetGroup(assetDTO.getAssetGroup());
+        assetDTO.setProjectId(assetDTO.getProjectId());
+        assetDTO.setSiteId(assetDTO.getSiteId());
+        assetDTO.setBlock(assetDTO.getBlock());
+        assetDTO.setFloor(assetDTO.getFloor());
+        assetDTO.setZone(assetDTO.getZone());
+        assetDTO.setModelNumber(assetDTO.getModelNumber());
+        assetDTO.setSerialNumber(assetDTO.getSerialNumber());
+        assetDTO.setPurchasePrice(assetDTO.getPurchasePrice());
+        assetDTO.setCurrentPrice(assetDTO.getCurrentPrice());
+        assetDTO.setEstimatedDisposePrice(assetDTO.getEstimatedDisposePrice());
+        assetDTO.setCode(assetDTO.getCode());
+        assetDTO.setUdsAsset(assetDTO.isUdsAsset());
+        
         return assetDTO;
     }
 
@@ -234,8 +273,7 @@ public class AssetManagementService extends AbstractService {
 
 
     private void mapToEntityAssets(AssetDTO assetDTO, Asset asset) {
-        Site site = getSite(assetDTO.getSiteId());
-
+        /*Site site = getSite(assetDTO.getSiteId());
 
         asset.setTitle(assetDTO.getTitle());
         asset.setDescription(assetDTO.getDescription());
@@ -244,7 +282,24 @@ public class AssetManagementService extends AbstractService {
         asset.setEndTime(DateUtil.convertToSQLDate(assetDTO.getEndTime()));
         asset.setUdsAsset(assetDTO.isUdsAsset());
         asset.setSite(site);
-
+*/
+        asset.setTitle(assetDTO.getTitle());
+        asset.setAssetGroup(assetDTO.getAssetGroup());
+        asset.setDescription(assetDTO.getDescription());
+        Site site = getSite(assetDTO.getSiteId());
+        asset.setSite(site);
+        asset.setBlock(assetDTO.getBlock());
+    	asset.setFloor(assetDTO.getFloor());
+    	asset.setZone(assetDTO.getZone());
+    	asset.setModelNumber(assetDTO.getModelNumber());
+    	asset.setSerialNumber(assetDTO.getSerialNumber());
+    	asset.setPurchasePrice(assetDTO.getPurchasePrice());
+    	asset.setCurrentPrice(assetDTO.getCurrentPrice());
+    	asset.setEstimatedDisposePrice(assetDTO.getEstimatedDisposePrice());
+        asset.setCode(assetDTO.getCode());
+        //asset.setEndTime(DateUtil.convertToSQLDate(assetDTO.getEndTime()));
+        //asset.setStartTime(DateUtil.convertToSQLDate(assetDTO.getStartTime()));
+        asset.setUdsAsset(assetDTO.isUdsAsset());
     }
 
     public AssetDTO updateAsset(AssetDTO assetDTO) {
@@ -321,5 +376,21 @@ public class AssetManagementService extends AbstractService {
 		if(site == null) throw new TimesheetException("Site not found : "+siteId);
 		return site;
 	}
+	
+	private Project getProject(Long projectId) {
+		Project project = projectRepositoy.findOne(projectId);
+		if(project == null) throw new TimesheetException("Project not found : "+projectId);
+		return project;
+	}
 
+	public AssetgroupDTO createAssetGroup(AssetgroupDTO assetGroupDTO) {
+		AssetGroup assetgroup= mapperUtil.toEntity(assetGroupDTO, AssetGroup.class);
+	    assetGroupRepository.save(assetgroup);
+        return assetGroupDTO;
+    }
+	
+	public List<AssetgroupDTO> findAllAssetGroups() {
+      List<AssetGroup> assetgroup = assetGroupRepository.findAll();
+      return mapperUtil.toModelList(assetgroup, AssetgroupDTO.class);
+	}
 }
