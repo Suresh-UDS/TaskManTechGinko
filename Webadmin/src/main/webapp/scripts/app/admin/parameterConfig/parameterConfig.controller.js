@@ -3,7 +3,7 @@
 angular.module('timeSheetApp')
 		    .controller(
 				'ParameterConfigController',
-				function($scope, $rootScope, $state, $timeout, ParameterConfigComponent,AssetTypeComponent,
+				function($scope, $rootScope, $state, $timeout, ParameterConfigComponent,ParameterComponent, ParameterUOMComponent, AssetTypeComponent,
 						$http, $stateParams,
 						$location) {
         $rootScope.loadingStop();
@@ -16,9 +16,13 @@ angular.module('timeSheetApp')
         $scope.pages = { currPage : 1};
         $scope.isEdit = !!$stateParams.id;
         
+        $scope.parameterConfig = {};
+        
         $scope.assetType = {};
         
         $scope.parameter = {};
+        
+        $scope.consumptionMonitoringRequired = false;
 
         console.log($stateParams)
                     var that =  $scope;
@@ -83,7 +87,7 @@ angular.module('timeSheetApp')
         };
         
         $scope.loadAllParameters = function() {
-        		ParameterConfigComponent.findAll().then(function (data) {
+        		ParameterComponent.findAll().then(function (data) {
 	            $scope.selectedParameter = null;
 	            $scope.parameters = data;
 	            $scope.loadingStop();
@@ -94,15 +98,39 @@ angular.module('timeSheetApp')
 	        console.log($scope.parameter.name);
 	        if($scope.parameter){
 	            console.log("Parameter entered");
-	            AssetTypeComponent.create($scope.assetType).then(function (response) {
+	            ParameterComponent.create($scope.parameter).then(function (response) {
 	                console.log(response);
-	                $scope.assetType = null;
-	                $scope.showNotifications('top','center','success','Asset Type Added Successfully');
-	                $scope.loadAllAssetTypes();
+	                $scope.parameter = null;
+	                $scope.showNotifications('top','center','success','Parameter Added Successfully');
+	                $scope.loadAllParameters();
 	
 	            })
 	        }else{
-	            console.log("Asset type not entered");
+	            console.log("Parameter not entered");
+	        }
+	    };
+	    
+        $scope.loadAllParameterUOMs = function() {
+	    		ParameterUOMComponent.findAll().then(function (data) {
+	            $scope.selectedParameterUOM = null;
+	            $scope.parameterUOMs = data;
+	            $scope.loadingStop();
+	        });
+	    }
+	    
+	    $scope.addParameterUOM = function () {
+	        console.log($scope.parameterUOM.name);
+	        if($scope.parameterUOM){
+	            console.log("ParameterUOM entered");
+	            ParameterUOMComponent.create($scope.parameterUOM).then(function (response) {
+	                console.log(response);
+	                $scope.parameterUOM = null;
+	                $scope.showNotifications('top','center','success','Parameter UOM Added Successfully');
+	                $scope.loadAllParameterUOMs();
+	
+	            })
+	        }else{
+	            console.log("Parameter UOM not entered");
 	        }
 	    };
         
@@ -168,6 +196,8 @@ angular.module('timeSheetApp')
         $scope.initPage=function (){
 
             $scope.loadAllAssetTypes();
+            $scope.loadAllParameters();
+            $scope.loadAllParameterUOMs();
         		if($scope.isEdit){
         			console.log("edit parameterConfig")
         			$scope.editParameterConfig();
@@ -180,14 +210,22 @@ angular.module('timeSheetApp')
         $scope.saveParameterConfig = function () {
 	        	$scope.error = null;
 	        	$scope.success =null;
-	        	if(!$scope.selectedAssetType){
+	        	if($scope.selectedAssetType){
 	        	    $scope.parameterConfig.assetType = $scope.selectedAssetType.name;
 	        }
+	        	if($scope.selectedParameter){
+	        	    $scope.parameterConfig.name = $scope.selectedParameter.name;
+	        }
+	        	if($scope.selectedParameterUOM){
+	        	    $scope.parameterConfig.uom = $scope.selectedParameterUOM.uom;
+	        }
+	        	$scope.parameterConfig.consumptionMonitoringRequired  = $scope.consumptionMonitoringRequired 
 	        	console.log('parameterConfig details ='+ JSON.stringify($scope.parameterConfig));
 	        	var post = $scope.isEdit ? ParameterConfigComponent.update : ParameterConfigComponent.create
 	        	post($scope.parameterConfig).then(function () {
 	                $scope.success = 'OK';
-	                $location.path('/parameterConfig-list');
+	                $scope.showNotifications('top','center','success','Parameter Configuration Saved Successfully');
+	                $location.path('/parameter-config');
 	            }).catch(function (response) {
 	                $scope.success = null;
 	                console.log('Error - '+ response.data);
@@ -210,10 +248,10 @@ angular.module('timeSheetApp')
         		$scope.deleteParameterConfigId= parameterConfig.id;
         }
 
-        $scope.deleteParameterConfig = function () {
-        		ParameterConfigComponent.remove($scope.deleteParameterConfigId).then(function(){
+        $scope.deleteParameterConfig = function (parameterConfigId) {
+        		ParameterConfigComponent.remove(parameterConfigId).then(function(){
 	            	$scope.success = 'OK';
-	            	$state.reload();
+	            	$scope.initLoad();
 	        	});
         };
 
@@ -310,4 +348,9 @@ angular.module('timeSheetApp')
              $scope.initPage(); 
           
          }
+        
+        $scope.showNotifications= function(position,alignment,color,msg){
+            demo.showNotification(position,alignment,color,msg);
+        }
+        
     });

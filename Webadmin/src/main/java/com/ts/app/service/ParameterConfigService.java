@@ -98,6 +98,7 @@ public class ParameterConfigService extends AbstractService {
 
 	private void mapToEntity(ParameterConfigDTO parameterConfigDTO, ParameterConfig parameterConfig) {
 		parameterConfig.setName(parameterConfigDTO.getName());
+		parameterConfig.setUom(parameterConfigDTO.getUom());
 		parameterConfig.setAssetType(parameterConfigDTO.getAssetType());
 	}
 
@@ -105,6 +106,7 @@ public class ParameterConfigService extends AbstractService {
 		ParameterConfigDTO parameterConfigDTO = new ParameterConfigDTO();
 		parameterConfigDTO.setId(parameterConfig.getId());
 		parameterConfigDTO.setName(parameterConfig.getName());
+		parameterConfigDTO.setUom(parameterConfig.getUom());
 		parameterConfigDTO.setAssetType(parameterConfig.getAssetType());
 		return parameterConfigDTO;
 	}
@@ -125,6 +127,11 @@ public class ParameterConfigService extends AbstractService {
 	public List<ParameterDTO> findAllParameters() {
 		List<Parameter> entities = parameterRepository.findAll();
 		return mapperUtil.toModelList(entities, ParameterDTO.class);
+	}
+	
+	public List<ParameterUOMDTO> findAllParameterUOMs() {
+		List<ParameterUOM> entities = parameterUOMRepository.findAll();
+		return mapperUtil.toModelList(entities, ParameterUOMDTO.class);
 	}
 
 	public ParameterConfigDTO findOne(Long id) {

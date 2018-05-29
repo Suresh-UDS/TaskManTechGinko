@@ -143,6 +143,7 @@ angular.module('timeSheetApp')
 	        	var post = $scope.isEdit ? ManufacturerComponent.update : ManufacturerComponent.create
 	        	post($scope.manufacturer).then(function () {
 	                $scope.success = 'OK';
+	                $scope.showNotifications('top','center','success','Manufacturer Saved Successfully');
 	                $location.path('/manufacturer-list');
 	            }).catch(function (response) {
 	                $scope.success = null;
@@ -266,4 +267,9 @@ angular.module('timeSheetApp')
              $scope.initPage(); 
           
          }
+        
+        $scope.showNotifications= function(position,alignment,color,msg){
+            demo.showNotification(position,alignment,color,msg);
+        }
+        
     });

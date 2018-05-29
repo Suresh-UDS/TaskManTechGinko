@@ -28,6 +28,7 @@ import com.ts.app.service.util.ImportUtil;
 import com.ts.app.web.rest.dto.ImportResult;
 import com.ts.app.web.rest.dto.ParameterConfigDTO;
 import com.ts.app.web.rest.dto.ParameterDTO;
+import com.ts.app.web.rest.dto.ParameterUOMDTO;
 import com.ts.app.web.rest.dto.SearchCriteria;
 import com.ts.app.web.rest.dto.SearchResult;
 import com.ts.app.web.rest.errors.TimesheetException;
@@ -86,6 +87,23 @@ public class ParameterConfigResource {
 
 		return new ResponseEntity<>(HttpStatus.CREATED);
 	}
+	
+	/**
+	 * POST /saveParameterConfig -> saveParameterUOM the ParameterUOM.
+	 */
+	@RequestMapping(value = "/parameterUOM", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+	@Timed
+	public ResponseEntity<?> saveParameterUOM(@Valid @RequestBody ParameterUOMDTO parameterUomDTO, HttpServletRequest request) {
+		log.info("Inside the saveParameter -" + parameterUomDTO.getUom());
+		try  {
+			parameterUomDTO.setUserId(SecurityUtils.getCurrentUserId());
+			parameterUomDTO = parameterConfigService.createParameterUOM(parameterUomDTO);
+		}catch (Exception cve) {
+			throw new TimesheetException(cve, parameterUomDTO);
+		}
+
+		return new ResponseEntity<>(HttpStatus.CREATED);
+	}
 
 	@RequestMapping(value = "/parameterConfig", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE)
 	@Timed
@@ -117,6 +135,12 @@ public class ParameterConfigResource {
 	public List<ParameterDTO> findAllParameters(HttpServletRequest request) {
 		log.info("--Invoked ParameterConfigResource.findAllParameters --");
 		return parameterConfigService.findAllParameters();
+	}
+	
+	@RequestMapping(value = "/parameterUOM", method = RequestMethod.GET)
+	public List<ParameterUOMDTO> findAllParameterUOM(HttpServletRequest request) {
+		log.info("--Invoked ParameterConfigResource.findAllParametersUOM --");
+		return parameterConfigService.findAllParameterUOMs();
 	}
 
 	@RequestMapping(value = "/parameterConfig/{id}", method = RequestMethod.GET)
