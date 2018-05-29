@@ -27,7 +27,9 @@ import com.ts.app.domain.Ticket;
 import com.ts.app.repository.AssetGroupRepository;
 import com.ts.app.domain.Employee;
 import com.ts.app.domain.EmployeeProjectSite;
+import com.ts.app.domain.Manufacturer;
 import com.ts.app.domain.User;
+import com.ts.app.domain.Vendor;
 import com.ts.app.repository.AssetRepository;
 import com.ts.app.repository.CheckInOutImageRepository;
 import com.ts.app.repository.CheckInOutRepository;
@@ -35,12 +37,14 @@ import com.ts.app.repository.DesignationRepository;
 import com.ts.app.repository.EmployeeRepository;
 import com.ts.app.repository.JobRepository;
 import com.ts.app.repository.LocationRepository;
+import com.ts.app.repository.ManufacturerRepository;
 import com.ts.app.repository.NotificationRepository;
 import com.ts.app.repository.PricingRepository;
 import com.ts.app.repository.ProjectRepository;
 import com.ts.app.repository.SiteRepository;
 import com.ts.app.repository.TicketRepository;
 import com.ts.app.repository.UserRepository;
+import com.ts.app.repository.VendorRepository;
 import com.ts.app.service.util.DateUtil;
 import com.ts.app.service.util.ExportUtil;
 import com.ts.app.service.util.FileUploadHelper;
@@ -137,6 +141,12 @@ public class AssetManagementService extends AbstractService {
     @Inject
     private ProjectRepository projectRepositoy;
     
+    @Inject
+	private ManufacturerRepository manufacturerRepository;
+    
+    @Inject
+	private VendorRepository vendorRepository;
+    
     //Asset
     public AssetDTO saveAsset(AssetDTO assetDTO) {
         log.debug("assets service in job services");
@@ -158,7 +168,13 @@ public class AssetManagementService extends AbstractService {
 	        //asset.setEndTime(DateUtil.convertToSQLDate(assetDTO.getEndTime()));
 	        //asset.setStartTime(DateUtil.convertToSQLDate(assetDTO.getStartTime()));
 	        asset.setUdsAsset(assetDTO.isUdsAsset());
+	        asset.setActive(Asset.ACTIVE_YES);
+	    Manufacturer manufacturer = getManufacturer(assetDTO.getManufacturerId());
+	        asset.setManufacturer(manufacturer);
 
+        Vendor vendor = getVendor(assetDTO.getVendorId());
+        	asset.setAmcVendor(vendor);
+	        
         List<Asset> existingAssets = assetRepository.findAssetByTitle(assetDTO.getTitle());
         log.debug("Existing asset -"+ existingAssets);
         if(CollectionUtils.isEmpty(existingAssets)) {
@@ -489,6 +505,20 @@ public class AssetManagementService extends AbstractService {
 		if (site == null)
 			throw new TimesheetException("Site not found : " + siteId);
 		return site;
+	}
+	
+	private Manufacturer getManufacturer(Long manufacturerId) {
+		Manufacturer manufacturer = manufacturerRepository.findOne(manufacturerId);
+		if (manufacturer == null)
+			throw new TimesheetException("Manufacturer not found : " + manufacturerId);
+		return manufacturer;
+	}
+	
+	private Vendor getVendor(Long vendorId) {
+		Vendor vendor = vendorRepository.findOne(vendorId);
+		if (vendor == null)
+			throw new TimesheetException("Manufacturer not found : " + vendorId);
+		return vendor;
 	}
 	
 	private Project getProject(Long projectId) {
