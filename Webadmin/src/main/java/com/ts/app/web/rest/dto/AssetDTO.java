@@ -12,13 +12,146 @@ public class AssetDTO extends BaseDTO {
     private String code;
     private String description;
     private Long siteId;
+    private Long projectId;
     private String siteName;
     private Date endTime;
     private Date startTime;
     private boolean udsAsset;
     private String qrCodeImage;
-
-    public String getTitle() {
+    private String group;
+    private String assetType;
+    private String assetGroup;
+    private String block;
+    private String floor;
+    private String zone;
+    private double addressLat;
+	private double addressLng;
+	private Long manufacturerId;
+	private Long vendorId;
+	private String modelNumber;
+    private String serialNumber;
+    private Date acquiredDate;
+    private double purchasePrice;
+    private double currentPrice;
+    private double estimatedDisposePrice;
+    private Date warrentyExpiryDate;
+    private String assetCode;
+    
+    public Long getProjectId() {
+		return projectId;
+	}
+	public void setProjectId(Long projectId) {
+		this.projectId = projectId;
+	}
+	public String getAssetType() {
+		return assetType;
+	}
+	public void setAssetType(String assetType) {
+		this.assetType = assetType;
+	}
+	public String getAssetGroup() {
+		return assetGroup;
+	}
+	public void setAssetGroup(String assetGroup) {
+		this.assetGroup = assetGroup;
+	}
+	public String getBlock() {
+		return block;
+	}
+	public void setBlock(String block) {
+		this.block = block;
+	}
+	public String getFloor() {
+		return floor;
+	}
+	public void setFloor(String floor) {
+		this.floor = floor;
+	}
+	public String getZone() {
+		return zone;
+	}
+	public void setZone(String zone) {
+		this.zone = zone;
+	}
+	public double getAddressLat() {
+		return addressLat;
+	}
+	public void setAddressLat(double addressLat) {
+		this.addressLat = addressLat;
+	}
+	public double getAddressLng() {
+		return addressLng;
+	}
+	public void setAddressLng(double addressLng) {
+		this.addressLng = addressLng;
+	}
+	public Long getManufacturerId() {
+		return manufacturerId;
+	}
+	public void setManufacturerId(Long manufacturerId) {
+		this.manufacturerId = manufacturerId;
+	}
+	public Long getVendorId() {
+		return vendorId;
+	}
+	public void setVendorId(Long vendorId) {
+		this.vendorId = vendorId;
+	}
+	public String getModelNumber() {
+		return modelNumber;
+	}
+	public void setModelNumber(String modelNumber) {
+		this.modelNumber = modelNumber;
+	}
+	public String getSerialNumber() {
+		return serialNumber;
+	}
+	public void setSerialNumber(String serialNumber) {
+		this.serialNumber = serialNumber;
+	}
+	public Date getAcquiredDate() {
+		return acquiredDate;
+	}
+	public void setAcquiredDate(Date acquiredDate) {
+		this.acquiredDate = acquiredDate;
+	}
+	public double getPurchasePrice() {
+		return purchasePrice;
+	}
+	public void setPurchasePrice(double purchasePrice) {
+		this.purchasePrice = purchasePrice;
+	}
+	public double getCurrentPrice() {
+		return currentPrice;
+	}
+	public void setCurrentPrice(double currentPrice) {
+		this.currentPrice = currentPrice;
+	}
+	public double getEstimatedDisposePrice() {
+		return estimatedDisposePrice;
+	}
+	public void setEstimatedDisposePrice(double estimatedDisposePrice) {
+		this.estimatedDisposePrice = estimatedDisposePrice;
+	}
+	public Date getWarrentyExpiryDate() {
+		return warrentyExpiryDate;
+	}
+	public void setWarrentyExpiryDate(Date warrentyExpiryDate) {
+		this.warrentyExpiryDate = warrentyExpiryDate;
+	}
+	public String getAssetCode() {
+		return assetCode;
+	}
+	public void setAssetCode(String assetCode) {
+		this.assetCode = assetCode;
+	}
+	public String getGroup() {
+		return group;
+	}
+	public void setGroup(String group) {
+		this.group = group;
+	}
+	public String getTitle() {
         return title;
     }
     public void setTitle(String title) {
