@@ -23,7 +23,7 @@ angular.module('timeSheetApp')
             })
         .state('edit-asset', {
             parent: 'manage',
-            url: '/edit-asset:id',
+            url: '/edit-asset/:id',
             controller: 'AssetController',
             data: {
                 authorities: [],
@@ -41,7 +41,7 @@ angular.module('timeSheetApp')
             }
         }).state('view-asset', {
             parent: 'manage',
-            url: '/view-asset:id',
+            url: '/view-asset/:id',
             controller: 'AssetController',
             data: {
                 authorities: [],
