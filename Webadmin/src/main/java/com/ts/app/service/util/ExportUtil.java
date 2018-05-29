@@ -1228,6 +1228,7 @@ public class ExportUtil {
 					log.error("Error while flushing/closing  !!!");
 					statusMap.put(export_File_Name, "FAILED");
 				}
+				lock.unlock();
 			}
 		});
 
