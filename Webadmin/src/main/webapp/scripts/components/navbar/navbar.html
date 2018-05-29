@@ -86,18 +86,27 @@ Tip 3: you can change the color of the sidebar with data-background-color="white
             <!--</div>-->
        <!-- </div> -->
         <ul class="nav" ng-switch-when="true">
+
             <li ui-sref-active="active" >
                 <a ui-sref="dashboard">
                     <i class="material-icons">dashboard</i>
                     <p> Dashboard </p>
                 </a>
             </li>
-            <li ui-sref-active="active" has-permission="Client:List" >
-                <a ui-sref="projects">
-                    <i class="material-icons">people</i>
-                    <p>Client </p>
+
+            <li ui-sref-active="active" >
+                <a ui-sref="notice-board">
+                    <i class="material-icons">insert_invitation</i>
+                    <p> Notice Board </p>
                 </a>
             </li>
+
+            <!--<li ui-sref-active="active" has-permission="Client:List" >-->
+                <!--<a ui-sref="projects">-->
+                    <!--<i class="material-icons">people</i>-->
+                    <!--<p>Client </p>-->
+                <!--</a>-->
+            <!--</li>-->
 
             <!--<li ui-sref-active="active" has-permission="Asset:List" >-->
                 <!--<a ui-sref="assets">-->
@@ -105,66 +114,67 @@ Tip 3: you can change the color of the sidebar with data-background-color="white
                     <!--<p>Assets </p>-->
                 <!--</a>-->
             <!--</li>-->
-            <li ui-sref-active="active" has-permission="Site:List">
-                <a ui-sref="sites">
-                    <i class="material-icons">device_hub</i>
-                    <p>Sites</p>
-                </a>
-            </li>
-            <li ui-sref-active="active" has-permission="Location:List">
-                <a ui-sref="locations">
-                    <i class="material-icons">place</i>
-                    <p>Locations</p>
-                </a>
-            </li>
-            <li ui-sref-active="active" has-permission="Employee:List">
-                <a ui-sref="employees">
-                    <i class="material-icons">people</i>
-                    <p>Employee</p>
-                </a>
-            </li>
-            <li ui-sref-active="active" has-permission="Assets:List">
-                <a ui-sref="assets">
-                    <i class="material-icons">assessment</i>
-                    <p>Assets </p>
-                </a>
-            </li>
-            <li ui-sref-active="active" has-permission="Checklist1:List">
-                <a ui-sref="checklists">
-                    <i class="material-icons">content_paste</i>
-                    <p>Checklist</p>
-                </a>
-            </li>
-            <li ui-sref-active="active" has-permission="Jobs:List">
-                <a ui-sref="jobs">
-                    <i class="material-icons">description</i>
-                    <p>Jobs </p>
-                </a>
-            </li>
-            <li ui-sref-active="active" has-permission="Attendance:List">
-                <a ui-sref="attendances">
-                    <i class="material-icons">content_paste</i>
-                    <p>Attendance</p>
-                </a>
-            </li>
-            <li ui-sref-active="active" has-permission="Quotation:List">
-                <a ui-sref="quotation-list">
-                    <i class="material-icons">receipt</i>
-                    <p>Quotation </p>
-                </a>
-            </li>
-            <li ui-sref-active="active" has-permission="Import:List">
-                <a ui-sref="imports">
-                    <i class="material-icons">file_upload</i>
-                    <p>Import</p>
-                </a>
-            </li>
-            <li ui-sref-active="active" has-permission="Tickets:List">
-                <a ui-sref="tickets">
-                    <i class="material-icons">tab</i>
-                    <p>Tickets</p>
-                </a>
-            </li>
+            <!--<li ui-sref-active="active" has-permission="Site:List">-->
+                <!--<a ui-sref="sites">-->
+                    <!--<i class="material-icons">device_hub</i>-->
+                    <!--<p>Sites</p>-->
+                <!--</a>-->
+            <!--</li>-->
+            <!--<li ui-sref-active="active" has-permission="Location:List">-->
+                <!--<a ui-sref="locations">-->
+                    <!--<i class="material-icons">place</i>-->
+                    <!--<p>Locations</p>-->
+                <!--</a>-->
+            <!--</li>-->
+            <!--<li ui-sref-active="active" has-permission="Employee:List">-->
+                <!--<a ui-sref="employees">-->
+                    <!--<i class="material-icons">people</i>-->
+                    <!--<p>Employee</p>-->
+                <!--</a>-->
+            <!--</li>-->
+            <!--<li ui-sref-active="active" has-permission="Assets:List">-->
+                <!--<a ui-sref="assets">-->
+                    <!--<i class="material-icons">assessment</i>-->
+                    <!--<p>Assets </p>-->
+                <!--</a>-->
+            <!--</li>-->
+            <!--<li ui-sref-active="active" has-permission="Checklist1:List">-->
+                <!--<a ui-sref="checklists">-->
+                    <!--<i class="material-icons">content_paste</i>-->
+                    <!--<p>Checklist</p>-->
+                <!--</a>-->
+            <!--</li>-->
+            <!--<li ui-sref-active="active" has-permission="Jobs:List">-->
+                <!--<a ui-sref="jobs">-->
+                    <!--<i class="material-icons">description</i>-->
+                    <!--<p>Jobs </p>-->
+                <!--</a>-->
+            <!--</li>-->
+            <!--<li ui-sref-active="active" has-permission="Attendance:List">-->
+                <!--<a ui-sref="attendances">-->
+                    <!--<i class="material-icons">content_paste</i>-->
+                    <!--<p>Attendance</p>-->
+                <!--</a>-->
+            <!--</li>-->
+            <!--<li ui-sref-active="active" has-permission="Quotation:List">-->
+                <!--<a ui-sref="quotation-list">-->
+                    <!--<i class="material-icons">receipt</i>-->
+                    <!--<p>Quotation </p>-->
+                <!--</a>-->
+            <!--</li>-->
+            <!--<li ui-sref-active="active" has-permission="Import:List">-->
+                <!--<a ui-sref="imports">-->
+                    <!--<i class="material-icons">file_upload</i>-->
+                    <!--<p>Import</p>-->
+                <!--</a>-->
+            <!--</li>-->
+            <!--<li ui-sref-active="active" has-permission="Tickets:List">-->
+                <!--<a ui-sref="tickets">-->
+                    <!--<i class="material-icons">tab</i>-->
+                    <!--<p>Tickets</p>-->
+                <!--</a>-->
+            <!--</li>-->
+
             <!--<li has-permission="Inventory:List" ng-class="{active: $state.includes('admin')}">-->
                 <!--<a data-toggle="collapse" data-target="#Inventory" href="#">-->
                     <!--<i class="material-icons">location_city</i>-->
@@ -192,137 +202,137 @@ Tip 3: you can change the color of the sidebar with data-background-color="white
                     <!--</ul>-->
                 <!--</div>-->
             <!--</li>-->
-            <li has-permission="Reports:List" ng-class="{active: $state.includes('reports')}">
-                <a data-toggle="collapse" data-target="#formsExamples" href="#">
-                    <i class="material-icons">content_paste</i>
-                    <p> Reports
-                        <b class="caret"></b>
-                    </p>
-                </a>
-                <div class="collapse" id="formsExamples">
-                    <ul class="nav SubNav">
-                        <li ui-sref-active="active" has-permission="EmployeeReports:List">
-                            <a ui-sref="employeeReports">
-                                <i class="material-icons">people</i>
-                                <p>Employee</p>
-                            </a>
-                        </li>
-                        <li ui-sref-active="active" has-permission="JobReports:List">
-                            <a ui-sref="jobReports">
-                                <i class="material-icons">description</i>
-                                <p>Job</p>
-                            </a>
-                        </li>
-                        <li ui-sref-active="active">
-                            <a ui-sref="attendanceReports" has-permission="AttendanceReports:List">
-                                <i class="material-icons">content_paste</i>
-                                <p>Attendance</p>
-                            </a>
-                        </li>
-                        <li ui-sref-active="active">
-                            <a ui-sref="feedbackReports" has-permission="Feedback:List">
-                                <i class="material-icons">feedback</i>
-                                <p>Feedback</p>
-                            </a>
-                        </li>
-                        <li ui-sref-active="active">
-                            <a ui-sref="ticketReports">
-                                <i class="material-icons">description</i>
-                                <p>Ticket</p>
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-            </li>
+            <!--<li has-permission="Reports:List" ng-class="{active: $state.includes('reports')}">-->
+                <!--<a data-toggle="collapse" data-target="#formsExamples" href="#">-->
+                    <!--<i class="material-icons">content_paste</i>-->
+                    <!--<p> Reports-->
+                        <!--<b class="caret"></b>-->
+                    <!--</p>-->
+                <!--</a>-->
+                <!--<div class="collapse" id="formsExamples">-->
+                    <!--<ul class="nav SubNav">-->
+                        <!--<li ui-sref-active="active" has-permission="EmployeeReports:List">-->
+                            <!--<a ui-sref="employeeReports">-->
+                                <!--<i class="material-icons">people</i>-->
+                                <!--<p>Employee</p>-->
+                            <!--</a>-->
+                        <!--</li>-->
+                        <!--<li ui-sref-active="active" has-permission="JobReports:List">-->
+                            <!--<a ui-sref="jobReports">-->
+                                <!--<i class="material-icons">description</i>-->
+                                <!--<p>Job</p>-->
+                            <!--</a>-->
+                        <!--</li>-->
+                        <!--<li ui-sref-active="active">-->
+                            <!--<a ui-sref="attendanceReports" has-permission="AttendanceReports:List">-->
+                                <!--<i class="material-icons">content_paste</i>-->
+                                <!--<p>Attendance</p>-->
+                            <!--</a>-->
+                        <!--</li>-->
+                        <!--<li ui-sref-active="active">-->
+                            <!--<a ui-sref="feedbackReports" has-permission="Feedback:List">-->
+                                <!--<i class="material-icons">feedback</i>-->
+                                <!--<p>Feedback</p>-->
+                            <!--</a>-->
+                        <!--</li>-->
+                        <!--<li ui-sref-active="active">-->
+                            <!--<a ui-sref="ticketReports">-->
+                                <!--<i class="material-icons">description</i>-->
+                                <!--<p>Ticket</p>-->
+                            <!--</a>-->
+                        <!--</li>-->
+                    <!--</ul>-->
+                <!--</div>-->
+            <!--</li>-->
 
-            <li ui-sref-active="active" has-permission="RateCard:List">
-                <a ui-sref="rateCardList">
-                    <i class="material-icons">credit_card</i>
-                    <p>Rate Card </p>
-                </a>
-            </li>
-            <li ui-sref-active="active" has-permission="UserRole:List"  >
-                <a ui-sref="user-roles">
-                    <i class="material-icons">group</i>
-                    <p>User Roles</p>
-                </a>
-            </li>
-            <li ui-sref-active="active" has-permission="RolePermission:List"  >
-                <a ui-sref="role-permission">
-                    <i class="material-icons">group</i>
-                    <p>Role Permission</p>
-                </a>
-            </li>
-            <li ui-sref-active="active"  has-permission="ModuleActions:List" >
-                <a ui-sref="app-module-actions">
-                    <i class="material-icons">view_module</i>
-                    <p>App Module & Actions</p>
-                </a>
-            </li>
+            <!--<li ui-sref-active="active" has-permission="RateCard:List">-->
+                <!--<a ui-sref="rateCardList">-->
+                    <!--<i class="material-icons">credit_card</i>-->
+                    <!--<p>Rate Card </p>-->
+                <!--</a>-->
+            <!--</li>-->
+            <!--<li ui-sref-active="active" has-permission="UserRole:List"  >-->
+                <!--<a ui-sref="user-roles">-->
+                    <!--<i class="material-icons">group</i>-->
+                    <!--<p>User Roles</p>-->
+                <!--</a>-->
+            <!--</li>-->
+            <!--<li ui-sref-active="active" has-permission="RolePermission:List"  >-->
+                <!--<a ui-sref="role-permission">-->
+                    <!--<i class="material-icons">group</i>-->
+                    <!--<p>Role Permission</p>-->
+                <!--</a>-->
+            <!--</li>-->
+            <!--<li ui-sref-active="active"  has-permission="ModuleActions:List" >-->
+                <!--<a ui-sref="app-module-actions">-->
+                    <!--<i class="material-icons">view_module</i>-->
+                    <!--<p>App Module & Actions</p>-->
+                <!--</a>-->
+            <!--</li>-->
 
-            <li has-permission="Feedback:List" ng-class="{active: $state.includes('admin')}">
-                <a data-toggle="collapse" data-target="#formsExamples2" href="#">
-                    <i class="material-icons">feedback</i>
-                    <p> Feedback
-                        <b class="caret"></b>
-                    </p>
-                </a>
-                <div class="collapse" id="formsExamples2" has-permission="Feedback:List">
-                    <ul class="nav SubNav">
+            <!--<li has-permission="Feedback:List" ng-class="{active: $state.includes('admin')}">-->
+                <!--<a data-toggle="collapse" data-target="#formsExamples2" href="#">-->
+                    <!--<i class="material-icons">feedback</i>-->
+                    <!--<p> Feedback-->
+                        <!--<b class="caret"></b>-->
+                    <!--</p>-->
+                <!--</a>-->
+                <!--<div class="collapse" id="formsExamples2" has-permission="Feedback:List">-->
+                    <!--<ul class="nav SubNav">-->
 
-                        <li ui-sref-active="active"  >
-                            <a ui-sref="feedbacks">
-                                <i class="material-icons">feedback</i>
-                                <p>Feedbacks</p>
-                            </a>
-                        </li>
-                        <li ui-sref-active="active"  >
-                            <a ui-sref="feedback-questions">
-                                <i class="material-icons">feedback</i>
-                                <p>Feedback Master</p>
-                            </a>
-                        </li>
-                        <li ui-sref-active="active"  >
-                            <a ui-sref="feedback-setup">
-                                <i class="material-icons">feedback</i>
-                                <p>Feedback Setup</p>
-                            </a>
-                        </li>
+                        <!--<li ui-sref-active="active"  >-->
+                            <!--<a ui-sref="feedbacks">-->
+                                <!--<i class="material-icons">feedback</i>-->
+                                <!--<p>Feedbacks</p>-->
+                            <!--</a>-->
+                        <!--</li>-->
+                        <!--<li ui-sref-active="active"  >-->
+                            <!--<a ui-sref="feedback-questions">-->
+                                <!--<i class="material-icons">feedback</i>-->
+                                <!--<p>Feedback Master</p>-->
+                            <!--</a>-->
+                        <!--</li>-->
+                        <!--<li ui-sref-active="active"  >-->
+                            <!--<a ui-sref="feedback-setup">-->
+                                <!--<i class="material-icons">feedback</i>-->
+                                <!--<p>Feedback Setup</p>-->
+                            <!--</a>-->
+                        <!--</li>-->
 
-                    </ul>
-                </div>
-            </li>
+                    <!--</ul>-->
+                <!--</div>-->
+            <!--</li>-->
 
-            <li has-permission="Administrator:List" ng-class="{active: $state.includes('admin')}">
-                <a data-toggle="collapse" data-target="#formsExamples1" href="#">
-                    <i class="material-icons">content_paste</i>
-                    <p> Administrator
-                        <b class="caret"></b>
-                    </p>
-                </a>
-                <div class="collapse" id="formsExamples1">
-                    <ul class="nav SubNav">
-                        <li ui-sref-active="active">
-                            <a ui-sref="users">
-                                <i class="material-icons">people</i>
-                                <p>User</p>
-                            </a>
-                        </li>
-                        <li ui-sref-active="active" has-permission="UserGroup:List">
-                            <a ui-sref="userGroups">
-                                <i class="material-icons">group</i>
-                                <p>User Group</p>
-                            </a>
-                        </li>
-                        <li ui-sref-active="active" has-permission="Settings:List">
-                            <a ui-sref="app_settings">
-                                <i class="material-icons">settings</i>
-                                <p>Settings</p>
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-            </li>
+            <!--<li has-permission="Administrator:List" ng-class="{active: $state.includes('admin')}">-->
+                <!--<a data-toggle="collapse" data-target="#formsExamples1" href="#">-->
+                    <!--<i class="material-icons">content_paste</i>-->
+                    <!--<p> Administrator-->
+                        <!--<b class="caret"></b>-->
+                    <!--</p>-->
+                <!--</a>-->
+                <!--<div class="collapse" id="formsExamples1">-->
+                    <!--<ul class="nav SubNav">-->
+                        <!--<li ui-sref-active="active">-->
+                            <!--<a ui-sref="users">-->
+                                <!--<i class="material-icons">people</i>-->
+                                <!--<p>User</p>-->
+                            <!--</a>-->
+                        <!--</li>-->
+                        <!--<li ui-sref-active="active" has-permission="UserGroup:List">-->
+                            <!--<a ui-sref="userGroups">-->
+                                <!--<i class="material-icons">group</i>-->
+                                <!--<p>User Group</p>-->
+                            <!--</a>-->
+                        <!--</li>-->
+                        <!--<li ui-sref-active="active" has-permission="Settings:List">-->
+                            <!--<a ui-sref="app_settings">-->
+                                <!--<i class="material-icons">settings</i>-->
+                                <!--<p>Settings</p>-->
+                            <!--</a>-->
+                        <!--</li>-->
+                    <!--</ul>-->
+                <!--</div>-->
+            <!--</li>-->
 
             <!--<li ui-sref="checkInOut">-->
             <!---->
