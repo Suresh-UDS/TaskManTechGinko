@@ -1,12 +1,12 @@
 'use strict';
 
 angular.module('timeSheetApp')
-    .factory('AssetComponent', function AssetComponent(Asset,$http) {
+    .factory('VendorComponent', function VendorComponent(Vendor,$http) {
         return {
 
-            create : function(asset,callback){
+            create : function(vendor,callback){
                 var cb = callback || angular.noop;
-                return $http.post('api/asset',asset).then(
+                return $http.post('api/vendor',vendor).then(
                     function (response) {
                         return cb(response);
                     }).catch(
@@ -16,9 +16,9 @@ angular.module('timeSheetApp')
                     })
 
             },
-            update : function(asset,callback){
+            update : function(vendor,callback){
                 var cb = callback || angular.noop;
-                return $http.put('api/asset/'+asset.id,asset).then(
+                return $http.put('api/vendor',vendor).then(
                     function (response) {
                         return cb(response);
                     }).catch(
@@ -33,7 +33,7 @@ angular.module('timeSheetApp')
 
                 var cb = callback || angular.noop;
 
-                return  $http.delete('api/asset/'+id).then(
+                return  $http.delete('api/vendor/'+id).then(
                     function (response) {
                         return cb(response);
                     }).catch(
@@ -42,13 +42,18 @@ angular.module('timeSheetApp')
                         return cb(err);
                     })
             },
+            findAll: function () {
+				return $http.get('api/vendor').then(function (response) {
+					return response.data;
+				});
+			},            
             findById : function(id){
-                return $http.get('api/asset/'+id).then(function (response) {
+                return $http.get('api/vendor/'+id).then(function (response) {
                     return response.data;
                 });
             },
-            search: function() {
-                return $http.post('api/assets/search').then(function (response) {
+            search: function(searchCriteria) {
+                return $http.post('api/vendor/search',searchCriteria).then(function (response) {
                     return response.data;
                 });
             }

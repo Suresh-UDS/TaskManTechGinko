@@ -39,7 +39,7 @@ import com.ts.app.repository.FeedbackMappingRepository;
 import com.ts.app.repository.FeedbackTransactionRepository;
 import com.ts.app.repository.ProjectRepository;
 import com.ts.app.repository.SettingsRepository;
-import com.ts.app.repository.SiteRepository;
+import com.ts.app.repository.ManufacturerRepository;
 import com.ts.app.service.util.DateUtil;
 import com.ts.app.service.util.MapperUtil;
 import com.ts.app.web.rest.dto.BaseDTO;
@@ -76,7 +76,7 @@ public class FeedbackTransactionService extends AbstractService {
 	private SettingsRepository settingsRepository;
 
 	@Inject
-	private SiteRepository siteRepository;
+	private ManufacturerRepository siteRepository;
 
 	@Inject
 	private MapperUtil<AbstractAuditingEntity, BaseDTO> mapperUtil;

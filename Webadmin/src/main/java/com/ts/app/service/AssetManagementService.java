@@ -9,6 +9,9 @@ import org.apache.commons.collections.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.env.Environment;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
@@ -22,6 +25,9 @@ import com.ts.app.domain.Project;
 import com.ts.app.domain.Site;
 import com.ts.app.domain.Ticket;
 import com.ts.app.repository.AssetGroupRepository;
+import com.ts.app.domain.Employee;
+import com.ts.app.domain.EmployeeProjectSite;
+import com.ts.app.domain.User;
 import com.ts.app.repository.AssetRepository;
 import com.ts.app.repository.CheckInOutImageRepository;
 import com.ts.app.repository.CheckInOutRepository;
@@ -50,6 +56,7 @@ import com.ts.app.web.rest.dto.ExportResult;
 import com.ts.app.web.rest.dto.ImportResult;
 import com.ts.app.web.rest.dto.JobDTO;
 import com.ts.app.web.rest.dto.SearchCriteria;
+import com.ts.app.web.rest.dto.SearchResult;
 import com.ts.app.web.rest.errors.TimesheetException;
 
 /**
@@ -64,20 +71,20 @@ public class AssetManagementService extends AbstractService {
 	@Inject
 	private JobRepository jobRepository;
 
-    @Inject
-    private CheckInOutRepository checkInOutRepository;
+	@Inject
+	private CheckInOutRepository checkInOutRepository;
 
-    @Inject
-    private AssetRepository assetRepository;
+	@Inject
+	private AssetRepository assetRepository;
 
-    @Inject
-    private TicketRepository ticketRepository;
+	@Inject
+	private TicketRepository ticketRepository;
 
-    @Inject
+	@Inject
 	private EmployeeRepository employeeRepository;
 
-    @Inject
-    private LocationRepository locationRepository;
+	@Inject
+	private LocationRepository locationRepository;
 
 	@Inject
 	private MapperUtil<AbstractAuditingEntity, BaseDTO> mapperUtil;
@@ -337,13 +344,119 @@ public class AssetManagementService extends AbstractService {
     }
 
 
+	// public SearchResult<AssetDTO> getSiteAssets(Long siteId,int page) {
+	// Pageable pageRequest = new PageRequest(page, PagingUtil.PAGE_SIZE, new
+	// Sort(Direction.DESC,"id"));
+	//
+	// Page<Asset> assets= assetRepository.findBySiteId(siteId,pageRequest);
+	// SearchResult<AssetDTO> paginatedAssets = new SearchResult<>();
+	// paginatedAssets.setCurrPage(page);
+	// paginatedAssets.setTransactions(mapperUtil.toModelList(assets.getContent(),
+	// AssetDTO.class));
+	// paginatedAssets.setTotalCount(assets.getTotalElements());
+	// paginatedAssets.setTotalPages(assets.getTotalPages());
+	// return paginatedAssets;
+	// }
+
+	public SearchResult<AssetDTO> findBySearchCrieria(SearchCriteria searchCriteria) {
+
+		// -------
+		SearchResult<AssetDTO> result = new SearchResult<AssetDTO>();
+		User user = userRepository.findOne(searchCriteria.getUserId());
+		Employee employee = user.getEmployee();
+		List<EmployeeProjectSite> sites = employee.getProjectSites();
+		List<Long> siteIds = new ArrayList<Long>();
+    		for(EmployeeProjectSite site : sites) {
+    			siteIds.add(site.getSite().getId());
+    		}
+		
+		if (searchCriteria != null) {
+			Pageable pageRequest = null;
+			if (!StringUtils.isEmpty(searchCriteria.getColumnName())) {
+				Sort sort = new Sort(searchCriteria.isSortByAsc() ? Sort.Direction.ASC : Sort.Direction.DESC,
+						searchCriteria.getColumnName());
+				log.debug("Sorting object" + sort);
+				pageRequest = createPageSort(searchCriteria.getCurrPage(), searchCriteria.getSort(), sort);
+			} else {
+				if (searchCriteria.isList()) {
+					pageRequest = createPageRequest(searchCriteria.getCurrPage(), true);
+				} else {
+					pageRequest = createPageRequest(searchCriteria.getCurrPage());
+				}
+			}
+			Page<Asset> page = null;
+			List<AssetDTO> transactions = null;
+			log.debug( "name =" + searchCriteria.getAssetName() + " ,  assetType = " + searchCriteria.getAssetTypeName());
+			if (!searchCriteria.isFindAll()) {
+				if (!StringUtils.isEmpty(searchCriteria.getAssetTypeName())
+						&& !StringUtils.isEmpty(searchCriteria.getAssetName()) && searchCriteria.getProjectId() > 0 && searchCriteria.getSiteId() > 0) {
+					page = assetRepository.findByAllCriteria(searchCriteria.getAssetTypeName(), searchCriteria.getAssetName(), searchCriteria.getProjectId(), searchCriteria.getSiteId(), pageRequest);
+				} else if (!StringUtils.isEmpty(searchCriteria.getAssetName())) {
+					page = assetRepository.findByName(siteIds, searchCriteria.getAssetName(), pageRequest);
+				} else if (!StringUtils.isEmpty(searchCriteria.getAssetTypeName())) {
+					page = assetRepository.findByAssetType(siteIds,searchCriteria.getAssetTypeName(),pageRequest);
+				} else if (searchCriteria.getSiteId() > 0) {
+					page = assetRepository.findBySiteId(searchCriteria.getSiteId(),pageRequest);
+				} else if (searchCriteria.getProjectId() > 0) {
+					page = assetRepository.findByProjectId(searchCriteria.getProjectId(),pageRequest);
+				}
+			} else {
+				if(CollectionUtils.isNotEmpty(siteIds)) {
+					page = assetRepository.findAll(siteIds,pageRequest);
+				}else {
+					page = assetRepository.findAll(pageRequest);
+				}
+			}
+			if (page != null) {
+				if (transactions == null) {
+					transactions = new ArrayList<AssetDTO>();
+				}
+				List<Asset> assetList = page.getContent();
+				if (CollectionUtils.isNotEmpty(assetList)) {
+					for (Asset asset : assetList) {
+						transactions.add(mapToModel(asset, false));
+					}
+				}
+				if (CollectionUtils.isNotEmpty(transactions)) {
+					buildSearchResult(searchCriteria, page, transactions, result);
+				}
+			}
+
+		}
+		return result;
+	}
+
+	private void buildSearchResult(SearchCriteria searchCriteria, Page<Asset> page,
+			List<AssetDTO> transactions, SearchResult<AssetDTO> result) {
+		if (page != null) {
+			result.setTotalPages(page.getTotalPages());
+		}
+		result.setCurrPage(page.getNumber() + 1);
+		result.setTotalCount(page.getTotalElements());
+		result.setStartInd((result.getCurrPage() - 1) * 10 + 1);
+		result.setEndInd((result.getTotalCount() > 10 ? (result.getCurrPage()) * 10 : result.getTotalCount()));
+
+		result.setTransactions(transactions);
+		return;
+	}
+	
+	private AssetDTO mapToModel(Asset asset, boolean includeShifts) {
+		AssetDTO assetDTO = new AssetDTO();
+		assetDTO.setId(asset.getId());
+		assetDTO.setTitle(asset.getTitle());
+		assetDTO.setCode(asset.getCode());
+		assetDTO.setSiteId(asset.getSite().getId());
+		assetDTO.setSiteName(asset.getSite().getName());
+		return assetDTO;
+	}
+
 	public ExportResult getExportStatus(String fileId) {
 		ExportResult er = new ExportResult();
 
 		fileId += ".xlsx";
-        //log.debug("FILE ID INSIDE OF getExportStatus CALL ***********"+fileId);
+		// log.debug("FILE ID INSIDE OF getExportStatus CALL ***********"+fileId);
 
-		if(!StringUtils.isEmpty(fileId)) {
+		if (!StringUtils.isEmpty(fileId)) {
 			String status = exportUtil.getExportStatus(fileId);
 			er.setFile(fileId);
 			er.setStatus(status);
@@ -352,7 +465,7 @@ public class AssetManagementService extends AbstractService {
 	}
 
 	public byte[] getExportFile(String fileName) {
-		//return exportUtil.readExportFile(fileName);
+		// return exportUtil.readExportFile(fileName);
 		return exportUtil.readJobExportFile(fileName);
 	}
 
@@ -362,18 +475,19 @@ public class AssetManagementService extends AbstractService {
 
 	public ImportResult getImportStatus(String fileId) {
 		ImportResult er = new ImportResult();
-		//fileId += ".csv";
-		if(!StringUtils.isEmpty(fileId)) {
+		// fileId += ".csv";
+		if (!StringUtils.isEmpty(fileId)) {
 			String status = importUtil.getImportStatus(fileId);
 			er.setFile(fileId);
 			er.setStatus(status);
 		}
 		return er;
 	}
-	
+
 	private Site getSite(Long siteId) {
 		Site site = siteRepository.findOne(siteId);
-		if(site == null) throw new TimesheetException("Site not found : "+siteId);
+		if (site == null)
+			throw new TimesheetException("Site not found : " + siteId);
 		return site;
 	}
 	

@@ -8,7 +8,6 @@ import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 import java.util.TimeZone;
@@ -36,7 +35,6 @@ import com.ts.app.domain.Employee;
 import com.ts.app.domain.EmployeeHistory;
 import com.ts.app.domain.EmployeeLocation;
 import com.ts.app.domain.EmployeeProjectSite;
-import com.ts.app.domain.EmployeeShift;
 import com.ts.app.domain.Job;
 import com.ts.app.domain.Project;
 import com.ts.app.domain.Site;
@@ -74,7 +72,6 @@ import com.ts.app.web.rest.dto.SearchCriteria;
 import com.ts.app.web.rest.dto.SearchResult;
 import com.ts.app.web.rest.dto.SiteDTO;
 import com.ts.app.web.rest.dto.UserDTO;
-import com.ts.app.web.rest.dto.UserRoleDTO;
 
 /**
  * Service class for managing employee information.

@@ -7,22 +7,22 @@
             <div class="card margin-TB-5 tablecard appModuleCard">
 
                 <div class="card-content">
-                    <div class="row" ng-init="loadManufacturerList();">
+                    <div class="row" ng-init="loadManufacturers();">
                         <div class="col-md-12">
                             <div class="card formcard FilterCard">
                                 <div class="card-content">
-                                    <form name="searchForm"  ng-submit="searchFilter();" novalidate >
+                                    <form name="searchForm"  ng-submit="search();" novalidate >
 
                                         <div class="row" >
                                             <div class="col-xs-12 col-md-4">
                                                 <div class="form-group no-padding" >
                                                     <div class="dropdown">
                                                         <div class="form-group">
-                                                            <label class="control-label">Select type</label>
+                                                            <label class="control-label">Select Asset Type</label>
                                                             <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                                            <select class="form-control ">
-                                                                <option value="">Select type...</option>
-                                                            </select>
+														<select class="form-control " ng-model="selectedAssetType"  ng-options="assetType as assetType.name for assetType in assetTypes">
+                                                        		<option value="">Select Asset Type...</option>
+                                                    		</select>                                                            
                                                         </div>
                                                     </div>
                                                 </div>
@@ -74,7 +74,7 @@
 
                             <thead>
                             <tr>
-                                <th width="15%">Manufacturer Type
+                                <th width="15%">Asset Type
                                     <span class="sortingIcons">
                                         <span ng-click="columnAscOrder('id')" ng-class="isActiveAsc == 'id' ? 'active' : ''" >
                                             <i  class="fa fa-caret-up"></i>
@@ -121,54 +121,17 @@
                             </thead>
 
                             <tbody>
-
-                                <tr>
-                                    <td> diesel generator </td>
-                                    <td>Mahindra</td>
-                                    <td>Praveen</td>
-                                    <td>8608463226</td>
-                                    <td class="text-right">
-                                        <a data-toggle="modal"  data-target="#RightModal-View"  has-permission="" ui-sref=""  class="btn btn-simple btn-info"><i class="material-icons">visibility</i></a>
-                                        <a data-toggle="modal"  data-target="#RightModal-Edit"  has-permission="" ui-sref=""  class="btn btn-simple btn-info"><i class="material-icons">edit</i></a>
-                                    </td>
-
-                                </tr>
-                                <tr>
-                                    <td> diesel generator </td>
-                                    <td>Mahindra</td>
-                                    <td>Praveen</td>
-                                    <td>8608463226</td>
-                                    <td class="text-right">
-                                        <a data-toggle="modal"  data-target="#RightModal-View"  has-permission="" ui-sref=""  class="btn btn-simple btn-info"><i class="material-icons">visibility</i></a>
-                                        <a data-toggle="modal"  data-target="#RightModal-Edit"  has-permission="" ui-sref=""  class="btn btn-simple btn-info"><i class="material-icons">edit</i></a>
-                                    </td>
-
-                                </tr>
-                                <tr>
-                                    <td> diesel generator </td>
-                                    <td>Mahindra</td>
-                                    <td>Praveen</td>
-                                    <td>8608463226</td>
-                                    <td class="text-right">
-                                        <a data-toggle="modal"  data-target="#RightModal-View"  has-permission="" ui-sref=""  class="btn btn-simple btn-info"><i class="material-icons">visibility</i></a>
-                                        <a data-toggle="modal"  data-target="#RightModal-Edit"  has-permission="" ui-sref=""  class="btn btn-simple btn-info"><i class="material-icons">edit</i></a>
-                                    </td>
-
-                                </tr>
-                                <tr>
-                                    <td> diesel generator </td>
-                                    <td>Mahindra</td>
-                                    <td>Praveen</td>
-                                    <td>8608463226</td>
-                                    <td class="text-right">
-                                        <a data-toggle="modal"  data-target="#RightModal-View"  has-permission="" ui-sref=""  class="btn btn-simple btn-info"><i class="material-icons">visibility</i></a>
-                                        <a data-toggle="modal"  data-target="#RightModal-Edit"  has-permission="" ui-sref=""  class="btn btn-simple btn-info"><i class="material-icons">edit</i></a>
-                                    </td>
-
-                                </tr>
-
-
-
+							<tr ng-repeat="manufacturer in manufacturers" repeat-done="initDataTables()">
+								<td>{{manufacturer.assetType}}</td>
+								<td>{{manufacturer.name}}</td>
+                                	<td>{{manufacturer.contactFirstName}} {{manufacturer.contactLastName}}</td>
+							   	<td>{{manufacturer.phone}}</td>
+                                 <td class="text-right">
+                                     <a data-toggle="modal"  data-target="#RightModal-View" ng-click="getManufacturerDetails(manufacturer.id, 'view')"  has-permission="Manufacturer:View"   class="btn btn-simple btn-info"><i class="material-icons">visibility</i></a>
+                                     <a data-toggle="modal"  data-target="#RightModal-Edit" ng-click="getManufacturerDetails(manufacturer.id, 'edit')"  has-permission="Manufacturer:Edit"   class="btn btn-simple btn-info"><i class="material-icons">edit</i></a>
+                                 </td>
+							
+							</tr>
                             </tbody>
                         </table>
 
@@ -195,7 +158,9 @@
 
             <div class="modal-body">
 
-
+			<form ng-show="!success" name="form" role="form" novalidate
+						ng-submit="saveManufacturer()"
+						onClick="" class="form-horizontal">
                 <div class="row">
                     <div class="col-md-6">
 
@@ -207,45 +172,47 @@
 
                                     <div class="col-md-12">
                                         <div class="form-group">
-                                            <label class="control-label">Manufacturer Name</label>
-                                            <input id='manufacturerName' ng-model=""
+                                            <label class="control-label">Asset Type<span class="red-star">*</span></label>
+                                            
+                                  			<select class="form-control " ng-model="selectedAssetType"  ng-options="assetType as assetType.name for assetType in assetTypes track by name" required>
+                                             	<option value="">Select Asset Type...</option>
+											</select>                                                            
+                                  
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label">Manufacturer Name<span class="red-star">*</span></label>
+                                            <input id='manufacturerName' ng-model="manufacturer.name"
                                                    class='form-control' name='manufacturerName' type='text' value=""
                                                    ng-minlength='2' ng-maxlength='50' ng-pattern="/^[A-Za-z0-9\s&-/]*$/" autofocus required/>
 
                                         </div>
                                         <div class="form-group">
-                                            <label class="control-label">Contact Name</label>
-                                            <input id='contactName' ng-model=""
+                                            <label class="control-label">Contact First Name</label>
+                                            <input id='contactName' ng-model="manufacturer.contactFirstName"
                                                    class='form-control' name='contactName' type='text' value=""
-                                                   ng-minlength='2' ng-maxlength='50' ng-pattern="/^[A-Za-z0-9\s&-/]*$/" autofocus required/>
+                                                   ng-minlength='2' ng-maxlength='50' ng-pattern="/^[A-Za-z0-9\s&-/]*$/" autofocus />
 
                                         </div>
-                                        <div class="form-group">
-                                            <label class="control-label">First Name</label>
-                                            <input id='firstName' ng-model=""
-                                                   class='form-control' name='firstName' type='text' value=""
-                                                   ng-minlength='2' ng-maxlength='50' ng-pattern="/^[A-Za-z0-9\s&-/]*$/" autofocus required/>
 
-                                        </div>
                                         <div class="form-group">
-                                            <label class="control-label">Last Name</label>
-                                            <input id='lastName' ng-model=""
+                                            <label class="control-label">Contact Last Name</label>
+                                            <input id='lastName' ng-model="manufacturer.contactLastName"
                                                    class='form-control' name='lastName' type='text' value=""
-                                                   ng-minlength='2' ng-maxlength='50' ng-pattern="/^[A-Za-z0-9\s&-/]*$/" autofocus required/>
+                                                   ng-minlength='2' ng-maxlength='50' ng-pattern="/^[A-Za-z0-9\s&-/]*$/" autofocus />
 
                                         </div>
                                         <div class="form-group">
-                                            <label class="control-label">Mobile No</label>
-                                            <input id='mobNum' ng-model=""
+                                            <label class="control-label">Phone No</label>
+                                            <input id='mobNum' ng-model="manufacturer.phone"
                                                    class='form-control' name='mobNum' type='number' value=""
-                                                   ng-minlength='2' ng-maxlength='50' autofocus required/>
+                                                   ng-minlength='2' ng-maxlength='50' autofocus />
 
                                         </div>
                                         <div class="form-group">
                                             <label class="control-label">Email</label>
-                                            <input id='email' ng-model=""
+                                            <input id='email' ng-model="manufacturer.email"
                                                    class='form-control' name='email' type='email' value=""
-                                                   ng-minlength='2' ng-maxlength='50' autofocus required/>
+                                                   ng-minlength='2' ng-maxlength='50' autofocus />
 
                                         </div>
                                     </div>
@@ -266,44 +233,44 @@
                                     <div class="col-md-12">
                                         <div class="form-group">
                                             <label class="control-label">Line 1</label>
-                                            <input id='line1' ng-model=""
+                                            <input id='line1' ng-model="manufacturer.addressLine1"
                                                    class='form-control' name='line1' type='text' value=""
-                                                   ng-minlength='2' ng-maxlength='50' ng-pattern="/^[A-Za-z0-9\s&-/]*$/" autofocus required/>
+                                                   ng-minlength='2' ng-maxlength='50' ng-pattern="/^[A-Za-z0-9\s&-/]*$/" autofocus />
 
                                         </div>
                                         <div class="form-group">
                                             <label class="control-label">Line 2</label>
-                                            <input id='line2' ng-model=""
+                                            <input id='line2' ng-model="manufacturer.addressLine2"
                                                    class='form-control' name='line2' type='text' value=""
-                                                   ng-minlength='2' ng-maxlength='50' ng-pattern="/^[A-Za-z0-9\s&-/]*$/" autofocus required/>
+                                                   ng-minlength='2' ng-maxlength='50' ng-pattern="/^[A-Za-z0-9\s&-/]*$/" autofocus />
 
                                         </div>
                                         <div class="form-group">
                                             <label class="control-label">City</label>
-                                            <input id='City' ng-model=""
+                                            <input id='City' ng-model="manufacturer.city"
                                                    class='form-control' name='City' type='text' value=""
-                                                   ng-minlength='2' ng-maxlength='50' ng-pattern="/^[A-Za-z0-9\s&-/]*$/" autofocus required/>
+                                                   ng-minlength='2' ng-maxlength='50' ng-pattern="/^[A-Za-z0-9\s&-/]*$/" autofocus />
 
                                         </div>
                                         <div class="form-group">
                                             <label class="control-label">State</label>
-                                            <input id='state' ng-model=""
+                                            <input id='state' ng-model="manufacturer.state"
                                                    class='form-control' name='state' type='text' value=""
-                                                   ng-minlength='2' ng-maxlength='50' ng-pattern="/^[A-Za-z0-9\s&-/]*$/" autofocus required/>
+                                                   ng-minlength='2' ng-maxlength='50' ng-pattern="/^[A-Za-z0-9\s&-/]*$/" autofocus />
 
                                         </div>
                                         <div class="form-group">
                                             <label class="control-label">Pin Code</label>
-                                            <input id='pinCode' ng-model=""
+                                            <input id='pinCode' ng-model="manufacturer.pincode"
                                                    class='form-control' name='pinCode' type='number' value=""
-                                                   ng-minlength='2' ng-maxlength='50' ng-pattern="/^[A-Za-z0-9\s&-/]*$/" autofocus required/>
+                                                   ng-minlength='2' ng-maxlength='50' ng-pattern="/^[A-Za-z0-9\s&-/]*$/" autofocus />
 
                                         </div>
                                         <div class="form-group">
                                             <label class="control-label">Country</label>
-                                            <input id='country' ng-model=""
+                                            <input id='country' ng-model="manufacturer.country"
                                                    class='form-control' name='country' type='text' value=""
-                                                   ng-minlength='2' ng-maxlength='50' ng-pattern="/^[A-Za-z0-9\s&-/]*$/" autofocus required/>
+                                                   ng-minlength='2' ng-maxlength='50' ng-pattern="/^[A-Za-z0-9\s&-/]*$/" autofocus />
 
                                         </div>
                                     </div>
@@ -335,7 +302,7 @@
                     </div>
                 </div>
 
-
+			</form>
 
             </div>
 
@@ -353,7 +320,9 @@
             </div>
 
             <div class="modal-body">
-
+				<form ng-show="!success" name="form" role="form" novalidate
+						ng-submit="saveManufacturer()"
+						onClick="" class="form-horizontal">
                 <div class="row">
                     <div class="col-md-6">
 
@@ -364,46 +333,47 @@
                                 <div class="row">
 
                                     <div class="col-md-12">
+                                       <div class="form-group">
+                                            <label class="control-label">Asset Type<span class="red-star">*</span></label>
+                                            
+                                  			<select class="form-control " ng-model="selectedAssetType"  ng-options="assetType as assetType.name for assetType in assetTypes track by name" required>
+                                             	<option value="">Select Asset Type...</option>
+											</select>                                                            
+                                  
+                                        </div>
                                         <div class="form-group">
-                                            <label class="control-label">Manufacturer Name</label>
-                                            <input id='manufacturerName' ng-model=""
+                                            <label class="control-label">Manufacturer Name<span class="red-star">*</span></label>
+                                            <input id='manufacturerName' ng-model="manufacturer.name"
                                                    class='form-control' name='manufacturerName' type='text' value=""
                                                    ng-minlength='2' ng-maxlength='50' ng-pattern="/^[A-Za-z0-9\s&-/]*$/" autofocus required/>
 
                                         </div>
                                         <div class="form-group">
-                                            <label class="control-label">Contact Name</label>
-                                            <input id='contactName' ng-model=""
-                                                   class='form-control' name='contactName' type='text' value=""
-                                                   ng-minlength='2' ng-maxlength='50' ng-pattern="/^[A-Za-z0-9\s&-/]*$/" autofocus required/>
+                                            <label class="control-label">Contact First Name</label>
+                                            <input id='contactName' ng-model="manufacturer.contactFirstName"
+                                                   class='form-control' name='contactFirstName' type='text' value=""
+                                                   ng-minlength='2' ng-maxlength='50' ng-pattern="/^[A-Za-z0-9\s&-/]*$/" autofocus />
 
                                         </div>
                                         <div class="form-group">
-                                            <label class="control-label">First Name</label>
-                                            <input id='firstName' ng-model=""
-                                                   class='form-control' name='firstName' type='text' value=""
-                                                   ng-minlength='2' ng-maxlength='50' ng-pattern="/^[A-Za-z0-9\s&-/]*$/" autofocus required/>
+                                            <label class="control-label">Contact Last Name</label>
+                                            <input id='firstName' ng-model="manufacturer.contactLastName"
+                                                   class='form-control' name='contactLastName' type='text' value=""
+                                                   ng-minlength='2' ng-maxlength='50' ng-pattern="/^[A-Za-z0-9\s&-/]*$/" autofocus />
 
                                         </div>
                                         <div class="form-group">
-                                            <label class="control-label">Last Name</label>
-                                            <input id='lastName' ng-model=""
-                                                   class='form-control' name='lastName' type='text' value=""
-                                                   ng-minlength='2' ng-maxlength='50' ng-pattern="/^[A-Za-z0-9\s&-/]*$/" autofocus required/>
-
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="control-label">Mobile No</label>
-                                            <input id='mobNum' ng-model=""
-                                                   class='form-control' name='mobNum' type='number' value=""
-                                                   ng-minlength='2' ng-maxlength='50' autofocus required/>
+                                            <label class="control-label">Phone No</label>
+                                            <input id='mobNum' ng-model="manufacturer.phone"
+                                                   class='form-control' name='phone' type='number' value=""
+                                                   ng-minlength='2' ng-maxlength='50' autofocus />
 
                                         </div>
                                         <div class="form-group">
                                             <label class="control-label">Email</label>
-                                            <input id='email' ng-model=""
+                                            <input id='email' ng-model="manufacturer.email"
                                                    class='form-control' name='email' type='email' value=""
-                                                   ng-minlength='2' ng-maxlength='50' autofocus required/>
+                                                   ng-minlength='2' ng-maxlength='50' autofocus />
 
                                         </div>
                                     </div>
@@ -424,44 +394,44 @@
                                     <div class="col-md-12">
                                         <div class="form-group">
                                             <label class="control-label">Line 1</label>
-                                            <input id='line1' ng-model=""
+                                            <input id='line1' ng-model="manufacturer.addressLine1"
                                                    class='form-control' name='line1' type='text' value=""
-                                                   ng-minlength='2' ng-maxlength='50' ng-pattern="/^[A-Za-z0-9\s&-/]*$/" autofocus required/>
+                                                   ng-minlength='2' ng-maxlength='50' ng-pattern="/^[A-Za-z0-9\s&-/]*$/" autofocus />
 
                                         </div>
                                         <div class="form-group">
                                             <label class="control-label">Line 2</label>
-                                            <input id='line2' ng-model=""
+                                            <input id='line2' ng-model="manufacturer.addressLine2"
                                                    class='form-control' name='line2' type='text' value=""
-                                                   ng-minlength='2' ng-maxlength='50' ng-pattern="/^[A-Za-z0-9\s&-/]*$/" autofocus required/>
+                                                   ng-minlength='2' ng-maxlength='50' ng-pattern="/^[A-Za-z0-9\s&-/]*$/" autofocus />
 
                                         </div>
                                         <div class="form-group">
                                             <label class="control-label">City</label>
-                                            <input id='City' ng-model=""
+                                            <input id='City' ng-model="manufacturer.city"
                                                    class='form-control' name='City' type='text' value=""
-                                                   ng-minlength='2' ng-maxlength='50' ng-pattern="/^[A-Za-z0-9\s&-/]*$/" autofocus required/>
+                                                   ng-minlength='2' ng-maxlength='50' ng-pattern="/^[A-Za-z0-9\s&-/]*$/" autofocus />
 
                                         </div>
                                         <div class="form-group">
                                             <label class="control-label">State</label>
-                                            <input id='state' ng-model=""
+                                            <input id='state' ng-model="manufacturer.state"
                                                    class='form-control' name='state' type='text' value=""
-                                                   ng-minlength='2' ng-maxlength='50' ng-pattern="/^[A-Za-z0-9\s&-/]*$/" autofocus required/>
+                                                   ng-minlength='2' ng-maxlength='50' ng-pattern="/^[A-Za-z0-9\s&-/]*$/" autofocus />
 
                                         </div>
                                         <div class="form-group">
                                             <label class="control-label">Pin Code</label>
-                                            <input id='pinCode' ng-model=""
+                                            <input id='pinCode' ng-model="manufacturer.pincode"
                                                    class='form-control' name='pinCode' type='number' value=""
-                                                   ng-minlength='2' ng-maxlength='50' ng-pattern="/^[A-Za-z0-9\s&-/]*$/" autofocus required/>
+                                                   ng-minlength='2' ng-maxlength='50' ng-pattern="/^[A-Za-z0-9\s&-/]*$/" autofocus />
 
                                         </div>
                                         <div class="form-group">
                                             <label class="control-label">Country</label>
-                                            <input id='country' ng-model=""
+                                            <input id='country' ng-model="manufacturer.country"
                                                    class='form-control' name='country' type='text' value=""
-                                                   ng-minlength='2' ng-maxlength='50' ng-pattern="/^[A-Za-z0-9\s&-/]*$/" autofocus required/>
+                                                   ng-minlength='2' ng-maxlength='50' ng-pattern="/^[A-Za-z0-9\s&-/]*$/" autofocus />
 
                                         </div>
                                     </div>
@@ -492,7 +462,7 @@
                         </div>
                     </div>
                 </div>
-
+			</form>
 
             </div>
 
@@ -523,37 +493,33 @@
                                   <table class="table">
                                       <tbody>
                                       <tr>
+                                          <td>Asset Type</td>
+                                          <td>{{manufacturer.assetType}}</td>
+                                      </tr>
+                                      <tr>
                                           <td>Manufacturer Name</td>
-                                          <td></td>
+                                          <td>{{manufacturer.name}}</td>
                                       </tr>
                                       <tr>
-                                          <td>Contact Name</td>
-                                          <td></td>
+                                          <td>Contact First Name</td>
+                                          <td>{{manufacturer.contactFirstName}}</td>
 
                                       </tr>
                                       <tr>
-                                          <td>First Name</td>
-                                          <td></td>
+                                          <td>Contact Last Name</td>
+                                          <td>{{manufacturer.contactLastName}}</td>
 
                                       </tr>
                                       <tr>
-                                          <td>Last Name</td>
-                                          <td></td>
-
-                                      </tr>
-                                      <tr>
-                                          <td>Mobile No</td>
-                                          <td></td>
+                                          <td>Phone No</td>
+                                          <td>{{manufacturer.phone}}</td>
 
                                       </tr>
                                       <tr>
                                           <td>Email</td>
-                                          <td></td>
+                                          <td>{{manufacturer.email}}</td>
 
                                       </tr>
-
-
-
                                       </tbody>
                                   </table>
                               </div>
@@ -577,48 +543,36 @@
                                       <tbody>
                                       <tr>
                                           <td>Line 1 </td>
-                                          <td></td>
+                                          <td>{{manufacturer.addressLine1}}</td>
                                       </tr>
                                       <tr>
                                           <td>Line 2</td>
-                                          <td></td>
+                                          <td>{{manufacturer.addressLine2}}</td>
 
                                       </tr>
                                       <tr>
                                           <td>City</td>
-                                          <td>
-
-                                          </td>
+                                          <td>{{manufacturer.city}}</td>
 
                                       </tr>
                                       <tr>
 
                                           <td>State</td>
-                                          <td>
-
-                                          </td>
+                                          <td>{{manufacturer.state}}</td>
 
                                       </tr>
                                       <tr>
 
                                           <td>Pin Code</td>
-                                          <td>
-
-                                          </td>
+                                          <td>{{manufacturer.pincode}}</td>
 
                                       </tr>
                                       <tr>
 
                                           <td>Country</td>
-                                          <td>
-
-                                          </td>
+                                          <td>{{manufacturer.country}}</td>
 
                                       </tr>
-
-
-
-
                                       </tbody>
                                   </table>
                               </div>
