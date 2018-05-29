@@ -22,6 +22,7 @@ import com.codahale.metrics.annotation.Timed;
 import com.ts.app.security.SecurityUtils;
 import com.ts.app.service.AssetManagementService;
 import com.ts.app.web.rest.dto.AssetDTO;
+import com.ts.app.web.rest.dto.AssetTypeDTO;
 import com.ts.app.web.rest.dto.AssetgroupDTO;
 import com.ts.app.web.rest.dto.DesignationDTO;
 import com.ts.app.web.rest.errors.TimesheetException;
@@ -146,5 +147,11 @@ public class AssetResource {
     public List<AssetgroupDTO> findAllAssetGroups() {
         log.info("--Invoked AssetResource.findAllAssetGroups --");
         return assetService.findAllAssetGroups();
+    }
+    
+    @RequestMapping(value = "/assets/type", method = RequestMethod.GET)
+    public List<AssetTypeDTO> findAllAssetType() { 
+    	log.info("Get All Asset Type");
+    	return assetService.findAllAssetType();
     }
 }

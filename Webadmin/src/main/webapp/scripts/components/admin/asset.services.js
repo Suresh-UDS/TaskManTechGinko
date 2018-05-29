@@ -51,6 +51,13 @@ angular.module('timeSheetApp')
                 return $http.post('api/assets/search').then(function (response) {
                     return response.data;
                 });
+            },
+            
+            loadAssetType : function() { 
+            	return $http.get('api/assets/type').then(function (response) { 
+            		return response.data;
+            	});
+            	
             }
         };
     });
