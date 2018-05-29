@@ -179,7 +179,7 @@ angular.module('timeSheetApp')
             }
 
             $scope.searchCriteria.currPage = currPageVal;
-            console.log('Selected feedback' + $scope.selectedLocation);
+            console.log('Selected Location' + $scope.selectedLocation);
 
             if(!$scope.selectedProject) {
                 if($rootScope.searchCriteriaLocation) {
