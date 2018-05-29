@@ -145,22 +145,5 @@ angular.module('timeSheetApp')
             resolve: {
 
             }
-        }).state('vendor-list', {
-                parent: 'manage',
-                url: '/vendor-list',
-                controller: 'AssetController',
-                data: {
-                    authorities: [],
-                    pageTitle: 'Vendor'
-                },
-                views: {
-                    'content@': {
-                        templateUrl: 'scripts/app/admin/asset/vendor-list.html',
-                        controller: 'AssetController'
-                    }
-                },
-                resolve: {
-
-                }
-            });
+        });
     });
