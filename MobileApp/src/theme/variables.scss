@@ -188,7 +188,10 @@ ion-app.md
   color: #000;
 }
 
-
+image-viewer ion-header
+{
+  display: none !important;
+}
 
 // App iOS Variables
 // --------------------------------------------------
