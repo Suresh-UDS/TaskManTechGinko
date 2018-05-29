@@ -1206,7 +1206,7 @@ public class ExportUtil {
 					dataRow.createCell(1).setCellValue(transaction.getTitle());
 					dataRow.createCell(2).setCellValue(transaction.getEmployeeName());
 					dataRow.createCell(3).setCellValue(String.valueOf(transaction.getJobType()));
-					dataRow.createCell(4).setCellValue(transaction.getPlannedStartTime());
+					dataRow.createCell(4).setCellValue(String.valueOf(transaction.getPlannedStartTime()));
 					dataRow.createCell(5).setCellValue(String.valueOf(transaction.getActualEndTime()));
 					dataRow.createCell(6)
 							.setCellValue(transaction.getJobStatus() != null ? transaction.getJobStatus().name()
