@@ -353,6 +353,11 @@ angular.module('timeSheetApp')
             document.body.innerHTML = printContents;
             window.print();
             document.body.innerHTML = originalContents;
+
+        }
+
+        $scope.printPage = function () {
+            window.print();
         }
 
         $scope.next = function() {
