@@ -20,6 +20,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.ts.app.domain.AbstractAuditingEntity;
 import com.ts.app.domain.Asset;
 import com.ts.app.domain.AssetGroup;
+import com.ts.app.domain.AssetType;
 import com.ts.app.domain.Designation;
 import com.ts.app.domain.Project;
 import com.ts.app.domain.Site;
@@ -29,6 +30,7 @@ import com.ts.app.domain.Employee;
 import com.ts.app.domain.EmployeeProjectSite;
 import com.ts.app.domain.User;
 import com.ts.app.repository.AssetRepository;
+import com.ts.app.repository.AssetTypeRepository;
 import com.ts.app.repository.CheckInOutImageRepository;
 import com.ts.app.repository.CheckInOutRepository;
 import com.ts.app.repository.DesignationRepository;
@@ -49,6 +51,7 @@ import com.ts.app.service.util.MapperUtil;
 import com.ts.app.service.util.QRCodeUtil;
 import com.ts.app.service.util.ReportUtil;
 import com.ts.app.web.rest.dto.AssetDTO;
+import com.ts.app.web.rest.dto.AssetTypeDTO;
 import com.ts.app.web.rest.dto.AssetgroupDTO;
 import com.ts.app.web.rest.dto.BaseDTO;
 import com.ts.app.web.rest.dto.DesignationDTO;
@@ -136,6 +139,9 @@ public class AssetManagementService extends AbstractService {
     
     @Inject
     private ProjectRepository projectRepositoy;
+    
+    @Inject
+    private AssetTypeRepository assetTypeRepository;
     
     //Asset
     public AssetDTO saveAsset(AssetDTO assetDTO) {
@@ -506,5 +512,10 @@ public class AssetManagementService extends AbstractService {
 	public List<AssetgroupDTO> findAllAssetGroups() {
       List<AssetGroup> assetgroup = assetGroupRepository.findAll();
       return mapperUtil.toModelList(assetgroup, AssetgroupDTO.class);
+	}
+	
+	public List<AssetTypeDTO> findAllAssetType() {
+      List<AssetType> assetType = assetTypeRepository.findAll();
+      return mapperUtil.toModelList(assetType, AssetTypeDTO.class);
 	}
 }
