@@ -151,6 +151,8 @@ public class SearchCriteria extends Paginator {
 	
 	private String assetName;
 	
+	private String vendorName;
+	
 	public long getId() {
 		return id;
 	}
@@ -796,6 +798,14 @@ public class SearchCriteria extends Paginator {
 
 	public void setAssetName(String assetName) {
 		this.assetName = assetName;
+	}
+
+	public String getVendorName() {
+		return vendorName;
+	}
+
+	public void setVendorName(String vendorName) {
+		this.vendorName = vendorName;
 	}
     
 	

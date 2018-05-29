@@ -7,11 +7,11 @@
             <div class="card margin-TB-5 tablecard appModuleCard">
 
                 <div class="card-content">
-                    <div class="row" ng-init="loadManufacturerList();">
+                    <div class="row" ng-init="loadVendors();">
                         <div class="col-md-12">
                             <div class="card formcard FilterCard">
                                 <div class="card-content">
-                                    <form name="searchForm"  ng-submit="searchFilter();" novalidate >
+                                    <form name="searchForm"  ng-submit="search();" novalidate >
 
                                         <div class="row" >
 
@@ -19,10 +19,11 @@
                                                 <div class="form-group no-padding" >
                                                     <div class="dropdown">
                                                         <div class="form-group">
-                                                            <label class="control-label">Name</label>
+                                                            <label class="control-label">Search Name</label>
                                                             <input id='name'
                                                                    class='form-control'
                                                                    name='name'
+                                                                   ng-model="selectedName"
                                                                    type='text' value=""
                                                                    ng-minlength='5'
                                                                    ng-maxlength='250'
@@ -73,7 +74,18 @@
                                         </span>
                                     </span>
                                 </th>
-                                <th width="15%">Person Name
+                                <th width="15%">Contact First Name
+
+                                    <span class="sortingIcons">
+                                        <span ng-click="columnAscOrder('address')" ng-class="isActiveAsc == 'address' ? 'active' : ''" >
+                                             <i  class="fa fa-caret-up"></i>
+                                        </span>
+                                        <span ng-click="columnDescOrder('address')" ng-class="isActiveDesc == 'address' ? 'active' : ''">
+                                            <i  class="fa fa-caret-down"></i>
+                                        </span>
+                                    </span>
+                                </th>
+                                <th width="15%">Contact Last Name
 
                                     <span class="sortingIcons">
                                         <span ng-click="columnAscOrder('address')" ng-class="isActiveAsc == 'address' ? 'active' : ''" >
@@ -101,67 +113,19 @@
                             </thead>
 
                             <tbody>
+								<tr ng-repeat="vendor in vendors" repeat-done="initDataTables()">
+									<td>{{vendor.name}}</td>
+	                                	<td>{{vendor.contactFirstName}} {{vendor.contactLastName}}</td>
+								   	<td>{{vendor.phone}}</td>
+								   	<td>{{vendor.addressLine1}} {{vendor.addressLine2}} {{vendor.city}} {{vendor.state}}</td>
+	                                 <td class="text-right">
+	                                     <a data-toggle="modal"  data-target="#RightModal-View" ng-click="getVendorDetails(vendor.id, 'view')"  has-permission="Vendor:View"   class="btn btn-simple btn-info"><i class="material-icons">visibility</i></a>
+	                                     <a data-toggle="modal"  data-target="#RightModal-Edit" ng-click="getVendorDetails(vendor.id, 'edit')"  has-permission="Vendor:Edit"   class="btn btn-simple btn-info"><i class="material-icons">edit</i></a>
+	                                 </td>
+								
+								</tr>
 
-                                <tr>
 
-                                    <td>Mahindra</td>
-                                    <td>Praveen</td>
-                                    <td>8608463226</td>
-                                    <td>Vadapalani, chennai</td>
-                                    <td class="text-right">
-                                        <a data-toggle="modal"  data-target="#RightModal-View"  has-permission="" ui-sref=""  class="btn btn-simple btn-info"><i class="material-icons">visibility</i></a>
-                                        <a data-toggle="modal"  data-target="#RightModal-Edit"  has-permission="" ui-sref=""  class="btn btn-simple btn-info"><i class="material-icons">edit</i></a>
-                                    </td>
-
-                                </tr>
-                                <tr>
-
-                                    <td>Mahindra</td>
-                                    <td>Praveen</td>
-                                    <td>8608463226</td>
-                                    <td>Vadapalani, chennai</td>
-                                    <td class="text-right">
-                                        <a data-toggle="modal"  data-target="#RightModal-View"  has-permission="" ui-sref=""  class="btn btn-simple btn-info"><i class="material-icons">visibility</i></a>
-                                        <a data-toggle="modal"  data-target="#RightModal-Edit"  has-permission="" ui-sref=""  class="btn btn-simple btn-info"><i class="material-icons">edit</i></a>
-                                    </td>
-
-                                </tr>
-                                <tr>
-
-                                    <td>Mahindra</td>
-                                    <td>Praveen</td>
-                                    <td>8608463226</td>
-                                    <td>Vadapalani, chennai</td>
-                                    <td class="text-right">
-                                        <a data-toggle="modal"  data-target="#RightModal-View"  has-permission="" ui-sref=""  class="btn btn-simple btn-info"><i class="material-icons">visibility</i></a>
-                                        <a data-toggle="modal"  data-target="#RightModal-Edit"  has-permission="" ui-sref=""  class="btn btn-simple btn-info"><i class="material-icons">edit</i></a>
-                                    </td>
-
-                                </tr>
-                                <tr>
-
-                                    <td>Mahindra</td>
-                                    <td>Praveen</td>
-                                    <td>8608463226</td>
-                                    <td>Vadapalani, chennai</td>
-                                    <td class="text-right">
-                                        <a data-toggle="modal"  data-target="#RightModal-View"  has-permission="" ui-sref=""  class="btn btn-simple btn-info"><i class="material-icons">visibility</i></a>
-                                        <a data-toggle="modal"  data-target="#RightModal-Edit"  has-permission="" ui-sref=""  class="btn btn-simple btn-info"><i class="material-icons">edit</i></a>
-                                    </td>
-
-                                </tr>
-                                <tr>
-
-                                    <td>Mahindra</td>
-                                    <td>Praveen</td>
-                                    <td>8608463226</td>
-                                    <td>Vadapalani, chennai</td>
-                                    <td class="text-right">
-                                        <a data-toggle="modal"  data-target="#RightModal-View"  has-permission="" ui-sref=""  class="btn btn-simple btn-info"><i class="material-icons">visibility</i></a>
-                                        <a data-toggle="modal"  data-target="#RightModal-Edit"  has-permission="" ui-sref=""  class="btn btn-simple btn-info"><i class="material-icons">edit</i></a>
-                                    </td>
-
-                                </tr>
 
                             </tbody>
                         </table>
@@ -191,6 +155,9 @@
 
             <div class="modal-body">
 
+			<form ng-show="!success" name="form" role="form" novalidate
+						ng-submit="saveVendor()"
+						onClick="" class="form-horizontal">
 
                 <div class="row">
                     <div class="col-md-6">
@@ -203,32 +170,39 @@
 
                                     <div class="col-md-12">
                                         <div class="form-group">
-                                            <label class="control-label">Vendor Name</label>
-                                            <input id='manufacturerName' ng-model=""
-                                                   class='form-control' name='manufacturerName' type='text' value=""
+                                            <label class="control-label">Vendor Name<span class="red-star">*</span></label>
+                                            <input id='manufacturerName' ng-model="vendor.name"
+                                                   class='form-control' name='name' type='text' value=""
                                                    ng-minlength='2' ng-maxlength='50' ng-pattern="/^[A-Za-z0-9\s&-/]*$/" autofocus required/>
 
                                         </div>
                                         <div class="form-group">
-                                            <label class="control-label">Contact Name</label>
-                                            <input id='contactName' ng-model=""
-                                                   class='form-control' name='contactName' type='text' value=""
-                                                   ng-minlength='2' ng-maxlength='50' ng-pattern="/^[A-Za-z0-9\s&-/]*$/" autofocus required/>
+                                            <label class="control-label">Contact First Name</label>
+                                            <input id='contactName' ng-model="vendor.contactFirstName"
+                                                   class='form-control' name='contactFirstName' type='text' value=""
+                                                   ng-minlength='2' ng-maxlength='50' ng-pattern="/^[A-Za-z0-9\s&-/]*$/" autofocus />
+
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label">Contact Last Name</label>
+                                            <input id='contactName' ng-model="vendor.contactLastName"
+                                                   class='form-control' name='contactLastName' type='text' value=""
+                                                   ng-minlength='2' ng-maxlength='50' ng-pattern="/^[A-Za-z0-9\s&-/]*$/" autofocus />
 
                                         </div>
 
                                         <div class="form-group">
-                                            <label class="control-label">Mobile No</label>
-                                            <input id='mobNum' ng-model=""
-                                                   class='form-control' name='mobNum' type='number' value=""
-                                                   ng-minlength='2' ng-maxlength='50' autofocus required/>
+                                            <label class="control-label">Phone No</label>
+                                            <input id='mobNum' ng-model="vendor.phone"
+                                                   class='form-control' name='phone' type='number' value=""
+                                                   ng-minlength='2' ng-maxlength='50' autofocus />
 
                                         </div>
                                         <div class="form-group">
                                             <label class="control-label">Email</label>
-                                            <input id='email' ng-model=""
+                                            <input id='email' ng-model="vendor.email"
                                                    class='form-control' name='email' type='email' value=""
-                                                   ng-minlength='2' ng-maxlength='50' autofocus required/>
+                                                   ng-minlength='2' ng-maxlength='50' autofocus />
 
                                         </div>
 
@@ -250,44 +224,44 @@
                                     <div class="col-md-12">
                                         <div class="form-group">
                                             <label class="control-label">Line 1</label>
-                                            <input id='line1' ng-model=""
+                                            <input id='line1' ng-model="vendor.addressLine1"
                                                    class='form-control' name='line1' type='text' value=""
-                                                   ng-minlength='2' ng-maxlength='50' ng-pattern="/^[A-Za-z0-9\s&-/]*$/" autofocus required/>
+                                                   ng-minlength='2' ng-maxlength='50' ng-pattern="/^[A-Za-z0-9\s&-/]*$/" autofocus />
 
                                         </div>
                                         <div class="form-group">
                                             <label class="control-label">Line 2</label>
-                                            <input id='line2' ng-model=""
+                                            <input id='line2' ng-model="vendor.addressLine2"
                                                    class='form-control' name='line2' type='text' value=""
-                                                   ng-minlength='2' ng-maxlength='50' ng-pattern="/^[A-Za-z0-9\s&-/]*$/" autofocus required/>
+                                                   ng-minlength='2' ng-maxlength='50' ng-pattern="/^[A-Za-z0-9\s&-/]*$/" autofocus />
 
                                         </div>
                                         <div class="form-group">
                                             <label class="control-label">City</label>
-                                            <input id='City' ng-model=""
+                                            <input id='City' ng-model="vendor.city"
                                                    class='form-control' name='City' type='text' value=""
-                                                   ng-minlength='2' ng-maxlength='50' ng-pattern="/^[A-Za-z0-9\s&-/]*$/" autofocus required/>
+                                                   ng-minlength='2' ng-maxlength='50' ng-pattern="/^[A-Za-z0-9\s&-/]*$/" autofocus />
 
                                         </div>
                                         <div class="form-group">
                                             <label class="control-label">State</label>
-                                            <input id='state' ng-model=""
+                                            <input id='state' ng-model="vendor.state"
                                                    class='form-control' name='state' type='text' value=""
-                                                   ng-minlength='2' ng-maxlength='50' ng-pattern="/^[A-Za-z0-9\s&-/]*$/" autofocus required/>
+                                                   ng-minlength='2' ng-maxlength='50' ng-pattern="/^[A-Za-z0-9\s&-/]*$/" autofocus />
 
                                         </div>
                                         <div class="form-group">
                                             <label class="control-label">Pin Code</label>
-                                            <input id='pinCode' ng-model=""
+                                            <input id='pinCode' ng-model="vendor.pincode"
                                                    class='form-control' name='pinCode' type='number' value=""
-                                                   ng-minlength='2' ng-maxlength='50' ng-pattern="/^[A-Za-z0-9\s&-/]*$/" autofocus required/>
+                                                   ng-minlength='2' ng-maxlength='50' ng-pattern="/^[A-Za-z0-9\s&-/]*$/" autofocus />
 
                                         </div>
                                         <div class="form-group">
                                             <label class="control-label">Country</label>
-                                            <input id='country' ng-model=""
+                                            <input id='country' ng-model="vendor.country"
                                                    class='form-control' name='country' type='text' value=""
-                                                   ng-minlength='2' ng-maxlength='50' ng-pattern="/^[A-Za-z0-9\s&-/]*$/" autofocus required/>
+                                                   ng-minlength='2' ng-maxlength='50' ng-pattern="/^[A-Za-z0-9\s&-/]*$/" autofocus />
 
                                         </div>
                                     </div>
@@ -319,7 +293,7 @@
                     </div>
                 </div>
 
-
+			</form>
 
             </div>
 
@@ -338,45 +312,56 @@
 
             <div class="modal-body">
 
+			<form ng-show="!success" name="form" role="form" novalidate
+						ng-submit="saveVendor()"
+						onClick="" class="form-horizontal">
                 <div class="row">
                     <div class="col-md-6">
 
                         <div class="panel panel-default">
-                            <div class="panel-heading">Vendor  Details</div>
+                            <div class="panel-heading">Vendor Details</div>
                             <div class="panel-body">
 
                                 <div class="row">
 
                                     <div class="col-md-12">
                                         <div class="form-group">
-                                            <label class="control-label">Vendor  Name</label>
-                                            <input id='manufacturerName' ng-model=""
-                                                   class='form-control' name='manufacturerName' type='text' value=""
+                                            <label class="control-label">Vendor Name<span class="red-star">*</span></label>
+                                            <input id='manufacturerName' ng-model="vendor.name"
+                                                   class='form-control' name='name' type='text' value=""
                                                    ng-minlength='2' ng-maxlength='50' ng-pattern="/^[A-Za-z0-9\s&-/]*$/" autofocus required/>
 
                                         </div>
                                         <div class="form-group">
-                                            <label class="control-label">Contact Name</label>
-                                            <input id='contactName' ng-model=""
-                                                   class='form-control' name='contactName' type='text' value=""
-                                                   ng-minlength='2' ng-maxlength='50' ng-pattern="/^[A-Za-z0-9\s&-/]*$/" autofocus required/>
+                                            <label class="control-label">Contact First Name</label>
+                                            <input id='contactName' ng-model="vendor.contactFirstName"
+                                                   class='form-control' name='contactFirstName' type='text' value=""
+                                                   ng-minlength='2' ng-maxlength='50' ng-pattern="/^[A-Za-z0-9\s&-/]*$/" autofocus />
+
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label">Contact Last Name</label>
+                                            <input id='contactName' ng-model="vendor.contactLastName"
+                                                   class='form-control' name='contactLastName' type='text' value=""
+                                                   ng-minlength='2' ng-maxlength='50' ng-pattern="/^[A-Za-z0-9\s&-/]*$/" autofocus />
 
                                         </div>
 
                                         <div class="form-group">
-                                            <label class="control-label">Mobile No</label>
-                                            <input id='mobNum' ng-model=""
-                                                   class='form-control' name='mobNum' type='number' value=""
-                                                   ng-minlength='2' ng-maxlength='50' autofocus required/>
+                                            <label class="control-label">Phone No</label>
+                                            <input id='mobNum' ng-model="vendor.phone"
+                                                   class='form-control' name='phone' type='number' value=""
+                                                   ng-minlength='2' ng-maxlength='50' autofocus />
 
                                         </div>
                                         <div class="form-group">
                                             <label class="control-label">Email</label>
-                                            <input id='email' ng-model=""
+                                            <input id='email' ng-model="vendor.email"
                                                    class='form-control' name='email' type='email' value=""
-                                                   ng-minlength='2' ng-maxlength='50' autofocus required/>
+                                                   ng-minlength='2' ng-maxlength='50' autofocus />
 
                                         </div>
+
                                     </div>
                                 </div>
 
@@ -395,44 +380,44 @@
                                     <div class="col-md-12">
                                         <div class="form-group">
                                             <label class="control-label">Line 1</label>
-                                            <input id='line1' ng-model=""
+                                            <input id='line1' ng-model="vendor.addressLine1"
                                                    class='form-control' name='line1' type='text' value=""
-                                                   ng-minlength='2' ng-maxlength='50' ng-pattern="/^[A-Za-z0-9\s&-/]*$/" autofocus required/>
+                                                   ng-minlength='2' ng-maxlength='50' ng-pattern="/^[A-Za-z0-9\s&-/]*$/" autofocus />
 
                                         </div>
                                         <div class="form-group">
                                             <label class="control-label">Line 2</label>
-                                            <input id='line2' ng-model=""
+                                            <input id='line2' ng-model="vendor.addressLine2"
                                                    class='form-control' name='line2' type='text' value=""
-                                                   ng-minlength='2' ng-maxlength='50' ng-pattern="/^[A-Za-z0-9\s&-/]*$/" autofocus required/>
+                                                   ng-minlength='2' ng-maxlength='50' ng-pattern="/^[A-Za-z0-9\s&-/]*$/" autofocus />
 
                                         </div>
                                         <div class="form-group">
                                             <label class="control-label">City</label>
-                                            <input id='City' ng-model=""
+                                            <input id='City' ng-model="vendor.city"
                                                    class='form-control' name='City' type='text' value=""
-                                                   ng-minlength='2' ng-maxlength='50' ng-pattern="/^[A-Za-z0-9\s&-/]*$/" autofocus required/>
+                                                   ng-minlength='2' ng-maxlength='50' ng-pattern="/^[A-Za-z0-9\s&-/]*$/" autofocus />
 
                                         </div>
                                         <div class="form-group">
                                             <label class="control-label">State</label>
-                                            <input id='state' ng-model=""
+                                            <input id='state' ng-model="vendor.state"
                                                    class='form-control' name='state' type='text' value=""
-                                                   ng-minlength='2' ng-maxlength='50' ng-pattern="/^[A-Za-z0-9\s&-/]*$/" autofocus required/>
+                                                   ng-minlength='2' ng-maxlength='50' ng-pattern="/^[A-Za-z0-9\s&-/]*$/" autofocus />
 
                                         </div>
                                         <div class="form-group">
                                             <label class="control-label">Pin Code</label>
-                                            <input id='pinCode' ng-model=""
+                                            <input id='pinCode' ng-model="vendor.pincode"
                                                    class='form-control' name='pinCode' type='number' value=""
-                                                   ng-minlength='2' ng-maxlength='50' ng-pattern="/^[A-Za-z0-9\s&-/]*$/" autofocus required/>
+                                                   ng-minlength='2' ng-maxlength='50' ng-pattern="/^[A-Za-z0-9\s&-/]*$/" autofocus />
 
                                         </div>
                                         <div class="form-group">
                                             <label class="control-label">Country</label>
-                                            <input id='country' ng-model=""
+                                            <input id='country' ng-model="vendor.country"
                                                    class='form-control' name='country' type='text' value=""
-                                                   ng-minlength='2' ng-maxlength='50' ng-pattern="/^[A-Za-z0-9\s&-/]*$/" autofocus required/>
+                                                   ng-minlength='2' ng-maxlength='50' ng-pattern="/^[A-Za-z0-9\s&-/]*$/" autofocus />
 
                                         </div>
                                     </div>
@@ -464,7 +449,7 @@
                     </div>
                 </div>
 
-
+			</form>
             </div>
 
         </div><!-- modal-content -->
@@ -495,22 +480,27 @@
                                         <tbody>
                                         <tr>
                                             <td>Vendor  Name</td>
-                                            <td></td>
+                                            <td>{{vendor.name}}</td>
                                         </tr>
                                         <tr>
-                                            <td>Contact Name</td>
-                                            <td></td>
+                                            <td>Contact First Name</td>
+                                            <td>{{vendor.contactFirstName}}</td>
+
+                                        </tr>
+                                        <tr>
+                                            <td>Contact Last Name</td>
+                                            <td>{{vendor.contactLastName}}</td>
 
                                         </tr>
 
                                         <tr>
-                                            <td>Mobile No</td>
-                                            <td></td>
+                                            <td>Phone No</td>
+                                            <td>{{vendor.phone}}</td>
 
                                         </tr>
                                         <tr>
                                             <td>Email</td>
-                                            <td></td>
+                                            <td>{{vendor.email}}</td>
 
                                         </tr>
 
@@ -537,48 +527,30 @@
                                         <tbody>
                                         <tr>
                                             <td>Line 1 </td>
-                                            <td></td>
+                                            <td>{{vendor.addressLine1}}</td>
                                         </tr>
                                         <tr>
                                             <td>Line 2</td>
-                                            <td></td>
+                                            <td>{{vendor.addressLine2}}</td>
 
                                         </tr>
                                         <tr>
                                             <td>City</td>
-                                            <td>
-
-                                            </td>
+                                            <td>{{vendor.city}}</td>
 
                                         </tr>
                                         <tr>
-
                                             <td>State</td>
-                                            <td>
-
-                                            </td>
-
+                                            <td>{{vendor.state}}</td>
                                         </tr>
                                         <tr>
-
                                             <td>Pin Code</td>
-                                            <td>
-
-                                            </td>
-
+                                            <td>{{vendor.pincode}}</td>
                                         </tr>
                                         <tr>
-
                                             <td>Country</td>
-                                            <td>
-
-                                            </td>
-
+                                            <td>{{vendor.country}}</td>
                                         </tr>
-
-
-
-
                                         </tbody>
                                     </table>
                                 </div>

@@ -47,14 +47,13 @@ public class Asset extends AbstractAuditingEntity implements Serializable {
     @Column(length = 250, nullable = false)
     private String code;
 
-    @NotNull
     @Size(min = 1, max = 2500)
     private String description;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "siteId", nullable = false)
     private Site site;
-
+    
     @Column(name="qr_code_image")
     private String qrCodeImage;
     
@@ -75,11 +74,11 @@ public class Asset extends AbstractAuditingEntity implements Serializable {
     private Date endTime;
     
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "manufacturerId", referencedColumnName = "id", nullable = false, insertable = false, updatable = false)
+	@JoinColumn(name = "manufacturerId", referencedColumnName = "id", nullable = true, insertable = false, updatable = false)
     private Manufacturer manufacturer;
     
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "manufacturerId", referencedColumnName = "id", nullable = true, insertable = false, updatable = false)
+	@JoinColumn(name = "vendorId", referencedColumnName = "id", nullable = true, insertable = false, updatable = false)
     private Vendor amcVendor;
     
     private String modelNumber;
@@ -109,7 +108,7 @@ public class Asset extends AbstractAuditingEntity implements Serializable {
 	
 	private boolean udsAsset;
 
-    public Long getId() {
+	public Long getId() {
         return id;
     }
     public void setId(Long id) {
