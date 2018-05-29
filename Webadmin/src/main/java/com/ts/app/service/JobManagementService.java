@@ -727,6 +727,7 @@ public class JobManagementService extends AbstractService {
 		dto.setSiteId(job.getSite().getId());
 		dto.setSiteName(job.getSite().getName());
 		dto.setDescription(job.getDescription());
+		dto.setJobStatus(job.getStatus());
 		dto.setStatus(job.getStatus().name());
 		dto.setEmployeeId(job.getEmployee().getId());
 		dto.setEmployeeName(job.getEmployee().getName());
