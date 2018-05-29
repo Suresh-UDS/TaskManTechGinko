@@ -100,7 +100,28 @@
                                                                                     </div>
                                                                                 </div>
                                                                                 <div class="col-md-12">
-                                                                                    <div class="form-group selectcon" style="padding-top:25px;">
+		                                                                              <div class="form-group selectcon" style="padding-top:25px;">
+		
+		                                                                                <div class="" style="float:left;width:90%;">
+		                                                                                    <select class="form-control" ng-model="employee.designation" ng-options="designation.designation as designation.designation for designation in designations">
+		                                                                                        <option value="">Please select Asset Type ..</option>
+		                                                                                    </select>
+		                                                                                </div>
+		                                                                                <div class="" style="float:left;">
+		                                                                                    <a href="javascript:;"  data-toggle="collapse" data-parent="#accordian" data-target="#addAssetType" class="btn btn-round btn-fab btn-fab-mini btn-simple" aria-expanded="false" aria-controls="collapseExample">
+		                                                                                        <i class="material-icons">add</i>
+		                                                                                    </a>
+		                                                                                </div>
+		                                                                                <div class="collapse" id="addAssetType">
+		                                                                                    <div class="">
+		                                                                                        <input class="input-desc" id='assetgroupName' ng-model=""
+		                                                                                               name='assetgroupName' type='text' value=""/>
+		                                                                                        <a class="btn btn-success"  ng-click="">Add</a>
+		                                                                                    </div>
+		                                                                                </div>
+		                                                                            </div>
+		                                                                        
+		                                                                              <div class="form-group selectcon" style="padding-top:25px;">
 
 
                                                                                         <div class="" style="float:left;width:90%;">
