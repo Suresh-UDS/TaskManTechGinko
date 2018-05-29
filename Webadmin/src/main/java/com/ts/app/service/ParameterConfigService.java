@@ -16,13 +16,19 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import com.ts.app.domain.AbstractAuditingEntity;
+import com.ts.app.domain.Parameter;
 import com.ts.app.domain.ParameterConfig;
+import com.ts.app.domain.ParameterUOM;
 import com.ts.app.repository.ParameterConfigRepository;
+import com.ts.app.repository.ParameterRepository;
+import com.ts.app.repository.ParameterUOMRepository;
 import com.ts.app.repository.UserRepository;
 import com.ts.app.service.util.ImportUtil;
 import com.ts.app.service.util.MapperUtil;
 import com.ts.app.web.rest.dto.BaseDTO;
 import com.ts.app.web.rest.dto.ParameterConfigDTO;
+import com.ts.app.web.rest.dto.ParameterDTO;
+import com.ts.app.web.rest.dto.ParameterUOMDTO;
 import com.ts.app.web.rest.dto.SearchCriteria;
 import com.ts.app.web.rest.dto.SearchResult;
 
@@ -37,6 +43,12 @@ public class ParameterConfigService extends AbstractService {
 
 	@Inject
 	private ParameterConfigRepository parameterConfigRepository;
+
+	@Inject
+	private ParameterRepository parameterRepository;
+
+	@Inject
+	private ParameterUOMRepository parameterUOMRepository;
 
 	@Inject
 	private UserRepository userRepository;
@@ -55,6 +67,26 @@ public class ParameterConfigService extends AbstractService {
 		log.debug("Created Information for ParameterConfig: {}", parameterConfig);
 		parameterConfigDto = mapperUtil.toModel(parameterConfig, ParameterConfigDTO.class);
 		return parameterConfigDto;
+	}
+	
+	public ParameterDTO createParameter(ParameterDTO parameterDto) {
+		// log.info("The admin Flag value is " +adminFlag);
+		Parameter parameter = mapperUtil.toEntity(parameterDto, Parameter.class);
+        parameter.setActive(ParameterConfig.ACTIVE_YES);
+		parameter = parameterRepository.save(parameter);
+		log.debug("Created Information for Parameter: {}", parameter);
+		parameterDto = mapperUtil.toModel(parameter, ParameterDTO.class);
+		return parameterDto;
+	}
+	
+	public ParameterUOMDTO createParameterUOM(ParameterUOMDTO parameterUomDto) {
+		// log.info("The admin Flag value is " +adminFlag);
+		ParameterUOM parameterUom = mapperUtil.toEntity(parameterUomDto, ParameterUOM.class);
+		parameterUom.setActive(ParameterConfig.ACTIVE_YES);
+		parameterUom = parameterUOMRepository.save(parameterUom);
+		log.debug("Created Information for ParameterUOM: {}", parameterUom);
+		parameterUomDto = mapperUtil.toModel(parameterUom, ParameterUOMDTO.class);
+		return parameterUomDto;
 	}
 
 	public void updateParameterConfig(ParameterConfigDTO parameterConfig) {
@@ -88,6 +120,11 @@ public class ParameterConfigService extends AbstractService {
 	public List<ParameterConfigDTO> findAll() {
 		List<ParameterConfig> entities = parameterConfigRepository.findAll();
 		return mapperUtil.toModelList(entities, ParameterConfigDTO.class);
+	}
+	
+	public List<ParameterDTO> findAllParameters() {
+		List<Parameter> entities = parameterRepository.findAll();
+		return mapperUtil.toModelList(entities, ParameterDTO.class);
 	}
 
 	public ParameterConfigDTO findOne(Long id) {

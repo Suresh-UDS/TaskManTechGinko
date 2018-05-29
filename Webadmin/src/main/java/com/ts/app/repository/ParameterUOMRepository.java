@@ -15,11 +15,11 @@ public interface ParameterUOMRepository extends JpaRepository<ParameterUOM, Long
 	@Override
 	void delete(ParameterUOM p);
 
-	@Query("SELECT p FROM ParameterUOM p WHERE p.active='Y' order by p.name")
+	@Query("SELECT p FROM ParameterUOM p WHERE p.active='Y' order by p.uom")
 	List<ParameterUOM> findAll();
 
-	@Query("SELECT p FROM ParameterUOM p WHERE p.name like '%' || :name || '%' and p.active='Y' order by p.name")
-	Page<ParameterUOM> findAllByName(@Param("name") String name, Pageable pageRequest);
+	@Query("SELECT p FROM ParameterUOM p WHERE p.uom like '%' || :uom || '%' and p.active='Y' order by p.uom")
+	Page<ParameterUOM> findAllByName(@Param("uom") String uom, Pageable pageRequest);
 
 
 

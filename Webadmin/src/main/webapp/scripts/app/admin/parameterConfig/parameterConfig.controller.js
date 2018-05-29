@@ -15,6 +15,10 @@ angular.module('timeSheetApp')
         $scope.searchCriteria = {};
         $scope.pages = { currPage : 1};
         $scope.isEdit = !!$stateParams.id;
+        
+        $scope.assetType = {};
+        
+        $scope.parameter = {};
 
         console.log($stateParams)
                     var that =  $scope;
@@ -61,6 +65,46 @@ angular.module('timeSheetApp')
                 $scope.loadingStop();
             });
         }
+        
+        $scope.addAssetType = function () {
+            console.log($scope.assetType.name);
+            if($scope.assetType){
+                console.log("AsseType entered");
+                AssetTypeComponent.create($scope.assetType).then(function (response) {
+                    console.log(response);
+                    $scope.assetType = null;
+                    $scope.showNotifications('top','center','success','Asset Type Added Successfully');
+                    $scope.loadAllAssetTypes();
+
+                })
+            }else{
+                console.log("Asset type not entered");
+            }
+        };
+        
+        $scope.loadAllParameters = function() {
+        		ParameterConfigComponent.findAll().then(function (data) {
+	            $scope.selectedParameter = null;
+	            $scope.parameters = data;
+	            $scope.loadingStop();
+	        });
+	    }
+	    
+	    $scope.addParameter = function () {
+	        console.log($scope.parameter.name);
+	        if($scope.parameter){
+	            console.log("Parameter entered");
+	            AssetTypeComponent.create($scope.assetType).then(function (response) {
+	                console.log(response);
+	                $scope.assetType = null;
+	                $scope.showNotifications('top','center','success','Asset Type Added Successfully');
+	                $scope.loadAllAssetTypes();
+	
+	            })
+	        }else{
+	            console.log("Asset type not entered");
+	        }
+	    };
         
         $scope.getParameterConfigDetails = function(id, mode) {
         		$scope.isEdit = (mode == 'edit' ? true : false)

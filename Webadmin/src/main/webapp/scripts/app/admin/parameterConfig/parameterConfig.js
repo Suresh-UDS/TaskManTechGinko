@@ -3,9 +3,9 @@
 angular.module('timeSheetApp')
     .config(function ($stateProvider) {
         $stateProvider
-            .state('parameterConfig-list', {
+            .state('parameter-config', {
                 parent: 'manage',
-                url: '/parameterConfig-list',
+                url: '/parameter-config',
                 controller: 'ParameterConfigController',
                 data: {
                     authorities: [],
@@ -13,7 +13,7 @@ angular.module('timeSheetApp')
                 },
                 views: {
                     'content@': {
-                        templateUrl: 'scripts/app/admin/parameterConfig/parameterConfig-list.html',
+                        templateUrl: 'scripts/app/admin/parameterConfig/config.html',
                         controller: 'ParameterConfigController'
                     }
                 },

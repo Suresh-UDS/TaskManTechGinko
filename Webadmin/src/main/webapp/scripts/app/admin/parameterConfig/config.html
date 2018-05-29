@@ -31,8 +31,8 @@
                                             <div class="clear"></div>
                                             <div class="collapse" id="addAssettype">
                                                 <div class="">
-                                                    <input class="input-desc ng-pristine ng-untouched ng-valid" id="assetgroupName" ng-model="" name="assetgroupName" type="text" value="" tabindex="0" aria-invalid="false">
-                                                    <a class="btn btn-success" ng-click="" tabindex="0">Add</a>
+                                                    <input class="input-desc ng-pristine ng-untouched ng-valid" id="assetTypeName" ng-model="assetType.name" name="assetTypeName" type="text" value="" tabindex="0" aria-invalid="false">
+                                                    <a class="btn btn-success" ng-click="addAssetType()" tabindex="0">Add</a>
                                                 </div>
                                             </div>
                                             <span class="material-input"></span></div>
@@ -43,22 +43,20 @@
                                             <div class="" style="float:left;width:90%;">
                                                 <label class="control-label">Select Parameter </label>
                                                 <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                                <select class="form-control ng-pristine ng-valid ng-touched"  tabindex="0" aria-invalid="false">
-                                                    <option value="" class="" selected="selected">Select Parameter ..</option>
-                                                    <option value="Power" class="" >Power</option>
-                                                    <option value="Liquid">Liquid</option>
-                                                </select>
+												<select class="form-control " ng-model="selectedParameter"  ng-options="parameter as parameter.name for parameter in parameters">
+													<option value="">Select Parameter...</option>
+                                                 	</select>                                                            
                                             </div>
                                             <div class="" style="float:left;width: 10%">
-                                                <a href="javascript:;" data-toggle="collapse" data-parent="#accordian" data-target="#addAsset" class="btn btn-round btn-fab btn-fab-mini btn-simple" aria-expanded="false" aria-controls="collapseExample">
+                                                <a href="javascript:;" data-toggle="collapse" data-parent="#accordian" data-target="#addParameter" class="btn btn-round btn-fab btn-fab-mini btn-simple" aria-expanded="false" aria-controls="collapseExample">
                                                     <i class="material-icons">add</i>
                                                 </a>
                                             </div>
                                             <div class="clear"></div>
-                                            <div class="collapse" id="addAsset">
+                                            <div class="collapse" id="addParameter">
                                                 <div class="">
-                                                    <input class="input-desc ng-pristine ng-untouched ng-valid" id="assetgroupName" ng-model="" name="assetgroupName" type="text" value="" tabindex="0" aria-invalid="false">
-                                                    <a class="btn btn-success" ng-click="" tabindex="0">Add</a>
+                                                    <input class="input-desc ng-pristine ng-untouched ng-valid" id="parameterName" ng-model="parameter.name" name="parameterName" type="text" value="" tabindex="0" aria-invalid="false">
+                                                    <a class="btn btn-success" ng-click="addParameter()" tabindex="0">Add</a>
                                                 </div>
                                             </div>
                                             <span class="material-input"></span></div>
