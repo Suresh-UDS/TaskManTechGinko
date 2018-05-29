@@ -1,5 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
-import {Events, Nav, Platform, ToastController} from 'ionic-angular';
+import {Events, MenuController, Nav, Platform, ToastController} from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import {BatteryStatus, BatteryStatusResponse} from "@ionic-native/battery-status";
@@ -42,8 +42,9 @@ export class MyApp {
     counter=0;
   pages: Array<{title: string, component: any,active:any,icon:any,permission:any}>;
 
-  constructor(public platform: Platform,private backgroundMode: BackgroundMode, public statusBar: StatusBar,public component:componentService,public toastCtrl: ToastController, public splashScreen: SplashScreen, private oneSignal: OneSignal, public events:Events, private batteryStatus: BatteryStatus, private appVersion:AppVersion) {
+  constructor(public platform: Platform,public menuCtrl:MenuController,private backgroundMode: BackgroundMode, public statusBar: StatusBar,public component:componentService,public toastCtrl: ToastController, public splashScreen: SplashScreen, private oneSignal: OneSignal, public events:Events, private batteryStatus: BatteryStatus, private appVersion:AppVersion) {
     this.initializeApp();
+
       this.backgroundMode.enable();
       let subscription = this.batteryStatus.onChange().subscribe(
           (status:BatteryStatusResponse)=>{
@@ -104,6 +105,7 @@ export class MyApp {
     this.platform.ready().then(() => {
       // Okay, so the platform is ready and our plugins are available.
       // Here you can do any higher level native things you might need.
+        this.menuCtrl.swipeEnable(false);
         console.log("Version details");
         console.log("current version"+"0.4.0");
         console.log(this.appVersion.getAppName());
