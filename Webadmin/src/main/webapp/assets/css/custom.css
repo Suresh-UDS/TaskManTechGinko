@@ -44,7 +44,14 @@ ul.checkList li
     /*overflow-y: scroll;*/
     /*height: 625px;*/
 }
-
+.CreatedPostCon .card h4
+{
+    margin-bottom: 0;
+}
+span.file-label
+{
+    font-size: 20px;
+}
 .CreatedPostCon .card .user-icon img
 {
     width: 45px !important;
