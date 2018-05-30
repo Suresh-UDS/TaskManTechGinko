@@ -1,12 +1,12 @@
 'use strict';
 
 angular.module('timeSheetApp')
-    .factory('ParameterConfigComponent', function ParameterConfigComponent(ParameterConfig,$http) {
+    .factory('ParameterUOMComponent', function ParameterUOMComponent(ParameterUOM,$http) {
         return {
 
-            create : function(parameterConfig,callback){
+            create : function(parameter,callback){
                 var cb = callback || angular.noop;
-                return $http.post('api/parameterConfig',parameterConfig).then(
+                return $http.post('api/parameterUOM',parameter).then(
                     function (response) {
                         return cb(response);
                     }).catch(
@@ -16,9 +16,9 @@ angular.module('timeSheetApp')
                     })
 
             },
-            update : function(parameterConfig,callback){
+            update : function(parameter,callback){
                 var cb = callback || angular.noop;
-                return $http.put('api/parameterConfig',parameterConfig).then(
+                return $http.put('api/parameterUOM',parameter).then(
                     function (response) {
                         return cb(response);
                     }).catch(
@@ -33,7 +33,7 @@ angular.module('timeSheetApp')
 
                 var cb = callback || angular.noop;
 
-                return  $http.delete('api/parameterConfig/'+id).then(
+                return  $http.delete('api/parameterUOM/'+id).then(
                     function (response) {
                         return cb(response);
                     }).catch(
@@ -43,17 +43,17 @@ angular.module('timeSheetApp')
                     })
             },
             findAll: function () {
-				return $http.get('api/parameterConfig').then(function (response) {
+				return $http.get('api/parameterUOM').then(function (response) {
 					return response.data;
 				});
-			}, 
+			},            
             findById : function(id){
-                return $http.get('api/parameterConfig/'+id).then(function (response) {
+                return $http.get('api/parameterUOM/'+id).then(function (response) {
                     return response.data;
                 });
             },
             search: function(searchCriteria) {
-                return $http.post('api/parameterConfig/search',searchCriteria).then(function (response) {
+                return $http.post('api/parameterUOM/search',searchCriteria).then(function (response) {
                     return response.data;
                 });
             }

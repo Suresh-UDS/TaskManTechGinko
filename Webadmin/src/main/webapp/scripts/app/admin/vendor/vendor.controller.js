@@ -131,6 +131,7 @@ angular.module('timeSheetApp')
 	        	var post = $scope.isEdit ? VendorComponent.update : VendorComponent.create
 	        	post($scope.vendor).then(function () {
 	                $scope.success = 'OK';
+	                $scope.showNotifications('top','center','success','Vendor Saved Successfully');
 	                $location.path('/vendor-list');
 	            }).catch(function (response) {
 	                $scope.success = null;
@@ -254,4 +255,9 @@ angular.module('timeSheetApp')
              $scope.initPage(); 
           
          }
+        
+        $scope.showNotifications= function(position,alignment,color,msg){
+            demo.showNotification(position,alignment,color,msg);
+        }
+        
     });
