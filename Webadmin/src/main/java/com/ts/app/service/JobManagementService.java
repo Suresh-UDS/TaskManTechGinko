@@ -366,7 +366,6 @@ public class JobManagementService extends AbstractService {
 	        			if(CollectionUtils.isEmpty(page.getContent())) {
 		            		List<EmployeeProjectSite> projectSites = employee.getProjectSites();
 		            		if(CollectionUtils.isNotEmpty(projectSites)) {
-		            			List<Long> siteIds = new ArrayList<Long>();
 		            			for(EmployeeProjectSite projSite : projectSites) {
 		            				siteIds.add(projSite.getSite().getId());
 		            			}
