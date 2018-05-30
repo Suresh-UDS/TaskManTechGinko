@@ -94,9 +94,7 @@ public class Asset extends AbstractAuditingEntity implements Serializable {
     private double estimatedDisposePrice;
     
     private Date warrentyExpiryDate;
-    
-    private String assetCode;
-    
+        
 	@OneToMany(mappedBy="asset",cascade={CascadeType.ALL}, fetch = FetchType.LAZY, orphanRemoval = true)
     private List<AssetPPMSchedule> ppmSchedules;
     
@@ -269,12 +267,6 @@ public class Asset extends AbstractAuditingEntity implements Serializable {
 	}
 	public void setWarrentyExpiryDate(Date warrentyExpiryDate) {
 		this.warrentyExpiryDate = warrentyExpiryDate;
-	}
-	public String getAssetCode() {
-		return assetCode;
-	}
-	public void setAssetCode(String assetCode) {
-		this.assetCode = assetCode;
 	}
 	public List<AssetPPMSchedule> getPpmSchedules() {
 		return ppmSchedules;
