@@ -20,15 +20,18 @@ import org.springframework.web.multipart.MultipartFile;
 import com.ts.app.domain.AbstractAuditingEntity;
 import com.ts.app.domain.Asset;
 import com.ts.app.domain.AssetGroup;
+import com.ts.app.domain.AssetParameterConfig;
 import com.ts.app.domain.AssetType;
 import com.ts.app.domain.Designation;
 import com.ts.app.domain.Project;
 import com.ts.app.domain.Site;
 import com.ts.app.domain.Ticket;
 import com.ts.app.repository.AssetGroupRepository;
+import com.ts.app.repository.AssetParameterConfigRepository;
 import com.ts.app.domain.Employee;
 import com.ts.app.domain.EmployeeProjectSite;
 import com.ts.app.domain.Manufacturer;
+import com.ts.app.domain.ParameterConfig;
 import com.ts.app.domain.User;
 import com.ts.app.domain.Vendor;
 import com.ts.app.repository.AssetRepository;
@@ -55,6 +58,7 @@ import com.ts.app.service.util.MapperUtil;
 import com.ts.app.service.util.QRCodeUtil;
 import com.ts.app.service.util.ReportUtil;
 import com.ts.app.web.rest.dto.AssetDTO;
+import com.ts.app.web.rest.dto.AssetParameterConfigDTO;
 import com.ts.app.web.rest.dto.AssetTypeDTO;
 import com.ts.app.web.rest.dto.AssetgroupDTO;
 import com.ts.app.web.rest.dto.BaseDTO;
@@ -62,6 +66,7 @@ import com.ts.app.web.rest.dto.DesignationDTO;
 import com.ts.app.web.rest.dto.ExportResult;
 import com.ts.app.web.rest.dto.ImportResult;
 import com.ts.app.web.rest.dto.JobDTO;
+import com.ts.app.web.rest.dto.ParameterConfigDTO;
 import com.ts.app.web.rest.dto.SearchCriteria;
 import com.ts.app.web.rest.dto.SearchResult;
 import com.ts.app.web.rest.errors.TimesheetException;
@@ -150,6 +155,9 @@ public class AssetManagementService extends AbstractService {
     @Inject
 	private VendorRepository vendorRepository;
     private AssetTypeRepository assetTypeRepository;
+    
+    @Inject
+    private AssetParameterConfigRepository assetParamConfigRepository;
     
     //Asset
     public AssetDTO saveAsset(AssetDTO assetDTO) {
@@ -546,4 +554,19 @@ public class AssetManagementService extends AbstractService {
       List<AssetType> assetType = assetTypeRepository.findAll();
       return mapperUtil.toModelList(assetType, AssetTypeDTO.class);
 	}
+
+	public List<AssetParameterConfigDTO> findByAssetConfig(Long id) {
+		// TODO Auto-generated method stub
+		List<AssetParameterConfig> entities = assetParamConfigRepository.findByAssetId(id);
+		return mapperUtil.toModelList(entities, AssetParameterConfigDTO.class);	
+	}
+	
+	public void deleteAssetConfig(Long id) {
+		log.debug("Inside deleteAssetConfig");
+		AssetParameterConfig assetConfigUpdate = assetParamConfigRepository.findOne(id);
+		assetConfigUpdate.setActive(AssetParameterConfig.ACTIVE_NO);
+		assetParamConfigRepository.save(assetConfigUpdate);
+	}
+	
+	
 }

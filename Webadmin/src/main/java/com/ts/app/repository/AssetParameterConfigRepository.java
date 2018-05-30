@@ -9,6 +9,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import com.ts.app.domain.AssetParameterConfig;
+import com.ts.app.web.rest.dto.AssetParameterConfigDTO;
 
 public interface AssetParameterConfigRepository extends JpaRepository<AssetParameterConfig ,Long>{
 
@@ -17,5 +18,8 @@ public interface AssetParameterConfigRepository extends JpaRepository<AssetParam
 	
 	@Query("SELECT a FROM AssetParameterConfig a WHERE a.assetType like %:assetType% and a.active='Y' order by a.assetType")
 	List<AssetParameterConfig> findByAssetType(@Param("assetType") String assetType);
+	
+	@Query("SELECT a FROM AssetParameterConfig a WHERE a.asset.id= :assetId and a.active='Y'")
+	List<AssetParameterConfig> findByAssetId(@Param("assetId") long assetId);
 	
 }
