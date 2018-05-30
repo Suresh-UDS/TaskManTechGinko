@@ -5,7 +5,7 @@ angular.module('timeSheetApp')
 				'AssetController',
 				function($scope, $rootScope, $state, $timeout, AssetComponent,
 						ProjectComponent,LocationComponent,SiteComponent,EmployeeComponent, $http, $stateParams,
-						$location,PaginationComponent) {
+						$location,PaginationComponent,AssetTypeComponent) {
                      
         $rootScope.loadingStop();
         $rootScope.loginView = false;
@@ -418,7 +418,7 @@ angular.module('timeSheetApp')
         }
         
         $scope.loadAssetType = function() { 
-        	AssetComponent.loadAssetType().then(function(resp){ 
+        	AssetTypeComponent.findAll().then(function(resp){ 
         		console.log('Asset Types' +JSON.stringify(resp));
         		$scope.assetTypes = resp;
         	});
