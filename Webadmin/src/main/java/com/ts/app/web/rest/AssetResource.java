@@ -24,7 +24,6 @@ import com.ts.app.service.AssetManagementService;
 import com.ts.app.web.rest.dto.AssetDTO;
 import com.ts.app.web.rest.dto.AssetTypeDTO;
 import com.ts.app.web.rest.dto.AssetgroupDTO;
-import com.ts.app.web.rest.dto.DesignationDTO;
 import com.ts.app.web.rest.errors.TimesheetException;
 import com.ts.app.web.rest.dto.SearchCriteria;
 import com.ts.app.web.rest.dto.SearchResult;
@@ -124,9 +123,15 @@ public class AssetResource {
         return new ResponseEntity<>(response,HttpStatus.CREATED);
     }
 
-    @RequestMapping(value = "/asset/{id}/qrcode", method = RequestMethod.GET, produces = MediaType.IMAGE_PNG_VALUE)
-    public String generateAssetQRCode(@PathVariable("id") long assetId) {
-        return assetService.generateAssetQRCode(assetId);
+    @RequestMapping(value = "/asset/{id}/qrcode/{code}", method = RequestMethod.GET, produces = MediaType.IMAGE_PNG_VALUE)
+    public String generateAssetQRCode(@PathVariable("id") long assetId,@PathVariable("code") String assetCode) {
+        return assetService.generateAssetQRCode(assetId,assetCode);
+    }
+    
+    @RequestMapping(path="/asset/qrcode/{id}", method = RequestMethod.GET, produces = MediaType.IMAGE_PNG_VALUE)
+    public String getQRCode(@PathVariable("id") Long id){
+    	log.debug(">>> get QR Code! <<<");
+        return assetService.getQRCode(id);
     }
     
     @RequestMapping(value = "/assetgroup", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)

@@ -337,8 +337,10 @@ public class AssetManagementService extends AbstractService {
         return mapperUtil.toModel(asset, AssetDTO.class);
     }
 
-    public String generateAssetQRCode(long assetId) {
+    public String generateAssetQRCode(long assetId,String assetCode) {
         Asset asset= assetRepository.findOne(assetId);
+        	asset.setCode(assetCode);
+        	assetRepository.save(asset);
         byte[] qrCodeImage = null;
         String qrCodeBase64 = null;
         if(asset != null) {
@@ -358,6 +360,18 @@ public class AssetManagementService extends AbstractService {
         return qrCodeBase64;
     }
 
+    public String getQRCode(long assetId){
+    	Asset asset= assetRepository.findOne(assetId);
+    	String qrCodeBase64 = null;
+    	String imageFileName = null;
+    	if(asset !=null) {
+    		imageFileName = asset.getQrCodeImage();
+    		if(org.apache.commons.lang3.StringUtils.isNotBlank(imageFileName)){
+    			qrCodeBase64 = fileUploadHelper.readQrCodeFile(imageFileName);
+    		}
+    	}
+    	return qrCodeBase64;
+    }
     
     public ExportResult generateReport(List<JobDTO> transactions, SearchCriteria criteria) {
         return reportUtil.generateJobReports(transactions, null, null, criteria);
