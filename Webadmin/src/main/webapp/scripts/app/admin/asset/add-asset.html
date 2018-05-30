@@ -1,4 +1,4 @@
-<div class="crud-form" ng-init="initLoad();loadingStart();"
+<div class="crud-form" ng-init="initLoad();loadingStart();loadProjects();"
 	data-unique-hash="a2ad475d60b22954085c657a73309b8f">
 	<div class="" ng-controller="AssetController">
 		<div class="row">
@@ -65,34 +65,34 @@
 
                                                                                 <div class="col-md-12">
                                                                                     <div class="form-group">
-                                                                                        <label class="control-label">Title</label>
-                                                                                        <input id='assetTitle'
-                                                                                               ng-model="asset.title"
-                                                                                               class='form-control'
-                                                                                               name='assetTitle'
-                                                                                               type='text' value=""
-                                                                                               ng-minlength='5'
-                                                                                               ng-maxlength='250'
-                                                                                               ng-pattern="/^[A-Za-z0-9\s]*$/" autofocus
-                                                                                                />
+                                                                                        <label class="control-label">Title <span class="red-star">*</span></label>
+                                                                                    <input id='assetTitle'
+                                                                                           ng-model="assetObj.title"
+                                                                                           class='form-control'
+                                                                                           name='assetTitle'
+                                                                                           type='text' value=""
+                                                                                           ng-minlength='5'
+                                                                                           ng-maxlength='250'
+                                                                                           ng-pattern="/^[A-Za-z0-9\s]*$/" autofocus
+                                                                                            required />
 
                                                                                         <div ng-show="form.$submitted || form.assetTitle.$touched">
                                                                                             <div ng-show="form.assetTitle.$dirty || form.assetTitle.$invalid">
                                                                                                 <p class="help-block" style="color:maroon"
                                                                                                    ng-show="form.assetTitle.$error.required">
-                                                                                                    Asset Title is required.
+                                                                                                    Asset title is required.
                                                                                                 </p>
                                                                                                 <p class="help-block" style="color:maroon"
                                                                                                    ng-show="form.assetTitle.$error.minlength">
-                                                                                                    Asset Title is required to be at least 5 character.
+                                                                                                    Asset title is required to be at least 5 character.
                                                                                                 </p>
                                                                                                 <p class="help-block" style="color:maroon"
                                                                                                    ng-show="form.assetTitle.$error.maxlength">
-                                                                                                    Asset Title cannot be longer than 250 characters.
+                                                                                                    Asset title cannot be longer than 250 characters.
                                                                                                 </p>
                                                                                                 <p class="help-block" style="color:maroon"
                                                                                                    ng-show="form.assetTitle.$error.pattern">
-                                                                                                    asset Title can only contain letters, digits and space.
+                                                                                                    asset title can only contain letters, digits and space.
                                                                                                 </p>
                                                                                             </div>
                                                                                         </div>
@@ -100,18 +100,22 @@
                                                                                     </div>
                                                                                 </div>
                                                                                 <div class="col-md-12">
-		                                                                              <div class="form-group selectcon" style="padding-top:25px;">
-		
-		                                                                                <div class="" style="float:left;width:90%;">
-		                                                                                    <select class="form-control" ng-model="employee.designation" ng-options="designation.designation as designation.designation for designation in designations">
-		                                                                                        <option value="">Please select Asset Type ..</option>
-		                                                                                    </select>
+		                                                                              <div class="form-group selectcon is-empty">
+                                                                                        <div class="row">
+    		                                                                                <div class="col-md-10 pad-r-0px">
+                                                                                                <label class="control-label">Type</label>
+                                                                                                <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
+    		                                                                                    <select class="form-control" ng-model="assetObj.assetype" ng-options="assetype as assetype.id for assetype in assetypes">
+    		                                                                                        <option value="">Select Asset Type ..</option>
+    		                                                                                    </select>
+    		                                                                                </div>
+    		                                                                                <div class="col-md-2 pdng-top25">
+    		                                                                                    <a href="javascript:void(0)"  data-toggle="collapse" data-parent="#accordian" data-target="#addAssetType" class="btn btn-round btn-fab btn-fab-mini btn-simple" aria-expanded="false" aria-controls="collapseExample">
+    		                                                                                        <i class="material-icons">add</i>
+    		                                                                                    </a>
+                                                                                            </div>
 		                                                                                </div>
-		                                                                                <div class="" style="float:left;">
-		                                                                                    <a href="javascript:;"  data-toggle="collapse" data-parent="#accordian" data-target="#addAssetType" class="btn btn-round btn-fab btn-fab-mini btn-simple" aria-expanded="false" aria-controls="collapseExample">
-		                                                                                        <i class="material-icons">add</i>
-		                                                                                    </a>
-		                                                                                </div>
+                                                                                        
 		                                                                                <div class="collapse" id="addAssetType">
 		                                                                                    <div class="">
 		                                                                                        <input class="input-desc" id='assetgroupName' ng-model=""
@@ -119,32 +123,36 @@
 		                                                                                        <a class="btn btn-success"  ng-click="">Add</a>
 		                                                                                    </div>
 		                                                                                </div>
+                                                                                        
 		                                                                            </div>
 		                                                                        
-		                                                                              <div class="form-group selectcon" style="padding-top:25px;">
+		                                                                              <div class="form-group selectcon is-empty">
 
+                                                                                        <div class="row">
+                                                                                            <div class="col-md-10 pad-r-0px">
+                                                                                                 <label class="control-label">Group</label>
+                                                                                                 <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
+                                                                                                <select class="form-control" ng-model="assetObj.assetgroup" ng-options="assetgroup.assetgroup as assetgroup.assetgroup for assetgroup in assetgroups">
+                                                                                                    <option value="">Select Asset Group ..</option>
+                                                                                                </select>
 
-                                                                                        <div class="" style="float:left;width:90%;">
-                                                                                            <select class="form-control" ng-model="asset.group" ng-options="assetgroup.assetgroup as assetgroup.assetgroup for assetgroup in assetgroups">
-                                                                                                <option value="">Please select Asset Group ..</option>
-                                                                                            </select>
-
+                                                                                            </div>
+                                                                                            
+                                                                                            <div class="col-md-2 pdng-top25">
+                                                                                                <a href="javascript:void(0)"  data-toggle="collapse" data-parent="#accordian" data-target="#addGroup" class="btn btn-round btn-fab btn-fab-mini btn-simple" aria-expanded="false" aria-controls="collapseExample">
+                                                                                                    <i class="material-icons">add</i>
+                                                                                                </a>
+                                                                                            </div>
                                                                                         </div>
-                                                                                        <div class="" style="float:left;">
-                                                                                            <a href="javascript:;"  data-toggle="collapse" data-parent="#accordian" data-target="#addGroup" class="btn btn-round btn-fab btn-fab-mini btn-simple" aria-expanded="false" aria-controls="collapseExample">
-                                                                                                <i class="material-icons">add</i>
-                                                                                            </a>
-                                                                                        </div>
+                                                                                     
+                                                                                       <div class="collapse" id="addGroup">
+                                                                                            <div class="">
+                                                                                                <input class="input-desc" id='assetgroupName' ng-model="assetgroup"
+                                                                                                       name='assetgroupName' type='text' value=""/>
+                                                                                                <a class="btn btn-success"  ng-click="addGroup()">Add</a>
 
-                                                                                    </div>
-
-                                                                                    <div class="collapse" id="addGroup">
-                                                                                        <div class="">
-                                                                                            <input class="input-desc" id='assetgroupName' ng-model="assetgroup"
-                                                                                                   name='assetgroupName' type='text' value=""/>
-                                                                                            <a class="btn btn-success margn-top0"  ng-click="addGroup()">Add</a>
-
-                                                                                        </div>
+                                                                                            </div>
+                                                                                       </div>
                                                                                     </div>
                                                                                 </div>
                                                                             </div>
@@ -153,8 +161,9 @@
                                                                                 <div class="col-md-12">
                                                                                     <div class="form-group">
                                                                                         <label class="control-label">Status</label>
-                                                                                        <select class="form-control" ng-model="asset.status" ng-options="status.status as status.status for status in statuses">
-                                                                                            <option value="">Please select Status ..</option>
+                                                                                        <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
+                                                                                        <select class="form-control" ng-model="assetObj.status" ng-options="status.status as status.status for status in statuses">
+                                                                                            <option value="">Select Status ..</option>
                                                                                         </select>
                                                                                     </div>
                                                                                 </div>
@@ -177,13 +186,9 @@
                                                                                 <div class="col-md-6">
                                                                                     <div class="form-group">
                                                                                         <label class="control-label">Client  <span class="red-star">*</span> </label>
-                                                                                        <!--<input type="text" class="form-control"-->
-                                                                                        <!--ng-model="selectedRole"-->
-                                                                                        <!--uib-typeahead="role as role.name for role in userRoles | filter:$viewValue | limitTo:5"-->
-                                                                                        <!--name="UserRole" ng-minlength="5" ng-maxlength="50" autofocus-->
-                                                                                        <!--required >-->
-                                                                                        <select class="form-control " ng-model="asset.client"  ng-options="project as project.name for project in projectsList" name="AssetClient" required>
-                                                                                            <option value="">Please select Client ...</option>
+                                                                                        <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
+                                                                                        <select class="form-control " ng-model="selectedProject" ng-options="project as project.name for project in projects" name="AssetClient"  ng-change="loadDepSites()"  required>
+                                                                                            <option value="">Select Client ...</option>
                                                                                         </select>
 
                                                                                         <div ng-show="form.$submitted || form.AssetClient.$touched">
@@ -205,13 +210,9 @@
                                                                                 <div class="col-md-6">
                                                                                     <div class="form-group">
                                                                                         <label class="control-label">Site   <span class="red-star">*</span> </label>
-                                                                                        <!--<input type="text" class="form-control"-->
-                                                                                        <!--ng-model="selectedRole"-->
-                                                                                        <!--uib-typeahead="role as role.name for role in userRoles | filter:$viewValue | limitTo:5"-->
-                                                                                        <!--name="UserRole" ng-minlength="5" ng-maxlength="50" autofocus-->
-                                                                                        <!--required >-->
-                                                                                        <select class="form-control " ng-model="asset.site"  ng-options="site as site.name for site in sites" name="AssetSite" required>
-                                                                                            <option value="">Please select Site ...</option>
+                                                                                        <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
+                                                                                        <select class="form-control " ng-model="selectedSite"  ng-options="site as site.name for site in sitesList" ng-change="loadBlocks()" name="AssetSite" required>
+                                                                                            <option value="">Select Site ...</option>
                                                                                         </select>
 
 																						<div ng-show="form.$submitted || form.AssetSite.$touched">
@@ -235,86 +236,31 @@
                                                                             <div class="row">
                                                                                 <div class="col-md-6">
                                                                                     <div class="form-group">
-                                                                                        <label class="control-label">Block   <span class="red-star">*</span> </label>
-                                                                                        <!--<input type="text" class="form-control"-->
-                                                                                        <!--ng-model="selectedRole"-->
-                                                                                        <!--uib-typeahead="role as role.name for role in userRoles | filter:$viewValue | limitTo:5"-->
-                                                                                        <!--name="UserRole" ng-minlength="5" ng-maxlength="50" autofocus-->
-                                                                                        <!--required >-->
-                                                                                        <select class="form-control " ng-model="asset.block"  ng-options="block as block.name for block in blocks" name="AssetBlock" required>
-                                                                                            <option value="">Please select Block ...</option>
+                                                                                        <label class="control-label">Block  </label>
+                                                                                        <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
+                                                                                        <select class="form-control " ng-model="selectedBlock"  ng-options="block as block for  block in  blocks" name="AssetBlock"  ng-change="loadFloors()">
+                                                                                            <option value="">Select Block ...</option>
                                                                                         </select>
-
-																						<div ng-show="form.$submitted || form.AssetBlock.$touched">
-												                                         <div ng-show="form.AssetBlock.$dirty || form.AssetBlock.$invalid">
-												                                             <p class="help-block" style="color: maroon"
-												                                                ng-show="form.AssetBlock.$error.required">Block is
-												                                                 required.</p>
-												                                             <p class="help-block" style="color: maroon"
-												                                                ng-show="form.AssetBlock.$error.minlength">Block is
-												                                                 required to be at least 5 character.</p>
-												                                             <p class="help-block" style="color: maroon"
-												                                                ng-show="form.AssetBlock.$error.maxlength">Block
-												                                                 cannot be longer than 50 characters.</p>
-												                                         </div>
-												                                     	</div>
-
-
                                                                                     </div>
                                                                                 </div>
                                                                                 <div class="col-md-6">
                                                                                     <div class="form-group">
-                                                                                        <label class="control-label">Floor    <span class="red-star">*</span> </label>
-                                                                                        <!--<input type="text" class="form-control"-->
-                                                                                        <!--ng-model="selectedRole"-->
-                                                                                        <!--uib-typeahead="role as role.name for role in userRoles | filter:$viewValue | limitTo:5"-->
-                                                                                        <!--name="UserRole" ng-minlength="5" ng-maxlength="50" autofocus-->
-                                                                                        <!--required >-->
-                                                                                        <select class="form-control " ng-model="asset.floor"  ng-options="floor as floor.name for floor in floors" name="AssetFloor" required>
+                                                                                        <label class="control-label">Floor </label>
+                                                                                        <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
+                                                                                        <select class="form-control " ng-model="selectedFloor" ng-options="floor as floor for floor in floors" name="AssetFloor" ng-change="loadZones()" >
                                                                                             <option value="">Please select Floor ...</option>
                                                                                         </select>
-
-																						<div ng-show="form.$submitted || form.AssetFloor.$touched">
-												                                         <div ng-show="form.AssetFloor.$dirty || form.AssetFloor.$invalid">
-												                                             <p class="help-block" style="color: maroon"
-												                                                ng-show="form.AssetFloor.$error.required">Floor is
-												                                                 required.</p>
-												                                             <p class="help-block" style="color: maroon"
-												                                                ng-show="form.AssetFloor.$error.minlength">Floor is
-												                                                 required to be at least 5 character.</p>
-												                                             <p class="help-block" style="color: maroon"
-												                                                ng-show="form.AssetFloor.$error.maxlength">Floor
-												                                                 cannot be longer than 50 characters.</p>
-												                                         </div>
-												                                     	</div>
-
                                                                                     </div>
                                                                                 </div>
                                                                                 <div class="col-md-6">
                                                                                     <div class="form-group">
-                                                                                        <label class="control-label">Zone     <span class="red-star">*</span> </label>
-                                                                                        <!--<input type="text" class="form-control"-->
-                                                                                        <!--ng-model="selectedRole"-->
-                                                                                        <!--uib-typeahead="role as role.name for role in userRoles | filter:$viewValue | limitTo:5"-->
-                                                                                        <!--name="UserRole" ng-minlength="5" ng-maxlength="50" autofocus-->
-                                                                                        <!--required >-->
-                                                                                        <select class="form-control " ng-model="asset.zone"  ng-options="zone as zone.name for zone in zones" name="AssetZone" required>
-                                                                                            <option value="">Please select Zone  ...</option>
+                                                                                        <label class="control-label">Zone  </label>
+                                                                                        <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
+                                                                                        <select class="form-control " ng-model="selectedZone"  ng-options="zone as zone for zone in zones" name="AssetZone" >
+                                                                                            <option value="">Select Zone  ...</option>
                                                                                         </select>
 
-																						<div ng-show="form.$submitted || form.AssetZone.$touched">
-												                                         <div ng-show="form.AssetZone.$dirty || form.AssetZone.$invalid">
-												                                             <p class="help-block" style="color: maroon"
-												                                                ng-show="form.AssetZone.$error.required">Site is
-												                                                 required.</p>
-												                                             <p class="help-block" style="color: maroon"
-												                                                ng-show="form.AssetZone.$error.minlength">Site is
-												                                                 required to be at least 5 character.</p>
-												                                             <p class="help-block" style="color: maroon"
-												                                                ng-show="form.AssetZone.$error.maxlength">Site
-												                                                 cannot be longer than 50 characters.</p>
-												                                         </div>
-												                                     	</div>
+																						
 
                                                                                     </div>
                                                                                 </div>
@@ -334,20 +280,23 @@
 
                                                                             <div class="row">
                                                                                 <div class="col-md-6">
-                                                                                    <div class="form-group selectcon" style="padding-top:25px;">
+                                                                                    <div class="form-group selectcon is-empty">
 
-
-                                                                                        <div class="" style="float:left;width:90%;">
-                                                                                            <select class="form-control" ng-model="asset.manufacturer" ng-options="manufacturer.manufacturer as manufacturer.manufacturer for manufacturer in manufacturers">
-                                                                                                <option value="">Please select Manufacturer ..</option>
+                                                                                     <div class="row">
+                                                                                        <div class="col-md-10 pad-r-0px">
+                                                                                            <label class="control-label">Manufacturer </label>
+                                                                                            <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
+                                                                                            <select class="form-control ng-pristine ng-valid ng-touched" ng-model="assetObj.manufacturer" ng-options="manufacturer.manufacturer as manufacturer.manufacturer for manufacturer in manufacturers">
+                                                                                                <option value="">Select Manufacturer ..</option>
                                                                                             </select>
 
                                                                                         </div>
-                                                                                        <div class="" style="float:left;">
-                                                                                            <a href="javascript:;"  data-toggle="collapse" data-parent="#accordian" data-target="#addManufacturer" class="btn btn-round btn-fab btn-fab-mini btn-simple" aria-expanded="false" aria-controls="collapseExample">
+                                                                                        <div class="col-md-2 pdng-top25">
+                                                                                            <a href="javascript:void(0)"  data-toggle="collapse" data-parent="#accordian" data-target="#addManufacturer" class="btn btn-round btn-fab btn-fab-mini btn-simple" aria-expanded="false" aria-controls="collapseExample">
                                                                                                 <i class="material-icons">add</i>
                                                                                             </a>
                                                                                         </div>
+                                                                                    </div>
 
                                                                                     </div>
                                                                                     <div class="collapse" id="addManufacturer">
@@ -360,15 +309,15 @@
                                                                                 </div>
                                                                                 <div class="col-md-6">
                                                                                     <div class="form-group">
-                                                                                        <label class="control-label">Model Number   <span class="red-star">*</span> </label>
+                                                                                        <label class="control-label">Model Number  <!--  <span class="red-star">*</span>--> </label> 
                                                                                         <input id='assetModel'
-                                                                                               ng-model="asset.model"
+                                                                                               ng-model="assetObj.model"
                                                                                                class='form-control'
                                                                                                name='assetModel'
                                                                                                type='text' value=""
                                                                                                autofocus
                                                                                                 />
-																						<div ng-show="form.$submitted || form.assetModel.$touched">
+																						<!-- <div ng-show="form.$submitted || form.assetModel.$touched">
 																							<div ng-show="form.assetModel.$dirty || form.assetModel.$invalid">
 																								<p class="help-block" style="color:maroon"
 																								   ng-show="form.assetModel.$error.required">
@@ -387,24 +336,23 @@
 																									Asset Model can only contain letters, digits and space.
 																								</p>
 																							</div>
-																						</div>
+																						</div> -->
 
                                                                                     </div>
-                                                                                </div>
-
+                                                                                 </div>
                                                                             </div>
                                                                             <div class="row">
                                                                                 <div class="col-md-6">
                                                                                     <div class="form-group">
-                                                                                        <label class="control-label">Serial Number   <span class="red-star">*</span> </label>
+                                                                                        <label class="control-label">Serial Number   <!-- <span class="red-star">*</span>  --></label>
                                                                                         <input id='assetSerial'
-                                                                                               ng-model="asset.serial"
+                                                                                               ng-model="assetObj.serial"
                                                                                                class='form-control'
                                                                                                name='assetSerial'
                                                                                                type='text' value=""
                                                                                                autofocus
                                                                                                 />
-																						<div ng-show="form.$submitted || form.assetSerial.$touched">
+																						<!-- <div ng-show="form.$submitted || form.assetSerial.$touched">
 																							<div ng-show="form.assetSerial.$dirty || form.assetSerial.$invalid">
 																								<p class="help-block" style="color:maroon"
 																								   ng-show="form.assetSerial.$error.required">
@@ -423,7 +371,7 @@
 																									Asset Serial can only contain letters, digits and space.
 																								</p>
 																							</div>
-																						</div>
+																						</div> -->
                                                                                     </div>
                                                                                 </div>
                                                                                 <div class="col-md-6">
@@ -437,9 +385,9 @@
                                                                                 </div>
                                                                                 <div class="col-md-6">
                                                                                     <div class="form-group">
-                                                                                        <label class="control-label">Purchase price     <span class="red-star">*</span> </label>
+                                                                                        <label class="control-label">Purchase price  <!--    <span class="red-star">*</span> --> </label>
                                                                                         <input id='assetPurchasePrice'
-                                                                                               ng-model="asset.purchasePrice"
+                                                                                               ng-model="assetObj.purchasePrice"
                                                                                                class='form-control'
                                                                                                name='assetPurchase'
                                                                                                type='text' value=""
@@ -451,9 +399,9 @@
 
                                                                                 <div class="col-md-6">
                                                                                     <div class="form-group">
-                                                                                        <label class="control-label">Current Price     <span class="red-star">*</span> </label>
+                                                                                        <label class="control-label">Current Price <!--     <span class="red-star">*</span> --> </label>
                                                                                         <input id='assetCurrentPrice'
-                                                                                               ng-model="asset.currentPrice"
+                                                                                               ng-model="assetObj.currentPrice"
                                                                                                class='form-control'
                                                                                                name='assetCurrent'
                                                                                                type='text' value=""
@@ -465,9 +413,9 @@
 
                                                                                 <div class="col-md-6">
                                                                                     <div class="form-group">
-                                                                                        <label class="control-label">Estimated dispose price     <span class="red-star">*</span> </label>
+                                                                                        <label class="control-label">Estimated dispose price     <!-- <span class="red-star">*</span> --> </label>
                                                                                         <input id='assetEstimate'
-                                                                                               ng-model="asset.estDisposePrice"
+                                                                                               ng-model="assetObj.estDisposePrice"
                                                                                                class='form-control'
                                                                                                name='assetEstimate'
                                                                                                type='text' value=""
@@ -478,19 +426,22 @@
                                                                                 </div>
 
                                                                                 <div class="col-md-6">
-                                                                                    <div class="form-group selectcon" style="padding-top:25px;">
+                                                                                    <div class="form-group selectcon is-empty">
 
+                                                                                         <div class="row">
+                                                                                            <div class="col-md-10 pad-r-0px">
+                                                                                                <label class="control-label">Service Provider </label>
+                                                                                                <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
+                                                                                                <select class="form-control" ng-model="assetObj.serviceProvider" ng-options="serviceprovider.serviceprovider as serviceprovider.serviceprovider for serviceprovider in serviceproviders">
+                                                                                                    <option value="">Select Service Provider  ..</option>
+                                                                                                </select>
 
-                                                                                        <div class="" style="float:left;width:90%;">
-                                                                                            <select class="form-control" ng-model="asset.serviceProvider" ng-options="serviceprovider.serviceprovider as serviceprovider.serviceprovider for serviceprovider in serviceproviders">
-                                                                                                <option value="">Please select Service Provider  ..</option>
-                                                                                            </select>
-
-                                                                                        </div>
-                                                                                        <div class="" style="float:left;">
-                                                                                            <a href="javascript:;"  data-toggle="collapse" data-parent="#accordian" data-target="#addServiceProvicer" class="btn btn-round btn-fab btn-fab-mini btn-simple" aria-expanded="false" aria-controls="collapseExample">
-                                                                                                <i class="material-icons">add</i>
-                                                                                            </a>
+                                                                                            </div>
+                                                                                            <div class="col-md-2 pdng-top25">
+                                                                                                <a href="javascript:void(0)"  data-toggle="collapse" data-parent="#accordian" data-target="#addServiceProvicer" class="btn btn-round btn-fab btn-fab-mini btn-simple" aria-expanded="false" aria-controls="collapseExample">
+                                                                                                    <i class="material-icons">add</i>
+                                                                                                </a>
+                                                                                            </div>
                                                                                         </div>
 
                                                                                     </div>
@@ -503,19 +454,22 @@
                                                                                     </div>
                                                                                 </div>
                                                                                 <div class="col-md-6">
-                                                                                    <div class="form-group selectcon" style="padding-top:25px;">
+                                                                                    <div class="form-group selectcon is-empty">
 
+                                                                                        <div class="row">
+                                                                                            <div class="col-md-10 pad-r-0px">
+                                                                                                <label class="control-label">Service Warranty Type </label>
+                                                                                                <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
+                                                                                                <select class="form-control" ng-model="assetObj.serviceWarranty" ng-options="servicewarranty.servicewarranty as servicewarranty.servicewarranty for servicewarranty in servicewarranties">
+                                                                                                    <option value="">Select Service Warranty Type ..</option>
+                                                                                                </select>
 
-                                                                                        <div class="" style="float:left;width:90%;">
-                                                                                            <select class="form-control" ng-model="asset.serviceWarranty" ng-options="servicewarranty.servicewarranty as servicewarranty.servicewarranty for servicewarranty in servicewarranties">
-                                                                                                <option value="">Please select Service Warranty Type ..</option>
-                                                                                            </select>
-
-                                                                                        </div>
-                                                                                        <div class="" style="float:left;">
-                                                                                            <a href="javascript:;"  data-toggle="collapse" data-parent="#accordian" data-target="#addWarrantyType" class="btn btn-round btn-fab btn-fab-mini btn-simple" aria-expanded="false" aria-controls="collapseExample">
-                                                                                                <i class="material-icons">add</i>
-                                                                                            </a>
+                                                                                            </div>
+                                                                                            <div class="col-md-2 pdng-top25">
+                                                                                                <a href="javascript:void(0)"  data-toggle="collapse" data-parent="#accordian" data-target="#addWarrantyType" class="btn btn-round btn-fab btn-fab-mini btn-simple" aria-expanded="false" aria-controls="collapseExample">
+                                                                                                    <i class="material-icons">add</i>
+                                                                                                </a>
+                                                                                            </div>
                                                                                         </div>
 
                                                                                     </div>
@@ -532,7 +486,7 @@
                                                                                     <div class="form-group">
                                                                                         <label class="control-label">Acquired Date</label>
                                                                                         <span class="form-control-feedback calender-icon"><i class="material-icons">date_range</i></span>
-                                                                                        <input type="text" class="form-control datepicker"  id="dateAcquired" ng-model="asset.dateAcquired" placeholder="{{dateFilterFrom | date:'dd-MMM-yyyy'}}"/>
+                                                                                        <input type="text" class="form-control datepicker"  id="dateAcquired" ng-model="assetObj.dateAcquired" placeholder="{{dateFilterFrom | date:'dd-MMM-yyyy'}}"/>
 
                                                                                     </div>
                                                                                 </div>
@@ -668,11 +622,11 @@
 
                                                                                 <div class="col-md-10">
                                                                                     <div class="form-group">
-                                                                                        <button class="btn btn-success" type="submit" ng-click="saveChecklist()"
-                                                                                                id="form-button-save">
-	                                  <span class="btn-label">
-	                        <i class="material-icons">check</i>
-	                   		 </span> Save
+                                                                                        <button class="btn btn-success" type="submit" 
+                                                                                                id="form-button-save" ng-click="saveAsset()">
+                                                            	                        <span class="btn-label">
+                                                            	                        <i class="material-icons">check</i>
+                                                            	                   		 </span> Save
                                                                                         </button>
                                                                                         <button class="btn btn-danger" type="button"
                                                                                                 ng-click="cancelChecklist()" id="cancel-button">
@@ -936,9 +890,9 @@
                                                                                     <div class="form-group">
                                                                                         <button class="btn btn-success" type="submit" ng-click="saveChecklist()"
                                                                                                 id="form-button-save">
-	                                  <span class="btn-label">
-	                        <i class="material-icons">check</i>
-	                   		 </span> Save
+                                                                                              <span class="btn-label">
+                                                                                    <i class="material-icons">check</i>
+                                                                               		 </span> Save
                                                                                         </button>
                                                                                         <button class="btn btn-danger" type="button"
                                                                                                 ng-click="cancelChecklist()" id="cancel-button">
@@ -1347,7 +1301,7 @@
                                                     </div>
                                                     <div class="wizard-footer">
                                                         <div class="pull-right">
-                                                            <input type='button' class='btn btn-next btn-fill btn-success btn-wd' name='next' value='Save and Continue' />
+                                                            <input type='button' class='btn btn-next btn-fill btn-success btn-wd' name='next' value='Save and Continue'  />
                                                             <input type='button' class='btn btn-finish btn-fill btn-success btn-wd' name='finish' value='Finish' />
                                                         </div>
                                                         <div class="pull-left">
