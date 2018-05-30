@@ -114,6 +114,7 @@ export class CreateQuotationPage2 {
             console.log(response.json());
             this.allSites = response.json();
             this.selectedSite=this.allSites[0].name;
+            this.siteDetails= this.allSites[0];
         })
 
         this.getRateCardTypes();
@@ -264,6 +265,63 @@ export class CreateQuotationPage2 {
         }
     }
 
+    submitQuotation()
+    {
+        if(this.rates.length!=0)
+        {
+
+            if(this.siteDetails){
+                console.log("Save quotation with site id");
+                this.quotationDetails = {
+                    "title":this.quotation.title,
+                    "description":this.quotation.description,
+                    "rateCardDetails":this.rates,
+                    "sentByUserId":this.sentByUserId,
+                    "sentByUserName":this.sentByUserName,
+                    "sentToUserId":this.sentToUserId,
+                    "sentToUserName":this.sentToUserName,
+                    "createdByUserId":this.sentByUserId,
+                    "createdByUserName":this.sentByUserName,
+                    "clientEmailId": this.clientEmailId,
+                    "siteId":this.siteDetails.id,
+                    "projectId":this.siteDetails.projectId,
+                    "projectName":this.siteDetails.projectName,
+                    "siteName":this.siteDetails.name,
+                    "grandTotal":this.grandTotal,
+                    "drafted":true,
+                    "mode":"submit"
+                };
+
+                this.saveQuotationDetails(this.quotationDetails)
+            }else{
+                console.log("Save Quotation without site id");
+
+
+                this.quotationDetails = {
+                    "title":this.quotation.title,
+                    "description":this.quotation.description,
+                    "rateCardDetails":this.rates,
+                    "sentByUserId":this.sentByUserId,
+                    "sentByUserName":this.sentByUserName,
+                    "sentToUserId":this.sentToUserId,
+                    "sentToUserName":this.sentToUserName,
+                    "createdByUserId":this.sentByUserId,
+                    "createdByUserName":this.sentByUserName,
+                    "grandTotal":this.grandTotal,
+                    "drafted":true
+                };
+                this.presentAlert(this.quotationDetails,'Save Without Selecting Site');
+            }
+
+
+        }
+        else
+        {
+            demo.showSwal('basic','Add Quotation')
+
+        }
+    }
+
     saveQuotationDetails(quotationDetails)
     {
         console.log("selected site in save Rates");
@@ -307,7 +365,7 @@ export class CreateQuotationPage2 {
                     }
                 }
                 this.componentService.showToastMessage('Quotation Successfully Drafted','bottom');
-                // this.navCtrl.setRoot(QuotationPage);
+                this.navCtrl.setRoot(QuotationPage);
 
             },err=>{
                 this.componentService.showToastMessage('Error in drafting quotation, your changes cannot be saved!','bottom');

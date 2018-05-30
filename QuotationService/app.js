@@ -116,7 +116,7 @@ function setupMasterData(){
         if(!result){
             RateCardType.create({
                 "name":"MATERIAL",
-                "uom":"PerQty"
+                "uom":"PER_QTY"
             })
         }
     })
@@ -125,7 +125,7 @@ function setupMasterData(){
         if(!res){
             RateCardType.create({
                 "name":"LABOUR",
-                "uom":"PerHour"
+                "uom":"PER_HOUR"
             })
         }
     })
@@ -134,7 +134,7 @@ function setupMasterData(){
         if(!res){
             RateCardType.create({
                 "name":"SERVICE",
-                "uom":"Fixed"
+                "uom":"FIXED"
             })
         }
     })

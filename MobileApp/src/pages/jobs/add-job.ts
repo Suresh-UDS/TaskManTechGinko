@@ -124,6 +124,17 @@ export class CreateJobPage {
 
             if(this.ticket){
                 this.newJob={
+                    "title":this.title,
+                    "description":this.description,
+                    "plannedStartTime":this.plannedStartTime,
+                    "plannedEndTime":this.plannedEndTime,
+                    "plannedHours":this.plannedHours,
+                    "jobStatus":"ASSIGNED",
+                    "comments":"test",
+                    "siteId":this.siteId,
+                    "employeeId":this.employ,
+                    "userId":this.userId,
+                    "locationId":1,
                     "ticketId":this.ticket.id
                 }
             }
