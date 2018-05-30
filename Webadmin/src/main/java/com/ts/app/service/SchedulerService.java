@@ -33,6 +33,7 @@ import com.ts.app.domain.AbstractAuditingEntity;
 import com.ts.app.domain.Attendance;
 import com.ts.app.domain.Employee;
 import com.ts.app.domain.EmployeeAttendanceReport;
+import com.ts.app.domain.EmployeeProjectSite;
 import com.ts.app.domain.EmployeeShift;
 import com.ts.app.domain.Job;
 import com.ts.app.domain.JobStatus;
@@ -659,8 +660,9 @@ public class SchedulerService extends AbstractService {
 		}	
 	}
 	
-	//@Scheduled(cron="0 0 0 1/1 * ?") //Test to run every 30 seconds
+	@Scheduled(cron="0 0 0/1 * * ?") // runs every 1 hr
 	public void attendanceCheckOutTask() {
+		Calendar currCal = Calendar.getInstance();
 		Calendar startCal = Calendar.getInstance();
 		startCal.set(Calendar.HOUR_OF_DAY,0);
 		startCal.set(Calendar.MINUTE,0);
@@ -669,17 +671,56 @@ public class SchedulerService extends AbstractService {
 		endCal.set(Calendar.MINUTE,59);
 		java.sql.Date startDate = new java.sql.Date(startCal.getTimeInMillis());
 		java.sql.Date endDate = new java.sql.Date(endCal.getTimeInMillis());
-		List<Attendance> dailyAttnList = attendanceRepository.findByCheckInDate(startDate, endDate);
+		List<Attendance> dailyAttnList = attendanceRepository.findByCheckInDateAndNotCheckout(startDate, endDate);
 		log.debug("Found {} Daily Attendance", dailyAttnList.size());
 
 		if(CollectionUtils.isNotEmpty(dailyAttnList)) {
 			for (Attendance dailyAttn : dailyAttnList) {
 				try {
-					if(dailyAttn.getCheckOutTime() == null) {
-						java.sql.Timestamp endTime = new Timestamp(endCal.getTimeInMillis());
-						dailyAttn.setCheckOutTime(endTime);
-						attendanceRepository.save(dailyAttn);
+					Employee emp = dailyAttn.getEmployee();
+					if(emp != null) {
+						List<EmployeeProjectSite> projSites = emp.getProjectSites();
+						for(EmployeeProjectSite projSite : projSites) {
+							Site site = projSite.getSite();
+							List<Shift> shifts = site.getShifts();
+							for(Shift shift : shifts) {
+								String startTime = shift.getStartTime();
+								String[] startTimeUnits = startTime.split(":");
+								Calendar shiftStartCal = Calendar.getInstance();
+								shiftStartCal.add(Calendar.DAY_OF_MONTH, -1);
+								shiftStartCal.set(Calendar.HOUR_OF_DAY, Integer.parseInt(startTimeUnits[0]));
+								shiftStartCal.set(Calendar.MINUTE, Integer.parseInt(startTimeUnits[1]));
+								shiftStartCal.set(Calendar.SECOND, 0);
+								shiftStartCal.set(Calendar.MILLISECOND, 0);
+								String endTime = shift.getEndTime();
+								String[] endTimeUnits = endTime.split(":");
+								Calendar shiftEndCal = Calendar.getInstance();
+								shiftEndCal.add(Calendar.DAY_OF_MONTH, -1);
+								shiftEndCal.set(Calendar.HOUR_OF_DAY, Integer.parseInt(endTimeUnits[0]));
+								shiftEndCal.set(Calendar.MINUTE, Integer.parseInt(endTimeUnits[1]));
+								shiftEndCal.set(Calendar.SECOND, 0);
+								shiftEndCal.set(Calendar.MILLISECOND, 0);
+								
+								EmployeeShift empShift = empShiftRepo.findEmployeeShiftBySiteAndShift(site.getId(), DateUtil.convertToSQLDate(shiftStartCal.getTime()), DateUtil.convertToSQLDate(shiftEndCal.getTime()));
+								
+								if(empShift != null) { //if employee shift assignment matches with site shift
+									if(dailyAttn.getCheckInTime().before(shiftEndCal.getTime()) && shiftEndCal.getTime().before(currCal.getTime())) { //if the employee checked in before the shift end time
+										//send alert
+										if(currCal.getTime().after(endCal.getTime())) { //if the shift ends before EOD midnight.
+											//check out automatically
+											dailyAttn.setCheckOutTime(new Timestamp(currCal.getTimeInMillis()));
+											dailyAttn.setShiftEndTime(endTime);
+											dailyAttn.setLatitudeOut(dailyAttn.getLatitudeOut());
+											dailyAttn.setLongitudeOut(dailyAttn.getLongitudeOut());
+											attendanceRepository.save(dailyAttn);
+										}
+										break;
+									}
+								}
+							}
+						}
 					}
+					
 				} catch (Exception ex) {
 					log.warn("Failed to checkout daily attendance  ", ex);
 				}
