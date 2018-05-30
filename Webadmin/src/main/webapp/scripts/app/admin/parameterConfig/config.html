@@ -1,0 +1,163 @@
+<div ng-init="initLoad()">
+
+
+                <div class="row">
+
+                    <div class="col-md-12">
+                        <div class="panel panel-default" style="min-height: 200px;">
+
+                            <div class="panel-heading">
+                                Parameter Details
+                            </div>
+                            <div class="panel-body">
+							<form ng-show="!success" name="form" role="form" novalidate
+										ng-submit="saveParameterConfig()"
+										onClick="" class="form-horizontal">
+
+                                <div class="row" >
+
+                                    <div class="col-md-4">
+                                        <div class="form-group selectcon is-empty SelectWithAddbtnCon">
+
+                                            <div class="" style="float:left;width:90%;">
+                                                <label class="control-label">Asset Type </label>
+                                                <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
+												<select class="form-control " ng-model="selectedAssetType"  ng-options="assetType as assetType.name for assetType in assetTypes">
+													<option value="">Select Asset Type...</option>
+                                                 	</select>                                                            
+                                            </div>
+                                            <div class="" style="float:left; width: 10%" >
+                                                <a href="javascript:;" data-toggle="collapse" data-parent="#accordian" data-target="#addAssettype" class="btn btn-round btn-fab btn-fab-mini btn-simple" aria-expanded="false" aria-controls="collapseExample">
+                                                    <i class="material-icons">add</i>
+                                                </a>
+                                            </div>
+                                            <div class="clear"></div>
+                                            <div class="collapse" id="addAssettype">
+                                                <div class="">
+                                                    <input class="input-desc ng-pristine ng-untouched ng-valid" id="assetTypeName" ng-model="assetType.name" name="assetTypeName" type="text" value="" tabindex="0" aria-invalid="false">
+                                                    <a class="btn btn-success" ng-click="addAssetType()" tabindex="0">Add</a>
+                                                </div>
+                                            </div>
+                                            <span class="material-input"></span></div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group selectcon is-empty SelectWithAddbtnCon">
+
+                                            <div class="" style="float:left;width:90%;">
+                                                <label class="control-label">Select Parameter </label>
+                                                <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
+												<select class="form-control " ng-model="selectedParameter"  ng-options="parameter as parameter.name for parameter in parameters">
+													<option value="">Select Parameter...</option>
+                                                 	</select>                                                            
+                                            </div>
+                                            <div class="" style="float:left;width: 10%">
+                                                <a href="javascript:;" data-toggle="collapse" data-parent="#accordian" data-target="#addParameter" class="btn btn-round btn-fab btn-fab-mini btn-simple" aria-expanded="false" aria-controls="collapseExample">
+                                                    <i class="material-icons">add</i>
+                                                </a>
+                                            </div>
+                                            <div class="clear"></div>
+                                            <div class="collapse" id="addParameter">
+                                                <div class="">
+                                                    <input class="input-desc ng-pristine ng-untouched ng-valid" id="parameterName" ng-model="parameter.name" name="parameterName" type="text" value="" tabindex="0" aria-invalid="false">
+                                                    <a class="btn btn-success" ng-click="addParameter()" tabindex="0">Add</a>
+                                                </div>
+                                            </div>
+                                            <span class="material-input"></span></div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group selectcon is-empty SelectWithAddbtnCon">
+
+                                            <div class="" style="float:left;width:90%;">
+                                                <label class="control-label">Select Units</label>
+                                                <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
+												<select class="form-control " ng-model="selectedParameterUOM"  ng-options="parameterUOM as parameterUOM.uom for parameterUOM in parameterUOMs">
+													<option value="">Select Units...</option>
+                                                 	</select>                                                            
+                                            </div>
+                                            <div class="" style="float:left;width: 10%">
+                                                <a href="javascript:;" data-toggle="collapse" data-parent="#accordian" data-target="#addUnits" class="btn btn-round btn-fab btn-fab-mini btn-simple" aria-expanded="false" aria-controls="collapseExample">
+                                                    <i class="material-icons">add</i>
+                                                </a>
+                                            </div>
+                                            <div class="clear"></div>
+                                            <div class="collapse" id="addUnits">
+                                                <div class="">
+                                                    <input class="input-desc ng-pristine ng-untouched ng-valid" id="parameterUOMName" ng-model="parameterUOM.uom" name="parameterUOMName" type="text" value="" tabindex="0" aria-invalid="false">
+                                                    <a class="btn btn-success" ng-click="addParameterUOM()" tabindex="0">Add</a>
+                                                </div>
+                                            </div>
+                                            <span class="material-input"></span></div>
+                                    </div>
+
+                                </div>
+
+                                <div class="row">
+
+                                    <div class="col-md-6">
+                                        <div class="checkbox">
+                                            <label>
+                                                <input type="checkbox" name="terms" ng-model="consumptionMonitoringRequired"> Consumption Monitoring Required
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 txt-align-rgt">
+                                        <button class="btn btn-success" type="submit"
+                                                id="form-button-add">
+                                            <span class="btn-label"><i class="material-icons">add</i></span> Add
+                                        </button>
+                                    </div>
+
+                                </div>
+
+							</form>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="panel panel-default" style="min-height: 200px;">
+
+                            <div class="panel-heading">
+                                Parameters
+                            </div>
+                            <div class="panel-body" ng-init="loadParameterConfigs();">
+
+                                <div class="table-responsive tablecard">
+                                    <table class="table table-striped">
+
+                                        <thead>
+                                        <tr>
+                                            <th>Asset Type</th>
+                                            <th>Parameter</th>
+                                            <th>Unit</th>
+                                            <th>Consumption Monitoring Required</th>
+                                            <th class="text-right" >Actions</th>
+                                        </tr>
+
+                                        </thead>
+
+                                        <tbody>
+                                        
+                                        	<tr ng-repeat="parameterConfig in parameterConfigs" repeat-done="initDataTables()">
+											<td>{{parameterConfig.assetType}}</td>
+											<td>{{parameterConfig.name}}</td>
+			                                	<td>{{parameterConfig.uom}}</td>
+										   	<td>{{parameterConfig.consumptionMonitoringRequired}}</td>
+			                                 <td class="text-right">
+			                                 	<a  has-permission="" class="btn btn-simple btn-danger" ng-click="deleteParameterConfig(parameterConfig.id)"><i class="material-icons">delete_forever</i><div class="ripple-container"></div></a>
+			                                 </td>
+										
+										</tr>
+
+                                        </tbody>
+                                    </table>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+</div>

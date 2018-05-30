@@ -95,7 +95,7 @@ import {AssetView} from "../pages/asset-view/asset-view";
 import {GetAssetReading} from "../pages/asset-view/get-asset-reading";
 import {QRScanner} from "@ionic-native/qr-scanner";
 import {ScanQR} from "../pages/asset-list/scanQR";
-
+import {IonicImageViewerModule} from "ionic-img-viewer";
 @NgModule({
   declarations: [
     MyApp,
@@ -170,6 +170,7 @@ import {ScanQR} from "../pages/asset-list/scanQR";
         backButtonIcon: 'ios-arrow-back',
         iconMode: 'md'
     }),
+    IonicImageViewerModule,
     IonicStorageModule.forRoot()
   ],
   bootstrap: [IonicApp],

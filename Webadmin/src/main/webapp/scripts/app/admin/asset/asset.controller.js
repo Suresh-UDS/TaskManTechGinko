@@ -127,6 +127,7 @@ angular.module('timeSheetApp')
         $scope.initMaterialWizard();
 
         $scope.editAsset = function(){
+        	$scope.loadAssetType();
         	AssetComponent.findById($stateParams.id).then(function(data){
         		$scope.asset=data;
         		console.log($scope.asset);
@@ -396,7 +397,7 @@ angular.module('timeSheetApp')
              $scope.initPage();
              $scope.loadAssets(); 
              $scope.setPage(1);
-          
+        
          }
 
           /*
@@ -415,6 +416,14 @@ angular.module('timeSheetApp')
             $scope.pages.currPage = page;
             $scope.search();
         }
+        
+        $scope.loadAssetType = function() { 
+        	AssetComponent.loadAssetType().then(function(resp){ 
+        		console.log('Asset Types' +JSON.stringify(resp));
+        		$scope.assetTypes = resp;
+        	});
+        }
+        
 
 
     });

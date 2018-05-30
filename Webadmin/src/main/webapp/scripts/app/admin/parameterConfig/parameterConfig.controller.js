@@ -2,8 +2,8 @@
 
 angular.module('timeSheetApp')
 		    .controller(
-				'VendorController',
-				function($scope, $rootScope, $state, $timeout, VendorComponent,AssetTypeComponent,
+				'ParameterConfigController',
+				function($scope, $rootScope, $state, $timeout, ParameterConfigComponent,ParameterComponent, ParameterUOMComponent, AssetTypeComponent,
 						$http, $stateParams,
 						$location) {
         $rootScope.loadingStop();
@@ -15,6 +15,14 @@ angular.module('timeSheetApp')
         $scope.searchCriteria = {};
         $scope.pages = { currPage : 1};
         $scope.isEdit = !!$stateParams.id;
+        
+        $scope.parameterConfig = {};
+        
+        $scope.assetType = {};
+        
+        $scope.parameter = {};
+        
+        $scope.consumptionMonitoringRequired = false;
 
         console.log($stateParams)
                     var that =  $scope;
@@ -54,21 +62,93 @@ angular.module('timeSheetApp')
 
         $scope.initMaterialWizard();
         
-        $scope.getVendorDetails = function(id, mode) {
+        $scope.loadAllAssetTypes = function() {
+        		AssetTypeComponent.findAll().then(function (data) {
+                $scope.selectedAssetType = null;
+                $scope.assetTypes = data;
+                $scope.loadingStop();
+            });
+        }
+        
+        $scope.addAssetType = function () {
+            console.log($scope.assetType.name);
+            if($scope.assetType){
+                console.log("AsseType entered");
+                AssetTypeComponent.create($scope.assetType).then(function (response) {
+                    console.log(response);
+                    $scope.assetType = null;
+                    $scope.showNotifications('top','center','success','Asset Type Added Successfully');
+                    $scope.loadAllAssetTypes();
+
+                })
+            }else{
+                console.log("Asset type not entered");
+            }
+        };
+        
+        $scope.loadAllParameters = function() {
+        		ParameterComponent.findAll().then(function (data) {
+	            $scope.selectedParameter = null;
+	            $scope.parameters = data;
+	            $scope.loadingStop();
+	        });
+	    }
+	    
+	    $scope.addParameter = function () {
+	        console.log($scope.parameter.name);
+	        if($scope.parameter){
+	            console.log("Parameter entered");
+	            ParameterComponent.create($scope.parameter).then(function (response) {
+	                console.log(response);
+	                $scope.parameter = null;
+	                $scope.showNotifications('top','center','success','Parameter Added Successfully');
+	                $scope.loadAllParameters();
+	
+	            })
+	        }else{
+	            console.log("Parameter not entered");
+	        }
+	    };
+	    
+        $scope.loadAllParameterUOMs = function() {
+	    		ParameterUOMComponent.findAll().then(function (data) {
+	            $scope.selectedParameterUOM = null;
+	            $scope.parameterUOMs = data;
+	            $scope.loadingStop();
+	        });
+	    }
+	    
+	    $scope.addParameterUOM = function () {
+	        console.log($scope.parameterUOM.name);
+	        if($scope.parameterUOM){
+	            console.log("ParameterUOM entered");
+	            ParameterUOMComponent.create($scope.parameterUOM).then(function (response) {
+	                console.log(response);
+	                $scope.parameterUOM = null;
+	                $scope.showNotifications('top','center','success','Parameter UOM Added Successfully');
+	                $scope.loadAllParameterUOMs();
+	
+	            })
+	        }else{
+	            console.log("Parameter UOM not entered");
+	        }
+	    };
+        
+        $scope.getParameterConfigDetails = function(id, mode) {
         		$scope.isEdit = (mode == 'edit' ? true : false)
-            VendorComponent.findById(id).then(function (data) {
-                $scope.vendor = data;
+            ParameterConfigComponent.findById(id).then(function (data) {
+                $scope.parameterConfig = data;
             });
         };
 
-        $scope.editVendor = function(){
-        		VendorComponent.findById($stateParams.id).then(function(data){
-	        		$scope.vendor=data;
-	        		console.log($scope.vendor);
+        $scope.editParameterConfig = function(){
+        		ParameterConfigComponent.findById($stateParams.id).then(function(data){
+	        		$scope.parameterConfig=data;
+	        		console.log($scope.parameterConfig);
 	        	})
         };
         
-        $scope.loadVendors = function(){
+        $scope.loadParameterConfigs = function(){
         		$scope.search();
         };
 
@@ -82,19 +162,20 @@ angular.module('timeSheetApp')
 
             $scope.searchCriteria.currPage = currPageVal;
             console.log('Selected  name -' + $scope.selectedName);
-            console.log('search criteria - '+JSON.stringify($rootScope.searchCriteriaVendor));
-            if(!$scope.selectedName) {
+            console.log('Selected  asset type  -' + $scope.selectedAssetType);
+            console.log('search criteria - '+JSON.stringify($rootScope.searchCriteriaParameterConfig));
+            if(!$scope.selectedName && !$scope.selectedAssetType) {
             		$scope.searchCriteria.findAll = true;
             }
             console.log($scope.searchCriteria);
-            VendorComponent.search($scope.searchCriteria).then(function (data) {
+            ParameterConfigComponent.search($scope.searchCriteria).then(function (data) {
                 console.log(data);
-                $scope.vendors = data.transactions;
-                $scope.vendorsLoader = true;
+                $scope.parameterConfigs = data.transactions;
+                $scope.parameterConfigsLoader = true;
                 $scope.loadingStop();
                 $scope.pages.currPage = data.currPage;
                 $scope.pages.totalPages = data.totalPages;
-                if($scope.vendors == null){
+                if($scope.parameterConfigs == null){
                     $scope.pages.startInd = 0;
                 }else{
                     $scope.pages.startInd = (data.currPage - 1) * 10 + 1;
@@ -115,24 +196,36 @@ angular.module('timeSheetApp')
         $scope.initPage=function (){
 
             $scope.loadAllAssetTypes();
+            $scope.loadAllParameters();
+            $scope.loadAllParameterUOMs();
         		if($scope.isEdit){
-        			console.log("edit vendor")
-        			$scope.editVendor();
+        			console.log("edit parameterConfig")
+        			$scope.editParameterConfig();
         		}else {
         		}
         }
 
 
 
-        $scope.saveVendor = function () {
+        $scope.saveParameterConfig = function () {
 	        	$scope.error = null;
 	        	$scope.success =null;
-	        	console.log('vendor details ='+ JSON.stringify($scope.vendor));
-	        	var post = $scope.isEdit ? VendorComponent.update : VendorComponent.create
-	        	post($scope.vendor).then(function () {
+	        	if($scope.selectedAssetType){
+	        	    $scope.parameterConfig.assetType = $scope.selectedAssetType.name;
+	        }
+	        	if($scope.selectedParameter){
+	        	    $scope.parameterConfig.name = $scope.selectedParameter.name;
+	        }
+	        	if($scope.selectedParameterUOM){
+	        	    $scope.parameterConfig.uom = $scope.selectedParameterUOM.uom;
+	        }
+	        	$scope.parameterConfig.consumptionMonitoringRequired  = $scope.consumptionMonitoringRequired 
+	        	console.log('parameterConfig details ='+ JSON.stringify($scope.parameterConfig));
+	        	var post = $scope.isEdit ? ParameterConfigComponent.update : ParameterConfigComponent.create
+	        	post($scope.parameterConfig).then(function () {
 	                $scope.success = 'OK';
-	                $scope.showNotifications('top','center','success','Vendor Saved Successfully');
-	                $location.path('/vendor-list');
+	                $scope.showNotifications('top','center','success','Parameter Configuration Saved Successfully');
+	                $location.path('/parameter-config');
 	            }).catch(function (response) {
 	                $scope.success = null;
 	                console.log('Error - '+ response.data);
@@ -148,17 +241,17 @@ angular.module('timeSheetApp')
 
         $scope.refreshPage = function(){
             $scope.clearFilter();
-            // $scope.loadVendors();
+            // $scope.loadParameterConfigs();
         }
 
-        $scope.deleteConfirm = function (vendor){
-        		$scope.deleteVendorId= vendor.id;
+        $scope.deleteConfirm = function (parameterConfig){
+        		$scope.deleteParameterConfigId= parameterConfig.id;
         }
 
-        $scope.deleteVendor = function () {
-        		VendorComponent.remove($scope.deleteVendorId).then(function(){
+        $scope.deleteParameterConfig = function (parameterConfigId) {
+        		ParameterConfigComponent.remove(parameterConfigId).then(function(){
 	            	$scope.success = 'OK';
-	            	$state.reload();
+	            	$scope.initLoad();
 	        	});
         };
 

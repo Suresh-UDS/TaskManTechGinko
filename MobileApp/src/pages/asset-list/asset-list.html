@@ -25,14 +25,38 @@
     </ion-fab>
 
   <ion-list>
-    <ion-item *ngFor="let asset of assetList">
-      <ion-thumbnail item-start>
-        <img [src]=asset.img>
-      </ion-thumbnail>
-      <h2>{{asset.name}}</h2>
-      <p>{{asset.assetGroup}}</p>
-      <button ion-button clear item-end (click)="viewAsset(asset)" >View</button>
+    <ion-item *ngFor="let asset of assetList" (click)="viewAsset(asset)" class="padding-left0">
+
+        <ion-row no-margin="">
+            <ion-col col-4 no-padding="">
+                <ion-thumbnail item-start class="margin-bottom0 margin-top0">
+                    <img [src]=asset.img imageViewer/>
+                </ion-thumbnail>
+            </ion-col>
+            <ion-col col-7 no-padding="" class="ver-center">
+                <div>
+                    <p text-left="" class="padding-bottom5">{{asset.name}}</p>
+                    <p text-left="" class="fnt-12">{{asset.assetGroup}}</p>
+                </div>
+            </ion-col>
+            <ion-col col-1 no-padding="" class="ver-center">
+                <button ion-button clear item-end  >
+                    <ion-icon name="md-eye"></ion-icon>
+                </button>
+            </ion-col>
+        </ion-row>
+
+
+      <!--<ion-thumbnail item-start>-->
+        <!--<img [src]=asset.img imageViewer/>-->
+      <!--</ion-thumbnail>-->
+      <!--<h2>{{asset.name}}</h2>-->
+      <!--<p>{{asset.assetGroup}}</p>-->
+      <!--<button ion-button clear item-end  >-->
+          <!--<ion-icon name="md-eye"></ion-icon>-->
+      <!--</button>-->
     </ion-item>
+
   </ion-list>
 
 

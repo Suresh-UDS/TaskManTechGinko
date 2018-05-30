@@ -1,12 +1,12 @@
 'use strict';
 
 angular.module('timeSheetApp')
-    .factory('AssetComponent', function AssetComponent($http) {
+    .factory('ParameterConfigComponent', function ParameterConfigComponent(ParameterConfig,$http) {
         return {
 
-            create : function(asset,callback){
+            create : function(parameterConfig,callback){
                 var cb = callback || angular.noop;
-                return $http.post('api/asset',asset).then(
+                return $http.post('api/parameterConfig',parameterConfig).then(
                     function (response) {
                         return cb(response);
                     }).catch(
@@ -16,9 +16,9 @@ angular.module('timeSheetApp')
                     })
 
             },
-            update : function(asset,callback){
+            update : function(parameterConfig,callback){
                 var cb = callback || angular.noop;
-                return $http.put('api/asset/'+asset.id,asset).then(
+                return $http.put('api/parameterConfig',parameterConfig).then(
                     function (response) {
                         return cb(response);
                     }).catch(
@@ -33,7 +33,7 @@ angular.module('timeSheetApp')
 
                 var cb = callback || angular.noop;
 
-                return  $http.delete('api/asset/'+id).then(
+                return  $http.delete('api/parameterConfig/'+id).then(
                     function (response) {
                         return cb(response);
                     }).catch(
@@ -42,22 +42,20 @@ angular.module('timeSheetApp')
                         return cb(err);
                     })
             },
+            findAll: function () {
+				return $http.get('api/parameterConfig').then(function (response) {
+					return response.data;
+				});
+			}, 
             findById : function(id){
-                return $http.get('api/asset/'+id).then(function (response) {
+                return $http.get('api/parameterConfig/'+id).then(function (response) {
                     return response.data;
                 });
             },
-            search: function() {
-                return $http.post('api/assets/search').then(function (response) {
+            search: function(searchCriteria) {
+                return $http.post('api/parameterConfig/search',searchCriteria).then(function (response) {
                     return response.data;
                 });
-            },
-            
-            loadAssetType : function() { 
-            	return $http.get('api/assets/type').then(function (response) { 
-            		return response.data;
-            	});
-            	
             }
         };
     });
