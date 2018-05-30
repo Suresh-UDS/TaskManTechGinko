@@ -36,9 +36,10 @@
                                                 <tr>
                                                     <td>Checklist</td>
                                                     <td>
-                                                        <ul class="checkList">
-                                                            <li ng-repeat="checklist in job.checklistItems">
-                                                                {{checklist.name}}
+                                                        <ul class="listOfActions list-group">
+                                                            <li class="list-group-item justify-content-between" ng-repeat="checklist in job.checklistItems">
+                                                                <span ng-if="!checklist.completed" style="color:red">{{checklist.checklistItemName}}</span>
+                                                                <span ng-if="checklist.completed" style="color:green">{{checklist.checklistItemName}}</span>
                                                             </li>
                                                         </ul>
                                                     </td>
