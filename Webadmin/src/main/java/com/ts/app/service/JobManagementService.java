@@ -29,20 +29,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.ts.app.domain.AbstractAuditingEntity;
-import com.ts.app.domain.Asset;
-import com.ts.app.domain.CheckInOutImage;
-import com.ts.app.domain.Employee;
-import com.ts.app.domain.EmployeeProjectSite;
-import com.ts.app.domain.Job;
-import com.ts.app.domain.JobChecklist;
-import com.ts.app.domain.JobStatus;
-import com.ts.app.domain.Location;
-import com.ts.app.domain.NotificationLog;
-import com.ts.app.domain.Price;
-import com.ts.app.domain.Site;
-import com.ts.app.domain.User;
-import com.ts.app.domain.UserRoleEnum;
 import com.ts.app.repository.AssetRepository;
 import com.ts.app.repository.CheckInOutImageRepository;
 import com.ts.app.repository.EmployeeRepository;
@@ -241,6 +227,31 @@ public class JobManagementService extends AbstractService {
             log.debug("JobSpecification toPredicate - searchCriteria get overdue status -"+ searchCriteria.isOverdueStatus());
             log.debug("JobSpecification toPredicate - searchCriteria get consolidated status -"+ searchCriteria.isConsolidated());
 
+            boolean hasViewAll = false;
+	    		Hibernate.initialize(user.getUserRole());
+	    		UserRole userRole = user.getUserRole();
+	    		if(userRole != null) {
+	    			Set<UserRolePermission> permissions = userRole.getRolePermissions();
+	    			if(CollectionUtils.isNotEmpty(permissions)) {
+	    				for(UserRolePermission perm : permissions) {
+	    					if(perm.getModule().getName().equalsIgnoreCase("Jobs")
+	    						&& perm.getAction().getName().equalsIgnoreCase("ViewAll")) {
+	    						hasViewAll = true;
+	    						break;
+	    					}
+	    				}
+	    			}
+	    		}
+	    		List<Long> siteIds = new ArrayList<Long>();
+	    		if(hasViewAll) {
+            		List<EmployeeProjectSite> sites = employee.getProjectSites();
+            		if(hasViewAll) {
+	            		for(EmployeeProjectSite site : sites) {
+	            			siteIds.add(site.getSite().getId());
+	            		}
+            		}
+	    		}
+            
             List<ReportResult> reportResults = new ArrayList<ReportResult>();
             log.debug("JobSpecification toPredicate - searchCriteria checkInDateFrom -"+ checkInDate);
 	        	if(checkInDate != null) {
@@ -332,7 +343,11 @@ public class JobManagementService extends AbstractService {
 		            		}else if(!StringUtils.isEmpty(searchCriteria.getJobTypeName())) {
 			        			page = jobRepository.findAll(new JobSpecification(searchCriteria,isAdmin),pageRequest);
 		            		}else {
-		            			page = jobRepository.findByDateRange(searchCriteria.getUserId(), subEmpIds, fromDt, toDt, pageRequest);
+		            			if(CollectionUtils.isNotEmpty(siteIds)) {
+		            				page = jobRepository.findBySiteIdsOrEmpIdsAndDateRange(searchCriteria.getUserId(), siteIds, subEmpIds, fromDt, toDt, pageRequest);
+		            			}else {
+		            				page = jobRepository.findByDateRange(searchCriteria.getUserId(), subEmpIds, fromDt, toDt, pageRequest);
+		            			}
 		            		}
 		            		allJobsList.addAll(page.getContent());
 		            	}
