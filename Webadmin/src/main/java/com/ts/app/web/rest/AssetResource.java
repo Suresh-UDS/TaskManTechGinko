@@ -19,12 +19,13 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.codahale.metrics.annotation.Timed;
+import com.ts.app.domain.AssetParameterConfig;
 import com.ts.app.security.SecurityUtils;
 import com.ts.app.service.AssetManagementService;
 import com.ts.app.web.rest.dto.AssetDTO;
+import com.ts.app.web.rest.dto.AssetParameterConfigDTO;
 import com.ts.app.web.rest.dto.AssetTypeDTO;
 import com.ts.app.web.rest.dto.AssetgroupDTO;
-import com.ts.app.web.rest.dto.DesignationDTO;
 import com.ts.app.web.rest.errors.TimesheetException;
 import com.ts.app.web.rest.dto.SearchCriteria;
 import com.ts.app.web.rest.dto.SearchResult;
@@ -124,9 +125,15 @@ public class AssetResource {
         return new ResponseEntity<>(response,HttpStatus.CREATED);
     }
 
-    @RequestMapping(value = "/asset/{id}/qrcode", method = RequestMethod.GET, produces = MediaType.IMAGE_PNG_VALUE)
-    public String generateAssetQRCode(@PathVariable("id") long assetId) {
-        return assetService.generateAssetQRCode(assetId);
+    @RequestMapping(value = "/asset/{id}/qrcode/{code}", method = RequestMethod.GET, produces = MediaType.IMAGE_PNG_VALUE)
+    public String generateAssetQRCode(@PathVariable("id") long assetId,@PathVariable("code") String assetCode) {
+        return assetService.generateAssetQRCode(assetId,assetCode);
+    }
+    
+    @RequestMapping(path="/asset/qrcode/{id}", method = RequestMethod.GET, produces = MediaType.IMAGE_PNG_VALUE)
+    public String getQRCode(@PathVariable("id") Long id){
+    	log.debug(">>> get QR Code! <<<");
+        return assetService.getQRCode(id);
     }
     
     @RequestMapping(value = "/assetgroup", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -154,4 +161,18 @@ public class AssetResource {
     	log.info("Get All Asset Type");
     	return assetService.findAllAssetType();
     }
+    
+    @RequestMapping(value = "/assets/config/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    public List<AssetParameterConfigDTO> getAssetConfig(@PathVariable Long id) { 
+    	log.info("Get All Asset config by Id");
+    	return assetService.findByAssetConfig(id);
+    }
+    
+    @RequestMapping(value = "/assets/removeConfig/{id}", method = RequestMethod.DELETE)
+    public ResponseEntity<?> deleteAssetConfig(@PathVariable Long id) { 
+    	assetService.deleteAssetConfig(id);
+    	return new ResponseEntity<>(HttpStatus.OK);
+    	
+    }
+    
 }

@@ -7,6 +7,7 @@ angular.module('timeSheetApp')
 						ProjectComponent,LocationComponent,SiteComponent,EmployeeComponent,ManufacturerComponent,AssetTypeComponent, $http, $stateParams,
 						$location,PaginationComponent) {
 
+
         $rootScope.loadingStop();
         $rootScope.loginView = false;
         $scope.success = null;
@@ -25,6 +26,7 @@ angular.module('timeSheetApp')
         $scope.pageSort = 10;
         $scope.pager = {};
         $scope.assetObj ={};
+        $scope.selectedConfig = null;
 
         console.log($stateParams)
                     var that =  $scope;
@@ -155,6 +157,12 @@ angular.module('timeSheetApp')
         	AssetComponent.findById($stateParams.id).then(function(data){
         		$scope.asset=data;
         		console.log($scope.asset);
+        		if($scope.asset.assetType) { 
+        			AssetComponent.findByAssetConfig($stateParams.id).then(function(data){ 
+                		console.log(data);
+                		$scope.assetParameters = data;
+                	});
+        		}
         		/*$scope.asset.selectedSite = {id : data.siteId,name : data.siteName}
         		console.log($scope.selectedSite)*/
         	})
@@ -441,12 +449,30 @@ angular.module('timeSheetApp')
             $scope.search();
         }
 
+
       /*  $scope.loadAssetType = function() {
         	AssetComponent.loadAssetType().then(function(resp){
         		console.log('Asset Types' +JSON.stringify(resp));
         		$scope.assetTypes = resp;
         	});
         }*/
+
+
+        
+        $scope.loadAssetType = function() { 
+        	AssetTypeComponent.findAll().then(function(resp){ 
+        		console.log('Asset Types' +JSON.stringify(resp));
+        		$scope.assetTypes = resp;
+        	});
+        }
+        
+        $scope.loadAssetConfig = function(type) { 
+        	ParameterConfigComponent.findByAssertType(type).then(function(data){ 
+        		console.log(data);
+        		$scope.assetConfigs = data;
+        	});
+        }
+        
 
 
 
