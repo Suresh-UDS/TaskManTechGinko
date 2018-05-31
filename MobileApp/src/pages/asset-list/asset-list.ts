@@ -46,7 +46,6 @@ export class AssetList {
           this.searchCriteria = {
               siteId:data.siteId,
               projectId:data.projectId,
-              currPage:
           }
 
       });
