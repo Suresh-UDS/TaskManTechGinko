@@ -497,13 +497,6 @@ angular.module('timeSheetApp')
 
         };
         
-        $scope.loadAssetType = function() { 
-        	AssetTypeComponent.findAll().then(function(resp){ 
-        		console.log('Asset Types' +JSON.stringify(resp));
-        		$scope.assetTypes = resp;
-        	});
-        }
-        
         
         $scope.loadAssetConfig = function(type) { 
         	ParameterConfigComponent.findByAssertType(type).then(function(data){ 
