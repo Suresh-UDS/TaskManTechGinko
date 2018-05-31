@@ -27,6 +27,7 @@ angular.module('timeSheetApp')
         $scope.pager = {};
         $scope.assetObj ={};
         $scope.selectedConfig = null;
+        $scope.addAssetType =null;
 
         console.log($stateParams)
                     var that =  $scope;
@@ -458,6 +459,26 @@ angular.module('timeSheetApp')
         }*/
 
 
+        $scope.addAssetType = function () {
+            console.log($scope.AssetType);
+            if($scope.AssetType){
+                console.log("Asset Type entered");
+                var AssetType ={
+                    name:$scope.AssetType
+                };
+                AssetTypeComponent.create(AssetType).then(function (response) {
+                    console.log(response);
+                    $scope.AssetType= null;
+                    $scope.showNotifications('top','center','success','AssetType Added Successfully');
+                    $scope.loadAssetType();
+
+                })
+            }else{
+                console.log("AssetType not entered");
+            }
+
+
+        };
         
         $scope.loadAssetType = function() { 
         	AssetTypeComponent.findAll().then(function(resp){ 
