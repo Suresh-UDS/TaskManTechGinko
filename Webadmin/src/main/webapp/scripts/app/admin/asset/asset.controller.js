@@ -5,8 +5,9 @@ angular.module('timeSheetApp')
 				'AssetController',
 				function($scope, $rootScope, $state, $timeout, AssetComponent,
 						ProjectComponent,LocationComponent,SiteComponent,EmployeeComponent, $http, $stateParams,
-						$location,PaginationComponent,AssetTypeComponent,ParameterConfigComponent,ParameterComponent,ParameterUOMComponent) {
+						$location,PaginationComponent,AssetTypeComponent,ParameterConfigComponent,ParameterComponent,ParameterUOMComponent,ManufacturerComponent) {
                      
+
         $rootScope.loadingStop();
         $rootScope.loginView = false;
         $scope.success = null;
@@ -37,6 +38,8 @@ angular.module('timeSheetApp')
         $scope.parameter = {};
         
         $scope.consumptionMonitoringRequired = false;
+        
+        $scope.addAssetType =null;
 
         console.log($stateParams)
                     var that =  $scope;
@@ -83,6 +86,30 @@ angular.module('timeSheetApp')
             ProjectComponent.findAll().then(function (data) {
                 console.log("Loading all projects")
                 $scope.projects = data;
+            });
+        };
+
+        $scope.loadManufacturer = function () {
+            ManufacturerComponent.findAll().then(function (data) {
+                console.log("Loading all Manufacturer -- " , data)
+                $scope.manufacturers = data;
+            });
+        };
+
+
+           $scope.createAssetType = function () {
+               AssetTypeComponent.create().then(function (data) {
+                console.log("Loading all AssetType -- " , data)
+                $scope.assetTypes = data;
+            });
+        };
+
+
+
+         $scope.loadAssetType = function () {
+            AssetTypeComponent.findAll().then(function (data) {
+                console.log("Loading all AssetType -- " , data)
+                $scope.assetTypes = data;
             });
         };
 
@@ -189,7 +216,7 @@ angular.module('timeSheetApp')
          }
 
         $scope.search = function () {
-           
+
             var currPageVal = ($scope.pages ? $scope.pages.currPage : 1);
           if(!$scope.searchCriteria) {
 
@@ -215,7 +242,7 @@ angular.module('timeSheetApp')
                 if($scope.selectedAsset) {
                     $scope.searchCriteria.findAll = false;
                     $scope.searchCriteria.id = $scope.selectedAsset.id;
-                    
+
             }
             }
             console.log($scope.searchCriteria);
@@ -225,7 +252,7 @@ angular.module('timeSheetApp')
             }
 
             if($scope.selectedColumn){
-              
+
                 $scope.searchCriteria.columnName = $scope.selectedColumn;
                 $scope.searchCriteria.sortByAsc = $scope.isAscOrder;
 
@@ -233,7 +260,7 @@ angular.module('timeSheetApp')
                 $scope.searchCriteria.columnName ="id";
                 $scope.searchCriteria.sortByAsc = true;
             }
-             
+
              console.log("search criteria",$scope.searchCriteria);
                 $scope.locations = '';
                 $scope.locationsLoader = false;
@@ -260,7 +287,7 @@ angular.module('timeSheetApp')
                     $scope.showCurrPage = data.currPage;
                     $scope.pageEntries = $scope.assets.length;
                     $scope.totalCountPages = data.totalCount;
-                    $scope.pageSort = 10; 
+                    $scope.pageSort = 10;
 
                 }
 
@@ -287,13 +314,13 @@ angular.module('timeSheetApp')
                 if(!$scope.selectedProject.id){
                     $scope.errorProject = "true";
                 }else{
-                 
+
                     $scope.assetObj.siteId = $scope.selectedSite.id;
                     $scope.assetObj.projectId = $scope.selectedProject.id;
                     $scope.assetObj.blockId = $scope.selectedBlock.id;
                     $scope.assetObj.floorId = $scope.selectedFloor.id;
                     $scope.assetObj.zoneId = $scope.selectedZone.id;
-            
+
                     console.log('Asset - ' + JSON.stringify($scope.assetObj));
                     AssetComponent.create($scope.assetObj).then(function() {
                         $scope.success = 'OK';
@@ -414,13 +441,13 @@ angular.module('timeSheetApp')
         };
 
         //init load
-        $scope.initLoad = function(){ 
+        $scope.initLoad = function(){
 
-             $scope.loadPageTop(); 
+             $scope.loadPageTop();
              $scope.initPage();
-             $scope.loadAssets(); 
+             $scope.loadAssets();
              $scope.setPage(1);
-        
+
          }
 
           /*
@@ -439,6 +466,36 @@ angular.module('timeSheetApp')
             $scope.pages.currPage = page;
             $scope.search();
         }
+
+
+      /*  $scope.loadAssetType = function() {
+        	AssetComponent.loadAssetType().then(function(resp){
+        		console.log('Asset Types' +JSON.stringify(resp));
+        		$scope.assetTypes = resp;
+        	});
+        }*/
+
+
+        $scope.addAssetType = function () {
+            console.log($scope.AssetType);
+            if($scope.AssetType){
+                console.log("Asset Type entered");
+                var AssetType ={
+                    name:$scope.AssetType
+                };
+                AssetTypeComponent.create(AssetType).then(function (response) {
+                    console.log(response);
+                    $scope.AssetType= null;
+                    $scope.showNotifications('top','center','success','AssetType Added Successfully');
+                    $scope.loadAssetType();
+
+                })
+            }else{
+                console.log("AssetType not entered");
+            }
+
+
+        };
         
         $scope.loadAssetType = function() { 
         	AssetTypeComponent.findAll().then(function(resp){ 
@@ -447,21 +504,6 @@ angular.module('timeSheetApp')
         	});
         }
         
-        $scope.addAssetType = function () {
-            console.log($scope.assetType.name);
-            if($scope.assetType){
-                console.log("AsseType entered");
-                AssetTypeComponent.create($scope.assetType).then(function (response) {
-                    console.log(response);
-                    $scope.assetType = null;
-                    $scope.showNotifications('top','center','success','Asset Type Added Successfully');
-                    $scope.loadAllAssetTypes();
-
-                })
-            }else{
-                console.log("Asset type not entered");
-            }
-        };
         
         $scope.loadAssetConfig = function(type) { 
         	ParameterConfigComponent.findByAssertType(type).then(function(data){ 
@@ -554,6 +596,7 @@ angular.module('timeSheetApp')
 
 	    };
 	        
+
 
 
     });

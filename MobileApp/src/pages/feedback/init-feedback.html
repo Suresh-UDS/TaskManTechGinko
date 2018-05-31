@@ -20,7 +20,7 @@
 
             <ion-list>
                 <ion-item>
-                    <ion-label>Project</ion-label>
+                    <ion-label no-padding>Project</ion-label>
                     <ion-select [selectOptions]="selectOptions" interface="popover" [(ngModel)]="selectedProject">
                         <ion-option *ngFor="let p of projects;let i=index" [value]="p" (ionSelect)="selectSite(p)"> {{p.name}}</ion-option>
                     </ion-select>

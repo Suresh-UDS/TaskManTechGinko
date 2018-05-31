@@ -70,6 +70,7 @@ import {FeedbackService} from "../pages/service/feedbackService";
 import {JobService} from "../pages/service/jobService";
 import {QuotationService} from "../pages/service/quotationService";
 import {SiteService} from "../pages/service/siteService";
+import {AssetService} from "../pages/service/assetService";
 import {JobPopoverPage} from "../pages/jobs/job-popover";
 import {BatteryStatus, BatteryStatusResponse} from "@ionic-native/battery-status";
 import {FeedbackDashboardPage} from "../pages/feedback/feedback-dashboard";
@@ -246,6 +247,7 @@ import {IonicImageViewerModule} from "ionic-img-viewer";
       JobService,
       QuotationService,
       SiteService,
+      AssetService,
     authService,
     HttpClient,
     Geolocation,

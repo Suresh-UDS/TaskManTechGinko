@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import {NavController, NavParams, ViewController} from "ionic-angular";
 import {componentService} from "../service/componentService";
 import {SiteService} from "../service/siteService";
+import {AssetService} from "../service/assetService";
 
 /**
  * Generated class for the AssetFilter page.
@@ -19,12 +20,19 @@ export class AssetFilter {
     siteList:any;
     assetGroup:any;
     selectedProject:any;
+    selectedSite:any;
     msg:any;
     scrollSite:any;
     activeSite:any;
     selectedAssetGroup:any;
+    searchCriteria:any;
+
+    page:1;
+    totalPages:0;
+    pageSort:15;
+    count=0;
     constructor(public navCtrl: NavController, public navParams: NavParams, public viewCtrl: ViewController, public component:componentService,
-                public siteService:SiteService) {
+                public siteService:SiteService, public assetService:AssetService) {
         this.assetGroup = [
             {name:"CMRL"},
             {name:"UDS House Keeping Assets"},
@@ -83,11 +91,20 @@ export class AssetFilter {
         console.log("Selected Site");
         console.log(site);
         this.activeSite= index;
+        this.selectedSite = site;
     }
 
     dismiss(){
         let data={'foo':'bar'};
         this.viewCtrl.dismiss(data);
+    }
+
+    filterAssets(){
+        this.searchCriteria = {
+            siteId:this.selectedSite.id,
+            projectId:this.selectedProject.id,
+        };
+        this.viewCtrl.dismiss(this.searchCriteria);
     }
 
 

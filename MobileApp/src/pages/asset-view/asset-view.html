@@ -9,19 +9,17 @@
     <button ion-button menuToggle>
       <ion-icon name="menu"></ion-icon>
     </button>
-    <ion-title>{{assetDetails.name}}</ion-title>
+    <ion-title>{{assetDetails.title}}</ion-title>
   </ion-navbar>
-    <ion-toolbar>
+    <ion-toolbar class="tool-bar">
         <ion-segment [(ngModel)]="categories" class="segmnt margin-auto" color="#ff9800">
-            <ion-segment-button value="details" >
-                Details
-            </ion-segment-button>
+            <ion-segment-button value="details" >Details</ion-segment-button>
             <ion-segment-button value="ppm">PPM </ion-segment-button>
             <ion-segment-button value="amc">AMC </ion-segment-button>
-            <!--<ion-segment-button value="config">Config </ion-segment-button>-->
-            <ion-segment-button value="tickets">Tickets</ion-segment-button>
+            <ion-segment-button value="config">Config </ion-segment-button>
             <ion-segment-button value="readings">Readings</ion-segment-button>
-
+            <ion-segment-button value="jobs">Jobs</ion-segment-button>
+            <ion-segment-button value="tickets">Tickets</ion-segment-button>
         </ion-segment>
     </ion-toolbar>
 </ion-header>
@@ -30,26 +28,38 @@
 <ion-content padding>
 
     <ion-fab right bottom mini (click)="getReadings()"   >
-        <ion-label color="dark" class="margin0">Get Reading</ion-label>
-        <button ion-fab color="primary"> <ion-icon name="add"></ion-icon></button>
+        <ion-label color="light" class="margin0 bg-orange">Reading</ion-label>
+        <button ion-fab color="primary" class="margin-auto margin-top5">
+            <i class="material-icons">network_check</i>
+            <!--<i class="fa fa-tachometer-alt"></i>-->
+        </button>
     </ion-fab>
 
 <div [ngSwitch]="categories">
     <ion-list *ngSwitchCase="'details'">
       <div class="card">
          <div class="panel-heading card-header-md-clr-orange">Asset Details         </div>
-          <div class="card-content table-responsive">
-              <ion-row class="margin0 white-bg padding10">
-                  <ion-col col-6 class="label-on-left">Name</ion-col>
-                  <ion-col col-6>
-                      <p text-right>{{assetDetails.name}}</p>
+
+          <div class="card-content table-responsive padding-top0">
+              <ion-row class="margin0 white-bg">
+                  <ion-col col-6 class="label-on-left" no-padding>Name</ion-col>
+                  <ion-col col-6 no-padding>
+                      <p text-right>{{assetDetails.title}}</p>
                   </ion-col>
-                  <ion-col col-6 class="label-on-left">Group</ion-col>
-                  <ion-col col-6>
+                  <ion-col col-6 class="label-on-left" no-padding>Code</ion-col>
+                  <ion-col col-6 no-padding="">
+                      <p text-right>{{assetDetails.code}}</p>
+                  </ion-col>
+                  <ion-col col-6 class="label-on-left" no-padding="">
+                      Group
+                  </ion-col>
+                  <ion-col col-6 no-padding="">
                       <p text-right>{{assetDetails.assetGroup}}</p>
                   </ion-col>
-                  <ion-col col-6 class="label-on-left">Type</ion-col>
-                  <ion-col col-6>
+                  <ion-col col-6 class="label-on-left" no-padding="">
+                      Type
+                  </ion-col>
+                  <ion-col col-6 no-padding="">
                       <p text-right>{{assetDetails.type}}</p>
                   </ion-col>
               </ion-row>
@@ -57,28 +67,38 @@
       </div>
 
       <div class="card">
-          <div class="panel-heading card-header-md-clr-orange">Asset Location         </div>
+          <div class="panel-heading card-header-md-clr-orange">Asset Location</div>
 
-          <div class="card-content table-responsive">
-              <ion-row class="margin0 white-bg padding10">
-                  <ion-col col-6 class="label-on-left">Client</ion-col>
-                  <ion-col col-6>
+          <div class="card-content table-responsive padding-top0">
+              <ion-row class="margin0 white-bg">
+                  <ion-col col-6 class="label-on-left" no-padding="">
+                      Client
+                  </ion-col>
+                  <ion-col col-6 no-padding="">
                       <p text-right>{{assetDetails.clientName}}</p>
                   </ion-col>
-                  <ion-col col-6 class="label-on-left">Site</ion-col>
-                  <ion-col col-6>
+                  <ion-col col-6 class="label-on-left" no-padding="">
+                      Site
+                  </ion-col>
+                  <ion-col col-6 no-padding="">
                       <p text-right>{{assetDetails.siteName}}</p>
                   </ion-col>
-                  <ion-col col-6 class="label-on-left">Block</ion-col>
-                  <ion-col col-6>
+                  <ion-col col-6 class="label-on-left" no-padding="">
+                      Block
+                  </ion-col>
+                  <ion-col col-6 no-padding="">
                       <p text-right>{{assetDetails.block}}</p>
                   </ion-col>
-                  <ion-col col-6 class="label-on-left">Floor</ion-col>
-                  <ion-col col-6>
+                  <ion-col col-6 class="label-on-left" no-padding="">
+                      Floor
+                  </ion-col>
+                  <ion-col col-6 no-padding="">
                       <p text-right>{{assetDetails.floor}}</p>
                   </ion-col>
-                  <ion-col col-6 class="label-on-left">Zone</ion-col>
-                  <ion-col col-6>
+                  <ion-col col-6 class="label-on-left" no-padding="">
+                      Zone
+                  </ion-col>
+                  <ion-col col-6 no-padding="">
                       <p text-right>{{assetDetails.zone}}</p>
                   </ion-col>
               </ion-row>
@@ -86,52 +106,68 @@
       </div>
 
       <div class="card">
-          <div class="panel-heading card-header-md-clr-orange">Manufacturer Details         </div>
+          <div class="panel-heading card-header-md-clr-orange">Manufacturer Details</div>
 
-          <div class="card-content table-responsive">
-              <ion-row class="margin0 white-bg padding10">
-                  <ion-col col-6 class="label-on-left">Manufacturer</ion-col>
-                  <ion-col col-6>
+          <div class="card-content table-responsive padding-top0">
+              <ion-row class="margin0 white-bg">
+                  <ion-col col-6 class="label-on-left" no-padding="">
+                      Manufacturer
+                  </ion-col>
+                  <ion-col col-6 no-padding="">
                       <p text-right>{{assetDetails.manufacturer}}</p>
                   </ion-col>
-                  <ion-col col-6 class="label-on-left">Model Number</ion-col>
-                  <ion-col col-6>
+                  <ion-col col-6 class="label-on-left" no-padding="">
+                      Model Number
+                  </ion-col>
+                  <ion-col col-6 no-padding="">
                       <p text-right>{{assetDetails.model}}</p>
                   </ion-col>
-                  <ion-col col-6 class="label-on-left">Serial</ion-col>
-                  <ion-col col-6>
+                  <ion-col col-6 class="label-on-left" no-padding="">
+                      Serial
+                  </ion-col>
+                  <ion-col col-6 no-padding="">
                       <p text-right>{{assetDetails.serial}}</p>
                   </ion-col>
-                  <ion-col col-6 class="label-on-left">Acquired Date</ion-col>
-                  <ion-col col-6>
+                  <ion-col col-5 class="label-on-left" no-padding="">
+                      Acquired Date
+                  </ion-col>
+                  <ion-col col-7 no-padding="">
                       <p text-right>{{assetDetails.acquiredDate | date:'MMM d, y, h:mm a' }}</p>
                   </ion-col>
-                  <ion-col col-6 class="label-on-left">Purchase Price</ion-col>
-                  <ion-col col-6>
+                  <ion-col col-6 class="label-on-left" no-padding="">
+                      Purchase Price
+                  </ion-col>
+                  <ion-col col-6 no-padding="">
                       <p text-right>{{assetDetails.purchasePrice}}</p>
                   </ion-col>
-                  <ion-col col-6 class="label-on-left">Purchase Price</ion-col>
-                  <ion-col col-6>
-                      <p text-right>{{assetDetails.purchasePrice}}</p>
+                  <ion-col col-6 class="label-on-left" no-padding="">
+                      Current Price
                   </ion-col>
-                  <ion-col col-6 class="label-on-left">Current Price</ion-col>
-                  <ion-col col-6>
+                  <ion-col col-6 no-padding="">
                       <p text-right>{{assetDetails.currentPrice}}</p>
                   </ion-col>
-                  <ion-col col-6 class="label-on-left">Estimated Dispose Price</ion-col>
-                  <ion-col col-6>
+                  <ion-col col-6 class="label-on-left" no-padding="">
+                      Estimated Dispose Price
+                  </ion-col>
+                  <ion-col col-6 no-padding="">
                       <p text-right>{{assetDetails.estimatedDisposePrice}}</p>
                   </ion-col>
-                  <ion-col col-6 class="label-on-left">Service Provider</ion-col>
-                  <ion-col col-6>
+                  <ion-col col-6 class="label-on-left" no-padding="">
+                      Service Provider
+                  </ion-col>
+                  <ion-col col-6 no-padding="">
                       <p text-right>{{assetDetails.serviceProvider}}</p>
                   </ion-col>
-                  <ion-col col-6 class="label-on-left">Warranty Type</ion-col>
-                  <ion-col col-6>
+                  <ion-col col-6 class="label-on-left" no-padding="">
+                      Warranty Type
+                  </ion-col>
+                  <ion-col col-6 no-padding="">
                       <p text-right>{{assetDetails.warrantyType}}</p>
                   </ion-col>
-                  <ion-col col-6 class="label-on-left">Warranty End Date</ion-col>
-                  <ion-col col-6>
+                  <ion-col col-5 class="label-on-left" no-padding="">
+                      Warranty End Date
+                  </ion-col>
+                  <ion-col col-7 no-padding="">
                       <p text-right>{{assetDetails.warrantyEndDate | date:'MMM d, y, h:mm a' }}</p>
                   </ion-col>
               </ion-row>
@@ -145,8 +181,9 @@
                 <ion-row class="margin0">
 
                     <ion-col col-2 class="ver-center">
-                        <button ion-button clear color="primary" class="icon-round ion-circle-icons icon-round-red">
-                            <ion-icon name="ios-construct-outline" class="fnt-24"></ion-icon>
+                        <button ion-button clear color="primary" class="">
+                            <!--<ion-icon name="ios-construct-outline" class="fnt-24"></ion-icon>-->
+                            <ion-icon ios="ios-calendar" md="md-calendar" class="green fnt-24"></ion-icon>
                         </button>
                     </ion-col>
                     <ion-col col-10="" class="padding-left5">
@@ -185,14 +222,15 @@
 
     <ion-list *ngSwitchCase="'amc'">
 
-        <div  class="white-bg" *ngFor="let ppm of assetDetails.ppms" >
+        <div  class="white-bg" *ngFor="let ppm of assetDetails.amcs" >
 
             <div class="padding-left16 padding-top5">
                 <ion-row class="margin0">
 
                     <ion-col col-2 class="ver-center">
-                        <button ion-button clear color="primary" class="icon-round ion-circle-icons icon-round-red">
-                            <ion-icon name="ios-construct-outline" class="fnt-24"></ion-icon>
+                        <button ion-button clear color="primary" class="">
+                            <!--<ion-icon name="ios-construct-outline" class="fnt-24"></ion-icon>-->
+                            <ion-icon ios="ios-calendar" md="md-calendar" class="blue fnt-24"></ion-icon>
                         </button>
                     </ion-col>
                     <ion-col col-10="" class="padding-left5">
@@ -229,12 +267,100 @@
         </div>
     </ion-list>
 
+    <ion-list *ngSwitchCase="'config'">
+
+    </ion-list>
+
+    <ion-list *ngSwitchCase="'jobs'">
+
+        <!--<div  class="white-bg" *ngFor="let job of todaysJobs" >-->
+
+            <!--<div class="padding-left16 padding-top5">-->
+                <!--<ion-row class="margin0">-->
+
+                    <!--<ion-col col-2 class="ver-center">-->
+                        <!--<button ion-button clear color="primary" class="icon-round ion-circle-icons"-->
+                                <!--[ngClass]="{'icon-round-red' : (job.status == 'OVERDUE'),-->
+                                                          <!--'icon-round-green' : (job.status == 'COMPLETED'),-->
+                                                          <!--'icon-round-blue' :(job.status =='OPEN' || job.status == 'ASSIGNED' || job.status == 'INPROGRESS')}">-->
+                            <!--<ion-icon name="ios-construct-outline" class="fnt-24"></ion-icon>-->
+                        <!--</button>-->
+                    <!--</ion-col>-->
+                    <!--<ion-col col-8 class="padding-left5">-->
+                        <!--<div class="border-btm padding-bottom5 ln-ght20" text-capitalize>-->
+                            <!--<p text-left class="margin0">{{job.title}}</p>-->
+                            <!--<p text-left class="margin0">{{job.employeeName}}</p>-->
+                            <!--<p text-left class="margin0">{{job.siteProjectName}} - {{job.siteName}}</p>-->
+                        <!--</div>-->
+                    <!--</ion-col>-->
+                    <!--<ion-col col-2 class="padding-left0 ver-center">-->
+                        <!--<div class="padding-bottom5">-->
+                            <!--<button ion-button clear color="primary" (tap)="open(slidingItem, item ,count)">-->
+                                <!--<i class="material-icons">more_horiz</i>-->
+                            <!--</button>-->
+                        <!--</div>-->
+                    <!--</ion-col>-->
+                    <!--&lt;!&ndash;-->
+                    <!--<ion-col col-1>-->
+                        <!--<p (click)="open(ItemSliding,Item)">f</p>-->
+                    <!--</ion-col>-->
+                    <!--&ndash;&gt;-->
+
+                <!--</ion-row>-->
+            <!--</div>-->
+            <!--<ion-item-sliding #slidingItem>-->
+
+                <!--<ion-item #item class="item-fnt padding-left0" >-->
+                    <!--&lt;!&ndash;<div class="padding-left16">&ndash;&gt;-->
+
+                    <!--<div text-capitalize >-->
+                        <!--<ion-row class="margin0">-->
+                            <!--<ion-col col-6 class="padding-right5">-->
+                                <!--<div *ngIf="job.status =='COMPLETED'">-->
+                                    <!--<p text-left class="fnt-12"><ion-icon ios="ios-calendar" md="md-calendar" class="green padding-right10"></ion-icon>{{job.actualStartTime | date:'MMM d, y, h:mm a' }} </p>-->
+                                <!--</div>-->
+                                <!--<div *ngIf="job.status !='COMPLETED'">-->
+                                    <!--<p text-left class="fnt-12"><ion-icon ios="ios-calendar" md="md-calendar" class="green padding-right10"></ion-icon>{{job.plannedStartTime | date:'MMM d, y, h:mm a' }} </p>-->
+                                <!--</div>-->
+                            <!--</ion-col>-->
+                            <!--<ion-col col-6>-->
+                                <!--<div *ngIf="job.status =='COMPLETED'">-->
+                                    <!--<p text-right class="fnt-12"><ion-icon ios="ios-calendar" md="md-calendar" class="red padding-right10"></ion-icon>{{job.actualEndTime | date:'MMM d, y, h:mm a' }} </p>-->
+                                <!--</div>-->
+                                <!--<div *ngIf="job.status !='COMPLETED'">-->
+                                    <!--<p text-right class="fnt-12"><ion-icon ios="ios-calendar" md="md-calendar" class="red padding-right10"></ion-icon>{{job.plannedEndTime | date:'MMM d, y, h:mm a' }} </p>-->
+                                <!--</div>-->
+                            <!--</ion-col>-->
+                        <!--</ion-row>-->
+                    <!--</div>-->
+                    <!--&lt;!&ndash;</div>&ndash;&gt;-->
+                <!--</ion-item>-->
+
+                <!--<ion-item-options class="ActionBtns" (click)="close(slidingItem)">-->
+                    <!--<div>-->
+                        <!--<button ion-button clear color="primary"><ion-icon name="md-eye" (click)="viewJob(job)" class="fnt-24 act-btn-view"></ion-icon></button>-->
+                    <!--</div>-->
+                    <!--&lt;!&ndash;<div *ngIf="userType === 'ADMIN' || userType === 'TECHNICIAN' || userType === 'FACILITYMANAGER' || userType === 'SUPERVISOR'">&ndash;&gt;-->
+                    <!--&lt;!&ndash;<button ion-button clear color="clr-blue"><ion-icon name="md-create" class="fnt-24"></ion-icon></button>&ndash;&gt;-->
+                    <!--&lt;!&ndash;</div>&ndash;&gt;-->
+                    <!--<div >-->
+                        <!--<button ion-button clear color="secondary" *ngIf="job.status !='COMPLETED'" (click)="compeleteJob(job)"><ion-icon name="md-checkmark-circle" class="fnt-24 act-btn-view"></ion-icon></button>-->
+                    <!--</div>-->
+                    <!--<div *ngIf="userType === 'ADMIN' || userType === 'TECHNICIAN' || userType === 'FACILITYMANAGER' || userType === 'SUPERVISOR'">-->
+                        <!--<button ion-button clear color="danger"><ion-icon name="md-close-circle" class="fnt-24 act-btn-view"></ion-icon></button>-->
+                    <!--</div>-->
+                <!--</ion-item-options>-->
+            <!--</ion-item-sliding>-->
+
+        <!--</div>-->
+
+    </ion-list>
+
     <ion-list *ngSwitchCase="'tickets'">
 
         <div  class="white-bg" *ngFor="let ticket of assetDetails.tickets" (click)="viewTicket(ticket)">
             <div class="padding-left16 padding-top5">
                 <ion-row class="margin0">
-
                     <ion-col col-2 class="ver-center">
                         <ion-icon *ngIf="ticket.status=='Open'" style="color:red" ios="ios-alert" md="md-alert" class="fnt-24"></ion-icon>
                         <ion-icon *ngIf="ticket.status=='Closed'" style="color:green" ios="ios-checkmark-circle" md="md-checkmark-circle" class="fnt-24"></ion-icon>
@@ -245,13 +371,11 @@
                             <p text-left class="margin0"><span>{{ticket.title}}</span><span float-right>{{ticket.status}}</span></p>
                         </div>
                     </ion-col>
-
                 </ion-row>
             </div>
 
             <ion-item #item class="item-fnt padding-left0" >
                 <!--<div class="padding-left16">-->
-
                 <div text-capitalize >
                     <ion-row class="margin0">
                         <ion-col col-6 class="padding-right5">
@@ -265,7 +389,6 @@
                             </div>
                         </ion-col>
                     </ion-row>
-
                 </div>
                 <!--</div>-->
             </ion-item>
@@ -277,27 +400,27 @@
     <ion-list *ngSwitchCase="'readings'">
         <table class="table table-hover">
             <thead class="text-warning">
-            <th>Date</th>
-            <th>Consumption</th>
-            <th>Type</th>
+                <th >Date</th>
+                <th >Consumption</th>
+                <th >Type</th>
             </thead>
             <tbody>
-            <tr>
-                <td>10-05-2018</td>
-                <td>20 Watt</td>
-                <td>POWER</td>
+                <tr>
+                    <td class="padding-left0">10-05-2018</td>
+                    <td class="padding-left0">20 Watt</td>
+                    <td class="padding-left0">POWER</td>
 
-            </tr>
-            <tr>
-                <td>11-05-2018</td>
-                <td>0 Watt</td>
-                <td>POWER</td>
-            </tr>
-            <tr>
-                <td>12-05-2018</td>
-                <td>60 Watt</td>
-                <td>POWER</td>
-            </tr>
+                </tr>
+                <tr>
+                    <td class="padding-left0">11-05-2018</td>
+                    <td class="padding-left0">0 Watt</td>
+                    <td>POWER</td>
+                </tr>
+                <tr>
+                    <td class="padding-left0">12-05-2018</td>
+                    <td class="padding-left0">60 Watt</td>
+                    <td class="padding-left0">POWER</td>
+                </tr>
             </tbody>
         </table>
     </ion-list>
