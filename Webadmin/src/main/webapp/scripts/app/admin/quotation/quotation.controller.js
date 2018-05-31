@@ -606,7 +606,8 @@ angular
 
 		        	//RateCardComponent.search($scope.searchCriteria).then(function (data) {
 		        	RateCardComponent.getAllQuotations($scope.searchCriteria).then(function (data) {
-		                $scope.quotations = data;
+                        data.sort();
+		        	    $scope.quotations = data;
 		                //$scope.quotations = data.transactions;
 		                $scope.quotationsLoader = true;
 		                  /*
