@@ -29,11 +29,11 @@
 
         <ion-row no-margin="">
             <ion-col col-4 no-padding="">
-                <ion-thumbnail *ngIf="asset.image" item-start class="margin-bottom0 margin-top0">
-                    <img [src]=asset.img imageViewer/>
+                <ion-thumbnail *ngIf="asset.qrCodeImage" item-start class="margin-bottom0 margin-top0">
+                    <img [src]=asset.qrCodeImage imageViewer/>
                 </ion-thumbnail>
-                <ion-thumbnail *ngIf="!asset.image" item-start class="margin-bottom0 margin-top0">
-                    <img src="imgs/placeholder.png" imageViewer/>
+                <ion-thumbnail *ngIf="!asset.qrCodeImage" item-start class="margin-bottom0 margin-top0">
+                    <img src="assets/imgs/placeholder.png" imageViewer/>
                 </ion-thumbnail>
             </ion-col>
             <ion-col col-7 no-padding="" class="ver-center">
