@@ -69,8 +69,31 @@ angular.module('timeSheetApp')
             	});
             	
             },
+
+            createAssetGroup :function(assetGroup,callback){
+                var cb = callback || angular.noop;
+                return $http.post('api/assetgroup',assetGroup).then(
+                    function (response) {
+                        return cb(response);
+                    }).catch(
+                    function (err) {
+                        console.log(JSON.stringify(err));
+                        return cb(err);
+                    })
+
+            },
             
-            findByAssetConfig : function(data) { 
+
+            
+            loadAssetGroup : function() { 
+                return $http.get('api/assetgroup').then(function (response) { 
+                    return response.data;
+                });
+                
+            },
+            
+
+            dByAssetConfig : function(data) { 
             	var type = data.assetTypeName;
             	var id = data.assetId;
             	return $http.get('api/assets/'+type+'/config/'+id).then(function (response) { 

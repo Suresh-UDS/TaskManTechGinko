@@ -34,6 +34,8 @@ angular.module('timeSheetApp')
         $scope.parameterConfig = {};
         
         $scope.assetType = {};
+
+        $scope.assetGroup = {};
         
         $scope.parameter = {};
         
@@ -108,6 +110,13 @@ angular.module('timeSheetApp')
             AssetTypeComponent.findAll().then(function (data) {
                 console.log("Loading all AssetType -- " , data)
                 $scope.assetTypes = data;
+            });
+        };
+
+        $scope.loadAssetGroup = function () {
+            AssetComponent.loadAssetGroup().then(function (data) {
+                console.log("Loading all Asset Group -- " , data)
+                $scope.assetGroups = data;
             });
         };
 
@@ -466,12 +475,7 @@ angular.module('timeSheetApp')
         }
 
 
-      /*  $scope.loadAssetType = function() {
-        	AssetComponent.loadAssetType().then(function(resp){
-        		console.log('Asset Types' +JSON.stringify(resp));
-        		$scope.assetTypes = resp;
-        	});
-        }*/
+   
 
 
         $scope.addAssetType = function () {
@@ -481,12 +485,31 @@ angular.module('timeSheetApp')
                 AssetTypeComponent.create($scope.assetType).then(function (response) {
                     console.log(response);
                     $scope.assetType = {};
-                    $scope.showNotifications('top','center','success','AssetType Added Successfully');
+                    $scope.showNotifications('top','center','success','Asset Type Added Successfully');
                     $scope.loadAssetType();
 
                 })
             }else{
-                console.log("AssetType not entered");
+                console.log("Asset Type not entered");
+            }
+
+
+        };
+
+        $scope.addAssetGroup = function () {
+
+            console.log($scope.assetGroup);
+            if($scope.assetGroup){
+                console.log("Asset Group entered");
+                AssetComponent.createAssetGroup($scope.assetGroup).then(function (response) {
+                    console.log(response);
+                    $scope.assetGroup = {};
+                    $scope.showNotifications('top','center','success','Asset Group Added Successfully');
+                    $scope.loadAssetGroup();
+
+                })
+            }else{
+                console.log("Asset Group not entered");
             }
 
 
