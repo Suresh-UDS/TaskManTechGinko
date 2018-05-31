@@ -108,7 +108,7 @@
                                                                             </div>
                                                                         </div>
                                                                         <div class="col-md-12">
-                                                                             <div class="form-group selectcon" style="padding-top:25px;">
+                                                                             <div class="form-group selectcon" style="padding-top:25px;" ng-init="loadAssetType()">
 
                                                                                 <div class="" style="float:left;width:90%;">
                                                                                     <select class="form-control" ng-change="loadAssetConfig(asset.assetType)" ng-model="asset.assetType" ng-options="assetType.name as assetType.name for assetType in assetTypes">
