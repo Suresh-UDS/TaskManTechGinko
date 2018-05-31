@@ -54,7 +54,7 @@
 
                             <div class="form-group label-floating">
                                 <label class="control-label" *ngIf="siteName">Site</label>
-                                <ion-select [(ngModel)]="siteName" class="select-box padding-left0" id="siteName" placeholder="Choose Site" name="siteName" #site="ngModel" required [ngClass]="{'select-error': eMsg=='siteName'}">
+                                <ion-select [(ngModel)]="siteName" class="select-box padding-left0" id="siteName" placeholder="Choose Site" name="siteName" #site="ngModel" interface="popover" required [ngClass]="{'select-error': eMsg=='siteName'}">
                                     <ion-option *ngFor="let site of sites" [value]="site.name" (ionSelect)="getEmployee(site.id)">{{site.name}}</ion-option>
                                 </ion-select>
 
@@ -93,7 +93,7 @@
 
                             <div class="form-group label-floating">
                                 <label class="control-label" >Severity</label>
-                                <ion-select [(ngModel)]="severity" class="select-box padding-left0" id="severity" name="severity" [placeholder]="empPlace" >
+                                <ion-select [(ngModel)]="severity" class="select-box padding-left0" id="severity" name="severity" interface="popover" [placeholder]="empPlace" >
                                     <ion-option grou *ngFor="let s of severities" [value]="s" >{{s}}</ion-option>
                                 </ion-select>
 
