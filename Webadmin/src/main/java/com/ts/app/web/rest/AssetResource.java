@@ -27,6 +27,7 @@ import com.ts.app.web.rest.dto.AssetParameterConfigDTO;
 import com.ts.app.web.rest.dto.AssetTypeDTO;
 import com.ts.app.web.rest.dto.AssetgroupDTO;
 import com.ts.app.web.rest.errors.TimesheetException;
+
 import com.ts.app.web.rest.dto.SearchCriteria;
 import com.ts.app.web.rest.dto.SearchResult;
 
@@ -162,10 +163,13 @@ public class AssetResource {
     	return assetService.findAllAssetType();
     }
     
-    @RequestMapping(value = "/assets/config/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public List<AssetParameterConfigDTO> getAssetConfig(@PathVariable Long id) { 
-    	log.info("Get All Asset config by Id");
-    	return assetService.findByAssetConfig(id);
+    @RequestMapping(value = "/assets/{type}/config/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    public List<AssetParameterConfigDTO> getAssetConfig(@PathVariable("type") String type, @PathVariable("id") Long id) { 
+    	List<AssetParameterConfigDTO> result = null;
+		if(type != null && id !=null) {
+			result = assetService.findByAssetConfig(type, id);
+		}
+		return result;
     }
     
     @RequestMapping(value = "/assets/removeConfig/{id}", method = RequestMethod.DELETE)
@@ -174,5 +178,26 @@ public class AssetResource {
     	return new ResponseEntity<>(HttpStatus.OK);
     	
     }
+    
+    @RequestMapping(value = "/assets/params", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> saveAssetParamConfig(@Valid @RequestBody AssetParameterConfigDTO assetParamConfigDTO, HttpServletRequest request) {
+		log.info("Inside the saveParameterConfig -" + assetParamConfigDTO.getName() + ", assetType -" + assetParamConfigDTO.getAssetType());
+    	try {
+    		assetParamConfigDTO.setUserId(SecurityUtils.getCurrentUserId());
+    		assetParamConfigDTO = assetService.createAssetParamConfig(assetParamConfigDTO);
+    		
+    	}catch (Exception cve) { 
+    		throw new TimesheetException(cve, assetParamConfigDTO);
+    	}
+		return new ResponseEntity<>(HttpStatus.CREATED); 
+    	
+    }
+    
+    
+    
+    
+    
+    
+    
     
 }
