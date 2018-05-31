@@ -9,14 +9,17 @@
     Dear
 </p>
 
+<p th:text="#{email.completed.report.text1(${jobId},${jobName})}">
 
-<p th:text="#{email.completed.report.text1(${jobId},${jobTitle})}">
+</p>
+
+<p th:text="#{email.completed.report.text2(${siteName})}">
 
 </p>
 <p>
 </p>
 <p>
-    <span th:text="#{email.report.text2}">Regards, </span>
+    <span th:text="#{email.completed.report.text3}">Regards, </span>
     <br/>
     <em th:text="#{email.signature}">UDS.</em>
 </p>
