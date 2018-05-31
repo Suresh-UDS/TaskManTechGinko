@@ -1,4 +1,36 @@
 page-asset-view {
 
+  .tool-bar
+  {
+    padding: 4px 0 0 0 !important;
+    min-height: 0 !important;
+  }
+  ion-segment {
+    display: block;
+    white-space: nowrap;
+    font-size: 0;
+    overflow-x: auto;
+    overflow-y: hidden;
+    height: 42px;
+
+    &::-webkit-scrollbar {
+      width: 0;
+      height: 0;
+      display: none;
+    }
+
+    ion-segment-button.segment-button {
+      display: inline-block;
+      min-width: 100px;
+      width: auto;
+    }
+  }
+
+  .label-on-left
+  {
+    padding-bottom: 10px !important;
+  }
+
+
 
 }

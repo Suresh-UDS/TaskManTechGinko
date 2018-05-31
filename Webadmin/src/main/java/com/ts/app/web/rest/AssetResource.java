@@ -19,9 +19,11 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.codahale.metrics.annotation.Timed;
+import com.ts.app.domain.AssetParameterConfig;
 import com.ts.app.security.SecurityUtils;
 import com.ts.app.service.AssetManagementService;
 import com.ts.app.web.rest.dto.AssetDTO;
+import com.ts.app.web.rest.dto.AssetParameterConfigDTO;
 import com.ts.app.web.rest.dto.AssetTypeDTO;
 import com.ts.app.web.rest.dto.AssetgroupDTO;
 import com.ts.app.web.rest.errors.TimesheetException;
@@ -159,4 +161,18 @@ public class AssetResource {
     	log.info("Get All Asset Type");
     	return assetService.findAllAssetType();
     }
+    
+    @RequestMapping(value = "/assets/config/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    public List<AssetParameterConfigDTO> getAssetConfig(@PathVariable Long id) { 
+    	log.info("Get All Asset config by Id");
+    	return assetService.findByAssetConfig(id);
+    }
+    
+    @RequestMapping(value = "/assets/removeConfig/{id}", method = RequestMethod.DELETE)
+    public ResponseEntity<?> deleteAssetConfig(@PathVariable Long id) { 
+    	assetService.deleteAssetConfig(id);
+    	return new ResponseEntity<>(HttpStatus.OK);
+    	
+    }
+    
 }

@@ -52,12 +52,36 @@ angular.module('timeSheetApp')
                     return response.data;
                 });
             },
+
+
+             createAssetType : function() { 
+                return $http.post('api/assets/type').then(function (response) { 
+                    return response.data;
+                });
+                
+            },
+            
+
             
             loadAssetType : function() { 
             	return $http.get('api/assets/type').then(function (response) { 
             		return response.data;
             	});
             	
+            },
+            
+            findByAssetConfig : function(id) { 
+            	return $http.get('api/assets/config/'+id).then(function (response) { 
+            		return response.data;
+            	});
+            },
+            
+            deleteConfigById : function(id) { 
+            	return $http.delete('api/assets/removeConfig/'+id).then(function(reaponse){ 
+            		return response.data;
+            	});
             }
+            
+
         };
     });
