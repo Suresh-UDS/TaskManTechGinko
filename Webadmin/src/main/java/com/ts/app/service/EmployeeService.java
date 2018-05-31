@@ -41,6 +41,7 @@ import com.ts.app.domain.Job;
 import com.ts.app.domain.Project;
 import com.ts.app.domain.Site;
 import com.ts.app.domain.User;
+import com.ts.app.domain.UserRole;
 import com.ts.app.domain.UserRoleEnum;
 import com.ts.app.repository.AttendanceRepository;
 import com.ts.app.repository.CheckInOutImageRepository;
