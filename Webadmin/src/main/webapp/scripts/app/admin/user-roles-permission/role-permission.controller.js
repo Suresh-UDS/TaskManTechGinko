@@ -60,7 +60,7 @@ angular.module('timeSheetApp')
 	        					var actionMatch = false;
 	        					for(var i = 0; i < actions.length ; i++) {
 	        						var action = actions[i];
-	        						if(action.name.toUpperCase() === actionName.toUpperCase()) {
+	        						if(action.name.toUpperCase() == actionName.toUpperCase()) {
 	        							actionMatch = true;
         								actions.splice(i,1);
 	        							break;
@@ -276,7 +276,7 @@ angular.module('timeSheetApp')
                 					// permActions.forEach(function(permAction)
 									// {
                 						
-                						if(action.name.indexOf(permAction.name) != -1) {
+                						if(action.name === (permAction.name)) {
                 							//console.log('action match found -' + action.name);
                 							permActionMatch = true;
                 							//console.log('action in scope - ' + $scope.moduleActions[i].moduleActions[k].name);
@@ -290,7 +290,7 @@ angular.module('timeSheetApp')
                 										var selPermActions = selPerms[p].moduleActions;
                 										if(selPermActions) { 
                     										for(var a=0; a < selPermActions.length; a++) {
-                    											if(selPermActions[a].name.indexOf(permAction.name) == -1) {
+                    											if(selPermActions[a].name.toUpperCase() === (permAction.name)) {
                     												var action = {
                     	                    								"id" : permAction.id,
                     	                    								"name" : permAction.name

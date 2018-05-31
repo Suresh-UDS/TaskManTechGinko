@@ -143,6 +143,8 @@ public class SearchCriteria extends Paginator {
 	
 	private Date quotationApprovedDate;
 	
+	private List<Long> siteIds;
+	
 	public long getId() {
 		return id;
 	}
@@ -756,6 +758,14 @@ public class SearchCriteria extends Paginator {
 
 	public void setQuotationSubmittedDate(Date quotationSubmittedDate) {
 		this.quotationSubmittedDate = quotationSubmittedDate;
+	}
+
+	public List<Long> getSiteIds() {
+		return siteIds;
+	}
+
+	public void setSiteIds(List<Long> siteIds) {
+		this.siteIds = siteIds;
 	}
     
 	

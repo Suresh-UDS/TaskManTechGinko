@@ -8,6 +8,7 @@ import java.util.TimeZone;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Expression;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
@@ -66,8 +67,9 @@ public class JobSpecification implements Specification<Job> {
         		}
 
             if(StringUtils.isNotEmpty(searchCriteria.getJobTypeName())){
-        			predicates.add(builder.equal(root.get("type"),  JobType.valueOf(searchCriteria.getJobTypeName())));
+        			predicates.add(builder.equal(root.get("type"),  JobType.getType(searchCriteria.getJobTypeName())));
         		}
+
 
             if(searchCriteria.getCheckInDateTimeFrom() != null){
 	            	if(root.get("plannedStartTime") != null) {
@@ -111,6 +113,11 @@ public class JobSpecification implements Specification<Job> {
 	                		orPredicates.add(root.get("employee").get("id").in(searchCriteria.getSubordinateIds()));
 	                }
 	            }
+	            if(CollectionUtils.isNotEmpty(searchCriteria.getSiteIds())){
+	            		Predicate path = root.get("site").get("id").in(searchCriteria.getSiteIds());
+	        			orPredicates.add(path);
+	            }
+
             //}
 	        log.debug("JobSpecification toPredicate - searchCriteria subordinateIds -"+ searchCriteria.getSubordinateIds());
             if(searchCriteria.getSiteId() == 0 && CollectionUtils.isNotEmpty(searchCriteria.getSubordinateIds())){

@@ -249,6 +249,7 @@ public class JobManagementService extends AbstractService {
 	            		for(EmployeeProjectSite site : sites) {
 	            			siteIds.add(site.getSite().getId());
 	            		}
+	            		searchCriteria.setSiteIds(siteIds);
             		}
 	    		}
             
