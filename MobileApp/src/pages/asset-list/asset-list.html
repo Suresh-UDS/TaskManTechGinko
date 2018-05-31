@@ -29,14 +29,17 @@
 
         <ion-row no-margin="">
             <ion-col col-4 no-padding="">
-                <ion-thumbnail item-start class="margin-bottom0 margin-top0">
+                <ion-thumbnail *ngIf="asset.image" item-start class="margin-bottom0 margin-top0">
                     <img [src]=asset.img imageViewer/>
+                </ion-thumbnail>
+                <ion-thumbnail *ngIf="!asset.image" item-start class="margin-bottom0 margin-top0">
+                    <img src="imgs/placeholder.png" imageViewer/>
                 </ion-thumbnail>
             </ion-col>
             <ion-col col-7 no-padding="" class="ver-center">
                 <div>
-                    <p text-left="" class="padding-bottom5">{{asset.name}}</p>
-                    <p text-left="" class="fnt-12">{{asset.assetGroup}}</p>
+                    <p text-left="" class="padding-bottom5">{{asset.title}}</p>
+                    <p text-left="" class="fnt-12">{{asset.code}}</p>
                 </div>
             </ion-col>
             <ion-col col-1 no-padding="" class="ver-center">
