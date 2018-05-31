@@ -64,9 +64,12 @@
 
     <ion-list *ngIf="tickets.length<=0">
         <ion-item>
-            <ion-card>
-                <div class="card-title">No Tickets found</div>
-                <div class="card-subtitle">Create new Tickets using the + icon at bottom</div>
+            <ion-card padding>
+                <ion-card-header no-padding>
+                    No Tickets found
+                </ion-card-header>
+                <!--<div class="card-title">No Tickets found</div>-->
+                <!--<div class="card-subtitle">Create new Tickets using the + icon at bottom</div>-->
             </ion-card>
         </ion-item>
 
