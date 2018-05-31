@@ -100,12 +100,12 @@
                                                                                     </div>
                                                                                 </div>
                                                                                 <div class="col-md-12">
-		                                                                              <div class="form-group selectcon is-empty">
+		                                                                              <div class="form-group selectcon is-empty" ng-init="loadAssetType()">
                                                                                         <div class="row">
     		                                                                                <div class="col-md-10 pad-r-0px">
                                                                                                 <label class="control-label">Type</label>
                                                                                                 <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-    		                                                                                    <select class="form-control" ng-model="assetObj.assetype" ng-options="assetype as assetype.id for assetype in assetypes">
+    		                                                                                    <select class="form-control" ng-model="assetObj.assetype" ng-options="assetype as assetype.name for assetype in assetTypes">
     		                                                                                        <option value="">Select Asset Type ..</option>
     		                                                                                    </select>
     		                                                                                </div>
@@ -115,7 +115,7 @@
     		                                                                                    </a>
                                                                                             </div>
 		                                                                                </div>
-                                                                                        
+
 		                                                                                <div class="collapse" id="addAssetType">
 		                                                                                    <div class="">
 		                                                                                        <input class="input-desc" id='assetgroupName' ng-model=""
@@ -123,9 +123,9 @@
 		                                                                                        <a class="btn btn-success"  ng-click="">Add</a>
 		                                                                                    </div>
 		                                                                                </div>
-                                                                                        
+
 		                                                                            </div>
-		                                                                        
+
 		                                                                              <div class="form-group selectcon is-empty">
 
                                                                                         <div class="row">
@@ -137,14 +137,14 @@
                                                                                                 </select>
 
                                                                                             </div>
-                                                                                            
+
                                                                                             <div class="col-md-2 pdng-top25">
                                                                                                 <a href="javascript:void(0)"  data-toggle="collapse" data-parent="#accordian" data-target="#addGroup" class="btn btn-round btn-fab btn-fab-mini btn-simple" aria-expanded="false" aria-controls="collapseExample">
                                                                                                     <i class="material-icons">add</i>
                                                                                                 </a>
                                                                                             </div>
                                                                                         </div>
-                                                                                     
+
                                                                                        <div class="collapse" id="addGroup">
                                                                                             <div class="">
                                                                                                 <input class="input-desc" id='assetgroupName' ng-model="assetgroup"
@@ -260,7 +260,7 @@
                                                                                             <option value="">Select Zone  ...</option>
                                                                                         </select>
 
-																						
+
 
                                                                                     </div>
                                                                                 </div>
@@ -276,13 +276,13 @@
 
                                                                     <div class="panel panel-default">
                                                                         <div class="panel-heading">Manufacturer Details</div>
-                                                                        <div class="panel-body">
+                                                                        <div class="panel-body" ng-init="loadManufacturer()">
 
                                                                             <div class="row">
                                                                                 <div class="col-md-6">
                                                                                     <div class="form-group selectcon is-empty">
 
-                                                                                     <div class="row">
+                                                                                     <div class="row" >
                                                                                         <div class="col-md-10 pad-r-0px">
                                                                                             <label class="control-label">Manufacturer </label>
                                                                                             <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
@@ -309,7 +309,7 @@
                                                                                 </div>
                                                                                 <div class="col-md-6">
                                                                                     <div class="form-group">
-                                                                                        <label class="control-label">Model Number  <!--  <span class="red-star">*</span>--> </label> 
+                                                                                        <label class="control-label">Model Number  <!--  <span class="red-star">*</span>--> </label>
                                                                                         <input id='assetModel'
                                                                                                ng-model="assetObj.model"
                                                                                                class='form-control'
@@ -622,7 +622,7 @@
 
                                                                                 <div class="col-md-10">
                                                                                     <div class="form-group">
-                                                                                        <button class="btn btn-success" type="submit" 
+                                                                                        <button class="btn btn-success" type="submit"
                                                                                                 id="form-button-save" ng-click="saveAsset()">
                                                             	                        <span class="btn-label">
                                                             	                        <i class="material-icons">check</i>

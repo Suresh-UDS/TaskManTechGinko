@@ -52,12 +52,14 @@ angular.module('timeSheetApp')
                     return response.data;
                 });
             },
-            
-            loadAssetType : function() { 
-            	return $http.get('api/assets/type').then(function (response) { 
-            		return response.data;
-            	});
-            	
+
+             createAssetType : function() { 
+                return $http.post('api/assets/type').then(function (response) { 
+                    return response.data;
+                });
+                
             }
+            
+            
         };
     });
