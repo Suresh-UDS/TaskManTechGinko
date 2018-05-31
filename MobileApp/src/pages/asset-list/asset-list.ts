@@ -20,8 +20,10 @@ import {AssetService} from "../service/assetService";
 export class AssetList {
 
     assetList:any;
+    searchCriteria:any;
   constructor(public navCtrl: NavController, public navParams: NavParams, public modalController:ModalController, public qrScanner:QRScanner, public assetService:AssetService) {
     this.assetList = [];
+    this.searchCriteria = {};
   }
 
   ionViewDidLoad() {
@@ -41,7 +43,13 @@ export class AssetList {
       modal.onDidDismiss(data=>{
           console.log("Modal dismissed");
           console.log(data);
-      })
+          this.searchCriteria = {
+              siteId:data.siteId,
+              projectId:data.projectId,
+              currPage:
+          }
+
+      });
       modal.present();
 
   }
@@ -73,6 +81,10 @@ export class AssetList {
 
   scanQR(){
       this.navCtrl.push(ScanQR)
+  }
+
+  searchAssets(){
+
   }
 
     viewAsset(asset){
