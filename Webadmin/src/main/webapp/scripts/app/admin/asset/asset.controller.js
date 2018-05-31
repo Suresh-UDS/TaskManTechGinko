@@ -39,8 +39,6 @@ angular.module('timeSheetApp')
         
         $scope.consumptionMonitoringRequired = false;
         
-        $scope.addAssetType =null;
-
         console.log($stateParams)
                     var that =  $scope;
 
@@ -477,15 +475,12 @@ angular.module('timeSheetApp')
 
 
         $scope.addAssetType = function () {
-            console.log($scope.AssetType);
-            if($scope.AssetType){
+            console.log($scope.assetType);
+            if($scope.assetType){
                 console.log("Asset Type entered");
-                var AssetType ={
-                    name:$scope.AssetType
-                };
-                AssetTypeComponent.create(AssetType).then(function (response) {
+                AssetTypeComponent.create($scope.assetType).then(function (response) {
                     console.log(response);
-                    $scope.AssetType= null;
+                    $scope.assetType = {};
                     $scope.showNotifications('top','center','success','AssetType Added Successfully');
                     $scope.loadAssetType();
 
