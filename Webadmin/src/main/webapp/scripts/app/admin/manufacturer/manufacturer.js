@@ -20,5 +20,39 @@ angular.module('timeSheetApp')
                 resolve: {
 
                 }
+            }).state('add-manufacturer', {
+                parent: 'manage',
+                url: '/add-manufacturer',
+                controller: 'ManufacturerController',
+                data: {
+                    authorities: [],
+                    pageTitle: 'Add Manufacturer'
+                },
+                views: {
+                    'content@': {
+                        templateUrl: 'scripts/app/admin/manufacturer/add-manufacturer.html',
+                        controller: 'ManufacturerController'
+                    }
+                },
+                resolve: {
+
+                }
+            }).state('edit-manufacturer', {
+                parent : 'manage',
+                url : '/edit-manufacturer/:id',
+                controller : 'ManufacturerController',
+                data : {
+                    authorities : [],
+                    pageTitle : 'Update Manufacturer'
+                },
+                views : {
+                    'content@' : {
+                        templateUrl : 'scripts/app/admin/manufacturer/edit-manufacturer.html',
+                        controller : 'ManufacturerController'
+                    }
+                },
+                resolve : {
+
+                }
             });
     });

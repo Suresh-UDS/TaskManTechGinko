@@ -1,5 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
-import {Events, MenuController, Nav, Platform, ToastController} from 'ionic-angular';
+import {Events, IonicApp, MenuController, Nav, Platform, ToastController} from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import {BatteryStatus, BatteryStatusResponse} from "@ionic-native/battery-status";
@@ -42,7 +42,7 @@ export class MyApp {
     counter=0;
   pages: Array<{title: string, component: any,active:any,icon:any,permission:any}>;
 
-  constructor(public platform: Platform,public menuCtrl:MenuController,private backgroundMode: BackgroundMode, public statusBar: StatusBar,public component:componentService,public toastCtrl: ToastController, public splashScreen: SplashScreen, private oneSignal: OneSignal, public events:Events, private batteryStatus: BatteryStatus, private appVersion:AppVersion) {
+  constructor(public platform: Platform,private ionicApp: IonicApp,public menuCtrl:MenuController,private backgroundMode: BackgroundMode, public statusBar: StatusBar,public component:componentService,public toastCtrl: ToastController, public splashScreen: SplashScreen, private oneSignal: OneSignal, public events:Events, private batteryStatus: BatteryStatus, private appVersion:AppVersion) {
     this.initializeApp();
 
       this.backgroundMode.enable();
@@ -57,9 +57,18 @@ export class MyApp {
           console.log("Back button event");
           console.log(view);
           console.log(this.nav.canGoBack());
+          console.log(this.ionicApp._modalPortal.getActive());
           if(this.nav.canGoBack())
           {
-                this.nav.pop();
+              this.nav.pop();
+          }
+          else if(this.menuCtrl.isOpen())
+          {
+              this.menuCtrl.close();
+          }
+          else if(this.ionicApp._modalPortal.getActive())
+          {
+              this.ionicApp._modalPortal.getActive().dismiss();
           }
           else if (this.counter == 0) {
               this.counter++;
