@@ -1,4 +1,4 @@
-<div ng-init="initLoad()">
+<div ng-init="">
 
 
 
@@ -11,7 +11,7 @@
                         <div class="col-md-12">
                             <div class="card formcard FilterCard">
                                 <div class="card-content">
-                                    <form name="searchForm"  ng-submit="search();" novalidate >
+                                    <form name="searchForm"  ng-submit="searchFilter();" novalidate >
 
                                         <div class="row" >
 
@@ -39,7 +39,10 @@
                                                     <button type="submit" class="btn btn-circle blue-clr">
                                                         <i class="material-icons">search</i>
                                                     </button>
-                                                    <button data-toggle="modal" data-target="#RightModal-Add"  class="btn btn-circle green-clr">
+                                                    <!-- <button data-toggle="modal" data-target="#RightModal-Add"  class="btn btn-circle green-clr">
+                                                        <i class="material-icons">add</i>
+                                                    </button> -->
+                                                    <button data-toggle="modal" data-target="#RightModal-Add"  class="btn btn-circle green-clr" ui-sref="add-vendor">
                                                         <i class="material-icons">add</i>
                                                     </button>
                                                     <button ng-click="refreshPage()" class="btn btn-circle orange-clr">
@@ -77,10 +80,10 @@
                                 <th width="15%">Contact First Name
 
                                     <span class="sortingIcons">
-                                        <span ng-click="columnAscOrder('address')" ng-class="isActiveAsc == 'address' ? 'active' : ''" >
+                                        <span ng-click="columnAscOrder('contactFirstName')" ng-class="isActiveAsc == 'contactFirstName' ? 'active' : ''" >
                                              <i  class="fa fa-caret-up"></i>
                                         </span>
-                                        <span ng-click="columnDescOrder('address')" ng-class="isActiveDesc == 'address' ? 'active' : ''">
+                                        <span ng-click="columnDescOrder('contactFirstName')" ng-class="isActiveDesc == 'contactFirstName' ? 'active' : ''">
                                             <i  class="fa fa-caret-down"></i>
                                         </span>
                                     </span>
@@ -88,10 +91,10 @@
                                 <th width="15%">Contact Last Name
 
                                     <span class="sortingIcons">
-                                        <span ng-click="columnAscOrder('address')" ng-class="isActiveAsc == 'address' ? 'active' : ''" >
+                                        <span ng-click="columnAscOrder('contactLastName')" ng-class="isActiveAsc == 'contactLastName' ? 'active' : ''" >
                                              <i  class="fa fa-caret-up"></i>
                                         </span>
-                                        <span ng-click="columnDescOrder('address')" ng-class="isActiveDesc == 'address' ? 'active' : ''">
+                                        <span ng-click="columnDescOrder('contactLastName')" ng-class="isActiveDesc == 'contactLastName' ? 'active' : ''">
                                             <i  class="fa fa-caret-down"></i>
                                         </span>
                                     </span>
@@ -115,12 +118,14 @@
                             <tbody>
 								<tr ng-repeat="vendor in vendors" repeat-done="initDataTables()">
 									<td>{{vendor.name}}</td>
-	                                	<td>{{vendor.contactFirstName}} {{vendor.contactLastName}}</td>
+	                                <td>{{vendor.contactFirstName}} </td>
+                                    <td>{{vendor.contactLastName}}</td>
 								   	<td>{{vendor.phone}}</td>
 								   	<td>{{vendor.addressLine1}} {{vendor.addressLine2}} {{vendor.city}} {{vendor.state}}</td>
 	                                 <td class="text-right">
 	                                     <a data-toggle="modal"  data-target="#RightModal-View" ng-click="getVendorDetails(vendor.id, 'view')"  has-permission="Vendor:View"   class="btn btn-simple btn-info"><i class="material-icons">visibility</i></a>
-	                                     <a data-toggle="modal"  data-target="#RightModal-Edit" ng-click="getVendorDetails(vendor.id, 'edit')"  has-permission="Vendor:Edit"   class="btn btn-simple btn-info"><i class="material-icons">edit</i></a>
+	                                    <!--  <a data-toggle="modal"  data-target="#RightModal-Edit" ng-click="getVendorDetails(vendor.id, 'edit')"  has-permission="Vendor:Edit"   class="btn btn-simple btn-info"><i class="material-icons">edit</i></a> -->
+                                        <a  ui-sref="edit-vendor({ id: vendor.id })"  has-permission="Vendor:Edit"   class="btn btn-simple btn-info"><i class="material-icons">edit</i></a>
 	                                 </td>
 								
 								</tr>
@@ -140,11 +145,30 @@
     </div>
     <!-- end row -->
 
+    <div class="card margin-TB-5 txt-align-center" ng-hide="vendors">
+
+        <div class="card-content">
+            <div class="" style="text-align:center;padding: 10px 0;"  ng-hide="vendorsLoader">
+                <div loader-css="ball-pulse"></div>
+            </div>
+
+            <h3>No data Found</h3>
+
+        </div>
+
+    </div>
+
+    <!-- Pagination directive start -->
+
+    <pagination-new></pagination-new>
+
+    <!-- Pagination directive end -->
+
 
 
 </div>
 
-<div class="modal right fade" id="RightModal-Add" tabindex="-1" role="dialog" aria-labelledby="RightModal">
+<!-- <div class="modal right fade" id="RightModal-Add" tabindex="-1" role="dialog" aria-labelledby="RightModal">
     <div class="modal-dialogNew Modalwith600" role="document">
         <div class="modal-content">
 
@@ -297,11 +321,11 @@
 
             </div>
 
-        </div><!-- modal-content -->
-    </div><!-- modal-dialog -->
-</div><!--End Add modal -->
+        </div> modal-content 
+    </div> modal-dialog 
+</div>End Add modal --> 
 
-<div class="modal right fade" id="RightModal-Edit" tabindex="-1" role="dialog" aria-labelledby="RightModal">
+<!-- <div class="modal right fade" id="RightModal-Edit" tabindex="-1" role="dialog" aria-labelledby="RightModal">
     <div class="modal-dialogNew" role="document">
         <div class="modal-content">
 
@@ -452,9 +476,9 @@
 			</form>
             </div>
 
-        </div><!-- modal-content -->
-    </div><!-- modal-dialog -->
-</div><!--End Edit modal -->
+        </div> modal-content 
+    </div>modal-dialog 
+</div>End Edit modal  -->
 
 <div class="modal right fade" id="RightModal-View" tabindex="-1" role="dialog" aria-labelledby="RightModal">
     <div class="modal-dialogNew" role="document">
