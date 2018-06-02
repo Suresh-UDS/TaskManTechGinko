@@ -252,7 +252,7 @@ public class JobManagementService extends AbstractService {
 	            		searchCriteria.setSiteIds(siteIds);
             		}
 	    		}
-            
+
             List<ReportResult> reportResults = new ArrayList<ReportResult>();
             log.debug("JobSpecification toPredicate - searchCriteria checkInDateFrom -"+ checkInDate);
 	        	if(checkInDate != null) {
@@ -764,7 +764,7 @@ public class JobManagementService extends AbstractService {
 		if(ticket != null) {
 			ticket.setStatus(TicketStatus.INPROGRESS.toValue());
 			ticketRepository.save(ticket);
-		}	
+		}
 		job.setTitle(jobDTO.getTitle());
 		job.setDescription(jobDTO.getDescription());
 		job.setStatus(jobDTO.getJobStatus());
@@ -1035,6 +1035,14 @@ public class JobManagementService extends AbstractService {
 		return mapperUtil.toModel(job, JobDTO.class);
 
 	}
+
+    public JobDTO saveJobAndCheckList(JobDTO jobDTO) {
+        Job job = findJob(jobDTO.getId());
+
+        mapToEntity(jobDTO, job);
+        job = jobRepository.save(job);
+        return mapperUtil.toModel(job, JobDTO.class);
+    }
 
 	public JobDTO onlyCompleteJob(Long id) {
 		Job job = findJob(id);
