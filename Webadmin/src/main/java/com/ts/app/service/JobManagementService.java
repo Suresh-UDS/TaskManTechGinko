@@ -16,6 +16,8 @@ import org.apache.commons.collections.CollectionUtils;
 import org.hibernate.Hibernate;
 import org.joda.time.DateTime;
 import org.joda.time.DurationFieldType;
+import org.joda.time.Hours;
+import org.joda.time.Minutes;
 import org.joda.time.Seconds;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -1033,8 +1035,8 @@ public class JobManagementService extends AbstractService {
 		}
 
 		Date endDate = new Date();
-		int totalHours = Seconds.secondsBetween(new DateTime(job.getActualStartTime()),new DateTime(endDate)).get(DurationFieldType.hours());
-		int totalMinutes = Seconds.secondsBetween(new DateTime(job.getActualStartTime()),new DateTime(endDate)).get(DurationFieldType.minutes());
+		int totalHours = Hours.hoursBetween(new DateTime(job.getActualStartTime()),new DateTime(endDate)).getHours();
+		int totalMinutes = Minutes.minutesBetween(new DateTime(job.getActualStartTime()),new DateTime(endDate)).getMinutes();
 		if(totalHours > 0) {
 			totalMinutes = totalMinutes % 60;
 		}
@@ -1051,8 +1053,8 @@ public class JobManagementService extends AbstractService {
 		Job job = findJob(id);
 		job.setActualStartTime(job.getPlannedStartTime());
 		Date endDate = new Date();
-		int totalHours = Seconds.secondsBetween(new DateTime(job.getActualStartTime()),new DateTime(endDate)).get(DurationFieldType.hours());
-		int totalMinutes = Seconds.secondsBetween(new DateTime(job.getActualStartTime()),new DateTime(endDate)).get(DurationFieldType.minutes());
+		int totalHours = Hours.hoursBetween(new DateTime(job.getActualStartTime()),new DateTime(endDate)).getHours();
+		int totalMinutes = Minutes.minutesBetween(new DateTime(job.getActualStartTime()),new DateTime(endDate)).getMinutes();
 		if(totalHours > 0) {
 			totalMinutes = totalMinutes % 60;
 		}
@@ -1068,8 +1070,8 @@ public class JobManagementService extends AbstractService {
 	public JobDTO onlyCompleteJob(Job job) {
 		job.setActualStartTime(job.getPlannedStartTime());
 		Date endDate = new Date();
-		int totalHours = Seconds.secondsBetween(new DateTime(job.getActualStartTime()),new DateTime(endDate)).get(DurationFieldType.hours());
-		int totalMinutes = Seconds.secondsBetween(new DateTime(job.getActualStartTime()),new DateTime(endDate)).get(DurationFieldType.minutes());
+		int totalHours = Hours.hoursBetween(new DateTime(job.getActualStartTime()),new DateTime(endDate)).getHours();
+		int totalMinutes = Minutes.minutesBetween(new DateTime(job.getActualStartTime()),new DateTime(endDate)).getMinutes();
 		if(totalHours > 0) {
 			totalMinutes = totalMinutes % 60;
 		}
