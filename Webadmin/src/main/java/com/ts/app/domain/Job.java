@@ -73,6 +73,7 @@ public class Job extends AbstractAuditingEntity implements Serializable{
 	private Date actualStartTime;
 	private Date actualEndTime;
 	private int actualHours;
+	private int actualMinutes;
 
 	private String schedule;
 	private Date scheduleEndDate;
@@ -369,4 +370,12 @@ public class Job extends AbstractAuditingEntity implements Serializable{
     public void setTicket(Ticket ticket) {
         this.ticket = ticket;
     }
+	public int getActualMinutes() {
+		return actualMinutes;
+	}
+	public void setActualMinutes(int actualMinutes) {
+		this.actualMinutes = actualMinutes;
+	}
+    
+    
 }
