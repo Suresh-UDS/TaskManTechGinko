@@ -15,6 +15,9 @@ import com.ts.app.web.rest.dto.*;
 import org.apache.commons.collections.CollectionUtils;
 import org.hibernate.Hibernate;
 import org.joda.time.DateTime;
+import org.joda.time.DurationFieldType;
+import org.joda.time.Hours;
+import org.joda.time.Minutes;
 import org.joda.time.Seconds;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -750,6 +753,8 @@ public class JobManagementService extends AbstractService {
 		dto.setPlannedEndTime(job.getPlannedEndTime());
 		dto.setActualStartTime(job.getActualStartTime());
 		dto.setActualEndTime(job.getActualEndTime());
+		dto.setActualHours(job.getActualHours());
+		dto.setActualMinutes(job.getActualMinutes());
 		return dto;
 	}
 
@@ -951,7 +956,11 @@ public class JobManagementService extends AbstractService {
 	public JobDTO updateJob(JobDTO jobDTO) {
 		Job job = findJob(jobDTO.getId());
 		mapToEntity(jobDTO, job);
-		job = jobRepository.save(job);
+		if(jobDTO.getJobStatus().equals(JobStatus.COMPLETED)) {
+			onlyCompleteJob(job);
+		}else {
+			job = jobRepository.save(job);
+		}
 
 		//if the job is scheduled for recurrence create a scheduled task
 		if(!StringUtils.isEmpty(jobDTO.getSchedule()) && !jobDTO.getSchedule().equalsIgnoreCase("ONCE")) {
@@ -1020,13 +1029,17 @@ public class JobManagementService extends AbstractService {
 
 	public JobDTO completeJob(Long id) {
 		Job job = findJob(id);
-
+		job.setActualStartTime(job.getPlannedStartTime());
 		if(job.getStatus() != JobStatus.INPROGRESS){
 			throw new TimesheetException("Job cannot be completed, Current Status : "+job.getStatus());
 		}
 
 		Date endDate = new Date();
-		int totalHours = Seconds.secondsBetween(new DateTime(job.getActualStartTime()),new DateTime(endDate)).getSeconds();
+		int totalHours = Hours.hoursBetween(new DateTime(job.getActualStartTime()),new DateTime(endDate)).getHours();
+		int totalMinutes = Minutes.minutesBetween(new DateTime(job.getActualStartTime()),new DateTime(endDate)).getMinutes();
+		if(totalHours > 0) {
+			totalMinutes = totalMinutes % 60;
+		}
 
 		job.setStatus(JobStatus.COMPLETED);
 		job.setActualEndTime(endDate);
@@ -1046,12 +1059,34 @@ public class JobManagementService extends AbstractService {
 
 	public JobDTO onlyCompleteJob(Long id) {
 		Job job = findJob(id);
-
+		job.setActualStartTime(job.getPlannedStartTime());
 		Date endDate = new Date();
-		//int totalHours = Seconds.secondsBetween(new DateTime(job.getActualStartTime()),new DateTime(endDate)).getSeconds();
+		int totalHours = Hours.hoursBetween(new DateTime(job.getActualStartTime()),new DateTime(endDate)).getHours();
+		int totalMinutes = Minutes.minutesBetween(new DateTime(job.getActualStartTime()),new DateTime(endDate)).getMinutes();
+		if(totalHours > 0) {
+			totalMinutes = totalMinutes % 60;
+		}
 		job.setStatus(JobStatus.COMPLETED);
 		job.setActualEndTime(endDate);
-		job.setActualHours(0);
+		job.setActualHours(totalHours);
+		job.setActualMinutes(totalMinutes);
+		jobRepository.save(job);
+		return mapperUtil.toModel(job, JobDTO.class);
+
+	}
+	
+	public JobDTO onlyCompleteJob(Job job) {
+		job.setActualStartTime(job.getPlannedStartTime());
+		Date endDate = new Date();
+		int totalHours = Hours.hoursBetween(new DateTime(job.getActualStartTime()),new DateTime(endDate)).getHours();
+		int totalMinutes = Minutes.minutesBetween(new DateTime(job.getActualStartTime()),new DateTime(endDate)).getMinutes();
+		if(totalHours > 0) {
+			totalMinutes = totalMinutes % 60;
+		}
+		job.setStatus(JobStatus.COMPLETED);
+		job.setActualEndTime(endDate);
+		job.setActualHours(totalHours);
+		job.setActualMinutes(totalMinutes);
 		jobRepository.save(job);
 		return mapperUtil.toModel(job, JobDTO.class);
 
