@@ -56,6 +56,12 @@ angular.module('timeSheetApp')
                 return $http.post('api/parameterConfig/search',searchCriteria).then(function (response) {
                     return response.data;
                 });
+            },
+        
+            findByAssertType : function(type) { 
+            	return $http.get('api/parameterConfig/assetType/'+type).then(function (response) { 
+            		return response.data;
+            	});
             }
         };
     });
