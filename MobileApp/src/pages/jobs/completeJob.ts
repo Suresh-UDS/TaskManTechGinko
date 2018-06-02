@@ -113,6 +113,23 @@ export class CompleteJobPage {
 
     }
 
+    saveJob(job){
+        this.component.showLoader('Saving Job');
+        this.jobService.saveJob(job).subscribe(
+            response=>{
+                console.log("Save Job response");
+                console.log(response)
+                this.component.closeLoader();
+                this.component.showToastMessage('Job Saved Successfully','bottom');
+            },err=>{
+                console.log("Error in saving response");
+                console.log(err);
+                this.component.closeLoader();
+                this.component.showToastMessage('Error in saving job, please try again...','bottom');
+            }
+        )
+    }
+
     completeJob(job, takenImages){
         this.component.showLoader('Completing Job');
         this.geolocation.getCurrentPosition().then((response)=>{
@@ -135,10 +152,10 @@ export class CompleteJobPage {
         console.log(this.checkOutDetails);
         this.jobService.checkOutJob(this.checkOutDetails).subscribe(
             response=>{
+                this.component.closeLoader();
                 console.log("complete job response");
                 console.log(response);
                 console.log(job);
-                this.component.closeLoader();
                 this.component.showToastMessage('Job Completed Successfully','bottom');
                 // this.component.showLoader('Uploading Images');
                 //TODO
@@ -206,19 +223,16 @@ export class CompleteJobPage {
     }
     changeStatus(i)
     {
-
         this.sLength=this.jobDetails.checklistItems.length;
-
-
             this.count=this.jobDetails.checklistItems.filter((data,i)=>{
                 return data.status;
             }).length;
             console.log(this.jobDetails.checklistItems[i].status);
 
         this.jobDetails.checklistItems[i].status=true;
+        this.jobDetails.checklistItems[i].completed=true;
         console.log("Count:"+this.count);
         console.log("Slength"+this.sLength);
-
             this.onButton=true;
 
     }

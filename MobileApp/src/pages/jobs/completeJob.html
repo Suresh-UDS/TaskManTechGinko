@@ -45,7 +45,7 @@
             <div *ngIf="jobDetails.checklistItems?.length > 0">
                 <ion-item *ngFor="let list of jobDetails.checklistItems;let i = index">
                     <ion-label style="color: black">{{list.checklistItemName}}</ion-label>
-                    <ion-checkbox [(ngModel)]="list.status"  (ionChange)="changeStatus(i)" checked="list.status"></ion-checkbox>
+                    <ion-checkbox [(ngModel)]="list.completed"  (ionChange)="changeStatus(i)" checked="list.status"></ion-checkbox>
                 </ion-item>
             </div>
             <div *ngIf="!jobDetails.checklistItems?.length > 0" class="align-center">
@@ -57,9 +57,13 @@
 </ion-content>
 
 <ion-footer>
-    <ion-toolbar class="align-center">
-        <button class="btn btn-warning center" (click)="completeJob(jobDetails,takenImages)">
-            complete job
+
+    <ion-toolbar class="align-right" padding-left padding-right (click)="saveJob(jobDetails)" >
+        <button class="btn btn-warning center pull-left">
+            Save
+        </button>
+        <button class="btn btn-success center pull-right" (click)="completeJob(jobDetails,takenImages)">
+            Complete <ion-icon name="ios-arrow-forward-outline"></ion-icon>
         </button>
     </ion-toolbar>
 </ion-footer>
