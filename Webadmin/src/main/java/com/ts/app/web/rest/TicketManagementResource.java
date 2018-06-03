@@ -10,12 +10,15 @@ import com.ts.app.service.TicketManagementService;
 import com.ts.app.service.UserService;
 import com.ts.app.service.util.MapperUtil;
 import com.ts.app.web.rest.dto.*;
+
+import org.json.JSONException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
@@ -144,5 +147,20 @@ public class TicketManagementResource {
 		response.setHeader("Content-Disposition","attachment; filename=\"" + fileId + ".xlsx\"");
 		return content;
 	}
+	
+    @RequestMapping(value = "/ticket/image/upload", method = RequestMethod.POST)
+    public ResponseEntity<?> upload(@RequestParam("ticketId") long ticketId, @RequestParam("ticketFile") MultipartFile file) throws JSONException {
+    		TicketDTO ticketDTO = new TicketDTO();
+    		ticketDTO.setImageFile(file);
+        ticketDTO.setId(ticketId);
+        log.debug("ticket resource with parameters"+ticketId);
+        ticketService.uploadFile(ticketDTO);
+        return new ResponseEntity<String>("{ \"ticketFileName\" : \""+ticketDTO.getImage() + "\", \"status\" : \"success\"}", HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/ticket/image/{id}/{imageId}",method = RequestMethod.GET)
+    public String findQuotationImage(@PathVariable("id") long ticketId, @PathVariable("imageId") String imageId) {
+        return ticketService.getTicketImage(ticketId, imageId);
+    }
 
 }

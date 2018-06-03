@@ -132,8 +132,8 @@ public class RateCardResource {
 
     @RequestMapping(value = "/quotation/image/upload", method = RequestMethod.POST)
     public ResponseEntity<?> upload(@RequestParam("quotationId") String quotationId, @RequestParam("quotationFile") MultipartFile file) throws JSONException {
-    	QuotationDTO quotationDTO = new QuotationDTO();
-    	quotationDTO.setQuotationFile(file);
+    		QuotationDTO quotationDTO = new QuotationDTO();
+    		quotationDTO.setQuotationFile(file);
         quotationDTO.setId(quotationId);
         log.debug("quotation resource with parameters"+quotationId);
         rateCardService.uploadFile(quotationDTO);

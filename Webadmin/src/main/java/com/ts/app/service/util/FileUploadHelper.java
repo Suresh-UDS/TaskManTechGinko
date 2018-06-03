@@ -303,6 +303,27 @@ public class FileUploadHelper {
         }
         return imageDataString;
     }
+    
+    public String uploadTicketFile(long ticketId, MultipartFile file, long dateTime) {
+        String name = ticketId + "_" + dateTime + ".jpg";
+        log.debug("file =" + file + ",  name=" + name);
+        if (!file.isEmpty()) {
+            // check and create emp directory
+            String filePath = env.getProperty("ticket.file.path");
+            filePath += "/" + ticketId;
+            uploadFile(file, filePath, name);
+        } else {
+            log.error("Empty file, upload failed for quotation- " + name);
+        }
+        return name;
+    }
+    
+    public String readTicketImages(long ticketId, String imageId) {
+        String filePath = env.getProperty("ticket.file.path");
+        filePath += "/"+ticketId+"/" + imageId +".jpg";
+        String imageData = readFile(filePath, imageId);
+        return imageData;
+    }
 
     public String readAttendanceImage(Long id, String empId, String imageFileName) {
         String filePath = env.getProperty("attendance.file.path");
@@ -355,6 +376,48 @@ public class FileUploadHelper {
             log.error("Empty file, upload failed for import - " + fileName);
         }
         return fileName;
+    }
+    
+    private void uploadFile(MultipartFile file, String filePath , String fileName) {
+    		FileSystem fileSystem = FileSystems.getDefault();
+        Path path = fileSystem.getPath(filePath);
+        if (!Files.exists(path)) {
+            Path newFilePath = Paths.get(filePath);
+            try {
+                Files.createDirectory(newFilePath);
+            } catch (IOException e) {
+                log.error("Error while creating path  " + newFilePath);
+            }
+        }
+        try {
+            filePath += "/" + fileName;
+            byte[] bytes = file.getBytes();
+            BufferedOutputStream stream = new BufferedOutputStream(new FileOutputStream(new File(filePath)));
+            stream.write(bytes);
+            stream.close();
+            log.debug("File uploaded successfully to quotation folder - " + fileName);
+        } catch (Exception e) {
+            log.error("File uploaded failed for quotation - " + fileName, e);
+        }
+        return;
+    }
+    
+    private String readFile(String filePath, String imageId) {
+        File file = new File(filePath);
+        String imageDataString = "data:image/png;base64,";
+        try {
+            FileInputStream imageFile = new FileInputStream(file);
+            byte imageData[] = new byte[(int) file.length()];
+            imageFile.read(imageData);
+
+            // Converting Image byte array into Base64 String
+            imageDataString += Base64.getEncoder().encodeToString(imageData);
+            imageFile.close();
+
+        }catch(IOException io) {
+            log.error("Error while reading the image file ,"+ imageId , io);
+        }
+        return imageDataString;
     }
 
 }

@@ -72,6 +72,9 @@ attendance:
 quotation:
     file:
         path:  /opt/quotation
+ticket:
+    file:
+        path:  /opt/ticket        
 import:
     file:
         path:

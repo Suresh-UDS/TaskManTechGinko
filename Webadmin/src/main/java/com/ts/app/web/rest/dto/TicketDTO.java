@@ -2,6 +2,8 @@ package com.ts.app.web.rest.dto;
 
 import java.util.Date;
 
+import org.springframework.web.multipart.MultipartFile;
+
 public class TicketDTO extends BaseDTO {
     private long id;
 
@@ -52,6 +54,10 @@ public class TicketDTO extends BaseDTO {
     private String comments;
     
     private String category;
+    
+    private String image;
+    
+    private MultipartFile imageFile;
 
 
     public long getId() {
@@ -252,6 +258,22 @@ public class TicketDTO extends BaseDTO {
 
 	public void setQuotationId(String quotationId) {
 		this.quotationId = quotationId;
+	}
+
+	public String getImage() {
+		return image;
+	}
+
+	public void setImage(String image) {
+		this.image = image;
+	}
+
+	public MultipartFile getImageFile() {
+		return imageFile;
+	}
+
+	public void setImageFile(MultipartFile imageFile) {
+		this.imageFile = imageFile;
 	}
 
 	

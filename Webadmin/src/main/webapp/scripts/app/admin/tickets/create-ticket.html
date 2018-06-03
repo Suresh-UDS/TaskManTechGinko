@@ -207,7 +207,7 @@
                              <div class="col-md-6">
                                  <div class="form-group">
                                      <label class="control-label">Comments</label>
-                                     <input type="text" ng-model="tickets.comments" class="form-control">
+                                     <textarea ng-model="tickets.comments" class="form-control"></textarea>
                                  </div>
                              </div>
                            </div>
@@ -215,6 +215,27 @@
                          </div>
                         </div>
                      </div>
+                     <div class="col-md-6">
+                        <div class="panel panel-default">
+                              
+                          <div class="panel-heading">Upload Image</div>
+                          <div class="panel-body">
+                            <div class="row">
+                     
+			                     <div class="col-md-6">
+			                      <div class="form-group label-floating" >
+			                      	<div class="pdng-top13" >
+			                          <input type="file"
+			                                 class="form-control" style="opacity:100;position:relative" file-model
+			                                 ng-model="selectedImageFile"
+			                                 name="ImageFile"
+			                          />
+			                      	</div>
+			                       </div>
+			                     </div>
+			                </div>
+						</div>
+					</div>					                     
                    </div>
                   
                    <div class="row">
