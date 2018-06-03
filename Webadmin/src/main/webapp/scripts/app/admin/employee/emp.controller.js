@@ -531,7 +531,7 @@ angular.module('timeSheetApp')
                 $scope.loadSelectedSite($scope.employee.siteId);
                 $scope.loadSelectedManager($scope.employee.managerId);
                 $scope.loadSelectedRole($scope.employee.userRoleId);
-                $scope.sites = $scope.employee.sites;
+                $scope.sites = $scope.employee.projectSites;
             });
         };
 

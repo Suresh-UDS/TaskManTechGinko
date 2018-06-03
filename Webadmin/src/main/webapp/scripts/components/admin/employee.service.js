@@ -117,7 +117,7 @@ angular.module('timeSheetApp')
                 })
             },
             getAttendance:function(id){
-                return $http.post('api/attendance/'+id,{employeeId:id}).then(function (response) {
+                return $http.get('api/attendance/'+id,{employeeId:id}).then(function (response) {
                     console.log(response);
                     return response.data;
                 })

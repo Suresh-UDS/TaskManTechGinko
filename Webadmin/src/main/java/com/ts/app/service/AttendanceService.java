@@ -1,5 +1,6 @@
 package com.ts.app.service;
 
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -7,6 +8,7 @@ import java.util.List;
 import javax.inject.Inject;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.time.DateUtils;
 import org.hibernate.Hibernate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -146,12 +148,22 @@ public class AttendanceService extends AbstractService {
 				Calendar startCal = Calendar.getInstance();
 				startCal.set(Calendar.HOUR_OF_DAY, Integer.parseInt(startTimeUnits[0]));
 				startCal.set(Calendar.MINUTE, Integer.parseInt(startTimeUnits[1]));
+				
 				String endTime = shift.getEndTime();
 				String[] endTimeUnits = endTime.split(":");
 				Calendar endCal = Calendar.getInstance();
 				endCal.set(Calendar.HOUR_OF_DAY, Integer.parseInt(endTimeUnits[0]));
 				endCal.set(Calendar.MINUTE, Integer.parseInt(endTimeUnits[1]));
-				if((startCal.before(dbAttn.getCheckInTime()) && endCal.after(dbAttn.getCheckInTime())) || startCal.equals(dbAttn.getCheckInTime())) {
+				
+				if(endCal.before(startCal)) {
+					startCal.add(Calendar.DAY_OF_MONTH, -1);
+				}
+				
+				Calendar checkInCal = Calendar.getInstance();
+				checkInCal.setTimeInMillis(dbAttn.getCheckInTime().getTime());
+				
+				if((startCal.before(checkInCal) && endCal.after(checkInCal)) 
+						|| startCal.equals(checkInCal)) {
 					dbAttn.setShiftStartTime(startTime);
 					dbAttn.setShiftEndTime(endTime);
 					break;
