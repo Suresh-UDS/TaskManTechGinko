@@ -74,7 +74,7 @@
                                                                                            ng-minlength='5'
                                                                                            ng-maxlength='250'
                                                                                            ng-pattern="/^[A-Za-z0-9\s]*$/" autofocus
-                                                                                            required />
+                                                                                           required />
 
                                                                                         <div ng-show="form.$submitted || form.assetTitle.$touched">
                                                                                             <div ng-show="form.assetTitle.$dirty || form.assetTitle.$invalid">
@@ -186,7 +186,7 @@
                                                                                     <div class="form-group">
                                                                                         <label class="control-label">Client  <span class="red-star">*</span> </label>
                                                                                         <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                                                                        <select class="form-control " ng-model="selectedProject" ng-options="project as project.name for project in projects" name="AssetClient"  ng-change="loadDepSites()"  required>
+                                                                                        <select class="form-control " ng-model="selectedProject" ng-options="project as project.name for project in projects" name="AssetClient"  ng-change="loadDepSites()"  >
                                                                                             <option value="">Select Client ...</option>
                                                                                         </select>
 
@@ -210,7 +210,7 @@
                                                                                     <div class="form-group">
                                                                                         <label class="control-label">Site   <span class="red-star">*</span> </label>
                                                                                         <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                                                                        <select class="form-control " ng-model="selectedSite"  ng-options="site as site.name for site in sitesList" ng-change="loadBlocks()" name="AssetSite" required>
+                                                                                        <select class="form-control " ng-model="selectedSite"  ng-options="site as site.name for site in sitesList" ng-change="loadBlocks()" name="AssetSite" >
                                                                                             <option value="">Select Site ...</option>
                                                                                         </select>
 
@@ -1099,7 +1099,7 @@
                                                                 </div>
                                                                 <div class="panel-body">
 
-                                                                    <form name="importClientForm"  class="ng-pristine ng-valid">
+                                                                    
 
                                                                         <div class="row">
 
@@ -1111,9 +1111,9 @@
                                                                                         <div class="form-group">
                                                                                             <label class="control-label">File Title</label>
                                                                                             <input id='fileTitle'
-                                                                                                   ng-model="file.title"
+                                                                                                   ng-model="uploadAsset.title"
                                                                                                    class='form-control'
-                                                                                                   name='fileTitle'
+                                                                                                   name='amcDocumentTitle'
                                                                                                    type='text' value=""
                                                                                                    ng-minlength='5'
                                                                                                    ng-maxlength='250'
@@ -1124,10 +1124,10 @@
                                                                                     <div class="col-md-12">
                                                                                         <div class="form-group label-floating is-empty is-fileinput row">
                                                                                             <div class="col-md-6 pdng-top13">
-                                                                                                <input type="file" class="form-control ng-pristine ng-valid ng-touched" style="opacity:100;position:relative" file-model="" ng-model="selectedClientFile" name="clientFile" tabindex="0" aria-invalid="false">
+                                                                                                <input type="file" class="form-control ng-pristine ng-valid ng-touched" style="opacity:100;position:relative" file-model ng-model="selectedClientFile" name="clientFile" tabindex="0" aria-invalid="false">
                                                                                             </div>
                                                                                             <div class="col-md-6">
-                                                                                                <button class="btn btn-success" tabindex="0">
+                                                                                                <button class="btn btn-success" tabindex="0" ng-click="uploadAssetFile()">
                                                                                 <span class="btn-label">
                                                                                     <i class="material-icons">file_upload</i>
                                                                                 </span>Upload Docs
@@ -1151,7 +1151,7 @@
                                                                                         <div class="form-group">
                                                                                             <label class="control-label">Photo Title</label>
                                                                                             <input id='fileTitle'
-                                                                                                   ng-model="file.title"
+                                                                                                   ng-model="asset.photoTitle"
                                                                                                    class='form-control'
                                                                                                    name='fileTitle'
                                                                                                    type='text' value=""
@@ -1164,10 +1164,10 @@
                                                                                     <div class="col-md-12">
                                                                                         <div class="form-group label-floating is-empty is-fileinput row">
                                                                                             <div class="col-md-6 pdng-top13">
-                                                                                                <input type="file" class="form-control ng-pristine ng-valid ng-touched" style="opacity:100;position:relative" file-model="" ng-model="selectedClientFile" name="clientFile" tabindex="0" aria-invalid="false">
+                                                                                                <input type="file" class="form-control ng-pristine ng-valid ng-touched" style="opacity:100;position:relative" file-model ng-model="selectedPhotoFile" name="clientFile" tabindex="0" aria-invalid="false">
                                                                                             </div>
                                                                                             <div class="col-md-6">
-                                                                                                <button class="btn btn-success" tabindex="0">
+                                                                                                <button class="btn btn-success" tabindex="0" ng-click="uploadAssetPhoto()">
                                                                                                     <span class="btn-label">
                                                                                                         <i class="material-icons">file_upload</i>
                                                                                                     </span>Upload Photos
@@ -1186,7 +1186,6 @@
 
                                                                         </div>
 
-                                                                    </form>
 
 
                                                                 </div>

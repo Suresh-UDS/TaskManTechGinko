@@ -30,6 +30,7 @@ angular.module('timeSheetApp')
         $scope.selectedAssetType = null;
         $scope.selectedConfigParam = null;
         $scope.selectedConfigUnit = null;
+        $scope.asset = {};
         
         $scope.parameterConfig = {};
         
@@ -38,6 +39,9 @@ angular.module('timeSheetApp')
         $scope.parameter = {};
         
         $scope.consumptionMonitoringRequired = false;
+        
+        $scope.selectedClientFile;
+        $scope.selectedPhotoFile;
         
         console.log($stateParams)
                     var that =  $scope;
@@ -583,8 +587,29 @@ angular.module('timeSheetApp')
             });;
 
 	    };
+	    
+	    $scope.uploadAsset = { };
+	    
+	    $scope.uploadAssetFile = function() {  
+	    	console.log($scope.selectedClientFile);
+	    	console.log($scope.uploadAsset.title);
+	     	if($scope.selectedClientFile) {
+	        	console.log('selected asset file - ' + $scope.selectedClientFile);
+	        	$scope.uploadAsset.uploadFile = $scope.selectedClientFile;
+	        	$scope.uploadAsset.assetId = 1;
+	        	console.log($scope.uploadAsset);
+	        	AssetComponent.uploadAssetFile($scope.uploadAsset).then(function(data){
+	        		console.log(data);
+	        	},function(err){
+	        		console.log('Import error');
+	        		console.log(err);
+	        	});
+        	} else {
+        		console.log('select a file');
+        	}
+	    	
+	    }
 	        
-
 
 
     });
