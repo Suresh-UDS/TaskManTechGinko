@@ -1,6 +1,7 @@
 package com.ts.app.domain;
 
-import java.sql.Date;
+import java.io.Serializable;
+import java.util.Date;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -16,7 +17,7 @@ import javax.persistence.Table;
 @Table(name = "asset_document")
 //@Cacheable(true)
 //@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-public class AssetDocument extends AbstractAuditingEntity {
+public class AssetDocument extends AbstractAuditingEntity implements Serializable {
 
     /**
 	 * 
@@ -33,7 +34,7 @@ public class AssetDocument extends AbstractAuditingEntity {
 	
 	private Date uploadedDate;
 	
-	@ManyToOne(fetch = FetchType.LAZY, cascade={CascadeType.ALL})
+	@ManyToOne(fetch = FetchType.LAZY, cascade={CascadeType.MERGE})
 	@JoinColumn(name = "assetId", referencedColumnName = "id", nullable = true)
 	private Asset asset;
 
