@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('timeSheetApp')
-    .factory('AssetComponent', function AssetComponent($http) {
+    .factory('AssetComponent', function AssetComponent(Asset,$http) {
         return {
 
             create : function(asset,callback){
