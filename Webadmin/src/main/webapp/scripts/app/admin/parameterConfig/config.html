@@ -10,83 +10,98 @@
                                 Parameter Details
                             </div>
                             <div class="panel-body">
-							<form ng-show="!success" name="form" role="form" novalidate
+                               <!--  ng-show="!success" -->
+							<form  name="form" role="form" novalidate
 										ng-submit="saveParameterConfig()"
 										onClick="" class="form-horizontal">
 
                                 <div class="row" >
 
                                     <div class="col-md-4">
-                                        <div class="form-group selectcon is-empty SelectWithAddbtnCon">
-
-                                            <div class="" style="float:left;width:90%;">
-                                                <label class="control-label">Asset Type </label>
-                                                <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-												<select class="form-control " ng-model="selectedAssetType"  ng-options="assetType as assetType.name for assetType in assetTypes">
-													<option value="">Select Asset Type...</option>
-                                                 	</select>                                                            
-                                            </div>
-                                            <div class="" style="float:left; width: 10%" >
-                                                <a href="javascript:;" data-toggle="collapse" data-parent="#accordian" data-target="#addAssettype" class="btn btn-round btn-fab btn-fab-mini btn-simple" aria-expanded="false" aria-controls="collapseExample">
-                                                    <i class="material-icons">add</i>
-                                                </a>
-                                            </div>
-                                            <div class="clear"></div>
-                                            <div class="collapse" id="addAssettype">
-                                                <div class="">
-                                                    <input class="input-desc ng-pristine ng-untouched ng-valid" id="assetTypeName" ng-model="assetType.name" name="assetTypeName" type="text" value="" tabindex="0" aria-invalid="false">
-                                                    <a class="btn btn-success" ng-click="addAssetType()" tabindex="0">Add</a>
+                                        <div class="form-group selectcon is-empty SelectWithAddbtnCon" ng-init="loadAssetTypes()">
+                                            <div class="row">
+                                                <div class="col-md-10 pad-r-0px">
+                                                    <label class="control-label">Asset Type</label>
+                                                    <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
+                                                    <select class="form-control" ng-model="selectedAssetType" ng-options="assetype as assetype.name for assetype in assetTypes">
+                                                        <option value="">Select Asset Type ..</option>
+                                                    </select>
+                                                </div>
+                                                <div class="col-md-2 ">
+                                                    <!-- <a href="javascript:void(0)"  data-toggle="collapse" data-parent="#accordian" data-target="#addAssetType" class="btn btn-round btn-fab btn-fab-mini btn-simple" aria-expanded="false" aria-controls="collapseExample">
+                                                        <i class="material-icons">add</i>
+                                                    </a> -->
+  
+                                                    <a  has-permission="" class="btn btn-round btn-fab btn-fab-mini btn-simple"  onClick="$('#addAssetType').modal()" data-target="#myModal"><i class="material-icons">add</i><div class="ripple-container" ></div></a>
                                                 </div>
                                             </div>
-                                            <span class="material-input"></span></div>
+
+                                            <!-- <div class="collapse"  id="addAssetType">
+                                                <div class="">
+                                                    <input class="input-desc" id="addAssetTypeInput" ng-model="assetType.name"   name="AssetType" type="text" value=""/>
+                                              <a class="btn btn-success"  ng-click="addAssetType()">Add</a>
+                                                </div>
+                                            </div> -->
+
+                                        </div>
+                                        
                                     </div>
                                     <div class="col-md-4">
-                                        <div class="form-group selectcon is-empty SelectWithAddbtnCon">
 
-                                            <div class="" style="float:left;width:90%;">
-                                                <label class="control-label">Select Parameter </label>
-                                                <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-												<select class="form-control " ng-model="selectedParameter"  ng-options="parameter as parameter.name for parameter in parameters">
-													<option value="">Select Parameter...</option>
-                                                 	</select>                                                            
-                                            </div>
-                                            <div class="" style="float:left;width: 10%">
-                                                <a href="javascript:;" data-toggle="collapse" data-parent="#accordian" data-target="#addParameter" class="btn btn-round btn-fab btn-fab-mini btn-simple" aria-expanded="false" aria-controls="collapseExample">
-                                                    <i class="material-icons">add</i>
-                                                </a>
-                                            </div>
-                                            <div class="clear"></div>
-                                            <div class="collapse" id="addParameter">
-                                                <div class="">
-                                                    <input class="input-desc ng-pristine ng-untouched ng-valid" id="parameterName" ng-model="parameter.name" name="parameterName" type="text" value="" tabindex="0" aria-invalid="false">
-                                                    <a class="btn btn-success" ng-click="addParameter()" tabindex="0">Add</a>
+                                        <div class="form-group selectcon is-empty SelectWithAddbtnCon" ng-init="loadAssetParams()">
+                                            <div class="row">
+                                                <div class="col-md-10 pad-r-0px">
+                                                    <label class="control-label">Select Parameter</label>
+                                                    <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
+                                                    <select class="form-control" ng-model="selectedParameter"  ng-options="parameter as parameter.name for parameter in parameters">
+                                                        <option value="">Select parameter ..</option>
+                                                    </select>
+                                                </div>
+                                                <div class="col-md-2 ">
+                                                   <!--  <a href="javascript:void(0)"  data-toggle="collapse" data-parent="#accordian" data-target="#addParameter" class="btn btn-round btn-fab btn-fab-mini btn-simple" aria-expanded="false" aria-controls="collapseExample">
+                                                        <i class="material-icons">add</i>
+                                                    </a> -->
+                                                    <a  has-permission="" class="btn btn-round btn-fab btn-fab-mini btn-simple"  onClick="$('#addParameter').modal()" data-target="#myModal"><i class="material-icons">add</i><div class="ripple-container" ></div></a>
                                                 </div>
                                             </div>
-                                            <span class="material-input"></span></div>
+
+                                            <!-- <div class="collapse" id="addParameter">
+                                                <div class="">
+                                                    <input class="input-desc" id="parameterName" ng-model="assetParam.name"   name="parameterName" type="text" value=""/>
+                                              <a class="btn btn-success"  ng-click="addAssetParam()">Add</a>
+                                                </div>
+                                            </div> -->
+
+                                        </div>
+                                        
                                     </div>
                                     <div class="col-md-4">
-                                        <div class="form-group selectcon is-empty SelectWithAddbtnCon">
-
-                                            <div class="" style="float:left;width:90%;">
-                                                <label class="control-label">Select Units</label>
-                                                <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-												<select class="form-control " ng-model="selectedParameterUOM"  ng-options="parameterUOM as parameterUOM.uom for parameterUOM in parameterUOMs">
-													<option value="">Select Units...</option>
-                                                 	</select>                                                            
-                                            </div>
-                                            <div class="" style="float:left;width: 10%">
-                                                <a href="javascript:;" data-toggle="collapse" data-parent="#accordian" data-target="#addUnits" class="btn btn-round btn-fab btn-fab-mini btn-simple" aria-expanded="false" aria-controls="collapseExample">
-                                                    <i class="material-icons">add</i>
-                                                </a>
-                                            </div>
-                                            <div class="clear"></div>
-                                            <div class="collapse" id="addUnits">
-                                                <div class="">
-                                                    <input class="input-desc ng-pristine ng-untouched ng-valid" id="parameterUOMName" ng-model="parameterUOM.uom" name="parameterUOMName" type="text" value="" tabindex="0" aria-invalid="false">
-                                                    <a class="btn btn-success" ng-click="addParameterUOM()" tabindex="0">Add</a>
+                                        <div class="form-group selectcon is-empty SelectWithAddbtnCon" ng-init="loadAssetParamUoms()">
+                                            <div class="row">
+                                                <div class="col-md-10 pad-r-0px">
+                                                    <label class="control-label">Select Units</label>
+                                                    <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
+                                                    <select class="form-control" ng-model="selectedParameterUOM"  ng-options="parameterUOM as parameterUOM.uom for parameterUOM in parameterUOMs">
+                                                        <option value="">Select units ..</option>
+                                                    </select>
+                                                </div>
+                                                <div class="col-md-2 ">
+                                                    <!-- <a href="javascript:void(0)"  data-toggle="collapse" data-parent="#accordian" data-target="#addUnits" class="btn btn-round btn-fab btn-fab-mini btn-simple" aria-expanded="false" aria-controls="collapseExample">
+                                                        <i class="material-icons">add</i>
+                                                    </a> -->
+                                                    <a  has-permission="" class="btn btn-round btn-fab btn-fab-mini btn-simple"  onClick="$('#addUnits').modal()" data-target="#myModal"><i class="material-icons">add</i><div class="ripple-container" ></div></a>
                                                 </div>
                                             </div>
-                                            <span class="material-input"></span></div>
+
+                                            <!-- <div class="collapse" id="addUnits">
+                                                <div class="">
+                                                    <input class="input-desc" id="parameterUOMName" ng-model="parameterUOM.uom"   name="parameterUOMName" type="text" value=""/>
+                                              <a class="btn btn-success"  ng-click="addParameterUOM()">Add</a>
+                                                </div>
+                                            </div> -->
+
+                                        </div>
+                                        
                                     </div>
 
                                 </div>
@@ -96,7 +111,7 @@
                                     <div class="col-md-6">
                                         <div class="checkbox">
                                             <label>
-                                                <input type="checkbox" name="terms" ng-model="consumptionMonitoringRequired"> Consumption Monitoring Required
+                                                <input type="checkbox" name="terms" ng-model="consumptionMonitoringRequired.value" > Consumption Monitoring Required
                                             </label>
                                         </div>
                                     </div>
@@ -144,7 +159,7 @@
 			                                	<td>{{parameterConfig.uom}}</td>
 										   	<td>{{parameterConfig.consumptionMonitoringRequired}}</td>
 			                                 <td class="text-right">
-			                                 	<a  has-permission="" class="btn btn-simple btn-danger" ng-click="deleteParameterConfig(parameterConfig.id)"><i class="material-icons">delete_forever</i><div class="ripple-container"></div></a>
+			                                 	<a  has-permission="" class="btn btn-simple btn-danger" ng-click="deleteConfirm(parameterConfig.id)" onClick="$('#deleteModal').modal()" data-target="#myModal"><i class="material-icons">delete_forever</i><div class="ripple-container" ></div></a>
 			                                 </td>
 										
 										</tr>
@@ -160,4 +175,131 @@
                     </div>
 
                 </div>
+
+
+                <div class="card margin-TB-5 txt-align-center" ng-hide="parameterConfigs">
+
+                    <div class="card-content">
+                        <div class="" style="text-align:center;padding: 10px 0;"  ng-hide="parameterConfigsLoader">
+                            <div loader-css="ball-pulse"></div>
+                        </div>
+
+                        <h3>No data Found</h3>
+
+                    </div>
+
+                </div>
+
+
+                <!-- Pagination directive start -->
+
+                <pagination-new></pagination-new>
+
+                <!-- Pagination directive end -->
+
+                
 </div>
+<div class="row">
+
+    <div id="deleteModal" data-backdrop="false" class="modal fade"
+        tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+        aria-hidden="true">
+        <div class="delete-dialog">
+            <div class="modal-content">
+                <div class="modal-body">
+                    Are you sure to delete the Parameter Configuration?<br>
+                </div>
+                <div class="delete-footer">
+                    <button type="button" ng-click="deleteParameterConfig()"
+                        class="btn btn-danger-outline text-danger" data-dismiss="modal">Confirm</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<!-- Add asset type dialog -->
+
+<div id="addAssetType" class="delete-confirmation modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"
+                        aria-hidden="true">&times;</button>
+                <h4 class="modal-title">Add Asset Type</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                <div class="col-md-9">
+                    <input class="input-desc" id="addAssetTypeInput" ng-model="assetType.name"   name="AssetType" type="text" value=""/> 
+                </div>
+                <div class="col-md-3 pull-left">
+                    <a class="btn btn-success"  ng-click="addAssetType()" data-dismiss="modal">Add</a>
+                </div>
+                <div class="clear"></div>
+                </div>
+            </div>
+           
+        </div>
+    </div>
+</div>
+<!-- Add asset type dialog -->
+
+<!-- Add asset param dialog -->
+
+<div id="addParameter" class="delete-confirmation modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"
+                        aria-hidden="true">&times;</button>
+                <h4 class="modal-title">Add Asset Param</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                <div class="col-md-9">
+                    <input class="input-desc" id="parameterName" ng-model="assetParam.name"   name="parameterName" type="text" value=""/>
+                </div>
+                <div class="col-md-3 pull-left">
+                    <a class="btn btn-success"  ng-click="addAssetParam()" data-dismiss="modal">Add</a>
+                </div>
+                <div class="clear"></div>
+                </div>
+
+                                              
+            </div>
+           
+        </div>
+    </div>
+</div>
+<!-- Add asset param dialog -->
+
+<!-- Add parameterUOM dialog -->
+
+<div id="addUnits" class="delete-confirmation modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"
+                        aria-hidden="true">&times;</button>
+                <h4 class="modal-title">Add Parameter Unit</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                <div class="col-md-9">
+                    <input class="input-desc" id="parameterUOMName" ng-model="parameterUOM.uom"   name="parameterUOMName" type="text" value=""/> 
+                </div>
+                <div class="col-md-3 pull-left">
+                    <a class="btn btn-success"  ng-click="addParameterUOM()" data-dismiss="modal">Add</a>
+                </div>
+                <div class="clear"></div>
+                </div>
+            </div>
+           
+        </div>
+    </div>
+</div>
+<!-- Add parameterUOM dialog -->
