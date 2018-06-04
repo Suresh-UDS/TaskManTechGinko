@@ -19,6 +19,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.ts.app.domain.AbstractAuditingEntity;
 import com.ts.app.domain.Asset;
+import com.ts.app.domain.AssetDocument;
 import com.ts.app.domain.AssetGroup;
 import com.ts.app.domain.AssetParameterConfig;
 import com.ts.app.domain.AssetType;
@@ -161,33 +162,21 @@ public class AssetManagementService extends AbstractService {
     
     //Asset
     public AssetDTO saveAsset(AssetDTO assetDTO) {
-        log.debug("assets service in job services");
-        Asset asset = new Asset();
-	        asset.setTitle(assetDTO.getTitle());
-	        asset.setAssetGroup(assetDTO.getAssetGroup());
-	        asset.setDescription(assetDTO.getDescription());
-        Site site = getSite(assetDTO.getSiteId());
-	        asset.setSite(site);
-	        asset.setBlock(assetDTO.getBlock());
-        	asset.setFloor(assetDTO.getFloor());
-        	asset.setZone(assetDTO.getZone());
-        	asset.setModelNumber(assetDTO.getModelNumber());
-        	asset.setSerialNumber(assetDTO.getSerialNumber());
-        	asset.setPurchasePrice(assetDTO.getPurchasePrice());
-        	asset.setCurrentPrice(assetDTO.getCurrentPrice());
-        	asset.setEstimatedDisposePrice(assetDTO.getEstimatedDisposePrice());
-	        asset.setCode(assetDTO.getCode());
-	        //asset.setEndTime(DateUtil.convertToSQLDate(assetDTO.getEndTime()));
-	        //asset.setStartTime(DateUtil.convertToSQLDate(assetDTO.getStartTime()));
-	        asset.setUdsAsset(assetDTO.isUdsAsset());
-	        asset.setActive(Asset.ACTIVE_YES);
-	    Manufacturer manufacturer = getManufacturer(assetDTO.getManufacturerId());
-	        asset.setManufacturer(manufacturer);
+        log.debug("assets service");
+
+    	Asset asset = mapperUtil.toEntity(assetDTO, Asset.class);
+    	Site site = getSite(assetDTO.getSiteId());
+        asset.setSite(site);
+        
+        Manufacturer manufacturer = getManufacturer(assetDTO.getManufacturerId());
+        asset.setManufacturer(manufacturer);
 
         Vendor vendor = getVendor(assetDTO.getVendorId());
-        	asset.setAmcVendor(vendor);
-	        
-        List<Asset> existingAssets = assetRepository.findAssetByTitle(assetDTO.getTitle());
+    	asset.setAmcVendor(vendor);
+
+    	asset.setActive(Asset.ACTIVE_YES);
+    	
+    	List<Asset> existingAssets = assetRepository.findAssetByTitle(assetDTO.getTitle());
         log.debug("Existing asset -"+ existingAssets);
         if(CollectionUtils.isEmpty(existingAssets)) {
         	log.debug(">>> save! <<<");
@@ -195,7 +184,8 @@ public class AssetManagementService extends AbstractService {
         }
 
         return mapperUtil.toModel(asset, AssetDTO.class);
-    }
+
+    	}
 
     public List<AssetDTO> findAllAssets(){
         log.debug("get all assets");
@@ -289,7 +279,7 @@ public class AssetManagementService extends AbstractService {
         
         return assetDTO;
     }
-
+    
     public AssetDTO getAssetByCode(String code){
         Asset asset = assetRepository.findByCode(code);
         AssetDTO assetDTO = mapperUtil.toModel(asset,AssetDTO.class);
@@ -380,7 +370,7 @@ public class AssetManagementService extends AbstractService {
     	}
     	return qrCodeBase64;
     }
-    
+        
     public ExportResult generateReport(List<JobDTO> transactions, SearchCriteria criteria) {
         return reportUtil.generateJobReports(transactions, null, null, criteria);
     }
