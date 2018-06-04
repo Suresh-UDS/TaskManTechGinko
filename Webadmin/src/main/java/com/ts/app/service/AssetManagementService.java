@@ -134,38 +134,40 @@ public class AssetManagementService extends AbstractService {
 	@Inject
 	private ReportService reportService;
 
-    @Inject
-    private Environment env;
+	@Inject
+	private Environment env;
 
-    @Inject
-    private FileUploadHelper fileUploadHelper;
+	@Inject
+	private FileUploadHelper fileUploadHelper;
 
-    @Inject
-    private ImportUtil importUtil;
+	@Inject
+	private ImportUtil importUtil;
 
-    @Inject
-    private ReportUtil reportUtil;
+	@Inject
+	private ReportUtil reportUtil;
 
-    @Inject
-    private PricingRepository priceRepository;
+	@Inject
+	private PricingRepository priceRepository;
 
-    @Inject
-    private CheckInOutImageRepository checkInOutImageRepository;
+	@Inject
+	private CheckInOutImageRepository checkInOutImageRepository;
 
-    @Inject
-    private TicketManagementService ticketManagementService;
+	@Inject
+	private TicketManagementService ticketManagementService;
 
-    @Inject
-    private AssetGroupRepository assetGroupRepository;
-    
-    @Inject
-    private ProjectRepository projectRepositoy;
-    
-    @Inject
+	@Inject
+	private AssetGroupRepository assetGroupRepository;
+
+	@Inject
+	private ProjectRepository projectRepositoy;
+
+	@Inject
 	private ManufacturerRepository manufacturerRepository;
-    
-    @Inject
+
+	@Inject
 	private VendorRepository vendorRepository;
+	
+	@Inject
     private AssetTypeRepository assetTypeRepository;
     
     @Inject
@@ -403,6 +405,20 @@ public class AssetManagementService extends AbstractService {
         return reportUtil.generateJobReports(transactions, null, null, criteria);
     }
 
+	// public SearchResult<AssetDTO> getSiteAssets(Long siteId,int page) {
+	// Pageable pageRequest = new PageRequest(page, PagingUtil.PAGE_SIZE, new
+	// Sort(Direction.DESC,"id"));
+	//
+	// Page<Asset> assets= assetRepository.findBySiteId(siteId,pageRequest);
+	// SearchResult<AssetDTO> paginatedAssets = new SearchResult<>();
+	// paginatedAssets.setCurrPage(page);
+	// paginatedAssets.setTransactions(mapperUtil.toModelList(assets.getContent(),
+	// AssetDTO.class));
+	// paginatedAssets.setTotalCount(assets.getTotalElements());
+	// paginatedAssets.setTotalPages(assets.getTotalPages());
+	// return paginatedAssets;
+	// }
+
 
 	// public SearchResult<AssetDTO> getSiteAssets(Long siteId,int page) {
 	// Pageable pageRequest = new PageRequest(page, PagingUtil.PAGE_SIZE, new
@@ -426,10 +442,10 @@ public class AssetManagementService extends AbstractService {
 		Employee employee = user.getEmployee();
 		List<EmployeeProjectSite> sites = employee.getProjectSites();
 		List<Long> siteIds = new ArrayList<Long>();
-    		for(EmployeeProjectSite site : sites) {
-    			siteIds.add(site.getSite().getId());
-    		}
-		
+		for (EmployeeProjectSite site : sites) {
+			siteIds.add(site.getSite().getId());
+		}
+
 		if (searchCriteria != null) {
 			Pageable pageRequest = null;
 			if (!StringUtils.isEmpty(searchCriteria.getColumnName())) {
@@ -446,24 +462,28 @@ public class AssetManagementService extends AbstractService {
 			}
 			Page<Asset> page = null;
 			List<AssetDTO> transactions = null;
-			log.debug( "name =" + searchCriteria.getAssetName() + " ,  assetType = " + searchCriteria.getAssetTypeName());
+			log.debug(
+					"name =" + searchCriteria.getAssetName() + " ,  assetType = " + searchCriteria.getAssetTypeName());
 			if (!searchCriteria.isFindAll()) {
 				if (!StringUtils.isEmpty(searchCriteria.getAssetTypeName())
-						&& !StringUtils.isEmpty(searchCriteria.getAssetName()) && searchCriteria.getProjectId() > 0 && searchCriteria.getSiteId() > 0) {
-					page = assetRepository.findByAllCriteria(searchCriteria.getAssetTypeName(), searchCriteria.getAssetName(), searchCriteria.getProjectId(), searchCriteria.getSiteId(), pageRequest);
+						&& !StringUtils.isEmpty(searchCriteria.getAssetName()) && searchCriteria.getProjectId() > 0
+						&& searchCriteria.getSiteId() > 0) {
+					page = assetRepository.findByAllCriteria(searchCriteria.getAssetTypeName(),
+							searchCriteria.getAssetName(), searchCriteria.getProjectId(), searchCriteria.getSiteId(),
+							pageRequest);
 				} else if (!StringUtils.isEmpty(searchCriteria.getAssetName())) {
 					page = assetRepository.findByName(siteIds, searchCriteria.getAssetName(), pageRequest);
 				} else if (!StringUtils.isEmpty(searchCriteria.getAssetTypeName())) {
-					page = assetRepository.findByAssetType(siteIds,searchCriteria.getAssetTypeName(),pageRequest);
+					page = assetRepository.findByAssetType(siteIds, searchCriteria.getAssetTypeName(), pageRequest);
 				} else if (searchCriteria.getSiteId() > 0) {
-					page = assetRepository.findBySiteId(searchCriteria.getSiteId(),pageRequest);
+					page = assetRepository.findBySiteId(searchCriteria.getSiteId(), pageRequest);
 				} else if (searchCriteria.getProjectId() > 0) {
-					page = assetRepository.findByProjectId(searchCriteria.getProjectId(),pageRequest);
-				} 
+					page = assetRepository.findByProjectId(searchCriteria.getProjectId(), pageRequest);
+				}
 			} else {
-				if(CollectionUtils.isNotEmpty(siteIds)) {
-					page = assetRepository.findAll(siteIds,pageRequest);
-				}else {
+				if (CollectionUtils.isNotEmpty(siteIds)) {
+					page = assetRepository.findAll(siteIds, pageRequest);
+				} else {
 					page = assetRepository.findAll(pageRequest);
 				}
 			}
@@ -486,8 +506,8 @@ public class AssetManagementService extends AbstractService {
 		return result;
 	}
 
-	private void buildSearchResult(SearchCriteria searchCriteria, Page<Asset> page,
-			List<AssetDTO> transactions, SearchResult<AssetDTO> result) {
+	private void buildSearchResult(SearchCriteria searchCriteria, Page<Asset> page, List<AssetDTO> transactions,
+			SearchResult<AssetDTO> result) {
 		if (page != null) {
 			result.setTotalPages(page.getTotalPages());
 		}
@@ -499,7 +519,7 @@ public class AssetManagementService extends AbstractService {
 		result.setTransactions(transactions);
 		return;
 	}
-	
+
 	private AssetDTO mapToModel(Asset asset, boolean includeShifts) {
 		AssetDTO assetDTO = new AssetDTO();
 		assetDTO.setId(asset.getId());
@@ -544,55 +564,56 @@ public class AssetManagementService extends AbstractService {
 		return er;
 	}
 
-	private Site getSite(Long siteId) {
+	private Site getSite(long siteId) {
 		Site site = siteRepository.findOne(siteId);
 		if (site == null)
 			throw new TimesheetException("Site not found : " + siteId);
 		return site;
 	}
-	
-	private Manufacturer getManufacturer(Long manufacturerId) {
+
+	private Manufacturer getManufacturer(long manufacturerId) {
 		Manufacturer manufacturer = manufacturerRepository.findOne(manufacturerId);
-		if (manufacturer == null)
-			throw new TimesheetException("Manufacturer not found : " + manufacturerId);
+		//if (manufacturer == null)
+		//	throw new TimesheetException("Manufacturer not found : " + manufacturerId);
 		return manufacturer;
 	}
-	
-	private Vendor getVendor(Long vendorId) {
+
+	private Vendor getVendor(long vendorId) {
 		Vendor vendor = vendorRepository.findOne(vendorId);
-		if (vendor == null)
-			throw new TimesheetException("Manufacturer not found : " + vendorId);
+		//if (vendor == null)
+		//	throw new TimesheetException("Manufacturer not found : " + vendorId);
 		return vendor;
 	}
-	
-	private Project getProject(Long projectId) {
+
+	private Project getProject(long projectId) {
 		Project project = projectRepositoy.findOne(projectId);
-		if(project == null) throw new TimesheetException("Project not found : "+projectId);
+		if (project == null)
+			throw new TimesheetException("Project not found : " + projectId);
 		return project;
 	}
 
 	public AssetgroupDTO createAssetGroup(AssetgroupDTO assetGroupDTO) {
-		AssetGroup assetgroup= mapperUtil.toEntity(assetGroupDTO, AssetGroup.class);
-	    assetGroupRepository.save(assetgroup);
-        return assetGroupDTO;
-    }
-	
-	public List<AssetgroupDTO> findAllAssetGroups() {
-      List<AssetGroup> assetgroup = assetGroupRepository.findAll();
-      return mapperUtil.toModelList(assetgroup, AssetgroupDTO.class);
+		AssetGroup assetgroup = mapperUtil.toEntity(assetGroupDTO, AssetGroup.class);
+		assetGroupRepository.save(assetgroup);
+		return assetGroupDTO;
 	}
-	
+
+	public List<AssetgroupDTO> findAllAssetGroups() {
+		List<AssetGroup> assetgroup = assetGroupRepository.findAll();
+		return mapperUtil.toModelList(assetgroup, AssetgroupDTO.class);
+	}
+
 	public List<AssetTypeDTO> findAllAssetType() {
-      List<AssetType> assetType = assetTypeRepository.findAll();
-      return mapperUtil.toModelList(assetType, AssetTypeDTO.class);
+		List<AssetType> assetType = assetTypeRepository.findAll();
+		return mapperUtil.toModelList(assetType, AssetTypeDTO.class);
 	}
 
 	public List<AssetParameterConfigDTO> findByAssetConfig(String assertType, Long assetId) {
 		// TODO Auto-generated method stub
 		List<AssetParameterConfig> entities = assetParamConfigRepository.findByAssetConfig(assertType, assetId);
-		return mapperUtil.toModelList(entities, AssetParameterConfigDTO.class);	
+		return mapperUtil.toModelList(entities, AssetParameterConfigDTO.class);
 	}
-	
+
 	public void deleteAssetConfig(Long id) {
 		log.debug("Inside deleteAssetConfig");
 		AssetParameterConfig assetConfigUpdate = assetParamConfigRepository.findOne(id);
@@ -653,5 +674,4 @@ public class AssetManagementService extends AbstractService {
 		return mapperUtil.toModelList(assetDocument, AssetDocumentDTO.class);
 	}
 
-	
 }

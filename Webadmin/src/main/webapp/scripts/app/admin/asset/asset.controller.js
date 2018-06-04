@@ -23,9 +23,9 @@ angular.module('timeSheetApp')
         $scope.selectedAsset = null;
         $scope.selectedProject = {};
         $scope.selectedSite = {};
-        $scope.selectedBlock = {};
-        $scope.selectedFloor = {};
-        $scope.selectedZone = {};
+        $scope.selectedBlock = null;
+        $scope.selectedFloor = null;
+        $scope.selectedZone = null;
         $scope.pageSort = 10;
         $scope.pager = {};
         $scope.assetGen ={};
@@ -109,7 +109,6 @@ angular.module('timeSheetApp')
         $scope.loadManufacturer = function () {
             ManufacturerComponent.findAll().then(function (data) {
                 console.log("Loading all Manufacturer -- " , data);
-                $scope.selectedAssetType = null;
                 $scope.manufacturers = data;
             });
         }
@@ -390,6 +389,7 @@ angular.module('timeSheetApp')
                 if(!$scope.selectedProject.id){
                     $scope.errorProject = "true";
                 }else{
+        
                     if($scope.selectedAssetType.id){
                        $scope.assetGen.assetType = $scope.selectedAssetType.id;
                     }
