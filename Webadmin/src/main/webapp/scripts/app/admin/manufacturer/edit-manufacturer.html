@@ -18,7 +18,7 @@
                 <div class="">
                     <div class="">
                         <form ng-show="!success" name="formEdit" role="form" novalidate
-                        						ng-submit="saveManufacturer()"
+                        						ng-submit="UpdateManufacturer()"
                         						onClick="" class="form-horizontal">
                                         <div class="row">
                                             <div class="col-md-6">
@@ -177,7 +177,7 @@
                                 <div class="form-group">
 
                                     <button class="btn btn-success" type="submit"
-                                            id="form-button-update" ng-disabled="form.$invalid">
+                                            id="form-button-update" ng-disabled="formEdit.$invalid">
                                         <span class="btn-label"><i class="material-icons">check</i></span> Update
                                     </button>
                                     <button class="btn btn-danger"  data-dismiss="modal" aria-label="Close" type="button"
@@ -196,4 +196,5 @@
          </div>
     </div>
 
+</div>
 </div>

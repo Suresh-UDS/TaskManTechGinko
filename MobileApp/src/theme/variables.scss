@@ -196,6 +196,11 @@ image-viewer ion-header
   display: none !important;
 }
 
+.sidebar .nav li:hover>a
+{
+  background-color: transparent !important;
+}
+
 // App iOS Variables
 // --------------------------------------------------
 // iOS only Sass variables can go here

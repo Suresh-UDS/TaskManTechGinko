@@ -118,20 +118,20 @@
 
 		                                                                                <div class="collapse" id="addAssetType">
 		                                                                                    <div class="">
-		                                                                                        <input class="input-desc" id="addAssetTypeInput" ng-model="AssetType"   name="AssetType" type="text" value=""/>
+		                                                                                        <input class="input-desc" id="addAssetTypeInput" ng-model="assetType.name"   name="AssetType" type="text" value=""/>
 		                                                                                  <a class="btn btn-success"  ng-click="addAssetType()">Add</a>
 		                                                                                    </div>
 		                                                                                </div>
 
 		                                                                            </div>
 
-		                                                                              <div class="form-group selectcon is-empty">
+		                                                                              <div class="form-group selectcon is-empty" ng-init="loadAssetGroup()">
 
                                                                                         <div class="row">
                                                                                             <div class="col-md-10 pad-r-0px">
                                                                                                  <label class="control-label">Group</label>
                                                                                                  <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                                                                                <select class="form-control" ng-model="assetObj.assetgroup" ng-options="assetgroup.assetgroup as assetgroup.assetgroup for assetgroup in assetgroups">
+                                                                                                <select class="form-control" ng-model="assetObj.assetgroup" ng-options="assetgroup.assetgroup as assetgroup.assetgroup for assetgroup in assetGroups">
                                                                                                     <option value="">Select Asset Group ..</option>
                                                                                                 </select>
 
@@ -146,9 +146,9 @@
 
                                                                                        <div class="collapse" id="addGroup">
                                                                                             <div class="">
-                                                                                                <input class="input-desc" id='assetgroupName' ng-model="assetgroup"
+                                                                                                <input class="input-desc" id='assetgroupName' ng-model="assetGroup.assetgroup"
                                                                                                        name='assetgroupName' type='text' value=""/>
-                                                                                                <a class="btn btn-success"  ng-click="addGroup()">Add</a>
+                                                                                                <a class="btn btn-success"  ng-click="addAssetGroup()">Add</a>
 
                                                                                             </div>
                                                                                        </div>

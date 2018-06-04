@@ -46,7 +46,17 @@ export class AssetList {
           this.searchCriteria = {
               siteId:data.siteId,
               projectId:data.projectId,
-          }
+          };
+
+          this.assetService.searchAssets(this.searchCriteria).subscribe(
+              response=>{
+                  console.log("Asset search filters response");
+                  console.log(response)
+              },err=>{
+                  console.log("Error in filtering assets");
+                  console.log(err);
+              }
+          )
 
       });
       modal.present();

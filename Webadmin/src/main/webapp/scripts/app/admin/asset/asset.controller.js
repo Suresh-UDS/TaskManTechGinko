@@ -4,9 +4,9 @@ angular.module('timeSheetApp')
 		    .controller(
 				'AssetController',
 				function($scope, $rootScope, $state, $timeout, AssetComponent,
-						ProjectComponent,LocationComponent,SiteComponent,EmployeeComponent,ManufacturerComponent,AssetTypeComponent, $http, $stateParams,
-						$location,PaginationComponent) {
-
+						ProjectComponent,LocationComponent,SiteComponent,EmployeeComponent, $http, $stateParams,
+						$location,PaginationComponent,AssetTypeComponent,ParameterConfigComponent,ParameterComponent,ParameterUOMComponent,ManufacturerComponent) {
+                     
 
         $rootScope.loadingStop();
         $rootScope.loginView = false;
@@ -27,8 +27,20 @@ angular.module('timeSheetApp')
         $scope.pager = {};
         $scope.assetObj ={};
         $scope.selectedConfig = null;
-        $scope.addAssetType =null;
+        $scope.selectedAssetType = null;
+        $scope.selectedConfigParam = null;
+        $scope.selectedConfigUnit = null;
+        
+        $scope.parameterConfig = {};
+        
+        $scope.assetType = {};
 
+        $scope.assetGroup = {};
+        
+        $scope.parameter = {};
+        
+        $scope.consumptionMonitoringRequired = false;
+        
         console.log($stateParams)
                     var that =  $scope;
 
@@ -101,6 +113,13 @@ angular.module('timeSheetApp')
             });
         };
 
+        $scope.loadAssetGroup = function () {
+            AssetComponent.loadAssetGroup().then(function (data) {
+                console.log("Loading all Asset Group -- " , data)
+                $scope.assetGroups = data;
+            });
+        };
+
         $scope.loadSelectedProject = function(projectId) {
             ProjectComponent.findOne(projectId).then(function (data) {
                 $scope.selectedProject = data;
@@ -159,10 +178,14 @@ angular.module('timeSheetApp')
         		$scope.asset=data;
         		console.log($scope.asset);
         		if($scope.asset.assetType) { 
-        			AssetComponent.findByAssetConfig($stateParams.id).then(function(data){ 
+        			$scope.assetConfig = {};
+        			$scope.assetConfig.assetTypeName = $scope.asset.assetType;
+        			$scope.assetConfig.assetId = $stateParams.id;
+         			AssetComponent.findByAssetConfig($scope.assetConfig).then(function(data){ 
                 		console.log(data);
                 		$scope.assetParameters = data;
                 	});
+        			
         		}
         		/*$scope.asset.selectedSite = {id : data.siteId,name : data.siteName}
         		console.log($scope.selectedSite)*/
@@ -333,7 +356,8 @@ angular.module('timeSheetApp')
 
 
         $scope.initPage=function (){
-
+        	$scope.loadAllParameters();
+        	$scope.loadAllParameterUOMs();
             $scope.loadAllSites();
         	if($scope.isEdit){
         	    console.log("edit asset")
@@ -451,41 +475,46 @@ angular.module('timeSheetApp')
         }
 
 
-      /*  $scope.loadAssetType = function() {
-        	AssetComponent.loadAssetType().then(function(resp){
-        		console.log('Asset Types' +JSON.stringify(resp));
-        		$scope.assetTypes = resp;
-        	});
-        }*/
+   
 
 
         $scope.addAssetType = function () {
-            console.log($scope.AssetType);
-            if($scope.AssetType){
+            console.log($scope.assetType);
+            if($scope.assetType){
                 console.log("Asset Type entered");
-                var AssetType ={
-                    name:$scope.AssetType
-                };
-                AssetTypeComponent.create(AssetType).then(function (response) {
+                AssetTypeComponent.create($scope.assetType).then(function (response) {
                     console.log(response);
-                    $scope.AssetType= null;
-                    $scope.showNotifications('top','center','success','AssetType Added Successfully');
+                    $scope.assetType = {};
+                    $scope.showNotifications('top','center','success','Asset Type Added Successfully');
                     $scope.loadAssetType();
 
                 })
             }else{
-                console.log("AssetType not entered");
+                console.log("Asset Type not entered");
+            }
+
+
+        };
+
+        $scope.addAssetGroup = function () {
+
+            console.log($scope.assetGroup);
+            if($scope.assetGroup){
+                console.log("Asset Group entered");
+                AssetComponent.createAssetGroup($scope.assetGroup).then(function (response) {
+                    console.log(response);
+                    $scope.assetGroup = {};
+                    $scope.showNotifications('top','center','success','Asset Group Added Successfully');
+                    $scope.loadAssetGroup();
+
+                })
+            }else{
+                console.log("Asset Group not entered");
             }
 
 
         };
         
-        $scope.loadAssetType = function() { 
-        	AssetTypeComponent.findAll().then(function(resp){ 
-        		console.log('Asset Types' +JSON.stringify(resp));
-        		$scope.assetTypes = resp;
-        	});
-        }
         
         $scope.loadAssetConfig = function(type) { 
         	ParameterConfigComponent.findByAssertType(type).then(function(data){ 
@@ -494,6 +523,90 @@ angular.module('timeSheetApp')
         	});
         }
         
+        $scope.deleteAssetConfig = function(id) { 
+        	AssetComponent.deleteConfigById(id).then(function(data){ 
+        		console.log(data);
+        	});
+        }
+        
+        $scope.loadAllParameters = function() {
+    		ParameterComponent.findAll().then(function (data) {
+	            $scope.selectedParameter = null;
+	            $scope.parameters = data;
+    		});
+        }
+    
+	    $scope.addParameter = function () {
+	        console.log($scope.parameter.name);
+	        if($scope.parameter){
+	            console.log("Parameter entered");
+	            ParameterComponent.create($scope.parameter).then(function (response) {
+	                console.log(response);
+	                $scope.parameter = null;
+	                $scope.showNotifications('top','center','success','Parameter Added Successfully');
+	                $scope.loadAllParameters();
+	
+	            })
+	        }else{
+	            console.log("Parameter not entered");
+	        }
+	    };
+	    
+	    $scope.loadAllParameterUOMs = function() {
+	    		ParameterUOMComponent.findAll().then(function (data) {
+	            $scope.selectedParameterUOM = null;
+	            $scope.parameterUOMs = data;
+	        });
+	    }
+	    
+	    $scope.addParameterUOM = function () {
+	        console.log($scope.parameterUOM.name);
+	        if($scope.parameterUOM){
+	            console.log("ParameterUOM entered");
+	            ParameterUOMComponent.create($scope.parameterUOM).then(function (response) {
+	                console.log(response);
+	                $scope.parameterUOM = null;
+	                $scope.showNotifications('top','center','success','Parameter UOM Added Successfully');
+	                $scope.loadAllParameterUOMs();
+	
+	            })
+	        }else{
+	            console.log("Parameter UOM not entered");
+	        }
+	    };
+	    
+	    $scope.saveAssetParamConfig = function () {
+	    	alert('called')
+        	$scope.error = null;
+        	$scope.success =null;
+        	if($scope.asset.assetType){
+        	    $scope.parameterConfig.assetType = $scope.asset.assetType;
+        	    $scope.parameterConfig.assetId = $stateParams.id
+        	}
+        	if($scope.selectedParameter){
+        	    $scope.parameterConfig.name = $scope.selectedParameter.name;
+        	}
+        	if($scope.selectedParameterUOM){
+        	    $scope.parameterConfig.uom = $scope.selectedParameterUOM.uom;
+        	}
+        	$scope.parameterConfig.consumptionMonitoringRequired  = $scope.consumptionMonitoringRequired 
+        	console.log('parameterConfig details ='+ JSON.stringify($scope.parameterConfig));
+        	AssetComponent.createAssetParamConfig($scope.parameterConfig).then(function () {
+                $scope.success = 'OK';
+                $scope.showNotifications('top','center','success','Asset Parameter Saved Successfully');
+                $scope.editAsset();
+            }).catch(function (response) {
+                $scope.success = null;
+                console.log('Error - '+ response.data);
+                if (response.status === 400 && response.data.message === 'error.duplicateRecordError') {
+                    $scope.errorProjectExists = 'ERROR';
+                } else {
+                    $scope.error = 'ERROR';
+                }
+            });;
+
+	    };
+	        
 
 
 

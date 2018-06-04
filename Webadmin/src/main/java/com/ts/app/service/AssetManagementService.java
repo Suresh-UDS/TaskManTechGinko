@@ -441,7 +441,7 @@ public class AssetManagementService extends AbstractService {
 					page = assetRepository.findBySiteId(searchCriteria.getSiteId(),pageRequest);
 				} else if (searchCriteria.getProjectId() > 0) {
 					page = assetRepository.findByProjectId(searchCriteria.getProjectId(),pageRequest);
-				}
+				} 
 			} else {
 				if(CollectionUtils.isNotEmpty(siteIds)) {
 					page = assetRepository.findAll(siteIds,pageRequest);
@@ -569,9 +569,9 @@ public class AssetManagementService extends AbstractService {
       return mapperUtil.toModelList(assetType, AssetTypeDTO.class);
 	}
 
-	public List<AssetParameterConfigDTO> findByAssetConfig(Long id) {
+	public List<AssetParameterConfigDTO> findByAssetConfig(String assertType, Long assetId) {
 		// TODO Auto-generated method stub
-		List<AssetParameterConfig> entities = assetParamConfigRepository.findByAssetId(id);
+		List<AssetParameterConfig> entities = assetParamConfigRepository.findByAssetConfig(assertType, assetId);
 		return mapperUtil.toModelList(entities, AssetParameterConfigDTO.class);	
 	}
 	
@@ -580,6 +580,15 @@ public class AssetManagementService extends AbstractService {
 		AssetParameterConfig assetConfigUpdate = assetParamConfigRepository.findOne(id);
 		assetConfigUpdate.setActive(AssetParameterConfig.ACTIVE_NO);
 		assetParamConfigRepository.save(assetConfigUpdate);
+	}
+
+	public AssetParameterConfigDTO createAssetParamConfig(AssetParameterConfigDTO assetParamConfigDTO) {
+		// TODO Auto-generated method stub
+		AssetParameterConfig assetParamConfig = mapperUtil.toEntity(assetParamConfigDTO, AssetParameterConfig.class);
+		assetParamConfig.setActive(AssetParameterConfig.ACTIVE_YES);
+		assetParamConfig = assetParamConfigRepository.save(assetParamConfig);
+		assetParamConfigDTO = mapperUtil.toModel(assetParamConfig, AssetParameterConfigDTO.class);
+		return assetParamConfigDTO;
 	}
 	
 	
