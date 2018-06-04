@@ -1,5 +1,5 @@
 <div class="crud-form"
-	data-unique-hash="a2ad475d60b22954085c657a73309b8f" ng-init="initLoad();loadingStart();viewAsset();">
+	data-unique-hash="a2ad475d60b22954085c657a73309b8f" ng-init="initLoad();viewAsset();">
 	<div class="">
 		<div class="row">
         	<div class="col-md-12">
@@ -62,27 +62,21 @@
                                                                    <tbody>
                                                                    <tr>
                                                                        <td>Name</td>
-                                                                       <td>{{assetDeatil.title}}</td>
+                                                                       <td>{{assetDetail.title}}</td>
                                                                    </tr>
                                                                    <tr>
                                                                        <td>Asset Type</td>
-                                                                       <td>Diesel Generator</td>
+                                                                       <td>{{assetDetail.assetType}}</td>
 
                                                                    </tr>
                                                                    <tr>
                                                                        <td>Asset Group</td>
-                                                                       <td></td>
+                                                                       <td>{{assetDetail.assetGroup}}</td>
 
                                                                    </tr>
                                                                    <tr>
                                                                        <td>Status </td>
-                                                                       <td>
-                                                                           <ul class="checkList">
-                                                                               <li ng-repeat="checklist in checklists">
-                                                                                   {{checklist.name}}
-                                                                               </li>
-                                                                           </ul>
-                                                                       </td>
+                                                                       <td>{{assetDetail.status}}                                               </td>
 
                                                                    </tr>
 
@@ -115,30 +109,24 @@
                                                                    </tr>
                                                                    <tr>
                                                                        <td>Site</td>
-                                                                       <td></td>
+                                                                       <td>{{assetDetail.siteName}}</td>
 
                                                                    </tr>
                                                                    <tr>
                                                                        <td>Block</td>
-                                                                       <td>
-
-                                                                       </td>
+                                                                       <td>{{assetDetail.block}} </td>
 
                                                                    </tr>
                                                                    <tr>
 
                                                                        <td>Floor  </td>
-                                                                       <td>
-
-                                                                       </td>
+                                                                       <td>{{assetDetail.floor}} </td>
 
                                                                    </tr>
                                                                    <tr>
 
                                                                        <td>Zone  </td>
-                                                                       <td>
-
-                                                                       </td>
+                                                                       <td>{{assetDetail.zone}}  </td>
 
                                                                    </tr>
 
@@ -169,65 +157,49 @@
                                                                    </tr>
                                                                    <tr>
                                                                        <td>Model Number</td>
-                                                                       <td></td>
+                                                                       <td>{{assetDetail.modelNumber}}</td>
 
                                                                    </tr>
                                                                    <tr>
                                                                        <td>Serial Number</td>
-                                                                       <td>
-
-                                                                       </td>
+                                                                       <td>{{assetDetail.serialNumber}}  </td>
 
                                                                    </tr>
                                                                    <tr>
                                                                        <td>Acquired Date</td>
-                                                                       <td>
-
-                                                                       </td>
+                                                                       <td>{{assetDetail.acquiredDate}} </td>
 
                                                                    </tr>
                                                                    <tr>
                                                                        <td>Purchase price</td>
-                                                                       <td>
-
-                                                                       </td>
+                                                                       <td>{{assetDetail.purchasePrice}} </td>
 
                                                                    </tr>
 
                                                                    <tr>
                                                                        <td>Current Price</td>
-                                                                       <td>
-                                                                           Rs 5000
-                                                                       </td>
+                                                                       <td>{{assetDetail.currentPrice}}   </td>
 
                                                                    </tr>
                                                                    <tr>
                                                                        <td>Estimated dispose price</td>
-                                                                       <td>
-                                                                           Rs 5000
-                                                                       </td>
+                                                                       <td>{{assetDetail.estimatedDisposePrice}}</td>
 
                                                                    </tr>
                                                                    <tr>
                                                                        <td>
                                                                            Service Provider</td>
-                                                                       <td>
-                                                                           UDS
-                                                                       </td>
+                                                                       <td></td>
 
                                                                    </tr>
                                                                    <tr>
                                                                        <td>Warranty Type</td>
-                                                                       <td>
-                                                                           Type
-                                                                       </td>
+                                                                       <td>{{assetDetail.warrentyExpiryDate}}   </td>
 
                                                                    </tr>
                                                                    <tr>
                                                                        <td>Warranty date</td>
-                                                                       <td>
-                                                                           03/03/2000
-                                                                       </td>
+                                                                       <td> </td>
 
                                                                    </tr>
 
@@ -313,7 +285,7 @@
 
                                                        <div class="col-md-6 col-md-offset-3" style="text-align: center;">
 
-                                                           <h4>Asset Code : AS54321</h4>
+                                                           <h4>Asset Code : {{assetDetail.assetCode}}</h4>
 
                                                            <div class="QrcodeCon">
 
