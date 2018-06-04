@@ -419,6 +419,7 @@ public class    EmployeeService extends AbstractService {
         CheckInOut checkInOut = new CheckInOut();
 
         if (checkInOutDto.getId()>0) {
+            log.debug("Checkinout available");
             checkInOut = checkInOutRepository.findOne(checkInOutDto.getId());
         }
         checkInOutDto.setCheckInDateTime(zdt);

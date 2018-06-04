@@ -888,6 +888,7 @@ public class JobManagementService extends AbstractService {
 		JobDTO jobDto = mapperUtil.toModel(job,JobDTO.class);
 		CheckInOut checkInOutDTO= checkInOutRepository.getByJobId(id);
 		if(checkInOutDTO != null) {
+		    jobDto.setCheckInOutId(checkInOutDTO.getId());
 			jobDto.setActualEndTime(checkInOutDTO.getCheckOutDateTime());
 		}
         log.debug("Actual End time"+jobDto.getActualEndTime());
@@ -1074,7 +1075,7 @@ public class JobManagementService extends AbstractService {
 		return mapperUtil.toModel(job, JobDTO.class);
 
 	}
-	
+
 	public JobDTO onlyCompleteJob(Job job) {
 		job.setActualStartTime(job.getPlannedStartTime());
 		Date endDate = new Date();

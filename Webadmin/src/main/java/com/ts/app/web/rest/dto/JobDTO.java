@@ -74,6 +74,8 @@ public class JobDTO extends BaseDTO {
 
 	private List<CheckInOutImageDTO> images;
 
+	private long checkInOutId;
+
 	@JsonIgnoreProperties
 	private String block;
 
@@ -412,6 +414,13 @@ public class JobDTO extends BaseDTO {
 	public void setActualMinutes(int actualMinutes) {
 		this.actualMinutes = actualMinutes;
 	}
-    
-    
+
+
+    public long getCheckInOutId() {
+        return checkInOutId;
+    }
+
+    public void setCheckInOutId(long checkInOutId) {
+        this.checkInOutId = checkInOutId;
+    }
 }
