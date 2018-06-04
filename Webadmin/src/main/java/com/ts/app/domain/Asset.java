@@ -42,7 +42,6 @@ public class Asset extends AbstractAuditingEntity implements Serializable {
     @Column(length = 250, nullable = false)
     private String title;
 
-    @NotNull
     @Size(min = 1, max = 250)
     @Column(length = 250, nullable = false)
     private String code;
