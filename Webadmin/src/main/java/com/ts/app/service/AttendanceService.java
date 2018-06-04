@@ -1,6 +1,5 @@
 package com.ts.app.service;
 
-import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -8,10 +7,10 @@ import java.util.List;
 import javax.inject.Inject;
 
 import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.lang3.time.DateUtils;
 import org.hibernate.Hibernate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.core.env.Environment;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -83,6 +82,9 @@ public class AttendanceService extends AbstractService {
 
     @Inject
     private ReportUtil reportUtil;
+    
+    @Inject
+    private Environment env;
 
     public AttendanceDTO saveCheckOutAttendance(AttendanceDTO attnDto){
         Attendance attn = mapperUtil.toEntity(attnDto, Attendance.class);
@@ -102,28 +104,8 @@ public class AttendanceService extends AbstractService {
         dbAttn.setLatitudeOut(attn.getLatitudeOut());
         dbAttn.setLongitudeOut(attn.getLongitudeOut());
 
-        long siteId = attnDto.getSiteId();
-        Site site = siteRepository.findOne(siteId);
-        List<Shift> shifts = site.getShifts();
-        if(CollectionUtils.isNotEmpty(shifts)) {
-        		for(Shift shift : shifts) {
-				String startTime = shift.getStartTime();
-				String[] startTimeUnits = startTime.split(":");
-				Calendar startCal = Calendar.getInstance();
-				startCal.set(Calendar.HOUR_OF_DAY, Integer.parseInt(startTimeUnits[0]));
-				startCal.set(Calendar.MINUTE, Integer.parseInt(startTimeUnits[1]));
-				String endTime = shift.getEndTime();
-				String[] endTimeUnits = endTime.split(":");
-				Calendar endCal = Calendar.getInstance();
-				endCal.set(Calendar.HOUR_OF_DAY, Integer.parseInt(endTimeUnits[0]));
-				endCal.set(Calendar.MINUTE, Integer.parseInt(endTimeUnits[1]));
-				if((startCal.before(dbAttn.getCheckInTime()) && endCal.after(dbAttn.getCheckInTime())) || startCal.equals(dbAttn.getCheckInTime())) {
-					dbAttn.setShiftStartTime(startTime);
-					dbAttn.setShiftEndTime(endTime);
-					break;
-				}
-        		}
-        }
+        findShiftTiming(attnDto, dbAttn);
+        
         dbAttn = attendanceRepository.save(dbAttn);
         attnDto = mapperUtil.toModel(dbAttn, AttendanceDTO.class);
 
@@ -137,6 +119,11 @@ public class AttendanceService extends AbstractService {
         if(log.isDebugEnabled()) {
         		log.debug("shift timings - " + shifts);
         }
+        //load the lead time and grace time properties
+        int shiftStartLeadTime = Integer.valueOf(env.getProperty("attendance.shiftStartLeadTime"));
+        int shiftEndLeadTime = Integer.valueOf(env.getProperty("attendance.shiftEndLeadTime"));
+        int shiftStartGraceTime = Integer.valueOf(env.getProperty("attendance.shiftStartGraceTime"));
+        int shiftEndGraceTime = Integer.valueOf(env.getProperty("attendance.shiftEndGraceTime"));
         if(CollectionUtils.isNotEmpty(shifts)) {
         		for(Shift shift : shifts) {
         	        if(log.isDebugEnabled()) {
@@ -149,12 +136,32 @@ public class AttendanceService extends AbstractService {
 				startCal.set(Calendar.HOUR_OF_DAY, Integer.parseInt(startTimeUnits[0]));
 				startCal.set(Calendar.MINUTE, Integer.parseInt(startTimeUnits[1]));
 				
+				Calendar startCalLeadTime = Calendar.getInstance();
+				startCalLeadTime.setTimeInMillis(startCal.getTimeInMillis());
+				startCalLeadTime.set(Calendar.HOUR_OF_DAY, Integer.parseInt(startTimeUnits[0]) - shiftStartLeadTime);
+				startCalLeadTime.set(Calendar.MINUTE, Integer.parseInt(startTimeUnits[1]));
+
+				Calendar startCalGraceTime = Calendar.getInstance();
+				startCalGraceTime.setTimeInMillis(startCal.getTimeInMillis());
+				startCalGraceTime.set(Calendar.HOUR_OF_DAY, Integer.parseInt(startTimeUnits[0]) + shiftStartGraceTime);
+				startCalGraceTime.set(Calendar.MINUTE, Integer.parseInt(startTimeUnits[1]));
+
 				String endTime = shift.getEndTime();
 				String[] endTimeUnits = endTime.split(":");
 				Calendar endCal = Calendar.getInstance();
 				endCal.set(Calendar.HOUR_OF_DAY, Integer.parseInt(endTimeUnits[0]));
 				endCal.set(Calendar.MINUTE, Integer.parseInt(endTimeUnits[1]));
-				
+
+				Calendar endCalLeadTime = Calendar.getInstance();
+				endCalLeadTime.setTimeInMillis(endCal.getTimeInMillis());
+				endCalLeadTime.set(Calendar.HOUR_OF_DAY, Integer.parseInt(endTimeUnits[0]) - shiftEndLeadTime);
+				endCalLeadTime.set(Calendar.MINUTE, Integer.parseInt(endTimeUnits[1]));
+
+				Calendar endCalGraceTime = Calendar.getInstance();
+				endCalGraceTime.setTimeInMillis(endCal.getTimeInMillis());
+				endCalGraceTime.set(Calendar.HOUR_OF_DAY, Integer.parseInt(endTimeUnits[0]) + shiftEndGraceTime);
+				endCalGraceTime.set(Calendar.MINUTE, Integer.parseInt(endTimeUnits[1]));
+
 				if(endCal.before(startCal)) {
 					startCal.add(Calendar.DAY_OF_MONTH, -1);
 				}
@@ -162,11 +169,44 @@ public class AttendanceService extends AbstractService {
 				Calendar checkInCal = Calendar.getInstance();
 				checkInCal.setTimeInMillis(dbAttn.getCheckInTime().getTime());
 				
-				if((startCal.before(checkInCal) && endCal.after(checkInCal)) 
-						|| startCal.equals(checkInCal)) {
-					dbAttn.setShiftStartTime(startTime);
-					dbAttn.setShiftEndTime(endTime);
-					break;
+				Calendar checkOutCal = null;
+				if(dbAttn.getCheckOutTime() != null) {
+					checkOutCal = Calendar.getInstance();
+					checkOutCal.setTimeInMillis(dbAttn.getCheckOutTime().getTime());
+				}
+				
+				if(checkInCal.before(endCalLeadTime)) { // 12:30 PM checkin time < 1 PM (2PM shift ends) - 1 hr lead time
+					if((startCal.before(checkInCal))  // 7 AM shift starts < 12:30 PM check in
+							|| startCal.equals(checkInCal)) {
+						dbAttn.setShiftStartTime(startTime);  //7 AM considered as shift starts
+						break;
+					}
+				}
+				
+				if(checkInCal.after(startCalLeadTime)) { // 1:30 PM checkin time > 1 PM (2 PM shift start) - 1 hr lead time
+					if((startCal.after(checkInCal))  // 2:00 PM shift starts > 1:30 PM check in    
+							|| startCal.equals(checkInCal)) {
+						dbAttn.setShiftStartTime(startTime);  //2 PM considered as shift starts
+						break;
+					}
+				}
+				
+				if(checkOutCal != null) { //if checkout done 
+					if(checkOutCal.after(startCalGraceTime)) { // 3:30 PM checkout time > 3 PM (2 PM shift start)  - 1 hr grace time
+						if((endCal.after(checkOutCal))  // 10 PM shift ends > 3:30 PM checkout time 
+								|| endCal.equals(checkOutCal)) {
+							dbAttn.setShiftEndTime(endTime); // 10 PM considered as checkout time
+							break;
+						}
+					}
+					
+					if(checkOutCal.before(endCalGraceTime)) { // 10:30 PM checkout time < 11 PM (10 PM shift ends) - 1 hr grace time
+						if((endCal.before(checkOutCal))  // 10 PM shift ends < 10:30 PM checkout time
+								|| endCal.equals(checkOutCal)) { 
+							dbAttn.setShiftEndTime(endTime); //10 PM considered as checkout time
+							break;
+						}
+					}
 				}
         		}
         }

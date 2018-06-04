@@ -57,6 +57,12 @@ public class ReportResource {
 		schedulerService.attendanceDetailReportSchedule();
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
+	
+	@RequestMapping(value = "/reports/attendance/checkout", method = RequestMethod.GET)
+	public ResponseEntity<?> sendAttendanceCheckoutAlert() {
+		schedulerService.attendanceCheckOutTask();
+		return new ResponseEntity<>(HttpStatus.OK);
+	}
 
 	
 	//    @CrossOrigin

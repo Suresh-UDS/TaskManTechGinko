@@ -1,11 +1,11 @@
 package com.ts.app.service;
 
-import java.awt.print.Pageable;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -20,7 +20,6 @@ import org.hibernate.Hibernate;
 import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.boot.autoconfigure.jdbc.DataSourceInitializedEvent;
 import org.springframework.core.env.Environment;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -61,8 +60,6 @@ import com.ts.app.web.rest.dto.SchedulerConfigDTO;
 import com.ts.app.web.rest.dto.SearchCriteria;
 import com.ts.app.web.rest.dto.SearchResult;
 import com.ts.app.web.rest.errors.TimesheetException;
-
-import net.sf.ehcache.hibernate.HibernateUtil;
 
 /**
  * Service class for managing Device information.
@@ -559,6 +556,7 @@ public class SchedulerService extends AbstractService {
 						attendanceReports = settingRepository.findSettingByKeyAndProjectId(SettingsService.EMAIL_NOTIFICATION_ATTENDANCE, proj.getId());
 					}
 					if(attendanceReports != null && attendanceReports.getSettingValue().equalsIgnoreCase("true")) {
+						List<Map<String,String>> consolidatedData = new ArrayList<Map<String,String>>();
 						StringBuilder content = new StringBuilder();
 						Hibernate.initialize(site.getShifts());
 						if(CollectionUtils.isNotEmpty(site.getShifts())) {
@@ -602,6 +600,13 @@ public class SchedulerService extends AbstractService {
 									content.append("Total employees - " + empCntInShift + LINE_SEPARATOR);
 									content.append("Present - " + attendanceCount + LINE_SEPARATOR);
 									content.append("Absent - " + absentCount + LINE_SEPARATOR);
+									Map<String,String> data = new HashMap<String,String>();
+									data.put("ShiftStartTime", shift.getStartTime());
+									data.put("ShiftEndTime", shift.getEndTime());
+									data.put("TotalEmployees", String.valueOf(empCntInShift));
+									data.put("Present", String.valueOf(attendanceCount));
+									data.put("Absent", String.valueOf(absentCount));
+									consolidatedData.add(data);
 								//}	
 							}
 	 					}else {
@@ -618,6 +623,12 @@ public class SchedulerService extends AbstractService {
 							content.append("Total employees - " + empCntInShift + LINE_SEPARATOR);
 							content.append("Present - " + attendanceCount + LINE_SEPARATOR);
 							content.append("Absent - " + absentCount + LINE_SEPARATOR);
+							Map<String,String> data = new HashMap<String,String>();
+							data.put("TotalEmployees", String.valueOf(empCntInShift));
+							data.put("Present", String.valueOf(attendanceCount));
+							data.put("Absent", String.valueOf(absentCount));
+							consolidatedData.add(data);
+							
 	 					}
 						List<EmployeeAttendanceReport> empAttnList = attendanceRepository.findBySiteId(site.getId(), DateUtil.convertToSQLDate(cal.getTime()), DateUtil.convertToSQLDate(dayEndcal.getTime()));
 						List<Long> empPresentList = new ArrayList<Long>();
@@ -651,7 +662,7 @@ public class SchedulerService extends AbstractService {
 					    		attendanceReportEmails = settingRepository.findSettingByKeyAndProjectId(SettingsService.EMAIL_NOTIFICATION_ATTENDANCE_EMAILS, proj.getId());
 					    }
 						ExportResult exportResult = null;
-						exportResult = exportUtil.writeAttendanceReportToFile(proj.getName(), empAttnList, null, exportResult);
+						exportResult = exportUtil.writeAttendanceReportToFile(proj.getName(), empAttnList, consolidatedData, null, exportResult);
 						//send reports in email.
 						mailService.sendAttendanceDetailedReportEmail(site.getName(),attendanceReportEmails.getSettingValue(), content.toString(), exportResult.getFile(),null, cal.getTime());
 					}
@@ -673,8 +684,12 @@ public class SchedulerService extends AbstractService {
 		java.sql.Date endDate = new java.sql.Date(endCal.getTimeInMillis());
 		List<Attendance> dailyAttnList = attendanceRepository.findByCheckInDateAndNotCheckout(startDate, endDate);
 		log.debug("Found {} Daily Attendance", dailyAttnList.size());
-
+		long[] users = null;
+		String[] userEmails = null;
 		if(CollectionUtils.isNotEmpty(dailyAttnList)) {
+			users = new long[dailyAttnList.size()];
+			userEmails = new String[dailyAttnList.size()];
+			int cnt = 0;
 			for (Attendance dailyAttn : dailyAttnList) {
 				try {
 					Employee emp = dailyAttn.getEmployee();
@@ -708,17 +723,25 @@ public class SchedulerService extends AbstractService {
 										//send alert
 										if(currCal.getTime().after(endCal.getTime())) { //if the shift ends before EOD midnight.
 											//check out automatically
-											dailyAttn.setCheckOutTime(new Timestamp(currCal.getTimeInMillis()));
-											dailyAttn.setShiftEndTime(endTime);
-											dailyAttn.setLatitudeOut(dailyAttn.getLatitudeOut());
-											dailyAttn.setLongitudeOut(dailyAttn.getLongitudeOut());
+											//dailyAttn.setCheckOutTime(new Timestamp(currCal.getTimeInMillis()));
+											//dailyAttn.setShiftEndTime(endTime);
+											//dailyAttn.setLatitudeOut(dailyAttn.getLatitudeOut());
+											//dailyAttn.setLongitudeOut(dailyAttn.getLongitudeOut());
+											dailyAttn.setNotCheckedOut(true);
 											attendanceRepository.save(dailyAttn);
+											users[cnt] = emp.getUser().getId();
+											//send email notifications
+											String content = "You checked in at " + dailyAttn.getCheckInTime() + " at site -" + site.getName();
+											mailService.sendAttendanceCheckouAlertEmail(site.getName(), emp.getEmail(), content, null, new Date());
+											
 										}
 										break;
 									}
 								}
 							}
 						}
+
+						cnt++;
 					}
 					
 				} catch (Exception ex) {
@@ -726,6 +749,12 @@ public class SchedulerService extends AbstractService {
 				}
 			}
 		}
+		//send push notifications
+		if(users != null && users.length >0) {
+			String content = "Please perform attendance checkout";
+			pushService.send(users, content);
+		}
+
 	}
 
 	public void createJobs(SchedulerConfig dailyTask) {
