@@ -70,6 +70,10 @@ qrcode:
     file:
          path: /opt/qrcode
 attendance:
+    shiftStartLeadTime: 1
+    shiftEndLeadTime: 1
+    shiftStartGraceTime: 1
+    shiftEndGraceTime: 1
     file:
         path:  /opt/attendance
 quotation:

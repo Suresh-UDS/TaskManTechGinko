@@ -62,6 +62,8 @@ public class ExportUtil {
 			"CHECK IN TIME", "CHECK OUT TIME" };
 	private static final Object[] EMPLOYEE_DETAIL_REPORT_FILE_HEADER = { "EMPLOYEE ID", "EMPLOYEE NAME", "DESIGNATION",
 			"REPORTING TO", "CLIENT", "SITE", "ACTIVE" };
+	private static final Object[] ATTENDANCE_CONSOLIDATED_REPORT_FILE_HEADER = { "SHIFT START TIME", "SHIFT START TIME", "TOTAL EMPLOYEES",
+			"PRESENT", "ABSENT" };
 	private static final Object[] ATTENDANCE_DETAIL_REPORT_FILE_HEADER = { "EMPLOYEE ID", "EMPLOYEE NAME", "SITE",
 			"CLIENT", "STATUS", "CHECK IN", "CHECK OUT", "SHIFT START", "SHIFT END" };
 
@@ -451,7 +453,7 @@ public class ExportUtil {
 
 	}
 
-	public ExportResult writeAttendanceReportToFile(String projName, List<EmployeeAttendanceReport> content,
+	public ExportResult writeAttendanceReportToFile(String projName, List<EmployeeAttendanceReport> content, List<Map<String,String>> consolidatedData,
 			final String empId, ExportResult result) {
 		boolean isAppend = (result != null);
 		log.debug("result = " + result + ", isAppend=" + isAppend);
@@ -513,17 +515,39 @@ public class ExportUtil {
 		// Files.createFile(newFilePath);
 		// pkg = OPCPackage.open(new FileInputStream(filePath));
 		XSSFWorkbook xssfWorkbook = new XSSFWorkbook();
-		// create worksheet with title
-		XSSFSheet xssfSheet = xssfWorkbook.createSheet("ATTENDANCE_REPORT");
+		
+		//create consolidated data sheet
+		XSSFSheet consSheet = xssfWorkbook.createSheet("ATTENDANCE_CONSOLIDATED_REPORT");
+		
+		Row headerRow = consSheet.createRow(0);
 
-		Row headerRow = xssfSheet.createRow(0);
+		for (int i = 0; i < ATTENDANCE_CONSOLIDATED_REPORT_FILE_HEADER.length; i++) {
+			Cell cell = headerRow.createCell(i);
+			cell.setCellValue((String) ATTENDANCE_CONSOLIDATED_REPORT_FILE_HEADER[i]);
+		}
+
+		int rowNum = 1;
+		
+		for (Map<String,String> data : consolidatedData) {
+			Row dataRow = consSheet.createRow(rowNum++);
+			dataRow.createCell(0).setCellValue(data.get("ShiftStartTime") != null ? data.get("ShiftStartTime") : "");
+			dataRow.createCell(1).setCellValue(data.get("ShiftEndTime") != null ? data.get("ShiftEndTime") : "");
+			dataRow.createCell(2).setCellValue(data.get("TotalEmployees"));
+			dataRow.createCell(3).setCellValue(data.get("Present"));
+			dataRow.createCell(4).setCellValue(data.get("Absent"));
+		}
+		
+		// create worksheet with title
+		XSSFSheet xssfSheet = xssfWorkbook.createSheet("ATTENDANCE_DETAILED_REPORT");
+
+		headerRow = xssfSheet.createRow(0);
 
 		for (int i = 0; i < ATTENDANCE_DETAIL_REPORT_FILE_HEADER.length; i++) {
 			Cell cell = headerRow.createCell(i);
 			cell.setCellValue((String) ATTENDANCE_DETAIL_REPORT_FILE_HEADER[i]);
 		}
 
-		int rowNum = 1;
+		rowNum = 1;
 
 		for (EmployeeAttendanceReport transaction : content) {
 
@@ -557,46 +581,7 @@ public class ExportUtil {
 			statusMap.put(filePath, "FAILED");
 		}
 		lock.unlock();
-		// try {
-		// // initialize FileWriter object
-		// log.debug("filePath = " + filePath + ", isAppend=" + isAppend);
-		// fileWriter = new FileWriter( filePath,isAppend);
-		// // initialize CSVPrinter object
-		// csvFilePrinter = new CSVPrinter(fileWriter, csvFileFormat);
-		// if(!isAppend) {
-		// // Create CSV file header
-		// csvFilePrinter.printRecord(ATTENDANCE_DETAIL_REPORT_FILE_HEADER);
-		// }
-		// for (EmployeeAttendanceReport transaction : content) {
-		// List record = new ArrayList();
-		// log.debug("Writing transaction record for site :"+
-		// transaction.getSiteName());
-		// record.add(transaction.getEmployeeIds());
-		// record.add(transaction.getName() + transaction.getLastName());
-		// record.add(transaction.getSiteName());
-		// record.add(transaction.getProjectName());
-		// record.add(transaction.getStatus());
-		// record.add(transaction.getCheckInTime());
-		// record.add(transaction.getCheckOutTime());
-		// record.add(transaction.getShiftStartTime());
-		// record.add(transaction.getShiftEndTime());
-		// csvFilePrinter.printRecord(record);
-		// }
-		// log.info(exportFileName + " CSV file was created successfully !!!");
-		// statusMap.put(exportFileName, "COMPLETED");
-		// } catch (Exception e) {
-		// log.error("Error in CsvFileWriter !!!");
-		// statusMap.put(exportFileName, "FAILED");
-		// } finally {
-		// try {
-		// fileWriter.flush();
-		// fileWriter.close();
-		// csvFilePrinter.close();
-		// } catch (IOException e) {
-		// log.error("Error while flushing/closing fileWriter/csvPrinter !!!");
-		// statusMap.put(exportFileName, "FAILED");
-		// }
-		// }
+		
 
 		result.setEmpId(empId);
 		result.setFile(fileName.substring(0, fileName.indexOf('.')));
