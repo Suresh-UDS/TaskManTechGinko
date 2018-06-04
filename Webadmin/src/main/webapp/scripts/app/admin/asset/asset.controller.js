@@ -50,6 +50,9 @@ angular.module('timeSheetApp')
 
         $scope.parameter = {};
 
+        $scope.manufacturer = {};
+        $scope.vendor = {};
+
         $scope.consumptionMonitoringRequired = false;
         
         $scope.selectedClientFile;
@@ -105,16 +108,55 @@ angular.module('timeSheetApp')
 
         $scope.loadManufacturer = function () {
             ManufacturerComponent.findAll().then(function (data) {
-                console.log("Loading all Manufacturer -- " , data)
+                console.log("Loading all Manufacturer -- " , data);
+                $scope.selectedAssetType = null;
                 $scope.manufacturers = data;
             });
-        };
+        }
+
+        $scope.addManufacturer = function () {
+            console.log($scope.manufacturer);
+            if($scope.manufacturer){
+                console.log("Manufacturer entered");
+                ManufacturerComponent.create($scope.manufacturer).then(function (response) {
+                    console.log(response);
+                    $scope.manufacturer = {};
+                    $scope.showNotifications('top','center','success','Manufacturer Added Successfully');
+                    $scope.loadManufacturer();
+                    
+
+                })
+            }else{
+                console.log("Manufacturer not entered");
+            }
+
+
+        }
 
          $scope.loadVendor = function () {
             VendorComponent.findAll().then(function (data) {
                 console.log("Loading all Vendor -- " , data)
                 $scope.vendors = data;
             });
+        };
+
+        $scope.addVendor = function () {
+            console.log($scope.vendor);
+            if($scope.vendor){
+                console.log("Asset Type entered");
+                VendorComponent.create($scope.vendor).then(function (response) {
+                    console.log(response);
+                    $scope.vendor = {};
+                    $scope.showNotifications('top','center','success','Vendor Added Successfully');
+                    $scope.loadVendor();
+                    
+
+                })
+            }else{
+                console.log("Vendor not entered");
+            }
+
+
         };
 
 
@@ -385,7 +427,7 @@ angular.module('timeSheetApp')
                      }
 
                     console.log("Asset Create List -- ",$scope.assetGen);
-                    AssetComponent.create($scope.assetGen).then(function() {
+                    AssetComponent.create($scope.assetGen).then(function(response) {
                         $scope.success = 'OK';
                         $scope.showNotifications('top','center','success','Asset Added');
                         $scope.selectedSite = null;
@@ -531,7 +573,7 @@ angular.module('timeSheetApp')
         }
 
 
-
+       
 
 
         $scope.addAssetType = function () {
