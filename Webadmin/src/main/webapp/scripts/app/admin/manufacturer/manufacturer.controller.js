@@ -121,14 +121,6 @@ angular.module('timeSheetApp')
             $scope.searchCriteria = searchCriteria;
             // }
 
-            $scope.searchCriteria.currPage = currPageVal;
-            console.log('Selected  name -' + $scope.selectedName);
-            console.log('Selected  asset type  -' + $scope.selectedAssetType);
-            console.log('search criteria - '+JSON.stringify($rootScope.searchCriteriaManufacturer));
-            if(!$scope.selectedName && !$scope.selectedAssetType) {
-            		$scope.searchCriteria.findAll = true;
-            }
-
 
             $scope.searchCriteria.currPage = currPageVal;
             $scope.searchCriteria.findAll = false;

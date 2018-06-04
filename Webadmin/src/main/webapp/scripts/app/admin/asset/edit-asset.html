@@ -32,27 +32,27 @@
 
                                             <ul class="nav nav-pills nav-pills-warning">
                                                 <li class="active">
-                                                    <a href=".pill2" data-toggle="tab" > General</a>
+                                                    <a href=".General" data-toggle="tab" > General</a>
                                                 </li>
                                                 <li class="">
-                                                    <a href=".pill3" data-toggle="tab"
+                                                    <a href=".qr-code" data-toggle="tab"
                                                        > QR Code</a>
                                                 </li>
-                                                <li class=""><a href=".pill6" data-toggle="tab"
+                                                <li class=""><a href=".ppm-schedule" data-toggle="tab"
                                                                 >PPM Schedule</a></li>
-                                                <li class=""><a href=".pill7" data-toggle="tab"
+                                                <li class=""><a href=".amc-schedule" data-toggle="tab"
                                                                 >AMC schedule</a></li>
                                                 <li class=""><a href=".Config" data-toggle="tab"
                                                 >Config</a></li>
 
-                                                <li class=""><a href=".pill8" data-toggle="tab"
+                                                <li class=""><a href=".docs" data-toggle="tab"
                                                                 >Documents</a></li>
-                                                <li class=""><a href=".pill4" data-toggle="tab"
+                                                <li class=""><a href=".ppm-jobs" data-toggle="tab"
                                                 >PPM Jobs</a></li>
-                                                <li class=""><a href=".pill5" data-toggle="tab"
+                                                <li class=""><a href=".amc-jobs" data-toggle="tab"
                                                 >AMC Jobs</a></li>
                                                 <li class="">
-                                                    <a href=".pill1" data-toggle="tab"
+                                                    <a href=".tickets" data-toggle="tab"
                                                     > Tickets</a>
                                                 </li>
 
@@ -60,7 +60,7 @@
                                             </ul>
                                             <div class="tab-content TabsContent ViewTables" style="">
 
-                                                <div class="tab-pane fade in active pill2" id="pill2">
+                                                <div class="tab-pane fade in active General" id="General">
                                                     <div class="row">
 
                                                         <div class="col-md-6">
@@ -108,38 +108,53 @@
                                                                             </div>
                                                                         </div>
                                                                         <div class="col-md-12">
-                                                                             <div class="form-group selectcon" style="padding-top:25px;" ng-init="loadAssetType()">
 
-                                                                                <div class="" style="float:left;width:90%;">
-                                                                                    <select class="form-control" ng-change="loadAssetConfig(asset.assetType)" ng-model="asset.assetType" ng-options="assetType.name as assetType.name for assetType in assetTypes">
-                                                                                        <option value="">Please select Asset Type ..</option>
-                                                                                    </select>
+
+                                                                            <div class="form-group selectcon is-empty" ng-init="loadAssetType()">
+                                                                                <div class="row">
+                                                                                    <div class="col-md-10 pad-r-0px">
+                                                                                        <label class="control-label">Type</label>
+                                                                                        <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
+                                                                                        <select class="form-control" ng-change="loadAssetConfig(asset.assetType)" ng-model="asset.assetType" ng-options="assetType.name as assetType.name for assetType in assetTypes">
+                                                                                            <option value="">Select Asset Type ..</option>
+                                                                                        </select>
+                                                                                    </div>
+                                                                                    <div class="col-md-2 pdng-top25">
+                                                                                        <a href="javascript:void(0)"  data-toggle="collapse" data-parent="#accordian" data-target="#addAssetType" class="btn btn-round btn-fab btn-fab-mini btn-simple" aria-expanded="false" aria-controls="collapseExample">
+                                                                                            <i class="material-icons">add</i>
+                                                                                        </a>
+                                                                                    </div>
                                                                                 </div>
-                                                                                <div class="" style="float:left;">
-                                                                                    <a href="javascript:;"  data-toggle="collapse" data-parent="#accordian" data-target="#addAssetType" class="btn btn-round btn-fab btn-fab-mini btn-simple" aria-expanded="false" aria-controls="collapseExample">
-                                                                                        <i class="material-icons">add</i>
-                                                                                    </a>
-                                                                                </div>
+
                                                                                 <div class="collapse" id="addAssetType">
                                                                                     <div class="">
-                                                                                        <input class="input-desc" id='assetgroupName' ng-model="assetType.name"
-                                                                                               name='assetgroupName' type='text' value=""/>
+                                                                                        <input class="input-desc" id="addAssetTypeInput" ng-model="assetType.name"   name="assetTypeName" type="text" value=""/>
                                                                                         <a class="btn btn-success"  ng-click="addAssetType()">Add</a>
                                                                                     </div>
                                                                                 </div>
-                                                                            </div>
-                                                                        
-                                                                            <div class="form-group selectcon" style="padding-top:25px;">
 
-                                                                                <div class="" style="float:left;width:90%;">
-                                                                                    <select class="form-control" ng-model="employee.designation" ng-options="designation.designation as designation.designation for designation in designations">
-                                                                                        <option value="">Please select Asset Group ..</option>
-                                                                                    </select>
-                                                                                </div>
-                                                                                <div class="" style="float:left;">
-                                                                                    <a href="javascript:;"  data-toggle="collapse" data-parent="#accordian" data-target="#addDesignation" class="btn btn-round btn-fab btn-fab-mini btn-simple" aria-expanded="false" aria-controls="collapseExample">
-                                                                                        <i class="material-icons">add</i>
-                                                                                    </a>
+                                                                            </div>
+
+
+                                                                            <div class="form-group selectcon">
+
+                                                                                <div class="row">
+
+                                                                                    <div class="col-md-10 pad-r-0px">
+                                                                                        <label class="control-label">Group</label>
+                                                                                        <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
+                                                                                        <select class="form-control" ng-model="employee.designation" ng-options="designation.designation as designation.designation for designation in designations">
+                                                                                            <option value="">Please select Asset Group ..</option>
+                                                                                        </select>
+                                                                                    </div>
+
+                                                                                    <div class="col-md-2 pdng-top25">
+                                                                                        <a href="javascript:;"  data-toggle="collapse" data-parent="#accordian" data-target="#addDesignation" class="btn btn-round btn-fab btn-fab-mini btn-simple" aria-expanded="false" aria-controls="collapseExample">
+                                                                                            <i class="material-icons">add</i>
+                                                                                        </a>
+                                                                                    </div>
+
+
                                                                                 </div>
                                                                                 <div class="collapse" id="addDesignation">
                                                                                     <div class="">
@@ -148,6 +163,9 @@
                                                                                         <a class="btn btn-success"  ng-click="">Add</a>
                                                                                     </div>
                                                                                 </div>
+
+
+
                                                                             </div>
                                                                         </div>
                                                                     </div>
@@ -156,6 +174,7 @@
                                                                         <div class="col-md-12">
                                                                             <div class="form-group">
                                                                                 <label class="control-label">Status</label>
+                                                                                <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
                                                                                 <select class="form-control" ng-model="employee.designation" ng-options="designation.designation as designation.designation for designation in designations">
                                                                                     <option value="">Please select Status ..</option>
                                                                                 </select>
@@ -185,6 +204,7 @@
                                                                                 <!--uib-typeahead="role as role.name for role in userRoles | filter:$viewValue | limitTo:5"-->
                                                                                 <!--name="UserRole" ng-minlength="5" ng-maxlength="50" autofocus-->
                                                                                 <!--required >-->
+                                                                                <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
                                                                                 <select class="form-control " ng-model=""  ng-options="">
                                                                                     <option value="">Please select Client ...</option>
                                                                                 </select>
@@ -201,6 +221,7 @@
                                                                                 <!--uib-typeahead="role as role.name for role in userRoles | filter:$viewValue | limitTo:5"-->
                                                                                 <!--name="UserRole" ng-minlength="5" ng-maxlength="50" autofocus-->
                                                                                 <!--required >-->
+                                                                                <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
                                                                                 <select class="form-control " ng-model=""  ng-options="">
                                                                                     <option value="">Please select Site ...</option>
                                                                                 </select>
@@ -220,6 +241,7 @@
                                                                                 <!--uib-typeahead="role as role.name for role in userRoles | filter:$viewValue | limitTo:5"-->
                                                                                 <!--name="UserRole" ng-minlength="5" ng-maxlength="50" autofocus-->
                                                                                 <!--required >-->
+                                                                                <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
                                                                                 <select class="form-control " ng-model=""  ng-options="">
                                                                                     <option value="">Please select Block ...</option>
                                                                                 </select>
@@ -236,6 +258,7 @@
                                                                                 <!--uib-typeahead="role as role.name for role in userRoles | filter:$viewValue | limitTo:5"-->
                                                                                 <!--name="UserRole" ng-minlength="5" ng-maxlength="50" autofocus-->
                                                                                 <!--required >-->
+                                                                                <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
                                                                                 <select class="form-control " ng-model=""  ng-options="">
                                                                                     <option value="">Please select Floor ...</option>
                                                                                 </select>
@@ -250,6 +273,7 @@
                                                                                 <!--uib-typeahead="role as role.name for role in userRoles | filter:$viewValue | limitTo:5"-->
                                                                                 <!--name="UserRole" ng-minlength="5" ng-maxlength="50" autofocus-->
                                                                                 <!--required >-->
+                                                                                <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
                                                                                 <select class="form-control " ng-model=""  ng-options="">
                                                                                     <option value="">Please select Zone  ...</option>
                                                                                 </select>
@@ -272,25 +296,37 @@
 
                                                                     <div class="row">
                                                                         <div class="col-md-6">
-                                                                            <div class="form-group selectcon" style="padding-top:25px;">
+                                                                            <div class="form-group selectcon">
 
-                                                                                <div class="" style="float:left;width:90%;">
-                                                                                    <select class="form-control" ng-model="employee.designation" ng-options="designation.designation as designation.designation for designation in designations">
-                                                                                        <option value="">Please select Manufactururer ..</option>
-                                                                                    </select>
+                                                                                <div class="row">
+
+                                                                                    <div class="col-md-10 pad-r-0px">
+                                                                                        <label class="control-label">Manufactururer</label>
+                                                                                        <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
+                                                                                        <select class="form-control" ng-model="employee.designation" ng-options="designation.designation as designation.designation for designation in designations">
+                                                                                            <option value="">Please select Manufactururer ..</option>
+                                                                                        </select>
+                                                                                    </div>
+
+                                                                                    <div class="col-md-2 pdng-top25">
+                                                                                        <a href="javascript:;"  data-toggle="collapse" data-parent="#accordian" data-target="#addManufactururer" class="btn btn-round btn-fab btn-fab-mini btn-simple" aria-expanded="false" aria-controls="collapseExample">
+                                                                                            <i class="material-icons">add</i>
+                                                                                        </a>
+                                                                                    </div>
+
+
                                                                                 </div>
-                                                                                <div class="" style="float:left;">
-                                                                                    <a href="javascript:;"  data-toggle="collapse" data-parent="#accordian" data-target="#addDesignation1" class="btn btn-round btn-fab btn-fab-mini btn-simple" aria-expanded="false" aria-controls="collapseExample">
-                                                                                        <i class="material-icons">add</i>
-                                                                                    </a>
-                                                                                </div>
-                                                                                <div class="collapse" id="addDesignation1">
+
+                                                                                <div class="collapse" id="addManufactururer">
                                                                                     <div class="">
                                                                                         <input class="input-desc" id='assetgroupName' ng-model=""
                                                                                                name='assetgroupName' type='text' value=""/>
                                                                                         <a class="btn btn-success"  ng-click="">Add</a>
                                                                                     </div>
                                                                                 </div>
+
+
+
                                                                             </div>
                                                                         </div>
                                                                         <div class="col-md-6">
@@ -375,18 +411,26 @@
                                                                         </div>
 
                                                                         <div class="col-md-6">
-                                                                            <div class="form-group selectcon" style="padding-top:25px;">
+                                                                            <div class="form-group selectcon" >
 
-                                                                                <div class="" style="float:left;width:90%;">
-                                                                                    <select class="form-control" ng-model="employee.designation" ng-options="designation.designation as designation.designation for designation in designations">
-                                                                                        <option value="">Please select Service Provider  ..</option>
-                                                                                    </select>
+
+                                                                                <div class="row">
+
+                                                                                    <div class="col-md-10 pad-r-0px">
+                                                                                        <label class="control-label">Service Provider</label>
+                                                                                        <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
+                                                                                        <select class="form-control" ng-model="employee.designation" ng-options="designation.designation as designation.designation for designation in designations">
+                                                                                            <option value="">Please select Service Provider  ..</option>
+                                                                                        </select>
+                                                                                    </div>
+                                                                                    <div class="col-md-2 pdng-top25">
+                                                                                        <a href="javascript:;"  data-toggle="collapse" data-parent="#accordian" data-target="#addServiceProvicer" class="btn btn-round btn-fab btn-fab-mini btn-simple" aria-expanded="false" aria-controls="collapseExample">
+                                                                                            <i class="material-icons">add</i>
+                                                                                        </a>
+                                                                                    </div>
+
                                                                                 </div>
-                                                                                <div class="" style="float:left;">
-                                                                                    <a href="javascript:;"  data-toggle="collapse" data-parent="#accordian" data-target="#addServiceProvicer" class="btn btn-round btn-fab btn-fab-mini btn-simple" aria-expanded="false" aria-controls="collapseExample">
-                                                                                        <i class="material-icons">add</i>
-                                                                                    </a>
-                                                                                </div>
+
                                                                                 <div class="collapse" id="addServiceProvicer">
                                                                                     <div class="">
                                                                                         <input class="input-desc" id='' ng-model=""
@@ -394,6 +438,7 @@
                                                                                         <a class="btn btn-success"  ng-click="">Add</a>
                                                                                     </div>
                                                                                 </div>
+
                                                                             </div>
                                                                         </div>
                                                                         <div class="col-md-6">
@@ -436,7 +481,7 @@
 
                                                     </div>
                                                 </div>
-                                                <div class="tab-pane fade pill3" id="pill3">
+                                                <div class="tab-pane fade qr-code" id="qr-code">
 
                                                     <div class="panel panel-default" style="">
                                                         <div class="panel-heading">
@@ -501,7 +546,7 @@
                                                     </div>
 
                                                 </div>
-                                                <div class="tab-pane fade pill1" id="pill1">
+                                                <div class="tab-pane fade tickets" id="tickets">
 
                                                     <div class="table-responsive tablecard">
                                                         <table class="table table-striped">
@@ -572,7 +617,7 @@
                                                     </div>
 
                                                 </div>
-                                                <div class="tab-pane fade pill4" id="pill4">
+                                                <div class="tab-pane fade ppm-jobs" id="ppm-jobs">
 
                                                     <div class="table-responsive tablecard">
                                                         <table class="table table-striped">
@@ -645,7 +690,7 @@
                                                     </div>
 
                                                 </div>
-                                                <div class="tab-pane fade pill5" id="pill5">
+                                                <div class="tab-pane fade amc-jobs" id="amc-jobs">
 
                                                     <div class="table-responsive tablecard">
                                                         <table class="table table-striped">
@@ -718,7 +763,7 @@
                                                     </div>
 
                                                 </div>
-                                                <div class="tab-pane fade pill6" id="pill6">
+                                                <div class="tab-pane fade ppm-schedule" id="ppm-schedule">
 
                                                     <div class="panel panel-default">
                                                         <div class="panel-heading">New Schedule</div>
@@ -952,7 +997,7 @@
                                                     </div>
 
                                                 </div>
-                                                <div class="tab-pane fade pill7" id="pill7">
+                                                <div class="tab-pane fade amc-schedule" id="amc-schedule">
 
                                                     <div class="panel panel-default">
                                                         <div class="panel-heading">New Schedule</div>
@@ -1190,20 +1235,20 @@
 
                                                     <div class="row">
 
-                                                        <div class="col-md-6">
+                                                        <div class="col-md-12">
                                                             <div class="panel panel-default" style="min-height: 200px;">
 
                                                                 <div class="panel-heading">
                                                                     New Parameters
                                                                 </div>
-                                                                
+
                                                                 <div class="panel-body">
 
-                                                                    <div class="row">                                                                   
-                                                                   
+                                                                    <div class="row">
 
-                                                                        <div class="col-md-12">
-                                                                        
+
+                                                                        <div class="col-md-6">
+
                                                                             <div class="form-group selectcon is-empty SelectWithAddbtnCon">
 
                                                                                 <div class="" style="float:left;width:90%;">
@@ -1228,6 +1273,9 @@
                                                                                 <span class="material-input"></span>
                                                                             </div>
 
+                                                                        </div>
+
+                                                                        <div class="col-md-6">
                                                                             <div class="form-group selectcon is-empty SelectWithAddbtnCon">
 
                                                                                 <div class="" style="float:left;width:90%;">
@@ -1251,7 +1299,6 @@
                                                                                 </div>
                                                                                 <span class="material-input"></span>
                                                                             </div>
-
                                                                         </div>
 
                                                                     </div>
@@ -1280,7 +1327,7 @@
 
                                                             </div>
                                                         </div>
-                                                        <div class="col-md-6">
+                                                        <div class="col-md-12">
                                                             <div class="panel panel-default" style="min-height: 200px;">
 
                                                                 <div class="panel-heading">
@@ -1381,8 +1428,7 @@
 
 
                                                 </div>
-
-                                                <div class="tab-pane fade pill8" id="pill8">
+                                                <div class="tab-pane fade docs" id="docs">
 
                                                     <div class="panel panel-default" style="min-height: 200px;">
 
@@ -1591,7 +1637,6 @@
                                                     </div>
 
                                                 </div>
-
 
                                             </div>
 

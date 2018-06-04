@@ -1033,6 +1033,7 @@ p.titleTxt
 ion-fab-list
 {
   left:-9px !important;
+    margin: 70px -13px !important;
 }
 .empl-round
 {
@@ -1626,6 +1627,11 @@ ion-grid .row:before
    {
        margin-left:0px !important;
    }
+    form-control[disabled], fieldset[disabled] .form-control, .form-group .form-control[disabled], fieldset[disabled] .form-group .form-control {
+        background-image: none;
+        border-bottom:none !important;
+        /* border-bottom: 1px dotted #D2D2D2; */
+    }
 }
 
 
