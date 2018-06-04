@@ -179,16 +179,15 @@ public class AssetManagementService extends AbstractService {
         
         Manufacturer manufacturer = getManufacturer(assetDTO.getManufacturerId());
         asset.setManufacturer(manufacturer);
-
+        
         Vendor vendor = getVendor(assetDTO.getVendorId());
     	asset.setAmcVendor(vendor);
-
+    	
     	asset.setActive(Asset.ACTIVE_YES);
     	
     	List<Asset> existingAssets = assetRepository.findAssetByTitle(assetDTO.getTitle());
         log.debug("Existing asset -"+ existingAssets);
         if(CollectionUtils.isEmpty(existingAssets)) {
-        	log.debug(">>> save! <<<");
             asset = assetRepository.save(asset);
         }
 
