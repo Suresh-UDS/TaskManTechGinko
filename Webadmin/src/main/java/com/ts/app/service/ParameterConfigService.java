@@ -16,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import com.ts.app.domain.AbstractAuditingEntity;
+import com.ts.app.domain.AssetParameterConfig;
 import com.ts.app.domain.Parameter;
 import com.ts.app.domain.ParameterConfig;
 import com.ts.app.domain.ParameterUOM;
@@ -25,6 +26,7 @@ import com.ts.app.repository.ParameterUOMRepository;
 import com.ts.app.repository.UserRepository;
 import com.ts.app.service.util.ImportUtil;
 import com.ts.app.service.util.MapperUtil;
+import com.ts.app.web.rest.dto.AssetParameterConfigDTO;
 import com.ts.app.web.rest.dto.BaseDTO;
 import com.ts.app.web.rest.dto.ParameterConfigDTO;
 import com.ts.app.web.rest.dto.ParameterDTO;
@@ -201,6 +203,12 @@ public class ParameterConfigService extends AbstractService {
 
 		result.setTransactions(transactions);
 		return;
+	}
+
+	public List<ParameterConfigDTO> findByAssertType(String type) {
+		// TODO Auto-generated method stub
+		List<ParameterConfig> entities = parameterConfigRepository.findAllByAssetType(type);
+		return mapperUtil.toModelList(entities, ParameterConfigDTO.class);
 	}
 
 

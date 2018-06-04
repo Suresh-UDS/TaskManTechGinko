@@ -1,5 +1,6 @@
 package com.ts.app.web.rest;
 
+import java.util.Date;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -16,13 +17,18 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.codahale.metrics.annotation.Timed;
+import com.ts.app.domain.AssetDocument;
 import com.ts.app.domain.AssetParameterConfig;
 import com.ts.app.security.SecurityUtils;
 import com.ts.app.service.AssetManagementService;
 import com.ts.app.web.rest.dto.AssetDTO;
+import com.ts.app.web.rest.dto.AssetDocumentDTO;
 import com.ts.app.web.rest.dto.AssetParameterConfigDTO;
 import com.ts.app.web.rest.dto.AssetTypeDTO;
 import com.ts.app.web.rest.dto.AssetgroupDTO;
@@ -191,6 +197,21 @@ public class AssetResource {
     	}
 		return new ResponseEntity<>(HttpStatus.CREATED); 
     	
+    }
+    
+    @RequestMapping(value ="/assets/uploadFile", method = RequestMethod.POST)
+    public ResponseEntity<?> uploadAssetFile(@RequestParam("title") String title, @RequestParam("assetId") long assetId, @RequestParam("uploadFile") MultipartFile file, AssetDocumentDTO assetDocumentDTO) {
+    	assetDocumentDTO.setAssetId(assetId);
+    	assetDocumentDTO.setTitle(title);
+    	assetDocumentDTO = assetService.uploadFile(assetDocumentDTO, file);
+    	return new ResponseEntity<>(assetDocumentDTO, HttpStatus.OK);
+    }
+    
+    @RequestMapping(value = "/assets/getAllFile/{id}", method = RequestMethod.GET)
+    public List<AssetDocumentDTO> getUploadedFiles(@PathVariable Long id) {
+    	List<AssetDocumentDTO> result = null;
+    	result = assetService.findAllDocuments(id);
+    	return result;
     }
     
     

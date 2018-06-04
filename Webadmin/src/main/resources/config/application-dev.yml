@@ -77,6 +77,15 @@ import:
         path:
             new: /opt/imports/new
             completed: /opt/imports/completed        
+
+asset:
+   file:
+       path: /opt/asset/uploads/site      
+
+multipart:
+   maxFileSize: 15MB
+   maxRequestSize: 15MB
+   
 max:
     user: 10
     userGroup: 2

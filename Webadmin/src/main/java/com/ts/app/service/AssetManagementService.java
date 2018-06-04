@@ -1,6 +1,10 @@
 package com.ts.app.service;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -27,6 +31,7 @@ import com.ts.app.domain.Designation;
 import com.ts.app.domain.Project;
 import com.ts.app.domain.Site;
 import com.ts.app.domain.Ticket;
+import com.ts.app.repository.AssetDocumentRepository;
 import com.ts.app.repository.AssetGroupRepository;
 import com.ts.app.repository.AssetParameterConfigRepository;
 import com.ts.app.domain.Employee;
@@ -59,6 +64,7 @@ import com.ts.app.service.util.MapperUtil;
 import com.ts.app.service.util.QRCodeUtil;
 import com.ts.app.service.util.ReportUtil;
 import com.ts.app.web.rest.dto.AssetDTO;
+import com.ts.app.web.rest.dto.AssetDocumentDTO;
 import com.ts.app.web.rest.dto.AssetParameterConfigDTO;
 import com.ts.app.web.rest.dto.AssetTypeDTO;
 import com.ts.app.web.rest.dto.AssetgroupDTO;
@@ -159,6 +165,9 @@ public class AssetManagementService extends AbstractService {
     
     @Inject
     private AssetParameterConfigRepository assetParamConfigRepository;
+    
+    @Inject
+    private AssetDocumentRepository assetDocumentRepository;
     
     //Asset
     public AssetDTO saveAsset(AssetDTO assetDTO) {
@@ -581,5 +590,30 @@ public class AssetManagementService extends AbstractService {
 		return assetParamConfigDTO;
 	}
 	
+	@Transactional
+	public AssetDocumentDTO uploadFile(AssetDocumentDTO assetDocumentDTO, MultipartFile file) {
+		// TODO Auto-generated method stub
+		Date uploadDate = new Date();
+		Calendar cal = Calendar.getInstance();
+		Asset assetEntity = assetRepository.findOne(assetDocumentDTO.getAssetId());
+		String assetCode = assetEntity.getCode();
+		Long siteId = assetEntity.getSite().getId();
+		String fileName = fileUploadHelper.uploadAssetDcmFile(assetCode, siteId, file, cal.getTimeInMillis());
+		assetDocumentDTO.setFile(fileName);
+		assetDocumentDTO.setUploadedDate(uploadDate);
+		assetDocumentDTO.setTitle(assetDocumentDTO.getTitle());
+		AssetDocument assetDocument = mapperUtil.toEntity(assetDocumentDTO, AssetDocument.class);
+		assetDocument.setActive(AssetDocument.ACTIVE_YES);
+		assetDocument = assetDocumentRepository.save(assetDocument);
+		assetDocumentDTO = mapperUtil.toModel(assetDocument, AssetDocumentDTO.class);
+		return assetDocumentDTO;
+	}
+
+	public List<AssetDocumentDTO> findAllDocuments(Long assetId) {
+		// TODO Auto-generated method stub
+		List<AssetDocument> assetDocument = assetDocumentRepository.findByAssetId(assetId);
+		return mapperUtil.toModelList(assetDocument, AssetDocumentDTO.class);
+	}
+
 	
 }
