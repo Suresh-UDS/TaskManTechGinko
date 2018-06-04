@@ -538,15 +538,15 @@ public class AssetManagementService extends AbstractService {
 
 	private Manufacturer getManufacturer(long manufacturerId) {
 		Manufacturer manufacturer = manufacturerRepository.findOne(manufacturerId);
-		if (manufacturer == null)
-			throw new TimesheetException("Manufacturer not found : " + manufacturerId);
+		//if (manufacturer == null)
+		//	throw new TimesheetException("Manufacturer not found : " + manufacturerId);
 		return manufacturer;
 	}
 
 	private Vendor getVendor(long vendorId) {
 		Vendor vendor = vendorRepository.findOne(vendorId);
-		if (vendor == null)
-			throw new TimesheetException("Manufacturer not found : " + vendorId);
+		//if (vendor == null)
+		//	throw new TimesheetException("Manufacturer not found : " + vendorId);
 		return vendor;
 	}
 
