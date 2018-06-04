@@ -207,6 +207,13 @@ public class AssetResource {
     	return new ResponseEntity<>(assetDocumentDTO, HttpStatus.OK);
     }
     
+    @RequestMapping(value = "/assets/getAllFile/{id}", method = RequestMethod.GET)
+    public List<AssetDocumentDTO> getUploadedFiles(@PathVariable Long id) {
+    	List<AssetDocumentDTO> result = null;
+    	result = assetService.findAllDocuments(id);
+    	return result;
+    }
+    
     
     
     
