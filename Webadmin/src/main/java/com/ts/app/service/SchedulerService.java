@@ -302,6 +302,7 @@ public class SchedulerService extends AbstractService {
 		if(env.getProperty("scheduler.overdueJob.enabled").equalsIgnoreCase("true")) {
 			Calendar cal = Calendar.getInstance();
 			//Setting overdueAlertSetting = settingRepository.findSettingByKey("email.notification.overdue");
+			List<Setting> settings = null;
 			Setting overdueAlertSetting = null;
 			String alertEmailIds = "";
 			Setting overdueEmails = null;
@@ -321,14 +322,27 @@ public class SchedulerService extends AbstractService {
 					long siteId = job.getSite().getId();
 					long projId = job.getSite().getProject().getId();
 					if(siteId > 0) {
-						overdueAlertSetting = settingRepository.findSettingByKeyAndSiteId(SettingsService.EMAIL_NOTIFICATION_OVERDUE, siteId);
-						overdueEmails = settingRepository.findSettingByKeyAndSiteId(SettingsService.EMAIL_NOTIFICATION_OVERDUE_EMAILS, siteId);
+						settings = settingRepository.findSettingByKeyAndSiteId(SettingsService.EMAIL_NOTIFICATION_OVERDUE, siteId);
+						if(CollectionUtils.isNotEmpty(settings)) {
+							overdueAlertSetting = settings.get(0);
+						}
+						settings = settingRepository.findSettingByKeyAndSiteId(SettingsService.EMAIL_NOTIFICATION_OVERDUE_EMAILS, siteId);
+						if(CollectionUtils.isNotEmpty(settings)) {
+							overdueEmails = settings.get(0);
+						}
 						if(overdueEmails != null) {
 							alertEmailIds = overdueEmails.getSettingValue();
 						}
 					}else if(projId > 0) {
-						overdueAlertSetting = settingRepository.findSettingByKeyAndProjectId(SettingsService.EMAIL_NOTIFICATION_OVERDUE, projId);
-						overdueEmails = settingRepository.findSettingByKeyAndProjectId(SettingsService.EMAIL_NOTIFICATION_OVERDUE_EMAILS, projId);
+						settings = settingRepository.findSettingByKeyAndProjectId(SettingsService.EMAIL_NOTIFICATION_OVERDUE, projId);
+						if(CollectionUtils.isNotEmpty(settings)) {
+							overdueAlertSetting = settings.get(0);
+						}
+						settings = settingRepository.findSettingByKeyAndProjectId(SettingsService.EMAIL_NOTIFICATION_OVERDUE_EMAILS, projId);
+						if(CollectionUtils.isNotEmpty(settings)) {
+							overdueEmails = settings.get(0);
+						}
+						
 						if(overdueEmails != null) {
 							alertEmailIds = overdueEmails.getSettingValue();
 						}
@@ -388,13 +402,16 @@ public class SchedulerService extends AbstractService {
 				Iterator<Site> siteItr = sites.iterator();
 				while(siteItr.hasNext()) {
 					Site site = siteItr.next();
-					Setting eodReports = settingRepository.findSettingByKeyAndSiteId("email.notification.eodReports", site.getId());
-					if(eodReports == null) {
-						eodReports = settingRepository.findSettingByKeyAndProjectId("email.notification.eodReports", proj.getId());
+					List<Setting> settings = null;
+					settings = settingRepository.findSettingByKeyAndSiteIdOrProjectId("email.notification.eodReports", site.getId(), proj.getId());
+					Setting eodReports = null;
+					if(CollectionUtils.isNotEmpty(settings)) {
+						eodReports = settings.get(0);
 					}
-					Setting eodReportEmails = settingRepository.findSettingByKeyAndSiteId("email.notification.eodReports.emails", site.getId());
-					if(eodReportEmails == null) {
-						eodReportEmails = settingRepository.findSettingByKeyAndProjectId("email.notification.eodReports.emails", proj.getId());
+					settings = settingRepository.findSettingByKeyAndSiteIdOrProjectId("email.notification.eodReports.emails", site.getId(), proj.getId());
+					Setting eodReportEmails = null;
+					if(CollectionUtils.isNotEmpty(settings)) {
+						eodReportEmails = settings.get(0);
 					}
 					SearchCriteria sc = new SearchCriteria();
 					sc.setCheckInDateTimeFrom(cal.getTime());
@@ -450,15 +467,17 @@ public class SchedulerService extends AbstractService {
 				Iterator<Site> siteItr = sites.iterator();
 				while(siteItr.hasNext()) {
 					Site site = siteItr.next();
-					Setting attendanceReports = settingRepository.findSettingByKeyAndSiteId(SettingsService.EMAIL_NOTIFICATION_ATTENDANCE, site.getId());
-					if(attendanceReports == null) {
-						attendanceReports = settingRepository.findSettingByKeyAndProjectId(SettingsService.EMAIL_NOTIFICATION_ATTENDANCE, proj.getId());
+					List<Setting> settings = settingRepository.findSettingByKeyAndSiteIdOrProjectId(SettingsService.EMAIL_NOTIFICATION_ATTENDANCE, site.getId(), proj.getId());
+					Setting attendanceReports = null;
+					if(CollectionUtils.isNotEmpty(settings)) {
+						attendanceReports = settings.get(0);
 					}
 					if(attendanceReports != null && attendanceReports.getSettingValue().equalsIgnoreCase("true")) {
-						Setting attendanceReportEmails = settingRepository.findSettingByKeyAndSiteId(SettingsService.EMAIL_NOTIFICATION_ATTENDANCE_EMAILS, site.getId());
-					    if(attendanceReportEmails == null) {
-					    		attendanceReportEmails = settingRepository.findSettingByKeyAndProjectId(SettingsService.EMAIL_NOTIFICATION_ATTENDANCE_EMAILS, proj.getId());
-					    }
+						settings = settingRepository.findSettingByKeyAndSiteIdOrProjectId(SettingsService.EMAIL_NOTIFICATION_ATTENDANCE_EMAILS, site.getId(), proj.getId());
+						Setting attendanceReportEmails = null;
+						if(CollectionUtils.isNotEmpty(settings)) {
+							attendanceReportEmails = settings.get(0);
+						}
 						if(CollectionUtils.isNotEmpty(site.getShifts())) {
 							List<Shift> shifts = site.getShifts();
 							for(Shift shift : shifts) {
@@ -542,6 +561,9 @@ public class SchedulerService extends AbstractService {
 			dayEndcal.set(Calendar.MILLISECOND, 0);
 			List<Project> projects = projectRepository.findAll();
 			for(Project proj : projects) {
+				int projEmployees = 0;
+				int projPresent = 0;
+				int projAbsent = 0;
 				SearchCriteria sc = new SearchCriteria();
 				sc.setCheckInDateTimeFrom(cal.getTime());
 				sc.setCheckInDateTimeTo(cal.getTime());
@@ -551,9 +573,13 @@ public class SchedulerService extends AbstractService {
 				Iterator<Site> siteItr = sites.iterator();
 				while(siteItr.hasNext()) {
 					Site site = siteItr.next();
-					Setting attendanceReports = settingRepository.findSettingByKeyAndSiteId(SettingsService.EMAIL_NOTIFICATION_ATTENDANCE, site.getId());
-					if(attendanceReports == null) {
-						attendanceReports = settingRepository.findSettingByKeyAndProjectId(SettingsService.EMAIL_NOTIFICATION_ATTENDANCE, proj.getId());
+					List<Setting> settings = settingRepository.findSettingByKeyAndSiteId(SettingsService.EMAIL_NOTIFICATION_ATTENDANCE, site.getId());
+					if(CollectionUtils.isEmpty(settings)) {
+						settings = settingRepository.findSettingByKeyAndProjectId(SettingsService.EMAIL_NOTIFICATION_ATTENDANCE, proj.getId());
+					}
+					Setting attendanceReports = null;
+					if(CollectionUtils.isNotEmpty(settings)) {
+						attendanceReports = settings.get(0);
 					}
 					if(attendanceReports != null && attendanceReports.getSettingValue().equalsIgnoreCase("true")) {
 						List<Map<String,String>> consolidatedData = new ArrayList<Map<String,String>>();
@@ -601,11 +627,15 @@ public class SchedulerService extends AbstractService {
 									content.append("Present - " + attendanceCount + LINE_SEPARATOR);
 									content.append("Absent - " + absentCount + LINE_SEPARATOR);
 									Map<String,String> data = new HashMap<String,String>();
+									data.put("SiteName", site.getName());
 									data.put("ShiftStartTime", shift.getStartTime());
 									data.put("ShiftEndTime", shift.getEndTime());
 									data.put("TotalEmployees", String.valueOf(empCntInShift));
 									data.put("Present", String.valueOf(attendanceCount));
 									data.put("Absent", String.valueOf(absentCount));
+									projEmployees += empCntInShift;
+									projPresent += attendanceCount;
+									projAbsent += absentCount;
 									consolidatedData.add(data);
 								//}	
 							}
@@ -624,9 +654,14 @@ public class SchedulerService extends AbstractService {
 							content.append("Present - " + attendanceCount + LINE_SEPARATOR);
 							content.append("Absent - " + absentCount + LINE_SEPARATOR);
 							Map<String,String> data = new HashMap<String,String>();
+							data.put("SiteName", site.getName());
 							data.put("TotalEmployees", String.valueOf(empCntInShift));
 							data.put("Present", String.valueOf(attendanceCount));
 							data.put("Absent", String.valueOf(absentCount));
+							projEmployees += empCntInShift;
+							projPresent += attendanceCount;
+							projAbsent += absentCount;
+							
 							consolidatedData.add(data);
 							
 	 					}
@@ -652,19 +687,29 @@ public class SchedulerService extends AbstractService {
 								empAttnRep.setLastName(emp.getLastName());
 								empAttnRep.setStatus(EmployeeAttendanceReport.ABSENT_STATUS);
 								empAttnRep.setSiteName(site.getName());
+								empAttnRep.setShiftStartTime("");
+								empAttnRep.setShiftEndTime("");
 								empAttnRep.setProjectName(proj.getName());
 								empAttnList.add(empAttnRep);
 							}
 						}
 						log.debug("send detailed report");
-						Setting attendanceReportEmails = settingRepository.findSettingByKeyAndSiteId(SettingsService.EMAIL_NOTIFICATION_ATTENDANCE_EMAILS, site.getId());
-					    if(attendanceReportEmails == null) {
-					    		attendanceReportEmails = settingRepository.findSettingByKeyAndProjectId(SettingsService.EMAIL_NOTIFICATION_ATTENDANCE_EMAILS, proj.getId());
-					    }
+						settings = settingRepository.findSettingByKeyAndSiteIdOrProjectId(SettingsService.EMAIL_NOTIFICATION_ATTENDANCE_EMAILS, site.getId(), proj.getId());
+						Setting attendanceReportEmails = null;
+						if(CollectionUtils.isNotEmpty(settings)) {
+							attendanceReportEmails = settings.get(0);
+						}
+					    //summary map
+					    Map<String,String> summaryMap = new HashMap<String, String>();
+					    summaryMap.put("TotalEmployees", String.valueOf(projEmployees));
+					    summaryMap.put("TotalPresent", String.valueOf(projPresent));
+					    summaryMap.put("TotalAbsent", String.valueOf(projAbsent));
 						ExportResult exportResult = null;
-						exportResult = exportUtil.writeAttendanceReportToFile(proj.getName(), empAttnList, consolidatedData, null, exportResult);
+						exportResult = exportUtil.writeAttendanceReportToFile(proj.getName(), empAttnList, consolidatedData, summaryMap, null, exportResult);
 						//send reports in email.
-						mailService.sendAttendanceDetailedReportEmail(site.getName(),attendanceReportEmails.getSettingValue(), content.toString(), exportResult.getFile(),null, cal.getTime());
+						if(attendanceReportEmails != null) {
+							mailService.sendAttendanceDetailedReportEmail(site.getName(),attendanceReportEmails.getSettingValue(), content.toString(), exportResult.getFile(),null, cal.getTime());
+						}
 					}
 				}
 			}

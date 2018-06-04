@@ -404,16 +404,17 @@ public class TicketManagementService extends AbstractService {
 		User user = employee.getUser();
 		String ticketUrl = env.getProperty("url.ticket-view");
 		ticketUrl +=  ticket.getId();
-		Setting ticketReports = settingsRepository.findSettingByKeyAndSiteId(SettingsService.EMAIL_NOTIFICATION_TICKET, site.getId());
-		if(ticketReports == null) {
-			ticketReports = settingsRepository.findSettingByKeyAndProjectId(SettingsService.EMAIL_NOTIFICATION_TICKET, site.getProject().getId());
+		Setting ticketReports = null; 
+		List<Setting> settings = settingsRepository.findSettingByKeyAndSiteIdOrProjectId(SettingsService.EMAIL_NOTIFICATION_TICKET, site.getId(), site.getProject().getId());
+		if(CollectionUtils.isNotEmpty(settings)) {
+			ticketReports = settings.get(0);
 		}
 		Setting ticketReportEmails = null;
 		if(ticketReports != null && ticketReports.getSettingValue().equalsIgnoreCase("true")) {
-			ticketReportEmails = settingsRepository.findSettingByKeyAndSiteId(SettingsService.EMAIL_NOTIFICATION_TICKET_EMAILS, site.getId());
-		    if(ticketReportEmails == null) {
-		    		ticketReportEmails = settingsRepository.findSettingByKeyAndProjectId(SettingsService.EMAIL_NOTIFICATION_TICKET_EMAILS, site.getProject().getId());
-		    }
+			settings = settingsRepository.findSettingByKeyAndSiteIdOrProjectId(SettingsService.EMAIL_NOTIFICATION_TICKET_EMAILS, site.getId(), site.getProject().getId());
+			if(CollectionUtils.isNotEmpty(settings)) {
+				ticketReports = settings.get(0);
+			}
 		}
 	    String ticketEmails = (user != null ? user.getEmail() : "");
 	    ticketEmails += ticketReportEmails != null ? ticketReportEmails.getSettingValue() : "";

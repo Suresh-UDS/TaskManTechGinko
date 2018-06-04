@@ -145,15 +145,28 @@ public class FeedbackTransactionService extends AbstractService {
 			Setting feedbackAlertSetting = null;
 			Setting feedbackEmails = null;
 			String alertEmailIds = "";
+			List<Setting> settings = null;
 			if(feedbackTransDto.getSiteId() > 0) {
-				feedbackAlertSetting = settingsRepository.findSettingByKeyAndSiteId(SettingsService.EMAIL_NOTIFICATION_FEEDBACK, feedbackTransDto.getSiteId());
-				feedbackEmails = settingsRepository.findSettingByKeyAndSiteId(SettingsService.EMAIL_NOTIFICATION_FEEDBACK_EMAILS, feedbackTransDto.getSiteId());
+				settings = settingsRepository.findSettingByKeyAndSiteId(SettingsService.EMAIL_NOTIFICATION_FEEDBACK, feedbackTransDto.getSiteId());
+				if(CollectionUtils.isNotEmpty(settings)) {
+					feedbackAlertSetting = settings.get(0);
+				}
+				settings = settingsRepository.findSettingByKeyAndSiteId(SettingsService.EMAIL_NOTIFICATION_FEEDBACK_EMAILS, feedbackTransDto.getSiteId());
+				if(CollectionUtils.isNotEmpty(settings)) {
+					feedbackEmails = settings.get(0);
+				}
 				if(feedbackEmails != null) {
 					alertEmailIds = feedbackEmails.getSettingValue();
 				}
 			}else if(feedbackTransDto.getProjectId() > 0) {
-				feedbackAlertSetting = settingsRepository.findSettingByKeyAndProjectId(SettingsService.EMAIL_NOTIFICATION_OVERDUE, feedbackTransDto.getProjectId());
-				feedbackEmails = settingsRepository.findSettingByKeyAndProjectId(SettingsService.EMAIL_NOTIFICATION_OVERDUE_EMAILS, feedbackTransDto.getProjectId());
+				settings = settingsRepository.findSettingByKeyAndProjectId(SettingsService.EMAIL_NOTIFICATION_OVERDUE, feedbackTransDto.getProjectId());
+				if(CollectionUtils.isNotEmpty(settings)) {
+					feedbackAlertSetting = settings.get(0);
+				}
+				settings = settingsRepository.findSettingByKeyAndProjectId(SettingsService.EMAIL_NOTIFICATION_OVERDUE_EMAILS, feedbackTransDto.getProjectId());
+				if(CollectionUtils.isNotEmpty(settings)) {
+					feedbackEmails = settings.get(0);
+				}
 				if(feedbackEmails != null) {
 					alertEmailIds = feedbackEmails.getSettingValue();
 				}

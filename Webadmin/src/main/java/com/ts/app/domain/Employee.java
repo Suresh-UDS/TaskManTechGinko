@@ -195,7 +195,6 @@ public class Employee extends AbstractAuditingEntity implements Serializable {
             "name='" + name +
             "managerID -" + (manager != null ? manager.getId() : "")+
             "managerName-"+ (manager != null ? manager.getName() : "")+
-            "userId-" + (user!=null ? user.getId() : 0) +
             "}";
     }
 

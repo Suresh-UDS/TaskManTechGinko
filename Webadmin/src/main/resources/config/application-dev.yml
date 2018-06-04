@@ -76,6 +76,8 @@ attendance:
     shiftEndGraceTime: 1
     file:
         path:  /opt/attendance
+    template:
+        path: /opt/template/Attendance_Report_Format.xlsx    
 quotation:
     file:
         path:  /opt/quotation

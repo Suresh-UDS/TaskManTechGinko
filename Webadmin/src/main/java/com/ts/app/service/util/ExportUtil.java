@@ -21,7 +21,6 @@ import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVPrinter;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.openxml4j.opc.OPCPackage;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
@@ -453,7 +452,7 @@ public class ExportUtil {
 
 	}
 
-	public ExportResult writeAttendanceReportToFile(String projName, List<EmployeeAttendanceReport> content, List<Map<String,String>> consolidatedData,
+	public ExportResult writeAttendanceReportToFile(String projName, List<EmployeeAttendanceReport> content, List<Map<String,String>> consolidatedData, Map<String, String> summary,
 			final String empId, ExportResult result) {
 		boolean isAppend = (result != null);
 		log.debug("result = " + result + ", isAppend=" + isAppend);
@@ -514,39 +513,51 @@ public class ExportUtil {
 		// Path newFilePath = Paths.get(filePath);
 		// Files.createFile(newFilePath);
 		// pkg = OPCPackage.open(new FileInputStream(filePath));
-		XSSFWorkbook xssfWorkbook = new XSSFWorkbook();
+		String templatePath = env.getProperty("attendance.template.path");
+		FileInputStream fis = null;
+		XSSFWorkbook xssfWorkbook = null;
+		try {
+			fis = new FileInputStream(templatePath);
+			xssfWorkbook = new XSSFWorkbook(fis);
+		} catch (IOException e1) {
+			log.error("Error while opening the attendance template file",e1);
+		}
 		
 		//create consolidated data sheet
-		XSSFSheet consSheet = xssfWorkbook.createSheet("ATTENDANCE_CONSOLIDATED_REPORT");
+		XSSFSheet consSheet = xssfWorkbook.getSheetAt(0);
 		
-		Row headerRow = consSheet.createRow(0);
+//		Row headerRow = consSheet.createRow(0);
+//
+//		for (int i = 0; i < ATTENDANCE_CONSOLIDATED_REPORT_FILE_HEADER.length; i++) {
+//			Cell cell = headerRow.createCell(i);
+//			cell.setCellValue((String) ATTENDANCE_CONSOLIDATED_REPORT_FILE_HEADER[i]);
+//		}
 
-		for (int i = 0; i < ATTENDANCE_CONSOLIDATED_REPORT_FILE_HEADER.length; i++) {
-			Cell cell = headerRow.createCell(i);
-			cell.setCellValue((String) ATTENDANCE_CONSOLIDATED_REPORT_FILE_HEADER[i]);
-		}
-
-		int rowNum = 1;
+		int rowNum = 2;
+		
+		Row projRow = consSheet.getRow(0);
+		projRow.getCell(0).setCellValue(projName);
 		
 		for (Map<String,String> data : consolidatedData) {
 			Row dataRow = consSheet.createRow(rowNum++);
-			dataRow.createCell(0).setCellValue(data.get("ShiftStartTime") != null ? data.get("ShiftStartTime") : "");
-			dataRow.createCell(1).setCellValue(data.get("ShiftEndTime") != null ? data.get("ShiftEndTime") : "");
+			dataRow.createCell(0).setCellValue(data.get("SiteName") != null ? data.get("SiteName") : "");
+			dataRow.createCell(1).setCellValue((data.get("ShiftStartTime") != null ? data.get("ShiftStartTime") : "") + " - " + (data.get("ShiftEndTime") != null ? data.get("ShiftEndTime") : ""));
 			dataRow.createCell(2).setCellValue(data.get("TotalEmployees"));
 			dataRow.createCell(3).setCellValue(data.get("Present"));
 			dataRow.createCell(4).setCellValue(data.get("Absent"));
 		}
 		
 		// create worksheet with title
-		XSSFSheet xssfSheet = xssfWorkbook.createSheet("ATTENDANCE_DETAILED_REPORT");
+		//XSSFSheet xssfSheet = xssfWorkbook.createSheet("ATTENDANCE_DETAILED_REPORT");
+		
+//		headerRow = xssfSheet.createRow(0);
+//
+//		for (int i = 0; i < ATTENDANCE_DETAIL_REPORT_FILE_HEADER.length; i++) {
+//			Cell cell = headerRow.createCell(i);
+//			cell.setCellValue((String) ATTENDANCE_DETAIL_REPORT_FILE_HEADER[i]);
+//		}
 
-		headerRow = xssfSheet.createRow(0);
-
-		for (int i = 0; i < ATTENDANCE_DETAIL_REPORT_FILE_HEADER.length; i++) {
-			Cell cell = headerRow.createCell(i);
-			cell.setCellValue((String) ATTENDANCE_DETAIL_REPORT_FILE_HEADER[i]);
-		}
-
+		XSSFSheet xssfSheet = xssfWorkbook.getSheetAt(1);
 		rowNum = 1;
 
 		for (EmployeeAttendanceReport transaction : content) {
@@ -556,12 +567,10 @@ public class ExportUtil {
 			dataRow.createCell(0).setCellValue(transaction.getEmployeeIds());
 			dataRow.createCell(1).setCellValue(transaction.getName() + " " + transaction.getLastName());
 			dataRow.createCell(2).setCellValue(transaction.getSiteName());
-			dataRow.createCell(3).setCellValue(transaction.getProjectName());
-			dataRow.createCell(4).setCellValue(transaction.getStatus());
-			dataRow.createCell(5).setCellValue(transaction.getCheckInTime() != null ? String.valueOf(transaction.getCheckInTime()) : "");
-			dataRow.createCell(6).setCellValue(transaction.getCheckOutTime() != null ? String.valueOf(transaction.getCheckOutTime()) : "");
-			dataRow.createCell(7).setCellValue(transaction.getShiftStartTime() != null ? String.valueOf(transaction.getShiftStartTime()) : "");
-			dataRow.createCell(8).setCellValue(transaction.getShiftEndTime() != null ? String.valueOf(transaction.getShiftEndTime()) : "");
+			dataRow.createCell(3).setCellValue((transaction.getShiftStartTime() != null ? String.valueOf(transaction.getShiftStartTime()) : "") + "-" + (transaction.getShiftEndTime() != null ? String.valueOf(transaction.getShiftEndTime()) : ""));
+			dataRow.createCell(4).setCellValue(transaction.getCheckInTime() != null ? String.valueOf(transaction.getCheckInTime()) : "");
+			dataRow.createCell(5).setCellValue(transaction.getCheckOutTime() != null ? String.valueOf(transaction.getCheckOutTime()) : "");
+			dataRow.createCell(6).setCellValue(transaction.getStatus());
 
 		}
 
@@ -580,7 +589,6 @@ public class ExportUtil {
 			log.error("Error while flushing/closing  !!!");
 			statusMap.put(filePath, "FAILED");
 		}
-		lock.unlock();
 		
 
 		result.setEmpId(empId);
