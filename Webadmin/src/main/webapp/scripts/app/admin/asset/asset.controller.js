@@ -378,6 +378,10 @@ angular.module('timeSheetApp')
             });
         };
 
+        $('input#acquiredDate').on('dp.change', function(e){
+                $scope.assetGen.acquiredDate = e.date._d;
+        });
+
         $scope.saveAsset = function () {
                 $scope.error = null;
                 $scope.success = null;
