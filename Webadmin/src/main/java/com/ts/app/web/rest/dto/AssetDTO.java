@@ -39,6 +39,7 @@ public class AssetDTO extends BaseDTO {
     private String amcDocumentTitle;
     private String amcDocumentFile;
     private Date amcDocumentUploadDate;
+    private String assetPpmTitle;
     
     public Long getProjectId() {
 		return projectId;
@@ -253,6 +254,12 @@ public class AssetDTO extends BaseDTO {
 	
 	public void setAmcDocumentUploadDate(Date amcDocumentUploadDate) {
 		this.amcDocumentUploadDate = amcDocumentUploadDate;
+	}
+	public String getAssetPpmTitle() {
+		return assetPpmTitle;
+	}
+	public void setAssetPpmTitle(String assetPpmTitle) {
+		this.assetPpmTitle = assetPpmTitle;
 	}
 	
 }

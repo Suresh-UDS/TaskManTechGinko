@@ -408,7 +408,7 @@ angular.module('timeSheetApp')
                         $scope.assetGen.serviceWarranty = $scope.selectedServiceWarranty.id;
                      }
                      if($scope.selectedVendor.id){
-                        $scope.assetGen.VendorId = $scope.selectedVendor.id;
+                        $scope.assetGen.vendorId = $scope.selectedVendor.id;
                      }
                      if($scope.selectedSite.id){
                          $scope.assetGen.siteId = $scope.selectedSite.id;
@@ -457,6 +457,7 @@ angular.module('timeSheetApp')
         	$scope.loadAllParameters();
         	$scope.loadAllParameterUOMs();
             $scope.loadAllSites();
+            $scope.getAllUploadedFiles();
         	if($scope.isEdit){
         	    console.log("edit asset")
         		$scope.editAsset();
@@ -707,6 +708,20 @@ angular.module('timeSheetApp')
 	    
 	    $scope.uploadAsset = { };
 	    
+	    $scope.getAllUploadedFiles = function() {
+	    	
+	    	if($stateParams.id){ 
+	    		$scope.assetId = $stateParams.id;
+	    	}else{ 
+	    		$scope.assetId = 1;
+	    	}
+	    	
+	    	AssetComponent.getAllUploadedFiles($scope.assetId).then(function(data){ 
+	    		console.log(data);
+	    		$scope.uploadFiles = data;
+	    	});
+	    }
+	    
 	    $scope.uploadAssetFile = function() {  
 	    	console.log($scope.selectedClientFile);
 	    	console.log($scope.uploadAsset.title);
@@ -717,6 +732,13 @@ angular.module('timeSheetApp')
 	        	console.log($scope.uploadAsset);
 	        	AssetComponent.uploadAssetFile($scope.uploadAsset).then(function(data){
 	        		console.log(data);
+	        		if(data) { 
+	        			$scope.uploadFiles.push(data);
+		        		$scope.getAllUploadedFiles();
+	        		}else{ 
+	        			console.log('No data found!');
+	        		}
+	        		
 	        	},function(err){
 	        		console.log('Import error');
 	        		console.log(err);

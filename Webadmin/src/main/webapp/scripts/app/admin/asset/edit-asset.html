@@ -1365,54 +1365,6 @@
                                                                                     </td>
 
                                                                                 </tr>
-<!--                                                                                 <tr>
-                                                                                    <td>Power</td>
-                                                                                    <td>watt</td>
-                                                                                    <td>
-                                                                                        <div class="checkbox">
-                                                                                            <label>
-                                                                                                <input type="checkbox" name="Consumption" checked disabled >
-                                                                                            </label>
-                                                                                        </div>
-                                                                                    </td>
-                                                                                    <td class="text-right">
-                                                                                        <a  has-permission="" ui-sref="" class="btn btn-simple btn-danger"><i class="material-icons">delete_forever</i><div class="ripple-container"></div></a>
-
-                                                                                    </td>
-
-                                                                                </tr>
-                                                                                <tr>
-                                                                                    <td>Power</td>
-                                                                                    <td>watt</td>
-                                                                                    <td>
-                                                                                        <div class="checkbox">
-                                                                                            <label>
-                                                                                                <input type="checkbox" name="Consumption" checked disabled >
-                                                                                            </label>
-                                                                                        </div>
-                                                                                    </td>
-                                                                                    <td class="text-right">
-                                                                                        <a  has-permission="" ui-sref="" class="btn btn-simple btn-danger"><i class="material-icons">delete_forever</i><div class="ripple-container"></div></a>
-
-                                                                                    </td>
-
-                                                                                </tr>
-                                                                                <tr>
-                                                                                <td>Power</td>
-                                                                                <td>watt</td>
-                                                                                <td>
-                                                                                    <div class="checkbox">
-                                                                                        <label>
-                                                                                            <input type="checkbox" name="Consumption" checked disabled >
-                                                                                        </label>
-                                                                                    </div>
-                                                                                </td>
-                                                                                <td class="text-right">
-                                                                                    <a  has-permission="" ui-sref="" class="btn btn-simple btn-danger"><i class="material-icons">delete_forever</i><div class="ripple-container"></div></a>
-
-                                                                                </td>
-
-                                                                            </tr> -->
 
                                                                             </tbody>
                                                                         </table>
@@ -1449,7 +1401,7 @@
                                                                             <div class="form-group">
                                                                                 <label class="control-label">File Title</label>
                                                                                 <input id='fileTitle'
-                                                                                       ng-model="file.title"
+                                                                                       ng-model="uploadAsset.title"
                                                                                        class='form-control'
                                                                                        name='fileTitle'
                                                                                        type='text' value=""
@@ -1465,7 +1417,7 @@
                                                                                     <input type="file" class="form-control ng-pristine ng-valid ng-touched" style="opacity:100;position:relative" file-model="" ng-model="selectedClientFile" name="clientFile" tabindex="0" aria-invalid="false">
                                                                                 </div>
                                                                                 <div class="col-md-6">
-                                                                                    <button class="btn btn-success" tabindex="0">
+                                                                                    <button class="btn btn-success" tabindex="0" ng-click="uploadAssetFile()">
                                                                                 <span class="btn-label">
                                                                                     <i class="material-icons">file_upload</i>
                                                                                 </span>Upload Docs
@@ -1541,41 +1493,11 @@
 
                                                            <div class="row">
 
-                                                               <div class="col-md-2 txt-align-center">
+                                                               <div class="col-md-2 txt-align-center" ng-repeat="uploadFile in uploadFiles">
                                                                    <a href="#">
                                                                        <img src="assets/img/Docs-icon.png" alt="docs" />
                                                                    </a>
-                                                                   <p>File Name</p>
-                                                               </div>
-                                                               <div class="col-md-2 txt-align-center">
-                                                                   <a href="#">
-                                                                       <img src="assets/img/Docs-icon.png" alt="docs" />
-                                                                   </a>
-                                                                   <p>File Name</p>
-                                                               </div>
-                                                               <div class="col-md-2 txt-align-center">
-                                                                   <a href="#">
-                                                                       <img src="assets/img/Docs-icon.png" alt="docs" />
-                                                                   </a>
-                                                                   <p>File Name</p>
-                                                               </div>
-                                                               <div class="col-md-2 txt-align-center">
-                                                                   <a href="#">
-                                                                       <img src="assets/img/Docs-icon.png" alt="docs" />
-                                                                   </a>
-                                                                   <p>File Name</p>
-                                                               </div>
-                                                               <div class="col-md-2 txt-align-center">
-                                                                   <a href="#">
-                                                                       <img src="assets/img/Docs-icon.png" alt="docs" />
-                                                                   </a>
-                                                                   <p>File Name</p>
-                                                               </div>
-                                                               <div class="col-md-2 txt-align-center">
-                                                                   <a href="#">
-                                                                       <img src="assets/img/Docs-icon.png" alt="docs" />
-                                                                   </a>
-                                                                   <p>File Name</p>
+                                                                   <p>{{uploadFile.title}}</p>
                                                                </div>
 
                                                            </div>
