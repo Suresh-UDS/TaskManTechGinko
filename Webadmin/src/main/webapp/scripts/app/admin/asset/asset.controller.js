@@ -50,6 +50,9 @@ angular.module('timeSheetApp')
 
         $scope.parameter = {};
 
+        $scope.manufacturer = {};
+        $scope.vendor = {};
+
         $scope.consumptionMonitoringRequired = false;
         
         $scope.selectedClientFile;
@@ -105,16 +108,55 @@ angular.module('timeSheetApp')
 
         $scope.loadManufacturer = function () {
             ManufacturerComponent.findAll().then(function (data) {
-                console.log("Loading all Manufacturer -- " , data)
+                console.log("Loading all Manufacturer -- " , data);
+                $scope.selectedAssetType = null;
                 $scope.manufacturers = data;
             });
-        };
+        }
+
+        $scope.addManufacturer = function () {
+            console.log($scope.manufacturer);
+            if($scope.manufacturer){
+                console.log("Manufacturer entered");
+                ManufacturerComponent.create($scope.manufacturer).then(function (response) {
+                    console.log(response);
+                    $scope.manufacturer = {};
+                    $scope.showNotifications('top','center','success','Manufacturer Added Successfully');
+                    $scope.loadManufacturer();
+                    
+
+                })
+            }else{
+                console.log("Manufacturer not entered");
+            }
+
+
+        }
 
          $scope.loadVendor = function () {
             VendorComponent.findAll().then(function (data) {
                 console.log("Loading all Vendor -- " , data)
                 $scope.vendors = data;
             });
+        };
+
+        $scope.addVendor = function () {
+            console.log($scope.vendor);
+            if($scope.vendor){
+                console.log("Asset Type entered");
+                VendorComponent.create($scope.vendor).then(function (response) {
+                    console.log(response);
+                    $scope.vendor = {};
+                    $scope.showNotifications('top','center','success','Vendor Added Successfully');
+                    $scope.loadVendor();
+                    
+
+                })
+            }else{
+                console.log("Vendor not entered");
+            }
+
+
         };
 
 
@@ -336,6 +378,10 @@ angular.module('timeSheetApp')
             });
         };
 
+        $('input#acquiredDate').on('dp.change', function(e){
+                $scope.assetGen.acquiredDate = e.date._d;
+        });
+
         $scope.saveAsset = function () {
                 $scope.error = null;
                 $scope.success = null;
@@ -385,7 +431,7 @@ angular.module('timeSheetApp')
                      }
 
                     console.log("Asset Create List -- ",$scope.assetGen);
-                    AssetComponent.create($scope.assetGen).then(function() {
+                    AssetComponent.create($scope.assetGen).then(function(response) {
                         $scope.success = 'OK';
                         $scope.showNotifications('top','center','success','Asset Added');
                         $scope.selectedSite = null;
@@ -416,6 +462,7 @@ angular.module('timeSheetApp')
         	$scope.loadAllParameterUOMs();
             $scope.loadAllSites();
             $scope.getAllUploadedFiles();
+            $scope.getAllUploadedPhotos();
         	if($scope.isEdit){
         	    console.log("edit asset")
         		$scope.editAsset();
@@ -532,7 +579,7 @@ angular.module('timeSheetApp')
         }
 
 
-
+       
 
 
         $scope.addAssetType = function () {
@@ -664,19 +711,37 @@ angular.module('timeSheetApp')
 
 	    };
 	    
-	    $scope.uploadAsset = { };
+	    $scope.uploadAsset = {};
+	    
+	    $scope.uploadAssetPhoto = {};
 	    
 	    $scope.getAllUploadedFiles = function() {
-	    	
+	    	var uploadObj = {};
+	    	uploadObj.type = 'document';
 	    	if($stateParams.id){ 
-	    		$scope.assetId = $stateParams.id;
+	    		uploadObj.assetId = $stateParams.id;
 	    	}else{ 
-	    		$scope.assetId = 1;
+	    		uploadObj.assetId = 1;
 	    	}
 	    	
-	    	AssetComponent.getAllUploadedFiles($scope.assetId).then(function(data){ 
+	    	AssetComponent.getAllUploadedFiles(uploadObj).then(function(data){ 
 	    		console.log(data);
 	    		$scope.uploadFiles = data;
+	    	});
+	    }
+	    
+	    $scope.getAllUploadedPhotos = function() {
+	    	var photoObj = {};
+	    	photoObj.type = 'image';
+	    	if($stateParams.id){ 
+	    		photoObj.assetId = $stateParams.id;
+	    	}else{ 
+	    		photoObj.assetId = 1;
+	    	}
+	    	
+	    	AssetComponent.getAllUploadedPhotos(photoObj).then(function(data){ 
+	    		console.log(data);
+	    		$scope.uploadAssetPhotos = data;
 	    	});
 	    }
 	    
@@ -687,12 +752,41 @@ angular.module('timeSheetApp')
 	        	console.log('selected asset file - ' + $scope.selectedClientFile);
 	        	$scope.uploadAsset.uploadFile = $scope.selectedClientFile;
 	        	$scope.uploadAsset.assetId = 1;
+	        	$scope.uploadAsset.type = 'document';
 	        	console.log($scope.uploadAsset);
 	        	AssetComponent.uploadAssetFile($scope.uploadAsset).then(function(data){
 	        		console.log(data);
 	        		if(data) { 
 	        			$scope.uploadFiles.push(data);
 		        		$scope.getAllUploadedFiles();
+	        		}else{ 
+	        			console.log('No data found!');
+	        		}
+	        		
+	        	},function(err){
+	        		console.log('Import error');
+	        		console.log(err);
+	        	});
+        	} else {
+        		console.log('select a file');
+        	}
+	    	
+	    }
+	    
+	    $scope.uploadAssetPhoto = function() {  
+	    	console.log($scope.selectedPhotoFile);
+	    	console.log($scope.uploadAssetPhoto.title);
+	     	if($scope.selectedPhotoFile) {
+	        	console.log('selected asset file - ' + $scope.selectedPhotoFile);
+	        	$scope.uploadAssetPhoto.uploadFile = $scope.selectedPhotoFile;
+	        	$scope.uploadAssetPhoto.assetId = 1;
+	        	$scope.uploadAssetPhoto.type = 'image';
+	        	console.log($scope.uploadAssetPhoto);
+	        	AssetComponent.uploadAssetPhoto($scope.uploadAssetPhoto).then(function(data){
+	        		console.log(data);
+	        		if(data) { 
+	        			$scope.uploadAssetPhotos.push(data);
+		        		$scope.getAllUploadedPhotos();
 	        		}else{ 
 	        			console.log('No data found!');
 	        		}
