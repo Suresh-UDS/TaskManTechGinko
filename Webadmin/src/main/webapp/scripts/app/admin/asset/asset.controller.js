@@ -5,7 +5,8 @@ angular.module('timeSheetApp')
 				'AssetController',
 				function($scope, $rootScope, $state, $timeout, AssetComponent,
 						ProjectComponent,LocationComponent,SiteComponent,EmployeeComponent, $http, $stateParams,
-						$location,PaginationComponent,AssetTypeComponent,ParameterConfigComponent,ParameterComponent,ParameterUOMComponent,ManufacturerComponent) {
+						$location,PaginationComponent,AssetTypeComponent,ParameterConfigComponent,ParameterComponent,
+                        ParameterUOMComponent,VendorComponent,ManufacturerComponent) {
                      
 
         $rootScope.loadingStop();
@@ -18,16 +19,22 @@ angular.module('timeSheetApp')
         $scope.pages = { currPage : 1};
         $scope.isEdit = !!$stateParams.id;
         $scope.selectedAsset = null;
-        $scope.selectedProject = null;
-        $scope.selectedSite = null;
-        $scope.selectedBlock = null;
-        $scope.selectedFloor = null;
-        $scope.selectedZone = null;
+        $scope.selectedProject = {};
+        $scope.selectedSite = {};
+        $scope.selectedBlock = {};
+        $scope.selectedFloor = {};
+        $scope.selectedZone = {};
         $scope.pageSort = 10;
         $scope.pager = {};
-        $scope.assetObj ={};
+        $scope.assetGen ={};
         $scope.selectedConfig = null;
-        $scope.selectedAssetType = null;
+        $scope.selectedAssetType = {};
+        $scope.selectedAssetGroup = {};
+        $scope.selectedAssetStatus = {};
+        $scope.selectedManufacturer = {};
+        $scope.selectedServiceProvider = {};
+         $scope.selectedServiceWarranty = {};
+         $scope.selectedVendor = {};
         $scope.selectedConfigParam = null;
         $scope.selectedConfigUnit = null;
         
@@ -96,6 +103,13 @@ angular.module('timeSheetApp')
             });
         };
 
+         $scope.loadVendor = function () {
+            VendorComponent.findAll().then(function (data) {
+                console.log("Loading all Vendor -- " , data)
+                $scope.vendors = data;
+            });
+        };
+
 
            $scope.createAssetType = function () {
                AssetTypeComponent.create().then(function (data) {
@@ -133,6 +147,7 @@ angular.module('timeSheetApp')
                 LocationComponent.findBlocks(projectId,$scope.selectedSite.id).then(function (data) {
                     $scope.selectedBlock = null;
                 $scope.blocks = data;
+                 console.log("Loading all blocks -- " ,  $scope.blocks);
             });
         };
 
@@ -142,6 +157,7 @@ angular.module('timeSheetApp')
                 LocationComponent.findFloors(projectId,$scope.selectedSite.id,$scope.selectedBlock).then(function (data) {
                     $scope.selectedFloor = null;
                 $scope.floors = data;
+                console.log("Loading all floors -- " ,  $scope.floors);
             });
         };
 
@@ -150,7 +166,8 @@ angular.module('timeSheetApp')
                 var projectId = $scope.selectedProject ? $scope.selectedProject.id : 0;
                 LocationComponent.findZones(projectId,$scope.selectedSite.id,$scope.selectedBlock, $scope.selectedFloor).then(function (data) {
                     $scope.selectedZone = null;
-                $scope.zones = data;
+                    $scope.zones = data;
+                    console.log('zones list',$scope.zones);
             });
         };
 
@@ -269,8 +286,8 @@ angular.module('timeSheetApp')
             }
 
              console.log("search criteria",$scope.searchCriteria);
-                $scope.locations = '';
-                $scope.locationsLoader = false;
+                $scope.assets = '';
+                $scope.assetsLoader = false;
                 $scope.loadPageTop();
 
             AssetComponent.search().then(function (data) {
@@ -313,7 +330,6 @@ angular.module('timeSheetApp')
         };
 
         $scope.saveAsset = function () {
-            alert("Muthu");
                 $scope.error = null;
                 $scope.success = null;
                 $scope.errorSitesExists = null;
@@ -321,15 +337,48 @@ angular.module('timeSheetApp')
                 if(!$scope.selectedProject.id){
                     $scope.errorProject = "true";
                 }else{
+                    if(!$scope.selectedAssetType.id){
+                       $scope.assetGen.assetType = $scope.selectedAssetType.id;
+                    }
+                     if(!$scope.selectedAssetGroup.id){
+                        $scope.assetGen.assetGroup = $scope.selectedAssetGroup.id;
+                     }
+                     if(!$scope.selectedAssetStatus.id){
+                        $scope.assetGen.assetStatus = $scope.selectedAssetStatus.id;
+                     }
+                     if(!$scope.selectedAssetStatus.id){
+                        $scope.assetGen.assetStatus = $scope.selectedAssetStatus.id;
+                     }
+                     if(!$scope.selectedManufacturer.id){
+                        $scope.assetGen.manufacturerId = $scope.selectedManufacturer.id;
+                     }
+                     if(!$scope.selectedServiceProvider.id){
+                         $scope.assetGen.serviceProvider = $scope.selectedServiceProvider.id;
+                     }
+                     if(!$scope.selectedServiceWarranty.id){
+                        $scope.assetGen.serviceWarranty = $scope.selectedServiceWarranty.id;
+                     }
+                     if(!$scope.selectedVendor.id){
+                        $scope.assetGen.VendorId = $scope.selectedVendor.id;
+                     }
+                     if(!$scope.selectedSite.id){
+                         $scope.assetGen.siteId = $scope.selectedSite.id;
+                     }
+                      if(!$scope.selectedProject.id){
+                          $scope.assetGen.projectId = $scope.selectedProject.id;
+                     }
+                      if(!$scope.selectedBlock){
+                          $scope.assetGen.block = $scope.selectedBlock;
+                     }
+                      if(!$scope.selectedFloor){
+                          $scope.assetGen.floor = $scope.selectedFloor;
+                     }
+                      if(!$scope.selectedZone){
+                         $scope.assetGen.zone = $scope.selectedZone;
+                     }
 
-                    $scope.assetObj.siteId = $scope.selectedSite.id;
-                    $scope.assetObj.projectId = $scope.selectedProject.id;
-                    $scope.assetObj.blockId = $scope.selectedBlock.id;
-                    $scope.assetObj.floorId = $scope.selectedFloor.id;
-                    $scope.assetObj.zoneId = $scope.selectedZone.id;
-
-                    console.log('Asset - ' + JSON.stringify($scope.assetObj));
-                    AssetComponent.create($scope.assetObj).then(function() {
+                    console.log("Asset Create List -- ",$scope.assetGen);
+                    AssetComponent.create($scope.assetGen).then(function() {
                         $scope.success = 'OK';
                         $scope.showNotifications('top','center','success','Asset Added');
                         $scope.selectedSite = null;
@@ -368,7 +417,7 @@ angular.module('timeSheetApp')
 
 
 
-        $scope.saveAsset = function () {
+        /*$scope.saveAsset = function () {
         	$scope.error = null;
         	$scope.success =null;
         	if($scope.asset.selectedSite!=null){
@@ -391,7 +440,7 @@ angular.module('timeSheetApp')
                 }
             });;
 
-        };
+        };*/
 
 
         $scope.refreshPage = function(){
@@ -487,6 +536,7 @@ angular.module('timeSheetApp')
                     $scope.assetType = {};
                     $scope.showNotifications('top','center','success','Asset Type Added Successfully');
                     $scope.loadAssetType();
+                    
 
                 })
             }else{
@@ -576,7 +626,6 @@ angular.module('timeSheetApp')
 	    };
 	    
 	    $scope.saveAssetParamConfig = function () {
-	    	alert('called')
         	$scope.error = null;
         	$scope.success =null;
         	if($scope.asset.assetType){
