@@ -24,7 +24,7 @@ spring:
         url: jdbc:mysql://localhost:3306/Taskman?useUnicode=true&characterEncoding=utf8
         name:
         username: root
-        password: admin
+        password: root
     jpa:
         database-platform: org.hibernate.dialect.MySQLInnoDBDialect
         database: MYSQL
@@ -77,6 +77,14 @@ import:
         path:
             new: /opt/imports/new
             completed: /opt/imports/completed
+asset:
+   file:
+       path: /opt/asset/uploads/site      
+
+multipart:
+   maxFileSize: 15MB
+   maxRequestSize: 15MB
+         
 max:
     user: 10
     userGroup: 2

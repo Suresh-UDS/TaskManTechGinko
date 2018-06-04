@@ -5,9 +5,11 @@ angular.module('timeSheetApp')
 				'AssetController',
 				function($scope, $rootScope, $state, $timeout, AssetComponent,
 						ProjectComponent,LocationComponent,SiteComponent,EmployeeComponent, $http, $stateParams,
+
 						$location,PaginationComponent,AssetTypeComponent,ParameterConfigComponent,ParameterComponent,
                         ParameterUOMComponent,VendorComponent,ManufacturerComponent) {
                      
+
 
         $rootScope.loadingStop();
         $rootScope.loginView = false;
@@ -37,16 +39,21 @@ angular.module('timeSheetApp')
          $scope.selectedVendor = {};
         $scope.selectedConfigParam = null;
         $scope.selectedConfigUnit = null;
-        
+
+        $scope.asset = {};
+       
         $scope.parameterConfig = {};
-        
+
         $scope.assetType = {};
 
         $scope.assetGroup = {};
-        
+
         $scope.parameter = {};
-        
+
         $scope.consumptionMonitoringRequired = false;
+        
+        $scope.selectedClientFile;
+        $scope.selectedPhotoFile;
         
         console.log($stateParams)
                     var that =  $scope;
@@ -194,15 +201,15 @@ angular.module('timeSheetApp')
         	AssetComponent.findById($stateParams.id).then(function(data){
         		$scope.asset=data;
         		console.log($scope.asset);
-        		if($scope.asset.assetType) { 
+        		if($scope.asset.assetType) {
         			$scope.assetConfig = {};
         			$scope.assetConfig.assetTypeName = $scope.asset.assetType;
         			$scope.assetConfig.assetId = $stateParams.id;
-         			AssetComponent.findByAssetConfig($scope.assetConfig).then(function(data){ 
+         			AssetComponent.findByAssetConfig($scope.assetConfig).then(function(data){
                 		console.log(data);
                 		$scope.assetParameters = data;
                 	});
-        			
+
         		}
         		/*$scope.asset.selectedSite = {id : data.siteId,name : data.siteName}
         		console.log($scope.selectedSite)*/
@@ -325,7 +332,7 @@ angular.module('timeSheetApp')
 
             AssetComponent.findById(assetId).then(function(data){
                 console.log("Asset details List==" + JSON.stringify(data));
-                $scope.assetDeatil= data;
+                $scope.assetDetail= data;
             });
         };
 
@@ -524,7 +531,7 @@ angular.module('timeSheetApp')
         }
 
 
-   
+
 
 
         $scope.addAssetType = function () {
@@ -564,28 +571,28 @@ angular.module('timeSheetApp')
 
 
         };
-        
-        
-        $scope.loadAssetConfig = function(type) { 
-        	ParameterConfigComponent.findByAssertType(type).then(function(data){ 
+
+
+        $scope.loadAssetConfig = function(type) {
+        	ParameterConfigComponent.findByAssertType(type).then(function(data){
         		console.log(data);
         		$scope.assetConfigs = data;
         	});
         }
-        
-        $scope.deleteAssetConfig = function(id) { 
-        	AssetComponent.deleteConfigById(id).then(function(data){ 
+
+        $scope.deleteAssetConfig = function(id) {
+        	AssetComponent.deleteConfigById(id).then(function(data){
         		console.log(data);
         	});
         }
-        
+
         $scope.loadAllParameters = function() {
     		ParameterComponent.findAll().then(function (data) {
 	            $scope.selectedParameter = null;
 	            $scope.parameters = data;
     		});
         }
-    
+
 	    $scope.addParameter = function () {
 	        console.log($scope.parameter.name);
 	        if($scope.parameter){
@@ -595,20 +602,20 @@ angular.module('timeSheetApp')
 	                $scope.parameter = null;
 	                $scope.showNotifications('top','center','success','Parameter Added Successfully');
 	                $scope.loadAllParameters();
-	
+
 	            })
 	        }else{
 	            console.log("Parameter not entered");
 	        }
 	    };
-	    
+
 	    $scope.loadAllParameterUOMs = function() {
 	    		ParameterUOMComponent.findAll().then(function (data) {
 	            $scope.selectedParameterUOM = null;
 	            $scope.parameterUOMs = data;
 	        });
 	    }
-	    
+
 	    $scope.addParameterUOM = function () {
 	        console.log($scope.parameterUOM.name);
 	        if($scope.parameterUOM){
@@ -618,13 +625,13 @@ angular.module('timeSheetApp')
 	                $scope.parameterUOM = null;
 	                $scope.showNotifications('top','center','success','Parameter UOM Added Successfully');
 	                $scope.loadAllParameterUOMs();
-	
+
 	            })
 	        }else{
 	            console.log("Parameter UOM not entered");
 	        }
 	    };
-	    
+
 	    $scope.saveAssetParamConfig = function () {
         	$scope.error = null;
         	$scope.success =null;
@@ -638,7 +645,7 @@ angular.module('timeSheetApp')
         	if($scope.selectedParameterUOM){
         	    $scope.parameterConfig.uom = $scope.selectedParameterUOM.uom;
         	}
-        	$scope.parameterConfig.consumptionMonitoringRequired  = $scope.consumptionMonitoringRequired 
+        	$scope.parameterConfig.consumptionMonitoringRequired  = $scope.consumptionMonitoringRequired
         	console.log('parameterConfig details ='+ JSON.stringify($scope.parameterConfig));
         	AssetComponent.createAssetParamConfig($scope.parameterConfig).then(function () {
                 $scope.success = 'OK';
@@ -655,8 +662,28 @@ angular.module('timeSheetApp')
             });;
 
 	    };
-	        
-
+	    
+	    $scope.uploadAsset = { };
+	    
+	    $scope.uploadAssetFile = function() {  
+	    	console.log($scope.selectedClientFile);
+	    	console.log($scope.uploadAsset.title);
+	     	if($scope.selectedClientFile) {
+	        	console.log('selected asset file - ' + $scope.selectedClientFile);
+	        	$scope.uploadAsset.uploadFile = $scope.selectedClientFile;
+	        	$scope.uploadAsset.assetId = 1;
+	        	console.log($scope.uploadAsset);
+	        	AssetComponent.uploadAssetFile($scope.uploadAsset).then(function(data){
+	        		console.log(data);
+	        	},function(err){
+	        		console.log('Import error');
+	        		console.log(err);
+	        	});
+        	} else {
+        		console.log('select a file');
+        	}
+	    	
+	    }
 
 
     });

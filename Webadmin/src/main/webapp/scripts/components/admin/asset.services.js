@@ -117,6 +117,22 @@ angular.module('timeSheetApp')
                         console.log(JSON.stringify(err));
                         return cb(err);
                     });
+            },
+            
+            uploadAssetFile : function(asset) { 
+            	var file = asset.uploadFile;
+            	var fileFormData = new FormData();
+            	
+        	 	fileFormData.append('title', asset.title);
+             	fileFormData.append('assetId', asset.assetId);
+             	fileFormData.append('uploadFile', file);
+               
+            	return $http.post('api/assets/uploadFile', fileFormData, {
+                    transformRequest: angular.identity,
+                    headers: {'Content-Type': undefined}
+                }).then(function (response) {
+            			return response.data;
+                });
             }
             
 

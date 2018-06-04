@@ -10,12 +10,15 @@ import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Base64;
+import java.util.Date;
 import java.util.List;
 
 import javax.inject.Inject;
 
+import org.apache.commons.io.FilenameUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.env.Environment;
@@ -148,6 +151,27 @@ public class FileUploadHelper {
 		return imageDataString;
 	}
 	
+	public String readDocument(String imageFileName) {
+		String filePath = env.getProperty("upload.file.path");
+		//filePath += "/" + empId;
+		//filePath += "/" + imageFileName +".jpg";
+		File file = new File(imageFileName);
+		String imageDataString = "data:image/jpg;base64,";
+		try {
+			FileInputStream imageFile = new FileInputStream(file);
+	        byte imageData[] = new byte[(int) file.length()];
+	        imageFile.read(imageData);
+
+	        // Converting Image byte array into Base64 String
+	        imageDataString += Base64.getEncoder().encodeToString(imageData);
+			imageFile.close();
+
+		}catch(IOException io) {
+			log.error("Error while reading the image file ,"+ imageFileName , io);
+		}
+		return imageDataString;
+	}
+
 	public String readQuestionImageFile(long feedbackQuestionsId, String imageFileName) {
 		String filePath = env.getProperty("upload.file.path");
 		filePath += "/" + feedbackQuestionsId;
@@ -302,5 +326,43 @@ public class FileUploadHelper {
         }
         return fileName;
     }
-
+    
+    public String uploadAssetDcmFile(String assetCode, Long siteId, MultipartFile file, long dateTime) {
+    	log.debug("Site id" + siteId);
+    	String extension = FilenameUtils.getExtension(file.getOriginalFilename());
+    	log.debug(extension);
+		String name =  assetCode + "_" + "document" + "_" + dateTime +"."+ extension;
+		log.debug("file =" + file + ",  name=" + name);
+		if (!file.isEmpty()) {
+			// check and create emp directory
+			String filePath = env.getProperty("asset.file.path");
+			FileSystem fileSystem = FileSystems.getDefault();
+			filePath += "/"+ siteId; 
+			filePath += "/"+ assetCode;
+			Path path = fileSystem.getPath(filePath);
+			// path = path.resolve(String.valueOf(empId));
+			if (!Files.exists(path)) {
+				Path newAssetPath = Paths.get(filePath);
+				try {
+					Files.createDirectories(newAssetPath);
+				} catch (IOException e) {
+					log.error("Error" +e);
+					log.error("Error while creating asset path " + newAssetPath);
+				}
+			}
+			try {
+				filePath += "/" + name;
+				byte[] bytes = file.getBytes();
+				BufferedOutputStream stream = new BufferedOutputStream(new FileOutputStream(new File(filePath)));
+				stream.write(bytes);
+				stream.close();
+				log.debug("Asset File uploaded successfully - " + name);
+			} catch (Exception e) {
+				log.error("Asset File uploaded failed - " + name, e);
+			}
+		} else {
+			log.error("Empty file, upload failed - " + name);
+		}
+		return name;
+	}
 }

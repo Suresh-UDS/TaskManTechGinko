@@ -25,6 +25,7 @@ import com.codahale.metrics.annotation.Timed;
 import com.ts.app.security.SecurityUtils;
 import com.ts.app.service.ParameterConfigService;
 import com.ts.app.service.util.ImportUtil;
+import com.ts.app.web.rest.dto.AssetParameterConfigDTO;
 import com.ts.app.web.rest.dto.ImportResult;
 import com.ts.app.web.rest.dto.ParameterConfigDTO;
 import com.ts.app.web.rest.dto.ParameterDTO;
@@ -191,6 +192,11 @@ public class ParameterConfigResource {
 		}
 		return result;
 	}
+    
+    @RequestMapping(value = "/parameterConfig/assetType/{type}", method = RequestMethod.GET)
+    public List<ParameterConfigDTO> getAssertConfigParam(@PathVariable String type) { 
+    	return parameterConfigService.findByAssertType(type); 
+    }
 
 
 

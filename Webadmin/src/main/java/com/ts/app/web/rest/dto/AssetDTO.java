@@ -36,6 +36,9 @@ public class AssetDTO extends BaseDTO {
     private double estimatedDisposePrice;
     private Date warrentyExpiryDate;
     private String assetCode;
+    private String amcDocumentTitle;
+    private String amcDocumentFile;
+    private Date amcDocumentUploadDate;
     
     public Long getProjectId() {
 		return projectId;
@@ -227,4 +230,29 @@ public class AssetDTO extends BaseDTO {
     public void setQrCodeImage(String qrCodeImage) {
         this.qrCodeImage = qrCodeImage;
     }
+    
+	public String getAmcDocumentTitle() {
+		return amcDocumentTitle;
+	}
+	
+	public void setAmcDocumentTitle(String amcDocumentTitle) {
+		this.amcDocumentTitle = amcDocumentTitle;
+	}
+	
+	public String getAmcDocumentFile() {
+		return amcDocumentFile;
+	}
+	
+	public void setAmcDocumentFile(String amcDocumentFile) {
+		this.amcDocumentFile = amcDocumentFile;
+	}
+	
+	public Date getAmcDocumentUploadDate() {
+		return amcDocumentUploadDate;
+	}
+	
+	public void setAmcDocumentUploadDate(Date amcDocumentUploadDate) {
+		this.amcDocumentUploadDate = amcDocumentUploadDate;
+	}
+	
 }
