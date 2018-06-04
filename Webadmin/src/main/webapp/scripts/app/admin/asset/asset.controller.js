@@ -366,7 +366,7 @@ angular.module('timeSheetApp')
                         $scope.assetGen.serviceWarranty = $scope.selectedServiceWarranty.id;
                      }
                      if($scope.selectedVendor.id){
-                        $scope.assetGen.VendorId = $scope.selectedVendor.id;
+                        $scope.assetGen.vendorId = $scope.selectedVendor.id;
                      }
                      if($scope.selectedSite.id){
                          $scope.assetGen.siteId = $scope.selectedSite.id;

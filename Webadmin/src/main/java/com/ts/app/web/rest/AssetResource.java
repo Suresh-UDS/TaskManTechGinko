@@ -207,6 +207,17 @@ public class AssetResource {
     	return new ResponseEntity<>(assetDocumentDTO, HttpStatus.OK);
     }
     
+    @RequestMapping(path="/asset/ppmschedule",method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+    @Timed
+    public ResponseEntity<?> saveAssetPPMSchedule(@Valid @RequestBody AssetDTO assetDTO, HttpServletRequest request) {
+        log.debug(">>> Asset DTO saveAssetPPMSchedule request <<<");
+        log.debug("Title <<<"+assetDTO.getAssetPpmTitle());
+        
+        
+        AssetDTO response = assetService.saveAsset(assetDTO);
+        log.debug("Asset save response - "+ response);
+        return new ResponseEntity<>(response,HttpStatus.CREATED);
+    }
     @RequestMapping(value = "/assets/getAllFile/{id}", method = RequestMethod.GET)
     public List<AssetDocumentDTO> getUploadedFiles(@PathVariable Long id) {
     	List<AssetDocumentDTO> result = null;
