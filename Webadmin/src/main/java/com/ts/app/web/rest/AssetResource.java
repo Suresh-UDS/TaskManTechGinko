@@ -56,19 +56,24 @@ public class AssetResource {
     public ResponseEntity<?> saveAsset(@Valid @RequestBody AssetDTO assetDTO, HttpServletRequest request) {
         log.debug(">>> Asset DTO save request <<<");
         log.debug("Title <<<"+assetDTO.getTitle());
+        log.debug("AssetType <<<"+assetDTO.getAssetType());
         log.debug("AssetGroup <<<"+assetDTO.getAssetGroup());
+        log.debug("Status <<<"+assetDTO.getStatus());
         log.debug("ProjectId <<<"+assetDTO.getProjectId());
         log.debug("SiteId <<<"+assetDTO.getSiteId());
         log.debug("Block <<<"+assetDTO.getBlock());
         log.debug("Floor <<<"+assetDTO.getFloor());
         log.debug("Zone <<<"+assetDTO.getZone());
+        log.debug("Manufacture <<<"+assetDTO.getManufacturerId());
         log.debug("ModelNumber <<<"+assetDTO.getModelNumber());
         log.debug("SerialNumber <<<"+assetDTO.getSerialNumber());
+        log.debug("Acquired Date <<<"+assetDTO.getAcquiredDate());
         log.debug("PurchasePrice <<<"+assetDTO.getPurchasePrice());
         log.debug("CurrentPrice <<<"+assetDTO.getCurrentPrice());
         log.debug("EstimatedDisposePrice <<<"+assetDTO.getEstimatedDisposePrice());
         log.debug("Code <<<"+assetDTO.getCode());
         log.debug("UdsAsset <<<"+assetDTO.isUdsAsset());
+        log.debug("Vendor <<<"+assetDTO.getVendorId());
         
         AssetDTO response = assetService.saveAsset(assetDTO);
         log.debug("Asset save response - "+ response);
