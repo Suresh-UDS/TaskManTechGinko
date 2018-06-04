@@ -411,6 +411,75 @@ public class    EmployeeService extends AbstractService {
     }
 
     @Transactional
+    public CheckInOutDTO saveCheckOutInfo(CheckInOutDTO checkInOutDto) {
+
+        log.debug("EmployeeService.checkOut - empId - "+checkInOutDto.getEmployeeEmpId());
+        //CheckInOut checkInOut = mapperUtil.toEntity(checkInOutDto, CheckInOut.class);
+        Timestamp zdt   = new Timestamp(System.currentTimeMillis());
+        CheckInOut checkInOut = new CheckInOut();
+
+        if (checkInOutDto.getId()>0) {
+            checkInOut = checkInOutRepository.findOne(checkInOutDto.getId());
+        }
+        checkInOutDto.setCheckInDateTime(zdt);
+        checkInOut.setCheckOutDateTime(zdt);
+        Device checkoutDevice = deviceRepository.findByUniqueId(checkInOutDto.getDeviceOutUniqueId());
+//        checkInOut.setDeviceOut(checkoutDevice);
+        checkInOut.setMinsWorked(0);
+        checkInOut.setEmployee(employeeRepository.findOne(checkInOutDto.getEmployeeId()));
+        checkInOut.setProject(projectRepository.findOne(checkInOutDto.getProjectId()));
+        checkInOut.setSite(siteRepository.findOne(checkInOutDto.getSiteId()));
+        Job job = jobRepository.findOne(checkInOutDto.getJobId());
+        zdt = new  Timestamp(job.getPlannedStartTime().getTime());
+        checkInOut.setCheckInDateTime(zdt);
+        checkInOut.setJob(job);
+//        Device device = deviceRepository.findByUniqueId(checkInOutDto.getDeviceInUniqueId());
+//        log.debug("device id " + (device == null ? 0 : device.getId()));
+//        if(device != null) {
+//            checkInOut.setDeviceIn(device);
+//        }else {
+//            checkInOut.setDeviceIn(checkoutDevice);
+//        }
+//        //checkInOut.setDeviceOut(device);
+        checkInOut.setLongitudeOut(checkInOutDto.getLongitudeOut());
+        checkInOut.setLatitudeOut(checkInOutDto.getLatitudeOut());
+        checkInOut.setRemarks(checkInOutDto.getRemarks());
+        checkInOut = checkInOutRepository.save(checkInOut);
+        checkInOutDto.setId(checkInOut.getId());
+        if(checkInOutDto.isCompleteJob()){
+            JobDTO completedJob = jobManagementService.onlyCompleteJob(checkInOutDto.getJobId());
+            log.debug("onlyCheckOut - completedJob" + completedJob);
+            log.debug("Transaction id "+checkInOutDto.getId());
+            if(completedJob != null) {
+                long siteId = completedJob.getSiteId();
+                long transactionId = checkInOutDto.getId();
+                log.debug("onlyCheckOut - completedJob siteId -" + transactionId);
+                List<User> users = userService.findUsers(siteId);
+                log.debug("onlyCheckOut - completedJob users  -" + users);
+                if(CollectionUtils.isNotEmpty(users)) {
+                    long userIds[] = new long[users.size()];
+                    int ind = 0;
+                    for(User user : users) {
+                        userIds[ind] = user.getId();
+                        log.debug("onlyCheckOut - completedJob user id  -" + user.getId());
+                        ind++;
+                        mailService.sendCompletedJobAlert(user, completedJob.getSiteName(), completedJob.getId(), completedJob.getTitle(), null);
+                    }
+                    String message = "Job  -"+ completedJob.getTitle() + " completed for site-" + completedJob.getSiteName();
+                    log.debug("push message -"+ message);
+                    pushService.send(userIds, message);
+                    jobManagementService.saveNotificationLog(checkInOutDto.getJobId(),checkInOutDto.getUserId(), users, siteId, message);
+                }
+            }
+        }
+        log.debug("tranction Id",checkInOutDto.getId());
+        log.debug("Created check out Information for Employee: {}", checkInOut.getEmployee().getEmpId());
+
+        return checkInOutDto;
+
+    }
+
+    @Transactional
     public CheckInOutImageDTO uploadFile(CheckInOutImageDTO checkInOutImageDto) {
         log.debug("EmployeeService.uploadFile - action - "+checkInOutImageDto.getAction());
         log.debug("Employee list from check in out images"+checkInOutImageDto.getEmployeeEmpId());
