@@ -344,43 +344,43 @@ angular.module('timeSheetApp')
                 if(!$scope.selectedProject.id){
                     $scope.errorProject = "true";
                 }else{
-                    if(!$scope.selectedAssetType.id){
+                    if($scope.selectedAssetType.id){
                        $scope.assetGen.assetType = $scope.selectedAssetType.id;
                     }
-                     if(!$scope.selectedAssetGroup.id){
+
+                     if($scope.selectedAssetGroup.id){
                         $scope.assetGen.assetGroup = $scope.selectedAssetGroup.id;
                      }
-                     if(!$scope.selectedAssetStatus.id){
+
+                     if($scope.selectedAssetStatus.id){
                         $scope.assetGen.assetStatus = $scope.selectedAssetStatus.id;
                      }
-                     if(!$scope.selectedAssetStatus.id){
-                        $scope.assetGen.assetStatus = $scope.selectedAssetStatus.id;
-                     }
-                     if(!$scope.selectedManufacturer.id){
+            
+                     if($scope.selectedManufacturer.id){
                         $scope.assetGen.manufacturerId = $scope.selectedManufacturer.id;
                      }
-                     if(!$scope.selectedServiceProvider.id){
+                     if($scope.selectedServiceProvider.id){
                          $scope.assetGen.serviceProvider = $scope.selectedServiceProvider.id;
                      }
-                     if(!$scope.selectedServiceWarranty.id){
+                     if($scope.selectedServiceWarranty.id){
                         $scope.assetGen.serviceWarranty = $scope.selectedServiceWarranty.id;
                      }
-                     if(!$scope.selectedVendor.id){
+                     if($scope.selectedVendor.id){
                         $scope.assetGen.VendorId = $scope.selectedVendor.id;
                      }
-                     if(!$scope.selectedSite.id){
+                     if($scope.selectedSite.id){
                          $scope.assetGen.siteId = $scope.selectedSite.id;
                      }
-                      if(!$scope.selectedProject.id){
+                      if($scope.selectedProject.id){
                           $scope.assetGen.projectId = $scope.selectedProject.id;
                      }
-                      if(!$scope.selectedBlock){
+                      if($scope.selectedBlock){
                           $scope.assetGen.block = $scope.selectedBlock;
                      }
-                      if(!$scope.selectedFloor){
+                      if($scope.selectedFloor){
                           $scope.assetGen.floor = $scope.selectedFloor;
                      }
-                      if(!$scope.selectedZone){
+                      if($scope.selectedZone){
                          $scope.assetGen.zone = $scope.selectedZone;
                      }
 
