@@ -126,6 +126,7 @@ angular.module('timeSheetApp')
         	 	fileFormData.append('title', asset.title);
              	fileFormData.append('assetId', asset.assetId);
              	fileFormData.append('uploadFile', file);
+             	fileFormData.append('type', asset.type);
                
             	return $http.post('api/assets/uploadFile', fileFormData, {
                     transformRequest: angular.identity,
@@ -135,8 +136,31 @@ angular.module('timeSheetApp')
                 });
             },
             
-            getAllUploadedFiles : function(id) { 
-            	return $http.get('api/assets/getAllFile/'+id).then(function(response){ 
+            getAllUploadedFiles : function(obj) { 
+            	return $http.get('api/assets/getAllFile/'+obj.type+'/'+obj.assetId).then(function(response){ 
+            		return response.data;
+            	});
+            },
+            
+            uploadAssetPhoto : function(asset) { 
+            	var file = asset.uploadFile;
+            	var fileFormData = new FormData();
+            	
+        	 	fileFormData.append('title', asset.title);
+             	fileFormData.append('assetId', asset.assetId);
+             	fileFormData.append('uploadFile', file);
+             	fileFormData.append('type', asset.type);
+               
+            	return $http.post('api/assets/uploadAssetPhoto', fileFormData, {
+                    transformRequest: angular.identity,
+                    headers: {'Content-Type': undefined}
+                }).then(function (response) {
+            			return response.data;
+                });
+            },
+            
+            getAllUploadedPhotos : function(obj) { 
+            	return $http.get('api/assets/getAllAssetPhoto/'+obj.type+'/'+obj.assetId).then(function(response){ 
             		return response.data;
             	});
             }

@@ -609,9 +609,9 @@ public class AssetManagementService extends AbstractService {
 		return assetDocumentDTO;
 	}
 
-	public List<AssetDocumentDTO> findAllDocuments(Long assetId) {
+	public List<AssetDocumentDTO> findAllDocuments(String type, Long assetId) {
 		// TODO Auto-generated method stub
-		List<AssetDocument> assetDocument = assetDocumentRepository.findByAssetId(assetId);
+		List<AssetDocument> assetDocument = assetDocumentRepository.findAllByType(type, assetId);
 		return mapperUtil.toModelList(assetDocument, AssetDocumentDTO.class);
 	}
 

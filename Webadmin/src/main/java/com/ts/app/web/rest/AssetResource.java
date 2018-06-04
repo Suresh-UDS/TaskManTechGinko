@@ -199,18 +199,19 @@ public class AssetResource {
     	
     }
     
-    @RequestMapping(value ="/assets/uploadFile", method = RequestMethod.POST)
-    public ResponseEntity<?> uploadAssetFile(@RequestParam("title") String title, @RequestParam("assetId") long assetId, @RequestParam("uploadFile") MultipartFile file, AssetDocumentDTO assetDocumentDTO) {
+    @RequestMapping(value ={"/assets/uploadFile", "/assets/uploadAssetPhoto"} , method = RequestMethod.POST)
+    public ResponseEntity<?> uploadAssetFile(@RequestParam("title") String title, @RequestParam("assetId") long assetId, @RequestParam("uploadFile") MultipartFile file, @RequestParam("type") String type, AssetDocumentDTO assetDocumentDTO) {
     	assetDocumentDTO.setAssetId(assetId);
     	assetDocumentDTO.setTitle(title);
+    	assetDocumentDTO.setType(type);
     	assetDocumentDTO = assetService.uploadFile(assetDocumentDTO, file);
     	return new ResponseEntity<>(assetDocumentDTO, HttpStatus.OK);
     }
     
-    @RequestMapping(value = "/assets/getAllFile/{id}", method = RequestMethod.GET)
-    public List<AssetDocumentDTO> getUploadedFiles(@PathVariable Long id) {
+    @RequestMapping(value = {"/assets/getAllFile/{type}/{id}", "/assets/getAllAssetPhoto/{type}/{id}"}, method = RequestMethod.GET)
+    public List<AssetDocumentDTO> getUploadedFiles(@PathVariable String type, @PathVariable Long id) {
     	List<AssetDocumentDTO> result = null;
-    	result = assetService.findAllDocuments(id);
+    	result = assetService.findAllDocuments(type, id);
     	return result;
     }
     
