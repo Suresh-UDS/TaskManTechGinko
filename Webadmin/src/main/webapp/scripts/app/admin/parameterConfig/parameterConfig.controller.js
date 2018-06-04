@@ -3,9 +3,10 @@
 angular.module('timeSheetApp')
 		    .controller(
 				'ParameterConfigController',
-				function($scope, $rootScope, $state, $timeout, ParameterConfigComponent,ParameterComponent, ParameterUOMComponent, AssetTypeComponent,
+				function($scope, $rootScope, $state, $timeout, ParameterConfigComponent,ParameterComponent,
+                 ParameterUOMComponent, AssetTypeComponent,
 						$http, $stateParams,
-						$location) {
+						$location,PaginationComponent) {
         $rootScope.loadingStop();
         $rootScope.loginView = false;
         $scope.success = null;
@@ -20,9 +21,15 @@ angular.module('timeSheetApp')
         
         $scope.assetType = {};
         
-        $scope.parameter = {};
+        $scope.assetParam = {};
+
+        $scope.parameterUOM = {};
+
+        $scope.selectedAssetType = {};
+        $scope.selectedParameter = {};
+        $scope.selectedParameterUOM = {};
         
-        $scope.consumptionMonitoringRequired = false;
+        $scope.consumptionMonitoringRequired = {value:false};
 
         console.log($stateParams)
                     var that =  $scope;
@@ -62,31 +69,38 @@ angular.module('timeSheetApp')
 
         $scope.initMaterialWizard();
         
-        $scope.loadAllAssetTypes = function() {
+        $scope.loadAssetTypes = function() {
+
         		AssetTypeComponent.findAll().then(function (data) {
                 $scope.selectedAssetType = null;
                 $scope.assetTypes = data;
                 $scope.loadingStop();
             });
         }
-        
+
         $scope.addAssetType = function () {
-            console.log($scope.assetType.name);
+ 
+            console.log($scope.assetType);
             if($scope.assetType){
-                console.log("AsseType entered");
+                console.log("Asset Type entered");
                 AssetTypeComponent.create($scope.assetType).then(function (response) {
                     console.log(response);
-                    $scope.assetType = null;
+                    $scope.assetType = {};
                     $scope.showNotifications('top','center','success','Asset Type Added Successfully');
-                    $scope.loadAllAssetTypes();
+                    $scope.loadAssetTypes();
+                    
 
                 })
             }else{
-                console.log("Asset type not entered");
+                console.log("Asset Type not entered");
             }
-        };
+
+
+        }
         
-        $scope.loadAllParameters = function() {
+      
+        
+        $scope.loadAssetParams = function() {
         		ParameterComponent.findAll().then(function (data) {
 	            $scope.selectedParameter = null;
 	            $scope.parameters = data;
@@ -94,23 +108,23 @@ angular.module('timeSheetApp')
 	        });
 	    }
 	    
-	    $scope.addParameter = function () {
-	        console.log($scope.parameter.name);
-	        if($scope.parameter){
+	    $scope.addAssetParam = function () {
+	        console.log($scope.assetParam.name);
+	        if($scope.assetParam){
 	            console.log("Parameter entered");
-	            ParameterComponent.create($scope.parameter).then(function (response) {
+	            ParameterComponent.create($scope.assetParam).then(function (response) {
 	                console.log(response);
 	                $scope.parameter = null;
 	                $scope.showNotifications('top','center','success','Parameter Added Successfully');
-	                $scope.loadAllParameters();
+	                $scope.loadAssetParams();
 	
 	            })
 	        }else{
 	            console.log("Parameter not entered");
 	        }
-	    };
+	    }
 	    
-        $scope.loadAllParameterUOMs = function() {
+        $scope.loadAssetParamUoms = function() {
 	    		ParameterUOMComponent.findAll().then(function (data) {
 	            $scope.selectedParameterUOM = null;
 	            $scope.parameterUOMs = data;
@@ -126,7 +140,7 @@ angular.module('timeSheetApp')
 	                console.log(response);
 	                $scope.parameterUOM = null;
 	                $scope.showNotifications('top','center','success','Parameter UOM Added Successfully');
-	                $scope.loadAllParameterUOMs();
+	                $scope.loadAssetParamUoms();
 	
 	            })
 	        }else{
@@ -149,7 +163,8 @@ angular.module('timeSheetApp')
         };
         
         $scope.loadParameterConfigs = function(){
-        		$scope.search();
+            $scope.clearFilter();
+        	$scope.search();
         };
 
         $scope.search = function () {
@@ -159,45 +174,51 @@ angular.module('timeSheetApp')
             }
             $scope.searchCriteria = searchCriteria;
             // }
-
             $scope.searchCriteria.currPage = currPageVal;
-            console.log('Selected  name -' + $scope.selectedName);
-            console.log('Selected  asset type  -' + $scope.selectedAssetType);
-            console.log('search criteria - '+JSON.stringify($rootScope.searchCriteriaParameterConfig));
-            if(!$scope.selectedName && !$scope.selectedAssetType) {
-            		$scope.searchCriteria.findAll = true;
-            }
-            console.log($scope.searchCriteria);
+            $scope.searchCriteria.findAll = true;
+
+            
+            console.log("search criteria",$scope.searchCriteria);
+                     $scope.parameterConfigs = '';
+                     $scope.parameterConfigsLoader = false;
+                     $scope.loadPageTop();
             ParameterConfigComponent.search($scope.searchCriteria).then(function (data) {
-                console.log(data);
                 $scope.parameterConfigs = data.transactions;
                 $scope.parameterConfigsLoader = true;
                 $scope.loadingStop();
+
+                /*
+                    ** Call pagination  main function **
+                */
+                 $scope.pager = {};
+                 $scope.pager = PaginationComponent.GetPager(data.totalCount, $scope.pages.currPage);
+                 $scope.totalCountPages = data.totalCount;
+
+                console.log("Pagination",$scope.pager);
+                console.log('Parameter Configs search result list -' + JSON.stringify($scope.parameterConfigs));
                 $scope.pages.currPage = data.currPage;
                 $scope.pages.totalPages = data.totalPages;
-                if($scope.parameterConfigs == null){
-                    $scope.pages.startInd = 0;
-                }else{
-                    $scope.pages.startInd = (data.currPage - 1) * 10 + 1;
-                }
 
-                $scope.pages.endInd = data.totalCount > 10  ? (data.currPage) * 10 : data.totalCount ;
-                $scope.pages.totalCnt = data.totalCount;
+                if($scope.parameterConfigs && $scope.parameterConfigs.length > 0 ){
+                    $scope.showCurrPage = data.currPage;
+                    $scope.pageEntries = $scope.parameterConfigs.length;
+                    $scope.totalCountPages = data.totalCount;
+                    $scope.pageSort = 10;
+                }
+           
 
             });
 
-            if($scope.pages.currPage == 1) {
-                $scope.firstStyle();
-            }
-        };
+       
+        }
 
 
 
         $scope.initPage=function (){
 
-            $scope.loadAllAssetTypes();
+            /*$scope.loadAllAssetTypes();
             $scope.loadAllParameters();
-            $scope.loadAllParameterUOMs();
+            $scope.loadAllParameterUOMs();*/
         		if($scope.isEdit){
         			console.log("edit parameterConfig")
         			$scope.editParameterConfig();
@@ -219,116 +240,53 @@ angular.module('timeSheetApp')
 	        	if($scope.selectedParameterUOM){
 	        	    $scope.parameterConfig.uom = $scope.selectedParameterUOM.uom;
 	        }
-	        	$scope.parameterConfig.consumptionMonitoringRequired  = $scope.consumptionMonitoringRequired 
+
+	        	$scope.parameterConfig.consumptionMonitoringRequired  = $scope.consumptionMonitoringRequired.value;
 	        	console.log('parameterConfig details ='+ JSON.stringify($scope.parameterConfig));
-	        	var post = $scope.isEdit ? ParameterConfigComponent.update : ParameterConfigComponent.create
-	        	post($scope.parameterConfig).then(function () {
+	        	//var post = $scope.isEdit ? ParameterConfigComponent.update : ParameterConfigComponent.create
+                //post($scope.parameterConfig).then(function () {
+            
+	        	ParameterConfigComponent.create($scope.parameterConfig).then(function () {
 	                $scope.success = 'OK';
 	                $scope.showNotifications('top','center','success','Parameter Configuration Saved Successfully');
-	                $location.path('/parameter-config');
+                    $scope.loadParameterConfigs();
+	                //$location.path('/parameter-config');
 	            }).catch(function (response) {
 	                $scope.success = null;
 	                console.log('Error - '+ response.data);
 	                if (response.status === 400 && response.data.message === 'error.duplicateRecordError') {
+                        $scope.showNotifications('top','center','danger','Parameter already  exists');
 	                    $scope.errorProjectExists = 'ERROR';
 	                } else {
+                        $scope.showNotifications('top','center','danger','Unable to create Parameter Configuration');
 	                    $scope.error = 'ERROR';
 	                }
 	            });;
 
-        };
+        }
 
 
         $scope.refreshPage = function(){
-            $scope.clearFilter();
-            // $scope.loadParameterConfigs();
+             $scope.loadParameterConfigs();
         }
 
-        $scope.deleteConfirm = function (parameterConfig){
-        		$scope.deleteParameterConfigId= parameterConfig.id;
+        $scope.deleteConfirm = function (id){
+        		$scope.deleteParamConId= id;
+
         }
 
-        $scope.deleteParameterConfig = function (parameterConfigId) {
-        		ParameterConfigComponent.remove(parameterConfigId).then(function(){
+        $scope.deleteParameterConfig = function () {
+
+        		ParameterConfigComponent.remove($scope.deleteParamConId).then(function(){
 	            	$scope.success = 'OK';
-	            	$scope.initLoad();
+                    $scope.initLoad();
+	            	$scope.loadParameterConfigs();
 	        	});
-        };
-
-        $scope.first = function() {
-	        	if($scope.pages.currPage > 1) {
-	            	$scope.pages.currPage = 1;
-	            	$scope.firstStyle();
-	            	$scope.search();
-	        	}
-	    };
-	
-	    $scope.firstStyle = function() {
-	    		var ele = angular.element('#first');
-	    		ele.addClass('disabledLink');
-	    		ele = angular.element('#previous');
-	    		ele.addClass('disabledLink');
-	    		if($scope.pages.totalPages > 1) {
-	    			var ele = angular.element('#next');
-	    			ele.removeClass('disabledLink');
-	    			ele = angular.element('#last');
-	    			ele.removeClass('disabledLink');
-	    		}
         }
 
-        $scope.previous = function() {
-        	if($scope.pages.currPage > 1) {
-            	$scope.pages.currPage = $scope.pages.currPage - 1;
-            	if($scope.pages.currPage == 1) {
-	       	       	 var ele = angular.element('#first');
-	    	    	 ele.addClass('disabled');
-	    	    	 ele = angular.element('#previous');
-	    	    	 ele.addClass('disabled');
-            	}
-     	       	 var ele = angular.element('#next');
-    	    	 ele.removeClass('disabled');
-    	    	 ele = angular.element('#last');
-    	    	 ele.removeClass('disabled');
-	    		$scope.search();
-        	}
+      
 
-        };
-
-	    $scope.next = function() {
-	    	if($scope.pages.currPage < $scope.pages.totalPages) {
-	        	$scope.pages.currPage = $scope.pages.currPage + 1;
-	        	if($scope.pages.currPage == $scope.pages.totalPages) {
-	       	       	 var ele = angular.element('#next');
-	    	    	 ele.addClass('disabled');
-	    	    	 ele = angular.element('#last');
-	    	    	 ele.addClass('disabled');
-	        	}
-	 	       	 var ele = angular.element('#first');
-		    	 ele.removeClass('disabled');
-		    	 ele = angular.element('#previous');
-		    	 ele.removeClass('disabled');
-	    		$scope.search();
-	    	}
-	
-	    };
-
-        $scope.last = function() {
-        	if($scope.pages.currPage < $scope.pages.totalPages) {
-            	$scope.pages.currPage = $scope.pages.totalPages;
-            	if($scope.pages.currPage == $scope.pages.totalPages) {
-	       	       	 var ele = angular.element('#next');
-	    	    	 ele.addClass('disabled');
-	    	    	 ele = angular.element('#last');
-	    	    	 ele.addClass('disabled');
-            	}
-      	       	var ele = angular.element('#first');
-    	    	ele.removeClass('disabled');
-    	    	ele = angular.element('#previous');
-    	    	ele.removeClass('disabled');
-    	    	$scope.search();
-        	}
-
-        };
+        
 
         $scope.clearFilter = function() {
             $scope.selectedProject = null;
@@ -339,8 +297,8 @@ angular.module('timeSheetApp')
                 currPage: 1,
                 totalPages: 0
             }
-            $scope.search();
-        };
+            //$scope.search();
+        }
 
         // init load
         $scope.initLoad = function(){ 
@@ -352,5 +310,23 @@ angular.module('timeSheetApp')
         $scope.showNotifications= function(position,alignment,color,msg){
             demo.showNotification(position,alignment,color,msg);
         }
+
+         /*
+        
+        ** Pagination init function **
+        @Param:integer
+
+        */
+
+        $scope.setPage = function (page) {
+
+            if (page < 1 || page > $scope.pager.totalPages) {
+                return;
+            }
+            //alert(page);
+            $scope.pages.currPage = page;
+            $scope.search();
+        }
+
         
     });
