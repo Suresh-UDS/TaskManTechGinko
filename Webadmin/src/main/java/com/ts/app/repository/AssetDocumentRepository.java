@@ -13,8 +13,8 @@ public interface AssetDocumentRepository extends JpaRepository<AssetDocument, Lo
 	@Query("SELECT at FROM AssetDocument at WHERE at.active='Y' order by at.file")
 	List<AssetDocument> findAll();
 
-	@Query("SELECT ad FROM AssetDocument ad WHERE ad.asset.id = :assetId and ad.active='Y' order by ad.title")
-	List<AssetDocument> findByAssetId(@Param("assetId") Long assetId);
+	@Query("SELECT ad FROM AssetDocument ad WHERE ad.asset.id = :assetId and ad.type = :type and ad.active='Y' order by ad.title")
+	List<AssetDocument> findAllByType(@Param("type") String type, @Param("assetId") Long assetId);
 	
 
 }

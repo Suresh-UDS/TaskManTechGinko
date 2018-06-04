@@ -1232,7 +1232,7 @@
                                                                                         <div class="form-group">
                                                                                             <label class="control-label">Photo Title</label>
                                                                                             <input id='fileTitle'
-                                                                                                   ng-model="asset.photoTitle"
+                                                                                                   ng-model="uploadAssetPhoto.title"
                                                                                                    class='form-control'
                                                                                                    name='fileTitle'
                                                                                                    type='text' value=""
@@ -1304,42 +1304,13 @@
 
                                                                     <div class="row">
 
-                                                                        <div class="col-md-2 txt-align-center">
+                                                                        <div class="col-md-2 txt-align-center" ng-repeat="uploadPhoto in uploadAssetPhotos">
                                                                             <a href="#">
                                                                                 <img src="assets/img/img.png" alt="docs" />
                                                                             </a>
-                                                                            <p>Photo Name</p>
+                                                                            <p>{{uploadPhoto.title}}</p>
                                                                         </div>
-                                                                        <div class="col-md-2 txt-align-center">
-                                                                            <a href="#">
-                                                                                <img src="assets/img/img.png" alt="docs" />
-                                                                            </a>
-                                                                            <p>Photo Name</p>
-                                                                        </div>
-                                                                        <div class="col-md-2 txt-align-center">
-                                                                            <a href="#">
-                                                                                <img src="assets/img/img.png" alt="docs" />
-                                                                            </a>
-                                                                            <p>Photo Name</p>
-                                                                        </div>
-                                                                        <div class="col-md-2 txt-align-center">
-                                                                            <a href="#">
-                                                                                <img src="assets/img/img.png" alt="docs" />
-                                                                            </a>
-                                                                            <p>Photo Name</p>
-                                                                        </div>
-                                                                        <div class="col-md-2 txt-align-center">
-                                                                            <a href="#">
-                                                                                <img src="assets/img/img.png" alt="docs" />
-                                                                            </a>
-                                                                            <p>Photo Name</p>
-                                                                        </div>
-                                                                        <div class="col-md-2 txt-align-center">
-                                                                            <a href="#">
-                                                                                <img src="assets/img/img.png" alt="docs" />
-                                                                            </a>
-                                                                            <p>Photo Name</p>
-                                                                        </div>
+                                                          
 
                                                                     </div>
 

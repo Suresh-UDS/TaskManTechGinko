@@ -32,6 +32,8 @@ public class AssetDocument extends AbstractAuditingEntity implements Serializabl
 	
 	private String file;
 	
+	private String type;
+	
 	private Date uploadedDate;
 	
 	@ManyToOne(fetch = FetchType.LAZY, cascade={CascadeType.MERGE})
@@ -76,6 +78,18 @@ public class AssetDocument extends AbstractAuditingEntity implements Serializabl
 
 	public void setAsset(Asset asset) {
 		this.asset = asset;
+	}
+
+	public String getType() {
+		return type;
+	}
+
+	public void setType(String type) {
+		this.type = type;
+	}
+
+	public static long getSerialversionuid() {
+		return serialVersionUID;
 	}
 	
 	

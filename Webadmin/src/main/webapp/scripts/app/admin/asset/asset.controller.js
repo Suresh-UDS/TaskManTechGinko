@@ -462,6 +462,7 @@ angular.module('timeSheetApp')
         	$scope.loadAllParameterUOMs();
             $scope.loadAllSites();
             $scope.getAllUploadedFiles();
+            $scope.getAllUploadedPhotos();
         	if($scope.isEdit){
         	    console.log("edit asset")
         		$scope.editAsset();
@@ -710,19 +711,37 @@ angular.module('timeSheetApp')
 
 	    };
 	    
-	    $scope.uploadAsset = { };
+	    $scope.uploadAsset = {};
+	    
+	    $scope.uploadAssetPhoto = {};
 	    
 	    $scope.getAllUploadedFiles = function() {
-	    	
+	    	var uploadObj = {};
+	    	uploadObj.type = 'document';
 	    	if($stateParams.id){ 
-	    		$scope.assetId = $stateParams.id;
+	    		uploadObj.assetId = $stateParams.id;
 	    	}else{ 
-	    		$scope.assetId = 1;
+	    		uploadObj.assetId = 1;
 	    	}
 	    	
-	    	AssetComponent.getAllUploadedFiles($scope.assetId).then(function(data){ 
+	    	AssetComponent.getAllUploadedFiles(uploadObj).then(function(data){ 
 	    		console.log(data);
 	    		$scope.uploadFiles = data;
+	    	});
+	    }
+	    
+	    $scope.getAllUploadedPhotos = function() {
+	    	var photoObj = {};
+	    	photoObj.type = 'image';
+	    	if($stateParams.id){ 
+	    		photoObj.assetId = $stateParams.id;
+	    	}else{ 
+	    		photoObj.assetId = 1;
+	    	}
+	    	
+	    	AssetComponent.getAllUploadedPhotos(photoObj).then(function(data){ 
+	    		console.log(data);
+	    		$scope.uploadAssetPhotos = data;
 	    	});
 	    }
 	    
@@ -733,12 +752,41 @@ angular.module('timeSheetApp')
 	        	console.log('selected asset file - ' + $scope.selectedClientFile);
 	        	$scope.uploadAsset.uploadFile = $scope.selectedClientFile;
 	        	$scope.uploadAsset.assetId = 1;
+	        	$scope.uploadAsset.type = 'document';
 	        	console.log($scope.uploadAsset);
 	        	AssetComponent.uploadAssetFile($scope.uploadAsset).then(function(data){
 	        		console.log(data);
 	        		if(data) { 
 	        			$scope.uploadFiles.push(data);
 		        		$scope.getAllUploadedFiles();
+	        		}else{ 
+	        			console.log('No data found!');
+	        		}
+	        		
+	        	},function(err){
+	        		console.log('Import error');
+	        		console.log(err);
+	        	});
+        	} else {
+        		console.log('select a file');
+        	}
+	    	
+	    }
+	    
+	    $scope.uploadAssetPhoto = function() {  
+	    	console.log($scope.selectedPhotoFile);
+	    	console.log($scope.uploadAssetPhoto.title);
+	     	if($scope.selectedPhotoFile) {
+	        	console.log('selected asset file - ' + $scope.selectedPhotoFile);
+	        	$scope.uploadAssetPhoto.uploadFile = $scope.selectedPhotoFile;
+	        	$scope.uploadAssetPhoto.assetId = 1;
+	        	$scope.uploadAssetPhoto.type = 'image';
+	        	console.log($scope.uploadAssetPhoto);
+	        	AssetComponent.uploadAssetPhoto($scope.uploadAssetPhoto).then(function(data){
+	        		console.log(data);
+	        		if(data) { 
+	        			$scope.uploadAssetPhotos.push(data);
+		        		$scope.getAllUploadedPhotos();
 	        		}else{ 
 	        			console.log('No data found!');
 	        		}
