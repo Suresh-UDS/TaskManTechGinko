@@ -718,8 +718,11 @@ public class SchedulerService extends AbstractService {
 								
 								EmployeeShift empShift = empShiftRepo.findEmployeeShiftBySiteAndShift(site.getId(), DateUtil.convertToSQLDate(shiftStartCal.getTime()), DateUtil.convertToSQLDate(shiftEndCal.getTime()));
 								
+								Calendar checkInCal = Calendar.getInstance(); 
+								checkInCal.setTimeInMillis(dailyAttn.getCheckInTime().getTime());
+								
 								if(empShift != null) { //if employee shift assignment matches with site shift
-									if(dailyAttn.getCheckInTime().before(shiftEndCal.getTime()) && shiftEndCal.getTime().before(currCal.getTime())) { //if the employee checked in before the shift end time
+									if(checkInCal.before(shiftEndCal.getTime()) && shiftEndCal.getTime().before(currCal.getTime())) { //if the employee checked in before the shift end time
 										//send alert
 										if(currCal.getTime().after(endCal.getTime())) { //if the shift ends before EOD midnight.
 											//check out automatically
