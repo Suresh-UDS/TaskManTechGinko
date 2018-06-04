@@ -133,6 +133,12 @@ angular.module('timeSheetApp')
                 }).then(function (response) {
             			return response.data;
                 });
+            },
+            
+            getAllUploadedFiles : function(id) { 
+            	return $http.get('api/assets/getAllFile/'+id).then(function(response){ 
+            		return response.data;
+            	});
             }
             
 
