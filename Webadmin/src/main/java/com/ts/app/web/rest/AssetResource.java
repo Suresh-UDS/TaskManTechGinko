@@ -30,6 +30,7 @@ import com.ts.app.service.AssetManagementService;
 import com.ts.app.web.rest.dto.AssetDTO;
 import com.ts.app.web.rest.dto.AssetDocumentDTO;
 import com.ts.app.web.rest.dto.AssetParameterConfigDTO;
+import com.ts.app.web.rest.dto.AssetPpmScheduleDTO;
 import com.ts.app.web.rest.dto.AssetTypeDTO;
 import com.ts.app.web.rest.dto.AssetgroupDTO;
 import com.ts.app.web.rest.errors.TimesheetException;
@@ -213,15 +214,15 @@ public class AssetResource {
     	return new ResponseEntity<>(assetDocumentDTO, HttpStatus.OK);
     }
     
-    @RequestMapping(path="/asset/ppmschedule",method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(path="/assets/ppmschedule",method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public ResponseEntity<?> saveAssetPPMSchedule(@Valid @RequestBody AssetDTO assetDTO, HttpServletRequest request) {
+    public ResponseEntity<?> saveAssetPPMSchedule(@Valid @RequestBody AssetPpmScheduleDTO assetPpmScheduleDTO, HttpServletRequest request) {
         log.debug(">>> Asset DTO saveAssetPPMSchedule request <<<");
-        log.debug("Title <<<"+assetDTO.getAssetPpmTitle());
+        assetPpmScheduleDTO.setUserId(SecurityUtils.getCurrentUserId());
+        log.debug("Title <<<"+assetPpmScheduleDTO.getTitle());
         
-        
-        AssetDTO response = assetService.saveAsset(assetDTO);
-        log.debug("Asset save response - "+ response);
+        AssetPpmScheduleDTO response = assetService.createAssetPpmSchedule(assetPpmScheduleDTO);
+        log.debug("Asset Ppm Schedule save response - "+ response);
         return new ResponseEntity<>(response,HttpStatus.CREATED);
     }
 

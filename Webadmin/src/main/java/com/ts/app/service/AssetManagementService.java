@@ -25,8 +25,10 @@ import com.ts.app.domain.AbstractAuditingEntity;
 import com.ts.app.domain.Asset;
 import com.ts.app.domain.AssetDocument;
 import com.ts.app.domain.AssetGroup;
+import com.ts.app.domain.AssetPPMSchedule;
 import com.ts.app.domain.AssetParameterConfig;
 import com.ts.app.domain.AssetType;
+import com.ts.app.domain.Checklist;
 import com.ts.app.domain.Designation;
 import com.ts.app.domain.Project;
 import com.ts.app.domain.Site;
@@ -34,6 +36,7 @@ import com.ts.app.domain.Ticket;
 import com.ts.app.repository.AssetDocumentRepository;
 import com.ts.app.repository.AssetGroupRepository;
 import com.ts.app.repository.AssetParameterConfigRepository;
+import com.ts.app.repository.AssetPpmScheduleRepository;
 import com.ts.app.domain.Employee;
 import com.ts.app.domain.EmployeeProjectSite;
 import com.ts.app.domain.Manufacturer;
@@ -44,6 +47,7 @@ import com.ts.app.repository.AssetRepository;
 import com.ts.app.repository.AssetTypeRepository;
 import com.ts.app.repository.CheckInOutImageRepository;
 import com.ts.app.repository.CheckInOutRepository;
+import com.ts.app.repository.ChecklistRepository;
 import com.ts.app.repository.DesignationRepository;
 import com.ts.app.repository.EmployeeRepository;
 import com.ts.app.repository.JobRepository;
@@ -66,6 +70,7 @@ import com.ts.app.service.util.ReportUtil;
 import com.ts.app.web.rest.dto.AssetDTO;
 import com.ts.app.web.rest.dto.AssetDocumentDTO;
 import com.ts.app.web.rest.dto.AssetParameterConfigDTO;
+import com.ts.app.web.rest.dto.AssetPpmScheduleDTO;
 import com.ts.app.web.rest.dto.AssetTypeDTO;
 import com.ts.app.web.rest.dto.AssetgroupDTO;
 import com.ts.app.web.rest.dto.BaseDTO;
@@ -169,6 +174,12 @@ public class AssetManagementService extends AbstractService {
     @Inject
     private AssetDocumentRepository assetDocumentRepository;
     
+    @Inject
+    private AssetPpmScheduleRepository assetPpmScheduleRepository;
+    
+    @Inject
+    private ChecklistRepository checklistRepository;
+    
     //Asset
     public AssetDTO saveAsset(AssetDTO assetDTO) {
         log.debug("assets service");
@@ -253,7 +264,16 @@ public class AssetManagementService extends AbstractService {
 
     public Asset getAsset(long id){
         Asset asset = assetRepository.findOne(id);
+        if (asset == null)
+			throw new TimesheetException("Asset not found : " + id);
         return asset;
+    }
+    
+    public Checklist getCheckList(long id){
+    	Checklist checklist = checklistRepository.findOne(id);
+        if (checklist == null)
+			throw new TimesheetException("Checklist not found : " + id);
+        return checklist;
     }
 
     public AssetDTO getAssetDTO(long id){
@@ -587,6 +607,25 @@ public class AssetManagementService extends AbstractService {
 		assetParamConfig = assetParamConfigRepository.save(assetParamConfig);
 		assetParamConfigDTO = mapperUtil.toModel(assetParamConfig, AssetParameterConfigDTO.class);
 		return assetParamConfigDTO;
+	}
+	
+	public AssetPpmScheduleDTO createAssetPpmSchedule(AssetPpmScheduleDTO assetPpmScheduleDTO) {
+		// TODO Auto-generated method stub
+		log.debug(">> create ppm schedule <<<");
+		AssetPPMSchedule assetPPMSchedule = mapperUtil.toEntity(assetPpmScheduleDTO, AssetPPMSchedule.class);
+		log.debug(">> after mapping ppm schedule <<<");
+		assetPPMSchedule.setActive(AssetPPMSchedule.ACTIVE_YES);
+		
+		Checklist checklist = getCheckList(assetPpmScheduleDTO.getChecklistId());
+		assetPPMSchedule.setChecklist(checklist);
+		
+		Asset asset = getAsset(assetPpmScheduleDTO.getAssetId());
+		assetPPMSchedule.setAsset(asset);
+        
+		assetPPMSchedule = assetPpmScheduleRepository.save(assetPPMSchedule);
+		log.debug(">> after save <<<");
+		assetPpmScheduleDTO = mapperUtil.toModel(assetPPMSchedule, AssetPpmScheduleDTO.class);
+		return assetPpmScheduleDTO;
 	}
 	
 	@Transactional
