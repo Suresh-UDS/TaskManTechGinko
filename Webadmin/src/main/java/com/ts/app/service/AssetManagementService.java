@@ -289,7 +289,6 @@ public class AssetManagementService extends AbstractService {
 	}
 
 	private void mapToEntityAssets(AssetDTO assetDTO, Asset asset) {
-
 		asset.setTitle(assetDTO.getTitle());
 		asset.setAssetGroup(assetDTO.getAssetGroup());
 		asset.setDescription(assetDTO.getDescription());
@@ -422,20 +421,6 @@ public class AssetManagementService extends AbstractService {
 		}
 		return assetAMCScheduleDTOs;
 	}
-
-	// public SearchResult<AssetDTO> getSiteAssets(Long siteId,int page) {
-	// Pageable pageRequest = new PageRequest(page, PagingUtil.PAGE_SIZE, new
-	// Sort(Direction.DESC,"id"));
-	//
-	// Page<Asset> assets= assetRepository.findBySiteId(siteId,pageRequest);
-	// SearchResult<AssetDTO> paginatedAssets = new SearchResult<>();
-	// paginatedAssets.setCurrPage(page);
-	// paginatedAssets.setTransactions(mapperUtil.toModelList(assets.getContent(),
-	// AssetDTO.class));
-	// paginatedAssets.setTotalCount(assets.getTotalElements());
-	// paginatedAssets.setTotalPages(assets.getTotalPages());
-	// return paginatedAssets;
-	// }
 
 	public SearchResult<AssetDTO> findBySearchCrieria(SearchCriteria searchCriteria) {
 
