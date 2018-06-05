@@ -19,6 +19,7 @@ public class AssetDTO extends BaseDTO {
     private boolean udsAsset;
     private String qrCodeImage;
     private String group;
+    private String type;
     private String assetType;
     private String assetGroup;
     private String block;
@@ -40,7 +41,7 @@ public class AssetDTO extends BaseDTO {
     private String amcDocumentFile;
     private Date amcDocumentUploadDate;
     private String assetPpmTitle;
-    
+
     public long getProjectId() {
 		return projectId;
 	}
@@ -231,27 +232,27 @@ public class AssetDTO extends BaseDTO {
     public void setQrCodeImage(String qrCodeImage) {
         this.qrCodeImage = qrCodeImage;
     }
-    
+
 	public String getAmcDocumentTitle() {
 		return amcDocumentTitle;
 	}
-	
+
 	public void setAmcDocumentTitle(String amcDocumentTitle) {
 		this.amcDocumentTitle = amcDocumentTitle;
 	}
-	
+
 	public String getAmcDocumentFile() {
 		return amcDocumentFile;
 	}
-	
+
 	public void setAmcDocumentFile(String amcDocumentFile) {
 		this.amcDocumentFile = amcDocumentFile;
 	}
-	
+
 	public Date getAmcDocumentUploadDate() {
 		return amcDocumentUploadDate;
 	}
-	
+
 	public void setAmcDocumentUploadDate(Date amcDocumentUploadDate) {
 		this.amcDocumentUploadDate = amcDocumentUploadDate;
 	}
@@ -261,5 +262,12 @@ public class AssetDTO extends BaseDTO {
 	public void setAssetPpmTitle(String assetPpmTitle) {
 		this.assetPpmTitle = assetPpmTitle;
 	}
-	
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
 }
