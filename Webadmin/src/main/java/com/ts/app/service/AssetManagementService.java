@@ -613,6 +613,15 @@ public class AssetManagementService extends AbstractService {
 		List<AssetDocument> assetDocument = assetDocumentRepository.findAllByType(type, assetId);
 		return mapperUtil.toModelList(assetDocument, AssetDocumentDTO.class);
 	}
+	
+	public byte[] getUploadedFile(long documentId) {
+		AssetDocument assetDocument = assetDocumentRepository.findOne(documentId);
+		String fileName = assetDocument.getFile();
+		Asset assetEntity = assetRepository.findOne(assetDocument.getAsset().getId());
+		Long siteId = assetEntity.getSite().getId();
+		String code = assetEntity.getCode();
+		return exportUtil.readUploadedFile(siteId, fileName, code);
+	}
 
 	
 }

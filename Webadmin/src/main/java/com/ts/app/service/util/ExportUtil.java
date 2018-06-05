@@ -1352,4 +1352,52 @@ public class ExportUtil {
 		result.setStatus(getExportStatus(file_Name));
 		return result;
 	}
+	
+	public byte[] readUploadedFile(long siteId, String fileName, String assetCode) {
+
+		 log.info("INSIDE OF readUploadedFILE **********");
+
+		String filePath = env.getProperty("asset.file.path");
+		
+		filePath += "/" + siteId;
+		
+		filePath += "/" + assetCode;
+
+		filePath += "/" + fileName;
+
+		log.debug("PATH OF THE READ FILE*********"+filePath);
+		File file = new File(filePath);
+		
+		 log.debug("NAME OF THE READ FILE*********"+file);
+
+		FileInputStream fileInputStream = null;
+		byte job_excelData[] = null;
+
+		try {
+
+			File readJobFile = new File(filePath);
+			String fileType = Files.probeContentType(readJobFile.toPath());
+			log.debug("Showing a file extenstion" + fileType);
+			job_excelData = new byte[(int) readJobFile.length()];
+
+			// read file into bytes[]
+			fileInputStream = new FileInputStream(file);
+			fileInputStream.read(job_excelData);
+
+		} catch (IOException e) {
+			e.printStackTrace();
+		} finally {
+			if (fileInputStream != null) {
+				try {
+					fileInputStream.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+
+		}
+
+		return job_excelData;
+
+	}
 }
