@@ -296,20 +296,20 @@ public class AssetManagementService extends AbstractService {
         assetDTO.setStartTime(asset.getStartTime());
         assetDTO.setEndTime(asset.getEndTime());*/
 
-        assetDTO.setTitle(assetDTO.getTitle());
-        assetDTO.setAssetGroup(assetDTO.getAssetGroup());
-        assetDTO.setProjectId(assetDTO.getProjectId());
-        assetDTO.setSiteId(assetDTO.getSiteId());
-        assetDTO.setBlock(assetDTO.getBlock());
-        assetDTO.setFloor(assetDTO.getFloor());
-        assetDTO.setZone(assetDTO.getZone());
-        assetDTO.setModelNumber(assetDTO.getModelNumber());
-        assetDTO.setSerialNumber(assetDTO.getSerialNumber());
-        assetDTO.setPurchasePrice(assetDTO.getPurchasePrice());
-        assetDTO.setCurrentPrice(assetDTO.getCurrentPrice());
-        assetDTO.setEstimatedDisposePrice(assetDTO.getEstimatedDisposePrice());
-        assetDTO.setCode(assetDTO.getCode());
-        assetDTO.setUdsAsset(assetDTO.isUdsAsset());
+//        assetDTO.setTitle(assetDTO.getTitle());
+//        assetDTO.setAssetGroup(assetDTO.getAssetGroup());
+//        assetDTO.setProjectId(assetDTO.getProjectId());
+//        assetDTO.setSiteId(assetDTO.getSiteId());
+//        assetDTO.setBlock(assetDTO.getBlock());
+//        assetDTO.setFloor(assetDTO.getFloor());
+//        assetDTO.setZone(assetDTO.getZone());
+//        assetDTO.setModelNumber(assetDTO.getModelNumber());
+//        assetDTO.setSerialNumber(assetDTO.getSerialNumber());
+//        assetDTO.setPurchasePrice(assetDTO.getPurchasePrice());
+//        assetDTO.setCurrentPrice(assetDTO.getCurrentPrice());
+//        assetDTO.setEstimatedDisposePrice(assetDTO.getEstimatedDisposePrice());
+//        assetDTO.setCode(assetDTO.getCode());
+//        assetDTO.setUdsAsset(assetDTO.isUdsAsset());
 
         return assetDTO;
     }
