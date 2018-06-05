@@ -1,7 +1,5 @@
 package com.ts.app.service;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -23,28 +21,26 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.ts.app.domain.AbstractAuditingEntity;
 import com.ts.app.domain.Asset;
+import com.ts.app.domain.AssetAMCSchedule;
 import com.ts.app.domain.AssetDocument;
 import com.ts.app.domain.AssetGroup;
 import com.ts.app.domain.AssetParameterConfig;
 import com.ts.app.domain.AssetType;
-import com.ts.app.domain.Designation;
-import com.ts.app.domain.Project;
-import com.ts.app.domain.Site;
-import com.ts.app.domain.Ticket;
-import com.ts.app.repository.AssetDocumentRepository;
-import com.ts.app.repository.AssetGroupRepository;
-import com.ts.app.repository.AssetParameterConfigRepository;
 import com.ts.app.domain.Employee;
 import com.ts.app.domain.EmployeeProjectSite;
 import com.ts.app.domain.Manufacturer;
-import com.ts.app.domain.ParameterConfig;
+import com.ts.app.domain.Project;
+import com.ts.app.domain.Site;
 import com.ts.app.domain.User;
 import com.ts.app.domain.Vendor;
+import com.ts.app.repository.AssetAMCRepository;
+import com.ts.app.repository.AssetDocumentRepository;
+import com.ts.app.repository.AssetGroupRepository;
+import com.ts.app.repository.AssetParameterConfigRepository;
 import com.ts.app.repository.AssetRepository;
 import com.ts.app.repository.AssetTypeRepository;
 import com.ts.app.repository.CheckInOutImageRepository;
 import com.ts.app.repository.CheckInOutRepository;
-import com.ts.app.repository.DesignationRepository;
 import com.ts.app.repository.EmployeeRepository;
 import com.ts.app.repository.JobRepository;
 import com.ts.app.repository.LocationRepository;
@@ -56,24 +52,22 @@ import com.ts.app.repository.SiteRepository;
 import com.ts.app.repository.TicketRepository;
 import com.ts.app.repository.UserRepository;
 import com.ts.app.repository.VendorRepository;
-import com.ts.app.service.util.DateUtil;
 import com.ts.app.service.util.ExportUtil;
 import com.ts.app.service.util.FileUploadHelper;
 import com.ts.app.service.util.ImportUtil;
 import com.ts.app.service.util.MapperUtil;
 import com.ts.app.service.util.QRCodeUtil;
 import com.ts.app.service.util.ReportUtil;
+import com.ts.app.web.rest.dto.AssetAMCScheduleDTO;
 import com.ts.app.web.rest.dto.AssetDTO;
 import com.ts.app.web.rest.dto.AssetDocumentDTO;
 import com.ts.app.web.rest.dto.AssetParameterConfigDTO;
 import com.ts.app.web.rest.dto.AssetTypeDTO;
 import com.ts.app.web.rest.dto.AssetgroupDTO;
 import com.ts.app.web.rest.dto.BaseDTO;
-import com.ts.app.web.rest.dto.DesignationDTO;
 import com.ts.app.web.rest.dto.ExportResult;
 import com.ts.app.web.rest.dto.ImportResult;
 import com.ts.app.web.rest.dto.JobDTO;
-import com.ts.app.web.rest.dto.ParameterConfigDTO;
 import com.ts.app.web.rest.dto.SearchCriteria;
 import com.ts.app.web.rest.dto.SearchResult;
 import com.ts.app.web.rest.errors.TimesheetException;
@@ -95,6 +89,9 @@ public class AssetManagementService extends AbstractService {
 
 	@Inject
 	private AssetRepository assetRepository;
+
+	@Inject
+	private AssetAMCRepository assetAMCRepository;
 
 	@Inject
 	private TicketRepository ticketRepository;
@@ -379,6 +376,42 @@ public class AssetManagementService extends AbstractService {
 			}
 		}
 		return qrCodeBase64;
+	}
+	
+	/**
+	 * Saves the asset AMC schedule information.
+	 * @param assetAMCScheduleDTO
+	 * @return
+	 */
+	public AssetAMCScheduleDTO saveAssetAMCSchedule(AssetAMCScheduleDTO assetAMCScheduleDTO) {
+		log.debug("assets service");
+
+		AssetAMCSchedule assetAMC = mapperUtil.toEntity(assetAMCScheduleDTO, AssetAMCSchedule.class);
+
+		assetAMC.setActive(Asset.ACTIVE_YES);
+
+		List<AssetAMCSchedule> existingSchedules = assetRepository.findAssetAMCScheduleByTitle(assetAMCScheduleDTO.getTitle());
+		log.debug("Existing schedule -" + existingSchedules);
+		if (CollectionUtils.isEmpty(existingSchedules)) {
+			assetAMC = assetAMCRepository.save(assetAMC);
+		}
+
+		return mapperUtil.toModel(assetAMC, AssetAMCScheduleDTO.class);
+
+	}
+	
+	/**
+	 * Returns a list of asset AMC schedule information for the given asset Id.
+	 * @param assetId
+	 * @return
+	 */
+	public List<AssetAMCScheduleDTO> getAssetAMCSchedules(long assetId) {
+		List<AssetAMCScheduleDTO> assetAMCScheduleDTOs = null;
+		List<AssetAMCSchedule> assetAMCSchedules = assetAMCRepository.findAssetAMCScheduleByAssetId(assetId);
+		if(CollectionUtils.isNotEmpty(assetAMCSchedules)) {
+			assetAMCScheduleDTOs = mapperUtil.toModelList(assetAMCSchedules, AssetAMCScheduleDTO.class);
+		}
+		return assetAMCScheduleDTOs;
 	}
 
 	public ExportResult generateReport(List<JobDTO> transactions, SearchCriteria criteria) {
