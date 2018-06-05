@@ -449,7 +449,7 @@ module.exports = {
                   })
               }else{
                   console.log("site id only");
-                  Quotation.find({siteId:req.body.siteId},function(err,quotations){
+                  Quotation.find({siteId:req.body.siteId}).sort({'createdDate':-1}).exec(function(err,quotations){
 
                       if(err){
                           console.log("Error in finding quotations");
