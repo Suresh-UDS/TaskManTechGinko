@@ -37,6 +37,7 @@ import com.ts.app.service.util.FileUploadHelper;
 import com.ts.app.web.rest.dto.AssetDTO;
 import com.ts.app.web.rest.dto.AssetDocumentDTO;
 import com.ts.app.web.rest.dto.AssetParameterConfigDTO;
+import com.ts.app.web.rest.dto.AssetPpmScheduleDTO;
 import com.ts.app.web.rest.dto.AssetTypeDTO;
 import com.ts.app.web.rest.dto.AssetgroupDTO;
 import com.ts.app.web.rest.errors.TimesheetException;
@@ -69,19 +70,24 @@ public class AssetResource {
     public ResponseEntity<?> saveAsset(@Valid @RequestBody AssetDTO assetDTO, HttpServletRequest request) {
         log.debug(">>> Asset DTO save request <<<");
         log.debug("Title <<<"+assetDTO.getTitle());
+        log.debug("AssetType <<<"+assetDTO.getAssetType());
         log.debug("AssetGroup <<<"+assetDTO.getAssetGroup());
+        log.debug("Status <<<"+assetDTO.getStatus());
         log.debug("ProjectId <<<"+assetDTO.getProjectId());
         log.debug("SiteId <<<"+assetDTO.getSiteId());
         log.debug("Block <<<"+assetDTO.getBlock());
         log.debug("Floor <<<"+assetDTO.getFloor());
         log.debug("Zone <<<"+assetDTO.getZone());
+        log.debug("Manufacture <<<"+assetDTO.getManufacturerId());
         log.debug("ModelNumber <<<"+assetDTO.getModelNumber());
         log.debug("SerialNumber <<<"+assetDTO.getSerialNumber());
+        log.debug("Acquired Date <<<"+assetDTO.getAcquiredDate());
         log.debug("PurchasePrice <<<"+assetDTO.getPurchasePrice());
         log.debug("CurrentPrice <<<"+assetDTO.getCurrentPrice());
         log.debug("EstimatedDisposePrice <<<"+assetDTO.getEstimatedDisposePrice());
         log.debug("Code <<<"+assetDTO.getCode());
         log.debug("UdsAsset <<<"+assetDTO.isUdsAsset());
+        log.debug("Vendor <<<"+assetDTO.getVendorId());
         
         AssetDTO response = assetService.saveAsset(assetDTO);
         log.debug("Asset save response - "+ response);
@@ -124,7 +130,7 @@ public class AssetResource {
     @Timed
     public ResponseEntity<?> updateAsset(@Valid @RequestBody AssetDTO assetDTO, HttpServletRequest request, @PathVariable("id") Long id) {
     	log.debug(">>> asset id : "+id);
-        if(assetDTO.getId()==null) assetDTO.setId(id);
+        if(assetDTO.getId() > 0) assetDTO.setId(id);
         log.debug("Asset Details in updateAsset = "+ assetDTO);
         log.debug(">>> Asset Update Request <<<");
         log.debug("Title <<<"+assetDTO.getTitle());
@@ -221,15 +227,15 @@ public class AssetResource {
     	return new ResponseEntity<>(assetDocumentDTO, HttpStatus.OK);
     }
     
-    @RequestMapping(path="/asset/ppmschedule",method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(path="/assets/ppmschedule",method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public ResponseEntity<?> saveAssetPPMSchedule(@Valid @RequestBody AssetDTO assetDTO, HttpServletRequest request) {
+    public ResponseEntity<?> saveAssetPPMSchedule(@Valid @RequestBody AssetPpmScheduleDTO assetPpmScheduleDTO, HttpServletRequest request) {
         log.debug(">>> Asset DTO saveAssetPPMSchedule request <<<");
-        log.debug("Title <<<"+assetDTO.getAssetPpmTitle());
+        assetPpmScheduleDTO.setUserId(SecurityUtils.getCurrentUserId());
+        log.debug("Title <<<"+assetPpmScheduleDTO.getTitle());
         
-        
-        AssetDTO response = assetService.saveAsset(assetDTO);
-        log.debug("Asset save response - "+ response);
+        AssetPpmScheduleDTO response = assetService.createAssetPpmSchedule(assetPpmScheduleDTO);
+        log.debug("Asset Ppm Schedule save response - "+ response);
         return new ResponseEntity<>(response,HttpStatus.CREATED);
     }
 

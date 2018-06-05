@@ -7,12 +7,12 @@ import java.util.Date;
  */
 public class AssetDTO extends BaseDTO {
 
-    private Long id;
+    private long id;
     private String title;
     private String code;
     private String description;
-    private Long siteId;
-    private Long projectId;
+    private long siteId;
+    private long projectId;
     private String siteName;
     private Date endTime;
     private Date startTime;
@@ -26,8 +26,8 @@ public class AssetDTO extends BaseDTO {
     private String zone;
     private double addressLat;
 	private double addressLng;
-	private Long manufacturerId;
-	private Long vendorId;
+	private long manufacturerId;
+	private long vendorId;
 	private String modelNumber;
     private String serialNumber;
     private Date acquiredDate;
@@ -41,10 +41,10 @@ public class AssetDTO extends BaseDTO {
     private Date amcDocumentUploadDate;
     private String assetPpmTitle;
     
-    public Long getProjectId() {
+    public long getProjectId() {
 		return projectId;
 	}
-	public void setProjectId(Long projectId) {
+	public void setProjectId(long projectId) {
 		this.projectId = projectId;
 	}
 	public String getAssetType() {
@@ -89,16 +89,16 @@ public class AssetDTO extends BaseDTO {
 	public void setAddressLng(double addressLng) {
 		this.addressLng = addressLng;
 	}
-	public Long getManufacturerId() {
+	public long getManufacturerId() {
 		return manufacturerId;
 	}
-	public void setManufacturerId(Long manufacturerId) {
+	public void setManufacturerId(long manufacturerId) {
 		this.manufacturerId = manufacturerId;
 	}
-	public Long getVendorId() {
+	public long getVendorId() {
 		return vendorId;
 	}
-	public void setVendorId(Long vendorId) {
+	public void setVendorId(long vendorId) {
 		this.vendorId = vendorId;
 	}
 	public String getModelNumber() {
@@ -169,11 +169,11 @@ public class AssetDTO extends BaseDTO {
     }
 
 
-    public Long getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(long id) {
         this.id = id;
     }
 
@@ -193,11 +193,11 @@ public class AssetDTO extends BaseDTO {
         this.endTime = endTime;
     }
 
-    public Long getSiteId() {
+    public long getSiteId() {
         return siteId;
     }
 
-    public void setSiteId(Long siteId) {
+    public void setSiteId(long siteId) {
         this.siteId = siteId;
     }
 
