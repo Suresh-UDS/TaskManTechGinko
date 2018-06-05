@@ -218,7 +218,6 @@ public class AssetResource {
     @Timed
     public ResponseEntity<?> saveAssetPPMSchedule(@Valid @RequestBody AssetPpmScheduleDTO assetPpmScheduleDTO, HttpServletRequest request) {
         log.debug(">>> Asset DTO saveAssetPPMSchedule request <<<");
-        assetPpmScheduleDTO.setUserId(SecurityUtils.getCurrentUserId());
         log.debug("Title <<<"+assetPpmScheduleDTO.getTitle());
         
         AssetPpmScheduleDTO response = assetService.createAssetPpmSchedule(assetPpmScheduleDTO);

@@ -166,22 +166,22 @@ public class AssetManagementService extends AbstractService {
 
 	@Inject
 	private VendorRepository vendorRepository;
-
+	
 	@Inject
     private AssetTypeRepository assetTypeRepository;
-
+    
     @Inject
     private AssetParameterConfigRepository assetParamConfigRepository;
-
+    
     @Inject
     private AssetDocumentRepository assetDocumentRepository;
-
+    
     @Inject
     private AssetPpmScheduleRepository assetPpmScheduleRepository;
-
+    
     @Inject
     private ChecklistRepository checklistRepository;
-
+    
     //Asset
     public AssetDTO saveAsset(AssetDTO assetDTO) {
         log.debug("assets service");
@@ -189,15 +189,15 @@ public class AssetManagementService extends AbstractService {
     	Asset asset = mapperUtil.toEntity(assetDTO, Asset.class);
     	Site site = getSite(assetDTO.getSiteId());
         asset.setSite(site);
-
+        
         Manufacturer manufacturer = getManufacturer(assetDTO.getManufacturerId());
         asset.setManufacturer(manufacturer);
-
+        
         Vendor vendor = getVendor(assetDTO.getVendorId());
     	asset.setAmcVendor(vendor);
-
+    	
     	asset.setActive(Asset.ACTIVE_YES);
-
+    	
     	List<Asset> existingAssets = assetRepository.findAssetByTitle(assetDTO.getTitle());
         log.debug("Existing asset -"+ existingAssets);
         if(CollectionUtils.isEmpty(existingAssets)) {
@@ -225,8 +225,6 @@ public class AssetManagementService extends AbstractService {
             dto.setUdsAsset(loc.isUdsAsset());
             dto.setCode(loc.getCode());
             dto.setDescription(loc.getDescription());
-            dto.setAssetGroup(loc.getAssetGroup());
-            dto.setAssetType(loc.getAssetType());
             assetDto.add(dto);
         }
         return assetDto;
@@ -261,8 +259,6 @@ public class AssetManagementService extends AbstractService {
             dto.setUdsAsset(loc.isUdsAsset());
             dto.setCode(loc.getCode());
             dto.setDescription(loc.getDescription());
-            dto.setAssetGroup(loc.getAssetGroup());
-            dto.setAssetType(loc.getAssetType());
             assetDto.add(dto);
         }
         return assetDto;
@@ -274,7 +270,7 @@ public class AssetManagementService extends AbstractService {
 			throw new TimesheetException("Asset not found : " + id);
         return asset;
     }
-
+    
     public Checklist getCheckList(long id){
     	Checklist checklist = checklistRepository.findOne(id);
         if (checklist == null)
@@ -295,25 +291,25 @@ public class AssetManagementService extends AbstractService {
         assetDTO.setUdsAsset(asset.isUdsAsset());
         assetDTO.setStartTime(asset.getStartTime());
         assetDTO.setEndTime(asset.getEndTime());*/
-
-//        assetDTO.setTitle(assetDTO.getTitle());
-//        assetDTO.setAssetGroup(assetDTO.getAssetGroup());
-//        assetDTO.setProjectId(assetDTO.getProjectId());
-//        assetDTO.setSiteId(assetDTO.getSiteId());
-//        assetDTO.setBlock(assetDTO.getBlock());
-//        assetDTO.setFloor(assetDTO.getFloor());
-//        assetDTO.setZone(assetDTO.getZone());
-//        assetDTO.setModelNumber(assetDTO.getModelNumber());
-//        assetDTO.setSerialNumber(assetDTO.getSerialNumber());
-//        assetDTO.setPurchasePrice(assetDTO.getPurchasePrice());
-//        assetDTO.setCurrentPrice(assetDTO.getCurrentPrice());
-//        assetDTO.setEstimatedDisposePrice(assetDTO.getEstimatedDisposePrice());
-//        assetDTO.setCode(assetDTO.getCode());
-//        assetDTO.setUdsAsset(assetDTO.isUdsAsset());
-
+        
+        assetDTO.setTitle(assetDTO.getTitle());
+        assetDTO.setAssetGroup(assetDTO.getAssetGroup());
+        assetDTO.setProjectId(assetDTO.getProjectId());
+        assetDTO.setSiteId(assetDTO.getSiteId());
+        assetDTO.setBlock(assetDTO.getBlock());
+        assetDTO.setFloor(assetDTO.getFloor());
+        assetDTO.setZone(assetDTO.getZone());
+        assetDTO.setModelNumber(assetDTO.getModelNumber());
+        assetDTO.setSerialNumber(assetDTO.getSerialNumber());
+        assetDTO.setPurchasePrice(assetDTO.getPurchasePrice());
+        assetDTO.setCurrentPrice(assetDTO.getCurrentPrice());
+        assetDTO.setEstimatedDisposePrice(assetDTO.getEstimatedDisposePrice());
+        assetDTO.setCode(assetDTO.getCode());
+        assetDTO.setUdsAsset(assetDTO.isUdsAsset());
+        
         return assetDTO;
     }
-
+    
     public AssetDTO getAssetByCode(String code){
         Asset asset = assetRepository.findByCode(code);
         AssetDTO assetDTO = mapperUtil.toModel(asset,AssetDTO.class);
@@ -404,7 +400,7 @@ public class AssetManagementService extends AbstractService {
     	}
     	return qrCodeBase64;
     }
-
+        
     public ExportResult generateReport(List<JobDTO> transactions, SearchCriteria criteria) {
         return reportUtil.generateJobReports(transactions, null, null, criteria);
     }
@@ -633,26 +629,26 @@ public class AssetManagementService extends AbstractService {
 		assetParamConfigDTO = mapperUtil.toModel(assetParamConfig, AssetParameterConfigDTO.class);
 		return assetParamConfigDTO;
 	}
-
+	
 	public AssetPpmScheduleDTO createAssetPpmSchedule(AssetPpmScheduleDTO assetPpmScheduleDTO) {
 		// TODO Auto-generated method stub
 		log.debug(">> create ppm schedule <<<");
 		AssetPPMSchedule assetPPMSchedule = mapperUtil.toEntity(assetPpmScheduleDTO, AssetPPMSchedule.class);
 		log.debug(">> after mapping ppm schedule <<<");
 		assetPPMSchedule.setActive(AssetPPMSchedule.ACTIVE_YES);
-
+		
 		Checklist checklist = getCheckList(assetPpmScheduleDTO.getChecklistId());
 		assetPPMSchedule.setChecklist(checklist);
-
+		
 		Asset asset = getAsset(assetPpmScheduleDTO.getAssetId());
 		assetPPMSchedule.setAsset(asset);
-
+        
 		assetPPMSchedule = assetPpmScheduleRepository.save(assetPPMSchedule);
 		log.debug(">> after save <<<");
 		assetPpmScheduleDTO = mapperUtil.toModel(assetPPMSchedule, AssetPpmScheduleDTO.class);
 		return assetPpmScheduleDTO;
 	}
-
+	
 	@Transactional
 	public AssetDocumentDTO uploadFile(AssetDocumentDTO assetDocumentDTO, MultipartFile file) {
 		// TODO Auto-generated method stub
