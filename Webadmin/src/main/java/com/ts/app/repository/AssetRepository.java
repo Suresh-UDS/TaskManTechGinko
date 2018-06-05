@@ -10,6 +10,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import com.ts.app.domain.Asset;
+import com.ts.app.domain.AssetAMCSchedule;
 
 /**
  * Created by karth on 7/5/2017.
@@ -19,6 +20,10 @@ public interface AssetRepository extends JpaRepository<Asset, Long>,JpaSpecifica
 
     @Query("SELECT a from Asset a where a.title = :title")
     List<Asset> findAssetByTitle(@Param("title") String title);
+    
+    @Query("SELECT a from AssetAMCSchedule a where a.title = :title")
+    List<AssetAMCSchedule> findAssetAMCScheduleByTitle(@Param("title") String title);
+    
 
     @Query("SELECT a from Asset a where a.code = :code")
     Asset findByCode(@Param("code") String code);
