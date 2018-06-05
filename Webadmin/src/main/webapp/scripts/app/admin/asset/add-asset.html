@@ -25,8 +25,10 @@
                                         <!--      Wizard container        -->
                                         <div class="wizard-container">
                                             <div class="card wizard-card active" data-color="orange" id="wizardProfile">
-                                                <form ng-show="!success" name="form" role="form" novalidate
-                                                      ng-submit="saveAsset()"  class="form-horizontal" >
+                                                 <!-- ng-show="!success" -->
+                                                 <!-- ng-submit="saveAsset()" -->
+                                                <!-- <form name="form" role="form" novalidate
+                                                        class="form-horizontal" > -->
                                                     <!--        You can switch " data-color="purple" "  with one of the next bright colors: "green", "orange", "red", "blue"       -->
                                                     <!--<div class="wizard-header">-->
                                                        <!---->
@@ -52,7 +54,8 @@
                                                     </div>
                                                     <div class="tab-content">
                                                         <div class="tab-pane fade in active  general" id="general">
-
+                                                            <form name="form" role="form" novalidate
+                                                              class="form-horizontal" >
                                                             <div class="row" ng-init="">
 
                                                                 <div class="col-md-6">
@@ -427,7 +430,7 @@
                                                                                     </div>
                                                                                 </div>
 
-                                                                                <div class="col-md-6">
+                                                                                <!-- <div class="col-md-6">
                                                                                     <div class="form-group selectcon is-empty">
 
                                                                                          <div class="row">
@@ -439,15 +442,15 @@
                                                                                                 </select>
 
                                                                                             </div>
-                                                                                            <div class="col-md-2 pdng-top25">
+                                                                                            <div class="col-md-2 pdng-top25"> -->
                                                                                                 <!-- <a href="javascript:void(0)"  data-toggle="collapse" data-parent="#accordian" data-target="#addServiceProvicer" class="btn btn-round btn-fab btn-fab-mini btn-simple" aria-expanded="false" aria-controls="collapseExample">
                                                                                                     <i class="material-icons">add</i>
                                                                                                 </a> -->
-                                                                                                <a  has-permission="" class="btn btn-round btn-fab btn-fab-mini btn-simple"  onClick="$('#addProvider').modal()" data-target="#myModal"><i class="material-icons">add</i><div class="ripple-container" ></div></a>
+                                                                                             <!--    <a  has-permission="" class="btn btn-round btn-fab btn-fab-mini btn-simple"  onClick="$('#addProvider').modal()" data-target="#myModal"><i class="material-icons">add</i><div class="ripple-container" ></div></a>
                                                                                             </div>
                                                                                         </div>
 
-                                                                                    </div>
+                                                                                    </div> -->
                                                                                     <!-- <div class="collapse" id="addServiceProvicer">
                                                                                         <div class="">
                                                                                             <input class="input-desc" id='serviceProvider' ng-model="serviceProvider"
@@ -455,8 +458,8 @@
                                                                                             <a class="btn btn-success margn-top0"  ng-click="addServiceProvider()">Add</a>
                                                                                         </div>
                                                                                     </div> -->
-                                                                                </div>
-                                                                                <div class="col-md-6">
+                                                                                <!-- </div> -->
+                                                                                <!-- <div class="col-md-6">
                                                                                     <div class="form-group selectcon is-empty">
 
                                                                                         <div class="row">
@@ -468,15 +471,15 @@
                                                                                                 </select>
 
                                                                                             </div>
-                                                                                            <div class="col-md-2 pdng-top25">
+                                                                                            <div class="col-md-2 pdng-top25"> -->
                                                                                                 <!-- <a href="javascript:void(0)"  data-toggle="collapse" data-parent="#accordian" data-target="#addWarrantyType" class="btn btn-round btn-fab btn-fab-mini btn-simple" aria-expanded="false" aria-controls="collapseExample">
                                                                                                     <i class="material-icons">add</i>
                                                                                                 </a> -->
-                                                                                                <a  has-permission="" class="btn btn-round btn-fab btn-fab-mini btn-simple"  onClick="$('#addWarranty').modal()" data-target="#myModal"><i class="material-icons">add</i><div class="ripple-container" ></div></a>
+                                                                                              <!--   <a  has-permission="" class="btn btn-round btn-fab btn-fab-mini btn-simple"  onClick="$('#addWarranty').modal()" data-target="#myModal"><i class="material-icons">add</i><div class="ripple-container" ></div></a>
                                                                                             </div>
                                                                                         </div>
 
-                                                                                    </div>
+                                                                                    </div> -->
                                                                                     <!-- <div class="collapse" id="addWarrantyType">
                                                                                         <div class="">
                                                                                             <input class="input-desc" id='' ng-model="assetGen.serviceWarranty"
@@ -484,7 +487,7 @@
                                                                                             <a class="btn btn-success margn-top0"  ng-click="addServiceWarranty()">Add</a>
                                                                                         </div>
                                                                                     </div> -->
-                                                                                </div>
+                                                                               <!--  </div> -->
 
                                                                                 <!-- <div class="col-md-6">
                                                                                     <div class="form-group">
@@ -570,7 +573,40 @@
 
                                                                                     </div>
                                                                                  </div>
+                                                                                
                                                                             </div>
+                                                                             <div class="row">
+                                                                                   <div class="col-md-6">
+                                                                                    <div class="form-group selectcon is-empty">
+
+                                                                                        <div class="row">
+                                                                                            <div class="col-md-10 pad-r-0px">
+                                                                                                <label class="control-label">Service Warranty Type </label>
+                                                                                                <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
+                                                                                                <select class="form-control" ng-model="selectedServiceWarranty" ng-options="servicewarranty.servicewarranty as servicewarranty.servicewarranty for servicewarranty in servicewarranties">
+                                                                                                    <option value="">Select Service Warranty Type ..</option>
+                                                                                                </select>
+
+                                                                                            </div>
+                                                                                            <div class="col-md-2 pdng-top25">
+                                                                                                <!-- <a href="javascript:void(0)"  data-toggle="collapse" data-parent="#accordian" data-target="#addWarrantyType" class="btn btn-round btn-fab btn-fab-mini btn-simple" aria-expanded="false" aria-controls="collapseExample">
+                                                                                                    <i class="material-icons">add</i>
+                                                                                                </a> -->
+                                                                                                <a  has-permission="" class="btn btn-round btn-fab btn-fab-mini btn-simple"  onClick="$('#addWarranty').modal()" data-target="#myModal"><i class="material-icons">add</i><div class="ripple-container" ></div></a>
+                                                                                            </div>
+                                                                                        </div>
+
+                                                                                    </div>
+                                                                                    <!-- <div class="collapse" id="addWarrantyType">
+                                                                                        <div class="">
+                                                                                            <input class="input-desc" id='' ng-model="assetGen.serviceWarranty"
+                                                                                                   name='serviceWarranty' type='text' value=""/>
+                                                                                            <a class="btn btn-success margn-top0"  ng-click="addServiceWarranty()">Add</a>
+                                                                                        </div>
+                                                                                    </div> -->
+                                                                                </div>
+
+                                                                                 </div>
                                                                             
                                                                         </div>
                                                                     </div>
@@ -578,14 +614,15 @@
                                                                 </div>
 
                                                             </div>
-
+                                                            </form>
                                                         </div>
                                                         <div class="tab-pane fade qrcode" id="qrcode">
-
+                                                          <form name="form1" role="form" 
+                                                        class="form-horizontal" >
                                                             <div class="panel panel-default" style="min-height: 300px;">
                                                                 <div class="panel-heading">
-
-                                                                    <div class="row">
+                                                                    QR Code
+                                                                    <!-- <div class="row">
 
                                                                         <div class="col-md-8">
 
@@ -601,7 +638,7 @@
 
                                                                         </div>
 
-                                                                    </div>
+                                                                    </div> -->
 
                                                                 </div>
                                                                 <div class="panel-body">
@@ -613,7 +650,7 @@
 
                                                                             <div class="form-group is-empty">
                                                                                 <label class="control-label">Asset Code </label>
-                                                                                <input id="assetcode" ng-model="asset.assetcode" class="form-control" name="assetcode" type="text" value="" ng-minlength="5" ng-maxlength="250" ng-pattern="/^[A-Za-z0-9\s]*$/" autofocus  tabindex="0" aria-required="true" aria-invalid="true" autocomplete="off">
+                                                                                <input id="assetcode" ng-model="assetGen.assetcode" class="form-control" name="assetcode" type="text" ng-minlength="5" ng-maxlength="250" ng-pattern="/^[A-Za-z0-9\s]*$/" autofocus  tabindex="0" aria-required="true" aria-invalid="true" autocomplete="off" required>
 
 
 
@@ -623,9 +660,17 @@
 
                                                                             <div style="text-align: center">
 
-                                                                                <button class="btn btn-success add-btn margn-tb0">
-                                                                                    <i class="material-icons">autorenew</i> Generate
+                                                                                <button class="btn btn-success add-btn margn-tb0" ng-click="createQrCode()">
+                                                                                    <i class="material-icons" >autorenew</i> Generate
                                                                                 </button>
+
+                                                                            </div>
+
+                                                                           <!--  <h4>Asset Code : AS54321</h4> -->
+
+                                                                            <div class="QrcodeCon" ng-show="qr_img">
+
+                                                                                <img src="{{qr_img}}" width="100%">
 
                                                                             </div>
 
@@ -638,9 +683,11 @@
                                                                 </div>
                                                             </div>
 
-
+                                                           </form>
                                                         </div>
                                                         <div class="tab-pane fade pmcschedule" id="pmcschedule">
+                                                            <form name="form2" role="form" novalidate
+                                                        class="form-horizontal" >
                                                             <div class="panel panel-default">
                                                                 <div class="panel-heading">New Schedule</div>
                                                                 <div class="panel-body">
@@ -905,8 +952,11 @@
                                                                 </table>
 
                                                             </div>
+                                                        </form>
                                                         </div>
                                                         <div class="tab-pane fade amcschedule" id="amcschedule">
+                                                            <form name="form3" role="form" novalidate
+                                                        class="form-horizontal" >
                                                             <div class="panel panel-default">
                                                                 <div class="panel-heading">New Schedule</div>
                                                                 <div class="panel-body">
@@ -1171,8 +1221,11 @@
                                                                 </table>
 
                                                             </div>
+                                                        </form>
                                                         </div>
                                                         <div class="tab-pane fade documents" id="documents">
+                                                            <form name="form4" role="form" novalidate
+                                                        class="form-horizontal" >
                                                             <div class="panel panel-default" style="min-height: 200px;">
 
                                                                 <div class="panel-heading">
@@ -1317,9 +1370,10 @@
                                                                 </div>
 
                                                             </div>
+                                                        </form>
                                                         </div>
                                                     </div>
-                                                    <div class="wizard-footer">
+                                                    <div class="wizard-footer" ng-show="assetGen.id">
                                                         <div class="pull-right">
                                                             <input type='button' class='btn btn-next btn-fill btn-success btn-wd' name='next' value='Next'  />
                                                             <input type='button' class='btn btn-finish btn-fill btn-success btn-wd' name='finish' value='Finish' />
