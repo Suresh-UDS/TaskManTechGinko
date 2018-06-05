@@ -1284,10 +1284,12 @@
 
                                                                         <div class="col-md-2 txt-align-center" ng-repeat="uploadFile in uploadFiles">
                                                                             <a href="#">
-                                                                                <img src="assets/img/Docs-icon.png" alt="docs" />
+                                                                                <img src="assets/img/Docs-icon.png" alt="docs" ng-click="showFile(uploadFile.id, uploadFile.file)"/>
                                                                             </a>
                                                                             <p>{{uploadFile.title}}</p>
                                                                         </div>
+                                                                        
+                                                                        <p class="empty-files" ng-show="!uploadFiles.length">No upload documents </p>
 
                                                                     </div>
 
@@ -1306,12 +1308,13 @@
 
                                                                         <div class="col-md-2 txt-align-center" ng-repeat="uploadPhoto in uploadAssetPhotos">
                                                                             <a href="#">
-                                                                                <img src="assets/img/img.png" alt="docs" />
+                                                                                <img src="assets/img/img.png" alt="docs" ng-click="showFile(uploadPhoto.id, uploadPhoto.file)"/>
                                                                             </a>
                                                                             <p>{{uploadPhoto.title}}</p>
+                                                                            
                                                                         </div>
-                                                          
-
+                                                 							
+                                                 							<p class="empty-files" ng-show="!uploadAssetPhotos.length">No upload photos </p>
                                                                     </div>
 
                                                                 </div>

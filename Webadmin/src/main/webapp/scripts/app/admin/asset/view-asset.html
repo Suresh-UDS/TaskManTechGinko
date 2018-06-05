@@ -827,7 +827,8 @@
                                                            <p>{{uploadFile.title}}</p>
                                                        </div>
 
-
+														<p class="empty-files" ng-show="!uploadFiles.length">No upload documents </p>
+														
                                                    </div>
 
                                                </div>
@@ -849,6 +850,8 @@
                                                            </a>
                                                            <p>{{uploadPhoto.title}}</p>
                                                        </div>
+                                                       
+                                                       <p class="empty-files" ng-show="!uploadAssetPhotos.length">No upload photos </p>
 
                                                    </div>
 
