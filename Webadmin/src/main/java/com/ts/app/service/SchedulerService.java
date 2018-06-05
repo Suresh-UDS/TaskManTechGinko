@@ -572,6 +572,7 @@ public class SchedulerService extends AbstractService {
 				Set<Site> sites = proj.getSite();
 				Iterator<Site> siteItr = sites.iterator();
 				while(siteItr.hasNext()) {
+					List<Map<String,String>> consolidatedData = new ArrayList<Map<String,String>>();
 					Site site = siteItr.next();
 					List<Setting> settings = settingRepository.findSettingByKeyAndSiteId(SettingsService.EMAIL_NOTIFICATION_ATTENDANCE, site.getId());
 					if(CollectionUtils.isEmpty(settings)) {
@@ -582,7 +583,6 @@ public class SchedulerService extends AbstractService {
 						attendanceReports = settings.get(0);
 					}
 					if(attendanceReports != null && attendanceReports.getSettingValue().equalsIgnoreCase("true")) {
-						List<Map<String,String>> consolidatedData = new ArrayList<Map<String,String>>();
 						StringBuilder content = new StringBuilder();
 						Hibernate.initialize(site.getShifts());
 						if(CollectionUtils.isNotEmpty(site.getShifts())) {
@@ -729,12 +729,8 @@ public class SchedulerService extends AbstractService {
 		java.sql.Date endDate = new java.sql.Date(endCal.getTimeInMillis());
 		List<Attendance> dailyAttnList = attendanceRepository.findByCheckInDateAndNotCheckout(startDate, endDate);
 		log.debug("Found {} Daily Attendance", dailyAttnList.size());
-		long[] users = null;
-		String[] userEmails = null;
+
 		if(CollectionUtils.isNotEmpty(dailyAttnList)) {
-			users = new long[dailyAttnList.size()];
-			userEmails = new String[dailyAttnList.size()];
-			int cnt = 0;
 			for (Attendance dailyAttn : dailyAttnList) {
 				try {
 					Employee emp = dailyAttn.getEmployee();
@@ -771,25 +767,17 @@ public class SchedulerService extends AbstractService {
 										//send alert
 										if(currCal.getTime().after(endCal.getTime())) { //if the shift ends before EOD midnight.
 											//check out automatically
-											//dailyAttn.setCheckOutTime(new Timestamp(currCal.getTimeInMillis()));
-											//dailyAttn.setShiftEndTime(endTime);
-											//dailyAttn.setLatitudeOut(dailyAttn.getLatitudeOut());
-											//dailyAttn.setLongitudeOut(dailyAttn.getLongitudeOut());
-											dailyAttn.setNotCheckedOut(true);
+											dailyAttn.setCheckOutTime(new Timestamp(currCal.getTimeInMillis()));
+											dailyAttn.setShiftEndTime(endTime);
+											dailyAttn.setLatitudeOut(dailyAttn.getLatitudeOut());
+											dailyAttn.setLongitudeOut(dailyAttn.getLongitudeOut());
 											attendanceRepository.save(dailyAttn);
-											users[cnt] = emp.getUser().getId();
-											//send email notifications
-											String content = "You checked in at " + dailyAttn.getCheckInTime() + " at site -" + site.getName();
-											mailService.sendAttendanceCheckouAlertEmail(site.getName(), emp.getEmail(), content, null, new Date());
-											
 										}
 										break;
 									}
 								}
 							}
 						}
-
-						cnt++;
 					}
 					
 				} catch (Exception ex) {
@@ -797,12 +785,6 @@ public class SchedulerService extends AbstractService {
 				}
 			}
 		}
-		//send push notifications
-		if(users != null && users.length >0) {
-			String content = "Please perform attendance checkout";
-			pushService.send(users, content);
-		}
-
 	}
 
 	public void createJobs(SchedulerConfig dailyTask) {

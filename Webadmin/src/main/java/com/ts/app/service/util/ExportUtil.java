@@ -61,8 +61,6 @@ public class ExportUtil {
 			"CHECK IN TIME", "CHECK OUT TIME" };
 	private static final Object[] EMPLOYEE_DETAIL_REPORT_FILE_HEADER = { "EMPLOYEE ID", "EMPLOYEE NAME", "DESIGNATION",
 			"REPORTING TO", "CLIENT", "SITE", "ACTIVE" };
-	private static final Object[] ATTENDANCE_CONSOLIDATED_REPORT_FILE_HEADER = { "SHIFT START TIME", "SHIFT START TIME", "TOTAL EMPLOYEES",
-			"PRESENT", "ABSENT" };
 	private static final Object[] ATTENDANCE_DETAIL_REPORT_FILE_HEADER = { "EMPLOYEE ID", "EMPLOYEE NAME", "SITE",
 			"CLIENT", "STATUS", "CHECK IN", "CHECK OUT", "SHIFT START", "SHIFT END" };
 
@@ -556,7 +554,6 @@ public class ExportUtil {
 //			Cell cell = headerRow.createCell(i);
 //			cell.setCellValue((String) ATTENDANCE_DETAIL_REPORT_FILE_HEADER[i]);
 //		}
-
 		XSSFSheet xssfSheet = xssfWorkbook.getSheetAt(1);
 		rowNum = 1;
 
@@ -589,7 +586,6 @@ public class ExportUtil {
 			log.error("Error while flushing/closing  !!!");
 			statusMap.put(filePath, "FAILED");
 		}
-		
 
 		result.setEmpId(empId);
 		result.setFile(fileName.substring(0, fileName.indexOf('.')));
