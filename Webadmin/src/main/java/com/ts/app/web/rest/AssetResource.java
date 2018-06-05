@@ -23,10 +23,10 @@ import org.springframework.web.multipart.MultipartFile;
 import com.codahale.metrics.annotation.Timed;
 import com.ts.app.security.SecurityUtils;
 import com.ts.app.service.AssetManagementService;
-import com.ts.app.web.rest.dto.AssetAMCScheduleDTO;
 import com.ts.app.web.rest.dto.AssetDTO;
 import com.ts.app.web.rest.dto.AssetDocumentDTO;
 import com.ts.app.web.rest.dto.AssetParameterConfigDTO;
+import com.ts.app.web.rest.dto.AssetPpmScheduleDTO;
 import com.ts.app.web.rest.dto.AssetTypeDTO;
 import com.ts.app.web.rest.dto.AssetgroupDTO;
 import com.ts.app.web.rest.dto.SearchCriteria;
@@ -181,6 +181,7 @@ public class AssetResource {
 			result = assetService.findByAssetConfig(type, id);
 		}
 		return result;
+
 	}
 
 	@RequestMapping(value = "/assets/removeConfig/{id}", method = RequestMethod.DELETE)
@@ -217,14 +218,16 @@ public class AssetResource {
 		return new ResponseEntity<>(assetDocumentDTO, HttpStatus.OK);
 	}
 
-	@RequestMapping(path = "/asset/ppmschedule", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+	@RequestMapping(path = "/assets/ppmschedule", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
 	@Timed
-	public ResponseEntity<?> saveAssetPPMSchedule(@Valid @RequestBody AssetDTO assetDTO, HttpServletRequest request) {
+	public ResponseEntity<?> saveAssetPPMSchedule(@Valid @RequestBody AssetPpmScheduleDTO assetPpmScheduleDTO,
+			HttpServletRequest request) {
 		log.debug(">>> Asset DTO saveAssetPPMSchedule request <<<");
-		log.debug("Title <<<" + assetDTO.getAssetPpmTitle());
+		assetPpmScheduleDTO.setUserId(SecurityUtils.getCurrentUserId());
+		log.debug("Title <<<" + assetPpmScheduleDTO.getTitle());
 
-		AssetDTO response = assetService.saveAsset(assetDTO);
-		log.debug("Asset save response - " + response);
+		AssetPpmScheduleDTO response = assetService.createAssetPpmSchedule(assetPpmScheduleDTO);
+		log.debug("Asset Ppm Schedule save response - " + response);
 		return new ResponseEntity<>(response, HttpStatus.CREATED);
 	}
 
@@ -234,32 +237,6 @@ public class AssetResource {
 		List<AssetDocumentDTO> result = null;
 		result = assetService.findAllDocuments(type, id);
 		return result;
-	}
-
-	@RequestMapping(path = "/asset/amcschedule", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-	@Timed
-	public ResponseEntity<?> saveAssetAMCSchedule(@Valid @RequestBody AssetAMCScheduleDTO assetAMCScheduleDTO, HttpServletRequest request) {
-		log.info(">>> Asset DTO saveAssetAMCSchedule request <<<");
-		if(log.isDebugEnabled()) {
-			log.debug("Title <<<" + assetAMCScheduleDTO.getTitle());
-		}
-		AssetAMCScheduleDTO response = assetService.saveAssetAMCSchedule(assetAMCScheduleDTO);
-		log.debug("Asset AMC Schedule save response - " + response);
-		return new ResponseEntity<>(response, HttpStatus.CREATED);
-	}
-	
-	@RequestMapping(path = "/asset/{assetId}/amcschedule", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-	@Timed
-	public List<AssetAMCScheduleDTO> getAssetAMCSchedules(@PathVariable("assetId") long id) {
-		log.info(">>> Get asset amc schedules for given asset id <<<");
-		if(log.isDebugEnabled()) {
-			log.debug("asset id -" + id);
-		}
-		List<AssetAMCScheduleDTO> response = assetService.getAssetAMCSchedules(id);
-		if(log.isDebugEnabled()) {
-			log.debug("Asset AMC Schedules response - " + response);
-		}
-		return response;
 	}
 
 }
