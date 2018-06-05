@@ -227,20 +227,6 @@ public class AssetManagementService extends AbstractService {
 		return assetDto;
 	}
 
-	// public SearchResult<AssetDTO> getSiteAssets(Long siteId,int page) {
-	// Pageable pageRequest = new PageRequest(page, PagingUtil.PAGE_SIZE, new
-	// Sort(Direction.DESC,"id"));
-	//
-	// Page<Asset> assets= assetRepository.findBySiteId(siteId,pageRequest);
-	// SearchResult<AssetDTO> paginatedAssets = new SearchResult<>();
-	// paginatedAssets.setCurrPage(page);
-	// paginatedAssets.setTransactions(mapperUtil.toModelList(assets.getContent(),
-	// AssetDTO.class));
-	// paginatedAssets.setTotalCount(assets.getTotalElements());
-	// paginatedAssets.setTotalPages(assets.getTotalPages());
-	// return paginatedAssets;
-	// }
-
 	public List<AssetDTO> getSiteAssets(Long AssetSiteId) {
 		log.debug("get site assets");
 		List<Asset> assets = assetRepository.findBySiteId(AssetSiteId);
@@ -279,34 +265,10 @@ public class AssetManagementService extends AbstractService {
 
 	public AssetDTO getAssetDTO(long id) {
 		Asset asset = assetRepository.findOne(id);
+		log.debug("Get asset by Id service");
+		log.debug("asset Type" + asset.getAssetType());
+		log.debug("Asset group" + asset.getAssetGroup());
 		AssetDTO assetDTO = mapperUtil.toModel(asset, AssetDTO.class);
-		/*
-		 * Site site = getSite(assetDTO.getSiteId());
-		 * assetDTO.setActive(asset.getActive());
-		 * assetDTO.setSiteId(assetDTO.getSiteId());
-		 * assetDTO.setSiteName(assetDTO.getSiteName());
-		 * assetDTO.setTitle(asset.getTitle()); assetDTO.setCode(asset.getCode());
-		 * assetDTO.setDescription(asset.getDescription());
-		 * assetDTO.setUdsAsset(asset.isUdsAsset());
-		 * assetDTO.setStartTime(asset.getStartTime());
-		 * assetDTO.setEndTime(asset.getEndTime());
-		 */
-
-		assetDTO.setTitle(assetDTO.getTitle());
-		assetDTO.setAssetGroup(assetDTO.getAssetGroup());
-		assetDTO.setProjectId(assetDTO.getProjectId());
-		assetDTO.setSiteId(assetDTO.getSiteId());
-		assetDTO.setBlock(assetDTO.getBlock());
-		assetDTO.setFloor(assetDTO.getFloor());
-		assetDTO.setZone(assetDTO.getZone());
-		assetDTO.setModelNumber(assetDTO.getModelNumber());
-		assetDTO.setSerialNumber(assetDTO.getSerialNumber());
-		assetDTO.setPurchasePrice(assetDTO.getPurchasePrice());
-		assetDTO.setCurrentPrice(assetDTO.getCurrentPrice());
-		assetDTO.setEstimatedDisposePrice(assetDTO.getEstimatedDisposePrice());
-		assetDTO.setCode(assetDTO.getCode());
-		assetDTO.setUdsAsset(assetDTO.isUdsAsset());
-
 		return assetDTO;
 	}
 
@@ -327,16 +289,7 @@ public class AssetManagementService extends AbstractService {
 	}
 
 	private void mapToEntityAssets(AssetDTO assetDTO, Asset asset) {
-		/*
-		 * Site site = getSite(assetDTO.getSiteId());
-		 * 
-		 * asset.setTitle(assetDTO.getTitle());
-		 * asset.setDescription(assetDTO.getDescription());
-		 * asset.setCode(assetDTO.getCode());
-		 * asset.setStartTime(DateUtil.convertToSQLDate(assetDTO.getStartTime()));
-		 * asset.setEndTime(DateUtil.convertToSQLDate(assetDTO.getEndTime()));
-		 * asset.setUdsAsset(assetDTO.isUdsAsset()); asset.setSite(site);
-		 */
+
 		asset.setTitle(assetDTO.getTitle());
 		asset.setAssetGroup(assetDTO.getAssetGroup());
 		asset.setDescription(assetDTO.getDescription());
@@ -351,8 +304,6 @@ public class AssetManagementService extends AbstractService {
 		asset.setCurrentPrice(assetDTO.getCurrentPrice());
 		asset.setEstimatedDisposePrice(assetDTO.getEstimatedDisposePrice());
 		asset.setCode(assetDTO.getCode());
-		// asset.setEndTime(DateUtil.convertToSQLDate(assetDTO.getEndTime()));
-		// asset.setStartTime(DateUtil.convertToSQLDate(assetDTO.getStartTime()));
 		asset.setUdsAsset(assetDTO.isUdsAsset());
 	}
 
@@ -404,20 +355,6 @@ public class AssetManagementService extends AbstractService {
 		return reportUtil.generateJobReports(transactions, null, null, criteria);
 	}
 
-	// public SearchResult<AssetDTO> getSiteAssets(Long siteId,int page) {
-	// Pageable pageRequest = new PageRequest(page, PagingUtil.PAGE_SIZE, new
-	// Sort(Direction.DESC,"id"));
-	//
-	// Page<Asset> assets= assetRepository.findBySiteId(siteId,pageRequest);
-	// SearchResult<AssetDTO> paginatedAssets = new SearchResult<>();
-	// paginatedAssets.setCurrPage(page);
-	// paginatedAssets.setTransactions(mapperUtil.toModelList(assets.getContent(),
-	// AssetDTO.class));
-	// paginatedAssets.setTotalCount(assets.getTotalElements());
-	// paginatedAssets.setTotalPages(assets.getTotalPages());
-	// return paginatedAssets;
-	// }
-
 	/**
 	 * Creates the asset AMC schedule information.
 	 * 
@@ -441,7 +378,7 @@ public class AssetManagementService extends AbstractService {
 		return mapperUtil.toModel(assetAMC, AssetAMCScheduleDTO.class);
 
 	}
-	
+
 	/**
 	 * Updates the asset AMC schedule information.
 	 * 
@@ -451,10 +388,11 @@ public class AssetManagementService extends AbstractService {
 	public AssetAMCScheduleDTO updateAssetAMCSchedule(AssetAMCScheduleDTO assetAMCScheduleDTO) {
 		log.debug("Update assets AMC schedule");
 		AssetAMCSchedule assetAMC = null;
-		if(assetAMCScheduleDTO.getId() > 0) {
+		if (assetAMCScheduleDTO.getId() > 0) {
 			assetAMC = assetAMCRepository.findOne(assetAMCScheduleDTO.getId());
 			assetAMC.setActive(assetAMCScheduleDTO.getActive());
-			if(assetAMCScheduleDTO.getChecklistDto() != null && assetAMC.getChecklist().getId() != assetAMCScheduleDTO.getChecklistDto().getId()) {
+			if (assetAMCScheduleDTO.getChecklistDto() != null
+					&& assetAMC.getChecklist().getId() != assetAMCScheduleDTO.getChecklistDto().getId()) {
 				Checklist checklist = checklistRepository.findOne(assetAMCScheduleDTO.getChecklistDto().getId());
 				assetAMC.setChecklist(checklist);
 			}
