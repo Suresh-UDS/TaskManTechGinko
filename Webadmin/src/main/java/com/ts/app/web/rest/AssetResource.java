@@ -5,6 +5,7 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import javax.websocket.server.PathParam;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,6 +24,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.codahale.metrics.annotation.Timed;
 import com.ts.app.security.SecurityUtils;
 import com.ts.app.service.AssetManagementService;
+import com.ts.app.web.rest.dto.AssetAMCScheduleDTO;
 import com.ts.app.web.rest.dto.AssetDTO;
 import com.ts.app.web.rest.dto.AssetDocumentDTO;
 import com.ts.app.web.rest.dto.AssetParameterConfigDTO;
@@ -237,5 +239,39 @@ public class AssetResource {
 		result = assetService.findAllDocuments(type, id);
 		return result;
 	}
+	
+	@RequestMapping(path = "/assets/amcschedule", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+	@Timed
+	public ResponseEntity<?> saveAssetAMCSchedule(@Valid @RequestBody AssetAMCScheduleDTO assetAMCScheduleDTO,
+			HttpServletRequest request) {
+		log.debug(">>> Asset DTO saveAssetAMCSchedule request <<<");
+		log.debug("Title <<<" + assetAMCScheduleDTO.getTitle());
 
+		AssetAMCScheduleDTO response = assetService.createAssetAMCSchedule(assetAMCScheduleDTO);
+		log.debug("Asset AMC Schedule save response - " + response);
+		return new ResponseEntity<>(response, HttpStatus.CREATED);
+	}
+
+	@RequestMapping(path = "/assets/amcschedule", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE)
+	@Timed
+	public ResponseEntity<?> updateAssetAMCSchedule(@Valid @RequestBody AssetAMCScheduleDTO assetAMCScheduleDTO,
+			HttpServletRequest request) {
+		log.debug(">>> Asset DTO updateAssetAMCSchedule request <<<");
+		log.debug("Title <<<" + assetAMCScheduleDTO.getTitle());
+
+		AssetAMCScheduleDTO response = assetService.updateAssetAMCSchedule(assetAMCScheduleDTO);
+		log.debug("Asset AMC Schedule update response - " + response);
+		return new ResponseEntity<>(response, HttpStatus.CREATED);
+	}
+	
+	@RequestMapping(path = "/assets/{assetId}/amcschedule", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	@Timed
+	public List<AssetAMCScheduleDTO> getAssetAMCSchedule(@PathParam("assetId") long id) {
+		log.debug(">>> Asset DTO updateAssetAMCSchedule request <<<");
+		log.debug("AssetId <<<" + id);
+
+		List<AssetAMCScheduleDTO> response = assetService.getAssetAMCSchedules(id);
+		log.debug("Get Asset AMC Schedule for asset id - " + response);
+		return response;
+	}
 }

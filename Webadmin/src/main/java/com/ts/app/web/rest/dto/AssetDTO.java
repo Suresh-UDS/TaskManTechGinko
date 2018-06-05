@@ -41,8 +41,6 @@ public class AssetDTO extends BaseDTO {
     private Date amcDocumentUploadDate;
     private String assetPpmTitle;
     
-    private 
-    
     public long getProjectId() {
 		return projectId;
 	}
