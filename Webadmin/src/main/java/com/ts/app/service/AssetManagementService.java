@@ -56,6 +56,7 @@ import com.ts.app.repository.SiteRepository;
 import com.ts.app.repository.TicketRepository;
 import com.ts.app.repository.UserRepository;
 import com.ts.app.repository.VendorRepository;
+import com.ts.app.service.util.DateUtil;
 import com.ts.app.service.util.ExportUtil;
 import com.ts.app.service.util.FileUploadHelper;
 import com.ts.app.service.util.ImportUtil;
@@ -288,23 +289,39 @@ public class AssetManagementService extends AbstractService {
 		return assetDTO;
 	}
 
-	private void mapToEntityAssets(AssetDTO assetDTO, Asset asset) {
-		asset.setTitle(assetDTO.getTitle());
-		asset.setAssetGroup(assetDTO.getAssetGroup());
-		asset.setDescription(assetDTO.getDescription());
+	private void mapToEntityAssets(AssetDTO assetDTO, Asset asset) {asset.setTitle(assetDTO.getTitle());
+	asset.setAssetType(assetDTO.getAssetType());
+	asset.setAssetGroup(assetDTO.getAssetGroup());
+	asset.setDescription(assetDTO.getDescription());
+	if (assetDTO.getSiteId() != asset.getSite().getId()) {
 		Site site = getSite(assetDTO.getSiteId());
 		asset.setSite(site);
-		asset.setBlock(assetDTO.getBlock());
-		asset.setFloor(assetDTO.getFloor());
-		asset.setZone(assetDTO.getZone());
-		asset.setModelNumber(assetDTO.getModelNumber());
-		asset.setSerialNumber(assetDTO.getSerialNumber());
-		asset.setPurchasePrice(assetDTO.getPurchasePrice());
-		asset.setCurrentPrice(assetDTO.getCurrentPrice());
-		asset.setEstimatedDisposePrice(assetDTO.getEstimatedDisposePrice());
-		asset.setCode(assetDTO.getCode());
-		asset.setUdsAsset(assetDTO.isUdsAsset());
 	}
+	if (assetDTO.getManufacturerId() != asset.getManufacturer().getId()) {
+		Manufacturer manufacturer = getManufacturer(assetDTO.getManufacturerId());
+		asset.setManufacturer(manufacturer);
+	}
+	if (assetDTO.getVendorId() != asset.getAmcVendor().getId()) {
+		Vendor vendor = getVendor(assetDTO.getVendorId());
+		asset.setAmcVendor(vendor);
+	}
+	asset.setBlock(assetDTO.getBlock());
+	asset.setFloor(assetDTO.getFloor());
+	asset.setZone(assetDTO.getZone());
+	asset.setModelNumber(assetDTO.getModelNumber());
+	asset.setSerialNumber(assetDTO.getSerialNumber());
+	asset.setAcquiredDate(DateUtil.convertToSQLDate(assetDTO.getAcquiredDate()));
+	asset.setPurchasePrice(assetDTO.getPurchasePrice());
+	asset.setCurrentPrice(assetDTO.getCurrentPrice());
+	asset.setEstimatedDisposePrice(assetDTO.getEstimatedDisposePrice());
+	asset.setCode(assetDTO.getCode());
+	if (!StringUtils.isEmpty(assetDTO.getEndTime())) {
+		asset.setEndTime(DateUtil.convertToSQLDate(assetDTO.getEndTime()));
+	}
+	if (!StringUtils.isEmpty(assetDTO.getStartTime())) {
+		asset.setStartTime(DateUtil.convertToSQLDate(assetDTO.getStartTime()));
+	}
+	asset.setUdsAsset(assetDTO.isUdsAsset());}
 
 	public AssetDTO updateAsset(AssetDTO assetDTO) {
 		Asset asset = assetRepository.findOne(assetDTO.getId());

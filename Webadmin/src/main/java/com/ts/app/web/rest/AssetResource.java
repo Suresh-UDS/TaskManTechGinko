@@ -117,6 +117,8 @@ public class AssetResource {
 		log.debug(">>> asset id : " + id);
 		if (assetDTO.getId() > 0)
 			assetDTO.setId(id);
+		if (id > 0)
+			assetDTO.setId(id);
 		log.debug("Asset Details in updateAsset = " + assetDTO);
 		log.debug(">>> Asset Update Request <<<");
 		log.debug("Title <<<" + assetDTO.getTitle());
