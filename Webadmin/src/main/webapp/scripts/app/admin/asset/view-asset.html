@@ -820,43 +820,15 @@
 
                                                    <div class="row">
 
-                                                       <div class="col-md-2 txt-align-center">
+                                                       <div class="col-md-2 txt-align-center" ng-repeat="uploadFile in uploadFiles">
                                                            <a href="#">
                                                                <img src="assets/img/Docs-icon.png" alt="docs" />
                                                            </a>
-                                                           <p>File Name</p>
-                                                       </div>
-                                                       <div class="col-md-2 txt-align-center">
-                                                           <a href="#">
-                                                               <img src="assets/img/Docs-icon.png" alt="docs" />
-                                                           </a>
-                                                           <p>File Name</p>
-                                                       </div>
-                                                       <div class="col-md-2 txt-align-center">
-                                                           <a href="#">
-                                                               <img src="assets/img/Docs-icon.png" alt="docs" />
-                                                           </a>
-                                                           <p>File Name</p>
-                                                       </div>
-                                                       <div class="col-md-2 txt-align-center">
-                                                           <a href="#">
-                                                               <img src="assets/img/Docs-icon.png" alt="docs" />
-                                                           </a>
-                                                           <p>File Name</p>
-                                                       </div>
-                                                       <div class="col-md-2 txt-align-center">
-                                                           <a href="#">
-                                                               <img src="assets/img/Docs-icon.png" alt="docs" />
-                                                           </a>
-                                                           <p>File Name</p>
-                                                       </div>
-                                                       <div class="col-md-2 txt-align-center">
-                                                           <a href="#">
-                                                               <img src="assets/img/Docs-icon.png" alt="docs" />
-                                                           </a>
-                                                           <p>File Name</p>
+                                                           <p>{{uploadFile.title}}</p>
                                                        </div>
 
+														<p class="empty-files" ng-show="!uploadFiles.length">No upload documents </p>
+														
                                                    </div>
 
                                                </div>
@@ -872,42 +844,14 @@
 
                                                    <div class="row">
 
-                                                       <div class="col-md-2 txt-align-center">
+                                                       <div class="col-md-2 txt-align-center" ng-repeat="uploadPhoto in uploadAssetPhotos">
                                                            <a href="#">
                                                                <img src="assets/img/img.png" alt="docs" />
                                                            </a>
-                                                           <p>Photo Name</p>
+                                                           <p>{{uploadPhoto.title}}</p>
                                                        </div>
-                                                       <div class="col-md-2 txt-align-center">
-                                                           <a href="#">
-                                                               <img src="assets/img/img.png" alt="docs" />
-                                                           </a>
-                                                           <p>Photo Name</p>
-                                                       </div>
-                                                       <div class="col-md-2 txt-align-center">
-                                                           <a href="#">
-                                                               <img src="assets/img/img.png" alt="docs" />
-                                                           </a>
-                                                           <p>Photo Name</p>
-                                                       </div>
-                                                       <div class="col-md-2 txt-align-center">
-                                                           <a href="#">
-                                                               <img src="assets/img/img.png" alt="docs" />
-                                                           </a>
-                                                           <p>Photo Name</p>
-                                                       </div>
-                                                       <div class="col-md-2 txt-align-center">
-                                                           <a href="#">
-                                                               <img src="assets/img/img.png" alt="docs" />
-                                                           </a>
-                                                           <p>Photo Name</p>
-                                                       </div>
-                                                       <div class="col-md-2 txt-align-center">
-                                                           <a href="#">
-                                                               <img src="assets/img/img.png" alt="docs" />
-                                                           </a>
-                                                           <p>Photo Name</p>
-                                                       </div>
+                                                       
+                                                       <p class="empty-files" ng-show="!uploadAssetPhotos.length">No upload photos </p>
 
                                                    </div>
 
@@ -942,82 +886,21 @@
 
                                                                    <tbody>
 
-                                                                   <tr>
-                                                                       <td>Power</td>
-                                                                       <td>Watt</td>
+                                                                      <tr ng-repeat="assetParam in assetParameters">
+                                                                       <td>{{assetParam.assetType}}</td>
+                                                                       <td>{{assetParam.uom}}</td>
                                                                        <td>
-
                                                                            <div class="checkbox">
                                                                                <label>
-                                                                                   <input type="checkbox" checked name="terms" disabled>
+                                                                                   <input type="checkbox" name="Consumption" ng-model="assetParam.consumptionMonitoringRequired" disabled >
                                                                                </label>
                                                                            </div>
                                                                        </td>
-                                                                       <td>
-                                                                           <a  has-authority="ROLE_ADMIN" class="btn btn-simple btn-info" ><i class="material-icons">edit</i><div class="ripple-container"></div></a>
+                                                                       <td class="text-right">
+                                                                           <a  has-permission="" ui-sref="" class="btn btn-simple btn-danger" ng-click="deleteAssetConfig(assetParam.id)"><i class="material-icons">delete_forever</i><div class="ripple-container"></div></a>
                                                                        </td>
-                                                                   </tr>
-                                                                   <tr>
-                                                                       <td>Power</td>
-                                                                       <td>Watt</td>
-                                                                       <td>
 
-                                                                           <div class="checkbox">
-                                                                               <label>
-                                                                                   <input type="checkbox" checked name="terms" disabled>
-                                                                               </label>
-                                                                           </div>
-                                                                       </td>
-                                                                       <td>
-                                                                           <a  has-authority="ROLE_ADMIN" class="btn btn-simple btn-info" ><i class="material-icons">edit</i><div class="ripple-container"></div></a>
-                                                                       </td>
                                                                    </tr>
-                                                                   <tr>
-                                                                       <td>Power</td>
-                                                                       <td>Watt</td>
-                                                                       <td>
-
-                                                                           <div class="checkbox">
-                                                                               <label>
-                                                                                   <input type="checkbox" checked name="terms" disabled>
-                                                                               </label>
-                                                                           </div>
-                                                                       </td>
-                                                                       <td>
-                                                                           <a  has-authority="ROLE_ADMIN" class="btn btn-simple btn-info" ><i class="material-icons">edit</i><div class="ripple-container"></div></a>
-                                                                       </td>
-                                                                   </tr>
-                                                                   <tr>
-                                                                       <td>Power</td>
-                                                                       <td>Watt</td>
-                                                                       <td>
-
-                                                                           <div class="checkbox">
-                                                                               <label>
-                                                                                   <input type="checkbox" checked name="terms" disabled>
-                                                                               </label>
-                                                                           </div>
-                                                                       </td>
-                                                                       <td>
-                                                                           <a  has-authority="ROLE_ADMIN" class="btn btn-simple btn-info" ><i class="material-icons">edit</i><div class="ripple-container"></div></a>
-                                                                       </td>
-                                                                   </tr>
-                                                                   <tr>
-                                                                       <td>Power</td>
-                                                                       <td>Watt</td>
-                                                                       <td>
-
-                                                                           <div class="checkbox">
-                                                                               <label>
-                                                                                   <input type="checkbox" checked name="terms" disabled>
-                                                                               </label>
-                                                                           </div>
-                                                                       </td>
-                                                                       <td>
-                                                                           <a  has-authority="ROLE_ADMIN" class="btn btn-simple btn-info" ><i class="material-icons">edit</i><div class="ripple-container"></div></a>
-                                                                       </td>
-                                                                   </tr>
-
 
                                                                    </tbody>
                                                                </table>

@@ -31,7 +31,7 @@
                                                     <!-- <a href="javascript:void(0)"  data-toggle="collapse" data-parent="#accordian" data-target="#addAssetType" class="btn btn-round btn-fab btn-fab-mini btn-simple" aria-expanded="false" aria-controls="collapseExample">
                                                         <i class="material-icons">add</i>
                                                     </a> -->
-  
+
                                                     <a  has-permission="" class="btn btn-round btn-fab btn-fab-mini btn-simple"  onClick="$('#addAssetType').modal()" data-target="#myModal"><i class="material-icons">add</i><div class="ripple-container" ></div></a>
                                                 </div>
                                             </div>
@@ -44,7 +44,7 @@
                                             </div> -->
 
                                         </div>
-                                        
+
                                     </div>
                                     <div class="col-md-4">
 
@@ -73,7 +73,7 @@
                                             </div> -->
 
                                         </div>
-                                        
+
                                     </div>
                                     <div class="col-md-4">
                                         <div class="form-group selectcon is-empty SelectWithAddbtnCon" ng-init="loadAssetParamUoms()">
@@ -101,7 +101,7 @@
                                             </div> -->
 
                                         </div>
-                                        
+
                                     </div>
 
                                 </div>
@@ -152,7 +152,7 @@
                                         </thead>
 
                                         <tbody>
-                                        
+
                                         	<tr ng-repeat="parameterConfig in parameterConfigs" repeat-done="initDataTables()">
 											<td>{{parameterConfig.assetType}}</td>
 											<td>{{parameterConfig.name}}</td>
@@ -161,7 +161,7 @@
 			                                 <td class="text-right">
 			                                 	<a  has-permission="" class="btn btn-simple btn-danger" ng-click="deleteConfirm(parameterConfig.id)" onClick="$('#deleteModal').modal()" data-target="#myModal"><i class="material-icons">delete_forever</i><div class="ripple-container" ></div></a>
 			                                 </td>
-										
+
 										</tr>
 
                                         </tbody>
@@ -197,7 +197,7 @@
 
                 <!-- Pagination directive end -->
 
-                
+
 </div>
 <div class="row">
 
@@ -223,7 +223,7 @@
 
 <!-- Add asset type dialog -->
 
-<div id="addAssetType" class="delete-confirmation modal fade">
+<div id="addAssetType" class="add-input-modal modal fade">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -232,17 +232,23 @@
                 <h4 class="modal-title">Add Asset Type</h4>
             </div>
             <div class="modal-body">
-                <div class="row">
-                <div class="col-md-9">
-                    <input class="input-desc" id="addAssetTypeInput" ng-model="assetType.name"   name="AssetType" type="text" value=""/> 
-                </div>
-                <div class="col-md-3 pull-left">
-                    <a class="btn btn-success"  ng-click="addAssetType()" data-dismiss="modal">Add</a>
-                </div>
-                <div class="clear"></div>
-                </div>
+
+                <form name="addAssetTypeForm">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <input class="" id="addAssetTypeInput" ng-model="assetType.name"   name="AssetType" type="text" value="" ng-required="true"/>
+                        </div>
+                        <div class="col-md-12 txt-align-center">
+                            <input type="submit" ng-click="addAssetType()" data-dismiss="modal" class="btn btn-success" name="add" value="Add" ng-disabled="addAssetTypeForm.$invalid">
+
+                        </div>
+
+                    </div>
+                </form>
+
+
             </div>
-           
+
         </div>
     </div>
 </div>
@@ -250,7 +256,7 @@
 
 <!-- Add asset param dialog -->
 
-<div id="addParameter" class="delete-confirmation modal fade">
+<div id="addParameter" class="add-input-modal modal fade">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -259,19 +265,23 @@
                 <h4 class="modal-title">Add Asset Param</h4>
             </div>
             <div class="modal-body">
-                <div class="row">
-                <div class="col-md-9">
-                    <input class="input-desc" id="parameterName" ng-model="assetParam.name"   name="parameterName" type="text" value=""/>
-                </div>
-                <div class="col-md-3 pull-left">
-                    <a class="btn btn-success"  ng-click="addAssetParam()" data-dismiss="modal">Add</a>
-                </div>
-                <div class="clear"></div>
-                </div>
 
-                                              
+                <form name="addParameterForm">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <input class="" id="parameterName" ng-model="assetParam.name"   name="parameterName" type="text" value="" ng-required="true"/>
+                        </div>
+                        <div class="col-md-12 txt-align-center">
+                            <input type="submit" ng-click="addAssetParam()" data-dismiss="modal" class="btn btn-success" name="add" value="Add" ng-disabled="addParameterForm.$invalid">
+                        </div>
+                    </div>
+                </form>
+
+
+
+
             </div>
-           
+
         </div>
     </div>
 </div>
@@ -279,7 +289,7 @@
 
 <!-- Add parameterUOM dialog -->
 
-<div id="addUnits" class="delete-confirmation modal fade">
+<div id="addUnits" class="add-input-modal modal fade">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -288,17 +298,21 @@
                 <h4 class="modal-title">Add Parameter Unit</h4>
             </div>
             <div class="modal-body">
-                <div class="row">
-                <div class="col-md-9">
-                    <input class="input-desc" id="parameterUOMName" ng-model="parameterUOM.uom"   name="parameterUOMName" type="text" value=""/> 
-                </div>
-                <div class="col-md-3 pull-left">
-                    <a class="btn btn-success"  ng-click="addParameterUOM()" data-dismiss="modal">Add</a>
-                </div>
-                <div class="clear"></div>
-                </div>
+
+              <form name="addUnitForm">
+                  <div class="row">
+                      <div class="col-md-12">
+                          <input class="input-desc" id="parameterUOMName" ng-model="parameterUOM.uom"   name="parameterUOMName" type="text" value="" ng-required="true"/>
+                      </div>
+                      <div class="col-md-12 txt-align-center">
+                          <input type="submit" ng-click="addParameterUOM()" data-dismiss="modal" class="btn btn-success" name="add" value="Add" ng-disabled="addUnitForm.$invalid">
+                      </div>
+
+                  </div>
+              </form>
+
             </div>
-           
+
         </div>
     </div>
 </div>

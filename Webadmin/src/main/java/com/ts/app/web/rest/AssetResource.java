@@ -1,14 +1,20 @@
 package com.ts.app.web.rest;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.util.Date;
 import java.util.List;
 
 import javax.inject.Inject;
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -27,9 +33,11 @@ import com.ts.app.domain.AssetDocument;
 import com.ts.app.domain.AssetParameterConfig;
 import com.ts.app.security.SecurityUtils;
 import com.ts.app.service.AssetManagementService;
+import com.ts.app.service.util.FileUploadHelper;
 import com.ts.app.web.rest.dto.AssetDTO;
 import com.ts.app.web.rest.dto.AssetDocumentDTO;
 import com.ts.app.web.rest.dto.AssetParameterConfigDTO;
+import com.ts.app.web.rest.dto.AssetPpmScheduleDTO;
 import com.ts.app.web.rest.dto.AssetTypeDTO;
 import com.ts.app.web.rest.dto.AssetgroupDTO;
 import com.ts.app.web.rest.errors.TimesheetException;
@@ -50,25 +58,36 @@ public class AssetResource {
 	@Inject
 	private AssetManagementService assetService;
 	
+	@Inject
+	private FileUploadHelper fileUploaderUtils;
+	
+	@Autowired
+	private ServletContext servletContext;
+	
 	//Asset
     @RequestMapping(path="/asset",method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
     public ResponseEntity<?> saveAsset(@Valid @RequestBody AssetDTO assetDTO, HttpServletRequest request) {
         log.debug(">>> Asset DTO save request <<<");
         log.debug("Title <<<"+assetDTO.getTitle());
+        log.debug("AssetType <<<"+assetDTO.getAssetType());
         log.debug("AssetGroup <<<"+assetDTO.getAssetGroup());
+        log.debug("Status <<<"+assetDTO.getStatus());
         log.debug("ProjectId <<<"+assetDTO.getProjectId());
         log.debug("SiteId <<<"+assetDTO.getSiteId());
         log.debug("Block <<<"+assetDTO.getBlock());
         log.debug("Floor <<<"+assetDTO.getFloor());
         log.debug("Zone <<<"+assetDTO.getZone());
+        log.debug("Manufacture <<<"+assetDTO.getManufacturerId());
         log.debug("ModelNumber <<<"+assetDTO.getModelNumber());
         log.debug("SerialNumber <<<"+assetDTO.getSerialNumber());
+        log.debug("Acquired Date <<<"+assetDTO.getAcquiredDate());
         log.debug("PurchasePrice <<<"+assetDTO.getPurchasePrice());
         log.debug("CurrentPrice <<<"+assetDTO.getCurrentPrice());
         log.debug("EstimatedDisposePrice <<<"+assetDTO.getEstimatedDisposePrice());
         log.debug("Code <<<"+assetDTO.getCode());
         log.debug("UdsAsset <<<"+assetDTO.isUdsAsset());
+        log.debug("Vendor <<<"+assetDTO.getVendorId());
         
         AssetDTO response = assetService.saveAsset(assetDTO);
         log.debug("Asset save response - "+ response);
@@ -111,7 +130,7 @@ public class AssetResource {
     @Timed
     public ResponseEntity<?> updateAsset(@Valid @RequestBody AssetDTO assetDTO, HttpServletRequest request, @PathVariable("id") Long id) {
     	log.debug(">>> asset id : "+id);
-        if(assetDTO.getId()==null) assetDTO.setId(id);
+        if(assetDTO.getId() > 0) assetDTO.setId(id);
         log.debug("Asset Details in updateAsset = "+ assetDTO);
         log.debug(">>> Asset Update Request <<<");
         log.debug("Title <<<"+assetDTO.getTitle());
@@ -199,13 +218,47 @@ public class AssetResource {
     	
     }
     
-    @RequestMapping(value ="/assets/uploadFile", method = RequestMethod.POST)
-    public ResponseEntity<?> uploadAssetFile(@RequestParam("title") String title, @RequestParam("assetId") long assetId, @RequestParam("uploadFile") MultipartFile file, AssetDocumentDTO assetDocumentDTO) {
+    @RequestMapping(value ={"/assets/uploadFile", "/assets/uploadAssetPhoto"} , method = RequestMethod.POST)
+    public ResponseEntity<?> uploadAssetFile(@RequestParam("title") String title, @RequestParam("assetId") long assetId, @RequestParam("uploadFile") MultipartFile file, @RequestParam("type") String type, AssetDocumentDTO assetDocumentDTO) {
     	assetDocumentDTO.setAssetId(assetId);
     	assetDocumentDTO.setTitle(title);
+    	assetDocumentDTO.setType(type);
     	assetDocumentDTO = assetService.uploadFile(assetDocumentDTO, file);
     	return new ResponseEntity<>(assetDocumentDTO, HttpStatus.OK);
     }
+    
+    @RequestMapping(path="/assets/ppmschedule",method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+    @Timed
+    public ResponseEntity<?> saveAssetPPMSchedule(@Valid @RequestBody AssetPpmScheduleDTO assetPpmScheduleDTO, HttpServletRequest request) {
+        log.debug(">>> Asset DTO saveAssetPPMSchedule request <<<");
+        assetPpmScheduleDTO.setUserId(SecurityUtils.getCurrentUserId());
+        log.debug("Title <<<"+assetPpmScheduleDTO.getTitle());
+        
+        AssetPpmScheduleDTO response = assetService.createAssetPpmSchedule(assetPpmScheduleDTO);
+        log.debug("Asset Ppm Schedule save response - "+ response);
+        return new ResponseEntity<>(response,HttpStatus.CREATED);
+    }
+
+	@RequestMapping(value = {"/assets/getAllFile/{type}/{id}", "/assets/getAllAssetPhoto/{type}/{id}"}, method = RequestMethod.GET)
+    public List<AssetDocumentDTO> getUploadedFiles(@PathVariable String type, @PathVariable Long id) {
+    	List<AssetDocumentDTO> result = null;
+    	result = assetService.findAllDocuments(type, id);
+    	return result;
+    }
+	
+	@RequestMapping(value = "/assets/viewFile/{documentId}/{fileName:.+}",method = RequestMethod.GET)
+	public byte[] getUploadFile(@PathVariable("documentId") long documentId, @PathVariable("fileName") String fileName, HttpServletResponse response) throws IOException {
+		log.debug("DocumentId" +documentId);
+		MediaType mediaType = fileUploaderUtils.getMediaTypeForFileName(this.servletContext, fileName);
+		log.debug("fileName: " + fileName);
+        log.debug("mediaType: " + mediaType);
+		byte[] content = assetService.getUploadedFile(documentId);
+		response.setContentType(mediaType.getType());
+		response.setContentLength(content.length);
+		response.setHeader("Content-Transfer-Encoding", "binary");
+		response.setHeader("Content-Disposition","attachment; filename=\"" + fileName + "\"");
+		return content;
+	}
     
     
     

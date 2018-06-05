@@ -25,8 +25,10 @@ import com.ts.app.domain.AbstractAuditingEntity;
 import com.ts.app.domain.Asset;
 import com.ts.app.domain.AssetDocument;
 import com.ts.app.domain.AssetGroup;
+import com.ts.app.domain.AssetPPMSchedule;
 import com.ts.app.domain.AssetParameterConfig;
 import com.ts.app.domain.AssetType;
+import com.ts.app.domain.Checklist;
 import com.ts.app.domain.Designation;
 import com.ts.app.domain.Project;
 import com.ts.app.domain.Site;
@@ -34,6 +36,7 @@ import com.ts.app.domain.Ticket;
 import com.ts.app.repository.AssetDocumentRepository;
 import com.ts.app.repository.AssetGroupRepository;
 import com.ts.app.repository.AssetParameterConfigRepository;
+import com.ts.app.repository.AssetPpmScheduleRepository;
 import com.ts.app.domain.Employee;
 import com.ts.app.domain.EmployeeProjectSite;
 import com.ts.app.domain.Manufacturer;
@@ -44,6 +47,7 @@ import com.ts.app.repository.AssetRepository;
 import com.ts.app.repository.AssetTypeRepository;
 import com.ts.app.repository.CheckInOutImageRepository;
 import com.ts.app.repository.CheckInOutRepository;
+import com.ts.app.repository.ChecklistRepository;
 import com.ts.app.repository.DesignationRepository;
 import com.ts.app.repository.EmployeeRepository;
 import com.ts.app.repository.JobRepository;
@@ -66,6 +70,7 @@ import com.ts.app.service.util.ReportUtil;
 import com.ts.app.web.rest.dto.AssetDTO;
 import com.ts.app.web.rest.dto.AssetDocumentDTO;
 import com.ts.app.web.rest.dto.AssetParameterConfigDTO;
+import com.ts.app.web.rest.dto.AssetPpmScheduleDTO;
 import com.ts.app.web.rest.dto.AssetTypeDTO;
 import com.ts.app.web.rest.dto.AssetgroupDTO;
 import com.ts.app.web.rest.dto.BaseDTO;
@@ -129,46 +134,54 @@ public class AssetManagementService extends AbstractService {
 	@Inject
 	private ReportService reportService;
 
-    @Inject
-    private Environment env;
+	@Inject
+	private Environment env;
 
-    @Inject
-    private FileUploadHelper fileUploadHelper;
+	@Inject
+	private FileUploadHelper fileUploadHelper;
 
-    @Inject
-    private ImportUtil importUtil;
+	@Inject
+	private ImportUtil importUtil;
 
-    @Inject
-    private ReportUtil reportUtil;
+	@Inject
+	private ReportUtil reportUtil;
 
-    @Inject
-    private PricingRepository priceRepository;
+	@Inject
+	private PricingRepository priceRepository;
 
-    @Inject
-    private CheckInOutImageRepository checkInOutImageRepository;
+	@Inject
+	private CheckInOutImageRepository checkInOutImageRepository;
 
-    @Inject
-    private TicketManagementService ticketManagementService;
+	@Inject
+	private TicketManagementService ticketManagementService;
 
-    @Inject
-    private AssetGroupRepository assetGroupRepository;
-    
-    @Inject
-    private ProjectRepository projectRepositoy;
-    
-    @Inject
+	@Inject
+	private AssetGroupRepository assetGroupRepository;
+
+	@Inject
+	private ProjectRepository projectRepositoy;
+
+	@Inject
 	private ManufacturerRepository manufacturerRepository;
-    
-    @Inject
+
+	@Inject
 	private VendorRepository vendorRepository;
+
+	@Inject
     private AssetTypeRepository assetTypeRepository;
-    
+
     @Inject
     private AssetParameterConfigRepository assetParamConfigRepository;
-    
+
     @Inject
     private AssetDocumentRepository assetDocumentRepository;
-    
+
+    @Inject
+    private AssetPpmScheduleRepository assetPpmScheduleRepository;
+
+    @Inject
+    private ChecklistRepository checklistRepository;
+
     //Asset
     public AssetDTO saveAsset(AssetDTO assetDTO) {
         log.debug("assets service");
@@ -176,7 +189,7 @@ public class AssetManagementService extends AbstractService {
     	Asset asset = mapperUtil.toEntity(assetDTO, Asset.class);
     	Site site = getSite(assetDTO.getSiteId());
         asset.setSite(site);
-        
+
         Manufacturer manufacturer = getManufacturer(assetDTO.getManufacturerId());
         asset.setManufacturer(manufacturer);
 
@@ -184,11 +197,10 @@ public class AssetManagementService extends AbstractService {
     	asset.setAmcVendor(vendor);
 
     	asset.setActive(Asset.ACTIVE_YES);
-    	
+
     	List<Asset> existingAssets = assetRepository.findAssetByTitle(assetDTO.getTitle());
         log.debug("Existing asset -"+ existingAssets);
         if(CollectionUtils.isEmpty(existingAssets)) {
-        	log.debug(">>> save! <<<");
             asset = assetRepository.save(asset);
         }
 
@@ -213,6 +225,8 @@ public class AssetManagementService extends AbstractService {
             dto.setUdsAsset(loc.isUdsAsset());
             dto.setCode(loc.getCode());
             dto.setDescription(loc.getDescription());
+            dto.setAssetGroup(loc.getAssetGroup());
+            dto.setAssetType(loc.getAssetType());
             assetDto.add(dto);
         }
         return assetDto;
@@ -247,6 +261,8 @@ public class AssetManagementService extends AbstractService {
             dto.setUdsAsset(loc.isUdsAsset());
             dto.setCode(loc.getCode());
             dto.setDescription(loc.getDescription());
+            dto.setAssetGroup(loc.getAssetGroup());
+            dto.setAssetType(loc.getAssetType());
             assetDto.add(dto);
         }
         return assetDto;
@@ -254,7 +270,16 @@ public class AssetManagementService extends AbstractService {
 
     public Asset getAsset(long id){
         Asset asset = assetRepository.findOne(id);
+        if (asset == null)
+			throw new TimesheetException("Asset not found : " + id);
         return asset;
+    }
+
+    public Checklist getCheckList(long id){
+    	Checklist checklist = checklistRepository.findOne(id);
+        if (checklist == null)
+			throw new TimesheetException("Checklist not found : " + id);
+        return checklist;
     }
 
     public AssetDTO getAssetDTO(long id){
@@ -270,25 +295,25 @@ public class AssetManagementService extends AbstractService {
         assetDTO.setUdsAsset(asset.isUdsAsset());
         assetDTO.setStartTime(asset.getStartTime());
         assetDTO.setEndTime(asset.getEndTime());*/
-        
-        assetDTO.setTitle(assetDTO.getTitle());
-        assetDTO.setAssetGroup(assetDTO.getAssetGroup());
-        assetDTO.setProjectId(assetDTO.getProjectId());
-        assetDTO.setSiteId(assetDTO.getSiteId());
-        assetDTO.setBlock(assetDTO.getBlock());
-        assetDTO.setFloor(assetDTO.getFloor());
-        assetDTO.setZone(assetDTO.getZone());
-        assetDTO.setModelNumber(assetDTO.getModelNumber());
-        assetDTO.setSerialNumber(assetDTO.getSerialNumber());
-        assetDTO.setPurchasePrice(assetDTO.getPurchasePrice());
-        assetDTO.setCurrentPrice(assetDTO.getCurrentPrice());
-        assetDTO.setEstimatedDisposePrice(assetDTO.getEstimatedDisposePrice());
-        assetDTO.setCode(assetDTO.getCode());
-        assetDTO.setUdsAsset(assetDTO.isUdsAsset());
-        
+
+//        assetDTO.setTitle(assetDTO.getTitle());
+//        assetDTO.setAssetGroup(assetDTO.getAssetGroup());
+//        assetDTO.setProjectId(assetDTO.getProjectId());
+//        assetDTO.setSiteId(assetDTO.getSiteId());
+//        assetDTO.setBlock(assetDTO.getBlock());
+//        assetDTO.setFloor(assetDTO.getFloor());
+//        assetDTO.setZone(assetDTO.getZone());
+//        assetDTO.setModelNumber(assetDTO.getModelNumber());
+//        assetDTO.setSerialNumber(assetDTO.getSerialNumber());
+//        assetDTO.setPurchasePrice(assetDTO.getPurchasePrice());
+//        assetDTO.setCurrentPrice(assetDTO.getCurrentPrice());
+//        assetDTO.setEstimatedDisposePrice(assetDTO.getEstimatedDisposePrice());
+//        assetDTO.setCode(assetDTO.getCode());
+//        assetDTO.setUdsAsset(assetDTO.isUdsAsset());
+
         return assetDTO;
     }
-    
+
     public AssetDTO getAssetByCode(String code){
         Asset asset = assetRepository.findByCode(code);
         AssetDTO assetDTO = mapperUtil.toModel(asset,AssetDTO.class);
@@ -379,10 +404,24 @@ public class AssetManagementService extends AbstractService {
     	}
     	return qrCodeBase64;
     }
-        
+
     public ExportResult generateReport(List<JobDTO> transactions, SearchCriteria criteria) {
         return reportUtil.generateJobReports(transactions, null, null, criteria);
     }
+
+	// public SearchResult<AssetDTO> getSiteAssets(Long siteId,int page) {
+	// Pageable pageRequest = new PageRequest(page, PagingUtil.PAGE_SIZE, new
+	// Sort(Direction.DESC,"id"));
+	//
+	// Page<Asset> assets= assetRepository.findBySiteId(siteId,pageRequest);
+	// SearchResult<AssetDTO> paginatedAssets = new SearchResult<>();
+	// paginatedAssets.setCurrPage(page);
+	// paginatedAssets.setTransactions(mapperUtil.toModelList(assets.getContent(),
+	// AssetDTO.class));
+	// paginatedAssets.setTotalCount(assets.getTotalElements());
+	// paginatedAssets.setTotalPages(assets.getTotalPages());
+	// return paginatedAssets;
+	// }
 
 
 	// public SearchResult<AssetDTO> getSiteAssets(Long siteId,int page) {
@@ -407,10 +446,10 @@ public class AssetManagementService extends AbstractService {
 		Employee employee = user.getEmployee();
 		List<EmployeeProjectSite> sites = employee.getProjectSites();
 		List<Long> siteIds = new ArrayList<Long>();
-    		for(EmployeeProjectSite site : sites) {
-    			siteIds.add(site.getSite().getId());
-    		}
-		
+		for (EmployeeProjectSite site : sites) {
+			siteIds.add(site.getSite().getId());
+		}
+
 		if (searchCriteria != null) {
 			Pageable pageRequest = null;
 			if (!StringUtils.isEmpty(searchCriteria.getColumnName())) {
@@ -427,24 +466,28 @@ public class AssetManagementService extends AbstractService {
 			}
 			Page<Asset> page = null;
 			List<AssetDTO> transactions = null;
-			log.debug( "name =" + searchCriteria.getAssetName() + " ,  assetType = " + searchCriteria.getAssetTypeName());
+			log.debug(
+					"name =" + searchCriteria.getAssetName() + " ,  assetType = " + searchCriteria.getAssetTypeName());
 			if (!searchCriteria.isFindAll()) {
 				if (!StringUtils.isEmpty(searchCriteria.getAssetTypeName())
-						&& !StringUtils.isEmpty(searchCriteria.getAssetName()) && searchCriteria.getProjectId() > 0 && searchCriteria.getSiteId() > 0) {
-					page = assetRepository.findByAllCriteria(searchCriteria.getAssetTypeName(), searchCriteria.getAssetName(), searchCriteria.getProjectId(), searchCriteria.getSiteId(), pageRequest);
+						&& !StringUtils.isEmpty(searchCriteria.getAssetName()) && searchCriteria.getProjectId() > 0
+						&& searchCriteria.getSiteId() > 0) {
+					page = assetRepository.findByAllCriteria(searchCriteria.getAssetTypeName(),
+							searchCriteria.getAssetName(), searchCriteria.getProjectId(), searchCriteria.getSiteId(),
+							pageRequest);
 				} else if (!StringUtils.isEmpty(searchCriteria.getAssetName())) {
 					page = assetRepository.findByName(siteIds, searchCriteria.getAssetName(), pageRequest);
 				} else if (!StringUtils.isEmpty(searchCriteria.getAssetTypeName())) {
-					page = assetRepository.findByAssetType(siteIds,searchCriteria.getAssetTypeName(),pageRequest);
+					page = assetRepository.findByAssetType(siteIds, searchCriteria.getAssetTypeName(), pageRequest);
 				} else if (searchCriteria.getSiteId() > 0) {
-					page = assetRepository.findBySiteId(searchCriteria.getSiteId(),pageRequest);
+					page = assetRepository.findBySiteId(searchCriteria.getSiteId(), pageRequest);
 				} else if (searchCriteria.getProjectId() > 0) {
-					page = assetRepository.findByProjectId(searchCriteria.getProjectId(),pageRequest);
-				} 
+					page = assetRepository.findByProjectId(searchCriteria.getProjectId(), pageRequest);
+				}
 			} else {
-				if(CollectionUtils.isNotEmpty(siteIds)) {
-					page = assetRepository.findAll(siteIds,pageRequest);
-				}else {
+				if (CollectionUtils.isNotEmpty(siteIds)) {
+					page = assetRepository.findAll(siteIds, pageRequest);
+				} else {
 					page = assetRepository.findAll(pageRequest);
 				}
 			}
@@ -467,8 +510,8 @@ public class AssetManagementService extends AbstractService {
 		return result;
 	}
 
-	private void buildSearchResult(SearchCriteria searchCriteria, Page<Asset> page,
-			List<AssetDTO> transactions, SearchResult<AssetDTO> result) {
+	private void buildSearchResult(SearchCriteria searchCriteria, Page<Asset> page, List<AssetDTO> transactions,
+			SearchResult<AssetDTO> result) {
 		if (page != null) {
 			result.setTotalPages(page.getTotalPages());
 		}
@@ -480,7 +523,7 @@ public class AssetManagementService extends AbstractService {
 		result.setTransactions(transactions);
 		return;
 	}
-	
+
 	private AssetDTO mapToModel(Asset asset, boolean includeShifts) {
 		AssetDTO assetDTO = new AssetDTO();
 		assetDTO.setId(asset.getId());
@@ -525,55 +568,56 @@ public class AssetManagementService extends AbstractService {
 		return er;
 	}
 
-	private Site getSite(Long siteId) {
+	private Site getSite(long siteId) {
 		Site site = siteRepository.findOne(siteId);
 		if (site == null)
 			throw new TimesheetException("Site not found : " + siteId);
 		return site;
 	}
-	
-	private Manufacturer getManufacturer(Long manufacturerId) {
+
+	private Manufacturer getManufacturer(long manufacturerId) {
 		Manufacturer manufacturer = manufacturerRepository.findOne(manufacturerId);
-		if (manufacturer == null)
-			throw new TimesheetException("Manufacturer not found : " + manufacturerId);
+		//if (manufacturer == null)
+		//	throw new TimesheetException("Manufacturer not found : " + manufacturerId);
 		return manufacturer;
 	}
-	
-	private Vendor getVendor(Long vendorId) {
+
+	private Vendor getVendor(long vendorId) {
 		Vendor vendor = vendorRepository.findOne(vendorId);
-		if (vendor == null)
-			throw new TimesheetException("Manufacturer not found : " + vendorId);
+		//if (vendor == null)
+		//	throw new TimesheetException("Manufacturer not found : " + vendorId);
 		return vendor;
 	}
-	
-	private Project getProject(Long projectId) {
+
+	private Project getProject(long projectId) {
 		Project project = projectRepositoy.findOne(projectId);
-		if(project == null) throw new TimesheetException("Project not found : "+projectId);
+		if (project == null)
+			throw new TimesheetException("Project not found : " + projectId);
 		return project;
 	}
 
 	public AssetgroupDTO createAssetGroup(AssetgroupDTO assetGroupDTO) {
-		AssetGroup assetgroup= mapperUtil.toEntity(assetGroupDTO, AssetGroup.class);
-	    assetGroupRepository.save(assetgroup);
-        return assetGroupDTO;
-    }
-	
-	public List<AssetgroupDTO> findAllAssetGroups() {
-      List<AssetGroup> assetgroup = assetGroupRepository.findAll();
-      return mapperUtil.toModelList(assetgroup, AssetgroupDTO.class);
+		AssetGroup assetgroup = mapperUtil.toEntity(assetGroupDTO, AssetGroup.class);
+		assetGroupRepository.save(assetgroup);
+		return assetGroupDTO;
 	}
-	
+
+	public List<AssetgroupDTO> findAllAssetGroups() {
+		List<AssetGroup> assetgroup = assetGroupRepository.findAll();
+		return mapperUtil.toModelList(assetgroup, AssetgroupDTO.class);
+	}
+
 	public List<AssetTypeDTO> findAllAssetType() {
-      List<AssetType> assetType = assetTypeRepository.findAll();
-      return mapperUtil.toModelList(assetType, AssetTypeDTO.class);
+		List<AssetType> assetType = assetTypeRepository.findAll();
+		return mapperUtil.toModelList(assetType, AssetTypeDTO.class);
 	}
 
 	public List<AssetParameterConfigDTO> findByAssetConfig(String assertType, Long assetId) {
 		// TODO Auto-generated method stub
 		List<AssetParameterConfig> entities = assetParamConfigRepository.findByAssetConfig(assertType, assetId);
-		return mapperUtil.toModelList(entities, AssetParameterConfigDTO.class);	
+		return mapperUtil.toModelList(entities, AssetParameterConfigDTO.class);
 	}
-	
+
 	public void deleteAssetConfig(Long id) {
 		log.debug("Inside deleteAssetConfig");
 		AssetParameterConfig assetConfigUpdate = assetParamConfigRepository.findOne(id);
@@ -589,7 +633,26 @@ public class AssetManagementService extends AbstractService {
 		assetParamConfigDTO = mapperUtil.toModel(assetParamConfig, AssetParameterConfigDTO.class);
 		return assetParamConfigDTO;
 	}
-	
+
+	public AssetPpmScheduleDTO createAssetPpmSchedule(AssetPpmScheduleDTO assetPpmScheduleDTO) {
+		// TODO Auto-generated method stub
+		log.debug(">> create ppm schedule <<<");
+		AssetPPMSchedule assetPPMSchedule = mapperUtil.toEntity(assetPpmScheduleDTO, AssetPPMSchedule.class);
+		log.debug(">> after mapping ppm schedule <<<");
+		assetPPMSchedule.setActive(AssetPPMSchedule.ACTIVE_YES);
+
+		Checklist checklist = getCheckList(assetPpmScheduleDTO.getChecklistId());
+		assetPPMSchedule.setChecklist(checklist);
+
+		Asset asset = getAsset(assetPpmScheduleDTO.getAssetId());
+		assetPPMSchedule.setAsset(asset);
+
+		assetPPMSchedule = assetPpmScheduleRepository.save(assetPPMSchedule);
+		log.debug(">> after save <<<");
+		assetPpmScheduleDTO = mapperUtil.toModel(assetPPMSchedule, AssetPpmScheduleDTO.class);
+		return assetPpmScheduleDTO;
+	}
+
 	@Transactional
 	public AssetDocumentDTO uploadFile(AssetDocumentDTO assetDocumentDTO, MultipartFile file) {
 		// TODO Auto-generated method stub
@@ -609,5 +672,19 @@ public class AssetManagementService extends AbstractService {
 		return assetDocumentDTO;
 	}
 
+	public List<AssetDocumentDTO> findAllDocuments(String type, Long assetId) {
+		// TODO Auto-generated method stub
+		List<AssetDocument> assetDocument = assetDocumentRepository.findAllByType(type, assetId);
+		return mapperUtil.toModelList(assetDocument, AssetDocumentDTO.class);
+	}
 	
+	public byte[] getUploadedFile(long documentId) {
+		AssetDocument assetDocument = assetDocumentRepository.findOne(documentId);
+		String fileName = assetDocument.getFile();
+		Asset assetEntity = assetRepository.findOne(assetDocument.getAsset().getId());
+		Long siteId = assetEntity.getSite().getId();
+		String code = assetEntity.getCode();
+		return exportUtil.readUploadedFile(siteId, fileName, code);
+	}
+
 }

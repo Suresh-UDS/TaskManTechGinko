@@ -35,14 +35,13 @@ public class Asset extends AbstractAuditingEntity implements Serializable {
 
 	@Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+    private long id;
 
     @NotNull
     @Size(min = 1, max = 250)
     @Column(length = 250, nullable = false)
     private String title;
 
-    @NotNull
     @Size(min = 1, max = 250)
     @Column(length = 250, nullable = false)
     private String code;
@@ -106,10 +105,10 @@ public class Asset extends AbstractAuditingEntity implements Serializable {
 	
 	private boolean udsAsset;
 
-	public Long getId() {
+	public long getId() {
         return id;
     }
-    public void setId(Long id) {
+    public void setId(long id) {
         this.id = id;
     }
     public String getTitle() {

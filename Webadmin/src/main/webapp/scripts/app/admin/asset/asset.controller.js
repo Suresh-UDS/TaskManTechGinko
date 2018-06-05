@@ -23,9 +23,9 @@ angular.module('timeSheetApp')
         $scope.selectedAsset = null;
         $scope.selectedProject = {};
         $scope.selectedSite = {};
-        $scope.selectedBlock = {};
-        $scope.selectedFloor = {};
-        $scope.selectedZone = {};
+        $scope.selectedBlock = null;
+        $scope.selectedFloor = null;
+        $scope.selectedZone = null;
         $scope.pageSort = 10;
         $scope.pager = {};
         $scope.assetGen ={};
@@ -49,6 +49,9 @@ angular.module('timeSheetApp')
         $scope.assetGroup = {};
 
         $scope.parameter = {};
+
+        $scope.manufacturer = {};
+        $scope.vendor = {};
 
         $scope.consumptionMonitoringRequired = false;
         
@@ -105,16 +108,54 @@ angular.module('timeSheetApp')
 
         $scope.loadManufacturer = function () {
             ManufacturerComponent.findAll().then(function (data) {
-                console.log("Loading all Manufacturer -- " , data)
+                console.log("Loading all Manufacturer -- " , data);
                 $scope.manufacturers = data;
             });
-        };
+        }
+
+        $scope.addManufacturer = function () {
+            console.log($scope.manufacturer);
+            if($scope.manufacturer){
+                console.log("Manufacturer entered");
+                ManufacturerComponent.create($scope.manufacturer).then(function (response) {
+                    console.log(response);
+                    $scope.manufacturer = {};
+                    $scope.showNotifications('top','center','success','Manufacturer Added Successfully');
+                    $scope.loadManufacturer();
+                    
+
+                })
+            }else{
+                console.log("Manufacturer not entered");
+            }
+
+
+        }
 
          $scope.loadVendor = function () {
             VendorComponent.findAll().then(function (data) {
                 console.log("Loading all Vendor -- " , data)
                 $scope.vendors = data;
             });
+        };
+
+        $scope.addVendor = function () {
+            console.log($scope.vendor);
+            if($scope.vendor){
+                console.log("Asset Type entered");
+                VendorComponent.create($scope.vendor).then(function (response) {
+                    console.log(response);
+                    $scope.vendor = {};
+                    $scope.showNotifications('top','center','success','Vendor Added Successfully');
+                    $scope.loadVendor();
+                    
+
+                })
+            }else{
+                console.log("Vendor not entered");
+            }
+
+
         };
 
 
@@ -336,6 +377,10 @@ angular.module('timeSheetApp')
             });
         };
 
+        $('input#acquiredDate').on('dp.change', function(e){
+                $scope.assetGen.acquiredDate = e.date._d;
+        });
+
         $scope.saveAsset = function () {
                 $scope.error = null;
                 $scope.success = null;
@@ -344,48 +389,49 @@ angular.module('timeSheetApp')
                 if(!$scope.selectedProject.id){
                     $scope.errorProject = "true";
                 }else{
-                    if(!$scope.selectedAssetType.id){
+        
+                    if($scope.selectedAssetType.id){
                        $scope.assetGen.assetType = $scope.selectedAssetType.id;
                     }
-                     if(!$scope.selectedAssetGroup.id){
+
+                     if($scope.selectedAssetGroup.id){
                         $scope.assetGen.assetGroup = $scope.selectedAssetGroup.id;
                      }
-                     if(!$scope.selectedAssetStatus.id){
+
+                     if($scope.selectedAssetStatus.id){
                         $scope.assetGen.assetStatus = $scope.selectedAssetStatus.id;
                      }
-                     if(!$scope.selectedAssetStatus.id){
-                        $scope.assetGen.assetStatus = $scope.selectedAssetStatus.id;
-                     }
-                     if(!$scope.selectedManufacturer.id){
+            
+                     if($scope.selectedManufacturer.id){
                         $scope.assetGen.manufacturerId = $scope.selectedManufacturer.id;
                      }
-                     if(!$scope.selectedServiceProvider.id){
+                     if($scope.selectedServiceProvider.id){
                          $scope.assetGen.serviceProvider = $scope.selectedServiceProvider.id;
                      }
-                     if(!$scope.selectedServiceWarranty.id){
+                     if($scope.selectedServiceWarranty.id){
                         $scope.assetGen.serviceWarranty = $scope.selectedServiceWarranty.id;
                      }
-                     if(!$scope.selectedVendor.id){
-                        $scope.assetGen.VendorId = $scope.selectedVendor.id;
+                     if($scope.selectedVendor.id){
+                        $scope.assetGen.vendorId = $scope.selectedVendor.id;
                      }
-                     if(!$scope.selectedSite.id){
+                     if($scope.selectedSite.id){
                          $scope.assetGen.siteId = $scope.selectedSite.id;
                      }
-                      if(!$scope.selectedProject.id){
+                      if($scope.selectedProject.id){
                           $scope.assetGen.projectId = $scope.selectedProject.id;
                      }
-                      if(!$scope.selectedBlock){
+                      if($scope.selectedBlock){
                           $scope.assetGen.block = $scope.selectedBlock;
                      }
-                      if(!$scope.selectedFloor){
+                      if($scope.selectedFloor){
                           $scope.assetGen.floor = $scope.selectedFloor;
                      }
-                      if(!$scope.selectedZone){
+                      if($scope.selectedZone){
                          $scope.assetGen.zone = $scope.selectedZone;
                      }
 
                     console.log("Asset Create List -- ",$scope.assetGen);
-                    AssetComponent.create($scope.assetGen).then(function() {
+                    AssetComponent.create($scope.assetGen).then(function(response) {
                         $scope.success = 'OK';
                         $scope.showNotifications('top','center','success','Asset Added');
                         $scope.selectedSite = null;
@@ -415,6 +461,8 @@ angular.module('timeSheetApp')
         	$scope.loadAllParameters();
         	$scope.loadAllParameterUOMs();
             $scope.loadAllSites();
+            $scope.getAllUploadedFiles();
+            $scope.getAllUploadedPhotos();
         	if($scope.isEdit){
         	    console.log("edit asset")
         		$scope.editAsset();
@@ -531,7 +579,7 @@ angular.module('timeSheetApp')
         }
 
 
-
+       
 
 
         $scope.addAssetType = function () {
@@ -663,7 +711,39 @@ angular.module('timeSheetApp')
 
 	    };
 	    
-	    $scope.uploadAsset = { };
+	    $scope.uploadAsset = {};
+	    
+	    $scope.uploadAssetPhoto = {};
+	    
+	    $scope.getAllUploadedFiles = function() {
+	    	var uploadObj = {};
+	    	uploadObj.type = 'document';
+	    	if($stateParams.id){ 
+	    		uploadObj.assetId = $stateParams.id;
+	    	}else{ 
+	    		uploadObj.assetId = 1;
+	    	}
+	    	
+	    	AssetComponent.getAllUploadedFiles(uploadObj).then(function(data){ 
+	    		console.log(data);
+	    		$scope.uploadFiles = data;
+	    	});
+	    }
+	    
+	    $scope.getAllUploadedPhotos = function() {
+	    	var photoObj = {};
+	    	photoObj.type = 'image';
+	    	if($stateParams.id){ 
+	    		photoObj.assetId = $stateParams.id;
+	    	}else{ 
+	    		photoObj.assetId = 1;
+	    	}
+	    	
+	    	AssetComponent.getAllUploadedPhotos(photoObj).then(function(data){ 
+	    		console.log(data);
+	    		$scope.uploadAssetPhotos = data;
+	    	});
+	    }
 	    
 	    $scope.uploadAssetFile = function() {  
 	    	console.log($scope.selectedClientFile);
@@ -672,9 +752,17 @@ angular.module('timeSheetApp')
 	        	console.log('selected asset file - ' + $scope.selectedClientFile);
 	        	$scope.uploadAsset.uploadFile = $scope.selectedClientFile;
 	        	$scope.uploadAsset.assetId = 1;
+	        	$scope.uploadAsset.type = 'document';
 	        	console.log($scope.uploadAsset);
 	        	AssetComponent.uploadAssetFile($scope.uploadAsset).then(function(data){
 	        		console.log(data);
+	        		if(data) { 
+	        			$scope.uploadFiles.push(data);
+		        		$scope.getAllUploadedFiles();
+	        		}else{ 
+	        			console.log('No data found!');
+	        		}
+	        		
 	        	},function(err){
 	        		console.log('Import error');
 	        		console.log(err);
@@ -683,6 +771,46 @@ angular.module('timeSheetApp')
         		console.log('select a file');
         	}
 	    	
+	    }
+	    
+	    $scope.uploadAssetPhoto = function() {  
+	    	console.log($scope.selectedPhotoFile);
+	    	console.log($scope.uploadAssetPhoto.title);
+	     	if($scope.selectedPhotoFile) {
+	        	console.log('selected asset file - ' + $scope.selectedPhotoFile);
+	        	$scope.uploadAssetPhoto.uploadFile = $scope.selectedPhotoFile;
+	        	$scope.uploadAssetPhoto.assetId = 1;
+	        	$scope.uploadAssetPhoto.type = 'image';
+	        	console.log($scope.uploadAssetPhoto);
+	        	AssetComponent.uploadAssetPhoto($scope.uploadAssetPhoto).then(function(data){
+	        		console.log(data);
+	        		if(data) { 
+	        			$scope.uploadAssetPhotos.push(data);
+		        		$scope.getAllUploadedPhotos();
+	        		}else{ 
+	        			console.log('No data found!');
+	        		}
+	        		
+	        	},function(err){
+	        		console.log('Import error');
+	        		console.log(err);
+	        	});
+        	} else {
+        		console.log('select a file');
+        	}
+	    	
+	    }
+
+	    
+	    $scope.showFile = function(docId, filename) { 
+	    	console.log(docId);
+	    	var document = {};
+	    	document.id = docId;
+	    	document.fileName = filename; 
+	    	AssetComponent.readFile(document).then(function(data){ 
+	    		console.log(data);
+	    		$scope.downloadFile = data;
+	    	});
 	    }
 
 
