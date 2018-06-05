@@ -8,7 +8,7 @@ import {ViewJobPage} from "../jobs/view-job";
 import {CompleteJobPage} from "../jobs/completeJob";
 import {ViewTicket} from "../ticket/view-ticket";
 import {CreateTicket} from "../ticket/create-ticket";
-
+import { DatePicker } from '@ionic-native/date-picker';
 /**
  * Generated class for the AssetView page.
  *
@@ -28,7 +28,11 @@ export class AssetView {
 
     totalPages:0;
     page:1;
-  constructor(private modalCtrl:ModalController,private componentService:componentService,public navCtrl: NavController, public navParams: NavParams, public jobService:JobService) {
+    fromDate:any;
+    toDate:any;
+    viewButton:any;
+
+  constructor(private modalCtrl:ModalController,private datePicker: DatePicker,private componentService:componentService,public navCtrl: NavController, public navParams: NavParams, public jobService:JobService) {
     this.assetDetails = this.navParams.data.assetDetails;
     this.categories = 'details';
   }
@@ -193,6 +197,59 @@ export class AssetView {
 
     viewTicket(ticket){
         this.navCtrl.push(ViewTicket,{ticket:ticket});
+    }
+
+
+    // Ticket search
+
+    selectFromDate()
+    {
+        this.datePicker.show({
+            date: new Date(),
+            mode: 'date',
+            androidTheme: this.datePicker.ANDROID_THEMES.THEME_HOLO_DARK
+        }).then(
+            date => {
+                this.fromDate=date;
+                console.log('Got date: ', date);
+                if(this.fromDate && this.toDate)
+                {
+                    console.log('view button true');
+                    this.viewButton=true;
+                }
+
+            },
+            err => console.log('Error occurred while getting date: ', err)
+        );
+
+    }
+    selectToDate()
+    {
+        this.datePicker.show({
+            date: new Date(),
+            mode: 'date',
+            androidTheme: this.datePicker.ANDROID_THEMES.THEME_HOLO_DARK
+        }).then(
+            date => {
+                this.toDate=date;
+                console.log('Got date: ', date);
+                if(this.fromDate && this.toDate)
+                {
+                    console.log('view button true');
+                    this.viewButton=true;
+                }
+
+            },
+            err => console.log('Error occurred while getting date: ', err)
+        );
+
+    }
+    dateSearch(fromDate,toDate)
+    {
+        // this.componentService.showLoader("")
+        console.log("From Date:"+fromDate);
+        console.log("To Date:"+toDate);
+
     }
 
 }
