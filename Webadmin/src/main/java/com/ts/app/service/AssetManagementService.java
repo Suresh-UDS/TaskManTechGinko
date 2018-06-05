@@ -1,7 +1,5 @@
 package com.ts.app.service;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -23,32 +21,30 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.ts.app.domain.AbstractAuditingEntity;
 import com.ts.app.domain.Asset;
+import com.ts.app.domain.AssetAMCSchedule;
 import com.ts.app.domain.AssetDocument;
 import com.ts.app.domain.AssetGroup;
 import com.ts.app.domain.AssetPPMSchedule;
 import com.ts.app.domain.AssetParameterConfig;
 import com.ts.app.domain.AssetType;
 import com.ts.app.domain.Checklist;
-import com.ts.app.domain.Designation;
+import com.ts.app.domain.Employee;
+import com.ts.app.domain.EmployeeProjectSite;
+import com.ts.app.domain.Manufacturer;
 import com.ts.app.domain.Project;
 import com.ts.app.domain.Site;
-import com.ts.app.domain.Ticket;
+import com.ts.app.domain.User;
+import com.ts.app.domain.Vendor;
+import com.ts.app.repository.AssetAMCRepository;
 import com.ts.app.repository.AssetDocumentRepository;
 import com.ts.app.repository.AssetGroupRepository;
 import com.ts.app.repository.AssetParameterConfigRepository;
 import com.ts.app.repository.AssetPpmScheduleRepository;
-import com.ts.app.domain.Employee;
-import com.ts.app.domain.EmployeeProjectSite;
-import com.ts.app.domain.Manufacturer;
-import com.ts.app.domain.ParameterConfig;
-import com.ts.app.domain.User;
-import com.ts.app.domain.Vendor;
 import com.ts.app.repository.AssetRepository;
 import com.ts.app.repository.AssetTypeRepository;
 import com.ts.app.repository.CheckInOutImageRepository;
 import com.ts.app.repository.CheckInOutRepository;
 import com.ts.app.repository.ChecklistRepository;
-import com.ts.app.repository.DesignationRepository;
 import com.ts.app.repository.EmployeeRepository;
 import com.ts.app.repository.JobRepository;
 import com.ts.app.repository.LocationRepository;
@@ -60,13 +56,13 @@ import com.ts.app.repository.SiteRepository;
 import com.ts.app.repository.TicketRepository;
 import com.ts.app.repository.UserRepository;
 import com.ts.app.repository.VendorRepository;
-import com.ts.app.service.util.DateUtil;
 import com.ts.app.service.util.ExportUtil;
 import com.ts.app.service.util.FileUploadHelper;
 import com.ts.app.service.util.ImportUtil;
 import com.ts.app.service.util.MapperUtil;
 import com.ts.app.service.util.QRCodeUtil;
 import com.ts.app.service.util.ReportUtil;
+import com.ts.app.web.rest.dto.AssetAMCScheduleDTO;
 import com.ts.app.web.rest.dto.AssetDTO;
 import com.ts.app.web.rest.dto.AssetDocumentDTO;
 import com.ts.app.web.rest.dto.AssetParameterConfigDTO;
@@ -74,11 +70,9 @@ import com.ts.app.web.rest.dto.AssetPpmScheduleDTO;
 import com.ts.app.web.rest.dto.AssetTypeDTO;
 import com.ts.app.web.rest.dto.AssetgroupDTO;
 import com.ts.app.web.rest.dto.BaseDTO;
-import com.ts.app.web.rest.dto.DesignationDTO;
 import com.ts.app.web.rest.dto.ExportResult;
 import com.ts.app.web.rest.dto.ImportResult;
 import com.ts.app.web.rest.dto.JobDTO;
-import com.ts.app.web.rest.dto.ParameterConfigDTO;
 import com.ts.app.web.rest.dto.SearchCriteria;
 import com.ts.app.web.rest.dto.SearchResult;
 import com.ts.app.web.rest.errors.TimesheetException;
@@ -100,6 +94,9 @@ public class AssetManagementService extends AbstractService {
 
 	@Inject
 	private AssetRepository assetRepository;
+
+	@Inject
+	private AssetAMCRepository assetAMCRepository;
 
 	@Inject
 	private TicketRepository ticketRepository;
@@ -166,273 +163,264 @@ public class AssetManagementService extends AbstractService {
 
 	@Inject
 	private VendorRepository vendorRepository;
-	
+
 	@Inject
-    private AssetTypeRepository assetTypeRepository;
-    
-    @Inject
-    private AssetParameterConfigRepository assetParamConfigRepository;
-    
-    @Inject
-    private AssetDocumentRepository assetDocumentRepository;
-    
-    @Inject
-    private AssetPpmScheduleRepository assetPpmScheduleRepository;
-    
-    @Inject
-    private ChecklistRepository checklistRepository;
-    
-    //Asset
-    public AssetDTO saveAsset(AssetDTO assetDTO) {
-        log.debug("assets service");
+	private AssetTypeRepository assetTypeRepository;
 
-    	Asset asset = mapperUtil.toEntity(assetDTO, Asset.class);
-    	Site site = getSite(assetDTO.getSiteId());
-        asset.setSite(site);
-        
-        Manufacturer manufacturer = getManufacturer(assetDTO.getManufacturerId());
-        asset.setManufacturer(manufacturer);
-        
-        Vendor vendor = getVendor(assetDTO.getVendorId());
-    	asset.setAmcVendor(vendor);
-    	
-    	asset.setActive(Asset.ACTIVE_YES);
-    	
-    	List<Asset> existingAssets = assetRepository.findAssetByTitle(assetDTO.getTitle());
-        log.debug("Existing asset -"+ existingAssets);
-        if(CollectionUtils.isEmpty(existingAssets)) {
-            asset = assetRepository.save(asset);
-        }
+	@Inject
+	private AssetParameterConfigRepository assetParamConfigRepository;
 
-        return mapperUtil.toModel(asset, AssetDTO.class);
+	@Inject
+	private AssetDocumentRepository assetDocumentRepository;
 
-    	}
+	@Inject
+	private AssetPpmScheduleRepository assetPpmScheduleRepository;
 
-    public List<AssetDTO> findAllAssets(){
-        log.debug("get all assets");
-        List<Asset> assets = assetRepository.findAll();
-        List<AssetDTO> assetDto = new ArrayList<>();
-        for(Asset loc: assets){
-            AssetDTO dto = new AssetDTO();
-            Long siteId = loc.getSite().getId();
-            Site site = getSite(siteId);
-            dto.setId(loc.getId());
-            dto.setTitle(loc.getTitle());
-            dto.setSiteId(site.getId());
-            dto.setSiteName(site.getName());
-            dto.setStartTime(loc.getStartTime());
-            dto.setEndTime(loc.getEndTime());
-            dto.setUdsAsset(loc.isUdsAsset());
-            dto.setCode(loc.getCode());
-            dto.setDescription(loc.getDescription());
-            assetDto.add(dto);
-        }
-        return assetDto;
-    }
+	@Inject
+	private ChecklistRepository checklistRepository;
 
-//    public SearchResult<AssetDTO> getSiteAssets(Long siteId,int	 page) {
-//        Pageable pageRequest = new PageRequest(page, PagingUtil.PAGE_SIZE, new Sort(Direction.DESC,"id"));
-//
-//        Page<Asset> assets= assetRepository.findBySiteId(siteId,pageRequest);
-//        SearchResult<AssetDTO> paginatedAssets = new SearchResult<>();
-//        paginatedAssets.setCurrPage(page);
-//        paginatedAssets.setTransactions(mapperUtil.toModelList(assets.getContent(), AssetDTO.class));
-//        paginatedAssets.setTotalCount(assets.getTotalElements());
-//        paginatedAssets.setTotalPages(assets.getTotalPages());
-//        return paginatedAssets;
-//    }
+	// Asset
+	public AssetDTO saveAsset(AssetDTO assetDTO) {
+		log.debug("assets service");
 
-    public List<AssetDTO> getSiteAssets(Long AssetSiteId){
-        log.debug("get site assets");
-        List<Asset> assets = assetRepository.findBySiteId(AssetSiteId);
-        List<AssetDTO> assetDto = new ArrayList<>();
-        for(Asset loc: assets){
-            AssetDTO dto = new AssetDTO();
-            Long siteId = loc.getSite().getId();
-            Site site = getSite(siteId);
-            dto.setId(loc.getId());
-            dto.setTitle(loc.getTitle());
-            dto.setSiteId(site.getId());
-            dto.setSiteName(site.getName());
-            dto.setStartTime(loc.getStartTime());
-            dto.setEndTime(loc.getEndTime());
-            dto.setUdsAsset(loc.isUdsAsset());
-            dto.setCode(loc.getCode());
-            dto.setDescription(loc.getDescription());
-            assetDto.add(dto);
-        }
-        return assetDto;
-    }
+		Asset asset = mapperUtil.toEntity(assetDTO, Asset.class);
+		Site site = getSite(assetDTO.getSiteId());
+		asset.setSite(site);
 
-    public Asset getAsset(long id){
-        Asset asset = assetRepository.findOne(id);
-        if (asset == null)
+		Manufacturer manufacturer = getManufacturer(assetDTO.getManufacturerId());
+		asset.setManufacturer(manufacturer);
+
+		Vendor vendor = getVendor(assetDTO.getVendorId());
+		asset.setAmcVendor(vendor);
+
+		asset.setActive(Asset.ACTIVE_YES);
+
+		List<Asset> existingAssets = assetRepository.findAssetByTitle(assetDTO.getTitle());
+		log.debug("Existing asset -" + existingAssets);
+		if (CollectionUtils.isEmpty(existingAssets)) {
+			asset = assetRepository.save(asset);
+		}
+
+		return mapperUtil.toModel(asset, AssetDTO.class);
+
+	}
+
+	public List<AssetDTO> findAllAssets() {
+		log.debug("get all assets");
+		List<Asset> assets = assetRepository.findAll();
+		List<AssetDTO> assetDto = new ArrayList<>();
+		for (Asset loc : assets) {
+			AssetDTO dto = new AssetDTO();
+			Long siteId = loc.getSite().getId();
+			Site site = getSite(siteId);
+			dto.setId(loc.getId());
+			dto.setTitle(loc.getTitle());
+			dto.setSiteId(site.getId());
+			dto.setSiteName(site.getName());
+			dto.setStartTime(loc.getStartTime());
+			dto.setEndTime(loc.getEndTime());
+			dto.setUdsAsset(loc.isUdsAsset());
+			dto.setCode(loc.getCode());
+			dto.setDescription(loc.getDescription());
+			assetDto.add(dto);
+		}
+		return assetDto;
+	}
+
+	public List<AssetDTO> getSiteAssets(Long AssetSiteId) {
+		log.debug("get site assets");
+		List<Asset> assets = assetRepository.findBySiteId(AssetSiteId);
+		List<AssetDTO> assetDto = new ArrayList<>();
+		for (Asset loc : assets) {
+			AssetDTO dto = new AssetDTO();
+			Long siteId = loc.getSite().getId();
+			Site site = getSite(siteId);
+			dto.setId(loc.getId());
+			dto.setTitle(loc.getTitle());
+			dto.setSiteId(site.getId());
+			dto.setSiteName(site.getName());
+			dto.setStartTime(loc.getStartTime());
+			dto.setEndTime(loc.getEndTime());
+			dto.setUdsAsset(loc.isUdsAsset());
+			dto.setCode(loc.getCode());
+			dto.setDescription(loc.getDescription());
+			assetDto.add(dto);
+		}
+		return assetDto;
+	}
+
+	public Asset getAsset(long id) {
+		Asset asset = assetRepository.findOne(id);
+		if (asset == null)
 			throw new TimesheetException("Asset not found : " + id);
-        return asset;
-    }
-    
-    public Checklist getCheckList(long id){
-    	Checklist checklist = checklistRepository.findOne(id);
-        if (checklist == null)
+		return asset;
+	}
+
+	public Checklist getCheckList(long id) {
+		Checklist checklist = checklistRepository.findOne(id);
+		if (checklist == null)
 			throw new TimesheetException("Checklist not found : " + id);
-        return checklist;
-    }
+		return checklist;
+	}
 
-    public AssetDTO getAssetDTO(long id){
-        Asset asset = assetRepository.findOne(id);
-        AssetDTO assetDTO = mapperUtil.toModel(asset,AssetDTO.class);
-        /*Site site = getSite(assetDTO.getSiteId());
-        assetDTO.setActive(asset.getActive());
-        assetDTO.setSiteId(assetDTO.getSiteId());
-        assetDTO.setSiteName(assetDTO.getSiteName());
-        assetDTO.setTitle(asset.getTitle());
-        assetDTO.setCode(asset.getCode());
-        assetDTO.setDescription(asset.getDescription());
-        assetDTO.setUdsAsset(asset.isUdsAsset());
-        assetDTO.setStartTime(asset.getStartTime());
-        assetDTO.setEndTime(asset.getEndTime());*/
-        
-        assetDTO.setTitle(assetDTO.getTitle());
-        assetDTO.setAssetGroup(assetDTO.getAssetGroup());
-        assetDTO.setProjectId(assetDTO.getProjectId());
-        assetDTO.setSiteId(assetDTO.getSiteId());
-        assetDTO.setBlock(assetDTO.getBlock());
-        assetDTO.setFloor(assetDTO.getFloor());
-        assetDTO.setZone(assetDTO.getZone());
-        assetDTO.setModelNumber(assetDTO.getModelNumber());
-        assetDTO.setSerialNumber(assetDTO.getSerialNumber());
-        assetDTO.setPurchasePrice(assetDTO.getPurchasePrice());
-        assetDTO.setCurrentPrice(assetDTO.getCurrentPrice());
-        assetDTO.setEstimatedDisposePrice(assetDTO.getEstimatedDisposePrice());
-        assetDTO.setCode(assetDTO.getCode());
-        assetDTO.setUdsAsset(assetDTO.isUdsAsset());
-        
-        return assetDTO;
-    }
-    
-    public AssetDTO getAssetByCode(String code){
-        Asset asset = assetRepository.findByCode(code);
-        AssetDTO assetDTO = mapperUtil.toModel(asset,AssetDTO.class);
-        Site site = getSite(assetDTO.getSiteId());
-        assetDTO.setActive(asset.getActive());
-        assetDTO.setSiteId(assetDTO.getSiteId());
-        assetDTO.setSiteName(assetDTO.getSiteName());
-        assetDTO.setTitle(asset.getTitle());
-        assetDTO.setCode(asset.getCode());
-        assetDTO.setDescription(asset.getDescription());
-        assetDTO.setUdsAsset(asset.isUdsAsset());
-        assetDTO.setStartTime(asset.getStartTime());
-        assetDTO.setEndTime(asset.getEndTime());
-        return assetDTO;
-    }
+	public AssetDTO getAssetDTO(long id) {
+		Asset asset = assetRepository.findOne(id);
+		log.debug("Get asset by Id service");
+		log.debug("asset Type" + asset.getAssetType());
+		log.debug("Asset group" + asset.getAssetGroup());
+		AssetDTO assetDTO = mapperUtil.toModel(asset, AssetDTO.class);
+		return assetDTO;
+	}
 
+	public AssetDTO getAssetByCode(String code) {
+		Asset asset = assetRepository.findByCode(code);
+		AssetDTO assetDTO = mapperUtil.toModel(asset, AssetDTO.class);
+		Site site = getSite(assetDTO.getSiteId());
+		assetDTO.setActive(asset.getActive());
+		assetDTO.setSiteId(assetDTO.getSiteId());
+		assetDTO.setSiteName(assetDTO.getSiteName());
+		assetDTO.setTitle(asset.getTitle());
+		assetDTO.setCode(asset.getCode());
+		assetDTO.setDescription(asset.getDescription());
+		assetDTO.setUdsAsset(asset.isUdsAsset());
+		assetDTO.setStartTime(asset.getStartTime());
+		assetDTO.setEndTime(asset.getEndTime());
+		return assetDTO;
+	}
 
-    private void mapToEntityAssets(AssetDTO assetDTO, Asset asset) {
-        /*Site site = getSite(assetDTO.getSiteId());
+	private void mapToEntityAssets(AssetDTO assetDTO, Asset asset) {
+		asset.setTitle(assetDTO.getTitle());
+		asset.setAssetGroup(assetDTO.getAssetGroup());
+		asset.setDescription(assetDTO.getDescription());
+		Site site = getSite(assetDTO.getSiteId());
+		asset.setSite(site);
+		asset.setBlock(assetDTO.getBlock());
+		asset.setFloor(assetDTO.getFloor());
+		asset.setZone(assetDTO.getZone());
+		asset.setModelNumber(assetDTO.getModelNumber());
+		asset.setSerialNumber(assetDTO.getSerialNumber());
+		asset.setPurchasePrice(assetDTO.getPurchasePrice());
+		asset.setCurrentPrice(assetDTO.getCurrentPrice());
+		asset.setEstimatedDisposePrice(assetDTO.getEstimatedDisposePrice());
+		asset.setCode(assetDTO.getCode());
+		asset.setUdsAsset(assetDTO.isUdsAsset());
+	}
 
-        asset.setTitle(assetDTO.getTitle());
-        asset.setDescription(assetDTO.getDescription());
-        asset.setCode(assetDTO.getCode());
-        asset.setStartTime(DateUtil.convertToSQLDate(assetDTO.getStartTime()));
-        asset.setEndTime(DateUtil.convertToSQLDate(assetDTO.getEndTime()));
-        asset.setUdsAsset(assetDTO.isUdsAsset());
-        asset.setSite(site);
-*/
-        asset.setTitle(assetDTO.getTitle());
-        asset.setAssetGroup(assetDTO.getAssetGroup());
-        asset.setDescription(assetDTO.getDescription());
-        Site site = getSite(assetDTO.getSiteId());
-        asset.setSite(site);
-        asset.setBlock(assetDTO.getBlock());
-    	asset.setFloor(assetDTO.getFloor());
-    	asset.setZone(assetDTO.getZone());
-    	asset.setModelNumber(assetDTO.getModelNumber());
-    	asset.setSerialNumber(assetDTO.getSerialNumber());
-    	asset.setPurchasePrice(assetDTO.getPurchasePrice());
-    	asset.setCurrentPrice(assetDTO.getCurrentPrice());
-    	asset.setEstimatedDisposePrice(assetDTO.getEstimatedDisposePrice());
-        asset.setCode(assetDTO.getCode());
-        //asset.setEndTime(DateUtil.convertToSQLDate(assetDTO.getEndTime()));
-        //asset.setStartTime(DateUtil.convertToSQLDate(assetDTO.getStartTime()));
-        asset.setUdsAsset(assetDTO.isUdsAsset());
-    }
+	public AssetDTO updateAsset(AssetDTO assetDTO) {
+		Asset asset = assetRepository.findOne(assetDTO.getId());
+		mapToEntityAssets(assetDTO, asset);
+		asset = assetRepository.save(asset);
 
-    public AssetDTO updateAsset(AssetDTO assetDTO) {
-        Asset asset = assetRepository.findOne(assetDTO.getId());
-        mapToEntityAssets(assetDTO, asset);
-        asset = assetRepository.save(asset);
+		return mapperUtil.toModel(asset, AssetDTO.class);
+	}
 
-        return mapperUtil.toModel(asset, AssetDTO.class);
-    }
+	public String generateAssetQRCode(long assetId, String assetCode) {
+		Asset asset = assetRepository.findOne(assetId);
+		asset.setCode(assetCode);
+		assetRepository.save(asset);
+		byte[] qrCodeImage = null;
+		String qrCodeBase64 = null;
+		if (asset != null) {
+			String code = String.valueOf(asset.getCode());
+			qrCodeImage = QRCodeUtil.generateQRCode(code);
+			String qrCodePath = env.getProperty("qrcode.file.path");
+			String imageFileName = null;
+			if (org.apache.commons.lang3.StringUtils.isNotEmpty(qrCodePath)) {
+				imageFileName = fileUploadHelper.uploadQrCodeFile(code, qrCodeImage);
+				asset.setQrCodeImage(imageFileName);
+				assetRepository.save(asset);
+			}
+			if (qrCodeImage != null && org.apache.commons.lang3.StringUtils.isNotBlank(imageFileName)) {
+				qrCodeBase64 = fileUploadHelper.readQrCodeFile(imageFileName);
+			}
+		}
+		return qrCodeBase64;
+	}
 
-    public String generateAssetQRCode(long assetId,String assetCode) {
-        Asset asset= assetRepository.findOne(assetId);
-        	asset.setCode(assetCode);
-        	assetRepository.save(asset);
-        byte[] qrCodeImage = null;
-        String qrCodeBase64 = null;
-        if(asset != null) {
-            String code = String.valueOf(asset.getCode());
-            qrCodeImage = QRCodeUtil.generateQRCode(code);
-            String qrCodePath = env.getProperty("qrcode.file.path");
-            String imageFileName = null;
-            if(org.apache.commons.lang3.StringUtils.isNotEmpty(qrCodePath)) {
-                imageFileName = fileUploadHelper.uploadQrCodeFile(code, qrCodeImage);
-                asset.setQrCodeImage(imageFileName);
-                assetRepository.save(asset);
-            }
-            if(qrCodeImage != null && org.apache.commons.lang3.StringUtils.isNotBlank(imageFileName)) {
-                qrCodeBase64 = fileUploadHelper.readQrCodeFile(imageFileName);
-            }
-        }
-        return qrCodeBase64;
-    }
+	public String getQRCode(long assetId) {
+		Asset asset = assetRepository.findOne(assetId);
+		String qrCodeBase64 = null;
+		String imageFileName = null;
+		if (asset != null) {
+			imageFileName = asset.getQrCodeImage();
+			if (org.apache.commons.lang3.StringUtils.isNotBlank(imageFileName)) {
+				qrCodeBase64 = fileUploadHelper.readQrCodeFile(imageFileName);
+			}
+		}
+		return qrCodeBase64;
+	}
 
-    public String getQRCode(long assetId){
-    	Asset asset= assetRepository.findOne(assetId);
-    	String qrCodeBase64 = null;
-    	String imageFileName = null;
-    	if(asset !=null) {
-    		imageFileName = asset.getQrCodeImage();
-    		if(org.apache.commons.lang3.StringUtils.isNotBlank(imageFileName)){
-    			qrCodeBase64 = fileUploadHelper.readQrCodeFile(imageFileName);
-    		}
-    	}
-    	return qrCodeBase64;
-    }
-        
-    public ExportResult generateReport(List<JobDTO> transactions, SearchCriteria criteria) {
-        return reportUtil.generateJobReports(transactions, null, null, criteria);
-    }
+	public ExportResult generateReport(List<JobDTO> transactions, SearchCriteria criteria) {
+		return reportUtil.generateJobReports(transactions, null, null, criteria);
+	}
 
-	// public SearchResult<AssetDTO> getSiteAssets(Long siteId,int page) {
-	// Pageable pageRequest = new PageRequest(page, PagingUtil.PAGE_SIZE, new
-	// Sort(Direction.DESC,"id"));
-	//
-	// Page<Asset> assets= assetRepository.findBySiteId(siteId,pageRequest);
-	// SearchResult<AssetDTO> paginatedAssets = new SearchResult<>();
-	// paginatedAssets.setCurrPage(page);
-	// paginatedAssets.setTransactions(mapperUtil.toModelList(assets.getContent(),
-	// AssetDTO.class));
-	// paginatedAssets.setTotalCount(assets.getTotalElements());
-	// paginatedAssets.setTotalPages(assets.getTotalPages());
-	// return paginatedAssets;
-	// }
+	/**
+	 * Creates the asset AMC schedule information.
+	 * 
+	 * @param assetAMCScheduleDTO
+	 * @return
+	 */
+	public AssetAMCScheduleDTO createAssetAMCSchedule(AssetAMCScheduleDTO assetAMCScheduleDTO) {
+		log.debug("Create assets AMC schedule");
 
+		AssetAMCSchedule assetAMC = mapperUtil.toEntity(assetAMCScheduleDTO, AssetAMCSchedule.class);
 
-	// public SearchResult<AssetDTO> getSiteAssets(Long siteId,int page) {
-	// Pageable pageRequest = new PageRequest(page, PagingUtil.PAGE_SIZE, new
-	// Sort(Direction.DESC,"id"));
-	//
-	// Page<Asset> assets= assetRepository.findBySiteId(siteId,pageRequest);
-	// SearchResult<AssetDTO> paginatedAssets = new SearchResult<>();
-	// paginatedAssets.setCurrPage(page);
-	// paginatedAssets.setTransactions(mapperUtil.toModelList(assets.getContent(),
-	// AssetDTO.class));
-	// paginatedAssets.setTotalCount(assets.getTotalElements());
-	// paginatedAssets.setTotalPages(assets.getTotalPages());
-	// return paginatedAssets;
-	// }
+		assetAMC.setActive(Asset.ACTIVE_YES);
+
+		List<AssetAMCSchedule> existingSchedules = assetRepository
+				.findAssetAMCScheduleByTitle(assetAMCScheduleDTO.getTitle());
+		log.debug("Existing schedule -" + existingSchedules);
+		if (CollectionUtils.isEmpty(existingSchedules)) {
+			assetAMC = assetAMCRepository.save(assetAMC);
+		}
+
+		return mapperUtil.toModel(assetAMC, AssetAMCScheduleDTO.class);
+
+	}
+
+	/**
+	 * Updates the asset AMC schedule information.
+	 * 
+	 * @param assetAMCScheduleDTO
+	 * @return
+	 */
+	public AssetAMCScheduleDTO updateAssetAMCSchedule(AssetAMCScheduleDTO assetAMCScheduleDTO) {
+		log.debug("Update assets AMC schedule");
+		AssetAMCSchedule assetAMC = null;
+		if (assetAMCScheduleDTO.getId() > 0) {
+			assetAMC = assetAMCRepository.findOne(assetAMCScheduleDTO.getId());
+			assetAMC.setActive(assetAMCScheduleDTO.getActive());
+			if (assetAMCScheduleDTO.getChecklistDto() != null
+					&& assetAMC.getChecklist().getId() != assetAMCScheduleDTO.getChecklistDto().getId()) {
+				Checklist checklist = checklistRepository.findOne(assetAMCScheduleDTO.getChecklistDto().getId());
+				assetAMC.setChecklist(checklist);
+			}
+			assetAMC.setFrequency(assetAMCScheduleDTO.getFrequency());
+			assetAMC.setFrequencyDuration(assetAMCScheduleDTO.getFrequencyDuration());
+			assetAMC.setFrequencyPrefix(assetAMCScheduleDTO.getFrequencyPrefix());
+			assetAMC.setEndDate(assetAMCScheduleDTO.getEndDate());
+			assetAMC.setStartDate(assetAMCScheduleDTO.getStartDate());
+			assetAMC.setTitle(assetAMCScheduleDTO.getTitle());
+			assetAMCRepository.save(assetAMC);
+		}
+		return mapperUtil.toModel(assetAMC, AssetAMCScheduleDTO.class);
+
+	}
+
+	/**
+	 * Returns a list of asset AMC schedule information for the given asset Id.
+	 * 
+	 * @param assetId
+	 * @return
+	 */
+	public List<AssetAMCScheduleDTO> getAssetAMCSchedules(long assetId) {
+		List<AssetAMCScheduleDTO> assetAMCScheduleDTOs = null;
+		List<AssetAMCSchedule> assetAMCSchedules = assetAMCRepository.findAssetAMCScheduleByAssetId(assetId);
+		if (CollectionUtils.isNotEmpty(assetAMCSchedules)) {
+			assetAMCScheduleDTOs = mapperUtil.toModelList(assetAMCSchedules, AssetAMCScheduleDTO.class);
+		}
+		return assetAMCScheduleDTOs;
+	}
 
 	public SearchResult<AssetDTO> findBySearchCrieria(SearchCriteria searchCriteria) {
 
@@ -573,15 +561,15 @@ public class AssetManagementService extends AbstractService {
 
 	private Manufacturer getManufacturer(long manufacturerId) {
 		Manufacturer manufacturer = manufacturerRepository.findOne(manufacturerId);
-		//if (manufacturer == null)
-		//	throw new TimesheetException("Manufacturer not found : " + manufacturerId);
+		// if (manufacturer == null)
+		// throw new TimesheetException("Manufacturer not found : " + manufacturerId);
 		return manufacturer;
 	}
 
 	private Vendor getVendor(long vendorId) {
 		Vendor vendor = vendorRepository.findOne(vendorId);
-		//if (vendor == null)
-		//	throw new TimesheetException("Manufacturer not found : " + vendorId);
+		// if (vendor == null)
+		// throw new TimesheetException("Manufacturer not found : " + vendorId);
 		return vendor;
 	}
 
@@ -629,26 +617,26 @@ public class AssetManagementService extends AbstractService {
 		assetParamConfigDTO = mapperUtil.toModel(assetParamConfig, AssetParameterConfigDTO.class);
 		return assetParamConfigDTO;
 	}
-	
+
 	public AssetPpmScheduleDTO createAssetPpmSchedule(AssetPpmScheduleDTO assetPpmScheduleDTO) {
 		// TODO Auto-generated method stub
 		log.debug(">> create ppm schedule <<<");
 		AssetPPMSchedule assetPPMSchedule = mapperUtil.toEntity(assetPpmScheduleDTO, AssetPPMSchedule.class);
 		log.debug(">> after mapping ppm schedule <<<");
 		assetPPMSchedule.setActive(AssetPPMSchedule.ACTIVE_YES);
-		
+
 		Checklist checklist = getCheckList(assetPpmScheduleDTO.getChecklistId());
 		assetPPMSchedule.setChecklist(checklist);
-		
+
 		Asset asset = getAsset(assetPpmScheduleDTO.getAssetId());
 		assetPPMSchedule.setAsset(asset);
-        
+
 		assetPPMSchedule = assetPpmScheduleRepository.save(assetPPMSchedule);
 		log.debug(">> after save <<<");
 		assetPpmScheduleDTO = mapperUtil.toModel(assetPPMSchedule, AssetPpmScheduleDTO.class);
 		return assetPpmScheduleDTO;
 	}
-	
+
 	@Transactional
 	public AssetDocumentDTO uploadFile(AssetDocumentDTO assetDocumentDTO, MultipartFile file) {
 		// TODO Auto-generated method stub
