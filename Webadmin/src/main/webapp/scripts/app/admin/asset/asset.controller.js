@@ -351,6 +351,8 @@ angular.module('timeSheetApp')
                 console.log("Pagination",$scope.pager);
                 console.log("Asset List - ", data);
 
+
+
                 $scope.pages.currPage = data.currPage;
                 $scope.pages.totalPages = data.totalPages;
                 $scope.loading = false;
@@ -432,11 +434,14 @@ angular.module('timeSheetApp')
 
                     console.log("Asset Create List -- ",$scope.assetGen);
                     AssetComponent.create($scope.assetGen).then(function(response) {
+                        console.log("Asset response",JSON.stringify(response));
+                        $scope.assetGen.id=response.data.id;
                         $scope.success = 'OK';
                         $scope.showNotifications('top','center','success','Asset Added');
                         $scope.selectedSite = null;
                         $scope.loadAssets();
-                        $location.path('/assets');
+
+                        //$location.path('/assets');
                     }).catch(function (response) {
                         $scope.success = null;
                         console.log('Error - '+ response.data);
@@ -454,6 +459,35 @@ angular.module('timeSheetApp')
                 }
 
         };
+
+       $scope.createQrCode= function(){  
+
+        if($scope.assetGen.id){
+            
+            var qr = {id:$scope.assetGen.id,code:$scope.assetGen.assetcode}
+
+            alert("code:"  + qr.code + "id:" + qr.id);
+            
+            AssetComponent.createQr(qr).then(function(){
+
+                $scope.success = 'OK';
+                $scope.genQrCodes();
+            });
+        }
+       }
+
+       $scope.genQrCodes= function(){  
+              var qr_id ={id:$scope.assetGen.id};
+              $rootScope.loadingStart();
+              $scope.qr_img = "";
+
+            AssetComponent.genQrCode(qr_id).then(function(response){
+             $scope.qr_img = response;
+             $rootScope.loadingStop();
+                
+            });
+        
+       }
 
 
 
