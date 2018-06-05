@@ -3,24 +3,40 @@
         <button ion-button menuToggle>
             <ion-icon name="menu"></ion-icon>
         </button>
-        <ion-title>{{assetDetails.name}}</ion-title>
+        <ion-title>{{assetDetails.title}}</ion-title>
     </ion-navbar>
 </ion-header>
 
-<ion-content>
+<ion-content class="readingcon">
+    <ion-card class="valuesCard">
+        <ion-card-content class="margin0">
+            <ion-item>
+                <ion-label color="primary" class="margin0">Previous Value</ion-label>
+                <ion-input placeholder="in watts"></ion-input>
+            </ion-item>
+            <ion-item>
+                <ion-label color="primary" class="margin0">Previous Value</ion-label>
+                <ion-input placeholder="in watts"></ion-input>
+            </ion-item>
+            <ion-item>
+                <ion-label color="primary" class="margin0">Time</ion-label>
+                <ion-input placeholder="Text Input" disabled [(ngModel)]="dateTime" ></ion-input>
+            </ion-item>
+        </ion-card-content>
+    </ion-card>
     <ion-list>
-        <ion-item>
-            <ion-label color="primary">Previous Value</ion-label>
-            <ion-input placeholder="in watts"></ion-input>
-        </ion-item>
-        <ion-item>
-            <ion-label color="primary">Current Value</ion-label>
-            <ion-input placeholder="in watts"></ion-input>
-        </ion-item>
-        <ion-item>
-            <ion-label color="primary">Time</ion-label>
-            <ion-input placeholder="Text Input" disabled [(ngModel)]="dateTime" ></ion-input>
-        </ion-item>
+        <!--<ion-item>-->
+            <!--<ion-label color="primary">Previous Value</ion-label>-->
+            <!--<ion-input placeholder="in watts"></ion-input>-->
+        <!--</ion-item>-->
+        <!--<ion-item>-->
+            <!--<ion-label color="primary">Current Value</ion-label>-->
+            <!--<ion-input placeholder="in watts"></ion-input>-->
+        <!--</ion-item>-->
+        <!--<ion-item>-->
+            <!--<ion-label color="primary">Time</ion-label>-->
+            <!--<ion-input placeholder="Text Input" disabled [(ngModel)]="dateTime" ></ion-input>-->
+        <!--</ion-item>-->
 
         <div class="margin-tp25 white-bg padding10">
             <ion-row class="margin0">
