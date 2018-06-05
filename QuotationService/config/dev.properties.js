@@ -4,8 +4,8 @@ module.exports = {
 		url:'mongodb://localhost:27017/quotation_svc',
 		//url:'mongodb://ec2-52-221-245-74.ap-southeast-1.compute.amazonaws.com:27017/delivery',
 		schema : '/../app/schema'
-		//user:'admin',
-		//password:'Tgadmin123#'
+		user:'clssmongo',
+		password:'i0ps2gal'
 	},
 
 	server:{
