@@ -118,6 +118,7 @@ public class AssetResource {
     public ResponseEntity<?> updateAsset(@Valid @RequestBody AssetDTO assetDTO, HttpServletRequest request, @PathVariable("id") Long id) {
     	log.debug(">>> asset id : "+id);
         if(assetDTO.getId() > 0) assetDTO.setId(id);
+        if(id > 0) assetDTO.setId(id);
         log.debug("Asset Details in updateAsset = "+ assetDTO);
         log.debug(">>> Asset Update Request <<<");
         log.debug("Title <<<"+assetDTO.getTitle());

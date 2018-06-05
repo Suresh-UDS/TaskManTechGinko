@@ -199,8 +199,9 @@ public class AssetManagementService extends AbstractService {
     	asset.setActive(Asset.ACTIVE_YES);
     	
     	List<Asset> existingAssets = assetRepository.findAssetByTitle(assetDTO.getTitle());
-        log.debug("Existing asset -"+ existingAssets);
+        log.debug("Existing asset -"+ existingAssets.size());
         if(CollectionUtils.isEmpty(existingAssets)) {
+        	log.debug(">>> before save<<<");
             asset = assetRepository.save(asset);
         }
 
@@ -292,7 +293,7 @@ public class AssetManagementService extends AbstractService {
         assetDTO.setStartTime(asset.getStartTime());
         assetDTO.setEndTime(asset.getEndTime());*/
         
-        assetDTO.setTitle(assetDTO.getTitle());
+        /*assetDTO.setTitle(assetDTO.getTitle());
         assetDTO.setAssetGroup(assetDTO.getAssetGroup());
         assetDTO.setProjectId(assetDTO.getProjectId());
         assetDTO.setSiteId(assetDTO.getSiteId());
@@ -305,7 +306,7 @@ public class AssetManagementService extends AbstractService {
         assetDTO.setCurrentPrice(assetDTO.getCurrentPrice());
         assetDTO.setEstimatedDisposePrice(assetDTO.getEstimatedDisposePrice());
         assetDTO.setCode(assetDTO.getCode());
-        assetDTO.setUdsAsset(assetDTO.isUdsAsset());
+        assetDTO.setUdsAsset(assetDTO.isUdsAsset());*/
         
         return assetDTO;
     }
@@ -339,21 +340,37 @@ public class AssetManagementService extends AbstractService {
         asset.setSite(site);
 */
         asset.setTitle(assetDTO.getTitle());
+        asset.setAssetType(assetDTO.getAssetType());
         asset.setAssetGroup(assetDTO.getAssetGroup());
         asset.setDescription(assetDTO.getDescription());
-        Site site = getSite(assetDTO.getSiteId());
-        asset.setSite(site);
+        if(assetDTO.getSiteId() != asset.getSite().getId()) {
+        	Site site = getSite(assetDTO.getSiteId());
+            asset.setSite(site);
+        }
+        if(assetDTO.getManufacturerId() != asset.getManufacturer().getId()) {
+        	Manufacturer manufacturer = getManufacturer(assetDTO.getManufacturerId());
+        	asset.setManufacturer(manufacturer);
+        }
+        if(assetDTO.getVendorId() != asset.getAmcVendor().getId()) {
+        	Vendor vendor = getVendor(assetDTO.getVendorId());
+    		asset.setAmcVendor(vendor);
+        }
         asset.setBlock(assetDTO.getBlock());
     	asset.setFloor(assetDTO.getFloor());
     	asset.setZone(assetDTO.getZone());
     	asset.setModelNumber(assetDTO.getModelNumber());
     	asset.setSerialNumber(assetDTO.getSerialNumber());
+    	asset.setAcquiredDate(DateUtil.convertToSQLDate(assetDTO.getAcquiredDate()));
     	asset.setPurchasePrice(assetDTO.getPurchasePrice());
     	asset.setCurrentPrice(assetDTO.getCurrentPrice());
     	asset.setEstimatedDisposePrice(assetDTO.getEstimatedDisposePrice());
         asset.setCode(assetDTO.getCode());
-        //asset.setEndTime(DateUtil.convertToSQLDate(assetDTO.getEndTime()));
-        //asset.setStartTime(DateUtil.convertToSQLDate(assetDTO.getStartTime()));
+        if (!StringUtils.isEmpty(assetDTO.getEndTime())){
+        	asset.setEndTime(DateUtil.convertToSQLDate(assetDTO.getEndTime()));
+        }
+        if (!StringUtils.isEmpty(assetDTO.getStartTime())){
+        asset.setStartTime(DateUtil.convertToSQLDate(assetDTO.getStartTime()));
+        }
         asset.setUdsAsset(assetDTO.isUdsAsset());
     }
 
@@ -362,8 +379,8 @@ public class AssetManagementService extends AbstractService {
         mapToEntityAssets(assetDTO, asset);
         asset = assetRepository.save(asset);
 
-        return mapperUtil.toModel(asset, AssetDTO.class);
-    }
+        return mapperUtil.toModel(asset, AssetDTO.class);      	
+    	}
 
     public String generateAssetQRCode(long assetId,String assetCode) {
         Asset asset= assetRepository.findOne(assetId);
