@@ -8,6 +8,7 @@ import {ViewJobPage} from "../jobs/view-job";
 import {CompleteJobPage} from "../jobs/completeJob";
 import {ViewTicket} from "../ticket/view-ticket";
 import {CreateTicket} from "../ticket/create-ticket";
+import {AssetService} from "../service/assetService";
 
 /**
  * Generated class for the AssetView page.
@@ -28,7 +29,7 @@ export class AssetView {
 
     totalPages:0;
     page:1;
-  constructor(private modalCtrl:ModalController,private componentService:componentService,public navCtrl: NavController, public navParams: NavParams, public jobService:JobService) {
+  constructor(private modalCtrl:ModalController,private componentService:componentService,public navCtrl: NavController, public navParams: NavParams, public jobService:JobService, public assetService:AssetService) {
     this.assetDetails = this.navParams.data.assetDetails;
     this.categories = 'details';
   }
@@ -42,8 +43,10 @@ export class AssetView {
     console.log('ionViewDidLoad AssetView');
     console.log(this.assetDetails);
     this.componentService.showLoader("");
-      this.getJobs()
-      this.getTickets()
+      this.getJobs();
+      this.getTickets();
+      this.getAssetConfig();
+      this.getAssetById();
   }
 
     getReadings(){
@@ -193,6 +196,31 @@ export class AssetView {
 
     viewTicket(ticket){
         this.navCtrl.push(ViewTicket,{ticket:ticket});
+    }
+
+    getAssetConfig(){
+        this.assetService.getAssetConfig(this.assetDetails.type,this.assetDetails.id).subscribe(
+            response=>{
+                console.log("Asset config");
+                console.log(response);
+            },err=>{
+                console.log("Error in getting asset config");
+                console.log(err);
+            }
+        )
+    }
+
+    getAssetById(){
+        this.assetService.getAssetById(this.assetDetails.id).subscribe(
+            response=>{
+                console.log("Asset by id");
+                console.log(response);
+                this.assetDetails = response;
+            },err=>{
+                console.log("Error in getting asset by id");
+                console.log(err);
+            }
+        )
     }
 
 }
