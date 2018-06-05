@@ -801,5 +801,17 @@ angular.module('timeSheetApp')
 	    	
 	    }
 
+	    
+	    $scope.showFile = function(docId, filename) { 
+	    	console.log(docId);
+	    	var document = {};
+	    	document.id = docId;
+	    	document.fileName = filename; 
+	    	AssetComponent.readFile(document).then(function(data){ 
+	    		console.log(data);
+	    		$scope.downloadFile = data;
+	    	});
+	    }
+
 
     });
