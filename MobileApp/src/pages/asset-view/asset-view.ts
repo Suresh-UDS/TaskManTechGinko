@@ -60,7 +60,7 @@ export class AssetView {
       }
       this.getJobs(this.searchCriteria);
       this.getTickets(this.searchCriteria);
-      this.getAssetConfig();
+
       this.getAssetById();
   }
 
@@ -281,8 +281,8 @@ export class AssetView {
         this.toDate="";
     }
 
-    getAssetConfig(){
-        this.assetService.getAssetConfig(this.assetDetails.type,this.assetDetails.id).subscribe(
+    getAssetConfig(assetDetails){
+        this.assetService.getAssetConfig(assetDetails.type,assetDetails.id).subscribe(
             response=>{
                 console.log("Asset config");
                 console.log(response);
@@ -299,6 +299,7 @@ export class AssetView {
                 console.log("Asset by id");
                 console.log(response);
                 this.assetDetails = response;
+                this.getAssetConfig(this.assetDetails);
             },err=>{
                 console.log("Error in getting asset by id");
                 console.log(err);
