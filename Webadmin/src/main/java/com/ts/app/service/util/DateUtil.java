@@ -49,7 +49,7 @@ public class DateUtil {
 	
 	public static java.sql.Date convertToSQLDate(Date utilDate) {
 		Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("Asia/Kolkata"));
-		cal.setTime(utilDate);
+		cal.setTimeInMillis(utilDate.getTime());
 		java.sql.Date sqlDate = new java.sql.Date(cal.getTimeInMillis());
 		return sqlDate;
 	}
