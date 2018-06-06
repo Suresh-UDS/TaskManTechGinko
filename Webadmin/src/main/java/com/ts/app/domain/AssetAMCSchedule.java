@@ -3,6 +3,7 @@ package com.ts.app.domain;
 import java.sql.Date;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -11,6 +12,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 @Entity
 @Table(name = "asset_amc_schedule")
@@ -27,20 +30,32 @@ public class AssetAMCSchedule extends AbstractAuditingEntity {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 	
+    @NotNull
+    @Size(min = 1, max = 250)
+    @Column(length = 250, nullable = false)
 	private String title;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "checklistId", referencedColumnName = "id", nullable = true)
 	private Checklist checklist;
 	
+    @NotNull
 	private Date startDate;
-	
+
+    @NotNull
 	private Date endDate;
 	
+    @NotNull
+    @Size(min = 1, max = 100)
+    @Column(length = 100, nullable = false)
 	private String frequencyPrefix;
 	
+    @NotNull
 	private int frequencyDuration;
 	
+    @NotNull
+    @Size(min = 1, max = 100)
+    @Column(length = 100, nullable = false)
 	private String frequency;
 	
 	@ManyToOne(fetch = FetchType.LAZY, cascade={CascadeType.ALL})

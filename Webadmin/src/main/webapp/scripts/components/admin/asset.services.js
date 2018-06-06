@@ -8,7 +8,8 @@ angular.module('timeSheetApp')
                 var cb = callback || angular.noop;
                 return $http.post('api/asset',asset).then(
                     function (response) {
-                        return cb(response);
+                        //return cb(response);
+                        return response;
                     }).catch(
                     function (err) {
                         console.log(JSON.stringify(err));
@@ -141,7 +142,18 @@ angular.module('timeSheetApp')
             		return response.data;
             	});
             },
-            
+             createQr : function(qr) { 
+                return $http.get('api/asset/'+qr.id+'/qrcode/'+qr.code).then(function(response){ 
+                    return response.data;
+
+                });
+            },
+            genQrCode : function(qr) { 
+                return $http.get('api/asset/qrcode/'+qr.id).then(function(response){ 
+                    return response.data;
+
+                });
+            },
             uploadAssetPhoto : function(asset) { 
             	var file = asset.uploadFile;
             	var fileFormData = new FormData();
@@ -169,6 +181,7 @@ angular.module('timeSheetApp')
             	return $http.get('api/assets/viewFile/'+document.id+'/'+document.fileName, {responseType: 'arrayBuffer'}).then(function(response){ 
             		return response.data;
             	});
+
             }
             
 
