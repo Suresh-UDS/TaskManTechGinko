@@ -251,6 +251,12 @@ public class EmployeeResource {
         return employeeService.findBySiteId(SecurityUtils.getCurrentUserId(),siteId);
     }
 
+    @RequestMapping(value = "/empAttendance/site/{siteId}", method = RequestMethod.GET)
+    public List<EmployeeDTO> findWithAttendanceBySiteId(@PathVariable Long siteId) {
+        log.info("--Invoked EmployeeResource.findAll --");
+        return employeeService.findWithAttendanceBySiteId(SecurityUtils.getCurrentUserId(),siteId);
+    }
+
 	@RequestMapping(value = "/employee/{id}/managers", method = RequestMethod.GET)
 	public List<EmployeeDTO> findAllEligibleManagers(@PathVariable Long id) {
 		List<EmployeeDTO> managers = employeeService.findAllEligibleManagers(id);

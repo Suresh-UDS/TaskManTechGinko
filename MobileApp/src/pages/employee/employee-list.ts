@@ -121,8 +121,15 @@ export class EmployeeList {
             var result = response.json()
             if(result[0]){
               console.log("already checked in ");
-              employee.checkedIn = true;
-              employee.attendanceId = result[0].id;
+                console.log(result[0].notCheckedOut);
+                if(result[0].notCheckedOut){
+                    console.log("Not checked out true");
+                    this.checkedIn = false;
+                }else{
+                    console.log("Not checked out false");
+                    this.checkedIn = true;
+                    employee.attendanceId = result[0].id;
+                }
             }else{
               console.log("Not yet checked in ");
               employee.checkedIn = false;
@@ -138,10 +145,19 @@ export class EmployeeList {
     this.attendanceService.getAttendances(employeeId,this.site.id).subscribe(
       response =>{
         console.log(response.json());
-        var result = response.json()
+        var result = response.json();
         if(result[0]){
           console.log("already checked in ");
-          this.checkedIn = true;
+          console.log(result[0].notCheckedOut);
+          if(result[0].notCheckedOut){
+              console.log("Not checked out true");
+              this.checkedIn = false;
+          }else{
+              console.log("Not checked out false");
+
+              this.checkedIn = true;
+
+          }
 
         }else{
           console.log("Not yet checked in ");

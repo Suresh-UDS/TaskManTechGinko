@@ -15,6 +15,7 @@ import java.util.TimeZone;
 
 import javax.inject.Inject;
 
+import com.ts.app.web.rest.dto.*;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.Hibernate;
@@ -142,6 +143,9 @@ public class    EmployeeService extends AbstractService {
 
     @Inject
     private JobManagementService jobManagementService;
+
+    @Inject
+    private AttendanceService attendanceService;
 
 	@Inject
 	private Environment env;
@@ -595,24 +599,60 @@ public class    EmployeeService extends AbstractService {
     }
 
     public List<EmployeeDTO> findBySiteId(long userId,long siteId) {
-    		List<EmployeeDTO> employeeDtos = null;
+        List<EmployeeDTO> employeeDtos = null;
         User user = userRepository.findOne(userId);
         List<Employee> entities = null;
         if(user.getUserRole().getName().equalsIgnoreCase(UserRoleEnum.ADMIN.toValue())) {
             entities = employeeRepository.findBySiteId(siteId);
         }else {
-	    		List<Long> subEmpIds = null;
-	    		subEmpIds = findAllSubordinates(user.getEmployee(), subEmpIds);
+            List<Long> subEmpIds = null;
+            subEmpIds = findAllSubordinates(user.getEmployee(), subEmpIds);
             entities = employeeRepository.findBySiteIdAndEmpIds(siteId, subEmpIds);
         }
         //return mapperUtil.toModelList(entities, EmployeeDTO.class);
-		if(CollectionUtils.isNotEmpty(entities)) {
-			employeeDtos = new ArrayList<EmployeeDTO>();
-			for(Employee emp : entities) {
-				employeeDtos.add(mapToModel(emp));
-			}
-		}
-		return employeeDtos;
+        if(CollectionUtils.isNotEmpty(entities)) {
+            employeeDtos = new ArrayList<EmployeeDTO>();
+            for(Employee emp : entities) {
+                employeeDtos.add(mapToModel(emp));
+
+            }
+        }
+        return employeeDtos;
+    }
+
+    public List<EmployeeDTO> findWithAttendanceBySiteId(long userId,long siteId) {
+        List<EmployeeDTO> employeeDtos = null;
+        User user = userRepository.findOne(userId);
+        List<Employee> entities = null;
+        if(user.getUserRole().getName().equalsIgnoreCase(UserRoleEnum.ADMIN.toValue())) {
+            entities = employeeRepository.findBySiteId(siteId);
+        }else {
+            List<Long> subEmpIds = null;
+            subEmpIds = findAllSubordinates(user.getEmployee(), subEmpIds);
+            entities = employeeRepository.findBySiteIdAndEmpIds(siteId, subEmpIds);
+        }
+        //return mapperUtil.toModelList(entities, EmployeeDTO.class);
+        if(CollectionUtils.isNotEmpty(entities)) {
+            employeeDtos = new ArrayList<EmployeeDTO>();
+            for(Employee emp : entities) {
+                EmployeeDTO employeeDTO = mapToModel(emp);
+                SearchCriteria sc = new SearchCriteria();
+                sc.setEmployeeEmpId(emp.getEmpId());
+                sc.setSiteId(siteId);
+                sc.setEmployeeId(emp.getId());
+                List<AttendanceDTO> result = attendanceService.findByEmpId(sc);
+                if(CollectionUtils.isNotEmpty(result)){
+                    log.debug("Employee checked in "+result.size());
+                    employeeDTO.setCheckedIn(true);
+                }else{
+                    log.debug("Employee checked false "+result.size());
+                    employeeDTO.setCheckedIn(false);
+                }
+                employeeDtos.add(employeeDTO);
+
+            }
+        }
+        return employeeDtos;
     }
 
 	public List<EmployeeDTO> findAllEligibleManagers(long empId) {
