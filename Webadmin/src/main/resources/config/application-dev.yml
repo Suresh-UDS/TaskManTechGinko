@@ -163,7 +163,7 @@ scheduler:
    attendanceConsolidatedReport:
       enabled: true
 
-default.user.password: Admin@Fms#
+default.user.password: uds12345
 
 # ===================================================================
 # JHipster specific properties
