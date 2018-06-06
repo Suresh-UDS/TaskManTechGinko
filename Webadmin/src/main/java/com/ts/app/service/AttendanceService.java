@@ -82,7 +82,7 @@ public class AttendanceService extends AbstractService {
 
 	@Inject
 	private ReportUtil reportUtil;
-	
+
     @Inject
     private Environment env;
 
@@ -105,7 +105,7 @@ public class AttendanceService extends AbstractService {
         dbAttn.setLongitudeOut(attn.getLongitudeOut());
 
         findShiftTiming(false, attnDto, dbAttn);
-        
+
         dbAttn = attendanceRepository.save(dbAttn);
         attnDto = mapperUtil.toModel(dbAttn, AttendanceDTO.class);
 
@@ -135,7 +135,7 @@ public class AttendanceService extends AbstractService {
 				Calendar startCal = Calendar.getInstance();
 				startCal.set(Calendar.HOUR_OF_DAY, Integer.parseInt(startTimeUnits[0]));
 				startCal.set(Calendar.MINUTE, Integer.parseInt(startTimeUnits[1]));
-				
+
 				Calendar startCalLeadTime = Calendar.getInstance();
 				startCalLeadTime.setTimeInMillis(startCal.getTimeInMillis());
 				startCalLeadTime.set(Calendar.HOUR_OF_DAY, Integer.parseInt(startTimeUnits[0]) - shiftStartLeadTime);
@@ -165,16 +165,16 @@ public class AttendanceService extends AbstractService {
 				if(!isCheckIn && endCal.before(startCal)) {
 					startCal.add(Calendar.DAY_OF_MONTH, -1);
 				}
-				
+
 				Calendar checkInCal = Calendar.getInstance();
 				checkInCal.setTimeInMillis(dbAttn.getCheckInTime().getTime());
-				
+
 				Calendar checkOutCal = null;
 				if(dbAttn.getCheckOutTime() != null) {
 					checkOutCal = Calendar.getInstance();
 					checkOutCal.setTimeInMillis(dbAttn.getCheckOutTime().getTime());
 				}
-				
+
 				if(checkInCal.before(endCalLeadTime)) { // 12:30 PM checkin time < 1 PM (2PM shift ends) - 1 hr lead time
 					if((startCal.before(checkInCal))  // 7 AM shift starts < 12:30 PM check in
 							|| startCal.equals(checkInCal)) {
@@ -183,9 +183,9 @@ public class AttendanceService extends AbstractService {
 						break;
 					}
 				}
-				
+
 				if(checkInCal.after(startCalLeadTime)) { // 1:30 PM checkin time > 1 PM (2 PM shift start) - 1 hr lead time
-					if((startCal.after(checkInCal))  // 2:00 PM shift starts > 1:30 PM check in    
+					if((startCal.after(checkInCal))  // 2:00 PM shift starts > 1:30 PM check in
 							|| startCal.equals(checkInCal)) {
 						dbAttn.setShiftStartTime(startTime);  //2 PM considered as shift starts
 						dbAttn.setShiftEndTime(endTime);
@@ -195,19 +195,19 @@ public class AttendanceService extends AbstractService {
 						dbAttn.setShiftEndTime(endTime);
 					}
 				}
-				
-				if(checkOutCal != null) { //if checkout done 
+
+				if(checkOutCal != null) { //if checkout done
 					if(checkOutCal.after(startCalGraceTime)) { // 3:30 PM checkout time > 3 PM (2 PM shift start)  + 1 hr grace time
-						if((endCal.after(checkOutCal))  // 10 PM shift ends > 3:30 PM checkout time 
+						if((endCal.after(checkOutCal))  // 10 PM shift ends > 3:30 PM checkout time
 								|| endCal.equals(checkOutCal)) {
 							dbAttn.setShiftEndTime(endTime); // 10 PM considered as checkout time
 							break;
 						}
 					}
-					
+
 					if(checkOutCal.before(endCalGraceTime)) { // 10:30 PM checkout time < 11 PM (10 PM shift ends) + 1 hr grace time
 						if((endCal.before(checkOutCal))  // 10 PM shift ends < 10:30 PM checkout time
-								|| endCal.equals(checkOutCal)) { 
+								|| endCal.equals(checkOutCal)) {
 							dbAttn.setShiftEndTime(endTime); //10 PM considered as checkout time
 							break;
 						}else if(endCal.after(checkOutCal)) {
@@ -236,6 +236,7 @@ public class AttendanceService extends AbstractService {
 		endCal.set(Calendar.SECOND, 0);
 		sc.setCheckInDateTimeFrom(startCal.getTime());
 		sc.setCheckInDateTimeTo(endCal.getTime());
+		sc.setNotCheckedOut(true);
 		log.debug("seach criteria"+" - " +sc.getEmployeeEmpId()+" - " +sc.getSiteId()+" - " +sc.getCheckInDateTimeFrom()+" - " +sc.getCheckInDateTimeTo());
 		SearchResult<AttendanceDTO> result = findBySearchCrieria(sc);
 		if(result == null || CollectionUtils.isEmpty(result.getTransactions())) {
@@ -458,11 +459,16 @@ public class AttendanceService extends AbstractService {
 					} else if (searchCriteria.getSiteId() != 0 && StringUtils.isEmpty(searchCriteria.getEmployeeEmpId())) {
 						log.debug("find by site id and check in  date and time - " + searchCriteria.getSiteId());
 						page = attendanceRepository.findBySiteIdAndCheckInTime(searchCriteria.getProjectId(), searchCriteria.getSiteId(), startDate, toDate, pageRequest);
-					} else if (searchCriteria.getSiteId() != 0) {
+					} else if (searchCriteria.getSiteId() != 0 && searchCriteria.isNotCheckedOut()) {
 						log.debug("find by site id and employee id date and time - " + searchCriteria.getSiteId() + " - " + searchCriteria.getEmployeeEmpId());
-						page = attendanceRepository.findBySiteIdEmpIdAndDate(searchCriteria.getProjectId(), searchCriteria.getSiteId(), searchCriteria.getEmployeeEmpId(),
+						page = attendanceRepository.findBySiteIdEmpIdAndDateAndNotCheckedOut(searchCriteria.getProjectId(), searchCriteria.getSiteId(), searchCriteria.getEmployeeEmpId(),
 								startDate, toDate, pageRequest);
-					} else if (searchCriteria.getProjectId() > 0) {
+
+					}else if (searchCriteria.getSiteId() != 0) {
+                        log.debug("find by site id and employee id date and time - " + searchCriteria.getSiteId() + " - " + searchCriteria.getEmployeeEmpId());
+                        page = attendanceRepository.findBySiteIdEmpIdAndDate(searchCriteria.getProjectId(), searchCriteria.getSiteId(), searchCriteria.getEmployeeEmpId(),
+                            startDate, toDate, pageRequest);
+                    } else if (searchCriteria.getProjectId() > 0) {
 						if (StringUtils.isEmpty(searchCriteria.getEmployeeEmpId())) {
 							page = attendanceRepository.findByProjectIdAndDate(searchCriteria.getProjectId(), startDate, toDate, pageRequest);
 						} else {
