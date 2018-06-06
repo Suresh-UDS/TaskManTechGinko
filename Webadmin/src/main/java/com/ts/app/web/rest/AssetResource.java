@@ -209,6 +209,17 @@ public class AssetResource {
 		return new ResponseEntity<>(response, HttpStatus.CREATED);
 	}
 
+	@RequestMapping(path = "/assets/{assetId}/ppmschedule", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	@Timed
+	public List<AssetPpmScheduleDTO> getAssetPPMSchedule(@PathVariable("assetId") Long assetId) {
+		log.debug(">>> Asset Resource getAssetPPMSchedule request <<<");
+		log.debug("AssetId <<< " + assetId);
+
+		List<AssetPpmScheduleDTO> response = assetService.getAssetPPMSchedule(assetId);
+		log.debug("Get Asset PPM Schedule for asset id size - " + response.size());
+		return response;
+	}
+	
 	@RequestMapping(value = { "/assets/getAllFile/{type}/{id}",
 			"/assets/getAllAssetPhoto/{type}/{id}" }, method = RequestMethod.GET)
 	public List<AssetDocumentDTO> getUploadedFiles(@PathVariable String type, @PathVariable Long id) {

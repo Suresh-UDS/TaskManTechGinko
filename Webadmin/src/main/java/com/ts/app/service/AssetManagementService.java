@@ -688,6 +688,21 @@ public class AssetManagementService extends AbstractService {
 
 	}
 
+	/**
+	 * Returns a list of asset AMC schedule information for the given asset Id.
+	 * 
+	 * @param assetId
+	 * @return
+	 */
+	public List<AssetPpmScheduleDTO> getAssetPPMSchedule(Long assetId) {
+		List<AssetPpmScheduleDTO> assetPpmScheduleDTOs = null;
+		List<AssetPPMSchedule> assetPPMSchedules = assetPpmScheduleRepository.findAssetPPMScheduleByAssetId(assetId);
+		if (CollectionUtils.isNotEmpty(assetPPMSchedules)) {
+			assetPpmScheduleDTOs = mapperUtil.toModelList(assetPPMSchedules, AssetPpmScheduleDTO.class);
+		}
+		return assetPpmScheduleDTOs;
+	}
+	
 	@Transactional
 	public AssetDocumentDTO uploadFile(AssetDocumentDTO assetDocumentDTO, MultipartFile file) {
 		// TODO Auto-generated method stub
