@@ -50,7 +50,7 @@ public class Job extends AbstractAuditingEntity implements Serializable{
     private Location location;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "assetId")
+    @JoinColumn(name = "assetId", nullable = true)
     private Asset asset;
 
     @OneToOne(fetch = FetchType.LAZY)
