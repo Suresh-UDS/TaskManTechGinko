@@ -57,7 +57,6 @@ import {FeedbackPage} from "../pages/feedback/feedback";
 import {FeedbackQuestionPage} from "../pages/feedback/feedback-questions";
 import {InitFeedbackPage} from "../pages/feedback/init-feedback";
 import { FileTransfer, FileUploadOptions, FileTransferObject } from '@ionic-native/file-transfer';
-import{JobFilter} from "../pages/jobs/job-filter/job-filter";
 import { File } from '@ionic-native/file';
 import{TicketFilter} from "../pages/ticket/ticket-filter/ticket-filter";
 
@@ -101,6 +100,8 @@ import {ScanQR} from "../pages/asset-list/scanQR";
 import {IonicImageViewerModule} from "ionic-img-viewer";
 import {DatePicker} from "@ionic-native/date-picker";
 import{EmployeeFilter} from "../pages/employee-list/employee-filter/employee-filter";
+import {JobFilter} from "../pages/jobs/job-filter/job-filter";
+
 
 @NgModule({
   declarations: [
@@ -168,6 +169,7 @@ import{EmployeeFilter} from "../pages/employee-list/employee-filter/employee-fil
       JobFilter,
       TicketFilter,
       EmployeeFilter,
+
   ],
   imports: [
     BrowserModule,
@@ -246,6 +248,9 @@ import{EmployeeFilter} from "../pages/employee-list/employee-filter/employee-fil
       JobFilter,
       TicketFilter,
       EmployeeFilter,
+      GetAssetReading,
+    ScanQR,
+
   ],
   providers: [
     StatusBar,
@@ -273,7 +278,6 @@ import{EmployeeFilter} from "../pages/employee-list/employee-filter/employee-fil
     Toast,
     FileTransfer,
     File,
-      DatePicker,
       AppVersion,
       QRScanner,
     {provide: ErrorHandler, useClass: IonicErrorHandler},

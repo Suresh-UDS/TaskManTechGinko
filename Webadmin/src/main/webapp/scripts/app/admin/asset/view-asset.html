@@ -820,42 +820,13 @@
 
                                                    <div class="row">
 
-                                                       <div class="col-md-2 txt-align-center">
+                                                       <div class="col-md-2 txt-align-center" ng-repeat="uploadFile in uploadFiles">
                                                            <a href="#">
                                                                <img src="assets/img/Docs-icon.png" alt="docs" />
                                                            </a>
-                                                           <p>File Name</p>
+                                                           <p>{{uploadFile.title}}</p>
                                                        </div>
-                                                       <div class="col-md-2 txt-align-center">
-                                                           <a href="#">
-                                                               <img src="assets/img/Docs-icon.png" alt="docs" />
-                                                           </a>
-                                                           <p>File Name</p>
-                                                       </div>
-                                                       <div class="col-md-2 txt-align-center">
-                                                           <a href="#">
-                                                               <img src="assets/img/Docs-icon.png" alt="docs" />
-                                                           </a>
-                                                           <p>File Name</p>
-                                                       </div>
-                                                       <div class="col-md-2 txt-align-center">
-                                                           <a href="#">
-                                                               <img src="assets/img/Docs-icon.png" alt="docs" />
-                                                           </a>
-                                                           <p>File Name</p>
-                                                       </div>
-                                                       <div class="col-md-2 txt-align-center">
-                                                           <a href="#">
-                                                               <img src="assets/img/Docs-icon.png" alt="docs" />
-                                                           </a>
-                                                           <p>File Name</p>
-                                                       </div>
-                                                       <div class="col-md-2 txt-align-center">
-                                                           <a href="#">
-                                                               <img src="assets/img/Docs-icon.png" alt="docs" />
-                                                           </a>
-                                                           <p>File Name</p>
-                                                       </div>
+                            
 
                                                    </div>
 
@@ -872,42 +843,13 @@
 
                                                    <div class="row">
 
-                                                       <div class="col-md-2 txt-align-center">
+                                                       <div class="col-md-2 txt-align-center" ng-repeat="uploadPhoto in uploadAssetPhotos">
                                                            <a href="#">
                                                                <img src="assets/img/img.png" alt="docs" />
                                                            </a>
-                                                           <p>Photo Name</p>
+                                                           <p>{{uploadPhoto.title}}</p>
                                                        </div>
-                                                       <div class="col-md-2 txt-align-center">
-                                                           <a href="#">
-                                                               <img src="assets/img/img.png" alt="docs" />
-                                                           </a>
-                                                           <p>Photo Name</p>
-                                                       </div>
-                                                       <div class="col-md-2 txt-align-center">
-                                                           <a href="#">
-                                                               <img src="assets/img/img.png" alt="docs" />
-                                                           </a>
-                                                           <p>Photo Name</p>
-                                                       </div>
-                                                       <div class="col-md-2 txt-align-center">
-                                                           <a href="#">
-                                                               <img src="assets/img/img.png" alt="docs" />
-                                                           </a>
-                                                           <p>Photo Name</p>
-                                                       </div>
-                                                       <div class="col-md-2 txt-align-center">
-                                                           <a href="#">
-                                                               <img src="assets/img/img.png" alt="docs" />
-                                                           </a>
-                                                           <p>Photo Name</p>
-                                                       </div>
-                                                       <div class="col-md-2 txt-align-center">
-                                                           <a href="#">
-                                                               <img src="assets/img/img.png" alt="docs" />
-                                                           </a>
-                                                           <p>Photo Name</p>
-                                                       </div>
+                                                       
 
                                                    </div>
 
@@ -953,7 +895,7 @@
                                                                            </div>
                                                                        </td>
                                                                        <td class="text-right">
-                                                                           <a  has-permission="" ui-sref="" class="btn btn-simple btn-danger" ng-click="deleteAssetConfig(assetParam.id)"><i class="material-icons">delete_forever</i><div class="ripple-container"></div></a>
+                                                                           <a  has-permission="" ui-sref="" class="btn btn-simple btn-danger" disabled><i class="material-icons">delete_forever</i><div class="ripple-container"></div></a>
                                                                        </td>
 
                                                                    </tr>

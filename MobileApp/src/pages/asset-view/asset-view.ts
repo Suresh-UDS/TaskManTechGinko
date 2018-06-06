@@ -37,7 +37,7 @@ export class AssetView {
     fromDate:any;
     toDate:any;
     viewButton:any;
-
+    searchCriteria:any;
 
   constructor(private modalCtrl:ModalController,private datePicker: DatePicker,private componentService:componentService,public navCtrl: NavController, public navParams: NavParams, public jobService:JobService, public assetService:AssetService) {
 
@@ -54,9 +54,16 @@ export class AssetView {
     console.log('ionViewDidLoad AssetView');
     console.log(this.assetDetails);
     this.componentService.showLoader("");
-      this.getJobs();
-      this.getTickets();
+
+      this.searchCriteria={
+          assetId:this.assetDetails.id
+      }
+      this.getJobs(this.searchCriteria);
+      this.getTickets(this.searchCriteria);
+
       this.getAssetById();
+      // this.getAssetPPMSchedule();
+      // this.getAssetAMCSchedule();
   }
 
     getReadings(){
@@ -68,20 +75,20 @@ export class AssetView {
         this.componentService.showLoader("");
         if(segment=='jobs')
         {
-            this.getJobs();
+            this.getJobs(this.searchCriteria);
             refresher.complete();
         }
         else if(segment=='tickets')
         {
-            this.getTickets();
+            this.getTickets(this.searchCriteria);
             refresher.complete()
         }
     }
-    getJobs()
+    getJobs(searchCriteria)
     {
-        var searchCriteria={
-            assetId:this.assetDetails.id
-        }
+        // var searchCriteria={
+        //     assetId:this.assetDetails.id
+        // }
 
         this.jobService.getJobs(searchCriteria).subscribe(
             response=>{
@@ -138,11 +145,9 @@ export class AssetView {
             }, 1000);
         }
     }
-    getTickets()
+    getTickets(searchCriteria)
     {
-        var searchCriteria={
-            assetId:this.assetDetails.id
-        }
+
         this.jobService.searchTickets(searchCriteria).subscribe(
             response=>{
                 this.componentService.closeLoader()
@@ -210,7 +215,7 @@ export class AssetView {
 
 
 
-    // Ticket search
+    // Date search
 
     selectFromDate()
     {
@@ -254,22 +259,40 @@ export class AssetView {
         );
 
     }
-    dateSearch(fromDate,toDate) {
+    dateSearch(fromDate,toDate,categories) {
         // this.componentService.showLoader("")
-        console.log("From Date:" + fromDate);
-        console.log("To Date:" + toDate);
+        console.log("From Date:" + fromDate.toISOString());
+        console.log("To Date:" + toDate.toISOString());
+        var searchCriteria={
+            fromDate:fromDate.toISOString(),
+            toDate:toDate.toISOString()
+        }
+        if(categories == 'jobs')
+        {
+            this.getJobs(searchCriteria)
+        }
+        else if(this.categories == 'tickets')
+        {
+            this.getTickets(searchCriteria);
+        }
 
     }
-    getAssetConfig(){
-        this.assetService.getAssetConfig(this.assetDetails.type,this.assetDetails.id).subscribe(
+    segmentChange()
+    {
+        this.fromDate="";
+        this.toDate="";
+    }
+
+    getAssetConfig(assetDetails){
+        this.assetService.getAssetConfig(assetDetails.type,assetDetails.id).subscribe(
             response=>{
                 console.log("Asset config");
                 console.log(response);
+                this.assetDetails.config = response;
             },err=>{
                 console.log("Error in getting asset config");
                 console.log(err);
-            }
-        )
+            })
     }
 
     getAssetById(){
@@ -278,6 +301,7 @@ export class AssetView {
                 console.log("Asset by id");
                 console.log(response);
                 this.assetDetails = response;
+                this.getAssetConfig(this.assetDetails);
             },err=>{
                 console.log("Error in getting asset by id");
                 console.log(err);
@@ -286,4 +310,33 @@ export class AssetView {
 
     }
 
+    getAssetPPMSchedule()
+    {
+        this.assetService.getAssetPPMSchedule(this.assetDetails.id).subscribe(
+            response=>{
+                console.log("Get asset AMC response");
+                console.log(response);
+                this.assetDetails.ppms = response;
+            },
+            error=>{
+                console.log("Get asset AMC error");
+                console.log(error);
+            }
+        )
+    }
+
+    getAssetAMCSchedule()
+    {
+        this.assetService.getAssetAMCSchedule(this.assetDetails.id).subscribe(
+            response=>{
+                console.log("Get asset AMC response");
+                console.log(response);
+                this.assetDetails.amcs = response;
+            },
+            error=>{
+                console.log("Get asset AMC error");
+                console.log(error);
+            }
+        )
+    }
 }
