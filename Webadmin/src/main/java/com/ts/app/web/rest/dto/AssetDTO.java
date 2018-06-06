@@ -35,12 +35,13 @@ public class AssetDTO extends BaseDTO {
     private double purchasePrice;
     private double currentPrice;
     private double estimatedDisposePrice;
-    private Date warrentyExpiryDate;
+    private Date warrantyExpiryDate;
     private String assetCode;
     private String amcDocumentTitle;
     private String amcDocumentFile;
     private Date amcDocumentUploadDate;
     private String assetPpmTitle;
+    private String warrantyType;
 
     public long getProjectId() {
 		return projectId;
@@ -138,11 +139,11 @@ public class AssetDTO extends BaseDTO {
 	public void setEstimatedDisposePrice(double estimatedDisposePrice) {
 		this.estimatedDisposePrice = estimatedDisposePrice;
 	}
-	public Date getWarrentyExpiryDate() {
-		return warrentyExpiryDate;
+	public Date getWarrantyExpiryDate() {
+		return warrantyExpiryDate;
 	}
-	public void setWarrentyExpiryDate(Date warrentyExpiryDate) {
-		this.warrentyExpiryDate = warrentyExpiryDate;
+	public void setWarrantyExpiryDate(Date warrentyExpiryDate) {
+		this.warrantyExpiryDate = warrentyExpiryDate;
 	}
 	public String getAssetCode() {
 		return assetCode;
@@ -270,4 +271,11 @@ public class AssetDTO extends BaseDTO {
     public void setType(String type) {
         this.type = type;
     }
+	public String getWarrantyType() {
+		return warrantyType;
+	}
+	public void setWarrantyType(String warrantyType) {
+		this.warrantyType = warrantyType;
+	}
+    
 }

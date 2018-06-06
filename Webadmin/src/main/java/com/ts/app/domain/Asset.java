@@ -104,6 +104,8 @@ public class Asset extends AbstractAuditingEntity implements Serializable {
     private List<AssetDocument> amcDocuments;
 	
 	private boolean udsAsset;
+	
+	private String warrantyType;
 
 	public long getId() {
         return id;
@@ -284,6 +286,12 @@ public class Asset extends AbstractAuditingEntity implements Serializable {
 	}
 	public void setAmcDocuments(List<AssetDocument> amcDocuments) {
 		this.amcDocuments = amcDocuments;
+	}
+	public String getWarrantyType() {
+		return warrantyType;
+	}
+	public void setWarrantyType(String warrantyType) {
+		this.warrantyType = warrantyType;
 	}
     
 }

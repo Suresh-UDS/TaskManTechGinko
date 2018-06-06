@@ -297,7 +297,7 @@ public class FileUploadHelper {
         return imageDataString;
     }
     
-    public String uploadJobImportFile(MultipartFile file, String filePath , String fileName) {
+    public String uploadImportFile(MultipartFile file, String filePath , String fileName) {
         log.debug("file =" + file + ",  name=" + fileName);
         if (!file.isEmpty()) {
             // check and create emp directory
