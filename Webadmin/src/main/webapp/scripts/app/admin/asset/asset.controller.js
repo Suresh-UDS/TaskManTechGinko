@@ -7,7 +7,7 @@ angular.module('timeSheetApp')
 						ProjectComponent,LocationComponent,SiteComponent,EmployeeComponent, $http, $stateParams,
 
 						$location,PaginationComponent,AssetTypeComponent,ParameterConfigComponent,ParameterComponent,
-                        ParameterUOMComponent,VendorComponent,ManufacturerComponent) {
+                        ParameterUOMComponent,VendorComponent,ManufacturerComponent,$sce) {
                      
 
 
@@ -39,6 +39,7 @@ angular.module('timeSheetApp')
          $scope.selectedVendor = {};
         $scope.selectedConfigParam = null;
         $scope.selectedConfigUnit = null;
+        $scope.assetSave = null;
 
         $scope.asset = {};
        
@@ -159,12 +160,12 @@ angular.module('timeSheetApp')
         };
 
 
-           $scope.createAssetType = function () {
+          /* $scope.createAssetType = function () {
                AssetTypeComponent.create().then(function (data) {
-                console.log("Loading all AssetType -- " , data)
+                console.log("creating all AssetType -- " , data)
                 $scope.assetTypes = data;
             });
-        };
+        };*/
 
 
 
@@ -437,6 +438,7 @@ angular.module('timeSheetApp')
                         console.log("Asset response",JSON.stringify(response));
                         $scope.assetGen.id=response.data.id;
                         $scope.success = 'OK';
+                        $scope.assetSave = "1";
                         $scope.showNotifications('top','center','success','Asset Added');
                         $scope.selectedSite = null;
                         $scope.loadAssets();
@@ -466,8 +468,7 @@ angular.module('timeSheetApp')
             
             var qr = {id:$scope.assetGen.id,code:$scope.assetGen.assetcode}
 
-            alert("code:"  + qr.code + "id:" + qr.id);
-            
+
             AssetComponent.createQr(qr).then(function(){
 
                 $scope.success = 'OK';
@@ -717,18 +718,39 @@ angular.module('timeSheetApp')
 	    $scope.saveAssetParamConfig = function () {
         	$scope.error = null;
         	$scope.success =null;
-        	if($scope.asset.assetType){
-        	    $scope.parameterConfig.assetType = $scope.asset.assetType;
-        	    $scope.parameterConfig.assetId = $stateParams.id
-        	}
-        	if($scope.selectedParameter){
-        	    $scope.parameterConfig.name = $scope.selectedParameter.name;
-        	}
-        	if($scope.selectedParameterUOM){
-        	    $scope.parameterConfig.uom = $scope.selectedParameterUOM.uom;
-        	}
-        	$scope.parameterConfig.consumptionMonitoringRequired  = $scope.consumptionMonitoringRequired
-        	console.log('parameterConfig details ='+ JSON.stringify($scope.parameterConfig));
+
+            if($stateParams.id){
+                if($scope.asset.assetType){
+                $scope.parameterConfig.assetType = $scope.asset.assetType;
+                $scope.parameterConfig.assetId = $stateParams.id;
+                }
+                if($scope.selectedParameter){
+                    $scope.parameterConfig.name = $scope.selectedParameter.name;
+                }
+                if($scope.selectedParameterUOM){
+                    $scope.parameterConfig.uom = $scope.selectedParameterUOM.uom;
+                }
+
+                    $scope.parameterConfig.consumptionMonitoringRequired  = $scope.consumptionMonitoringRequired
+                    console.log(' parameterConfig details (update) ='+ JSON.stringify($scope.parameterConfig));
+            }else if($scope.assetGen.id){
+                 $scope.parameterConfig.assetId = $scope.assetGen.id;
+
+                if($scope.selectedAssetType.id){
+                       $scope.parameterConfig.assetType = $scope.selectedAssetType.name;
+                    }
+                
+                if($scope.selectedParameter){
+                    $scope.parameterConfig.name = $scope.selectedParameter.name;
+                }
+                if($scope.selectedParameterUOM){
+                    $scope.parameterConfig.uom = $scope.selectedParameterUOM.uom;
+                }
+                 $scope.parameterConfig.consumptionMonitoringRequired  = $scope.consumptionMonitoringRequired
+                 console.log('parameterConfig details (create) ='+ JSON.stringify($scope.assetGen));
+
+            }
+        	
         	AssetComponent.createAssetParamConfig($scope.parameterConfig).then(function () {
                 $scope.success = 'OK';
                 $scope.showNotifications('top','center','success','Asset Parameter Saved Successfully');
@@ -833,6 +855,47 @@ angular.module('timeSheetApp')
         		console.log('select a file');
         	}
 	    	
+	    }
+	    
+	    $scope.download = false;
+	    
+	    var mimes = {
+		   "jpeg":"image/jpeg",
+		   "jpg":"image/jpeg",
+		   "pdf":"application/pdf",
+		   "png":"image/png",
+		   "csv":"text/csv",
+		   "zip":"application/zip",
+		   "xlsx": "application/x-msexcel",
+		   "xls":"application/x-msexcel"
+	    };
+	    
+	    $scope.showFile = function(docId, filename) { 
+	    	console.log(docId);
+	    	var document = {};
+	    	document.id = docId;
+	    	document.fileName = filename; 
+	    	var fileExt = filename.split('.').pop();
+	    	console.log(fileExt);
+	    	AssetComponent.readFile(document).then(function(data){ 
+	    		console.log(data);
+	    		console.log(data.fileName);
+	    		$scope.download = true;
+	    		var mime;
+	    		if( typeof(mimes[fileExt]) != "undefined" ) { 
+	    			mime = mimes[fileExt];
+					var file = new Blob([(data)], {type: mime});
+					var fileURL = URL.createObjectURL(file);
+					$scope.content = $sce.trustAsResourceUrl(fileURL);
+	    		}else {
+	    			mime = "text/html";
+		    		var file = new Blob([(data)], {type: mime});
+					var fileURL = URL.createObjectURL(file);
+					$scope.content = $sce.trustAsResourceUrl(fileURL);
+	    		}
+	    				
+	    		
+	    	});
 	    }
 
 

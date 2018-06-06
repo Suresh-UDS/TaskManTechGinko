@@ -896,7 +896,7 @@ button.btn.btn-outline {
     cursor: default;
     margin: 0 3px;
     padding: 0;
-    min-width: 160px;
+    min-width: 150px;
     float: left;
     position: relative;
     background-color: #d9e3f7;
@@ -1326,6 +1326,9 @@ a.sort-by:after {
 p.help-block{
   line-height: 15px;
   display:block !important;
+  text-align: left;
+  padding-top: 3px;
+  margin-bottom: 5px;
 }
 
 /* Schedule events css(calendar)*/
