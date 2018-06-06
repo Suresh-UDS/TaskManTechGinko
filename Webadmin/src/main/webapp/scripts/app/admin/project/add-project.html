@@ -102,7 +102,7 @@
                                                     <label class="control-label">First Name</label>
                                                     <input id='projectContactFirstName' ng-model="project.contactFirstName"
                                                            class='form-control' name='projectContactFirstName' type='text' value=""
-                                                           ng-minlength='2' ng-maxlength='50' ng-pattern="/^[A-Za-z0-9\s&-/]*$/" autofocus required/>
+                                                           ng-minlength='2' ng-maxlength='50' ng-pattern="/^[A-Za-z0-9\s&-/]*$/" autofocus />
                                                     <div ng-show="form.$submitted || form.projectContactFirstName.$touched">
                                                         <div ng-show="form.projectContactFirstName.$dirty || form.projectContactFirstName.$invalid">
                                                             <p class="help-block" style="color:maroon"
@@ -132,7 +132,7 @@
                                                     <label class="control-label">Last Name</label>
                                                     <input id='projectContactLastName' ng-model="project.contactLastName"
                                                            class='form-control' name='projectContactLastName' type='text' value=""
-                                                           ng-minlength='1' ng-maxlength='50' ng-pattern="/^[A-Za-z0-9\s&-/]*$/" autofocus required/>
+                                                           ng-minlength='1' ng-maxlength='50' ng-pattern="/^[A-Za-z0-9\s&-/]*$/" autofocus />
                                                     <div ng-show="form.$submitted || form.projectContactLastName.$touched">
                                                         <div ng-show="form.projectContactLastName.$dirty || form.projectContactLastName.$invalid">
                                                             <p class="help-block" style="color:maroon"
@@ -163,7 +163,7 @@
                                                     <label class="control-label">Phone</label>
                                                     <input id='phone' ng-model="project.phone"
                                                            class='form-control' name='phone' type='phone' value=""
-                                                           ng-minlength='10' ng-maxlength='10' ng-pattern="/^[0-9]*$/" autofocus required/>
+                                                           ng-minlength='10' ng-maxlength='10' ng-pattern="/^[0-9]*$/" autofocus />
                                                     <div ng-show="form.$submitted || form.phone.$touched">
                                                         <div ng-show="form.phone.$dirty || form.phone.$invalid">
                                                             <p class="help-block" style="color:maroon"
@@ -190,7 +190,7 @@
                                                     <label class="control-label">Email</label>
                                                     <input id='email' ng-model="project.email"
                                                            class='form-control' name='email' type='email' value=""
-                                                           ng-maxlength='50' autofocus required/>
+                                                           ng-maxlength='50' autofocus />
                                                     <div ng-show="form.$submitted || form.email.$touched">
                                                         <div ng-show="form.email.$dirty || form.email.$invalid">
                                                             <p class="help-block" style="color:maroon"
