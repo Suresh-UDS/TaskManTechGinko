@@ -712,7 +712,7 @@ angular.module('timeSheetApp')
             if($scope.assetType){
                 console.log("Asset Type entered");
                 AssetTypeComponent.create($scope.assetType).then(function (response) {
-                    console.log(response);
+                    console.log(">>> Asset Type Response "+JSON.stringify(response));
                     $scope.assetType = {};
                     $scope.showNotifications('top','center','success','Asset Type Added Successfully');
                     $scope.loadAssetType();

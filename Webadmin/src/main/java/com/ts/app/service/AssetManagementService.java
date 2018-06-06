@@ -26,6 +26,7 @@ import com.ts.app.domain.AssetDocument;
 import com.ts.app.domain.AssetGroup;
 import com.ts.app.domain.AssetPPMSchedule;
 import com.ts.app.domain.AssetParameterConfig;
+import com.ts.app.domain.AssetParameterReading;
 import com.ts.app.domain.AssetType;
 import com.ts.app.domain.Checklist;
 import com.ts.app.domain.Employee;
@@ -38,6 +39,7 @@ import com.ts.app.domain.Vendor;
 import com.ts.app.repository.AssetAMCRepository;
 import com.ts.app.repository.AssetDocumentRepository;
 import com.ts.app.repository.AssetGroupRepository;
+import com.ts.app.repository.AssetParamReadingRepository;
 import com.ts.app.repository.AssetParameterConfigRepository;
 import com.ts.app.repository.AssetPpmScheduleRepository;
 import com.ts.app.repository.AssetRepository;
@@ -67,6 +69,7 @@ import com.ts.app.web.rest.dto.AssetAMCScheduleDTO;
 import com.ts.app.web.rest.dto.AssetDTO;
 import com.ts.app.web.rest.dto.AssetDocumentDTO;
 import com.ts.app.web.rest.dto.AssetParameterConfigDTO;
+import com.ts.app.web.rest.dto.AssetParameterReadingDTO;
 import com.ts.app.web.rest.dto.AssetPpmScheduleDTO;
 import com.ts.app.web.rest.dto.AssetTypeDTO;
 import com.ts.app.web.rest.dto.AssetgroupDTO;
@@ -179,10 +182,13 @@ public class AssetManagementService extends AbstractService {
 
 	@Inject
 	private ChecklistRepository checklistRepository;
+	
+	@Inject
+	private AssetParamReadingRepository assetParamReadingRepository;
 
 	// Asset
 	public AssetDTO saveAsset(AssetDTO assetDTO) {
-		log.debug("assets service");
+		log.debug("assets service with assettype "+assetDTO.getAssetType());
 
 		Asset asset = mapperUtil.toEntity(assetDTO, Asset.class);
 		Site site = getSite(assetDTO.getSiteId());
@@ -267,9 +273,11 @@ public class AssetManagementService extends AbstractService {
 	public AssetDTO getAssetDTO(long id) {
 		Asset asset = assetRepository.findOne(id);
 		log.debug("Get asset by Id service");
-		log.debug("asset Type" + asset.getAssetType());
-		log.debug("Asset group" + asset.getAssetGroup());
+		log.debug("asset Type " + asset.getAssetType());
+		log.debug("Asset Group " + asset.getAssetGroup());
 		AssetDTO assetDTO = mapperUtil.toModel(asset, AssetDTO.class);
+		log.debug("asset Type after mapping... " + assetDTO.getAssetType());
+		log.debug("Asset Group after mapping...  " + assetDTO.getAssetGroup());
 		return assetDTO;
 	}
 
@@ -736,6 +744,21 @@ public class AssetManagementService extends AbstractService {
 		String code = assetEntity.getCode();
 		return exportUtil.readUploadedFile(siteId, fileName, code);
 		 
+	}
+
+	public AssetParameterReadingDTO saveAssetReadings(AssetParameterReadingDTO assetParamReadingDTO) {
+		AssetParameterReading assetParameterReading = mapperUtil.toEntity(assetParamReadingDTO, AssetParameterReading.class);
+		assetParameterReading.setActive(AssetParameterReading.ACTIVE_YES);
+		Asset asset = assetRepository.findOne(assetParamReadingDTO.getAssetId());
+		assetParameterReading.setAsset(asset);
+		assetParameterReading = assetParamReadingRepository.save(assetParameterReading);
+		assetParamReadingDTO = mapperUtil.toModel(assetParameterReading, AssetParameterReadingDTO.class);
+		return assetParamReadingDTO;
+	}
+
+	public AssetParameterReadingDTO viewReadings(long id) {
+		AssetParameterReading paramReading = assetParamReadingRepository.findOne(id);
+		return mapperUtil.toModel(paramReading, AssetParameterReadingDTO.class);
 	}
 
 }
