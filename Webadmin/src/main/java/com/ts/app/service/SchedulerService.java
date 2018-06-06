@@ -795,6 +795,7 @@ public class SchedulerService extends AbstractService {
 				try {
 					Employee emp = dailyAttn.getEmployee();
 					if (emp != null) {
+						Hibernate.initialize(emp.getProjectSites());
 						List<EmployeeProjectSite> projSites = emp.getProjectSites();
 						for (EmployeeProjectSite projSite : projSites) {
 							Site site = projSite.getSite();
