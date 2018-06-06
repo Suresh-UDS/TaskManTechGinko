@@ -276,7 +276,7 @@ public class AssetManagementService extends AbstractService {
 		log.debug("asset Type " + asset.getAssetType());
 		log.debug("Asset Group " + asset.getAssetGroup());
 		AssetDTO assetDTO = mapperUtil.toModel(asset, AssetDTO.class);
-		log.debug("asset Type after mapping... " + assetDTO.getAssetType());
+		log.debug("asset Type after mapping... " + assetDTO.getAssetType() +" Manufacture "+assetDTO.getManufacturerName() + " Vendor " + assetDTO.getAmcVendorName());
 		log.debug("Asset Group after mapping...  " + assetDTO.getAssetGroup());
 		return assetDTO;
 	}
