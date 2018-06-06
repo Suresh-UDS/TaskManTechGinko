@@ -6,6 +6,7 @@ import{SiteService} from "../../service/siteService";
 import{JobService} from "../../service/jobService";
 import{EmployeeService} from "../../service/employeeService";
 
+import { DatePicker } from '@ionic-native/date-picker';
 /**
  * Generated class for the AssetFilter page.
  *
@@ -17,6 +18,7 @@ import{EmployeeService} from "../../service/employeeService";
     templateUrl: 'job-filter.html',
 })
 export class JobFilter{
+
 
     clientList:any;
     siteList:any;
@@ -34,12 +36,18 @@ export class JobFilter{
     eMsg:any;
     empPlace:any;
 
+
+    fromDate:any;
+    toDate:any;
+    viewButton:any;
+
     page:1;
     totalPages:0;
     pageSort:15;
     count=0;
     constructor(public navCtrl: NavController, public navParams: NavParams, public viewCtrl: ViewController, public component:componentService,
-                public siteService:SiteService, public assetService:AssetService,private jobService:JobService,private employeeService:EmployeeService) {
+                public siteService:SiteService, public assetService:AssetService,private jobService:JobService,private employeeService:EmployeeService,
+                private   datePicker:DatePicker) {
         this.assetGroup = [
             {name:"CMRL"},
             {name:"UDS House Keeping Assets"},
@@ -100,6 +108,7 @@ export class JobFilter{
         console.log(site);
         this.activeSite= index;
         this.selectedSite = site;
+        this.getEmployee(site.id);
     }
 
     dismiss(){
@@ -114,6 +123,57 @@ export class JobFilter{
         };
         this.viewCtrl.dismiss(this.searchCriteria);
     }
+
+    selectFromDate()
+    {
+        this.datePicker.show({
+            date: new Date(),
+            mode: 'date',
+            androidTheme: this.datePicker.ANDROID_THEMES.THEME_HOLO_DARK
+        }).then(
+            date => {
+                this.fromDate=date;
+                console.log('Got date: ', date);
+                if(this.fromDate && this.toDate)
+                {
+                    console.log('view button true');
+                    this.viewButton=true;
+                }
+
+            },
+            err => console.log('Error occurred while getting date: ', err)
+        );
+
+    }
+    selectToDate()
+    {
+        this.datePicker.show({
+            date: new Date(),
+            mode: 'date',
+            androidTheme: this.datePicker.ANDROID_THEMES.THEME_HOLO_DARK
+        }).then(
+            date => {
+                this.toDate=date;
+                console.log('Got date: ', date);
+                if(this.fromDate && this.toDate)
+                {
+                    console.log('view button true');
+                    this.viewButton=true;
+                }
+
+            },
+            err => console.log('Error occurred while getting date: ', err)
+        );
+
+    }
+
+    dateSearch(fromDate,toDate) {
+        // this.componentService.showLoader("")
+        console.log("From Date:" + fromDate);
+        console.log("To Date:" + toDate);
+
+    }
+
     getEmployee(id)
     {
         if(id)
@@ -154,6 +214,19 @@ export class JobFilter{
             this.employee=[];
         }
     }
+
+    filter(){
+        this.viewCtrl.dismiss();
+    }
+
+    filterJob(){
+        this.searchCriteria = {
+            siteId:this.selectedSite.id,
+            projectId:this.selectedProject.id,
+        };
+        this.viewCtrl.dismiss(this.searchCriteria);
+    }
+
 
 
 

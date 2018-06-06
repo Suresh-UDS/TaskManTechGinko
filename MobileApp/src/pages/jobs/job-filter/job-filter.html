@@ -20,7 +20,7 @@
 <ion-content>
 
   <ion-fab right bottom>
-    <button (click)="filterAssets()" ion-fab><ion-icon name="checkmark"></ion-icon></button>
+    <button (click)="filter()" ion-fab><ion-icon name="checkmark"></ion-icon></button>
   </ion-fab>
   <div class="InitFeedbackCon">
     <div class="InputCon">
@@ -47,9 +47,53 @@
                   </ion-scroll>
                 </ion-item>
               </ion-row>
+
+                <!--<div class="form-group label-floating">-->
+                    <!--<label class="control-label" *ngIf="employ">Employee</label>-->
+                    <!--<ion-select [(ngModel)]="employ" [disabled]="empSelect" class="select-box padding-left0" interface="popover"  id="employ" name="employ" [placeholder]="empPlace" #emp="ngModel" required [ngClass]="{'select-error': eMsg=='employ'}">-->
+                        <!--<ion-option  *ngFor="let emp of employee" [value]="emp.id" >{{emp.fullName}} - {{emp.designation}}</ion-option>-->
+                    <!--</ion-select>-->
+
+                    <!--<div *ngIf="emp.errors && (emp.dirty || emp.touched)" class="error-msg">-->
+
+                    <!--</div>-->
+
+                    <!--<div *ngIf="emp.errors && (emp.untouched )" class="error-msg">-->
+
+                    <!--</div>-->
+                <!--</div>-->
             </div>
           </div>
+            <ion-item>
+                <ion-label class="clr-blk">Employee</ion-label>
+                <ion-select [(ngModel)]="employ" [disabled]="empSelect" class="select-box padding-left0" interface="popover" >
+                    <ion-option  *ngFor="let emp of employee" [value]="emp.id" >{{emp.fullName}} - {{emp.designation}}</ion-option>
+                </ion-select>
+            </ion-item>
         </div>
+
+          <ion-row no-margin class="" no-padding="" >
+              <ion-col col-5 class="ver-center  margin-right15" (click)="selectFromDate()">
+                  <ion-col col-2  class="ver-center padding-bottom1 primary-border-bottom">
+                      <ion-icon ios="ios-calendar" md="md-calendar"  class="fnt-24 clr-orange"></ion-icon>
+                  </ion-col>
+                  <ion-col col-10 class="ver-center padding-top-bottom0 primary-border-bottom">
+                      <ion-label *ngIf="!fromDate" class="bg-grey" no-margin="">From date</ion-label>
+                      <p padding-left no-margin="">{{ fromDate | date:'dd/MM/yyyy' }}</p>
+                  </ion-col>
+              </ion-col>
+              <ion-col col-5 (click)="selectToDate()" class="ver-center">
+                  <ion-col col-2 class="ver-center padding-bottom1 primary-border-bottom">
+                      <ion-icon ios="ios-calendar" md="md-calendar" class="fnt-24 clr-orange"></ion-icon>
+                  </ion-col>
+                  <ion-col col-10 class="ver-center padding-top-bottom0 primary-border-bottom">
+                      <ion-label *ngIf="!toDate" class="bg-grey" no-margin="">To date</ion-label>
+                      <p padding-left no-margin="">{{ toDate | date:'dd/MM/yyyy' }}</p>
+                  </ion-col>
+              </ion-col>
+          </ion-row>
+
+
 
       </ion-list>
       <!--<ion-item *ngFor="let ag of assetGroup">-->
