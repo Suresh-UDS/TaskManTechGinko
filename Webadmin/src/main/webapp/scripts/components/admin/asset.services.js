@@ -175,13 +175,6 @@ angular.module('timeSheetApp')
             	return $http.get('api/assets/getAllAssetPhoto/'+obj.type+'/'+obj.assetId).then(function(response){ 
             		return response.data;
             	});
-            },
-            
-            readFile : function(document) { 
-            	return $http.get('api/assets/viewFile/'+document.id+'/'+document.fileName, {responseType: 'arrayBuffer'}).then(function(response){ 
-            		return response.data;
-            	});
-
             }
             
 

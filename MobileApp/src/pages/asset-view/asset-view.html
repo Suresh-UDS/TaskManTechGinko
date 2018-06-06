@@ -12,7 +12,7 @@
     <ion-title>{{assetDetails.title}}</ion-title>
   </ion-navbar>
     <ion-toolbar class="tool-bar">
-        <ion-segment [(ngModel)]="categories" class="segmnt margin-auto" color="#ff9800">
+        <ion-segment [(ngModel)]="categories" class="segmnt margin-auto" color="#ff9800" (ionChange)="segmentChange()">
             <ion-segment-button value="details" >Details</ion-segment-button>
             <ion-segment-button value="ppm">PPM </ion-segment-button>
             <ion-segment-button value="amc">AMC </ion-segment-button>
@@ -21,7 +21,44 @@
             <ion-segment-button value="jobs">Jobs</ion-segment-button>
             <ion-segment-button value="tickets">Tickets</ion-segment-button>
         </ion-segment>
+
+
+    <div [ngSwitch]="true">
+
+        <ion-list *ngSwitchCase=" categories === 'jobs' || categories === 'tickets' " no-margin="">
+
+            <ion-row no-margin class="" no-padding="" >
+                <ion-col col-5 class="ver-center  margin-right15" (click)="selectFromDate()">
+                    <ion-col col-2  class="ver-center padding-bottom1">
+                        <ion-icon ios="ios-calendar" md="md-calendar"  class="fnt-24 clr-orange"></ion-icon>
+                    </ion-col>
+                    <ion-col col-10 class="ver-center padding-top-bottom0">
+                        <ion-label *ngIf="!fromDate" class="bg-trans padding-bottom0" no-margin="">From date</ion-label>
+                        <p padding-left no-margin="">{{ fromDate | date:'dd/MM/yyyy' }}</p>
+                    </ion-col>
+                </ion-col>
+                <ion-col col-5 (click)="selectToDate()" class="ver-center">
+                    <ion-col col-2 class="ver-center padding-bottom1">
+                        <ion-icon ios="ios-calendar" md="md-calendar" class="fnt-24 clr-orange"></ion-icon>
+                    </ion-col>
+                    <ion-col col-10 class="ver-center padding-top-bottom0">
+                        <ion-label *ngIf="!toDate" class="bg-trans padding-bottom0" no-margin="">To date</ion-label>
+                        <p padding-left no-margin="">{{ toDate | date:'dd/MM/yyyy' }}</p>
+                    </ion-col>
+                </ion-col>
+                <ion-col col-2 class=" ver-center padding-top-bottom0">
+                    <button ion-button round class="color-white" (click)="dateSearch(fromDate,toDate,categories)" [disabled]="!viewButton">
+                        <ion-icon name="arrow-round-forward"></ion-icon>
+                    </button>
+                </ion-col>
+            </ion-row>
+
+
+        </ion-list>
+
+    </div>
     </ion-toolbar>
+
 </ion-header>
 
 <ion-content padding>
@@ -290,7 +327,7 @@
         <!--</div>-->
     </ion-list>
 
-    <ion-list *ngSwitchCase="'jobs'">
+    <ion-list *ngSwitchCase="'jobs'" style="margin-top : 56px">
         <div *ngIf="assetDetails.jobs?.length<0">
             <ion-card>
                 <ion-card-content>
@@ -302,6 +339,8 @@
         <ion-refresher (ionRefresh)="doRefresh($event,'jobs')">
             <ion-refresher-content></ion-refresher-content>
         </ion-refresher>
+
+
 
 
         <div  class="white-bg" *ngFor="let job of assetDetails.jobs" >
@@ -391,44 +430,7 @@
 
     </ion-list>
 
-    <ion-list *ngSwitchCase="'tickets'">
-
-        <ion-row no-margin class="" no-padding="" >
-            <ion-col col-5 class="ver-center  margin-right15" (click)="selectFromDate()">
-                <ion-col col-2  class="ver-center padding-bottom1 primary-border-bottom">
-                    <ion-icon ios="ios-calendar" md="md-calendar"  class="fnt-24 clr-orange"></ion-icon>
-                </ion-col>
-                <ion-col col-10 class="ver-center padding-top-bottom0 primary-border-bottom">
-                    <ion-label *ngIf="!fromDate" class="bg-grey" no-margin="">From date</ion-label>
-                    <p padding-left no-margin="">{{ fromDate | date:'dd/MM/yyyy' }}</p>
-                </ion-col>
-            </ion-col>
-            <ion-col col-5 (click)="selectToDate()" class="ver-center">
-                <ion-col col-2 class="ver-center padding-bottom1 primary-border-bottom">
-                    <ion-icon ios="ios-calendar" md="md-calendar" class="fnt-24 clr-orange"></ion-icon>
-                </ion-col>
-                <ion-col col-10 class="ver-center padding-top-bottom0 primary-border-bottom">
-                    <ion-label *ngIf="!toDate" class="bg-grey" no-margin="">To date</ion-label>
-                    <p padding-left no-margin="">{{ toDate | date:'dd/MM/yyyy' }}</p>
-                </ion-col>
-            </ion-col>
-            <ion-col col-2 class=" ver-center padding-top-bottom0">
-                <button ion-button round class="color-white" (click)="dateSearch(fromDate,toDate)" [disabled]="!viewButton">
-                    <ion-icon name="arrow-round-forward"></ion-icon>
-                </button>
-            </ion-col>
-        </ion-row>
-
-        <!--<ion-list *ngIf="assetDetails.tickets.length<=0">-->
-            <!--<ion-item>-->
-                <!--<ion-card padding>-->
-                    <!--<ion-card-header no-padding>-->
-                        <!--No Tickets found-->
-                    <!--</ion-card-header>-->
-                <!--</ion-card>-->
-            <!--</ion-item>-->
-
-        <!--</ion-list>-->
+    <ion-list *ngSwitchCase="'tickets'" style="margin-top : 56px">
 
         <ion-refresher (ionRefresh)="doRefresh($event,'tickets')">
             <ion-refresher-content>

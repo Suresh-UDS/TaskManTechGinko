@@ -97,8 +97,6 @@ import {GetAssetReading} from "../pages/asset-view/get-asset-reading";
 import {QRScanner} from "@ionic-native/qr-scanner";
 import {ScanQR} from "../pages/asset-list/scanQR";
 import {IonicImageViewerModule} from "ionic-img-viewer";
-import {DatePicker} from "@ionic-native/date-picker";
-
 @NgModule({
   declarations: [
     MyApp,
@@ -264,7 +262,6 @@ import {DatePicker} from "@ionic-native/date-picker";
     Toast,
     FileTransfer,
     File,
-      DatePicker,
       AppVersion,
       QRScanner,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
