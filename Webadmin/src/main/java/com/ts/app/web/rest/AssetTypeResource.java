@@ -66,7 +66,7 @@ public class AssetTypeResource {
 			throw new TimesheetException(cve, assetTypeDTO);
 		}
 
-		return new ResponseEntity<>(HttpStatus.CREATED);
+		return new ResponseEntity<>(assetTypeDTO,HttpStatus.CREATED);
 	}
 
 	@RequestMapping(value = "/assetType", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE)

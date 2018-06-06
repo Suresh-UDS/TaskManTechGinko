@@ -93,7 +93,7 @@ public class AssetResource {
 
 	@RequestMapping(path = "/asset/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public AssetDTO getAsset(@PathVariable("id") Long id) {
-		log.debug(">>> get asset! <<<");
+		log.debug(">>> get asset details! <<<");
 		return assetService.getAssetDTO(id);
 	}
 

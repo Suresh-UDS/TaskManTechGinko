@@ -182,7 +182,7 @@ public class AssetManagementService extends AbstractService {
 
 	// Asset
 	public AssetDTO saveAsset(AssetDTO assetDTO) {
-		log.debug("assets service");
+		log.debug("assets service with assettype "+assetDTO.getAssetType());
 
 		Asset asset = mapperUtil.toEntity(assetDTO, Asset.class);
 		Site site = getSite(assetDTO.getSiteId());
@@ -267,9 +267,11 @@ public class AssetManagementService extends AbstractService {
 	public AssetDTO getAssetDTO(long id) {
 		Asset asset = assetRepository.findOne(id);
 		log.debug("Get asset by Id service");
-		log.debug("asset Type" + asset.getAssetType());
-		log.debug("Asset group" + asset.getAssetGroup());
+		log.debug("asset Type " + asset.getAssetType());
+		log.debug("Asset Group " + asset.getAssetGroup());
 		AssetDTO assetDTO = mapperUtil.toModel(asset, AssetDTO.class);
+		log.debug("asset Type after mapping... " + assetDTO.getAssetType());
+		log.debug("Asset Group after mapping...  " + assetDTO.getAssetGroup());
 		return assetDTO;
 	}
 
