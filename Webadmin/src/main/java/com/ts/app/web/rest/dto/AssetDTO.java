@@ -28,7 +28,11 @@ public class AssetDTO extends BaseDTO {
     private double addressLat;
 	private double addressLng;
 	private long manufacturerId;
+	private long manufactureManufactureId;
+	private String manufacturerName;
 	private long vendorId;
+	private long amcVendorVendorId;
+	private String amcVendorName;
 	private String modelNumber;
     private String serialNumber;
     private Date acquiredDate;
@@ -43,7 +47,31 @@ public class AssetDTO extends BaseDTO {
     private String assetPpmTitle;
     private String warrantyType;
 
-    public long getProjectId() {
+    public long getManufactureManufactureId() {
+		return manufactureManufactureId;
+	}
+	public void setManufactureManufactureId(long manufactureManufactureId) {
+		this.manufactureManufactureId = manufactureManufactureId;
+	}
+	public long getAmcVendorVendorId() {
+		return amcVendorVendorId;
+	}
+	public void setAmcVendorVendorId(long amcVendorVendorId) {
+		this.amcVendorVendorId = amcVendorVendorId;
+	}
+	public String getManufacturerName() {
+		return manufacturerName;
+	}
+	public void setManufacturerName(String manufacturerName) {
+		this.manufacturerName = manufacturerName;
+	}
+	public String getAmcVendorName() {
+		return amcVendorName;
+	}
+	public void setAmcVendorName(String amcVendorName) {
+		this.amcVendorName = amcVendorName;
+	}
+	public long getProjectId() {
 		return projectId;
 	}
 	public void setProjectId(long projectId) {
