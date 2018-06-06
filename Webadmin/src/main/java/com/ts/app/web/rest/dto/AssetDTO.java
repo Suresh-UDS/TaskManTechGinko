@@ -12,6 +12,7 @@ public class AssetDTO extends BaseDTO {
     private String code;
     private String description;
     private long siteId;
+    private long siteSiteId;
     private long projectId;
     private String siteName;
     private Date endTime;
@@ -21,7 +22,9 @@ public class AssetDTO extends BaseDTO {
     private String group;
     private String type;
     private String assetType;
+    private String assetTypeName;
     private String assetGroup;
+    private String assetGroupName;
     private String block;
     private String floor;
     private String zone;
@@ -47,7 +50,25 @@ public class AssetDTO extends BaseDTO {
     private String assetPpmTitle;
     private String warrantyType;
 
-    public long getManufactureManufactureId() {
+    public long getSiteSiteId() {
+		return siteSiteId;
+	}
+	public void setSiteSiteId(long siteSiteId) {
+		this.siteSiteId = siteSiteId;
+	}
+	public String getAssetTypeName() {
+		return assetTypeName;
+	}
+	public void setAssetTypeName(String assetTypeName) {
+		this.assetTypeName = assetTypeName;
+	}
+	public String getAssetGroupName() {
+		return assetGroupName;
+	}
+	public void setAssetGroupName(String assetGroupName) {
+		this.assetGroupName = assetGroupName;
+	}
+	public long getManufactureManufactureId() {
 		return manufactureManufactureId;
 	}
 	public void setManufactureManufactureId(long manufactureManufactureId) {
