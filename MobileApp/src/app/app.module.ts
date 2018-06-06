@@ -1,6 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { ErrorHandler, NgModule } from '@angular/core';
-import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
+import {FabContainer, IonicApp, IonicErrorHandler, IonicModule} from 'ionic-angular';
 import {HttpModule} from "@angular/http";
 import {HttpClient} from "../pages/Interceptor/HttpClient";
 import { MyApp } from './app.component';
@@ -99,6 +99,7 @@ import {QRScanner} from "@ionic-native/qr-scanner";
 import {ScanQR} from "../pages/asset-list/scanQR";
 import {IonicImageViewerModule} from "ionic-img-viewer";
 import {DatePicker} from "@ionic-native/date-picker";
+
 import{EmployeeFilter} from "../pages/employee-list/employee-filter/employee-filter";
 import {JobFilter} from "../pages/jobs/job-filter/job-filter";
 
@@ -169,7 +170,6 @@ import {JobFilter} from "../pages/jobs/job-filter/job-filter";
       JobFilter,
       TicketFilter,
       EmployeeFilter,
-
   ],
   imports: [
     BrowserModule,
@@ -250,7 +250,6 @@ import {JobFilter} from "../pages/jobs/job-filter/job-filter";
       EmployeeFilter,
       GetAssetReading,
     ScanQR,
-
   ],
   providers: [
     StatusBar,
@@ -278,8 +277,10 @@ import {JobFilter} from "../pages/jobs/job-filter/job-filter";
     Toast,
     FileTransfer,
     File,
+      DatePicker,
       AppVersion,
       QRScanner,
+      FabContainer,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
       {provide:MY_CONFIG_TOKEN, useValue: AppConfig}
   ]
