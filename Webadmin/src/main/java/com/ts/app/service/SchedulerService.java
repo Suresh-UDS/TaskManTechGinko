@@ -817,7 +817,9 @@ public class SchedulerService extends AbstractService {
 								shiftEndCal.set(Calendar.MINUTE, Integer.parseInt(endTimeUnits[1]));
 								shiftEndCal.set(Calendar.SECOND, 0);
 								shiftEndCal.set(Calendar.MILLISECOND, 0);
-
+								log.debug("site - "+ site.getId());
+								log.debug("shift start time - "+ DateUtil.convertToSQLDate(shiftStartCal.getTime()));
+								log.debug("shift end time - "+ DateUtil.convertToSQLDate(shiftStartCal.getTime()));
 								EmployeeShift empShift = empShiftRepo.findEmployeeShiftBySiteAndShift(site.getId(), DateUtil.convertToSQLDate(shiftStartCal.getTime()),
 										DateUtil.convertToSQLDate(shiftEndCal.getTime()));
 
