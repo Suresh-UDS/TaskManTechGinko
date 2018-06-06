@@ -770,7 +770,7 @@ public class SchedulerService extends AbstractService {
 		}
 	}
 
-	@Scheduled(cron="0 0 0/1 * * ?") // runs every 1 hr
+	@Scheduled(cron="0 15 * * * ?") // runs every 1 hr
 	public void attendanceCheckOutTask() {
 		Calendar currCal = Calendar.getInstance();
 		Calendar startCal = Calendar.getInstance();
