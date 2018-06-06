@@ -69,7 +69,7 @@
 
                             <thead>
                             <tr>
-                                <th>Code
+                                <th>Asset Code
                                     <span class="sortingIcons">
                                         <span ng-click="columnAscOrder('code')" ng-class="isActiveAsc == 'code' ? 'active' : ''" >
                                             <i  class="fa fa-caret-up"></i>
@@ -80,7 +80,7 @@
                                     </span>
 
                                 </th>
-                                <th>Name
+                                <th>Asset Name
                                     <span class="sortingIcons">
                                         <span ng-click="columnAscOrder('title')" ng-class="isActiveAsc == 'title' ? 'active' : ''" >
                                             <i  class="fa fa-caret-up"></i>
@@ -91,16 +91,37 @@
                                     </span>
 
                                 </th>
-                                <!-- <th>Description
-                                    <span class="sortingIcons">
-                                        <span ng-click="columnAscOrder('description')" ng-class="isActiveAsc == 'description' ? 'active' : ''" >
+                                <th>Asset Type
+                                     <span class="sortingIcons">
+                                        <span ng-click="columnAscOrder('assetType')" ng-class="isActiveAsc == 'assetType' ? 'active' : ''" >
                                             <i  class="fa fa-caret-up"></i>
                                         </span>
-                                        <span ng-click="columnDescOrder('description')" ng-class="isActiveDesc == 'description' ? 'active' : ''" >
+                                        <span ng-click="columnDescOrder('assetType')" ng-class="isActiveDesc == 'assetType' ? 'active' : ''" >
+                                             <i  ng-class="class" class="fa fa-caret-down"></i>
+                                        </span>
+                                    </span>
+                                </th>
+                                <th>Asset Group
+                                    <span class="sortingIcons">
+                                        <span ng-click="columnAscOrder('assetGroup')" ng-class="isActiveAsc == 'assetGroup' ? 'active' : ''" >
+                                            <i  class="fa fa-caret-up"></i>
+                                        </span>
+                                        <span ng-click="columnDescOrder('assetGroup')" ng-class="isActiveDesc == 'assetGroup' ? 'active' : ''" >
+                                             <i  ng-class="class" class="fa fa-caret-down"></i>
+                                        </span>
+                                    </span>
+                                </th>
+                                <!-- <th>Status
+                                    <span class="sortingIcons">
+                                        <span ng-click="columnAscOrder('status')" ng-class="isActiveAsc == 'status' ? 'active' : ''" >
+                                            <i  class="fa fa-caret-up"></i>
+                                        </span>
+                                        <span ng-click="columnDescOrder('status')" ng-class="isActiveDesc == 'status' ? 'active' : ''" >
                                              <i  ng-class="class" class="fa fa-caret-down"></i>
                                         </span>
                                     </span>
                                 </th> -->
+                               
                                 <th>Site
                                     <span class="sortingIcons">
                                         <span ng-click="columnAscOrder('siteName')" ng-class="isActiveAsc == 'siteName' ? 'active' : ''" >
@@ -111,36 +132,7 @@
                                         </span>
                                     </span>
                                 </th>
-                                <th>Sart Date
-                                     <span class="sortingIcons">
-                                        <span ng-click="columnAscOrder('sartDate')" ng-class="isActiveAsc == 'sartDate' ? 'active' : ''" >
-                                            <i  class="fa fa-caret-up"></i>
-                                        </span>
-                                        <span ng-click="columnDescOrder('sartDate')" ng-class="isActiveDesc == 'sartDate' ? 'active' : ''" >
-                                             <i  ng-class="class" class="fa fa-caret-down"></i>
-                                        </span>
-                                    </span>
-                                </th>
-                                <th>End Date
-                                    <span class="sortingIcons">
-                                        <span ng-click="columnAscOrder('endDate')" ng-class="isActiveAsc == 'endDate' ? 'active' : ''" >
-                                            <i  class="fa fa-caret-up"></i>
-                                        </span>
-                                        <span ng-click="columnDescOrder('endDate')" ng-class="isActiveDesc == 'endDate' ? 'active' : ''" >
-                                             <i  ng-class="class" class="fa fa-caret-down"></i>
-                                        </span>
-                                    </span>
-                                </th>
-                                <th>Status
-                                    <span class="sortingIcons">
-                                        <span ng-click="columnAscOrder('status')" ng-class="isActiveAsc == 'status' ? 'active' : ''" >
-                                            <i  class="fa fa-caret-up"></i>
-                                        </span>
-                                        <span ng-click="columnDescOrder('status')" ng-class="isActiveDesc == 'status' ? 'active' : ''" >
-                                             <i  ng-class="class" class="fa fa-caret-down"></i>
-                                        </span>
-                                    </span>
-                                </th>
+                                
                                 <th class="disabled-sorting text-right">Actions</th>
                             </tr>
                             </thead>
@@ -149,11 +141,10 @@
                             <tr ng-repeat="asset in assets">
                                 <td>{{asset.code}}</td>
                                 <td>{{asset.title}}</td>
-                                <!-- <td>{{asset.description}}</td> -->
+                                <td>{{asset.assetType}}</td>
+                                <td>{{asset.assetGroup}}</td>
+                                <!-- <td>{{asset.status}}</td> -->
                                 <td>{{asset.siteName}}</td>
-                                <td>{{asset.startTime | date : "dd/MM/yyyy hh:mm:ss a"}}</td>
-                                <td>{{asset.endTime | date : "dd/MM/yyyy hh:mm:ss a" }}</td>
-                                <td>{{asset.status}}</td>
                                 <td class="text-right">
                                     <a   has-authority="ROLE_ADMIN" ui-sref="view-asset({ id: asset.id })"   class="btn btn-simple btn-info btn-icon like"><i class="material-icons">remove_red_eye</i></a>
 
