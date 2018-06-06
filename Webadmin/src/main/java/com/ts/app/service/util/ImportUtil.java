@@ -59,10 +59,12 @@ import com.ts.app.repository.SiteRepository;
 import com.ts.app.repository.UserRepository;
 import com.ts.app.repository.UserRoleRepository;
 import com.ts.app.security.SecurityUtils;
+import com.ts.app.service.AssetManagementService;
 import com.ts.app.service.ChecklistService;
 import com.ts.app.service.JobManagementService;
 import com.ts.app.service.SiteLocationService;
 import com.ts.app.service.UserService;
+import com.ts.app.web.rest.dto.AssetDTO;
 import com.ts.app.web.rest.dto.BaseDTO;
 import com.ts.app.web.rest.dto.ChecklistDTO;
 import com.ts.app.web.rest.dto.ChecklistItemDTO;
@@ -86,6 +88,7 @@ public class ImportUtil {
 	private static final String NEW_IMPORT_FOLDER = "import.file.path.new";
 	private static final String JOB_FOLDER = "job";
 	private static final String EMPLOYEE_FOLDER = "employee";
+	private static final String ASSET_FOLDER = "asset";
 	private static final String CHECKLIST_FOLDER = "checklist";
 	private static final String EMP_SHIFT_FOLDER = "empshift";
 	private static final String CLIENT_FOLDER = "client";
@@ -137,11 +140,14 @@ public class ImportUtil {
 	@Inject
 	private EmployeeShiftRepository empShiftRepo;
 	
+	@Inject
+	private AssetManagementService assetManagementService;
+	
 	
 	public ImportResult importJobData(MultipartFile file, long dateTime) {
         String fileName = dateTime + ".xlsx";
 		String filePath = env.getProperty(NEW_IMPORT_FOLDER) + SEPARATOR +  JOB_FOLDER;
-		String uploadedFileName = fileUploadHelper.uploadJobImportFile(file, filePath, fileName);
+		String uploadedFileName = fileUploadHelper.uploadImportFile(file, filePath, fileName);
 		String targetFilePath = env.getProperty(COMPLETED_IMPORT_FOLDER) + SEPARATOR +  JOB_FOLDER;
 		String fileKey = fileName.substring(0, fileName.indexOf(".xlsx"));
 		if(statusMap.containsKey(fileKey)) {
@@ -160,7 +166,7 @@ public class ImportUtil {
 	public ImportResult importClientData(MultipartFile file, long dateTime) {
         String fileName = dateTime + ".xlsx";
 		String filePath = env.getProperty(NEW_IMPORT_FOLDER) + SEPARATOR +  CLIENT_FOLDER;
-		String uploadedFileName = fileUploadHelper.uploadJobImportFile(file, filePath, fileName);
+		String uploadedFileName = fileUploadHelper.uploadImportFile(file, filePath, fileName);
 		String targetFilePath = env.getProperty(COMPLETED_IMPORT_FOLDER) + SEPARATOR +  CLIENT_FOLDER;
 		String fileKey = fileName.substring(0, fileName.indexOf(".xlsx"));
 		if(statusMap.containsKey(fileKey)) {
@@ -180,7 +186,7 @@ public class ImportUtil {
 	public ImportResult importSiteData(MultipartFile file, long dateTime) {
         String fileName = dateTime + ".xlsx";
 		String filePath = env.getProperty(NEW_IMPORT_FOLDER) + SEPARATOR +  SITE_FOLDER;
-		String uploadedFileName = fileUploadHelper.uploadJobImportFile(file, filePath, fileName);
+		String uploadedFileName = fileUploadHelper.uploadImportFile(file, filePath, fileName);
 		String targetFilePath = env.getProperty(COMPLETED_IMPORT_FOLDER) + SEPARATOR +  SITE_FOLDER;
 		String fileKey = fileName.substring(0, fileName.indexOf(".xlsx"));
 		if(statusMap.containsKey(fileKey)) {
@@ -199,7 +205,7 @@ public class ImportUtil {
 	public ImportResult importEmployeeData(MultipartFile file, long dateTime) {
         String fileName = dateTime + ".xlsx";
 		String filePath = env.getProperty(NEW_IMPORT_FOLDER) + SEPARATOR +  EMPLOYEE_FOLDER;
-		String uploadedFileName = fileUploadHelper.uploadJobImportFile(file, filePath, fileName);
+		String uploadedFileName = fileUploadHelper.uploadImportFile(file, filePath, fileName);
 		String targetFilePath = env.getProperty(COMPLETED_IMPORT_FOLDER) + SEPARATOR +  EMPLOYEE_FOLDER;
 		String fileKey = fileName.substring(0, fileName.indexOf(".xlsx"));
 		if(statusMap.containsKey(fileKey)) {
@@ -216,10 +222,30 @@ public class ImportUtil {
 
 	}
 	
+	public ImportResult importAssetData(MultipartFile file, long dateTime) {
+        String fileName = dateTime + ".xlsx";
+		String filePath = env.getProperty(NEW_IMPORT_FOLDER) + SEPARATOR +  ASSET_FOLDER;
+		String uploadedFileName = fileUploadHelper.uploadImportFile(file, filePath, fileName);
+		String targetFilePath = env.getProperty(COMPLETED_IMPORT_FOLDER) + SEPARATOR +  ASSET_FOLDER;
+		String fileKey = fileName.substring(0, fileName.indexOf(".xlsx"));
+		if(statusMap.containsKey(fileKey)) {
+			String status = statusMap.get(fileKey);
+			log.debug("Current status for filename -"+fileKey+", status -" + status);
+		}else {
+			statusMap.put(fileKey, "PROCESSING");
+		}
+		importNewFiles("asset",filePath, fileName, targetFilePath);
+		ImportResult result = new ImportResult();
+		result.setFile(fileKey);
+		result.setStatus("PROCESSING");
+		return result;
+
+	}
+	
 	public ImportResult importChecklistData(MultipartFile file, long dateTime) {
         String fileName = dateTime + ".xlsx";
 		String filePath = env.getProperty(NEW_IMPORT_FOLDER) + SEPARATOR +  CHECKLIST_FOLDER;
-		String uploadedFileName = fileUploadHelper.uploadJobImportFile(file, filePath, fileName);
+		String uploadedFileName = fileUploadHelper.uploadImportFile(file, filePath, fileName);
 		String targetFilePath = env.getProperty(COMPLETED_IMPORT_FOLDER) + SEPARATOR +  CHECKLIST_FOLDER;
 		String fileKey = fileName.substring(0, fileName.indexOf(".xlsx"));
 		if(statusMap.containsKey(fileKey)) {
@@ -239,7 +265,7 @@ public class ImportUtil {
 	public ImportResult importEmployeeShiftData(MultipartFile file, long dateTime) {
         String fileName = dateTime + ".xlsx";
 		String filePath = env.getProperty(NEW_IMPORT_FOLDER) + SEPARATOR +  EMP_SHIFT_FOLDER;
-		String uploadedFileName = fileUploadHelper.uploadJobImportFile(file, filePath, fileName);
+		String uploadedFileName = fileUploadHelper.uploadImportFile(file, filePath, fileName);
 		String targetFilePath = env.getProperty(COMPLETED_IMPORT_FOLDER) + SEPARATOR +  EMP_SHIFT_FOLDER;
 		String fileKey = fileName.substring(0, fileName.indexOf(".xlsx"));
 		if(statusMap.containsKey(fileKey)) {
@@ -285,6 +311,9 @@ public class ImportUtil {
 						break;
 					case "employeeshift" :
 						importEmployeeShiftMasterFromFile(fileObj.getPath());
+						break;
+					case "asset" :
+						importAssetFromFile(fileObj.getPath());
 						break;
 						
 				}
@@ -561,6 +590,57 @@ public class ImportUtil {
 		
 	}
 
+	private void importAssetFromFile(String path) {
+		try {
+
+			FileInputStream excelFile = new FileInputStream(new File(path));
+			Workbook workbook = new XSSFWorkbook(excelFile);
+			Sheet datatypeSheet = workbook.getSheetAt(0);
+			//Iterator<Row> iterator = datatypeSheet.iterator();
+			int lastRow = datatypeSheet.getLastRowNum();
+			int r = 1;
+			
+			log.debug("Last Row number -" + lastRow);
+			for (; r <= lastRow; r++) {
+				log.debug("Current Row number -" + r);
+				Row currentRow = datatypeSheet.getRow(r);
+				AssetDTO assetDTO = new AssetDTO();
+				assetDTO.setTitle(getCellValue(currentRow.getCell(0)));
+				assetDTO.setAssetType(getCellValue(currentRow.getCell(1)));
+				assetDTO.setAssetGroup(getCellValue(currentRow.getCell(2)));
+				assetDTO.setProjectId(Long.valueOf(getCellValue(currentRow.getCell(3))));
+				assetDTO.setSiteId(Long.valueOf(getCellValue(currentRow.getCell(4))));
+				assetDTO.setBlock(getCellValue(currentRow.getCell(5)));
+				assetDTO.setFloor(getCellValue(currentRow.getCell(6)));
+				assetDTO.setZone(getCellValue(currentRow.getCell(7)));
+				assetDTO.setManufacturerId(Long.valueOf(getCellValue(currentRow.getCell(8))));
+				assetDTO.setModelNumber(getCellValue(currentRow.getCell(9)));
+				assetDTO.setSerialNumber(getCellValue(currentRow.getCell(10)));
+				String acquiredDate = getCellValue(currentRow.getCell(11));
+				if(StringUtils.isNotEmpty(acquiredDate)) {
+					assetDTO.setAcquiredDate(DateUtil.convertToDateTime(acquiredDate));
+				}
+				assetDTO.setPurchasePrice(Double.valueOf(getCellValue(currentRow.getCell(12))));
+				assetDTO.setCurrentPrice(Double.valueOf(getCellValue(currentRow.getCell(13))));
+				assetDTO.setEstimatedDisposePrice(Double.valueOf(getCellValue(currentRow.getCell(14))));
+				assetDTO.setWarrantyType(getCellValue(currentRow.getCell(15)));
+				String warrantyDate = getCellValue(currentRow.getCell(16));
+				if(StringUtils.isNotEmpty(warrantyDate)) {
+					assetDTO.setWarrantyExpiryDate(DateUtil.convertToDateTime(warrantyDate));
+				}
+				assetDTO.setVendorId(Long.valueOf(getCellValue(currentRow.getCell(17))));
+				assetDTO.setAssetCode(getCellValue(currentRow.getCell(18)));
+				
+				assetManagementService.saveAsset(assetDTO);
+				
+			}
+
+		} catch (FileNotFoundException e) {
+			log.error("Error while reading the job data file for import", e);
+		} catch (IOException e) {
+			log.error("Error while reading the job data file for import", e);
+		}
+	}	
 	
 	private void importEmployeeFromFile(String path) {
 		try {
