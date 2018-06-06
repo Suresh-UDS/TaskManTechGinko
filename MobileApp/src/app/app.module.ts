@@ -57,6 +57,7 @@ import {FeedbackPage} from "../pages/feedback/feedback";
 import {FeedbackQuestionPage} from "../pages/feedback/feedback-questions";
 import {InitFeedbackPage} from "../pages/feedback/init-feedback";
 import { FileTransfer, FileUploadOptions, FileTransferObject } from '@ionic-native/file-transfer';
+import{JobFilter} from "../pages/jobs/job-filter/job-filter";
 import { File } from '@ionic-native/file';
 
 import {CreateEmployeePage} from "../pages/employee-list/create-employee";
@@ -97,6 +98,8 @@ import {GetAssetReading} from "../pages/asset-view/get-asset-reading";
 import {QRScanner} from "@ionic-native/qr-scanner";
 import {ScanQR} from "../pages/asset-list/scanQR";
 import {IonicImageViewerModule} from "ionic-img-viewer";
+import {DatePicker} from "@ionic-native/date-picker";
+
 @NgModule({
   declarations: [
     MyApp,
@@ -159,7 +162,8 @@ import {IonicImageViewerModule} from "ionic-img-viewer";
       AssetView,
       AssetFilter,
       GetAssetReading,
-      ScanQR
+      ScanQR,
+      JobFilter,
   ],
   imports: [
     BrowserModule,
@@ -234,7 +238,8 @@ import {IonicImageViewerModule} from "ionic-img-viewer";
       AssetView,
       AssetList,
       AssetFilter,
-      GetAssetReading,ScanQR
+      GetAssetReading,ScanQR,
+      JobFilter,
   ],
   providers: [
     StatusBar,
@@ -262,6 +267,7 @@ import {IonicImageViewerModule} from "ionic-img-viewer";
     Toast,
     FileTransfer,
     File,
+      DatePicker,
       AppVersion,
       QRScanner,
     {provide: ErrorHandler, useClass: IonicErrorHandler},

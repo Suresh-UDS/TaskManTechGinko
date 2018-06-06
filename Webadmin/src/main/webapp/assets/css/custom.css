@@ -1326,6 +1326,9 @@ a.sort-by:after {
 p.help-block{
   line-height: 15px;
   display:block !important;
+  text-align: left;
+  padding-top: 3px;
+  margin-bottom: 5px;
 }
 
 /* Schedule events css(calendar)*/

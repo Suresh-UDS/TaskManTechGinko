@@ -149,7 +149,6 @@ public class AssetResource {
 			result = assetService.findByAssetConfig(type, id);
 		}
 		return result;
-
 	}
 
 	@RequestMapping(value = "/assets/removeConfig/{id}", method = RequestMethod.DELETE)
