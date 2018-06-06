@@ -1,5 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
-import {Events, IonicApp, MenuController, Nav, Platform, ToastController} from 'ionic-angular';
+import {Events, FabContainer, IonicApp, MenuController, Nav, Platform, ToastController} from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import {BatteryStatus, BatteryStatusResponse} from "@ionic-native/battery-status";
@@ -29,6 +29,7 @@ import{OneSignal} from "@ionic-native/onesignal";
 import {componentService} from "../pages/service/componentService";
 import {Ticket} from "../pages/ticket/ticket";
 import {AssetList} from "../pages/asset-list/asset-list";
+import{JobFilter} from "../pages/jobs/job-filter/job-filter";
 
 @Component({
   templateUrl: 'app.html'
@@ -42,7 +43,7 @@ export class MyApp {
     counter=0;
   pages: Array<{title: string, component: any,active:any,icon:any,permission:any}>;
 
-  constructor(public platform: Platform,private ionicApp: IonicApp,public menuCtrl:MenuController,private backgroundMode: BackgroundMode, public statusBar: StatusBar,public component:componentService,public toastCtrl: ToastController, public splashScreen: SplashScreen, private oneSignal: OneSignal, public events:Events, private batteryStatus: BatteryStatus, private appVersion:AppVersion) {
+  constructor(private fab:FabContainer,public platform: Platform,private ionicApp: IonicApp,public menuCtrl:MenuController,private backgroundMode: BackgroundMode, public statusBar: StatusBar,public component:componentService,public toastCtrl: ToastController, public splashScreen: SplashScreen, private oneSignal: OneSignal, public events:Events, private batteryStatus: BatteryStatus, private appVersion:AppVersion) {
     this.initializeApp();
 
       this.backgroundMode.enable();
@@ -58,6 +59,7 @@ export class MyApp {
           console.log(view);
           console.log(this.nav.canGoBack());
           console.log(this.ionicApp._modalPortal.getActive());
+          console.log(this.fab)
           if(this.nav.canGoBack())
           {
               this.nav.pop();
