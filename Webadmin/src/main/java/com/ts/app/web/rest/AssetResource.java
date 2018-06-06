@@ -33,6 +33,7 @@ import com.ts.app.web.rest.dto.AssetAMCScheduleDTO;
 import com.ts.app.web.rest.dto.AssetDTO;
 import com.ts.app.web.rest.dto.AssetDocumentDTO;
 import com.ts.app.web.rest.dto.AssetParameterConfigDTO;
+import com.ts.app.web.rest.dto.AssetParameterReadingDTO;
 import com.ts.app.web.rest.dto.AssetPpmScheduleDTO;
 import com.ts.app.web.rest.dto.AssetTypeDTO;
 import com.ts.app.web.rest.dto.AssetgroupDTO;
@@ -288,4 +289,24 @@ public class AssetResource {
 		response.setHeader("Content-Disposition","attachment; filename=\"" + fileName + "\"");
 		return new ResponseEntity<byte[]>(content, HttpStatus.OK);
 	}
+	
+	@RequestMapping(value = "/assets/saveReadings", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<?> saveAssetReadings(@Valid @RequestBody AssetParameterReadingDTO assetParamReadingDTO, HttpServletRequest request) {
+		log.debug("Save Asset Parameter Reading" +assetParamReadingDTO.getAssetName());
+		try{ 
+			assetParamReadingDTO.setUserId(SecurityUtils.getCurrentUserId());
+			assetParamReadingDTO = assetService.saveAssetReadings(assetParamReadingDTO);
+		} catch(TimesheetException e){ 
+			throw new TimesheetException(e, assetParamReadingDTO);
+		}
+		return new ResponseEntity<>(assetParamReadingDTO, HttpStatus.CREATED);
+	}
+	
+	@RequestMapping(value = "/assets/{id}/viewReadings", method = RequestMethod.GET)
+	public AssetParameterReadingDTO getReadings(@PathVariable("id") long id) {
+		AssetParameterReadingDTO result = null;
+		result = assetService.viewReadings(id);
+		return result;
+	}
+	
 }
