@@ -46,6 +46,7 @@ import com.ts.app.web.rest.dto.ReportResult;
 import com.ts.app.web.rest.dto.TicketDTO;
 
 @Component
+@Transactional
 public class ExportUtil {
 
 	private static final Logger log = LoggerFactory.getLogger(ExportUtil.class);
@@ -207,7 +208,6 @@ public class ExportUtil {
 	}
 
 	// @Async
-	@Transactional
 	public ExportResult writeJobReportToFile(List<Job> content, ExportResult result) {
 		List<JobDTO> jobs = new ArrayList<JobDTO>();
 		for (Job job : content) {
