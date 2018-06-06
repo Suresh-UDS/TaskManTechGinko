@@ -213,7 +213,7 @@ export class AssetView {
 
 
 
-    // Ticket search
+    // Date search
 
     selectFromDate()
     {
@@ -257,7 +257,7 @@ export class AssetView {
         );
 
     }
-    dateSearch(fromDate,toDate) {
+    dateSearch(fromDate,toDate,categories) {
         // this.componentService.showLoader("")
         console.log("From Date:" + fromDate.toISOString());
         console.log("To Date:" + toDate.toISOString());
@@ -265,8 +265,22 @@ export class AssetView {
             fromDate:fromDate.toISOString(),
             toDate:toDate.toISOString()
         }
-        this.getTickets(searchCriteria);
+        if(categories == 'jobs')
+        {
+
+        }
+        else if(this.categories == 'tickets')
+        {
+            this.getTickets(searchCriteria);
+        }
+
     }
+    segmentChange()
+    {
+        this.fromDate="";
+        this.toDate="";
+    }
+
     getAssetConfig(){
         this.assetService.getAssetConfig(this.assetDetails.type,this.assetDetails.id).subscribe(
             response=>{
@@ -293,9 +307,5 @@ export class AssetView {
 
     }
 
-    segmentChange()
-    {
-        this.fromDate="";
-        this.toDate="";
-    }
+
 }
