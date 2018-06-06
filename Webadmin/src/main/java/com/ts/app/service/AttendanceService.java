@@ -236,7 +236,6 @@ public class AttendanceService extends AbstractService {
 		endCal.set(Calendar.SECOND, 0);
 		sc.setCheckInDateTimeFrom(startCal.getTime());
 		sc.setCheckInDateTimeTo(endCal.getTime());
-		sc.setNotCheckedOut(true);
 		log.debug("seach criteria"+" - " +sc.getEmployeeEmpId()+" - " +sc.getSiteId()+" - " +sc.getCheckInDateTimeFrom()+" - " +sc.getCheckInDateTimeTo());
 		SearchResult<AttendanceDTO> result = findBySearchCrieria(sc);
 		if(result == null || CollectionUtils.isEmpty(result.getTransactions())) {
@@ -459,16 +458,11 @@ public class AttendanceService extends AbstractService {
 					} else if (searchCriteria.getSiteId() != 0 && StringUtils.isEmpty(searchCriteria.getEmployeeEmpId())) {
 						log.debug("find by site id and check in  date and time - " + searchCriteria.getSiteId());
 						page = attendanceRepository.findBySiteIdAndCheckInTime(searchCriteria.getProjectId(), searchCriteria.getSiteId(), startDate, toDate, pageRequest);
-					} else if (searchCriteria.getSiteId() != 0 && searchCriteria.isNotCheckedOut()) {
+					} else if (searchCriteria.getSiteId() != 0) {
 						log.debug("find by site id and employee id date and time - " + searchCriteria.getSiteId() + " - " + searchCriteria.getEmployeeEmpId());
-						page = attendanceRepository.findBySiteIdEmpIdAndDateAndNotCheckedOut(searchCriteria.getProjectId(), searchCriteria.getSiteId(), searchCriteria.getEmployeeEmpId(),
+						page = attendanceRepository.findBySiteIdEmpIdAndDate(searchCriteria.getProjectId(), searchCriteria.getSiteId(), searchCriteria.getEmployeeEmpId(),
 								startDate, toDate, pageRequest);
-
-					}else if (searchCriteria.getSiteId() != 0) {
-                        log.debug("find by site id and employee id date and time - " + searchCriteria.getSiteId() + " - " + searchCriteria.getEmployeeEmpId());
-                        page = attendanceRepository.findBySiteIdEmpIdAndDate(searchCriteria.getProjectId(), searchCriteria.getSiteId(), searchCriteria.getEmployeeEmpId(),
-                            startDate, toDate, pageRequest);
-                    } else if (searchCriteria.getProjectId() > 0) {
+					} else if (searchCriteria.getProjectId() > 0) {
 						if (StringUtils.isEmpty(searchCriteria.getEmployeeEmpId())) {
 							page = attendanceRepository.findByProjectIdAndDate(searchCriteria.getProjectId(), startDate, toDate, pageRequest);
 						} else {
