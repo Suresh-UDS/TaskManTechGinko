@@ -594,6 +594,7 @@ public class SchedulerService extends AbstractService {
 				sc.setProjectId(proj.getId());
 				// SearchResult<AttendanceDTO> searchResults =
 				// attendanceService.findBySearchCrieria(sc);
+				Hibernate.initialize(proj.getSite());
 				Set<Site> sites = proj.getSite();
 				Iterator<Site> siteItr = sites.iterator();
 				List<Setting> settings = settingRepository.findSettingByKeyAndProjectId(SettingsService.EMAIL_NOTIFICATION_ATTENDANCE, proj.getId());
@@ -825,7 +826,7 @@ public class SchedulerService extends AbstractService {
 								log.debug("EmpShift - "+ empShift);
 								Calendar checkInCal = Calendar.getInstance();
 								checkInCal.setTimeInMillis(dailyAttn.getCheckInTime().getTime());
-
+								log.debug("checkin cal - "+ checkInCal.getTime());
 								if (empShift != null) { // if employee shift assignment matches with site shift
 									if (checkInCal.before(shiftEndCal.getTime()) && shiftEndCal.getTime().before(currCal.getTime())) { // if the employee checked in before the
 																																		// shift end time
