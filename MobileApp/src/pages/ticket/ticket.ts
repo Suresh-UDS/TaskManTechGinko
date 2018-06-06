@@ -1,9 +1,10 @@
 import { Component } from '@angular/core';
-import {NavController, NavParams} from "ionic-angular";
+import {ModalController, NavController, NavParams} from "ionic-angular";
 import {componentService} from "../service/componentService";
 import {JobService} from "../service/jobService";
 import {CreateTicket} from "./create-ticket";
 import {ViewTicket} from "./view-ticket";
+import{TicketFilter} from "./ticket-filter/ticket-filter";
 
 
 /**
@@ -20,7 +21,7 @@ import {ViewTicket} from "./view-ticket";
 export class Ticket {
 
     tickets:any;
-  constructor(public navCtrl: NavController, public navParams: NavParams, private cs:componentService, private jobService:JobService) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, private cs:componentService, private jobService:JobService, public modalCtrl:ModalController) {
       this.tickets = [];
   }
 
@@ -48,6 +49,11 @@ export class Ticket {
 
     viewTicket(ticket){
       this.navCtrl.push(ViewTicket,{ticket:ticket});
+    }
+
+    presentModal() {
+        const modal = this.modalCtrl.create(TicketFilter);
+        modal.present();
     }
 
 }

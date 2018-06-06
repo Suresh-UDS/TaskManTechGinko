@@ -62,7 +62,11 @@ export class GetAssetReading {
 
         popover.onDidDismiss(data=>
         {
-
+            console.log(data)
+            if(data)
+            {
+                this.takenImages.pop(data);
+            }
         })
     }
 }

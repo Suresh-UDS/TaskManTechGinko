@@ -721,7 +721,7 @@ span.EmpNameTxt
 .select-box
 {
   max-width:100%;
-  border-bottom: 1px solid #dedede;
+  /*border-bottom: 1px solid #dedede;*/
 }
 .camera-btn
 {

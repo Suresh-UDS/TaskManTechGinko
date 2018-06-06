@@ -290,6 +290,12 @@ public class TicketManagementService extends AbstractService {
 	        					}else {
 	        						page = ticketRepository.findByProjectId(searchCriteria.getProjectId(), startDate, endDate, pageRequest);
 	        					}
+	        				}else if(searchCriteria.getAssetId() > 0) {
+	        					if(StringUtils.isNotEmpty(searchCriteria.getTicketStatus())) {
+	        						page = ticketRepository.findByAssetIdAndStatus(searchCriteria.getAssetId(), searchCriteria.getTicketStatus(), startDate, endDate, pageRequest);
+	        					}else {
+	        						page = ticketRepository.findByAssetId(searchCriteria.getAssetId(), startDate, endDate, pageRequest);
+	        					}
 	        				}else {
 	        					if(StringUtils.isNotEmpty(searchCriteria.getTicketStatus())) {
 	        						page = ticketRepository.findByStatus(searchCriteria.getTicketStatus(), startDate, endDate, pageRequest);
@@ -360,7 +366,13 @@ public class TicketManagementService extends AbstractService {
 	            				page = ticketRepository.findByProjectIdAndEmpId(searchCriteria.getProjectId(), searchCriteria.getSubordinateIds(), startDate, endDate,pageRequest);
 	            			}
 	            		}
-                }else {
+                }else if (searchCriteria.getAssetId() > 0) {
+	            		if(StringUtils.isNotEmpty(searchCriteria.getTicketStatus())) {
+            				page = ticketRepository.findByAssetIdAndStatus(searchCriteria.getAssetId(), searchCriteria.getTicketStatus(), startDate, endDate,pageRequest);
+	            		}else {
+            				page = ticketRepository.findByAssetId(searchCriteria.getAssetId(), startDate, endDate, pageRequest);
+	            		}
+	            }else {
 	            		if(StringUtils.isNotEmpty(searchCriteria.getTicketStatus())) {
             				page = ticketRepository.findByStatusAndEmpId(siteIds,searchCriteria.getTicketStatus(),searchCriteria.getSubordinateIds(), startDate, endDate,pageRequest);
 	            		}else {

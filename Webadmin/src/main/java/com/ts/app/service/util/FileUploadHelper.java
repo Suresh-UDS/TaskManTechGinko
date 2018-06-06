@@ -17,11 +17,13 @@ import java.util.Date;
 import java.util.List;
 
 import javax.inject.Inject;
+import javax.servlet.ServletContext;
 
 import org.apache.commons.io.FilenameUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.env.Environment;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -365,4 +367,17 @@ public class FileUploadHelper {
 		}
 		return name;
 	}
+    
+    public MediaType getMediaTypeForFileName(ServletContext servletContext, String fileName) {
+        // application/pdf
+        // application/xml
+        // image/gif, ...
+        String mineType = servletContext.getMimeType(fileName);
+        try {
+            MediaType mediaType = MediaType.parseMediaType(mineType);
+            return mediaType;
+        } catch (Exception e) {
+            return MediaType.APPLICATION_OCTET_STREAM;
+        }
+    }
 }

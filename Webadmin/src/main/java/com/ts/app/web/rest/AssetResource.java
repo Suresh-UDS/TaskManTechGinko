@@ -1,14 +1,18 @@
 package com.ts.app.web.rest;
 
+import java.io.IOException;
 import java.util.List;
 
 import javax.inject.Inject;
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import javax.websocket.server.PathParam;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -24,6 +28,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.codahale.metrics.annotation.Timed;
 import com.ts.app.security.SecurityUtils;
 import com.ts.app.service.AssetManagementService;
+import com.ts.app.service.util.FileUploadHelper;
 import com.ts.app.web.rest.dto.AssetAMCScheduleDTO;
 import com.ts.app.web.rest.dto.AssetDTO;
 import com.ts.app.web.rest.dto.AssetDocumentDTO;
@@ -47,6 +52,12 @@ public class AssetResource {
 
 	@Inject
 	private AssetManagementService assetService;
+	
+	@Inject
+	private FileUploadHelper fileUploaderUtils;
+	
+	@Autowired
+    private ServletContext servletContext;
 
 	// Asset
 	@RequestMapping(path = "/asset", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -262,5 +273,19 @@ public class AssetResource {
 		List<AssetAMCScheduleDTO> response = assetService.getAssetAMCSchedules(id);
 		log.debug("Get Asset AMC Schedule for asset id - " + response);
 		return response;
+	}
+	
+	@RequestMapping(value = "/assets/viewFile/{documentId}/{fileName:.+}",method = RequestMethod.GET)
+	public ResponseEntity<byte[]> getUploadFile(@PathVariable("documentId") long documentId, @PathVariable("fileName") String fileName, HttpServletResponse response) throws IOException {
+		log.debug("DocumentId" +documentId);
+		MediaType mediaType = fileUploaderUtils.getMediaTypeForFileName(this.servletContext, fileName);
+		log.debug("fileName: " + fileName);
+        log.debug("mediaType: " + mediaType);
+		byte[] content = assetService.getUploadedFile(documentId);
+		response.setContentType(mediaType.getType());
+		response.setContentLength(content.length);
+		response.setHeader("Content-Transfer-Encoding", "binary");
+		response.setHeader("Content-Disposition","attachment; filename=\"" + fileName + "\"");
+		return new ResponseEntity<byte[]>(content, HttpStatus.OK);
 	}
 }
