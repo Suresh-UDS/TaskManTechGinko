@@ -278,6 +278,14 @@ public class AssetManagementService extends AbstractService {
 		AssetDTO assetDTO = mapperUtil.toModel(asset, AssetDTO.class);
 		log.debug("asset Type after mapping... " + assetDTO.getAssetType() +" Manufacture "+assetDTO.getManufacturerName() + " Vendor " + assetDTO.getAmcVendorName());
 		log.debug("Asset Group after mapping...  " + assetDTO.getAssetGroup());
+		AssetType assetType = assetTypeRepository.findOne(Long.valueOf(assetDTO.getAssetType()));
+		assetDTO.setAssetTypeName(assetType.getName());
+		log.debug("Asset Type Name  " + assetDTO.getAssetTypeName());
+
+		AssetGroup assetGroup = assetGroupRepository.findOne(Long.valueOf(assetDTO.getAssetGroup()));
+		assetDTO.setAssetGroupName(assetGroup.getAssetgroup());
+		log.debug("Asset Group Name  " + assetDTO.getAssetGroupName());
+		
 		return assetDTO;
 	}
 
