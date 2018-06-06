@@ -58,7 +58,7 @@ export class AssetView {
       this.searchCriteria={
           assetId:this.assetDetails.id
       }
-      this.getJobs();
+      this.getJobs(this.searchCriteria);
       this.getTickets(this.searchCriteria);
       this.getAssetConfig();
       this.getAssetById();
@@ -73,7 +73,7 @@ export class AssetView {
         this.componentService.showLoader("");
         if(segment=='jobs')
         {
-            this.getJobs();
+            this.getJobs(this.searchCriteria);
             refresher.complete();
         }
         else if(segment=='tickets')
@@ -82,11 +82,11 @@ export class AssetView {
             refresher.complete()
         }
     }
-    getJobs()
+    getJobs(searchCriteria)
     {
-        var searchCriteria={
-            assetId:this.assetDetails.id
-        }
+        // var searchCriteria={
+        //     assetId:this.assetDetails.id
+        // }
 
         this.jobService.getJobs(searchCriteria).subscribe(
             response=>{
@@ -267,7 +267,7 @@ export class AssetView {
         }
         if(categories == 'jobs')
         {
-
+            this.getJobs(searchCriteria)
         }
         else if(this.categories == 'tickets')
         {
@@ -286,11 +286,11 @@ export class AssetView {
             response=>{
                 console.log("Asset config");
                 console.log(response);
+                this.assetDetails.config = response;
             },err=>{
                 console.log("Error in getting asset config");
                 console.log(err);
-            }
-        )
+            })
     }
 
     getAssetById(){
@@ -307,5 +307,18 @@ export class AssetView {
 
     }
 
-
+    getAssetAMCSchedule()
+    {
+        this.assetService.getAssetAMCSchedule(this.assetDetails.id).subscribe(
+            response=>{
+                console.log("Get asset AMC response");
+                console.log(response);
+                this.assetDetails.amsc = response;
+            },
+            error=>{
+                console.log("Get asset AMC error");
+                console.log(error);
+            }
+        )
+    }
 }
