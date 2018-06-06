@@ -576,7 +576,7 @@
 
                                                                                     </div>
                                                                                  </div>
-                                                                                
+
                                                                             </div>
                                                                              <div class="row">
                                                                                    <div class="col-md-6">
@@ -610,7 +610,7 @@
                                                                                 </div>
 
                                                                                  </div>
-                                                                            
+
                                                                         </div>
                                                                     </div>
 
@@ -620,7 +620,7 @@
                                                             </form>
                                                         </div>
                                                         <div class="tab-pane fade qrcode" id="qrcode">
-                                                          <form name="form1" role="form" 
+                                                          <form name="form1" role="form"
                                                         class="form-horizontal" >
                                                             <div class="panel panel-default" style="min-height: 300px;">
                                                                 <div class="panel-heading">
@@ -1396,7 +1396,7 @@
                                                                 </div>
                                                                 <div class="panel-body">
 
-                                                                    
+
 
                                                                         <div class="row">
 
@@ -1526,7 +1526,7 @@
                                                                             </a>
                                                                             <p>{{uploadPhoto.title}}</p>
                                                                         </div>
-                                                          
+
 
                                                                     </div>
 
@@ -1608,7 +1608,7 @@
 
 <!-- Add asset type dialog -->
 
-<div id="addAssetType" class="delete-confirmation modal fade">
+<div id="addAssetType" class="add-input-modal modal fade">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -1617,17 +1617,19 @@
                 <h4 class="modal-title">Add Asset Type</h4>
             </div>
             <div class="modal-body">
-                <div class="row">
-                <div class="col-md-9">
-                    <input class="input-desc" id="addAssetTypeInput" ng-model="assetType.name"   name="AssetType" type="text" value=""/> 
-                </div>
-                <div class="col-md-3 pull-left">
-                    <a class="btn btn-success"  ng-click="addAssetType()" data-dismiss="modal">Add</a>
-                </div>
-                <div class="clear"></div>
-                </div>
+
+                <form name="addAssetTypeForm">
+                    <div class="row">
+                        <div class="col-md-12 txt-align-center">
+                            <input class="" id="addAssetTypeInput" ng-model="assetType.name"   name="AssetType" type="text" value="" ng-required="true"/>
+                            <input type="submit" ng-click="addAssetType()" data-dismiss="modal" class="btn btn-success" name="add" value="Add" ng-disabled="addAssetTypeForm.$invalid">
+                        </div>
+                    </div>
+                </form>
+
+
             </div>
-           
+
         </div>
     </div>
 </div>
@@ -1635,7 +1637,7 @@
 
 <!-- Add asset group dialog -->
 
-<div id="addGroup" class="delete-confirmation modal fade">
+<div id="addGroup" class="add-input-modal modal fade">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -1644,18 +1646,19 @@
                 <h4 class="modal-title">Add Asset Group</h4>
             </div>
             <div class="modal-body">
-                <div class="row">
-                <div class="col-md-9">
-                    <input class="input-desc" id="assetgroupName" ng-model="assetGroup.assetgroup"   name="assetgroupName" type="text" value=""/>
-                </div>
-                <div class="col-md-3 pull-left">
-                    <a class="btn btn-success"  ng-click="addAssetGroup()" data-dismiss="modal">Add</a>
-                </div>
-                <div class="clear"></div>
-                </div>
-                                              
+
+                <form name="addGroupForm">
+                    <div class="row">
+                        <div class="col-md-12 txt-align-center">
+                            <input class="" id="assetgroupName" ng-model="assetGroup.assetgroup"   name="assetgroupName" type="text" value="" ng-required="true"/>
+                            <input type="submit" ng-click="addAssetGroup()" data-dismiss="modal" class="btn btn-success" name="add" value="Add" ng-disabled="addGroupForm.$invalid">
+                        </div>
+                    </div>
+                </form>
+
+
             </div>
-           
+
         </div>
     </div>
 </div>
@@ -1663,7 +1666,7 @@
 
 <!-- Add ManufacturerName dialog -->
 
-<div id="addManufacturer" class="delete-confirmation modal fade">
+<div id="addManufacturer" class="add-input-modal modal fade">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -1672,17 +1675,19 @@
                 <h4 class="modal-title">Add Manufacturer</h4>
             </div>
             <div class="modal-body">
-                <div class="row">
-                <div class="col-md-9">
-                    <input class="input-desc" id="assetManufacturerName" ng-model="manufacturer.name"   name="assetManufacturerName" type="text" value=""/> 
-                </div>
-                <div class="col-md-3 pull-left">
-                    <a class="btn btn-success"  ng-click="addManufacturer()" data-dismiss="modal">Add</a>
-                </div>
-                <div class="clear"></div>
-                </div>
+
+                <form name="addManufacturerForm">
+                    <div class="row">
+                        <div class="col-md-12 txt-align-center">
+                            <input class="" id="assetManufacturerName" ng-model="manufacturer.name"   name="assetManufacturerName" type="text" value="" ng-required="true"/>
+                            <input type="submit" ng-click="addManufacturer()" data-dismiss="modal" class="btn btn-success" name="add" value="Add" ng-disabled="addManufacturerForm.$invalid">
+                        </div>
+                    </div>
+                </form>
+
+
             </div>
-           
+
         </div>
     </div>
 </div>
@@ -1700,7 +1705,7 @@
             <div class="modal-body">
                 <div class="row">
                 <div class="col-md-9">
-                    <input class="input-desc" id="assetProvider" ng-model="Provider.name"   name="assetProvider" type="text" value=""/> 
+                    <input class="input-desc" id="assetProvider" ng-model="Provider.name"   name="assetProvider" type="text" value=""/>
                 </div>
                 <div class="col-md-3 pull-left">
                     <a class="btn btn-success"  ng-click="addProvider()" data-dismiss="modal">Add</a>
@@ -1708,14 +1713,14 @@
                 <div class="clear"></div>
                 </div>
             </div>
-           
+
         </div>
     </div>
 </div>
 <!-- Add Service Provider dialog -->
 <!-- Add Service Warranty dialog -->
 
-<div id="addWarranty" class="delete-confirmation modal fade">
+<div id="addWarranty" class="add-input-modal modal fade">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -1724,24 +1729,23 @@
                 <h4 class="modal-title">Add Service Warranty</h4>
             </div>
             <div class="modal-body">
-                <div class="row">
-                <div class="col-md-9">
-                    <input class="input-desc" id="assetWarranty" ng-model="Warranty.name"   name="assetWarrantye" type="text" value=""/> 
-                </div>
-                <div class="col-md-3 pull-left">
-                    <a class="btn btn-success"  ng-click="addWarranty()" data-dismiss="modal">Add</a>
-                </div>
-                <div class="clear"></div>
-                </div>
+                <form name="addWarrantyForm">
+                    <div class="row">
+                        <div class="col-md-12 txt-align-center">
+                            <input class="" id="assetWarranty" ng-model="Warranty.name"   name="assetWarrantye" type="text" value="" ng-required="true"/>
+                            <input type="submit" ng-click="addWarranty()" data-dismiss="modal" class="btn btn-success" name="add" value="Add" ng-disabled="addWarrantyForm.$invalid">
+                        </div>
+                    </div>
+                </form>
             </div>
-           
+
         </div>
     </div>
 </div>
 <!-- Add Service Warranty dialog -->
 <!-- Add Vendor dialog -->
 
-<div id="addVendor" class="delete-confirmation modal fade">
+<div id="addVendor" class="add-input-modal modal fade">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -1750,17 +1754,18 @@
                 <h4 class="modal-title">Add Vendor</h4>
             </div>
             <div class="modal-body">
-                <div class="row">
-                <div class="col-md-9">
-                    <input class="input-desc" id="assetVendorName" ng-model="vendor.name"   name="assetVendorName" type="text" value=""/> 
-                </div>
-                <div class="col-md-3 pull-left">
-                    <a class="btn btn-success"  ng-click="addVendor()" data-dismiss="modal">Add</a>
-                </div>
-                <div class="clear"></div>
-                </div>
+
+                <form name="addVendorForm">
+                    <div class="row">
+                        <div class="col-md-12 txt-align-center">
+                            <input class="" id="assetVendorName" ng-model="vendor.name"   name="assetVendorName" type="text" value="" ng-required="true"/>
+                            <input type="submit" ng-click="addVendor()" data-dismiss="modal" class="btn btn-success" name="add" value="Add" ng-disabled="addVendorForm.$invalid">
+                        </div>
+                    </div>
+                </form>
+
             </div>
-           
+
         </div>
     </div>
 </div>
