@@ -166,7 +166,7 @@ angular.module('timeSheetApp')
             },
             
             readFile : function(document) { 
-            	return $http.get('api/assets/viewFile/'+document.id+'/'+document.fileName).then(function(response){ 
+            	return $http.get('api/assets/viewFile/'+document.id+'/'+document.fileName, {responseType: 'arrayBuffer'}).then(function(response){ 
             		return response.data;
             	});
             }

@@ -247,7 +247,7 @@ public class AssetResource {
     }
 	
 	@RequestMapping(value = "/assets/viewFile/{documentId}/{fileName:.+}",method = RequestMethod.GET)
-	public byte[] getUploadFile(@PathVariable("documentId") long documentId, @PathVariable("fileName") String fileName, HttpServletResponse response) throws IOException {
+	public ResponseEntity<byte[]> getUploadFile(@PathVariable("documentId") long documentId, @PathVariable("fileName") String fileName, HttpServletResponse response) throws IOException {
 		log.debug("DocumentId" +documentId);
 		MediaType mediaType = fileUploaderUtils.getMediaTypeForFileName(this.servletContext, fileName);
 		log.debug("fileName: " + fileName);
@@ -257,7 +257,7 @@ public class AssetResource {
 		response.setContentLength(content.length);
 		response.setHeader("Content-Transfer-Encoding", "binary");
 		response.setHeader("Content-Disposition","attachment; filename=\"" + fileName + "\"");
-		return content;
+		return new ResponseEntity<byte[]>(content, HttpStatus.OK);
 	}
     
     
