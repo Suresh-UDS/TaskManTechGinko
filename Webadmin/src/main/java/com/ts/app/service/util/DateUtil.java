@@ -49,10 +49,11 @@ public class DateUtil {
 	
 	public static java.sql.Date convertToSQLDate(Date utilDate) {
 		Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("Asia/Kolkata"));
-		cal.setTimeInMillis(utilDate.getTime());
+		cal.setTime(utilDate);
 		java.sql.Date sqlDate = new java.sql.Date(cal.getTimeInMillis());
 		return sqlDate;
 	}
+	
 	
 	public static Date convertToDateTime(String date, String time) {
         DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
