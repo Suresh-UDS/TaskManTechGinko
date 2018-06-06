@@ -15,6 +15,6 @@ public interface EmployeeShiftRepository extends JpaRepository<EmployeeShift, Lo
 	public long findEmployeeCountBySiteAndShift(@Param("siteId") long siteId, @Param("startTime") Date startTime, @Param("endTime") Date endTime);
 	
 	@Query("SELECT es FROM EmployeeShift es where es.site.id = :siteId and es.startTime = :startTime and es.endTime = :endTime")
-	public EmployeeShift findEmployeeShiftBySiteAndShift(@Param("siteId") long siteId, @Param("startTime") String startTime, @Param("endTime") String endTime);
+	public EmployeeShift findEmployeeShiftBySiteAndShift(@Param("siteId") long siteId, @Param("startTime") Timestamp startTime, @Param("endTime") Timestamp endTime);
 
 }
