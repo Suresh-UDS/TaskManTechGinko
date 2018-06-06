@@ -172,7 +172,7 @@ angular.module('timeSheetApp')
             },
             
             getAllUploadedPhotos : function(obj) { 
-            	return $http.get('api/assets/getAllAssetPhoto/'+obj.type+'/'+obj.assetId).then(function(response){ 
+            	return $http.get('api/assets/getAllAssetPhoto/'+obj.type+'/'+obj.assetId, {responseType: 'arrayBuffer'}).then(function(response){ 
             		return response.data;
             	});
             }

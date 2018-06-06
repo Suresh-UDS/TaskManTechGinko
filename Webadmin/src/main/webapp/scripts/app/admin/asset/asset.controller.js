@@ -5,10 +5,8 @@ angular.module('timeSheetApp')
 				'AssetController',
 				function($scope, $rootScope, $state, $timeout, AssetComponent,
 						ProjectComponent,LocationComponent,SiteComponent,EmployeeComponent, $http, $stateParams,
-                        $location,PaginationComponent,AssetTypeComponent,ParameterConfigComponent,ParameterComponent,
-                        ParameterUOMComponent,VendorComponent,ManufacturerComponent) {
-                     
-
+                     	$location,PaginationComponent,AssetTypeComponent,ParameterConfigComponent,ParameterComponent,
+                        ParameterUOMComponent,VendorComponent,ManufacturerComponent,$sce) {
 
         $rootScope.loadingStop();
         $rootScope.loginView = false;
@@ -848,6 +846,47 @@ angular.module('timeSheetApp')
         		console.log('select a file');
         	}
 	    	
+	    }
+	    
+        $scope.download = false;
+	    
+	    var mimes = {
+		   "jpeg":"image/jpeg",
+		   "jpg":"image/jpeg",
+		   "pdf":"application/pdf",
+		   "png":"image/png",
+		   "csv":"text/csv",
+		   "zip":"application/zip",
+		   "xlsx": "application/x-msexcel",
+		   "xls":"application/x-msexcel"
+	    };
+	    
+	    $scope.showFile = function(docId, filename) { 
+	    	console.log(docId);
+	    	var document = {};
+	    	document.id = docId;
+	    	document.fileName = filename; 
+	    	var fileExt = filename.split('.').pop();
+	    	console.log(fileExt);
+	    	AssetComponent.readFile(document).then(function(data){ 
+	    		console.log(data);
+	    		console.log(data.fileName);
+	    		$scope.download = true;
+	    		var mime;
+	    		if( typeof(mimes[fileExt]) != "undefined" ) { 
+	    			mime = mimes[fileExt];
+					var file = new Blob([(data)], {type: mime});
+					var fileURL = URL.createObjectURL(file);
+					$scope.content = $sce.trustAsResourceUrl(fileURL);
+	    		}else {
+	    			mime = "text/html";
+		    		var file = new Blob([(data)], {type: mime});
+					var fileURL = URL.createObjectURL(file);
+					$scope.content = $sce.trustAsResourceUrl(fileURL);
+	    		}
+	    				
+	    		
+	    	});
 	    }
 
 
