@@ -445,7 +445,7 @@ public class SchedulerService extends AbstractService {
 	// generate consolidated report.
 	// @Scheduled(initialDelay = 60000,fixedRate = 300000) //run every 5 mins for
 	// testing
-	@Scheduled(cron = "0 0 0/1 * * ?")
+	//@Scheduled(cron = "0 0 0/1 * * ?")
 	public void attendanceReportSchedule() {
 		if (env.getProperty("scheduler.attendanceDetailReport.enabled").equalsIgnoreCase("true")) {
 			Calendar cal = Calendar.getInstance();
@@ -552,15 +552,22 @@ public class SchedulerService extends AbstractService {
 			}
 		}
 	}
+	
+	@Scheduled(cron = "0 0 0/1 * * ?")
+	public void attendanceShiftReportSchedule() {
+		Calendar cal = Calendar.getInstance();
+		generateDetailedAttendanceReport(cal.getTime(), true, false);
+	}
+
 
 	@Scheduled(cron = "0 0 7 1/1 * ?") // send detailed attendance report
 	public void attendanceDetailReportSchedule() {
 		Calendar cal = Calendar.getInstance();
 		cal.set(Calendar.DAY_OF_MONTH, -1);
-		generateDetailedAttendanceReport(cal.getTime());
+		generateDetailedAttendanceReport(cal.getTime(), false, true);
 	}
 	
-	public void generateDetailedAttendanceReport(Date date) {
+	public void generateDetailedAttendanceReport(Date date, boolean shiftAlert, boolean dayReport) {
 		if (env.getProperty("scheduler.attendanceDetailReport.enabled").equalsIgnoreCase("true")) {
 			Calendar cal = Calendar.getInstance();
 			cal.setTime(date);
@@ -666,6 +673,11 @@ public class SchedulerService extends AbstractService {
 								projPresent += attendanceCount;
 								projAbsent += absentCount;
 								consolidatedData.add(data);
+								if (shiftAlert && timeDiff >= 3600000 && timeDiff < 7200000) { // within 2 hours of the shift start timing.)
+									shiftAlert = true;
+								}else {
+									shiftAlert = false;
+								}
 								// }
 							}
 						} else {
@@ -749,7 +761,7 @@ public class SchedulerService extends AbstractService {
 					ExportResult exportResult = null;
 					exportResult = exportUtil.writeAttendanceReportToFile(proj.getName(), empAttnList, consolidatedData, summaryMap, null, exportResult);
 					// send reports in email.
-					if (attendanceReportEmails != null && projEmployees > 0) {
+					if (attendanceReportEmails != null && projEmployees > 0 && (shiftAlert || dayReport)) {
 						mailService.sendAttendanceDetailedReportEmail(proj.getName(), attendanceReportEmails.getSettingValue(), content.toString(), exportResult.getFile(), null,
 								cal.getTime());
 					}
