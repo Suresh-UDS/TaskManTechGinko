@@ -77,7 +77,7 @@ attendance:
     file:
         path:  /opt/attendance
     template:
-        path: /opt/template/Attendance_Report_Format.xlsx    
+        path: /opt/template/Attendance_Report_Format.xlsx
 quotation:
     file:
         path:  /opt/quotation
@@ -88,7 +88,7 @@ import:
     file:
         path:
             new: /opt/imports/new
-            completed: /opt/imports/completed        
+            completed: /opt/imports/completed
 max:
     user: 10
     userGroup: 2
@@ -163,7 +163,7 @@ scheduler:
    attendanceConsolidatedReport:
       enabled: true
 
-default.user.password: uds12345
+default.user.password: Admin@Fms#
 
 # ===================================================================
 # JHipster specific properties
