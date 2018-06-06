@@ -45,4 +45,24 @@ export class AssetService {
         )
     }
 
+    getAssetConfig(assetType,assetId):Observable<any>{
+        return this.http.get(this.config.Url+'api/assets/'+assetType+'/config/'+assetId).map(
+            response=>{
+                console.log("Get asset config");
+                console.log(response);
+                return response.json();
+            }
+        )
+    }
+
+    getAssetById(assetId):Observable<any>{
+        return this.http.get(this.config.Url+'api/asset/'+assetId).map(
+            response=>{
+                console.log("Get asset by Id");
+                console.log(response);
+                return response.json();
+            }
+        )
+    }
+
 }

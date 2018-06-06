@@ -56,7 +56,6 @@ export class AssetView {
     this.componentService.showLoader("");
       this.getJobs();
       this.getTickets();
-      this.getAssetConfig();
       this.getAssetById();
   }
 
