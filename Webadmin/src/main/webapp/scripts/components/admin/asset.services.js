@@ -17,6 +17,19 @@ angular.module('timeSheetApp')
                     })
 
             },
+            createPPM : function(asset,callback){
+                var cb = callback || angular.noop;
+                return $http.post('api/assets/ppmschedule',asset).then(
+                    function (response) {
+                        //return cb(response);
+                        return response;
+                    }).catch(
+                    function (err) {
+                        console.log(JSON.stringify(err));
+                        return cb(err);
+                    })
+
+            },
             update : function(asset,callback){
                 var cb = callback || angular.noop;
                 return $http.put('api/asset/'+asset.id,asset).then(
