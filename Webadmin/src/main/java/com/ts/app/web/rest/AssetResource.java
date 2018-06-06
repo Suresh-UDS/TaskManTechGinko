@@ -149,6 +149,7 @@ public class AssetResource {
 			result = assetService.findByAssetConfig(type, id);
 		}
 		return result;
+
 	}
 
 	@RequestMapping(value = "/assets/removeConfig/{id}", method = RequestMethod.DELETE)
@@ -227,7 +228,7 @@ public class AssetResource {
 		result = assetService.findAllDocuments(type, id);
 		return result;
 	}
-
+	
 	@RequestMapping(path = "/assets/amcschedule", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
 	@Timed
 	public ResponseEntity<?> saveAssetAMCSchedule(@Valid @RequestBody AssetAMCScheduleDTO assetAMCScheduleDTO,
@@ -251,7 +252,7 @@ public class AssetResource {
 		log.debug("Asset AMC Schedule update response - " + response);
 		return new ResponseEntity<>(response, HttpStatus.CREATED);
 	}
-
+	
 	@RequestMapping(path = "/assets/{assetId}/amcschedule", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	@Timed
 	public List<AssetAMCScheduleDTO> getAssetAMCSchedule(@PathParam("assetId") long id) {

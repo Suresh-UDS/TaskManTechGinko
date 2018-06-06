@@ -29,7 +29,6 @@ import{OneSignal} from "@ionic-native/onesignal";
 import {componentService} from "../pages/service/componentService";
 import {Ticket} from "../pages/ticket/ticket";
 import {AssetList} from "../pages/asset-list/asset-list";
-import{JobFilter} from "../pages/jobs/job-filter/job-filter";
 
 @Component({
   templateUrl: 'app.html'
