@@ -63,6 +63,10 @@ public class Ticket extends AbstractAuditingEntity implements Serializable {
     @JoinColumn(name = "closed_by_id", nullable = true)
     private Employee closedBy;
     
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "asset_id", nullable = true)
+    private Asset asset;
+
     private Date closedOn;
     
     private String reportingTo;
@@ -249,7 +253,13 @@ public class Ticket extends AbstractAuditingEntity implements Serializable {
 		this.quotationId = quotationId;
 	}
 
-	
-    
+	public Asset getAsset() {
+		return asset;
+	}
+
+	public void setAsset(Asset asset) {
+		this.asset = asset;
+	}
+
 	
 }

@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import {
-    ActionSheetController, Button, IonicPage, Item, ItemSliding, LoadingController, NavController, NavParams,
+    ActionSheetController, Button, IonicPage, Item, ItemSliding, LoadingController, ModalController, NavController,
+    NavParams,
     ToastController
 } from 'ionic-angular';
 import {AttendanceListPage} from "../attendance-list/attendance-list";
@@ -13,6 +14,7 @@ import {EmployeeDetailPage} from "./employee-detail";
 import {CreateEmployeePage} from "./create-employee";
 import {EmployeeService} from "../service/employeeService";
 import {Toast} from "@ionic-native/toast";
+import{EmployeeFilter} from "./employee-filter/employee-filter";
 
 /**
  * Generated class for the EmployeeList page.
@@ -36,7 +38,8 @@ export class EmployeeListPage {
 
   constructor(public navCtrl: NavController,public component:componentService,public myService:authService, public navParams: NavParams, private  authService: authService, public camera: Camera,
               private loadingCtrl:LoadingController, private geolocation:Geolocation, private toast: Toast,
-              private geoFence:Geofence, private employeeService: EmployeeService, private actionSheetCtrl: ActionSheetController) {
+              private geoFence:Geofence, private employeeService: EmployeeService, private actionSheetCtrl: ActionSheetController,
+              private modalCtrl:ModalController) {
 
       this.employees = [];
 
@@ -217,5 +220,10 @@ export class EmployeeListPage {
     relieveEmployee(emp){
         console.log("Relieve Employee");
         this.component.showToastMessage('Relieve employee is in beta, please try again later','bottom');
+    }
+
+    presentModal() {
+        const modal = this.modalCtrl.create(EmployeeFilter);
+        modal.present();
     }
 }

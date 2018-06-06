@@ -317,8 +317,10 @@ public class JobManagementService extends AbstractService {
 		            			page = jobRepository.findByStartDateAndSiteAndJobType(searchCriteria.getSiteId(),  searchCriteria.getJobTypeName(), fromDt, toDt, pageRequest);
 		            		}else if(!StringUtils.isEmpty(searchCriteria.getJobTypeName())) {
 			        			page = jobRepository.findAll(new JobSpecification(searchCriteria,isAdmin),pageRequest);
-		            		}else {
+		            		}else if(CollectionUtils.isNotEmpty(subEmpIds)){
 		            			page = jobRepository.findByDateRange(searchCriteria.getUserId(), subEmpIds, fromDt, toDt, pageRequest);
+		            		}else {
+		            			page = jobRepository.findAll(new JobSpecification(searchCriteria,isAdmin),pageRequest);
 		            		}
 		            		allJobsList.addAll(page.getContent());
 		            	}

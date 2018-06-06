@@ -32,6 +32,12 @@ public interface TicketRepository extends JpaRepository<Ticket,Long>, JpaSpecifi
     @Query("SELECT t FROM Ticket t where t.status = :status and t.createdDate between :startDate and :endDate")
     Page<Ticket> findByStatus(@Param("status") String status,@Param("startDate") ZonedDateTime startDate,@Param("endDate") ZonedDateTime endDate,Pageable pageRequest);
     
+    @Query("SELECT t FROM Ticket t where t.asset.id = :assetId and t.status = :status and t.createdDate between :startDate and :endDate")
+    Page<Ticket> findByAssetIdAndStatus(@Param("assetId") long assetId, @Param("status") String status,@Param("startDate") ZonedDateTime startDate,@Param("endDate") ZonedDateTime endDate,Pageable pageRequest);
+
+    @Query("SELECT t FROM Ticket t where t.asset.id = :assetId and t.createdDate between :startDate and :endDate")
+    Page<Ticket> findByAssetId(@Param("assetId") long assetId,@Param("startDate") ZonedDateTime startDate,@Param("endDate") ZonedDateTime endDate,Pageable pageRequest);
+
     @Query("SELECT t FROM Ticket t where t.createdDate between :startDate and :endDate")
     Page<Ticket> findByDateRange(@Param("startDate") ZonedDateTime startDate,@Param("endDate") ZonedDateTime endDate,Pageable pageRequest);
 

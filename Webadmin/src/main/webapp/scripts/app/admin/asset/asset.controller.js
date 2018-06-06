@@ -25,6 +25,7 @@ angular.module('timeSheetApp')
         $scope.selectedZone = null;
         $scope.pageSort = 10;
         $scope.assetGen ={};
+        $scope.assetPPM ={};
         $scope.selectedConfig = null;
         $scope.selectedAssetType = {};
         $scope.selectedAssetGroup = {};
@@ -99,8 +100,49 @@ angular.module('timeSheetApp')
             demo.showNotification(position,alignment,color,msg);
         }
 
+        $scope.savePPMSchedule = function (){
+        	alert("save ppm schedule");
+        	console.log(">> Title "+$scope.assetPPM.title);
+        	console.log(">> checklist "+$scope.assetPPM.checklistId);
+        	console.log(">> from date "+$scope.assetPPM.dateFilterFrom);
+        	console.log(">> to date "+$scope.assetPPM.dateFilterTo);
+        	console.log(">> frequency "+$scope.selectedFrequency);
+        	console.log(">> time interval "+$scope.selectedTimeInterval);
+        	console.log(">> freq occurrence "+$scope.selectedFrequnceyOccurrence);
+        	$scope.assetPPM.startDate = $scope.assetPPM.dateFilterFrom;
+        	$scope.assetPPM.endDate = $scope.assetPPM.dateFilterTo;
+        	$scope.assetPPM.frequencyPrefix = $scope.selectedFrequency;
+        	$scope.assetPPM.frequencyDuration = $scope.selectedTimeInterval;
+        	$scope.assetPPM.frequency = $scope.selectedFrequnceyOccurrence;
+        	console.log(">>> Asset id "+$scope.assetGen.id);
+        	$scope.assetPPM.assetId = $scope.assetGen.id;
+        	
+        	AssetComponent.createPPM($scope.assetPPM).then(function(response) {
+                console.log("Asset response",JSON.stringify(response));
+                $scope.assetGen.id=response.data.id;
+                $scope.success = 'OK';
+                $scope.showNotifications('top','center','success','Asset Added');
+                $scope.selectedSite = null;
+                $scope.loadAssets();
 
+                //$location.path('/assets');
+            }).catch(function (response) {
+                $scope.success = null;
+                console.log('Error - '+ response.data);
+                console.log('status - '+ response.status + ' , message - ' + response.data.message);
+                if (response.status === 400 && response.data.message === 'error.duplicateRecordError') {
+                        $scope.errorAssetsExists = 'ERROR';
+                    $scope.showNotifications('top','center','danger','Asset Already Exists');
 
+                    console.log($scope.errorAssetsExists);
+                } else {
+                    $scope.showNotifications('top','center','danger','Error in creating Asset. Please try again later..');
+                    $scope.error = 'ERROR';
+                }
+            });
+
+        }
+        
         $scope.loadProjects = function () {
             ProjectComponent.findAll().then(function (data) {
                 console.log("Loading all projects")
@@ -429,6 +471,14 @@ angular.module('timeSheetApp')
                 $scope.assetGen.acquiredDate = e.date._d;
         });
 
+        $('input#dateFilterFrom').on('dp.change', function(e){
+            $scope.assetPPM.dateFilterFrom = e.date._d;
+        });
+        
+        $('input#dateFilterTo').on('dp.change', function(e){
+            $scope.assetPPM.dateFilterTo = e.date._d;
+        });
+        
          /* Create and save asset */
 
         $scope.saveAsset = function () {
@@ -478,6 +528,7 @@ angular.module('timeSheetApp')
                             $scope.error = 'ERROR';
                         }
                     });
+                    
                 }
 
         }

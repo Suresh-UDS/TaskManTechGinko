@@ -17,6 +17,19 @@ angular.module('timeSheetApp')
                     })
 
             },
+            createPPM : function(asset,callback){
+                var cb = callback || angular.noop;
+                return $http.post('api/assets/ppmschedule',asset).then(
+                    function (response) {
+                        //return cb(response);
+                        return response;
+                    }).catch(
+                    function (err) {
+                        console.log(JSON.stringify(err));
+                        return cb(err);
+                    })
+
+            },
             update : function(asset,callback){
                 var cb = callback || angular.noop;
                 return $http.put('api/asset/'+asset.id,asset).then(
@@ -172,9 +185,16 @@ angular.module('timeSheetApp')
             },
             
             getAllUploadedPhotos : function(obj) { 
-            	return $http.get('api/assets/getAllAssetPhoto/'+obj.type+'/'+obj.assetId, {responseType: 'arrayBuffer'}).then(function(response){ 
+            	return $http.get('api/assets/getAllAssetPhoto/'+obj.type+'/'+obj.assetId).then(function(response){ 
             		return response.data;
             	});
+            },
+            
+            readFile : function(document) { 
+            	return $http.get('api/assets/viewFile/'+document.id+'/'+document.fileName, {responseType: 'arraybuffer'}).then(function(response){
+            		return response.data;
+            	});
+
             }
             
 
