@@ -632,6 +632,8 @@ public class AssetManagementService extends AbstractService {
 		// TODO Auto-generated method stub
 		AssetParameterConfig assetParamConfig = mapperUtil.toEntity(assetParamConfigDTO, AssetParameterConfig.class);
 		assetParamConfig.setActive(AssetParameterConfig.ACTIVE_YES);
+		Asset asset = assetRepository.findOne(assetParamConfigDTO.getAssetId());
+		assetParamConfig.setAsset(asset);
 		assetParamConfig = assetParamConfigRepository.save(assetParamConfig);
 		assetParamConfigDTO = mapperUtil.toModel(assetParamConfig, AssetParameterConfigDTO.class);
 		return assetParamConfigDTO;
