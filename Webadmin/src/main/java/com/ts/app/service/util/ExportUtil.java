@@ -537,12 +537,12 @@ public class ExportUtil {
 		projRow.getCell(0).setCellValue(projName);
 		
 		for (Map<String,String> data : consolidatedData) {
-			Row dataRow = consSheet.createRow(rowNum++);
-			dataRow.createCell(0).setCellValue(data.get("SiteName") != null ? data.get("SiteName") : "");
-			dataRow.createCell(1).setCellValue((data.get("ShiftStartTime") != null ? data.get("ShiftStartTime") : "") + " - " + (data.get("ShiftEndTime") != null ? data.get("ShiftEndTime") : ""));
-			dataRow.createCell(2).setCellValue(data.get("TotalEmployees"));
-			dataRow.createCell(3).setCellValue(data.get("Present"));
-			dataRow.createCell(4).setCellValue(data.get("Absent"));
+			Row dataRow = consSheet.getRow(rowNum++);
+			dataRow.getCell(0).setCellValue(data.get("SiteName") != null ? data.get("SiteName") : "");
+			dataRow.getCell(1).setCellValue((data.get("ShiftStartTime") != null ? data.get("ShiftStartTime") : "") + " - " + (data.get("ShiftEndTime") != null ? data.get("ShiftEndTime") : ""));
+			dataRow.getCell(2).setCellValue(data.get("TotalEmployees"));
+			dataRow.getCell(3).setCellValue(data.get("Present"));
+			dataRow.getCell(4).setCellValue(data.get("Absent"));
 		}
 		
 		// create worksheet with title
@@ -559,15 +559,15 @@ public class ExportUtil {
 
 		for (EmployeeAttendanceReport transaction : content) {
 
-			Row dataRow = xssfSheet.createRow(rowNum++);
+			Row dataRow = xssfSheet.getRow(rowNum++);
 
-			dataRow.createCell(0).setCellValue(transaction.getEmployeeIds());
-			dataRow.createCell(1).setCellValue(transaction.getName() + " " + transaction.getLastName());
-			dataRow.createCell(2).setCellValue(transaction.getSiteName());
-			dataRow.createCell(3).setCellValue((transaction.getShiftStartTime() != null ? String.valueOf(transaction.getShiftStartTime()) : "") + "-" + (transaction.getShiftEndTime() != null ? String.valueOf(transaction.getShiftEndTime()) : ""));
-			dataRow.createCell(4).setCellValue(transaction.getCheckInTime() != null ? String.valueOf(transaction.getCheckInTime()) : "");
-			dataRow.createCell(5).setCellValue(transaction.getCheckOutTime() != null ? String.valueOf(transaction.getCheckOutTime()) : "");
-			dataRow.createCell(6).setCellValue(transaction.getStatus());
+			dataRow.getCell(0).setCellValue(transaction.getEmployeeIds());
+			dataRow.getCell(1).setCellValue(transaction.getName() + " " + transaction.getLastName());
+			dataRow.getCell(2).setCellValue(transaction.getSiteName());
+			dataRow.getCell(3).setCellValue((transaction.getShiftStartTime() != null ? String.valueOf(transaction.getShiftStartTime()) : "") + "-" + (transaction.getShiftEndTime() != null ? String.valueOf(transaction.getShiftEndTime()) : ""));
+			dataRow.getCell(4).setCellValue(transaction.getCheckInTime() != null ? String.valueOf(transaction.getCheckInTime()) : "");
+			dataRow.getCell(5).setCellValue(transaction.getCheckOutTime() != null ? String.valueOf(transaction.getCheckOutTime()) : "");
+			dataRow.getCell(6).setCellValue(transaction.getStatus());
 
 		}
 

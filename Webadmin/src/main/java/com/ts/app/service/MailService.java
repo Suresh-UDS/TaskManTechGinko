@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Properties;
 
 import javax.inject.Inject;
@@ -337,4 +338,15 @@ public class MailService {
 		}
 		return msg;
 	}
+    
+    public void sendAttendanceCheckouAlertEmail(String emailIds, Map<String,Object> values) {
+    		log.debug("Sending attendance consolidated report e-mail to '{}'", emailIds);
+    		Locale locale = Locale.forLanguageTag("en-US");
+    		Context context = new Context(locale);
+    		context.setVariable("checkInTime", values.get("checkInTime"));
+    		context.setVariable("site", values.get("site"));
+    		String emailContent = templateEngine.process("attendanceCheckoutAlertEmail", context);
+    		String subject = messageSource.getMessage("email.attendance.checkout.alert.title", null, locale);
+    		sendEmail(emailIds, subject, emailContent, true, true,null);
+    	}
 }

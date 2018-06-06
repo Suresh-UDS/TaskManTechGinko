@@ -1,6 +1,8 @@
 package com.ts.app.web.rest;
 
+import java.util.Calendar;
 import java.util.Date;
+import java.util.Optional;
 
 import javax.inject.Inject;
 
@@ -11,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ts.app.security.SecurityUtils;
@@ -53,8 +56,21 @@ public class ReportResource {
 	}
 	
 	@RequestMapping(value = "/reports/attendance/detailed", method = RequestMethod.GET)
-	public ResponseEntity<?> sendDetailedAttendanceReport() {
-		schedulerService.attendanceDetailReportSchedule();
+	public ResponseEntity<?> sendDetailedAttendanceReport(@RequestParam(value = "date", required = false) Date attnDate) {
+		if(attnDate == null) {
+			Calendar currCal = Calendar.getInstance();
+			currCal.set(Calendar.HOUR_OF_DAY, 0);
+			currCal.set(Calendar.MINUTE,0);
+			attnDate = currCal.getTime();
+		}		
+		schedulerService.generateDetailedAttendanceReport(attnDate);
+		return new ResponseEntity<>(HttpStatus.OK);
+	}
+	
+	@RequestMapping(value = "/reports/attendance/checkout", method = RequestMethod.GET)
+	public ResponseEntity<?> autocheckoutAttendance() {
+		
+		schedulerService.attendanceCheckOutTask();
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 
