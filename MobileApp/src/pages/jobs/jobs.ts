@@ -7,7 +7,8 @@ import {CreateJobPage} from "./add-job";
 import { ActionSheetController } from 'ionic-angular'
 import {CompleteJobPage} from "./completeJob";
 import {JobService} from "../service/jobService";
-
+import{ModalController} from "ionic-angular";
+import{JobFilter} from "./job-filter/job-filter";
 
 @Component({
   selector: 'page-jobs',
@@ -32,7 +33,7 @@ export class JobsPage {
     pageSort:15;
 
     constructor(public navCtrl: NavController,public component:componentService, public authService: authService,
-                    private loadingCtrl:LoadingController, private actionSheetCtrl: ActionSheetController, private jobService: JobService, public events:Events) {
+                    private loadingCtrl:LoadingController, private actionSheetCtrl: ActionSheetController, private jobService: JobService, public events:Events,public modalCtrl:ModalController) {
         this.allJobs = [];
         this.todaysJobs =[];
         this.categories = 'today';
@@ -307,4 +308,10 @@ export class JobsPage {
 
 
     }
+
+    presentModal() {
+        const modal = this.modalCtrl.create(JobFilter);
+        modal.present();
+    }
+
 }
