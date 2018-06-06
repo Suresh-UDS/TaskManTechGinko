@@ -374,10 +374,11 @@ angular.module('timeSheetApp')
                 }
 
             }else{
+
                 if($scope.selectedAsset) {
 
                     $scope.searchCriteria.findAll = false;
-                    $scope.searchCriteria.id = $scope.selectedAsset.id;
+                    $scope.searchCriteria.assetId = $scope.selectedAsset.id;
 
                 }
             }
@@ -403,7 +404,7 @@ angular.module('timeSheetApp')
                 $scope.assetsLoader = false;
                 $scope.loadPageTop();
 
-            AssetComponent.search().then(function (data) {
+            AssetComponent.search($scope.searchCriteria).then(function (data) {
                 $scope.assets = data;
                 $scope.assetsLoader = true;
 
@@ -450,7 +451,6 @@ angular.module('timeSheetApp')
         }
 
         $scope.assetConfig=function(){
-
 
              
             if($stateParams.id){ 
@@ -712,7 +712,7 @@ angular.module('timeSheetApp')
             if($scope.assetType){
                 console.log("Asset Type entered");
                 AssetTypeComponent.create($scope.assetType).then(function (response) {
-                    console.log(">>> Asset Type Response "+JSON.stringify(response));
+                    console.log(response);
                     $scope.assetType = {};
                     $scope.showNotifications('top','center','success','Asset Type Added Successfully');
                     $scope.loadAssetType();
