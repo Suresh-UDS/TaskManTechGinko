@@ -42,6 +42,9 @@
                                                                 <a href=".qrcode" data-toggle="tab" >QR Code</a>
                                                             </li>
                                                             <li class="step">
+                                                                <a href=".config" data-toggle="tab" >Config</a>
+                                                            </li>
+                                                            <li class="step">
                                                                 <a href=".pmcschedule" data-toggle="tab" >PPM Schedule</a>
                                                             </li>
                                                             <li class="step">
@@ -685,8 +688,168 @@
 
                                                            </form>
                                                         </div>
+                                                        <div class="tab-pane fade config" id="config">
+                                                          <form name="form2" role="form" 
+                                                        class="form-horizontal" >
+                                                            <div class="panel panel-default" style="min-height: 300px;">
+                                                                <div class="panel-heading">
+                                                                    Config
+            
+                                                                </div>
+                                                                <div class="panel-body">
+
+                                                                    <div class="row">
+
+                                                                        <div class="col-md-12">
+                                                                            <div class="panel panel-default" style="min-height: 200px;">
+
+                                                                                <div class="panel-heading">
+                                                                                    New Parameters
+                                                                                </div>
+
+                                                                                <div class="panel-body">
+
+                                                                                    <div class="row">
+
+
+                                                                                        <div class="col-md-6">
+
+                                                                                            <div class="form-group selectcon is-empty SelectWithAddbtnCon">
+
+                                                                                                <div class="" style="float:left;width:90%;">
+                                                                                                    <label class="control-label">Select Parameter </label>
+                                                                                                    <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
+                                                                                                    <select class="form-control ng-pristine ng-valid ng-touched" ng-model="selectedParameter"  ng-options="parameter as parameter.name for parameter in parameters" tabindex="0" aria-invalid="false">
+                                                                                                        <option value="" class="" selected="selected">Please select Parameter ..</option>
+                                                                                                    </select>
+                                                                                                </div>
+                                                                                                <div class="" style="float:left;">
+                                                                                                    <a href="javascript:;" data-toggle="collapse" data-parent="#accordian" data-target="#addParamet" class="btn btn-round btn-fab btn-fab-mini btn-simple" aria-expanded="false" aria-controls="collapseExample">
+                                                                                                        <i class="material-icons">add</i>
+                                                                                                    </a>
+                                                                                                </div>
+                                                                                                <div class="clear"></div>
+                                                                                                <div class="collapse" id="addParamet">
+                                                                                                    <div class="">
+                                                                                                        <input class="input-desc ng-pristine ng-untouched ng-valid" id="assetgroupName" ng-model="parameter.name" name="assetgroupName" type="text" value="" tabindex="0" aria-invalid="false">
+                                                                                                        <a class="btn btn-success" ng-click="addParameter()" tabindex="0">Add</a>
+                                                                                                    </div>
+                                                                                                </div>
+                                                                                                <span class="material-input"></span>
+                                                                                            </div>
+
+                                                                                        </div>
+
+                                                                                        <div class="col-md-6">
+                                                                                            <div class="form-group selectcon is-empty SelectWithAddbtnCon">
+
+                                                                                                <div class="" style="float:left;width:90%;">
+                                                                                                    <label class="control-label">Select Units</label>
+                                                                                                    <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
+                                                                                                    <select class="form-control ng-pristine ng-valid ng-touched" ng-model="selectedParameterUOM"  ng-options="parameterUOM as parameterUOM.uom for parameterUOM in parameterUOMs" tabindex="0" aria-invalid="false">
+                                                                                                        <option value="" class="" selected="selected">Please select Units ..</option>
+                                                                                                    </select>
+                                                                                                </div>
+                                                                                                <div class="" style="float:left;">
+                                                                                                    <a href="javascript:;" data-toggle="collapse" data-parent="#accordian" data-target="#addUnits" class="btn btn-round btn-fab btn-fab-mini btn-simple" aria-expanded="false" aria-controls="collapseExample">
+                                                                                                        <i class="material-icons">add</i>
+                                                                                                    </a>
+                                                                                                </div>
+                                                                                                <div class="clear"></div>
+                                                                                                <div class="collapse" id="addUnits">
+                                                                                                    <div class="">
+                                                                                                        <input class="input-desc ng-pristine ng-untouched ng-valid" id="assetgroupName" ng-model="parameterUOM.uom" name="assetgroupName" type="text" value="" tabindex="0" aria-invalid="false">
+                                                                                                        <a class="btn btn-success" ng-click="addParameterUOM()" tabindex="0">Add</a>
+                                                                                                    </div>
+                                                                                                </div>
+                                                                                                <span class="material-input"></span>
+                                                                                            </div>
+                                                                                        </div>
+
+                                                                                    </div>
+
+
+                                                                                    <div class="row">
+
+                                                                                        <div class="col-md-8">
+                                                                                            <div class="checkbox">
+                                                                                                <label>
+                                                                                                    <input type="checkbox" ng-model="consumptionMonitoringRequired" name="terms"> Consumption Monitor Reading
+                                                                                                </label>
+                                                                                            </div>
+                                                                                        </div>
+
+                                                                                        <div class="col-md-4 txt-align-rgt">
+                                                                                            <button class="btn btn-success" ng-click="saveAssetParamConfig()"
+                                                                                                    id="form-button-add">
+                                                                                                <span class="btn-label"><i class="material-icons">add</i></span> Add
+                                                                                            </button>
+                                                                                        </div>
+
+                                                                                    </div>
+
+                                                                                </div>
+
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="col-md-12">
+                                                                            <div class="panel panel-default" style="min-height: 200px;">
+
+                                                                                <div class="panel-heading">
+                                                                                   Parameters
+                                                                                </div>
+                                                                                <div class="panel-body">
+
+                                                                                    <div class="table-responsive tablecard">
+                                                                                        <table class="table table-striped">
+
+                                                                                            <thead>
+                                                                                            <tr>
+                                                                                                <th>Type</th>
+                                                                                                <th>Units</th>
+                                                                                                <th>Consumption</th>
+                                                                                                <th class="text-right" >Actions</th>
+                                                                                            </tr>
+
+                                                                                            </thead>
+
+                                                                                            <tbody>
+
+                                                                                                <tr ng-repeat="assetParam in assetParameters">
+                                                                                                    <td>{{assetParam.assetType}}</td>
+                                                                                                    <td>{{assetParam.uom}}</td>
+                                                                                                    <td>
+                                                                                                        <div class="checkbox">
+                                                                                                            <label>
+                                                                                                                <input type="checkbox" name="Consumption" ng-model="assetParam.consumptionMonitoringRequired" disabled >
+                                                                                                            </label>
+                                                                                                        </div>
+                                                                                                    </td>
+                                                                                                    <td class="text-right">
+                                                                                                        <a  has-permission="" ui-sref="" class="btn btn-simple btn-danger" ng-click="deleteAssetConfig(assetParam.id)"><i class="material-icons">delete_forever</i><div class="ripple-container"></div></a>
+                                                                                                    </td>
+
+                                                                                                </tr>
+
+                                                                                            </tbody>
+                                                                                        </table>
+
+                                                                                    </div>
+
+                                                                                </div>
+
+                                                                            </div>
+                                                                        </div>
+
+                                                                    </div>
+
+                                                                </div>
+                                                            </div>
+
+                                                        </form>
+                                                        </div>
                                                         <div class="tab-pane fade pmcschedule" id="pmcschedule">
-                                                            <form name="form2" role="form" novalidate
+                                                            <form name="form3" role="form" novalidate
                                                         class="form-horizontal" >
                                                             <div class="panel panel-default">
                                                                 <div class="panel-heading">New Schedule</div>
@@ -745,9 +908,9 @@
                                                                             </div>
 
 
-                                                                            <div class="row">
+                                                                            <div class="row" ng-hide="assetSave">
 
-                                                                                <div class="col-md-10">
+                                                                                <div class="col-md-10" >
                                                                                     <div class="form-group">
                                                                                         <button class="btn btn-success" type="submit"
                                                                                                 id="form-button-save" ng-click="saveAsset()">
@@ -955,7 +1118,7 @@
                                                         </form>
                                                         </div>
                                                         <div class="tab-pane fade amcschedule" id="amcschedule">
-                                                            <form name="form3" role="form" novalidate
+                                                            <form name="form4" role="form" novalidate
                                                         class="form-horizontal" >
                                                             <div class="panel panel-default">
                                                                 <div class="panel-heading">New Schedule</div>
@@ -1014,7 +1177,7 @@
                                                                             </div>
 
 
-                                                                            <div class="row">
+                                                                            <div class="row" ng-hide="assetSave">
 
                                                                                 <div class="col-md-10">
                                                                                     <div class="form-group">
@@ -1224,7 +1387,7 @@
                                                         </form>
                                                         </div>
                                                         <div class="tab-pane fade documents" id="documents">
-                                                            <form name="form4" role="form" novalidate
+                                                            <form name="form5" role="form" novalidate
                                                         class="form-horizontal" >
                                                             <div class="panel panel-default" style="min-height: 200px;">
 
@@ -1375,7 +1538,7 @@
                                                     </div>
                                                     <div class="wizard-footer" ng-show="assetGen.id">
                                                         <div class="pull-right">
-                                                            <input type='button' class='btn btn-next btn-fill btn-success btn-wd' name='next' value='Next'  />
+                                                            <input type='button' class='btn btn-next btn-fill btn-default btn-wd' name='next' value='Next'  />
                                                             <input type='button' class='btn btn-finish btn-fill btn-success btn-wd' name='finish' value='Finish' />
                                                         </div>
                                                         <div class="pull-left">
@@ -1383,7 +1546,7 @@
                                                         </div>
                                                         <div class="clearfix"></div>
                                                     </div>
-                                                </form>
+                                           
                                             </div>
                                         </div>
                                         <!-- wizard container -->
@@ -1392,7 +1555,7 @@
 
 
 
-                                <div class="row">
+                                <div class="row" ng-hide="assetSave">
 
                                     <div class="col-sm-offset-8 col-sm-4 txt-align-rgt">
                                         <button class="btn btn-success" type="submit"
