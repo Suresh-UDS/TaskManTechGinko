@@ -197,7 +197,7 @@ public class AssetManagementService extends AbstractService {
 		asset.setActive(Asset.ACTIVE_YES);
 
 		List<Asset> existingAssets = assetRepository.findAssetByTitle(assetDTO.getTitle());
-		log.debug("Existing asset -" + existingAssets);
+		log.debug("Existing asset size -" + existingAssets.size());
 		if (CollectionUtils.isEmpty(existingAssets)) {
 			asset = assetRepository.save(asset);
 		}
@@ -641,7 +641,6 @@ public class AssetManagementService extends AbstractService {
 		// TODO Auto-generated method stub
 		log.debug(">> create ppm schedule <<<");
 		AssetPPMSchedule assetPPMSchedule = mapperUtil.toEntity(assetPpmScheduleDTO, AssetPPMSchedule.class);
-		log.debug(">> after mapping ppm schedule <<<");
 		assetPPMSchedule.setActive(AssetPPMSchedule.ACTIVE_YES);
 
 		Checklist checklist = getCheckList(assetPpmScheduleDTO.getChecklistId());
@@ -651,9 +650,42 @@ public class AssetManagementService extends AbstractService {
 		assetPPMSchedule.setAsset(asset);
 
 		assetPPMSchedule = assetPpmScheduleRepository.save(assetPPMSchedule);
-		log.debug(">> after save <<<");
 		assetPpmScheduleDTO = mapperUtil.toModel(assetPPMSchedule, AssetPpmScheduleDTO.class);
 		return assetPpmScheduleDTO;
+	}
+	
+	/**
+	 * Updates the asset PPM schedule information.
+	 * 
+	 * @param assetPPMScheduleDTO
+	 * @return
+	 */
+	public AssetPpmScheduleDTO updateAssetPPMSchedule(AssetPpmScheduleDTO assetPpmScheduleDTO) {
+		log.debug("Update assets PPM schedule");
+		AssetPPMSchedule assetPPMSchedule = null;
+		if (assetPpmScheduleDTO.getId() > 0) {
+			assetPPMSchedule = assetPpmScheduleRepository.findOne(assetPpmScheduleDTO.getId());
+			assetPPMSchedule.setActive(assetPpmScheduleDTO.getActive());
+			if (assetPpmScheduleDTO.getChecklistId() != null
+					&& assetPPMSchedule.getChecklist().getId() != assetPpmScheduleDTO.getChecklistId()) {
+				Checklist checklist = checklistRepository.findOne(assetPpmScheduleDTO.getChecklistId());
+				assetPPMSchedule.setChecklist(checklist);
+			}
+			if (assetPpmScheduleDTO.getAssetId() != null
+					&& assetPPMSchedule.getAsset().getId() != assetPpmScheduleDTO.getAssetId()) {
+				Asset asset = assetRepository.findOne(assetPpmScheduleDTO.getAssetId());
+				assetPPMSchedule.setAsset(asset);
+			}
+			assetPPMSchedule.setFrequency(assetPpmScheduleDTO.getFrequency());
+			assetPPMSchedule.setFrequencyDuration(assetPpmScheduleDTO.getFrequencyDuration());
+			assetPPMSchedule.setFrequencyPrefix(assetPpmScheduleDTO.getFrequencyPrefix());
+			assetPPMSchedule.setEndDate(assetPpmScheduleDTO.getEndDate());
+			assetPPMSchedule.setStartDate(assetPpmScheduleDTO.getStartDate());
+			assetPPMSchedule.setTitle(assetPpmScheduleDTO.getTitle());
+			assetPpmScheduleRepository.save(assetPPMSchedule);
+		}
+		return mapperUtil.toModel(assetPPMSchedule, AssetPpmScheduleDTO.class);
+
 	}
 
 	@Transactional
