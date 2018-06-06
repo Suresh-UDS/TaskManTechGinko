@@ -89,7 +89,12 @@ export class CompleteJobPage {
 
         popover.onDidDismiss(data=>
         {
-            this.takenImages.pop(data);
+            console.log(data)
+            if(data)
+            {
+                this.takenImages.pop(data);
+            }
+
         })
     }
     viewCamera(status,job) {
