@@ -657,9 +657,12 @@ angular.module('timeSheetApp')
 
 
         $scope.loadAssetConfig = function(type) {
-        	ParameterConfigComponent.findByAssertType(type).then(function(data){
+        	$scope.assetConfig = {};
+			$scope.assetConfig.assetTypeName = type;
+			$scope.assetConfig.assetId = $stateParams.id;
+ 			AssetComponent.findByAssetConfig($scope.assetConfig).then(function(data){
         		console.log(data);
-        		$scope.assetConfigs = data;
+        		$scope.assetParameters = data;
         	});
         }
 
