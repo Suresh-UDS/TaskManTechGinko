@@ -861,7 +861,7 @@
                                                                             <div class="form-group">
                                                                                 <label class="control-label">Title</label>
                                                                                 <input id='ppmTitle'
-                                                                                       ng-model="asset.title"
+                                                                                       ng-model="assetPPM.title"
                                                                                        class='form-control'
                                                                                        name='ppmTitle'
                                                                                        type='text' value=""
@@ -876,7 +876,7 @@
                                                                             <div class="Flt_lft">
                                                                                 <div class="form-group">
                                                                                     <label class="control-label">Checklist</label>
-                                                                                    <input type="text" class="form-control" ng-model="newChecklistItem.name">
+                                                                                    <input type="text" class="form-control" ng-model="assetPPM.checklistId">
 
                                                                                 </div>
                                                                             </div>
@@ -941,7 +941,7 @@
                                                                             <div class="form-group">
                                                                                 <label class="control-label">To Date</label>
                                                                                 <span class="form-control-feedback calender-icon"><i class="material-icons">date_range</i></span>
-                                                                                <input type="text" class="form-control datepicker"  id="dateFilterFrom"  placeholder="{{dateFilterFrom | date:'dd-MMM-yyyy'}}"/>
+                                                                                <input type="text" class="form-control datepicker"  id="dateFilterTo"  placeholder="{{dateFilterTo | date:'dd-MMM-yyyy'}}"/>
 
                                                                             </div>
                                                                         </div>
@@ -979,8 +979,8 @@
                                                                                 <div class="form-group">
                                                                                     <label class="control-label">Select Frequency</label>
                                                                                     <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                                                                    <select class="form-control ">
-                                                                                        <option value="">Every</option>
+                                                                                    <select class="form-control" ng-model="selectedFrequency">
+                                                                                        <option value="Every">Every</option>
                                                                                     </select>
                                                                                 </div>
                                                                             </div>
@@ -989,10 +989,10 @@
                                                                             <div class="form-group">
                                                                                 <label class="control-label">&nbsp;</label>
                                                                                 <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                                                                <select class="form-control ">
-                                                                                    <option value="">1</option>
-                                                                                    <option value="">2</option>
-                                                                                    <option value="">3</option>
+                                                                                <select class="form-control" ng-model="selectedTimeInterval">
+                                                                                    <option value="1">1</option>
+                                                                                    <option value="2">2</option>
+                                                                                    <option value="3">3</option>
                                                                                 </select>
                                                                             </div>
                                                                         </div>
@@ -1000,20 +1000,20 @@
                                                                             <div class="form-group">
                                                                                 <label class="control-label">&nbsp;</label>
                                                                                 <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                                                                <select class="form-control ">
-                                                                                    <option value="">Hour</option>
-                                                                                    <option value="">Day</option>
-                                                                                    <option value="">Week</option>
-                                                                                    <option value="">Fortnight</option>
-                                                                                    <option value="">Month</option>
-                                                                                    <option value="">Quarter</option>
-                                                                                    <option value="">Half</option>
-                                                                                    <option value="">Year</option>
+                                                                                <select class="form-control" ng-model="selectedFrequnceyOccurrence">
+                                                                                    <option value="Hour">Hour</option>
+                                                                                    <option value="Day">Day</option>
+                                                                                    <option value="Week">Week</option>
+                                                                                    <option value="Fortnight">Fortnight</option>
+                                                                                    <option value="Month">Month</option>
+                                                                                    <option value="Quarter">Quarter</option>
+                                                                                    <option value="Half">Half</option>
+                                                                                    <option value="Year">Year</option>
                                                                                 </select>
                                                                             </div>
                                                                         </div>
                                                                         <div class="col-md-1" style="padding-top: 25px;">
-                                                                            <a class="btn btn-success add-btn margn-top0"  ng-click="">Add</a>
+                                                                            <a class="btn btn-success add-btn margn-top0"  ng-click="savePPMSchedule()">Add</a>
                                                                         </div>
                                                                     </div>
                                                                 </div>
@@ -1210,7 +1210,7 @@
                                                                             <div class="form-group">
                                                                                 <label class="control-label">To Date</label>
                                                                                 <span class="form-control-feedback calender-icon"><i class="material-icons">date_range</i></span>
-                                                                                <input type="text" class="form-control datepicker"  id="dateFilterFrom"  placeholder="{{dateFilterFrom | date:'dd-MMM-yyyy'}}"/>
+                                                                                <input type="text" class="form-control datepicker"  id="dateFilterTo"  placeholder="{{dateFilterTo | date:'dd-MMM-yyyy'}}"/>
 
                                                                             </div>
                                                                         </div>

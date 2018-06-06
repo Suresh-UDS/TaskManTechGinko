@@ -1,8 +1,8 @@
-<div class="crud-form" ng-init="initLoad();loadingStart();"
+<div class="crud-form" ng-init="editAsset();initLoad();loadingStart();"
 	data-unique-hash="a2ad475d60b22954085c657a73309b8f">
 	<div class="">
 		<div class="row">
-			<div class="col-mod-12">
+			<!-- <div class="col-mod-12">
 				<div class="alert alert-success" ng-show="success">
 					<strong>Asset saved!</strong>
 				</div>
@@ -13,14 +13,15 @@
 				<div class="alert alert-danger" ng-show="errorAssetExists">
 					<strong>Asset already registered!</strong> Please choose another one.
 				</div>
-			</div>
+			</div> -->
 			<div class="col-md-12">
 
                 <div class="">
                     <div class="">
 
                         <div class="form-container table-container">
-                            <form ng-show="!success" name="form" role="form" novalidate
+                           <!--  ng-show="!success" --> 
+                            <form name="form" role="form" novalidate
                                   ng-submit="saveAsset()" class="form-horizontal">
 
                                 <div class="TabsCon ">
@@ -107,7 +108,7 @@
 
                                                                             </div>
                                                                         </div>
-                                                                        <div class="col-md-12">
+                                                                        <div class="col-md-12" ng-init="assetConfig();">
 
 
                                                                             <div class="form-group selectcon is-empty" ng-init="loadAssetType()">
