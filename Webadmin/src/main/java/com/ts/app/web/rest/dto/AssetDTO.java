@@ -19,7 +19,6 @@ public class AssetDTO extends BaseDTO {
     private boolean udsAsset;
     private String qrCodeImage;
     private String group;
-    private String type;
     private String assetType;
     private String assetGroup;
     private String block;
@@ -263,11 +262,4 @@ public class AssetDTO extends BaseDTO {
 		this.assetPpmTitle = assetPpmTitle;
 	}
 
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
-    }
 }

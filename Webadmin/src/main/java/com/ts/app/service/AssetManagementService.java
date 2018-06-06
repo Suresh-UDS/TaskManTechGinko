@@ -225,6 +225,8 @@ public class AssetManagementService extends AbstractService {
             dto.setUdsAsset(loc.isUdsAsset());
             dto.setCode(loc.getCode());
             dto.setDescription(loc.getDescription());
+            dto.setAssetType(loc.getAssetType());
+            dto.setAssetGroup(loc.getAssetGroup());
             assetDto.add(dto);
         }
         return assetDto;
@@ -259,6 +261,8 @@ public class AssetManagementService extends AbstractService {
             dto.setUdsAsset(loc.isUdsAsset());
             dto.setCode(loc.getCode());
             dto.setDescription(loc.getDescription());
+            dto.setAssetType(loc.getAssetType());
+            dto.setAssetGroup(loc.getAssetGroup());
             assetDto.add(dto);
         }
         return assetDto;
@@ -353,6 +357,8 @@ public class AssetManagementService extends AbstractService {
     	asset.setSerialNumber(assetDTO.getSerialNumber());
     	asset.setPurchasePrice(assetDTO.getPurchasePrice());
     	asset.setCurrentPrice(assetDTO.getCurrentPrice());
+    	asset.setAssetGroup(assetDTO.getAssetGroup());
+    	asset.setAssetType(assetDTO.getAssetType());
     	asset.setEstimatedDisposePrice(assetDTO.getEstimatedDisposePrice());
         asset.setCode(assetDTO.getCode());
         //asset.setEndTime(DateUtil.convertToSQLDate(assetDTO.getEndTime()));
