@@ -25,6 +25,17 @@
     </ion-fab>
 
   <ion-list>
+
+      <ion-refresher (ionRefresh)="doRefresh($event)">
+          <ion-refresher-content></ion-refresher-content>
+      </ion-refresher>
+      <div *ngIf="assetList?.length<0">
+          <ion-card>
+              <ion-card-content>
+                  No Asset
+              </ion-card-content>
+          </ion-card>
+      </div>
     <ion-item *ngFor="let asset of assetList" (click)="viewAsset(asset)" class="padding-left0">
 
         <ion-row no-margin="">
@@ -59,7 +70,9 @@
           <!--<ion-icon name="md-eye"></ion-icon>-->
       <!--</button>-->
     </ion-item>
-
+      <!--<ion-infinite-scroll *ngIf="page<totalPages"  (ionInfinite)="doInfiniteAllJobs($event)">-->
+          <!--<ion-infinite-scroll-content></ion-infinite-scroll-content>-->
+      <!--</ion-infinite-scroll>-->
   </ion-list>
 
 

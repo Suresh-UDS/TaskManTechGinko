@@ -37,7 +37,7 @@ export class AssetView {
     fromDate:any;
     toDate:any;
     viewButton:any;
-
+    searchCriteria:any;
 
   constructor(private modalCtrl:ModalController,private datePicker: DatePicker,private componentService:componentService,public navCtrl: NavController, public navParams: NavParams, public jobService:JobService, public assetService:AssetService) {
 
@@ -54,8 +54,12 @@ export class AssetView {
     console.log('ionViewDidLoad AssetView');
     console.log(this.assetDetails);
     this.componentService.showLoader("");
+
+      this.searchCriteria={
+          assetId:this.assetDetails.id
+      }
       this.getJobs();
-      this.getTickets();
+      this.getTickets(this.searchCriteria);
       this.getAssetConfig();
       this.getAssetById();
   }
@@ -74,7 +78,7 @@ export class AssetView {
         }
         else if(segment=='tickets')
         {
-            this.getTickets();
+            this.getTickets(this.searchCriteria);
             refresher.complete()
         }
     }
@@ -139,11 +143,9 @@ export class AssetView {
             }, 1000);
         }
     }
-    getTickets()
+    getTickets(searchCriteria)
     {
-        var searchCriteria={
-            assetId:this.assetDetails.id
-        }
+
         this.jobService.searchTickets(searchCriteria).subscribe(
             response=>{
                 this.componentService.closeLoader()
@@ -211,7 +213,7 @@ export class AssetView {
 
 
 
-    // Ticket search
+    // Date search
 
     selectFromDate()
     {
@@ -255,12 +257,30 @@ export class AssetView {
         );
 
     }
-    dateSearch(fromDate,toDate) {
+    dateSearch(fromDate,toDate,categories) {
         // this.componentService.showLoader("")
-        console.log("From Date:" + fromDate);
-        console.log("To Date:" + toDate);
+        console.log("From Date:" + fromDate.toISOString());
+        console.log("To Date:" + toDate.toISOString());
+        var searchCriteria={
+            fromDate:fromDate.toISOString(),
+            toDate:toDate.toISOString()
+        }
+        if(categories == 'jobs')
+        {
+
+        }
+        else if(this.categories == 'tickets')
+        {
+            this.getTickets(searchCriteria);
+        }
 
     }
+    segmentChange()
+    {
+        this.fromDate="";
+        this.toDate="";
+    }
+
     getAssetConfig(){
         this.assetService.getAssetConfig(this.assetDetails.type,this.assetDetails.id).subscribe(
             response=>{
@@ -286,5 +306,6 @@ export class AssetView {
         )
 
     }
+
 
 }

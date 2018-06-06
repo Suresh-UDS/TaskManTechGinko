@@ -39,7 +39,6 @@ angular.module('timeSheetApp')
          $scope.selectedVendor = {};
         $scope.selectedConfigParam = null;
         $scope.selectedConfigUnit = null;
-        $scope.assetSave = null;
 
         $scope.asset = {};
        
@@ -160,12 +159,12 @@ angular.module('timeSheetApp')
         };
 
 
-          /* $scope.createAssetType = function () {
+           $scope.createAssetType = function () {
                AssetTypeComponent.create().then(function (data) {
-                console.log("creating all AssetType -- " , data)
+                console.log("Loading all AssetType -- " , data)
                 $scope.assetTypes = data;
             });
-        };*/
+        };
 
 
 
@@ -438,7 +437,6 @@ angular.module('timeSheetApp')
                         console.log("Asset response",JSON.stringify(response));
                         $scope.assetGen.id=response.data.id;
                         $scope.success = 'OK';
-                        $scope.assetSave = "1";
                         $scope.showNotifications('top','center','success','Asset Added');
                         $scope.selectedSite = null;
                         $scope.loadAssets();
@@ -468,7 +466,8 @@ angular.module('timeSheetApp')
             
             var qr = {id:$scope.assetGen.id,code:$scope.assetGen.assetcode}
 
-
+            alert("code:"  + qr.code + "id:" + qr.id);
+            
             AssetComponent.createQr(qr).then(function(){
 
                 $scope.success = 'OK';
@@ -718,39 +717,18 @@ angular.module('timeSheetApp')
 	    $scope.saveAssetParamConfig = function () {
         	$scope.error = null;
         	$scope.success =null;
-
-            if($stateParams.id){
-                if($scope.asset.assetType){
-                $scope.parameterConfig.assetType = $scope.asset.assetType;
-                $scope.parameterConfig.assetId = $stateParams.id;
-                }
-                if($scope.selectedParameter){
-                    $scope.parameterConfig.name = $scope.selectedParameter.name;
-                }
-                if($scope.selectedParameterUOM){
-                    $scope.parameterConfig.uom = $scope.selectedParameterUOM.uom;
-                }
-
-                    $scope.parameterConfig.consumptionMonitoringRequired  = $scope.consumptionMonitoringRequired
-                    console.log(' parameterConfig details (update) ='+ JSON.stringify($scope.parameterConfig));
-            }else if($scope.assetGen.id){
-                 $scope.parameterConfig.assetId = $scope.assetGen.id;
-
-                if($scope.selectedAssetType.id){
-                       $scope.parameterConfig.assetType = $scope.selectedAssetType.name;
-                    }
-                
-                if($scope.selectedParameter){
-                    $scope.parameterConfig.name = $scope.selectedParameter.name;
-                }
-                if($scope.selectedParameterUOM){
-                    $scope.parameterConfig.uom = $scope.selectedParameterUOM.uom;
-                }
-                 $scope.parameterConfig.consumptionMonitoringRequired  = $scope.consumptionMonitoringRequired
-                 console.log('parameterConfig details (create) ='+ JSON.stringify($scope.assetGen));
-
-            }
-        	
+        	if($scope.asset.assetType){
+        	    $scope.parameterConfig.assetType = $scope.asset.assetType;
+        	    $scope.parameterConfig.assetId = $stateParams.id
+        	}
+        	if($scope.selectedParameter){
+        	    $scope.parameterConfig.name = $scope.selectedParameter.name;
+        	}
+        	if($scope.selectedParameterUOM){
+        	    $scope.parameterConfig.uom = $scope.selectedParameterUOM.uom;
+        	}
+        	$scope.parameterConfig.consumptionMonitoringRequired  = $scope.consumptionMonitoringRequired
+        	console.log('parameterConfig details ='+ JSON.stringify($scope.parameterConfig));
         	AssetComponent.createAssetParamConfig($scope.parameterConfig).then(function () {
                 $scope.success = 'OK';
                 $scope.showNotifications('top','center','success','Asset Parameter Saved Successfully');
