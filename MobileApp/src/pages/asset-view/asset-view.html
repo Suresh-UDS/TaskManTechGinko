@@ -174,13 +174,13 @@
     </ion-list>
     <ion-list *ngSwitchCase="'ppm'">
         <p text-right class="fnt-18" (click)="showCalendar()"><ion-icon ios="ios-calendar" md="md-calendar" class="green fnt-25 padding-right10"></ion-icon></p>
-        <div *ngIf="assetDetails.ppms?.length<0">
-            <ion-card>
-                <ion-card-content>
-                    No Data Found
-                </ion-card-content>
-            </ion-card>
-        </div>
+        <!--<div *ngIf="assetDetails.ppms?.length<0">-->
+            <!--<ion-card>-->
+                <!--<ion-card-content>-->
+                    <!--No Data Found-->
+                <!--</ion-card-content>-->
+            <!--</ion-card>-->
+        <!--</div>-->
         <div  class="white-bg" *ngFor="let ppm of assetDetails.ppms" >
 
             <div class="padding-left16 padding-top5">
@@ -281,13 +281,13 @@
     </ion-list>
 
     <ion-list *ngSwitchCase="'config'">
-        <div *ngIf="assetDetails.config?.length<0">
-            <ion-card>
-                <ion-card-content>
-                    No Data Found
-                </ion-card-content>
-            </ion-card>
-        </div>
+        <!--<div *ngIf="assetDetails.config?.length<0">-->
+            <!--<ion-card>-->
+                <!--<ion-card-content>-->
+                    <!--No Data Found-->
+                <!--</ion-card-content>-->
+            <!--</ion-card>-->
+        <!--</div>-->
     </ion-list>
 
     <ion-list *ngSwitchCase="'jobs'">
@@ -419,16 +419,16 @@
             </ion-col>
         </ion-row>
 
-        <ion-list *ngIf="assetDetails.tickets.length<=0">
-            <ion-item>
-                <ion-card padding>
-                    <ion-card-header no-padding>
-                        No Tickets found
-                    </ion-card-header>
-                </ion-card>
-            </ion-item>
+        <!--<ion-list *ngIf="assetDetails.tickets.length<=0">-->
+            <!--<ion-item>-->
+                <!--<ion-card padding>-->
+                    <!--<ion-card-header no-padding>-->
+                        <!--No Tickets found-->
+                    <!--</ion-card-header>-->
+                <!--</ion-card>-->
+            <!--</ion-item>-->
 
-        </ion-list>
+        <!--</ion-list>-->
 
         <ion-refresher (ionRefresh)="doRefresh($event,'tickets')">
             <ion-refresher-content>
