@@ -62,6 +62,8 @@ export class AssetView {
       this.getTickets(this.searchCriteria);
 
       this.getAssetById();
+      // this.getAssetPPMSchedule();
+      // this.getAssetAMCSchedule();
   }
 
     getReadings(){
@@ -308,13 +310,28 @@ export class AssetView {
 
     }
 
+    getAssetPPMSchedule()
+    {
+        this.assetService.getAssetPPMSchedule(this.assetDetails.id).subscribe(
+            response=>{
+                console.log("Get asset AMC response");
+                console.log(response);
+                this.assetDetails.ppms = response;
+            },
+            error=>{
+                console.log("Get asset AMC error");
+                console.log(error);
+            }
+        )
+    }
+
     getAssetAMCSchedule()
     {
         this.assetService.getAssetAMCSchedule(this.assetDetails.id).subscribe(
             response=>{
                 console.log("Get asset AMC response");
                 console.log(response);
-                this.assetDetails.amsc = response;
+                this.assetDetails.amcs = response;
             },
             error=>{
                 console.log("Get asset AMC error");
