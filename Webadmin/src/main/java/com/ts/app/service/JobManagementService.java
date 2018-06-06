@@ -704,8 +704,7 @@ public class JobManagementService extends AbstractService {
 
 		return mapperUtil.toModel(job, JobDTO.class);
 	}
-
-
+	
 	private JobDTO mapToModel(Job job) {
 		JobDTO dto = new JobDTO();
 		dto.setId(job.getId());

@@ -1495,15 +1495,19 @@
 
                                                                <div class="col-md-2 txt-align-center" ng-repeat="uploadFile in uploadFiles">
                                                                    <a href="#">
-                                                                       <img src="assets/img/Docs-icon.png" alt="docs" ng-click="showFile(uploadFile.id, uploadFile.file)"/>
+                                                                       <img src="assets/img/Docs-icon.png" alt="docs" />
                                                                    </a>
                                                                    <p>{{uploadFile.title}}</p>
-                                                                   <a href="{{downloadFile}}" ng-show="download">Download</a>
+
+                                                                   <div ng-show="download">
+                                                                   	<a href="{{content}}" download>download</a>
+                                                                   </div>
+
                                                                </div>
-                                                               
-                                                               <p class="empty-files" ng-show="!uploadFiles.length">No upload documents </p>
 
                                                            </div>
+                                                           
+                                                           
 
                                                         </div>
 
@@ -1520,12 +1524,15 @@
 
                                                                 <div class="col-md-2 txt-align-center" ng-repeat="uploadPhoto in uploadAssetPhotos">
                                                                     <a href="#">
-                                                                        <img src="assets/img/img.png" alt="docs" ng-click="showFile(uploadPhoto.id, uploadPhoto.file)"/>
+                                                                        <img src="assets/img/img.png" alt="docs" />
                                                                     </a>
+
                                                                     <p><b>{{uploadPhoto.title}}</b></p>
+                                                                     <div ng-show="download">
+                                                                   	<a href="{{content}}" download>download</a>
+                                                                   </div>
+
                                                                 </div>
-                                                                
-                                                                <p class="empty-files" ng-show="!uploadAssetPhotos.length">No upload photos </p>
 
                                                             </div>
 

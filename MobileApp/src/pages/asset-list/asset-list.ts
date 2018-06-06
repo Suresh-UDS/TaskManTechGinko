@@ -6,6 +6,7 @@ import {QRScanner, QRScannerStatus} from "@ionic-native/qr-scanner";
 import {AssetView} from "../asset-view/asset-view";
 import {ScanQR} from "./scanQR";
 import {AssetService} from "../service/assetService";
+import {componentService} from "../service/componentService";
 
 /**
  * Generated class for the AssetList page.
@@ -21,17 +22,22 @@ export class AssetList {
 
     assetList:any;
     searchCriteria:any;
-  constructor(public navCtrl: NavController, public navParams: NavParams, public modalController:ModalController, public qrScanner:QRScanner, public assetService:AssetService) {
+  constructor(public componentService:componentService, public navCtrl: NavController, public navParams: NavParams, public modalController:ModalController, public qrScanner:QRScanner, public assetService:AssetService) {
     this.assetList = [];
     this.searchCriteria = {};
   }
 
   ionViewDidLoad() {
-    console.log('ionViewDidLoad AssetList')
+    console.log('ionViewDidLoad AssetList');
+    this.componentService.showLoader("Loading Assets")
     this.assetService.findAllAssets().subscribe(
         response=>{
+            this.componentService.closeLoader()
             console.log(response);
             this.assetList = response;
+        },
+        error=>{
+            console.log("")
         }
     );
 
@@ -78,7 +84,7 @@ export class AssetList {
           if(status.authorized){
               console.log("Permission Authorized");
 
-          }else if(status.denied){
+          }else if(status.denied){0
               console.log("Permission denied temporarily" );
               this.qrScanner.openSettings();
           }else{
