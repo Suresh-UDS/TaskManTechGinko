@@ -84,7 +84,7 @@
 
                                                                                         <div ng-show="form.$submitted || form.assetTitle.$touched">
                                                                                             <div ng-show="form.assetTitle.$dirty || form.assetTitle.$invalid">
-                                                                                                <p class="help-block" style="color:maroon"
+                                                                                                <p class="help-block" style="color:#ff0000"
                                                                                                    ng-show="form.assetTitle.$error.required">
                                                                                                     Asset title is required.
                                                                                                 </p>
@@ -669,7 +669,7 @@
 
                                                                             </div>
 
-                                                                           <!--  <h4>Asset Code : AS54321</h4> -->
+
 
                                                                             <div class="QrcodeCon" ng-show="qr_img">
 
@@ -1621,7 +1621,33 @@
                 <form name="addAssetTypeForm">
                     <div class="row">
                         <div class="col-md-12 txt-align-center">
-                            <input class="" id="addAssetTypeInput" ng-model="assetType.name"   name="AssetType" type="text" value="" ng-required="true"/>
+                            <input class="" id="addAssetTypeInput" ng-model="assetType.name"   name="AssetType" type="text" value=""  ng-minlength='5'
+                                   ng-maxlength='100' autofocus  ng-pattern="/^[A-Za-z0-9\s]*$/"  ng-required="true"/>
+
+                            <div ng-show="addAssetTypeForm.$submitted || addAssetTypeForm.AssetType.$touched">
+                                <div ng-show="addAssetTypeForm.AssetType.$dirty || addAssetTypeForm.AssetType.$invalid">
+                                    <p class="help-block" style="color:#ff0000"
+                                       ng-show="addAssetTypeForm.AssetType.$error.required">
+                                        Asset type is required.
+                                    </p>
+                                    <p class="help-block" style="color:maroon"
+                                       ng-show="addAssetTypeForm.AssetType.$error.minlength">
+                                        Asset type is required to be at least 5 character.
+                                    </p>
+                                    <p class="help-block" style="color:maroon"
+                                       ng-show="addAssetTypeForm.AssetType.$error.maxlength">
+                                        Asset type cannot be longer than 250 characters.
+                                    </p>
+                                    <p class="help-block" style="color:maroon"
+                                       ng-show="addAssetTypeForm.AssetType.$error.pattern">
+                                        asset type can only contain letters, digits and space.
+                                    </p>
+                                </div>
+                            </div>
+
+
+
+
                             <input type="submit" ng-click="addAssetType()" data-dismiss="modal" class="btn btn-success" name="add" value="Add" ng-disabled="addAssetTypeForm.$invalid">
                         </div>
                     </div>
