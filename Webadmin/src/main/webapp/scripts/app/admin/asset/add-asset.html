@@ -110,11 +110,21 @@
 		                                                                              <div class="form-group selectcon is-empty" ng-init="loadAssetType()">
                                                                                         <div class="row">
     		                                                                                <div class="col-md-10 pad-r-0px">
-                                                                                                <label class="control-label">Type</label>
+                                                                                                <label class="control-label">Type <span class="red-star">*</span></label>
                                                                                                 <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-    		                                                                                    <select class="form-control" ng-model="selectedAssetType" ng-options="assetype as assetype.name for assetype in assetTypes">
+    		                                                                                    <select class="form-control" ng-model="selectedAssetType" ng-options="assetype as assetype.name for assetype in assetTypes" name="AssetType" required>
     		                                                                                        <option value="">Select Asset Type ..</option>
     		                                                                                    </select>
+
+                                                                                                        <div ng-show="form.$submitted || form.AssetType.$touched">
+                                                                                                    <div ng-show="form.AssetType.$dirty || form.AssetType.$invalid">
+                                                                                                        <p class="help-block" style="color:maroon"
+                                                                                                           ng-show="form.AssetType.$error.required">
+                                                                                                            Asset Type is required.
+                                                                                                        </p>
+                                                                                                        
+                                                                                                    </div>
+                                                                                                </div>
     		                                                                                </div>
     		                                                                                <div class="col-md-2 pdng-top25">
     		                                                                                    <!-- <a href="javascript:void(0)"  data-toggle="collapse" data-parent="#accordian" data-target="#addAssetType" class="btn btn-round btn-fab btn-fab-mini btn-simple" aria-expanded="false" aria-controls="collapseExample">
