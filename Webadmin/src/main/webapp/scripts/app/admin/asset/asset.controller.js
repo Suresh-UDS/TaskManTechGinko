@@ -38,6 +38,8 @@ angular.module('timeSheetApp')
         $scope.selectedConfigUnit = null;
 
         $scope.asset = {};
+
+        $scope.assetDetail = {};
        
         $scope.parameterConfig = {};
 
@@ -285,11 +287,13 @@ angular.module('timeSheetApp')
         $scope.initMaterialWizard();
 
         $scope.editAsset = function(){
-            //alert("Muthu");
+             //alert($stateParams.id);
+            console.log($stateParams.id);
         	$scope.loadAssetType();
         	AssetComponent.findById($stateParams.id).then(function(data){
+
         		$scope.asset=data;
-        		console.log("asset list",$scope.asset);
+        		
         		/*if($scope.asset.assetType) {
         			$scope.assetConfig = {};
         			$scope.assetConfig.assetTypeName = $scope.asset.assetType;
@@ -305,31 +309,7 @@ angular.module('timeSheetApp')
         	})
         }
 
-        $scope.assetConfig=function(){
-            
-             $scope.assetConfig = {};
-
-             alert($scope.asset.assetType);
-
-            if($stateParams.id){ 
-               
-                $scope.assetConfig.assetTypeName = $scope.asset.name;
-                $scope.assetConfig.assetId = $stateParams.id;
-            }
-            else if($scope.assetGen.id){
-               
-                $scope.assetConfig.assetTypeName = $scope.selectedAssetType.name;
-                $scope.assetConfig.assetId = $scope.assetGen.id;
-            }  
-    
-                    AssetComponent.findByAssetConfig($scope.assetConfig).then(function(data){
-                        console.log(data);
-                        $scope.assetParameters = data;
-                    });
-
-                
-        }
-
+        
         
        
 
@@ -464,8 +444,34 @@ angular.module('timeSheetApp')
             AssetComponent.findById(assetId).then(function(data){
                 console.log("Asset details List==" + JSON.stringify(data));
                 $scope.assetDetail= data;
+                $scope.assetConfig();
+
             });
         }
+
+        $scope.assetConfig=function(){
+
+
+             
+            if($stateParams.id){ 
+               
+                $scope.assetConfig.assetTypeName = $scope.assetDetail.name;
+                $scope.assetConfig.assetId = $stateParams.id;
+            }
+            else if($scope.assetGen.id){
+               
+                $scope.assetConfig.assetTypeName = $scope.selectedAssetType.name;
+                $scope.assetConfig.assetId = $scope.assetGen.id;
+            }  
+    
+                    AssetComponent.findByAssetConfig($scope.assetConfig).then(function(data){
+                        console.log(data);
+                        $scope.assetParameters = data;
+                    });
+
+                
+        }
+
 
         $('input#acquiredDate').on('dp.change', function(e){
                 $scope.assetGen.acquiredDate = e.date._d;
