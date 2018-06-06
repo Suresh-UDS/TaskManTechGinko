@@ -630,6 +630,8 @@ public class AssetManagementService extends AbstractService {
 		// TODO Auto-generated method stub
 		AssetParameterConfig assetParamConfig = mapperUtil.toEntity(assetParamConfigDTO, AssetParameterConfig.class);
 		assetParamConfig.setActive(AssetParameterConfig.ACTIVE_YES);
+		Asset asset = assetRepository.findOne(assetParamConfigDTO.getAssetId());
+		assetParamConfig.setAsset(asset);
 		assetParamConfig = assetParamConfigRepository.save(assetParamConfig);
 		assetParamConfigDTO = mapperUtil.toModel(assetParamConfig, AssetParameterConfigDTO.class);
 		return assetParamConfigDTO;
@@ -686,6 +688,21 @@ public class AssetManagementService extends AbstractService {
 
 	}
 
+	/**
+	 * Returns a list of asset AMC schedule information for the given asset Id.
+	 * 
+	 * @param assetId
+	 * @return
+	 */
+	public List<AssetPpmScheduleDTO> getAssetPPMSchedule(Long assetId) {
+		List<AssetPpmScheduleDTO> assetPpmScheduleDTOs = null;
+		List<AssetPPMSchedule> assetPPMSchedules = assetPpmScheduleRepository.findAssetPPMScheduleByAssetId(assetId);
+		if (CollectionUtils.isNotEmpty(assetPPMSchedules)) {
+			assetPpmScheduleDTOs = mapperUtil.toModelList(assetPPMSchedules, AssetPpmScheduleDTO.class);
+		}
+		return assetPpmScheduleDTOs;
+	}
+	
 	@Transactional
 	public AssetDocumentDTO uploadFile(AssetDocumentDTO assetDocumentDTO, MultipartFile file) {
 		// TODO Auto-generated method stub
@@ -709,6 +726,16 @@ public class AssetManagementService extends AbstractService {
 		// TODO Auto-generated method stub
 		List<AssetDocument> assetDocument = assetDocumentRepository.findAllByType(type, assetId);
 		return mapperUtil.toModelList(assetDocument, AssetDocumentDTO.class);
+	}
+	
+	public byte[] getUploadedFile(long documentId) {
+		AssetDocument assetDocument = assetDocumentRepository.findOne(documentId);
+		String fileName = assetDocument.getFile();
+		Asset assetEntity = assetRepository.findOne(assetDocument.getAsset().getId());
+		Long siteId = assetEntity.getSite().getId();
+		String code = assetEntity.getCode();
+		return exportUtil.readUploadedFile(siteId, fileName, code);
+		 
 	}
 
 }
