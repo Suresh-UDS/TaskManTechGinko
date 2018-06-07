@@ -62,8 +62,8 @@ export class AssetView {
       this.getTickets(this.searchCriteria);
 
       this.getAssetById();
-      // this.getAssetPPMSchedule();
-      // this.getAssetAMCSchedule();
+      this.getAssetPPMSchedule();
+      this.getAssetAMCSchedule();
   }
 
     getReadings(){
