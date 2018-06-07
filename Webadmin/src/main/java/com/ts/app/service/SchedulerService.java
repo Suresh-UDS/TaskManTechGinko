@@ -388,6 +388,7 @@ public class SchedulerService extends AbstractService {
 
 	// @Scheduled(initialDelay = 60000,fixedRate = 900000) //Runs every 15 mins
 	@Scheduled(cron = "0 0 20 1/1 * ?")
+	@Transactional
 	public void endOfDayReportSchedule() {
 		if (env.getProperty("scheduler.eodJobReport.enabled").equalsIgnoreCase("true")) {
 			Calendar cal = Calendar.getInstance();
@@ -776,6 +777,7 @@ public class SchedulerService extends AbstractService {
 	}
 
 	@Scheduled(cron="0 15 * * * ?") // runs every 1 hr
+	@Transactional
 	public void attendanceCheckOutTask() {
 		Calendar currCal = Calendar.getInstance();
 		Calendar startCal = Calendar.getInstance();
