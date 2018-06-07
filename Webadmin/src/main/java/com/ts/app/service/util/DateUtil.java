@@ -100,4 +100,11 @@ public class DateUtil {
         return convertToDateTime(strDate, strtime);
 
 	}
+	
+	public static String formatToDateString(Date date) {
+        DateFormat dtFormat = new SimpleDateFormat("dd-MMM-yyyy");
+        String strDate = dtFormat.format(date);
+        return strDate;
+
+	}
 }
