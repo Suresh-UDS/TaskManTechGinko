@@ -293,6 +293,10 @@ angular.module('timeSheetApp')
         	AssetComponent.findById($stateParams.id).then(function(data){
 
         		$scope.asset=data;
+                
+                $scope.selectedAssetType ={name:$scope.asset.assetTypeName};
+                $scope.selectedAssetGroup ={assetgroup:$scope.asset.assetGroupName};
+                $scope.selectedSite ={name:$scope.asset.siteName};
         		
         		/*if($scope.asset.assetType) {
         			$scope.assetConfig = {};
@@ -350,34 +354,27 @@ angular.module('timeSheetApp')
 
         $scope.search = function () {
 
-            var currPageVal = ($scope.pages ? $scope.pages.currPage : 1);
-
-          if(!$scope.searchCriteria) {
-
+           var currPageVal = ($scope.pages ? $scope.pages.currPage : 1);
+            if(!$scope.searchCriteria) {
                 var searchCriteria = {
-                    currPage : currPageVal
-                }
-
+                        currPage : currPageVal
+                };
                 $scope.searchCriteria = searchCriteria;
-
             }
 
             $scope.searchCriteria.currPage = currPageVal;
+            $scope.searchCriteria.findAll = false;
 
             console.log('Selected Assets' + $scope.selectedLocation);
 
-            if(!$scope.selectedAsset) {
-                if($rootScope.searchCriteriaAssets) {
-                    $scope.searchCriteria = $rootScope.searchCriteriaAssets;
-                }else {
+            if(!$scope.selectedAsset.id) {
+            
                     $scope.searchCriteria.findAll = true;
-                }
 
             }else{
 
-                if($scope.selectedAsset) {
+                if($scope.selectedAsset.id) {
 
-                    $scope.searchCriteria.findAll = false;
                     $scope.searchCriteria.assetId = $scope.selectedAsset.id;
 
                 }
@@ -405,7 +402,7 @@ angular.module('timeSheetApp')
                 $scope.loadPageTop();
 
             AssetComponent.search($scope.searchCriteria).then(function (data) {
-                $scope.assets = data;
+                $scope.assets = data.transactions;
                 $scope.assetsLoader = true;
 
                 /*
@@ -441,6 +438,7 @@ angular.module('timeSheetApp')
         $scope.viewAsset = function(){
 
             var assetId = $stateParams.id;
+             $scope.assetDetail= {};
 
             AssetComponent.findById(assetId).then(function(data){
                 console.log("Asset details List==" + JSON.stringify(data));
