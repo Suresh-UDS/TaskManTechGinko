@@ -61,8 +61,13 @@ angular.module('timeSheetApp')
                     return response.data;
                 });
             },
-            search: function() {
+            /*search: function() {
                 return $http.post('api/assets/search').then(function (response) {
+                    return response.data;
+                });
+            },*/
+            search: function(searchCriteria) {
+                return $http.post('api/asset/search',searchCriteria).then(function (response) {
                     return response.data;
                 });
             },
