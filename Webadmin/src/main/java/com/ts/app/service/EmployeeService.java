@@ -646,6 +646,7 @@ public class    EmployeeService extends AbstractService {
                     log.debug("Employee checked in "+result.size());
                     employeeDTO.setCheckedIn(true);
                     employeeDTO.setNotCheckedOut(attendanceDTO.isNotCheckedOut());
+                    employeeDTO.setAttendanceId(attendanceDTO.getId());
                 }else{
                     log.debug("Employee checked false "+result.size());
                     employeeDTO.setCheckedIn(false);

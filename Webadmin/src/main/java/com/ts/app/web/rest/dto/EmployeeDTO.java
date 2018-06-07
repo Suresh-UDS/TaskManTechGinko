@@ -87,6 +87,8 @@ public class EmployeeDTO extends BaseDTO {
 
 	private String userRoleName;
 
+	private long attendanceId;
+
 	public long getId() {
 		return id;
 	}
@@ -375,5 +377,13 @@ public class EmployeeDTO extends BaseDTO {
 
     public void setNotCheckedOut(boolean notCheckedOut) {
         this.notCheckedOut = notCheckedOut;
+    }
+
+    public long getAttendanceId() {
+        return attendanceId;
+    }
+
+    public void setAttendanceId(long attendanceId) {
+        this.attendanceId = attendanceId;
     }
 }
