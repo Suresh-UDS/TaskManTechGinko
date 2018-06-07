@@ -77,11 +77,13 @@ export class AssetView {
         {
             this.getJobs(this.searchCriteria);
             refresher.complete();
+            // this.componentService.showLoader("");
         }
         else if(segment=='tickets')
         {
             this.getTickets(this.searchCriteria);
             refresher.complete()
+            // this.componentService.showLoader("");
         }
     }
     getJobs(searchCriteria)
@@ -89,18 +91,18 @@ export class AssetView {
         // var searchCriteria={
         //     assetId:this.assetDetails.id
         // }
-
         this.jobService.getJobs(searchCriteria).subscribe(
             response=>{
-                this.componentService.closeLoader()
+                this.componentService.closeLoader();
                 console.log("Getting Jobs response");
                 console.log(response);
                 this.assetDetails.jobs=response.transactions;
                 this.page = response.currPage;
                 this.totalPages = response.totalPages;
+                console.log(this.assetDetails.jobs)
             },
             error=>{
-                this.componentService.closeLoader()
+                this.componentService.closeLoader();
                 console.log(error)
                 console.log("Getting Jobs errors")
             })
@@ -147,7 +149,6 @@ export class AssetView {
     }
     getTickets(searchCriteria)
     {
-
         this.jobService.searchTickets(searchCriteria).subscribe(
             response=>{
                 this.componentService.closeLoader()
@@ -156,7 +157,7 @@ export class AssetView {
                 this.assetDetails.tickets=response.transactions;
             },
             error=>{
-                this.componentService.closeLoader();
+                this.componentService.closeLoader()
                 console.log(error)
                 console.log("Getting Ticket errors")
             }
@@ -284,6 +285,7 @@ export class AssetView {
     }
 
     getAssetConfig(assetDetails){
+
         this.assetService.getAssetConfig(assetDetails.type,assetDetails.id).subscribe(
             response=>{
                 console.log("Asset config");
@@ -329,11 +331,13 @@ export class AssetView {
     {
         this.assetService.getAssetAMCSchedule(this.assetDetails.id).subscribe(
             response=>{
+                this.componentService.closeLoader()
                 console.log("Get asset AMC response");
                 console.log(response);
                 this.assetDetails.amcs = response;
             },
             error=>{
+                this.componentService.closeLoader()
                 console.log("Get asset AMC error");
                 console.log(error);
             }
