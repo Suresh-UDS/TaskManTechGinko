@@ -17,7 +17,7 @@ angular.module('timeSheetApp')
         $scope.searchCriteria = {};
         $scope.pages = { currPage : 1};
         $scope.isEdit = !!$stateParams.id;
-        $scope.selectedAsset = null;
+        $scope.selectedAsset = {};
         $scope.selectedProject = {};
         $scope.selectedSite = {};
         $scope.selectedBlock = null;
@@ -664,7 +664,7 @@ angular.module('timeSheetApp')
 
 
         $scope.clearFilter = function() {
-            $scope.selectedAsset = null;
+            $scope.selectedAsset = {};
             $scope.selectedProject = null;
             $scope.searchCriteria = {};
             $scope.selectedSite = null;
