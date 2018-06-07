@@ -82,6 +82,8 @@ import {SelectFeedbackPage} from "../pages/feedback/select-feedback";
 
 import {FeedbackZone} from "../pages/feedback/feedbackZone";
 import {Splash} from "../pages/splash/splash";
+import {SplashLogo} from "../pages/splash-logo/splash-logo";
+
 
 import {InitFeedbackZone} from "../pages/feedback/init-feedback-zone";
 import {WizardFeedbackEntry} from "../pages/feedback/wizard-feedback-entry";
@@ -171,6 +173,7 @@ import {JobFilter} from "../pages/jobs/job-filter/job-filter";
       JobFilter,
       TicketFilter,
       Splash,
+      SplashLogo,
       EmployeeFilter,
   ],
   imports: [
@@ -252,6 +255,7 @@ import {JobFilter} from "../pages/jobs/job-filter/job-filter";
       EmployeeFilter,
       GetAssetReading,
       Splash,
+      SplashLogo,
     ScanQR,
   ],
   providers: [

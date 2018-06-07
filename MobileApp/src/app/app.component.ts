@@ -25,6 +25,7 @@ import {FeedbackPage} from "../pages/feedback/feedback";
 import {InitFeedbackPage} from "../pages/feedback/init-feedback";
 import {AppVersion} from "@ionic-native/app-version";
 import {Splash} from "../pages/splash/splash";
+import {SplashLogo} from "../pages/splash-logo/splash-logo";
 
 import{OneSignal} from "@ionic-native/onesignal";
 import {componentService} from "../pages/service/componentService";
@@ -102,6 +103,7 @@ export class MyApp {
       { title: 'Quotation', component: QuotationPage,active:false,icon:'receipt',permission:'QuotationList'},
        { title: 'Feedback', component: InitFeedbackPage,active:false,icon:'feedback',permission:'FeedbackList'},
         {title:'Splash page', component:Splash,active:false,icon:'feedback'},
+        {title:'Splash logo', component:SplashLogo,active:false,icon:'feedback'},
       // { title: 'Reports', component: ReportsPage,active:false,icon:'trending_up'},
       // { title: 'Logout', component: LogoutPage,active:false,icon:'power_settings_new'}
     ];

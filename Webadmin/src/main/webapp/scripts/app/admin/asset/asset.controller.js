@@ -293,6 +293,36 @@ angular.module('timeSheetApp')
         	AssetComponent.findById($stateParams.id).then(function(data){
 
         		$scope.asset=data;
+
+                console.log("Edit Asset--",$scope.asset);
+
+                $scope.selectedAssetType ={name:$scope.asset.assetTypeName};
+                $scope.selectedAssetGroup ={assetgroup:$scope.asset.assetGroupName};
+                $scope.selectedSite ={name:$scope.asset.siteName};
+                $scope.selectedBlock = $scope.asset.block;
+                $scope.selectedFloor = $scope.asset.floor;
+                $scope.selectedZone = $scope.asset.zone;
+                $scope.selectedManufacturer = {name:$scope.asset.manufacturerName};
+                $scope.selectedVendor = {id:$scope.asset.vendorId};
+                if($scope.asset.siteId){   
+                        LocationComponent.findBlocks(0,$scope.asset.siteId).then(function (data) {
+                        $scope.selectedBlock = null;
+                        $scope.blocks = data;
+                         console.log("Loading all blocks -- " ,  $scope.blocks);
+                    });
+               
+                       LocationComponent.findFloors(0,$scope.asset.siteId,$scope.asset.block).then(function (data) {
+                        $scope.selectedFloor = null;
+                        $scope.floors = data;
+                        console.log("Loading all floors -- " ,  $scope.floors);
+                    });
+
+                       LocationComponent.findZones(0,$scope.asset.siteId,$scope.asset.block,$scope.asset.floor).then(function (data) {
+                        $scope.selectedZone = null;
+                        $scope.zones = data;
+                        console.log('zones list',$scope.zones);
+                   });
+                }
         		
         		/*if($scope.asset.assetType) {
         			$scope.assetConfig = {};
@@ -350,34 +380,27 @@ angular.module('timeSheetApp')
 
         $scope.search = function () {
 
-            var currPageVal = ($scope.pages ? $scope.pages.currPage : 1);
-
-          if(!$scope.searchCriteria) {
-
+           var currPageVal = ($scope.pages ? $scope.pages.currPage : 1);
+            if(!$scope.searchCriteria) {
                 var searchCriteria = {
-                    currPage : currPageVal
-                }
-
+                        currPage : currPageVal
+                };
                 $scope.searchCriteria = searchCriteria;
-
             }
 
             $scope.searchCriteria.currPage = currPageVal;
+            $scope.searchCriteria.findAll = false;
 
             console.log('Selected Assets' + $scope.selectedLocation);
 
-            if(!$scope.selectedAsset) {
-                if($rootScope.searchCriteriaAssets) {
-                    $scope.searchCriteria = $rootScope.searchCriteriaAssets;
-                }else {
+            if(!$scope.selectedAsset.id) {
+            
                     $scope.searchCriteria.findAll = true;
-                }
 
             }else{
 
-                if($scope.selectedAsset) {
+                if($scope.selectedAsset.id) {
 
-                    $scope.searchCriteria.findAll = false;
                     $scope.searchCriteria.assetId = $scope.selectedAsset.id;
 
                 }
@@ -405,7 +428,7 @@ angular.module('timeSheetApp')
                 $scope.loadPageTop();
 
             AssetComponent.search($scope.searchCriteria).then(function (data) {
-                $scope.assets = data;
+                $scope.assets = data.transactions;
                 $scope.assetsLoader = true;
 
                 /*
@@ -441,6 +464,7 @@ angular.module('timeSheetApp')
         $scope.viewAsset = function(){
 
             var assetId = $stateParams.id;
+             $scope.assetDetail= {};
 
             AssetComponent.findById(assetId).then(function(data){
                 console.log("Asset details List==" + JSON.stringify(data));

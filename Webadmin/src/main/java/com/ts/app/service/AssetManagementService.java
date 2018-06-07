@@ -213,7 +213,7 @@ public class AssetManagementService extends AbstractService {
 	}
 
 	public List<AssetDTO> findAllAssets() {
-		log.debug("get all assets");
+		log.debug(">>> get all assets");
 		List<Asset> assets = assetRepository.findAll();
 		List<AssetDTO> assetDto = new ArrayList<>();
 		for (Asset loc : assets) {
@@ -548,6 +548,22 @@ public class AssetManagementService extends AbstractService {
 		assetDTO.setCode(asset.getCode());
 		assetDTO.setSiteId(asset.getSite().getId());
 		assetDTO.setSiteName(asset.getSite().getName());
+		assetDTO.setAssetType(asset.getAssetType());
+		assetDTO.setAssetGroup(asset.getAssetGroup());
+		
+		log.debug(">>> Asset Type " + assetDTO.getAssetType() +" Manufacture "+assetDTO.getManufacturerName() + " Vendor " + assetDTO.getAmcVendorName());
+		log.debug("Asset Group ...  " + assetDTO.getAssetGroup());
+		
+		AssetType assetType = assetTypeRepository.findOne(Long.valueOf(assetDTO.getAssetType()));
+		assetDTO.setAssetTypeName(assetType.getName());
+		
+		log.debug("Asset Type Name  " + assetDTO.getAssetTypeName());
+
+		AssetGroup assetGroup = assetGroupRepository.findOne(Long.valueOf(assetDTO.getAssetGroup()));
+		assetDTO.setAssetGroupName(assetGroup.getAssetgroup());
+		
+		log.debug("Asset Group Name  " + assetDTO.getAssetGroupName());
+
 		return assetDTO;
 	}
 
