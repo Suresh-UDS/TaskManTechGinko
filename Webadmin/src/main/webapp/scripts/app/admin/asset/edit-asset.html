@@ -266,7 +266,7 @@
                                                                                 <label class="control-label">Floor </label>
                                                                                 <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
                                                                                 <select class="form-control " ng-model="selectedFloor" ng-options="floor for floor in floors" name="AssetFloor" ng-change="loadZones()" >
-                                                                                    <option value="">Please select Floor ...</option>
+                                                                                    <option value="">Select Floor ...</option>
                                                                                 </select>
                                                                             </div>
                                                                         </div>
@@ -304,7 +304,7 @@
                                                                                     <div class="col-md-10 pad-r-0px">
                                                                                         <label class="control-label">Manufacturer </label>
                                                                                         <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                                                                        <select class="form-control ng-pristine ng-valid ng-touched" ng-model="selectedManufacturer" ng-options="manufacturer as manufacturer.name for manufacturer in manufacturers">
+                                                                                        <select class="form-control ng-pristine ng-valid ng-touched" ng-model="selectedManufacturer" ng-options="manufacturer as manufacturer.name for manufacturer in manufacturers track by manufacturer.name">
                                                                                             <option value="">Select Manufacturer ..</option>
                                                                                         </select>
 
@@ -499,7 +499,7 @@
                                                                                     <div class="col-md-10 pad-r-0px">
                                                                                         <label class="control-label">Vendor </label>
                                                                                         <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                                                                        <select class="form-control ng-pristine ng-valid ng-touched" ng-model="selectedVendor" ng-options="vendor as vendor.name for vendor in vendors">
+                                                                                        <select class="form-control ng-pristine ng-valid ng-touched" ng-model="selectedVendor" ng-options="vendor as vendor.name for vendor in vendors track by vendor.id">
                                                                                             <option value="">Select Vendor ..</option>
                                                                                         </select>
 

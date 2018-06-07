@@ -293,10 +293,36 @@ angular.module('timeSheetApp')
         	AssetComponent.findById($stateParams.id).then(function(data){
 
         		$scope.asset=data;
-                
+
+                console.log("Edit Asset--",$scope.asset);
+
                 $scope.selectedAssetType ={name:$scope.asset.assetTypeName};
                 $scope.selectedAssetGroup ={assetgroup:$scope.asset.assetGroupName};
                 $scope.selectedSite ={name:$scope.asset.siteName};
+                $scope.selectedBlock = $scope.asset.block;
+                $scope.selectedFloor = $scope.asset.floor;
+                $scope.selectedZone = $scope.asset.zone;
+                $scope.selectedManufacturer = {name:$scope.asset.manufacturerName};
+                $scope.selectedVendor = {id:$scope.asset.vendorId};
+                if($scope.asset.siteId){   
+                        LocationComponent.findBlocks(0,$scope.asset.siteId).then(function (data) {
+                        $scope.selectedBlock = null;
+                        $scope.blocks = data;
+                         console.log("Loading all blocks -- " ,  $scope.blocks);
+                    });
+               
+                       LocationComponent.findFloors(0,$scope.asset.siteId,$scope.asset.block).then(function (data) {
+                        $scope.selectedFloor = null;
+                        $scope.floors = data;
+                        console.log("Loading all floors -- " ,  $scope.floors);
+                    });
+
+                       LocationComponent.findZones(0,$scope.asset.siteId,$scope.asset.block,$scope.asset.floor).then(function (data) {
+                        $scope.selectedZone = null;
+                        $scope.zones = data;
+                        console.log('zones list',$scope.zones);
+                   });
+                }
         		
         		/*if($scope.asset.assetType) {
         			$scope.assetConfig = {};
