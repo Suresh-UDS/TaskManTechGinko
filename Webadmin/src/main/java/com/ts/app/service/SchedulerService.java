@@ -555,15 +555,14 @@ public class SchedulerService extends AbstractService {
 		}
 	}
 	
-	//@Scheduled(cron = "0 0 0/1 * * ?")
-	@Transactional
+	@Scheduled(cron = "0 0 0/1 * * ?")
 	public void attendanceShiftReportSchedule() {
 		Calendar cal = Calendar.getInstance();
 		generateDetailedAttendanceReport(cal.getTime(), true, false);
 	}
 
 
-	@Scheduled(cron = "0 15 * 1/1 * ?") // send detailed attendance report
+	@Scheduled(cron = "0 0 7 1/1 * ?") // send detailed attendance report
 	public void attendanceDetailReportSchedule() {
 		Calendar cal = Calendar.getInstance();
 		cal.set(Calendar.DAY_OF_MONTH, -1);
