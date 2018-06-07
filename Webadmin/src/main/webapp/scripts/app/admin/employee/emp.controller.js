@@ -809,7 +809,7 @@ angular.module('timeSheetApp')
             EmployeeComponent.getAttendance(id).then(function(data) {
                 console.log("Attendance Data");
                 console.log(data);
-                if (data[0]) {
+                if (data && data[0]) {
                     console.log("Already checked in");
                     $('#noticeModal').modal('hide');
                     var msg = 'Attendance already marked ' + data[0].employeeFullName + ' at site ' + data[0].siteName;
