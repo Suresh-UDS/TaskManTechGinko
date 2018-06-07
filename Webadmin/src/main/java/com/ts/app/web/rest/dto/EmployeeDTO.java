@@ -86,6 +86,8 @@ public class EmployeeDTO extends BaseDTO {
 	private long userRoleId;
 
 	private String userRoleName;
+	
+	private boolean client;
 
 	public long getId() {
 		return id;
@@ -376,4 +378,14 @@ public class EmployeeDTO extends BaseDTO {
     public void setNotCheckedOut(boolean notCheckedOut) {
         this.notCheckedOut = notCheckedOut;
     }
+
+	public boolean isClient() {
+		return client;
+	}
+
+	public void setClient(boolean client) {
+		this.client = client;
+	}
+    
+    
 }
