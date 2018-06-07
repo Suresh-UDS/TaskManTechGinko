@@ -1,4 +1,4 @@
-<div class="crud-form" ng-init="editAsset();initLoad();loadingStart();"
+<div class="crud-form" ng-init="editAsset();initLoad();loadingStart();assetConfig();"
 	data-unique-hash="a2ad475d60b22954085c657a73309b8f">
 	<div class="">
 		<div class="row">
@@ -77,7 +77,7 @@
 
                                                                         <div class="col-md-12">
                                                                             <div class="form-group">
-                                                                                <label class="control-label">Name</label>
+                                                                                <label class="control-label">Title<span class="red-star">*</span></label>
                                                                                 <input id='assetName'
                                                                                        ng-model="asset.title"
                                                                                        class='form-control'
@@ -632,7 +632,7 @@
 
                                                                     <div class="form-group is-empty">
                                                                         <label class="control-label">Asset Code </label>
-                                                                        <input id="assetcode" ng-model="asset.assetcode" class="form-control" name="assetcode" type="text" value="" ng-minlength="5" ng-maxlength="250" ng-pattern="/^[A-Za-z0-9\s]*$/" autofocus="" required="" tabindex="0" aria-required="true" aria-invalid="true" autocomplete="off">
+                                                                        <input id="assetcode" ng-model="asset.assetCode" class="form-control" name="assetcode" type="text" value="" ng-minlength="5" ng-maxlength="250" ng-pattern="/^[A-Za-z0-9\s]*$/" autofocus="" required="" tabindex="0" aria-required="true" aria-invalid="true" autocomplete="off">
 
 
 
@@ -648,11 +648,11 @@
 
                                                                     </div>
 
-                                                                    <h4>Asset Code : AS54321</h4>
+                                                                    <h4>{{asset.assetCode}}</h4>
 
-                                                                    <div class="QrcodeCon">
+                                                                    <div class="QrcodeCon" ng-show="qr_img">
 
-                                                                        <img src="../../../../assets/img/qr-code.png" width="70%">
+                                                                        <img src="{{qr_img}}" width="100%">
 
                                                                     </div>
 
@@ -1692,7 +1692,7 @@
                                     <div class="col-md-12" style="text-align:right;">
 
                                         <button class="btn btn-success" type="submit"
-                                                id="form-button-save" ng-disabled="form.$invalid">
+                                                id="form-button-save" ng-disabled="form.$invalid" ng-click="updateAsset();">
                                             <span class="btn-label">
                                             <i class="material-icons">check</i>
                                         </span> Update
