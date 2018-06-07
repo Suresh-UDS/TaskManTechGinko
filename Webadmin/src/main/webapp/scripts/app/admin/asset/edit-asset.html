@@ -632,11 +632,27 @@
 
                                                                     <div class="form-group is-empty">
                                                                         <label class="control-label">Asset Code </label>
-                                                                        <input id="assetcode" ng-model="asset.assetCode" class="form-control" name="assetcode" type="text" value="" ng-minlength="5" ng-maxlength="250" ng-pattern="/^[A-Za-z0-9\s]*$/" autofocus="" required="" tabindex="0" aria-required="true" aria-invalid="true" autocomplete="off">
+                                                                        <input id="assetcode" ng-model="asset.assetCode" class="form-control" name="assetcode" type="text" value="" ng-minlength="1" ng-maxlength="10" ng-pattern="/^[A-Za-z0-9]*$/" autofocus="" required="" tabindex="0" aria-required="true" aria-invalid="true" autocomplete="off">
 
 
 
-                                                                        <span class="material-input"></span>
+                                                                        <div ng-show="form2.$submitted || form2.assetcode.$touched">
+                                                                            <div ng-show="form2.assetcode.$dirty || form2.assetcode.$invalid">
+                                                                                <p class="help-block" style="color:maroon"
+                                                                                   ng-show="form2.assetcode.$error.required">
+                                                                                    Asset code is required.
+                                                                                </p>
+                                                                                
+                                                                                <p class="help-block" style="color:maroon;background-color:#fff;z-index:2000;"
+                                                                                   ng-show="form2.assetcode.$error.maxlength">
+                                                                                    Asset code cannot be longer than 10 characters.
+                                                                                </p>
+                                                                                <p class="help-block" style="color:maroon;"
+                                                                                   ng-show="form2.assetcode.$error.pattern">
+                                                                                    Asset code can only contain letters, digits.
+                                                                                </p>
+                                                                            </div>
+                                                                        </div>
 
                                                                     </div>
 
