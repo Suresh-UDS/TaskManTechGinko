@@ -125,6 +125,40 @@ button.button-md-primary p.siteName
 
 }
 
+.bg-orange
+{
+
+  .scroll-content
+  {
+    background: color($colors, primary) !important;
+
+    .SplashLoader
+    {
+      height: 100%;
+      display: flex;
+      img
+      {
+        margin:0 auto;
+      }
+    }
+
+  }
+
+}
+.bg-white
+{
+  .LogoTop
+  {
+    text-align: center;
+    padding-top: 70px;
+  }
+  .SplashLoader
+  {
+    text-align: center;
+    padding-top: 20px;
+  }
+}
+
 // Margin Adjus
 
 .margin-top5
