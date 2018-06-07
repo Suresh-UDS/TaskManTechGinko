@@ -208,6 +208,7 @@ public class ExportUtil {
 	}
 
 	// @Async
+	@org.springframework.transaction.annotation.Transactional
 	public ExportResult writeJobReportToFile(List<Job> content, ExportResult result) {
 		List<JobDTO> jobs = new ArrayList<JobDTO>();
 		for (Job job : content) {
