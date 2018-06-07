@@ -554,7 +554,7 @@ public class SchedulerService extends AbstractService {
 		}
 	}
 	
-	@Scheduled(cron = "0 0 0/1 * * ?")
+	//@Scheduled(cron = "0 0 0/1 * * ?")
 	@Transactional
 	public void attendanceShiftReportSchedule() {
 		Calendar cal = Calendar.getInstance();
@@ -562,7 +562,7 @@ public class SchedulerService extends AbstractService {
 	}
 
 
-	@Scheduled(cron = "0 0 7 1/1 * ?") // send detailed attendance report
+	@Scheduled(cron = "0 15 * 1/1 * ?") // send detailed attendance report
 	@Transactional
 	public void attendanceDetailReportSchedule() {
 		Calendar cal = Calendar.getInstance();
@@ -570,6 +570,7 @@ public class SchedulerService extends AbstractService {
 		generateDetailedAttendanceReport(cal.getTime(), false, true);
 	}
 	
+	@Transactional
 	public void generateDetailedAttendanceReport(Date date, boolean shiftAlert, boolean dayReport) {
 		if (env.getProperty("scheduler.attendanceDetailReport.enabled").equalsIgnoreCase("true")) {
 			Calendar cal = Calendar.getInstance();
