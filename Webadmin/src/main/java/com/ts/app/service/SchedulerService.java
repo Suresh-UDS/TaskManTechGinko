@@ -388,6 +388,7 @@ public class SchedulerService extends AbstractService {
 
 	// @Scheduled(initialDelay = 60000,fixedRate = 900000) //Runs every 15 mins
 	@Scheduled(cron = "0 0 20 1/1 * ?")
+	@Transactional
 	public void endOfDayReportSchedule() {
 		if (env.getProperty("scheduler.eodJobReport.enabled").equalsIgnoreCase("true")) {
 			Calendar cal = Calendar.getInstance();
@@ -446,6 +447,7 @@ public class SchedulerService extends AbstractService {
 	// @Scheduled(initialDelay = 60000,fixedRate = 300000) //run every 5 mins for
 	// testing
 	//@Scheduled(cron = "0 0 0/1 * * ?")
+	@Transactional
 	public void attendanceReportSchedule() {
 		if (env.getProperty("scheduler.attendanceDetailReport.enabled").equalsIgnoreCase("true")) {
 			Calendar cal = Calendar.getInstance();
@@ -567,6 +569,7 @@ public class SchedulerService extends AbstractService {
 		generateDetailedAttendanceReport(cal.getTime(), false, true);
 	}
 	
+	@Transactional
 	public void generateDetailedAttendanceReport(Date date, boolean shiftAlert, boolean dayReport) {
 		if (env.getProperty("scheduler.attendanceDetailReport.enabled").equalsIgnoreCase("true")) {
 			Calendar cal = Calendar.getInstance();
@@ -594,6 +597,7 @@ public class SchedulerService extends AbstractService {
 				sc.setProjectId(proj.getId());
 				// SearchResult<AttendanceDTO> searchResults =
 				// attendanceService.findBySearchCrieria(sc);
+				Hibernate.initialize(proj.getSite());
 				Set<Site> sites = proj.getSite();
 				Iterator<Site> siteItr = sites.iterator();
 				List<Setting> settings = settingRepository.findSettingByKeyAndProjectId(SettingsService.EMAIL_NOTIFICATION_ATTENDANCE, proj.getId());
@@ -770,8 +774,13 @@ public class SchedulerService extends AbstractService {
 		}
 	}
 
-	@Scheduled(cron="0 0 0/1 * * ?") // runs every 1 hr
+	@Scheduled(cron="0 30 * * * ?") // runs every 1 hr
 	public void attendanceCheckOutTask() {
+		autoCheckOutAttendance();
+	}
+	
+	@Transactional
+	private void autoCheckOutAttendance() {
 		Calendar currCal = Calendar.getInstance();
 		Calendar startCal = Calendar.getInstance();
 		startCal.set(Calendar.HOUR_OF_DAY, 0);
@@ -793,8 +802,10 @@ public class SchedulerService extends AbstractService {
 		if (CollectionUtils.isNotEmpty(dailyAttnList)) {
 			for (Attendance dailyAttn : dailyAttnList) {
 				try {
+					Hibernate.initialize(dailyAttn.getEmployee());
 					Employee emp = dailyAttn.getEmployee();
 					if (emp != null) {
+						Hibernate.initialize(emp.getProjectSites());
 						List<EmployeeProjectSite> projSites = emp.getProjectSites();
 						for (EmployeeProjectSite projSite : projSites) {
 							Site site = projSite.getSite();
@@ -803,7 +814,7 @@ public class SchedulerService extends AbstractService {
 								String startTime = shift.getStartTime();
 								String[] startTimeUnits = startTime.split(":");
 								Calendar shiftStartCal = Calendar.getInstance();
-								shiftStartCal.add(Calendar.DAY_OF_MONTH, -1);
+								//shiftStartCal.add(Calendar.DAY_OF_MONTH, -1);
 								shiftStartCal.set(Calendar.HOUR_OF_DAY, Integer.parseInt(startTimeUnits[0]));
 								shiftStartCal.set(Calendar.MINUTE, Integer.parseInt(startTimeUnits[1]));
 								shiftStartCal.set(Calendar.SECOND, 0);
@@ -811,18 +822,20 @@ public class SchedulerService extends AbstractService {
 								String endTime = shift.getEndTime();
 								String[] endTimeUnits = endTime.split(":");
 								Calendar shiftEndCal = Calendar.getInstance();
-								shiftEndCal.add(Calendar.DAY_OF_MONTH, -1);
+								//shiftEndCal.add(Calendar.DAY_OF_MONTH, -1);
 								shiftEndCal.set(Calendar.HOUR_OF_DAY, Integer.parseInt(endTimeUnits[0]));
 								shiftEndCal.set(Calendar.MINUTE, Integer.parseInt(endTimeUnits[1]));
 								shiftEndCal.set(Calendar.SECOND, 0);
 								shiftEndCal.set(Calendar.MILLISECOND, 0);
-
-								EmployeeShift empShift = empShiftRepo.findEmployeeShiftBySiteAndShift(site.getId(), DateUtil.convertToSQLDate(shiftStartCal.getTime()),
-										DateUtil.convertToSQLDate(shiftEndCal.getTime()));
-
+								log.debug("site - "+ site.getId());
+								log.debug("shift start time - "+ DateUtil.convertToTimestamp(shiftStartCal.getTime()));
+								log.debug("shift end time - "+ DateUtil.convertToTimestamp(shiftEndCal.getTime()));
+								EmployeeShift empShift = empShiftRepo.findEmployeeShiftBySiteAndShift(site.getId(), DateUtil.convertToTimestamp(shiftStartCal.getTime()),
+										DateUtil.convertToTimestamp(shiftEndCal.getTime()));
+								log.debug("EmpShift - "+ empShift);
 								Calendar checkInCal = Calendar.getInstance();
 								checkInCal.setTimeInMillis(dailyAttn.getCheckInTime().getTime());
-
+								log.debug("checkin cal - "+ checkInCal.getTime());
 								if (empShift != null) { // if employee shift assignment matches with site shift
 									if (checkInCal.before(shiftEndCal.getTime()) && shiftEndCal.getTime().before(currCal.getTime())) { // if the employee checked in before the
 																																		// shift end time
@@ -847,17 +860,15 @@ public class SchedulerService extends AbstractService {
 										break;
 									}
 								} else {
-									if (currCal.getTime().after(endCal.getTime())) {
+									if (checkInCal.before(prevDayEndCal.getTime()) && currCal.getTime().after(prevDayEndCal.getTime())) {
+										dailyAttn.setNotCheckedOut(true); // mark the attendance as not checked out.
 										// send email notifications
 										Map<String, Object> values = new HashMap<String, Object>();
 										values.put("checkInTime", checkInCal.getTime());
 										values.put("site", site.getName());
 										mailService.sendAttendanceCheckouAlertEmail(emp.getEmail(), values);
 										break;
-									} else if (currCal.getTime().after(prevDayEndCal.getTime())) {
-										dailyAttn.setNotCheckedOut(true); // mark the attendance as not checked out.
-										attendanceRepository.save(dailyAttn);
-									}
+									} 
 								}
 							}
 						}

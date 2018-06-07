@@ -146,6 +146,9 @@ public class    EmployeeService extends AbstractService {
 
     @Inject
     private AttendanceService attendanceService;
+    
+    @Inject
+    private UserRoleService userRoleService;
 
 	@Inject
 	private Environment env;
@@ -218,7 +221,12 @@ public class    EmployeeService extends AbstractService {
 					loc.setEmployee(employee);
 				}
 			}
-
+			if(employeeDto.getUserRoleId() > 0) {
+				UserRoleDTO userRoleDTO = userRoleService.findOne(employeeDto.getUserRoleId());
+				if(userRoleDTO.getName().startsWith("Client")) {
+					employee.setClient(true); //mark the employee as client employee
+				}
+			}	
 			employee = employeeRepository.save(employee);
 			//create user if opted.
 			if(employeeDto.isCreateUser() && employeeDto.getUserRoleId() > 0) {
@@ -233,6 +241,7 @@ public class    EmployeeService extends AbstractService {
 				user.setEmployeeId(employee.getId());
 				user.setActivated(true);
 				userService.createUserInformation(user);
+				
 			}
 
 			log.debug("Created Information for Employee: {}", employee);
@@ -319,6 +328,13 @@ public class    EmployeeService extends AbstractService {
 			user.setEmail(employeeUpdate.getEmail());
 		}
 		employeeUpdate.setUser(user);
+		if(employee.getUserRoleId() > 0) {
+			UserRoleDTO userRoleDTO = userRoleService.findOne(employee.getUserRoleId());
+			if(userRoleDTO.getName().startsWith("Client")) {
+				employee.setClient(true); //mark the employee as client employee
+			}
+		}	
+		
 		employeeRepository.saveAndFlush(employeeUpdate);
 		employee = mapperUtil.toModel(employeeUpdate, EmployeeDTO.class);
 		return employee;
@@ -807,86 +823,61 @@ public class    EmployeeService extends AbstractService {
 			java.sql.Date toDate = DateUtil.convertToSQLDate(DateUtil.convertUTCToIST(endCal));
 
 			log.debug("findBySearchCriteria - "+searchCriteria.getSiteId() +", "+searchCriteria.getEmployeeId() +", "+searchCriteria.getProjectId());
+			
+			boolean isClient = false; 
+			
+			if(user != null && user.getUserRole() != null) {
+				isClient = user.getUserRole().getName().equalsIgnoreCase(UserRoleEnum.ADMIN.toValue());
+			}
+			
 			if((searchCriteria.getSiteId() != 0 && searchCriteria.getProjectId() != 0)) {
 				if(searchCriteria.getFromDate() != null) {
-					page = employeeRepository.findBySiteIdAndProjectId(searchCriteria.getProjectId(), searchCriteria.getSiteId(),startDate, toDate, pageRequest);
+					page = employeeRepository.findBySiteIdAndProjectId(searchCriteria.getProjectId(), searchCriteria.getSiteId(),startDate, toDate, isClient, pageRequest);
 				}else if(StringUtils.isNotEmpty(searchCriteria.getName())) {
-					page = employeeRepository.findByProjectSiteAndEmployeeName(searchCriteria.getProjectId(), searchCriteria.getSiteId(), searchCriteria.getName(), pageRequest);
+					page = employeeRepository.findByProjectSiteAndEmployeeName(searchCriteria.getProjectId(), searchCriteria.getSiteId(), searchCriteria.getName(), isClient, pageRequest);
 				}else {
-					page = employeeRepository.findBySiteIdAndProjectId(searchCriteria.getProjectId(), searchCriteria.getSiteId(), pageRequest);
+					page = employeeRepository.findBySiteIdAndProjectId(searchCriteria.getProjectId(), searchCriteria.getSiteId(), isClient, pageRequest);
 				}
 			}else if(searchCriteria.getSiteId() != 0 && StringUtils.isNotEmpty(searchCriteria.getName())) {
 				List<String> empIds = new ArrayList<String>();
 				empIds.add(searchCriteria.getEmployeeEmpId());
-				page = employeeRepository.findByProjectSiteAndEmployeeName(searchCriteria.getProjectId(), searchCriteria.getSiteId(), searchCriteria.getName(), pageRequest);;
+				page = employeeRepository.findByProjectSiteAndEmployeeName(searchCriteria.getProjectId(), searchCriteria.getSiteId(), searchCriteria.getName(), isClient, pageRequest);;
 			}else if(searchCriteria.getProjectId() != 0 && StringUtils.isNotEmpty(searchCriteria.getName())) {
 				List<String> empIds = new ArrayList<String>();
 				empIds.add(searchCriteria.getEmployeeEmpId());
-				page = employeeRepository.findByProjectAndEmployeeName(searchCriteria.getProjectId(), searchCriteria.getName(), pageRequest);;
+				page = employeeRepository.findByProjectAndEmployeeName(searchCriteria.getProjectId(), searchCriteria.getName(), isClient, pageRequest);;
 			}else if(StringUtils.isNotEmpty(searchCriteria.getEmployeeEmpId())) {
 				List<String> empIds = new ArrayList<String>();
 				empIds.add(searchCriteria.getEmployeeEmpId());
-				page = employeeRepository.findAllByEmpCodes(empIds, pageRequest);
+				page = employeeRepository.findAllByEmpCodes(empIds, isClient, pageRequest);
 			}
 			else if(StringUtils.isNotEmpty(searchCriteria.getName())) {
-				page = employeeRepository.findByEmployeeName(searchCriteria.getName(), pageRequest);
+				page = employeeRepository.findByEmployeeName(searchCriteria.getName(), isClient, pageRequest);
 			}else if (StringUtils.isNotEmpty(searchCriteria.getEmployeeEmpId())) {
 				log.debug(">>> find empid from service <<<");
-				page = employeeRepository.findEmployeeId(String.valueOf(searchCriteria.getEmployeeId()), pageRequest);
+				page = employeeRepository.findEmployeeId(String.valueOf(searchCriteria.getEmployeeId()), isClient, pageRequest);
 			}
-//			else if((searchCriteria.getSiteId() != 0 && searchCriteria.getEmployeeId() != 0)) {
-//				log.debug("findBySearchCriteria - "+searchCriteria.getSiteId() +", "+searchCriteria.getEmployeeId() +", "+searchCriteria.getProjectId());
-//				if(searchCriteria.getFromDate() != null) {
-//					page = employeeRepository.findEmployeesByIdAndSiteIdOrProjectId(searchCriteria.getEmployeeId(), searchCriteria.getProjectId(), searchCriteria.getSiteId(), startDate, toDate, pageRequest);
-//				}else {
-//					page = employeeRepository.findEmployeesByIdAndSiteIdOrProjectId(searchCriteria.getEmployeeId(), searchCriteria.getProjectId(), searchCriteria.getSiteId(), pageRequest);
-//				}
-//			}else if((searchCriteria.getEmployeeId() != 0 && searchCriteria.getProjectId() != 0)) {
-//				if(searchCriteria.getFromDate() != null) {
-//					page = employeeRepository.findEmployeesByIdAndProjectIdOrSiteId(searchCriteria.getEmployeeId(), searchCriteria.getProjectId(), searchCriteria.getSiteId(), startDate, toDate, pageRequest);
-//				}else {
-//					page = employeeRepository.findEmployeesByIdAndProjectIdOrSiteId(searchCriteria.getEmployeeId(), searchCriteria.getProjectId(), searchCriteria.getSiteId(), pageRequest);
-//				}
-//			}else if (searchCriteria.getEmployeeId() != 0 && searchCriteria.getProjectId() != 0 && searchCriteria.getSiteId() != 0) {
-//				if(searchCriteria.getFromDate() != null) {
-//					page = employeeRepository.findEmployeesByIdAndSiteIdAndProjectId(searchCriteria.getEmployeeId(), searchCriteria.getProjectId(), searchCriteria.getSiteId(), startDate, toDate,pageRequest);
-//				}else {
-//					page = employeeRepository.findEmployeesByIdAndSiteIdAndProjectId(searchCriteria.getEmployeeId(), searchCriteria.getProjectId(), searchCriteria.getSiteId(), pageRequest);
-//				}
-//            }else if (searchCriteria.getEmployeeId() != 0) {
-//			    page = employeeRepository.findByEmployeeId(searchCriteria.getEmployeeId(),pageRequest);
-//            	//page = employeeRepository.findEmployeesByIdOrSiteIdAndProjectId(searchCriteria.getEmployeeId(), searchCriteria.getProjectId(), searchCriteria.getSiteId(), userGroupId, pageRequest);
-//            }
+
             else if (searchCriteria.getProjectId() != 0) {
             		if(searchCriteria.getFromDate() != null) {
-            			page = employeeRepository.findEmployeesByIdAndSiteIdOrProjectId(searchCriteria.getEmployeeId(), searchCriteria.getProjectId(), searchCriteria.getSiteId(), startDate, toDate, pageRequest);
+            			page = employeeRepository.findEmployeesByIdAndSiteIdOrProjectId(searchCriteria.getEmployeeId(), searchCriteria.getProjectId(), searchCriteria.getSiteId(), startDate, toDate, isClient, pageRequest);
             		}else {
-            			page = employeeRepository.findEmployeesByIdAndSiteIdOrProjectId(searchCriteria.getEmployeeId(), searchCriteria.getProjectId(), searchCriteria.getSiteId(), pageRequest);
+            			page = employeeRepository.findEmployeesByIdAndSiteIdOrProjectId(searchCriteria.getEmployeeId(), searchCriteria.getProjectId(), searchCriteria.getSiteId(), isClient, pageRequest);
             		}
             }else if (searchCriteria.getSiteId() != 0) {
             		if(searchCriteria.getFromDate() != null) {
-            			page = employeeRepository.findEmployeesByIdAndProjectIdOrSiteId(searchCriteria.getEmployeeId(), searchCriteria.getProjectId(), searchCriteria.getSiteId(), startDate, toDate, pageRequest);
+            			page = employeeRepository.findEmployeesByIdAndProjectIdOrSiteId(searchCriteria.getEmployeeId(), searchCriteria.getProjectId(), searchCriteria.getSiteId(), startDate, toDate, isClient, pageRequest);
             		}else {
-            			page = employeeRepository.findEmployeesByIdAndProjectIdOrSiteId(searchCriteria.getEmployeeId(), searchCriteria.getProjectId(), searchCriteria.getSiteId(), pageRequest);
+            			page = employeeRepository.findEmployeesByIdAndProjectIdOrSiteId(searchCriteria.getEmployeeId(), searchCriteria.getProjectId(), searchCriteria.getSiteId(), isClient, pageRequest);
             		}
             }else if (StringUtils.isNotEmpty(searchCriteria.getSiteName())) {
 	        		List<Long> subEmpIds = null;
 	        		subEmpIds = findAllSubordinates(user.getEmployee(), subEmpIds);
-	        		page = employeeRepository.findBySiteName(searchCriteria.getSiteName(), subEmpIds, pageRequest);
+	        		page = employeeRepository.findBySiteName(searchCriteria.getSiteName(), subEmpIds, isClient, pageRequest);
             }else if (StringUtils.isNotEmpty(searchCriteria.getProjectName())) {
 	        		List<Long> subEmpIds = null;
 	        		subEmpIds = findAllSubordinates(user.getEmployee(), subEmpIds);
-	        		page = employeeRepository.findByProjectName(searchCriteria.getProjectName(), subEmpIds, pageRequest);
-//	        }
-//            else if(StringUtils.isNotEmpty(searchCriteria.getColumnName())){
-//		        	if(searchCriteria.isSortByAsc() == true){
-//		        		Pageable pageable = createPageSort(searchCriteria.getCurrPage(), 10, orderByASC(searchCriteria.getColumnName()));
-//			        	page = employeeRepository.findByOrder(pageable);
-//		        	}else if(searchCriteria.isSortByAsc() == false){
-//		        		Pageable pageable = createPageSort(searchCriteria.getCurrPage(), 10, orderByDESC(searchCriteria.getColumnName()));
-//			        	page = employeeRepository.findByOrder(pageable);
-//		        	}
-
+	        		page = employeeRepository.findByProjectName(searchCriteria.getProjectName(), subEmpIds, isClient, pageRequest);
 	        }else {
 	            	if(user.getUserRole().getName().equalsIgnoreCase(UserRoleEnum.ADMIN.toValue())) {
 	            		page = employeeRepository.findAll(pageRequest);
@@ -897,12 +888,12 @@ public class    EmployeeService extends AbstractService {
 	            			for(EmployeeProjectSite projSite : projectSites) {
 	            				siteIds.add(projSite.getSite().getId());
 	            			}
-	            			page = employeeRepository.findBySiteIds(siteIds, pageRequest);
+	            			page = employeeRepository.findBySiteIds(siteIds, isClient, pageRequest);
 	            		}else {
 		            		List<Long> subEmpIds = null;
 		            		subEmpIds = findAllSubordinates(user.getEmployee(), subEmpIds);
 						if(CollectionUtils.isNotEmpty(subEmpIds)) {
-		            			page = employeeRepository.findAllByEmpIds(subEmpIds, pageRequest);
+		            			page = employeeRepository.findAllByEmpIds(subEmpIds, isClient, pageRequest);
 						}
 	            		}
 	            	}
@@ -1010,6 +1001,7 @@ public class    EmployeeService extends AbstractService {
     		empDto.setRelieved(employee.isRelieved());
     		empDto.setProjectName(CollectionUtils.isNotEmpty(employee.getProjectSites()) ? employee.getProjectSites().get(0).getProject().getName() : "");
     		empDto.setSiteName(CollectionUtils.isNotEmpty(employee.getProjectSites()) ? employee.getProjectSites().get(0).getSite().getName() : "");
+    		empDto.setClient(employee.isClient());
     		return empDto;
     }
 

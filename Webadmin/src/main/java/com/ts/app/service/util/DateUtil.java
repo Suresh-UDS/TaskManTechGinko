@@ -54,6 +54,7 @@ public class DateUtil {
 		return sqlDate;
 	}
 	
+	
 	public static Date convertToDateTime(String date, String time) {
         DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Date dateTime = null;
@@ -97,6 +98,13 @@ public class DateUtil {
         String strtime = timeFormat.format(time);
         
         return convertToDateTime(strDate, strtime);
+
+	}
+	
+	public static String formatToDateString(Date date) {
+        DateFormat dtFormat = new SimpleDateFormat("dd-MMM-yyyy");
+        String strDate = dtFormat.format(date);
+        return strDate;
 
 	}
 }

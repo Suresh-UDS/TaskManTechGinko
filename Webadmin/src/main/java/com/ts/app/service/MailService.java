@@ -28,6 +28,7 @@ import org.thymeleaf.spring4.SpringTemplateEngine;
 
 import com.ts.app.config.JHipsterProperties;
 import com.ts.app.domain.User;
+import com.ts.app.service.util.DateUtil;
 import com.ts.app.service.util.Sendgrid;
 import com.ts.app.web.rest.dto.UserDTO;
 
@@ -219,7 +220,7 @@ public class MailService {
         Context context = new Context(locale);
         context.setVariable("baseUrl", baseUrl);
         //context.setVariable("fileName",file);
-        context.setVariable("date", currDate);
+        context.setVariable("date", DateUtil.formatToDateString(currDate));
         context.setVariable("reportData", reportData);
         String content = templateEngine.process("attendanceConsolidatedReportEmail", context);
         String subject = messageSource.getMessage("email.attendance.report.title", null, locale);
@@ -234,7 +235,7 @@ public class MailService {
         Context context = new Context(locale);
         context.setVariable("baseUrl", baseUrl);
         context.setVariable("fileName",file);
-        context.setVariable("date", currDate);
+        context.setVariable("date", DateUtil.formatToDateString(currDate));
         context.setVariable("reportData", reportData);
         String content = templateEngine.process("attendanceDetailedReportEmail", context);
         String subject = messageSource.getMessage("email.attendance.detailed.report.title", null, locale);
@@ -249,7 +250,7 @@ public class MailService {
         Context context = new Context(locale);
         context.setVariable("baseUrl", baseUrl);
         context.setVariable("fileName",file);
-        context.setVariable("date", currDate);
+        context.setVariable("date", DateUtil.formatToDateString(currDate));
         String content = templateEngine.process("jobReportEmail", context);
         String subject = messageSource.getMessage("email.report.title", null, locale);
         String fileName = file;

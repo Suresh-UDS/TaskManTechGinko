@@ -16,6 +16,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 import javax.inject.Inject;
+import javax.transaction.Transactional;
 
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVPrinter;
@@ -26,6 +27,7 @@ import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.hibernate.Hibernate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.env.Environment;
@@ -44,6 +46,7 @@ import com.ts.app.web.rest.dto.ReportResult;
 import com.ts.app.web.rest.dto.TicketDTO;
 
 @Component
+@Transactional
 public class ExportUtil {
 
 	private static final Logger log = LoggerFactory.getLogger(ExportUtil.class);
@@ -205,12 +208,15 @@ public class ExportUtil {
 	}
 
 	// @Async
+	@org.springframework.transaction.annotation.Transactional
 	public ExportResult writeJobReportToFile(List<Job> content, ExportResult result) {
 		List<JobDTO> jobs = new ArrayList<JobDTO>();
 		for (Job job : content) {
 			JobDTO jobDto = new JobDTO();
+			Hibernate.initialize(job.getSite());
 			jobDto.setSiteName(job.getSite().getName());
 			jobDto.setTitle(job.getTitle());
+			Hibernate.initialize(job.getEmployee());
 			jobDto.setEmployeeName(job.getEmployee().getName());
 			jobDto.setJobType(job.getType());
 			jobDto.setPlannedStartTime(job.getPlannedStartTime());
