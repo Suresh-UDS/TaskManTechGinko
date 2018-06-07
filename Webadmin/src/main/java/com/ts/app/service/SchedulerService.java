@@ -564,7 +564,6 @@ public class SchedulerService extends AbstractService {
 
 
 	@Scheduled(cron = "0 15 * 1/1 * ?") // send detailed attendance report
-	@Transactional
 	public void attendanceDetailReportSchedule() {
 		Calendar cal = Calendar.getInstance();
 		cal.set(Calendar.DAY_OF_MONTH, -1);
@@ -777,8 +776,12 @@ public class SchedulerService extends AbstractService {
 	}
 
 	@Scheduled(cron="0 15 * * * ?") // runs every 1 hr
-	@Transactional
 	public void attendanceCheckOutTask() {
+		autoCheckOutAttendance();
+	}
+	
+	@Transactional
+	private void autoCheckOutAttendance() {
 		Calendar currCal = Calendar.getInstance();
 		Calendar startCal = Calendar.getInstance();
 		startCal.set(Calendar.HOUR_OF_DAY, 0);
@@ -800,6 +803,7 @@ public class SchedulerService extends AbstractService {
 		if (CollectionUtils.isNotEmpty(dailyAttnList)) {
 			for (Attendance dailyAttn : dailyAttnList) {
 				try {
+					Hibernate.initialize(dailyAttn.getEmployee());
 					Employee emp = dailyAttn.getEmployee();
 					if (emp != null) {
 						Hibernate.initialize(emp.getProjectSites());
