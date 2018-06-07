@@ -669,14 +669,14 @@ angular.module('timeSheetApp')
         }
 
         $scope.deleteConfirm = function (asset){
-        	$scope.deleteAssetId= asset.id;
+        	$scope.deleteAssetId= asset;
         }
 
         $scope.deleteAsset = function () {
         	AssetComponent.remove($scope.deleteAssetId).then(function(){
-
+                
             	$scope.success = 'OK';
-            	$state.reload();
+            	$scope.loadAssets();
         	});
         };
 
