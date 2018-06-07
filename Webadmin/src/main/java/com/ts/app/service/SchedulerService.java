@@ -774,7 +774,7 @@ public class SchedulerService extends AbstractService {
 		}
 	}
 
-	@Scheduled(cron="0 15 * * * ?") // runs every 1 hr
+	@Scheduled(cron="0 30 * * * ?") // runs every 1 hr
 	public void attendanceCheckOutTask() {
 		autoCheckOutAttendance();
 	}
