@@ -860,17 +860,15 @@ public class SchedulerService extends AbstractService {
 										break;
 									}
 								} else {
-									if (currCal.getTime().after(endCal.getTime())) {
+									if (checkInCal.before(prevDayEndCal.getTime()) && currCal.getTime().after(prevDayEndCal.getTime())) {
+										dailyAttn.setNotCheckedOut(true); // mark the attendance as not checked out.
 										// send email notifications
 										Map<String, Object> values = new HashMap<String, Object>();
 										values.put("checkInTime", checkInCal.getTime());
 										values.put("site", site.getName());
 										mailService.sendAttendanceCheckouAlertEmail(emp.getEmail(), values);
 										break;
-									} else if (currCal.getTime().after(prevDayEndCal.getTime())) {
-										dailyAttn.setNotCheckedOut(true); // mark the attendance as not checked out.
-										attendanceRepository.save(dailyAttn);
-									}
+									} 
 								}
 							}
 						}
