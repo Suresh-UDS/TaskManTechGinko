@@ -113,7 +113,7 @@ angular.module('timeSheetApp')
             
 
             findByAssetConfig : function(data) { 
-            	return $http.get('api/assets/config/', data).then(function (response) { 
+            	return $http.get('api/assets/config', data).then(function (response) { 
             		return response.data;
             	});
             },
