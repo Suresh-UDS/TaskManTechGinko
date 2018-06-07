@@ -113,9 +113,7 @@ angular.module('timeSheetApp')
             
 
             findByAssetConfig : function(data) { 
-            	var type = data.assetTypeName;
-            	var id = data.assetId;
-            	return $http.get('api/assets/'+type+'/config/'+id).then(function (response) { 
+            	return $http.get('api/assets/config/', data).then(function (response) { 
             		return response.data;
             	});
             },
