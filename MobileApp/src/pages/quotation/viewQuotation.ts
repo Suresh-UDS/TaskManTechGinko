@@ -62,7 +62,11 @@ export class ViewQuotationPage {
 
 
     sendQuotation(quotation){
-        this.quotationService.createQuotation(quotation).subscribe(
+        var selectedQuotation = quotation;
+        selectedQuotation.isSubmitted = true;
+        selectedQuotation.submitted = true;
+        selectedQuotation.mode="edit";
+        this.quotationService.createQuotation(selectedQuotation).subscribe(
             response=>{
                 console.log(response);
                 this.componentService.showToastMessage('Quotation Sent Successfully','bottom');
@@ -75,9 +79,8 @@ export class ViewQuotationPage {
     }
 
     approveQuotation(quotation){
-        this.quotationService.approveQuotation(this.quotation).subscribe(
+        this.quotationService.approveQuotation(quotation).subscribe(
             response=>{
-                console.log(response);
                 this.componentService.showToastMessage('Quotation Approved','bottom');
                 this.navCtrl.setRoot(QuotationPage);
             },err=>{

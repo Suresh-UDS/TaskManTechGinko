@@ -17,7 +17,6 @@ import {EmployeeService} from "../service/employeeService";
  * Ionic pages and navigation.
  */
 
-@IonicPage()
 @Component({
   selector: 'page-login',
   templateUrl: 'login.html',
@@ -85,7 +84,8 @@ export class LoginPage {
               var employee = response.json().employee;
 
               if (response.status == 200) {
-                this.navCtrl.setRoot(TabsPage);
+                  window.location.reload()
+                  this.navCtrl.setRoot(TabsPage);
                 this.component.closeLoader();
               }
 

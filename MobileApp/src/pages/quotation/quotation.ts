@@ -90,24 +90,19 @@ export class QuotationPage {
               this.quotations = response;
               console.log(this.quotations)
               for(var i=0; i<this.quotations.length;i++){
-                  if(this.quotations[i].isDrafted == true){
+                  if(this.quotations[i].status=="pending"){
                       console.log("drafted");
-                      console.log(this.quotations[i].isDrafted)
+                      console.log(this.quotations[i].status)
                       this.draftedQuotationsCount++;
                       this.draftedQuotations.push(this.quotations[i]);
-                  }else if(this.quotations[i].isArchived == true){
-                      console.log("archived");
-                      console.log(this.quotations[i].isArchived)
-                      this.archivedQuotations.push(this.quotations[i]);
-                      this.archivedQuotationsCount++;
-                  }else if(this.quotations[i].isApproved == true){
+                  }else if(this.quotations[i].status == "approved" || this.quotations[i].status == "rejected"){
                       console.log("approved");
                       console.log(this.quotations[i].isApproved)
                       this.approvedQuotations.push(this.quotations[i]);
                       this.approvedQuotationsCount++;
-                  }else if(this.quotations[i].isSubmitted == true){
+                  }else if(this.quotations[i].status == "Waiting for approval"){
                       console.log("submitted");
-                      console.log(this.quotations[i].isSubmitted)
+                      console.log(this.quotations[i].status)
                       this.submittedQuotations.push(this.quotations[i]);
                       this.submittedQuotationsCount++;
                   }else{
