@@ -499,8 +499,13 @@ angular.module('timeSheetApp')
         $scope.assetConfig=function(){
              
             if($stateParams.id){ 
-               
+               if($scope.assetDetail.assetType){
+                 $scope.assetConfigs.assetType = $scope.assetDetail.assetType;  
+               }
+               else if($scope.assetList.assetType){
                 $scope.assetConfigs.assetType = $scope.assetList.assetType;
+               }
+                
 
                 $scope.assetConfigs.assetId = $stateParams.id;
             }
