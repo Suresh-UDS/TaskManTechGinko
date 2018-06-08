@@ -1101,6 +1101,8 @@ angular.module('timeSheetApp')
 	    	});
 	    }
 	    
+	    $scope.amcScheduleList = [];
+	    
 	    
 	    $scope.saveAmcSchedule = function() { 
 	    	console.log($scope.selectedChecklist);
@@ -1124,8 +1126,15 @@ angular.module('timeSheetApp')
 	    	
 	    	AssetComponent.saveAmcSchedule($scope.amcSchedule).then(function(data){  
 	    		console.log(data);
+	    		if(data && data.checklistId) { 
+	    			console.log(data.checklistId);
+	    			$scope.amcScheduleList.push(data);
+	    			ChecklistComponent.findOne(data.checklistId).then(function(data){ 
+	    				$scope.checklistItms = data.items;
+	    				console.log($scope.checklistItms);
+	    			});
+	    		}
 	    	});
-	    	
 	    	
 	    }
 	    

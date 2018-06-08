@@ -452,7 +452,7 @@ public class AssetManagementService extends AbstractService {
 
 		AssetAMCSchedule assetAMC = mapperUtil.toEntity(assetAMCScheduleDTO, AssetAMCSchedule.class);
 
-		assetAMC.setActive(Asset.ACTIVE_YES);
+		assetAMC.setActive(AssetAMCSchedule.ACTIVE_YES);
 
 		List<AssetAMCSchedule> existingSchedules = assetRepository.findAssetAMCScheduleByTitle(assetAMCScheduleDTO.getTitle());
 		log.debug("Existing schedule -" + existingSchedules);
