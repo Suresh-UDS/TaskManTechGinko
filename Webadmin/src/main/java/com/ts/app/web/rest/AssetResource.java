@@ -65,7 +65,7 @@ public class AssetResource {
 	@Timed
 	public ResponseEntity<?> saveAsset(@Valid @RequestBody AssetDTO assetDTO, HttpServletRequest request) {
 		log.debug(">>> Asset DTO save request <<<");
-
+		
 		AssetDTO response = assetService.saveAsset(assetDTO);
 		log.debug("Asset new id - " + response.getId());
 		return new ResponseEntity<>(response, HttpStatus.CREATED);

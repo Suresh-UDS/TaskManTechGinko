@@ -568,19 +568,6 @@ public class AssetManagementService extends AbstractService {
 		assetDTO.setAssetType(asset.getAssetType());
 		assetDTO.setAssetGroup(asset.getAssetGroup());
 
-		log.debug(">>> Asset Type " + assetDTO.getAssetType() + " Manufacture " + assetDTO.getManufacturerName() + " Vendor " + assetDTO.getAmcVendorName());
-		log.debug("Asset Group ...  " + assetDTO.getAssetGroup());
-
-		AssetType assetType = assetTypeRepository.findOne(Long.valueOf(assetDTO.getAssetType()));
-		assetDTO.setAssetTypeName(assetType.getName());
-
-		log.debug("Asset Type Name  " + assetDTO.getAssetTypeName());
-
-		AssetGroup assetGroup = assetGroupRepository.findOne(Long.valueOf(assetDTO.getAssetGroup()));
-		assetDTO.setAssetGroupName(assetGroup.getAssetgroup());
-
-		log.debug("Asset Group Name  " + assetDTO.getAssetGroupName());
-
 		return assetDTO;
 	}
 
