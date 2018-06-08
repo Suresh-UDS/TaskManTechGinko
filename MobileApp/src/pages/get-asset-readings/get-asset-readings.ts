@@ -24,6 +24,7 @@ export class GetAssetReadings {
     dateTime:any;
     takenImages:any;
     uom:any;
+    assetConfig:any;
     constructor(public navCtrl: NavController, public navParams: NavParams, public modalController: ModalController,
                 public componentService:componentService, public popoverCtrl:PopoverController, public camera:Camera,
                 public assetService:AssetService) {
@@ -34,6 +35,7 @@ export class GetAssetReadings {
     }
     ionViewDidLoad(){
         console.log("Get Asset reading page");
+        this. getAssetConfig();
     }
 
     submitReading(){
@@ -96,6 +98,17 @@ export class GetAssetReadings {
     }
 
     getAssetConfig(){
+        console.log(this.assetDetails.config);
+        this.assetService.getAssetConfig(this.assetDetails.assetType,this.assetDetails.id).subscribe(
+            response=>{
+                console.log("Get Asset config");
+                console.log(response);
+                this.assetConfig= response;
+
+            },err=>{
+                console.log("Error in getting asset config");
+                console.log(err);
+            })
 
     }
 }
