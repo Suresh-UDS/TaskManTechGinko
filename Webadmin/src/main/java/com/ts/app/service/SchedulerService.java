@@ -555,7 +555,7 @@ public class SchedulerService extends AbstractService {
 		}
 	}
 	
-	@Scheduled(cron = "0 0 0/1 * * ?")
+	@Scheduled(cron = "0 30 * * * ?")
 	public void attendanceShiftReportSchedule() {
 		Calendar cal = Calendar.getInstance();
 		generateDetailedAttendanceReport(cal.getTime(), true, false);
@@ -565,7 +565,7 @@ public class SchedulerService extends AbstractService {
 	@Scheduled(cron = "0 0 7 1/1 * ?") // send detailed attendance report
 	public void attendanceDetailReportSchedule() {
 		Calendar cal = Calendar.getInstance();
-		cal.set(Calendar.DAY_OF_MONTH, -1);
+		cal.add(Calendar.DAY_OF_MONTH, -1);
 		generateDetailedAttendanceReport(cal.getTime(), false, true);
 	}
 	
@@ -677,7 +677,7 @@ public class SchedulerService extends AbstractService {
 								projPresent += attendanceCount;
 								projAbsent += absentCount;
 								consolidatedData.add(data);
-								if (shiftAlert && timeDiff >= 3600000 && timeDiff < 7200000) { // within 2 hours of the shift start timing.)
+								if (shiftAlert && timeDiff >= 1800000 && timeDiff < 3200000) { // within 1 hour of the shift start timing.)
 									shiftAlert = true;
 								}else {
 									shiftAlert = false;
@@ -767,10 +767,10 @@ public class SchedulerService extends AbstractService {
 					content.append("Present - " + projPresent + LINE_SEPARATOR);
 					content.append("Absent - " + (projEmpCnt - projPresent) + LINE_SEPARATOR);
 
-					ExportResult exportResult = null;
-					exportResult = exportUtil.writeAttendanceReportToFile(proj.getName(), empAttnList, consolidatedData, summaryMap, null, exportResult);
 					// send reports in email.
 					if (attendanceReportEmails != null && projEmployees > 0 && (shiftAlert || dayReport)) {
+						ExportResult exportResult = null;
+						exportResult = exportUtil.writeAttendanceReportToFile(proj.getName(), empAttnList, consolidatedData, summaryMap, null, exportResult);
 						mailService.sendAttendanceDetailedReportEmail(proj.getName(), attendanceReportEmails.getSettingValue(), content.toString(), exportResult.getFile(), null,
 								cal.getTime());
 					}

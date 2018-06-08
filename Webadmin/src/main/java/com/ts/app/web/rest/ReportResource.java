@@ -51,7 +51,7 @@ public class ReportResource {
 	
 	@RequestMapping(value = "/reports/attendance/consolidated", method = RequestMethod.GET)
 	public ResponseEntity<?> sendConsolidatedAttendanceReport() {
-		schedulerService.attendanceReportSchedule();
+		schedulerService.attendanceShiftReportSchedule();
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 	
