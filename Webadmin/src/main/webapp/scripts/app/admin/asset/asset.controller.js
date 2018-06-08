@@ -6,7 +6,7 @@ angular.module('timeSheetApp')
 				function($scope, $rootScope, $state, $timeout, AssetComponent,
 						ProjectComponent,LocationComponent,SiteComponent,EmployeeComponent, $http, $stateParams,
                      	$location,PaginationComponent,AssetTypeComponent,ParameterConfigComponent,ParameterComponent,
-                        ParameterUOMComponent,VendorComponent,ManufacturerComponent,$sce) {
+                        ParameterUOMComponent,VendorComponent,ManufacturerComponent,$sce,ChecklistComponent) {
 
         $rootScope.loadingStop();
         $rootScope.loginView = false;
@@ -479,12 +479,12 @@ angular.module('timeSheetApp')
              
             if($stateParams.id){ 
                
-                $scope.assetConfig.assetTypeName = $scope.assetDetail.name;
+                $scope.assetConfig.assetType = $scope.assetDetail.name;
                 $scope.assetConfig.assetId = $stateParams.id;
             }
             else if($scope.assetGen.id){
                
-                $scope.assetConfig.assetTypeName = $scope.selectedAssetType.name;
+                $scope.assetConfig.assetType = $scope.selectedAssetType.name;
                 $scope.assetConfig.assetId = $scope.assetGen.id;
             }  
     
@@ -1020,6 +1020,57 @@ angular.module('timeSheetApp')
 	    				
 	    		
 	    	});
+	    }
+	    
+	    $scope.amcSchedule = {};
+	    $scope.selectedChecklist;
+	    $scope.selectedFrequencyPrefix;
+	    $scope.selectedFrequency;
+	    $scope.selectedFreqDuration;
+	    
+	    $scope.frequencyPrefixies = ['Every', 'Monthly'];
+	    
+	    $scope.frequencyDurations= [1, 2, 3];
+	    
+	    $scope.frequencies = ['Hour', 'Day', 'Week', 'Fortnight', 'Month', 'Quarter', 'Half', 'Year'];
+	    
+	    $('input#dateFilterAmcFrom').on('dp.change', function(e){
+            $scope.amcSchedule.startDate = e.date._d;
+        });
+        
+        $('input#dateFilterAmcTo').on('dp.change', function(e){
+            $scope.amcSchedule.endDate = e.date._d;
+        });
+	    
+	    $scope.loadCheckList = function() { 
+	    	ChecklistComponent.findAll().then(function(data){ 
+	    		alert(data);
+	    		$scope.checkLists = data;
+	    	});
+	    }
+	    
+	    
+	    $scope.saveAmcSchedule = function() { 
+	    	console.log($scope.selectedChecklist);
+	    	if($scope.selectedChecklist){ 
+	    		$scope.amcSchedule.checklistId = $scope.selectedChecklist.id;
+	    	}
+	    	if($scope.assetGen.id){ 
+	    		$scope.amcSchedule.assetId = $scope.assetGen.id;
+	    	}
+	    	if($scope.selectedFrequencyPrefix) { 
+	    		$scope.amcSchedule.frequencyPrefix = $scope.selectedFrequencyPrefix;
+	    	}
+	    	if($scope.selectedFrequency) { 
+	    		$scope.amcSchedule.frequency = $scope.selectedFrequency;
+	    	}
+	    	if($scope.selectedFreqDuration) { 
+	    		$scope.amcSchedule.frequencyDuration = $scope.selectedFreqDuration;
+	    	}
+	    	
+	    	console.log($scope.amcSchedule);
+	    	
+	    	
 	    }
 
 
