@@ -55,7 +55,7 @@ public class PushService {
 	public void send(long users[],String message) {
 		try {
 		    log.debug("Sending push messages to - "+users[0]);
-			String pushEndpoint = env.getProperty("pushService.url");
+			String pushEndpoint = env.getProperty("pushService.url")+"api/push/send";
 			RestTemplate restTemplate = new RestTemplate();
 			MappingJackson2HttpMessageConverter jsonHttpMessageConverter = new MappingJackson2HttpMessageConverter();
 			jsonHttpMessageConverter.getObjectMapper().configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
@@ -88,7 +88,7 @@ public class PushService {
 
 	public void subscribe(PushRequestDTO pushRequest) {
 		try {
-			String pushEndpoint = env.getProperty("pushService.url");
+			String pushEndpoint = env.getProperty("pushService.url")+"api/push/subscribe";
 			RestTemplate restTemplate = new RestTemplate();
 			MappingJackson2HttpMessageConverter jsonHttpMessageConverter = new MappingJackson2HttpMessageConverter();
 			jsonHttpMessageConverter.getObjectMapper().configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
