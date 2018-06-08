@@ -551,6 +551,15 @@ public class ExportUtil {
 			dataRow.getCell(4).setCellValue(data.get("Absent"));
 		}
 		
+		rowNum++;
+		
+		Row summaryRow = consSheet.getRow(rowNum);
+		summaryRow.getCell(0).setCellValue("Total");
+		summaryRow.getCell(2).setCellValue(summary.get("TotalEmployees"));
+		summaryRow.getCell(3).setCellValue(summary.get("TotalPresent"));
+		summaryRow.getCell(4).setCellValue(summary.get("TotalAbsent"));
+		
+		
 		// create worksheet with title
 		//XSSFSheet xssfSheet = xssfWorkbook.createSheet("ATTENDANCE_DETAILED_REPORT");
 		
