@@ -682,6 +682,7 @@ public class SchedulerService extends AbstractService {
 								}else {
 									shiftAlert = false;
 								}
+								log.debug("Site Name  - "+ site.getName() + ", -shift start time -" + shift.getStartTime() + ", shift end time -" + shift.getEndTime() + ", shift alert -" + shiftAlert);
 								// }
 							}
 						} else {
@@ -766,7 +767,7 @@ public class SchedulerService extends AbstractService {
 					content.append("Total employees - " + projEmpCnt + LINE_SEPARATOR);
 					content.append("Present - " + projPresent + LINE_SEPARATOR);
 					content.append("Absent - " + (projEmpCnt - projPresent) + LINE_SEPARATOR);
-
+					log.debug("Project Name  - "+ proj.getName() + ", shift alert -" + shiftAlert + ", dayReport -" + dayReport);
 					// send reports in email.
 					if (attendanceReportEmails != null && projEmployees > 0 && (shiftAlert || dayReport)) {
 						ExportResult exportResult = null;
