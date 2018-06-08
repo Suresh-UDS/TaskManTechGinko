@@ -3,6 +3,7 @@ package com.ts.app.service;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.EnumSet;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -31,6 +32,9 @@ import com.ts.app.domain.AssetType;
 import com.ts.app.domain.Checklist;
 import com.ts.app.domain.Employee;
 import com.ts.app.domain.EmployeeProjectSite;
+import com.ts.app.domain.Frequency;
+import com.ts.app.domain.FrequencyDuration;
+import com.ts.app.domain.FrequencyPrefix;
 import com.ts.app.domain.Manufacturer;
 import com.ts.app.domain.ParameterConfig;
 import com.ts.app.domain.Project;
@@ -795,6 +799,16 @@ public class AssetManagementService extends AbstractService {
 	public AssetParameterReadingDTO viewReadings(long id) {
 		AssetParameterReading paramReading = assetParamReadingRepository.findOne(id);
 		return mapperUtil.toModel(paramReading, AssetParameterReadingDTO.class);
+	}
+	
+	public Frequency[] getAllType() { 
+		Frequency[] types = Frequency.values();
+		return types;
+	}
+	
+	public FrequencyPrefix[] getAllPrefixs() { 
+		FrequencyPrefix[] prefixs = FrequencyPrefix.values();
+		return prefixs;
 	}
 
 }
