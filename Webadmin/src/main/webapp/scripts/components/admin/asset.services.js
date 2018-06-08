@@ -9,6 +9,7 @@ angular.module('timeSheetApp')
                 return $http.post('api/asset',asset).then(
                     function (response) {
                         //return cb(response);
+                        console.log("Create Asset Service response -- " , response);
                         return response;
                     }).catch(
                     function (err) {
