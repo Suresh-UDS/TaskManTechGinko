@@ -1112,6 +1112,9 @@ demo = {
                         '</div>'+
                         '<div class="form-group">' +
                         '<input type "text" class="form-control" placeholder="DD/MM/YYYY" id="input-tdate" >' +
+                        '</div>'+
+                        '<div class="form-group">' +
+                        '<input type "text" class="form-control" placeholder="Weekly" id="input-frq" >' +
                         '</div>',
                     showCancelButton: true,
                     confirmButtonClass: 'btn btn-success',
@@ -1122,6 +1125,7 @@ demo = {
                     var eventData;
                     event_title = $('#input-title').val();
                     event_desc = $('#input-desc').val();
+                    event_frq = $('#input-frq').val();
 
                     if (event_title) {
                         eventData = {
@@ -1222,16 +1226,19 @@ demo = {
             swal({
                     title: 'View schedule',
                     html: '<div class="form-group">' +
-                        '<input type "text" class="form-control" placeholder="Schedule Title" id="input-title" value="'+calEvent.title+'">' +
+                        '<input type "readonly" class="form-control" placeholder="Schedule Title" id="input-title" value="'+calEvent.title+'">' +
                         '</div>'+
                         '<div class="form-group">' +
-                        '<input type "text" class="form-control" placeholder="Schedule Description" id="input-desc" >' +
+                        '<input type "readonly" class="form-control" placeholder="Schedule Description" id="input-desc" >' +
                         '</div>'+
                         '<div class="form-group">' +
-                        '<input type "text" class="form-control" placeholder="DD/MM/YYYY" id="input-fdate" value="'+inputFdate+'" >' +
+                        '<input type "readonly" class="form-control" placeholder="DD/MM/YYYY" id="input-fdate" value="'+inputFdate+'" >' +
                         '</div>'+
                         '<div class="form-group">' +
-                        '<input type "text" class="form-control" placeholder="DD/MM/YYYY" id="input-tdate" value="'+inputTdate+'">' +
+                        '<input type "readonly" class="form-control" placeholder="DD/MM/YYYY" id="input-tdate" value="'+inputTdate+'">' +
+                        '</div>'+
+                        '<div class="form-group">' +
+                        '<input type "readonly" class="form-control" placeholder="Weekly" id="input-frq" value="">' +
                         '</div>',
                     showCancelButton: true,
                     confirmButtonClass: 'btn btn-success',

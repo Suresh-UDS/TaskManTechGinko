@@ -32,7 +32,7 @@ ul.checkList li
 }
 .SubNav
 {
-  padding-left:30px;
+  padding-left:8px;
 }
 
 .bg-info .bg-info.darken, .bg-info.darken {
@@ -1379,7 +1379,7 @@ div.bouncing-container {
 }
 div.bouncing-container.asset
 {
-    right: 150px;
+    right: 105px;
 }
 div.bouncing-container .message-container {
     position: relative;

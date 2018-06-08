@@ -153,14 +153,13 @@ public class AssetResource {
 		return assetService.findAllAssetType();
 	}
 
-	@RequestMapping(value = "/assets/{type}/config/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-	public List<AssetParameterConfigDTO> getAssetConfig(@PathVariable("type") String type,
-			@PathVariable("id") Long id) {
+	@RequestMapping(value = "/assets/config", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<List<AssetParameterConfigDTO>> getAssetConfig(@Valid @RequestBody AssetParameterConfigDTO assetParamConfigDTO) {
 		List<AssetParameterConfigDTO> result = null;
-		if (type != null && id != null) {
-			result = assetService.findByAssetConfig(type, id);
+		if (assetParamConfigDTO.getAssetType()!=null && assetParamConfigDTO.getAssetId() > 0) {
+			result = assetService.findByAssetConfig(assetParamConfigDTO.getAssetType(), assetParamConfigDTO.getAssetId());
 		}
-		return result;
+		return new ResponseEntity<>(result, HttpStatus.OK);
 
 	}
 
