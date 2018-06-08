@@ -475,7 +475,10 @@ public class    EmployeeService extends AbstractService {
                 long siteId = completedJob.getSiteId();
                 long transactionId = checkInOutDto.getId();
                 log.debug("onlyCheckOut - completedJob siteId -" + transactionId);
-                List<User> users = userService.findUsers(siteId);
+                //List<User> users = userService.findUsers(siteId);
+                User jobUser = job.getEmployee().getUser();
+                List<User> users = new ArrayList<User>();
+                users.add(jobUser);
                 log.debug("onlyCheckOut - completedJob users  -" + users);
                 if(CollectionUtils.isNotEmpty(users)) {
                     long userIds[] = new long[users.size()];
