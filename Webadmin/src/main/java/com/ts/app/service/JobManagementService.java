@@ -707,6 +707,90 @@ public class JobManagementService extends AbstractService {
 		return mapperUtil.toModel(job, JobDTO.class);
 	}
 	
+	public JobDTO createJob(AssetPpmScheduleDTO assetPpmScheduleDTO) {
+		log.debug(">>> assetPpmSchedule Title from CreateJOb <<<"+assetPpmScheduleDTO.getTitle());
+		
+		Job job = new Job();
+		
+		//AssetPPMSchedule assetPpmSchedule = new AssetPPMSchedule();
+		JobDTO jobDTO = new JobDTO();
+		
+		//Employee employee = getEmployee(jobDTO.getEmployeeId());
+		Asset asset = assetRepository.findOne(assetPpmScheduleDTO.getAssetId());
+		//Site site = getSite(asset.getSite().getId());
+		log.debug(">>> asset id "+ asset.getId() +" Site "+asset.getSite().getName()+" User "+asset.getSite().getUser() + " User id "+asset.getSite().getUser().getId());
+		jobDTO.setEmployeeEmpId(String.valueOf(asset.getSite().getUser().getId()));
+		//Location location = getLocation(jobDTO.getLocationId());
+
+		mapToEntity(jobDTO, job);
+
+		if(job.getStatus() == null) {
+			job.setStatus(JobStatus.OPEN);
+		}
+
+		Calendar calStart = Calendar.getInstance();
+		calStart.set(Calendar.HOUR_OF_DAY, 0);
+		calStart.set(Calendar.MINUTE,0);
+		Calendar calEnd = Calendar.getInstance();
+		calEnd.set(Calendar.HOUR_OF_DAY, 11);
+		calEnd.set(Calendar.MINUTE,59);
+
+		java.sql.Date startDate = new java.sql.Date(calStart.getTimeInMillis());
+		java.sql.Date endDate = new java.sql.Date(calEnd.getTimeInMillis());
+		log.debug("Before saving new job -"+ job);
+		log.debug("start Date  -"+ startDate + ", end date -" + endDate);
+		//List<Job> existingJobs = jobRepository.findJobByTitleSiteAndDate(jobDTO.getTitle(), jobDTO.getSiteId(), startDate, endDate);
+		//log.debug("Existing job -"+ existingJobs);
+		//if(CollectionUtils.isEmpty(existingJobs)) {
+		//if job is created against a ticket
+		/*if(jobDTO.getTicketId() > 0) {
+			Ticket ticket = ticketRepository.findOne(jobDTO.getTicketId());
+			job.setTicket(ticket);
+			ticket.setStatus(TicketStatus.ASSIGNED.toValue());
+			ticketRepository.save(ticket);
+		}*/
+		job.setPlannedStartTime(startDate);
+		job.setPlannedEndTime(endDate);
+		job.setTitle(assetPpmScheduleDTO.getTitle());
+		job.setDescription(assetPpmScheduleDTO.getTitle() + assetPpmScheduleDTO.getFrequencyPrefix()+" "+assetPpmScheduleDTO.getFrequencyDuration()+" "+assetPpmScheduleDTO.getFrequency());
+		job = jobRepository.saveAndFlush(job);
+
+		/*if(jobDTO.getTicketId() > 0) {
+			Ticket ticket = ticketRepository.findOne(jobDTO.getTicketId());
+			ticket.setJob(job);
+			ticketRepository.saveAndFlush(ticket);
+        }*/
+
+
+		//}
+
+		//if the job is scheduled for recurrence create a scheduled task
+		if(!StringUtils.isEmpty(assetPpmScheduleDTO.getId()) && !assetPpmScheduleDTO.getTitle().equalsIgnoreCase("HOUR")) {
+			SchedulerConfigDTO schConfDto = new SchedulerConfigDTO();
+			//schConfDto.setSchedule(jobDTO.getSchedule());
+			schConfDto.setType("MAINTENANCE");
+			StringBuffer data = new StringBuffer();
+			data.append("title="+assetPpmScheduleDTO.getTitle());
+			data.append("&description="+assetPpmScheduleDTO.getFrequencyPrefix()+" "+assetPpmScheduleDTO.getFrequencyDuration()+" "+assetPpmScheduleDTO.getFrequency());				
+			data.append("&siteId="+asset.getSite().getId());
+			data.append("&empId="+asset.getSite().getUser().getId());
+			//data.append("&empId="+assetPpmScheduleDTO.getEmployeeId());
+			data.append("&plannedStartTime="+assetPpmScheduleDTO.getStartDate());
+			data.append("&plannedEndTime="+assetPpmScheduleDTO.getEndDate());
+			data.append("&plannedHours="+assetPpmScheduleDTO.getFrequencyDuration());
+			//data.append("&location="+assetPpmScheduleDTO.getLocationId());
+			data.append("&frequency="+assetPpmScheduleDTO.getFrequency());
+			schConfDto.setData(data.toString());
+			schConfDto.setStartDate(assetPpmScheduleDTO.getStartDate());
+			schConfDto.setEndDate(assetPpmScheduleDTO.getEndDate());
+			schConfDto.setScheduleEndDate(assetPpmScheduleDTO.getEndDate());
+
+			schedulerService.save(schConfDto,job);
+		}
+
+		return mapperUtil.toModel(job, JobDTO.class);
+			
+	}
 	private JobDTO mapToModel(Job job) {
 		JobDTO dto = new JobDTO();
 		dto.setId(job.getId());

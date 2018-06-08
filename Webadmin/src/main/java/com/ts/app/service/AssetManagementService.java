@@ -191,6 +191,9 @@ public class AssetManagementService extends AbstractService {
 	@Inject
 	private ParameterConfigRepository parameterConfigRepository;
 
+	@Inject
+	private JobManagementService jobManagementService;
+
 	// Asset
 	public AssetDTO saveAsset(AssetDTO assetDTO) {
 		log.debug("assets service with assettype " + assetDTO.getAssetType());
@@ -443,8 +446,8 @@ public class AssetManagementService extends AbstractService {
 		if (assetAMCScheduleDTO.getId() > 0) {
 			assetAMC = assetAMCRepository.findOne(assetAMCScheduleDTO.getId());
 			assetAMC.setActive(assetAMCScheduleDTO.getActive());
-			if (assetAMC.getChecklist().getId() != assetAMCScheduleDTO.getId()) {
-				Checklist checklist = checklistRepository.findOne(assetAMCScheduleDTO.getId());
+			if (assetAMC.getChecklist().getId() != assetAMCScheduleDTO.getChecklistId()) {
+				Checklist checklist = checklistRepository.findOne(assetAMCScheduleDTO.getChecklistId());
 				assetAMC.setChecklist(checklist);
 			}
 			assetAMC.setFrequency(assetAMCScheduleDTO.getFrequency());
@@ -565,19 +568,6 @@ public class AssetManagementService extends AbstractService {
 		assetDTO.setAssetType(asset.getAssetType());
 		assetDTO.setAssetGroup(asset.getAssetGroup());
 
-		log.debug(">>> Asset Type " + assetDTO.getAssetType() + " Manufacture " + assetDTO.getManufacturerName() + " Vendor " + assetDTO.getAmcVendorName());
-		log.debug("Asset Group ...  " + assetDTO.getAssetGroup());
-
-		AssetType assetType = assetTypeRepository.findOne(Long.valueOf(assetDTO.getAssetType()));
-		assetDTO.setAssetTypeName(assetType.getName());
-
-		log.debug("Asset Type Name  " + assetDTO.getAssetTypeName());
-
-		AssetGroup assetGroup = assetGroupRepository.findOne(Long.valueOf(assetDTO.getAssetGroup()));
-		assetDTO.setAssetGroupName(assetGroup.getAssetgroup());
-
-		log.debug("Asset Group Name  " + assetDTO.getAssetGroupName());
-
 		return assetDTO;
 	}
 
@@ -697,6 +687,8 @@ public class AssetManagementService extends AbstractService {
 
 		assetPPMSchedule = assetPpmScheduleRepository.save(assetPPMSchedule);
 		assetPpmScheduleDTO = mapperUtil.toModel(assetPPMSchedule, AssetPpmScheduleDTO.class);
+		jobManagementService.createJob(assetPpmScheduleDTO);
+		log.debug(">> after create job for ppm schedule <<<");
 		return assetPpmScheduleDTO;
 	}
 
