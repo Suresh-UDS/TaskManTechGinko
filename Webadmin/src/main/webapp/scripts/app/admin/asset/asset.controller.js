@@ -298,6 +298,8 @@ angular.module('timeSheetApp')
                 console.log("Edit Asset--",$scope.assetList);
 
 
+
+
                 $scope.assetEdit.id = $scope.assetList.id;
                 $scope.assetEdit.title = $scope.assetList.title;
                 $scope.assetEdit.modelNumber = $scope.assetList.modelNumber;
@@ -338,6 +340,10 @@ angular.module('timeSheetApp')
                 $scope.genQrCodes();
 
                 $rootScope.loadingStop();
+
+                $scope.assetConfig();
+
+
         		
         		/*if($scope.asset.assetType) {
         			$scope.assetConfig = {};
@@ -489,12 +495,12 @@ angular.module('timeSheetApp')
             });
         }
 
-        $scope.assetConfig=function(){
 
+        $scope.assetConfig=function(){
              
             if($stateParams.id){ 
                
-                $scope.assetConfigs.assetType = $scope.selectedAssetType.name;
+                $scope.assetConfigs.assetType = $scope.assetList.assetType;
 
                 $scope.assetConfigs.assetId = $stateParams.id;
             }
@@ -506,8 +512,11 @@ angular.module('timeSheetApp')
                console.log("Asset Config load" ,$scope.assetConfigs);
     
                     AssetComponent.findByAssetConfig($scope.assetConfigs).then(function(data){
+                       
                         console.log(data);
                         $scope.assetParameters = data;
+                        
+
                     });
 
                 
@@ -583,15 +592,21 @@ angular.module('timeSheetApp')
 
        $scope.createQrCode= function(){  
 
-        if(!$scope.assetGen.id){
+           
+        if(!$scope.assetGen.id && !$stateParams.id){
             
           $scope.showNotifications('top','center','danger','Please create asset first..');
 
-        }
+        }else{
 
         if($scope.assetGen.id){
             
-            var qr = {id:$scope.assetGen.id,code:$scope.assetGen.assetcode}
+            var qr = {id:$scope.assetGen.id,code:$scope.assetGen.assetcode};
+
+        }else if($stateParams.id){
+
+            var qr = {id:$stateParams.id,code:$scope.assetQr.assetCode};
+        }
 
             //alert("code:"  + qr.code + "id:" + qr.id);
             
@@ -602,8 +617,9 @@ angular.module('timeSheetApp')
                 $scope.genQrCodes();
             });
         }
+    }
 
-       }
+       
 
        /* View QR code by asset id */
 
@@ -924,8 +940,8 @@ angular.module('timeSheetApp')
         	$scope.success =null;
 
             if($stateParams.id){
-            	if($scope.asset.assetType){
-            	    $scope.parameterConfig.assetType = $scope.asset.assetTypeName;
+            	if($scope.assetList.assetType){
+            	    $scope.parameterConfig.assetType = $scope.assetList.assetType;
             	    $scope.parameterConfig.assetId = $stateParams.id;
             	}
             	if($scope.selectedParameter){

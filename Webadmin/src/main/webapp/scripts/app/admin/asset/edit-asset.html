@@ -1,5 +1,5 @@
-<div class="crud-form" ng-init="editAsset();loadingStart();assetConfig();"
-	data-unique-hash="a2ad475d60b22954085c657a73309b8f">
+<div class="crud-form" ng-init="editAsset();loadingStart();assetConfig();loadAllParameters();loadAllParameterUOMs();"
+	data-unique-hash="a2ad475d60b22954085c657a73309b8f"> 
 	<div class="">
 		<div class="row">
 			<!-- <div class="col-mod-12">
@@ -633,7 +633,7 @@
 
                                                                     <div class="form-group is-empty">
                                                                         <label class="control-label">Asset Code </label>
-                                                                        <input id="assetcode" ng-model="asset.assetCode" class="form-control" name="assetcode" type="text" value="" ng-minlength="1" ng-maxlength="10" ng-pattern="/^[A-Za-z0-9]*$/" autofocus="" required="" tabindex="0" aria-required="true" aria-invalid="true" autocomplete="off">
+                                                                        <input id="assetcode" ng-model="assetQr.assetCode" class="form-control" name="assetcode" type="text" value="" ng-minlength="1" ng-maxlength="10" ng-pattern="/^[A-Za-z0-9]*$/" autofocus="" required="" tabindex="0" aria-required="true" aria-invalid="true" autocomplete="off">
 
 
 
@@ -659,13 +659,13 @@
 
                                                                     <div style="text-align: center">
 
-                                                                        <button class="btn btn-success add-btn margn-tb0">
+                                                                        <button class="btn btn-success add-btn margn-tb0" ng-click="createQrCode()">
                                                                             <i class="material-icons">autorenew</i> Generate
                                                                         </button>
 
                                                                     </div>
 
-                                                                    <h4>{{asset.assetCode}}</h4>
+                                                                    <!-- <h4>{{assetList.assetCode}}</h4> -->
 
                                                                     <div class="QrcodeCon" ng-show="qr_img">
 
@@ -1395,7 +1395,7 @@
                                                                                     <label class="control-label">Select Parameter </label>
                                                                                     <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
                                                                                     <select class="form-control ng-pristine ng-valid ng-touched" ng-model="selectedParameter"  ng-options="parameter as parameter.name for parameter in parameters" tabindex="0" aria-invalid="false">
-                                                                                        <option value="" class="" selected="selected">Please select Parameter ..</option>
+                                                                                    <option value="" class="" selected="selected">Select Parameter ..</option>
                                                                                     </select>
                                                                                 </div>
                                                                                 <div class="" style="float:left;">
@@ -1422,7 +1422,7 @@
                                                                                     <label class="control-label">Select Units</label>
                                                                                     <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
                                                                                     <select class="form-control ng-pristine ng-valid ng-touched" ng-model="selectedParameterUOM"  ng-options="parameterUOM as parameterUOM.uom for parameterUOM in parameterUOMs" tabindex="0" aria-invalid="false">
-                                                                                        <option value="" class="" selected="selected">Please select Units ..</option>
+                                                                                    <option value="" class="" selected="selected">Select Units ..</option>
                                                                                     </select>
                                                                                 </div>
                                                                                 <div class="" style="float:left;">
@@ -1468,7 +1468,7 @@
                                                             </div>
                                                             </form>
                                                         </div>
-                                                        <div class="col-md-12">
+                                                        <div class="col-md-12" >
                                                             <div class="panel panel-default" style="min-height: 200px;">
 
                                                                 <div class="panel-heading">
