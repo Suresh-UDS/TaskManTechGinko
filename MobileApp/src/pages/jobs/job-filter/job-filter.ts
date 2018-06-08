@@ -5,7 +5,6 @@ import{AssetService} from "../../service/assetService";
 import{SiteService} from "../../service/siteService";
 import{JobService} from "../../service/jobService";
 import{EmployeeService} from "../../service/employeeService";
-
 import { DatePicker } from '@ionic-native/date-picker';
 /**
  * Generated class for the AssetFilter page.
@@ -53,7 +52,7 @@ export class JobFilter{
             {name:"UDS House Keeping Assets"},
             {name:"UDS Electrical Assets"},
             {name:"UDS Plumbing Assets"}
-        ]
+        ];
         this.empPlace='Employee';
     }
 
@@ -73,7 +72,7 @@ export class JobFilter{
             error=>{
                 if(error.type==3)
                 {
-                    this.msg='Server Unreachable'
+                    this.msg='Server Unreachable';
                 }
                 this.component.showToastMessage(this.msg,'bottom');
                 this.component.closeLoader();
@@ -129,7 +128,8 @@ export class JobFilter{
         this.datePicker.show({
             date: new Date(),
             mode: 'date',
-            androidTheme: this.datePicker.ANDROID_THEMES.THEME_HOLO_DARK
+            androidTheme: this.datePicker.ANDROID_THEMES.THEME_DEVICE_DEFAULT_DARK,
+            allowFutureDates:false
         }).then(
             date => {
                 this.fromDate=date;
@@ -150,7 +150,8 @@ export class JobFilter{
         this.datePicker.show({
             date: new Date(),
             mode: 'date',
-            androidTheme: this.datePicker.ANDROID_THEMES.THEME_HOLO_DARK
+            androidTheme: this.datePicker.ANDROID_THEMES.THEME_DEVICE_DEFAULT_DARK,
+            allowFutureDates:false
         }).then(
             date => {
                 this.toDate=date;
@@ -185,21 +186,21 @@ export class JobFilter{
             var search={
                 currPage:1,
                 siteId:id
-            }
+            };
             this.employeeService.searchEmployees(search).subscribe(
                 response=> {
                     console.log(response);
                     if(response.transactions!==null)
                     {
                         this.empSelect=false;
-                        this.empPlace="Employee"
+                        this.empPlace="Employee";
                         this.employee=response.transactions;
                         console.log(this.employee);
                     }
                     else
                     {
                         this.empSelect=true;
-                        this.empPlace="No Employee"
+                        this.empPlace="No Employee";
                         this.employee=[]
                     }
                 },
@@ -226,8 +227,6 @@ export class JobFilter{
         };
         this.viewCtrl.dismiss(this.searchCriteria);
     }
-
-
 
 
 }

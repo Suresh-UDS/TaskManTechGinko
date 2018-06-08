@@ -27,14 +27,13 @@ export class TicketFilter {
     empSelect:any ;
     empPlace:any;
     employee:any;
-    datePicker:any;
     fromDate:any;
     toDate:any;
     viewButton:any;
     clientList:any;
 
   constructor(public navCtrl: NavController, public navParams: NavParams,public viewCtrl:ViewController,public siteService:SiteService,public component:componentService,
-              public employeeService:EmployeeService) {
+              public employeeService:EmployeeService,public datePicker:DatePicker) {
       this.empPlace='Employee';
   }
 
@@ -140,7 +139,8 @@ export class TicketFilter {
         this.datePicker.show({
             date: new Date(),
             mode: 'date',
-            androidTheme: this.datePicker.ANDROID_THEMES.THEME_HOLO_DARK
+            androidTheme: this.datePicker.ANDROID_THEMES.THEME_DEVICE_DEFAULT_DARK,
+            allowFutureDates:false,
         }).then(
             date => {
                 this.fromDate=date;
@@ -161,7 +161,8 @@ export class TicketFilter {
         this.datePicker.show({
             date: new Date(),
             mode: 'date',
-            androidTheme: this.datePicker.ANDROID_THEMES.THEME_HOLO_DARK
+            androidTheme: this.datePicker.ANDROID_THEMES.THEME_DEVICE_DEFAULT_DARK,
+            allowFutureDates:false,
         }).then(
             date => {
                 this.toDate=date;
