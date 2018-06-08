@@ -864,6 +864,10 @@ public class SchedulerService extends AbstractService {
 										values.put("checkInTime", DateUtil.formatToDateTimeString(checkInCal.getTime()));
 										values.put("site", site.getName());
 										mailService.sendAttendanceCheckouAlertEmail(emp.getEmail(), values);
+										long userId = emp.getUser().getId();
+										long[] userIds = new long[1];
+										userIds[0] = userId;
+										pushService.sendAttendanceCheckoutAlert(userIds, values);
 										break;
 									}
 								} else {
@@ -874,6 +878,10 @@ public class SchedulerService extends AbstractService {
 										values.put("checkInTime", DateUtil.formatToDateTimeString(checkInCal.getTime()));
 										values.put("site", site.getName());
 										mailService.sendAttendanceCheckouAlertEmail(emp.getEmail(), values);
+										long userId = emp.getUser().getId();
+										long[] userIds = new long[1];
+										userIds[0] = userId;
+										pushService.sendAttendanceCheckoutAlert(userIds, values);
 										break;
 									} 
 								}
