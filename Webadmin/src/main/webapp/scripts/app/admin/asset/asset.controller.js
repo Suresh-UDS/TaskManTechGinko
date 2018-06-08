@@ -1059,17 +1059,27 @@ angular.module('timeSheetApp')
 	    	});
 	    }
 	    
+	    /* AMC schedule */	    
+	    
 	    $scope.amcSchedule = {};
 	    $scope.selectedChecklist;
 	    $scope.selectedFrequencyPrefix;
 	    $scope.selectedFrequency;
 	    $scope.selectedFreqDuration;
 	    
-	    $scope.frequencyPrefixies = ['Every', 'Monthly'];
+	    $scope.loadFreq = function() { 
+	    	AssetComponent.getAllFrequencies().then(function(data){ 
+	    		$scope.frequencies = data;
+	    	});
+	    }
 	    
-	    $scope.frequencyDurations= [1, 2, 3];
+	    $scope.loadFreqPrefix = function() {
+	    	AssetComponent.getAllPrefix().then(function(data) { 
+	    		$scope.frequencyPrefixies = data;
+	    	});
+	    }
 	    
-	    $scope.frequencies = ['Hour', 'Day', 'Week', 'Fortnight', 'Month', 'Quarter', 'Half', 'Year'];
+	    $scope.frequencyDurations= [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 	    
 	    $('input#dateFilterAmcFrom').on('dp.change', function(e){
             $scope.amcSchedule.startDate = e.date._d;
@@ -1107,8 +1117,14 @@ angular.module('timeSheetApp')
 	    	
 	    	console.log($scope.amcSchedule);
 	    	
+	    	AssetComponent.saveAmcSchedule($scope.amcSchedule).then(function(data){  
+	    		console.log(data);
+	    	});
+	    	
 	    	
 	    }
+	    
+	    /*End AMC*/	    
 
 
     });
