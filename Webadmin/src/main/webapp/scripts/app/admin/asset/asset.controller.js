@@ -49,6 +49,8 @@ angular.module('timeSheetApp')
 
         $scope.assetGroup = {};
 
+        $scope.assetConfigs ={};
+
         $scope.parameter = {};
 
         $scope.manufacturer = {};
@@ -493,17 +495,18 @@ angular.module('timeSheetApp')
              
             if($stateParams.id){ 
                
-                $scope.assetConfig.assetType = $scope.assetDetail.name;
+                $scope.assetConfigs.assetType = $scope.selectedAssetType.name;
 
-                $scope.assetConfig.assetId = $stateParams.id;
+                $scope.assetConfigs.assetId = $stateParams.id;
             }
             else if($scope.assetGen.id){
                
-                $scope.assetConfig.assetType = $scope.selectedAssetType.name;
-                $scope.assetConfig.assetId = $scope.assetGen.id;
+                $scope.assetConfigs.assetType = $scope.selectedAssetType.name;
+                $scope.assetConfigs.assetId = $scope.assetGen.id;
             }  
+               console.log("Asset Config load" ,$scope.assetConfigs);
     
-                    AssetComponent.findByAssetConfig($scope.assetConfig).then(function(data){
+                    AssetComponent.findByAssetConfig($scope.assetConfigs).then(function(data){
                         console.log(data);
                         $scope.assetParameters = data;
                     });
@@ -606,7 +609,7 @@ angular.module('timeSheetApp')
        /* View QR code by asset id */
 
        $scope.genQrCodes= function(){ 
-        
+
               if($scope.assetEdit.id){
     
                 var qr_id ={id:$scope.asset.id};
