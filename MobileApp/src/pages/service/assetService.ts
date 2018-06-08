@@ -93,7 +93,7 @@ export class AssetService {
     }
 
     viewReading(assetId):Observable<any>{
-        return this.http.get(this.config.Url+' api/assets/+ api/assets/'+assetId+'/viewReadings' ).map(
+        return this.http.get(this.config.Url+'api/assets/'+assetId+'/viewReadings' ).map(
             response=>{
                 console.log("View Reading");
                 console.log(response);
