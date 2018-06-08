@@ -759,9 +759,12 @@ public class SchedulerService extends AbstractService {
 					content.append("Absent - " + projAbsent + LINE_SEPARATOR);
 					
 					Map<String, String> summaryMap = new HashMap<String, String>();
-					summaryMap.put("TotalEmployees", String.valueOf(projEmployees));
+					//get total employee count
+					long projEmpCnt = employeeRepository.findCountByProjectId(proj.getId());
+					
+					summaryMap.put("TotalEmployees", String.valueOf(projEmpCnt));
 					summaryMap.put("TotalPresent", String.valueOf(projPresent));
-					summaryMap.put("TotalAbsent", String.valueOf(projAbsent));
+					summaryMap.put("TotalAbsent", String.valueOf(projEmpCnt - projPresent));
 					ExportResult exportResult = null;
 					exportResult = exportUtil.writeAttendanceReportToFile(proj.getName(), empAttnList, consolidatedData, summaryMap, null, exportResult);
 					// send reports in email.
