@@ -77,8 +77,16 @@ ul.checkList li
 {
 	background: #4caf50 !important;
 }
-
-
+#deleteModal .delete-dialog
+{
+    width: 50%;
+    margin: 0 auto;
+    padding-top: 2%;
+}
+#deleteModal .delete-dialog .modal-content
+{
+    text-align: center;
+}
 .orng-1
 {
     background: #ff7b00 !important;
