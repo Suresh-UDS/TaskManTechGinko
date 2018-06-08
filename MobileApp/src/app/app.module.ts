@@ -81,6 +81,9 @@ import { NativeAudio } from '@ionic-native/native-audio';
 import {SelectFeedbackPage} from "../pages/feedback/select-feedback";
 import{GetAssetReadings} from "../pages/get-asset-readings/get-asset-readings";
 import {FeedbackZone} from "../pages/feedback/feedbackZone";
+import {Splash} from "../pages/splash/splash";
+import {SplashLogo} from "../pages/splash-logo/splash-logo";
+
 
 import {InitFeedbackZone} from "../pages/feedback/init-feedback-zone";
 import {WizardFeedbackEntry} from "../pages/feedback/wizard-feedback-entry";
@@ -169,6 +172,8 @@ import {JobFilter} from "../pages/jobs/job-filter/job-filter";
       ScanQR,
       JobFilter,
       TicketFilter,
+      Splash,
+      SplashLogo,
       EmployeeFilter,
       GetAssetReadings,
   ],
@@ -250,6 +255,8 @@ import {JobFilter} from "../pages/jobs/job-filter/job-filter";
       TicketFilter,
       EmployeeFilter,
       GetAssetReading,
+      Splash,
+      SplashLogo,
     ScanQR,
       GetAssetReadings,
 

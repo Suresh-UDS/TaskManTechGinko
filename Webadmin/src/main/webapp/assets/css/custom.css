@@ -5,6 +5,7 @@ a:focus
 body
 {
   font-size: 13px;
+    background-color: #f9f9f9;
 }
 ul li
 {
@@ -32,7 +33,7 @@ ul.checkList li
 }
 .SubNav
 {
-  padding-left:30px;
+  padding-left:8px;
 }
 
 .bg-info .bg-info.darken, .bg-info.darken {
@@ -76,8 +77,16 @@ ul.checkList li
 {
 	background: #4caf50 !important;
 }
-
-
+#deleteModal .delete-dialog
+{
+    width: 50%;
+    margin: 0 auto;
+    padding-top: 2%;
+}
+#deleteModal .delete-dialog .modal-content
+{
+    text-align: center;
+}
 .orng-1
 {
     background: #ff7b00 !important;
@@ -371,7 +380,7 @@ button.btn.btn-circle:hover
   padding-left: 56px;
 }
 .card-login .card-content {
-    padding: 20px 30px 10px 10px;
+    padding: 15px 20px 0px 10px;
 }
 .card-login .card-content .input-group
 {
@@ -1379,7 +1388,7 @@ div.bouncing-container {
 }
 div.bouncing-container.asset
 {
-    right: 150px;
+    right: 105px;
 }
 div.bouncing-container .message-container {
     position: relative;

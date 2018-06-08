@@ -664,11 +664,25 @@
 
                                                                             <div class="form-group is-empty">
                                                                                 <label class="control-label">Asset Code </label>
-                                                                                <input id="assetcode" ng-model="assetGen.assetcode" class="form-control" name="assetcode" type="text" ng-minlength="5" ng-maxlength="250" ng-pattern="/^[A-Za-z0-9\s]*$/" autofocus  tabindex="0" aria-required="true" aria-invalid="true" autocomplete="off" required>
+                                                                                <input id="assetcode" ng-model="assetGen.assetcode" class="form-control" name="assetcode" type="text" ng-minlength="1" ng-maxlength="10" ng-pattern="/^[A-Za-z0-9]*$/" autofocus  tabindex="0" aria-required="true" aria-invalid="true" autocomplete="off" required>
 
-
-
-                                                                                <span class="material-input"></span>
+                                                                                <div ng-show="form1.$submitted || form1.assetcode.$touched">
+                                                                                    <div ng-show="form1.assetcode.$dirty || form1.assetcode.$invalid">
+                                                                                        <p class="help-block" style="color:maroon"
+                                                                                           ng-show="form1.assetcode.$error.required">
+                                                                                            Asset code is required.
+                                                                                        </p>
+                                                                                        
+                                                                                        <p class="help-block" style="color:maroon;background-color:#fff;z-index:2000;"
+                                                                                           ng-show="form1.assetcode.$error.maxlength">
+                                                                                            Asset code cannot be longer than 10 characters.
+                                                                                        </p>
+                                                                                        <p class="help-block" style="color:maroon;"
+                                                                                           ng-show="form1.assetcode.$error.pattern">
+                                                                                            Asset code can only contain letters, digits.
+                                                                                        </p>
+                                                                                    </div>
+                                                                                </div>
 
                                                                             </div>
 
@@ -1140,9 +1154,9 @@
                                                                             <div class="form-group">
                                                                                 <label class="control-label">Title</label>
                                                                                 <input id='ppmTitle'
-                                                                                       ng-model="asset.title"
+                                                                                       ng-model="amcSchedule.title"
                                                                                        class='form-control'
-                                                                                       name='ppmTitle'
+                                                                                       name='amcTitle'
                                                                                        type='text' value=""
                                                                                        ng-minlength='5'
                                                                                        ng-maxlength='250'
@@ -1150,12 +1164,14 @@
                                                                                 />
                                                                             </div>
                                                                         </div>
-                                                                        <div class="col-md-4 checklistLftCon">
+                                                                        <div class="col-md-4 checklistLftCon" ng-init="loadCheckList()">
 
                                                                             <div class="Flt_lft">
                                                                                 <div class="form-group">
                                                                                     <label class="control-label">Checklist</label>
-                                                                                    <input type="text" class="form-control" ng-model="newChecklistItem.name">
+                                                                                    <select class="form-control" ng-model="selectedChecklist" ng-options="checklist as checklist.name for checklist in checkLists">
+                                                                                        <option value="">Select Checklist ..</option>
+                                                                                    </select>
 
                                                                                 </div>
                                                                             </div>
@@ -1212,7 +1228,7 @@
                                                                             <div class="form-group">
                                                                                 <label class="control-label">From Date</label>
                                                                                 <span class="form-control-feedback calender-icon"><i class="material-icons">date_range</i></span>
-                                                                                <input type="text" class="form-control datepicker"  id="dateFilterFrom"  placeholder="{{dateFilterFrom | date:'dd-MMM-yyyy'}}"/>
+                                                                                <input type="text" class="form-control datepicker"  id="dateFilterAmcFrom"  placeholder="{{dateFilterFrom | date:'dd-MMM-yyyy'}}"/>
 
                                                                             </div>
                                                                         </div>
@@ -1220,7 +1236,7 @@
                                                                             <div class="form-group">
                                                                                 <label class="control-label">To Date</label>
                                                                                 <span class="form-control-feedback calender-icon"><i class="material-icons">date_range</i></span>
-                                                                                <input type="text" class="form-control datepicker"  id="dateFilterTo"  placeholder="{{dateFilterTo | date:'dd-MMM-yyyy'}}"/>
+                                                                                <input type="text" class="form-control datepicker"  id="dateFilterAmcTo"  placeholder="{{dateFilterTo | date:'dd-MMM-yyyy'}}"/>
 
                                                                             </div>
                                                                         </div>
@@ -1247,7 +1263,7 @@
                                                                                 <div class="">
                                                                                     <input class="input-desc" id='' ng-model=""
                                                                                            name='' type='text' value=""/>
-                                                                                    <a class="btn btn-success add-btn margn-top0"  ng-click="">Add</a>
+                                                                                    <a class="btn btn-success add-btn margn-top0"  ng-click="">Added</a>
                                                                                 </div>
                                                                             </div>
                                                                         </div>
@@ -1258,8 +1274,8 @@
                                                                                 <div class="form-group">
                                                                                     <label class="control-label">Select Frequency</label>
                                                                                     <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                                                                    <select class="form-control ">
-                                                                                        <option value="">Every</option>
+                                                                                    <select class="form-control" ng-model="selectedFrequencyPrefix" ng-options=" frequencyPrefix for frequencyPrefix in frequencyPrefixies">
+                                                                                        <option value=""></option>
                                                                                     </select>
                                                                                 </div>
                                                                             </div>
@@ -1268,10 +1284,8 @@
                                                                             <div class="form-group">
                                                                                 <label class="control-label">&nbsp;</label>
                                                                                 <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                                                                <select class="form-control ">
-                                                                                    <option value="">1</option>
-                                                                                    <option value="">2</option>
-                                                                                    <option value="">3</option>
+                                                                                <select class="form-control" ng-model="selectedFrequency" ng-options="frequencyDuration for frequencyDuration in frequencyDurations">
+                                                                                    <option value=""></option>
                                                                                 </select>
                                                                             </div>
                                                                         </div>
@@ -1279,20 +1293,13 @@
                                                                             <div class="form-group">
                                                                                 <label class="control-label">&nbsp;</label>
                                                                                 <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                                                                <select class="form-control ">
-                                                                                    <option value="">Hour</option>
-                                                                                    <option value="">Day</option>
-                                                                                    <option value="">Week</option>
-                                                                                    <option value="">Fortnight</option>
-                                                                                    <option value="">Month</option>
-                                                                                    <option value="">Quarter</option>
-                                                                                    <option value="">Half</option>
-                                                                                    <option value="">Year</option>
+                                                                                <select class="form-control" ng-model="selectedFreqDuration" ng-options="frequency for frequency in frequencies">
+                                                                                    <option value=""></option>
                                                                                 </select>
                                                                             </div>
                                                                         </div>
                                                                         <div class="col-md-1" style="padding-top: 25px;">
-                                                                            <a class="btn btn-success add-btn margn-top0"  ng-click="">Add</a>
+                                                                            <a class="btn btn-success add-btn margn-top0"  ng-click="saveAmcSchedule()">Add</a>
                                                                         </div>
                                                                     </div>
                                                                 </div>
@@ -1547,10 +1554,10 @@
                                                         </form>
                                                         </div>
                                                     </div>
-                                                    <div class="wizard-footer" ng-show="assetGen.id">
+                                                    <div class="wizard-footer" >
                                                         <div class="pull-right">
                                                             <input type='button' class='btn btn-next btn-fill btn-default btn-wd' name='next' value='Next'  />
-                                                            <input type='button' class='btn btn-finish btn-fill btn-success btn-wd' name='finish' value='Finish' />
+                                                            <!-- <input type='button' class='btn btn-finish btn-fill btn-success btn-wd' name='finish' value='Finish' /> -->
                                                         </div>
                                                         <div class="pull-left">
                                                             <input type='button' class='btn btn-previous btn-fill btn-default btn-wd' name='previous' value='Previous' />
@@ -1566,7 +1573,7 @@
 
 
 
-                                <div class="row" ng-hide="assetSave">
+                                <div class="row" ng-hide="assetGen.id">
 
                                     <div class="col-sm-offset-8 col-sm-4 txt-align-rgt">
                                         <button class="btn btn-success" type="submit"

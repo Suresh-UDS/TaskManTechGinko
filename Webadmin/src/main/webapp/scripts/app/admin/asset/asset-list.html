@@ -8,7 +8,7 @@
             <div class="card tablecard">
                 <div class="card-content">
 
-                    <div class="bouncing-container asset">
+                    <div class="bouncing-container asset" ng-show="!assets">
                         <div class="message-container">
                             <span>Let's create your<br>first Asset!</span>
                         </div>
@@ -146,11 +146,11 @@
                                 <!-- <td>{{asset.status}}</td> -->
                                 <td>{{asset.siteName}}</td>
                                 <td class="text-right">
-                                    <a   has-authority="ROLE_ADMIN" ui-sref="view-asset({ id: asset.id })"   class="btn btn-simple btn-info btn-icon like"><i class="material-icons">remove_red_eye</i></a>
+                                    <a   has-authority="ROLE_ADMIN" ui-sref="view-asset({ id: asset.id })"  has-permission="Asset:View"   class="btn btn-simple btn-info btn-icon like"><i class="material-icons">remove_red_eye</i></a>
 
-                                    <a  ng-class="{active: $state.includes('admin')}" has-authority="ROLE_ADMIN" ui-sref="edit-asset({ id: asset.id })"  class="btn btn-simple btn-info"><i class="material-icons">edit</i></a>
+                                    <a  ng-class="{active: $state.includes('admin')}" has-permission="Asset:Edit" has-authority="ROLE_ADMIN" ui-sref="edit-asset({ id: asset.id })"  class="btn btn-simple btn-info"><i class="material-icons">edit</i></a>
 
-                                    <a ng-class="{active: $state.includes('admin')}" has-authority="ROLE_ADMIN"  ng-click="deleteConfirm(asset)"  onClick="$('#deleteModal').modal()" data-target="#myModal"   class="btn btn-simple btn-danger"><i class="material-icons">close</i></a>
+                                    <a ng-class="{active: $state.includes('admin')}" has-permission="Asset:Delete" has-authority="ROLE_ADMIN"  ng-click="deleteConfirm(asset.id)"  onClick="$('#deleteModal').modal()" data-target="#myModal"   class="btn btn-simple btn-danger"><i class="material-icons">close</i></a>
 
                                 </td>
 

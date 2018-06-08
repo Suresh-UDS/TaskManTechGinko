@@ -9,6 +9,7 @@ angular.module('timeSheetApp')
                 return $http.post('api/asset',asset).then(
                     function (response) {
                         //return cb(response);
+                        console.log("Create Asset Service response -- " , response);
                         return response;
                     }).catch(
                     function (err) {
@@ -61,8 +62,13 @@ angular.module('timeSheetApp')
                     return response.data;
                 });
             },
-            search: function() {
+            /*search: function() {
                 return $http.post('api/assets/search').then(function (response) {
+                    return response.data;
+                });
+            },*/
+            search: function(searchCriteria) {
+                return $http.post('api/asset/search',searchCriteria).then(function (response) {
                     return response.data;
                 });
             },
@@ -108,9 +114,7 @@ angular.module('timeSheetApp')
             
 
             findByAssetConfig : function(data) { 
-            	var type = data.assetTypeName;
-            	var id = data.assetId;
-            	return $http.get('api/assets/'+type+'/config/'+id).then(function (response) { 
+            	return $http.post('api/assets/config', data).then(function (response) { 
             		return response.data;
             	});
             },
@@ -122,6 +126,8 @@ angular.module('timeSheetApp')
             },
             
             createAssetParamConfig : function(assetParam, callback) {
+
+                console.log("asset requsest -- ",assetParam);
             	var cb = callback || angular.noop;
                 return $http.post('api/assets/params', assetParam).then(
                     function (response) {

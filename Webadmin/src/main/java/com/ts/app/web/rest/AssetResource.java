@@ -65,7 +65,7 @@ public class AssetResource {
 	@Timed
 	public ResponseEntity<?> saveAsset(@Valid @RequestBody AssetDTO assetDTO, HttpServletRequest request) {
 		log.debug(">>> Asset DTO save request <<<");
-
+		
 		AssetDTO response = assetService.saveAsset(assetDTO);
 		log.debug("Asset new id - " + response.getId());
 		return new ResponseEntity<>(response, HttpStatus.CREATED);
@@ -153,14 +153,13 @@ public class AssetResource {
 		return assetService.findAllAssetType();
 	}
 
-	@RequestMapping(value = "/assets/{type}/config/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-	public List<AssetParameterConfigDTO> getAssetConfig(@PathVariable("type") String type,
-			@PathVariable("id") Long id) {
+	@RequestMapping(value = "/assets/config", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<List<AssetParameterConfigDTO>> getAssetConfig(@Valid @RequestBody AssetParameterConfigDTO assetParamConfigDTO) {
 		List<AssetParameterConfigDTO> result = null;
-		if (type != null && id != null) {
-			result = assetService.findByAssetConfig(type, id);
+		if (assetParamConfigDTO.getAssetType()!=null && assetParamConfigDTO.getAssetId() > 0) {
+			result = assetService.findByAssetConfig(assetParamConfigDTO.getAssetType(), assetParamConfigDTO.getAssetId());
 		}
-		return result;
+		return new ResponseEntity<>(result, HttpStatus.OK);
 
 	}
 
@@ -206,7 +205,7 @@ public class AssetResource {
 		log.debug("Title <<<" + assetPpmScheduleDTO.getTitle());
 
 		AssetPpmScheduleDTO response = assetService.createAssetPpmSchedule(assetPpmScheduleDTO);
-		log.debug("Asset Ppm Schedule save response - " + response);
+		log.debug("Asset Ppm Schedule after save and create job response - " + response);
 		return new ResponseEntity<>(response, HttpStatus.CREATED);
 	}
 
