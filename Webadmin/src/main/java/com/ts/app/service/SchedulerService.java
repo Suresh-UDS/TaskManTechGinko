@@ -820,6 +820,7 @@ public class SchedulerService extends AbstractService {
 								String[] startTimeUnits = startTime.split(":");
 								Calendar shiftStartCal = Calendar.getInstance();
 								//shiftStartCal.add(Calendar.DAY_OF_MONTH, -1);
+								shiftStartCal.setTimeInMillis(dailyAttn.getCheckInTime().getTime());
 								shiftStartCal.set(Calendar.HOUR_OF_DAY, Integer.parseInt(startTimeUnits[0]));
 								shiftStartCal.set(Calendar.MINUTE, Integer.parseInt(startTimeUnits[1]));
 								shiftStartCal.set(Calendar.SECOND, 0);
@@ -827,6 +828,7 @@ public class SchedulerService extends AbstractService {
 								String endTime = shift.getEndTime();
 								String[] endTimeUnits = endTime.split(":");
 								Calendar shiftEndCal = Calendar.getInstance();
+								shiftEndCal.setTimeInMillis(dailyAttn.getCheckInTime().getTime());
 								//shiftEndCal.add(Calendar.DAY_OF_MONTH, -1);
 								shiftEndCal.set(Calendar.HOUR_OF_DAY, Integer.parseInt(endTimeUnits[0]));
 								shiftEndCal.set(Calendar.MINUTE, Integer.parseInt(endTimeUnits[1]));
