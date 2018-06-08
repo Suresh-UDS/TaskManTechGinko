@@ -753,10 +753,6 @@ public class SchedulerService extends AbstractService {
 					if (CollectionUtils.isNotEmpty(settings)) {
 						attendanceReportEmails = settings.get(0);
 					}
-					content = new StringBuilder("Client Name - " + proj.getName() + LINE_SEPARATOR);
-					content.append("Total employees - " + projEmployees + LINE_SEPARATOR);
-					content.append("Present - " + projPresent + LINE_SEPARATOR);
-					content.append("Absent - " + projAbsent + LINE_SEPARATOR);
 					
 					Map<String, String> summaryMap = new HashMap<String, String>();
 					//get total employee count
@@ -765,6 +761,12 @@ public class SchedulerService extends AbstractService {
 					summaryMap.put("TotalEmployees", String.valueOf(projEmpCnt));
 					summaryMap.put("TotalPresent", String.valueOf(projPresent));
 					summaryMap.put("TotalAbsent", String.valueOf(projEmpCnt - projPresent));
+
+					content = new StringBuilder("Client Name - " + proj.getName() + LINE_SEPARATOR);
+					content.append("Total employees - " + projEmpCnt + LINE_SEPARATOR);
+					content.append("Present - " + projPresent + LINE_SEPARATOR);
+					content.append("Absent - " + (projEmpCnt - projPresent) + LINE_SEPARATOR);
+
 					ExportResult exportResult = null;
 					exportResult = exportUtil.writeAttendanceReportToFile(proj.getName(), empAttnList, consolidatedData, summaryMap, null, exportResult);
 					// send reports in email.
