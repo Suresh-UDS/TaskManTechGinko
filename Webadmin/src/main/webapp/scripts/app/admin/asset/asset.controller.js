@@ -310,7 +310,7 @@ angular.module('timeSheetApp')
                 $scope.assetEdit.currentPrice = $scope.asset.currentPrice;
                 $scope.assetEdit.estimatedDisposePrice = $scope.asset.estimatedDisposePrice;
                 $scope.assetEdit.vendorLocation = $scope.asset.vendorLocation;
-                $scope.selectedAssetType ={name:$scope.asset.assetTypeName};
+                $scope.selectedAssetType ={name:$scope.asset.assetType};
                 $scope.selectedAssetGroup ={assetgroup:$scope.asset.assetGroupName};
                 $scope.selectedSite ={name:$scope.asset.siteName};
                 $scope.selectedBlock = $scope.asset.block;
@@ -633,15 +633,15 @@ angular.module('timeSheetApp')
         $scope.updateAsset = function () {
         	$scope.error = null;
         	$scope.success =null;
-
-                $scope.assetEdit.assetTypeName =$scope.selectedAssetType.name;
+                 
+               /* $scope.assetEdit.assetTypeName =$scope.selectedAssetType.name;
                 $scope.assetEdit.assetGroupName = $scope.selectedAssetGroup.name;
                 $scope.assetEdit.siteName = $scope.selectedSite.name;
                 $scope.assetEdit.block = $scope.selectedBlock;
                 $scope.assetEdit.floor = $scope.selectedFloor;
                 $scope.assetEdit.zone = $scope.selectedZone;
                 $scope.assetEdit.manufacturerName = $scope.selectedManufacturer.name;
-                $scope.assetEdit.vendorId = $scope.selectedVendor.id;
+                $scope.assetEdit.vendorId = $scope.selectedVendor.id;*/
 
                // alert($scope.assetEdit.title);
 
@@ -656,7 +656,7 @@ angular.module('timeSheetApp')
                  $scope.showNotifications('top','center','success','Asset Updated!!');
                  $scope.loadAssets();
 
-            	$location.path('/assets');
+            	//$location.path('/assets');
 
             }).catch(function (response) {
 
