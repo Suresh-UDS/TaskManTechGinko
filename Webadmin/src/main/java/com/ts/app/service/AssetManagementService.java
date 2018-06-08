@@ -186,6 +186,9 @@ public class AssetManagementService extends AbstractService {
 	@Inject
 	private AssetParamReadingRepository assetParamReadingRepository;
 
+	@Inject
+	private JobManagementService jobManagementService;
+
 	// Asset
 	public AssetDTO saveAsset(AssetDTO assetDTO) {
 		log.debug("assets service with assettype "+assetDTO.getAssetType());
@@ -683,6 +686,8 @@ public class AssetManagementService extends AbstractService {
 
 		assetPPMSchedule = assetPpmScheduleRepository.save(assetPPMSchedule);
 		assetPpmScheduleDTO = mapperUtil.toModel(assetPPMSchedule, AssetPpmScheduleDTO.class);
+		jobManagementService.createJob(assetPpmScheduleDTO);
+		log.debug(">> after create job for ppm schedule <<<");
 		return assetPpmScheduleDTO;
 	}
 	
