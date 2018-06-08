@@ -535,8 +535,8 @@ angular.module('timeSheetApp')
                     $scope.errorProject = "true";
                 }else{
         
-                    if($scope.selectedAssetType.id){ $scope.assetGen.assetType = $scope.selectedAssetType.id; }
-                    if($scope.selectedAssetGroup.id){ $scope.assetGen.assetGroup = $scope.selectedAssetGroup.id;}
+                    if($scope.selectedAssetType.id){ $scope.assetGen.assetType = $scope.selectedAssetType.name; }
+                    if($scope.selectedAssetGroup.id){ $scope.assetGen.assetGroup = $scope.selectedAssetGroup.assetgroup;}
                     if($scope.selectedAssetStatus.id){ $scope.assetGen.assetStatus = $scope.selectedAssetStatus.id;}
                     if($scope.selectedManufacturer.id){$scope.assetGen.manufacturerId = $scope.selectedManufacturer.id;}
                     if($scope.selectedServiceProvider.id){$scope.assetGen.serviceProvider = $scope.selectedServiceProvider.id;}
@@ -585,7 +585,6 @@ angular.module('timeSheetApp')
             
           $scope.showNotifications('top','center','danger','Please create asset..');
 
-          return false;
         }
 
         if($scope.assetGen.id){
@@ -597,6 +596,7 @@ angular.module('timeSheetApp')
             AssetComponent.createQr(qr).then(function(){
 
                 $scope.success = 'OK';
+  
                 $scope.genQrCodes();
             });
         }
@@ -606,10 +606,12 @@ angular.module('timeSheetApp')
        /* View QR code by asset id */
 
        $scope.genQrCodes= function(){ 
-
-              if($scope.asset.id){
+        
+              if($scope.assetEdit.id){
+    
                 var qr_id ={id:$scope.asset.id};
-              }else if($scope.assetGen.assetId){
+              }else if($scope.assetGen.id){
+      
                 var qr_id ={id:$scope.assetGen.id};
               }
               $rootScope.loadingStart();
@@ -638,7 +640,7 @@ angular.module('timeSheetApp')
                 $scope.assetEdit.manufacturerName = $scope.selectedManufacturer.name;
                 $scope.assetEdit.vendorId = $scope.selectedVendor.id;
 
-                alert($scope.assetEdit.title);
+               // alert($scope.assetEdit.title);
 
         	
         	console.log('Edit asset details ='+ JSON.stringify($scope.assetEdit));
@@ -1081,7 +1083,7 @@ angular.module('timeSheetApp')
 	    
 	    $scope.loadCheckList = function() { 
 	    	ChecklistComponent.findAll().then(function(data){ 
-	    		alert(data);
+	    		//alert(data);
 	    		$scope.checkLists = data;
 	    	});
 	    }
