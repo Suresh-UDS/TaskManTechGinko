@@ -102,8 +102,8 @@ export class MyApp {
         { title: 'Rate Card', component: RateCardPage,active:false,icon:'description',permission:'RateCardList'},
       { title: 'Quotation', component: QuotationPage,active:false,icon:'receipt',permission:'QuotationList'},
        { title: 'Feedback', component: InitFeedbackPage,active:false,icon:'feedback',permission:'FeedbackList'},
-        {title:'Splash page', component:Splash,active:false,icon:'feedback'},
-        {title:'Splash logo', component:SplashLogo,active:false,icon:'feedback'},
+        {title:'Splash page', component:Splash,active:false,icon:'feedback',permission:'DashboardList'},
+        {title:'Splash logo', component:SplashLogo,active:false,icon:'feedback',permission:'DashboardList'},
       // { title: 'Reports', component: ReportsPage,active:false,icon:'trending_up'},
       // { title: 'Logout', component: LogoutPage,active:false,icon:'power_settings_new'}
     ];

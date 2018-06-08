@@ -65,12 +65,11 @@ export class AssetView {
       this.getAssetById();
       this.getAssetPPMSchedule();
       this.getAssetAMCSchedule();
-
-
+      this.viewReading();
   }
 
     getReadings(){
-        this.navCtrl.push(GetAssetReadings,{assetDetails:this.assetDetails});
+        this.navCtrl.push(GetAssetReading,{assetDetails:this.assetDetails});
     }
 
     doRefresh(refresher,segment)
@@ -327,6 +326,7 @@ export class AssetView {
             error=>{
                 console.log("Get asset AMC error");
                 console.log(error);
+                this.assetDetails.ppms = [];
             }
         )
     }
