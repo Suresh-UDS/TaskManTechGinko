@@ -43,6 +43,7 @@ export class AssetView {
 
     this.assetDetails = this.navParams.data.assetDetails;
     this.categories = 'details';
+
   }
     showCalendar()
     {
@@ -63,6 +64,8 @@ export class AssetView {
       this.getAssetById();
       this.getAssetPPMSchedule();
       this.getAssetAMCSchedule();
+
+
   }
 
     getReadings(){
@@ -284,12 +287,13 @@ export class AssetView {
     }
 
     getAssetConfig(assetDetails){
-
+        console.log(this.assetDetails.config);
         this.assetService.getAssetConfig(assetDetails.assetType,assetDetails.id).subscribe(
             response=>{
                 console.log("Asset config");
                 console.log(response);
                 this.assetDetails.config = response;
+
             },err=>{
                 console.log("Error in getting asset config");
                 console.log(err);
