@@ -119,9 +119,10 @@
                                                                                     <div class="col-md-10 pad-r-0px">
                                                                                         <label class="control-label">Type</label>
                                                                                         <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                                                                        <select class="form-control" ng-model="selectedAssetType" ng-options="assetTypeName as assetType.name for assetType in assetTypes track by assetType.name">
-                                                                                            <option value="">Select Asset Type ..</option>
-                                                                                        </select>
+                                                                                       
+                                                                                        <select class="form-control" ng-model="selectedAssetType" ng-options="assetype as assetype.name for assetype in assetTypes track by assetype.name" name="AssetType" required>
+                                                                                         <option value="">Select Asset Type ..</option>
+                                                                                                </select>
                                                                                     </div>
                                                                                     <div class="col-md-2 pdng-top25">
                                                                                        <!--  <a href="javascript:void(0)"  data-toggle="collapse" data-parent="#accordian" data-target="#addAssetType" class="btn btn-round btn-fab btn-fab-mini btn-simple" aria-expanded="false" aria-controls="collapseExample">
@@ -147,7 +148,7 @@
                                                                                     <div class="col-md-10 pad-r-0px">
                                                                                          <label class="control-label">Group</label>
                                                                                          <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                                                                        <select class="form-control" ng-model="selectedAssetGroup" ng-options="assetgroup as assetgroup.assetgroup for assetgroup in assetGroups track by assetgroup">
+                                                                                        <select class="form-control" ng-model="selectedAssetGroup" ng-options="assetgroup as assetgroup.assetgroup for assetgroup in assetGroups track by assetgroup.assetgroup">
                                                                                             <option value="">Select Asset Group ..</option>
                                                                                         </select>
 
