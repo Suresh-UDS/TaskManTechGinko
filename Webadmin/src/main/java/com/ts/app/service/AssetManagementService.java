@@ -371,6 +371,13 @@ public class AssetManagementService extends AbstractService {
 		return mapperUtil.toModel(asset, AssetDTO.class);
 	}
 
+	public void deleteAsset(Long id) {
+		log.debug(">>> Inside Asset Delete Service");
+		Asset asset = assetRepository.findOne(id);
+		asset.setActive(Asset.ACTIVE_NO);
+		assetRepository.save(asset);
+	}
+	
 	public String generateAssetQRCode(long assetId, String assetCode) {
 		Asset asset = assetRepository.findOne(assetId);
 		asset.setCode(assetCode);
@@ -523,7 +530,7 @@ public class AssetManagementService extends AbstractService {
 				if (CollectionUtils.isNotEmpty(siteIds)) {
 					page = assetRepository.findAll(siteIds, pageRequest);
 				} else {
-					page = assetRepository.findAll(pageRequest);
+					page = assetRepository.findAllAsset(pageRequest);
 				}
 			}
 			if (page != null) {

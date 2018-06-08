@@ -114,6 +114,13 @@ public class AssetResource {
 		AssetDTO response = assetService.updateAsset(assetDTO);
 		return new ResponseEntity<>(response, HttpStatus.CREATED);
 	}
+	
+	@RequestMapping(value = "/asset/{id}", method = RequestMethod.DELETE)
+	public ResponseEntity<?> delete(@PathVariable Long id) {
+		log.debug(">>> Inside Asset Delete " + id);
+		assetService.deleteAsset(id);
+		return new ResponseEntity<>(HttpStatus.OK);
+	}
 
 	@RequestMapping(value = "/asset/{id}/qrcode/{code}", method = RequestMethod.GET, produces = MediaType.IMAGE_PNG_VALUE)
 	public String generateAssetQRCode(@PathVariable("id") long assetId, @PathVariable("code") String assetCode) {

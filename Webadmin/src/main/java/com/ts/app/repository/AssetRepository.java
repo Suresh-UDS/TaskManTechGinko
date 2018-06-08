@@ -11,6 +11,7 @@ import org.springframework.data.repository.query.Param;
 
 import com.ts.app.domain.Asset;
 import com.ts.app.domain.AssetAMCSchedule;
+import com.ts.app.domain.Employee;
 
 /**
  * Created by karth on 7/5/2017.
@@ -48,4 +49,6 @@ public interface AssetRepository extends JpaRepository<Asset, Long>,JpaSpecifica
     @Query("SELECT a from Asset a where a.site.id in (:siteIds) and a.active = 'Y'  order by a.title")
     Page<Asset> findAll(@Param("siteIds") List<Long> siteIds,  Pageable pageRequest);
 
+    @Query("SELECT e FROM Asset e WHERE e.active='Y' order by e.title")
+    Page<Asset> findAllAsset(Pageable pageRequest);
 }
