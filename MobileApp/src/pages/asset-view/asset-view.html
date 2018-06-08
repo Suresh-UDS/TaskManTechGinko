@@ -207,15 +207,15 @@
     </ion-list>
     <ion-list *ngSwitchCase="'ppm'">
 
-        <div *ngIf="!assetDetails.ppms || assetDetails.ppms.length < 0">
-            <ion-card>
+        <div text-center="" *ngIf="!assetDetails.ppms || assetDetails.ppms.length < 0">
+            <ion-card text-center="">
                 <ion-card-content>
                     No Data found
                 </ion-card-content>
             </ion-card>
         </div>
 
-        <p text-right class="fnt-18" (click)="showCalendar()"><ion-icon ios="ios-calendar" md="md-calendar" class="green fnt-25 padding-right10"></ion-icon></p>
+        <!--<p text-right class="fnt-18" (click)="showCalendar()"><ion-icon ios="ios-calendar" md="md-calendar" class="green fnt-25 padding-right10"></ion-icon></p>-->
 
         <div  class="white-bg" *ngFor="let ppm of assetDetails.ppms" >
             <img src="https://png.icons8.com/metro/50/000000/overtime.png">
@@ -234,6 +234,7 @@
                             <p text-left class="margin0">{{ppm.status}} </p>
                         </div>
                     </ion-col>
+                    <
                 </ion-row>
             </div>
 
@@ -262,8 +263,8 @@
     </ion-list>
 
     <ion-list *ngSwitchCase="'amc'">
-        <div *ngIf="!assetDetails.amcs || assetDetails.amcs.length < 0">
-            <ion-card>
+        <div text-center="" *ngIf="!assetDetails.amcs || assetDetails.amcs.length < 0">
+            <ion-card text-center="">
                 <ion-card-content>
                     No Data found
                 </ion-card-content>
@@ -317,8 +318,8 @@
 
     <div *ngSwitchCase="'config'">
 
-        <div *ngIf="!assetDetails.config || assetDetails.config.length < 0">
-            <ion-card>
+        <div text-center="" *ngIf="!assetDetails.config || assetDetails.config.length < 0">
+            <ion-card text-center="">
                 <ion-card-content>
                     No Data found
                 </ion-card-content>
@@ -399,8 +400,8 @@
 
     <ion-list *ngSwitchCase="'jobs'" style="margin-top : 56px">
 
-        <div *ngIf="!assetDetails.jobs || assetDetails.jobs?.length<0">
-            <ion-card>
+        <div text-center="" *ngIf="!assetDetails.jobs || assetDetails.jobs?.length<0">
+            <ion-card text-center="">
                 <ion-card-content>
                     No Data found
                 </ion-card-content>
@@ -500,8 +501,8 @@
 
     <ion-list *ngSwitchCase="'tickets'" style="margin-top : 56px">
 
-        <div *ngIf="!assetDetails.tickets || assetDetails.tickets?.length<0">
-            <ion-card>
+        <div text-center="" *ngIf="!assetDetails.tickets || assetDetails.tickets?.length<0">
+            <ion-card text-center="">
                 <ion-card-content>
                     No Data found
                 </ion-card-content>
@@ -555,8 +556,8 @@
 
     <ion-list *ngSwitchCase="'readings'">
 
-        <div *ngIf="!assetDetails.readings || assetDetails.readings.length < 0">
-            <ion-card>
+        <div text-center="" *ngIf="!assetDetails.readings || assetDetails.readings.length < 0">
+            <ion-card text-center="">
                 <ion-card-content>
                     No Data found
                 </ion-card-content>
