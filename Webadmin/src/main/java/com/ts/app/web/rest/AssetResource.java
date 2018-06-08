@@ -154,12 +154,12 @@ public class AssetResource {
 	}
 
 	@RequestMapping(value = "/assets/config", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-	public List<AssetParameterConfigDTO> getAssetConfig(@Valid @RequestBody AssetParameterConfigDTO assetParamConfigDTO) {
+	public ResponseEntity<List<AssetParameterConfigDTO>> getAssetConfig(@Valid @RequestBody AssetParameterConfigDTO assetParamConfigDTO) {
 		List<AssetParameterConfigDTO> result = null;
 		if (assetParamConfigDTO.getAssetType()!=null && assetParamConfigDTO.getAssetId() > 0) {
 			result = assetService.findByAssetConfig(assetParamConfigDTO.getAssetType(), assetParamConfigDTO.getAssetId());
 		}
-		return result;
+		return new ResponseEntity<>(result, HttpStatus.OK);
 
 	}
 
