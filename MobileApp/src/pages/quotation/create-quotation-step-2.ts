@@ -208,7 +208,7 @@ export class CreateQuotationPage2 {
     }
 
 
-    saveRates()
+    saveRates(mode)
     {
         if(this.rates.length!=0)
         {
@@ -231,9 +231,22 @@ export class CreateQuotationPage2 {
                     "projectName":this.siteDetails.projectName,
                     "siteName":this.siteDetails.name,
                     "grandTotal":this.grandTotal,
-                    "drafted":true,
-                    "mode":"create"
+                    "mode":mode
                 };
+                if(mode == 'submit'){
+                    console.log(mode);
+                    this.quotationDetails.submitted=true;
+                    this.quotationDetails.isSubmitted=true;
+                    this.quotationDetails.isDrafted=false;
+                    this.quotationDetails.drafted=false;
+
+                }else{
+                    console.log(mode);
+                    this.quotationDetails.drafted=true;
+                    this.quotationDetails.isDrafted=true;
+                    this.quotationDetails.submitted=false;
+                    this.quotationDetails.isSubmitted=false;
+                }
 
                 this.saveQuotationDetails(this.quotationDetails)
             }else{

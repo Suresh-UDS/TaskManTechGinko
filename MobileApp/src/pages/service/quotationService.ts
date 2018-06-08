@@ -106,8 +106,8 @@ export class QuotationService {
     approveQuotation(quotation): Observable<any>{
         return this.http.post(this.config.Url+'api/rateCard/quotation/approve',quotation).map(
             response=>{
-                console.log(response.json());
-                return response.json();
+                console.log(response);
+                return response;
             }
         )
     }

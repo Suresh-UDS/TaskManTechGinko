@@ -172,11 +172,11 @@
 </ion-content>
 
 <ion-footer >
-    <ion-toolbar class="align-right" padding-left padding-right (click)="saveRates()" >
-        <button class="btn btn-warning center pull-left">
+    <ion-toolbar class="align-right" padding-left padding-right  >
+        <button class="btn btn-warning center pull-left" (click)="saveRates('create')">
             Save
         </button>
-        <button class="btn btn-success center pull-right" (click)="submitQuotation()">
+        <button class="btn btn-success center pull-right" (click)="saveRates('submit')">
             Submit <ion-icon name="ios-arrow-forward-outline"></ion-icon>
         </button>
     </ion-toolbar>

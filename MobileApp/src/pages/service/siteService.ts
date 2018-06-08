@@ -73,7 +73,7 @@ export class SiteService {
     }
 
     searchSiteEmployee(siteId):Observable<any>{
-        return this.http.get(this.config.Url+'api/employee/site/'+siteId).map(
+        return this.http.get(this.config.Url+'api/empAttendance/site/'+siteId).map(
             response=>{
                 return response;
             }
