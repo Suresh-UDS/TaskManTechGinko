@@ -423,9 +423,8 @@ public class AssetManagementService extends AbstractService {
 		if (assetAMCScheduleDTO.getId() > 0) {
 			assetAMC = assetAMCRepository.findOne(assetAMCScheduleDTO.getId());
 			assetAMC.setActive(assetAMCScheduleDTO.getActive());
-			if (assetAMCScheduleDTO.getChecklistDto() != null
-					&& assetAMC.getChecklist().getId() != assetAMCScheduleDTO.getChecklistDto().getId()) {
-				Checklist checklist = checklistRepository.findOne(assetAMCScheduleDTO.getChecklistDto().getId());
+			if (assetAMC.getChecklist().getId() != assetAMCScheduleDTO.getChecklistId()) {
+				Checklist checklist = checklistRepository.findOne(assetAMCScheduleDTO.getChecklistId());
 				assetAMC.setChecklist(checklist);
 			}
 			assetAMC.setFrequency(assetAMCScheduleDTO.getFrequency());
