@@ -65,7 +65,7 @@ public class AssetResource {
 	@Timed
 	public ResponseEntity<?> saveAsset(@Valid @RequestBody AssetDTO assetDTO, HttpServletRequest request) {
 		log.debug(">>> Asset DTO save request <<<");
-
+		
 		AssetDTO response = assetService.saveAsset(assetDTO);
 		log.debug("Asset new id - " + response.getId());
 		return new ResponseEntity<>(response, HttpStatus.CREATED);
@@ -205,7 +205,7 @@ public class AssetResource {
 		log.debug("Title <<<" + assetPpmScheduleDTO.getTitle());
 
 		AssetPpmScheduleDTO response = assetService.createAssetPpmSchedule(assetPpmScheduleDTO);
-		log.debug("Asset Ppm Schedule save response - " + response);
+		log.debug("Asset Ppm Schedule after save and create job response - " + response);
 		return new ResponseEntity<>(response, HttpStatus.CREATED);
 	}
 
