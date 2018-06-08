@@ -485,12 +485,12 @@ angular.module('timeSheetApp')
         $scope.viewAsset = function(){
 
             var assetId = $stateParams.id;
-             $scope.assetDetail= {};
 
             AssetComponent.findById(assetId).then(function(data){
                 console.log("Asset details List==" + JSON.stringify(data));
                 $scope.assetDetail= data;
                 $scope.assetConfig();
+                $scope.genQrCodes();
 
             });
         }
@@ -653,6 +653,7 @@ angular.module('timeSheetApp')
         $scope.updateAsset = function () {
         	$scope.error = null;
         	$scope.success =null;
+
                  
                 if($scope.selectedAssetType.name)
                 {     $scope.assetEdit.assetType =$scope.selectedAssetType.name;

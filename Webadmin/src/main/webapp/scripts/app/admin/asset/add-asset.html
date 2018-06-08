@@ -698,7 +698,7 @@
 
                                                                             <div class="QrcodeCon" ng-show="qr_img">
 
-                                                                                <img src="{{qr_img}}" width="100%">
+                                                                                <img src="{{qr_img}}" width="50%">
 
                                                                             </div>
 
@@ -744,9 +744,18 @@
                                                                                                 <div class="" style="float:left;width:90%;">
                                                                                                     <label class="control-label">Select Parameter </label>
                                                                                                     <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                                                                                    <select class="form-control ng-pristine ng-valid ng-touched" ng-model="selectedParameter"  ng-options="parameter as parameter.name for parameter in parameters" tabindex="0" aria-invalid="false">
+                                                                                                    <select class="form-control ng-pristine ng-valid ng-touched" ng-model="selectedParameter" name="param"  ng-options="parameter as parameter.name for parameter in parameters" tabindex="0" aria-invalid="false" required>
                                                                                                         <option value="" class="" selected="selected">Select Parameter ..</option>
                                                                                                     </select>
+                                                                                                    <div ng-show="form2.$submitted || form2.param.$touched">
+                                                                                                        <div ng-show="form2.param.$dirty || form2.param.$invalid">
+                                                                                                            <p class="help-block" style="color:maroon"
+                                                                                                               ng-show="form2.param.$error.required">
+                                                                                                                Parameter is required.
+                                                                                                            </p>
+                                                                                                            
+                                                                                                        </div>
+                                                                                                    </div>
                                                                                                 </div>
                                                                                                 <div class="" style="float:left;">
                                                                                                     <a href="javascript:;" data-toggle="collapse" data-parent="#accordian" data-target="#addParamet" class="btn btn-round btn-fab btn-fab-mini btn-simple" aria-expanded="false" aria-controls="collapseExample">
@@ -771,9 +780,18 @@
                                                                                                 <div class="" style="float:left;width:90%;">
                                                                                                     <label class="control-label">Select Units</label>
                                                                                                     <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                                                                                    <select class="form-control ng-pristine ng-valid ng-touched" ng-model="selectedParameterUOM"  ng-options="parameterUOM as parameterUOM.uom for parameterUOM in parameterUOMs" tabindex="0" aria-invalid="false">
+                                                                                                    <select class="form-control ng-pristine ng-valid ng-touched" ng-model="selectedParameterUOM" name="parameterUOM"  ng-options="parameterUOM as parameterUOM.uom for parameterUOM in parameterUOMs" tabindex="0" aria-invalid="false" required>
                                                                                                         <option value="" class="" selected="selected">Select Units ..</option>
                                                                                                     </select>
+                                                                                                    <div ng-show="form2.$submitted || form2.parameterUOM.$touched">
+                                                                                                        <div ng-show="form2.parameterUOM.$dirty || form2.parameterUOM.$invalid">
+                                                                                                            <p class="help-block" style="color:maroon"
+                                                                                                               ng-show="form2.parameterUOM.$error.required">
+                                                                                                                Parameter UOM is required.
+                                                                                                            </p>
+                                                                                                            
+                                                                                                        </div>
+                                                                                                    </div>
                                                                                                 </div>
                                                                                                 <div class="" style="float:left;">
                                                                                                     <a href="javascript:;" data-toggle="collapse" data-parent="#accordian" data-target="#addUnits" class="btn btn-round btn-fab btn-fab-mini btn-simple" aria-expanded="false" aria-controls="collapseExample">
@@ -805,7 +823,7 @@
                                                                                         </div>
 
                                                                                         <div class="col-md-4 txt-align-rgt">
-                                                                                            <button class="btn btn-success" ng-click="saveAssetParamConfig()"
+                                                                                            <button class="btn btn-success" ng-click="saveAssetParamConfig()" ng-disabled="form6.$invalid"
                                                                                                     id="form-button-add">
                                                                                                 <span class="btn-label"><i class="material-icons">add</i></span> Add
                                                                                             </button>
