@@ -27,15 +27,16 @@ public class PushResource {
 	@Inject
 	private PushService pushService;
 	
-	@RequestMapping(value = "/push/subscribe", method = RequestMethod.GET)
+	@RequestMapping(value = "/push/subscribe", method = RequestMethod.POST)
 	public ResponseEntity<?> subscribe(@RequestBody PushRequestDTO pushRequest) {
 		long userId = SecurityUtils.getCurrentUserId();
 		pushRequest.setUserId(userId);
+		pushRequest.setUserType("customer");
 		pushService.subscribe(pushRequest);
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 	
-	@RequestMapping(value = "/push/send", method = RequestMethod.GET)
+	@RequestMapping(value = "/push/send", method = RequestMethod.POST)
 	public ResponseEntity<?> send(@RequestBody PushRequestDTO pushRequest) {
 		long userId = SecurityUtils.getCurrentUserId();
 		pushRequest.setUserId(userId);

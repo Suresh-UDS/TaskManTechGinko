@@ -3,6 +3,12 @@
 
   "mongodbUrl": "mongodb://localhost:27017/taskman_push_db",
 
+  "db" : {
+    "url":"mongodb://localhost:27017/taskman_push_db",
+    "user" :"clssmongo",
+    "password":"i0ps2gal"
+  },
+
   "gcm": {
     "apiKey": "AIzaSyDSRYXq7bbLDR3OUzmqyBkgX4B1eXSX6d0"
   },

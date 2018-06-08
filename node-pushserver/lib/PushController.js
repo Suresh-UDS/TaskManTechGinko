@@ -54,9 +54,6 @@ var send = function (pushAssociations, payload, target) {
 
             var data = {
               message: payload.data.message,
-              bookingId : payload.additionalData.bookingId,
-              stateId: payload.additionalData.stateId,
-              event: payload.additionalData.event,
               users : users,
               userType: userType,
               isIos : isIOS,
