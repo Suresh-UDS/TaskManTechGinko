@@ -15,14 +15,15 @@ import{AssetService} from "../service/assetService";
  * Ionic pages and navigation.
  */
 @Component({
-    selector: 'page-get-asset-reading',
-    templateUrl: 'get-asset-reading.html',
+    selector: 'page-get-asset-readings',
+    templateUrl: 'get-asset-readings.html',
 })
-export class GetAssetReading {
+export class GetAssetReadings {
 
     assetDetails:any;
     dateTime:any;
     takenImages:any;
+    uom:any;
     constructor(public navCtrl: NavController, public navParams: NavParams, public modalController: ModalController,
                 public componentService:componentService, public popoverCtrl:PopoverController, public camera:Camera,
                 public assetService:AssetService) {
@@ -33,7 +34,6 @@ export class GetAssetReading {
     }
     ionViewDidLoad(){
         console.log("Get Asset reading page");
-        this.getReading();
     }
 
     submitReading(){
@@ -76,12 +76,14 @@ export class GetAssetReading {
         })
     }
 
-    getReading(){
+    saveReading(){
         console.log("Reading page");
         this.assetService.saveReading().subscribe(
             response=>{
                 console.log("Save Reading Response");
                 console.log(response);
+                this.componentService.showToastMessage('Reading Added','bottom');
+                this.navCtrl.pop();
             },
             error=>
             {
@@ -90,6 +92,10 @@ export class GetAssetReading {
             }
 
         )
+
+    }
+
+    getAssetConfig(){
 
     }
 }

@@ -46,7 +46,8 @@ export class AssetService {
     }
 
     getAssetConfig(assetType,assetId):Observable<any>{
-        return this.http.get(this.config.Url+'api/assets/'+assetType+'/config/'+assetId).map(
+        var data={assetType: assetType, assetId: assetId}
+        return this.http.post(this.config.Url+'api/assets/config',data).map(
             response=>{
                 console.log("Get asset config");
                 console.log(response);
@@ -80,6 +81,25 @@ export class AssetService {
                 console.log(response);
                 return response.json();
             })
+    }
+    saveReading():Observable<any>{
+        return this.http.post(this.config.Url+'api/assets/saveReadings',"").map(
+            response=>{
+                console.log("Save Reading");
+                console.log(response);
+                return response.json();
+            }
+        )
+    }
+
+    viewReading(assetId):Observable<any>{
+        return this.http.get(this.config.Url+' api/assets/+ api/assets/'+assetId+'/viewReadings' ).map(
+            response=>{
+                console.log("View Reading");
+                console.log(response);
+                return response.json();
+            }
+        )
     }
 
 }

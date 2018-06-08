@@ -195,6 +195,9 @@ public class AssetManagementService extends AbstractService {
 	@Inject
 	private ParameterConfigRepository parameterConfigRepository;
 
+	@Inject
+	private JobManagementService jobManagementService;
+
 	// Asset
 	public AssetDTO saveAsset(AssetDTO assetDTO) {
 		log.debug("assets service with assettype " + assetDTO.getAssetType());
@@ -299,7 +302,7 @@ public class AssetManagementService extends AbstractService {
 		log.debug("asset Type " + asset.getAssetType());
 		log.debug("Asset Group " + asset.getAssetGroup());
 		AssetDTO assetDTO = mapperUtil.toModel(asset, AssetDTO.class);
-		log.debug("asset Type after mapping... " + assetDTO.getAssetType() + " Manufacture " + assetDTO.getManufacturerName() + " Vendor " + assetDTO.getAmcVendorName());
+/*		log.debug("asset Type after mapping... " + assetDTO.getAssetType() + " Manufacture " + assetDTO.getManufacturerName() + " Vendor " + assetDTO.getAmcVendorName());
 		log.debug("Asset Group after mapping...  " + assetDTO.getAssetGroup());
 		AssetType assetType = assetTypeRepository.findOne(Long.valueOf(assetDTO.getAssetType()));
 		assetDTO.setAssetTypeName(assetType.getName());
@@ -308,7 +311,7 @@ public class AssetManagementService extends AbstractService {
 		AssetGroup assetGroup = assetGroupRepository.findOne(Long.valueOf(assetDTO.getAssetGroup()));
 		assetDTO.setAssetGroupName(assetGroup.getAssetgroup());
 		log.debug("Asset Group Name  " + assetDTO.getAssetGroupName());
-
+*/
 		return assetDTO;
 	}
 
@@ -372,6 +375,13 @@ public class AssetManagementService extends AbstractService {
 		return mapperUtil.toModel(asset, AssetDTO.class);
 	}
 
+	public void deleteAsset(Long id) {
+		log.debug(">>> Inside Asset Delete Service");
+		Asset asset = assetRepository.findOne(id);
+		asset.setActive(Asset.ACTIVE_NO);
+		assetRepository.save(asset);
+	}
+	
 	public String generateAssetQRCode(long assetId, String assetCode) {
 		Asset asset = assetRepository.findOne(assetId);
 		asset.setCode(assetCode);
@@ -524,7 +534,7 @@ public class AssetManagementService extends AbstractService {
 				if (CollectionUtils.isNotEmpty(siteIds)) {
 					page = assetRepository.findAll(siteIds, pageRequest);
 				} else {
-					page = assetRepository.findAll(pageRequest);
+					page = assetRepository.findAllAsset(pageRequest);
 				}
 			}
 			if (page != null) {
@@ -568,19 +578,6 @@ public class AssetManagementService extends AbstractService {
 		assetDTO.setSiteName(asset.getSite().getName());
 		assetDTO.setAssetType(asset.getAssetType());
 		assetDTO.setAssetGroup(asset.getAssetGroup());
-
-		log.debug(">>> Asset Type " + assetDTO.getAssetType() + " Manufacture " + assetDTO.getManufacturerName() + " Vendor " + assetDTO.getAmcVendorName());
-		log.debug("Asset Group ...  " + assetDTO.getAssetGroup());
-
-		AssetType assetType = assetTypeRepository.findOne(Long.valueOf(assetDTO.getAssetType()));
-		assetDTO.setAssetTypeName(assetType.getName());
-
-		log.debug("Asset Type Name  " + assetDTO.getAssetTypeName());
-
-		AssetGroup assetGroup = assetGroupRepository.findOne(Long.valueOf(assetDTO.getAssetGroup()));
-		assetDTO.setAssetGroupName(assetGroup.getAssetgroup());
-
-		log.debug("Asset Group Name  " + assetDTO.getAssetGroupName());
 
 		return assetDTO;
 	}
@@ -701,6 +698,8 @@ public class AssetManagementService extends AbstractService {
 
 		assetPPMSchedule = assetPpmScheduleRepository.save(assetPPMSchedule);
 		assetPpmScheduleDTO = mapperUtil.toModel(assetPPMSchedule, AssetPpmScheduleDTO.class);
+		jobManagementService.createJob(assetPpmScheduleDTO);
+		log.debug(">> after create job for ppm schedule <<<");
 		return assetPpmScheduleDTO;
 	}
 

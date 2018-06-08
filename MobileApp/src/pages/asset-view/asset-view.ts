@@ -8,6 +8,7 @@ import {ViewJobPage} from "../jobs/view-job";
 import {CompleteJobPage} from "../jobs/completeJob";
 import {ViewTicket} from "../ticket/view-ticket";
 import {CreateTicket} from "../ticket/create-ticket";
+import{GetAssetReadings} from "../get-asset-readings/get-asset-readings";
 
 import { DatePicker } from '@ionic-native/date-picker';
 import {AssetService} from "../service/assetService";
@@ -43,6 +44,7 @@ export class AssetView {
 
     this.assetDetails = this.navParams.data.assetDetails;
     this.categories = 'details';
+
   }
     showCalendar()
     {
@@ -63,10 +65,12 @@ export class AssetView {
       this.getAssetById();
       this.getAssetPPMSchedule();
       this.getAssetAMCSchedule();
+
+
   }
 
     getReadings(){
-        this.navCtrl.push(GetAssetReading,{assetDetails:this.assetDetails});
+        this.navCtrl.push(GetAssetReadings,{assetDetails:this.assetDetails});
     }
 
     doRefresh(refresher,segment)
@@ -266,7 +270,7 @@ export class AssetView {
         var searchCriteria={
             fromDate:fromDate.toISOString(),
             toDate:toDate.toISOString()
-        }
+        };
         if(categories == 'jobs')
         {
             this.getJobs(searchCriteria)
@@ -284,12 +288,13 @@ export class AssetView {
     }
 
     getAssetConfig(assetDetails){
-
+        console.log(this.assetDetails.config);
         this.assetService.getAssetConfig(assetDetails.assetType,assetDetails.id).subscribe(
             response=>{
                 console.log("Asset config");
                 console.log(response);
                 this.assetDetails.config = response;
+
             },err=>{
                 console.log("Error in getting asset config");
                 console.log(err);
@@ -338,6 +343,21 @@ export class AssetView {
             error=>{
                 this.componentService.closeLoader()
                 console.log("Get asset AMC error");
+                console.log(error);
+            }
+        )
+    }
+
+    viewReading(){
+        this.assetService.viewReading(this.assetDetails.id).subscribe(
+            response=>
+            {
+                console.log("View Reading Response");
+                console.log(response);
+                this.assetDetails.reading=response;
+            },error=>
+            {
+                console.log("Error in View Reading");
                 console.log(error);
             }
         )

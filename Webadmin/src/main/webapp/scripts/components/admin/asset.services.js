@@ -114,7 +114,7 @@ angular.module('timeSheetApp')
             
 
             findByAssetConfig : function(data) { 
-            	return $http.get('api/assets/config', data).then(function (response) { 
+            	return $http.post('api/assets/config', data).then(function (response) { 
             		return response.data;
             	});
             },
@@ -126,6 +126,8 @@ angular.module('timeSheetApp')
             },
             
             createAssetParamConfig : function(assetParam, callback) {
+
+                console.log("asset requsest -- ",assetParam);
             	var cb = callback || angular.noop;
                 return $http.post('api/assets/params', assetParam).then(
                     function (response) {

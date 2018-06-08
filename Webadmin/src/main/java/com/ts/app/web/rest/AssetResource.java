@@ -68,7 +68,7 @@ public class AssetResource {
 	@Timed
 	public ResponseEntity<?> saveAsset(@Valid @RequestBody AssetDTO assetDTO, HttpServletRequest request) {
 		log.debug(">>> Asset DTO save request <<<");
-
+		
 		AssetDTO response = assetService.saveAsset(assetDTO);
 		log.debug("Asset new id - " + response.getId());
 		return new ResponseEntity<>(response, HttpStatus.CREATED);
@@ -116,6 +116,13 @@ public class AssetResource {
 		log.debug("Asset Details in updateAsset id from dto = " + assetDTO.getId());
 		AssetDTO response = assetService.updateAsset(assetDTO);
 		return new ResponseEntity<>(response, HttpStatus.CREATED);
+	}
+	
+	@RequestMapping(value = "/asset/{id}", method = RequestMethod.DELETE)
+	public ResponseEntity<?> delete(@PathVariable Long id) {
+		log.debug(">>> Inside Asset Delete " + id);
+		assetService.deleteAsset(id);
+		return new ResponseEntity<>(HttpStatus.OK);
 	}
 
 	@RequestMapping(value = "/asset/{id}/qrcode/{code}", method = RequestMethod.GET, produces = MediaType.IMAGE_PNG_VALUE)
@@ -208,7 +215,7 @@ public class AssetResource {
 		log.debug("Title <<<" + assetPpmScheduleDTO.getTitle());
 
 		AssetPpmScheduleDTO response = assetService.createAssetPpmSchedule(assetPpmScheduleDTO);
-		log.debug("Asset Ppm Schedule save response - " + response);
+		log.debug("Asset Ppm Schedule after save and create job response - " + response);
 		return new ResponseEntity<>(response, HttpStatus.CREATED);
 	}
 
