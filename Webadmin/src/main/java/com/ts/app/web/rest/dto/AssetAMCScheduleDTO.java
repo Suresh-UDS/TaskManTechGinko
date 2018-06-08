@@ -8,7 +8,9 @@ public class AssetAMCScheduleDTO extends BaseDTO {
 	
 	private String title;
 	
-	private ChecklistDTO checklistDto;
+	private long checklistId;
+	
+	private String checklistName;
 	
 	private Date startDate;
 	
@@ -36,14 +38,6 @@ public class AssetAMCScheduleDTO extends BaseDTO {
 
 	public void setTitle(String title) {
 		this.title = title;
-	}
-
-	public ChecklistDTO getChecklistDto() {
-		return checklistDto;
-	}
-
-	public void setChecklistDto(ChecklistDTO checklistDto) {
-		this.checklistDto = checklistDto;
 	}
 
 	public Date getStartDate() {
@@ -93,7 +87,22 @@ public class AssetAMCScheduleDTO extends BaseDTO {
 	public void setAssetId(long assetId) {
 		this.assetId = assetId;
 	}
-	
+
+	public long getChecklistId() {
+		return checklistId;
+	}
+
+	public void setChecklistId(long checklistId) {
+		this.checklistId = checklistId;
+	}
+
+	public String getChecklistName() {
+		return checklistName;
+	}
+
+	public void setChecklistName(String checklistName) {
+		this.checklistName = checklistName;
+	}
 	
 
 }

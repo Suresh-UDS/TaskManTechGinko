@@ -9,6 +9,7 @@ angular.module('timeSheetApp')
                 return $http.post('api/asset',asset).then(
                     function (response) {
                         //return cb(response);
+                        console.log("Create Asset Service response -- " , response);
                         return response;
                     }).catch(
                     function (err) {
@@ -113,9 +114,7 @@ angular.module('timeSheetApp')
             
 
             findByAssetConfig : function(data) { 
-            	var type = data.assetTypeName;
-            	var id = data.assetId;
-            	return $http.get('api/assets/'+type+'/config/'+id).then(function (response) { 
+            	return $http.get('api/assets/config', data).then(function (response) { 
             		return response.data;
             	});
             },

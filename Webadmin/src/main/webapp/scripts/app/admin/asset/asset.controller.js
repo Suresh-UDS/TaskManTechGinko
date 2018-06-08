@@ -293,10 +293,38 @@ angular.module('timeSheetApp')
         	AssetComponent.findById($stateParams.id).then(function(data){
 
         		$scope.asset=data;
-                
+
+                console.log("Edit Asset--",$scope.asset);
+
                 $scope.selectedAssetType ={name:$scope.asset.assetTypeName};
                 $scope.selectedAssetGroup ={assetgroup:$scope.asset.assetGroupName};
                 $scope.selectedSite ={name:$scope.asset.siteName};
+                $scope.selectedBlock = $scope.asset.block;
+                $scope.selectedFloor = $scope.asset.floor;
+                $scope.selectedZone = $scope.asset.zone;
+                $scope.selectedManufacturer = {name:$scope.asset.manufacturerName};
+                $scope.selectedVendor = {id:$scope.asset.vendorId};
+                if($scope.asset.siteId){   
+                        LocationComponent.findBlocks(0,$scope.asset.siteId).then(function (data) {
+                        $scope.selectedBlock = null;
+                        $scope.blocks = data;
+                         console.log("Loading all blocks -- " ,  $scope.blocks);
+                    });
+               
+                       LocationComponent.findFloors(0,$scope.asset.siteId,$scope.asset.block).then(function (data) {
+                        $scope.selectedFloor = null;
+                        $scope.floors = data;
+                        console.log("Loading all floors -- " ,  $scope.floors);
+                    });
+
+                       LocationComponent.findZones(0,$scope.asset.siteId,$scope.asset.block,$scope.asset.floor).then(function (data) {
+                        $scope.selectedZone = null;
+                        $scope.zones = data;
+                        console.log('zones list',$scope.zones);
+                   });
+                }
+
+                $scope.genQrCodes();
         		
         		/*if($scope.asset.assetType) {
         			$scope.assetConfig = {};
@@ -452,8 +480,9 @@ angular.module('timeSheetApp')
 
              
             if($stateParams.id){ 
+                alert($scope.assets.name);
                
-                $scope.assetConfig.assetTypeName = $scope.assetDetail.name;
+                $scope.assetConfig.assetTypeName = $scope.assets.name;
                 $scope.assetConfig.assetId = $stateParams.id;
             }
             else if($scope.assetGen.id){
@@ -513,7 +542,6 @@ angular.module('timeSheetApp')
                         $scope.assetGen.id=response.data.id;
                         $scope.success = 'OK';
                         $scope.showNotifications('top','center','success','Asset Added');
-                        $scope.selectedSite = null;
                         $scope.loadAssets();
 
                         //$location.path('/assets');
@@ -541,6 +569,13 @@ angular.module('timeSheetApp')
 
        $scope.createQrCode= function(){  
 
+        if(!$scope.assetGen.id){
+            
+          $scope.showNotifications('top','center','danger','Please create asset..');
+
+          return false;
+        }
+
         if($scope.assetGen.id){
             
             var qr = {id:$scope.assetGen.id,code:$scope.assetGen.assetcode}
@@ -558,9 +593,13 @@ angular.module('timeSheetApp')
 
        /* View QR code by asset id */
 
-       $scope.genQrCodes= function(){  
+       $scope.genQrCodes= function(){ 
 
-              var qr_id ={id:$scope.assetGen.id};
+              if($scope.asset.id){
+                var qr_id ={id:$scope.asset.id};
+              }else if($scope.assetGen.assetId){
+                var qr_id ={id:$scope.assetGen.id};
+              }
               $rootScope.loadingStart();
               $scope.qr_img = "";
 
@@ -581,12 +620,16 @@ angular.module('timeSheetApp')
         	    $scope.asset.siteId = $scope.asset.selectedSite.id;
         	    delete $scope.asset.selectedSite;
             }
-        	console.log('asset details ='+ JSON.stringify($scope.asset));
+        	console.log('Edit asset details ='+ JSON.stringify($scope.asset));
+
+            return false;
         	//$scope.asset.assetStatus = $scope.selectedStatus.name;
         	//var post = $scope.isEdit ? AssetComponent.update : AssetComponent.create
         	AssetComponent.update($scope.asset).then(function () {
 
                 $scope.success = 'OK';
+                 $scope.showNotifications('top','center','success','Asset Added');
+                 $scope.loadAssets();
 
             	$location.path('/assets');
 
@@ -626,14 +669,14 @@ angular.module('timeSheetApp')
         }
 
         $scope.deleteConfirm = function (asset){
-        	$scope.deleteAssetId= asset.id;
+        	$scope.deleteAssetId= asset;
         }
 
         $scope.deleteAsset = function () {
         	AssetComponent.remove($scope.deleteAssetId).then(function(){
-
+                
             	$scope.success = 'OK';
-            	$state.reload();
+            	$scope.loadAssets();
         	});
         };
 
@@ -820,7 +863,7 @@ angular.module('timeSheetApp')
 
             if($stateParams.id){
             	if($scope.asset.assetType){
-            	    $scope.parameterConfig.assetType = $scope.asset.assetType;
+            	    $scope.parameterConfig.assetType = $scope.asset.assetTypeName;
             	    $scope.parameterConfig.assetId = $stateParams.id;
             	}
             	if($scope.selectedParameter){
