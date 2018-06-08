@@ -100,7 +100,7 @@ public interface AttendanceRepository extends JpaRepository<Attendance, Long>,Jp
     @Query("SELECT a from Attendance a where a.checkInTime between :startDate and :endDate order by a.checkInTime desc")
     List<Attendance> findByCheckInDate(@Param("startDate") Date startDate, @Param("endDate") Date endDate);
 
-    @Query("SELECT a from Attendance a where a.checkInTime < :endDate and a.checkOutTime is null order by a.checkInTime desc")
+    @Query("SELECT a from Attendance a where a.checkInTime < :endDate and a.checkOutTime is null and a.notCheckedOut = FALSE order by a.checkInTime desc")
     List<Attendance> findByCheckInDateAndNotCheckout(@Param("endDate") Date endDate);
 
     @Query("SELECT a from Attendance a where a.site.id = :siteId order by a.checkInTime desc")

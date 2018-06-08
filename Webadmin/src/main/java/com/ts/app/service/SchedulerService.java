@@ -794,7 +794,7 @@ public class SchedulerService extends AbstractService {
 		endCal.set(Calendar.HOUR_OF_DAY, 23);
 		endCal.set(Calendar.MINUTE, 59);
 		Calendar prevDayEndCal = Calendar.getInstance();
-		prevDayEndCal.set(Calendar.DAY_OF_MONTH, -1);
+		prevDayEndCal.add(Calendar.DAY_OF_MONTH, -1);
 		prevDayEndCal.set(Calendar.HOUR_OF_DAY, 23);
 		prevDayEndCal.set(Calendar.MINUTE, 59);
 
@@ -861,17 +861,17 @@ public class SchedulerService extends AbstractService {
 										}
 										// send email notifications
 										Map<String, Object> values = new HashMap<String, Object>();
-										values.put("checkInTime", checkInCal.getTime());
+										values.put("checkInTime", DateUtil.formatToDateTimeString(checkInCal.getTime()));
 										values.put("site", site.getName());
 										mailService.sendAttendanceCheckouAlertEmail(emp.getEmail(), values);
 										break;
 									}
 								} else {
-									if (checkInCal.before(prevDayEndCal.getTime()) && currCal.getTime().after(prevDayEndCal.getTime())) {
+									if (checkInCal.before(prevDayEndCal) && currCal.after(prevDayEndCal)) {
 										dailyAttn.setNotCheckedOut(true); // mark the attendance as not checked out.
 										// send email notifications
 										Map<String, Object> values = new HashMap<String, Object>();
-										values.put("checkInTime", checkInCal.getTime());
+										values.put("checkInTime", DateUtil.formatToDateTimeString(checkInCal.getTime()));
 										values.put("site", site.getName());
 										mailService.sendAttendanceCheckouAlertEmail(emp.getEmail(), values);
 										break;
