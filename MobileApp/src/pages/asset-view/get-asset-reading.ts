@@ -6,6 +6,7 @@ import {AssetView} from "../asset-view/asset-view";
 import {componentService} from "../service/componentService";
 import {JobPopoverPage} from "../jobs/job-popover";
 import {Camera, CameraOptions} from "@ionic-native/camera";
+import{AssetService} from "../service/assetService";
 
 /**
  * Generated class for the GetAssetReadings page.
@@ -23,11 +24,16 @@ export class GetAssetReading {
     dateTime:any;
     takenImages:any;
     constructor(public navCtrl: NavController, public navParams: NavParams, public modalController: ModalController,
-                public componentService:componentService, public popoverCtrl:PopoverController, public camera:Camera) {
+                public componentService:componentService, public popoverCtrl:PopoverController, public camera:Camera,
+                public assetService:AssetService) {
         this.assetDetails = this.navParams.get('assetDetails');
         this.dateTime = new Date();
         this.takenImages = [];
 
+    }
+    ionViewDidLoad(){
+        console.log("Get Asset reading page");
+        this.getReading();
     }
 
     submitReading(){
@@ -68,5 +74,22 @@ export class GetAssetReading {
                 this.takenImages.pop(data);
             }
         })
+    }
+
+    getReading(){
+        console.log("Reading page");
+        this.assetService.saveReading().subscribe(
+            response=>{
+                console.log("Save Reading Response");
+                console.log(response);
+            },
+            error=>
+            {
+                console.log("Save Reading Error");
+                console.log(error);
+            }
+
+        )
+
     }
 }

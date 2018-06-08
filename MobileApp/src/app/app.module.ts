@@ -79,7 +79,7 @@ import {QuotationImagePopoverPage} from "../pages/quotation/quotation-image-popo
 import { BackgroundMode } from '@ionic-native/background-mode';
 import { NativeAudio } from '@ionic-native/native-audio';
 import {SelectFeedbackPage} from "../pages/feedback/select-feedback";
-
+import{GetAssetReadings} from "../pages/get-asset-readings/get-asset-readings";
 import {FeedbackZone} from "../pages/feedback/feedbackZone";
 
 import {InitFeedbackZone} from "../pages/feedback/init-feedback-zone";
@@ -170,6 +170,7 @@ import {JobFilter} from "../pages/jobs/job-filter/job-filter";
       JobFilter,
       TicketFilter,
       EmployeeFilter,
+      GetAssetReadings,
   ],
   imports: [
     BrowserModule,
@@ -250,6 +251,9 @@ import {JobFilter} from "../pages/jobs/job-filter/job-filter";
       EmployeeFilter,
       GetAssetReading,
     ScanQR,
+      GetAssetReadings,
+
+
   ],
   providers: [
     StatusBar,
