@@ -26,21 +26,21 @@ import com.ts.app.web.rest.dto.PushRequestDTO;
 
 @Service
 public class PushService {
-	
+
 	private final Logger log = LoggerFactory.getLogger(PushService.class);
-	
+
 	//private static final String pushEndpoint = "http://localhost:9000/api/push/send";
-	
+
     @Inject
     private MessageSource messageSource;
 
     @Inject
     private SpringTemplateEngine templateEngine;
-	
+
 	@Inject
 	private Environment env;
 
-	
+
 	public void sendAttendanceCheckoutAlert(long userIds[], Map<String,Object> values) {
 		Locale locale = Locale.forLanguageTag("en-US");
 		Context context = new Context(locale);
@@ -50,11 +50,12 @@ public class PushService {
 		String subject = messageSource.getMessage("email.attendance.checkout.alert.title", null, locale);
 		send(userIds, emailContent);
 	}
-	
-	
+
+
 	public void send(long users[],String message) {
 		try {
-			String pushEndpoint = env.getProperty("pushService.url");
+		    log.debug("Sending push messages to - "+users[0]);
+			String pushEndpoint = env.getProperty("pushService.url")+"api/push/send";
 			RestTemplate restTemplate = new RestTemplate();
 			MappingJackson2HttpMessageConverter jsonHttpMessageConverter = new MappingJackson2HttpMessageConverter();
 			jsonHttpMessageConverter.getObjectMapper().configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
@@ -69,7 +70,7 @@ public class PushService {
 			request.put("android", data);
 			request.put("ios", data);
 			log.debug("Push request - "+ request);
-			
+
 			MultiValueMap<String, String> headers = new LinkedMultiValueMap<String, String>();
 	        Map map = new HashMap<String, String>();
 	        map.put("Content-Type", "application/json");
@@ -84,10 +85,10 @@ public class PushService {
 			e.printStackTrace();
 		}
 	}
-	
+
 	public void subscribe(PushRequestDTO pushRequest) {
 		try {
-			String pushEndpoint = env.getProperty("pushService.url");
+			String pushEndpoint = env.getProperty("pushService.url")+"api/push/subscribe";
 			RestTemplate restTemplate = new RestTemplate();
 			MappingJackson2HttpMessageConverter jsonHttpMessageConverter = new MappingJackson2HttpMessageConverter();
 			jsonHttpMessageConverter.getObjectMapper().configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
@@ -100,7 +101,7 @@ public class PushService {
 			request.put("userId", pushRequest.getUser());
 			request.put("userType", pushRequest.getUserType());
 			log.debug("Push request - "+ request);
-			
+
 			MultiValueMap<String, String> headers = new LinkedMultiValueMap<String, String>();
 	        Map map = new HashMap<String, String>();
 	        map.put("Content-Type", "application/json");
