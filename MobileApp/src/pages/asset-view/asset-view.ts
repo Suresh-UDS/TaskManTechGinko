@@ -60,7 +60,6 @@ export class AssetView {
       }
       this.getJobs(this.searchCriteria);
       this.getTickets(this.searchCriteria);
-
       this.getAssetById();
       this.getAssetPPMSchedule();
       this.getAssetAMCSchedule();
@@ -286,7 +285,7 @@ export class AssetView {
 
     getAssetConfig(assetDetails){
 
-        this.assetService.getAssetConfig(assetDetails.type,assetDetails.id).subscribe(
+        this.assetService.getAssetConfig(assetDetails.assetType,assetDetails.id).subscribe(
             response=>{
                 console.log("Asset config");
                 console.log(response);
