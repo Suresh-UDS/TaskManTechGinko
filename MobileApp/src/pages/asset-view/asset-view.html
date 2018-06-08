@@ -206,17 +206,18 @@
       </div>
     </ion-list>
     <ion-list *ngSwitchCase="'ppm'">
-        <p text-right class="fnt-18" (click)="showCalendar()"><ion-icon ios="ios-calendar" md="md-calendar" class="green fnt-25 padding-right10"></ion-icon></p>
-        <!--<div *ngIf="assetDetails.ppms.length<0">-->
-            <!--<ion-card>-->
-                <!--<ion-card-content>-->
-                    <!--No Data Found-->
-                <!--</ion-card-content>-->
-            <!--</ion-card>-->
-        <!--</div>-->
-        <div  class="white-bg" *ngFor="let ppm of assetDetails.ppms" >
 
-            <div class="padding-left16 padding-top5">
+        <div text-center="" *ngIf="!assetDetails.ppms || assetDetails.ppms.length < 0">
+            <ion-card text-center="">
+                <ion-card-content>
+                    No Data found
+                </ion-card-content>
+            </ion-card>
+        </div>
+
+        <!--<p text-right class="fnt-18" (click)="showCalendar()"><ion-icon ios="ios-calendar" md="md-calendar" class="green fnt-25 padding-right10"></ion-icon></p>-->
+        <div  class="white-bg"  *ngFor="let ppm of assetDetails.ppms;let j=index">
+            <div class="padding-left16 padding-top5" data-toggle="collapse" [attr.data-target]="'#'+j">
                 <ion-row class="margin0">
                     <ion-col col-2 class="ver-center">
                         <button ion-button clear color="primary" class="">
@@ -224,52 +225,53 @@
                             <ion-icon ios="ios-calendar" md="md-calendar" class="green fnt-24"></ion-icon>
                         </button>
                     </ion-col>
-                    <ion-col col-10="" class="padding-left5">
+                    <ion-col col-9="" class="padding-left5">
                         <div class="border-btm padding-bottom5 ln-ght20" text-capitalize>
                             <p text-left class="margin0">{{ppm.title}}</p>
                             <p text-left class="margin0">{{ppm.frequency}}</p>
-                            <p text-left class="margin0">{{ppm.status}} </p>
                         </div>
+                    </ion-col>
+                    <ion-col col-1 class="ver-center">
+                        <ion-icon name="ios-arrow-down" item-right class="clr-orange" ></ion-icon>
                     </ion-col>
                 </ion-row>
             </div>
 
-            <ion-item #item class="item-fnt padding-left0" >
-                <!--<div class="padding-left16">-->
-
-                <div text-capitalize >
-                    <ion-row class="margin0">
-                        <ion-col col-6 class="padding-right5">
-                            <div>
-                                <p text-left class="fnt-12"><ion-icon ios="ios-calendar" md="md-calendar" class="green padding-right10"></ion-icon>{{ppm.scheduledDate | date:'MMM d, y, h:mm a' }} </p>
-                            </div>
-                        </ion-col>
-                        <ion-col col-6>
-                            <div>
-                                <p text-right class="fnt-12"><ion-icon ios="ios-calendar" md="md-calendar" class="red padding-right10"></ion-icon>{{ppm.scheduledDate | date:'MMM d, y, h:mm a' }} </p>
-                            </div>
-                        </ion-col>
-                      </ion-row>
-                </div>
-                <!--</div>-->
-            </ion-item>
-
-
+            <div id="{{j}}" class="collapse">
+                <ion-item #item class="item-fnt padding-left0" >
+                    <!--<div class="padding-left16">-->
+                    <div text-capitalize >
+                        <ion-row class="margin0">
+                            <ion-col col-6 class="padding-right5">
+                                <div>
+                                    <p text-left class="fnt-12"><ion-icon ios="ios-calendar" md="md-calendar" class="green padding-right10"></ion-icon>{{ppm.scheduledDate | date:'MMM d, y, h:mm a' }} </p>
+                                </div>
+                            </ion-col>
+                            <ion-col col-6>
+                                <div>
+                                    <p text-right class="fnt-12"><ion-icon ios="ios-calendar" md="md-calendar" class="red padding-right10"></ion-icon>{{ppm.scheduledDate | date:'MMM d, y, h:mm a' }} </p>
+                                </div>
+                            </ion-col>
+                          </ion-row>
+                    </div>
+                    <!--</div>-->
+                </ion-item>
+            </div>
         </div>
     </ion-list>
 
     <ion-list *ngSwitchCase="'amc'">
-        <div *ngIf="assetDetails.amc?.length<0">
-            <ion-card>
+        <div text-center="" *ngIf="!assetDetails.amcs || assetDetails.amcs.length < 0">
+            <ion-card text-center="">
                 <ion-card-content>
-                    No Data Found
+                    No Data found
                 </ion-card-content>
             </ion-card>
         </div>
 
-        <div  class="white-bg" *ngFor="let ppm of assetDetails.amcs" >
+        <div  class="white-bg" *ngFor="let ppm of assetDetails.amcs;let k=index" >
 
-            <div class="padding-left16 padding-top5">
+            <div class="padding-left16 padding-top5" data-toggle="collapse" [attr.data-target]="'#'+k" >
                 <ion-row class="margin0">
 
                     <ion-col col-2 class="ver-center">
@@ -288,6 +290,7 @@
                 </ion-row>
             </div>
 
+            <div id="{{k}}" class="collapse">
             <ion-item #item class="item-fnt padding-left0" >
                 <!--<div class="padding-left16">-->
 
@@ -307,16 +310,17 @@
                 </div>
                 <!--</div>-->
             </ion-item>
-
+            </div>
 
         </div>
     </ion-list>
 
     <div *ngSwitchCase="'config'">
-        <div *ngIf="assetDetails.config.length<0">
-            <ion-card>
+
+        <div text-center="" *ngIf="!assetDetails.config || assetDetails.config?.length<0">
+            <ion-card text-center="">
                 <ion-card-content>
-                    No Data Found
+                    No Data found
                 </ion-card-content>
             </ion-card>
         </div>
@@ -329,13 +333,13 @@
                             <i class="fa fa-cog fnt-40"></i>
                         </button>
                     </ion-col>
-                    <ion-col col-9 class="border-btm">
+                    <ion-col col-9 class="border-up">
                         <div class="ln-ght20" text-capitalize>
                             <p text-left class="margin0">{{ config.assetType }}</p>
                             <p text-left class="margin0">{{ config.assetTitle }}</p>
                         </div>
                     </ion-col>
-                    <ion-col col-1 class="ver-center border-btm">
+                    <ion-col col-1 class="ver-center border-up">
                         <ion-icon name="ios-arrow-down" item-right class="clr-orange" ></ion-icon>
                     </ion-col>
                 </ion-row>
@@ -394,10 +398,11 @@
     </div>
 
     <ion-list *ngSwitchCase="'jobs'" style="margin-top : 56px">
-        <div *ngIf="assetDetails.jobs.length<0">
-            <ion-card>
+
+        <div text-center="" *ngIf="!assetDetails.jobs || assetDetails.jobs?.length<0">
+            <ion-card text-center="">
                 <ion-card-content>
-                    No Data Found
+                    No Data found
                 </ion-card-content>
             </ion-card>
         </div>
@@ -495,6 +500,14 @@
 
     <ion-list *ngSwitchCase="'tickets'" style="margin-top : 56px">
 
+        <div text-center="" *ngIf="!assetDetails.tickets || assetDetails.tickets?.length<0">
+            <ion-card text-center="">
+                <ion-card-content>
+                    No Data found
+                </ion-card-content>
+            </ion-card>
+        </div>
+
         <ion-refresher (ionRefresh)="doRefresh($event,'tickets')">
             <ion-refresher-content>
 
@@ -541,38 +554,31 @@
     </ion-list>
 
     <ion-list *ngSwitchCase="'readings'">
-        <div *ngIf="assetDetails.readings?.length<0">
-            <ion-card>
+
+        <div text-center="" *ngIf="!assetDetails.reading || assetDetails.reading.length < 0">
+            <ion-card text-center="">
                 <ion-card-content>
-                    No Reading
+                    No Data found
                 </ion-card-content>
             </ion-card>
         </div>
-        <table class="table table-hover">
-            <thead class="text-warning">
-                <th >Date</th>
-                <th >Consumption</th>
-                <th >Type</th>
-            </thead>
-            <tbody>
-                <tr>
-                    <td class="padding-left0">10-05-2018</td>
-                    <td class="padding-left0">20 Watt</td>
-                    <td class="padding-left0">POWER</td>
 
-                </tr>
-                <tr>
-                    <td class="padding-left0">11-05-2018</td>
-                    <td class="padding-left0">0 Watt</td>
-                    <td>POWER</td>
-                </tr>
-                <tr>
-                    <td class="padding-left0">12-05-2018</td>
-                    <td class="padding-left0">60 Watt</td>
-                    <td class="padding-left0">POWER</td>
-                </tr>
-            </tbody>
-        </table>
+        <div *ngIf="assetDetails.readings">
+            <table class="table table-hover">
+                <thead class="text-warning">
+                    <th >Date</th>
+                    <th >Consumption</th>
+                    <th >Type</th>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let reading of assetDetails.reading">
+                        <td class="padding-left0">10-05-2018</td>
+                        <td class="padding-left0">20 Watt</td>
+                        <td class="padding-left0">POWER</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
     </ion-list>
 </div>
 </ion-content>

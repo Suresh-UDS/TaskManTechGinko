@@ -310,7 +310,7 @@ angular.module('timeSheetApp')
                 $scope.assetEdit.currentPrice = $scope.asset.currentPrice;
                 $scope.assetEdit.estimatedDisposePrice = $scope.asset.estimatedDisposePrice;
                 $scope.assetEdit.vendorLocation = $scope.asset.vendorLocation;
-                $scope.selectedAssetType ={name:$scope.asset.assetTypeName};
+                $scope.selectedAssetType ={name:$scope.asset.assetType};
                 $scope.selectedAssetGroup ={assetgroup:$scope.asset.assetGroupName};
                 $scope.selectedSite ={name:$scope.asset.siteName};
                 $scope.selectedBlock = $scope.asset.block;
@@ -633,15 +633,15 @@ angular.module('timeSheetApp')
         $scope.updateAsset = function () {
         	$scope.error = null;
         	$scope.success =null;
-
-                $scope.assetEdit.assetTypeName =$scope.selectedAssetType.name;
+                 
+               /* $scope.assetEdit.assetTypeName =$scope.selectedAssetType.name;
                 $scope.assetEdit.assetGroupName = $scope.selectedAssetGroup.name;
                 $scope.assetEdit.siteName = $scope.selectedSite.name;
                 $scope.assetEdit.block = $scope.selectedBlock;
                 $scope.assetEdit.floor = $scope.selectedFloor;
                 $scope.assetEdit.zone = $scope.selectedZone;
                 $scope.assetEdit.manufacturerName = $scope.selectedManufacturer.name;
-                $scope.assetEdit.vendorId = $scope.selectedVendor.id;
+                $scope.assetEdit.vendorId = $scope.selectedVendor.id;*/
 
                // alert($scope.assetEdit.title);
 
@@ -656,7 +656,7 @@ angular.module('timeSheetApp')
                  $scope.showNotifications('top','center','success','Asset Updated!!');
                  $scope.loadAssets();
 
-            	$location.path('/assets');
+            	//$location.path('/assets');
 
             }).catch(function (response) {
 
@@ -1064,17 +1064,27 @@ angular.module('timeSheetApp')
 	    	});
 	    }
 	    
+	    /* AMC schedule */	    
+	    
 	    $scope.amcSchedule = {};
 	    $scope.selectedChecklist;
 	    $scope.selectedFrequencyPrefix;
 	    $scope.selectedFrequency;
 	    $scope.selectedFreqDuration;
 	    
-	    $scope.frequencyPrefixies = ['Every', 'Monthly'];
+	    $scope.loadFreq = function() { 
+	    	AssetComponent.getAllFrequencies().then(function(data){ 
+	    		$scope.frequencies = data;
+	    	});
+	    }
 	    
-	    $scope.frequencyDurations= [1, 2, 3];
+	    $scope.loadFreqPrefix = function() {
+	    	AssetComponent.getAllPrefix().then(function(data) { 
+	    		$scope.frequencyPrefixies = data;
+	    	});
+	    }
 	    
-	    $scope.frequencies = ['Hour', 'Day', 'Week', 'Fortnight', 'Month', 'Quarter', 'Half', 'Year'];
+	    $scope.frequencyDurations= [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 	    
 	    $('input#dateFilterAmcFrom').on('dp.change', function(e){
             $scope.amcSchedule.startDate = e.date._d;
@@ -1090,6 +1100,8 @@ angular.module('timeSheetApp')
 	    		$scope.checkLists = data;
 	    	});
 	    }
+	    
+	    $scope.amcScheduleList = [];
 	    
 	    
 	    $scope.saveAmcSchedule = function() { 
@@ -1112,8 +1124,21 @@ angular.module('timeSheetApp')
 	    	
 	    	console.log($scope.amcSchedule);
 	    	
+	    	AssetComponent.saveAmcSchedule($scope.amcSchedule).then(function(data){  
+	    		console.log(data);
+	    		if(data && data.checklistId) { 
+	    			console.log(data.checklistId);
+	    			$scope.amcScheduleList.push(data);
+	    			ChecklistComponent.findOne(data.checklistId).then(function(data){ 
+	    				$scope.checklistItms = data.items;
+	    				console.log($scope.checklistItms);
+	    			});
+	    		}
+	    	});
 	    	
 	    }
+	    
+	    /*End AMC*/	    
 
 
     });

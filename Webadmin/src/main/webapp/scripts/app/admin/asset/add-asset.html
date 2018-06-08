@@ -1269,7 +1269,7 @@
                                                                         </div>
                                                                     </div>
                                                                     <div class="row">
-                                                                        <div class="col-md-2">
+                                                                        <div class="col-md-2" ng-init="loadFreqPrefix()">
                                                                             <div class="dropdown">
                                                                                 <div class="form-group">
                                                                                     <label class="control-label">Select Frequency</label>
@@ -1284,16 +1284,16 @@
                                                                             <div class="form-group">
                                                                                 <label class="control-label">&nbsp;</label>
                                                                                 <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                                                                <select class="form-control" ng-model="selectedFrequency" ng-options="frequencyDuration for frequencyDuration in frequencyDurations">
+                                                                                <select class="form-control" ng-model="selectedFreqDuration" ng-options="frequencyDuration for frequencyDuration in frequencyDurations">
                                                                                     <option value=""></option>
                                                                                 </select>
                                                                             </div>
                                                                         </div>
-                                                                        <div class="col-md-3">
+                                                                        <div class="col-md-3" ng-init="loadFreq()">
                                                                             <div class="form-group">
                                                                                 <label class="control-label">&nbsp;</label>
                                                                                 <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                                                                <select class="form-control" ng-model="selectedFreqDuration" ng-options="frequency for frequency in frequencies">
+                                                                                <select class="form-control" ng-model="selectedFrequency" ng-options="frequency for frequency in frequencies">
                                                                                     <option value=""></option>
                                                                                 </select>
                                                                             </div>
@@ -1322,82 +1322,22 @@
 
                                                                     <tbody>
 
-                                                                    <tr>
-                                                                        <td>Schedule Title</td>
+                                                                    <tr ng-repeat="amcSchedule in amcScheduleList">
+                                                                        <td>{{amcSchedule.title}}</td>
                                                                         <td>
-                                                                            <div class="bootstrap-tagsinput"><span class="tag label label-info">Item 1<span data-role="remove"></span></span>
-                                                                                <span class="tag label label-info">Item 2<span data-role="remove"></span></span>
-                                                                                <span class="tag label label-info">Item 3<span data-role="remove"></span></span>
-                                                                                <span class="tag label label-info">Item 4<span data-role="remove"></span></span> <input type="text" placeholder=""></div>
+                                                                            <div class="bootstrap-tagsinput" ng-repeat="checkList in checklistItms">
+                                                                            	<span class="tag label label-info">{{checkList.name}}<span data-role="remove"></span></span> 
+                                                                                <input type="text" placeholder="">
+                                                                            </div>
                                                                         </td>
-                                                                        <td>03/03/2018</td>
-                                                                        <td>03/03/2018</td>
-                                                                        <td>Every 2 Hour</td>
+                                                                        <td>{{amcSchedule.startDate}}</td>
+                                                                        <td>{{amcSchedule.endDate}}</td>
+                                                                        <td>{{amcSchedule.frequencyPrefix}}&nbsp; {{amcSchedule.frequencyDuration}}&nbsp; {{amcSchedule.frequency}}</td>
                                                                         <td class="text-right">
                                                                             <a  ng-class="{active: $state.includes('admin')}"  has-permission="" ui-sref=""  class="btn btn-simple btn-danger"><i class="material-icons">delete_forever</i></a>
                                                                         </td>
                                                                     </tr>
-                                                                    <tr>
-                                                                        <td>Schedule Title</td>
-                                                                        <td>
-                                                                            <div class="bootstrap-tagsinput"><span class="tag label label-info">Item 1<span data-role="remove"></span></span>
-                                                                                <span class="tag label label-info">Item 2<span data-role="remove"></span></span>
-                                                                                <span class="tag label label-info">Item 3<span data-role="remove"></span></span>
-                                                                                <span class="tag label label-info">Item 4<span data-role="remove"></span></span> <input type="text" placeholder=""></div>
-                                                                        </td>
-                                                                        <td>03/03/2018</td>
-                                                                        <td>03/03/2018</td>
-                                                                        <td>Every 2 Hour</td>
-                                                                        <td class="text-right">
-                                                                            <a  ng-class="{active: $state.includes('admin')}"  has-permission="" ui-sref=""  class="btn btn-simple btn-danger"><i class="material-icons">delete_forever</i></a>
-                                                                        </td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td>Schedule Title</td>
-                                                                        <td>
-                                                                            <div class="bootstrap-tagsinput"><span class="tag label label-info">Item 1<span data-role="remove"></span></span>
-                                                                                <span class="tag label label-info">Item 2<span data-role="remove"></span></span>
-                                                                                <span class="tag label label-info">Item 3<span data-role="remove"></span></span>
-                                                                                <span class="tag label label-info">Item 4<span data-role="remove"></span></span> <input type="text" placeholder=""></div>
-                                                                        </td>
-                                                                        <td>03/03/2018</td>
-                                                                        <td>03/03/2018</td>
-                                                                        <td>Every 2 Hour</td>
-                                                                        <td class="text-right">
-                                                                            <a  ng-class="{active: $state.includes('admin')}"  has-permission="" ui-sref=""  class="btn btn-simple btn-danger"><i class="material-icons">delete_forever</i></a>
-                                                                        </td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td>Schedule Title</td>
-                                                                        <td>
-                                                                            <div class="bootstrap-tagsinput"><span class="tag label label-info">Item 1<span data-role="remove"></span></span>
-                                                                                <span class="tag label label-info">Item 2<span data-role="remove"></span></span>
-                                                                                <span class="tag label label-info">Item 3<span data-role="remove"></span></span>
-                                                                                <span class="tag label label-info">Item 4<span data-role="remove"></span></span> <input type="text" placeholder=""></div>
-                                                                        </td>
-                                                                        <td>03/03/2018</td>
-                                                                        <td>03/03/2018</td>
-                                                                        <td>Every 2 Hour</td>
-                                                                        <td class="text-right">
-                                                                            <a  ng-class="{active: $state.includes('admin')}"  has-permission="" ui-sref=""  class="btn btn-simple btn-danger"><i class="material-icons">delete_forever</i></a>
-                                                                        </td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td>Schedule Title</td>
-                                                                        <td>
-                                                                            <div class="bootstrap-tagsinput"><span class="tag label label-info">Item 1<span data-role="remove"></span></span>
-                                                                                <span class="tag label label-info">Item 2<span data-role="remove"></span></span>
-                                                                                <span class="tag label label-info">Item 3<span data-role="remove"></span></span>
-                                                                                <span class="tag label label-info">Item 4<span data-role="remove"></span></span> <input type="text" placeholder=""></div>
-                                                                        </td>
-                                                                        <td>03/03/2018</td>
-                                                                        <td>03/03/2018</td>
-                                                                        <td>Every 2 Hour</td>
-                                                                        <td class="text-right">
-                                                                            <a  ng-class="{active: $state.includes('admin')}"  has-permission="" ui-sref=""  class="btn btn-simple btn-danger"><i class="material-icons">delete_forever</i></a>
-                                                                        </td>
-                                                                    </tr>
-
+                                                                    
                                                                     </tbody>
                                                                 </table>
 

@@ -3,6 +3,7 @@ package com.ts.app.service;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.EnumSet;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -31,6 +32,9 @@ import com.ts.app.domain.AssetType;
 import com.ts.app.domain.Checklist;
 import com.ts.app.domain.Employee;
 import com.ts.app.domain.EmployeeProjectSite;
+import com.ts.app.domain.Frequency;
+import com.ts.app.domain.FrequencyDuration;
+import com.ts.app.domain.FrequencyPrefix;
 import com.ts.app.domain.Manufacturer;
 import com.ts.app.domain.ParameterConfig;
 import com.ts.app.domain.Project;
@@ -76,6 +80,7 @@ import com.ts.app.web.rest.dto.AssetPpmScheduleDTO;
 import com.ts.app.web.rest.dto.AssetTypeDTO;
 import com.ts.app.web.rest.dto.AssetgroupDTO;
 import com.ts.app.web.rest.dto.BaseDTO;
+import com.ts.app.web.rest.dto.EmployeeDTO;
 import com.ts.app.web.rest.dto.ExportResult;
 import com.ts.app.web.rest.dto.ImportResult;
 import com.ts.app.web.rest.dto.JobDTO;
@@ -234,6 +239,24 @@ public class AssetManagementService extends AbstractService {
 
 	}
 
+	public boolean isDuplicate(AssetDTO assetDTO) {
+	    log.debug("Asset Title "+assetDTO.getTitle());
+		Asset asset = assetRepository.findByTitle(assetDTO.getTitle());
+		if(asset != null) {
+			return true;
+		}
+		return false;
+	}
+	
+	public boolean isDuplicatePPMSchedule(AssetPpmScheduleDTO assetPpmScheduleDTO) {
+	    log.debug("Asset Title "+assetPpmScheduleDTO.getTitle());
+		Asset asset = assetRepository.findByTitle(assetPpmScheduleDTO.getTitle());
+		if(asset != null) {
+			return true;
+		}
+		return false;
+	}
+	
 	public List<AssetDTO> findAllAssets() {
 		log.debug(">>> get all assets");
 		List<Asset> assets = assetRepository.findAll();
@@ -298,6 +321,13 @@ public class AssetManagementService extends AbstractService {
 		log.debug("asset Type " + asset.getAssetType());
 		log.debug("Asset Group " + asset.getAssetGroup());
 		AssetDTO assetDTO = mapperUtil.toModel(asset, AssetDTO.class);
+		
+		AssetType assetType = assetTypeRepository.findByName(asset.getAssetType());
+		assetDTO.setAssetTypeId(assetType.getId());
+		
+		AssetGroup assetGroup = assetGroupRepository.findByName(asset.getAssetGroup());
+		assetDTO.setAssetGroupId(assetGroup.getId());
+		
 /*		log.debug("asset Type after mapping... " + assetDTO.getAssetType() + " Manufacture " + assetDTO.getManufacturerName() + " Vendor " + assetDTO.getAmcVendorName());
 		log.debug("Asset Group after mapping...  " + assetDTO.getAssetGroup());
 		AssetType assetType = assetTypeRepository.findOne(Long.valueOf(assetDTO.getAssetType()));
@@ -429,7 +459,7 @@ public class AssetManagementService extends AbstractService {
 
 		AssetAMCSchedule assetAMC = mapperUtil.toEntity(assetAMCScheduleDTO, AssetAMCSchedule.class);
 
-		assetAMC.setActive(Asset.ACTIVE_YES);
+		assetAMC.setActive(AssetAMCSchedule.ACTIVE_YES);
 
 		List<AssetAMCSchedule> existingSchedules = assetRepository.findAssetAMCScheduleByTitle(assetAMCScheduleDTO.getTitle());
 		log.debug("Existing schedule -" + existingSchedules);
@@ -694,7 +724,7 @@ public class AssetManagementService extends AbstractService {
 
 		assetPPMSchedule = assetPpmScheduleRepository.save(assetPPMSchedule);
 		assetPpmScheduleDTO = mapperUtil.toModel(assetPPMSchedule, AssetPpmScheduleDTO.class);
-		jobManagementService.createJob(assetPpmScheduleDTO);
+		//jobManagementService.createJob(assetPpmScheduleDTO);
 		log.debug(">> after create job for ppm schedule <<<");
 		return assetPpmScheduleDTO;
 	}
@@ -794,6 +824,16 @@ public class AssetManagementService extends AbstractService {
 	public AssetParameterReadingDTO viewReadings(long id) {
 		AssetParameterReading paramReading = assetParamReadingRepository.findOne(id);
 		return mapperUtil.toModel(paramReading, AssetParameterReadingDTO.class);
+	}
+	
+	public Frequency[] getAllType() { 
+		Frequency[] types = Frequency.values();
+		return types;
+	}
+	
+	public FrequencyPrefix[] getAllPrefixs() { 
+		FrequencyPrefix[] prefixs = FrequencyPrefix.values();
+		return prefixs;
 	}
 
 }

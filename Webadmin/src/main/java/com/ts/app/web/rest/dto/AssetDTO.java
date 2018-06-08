@@ -22,9 +22,9 @@ public class AssetDTO extends BaseDTO {
     private String group;
     private String type;
     private String assetType;
-    private String assetTypeName;
+    private long assetTypeId;
     private String assetGroup;
-    private String assetGroupName;
+    private long assetGroupId;
     private String block;
     private String floor;
     private String zone;
@@ -50,23 +50,23 @@ public class AssetDTO extends BaseDTO {
     private String assetPpmTitle;
     private String warrantyType;
 
-    public long getSiteSiteId() {
+    public long getAssetTypeId() {
+		return assetTypeId;
+	}
+	public void setAssetTypeId(long assetTypeId) {
+		this.assetTypeId = assetTypeId;
+	}
+	public long getAssetGroupId() {
+		return assetGroupId;
+	}
+	public void setAssetGroupId(long assetGroupId) {
+		this.assetGroupId = assetGroupId;
+	}
+	public long getSiteSiteId() {
 		return siteSiteId;
 	}
 	public void setSiteSiteId(long siteSiteId) {
 		this.siteSiteId = siteSiteId;
-	}
-	public String getAssetTypeName() {
-		return assetTypeName;
-	}
-	public void setAssetTypeName(String assetTypeName) {
-		this.assetTypeName = assetTypeName;
-	}
-	public String getAssetGroupName() {
-		return assetGroupName;
-	}
-	public void setAssetGroupName(String assetGroupName) {
-		this.assetGroupName = assetGroupName;
 	}
 	public long getManufactureManufactureId() {
 		return manufactureManufactureId;
