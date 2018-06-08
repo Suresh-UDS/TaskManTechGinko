@@ -7,17 +7,49 @@
     </ion-navbar>
 </ion-header>
 
-<ion-content class="readingcon">
-    <ion-card class="valuesCard">
-        <ion-card-content class="margin0">
+<ion-content >
+    <ion-list *ngFor="let config of assetDetails.config;let i=index;">
 
-        </ion-card-content>
-    </ion-card>
-    <ion-list>
+        <ion-row class="margin0" data-toggle="collapse" [attr.data-target]="'#'+i">
+            <ion-col col-2 class="ver-center">
+                <button ion-button clear color="primary" class="">
+                    <i class="fa fa-cog fnt-40"></i>
+                </button>
+            </ion-col>
+            <ion-col col-9 class="border-up">
+                <div class="ln-ght20" text-capitalize>
+                    <p text-left class="margin0">{{ config.assetType }}</p>
+                    <p text-left class="margin0">{{ config.assetTitle }}</p>
+                </div>
+            </ion-col>
+            <ion-col col-1 class="ver-center border-up">
+                <ion-icon name="ios-arrow-down" item-right class="clr-orange" ></ion-icon>
+            </ion-col>
+        </ion-row>
 
-
+        <div id="{{i}}" class="collapse">
+            <ion-row no-margin="" >
+                <ion-col col-3>
+                    <p class="margin0" text-center="">{{ config.lastModifiedDate  | date : 'shortDate' }}</p>
+                    <p class="margin0 clr-orange fnt-12" text-center="">Date</p>
+                </ion-col>
+                <ion-col col-6>
+                    <div class="">
+                        <p text-center class="margin0">{{ config.name }}</p>
+                        <p text-center class="margin0 clr-orange fnt-12">Name</p>
+                    </div>
+                </ion-col>
+                <ion-col col-3 >
+                    <div class="">
+                        <p text-center class="margin0">{{ config.uom }}</p>
+                        <p text-center class="margin0 clr-orange fnt-12">Uom</p>
+                    </div>
+                </ion-col>
+            </ion-row>
+        </div>
 
     </ion-list>
+
 
 </ion-content>
 

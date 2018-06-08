@@ -69,7 +69,7 @@ export class AssetView {
   }
 
     getReadings(){
-        this.navCtrl.push(GetAssetReadings,{assetDetails:this.assetDetails});
+        this.navCtrl.push(GetAssetReading,{assetDetails:this.assetDetails});
     }
 
     doRefresh(refresher,segment)
