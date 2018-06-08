@@ -6,7 +6,7 @@ angular.module('timeSheetApp')
 				function($scope, $rootScope, $state, $timeout, AssetComponent,
 						ProjectComponent,LocationComponent,SiteComponent,EmployeeComponent, $http, $stateParams,
                      	$location,PaginationComponent,AssetTypeComponent,ParameterConfigComponent,ParameterComponent,
-                        ParameterUOMComponent,VendorComponent,ManufacturerComponent,$sce) {
+                        ParameterUOMComponent,VendorComponent,ManufacturerComponent,$sce,ChecklistComponent) {
 
         $rootScope.loadingStop();
         $rootScope.loginView = false;
@@ -38,6 +38,8 @@ angular.module('timeSheetApp')
         $scope.selectedConfigUnit = null;
 
         $scope.asset = {};
+
+        $scope.assetEdit = {};
 
         $scope.assetDetail = {};
        
@@ -296,6 +298,16 @@ angular.module('timeSheetApp')
 
                 console.log("Edit Asset--",$scope.asset);
 
+
+                $scope.assetEdit.id = $scope.asset.id;
+                $scope.assetEdit.title = $scope.asset.title;
+                $scope.assetEdit.modelNumber = $scope.asset.modelNumber;
+                $scope.assetEdit.serialNumber =  $scope.asset.serialNumber;
+                $scope.assetEdit.acquiredDate = $scope.asset.acquiredDate;
+                $scope.assetEdit.purchasePrice = $scope.asset.purchasePrice;
+                $scope.assetEdit.currentPrice = $scope.asset.currentPrice;
+                $scope.assetEdit.estimatedDisposePrice = $scope.asset.estimatedDisposePrice;
+                $scope.assetEdit.vendorLocation = $scope.asset.vendorLocation;
                 $scope.selectedAssetType ={name:$scope.asset.assetTypeName};
                 $scope.selectedAssetGroup ={assetgroup:$scope.asset.assetGroupName};
                 $scope.selectedSite ={name:$scope.asset.siteName};
@@ -480,14 +492,14 @@ angular.module('timeSheetApp')
 
              
             if($stateParams.id){ 
-                alert($scope.assets.name);
                
-                $scope.assetConfig.assetTypeName = $scope.assets.name;
+                $scope.assetConfig.assetType = $scope.assetDetail.name;
+
                 $scope.assetConfig.assetId = $stateParams.id;
             }
             else if($scope.assetGen.id){
                
-                $scope.assetConfig.assetTypeName = $scope.selectedAssetType.name;
+                $scope.assetConfig.assetType = $scope.selectedAssetType.name;
                 $scope.assetConfig.assetId = $scope.assetGen.id;
             }  
     
@@ -616,19 +628,27 @@ angular.module('timeSheetApp')
         $scope.updateAsset = function () {
         	$scope.error = null;
         	$scope.success =null;
-        	if($scope.asset.selectedSite!=null){
-        	    $scope.asset.siteId = $scope.asset.selectedSite.id;
-        	    delete $scope.asset.selectedSite;
-            }
-        	console.log('Edit asset details ='+ JSON.stringify($scope.asset));
 
-            return false;
+                $scope.assetEdit.assetTypeName =$scope.selectedAssetType.name;
+                $scope.assetEdit.assetGroupName = $scope.selectedAssetGroup.name;
+                $scope.assetEdit.siteName = $scope.selectedSite.name;
+                $scope.assetEdit.block = $scope.selectedBlock;
+                $scope.assetEdit.floor = $scope.selectedFloor;
+                $scope.assetEdit.zone = $scope.selectedZone;
+                $scope.assetEdit.manufacturerName = $scope.selectedManufacturer.name;
+                $scope.assetEdit.vendorId = $scope.selectedVendor.id;
+
+                alert($scope.assetEdit.title);
+
+        	
+        	console.log('Edit asset details ='+ JSON.stringify($scope.assetEdit));
+
         	//$scope.asset.assetStatus = $scope.selectedStatus.name;
         	//var post = $scope.isEdit ? AssetComponent.update : AssetComponent.create
-        	AssetComponent.update($scope.asset).then(function () {
+        	AssetComponent.update($scope.assetEdit).then(function () {
 
                 $scope.success = 'OK';
-                 $scope.showNotifications('top','center','success','Asset Added');
+                 $scope.showNotifications('top','center','success','Asset Updated!!');
                  $scope.loadAssets();
 
             	$location.path('/assets');
@@ -1037,6 +1057,57 @@ angular.module('timeSheetApp')
 	    				
 	    		
 	    	});
+	    }
+	    
+	    $scope.amcSchedule = {};
+	    $scope.selectedChecklist;
+	    $scope.selectedFrequencyPrefix;
+	    $scope.selectedFrequency;
+	    $scope.selectedFreqDuration;
+	    
+	    $scope.frequencyPrefixies = ['Every', 'Monthly'];
+	    
+	    $scope.frequencyDurations= [1, 2, 3];
+	    
+	    $scope.frequencies = ['Hour', 'Day', 'Week', 'Fortnight', 'Month', 'Quarter', 'Half', 'Year'];
+	    
+	    $('input#dateFilterAmcFrom').on('dp.change', function(e){
+            $scope.amcSchedule.startDate = e.date._d;
+        });
+        
+        $('input#dateFilterAmcTo').on('dp.change', function(e){
+            $scope.amcSchedule.endDate = e.date._d;
+        });
+	    
+	    $scope.loadCheckList = function() { 
+	    	ChecklistComponent.findAll().then(function(data){ 
+	    		alert(data);
+	    		$scope.checkLists = data;
+	    	});
+	    }
+	    
+	    
+	    $scope.saveAmcSchedule = function() { 
+	    	console.log($scope.selectedChecklist);
+	    	if($scope.selectedChecklist){ 
+	    		$scope.amcSchedule.checklistId = $scope.selectedChecklist.id;
+	    	}
+	    	if($scope.assetGen.id){ 
+	    		$scope.amcSchedule.assetId = $scope.assetGen.id;
+	    	}
+	    	if($scope.selectedFrequencyPrefix) { 
+	    		$scope.amcSchedule.frequencyPrefix = $scope.selectedFrequencyPrefix;
+	    	}
+	    	if($scope.selectedFrequency) { 
+	    		$scope.amcSchedule.frequency = $scope.selectedFrequency;
+	    	}
+	    	if($scope.selectedFreqDuration) { 
+	    		$scope.amcSchedule.frequencyDuration = $scope.selectedFreqDuration;
+	    	}
+	    	
+	    	console.log($scope.amcSchedule);
+	    	
+	    	
 	    }
 
 

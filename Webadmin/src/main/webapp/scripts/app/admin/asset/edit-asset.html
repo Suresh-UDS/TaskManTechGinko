@@ -79,7 +79,7 @@
                                                                             <div class="form-group">
                                                                                 <label class="control-label">Title<span class="red-star">*</span></label>
                                                                                 <input id='assetName'
-                                                                                       ng-model="asset.title"
+                                                                                       ng-model="assetEdit.title"
                                                                                        class='form-control'
                                                                                        name='assetName'
                                                                                        type='text' value=""
@@ -119,7 +119,7 @@
                                                                                     <div class="col-md-10 pad-r-0px">
                                                                                         <label class="control-label">Type</label>
                                                                                         <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                                                                        <select class="form-control" ng-change="loadAssetConfig(asset.assetType)" ng-model="selectedAssetType" ng-options="assetTypeName as assetType.name for assetType in assetTypes track by assetType.name">
+                                                                                        <select class="form-control" ng-change="loadAssetConfig(assetEdit.assetType)" ng-model="selectedAssetType" ng-options="assetTypeName as assetType.name for assetType in assetTypes track by assetType.name">
                                                                                             <option value="">Select Asset Type ..</option>
                                                                                         </select>
                                                                                     </div>
@@ -333,7 +333,7 @@
                                                                                     <div class="form-group">
                                                                                         <label class="control-label">Model Number  <!--  <span class="red-star">*</span>--> </label>
                                                                                         <input id='assetModel'
-                                                                                               ng-model="asset.modelNumber"
+                                                                                               ng-model="assetEdit.modelNumber"
                                                                                                class='form-control'
                                                                                                name='assetModel'
                                                                                                type='text' value=""
@@ -368,7 +368,7 @@
                                                                                 <div class="form-group">
                                                                                     <label class="control-label">Serial Number   <!-- <span class="red-star">*</span>  --></label>
                                                                                     <input id='assetSerial'
-                                                                                           ng-model="asset.serialNumber"
+                                                                                           ng-model="assetEdit.serialNumber"
                                                                                            class='form-control'
                                                                                            name='assetSerial'
                                                                                            type='text' value=""
@@ -400,7 +400,7 @@
                                                                                 <div class="form-group">
                                                                                     <label class="control-label">Acquired Date</label>
                                                                                     <span class="form-control-feedback calender-icon"><i class="material-icons">date_range</i></span>
-                                                                                    <input type="text" ng-model="asset.acquiredDate" class="form-control datepicker"  id="acquiredDate" placeholder="{{acquiredDate | date:'dd-MMM-yyyy'}}"/>
+                                                                                    <input type="text" ng-model="assetEdit.acquiredDate" class="form-control datepicker"  id="acquiredDate" placeholder="{{acquiredDate | date:'dd-MMM-yyyy'}}"/>
 
                                                                                 </div>
 
@@ -409,7 +409,7 @@
                                                                             <div class="form-group">
                                                                                 <label class="control-label">Purchase price     <span class="red-star">*</span> </label>
                                                                                 <input id=''
-                                                                                       ng-model="asset.purchasePrice" 
+                                                                                       ng-model="assetEdit.purchasePrice" 
                                                                                        class='form-control'
                                                                                        name=''
                                                                                        type='text' value=""
@@ -423,7 +423,7 @@
                                                                             <div class="form-group">
                                                                                 <label class="control-label">Current Price     <span class="red-star">*</span> </label>
                                                                                 <input id=''
-                                                                                       ng-model="asset.currentPrice"
+                                                                                       ng-model="assetEdit.currentPrice"
                                                                                        class='form-control'
                                                                                        name=''
                                                                                        type='text' value=""
@@ -437,7 +437,7 @@
                                                                             <div class="form-group">
                                                                                 <label class="control-label">Estimated dispose price     <span class="red-star">*</span> </label>
                                                                                 <input id=''
-                                                                                       ng-model="asset.estimatedDisposePrice"
+                                                                                       ng-model="assetEdit.estimatedDisposePrice"
                                                                                        class='form-control'
                                                                                        name=''
                                                                                        type='text' value=""
@@ -525,7 +525,7 @@
                                                                                 <div class="form-group">
                                                                                     <label class="control-label">Location  <!--  <span class="red-star">*</span>--> </label>
                                                                                     <input id='vendorLocation'
-                                                                                           ng-model="asset.vendorLocation"
+                                                                                           ng-model="assetEdit.vendorLocation"
                                                                                            class='form-control'
                                                                                            name='vendorLocation'
                                                                                            type='text' value=""
