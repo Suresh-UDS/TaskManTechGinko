@@ -80,6 +80,7 @@ import com.ts.app.web.rest.dto.AssetPpmScheduleDTO;
 import com.ts.app.web.rest.dto.AssetTypeDTO;
 import com.ts.app.web.rest.dto.AssetgroupDTO;
 import com.ts.app.web.rest.dto.BaseDTO;
+import com.ts.app.web.rest.dto.EmployeeDTO;
 import com.ts.app.web.rest.dto.ExportResult;
 import com.ts.app.web.rest.dto.ImportResult;
 import com.ts.app.web.rest.dto.JobDTO;
@@ -238,6 +239,24 @@ public class AssetManagementService extends AbstractService {
 
 	}
 
+	public boolean isDuplicate(AssetDTO assetDTO) {
+	    log.debug("Asset Title "+assetDTO.getTitle());
+		Asset asset = assetRepository.findByTitle(assetDTO.getTitle());
+		if(asset != null) {
+			return true;
+		}
+		return false;
+	}
+	
+	public boolean isDuplicatePPMSchedule(AssetPpmScheduleDTO assetPpmScheduleDTO) {
+	    log.debug("Asset Title "+assetPpmScheduleDTO.getTitle());
+		Asset asset = assetRepository.findByTitle(assetPpmScheduleDTO.getTitle());
+		if(asset != null) {
+			return true;
+		}
+		return false;
+	}
+	
 	public List<AssetDTO> findAllAssets() {
 		log.debug(">>> get all assets");
 		List<Asset> assets = assetRepository.findAll();

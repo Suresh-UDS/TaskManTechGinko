@@ -69,9 +69,21 @@ public class AssetResource {
 	public ResponseEntity<?> saveAsset(@Valid @RequestBody AssetDTO assetDTO, HttpServletRequest request) {
 		log.debug(">>> Asset DTO save request <<<");
 		
-		AssetDTO response = assetService.saveAsset(assetDTO);
-		log.debug("Asset new id - " + response.getId());
-		return new ResponseEntity<>(response, HttpStatus.CREATED);
+		try {
+			if(!assetService.isDuplicate(assetDTO)) {
+				log.debug(">>> going to create <<<");
+				assetDTO = assetService.saveAsset(assetDTO);
+			}else {
+				log.debug(">>> duplicate <<<");
+				assetDTO.setMessage("error.duplicateRecordError");
+				return new ResponseEntity<>(assetDTO,HttpStatus.BAD_REQUEST);
+			}
+		}catch(Exception e) {
+			throw new TimesheetException(e, assetDTO);
+		}
+		
+		log.debug("Asset new id - " + assetDTO.getId());
+		return new ResponseEntity<>(assetDTO, HttpStatus.CREATED);
 	}
 
 	@RequestMapping(value = "/assets/search", method = RequestMethod.POST)
@@ -213,10 +225,24 @@ public class AssetResource {
 			HttpServletRequest request) {
 		log.debug(">>> Asset DTO saveAssetPPMSchedule request <<<");
 		log.debug("Title <<<" + assetPpmScheduleDTO.getTitle());
+		
+		try {
+			if(!assetService.isDuplicatePPMSchedule(assetPpmScheduleDTO)) {
+				log.debug(">>> going to create <<<");
+				assetPpmScheduleDTO = assetService.createAssetPpmSchedule(assetPpmScheduleDTO);
+			}else {
+				log.debug(">>> duplicate <<<");
+				assetPpmScheduleDTO.setMessage("error.duplicateRecordError");
+				return new ResponseEntity<>(assetPpmScheduleDTO,HttpStatus.BAD_REQUEST);
+			}
+			
 
-		AssetPpmScheduleDTO response = assetService.createAssetPpmSchedule(assetPpmScheduleDTO);
-		log.debug("Asset Ppm Schedule after save and create job response - " + response);
-		return new ResponseEntity<>(response, HttpStatus.CREATED);
+		}catch(Exception e) {
+			throw new TimesheetException(e, assetPpmScheduleDTO);
+		}
+		
+		log.debug("Asset PPM Schedule new id - " + assetPpmScheduleDTO.getId());
+		return new ResponseEntity<>(assetPpmScheduleDTO, HttpStatus.CREATED);
 	}
 
 	@RequestMapping(path = "/assets/ppmschedule", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE)
