@@ -39,6 +39,8 @@ angular.module('timeSheetApp')
 
         $scope.asset = {};
 
+        $scope.assetEdit = {};
+
         $scope.assetDetail = {};
        
         $scope.parameterConfig = {};
@@ -296,6 +298,16 @@ angular.module('timeSheetApp')
 
                 console.log("Edit Asset--",$scope.asset);
 
+
+                $scope.assetEdit.id = $scope.asset.id;
+                $scope.assetEdit.title = $scope.asset.title;
+                $scope.assetEdit.modelNumber = $scope.asset.modelNumber;
+                $scope.assetEdit.serialNumber =  $scope.asset.serialNumber;
+                $scope.assetEdit.acquiredDate = $scope.asset.acquiredDate;
+                $scope.assetEdit.purchasePrice = $scope.asset.purchasePrice;
+                $scope.assetEdit.currentPrice = $scope.asset.currentPrice;
+                $scope.assetEdit.estimatedDisposePrice = $scope.asset.estimatedDisposePrice;
+                $scope.assetEdit.vendorLocation = $scope.asset.vendorLocation;
                 $scope.selectedAssetType ={name:$scope.asset.assetTypeName};
                 $scope.selectedAssetGroup ={assetgroup:$scope.asset.assetGroupName};
                 $scope.selectedSite ={name:$scope.asset.siteName};
@@ -480,7 +492,6 @@ angular.module('timeSheetApp')
 
              
             if($stateParams.id){ 
-                alert($scope.assets.name);
                
                 $scope.assetConfig.assetTypeName = $scope.assets.name;
                 $scope.assetConfig.assetId = $stateParams.id;
@@ -616,19 +627,27 @@ angular.module('timeSheetApp')
         $scope.updateAsset = function () {
         	$scope.error = null;
         	$scope.success =null;
-        	if($scope.asset.selectedSite!=null){
-        	    $scope.asset.siteId = $scope.asset.selectedSite.id;
-        	    delete $scope.asset.selectedSite;
-            }
-        	console.log('Edit asset details ='+ JSON.stringify($scope.asset));
 
-            return false;
+                $scope.assetEdit.assetTypeName =$scope.selectedAssetType.name;
+                $scope.assetEdit.assetGroupName = $scope.selectedAssetGroup.name;
+                $scope.assetEdit.siteName = $scope.selectedSite.name;
+                $scope.assetEdit.block = $scope.selectedBlock;
+                $scope.assetEdit.floor = $scope.selectedFloor;
+                $scope.assetEdit.zone = $scope.selectedZone;
+                $scope.assetEdit.manufacturerName = $scope.selectedManufacturer.name;
+                $scope.assetEdit.vendorId = $scope.selectedVendor.id;
+
+                alert($scope.assetEdit.title);
+
+        	
+        	console.log('Edit asset details ='+ JSON.stringify($scope.assetEdit));
+
         	//$scope.asset.assetStatus = $scope.selectedStatus.name;
         	//var post = $scope.isEdit ? AssetComponent.update : AssetComponent.create
-        	AssetComponent.update($scope.asset).then(function () {
+        	AssetComponent.update($scope.assetEdit).then(function () {
 
                 $scope.success = 'OK';
-                 $scope.showNotifications('top','center','success','Asset Added');
+                 $scope.showNotifications('top','center','success','Asset Updated!!');
                  $scope.loadAssets();
 
             	$location.path('/assets');
