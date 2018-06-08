@@ -206,16 +206,19 @@
       </div>
     </ion-list>
     <ion-list *ngSwitchCase="'ppm'">
-        <p text-right class="fnt-18" (click)="showCalendar()"><ion-icon ios="ios-calendar" md="md-calendar" class="green fnt-25 padding-right10"></ion-icon></p>
-        <!--<div *ngIf="assetDetails.ppms.length<0">-->
-            <!--<ion-card>-->
-                <!--<ion-card-content>-->
-                    <!--No Data Found-->
-                <!--</ion-card-content>-->
-            <!--</ion-card>-->
-        <!--</div>-->
-        <div  class="white-bg" *ngFor="let ppm of assetDetails.ppms" >
 
+        <div text-center="" *ngIf="!assetDetails.ppms || assetDetails.ppms.length < 0">
+            <ion-card text-center="">
+                <ion-card-content>
+                    No Data found
+                </ion-card-content>
+            </ion-card>
+        </div>
+
+        <!--<p text-right class="fnt-18" (click)="showCalendar()"><ion-icon ios="ios-calendar" md="md-calendar" class="green fnt-25 padding-right10"></ion-icon></p>-->
+
+        <div  class="white-bg" *ngFor="let ppm of assetDetails.ppms" >
+            <img src="https://png.icons8.com/metro/50/000000/overtime.png">
             <div class="padding-left16 padding-top5">
                 <ion-row class="margin0">
                     <ion-col col-2 class="ver-center">
@@ -231,6 +234,7 @@
                             <p text-left class="margin0">{{ppm.status}} </p>
                         </div>
                     </ion-col>
+                    <
                 </ion-row>
             </div>
 
@@ -259,10 +263,10 @@
     </ion-list>
 
     <ion-list *ngSwitchCase="'amc'">
-        <div *ngIf="assetDetails.amc?.length<0">
-            <ion-card>
+        <div text-center="" *ngIf="!assetDetails.amcs || assetDetails.amcs.length < 0">
+            <ion-card text-center="">
                 <ion-card-content>
-                    No Data Found
+                    No Data found
                 </ion-card-content>
             </ion-card>
         </div>
@@ -313,10 +317,11 @@
     </ion-list>
 
     <div *ngSwitchCase="'config'">
-        <div *ngIf="assetDetails.config.length<0">
-            <ion-card>
+
+        <div text-center="" *ngIf="!assetDetails.config || assetDetails.config.length < 0">
+            <ion-card text-center="">
                 <ion-card-content>
-                    No Data Found
+                    No Data found
                 </ion-card-content>
             </ion-card>
         </div>
@@ -394,10 +399,11 @@
     </div>
 
     <ion-list *ngSwitchCase="'jobs'" style="margin-top : 56px">
-        <div *ngIf="assetDetails.jobs.length<0">
-            <ion-card>
+
+        <div text-center="" *ngIf="!assetDetails.jobs || assetDetails.jobs?.length<0">
+            <ion-card text-center="">
                 <ion-card-content>
-                    No Data Found
+                    No Data found
                 </ion-card-content>
             </ion-card>
         </div>
@@ -495,6 +501,14 @@
 
     <ion-list *ngSwitchCase="'tickets'" style="margin-top : 56px">
 
+        <div text-center="" *ngIf="!assetDetails.tickets || assetDetails.tickets?.length<0">
+            <ion-card text-center="">
+                <ion-card-content>
+                    No Data found
+                </ion-card-content>
+            </ion-card>
+        </div>
+
         <ion-refresher (ionRefresh)="doRefresh($event,'tickets')">
             <ion-refresher-content>
 
@@ -541,38 +555,31 @@
     </ion-list>
 
     <ion-list *ngSwitchCase="'readings'">
-        <div *ngIf="assetDetails.readings?.length<0">
-            <ion-card>
+
+        <div text-center="" *ngIf="!assetDetails.readings || assetDetails.readings.length < 0">
+            <ion-card text-center="">
                 <ion-card-content>
-                    No Reading
+                    No Data found
                 </ion-card-content>
             </ion-card>
         </div>
-        <table class="table table-hover">
-            <thead class="text-warning">
-                <th >Date</th>
-                <th >Consumption</th>
-                <th >Type</th>
-            </thead>
-            <tbody>
-                <tr>
-                    <td class="padding-left0">10-05-2018</td>
-                    <td class="padding-left0">20 Watt</td>
-                    <td class="padding-left0">POWER</td>
 
-                </tr>
-                <tr>
-                    <td class="padding-left0">11-05-2018</td>
-                    <td class="padding-left0">0 Watt</td>
-                    <td>POWER</td>
-                </tr>
-                <tr>
-                    <td class="padding-left0">12-05-2018</td>
-                    <td class="padding-left0">60 Watt</td>
-                    <td class="padding-left0">POWER</td>
-                </tr>
-            </tbody>
-        </table>
+        <div *ngIf="assetDetails.readings">
+            <table class="table table-hover">
+                <thead class="text-warning">
+                    <th >Date</th>
+                    <th >Consumption</th>
+                    <th >Type</th>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let reading of assetDetails.reading">
+                        <td class="padding-left0">10-05-2018</td>
+                        <td class="padding-left0">20 Watt</td>
+                        <td class="padding-left0">POWER</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
     </ion-list>
 </div>
 </ion-content>

@@ -26,6 +26,9 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.codahale.metrics.annotation.Timed;
+import com.ts.app.domain.Frequency;
+import com.ts.app.domain.FrequencyDuration;
+import com.ts.app.domain.FrequencyPrefix;
 import com.ts.app.security.SecurityUtils;
 import com.ts.app.service.AssetManagementService;
 import com.ts.app.service.util.FileUploadHelper;
@@ -113,6 +116,13 @@ public class AssetResource {
 		log.debug("Asset Details in updateAsset id from dto = " + assetDTO.getId());
 		AssetDTO response = assetService.updateAsset(assetDTO);
 		return new ResponseEntity<>(response, HttpStatus.CREATED);
+	}
+	
+	@RequestMapping(value = "/asset/{id}", method = RequestMethod.DELETE)
+	public ResponseEntity<?> delete(@PathVariable Long id) {
+		log.debug(">>> Inside Asset Delete " + id);
+		assetService.deleteAsset(id);
+		return new ResponseEntity<>(HttpStatus.OK);
 	}
 
 	@RequestMapping(value = "/asset/{id}/qrcode/{code}", method = RequestMethod.GET, produces = MediaType.IMAGE_PNG_VALUE)
@@ -307,5 +317,20 @@ public class AssetResource {
 		result = assetService.viewReadings(id);
 		return result;
 	}
+	
+	@RequestMapping(value="/assets/amc/frequency", method = RequestMethod.GET) 
+	public Frequency[] getAllFrequency() { 
+		Frequency[] List = null;
+		List = assetService.getAllType();
+		return List;
+	}
+	
+	@RequestMapping(value="/assets/amc/frequencyPrefix", method = RequestMethod.GET) 
+	public FrequencyPrefix[] getAllFrequencyPrefix() { 
+		FrequencyPrefix[] List = null;
+		List = assetService.getAllPrefixs();
+		return List;
+	}
+	
 	
 }

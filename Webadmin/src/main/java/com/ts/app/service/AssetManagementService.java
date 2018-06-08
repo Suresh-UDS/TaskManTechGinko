@@ -3,6 +3,7 @@ package com.ts.app.service;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.EnumSet;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -31,6 +32,9 @@ import com.ts.app.domain.AssetType;
 import com.ts.app.domain.Checklist;
 import com.ts.app.domain.Employee;
 import com.ts.app.domain.EmployeeProjectSite;
+import com.ts.app.domain.Frequency;
+import com.ts.app.domain.FrequencyDuration;
+import com.ts.app.domain.FrequencyPrefix;
 import com.ts.app.domain.Manufacturer;
 import com.ts.app.domain.ParameterConfig;
 import com.ts.app.domain.Project;
@@ -298,7 +302,7 @@ public class AssetManagementService extends AbstractService {
 		log.debug("asset Type " + asset.getAssetType());
 		log.debug("Asset Group " + asset.getAssetGroup());
 		AssetDTO assetDTO = mapperUtil.toModel(asset, AssetDTO.class);
-		log.debug("asset Type after mapping... " + assetDTO.getAssetType() + " Manufacture " + assetDTO.getManufacturerName() + " Vendor " + assetDTO.getAmcVendorName());
+/*		log.debug("asset Type after mapping... " + assetDTO.getAssetType() + " Manufacture " + assetDTO.getManufacturerName() + " Vendor " + assetDTO.getAmcVendorName());
 		log.debug("Asset Group after mapping...  " + assetDTO.getAssetGroup());
 		AssetType assetType = assetTypeRepository.findOne(Long.valueOf(assetDTO.getAssetType()));
 		assetDTO.setAssetTypeName(assetType.getName());
@@ -307,7 +311,7 @@ public class AssetManagementService extends AbstractService {
 		AssetGroup assetGroup = assetGroupRepository.findOne(Long.valueOf(assetDTO.getAssetGroup()));
 		assetDTO.setAssetGroupName(assetGroup.getAssetgroup());
 		log.debug("Asset Group Name  " + assetDTO.getAssetGroupName());
-
+*/
 		return assetDTO;
 	}
 
@@ -371,6 +375,13 @@ public class AssetManagementService extends AbstractService {
 		return mapperUtil.toModel(asset, AssetDTO.class);
 	}
 
+	public void deleteAsset(Long id) {
+		log.debug(">>> Inside Asset Delete Service");
+		Asset asset = assetRepository.findOne(id);
+		asset.setActive(Asset.ACTIVE_NO);
+		assetRepository.save(asset);
+	}
+	
 	public String generateAssetQRCode(long assetId, String assetCode) {
 		Asset asset = assetRepository.findOne(assetId);
 		asset.setCode(assetCode);
@@ -523,7 +534,7 @@ public class AssetManagementService extends AbstractService {
 				if (CollectionUtils.isNotEmpty(siteIds)) {
 					page = assetRepository.findAll(siteIds, pageRequest);
 				} else {
-					page = assetRepository.findAll(pageRequest);
+					page = assetRepository.findAllAsset(pageRequest);
 				}
 			}
 			if (page != null) {
@@ -787,6 +798,16 @@ public class AssetManagementService extends AbstractService {
 	public AssetParameterReadingDTO viewReadings(long id) {
 		AssetParameterReading paramReading = assetParamReadingRepository.findOne(id);
 		return mapperUtil.toModel(paramReading, AssetParameterReadingDTO.class);
+	}
+	
+	public Frequency[] getAllType() { 
+		Frequency[] types = Frequency.values();
+		return types;
+	}
+	
+	public FrequencyPrefix[] getAllPrefixs() { 
+		FrequencyPrefix[] prefixs = FrequencyPrefix.values();
+		return prefixs;
 	}
 
 }

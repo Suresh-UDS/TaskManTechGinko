@@ -201,6 +201,24 @@ angular.module('timeSheetApp')
             		return response.data;
             	});
 
+            },
+            
+            saveAmcSchedule : function(schedule) { 
+            	return $http.post('api/assets/amcschedule', schedule).then(function(response){
+            		return response.data;
+            	});
+            },
+            
+            getAllPrefix : function() { 
+            	return $http.get('api/assets/amc/frequencyPrefix').then(function(response){
+            		return response.data;
+            	});
+            },
+            
+            getAllFrequencies : function() {
+            	return $http.get('api/assets/amc/frequency').then(function(response){
+            		return response.data;
+            	});
             }
             
 

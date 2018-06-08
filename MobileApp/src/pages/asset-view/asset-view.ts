@@ -65,8 +65,7 @@ export class AssetView {
       this.getAssetById();
       this.getAssetPPMSchedule();
       this.getAssetAMCSchedule();
-
-
+      this.viewReading();
   }
 
     getReadings(){
@@ -327,6 +326,7 @@ export class AssetView {
             error=>{
                 console.log("Get asset AMC error");
                 console.log(error);
+                this.assetDetails.ppms = [];
             }
         )
     }
