@@ -33,27 +33,27 @@
 
                                             <ul class="nav nav-pills nav-pills-warning">
                                                 <li class="active">
-                                                    <a href=".General" data-toggle="tab" > General</a>
+                                                    <a href=".General" data-toggle="tab" ng-click="uView('on')"> General</a>
                                                 </li>
                                                 <li class="">
-                                                    <a href=".qr-code" data-toggle="tab"
+                                                    <a href=".qr-code" data-toggle="tab" ng-click="uView('off')"
                                                        > QR Code</a>
                                                 </li>
-                                                <li class=""><a href=".ppm-schedule" data-toggle="tab"
+                                                <li class=""><a href=".ppm-schedule" data-toggle="tab" ng-click="uView('off')"
                                                                 >PPM Schedule</a></li>
-                                                <li class=""><a href=".amc-schedule" data-toggle="tab"
+                                                <li class=""><a href=".amc-schedule" data-toggle="tab" ng-click="uView('off')"
                                                                 >AMC schedule</a></li>
-                                                <li class=""><a href=".Config" data-toggle="tab"
+                                                <li class=""><a href=".Config" data-toggle="tab" ng-click="uView('off')"
                                                 >Config</a></li>
 
-                                                <li class=""><a href=".docs" data-toggle="tab"
+                                                <li class=""><a href=".docs" data-toggle="tab" ng-click="uView('off')"
                                                                 >Documents</a></li>
-                                                <li class=""><a href=".ppm-jobs" data-toggle="tab"
+                                                <li class=""><a href=".ppm-jobs" data-toggle="tab" ng-click="uView('off')"
                                                 >PPM Jobs</a></li>
-                                                <li class=""><a href=".amc-jobs" data-toggle="tab"
+                                                <li class=""><a href=".amc-jobs" data-toggle="tab" ng-click="uView('off')"
                                                 >AMC Jobs</a></li>
                                                 <li class="">
-                                                    <a href=".tickets" data-toggle="tab"
+                                                    <a href=".tickets" data-toggle="tab" ng-click="uView('off')"
                                                     > Tickets</a>
                                                 </li>
 
@@ -1701,7 +1701,7 @@
 
                                             <div class="">
 
-                                                <div class="row">
+                                               <!--  <div class="row">
 
                                                     <div class="col-md-12 txt-align-rgt">
                                                         <div class="form-group">
@@ -1714,6 +1714,27 @@
 
                                                         </div>
                                                     </div>
+                                                </div> -->
+
+                                                <div class="row" ng-hide="upView">
+                                                    <div class="col-md-12" style="text-align:right;">
+
+                                                        <button class="btn btn-success" type="submit"
+                                                                id="form-button-save" ng-disabled="form.$invalid" ng-click="updateAsset();">
+                                                            <span class="btn-label">
+                                                            <i class="material-icons">check</i>
+                                                        </span> Update
+                                                        </button>
+                                                        <!--    <button class="btn btn-info b10" type="submit"
+                                                            id="save-and-go-back-button" ng-disabled="form.$invalid">
+                                                            <i class="fa fa-rotate-left" ></i> Save and go back to list
+                                                        </button> -->
+                                                        <button class="btn btn-danger" type="button"
+                                                                ui-sref="assets" id="cancel-button">
+                                                            <i class="material-icons">close</i> Cancel
+                                                        </button>
+
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -1723,7 +1744,7 @@
 
                                 </div>
 
-                                <div class="row">
+                                <!-- <div class="row">
                                     <div class="col-md-12" style="text-align:right;">
 
                                         <button class="btn btn-success" type="submit"
@@ -1731,18 +1752,18 @@
                                             <span class="btn-label">
                                             <i class="material-icons">check</i>
                                         </span> Update
-                                        </button>
+                                        </button> -->
                                         <!-- 	<button class="btn btn-info b10" type="submit"
                                             id="save-and-go-back-button" ng-disabled="form.$invalid">
                                             <i class="fa fa-rotate-left" ></i> Save and go back to list
                                         </button> -->
-                                        <button class="btn btn-danger" type="button"
+                                        <!-- <button class="btn btn-danger" type="button"
                                                 ui-sref="assets" id="cancel-button">
                                             <i class="material-icons">close</i> Cancel
                                         </button>
 
                                     </div>
-                                </div>
+                                </div> -->
 
 
 

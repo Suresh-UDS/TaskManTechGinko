@@ -645,6 +645,7 @@ angular.module('timeSheetApp')
 
             AssetComponent.genQrCode(qr_id).then(function(response){
 
+            
              $scope.qr_img = response;
 
              $rootScope.loadingStop();
@@ -1197,7 +1198,22 @@ angular.module('timeSheetApp')
 	    	
 	    }
 	    
-	    /*End AMC*/	    
+	    /*End AMC*/	   
+
+
+
+        $scope.uView=function(val){
+
+            if(val == "on"){
+
+                $scope.upView = "";
+
+            }else if(val == "off"){
+
+                $scope.upView = "1";
+            }
+
+        } 
 
 
     });
