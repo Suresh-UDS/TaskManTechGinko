@@ -358,5 +358,13 @@ public class AssetResource {
 		return List;
 	}
 	
+	@RequestMapping(value = "/assets/{assetId}/viewAssetReadings", method = RequestMethod.GET)
+	public List<AssetParameterReadingDTO> getAssetReadings(@PathVariable("assetId") long assetId) {
+		List<AssetParameterReadingDTO> result = null;
+		result = assetService.viewAssetReadings(assetId);
+		return result;
+	}
+	
+	
 	
 }

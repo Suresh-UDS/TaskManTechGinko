@@ -837,4 +837,13 @@ public class AssetManagementService extends AbstractService {
 		return prefixs;
 	}
 
+	public List<AssetParameterReadingDTO> viewAssetReadings(long assetId) {
+		List<AssetParameterReadingDTO> assetParameterReadingDTO = null;
+		List<AssetParameterReading> assetParameterReading = assetRepository.findByAssetReading(assetId);
+		if (CollectionUtils.isNotEmpty(assetParameterReading)) {
+			assetParameterReadingDTO = mapperUtil.toModelList(assetParameterReading, AssetParameterReadingDTO.class);
+		}
+		return assetParameterReadingDTO;
+	}
+
 }
