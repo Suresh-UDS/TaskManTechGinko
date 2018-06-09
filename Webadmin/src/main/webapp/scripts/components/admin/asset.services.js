@@ -226,6 +226,12 @@ angular.module('timeSheetApp')
             	return $http.get('api//assets/'+id+'/amcschedule').then(function(response) { 
             		return response.data;
             	});
+            },
+            
+            findByAssetReadings : function(id) { 
+            	return $http.get('api/assets/'+id+'/viewAssetReadings').then(function(response) { 
+            		return response.data;
+            	});
             }
             
 

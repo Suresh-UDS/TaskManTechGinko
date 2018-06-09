@@ -459,6 +459,8 @@ public class AssetManagementService extends AbstractService {
 
 		AssetAMCSchedule assetAMC = mapperUtil.toEntity(assetAMCScheduleDTO, AssetAMCSchedule.class);
 		Checklist checklist = checklistRepository.findOne(assetAMCScheduleDTO.getChecklistId());
+		Asset asset = assetRepository.findOne(assetAMCScheduleDTO.getAssetId());
+		assetAMC.setAsset(asset);
 		assetAMC.setChecklist(checklist);
 		assetAMC.setActive(AssetAMCSchedule.ACTIVE_YES);
 
