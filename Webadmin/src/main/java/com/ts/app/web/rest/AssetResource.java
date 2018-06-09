@@ -102,6 +102,17 @@ public class AssetResource {
 		return result;
 	}
 
+	@RequestMapping(value = "/asset/findppmschedule", method = RequestMethod.POST)
+	public SearchResult<AssetPpmScheduleDTO> findPPMSchedule(@RequestBody SearchCriteria searchCriteria) {
+		log.debug(">>> find ppm schedule <<<");
+		SearchResult<AssetPpmScheduleDTO> result = null;
+		if (searchCriteria != null) {
+			searchCriteria.setUserId(SecurityUtils.getCurrentUserId());
+			result = assetService.findPPMSearchCriteria(searchCriteria);
+		}
+		return result;
+	}
+	
 	@RequestMapping(path = "/site/{id}/asset", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public List<AssetDTO> getSiteAssets(@PathVariable("id") Long siteId) {
 		return assetService.getSiteAssets(siteId);
@@ -126,6 +137,26 @@ public class AssetResource {
 		if (assetDTO.getId() > 0)
 			assetDTO.setId(id);
 		log.debug("Asset Details in updateAsset id from dto = " + assetDTO.getId());
+		log.debug(">>> Asset DTO update request <<<");
+		log.debug("Title <<<" + assetDTO.getTitle());
+		log.debug("AssetType <<<" + assetDTO.getAssetType());
+		log.debug("AssetGroup <<<" + assetDTO.getAssetGroup());
+		log.debug("Status <<<" + assetDTO.getStatus());
+		log.debug("ProjectId <<<" + assetDTO.getProjectId());
+		log.debug("SiteId <<<" + assetDTO.getSiteId());
+		log.debug("Block <<<" + assetDTO.getBlock());
+		log.debug("Floor <<<" + assetDTO.getFloor());
+		log.debug("Zone <<<" + assetDTO.getZone());
+		log.debug("Manufacture <<<" + assetDTO.getManufacturerId());
+		log.debug("ModelNumber <<<" + assetDTO.getModelNumber());
+		log.debug("SerialNumber <<<" + assetDTO.getSerialNumber());
+		log.debug("Acquired Date <<<" + assetDTO.getAcquiredDate());
+		log.debug("PurchasePrice <<<" + assetDTO.getPurchasePrice());
+		log.debug("CurrentPrice <<<" + assetDTO.getCurrentPrice());
+		log.debug("EstimatedDisposePrice <<<" + assetDTO.getEstimatedDisposePrice());
+		log.debug("Code <<<" + assetDTO.getCode());
+		log.debug("UdsAsset <<<" + assetDTO.isUdsAsset());
+		log.debug("Vendor <<<" + assetDTO.getVendorId());
 		AssetDTO response = assetService.updateAsset(assetDTO);
 		return new ResponseEntity<>(response, HttpStatus.CREATED);
 	}
