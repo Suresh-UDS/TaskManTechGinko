@@ -1022,7 +1022,8 @@
                                                                                     <label class="control-label">Select Frequency</label>
                                                                                     <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
                                                                                     <select class="form-control" ng-model="selectedFrequency">
-                                                                                        <option value="Every">Every</option>
+                                                                                        <option value="" >Select</option>
+                                                                                        <option value="Every" >Every</option>
                                                                                     </select>
                                                                                 </div>
                                                                             </div>
@@ -1032,6 +1033,7 @@
                                                                                 <label class="control-label">&nbsp;</label>
                                                                                 <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
                                                                                 <select class="form-control" ng-model="selectedTimeInterval">
+                                                                                    <option value="" >Select</option>
                                                                                     <option value="1">1</option>
                                                                                     <option value="2">2</option>
                                                                                     <option value="3">3</option>
@@ -1043,6 +1045,7 @@
                                                                                 <label class="control-label">&nbsp;</label>
                                                                                 <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
                                                                                 <select class="form-control" ng-model="selectedFrequnceyOccurrence">
+                                                                                    <option value="" >Select</option>
                                                                                     <option value="Hour">Hour</option>
                                                                                     <option value="Day">Day</option>
                                                                                     <option value="Week">Week</option>
@@ -1293,7 +1296,7 @@
                                                                                     <label class="control-label">Select Frequency</label>
                                                                                     <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
                                                                                     <select class="form-control" ng-model="selectedFrequencyPrefix" ng-options=" frequencyPrefix for frequencyPrefix in frequencyPrefixies">
-                                                                                        <option value=""></option>
+                                                                                        <option value="">Select</option>
                                                                                     </select>
                                                                                 </div>
                                                                             </div>
@@ -1303,7 +1306,7 @@
                                                                                 <label class="control-label">&nbsp;</label>
                                                                                 <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
                                                                                 <select class="form-control" ng-model="selectedFreqDuration" ng-options="frequencyDuration for frequencyDuration in frequencyDurations">
-                                                                                    <option value=""></option>
+                                                                                    <option value="">Select</option>
                                                                                 </select>
                                                                             </div>
                                                                         </div>
@@ -1312,7 +1315,7 @@
                                                                                 <label class="control-label">&nbsp;</label>
                                                                                 <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
                                                                                 <select class="form-control" ng-model="selectedFrequency" ng-options="frequency for frequency in frequencies">
-                                                                                    <option value=""></option>
+                                                                                    <option value="">Select</option>
                                                                                 </select>
                                                                             </div>
                                                                         </div>
