@@ -41,6 +41,8 @@ angular.module('timeSheetApp')
 
         $scope.assetEdit = {};
 
+        $scope.assetList = {};
+
         $scope.assetDetail = {};
        
         $scope.parameterConfig = {};
@@ -107,14 +109,9 @@ angular.module('timeSheetApp')
         }
 
         $scope.savePPMSchedule = function (){
-        	alert("save ppm schedule");
-        	console.log(">> Title "+$scope.assetPPM.title);
-        	console.log(">> checklist "+$scope.assetPPM.checklistId);
-        	console.log(">> from date "+$scope.assetPPM.dateFilterFrom);
-        	console.log(">> to date "+$scope.assetPPM.dateFilterTo);
-        	console.log(">> frequency "+$scope.selectedFrequency);
-        	console.log(">> time interval "+$scope.selectedTimeInterval);
-        	console.log(">> freq occurrence "+$scope.selectedFrequnceyOccurrence);
+        	
+        	console.log("Create asset ppm ==> " ,$scope.assetPPM.title);
+
         	$scope.assetPPM.startDate = $scope.assetPPM.dateFilterFrom;
         	$scope.assetPPM.endDate = $scope.assetPPM.dateFilterTo;
         	$scope.assetPPM.frequencyPrefix = $scope.selectedFrequency;
@@ -128,7 +125,7 @@ angular.module('timeSheetApp')
                 $scope.assetGen.id=response.data.id;
                 $scope.success = 'OK';
                 $scope.showNotifications('top','center','success','Asset Added');
-                $scope.selectedSite = null;
+
                 $scope.loadAssets();
 
                 //$location.path('/assets');
@@ -245,7 +242,7 @@ angular.module('timeSheetApp')
         $scope.loadBlocks = function () {
                 console.log('selected project -' + ($scope.selectedProject ? $scope.selectedProject.id : 0) + ', site -' + ($scope.selectedSite ? $scope.selectedSite.id : 0))
                 var projectId = $scope.selectedProject ? $scope.selectedProject.id : 0;
-                LocationComponent.findBlocks(projectId,$scope.selectedSite.id).then(function (data) {
+                LocationComponent.findBlocks(0,$scope.selectedSite.id).then(function (data) {
                     $scope.selectedBlock = null;
                 $scope.blocks = data;
                  console.log("Loading all blocks -- " ,  $scope.blocks);
@@ -255,7 +252,7 @@ angular.module('timeSheetApp')
 
         $scope.loadFloors = function () {
                 var projectId = $scope.selectedProject ? $scope.selectedProject.id : 0;
-                LocationComponent.findFloors(projectId,$scope.selectedSite.id,$scope.selectedBlock).then(function (data) {
+                LocationComponent.findFloors(0,$scope.selectedSite.id,$scope.selectedBlock).then(function (data) {
                     $scope.selectedFloor = null;
                 $scope.floors = data;
                 console.log("Loading all floors -- " ,  $scope.floors);
@@ -265,7 +262,7 @@ angular.module('timeSheetApp')
         $scope.loadZones = function () {
                 console.log('load zones - ' + $scope.selectedSite.id +',' +$scope.selectedBlock +','+$scope.selectedFloor);
                 var projectId = $scope.selectedProject ? $scope.selectedProject.id : 0;
-                LocationComponent.findZones(projectId,$scope.selectedSite.id,$scope.selectedBlock, $scope.selectedFloor).then(function (data) {
+                LocationComponent.findZones(0,$scope.selectedSite.id,$scope.selectedBlock, $scope.selectedFloor).then(function (data) {
                     $scope.selectedZone = null;
                     $scope.zones = data;
                     console.log('zones list',$scope.zones);
@@ -293,45 +290,47 @@ angular.module('timeSheetApp')
         $scope.editAsset = function(){
              //alert($stateParams.id);
             console.log($stateParams.id);
-        	$scope.loadAssetType();
+
         	AssetComponent.findById($stateParams.id).then(function(data){
 
-        		$scope.asset=data;
+        		$scope.assetList=data;
 
-                console.log("Edit Asset--",$scope.asset);
+                console.log("Edit Asset--",$scope.assetList);
 
 
-                $scope.assetEdit.id = $scope.asset.id;
-                $scope.assetEdit.title = $scope.asset.title;
-                $scope.assetEdit.modelNumber = $scope.asset.modelNumber;
-                $scope.assetEdit.serialNumber =  $scope.asset.serialNumber;
-                $scope.assetEdit.acquiredDate = $scope.asset.acquiredDate;
-                $scope.assetEdit.purchasePrice = $scope.asset.purchasePrice;
-                $scope.assetEdit.currentPrice = $scope.asset.currentPrice;
-                $scope.assetEdit.estimatedDisposePrice = $scope.asset.estimatedDisposePrice;
-                $scope.assetEdit.vendorLocation = $scope.asset.vendorLocation;
-                $scope.selectedAssetType ={name:$scope.asset.assetTypeName};
-                $scope.selectedAssetGroup ={assetgroup:$scope.asset.assetGroupName};
-                $scope.selectedSite ={name:$scope.asset.siteName};
-                $scope.selectedBlock = $scope.asset.block;
-                $scope.selectedFloor = $scope.asset.floor;
-                $scope.selectedZone = $scope.asset.zone;
-                $scope.selectedManufacturer = {name:$scope.asset.manufacturerName};
-                $scope.selectedVendor = {id:$scope.asset.vendorId};
-                if($scope.asset.siteId){   
-                        LocationComponent.findBlocks(0,$scope.asset.siteId).then(function (data) {
+
+
+                $scope.assetEdit.id = $scope.assetList.id;
+                $scope.assetEdit.title = $scope.assetList.title;
+                $scope.assetEdit.modelNumber = $scope.assetList.modelNumber;
+                $scope.assetEdit.serialNumber =  $scope.assetList.serialNumber;
+                $scope.assetEdit.acquiredDate = $scope.assetList.acquiredDate;
+                $scope.assetEdit.purchasePrice = $scope.assetList.purchasePrice;
+                $scope.assetEdit.currentPrice = $scope.assetList.currentPrice;
+                $scope.assetEdit.estimatedDisposePrice = $scope.assetList.estimatedDisposePrice;
+                $scope.assetEdit.vendorLocation = $scope.assetList.vendorLocation;
+                $scope.selectedAssetType ={name:$scope.assetList.assetType};
+                $scope.selectedAssetGroup ={assetgroup:$scope.assetList.assetGroup};
+                $scope.selectedSite ={name:$scope.assetList.siteName};
+                $scope.selectedBlock = $scope.assetList.block;
+                $scope.selectedFloor = $scope.assetList.floor;
+                $scope.selectedZone = $scope.assetList.zone;
+                $scope.selectedManufacturer = {name:$scope.assetList.manufacturerName};
+                $scope.selectedVendor = {id:$scope.assetList.vendorId};
+                if($scope.assetList.siteId){   
+                        LocationComponent.findBlocks(0,$scope.assetList.siteId).then(function (data) {
                         $scope.selectedBlock = null;
                         $scope.blocks = data;
                          console.log("Loading all blocks -- " ,  $scope.blocks);
                     });
                
-                       LocationComponent.findFloors(0,$scope.asset.siteId,$scope.asset.block).then(function (data) {
+                       LocationComponent.findFloors(0,$scope.assetList.siteId,$scope.assetList.block).then(function (data) {
                         $scope.selectedFloor = null;
                         $scope.floors = data;
                         console.log("Loading all floors -- " ,  $scope.floors);
                     });
 
-                       LocationComponent.findZones(0,$scope.asset.siteId,$scope.asset.block,$scope.asset.floor).then(function (data) {
+                       LocationComponent.findZones(0,$scope.assetList.siteId,$scope.assetList.block,$scope.assetList.floor).then(function (data) {
                         $scope.selectedZone = null;
                         $scope.zones = data;
                         console.log('zones list',$scope.zones);
@@ -339,6 +338,12 @@ angular.module('timeSheetApp')
                 }
 
                 $scope.genQrCodes();
+
+                $rootScope.loadingStop();
+
+                $scope.assetConfig();
+
+
         		
         		/*if($scope.asset.assetType) {
         			$scope.assetConfig = {};
@@ -480,22 +485,27 @@ angular.module('timeSheetApp')
         $scope.viewAsset = function(){
 
             var assetId = $stateParams.id;
-             $scope.assetDetail= {};
 
             AssetComponent.findById(assetId).then(function(data){
                 console.log("Asset details List==" + JSON.stringify(data));
                 $scope.assetDetail= data;
                 $scope.assetConfig();
+                $scope.genQrCodes();
 
             });
         }
 
-        $scope.assetConfig=function(){
 
+        $scope.assetConfig=function(){
              
             if($stateParams.id){ 
-               
-                $scope.assetConfigs.assetType = $scope.selectedAssetType.name;
+               if($scope.assetDetail.assetType){
+                 $scope.assetConfigs.assetType = $scope.assetDetail.assetType;  
+               }
+               else if($scope.assetList.assetType){
+                $scope.assetConfigs.assetType = $scope.assetList.assetType;
+               }
+                
 
                 $scope.assetConfigs.assetId = $stateParams.id;
             }
@@ -507,8 +517,11 @@ angular.module('timeSheetApp')
                console.log("Asset Config load" ,$scope.assetConfigs);
     
                     AssetComponent.findByAssetConfig($scope.assetConfigs).then(function(data){
+                       
                         console.log(data);
                         $scope.assetParameters = data;
+                        
+
                     });
 
                 
@@ -557,7 +570,7 @@ angular.module('timeSheetApp')
                         $scope.assetGen.id=response.data.id;
                         $scope.success = 'OK';
                         $scope.showNotifications('top','center','success','Asset Added');
-                        $scope.loadAssets();
+                        //$scope.loadAssets();
 
                         //$location.path('/assets');
 
@@ -584,15 +597,21 @@ angular.module('timeSheetApp')
 
        $scope.createQrCode= function(){  
 
-        if(!$scope.assetGen.id){
+           
+        if(!$scope.assetGen.id && !$stateParams.id){
             
-          $scope.showNotifications('top','center','danger','Please create asset..');
+          $scope.showNotifications('top','center','danger','Please create asset first..');
 
-        }
+        }else{
 
         if($scope.assetGen.id){
             
-            var qr = {id:$scope.assetGen.id,code:$scope.assetGen.assetcode}
+            var qr = {id:$scope.assetGen.id,code:$scope.assetGen.assetcode};
+
+        }else if($stateParams.id){
+
+            var qr = {id:$stateParams.id,code:$scope.assetQr.assetCode};
+        }
 
             //alert("code:"  + qr.code + "id:" + qr.id);
             
@@ -603,25 +622,32 @@ angular.module('timeSheetApp')
                 $scope.genQrCodes();
             });
         }
+    }
 
-       }
+       
 
        /* View QR code by asset id */
 
        $scope.genQrCodes= function(){ 
 
-              if($scope.assetEdit.id){
+              if($stateParams.id){
     
-                var qr_id ={id:$scope.asset.id};
+                var qr_id ={id:$stateParams.id};
+
               }else if($scope.assetGen.id){
       
                 var qr_id ={id:$scope.assetGen.id};
               }
               $rootScope.loadingStart();
+
               $scope.qr_img = "";
 
+
             AssetComponent.genQrCode(qr_id).then(function(response){
+
+            
              $scope.qr_img = response;
+
              $rootScope.loadingStop();
                 
             });
@@ -634,16 +660,50 @@ angular.module('timeSheetApp')
         	$scope.error = null;
         	$scope.success =null;
 
-                $scope.assetEdit.assetTypeName =$scope.selectedAssetType.name;
-                $scope.assetEdit.assetGroupName = $scope.selectedAssetGroup.name;
-                $scope.assetEdit.siteName = $scope.selectedSite.name;
-                $scope.assetEdit.block = $scope.selectedBlock;
-                $scope.assetEdit.floor = $scope.selectedFloor;
-                $scope.assetEdit.zone = $scope.selectedZone;
-                $scope.assetEdit.manufacturerName = $scope.selectedManufacturer.name;
-                $scope.assetEdit.vendorId = $scope.selectedVendor.id;
-
-               // alert($scope.assetEdit.title);
+                 
+                if($scope.selectedAssetType.name)
+                {     $scope.assetEdit.assetType =$scope.selectedAssetType.name;
+                }else{
+                      $scope.assetEdit.assetType =$scope.assetList.assetType;
+                }
+                if($scope.selectedAssetGroup.assetgroup){
+                    $scope.assetEdit.assetGroup = $scope.selectedAssetGroup.assetgroup;
+                }else{
+                    $scope.assetEdit.assetGroup = $scope.assetList.assetGroup;
+                }
+                if($scope.selectedSite.name){
+                   $scope.assetEdit.siteName = $scope.selectedSite.name;
+                }else{
+                    $scope.assetEdit.siteName = $scope.assetList.siteName;
+                }
+                if($scope.selectedBlock){
+                    $scope.assetEdit.block = $scope.selectedBlock;
+                }else{
+                    $scope.assetEdit.block =  $scope.assetList.block;
+                }
+                if($scope.selectedFloor){
+                    $scope.assetEdit.floor = $scope.selectedFloor;
+                }else{
+                    $scope.assetEdit.floor = $scope.assetList.floor;
+                }
+                if($scope.selectedZone){
+                    $scope.assetEdit.zone = $scope.selectedZone;
+                }else{
+                    $scope.assetEdit.zone = $scope.assetList.zone;
+                }
+                if($scope.selectedManufacturer.name){
+                   $scope.assetEdit.manufacturerName = $scope.selectedManufacturer.name; 
+               }else{
+                  $scope.assetEdit.manufacturerName = $scope.assetList.manufacturerName; 
+               }
+                if($scope.selectedVendor.id){
+                   $scope.assetEdit.vendorId = $scope.selectedVendor.id; 
+                }
+                else{
+                    $scope.assetEdit.vendorId = $scope.assetList.vendorId; 
+                }
+                
+            
 
         	
         	console.log('Edit asset details ='+ JSON.stringify($scope.assetEdit));
@@ -656,7 +716,7 @@ angular.module('timeSheetApp')
                  $scope.showNotifications('top','center','success','Asset Updated!!');
                  $scope.loadAssets();
 
-            	$location.path('/assets');
+            	//$location.path('/assets');
 
             }).catch(function (response) {
 
@@ -887,8 +947,8 @@ angular.module('timeSheetApp')
         	$scope.success =null;
 
             if($stateParams.id){
-            	if($scope.asset.assetType){
-            	    $scope.parameterConfig.assetType = $scope.asset.assetTypeName;
+            	if($scope.assetList.assetType){
+            	    $scope.parameterConfig.assetType = $scope.assetList.assetType;
             	    $scope.parameterConfig.assetId = $stateParams.id;
             	}
             	if($scope.selectedParameter){
@@ -1146,7 +1206,21 @@ angular.module('timeSheetApp')
 	    	});
 	    }
 	    
-	    /*End AMC*/	    
+	    /*End AMC*/	      
+
+
+        $scope.uView=function(val){
+
+            if(val == "on"){
+
+                $scope.upView = "";
+
+            }else if(val == "off"){
+
+                $scope.upView = "1";
+            }
+
+        } 
 
 
     });

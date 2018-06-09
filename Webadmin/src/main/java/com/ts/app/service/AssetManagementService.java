@@ -321,6 +321,13 @@ public class AssetManagementService extends AbstractService {
 		log.debug("asset Type " + asset.getAssetType());
 		log.debug("Asset Group " + asset.getAssetGroup());
 		AssetDTO assetDTO = mapperUtil.toModel(asset, AssetDTO.class);
+		
+		AssetType assetType = assetTypeRepository.findByName(asset.getAssetType());
+		assetDTO.setAssetTypeId(assetType.getId());
+		
+		AssetGroup assetGroup = assetGroupRepository.findByName(asset.getAssetGroup());
+		assetDTO.setAssetGroupId(assetGroup.getId());
+		
 /*		log.debug("asset Type after mapping... " + assetDTO.getAssetType() + " Manufacture " + assetDTO.getManufacturerName() + " Vendor " + assetDTO.getAmcVendorName());
 		log.debug("Asset Group after mapping...  " + assetDTO.getAssetGroup());
 		AssetType assetType = assetTypeRepository.findOne(Long.valueOf(assetDTO.getAssetType()));
@@ -717,7 +724,7 @@ public class AssetManagementService extends AbstractService {
 
 		assetPPMSchedule = assetPpmScheduleRepository.save(assetPPMSchedule);
 		assetPpmScheduleDTO = mapperUtil.toModel(assetPPMSchedule, AssetPpmScheduleDTO.class);
-		jobManagementService.createJob(assetPpmScheduleDTO);
+		//jobManagementService.createJob(assetPpmScheduleDTO);
 		log.debug(">> after create job for ppm schedule <<<");
 		return assetPpmScheduleDTO;
 	}

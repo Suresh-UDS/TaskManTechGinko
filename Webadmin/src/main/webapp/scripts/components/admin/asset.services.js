@@ -168,6 +168,7 @@ angular.module('timeSheetApp')
                 });
             },
             genQrCode : function(qr) { 
+                
                 return $http.get('api/asset/qrcode/'+qr.id).then(function(response){ 
                     return response.data;
 
