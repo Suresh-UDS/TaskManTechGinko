@@ -28,6 +28,7 @@ import {AppVersion} from "@ionic-native/app-version";
 import{OneSignal} from "@ionic-native/onesignal";
 import {componentService} from "../pages/service/componentService";
 import {Ticket} from "../pages/ticket/ticket";
+import {authService} from "../pages/service/authService";
 
 @Component({
   templateUrl: 'app.html'
@@ -39,9 +40,11 @@ export class MyApp {
   userName:any;
   userType :any;
     counter=0;
+    pushEvent:any;
+
   pages: Array<{title: string, component: any,active:any,icon:any,permission:any}>;
 
-  constructor(public platform: Platform,private backgroundMode: BackgroundMode, public statusBar: StatusBar,public component:componentService,public toastCtrl: ToastController, public splashScreen: SplashScreen, private oneSignal: OneSignal, public events:Events, private batteryStatus: BatteryStatus, private appVersion:AppVersion) {
+  constructor(public platform: Platform,private backgroundMode: BackgroundMode, public statusBar: StatusBar,public component:componentService,public toastCtrl: ToastController, public splashScreen: SplashScreen, private oneSignal: OneSignal, public events:Events, private batteryStatus: BatteryStatus, private appVersion:AppVersion, private authService:authService) {
     this.initializeApp();
       this.events.subscribe('permissions:set',(permission)=>{
           console.log("Event permission in component");
@@ -59,6 +62,45 @@ export class MyApp {
               console.log(status.level,status.isPlugged);
           }
       );
+
+
+          this.oneSignal.startInit('be468c76-586a-4de1-bd19-fc6d9512e5ca','1088177211637');
+          this.oneSignal.inFocusDisplaying(this.oneSignal.OSInFocusDisplayOption.InAppAlert);
+          this.oneSignal.handleNotificationReceived().subscribe(response=>{
+              console.log("Notification received");
+              console.log(JSON.stringify(response))
+
+
+          });
+          this.oneSignal.handleNotificationOpened().subscribe(response=> {
+              console.log("Notification Opened")
+              console.log(JSON.stringify(response))
+              this.pushEvent=response.notification.payload.additionalData.event;
+              if(this.pushEvent=='assign_driver')
+              {
+                  this.nav.setRoot(TabsPage,{event:this.pushEvent})
+              }
+              else if(this.pushEvent=='cancel_booking')
+              {
+                  this.nav.setRoot(TabsPage,{event:this.pushEvent})
+              }
+          });
+
+          this.oneSignal.getIds().then(
+              response=>{
+                  console.log("Push Subscription response - get Ids");
+                  console.log(response);
+                      this.registerForPush("android",response.pushToken,response.userId);
+              }
+          );
+
+
+          this.oneSignal.endInit();
+
+
+
+
+
       platform.registerBackButtonAction(() => {
           let view = this.nav.getActive();
           console.log("Back button event");
@@ -159,5 +201,15 @@ export class MyApp {
   gotoDashboard(){
       this.nav.setRoot(TabsPage);
   }
+
+    registerForPush(type,pushToken,pushUserId){
+        var user = { user: 'user' + Math.floor((Math.random() * 10000000) + 1), type: type, token: pushToken,pushUserId: pushUserId, userType: 'driver'};
+        this.authService.pushSubscription(user).subscribe(
+            response=>{
+                console.log("Response from register for push");
+                console.log(response);
+            }
+        )
+    }
 
 }
