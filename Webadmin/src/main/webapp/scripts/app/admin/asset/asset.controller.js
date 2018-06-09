@@ -125,12 +125,13 @@ angular.module('timeSheetApp')
         	
         	AssetComponent.createPPM($scope.assetPPM).then(function(response) {
                 console.log("Asset response",JSON.stringify(response));
-                $scope.assetGen.id=response.data.id;
+                $scope.assetGen.id=response.data.assetId;
+                console.log(">>> Asset Id : "+$scope.assetGen.id);
                 $scope.success = 'OK';
                 $scope.showNotifications('top','center','success','Asset Added');
-                $scope.selectedSite = null;
-                $scope.loadAssets();
-
+                //$scope.selectedSite = null;
+                //$scope.loadAssets();
+                $scope.loadPPMSchedule($scope.assetGen.id);
                 //$location.path('/assets');
             }).catch(function (response) {
                 $scope.success = null;
@@ -557,8 +558,7 @@ angular.module('timeSheetApp')
                         $scope.assetGen.id=response.data.id;
                         $scope.success = 'OK';
                         $scope.showNotifications('top','center','success','Asset Added');
-                        $scope.loadAssets();
-
+                        //$scope.loadAssets();
                         //$location.path('/assets');
 
                     }).catch(function (response) {
@@ -751,6 +751,70 @@ angular.module('timeSheetApp')
              $scope.setPage(1);
 
          }
+        
+        $scope.loadPPMSchedule = function(assetId){
+        	
+        	var currPageVal = ($scope.pages ? $scope.pages.currPage : 1);
+            if(!$scope.searchCriteria) {
+                var searchCriteria = {
+                        currPage : currPageVal
+                };
+                $scope.searchCriteria = searchCriteria;
+            }
+
+            $scope.searchCriteria.currPage = currPageVal;
+            $scope.searchCriteria.findAll = false;
+
+            //----
+            if($scope.pageSort){
+                $scope.searchCriteria.sort = $scope.pageSort;
+            }
+
+            if($scope.selectedColumn){
+
+                $scope.searchCriteria.columnName = $scope.selectedColumn;
+                $scope.searchCriteria.sortByAsc = $scope.isAscOrder;
+
+            }else{
+                $scope.searchCriteria.columnName ="id";
+                $scope.searchCriteria.sortByAsc = true;
+            }
+
+             console.log("search criteria",$scope.searchCriteria);
+                //$scope.assets = '';
+                //$scope.assetsLoader = false;
+                //$scope.loadPageTop();
+                
+        	console.log(">>> loading ppm! asset id is "+assetId);
+        	$scope.searchCriteria.assetId = assetId;
+        	AssetComponent.findPPMSchedule($scope.searchCriteria).then(function (data) {
+                $scope.ppmschedule = data.transactions;
+                //$scope.projectsLoader = true;
+
+                /*
+                    ** Call pagination  main function **
+                */
+                 $scope.pager = {};
+                 $scope.pager = PaginationComponent.GetPager(data.totalCount, $scope.pages.currPage);
+                 $scope.totalCountPages = data.totalCount;
+
+                 console.log("Pagination",$scope.pager);
+                 console.log($scope.projects);
+
+                $scope.pages.currPage = data.currPage;
+                $scope.pages.totalPages = data.totalPages;
+
+
+                if($scope.projects && $scope.projects.length > 0 ){
+                    $scope.showCurrPage = data.currPage;
+                    $scope.pageEntries = $scope.projects.length;
+                    $scope.totalCountPages = data.totalCount;
+                    $scope.pageSort = 10;
+                }
+
+            });
+
+        }
 
         /*
         ** Pagination init function **

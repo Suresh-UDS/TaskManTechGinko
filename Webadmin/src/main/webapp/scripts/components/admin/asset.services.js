@@ -73,7 +73,11 @@ angular.module('timeSheetApp')
                 });
             },
 
-
+            findPPMSchedule: function(searchCriteria) {
+            	return $http.post('api/asset/findppmschedule',searchCriteria).then(function (response) {
+                    return response.data;
+                });
+            },
              createAssetType : function() { 
                 return $http.post('api/assets/type').then(function (response) { 
                     return response.data;
