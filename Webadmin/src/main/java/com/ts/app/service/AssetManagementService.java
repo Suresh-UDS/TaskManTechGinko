@@ -458,7 +458,8 @@ public class AssetManagementService extends AbstractService {
 		log.debug("Create assets AMC schedule");
 
 		AssetAMCSchedule assetAMC = mapperUtil.toEntity(assetAMCScheduleDTO, AssetAMCSchedule.class);
-
+		Checklist checklist = checklistRepository.findOne(assetAMCScheduleDTO.getChecklistId());
+		assetAMC.setChecklist(checklist);
 		assetAMC.setActive(AssetAMCSchedule.ACTIVE_YES);
 
 		List<AssetAMCSchedule> existingSchedules = assetRepository.findAssetAMCScheduleByTitle(assetAMCScheduleDTO.getTitle());
@@ -925,6 +926,15 @@ public class AssetManagementService extends AbstractService {
 	public FrequencyPrefix[] getAllPrefixs() { 
 		FrequencyPrefix[] prefixs = FrequencyPrefix.values();
 		return prefixs;
+	}
+
+	public List<AssetParameterReadingDTO> viewAssetReadings(long assetId) {
+		List<AssetParameterReadingDTO> assetParameterReadingDTO = null;
+		List<AssetParameterReading> assetParameterReading = assetRepository.findByAssetReading(assetId);
+		if (CollectionUtils.isNotEmpty(assetParameterReading)) {
+			assetParameterReadingDTO = mapperUtil.toModelList(assetParameterReading, AssetParameterReadingDTO.class);
+		}
+		return assetParameterReadingDTO;
 	}
 
 }

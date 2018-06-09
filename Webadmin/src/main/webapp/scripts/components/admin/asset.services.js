@@ -172,6 +172,7 @@ angular.module('timeSheetApp')
                 });
             },
             genQrCode : function(qr) { 
+                
                 return $http.get('api/asset/qrcode/'+qr.id).then(function(response){ 
                     return response.data;
 
@@ -221,6 +222,12 @@ angular.module('timeSheetApp')
             
             getAllFrequencies : function() {
             	return $http.get('api/assets/amc/frequency').then(function(response){
+            		return response.data;
+            	});
+            },
+            
+            findByAssetAMC : function(id) { 
+            	return $http.get('api//assets/'+id+'/amcschedule').then(function(response) { 
             		return response.data;
             	});
             }
