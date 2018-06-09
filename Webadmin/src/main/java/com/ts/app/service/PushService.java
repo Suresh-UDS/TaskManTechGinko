@@ -98,7 +98,7 @@ public class PushService {
 			request.put("type", pushRequest.getType());
 			request.put("token", pushRequest.getToken());
 			request.put("pushUserId", pushRequest.getPushUserId());
-			request.put("userId", pushRequest.getUser());
+			request.put("userId", pushRequest.getUserId());
 			request.put("userType", pushRequest.getUserType());
 			log.debug("Push request - "+ request);
 

@@ -1,12 +1,12 @@
 {
   "webPort": 9000,
 
-  "mongodbUrl": "mongodb://askmedrivers:AmdUser123#@ec2-54-179-132-59.ap-southeast-1.compute.amazonaws.com:27017/delivery",
+  "mongodbUrl": "mongodb://localhost:27017/taskman_push_db",
 
   "db" : {
-    "url":"mongodb://ec2-54-254-131-235.ap-southeast-1.compute.amazonaws.com:27017,ec2-54-179-132-59.ap-southeast-1.compute.amazonaws.com:27017/delivery?replicaSet=amd1",
-    "user" :"askmedrivers",
-    "password":"AmdUser123#"
+    "url":"mongodb://localhost:27017/taskman_push_db",
+    "user" :"",
+    "password":""
   },
 
   "gcm": {
@@ -30,8 +30,8 @@
 
   "oneSignal": {
     "customer":{
-      "appId": "7de11221-460c-4640-a30b-84f2ba0cee5f",
-      "apiKey": "MzUyMjdiODktMzJjZi00NDE3LTgyN2QtZThiNzc4NjllOGQ5",
+      "appId": "be468c76-586a-4de1-bd19-fc6d9512e5ca",
+      "apiKey": "ODE2Y2NmNDAtOTU4Zi00Y2JkLWIwNjItNzk0YzM2ZDhiZGZk",
       "host": "onesignal.com",
       "port": 443,
       "path": "/api/v1/notifications",
