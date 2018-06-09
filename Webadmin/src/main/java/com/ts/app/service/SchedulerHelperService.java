@@ -74,6 +74,7 @@ public class SchedulerHelperService extends AbstractService {
 				if (attendanceReports != null && attendanceReports.getSettingValue().equalsIgnoreCase("true")) {
 					List<EmployeeAttendanceReport> empAttnList = new ArrayList<EmployeeAttendanceReport>();
 					List<EmployeeAttendanceReport> siteAttnList = null;
+					List<Map<String, String>> siteShiftConsolidatedData = new ArrayList<Map<String, String>>();
 					List<Map<String, String>> consolidatedData = new ArrayList<Map<String, String>>();
 					StringBuilder content = new StringBuilder();
 					while (siteItr.hasNext()) {
@@ -141,12 +142,11 @@ public class SchedulerHelperService extends AbstractService {
 								projEmployees += empCntInShift;
 								projPresent += attendanceCount;
 								projAbsent += absentCount;
-								consolidatedData.add(data);
 								if (shiftAlert && timeDiff >= 1800000 && timeDiff < 3200000) { // within 1 hour of the shift start timing.)
-									shiftAlert = true;
-								}else {
-									shiftAlert = false;
+									//shiftAlert = true;
+									siteShiftConsolidatedData.add(data);
 								}
+								consolidatedData.add(data);
 								schedulerService.log.debug("Site Name  - "+ site.getName() + ", -shift start time -" + shift.getStartTime() + ", shift end time -" + shift.getEndTime() + ", shift alert -" + shiftAlert);
 								// }
 							}
@@ -234,7 +234,7 @@ public class SchedulerHelperService extends AbstractService {
 					content.append("Absent - " + (projEmpCnt - projPresent) + SchedulerService.LINE_SEPARATOR);
 					schedulerService.log.debug("Project Name  - "+ proj.getName() + ", shift alert -" + shiftAlert + ", dayReport -" + dayReport);
 					// send reports in email.
-					if (attendanceReportEmails != null && projEmployees > 0 && (shiftAlert || dayReport)) {
+					if (attendanceReportEmails != null && projEmployees > 0 && ((shiftAlert && siteShiftConsolidatedData.size() > 0) || dayReport)) {
 						ExportResult exportResult = null;
 						exportResult = schedulerService.exportUtil.writeAttendanceReportToFile(proj.getName(), empAttnList, consolidatedData, summaryMap, null, exportResult);
 						schedulerService.mailService.sendAttendanceDetailedReportEmail(proj.getName(), attendanceReportEmails.getSettingValue(), content.toString(), exportResult.getFile(), null,
