@@ -59,7 +59,7 @@ public class ReportResource {
 	public ResponseEntity<?> sendDetailedAttendanceReport(@RequestParam(value = "date", required = false) Date attnDate) {
 		if(attnDate == null) {
 			Calendar currCal = Calendar.getInstance();
-			currCal.add(Calendar.DAY_OF_MONTH, currCal.get(Calendar.DAY_OF_MONTH) - 1);
+			currCal.add(Calendar.DAY_OF_YEAR, -1);
 			currCal.set(Calendar.HOUR_OF_DAY, 0);
 			currCal.set(Calendar.MINUTE,0);
 			attnDate = currCal.getTime();
