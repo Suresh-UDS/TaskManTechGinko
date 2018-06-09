@@ -63,7 +63,7 @@ public class ReportResource {
 			currCal.set(Calendar.MINUTE,0);
 			attnDate = currCal.getTime();
 		}		
-		schedulerService.generateDetailedAttendanceReport(attnDate, false, true);
+		schedulerService.schedulerHelperService.generateDetailedAttendanceReport(schedulerService, attnDate, false, true);
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 	
