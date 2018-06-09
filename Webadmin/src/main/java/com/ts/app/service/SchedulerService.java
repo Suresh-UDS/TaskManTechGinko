@@ -543,7 +543,7 @@ public class SchedulerService extends AbstractService {
 		}
 	}
 	
-	@Scheduled(cron = "0 */5 * * * ?")
+	@Scheduled(cron = "0 */30 * * * ?")
 	public void attendanceShiftReportSchedule() {
 		Calendar cal = Calendar.getInstance();
 		schedulerHelperService.generateDetailedAttendanceReport(this, cal.getTime(), true, false);
