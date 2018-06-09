@@ -302,11 +302,11 @@ public class AssetResource {
 	
 	@RequestMapping(path = "/assets/{assetId}/amcschedule", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	@Timed
-	public List<AssetAMCScheduleDTO> getAssetAMCSchedule(@PathParam("assetId") long id) {
+	public List<AssetAMCScheduleDTO> getAssetAMCSchedule(@PathVariable("assetId") long assetId) {
 		log.debug(">>> Asset DTO updateAssetAMCSchedule request <<<");
-		log.debug("AssetId <<<" + id);
+		log.debug("AssetId <<<" + assetId);
 
-		List<AssetAMCScheduleDTO> response = assetService.getAssetAMCSchedules(id);
+		List<AssetAMCScheduleDTO> response = assetService.getAssetAMCSchedules(assetId);
 		log.debug("Get Asset AMC Schedule for asset id - " + response);
 		return response;
 	}
@@ -357,6 +357,14 @@ public class AssetResource {
 		List = assetService.getAllPrefixs();
 		return List;
 	}
+	
+	@RequestMapping(value = "/assets/{assetId}/viewAssetReadings", method = RequestMethod.GET)
+	public List<AssetParameterReadingDTO> getAssetReadings(@PathVariable("assetId") long assetId) {
+		List<AssetParameterReadingDTO> result = null;
+		result = assetService.viewAssetReadings(assetId);
+		return result;
+	}
+	
 	
 	
 }

@@ -46,8 +46,7 @@ public class Checklist extends AbstractAuditingEntity implements Serializable {
     @JoinColumn(name = "projectId", nullable = true)
     private Project project;
 
-	@OneToMany(mappedBy = "checklist", cascade = {CascadeType.ALL})
-	@Cascade(org.hibernate.annotations.CascadeType.DELETE_ORPHAN) 
+	@OneToMany(mappedBy = "checklist", cascade = {CascadeType.ALL}, orphanRemoval=true)
 	private Set<ChecklistItem> items;
 
 	

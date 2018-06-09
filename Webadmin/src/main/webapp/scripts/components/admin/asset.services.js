@@ -220,6 +220,12 @@ angular.module('timeSheetApp')
             	return $http.get('api/assets/amc/frequency').then(function(response){
             		return response.data;
             	});
+            },
+            
+            findByAssetAMC : function(id) { 
+            	return $http.get('api//assets/'+id+'/amcschedule').then(function(response) { 
+            		return response.data;
+            	});
             }
             
 

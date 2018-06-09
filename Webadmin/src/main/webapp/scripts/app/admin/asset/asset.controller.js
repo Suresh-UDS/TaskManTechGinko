@@ -1198,8 +1198,15 @@ angular.module('timeSheetApp')
 	    	
 	    }
 	    
-	    /*End AMC*/	   
-
+	    $scope.loadAmcSchedule = function() { 
+	    	var assetId = $stateParams.id; 
+	    	AssetComponent.findByAssetAMC(assetId).then(function(data) { 
+	    		console.log(data);
+	    		$scope.amcScheduleList = data;
+	    	});
+	    }
+	    
+	    /*End AMC*/	      
 
 
         $scope.uView=function(val){
