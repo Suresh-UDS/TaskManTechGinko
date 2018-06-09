@@ -555,7 +555,7 @@ public class SchedulerService extends AbstractService {
 		}
 	}
 	
-	@Scheduled(cron = "0 30 * * * ?")
+	@Scheduled(cron = "0 */5 * * * ?")
 	public void attendanceShiftReportSchedule() {
 		Calendar cal = Calendar.getInstance();
 		generateDetailedAttendanceReport(cal.getTime(), true, false);
@@ -565,8 +565,7 @@ public class SchedulerService extends AbstractService {
 	@Scheduled(cron = "0 0 7 1/1 * ?") // send detailed attendance report
 	public void attendanceDetailReportSchedule() {
 		Calendar cal = Calendar.getInstance();
-		//cal.add(Calendar.DAY_OF_MONTH, -1);
-		cal.add(Calendar.DAY_OF_MONTH, cal.get(Calendar.DAY_OF_MONTH) - 1);
+		cal.add(Calendar.DAY_OF_YEAR, -1);
 		generateDetailedAttendanceReport(cal.getTime(), false, true);
 	}
 	
@@ -781,7 +780,7 @@ public class SchedulerService extends AbstractService {
 		}
 	}
 
-	@Scheduled(cron="0 30 * * * ?") // runs every 1 hr
+	@Scheduled(cron="0 */30 * * * ?") // runs every 30 mins
 	public void attendanceCheckOutTask() {
 		autoCheckOutAttendance();
 	}
