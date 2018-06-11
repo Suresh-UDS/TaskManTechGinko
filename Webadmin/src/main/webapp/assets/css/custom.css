@@ -442,7 +442,28 @@ textarea.form-control {
     padding: 5px;
     margin: 5px;
 }
-
+ .docsRow
+ {
+   padding-top:20px;
+ }
+.DocsCon:hover .DeleteBtn
+{
+	display:block;
+}
+.DeleteBtn
+{
+	position: absolute;
+    right: 55px;
+    top: -10px;
+    display:none;
+    transition: all 1s ease;    
+}
+.DeleteBtn i
+{
+	color: red;
+    font-size: 18px;
+    cursor:pointer;
+}
 
 /*End Checklist css */
 

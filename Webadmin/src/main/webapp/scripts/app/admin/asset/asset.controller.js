@@ -1400,6 +1400,37 @@ angular.module('timeSheetApp')
             window.print();
             document.body.innerHTML = originalContents;
         }
+        
+		/**
+		 * View Readings*/
+        
+        $scope.noReading = false;
+        
+        $scope.loadAssetReadings = function() {
+        	var id = $stateParams.id;
+        	AssetComponent.findByAssetReadings(id).then(function(data){ 
+        		console.log('View Readings - ' +JSON.stringify(data));
+        		if(data.length > 0) { 
+        			$scope.assetReadings = data;
+            		$scope.viewAssetReading(data[0].id);
+        		}else{ 
+        			console.log('No readings');
+        			$scope.noReading = true;
+        			$scope.assetReadings = [];
+        		}
+        		
+        	});
+        }
+        
+        $scope.viewAssetReading = function(id) {
+        	AssetComponent.findByReadingId(id).then(function(data){ 
+        		console.log(data);
+        		$scope.readingData = data;
+        	});
+        	
+        }
+        
+        /**End view Readings*/        
 
 
     });

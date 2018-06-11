@@ -34,7 +34,7 @@ export class GetAssetReading {
     ionViewDidLoad(){
         console.log("Get Asset reading page");
         console.log(this.assetDetails.config);
-        this.getReading();
+
     }
 
     submitReading(){
@@ -77,9 +77,19 @@ export class GetAssetReading {
         })
     }
 
-    getReading(){
+    saveReading(reading){
         console.log("Reading page");
-        this.assetService.saveReading().subscribe(
+        var assetReading = {
+            name:reading.name,
+            uom:reading.uom,
+            initialValue:reading.previousValue,
+            finalValue:reading.currentValue,
+            consumption:reading.currentValue-reading.previousValue,
+            value:"0.88",
+            assetId:reading.assetId
+
+        };
+        this.assetService.saveReading(assetReading).subscribe(
             response=>{
                 console.log("Save Reading Response");
                 console.log(response);

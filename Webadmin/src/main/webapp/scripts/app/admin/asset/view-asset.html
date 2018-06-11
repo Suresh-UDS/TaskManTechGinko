@@ -944,19 +944,16 @@
                                            </div>
 
                                        </div>
-                                       <div class="tab-pane fade Readings" id="Readings">
+                                       <div class="tab-pane fade Readings" id="Readings" ng-init="loadAssetReadings()">
 
                                           <div class="">
 
                                               <ul class="nav nav-pills nav-pills-warning">
-                                                  <li class="active">
-                                                      <a href=".Fuel" data-toggle="tab" > Fuel</a>
+                                                  <li class="active" ng-repeat="reading in assetReadings">
+                                                      <a href=".Fuel" data-toggle="tab" ng-click="viewAssetReading(reading.id)">{{reading.name}}</a>
                                                   </li>
-                                                  <li>
-                                                      <a href=".Power" data-toggle="tab" > Power</a>
-                                                  </li>
-                                                  <li>
-                                                      <a href=".Temperature" data-toggle="tab" > Temperature</a>
+                                                  <li class="active" ng-show="!assetReadings.length">
+                                                      <a href=".Fuel" data-toggle="tab">No_Readings</a>
                                                   </li>
                                               </ul>
 
@@ -978,151 +975,15 @@
                                                                       </thead>
 
                                                                       <tbody>
-                                                                      <tr>
-                                                                          <td>10-05-2018</td>
-                                                                          <td>10 Watt</td>
-                                                                          <td>30 Watt</td>
-                                                                          <td>20 Watt</td>
+                                                                      <tr ng-hide="noReading">
+                                                                          <td>{{readingData.createdDate | date: "dd-MM-yyyy hh:mm:ss"}}</td>
+                                                                          <td>{{readingData.initialValue}}&nbsp; {{readingData.uom}}</td>
+                                                                          <td>{{readingData.finalValue}}&nbsp; {{readingData.uom}}</td>
+                                                                          <td>{{readingData.consumption}}&nbsp; {{readingData.uom}}</td>
                                                                       </tr>
-                                                                      <tr>
-                                                                          <td>10-05-2018</td>
-                                                                          <td>10 Watt</td>
-                                                                          <td>30 Watt</td>
-                                                                          <td>20 Watt</td>
+                                                                      <tr ng-show="noReading">
+                                                                      	<td colspan="4" align="center">No Readings Found</td>
                                                                       </tr>
-                                                                      <tr>
-                                                                          <td>10-05-2018</td>
-                                                                          <td>10 Watt</td>
-                                                                          <td>30 Watt</td>
-                                                                          <td>20 Watt</td>
-                                                                      </tr>
-                                                                      <tr>
-                                                                          <td>10-05-2018</td>
-                                                                          <td>10 Watt</td>
-                                                                          <td>30 Watt</td>
-                                                                          <td>20 Watt</td>
-                                                                      </tr>
-                                                                      <tr>
-                                                                          <td>10-05-2018</td>
-                                                                          <td>10 Watt</td>
-                                                                          <td>30 Watt</td>
-                                                                          <td>20 Watt</td>
-                                                                      </tr>
-
-
-
-                                                                      </tbody>
-                                                                  </table>
-
-                                                              </div>
-                                                          </div>
-                                                      </div>
-                                                  </div>
-                                                  <div class="tab-pane fade Power" id="Power">
-                                                      <div class="row">
-                                                          <div class="col-md-8 col-md-offset-2">
-                                                              <div class="table-responsive tablecard">
-                                                                  <table class="table table-striped">
-
-                                                                      <thead>
-                                                                      <tr>
-                                                                          <th width="25%">Date</th>
-                                                                          <th width="25%">Initial Value</th>
-                                                                          <th width="25%">Final Value</th>
-                                                                          <th width="25%">Consumption</th>
-                                                                      </tr>
-                                                                      </thead>
-
-                                                                      <tbody>
-                                                                      <tr>
-                                                                          <td>10-05-2018</td>
-                                                                          <td>10 Watt</td>
-                                                                          <td>30 Watt</td>
-                                                                          <td>20 Watt</td>
-                                                                      </tr>
-                                                                      <tr>
-                                                                          <td>10-05-2018</td>
-                                                                          <td>10 Watt</td>
-                                                                          <td>30 Watt</td>
-                                                                          <td>20 Watt</td>
-                                                                      </tr>
-                                                                      <tr>
-                                                                          <td>10-05-2018</td>
-                                                                          <td>10 Watt</td>
-                                                                          <td>30 Watt</td>
-                                                                          <td>20 Watt</td>
-                                                                      </tr>
-                                                                      <tr>
-                                                                          <td>10-05-2018</td>
-                                                                          <td>10 Watt</td>
-                                                                          <td>30 Watt</td>
-                                                                          <td>20 Watt</td>
-                                                                      </tr>
-                                                                      <tr>
-                                                                          <td>10-05-2018</td>
-                                                                          <td>10 Watt</td>
-                                                                          <td>30 Watt</td>
-                                                                          <td>20 Watt</td>
-                                                                      </tr>
-
-
-
-                                                                      </tbody>
-                                                                  </table>
-
-                                                              </div>
-                                                          </div>
-                                                      </div>
-                                                  </div>
-                                                  <div class="tab-pane fade Temperature" id="Temperature">
-                                                      <div class="row">
-                                                          <div class="col-md-8 col-md-offset-2">
-                                                              <div class="table-responsive tablecard">
-                                                                  <table class="table table-striped">
-
-                                                                      <thead>
-                                                                      <tr>
-                                                                          <th width="25%">Date</th>
-                                                                          <th width="25%">Initial Value</th>
-                                                                          <th width="25%">Final Value</th>
-                                                                          <th width="25%">Consumption</th>
-                                                                      </tr>
-                                                                      </thead>
-
-                                                                      <tbody>
-                                                                      <tr>
-                                                                          <td>10-05-2018</td>
-                                                                          <td>10 Watt</td>
-                                                                          <td>30 Watt</td>
-                                                                          <td>20 Watt</td>
-                                                                      </tr>
-                                                                      <tr>
-                                                                          <td>10-05-2018</td>
-                                                                          <td>10 Watt</td>
-                                                                          <td>30 Watt</td>
-                                                                          <td>20 Watt</td>
-                                                                      </tr>
-                                                                      <tr>
-                                                                          <td>10-05-2018</td>
-                                                                          <td>10 Watt</td>
-                                                                          <td>30 Watt</td>
-                                                                          <td>20 Watt</td>
-                                                                      </tr>
-                                                                      <tr>
-                                                                          <td>10-05-2018</td>
-                                                                          <td>10 Watt</td>
-                                                                          <td>30 Watt</td>
-                                                                          <td>20 Watt</td>
-                                                                      </tr>
-                                                                      <tr>
-                                                                          <td>10-05-2018</td>
-                                                                          <td>10 Watt</td>
-                                                                          <td>30 Watt</td>
-                                                                          <td>20 Watt</td>
-                                                                      </tr>
-
-
-
                                                                       </tbody>
                                                                   </table>
 

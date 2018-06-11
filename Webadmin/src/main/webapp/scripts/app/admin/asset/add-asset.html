@@ -1427,17 +1427,20 @@
                                                                 </div>
                                                                 <div class="panel-body">
 
+
                                                                    <div class="row">
 
                                                                        <div class="col-md-2 txt-align-center" ng-repeat="uploadFile in uploadFiles">
                                                                            <a href="#">
                                                                                <img src="assets/img/Docs-icon.png" alt="docs" ng-click="showFile(uploadFile.id, uploadFile.file)"/>
+                                                                               <!-- <img src="assets/img/Docs-icon.png" alt="docs" /> -->
                                                                            </a>
                                                                            <p>{{uploadFile.title}}</p>
                                                                            <div  ng-if="uploadFile.id == download">
                                                                             <a href="{{content}}" download>download</a>
                                                                            </div>
                                                                        </div>
+
 
                                                                    </div>
 
@@ -1452,9 +1455,12 @@
                                                                 </div>
                                                                 <div class="panel-body">
 
-                                                                    <div class="row">
+                                                                    <div class="row docsRow">
 
-                                                                        <div class="col-md-2 txt-align-center" ng-repeat="uploadPhoto in uploadAssetPhotos">
+                                                                        <div class="col-md-2 txt-align-center DocsCon" ng-repeat="uploadPhoto in uploadAssetPhotos">
+                                                                            <div class="DeleteBtn">                                                                         
+                                                                            	 <i class="material-icons">close</i>
+                                                                             </div>
                                                                             <a href="#">
                                                                                 <img src="D:\asset\uploads\site\{{uploadPhoto.id}}\{{uploadPhoto.file}}" alt="docs" ng-click="showFile(uploadFile.id, uploadFile.file)"/>
                                                                             </a>
