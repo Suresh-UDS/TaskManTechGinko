@@ -42,7 +42,7 @@ angular.module('timeSheetApp')
                Principal.identity().then(function(response)
             {
                    //alert(response.firstName + response.lastName)
-                 console.log('current user' +JSON.stringify(response.login));
+                 //console.log('current user' +JSON.stringify(response.login));
                  if(response.firstName != null){
 
                   $rootScope.accountNames = response.firstName;
@@ -87,7 +87,7 @@ angular.module('timeSheetApp')
 
          $scope.loadingStop = function(){
             
-            console.log("Calling loader");
+            //console.log("Calling loader");
             $('.pageCenter').hide();$('.overlay').hide();
                     
         };

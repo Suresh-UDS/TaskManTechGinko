@@ -6,7 +6,7 @@ angular.module('timeSheetApp')
 				function($scope, $rootScope, $state, $timeout, AssetComponent,
 						ProjectComponent,LocationComponent,SiteComponent,EmployeeComponent, $http, $stateParams,
                      	$location,PaginationComponent,AssetTypeComponent,ParameterConfigComponent,ParameterComponent,
-                        ParameterUOMComponent,VendorComponent,ManufacturerComponent,$sce,ChecklistComponent) {
+                        ParameterUOMComponent,VendorComponent,ManufacturerComponent,$sce,ChecklistComponent,$filter) {
 
         $rootScope.loadingStop();
         $rootScope.loginView = false;
@@ -36,6 +36,7 @@ angular.module('timeSheetApp')
         $scope.selectedVendor = {};
         $scope.selectedConfigParam = null;
         $scope.selectedConfigUnit = null;
+        $scope.assetEditDate = null;
 
         $scope.asset = {};
 
@@ -110,46 +111,59 @@ angular.module('timeSheetApp')
 
         $scope.savePPMSchedule = function (){
         	
-        	console.log("Create asset ppm ==> " ,$scope.assetPPM.title);
+        	console.log(" --- Create asset ppm ---" ,$scope.assetPPM.title);
 
-        	$scope.assetPPM.startDate = $scope.assetPPM.dateFilterFrom;
-        	$scope.assetPPM.endDate = $scope.assetPPM.dateFilterTo;
-        	$scope.assetPPM.frequencyPrefix = $scope.selectedFrequency;
-        	$scope.assetPPM.frequencyDuration = $scope.selectedTimeInterval;
-        	$scope.assetPPM.frequency = $scope.selectedFrequnceyOccurrence;
-        	console.log(">>> Asset id "+$scope.assetGen.id);
-        	$scope.assetPPM.assetId = $scope.assetGen.id;
-        	
-        	AssetComponent.createPPM($scope.assetPPM).then(function(response) {
-                console.log("Asset response",JSON.stringify(response));
-                $scope.assetGen.id=response.data.assetId;
-                console.log(">>> Asset Id : "+$scope.assetGen.id);
-                $scope.success = 'OK';
-                $scope.showNotifications('top','center','success','Asset Added');
-                //$scope.selectedSite = null;
-                //$scope.loadAssets();
-                $scope.loadPPMSchedule($scope.assetGen.id);
+            if(!$scope.assetGen.id && !$stateParams.id){
+            
+                  $scope.showNotifications('top','center','danger','Please create asset first..');
 
-                $scope.loadAssets();
+            }else{
 
-                //$location.path('/assets');
-            }).catch(function (response) {
-                $scope.success = null;
-                console.log('Error - '+ response.data);
-                console.log('status - '+ response.status + ' , message - ' + response.data.message);
-                if (response.status === 400 && response.data.message === 'error.duplicateRecordError') {
-                        $scope.errorAssetsExists = 'ERROR';
-                    $scope.showNotifications('top','center','danger','Asset Already Exists');
+                if($scope.assetGen.id){
 
-                    console.log($scope.errorAssetsExists);
-                } else {
-                    $scope.showNotifications('top','center','danger','Error in creating Asset. Please try again later..');
-                    $scope.error = 'ERROR';
+                   $scope.assetPPM.assetId = $scope.assetGen.id;
+
+                }else if($stateParams.id){
+
+                     $scope.assetPPM.assetId = $stateParams.id;
                 }
-            });
 
-        }
+            	$scope.assetPPM.startDate = $scope.assetPPM.dateFilterFrom;
+            	$scope.assetPPM.endDate = $scope.assetPPM.dateFilterTo;
+            	$scope.assetPPM.frequencyPrefix = $scope.selectedFrequency;
+            	$scope.assetPPM.frequencyDuration = $scope.selectedTimeInterval;
+            	$scope.assetPPM.frequency = $scope.selectedFrequnceyOccurrence;
         
+        	
+            	AssetComponent.createPPM($scope.assetPPM).then(function(response) {
+
+                    console.log("PPM schedule response",JSON.stringify(response));
+              
+                    $scope.success = 'OK';
+
+                    $scope.showNotifications('top','center','success','PPM schedule Added');
+       
+                    $scope.loadPPMSchedule();
+
+                }).catch(function (response) {
+                    $scope.success = null;
+                    console.log('Error - '+ response.data);
+                    console.log('status - '+ response.status + ' , message - ' + response.data.message);
+                    if (response.status === 400 && response.data.message === 'error.duplicateRecordError') {
+                            $scope.errorAssetsExists = 'ERROR';
+                        $scope.showNotifications('top','center','danger','PPM schedule Already Exists');
+
+                        console.log($scope.errorAssetsExists);
+                    } else {
+                        $scope.showNotifications('top','center','danger','Error in creating PPM schedule. Please try again later..');
+                        $scope.error = 'ERROR';
+                    }
+                });
+            
+
+            }
+        }
+            
         $scope.loadProjects = function () {
             ProjectComponent.findAll().then(function (data) {
                 console.log("Loading all projects")
@@ -299,9 +313,7 @@ angular.module('timeSheetApp')
 
         		$scope.assetList=data;
 
-                console.log("Edit Asset--",$scope.assetList);
-
-
+                console.log("--- Load asset ---",$scope.assetList);
 
 
                 $scope.assetEdit.id = $scope.assetList.id;
@@ -309,17 +321,18 @@ angular.module('timeSheetApp')
                 $scope.assetEdit.modelNumber = $scope.assetList.modelNumber;
                 $scope.assetEdit.serialNumber =  $scope.assetList.serialNumber;
                 $scope.assetEdit.acquiredDate = $scope.assetList.acquiredDate;
+                $scope.assetEdit.acquiredDate1 = $scope.assetList.acquiredDate;
                 $scope.assetEdit.purchasePrice = $scope.assetList.purchasePrice;
                 $scope.assetEdit.currentPrice = $scope.assetList.currentPrice;
                 $scope.assetEdit.estimatedDisposePrice = $scope.assetList.estimatedDisposePrice;
                 $scope.assetEdit.vendorLocation = $scope.assetList.vendorLocation;
                 $scope.selectedAssetType ={name:$scope.assetList.assetType};
                 $scope.selectedAssetGroup ={assetgroup:$scope.assetList.assetGroup};
-                $scope.selectedSite ={name:$scope.assetList.siteName};
+                $scope.selectedSite ={id:$scope.assetList.siteId,name:$scope.assetList.siteName};
                 $scope.selectedBlock = $scope.assetList.block;
                 $scope.selectedFloor = $scope.assetList.floor;
                 $scope.selectedZone = $scope.assetList.zone;
-                $scope.selectedManufacturer = {name:$scope.assetList.manufacturerName};
+                $scope.selectedManufacturer = {id:$scope.assetList.manufacturerId,name:$scope.assetList.manufacturerName};
                 $scope.selectedVendor = {id:$scope.assetList.vendorId};
                 if($scope.assetList.siteId){   
                         LocationComponent.findBlocks(0,$scope.assetList.siteId).then(function (data) {
@@ -534,6 +547,7 @@ angular.module('timeSheetApp')
 
         $('input#acquiredDate').on('dp.change', function(e){
                 $scope.assetGen.acquiredDate = e.date._d;
+                $scope.assetEditDate = e.date._d;
         });
 
         $('input#dateFilterFrom').on('dp.change', function(e){
@@ -571,7 +585,7 @@ angular.module('timeSheetApp')
                     console.log("Asset Create List -- ",$scope.assetGen);
                     AssetComponent.create($scope.assetGen).then(function(response) {
                         console.log("Asset response",JSON.stringify(response));
-                        $scope.assetGen.id=response.data.id;
+                        $scope.assetGen.id=response.id;
                         $scope.success = 'OK';
                         $scope.showNotifications('top','center','success','Asset Added');
                         //$scope.loadAssets();
@@ -664,20 +678,20 @@ angular.module('timeSheetApp')
         	$scope.success =null;
 
                  
-                if($scope.selectedAssetType.name)
+                if($scope.selectedAssetType)
                 {     $scope.assetEdit.assetType =$scope.selectedAssetType.name;
                 }else{
                       $scope.assetEdit.assetType =$scope.assetList.assetType;
                 }
-                if($scope.selectedAssetGroup.assetgroup){
+                if($scope.selectedAssetGroup){
                     $scope.assetEdit.assetGroup = $scope.selectedAssetGroup.assetgroup;
                 }else{
                     $scope.assetEdit.assetGroup = $scope.assetList.assetGroup;
                 }
-                if($scope.selectedSite.name){
-                   $scope.assetEdit.siteName = $scope.selectedSite.name;
+                if($scope.selectedSite){
+                   $scope.assetEdit.siteId = $scope.selectedSite.id;
                 }else{
-                    $scope.assetEdit.siteName = $scope.assetList.siteName;
+                    $scope.assetEdit.siteId = $scope.assetList.siteId;
                 }
                 if($scope.selectedBlock){
                     $scope.assetEdit.block = $scope.selectedBlock;
@@ -694,22 +708,25 @@ angular.module('timeSheetApp')
                 }else{
                     $scope.assetEdit.zone = $scope.assetList.zone;
                 }
-                if($scope.selectedManufacturer.name){
-                   $scope.assetEdit.manufacturerName = $scope.selectedManufacturer.name; 
+                if($scope.selectedManufacturer){
+                   $scope.assetEdit.manufacturerId = $scope.selectedManufacturer.id; 
                }else{
-                  $scope.assetEdit.manufacturerName = $scope.assetList.manufacturerName; 
+                  $scope.assetEdit.manufacturerId = $scope.assetList.manufacturerId; 
                }
-                if($scope.selectedVendor.id){
+                if($scope.selectedVendor){
                    $scope.assetEdit.vendorId = $scope.selectedVendor.id; 
                 }
                 else{
                     $scope.assetEdit.vendorId = $scope.assetList.vendorId; 
                 }
+                if($scope.assetEditDate){
+                    $scope.assetEdit.acquiredDate = $scope.assetEditDate;
+                    $scope.assetEdit.acquiredDate1 = $filter('date')($scope.assetEditDate, 'dd/MM/yyyy');
+
+                }
                 
             
-
-        	
-        	console.log('Edit asset details ='+ JSON.stringify($scope.assetEdit));
+        	console.log('--- Edit asset details ---', JSON.stringify($scope.assetEdit));
 
         	//$scope.asset.assetStatus = $scope.selectedStatus.name;
         	//var post = $scope.isEdit ? AssetComponent.update : AssetComponent.create
@@ -1099,8 +1116,22 @@ angular.module('timeSheetApp')
 	    $scope.uploadAssetFile = function() { 
 	     	if($scope.selectedClientFile) {
 	        	console.log("file title - " + $scope.uploadAsset.title + "file name -" + $scope.selectedClientFile);
+
+                if(!$scope.assetGen.id && !$stateParams.id){
+            
+                  $scope.showNotifications('top','center','danger','Please create asset first..');
+
+                }
+
+                if($scope.assetGen.id){
+                    $scope.uploadAsset.assetId = $scope.assetGen.id;
+
+                }else if($stateParams.id){
+
+                     $scope.uploadAsset.assetId = $stateParams.id;
+                }
 	        	$scope.uploadAsset.uploadFile = $scope.selectedClientFile;
-	        	$scope.uploadAsset.assetId = 1;
+	        	//$scope.uploadAsset.assetId = 1;
 	        	$scope.uploadAsset.type = 'document';
 	        	console.log($scope.uploadAsset);
 	        	AssetComponent.uploadAssetFile($scope.uploadAsset).then(function(data){
@@ -1221,47 +1252,78 @@ angular.module('timeSheetApp')
             $scope.amcSchedule.endDate = e.date._d;
         });
 	    
-	    $scope.loadCheckList = function() { 
+	    /*$scope.loadCheckList = function() { 
 	    	ChecklistComponent.findAll().then(function(data){ 
 	    		//alert(data);
 	    		$scope.checkLists = data;
 	    	});
-	    }
+	    }*/
+
+        $scope.loadChecklist = function(id) {
+
+            console.log('loadChecklist -' + id);
+            ChecklistComponent.findOne(id).then(function (data) {
+
+                return data.name;
+                //$scope.checklist = data;
+               /* console.log("--Checklist Data--",$scope.checklist);
+                for(var i in data.items) {
+                    $scope.checklistItems.push(data.items[i]);  
+                }*/
+                
+            });
+        }
 	    
 	    $scope.amcScheduleList = [];
 	    
 	    
 	    $scope.saveAmcSchedule = function() { 
-	    	console.log($scope.selectedChecklist);
-	    	if($scope.selectedChecklist){ 
-	    		$scope.amcSchedule.checklistId = $scope.selectedChecklist.id;
-	    	}
-	    	if($scope.assetGen.id){ 
-	    		$scope.amcSchedule.assetId = $scope.assetGen.id;
-	    	}
-	    	if($scope.selectedFrequencyPrefix) { 
-	    		$scope.amcSchedule.frequencyPrefix = $scope.selectedFrequencyPrefix;
-	    	}
-	    	if($scope.selectedFrequency) { 
-	    		$scope.amcSchedule.frequency = $scope.selectedFrequency;
-	    	}
-	    	if($scope.selectedFreqDuration) { 
-	    		$scope.amcSchedule.frequencyDuration = $scope.selectedFreqDuration;
-	    	}
-	    	
-	    	console.log($scope.amcSchedule);
-	    	
-	    	AssetComponent.saveAmcSchedule($scope.amcSchedule).then(function(data){  
-	    		console.log(data);
-	    		if(data && data.checklistId) { 
-	    			console.log(data.checklistId);
-	    			$scope.amcScheduleList.push(data);
-	    			ChecklistComponent.findOne(data.checklistId).then(function(data){ 
-	    				$scope.checklistItms = data.items;
-	    				console.log($scope.checklistItms);
-	    			});
-	    		}
-	    	});
+
+    	    	console.log($scope.selectedChecklist);
+
+               if(!$scope.assetGen.id && !$stateParams.id){
+            
+                  $scope.showNotifications('top','center','danger','Please create asset first..');
+
+                }else{
+
+                if($scope.assetGen.id){
+                    $scope.amcSchedule.assetId= $scope.assetGen.id;
+
+                }else if($stateParams.id){
+
+                     $scope.amcSchedule.assetId = $stateParams.id;
+                }
+    	    	if($scope.selectedChecklist){ 
+    	    		$scope.amcSchedule.checklistId = $scope.selectedChecklist.id;
+    	    	}
+    	    	
+    	    	if($scope.selectedFrequencyPrefix) { 
+    	    		$scope.amcSchedule.frequencyPrefix = $scope.selectedFrequencyPrefix;
+    	    	}
+    	    	if($scope.selectedFrequency) { 
+    	    		$scope.amcSchedule.frequency = $scope.selectedFrequency;
+    	    	}
+    	    	if($scope.selectedFreqDuration) { 
+    	    		$scope.amcSchedule.frequencyDuration = $scope.selectedFreqDuration;
+    	    	}
+    	    	
+    	    	console.log($scope.amcSchedule);
+    	    	
+    	    	AssetComponent.saveAmcSchedule($scope.amcSchedule).then(function(data){  
+    	    		console.log(data);
+    	    		if(data && data.checklistId) { 
+    	    			console.log(data.checklistId);
+    	    			$scope.amcScheduleList.push(data);
+
+    	    			ChecklistComponent.findOne(data.checklistId).then(function(data){ 
+    	    				$scope.checklistItms = data.items;
+    	    				console.log($scope.checklistItms);
+    	    			});
+    	    		}
+    	    	});
+
+            }
 	    	
 	    }
 	    
@@ -1270,6 +1332,7 @@ angular.module('timeSheetApp')
 	    	AssetComponent.findByAssetAMC(assetId).then(function(data) { 
 	    		console.log(data);
 	    		$scope.amcScheduleList = data;
+                console.log("AMC List" , $scope.amcScheduleList);
 	    	});
 	    }
 	    

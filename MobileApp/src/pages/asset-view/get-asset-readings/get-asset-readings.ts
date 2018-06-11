@@ -1,12 +1,13 @@
 import { Component } from '@angular/core';
 import {NavController, NavParams, PopoverController} from "ionic-angular";
 import {ModalController} from "ionic-angular";
+import {componentService} from "../../service/componentService";
+import {AssetService} from "../../service/assetService";
+import{Camera,CameraOptions} from "@ionic-native/camera";
+import {JobPopoverPage} from "../../jobs/job-popover";
+
 // import {QRScanner, QRScannerStatus} from "@ionic-native/qr-scanner";
-import {AssetView} from "../asset-view/asset-view";
-import {componentService} from "../service/componentService";
-import {JobPopoverPage} from "../jobs/job-popover";
-import {Camera, CameraOptions} from "@ionic-native/camera";
-import{AssetService} from "../service/assetService";
+
 
 /**
  * Generated class for the GetAssetReadings page.
@@ -80,20 +81,20 @@ export class GetAssetReadings {
 
     saveReading(){
         console.log("Reading page");
-        this.assetService.saveReading().subscribe(
-            response=>{
-                console.log("Save Reading Response");
-                console.log(response);
-                this.componentService.showToastMessage('Reading Added','bottom');
-                this.navCtrl.pop();
-            },
-            error=>
-            {
-                console.log("Save Reading Error");
-                console.log(error);
-            }
-
-        )
+        // this.assetService.saveReading().subscribe(
+        //     response=>{
+        //         console.log("Save Reading Response");
+        //         console.log(response);
+        //         this.componentService.showToastMessage('Reading Added','bottom');
+        //         this.navCtrl.pop();
+        //     },
+        //     error=>
+        //     {
+        //         console.log("Save Reading Error");
+        //         console.log(error);
+        //     }
+        //
+        // )
 
     }
 

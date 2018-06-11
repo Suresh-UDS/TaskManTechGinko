@@ -316,28 +316,13 @@ public class AssetManagementService extends AbstractService {
 	}
 
 	public AssetDTO getAssetDTO(long id) {
+		log.debug(">>> Get asset by Id ... "+id);
 		Asset asset = assetRepository.findOne(id);
-		log.debug("Get asset by Id service");
-		log.debug("asset Type " + asset.getAssetType());
-		log.debug("Asset Group " + asset.getAssetGroup());
+		log.debug(">>> Get asset Id after fectching ... "+asset.getId());
+		log.debug(">>> asset Type " + asset.getAssetType());
+		log.debug(">>> Asset Group " + asset.getAssetGroup());
 		AssetDTO assetDTO = mapperUtil.toModel(asset, AssetDTO.class);
 		
-		AssetType assetType = assetTypeRepository.findByName(asset.getAssetType());
-		assetDTO.setAssetTypeId(assetType.getId());
-		
-		AssetGroup assetGroup = assetGroupRepository.findByName(asset.getAssetGroup());
-		assetDTO.setAssetGroupId(assetGroup.getId());
-		
-/*		log.debug("asset Type after mapping... " + assetDTO.getAssetType() + " Manufacture " + assetDTO.getManufacturerName() + " Vendor " + assetDTO.getAmcVendorName());
-		log.debug("Asset Group after mapping...  " + assetDTO.getAssetGroup());
-		AssetType assetType = assetTypeRepository.findOne(Long.valueOf(assetDTO.getAssetType()));
-		assetDTO.setAssetTypeName(assetType.getName());
-		log.debug("Asset Type Name  " + assetDTO.getAssetTypeName());
-
-		AssetGroup assetGroup = assetGroupRepository.findOne(Long.valueOf(assetDTO.getAssetGroup()));
-		assetDTO.setAssetGroupName(assetGroup.getAssetgroup());
-		log.debug("Asset Group Name  " + assetDTO.getAssetGroupName());
-*/
 		return assetDTO;
 	}
 

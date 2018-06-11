@@ -8,7 +8,7 @@ import {ViewJobPage} from "../jobs/view-job";
 import {CompleteJobPage} from "../jobs/completeJob";
 import {ViewTicket} from "../ticket/view-ticket";
 import {CreateTicket} from "../ticket/create-ticket";
-import{GetAssetReadings} from "../get-asset-readings/get-asset-readings";
+import{GetAssetReadings} from "./get-asset-readings/get-asset-readings";
 
 import { DatePicker } from '@ionic-native/date-picker';
 import {AssetService} from "../service/assetService";
@@ -66,6 +66,8 @@ export class AssetView {
       this.getAssetPPMSchedule();
       this.getAssetAMCSchedule();
       this.viewReading();
+      this.getAssetConfig(this.assetDetails);
+
   }
 
     getReadings(){
