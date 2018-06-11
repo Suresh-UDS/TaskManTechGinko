@@ -289,7 +289,7 @@ public class UserResource {
 
     @RequestMapping(value = "/user/change_password", method=RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> changeNewPassword(@RequestBody KeyAndPasswordDTO keyAndPasswordDTO){
-        User user = userRepository.findByLogin(keyAndPasswordDTO.getUserName());
+        User user = userRepository.findOne(keyAndPasswordDTO.getUserId());
         if(user !=null){
             user = userService.changeNewPassword(keyAndPasswordDTO.getUserName(), keyAndPasswordDTO.getNewPassword());
             return new ResponseEntity<Object>("Username changed",HttpStatus.OK);
