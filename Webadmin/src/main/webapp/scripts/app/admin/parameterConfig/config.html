@@ -157,7 +157,13 @@
 											<td>{{parameterConfig.assetType}}</td>
 											<td>{{parameterConfig.name}}</td>
 			                                	<td>{{parameterConfig.uom}}</td>
-										   	<td>{{parameterConfig.consumptionMonitoringRequired}}</td>
+										   	<td>
+										   		<div class="checkbox">
+                                                    <label>
+                                                        <input type="checkbox" name="Consumption" ng-model="parameterConfig.consumptionMonitoringRequired" disabled >
+                                                    </label>
+                                                </div>
+                                             </td>
 			                                 <td class="text-right">
 			                                 	<a  has-permission="" class="btn btn-simple btn-danger" ng-click="deleteConfirm(parameterConfig.id)" onClick="$('#deleteModal').modal()" data-target="#myModal"><i class="material-icons">delete_forever</i><div class="ripple-container" ></div></a>
 			                                 </td>
