@@ -44,6 +44,7 @@ angular.module('timeSheetApp')
         $scope.uploadAsset = {}; 
         $scope.uploadAssetPhoto = {};
         $scope.amcScheduleList = [];
+        $scope.ppmScheduleList = [];
 
         $scope.asset = {};
 
@@ -132,7 +133,9 @@ angular.module('timeSheetApp')
 
                      $scope.assetPPM.assetId = $stateParams.id;
                 }
-
+                if($scope.selectedChecklist){ 
+    	    		$scope.assetPPM.checklistId = $scope.selectedChecklist.id;
+    	    	}
             	$scope.assetPPM.startDate = $scope.assetPPM.dateFilterFrom;
             	$scope.assetPPM.endDate = $scope.assetPPM.dateFilterTo;
             	$scope.assetPPM.frequencyPrefix = $scope.selectedFrequency;
@@ -837,7 +840,7 @@ angular.module('timeSheetApp')
 
          }
         
-        $scope.loadPPMSchedule = function(assetId){
+        /*$scope.loadPPMSchedule = function(assetId){
         	
         	var currPageVal = ($scope.pages ? $scope.pages.currPage : 1);
             if(!$scope.searchCriteria) {
@@ -876,9 +879,9 @@ angular.module('timeSheetApp')
                 $scope.ppmschedule = data.transactions;
                 //$scope.projectsLoader = true;
 
-                /*
+                
                     ** Call pagination  main function **
-                */
+                
                  $scope.pager = {};
                  $scope.pager = PaginationComponent.GetPager(data.totalCount, $scope.pages.currPage);
                  $scope.totalCountPages = data.totalCount;
@@ -899,7 +902,7 @@ angular.module('timeSheetApp')
 
             });
 
-        }
+        }*/
 
         /*
         ** Pagination init function **
@@ -1405,6 +1408,25 @@ angular.module('timeSheetApp')
 	    }
 	    
 	    /*End AMC*/	      
+	    
+	    $scope.loadPPMSchedule = function() { 
+
+            if($scope.assetGen.id){
+
+                    var assetId= $scope.assetGen.id;
+
+                }else if($stateParams.id){
+
+                     var assetId = $stateParams.id;
+                }
+	    	 
+	    	AssetComponent.findByAssetPPM(assetId).then(function(data) { 
+	    		console.log(data);
+                $scope.ppmScheduleList = "";
+	    		$scope.ppmScheduleList = data;
+                console.log(">>> PPM List" , $scope.ppmScheduleList);
+	    	});
+	    }
 
 
         $scope.uView=function(val){
