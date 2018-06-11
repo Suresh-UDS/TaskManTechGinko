@@ -80,6 +80,7 @@ import com.ts.app.web.rest.dto.AssetPpmScheduleDTO;
 import com.ts.app.web.rest.dto.AssetTypeDTO;
 import com.ts.app.web.rest.dto.AssetgroupDTO;
 import com.ts.app.web.rest.dto.BaseDTO;
+import com.ts.app.web.rest.dto.EmployeeDTO;
 import com.ts.app.web.rest.dto.ExportResult;
 import com.ts.app.web.rest.dto.ImportResult;
 import com.ts.app.web.rest.dto.JobDTO;
@@ -238,6 +239,24 @@ public class AssetManagementService extends AbstractService {
 
 	}
 
+	public boolean isDuplicate(AssetDTO assetDTO) {
+	    log.debug("Asset Title "+assetDTO.getTitle());
+		Asset asset = assetRepository.findByTitle(assetDTO.getTitle());
+		if(asset != null) {
+			return true;
+		}
+		return false;
+	}
+	
+	public boolean isDuplicatePPMSchedule(AssetPpmScheduleDTO assetPpmScheduleDTO) {
+	    log.debug("Asset Title "+assetPpmScheduleDTO.getTitle());
+		Asset asset = assetRepository.findByTitle(assetPpmScheduleDTO.getTitle());
+		if(asset != null) {
+			return true;
+		}
+		return false;
+	}
+	
 	public List<AssetDTO> findAllAssets() {
 		log.debug(">>> get all assets");
 		List<Asset> assets = assetRepository.findAll();
@@ -297,21 +316,13 @@ public class AssetManagementService extends AbstractService {
 	}
 
 	public AssetDTO getAssetDTO(long id) {
+		log.debug(">>> Get asset by Id ... "+id);
 		Asset asset = assetRepository.findOne(id);
-		log.debug("Get asset by Id service");
-		log.debug("asset Type " + asset.getAssetType());
-		log.debug("Asset Group " + asset.getAssetGroup());
+		log.debug(">>> Get asset Id after fectching ... "+asset.getId());
+		log.debug(">>> asset Type " + asset.getAssetType());
+		log.debug(">>> Asset Group " + asset.getAssetGroup());
 		AssetDTO assetDTO = mapperUtil.toModel(asset, AssetDTO.class);
-/*		log.debug("asset Type after mapping... " + assetDTO.getAssetType() + " Manufacture " + assetDTO.getManufacturerName() + " Vendor " + assetDTO.getAmcVendorName());
-		log.debug("Asset Group after mapping...  " + assetDTO.getAssetGroup());
-		AssetType assetType = assetTypeRepository.findOne(Long.valueOf(assetDTO.getAssetType()));
-		assetDTO.setAssetTypeName(assetType.getName());
-		log.debug("Asset Type Name  " + assetDTO.getAssetTypeName());
-
-		AssetGroup assetGroup = assetGroupRepository.findOne(Long.valueOf(assetDTO.getAssetGroup()));
-		assetDTO.setAssetGroupName(assetGroup.getAssetgroup());
-		log.debug("Asset Group Name  " + assetDTO.getAssetGroupName());
-*/
+		
 		return assetDTO;
 	}
 
@@ -432,8 +443,11 @@ public class AssetManagementService extends AbstractService {
 		log.debug("Create assets AMC schedule");
 
 		AssetAMCSchedule assetAMC = mapperUtil.toEntity(assetAMCScheduleDTO, AssetAMCSchedule.class);
-
-		assetAMC.setActive(Asset.ACTIVE_YES);
+		Checklist checklist = checklistRepository.findOne(assetAMCScheduleDTO.getChecklistId());
+		Asset asset = assetRepository.findOne(assetAMCScheduleDTO.getAssetId());
+		assetAMC.setAsset(asset);
+		assetAMC.setChecklist(checklist);
+		assetAMC.setActive(AssetAMCSchedule.ACTIVE_YES);
 
 		List<AssetAMCSchedule> existingSchedules = assetRepository.findAssetAMCScheduleByTitle(assetAMCScheduleDTO.getTitle());
 		log.debug("Existing schedule -" + existingSchedules);
@@ -486,6 +500,64 @@ public class AssetManagementService extends AbstractService {
 			assetAMCScheduleDTOs = mapperUtil.toModelList(assetAMCSchedules, AssetAMCScheduleDTO.class);
 		}
 		return assetAMCScheduleDTOs;
+	}
+
+	public SearchResult<AssetPpmScheduleDTO> findPPMSearchCriteria(SearchCriteria searchCriteria) {
+
+		log.debug(">>> search ppm schedule 2 <<<");
+
+		// -------
+		SearchResult<AssetPpmScheduleDTO> result = new SearchResult<AssetPpmScheduleDTO>();
+		/*User user = userRepository.findOne(searchCriteria.getUserId());
+		Employee employee = user.getEmployee();
+		List<EmployeeProjectSite> sites = employee.getProjectSites();
+		List<Long> siteIds = new ArrayList<Long>();
+		for (EmployeeProjectSite site : sites) {
+			siteIds.add(site.getSite().getId());
+		}*/
+
+		if (searchCriteria != null) {
+			Pageable pageRequest = null;
+			if (!StringUtils.isEmpty(searchCriteria.getColumnName())) {
+				Sort sort = new Sort(searchCriteria.isSortByAsc() ? Sort.Direction.ASC : Sort.Direction.DESC, searchCriteria.getColumnName());
+				log.debug("Sorting object" + sort);
+				pageRequest = createPageSort(searchCriteria.getCurrPage(), searchCriteria.getSort(), sort);
+			} else {
+				if (searchCriteria.isList()) {
+					pageRequest = createPageRequest(searchCriteria.getCurrPage(), true);
+				} else {
+					pageRequest = createPageRequest(searchCriteria.getCurrPage());
+				}
+			}
+			Page<AssetPPMSchedule> page = null;
+			List<AssetPpmScheduleDTO> transactions = null;
+			log.debug(">>> Asset id in find search 3 =" + searchCriteria.getAssetId());
+			page = assetPpmScheduleRepository.findAllPPMSchedule(searchCriteria.getAssetId(), pageRequest);		
+			log.debug(">>> PPM Schedule size for this asset "+page.getContent().size());
+			List<AssetPPMSchedule> assetList = page.getContent();
+			log.debug(">>> Inside collection 3 A page content size <<<"+assetList.size());
+			if (page != null) {
+				log.debug(">>> Inside collection 3 B <<<");
+
+				if (transactions == null) {
+					log.debug(">>> Inside collection 3 C <<<");
+
+					transactions = new ArrayList<AssetPpmScheduleDTO>();
+				}
+
+				if (CollectionUtils.isNotEmpty(assetList)) {
+					log.debug(">>> Inside collection 4 <<<");
+					for (AssetPPMSchedule asset : assetList) {
+						transactions.add(mapToPPMScheduleModel(asset));
+					}
+				}
+				if (CollectionUtils.isNotEmpty(transactions)) {
+					buildSearchPPMScheduleResult(searchCriteria, page, transactions, result);
+				}
+			}
+
+		}
+		return result;
 	}
 
 	public SearchResult<AssetDTO> findBySearchCrieria(SearchCriteria searchCriteria) {
@@ -569,6 +641,19 @@ public class AssetManagementService extends AbstractService {
 		return;
 	}
 
+	private void buildSearchPPMScheduleResult(SearchCriteria searchCriteria, Page<AssetPPMSchedule> page, List<AssetPpmScheduleDTO> transactions, SearchResult<AssetPpmScheduleDTO> result) {
+		if (page != null) {
+			result.setTotalPages(page.getTotalPages());
+		}
+		result.setCurrPage(page.getNumber() + 1);
+		result.setTotalCount(page.getTotalElements());
+		result.setStartInd((result.getCurrPage() - 1) * 10 + 1);
+		result.setEndInd((result.getTotalCount() > 10 ? (result.getCurrPage()) * 10 : result.getTotalCount()));
+
+		result.setTransactions(transactions);
+		return;
+	}
+	
 	private AssetDTO mapToModel(Asset asset, boolean includeShifts) {
 		AssetDTO assetDTO = new AssetDTO();
 		assetDTO.setId(asset.getId());
@@ -578,6 +663,26 @@ public class AssetManagementService extends AbstractService {
 		assetDTO.setSiteName(asset.getSite().getName());
 		assetDTO.setAssetType(asset.getAssetType());
 		assetDTO.setAssetGroup(asset.getAssetGroup());
+
+		return assetDTO;
+	}
+
+	private AssetPpmScheduleDTO mapToPPMScheduleModel(AssetPPMSchedule asset) {
+		
+		log.debug(">>> Inside collection 5 <<<");
+
+		AssetPpmScheduleDTO assetDTO = new AssetPpmScheduleDTO();
+		assetDTO.setId(asset.getId());
+		assetDTO.setTitle(asset.getTitle());
+		assetDTO.setChecklistId(asset.getChecklist().getId());
+		assetDTO.setStartDate(asset.getStartDate());
+		assetDTO.setEndDate(asset.getEndDate());
+		assetDTO.setFrequency(asset.getFrequency());
+		log.debug(">>> Title <<< "+assetDTO.getTitle());
+		log.debug(">>> Check list id <<< "+assetDTO.getChecklistId());
+		log.debug(">>> Start Date <<< "+assetDTO.getStartDate());
+		log.debug(">>> End Date <<< "+assetDTO.getEndDate());
+		log.debug(">>> Frequency <<< "+assetDTO.getFrequency());
 
 		return assetDTO;
 	}
@@ -698,7 +803,7 @@ public class AssetManagementService extends AbstractService {
 
 		assetPPMSchedule = assetPpmScheduleRepository.save(assetPPMSchedule);
 		assetPpmScheduleDTO = mapperUtil.toModel(assetPPMSchedule, AssetPpmScheduleDTO.class);
-		jobManagementService.createJob(assetPpmScheduleDTO);
+		//jobManagementService.createJob(assetPpmScheduleDTO);
 		log.debug(">> after create job for ppm schedule <<<");
 		return assetPpmScheduleDTO;
 	}
@@ -808,6 +913,15 @@ public class AssetManagementService extends AbstractService {
 	public FrequencyPrefix[] getAllPrefixs() { 
 		FrequencyPrefix[] prefixs = FrequencyPrefix.values();
 		return prefixs;
+	}
+
+	public List<AssetParameterReadingDTO> viewAssetReadings(long assetId) {
+		List<AssetParameterReadingDTO> assetParameterReadingDTO = null;
+		List<AssetParameterReading> assetParameterReading = assetRepository.findByAssetReading(assetId);
+		if (CollectionUtils.isNotEmpty(assetParameterReading)) {
+			assetParameterReadingDTO = mapperUtil.toModelList(assetParameterReading, AssetParameterReadingDTO.class);
+		}
+		return assetParameterReadingDTO;
 	}
 
 }

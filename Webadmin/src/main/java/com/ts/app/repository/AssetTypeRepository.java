@@ -21,6 +21,7 @@ public interface AssetTypeRepository extends JpaRepository<AssetType, Long> {
 	@Query("SELECT at FROM AssetType at WHERE at.name like '%' || :name || '%' and at.active='Y' order by at.name")
 	Page<AssetType> findAllByName(@Param("name") String name, Pageable pageRequest);
 
-
+	@Query("SELECT at FROM AssetType at WHERE at.name= :name")
+	AssetType findByName(@Param("name") String name);
 
 }

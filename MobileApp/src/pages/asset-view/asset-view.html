@@ -215,7 +215,6 @@
             </ion-card>
         </div>
 
-
         <!--<p text-right class="fnt-18" (click)="showCalendar()"><ion-icon ios="ios-calendar" md="md-calendar" class="green fnt-25 padding-right10"></ion-icon></p>-->
         <div  class="white-bg"  *ngFor="let ppm of assetDetails.ppms;let j=index">
             <div class="padding-left16 padding-top5" data-toggle="collapse" [attr.data-target]="'#'+j">
@@ -272,7 +271,7 @@
 
         <div  class="white-bg" *ngFor="let ppm of assetDetails.amcs;let k=index" >
 
-            <div class="padding-left16 padding-top5" >
+            <div class="padding-left16 padding-top5" data-toggle="collapse" [attr.data-target]="'#'+k" >
                 <ion-row class="margin0">
 
                     <ion-col col-2 class="ver-center">
@@ -291,6 +290,7 @@
                 </ion-row>
             </div>
 
+            <div id="{{k}}" class="collapse">
             <ion-item #item class="item-fnt padding-left0" >
                 <!--<div class="padding-left16">-->
 
@@ -310,7 +310,7 @@
                 </div>
                 <!--</div>-->
             </ion-item>
-
+            </div>
 
         </div>
     </ion-list>
@@ -555,7 +555,7 @@
 
     <ion-list *ngSwitchCase="'readings'">
 
-        <div text-center="" *ngIf="!assetDetails.readings || assetDetails.readings.length < 0">
+        <div text-center="" *ngIf="!assetDetails.reading || assetDetails.reading.length < 0">
             <ion-card text-center="">
                 <ion-card-content>
                     No Data found

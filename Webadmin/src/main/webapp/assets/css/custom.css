@@ -24,6 +24,9 @@ ul.checkList li
       border-radius: 5px;
       font-size: 11px;
 }
+.txtBold{
+  font-weight:bold;
+}
 .box {
     position: relative;
     overflow: hidden;

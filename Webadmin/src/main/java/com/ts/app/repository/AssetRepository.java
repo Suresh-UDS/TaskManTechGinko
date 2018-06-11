@@ -11,6 +11,7 @@ import org.springframework.data.repository.query.Param;
 
 import com.ts.app.domain.Asset;
 import com.ts.app.domain.AssetAMCSchedule;
+import com.ts.app.domain.AssetParameterReading;
 import com.ts.app.domain.Employee;
 
 /**
@@ -28,6 +29,9 @@ public interface AssetRepository extends JpaRepository<Asset, Long>,JpaSpecifica
 
     @Query("SELECT a from Asset a where a.code = :code")
     Asset findByCode(@Param("code") String code);
+    
+    @Query("SELECT a from Asset a where a.title = :title")
+    Asset findByTitle(@Param("title") String title);
 
     List<Asset> findBySiteId(Long siteId);
     
@@ -51,4 +55,7 @@ public interface AssetRepository extends JpaRepository<Asset, Long>,JpaSpecifica
 
     @Query("SELECT e FROM Asset e WHERE e.active='Y' order by e.title")
     Page<Asset> findAllAsset(Pageable pageRequest);
+
+    @Query("SELECT r FROM AssetParameterReading r WHERE r.asset.id = :assetId and r.active = 'Y' order by r.name")
+	List<AssetParameterReading> findByAssetReading(@Param("assetId") long assetId);
 }

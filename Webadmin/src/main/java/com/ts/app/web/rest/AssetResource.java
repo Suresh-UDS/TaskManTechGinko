@@ -69,9 +69,21 @@ public class AssetResource {
 	public ResponseEntity<?> saveAsset(@Valid @RequestBody AssetDTO assetDTO, HttpServletRequest request) {
 		log.debug(">>> Asset DTO save request <<<");
 		
-		AssetDTO response = assetService.saveAsset(assetDTO);
-		log.debug("Asset new id - " + response.getId());
-		return new ResponseEntity<>(response, HttpStatus.CREATED);
+		try {
+			if(!assetService.isDuplicate(assetDTO)) {
+				log.debug(">>> going to create <<<");
+				assetDTO = assetService.saveAsset(assetDTO);
+			}else {
+				log.debug(">>> duplicate <<<");
+				assetDTO.setMessage("error.duplicateRecordError");
+				return new ResponseEntity<>(assetDTO,HttpStatus.BAD_REQUEST);
+			}
+		}catch(Exception e) {
+			throw new TimesheetException(e, assetDTO);
+		}
+		
+		log.debug("Asset new id - " + assetDTO.getId());
+		return new ResponseEntity<>(assetDTO, HttpStatus.CREATED);
 	}
 
 	@RequestMapping(value = "/assets/search", method = RequestMethod.POST)
@@ -90,6 +102,17 @@ public class AssetResource {
 		return result;
 	}
 
+	@RequestMapping(value = "/asset/findppmschedule", method = RequestMethod.POST)
+	public SearchResult<AssetPpmScheduleDTO> findPPMSchedule(@RequestBody SearchCriteria searchCriteria) {
+		log.debug(">>> find ppm schedule <<<");
+		SearchResult<AssetPpmScheduleDTO> result = null;
+		if (searchCriteria != null) {
+			searchCriteria.setUserId(SecurityUtils.getCurrentUserId());
+			result = assetService.findPPMSearchCriteria(searchCriteria);
+		}
+		return result;
+	}
+	
 	@RequestMapping(path = "/site/{id}/asset", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public List<AssetDTO> getSiteAssets(@PathVariable("id") Long siteId) {
 		return assetService.getSiteAssets(siteId);
@@ -97,7 +120,7 @@ public class AssetResource {
 
 	@RequestMapping(path = "/asset/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public AssetDTO getAsset(@PathVariable("id") Long id) {
-		log.debug(">>> get asset details! <<<");
+		log.debug(">>> get asset details! by asset id from resource <<<"+id);
 		return assetService.getAssetDTO(id);
 	}
 
@@ -114,6 +137,26 @@ public class AssetResource {
 		if (assetDTO.getId() > 0)
 			assetDTO.setId(id);
 		log.debug("Asset Details in updateAsset id from dto = " + assetDTO.getId());
+		log.debug(">>> Asset DTO update request <<<");
+		log.debug("Title <<<" + assetDTO.getTitle());
+		log.debug("AssetType <<<" + assetDTO.getAssetType());
+		log.debug("AssetGroup <<<" + assetDTO.getAssetGroup());
+		log.debug("Status <<<" + assetDTO.getStatus());
+		log.debug("ProjectId <<<" + assetDTO.getProjectId());
+		log.debug("SiteId <<<" + assetDTO.getSiteId());
+		log.debug("Block <<<" + assetDTO.getBlock());
+		log.debug("Floor <<<" + assetDTO.getFloor());
+		log.debug("Zone <<<" + assetDTO.getZone());
+		log.debug("Manufacture <<<" + assetDTO.getManufacturerId());
+		log.debug("ModelNumber <<<" + assetDTO.getModelNumber());
+		log.debug("SerialNumber <<<" + assetDTO.getSerialNumber());
+		log.debug("Acquired Date <<<" + assetDTO.getAcquiredDate());
+		log.debug("PurchasePrice <<<" + assetDTO.getPurchasePrice());
+		log.debug("CurrentPrice <<<" + assetDTO.getCurrentPrice());
+		log.debug("EstimatedDisposePrice <<<" + assetDTO.getEstimatedDisposePrice());
+		log.debug("Code <<<" + assetDTO.getCode());
+		log.debug("UdsAsset <<<" + assetDTO.isUdsAsset());
+		log.debug("Vendor <<<" + assetDTO.getVendorId());
 		AssetDTO response = assetService.updateAsset(assetDTO);
 		return new ResponseEntity<>(response, HttpStatus.CREATED);
 	}
@@ -213,10 +256,24 @@ public class AssetResource {
 			HttpServletRequest request) {
 		log.debug(">>> Asset DTO saveAssetPPMSchedule request <<<");
 		log.debug("Title <<<" + assetPpmScheduleDTO.getTitle());
+		
+		try {
+			if(!assetService.isDuplicatePPMSchedule(assetPpmScheduleDTO)) {
+				log.debug(">>> going to create <<<");
+				assetPpmScheduleDTO = assetService.createAssetPpmSchedule(assetPpmScheduleDTO);
+			}else {
+				log.debug(">>> duplicate <<<");
+				assetPpmScheduleDTO.setMessage("error.duplicateRecordError");
+				return new ResponseEntity<>(assetPpmScheduleDTO,HttpStatus.BAD_REQUEST);
+			}
+			
 
-		AssetPpmScheduleDTO response = assetService.createAssetPpmSchedule(assetPpmScheduleDTO);
-		log.debug("Asset Ppm Schedule after save and create job response - " + response);
-		return new ResponseEntity<>(response, HttpStatus.CREATED);
+		}catch(Exception e) {
+			throw new TimesheetException(e, assetPpmScheduleDTO);
+		}
+		
+		log.debug("Asset PPM Schedule new id - " + assetPpmScheduleDTO.getId());
+		return new ResponseEntity<>(assetPpmScheduleDTO, HttpStatus.CREATED);
 	}
 
 	@RequestMapping(path = "/assets/ppmschedule", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -276,11 +333,11 @@ public class AssetResource {
 	
 	@RequestMapping(path = "/assets/{assetId}/amcschedule", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	@Timed
-	public List<AssetAMCScheduleDTO> getAssetAMCSchedule(@PathParam("assetId") long id) {
+	public List<AssetAMCScheduleDTO> getAssetAMCSchedule(@PathVariable("assetId") long assetId) {
 		log.debug(">>> Asset DTO updateAssetAMCSchedule request <<<");
-		log.debug("AssetId <<<" + id);
+		log.debug("AssetId <<<" + assetId);
 
-		List<AssetAMCScheduleDTO> response = assetService.getAssetAMCSchedules(id);
+		List<AssetAMCScheduleDTO> response = assetService.getAssetAMCSchedules(assetId);
 		log.debug("Get Asset AMC Schedule for asset id - " + response);
 		return response;
 	}
@@ -331,6 +388,14 @@ public class AssetResource {
 		List = assetService.getAllPrefixs();
 		return List;
 	}
+	
+	@RequestMapping(value = "/assets/{assetId}/viewAssetReadings", method = RequestMethod.GET)
+	public List<AssetParameterReadingDTO> getAssetReadings(@PathVariable("assetId") long assetId) {
+		List<AssetParameterReadingDTO> result = null;
+		result = assetService.viewAssetReadings(assetId);
+		return result;
+	}
+	
 	
 	
 }
