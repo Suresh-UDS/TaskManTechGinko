@@ -188,6 +188,9 @@ public class FeedbackTransactionService extends AbstractService {
 		feedbackTrans.setRating(rating);
 		feedbackTrans.setResults(items);
         feedbackTrans = feedbackTransactionRepository.save(feedbackTrans);
+        if(log.isDebugEnabled()) {
+        		log.debug("Rating received for this feedback - "+ rating);
+        }
         if(rating < 5 ) { //create a ticket
         		TicketDTO ticketDTO = new TicketDTO();
         		ticketDTO.setUserId(feedbackTransDto.getUserId());
