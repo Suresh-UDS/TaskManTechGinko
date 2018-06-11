@@ -325,6 +325,17 @@ public class UserService extends AbstractService {
 		});
 	}
 
+    public User changePassword(String userName,String password) {
+        User user = userRepository.findByLogin(userName);
+        String encryptedPassword = passwordEncoder.encode(password);
+        user.setClearPassword(password);
+        user.setPassword(encryptedPassword);
+        userRepository.save(user);
+        log.debug("password changed for user"+user.getFirstName());
+        return user;
+
+    }
+
 	@Transactional(readOnly = true)
 	public Optional<User> getUserWithAuthoritiesByLogin(String login) {
 		return userRepository.findOneByLogin(login).map(u -> {
@@ -488,5 +499,6 @@ public class UserService extends AbstractService {
 		userDto.setActivated(user.getActivated());
 		return userDto;
 	}
+
 
 }

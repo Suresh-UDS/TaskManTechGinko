@@ -155,7 +155,7 @@ public class AccountResource {
 		*/
 		UserDTO userDto = userService.getUserWithAuthorities();
 		if(userDto != null) {
-			return new ResponseEntity<>(userDto, HttpStatus.OK); 
+			return new ResponseEntity<>(userDto, HttpStatus.OK);
 		}
 		return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 	}
@@ -233,6 +233,16 @@ public class AccountResource {
 					.ifPresent(t -> persistentTokenRepository.delete(decodedSeries));
 		});
 	}
+
+	@RequestMapping(value = "/account/change_password", method=RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> changePassword(@RequestBody KeyAndPasswordDTO keyAndPasswordDTO){
+	    User user = userRepository.findByLogin(keyAndPasswordDTO.getUserName());
+	    if(user !=null){
+            user = userService.changePassword(keyAndPasswordDTO.getUserName(), keyAndPasswordDTO.getNewPassword());
+            return new ResponseEntity<Object>("Username changed",HttpStatus.OK);
+        }
+        return new ResponseEntity<Object>("Username not found",HttpStatus.SERVICE_UNAVAILABLE);
+    }
 
 	@RequestMapping(value = "/account/reset_password/init", method = RequestMethod.POST, produces = MediaType.TEXT_PLAIN_VALUE)
 	@Timed
