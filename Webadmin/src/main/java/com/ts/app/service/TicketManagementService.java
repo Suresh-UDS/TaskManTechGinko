@@ -145,6 +145,10 @@ public class TicketManagementService extends AbstractService {
 
         ticketDTO = mapperUtil.toModel(ticket, TicketDTO.class);
 
+        if(employee == null) {
+        		employee = user.getEmployee();
+        }
+        
         if(employee != null) {
         		sendNotifications(employee, ticket, site, true);
         }
