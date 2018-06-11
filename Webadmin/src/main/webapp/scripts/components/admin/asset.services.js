@@ -244,6 +244,12 @@ angular.module('timeSheetApp')
             	return $http.get('api/assets/'+id+'/viewAssetReadings').then(function(response) { 
             		return response.data;
             	});
+            },
+            
+            findByReadingId : function(id) { 
+            	return $http.get('api/assets/'+id+'/viewReadings').then(function(response) { 
+            		return response.data;
+            	});
             }
             
 

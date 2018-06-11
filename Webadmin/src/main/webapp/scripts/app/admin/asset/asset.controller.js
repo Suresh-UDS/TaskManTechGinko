@@ -37,6 +37,13 @@ angular.module('timeSheetApp')
         $scope.selectedConfigParam = null;
         $scope.selectedConfigUnit = null;
         $scope.assetEditDate = null;
+        $scope.uploadFiles = [];
+        $scope.uploadAssetPhotos = [];
+        $scope.uploadObj = {};
+        $scope.photoObj = {};
+        $scope.uploadAsset = {}; 
+        $scope.uploadAssetPhoto = {};
+        $scope.amcScheduleList = [];
 
         $scope.asset = {};
 
@@ -76,9 +83,7 @@ angular.module('timeSheetApp')
             plannedEnd : false,
         }
 
-        $scope.uploadAsset = {};
-        
-        $scope.uploadAssetPhoto = {};
+       
 
         $scope.initCalender = function(){
 
@@ -1076,95 +1081,131 @@ angular.module('timeSheetApp')
                 } else {
                     $scope.error = 'ERROR';
                 }
-            });;
+            });
 
 	    };
 	    
 
 	    
 	    $scope.getAllUploadedFiles = function() {
-	    	var uploadObj = {};
-	    	uploadObj.type = 'document';
-	    	if($stateParams.id){ 
-	    		uploadObj.assetId = $stateParams.id;
-	    	}else{ 
-	    		uploadObj.assetId = 1;
-	    	}
+
+
+	    	$scope.uploadObj.type = 'document';
 	    	
-	    	AssetComponent.getAllUploadedFiles(uploadObj).then(function(data){ 
-	    		console.log(data);
-	    		$scope.uploadFiles = data;
+
+            if($scope.assetGen.id){
+                
+                $scope.uploadObj.assetId = $scope.assetGen.id;
+
+            }else if($stateParams.id){
+
+                 $scope.uploadObj.assetId = $stateParams.id;
+            }
+	    	
+	    	AssetComponent.getAllUploadedFiles($scope.uploadObj).then(function(data){ 
+                $scope.uploadFiles = [];
+	    		$scope.uploadFiles=data;
+                console.log("-- Upload files --" , $scope.uploadFiles);
 	    	});
 	    }
 	    
 	    $scope.getAllUploadedPhotos = function() {
 
-	    	var photoObj = {};
-	    	photoObj.type = 'image';
-	    	if($stateParams.id){ 
-	    		photoObj.assetId = $stateParams.id;
-	    	}else{ 
-	    		photoObj.assetId = 1;
-	    	}
+	    	$scope.photoObj.type = 'image';
+
+            if($scope.assetGen.id){
+
+                $scope.photoObj.assetId = $scope.assetGen.id;
+
+            }else if($stateParams.id){
+
+                 $scope.photoObj.assetId = $stateParams.id;
+            }
 	    	
-	    	AssetComponent.getAllUploadedPhotos(photoObj).then(function(data){ 
-	    		console.log(data);
-	    		$scope.uploadAssetPhotos = data;
+	    	AssetComponent.getAllUploadedPhotos($scope.photoObj).then(function(data){ 
+                $scope.uploadAssetPhotos = [];
+	    		$scope.uploadAssetPhotos=data;
+                console.log("-- Uploaded Photos --",$scope.uploadAssetPhotos);
 	    	});
 	    }
 	    
 	    $scope.uploadAssetFile = function() { 
-	     	if($scope.selectedClientFile) {
-	        	console.log("file title - " + $scope.uploadAsset.title + "file name -" + $scope.selectedClientFile);
 
                 if(!$scope.assetGen.id && !$stateParams.id){
-            
-                  $scope.showNotifications('top','center','danger','Please create asset first..');
+                
+                      $scope.showNotifications('top','center','danger','Please create asset first..');
 
-                }
+                    }else{
 
-                if($scope.assetGen.id){
-                    $scope.uploadAsset.assetId = $scope.assetGen.id;
+    	     	if($scope.selectedClientFile) {
 
-                }else if($stateParams.id){
+    	        	console.log("file title - " + $scope.uploadAsset.title + "file name -" + $scope.selectedClientFile);
 
-                     $scope.uploadAsset.assetId = $stateParams.id;
-                }
-	        	$scope.uploadAsset.uploadFile = $scope.selectedClientFile;
-	        	//$scope.uploadAsset.assetId = 1;
-	        	$scope.uploadAsset.type = 'document';
-	        	console.log($scope.uploadAsset);
-	        	AssetComponent.uploadAssetFile($scope.uploadAsset).then(function(data){
-	        		console.log(data);
-	        		if(data) { 
-	        			$scope.uploadFiles.push(data);
-		        		$scope.getAllUploadedFiles();
-	        		}else{ 
-	        			console.log('No data found!');
-	        		}
-	        		
-	        	},function(err){
-	        		console.log('Import error');
-	        		console.log(err);
-	        	});
-        	} else {
-        		console.log('select a file');
-        	}
+                    if($scope.assetGen.id){
+                        $scope.uploadAsset.assetId = $scope.assetGen.id;
+
+                    }else if($stateParams.id){
+
+                         $scope.uploadAsset.assetId = $stateParams.id;
+                    }
+
+    	        	$scope.uploadAsset.uploadFile = $scope.selectedClientFile;
+    	        	//$scope.uploadAsset.assetId = 1;
+    	        	$scope.uploadAsset.type = 'document';
+    	        	console.log($scope.uploadAsset);
+    	        	AssetComponent.uploadAssetFile($scope.uploadAsset).then(function(data){
+    	        		console.log("-- Upload file --",data);
+    	        		if(data) { 
+                            $scope.uploadFiles =[];
+    	        			$scope.uploadFiles.push(data);
+    		        		$scope.getAllUploadedFiles();
+    	        		}else{ 
+    	        			console.log('No data found!');
+    	        		}
+    	        		
+    	        	},function(err){
+    	        		console.log('Import error');
+    	        		console.log(err);
+    	        	});
+            	} else {
+            		console.log('select a file');
+            	}
+            }
 	    	
 	    }
 	    
-	    $scope.uploadAssetPhoto = function() {  
+	    $scope.uploadAssetPhotoFile = function() { 
+
+        if(!$scope.assetGen.id && !$stateParams.id){
+                
+            $scope.showNotifications('top','center','danger','Please create asset first..');
+
+        }else{ 
 	    	console.log($scope.selectedPhotoFile);
+
 	    	console.log($scope.uploadAssetPhoto.title);
+
 	     	if($scope.selectedPhotoFile) {
 	        	console.log('selected asset file - ' + $scope.selectedPhotoFile);
+
 	        	$scope.uploadAssetPhoto.uploadFile = $scope.selectedPhotoFile;
-	        	$scope.uploadAssetPhoto.assetId = 1;
+
+                if($scope.assetGen.id){
+                        $scope.uploadAssetPhoto.assetId = $scope.assetGen.id;
+
+                    }else if($stateParams.id){
+
+                         $scope.uploadAssetPhoto.assetId = $stateParams.id;
+                    }
+	        	//$scope.uploadAssetPhoto.assetId = 1;
 	        	$scope.uploadAssetPhoto.type = 'image';
+
 	        	console.log($scope.uploadAssetPhoto);
+
 	        	AssetComponent.uploadAssetPhoto($scope.uploadAssetPhoto).then(function(data){
 	        		console.log(data);
 	        		if(data) { 
+                        $scope.uploadAssetPhotos =[];
 	        			$scope.uploadAssetPhotos.push(data);
 		        		$scope.getAllUploadedPhotos();
 	        		}else{ 
@@ -1178,10 +1219,11 @@ angular.module('timeSheetApp')
         	} else {
         		console.log('select a file');
         	}
+          }
 	    	
 	    }
 	    
-        $scope.download = false;
+        $scope.download = '';
 	    
 	    var mimes = {
 		   "jpeg":"image/jpeg",
@@ -1202,9 +1244,9 @@ angular.module('timeSheetApp')
 	    	var fileExt = filename.split('.').pop();
 	    	console.log(fileExt);
 	    	AssetComponent.readFile(document).then(function(data){ 
-	    		console.log(data);
+	    		console.log("-- Download file --",data);
 	    		console.log(data.fileName);
-	    		$scope.download = true;
+	    		$scope.download = docId;
 	    		var mime;
 	    		if( typeof(mimes[fileExt]) != "undefined" ) { 
 	    			mime = mimes[fileExt];
@@ -1252,14 +1294,14 @@ angular.module('timeSheetApp')
             $scope.amcSchedule.endDate = e.date._d;
         });
 	    
-	    /*$scope.loadCheckList = function() { 
+	    $scope.loadCheckList = function() { 
 	    	ChecklistComponent.findAll().then(function(data){ 
 	    		//alert(data);
 	    		$scope.checkLists = data;
 	    	});
-	    }*/
+	    }
 
-        $scope.loadChecklist = function(id) {
+        /*$scope.loadChecklist = function(id) {
 
             console.log('loadChecklist -' + id);
             ChecklistComponent.findOne(id).then(function (data) {
@@ -1271,29 +1313,32 @@ angular.module('timeSheetApp')
                     $scope.checklistItems.push(data.items[i]);  
                 }*/
                 
-            });
-        }
+          /*  });
+        }*/
 	    
-	    $scope.amcScheduleList = [];
+	    
 	    
 	    
 	    $scope.saveAmcSchedule = function() { 
 
-    	    	console.log($scope.selectedChecklist);
-
-               if(!$scope.assetGen.id && !$stateParams.id){
+            if(!$scope.assetGen.id && !$stateParams.id){
             
                   $scope.showNotifications('top','center','danger','Please create asset first..');
 
                 }else{
 
                 if($scope.assetGen.id){
+
                     $scope.amcSchedule.assetId= $scope.assetGen.id;
 
                 }else if($stateParams.id){
 
                      $scope.amcSchedule.assetId = $stateParams.id;
                 }
+
+    	    	console.log($scope.selectedChecklist);
+
+               
     	    	if($scope.selectedChecklist){ 
     	    		$scope.amcSchedule.checklistId = $scope.selectedChecklist.id;
     	    	}
@@ -1314,23 +1359,46 @@ angular.module('timeSheetApp')
     	    		console.log(data);
     	    		if(data && data.checklistId) { 
     	    			console.log(data.checklistId);
-    	    			$scope.amcScheduleList.push(data);
+    	    			//$scope.amcScheduleList.push(data);
+                        $scope.loadAmcSchedule();
+                        $scope.showNotifications('top','center','success','AMC Schedule Saved Successfully');
 
     	    			ChecklistComponent.findOne(data.checklistId).then(function(data){ 
     	    				$scope.checklistItms = data.items;
     	    				console.log($scope.checklistItms);
     	    			});
     	    		}
-    	    	});
+    	    	}).catch(function (response) {
+                
+                if (response.status === 400 && response.data.message === 'error.duplicateRecordError') {
+                    $scope.errorProjectExists = 'ERROR';
+                    $scope.showNotifications('top','center','danger','AMC Schedule Already Exists');
+                } else {
+                    $scope.error = 'ERROR';
+                     $scope.showNotifications('top','center','danger','Error in creating AMC Schedule. Please try again later..');
+                }
+
+               
+            });
 
             }
 	    	
 	    }
 	    
 	    $scope.loadAmcSchedule = function() { 
-	    	var assetId = $stateParams.id; 
+
+            if($scope.assetGen.id){
+
+                    var assetId= $scope.assetGen.id;
+
+                }else if($stateParams.id){
+
+                     var assetId = $stateParams.id;
+                }
+	    	 
 	    	AssetComponent.findByAssetAMC(assetId).then(function(data) { 
 	    		console.log(data);
+                $scope.amcScheduleList = "";
 	    		$scope.amcScheduleList = data;
                 console.log("AMC List" , $scope.amcScheduleList);
 	    	});
@@ -1359,6 +1427,37 @@ angular.module('timeSheetApp')
             window.print();
             document.body.innerHTML = originalContents;
         }
+        
+		/**
+		 * View Readings*/
+        
+        $scope.noReading = false;
+        
+        $scope.loadAssetReadings = function() {
+        	var id = $stateParams.id;
+        	AssetComponent.findByAssetReadings(id).then(function(data){ 
+        		console.log('View Readings - ' +JSON.stringify(data));
+        		if(data.length > 0) { 
+        			$scope.assetReadings = data;
+            		$scope.viewAssetReading(data[0].id);
+        		}else{ 
+        			console.log('No readings');
+        			$scope.noReading = true;
+        			$scope.assetReadings = [];
+        		}
+        		
+        	});
+        }
+        
+        $scope.viewAssetReading = function(id) {
+        	AssetComponent.findByReadingId(id).then(function(data){ 
+        		console.log(data);
+        		$scope.readingData = data;
+        	});
+        	
+        }
+        
+        /**End view Readings*/        
 
 
     });

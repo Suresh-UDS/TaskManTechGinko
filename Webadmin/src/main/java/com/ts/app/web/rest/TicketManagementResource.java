@@ -144,5 +144,14 @@ public class TicketManagementResource {
 		response.setHeader("Content-Disposition","attachment; filename=\"" + fileId + ".xlsx\"");
 		return content;
 	}
+	
+	@RequestMapping(value="/ticket/{assetId}/view", method= RequestMethod.GET)
+	public List<TicketDTO> getAssetTickets(@PathVariable("assetId") long assetId) {
+		log.info("Get ticket by assetId" +assetId);
+		List<TicketDTO> result = null;
+		result = ticketService.getAllAssetTickets(assetId);
+		log.info("Tickets result - " +result);
+		return result;
+	}
 
 }

@@ -27,7 +27,7 @@
         <div class="InputCon">
     <ion-list>
         <ion-item>
-            <ion-label>Client</ion-label>
+            <ion-label text-capitalize="" class="client-label">Client :</ion-label>
             <ion-select [selectOptions]="selectOptions" interface="popover" [(ngModel)]="selectedProject">
                 <ion-option *ngFor="let p of clientList;let i=index" [value]="p" (ionSelect)="selectSite(p)"> {{p.name}}</ion-option>
             </ion-select>
@@ -53,10 +53,26 @@
         </div>
 
     </ion-list>
-    <!--<ion-item *ngFor="let ag of assetGroup">-->
-        <!--<ion-label>{{ag.name}}</ion-label>-->
-        <!--<ion-checkbox [(ngModel)]="selectedAssetGroup"></ion-checkbox>-->
-    <!--</ion-item>-->
+
+    <div padding="">
+        <ion-list>
+            <h3 class="clr-orange">Asset Type</h3>
+            <ion-item *ngFor="let type of assetType" class="check-style">
+               <ion-label>{{ type.name }}</ion-label>
+                <ion-checkbox [(ngModel)]=" type.name "></ion-checkbox>
+            </ion-item>
+
+        </ion-list>
+    </div>
+    <div padding="" margin-top="">
+        <ion-list>
+            <h3 class="clr-orange">Asset Type</h3>
+            <ion-item *ngFor=" let group of assetGroup " class="check-style">
+                <ion-label>{{ group.assetgroup }}</ion-label>
+                <ion-checkbox [(ngModel)]=" group.assetgroup "></ion-checkbox>
+            </ion-item>
+        </ion-list>
+    </div>
 
     </div>
 </div>

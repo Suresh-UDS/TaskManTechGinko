@@ -59,13 +59,15 @@
 
 <ion-content class="margin-top20">
 
-        <ion-fab right bottom mini (click)="getReadings()"  margin>
-            <ion-label color="light" class="margin0 bg-orange">Reading</ion-label>
-            <button ion-fab color="primary" class="margin-auto margin-top5">
-                <i class="material-icons">network_check</i>
-                <!--<i class="fa fa-tachometer-alt"></i>-->
-            </button>
-        </ion-fab>
+    <ion-fab right bottom mini (click)="getReadings()"   margin>
+        <ion-label color="light" class="margin0 bg-orange">Reading</ion-label>
+        <button ion-fab color="primary" class="margin-auto margin-top5">
+            <!--<i class="material-icons">network_check</i>-->
+            <ion-icon name="speedometer" class="fnt-35"></ion-icon>
+            <!--<i class="fa fa-tachometer-alt"></i>-->
+        </button>
+    </ion-fab>
+
 
 <div [ngSwitch]="categories">
     <ion-list *ngSwitchCase="'details'">
@@ -215,48 +217,52 @@
             </ion-card>
         </div>
 
-        <!--<p text-right class="fnt-18" (click)="showCalendar()"><ion-icon ios="ios-calendar" md="md-calendar" class="green fnt-25 padding-right10"></ion-icon></p>-->
-        <div  class="white-bg"  *ngFor="let ppm of assetDetails.ppms;let j=index">
-            <div class="padding-left16 padding-top5" data-toggle="collapse" [attr.data-target]="'#'+j">
+        <div  class="white-bg" *ngFor="let ppm of assetDetails.ppms;let k=index" >
+
+            <div class="padding-left16 padding-top5" >
                 <ion-row class="margin0">
+
                     <ion-col col-2 class="ver-center">
                         <button ion-button clear color="primary" class="">
+                            <ion-icon name="md-clock" class="green fnt-40"></ion-icon>
                             <!--<ion-icon name="ios-construct-outline" class="fnt-24"></ion-icon>-->
-                            <ion-icon ios="ios-calendar" md="md-calendar" class="green fnt-24"></ion-icon>
+                            <!--<ion-icon ios="ios-calendar" md="md-calendar" ></ion-icon>-->
                         </button>
                     </ion-col>
-                    <ion-col col-9="" class="padding-left5">
-                        <div class="border-btm padding-bottom5 ln-ght20" text-capitalize>
-                            <p text-left class="margin0">{{ppm.title}}</p>
-                            <p text-left class="margin0">{{ppm.frequency}}</p>
+                    <ion-col col-7="" class="padding-left5 border-btm">
+                        <div class=" padding-bottom5 ln-ght20" text-capitalize>
+                            <p text-left class="margin0">{{ ppm.title }}</p>
+                            <p text-left class="margin0">{{ ppm.checklistName }}</p>
                         </div>
                     </ion-col>
-                    <ion-col col-1 class="ver-center">
-                        <ion-icon name="ios-arrow-down" item-right class="clr-orange" ></ion-icon>
+                    <ion-col col-3 class="border-btm">
+                        <p text-left class="margin0 clr-orange"> {{ ppm.frequencyPrefix }} </p>
+                        <p text-left class="margin0 clr-orange"> {{ ppm.frequency }} </p>
                     </ion-col>
                 </ion-row>
             </div>
 
-            <div id="{{j}}" class="collapse">
-                <ion-item #item class="item-fnt padding-left0" >
-                    <!--<div class="padding-left16">-->
-                    <div text-capitalize >
-                        <ion-row class="margin0">
-                            <ion-col col-6 class="padding-right5">
-                                <div>
-                                    <p text-left class="fnt-12"><ion-icon ios="ios-calendar" md="md-calendar" class="green padding-right10"></ion-icon>{{ppm.scheduledDate | date:'MMM d, y, h:mm a' }} </p>
-                                </div>
-                            </ion-col>
-                            <ion-col col-6>
-                                <div>
-                                    <p text-right class="fnt-12"><ion-icon ios="ios-calendar" md="md-calendar" class="red padding-right10"></ion-icon>{{ppm.scheduledDate | date:'MMM d, y, h:mm a' }} </p>
-                                </div>
-                            </ion-col>
-                          </ion-row>
-                    </div>
-                    <!--</div>-->
-                </ion-item>
-            </div>
+            <ion-item #item class="item-fnt padding-left0" >
+                <!--<div class="padding-left16">-->
+
+                <div text-capitalize >
+                    <ion-row class="margin0">
+                        <ion-col col-6 class="padding-right5">
+                            <div>
+                                <p text-left class="fnt-12"><ion-icon ios="ios-calendar" md="md-calendar" class="green padding-right10"></ion-icon>{{ ppm.startDate }} </p>
+                            </div>
+                        </ion-col>
+                        <ion-col col-6>
+                            <div>
+                                <p text-right class="fnt-12"><ion-icon ios="ios-calendar" md="md-calendar" class="red padding-right10"></ion-icon>{{ ppm.endDate }} </p>
+                            </div>
+                        </ion-col>
+                    </ion-row>
+                </div>
+                <!--</div>-->
+            </ion-item>
+
+
         </div>
     </ion-list>
 
@@ -269,28 +275,31 @@
             </ion-card>
         </div>
 
-        <div  class="white-bg" *ngFor="let ppm of assetDetails.amcs;let k=index" >
+        <div  class="white-bg" *ngFor="let amc of assetDetails.amcs;let k=index" >
 
-            <div class="padding-left16 padding-top5" data-toggle="collapse" [attr.data-target]="'#'+k" >
+            <div class="padding-left16 padding-top5" >
                 <ion-row class="margin0">
 
                     <ion-col col-2 class="ver-center">
                         <button ion-button clear color="primary" class="">
+                            <ion-icon name="md-clock" class="blue fnt-40"></ion-icon>
                             <!--<ion-icon name="ios-construct-outline" class="fnt-24"></ion-icon>-->
-                            <ion-icon ios="ios-calendar" md="md-calendar" class="blue fnt-24"></ion-icon>
+                            <!--<ion-icon ios="ios-calendar" md="md-calendar" ></ion-icon>-->
                         </button>
                     </ion-col>
-                    <ion-col col-10="" class="padding-left5">
-                        <div class="border-btm padding-bottom5 ln-ght20" text-capitalize>
-                            <p text-left class="margin0">{{ppm.title}}</p>
-                            <p text-left class="margin0">{{ppm.frequency}}</p>
-                            <p text-left class="margin0">{{ppm.status}} </p>
+                    <ion-col col-7="" class="padding-left5 border-btm">
+                        <div class=" padding-bottom5 ln-ght20" text-capitalize>
+                            <p text-left class="margin0">{{ amc.title }}</p>
+                            <p text-left class="margin0">{{ amc.status ? amc.status : "Status" }}</p>
                         </div>
+                    </ion-col>
+                    <ion-col col-3 class="border-btm">
+                        <p text-left class="margin0 clr-orange"> {{ amc.frequencyPrefix }} </p>
+                        <p text-left class="margin0 clr-orange"> {{ amc.frequency }} </p>
                     </ion-col>
                 </ion-row>
             </div>
 
-            <div id="{{k}}" class="collapse">
             <ion-item #item class="item-fnt padding-left0" >
                 <!--<div class="padding-left16">-->
 
@@ -298,19 +307,19 @@
                     <ion-row class="margin0">
                         <ion-col col-6 class="padding-right5">
                             <div>
-                                <p text-left class="fnt-12"><ion-icon ios="ios-calendar" md="md-calendar" class="green padding-right10"></ion-icon>{{ppm.scheduledDate | date:'MMM d, y, h:mm a' }} </p>
+                                <p text-left class="fnt-12"><ion-icon ios="ios-calendar" md="md-calendar" class="green padding-right10"></ion-icon>{{ amc.startDate }} </p>
                             </div>
                         </ion-col>
                         <ion-col col-6>
                             <div>
-                                <p text-right class="fnt-12"><ion-icon ios="ios-calendar" md="md-calendar" class="red padding-right10"></ion-icon>{{ppm.scheduledDate | date:'MMM d, y, h:mm a' }} </p>
+                                <p text-right class="fnt-12"><ion-icon ios="ios-calendar" md="md-calendar" class="red padding-right10"></ion-icon>{{ amc.endDate }} </p>
                             </div>
                         </ion-col>
                     </ion-row>
                 </div>
                 <!--</div>-->
             </ion-item>
-            </div>
+
 
         </div>
     </ion-list>
@@ -327,24 +336,20 @@
 
         <div  class="white-bg border-btm" *ngFor=" let config of assetDetails.config;let i=index; " >
             <div class="padding-top5">
-                <ion-row class="margin0" data-toggle="collapse" [attr.data-target]="'#'+i">
+                <ion-row class="margin0">
                     <ion-col col-2 class="ver-center">
                         <button ion-button clear color="primary" class="">
                             <i class="fa fa-cog fnt-40"></i>
                         </button>
                     </ion-col>
-                    <ion-col col-9 class="border-up">
+                    <ion-col col-10 class="border-up">
                         <div class="ln-ght20" text-capitalize>
                             <p text-left class="margin0">{{ config.assetType }}</p>
                             <p text-left class="margin0">{{ config.assetTitle }}</p>
                         </div>
                     </ion-col>
-                    <ion-col col-1 class="ver-center border-up">
-                        <ion-icon name="ios-arrow-down" item-right class="clr-orange" ></ion-icon>
-                    </ion-col>
                 </ion-row>
 
-                <div id="{{i}}" class="collapse">
                 <ion-row no-margin="" >
                     <ion-col col-3>
                         <p class="margin0" text-center="">{{ config.lastModifiedDate  | date : 'shortDate' }}</p>
@@ -363,7 +368,6 @@
                         </div>
                     </ion-col>
                 </ion-row>
-                </div>
             </div>
         </div>
 
