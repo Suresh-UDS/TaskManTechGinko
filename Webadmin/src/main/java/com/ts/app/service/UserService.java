@@ -325,7 +325,7 @@ public class UserService extends AbstractService {
 		});
 	}
 
-    public User changePassword(String userName,String password) {
+    public User changeNewPassword(String userName,String password) {
         User user = userRepository.findByLogin(userName);
         String encryptedPassword = passwordEncoder.encode(password);
         user.setClearPassword(password);

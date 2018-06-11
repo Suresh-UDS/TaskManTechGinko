@@ -234,15 +234,7 @@ public class AccountResource {
 		});
 	}
 
-	@RequestMapping(value = "/account/change_password", method=RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> changePassword(@RequestBody KeyAndPasswordDTO keyAndPasswordDTO){
-	    User user = userRepository.findByLogin(keyAndPasswordDTO.getUserName());
-	    if(user !=null){
-            user = userService.changePassword(keyAndPasswordDTO.getUserName(), keyAndPasswordDTO.getNewPassword());
-            return new ResponseEntity<Object>("Username changed",HttpStatus.OK);
-        }
-        return new ResponseEntity<Object>("Username not found",HttpStatus.SERVICE_UNAVAILABLE);
-    }
+
 
 	@RequestMapping(value = "/account/reset_password/init", method = RequestMethod.POST, produces = MediaType.TEXT_PLAIN_VALUE)
 	@Timed
