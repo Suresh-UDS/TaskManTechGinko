@@ -6,7 +6,7 @@ angular.module('timeSheetApp')
 
             create : function(asset,callback){
                 var cb = callback || angular.noop;
-                return $http.post('api/asset',asset).then(
+               /* return $http.post('api/asset',asset).then(
                     function (response) {
                         //return cb(response);
                         console.log("Create Asset Service response -- " , response);
@@ -15,7 +15,15 @@ angular.module('timeSheetApp')
                     function (err) {
                         console.log(JSON.stringify(err));
                         return cb(err);
-                    })
+                    })*/
+
+                    return Asset.save(asset,
+                    function () {
+                        return cb(asset);
+                    },
+                    function (err) {
+                        return cb(err);
+                    }.bind(this)).$promise;
 
             },
             createPPM : function(asset,callback){
