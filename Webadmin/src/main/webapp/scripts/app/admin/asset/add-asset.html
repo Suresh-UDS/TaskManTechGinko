@@ -52,7 +52,7 @@
                                                                 <a href=".config" data-toggle="tab" >Config</a>
                                                             </li>
                                                             <li class="step">
-                                                                <a href=".documents" data-toggle="tab" >Documents</a>
+                                                                <a href=".docs" data-toggle="tab" >Documents</a>
                                                             </li>
                                                         </ul>
                                                     </div>
@@ -1315,9 +1315,9 @@
                                                             </div>
 
                                                         </div>
-                                                        <div class="tab-pane fade documents" id="documents">
-                                                            <form name="form5" role="form" novalidate
-                                                        class="form-horizontal" >
+                                                        <div class="tab-pane fade docs" id="docs">
+                                                            <form name="importClientForm" role="form" novalidate
+                                                            class="ng-pristine ng-valid">
                                                             <div class="panel panel-default" style="min-height: 200px;">
 
                                                                 <div class="panel-heading">
@@ -1325,99 +1325,101 @@
                                                                 </div>
                                                                 <div class="panel-body">
 
+                                                                  
 
+                                                                    <div class="row">
 
-                                                                        <div class="row">
+                                                                        <div class="col-md-6">
 
-                                                                            <div class="col-md-6">
+                                                                            <div class="row" ng-init="getAllUploadedFiles();">
 
-                                                                                <div class="row">
-
-                                                                                    <div class="col-md-11">
-                                                                                        <div class="form-group">
-                                                                                            <label class="control-label">File Title</label>
-                                                                                            <input id='fileTitle'
-                                                                                                   ng-model="uploadAsset.title"
-                                                                                                   class='form-control'
-                                                                                                   name='amcDocumentTitle'
-                                                                                                   type='text' value=""
-                                                                                                   ng-minlength='5'
-                                                                                                   ng-maxlength='250'
-                                                                                                   ng-pattern="/^[A-Za-z0-9\s]*$/" autofocus
-                                                                                            />
-                                                                                        </div>
+                                                                                <div class="col-md-11">
+                                                                                    <div class="form-group">
+                                                                                        <label class="control-label">File Title</label>
+                                                                                        <input id='fileTitle'
+                                                                                               ng-model="uploadAsset.title"
+                                                                                               class='form-control'
+                                                                                               name='fileTitle'
+                                                                                               type='text' value=""
+                                                                                               ng-minlength='5'
+                                                                                               ng-maxlength='250'
+                                                                                               ng-pattern="/^[A-Za-z0-9\s]*$/" autofocus
+                                                                                        />
                                                                                     </div>
-                                                                                    <div class="col-md-12">
-                                                                                        <div class="form-group label-floating is-empty is-fileinput row">
-                                                                                            <div class="col-md-6 pdng-top13">
-                                                                                                <input type="file" class="form-control ng-pristine ng-valid ng-touched" style="opacity:100;position:relative" file-model ng-model="selectedClientFile" name="clientFile" tabindex="0" aria-invalid="false">
-                                                                                            </div>
-                                                                                            <div class="col-md-6">
-                                                                                                <button class="btn btn-success" tabindex="0" ng-click="uploadAssetFile()">
-                                                                                <span class="btn-label">
-                                                                                    <i class="material-icons">file_upload</i>
-                                                                                </span>Upload Docs
-                                                                                                </button>
-
-                                                                                            </div>
-                                                                                            <!--  <div class="col-md-12" ng-hide="!clientImportMsg()">
-                                                                                                 <span class="card-title">Status - {{clientImportMsg()}}</span>
-                                                                                             </div> -->
-                                                                                            <span class="material-input"></span></div>
-                                                                                    </div>
-
                                                                                 </div>
-
-                                                                            </div>
-                                                                            <div class="col-md-6">
-
-                                                                                <div class="row">
-
-                                                                                    <div class="col-md-11">
-                                                                                        <div class="form-group">
-                                                                                            <label class="control-label">Photo Title</label>
-                                                                                            <input id='fileTitle'
-                                                                                                   ng-model="uploadAssetPhoto.title"
-                                                                                                   class='form-control'
-                                                                                                   name='fileTitle'
-                                                                                                   type='text' value=""
-                                                                                                   ng-minlength='5'
-                                                                                                   ng-maxlength='250'
-                                                                                                   ng-pattern="/^[A-Za-z0-9\s]*$/" autofocus
-                                                                                            />
+                                                                                <div class="col-md-12">
+                                                                                    <div class="form-group label-floating is-empty is-fileinput row">
+                                                                                        <div class="col-md-6 pdng-top13">
+                                                                                            <input type="file" class="form-control ng-pristine ng-valid ng-touched" style="opacity:100;position:relative" file-model="" ng-model="selectedClientFile" name="clientFile" tabindex="0" aria-invalid="false">
                                                                                         </div>
-                                                                                    </div>
-                                                                                    <div class="col-md-12">
-                                                                                        <div class="form-group label-floating is-empty is-fileinput row">
-                                                                                            <div class="col-md-6 pdng-top13">
-                                                                                                <input type="file" class="form-control ng-pristine ng-valid ng-touched" style="opacity:100;position:relative" file-model ng-model="selectedPhotoFile" name="clientFile" tabindex="0" aria-invalid="false">
-                                                                                            </div>
-                                                                                            <div class="col-md-6">
-                                                                                                <button class="btn btn-success" tabindex="0" ng-click="uploadAssetPhoto()">
-                                                                                                    <span class="btn-label">
-                                                                                                        <i class="material-icons">file_upload</i>
-                                                                                                    </span>Upload Photos
-                                                                                                </button>
-                                                                                            </div>
-                                                                                            <!--  <div class="col-md-12" ng-hide="!clientImportMsg()">
-                                                                                                 <span class="card-title">Status - {{clientImportMsg()}}</span>
-                                                                                             </div> -->
-                                                                                            <span class="material-input"></span></div>
-                                                                                    </div>
+                                                                                        <div class="col-md-6">
+                                                                                            <button class="btn btn-success" tabindex="0" ng-click="uploadAssetFile()">
+                                                                                        <span class="btn-label">
+                                                                                            <i class="material-icons">file_upload</i>
+                                                                                        </span>Upload Docs
+                                                                                            </button>
 
+                                                                                        </div>
+                                                                                        <!--  <div class="col-md-12" ng-hide="!clientImportMsg()">
+                                                                                             <span class="card-title">Status - {{clientImportMsg()}}</span>
+                                                                                         </div> -->
+                                                                                        <span class="material-input"></span></div>
                                                                                 </div>
-
 
                                                                             </div>
 
                                                                         </div>
+                                                                        <div class="col-md-6">
 
+                                                                           <div class="row" ng-init="getAllUploadedPhotos();">
+
+                                                                               <div class="col-md-11">
+                                                                                   <div class="form-group">
+                                                                                       <label class="control-label">Photo Title</label>
+                                                                                       <input id='fileTitle'
+                                                                                              ng-model="uploadAssetPhoto.title"
+                                                                                              class='form-control'
+                                                                                              name='fileTitle'
+                                                                                              type='text' value=""
+                                                                                              ng-minlength='5'
+                                                                                              ng-maxlength='250'
+                                                                                              ng-pattern="/^[A-Za-z0-9\s]*$/" autofocus
+                                                                                       />
+                                                                                   </div>
+                                                                               </div>
+                                                                               <div class="col-md-12">
+                                                                                   <div class="form-group label-floating is-empty is-fileinput row">
+                                                                                       <div class="col-md-6 pdng-top13">
+                                                                                           <input type="file" class="form-control ng-pristine ng-valid ng-touched" style="opacity:100;position:relative" file-model="" ng-model="selectedPhotoFile" name="clientFile" tabindex="0" aria-invalid="false">
+                                                                                       </div>
+                                                                                       <div class="col-md-6">
+                                                                                           <button class="btn btn-success" tabindex="0" ng-click="uploadAssetPhotoFile()">
+                                                                                        <span class="btn-label">
+                                                                                            <i class="material-icons">file_upload</i>
+                                                                                        </span>Upload Docs
+                                                                                           </button>
+
+                                                                                       </div>
+                                                                                       <!--  <div class="col-md-12" ng-hide="!clientImportMsg()">
+                                                                                            <span class="card-title">Status - {{clientImportMsg()}}</span>
+                                                                                        </div> -->
+                                                                                       <span class="material-input"></span></div>
+                                                                               </div>
+
+                                                                           </div>
+
+
+                                                                        </div>
+
+                                                                    </div>
+
+                                                                   
 
 
                                                                 </div>
 
                                                             </div>
-
+                                                            </form>
                                                             <div class="panel panel-default" style="min-height: 200px;">
 
                                                                 <div class="panel-heading">
@@ -1425,19 +1427,22 @@
                                                                 </div>
                                                                 <div class="panel-body">
 
-                                                                    <div class="row docsRow">
 
-                                                                        <div class="col-md-2 txt-align-center DocsCon" ng-repeat="uploadFile in uploadFiles">
-                                                                           <div class="DeleteBtn">                                                                         
-                                                                             <i class="material-icons">close</i>
+                                                                   <div class="row">
+
+                                                                       <div class="col-md-2 txt-align-center" ng-repeat="uploadFile in uploadFiles">
+                                                                           <a href="#">
+                                                                               <img src="assets/img/Docs-icon.png" alt="docs" ng-click="showFile(uploadFile.id, uploadFile.file)"/>
+                                                                               <!-- <img src="assets/img/Docs-icon.png" alt="docs" /> -->
+                                                                           </a>
+                                                                           <p>{{uploadFile.title}}</p>
+                                                                           <div  ng-if="uploadFile.id == download">
+                                                                            <a href="{{content}}" download>download</a>
                                                                            </div>
-                                                                            <a href="#">
-                                                                                <img src="assets/img/Docs-icon.png" alt="docs" />
-                                                                            </a>
-                                                                            <p>{{uploadFile.title}}</p>
-                                                                        </div>
+                                                                       </div>
 
-                                                                    </div>
+
+                                                                   </div>
 
                                                                 </div>
 
@@ -1457,18 +1462,20 @@
                                                                             	 <i class="material-icons">close</i>
                                                                              </div>
                                                                             <a href="#">
-                                                                                <img src="assets/img/img.png" alt="docs" />
+                                                                                <img src="D:\asset\uploads\site\{{uploadPhoto.id}}\{{uploadPhoto.file}}" alt="docs" ng-click="showFile(uploadFile.id, uploadFile.file)"/>
                                                                             </a>
                                                                             <p>{{uploadPhoto.title}}</p>
+                                                                            <div ng-if="uploadFile.id == download">
+                                                                            <a href="{{content}}" download>download</a>
+                                                                           </div>
                                                                         </div>
-
 
                                                                     </div>
 
                                                                 </div>
 
                                                             </div>
-                                                        </form>
+
                                                         </div>
                                                     </div>
                                                     <div class="wizard-footer" >
