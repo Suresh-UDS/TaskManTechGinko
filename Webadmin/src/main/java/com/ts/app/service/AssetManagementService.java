@@ -250,8 +250,8 @@ public class AssetManagementService extends AbstractService {
 	
 	public boolean isDuplicatePPMSchedule(AssetPpmScheduleDTO assetPpmScheduleDTO) {
 	    log.debug("Asset Title "+assetPpmScheduleDTO.getTitle());
-		Asset asset = assetRepository.findByTitle(assetPpmScheduleDTO.getTitle());
-		if(asset != null) {
+	    AssetPPMSchedule assetPPMSchedule = assetPpmScheduleRepository.findByTitle(assetPpmScheduleDTO.getTitle());
+		if(assetPPMSchedule != null) {
 			return true;
 		}
 		return false;
