@@ -291,7 +291,7 @@ public class UserResource {
     public ResponseEntity<?> changeNewPassword(@RequestBody KeyAndPasswordDTO keyAndPasswordDTO){
         User user = userRepository.findOne(keyAndPasswordDTO.getUserId());
         if(user !=null){
-            user = userService.changeNewPassword(keyAndPasswordDTO.getUserName(), keyAndPasswordDTO.getNewPassword());
+            user = userService.changeNewPassword(keyAndPasswordDTO.getUserId(), keyAndPasswordDTO.getNewPassword());
             return new ResponseEntity<Object>("Username changed",HttpStatus.OK);
         }
         return new ResponseEntity<Object>("Username not found",HttpStatus.SERVICE_UNAVAILABLE);
