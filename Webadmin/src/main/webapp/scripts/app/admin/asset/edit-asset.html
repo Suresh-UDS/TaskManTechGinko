@@ -1503,7 +1503,7 @@
 
                                                                 <div class="col-md-6">
 
-                                                                    <div class="row">
+                                                                    <div class="row" >
 
                                                                         <div class="col-md-11">
                                                                             <div class="form-group">
@@ -1543,13 +1543,13 @@
                                                                 </div>
                                                                 <div class="col-md-6">
 
-                                                                   <div class="row">
+                                                                   <div class="row" >
 
                                                                        <div class="col-md-11">
                                                                            <div class="form-group">
                                                                                <label class="control-label">Photo Title</label>
                                                                                <input id='fileTitle'
-                                                                                      ng-model="file.title"
+                                                                                      ng-model="uploadAssetPhoto.title"
                                                                                       class='form-control'
                                                                                       name='fileTitle'
                                                                                       type='text' value=""
@@ -1562,10 +1562,10 @@
                                                                        <div class="col-md-12">
                                                                            <div class="form-group label-floating is-empty is-fileinput row">
                                                                                <div class="col-md-6 pdng-top13">
-                                                                                   <input type="file" class="form-control ng-pristine ng-valid ng-touched" style="opacity:100;position:relative" file-model="" ng-model="selectedClientFile" name="clientFile" tabindex="0" aria-invalid="false">
+                                                                                   <input type="file" class="form-control ng-pristine ng-valid ng-touched" style="opacity:100;position:relative" file-model="" ng-model="selectedPhotoFile" name="clientFile" tabindex="0" aria-invalid="false">
                                                                                </div>
                                                                                <div class="col-md-6">
-                                                                                   <button class="btn btn-success" tabindex="0">
+                                                                                   <button class="btn btn-success" tabindex="0" ng-click="uploadAssetPhotoFile()">
                                                                                 <span class="btn-label">
                                                                                     <i class="material-icons">file_upload</i>
                                                                                 </span>Upload Docs
@@ -1599,14 +1599,14 @@
                                                         </div>
                                                         <div class="panel-body">
 
-                                                           <div class="row">
+                                                           <div class="row" ng-init="getAllUploadedFiles();" >
 
                                                                <div class="col-md-2 txt-align-center" ng-repeat="uploadFile in uploadFiles">
                                                                    <a href="#">
                                                                        <img src="assets/img/Docs-icon.png" alt="docs" ng-click="showFile(uploadFile.id, uploadFile.file)"/>
                                                                    </a>
                                                                    <p>{{uploadFile.title}}</p>
-                                                                   <div ng-show="download">
+                                                                   <div  ng-if="uploadFile.id == download">
                                                                    	<a href="{{content}}" download>download</a>
                                                                    </div>
                                                                </div>
@@ -1624,14 +1624,14 @@
                                                         </div>
                                                         <div class="panel-body">
 
-                                                            <div class="row">
+                                                            <div class="row" ng-init="getAllUploadedPhotos();">
 
                                                                 <div class="col-md-2 txt-align-center" ng-repeat="uploadPhoto in uploadAssetPhotos">
                                                                     <a href="#">
-                                                                        <img src="assets/img/img.png" alt="docs" ng-click="showFile(uploadFile.id, uploadFile.file)"/>
+                                                                        <img src="D:\asset\uploads\site\{{uploadPhoto.id}}\{{uploadPhoto.file}}" alt="docs" ng-click="showFile(uploadFile.id, uploadFile.file)"/>
                                                                     </a>
                                                                     <p>{{uploadPhoto.title}}</p>
-                                                                    <div ng-show="download">
+                                                                    <div ng-if="uploadFile.id == download">
                                                                    	<a href="{{content}}" download>download</a>
                                                                    </div>
                                                                 </div>
