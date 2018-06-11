@@ -1359,7 +1359,8 @@ angular.module('timeSheetApp')
     	    		console.log(data);
     	    		if(data && data.checklistId) { 
     	    			console.log(data.checklistId);
-    	    			$scope.amcScheduleList.push(data);
+    	    			//$scope.amcScheduleList.push(data);
+                        $scope.loadAmcSchedule();
                         $scope.showNotifications('top','center','success','AMC Schedule Saved Successfully');
 
     	    			ChecklistComponent.findOne(data.checklistId).then(function(data){ 
@@ -1385,9 +1386,19 @@ angular.module('timeSheetApp')
 	    }
 	    
 	    $scope.loadAmcSchedule = function() { 
-	    	var assetId = $stateParams.id; 
+
+            if($scope.assetGen.id){
+
+                    var assetId= $scope.assetGen.id;
+
+                }else if($stateParams.id){
+
+                     var assetId = $stateParams.id;
+                }
+	    	 
 	    	AssetComponent.findByAssetAMC(assetId).then(function(data) { 
 	    		console.log(data);
+                $scope.amcScheduleList = "";
 	    		$scope.amcScheduleList = data;
                 console.log("AMC List" , $scope.amcScheduleList);
 	    	});
