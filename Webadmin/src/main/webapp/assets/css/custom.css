@@ -90,6 +90,25 @@ ul.checkList li
 {
     text-align: center;
 }
+.hiddenCheckList
+{
+    position: relative;
+}
+.CheckListBx
+{
+    display: none;
+    position: absolute;
+    top: -40px;
+    left: 70px;
+    border: 1px solid #ccc;
+    min-height: 60px;
+    border-radius: 5px;
+    background: #ffffff;
+}
+.hiddenCheckList:hover .CheckListBx
+{
+    display: block;
+}
 .orng-1
 {
     background: #ff7b00 !important;
@@ -456,7 +475,7 @@ textarea.form-control {
     right: 55px;
     top: -10px;
     display:none;
-    transition: all 1s ease;    
+    transition: all 1s ease;
 }
 .DeleteBtn i
 {
