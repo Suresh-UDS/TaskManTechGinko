@@ -948,6 +948,9 @@
                                                   <li class="active" ng-repeat="reading in assetReadings">
                                                       <a href=".Fuel" data-toggle="tab" ng-click="viewAssetReading(reading.id)">{{reading.name}}</a>
                                                   </li>
+                                                  <li class="active" ng-show="!assetReadings.length">
+                                                      <a href=".Fuel" data-toggle="tab">No_Readings</a>
+                                                  </li>
                                               </ul>
 
                                               <div class="tab-content TabsContent ViewTables" style="">
@@ -968,11 +971,14 @@
                                                                       </thead>
 
                                                                       <tbody>
-                                                                      <tr>
+                                                                      <tr ng-hide="noReading">
                                                                           <td>{{readingData.createdDate | date: "dd-MM-yyyy hh:mm:ss"}}</td>
                                                                           <td>{{readingData.initialValue}}&nbsp; {{readingData.uom}}</td>
                                                                           <td>{{readingData.finalValue}}&nbsp; {{readingData.uom}}</td>
                                                                           <td>{{readingData.consumption}}&nbsp; {{readingData.uom}}</td>
+                                                                      </tr>
+                                                                      <tr ng-show="noReading">
+                                                                      	<td colspan="4" align="center">No Readings</td>
                                                                       </tr>
                                                                       </tbody>
                                                                   </table>

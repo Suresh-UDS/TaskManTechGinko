@@ -1363,12 +1363,21 @@ angular.module('timeSheetApp')
 		/**
 		 * View Readings*/
         
+        $scope.noReading = false;
+        
         $scope.loadAssetReadings = function() {
         	var id = $stateParams.id;
         	AssetComponent.findByAssetReadings(id).then(function(data){ 
         		console.log('View Readings - ' +JSON.stringify(data));
-        		$scope.assetReadings = data;
-        		$scope.viewAssetReading(data[0].id);
+        		if(data.length > 0) { 
+        			$scope.assetReadings = data;
+            		$scope.viewAssetReading(data[0].id);
+        		}else{ 
+        			console.log('No readings');
+        			$scope.noReading = true;
+        			$scope.assetReadings = [];
+        		}
+        		
         	});
         }
         
