@@ -1359,6 +1359,28 @@ angular.module('timeSheetApp')
             window.print();
             document.body.innerHTML = originalContents;
         }
+        
+		/**
+		 * View Readings*/
+        
+        $scope.loadAssetReadings = function() {
+        	var id = $stateParams.id;
+        	AssetComponent.findByAssetReadings(id).then(function(data){ 
+        		console.log('View Readings - ' +JSON.stringify(data));
+        		$scope.assetReadings = data;
+        		$scope.viewAssetReading(data[0].id);
+        	});
+        }
+        
+        $scope.viewAssetReading = function(id) {
+        	AssetComponent.findByReadingId(id).then(function(data){ 
+        		console.log(data);
+        		$scope.readingData = data;
+        	});
+        	
+        }
+        
+        /**End view Readings*/        
 
 
     });
