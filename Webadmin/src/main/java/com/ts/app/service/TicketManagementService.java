@@ -464,4 +464,11 @@ public class TicketManagementService extends AbstractService {
 		//return exportUtil.readExportFile(fileName);
 		return exportUtil.readJobExportFile(fileName);
 	}
+
+	public List<TicketDTO> getAllAssetTickets(long assetId) {
+		List<Ticket> tickets = ticketRepository.findByAssetId(assetId);
+		return mapperUtil.toModelList(tickets, TicketDTO.class);
+	}
+	
+
 }
