@@ -41,7 +41,7 @@
                                                 </li>
                                                 <li class=""><a href=".ppm-schedule" data-toggle="tab" ng-click="uView('off')"
                                                                 >PPM Schedule</a></li>
-                                                <li class=""><a href=".amc-schedule" data-toggle="tab" ng-click="uView('off')"
+                                                <li class=""><a href=".amcschedule" data-toggle="tab" ng-click="uView('off')"
                                                                 >AMC schedule</a></li>
                                                 <li class=""><a href=".Config" data-toggle="tab" ng-click="uView('off')"
                                                 >Config</a></li>
@@ -1148,7 +1148,7 @@
                                                         </div>
                                                     </form>
                                                 </div>
-                                                <div class="tab-pane fade amc-schedule" id="amc-schedule" ng-init="loadAmcSchedule()">
+                                                <div class="tab-pane fade amcschedule" id="amc-schedule" ng-init="loadAmcSchedule()">
                                                     <form name="form4" role="form" novalidate
                                                     class="form-horizontal">
                                                     <div class="panel panel-default">
@@ -1160,7 +1160,7 @@
                                                                     <div class="form-group">
                                                                         <label class="control-label">Title</label>
                                                                         <input id='ppmTitle'
-                                                                               ng-model="asset.title"
+                                                                               ng-model="amcSchedule.title"
                                                                                class='form-control'
                                                                                name='ppmTitle'
                                                                                type='text' value=""
@@ -1168,63 +1168,80 @@
                                                                                ng-maxlength='250'
                                                                                ng-pattern="/^[A-Za-z0-9\s]*$/" autofocus
                                                                         />
+
+                                                                        <div ng-show="form4.$submitted || form4.ppmTitle.$touched">
+                                                                            <div ng-show="form4.ppmTitle.$dirty || form4.ppmTitle.$invalid">
+                                                                                <p class="help-block" style="color:maroon"
+                                                                                   ng-show="form4.ppmTitle.$error.required">
+                                                                                    Schedule title is required.
+                                                                                </p>
+                                                                                
+                                                                                <p class="help-block" style="color:maroon"
+                                                                                   ng-show="form4.assetTitle.$error.pattern">
+                                                                                    Schedule title can only contain letters, digits and space.
+                                                                                </p>
+                                                                            </div>
+                                                                        </div>
                                                                     </div>
                                                                 </div>
                                                                 <div class="col-md-4" ng-init="loadCheckList()">
                                                                     <div class="form-group selectcon is-empty SelectWithAddbtnCon">
-
-                                                                        <div class="" style="float:left;width:90%;">
-                                                                            <label class="control-label">Checklist</label>
-                                                                            <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                                                            <select class="form-control ng-pristine ng-valid ng-touched" ng-model="selectedChecklist" ng-options="checklist as checklist.name for checklist in checkLists" tabindex="0" aria-invalid="false">
-                                                                                <option value="" class="" selected="selected">Checklist ..</option>
-                                                                            </select>
-                                                                        </div>
-                                                                        <div class="" style="float:left;width:10%;">
-                                                                            <a href="javascript:;" data-toggle="collapse" data-parent="#accordian" data-target="#addAssetGroup" class="btn btn-round btn-fab btn-fab-mini btn-simple" aria-expanded="false" aria-controls="collapseExample">
-                                                                                <i class="material-icons">add</i>
-                                                                            </a>
-                                                                        </div>
-                                                                        <div class="clear"></div>
-                                                                        <div class="collapse" id="addAssetGroup">
-                                                                            <div class="">
-                                                                                <input class="input-desc ng-pristine ng-untouched ng-valid" id="assetgroupName" ng-model="" name="assetgroupName" type="text" value="" tabindex="0" aria-invalid="false">
-                                                                                <a class="btn btn-success" ng-click="" tabindex="0">Add</a>
+                                                                        <div class="row">
+                                                                            <div class="col-md-10 pad-r-0px">
+                                                                                <label class="control-label">Checklist</label>
+                                                                                <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
+                                                                                    <select class="form-control ng-pristine ng-valid ng-touched" ng-model="selectedChecklist" ng-options="checklist as checklist.name for checklist in checkLists" tabindex="0" aria-invalid="false">
+                                                                                        <option value="" >Select Checklist ..</option>
+                                                                                    </select>
                                                                             </div>
+                                                                            <div class="col-md-2">
+                                                                               <!--  <a href="javascript:;" data-toggle="collapse" data-parent="#accordian" data-target="#addChecklist" class="btn btn-round btn-fab btn-fab-mini btn-simple" aria-expanded="false" aria-controls="collapseExample">
+                                                                                    <i class="material-icons">add</i>
+                                                                                </a> -->
+                                                                                <a  has-permission="" class="btn btn-round btn-fab btn-fab-mini btn-simple"  onClick="$('#addChecklist').modal()" data-target="#myModal"><i class="material-icons">add</i><div class="ripple-container" ></div></a>
+                                                                            </div>
+                                                                         
+                                                                           <!--  <div class="clear"></div>
+                                                                            <div class="collapse" id="addAssetGroup">
+                                                                                <div class="">
+                                                                                    <input class="input-desc ng-pristine ng-untouched ng-valid" id="assetgroupName" ng-model="" name="assetgroupName" type="text" value="" tabindex="0" aria-invalid="false">
+                                                                                    <a class="btn btn-success" ng-click="" tabindex="0">Add</a>
+                                                                                </div>
+                                                                            </div>
+                                                                            <span class="material-input"></span></div> -->
                                                                         </div>
-                                                                        <span class="material-input"></span></div>
-                                                                </div>
-                                                                <div class="col-md-2">
-                                                                    <div class="form-group">
-                                                                        <label class="control-label">From Date</label>
-                                                                        <span class="form-control-feedback calender-icon"><i class="material-icons">date_range</i></span>
-                                                                        <input type="text" class="form-control datepicker"  id="dateFilterFrom"  placeholder="{{dateFilterFrom | date:'dd-MMM-yyyy'}}"/>
-
                                                                     </div>
                                                                 </div>
-                                                                <div class="col-md-2">
-                                                                    <div class="form-group">
-                                                                        <label class="control-label">To Date</label>
-                                                                        <span class="form-control-feedback calender-icon"><i class="material-icons">date_range</i></span>
-                                                                        <input type="text" class="form-control datepicker"  id="dateFilterFrom"  placeholder="{{dateFilterFrom | date:'dd-MMM-yyyy'}}"/>
+                                                                    <div class="col-md-2">
+                                                                        <div class="form-group">
+                                                                            <label class="control-label">From Date</label>
+                                                                            <span class="form-control-feedback calender-icon"><i class="material-icons">date_range</i></span>
+                                                                            <input type="text" class="form-control datepicker"  id="dateFilterAmcFrom"  placeholder="{{dateFilterAmcFrom | date:'dd-MMM-yyyy'}}"/>
 
+                                                                        </div>
                                                                     </div>
-                                                                </div>
+                                                                    <div class="col-md-2">
+                                                                        <div class="form-group">
+                                                                            <label class="control-label">To Date</label>
+                                                                            <span class="form-control-feedback calender-icon"><i class="material-icons">date_range</i></span>
+                                                                            <input type="text" class="form-control datepicker"  id="dateFilterAmcTo"  placeholder="{{dateFilterAmcTo | date:'dd-MMM-yyyy'}}"/>
 
-                                                                <!--<div class="col-md-2">-->
+                                                                        </div>
+                                                                    </div>
 
-                                                                <!--<div class="form-group" style="padding-top: 20px;">-->
-                                                                <!--<div class="checkbox">-->
-                                                                <!--<label>-->
-                                                                <!--<input type="checkbox" name="terms"> Active-->
-                                                                <!--</label>-->
-                                                                <!--</div>-->
-                                                                <!--</div>-->
+                                                                    <!--<div class="col-md-2">-->
+
+                                                                    <!--<div class="form-group" style="padding-top: 20px;">-->
+                                                                    <!--<div class="checkbox">-->
+                                                                    <!--<label>-->
+                                                                    <!--<input type="checkbox" name="terms"> Active-->
+                                                                    <!--</label>-->
+                                                                    <!--</div>-->
+                                                                    <!--</div>-->
 
 
-                                                                <!--</div>-->
-
-
+                                                                    <!--</div>-->
+                        
                                                             </div>
                                                             <div class="row">
                                                                 <div class="col-md-5">
@@ -1245,7 +1262,7 @@
                                                                             <label class="control-label">Select Frequency</label>
                                                                             <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
                                                                             <select class="form-control" ng-model="selectedFrequencyPrefix" ng-options="frequencyPrefix for frequencyPrefix in frequencyPrefixies">
-                                                                                <option value=""></option>
+                                                                                <option value="">Select..</option>
                                                                             </select>
                                                                         </div>
                                                                     </div>
@@ -1255,7 +1272,7 @@
                                                                         <label class="control-label">&nbsp;</label>
                                                                         <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
                                                                         <select class="form-control" ng-model="selectedFreqDuration" ng-options="frequencyDuration for frequencyDuration in frequencyDurations">
-                                                                            <option value=""></option>
+                                                                            <option value="">selected..</option>
                                                                         </select>
                                                                     </div>
                                                                 </div>
@@ -1264,7 +1281,7 @@
                                                                         <label class="control-label">&nbsp;</label>
                                                                         <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
                                                                         <select class="form-control" ng-model="selectedFrequency" ng-options="frequency for frequency in frequencies">
-                                                                            <option value=""></option>
+                                                                            <option value="">select..</option>
                                                                         </select>
                                                                     </div>
                                                                 </div>
@@ -1294,13 +1311,13 @@
 
                                                             <tr ng-repeat="amcSchedule in amcScheduleList">
                                                                 <td>{{amcSchedule.title}}</td>
+                                                                <td>{{amcSchedule.checklistName}}</td>
                                                                 <!-- <td>
                                                                     <div class="bootstrap-tagsinput">
-                                                                    	<span class="tag label label-info" ng-repeat="checkList in checklistItms">{{checkList.name}}<span data-role="remove"></span></span>
+                                                                        <span class="tag label label-info" ng-repeat="checkList in checklistItms">{{checkList.name}}<span data-role="remove"></span></span>
                                                                         <input type="text" placeholder="">
                                                                     </div>
                                                                 </td> -->
-                                                                <td>{{amcSchedule.checklistName}}</td>
                                                                 <td>{{amcSchedule.startDate}}</td>
                                                                 <td>{{amcSchedule.endDate}}</td>
                                                                 <td>{{amcSchedule.frequencyPrefix}}&nbsp; {{amcSchedule.frequencyDuration}}&nbsp; {{amcSchedule.frequency}}</td>
@@ -1628,10 +1645,10 @@
 
                                                                 <div class="col-md-2 txt-align-center" ng-repeat="uploadPhoto in uploadAssetPhotos">
                                                                     <a href="#">
-                                                                        <img src="D:\asset\uploads\site\{{uploadPhoto.id}}\{{uploadPhoto.file}}" alt="docs" ng-click="showFile(uploadFile.id, uploadFile.file)"/>
+                                                                        <img src="D:\asset\uploads\site\{{uploadPhoto.id}}\{{uploadPhoto.file}}" alt="docs" ng-click="showFile(uploadPhoto.id, uploadPhoto.file)"/>
                                                                     </a>
                                                                     <p>{{uploadPhoto.title}}</p>
-                                                                    <div ng-if="uploadFile.id == download">
+                                                                    <div ng-if="uploadPhoto.id == download">
                                                                    	<a href="{{content}}" download>download</a>
                                                                    </div>
                                                                 </div>
@@ -1957,3 +1974,30 @@
     </div>
 </div>
 <!-- Add param uom dialog -->
+<!-- Add checklist dialog -->
+
+<div id="addChecklist" class="add-input-modal modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"
+                        aria-hidden="true">&times;</button>
+                <h4 class="modal-title">Add Vendor</h4>
+            </div>
+            <div class="modal-body">
+
+                <form name="addChecklistForm">
+                    <div class="row">
+                        <div class="col-md-12 txt-align-center">
+                            <input class="" id="addChecklistName" ng-model="addChecklist.name"   name="addChecklistName" type="text" value="" ng-required="true"/>
+                            <input type="submit" ng-click="addChecklist()" data-dismiss="modal" class="btn btn-success" name="add" value="Add" ng-disabled="addChecklist.$invalid">
+                        </div>
+                    </div>
+                </form>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+<!-- Add checklist  dialog -->

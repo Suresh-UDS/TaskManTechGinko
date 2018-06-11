@@ -295,7 +295,7 @@ export class AssetView {
                 console.log("Asset config");
                 console.log(response);
                 this.assetDetails.config = response;
-
+                this.getAssetAMCSchedule();
             },err=>{
                 console.log("Error in getting asset config");
                 console.log(err);
@@ -339,8 +339,8 @@ export class AssetView {
             response=>{
                 this.componentService.closeLoader()
                 console.log("Get asset AMC response");
-                console.log(response);
                 this.assetDetails.amcs = response;
+                console.log(this.assetDetails.amcs);
             },
             error=>{
                 this.componentService.closeLoader()
