@@ -64,5 +64,8 @@ public interface TicketRepository extends JpaRepository<Ticket,Long>, JpaSpecifi
 
     @Query("SELECT t FROM Ticket t where t.status = :status and (t.site.id in (:siteIds) or t.employee.id in (:empIds) or t.assignedTo.id in (:empIds) ) and t.createdDate between :startDate and :endDate")
     Page<Ticket> findByStatusAndEmpId(@Param("siteIds") List<Long> siteIds, @Param("status") String status,@Param("empIds") List<Long> empIds,@Param("startDate") ZonedDateTime startDate,@Param("endDate") ZonedDateTime endDate, Pageable pageRequest);
+    
+    @Query("SELECT t FROM Ticket t WHERE t.asset.id = :assetId and t.active = 'Y' order by t.title")
+	List<Ticket> findByAssetId(@Param("assetId") long assetId);
 
 }
