@@ -794,8 +794,8 @@
                                                    <div class="row" ng-init="getAllUploadedFiles();" >
 
                                                        <div class="col-md-2 txt-align-center" ng-repeat="uploadFile in uploadFiles">
-                                                           <a href="#">
-                                                               <img src="assets/img/Docs-icon.png" alt="docs" ng-click="showFile(uploadFile.id, uploadFile.file)"/>
+                                                           <a href="#" ng-click="showFile(uploadFile.id, uploadFile.file)">
+                                                               <img src="assets/img/Docs-icon.png" alt="docs" />
                                                            </a>
                                                            <p>{{uploadFile.title}}</p>
                                                            <div  ng-if="uploadFile.id == download">
@@ -820,7 +820,8 @@
 
                                                         <div class="col-md-2 txt-align-center" ng-repeat="uploadPhoto in uploadAssetPhotos">
                                                             <a href="#">
-                                                                <img src="D:\asset\uploads\site\{{uploadPhoto.id}}\{{uploadPhoto.file}}" alt="docs" ng-click="showFile(uploadPhoto.id, uploadPhoto.file)"/>
+                                                                <!-- <img src="D:\asset\uploads\site\{{uploadPhoto.id}}\{{uploadPhoto.file}}" alt="docs" ng-click="showFile(uploadPhoto.id, uploadPhoto.file)"/> -->
+                                                                 <img src="assets/img/img.png" alt="docs"  ng-click="showFile(uploadPhoto.id, uploadPhoto.file)" />
                                                             </a>
                                                             <p>{{uploadPhoto.title}}</p>
                                                             <div ng-if="uploadPhoto.id == download">

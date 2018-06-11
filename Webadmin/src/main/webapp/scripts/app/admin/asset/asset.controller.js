@@ -44,6 +44,7 @@ angular.module('timeSheetApp')
         $scope.uploadAsset = {}; 
         $scope.uploadAssetPhoto = {};
         $scope.amcScheduleList = [];
+        $scope.ppmscheduleList ={};
 
         $scope.asset = {};
 
@@ -82,6 +83,17 @@ angular.module('timeSheetApp')
             plannedStart : false,
             plannedEnd : false,
         }
+
+        $scope.amcSchedule = {};
+        $scope.selectedChecklist ={};
+        $scope.selectedFrequencyPrefix ={};
+        $scope.selectedFrequency={};
+        $scope.selectedFreqDuration={};
+
+        $scope.selectedChecklist1 ={};
+        $scope.selectedFrequencyPrefix1 ={};
+        $scope.selectedFrequency1={};
+        $scope.selectedFreqDuration1={};
 
        
 
@@ -133,11 +145,19 @@ angular.module('timeSheetApp')
                      $scope.assetPPM.assetId = $stateParams.id;
                 }
 
-            	$scope.assetPPM.startDate = $scope.assetPPM.dateFilterFrom;
-            	$scope.assetPPM.endDate = $scope.assetPPM.dateFilterTo;
-            	$scope.assetPPM.frequencyPrefix = $scope.selectedFrequency;
-            	$scope.assetPPM.frequencyDuration = $scope.selectedTimeInterval;
-            	$scope.assetPPM.frequency = $scope.selectedFrequnceyOccurrence;
+                if($scope.selectedChecklist1){ 
+                    $scope.assetPPM.checklistId = $scope.selectedChecklist1.id;
+                }
+                
+                if($scope.selectedFrequencyPrefix1) { 
+                    $scope.assetPPM.frequencyPrefix = $scope.selectedFrequencyPrefix1;
+                }
+                if($scope.selectedFrequency1) { 
+                    $scope.assetPPM.frequency = $scope.selectedFrequency1;
+                }
+                if($scope.selectedFreqDuration1) { 
+                    $scope.assetPPM.frequencyDuration = $scope.selectedFreqDuration1;
+                }
         
         	
             	AssetComponent.createPPM($scope.assetPPM).then(function(response) {
@@ -555,12 +575,15 @@ angular.module('timeSheetApp')
                 $scope.assetEditDate = e.date._d;
         });
 
-        $('input#dateFilterFrom').on('dp.change', function(e){
-            $scope.assetPPM.dateFilterFrom = e.date._d;
+        $('input#dateFilterPpmFrom').on('dp.change', function(e){
+
+            $scope.assetPPM.startDate = e.date._d;
+            
         });
         
-        $('input#dateFilterTo').on('dp.change', function(e){
-            $scope.assetPPM.dateFilterTo = e.date._d;
+        $('input#dateFilterPpmTo').on('dp.change', function(e){
+  
+            $scope.assetPPM.endDate =  e.date._d;
         });
         
          /* Create and save asset */
@@ -837,7 +860,7 @@ angular.module('timeSheetApp')
 
          }
         
-        $scope.loadPPMSchedule = function(assetId){
+        $scope.loadPPMSchedule = function(){
         	
         	var currPageVal = ($scope.pages ? $scope.pages.currPage : 1);
             if(!$scope.searchCriteria) {
@@ -869,11 +892,19 @@ angular.module('timeSheetApp')
                 //$scope.assets = '';
                 //$scope.assetsLoader = false;
                 //$scope.loadPageTop();
+
+                if($scope.assetGen.id){
+
+                   $scope.searchCriteria.assetId = $scope.assetGen.id;
+
+                }else if($stateParams.id){
+
+                     $scope.searchCriteria.assetId = $stateParams.id;
+                }
                 
-        	console.log(">>> loading ppm! asset id is "+assetId);
-        	$scope.searchCriteria.assetId = assetId;
+        	console.log(">>> loading ppm! asset id is "+ $scope.searchCriteria.assetId);
         	AssetComponent.findPPMSchedule($scope.searchCriteria).then(function (data) {
-                $scope.ppmschedule = data.transactions;
+                $scope.ppmscheduleList = data.transactions;
                 //$scope.projectsLoader = true;
 
                 /*
@@ -1266,11 +1297,7 @@ angular.module('timeSheetApp')
 	    
 	    /* AMC schedule */	    
 	    
-	    $scope.amcSchedule = {};
-	    $scope.selectedChecklist;
-	    $scope.selectedFrequencyPrefix;
-	    $scope.selectedFrequency;
-	    $scope.selectedFreqDuration;
+	   
 	    
 	    $scope.loadFreq = function() { 
 	    	AssetComponent.getAllFrequencies().then(function(data){ 
