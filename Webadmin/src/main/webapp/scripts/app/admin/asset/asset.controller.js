@@ -43,6 +43,7 @@ angular.module('timeSheetApp')
         $scope.photoObj = {};
         $scope.uploadAsset = {}; 
         $scope.uploadAssetPhoto = {};
+        $scope.amcScheduleList = [];
 
         $scope.asset = {};
 
@@ -1080,7 +1081,7 @@ angular.module('timeSheetApp')
                 } else {
                     $scope.error = 'ERROR';
                 }
-            });;
+            });
 
 	    };
 	    
@@ -1315,26 +1316,29 @@ angular.module('timeSheetApp')
           /*  });
         }*/
 	    
-	    $scope.amcScheduleList = [];
+	    
 	    
 	    
 	    $scope.saveAmcSchedule = function() { 
 
-    	    	console.log($scope.selectedChecklist);
-
-               if(!$scope.assetGen.id && !$stateParams.id){
+            if(!$scope.assetGen.id && !$stateParams.id){
             
                   $scope.showNotifications('top','center','danger','Please create asset first..');
 
                 }else{
 
                 if($scope.assetGen.id){
+
                     $scope.amcSchedule.assetId= $scope.assetGen.id;
 
                 }else if($stateParams.id){
 
                      $scope.amcSchedule.assetId = $stateParams.id;
                 }
+
+    	    	console.log($scope.selectedChecklist);
+
+               
     	    	if($scope.selectedChecklist){ 
     	    		$scope.amcSchedule.checklistId = $scope.selectedChecklist.id;
     	    	}
@@ -1355,23 +1359,46 @@ angular.module('timeSheetApp')
     	    		console.log(data);
     	    		if(data && data.checklistId) { 
     	    			console.log(data.checklistId);
-    	    			$scope.amcScheduleList.push(data);
+    	    			//$scope.amcScheduleList.push(data);
+                        $scope.loadAmcSchedule();
+                        $scope.showNotifications('top','center','success','AMC Schedule Saved Successfully');
 
     	    			ChecklistComponent.findOne(data.checklistId).then(function(data){ 
     	    				$scope.checklistItms = data.items;
     	    				console.log($scope.checklistItms);
     	    			});
     	    		}
-    	    	});
+    	    	}).catch(function (response) {
+                
+                if (response.status === 400 && response.data.message === 'error.duplicateRecordError') {
+                    $scope.errorProjectExists = 'ERROR';
+                    $scope.showNotifications('top','center','danger','AMC Schedule Already Exists');
+                } else {
+                    $scope.error = 'ERROR';
+                     $scope.showNotifications('top','center','danger','Error in creating AMC Schedule. Please try again later..');
+                }
+
+               
+            });
 
             }
 	    	
 	    }
 	    
 	    $scope.loadAmcSchedule = function() { 
-	    	var assetId = $stateParams.id; 
+
+            if($scope.assetGen.id){
+
+                    var assetId= $scope.assetGen.id;
+
+                }else if($stateParams.id){
+
+                     var assetId = $stateParams.id;
+                }
+	    	 
 	    	AssetComponent.findByAssetAMC(assetId).then(function(data) { 
 	    		console.log(data);
+                $scope.amcScheduleList = "";
 	    		$scope.amcScheduleList = data;
                 console.log("AMC List" , $scope.amcScheduleList);
 	    	});
