@@ -47,6 +47,10 @@ public interface UserRepository extends JpaRepository<User, Long> {
 	@Query("SELECT u FROM User u WHERE u.login like '%' || :userLogin || '%' order by u.id")
 	Page<User> findByLogin(@Param("userLogin") String userLogin, Pageable pageRequest);
 
+    @Query("SELECT u FROM User u WHERE u.login like '%' || :userLogin || '%' order by u.id")
+    User findByLogin(@Param("userLogin") String userLogin);
+
+
     @Query("SELECT u FROM User u WHERE u.login like '%' || :userLogin || '%' or u.firstName like '%' || :userFirstName || '%' or u.lastName like '%' || :userLastName || '%' or u.email like '%' || :userEmail || '%' or u.userRole.id = :userRoleId")
     Page<User> findByLoginOrFirsNameOrLastNameOrRole(@Param("userLogin") String userLogin,@Param("userFirstName") String userFirstName,@Param("userLastName") String userLastName,@Param("userEmail") String email,@Param("userRoleId") long userRoleId, Pageable pageRequest);
 
