@@ -70,6 +70,13 @@ angular.module('timeSheetApp')
                 console.log(response);
                 return response.data;
             })
+        },
+        
+        getTicketsByAssetId : function(id) { 
+        	return $http.get('api/ticket/'+id+'/view').then(function(response) { 
+        		console.log(response);
+        		return response.data;
+        	});
         }
     };
 });
