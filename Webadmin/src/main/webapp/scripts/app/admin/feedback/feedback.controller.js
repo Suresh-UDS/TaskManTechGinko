@@ -252,10 +252,10 @@ angular.module('timeSheetApp')
                 $scope.data = [];
                 $scope.label = [];
                 $scope.datas = [];
-                $scope.options = {}
-                $scope.options.legend = { "display" : true}
-                $scope.option = {}
-                $scope.option.legend = { "display" : true}
+//                $scope.options = {}
+//                $scope.options.legend = { "display" : true}
+//                $scope.option = {}
+//                $scope.option.legend = { "display" : true}
                 if($scope.feedbackReport.weeklyZone && $scope.feedbackReport.weeklyZone.length > 0) {
                     var zoneDateWiseRating = $scope.feedbackReport.weeklyZone;
                     var zoneDateWiseDataArr = [];
