@@ -938,7 +938,7 @@
                                                 </div>
                                                <div class="tab-pane fade ppm-schedule" id="ppm-schedule" ng-init="loadPPMSchedule()" >
                                                             <form name="form3" role="form" novalidate
-                                                        class="form-horizontal" ng-init="initPPMSchedule()">
+                                                        class="form-horizontal" >
                                                             <div class="panel panel-default">
                                                                 <div class="panel-heading">New Schedule</div>
                                                                 <div class="panel-body">
@@ -1141,7 +1141,7 @@
 
                                                                     <tbody>
 
-                                                                        <tr ng-repeat="ppmschedule in ppmscheduleList">
+                                                                        <tr ng-repeat="ppmschedule in ppmscheduleList"> 
                                                                             <td>{{ppmschedule.title}}</td>
                                                                            <td class="hiddenCheckList">{{ppmschedule.checklistName}}
 

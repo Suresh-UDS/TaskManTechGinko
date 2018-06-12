@@ -43,7 +43,7 @@ angular.module('timeSheetApp')
         $scope.photoObj = {};
         $scope.uploadAsset = {}; 
         $scope.uploadAssetPhoto = {};
-        $scope.amcScheduleList = [];
+        $scope.amcScheduleList = {};
         $scope.ppmscheduleList ={};
 
         $scope.asset = {};
@@ -1026,6 +1026,7 @@ angular.module('timeSheetApp')
 
                  $scope.uploadObj.assetId = $stateParams.id;
             }
+
 	    	
 	    	AssetComponent.getAllUploadedFiles($scope.uploadObj).then(function(data){ 
                 $scope.uploadFiles = [];
@@ -1073,6 +1074,7 @@ angular.module('timeSheetApp')
 
                          $scope.uploadAsset.assetId = $stateParams.id;
                     }
+
 
     	        	$scope.uploadAsset.uploadFile = $scope.selectedClientFile;
     	        	//$scope.uploadAsset.assetId = 1;
