@@ -352,7 +352,7 @@ public class AssetResource {
 	
 	@RequestMapping(value = "/assets/saveReadings", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> saveAssetReadings(@Valid @RequestBody AssetParameterReadingDTO assetParamReadingDTO, HttpServletRequest request) {
-		log.debug("Save Asset Parameter Reading" +assetParamReadingDTO.getAssetName());
+		log.debug("Save Asset Parameter Reading" +assetParamReadingDTO.getName());
 		try{ 
 			assetParamReadingDTO.setUserId(SecurityUtils.getCurrentUserId());
 			assetParamReadingDTO = assetService.saveAssetReadings(assetParamReadingDTO);
@@ -390,10 +390,10 @@ public class AssetResource {
 		return result;
 	}
 	
-	@RequestMapping(value = "/assets/{assetId}/getLatestReading", method = RequestMethod.GET)
-	public AssetParameterReading getLatestReading(@PathVariable("assetId") long assetId) {
-		AssetParameterReading result = null;
-		result = assetService.getLatestParamReading(assetId);
+	@RequestMapping(value = "/assets/{assetId}/getLatestReading/{assetParamId}", method = RequestMethod.GET)
+	public AssetParameterReadingDTO getLatestReading(@PathVariable("assetId") long assetId, @PathVariable("assetParamId") long assetParamId) {
+		AssetParameterReadingDTO result = null;
+		result = assetService.getLatestParamReading(assetId, assetParamId);
 		return result;
 	}
 	

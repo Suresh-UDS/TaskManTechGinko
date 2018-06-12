@@ -41,7 +41,7 @@ public class AssetParameterReadingDTO extends BaseDTO implements Serializable {
 	
 	private long jobId;
 	
-	private long parameterConfigId;
+	private long assetParameterConfigId;
 	
 	private boolean consumptionMonitoringRequired;
 
@@ -125,12 +125,12 @@ public class AssetParameterReadingDTO extends BaseDTO implements Serializable {
 		this.jobId = jobId;
 	}
 
-	public long getParameterConfigId() {
-		return parameterConfigId;
+	public long getAssetParameterConfigId() {
+		return assetParameterConfigId;
 	}
 
-	public void setParameterConfigId(long parameterConfigId) {
-		this.parameterConfigId = parameterConfigId;
+	public void setAssetParameterConfigId(long assetParameterConfigId) {
+		this.assetParameterConfigId = assetParameterConfigId;
 	}
 
 	public boolean isConsumptionMonitoringRequired() {

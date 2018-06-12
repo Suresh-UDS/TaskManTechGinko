@@ -36,6 +36,7 @@ import com.ts.app.domain.EmployeeProjectSite;
 import com.ts.app.domain.Frequency;
 import com.ts.app.domain.FrequencyDuration;
 import com.ts.app.domain.FrequencyPrefix;
+import com.ts.app.domain.Job;
 import com.ts.app.domain.Manufacturer;
 import com.ts.app.domain.ParameterConfig;
 import com.ts.app.domain.Project;
@@ -913,6 +914,14 @@ public class AssetManagementService extends AbstractService {
 		assetParameterReading.setActive(AssetParameterReading.ACTIVE_YES);
 		Asset asset = assetRepository.findOne(assetParamReadingDTO.getAssetId());
 		assetParameterReading.setAsset(asset);
+		if(assetParamReadingDTO.getJobId() > 0) {
+			Job jobEntity = jobRepository.findOne(assetParamReadingDTO.getJobId());
+			assetParameterReading.setJob(jobEntity);
+		}else{ 
+			assetParameterReading.setJob(null);
+		}
+		AssetParameterConfig assetParameterConfig = assetParamConfigRepository.findOne(assetParamReadingDTO.getAssetParameterConfigId());
+		assetParameterReading.setAssetParameterConfig(assetParameterConfig);
 		assetParameterReading = assetParamReadingRepository.save(assetParameterReading);
 		assetParamReadingDTO = mapperUtil.toModel(assetParameterReading, AssetParameterReadingDTO.class);
 		return assetParamReadingDTO;
@@ -942,9 +951,10 @@ public class AssetManagementService extends AbstractService {
 		return assetParameterReadingDTO;
 	}
 
-	public AssetParameterReading getLatestParamReading(long assetId) {
-		AssetParameterReading assetParamReadings = assetRepository.findTopByNameOrderByCreatedDate(assetId);
-		return assetParamReadings;
+	public AssetParameterReadingDTO getLatestParamReading(long assetId, long assetParamId) {
+		List<AssetParameterReading> assetParamReadings = assetRepository.findAssetReadingById(assetId, assetParamId);
+		AssetParameterReading assetLatestParamReading = assetParamReadings.get(0);
+		return mapperUtil.toModel(assetLatestParamReading, AssetParameterReadingDTO.class);
 	}
 	
 	@Transactional
