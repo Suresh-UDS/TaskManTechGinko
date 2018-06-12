@@ -82,7 +82,7 @@ angular.module('timeSheetApp')
 
          $scope.loadingStop = function(){
             
-            console.log("Calling loader");
+            //console.log("Calling loader");
             $('.pageCenter').hide();$('.overlay').hide();
                     
         };
