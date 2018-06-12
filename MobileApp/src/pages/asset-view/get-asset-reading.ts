@@ -71,7 +71,7 @@ export class GetAssetReading {
 
         popover.onDidDismiss(data=>
         {
-            console.log(data)
+            console.log(data);
             if(data)
             {
                 this.takenImages.pop(data);
@@ -90,7 +90,7 @@ export class GetAssetReading {
             consumption:reading.currentValue-reading.previousValue,
             value:"0.88",
             assetId:reading.assetId,
-            id:reading.id,
+            assetParameterConfigId:reading.id,
             consumptionMonitoringRequired:reading.consumptionMonitoringRequired,
         };
         this.assetService.saveReading(assetReading).subscribe(

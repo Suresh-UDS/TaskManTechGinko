@@ -9,7 +9,6 @@
 
 <ion-content padding>
     <ion-list *ngFor="let config of assetDetails.config;let i=index;">
-
         <ion-row class="margin0 border-btm-blk" data-toggle="collapse" [attr.data-target]="'#'+i">
             <ion-col col-2 class="ver-center">
                 <button ion-button clear color="primary" class="">
@@ -17,7 +16,7 @@
                 </button>
             </ion-col>
             <ion-col col-8 class="ver-center" text-center>
-                    <h5 text-center class="margin0">{{ config.assetTitle }}</h5>
+                    <h5 text-center class="margin0">{{ config.name}}</h5>
             </ion-col>
             <ion-col col-2 class="ver-center border-up">
                 <ion-icon name="ios-arrow-down" item-right class="clr-orange" ></ion-icon>
@@ -83,7 +82,5 @@
             </div>
         </div>
     </ion-list>
-
-
 </ion-content>
 
