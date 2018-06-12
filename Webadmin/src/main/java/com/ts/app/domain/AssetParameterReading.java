@@ -151,6 +151,5 @@ public class AssetParameterReading extends AbstractAuditingEntity implements Ser
 	public void setConsumptionMonitoringRequired(boolean consumptionMonitoringRequired) {
 		this.consumptionMonitoringRequired = consumptionMonitoringRequired;
 	}
-
     
 }

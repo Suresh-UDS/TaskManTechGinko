@@ -45,6 +45,7 @@ public class AssetParameterReadingDTO extends BaseDTO implements Serializable {
 	
 	private boolean consumptionMonitoringRequired;
 
+
     public Long getId() {
         return id;
     }
