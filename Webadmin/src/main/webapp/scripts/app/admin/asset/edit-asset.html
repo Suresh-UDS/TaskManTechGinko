@@ -936,6 +936,28 @@
                                                     </div>
 
                                                 </div>
+                                                  <!-- <div class="tab-pane fade ppm-schedule" id="ppm-schedule" ng-init="loadPPMSchedule()" >
+                                                            <form name="form3" role="form" novalidate
+                                                        class="form-horizontal" >
+                                                            <div class="panel panel-default">
+                                                    <div class="panel-heading">New Schedule</div>
+                                                    <div class="panel-body">
+                                                        <div class="row">
+
+                                                            <div class="col-md-4">
+                                                                <div class="form-group">
+                                                                    <label class="control-label">Title</label>
+                                                                    <input id='ppmTitle'
+                                                                           ng-model="assetPPM.title"
+                                                                           class='form-control'
+                                                                           name='ppmTitle'
+                                                                           type='text' value=""
+                                                                           ng-minlength='5'
+                                                                           ng-maxlength='250'
+                                                                           ng-pattern="/^[A-Za-z0-9\s]*$/" autofocus
+                                                                    />
+                                                                </div> -->
+
                                                 <div class="tab-pane fade ppm-schedule" id="ppm-schedulee" >
                                                     <form name="form3" role="form" novalidate
                                                     class="form-horizontal" ng-init="initPPMSchedule()">
@@ -956,6 +978,7 @@
                                                                                    ng-maxlength='250'
                                                                                    ng-pattern="/^[A-Za-z0-9\s]*$/" autofocus
                                                                             />
+
                                                                         </div>
                                                                     </div>
                                                                     <div class="col-md-4 checklistLftCon">
@@ -1124,7 +1147,13 @@
 
                                                                 </thead>
 
+<<<<<<< HEAD
+                                                                        <tr ng-repeat="ppmschedule in ppmscheduleList"> 
+                                                                            <td>{{ppmschedule.title}}</td>
+                                                                           <td class="hiddenCheckList">{{ppmschedule.checklistName}}
+=======
                                                                 <tbody>
+>>>>>>> 5e90b5930b9a5cdd492f92837d675fb758a2bb23
 
                                                                     <tr>
                                                                         <td>Schedule Title</td>
