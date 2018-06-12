@@ -115,7 +115,7 @@ public class SchedulerHelperService extends AbstractService {
 								if (empCntInShift == 0) {
 									empCntInShift = schedulerService.employeeRepository.findCountBySiteId(site.getId());
 								}
-	
+
 								long attendanceCount = schedulerService.attendanceRepository.findCountBySiteAndCheckInTime(site.getId(), DateUtil.convertToSQLDate(startCal.getTime()),
 										DateUtil.convertToSQLDate(endCal.getTime()));
 								// List<EmployeeAttendanceReport> empAttnList =
@@ -123,7 +123,7 @@ public class SchedulerHelperService extends AbstractService {
 								// DateUtil.convertToSQLDate(cal.getTime()),
 								// DateUtil.convertToSQLDate(cal.getTime()));
 								long absentCount = empCntInShift - attendanceCount;
-	
+
 								// ExportResult exportResult = new ExportResult();
 								// exportResult = exportUtil.writeAttendanceReportToFile(proj.getName(),
 								// empAttnList, null, exportResult);
@@ -152,7 +152,7 @@ public class SchedulerHelperService extends AbstractService {
 							}
 						} else {
 							empCntInShift = schedulerService.employeeRepository.findCountBySiteId(site.getId());
-	
+
 							long attendanceCount = schedulerService.attendanceRepository.findCountBySiteAndCheckInTime(site.getId(), DateUtil.convertToSQLDate(cal.getTime()),
 									DateUtil.convertToSQLDate(dayEndcal.getTime()));
 							// List<EmployeeAttendanceReport> empAttnList =
@@ -160,7 +160,7 @@ public class SchedulerHelperService extends AbstractService {
 							// DateUtil.convertToSQLDate(cal.getTime()),
 							// DateUtil.convertToSQLDate(cal.getTime()));
 							long absentCount = empCntInShift - attendanceCount;
-	
+
 							// ExportResult exportResult = new ExportResult();
 							// exportResult = exportUtil.writeAttendanceReportToFile(proj.getName(),
 							// empAttnList, null, exportResult);
@@ -177,9 +177,9 @@ public class SchedulerHelperService extends AbstractService {
 							projEmployees += empCntInShift;
 							projPresent += attendanceCount;
 							projAbsent += absentCount;
-	
+
 							consolidatedData.add(data);
-	
+
 						}
 						siteAttnList = schedulerService.attendanceRepository.findBySiteId(site.getId(), DateUtil.convertToSQLDate(cal.getTime()),
 								DateUtil.convertToSQLDate(dayEndcal.getTime()));
@@ -219,15 +219,15 @@ public class SchedulerHelperService extends AbstractService {
 					if (CollectionUtils.isNotEmpty(settings)) {
 						attendanceReportEmails = settings.get(0);
 					}
-					
+
 					Map<String, String> summaryMap = new HashMap<String, String>();
 					//get total employee count
 					long projEmpCnt = schedulerService.employeeRepository.findCountByProjectId(proj.getId());
-					
+
 					summaryMap.put("TotalEmployees", String.valueOf(projEmpCnt));
 					summaryMap.put("TotalPresent", String.valueOf(projPresent));
 					summaryMap.put("TotalAbsent", String.valueOf(projEmpCnt - projPresent));
-	
+
 					content = new StringBuilder("Client Name - " + proj.getName() + SchedulerService.LINE_SEPARATOR);
 					content.append("Total employees - " + projEmpCnt + SchedulerService.LINE_SEPARATOR);
 					content.append("Present - " + projPresent + SchedulerService.LINE_SEPARATOR);
@@ -245,7 +245,7 @@ public class SchedulerHelperService extends AbstractService {
 		}
 	}
 
-	@Transactional 
+	@Transactional
 	public void autoCheckOutAttendance(SchedulerService schedulerService) {
 		Calendar currCal = Calendar.getInstance();
 		Calendar startCal = Calendar.getInstance();
@@ -258,13 +258,13 @@ public class SchedulerHelperService extends AbstractService {
 		prevDayEndCal.add(Calendar.DAY_OF_MONTH, -1);
 		prevDayEndCal.set(Calendar.HOUR_OF_DAY, 23);
 		prevDayEndCal.set(Calendar.MINUTE, 59);
-	
+
 		java.sql.Date startDate = new java.sql.Date(startCal.getTimeInMillis());
 		java.sql.Date endDate = new java.sql.Date(endCal.getTimeInMillis());
 		java.sql.Date currDate = new java.sql.Date(currCal.getTimeInMillis());
 		List<Attendance> dailyAttnList = schedulerService.attendanceRepository.findByCheckInDateAndNotCheckout(currDate);
 		schedulerService.log.debug("Found {} Daily Attendance", dailyAttnList.size());
-	
+
 		if (CollectionUtils.isNotEmpty(dailyAttnList)) {
 			for (Attendance dailyAttn : dailyAttnList) {
 				try {
@@ -305,10 +305,16 @@ public class SchedulerHelperService extends AbstractService {
 								checkInCal.setTimeInMillis(dailyAttn.getCheckInTime().getTime());
 								schedulerService.log.debug("checkin cal - "+ checkInCal.getTime());
 								if (empShift != null) { // if employee shift assignment matches with site shift
-									if (checkInCal.before(shiftEndCal.getTime()) && shiftEndCal.getTime().before(currCal.getTime())) { // if the employee checked in before the
-																																		// shift end time
+                                    schedulerService.log.debug("Employee shift found");
+                                    schedulerService.log.debug("Shift end time "+shiftEndCal.getTime());
+                                    schedulerService.log.debug("Current time "+currCal.getTime());
+                                    schedulerService.log.debug("checkiin time "+checkInCal.getTime());
+                                    // shift end time
+                                    if (checkInCal.before(shiftEndCal) && shiftEndCal.before(currCal)) { // if the employee checked in before the
 										// send alert
-										if (currCal.getTime().after(endCal.getTime())) { // if the shift ends before EOD midnight.
+                                        schedulerService.log.debug("Shift end time "+shiftEndCal.getTime());
+                                        schedulerService.log.debug("Current time "+currCal.getTime());
+										if (currCal.after(endCal)) { // if the shift ends before EOD midnight.
 											// check out automatically
 											// dailyAttn.setCheckOutTime(new Timestamp(currCal.getTimeInMillis()));
 											// dailyAttn.setShiftEndTime(endTime);
@@ -316,7 +322,7 @@ public class SchedulerHelperService extends AbstractService {
 											// dailyAttn.setLongitudeOut(dailyAttn.getLongitudeOut());
 											dailyAttn.setNotCheckedOut(true); // mark the attendance as not checked out.
 											schedulerService.attendanceRepository.save(dailyAttn);
-										} else if (currCal.getTime().after(prevDayEndCal.getTime())) {
+										} else if (currCal.after(prevDayEndCal)) {
 											dailyAttn.setNotCheckedOut(true); // mark the attendance as not checked out.
 											schedulerService.attendanceRepository.save(dailyAttn);
 										}
@@ -330,7 +336,9 @@ public class SchedulerHelperService extends AbstractService {
 										userIds[0] = userId;
 										schedulerService.pushService.sendAttendanceCheckoutAlert(userIds, values);
 										break;
-									}
+									}else{
+                                        schedulerService.log.debug("Shift end time else condition");
+                                    }
 								} else {
 									if (checkInCal.before(prevDayEndCal) && currCal.after(prevDayEndCal)) {
 										dailyAttn.setNotCheckedOut(true); // mark the attendance as not checked out.
@@ -344,12 +352,12 @@ public class SchedulerHelperService extends AbstractService {
 										userIds[0] = userId;
 										schedulerService.pushService.sendAttendanceCheckoutAlert(userIds, values);
 										break;
-									} 
+									}
 								}
 							}
 						}
 					}
-	
+
 				} catch (Exception ex) {
 					schedulerService.log.warn("Failed to checkout daily attendance  ", ex);
 				}
@@ -357,6 +365,6 @@ public class SchedulerHelperService extends AbstractService {
 		}
 	}
 
-	
+
 
 }
