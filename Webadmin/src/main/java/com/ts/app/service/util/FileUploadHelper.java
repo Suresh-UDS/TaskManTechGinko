@@ -380,32 +380,4 @@ public class FileUploadHelper {
             return MediaType.APPLICATION_OCTET_STREAM;
         }
     }
-    
-    public String deleteAssetFile(String assetCode, long siteId, String imageFileName) {
-		String filePath = env.getProperty("asset.file.path");
-		filePath += "/" + siteId;
-		filePath += "/" + assetCode;
-		filePath += "/" + imageFileName;
-		log.debug("Site Id -" + siteId +", imageFilePath - " + filePath);
-		try {
-			File file = new File(filePath);
-			log.debug("imageFilePath - " + file);
-			if(file.exists()) {
-				if(file.delete()) {
-					log.debug("Deleted imageFile - " + imageFileName);
-					return imageFileName;
-				}else {
-					log.debug("Failed to Delete a imageFile - " + imageFileName);
-				}
-			}
-		} catch(Exception e) { 
-			log.info("Error while deleting a file -" +e);
-		}
-		
-		return null;
-	}
-    
-    
-    
-    
 }

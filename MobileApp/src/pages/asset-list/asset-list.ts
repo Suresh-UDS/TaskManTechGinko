@@ -141,7 +141,6 @@ export class AssetList {
     }
 
     // Scroll
-
     doInfiniteTodaysJobs(infiniteScroll){
         console.log('Begin async operation');
         console.log(infiniteScroll);
