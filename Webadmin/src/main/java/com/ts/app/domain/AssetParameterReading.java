@@ -49,9 +49,20 @@ public class AssetParameterReading extends AbstractAuditingEntity implements Ser
     @Column(nullable = true)
     private double value;
     
+    @Column(nullable = true)
+    private boolean consumptionMonitoringRequired;
+    
     @ManyToOne(fetch = FetchType.LAZY, cascade={CascadeType.ALL})
 	@JoinColumn(name = "assetId", referencedColumnName = "id", nullable = true)
 	private Asset asset;    
+    
+    @ManyToOne(fetch = FetchType.LAZY, cascade={CascadeType.ALL})
+    @JoinColumn(name = "jobId", referencedColumnName = "id", nullable = true)
+    private Job job;
+    
+    @ManyToOne(fetch = FetchType.LAZY, cascade={CascadeType.ALL})
+    @JoinColumn(name = "parameterConfigId", referencedColumnName = "id", nullable = true)
+    private ParameterConfig parameterConfig;
 
     public Long getId() {
         return id;
@@ -115,6 +126,30 @@ public class AssetParameterReading extends AbstractAuditingEntity implements Ser
 
 	public void setValue(double value) {
 		this.value = value;
+	}
+
+	public Job getJob() {
+		return job;
+	}
+
+	public void setJob(Job job) {
+		this.job = job;
+	}
+
+	public ParameterConfig getParameterConfig() {
+		return parameterConfig;
+	}
+
+	public void setParameterConfig(ParameterConfig parameterConfig) {
+		this.parameterConfig = parameterConfig;
+	}
+
+	public boolean isConsumptionMonitoringRequired() {
+		return consumptionMonitoringRequired;
+	}
+
+	public void setConsumptionMonitoringRequired(boolean consumptionMonitoringRequired) {
+		this.consumptionMonitoringRequired = consumptionMonitoringRequired;
 	}
 
     
