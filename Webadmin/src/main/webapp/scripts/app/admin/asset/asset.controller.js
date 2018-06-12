@@ -906,6 +906,7 @@ angular.module('timeSheetApp')
         	AssetComponent.findPPMSchedule($scope.searchCriteria).then(function (data) {
                 $scope.ppmscheduleList = data.transactions;
                 //$scope.projectsLoader = true;
+                 console.log("Loading ppm list" , $scope.ppmscheduleList);
 
                 /*
                     ** Call pagination  main function **
@@ -915,7 +916,7 @@ angular.module('timeSheetApp')
                  $scope.totalCountPages = data.totalCount;
 
                  console.log("Pagination",$scope.pager);
-                 console.log($scope.projects);
+                
 
                 $scope.pages.currPage = data.currPage;
                 $scope.pages.totalPages = data.totalPages;
@@ -1327,6 +1328,8 @@ angular.module('timeSheetApp')
 	    		$scope.checkLists = data;
 	    	});
 	    }
+
+
 
         /*$scope.loadChecklist = function(id) {
 

@@ -1129,13 +1129,16 @@
 
                                                                         <tr ng-repeat="ppmschedule in ppmscheduleList">
                                                                             <td>{{ppmschedule.title}}</td>
-                                                                            <td>{{ppmschedule.checklistName}}</td>
-                                                                            <!-- <td>
-                                                                                <div class="bootstrap-tagsinput"><span class="tag label label-info">Item 1<span data-role="remove"></span></span>
-                                                                                    <span class="tag label label-info">Item 2<span data-role="remove"></span></span>
-                                                                                    <span class="tag label label-info">Item 3<span data-role="remove"></span></span>
-                                                                                    <span class="tag label label-info">Item 4<span data-role="remove"></span></span> <input type="text" placeholder=""></div>
-                                                                            </td> -->
+                                                                            <td class="hiddenCheckList">{{ppmschedule.checklistName}}
+
+                                                                               <div class="CheckListBx">
+                                                                                   <div class="bootstrap-tagsinput"><span class="tag label label-info">Item 1<span data-role="remove"></span></span>
+                                                                                       <span class="tag label label-info">Item 2<span data-role="remove"></span></span>
+                                                                                       <span class="tag label label-info">Item 3<span data-role="remove"></span></span>
+                                                                                       <span class="tag label label-info">Item 4<span data-role="remove"></span></span> <input type="text" placeholder=""></div>
+                                                                               </div>
+
+                                                                            </td>
                                                                             <td>{{ppmschedule.startDate}}</td>
                                                                             <td>{{ppmschedule.endDate}}</td>
                                                                              <td>{{ppmschedule.frequencyPrefix}}&nbsp; {{ppmschedule.frequencyDuration}}&nbsp; {{ppmschedule.frequency}}</td>
@@ -1313,13 +1316,16 @@
 
                                                                     <tr ng-repeat="amcSchedule in amcScheduleList">
                                                                         <td>{{amcSchedule.title}}</td>
-                                                                        <td>{{amcSchedule.checklistName}}</td>
-                                                                        <!-- <td>
-                                                                            <div class="bootstrap-tagsinput">
-                                                                                <span class="tag label label-info" ng-repeat="checkList in checklistItms">{{checkList.name}}<span data-role="remove"></span></span>
-                                                                                <input type="text" placeholder="">
-                                                                            </div>
-                                                                        </td> -->
+                                                                        <td class="hiddenCheckList">{{amcSchedule.checklistName}}
+
+                                                                           <div class="CheckListBx">
+                                                                               <div class="bootstrap-tagsinput"><span class="tag label label-info">Item 1<span data-role="remove"></span></span>
+                                                                                   <span class="tag label label-info">Item 2<span data-role="remove"></span></span>
+                                                                                   <span class="tag label label-info">Item 3<span data-role="remove"></span></span>
+                                                                                   <span class="tag label label-info">Item 4<span data-role="remove"></span></span> <input type="text" placeholder=""></div>
+                                                                           </div>
+
+                                                                        </td>
                                                                         <td>{{amcSchedule.startDate}}</td>
                                                                         <td>{{amcSchedule.endDate}}</td>
                                                                         <td>{{amcSchedule.frequencyPrefix}}&nbsp; {{amcSchedule.frequencyDuration}}&nbsp; {{amcSchedule.frequency}}</td>

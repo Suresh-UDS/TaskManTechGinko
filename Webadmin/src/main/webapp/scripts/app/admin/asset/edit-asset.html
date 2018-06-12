@@ -1143,16 +1143,19 @@
 
                                                                         <tr ng-repeat="ppmschedule in ppmscheduleList">
                                                                             <td>{{ppmschedule.title}}</td>
-                                                                            <td>{{ppmschedule.checklistName}}</td>
-                                                                            <!-- <td>
-                                                                                <div class="bootstrap-tagsinput"><span class="tag label label-info">Item 1<span data-role="remove"></span></span>
-                                                                                    <span class="tag label label-info">Item 2<span data-role="remove"></span></span>
-                                                                                    <span class="tag label label-info">Item 3<span data-role="remove"></span></span>
-                                                                                    <span class="tag label label-info">Item 4<span data-role="remove"></span></span> <input type="text" placeholder=""></div>
-                                                                            </td> -->
+                                                                           <td class="hiddenCheckList">{{ppmschedule.checklistName}}
+
+                                                                               <div class="CheckListBx">
+                                                                                   <div class="bootstrap-tagsinput"><span class="tag label label-info">Item 1<span data-role="remove"></span></span>
+                                                                                       <span class="tag label label-info">Item 2<span data-role="remove"></span></span>
+                                                                                       <span class="tag label label-info">Item 3<span data-role="remove"></span></span>
+                                                                                       <span class="tag label label-info">Item 4<span data-role="remove"></span></span> <input type="text" placeholder=""></div>
+                                                                               </div>
+
+                                                                            </td>
                                                                             <td>{{ppmschedule.startDate}}</td>
                                                                             <td>{{ppmschedule.endDate}}</td>
-                                                                             <td>{{ppmschedule.frequencyPrefix}}&nbsp; {{ppmschedule.frequencyDuration}}&nbsp; {{ppmschedule.frequency}}</td>
+                                                                             <td>{{ppmschedule.frequencyPrefix}} &nbsp; {{ppmschedule.frequencyDuration}} &nbsp; {{ppmschedule.frequency}}</td>
                                                                              <td class="text-right">
                                                                             <a  ng-class="{active: $state.includes('admin')}"  has-permission="" ui-sref=""  class="btn btn-simple btn-danger"><i class="material-icons">delete_forever</i></a>
                                                                         </td>
