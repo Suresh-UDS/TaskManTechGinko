@@ -420,9 +420,9 @@ angular.module('timeSheetApp')
                 $scope.error = null;
                 $scope.success = null;
                 $scope.errorSitesExists = null;
-                $scope.errorProject = null;
-                if(!$scope.selectedProject.id){
-                    $scope.errorProject = "true";
+                $scope.errorSite = null;
+                if(!$scope.selectedSite.id){
+                    $scope.errorSite = "true";
                 }else{
         
                     if($scope.selectedAssetType.id){ $scope.assetGen.assetType = $scope.selectedAssetType.name; }
@@ -469,9 +469,9 @@ angular.module('timeSheetApp')
 
          $scope.editAsset = function(){
              //alert($stateParams.id);
-            console.log($stateParams.id);
+            var assetId = $stateParams.id;
 
-            AssetComponent.findById($stateParams.id).then(function(data){
+            AssetComponent.findById(assetId).then(function(data){
 
                 $scope.assetList=data;
 
