@@ -321,19 +321,6 @@ public class AssetResource {
 		return response;
 	}
 	
-	@RequestMapping(path = "/assets/{assetId}/ppmschedulelist", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-	@Timed
-	public List<AssetPpmScheduleDTO> getAssetPPMSchedule(@PathVariable("assetId") long assetId) {
-		log.debug(">>> Asset PPM get request <<<");
-		log.debug("AssetId <<<" + assetId);
-
-		List<AssetPpmScheduleDTO> response = assetService.getAssetPPMSchedules(assetId);
-		for(AssetPpmScheduleDTO assetPpmScheduleDTO:response) {
-		log.debug("Get Asset PPM Schedule for asset id - " + assetPpmScheduleDTO.getId());
-		}
-		return response;
-	}
-	
 	@RequestMapping(value = "/assets/viewFile/{documentId}/{fileName:.+}",method = RequestMethod.GET)
 	public ResponseEntity<byte[]> getUploadFile(@PathVariable("documentId") long documentId, @PathVariable("fileName") String fileName, HttpServletResponse response) throws IOException {
 		log.debug("DocumentId" +documentId);

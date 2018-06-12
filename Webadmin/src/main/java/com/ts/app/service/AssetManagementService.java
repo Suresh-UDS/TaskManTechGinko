@@ -250,8 +250,8 @@ public class AssetManagementService extends AbstractService {
 	
 	public boolean isDuplicatePPMSchedule(AssetPpmScheduleDTO assetPpmScheduleDTO) {
 	    log.debug("Asset Title "+assetPpmScheduleDTO.getTitle());
-	    AssetPPMSchedule assetPPMSchedule = assetPpmScheduleRepository.findByTitle(assetPpmScheduleDTO.getTitle());
-		if(assetPPMSchedule != null) {
+		Asset asset = assetRepository.findByTitle(assetPpmScheduleDTO.getTitle());
+		if(asset != null) {
 			return true;
 		}
 		return false;
@@ -502,22 +502,6 @@ public class AssetManagementService extends AbstractService {
 		return assetAMCScheduleDTOs;
 	}
 
-	/**
-	 * Returns a list of asset PPM schedule information for the given asset Id.
-	 * 
-	 * @param assetId
-	 * @return
-	 */
-	public List<AssetPpmScheduleDTO> getAssetPPMSchedules(long assetId) {
-		List<AssetPpmScheduleDTO> assetPpmScheduleDTOs = null;
-		List<AssetPPMSchedule> assetPpmSchedules = assetPpmScheduleRepository.findAssetPPMScheduleByAssetId(assetId);
-		if (CollectionUtils.isNotEmpty(assetPpmSchedules)) {
-			assetPpmScheduleDTOs = mapperUtil.toModelList(assetPpmSchedules, AssetPpmScheduleDTO.class);
-		}
-		return assetPpmScheduleDTOs;
-	}
-
-	
 	public SearchResult<AssetPpmScheduleDTO> findPPMSearchCriteria(SearchCriteria searchCriteria) {
 
 		log.debug(">>> search ppm schedule 2 <<<");

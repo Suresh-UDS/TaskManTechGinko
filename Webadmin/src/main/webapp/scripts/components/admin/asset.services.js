@@ -30,13 +30,14 @@ angular.module('timeSheetApp')
                 var cb = callback || angular.noop;
                 return $http.post('api/assets/ppmschedule',asset).then(
                     function (response) {
-                        //return cb(response);
-                        return response;
+                        return cb(response);
+                        //return response;
                     }).catch(
                     function (err) {
                         console.log(JSON.stringify(err));
                         return cb(err);
                     })
+
 
             },
             update : function(asset,callback){
@@ -236,12 +237,6 @@ angular.module('timeSheetApp')
             
             findByAssetAMC : function(id) { 
             	return $http.get('api//assets/'+id+'/amcschedule').then(function(response) { 
-            		return response.data;
-            	});
-            },
-            
-            findByAssetPPM : function(id) { 
-            	return $http.get('api/assets/'+id+'/ppmschedulelist').then(function(response) { 
             		return response.data;
             	});
             },
