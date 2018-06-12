@@ -819,7 +819,7 @@ public class AssetManagementService extends AbstractService {
 
 		assetPPMSchedule = assetPpmScheduleRepository.save(assetPPMSchedule);
 		assetPpmScheduleDTO = mapperUtil.toModel(assetPPMSchedule, AssetPpmScheduleDTO.class);
-		//jobManagementService.createJob(assetPpmScheduleDTO);
+		jobManagementService.createJob(assetPpmScheduleDTO);
 		log.debug(">> after create job for ppm schedule <<<");
 		return assetPpmScheduleDTO;
 	}
