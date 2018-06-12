@@ -241,12 +241,6 @@ angular.module('timeSheetApp')
             	});
             },
             
-            findByAssetPPM : function(id) { 
-            	return $http.get('api/assets/'+id+'/ppmschedulelist').then(function(response) { 
-            		return response.data;
-            	});
-            },
-            
             findByAssetReadings : function(id) { 
             	return $http.get('api/assets/'+id+'/viewAssetReadings').then(function(response) { 
             		return response.data;
