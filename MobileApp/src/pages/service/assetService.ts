@@ -102,4 +102,24 @@ export class AssetService {
         )
     }
 
+    getAssetType():Observable<any>{
+        return this.http.get(this.config.Url+'api/assetType').map(
+            response=>{
+                console.log("Get Asset Type");
+                return response.json();
+            }
+        )
+    }
+
+    getAssetGroup():Observable<any>{
+        return this.http.get(this.config.Url+'api/assetgroup').map(
+            response=>{
+                console.log("Get Asset Group");
+                return response.json();
+            }
+        )
+    }
+
+
+
 }

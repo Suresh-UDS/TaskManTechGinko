@@ -17,7 +17,7 @@
             <ion-segment-button value="ppm">PPM </ion-segment-button>
             <ion-segment-button value="amc">AMC </ion-segment-button>
             <ion-segment-button value="config">Config </ion-segment-button>
-            <ion-segment-button value="readings">Readings</ion-segment-button>
+            <ion-segment-button value="readings" (ionSelect)="viewReading()">Readings</ion-segment-button>
             <ion-segment-button value="jobs">Jobs</ion-segment-button>
             <ion-segment-button value="tickets">Tickets</ion-segment-button>
         </ion-segment>
@@ -57,9 +57,9 @@
 
 </ion-header>
 
-<ion-content padding>
+<ion-content class="margin-top20">
 
-    <ion-fab right bottom mini (click)="getReadings()"   >
+    <ion-fab right bottom mini (click)="getReadings()"   margin>
         <ion-label color="light" class="margin0 bg-orange">Reading</ion-label>
         <button ion-fab color="primary" class="margin-auto margin-top5">
             <!--<i class="material-icons">network_check</i>-->
@@ -67,6 +67,7 @@
             <!--<i class="fa fa-tachometer-alt"></i>-->
         </button>
     </ion-fab>
+
 
 <div [ngSwitch]="categories">
     <ion-list *ngSwitchCase="'details'">
@@ -223,7 +224,7 @@
 
                     <ion-col col-2 class="ver-center">
                         <button ion-button clear color="primary" class="">
-                            <ion-icon name="md-clock" class="blue fnt-40"></ion-icon>
+                            <ion-icon name="md-clock" class="green fnt-40"></ion-icon>
                             <!--<ion-icon name="ios-construct-outline" class="fnt-24"></ion-icon>-->
                             <!--<ion-icon ios="ios-calendar" md="md-calendar" ></ion-icon>-->
                         </button>
@@ -566,22 +567,35 @@
             </ion-card>
         </div>
 
-        <div *ngIf="assetDetails.readings">
-            <table class="table table-hover">
-                <thead class="text-warning">
-                    <th >Date</th>
-                    <th >Consumption</th>
-                    <th >Type</th>
-                </thead>
-                <tbody>
-                    <tr *ngFor="let reading of assetDetails.reading">
-                        <td class="padding-left0">10-05-2018</td>
-                        <td class="padding-left0">20 Watt</td>
-                        <td class="padding-left0">POWER</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
+        <div *ngIf="assetDetails.reading">
+            <div class="card-content white-bg" >
+                <div class="table-responsive">
+                    <table class="table table-scroll">
+                        <thead>
+                        <tr>
+                            <th class="text-center clr-orange">Date</th>
+                            <th class="text-center clr-orange" >Type</th>
+                            <th class="text-center clr-orange" >Initial value</th>
+                            <th class="text-center clr-orange">Final value</th>
+                            <th class="text-center clr-orange" >Consumption</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr *ngFor="let readings of assetDetails.reading">
+                            <td class="text-center">{{readings.createdDate| date : 'dd MMM yyyy'}}
+                            <p>{{readings.createdDate|date : 'HH:mm'}}</p></td>
+                            <td class="text-center">{{readings.name}}</td>
+                            <td class="text-center" *ngIf="readings.consumption">{{readings.initialValue}}</td>
+                            <td class="text-center" *ngIf="!readings.consumption">NA</td>
+                            <td class="text-center">{{readings.finalValue}}</td>
+                            <td class="text-center" *ngIf="readings.consumption">{{readings.consumption}}</td>
+                            <td class="text-center" *ngIf="!readings.consumption">NA</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                </div>
+            </div>
     </ion-list>
 </div>
 </ion-content>

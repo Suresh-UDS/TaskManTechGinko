@@ -36,6 +36,7 @@ export class GetAssetReadings {
     }
     ionViewDidLoad(){
         console.log("Get Asset reading page");
+        console.log(this.assetDetails);
         this. getAssetConfig();
     }
 
