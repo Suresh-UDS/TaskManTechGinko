@@ -21,9 +21,18 @@ page-asset-list {
     float: left;
     border-bottom: none !important;
   }
-  .check-style .item-inner,.list-md .item-block .item-inner,.item-md.item-block .item-inner
+  .check-style .item-inner
   {
     border-bottom: none !important;
+  }
+  .filter-modal
+  {
+    left: 5% !important;
+    top: 56px !important;
+  }
+  .margin-right0
+  {
+    margin-right: 0 !important;
   }
 }
 

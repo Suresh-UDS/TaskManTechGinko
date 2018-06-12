@@ -17,7 +17,7 @@
             <ion-segment-button value="ppm">PPM </ion-segment-button>
             <ion-segment-button value="amc">AMC </ion-segment-button>
             <ion-segment-button value="config">Config </ion-segment-button>
-            <ion-segment-button value="readings">Readings</ion-segment-button>
+            <ion-segment-button value="readings" (ionSelect)="viewReading()">Readings</ion-segment-button>
             <ion-segment-button value="jobs">Jobs</ion-segment-button>
             <ion-segment-button value="tickets">Tickets</ion-segment-button>
         </ion-segment>
@@ -57,9 +57,9 @@
 
 </ion-header>
 
-<ion-content padding>
+<ion-content class="margin-top20">
 
-    <ion-fab right bottom mini (click)="getReadings()"   >
+    <ion-fab right bottom mini (click)="getReadings()"  margin>
         <ion-label color="light" class="margin0 bg-orange">Reading</ion-label>
         <button ion-fab color="primary" class="margin-auto margin-top5">
             <!--<i class="material-icons">network_check</i>-->
@@ -68,11 +68,8 @@
         </button>
     </ion-fab>
 
-
-
-
 <div [ngSwitch]="categories">
-    <ion-list *ngSwitchCase="'details'">
+    <ion-list *ngSwitchCase="'details'" padding-left="" padding-right="">
         <!--<ion-fab left bottom mini (click)="addAssetImage()"   >-->
             <!--<ion-label color="light" class="margin0 bg-orange padding-left-right20">Add</ion-label>-->
             <!--<button ion-fab color="primary" class="margin-auto margin-top5">-->
@@ -226,7 +223,7 @@
 
 
     </ion-list>
-    <ion-list *ngSwitchCase="'ppm'">
+    <ion-list *ngSwitchCase="'ppm'" padding-left="" padding-right="">
 
         <div text-center="" *ngIf="!assetDetails.ppms || assetDetails.ppms.length < 0">
             <ion-card text-center="">
@@ -284,7 +281,7 @@
         </div>
     </ion-list>
 
-    <ion-list *ngSwitchCase="'amc'">
+    <ion-list *ngSwitchCase="'amc'" padding-left="" padding-right="">
         <div text-center="" *ngIf="!assetDetails.amcs || assetDetails.amcs.length < 0">
             <ion-card text-center="">
                 <ion-card-content>
@@ -419,7 +416,7 @@
 
     </div>
 
-    <ion-list *ngSwitchCase="'jobs'" style="margin-top : 56px">
+    <ion-list *ngSwitchCase="'jobs'" style="margin-top : 56px" padding-left="" padding-right="">
 
         <div text-center="" *ngIf="!assetDetails.jobs || assetDetails.jobs?.length<0">
             <ion-card text-center="">
@@ -520,7 +517,7 @@
 
     </ion-list>
 
-    <ion-list *ngSwitchCase="'tickets'" style="margin-top : 56px">
+    <ion-list *ngSwitchCase="'tickets'" style="margin-top : 56px" padding-left="" padding-right="">
 
         <div text-center="" *ngIf="!assetDetails.tickets || assetDetails.tickets?.length<0">
             <ion-card text-center="">
@@ -585,22 +582,35 @@
             </ion-card>
         </div>
 
-        <div *ngIf="assetDetails.readings">
-            <table class="table table-hover">
-                <thead class="text-warning">
-                    <th >Date</th>
-                    <th >Consumption</th>
-                    <th >Type</th>
-                </thead>
-                <tbody>
-                    <tr *ngFor="let reading of assetDetails.reading">
-                        <td class="padding-left0">10-05-2018</td>
-                        <td class="padding-left0">20 Watt</td>
-                        <td class="padding-left0">POWER</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
+        <div *ngIf="assetDetails.reading">
+            <div class="card-content white-bg" >
+                <div class="table-responsive">
+                    <table class="table table-scroll">
+                        <thead>
+                        <tr>
+                            <th class="text-center clr-orange">Date</th>
+                            <th class="text-center clr-orange" >Type</th>
+                            <th class="text-center clr-orange" >Initial value</th>
+                            <th class="text-center clr-orange">Final value</th>
+                            <th class="text-center clr-orange" >Consumption</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr *ngFor="let readings of assetDetails.reading">
+                            <td class="text-center">{{readings.createdDate| date : 'dd/ MM /yy'}}
+                            <p>{{readings.createdDate|date : 'hh:mm a'}}</p></td>
+                            <td class="text-center">{{readings.name}}</td>
+                            <td class="text-center" *ngIf="readings.consumption">{{readings.initialValue}}</td>
+                            <td class="text-center" *ngIf="!readings.consumption">NA</td>
+                            <td class="text-center">{{readings.finalValue}}</td>
+                            <td class="text-center" *ngIf="readings.consumption">{{readings.consumption}}</td>
+                            <td class="text-center" *ngIf="!readings.consumption">NA</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                </div>
+            </div>
     </ion-list>
 </div>
 </ion-content>
