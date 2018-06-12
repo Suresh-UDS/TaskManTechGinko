@@ -26,6 +26,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.codahale.metrics.annotation.Timed;
+import com.ts.app.domain.AssetParameterReading;
 import com.ts.app.domain.Frequency;
 import com.ts.app.domain.FrequencyDuration;
 import com.ts.app.domain.FrequencyPrefix;
@@ -40,6 +41,7 @@ import com.ts.app.web.rest.dto.AssetParameterReadingDTO;
 import com.ts.app.web.rest.dto.AssetPpmScheduleDTO;
 import com.ts.app.web.rest.dto.AssetTypeDTO;
 import com.ts.app.web.rest.dto.AssetgroupDTO;
+import com.ts.app.web.rest.dto.ImageDeleteRequest;
 import com.ts.app.web.rest.dto.SearchCriteria;
 import com.ts.app.web.rest.dto.SearchResult;
 import com.ts.app.web.rest.errors.TimesheetException;
@@ -321,6 +323,19 @@ public class AssetResource {
 		return response;
 	}
 	
+	@RequestMapping(path = "/assets/{assetId}/ppmschedulelist", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	@Timed
+	public List<AssetPpmScheduleDTO> getAssetPPMSchedule(@PathVariable("assetId") long assetId) {
+		log.debug(">>> Asset PPM get request <<<");
+		log.debug("AssetId <<<" + assetId);
+
+		List<AssetPpmScheduleDTO> response = assetService.getAssetPPMSchedules(assetId);
+		for(AssetPpmScheduleDTO assetPpmScheduleDTO:response) {
+		log.debug("Get Asset PPM Schedule for asset id - " + assetPpmScheduleDTO.getId());
+		}
+		return response;
+	}
+	
 	@RequestMapping(value = "/assets/viewFile/{documentId}/{fileName:.+}",method = RequestMethod.GET)
 	public ResponseEntity<byte[]> getUploadFile(@PathVariable("documentId") long documentId, @PathVariable("fileName") String fileName, HttpServletResponse response) throws IOException {
 		log.debug("DocumentId" +documentId);
@@ -374,6 +389,20 @@ public class AssetResource {
 		result = assetService.viewAssetReadings(assetId);
 		return result;
 	}
+	
+	@RequestMapping(value = "/assets/{assetId}/getLatestReading", method = RequestMethod.GET)
+	public AssetParameterReading getLatestReading(@PathVariable("assetId") long assetId) {
+		AssetParameterReading result = null;
+		result = assetService.getLatestParamReading(assetId);
+		return result;
+	}
+	
+	@RequestMapping(value = "/assets/{id}/document/image", method = RequestMethod.DELETE)
+    public ResponseEntity<?>  deleteImages(@PathVariable("id") long id) {
+        log.debug("images ids -"+id);
+        assetService.deleteImages(id);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 	
 	
 	
