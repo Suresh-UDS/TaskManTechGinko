@@ -59,7 +59,7 @@
 
 <ion-content class="margin-top20">
 
-    <ion-fab right bottom mini (click)="getReadings()"   margin>
+    <ion-fab right bottom mini (click)="getReadings()"  margin>
         <ion-label color="light" class="margin0 bg-orange">Reading</ion-label>
         <button ion-fab color="primary" class="margin-auto margin-top5">
             <!--<i class="material-icons">network_check</i>-->
@@ -582,8 +582,8 @@
                         </thead>
                         <tbody>
                         <tr *ngFor="let readings of assetDetails.reading">
-                            <td class="text-center">{{readings.createdDate| date : 'dd MMM yyyy'}}
-                            <p>{{readings.createdDate|date : 'HH:mm'}}</p></td>
+                            <td class="text-center">{{readings.createdDate| date : 'dd/ MM /yy'}}
+                            <p>{{readings.createdDate|date : 'hh:mm a'}}</p></td>
                             <td class="text-center">{{readings.name}}</td>
                             <td class="text-center" *ngIf="readings.consumption">{{readings.initialValue}}</td>
                             <td class="text-center" *ngIf="!readings.consumption">NA</td>

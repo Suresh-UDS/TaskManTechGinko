@@ -36,7 +36,7 @@
               </ion-card-content>
           </ion-card>
       </div>
-    <ion-item *ngFor="let asset of assetList" (click)="viewAsset(asset)" class="">
+    <ion-item *ngFor="let asset of assetList" (click)="viewAsset(asset)" class="border-btm-blk">
 
         <ion-thumbnail *ngIf="asset.qrCodeImage" item-start class="">
             <img [src]=asset.qrCodeImage imageViewer/>

@@ -211,11 +211,6 @@ ion-app.md
       }
 
     }
-
-
-
-
-
   }
 
 
@@ -233,6 +228,26 @@ image-viewer ion-header
 .sidebar .nav li:hover>a
 {
   background-color: transparent !important;
+}
+.text-input-md
+{
+  margin:0px !important;
+}
+h1, h2, h3, h4, h5, h6
+{
+  margin-bottom:0px !important;
+}
+[padding] h1:first-child, [padding] h2:first-child, [padding] h3:first-child, [padding] h4:first-child, [padding] h5:first-child, [padding] h6:first-child
+{
+  margin-top:0px !important;
+}
+ion-input
+{
+  border-bottom:1px solid #ccc !important;
+}
+ion-toolbar
+{
+  background: $clr-white !important;
 }
 
 // App iOS Variables
