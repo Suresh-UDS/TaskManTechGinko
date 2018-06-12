@@ -119,7 +119,7 @@
 
                                     <div class="TailsContent" ng-controller="FeedbackController as vm">
                                         <ul class="blocksListCon">
-                                            <button type="submit" ng-click="genZoneReport(item.block, item.floor,item.zone,searchForm )" ng-repeat="item in filteredLocations track by $index" ng-show="(($index < (vm.page * vm.numRecords)) && ($index >= ((vm.page - 1) * vm.numRecords)))">{{ item.block }}<br/>{{item.floor}}<br/>{{item.zone}}</button>
+                                            <button type="submit" ng-click="genZoneReport(item.block, item.floor,item.zone,searchForm );search()" ng-repeat="item in filteredLocations track by $index" ng-show="(($index < (vm.page * vm.numRecords)) && ($index >= ((vm.page - 1) * vm.numRecords)))">{{ item.block }}<br/>{{item.floor}}<br/>{{item.zone}}</button>
                                         </ul>
 
                                         <div class="clear"></div>
@@ -259,9 +259,8 @@
                                         <div ng-repeat ="(key, value) in questionRating.rating">
                                             <jk-rating-stars max-rating="5" rating="key" read-only="readOnly" >
                                             </jk-rating-stars>
-                                            {{value}}
-
                                         </div>
+                                        ({{value}})
                                     </td>
                                 </tr>
                                 </thead>

@@ -166,7 +166,7 @@ angular.module('timeSheetApp')
 	    		$scope.selectedZone = zone;
 	    		//document.getElementById('searchForm').submit()
 
-	    		$scope.search();
+	    		//$scope.search();
 	    };
 
 	    $scope.search = function () {
