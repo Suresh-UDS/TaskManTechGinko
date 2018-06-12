@@ -12,7 +12,7 @@
     <ion-title>{{assetDetails.title}}</ion-title>
   </ion-navbar>
     <ion-toolbar class="tool-bar">
-        <ion-segment [(ngModel)]="categories" class="segmnt margin-auto" color="#ff9800" (ionChange)="segmentChange()">
+        <ion-segment [(ngModel)]="categories" class="segmnt margin-auto" color="#ff9800" (ionChange)="segmentChange(categories)">
             <ion-segment-button value="details" >Details</ion-segment-button>
             <ion-segment-button value="ppm">PPM </ion-segment-button>
             <ion-segment-button value="amc">AMC </ion-segment-button>
@@ -68,8 +68,17 @@
         </button>
     </ion-fab>
 
+
+
+
 <div [ngSwitch]="categories">
     <ion-list *ngSwitchCase="'details'">
+        <!--<ion-fab left bottom mini (click)="addAssetImage()"   >-->
+            <!--<ion-label color="light" class="margin0 bg-orange padding-left-right20">Add</ion-label>-->
+            <!--<button ion-fab color="primary" class="margin-auto margin-top5">-->
+                <!--<ion-icon name="camera"></ion-icon>-->
+            <!--</button>-->
+        <!--</ion-fab>-->
       <div class="card">
          <div class="panel-heading card-header-md-clr-orange">Asset Details</div>
 
@@ -93,7 +102,7 @@
                       Type
                   </ion-col>
                   <ion-col col-6 no-padding="">
-                      <p text-right>{{assetDetails.type}}</p>
+                      <p text-right>{{assetDetails.assetType}}</p>
                   </ion-col>
               </ion-row>
           </div>
@@ -104,12 +113,12 @@
 
           <div class="card-content table-responsive padding-top0">
               <ion-row class="margin0 white-bg">
-                  <ion-col col-6 class="label-on-left" no-padding="">
-                      Client
-                  </ion-col>
-                  <ion-col col-6 no-padding="">
-                      <p text-right>{{assetDetails.clientName}}</p>
-                  </ion-col>
+                  <!--<ion-col col-6 class="label-on-left" no-padding="">-->
+                      <!--Client-->
+                  <!--</ion-col>-->
+                  <!--<ion-col col-6 no-padding="">-->
+                      <!--<p text-right>{{assetDetails.clientName}}</p>-->
+                  <!--</ion-col>-->
                   <ion-col col-6 class="label-on-left" no-padding="">
                       Site
                   </ion-col>
@@ -146,19 +155,19 @@
                       Manufacturer
                   </ion-col>
                   <ion-col col-6 no-padding="">
-                      <p text-right>{{assetDetails.manufacturer}}</p>
+                      <p text-right>{{assetDetails.manufacturerName}}</p>
                   </ion-col>
                   <ion-col col-6 class="label-on-left" no-padding="">
                       Model Number
                   </ion-col>
                   <ion-col col-6 no-padding="">
-                      <p text-right>{{assetDetails.model}}</p>
+                      <p text-right>{{assetDetails.modelNumber}}</p>
                   </ion-col>
                   <ion-col col-6 class="label-on-left" no-padding="">
                       Serial
                   </ion-col>
                   <ion-col col-6 no-padding="">
-                      <p text-right>{{assetDetails.serial}}</p>
+                      <p text-right>{{assetDetails.serialNumber}}</p>
                   </ion-col>
                   <ion-col col-5 class="label-on-left" no-padding="">
                       Acquired Date
@@ -184,27 +193,38 @@
                   <ion-col col-6 no-padding="">
                       <p text-right>{{assetDetails.estimatedDisposePrice}}</p>
                   </ion-col>
-                  <ion-col col-6 class="label-on-left" no-padding="">
-                      Service Provider
-                  </ion-col>
-                  <ion-col col-6 no-padding="">
-                      <p text-right>{{assetDetails.serviceProvider}}</p>
-                  </ion-col>
-                  <ion-col col-6 class="label-on-left" no-padding="jk">
-                      Warranty Type
-                  </ion-col>
-                  <ion-col col-6 no-padding="">
-                      <p text-right>{{assetDetails.warrantyType}}</p>
-                  </ion-col>
-                  <ion-col col-5 class="label-on-left" no-padding="">
-                      Warranty End Date
-                  </ion-col>
-                  <ion-col col-7 no-padding="">
-                      <p text-right>{{assetDetails.warrantyEndDate | date:'MMM d, y, h:mm a' }}</p>
-                  </ion-col>
               </ion-row>
           </div>
       </div>
+
+      <div class="card">
+          <div class="panel-heading card-header-md-clr-orange">AMC Vendor Details</div>
+          <div class="card-content table-responsive padding-top0">
+                  <ion-row class="margin0 white-bg">
+                      <ion-col col-6 class="label-on-left" no-padding="jk">
+                          Vendor
+                      </ion-col>
+                      <ion-col col-6 no-padding="">
+                          <p text-right>{{assetDetails.warrantyType}}</p>
+                      </ion-col>
+                      <ion-col col-6 class="label-on-left" no-padding="jk">
+                          Warranty Type
+                      </ion-col>
+                      <ion-col col-6 no-padding="">
+                          <p text-right>{{assetDetails.warrantyType}}</p>
+                      </ion-col>
+                      <ion-col col-5 class="label-on-left" no-padding="">
+                          Warranty End Date
+                      </ion-col>
+                      <ion-col col-7 no-padding="">
+                          <p text-right>{{assetDetails.warrantyExpiryDate | date:'MMM d, y, h:mm a' }}</p>
+                      </ion-col>
+                  </ion-row>
+          </div>
+      </div>
+
+
+
     </ion-list>
     <ion-list *ngSwitchCase="'ppm'">
 
@@ -220,7 +240,6 @@
 
             <div class="padding-left16 padding-top5" >
                 <ion-row class="margin0">
-
                     <ion-col col-2 class="ver-center">
                         <button ion-button clear color="primary" class="">
                             <ion-icon name="md-clock" class="green fnt-40"></ion-icon>
@@ -231,7 +250,7 @@
                     <ion-col col-7="" class="padding-left5 border-btm">
                         <div class=" padding-bottom5 ln-ght20" text-capitalize>
                             <p text-left class="margin0">{{ ppm.title }}</p>
-                            <p text-left class="margin0">{{ ppm.checklistName }}</p>
+                            <p text-left class="margin0">{{ ppm.status ? ppm.status : "Status" }}</p>
                         </div>
                     </ion-col>
                     <ion-col col-3 class="border-btm">
@@ -333,7 +352,7 @@
             </ion-card>
         </div>
 
-        <div  class="white-bg border-btm" *ngFor=" let config of assetDetails.config;let i=index; " >
+        <ion-list class="white-bg border-btm" *ngFor=" let config of assetDetails.config;let i=index; " >
             <div class="padding-top5">
                 <ion-row class="margin0">
                     <ion-col col-2 class="ver-center">
@@ -356,19 +375,19 @@
                     </ion-col>
                     <ion-col col-6>
                         <div class="">
-                            <p text-center class="margin0">{{ config.name }}</p>
+                            <p text-center class="margin0" text-uppercase	>{{ config.name }}</p>
                             <p text-center class="margin0 clr-orange fnt-12">Name</p>
                         </div>
                     </ion-col>
                     <ion-col col-3 >
                         <div class="">
-                            <p text-center class="margin0">{{ config.uom }}</p>
+                            <p text-center class="margin0" text-uppercase	>{{ config.uom }}</p>
                             <p text-center class="margin0 clr-orange fnt-12">Uom</p>
                         </div>
                     </ion-col>
                 </ion-row>
             </div>
-        </div>
+        </ion-list>
 
 
             <!--<div class="card" *ngFor="let config of assetDetails.config">-->
