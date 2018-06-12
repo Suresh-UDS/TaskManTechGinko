@@ -34,6 +34,7 @@ import com.ts.app.domain.Attendance;
 import com.ts.app.domain.Employee;
 import com.ts.app.domain.EmployeeAttendanceReport;
 import com.ts.app.domain.EmployeeShift;
+import com.ts.app.domain.Frequency;
 import com.ts.app.domain.Job;
 import com.ts.app.domain.JobStatus;
 import com.ts.app.domain.Project;
@@ -149,6 +150,7 @@ public class SchedulerService extends AbstractService {
 
 	public void save(SchedulerConfigDTO dto, Job job) {
 		if(dto.getId() != null && dto.getId() > 0){
+			log.debug(">>> Schedule Config already created! <<<");
 			SchedulerConfig entity =  schedulerConfigRepository.findOne(dto.getId());
 			if(entity !=null){
 				mapperUtil.toEntity(dto, entity);
@@ -161,6 +163,7 @@ public class SchedulerService extends AbstractService {
 			}
 
 		}else{
+			log.debug(">>> Going to create Schedule! <<<");
 			SchedulerConfig entity = mapperUtil.toEntity(dto, SchedulerConfig.class);
 			entity.setJob(job);
 			entity.setActive("Y");
@@ -691,7 +694,7 @@ public class SchedulerService extends AbstractService {
 		if ("CREATE_JOB".equals(dailyTask.getType())) {
 			if(dailyTask.getSchedule().equalsIgnoreCase(DAILY)) {
 				String creationPolicy = env.getProperty("scheduler.dailyJob.creation");
-				if(creationPolicy.equalsIgnoreCase("monthly")) { //if the creation policy is set to monthly, create jobs for the rest of the month
+				if(creationPolicy.equalsIgnoreCase("daily")) { //if the creation policy is set to monthly, create jobs for the rest of the month
 					DateTime currDate = DateTime.now();
 			        DateTime lastDate = currDate.dayOfMonth().withMaximumValue();
 					while(currDate.isBefore(lastDate) || currDate.isEqual(lastDate)) {
@@ -732,6 +735,25 @@ public class SchedulerService extends AbstractService {
 						if(prevJob.getPlannedStartTime().before(currDate.toDate())) {
 					        DateTime lastDate = currDate.dayOfMonth().withMaximumValue();
 					        currDate = currDate.plusDays(currDate.dayOfMonth().getMaximumValue());
+							while(currDate.isBefore(lastDate) || currDate.isEqual(lastDate)) {
+								jobCreationTask(dailyTask, dailyTask.getJob(), dailyTask.getData(), currDate.toDate());
+								dailyTask.setLastRun(currDate.toDate());
+								currDate = currDate.plusDays(currDate.dayOfMonth().getMaximumValue()); //create for every month.
+							}
+						}
+					}
+				}
+			}else if(dailyTask.getSchedule().equalsIgnoreCase(Frequency.YEAR.getTypeFrequency())) {
+				String creationPolicy = env.getProperty("scheduler.yearlyJob.creation");
+				if(creationPolicy.equalsIgnoreCase("daily")) { //if the creation policy is set to daily, create jobs for the rest of the month
+					PageRequest pageRequest = new PageRequest(1, 1); 
+					List<Job> prevJobs = jobRepository.findLastJobByParentJobId(dailyTask.getJob().getId(), pageRequest);
+					DateTime currDate = DateTime.now();
+					if(CollectionUtils.isNotEmpty(prevJobs)) {
+						Job prevJob = prevJobs.get(0);
+						if(prevJob.getPlannedStartTime().before(currDate.toDate())) {
+					        DateTime lastDate = currDate.dayOfYear().withMaximumValue();
+					        currDate = currDate.plusDays(currDate.dayOfYear().getMaximumValue());
 							while(currDate.isBefore(lastDate) || currDate.isEqual(lastDate)) {
 								jobCreationTask(dailyTask, dailyTask.getJob(), dailyTask.getData(), currDate.toDate());
 								dailyTask.setLastRun(currDate.toDate());

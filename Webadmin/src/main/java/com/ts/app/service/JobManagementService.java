@@ -771,11 +771,11 @@ public class JobManagementService extends AbstractService {
 		//}
 
 		//if the job is scheduled for recurrence create a scheduled task
-		if(!StringUtils.isEmpty(assetPpmScheduleDTO.getId()) && !assetPpmScheduleDTO.getTitle().equalsIgnoreCase("HOUR")) {
+		if(!StringUtils.isEmpty(assetPpmScheduleDTO.getId())) {
 			log.debug(">>> Scheduler Service <<<");
 			SchedulerConfigDTO schConfDto = new SchedulerConfigDTO();
 			//schConfDto.setSchedule(jobDTO.getSchedule());
-			schConfDto.setType("MAINTENANCE");
+			schConfDto.setType("CREATE_JOB");
 			StringBuffer data = new StringBuffer();
 			data.append("title="+assetPpmScheduleDTO.getTitle());
 			data.append("&description="+assetPpmScheduleDTO.getFrequencyPrefix()+" "+assetPpmScheduleDTO.getFrequencyDuration()+" "+assetPpmScheduleDTO.getFrequency());				
@@ -788,7 +788,7 @@ public class JobManagementService extends AbstractService {
 			//data.append("&location="+assetPpmScheduleDTO.getLocationId());
 			data.append("&frequency="+assetPpmScheduleDTO.getFrequency());
 			schConfDto.setData(data.toString());
-			schConfDto.setSchedule(assetPpmScheduleDTO.getTitle());
+			schConfDto.setSchedule(assetPpmScheduleDTO.getFrequency());
 			schConfDto.setStartDate(assetPpmScheduleDTO.getStartDate());
 			schConfDto.setEndDate(assetPpmScheduleDTO.getEndDate());
 			schConfDto.setScheduleEndDate(assetPpmScheduleDTO.getEndDate());
