@@ -29,6 +29,7 @@ import com.ts.app.domain.AssetPPMSchedule;
 import com.ts.app.domain.AssetParameterConfig;
 import com.ts.app.domain.AssetParameterReading;
 import com.ts.app.domain.AssetType;
+import com.ts.app.domain.CheckInOut;
 import com.ts.app.domain.Checklist;
 import com.ts.app.domain.Employee;
 import com.ts.app.domain.EmployeeProjectSite;
@@ -82,6 +83,7 @@ import com.ts.app.web.rest.dto.AssetgroupDTO;
 import com.ts.app.web.rest.dto.BaseDTO;
 import com.ts.app.web.rest.dto.EmployeeDTO;
 import com.ts.app.web.rest.dto.ExportResult;
+import com.ts.app.web.rest.dto.ImageDeleteRequest;
 import com.ts.app.web.rest.dto.ImportResult;
 import com.ts.app.web.rest.dto.JobDTO;
 import com.ts.app.web.rest.dto.SearchCriteria;
@@ -923,5 +925,23 @@ public class AssetManagementService extends AbstractService {
 		}
 		return assetParameterReadingDTO;
 	}
+
+	public AssetParameterReading getLatestParamReading(long assetId) {
+		AssetParameterReading assetParamReadings = assetRepository.findTopByNameOrderByCreatedDate(assetId);
+		return assetParamReadings;
+	}
+	
+	@Transactional
+    public void deleteImages(long id) {
+		AssetDocument assetDocumentEntity = assetDocumentRepository.findOne(id);
+		Long assetId = assetDocumentEntity.getAsset().getId();
+		String file = assetDocumentEntity.getFile(); 
+		Asset asset = assetRepository.findOne(assetId);
+		String assetCode = asset.getCode();
+		Long siteId = asset.getSite().getId();
+		String fileName = fileUploadHelper.deleteAssetFile(assetCode, siteId, file);
+		log.info("The " + fileName + " was deleted successfully.");
+		assetDocumentRepository.delete(id);
+    }
 
 }
