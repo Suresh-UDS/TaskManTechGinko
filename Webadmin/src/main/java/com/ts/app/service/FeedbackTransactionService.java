@@ -312,17 +312,21 @@ public class FeedbackTransactionService extends AbstractService {
 	        	toTime = toTime.withSecond(59);
 	        DecimalFormat df = new DecimalFormat("#.0");
 			// Calcualte a weekly date need to modify
+	        ZonedDateTime weeklyFromDate = fromTime;
+	        	ZonedDateTime weeklyToDate = toTime;
+	        if(searchCriteria.getCheckInDateTimeFrom() == null && searchCriteria.getCheckInDateTimeTo() == null) {
 				DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSSSSS");
 		        Date date = new Date();
 		        String todate = dateFormat.format(date);
 		        String pattern = "yyyy-MM-dd HH:mm:ss.SSSSSS";
 		        DateTimeFormatter parser = DateTimeFormatter.ofPattern(pattern).withZone(ZoneId.systemDefault());
-		        ZonedDateTime weeklyToDate = ZonedDateTime.parse(todate, parser);
+		        weeklyToDate = ZonedDateTime.parse(todate, parser);
 		        Calendar cal = Calendar.getInstance();
 		        cal.add(Calendar.DATE, -7);
 		        Date todate1 = cal.getTime();
 		        String fromdate = dateFormat.format(todate1);
-		        ZonedDateTime weeklyFromDate = ZonedDateTime.parse(fromdate, parser);
+		        weeklyFromDate = ZonedDateTime.parse(fromdate, parser);
+	        }
 		        // end
 			if(searchCriteria.getProjectId() > 0) {
 				log.debug("***************"+searchCriteria.getSiteId()+"\t block: "+ searchCriteria.getBlock()+"\t floor : "+ searchCriteria.getFloor()+"\t zone : " +searchCriteria.getZone()+"fromTime: \t"+fromTime+"toTime \t"+toTime);
