@@ -100,8 +100,6 @@
     <plugin name="cordova-plugin-nativeaudio" spec="^3.0.9" />
     <plugin name="cordova-plugin-app-version" spec="^0.1.9" />
     <plugin name="cordova-plugin-qrscanner" spec="^2.6.0" />
-<<<<<<< HEAD
-=======
+    <plugin name="cordova-plugin-datepicker" spec="^0.9.3" />
     <plugin name="onesignal-cordova-plugin" spec="^2.4.1" />
->>>>>>> Release-1.0
 </widget>

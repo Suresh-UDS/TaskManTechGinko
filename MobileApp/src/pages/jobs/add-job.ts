@@ -123,9 +123,6 @@ export class CreateJobPage {
             };
 
             if(this.ticket){
-<<<<<<< HEAD
-                this.newJob.ticketId = this.ticket.id;
-=======
                 this.newJob={
                     "title":this.title,
                     "description":this.description,
@@ -140,7 +137,6 @@ export class CreateJobPage {
                     "locationId":1,
                     "ticketId":this.ticket.id
                 }
->>>>>>> Release-1.0
             }
 
 
