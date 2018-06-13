@@ -147,7 +147,7 @@ public class ImportUtil {
 	public ImportResult importJobData(MultipartFile file, long dateTime) {
         String fileName = dateTime + ".xlsx";
 		String filePath = env.getProperty(NEW_IMPORT_FOLDER) + SEPARATOR +  JOB_FOLDER;
-		String uploadedFileName = fileUploadHelper.uploadImportFile(file, filePath, fileName);
+		String uploadedFileName = fileUploadHelper.uploadJobImportFile(file, filePath, fileName);
 		String targetFilePath = env.getProperty(COMPLETED_IMPORT_FOLDER) + SEPARATOR +  JOB_FOLDER;
 		String fileKey = fileName.substring(0, fileName.indexOf(".xlsx"));
 		if(statusMap.containsKey(fileKey)) {
@@ -166,7 +166,7 @@ public class ImportUtil {
 	public ImportResult importClientData(MultipartFile file, long dateTime) {
         String fileName = dateTime + ".xlsx";
 		String filePath = env.getProperty(NEW_IMPORT_FOLDER) + SEPARATOR +  CLIENT_FOLDER;
-		String uploadedFileName = fileUploadHelper.uploadImportFile(file, filePath, fileName);
+		String uploadedFileName = fileUploadHelper.uploadJobImportFile(file, filePath, fileName);
 		String targetFilePath = env.getProperty(COMPLETED_IMPORT_FOLDER) + SEPARATOR +  CLIENT_FOLDER;
 		String fileKey = fileName.substring(0, fileName.indexOf(".xlsx"));
 		if(statusMap.containsKey(fileKey)) {
@@ -186,7 +186,7 @@ public class ImportUtil {
 	public ImportResult importSiteData(MultipartFile file, long dateTime) {
         String fileName = dateTime + ".xlsx";
 		String filePath = env.getProperty(NEW_IMPORT_FOLDER) + SEPARATOR +  SITE_FOLDER;
-		String uploadedFileName = fileUploadHelper.uploadImportFile(file, filePath, fileName);
+		String uploadedFileName = fileUploadHelper.uploadJobImportFile(file, filePath, fileName);
 		String targetFilePath = env.getProperty(COMPLETED_IMPORT_FOLDER) + SEPARATOR +  SITE_FOLDER;
 		String fileKey = fileName.substring(0, fileName.indexOf(".xlsx"));
 		if(statusMap.containsKey(fileKey)) {
@@ -205,7 +205,7 @@ public class ImportUtil {
 	public ImportResult importEmployeeData(MultipartFile file, long dateTime) {
         String fileName = dateTime + ".xlsx";
 		String filePath = env.getProperty(NEW_IMPORT_FOLDER) + SEPARATOR +  EMPLOYEE_FOLDER;
-		String uploadedFileName = fileUploadHelper.uploadImportFile(file, filePath, fileName);
+		String uploadedFileName = fileUploadHelper.uploadJobImportFile(file, filePath, fileName);
 		String targetFilePath = env.getProperty(COMPLETED_IMPORT_FOLDER) + SEPARATOR +  EMPLOYEE_FOLDER;
 		String fileKey = fileName.substring(0, fileName.indexOf(".xlsx"));
 		if(statusMap.containsKey(fileKey)) {
@@ -225,7 +225,7 @@ public class ImportUtil {
 	public ImportResult importAssetData(MultipartFile file, long dateTime) {
         String fileName = dateTime + ".xlsx";
 		String filePath = env.getProperty(NEW_IMPORT_FOLDER) + SEPARATOR +  ASSET_FOLDER;
-		String uploadedFileName = fileUploadHelper.uploadImportFile(file, filePath, fileName);
+		String uploadedFileName = fileUploadHelper.uploadJobImportFile(file, filePath, fileName);
 		String targetFilePath = env.getProperty(COMPLETED_IMPORT_FOLDER) + SEPARATOR +  ASSET_FOLDER;
 		String fileKey = fileName.substring(0, fileName.indexOf(".xlsx"));
 		if(statusMap.containsKey(fileKey)) {
@@ -245,7 +245,7 @@ public class ImportUtil {
 	public ImportResult importChecklistData(MultipartFile file, long dateTime) {
         String fileName = dateTime + ".xlsx";
 		String filePath = env.getProperty(NEW_IMPORT_FOLDER) + SEPARATOR +  CHECKLIST_FOLDER;
-		String uploadedFileName = fileUploadHelper.uploadImportFile(file, filePath, fileName);
+		String uploadedFileName = fileUploadHelper.uploadJobImportFile(file, filePath, fileName);
 		String targetFilePath = env.getProperty(COMPLETED_IMPORT_FOLDER) + SEPARATOR +  CHECKLIST_FOLDER;
 		String fileKey = fileName.substring(0, fileName.indexOf(".xlsx"));
 		if(statusMap.containsKey(fileKey)) {
@@ -265,7 +265,7 @@ public class ImportUtil {
 	public ImportResult importEmployeeShiftData(MultipartFile file, long dateTime) {
         String fileName = dateTime + ".xlsx";
 		String filePath = env.getProperty(NEW_IMPORT_FOLDER) + SEPARATOR +  EMP_SHIFT_FOLDER;
-		String uploadedFileName = fileUploadHelper.uploadImportFile(file, filePath, fileName);
+		String uploadedFileName = fileUploadHelper.uploadJobImportFile(file, filePath, fileName);
 		String targetFilePath = env.getProperty(COMPLETED_IMPORT_FOLDER) + SEPARATOR +  EMP_SHIFT_FOLDER;
 		String fileKey = fileName.substring(0, fileName.indexOf(".xlsx"));
 		if(statusMap.containsKey(fileKey)) {

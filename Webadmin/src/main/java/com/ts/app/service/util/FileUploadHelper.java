@@ -152,7 +152,6 @@ public class FileUploadHelper {
 		}
 		return imageDataString;
 	}
-<<<<<<< HEAD
 	
 	public String readDocument(String imageFileName) {
 		String filePath = env.getProperty("upload.file.path");
@@ -174,8 +173,7 @@ public class FileUploadHelper {
 		}
 		return imageDataString;
 	}
-=======
->>>>>>> Release-1.0
+
 
 	public String readQuestionImageFile(long feedbackQuestionsId, String imageFileName) {
 		String filePath = env.getProperty("upload.file.path");
@@ -374,13 +372,8 @@ public class FileUploadHelper {
         }
         return imageDataString;
     }
-<<<<<<< HEAD
-    
-    public String uploadImportFile(MultipartFile file, String filePath , String fileName) {
-=======
 
     public String uploadJobImportFile(MultipartFile file, String filePath , String fileName) {
->>>>>>> Release-1.0
         log.debug("file =" + file + ",  name=" + fileName);
         if (!file.isEmpty()) {
             // check and create emp directory
@@ -412,7 +405,6 @@ public class FileUploadHelper {
         return fileName;
     }
     
-<<<<<<< HEAD
     public String uploadAssetDcmFile(String assetCode, Long siteId, MultipartFile file, long dateTime) {
     	log.debug("Site id" + siteId);
     	String extension = FilenameUtils.getExtension(file.getOriginalFilename());
@@ -490,9 +482,6 @@ public class FileUploadHelper {
 	}
     
     
-    
-    
-=======
     private void uploadFile(MultipartFile file, String filePath , String fileName) {
     		FileSystem fileSystem = FileSystems.getDefault();
         Path path = fileSystem.getPath(filePath);
@@ -535,5 +524,5 @@ public class FileUploadHelper {
         return imageDataString;
     }
 
->>>>>>> Release-1.0
+
 }
