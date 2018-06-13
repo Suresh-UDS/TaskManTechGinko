@@ -299,7 +299,8 @@ export class AssetView {
         console.log("To Date:" + toDate.toISOString());
         var searchCriteria={
             fromDate:fromDate.toISOString(),
-            toDate:toDate.toISOString()
+            toDate:toDate.toISOString(),
+            assetId:this.assetDetails.id
         };
         if(categories == 'jobs')
         {
@@ -307,6 +308,7 @@ export class AssetView {
         }
         else if(this.categories == 'tickets')
         {
+            this.componentService.showLoader("")
             this.getTickets(searchCriteria);
         }
 
