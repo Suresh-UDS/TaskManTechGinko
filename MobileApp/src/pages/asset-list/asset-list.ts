@@ -24,6 +24,7 @@ export class AssetList {
     searchCriteria:any;
     page:1;
     totalPages:0;
+    open:any;
   constructor(public componentService:componentService, public navCtrl: NavController, public navParams: NavParams, public modalController:ModalController, public qrScanner:QRScanner, public assetService:AssetService) {
     this.assetList = [];
     this.searchCriteria = {};
@@ -43,6 +44,8 @@ export class AssetList {
             console.log("")
         }
     );
+
+    this.open = true;
 
 
       // After Set Pagination
@@ -67,10 +70,12 @@ export class AssetList {
   }
 
   openFilters(){
+      this.open = false;
       console.log("Opening filter modal");
       let modal = this.modalController.create(AssetFilter,{},{cssClass : 'asset-filter',showBackdrop : true});
       modal.onDidDismiss(data=>{
           console.log("Modal dismissed");
+          this.open = true;
           console.log(data);
           var searchCriteria = {
               siteId:data.siteId,
