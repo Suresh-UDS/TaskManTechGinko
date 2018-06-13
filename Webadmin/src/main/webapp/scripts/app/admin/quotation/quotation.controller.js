@@ -7,7 +7,7 @@ angular
 				function($scope, $rootScope, $state, $timeout, $http, $document, $window,
 						$stateParams, $location, RateCardComponent,TicketComponent, JobComponent,
 						 ProjectComponent, SiteComponent,PaginationComponent,$filter) {
-                    
+
                     $rootScope.loadingStop();
 
                     $rootScope.loginView = false;
@@ -17,6 +17,10 @@ angular
                      $scope.selectedSite = null;
 
 					$scope.quotations;
+
+					$scope.quotationImages=[];
+
+                    $scope.selectedImageFile;
 
 					$scope.materialName;
 
@@ -67,10 +71,10 @@ angular
 					$scope.pageSort = 10;
 
 					$scope.pager = {};
-					
-			        $scope.selectedSubmittedDate = $filter('date')(new Date(), 'dd/MM/yyyy'); 
+
+			        $scope.selectedSubmittedDate = $filter('date')(new Date(), 'dd/MM/yyyy');
 			        $scope.selectedApprovedDate = $filter('date')(new Date(), 'dd/MM/yyyy');
-					
+
 			        $scope.selectedSubmittedDateSer = new Date();
 			        $scope.selectedApprovedDateSer = new Date();
 
@@ -83,13 +87,13 @@ angular
 			        $('input#submittedDateFilter').on('dp.change', function(e){
 			            console.log(e.date);
 			            console.log(e.date._d);
-			            $scope.selectedSubmittedDateSer = e.date._d; 
-			            
+			            $scope.selectedSubmittedDateSer = e.date._d;
+
 			            $.notifyClose();
-			             
+
 		               $scope.selectedSubmittedDate = $filter('date')(e.date._d, 'dd/MM/yyyy');
-			            
-			            
+
+
 
 			        });
 			        $('input#approvedDateFilter').on('dp.change', function(e){
@@ -98,14 +102,14 @@ angular
 			            $scope.selectedApprovedDateSer = e.date._d;
 
 			            $.notifyClose();
-			            
+
 		                $scope.selectedApprovedDate = $filter('date')(e.date._d, 'dd/MM/yyyy');
 
 			        });
-			        
+
 			        $scope.initCalender();
 
-					
+
 					$scope.init = function() {
 
                         console.log("State parameters");
@@ -148,6 +152,39 @@ angular
 
 						$scope.loadProjects();
 					}
+
+					$scope.actionsShow = function() {
+                     $('#approveButton').show();
+                      $('#actionButtons').show();
+					};
+
+					$scope.actionsHide= function() {
+					  $('#approveButton').hide();
+                      $('#actionButtons').hide();
+					};
+
+					 $scope.stepsModel = [];
+
+					    $scope.imageUpload = function(event){
+
+					    	alert(event);
+					         //var files = event.target.files; //FileList object
+
+					        /* for (var i = 0; i < files.length; i++) {
+					             var file = files[i];
+					                 var reader = new FileReader();
+					                 reader.onload = $scope.imageIsLoaded;
+					                 reader.readAsDataURL(file);
+					         }*/
+					    }
+
+					    $scope.imageIsLoaded = function(e){
+					        $scope.$apply(function() {
+					            $scope.stepsModel.push(e.target.result);
+					        });
+					    }
+
+
 
 					$scope.loadProjects = function() {
 						ProjectComponent.findAll().then(function(data) {
@@ -282,6 +319,9 @@ angular
 					}
 
 					$scope.saveQuotation = function(mode) {
+
+						console.log("Image file",$scope.selectedImageFile);
+
 						$scope.quotation.siteId = $scope.selectedSite.id;
 						$scope.quotation.siteName = $scope.selectedSite.name;
 						$scope.quotation.projectId = $scope.selectedProject.id;
@@ -303,6 +343,18 @@ angular
 						RateCardComponent.createQuotation($scope.quotation)
 								.then(function(response) {
 									console.log(response);
+                                console.log($scope.selectedImageFile);
+								if($scope.selectedImageFile !=""){
+
+								RateCardComponent.upload(response._id,$scope.selectedImageFile)
+								    .then(function(response) {
+									console.log("image uploaded",response);
+
+								}).catch(function (response) {
+									console.log("Failed to image upload",response);
+								});
+
+								}
 									$scope.showNotifications('top','center','success','Quotation saved Successfully');
 									//$scope.loadAllQuotations();
 									$location.path('/quotation-list');
@@ -319,12 +371,19 @@ angular
 
 			                        }
 			                    });
-					}
+					};
 
 					$scope.selectQuotation = function(quotation) {
 
 						$scope.quotation = quotation;
-					}
+					};
+
+                    $scope.loadQuotationImage = function(image) {
+                        var eleId = 'photoStart';
+                        var ele = document.getElementById(eleId);
+                        ele.setAttribute('src',image);
+
+                    };
 
 			        $scope.loadQuotation = function() {
 
@@ -352,6 +411,24 @@ angular
 				                $scope.selectedSite = {};
 				                $scope.selectedSite.id = $scope.quotation.siteId;
 				                $scope.selectedSite.name = $scope.quotation.siteName;
+
+				                if($scope.quotation.images.length>0){
+				                    console.log("images found");
+				                    for(var i=0;i<$scope.quotation.images.length;i++){
+				                        RateCardComponent.findQuotationImages($scope.quotation._id,$scope.quotation.images[i]).
+				                        then(function (response) {
+				                            console.log(response);
+				                            console.log(response.image);
+                                            $scope.quotationImages.push(response);
+                                        })
+                                    }
+                                }
+
+                                 $scope.loadQImagesNew = function(image,qId) {
+						            var eleId = 'quoImage';
+						            var ele = document.getElementById(eleId);
+						            ele.setAttribute('src',image);
+						        };
 
 				                if($scope.quotation.ticketId > 0) {
 					                TicketComponent.getTicketDetails($scope.quotation.ticketId).then(function(data){
@@ -498,14 +575,14 @@ angular
 			        	if($scope.selectedApprovedBy) {
 			        		$scope.searchCriteria.quotationApprovedBy = $scope.selectedApprovedBy;
 			        	}
-			        	
+
 			        	if($scope.selectedSubmittedDateSer) {
 			        		$scope.searchCriteria.quotationSubmittedDate = $scope.selectedSubmittedDateSer;
 			        	}
 			        	if($scope.selectedApprovedDateSer) {
 			        		$scope.searchCriteria.quotationApprovedDate = $scope.selectedApprovedDateSer;
 			        	}
-			        	
+
 
 		            if($scope.pageSort){
 		                $scope.searchCriteria.sort = $scope.pageSort;
@@ -529,7 +606,7 @@ angular
 
 		        	//RateCardComponent.search($scope.searchCriteria).then(function (data) {
 		        	RateCardComponent.getAllQuotations($scope.searchCriteria).then(function (data) {
-		                $scope.quotations = data;
+		        	    $scope.quotations = data;
 		                //$scope.quotations = data.transactions;
 		                $scope.quotationsLoader = true;
 		                  /*

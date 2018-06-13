@@ -11,7 +11,7 @@ import {AssetService} from "../service/assetService";
  * Ionic pages and navigation.
  */
 @Component({
-    selector: 'page-asset-filter',
+    selector: 'page-asset-list',
     templateUrl: 'asset-filter.html',
 })
 export class AssetFilter {
@@ -26,24 +26,23 @@ export class AssetFilter {
     activeSite:any;
     selectedAssetGroup:any;
     searchCriteria:any;
-
+    selectOptions:any;
     page:1;
     totalPages:0;
     pageSort:15;
     count=0;
+    assetType:any;
     constructor(public navCtrl: NavController, public navParams: NavParams, public viewCtrl: ViewController, public component:componentService,
                 public siteService:SiteService, public assetService:AssetService) {
-        this.assetGroup = [
-            {name:"CMRL"},
-            {name:"UDS House Keeping Assets"},
-            {name:"UDS Electrical Assets"},
-            {name:"UDS Plumbing Assets"}
-        ]
+
     }
 
     ionViewDidLoad() {
         console.log('ionViewDidLoad AssetFilter');
         this.component.showLoader('Getting Project');
+        this.selectOptions={
+            cssClass: 'selectbox-popover'
+        }
         this.siteService.getAllProjects().subscribe(
             response=>{
                 console.log("====project======");
@@ -61,6 +60,31 @@ export class AssetFilter {
                 }
                 this.component.showToastMessage(this.msg,'bottom');
                 this.component.closeLoader();
+            }
+        )
+
+        this.assetService.getAssetType().subscribe(
+            response=>
+            {
+                console.log("Get Asset type Response");
+                console.log(response);
+                this.assetType = response;
+            },error=>
+            {
+                console.log("Get Asset Type  Reading");
+                console.log(error);
+            }
+        )
+        this.assetService.getAssetGroup().subscribe(
+            response=>
+            {
+                console.log("Get Asset Group Response");
+                console.log(response);
+                this.assetGroup = response;
+            },error=>
+            {
+                console.log("Get Asset Group Reading");
+                console.log(error);
             }
         )
 
@@ -99,11 +123,24 @@ export class AssetFilter {
         this.viewCtrl.dismiss(data);
     }
 
+    typeChange(i)
+    {
+        this.assetType[i].status = true;
+    }
+    groupChange(i)
+    {
+        this.assetGroup[i].status = true;
+    }
+
     filterAssets(){
         this.searchCriteria = {
             siteId:this.selectedSite.id,
             projectId:this.selectedProject.id,
+            assetType:this.assetType,
+            assetGroup:this.assetGroup
         };
+        console.log(this.searchCriteria);
+
         this.viewCtrl.dismiss(this.searchCriteria);
     }
 

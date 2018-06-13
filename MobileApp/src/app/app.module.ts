@@ -79,12 +79,9 @@ import {QuotationImagePopoverPage} from "../pages/quotation/quotation-image-popo
 import { BackgroundMode } from '@ionic-native/background-mode';
 import { NativeAudio } from '@ionic-native/native-audio';
 import {SelectFeedbackPage} from "../pages/feedback/select-feedback";
-import{GetAssetReadings} from "../pages/get-asset-readings/get-asset-readings";
 import {FeedbackZone} from "../pages/feedback/feedbackZone";
 import {Splash} from "../pages/splash/splash";
 import {SplashLogo} from "../pages/splash-logo/splash-logo";
-
-
 import {InitFeedbackZone} from "../pages/feedback/init-feedback-zone";
 import {WizardFeedbackEntry} from "../pages/feedback/wizard-feedback-entry";
 import {FeedbackQuestionsForm} from "../pages/feedback/feedback-questions-form";
@@ -97,11 +94,12 @@ import {HasPermission} from "../components/has-permission/has-permission";
 import {AssetList} from "../pages/asset-list/asset-list";
 import {AssetFilter} from "../pages/asset-list/asset-filter";
 import {AssetView} from "../pages/asset-view/asset-view";
-import {GetAssetReading} from "../pages/asset-view/get-asset-reading";
 import {QRScanner} from "@ionic-native/qr-scanner";
 import {ScanQR} from "../pages/asset-list/scanQR";
 import {IonicImageViewerModule} from "ionic-img-viewer";
 import {DatePicker} from "@ionic-native/date-picker";
+import{GetAssetReading} from "../pages/asset-view/get-asset-reading";
+import{GetAssetReadings} from "../pages/asset-view/get-asset-readings/get-asset-readings";
 
 import{EmployeeFilter} from "../pages/employee-list/employee-filter/employee-filter";
 import {JobFilter} from "../pages/jobs/job-filter/job-filter";
@@ -168,13 +166,13 @@ import {JobFilter} from "../pages/jobs/job-filter/job-filter";
       AssetList,
       AssetView,
       AssetFilter,
-      GetAssetReading,
       ScanQR,
       JobFilter,
       TicketFilter,
       Splash,
       SplashLogo,
       EmployeeFilter,
+      GetAssetReading,
       GetAssetReadings,
   ],
   imports: [
@@ -250,7 +248,6 @@ import {JobFilter} from "../pages/jobs/job-filter/job-filter";
       AssetView,
       AssetList,
       AssetFilter,
-      GetAssetReading,ScanQR,
       JobFilter,
       TicketFilter,
       EmployeeFilter,
@@ -259,6 +256,7 @@ import {JobFilter} from "../pages/jobs/job-filter/job-filter";
       SplashLogo,
     ScanQR,
       GetAssetReadings,
+
 
 
   ],

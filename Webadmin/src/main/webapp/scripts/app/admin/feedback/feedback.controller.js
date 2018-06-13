@@ -166,7 +166,7 @@ angular.module('timeSheetApp')
 	    		$scope.selectedZone = zone;
 	    		//document.getElementById('searchForm').submit()
 
-	    		$scope.search();
+	    		//$scope.search();
 	    };
 
 	    $scope.search = function () {
@@ -252,6 +252,10 @@ angular.module('timeSheetApp')
                 $scope.data = [];
                 $scope.label = [];
                 $scope.datas = [];
+//                $scope.options = {}
+//                $scope.options.legend = { "display" : true}
+//                $scope.option = {}
+//                $scope.option.legend = { "display" : true}
                 if($scope.feedbackReport.weeklyZone && $scope.feedbackReport.weeklyZone.length > 0) {
                     var zoneDateWiseRating = $scope.feedbackReport.weeklyZone;
                     var zoneDateWiseDataArr = [];
@@ -353,6 +357,19 @@ angular.module('timeSheetApp')
             document.body.innerHTML = printContents;
             window.print();
             document.body.innerHTML = originalContents;
+        }
+
+        $scope.printPage = function () {
+            window.print();
+        }
+
+
+        $scope.printToCart = function(printSectionId) {
+            var innerContents = document.getElementById(printSectionId).innerHTML;
+            var popupWinindow = window.open('', '_blank', 'width=600,height=700,scrollbars=no,menubar=no,toolbar=no,location=no,status=no,titlebar=no');
+            popupWinindow.document.open();
+            popupWinindow.document.write('<html><head><link rel="stylesheet" type="text/css" href="assets/css/material-dashboard.css" /></head><body onload="window.print()">' + innerContents + '</html>');
+            popupWinindow.document.close();
         }
 
         $scope.next = function() {

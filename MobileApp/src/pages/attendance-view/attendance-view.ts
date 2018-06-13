@@ -9,7 +9,6 @@ import {DomSanitizer} from "@angular/platform-browser";
  * Ionic pages and navigation.
  */
 
-@IonicPage()
 @Component({
   selector: 'page-attendance-view',
   templateUrl: 'attendance-view.html',

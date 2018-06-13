@@ -10,7 +10,6 @@ import {authService} from "../service/authService";
  * Ionic pages and navigation.
  */
 
-@IonicPage()
 @Component({
   selector: 'page-attendance-list',
   templateUrl: 'attendance-list.html',

@@ -35,6 +35,7 @@ import com.ts.app.domain.EmployeeProjectSite;
 import com.ts.app.domain.Frequency;
 import com.ts.app.domain.FrequencyDuration;
 import com.ts.app.domain.FrequencyPrefix;
+import com.ts.app.domain.Job;
 import com.ts.app.domain.Manufacturer;
 import com.ts.app.domain.ParameterConfig;
 import com.ts.app.domain.Project;
@@ -803,7 +804,7 @@ public class AssetManagementService extends AbstractService {
 
 		assetPPMSchedule = assetPpmScheduleRepository.save(assetPPMSchedule);
 		assetPpmScheduleDTO = mapperUtil.toModel(assetPPMSchedule, AssetPpmScheduleDTO.class);
-		//jobManagementService.createJob(assetPpmScheduleDTO);
+		jobManagementService.createJob(assetPpmScheduleDTO);
 		log.debug(">> after create job for ppm schedule <<<");
 		return assetPpmScheduleDTO;
 	}
@@ -895,6 +896,14 @@ public class AssetManagementService extends AbstractService {
 		assetParameterReading.setActive(AssetParameterReading.ACTIVE_YES);
 		Asset asset = assetRepository.findOne(assetParamReadingDTO.getAssetId());
 		assetParameterReading.setAsset(asset);
+		if(assetParamReadingDTO.getJobId() > 0) {
+			Job jobEntity = jobRepository.findOne(assetParamReadingDTO.getJobId());
+			assetParameterReading.setJob(jobEntity);
+		}else{ 
+			assetParameterReading.setJob(null);
+		}
+		AssetParameterConfig assetParameterConfig = assetParamConfigRepository.findOne(assetParamReadingDTO.getAssetParameterConfigId());
+		assetParameterReading.setAssetParameterConfig(assetParameterConfig);
 		assetParameterReading = assetParamReadingRepository.save(assetParameterReading);
 		assetParamReadingDTO = mapperUtil.toModel(assetParameterReading, AssetParameterReadingDTO.class);
 		return assetParamReadingDTO;
@@ -923,5 +932,24 @@ public class AssetManagementService extends AbstractService {
 		}
 		return assetParameterReadingDTO;
 	}
+
+	public AssetParameterReadingDTO getLatestParamReading(long assetId, long assetParamId) {
+		List<AssetParameterReading> assetParamReadings = assetRepository.findAssetReadingById(assetId, assetParamId);
+		AssetParameterReading assetLatestParamReading = assetParamReadings.get(0);
+		return mapperUtil.toModel(assetLatestParamReading, AssetParameterReadingDTO.class);
+	}
+	
+	@Transactional
+    public void deleteImages(long id) {
+		AssetDocument assetDocumentEntity = assetDocumentRepository.findOne(id);
+		Long assetId = assetDocumentEntity.getAsset().getId();
+		String file = assetDocumentEntity.getFile(); 
+		Asset asset = assetRepository.findOne(assetId);
+		String assetCode = asset.getCode();
+		Long siteId = asset.getSite().getId();
+		String fileName = fileUploadHelper.deleteAssetFile(assetCode, siteId, file);
+		log.info("The " + fileName + " was deleted successfully.");
+		assetDocumentRepository.delete(id);
+    }
 
 }

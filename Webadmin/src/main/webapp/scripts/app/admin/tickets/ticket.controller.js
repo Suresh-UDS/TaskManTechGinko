@@ -34,6 +34,7 @@ angular.module('timeSheetApp')
         $scope.selectedProject = null;
 
         $scope.selectedTicket = null;
+        $scope.selectedImageFile;
 
         $scope.calendar = {
                 start : false,
@@ -111,11 +112,21 @@ angular.module('timeSheetApp')
                     $scope.tickets.severity = $scope.tickets.severity;
                     $scope.tickets.comments = $scope.tickets.comments;
                     console.log('Tickets - ' + JSON.stringify($scope.tickets));
-                    JobComponent.createTicket($scope.tickets).then(function() {
+                    JobComponent.createTicket($scope.tickets).then(function(response) {
+                    		if($scope.selectedImageFile){
+		                    	TicketComponent.upload(response.id,$scope.selectedImageFile)
+							    .then(function(response) {
+								console.log("ticket image uploaded",response);
+		
+							}).catch(function (response) {
+								console.log("Failed to image upload",response);
+							});
+                    		}    	
+	                    	
                         $scope.success = 'OK';
                         $scope.showNotifications('top','center','success','Ticket Added');
                         $scope.selectedSite = null;
-                        $scope.loadTickets();
+                        //$scope.loadTickets();
                         $location.path('/tickets');
                     }).catch(function (response) {
                         $scope.success = null;
@@ -223,7 +234,14 @@ angular.module('timeSheetApp')
                 $scope.tickets.comments = $scope.tickets.comments;
                 $scope.tickets.status = $scope.tickets.status;
 
-
+                if($scope.tickets.image){
+                    console.log("image found");
+                    TicketComponent.findTicketImage($scope.tickets.id,$scope.tickets.image).
+	                    	then(function (response) {
+	                        console.log(response);
+	                        $scope.ticketImage = response;
+                    })
+                }
             });
         };
 
@@ -231,7 +249,7 @@ angular.module('timeSheetApp')
             var tId =parseInt(id);
 
             JobComponent.getTicketDetails(tId).then(function(data){
-                console.log("Ticket details List==" + JSON.stringify(data));
+                console.log("Ticket details ==" + JSON.stringify(data));
                 var tlist= data;
                 $scope.listId = tlist.id;
                 $scope.listTitle = tlist.title;
@@ -243,9 +261,23 @@ angular.module('timeSheetApp')
                 $scope.listCreatedBy = tlist.createdBy;
                 $scope.listCreatedDate = tlist.createdDate;
                 $scope.listStatus = tlist.status;
-
+                if(tlist.image){
+                    console.log("image found");
+                    TicketComponent.findTicketImage(tlist.id,tlist.image).
+	                    	then(function (response) {
+	                        console.log(response);
+	                        $scope.ticketImage = response;
+                    })
+                }
 
             });
+        };
+
+        
+        $scope.loadTicketImage = function(image,qId) {
+            var eleId = 'ticketImage';
+            var ele = document.getElementById(eleId);
+            ele.setAttribute('src',image);
         };
 
 
@@ -270,11 +302,22 @@ angular.module('timeSheetApp')
                 }
                 $scope.tickets.comments = $scope.tickets.comments;
                 console.log('Tickets - ' + JSON.stringify($scope.tickets));
-                JobComponent.updateTicket($scope.tickets).then(function() {
+                JobComponent.updateTicket($scope.tickets).then(function(response) {
+                		console.log('ticket updated successfuly');
+	                	if($scope.selectedImageFile){
+	                		console.log('ticket image found');
+	                    	TicketComponent.upload(response.id,$scope.selectedImageFile)
+						    .then(function(response) {
+							console.log("ticket image uploaded",response);
+	
+						}).catch(function (response) {
+							console.log("Failed to image upload",response);
+						});
+	            		}                    	
                     $scope.success = 'OK';
                     //$(".fadeInDown").setAttribute("aria-hidden", "false");
                     $scope.showNotifications('top','center','success','Ticket updated');
-                    $scope.search();
+                    //$scope.search();
                     $location.path('/tickets');
                 }).catch(function (response) {
                     $scope.success = null;

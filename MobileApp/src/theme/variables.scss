@@ -49,6 +49,8 @@ $clr-white:#ffffff;
 $clr-black:#191919;
 $margn5:5px;
 $fontSize10:10px;
+$font0:0px;
+$size:10%;
 
 
 $text-input-md-highlight-color-invalid: transparent;
@@ -169,6 +171,17 @@ button.button-md-primary p.siteName
 {
   margin-top:$margn5 - 2  !important;
 }
+.margin-left-0{
+  margin-left:$font0 !important;
+}
+.margin-right-0
+{
+  margin-right:$font0 !important;
+}
+.width100
+{
+  width:$size+90 !important;
+}
 
 
 scanqr
@@ -234,6 +247,7 @@ image-viewer ion-header
 {
   background-color: transparent !important;
 }
+
 
 // App iOS Variables
 // --------------------------------------------------

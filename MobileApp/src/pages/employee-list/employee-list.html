@@ -37,13 +37,16 @@
             </ion-avatar>
           </ion-col>
           <ion-col col-8 class="ver-center" (click)="viewEmployee(emp)">
-              <p text-left class="fnt-wt" text-capitalize>{{emp.name}}</p>
+              <p style="white-space:normal" text-left class="fnt-wt" text-capitalize>{{emp.name}} {{emp.lastName}}</p>
           </ion-col>
           <ion-col col-1 class="ver-center">
               <button #menu ion-button icon-left icon-only clear class="pop-icon" (click)="open(slidingItem, item ,count,menu)">
                 <ion-icon name="md-more" class="fnt-18 padding0"></ion-icon>
               </button>
           </ion-col>
+        </ion-row>
+        <ion-row col-8 offset-2>
+            <p text-left class="fnt-wt" text-capitalize>{{emp.empId}}</p>
         </ion-row>
       </ion-item>
 

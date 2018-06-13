@@ -9,7 +9,7 @@ import {CompleteJobPage} from "../jobs/completeJob";
 import {ViewTicket} from "../ticket/view-ticket";
 import {CreateTicket} from "../ticket/create-ticket";
 import{GetAssetReadings} from "./get-asset-readings/get-asset-readings";
-
+import {Camera, CameraOptions} from "@ionic-native/camera";
 import { DatePicker } from '@ionic-native/date-picker';
 import {AssetService} from "../service/assetService";
 
@@ -40,7 +40,7 @@ export class AssetView {
     viewButton:any;
     searchCriteria:any;
 
-  constructor(private modalCtrl:ModalController,private datePicker: DatePicker,private componentService:componentService,public navCtrl: NavController, public navParams: NavParams, public jobService:JobService, public assetService:AssetService) {
+  constructor(public camera: Camera,private modalCtrl:ModalController,private datePicker: DatePicker,private componentService:componentService,public navCtrl: NavController, public navParams: NavParams, public jobService:JobService, public assetService:AssetService) {
 
     this.assetDetails = this.navParams.data.assetDetails;
     this.categories = 'details';
@@ -60,20 +60,41 @@ export class AssetView {
       this.searchCriteria={
           assetId:this.assetDetails.id
       }
-      this.getJobs(this.searchCriteria);
-      this.getTickets(this.searchCriteria);
-      this.getAssetById();
-      this.getAssetPPMSchedule();
-      this.getAssetAMCSchedule();
-      this.viewReading();
-      this.getAssetConfig(this.assetDetails);
 
+      this.getAssetById();
   }
 
     getReadings(){
         this.navCtrl.push(GetAssetReading,{assetDetails:this.assetDetails});
     }
 
+    // Segment Change
+    segmentChange(categories)
+    {
+        this.fromDate="";
+        this.toDate="";
+    }
+    //
+
+    addAssetImage() {
+
+        const options: CameraOptions = {
+            quality: 50,
+            destinationType: this.camera.DestinationType.NATIVE_URI,
+            encodingType: this.camera.EncodingType.JPEG,
+            mediaType: this.camera.MediaType.PICTURE
+        };
+
+        this.camera.getPicture(options).then((imageData) => {
+
+            console.log('imageData -' +imageData);
+
+        })
+
+    }
+
+
+    // Pullto refresh
     doRefresh(refresher,segment)
     {
         this.componentService.showLoader("");
@@ -90,6 +111,9 @@ export class AssetView {
             // this.componentService.showLoader("");
         }
     }
+
+
+    //job
     getJobs(searchCriteria)
     {
         // var searchCriteria={
@@ -100,7 +124,7 @@ export class AssetView {
                 this.componentService.closeLoader();
                 console.log("Getting Jobs response");
                 console.log(response);
-                this.assetDetails.jobs=response.transactions;
+                this.assetDetails.jobs = response.transactions;
                 this.page = response.currPage;
                 this.totalPages = response.totalPages;
                 console.log(this.assetDetails.jobs)
@@ -151,24 +175,6 @@ export class AssetView {
             }, 1000);
         }
     }
-    getTickets(searchCriteria)
-    {
-        this.jobService.searchTickets(searchCriteria).subscribe(
-            response=>{
-                this.componentService.closeLoader()
-                console.log("Getting tickets response");
-                console.log(response);
-                this.assetDetails.tickets=response.transactions;
-            },
-            error=>{
-                this.componentService.closeLoader()
-                console.log(error)
-                console.log("Getting Ticket errors")
-            }
-        )
-
-
-    }
 
     viewJob(job)
     {
@@ -209,19 +215,11 @@ export class AssetView {
         item.setElementClass("active-slide", false);
         item.setElementClass("active-options-right", false);
     }
-
-    createTicket(){
-        this.navCtrl.push(CreateTicket);
-    }
-
-    viewTicket(ticket){
-        this.navCtrl.push(ViewTicket,{ticket:ticket});
-    }
+    //
 
 
 
     // Date search
-
     selectFromDate()
     {
         this.datePicker.show({
@@ -270,7 +268,8 @@ export class AssetView {
         console.log("To Date:" + toDate.toISOString());
         var searchCriteria={
             fromDate:fromDate.toISOString(),
-            toDate:toDate.toISOString()
+            toDate:toDate.toISOString(),
+            assetId:this.assetDetails.id
         };
         if(categories == 'jobs')
         {
@@ -278,38 +277,24 @@ export class AssetView {
         }
         else if(this.categories == 'tickets')
         {
+            this.componentService.showLoader("")
             this.getTickets(searchCriteria);
         }
 
     }
-    segmentChange()
-    {
-        this.fromDate="";
-        this.toDate="";
-    }
+    //
 
-    getAssetConfig(assetDetails){
-        console.log(this.assetDetails.config);
-        this.assetService.getAssetConfig(assetDetails.assetType,assetDetails.id).subscribe(
-            response=>{
-                console.log("Asset config");
-                console.log(response);
-                this.assetDetails.config = response;
-                this.getAssetAMCSchedule();
-            },err=>{
-                console.log("Error in getting asset config");
-                console.log(err);
-            })
-    }
+
 
     getAssetById(){
         this.assetService.getAssetById(this.assetDetails.id).subscribe(
             response=>{
+                this.componentService.closeLoader();
                 console.log("Asset by id");
                 console.log(response);
                 this.assetDetails = response;
-                this.getAssetConfig(this.assetDetails);
             },err=>{
+                this.componentService.closeLoader();
                 console.log("Error in getting asset by id");
                 console.log(err);
             }
@@ -317,22 +302,26 @@ export class AssetView {
 
     }
 
+
+    // PPM
     getAssetPPMSchedule()
     {
         this.assetService.getAssetPPMSchedule(this.assetDetails.id).subscribe(
             response=>{
-                console.log("Get asset AMC response");
+                this.componentService.closeLoader();
+                console.log("Get asset PPM response");
                 console.log(response);
                 this.assetDetails.ppms = response;
             },
             error=>{
-                console.log("Get asset AMC error");
+                this.componentService.closeLoader();
+                console.log("Get asset PPM error");
                 console.log(error);
-                this.assetDetails.ppms = [];
-            }
-        )
+            })
     }
 
+
+    // AMC
     getAssetAMCSchedule()
     {
         this.assetService.getAssetAMCSchedule(this.assetDetails.id).subscribe(
@@ -346,17 +335,33 @@ export class AssetView {
                 this.componentService.closeLoader()
                 console.log("Get asset AMC error");
                 console.log(error);
-            }
-        )
+            })
     }
 
-    viewReading(){
+    // Config
+    getAssetConfig(){
+        console.log(this.assetDetails.config);
+        this.assetService.getAssetConfig(this.assetDetails.assetType,this.assetDetails.id).subscribe(
+            response=>{
+                this.componentService.closeLoader()
+                console.log("Asset config");
+                console.log(response);
+                this.assetDetails.config = response;
+            },err=>{
+                this.componentService.closeLoader();
+                console.log("Error in getting asset config");
+                console.log(err);
+            })
+    }
+
+    // Reading
+    getReading(){
         this.assetService.viewReading(this.assetDetails.id).subscribe(
             response=>
             {
                 console.log("View Reading Response");
                 console.log(response);
-                this.assetDetails.reading=response;
+                this.assetDetails.reading = response;
             },error=>
             {
                 console.log("Error in View Reading");
@@ -364,4 +369,22 @@ export class AssetView {
             }
         )
     }
+
+    // Tickets
+    getTickets(searchCriteria)
+    {
+        this.jobService.searchTickets(searchCriteria).subscribe(
+            response=>{
+                this.componentService.closeLoader()
+                console.log("Getting tickets response");
+                console.log(response);
+                this.assetDetails.tickets = response.transactions;
+            },
+            error=>{
+                this.componentService.closeLoader()
+                console.log(error)
+                console.log("Getting Ticket errors")
+            })
+    }
+
 }

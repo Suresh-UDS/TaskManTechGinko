@@ -89,6 +89,7 @@ function startup(){
   app.get('/api/pdf/create',quotationController.createPDF);
   app.get('/api/rateCardTypes',quotationController.getRateCardTypes);
   app.post('/api/rateCard/delete',quotationController.deleteRateCard);
+  app.post('/api/quotation/uploadImage',quotationController.updateImages);
 
   // app.post('/api/oneSignal/send',notificationService.sendNotification);
   // app.post('/api/oneSignal/subscribe', notificationService.subscribe);
@@ -108,6 +109,33 @@ function setupMasterData(){
                 "type" : "quotation",
                 "value" : 1
             });
+        }
+    })
+
+    RateCardType.findOne({name:'MATERIAL'},function (err, result) {
+        if(!result){
+            RateCardType.create({
+                "name":"MATERIAL",
+                "uom":"PER_QTY"
+            })
+        }
+    })
+
+    RateCardType.findOne({name:'LABOUR'},function (err, res) {
+        if(!res){
+            RateCardType.create({
+                "name":"LABOUR",
+                "uom":"PER_HOUR"
+            })
+        }
+    })
+
+    RateCardType.findOne({name:'SERVICE'},function (err, res) {
+        if(!res){
+            RateCardType.create({
+                "name":"SERVICE",
+                "uom":"FIXED"
+            })
         }
     })
 }

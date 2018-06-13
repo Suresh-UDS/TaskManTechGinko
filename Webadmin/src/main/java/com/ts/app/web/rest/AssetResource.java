@@ -136,27 +136,6 @@ public class AssetResource {
 		log.debug(">>> asset id : " + id);
 		if (assetDTO.getId() > 0)
 			assetDTO.setId(id);
-		log.debug("Asset Details in updateAsset id from dto = " + assetDTO.getId());
-		log.debug(">>> Asset DTO update request <<<");
-		log.debug("Title <<<" + assetDTO.getTitle());
-		log.debug("AssetType <<<" + assetDTO.getAssetType());
-		log.debug("AssetGroup <<<" + assetDTO.getAssetGroup());
-		log.debug("Status <<<" + assetDTO.getStatus());
-		log.debug("ProjectId <<<" + assetDTO.getProjectId());
-		log.debug("SiteId <<<" + assetDTO.getSiteId());
-		log.debug("Block <<<" + assetDTO.getBlock());
-		log.debug("Floor <<<" + assetDTO.getFloor());
-		log.debug("Zone <<<" + assetDTO.getZone());
-		log.debug("Manufacture <<<" + assetDTO.getManufacturerId());
-		log.debug("ModelNumber <<<" + assetDTO.getModelNumber());
-		log.debug("SerialNumber <<<" + assetDTO.getSerialNumber());
-		log.debug("Acquired Date <<<" + assetDTO.getAcquiredDate());
-		log.debug("PurchasePrice <<<" + assetDTO.getPurchasePrice());
-		log.debug("CurrentPrice <<<" + assetDTO.getCurrentPrice());
-		log.debug("EstimatedDisposePrice <<<" + assetDTO.getEstimatedDisposePrice());
-		log.debug("Code <<<" + assetDTO.getCode());
-		log.debug("UdsAsset <<<" + assetDTO.isUdsAsset());
-		log.debug("Vendor <<<" + assetDTO.getVendorId());
 		AssetDTO response = assetService.updateAsset(assetDTO);
 		return new ResponseEntity<>(response, HttpStatus.CREATED);
 	}
@@ -358,7 +337,7 @@ public class AssetResource {
 	
 	@RequestMapping(value = "/assets/saveReadings", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> saveAssetReadings(@Valid @RequestBody AssetParameterReadingDTO assetParamReadingDTO, HttpServletRequest request) {
-		log.debug("Save Asset Parameter Reading" +assetParamReadingDTO.getAssetName());
+		log.debug("Save Asset Parameter Reading" +assetParamReadingDTO.getName());
 		try{ 
 			assetParamReadingDTO.setUserId(SecurityUtils.getCurrentUserId());
 			assetParamReadingDTO = assetService.saveAssetReadings(assetParamReadingDTO);
@@ -396,6 +375,19 @@ public class AssetResource {
 		return result;
 	}
 	
+	@RequestMapping(value = "/assets/{assetId}/getLatestReading/{assetParamId}", method = RequestMethod.GET)
+	public AssetParameterReadingDTO getLatestReading(@PathVariable("assetId") long assetId, @PathVariable("assetParamId") long assetParamId) {
+		AssetParameterReadingDTO result = null;
+		result = assetService.getLatestParamReading(assetId, assetParamId);
+		return result;
+	}
+	
+	@RequestMapping(value = "/assets/{id}/document/image", method = RequestMethod.DELETE)
+    public ResponseEntity<?>  deleteImages(@PathVariable("id") long id) {
+        log.debug("images ids -"+id);
+        assetService.deleteImages(id);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 	
 	
 }

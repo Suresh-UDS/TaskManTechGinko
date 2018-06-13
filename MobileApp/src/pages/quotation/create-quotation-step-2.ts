@@ -1,4 +1,4 @@
-import {Component, ViewChild} from '@angular/core';
+import {Component, Inject, ViewChild} from '@angular/core';
 import {
     AlertController, Events, ModalController, NavController, NavParams, PopoverController,
     Select
@@ -12,6 +12,8 @@ import {QuotationService} from "../service/quotationService";
 import {SiteService} from "../service/siteService";
 import {Camera, CameraOptions} from "@ionic-native/camera";
 import {QuotationImagePopoverPage} from "./quotation-image-popover";
+import {FileTransferObject, FileTransfer, FileUploadOptions} from "@ionic-native/file-transfer";
+import {ApplicationConfig, MY_CONFIG_TOKEN} from "../service/app-config";
 declare var demo;
 
 
@@ -59,8 +61,11 @@ export class CreateQuotationPage2 {
     viewSiteName:any;
     selectSiteIndex:any;
 
+
+    fileTransfer: FileTransferObject = this.transfer.create();
+
     constructor(public navCtrl: NavController,public camera: Camera,public modalCtrl: ModalController,public navParams:NavParams,public popoverCtrl: PopoverController, public evts: Events, public authService:authService, public alertCtrl: AlertController, public componentService:componentService,
-                private quotationService: QuotationService, private siteService: SiteService
+                private quotationService: QuotationService, private siteService: SiteService,private transfer: FileTransfer,@Inject(MY_CONFIG_TOKEN) private config:ApplicationConfig
                 ) {
 
         this.takenImages = [];
@@ -109,6 +114,7 @@ export class CreateQuotationPage2 {
             console.log(response.json());
             this.allSites = response.json();
             this.selectedSite=this.allSites[0].name;
+            this.siteDetails= this.allSites[0];
         })
 
         this.getRateCardTypes();
@@ -202,7 +208,77 @@ export class CreateQuotationPage2 {
     }
 
 
-    saveRates()
+    saveRates(mode)
+    {
+        if(this.rates.length!=0)
+        {
+
+            if(this.siteDetails){
+                console.log("Save quotation with site id");
+                this.quotationDetails = {
+                    "title":this.quotation.title,
+                    "description":this.quotation.description,
+                    "rateCardDetails":this.rates,
+                    "sentByUserId":this.sentByUserId,
+                    "sentByUserName":this.sentByUserName,
+                    "sentToUserId":this.sentToUserId,
+                    "sentToUserName":this.sentToUserName,
+                    "createdByUserId":this.sentByUserId,
+                    "createdByUserName":this.sentByUserName,
+                    "clientEmailId": this.clientEmailId,
+                    "siteId":this.siteDetails.id,
+                    "projectId":this.siteDetails.projectId,
+                    "projectName":this.siteDetails.projectName,
+                    "siteName":this.siteDetails.name,
+                    "grandTotal":this.grandTotal,
+                    "mode":mode
+                };
+                if(mode == 'submit'){
+                    console.log(mode);
+                    this.quotationDetails.submitted=true;
+                    this.quotationDetails.isSubmitted=true;
+                    this.quotationDetails.isDrafted=false;
+                    this.quotationDetails.drafted=false;
+
+                }else{
+                    console.log(mode);
+                    this.quotationDetails.drafted=true;
+                    this.quotationDetails.isDrafted=true;
+                    this.quotationDetails.submitted=false;
+                    this.quotationDetails.isSubmitted=false;
+                }
+
+                this.saveQuotationDetails(this.quotationDetails)
+            }else{
+                console.log("Save Quotation without site id");
+
+
+                this.quotationDetails = {
+                    "title":this.quotation.title,
+                    "description":this.quotation.description,
+                    "rateCardDetails":this.rates,
+                    "sentByUserId":this.sentByUserId,
+                    "sentByUserName":this.sentByUserName,
+                    "sentToUserId":this.sentToUserId,
+                    "sentToUserName":this.sentToUserName,
+                    "createdByUserId":this.sentByUserId,
+                    "createdByUserName":this.sentByUserName,
+                    "grandTotal":this.grandTotal,
+                    "drafted":true
+                };
+                this.presentAlert(this.quotationDetails,'Save Without Selecting Site');
+            }
+
+
+        }
+        else
+        {
+            demo.showSwal('basic','Add Quotation')
+
+        }
+    }
+
+    submitQuotation()
     {
         if(this.rates.length!=0)
         {
@@ -226,7 +302,7 @@ export class CreateQuotationPage2 {
                     "siteName":this.siteDetails.name,
                     "grandTotal":this.grandTotal,
                     "drafted":true,
-                    "mode":"create"
+                    "mode":"submit"
                 };
 
                 this.saveQuotationDetails(this.quotationDetails)
@@ -269,6 +345,38 @@ export class CreateQuotationPage2 {
         this.quotationService.createQuotation(quotationDetails).subscribe(
             response=>{
                 console.log(response);
+                if(this.takenImages.length>0){
+                    for(let i in this.takenImages) {
+
+                        console.log("image loop");
+                        console.log(i);
+                        console.log(this.takenImages[i]);
+                        console.log(this.takenImages[i].file);
+                        let token_header=window.localStorage.getItem('session');
+                        let options: FileUploadOptions = {
+                            fileKey: 'quotationFile',
+                            fileName:response._id+'_quotation',
+                            headers:{
+                                'X-Auth-Token':token_header
+                            },
+                            params:{
+                                quotationId:response._id,
+                            }
+                        };
+
+                        this.fileTransfer.upload(this.takenImages[i], this.config.Url+'api/quotation/image/upload', options)
+                            .then((data) => {
+                                console.log(data);
+                                var data_response = JSON.parse(data.response);
+                                console.log(data_response);
+                                console.log("image upload");
+                            }, (err) => {
+                                console.log(err);
+                                console.log("image upload fail");
+                            })
+
+                    }
+                }
                 this.componentService.showToastMessage('Quotation Successfully Drafted','bottom');
                 this.navCtrl.setRoot(QuotationPage);
 
@@ -344,7 +452,7 @@ export class CreateQuotationPage2 {
 
         popover.onDidDismiss(data=>
         {
-            this.takenImages.pop(data);
+            // this.takenImages.pop(data);
         })
     }
     viewCamera() {
@@ -369,7 +477,10 @@ export class CreateQuotationPage2 {
     }
     viewSite(site,i)
     {
-        this.selectedSite=site;
+        console.log("Selecting site");
+        console.log(site);
+        console.log(i);
+        this.selectedSite=site.name;
         this.siteDetails = site;
         this.openSites=true;
         this.selectSiteIndex=i;

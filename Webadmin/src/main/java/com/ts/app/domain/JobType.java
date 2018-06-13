@@ -20,5 +20,38 @@ public enum JobType {
 		value = val;
 	}
 	
-
+	public static JobType getType(String name) {
+		JobType result = null;
+		switch(name) {
+			case "HOUSEKEEPING" :
+				result = HOUSEKEEPING;
+				break;
+			case "ELECTRICAL" :
+				result = ELECTRICAL;
+				break;
+			case "AC" :
+				result = AC;
+				break;
+			case "CARPENTRY" :
+				result = CARPENTRY;
+				break;
+			case "PESTCONTROL" :
+				result = PESTCONTROL;
+				break;
+			case "PLUMBING" :
+				result = PLUMBING;
+				break;
+			case "MAINTENANCE" :
+				result = MAINTENANCE;
+				break;
+			case "ADMIN" :
+				result = ADMIN;
+				break;
+				
+			default:
+				result = HOUSEKEEPING;
+		
+		}
+		return result;
+	}
 }

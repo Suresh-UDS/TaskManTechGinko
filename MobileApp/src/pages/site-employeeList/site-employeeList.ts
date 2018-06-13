@@ -16,7 +16,6 @@ import {EmployeeService} from "../service/employeeService";
  * Ionic pages and navigation.
  */
 
-@IonicPage()
 @Component({
   selector: 'page-site-employee-list',
   templateUrl: 'site-employeeList.html',

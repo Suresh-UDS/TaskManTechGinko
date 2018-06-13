@@ -27,13 +27,25 @@ export class GetAssetReading {
                 public componentService:componentService, public popoverCtrl:PopoverController, public camera:Camera,
                 public assetService:AssetService) {
         this.assetDetails = this.navParams.get('assetDetails');
+        console.log(this.navParams.get('assetDetails'));
         this.dateTime = new Date();
         this.takenImages = [];
 
     }
     ionViewDidLoad(){
         console.log("Get Asset reading page");
+        console.log(this.assetDetails);
         console.log(this.assetDetails.config);
+        this.assetService.getAssetConfig(this.assetDetails.assetType,this.assetDetails.id).subscribe(
+            response=>{
+                console.log("Asset config details");
+                console.log(response);
+                this.assetDetails.config = response;
+            },err=>{
+                console.log("Error in getting asset config");
+                console.log(err);
+            }
+        )
 
     }
 
@@ -69,7 +81,7 @@ export class GetAssetReading {
 
         popover.onDidDismiss(data=>
         {
-            console.log(data)
+            console.log(data);
             if(data)
             {
                 this.takenImages.pop(data);
@@ -79,6 +91,7 @@ export class GetAssetReading {
 
     saveReading(reading){
         console.log("Reading page");
+        console.log(reading);
         var assetReading = {
             name:reading.name,
             uom:reading.uom,
@@ -86,8 +99,9 @@ export class GetAssetReading {
             finalValue:reading.currentValue,
             consumption:reading.currentValue-reading.previousValue,
             value:"0.88",
-            assetId:reading.assetId
-
+            assetId:reading.assetId,
+            assetParameterConfigId:reading.id,
+            consumptionMonitoringRequired:reading.consumptionMonitoringRequired,
         };
         this.assetService.saveReading(assetReading).subscribe(
             response=>{

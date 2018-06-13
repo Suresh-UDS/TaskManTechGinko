@@ -15,6 +15,9 @@ import com.ts.app.web.rest.dto.*;
 import org.apache.commons.collections.CollectionUtils;
 import org.hibernate.Hibernate;
 import org.joda.time.DateTime;
+import org.joda.time.DurationFieldType;
+import org.joda.time.Hours;
+import org.joda.time.Minutes;
 import org.joda.time.Seconds;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -227,6 +230,32 @@ public class JobManagementService extends AbstractService {
             log.debug("JobSpecification toPredicate - searchCriteria get overdue status -"+ searchCriteria.isOverdueStatus());
             log.debug("JobSpecification toPredicate - searchCriteria get consolidated status -"+ searchCriteria.isConsolidated());
 
+            boolean hasViewAll = false;
+	    		Hibernate.initialize(user.getUserRole());
+	    		UserRole userRole = user.getUserRole();
+	    		if(userRole != null) {
+	    			Set<UserRolePermission> permissions = userRole.getRolePermissions();
+	    			if(CollectionUtils.isNotEmpty(permissions)) {
+	    				for(UserRolePermission perm : permissions) {
+	    					if(perm.getModule().getName().equalsIgnoreCase("Jobs")
+	    						&& perm.getAction().getName().equalsIgnoreCase("ViewAll")) {
+	    						hasViewAll = true;
+	    						break;
+	    					}
+	    				}
+	    			}
+	    		}
+	    		List<Long> siteIds = new ArrayList<Long>();
+	    		if(hasViewAll) {
+            		List<EmployeeProjectSite> sites = employee.getProjectSites();
+            		if(hasViewAll) {
+	            		for(EmployeeProjectSite site : sites) {
+	            			siteIds.add(site.getSite().getId());
+	            		}
+	            		searchCriteria.setSiteIds(siteIds);
+            		}
+	    		}
+
             List<ReportResult> reportResults = new ArrayList<ReportResult>();
             log.debug("JobSpecification toPredicate - searchCriteria checkInDateFrom -"+ checkInDate);
 	        	if(checkInDate != null) {
@@ -317,10 +346,12 @@ public class JobManagementService extends AbstractService {
 		            			page = jobRepository.findByStartDateAndSiteAndJobType(searchCriteria.getSiteId(),  searchCriteria.getJobTypeName(), fromDt, toDt, pageRequest);
 		            		}else if(!StringUtils.isEmpty(searchCriteria.getJobTypeName())) {
 			        			page = jobRepository.findAll(new JobSpecification(searchCriteria,isAdmin),pageRequest);
-		            		}else if(CollectionUtils.isNotEmpty(subEmpIds)){
-		            			page = jobRepository.findByDateRange(searchCriteria.getUserId(), subEmpIds, fromDt, toDt, pageRequest);
 		            		}else {
-		            			page = jobRepository.findAll(new JobSpecification(searchCriteria,isAdmin),pageRequest);
+		            			if(CollectionUtils.isNotEmpty(siteIds)) {
+		            				page = jobRepository.findBySiteIdsOrEmpIdsAndDateRange(searchCriteria.getUserId(), siteIds, subEmpIds, fromDt, toDt, pageRequest);
+		            			}else {
+		            				page = jobRepository.findByDateRange(searchCriteria.getUserId(), subEmpIds, fromDt, toDt, pageRequest);
+		            			}
 		            		}
 		            		allJobsList.addAll(page.getContent());
 		            	}
@@ -339,7 +370,6 @@ public class JobManagementService extends AbstractService {
 	        			if(CollectionUtils.isEmpty(page.getContent())) {
 		            		List<EmployeeProjectSite> projectSites = employee.getProjectSites();
 		            		if(CollectionUtils.isNotEmpty(projectSites)) {
-		            			List<Long> siteIds = new ArrayList<Long>();
 		            			for(EmployeeProjectSite projSite : projectSites) {
 		            				siteIds.add(projSite.getSite().getId());
 		            			}
@@ -713,16 +743,17 @@ public class JobManagementService extends AbstractService {
 		Job job = new Job();
 		
 		//AssetPPMSchedule assetPpmSchedule = new AssetPPMSchedule();
-		JobDTO jobDTO = new JobDTO();
+		//JobDTO jobDTO = new JobDTO();
 		
 		//Employee employee = getEmployee(jobDTO.getEmployeeId());
+		Employee employee = employeeRepository.findOne(Long.valueOf(20));
 		Asset asset = assetRepository.findOne(assetPpmScheduleDTO.getAssetId());
-		//Site site = getSite(asset.getSite().getId());
-		log.debug(">>> asset id "+ asset.getId() +" Site "+asset.getSite().getName()+" User "+asset.getSite().getUser() + " User id "+asset.getSite().getUser().getId());
-		jobDTO.setEmployeeEmpId(String.valueOf(asset.getSite().getUser().getId()));
+		Site site = getSite(asset.getSite().getId());
+		//log.debug(">>> asset id "+ asset.getId() +" Site "+asset.getSite().getName()+" User "+asset.getSite().getUser() + " User id "+asset.getSite().getUser().getId());
+		//jobDTO.setEmployeeEmpId(String.valueOf(asset.getSite().getUser().getId()));
 		//Location location = getLocation(jobDTO.getLocationId());
 
-		mapToEntity(jobDTO, job);
+		//mapToEntity(jobDTO, job);
 
 		if(job.getStatus() == null) {
 			job.setStatus(JobStatus.OPEN);
@@ -749,11 +780,16 @@ public class JobManagementService extends AbstractService {
 			ticket.setStatus(TicketStatus.ASSIGNED.toValue());
 			ticketRepository.save(ticket);
 		}*/
+		
+		job.setEmployee(employee);
+		job.setSite(site);
 		job.setPlannedStartTime(startDate);
 		job.setPlannedEndTime(endDate);
 		job.setTitle(assetPpmScheduleDTO.getTitle());
 		job.setDescription(assetPpmScheduleDTO.getTitle() + assetPpmScheduleDTO.getFrequencyPrefix()+" "+assetPpmScheduleDTO.getFrequencyDuration()+" "+assetPpmScheduleDTO.getFrequency());
 		job = jobRepository.saveAndFlush(job);
+
+		log.debug(">>> After Save Job: <<<"+job.getId());
 
 		/*if(jobDTO.getTicketId() > 0) {
 			Ticket ticket = ticketRepository.findOne(jobDTO.getTicketId());
@@ -765,15 +801,16 @@ public class JobManagementService extends AbstractService {
 		//}
 
 		//if the job is scheduled for recurrence create a scheduled task
-		if(!StringUtils.isEmpty(assetPpmScheduleDTO.getId()) && !assetPpmScheduleDTO.getTitle().equalsIgnoreCase("HOUR")) {
+		if(!StringUtils.isEmpty(assetPpmScheduleDTO.getId())) {
+			log.debug(">>> Scheduler Service <<<");
 			SchedulerConfigDTO schConfDto = new SchedulerConfigDTO();
 			//schConfDto.setSchedule(jobDTO.getSchedule());
-			schConfDto.setType("MAINTENANCE");
+			schConfDto.setType("CREATE_JOB");
 			StringBuffer data = new StringBuffer();
 			data.append("title="+assetPpmScheduleDTO.getTitle());
 			data.append("&description="+assetPpmScheduleDTO.getFrequencyPrefix()+" "+assetPpmScheduleDTO.getFrequencyDuration()+" "+assetPpmScheduleDTO.getFrequency());				
 			data.append("&siteId="+asset.getSite().getId());
-			data.append("&empId="+asset.getSite().getUser().getId());
+			data.append("&empId="+employee.getId());
 			//data.append("&empId="+assetPpmScheduleDTO.getEmployeeId());
 			data.append("&plannedStartTime="+assetPpmScheduleDTO.getStartDate());
 			data.append("&plannedEndTime="+assetPpmScheduleDTO.getEndDate());
@@ -781,6 +818,7 @@ public class JobManagementService extends AbstractService {
 			//data.append("&location="+assetPpmScheduleDTO.getLocationId());
 			data.append("&frequency="+assetPpmScheduleDTO.getFrequency());
 			schConfDto.setData(data.toString());
+			schConfDto.setSchedule(assetPpmScheduleDTO.getFrequency());
 			schConfDto.setStartDate(assetPpmScheduleDTO.getStartDate());
 			schConfDto.setEndDate(assetPpmScheduleDTO.getEndDate());
 			schConfDto.setScheduleEndDate(assetPpmScheduleDTO.getEndDate());
@@ -798,6 +836,7 @@ public class JobManagementService extends AbstractService {
 		dto.setSiteId(job.getSite().getId());
 		dto.setSiteName(job.getSite().getName());
 		dto.setDescription(job.getDescription());
+		dto.setJobStatus(job.getStatus());
 		dto.setStatus(job.getStatus().name());
 		dto.setEmployeeId(job.getEmployee().getId());
 		dto.setEmployeeName(job.getEmployee().getName());
@@ -805,6 +844,8 @@ public class JobManagementService extends AbstractService {
 		dto.setPlannedEndTime(job.getPlannedEndTime());
 		dto.setActualStartTime(job.getActualStartTime());
 		dto.setActualEndTime(job.getActualEndTime());
+		dto.setActualHours(job.getActualHours());
+		dto.setActualMinutes(job.getActualMinutes());
 		return dto;
 	}
 
@@ -819,7 +860,7 @@ public class JobManagementService extends AbstractService {
 		if(ticket != null) {
 			ticket.setStatus(TicketStatus.INPROGRESS.toValue());
 			ticketRepository.save(ticket);
-		}	
+		}
 		job.setTitle(jobDTO.getTitle());
 		job.setDescription(jobDTO.getDescription());
 		job.setStatus(jobDTO.getJobStatus());
@@ -935,6 +976,7 @@ public class JobManagementService extends AbstractService {
 		JobDTO jobDto = mapperUtil.toModel(job,JobDTO.class);
 		CheckInOut checkInOutDTO= checkInOutRepository.getByJobId(id);
 		if(checkInOutDTO != null) {
+		    jobDto.setCheckInOutId(checkInOutDTO.getId());
 			jobDto.setActualEndTime(checkInOutDTO.getCheckOutDateTime());
 		}
         log.debug("Actual End time"+jobDto.getActualEndTime());
@@ -1003,7 +1045,11 @@ public class JobManagementService extends AbstractService {
 	public JobDTO updateJob(JobDTO jobDTO) {
 		Job job = findJob(jobDTO.getId());
 		mapToEntity(jobDTO, job);
-		job = jobRepository.save(job);
+		if(jobDTO.getJobStatus().equals(JobStatus.COMPLETED)) {
+			onlyCompleteJob(job);
+		}else {
+			job = jobRepository.save(job);
+		}
 
 		//if the job is scheduled for recurrence create a scheduled task
 		if(!StringUtils.isEmpty(jobDTO.getSchedule()) && !jobDTO.getSchedule().equalsIgnoreCase("ONCE")) {
@@ -1072,13 +1118,17 @@ public class JobManagementService extends AbstractService {
 
 	public JobDTO completeJob(Long id) {
 		Job job = findJob(id);
-
+		job.setActualStartTime(job.getPlannedStartTime());
 		if(job.getStatus() != JobStatus.INPROGRESS){
 			throw new TimesheetException("Job cannot be completed, Current Status : "+job.getStatus());
 		}
 
 		Date endDate = new Date();
-		int totalHours = Seconds.secondsBetween(new DateTime(job.getActualStartTime()),new DateTime(endDate)).getSeconds();
+		int totalHours = Hours.hoursBetween(new DateTime(job.getActualStartTime()),new DateTime(endDate)).getHours();
+		int totalMinutes = Minutes.minutesBetween(new DateTime(job.getActualStartTime()),new DateTime(endDate)).getMinutes();
+		if(totalHours > 0) {
+			totalMinutes = totalMinutes % 60;
+		}
 
 		job.setStatus(JobStatus.COMPLETED);
 		job.setActualEndTime(endDate);
@@ -1088,14 +1138,44 @@ public class JobManagementService extends AbstractService {
 
 	}
 
+    public JobDTO saveJobAndCheckList(JobDTO jobDTO) {
+        Job job = findJob(jobDTO.getId());
+
+        mapToEntity(jobDTO, job);
+        job = jobRepository.save(job);
+        return mapperUtil.toModel(job, JobDTO.class);
+    }
+
 	public JobDTO onlyCompleteJob(Long id) {
 		Job job = findJob(id);
-
+		job.setActualStartTime(job.getPlannedStartTime());
 		Date endDate = new Date();
-		//int totalHours = Seconds.secondsBetween(new DateTime(job.getActualStartTime()),new DateTime(endDate)).getSeconds();
+		int totalHours = Hours.hoursBetween(new DateTime(job.getActualStartTime()),new DateTime(endDate)).getHours();
+		int totalMinutes = Minutes.minutesBetween(new DateTime(job.getActualStartTime()),new DateTime(endDate)).getMinutes();
+		if(totalHours > 0) {
+			totalMinutes = totalMinutes % 60;
+		}
 		job.setStatus(JobStatus.COMPLETED);
 		job.setActualEndTime(endDate);
-		job.setActualHours(0);
+		job.setActualHours(totalHours);
+		job.setActualMinutes(totalMinutes);
+		jobRepository.save(job);
+		return mapperUtil.toModel(job, JobDTO.class);
+
+	}
+
+	public JobDTO onlyCompleteJob(Job job) {
+		job.setActualStartTime(job.getPlannedStartTime());
+		Date endDate = new Date();
+		int totalHours = Hours.hoursBetween(new DateTime(job.getActualStartTime()),new DateTime(endDate)).getHours();
+		int totalMinutes = Minutes.minutesBetween(new DateTime(job.getActualStartTime()),new DateTime(endDate)).getMinutes();
+		if(totalHours > 0) {
+			totalMinutes = totalMinutes % 60;
+		}
+		job.setStatus(JobStatus.COMPLETED);
+		job.setActualEndTime(endDate);
+		job.setActualHours(totalHours);
+		job.setActualMinutes(totalMinutes);
 		jobRepository.save(job);
 		return mapperUtil.toModel(job, JobDTO.class);
 

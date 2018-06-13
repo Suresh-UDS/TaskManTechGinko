@@ -10,18 +10,23 @@
       <ion-icon name="menu"></ion-icon>
     </button>
     <ion-title text-center>Asset List</ion-title>
+      <ion-buttons right>
+          <button ion-button color="primary" icon-only (click)="openFilters()" class="padding-right10" *ngIf="open">
+              <i class="fa fa-filter fnt-24"></i>
+          </button>
+      </ion-buttons>
   </ion-navbar>
 </ion-header>
 
 
 <ion-content padding>
 
-    <ion-fab right bottom (click)="openFilters()"   >
-        <button ion-fab color="primary"> <ion-icon name="funnel"></ion-icon></button>
-    </ion-fab>
+    <!--<ion-fab right bottom (click)="openFilters()"   >-->
+        <!--<button ion-fab color="primary"> <ion-icon name="funnel"></ion-icon></button>-->
+    <!--</ion-fab>-->
 
-    <ion-fab top right edge (click)="scanQR()" >
-        <button ion-fab color="primary"> <ion-icon name="qr-scanner"></ion-icon></button>
+    <ion-fab bottom right  (click)="scanQR()" >
+        <button ion-fab color="primary"> <i class="fa fa-qrcode clr-white fnt-24"></i></button>
     </ion-fab>
 
   <ion-list>

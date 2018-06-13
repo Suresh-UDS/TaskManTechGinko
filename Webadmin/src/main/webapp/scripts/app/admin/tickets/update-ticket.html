@@ -209,6 +209,37 @@
                          </div>
                         </div>
                      </div>
+                     
+                     <div class="col-md-6">
+                        <div class="panel panel-default">
+                              
+                          <div class="panel-heading">Upload Image</div>
+                          <div class="panel-body">
+                            <div class="row">
+                     
+			                     <div class="col-md-6">
+			                      <div class="form-group label-floating" >
+			                      	<div class="pdng-top13" >
+			                          <input type="file"
+			                                 class="form-control" style="opacity:100;position:relative" file-model
+			                                 ng-model="selectedImageFile"
+			                                 name="ImageFile"
+			                          />
+			                          
+                                      
+              							<a id="images" href="#" onClick="$('#myModalNew').modal()" data-target="#myModalNew" data-dismiss="#myModalNew" ng-click="loadTicketImage(ticketImage,tickets.id)">
+                 							<img  src={{ticketImage}} width="100px" height="100px" />
+             							</a>
+                              
+			                          
+			                          
+			                      	</div>
+			                       </div>
+			                     </div>
+			                </div>
+						</div>
+					</div>					                     
+                   </div>
                    </div>
                     <div class="row">
 
@@ -258,7 +289,33 @@
 </div>
 
 
+<div id="myModalNew" class="modal fade" data-backdrop="false" tabindex="-1" role="dialog"
+         aria-labelledby="myModalLabel" aria-hidden="true" >
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <table >
+                        <thead>
+                        <tr >
+                            <th style="text-align: center">Ticket Image</th>
 
+                        </tr>
+                        </thead>
+                        <tr>
+
+                            <td><img id="ticketImage" width="250" height="250" src="#"
+                                     class="img-responsive"></td>
+                        </tr>
+
+                    </table>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
 
 

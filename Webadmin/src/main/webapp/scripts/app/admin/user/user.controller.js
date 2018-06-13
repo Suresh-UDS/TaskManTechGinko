@@ -81,7 +81,8 @@ angular.module('timeSheetApp')
         	}
         	UserComponent.createUser($scope.user).then(function () {
             	$scope.success = 'OK';
-            	$scope.loadUsers();
+            	//$scope.loadUsers();
+            	$scope.showNotifications('top','center','success','User Created Successfully');
             	$location.path('/users');
             }).catch(function (response) {
                 $scope.success = null;
@@ -121,17 +122,21 @@ angular.module('timeSheetApp')
         };
 
         $scope.updateUser = function () {
-        	if($scope.selectedGroup) {
-        		$scope.user.userGroupId = $scope.selectedGroup.id;
-        	}
-        	$scope.user.password = $scope.user.clearPassword;
-        	if($scope.selectedEmployee) {
-            	$scope.user.employeeId = $scope.selectedEmployee.id
-        	}
+	        	if($scope.selectedRole) {
+	        		$scope.user.userRoleId = $scope.selectedRole.id;
+	        	}
+	        	if($scope.selectedGroup) {
+	        		$scope.user.userGroupId = $scope.selectedGroup.id;
+	        	}
+	        	$scope.user.password = $scope.user.clearPassword;
+	        	if($scope.selectedEmployee) {
+	            	$scope.user.employeeId = $scope.selectedEmployee.id
+	        	}
 
         	UserComponent.updateUser($scope.user).then(function () {
             	$scope.success = 'OK';
-            	$scope.loadUsers();
+            	//$scope.loadUsers();
+            	$scope.showNotifications('top','center','success','User Details Updated Successfully');
             	$location.path('/users');
             }).catch(function (response) {
                 $scope.success = null;
@@ -394,6 +399,9 @@ angular.module('timeSheetApp')
                 $scope.search();
             };
 
+            $scope.showNotifications= function(position,alignment,color,msg){
+                demo.showNotification(position,alignment,color,msg);
+            }
 
 
     });

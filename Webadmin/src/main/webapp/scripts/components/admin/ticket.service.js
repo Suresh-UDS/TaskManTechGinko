@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('timeSheetApp')
-    .factory('TicketComponent', function SiteComponent(Site,$http) {
+    .factory('TicketComponent', function TicketComponent(Ticket,$http) {
         return {
 
 	    loadTicketStatuses : function(){
@@ -68,6 +68,34 @@ angular.module('timeSheetApp')
         searchTickets:function(search){
             return $http.post('api/tickets/search',search).then(function (response) {
                 console.log(response);
+                return response.data;
+            })
+        },
+        
+        getTicketsByAssetId : function(id) { 
+	        	return $http.get('api/ticket/'+id+'/view').then(function(response) { 
+	        		console.log(response);
+	        		return response.data;
+	        	});
+        },
+
+        upload: function(ticketId,ticketImage) {
+             var fileFormData = new FormData();
+             fileFormData.append('ticketFile', ticketImage);
+             fileFormData.append('ticketId', ticketId);
+             return $http.post('api/ticket/image/upload', fileFormData, {
+                 transformRequest: angular.identity,
+                 headers: {'Content-Type': undefined}
+
+             }).then(function (response) {
+                 return response.data;
+             });
+
+        },
+        findTicketImage: function(ticketId,imageId){
+            return $http.get('api/ticket/image/'+ticketId+'/'+imageId).then(function (response) {
+                console.log("Ticket image response");
+                console.log(response.data);
                 return response.data;
             })
         }

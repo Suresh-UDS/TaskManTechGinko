@@ -39,20 +39,15 @@
                             <div class="form-group label-floating" [ngClass]="{'has-error': eMsg=='all'||eMsg=='description'}">
                                 <label class="control-label">Description</label>
                                 <input class="form-control" type="text" [(ngModel)]="description" id="description" name="title" #desc="ngModel" required [ngClass]="{'has-error': desc.errors || eMsg=='all'|| eMsg=='description'}">
-                                <div *ngIf="desc.errors && (desc.dirty || desc.touched)" class="error-msg">
-
-                                </div>
-
-                                <div *ngIf="desc.errors && (desc.untouched )" class="error-msg">
-
-                                </div>
+                                <div *ngIf="desc.errors && (desc.dirty || desc.touched)" class="error-msg"></div>
+                                <div *ngIf="desc.errors && (desc.untouched )" class="error-msg"></div>
                             </div>
 
                         </ion-col>
 
                         <ion-col col-12>
 
-                            <div class="form-group label-floating">
+                            <div class="form-group label-floating border-btm">
                                 <label class="control-label" *ngIf="siteName">Site</label>
                                 <ion-select [(ngModel)]="siteName" class="select-box padding-left0" id="siteName" placeholder="Choose Site" name="siteName" #site="ngModel" interface="popover" required [ngClass]="{'select-error': eMsg=='siteName'}">
                                     <ion-option *ngFor="let site of sites" [value]="site.name" (ionSelect)="getEmployee(site.id)">{{site.name}}</ion-option>
@@ -108,9 +103,46 @@
                             </div>
                         </ion-col>
 
+                        <ion-col col-12>
+                            <ion-row class="margin0">
+                                <ion-col col-6 class="label-on-left">
+                                    <p class="line-height">Issue Image</p>
+                                </ion-col>
+                                <ion-col col-6 text-right>
+                                    <button class="ion-button camera-btn" round (click)="viewCamera()">
+                                        <ion-icon name="ios-camera"></ion-icon>
+                                    </button>
+                                </ion-col>
+                            </ion-row>
+                        </ion-col>
+
+                        <ion-col col-12>
+                            <ion-row>
+                                <ion-col col-3 *ngFor="let image of takenImages;let i of index">
+                                    <img [src]="image" class="job-img margin-bottom25" (click)="viewImage(i,image)">
+                                </ion-col>
+                            </ion-row>
+                        </ion-col>
+
+                        <!--<div class="margin-tp25 white-bg padding10">-->
+                            <!--<ion-row class="margin0">-->
+                                <!--<ion-col col-6 class="label-on-left">-->
+                                    <!--<p class="line-height">Photo (Before)</p>-->
+                                <!--</ion-col>-->
+                                <!--<ion-col col-6 text-right>-->
+                                    <!--<button class="ion-button" round (click)="viewCamera()" class="camera-btn"><ion-icon name="ios-camera"></ion-icon></button>-->
+                                <!--</ion-col>-->
+                            <!--</ion-row>-->
+                            <!--<ion-row>-->
+                                <!--<ion-col col-3 *ngFor="let image of takenImages;let i of index" class="">-->
+                                    <!--<img [src]="image" class="job-img margin-bottom25" (click)="viewImage(i,image)">-->
+                                <!--</ion-col>-->
+                            <!--</ion-row>-->
+                        <!--</div>-->
 
 
-                        <button type="submit" class="btn btn-warning pull-right margin-auto" (click)="createTicket()">Add</button>
+
+                        <!--<button type="submit" class="btn btn-warning pull-right margin-auto" (click)="createTicket()">Add</button>-->
 
                         <div class="clearfix"></div>
                     </ion-row>
@@ -119,3 +151,11 @@
         </div>
     </div>
 </ion-content>
+
+<ion-footer>
+    <ion-toolbar class="align-center" >
+        <button class="btn btn-warning center margin-auto" type="submit" (click)="createTicket()">
+            Add
+        </button>
+    </ion-toolbar>
+</ion-footer>
