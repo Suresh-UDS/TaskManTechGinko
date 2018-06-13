@@ -9,22 +9,35 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import javax.inject.Inject;
+
 import org.apache.commons.collections.CollectionUtils;
 import org.hibernate.Hibernate;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.google.common.primitives.Longs;
 import com.ts.app.domain.Attendance;
 import com.ts.app.domain.Employee;
 import com.ts.app.domain.EmployeeAttendanceReport;
 import com.ts.app.domain.EmployeeProjectSite;
 import com.ts.app.domain.EmployeeShift;
+import com.ts.app.domain.Job;
+import com.ts.app.domain.JobStatus;
 import com.ts.app.domain.Project;
 import com.ts.app.domain.Setting;
 import com.ts.app.domain.Shift;
 import com.ts.app.domain.Site;
+import com.ts.app.repository.JobRepository;
+import com.ts.app.repository.ProjectRepository;
+import com.ts.app.repository.SettingsRepository;
 import com.ts.app.service.util.DateUtil;
+import com.ts.app.service.util.ExportUtil;
 import com.ts.app.web.rest.dto.ExportResult;
+import com.ts.app.web.rest.dto.ReportResult;
 import com.ts.app.web.rest.dto.SearchCriteria;
 
 /**
@@ -33,7 +46,180 @@ import com.ts.app.web.rest.dto.SearchCriteria;
 @Service
 @Transactional
 public class SchedulerHelperService extends AbstractService {
+	
+	final Logger log = LoggerFactory.getLogger(SchedulerHelperService.class);
 
+	@Inject
+	private PushService pushService;
+	
+	@Inject
+	private MailService mailService;
+	
+	@Inject
+	private JobRepository jobRepository;
+	
+	@Inject
+	private SettingsRepository settingRepository;
+	
+	@Inject
+	private ProjectRepository projectRepository;
+	
+	@Inject
+	private JobManagementService jobManagementService;
+	
+	@Inject
+	private ExportUtil exportUtil;
+	
+	@Inject
+	private Environment env;
+	
+	public void eodJobReport() {
+		if (env.getProperty("scheduler.eodJobReport.enabled").equalsIgnoreCase("true")) {
+			Calendar cal = Calendar.getInstance();
+			cal.set(Calendar.HOUR_OF_DAY, 0);
+			cal.set(Calendar.MINUTE, 0);
+			List<Project> projects = projectRepository.findAll();
+			for (Project proj : projects) {
+				Set<Site> sites = proj.getSite();
+				Iterator<Site> siteItr = sites.iterator();
+				while (siteItr.hasNext()) {
+					Site site = siteItr.next();
+					List<Setting> settings = null;
+					settings = settingRepository.findSettingByKeyAndSiteIdOrProjectId("email.notification.eodReports", site.getId(), proj.getId());
+					Setting eodReports = null;
+					if (CollectionUtils.isNotEmpty(settings)) {
+						eodReports = settings.get(0);
+					}
+					settings = settingRepository.findSettingByKeyAndSiteIdOrProjectId("email.notification.eodReports.emails", site.getId(), proj.getId());
+					Setting eodReportEmails = null;
+					if (CollectionUtils.isNotEmpty(settings)) {
+						eodReportEmails = settings.get(0);
+					}
+					SearchCriteria sc = new SearchCriteria();
+					sc.setCheckInDateTimeFrom(cal.getTime());
+					sc.setProjectId(proj.getId());
+					List<ReportResult> reportResults = jobManagementService.generateConsolidatedReport(sc, false);
+
+					if (CollectionUtils.isNotEmpty(reportResults)) {
+						// if report generation needed
+						log.debug("results exists");
+						if (eodReports != null && eodReports.getSettingValue().equalsIgnoreCase("true")) {
+							log.debug("send report");
+							ExportResult exportResult = new ExportResult();
+							exportResult = exportUtil.writeConsolidatedJobReportToFile(proj.getName(), reportResults, null, exportResult);
+							// send reports in email.
+							if (eodReportEmails != null) {
+								mailService.sendJobReportEmailFile(eodReportEmails.getSettingValue(), exportResult.getFile(), null, cal.getTime());
+							}
+
+						}
+
+					} else {
+						log.debug("no jobs found on the daterange");
+					}
+
+				}
+			}
+		}
+	}
+
+	public void overdueJobReport() {
+		if (env.getProperty("scheduler.overdueJob.enabled").equalsIgnoreCase("true")) {
+			Calendar cal = Calendar.getInstance();
+			// Setting overdueAlertSetting =
+			// settingRepository.findSettingByKey("email.notification.overdue");
+			List<Setting> settings = null;
+			Setting overdueAlertSetting = null;
+			String alertEmailIds = "";
+			Setting overdueEmails = null;
+			// if(overdueAlertSetting != null &&
+			// StringUtils.isNotEmpty(overdueAlertSetting.getSettingValue())
+			// && overdueAlertSetting.getSettingValue().equalsIgnoreCase("true")) {
+			// overdueEmails =
+			// settingRepository.findSettingByKey("email.notification.overdue.emails");
+			// alertEmailIds = overdueEmails.getSettingValue();
+			// }
+
+			List<Job> overDueJobs = jobRepository.findOverdueJobsByStatusAndEndDateTime(cal.getTime());
+			log.debug("Found {} overdue jobs", (overDueJobs != null ? overDueJobs.size() : 0));
+
+			if (CollectionUtils.isNotEmpty(overDueJobs)) {
+				ExportResult exportResult = new ExportResult();
+				exportResult = exportUtil.writeJobReportToFile(overDueJobs, exportResult);
+				for (Job job : overDueJobs) {
+					long siteId = job.getSite().getId();
+					long projId = job.getSite().getProject().getId();
+					if (siteId > 0) {
+						settings = settingRepository.findSettingByKeyAndSiteId(SettingsService.EMAIL_NOTIFICATION_OVERDUE, siteId);
+						if (CollectionUtils.isNotEmpty(settings)) {
+							overdueAlertSetting = settings.get(0);
+						}
+						settings = settingRepository.findSettingByKeyAndSiteId(SettingsService.EMAIL_NOTIFICATION_OVERDUE_EMAILS, siteId);
+						if (CollectionUtils.isNotEmpty(settings)) {
+							overdueEmails = settings.get(0);
+						}
+						if (overdueEmails != null) {
+							alertEmailIds = overdueEmails.getSettingValue();
+						}
+					} else if (projId > 0) {
+						settings = settingRepository.findSettingByKeyAndProjectId(SettingsService.EMAIL_NOTIFICATION_OVERDUE, projId);
+						if (CollectionUtils.isNotEmpty(settings)) {
+							overdueAlertSetting = settings.get(0);
+						}
+						settings = settingRepository.findSettingByKeyAndProjectId(SettingsService.EMAIL_NOTIFICATION_OVERDUE_EMAILS, projId);
+						if (CollectionUtils.isNotEmpty(settings)) {
+							overdueEmails = settings.get(0);
+						}
+
+						if (overdueEmails != null) {
+							alertEmailIds = overdueEmails.getSettingValue();
+						}
+					}
+					try {
+						List<Long> pushAlertUserIds = new ArrayList<Long>();
+						Employee assignee = job.getEmployee();
+						if (assignee.getUser() != null) {
+							pushAlertUserIds.add(assignee.getUser().getId()); // add employee user account id for push
+						}
+						int alertCnt = job.getOverdueAlertCount() + 1;
+						Employee manager = assignee;
+						for (int x = 0; x < alertCnt; x++) {
+							if (manager != null) {
+								manager = manager.getManager();
+								if (manager != null && manager.getUser() != null) {
+									alertEmailIds += "," + manager.getUser().getEmail();
+									pushAlertUserIds.add(manager.getUser().getId()); // add manager user account id for push
+								}
+							}
+						}
+						try {
+							if (CollectionUtils.isNotEmpty(pushAlertUserIds)) {
+								long[] pushUserIds = Longs.toArray(pushAlertUserIds);
+								String message = "Site - " + job.getSite().getName() + ", Job - " + job.getTitle() + ", Status - " + JobStatus.OVERDUE.name() + ", Time - "
+										+ job.getPlannedEndTime();
+								pushService.send(pushUserIds, message); // send push to employee and managers.
+							}
+							if (overdueAlertSetting != null && overdueAlertSetting.getSettingValue().equalsIgnoreCase("true")) { // send escalation emails to managers and alert
+																																	// emails
+								mailService.sendOverdueJobAlert(assignee.getUser(), alertEmailIds, job.getSite().getName(), job.getId(), job.getTitle(), exportResult.getFile());
+								job.setOverDueEmailAlert(true);
+							}
+						} catch (Exception e) {
+							log.error("Error while sending push and email notification for overdue job alerts", e);
+						}
+						job.setOverdueAlertCount(alertCnt);
+						job.setStatus(JobStatus.OVERDUE);
+						jobRepository.save(job);
+
+					} catch (Exception ex) {
+						log.warn("Failed to create JOB ", ex);
+					}
+				}
+			}
+		}		
+	}
+	
+	
 	@Transactional
 	public void generateDetailedAttendanceReport(SchedulerService schedulerService, Date date, boolean shiftAlert, boolean dayReport) {
 		if (schedulerService.env.getProperty("scheduler.attendanceDetailReport.enabled").equalsIgnoreCase("true")) {
