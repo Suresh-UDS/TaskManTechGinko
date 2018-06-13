@@ -312,7 +312,7 @@ module.exports = {
     },
 
     getQuotations: function(req,res,next){
-      Quotation.find({siteId:req.body.siteId}, function(err,quotations){
+      Quotation.find({siteId:req.body.siteId}).sort({serialId:-1}).exec(function(err,quotations){
           if(err){
               console.log("unable to get Quotations")
               res.send(200,err);
@@ -358,7 +358,7 @@ module.exports = {
     search: function(req,res,next){
       console.log("Search quotations");
       console.log(req.body);
-      Quotation.find({title:{$regex:'^'+req.body.title,$options:"si"}}).sort({'title':1}).limit(10).exec(function(err,result){
+      Quotation.find({title:{$regex:'^'+req.body.title,$options:"si"}}).sort({'createdDate':-1}).limit(10).exec(function(err,result){
           if(err){
               console.log("Error in finding quotation");
               res.send(200,'No Quotation found');
@@ -384,7 +384,7 @@ module.exports = {
 
                   if(req.body.createdBy){
                       if(req.body.approvedBy){
-                          Quotation.find({siteId:req.body.siteId,title:{$regex:'^'+req.body.title,$options:"si"},status:{$regex:'^'+req.body.status,$options:"si"},createdByUserName:{$regex:'^'+req.body.createdBy,$options:"si"},approvedByUserName:{$regex:'^'+req.body.approvedBy,$options:"si"}}).sort({'title':1}).exec(function(err,quotations){
+                          Quotation.find({siteId:req.body.siteId,title:{$regex:'^'+req.body.title,$options:"si"},status:{$regex:'^'+req.body.status,$options:"si"},createdByUserName:{$regex:'^'+req.body.createdBy,$options:"si"},approvedByUserName:{$regex:'^'+req.body.approvedBy,$options:"si"}}).sort({'createdDate':-1}).exec(function(err,quotations){
                               if(err){
                                   console.log("Error in finding quotations");
                                   res.send(200,"No quotation found");
@@ -395,7 +395,7 @@ module.exports = {
 
                           })
                       }else{
-                          Quotation.find({siteId:req.body.siteId,title:{$regex:'^'+req.body.title,$options:"si"},status:{$regex:'^'+req.body.status,$options:"si"},createdByUserName:{$regex:'^'+req.body.createdBy,$options:"si"}}).sort({'title':1}).exec(function(err,quotations){
+                          Quotation.find({siteId:req.body.siteId,title:{$regex:'^'+req.body.title,$options:"si"},status:{$regex:'^'+req.body.status,$options:"si"},createdByUserName:{$regex:'^'+req.body.createdBy,$options:"si"}}).sort({'createdDate':-1}).exec(function(err,quotations){
                               if(err){
                                   console.log("Error in finding quotations");
                                   res.send(200,"No quotation found");
@@ -408,7 +408,7 @@ module.exports = {
                       }
 
                   }else{
-                      Quotation.find({siteId:req.body.siteId,title:{$regex:'^'+req.body.title,$options:"si"},status:{$regex:'^'+req.body.status,$options:"si"}}).sort({'title':1}).exec(function(err,quotations){
+                      Quotation.find({siteId:req.body.siteId,title:{$regex:'^'+req.body.title,$options:"si"},status:{$regex:'^'+req.body.status,$options:"si"}}).sort({'createdDate':-1}).exec(function(err,quotations){
                           if(err){
                               console.log("Error in finding quotations");
                               res.send(200,"No quotation found");
@@ -421,7 +421,7 @@ module.exports = {
                   }
 
               }else{
-                  Quotation.find({siteId:req.body.siteId,title:{$regex:'^'+req.body.title,$options:"si"}}).sort({'title':1}).exec(function(err,quotations){
+                  Quotation.find({siteId:req.body.siteId,title:{$regex:'^'+req.body.title,$options:"si"}}).sort({'createdDate':-1}).exec(function(err,quotations){
                       if(err){
                           console.log("Error in finding quotations");
                           res.send(200,"No quotation found");
@@ -437,7 +437,7 @@ module.exports = {
               console.log("site id no title");
               if(req.body.status){
                   console.log("site id no title + status");
-                  Quotation.find({siteId:req.body.siteId,status:{$regex:'^'+req.body.status,$options:"si"}}).sort({'title':1}).exec(function(err,quotations){
+                  Quotation.find({siteId:req.body.siteId,status:{$regex:'^'+req.body.status,$options:"si"}}).sort({'createdDate':-1}).exec(function(err,quotations){
                       if(err){
                           console.log("Error in finding quotations");
                           res.send(200,"No quotation found");
@@ -449,7 +449,7 @@ module.exports = {
                   })
               }else{
                   console.log("site id only");
-                  Quotation.find({siteId:req.body.siteId},function(err,quotations){
+                  Quotation.find({siteId:req.body.siteId}).sort({'createdDate':-1}).exec(function(err,quotations){
 
                       if(err){
                           console.log("Error in finding quotations");
@@ -467,7 +467,7 @@ module.exports = {
           if(req.body.status){
               if(req.body.createdBy){
                   if(req.body.approvedBy){
-                      Quotation.find({title:{$regex:'^'+req.body.title,$options:"si"},status:{$regex:'^'+req.body.status,$options:"si"},createdByUserName:{$regex:'^'+req.body.createdBy,$options:"si"},approvedByUserName:{$regex:'^'+req.body.approvedBy,$options:"si"}}).sort({'title':1}).exec(function(err,quotations){
+                      Quotation.find({title:{$regex:'^'+req.body.title,$options:"si"},status:{$regex:'^'+req.body.status,$options:"si"},createdByUserName:{$regex:'^'+req.body.createdBy,$options:"si"},approvedByUserName:{$regex:'^'+req.body.approvedBy,$options:"si"}}).sort({'createdDate':-1}).exec(function(err,quotations){
                           if(err){
                               console.log("Error in finding quotations");
                               res.send(200,"No quotation found");
@@ -478,7 +478,7 @@ module.exports = {
 
                       })
                   }else{
-                      Quotation.find({title:{$regex:'^'+req.body.title,$options:"si"},status:{$regex:'^'+req.body.status,$options:"si"},createdByUserName:{$regex:'^'+req.body.createdBy,$options:"si"}}).sort({'title':1}).exec(function(err,quotations){
+                      Quotation.find({title:{$regex:'^'+req.body.title,$options:"si"},status:{$regex:'^'+req.body.status,$options:"si"},createdByUserName:{$regex:'^'+req.body.createdBy,$options:"si"}}).sort({'createdDate':-1}).exec(function(err,quotations){
                           if(err){
                               console.log("Error in finding quotations");
                               res.send(200,"No quotation found");
@@ -491,7 +491,7 @@ module.exports = {
                   }
 
               }else{
-                  Quotation.find({title:{$regex:'^'+req.body.title,$options:"si"},status:{$regex:'^'+req.body.status,$options:"si"}}).sort({'title':1}).exec(function(err,quotations){
+                  Quotation.find({title:{$regex:'^'+req.body.title,$options:"si"},status:{$regex:'^'+req.body.status,$options:"si"}}).sort({'createdDate':-1}).exec(function(err,quotations){
                       if(err){
                           console.log("Error in finding quotations");
                           res.send(200,"No quotation found");
@@ -504,7 +504,7 @@ module.exports = {
               }
 
           }else{
-              Quotation.find({title:{$regex:'^'+req.body.title,$options:"si"}}).sort({'title':1}).exec(function(err,quotations){
+              Quotation.find({title:{$regex:'^'+req.body.title,$options:"si"}}).sort({'createdDate':-1}).exec(function(err,quotations){
                   if(err){
                       console.log("Error in finding quotations");
                       res.send(200,"No quotation found");
@@ -519,7 +519,7 @@ module.exports = {
       }else if(req.body.status){
           if(req.body.createdBy){
               if(req.body.approvedBy){
-                  Quotation.find({status:{$regex:'^'+req.body.status,$options:"si"},createdByUserName:{$regex:'^'+req.body.createdBy,$options:"si"},approvedByUserName:{$regex:'^'+req.body.approvedBy,$options:"si"}}).sort({'title':1}).exec(function(err,quotations){
+                  Quotation.find({status:{$regex:'^'+req.body.status,$options:"si"},createdByUserName:{$regex:'^'+req.body.createdBy,$options:"si"},approvedByUserName:{$regex:'^'+req.body.approvedBy,$options:"si"}}).sort({'createdDate':-1}).exec(function(err,quotations){
                       if(err){
                           console.log("Error in finding quotations");
                           res.send(200,"No quotation found");
@@ -530,7 +530,7 @@ module.exports = {
 
                   })
               }else{
-                  Quotation.find({status:{$regex:'^'+req.body.status,$options:"si"},createdByUserName:{$regex:'^'+req.body.createdBy,$options:"si"}}).sort({'title':1}).exec(function(err,quotations){
+                  Quotation.find({status:{$regex:'^'+req.body.status,$options:"si"},createdByUserName:{$regex:'^'+req.body.createdBy,$options:"si"}}).sort({'createdDate':-1}).exec(function(err,quotations){
                       if(err){
                           console.log("Error in finding quotations");
                           res.send(200,"No quotation found");
@@ -543,7 +543,7 @@ module.exports = {
               }
 
           }else{
-              Quotation.find({status:{$regex:'^'+req.body.status,$options:"si"}}).sort({'title':1}).exec(function(err,quotations){
+              Quotation.find({status:{$regex:'^'+req.body.status,$options:"si"}}).sort({'createdDate':-1}).exec(function(err,quotations){
                   if(err){
                       console.log("Error in finding quotations");
                       res.send(200,"No quotation found");
@@ -557,7 +557,7 @@ module.exports = {
 
       }else if(req.body.createdBy){
           if(req.body.approvedBy){
-              Quotation.find({createdByUserName:{$regex:'^'+req.body.createdBy,$options:"si"},approvedByUserName:{$regex:'^'+req.body.approvedBy,$options:"si"}}).sort({'title':1}).exec(function(err,quotations){
+              Quotation.find({createdByUserName:{$regex:'^'+req.body.createdBy,$options:"si"},approvedByUserName:{$regex:'^'+req.body.approvedBy,$options:"si"}}).sort({'createdDate':-1}).exec(function(err,quotations){
                   if(err){
                       console.log("Error in finding quotations");
                       res.send(200,"No quotation found");
@@ -568,7 +568,7 @@ module.exports = {
 
               })
           }else{
-              Quotation.find({createdByUserName:{$regex:'^'+req.body.createdBy,$options:"si"}}).sort({'title':1}).exec(function(err,quotations){
+              Quotation.find({createdByUserName:{$regex:'^'+req.body.createdBy,$options:"si"}}).sort({'createdDate':-1}).exec(function(err,quotations){
                   if(err){
                       console.log("Error in finding quotations");
                       res.send(200,"No quotation found");
@@ -581,7 +581,7 @@ module.exports = {
           }
 
       }else if(req.body.approvedBy){
-          Quotation.find({approvedByUserName:{$regex:'^'+req.body.approvedBy,$options:"si"}}).sort({'title':1}).exec(function(err,quotations){
+          Quotation.find({approvedByUserName:{$regex:'^'+req.body.approvedBy,$options:"si"}}).sort({'createdDate':-1}).exec(function(err,quotations){
               if(err){
                   console.log("Error in finding quotations");
                   res.send(200,"No quotation found");
@@ -673,6 +673,32 @@ module.exports = {
             }
         })
     },
+
+    updateImages: function (req, res, next) {
+        Quotation.findById({_id:req.body.quotationId},function(err,quotation){
+            if(err){
+                console.log("Error in finding quotation");
+                console.log(err);
+            }else{
+                if(quotation){
+                    console.log("Quotation found");
+                    console.log(quotation);
+                    console.log(req.body.quotationImage);
+                    if(quotation.images.length>0){
+                        console.log("quotation images available");
+                        quotation.images.push(req.body.quotationImage);
+                        quotation.save();
+                        res.send(200,quotation);
+                    }else{
+                        quotation.images = req.body.quotationImage;
+                        quotation.save();
+                        res.send(200,quotation);
+                    }
+
+                }
+            }
+        })
+    }
 
 
     

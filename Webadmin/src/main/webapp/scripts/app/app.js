@@ -122,12 +122,12 @@ angular.module('timeSheetApp', ['LocalStorageModule',
         }
 
         $rootScope.loadingStop = function(){
-            
+
             console.log("Calling loader");
 
             $('.pageCenter').hide();
             $('.overlay').hide();
-                    
+
         }
 
         //Loading Page go to top position
@@ -138,10 +138,6 @@ angular.module('timeSheetApp', ['LocalStorageModule',
         }
 
 
-
-
-
-       
     })
     .config(function ($stateProvider, $urlRouterProvider, $httpProvider, $locationProvider,  httpRequestInterceptorCacheBusterProvider,uiGmapGoogleMapApiProvider) {
     	uiGmapGoogleMapApiProvider.configure({
@@ -180,7 +176,7 @@ angular.module('timeSheetApp', ['LocalStorageModule',
             }
         });
 
-        
+
 
         $httpProvider.interceptors.push('errorHandlerInterceptor');
         $httpProvider.interceptors.push('authExpiredInterceptor');

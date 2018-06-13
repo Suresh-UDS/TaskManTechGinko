@@ -26,6 +26,9 @@ angular.module('timeSheetApp')
         		end : false,
         };
 
+        $scope.printPage = function () {
+            window.print();
+        }
 
 
         $scope.saveProject = function () {

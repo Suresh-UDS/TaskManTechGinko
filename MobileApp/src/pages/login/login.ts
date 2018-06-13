@@ -17,7 +17,6 @@ import {EmployeeService} from "../service/employeeService";
  * Ionic pages and navigation.
  */
 
-@IonicPage()
 @Component({
   selector: 'page-login',
   templateUrl: 'login.html',
@@ -61,8 +60,11 @@ export class LoginPage {
                   console.log("user role found");
                   window.localStorage.setItem('userRole',response.json().user.userRoleName.toUpperCase());
                   if(response.json().user.userRole.rolePermissions){
-                      console.log("Saving user permissions");
-                      console.log(response.json().user.userRole.rolePermissions);
+                      var rolePermissions = [];
+                      for (let rp of response.json().user.userRole.rolePermissions){
+                            rolePermissions.push(rp.moduleName+rp.actionName)
+                      }
+                      this.events.publish('permissions:set',rolePermissions);
                       window.localStorage.setItem('rolePermissions',JSON.stringify(response.json().user.userRole.rolePermissions));
                   }
                   this.events.publish('userType',response.json().user.userRole.rolePermissions);
@@ -71,29 +73,7 @@ export class LoginPage {
                   this.events.publish('userType','ADMIN');
                   window.localStorage.setItem('userRole','ADMIN');
               }
-              // this.employeeService.getUser(response.json().employee.userId).subscribe(
-              //     response=>{
-              //         console.log("User response");
-              //         console.log(response);
-              //         var module = {};
-              //         window.localStorage.setItem('userType',response.userRole.name.toUpperCase());
-              //         this.events.publish('userType',response.userRole.name.toUpperCase());
-              //         if(response.name.toUpperCase() === 'ADMIN'){
-              //           }
-              //         for (let userRole of response.userRole.rolePermissions){
-              //             // this.permissionService.addPermission([userRole.moduleName])
-              //             module = {module:userRole.moduleName,
-              //                 action:userRole.actionName}
-              //             this.permission.push(module);
-              //         }
-              //         this.events.publish('permissions:set',this.permission);
-              //
-              //         console.log("Modules and permissions");
-              //         console.log(this.permission)
-              //     },err=>{
-              //         this.events.publish('userType','ADMIN');
-              //     }
-              // );
+              this.events.publish('user:logedin',response.json().employee.fullName);
               window.localStorage.setItem('session', response.json().token);
               window.localStorage.setItem('userGroup', response.json().employee.userUserGroupName);
               window.localStorage.setItem('employeeId', response.json().employee.id);
@@ -104,7 +84,8 @@ export class LoginPage {
               var employee = response.json().employee;
 
               if (response.status == 200) {
-                this.navCtrl.setRoot(TabsPage);
+                  window.location.reload()
+                  this.navCtrl.setRoot(TabsPage);
                 this.component.closeLoader();
               }
 

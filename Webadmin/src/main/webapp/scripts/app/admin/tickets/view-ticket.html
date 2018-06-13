@@ -97,6 +97,31 @@
 
                             </div>
                             <div class="col-md-4">
+	                            <div class="panel panel-default">
+	                                    <div class="panel-heading">Image</div>
+	                                    <div class="panel-body">
+	
+	
+	                                        <div class="table-responsive">
+	                                            <table class="table">
+	                                                <tbody>
+	                                                <tr>
+	                                                    <td>Image</td>
+	                                                    <td>
+	                                    						<a id="images" href="#" onClick="$('#myModalNew').modal()" data-target="#myModalNew" data-dismiss="#myModalNew" ng-click="loadTicketImage(ticketImage,tickets.id)">
+                                        							<img  src={{ticketImage}} width="100px" height="100px" />
+                                    							</a>
+	                                                    </td>
+	                                                </tr>
+	                                                </tbody>
+	                                            </table>
+	                                        </div>
+	
+	                                    </div>
+	                                </div>
+                            </div>
+                            
+                            <div class="col-md-4">
 
                                 <div class="panel panel-default">
                                     <div class="panel-heading">Comments </div>
@@ -191,3 +216,31 @@
     </div>
 </div>
 <!-- End of Ticket Close confirmation dialog -->
+
+<div id="myModalNew" class="modal fade" data-backdrop="false" tabindex="-1" role="dialog"
+         aria-labelledby="myModalLabel" aria-hidden="true" >
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <table >
+                        <thead>
+                        <tr >
+                            <th style="text-align: center">Ticket Image</th>
+
+                        </tr>
+                        </thead>
+                        <tr>
+
+                            <td><img id="ticketImage" width="250" height="250" src="#"
+                                     class="img-responsive"></td>
+                        </tr>
+
+                    </table>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>

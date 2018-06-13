@@ -47,7 +47,8 @@ var QuotationModel = function() {
         approvedDate: Date,
         rejectedDate: Date,
         archivedDate: Date,
-        status:String
+        status:String,
+        images:[]
     });
 
     QuotationSchema.plugin(captainHook);

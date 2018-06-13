@@ -118,29 +118,29 @@ public class SearchCriteria extends Paginator {
 	private double lat;
 
 	private double lng;
-	
+
 	private boolean report;
-	
+
 	private String jobTypeName;
-	
+
 	private String ticketStatus;
-	
+
 	private boolean admin;
-	
+
 	private boolean list;
-	
+
 	private String quotationTitle;
-	
+
 	private String quotationCreatedBy;
-	
+
 	private String quotationApprovedBy;
-	
+
 	private String quotationStatus;
-	
+
 	private Date quotationCreatedDate;
-	
+
 	private Date quotationSubmittedDate;
-	
+
 	private Date quotationApprovedDate;
 	
 	private long manufacturerId;
@@ -155,6 +155,10 @@ public class SearchCriteria extends Paginator {
 	
 	private long assetId;
 	
+	private List<Long> siteIds;
+
+	private boolean notCheckedOut;
+
 	public long getId() {
 		return id;
 	}
@@ -376,7 +380,7 @@ public class SearchCriteria extends Paginator {
 	public void setOverdueStatus(boolean overdueStatus) {
 		this.overdueStatus = overdueStatus;
 	}
-	
+
 	/*public String toString() {
 		StringBuilder sb = new StringBuilder();
 		sb.append("userId="+ userId);
@@ -819,4 +823,20 @@ public class SearchCriteria extends Paginator {
 	}
     
 	
+	public List<Long> getSiteIds() {
+		return siteIds;
+	}
+
+	public void setSiteIds(List<Long> siteIds) {
+		this.siteIds = siteIds;
+	}
+
+
+    public boolean isNotCheckedOut() {
+        return notCheckedOut;
+    }
+
+    public void setNotCheckedOut(boolean notCheckedOut) {
+        this.notCheckedOut = notCheckedOut;
+    }
 }

@@ -11,6 +11,7 @@ import java.util.Set;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 
+import com.ts.app.web.rest.dto.*;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -45,10 +46,6 @@ import com.ts.app.service.MailService;
 import com.ts.app.service.UserService;
 import com.ts.app.service.util.MapperUtil;
 import com.ts.app.service.util.RandomUtil;
-import com.ts.app.web.rest.dto.BaseDTO;
-import com.ts.app.web.rest.dto.SearchCriteria;
-import com.ts.app.web.rest.dto.SearchResult;
-import com.ts.app.web.rest.dto.UserDTO;
 import com.ts.app.web.rest.errors.TimesheetException;
 import com.ts.app.web.rest.util.HeaderUtil;
 import com.ts.app.web.rest.util.PaginationUtil;
@@ -289,6 +286,16 @@ public class UserResource {
 		}
 		return result;
 	}
+
+    @RequestMapping(value = "/user/change_password", method=RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> changeNewPassword(@RequestBody KeyAndPasswordDTO keyAndPasswordDTO){
+        User user = userRepository.findOne(keyAndPasswordDTO.getUserId());
+        if(user !=null){
+            user = userService.changeNewPassword(keyAndPasswordDTO.getUserId(), keyAndPasswordDTO.getNewPassword());
+            return new ResponseEntity<Object>("Username changed",HttpStatus.OK);
+        }
+        return new ResponseEntity<Object>("Username not found",HttpStatus.SERVICE_UNAVAILABLE);
+    }
 
 
 

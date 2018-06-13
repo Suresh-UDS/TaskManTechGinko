@@ -38,7 +38,7 @@
                                             <div class="col-md-4">
 
                                                 <div class="form-group">
-                                                    <label class="control-label">Title </label>
+                                                    <label class="control-label">Title <span class="red-star">*</span></label>
                                                     <input id='jobName'
                                                            ng-model="job.title"
                                                            class='form-control'
@@ -72,7 +72,7 @@
                                                 </div>
 
                                             </div>
-                                            <div class="col-md-8">
+                                            <div class="col-md-12">
                                                 <div class="form-group">
                                                     <label class="control-label">Description<span class="red-star">*</span> </label>
                                             <textarea
@@ -81,6 +81,7 @@
                                                 name='jobDesc'
                                                 ng-maxlength='2500'
                                                 ng-pattern="/^[a-zA-Z0-9 _\\\/.’'\-,#:]+$/"
+                                                required
                                             ></textarea>
 
                                                     <div ng-show="form.$submitted || form.jobDesc.$touched">
@@ -101,7 +102,7 @@
 
                                             <div class="col-md-6">
                                                 <div class="form-group">
-                                                    <label class="control-label">Checklist<span class="red-star">*</span></label>
+                                                    <label class="control-label">Checklist</label>
                                                     <div class="dropdown">
                                                         <!--<input type="text"-->
                                                         <!--class="form-control"-->
@@ -136,7 +137,7 @@
                                                         <!--required-->
                                                         <!--autocomplete="off" />-->
                                                         <span class="form-control-feedback d-sm-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                                        <select class="form-control " ng-model="selectedEmployee" ng-init="selectedEmployee = selected" ng-options="emp as emp.name for emp in employees track by emp.id">
+                                                        <select required class="form-control " ng-model="selectedEmployee"  ng-options="emp as emp.name for emp in employees track by emp.id">
                                                             <option value="">Please select Employees...</option>
                                                         </select>
 
@@ -153,7 +154,7 @@
 
 
                                         </div>
-                                        <div class="row">
+                                        <!-- <div class="row">
 
                                             <div class="col-md-12">
                                                 <div class="form-group">
@@ -178,7 +179,7 @@
 
                                             </div>
 
-                                        </div>
+                                        </div> -->
 
                                     </div>
                                 </div>
@@ -204,7 +205,7 @@
                                                         <!--required-->
                                                         <!--autocomplete="off" />-->
                                                         <span class="form-control-feedback d-sm-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                                        <select class="form-control " ng-model="selectedSite" ng-change="loadBlocks();" ng-options="site as site.name for site in sites track by site.id">
+                                                        <select required class="form-control " ng-model="selectedSite"  ng-change="loadBlocks();" ng-options="site as site.name for site in sites track by site.id">
                                                             <option value="">Please select Site...</option>
                                                         </select>
                                                         <div ng-show="form.$submitted || form.siteName.$touched">
@@ -304,9 +305,9 @@
                                             <div class="col-md-12">
 
                                                 <div class="form-group">
-                                                    <label class="label-control">Start date</label>
+                                                    <label class="label-control">Start date<span class="red-star">*</span> </label>
                                                     <span class="form-control-feedback calender-icon"><i class="material-icons">date_range</i></span>
-                                                    <input type="text"  ng-model="job.plannedStartTime"  name='plannedStartDate' class="form-control datetimepicker"  id="dateFilterFrom"  placeholder="{{dateFilterFrom | date:'dd-MMM-yyyy HH:mm:ss Z'}}"/>
+                                                    <input type="text"  ng-model="job.plannedStartTime"  class="form-control datetimepicker"  id="jobStartDate" ng-bind="job.plannedStartTime | date:'dd/MM/yyyy HH:mm'" required/>
 
                                                 </div>
 
@@ -318,14 +319,16 @@
                                         <div class="row">
                                             <div class="col-md-6">
                                                 <div class="form-group">
-                                                    <label class="control-label">Hours </label>
+                                                    <label class="control-label">Hours<span class="red-star">*</span> </label>
                                                     <input
                                                         ng-model="job.plannedHours"
                                                         class='form-control'
                                                         name='plannedHours'
                                                         type="number"
+                                                        value="1"
+                                                     	   min="1"   
                                                         required
-                                                    ></textarea>
+                                                    >
 
                                                     <div ng-show="form.$submitted || form.plannedHours.$touched">
                                                         <div
@@ -358,11 +361,7 @@
                                                         <option>INPROGRESS</option>
                                                         <option>COMPLETED</option>
                                                     </select>
-                                                    <!-- <input type="text"
-                                                                    class="form-control searchable-input floatL"
-                                                                    ng-model="selectedStatus"
-                                                                    uib-typeahead="stat as stat.name for stat in status | filter:$viewValue | limitTo:5" />
-                     -->
+                                                    
                                                     <div ng-show="form.$submitted || form.jobStatus.$touched">
                                                         <div
                                                             ng-show="form.jobStatus.$dirty || form.jobStatus.$invalid">
@@ -379,7 +378,7 @@
                                         <div class="row">
                                             <div class="col-md-6">
                                                 <div class="form-group">
-                                                    <label class="control-label">Type </label>
+                                                    <label class="control-label">Type<span class="red-star">*</span> </label>
                                                     <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
                                                     <select
                                                         required

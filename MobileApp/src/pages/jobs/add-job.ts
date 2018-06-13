@@ -90,23 +90,23 @@ export class CreateJobPage {
     }
     addJob()
     {
-        if(this.title && this.description && this.siteName && this.employ && this.startDate && this.startTime && this.endDate && this.endTime)
+        if(this.title && this.description && this.siteName && this.employ && this.startDate && this.endDate)
         {
             this.eMsg="";
             this.siteId=window.localStorage.getItem('site')
-            console.log( this.siteId);
-            var sDate = moment(this.startDate).format("MM/DD/YYYY");
-            var sTime = moment(this.startTime).format("hh:mm A");
+           var SDate = moment(this.startDate).local().format('YYYY-MM-DD HH:mm:ss');
+           var SDate = moment(this.startDate).local().format('YYYY-MM-DD HH:mm:ss');
+            var EDate = new Date(this.endDate);
 
-            var startDateTimeMoment = moment(sDate+' '+sTime,"MM/DD/YYYY hh:mm A");
-            var eDate = moment(this.endDate).format("MM/DD/YYYY");
-            var eTime = moment(this.endTime).format("hh:mm A");
-            var endDateTimeMoment = moment(eDate+' '+eTime,"MM/DD/YYYY hh:mm A");
-            this.plannedStartTime = startDateTimeMoment.toDate();
-            this.plannedStartTime = this.plannedStartTime.toISOString();
-            this.plannedEndTime = endDateTimeMoment.toDate().toISOString();
+            this.startTime = moment(this.startDate).subtract(5,'hours').toDate();
+            this.endTime = moment(this.endDate).subtract(5,'hours').toDate();
+
+
+            this.plannedStartTime =moment(this.startTime).subtract(30,'minutes').toDate();
+            this.plannedEndTime= moment(this.endTime).subtract(30,'minutes').toDate();
+
             this.plannedHours = 2;
-            this.userId=localStorage.getItem('employeeUserId')
+            this.userId=localStorage.getItem('employeeUserId');
             this.newJob={
                 "title":this.title,
                 "description":this.description,
@@ -123,7 +123,24 @@ export class CreateJobPage {
             };
 
             if(this.ticket){
+<<<<<<< HEAD
                 this.newJob.ticketId = this.ticket.id;
+=======
+                this.newJob={
+                    "title":this.title,
+                    "description":this.description,
+                    "plannedStartTime":this.plannedStartTime,
+                    "plannedEndTime":this.plannedEndTime,
+                    "plannedHours":this.plannedHours,
+                    "jobStatus":"ASSIGNED",
+                    "comments":"test",
+                    "siteId":this.siteId,
+                    "employeeId":this.employ,
+                    "userId":this.userId,
+                    "locationId":1,
+                    "ticketId":this.ticket.id
+                }
+>>>>>>> Release-1.0
             }
 
 
