@@ -68,7 +68,7 @@ export class AssetList {
 
   openFilters(){
       console.log("Opening filter modal");
-      let modal = this.modalController.create(AssetFilter);
+      let modal = this.modalController.create(AssetFilter,{},{cssClass : 'asset-filter',showBackdrop : true});
       modal.onDidDismiss(data=>{
           console.log("Modal dismissed");
           console.log(data);

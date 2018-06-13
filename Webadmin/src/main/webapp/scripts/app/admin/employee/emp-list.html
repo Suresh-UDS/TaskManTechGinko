@@ -360,13 +360,13 @@
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    <tr ng-repeat="site in sites">
+                                    <tr ng-repeat="projSite in sites">
 
-                                        <td>{{site.id}}</td>
-                                        <td>{{site.name}}</td>
+                                        <td>{{projSite.siteId}}</td>
+                                        <td>{{projSite.siteName}}</td>
                                         <td>
-                                            <button ng-click="checkIn(site.id,employee.empId,employee.id)" data-dismiss="modal"  class="btn btn-success btn-sm btn-round">check-In</button>
-                                            <button ng-click="checkOut(site.id,employee.empId,employee.id)" data-dismiss="modal"  class="btn btn-success btn-sm btn-round">check-Out</button>
+                                            <button ng-click="checkIn(projSite.siteId,employee.empId,employee.id)" data-dismiss="modal"  class="btn btn-success btn-sm btn-round">check-In</button>
+                                            <button ng-click="checkOut(projSite.siteId,employee.empId,employee.id)" data-dismiss="modal"  class="btn btn-success btn-sm btn-round">check-Out</button>
                                         </td>
 
                                     </tr>

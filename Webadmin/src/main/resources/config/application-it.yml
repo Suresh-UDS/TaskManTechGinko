@@ -67,13 +67,25 @@ qrcode:
     file:
          path: /opt/qrcode
 attendance:
+    shiftStartLeadTime: 1
+    shiftEndLeadTime: 1
+    shiftStartGraceTime: 1
+    shiftEndGraceTime: 1
     file:
         path:  /opt/attendance
+    template:
+        path: /opt/template/Attendance_Report_Format.xlsx
+quotation:
+    file:
+        path:  /opt/quotation
+ticket:
+    file:
+        path:  /opt/ticket        
 import:
     file:
         path:
             new: /opt/imports/new
-            completed: /opt/imports/completed  
+            completed: /opt/imports/completed
 max:
     user: 10
     userGroup: 2
@@ -98,7 +110,7 @@ email:
             title: Overdue job report
     compleed:
         report:
-            title: Completed job report    
+            title: Completed job report
 
 reports:
     job-report:
@@ -108,14 +120,14 @@ reports:
         url: https://taskmanadmin.uds.in/#/attendance-reports
         #url: http://ec2-13-127-100-174.ap-south-1.compute.amazonaws.com:8088/#/attendance-reports
     feedback-report:
-        url: https://taskmanadmin.uds.in/#/feedbacks        
+        url: https://taskmanadmin.uds.in/#/feedbacks
     ticket-report:
         url: https://taskmanadmin.uds.in/#/ticket-reports
-        
+
 url:
     ticket-view: https://taskmanadmin.uds.in#/view-ticket
     quotation-view: https://taskmanadmin.uds.in#/view-quotation
-            
+
 facedetection:
     api:
         url: https://api.kairos.com/detect
@@ -143,20 +155,20 @@ scheduler:
       creation: monthly
    weeklyJob:
       enabled: false
-      creation: monthly      
+      creation: monthly
    monthlyJob:
-      enabled: false      
+      enabled: false
       creation: yearly
    overdueJob:
-      enabled: false   
+      enabled: false
    eodJobReport:
       enabled: false
    attendanceDetailReport:
-      enabled: true      
+      enabled: true
    attendanceConsolidatedReport:
       enabled: true
-            
-default.user.password: uds12345      
+
+default.user.password: uds12345
 # ===================================================================
 # JHipster specific properties
 # ===================================================================

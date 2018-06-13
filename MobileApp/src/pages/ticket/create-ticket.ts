@@ -1,10 +1,14 @@
-import { Component } from '@angular/core';
-import {NavController, NavParams} from "ionic-angular";
+import {Component, Inject} from '@angular/core';
+import {NavController, NavParams, PopoverController} from "ionic-angular";
 import {SiteService} from "../service/siteService";
 import {JobService} from "../service/jobService";
 import {Ticket} from "./ticket";
 import {componentService} from "../service/componentService";
 import {EmployeeService} from "../service/employeeService";
+import {FileTransferObject, FileTransfer, FileUploadOptions} from "@ionic-native/file-transfer";
+import {ApplicationConfig, MY_CONFIG_TOKEN} from "../service/app-config";
+import {Camera, CameraOptions} from "@ionic-native/camera";
+import {QuotationImagePopoverPage} from "../quotation/quotation-image-popover";
 
 
 /**
@@ -37,12 +41,18 @@ export class CreateTicket {
     private employee: any;
     private severities: any;
     private severity: any;
+    ticketImage:any;
+    takenImages:any;
+    fileTransfer: FileTransferObject = this.transfer.create();
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, public siteService:SiteService, public jobService:JobService, public cs:componentService, public employeeService:EmployeeService) {
+
+    constructor(public navCtrl: NavController, public navParams: NavParams, public siteService:SiteService,public camera:Camera,public popoverCtrl: PopoverController,
+                public jobService:JobService, public cs:componentService, public employeeService:EmployeeService,@Inject(MY_CONFIG_TOKEN) private config:ApplicationConfig,private transfer: FileTransfer) {
       this.sites=[];
       this.employee=[];
       this.severities = ['Low','Medium','High'];
       this.severity = this.severities[0];
+      this.takenImages=[];
   }
 
   ionViewDidLoad() {
@@ -123,12 +133,43 @@ export class CreateTicket {
                   "userId":this.userId,
                   "severity":this.severity,
 
-              }
+              };
 
 
               this.jobService.createTicket(this.newTicket).subscribe(
                   response=> {
                       console.log(response);
+
+                      //Ticket image upload on successfully creating ticket.
+                      if(this.takenImages.length>0){
+                          for(var i=0;i<this.takenImages.length;i++){
+                              let token_header=window.localStorage.getItem('session');
+                              let options: FileUploadOptions = {
+                                  fileKey: 'ticketFile',
+                                  fileName:response.employeeEmpId+'_ticketImage_'+response.id,
+                                  headers:{
+                                      'X-Auth-Token':token_header
+                                  },
+                                  params:{
+                                      ticketId:response.id
+                                  }
+                              };
+
+                              this.fileTransfer.upload(this.takenImages[i], this.config.Url+'api/ticket/image/upload', options)
+                                  .then((data) => {
+                                      console.log(data);
+                                      console.log("image upload");
+                                      this.cs.closeLoader();
+                                  }, (err) => {
+                                      console.log(err);
+                                      console.log("image upload fail");
+                                      this.cs.closeLoader();
+                                  })
+                          }
+
+
+                      }
+
                       this.navCtrl.setRoot(Ticket);
                   },
                   error=>{
@@ -179,5 +220,39 @@ export class CreateTicket {
 
           }
   }
+
+  viewCamera() {
+
+        const options: CameraOptions = {
+            quality: 50,
+            destinationType: this.camera.DestinationType.NATIVE_URI,
+            encodingType: this.camera.EncodingType.JPEG,
+            mediaType: this.camera.MediaType.PICTURE
+        };
+
+        this.camera.getPicture(options).then((imageData) => {
+
+            console.log('imageData -' +imageData);
+            imageData = imageData.replace("assets-library://", "cdvfile://localhost/assets-library/")
+            this.takenImages.push(imageData);
+
+        })
+
+  }
+
+  viewImage(index,img)
+    {
+        let popover = this.popoverCtrl.create(QuotationImagePopoverPage,{i:img,ind:index},{cssClass:'view-img',showBackdrop:true});
+        popover.present({
+
+        });
+
+        popover.onDidDismiss(data=>
+        {
+            this.takenImages.pop(data);
+        })
+    }
+
+
 
 }

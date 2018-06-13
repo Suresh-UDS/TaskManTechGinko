@@ -145,15 +145,28 @@ public class FeedbackTransactionService extends AbstractService {
 			Setting feedbackAlertSetting = null;
 			Setting feedbackEmails = null;
 			String alertEmailIds = "";
+			List<Setting> settings = null;
 			if(feedbackTransDto.getSiteId() > 0) {
-				feedbackAlertSetting = settingsRepository.findSettingByKeyAndSiteId(SettingsService.EMAIL_NOTIFICATION_FEEDBACK, feedbackTransDto.getSiteId());
-				feedbackEmails = settingsRepository.findSettingByKeyAndSiteId(SettingsService.EMAIL_NOTIFICATION_FEEDBACK_EMAILS, feedbackTransDto.getSiteId());
+				settings = settingsRepository.findSettingByKeyAndSiteId(SettingsService.EMAIL_NOTIFICATION_FEEDBACK, feedbackTransDto.getSiteId());
+				if(CollectionUtils.isNotEmpty(settings)) {
+					feedbackAlertSetting = settings.get(0);
+				}
+				settings = settingsRepository.findSettingByKeyAndSiteId(SettingsService.EMAIL_NOTIFICATION_FEEDBACK_EMAILS, feedbackTransDto.getSiteId());
+				if(CollectionUtils.isNotEmpty(settings)) {
+					feedbackEmails = settings.get(0);
+				}
 				if(feedbackEmails != null) {
 					alertEmailIds = feedbackEmails.getSettingValue();
 				}
 			}else if(feedbackTransDto.getProjectId() > 0) {
-				feedbackAlertSetting = settingsRepository.findSettingByKeyAndProjectId(SettingsService.EMAIL_NOTIFICATION_OVERDUE, feedbackTransDto.getProjectId());
-				feedbackEmails = settingsRepository.findSettingByKeyAndProjectId(SettingsService.EMAIL_NOTIFICATION_OVERDUE_EMAILS, feedbackTransDto.getProjectId());
+				settings = settingsRepository.findSettingByKeyAndProjectId(SettingsService.EMAIL_NOTIFICATION_OVERDUE, feedbackTransDto.getProjectId());
+				if(CollectionUtils.isNotEmpty(settings)) {
+					feedbackAlertSetting = settings.get(0);
+				}
+				settings = settingsRepository.findSettingByKeyAndProjectId(SettingsService.EMAIL_NOTIFICATION_OVERDUE_EMAILS, feedbackTransDto.getProjectId());
+				if(CollectionUtils.isNotEmpty(settings)) {
+					feedbackEmails = settings.get(0);
+				}
 				if(feedbackEmails != null) {
 					alertEmailIds = feedbackEmails.getSettingValue();
 				}
@@ -175,6 +188,9 @@ public class FeedbackTransactionService extends AbstractService {
 		feedbackTrans.setRating(rating);
 		feedbackTrans.setResults(items);
         feedbackTrans = feedbackTransactionRepository.save(feedbackTrans);
+        if(log.isDebugEnabled()) {
+        		log.debug("Rating received for this feedback - "+ rating);
+        }
         if(rating < 5 ) { //create a ticket
         		TicketDTO ticketDTO = new TicketDTO();
         		ticketDTO.setUserId(feedbackTransDto.getUserId());
@@ -296,17 +312,21 @@ public class FeedbackTransactionService extends AbstractService {
 	        	toTime = toTime.withSecond(59);
 	        DecimalFormat df = new DecimalFormat("#.0");
 			// Calcualte a weekly date need to modify
+	        ZonedDateTime weeklyFromDate = fromTime;
+	        	ZonedDateTime weeklyToDate = toTime;
+	        if(searchCriteria.getCheckInDateTimeFrom() == null && searchCriteria.getCheckInDateTimeTo() == null) {
 				DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSSSSS");
 		        Date date = new Date();
 		        String todate = dateFormat.format(date);
 		        String pattern = "yyyy-MM-dd HH:mm:ss.SSSSSS";
 		        DateTimeFormatter parser = DateTimeFormatter.ofPattern(pattern).withZone(ZoneId.systemDefault());
-		        ZonedDateTime weeklyToDate = ZonedDateTime.parse(todate, parser);
+		        weeklyToDate = ZonedDateTime.parse(todate, parser);
 		        Calendar cal = Calendar.getInstance();
 		        cal.add(Calendar.DATE, -7);
 		        Date todate1 = cal.getTime();
 		        String fromdate = dateFormat.format(todate1);
-		        ZonedDateTime weeklyFromDate = ZonedDateTime.parse(fromdate, parser);
+		        weeklyFromDate = ZonedDateTime.parse(fromdate, parser);
+	        }
 		        // end
 			if(searchCriteria.getProjectId() > 0) {
 				log.debug("***************"+searchCriteria.getSiteId()+"\t block: "+ searchCriteria.getBlock()+"\t floor : "+ searchCriteria.getFloor()+"\t zone : " +searchCriteria.getZone()+"fromTime: \t"+fromTime+"toTime \t"+toTime);

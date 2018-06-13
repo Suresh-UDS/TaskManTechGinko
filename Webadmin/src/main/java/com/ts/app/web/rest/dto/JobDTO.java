@@ -47,7 +47,7 @@ public class JobDTO extends BaseDTO {
 	private Date actualStartTime;
 	private Date actualEndTime;
 	private int actualHours;
-
+	private int actualMinutes;
 
 	private JobStatus jobStatus;
 	private JobType jobType;
@@ -73,6 +73,8 @@ public class JobDTO extends BaseDTO {
 	private List<JobChecklistDTO> checklistItems;
 
 	private List<CheckInOutImageDTO> images;
+
+	private long checkInOutId;
 
 	@JsonIgnoreProperties
 	private String block;
@@ -405,5 +407,20 @@ public class JobDTO extends BaseDTO {
 
     public void setTicketName(String ticketName) {
         this.ticketName = ticketName;
+    }
+	public int getActualMinutes() {
+		return actualMinutes;
+	}
+	public void setActualMinutes(int actualMinutes) {
+		this.actualMinutes = actualMinutes;
+	}
+
+
+    public long getCheckInOutId() {
+        return checkInOutId;
+    }
+
+    public void setCheckInOutId(long checkInOutId) {
+        this.checkInOutId = checkInOutId;
     }
 }

@@ -103,9 +103,46 @@
                             </div>
                         </ion-col>
 
+                        <ion-col col-12>
+                            <ion-row class="margin0">
+                                <ion-col col-6 class="label-on-left">
+                                    <p class="line-height">Issue Image</p>
+                                </ion-col>
+                                <ion-col col-6 text-right>
+                                    <button class="ion-button camera-btn" round (click)="viewCamera()">
+                                        <ion-icon name="ios-camera"></ion-icon>
+                                    </button>
+                                </ion-col>
+                            </ion-row>
+                        </ion-col>
+
+                        <ion-col col-12>
+                            <ion-row>
+                                <ion-col col-3 *ngFor="let image of takenImages;let i of index">
+                                    <img [src]="image" class="job-img margin-bottom25" (click)="viewImage(i,image)">
+                                </ion-col>
+                            </ion-row>
+                        </ion-col>
+
+                        <!--<div class="margin-tp25 white-bg padding10">-->
+                            <!--<ion-row class="margin0">-->
+                                <!--<ion-col col-6 class="label-on-left">-->
+                                    <!--<p class="line-height">Photo (Before)</p>-->
+                                <!--</ion-col>-->
+                                <!--<ion-col col-6 text-right>-->
+                                    <!--<button class="ion-button" round (click)="viewCamera()" class="camera-btn"><ion-icon name="ios-camera"></ion-icon></button>-->
+                                <!--</ion-col>-->
+                            <!--</ion-row>-->
+                            <!--<ion-row>-->
+                                <!--<ion-col col-3 *ngFor="let image of takenImages;let i of index" class="">-->
+                                    <!--<img [src]="image" class="job-img margin-bottom25" (click)="viewImage(i,image)">-->
+                                <!--</ion-col>-->
+                            <!--</ion-row>-->
+                        <!--</div>-->
 
 
-                        <button type="submit" class="btn btn-warning pull-right margin-auto" (click)="createTicket()">Add</button>
+
+                        <!--<button type="submit" class="btn btn-warning pull-right margin-auto" (click)="createTicket()">Add</button>-->
 
                         <div class="clearfix"></div>
                     </ion-row>
@@ -114,3 +151,11 @@
         </div>
     </div>
 </ion-content>
+
+<ion-footer>
+    <ion-toolbar class="align-center" >
+        <button class="btn btn-warning center margin-auto" type="submit" (click)="createTicket()">
+            Add
+        </button>
+    </ion-toolbar>
+</ion-footer>

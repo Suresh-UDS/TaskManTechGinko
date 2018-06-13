@@ -71,19 +71,25 @@ public class EmployeeDTO extends BaseDTO {
     private boolean isReliever;
 
     private boolean isRelieved;
-    
+
     private boolean createUser;
-    
+
     private String phone;
-    
+
     private String email;
+
+    private boolean notCheckedOut;
 
     @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property="@id")
     private EmployeeDTO manager;
-    
+
 	private long userRoleId;
-	
+
 	private String userRoleName;
+
+	private boolean client;
+
+	private long attendanceId;
 
 	public long getId() {
 		return id;
@@ -366,5 +372,29 @@ public class EmployeeDTO extends BaseDTO {
 		this.email = email;
 	}
 
-	
+
+    public boolean isNotCheckedOut() {
+        return notCheckedOut;
+    }
+
+    public void setNotCheckedOut(boolean notCheckedOut) {
+        this.notCheckedOut = notCheckedOut;
+    }
+
+	public boolean isClient() {
+		return client;
+	}
+
+	public void setClient(boolean client) {
+		this.client = client;
+	}
+
+
+    public long getAttendanceId() {
+        return attendanceId;
+    }
+
+    public void setAttendanceId(long attendanceId) {
+        this.attendanceId = attendanceId;
+    }
 }

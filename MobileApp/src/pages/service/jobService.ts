@@ -37,6 +37,23 @@ export class JobService {
         )
     }
 
+    updateJobImages(job):Observable<any>{
+        return this.http.post(this.config.Url+'api/employee/jobUpdate',job).map(
+            response=>{
+                return response.json();
+            }
+        )
+    }
+
+
+    saveJob(job):Observable<any>{
+        return this.http.post(this.config.Url+'api/job/save',job).map(
+            response=>{
+                return response.json();
+            }
+        )
+    }
+
     loadCheckLists(): Observable<any>{
         return this.http.get(this.config.Url+'api/checklist').map(
             response=>{
@@ -89,6 +106,14 @@ export class JobService {
         return this.http.get(this.config.Url+'api/ticket/details/'+id).map(
             response=>{
                 return response.json();
+            }
+        )
+    }
+
+    getTicketImages(ticketId,imageId):Observable<any>{
+        return this.http.get(this.config.Url+'api/ticket/image/'+ticketId+'/'+imageId).map(
+            response=>{
+                return response;
             }
         )
     }

@@ -134,6 +134,13 @@ public class EmployeeResource {
         return new ResponseEntity<String>("{ \"empId\" : "+'"'+checkInOut.getEmployeeEmpId() + '"'+", \"status\" : \"success\", \"transactionId\" : \"" + checkInOut.getId() +"\" }", HttpStatus.OK);
     }
 
+    @RequestMapping(value = "/employee/jobUpdate", method = RequestMethod.POST)
+    public ResponseEntity<?> employeeJobUpdate(@RequestBody CheckInOutDTO checkInOut) {
+        checkInOut.setUserId(SecurityUtils.getCurrentUserId());
+        employeeService.saveCheckOutInfo(checkInOut);
+        return new ResponseEntity<String>("{ \"empId\" : "+'"'+checkInOut.getEmployeeEmpId() + '"'+", \"status\" : \"success\", \"transactionId\" : \"" + checkInOut.getId() +"\" }", HttpStatus.OK);
+    }
+
     @RequestMapping(value = "/employee/image/upload", method = RequestMethod.POST)
     public ResponseEntity<?> upload(@RequestParam("employeeEmpId") String employeeEmpId, @RequestParam("employeeId") String employeeId,@RequestParam("jobId") Long jobId,@RequestParam("siteId") String siteId,@RequestParam("checkInOutId") String checkInOutId, @RequestParam("action") String action, @RequestParam("photoOutFile") MultipartFile file) {
         CheckInOutImageDTO checkInOutImage = new CheckInOutImageDTO();
@@ -242,6 +249,12 @@ public class EmployeeResource {
     public List<EmployeeDTO> findBySiteId(@PathVariable Long siteId) {
         log.info("--Invoked EmployeeResource.findAll --");
         return employeeService.findBySiteId(SecurityUtils.getCurrentUserId(),siteId);
+    }
+
+    @RequestMapping(value = "/empAttendance/site/{siteId}", method = RequestMethod.GET)
+    public List<EmployeeDTO> findWithAttendanceBySiteId(@PathVariable Long siteId) {
+        log.info("--Invoked EmployeeResource.findAll --");
+        return employeeService.findWithAttendanceBySiteId(SecurityUtils.getCurrentUserId(),siteId);
     }
 
 	@RequestMapping(value = "/employee/{id}/managers", method = RequestMethod.GET)

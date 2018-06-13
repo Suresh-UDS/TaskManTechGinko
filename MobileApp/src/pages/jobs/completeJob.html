@@ -28,7 +28,7 @@
         <div class="margin-tp25 white-bg padding10">
             <ion-row class="margin0">
                 <ion-col col-6 class="label-on-left">
-                    <p class="line-height">Photo </p>
+                    <p class="line-height">New Images </p>
                 </ion-col>
                 <ion-col col-6 text-right>
                     <button class="ion-button" round (click)="viewCamera('beforeJob',jobDetails)" class="camera-btn"><ion-icon name="ios-camera"></ion-icon></button>
@@ -41,25 +41,44 @@
             </ion-row>
         </div>
 
+        <div class="margin-tp25 white-bg padding10" >
+            <ion-row class="margin0">
+                <ion-col col-6 class="label-on-left">
+                    <p class="line-height">Uploaded Images </p>
+                </ion-col>
+            </ion-row>
+            <ion-row>
+                <ion-col col-3 *ngFor="let image of completedImages;let i of index" class="">
+                    <img [src]="image" class="job-img margin-bottom25" (click)="viewOnlyImage(i,image)">
+                </ion-col>
+            </ion-row>
+        </div>
+
         <ion-row class="margin-tp25 white-bg padding10" >
             <div *ngIf="jobDetails.checklistItems?.length > 0">
                 <ion-item *ngFor="let list of jobDetails.checklistItems;let i = index">
                     <ion-label style="color: black">{{list.checklistItemName}}</ion-label>
-                    <ion-checkbox [(ngModel)]="list.status"  (ionChange)="changeStatus(i)" checked="list.status"></ion-checkbox>
+                    <ion-checkbox [(ngModel)]="list.completed"   checked="list.completed"></ion-checkbox>
                 </ion-item>
             </div>
             <div *ngIf="!jobDetails.checklistItems?.length > 0" class="align-center">
                 <p text-center>No Checklist Found</p>
             </div>
         </ion-row>
+
+
     </ion-list>
 
 </ion-content>
 
 <ion-footer>
-    <ion-toolbar class="align-center">
-        <button class="btn btn-warning center" (click)="completeJob(jobDetails,takenImages)">
-            complete job
+
+    <ion-toolbar class="align-right" padding-left padding-right  >
+        <button class="btn btn-warning center pull-left" (click)="saveJob(jobDetails)">
+            Save
+        </button>
+        <button class="btn btn-success center pull-right" (click)="completeJob(jobDetails,takenImages)">
+            Complete <ion-icon name="ios-arrow-forward-outline"></ion-icon>
         </button>
     </ion-toolbar>
 </ion-footer>

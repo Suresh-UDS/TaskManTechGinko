@@ -123,11 +123,24 @@ export class AssetFilter {
         this.viewCtrl.dismiss(data);
     }
 
+    typeChange(i)
+    {
+        this.assetType[i].status = true;
+    }
+    groupChange(i)
+    {
+        this.assetGroup[i].status = true;
+    }
+
     filterAssets(){
         this.searchCriteria = {
             siteId:this.selectedSite.id,
             projectId:this.selectedProject.id,
+            assetType:this.assetType,
+            assetGroup:this.assetGroup
         };
+        console.log(this.searchCriteria);
+
         this.viewCtrl.dismiss(this.searchCriteria);
     }
 

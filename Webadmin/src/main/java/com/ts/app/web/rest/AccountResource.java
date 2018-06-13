@@ -155,7 +155,7 @@ public class AccountResource {
 		*/
 		UserDTO userDto = userService.getUserWithAuthorities();
 		if(userDto != null) {
-			return new ResponseEntity<>(userDto, HttpStatus.OK); 
+			return new ResponseEntity<>(userDto, HttpStatus.OK);
 		}
 		return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 	}
@@ -233,6 +233,8 @@ public class AccountResource {
 					.ifPresent(t -> persistentTokenRepository.delete(decodedSeries));
 		});
 	}
+
+
 
 	@RequestMapping(value = "/account/reset_password/init", method = RequestMethod.POST, produces = MediaType.TEXT_PLAIN_VALUE)
 	@Timed

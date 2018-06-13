@@ -23,7 +23,7 @@ public class DateUtil {
 
 	public static Date convertUTCToIST(Calendar utcDate) {
         String strdate = null;
-        DateFormat formatter = new SimpleDateFormat("yyyy-dd-MM HH:mm:ss");
+        DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         strdate = formatter.format(utcDate.getTime());
         TimeZone obj = TimeZone.getTimeZone("Asia/Kolkata");
         formatter.setTimeZone(obj);
@@ -39,7 +39,7 @@ public class DateUtil {
 	
 	public static String formatUTCToIST(Calendar utcDate) {
         String strdate = null;
-        DateFormat formatter = new SimpleDateFormat("yyyy-dd-MM HH:mm:ss");
+        DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         strdate = formatter.format(utcDate.getTime());
         TimeZone obj = TimeZone.getTimeZone("Asia/Kolkata");
         formatter.setTimeZone(obj);
@@ -54,8 +54,9 @@ public class DateUtil {
 		return sqlDate;
 	}
 	
+	
 	public static Date convertToDateTime(String date, String time) {
-        DateFormat formatter = new SimpleDateFormat("yyyy-dd-MM HH:mm:ss");
+        DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Date dateTime = null;
 		try {
 			dateTime = formatter.parse(date + " " + time);
@@ -68,7 +69,7 @@ public class DateUtil {
 	}
 	
 	public static Date convertToDateTime(String date) {
-        DateFormat formatter = new SimpleDateFormat("yyyy-dd-MM HH:mm:ss");
+        DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Date dateTime = null;
 		try {
 			dateTime = formatter.parse(date);
@@ -91,12 +92,26 @@ public class DateUtil {
 
 	
 	public static Date convertToDateTime(Date date, Date time) {
-        DateFormat dtFormat = new SimpleDateFormat("yyyy-dd-MM");
+        DateFormat dtFormat = new SimpleDateFormat("yyyy-MM-dd");
         DateFormat timeFormat = new SimpleDateFormat("HH:mm:ss");
         String strDate = dtFormat.format(date);
         String strtime = timeFormat.format(time);
         
         return convertToDateTime(strDate, strtime);
+
+	}
+	
+	public static String formatToDateString(Date date) {
+        DateFormat dtFormat = new SimpleDateFormat("dd-MMM-yyyy");
+        String strDate = dtFormat.format(date);
+        return strDate;
+
+	}
+	
+	public static String formatToDateTimeString(Date date) {
+        DateFormat dtFormat = new SimpleDateFormat("dd-MMM-yyyy hh:mm a");
+        String strDate = dtFormat.format(date);
+        return strDate;
 
 	}
 }
