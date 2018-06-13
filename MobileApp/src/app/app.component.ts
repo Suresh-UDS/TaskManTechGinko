@@ -30,10 +30,14 @@ import {SplashLogo} from "../pages/splash-logo/splash-logo";
 import{OneSignal} from "@ionic-native/onesignal";
 import {componentService} from "../pages/service/componentService";
 import {Ticket} from "../pages/ticket/ticket";
+<<<<<<< HEAD
 import {AssetList} from "../pages/asset-list/asset-list";
 import{JobFilter} from "../pages/jobs/job-filter/job-filter";
 import{TicketFilter} from "../pages/ticket/ticket-filter/ticket-filter";
 import{EmployeeFilter} from "../pages/employee-list/employee-filter/employee-filter";
+=======
+import {authService} from "../pages/service/authService";
+>>>>>>> Release-1.0
 
 @Component({
   templateUrl: 'app.html'
@@ -45,11 +49,27 @@ export class MyApp {
   userName:any;
   userType :any;
     counter=0;
+    pushEvent:any;
+
   pages: Array<{title: string, component: any,active:any,icon:any,permission:any}>;
 
+<<<<<<< HEAD
   constructor(public platform: Platform,private ionicApp: IonicApp,public menuCtrl:MenuController,private backgroundMode: BackgroundMode, public statusBar: StatusBar,public component:componentService,public toastCtrl: ToastController, public splashScreen: SplashScreen, private oneSignal: OneSignal, public events:Events, private batteryStatus: BatteryStatus, private appVersion:AppVersion) {
     this.initializeApp();
 
+=======
+  constructor(public platform: Platform,private backgroundMode: BackgroundMode, public statusBar: StatusBar,public component:componentService,public toastCtrl: ToastController, public splashScreen: SplashScreen, private oneSignal: OneSignal, public events:Events, private batteryStatus: BatteryStatus, private appVersion:AppVersion, private authService:authService) {
+    this.initializeApp();
+      this.events.subscribe('permissions:set',(permission)=>{
+          console.log("Event permission in component");
+          console.log(permission);
+      })
+
+      this.events.subscribe('user:logedin',data=>{
+          console.log("Subsribed to user name");
+          console.log(data);
+      })
+>>>>>>> Release-1.0
       this.backgroundMode.enable();
       let subscription = this.batteryStatus.onChange().subscribe(
           (status:BatteryStatusResponse)=>{
@@ -57,6 +77,45 @@ export class MyApp {
               console.log(status.level,status.isPlugged);
           }
       );
+
+
+          this.oneSignal.startInit('be468c76-586a-4de1-bd19-fc6d9512e5ca','1088177211637');
+          this.oneSignal.inFocusDisplaying(this.oneSignal.OSInFocusDisplayOption.InAppAlert);
+          this.oneSignal.handleNotificationReceived().subscribe(response=>{
+              console.log("Notification received");
+              console.log(JSON.stringify(response))
+
+
+          });
+          this.oneSignal.handleNotificationOpened().subscribe(response=> {
+              console.log("Notification Opened")
+              console.log(JSON.stringify(response))
+              this.pushEvent=response.notification.payload.additionalData.event;
+              if(this.pushEvent=='assign_driver')
+              {
+                  this.nav.setRoot(TabsPage,{event:this.pushEvent})
+              }
+              else if(this.pushEvent=='cancel_booking')
+              {
+                  this.nav.setRoot(TabsPage,{event:this.pushEvent})
+              }
+          });
+
+          this.oneSignal.getIds().then(
+              response=>{
+                  console.log("Push Subscription response - get Ids");
+                  console.log(response);
+                      this.registerForPush("android",response.pushToken,response.userId);
+              }
+          );
+
+
+          this.oneSignal.endInit();
+
+
+
+
+
       platform.registerBackButtonAction(() => {
           let view = this.nav.getActive();
           console.log("Back button event");
@@ -84,11 +143,7 @@ export class MyApp {
               platform.exitApp();
           }
       }, 0);
-      this.events.subscribe('userType',(type)=>{
-          console.log("User type event");
-          console.log(type);
-          this.userType = type;
-      });
+
     // used for an example of ngFor and navigation
     this.pages = [
       { title: 'Dashboard', component: TabsPage,active:true,icon:'dashboard',permission:'DashboardList'},
@@ -112,11 +167,10 @@ export class MyApp {
     console.log(window.localStorage.getItem('employeeFullName'));
     this.userName = window.localStorage.getItem('employeeFullName');
 
-    this.events.subscribe('permissions:set',(permission)=>{
-        console.log("Event permission in component");
-        console.log(permission);
-    })
+
   }
+
+
   initializeApp() {
     this.platform.ready().then(() => {
       // Okay, so the platform is ready and our plugins are available.
@@ -175,5 +229,15 @@ export class MyApp {
   gotoDashboard(){
       this.nav.setRoot(TabsPage);
   }
+
+    registerForPush(type,pushToken,pushUserId){
+        var user = { user: 'user' + Math.floor((Math.random() * 10000000) + 1), type: type, token: pushToken,pushUserId: pushUserId, userType: 'driver'};
+        this.authService.pushSubscription(user).subscribe(
+            response=>{
+                console.log("Response from register for push");
+                console.log(response);
+            }
+        )
+    }
 
 }

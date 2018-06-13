@@ -46,7 +46,7 @@ public class Project extends AbstractAuditingEntity implements Serializable {
     @Column(length = 50, unique = true, nullable = false)
     private String name;   
 
-    @OneToMany(mappedBy = "project",fetch=FetchType.LAZY)  
+    @OneToMany(mappedBy = "project")  
     private Set<Site> site;  
 
     @OneToMany(mappedBy = "project",fetch=FetchType.LAZY)  

@@ -16,7 +16,6 @@ import {componentService} from "../service/componentService";
  * Ionic pages and navigation.
  */
 
-@IonicPage()
 @Component({
   selector: 'page-site-list',
   templateUrl: 'site-list.html',

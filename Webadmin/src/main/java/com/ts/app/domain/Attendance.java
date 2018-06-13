@@ -58,6 +58,8 @@ public class Attendance extends AbstractAuditingEntity implements Serializable{
 	private String shiftStartTime;
 	
 	private String shiftEndTime;
+	
+	private boolean notCheckedOut;
 
 	public Long getId() {
 		return id;
@@ -181,6 +183,14 @@ public class Attendance extends AbstractAuditingEntity implements Serializable{
 
 	public void setShiftEndTime(String shiftEndTime) {
 		this.shiftEndTime = shiftEndTime;
+	}
+
+	public boolean isNotCheckedOut() {
+		return notCheckedOut;
+	}
+
+	public void setNotCheckedOut(boolean notCheckedOut) {
+		this.notCheckedOut = notCheckedOut;
 	}
     
     

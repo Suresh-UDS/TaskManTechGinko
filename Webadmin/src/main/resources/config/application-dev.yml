@@ -70,8 +70,20 @@ qrcode:
     file:
          path: /opt/qrcode
 attendance:
+    shiftStartLeadTime: 1
+    shiftEndLeadTime: 1
+    shiftStartGraceTime: 1
+    shiftEndGraceTime: 1
     file:
         path:  /opt/attendance
+    template:
+        path: /opt/template/Attendance_Report_Format.xlsx
+quotation:
+    file:
+        path:  /opt/quotation
+ticket:
+    file:
+        path:  /opt/ticket
 import:
     file:
         path:

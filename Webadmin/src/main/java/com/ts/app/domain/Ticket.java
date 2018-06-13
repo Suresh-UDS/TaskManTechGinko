@@ -84,7 +84,7 @@ public class Ticket extends AbstractAuditingEntity implements Serializable {
     private String category;
     
     private String quotationId;
-
+    
     public Long getId() {
         return id;
     }

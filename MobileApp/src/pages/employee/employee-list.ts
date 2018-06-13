@@ -106,31 +106,7 @@ export class EmployeeList {
 
 
   ionViewWillEnter(){
-
-    this.siteService.searchSiteEmployee(this.site.id).subscribe(response=>{
-      console.log(response.json());
-      this.employeeList = response.json();
-      this.userGroup = window.localStorage.getItem('userGroup');
-      this.employeeId = window.localStorage.getItem('employeeId');
-      this.employeeFullName = window.localStorage.getItem('employeeFullName');
-      this.employeeEmpId = window.localStorage.getItem('employeeEmpId');
-      for(let employee of this.employeeList) {
-        this.attendanceService.getAttendances(employee.id,this.site.id).subscribe(
-          response =>{
-            console.log(response.json());
-            var result = response.json()
-            if(result[0]){
-              console.log("already checked in ");
-              employee.checkedIn = true;
-              employee.attendanceId = result[0].id;
-            }else{
-              console.log("Not yet checked in ");
-              employee.checkedIn = false;
-            }
-          }
-        );
-      }
-    })
+      this.getEmployees();
 
   }
 
@@ -138,10 +114,19 @@ export class EmployeeList {
     this.attendanceService.getAttendances(employeeId,this.site.id).subscribe(
       response =>{
         console.log(response.json());
-        var result = response.json()
+        var result = response.json();
         if(result[0]){
           console.log("already checked in ");
-          this.checkedIn = true;
+          console.log(result[0].notCheckedOut);
+          if(result[0].notCheckedOut){
+              console.log("Not checked out true");
+              this.checkedIn = false;
+          }else{
+              console.log("Not checked out false");
+
+              this.checkedIn = true;
+
+          }
 
         }else{
           console.log("Not yet checked in ");
@@ -334,6 +319,7 @@ export class EmployeeList {
   markAttendanceCheckOut(employee,imageData){
       this.attendanceService.markAttendanceCheckOut(this.site.id,employee.empId,this.lattitude,this.longitude,imageData,employee.attendanceId).subscribe(response=>{
           console.log(response.json());
+          this.getEmployees();
           this.closeAll();
           if(response && response.status === 200){
               var msg='Face Verified and Attendance marked Successfully';
@@ -344,6 +330,17 @@ export class EmployeeList {
           console.log(error);
           this.showSuccessToast(msg);
           this.closeAll();
+      })
+  }
+
+  getEmployees(){
+      this.siteService.searchSiteEmployee(this.site.id).subscribe(response=>{
+          console.log(response.json());
+          this.employeeList = response.json();
+          this.userGroup = window.localStorage.getItem('userGroup');
+          this.employeeId = window.localStorage.getItem('employeeId');
+          this.employeeFullName = window.localStorage.getItem('employeeFullName');
+          this.employeeEmpId = window.localStorage.getItem('employeeEmpId');
       })
   }
 

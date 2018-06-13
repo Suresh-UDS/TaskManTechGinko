@@ -189,25 +189,31 @@ public class JobManagementResource {
 	}
 
 	@RequestMapping(path="/job/{id}/complete", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<?> completeJob(@PathVariable("id") Long id){
-		JobDTO response = jobService.completeJob(id);
-		if(response != null) {
-			long siteId = response.getSiteId();
-			List<User> users = userService.findUsers(siteId);
-			if(CollectionUtils.isNotEmpty(users)) {
-				long userIds[] = new long[users.size()];
-				int ind = 0;
-				for(User user : users) {
-					userIds[ind] = user.getId();
-					ind++;
-				}
-				String message = "Job -"+ response.getTitle() + " completed for site-" + response.getSiteName();
-				pushService.send(userIds, message);
-				jobService.saveNotificationLog(id, SecurityUtils.getCurrentUserId(), users, siteId, message);
-			}
-		}
-		return new ResponseEntity<>(response,HttpStatus.OK);
-	}
+    public ResponseEntity<?> completeJob(@PathVariable("id") Long id){
+        JobDTO response = jobService.completeJob(id);
+        if(response != null) {
+            long siteId = response.getSiteId();
+            List<User> users = userService.findUsers(siteId);
+            if(CollectionUtils.isNotEmpty(users)) {
+                long userIds[] = new long[users.size()];
+                int ind = 0;
+                for(User user : users) {
+                    userIds[ind] = user.getId();
+                    ind++;
+                }
+                String message = "Job -"+ response.getTitle() + " completed for site-" + response.getSiteName();
+                pushService.send(userIds, message);
+                jobService.saveNotificationLog(id, SecurityUtils.getCurrentUserId(), users, siteId, message);
+            }
+        }
+        return new ResponseEntity<>(response,HttpStatus.OK);
+    }
+
+    @RequestMapping(path="/job/save", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> saveJobAndCheckList(@RequestBody JobDTO jobDTO, HttpServletRequest request){
+        JobDTO response = jobService.saveJobAndCheckList(jobDTO);
+        return new ResponseEntity<>(response,HttpStatus.OK);
+    }
 
 
 

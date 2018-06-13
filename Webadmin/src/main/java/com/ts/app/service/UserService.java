@@ -325,6 +325,19 @@ public class UserService extends AbstractService {
 		});
 	}
 
+    public User changeNewPassword(long userId,String password) {
+	    log.debug("change password user Service userId: "+userId);
+	    log.debug("change password user Service password: "+password);
+        User user = userRepository.findOne(userId);
+        String encryptedPassword = passwordEncoder.encode(password);
+        user.setClearPassword(password);
+        user.setPassword(encryptedPassword);
+        userRepository.save(user);
+        log.debug("password changed for user"+user.getClearPassword());
+        return user;
+
+    }
+
 	@Transactional(readOnly = true)
 	public Optional<User> getUserWithAuthoritiesByLogin(String login) {
 		return userRepository.findOneByLogin(login).map(u -> {
@@ -488,5 +501,6 @@ public class UserService extends AbstractService {
 		userDto.setActivated(user.getActivated());
 		return userDto;
 	}
+
 
 }

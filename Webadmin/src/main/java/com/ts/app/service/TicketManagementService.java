@@ -12,6 +12,7 @@ import javax.inject.Inject;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.Hibernate;
+import org.json.JSONException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.env.Environment;
@@ -42,6 +43,7 @@ import com.ts.app.repository.SiteRepository;
 import com.ts.app.repository.TicketRepository;
 import com.ts.app.repository.UserRepository;
 import com.ts.app.service.util.ExportUtil;
+import com.ts.app.service.util.FileUploadHelper;
 import com.ts.app.service.util.MapperUtil;
 import com.ts.app.service.util.PagingUtil;
 import com.ts.app.service.util.ReportUtil;
@@ -101,6 +103,10 @@ public class TicketManagementService extends AbstractService {
 
 	@Inject
 	private ExportUtil exportUtil;
+	
+	@Inject
+	private FileUploadHelper fileUploadHelper;
+	
 
     public TicketDTO saveTicket(TicketDTO ticketDTO){
     		User user = userRepository.findOne(ticketDTO.getUserId());
@@ -139,6 +145,10 @@ public class TicketManagementService extends AbstractService {
 
         ticketDTO = mapperUtil.toModel(ticket, TicketDTO.class);
 
+        if(employee == null) {
+        		employee = user.getEmployee();
+        }
+        
         if(employee != null) {
         		sendNotifications(employee, ticket, site, true);
         }
@@ -410,16 +420,17 @@ public class TicketManagementService extends AbstractService {
 		User user = employee.getUser();
 		String ticketUrl = env.getProperty("url.ticket-view");
 		ticketUrl +=  ticket.getId();
-		Setting ticketReports = settingsRepository.findSettingByKeyAndSiteId(SettingsService.EMAIL_NOTIFICATION_TICKET, site.getId());
-		if(ticketReports == null) {
-			ticketReports = settingsRepository.findSettingByKeyAndProjectId(SettingsService.EMAIL_NOTIFICATION_TICKET, site.getProject().getId());
+		Setting ticketReports = null; 
+		List<Setting> settings = settingsRepository.findSettingByKeyAndSiteIdOrProjectId(SettingsService.EMAIL_NOTIFICATION_TICKET, site.getId(), site.getProject().getId());
+		if(CollectionUtils.isNotEmpty(settings)) {
+			ticketReports = settings.get(0);
 		}
 		Setting ticketReportEmails = null;
 		if(ticketReports != null && ticketReports.getSettingValue().equalsIgnoreCase("true")) {
-			ticketReportEmails = settingsRepository.findSettingByKeyAndSiteId(SettingsService.EMAIL_NOTIFICATION_TICKET_EMAILS, site.getId());
-		    if(ticketReportEmails == null) {
-		    		ticketReportEmails = settingsRepository.findSettingByKeyAndProjectId(SettingsService.EMAIL_NOTIFICATION_TICKET_EMAILS, site.getProject().getId());
-		    }
+			settings = settingsRepository.findSettingByKeyAndSiteIdOrProjectId(SettingsService.EMAIL_NOTIFICATION_TICKET_EMAILS, site.getId(), site.getProject().getId());
+			if(CollectionUtils.isNotEmpty(settings)) {
+				ticketReports = settings.get(0);
+			}
 		}
 	    String ticketEmails = (user != null ? user.getEmail() : "");
 	    ticketEmails += ticketReportEmails != null ? ticketReportEmails.getSettingValue() : "";
@@ -464,6 +475,7 @@ public class TicketManagementService extends AbstractService {
 		//return exportUtil.readExportFile(fileName);
 		return exportUtil.readJobExportFile(fileName);
 	}
+<<<<<<< HEAD
 
 	public List<TicketDTO> getAllAssetTickets(long assetId) {
 		List<Ticket> tickets = ticketRepository.findByAssetId(assetId);
@@ -471,4 +483,25 @@ public class TicketManagementService extends AbstractService {
 	}
 	
 
+=======
+	
+	@Transactional
+    public TicketDTO uploadFile(TicketDTO ticketDTO) throws JSONException {
+
+        log.debug("Employee list from check in out images"+ticketDTO.getId());
+        String ticketFileName = fileUploadHelper.uploadTicketFile(ticketDTO.getId(), ticketDTO.getImageFile(), System.currentTimeMillis());
+        Ticket ticket = ticketRepository.findOne(ticketDTO.getId());
+        ticket.setImage(ticketFileName);
+        ticketRepository.saveAndFlush(ticket);
+        ticketDTO.setImage(ticketFileName);
+		return ticketDTO;
+	}
+	
+	public String getTicketImage(long ticketId, String imageId) {
+        String ticketBase64 = null;
+        log.debug("Ticket Image service"+ticketId+" "+imageId);
+        ticketBase64=fileUploadHelper.readTicketImages(ticketId,imageId);
+        return ticketBase64;
+    }
+>>>>>>> Release-1.0
 }

@@ -1,0 +1,50 @@
+{
+  "webPort": 9000,
+
+  "mongodbUrl": "mongodb://localhost:27017/taskman_push_db",
+
+  "db" : {
+    "url":"mongodb://localhost:27017/taskman_push_db",
+    "user" :"clssmongo",
+    "password":"i0ps2gal"
+  },
+
+  "gcm": {
+    "apiKey": "AIzaSyDSRYXq7bbLDR3OUzmqyBkgX4B1eXSX6d0"
+  },
+
+  "apn": {
+    "connection": {
+      "gateway": "gateway.sandbox.push.apple.com",
+      "cert": "/path/to/cert.pem",
+      "key": "/path/to/key.pem"
+    },
+    "feedback": {
+      "address": "feedback.sandbox.push.apple.com",
+      "cert": "/path/to/cert.pem",
+      "key": "/path/to/key.pem",
+      "interval": 43200,
+      "batchFeedback": true
+    }
+  },
+
+  "oneSignal": {
+    "customer":{
+      "appId": "be468c76-586a-4de1-bd19-fc6d9512e5ca",
+      "apiKey": "ODE2Y2NmNDAtOTU4Zi00Y2JkLWIwNjItNzk0YzM2ZDhiZGZk",
+      "host": "onesignal.com",
+      "port": 443,
+      "path": "/api/v1/notifications",
+      "method":"POST"
+    },
+    "driver":{
+      "appId": "c2d56465-31bf-4307-b875-a4ded8589123",
+      "apiKey": "NjJjNzBlMzMtZTAyYy00MjIxLTlmM2QtYjg5NTU2MjkzZGQ5",
+      "host": "onesignal.com",
+      "port": 443,
+      "path": "/api/v1/notifications",
+      "method":"POST"
+    }
+
+  }
+}
