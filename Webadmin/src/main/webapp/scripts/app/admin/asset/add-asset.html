@@ -1457,11 +1457,15 @@
                                                                 <div class="panel-body">
 
 
-                                                                   <div class="row">
+                                                                   <div class="row docsRow"  ng-show="uploadFiles">
 
-                                                                       <div class="col-md-2 txt-align-center" ng-repeat="uploadFile in uploadFiles">
-                                                                           <a href="#">
-                                                                               <img src="assets/img/Docs-icon.png" alt="docs" ng-click="showFile(uploadFile.id, uploadFile.file)"/>
+                                                                       <div class="col-md-2 txt-align-center DocsCon" ng-repeat="uploadFile in uploadFiles">
+
+                                                                             <div class="DeleteBtn" ng-click="deleteConfirmDoc(uploadFile.id)"  onClick="$('#deleteModal').modal()" data-target="#myModal">                                 
+                                                                                 <i class="material-icons">close</i>
+                                                                             </div>
+                                                                           <a href="#" ng-click="showFile(uploadFile.id, uploadFile.file)">
+                                                                               <img src="assets/img/Docs-icon.png" alt="docs" />
                                                                                <!-- <img src="assets/img/Docs-icon.png" alt="docs" /> -->
                                                                            </a>
                                                                            <p>{{uploadFile.title}}</p>
@@ -1474,6 +1478,11 @@
                                                                    </div>
 
                                                                 </div>
+                                                                <div class="row docsRow txt-align-center" ng-hide="uploadFiles" >
+
+                                                                   <h4>No Documents</h4>
+
+                                                               </div>
 
                                                             </div>
 
@@ -1484,14 +1493,15 @@
                                                                 </div>
                                                                 <div class="panel-body">
 
-                                                                    <div class="row docsRow">
+                                                                    <div class="row docsRow" ng-show="uploadAssetPhotos">
 
                                                                         <div class="col-md-2 txt-align-center DocsCon" ng-repeat="uploadPhoto in uploadAssetPhotos">
-                                                                            <div class="DeleteBtn">                                                                         
+                                                                            <div class="DeleteBtn" ng-click="deleteConfirmDoc(uploadPhoto.id)"  onClick="$('#deleteModal').modal()" data-target="#myModal">                                 
                                                                             	 <i class="material-icons">close</i>
                                                                              </div>
-                                                                            <a href="#">
-                                                                                <img src="D:\asset\uploads\site\{{uploadPhoto.id}}\{{uploadPhoto.file}}" alt="docs" ng-click="showFile(uploadPhoto.id, uploadPhoto.file)"/>
+                                                                            <a href="#" ng-click="showFile(uploadPhoto.id, uploadPhoto.file)">
+                                                                                <!-- <img src="D:\asset\uploads\site\{{uploadPhoto.id}}\{{uploadPhoto.file}}" alt="docs" /> -->
+                                                                                <img src="assets/img/img-icon.png" alt="docs" />
                                                                             </a>
                                                                             <p>{{uploadPhoto.title}}</p>
                                                                             <div ng-if="uploadPhoto.id == download">
@@ -1500,6 +1510,11 @@
                                                                         </div>
 
                                                                     </div>
+                                                                    <div class="row docsRow txt-align-center" ng-hide="uploadAssetPhotos" >
+
+                                                                       <h4>No Images</h4>
+
+                                                                   </div>
 
                                                                 </div>
 
@@ -1822,3 +1837,27 @@
     </div>
 </div>
 <!-- Add checklist  dialog -->
+
+<!-- Add Document/Image delete  dialog -->
+
+<div class="row">
+        <div id="deleteModal" data-backdrop="false" class="modal fade"
+            tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+            aria-hidden="true">
+            <div class="delete-dialog">
+                <div class="modal-content">
+                    <div class="modal-body">
+                        Are you sure to delete the Document / Image?<br>
+                    </div>
+                    <div class="delete-footer">
+                        <button type="button" ng-click="deleteDoc()"
+                            class="btn btn-danger-outline text-danger" data-dismiss="modal">Confirm</button>
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+<!-- Add Document/Image delete  dialog -->
