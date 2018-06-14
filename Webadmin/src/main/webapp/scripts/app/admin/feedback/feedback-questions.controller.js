@@ -36,7 +36,7 @@ angular.module('timeSheetApp')
             $scope.newFeedbackItem = {};
             $scope.feedbackItem.displayType = 'form';
             $scope.loading = true;
-            $scope.newFeedbackItem.remarksRequired=true;
+            $scope.newFeedbackItem.remarksRequired=false;
           $scope.loadProjects();
           $scope.search();
           $scope.qType();
