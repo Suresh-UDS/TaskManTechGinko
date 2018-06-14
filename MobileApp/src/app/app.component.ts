@@ -29,6 +29,7 @@ import{OneSignal} from "@ionic-native/onesignal";
 import {componentService} from "../pages/service/componentService";
 import {Ticket} from "../pages/ticket/ticket";
 import {authService} from "../pages/service/authService";
+import {ForgotPassword} from "../pages/forgot-password/forgot-password";
 
 @Component({
   templateUrl: 'app.html'
@@ -63,44 +64,6 @@ export class MyApp {
           }
       );
 
-
-          this.oneSignal.startInit('be468c76-586a-4de1-bd19-fc6d9512e5ca','1088177211637');
-          this.oneSignal.inFocusDisplaying(this.oneSignal.OSInFocusDisplayOption.InAppAlert);
-          this.oneSignal.handleNotificationReceived().subscribe(response=>{
-              console.log("Notification received");
-              console.log(JSON.stringify(response))
-
-
-          });
-          this.oneSignal.handleNotificationOpened().subscribe(response=> {
-              console.log("Notification Opened")
-              console.log(JSON.stringify(response))
-              this.pushEvent=response.notification.payload.additionalData.event;
-              if(this.pushEvent=='assign_driver')
-              {
-                  this.nav.setRoot(TabsPage,{event:this.pushEvent})
-              }
-              else if(this.pushEvent=='cancel_booking')
-              {
-                  this.nav.setRoot(TabsPage,{event:this.pushEvent})
-              }
-          });
-
-          this.oneSignal.getIds().then(
-              response=>{
-                  console.log("Push Subscription response - get Ids");
-                  console.log(response);
-                      this.registerForPush("android",response.pushToken,response.userId);
-              }
-          );
-
-
-          this.oneSignal.endInit();
-
-
-
-
-
       platform.registerBackButtonAction(() => {
           let view = this.nav.getActive();
           console.log("Back button event");
@@ -132,6 +95,7 @@ export class MyApp {
         { title: 'Rate Card', component: RateCardPage,active:false,icon:'description',permission:'RateCardList'},
       { title: 'Quotation', component: QuotationPage,active:false,icon:'receipt',permission:'QuotationList'},
        { title: 'Feedback', component: InitFeedbackPage,active:false,icon:'feedback',permission:'FeedbackList'},
+       // { title: 'Forgot Password', component: ForgotPassword,active:false,icon:'feedback',permission:'FeedbackList'},
       // { title: 'Reports', component: ReportsPage,active:false,icon:'trending_up'},
       // { title: 'Logout', component: LogoutPage,active:false,icon:'power_settings_new'}
     ];
@@ -159,17 +123,42 @@ export class MyApp {
      // this.statusBar.overlaysWebView(true);
      // this.statusBar.backgroundColorByHexString("#25312C");
 
-        this.oneSignal.startInit('647127c6-f890-4aad-b4e2-52379805f26c','1015991031299');
-        this.oneSignal.inFocusDisplaying(this.oneSignal.OSInFocusDisplayOption.InAppAlert);
-        this.oneSignal.handleNotificationReceived().subscribe(response =>{
-            console.log(response);
-        })
 
-        this.oneSignal.handleNotificationOpened().subscribe(response=>{
-            console.log(response);
-        })
+        this.oneSignal.startInit('be468c76-586a-4de1-bd19-fc6d9512e5ca','1088177211637');
+        this.oneSignal.inFocusDisplaying(this.oneSignal.OSInFocusDisplayOption.InAppAlert);
+        this.oneSignal.handleNotificationReceived().subscribe(response=>{
+            console.log("Notification received");
+            console.log(JSON.stringify(response))
+
+
+        });
+        this.oneSignal.handleNotificationOpened().subscribe(response=> {
+            console.log("Notification Opened")
+            console.log(JSON.stringify(response))
+            this.pushEvent=response.notification.payload.additionalData.event;
+            if(this.pushEvent=='assign_driver')
+            {
+                this.nav.setRoot(TabsPage,{event:this.pushEvent})
+            }
+            else if(this.pushEvent=='cancel_booking')
+            {
+                this.nav.setRoot(TabsPage,{event:this.pushEvent})
+            }
+        });
+
+        this.oneSignal.getIds().then(
+            response=>{
+                console.log("Push Subscription response - get Ids");
+                console.log(response);
+                this.registerForPush("android",response.pushToken,response.userId);
+            }
+        );
+
 
         this.oneSignal.endInit();
+
+
+
     });
   }
 

@@ -380,5 +380,3 @@ angular.module('timeSheetApp')
 
 
     });
-
-

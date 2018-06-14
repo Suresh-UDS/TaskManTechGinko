@@ -11,6 +11,8 @@ angular.module('timeSheetApp')
         $scope.errors = {};
         $scope.resLoader=false;
         $scope.rememberMe = true;
+        $scope.oldPassword='';
+        $scope.newPassword='';
         $timeout(function (){angular.element('[ng-model="username"]').focus();});
         $scope.login = function (event) {
             event.preventDefault();
@@ -29,7 +31,7 @@ angular.module('timeSheetApp')
                 }
                 $scope.resLoader=true;
                 $rootScope.inits();
-                
+
             }).catch(function () {
                 $scope.authenticationError = true;
                 $scope.resLoader=false;
@@ -42,11 +44,31 @@ angular.module('timeSheetApp')
             //alert("test");
             //$("#loadPage").scrollTop();
             $("#loadPage").animate({scrollTop: 0}, 2000);
+        };
+
+        $scope.showNotifications= function(position,alignment,color,msg){
+            demo.showNotification(position,alignment,color,msg);
         }
-        
-        
+
+        $scope.changeNewPassword = function(event){
+            // event.preventDefault();
+            var changePasswordData = {
+                newPassword:this.newPassword,
+                oldPassword:this.oldPassword
+            }
+            Auth.changeNewPassword(changePasswordData).then(function (response) {
+                console.log("Password successfully  changed");
+                $scope.showNotifications('top','center','success','Password Successfully Changed..');
+            }).catch(function (err) {
+                $scope.showNotifications('top','center','failure','Password Successfully Changed..');
+                console.log("Error in change password");
+            })
+
+        };
+
+
         // Username and Password validations
-        
+
         	var msg="";
         	var elements = document.getElementsByTagName("INPUT");
 
@@ -54,9 +76,9 @@ angular.module('timeSheetApp')
         	   elements[i].oninvalid =function(e) {
         	        if (!e.target.validity.valid) {
         	        switch(e.target.id){
-        	            case 'password' : 
+        	            case 'password' :
         	            e.target.setCustomValidity("Password cannot be blank");break;
-        	            case 'username' : 
+        	            case 'username' :
         	            e.target.setCustomValidity("Username cannot be blank");break;
         	        default : e.target.setCustomValidity("");break;
 
@@ -66,8 +88,8 @@ angular.module('timeSheetApp')
         	   elements[i].oninput = function(e) {
         	        e.target.setCustomValidity(msg);
         	    };
-        	} 
-        
-        	
-        	
+        	}
+
+
+
     });

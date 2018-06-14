@@ -58,6 +58,7 @@ import {FeedbackQuestionPage} from "../pages/feedback/feedback-questions";
 import {InitFeedbackPage} from "../pages/feedback/init-feedback";
 import { FileTransfer, FileUploadOptions, FileTransferObject } from '@ionic-native/file-transfer';
 import { File } from '@ionic-native/file';
+import {ForgotPassword} from "../pages/forgot-password/forgot-password";
 
 import {CreateEmployeePage} from "../pages/employee-list/create-employee";
 import {OneSignal} from "@ionic-native/onesignal";
@@ -147,7 +148,8 @@ import {HasPermission} from "../components/has-permission/has-permission";
       Ticket,
       CreateTicket,
       ViewTicket,
-      HasPermission
+      HasPermission,
+      ForgotPassword
   ],
   imports: [
     BrowserModule,
@@ -217,7 +219,8 @@ import {HasPermission} from "../components/has-permission/has-permission";
       WizardFeedbackEntry,
       Ticket,
       CreateTicket,
-      ViewTicket
+      ViewTicket,
+      ForgotPassword
   ],
   providers: [
     StatusBar,

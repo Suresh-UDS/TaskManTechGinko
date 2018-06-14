@@ -89,8 +89,17 @@ export class authService
             })
     }
 
-
-
-
+    resetPassword(changePassword):Observable<any>{
+        return this.http.post(this.config.Url+'api/user/change_password',changePassword).map(
+            response=>{
+                console.log("Reset password response");
+                console.log(response);
+                return response;
+            },err=>{
+                console.log(err);
+                return err
+            }
+        )
+    }
 
 }
