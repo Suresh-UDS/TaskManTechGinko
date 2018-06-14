@@ -84,6 +84,8 @@ public class JobDTO extends BaseDTO {
 
 	@JsonIgnoreProperties
 	private String zone;
+	
+	private String maintenanceType;
 
 	public String getTitle() {
 		return title;
@@ -423,4 +425,11 @@ public class JobDTO extends BaseDTO {
     public void setCheckInOutId(long checkInOutId) {
         this.checkInOutId = checkInOutId;
     }
+	public String getMaintenanceType() {
+		return maintenanceType;
+	}
+	public void setMaintenanceType(String maintenanceType) {
+		this.maintenanceType = maintenanceType;
+	}
+	
 }

@@ -75,37 +75,6 @@ export class AssetView {
     {
         this.fromDate="";
         this.toDate="";
-        if(categories == 'ppm')
-        {
-            this.componentService.showLoader("");
-            this.getAssetPPMSchedule()
-        }
-        else if(categories == 'amc')
-        {
-            this.componentService.showLoader("");
-            this.getAssetAMCSchedule()
-        }
-        else if(categories == 'config')
-        {
-            this.componentService.showLoader("");
-            this.getAssetConfig(this.assetDetails);
-        }
-        else if(categories == 'jobs')
-        {
-            this.componentService.showLoader("");
-            this.getJobs(this.searchCriteria);
-        }
-        else if(this.categories == 'tickets')
-        {
-            this.componentService.showLoader("");
-            this.getTickets(this.searchCriteria);
-        }
-        else if(categories == 'reading')
-        {
-            this.componentService.showLoader("");
-            this.getReading();
-        }
-
     }
     //
 
@@ -414,9 +383,9 @@ export class AssetView {
     }
 
     // Config
-    getAssetConfig(assetDetails){
+    getAssetConfig(){
         console.log(this.assetDetails.config);
-        this.assetService.getAssetConfig(assetDetails.assetType,assetDetails.id).subscribe(
+        this.assetService.getAssetConfig(this.assetDetails.assetType,this.assetDetails.id).subscribe(
             response=>{
                 this.componentService.closeLoader()
                 console.log("Asset config");

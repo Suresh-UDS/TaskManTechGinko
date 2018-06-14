@@ -57,4 +57,8 @@ page-asset-view {
     border-bottom:1px solid #CCC;
 
   }
+  .has-refresher > .scroll-content
+  {
+    border-top: none !important;
+  }
 }

@@ -113,6 +113,19 @@ public class AssetResource {
 		return result;
 	}
 	
+	@RequestMapping(path = "/assets/{assetId}/ppmschedulelist", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	@Timed
+	public List<AssetPpmScheduleDTO> getAssetPPMSchedule(@PathVariable("assetId") long assetId) {
+		log.debug(">>> Asset PPM get request <<<");
+		log.debug("AssetId <<<" + assetId);
+
+		List<AssetPpmScheduleDTO> response = assetService.getAssetPPMSchedules(assetId);
+		for(AssetPpmScheduleDTO assetPpmScheduleDTO:response) {
+		log.debug("Get Asset PPM Schedule for asset id - " + assetPpmScheduleDTO.getId());
+		}
+		return response;
+	}
+	
 	@RequestMapping(path = "/site/{id}/asset", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public List<AssetDTO> getSiteAssets(@PathVariable("id") Long siteId) {
 		return assetService.getSiteAssets(siteId);
@@ -338,9 +351,17 @@ public class AssetResource {
 	@RequestMapping(value = "/assets/saveReadings", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> saveAssetReadings(@Valid @RequestBody AssetParameterReadingDTO assetParamReadingDTO, HttpServletRequest request) {
 		log.debug("Save Asset Parameter Reading" +assetParamReadingDTO.getName());
+		log.debug("Save Asset Parameter Reading" +assetParamReadingDTO.getAssetParameterConfigId());
 		try{ 
 			assetParamReadingDTO.setUserId(SecurityUtils.getCurrentUserId());
-			assetParamReadingDTO = assetService.saveAssetReadings(assetParamReadingDTO);
+			if(assetParamReadingDTO.getId() != null) {
+				log.debug("Update Asset Parameter Reading" +assetParamReadingDTO.getId());
+				assetParamReadingDTO = assetService.updateAssetReadings(assetParamReadingDTO);
+			}else{
+				assetParamReadingDTO = assetService.saveAssetReadings(assetParamReadingDTO);
+			}
+			
+			
 		} catch(TimesheetException e){ 
 			throw new TimesheetException(e, assetParamReadingDTO);
 		}
