@@ -35,12 +35,8 @@
     "@ionic-native/geofence": "^4.5.2",
     "@ionic-native/geolocation": "^4.5.2",
     "@ionic-native/native-audio": "^4.7.0",
-<<<<<<< HEAD
-    "@ionic-native/onesignal": "^4.5.3",
     "@ionic-native/qr-scanner": "^4.7.0",
-=======
     "@ionic-native/onesignal": "^4.7.0",
->>>>>>> Release-1.0
     "@ionic-native/splash-screen": "4.3.2",
     "@ionic-native/status-bar": "^4.3.2",
     "@ionic-native/toast": "^4.5.3",
@@ -120,11 +116,8 @@
       "cordova-plugin-nativeaudio": {},
       "cordova-plugin-app-version": {},
       "cordova-plugin-qrscanner": {},
-<<<<<<< HEAD
-      "cordova-plugin-datepicker": {}
-=======
+      "cordova-plugin-datepicker": {},
       "onesignal-cordova-plugin": {}
->>>>>>> Release-1.0
     },
     "platforms": [
       "android"

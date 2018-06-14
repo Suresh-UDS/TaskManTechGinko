@@ -36,6 +36,16 @@ export class GetAssetReading {
         console.log("Get Asset reading page");
         console.log(this.assetDetails);
         console.log(this.assetDetails.config);
+        this.assetService.getAssetConfig(this.assetDetails.assetType,this.assetDetails.id).subscribe(
+            response=>{
+                console.log("Asset config details");
+                console.log(response);
+                this.assetDetails.config = response;
+            },err=>{
+                console.log("Error in getting asset config");
+                console.log(err);
+            }
+        )
 
     }
 

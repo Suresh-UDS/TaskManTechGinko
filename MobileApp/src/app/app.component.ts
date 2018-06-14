@@ -30,14 +30,11 @@ import {SplashLogo} from "../pages/splash-logo/splash-logo";
 import{OneSignal} from "@ionic-native/onesignal";
 import {componentService} from "../pages/service/componentService";
 import {Ticket} from "../pages/ticket/ticket";
-<<<<<<< HEAD
 import {AssetList} from "../pages/asset-list/asset-list";
 import{JobFilter} from "../pages/jobs/job-filter/job-filter";
 import{TicketFilter} from "../pages/ticket/ticket-filter/ticket-filter";
 import{EmployeeFilter} from "../pages/employee-list/employee-filter/employee-filter";
-=======
 import {authService} from "../pages/service/authService";
->>>>>>> Release-1.0
 
 @Component({
   templateUrl: 'app.html'
@@ -53,23 +50,14 @@ export class MyApp {
 
   pages: Array<{title: string, component: any,active:any,icon:any,permission:any}>;
 
-<<<<<<< HEAD
-  constructor(public platform: Platform,private ionicApp: IonicApp,public menuCtrl:MenuController,private backgroundMode: BackgroundMode, public statusBar: StatusBar,public component:componentService,public toastCtrl: ToastController, public splashScreen: SplashScreen, private oneSignal: OneSignal, public events:Events, private batteryStatus: BatteryStatus, private appVersion:AppVersion) {
-    this.initializeApp();
-
-=======
-  constructor(public platform: Platform,private backgroundMode: BackgroundMode, public statusBar: StatusBar,public component:componentService,public toastCtrl: ToastController, public splashScreen: SplashScreen, private oneSignal: OneSignal, public events:Events, private batteryStatus: BatteryStatus, private appVersion:AppVersion, private authService:authService) {
+  constructor(public platform: Platform,private ionicApp: IonicApp,public menuCtrl:MenuController,private backgroundMode: BackgroundMode, public statusBar: StatusBar,public component:componentService,public toastCtrl: ToastController, public splashScreen: SplashScreen, private oneSignal: OneSignal, public events:Events, private batteryStatus: BatteryStatus, private appVersion:AppVersion, private authService:authService) {
     this.initializeApp();
       this.events.subscribe('permissions:set',(permission)=>{
           console.log("Event permission in component");
           console.log(permission);
       })
 
-      this.events.subscribe('user:logedin',data=>{
-          console.log("Subsribed to user name");
-          console.log(data);
-      })
->>>>>>> Release-1.0
+
       this.backgroundMode.enable();
       let subscription = this.batteryStatus.onChange().subscribe(
           (status:BatteryStatusResponse)=>{

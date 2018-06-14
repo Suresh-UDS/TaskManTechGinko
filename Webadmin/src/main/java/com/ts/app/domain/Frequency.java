@@ -5,14 +5,17 @@ import java.util.stream.Stream;
 
 public enum Frequency {
 	
-	 	HOUR("Hourly"), 
-	    DAY("Daily"), 
-	    WEEK("Weekly"), 
-	    FORTNIGHT("Fortnightly"), 
-	    MONTH("Monthly"), 
-	    QUARTER("Quarterly"), 
-	    HALFYEAR("HalfYearly"),
-		YEAR("Yearly");
+		DAILY("DAILY"),
+		WEEKLY("WEEKLY"),
+		MONTHLY("MONTHLY"),
+	 	HOUR("HOURLY"), 
+	    DAY("DAILY"), 
+	    WEEK("WEEKLY"), 
+	    FORTNIGHT("FORTNIGHTLY"), 
+	    MONTH("MONTHLY"), 
+	    QUARTER("QUARTERLY"), 
+	    HALFYEAR("HALFYEARLY"),
+		YEAR("YEARLY");
 	 
 	    private String typeFrequency;
 	 

@@ -71,9 +71,9 @@ public class SchedulerService extends AbstractService {
 
 	static final String LINE_SEPARATOR = "      \n\n";
 
-	private static final String DAILY = "Daily";
+	/*private static final String DAILY = "Daily";
 	private static final String WEEKLY = "Weekly";
-	private static final String MONTHLY = "Monthly";
+	private static final String MONTHLY = "Monthly";*/
 
 	@Inject ProjectRepository projectRepository;
 
@@ -569,7 +569,7 @@ public class SchedulerService extends AbstractService {
 	
 	public void createJobs(SchedulerConfig dailyTask) {
 		if ("CREATE_JOB".equals(dailyTask.getType())) {
-			if (dailyTask.getSchedule().equalsIgnoreCase(DAILY)) {
+			if (dailyTask.getSchedule().equalsIgnoreCase(Frequency.DAILY.getTypeFrequency())) {
 				String creationPolicy = env.getProperty("scheduler.dailyJob.creation");
 				if (creationPolicy.equalsIgnoreCase("monthly")) { // if the creation policy is set to monthly, create jobs for the rest of the
 																	// month
@@ -583,7 +583,7 @@ public class SchedulerService extends AbstractService {
 					jobCreationTask(dailyTask, dailyTask.getJob(), dailyTask.getData(), new Date());
 				}
 				// dailyTask.setLastRun(new Date());
-			} else if (dailyTask.getSchedule().equalsIgnoreCase(WEEKLY)) {
+			} else if (dailyTask.getSchedule().equalsIgnoreCase(Frequency.WEEKLY.getTypeFrequency())) {
 				String creationPolicy = env.getProperty("scheduler.weeklyJob.creation");
 				if (creationPolicy.equalsIgnoreCase("monthly")) { // if the creation policy is set to monthly, create jobs for the rest of the
 																	// month
@@ -603,7 +603,7 @@ public class SchedulerService extends AbstractService {
 						}
 					}
 				}
-			} else if (dailyTask.getSchedule().equalsIgnoreCase(MONTHLY)) {
+			} else if (dailyTask.getSchedule().equalsIgnoreCase(Frequency.MONTHLY.getTypeFrequency())) {
 				String creationPolicy = env.getProperty("scheduler.monthlyJob.creation");
 				if (creationPolicy.equalsIgnoreCase("yearly")) { // if the creation policy is set to monthly, create jobs for the rest of the
 																	// month
@@ -623,7 +623,8 @@ public class SchedulerService extends AbstractService {
 						}
 					}
 				}
-			}else if(dailyTask.getSchedule().equalsIgnoreCase(Frequency.YEAR.getTypeFrequency())) {
+			}else if(dailyTask.getSchedule().equalsIgnoreCase(Frequency.valueOf("YEAR").getTypeFrequency())) {
+				log.debug(">>> Yearly <<<");
 				String creationPolicy = env.getProperty("scheduler.yearlyJob.creation");
 				if(creationPolicy.equalsIgnoreCase("daily")) { //if the creation policy is set to daily, create jobs for the rest of the month
 					PageRequest pageRequest = new PageRequest(1, 1); 
