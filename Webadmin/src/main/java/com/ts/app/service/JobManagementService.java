@@ -724,7 +724,7 @@ public class JobManagementService extends AbstractService {
 	}
 	
 	public JobDTO createJob(AssetPpmScheduleDTO assetPpmScheduleDTO) {
-		log.debug(">>> assetPpmSchedule Title from CreateJOb <<<"+assetPpmScheduleDTO.getTitle());
+		log.debug(">>> assetPpmSchedule Title from CreateJOb <<<"+assetPpmScheduleDTO.getTitle()+" Employee Id "+assetPpmScheduleDTO.getEmpId());
 		
 		Job job = new Job();
 		
@@ -732,7 +732,7 @@ public class JobManagementService extends AbstractService {
 		//JobDTO jobDTO = new JobDTO();
 		
 		//Employee employee = getEmployee(jobDTO.getEmployeeId());
-		Employee employee = employeeRepository.findOne(Long.valueOf(20));
+		Employee employee = employeeRepository.findOne(assetPpmScheduleDTO.getEmpId());
 		Asset asset = assetRepository.findOne(assetPpmScheduleDTO.getAssetId());
 		Site site = getSite(asset.getSite().getId());
 		//log.debug(">>> asset id "+ asset.getId() +" Site "+asset.getSite().getName()+" User "+asset.getSite().getUser() + " User id "+asset.getSite().getUser().getId());
@@ -787,6 +787,7 @@ public class JobManagementService extends AbstractService {
 		//}
 
 		//if the job is scheduled for recurrence create a scheduled task
+		log.debug(">>> ID <<< "+assetPpmScheduleDTO.getId());
 		if(!StringUtils.isEmpty(assetPpmScheduleDTO.getId())) {
 			log.debug(">>> Scheduler Service <<<");
 			SchedulerConfigDTO schConfDto = new SchedulerConfigDTO();
