@@ -109,6 +109,8 @@ public class Job extends AbstractAuditingEntity implements Serializable{
     private String floor;
 
     private String zone;
+    
+    private String maintenanceType;
 
 	public Long getId() {
 		return id;
@@ -375,6 +377,12 @@ public class Job extends AbstractAuditingEntity implements Serializable{
 	}
 	public void setActualMinutes(int actualMinutes) {
 		this.actualMinutes = actualMinutes;
+	}
+	public String getMaintenanceType() {
+		return maintenanceType;
+	}
+	public void setMaintenanceType(String maintenanceType) {
+		this.maintenanceType = maintenanceType;
 	}
     
     

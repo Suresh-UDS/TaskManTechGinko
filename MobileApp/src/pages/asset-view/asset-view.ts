@@ -39,11 +39,13 @@ export class AssetView {
     toDate:any;
     viewButton:any;
     searchCriteria:any;
+    spinner:any;
 
   constructor(public camera: Camera,private modalCtrl:ModalController,private datePicker: DatePicker,private componentService:componentService,public navCtrl: NavController, public navParams: NavParams, public jobService:JobService, public assetService:AssetService) {
 
     this.assetDetails = this.navParams.data.assetDetails;
     this.categories = 'details';
+    this.spinner=true;
 
   }
     showCalendar()
@@ -175,6 +177,48 @@ export class AssetView {
             }, 1000);
         }
     }
+
+    readingScroll(infiniteScroll)
+    {
+        console.log('Reading Page async operation');
+        console.log(infiniteScroll);
+        console.log(this.totalPages);
+        console.log(this.page);
+        var searchCriteria = {
+            currPage: this.page + 1,
+            assetId:this.assetDetails.id
+        };
+        if (this.page > this.totalPages) {
+            console.log("End of all pages");
+            infiniteScroll.complete();
+            this.componentService.showToastMessage('Reading list Loaded', 'bottom');
+
+        } else {
+            console.log("Getting  pages");
+            console.log(this.totalPages);
+            console.log(this.page);
+            setTimeout(() => {
+                this.assetService.viewReading(searchCriteria).subscribe(
+                    response => {
+                        console.log('ionViewDidLoad jobs list:');
+                        console.log(response);
+                        console.log(response.transactions);
+                        for (var i = 0; i < response.transactions.length; i++) {
+                            this.assetDetails.jobs.push(response.transactions[i]);
+                        }
+                        this.page = response.currPage;
+                        this.totalPages = response.totalPages;
+                        this.componentService.closeLoader();
+                    },
+                    error => {
+                        console.log('ionViewDidLoad Readings  Page:' + error);
+                    }
+                )
+                infiniteScroll.complete();
+            }, 1000);
+        }
+    }
+
 
     viewJob(job)
     {
@@ -361,11 +405,13 @@ export class AssetView {
             {
                 console.log("View Reading Response");
                 console.log(response);
+                this.spinner=false;
                 this.assetDetails.reading = response;
             },error=>
             {
                 console.log("Error in View Reading");
                 console.log(error);
+                this.spinner=false;
             }
         )
     }
