@@ -16,6 +16,10 @@ public class FeedbackTransactionResultDTO extends BaseDTO implements Serializabl
 
     private String scoreType;
 
+    private String remarks;
+
+    private boolean remarksRequired;
+
     public long getId() {
         return id;
     }
@@ -54,5 +58,21 @@ public class FeedbackTransactionResultDTO extends BaseDTO implements Serializabl
 
     public void setScoreType(String scoreType) {
         this.scoreType = scoreType;
+    }
+
+    public boolean isRemarksRequired() {
+        return remarksRequired;
+    }
+
+    public void setRemarksRequired(boolean remarksRequired) {
+        this.remarksRequired = remarksRequired;
+    }
+
+    public String getRemarks() {
+        return remarks;
+    }
+
+    public void setRemarks(String remarks) {
+        this.remarks = remarks;
     }
 }
