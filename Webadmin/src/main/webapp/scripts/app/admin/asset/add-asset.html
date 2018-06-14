@@ -201,7 +201,7 @@
                                                                         <div class="panel-body">
 
                                                                             <div class="row">
-                                                                                <div class="col-md-6">
+                                                                                <!-- <div class="col-md-6">
                                                                                     <div class="form-group">
                                                                                         <label class="control-label">Client  <span class="red-star">*</span> </label>
                                                                                         <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
@@ -224,12 +224,12 @@
 												                                     	</div>
 
                                                                                     </div>
-                                                                                </div>
-                                                                                <div class="col-md-6">
+                                                                                </div> -->
+                                                                                <div class="col-md-12" ng-init="loadAllSites();">
                                                                                     <div class="form-group">
                                                                                         <label class="control-label">Site   <span class="red-star">*</span> </label>
                                                                                         <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                                                                        <select class="form-control " ng-model="selectedSite"  ng-options="site as site.name for site in sitesList" ng-change="loadBlocks()" name="AssetSite" >
+                                                                                        <select class="form-control " ng-model="selectedSite"  ng-options="site as site.name for site in sites" ng-change="loadBlocks();" name="AssetSite" >
                                                                                             <option value="">Select Site ...</option>
                                                                                         </select>
 
@@ -1242,6 +1242,36 @@
                                                                         </div>
                                                                     </div>
                                                                     <div class="row">
+
+                                                                        <div class="col-md-4" ng-init="loadEmployees();">
+                                                                            <div class="form-group">
+                                                                                <label class="control-label">Employee<span class="red-star">*</span> </label>
+                                                                                <div class="dropdown">
+                                                                                    
+                                                                                    <span class="form-control-feedback d-sm-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
+
+                                                                                    <select class="form-control " ng-model="selectedEmployee"  ng-options="emp as emp.name for emp in employees track by emp.id" name="employeeName" required>
+
+
+                                                                                        <option value="">Select Employees...</option>
+                                                                                    </select>
+
+                                                                                    <div ng-show="form4.$submitted || form4.employeeName.$touched">
+                                                                                        <div
+                                                                                            ng-show="form4.employeeName.$dirty || form4.employeeName.$invalid">
+                                                                                            <p class="help-block" style="color:maroon"
+                                                                                               ng-show="form4.employeeName.$error.required">
+                                                                                                Employee is required.
+                                                                                            </p>
+
+                                                                                        </div>
+                                                                                        
+                                                                                    </div>
+                                                                                </div>
+                                                                                
+                                                                            </div>
+
+                                                                        </div>
                                                                         <div class="col-md-2" ng-init="loadFreqPrefix()">
                                                                             <div class="dropdown">
                                                                                 <div class="form-group">

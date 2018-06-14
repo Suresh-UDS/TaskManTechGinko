@@ -367,6 +367,8 @@ angular.module('timeSheetApp')
 
                 $scope.assetConfig();
 
+                $scope.loadEmployees();
+
 
         		
         		/*if($scope.asset.assetType) {
@@ -571,9 +573,11 @@ angular.module('timeSheetApp')
                 $scope.error = null;
                 $scope.success = null;
                 $scope.errorSitesExists = null;
-                $scope.errorProject = null;
-                if(!$scope.selectedProject.id){
-                    $scope.errorProject = "true";
+                $scope.errorSite = null;
+                if(!$scope.selectedSite.id){
+                    $scope.errorSite = "true";
+                    $scope.showNotifications('top','center','danger','Please select site!!!');
+
                 }else{
         
                     if($scope.selectedAssetType.id){ $scope.assetGen.assetType = $scope.selectedAssetType.name; }
@@ -593,8 +597,10 @@ angular.module('timeSheetApp')
                     AssetComponent.create($scope.assetGen).then(function(response) {
                         console.log("Asset response",JSON.stringify(response));
                         $scope.assetGen.id=response.id;
+                        $scope.assetGen.siteId=response.siteId;
                         $scope.success = 'OK';
                         $scope.showNotifications('top','center','success','Asset Added');
+                        $scope.loadEmployees();
                         //$scope.loadAssets();
                         //$location.path('/assets');
 
@@ -773,7 +779,7 @@ angular.module('timeSheetApp')
             }else {
                 console.log("add asset")
             }
-        }
+        }  
 
 
         $scope.refreshPage = function(){
@@ -1341,7 +1347,11 @@ angular.module('timeSheetApp')
                 }
 
     	    	console.log($scope.selectedChecklist);
+        
 
+                 if($scope.selectedEmployee){ 
+                    $scope.amcSchedule.empId = $scope.selectedEmployee.id;
+                }
                
     	    	if($scope.selectedChecklist){ 
     	    		$scope.amcSchedule.checklistId = $scope.selectedChecklist.id;
@@ -1357,7 +1367,7 @@ angular.module('timeSheetApp')
     	    		$scope.amcSchedule.frequencyDuration = $scope.selectedFreqDuration;
     	    	}
     	    	
-    	    	console.log($scope.amcSchedule);
+    	    	console.log("To be create AMC schedule",$scope.amcSchedule);
     	    	
     	    	AssetComponent.saveAmcSchedule($scope.amcSchedule).then(function(data){  
     	    		console.log(data);
@@ -1461,7 +1471,28 @@ angular.module('timeSheetApp')
         	
         }
         
-        /**End view Readings*/        
+        /**End view Readings*/   
+
+
+
+        $scope.loadEmployees = function () {
+            //var deferred = $q.defer(); 
+            if($scope.assetList.siteId){
+               var empParam = {siteId:$scope.assetList.siteId,list:true};
+            } else if($scope.assetGen.siteId) {
+                var empParam = {siteId:$scope.assetGen.siteId,list:true};
+            }
+
+            //alert(empParam.siteId);
+                         
+                EmployeeComponent.search(empParam).then(function (data) {
+                    $scope.selectedEmployee = null;
+                    $scope.employees = data.transactions;
+                    //deferred.resolve($scope.employees);
+            });
+                //return deferred.promise;
+                
+        };     
 
 
     });
