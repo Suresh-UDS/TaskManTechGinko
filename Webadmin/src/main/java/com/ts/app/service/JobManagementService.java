@@ -1485,6 +1485,7 @@ public class JobManagementService extends AbstractService {
 			schConfDto.setStartDate(assetAMCScheduleDTO.getStartDate());
 			schConfDto.setEndDate(assetAMCScheduleDTO.getEndDate());
 			schConfDto.setScheduleEndDate(assetAMCScheduleDTO.getEndDate());
+			schConfDto.setAssetId(assetAMCScheduleDTO.getAssetId());
 
 			schedulerService.save(schConfDto,job);
 		}
