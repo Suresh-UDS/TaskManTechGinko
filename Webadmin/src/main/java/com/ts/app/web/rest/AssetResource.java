@@ -113,6 +113,19 @@ public class AssetResource {
 		return result;
 	}
 	
+	@RequestMapping(path = "/assets/{assetId}/ppmschedulelist", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	@Timed
+	public List<AssetPpmScheduleDTO> getAssetPPMSchedule(@PathVariable("assetId") long assetId) {
+		log.debug(">>> Asset PPM get request <<<");
+		log.debug("AssetId <<<" + assetId);
+
+		List<AssetPpmScheduleDTO> response = assetService.getAssetPPMSchedules(assetId);
+		for(AssetPpmScheduleDTO assetPpmScheduleDTO:response) {
+		log.debug("Get Asset PPM Schedule for asset id - " + assetPpmScheduleDTO.getId());
+		}
+		return response;
+	}
+	
 	@RequestMapping(path = "/site/{id}/asset", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public List<AssetDTO> getSiteAssets(@PathVariable("id") Long siteId) {
 		return assetService.getSiteAssets(siteId);
