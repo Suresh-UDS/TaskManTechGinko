@@ -804,13 +804,31 @@ angular.module('timeSheetApp')
         	$scope.deleteAssetId= asset;
         }
 
+
+
         $scope.deleteAsset = function () {
         	AssetComponent.remove($scope.deleteAssetId).then(function(){
                 
             	$scope.success = 'OK';
             	$scope.loadAssets();
         	});
-        };
+        }
+
+        $scope.deleteConfirmDoc = function (id){
+            $scope.deleteDocId= id;
+        }
+
+
+
+        $scope.deleteDoc = function () {
+            AssetComponent.deleteDoc($scope.deleteDocId).then(function(){
+                
+                $scope.getAllUploadedFiles();
+                $scope.getAllUploadedPhotos();
+            });
+        }
+
+          
 
         $scope.loadQRCode = function(assetId, qrCodeImage) {
 
@@ -935,10 +953,10 @@ angular.module('timeSheetApp')
                      var PPMParam = {assetId:$stateParams.id};
                 }
              
-            AssetComponent.findPPMSchedule(PPMParam).then(function(data) { 
+            AssetComponent.findByAssetPPM(PPMParam.id).then(function(data) { 
                 console.log(data);
                 $scope.ppmScheduleList = {};
-                $scope.ppmScheduleList = data.transactions;
+                $scope.ppmScheduleList = data;
                 console.log("PPM List" , $scope.ppmScheduleList);
             });
         }
@@ -1127,8 +1145,8 @@ angular.module('timeSheetApp')
 
 	    };
 	    
+   
 
-	    
 	    $scope.getAllUploadedFiles = function() {
 
 
@@ -1148,6 +1166,7 @@ angular.module('timeSheetApp')
 	    	AssetComponent.getAllUploadedFiles($scope.uploadObj).then(function(data){ 
                 $scope.uploadFiles = [];
 	    		$scope.uploadFiles=data;
+                
                 console.log("-- Upload files --" , $scope.uploadFiles);
 	    	});
 	    }
@@ -1167,7 +1186,8 @@ angular.module('timeSheetApp')
 	    	
 	    	AssetComponent.getAllUploadedPhotos($scope.photoObj).then(function(data){ 
                 $scope.uploadAssetPhotos = [];
-	    		$scope.uploadAssetPhotos=data;
+                $scope.uploadAssetPhotos=data;
+	   
                 console.log("-- Uploaded Photos --",$scope.uploadAssetPhotos);
 	    	});
 	    }

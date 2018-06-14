@@ -251,8 +251,8 @@ public class AssetManagementService extends AbstractService {
 	
 	public boolean isDuplicatePPMSchedule(AssetPpmScheduleDTO assetPpmScheduleDTO) {
 	    log.debug("Asset Title "+assetPpmScheduleDTO.getTitle());
-		Asset asset = assetRepository.findByTitle(assetPpmScheduleDTO.getTitle());
-		if(asset != null) {
+		AssetPPMSchedule assetPPMSchedule = assetPpmScheduleRepository.findAssetPPMScheduleByTitle(assetPpmScheduleDTO.getTitle());
+		if(assetPPMSchedule != null) {
 			return true;
 		}
 		return false;
@@ -506,6 +506,21 @@ public class AssetManagementService extends AbstractService {
 		return assetAMCScheduleDTOs;
 	}
 
+	/**
+	 * Returns a list of asset PPM schedule information for the given asset Id.
+	 * 
+	 * @param assetId
+	 * @return
+	 */
+	public List<AssetPpmScheduleDTO> getAssetPPMSchedules(long assetId) {
+		List<AssetPpmScheduleDTO> assetPpmScheduleDTOs = null;
+		List<AssetPPMSchedule> assetPpmSchedules = assetPpmScheduleRepository.findAssetPPMScheduleByAssetId(assetId);
+		if (CollectionUtils.isNotEmpty(assetPpmSchedules)) {
+			assetPpmScheduleDTOs = mapperUtil.toModelList(assetPpmSchedules, AssetPpmScheduleDTO.class);
+		}
+		return assetPpmScheduleDTOs;
+	}
+	
 	public SearchResult<AssetPpmScheduleDTO> findPPMSearchCriteria(SearchCriteria searchCriteria) {
 
 		log.debug(">>> search ppm schedule 2 <<<");
@@ -676,17 +691,24 @@ public class AssetManagementService extends AbstractService {
 		log.debug(">>> Inside collection 5 <<<");
 
 		AssetPpmScheduleDTO assetDTO = new AssetPpmScheduleDTO();
+		assetDTO.setAssetId(asset.getAsset().getId());
+		assetDTO.setActive(asset.getActive());
 		assetDTO.setId(asset.getId());
 		assetDTO.setTitle(asset.getTitle());
 		assetDTO.setChecklistId(asset.getChecklist().getId());
+		assetDTO.setChecklistName(asset.getChecklist().getName());
 		assetDTO.setStartDate(asset.getStartDate());
 		assetDTO.setEndDate(asset.getEndDate());
 		assetDTO.setFrequency(asset.getFrequency());
+		assetDTO.setFrequencyDuration(asset.getFrequencyDuration());
+		assetDTO.setFrequencyPrefix(asset.getFrequencyPrefix());
 		log.debug(">>> Title <<< "+assetDTO.getTitle());
 		log.debug(">>> Check list id <<< "+assetDTO.getChecklistId());
 		log.debug(">>> Start Date <<< "+assetDTO.getStartDate());
 		log.debug(">>> End Date <<< "+assetDTO.getEndDate());
 		log.debug(">>> Frequency <<< "+assetDTO.getFrequency());
+		log.debug(">>> Frequency Duration <<< "+assetDTO.getFrequencyDuration());
+		log.debug(">>> Frequency Prefix <<< "+assetDTO.getFrequencyPrefix());
 
 		return assetDTO;
 	}

@@ -82,6 +82,12 @@ angular.module('timeSheetApp')
                 });
             },
 
+            findByAssetPPM : function(id) { 
+                return $http.get('api/assets/'+id+'/ppmschedulelist').then(function(response) { 
+                    return response.data;
+                });
+            },
+
             findPPMSchedule: function(searchCriteria) {
             	return $http.post('api/asset/findppmschedule',searchCriteria).then(function (response) {
                     return response.data;
@@ -132,8 +138,8 @@ angular.module('timeSheetApp')
             	});
             },
             
-            deleteConfigById : function(id) { 
-            	return $http.delete('api/assets/removeConfig/'+id).then(function(reaponse){ 
+            deleteDoc : function(id) { 
+            	return $http.delete('/assets/'+id+'/document/image').then(function(reaponse){ 
             		return response.data;
             	});
             },
