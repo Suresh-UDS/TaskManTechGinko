@@ -24,6 +24,8 @@ public class AssetAMCScheduleDTO extends BaseDTO {
 	
 	private long assetId;
 	
+	private long empId;
+	
 	public long getId() {
 		return id;
 	}
@@ -102,6 +104,14 @@ public class AssetAMCScheduleDTO extends BaseDTO {
 
 	public void setChecklistName(String checklistName) {
 		this.checklistName = checklistName;
+	}
+
+	public long getEmpId() {
+		return empId;
+	}
+
+	public void setEmpId(long empId) {
+		this.empId = empId;
 	}
 	
 
