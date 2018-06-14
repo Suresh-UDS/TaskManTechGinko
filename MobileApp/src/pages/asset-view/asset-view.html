@@ -17,7 +17,7 @@
             <ion-segment-button value="ppm">PPM </ion-segment-button>
             <ion-segment-button value="amc">AMC </ion-segment-button>
             <ion-segment-button value="config">Config </ion-segment-button>
-            <ion-segment-button value="readings" (ionSelect)="viewReading()">Readings</ion-segment-button>
+            <ion-segment-button value="readings" (ionSelect)="getReading()">Readings</ion-segment-button>
             <ion-segment-button value="jobs">Jobs</ion-segment-button>
             <ion-segment-button value="tickets">Tickets</ion-segment-button>
         </ion-segment>
@@ -573,14 +573,17 @@
     </ion-list>
 
     <ion-list *ngSwitchCase="'readings'">
-
-        <div text-center="" *ngIf="!assetDetails.reading || assetDetails.reading.length < 0">
-            <ion-card text-center="">
+        <div  *ngIf="(!assetDetails.reading || assetDetails.reading.length < 0) && spinner" text-center class="margin-top25">
+            <ion-spinner name="circles"></ion-spinner>
+        </div>
+        <div *ngIf="(!assetDetails.reading || assetDetails.reading.length < 0) && !spinner">
+            <ion-card text-center>
                 <ion-card-content>
                     No Data found
                 </ion-card-content>
             </ion-card>
         </div>
+
 
         <div *ngIf="assetDetails.reading">
             <div class="card-content white-bg" >
@@ -610,7 +613,11 @@
                     </table>
                 </div>
                 </div>
+
             </div>
+        <!--<ion-infinite-scroll *ngIf="page<totalPages" (ionInfinite)="readingScroll($event)">-->
+            <!--<ion-infinite-scroll-content></ion-infinite-scroll-content>-->
+        <!--</ion-infinite-scroll>-->
     </ion-list>
 </div>
 </ion-content>
