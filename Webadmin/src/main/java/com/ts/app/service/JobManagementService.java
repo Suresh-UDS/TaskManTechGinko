@@ -1422,22 +1422,19 @@ public class JobManagementService extends AbstractService {
 
 	public ResponseEntity<?> createAMCJobs(AssetAMCScheduleDTO assetAMCScheduleDTO) {
 
-		log.debug(">>> assetPpmSchedule Title from CreateJOb <<<"+assetAMCScheduleDTO.getTitle());
+		log.debug(">>> assetAMCSchedule Title from CreateAMCJob <<<"+assetAMCScheduleDTO.getTitle());
 		
 		Job job = new Job();
 		
-		//AssetPPMSchedule assetPpmSchedule = new AssetPPMSchedule();
-		//JobDTO jobDTO = new JobDTO();
-		
-		//Employee employee = getEmployee(jobDTO.getEmployeeId());
+		Site site = null;
+	
 		Employee employee = employeeRepository.findOne(assetAMCScheduleDTO.getEmpId());
-		Asset asset = assetRepository.findOne(assetAMCScheduleDTO.getAssetId());
-		Site site = getSite(asset.getSite().getId());
-		//log.debug(">>> asset id "+ asset.getId() +" Site "+asset.getSite().getName()+" User "+asset.getSite().getUser() + " User id "+asset.getSite().getUser().getId());
-		//jobDTO.setEmployeeEmpId(String.valueOf(asset.getSite().getUser().getId()));
-		//Location location = getLocation(jobDTO.getLocationId());
-
-		//mapToEntity(jobDTO, job);
+		
+		if(assetAMCScheduleDTO.getAssetId() > 0) {
+			Asset asset = assetRepository.findOne(assetAMCScheduleDTO.getAssetId());
+			job.setAsset(asset);
+			site = getSite(asset.getSite().getId());
+		}
 
 		if(job.getStatus() == null) {
 			job.setStatus(JobStatus.OPEN);
@@ -1454,16 +1451,6 @@ public class JobManagementService extends AbstractService {
 		java.sql.Date endDate = new java.sql.Date(calEnd.getTimeInMillis());
 		log.debug("Before saving new job -"+ job);
 		log.debug("start Date  -"+ startDate + ", end date -" + endDate);
-		//List<Job> existingJobs = jobRepository.findJobByTitleSiteAndDate(jobDTO.getTitle(), jobDTO.getSiteId(), startDate, endDate);
-		//log.debug("Existing job -"+ existingJobs);
-		//if(CollectionUtils.isEmpty(existingJobs)) {
-		//if job is created against a ticket
-		/*if(jobDTO.getTicketId() > 0) {
-			Ticket ticket = ticketRepository.findOne(jobDTO.getTicketId());
-			job.setTicket(ticket);
-			ticket.setStatus(TicketStatus.ASSIGNED.toValue());
-			ticketRepository.save(ticket);
-		}*/
 		
 		job.setEmployee(employee);
 		job.setSite(site);
@@ -1471,18 +1458,10 @@ public class JobManagementService extends AbstractService {
 		job.setPlannedEndTime(endDate);
 		job.setTitle(assetAMCScheduleDTO.getTitle());
 		job.setDescription(assetAMCScheduleDTO.getTitle() +" "+ assetAMCScheduleDTO.getFrequencyPrefix()+" "+assetAMCScheduleDTO.getFrequencyDuration()+" "+assetAMCScheduleDTO.getFrequency());
+		job.setMaintenanceType(assetAMCScheduleDTO.getMaintenanceType());
 		job = jobRepository.saveAndFlush(job);
 
 		log.debug(">>> After Save Job: <<<"+job.getId());
-
-		/*if(jobDTO.getTicketId() > 0) {
-			Ticket ticket = ticketRepository.findOne(jobDTO.getTicketId());
-			ticket.setJob(job);
-			ticketRepository.saveAndFlush(ticket);
-        }*/
-
-
-		//}
 
 		//if the job is scheduled for recurrence create a scheduled task
 		if(!StringUtils.isEmpty(assetAMCScheduleDTO.getId())) {
@@ -1493,7 +1472,7 @@ public class JobManagementService extends AbstractService {
 			StringBuffer data = new StringBuffer();
 			data.append("title="+assetAMCScheduleDTO.getTitle());
 			data.append("&description="+assetAMCScheduleDTO.getFrequencyPrefix()+" "+assetAMCScheduleDTO.getFrequencyDuration()+" "+assetAMCScheduleDTO.getFrequency());				
-			data.append("&siteId="+asset.getSite().getId());
+			data.append("&siteId="+site.getId());
 			data.append("&empId="+employee.getId());
 			//data.append("&empId="+assetPpmScheduleDTO.getEmployeeId());
 			data.append("&plannedStartTime="+assetAMCScheduleDTO.getStartDate());
