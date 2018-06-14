@@ -818,7 +818,7 @@ public class JobManagementService extends AbstractService {
 			//data.append("&location="+assetPpmScheduleDTO.getLocationId());
 			data.append("&frequency="+assetPpmScheduleDTO.getFrequency());
 			schConfDto.setData(data.toString());
-			schConfDto.setSchedule(assetPpmScheduleDTO.getFrequency());
+			schConfDto.setSchedule(Frequency.valueOf(assetPpmScheduleDTO.getFrequency()).getTypeFrequency());
 			schConfDto.setStartDate(assetPpmScheduleDTO.getStartDate());
 			schConfDto.setEndDate(assetPpmScheduleDTO.getEndDate());
 			schConfDto.setScheduleEndDate(assetPpmScheduleDTO.getEndDate());

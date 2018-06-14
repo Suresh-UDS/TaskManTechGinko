@@ -338,9 +338,17 @@ public class AssetResource {
 	@RequestMapping(value = "/assets/saveReadings", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> saveAssetReadings(@Valid @RequestBody AssetParameterReadingDTO assetParamReadingDTO, HttpServletRequest request) {
 		log.debug("Save Asset Parameter Reading" +assetParamReadingDTO.getName());
+		log.debug("Save Asset Parameter Reading" +assetParamReadingDTO.getAssetParameterConfigId());
 		try{ 
 			assetParamReadingDTO.setUserId(SecurityUtils.getCurrentUserId());
-			assetParamReadingDTO = assetService.saveAssetReadings(assetParamReadingDTO);
+			if(assetParamReadingDTO.getId() != null) {
+				log.debug("Update Asset Parameter Reading" +assetParamReadingDTO.getId());
+				assetParamReadingDTO = assetService.updateAssetReadings(assetParamReadingDTO);
+			}else{
+				assetParamReadingDTO = assetService.saveAssetReadings(assetParamReadingDTO);
+			}
+			
+			
 		} catch(TimesheetException e){ 
 			throw new TimesheetException(e, assetParamReadingDTO);
 		}
