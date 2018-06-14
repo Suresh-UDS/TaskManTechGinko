@@ -804,8 +804,10 @@ public class AssetManagementService extends AbstractService {
 
 		assetPPMSchedule = assetPpmScheduleRepository.save(assetPPMSchedule);
 		assetPpmScheduleDTO = mapperUtil.toModel(assetPPMSchedule, AssetPpmScheduleDTO.class);
+		if(assetPPMSchedule.getId() !=0) {
 		jobManagementService.createJob(assetPpmScheduleDTO);
 		log.debug(">> after create job for ppm schedule <<<");
+		}
 		return assetPpmScheduleDTO;
 	}
 
@@ -951,5 +953,34 @@ public class AssetManagementService extends AbstractService {
 		log.info("The " + fileName + " was deleted successfully.");
 		assetDocumentRepository.delete(id);
     }
+
+	public AssetParameterReadingDTO updateAssetReadings(AssetParameterReadingDTO assetParamReadingDTO) {
+
+			AssetParameterReading assetParamReading = assetParamReadingRepository.findOne(assetParamReadingDTO.getId());
+			if(assetParamReadingDTO.getAssetId() > 0){ 
+				Asset asset = assetRepository.findOne(assetParamReadingDTO.getAssetId());
+				assetParamReading.setAsset(asset);
+			}
+			if(assetParamReadingDTO.getAssetParameterConfigId() > 0){ 
+				AssetParameterConfig assetParameterConfig = assetParamConfigRepository.findOne(assetParamReadingDTO.getAssetParameterConfigId());
+				assetParamReading.setAssetParameterConfig(assetParameterConfig);
+			}
+			if(assetParamReadingDTO.getJobId() > 0){ 
+				Job job = jobRepository.findOne(assetParamReadingDTO.getJobId());
+				assetParamReading.setJob(job);
+			}
+			assetParamReading.setConsumption(assetParamReadingDTO.getConsumption());
+			assetParamReading.setConsumptionMonitoringRequired(assetParamReadingDTO.isConsumptionMonitoringRequired());
+			assetParamReading.setInitialValue(assetParamReadingDTO.getInitialValue());
+			assetParamReading.setFinalValue(assetParamReadingDTO.getFinalValue());
+			assetParamReading.setCreatedDate(assetParamReadingDTO.getCreatedDate());
+			assetParamReading.setName(assetParamReadingDTO.getName());
+			assetParamReading.setUom(assetParamReadingDTO.getUom());
+			assetParamReading.setValue(assetParamReadingDTO.getValue());
+			assetParamReadingRepository.save(assetParamReading);
+		
+			return mapperUtil.toModel(assetParamReading, AssetParameterReadingDTO.class);
+	}
+	
 
 }

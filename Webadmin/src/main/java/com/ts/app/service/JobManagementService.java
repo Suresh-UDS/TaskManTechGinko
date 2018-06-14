@@ -786,7 +786,7 @@ public class JobManagementService extends AbstractService {
 		job.setPlannedStartTime(startDate);
 		job.setPlannedEndTime(endDate);
 		job.setTitle(assetPpmScheduleDTO.getTitle());
-		job.setDescription(assetPpmScheduleDTO.getTitle() + assetPpmScheduleDTO.getFrequencyPrefix()+" "+assetPpmScheduleDTO.getFrequencyDuration()+" "+assetPpmScheduleDTO.getFrequency());
+		job.setDescription(assetPpmScheduleDTO.getTitle() +" "+ assetPpmScheduleDTO.getFrequencyPrefix()+" "+assetPpmScheduleDTO.getFrequencyDuration()+" "+assetPpmScheduleDTO.getFrequency());
 		job = jobRepository.saveAndFlush(job);
 
 		log.debug(">>> After Save Job: <<<"+job.getId());
@@ -818,7 +818,7 @@ public class JobManagementService extends AbstractService {
 			//data.append("&location="+assetPpmScheduleDTO.getLocationId());
 			data.append("&frequency="+assetPpmScheduleDTO.getFrequency());
 			schConfDto.setData(data.toString());
-			schConfDto.setSchedule(assetPpmScheduleDTO.getFrequency());
+			schConfDto.setSchedule(Frequency.valueOf(assetPpmScheduleDTO.getFrequency()).getTypeFrequency());
 			schConfDto.setStartDate(assetPpmScheduleDTO.getStartDate());
 			schConfDto.setEndDate(assetPpmScheduleDTO.getEndDate());
 			schConfDto.setScheduleEndDate(assetPpmScheduleDTO.getEndDate());

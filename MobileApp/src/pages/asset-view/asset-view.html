@@ -14,12 +14,12 @@
     <ion-toolbar class="tool-bar">
         <ion-segment [(ngModel)]="categories" class="segmnt margin-auto" color="#ff9800" (ionChange)="segmentChange(categories)">
             <ion-segment-button value="details" >Details</ion-segment-button>
-            <ion-segment-button value="ppm">PPM </ion-segment-button>
-            <ion-segment-button value="amc">AMC </ion-segment-button>
-            <ion-segment-button value="config">Config </ion-segment-button>
-            <ion-segment-button value="readings" (ionSelect)="viewReading()">Readings</ion-segment-button>
-            <ion-segment-button value="jobs">Jobs</ion-segment-button>
-            <ion-segment-button value="tickets">Tickets</ion-segment-button>
+            <ion-segment-button value="ppm" (ionSelect)="getAssetPPMSchedule()">PPM </ion-segment-button>
+            <ion-segment-button value="amc" (ionSelect)="getAssetAMCSchedule()">AMC </ion-segment-button>
+            <ion-segment-button value="config" (ionSelect)="getAssetConfig()">Config </ion-segment-button>
+            <ion-segment-button value="readings" (ionSelect)="getReading()">Readings</ion-segment-button>
+            <ion-segment-button value="jobs" (ionSelect)="getJobs(searchCriteria)">Jobs</ion-segment-button>
+            <ion-segment-button value="tickets" (ionSelect)="getTickets(searchCriteria)">Tickets</ion-segment-button>
         </ion-segment>
     </ion-toolbar>
     <div [ngSwitch]="true">
@@ -339,7 +339,7 @@
         </div>
     </ion-list>
 
-    <div *ngSwitchCase="'config'">
+    <div *ngSwitchCase="'config'" margin-left="" margin-right="">
 
         <div text-center="" *ngIf="!assetDetails.config || assetDetails.config?.length<0">
             <ion-card text-center="">
@@ -572,7 +572,7 @@
 
     </ion-list>
 
-    <ion-list *ngSwitchCase="'readings'">
+    <ion-list *ngSwitchCase="'readings'" margin-right="" margin-left="">
 
         <div text-center="" *ngIf="!assetDetails.reading || assetDetails.reading.length < 0">
             <ion-card text-center="">

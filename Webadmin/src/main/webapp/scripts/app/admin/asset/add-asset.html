@@ -1047,14 +1047,13 @@
                                                                         </div>
                                                                     </div>
                                                                     <div class="row">
-                                                                        <div class="col-md-2">
+                                                                        <div class="col-md-2" ng-init="loadFreqPrefix()">
                                                                             <div class="dropdown">
                                                                                 <div class="form-group">
                                                                                     <label class="control-label">Select Frequency</label>
                                                                                     <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                                                                    <select class="form-control" ng-model="selectedFrequency">
-                                                                                        <option value="" >Select</option>
-                                                                                        <option value="Every" >Every</option>
+                                                                                    <select class="form-control" ng-model="selectedFrequency" ng-options="frequencyPrefix for frequencyPrefix in frequencyPrefixies">
+                                                                                        <option value="">Select..</option>
                                                                                     </select>
                                                                                 </div>
                                                                             </div>
@@ -1063,28 +1062,17 @@
                                                                             <div class="form-group">
                                                                                 <label class="control-label">&nbsp;</label>
                                                                                 <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                                                                <select class="form-control" ng-model="selectedTimeInterval">
-                                                                                    <option value="" >Select</option>
-                                                                                    <option value="1">1</option>
-                                                                                    <option value="2">2</option>
-                                                                                    <option value="3">3</option>
+                                                                                <select class="form-control" ng-model="selectedTimeInterval" ng-options="frequencyDuration for frequencyDuration in frequencyDurations">
+                                                                                    <option value="">selected..</option>
                                                                                 </select>
                                                                             </div>
                                                                         </div>
-                                                                        <div class="col-md-3">
+                                                                        <div class="col-md-3" ng-init="loadFreq()">
                                                                             <div class="form-group">
                                                                                 <label class="control-label">&nbsp;</label>
                                                                                 <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                                                                <select class="form-control" ng-model="selectedFrequnceyOccurrence">
-                                                                                    <option value="" >Select</option>
-                                                                                    <option value="Hour">Hour</option>
-                                                                                    <option value="Day">Day</option>
-                                                                                    <option value="Week">Week</option>
-                                                                                    <option value="Fortnight">Fortnight</option>
-                                                                                    <option value="Month">Month</option>
-                                                                                    <option value="Quarter">Quarter</option>
-                                                                                    <option value="Half">Half</option>
-                                                                                    <option value="Year">Year</option>
+                                                                                <select class="form-control" ng-model="selectedFrequnceyOccurrence" ng-options="frequency for frequency in frequencies">
+                                                                                    <option value="">select..</option>
                                                                                 </select>
                                                                             </div>
                                                                         </div>
