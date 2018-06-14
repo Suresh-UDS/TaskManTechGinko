@@ -26,6 +26,8 @@ public class AssetAMCScheduleDTO extends BaseDTO {
 	
 	private long empId;
 	
+	private String maintenanceType;
+	
 	public long getId() {
 		return id;
 	}
@@ -112,6 +114,14 @@ public class AssetAMCScheduleDTO extends BaseDTO {
 
 	public void setEmpId(long empId) {
 		this.empId = empId;
+	}
+
+	public String getMaintenanceType() {
+		return maintenanceType;
+	}
+
+	public void setMaintenanceType(String maintenanceType) {
+		this.maintenanceType = maintenanceType;
 	}
 	
 

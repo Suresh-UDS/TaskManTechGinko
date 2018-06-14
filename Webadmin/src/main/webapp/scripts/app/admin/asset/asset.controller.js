@@ -1454,6 +1454,8 @@ angular.module('timeSheetApp')
     	    		$scope.amcSchedule.frequencyDuration = $scope.selectedFreqDuration;
     	    	}
     	    	
+    	    	$scope.amcSchedule.maintenanceType = 'AMC';
+    	    	
     	    	console.log("To be create AMC schedule",$scope.amcSchedule);
     	    	
     	    	AssetComponent.saveAmcSchedule($scope.amcSchedule).then(function(data){  
