@@ -700,11 +700,15 @@ public class AssetManagementService extends AbstractService {
 		assetDTO.setStartDate(asset.getStartDate());
 		assetDTO.setEndDate(asset.getEndDate());
 		assetDTO.setFrequency(asset.getFrequency());
+		assetDTO.setFrequencyDuration(asset.getFrequencyDuration());
+		assetDTO.setFrequencyPrefix(asset.getFrequencyPrefix());
 		log.debug(">>> Title <<< "+assetDTO.getTitle());
 		log.debug(">>> Check list id <<< "+assetDTO.getChecklistId());
 		log.debug(">>> Start Date <<< "+assetDTO.getStartDate());
 		log.debug(">>> End Date <<< "+assetDTO.getEndDate());
 		log.debug(">>> Frequency <<< "+assetDTO.getFrequency());
+		log.debug(">>> Frequency Duration <<< "+assetDTO.getFrequencyDuration());
+		log.debug(">>> Frequency Prefix <<< "+assetDTO.getFrequencyPrefix());
 
 		return assetDTO;
 	}
