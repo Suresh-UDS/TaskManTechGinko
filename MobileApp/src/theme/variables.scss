@@ -234,6 +234,10 @@ ion-app.md
 
 }
 
+.border-btm-blk{
+  border-bottom:1px solid #a7a1a1 !important
+}
+
 .form-group label.control-label{
   color: #000;
 }
@@ -247,7 +251,15 @@ image-viewer ion-header
 {
   background-color: transparent !important;
 }
+.text-input-md
+{
+  margin:0px !important;
+}
 
+ion-input
+{
+  border-bottom:1px solid #ccc !important;
+}
 
 // App iOS Variables
 // --------------------------------------------------

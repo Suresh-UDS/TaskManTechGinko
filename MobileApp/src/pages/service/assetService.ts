@@ -120,6 +120,15 @@ export class AssetService {
         )
     }
 
+    getAssetPreviousReadings(assetId,assetParamId):Observable<any>{
+        return this.http.get(this.config.Url+'api/assets/'+assetId+'/getLatestReading/'+assetParamId).map(
+            response=>{
+                console.log('Get Previous Reading');
+                return response.json();
+            }
+        )
+    }
+
 
 
 }
