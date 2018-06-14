@@ -339,7 +339,7 @@
         </div>
     </ion-list>
 
-    <div *ngSwitchCase="'config'">
+    <div *ngSwitchCase="'config'" margin-left="" margin-right="">
 
         <div text-center="" *ngIf="!assetDetails.config || assetDetails.config?.length<0">
             <ion-card text-center="">
@@ -572,7 +572,7 @@
 
     </ion-list>
 
-    <ion-list *ngSwitchCase="'readings'">
+    <ion-list *ngSwitchCase="'readings'" margin-right="" margin-left="">
 
         <div text-center="" *ngIf="!assetDetails.reading || assetDetails.reading.length < 0">
             <ion-card text-center="">
