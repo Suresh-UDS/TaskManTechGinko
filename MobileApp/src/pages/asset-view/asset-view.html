@@ -341,7 +341,7 @@
 
     <div *ngSwitchCase="'config'" margin-left="" margin-right="">
 
-        <div text-center="" *ngIf="!assetDetails.config || assetDetails.config?.length<0">
+        <div text-center="" *ngIf="assetDetails.config?.length == 0">
             <ion-card text-center="">
                 <ion-card-content>
                     No Data found
@@ -416,7 +416,7 @@
 
     </div>
 
-    <ion-list *ngSwitchCase="'jobs'" style="margin-top : 56px" padding-left="" padding-right="">
+    <ion-list *ngSwitchCase="'jobs'" style="" padding-left="" padding-right="">
 
         <div text-center="" *ngIf="!assetDetails.jobs || assetDetails.jobs?.length<0">
             <ion-card text-center="">
@@ -519,7 +519,7 @@
 
     <ion-list *ngSwitchCase="'tickets'" style="margin-top : 56px" padding-left="" padding-right="">
 
-        <div text-center="" *ngIf="!assetDetails.tickets || assetDetails.tickets?.length<0">
+        <div text-center="" *ngIf="assetDetails.tickets?.length == 0">
             <ion-card text-center="">
                 <ion-card-content>
                     No Data found

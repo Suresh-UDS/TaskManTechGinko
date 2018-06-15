@@ -675,7 +675,7 @@ public class SchedulerService extends AbstractService {
 					Job prevJob = prevJobs.get(0);
 					if (prevJob.getPlannedStartTime().before(currDate.toDate())) {
 						DateTime lastDate = currDate.plusMonths(6).toDateTime();
-						currDate = currDate.plusDays(currDate.dayOfMonth().getMaximumValue());
+						currDate = currDate.dayOfMonth().getDateTime();
 						while (currDate.isBefore(lastDate) || currDate.isEqual(lastDate)) {
 							jobCreationTask(dailyTask, dailyTask.getJob(), dailyTask.getData(), currDate.toDate());
 							dailyTask.setLastRun(currDate.toDate());
