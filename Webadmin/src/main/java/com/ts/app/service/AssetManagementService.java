@@ -708,7 +708,7 @@ public class AssetManagementService extends AbstractService {
 	}
 
 	public ImportResult importFile(MultipartFile file, long dateTime) {
-		return importUtil.importJobData(file, dateTime);
+		return importUtil.importAssetData(file, dateTime);
 	}
 
 	public ImportResult getImportStatus(String fileId) {
