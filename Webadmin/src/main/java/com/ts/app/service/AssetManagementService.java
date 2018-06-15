@@ -454,12 +454,13 @@ public class AssetManagementService extends AbstractService {
 		log.debug("Existing schedule -" + existingSchedules);
 		if (CollectionUtils.isEmpty(existingSchedules)) {
 			assetAMC = assetAMCRepository.save(assetAMC);
+			assetAMCScheduleDTO = mapperUtil.toModel(assetAMC, AssetAMCScheduleDTO.class);
 			if(assetAMC.getId() > 0) { 
 				jobManagementService.createAMCJobs(assetAMCScheduleDTO);
 			}
 		}
 
-		return mapperUtil.toModel(assetAMC, AssetAMCScheduleDTO.class);
+		return assetAMCScheduleDTO;
 
 	}
 

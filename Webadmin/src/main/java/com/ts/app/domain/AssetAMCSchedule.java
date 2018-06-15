@@ -28,7 +28,7 @@ public class AssetAMCSchedule extends AbstractAuditingEntity {
 
 	@Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+    private long id;
 	
     @NotNull
     @Size(min = 1, max = 250)
@@ -61,12 +61,14 @@ public class AssetAMCSchedule extends AbstractAuditingEntity {
 	@ManyToOne(fetch = FetchType.LAZY, cascade={CascadeType.ALL})
 	@JoinColumn(name = "assetId", referencedColumnName = "id", nullable = true)
 	private Asset asset;
+	
+	private long empId;
 
-	public Long getId() {
+	public long getId() {
 		return id;
 	}
 
-	public void setId(Long id) {
+	public void setId(long id) {
 		this.id = id;
 	}
 
@@ -132,6 +134,14 @@ public class AssetAMCSchedule extends AbstractAuditingEntity {
 
 	public void setAsset(Asset asset) {
 		this.asset = asset;
+	}
+
+	public long getEmpId() {
+		return empId;
+	}
+
+	public void setEmpId(long empId) {
+		this.empId = empId;
 	}
 	
 	
