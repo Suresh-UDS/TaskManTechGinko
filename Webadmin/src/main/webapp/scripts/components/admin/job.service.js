@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('timeSheetApp')
-    .factory('JobComponent', function JobComponent(job,$http) {
+    .factory('JobComponent', function JobComponent($http) {
         return {
 
         	findBySiteId: function (siteId,page) {
