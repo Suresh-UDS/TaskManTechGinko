@@ -944,6 +944,8 @@ angular.module('timeSheetApp')
 
         $scope.loadPPMSchedule = function() { 
 
+            var item_ar = [];
+
             if($scope.assetGen.id){
 
                     var assetId= $scope.assetGen.id;
@@ -955,7 +957,7 @@ angular.module('timeSheetApp')
              
             AssetComponent.findByAssetPPM(assetId).then(function(data) { 
                 
-               
+                     
                 $scope.ppmScheduleList = data;
 
                 for(var i = 0;i < $scope.ppmScheduleList.length;i++){   
@@ -963,33 +965,38 @@ angular.module('timeSheetApp')
 
                     var ppmId = $scope.ppmScheduleList[i].checklistId;
 
+
                   
 
+                    ChecklistComponent.findOne(ppmId).then(function(response){ 
 
 
-                ChecklistComponent.findOne(ppmId).then(function(response){ 
+                          
+                       item_ar.push(response.items);
+                        
+                       
 
-                    for(var j= 0;j < $scope.ppmScheduleList.length;j++){  
+                        console.log("array", item_ar);
 
-                         //alert(j);
 
-                    // console.log("Items+++",data.items);
+                        if (i == item_ar.length) {
 
-                    //console.log("PPM",$scope.ppmScheduleList[j]);
+                             for(var j= 0;j < $scope.ppmScheduleList.length;j++){  
 
-                    //alert($scope.ppmScheduleList[j].checklistName);
+                                // alert(j);
+                          
 
-                    //$scope.ppmScheduleList[j][items] = "";
+                              $scope.ppmScheduleList[j].items = item_ar[j];
 
-                $scope.ppmScheduleList[j].items = response.items;
+                            }
+      
+                       }
 
-                    }
+                   });
 
-               });
-                    
 
                 }
-
+                
                 console.log("PPM List" , $scope.ppmScheduleList);
             });
         }
@@ -1487,6 +1494,8 @@ angular.module('timeSheetApp')
 	    
 	    $scope.loadAmcSchedule = function() { 
 
+            var item_ar = [];
+
             if($scope.assetGen.id){
 
                     var assetId= $scope.assetGen.id;
@@ -1507,28 +1516,28 @@ angular.module('timeSheetApp')
                     var amcId = $scope.amcScheduleList[i].checklistId;
 
 
-                ChecklistComponent.findOne(amcId).then(function(data){ 
+                    ChecklistComponent.findOne(amcId).then(function(data){ 
 
-                     console.log("Items+++", JSON.stringify(data));
+                          item_ar.push(data.items);
+                            
+                        
+                            console.log("array", item_ar);
 
-                    for(var j= 0;j < $scope.amcScheduleList.length;j++){  
 
-                         //alert(j);
+                            if (i == item_ar.length) {
 
-                    
-                    
-                    //console.log("PPM",$scope.ppmScheduleList[j]);
+                                 for(var j= 0;j < $scope.amcScheduleList.length;j++){  
 
-                    //alert($scope.ppmScheduleList[j].checklistName);
+                                    // alert(j);
+                              
+                                  $scope.amcScheduleList[j].items = item_ar[j];
 
-                    //$scope.ppmScheduleList[j][items] = "";
+                                }
+          
+                           }
 
-                $scope.amcScheduleList[j].items = data.items;
-
-                    }
-
-               });
-                    
+                   });
+                        
 
                 }
 	    		
