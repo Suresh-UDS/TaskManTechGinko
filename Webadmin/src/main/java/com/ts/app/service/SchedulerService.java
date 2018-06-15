@@ -566,21 +566,88 @@ public class SchedulerService extends AbstractService {
 	public void attendanceCheckOutTask() {
 		schedulerHelperService.autoCheckOutAttendance(this);
 	}
-	
+
 	public void createJobs(SchedulerConfig dailyTask) {
+		if ("CREATE_JOB".equals(dailyTask.getType())) {
+			String creationPolicy = env.getProperty("scheduler.dailyJob.creation");
+			PageRequest pageRequest = new PageRequest(1, 1);
+			Job parentJob = dailyTask.getJob();
+			List<Job> prevJobs = jobRepository.findLastJobByParentJobId(parentJob.getId(), pageRequest);
+			if (creationPolicy.equalsIgnoreCase("monthly")) { // if the creation policy is set to monthly, create jobs for the rest of the
+																// month
+				DateTime currDate = DateTime.now();
+				DateTime lastDate = currDate.dayOfMonth().withMaximumValue();
+				if(CollectionUtils.isNotEmpty(prevJobs)) {
+					Job prevJob = prevJobs.get(0);
+					currDate = addDays(currDate, dailyTask.getSchedule());
+					if(prevJob.getPlannedStartTime().before(currDate.toDate())){
+						while (currDate.isBefore(lastDate) || currDate.isEqual(lastDate)) {
+							jobCreationTask(dailyTask, dailyTask.getJob(), dailyTask.getData(), currDate.toDate());
+							currDate = addDays(currDate, dailyTask.getSchedule());
+						}
+					}
+				}else {
+					currDate = new DateTime(parentJob.getPlannedStartTime().getTime());
+					while (currDate.isBefore(lastDate) || currDate.isEqual(lastDate)) {
+						jobCreationTask(dailyTask, dailyTask.getJob(), dailyTask.getData(), currDate.toDate());
+						currDate = addDays(currDate, dailyTask.getSchedule());
+					}
+				}
+			} else if (creationPolicy.equalsIgnoreCase("daily")) {
+				DateTime currDate = DateTime.now();
+				if(CollectionUtils.isNotEmpty(prevJobs)) {
+					Job prevJob = prevJobs.get(0);
+					currDate = addDays(currDate, dailyTask.getSchedule());
+					if(prevJob.getPlannedStartTime().before(currDate.toDate())){
+						jobCreationTask(dailyTask, dailyTask.getJob(), dailyTask.getData(), currDate.toDate());
+					}
+				}else {
+					currDate = new DateTime(parentJob.getPlannedStartTime().getTime());
+					jobCreationTask(dailyTask, dailyTask.getJob(), dailyTask.getData(), currDate.toDate());
+				}
+			}
+		}
+	}
+	
+	public void createJobsOld(SchedulerConfig dailyTask) {
 		if ("CREATE_JOB".equals(dailyTask.getType())) {
 			if (dailyTask.getSchedule().equalsIgnoreCase(Frequency.DAILY.getTypeFrequency())) {
 				String creationPolicy = env.getProperty("scheduler.dailyJob.creation");
+				PageRequest pageRequest = new PageRequest(1, 1);
+				Job parentJob = dailyTask.getJob();
+				List<Job> prevJobs = jobRepository.findLastJobByParentJobId(parentJob.getId(), pageRequest);
 				if (creationPolicy.equalsIgnoreCase("monthly")) { // if the creation policy is set to monthly, create jobs for the rest of the
 																	// month
 					DateTime currDate = DateTime.now();
 					DateTime lastDate = currDate.dayOfMonth().withMaximumValue();
-					while (currDate.isBefore(lastDate) || currDate.isEqual(lastDate)) {
-						jobCreationTask(dailyTask, dailyTask.getJob(), dailyTask.getData(), currDate.toDate());
-						currDate = currDate.plusDays(1);
+					if(CollectionUtils.isNotEmpty(prevJobs)) {
+						Job prevJob = prevJobs.get(0);
+						currDate = addDays(currDate, dailyTask.getSchedule());
+						if(prevJob.getPlannedStartTime().before(currDate.toDate())){
+							while (currDate.isBefore(lastDate) || currDate.isEqual(lastDate)) {
+								jobCreationTask(dailyTask, dailyTask.getJob(), dailyTask.getData(), currDate.toDate());
+								currDate = addDays(currDate, dailyTask.getSchedule());
+							}
+						}
+					}else {
+						currDate = new DateTime(parentJob.getPlannedStartTime().getTime());
+						while (currDate.isBefore(lastDate) || currDate.isEqual(lastDate)) {
+							jobCreationTask(dailyTask, dailyTask.getJob(), dailyTask.getData(), currDate.toDate());
+							currDate = addDays(currDate, dailyTask.getSchedule());
+						}
 					}
 				} else if (creationPolicy.equalsIgnoreCase("daily")) {
-					jobCreationTask(dailyTask, dailyTask.getJob(), dailyTask.getData(), new Date());
+					DateTime currDate = DateTime.now();
+					if(CollectionUtils.isNotEmpty(prevJobs)) {
+						Job prevJob = prevJobs.get(0);
+						currDate = addDays(currDate, dailyTask.getSchedule());
+						if(prevJob.getPlannedStartTime().before(currDate.toDate())){
+							jobCreationTask(dailyTask, dailyTask.getJob(), dailyTask.getData(), currDate.toDate());
+						}
+					}else {
+						currDate = new DateTime(parentJob.getPlannedStartTime().getTime());
+						jobCreationTask(dailyTask, dailyTask.getJob(), dailyTask.getData(), currDate.toDate());
+					}
 				}
 				// dailyTask.setLastRun(new Date());
 			} else if (dailyTask.getSchedule().equalsIgnoreCase(Frequency.WEEKLY.getTypeFrequency())) {
@@ -687,6 +754,25 @@ public class SchedulerService extends AbstractService {
 		} else {
 			log.warn("Unknown scheduler config type job" + dailyTask);
 		}
+	}
+	
+	
+	private DateTime addDays(DateTime dateTime , String scheduleType) {
+		Frequency frequency = Frequency.valueOf(scheduleType);
+		switch(frequency) {
+			case DAILY :
+				dateTime = dateTime.plusDays(1);
+			case WEEKLY :
+				dateTime = dateTime.plusWeeks(1);
+			case FORTNIGHT :
+				dateTime = dateTime.plusDays(14);
+			case MONTH :
+				dateTime = dateTime.plusMonths(1);
+				break;
+			default:
+			
+		}
+		return dateTime;
 	}
 
 	public void deleteJobs(SchedulerConfig dailyTask) {
