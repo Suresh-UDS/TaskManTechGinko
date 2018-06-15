@@ -729,10 +729,6 @@ public class JobManagementService extends AbstractService {
 		Job job = new Job();
 		Site site = null;
 		
-		//AssetPPMSchedule assetPpmSchedule = new AssetPPMSchedule();
-		//JobDTO jobDTO = new JobDTO();
-		
-		//Employee employee = getEmployee(jobDTO.getEmployeeId());
 		Employee employee = employeeRepository.findOne(assetPpmScheduleDTO.getEmpId());
 		if(assetPpmScheduleDTO.getAssetId() > 0) {
 			Asset asset = assetRepository.findOne(assetPpmScheduleDTO.getAssetId());
@@ -740,12 +736,6 @@ public class JobManagementService extends AbstractService {
 			site = getSite(asset.getSite().getId());
 		}
 		
-		//log.debug(">>> asset id "+ asset.getId() +" Site "+asset.getSite().getName()+" User "+asset.getSite().getUser() + " User id "+asset.getSite().getUser().getId());
-		//jobDTO.setEmployeeEmpId(String.valueOf(asset.getSite().getUser().getId()));
-		//Location location = getLocation(jobDTO.getLocationId());
-
-		//mapToEntity(jobDTO, job);
-
 		if(job.getStatus() == null) {
 			job.setStatus(JobStatus.OPEN);
 		}
@@ -769,19 +759,10 @@ public class JobManagementService extends AbstractService {
 		job.setTitle(assetPpmScheduleDTO.getTitle());
 		job.setDescription(assetPpmScheduleDTO.getTitle() +" "+ assetPpmScheduleDTO.getFrequencyPrefix()+" "+assetPpmScheduleDTO.getFrequencyDuration()+" "+assetPpmScheduleDTO.getFrequency());
 		job.setMaintenanceType(assetPpmScheduleDTO.getMaintenanceType());
-
+		job.setActive(AbstractAuditingEntity.ACTIVE_YES);
 		job = jobRepository.saveAndFlush(job);
 
 		log.debug(">>> After Save Job: <<<"+job.getId());
-
-		/*if(jobDTO.getTicketId() > 0) {
-			Ticket ticket = ticketRepository.findOne(jobDTO.getTicketId());
-			ticket.setJob(job);
-			ticketRepository.saveAndFlush(ticket);
-        }*/
-
-
-		//}
 
 		//if the job is scheduled for recurrence create a scheduled task
 		log.debug(">>> ID <<< "+assetPpmScheduleDTO.getId());
