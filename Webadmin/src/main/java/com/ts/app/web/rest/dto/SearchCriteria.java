@@ -158,6 +158,8 @@ public class SearchCriteria extends Paginator {
 	private List<Long> siteIds;
 
 	private boolean notCheckedOut;
+	
+	private String maintenanceType;
 
 	public long getId() {
 		return id;
@@ -839,4 +841,12 @@ public class SearchCriteria extends Paginator {
     public void setNotCheckedOut(boolean notCheckedOut) {
         this.notCheckedOut = notCheckedOut;
     }
+
+	public String getMaintenanceType() {
+		return maintenanceType;
+	}
+
+	public void setMaintenanceType(String maintenanceType) {
+		this.maintenanceType = maintenanceType;
+	}
 }
