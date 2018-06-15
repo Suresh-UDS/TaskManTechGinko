@@ -27,6 +27,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
@@ -50,22 +52,6 @@ import com.ts.app.service.util.MapperUtil;
 import com.ts.app.service.util.PagingUtil;
 import com.ts.app.service.util.QRCodeUtil;
 import com.ts.app.service.util.ReportUtil;
-import com.ts.app.web.rest.dto.AssetDTO;
-import com.ts.app.web.rest.dto.BaseDTO;
-import com.ts.app.web.rest.dto.CheckInOutDTO;
-import com.ts.app.web.rest.dto.CheckInOutImageDTO;
-import com.ts.app.web.rest.dto.EmployeeDTO;
-import com.ts.app.web.rest.dto.ExportResult;
-import com.ts.app.web.rest.dto.ImportResult;
-import com.ts.app.web.rest.dto.JobChecklistDTO;
-import com.ts.app.web.rest.dto.JobDTO;
-import com.ts.app.web.rest.dto.LocationDTO;
-import com.ts.app.web.rest.dto.NotificationLogDTO;
-import com.ts.app.web.rest.dto.PriceDTO;
-import com.ts.app.web.rest.dto.ReportResult;
-import com.ts.app.web.rest.dto.SchedulerConfigDTO;
-import com.ts.app.web.rest.dto.SearchCriteria;
-import com.ts.app.web.rest.dto.SearchResult;
 import com.ts.app.web.rest.errors.TimesheetException;
 
 /**
@@ -738,7 +724,7 @@ public class JobManagementService extends AbstractService {
 	}
 	
 	public JobDTO createJob(AssetPpmScheduleDTO assetPpmScheduleDTO) {
-		log.debug(">>> assetPpmSchedule Title from CreateJOb <<<"+assetPpmScheduleDTO.getTitle());
+		log.debug(">>> assetPpmSchedule Title from CreateJOb <<<"+assetPpmScheduleDTO.getTitle()+" Employee Id "+assetPpmScheduleDTO.getEmpId());
 		
 		Job job = new Job();
 		
@@ -746,7 +732,7 @@ public class JobManagementService extends AbstractService {
 		//JobDTO jobDTO = new JobDTO();
 		
 		//Employee employee = getEmployee(jobDTO.getEmployeeId());
-		Employee employee = employeeRepository.findOne(Long.valueOf(20));
+		Employee employee = employeeRepository.findOne(assetPpmScheduleDTO.getEmpId());
 		Asset asset = assetRepository.findOne(assetPpmScheduleDTO.getAssetId());
 		Site site = getSite(asset.getSite().getId());
 		//log.debug(">>> asset id "+ asset.getId() +" Site "+asset.getSite().getName()+" User "+asset.getSite().getUser() + " User id "+asset.getSite().getUser().getId());
@@ -801,6 +787,7 @@ public class JobManagementService extends AbstractService {
 		//}
 
 		//if the job is scheduled for recurrence create a scheduled task
+		log.debug(">>> ID <<< "+assetPpmScheduleDTO.getId());
 		if(!StringUtils.isEmpty(assetPpmScheduleDTO.getId())) {
 			log.debug(">>> Scheduler Service <<<");
 			SchedulerConfigDTO schConfDto = new SchedulerConfigDTO();
@@ -1432,5 +1419,82 @@ public class JobManagementService extends AbstractService {
 			er.setStatus(status);
 		}
 		return er;
+	}
+
+	public ResponseEntity<?> createAMCJobs(AssetAMCScheduleDTO assetAMCScheduleDTO) {
+
+		log.debug(">>> assetAMCSchedule Title from CreateAMCJob <<<"+assetAMCScheduleDTO.getTitle());
+		
+		Job job = new Job();
+		
+		Site site = null;
+	
+		Employee employee = employeeRepository.findOne(assetAMCScheduleDTO.getEmpId());
+		
+		if(assetAMCScheduleDTO.getAssetId() > 0) {
+			Asset asset = assetRepository.findOne(assetAMCScheduleDTO.getAssetId());
+			job.setAsset(asset);
+			site = getSite(asset.getSite().getId());
+		}
+
+		if(job.getStatus() == null) {
+			job.setStatus(JobStatus.OPEN);
+		}
+
+		Calendar calStart = Calendar.getInstance();
+		calStart.set(Calendar.HOUR_OF_DAY, 0);
+		calStart.set(Calendar.MINUTE,0);
+		Calendar calEnd = Calendar.getInstance();
+		calEnd.set(Calendar.HOUR_OF_DAY, 11);
+		calEnd.set(Calendar.MINUTE,59);
+
+		java.sql.Date startDate = new java.sql.Date(calStart.getTimeInMillis());
+		java.sql.Date endDate = new java.sql.Date(calEnd.getTimeInMillis());
+		log.debug("Before saving new job -"+ job);
+		log.debug("start Date  -"+ startDate + ", end date -" + endDate);
+		
+		job.setEmployee(employee);
+		job.setSite(site);
+		job.setPlannedStartTime(startDate);
+		job.setPlannedEndTime(endDate);
+		job.setTitle(assetAMCScheduleDTO.getTitle());
+		job.setDescription(assetAMCScheduleDTO.getTitle() +" "+ assetAMCScheduleDTO.getFrequencyPrefix()+" "+assetAMCScheduleDTO.getFrequencyDuration()+" "+assetAMCScheduleDTO.getFrequency());
+		job.setMaintenanceType(assetAMCScheduleDTO.getMaintenanceType());
+		job = jobRepository.saveAndFlush(job);
+
+		log.debug(">>> After Save Job: <<<"+job.getId());
+
+		//if the job is scheduled for recurrence create a scheduled task
+		if(!StringUtils.isEmpty(assetAMCScheduleDTO.getId())) {
+			log.debug(">>> Scheduler Service <<<");
+			SchedulerConfigDTO schConfDto = new SchedulerConfigDTO();
+			//schConfDto.setSchedule(jobDTO.getSchedule());
+			schConfDto.setType("CREATE_JOB");
+			StringBuffer data = new StringBuffer();
+			data.append("title="+assetAMCScheduleDTO.getTitle());
+			data.append("&description="+assetAMCScheduleDTO.getFrequencyPrefix()+" "+assetAMCScheduleDTO.getFrequencyDuration()+" "+assetAMCScheduleDTO.getFrequency());				
+			data.append("&siteId="+site.getId());
+			data.append("&empId="+employee.getId());
+			//data.append("&empId="+assetPpmScheduleDTO.getEmployeeId());
+			data.append("&plannedStartTime="+assetAMCScheduleDTO.getStartDate());
+			data.append("&plannedEndTime="+assetAMCScheduleDTO.getEndDate());
+			data.append("&plannedHours="+assetAMCScheduleDTO.getFrequencyDuration());
+			//data.append("&location="+assetPpmScheduleDTO.getLocationId());
+			data.append("&frequency="+assetAMCScheduleDTO.getFrequency());
+			schConfDto.setData(data.toString());
+			schConfDto.setSchedule(Frequency.valueOf(assetAMCScheduleDTO.getFrequency()).getTypeFrequency());
+			schConfDto.setStartDate(assetAMCScheduleDTO.getStartDate());
+			schConfDto.setEndDate(assetAMCScheduleDTO.getEndDate());
+			schConfDto.setScheduleEndDate(assetAMCScheduleDTO.getEndDate());
+			schConfDto.setAssetId(assetAMCScheduleDTO.getAssetId());
+
+			schedulerService.save(schConfDto,job);
+		}
+		
+		JobDTO jobDto = mapperUtil.toModel(job, JobDTO.class);
+
+		return new ResponseEntity<>(jobDto, HttpStatus.CREATED);
+			
+	
 	}
 }

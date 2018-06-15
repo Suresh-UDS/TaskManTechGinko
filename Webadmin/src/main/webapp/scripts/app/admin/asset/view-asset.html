@@ -272,7 +272,7 @@
 
                                                        </div>
                                                        <div class="col-md-4" style="text-align: right">
-                                                           <button class="btn btn-success add-btn margn-tb0" ng-click="printDiv('printable')">
+                                                           <button class="btn btn-success add-btn margn-tb0" ng-click="printDiv('printable')" >
                                                                <i class="material-icons">print</i> Print
                                                            </button>
                                                        </div>
@@ -547,7 +547,7 @@
                                            </div>
 
                                        </div>
-                                       <div class="tab-pane in ppm-schedule" id="ppm-schedule">
+                                       <div class="tab-pane in ppm-schedule" id="ppm-schedule" ng-init="loadPPMSchedule()">
 
                                            <div class="row">
                                                <div class="col-md-12 text-right">
@@ -602,98 +602,51 @@
                                            </div>
 
                                            <div class="table-responsive tablecard">
-                                               <table class="table table-striped">
+                                              <table class="table table-striped">
 
-                                                   <thead>
-                                                   <tr>
-                                                       <th>Schedule Title</th>
-                                                       <th>Schedule Type</th>
-                                                       <th>Checklist</th>
-                                                       <th>From Date</th>
-                                                       <th>To Date</th>
-                                                       <th>Frequency</th>
+                                                  <thead>
+                                                  <tr  >
+                                                      <th width="15%">Title</th>
+                                                      <th width="30%">Checklist</th>
+                                                      <th>From Date</th>
+                                                      <th width="10%">To Date</th>
+                                                      <th width="10%">Frequency</th>
+                                                      <th width="5%" align="right">Actions</th>
+                                                  </tr>
 
-                                                   </tr>
+                                                  </thead>
 
-                                                   </thead>
+                                                  <tbody>
+                                                  <tr ng-repeat="ppmSchedules in ppmScheduleList">
+                                                      <td>{{ppmSchedules.title}}</td>
+                                                      <td class="hiddenCheckList">{{ppmSchedules.checklistName}}
 
-                                                   <tbody>
+                                                         <div class="CheckListBx">
+                                                             <div class="bootstrap-tagsinput"><span class="tag label label-info">Item 1<span data-role="remove"></span></span>
+                                                                 <span class="tag label label-info">Item 2<span data-role="remove"></span></span>
+                                                                 <span class="tag label label-info">Item 3<span data-role="remove"></span></span>
+                                                                 <span class="tag label label-info">Item 4<span data-role="remove"></span></span> <input type="text" placeholder=""></div>
+                                                         </div>
 
-                                                      <tr>
-                                                       <td>Title</td>
-                                                       <td>Weekly</td>
-                                                       <td>
-                                                           <div class="bootstrap-tagsinput"><span class="tag label label-info">Item 1<span data-role="remove"></span></span>
-                                                               <span class="tag label label-info">Item 2<span data-role="remove"></span></span>
-                                                               <span class="tag label label-info">Item 3<span data-role="remove"></span></span>
-                                                               <span class="tag label label-info">Item 4<span data-role="remove"></span></span> <input type="text" placeholder=""></div>
-                                                       </td>
-                                                       <td>03/03/2018</td>
-                                                       <td>03/03/2018</td>
-                                                       <td>Every 2 Hour</td>
+                                                      </td>
+                                                      <!-- <td>
+                                                          <div class="bootstrap-tagsinput">
+                                                              <span class="tag label label-info" ng-repeat="checkList in checklistItms">{{checkList.name}}<span data-role="remove"></span></span>
+                                                              <input type="text" placeholder="">
+                                                          </div>
+                                                      </td> -->
+                                                      <td>{{ppmSchedules.startDate}}</td>
+                                                      <td>{{ppmSchedules.endDate}}</td>
+                                                      <td>{{ppmSchedules.frequencyPrefix}}&nbsp; {{ppmSchedules.frequencyDuration}}&nbsp; {{ppmSchedules.frequency}}</td>
+                                                      <td class="text-right">
+                                                          <a  ng-class="{active: $state.includes('admin')}"  has-permission="" ui-sref=""  class="btn btn-simple btn-danger"><i class="material-icons">delete_forever</i></a>
+                                                      </td>
+                                                  </tr>
 
-                                                   </tr>
-                                                      <tr>
-                                                          <td>Title</td>
-                                                          <td>Weekly</td>
-                                                          <td>
-                                                              <div class="bootstrap-tagsinput"><span class="tag label label-info">Item 1<span data-role="remove"></span></span>
-                                                                  <span class="tag label label-info">Item 2<span data-role="remove"></span></span>
-                                                                  <span class="tag label label-info">Item 3<span data-role="remove"></span></span>
-                                                                  <span class="tag label label-info">Item 4<span data-role="remove"></span></span> <input type="text" placeholder=""></div>
-                                                          </td>
-                                                          <td>03/03/2018</td>
-                                                          <td>03/03/2018</td>
-                                                          <td>Every 2 Hour</td>
+                                                  </tbody>
+                                              </table>
 
-                                                      </tr>
-                                                      <tr>
-                                                          <td>Title</td>
-                                                          <td>Weekly</td>
-                                                          <td>
-                                                              <div class="bootstrap-tagsinput"><span class="tag label label-info">Item 1<span data-role="remove"></span></span>
-                                                                  <span class="tag label label-info">Item 2<span data-role="remove"></span></span>
-                                                                  <span class="tag label label-info">Item 3<span data-role="remove"></span></span>
-                                                                  <span class="tag label label-info">Item 4<span data-role="remove"></span></span> <input type="text" placeholder=""></div>
-                                                          </td>
-                                                          <td>03/03/2018</td>
-                                                          <td>03/03/2018</td>
-                                                          <td>Every 2 Hour</td>
-
-                                                      </tr>
-                                                      <tr>
-                                                          <td>Title</td>
-                                                          <td>Weekly</td>
-                                                          <td>
-                                                              <div class="bootstrap-tagsinput"><span class="tag label label-info">Item 1<span data-role="remove"></span></span>
-                                                                  <span class="tag label label-info">Item 2<span data-role="remove"></span></span>
-                                                                  <span class="tag label label-info">Item 3<span data-role="remove"></span></span>
-                                                                  <span class="tag label label-info">Item 4<span data-role="remove"></span></span> <input type="text" placeholder=""></div>
-                                                          </td>
-                                                          <td>03/03/2018</td>
-                                                          <td>03/03/2018</td>
-                                                          <td>Every 2 Hour</td>
-
-                                                      </tr>
-                                                      <tr>
-                                                          <td>Title</td>
-                                                          <td>Weekly</td>
-                                                          <td>
-                                                              <div class="bootstrap-tagsinput"><span class="tag label label-info">Item 1<span data-role="remove"></span></span>
-                                                                  <span class="tag label label-info">Item 2<span data-role="remove"></span></span>
-                                                                  <span class="tag label label-info">Item 3<span data-role="remove"></span></span>
-                                                                  <span class="tag label label-info">Item 4<span data-role="remove"></span></span> <input type="text" placeholder=""></div>
-                                                          </td>
-                                                          <td>03/03/2018</td>
-                                                          <td>03/03/2018</td>
-                                                          <td>Every 2 Hour</td>
-
-                                                      </tr>
-
-                                                   </tbody>
-                                               </table>
-
-                                           </div>
+                                          </div>
 
                                        </div>
                                        <div class="tab-pane fade amc-schedule" id="amc-schedule" ng-init="loadAmcSchedule()">
@@ -789,13 +742,16 @@
                                                <div class="panel-heading">
                                                    Documents
                                                </div>
-                                               <div class="panel-body">
+                                               <div class="panel-body" ng-init="getAllUploadedFiles();">
 
-                                                   <div class="row" ng-init="getAllUploadedFiles();" >
+                                                   <div class="row docsRow"  ng-show="uploadFiles">
 
-                                                       <div class="col-md-2 txt-align-center" ng-repeat="uploadFile in uploadFiles">
-                                                           <a href="#">
-                                                               <img src="assets/img/Docs-icon.png" alt="docs" ng-click="showFile(uploadFile.id, uploadFile.file)"/>
+                                                       <div class="col-md-2 txt-align-center DocsCon" ng-repeat="uploadFile in uploadFiles">
+                                                          <div class="DeleteBtn" ng-click="deleteConfirmDoc(uploadFile.id)"  onClick="$('#deleteModal').modal()" data-target="#myModal">                               
+                                                             <i class="material-icons">close</i>
+                                                           </div>
+                                                           <a href="#"  ng-click="showFile(uploadFile.id, uploadFile.file)">
+                                                               <img src="assets/img/Docs-icon.png" alt="docs"/>
                                                            </a>
                                                            <p>{{uploadFile.title}}</p>
                                                            <div  ng-if="uploadFile.id == download">
@@ -804,6 +760,11 @@
                                                        </div>
 
                                                    </div>
+                                                    <div class="row docsRow txt-align-center" ng-hide="uploadFiles" >
+
+                                                         <h4>No Documents</h4>
+
+                                                     </div>
 
                                                </div>
 
@@ -814,13 +775,17 @@
                                                <div class="panel-heading">
                                                    Photos
                                                </div>
-                                               <div class="panel-body">
+                                               <div class="panel-body" ng-init="getAllUploadedPhotos();">
 
-                                                   <div class="row" ng-init="getAllUploadedPhotos();">
+                                                   <div class="row docsRow" ng-show="uploadAssetPhotos">
 
-                                                        <div class="col-md-2 txt-align-center" ng-repeat="uploadPhoto in uploadAssetPhotos">
-                                                            <a href="#">
-                                                                <img src="D:\asset\uploads\site\{{uploadPhoto.id}}\{{uploadPhoto.file}}" alt="docs" ng-click="showFile(uploadPhoto.id, uploadPhoto.file)"/>
+                                                        <div class="col-md-2 txt-align-center DocsCon" ng-repeat="uploadPhoto in uploadAssetPhotos">
+                                                            <div class="DeleteBtn" ng-click="deleteConfirmDoc(uploadPhoto.id)"  onClick="$('#deleteModal').modal()" data-target="#myModal">                                 
+                                                               <i class="material-icons">close</i>
+                                                             </div>
+                                                            <a href="#" ng-click="showFile(uploadPhoto.id, uploadPhoto.file)">
+                                                                <!-- <img src="D:\asset\uploads\site\{{uploadPhoto.id}}\{{uploadPhoto.file}}" alt="docs" /> -->
+                                                                <img src="assets/img/img-icon.png" alt="docs" />
                                                             </a>
                                                             <p>{{uploadPhoto.title}}</p>
                                                             <div ng-if="uploadPhoto.id == download">
@@ -829,6 +794,12 @@
                                                         </div>
 
                                                     </div>
+
+                                                    <div class="row docsRow txt-align-center" ng-hide="uploadAssetPhotos" >
+
+                                                       <h4>No Images</h4>
+
+                                                   </div>
 
                                                </div>
 
@@ -1025,3 +996,27 @@
         </div><!-- modal-content -->
     </div><!-- modal-dialog -->
 </div><!--End View modal -->
+
+<!-- Add Document/Image delete  dialog -->
+
+<div class="row">
+        <div id="deleteModal" data-backdrop="false" class="modal fade"
+            tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+            aria-hidden="true">
+            <div class="delete-dialog">
+                <div class="modal-content">
+                    <div class="modal-body">
+                        Are you sure to delete the Document / Image?<br>
+                    </div>
+                    <div class="delete-footer">
+                        <button type="button" ng-click="deleteDoc()"
+                            class="btn btn-danger-outline text-danger" data-dismiss="modal">Confirm</button>
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+<!-- Add Document/Image delete  dialog -->

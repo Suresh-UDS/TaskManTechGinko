@@ -116,6 +116,14 @@ angular.module('timeSheetApp')
             demo.showNotification(position,alignment,color,msg);
         }
 
+        $('input#dateFilterPpmFrom').on('dp.change', function(e){
+            $scope.assetPPM.startDate = e.date._d;
+        });
+        
+        $('input#dateFilterPpmTo').on('dp.change', function(e){
+            $scope.assetPPM.endDate = e.date._d;
+        });
+
         $scope.savePPMSchedule = function (){
         	
         	console.log(" --- Create asset ppm ---" ,$scope.assetPPM.title);
@@ -134,17 +142,29 @@ angular.module('timeSheetApp')
 
                      $scope.assetPPM.assetId = $stateParams.id;
                 }
+                if($scope.selectedEmployee){ 
+                    $scope.assetPPM.empId = $scope.selectedEmployee.id;
+                }
+               
+                if($scope.selectedChecklist){ 
+                    $scope.assetPPM.checklistId = $scope.selectedChecklist.id;
+                }
+                
+                if($scope.selectedFrequency) { 
+                    $scope.assetPPM.frequencyPrefix = $scope.selectedFrequency;
+                }
+                if($scope.selectedFrequnceyOccurrence) { 
+                    $scope.assetPPM.frequency = $scope.selectedFrequnceyOccurrence;
+                }
+                if($scope.selectedTimeInterval) { 
+                    $scope.assetPPM.frequencyDuration = $scope.selectedTimeInterval;
+                }
+          
+                console.log("To be created PPM",$scope.assetPPM);
 
-            	$scope.assetPPM.startDate = $scope.assetPPM.dateFilterFrom;
-            	$scope.assetPPM.endDate = $scope.assetPPM.dateFilterTo;
-            	$scope.assetPPM.frequencyPrefix = $scope.selectedFrequency;
-            	$scope.assetPPM.frequencyDuration = $scope.selectedTimeInterval;
-            	$scope.assetPPM.frequency = $scope.selectedFrequnceyOccurrence;
-        
-        	
             	AssetComponent.createPPM($scope.assetPPM).then(function(response) {
 
-                    console.log("PPM schedule response",JSON.stringify(response));
+                    //console.log("PPM schedule response",JSON.stringify(response));
               
                     $scope.success = 'OK';
 
@@ -559,13 +579,7 @@ angular.module('timeSheetApp')
                 $scope.assetEditDate = e.date._d;
         });
 
-        $('input#dateFilterFrom').on('dp.change', function(e){
-            $scope.assetPPM.dateFilterFrom = e.date._d;
-        });
         
-        $('input#dateFilterTo').on('dp.change', function(e){
-            $scope.assetPPM.dateFilterTo = e.date._d;
-        });
         
          /* Create and save asset */
 
@@ -790,13 +804,31 @@ angular.module('timeSheetApp')
         	$scope.deleteAssetId= asset;
         }
 
+
+
         $scope.deleteAsset = function () {
         	AssetComponent.remove($scope.deleteAssetId).then(function(){
                 
             	$scope.success = 'OK';
             	$scope.loadAssets();
         	});
-        };
+        }
+
+        $scope.deleteConfirmDoc = function (id){
+            $scope.deleteDocId= id;
+        }
+
+
+
+        $scope.deleteDoc = function () {
+            AssetComponent.deleteDoc($scope.deleteDocId).then(function(){
+                
+                $scope.getAllUploadedFiles();
+                $scope.getAllUploadedPhotos();
+            });
+        }
+
+          
 
         $scope.loadQRCode = function(assetId, qrCodeImage) {
 
@@ -845,7 +877,7 @@ angular.module('timeSheetApp')
 
          }
         
-        $scope.loadPPMSchedule = function(assetId){
+        /*$scope.loadPPMSchedule = function(assetId){
         	
         	var currPageVal = ($scope.pages ? $scope.pages.currPage : 1);
             if(!$scope.searchCriteria) {
@@ -887,7 +919,7 @@ angular.module('timeSheetApp')
                 /*
                     ** Call pagination  main function **
                 */
-                 $scope.pager = {};
+               /*  $scope.pager = {};
                  $scope.pager = PaginationComponent.GetPager(data.totalCount, $scope.pages.currPage);
                  $scope.totalCountPages = data.totalCount;
 
@@ -905,8 +937,61 @@ angular.module('timeSheetApp')
                     $scope.pageSort = 10;
                 }
 
-            });
+            });*/
 
+       /* }*/
+
+
+        $scope.loadPPMSchedule = function() { 
+
+            if($scope.assetGen.id){
+
+                    var assetId= $scope.assetGen.id;
+
+                }else if($stateParams.id){
+
+                     var assetId = $stateParams.id;
+                }
+             
+            AssetComponent.findByAssetPPM(assetId).then(function(data) { 
+                
+               
+                $scope.ppmScheduleList = data;
+
+                for(var i = 0;i < $scope.ppmScheduleList.length;i++){   
+
+
+                    var ppmId = $scope.ppmScheduleList[i].checklistId;
+
+                  
+
+
+
+                ChecklistComponent.findOne(ppmId).then(function(response){ 
+
+                    for(var j= 0;j < $scope.ppmScheduleList.length;j++){  
+
+                         //alert(j);
+
+                    // console.log("Items+++",data.items);
+
+                    //console.log("PPM",$scope.ppmScheduleList[j]);
+
+                    //alert($scope.ppmScheduleList[j].checklistName);
+
+                    //$scope.ppmScheduleList[j][items] = "";
+
+                $scope.ppmScheduleList[j].items = response.items;
+
+                    }
+
+               });
+                    
+
+                }
+
+                console.log("PPM List" , $scope.ppmScheduleList);
+            });
         }
 
         /*
@@ -1093,8 +1178,8 @@ angular.module('timeSheetApp')
 
 	    };
 	    
+   
 
-	    
 	    $scope.getAllUploadedFiles = function() {
 
 
@@ -1114,6 +1199,7 @@ angular.module('timeSheetApp')
 	    	AssetComponent.getAllUploadedFiles($scope.uploadObj).then(function(data){ 
                 $scope.uploadFiles = [];
 	    		$scope.uploadFiles=data;
+                
                 console.log("-- Upload files --" , $scope.uploadFiles);
 	    	});
 	    }
@@ -1133,7 +1219,8 @@ angular.module('timeSheetApp')
 	    	
 	    	AssetComponent.getAllUploadedPhotos($scope.photoObj).then(function(data){ 
                 $scope.uploadAssetPhotos = [];
-	    		$scope.uploadAssetPhotos=data;
+                $scope.uploadAssetPhotos=data;
+	   
                 console.log("-- Uploaded Photos --",$scope.uploadAssetPhotos);
 	    	});
 	    }
@@ -1305,11 +1392,11 @@ angular.module('timeSheetApp')
         });
 	    
 	    $scope.loadCheckList = function() { 
-	    	ChecklistComponent.findAll().then(function(data){ 
-	    		//alert(data);
-	    		$scope.checkLists = data;
-	    	});
-	    }
+            ChecklistComponent.findAll().then(function(data){ 
+                //alert(data);
+                $scope.checkLists = data;
+            });
+        }
 
         /*$scope.loadChecklist = function(id) {
 
@@ -1367,6 +1454,8 @@ angular.module('timeSheetApp')
     	    		$scope.amcSchedule.frequencyDuration = $scope.selectedFreqDuration;
     	    	}
     	    	
+    	    	$scope.amcSchedule.maintenanceType = 'AMC';
+    	    	
     	    	console.log("To be create AMC schedule",$scope.amcSchedule);
     	    	
     	    	AssetComponent.saveAmcSchedule($scope.amcSchedule).then(function(data){  
@@ -1377,10 +1466,7 @@ angular.module('timeSheetApp')
                         $scope.loadAmcSchedule();
                         $scope.showNotifications('top','center','success','AMC Schedule Saved Successfully');
 
-    	    			ChecklistComponent.findOne(data.checklistId).then(function(data){ 
-    	    				$scope.checklistItms = data.items;
-    	    				console.log($scope.checklistItms);
-    	    			});
+    	    			
     	    		}
     	    	}).catch(function (response) {
                 
@@ -1411,9 +1497,41 @@ angular.module('timeSheetApp')
                 }
 	    	 
 	    	AssetComponent.findByAssetAMC(assetId).then(function(data) { 
-	    		console.log(data);
-                $scope.amcScheduleList = "";
-	    		$scope.amcScheduleList = data;
+
+	    		//console.log(data);
+   
+                $scope.amcScheduleList = data;
+
+                for(var i = 0;i < $scope.amcScheduleList.length;i++){   
+
+                    var amcId = $scope.amcScheduleList[i].checklistId;
+
+
+                ChecklistComponent.findOne(amcId).then(function(data){ 
+
+                     console.log("Items+++", JSON.stringify(data));
+
+                    for(var j= 0;j < $scope.amcScheduleList.length;j++){  
+
+                         //alert(j);
+
+                    
+                    
+                    //console.log("PPM",$scope.ppmScheduleList[j]);
+
+                    //alert($scope.ppmScheduleList[j].checklistName);
+
+                    //$scope.ppmScheduleList[j][items] = "";
+
+                $scope.amcScheduleList[j].items = data.items;
+
+                    }
+
+               });
+                    
+
+                }
+	    		
                 console.log("AMC List" , $scope.amcScheduleList);
 	    	});
 	    }
@@ -1492,7 +1610,8 @@ angular.module('timeSheetApp')
             });
                 //return deferred.promise;
                 
-        };     
+        }
 
+ 
 
     });

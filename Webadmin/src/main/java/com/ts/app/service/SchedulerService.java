@@ -643,6 +643,46 @@ public class SchedulerService extends AbstractService {
 						}
 					}
 				}
+			}else if(dailyTask.getSchedule().equalsIgnoreCase(Frequency.valueOf("FORTNIGHT").getTypeFrequency())) {
+				log.debug(">>> Fortnightly <<<");
+				String creationPolicy = env.getProperty("scheduler.fornightlyJob.creation");
+				if(creationPolicy.equalsIgnoreCase("daily")) { //if the creation policy is set to daily, create jobs for the rest of the month
+					PageRequest pageRequest = new PageRequest(1, 1); 
+					List<Job> prevJobs = jobRepository.findLastJobByParentJobId(dailyTask.getJob().getId(), pageRequest);
+					DateTime currDate = DateTime.now();
+					if(CollectionUtils.isNotEmpty(prevJobs)) {
+						Job prevJob = prevJobs.get(0);
+						if(prevJob.getPlannedStartTime().before(currDate.toDate())) {
+					        DateTime lastDate = currDate.dayOfMonth().withMaximumValue();
+					        currDate = currDate.plusDays(14);
+					        while (currDate.isBefore(lastDate) || currDate.isEqual(lastDate)) {
+								jobCreationTask(dailyTask, dailyTask.getJob(), dailyTask.getData(), currDate.toDate());
+								dailyTask.setLastRun(currDate.toDate());
+								currDate = currDate.plusDays(14); // create for every 2 week.
+							}
+						}
+					}
+				}
+			}
+		} else if (dailyTask.getSchedule().equalsIgnoreCase(Frequency.valueOf("HALFYEAR").getTypeFrequency())) {
+			String creationPolicy = env.getProperty("scheduler.halfyearlyJob.creation");
+			if (creationPolicy.equalsIgnoreCase("yearly")) { // if the creation policy is set to yearly, create jobs for the rest of the
+																// 6 month
+				PageRequest pageRequest = new PageRequest(1, 1);
+				List<Job> prevJobs = jobRepository.findLastJobByParentJobId(dailyTask.getJob().getId(), pageRequest);
+				DateTime currDate = DateTime.now();
+				if (CollectionUtils.isNotEmpty(prevJobs)) {
+					Job prevJob = prevJobs.get(0);
+					if (prevJob.getPlannedStartTime().before(currDate.toDate())) {
+						DateTime lastDate = currDate.plusMonths(6).toDateTime();
+						currDate = currDate.plusDays(currDate.dayOfMonth().getMaximumValue());
+						while (currDate.isBefore(lastDate) || currDate.isEqual(lastDate)) {
+							jobCreationTask(dailyTask, dailyTask.getJob(), dailyTask.getData(), currDate.toDate());
+							dailyTask.setLastRun(currDate.toDate());
+							currDate = currDate.plusMonths(6); // create for every 6 month.
+						}
+					}
+				}
 			}
 		} else {
 			log.warn("Unknown scheduler config type job" + dailyTask);

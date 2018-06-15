@@ -6,12 +6,27 @@ public class AssetPpmScheduleDTO extends BaseDTO {
 	private Long id;
 	private String title;
 	private Long checklistId;
+	private String checklistName;
 	private Date startDate;
 	private Date endDate;
 	private String frequencyPrefix;
 	private int frequencyDuration;
 	private String frequency;
 	private Long assetId;
+	private long empId;
+
+	public long getEmpId() {
+		return empId;
+	}
+	public void setEmpId(long empId) {
+		this.empId = empId;
+	}
+	public String getChecklistName() {
+		return checklistName;
+	}
+	public void setChecklistName(String checklistName) {
+		this.checklistName = checklistName;
+	}
 	public Long getId() {
 		return id;
 	}

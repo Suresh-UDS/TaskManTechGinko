@@ -958,7 +958,7 @@
                                                                     />
                                                                 </div> -->
 
-                                                <div class="tab-pane fade ppm-schedule" id="ppm-schedulee" >
+                                                <div class="tab-pane fade ppm-schedule" id="ppm-schedulee" ng-init="loadPPMSchedule()">
                                                     <form name="form3" role="form" novalidate
                                                     class="form-horizontal" ng-init="initPPMSchedule()">
                                                         <div class="panel panel-default">
@@ -981,69 +981,39 @@
 
                                                                         </div>
                                                                     </div>
-                                                                    <div class="col-md-4 checklistLftCon">
-
-                                                                        <div class="Flt_lft">
-                                                                            <div class="form-group">
-                                                                                <label class="control-label">Checklist</label>
-                                                                                <input type="text" class="form-control" ng-model="assetPPM.checklistId">
-
-                                                                            </div>
-                                                                        </div>
-                                                                        <div class="Flt_rgt">
-                                                                            <button class="btn btn-success margn-top30">
-                                                                                <span class="btn-label">
-                                                                                    <i class="material-icons">add</i>
-                                                                                </span>
-                                                                            </button>
-                                                                        </div>
-
-
-                                                                    </div>
-                                                                    <div class="row col-md-5 addedActionList pdng-top15" ng-hide="!(checklistItems.length > 0)">
-
-
-                                                                        <div class="form-group">
-
-                                                                            <label class="">Items</label>
-
-                                                                            <ul class="listOfActions list-group">
-
-                                                                                <li class="list-group-item justify-content-between" ng-repeat=" item in checklistItems" ng-bind-html-unsafe="item.text">
-                                                                                    {{item.name}}
-                                                                                    <span class="badge badge-default badge-pill" ng-click="removeItem($index)"><i class="material-icons">remove_circle</i></span>
-                                                                                </li>
-
-                                                                            </ul>
-
-                                                                        </div>
-
-
-                                                                        <!-- <div class="row" ng-hide="assetSave">
-
-                                                                            <div class="col-md-10" >
-                                                                                <div class="form-group">
-                                                                                    <button class="btn btn-success" type="submit"
-                                                                                            id="form-button-save" ng-click="saveAsset()">
-                                                                                    <span class="btn-label">
-                                                                                    <i class="material-icons">check</i>
-                                                                                     </span> Save
-                                                                                    </button>
-                                                                                    <button class="btn btn-danger" type="button"
-                                                                                            ng-click="cancelChecklist()" id="cancel-button">
-                                                                                        <i class="material-icons">close</i>Cancel
-                                                                                    </button>
+                                                                    <div class="col-md-4" ng-init="loadCheckList()">
+                                                                        <div class="form-group selectcon is-empty SelectWithAddbtnCon">
+                                                                            <div class="row">
+                                                                                <div class="col-md-10 pad-r-0px">
+                                                                                    <label class="control-label">Checklist</label>
+                                                                                    <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
+                                                                                        <select class="form-control ng-pristine ng-valid ng-touched" ng-model="selectedChecklist" ng-options="checklist as checklist.name for checklist in checkLists" tabindex="0" aria-invalid="false">
+                                                                                            <option value="" >Select Checklist ..</option>
+                                                                                        </select>
                                                                                 </div>
+                                                                                <div class="col-md-2">
+                                                                                   <!--  <a href="javascript:;" data-toggle="collapse" data-parent="#accordian" data-target="#addChecklist" class="btn btn-round btn-fab btn-fab-mini btn-simple" aria-expanded="false" aria-controls="collapseExample">
+                                                                                        <i class="material-icons">add</i>
+                                                                                    </a> -->
+                                                                                    <a  has-permission="" class="btn btn-round btn-fab btn-fab-mini btn-simple"  onClick="$('#addChecklist').modal()" data-target="#myModal"><i class="material-icons">add</i><div class="ripple-container" ></div></a>
+                                                                                </div>
+                                                                             
+                                                                               <!--  <div class="clear"></div>
+                                                                                <div class="collapse" id="addAssetGroup">
+                                                                                    <div class="">
+                                                                                        <input class="input-desc ng-pristine ng-untouched ng-valid" id="assetgroupName" ng-model="" name="assetgroupName" type="text" value="" tabindex="0" aria-invalid="false">
+                                                                                        <a class="btn btn-success" ng-click="" tabindex="0">Add</a>
+                                                                                    </div>
+                                                                                </div>
+                                                                                <span class="material-input"></span></div> -->
                                                                             </div>
-
-                                                                        </div> -->
-
+                                                                        </div>
                                                                     </div>
                                                                     <div class="col-md-2">
                                                                         <div class="form-group">
                                                                             <label class="control-label">From Date</label>
                                                                             <span class="form-control-feedback calender-icon"><i class="material-icons">date_range</i></span>
-                                                                            <input type="text" class="form-control datepicker"  id="dateFilterFrom"  placeholder="{{dateFilterFrom | date:'dd-MMM-yyyy'}}"/>
+                                                                            <input type="text" class="form-control datepicker"  id="dateFilterPpmFrom"  placeholder="{{dateFilterPpmFrom | date:'dd-MMM-yyyy'}}"/>
 
                                                                         </div>
                                                                     </div>
@@ -1051,7 +1021,7 @@
                                                                         <div class="form-group">
                                                                             <label class="control-label">To Date</label>
                                                                             <span class="form-control-feedback calender-icon"><i class="material-icons">date_range</i></span>
-                                                                            <input type="text" class="form-control datepicker"  id="dateFilterTo"  placeholder="{{dateFilterTo | date:'dd-MMM-yyyy'}}"/>
+                                                                            <input type="text" class="form-control datepicker"  id="dateFilterPpmTo"  placeholder="{{dateFilterPpmTo | date:'dd-MMM-yyyy'}}"/>
 
                                                                         </div>
                                                                     </div>
@@ -1084,15 +1054,44 @@
                                                                     </div>
                                                                 </div>
                                                                 <div class="row">
+                                                                    <div class="col-md-4" ng-init="loadEmployees();">
+                                                                            <div class="form-group">
+                                                                                <label class="control-label">Employee<span class="red-star">*</span> </label>
+                                                                                <div class="dropdown">
+                                                                                    
+                                                                                    <span class="form-control-feedback d-sm-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
 
-                                                                    <div class="col-md-2">
+                                                                                    <select class="form-control " ng-model="selectedEmployee"  ng-options="emp as emp.name for emp in employees track by emp.id" name="employeeName" required>
+
+
+                                                                                        <option value="">Select Employees...</option>
+                                                                                    </select>
+
+                                                                                    <div ng-show="form4.$submitted || form4.employeeName.$touched">
+                                                                                        <div
+                                                                                            ng-show="form4.employeeName.$dirty || form4.employeeName.$invalid">
+                                                                                            <p class="help-block" style="color:maroon"
+                                                                                               ng-show="form4.employeeName.$error.required">
+                                                                                                Employee is required.
+                                                                                            </p>
+
+                                                                                        </div>
+                                                                                        
+                                                                                    </div>
+                                                                                </div>
+                                                                                
+                                                                            </div>
+
+                                                                        </div>
+
+                                                                    <div class="col-md-2" ng-init="loadFreqPrefix()">
                                                                         <div class="dropdown">
                                                                             <div class="form-group">
                                                                                 <label class="control-label">Select Frequency</label>
                                                                                 <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                                                                <select class="form-control" ng-model="selectedFrequency">
-                                                                                    <option value="" >Select</option>
-                                                                                    <option value="Every" >Every</option>
+                                                                               
+                                                                                <select class="form-control" ng-model="selectedFrequency" ng-options="frequencyPrefix for frequencyPrefix in frequencyPrefixies">
+                                                                                <option value="">Select..</option>
                                                                                 </select>
                                                                             </div>
                                                                         </div>
@@ -1101,28 +1100,19 @@
                                                                         <div class="form-group">
                                                                             <label class="control-label">&nbsp;</label>
                                                                             <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                                                            <select class="form-control" ng-model="selectedTimeInterval">
-                                                                                <option value="" >Select</option>
-                                                                                <option value="1">1</option>
-                                                                                <option value="2">2</option>
-                                                                                <option value="3">3</option>
+                                                                            
+                                                                            <select class="form-control" ng-model="selectedTimeInterval" ng-options="frequencyDuration for frequencyDuration in frequencyDurations">
+                                                                                    <option value="">selected..</option>
                                                                             </select>
                                                                         </div>
                                                                     </div>
-                                                                    <div class="col-md-3">
+                                                                    <div class="col-md-3" ng-init="loadFreq()">
                                                                         <div class="form-group">
                                                                             <label class="control-label">&nbsp;</label>
                                                                             <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                                                            <select class="form-control" ng-model="selectedFrequnceyOccurrence">
-                                                                                <option value="" >Select</option>
-                                                                                <option value="Hour">Hour</option>
-                                                                                <option value="Day">Day</option>
-                                                                                <option value="Week">Week</option>
-                                                                                <option value="Fortnight">Fortnight</option>
-                                                                                <option value="Month">Month</option>
-                                                                                <option value="Quarter">Quarter</option>
-                                                                                <option value="Half">Half</option>
-                                                                                <option value="Year">Year</option>
+                                                                            
+                                                                            <select class="form-control" ng-model="selectedFrequnceyOccurrence" ng-options="frequency for frequency in frequencies">
+                                                                                    <option value="">select..</option>
                                                                             </select>
                                                                         </div>
                                                                     </div>
@@ -1137,34 +1127,43 @@
                                                             <table class="table table-striped">
 
                                                                 <thead>
-                                                                <tr>
+                                                                <tr  >
                                                                     <th width="15%">Title</th>
                                                                     <th width="30%">Checklist</th>
                                                                     <th>From Date</th>
-                                                                    <th>To Date</th>
-                                                                    <th>Frequency</th>
-                                                                    <th align="right">Actions</th>
+                                                                    <th width="10%">To Date</th>
+                                                                    <th width="10%">Frequency</th>
+                                                                    <th width="5%" align="right">Actions</th>
                                                                 </tr>
 
                                                                 </thead>
+
                                                                 <tbody>
+                                                                <tr ng-repeat="ppmSchedules in ppmScheduleList">
+                                                                    <td>{{ppmSchedules.title}}</td>
+                                                                    <td class="hiddenCheckList" ng-mouseover="loadCheckList(ppmSchedules.checklistId)">{{ppmSchedules.checklistName}}
 
+                                                                       <div class="CheckListBx">
+                                                                           <div class="bootstrap-tagsinput" ng-repeat="checkListItem in ppmSchedules.items">
+                                                                               <span class="tag label label-info">{{checkListItem.name}}<span data-role="remove"></span></span>
+        
+                                                                           </div>
+                                                                       </div>
 
-                                                                    <tr>
-                                                                        <td>Schedule Title</td>
-                                                                        <td>
-                                                                            <div class="bootstrap-tagsinput"><span class="tag label label-info">Item 1<span data-role="remove"></span></span>
-                                                                                <span class="tag label label-info">Item 2<span data-role="remove"></span></span>
-                                                                                <span class="tag label label-info">Item 3<span data-role="remove"></span></span>
-                                                                                <span class="tag label label-info">Item 4<span data-role="remove"></span></span> <input type="text" placeholder=""></div>
-                                                                        </td>
-                                                                        <td>03/03/2018</td>
-                                                                        <td>03/03/2018</td>
-                                                                        <td>Every 2 Hour</td>
-                                                                        <td class="text-right">
-                                                                            <a  ng-class="{active: $state.includes('admin')}"  has-permission="" ui-sref=""  class="btn btn-simple btn-danger"><i class="material-icons">delete_forever</i></a>
-                                                                        </td>
-                                                                    </tr>
+                                                                    </td>
+                                                                    <!-- <td>
+                                                                        <div class="bootstrap-tagsinput">
+                                                                            <span class="tag label label-info" ng-repeat="checkList in checklistItms">{{checkList.name}}<span data-role="remove"></span></span>
+                                                                            <input type="text" placeholder="">
+                                                                        </div>
+                                                                    </td> -->
+                                                                    <td>{{ppmSchedules.startDate}}</td>
+                                                                    <td>{{ppmSchedules.endDate}}</td>
+                                                                    <td>{{ppmSchedules.frequencyPrefix}}&nbsp; {{ppmSchedules.frequencyDuration}}&nbsp; {{ppmSchedules.frequency}}</td>
+                                                                    <td class="text-right">
+                                                                        <a  ng-class="{active: $state.includes('admin')}"  has-permission="" ui-sref=""  class="btn btn-simple btn-danger"><i class="material-icons">delete_forever</i></a>
+                                                                    </td>
+                                                                </tr>
 
                                                                 </tbody>
                                                             </table>
@@ -1183,20 +1182,20 @@
                                                                 <div class="col-md-4">
                                                                     <div class="form-group">
                                                                         <label class="control-label">Title</label>
-                                                                        <input id='ppmTitle'
+                                                                        <input id='amcTitle'
                                                                                ng-model="amcSchedule.title"
                                                                                class='form-control'
-                                                                               name='ppmTitle'
+                                                                               name='amcTitle'
                                                                                type='text' value=""
                                                                                ng-minlength='5'
                                                                                ng-maxlength='250'
                                                                                ng-pattern="/^[A-Za-z0-9\s]*$/" autofocus
                                                                         />
 
-                                                                        <div ng-show="form4.$submitted || form4.ppmTitle.$touched">
-                                                                            <div ng-show="form4.ppmTitle.$dirty || form4.ppmTitle.$invalid">
+                                                                        <div ng-show="form4.$submitted || form4.amcTitle.$touched">
+                                                                            <div ng-show="form4.amcTitle.$dirty || form4.amcTitle.$invalid">
                                                                                 <p class="help-block" style="color:maroon"
-                                                                                   ng-show="form4.ppmTitle.$error.required">
+                                                                                   ng-show="form4.amcTitle.$error.required">
                                                                                     Schedule title is required.
                                                                                 </p>
 
@@ -1363,13 +1362,23 @@
                                                             <tbody>
                                                             <tr ng-repeat="amcSchedule in amcScheduleList">
                                                                 <td>{{amcSchedule.title}}</td>
-                                                                <td class="hiddenCheckList">{{amcSchedule.checklistName}}
+                                                                <!-- <td class="hiddenCheckList">{{amcSchedule.checklistName}}
 
                                                                    <div class="CheckListBx">
                                                                        <div class="bootstrap-tagsinput"><span class="tag label label-info">Item 1<span data-role="remove"></span></span>
                                                                            <span class="tag label label-info">Item 2<span data-role="remove"></span></span>
                                                                            <span class="tag label label-info">Item 3<span data-role="remove"></span></span>
                                                                            <span class="tag label label-info">Item 4<span data-role="remove"></span></span> <input type="text" placeholder=""></div>
+                                                                   </div>
+
+                                                                </td> -->
+                                                                <td class="hiddenCheckList">{{amcSchedule.checklistName}}
+
+                                                                   <div class="CheckListBx">
+                                                                       <div class="bootstrap-tagsinput" ng-repeat="checkListItemAmc in amcSchedule.items">
+                                                                           <span class="tag label label-info">{{checkListItemAmc.name}}<span data-role="remove"></span></span>
+    
+                                                                       </div>
                                                                    </div>
 
                                                                 </td>
@@ -1675,19 +1684,27 @@
                                                         <div class="panel-heading">
                                                             Documents
                                                         </div>
-                                                        <div class="panel-body">
+                                                        <div class="panel-body" ng-init="getAllUploadedFiles();">
 
-                                                           <div class="row" ng-init="getAllUploadedFiles();" >
+                                                           <div class="row docsRow"  ng-show="uploadFiles"  >
 
-                                                               <div class="col-md-2 txt-align-center" ng-repeat="uploadFile in uploadFiles">
-                                                                   <a href="#">
-                                                                       <img src="assets/img/Docs-icon.png" alt="docs" ng-click="showFile(uploadFile.id, uploadFile.file)"/>
+                                                               <div class="col-md-2 txt-align-center DocsCon" ng-repeat="uploadFile in uploadFiles">
+                                                                   <div class="DeleteBtn" ng-click="deleteConfirmDoc(uploadFile.id)"  onClick="$('#deleteModal').modal()" data-target="#myModal">                                 
+                                                                     <i class="material-icons">close</i>
+                                                                 </div>
+                                                                   <a href="#" ng-click="showFile(uploadFile.id, uploadFile.file)">
+                                                                       <img src="assets/img/Docs-icon.png" alt="docs" />
                                                                    </a>
                                                                    <p>{{uploadFile.title}}</p>
                                                                    <div  ng-if="uploadFile.id == download">
                                                                    	<a href="{{content}}" download>download</a>
                                                                    </div>
                                                                </div>
+
+                                                           </div>
+                                                           <div class="row docsRow txt-align-center" ng-hide="uploadFiles" >
+
+                                                               <h4>No Documents</h4>
 
                                                            </div>
 
@@ -1700,13 +1717,17 @@
                                                         <div class="panel-heading">
                                                             Photos
                                                         </div>
-                                                        <div class="panel-body">
+                                                        <div class="panel-body" ng-init="getAllUploadedPhotos();">
 
-                                                            <div class="row" ng-init="getAllUploadedPhotos();">
+                                                            <div class="row docsRow" ng-show="uploadAssetPhotos" >
 
-                                                                <div class="col-md-2 txt-align-center" ng-repeat="uploadPhoto in uploadAssetPhotos">
-                                                                    <a href="#">
-                                                                        <img src="D:\asset\uploads\site\{{uploadPhoto.id}}\{{uploadPhoto.file}}" alt="docs" ng-click="showFile(uploadPhoto.id, uploadPhoto.file)"/>
+                                                                <div class="col-md-2 txt-align-center DocsCon" ng-repeat="uploadPhoto in uploadAssetPhotos">
+                                                                    <div class="DeleteBtn" ng-click="deleteConfirmDoc(uploadPhoto.id)"  onClick="$('#deleteModal').modal()" data-target="#myModal">                                 
+                                                                         <i class="material-icons">close</i>
+                                                                     </div>
+                                                                    <a href="#" ng-click="showFile(uploadPhoto.id, uploadPhoto.file)">
+                                                                        <!-- <img src="D:\asset\uploads\site\{{uploadPhoto.id}}\{{uploadPhoto.file}}" alt="docs" ng-click="showFile(uploadPhoto.id, uploadPhoto.file)"/> -->
+                                                                        <img src="assets/img/img.png" alt="docs" />
                                                                     </a>
                                                                     <p>{{uploadPhoto.title}}</p>
                                                                     <div ng-if="uploadPhoto.id == download">
@@ -1715,6 +1736,11 @@
                                                                 </div>
 
                                                             </div>
+                                                            <div class="row docsRow txt-align-center" ng-hide="uploadAssetPhotos" >
+
+                                                               <h4>No Images</h4>
+
+                                                           </div>
 
                                                         </div>
 
@@ -2062,3 +2088,26 @@
     </div>
 </div>
 <!-- Add checklist  dialog -->
+<!-- Add Document/Image delete  dialog -->
+
+<div class="row">
+        <div id="deleteModal" data-backdrop="false" class="modal fade"
+            tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+            aria-hidden="true">
+            <div class="delete-dialog">
+                <div class="modal-content">
+                    <div class="modal-body">
+                        Are you sure to delete the Document / Image?<br>
+                    </div>
+                    <div class="delete-footer">
+                        <button type="button" ng-click="deleteDoc()"
+                            class="btn btn-danger-outline text-danger" data-dismiss="modal">Confirm</button>
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+<!-- Add Document/Image delete  dialog -->
