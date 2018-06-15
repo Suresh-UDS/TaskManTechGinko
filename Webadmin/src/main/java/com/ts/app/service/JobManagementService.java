@@ -723,18 +723,23 @@ public class JobManagementService extends AbstractService {
 		return mapperUtil.toModel(job, JobDTO.class);
 	}
 	
-	public JobDTO createJob(AssetPpmScheduleDTO assetPpmScheduleDTO) {
+	public ResponseEntity<?> createJob(AssetPpmScheduleDTO assetPpmScheduleDTO) {
 		log.debug(">>> assetPpmSchedule Title from CreateJOb <<<"+assetPpmScheduleDTO.getTitle()+" Employee Id "+assetPpmScheduleDTO.getEmpId());
 		
 		Job job = new Job();
+		Site site = null;
 		
 		//AssetPPMSchedule assetPpmSchedule = new AssetPPMSchedule();
 		//JobDTO jobDTO = new JobDTO();
 		
 		//Employee employee = getEmployee(jobDTO.getEmployeeId());
 		Employee employee = employeeRepository.findOne(assetPpmScheduleDTO.getEmpId());
-		Asset asset = assetRepository.findOne(assetPpmScheduleDTO.getAssetId());
-		Site site = getSite(asset.getSite().getId());
+		if(assetPpmScheduleDTO.getAssetId() > 0) {
+			Asset asset = assetRepository.findOne(assetPpmScheduleDTO.getAssetId());
+			job.setAsset(asset);
+			site = getSite(asset.getSite().getId());
+		}
+		
 		//log.debug(">>> asset id "+ asset.getId() +" Site "+asset.getSite().getName()+" User "+asset.getSite().getUser() + " User id "+asset.getSite().getUser().getId());
 		//jobDTO.setEmployeeEmpId(String.valueOf(asset.getSite().getUser().getId()));
 		//Location location = getLocation(jobDTO.getLocationId());
@@ -756,23 +761,15 @@ public class JobManagementService extends AbstractService {
 		java.sql.Date endDate = new java.sql.Date(calEnd.getTimeInMillis());
 		log.debug("Before saving new job -"+ job);
 		log.debug("start Date  -"+ startDate + ", end date -" + endDate);
-		//List<Job> existingJobs = jobRepository.findJobByTitleSiteAndDate(jobDTO.getTitle(), jobDTO.getSiteId(), startDate, endDate);
-		//log.debug("Existing job -"+ existingJobs);
-		//if(CollectionUtils.isEmpty(existingJobs)) {
-		//if job is created against a ticket
-		/*if(jobDTO.getTicketId() > 0) {
-			Ticket ticket = ticketRepository.findOne(jobDTO.getTicketId());
-			job.setTicket(ticket);
-			ticket.setStatus(TicketStatus.ASSIGNED.toValue());
-			ticketRepository.save(ticket);
-		}*/
-		
+
 		job.setEmployee(employee);
 		job.setSite(site);
 		job.setPlannedStartTime(startDate);
 		job.setPlannedEndTime(endDate);
 		job.setTitle(assetPpmScheduleDTO.getTitle());
 		job.setDescription(assetPpmScheduleDTO.getTitle() +" "+ assetPpmScheduleDTO.getFrequencyPrefix()+" "+assetPpmScheduleDTO.getFrequencyDuration()+" "+assetPpmScheduleDTO.getFrequency());
+		job.setMaintenanceType(assetPpmScheduleDTO.getMaintenanceType());
+
 		job = jobRepository.saveAndFlush(job);
 
 		log.debug(">>> After Save Job: <<<"+job.getId());
@@ -796,7 +793,7 @@ public class JobManagementService extends AbstractService {
 			StringBuffer data = new StringBuffer();
 			data.append("title="+assetPpmScheduleDTO.getTitle());
 			data.append("&description="+assetPpmScheduleDTO.getFrequencyPrefix()+" "+assetPpmScheduleDTO.getFrequencyDuration()+" "+assetPpmScheduleDTO.getFrequency());				
-			data.append("&siteId="+asset.getSite().getId());
+			data.append("&siteId="+site.getId());
 			data.append("&empId="+employee.getId());
 			//data.append("&empId="+assetPpmScheduleDTO.getEmployeeId());
 			data.append("&plannedStartTime="+assetPpmScheduleDTO.getStartDate());
@@ -809,12 +806,14 @@ public class JobManagementService extends AbstractService {
 			schConfDto.setStartDate(assetPpmScheduleDTO.getStartDate());
 			schConfDto.setEndDate(assetPpmScheduleDTO.getEndDate());
 			schConfDto.setScheduleEndDate(assetPpmScheduleDTO.getEndDate());
+			schConfDto.setAssetId(assetPpmScheduleDTO.getAssetId());
 
 			schedulerService.save(schConfDto,job);
 		}
 
-		return mapperUtil.toModel(job, JobDTO.class);
-			
+		JobDTO jobDto = mapperUtil.toModel(job, JobDTO.class);
+
+		return new ResponseEntity<>(jobDto, HttpStatus.CREATED);			
 	}
 	private JobDTO mapToModel(Job job) {
 		JobDTO dto = new JobDTO();

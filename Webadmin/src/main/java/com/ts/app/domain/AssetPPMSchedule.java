@@ -25,7 +25,7 @@ public class AssetPPMSchedule extends AbstractAuditingEntity {
 
 	@Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+    private long id;
 	
 	private String title;
 	
@@ -47,11 +47,21 @@ public class AssetPPMSchedule extends AbstractAuditingEntity {
 	@JoinColumn(name = "assetId", referencedColumnName = "id", nullable = true)
 	private Asset asset;
 
-	public Long getId() {
+	private long empId;
+
+	public long getEmpId() {
+		return empId;
+	}
+
+	public void setEmpId(long empId) {
+		this.empId = empId;
+	}
+
+	public long getId() {
 		return id;
 	}
 
-	public void setId(Long id) {
+	public void setId(long id) {
 		this.id = id;
 	}
 

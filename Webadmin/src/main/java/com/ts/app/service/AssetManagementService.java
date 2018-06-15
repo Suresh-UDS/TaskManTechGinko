@@ -251,7 +251,7 @@ public class AssetManagementService extends AbstractService {
 	
 	public boolean isDuplicatePPMSchedule(AssetPpmScheduleDTO assetPpmScheduleDTO) {
 	    log.debug("Asset Title "+assetPpmScheduleDTO.getTitle());
-		AssetPPMSchedule assetPPMSchedule = assetPpmScheduleRepository.findAssetPPMScheduleByTitle(assetPpmScheduleDTO.getTitle());
+		List<AssetPPMSchedule> assetPPMSchedule = assetPpmScheduleRepository.findAssetPPMScheduleByTitle(assetPpmScheduleDTO.getTitle());
 		if(assetPPMSchedule != null) {
 			return true;
 		}
@@ -815,7 +815,7 @@ public class AssetManagementService extends AbstractService {
 		return assetParamConfigDTO;
 	}
 
-	public AssetPpmScheduleDTO createAssetPpmSchedule(AssetPpmScheduleDTO assetPpmScheduleDTO) {
+	/*public AssetPpmScheduleDTO createAssetPpmSchedule(AssetPpmScheduleDTO assetPpmScheduleDTO) {
 		// TODO Auto-generated method stub
 		log.debug(">> create ppm schedule and employee id <<< "+assetPpmScheduleDTO.getEmpId());
 		AssetPPMSchedule assetPPMSchedule = mapperUtil.toEntity(assetPpmScheduleDTO, AssetPPMSchedule.class);
@@ -837,8 +837,37 @@ public class AssetManagementService extends AbstractService {
 		}
 		
 		return mapperUtil.toModel(assetPPMSchedule, AssetPpmScheduleDTO.class);
-	}
+	}*/
 
+	/**
+	 * Creates the asset AMC schedule information.
+	 * 
+	 * @param assetAMCScheduleDTO
+	 * @return
+	 */
+	public AssetPpmScheduleDTO createAssetPpmSchedule(AssetPpmScheduleDTO assetPpmScheduleDTO) {
+		log.debug("Create assets PPM schedule");
+
+		AssetPPMSchedule assetPPMSchedule = mapperUtil.toEntity(assetPpmScheduleDTO, AssetPPMSchedule.class);
+		Checklist checklist = checklistRepository.findOne(assetPpmScheduleDTO.getChecklistId());
+		Asset asset = assetRepository.findOne(assetPpmScheduleDTO.getAssetId());
+		assetPPMSchedule.setAsset(asset);
+		assetPPMSchedule.setChecklist(checklist);
+		assetPPMSchedule.setActive(AssetPPMSchedule.ACTIVE_YES);
+
+		List<AssetPPMSchedule> assetPPMSchedules = assetPpmScheduleRepository.findAssetPPMScheduleByTitle(assetPpmScheduleDTO.getTitle());
+		log.debug("Existing schedule -" + assetPPMSchedule);
+		if (CollectionUtils.isEmpty(assetPPMSchedules)) {
+		assetPPMSchedule = assetPpmScheduleRepository.save(assetPPMSchedule);
+		assetPpmScheduleDTO = mapperUtil.toModel(assetPPMSchedule, AssetPpmScheduleDTO.class);
+			if(assetPPMSchedule.getId() > 0) { 
+				jobManagementService.createJob(assetPpmScheduleDTO);
+			}
+		}
+		return assetPpmScheduleDTO;
+
+	}
+	
 	/**
 	 * Updates the asset PPM schedule information.
 	 * 

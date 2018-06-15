@@ -246,7 +246,7 @@ public class AssetResource {
 		return new ResponseEntity<>(assetDocumentDTO, HttpStatus.OK);
 	}
 
-	@RequestMapping(path = "/assets/ppmschedule", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+	/*@RequestMapping(path = "/assets/ppmschedule", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
 	@Timed
 	public ResponseEntity<?> saveAssetPPMSchedule(@Valid @RequestBody AssetPpmScheduleDTO assetPpmScheduleDTO,
 			HttpServletRequest request) {
@@ -270,8 +270,20 @@ public class AssetResource {
 		
 		log.debug("Asset PPM Schedule new id - " + assetPpmScheduleDTO.getId());
 		return new ResponseEntity<>(assetPpmScheduleDTO, HttpStatus.CREATED);
-	}
+	}*/
 
+	@RequestMapping(path = "/assets/ppmschedule", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+	@Timed
+	public ResponseEntity<?> saveAssetPPMSchedule(@Valid @RequestBody AssetPpmScheduleDTO assetPpmScheduleDTO,
+			HttpServletRequest request) {
+		log.debug(">>> Asset DTO saveAssetPPMSchedule request <<<");
+		log.debug("Title <<<" + assetPpmScheduleDTO.getTitle());
+
+		AssetPpmScheduleDTO response = assetService.createAssetPpmSchedule(assetPpmScheduleDTO);
+		log.debug("Asset PPM Schedule save response - " + response);
+		return new ResponseEntity<>(response, HttpStatus.CREATED);
+	}
+	
 	@RequestMapping(path = "/assets/ppmschedule", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE)
 	@Timed
 	public ResponseEntity<?> updateAssetPPMSchedule(@Valid @RequestBody AssetPpmScheduleDTO assetPpmScheduleDTO,
