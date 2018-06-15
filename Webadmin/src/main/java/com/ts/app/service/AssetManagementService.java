@@ -733,7 +733,7 @@ public class AssetManagementService extends AbstractService {
 	}
 
 	public ImportResult importFile(MultipartFile file, long dateTime) {
-		return importUtil.importJobData(file, dateTime);
+		return importUtil.importAssetData(file, dateTime);
 	}
 
 	public ImportResult getImportStatus(String fileId) {
@@ -817,7 +817,7 @@ public class AssetManagementService extends AbstractService {
 
 	public AssetPpmScheduleDTO createAssetPpmSchedule(AssetPpmScheduleDTO assetPpmScheduleDTO) {
 		// TODO Auto-generated method stub
-		log.debug(">> create ppm schedule <<<");
+		log.debug(">> create ppm schedule and employee id <<< "+assetPpmScheduleDTO.getEmpId());
 		AssetPPMSchedule assetPPMSchedule = mapperUtil.toEntity(assetPpmScheduleDTO, AssetPPMSchedule.class);
 		assetPPMSchedule.setActive(AssetPPMSchedule.ACTIVE_YES);
 
@@ -828,12 +828,15 @@ public class AssetManagementService extends AbstractService {
 		assetPPMSchedule.setAsset(asset);
 
 		assetPPMSchedule = assetPpmScheduleRepository.save(assetPPMSchedule);
-		assetPpmScheduleDTO = mapperUtil.toModel(assetPPMSchedule, AssetPpmScheduleDTO.class);
-		if(assetPPMSchedule.getId() !=0) {
+		assetPpmScheduleDTO.setId(assetPPMSchedule.getId());
+		log.debug(">>> Employee Id 1 <<<: "+assetPpmScheduleDTO.getEmpId());
+		if(assetPPMSchedule.getId() > 0) {
+		log.debug(">>> Employee Id 2: <<< "+assetPpmScheduleDTO.getEmpId());
 		jobManagementService.createJob(assetPpmScheduleDTO);
 		log.debug(">> after create job for ppm schedule <<<");
 		}
-		return assetPpmScheduleDTO;
+		
+		return mapperUtil.toModel(assetPPMSchedule, AssetPpmScheduleDTO.class);
 	}
 
 	/**

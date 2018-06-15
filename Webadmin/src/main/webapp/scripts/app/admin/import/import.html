@@ -226,4 +226,37 @@
         
 
     </div>
+    
+    <div class="row">
+        <div class="col-md-6">
+            <div class="panel panel-default">
+                <div class="panel-heading">Asset</div>
+                <div class="panel-body">
+                    <form name="importAssetForm" >
+                        <div class="row">
+                            <div class="form-group label-floating" >
+                                <div class="col-md-6 pdng-top13" >
+                                    <input type="file"
+                                           class="form-control" style="opacity:100;position:relative" file-model
+                                           ng-model="selectedAssetFile"
+                                           name="assetFile"
+                                    />
+                                </div>
+                                <div class="col-md-6">
+                                    <button class="btn btn-success" ng-click="uploadAssetShift()" >
+                                        <span class="btn-label">
+                                       		<i class="material-icons">file_upload</i>
+                                   		</span>Import Asset
+                                    </button>
+                                    <span ng-hide="!assetImportStatusLoad()"> <i class="fa fa-spinner fa-spin" style="font-size:15px"></i> </span>
+                                </div>
+                                  <!-- <div class="col-md-12" ng-hide="!clientImportMsg()">
+                                  	<span class="card-title">Status - {{clientImportMsg()}}</span>
+                                  </div> -->
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>    
 </div>

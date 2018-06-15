@@ -606,30 +606,31 @@ public class ImportUtil {
 				Row currentRow = datatypeSheet.getRow(r);
 				AssetDTO assetDTO = new AssetDTO();
 				assetDTO.setTitle(getCellValue(currentRow.getCell(0)));
-				assetDTO.setAssetType(getCellValue(currentRow.getCell(1)));
-				assetDTO.setAssetGroup(getCellValue(currentRow.getCell(2)));
-				assetDTO.setProjectId(Long.valueOf(getCellValue(currentRow.getCell(3))));
-				assetDTO.setSiteId(Long.valueOf(getCellValue(currentRow.getCell(4))));
-				assetDTO.setBlock(getCellValue(currentRow.getCell(5)));
-				assetDTO.setFloor(getCellValue(currentRow.getCell(6)));
-				assetDTO.setZone(getCellValue(currentRow.getCell(7)));
-				assetDTO.setManufacturerId(Long.valueOf(getCellValue(currentRow.getCell(8))));
-				assetDTO.setModelNumber(getCellValue(currentRow.getCell(9)));
-				assetDTO.setSerialNumber(getCellValue(currentRow.getCell(10)));
-				String acquiredDate = getCellValue(currentRow.getCell(11));
+				assetDTO.setDescription(getCellValue(currentRow.getCell(1)));
+				assetDTO.setAssetType(getCellValue(currentRow.getCell(2)));
+				assetDTO.setAssetGroup(getCellValue(currentRow.getCell(3)));
+				assetDTO.setProjectId(Long.valueOf(getCellValue(currentRow.getCell(4))));
+				assetDTO.setSiteId(Long.valueOf(getCellValue(currentRow.getCell(5))));
+				assetDTO.setBlock(getCellValue(currentRow.getCell(6)));
+				assetDTO.setFloor(getCellValue(currentRow.getCell(7)));
+				assetDTO.setZone(getCellValue(currentRow.getCell(8)));
+				assetDTO.setManufacturerId(Long.valueOf(getCellValue(currentRow.getCell(9))));
+				assetDTO.setModelNumber(getCellValue(currentRow.getCell(10)));
+				assetDTO.setSerialNumber(getCellValue(currentRow.getCell(11)));
+				String acquiredDate = getCellValue(currentRow.getCell(12));
 				if(StringUtils.isNotEmpty(acquiredDate)) {
 					assetDTO.setAcquiredDate(DateUtil.convertToDateTime(acquiredDate));
 				}
-				assetDTO.setPurchasePrice(Double.valueOf(getCellValue(currentRow.getCell(12))));
-				assetDTO.setCurrentPrice(Double.valueOf(getCellValue(currentRow.getCell(13))));
-				assetDTO.setEstimatedDisposePrice(Double.valueOf(getCellValue(currentRow.getCell(14))));
-				assetDTO.setWarrantyType(getCellValue(currentRow.getCell(15)));
-				String warrantyDate = getCellValue(currentRow.getCell(16));
+				assetDTO.setPurchasePrice(Double.valueOf(getCellValue(currentRow.getCell(13))));
+				assetDTO.setCurrentPrice(Double.valueOf(getCellValue(currentRow.getCell(14))));
+				assetDTO.setEstimatedDisposePrice(Double.valueOf(getCellValue(currentRow.getCell(15))));
+				assetDTO.setWarrantyType(getCellValue(currentRow.getCell(16)));
+				String warrantyDate = getCellValue(currentRow.getCell(17));
 				if(StringUtils.isNotEmpty(warrantyDate)) {
 					assetDTO.setWarrantyExpiryDate(DateUtil.convertToDateTime(warrantyDate));
 				}
-				assetDTO.setVendorId(Long.valueOf(getCellValue(currentRow.getCell(17))));
-				assetDTO.setAssetCode(getCellValue(currentRow.getCell(18)));
+				assetDTO.setVendorId(Long.valueOf(getCellValue(currentRow.getCell(18))));
+				assetDTO.setAssetCode(getCellValue(currentRow.getCell(19)));
 				
 				assetManagementService.saveAsset(assetDTO);
 				
