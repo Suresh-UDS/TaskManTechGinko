@@ -6,7 +6,7 @@ angular.module('timeSheetApp')
 				function($scope, $rootScope, $state, $timeout, AssetComponent,
 						ProjectComponent,LocationComponent,SiteComponent,EmployeeComponent, $http, $stateParams,
                      	$location,PaginationComponent,AssetTypeComponent,ParameterConfigComponent,ParameterComponent,
-                        ParameterUOMComponent,VendorComponent,ManufacturerComponent,$sce,ChecklistComponent,$filter) {
+                        ParameterUOMComponent,VendorComponent,ManufacturerComponent,$sce,ChecklistComponent,$filter,JobComponent) {
 
         $rootScope.loadingStop();
         $rootScope.loginView = false;
@@ -1619,6 +1619,16 @@ angular.module('timeSheetApp')
             });
                 //return deferred.promise;
                 
+        }
+        
+        $scope.loadAMCJobs = function() { 
+        	$scope.searchCriteria.maintenanceType = "AMC";
+        	$scope.searchCriteria.assetId = $stateParams.id;
+        	console.log($scope.searchCriteria);
+        	JobComponent.search($scope.searchCriteria).then(function(data){ 
+        		console.log(data);
+        		$scope.amcJobLists = data.transactions;
+        	});
         }
 
  

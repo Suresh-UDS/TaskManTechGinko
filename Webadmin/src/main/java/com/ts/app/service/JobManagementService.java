@@ -1440,6 +1440,7 @@ public class JobManagementService extends AbstractService {
 		job.setTitle(assetAMCScheduleDTO.getTitle());
 		job.setDescription(assetAMCScheduleDTO.getTitle() +" "+ assetAMCScheduleDTO.getFrequencyPrefix()+" "+assetAMCScheduleDTO.getFrequencyDuration()+" "+assetAMCScheduleDTO.getFrequency());
 		job.setMaintenanceType(assetAMCScheduleDTO.getMaintenanceType());
+		job.setFrequency(Frequency.valueOf(assetAMCScheduleDTO.getFrequency()).getTypeFrequency());
 		job.setActive(job.ACTIVE_YES);
 		job = jobRepository.saveAndFlush(job);
 
