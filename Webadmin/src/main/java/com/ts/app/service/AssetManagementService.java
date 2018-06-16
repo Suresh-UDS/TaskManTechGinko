@@ -28,6 +28,8 @@ import com.ts.app.domain.AssetGroup;
 import com.ts.app.domain.AssetPPMSchedule;
 import com.ts.app.domain.AssetParameterConfig;
 import com.ts.app.domain.AssetParameterReading;
+import com.ts.app.domain.AssetParameterReadingRule;
+import com.ts.app.domain.AssetReadingRule;
 import com.ts.app.domain.AssetType;
 import com.ts.app.domain.Checklist;
 import com.ts.app.domain.Employee;
@@ -39,6 +41,7 @@ import com.ts.app.domain.Job;
 import com.ts.app.domain.Manufacturer;
 import com.ts.app.domain.ParameterConfig;
 import com.ts.app.domain.Project;
+import com.ts.app.domain.Setting;
 import com.ts.app.domain.Site;
 import com.ts.app.domain.User;
 import com.ts.app.domain.Vendor;
@@ -48,6 +51,7 @@ import com.ts.app.repository.AssetGroupRepository;
 import com.ts.app.repository.AssetParamReadingRepository;
 import com.ts.app.repository.AssetParameterConfigRepository;
 import com.ts.app.repository.AssetPpmScheduleRepository;
+import com.ts.app.repository.AssetReadingRuleRepository;
 import com.ts.app.repository.AssetRepository;
 import com.ts.app.repository.AssetTypeRepository;
 import com.ts.app.repository.CheckInOutImageRepository;
@@ -61,10 +65,12 @@ import com.ts.app.repository.NotificationRepository;
 import com.ts.app.repository.ParameterConfigRepository;
 import com.ts.app.repository.PricingRepository;
 import com.ts.app.repository.ProjectRepository;
+import com.ts.app.repository.SettingsRepository;
 import com.ts.app.repository.SiteRepository;
 import com.ts.app.repository.TicketRepository;
 import com.ts.app.repository.UserRepository;
 import com.ts.app.repository.VendorRepository;
+import com.ts.app.service.util.CommonUtil;
 import com.ts.app.service.util.DateUtil;
 import com.ts.app.service.util.ExportUtil;
 import com.ts.app.service.util.FileUploadHelper;
@@ -199,6 +205,17 @@ public class AssetManagementService extends AbstractService {
 
 	@Inject
 	private JobManagementService jobManagementService;
+	
+	@Inject
+	private AssetReadingRuleRepository assetReadingRuleRepository;
+	
+	@Inject
+	private SettingsRepository settingRepository;
+	
+	
+	public static final String EMAIL_NOTIFICATION_READING = "email.notification.reading";
+	
+	public static final String EMAIL_NOTIFICATION_READING_EMAILS = "email.notification.reading.emails";
 
 	// Asset
 	public AssetDTO saveAsset(AssetDTO assetDTO) {
@@ -1036,6 +1053,62 @@ public class AssetManagementService extends AbstractService {
 			assetParamReading.setUom(assetParamReadingDTO.getUom());
 			assetParamReading.setValue(assetParamReadingDTO.getValue());
 			assetParamReadingRepository.save(assetParamReading);
+			
+			if(assetParamReadingDTO.getAssetParameterConfigId() > 0 ) { 
+				List<AssetParameterReadingRule> readingRuleLists = assetReadingRuleRepository.findByAssetConfigId(assetParamReadingDTO.getAssetParameterConfigId());
+				for(AssetParameterReadingRule assetReadingRuleList : readingRuleLists) {
+							
+					AssetReadingRule rule = AssetReadingRule.valueOf(assetReadingRuleList.getRule());
+					
+					switch(rule) {
+					
+						case CURRENT_CONSUMPTION_GREATER_THAN_PREVIOUS_CONSUMPTION :
+							
+							if(assetParamReadingDTO.getId() > 0 ) { 
+								AssetParameterReadingDTO prevReading = getLatestParamReading(assetParamReadingDTO.getAssetId(), assetParamReadingDTO.getAssetParameterConfigId());
+								
+								if(assetParamReadingDTO.getConsumption() < prevReading.getConsumption()) { 
+									Setting setting = settingRepository.findSettingByKey(EMAIL_NOTIFICATION_READING);
+									
+									if(setting.getSettingValue() == "true") { 
+										Setting settingEntity = settingRepository.findSettingByKey(EMAIL_NOTIFICATION_READING_EMAILS);
+										if(settingEntity.getSettingValue().length() > 0) { 
+											List<String> emailLists = CommonUtil.convertToList(settingEntity.getSettingValue(), ",");
+											for(String email : emailLists) { 
+												mailService.sendReadingAlert(email);
+											}
+										}
+									}
+								}
+							}
+							
+						case CURRENT_READING_GREATER_THAN_PREVIOUS_READING :
+							
+							if(assetParamReadingDTO.getId() > 0 ) { 
+								AssetParameterReadingDTO prevReading = getLatestParamReading(assetParamReadingDTO.getAssetId(), assetParamReadingDTO.getAssetParameterConfigId());
+								
+								if(assetParamReadingDTO.getValue() < prevReading.getValue()) { 
+									Setting setting = settingRepository.findSettingByKey(EMAIL_NOTIFICATION_READING);
+									
+									if(setting.getSettingValue() == "true") { 
+										Setting settingEntity = settingRepository.findSettingByKey(EMAIL_NOTIFICATION_READING_EMAILS);
+										if(settingEntity.getSettingValue().length() > 0) { 
+											List<String> emailLists = CommonUtil.convertToList(settingEntity.getSettingValue(), ",");
+											for(String email : emailLists) { 
+												mailService.sendReadingAlert(email);
+											}
+										}
+									}
+								}
+							}
+							
+						default:
+						
+					}
+					
+				}
+			}
+		
 		
 			return mapperUtil.toModel(assetParamReading, AssetParameterReadingDTO.class);
 	}
