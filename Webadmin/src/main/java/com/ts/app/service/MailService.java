@@ -315,6 +315,16 @@ public class MailService {
         String subject = messageSource.getMessage("email.feedback.alert.title", null, locale);
         sendEmail(emailIds, subject, content, true, true, null);
     }
+    
+    @Async
+    public void sendReadingAlert(String emailIds) {
+        log.debug("Sending feedback alert e-mail to '{}'", emailIds);
+        Locale locale = Locale.forLanguageTag("en-US");
+        Context context = new Context(locale);
+        String content = templateEngine.process("feedbackEmailAlert", context);
+        String subject = messageSource.getMessage("email.feedback.alert.title", null, locale);
+        sendEmail(emailIds, subject, content, true, true, null);
+    }
 
 
     @Async
