@@ -611,7 +611,7 @@ public class SchedulerService extends AbstractService {
 	
 	public void createJobsOld(SchedulerConfig dailyTask) {
 		if ("CREATE_JOB".equals(dailyTask.getType())) {
-			if (dailyTask.getSchedule().equalsIgnoreCase(Frequency.DAILY.getTypeFrequency())) {
+			if (dailyTask.getSchedule().equalsIgnoreCase(Frequency.DAY.getTypeFrequency())) {
 				String creationPolicy = env.getProperty("scheduler.dailyJob.creation");
 				PageRequest pageRequest = new PageRequest(1, 1);
 				Job parentJob = dailyTask.getJob();
@@ -650,7 +650,7 @@ public class SchedulerService extends AbstractService {
 					}
 				}
 				// dailyTask.setLastRun(new Date());
-			} else if (dailyTask.getSchedule().equalsIgnoreCase(Frequency.WEEKLY.getTypeFrequency())) {
+			} else if (dailyTask.getSchedule().equalsIgnoreCase(Frequency.WEEK.getTypeFrequency())) {
 				String creationPolicy = env.getProperty("scheduler.weeklyJob.creation");
 				if (creationPolicy.equalsIgnoreCase("monthly")) { // if the creation policy is set to monthly, create jobs for the rest of the
 																	// month
@@ -670,7 +670,7 @@ public class SchedulerService extends AbstractService {
 						}
 					}
 				}
-			} else if (dailyTask.getSchedule().equalsIgnoreCase(Frequency.MONTHLY.getTypeFrequency())) {
+			} else if (dailyTask.getSchedule().equalsIgnoreCase(Frequency.MONTH.getTypeFrequency())) {
 				String creationPolicy = env.getProperty("scheduler.monthlyJob.creation");
 				if (creationPolicy.equalsIgnoreCase("yearly")) { // if the creation policy is set to monthly, create jobs for the rest of the
 																	// month
@@ -760,14 +760,22 @@ public class SchedulerService extends AbstractService {
 	private DateTime addDays(DateTime dateTime , String scheduleType) {
 		Frequency frequency = Frequency.valueOf(scheduleType);
 		switch(frequency) {
-			case DAILY :
+			case HOUR :
+				dateTime = dateTime.plusHours(1);
+			case DAY :
 				dateTime = dateTime.plusDays(1);
-			case WEEKLY :
+			case WEEK :
 				dateTime = dateTime.plusWeeks(1);
 			case FORTNIGHT :
 				dateTime = dateTime.plusDays(14);
 			case MONTH :
 				dateTime = dateTime.plusMonths(1);
+			case YEAR :
+				dateTime = dateTime.plusYears(1);
+			case HALFYEAR :
+				dateTime = dateTime.plusMonths(6);
+			case QUARTER :
+				dateTime = dateTime.plusMonths(3);
 				break;
 			default:
 			
