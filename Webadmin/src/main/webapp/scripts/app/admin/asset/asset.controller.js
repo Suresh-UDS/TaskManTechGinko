@@ -159,7 +159,8 @@ angular.module('timeSheetApp')
                 if($scope.selectedTimeInterval) { 
                     $scope.assetPPM.frequencyDuration = $scope.selectedTimeInterval;
                 }
-          
+    	    	$scope.assetPPM.maintenanceType = 'PPM';
+    	    	
                 console.log("To be created PPM",$scope.assetPPM);
 
             	AssetComponent.createPPM($scope.assetPPM).then(function(response) {
