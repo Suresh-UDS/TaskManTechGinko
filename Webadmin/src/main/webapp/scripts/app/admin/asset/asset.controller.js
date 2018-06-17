@@ -112,23 +112,20 @@ angular.module('timeSheetApp')
 
         }
 
-        
+        var nottifShow = true ;
 
         $scope.showNotifications= function(position,alignment,color,msg){
-          
-                demo.showNotification(position,alignment,color,msg);
+           
+            if(nottifShow == true){
+               nottifShow = false ;
+               demo.showNotification(position,alignment,color,msg);
+               
+            }else if(nottifShow == false){
+                $timeout(function() {
+                  nottifShow = true ;
+                }, 8000);
 
-                //Timer start function.
-            $scope.StartTimer = function () {
-                //Set the Timer start message.
-                $scope.Message = "Timer started. ";
- 
-                //Initialize the Timer to run every 1000 milliseconds i.e. one second.
-                $scope.Timer = $interval(function () {
-                    //Display the current time.
-                    var time = "";
-                }, 2000);
-            };
+            }
             
         }
 
@@ -1153,54 +1150,62 @@ angular.module('timeSheetApp')
 	    $scope.saveAssetParamConfig = function () {
         	$scope.error = null;
         	$scope.success =null;
+          if(!$scope.assetGen.id && !$stateParams.id){
+        
+              $scope.showNotifications('top','center','danger','Please create asset first..');
 
-            if($stateParams.id){
-            	if($scope.assetList.assetType){
-            	    $scope.parameterConfig.assetType = $scope.assetList.assetType;
-            	    $scope.parameterConfig.assetId = $stateParams.id;
-            	}
-            	if($scope.selectedParameter){
-            	    $scope.parameterConfig.name = $scope.selectedParameter.name;
-            	}
-            	if($scope.selectedParameterUOM){
-            	    $scope.parameterConfig.uom = $scope.selectedParameterUOM.uom;
-            	}
-            	$scope.parameterConfig.consumptionMonitoringRequired  = $scope.consumptionMonitoringRequired
-            	console.log('Edit parameterConfig details ='+ JSON.stringify($scope.parameterConfig));
-            }
-            else if($scope.assetGen.id){
-
-                $scope.parameterConfig.assetId = $scope.assetGen.id;
-
-                if($scope.selectedAssetType.name){
-
-                    $scope.parameterConfig.assetType = $scope.selectedAssetType.name;
+            }else{
        
-                }
-                if($scope.selectedParameter){
+                if($stateParams.id){
+                	if($scope.assetList.assetType){
+                	    $scope.parameterConfig.assetType = $scope.assetList.assetType;
+                	    $scope.parameterConfig.assetId = $stateParams.id;
+                	}
+                	if($scope.selectedParameter){
+                	    $scope.parameterConfig.name = $scope.selectedParameter.name;
+                	}
+                	if($scope.selectedParameterUOM){
+                	    $scope.parameterConfig.uom = $scope.selectedParameterUOM.uom;
+                	}
+                	$scope.parameterConfig.consumptionMonitoringRequired  = $scope.consumptionMonitoringRequired
+                	console.log('Edit parameterConfig details ='+ JSON.stringify($scope.parameterConfig));
 
-                    $scope.parameterConfig.name = $scope.selectedParameter.name;
+                }else if($scope.assetGen.id){
+
+                    $scope.parameterConfig.assetId = $scope.assetGen.id;
+
+                    if($scope.selectedAssetType.name){
+
+                        $scope.parameterConfig.assetType = $scope.selectedAssetType.name;
+           
+                    }
+                    if($scope.selectedParameter){
+
+                        $scope.parameterConfig.name = $scope.selectedParameter.name;
+                    }
+                    if($scope.selectedParameterUOM){
+                        $scope.parameterConfig.uom = $scope.selectedParameterUOM.uom;
+                    }
+                    $scope.parameterConfig.consumptionMonitoringRequired  = $scope.consumptionMonitoringRequired
+                    console.log('Add parameterConfig details ='+ JSON.stringify($scope.parameterConfig));
                 }
-                if($scope.selectedParameterUOM){
-                    $scope.parameterConfig.uom = $scope.selectedParameterUOM.uom;
-                }
-                $scope.parameterConfig.consumptionMonitoringRequired  = $scope.consumptionMonitoringRequired
-                console.log('Add parameterConfig details ='+ JSON.stringify($scope.parameterConfig));
-            }
-        	AssetComponent.createAssetParamConfig($scope.parameterConfig).then(function () {
-                $scope.success = 'OK';
-                $scope.showNotifications('top','center','success','Asset Parameter Saved Successfully');
-                $scope.assetConfig();
-                //$scope.loadAllParameters();
-            }).catch(function (response) {
-                $scope.success = null;
-                console.log('Error - '+ response.data);
-                if (response.status === 400 && response.data.message === 'error.duplicateRecordError') {
-                    $scope.errorProjectExists = 'ERROR';
-                } else {
-                    $scope.error = 'ERROR';
-                }
-            });
+                
+            	AssetComponent.createAssetParamConfig($scope.parameterConfig).then(function () {
+                    $scope.success = 'OK';
+                    $scope.showNotifications('top','center','success','Asset Parameter Saved Successfully');
+                    $scope.assetConfig();
+                    //$scope.loadAllParameters();
+                }).catch(function (response) {
+                    $scope.success = null;
+                    console.log('Error - '+ response.data);
+                    if (response.status === 400 && response.data.message === 'error.duplicateRecordError') {
+                        $scope.errorProjectExists = 'ERROR';
+                    } else {
+                        $scope.error = 'ERROR';
+                    }
+                });
+
+             }
 
 	    };
 	    

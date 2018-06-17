@@ -291,8 +291,21 @@ angular.module('timeSheetApp')
           
          }
         
+         var nottifShow = true ;
+
         $scope.showNotifications= function(position,alignment,color,msg){
-            demo.showNotification(position,alignment,color,msg);
+           
+            if(nottifShow == true){
+               nottifShow = false ;
+               demo.showNotification(position,alignment,color,msg);
+               
+            }else if(nottifShow == false){
+                $timeout(function() {
+                  nottifShow = true ;
+                }, 8000);
+
+            }
+            
         }
 
            /*

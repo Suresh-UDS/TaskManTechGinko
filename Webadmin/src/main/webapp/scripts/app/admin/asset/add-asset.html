@@ -1345,8 +1345,7 @@
 
                                                         </div>
                                                         <div class="tab-pane fade docs" id="docs">
-                                                            <form name="importClientForm" role="form" novalidate
-                                                            class="ng-pristine ng-valid">
+                                                            
                                                             <div class="panel panel-default" style="min-height: 200px;">
 
                                                                 <div class="panel-heading">
@@ -1357,7 +1356,7 @@
                                                                   
 
                                                                     <div class="row">
-
+                                                                     <form name="importClientForm" role="form" novalidate class="ng-pristine ng-valid">
                                                                         <div class="col-md-6">
 
                                                                             <div class="row" ng-init="getAllUploadedFiles();">
@@ -1370,19 +1369,39 @@
                                                                                                class='form-control'
                                                                                                name='fileTitle'
                                                                                                type='text' value=""
-                                                                                               ng-minlength='5'
-                                                                                               ng-maxlength='250'
-                                                                                               ng-pattern="/^[A-Za-z0-9\s]*$/" autofocus
+                                                                                                autofocus required
                                                                                         />
+                                                                                        <div ng-show="importClientForm.$submitted || importClientForm.fileTitle.$touched">
+                                                                                            <div
+                                                                                                ng-show="importClientForm.fileTitle.$dirty || importClientForm.fileTitle.$invalid">
+                                                                                                <p class="help-block" style="color:maroon"
+                                                                                                   ng-show="importClientForm.fileTitle.$error.required">
+                                                                                                    File title is required.
+                                                                                                </p>
+
+                                                                                            </div>
+                                                                                            
+                                                                                        </div>
                                                                                     </div>
                                                                                 </div>
                                                                                 <div class="col-md-12">
                                                                                     <div class="form-group label-floating is-empty is-fileinput row">
                                                                                         <div class="col-md-6 pdng-top13">
-                                                                                            <input type="file" class="form-control ng-pristine ng-valid ng-touched" style="opacity:100;position:relative" file-model="" ng-model="selectedClientFile" name="clientFile" tabindex="0" aria-invalid="false">
+                                                                                            <input type="file" class="form-control ng-pristine ng-valid ng-touched" style="opacity:100;position:relative" file-model="" ng-model="selectedClientFile" name="clientFile" tabindex="0" aria-invalid="false" required>
+                                                                                             <div ng-show="importClientForm.$submitted || importClientForm.clientFile.$touched">
+                                                                                                <div
+                                                                                                    ng-show="importClientForm.clientFile.$dirty || importClientForm.clientFile.$invalid">
+                                                                                                    <p class="help-block" style="color:maroon"
+                                                                                                       ng-show="importClientForm.clientFile.$error.required">
+                                                                                                        File  is required.
+                                                                                                    </p>
+
+                                                                                                </div>
+                                                                                                
+                                                                                            </div>
                                                                                         </div>
                                                                                         <div class="col-md-6">
-                                                                                            <button class="btn btn-success" tabindex="0" ng-click="uploadAssetFile()">
+                                                                                            <button class="btn btn-success" tabindex="0" ng-click="uploadAssetFile()" ng-disabled="importClientForm.$invalid">
                                                                                         <span class="btn-label">
                                                                                             <i class="material-icons">file_upload</i>
                                                                                         </span>Upload Docs
@@ -1398,6 +1417,8 @@
                                                                             </div>
 
                                                                         </div>
+                                                                       </form> 
+                                                                       <form name="importClientForm1" role="form" novalidate class="ng-pristine ng-valid">
                                                                         <div class="col-md-6">
 
                                                                            <div class="row" ng-init="getAllUploadedPhotos();">
@@ -1408,21 +1429,41 @@
                                                                                        <input id='fileTitle'
                                                                                               ng-model="uploadAssetPhoto.title"
                                                                                               class='form-control'
-                                                                                              name='fileTitle'
+                                                                                              name='photoTitle'
                                                                                               type='text' value=""
-                                                                                              ng-minlength='5'
-                                                                                              ng-maxlength='250'
-                                                                                              ng-pattern="/^[A-Za-z0-9\s]*$/" autofocus
+                                                                                              autofocus required
                                                                                        />
+                                                                                       <div ng-show="importClientForm1.$submitted || importClientForm1.photoTitle.$touched">
+                                                                                            <div
+                                                                                                ng-show="importClientForm1.photoTitle.$dirty || importClientForm1.photoTitle.$invalid">
+                                                                                                <p class="help-block" style="color:maroon"
+                                                                                                   ng-show="importClientForm1.photoTitle.$error.required">
+                                                                                                    Photo title is required.
+                                                                                                </p>
+
+                                                                                            </div>
+                                                                                            
+                                                                                        </div>
                                                                                    </div>
                                                                                </div>
                                                                                <div class="col-md-12">
                                                                                    <div class="form-group label-floating is-empty is-fileinput row">
                                                                                        <div class="col-md-6 pdng-top13">
-                                                                                           <input type="file" class="form-control ng-pristine ng-valid ng-touched" style="opacity:100;position:relative" file-model="" ng-model="selectedPhotoFile" name="clientFile" tabindex="0" aria-invalid="false">
+                                                                                           <input type="file" class="form-control ng-pristine ng-valid ng-touched" style="opacity:100;position:relative" file-model="" ng-model="selectedPhotoFile" name="clientFile1" tabindex="0" aria-invalid="false">
+                                                                                           <div ng-show="importClientForm1.$submitted || importClientForm1.clientFile1.$touched">
+                                                                                                <div
+                                                                                                    ng-show="importClientForm1.clientFile1.$dirty || importClientForm1.clientFile1.$invalid">
+                                                                                                    <p class="help-block" style="color:maroon"
+                                                                                                       ng-show="importClientForm1.clientFile1.$error.required">
+                                                                                                        Photo  is required.
+                                                                                                    </p>
+
+                                                                                                </div>
+                                                                                                
+                                                                                            </div>
                                                                                        </div>
                                                                                        <div class="col-md-6">
-                                                                                           <button class="btn btn-success" tabindex="0" ng-click="uploadAssetPhotoFile()">
+                                                                                           <button class="btn btn-success" tabindex="0" ng-click="uploadAssetPhotoFile()"  ng-disabled="importClientForm1.$invalid">
                                                                                         <span class="btn-label">
                                                                                             <i class="material-icons">file_upload</i>
                                                                                         </span>Upload Docs
@@ -1439,6 +1480,7 @@
 
 
                                                                         </div>
+                                                                    </form>
 
                                                                     </div>
 
