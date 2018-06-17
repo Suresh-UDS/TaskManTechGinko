@@ -41,6 +41,10 @@ public class NotificationLog extends AbstractAuditingEntity implements Serializa
 	private String message;
 
 	private boolean isRead;
+	
+	private String event;
+	
+	private String status;
 
 	public Long getId() {
 		return id;
@@ -96,6 +100,22 @@ public class NotificationLog extends AbstractAuditingEntity implements Serializa
 
 	public void setJob(Job job) {
 		this.job = job;
+	}
+
+	public String getEvent() {
+		return event;
+	}
+
+	public void setEvent(String event) {
+		this.event = event;
+	}
+
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
 	}
 
 

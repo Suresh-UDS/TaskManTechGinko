@@ -69,8 +69,8 @@ public class JobSpecification implements Specification<Job> {
             if(StringUtils.isNotEmpty(searchCriteria.getJobTypeName())){
         			predicates.add(builder.equal(root.get("type"),  JobType.getType(searchCriteria.getJobTypeName())));
         		}
-            if(StringUtils.isNotEmpty(searchCriteria.getMaintenanceType())) { 
-            	predicates.add(builder.equal(root.get("maintenanceType"), searchCriteria.getMaintenanceType()));
+            if(StringUtils.isNotEmpty(searchCriteria.getMaintenanceType()) && searchCriteria.getAssetId() != 0 ) { 
+            	predicates.add(builder.and(builder.equal(root.get("maintenanceType"), searchCriteria.getMaintenanceType()), builder.equal(root.get("asset").get("id"), searchCriteria.getAssetId())));
             }
 
             if(searchCriteria.getCheckInDateTimeFrom() != null){

@@ -28,6 +28,10 @@ public class NotificationLogDTO extends BaseDTO implements Serializable {
 	private boolean isRead;
 
 	private long jobId;
+	
+	private String event;
+	
+	private String status;
 
 	public Long getId() {
 		return id;
@@ -117,6 +121,22 @@ public class NotificationLogDTO extends BaseDTO implements Serializable {
 
 	public void setRead(boolean isRead) {
 		this.isRead = isRead;
+	}
+
+	public String getEvent() {
+		return event;
+	}
+
+	public void setEvent(String event) {
+		this.event = event;
+	}
+
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
 	}
 
 
