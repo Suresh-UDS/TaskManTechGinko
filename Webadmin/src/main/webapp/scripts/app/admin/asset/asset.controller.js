@@ -112,9 +112,27 @@ angular.module('timeSheetApp')
 
         }
 
+        
+
         $scope.showNotifications= function(position,alignment,color,msg){
-            demo.showNotification(position,alignment,color,msg);
+          
+                demo.showNotification(position,alignment,color,msg);
+
+                //Timer start function.
+            $scope.StartTimer = function () {
+                //Set the Timer start message.
+                $scope.Message = "Timer started. ";
+ 
+                //Initialize the Timer to run every 1000 milliseconds i.e. one second.
+                $scope.Timer = $interval(function () {
+                    //Display the current time.
+                    var time = "";
+                }, 2000);
+            };
+            
         }
+
+
 
         $('input#dateFilterPpmFrom').on('dp.change', function(e){
             $scope.assetPPM.startDate = e.date._d;
