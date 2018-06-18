@@ -57,11 +57,9 @@ angular.module('timeSheetApp')
 
 
 
-    		$scope.pages = { currPage : 1};
+        $scope.pages = { currPage : 1};
 
-        $scope.searchCriteria = {
-
-        }
+        $scope.searchCriteria = {};
 
         $scope.feedbackList;
 
@@ -227,6 +225,7 @@ angular.module('timeSheetApp')
                     $scope.searchCriteria.projectId = 0;
                 }
             }
+
             console.log("Search Criteria : "+$scope.searchCriteria);
             FeedbackComponent.reports($scope.searchCriteria).then(function (data) {
                 $scope.feedbackList = data.transactions;
@@ -257,13 +256,16 @@ angular.module('timeSheetApp')
 //                $scope.option = {}
 //                $scope.option.legend = { "display" : true}
                 if($scope.feedbackReport.weeklyZone && $scope.feedbackReport.weeklyZone.length > 0) {
+                    
                     var zoneDateWiseRating = $scope.feedbackReport.weeklyZone;
                     var zoneDateWiseDataArr = [];
                     for(var i =0;i<zoneDateWiseRating.length; i++) {
                     		$scope.labels.push(zoneDateWiseRating[i].date);
                     		zoneDateWiseDataArr.push(zoneDateWiseRating[i].rating);
                     }
-                    $scope.data.push(zoneDateWiseDataArr);
+
+                    //$scope.data.push(zoneDateWiseDataArr);
+                    $scope.data = zoneDateWiseDataArr;
 
                     console.log('labels - ' + JSON.stringify($scope.labels));
                     console.log('data - ' + JSON.stringify($scope.data));
@@ -276,32 +278,40 @@ angular.module('timeSheetApp')
                     console.log('doughnut data - ' + JSON.stringify($scope.datas));
 
                 }else {
+
                     var zoneWiseRating = $scope.feedbackReport.weeklySite;
                     var zoneWiseDataArr = [];
+
                     for(var i =0;i<zoneWiseRating.length; i++) {
                     		$scope.labels.push(zoneWiseRating[i].zoneName);
                     		zoneWiseDataArr.push(zoneWiseRating[i].rating);
                     }
-                    $scope.data.push(zoneWiseDataArr);
+
+                    //$scope.data.push(zoneWiseDataArr);
+                    $scope.data = zoneWiseDataArr;
+
                     var zoneDateWiseRating = $scope.feedbackReport.weeklySite;
                     var zoneDateWiseDataArr = [];
                     for(var i =0;i<zoneDateWiseRating.length; i++) {
                     		$scope.label.push(zoneDateWiseRating[i].zoneName);
                     		$scope.datas.push(zoneDateWiseRating[i].rating);
                     }
+
+                    console.log('labels - ' + JSON.stringify($scope.labels));
+                    console.log('data - ' + JSON.stringify($scope.data));
                     //$scope.datas.push(zoneDateWiseDataArr);
 
                 }
             });
-            $rootScope.searchCriteriaFeedback = $scope.searchCriteria;
+            /*$rootScope.searchCriteriaFeedback = $scope.searchCriteria;
             if($scope.pages.currPage == 1) {
                 $scope.firstStyle();
-            }
+            }*/
         };
 
 
 
-        $scope.first = function() {
+       /* $scope.first = function() {
             if($scope.pages.currPage > 1) {
                 $scope.pages.currPage = 1;
                 $scope.firstStyle();
@@ -349,7 +359,7 @@ angular.module('timeSheetApp')
                 $scope.search();
             }
 
-        };
+        };*/
 
         $scope.printDiv = function(printable) {
             var printContents = document.getElementById(printable).innerHTML;
@@ -373,7 +383,7 @@ angular.module('timeSheetApp')
             popupWinindow.document.close();
         }
 
-        $scope.next = function() {
+       /* $scope.next = function() {
             console.log("Calling next")
 
             if($scope.pages.currPage < $scope.pages.totalPages) {
@@ -418,7 +428,7 @@ angular.module('timeSheetApp')
                 $scope.search();
             }
 
-        };
+        };*/
 
         $scope.clearFilter = function() {
             $scope.selectedSite = null;
