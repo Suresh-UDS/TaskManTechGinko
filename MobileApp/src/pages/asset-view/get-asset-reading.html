@@ -9,7 +9,7 @@
 
 <ion-content padding>
     <ion-list *ngFor="let config of assetConfig;let i=index;">
-        <ion-row class="margin0 border-btm-blk" data-toggle="collapse" [attr.data-target]="'#'+i">
+        <ion-row class="margin0 border-btm-blk" data-toggle="collapse" [attr.data-target]="'#'+i" (click)="toggle(i)">
             <ion-col col-2 class="ver-center">
                 <button ion-button clear color="primary" class="">
                     <i class="fa fa-cog fnt-40"></i>
@@ -23,8 +23,8 @@
             </ion-col>
         </ion-row>
 
-        <div id="{{i}}" class="collapse">
-            <div  *ngIf="config.consumptionMonitoringRequired" class="row">
+        <div id="{{i}}" class="collapse"  (click) = "current = i" >
+            <div  *ngIf="config.consumptionMonitoringRequired" class="row panel-collapse" [class.collapse]='current != i' aria-controls="collapseOne">
                 <div class="col-md-10">
                     <div class="card">
                         <div class="card-content">
@@ -33,7 +33,7 @@
                                     <ion-label class="margin0 padding0">Initial Reading:</ion-label>
                                 </ion-col>
                                 <ion-col col-5>
-                                    <ion-input type="text" placeholder="in watts"  [(ngModel)]="config.previousValue" class="margin0" text-center></ion-input>
+                                    <ion-input type="tel" placeholder="in {{config.uom}}"   [(ngModel)]="config.previousValue" class="margin0" text-center maxlength="10"></ion-input>
                                 </ion-col>
                                 <ion-col col-3>
                                     <ion-label class="margin0">{{config.uom}}</ion-label>
@@ -44,7 +44,7 @@
                                     <ion-label class="margin0 padding0">Final Reading:</ion-label>
                                 </ion-col>
                                 <ion-col col-5>
-                                    <ion-input type="number" placeholder="in watts"  [(ngModel)]="config.currentValue" class="margin0" text-center></ion-input>
+                                    <ion-input type="tel"  pattern="[0-9]*"    placeholder="in {{config.uom}}"  [(ngModel)]="config.currentValue" class="margin0" text-center  maxlength="10" step="00.01"></ion-input>
                                 </ion-col>
                                 <ion-col col-3>
                                     <ion-label class="margin0">{{config.uom}}</ion-label>
@@ -80,16 +80,16 @@
                     </div>
                 </div>
             </div >
-            <div  *ngIf="!config.consumptionMonitoringRequired" class="row">
+            <div  *ngIf="!config.consumptionMonitoringRequired" class="row"  aria-controls="collapseTwo">
                 <div class="col-md-10">
                     <div class="card">
                         <div class="card-content">
-                            <ion-row class="margin0" *ngIf="config.value">
+                            <ion-row class="margin0" *ngIf="config.previousValue">
                                 <ion-col col-4>
-                                    <ion-label class="margin0 padding0">Previous value:</ion-label>
+                                    <ion-label class="margin0 padding0">Previous Reading:</ion-label>
                                 </ion-col>
                                 <ion-col col-5>
-                                    <ion-input type="text" placeholder="in watts" disabled [(ngModel)]="config.value" class="margin0" text-center></ion-input>
+                                    <ion-input type="tel" placeholder="in {{config.uom}}" [(ngModel)]="config.previousValue" class="margin0" text-center maxlength="10"></ion-input>
                                 </ion-col>
                                 <ion-col col-3>
                                     <ion-label class="margin0">{{config.uom}}</ion-label>
@@ -97,10 +97,10 @@
                             </ion-row>
                             <ion-row class="margin0">
                                 <ion-col col-4>
-                                    <ion-label class="margin0 padding0">Current value:</ion-label>
+                                    <ion-label class="margin0 padding0">Current Reading:</ion-label>
                                 </ion-col>
                                 <ion-col col-5>
-                                    <ion-input type="number" placeholder="in watts"  [(ngModel)]="config.currentValue" class="margin0" text-center></ion-input>
+                                    <ion-input type="tel" placeholder="in {{config.uom}}"   [(ngModel)]="config.currentValue" class="margin0" text-center maxlength="10"></ion-input>
                                 </ion-col>
                                 <ion-col col-3>
                                     <ion-label class="margin0">{{config.uom}}</ion-label>
