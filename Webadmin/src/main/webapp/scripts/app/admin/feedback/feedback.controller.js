@@ -251,55 +251,80 @@ angular.module('timeSheetApp')
                 $scope.data = [];
                 $scope.label = [];
                 $scope.datas = [];
+                $scope.options = [];
 //                $scope.options = {}
 //                $scope.options.legend = { "display" : true}
 //                $scope.option = {}
 //                $scope.option.legend = { "display" : true}
                 if($scope.feedbackReport.weeklyZone && $scope.feedbackReport.weeklyZone.length > 0) {
+
+                    // Line chart data
                     
-                    var zoneDateWiseRating = $scope.feedbackReport.weeklyZone;
-                    var zoneDateWiseDataArr = [];
-                    for(var i =0;i<zoneDateWiseRating.length; i++) {
-                    		$scope.labels.push(zoneDateWiseRating[i].date);
-                    		zoneDateWiseDataArr.push(zoneDateWiseRating[i].rating);
+                    var lineZoneDateWiseRating = $scope.feedbackReport.weeklyZone;
+                    //var chartZoneDateWiseDataArr = [];
+                    for(var i =0;i<lineZoneDateWiseRating.length; i++) {
+                    		$scope.labels.push(lineZoneDateWiseRating[i].date);
+                    		$scope.data.push(lineZoneDateWiseRating[i].rating);
                     }
 
-                    //$scope.data.push(zoneDateWiseDataArr);
-                    $scope.data = zoneDateWiseDataArr;
+                    //$scope.data.push(chartZoneDateWiseDataArr);
+                    //$scope.data = chartZoneDateWiseDataArr;
 
-                    console.log('labels - ' + JSON.stringify($scope.labels));
-                    console.log('data - ' + JSON.stringify($scope.data));
-                    var zoneOverallRating = $scope.feedbackReport.weeklyZone;
-                    for(var i =0;i<zoneOverallRating.length; i++) {
-                    		$scope.label.push(zoneOverallRating[i].date);
-                    		$scope.datas.push(zoneOverallRating[i].rating);
+                    console.log('Line chart labels - ' + JSON.stringify($scope.labels));
+                    console.log('Line chart data - ' + JSON.stringify($scope.data));
+
+                     // Doughnut chart data
+
+                    var doughnutZoneDateWiseRating = $scope.feedbackReport.weeklyZone;
+                    for(var i =0;i<doughnutZoneDateWiseRating.length; i++) {
+                    		$scope.label.push(doughnutZoneDateWiseRating[i].date);
+                    		$scope.datas.push(doughnutZoneDateWiseRating[i].rating);
                     }
-                    console.log('doughnut labels - ' + JSON.stringify($scope.label));
-                    console.log('doughnut data - ' + JSON.stringify($scope.datas));
+                    
+                    $scope.chartOptions = { legend: { display: true } };
+
+                                          
+
+                    console.log('Doughnut chart labels - ' + JSON.stringify($scope.label));
+                    console.log('Doughnut chart data - ' + JSON.stringify($scope.datas));
+                    console.log('Doughnut chart Legend - ' + JSON.stringify($scope.options));
 
                 }else {
 
-                    var zoneWiseRating = $scope.feedbackReport.weeklySite;
-                    var zoneWiseDataArr = [];
+                    // Line chart data
 
-                    for(var i =0;i<zoneWiseRating.length; i++) {
-                    		$scope.labels.push(zoneWiseRating[i].zoneName);
-                    		zoneWiseDataArr.push(zoneWiseRating[i].rating);
+                    var lineZoneWiseRating = $scope.feedbackReport.weeklySite;
+                    //var chartZoneWiseDataArr = [];
+
+                    for(var i =0;i<lineZoneWiseRating.length; i++) {
+                    		$scope.labels.push(lineZoneWiseRating[i].zoneName);
+                    		$scope.data.push(lineZoneWiseRating[i].rating);
                     }
 
-                    //$scope.data.push(zoneWiseDataArr);
-                    $scope.data = zoneWiseDataArr;
+                    //$scope.data.push(chartZoneWiseDataArr);
+                    //$scope.data = chartZoneWiseDataArr;
 
-                    var zoneDateWiseRating = $scope.feedbackReport.weeklySite;
-                    var zoneDateWiseDataArr = [];
-                    for(var i =0;i<zoneDateWiseRating.length; i++) {
-                    		$scope.label.push(zoneDateWiseRating[i].zoneName);
-                    		$scope.datas.push(zoneDateWiseRating[i].rating);
+                    console.log('Line chart labels - ' + JSON.stringify($scope.labels));
+                    console.log('Line chart data - ' + JSON.stringify($scope.data));
+
+                     // Doughnut chart data
+
+                    var doughnutZoneWiseRating = $scope.feedbackReport.weeklySite;
+                    //var doughnutZoneWiseDataArr = [];
+                    for(var i =0;i<doughnutZoneWiseRating.length; i++) {
+                    		$scope.label.push(doughnutZoneWiseRating[i].zoneName);
+                    		$scope.datas.push(doughnutZoneWiseRating[i].rating);
                     }
 
-                    console.log('labels - ' + JSON.stringify($scope.labels));
-                    console.log('data - ' + JSON.stringify($scope.data));
                     //$scope.datas.push(zoneDateWiseDataArr);
+
+                     $scope.chartOptions = { legend: { display: true } };
+
+                    console.log('Doughnut chart labels - ' + JSON.stringify($scope.label));
+                    console.log('Doughnut chart data - ' + JSON.stringify($scope.datas));
+                    console.log('Doughnut chart Legend - ' + JSON.stringify($scope.options));
+
+                    
 
                 }
             });
