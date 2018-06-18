@@ -1,6 +1,7 @@
 package com.ts.app.web.rest;
 
 import java.io.IOException;
+import java.util.Calendar;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -8,7 +9,6 @@ import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
-import javax.websocket.server.PathParam;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,11 +27,11 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.codahale.metrics.annotation.Timed;
 import com.ts.app.domain.Frequency;
-import com.ts.app.domain.FrequencyDuration;
 import com.ts.app.domain.FrequencyPrefix;
 import com.ts.app.security.SecurityUtils;
 import com.ts.app.service.AssetManagementService;
 import com.ts.app.service.util.FileUploadHelper;
+import com.ts.app.service.util.ImportUtil;
 import com.ts.app.web.rest.dto.AssetAMCScheduleDTO;
 import com.ts.app.web.rest.dto.AssetDTO;
 import com.ts.app.web.rest.dto.AssetDocumentDTO;
@@ -40,6 +40,7 @@ import com.ts.app.web.rest.dto.AssetParameterReadingDTO;
 import com.ts.app.web.rest.dto.AssetPpmScheduleDTO;
 import com.ts.app.web.rest.dto.AssetTypeDTO;
 import com.ts.app.web.rest.dto.AssetgroupDTO;
+import com.ts.app.web.rest.dto.ImportResult;
 import com.ts.app.web.rest.dto.SearchCriteria;
 import com.ts.app.web.rest.dto.SearchResult;
 import com.ts.app.web.rest.errors.TimesheetException;
@@ -62,6 +63,9 @@ public class AssetResource {
 	
 	@Autowired
     private ServletContext servletContext;
+	
+	@Inject
+	private ImportUtil importUtil;
 
 	// Asset
 	@RequestMapping(path = "/asset", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -248,26 +252,12 @@ public class AssetResource {
 			HttpServletRequest request) {
 		log.debug(">>> Asset DTO saveAssetPPMSchedule request <<<");
 		log.debug("Title <<<" + assetPpmScheduleDTO.getTitle());
-		
-		try {
-			if(!assetService.isDuplicatePPMSchedule(assetPpmScheduleDTO)) {
-				log.debug(">>> going to create <<<");
-				assetPpmScheduleDTO = assetService.createAssetPpmSchedule(assetPpmScheduleDTO);
-			}else {
-				log.debug(">>> duplicate <<<");
-				assetPpmScheduleDTO.setMessage("error.duplicateRecordError");
-				return new ResponseEntity<>(assetPpmScheduleDTO,HttpStatus.BAD_REQUEST);
-			}
-			
 
-		}catch(Exception e) {
-			throw new TimesheetException(e, assetPpmScheduleDTO);
-		}
-		
-		log.debug("Asset PPM Schedule new id - " + assetPpmScheduleDTO.getId());
-		return new ResponseEntity<>(assetPpmScheduleDTO, HttpStatus.CREATED);
+		AssetPpmScheduleDTO response = assetService.createAssetPpmSchedule(assetPpmScheduleDTO);
+		log.debug("Asset PPM Schedule save response - " + response);
+		return new ResponseEntity<>(response, HttpStatus.CREATED);
 	}
-
+	
 	@RequestMapping(path = "/assets/ppmschedule", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE)
 	@Timed
 	public ResponseEntity<?> updateAssetPPMSchedule(@Valid @RequestBody AssetPpmScheduleDTO assetPpmScheduleDTO,
@@ -411,4 +401,33 @@ public class AssetResource {
     }
 	
 	
+	@RequestMapping(path="/assets/import", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<ImportResult> importJobData(@RequestParam("assetFile") MultipartFile file){
+		Calendar cal = Calendar.getInstance();
+		ImportResult result = importUtil.importJobData(file, cal.getTimeInMillis());
+		return new ResponseEntity<ImportResult>(result,HttpStatus.OK);
+	}
+
+    @RequestMapping(value = "/assets/import/{fileId}/status",method = RequestMethod.GET)
+	public ImportResult importStatus(@PathVariable("fileId") String fileId) {
+		//log.debug("ImportStatus -  fileId -"+ fileId);
+		ImportResult result = assetService.getImportStatus(fileId);
+		if(result!=null && result.getStatus() != null) {
+			switch(result.getStatus()) {
+				case "PROCESSING" :
+					result.setMsg("Importing data...");
+					break;
+				case "COMPLETED" :
+					result.setMsg("Completed importing");
+					break;
+				case "FAILED" :
+					result.setMsg("Failed to import. Please try again");
+					break;
+				default :
+					result.setMsg("Completed importing");
+					break;
+			}
+		}
+		return result;
+	}
 }

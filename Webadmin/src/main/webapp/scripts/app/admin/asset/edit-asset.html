@@ -1,4 +1,4 @@
-<div class="crud-form" ng-init="editAsset();loadingStart();assetConfig();loadAllParameters();loadAllParameterUOMs();"
+<div class="crud-form" ng-init="editAsset();loadingStart();assetConfig();loadAllParameters();loadAllParameterUOMs();loadAMCJobs();"
 	data-unique-hash="a2ad475d60b22954085c657a73309b8f">
 	<div class="">
 		<div class="row">
@@ -882,54 +882,18 @@
                                                             </thead>
 
                                                             <tbody>
-                                                            <tr>
-                                                                <td>Weekly</td>
-                                                                <td>03/03/2018</td>
-                                                                <td>00045</td>
-                                                                <td>03/03/2018</td>
-                                                                <td>15/03/2018</td>
-                                                                <td>UDS</td>
-                                                                <td>Completed</td>
+                                                            <tr ng-repeat="amcList in amcJobLists">
+                                                                <td>{{amcList.schedule}}</td>
+                                                                <td>{{amcList.plannedStartTime | date:'dd-MMM-yyyy'}}</td>
+                                                                <td>{{amcList.id}}</td>
+                                                                <td>{{amcList.plannedStartTime | date:'dd-MMM-yyyy'}}</td>
+                                                                <td>{{amcList.plannedEndTime | date:'dd-MMM-yyyy'}}</td>
+                                                                <td>{{amcList.employeeName}}</td>
+                                                                <td>{{amcList.jobStatus}}</td>
                                                             </tr>
                                                             <tr>
-                                                                <td>Weekly</td>
-                                                                <td>03/03/2018</td>
-                                                                <td>00045</td>
-                                                                <td>03/03/2018</td>
-                                                                <td>15/03/2018</td>
-                                                                <td>UDS</td>
-                                                                <td>Completed</td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td>Weekly</td>
-                                                                <td>03/03/2018</td>
-                                                                <td>00045</td>
-                                                                <td>03/03/2018</td>
-                                                                <td>15/03/2018</td>
-                                                                <td>UDS</td>
-                                                                <td>Completed</td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td>Weekly</td>
-                                                                <td>03/03/2018</td>
-                                                                <td>00045</td>
-                                                                <td>03/03/2018</td>
-                                                                <td>15/03/2018</td>
-                                                                <td>UDS</td>
-                                                                <td>Completed</td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td>Weekly</td>
-                                                                <td>03/03/2018</td>
-                                                                <td>00045</td>
-                                                                <td>03/03/2018</td>
-                                                                <td>15/03/2018</td>
-                                                                <td>UDS</td>
-                                                                <td>Completed</td>
-                                                            </tr>
-
-
-
+                                                   				<td colspan="7" align="center" ng-show="!amcJobLists.length">No AMC Jobs Found</td>
+                                                   			</tr>
                                                             </tbody>
                                                         </table>
 
@@ -1141,13 +1105,13 @@
                                                                 <tbody>
                                                                 <tr ng-repeat="ppmSchedules in ppmScheduleList">
                                                                     <td>{{ppmSchedules.title}}</td>
-                                                                    <td class="hiddenCheckList">{{ppmSchedules.checklistName}}
+                                                                    <td class="hiddenCheckList" ng-mouseover="loadCheckList(ppmSchedules.checklistId)">{{ppmSchedules.checklistName}}
 
                                                                        <div class="CheckListBx">
-                                                                           <div class="bootstrap-tagsinput"><span class="tag label label-info">Item 1<span data-role="remove"></span></span>
-                                                                               <span class="tag label label-info">Item 2<span data-role="remove"></span></span>
-                                                                               <span class="tag label label-info">Item 3<span data-role="remove"></span></span>
-                                                                               <span class="tag label label-info">Item 4<span data-role="remove"></span></span> <input type="text" placeholder=""></div>
+                                                                           <div class="bootstrap-tagsinput" ng-repeat="checkListItem in ppmSchedules.items">
+                                                                               <span class="tag label label-info">{{checkListItem.name}}<span data-role="remove"></span></span>
+        
+                                                                           </div>
                                                                        </div>
 
                                                                     </td>
@@ -1362,13 +1326,23 @@
                                                             <tbody>
                                                             <tr ng-repeat="amcSchedule in amcScheduleList">
                                                                 <td>{{amcSchedule.title}}</td>
-                                                                <td class="hiddenCheckList">{{amcSchedule.checklistName}}
+                                                                <!-- <td class="hiddenCheckList">{{amcSchedule.checklistName}}
 
                                                                    <div class="CheckListBx">
                                                                        <div class="bootstrap-tagsinput"><span class="tag label label-info">Item 1<span data-role="remove"></span></span>
                                                                            <span class="tag label label-info">Item 2<span data-role="remove"></span></span>
                                                                            <span class="tag label label-info">Item 3<span data-role="remove"></span></span>
                                                                            <span class="tag label label-info">Item 4<span data-role="remove"></span></span> <input type="text" placeholder=""></div>
+                                                                   </div>
+
+                                                                </td> -->
+                                                                <td class="hiddenCheckList">{{amcSchedule.checklistName}}
+
+                                                                   <div class="CheckListBx">
+                                                                       <div class="bootstrap-tagsinput" ng-repeat="checkListItemAmc in amcSchedule.items">
+                                                                           <span class="tag label label-info">{{checkListItemAmc.name}}<span data-role="remove"></span></span>
+    
+                                                                       </div>
                                                                    </div>
 
                                                                 </td>
@@ -1565,8 +1539,7 @@
 
                                                 </div>
                                                 <div class="tab-pane fade docs" id="docs">
-                                                    <form name="importClientForm" role="form" novalidate
-                                                    class="ng-pristine ng-valid">
+                                                    
                                                     <div class="panel panel-default" style="min-height: 200px;">
 
                                                         <div class="panel-heading">
@@ -1577,6 +1550,8 @@
 
 
                                                             <div class="row">
+                                                                <form name="importClientForm" role="form" novalidate
+                                                                 class="ng-pristine ng-valid">
 
                                                                 <div class="col-md-6">
 
@@ -1590,19 +1565,39 @@
                                                                                        class='form-control'
                                                                                        name='fileTitle'
                                                                                        type='text' value=""
-                                                                                       ng-minlength='5'
-                                                                                       ng-maxlength='250'
-                                                                                       ng-pattern="/^[A-Za-z0-9\s]*$/" autofocus
+                                                                                        autofocus required
                                                                                 />
+                                                                                <div ng-show="importClientForm.$submitted || importClientForm.fileTitle.$touched">
+                                                                                    <div
+                                                                                        ng-show="importClientForm.fileTitle.$dirty || importClientForm.fileTitle.$invalid">
+                                                                                        <p class="help-block" style="color:maroon"
+                                                                                           ng-show="importClientForm.fileTitle.$error.required">
+                                                                                            File title is required.
+                                                                                        </p>
+
+                                                                                    </div>
+                                                                                    
+                                                                                </div>
                                                                             </div>
                                                                         </div>
                                                                         <div class="col-md-12">
                                                                             <div class="form-group label-floating is-empty is-fileinput row">
                                                                                 <div class="col-md-6 pdng-top13">
-                                                                                    <input type="file" class="form-control ng-pristine ng-valid ng-touched" style="opacity:100;position:relative" file-model="" ng-model="selectedClientFile" name="clientFile" tabindex="0" aria-invalid="false">
+                                                                                    <input type="file" class="form-control ng-pristine ng-valid ng-touched" style="opacity:100;position:relative" file-model="" ng-model="selectedClientFile" name="clientFile" tabindex="0" aria-invalid="false" required>
+                                                                                    <div ng-show="importClientForm.$submitted || importClientForm.clientFile.$touched">
+                                                                                        <div
+                                                                                            ng-show="importClientForm.clientFile.$dirty || importClientForm.clientFile.$invalid">
+                                                                                            <p class="help-block" style="color:maroon"
+                                                                                               ng-show="importClientForm.clientFile.$error.required">
+                                                                                                File  is required.
+                                                                                            </p>
+
+                                                                                        </div>
+                                                                                        
+                                                                                    </div>
                                                                                 </div>
                                                                                 <div class="col-md-6">
-                                                                                    <button class="btn btn-success" tabindex="0" ng-click="uploadAssetFile()">
+                                                                                    <button class="btn btn-success" tabindex="0" ng-click="uploadAssetFile()" ng-disabled="importClientForm.$invalid">
                                                                                 <span class="btn-label">
                                                                                     <i class="material-icons">file_upload</i>
                                                                                 </span>Upload Docs
@@ -1618,6 +1613,9 @@
                                                                     </div>
 
                                                                 </div>
+                                                            </form>
+                                                            <form name="importClientForm1" role="form" novalidate
+                                                             class="ng-pristine ng-valid">
                                                                 <div class="col-md-6">
 
                                                                    <div class="row" >
@@ -1628,21 +1626,41 @@
                                                                                <input id='fileTitle'
                                                                                       ng-model="uploadAssetPhoto.title"
                                                                                       class='form-control'
-                                                                                      name='fileTitle'
+                                                                                      name='photoTitle'
                                                                                       type='text' value=""
-                                                                                      ng-minlength='5'
-                                                                                      ng-maxlength='250'
-                                                                                      ng-pattern="/^[A-Za-z0-9\s]*$/" autofocus
+                                                                                       autofocus required
                                                                                />
+                                                                                <div ng-show="importClientForm1.$submitted || importClientForm1.photoTitle.$touched">
+                                                                                    <div
+                                                                                        ng-show="importClientForm1.photoTitle.$dirty || importClientForm1.photoTitle.$invalid">
+                                                                                        <p class="help-block" style="color:maroon"
+                                                                                           ng-show="importClientForm1.photoTitle.$error.required">
+                                                                                            Photo title is required.
+                                                                                        </p>
+
+                                                                                    </div>
+                                                                                    
+                                                                                </div>
                                                                            </div>
                                                                        </div>
                                                                        <div class="col-md-12">
                                                                            <div class="form-group label-floating is-empty is-fileinput row">
                                                                                <div class="col-md-6 pdng-top13">
-                                                                                   <input type="file" class="form-control ng-pristine ng-valid ng-touched" style="opacity:100;position:relative" file-model="" ng-model="selectedPhotoFile" name="clientFile" tabindex="0" aria-invalid="false">
+                                                                                   <input type="file" class="form-control ng-pristine ng-valid ng-touched" style="opacity:100;position:relative" file-model="" ng-model="selectedPhotoFile" name="clientFile1" tabindex="0" aria-invalid="false" required>
+                                                                                   <div ng-show="importClientForm1.$submitted || importClientForm1.clientFile1.$touched">
+                                                                                        <div
+                                                                                            ng-show="importClientForm1.clientFile1.$dirty || importClientForm1.clientFile1.$invalid">
+                                                                                            <p class="help-block" style="color:maroon"
+                                                                                               ng-show="importClientForm1.clientFile1.$error.required">
+                                                                                                Photo  is required.
+                                                                                            </p>
+
+                                                                                        </div>
+                                                                                        
+                                                                                    </div>
                                                                                </div>
                                                                                <div class="col-md-6">
-                                                                                   <button class="btn btn-success" tabindex="0" ng-click="uploadAssetPhotoFile()">
+                                                                                   <button class="btn btn-success" tabindex="0" ng-click="uploadAssetPhotoFile()" ng-disabled="importClientForm1.$invalid">
                                                                                 <span class="btn-label">
                                                                                     <i class="material-icons">file_upload</i>
                                                                                 </span>Upload Docs
@@ -1659,6 +1677,7 @@
 
 
                                                                 </div>
+                                                              </form>
 
                                                             </div>
 
@@ -1668,7 +1687,7 @@
                                                         </div>
 
                                                     </div>
-                                                    </form>
+                                                    
                                                     <div class="panel panel-default" style="min-height: 200px;">
 
                                                         <div class="panel-heading">

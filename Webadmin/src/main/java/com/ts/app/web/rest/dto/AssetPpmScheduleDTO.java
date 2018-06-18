@@ -3,7 +3,7 @@ package com.ts.app.web.rest.dto;
 import java.sql.Date;
 
 public class AssetPpmScheduleDTO extends BaseDTO {
-	private Long id;
+    private long id;
 	private String title;
 	private Long checklistId;
 	private String checklistName;
@@ -13,17 +13,31 @@ public class AssetPpmScheduleDTO extends BaseDTO {
 	private int frequencyDuration;
 	private String frequency;
 	private Long assetId;
-	
+	private long empId;
+	private String maintenanceType;
+
+	public String getMaintenanceType() {
+		return maintenanceType;
+	}
+	public void setMaintenanceType(String maintenanceType) {
+		this.maintenanceType = maintenanceType;
+	}
+	public long getEmpId() {
+		return empId;
+	}
+	public void setEmpId(long empId) {
+		this.empId = empId;
+	}
 	public String getChecklistName() {
 		return checklistName;
 	}
 	public void setChecklistName(String checklistName) {
 		this.checklistName = checklistName;
 	}
-	public Long getId() {
+	public long getId() {
 		return id;
 	}
-	public void setId(Long id) {
+	public void setId(long id) {
 		this.id = id;
 	}
 	public String getTitle() {

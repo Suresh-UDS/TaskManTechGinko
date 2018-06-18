@@ -24,7 +24,7 @@ spring:
         url: jdbc:mysql://localhost:3306/Taskman?useUnicode=true&characterEncoding=utf8
         name:
         username: root
-        password: admin
+        password: root
     jpa:
         database-platform: org.hibernate.dialect.MySQLInnoDBDialect
         database: MYSQL
@@ -91,7 +91,7 @@ import:
             completed: /opt/imports/completed
 asset:
    file:
-       path: /opt/asset/uploads/site      
+       path: opt/uploads/site      
 
 multipart:
    maxFileSize: 15MB
@@ -162,6 +162,15 @@ scheduler:
       enabled: true
    monthlyJob:
       enabled: true
+   yearlyJob:
+      enabled: true
+      creation: daily
+   fortnightlyJob:
+      enabled: true
+      creation: daily
+   halfyearlyJob:
+      enabled: true
+      creation: yearly
    overdueJob:
       enabled: false
    eodJobReport:

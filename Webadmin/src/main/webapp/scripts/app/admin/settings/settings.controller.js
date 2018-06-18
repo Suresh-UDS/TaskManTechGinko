@@ -16,7 +16,8 @@ angular.module('timeSheetApp')
     			eodJobEmailIds : [],
     			quotationEmailIds : [],
     			feedbackEmailIds : [],
-    			ticketEmailIds : []
+    			ticketEmailIds : [],
+    			readingEmailIds : []
     		};
     		
     	
@@ -102,6 +103,19 @@ angular.module('timeSheetApp')
 	    
 	    $scope.removeFeedbackEmail = function(ind) {
 	    		$scope.settings.feedbackEmailIds.splice(ind,1);
+	    }
+	    
+	    $scope.addReadingEmail = function() {
+        	var email = $scope.readingEmail;
+        	if(!$scope.settings.readingEmailIds) {
+        		$scope.settings.readingEmailIds = [];
+        	}
+        	$scope.settings.readingEmailIds.push(email);
+        	$scope.readingEmail = '';
+	    }
+    
+	    $scope.removeReadingEmail = function(index) {
+    		$scope.settings.readingEmailIds.splice(index,1);
 	    }
     		
         $scope.loadProjects = function () {

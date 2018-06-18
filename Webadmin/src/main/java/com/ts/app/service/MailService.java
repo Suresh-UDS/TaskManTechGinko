@@ -315,6 +315,21 @@ public class MailService {
         String subject = messageSource.getMessage("email.feedback.alert.title", null, locale);
         sendEmail(emailIds, subject, content, true, true, null);
     }
+    
+    @Async
+    public void sendReadingAlert(String emailIds, String siteName, String assetCode, String assetName, String type, Date date) {
+        log.debug("Sending Reading alert e-mail to '{}'", emailIds);
+        Locale locale = Locale.forLanguageTag("en-US");
+        Context context = new Context(locale);
+        context.setVariable("assetName", assetName);
+        context.setVariable("assetCode", assetCode);
+        context.setVariable("siteName", siteName);
+        context.setVariable("type", type);
+        context.setVariable("date", date);
+        String content = templateEngine.process("assetReadingAlert", context);
+        String subject = messageSource.getMessage("email.reading.title", null, locale);
+        sendEmail(emailIds, subject, content, true, true, null);
+    }
 
 
     @Async

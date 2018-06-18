@@ -28,6 +28,8 @@ import com.ts.app.domain.AssetGroup;
 import com.ts.app.domain.AssetPPMSchedule;
 import com.ts.app.domain.AssetParameterConfig;
 import com.ts.app.domain.AssetParameterReading;
+import com.ts.app.domain.AssetParameterReadingRule;
+import com.ts.app.domain.AssetReadingRule;
 import com.ts.app.domain.AssetType;
 import com.ts.app.domain.Checklist;
 import com.ts.app.domain.Employee;
@@ -39,15 +41,18 @@ import com.ts.app.domain.Job;
 import com.ts.app.domain.Manufacturer;
 import com.ts.app.domain.ParameterConfig;
 import com.ts.app.domain.Project;
+import com.ts.app.domain.Setting;
 import com.ts.app.domain.Site;
 import com.ts.app.domain.User;
 import com.ts.app.domain.Vendor;
+import com.ts.app.domain.util.StringUtil;
 import com.ts.app.repository.AssetAMCRepository;
 import com.ts.app.repository.AssetDocumentRepository;
 import com.ts.app.repository.AssetGroupRepository;
 import com.ts.app.repository.AssetParamReadingRepository;
 import com.ts.app.repository.AssetParameterConfigRepository;
 import com.ts.app.repository.AssetPpmScheduleRepository;
+import com.ts.app.repository.AssetReadingRuleRepository;
 import com.ts.app.repository.AssetRepository;
 import com.ts.app.repository.AssetTypeRepository;
 import com.ts.app.repository.CheckInOutImageRepository;
@@ -61,10 +66,12 @@ import com.ts.app.repository.NotificationRepository;
 import com.ts.app.repository.ParameterConfigRepository;
 import com.ts.app.repository.PricingRepository;
 import com.ts.app.repository.ProjectRepository;
+import com.ts.app.repository.SettingsRepository;
 import com.ts.app.repository.SiteRepository;
 import com.ts.app.repository.TicketRepository;
 import com.ts.app.repository.UserRepository;
 import com.ts.app.repository.VendorRepository;
+import com.ts.app.service.util.CommonUtil;
 import com.ts.app.service.util.DateUtil;
 import com.ts.app.service.util.ExportUtil;
 import com.ts.app.service.util.FileUploadHelper;
@@ -199,6 +206,17 @@ public class AssetManagementService extends AbstractService {
 
 	@Inject
 	private JobManagementService jobManagementService;
+	
+	@Inject
+	private AssetReadingRuleRepository assetReadingRuleRepository;
+	
+	@Inject
+	private SettingsRepository settingRepository;
+	
+	
+	public static final String EMAIL_NOTIFICATION_READING = "email.notification.reading";
+	
+	public static final String EMAIL_NOTIFICATION_READING_EMAILS = "email.notification.reading.emails";
 
 	// Asset
 	public AssetDTO saveAsset(AssetDTO assetDTO) {
@@ -251,7 +269,7 @@ public class AssetManagementService extends AbstractService {
 	
 	public boolean isDuplicatePPMSchedule(AssetPpmScheduleDTO assetPpmScheduleDTO) {
 	    log.debug("Asset Title "+assetPpmScheduleDTO.getTitle());
-		AssetPPMSchedule assetPPMSchedule = assetPpmScheduleRepository.findAssetPPMScheduleByTitle(assetPpmScheduleDTO.getTitle());
+		List<AssetPPMSchedule> assetPPMSchedule = assetPpmScheduleRepository.findAssetPPMScheduleByTitle(assetPpmScheduleDTO.getTitle());
 		if(assetPPMSchedule != null) {
 			return true;
 		}
@@ -454,12 +472,13 @@ public class AssetManagementService extends AbstractService {
 		log.debug("Existing schedule -" + existingSchedules);
 		if (CollectionUtils.isEmpty(existingSchedules)) {
 			assetAMC = assetAMCRepository.save(assetAMC);
+			assetAMCScheduleDTO = mapperUtil.toModel(assetAMC, AssetAMCScheduleDTO.class);
 			if(assetAMC.getId() > 0) { 
 				jobManagementService.createAMCJobs(assetAMCScheduleDTO);
 			}
 		}
 
-		return mapperUtil.toModel(assetAMC, AssetAMCScheduleDTO.class);
+		return assetAMCScheduleDTO;
 
 	}
 
@@ -733,7 +752,7 @@ public class AssetManagementService extends AbstractService {
 	}
 
 	public ImportResult importFile(MultipartFile file, long dateTime) {
-		return importUtil.importJobData(file, dateTime);
+		return importUtil.importAssetData(file, dateTime);
 	}
 
 	public ImportResult getImportStatus(String fileId) {
@@ -815,27 +834,35 @@ public class AssetManagementService extends AbstractService {
 		return assetParamConfigDTO;
 	}
 
+	/**
+	 * Creates the asset PPM schedule information.
+	 * 
+	 * @param assetPPMScheduleDTO
+	 * @return
+	 */
 	public AssetPpmScheduleDTO createAssetPpmSchedule(AssetPpmScheduleDTO assetPpmScheduleDTO) {
-		// TODO Auto-generated method stub
-		log.debug(">> create ppm schedule <<<");
+		log.debug("Create assets PPM schedule");
+
 		AssetPPMSchedule assetPPMSchedule = mapperUtil.toEntity(assetPpmScheduleDTO, AssetPPMSchedule.class);
+		Checklist checklist = checklistRepository.findOne(assetPpmScheduleDTO.getChecklistId());
+		Asset asset = assetRepository.findOne(assetPpmScheduleDTO.getAssetId());
+		assetPPMSchedule.setAsset(asset);
+		assetPPMSchedule.setChecklist(checklist);
 		assetPPMSchedule.setActive(AssetPPMSchedule.ACTIVE_YES);
 
-		Checklist checklist = getCheckList(assetPpmScheduleDTO.getChecklistId());
-		assetPPMSchedule.setChecklist(checklist);
-
-		Asset asset = getAsset(assetPpmScheduleDTO.getAssetId());
-		assetPPMSchedule.setAsset(asset);
-
+		List<AssetPPMSchedule> assetPPMSchedules = assetPpmScheduleRepository.findAssetPPMScheduleByTitle(assetPpmScheduleDTO.getTitle());
+		log.debug("Existing schedule -" + assetPPMSchedule);
+		if (CollectionUtils.isEmpty(assetPPMSchedules)) {
 		assetPPMSchedule = assetPpmScheduleRepository.save(assetPPMSchedule);
 		assetPpmScheduleDTO = mapperUtil.toModel(assetPPMSchedule, AssetPpmScheduleDTO.class);
-		if(assetPPMSchedule.getId() !=0) {
-		jobManagementService.createJob(assetPpmScheduleDTO);
-		log.debug(">> after create job for ppm schedule <<<");
+			if(assetPPMSchedule.getId() > 0) { 
+				jobManagementService.createJob(assetPpmScheduleDTO);
+			}
 		}
 		return assetPpmScheduleDTO;
-	}
 
+	}
+	
 	/**
 	 * Updates the asset PPM schedule information.
 	 * 
@@ -929,6 +956,7 @@ public class AssetManagementService extends AbstractService {
 		}else{ 
 			assetParameterReading.setJob(null);
 		}
+		
 		AssetParameterConfig assetParameterConfig = assetParamConfigRepository.findOne(assetParamReadingDTO.getAssetParameterConfigId());
 		assetParameterReading.setAssetParameterConfig(assetParameterConfig);
 		assetParameterReading = assetParamReadingRepository.save(assetParameterReading);
@@ -994,7 +1022,11 @@ public class AssetManagementService extends AbstractService {
 				Job job = jobRepository.findOne(assetParamReadingDTO.getJobId());
 				assetParamReading.setJob(job);
 			}
-			assetParamReading.setConsumption(assetParamReadingDTO.getConsumption());
+			if(assetParamReadingDTO.getInitialValue() > 0 && assetParamReadingDTO.getFinalValue() > 0) {
+				double consumption = assetParamReadingDTO.getFinalValue() - assetParamReadingDTO.getInitialValue();
+				assetParamReading.setConsumption(consumption);
+			}
+			
 			assetParamReading.setConsumptionMonitoringRequired(assetParamReadingDTO.isConsumptionMonitoringRequired());
 			assetParamReading.setInitialValue(assetParamReadingDTO.getInitialValue());
 			assetParamReading.setFinalValue(assetParamReadingDTO.getFinalValue());
@@ -1003,6 +1035,104 @@ public class AssetManagementService extends AbstractService {
 			assetParamReading.setUom(assetParamReadingDTO.getUom());
 			assetParamReading.setValue(assetParamReadingDTO.getValue());
 			assetParamReadingRepository.save(assetParamReading);
+			
+			if(assetParamReadingDTO.getAssetParameterConfigId() > 0 ) { 
+				
+				List<AssetParameterReadingRule> readingRuleLists = assetReadingRuleRepository.findByAssetConfigId(assetParamReadingDTO.getAssetParameterConfigId());
+				
+				AssetParameterReadingDTO prevReading = getLatestParamReading(assetParamReadingDTO.getAssetId(), assetParamReadingDTO.getAssetParameterConfigId());
+				
+				AssetParameterConfig assetParamConfig = assetParamConfigRepository.findOne(assetParamReadingDTO.getId());
+				
+				Asset asset = assetRepository.findOne(assetParamConfig.getId());
+				
+				String assetCode = asset.getCode();
+				
+				String assetName = asset.getTitle();
+				
+				Site site = siteRepository.findOne(asset.getSite().getId());
+				
+				String siteName = site.getName();
+				
+				Date date = new Date();
+				
+				for(AssetParameterReadingRule assetReadingRuleList : readingRuleLists) {
+							
+					AssetReadingRule rule = AssetReadingRule.valueOf(assetReadingRuleList.getRule());
+					
+					switch(rule) {
+					
+						case CURRENT_CONSUMPTION_GREATER_THAN_PREVIOUS_CONSUMPTION :
+							
+							if(assetParamReadingDTO.getId() > 0 && assetParamReadingDTO.isConsumptionMonitoringRequired()) { 
+																
+								if(assetParamReadingDTO.getConsumption() < prevReading.getConsumption()) {
+									
+									String type = "consumption";
+									
+									Setting setting = settingRepository.findSettingByKey(EMAIL_NOTIFICATION_READING);
+									
+									if(setting.getSettingValue() == "true") { 
+										Setting settingEntity = settingRepository.findSettingByKey(EMAIL_NOTIFICATION_READING_EMAILS);
+										if(settingEntity.getSettingValue().length() > 0) { 
+											List<String> emailLists = CommonUtil.convertToList(settingEntity.getSettingValue(), ",");
+											for(String email : emailLists) { 
+												mailService.sendReadingAlert(email, siteName, assetCode, assetName, type, date);
+											}
+										}
+									}
+								}
+							}
+							
+						case CURRENT_READING_GREATER_THAN_PREVIOUS_READING :
+							
+							if(assetParamReadingDTO.getId() > 0 && !assetParamReadingDTO.isConsumptionMonitoringRequired()) { 
+								
+								String type = "reading";
+								
+								if(assetParamReadingDTO.getValue() > 0 && prevReading.getValue() > 0) { 
+									
+									double currentThreshold = prevReading.getValue() - assetParamReadingDTO.getValue();
+									
+									double threshold = assetParamConfig.getThreshold();
+									
+									if(currentThreshold > threshold) { 
+										
+										Setting setting = settingRepository.findSettingByKey(EMAIL_NOTIFICATION_READING);
+										
+										if(setting.getSettingValue() == "true") { 
+											
+											Setting settingEntity = settingRepository.findSettingByKey(EMAIL_NOTIFICATION_READING_EMAILS);
+											
+											if(settingEntity.getSettingValue().length() > 0) {
+												
+												List<String> emailLists = CommonUtil.convertToList(settingEntity.getSettingValue(), ",");
+												for(String email : emailLists) { 
+													mailService.sendReadingAlert(email, siteName, assetCode, assetName, type, date);
+												}
+												
+											} else {
+												
+												log.info("There is no email ids registered");
+											}
+										}
+										
+									}
+									
+								}
+							}
+							
+						case CURRENT_RUNHOUR_GREATER_THAN_PREVIOUS_RUNHOUR : 
+							
+							
+							
+						default:
+						
+					}
+					
+				}
+			}
+		
 		
 			return mapperUtil.toModel(assetParamReading, AssetParameterReadingDTO.class);
 	}
