@@ -12,7 +12,7 @@ import{GetAssetReadings} from "./get-asset-readings/get-asset-readings";
 import {Camera, CameraOptions} from "@ionic-native/camera";
 import { DatePicker } from '@ionic-native/date-picker';
 import {AssetService} from "../service/assetService";
-import{CalenderPage} from "../calender-page/calender-page";
+
 
 
 /**
@@ -52,7 +52,6 @@ export class AssetView {
     {
         // let dateModal=this.modalCtrl.create(DateModal)
         // dateModal.present()
-        this.navCtrl.push(CalenderPage);
     }
 
   ionViewDidLoad() {
@@ -416,22 +415,6 @@ export class AssetView {
             }
         )
     }
-
-    // Reading Date Search
-    readingDateSearch(fromDate,toDate) {
-        // this.componentService.showLoader("")
-        console.log("From Date:" + fromDate.toISOString());
-        console.log("To Date:" + toDate.toISOString());
-        var searchCriteria={
-            fromDate:fromDate.toISOString(),
-            toDate:toDate.toISOString(),
-            assetId:this.assetDetails.id
-        };
-    }
-    //
-
-
-
 
     // Tickets
     getTickets(searchCriteria)

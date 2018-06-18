@@ -995,6 +995,11 @@ a:hover, a:focus
 {
   border-bottom: 1px solid #eeeeee;
 }
+.border-btm-blk
+{
+    border-bottom:1px solid #c1bcbc !important;
+}
+
 p.titleTxt
 {
   font-weight:600;
@@ -1634,13 +1639,15 @@ ion-grid .row:before
    {
        margin-left:0px !important;
    }
-    ion-spinner * {
-        width: 30% !important;
-        height: 28px;
-        stroke: #444;
-        fill: #222;
+   .gray-clr
+   {
+       background-color:#EEEEEE !important;
+   }
+    .toolbar-background-md
+    {
+        background-color:white !important;
+        border:none !important;
     }
-
 
 }
 

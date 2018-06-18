@@ -35,8 +35,6 @@ import{JobFilter} from "../pages/jobs/job-filter/job-filter";
 import{TicketFilter} from "../pages/ticket/ticket-filter/ticket-filter";
 import{EmployeeFilter} from "../pages/employee-list/employee-filter/employee-filter";
 import {authService} from "../pages/service/authService";
-import { OnInit } from '@angular/core';
-
 
 @Component({
   templateUrl: 'app.html'

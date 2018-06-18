@@ -23,8 +23,6 @@ export class GetAssetReading {
     assetDetails:any;
     dateTime:any;
     takenImages:any;
-    assetConfig:any;
-    current:any;
     constructor(public navCtrl: NavController, public navParams: NavParams, public modalController: ModalController,
                 public componentService:componentService, public popoverCtrl:PopoverController, public camera:Camera,
                 public assetService:AssetService) {
@@ -32,21 +30,9 @@ export class GetAssetReading {
         console.log(this.navParams.get('assetDetails'));
         this.dateTime = new Date();
         this.takenImages = [];
-        this.assetConfig=[];
 
     }
-    ionViewWillEnter(){
-       this.getAssetConfigsReading();
-    }
-
-    showHide(i){
-        console.log("Show hide"+i);
-        // this.collapseHide
-    }
-
-
-    getAssetConfigsReading()
-    {
+    ionViewDidLoad(){
         console.log("Get Asset reading page");
         console.log(this.assetDetails);
         console.log(this.assetDetails.config);
@@ -54,38 +40,13 @@ export class GetAssetReading {
             response=>{
                 console.log("Asset config details");
                 console.log(response);
-                this.assetConfig = response;
-                for(let config of this.assetConfig){
-                    this.assetService.getAssetPreviousReadings(config.assetId,config.id).subscribe(
-                        response=>{
-                            console.log("Get Asset Previous readings");
-                            console.log(response);
-                            if(response.initialValue<0){
-
-                                if(response.value>0){
-                                    config.previousValue=response.value;
-                                }
-                            }
-                            else if(response.finalValue<0)
-                            {
-                                config.previousValue=response.initialValue;
-                                config.reading=response.initialValue;
-                                console.log(this.assetConfig);
-                                config.previousReadingId=response.id;
-                            }else{
-                                config.previousValue=response.finalValue;
-                                config.reading=response.initialValue;
-                                console.log(this.assetConfig);
-
-                            }
-                        }
-                    )
-                }
+                this.assetDetails.config = response;
             },err=>{
                 console.log("Error in getting asset config");
                 console.log(err);
             }
         )
+
     }
 
     submitReading(){
@@ -131,70 +92,29 @@ export class GetAssetReading {
     saveReading(reading){
         console.log("Reading page");
         console.log(reading);
-        var assetReading={};
-
-        if(reading.consumptionMonitoringRequired && reading.previousReadingId>0){
-            assetReading = {
-                name:reading.name,
-                uom:reading.uom,
-                initialValue:reading.previousValue,
-                finalValue:reading.currentValue,
-                consumption:reading.currentValue-reading.previousValue,
-                assetId:reading.assetId,
-                assetParameterConfigId:reading.id,
-                consumptionMonitoringRequired:reading.consumptionMonitoringRequired,
-                readingId:reading.previousReadingId
-
-            };
-            console.log(assetReading);
-            this.assetSaveReading(assetReading);
-        }else if(reading.consumptionMonitoringRequired){
-            assetReading = {
-                name:reading.name,
-                uom:reading.uom,
-                initialValue:reading.previousValue,
-                finalValue:reading.currentValue,
-                consumption:reading.currentValue-reading.previousValue,
-                assetId:reading.assetId,
-                assetParameterConfigId:reading.id,
-                consumptionMonitoringRequired:reading.consumptionMonitoringRequired,
-            };
-            console.log(assetReading);
-            this.assetSaveReading(assetReading);
-        }else{
-            assetReading = {
-                name:reading.name,
-                uom:reading.uom,
-                value:reading.currentValue,
-                assetId:reading.assetId,
-                assetParameterConfigId:reading.id,
-                consumptionMonitoringRequired:reading.consumptionMonitoringRequired,
-            };
-            console.log(assetReading);
-            this.assetSaveReading(assetReading);
-        }
-
-
-    }
-
-    assetSaveReading(assetReading)
-    {
+        var assetReading = {
+            name:reading.name,
+            uom:reading.uom,
+            initialValue:reading.previousValue,
+            finalValue:reading.currentValue,
+            consumption:reading.currentValue-reading.previousValue,
+            value:"0.88",
+            assetId:reading.assetId,
+            assetParameterConfigId:reading.id,
+            consumptionMonitoringRequired:reading.consumptionMonitoringRequired,
+        };
         this.assetService.saveReading(assetReading).subscribe(
             response=>{
                 console.log("Save Reading Response");
                 console.log(response);
-                this.componentService.showToastMessage('Reading Saved','bottom');
-                this.navCtrl.pop();
             },
             error=>
             {
                 console.log("Save Reading Error");
                 console.log(error);
-                this.componentService.showToastMessage('Save Reading Error','bottom');
             }
 
         )
+
     }
-
-
 }

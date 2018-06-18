@@ -246,6 +246,32 @@ public class AssetResource {
 		return new ResponseEntity<>(assetDocumentDTO, HttpStatus.OK);
 	}
 
+	/*@RequestMapping(path = "/assets/ppmschedule", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+	@Timed
+	public ResponseEntity<?> saveAssetPPMSchedule(@Valid @RequestBody AssetPpmScheduleDTO assetPpmScheduleDTO,
+			HttpServletRequest request) {
+		log.debug(">>> Asset DTO saveAssetPPMSchedule request <<<");
+		log.debug("Title <<<" + assetPpmScheduleDTO.getTitle());
+		
+		try {
+			if(!assetService.isDuplicatePPMSchedule(assetPpmScheduleDTO)) {
+				log.debug(">>> going to create <<<");
+				assetPpmScheduleDTO = assetService.createAssetPpmSchedule(assetPpmScheduleDTO);
+			}else {
+				log.debug(">>> duplicate <<<");
+				assetPpmScheduleDTO.setMessage("error.duplicateRecordError");
+				return new ResponseEntity<>(assetPpmScheduleDTO,HttpStatus.BAD_REQUEST);
+			}
+			
+
+		}catch(Exception e) {
+			throw new TimesheetException(e, assetPpmScheduleDTO);
+		}
+		
+		log.debug("Asset PPM Schedule new id - " + assetPpmScheduleDTO.getId());
+		return new ResponseEntity<>(assetPpmScheduleDTO, HttpStatus.CREATED);
+	}*/
+
 	@RequestMapping(path = "/assets/ppmschedule", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
 	@Timed
 	public ResponseEntity<?> saveAssetPPMSchedule(@Valid @RequestBody AssetPpmScheduleDTO assetPpmScheduleDTO,

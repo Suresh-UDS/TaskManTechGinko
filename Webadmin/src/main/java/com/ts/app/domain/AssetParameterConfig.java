@@ -47,8 +47,6 @@ public class AssetParameterConfig extends AbstractAuditingEntity implements Seri
     @ManyToOne(fetch = FetchType.LAZY, cascade={CascadeType.ALL})
 	@JoinColumn(name = "assetId", referencedColumnName = "id", nullable = true)
 	private Asset asset;    
-    
-    private double threshold;
 
     public Long getId() {
         return id;
@@ -96,14 +94,6 @@ public class AssetParameterConfig extends AbstractAuditingEntity implements Seri
 
 	public void setAsset(Asset asset) {
 		this.asset = asset;
-	}
-
-	public double getThreshold() {
-		return threshold;
-	}
-
-	public void setThreshold(double threshold) {
-		this.threshold = threshold;
 	}
 
     
