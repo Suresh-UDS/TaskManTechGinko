@@ -1,4 +1,4 @@
-<div class="crud-form" ng-init="editAsset();loadingStart();assetConfig();loadAllParameters();loadAllParameterUOMs();loadAMCJobs();"
+<div class="crud-form" ng-init="editAsset();loadingStart();assetConfig();loadAllParameters();loadAllParameterUOMs();loadAMCJobs();loadPPMJobs();"
 	data-unique-hash="a2ad475d60b22954085c657a73309b8f">
 	<div class="">
 		<div class="row">
@@ -809,54 +809,18 @@
                                                             </thead>
 
                                                             <tbody>
-                                                            <tr>
-                                                                <td>Weekly</td>
-                                                                <td>03/03/2018</td>
-                                                                <td>00045</td>
-                                                                <td>03/03/2018</td>
-                                                                <td>15/03/2018</td>
-                                                                <td>UDS</td>
-                                                                <td>Completed</td>
+                                                            <tr ng-repeat="ppmList in ppmJobLists">
+                                                                <td>{{ppmList.schedule}}</td>
+                                                                <td>{{ppmList.plannedStartTime | date:'dd-MMM-yyyy'}}</td>
+                                                                <td>{{ppmList.id}}</td>
+                                                                <td>{{ppmList.plannedStartTime | date:'dd-MMM-yyyy'}}</td>
+                                                                <td>{{ppmList.plannedEndTime | date:'dd-MMM-yyyy'}}</td>
+                                                                <td>{{ppmList.employeeName}}</td>
+                                                                <td>{{ppmList.jobStatus}}</td>
                                                             </tr>
                                                             <tr>
-                                                                <td>Weekly</td>
-                                                                <td>03/03/2018</td>
-                                                                <td>00045</td>
-                                                                <td>03/03/2018</td>
-                                                                <td>15/03/2018</td>
-                                                                <td>UDS</td>
-                                                                <td>Completed</td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td>Weekly</td>
-                                                                <td>03/03/2018</td>
-                                                                <td>00045</td>
-                                                                <td>03/03/2018</td>
-                                                                <td>15/03/2018</td>
-                                                                <td>UDS</td>
-                                                                <td>Completed</td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td>Weekly</td>
-                                                                <td>03/03/2018</td>
-                                                                <td>00045</td>
-                                                                <td>03/03/2018</td>
-                                                                <td>15/03/2018</td>
-                                                                <td>UDS</td>
-                                                                <td>Completed</td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td>Weekly</td>
-                                                                <td>03/03/2018</td>
-                                                                <td>00045</td>
-                                                                <td>03/03/2018</td>
-                                                                <td>15/03/2018</td>
-                                                                <td>UDS</td>
-                                                                <td>Completed</td>
-                                                            </tr>
-
-
-
+                                                   				<td colspan="7" align="center" ng-show="!ppmJobLists.length">No PPM Jobs Found</td>
+                                                   			</tr>
                                                             </tbody>
                                                         </table>
 

@@ -49,6 +49,16 @@ public class AssetPPMSchedule extends AbstractAuditingEntity {
 
 	private long empId;
 
+	private String maintenanceType;
+
+	public String getMaintenanceType() {
+		return maintenanceType;
+	}
+
+	public void setMaintenanceType(String maintenanceType) {
+		this.maintenanceType = maintenanceType;
+	}
+
 	public long getEmpId() {
 		return empId;
 	}
