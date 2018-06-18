@@ -14,12 +14,12 @@
     <ion-toolbar class="tool-bar">
         <ion-segment [(ngModel)]="categories" class="segmnt margin-auto" color="#ff9800" (ionChange)="segmentChange(categories)">
             <ion-segment-button value="details" >Details</ion-segment-button>
-            <ion-segment-button value="ppm" (ionSelect)="getAssetPPMSchedule()">PPM </ion-segment-button>
-            <ion-segment-button value="amc" (ionSelect)="getAssetAMCSchedule()">AMC </ion-segment-button>
-            <ion-segment-button value="config" (ionSelect)="getAssetConfig()">Config </ion-segment-button>
+            <ion-segment-button value="ppm">PPM </ion-segment-button>
+            <ion-segment-button value="amc">AMC </ion-segment-button>
+            <ion-segment-button value="config">Config </ion-segment-button>
             <ion-segment-button value="readings" (ionSelect)="getReading()">Readings</ion-segment-button>
-            <ion-segment-button value="jobs" (ionSelect)="getJobs(searchCriteria)">Jobs</ion-segment-button>
-            <ion-segment-button value="tickets" (ionSelect)="getTickets(searchCriteria)">Tickets</ion-segment-button>
+            <ion-segment-button value="jobs">Jobs</ion-segment-button>
+            <ion-segment-button value="tickets">Tickets</ion-segment-button>
         </ion-segment>
     </ion-toolbar>
     <div [ngSwitch]="true">
@@ -282,6 +282,9 @@
     </ion-list>
 
     <ion-list *ngSwitchCase="'amc'" padding-left="" padding-right="">
+        <div float-right margin-top>
+            <ion-icon ios="ios-calendar" md="md-calendar" class="green fnt-25 padding-right10"(click)="showCalendar()"></ion-icon>
+        </div>
         <div text-center="" *ngIf="!assetDetails.amcs || assetDetails.amcs.length < 0">
             <ion-card text-center="">
                 <ion-card-content>
@@ -339,9 +342,9 @@
         </div>
     </ion-list>
 
-    <div *ngSwitchCase="'config'" margin-left="" margin-right="">
+    <div *ngSwitchCase="'config'">
 
-        <div text-center="" *ngIf="assetDetails.config?.length == 0">
+        <div text-center="" *ngIf="!assetDetails.config || assetDetails.config?.length<0">
             <ion-card text-center="">
                 <ion-card-content>
                     No Data found
@@ -416,8 +419,7 @@
 
     </div>
 
-    <ion-list *ngSwitchCase="'jobs'" style="" padding-left="" padding-right="" style="margin-top : 56px">
-
+    <ion-list *ngSwitchCase="'jobs'" style="margin-top : 56px" padding-left="" padding-right="">
         <div text-center="" *ngIf="!assetDetails.jobs || assetDetails.jobs?.length<0">
             <ion-card text-center="">
                 <ion-card-content>
@@ -519,7 +521,7 @@
 
     <ion-list *ngSwitchCase="'tickets'" style="margin-top : 56px" padding-left="" padding-right="">
 
-        <div text-center="" *ngIf="assetDetails.tickets?.length == 0">
+        <div text-center="" *ngIf="!assetDetails.tickets || assetDetails.tickets?.length<0">
             <ion-card text-center="">
                 <ion-card-content>
                     No Data found
@@ -573,6 +575,31 @@
     </ion-list>
 
     <ion-list *ngSwitchCase="'readings'">
+        <ion-row no-margin class="" no-padding style="background: wheat;">
+            <ion-col col-5 class="ver-center  margin-right15" (click)="selectFromDate()">
+                <ion-col col-2  class="ver-center padding-bottom1">
+                    <ion-icon ios="ios-calendar" md="md-calendar"  class="fnt-24 clr-orange"></ion-icon>
+                </ion-col>
+                <ion-col col-10 class="ver-center padding-top-bottom0">
+                    <ion-label *ngIf="!fromDate" class="bg-trans padding-bottom0" no-margin="">From date</ion-label>
+                    <p padding-left no-margin="">{{ fromDate | date:'dd/MM/yyyy' }}</p>
+                </ion-col>
+            </ion-col>
+            <ion-col col-5 (click)="selectToDate()" class="ver-center">
+                <ion-col col-2 class="ver-center padding-bottom1">
+                    <ion-icon ios="ios-calendar" md="md-calendar" class="fnt-24 clr-orange"></ion-icon>
+                </ion-col>
+                <ion-col col-10 class="ver-center padding-top-bottom0">
+                    <ion-label *ngIf="!toDate" class="bg-trans padding-bottom0" no-margin="">To date</ion-label>
+                    <p padding-left no-margin="">{{ toDate | date:'dd/MM/yyyy' }}</p>
+                </ion-col>
+            </ion-col>
+            <ion-col col-2 class=" ver-center padding-top-bottom0">
+                <button ion-button round class="color-white" (click)="readingDateSearch(fromDate,toDate)" [disabled]="!viewButton">
+                    <ion-icon name="arrow-round-forward"></ion-icon>
+                </button>
+            </ion-col>
+        </ion-row>
         <div  *ngIf="(!assetDetails.reading || assetDetails.reading.length < 0) && spinner" text-center class="margin-top25">
             <ion-spinner name="circles"></ion-spinner>
         </div>
@@ -596,6 +623,7 @@
                             <th class="text-center clr-orange" >Initial value</th>
                             <th class="text-center clr-orange">Final value</th>
                             <th class="text-center clr-orange" >Consumption</th>
+                            <th class="text-center clr-orange">Uom</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -608,6 +636,7 @@
                             <td class="text-center">{{readings.finalValue}}</td>
                             <td class="text-center" *ngIf="readings.consumption">{{readings.consumption}}</td>
                             <td class="text-center" *ngIf="!readings.consumption">NA</td>
+                            <td class="text-center">{{readings.uom}}</td>
                         </tr>
                         </tbody>
                     </table>

@@ -833,10 +833,34 @@ public class AssetManagementService extends AbstractService {
 		return assetParamConfigDTO;
 	}
 
+	/*public AssetPpmScheduleDTO createAssetPpmSchedule(AssetPpmScheduleDTO assetPpmScheduleDTO) {
+		// TODO Auto-generated method stub
+		log.debug(">> create ppm schedule and employee id <<< "+assetPpmScheduleDTO.getEmpId());
+		AssetPPMSchedule assetPPMSchedule = mapperUtil.toEntity(assetPpmScheduleDTO, AssetPPMSchedule.class);
+		assetPPMSchedule.setActive(AssetPPMSchedule.ACTIVE_YES);
+
+		Checklist checklist = getCheckList(assetPpmScheduleDTO.getChecklistId());
+		assetPPMSchedule.setChecklist(checklist);
+
+		Asset asset = getAsset(assetPpmScheduleDTO.getAssetId());
+		assetPPMSchedule.setAsset(asset);
+
+		assetPPMSchedule = assetPpmScheduleRepository.save(assetPPMSchedule);
+		assetPpmScheduleDTO.setId(assetPPMSchedule.getId());
+		log.debug(">>> Employee Id 1 <<<: "+assetPpmScheduleDTO.getEmpId());
+		if(assetPPMSchedule.getId() > 0) {
+		log.debug(">>> Employee Id 2: <<< "+assetPpmScheduleDTO.getEmpId());
+		jobManagementService.createJob(assetPpmScheduleDTO);
+		log.debug(">> after create job for ppm schedule <<<");
+		}
+		
+		return mapperUtil.toModel(assetPPMSchedule, AssetPpmScheduleDTO.class);
+	}*/
+
 	/**
-	 * Creates the asset PPM schedule information.
+	 * Creates the asset AMC schedule information.
 	 * 
-	 * @param assetPPMScheduleDTO
+	 * @param assetAMCScheduleDTO
 	 * @return
 	 */
 	public AssetPpmScheduleDTO createAssetPpmSchedule(AssetPpmScheduleDTO assetPpmScheduleDTO) {
