@@ -96,6 +96,7 @@ public class Job extends AbstractAuditingEntity implements Serializable{
 	private boolean completedDueEmailAlert;
 
 	private String frequency;
+	private String duration;
 
     @OneToMany(mappedBy ="job", cascade = {CascadeType.ALL}, fetch = FetchType.LAZY, orphanRemoval = true)
 	private List<JobChecklist> checklistItems;
@@ -112,6 +113,12 @@ public class Job extends AbstractAuditingEntity implements Serializable{
     
     private String maintenanceType;
 
+	public String getDuration() {
+		return duration;
+	}
+	public void setDuration(String duration) {
+		this.duration = duration;
+	}
 	public Long getId() {
 		return id;
 	}

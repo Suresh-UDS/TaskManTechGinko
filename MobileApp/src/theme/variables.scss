@@ -234,6 +234,41 @@ ion-app.md
 
 }
 
+.card-calendar
+{
+  .fc-view-container
+  {
+    .fc-widget-content
+    {
+      .fc-scroller.fc-day-grid-container
+      {
+        height: auto !important;
+      }
+    }
+  }
+
+
+  //.card-calendar .fc-toolbar {
+  //  text-align: center !important;
+  //  paddig-top:0px !important;
+  //  padding-left:0px !important;
+  //  padding-right:0px !important;
+  //}
+  //.card-calendar .fc .fc-toolbar > * > * {
+  //  float: left;
+  //  margin-left: 73px !important;
+  //  margin-top:5px !important;
+  //}
+  //.fc .fc-toolbar>*> :first-child {
+  //  margin-left: 0px !important;
+  //  margin-right: 135px !important;
+  //}
+  //.fc-toolbar .fc-left {
+  //  margin-bottom:0px !important;
+  //}
+
+}
+
 .border-btm-blk{
   border-bottom:1px solid #a7a1a1 !important
 }

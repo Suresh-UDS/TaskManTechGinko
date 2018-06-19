@@ -237,11 +237,8 @@ public class AssetManagementService extends AbstractService {
 
 		asset.setActive(Asset.ACTIVE_YES);
 
-		List<Asset> existingAssets = assetRepository.findAssetByTitle(assetDTO.getTitle());
-		log.debug("Existing asset size -" + existingAssets.size());
-		if (CollectionUtils.isEmpty(existingAssets)) {
-			asset = assetRepository.save(asset);
-		}
+		asset = assetRepository.save(asset);
+
 		List<ParameterConfig> parameterConfigs = parameterConfigRepository.findAllByAssetType(assetDTO.getAssetType());
 		if(CollectionUtils.isNotEmpty(parameterConfigs)) {
 			List<AssetParameterConfig> assetParamConfigs = new ArrayList<AssetParameterConfig>();
@@ -451,8 +448,8 @@ public class AssetManagementService extends AbstractService {
 		return qrCodeBase64;
 	}
 
-	public ExportResult generateReport(List<JobDTO> transactions, SearchCriteria criteria) {
-		return reportUtil.generateJobReports(transactions, null, null, criteria);
+	public ExportResult generateReport(List<AssetDTO> transactions, SearchCriteria criteria) {
+		return reportUtil.generateAssetReports(transactions, null, null, criteria);
 	}
 
 	/**
@@ -612,7 +609,7 @@ public class AssetManagementService extends AbstractService {
 		for (EmployeeProjectSite site : sites) {
 			siteIds.add(site.getSite().getId());
 		}
-
+		
 		if (searchCriteria != null) {
 			Pageable pageRequest = null;
 			if (!StringUtils.isEmpty(searchCriteria.getColumnName())) {
@@ -634,6 +631,10 @@ public class AssetManagementService extends AbstractService {
 						&& searchCriteria.getSiteId() > 0) {
 					page = assetRepository.findByAllCriteria(searchCriteria.getAssetTypeName(), searchCriteria.getAssetName(), searchCriteria.getProjectId(),
 							searchCriteria.getSiteId(), pageRequest);
+				} else if (!StringUtils.isEmpty(searchCriteria.getAssetCode())) {
+					page = assetRepository.findByAssetCode(searchCriteria.getAssetCode(), pageRequest);
+				} else if (!StringUtils.isEmpty(searchCriteria.getAssetTitle())) {
+					page = assetRepository.findByAssetTitle(searchCriteria.getAssetTitle(), pageRequest);
 				} else if (!StringUtils.isEmpty(searchCriteria.getAssetName())) {
 					page = assetRepository.findByName(siteIds, searchCriteria.getAssetName(), pageRequest);
 				} else if (!StringUtils.isEmpty(searchCriteria.getAssetTypeName())) {

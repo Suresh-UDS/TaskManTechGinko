@@ -69,7 +69,7 @@ public class JobDTO extends BaseDTO {
 	private boolean scheduled;
 
 	private String frequency;
-
+	private String duration;
 	private List<JobChecklistDTO> checklistItems;
 
 	private List<CheckInOutImageDTO> images;
@@ -87,6 +87,12 @@ public class JobDTO extends BaseDTO {
 	
 	private String maintenanceType;
 
+	public String getDuration() {
+		return duration;
+	}
+	public void setDuration(String duration) {
+		this.duration = duration;
+	}
 	public String getTitle() {
 		return title;
 	}

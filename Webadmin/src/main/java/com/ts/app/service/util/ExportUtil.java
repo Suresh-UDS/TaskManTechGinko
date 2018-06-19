@@ -37,6 +37,7 @@ import com.ts.app.domain.AbstractAuditingEntity;
 import com.ts.app.domain.EmployeeAttendanceReport;
 import com.ts.app.domain.Job;
 import com.ts.app.domain.JobStatus;
+import com.ts.app.web.rest.dto.AssetDTO;
 import com.ts.app.web.rest.dto.AttendanceDTO;
 import com.ts.app.web.rest.dto.BaseDTO;
 import com.ts.app.web.rest.dto.EmployeeDTO;
@@ -75,6 +76,7 @@ public class ExportUtil {
 			"CHECK OUT IMAGE" };
 	private String[] TICKET_HEADER = { "ID", "SITE", "ISSUE", "STATUS", "CATEGORY", "SEVERITY", "INITIATOR",
 			"INITIATED ON", "ASSIGNED TO", "ASSIGNED ON", "CLOSED BY", "CLOSED ON" };
+	private String[] ASSET_HEADER = { "ID", "ASSET CODE", "NAME", "ASSET TYPE", "ASSET GROUP", "CLIENT", "SITE", "BLOCK", "FLOOR", "ZONE", "STATUS"};
 
 	@Inject
 	private Environment env;
@@ -1334,6 +1336,118 @@ public class ExportUtil {
 					xssfSheet.autoSizeColumn(i);
 				}
 				log.info(export_File_Name + " Ticket export file was created successfully !!!");
+				statusMap.put(export_File_Name, "COMPLETED");
+
+				FileOutputStream fileOutputStream = null;
+				try {
+					fileOutputStream = new FileOutputStream(file_Path);
+					xssfWorkbook.write(fileOutputStream);
+					fileOutputStream.close();
+				} catch (IOException e) {
+					log.error("Error while flushing/closing  !!!");
+					statusMap.put(export_File_Name, "FAILED");
+				}
+				lock.unlock();
+			}
+		});
+
+		writer_Thread.start();
+
+		result.setEmpId(empId);
+		result.setFile(file_Name.substring(0, file_Name.indexOf('.')));
+		result.setStatus(getExportStatus(file_Name));
+		return result;
+	}
+	
+	
+	public ExportResult writeAssetExcelReportToFile(List<AssetDTO> content, String empId, ExportResult result) {
+		boolean isAppend = (result != null);
+		log.debug("result = " + result + ", isAppend = " + isAppend);
+		if (result == null) {
+			result = new ExportResult();
+		}
+		String file_Name = null;
+		if (StringUtils.isEmpty(result.getFile())) {
+			if (StringUtils.isNotEmpty(empId)) {
+				file_Name = empId + System.currentTimeMillis() + ".xlsx";
+			} else {
+				file_Name = System.currentTimeMillis() + ".xlsx";
+			}
+		} else {
+			file_Name = result.getFile() + ".xlsx";
+		}
+
+		if (statusMap.containsKey((file_Name))) {
+			String status = statusMap.get(file_Name);
+			// log.debug("Current status for filename -" + file_Name + ", status -" +
+			// status);
+		} else {
+			statusMap.put(file_Name, "PROCESSING");
+		}
+
+		final String export_File_Name = file_Name;
+		if (lock == null) {
+			lock = new Lock();
+		}
+		try {
+			lock.lock();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+
+		Thread writer_Thread = new Thread(new Runnable() {
+			@Override
+			public void run() {
+				String file_Path = env.getProperty("export.file.path");
+				FileSystem fileSystem = FileSystems.getDefault();
+				if (StringUtils.isNotEmpty(empId)) {
+					file_Path += "/" + empId;
+				}
+				Path path = fileSystem.getPath(file_Path);
+				if (!Files.exists(path)) {
+					Path newEmpPath = Paths.get(file_Path);
+					try {
+						Files.createDirectory(newEmpPath);
+					} catch (IOException e) {
+						log.error("Error While Creating Path " + newEmpPath);
+					}
+				}
+
+				file_Path += "/" + export_File_Name;
+				// create workbook
+				XSSFWorkbook xssfWorkbook = new XSSFWorkbook();
+				// create worksheet with title
+				XSSFSheet xssfSheet = xssfWorkbook.createSheet("ASSET_REPORT");
+
+				Row headerRow = xssfSheet.createRow(0);
+
+				for (int i = 0; i < ASSET_HEADER.length; i++) {
+					Cell cell = headerRow.createCell(i);
+					cell.setCellValue(ASSET_HEADER[i]);
+				}
+
+				int rowNum = 1;
+
+				for (AssetDTO transaction : content) {
+
+					Row dataRow = xssfSheet.createRow(rowNum++);
+					dataRow.createCell(0).setCellValue(transaction.getId());
+					dataRow.createCell(1).setCellValue(transaction.getCode());
+					dataRow.createCell(2).setCellValue(transaction.getTitle());
+					dataRow.createCell(3).setCellValue(transaction.getAssetType());
+					dataRow.createCell(4).setCellValue(transaction.getAssetGroup());
+					dataRow.createCell(5).setCellValue(transaction.getProjectName());
+					dataRow.createCell(6).setCellValue(transaction.getSiteName());
+					dataRow.createCell(7).setCellValue(transaction.getBlock());
+					dataRow.createCell(8).setCellValue(transaction.getFloor());
+					dataRow.createCell(9).setCellValue(transaction.getZone());
+					dataRow.createCell(10).setCellValue(transaction.getStatus());
+				}
+
+				for (int i = 0; i < ASSET_HEADER.length; i++) {
+					xssfSheet.autoSizeColumn(i);
+				}
+				log.info(export_File_Name + " Asset export file was created successfully !!!");
 				statusMap.put(export_File_Name, "COMPLETED");
 
 				FileOutputStream fileOutputStream = null;

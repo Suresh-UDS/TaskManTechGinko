@@ -40,9 +40,12 @@ import com.ts.app.web.rest.dto.AssetParameterReadingDTO;
 import com.ts.app.web.rest.dto.AssetPpmScheduleDTO;
 import com.ts.app.web.rest.dto.AssetTypeDTO;
 import com.ts.app.web.rest.dto.AssetgroupDTO;
+import com.ts.app.web.rest.dto.ExportResponse;
+import com.ts.app.web.rest.dto.ExportResult;
 import com.ts.app.web.rest.dto.ImportResult;
 import com.ts.app.web.rest.dto.SearchCriteria;
 import com.ts.app.web.rest.dto.SearchResult;
+import com.ts.app.web.rest.dto.TicketDTO;
 import com.ts.app.web.rest.errors.TimesheetException;
 
 /**
@@ -74,15 +77,8 @@ public class AssetResource {
 		log.debug(">>> Asset DTO save request <<<");
 		
 		try {
-			if(!assetService.isDuplicate(assetDTO)) {
-				log.debug(">>> going to create <<<");
-				assetDTO = assetService.saveAsset(assetDTO);
-			}else {
-				log.debug(">>> duplicate <<<");
-				assetDTO.setMessage("error.duplicateRecordError");
-				return new ResponseEntity<>(assetDTO,HttpStatus.BAD_REQUEST);
-			}
-		}catch(Exception e) {
+			assetDTO = assetService.saveAsset(assetDTO);
+			}catch(Exception e) {
 			throw new TimesheetException(e, assetDTO);
 		}
 		
@@ -428,9 +424,9 @@ public class AssetResource {
 	
 	
 	@RequestMapping(path="/assets/import", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<ImportResult> importJobData(@RequestParam("assetFile") MultipartFile file){
+	public ResponseEntity<ImportResult> importAssetData(@RequestParam("assetFile") MultipartFile file){
 		Calendar cal = Calendar.getInstance();
-		ImportResult result = importUtil.importJobData(file, cal.getTimeInMillis());
+		ImportResult result = assetService.importFile(file, cal.getTimeInMillis());
 		return new ResponseEntity<ImportResult>(result,HttpStatus.OK);
 	}
 
@@ -455,5 +451,61 @@ public class AssetResource {
 			}
 		}
 		return result;
+	}
+    
+    @RequestMapping(value = "/asset/export", method = RequestMethod.POST)
+	public ExportResponse exportAsset(@RequestBody SearchCriteria searchCriteria) {
+		// log.debug("JOB EXPORT STARTS HERE **********");
+		ExportResponse resp = new ExportResponse();
+		if (searchCriteria != null) {
+			searchCriteria.setUserId(SecurityUtils.getCurrentUserId());
+			SearchResult<AssetDTO> result = assetService.findBySearchCrieria(searchCriteria);
+			List<AssetDTO> results = result.getTransactions();
+			resp.addResult(assetService.generateReport(results, searchCriteria));
+
+			// log.debug("RESPONSE FOR OBJECT resp *************"+resp);
+		}
+		return resp;
+	}
+
+	@RequestMapping(value = "/asset/export/{fileId}/status", method = RequestMethod.GET)
+	public ExportResult exportStatus(@PathVariable("fileId") String fileId) {
+		// log.debug("ExportStatus - fileId -"+ fileId);
+		ExportResult result = assetService.getExportStatus(fileId);
+
+		// log.debug("RESULT NOW **********"+result);
+		// log.debug("RESULT GET STATUS **********"+result.getStatus());
+
+		if (result != null && result.getStatus() != null) {
+			switch (result.getStatus()) {
+			case "PROCESSING":
+				result.setMsg("Exporting...");
+				break;
+			case "COMPLETED":
+				result.setMsg("Download");
+				// log.debug("DOWNLOAD FILE PROCESSING HERE ************"+result.getMsg());
+				// log.debug("FILE ID IN API CALLING ************"+fileId);
+				result.setFile("/api/asset/export/" + fileId);
+				// log.debug("DOWNLOADED FILE IS ************"+result.getFile());
+				break;
+			case "FAILED":
+				result.setMsg("Failed to export. Please try again");
+				break;
+			default:
+				result.setMsg("Failed to export. Please try again");
+				break;
+			}
+		}
+		return result;
+	}
+
+	@RequestMapping(value = "/asset/export/{fileId}", method = RequestMethod.GET)
+	public byte[] getExportFile(@PathVariable("fileId") String fileId, HttpServletResponse response) {
+		byte[] content = assetService.getExportFile(fileId);
+		response.setContentType("Application/x-msexcel");
+		response.setContentLength(content.length);
+		response.setHeader("Content-Transfer-Encoding", "binary");
+		response.setHeader("Content-Disposition", "attachment; filename=\"" + fileId + ".xlsx\"");
+		return content;
 	}
 }

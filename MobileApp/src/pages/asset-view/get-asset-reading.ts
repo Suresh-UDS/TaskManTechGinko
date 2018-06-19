@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import {Component, ElementRef, ViewChild} from '@angular/core';
 import {NavController, NavParams, PopoverController} from "ionic-angular";
 import {ModalController} from "ionic-angular";
 // import {QRScanner, QRScannerStatus} from "@ionic-native/qr-scanner";
@@ -25,6 +25,7 @@ export class GetAssetReading {
     takenImages:any;
     assetConfig:any;
     current:any;
+
 
     constructor(public navCtrl: NavController, public navParams: NavParams, public modalController: ModalController,
                 public componentService:componentService, public popoverCtrl:PopoverController, public camera:Camera,
@@ -106,7 +107,7 @@ export class GetAssetReading {
         this.camera.getPicture(options).then((imageData) => {
 
             console.log('imageData -' +imageData);
-            imageData = imageData.replace("assets-library://", "cdvfile://localhost/assets-library/")
+            imageData = imageData.replace("assets-library://", "cdvfile://localhost/assets-library/");
             this.takenImages.push(imageData);
         })
 
@@ -130,7 +131,7 @@ export class GetAssetReading {
     }
 
     saveReading(reading){
-        console.log("Reading page");
+        console.log("Save Reading");
         console.log(reading);
         var assetReading={};
 
