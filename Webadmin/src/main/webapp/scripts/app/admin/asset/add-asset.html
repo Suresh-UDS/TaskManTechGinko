@@ -34,7 +34,28 @@
                                                        <!---->
                                                     <!--</div>-->
                                                     <div class="wizard-navigation">
-                                                        <ul class="arrow-steps">
+                                                        <ul class="arrow-steps" ng-hide="assetGen.id">
+                                                            <li class="step active">
+                                                                <a href=".general" data-toggle="tab" >General</a>
+                                                            </li>
+                                                            <li class="step">
+                                                                <a >QR Code</a>
+                                                            </li>
+                                                           
+                                                            <li class="step">
+                                                                <a >PPM Schedule</a>
+                                                            </li>
+                                                            <li class="step">
+                                                                <a >AMC schedule</a>
+                                                            </li>
+                                                             <li class="step">
+                                                                <a >Config</a>
+                                                            </li>
+                                                            <li class="step">
+                                                                <a  >Documents</a>
+                                                            </li>
+                                                        </ul>
+                                                        <ul class="arrow-steps" ng-show="assetGen.id">
                                                             <li class="step active">
                                                                 <a href=".general" data-toggle="tab" >General</a>
                                                             </li>
@@ -1564,7 +1585,7 @@
 
                                                         </div>
                                                     </div>
-                                                    <div class="wizard-footer" >
+                                                    <div class="wizard-footer" ng-show="assetGen.id" >
                                                         <div class="pull-right">
                                                             <input type='button' class='btn btn-next btn-fill btn-default btn-wd' name='next' value='Next'  />
                                                             <!-- <input type='button' class='btn btn-finish btn-fill btn-success btn-wd' name='finish' value='Finish' /> -->
