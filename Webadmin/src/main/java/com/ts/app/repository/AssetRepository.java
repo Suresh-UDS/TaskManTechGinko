@@ -33,6 +33,12 @@ public interface AssetRepository extends JpaRepository<Asset, Long>,JpaSpecifica
     @Query("SELECT a from Asset a where a.title = :title")
     Asset findByTitle(@Param("title") String title);
 
+    @Query("SELECT a from Asset a where a.code like '%' || :code || '%' and a.active = 'Y'  order by a.title")
+    Page<Asset> findByAssetCode(@Param("code") String code, Pageable pageRequest);
+    
+    @Query("SELECT a from Asset a where a.title like '%' || :name || '%' and a.active = 'Y'  order by a.title")
+    Page<Asset> findByAssetTitle(@Param("name") String name, Pageable pageRequest);
+    
     List<Asset> findBySiteId(Long siteId);
     
     @Query("SELECT a from Asset a where a.site.id = :siteId and a.active = 'Y'  order by a.title")
