@@ -123,6 +123,8 @@ reports:
         url: https://taskmanadmin.uds.in/#/feedbacks
     ticket-report:
         url: https://taskmanadmin.uds.in/#/ticket-reports
+    asset-report:
+        url: https://taskmanadmin.uds.in/#/asset-report
 
 url:
     ticket-view: https://taskmanadmin.uds.in#/view-ticket

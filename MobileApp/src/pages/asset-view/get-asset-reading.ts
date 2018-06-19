@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import {Component, ElementRef, ViewChild} from '@angular/core';
 import {NavController, NavParams, PopoverController} from "ionic-angular";
 import {ModalController} from "ionic-angular";
 // import {QRScanner, QRScannerStatus} from "@ionic-native/qr-scanner";

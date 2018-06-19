@@ -14,6 +14,7 @@ public class AssetDTO extends BaseDTO {
     private long siteId;
     private long siteSiteId;
     private long projectId;
+    private String projectName;
     private String siteName;
     private Date endTime;
     private Date startTime;
@@ -312,5 +313,13 @@ public class AssetDTO extends BaseDTO {
 	public void setWarrantyType(String warrantyType) {
 		this.warrantyType = warrantyType;
 	}
+	public String getProjectName() {
+		return projectName;
+	}
+	public void setProjectName(String projectName) {
+		this.projectName = projectName;
+	}
+	
+	
     
 }

@@ -4,7 +4,7 @@ angular.module('timeSheetApp')
 		    .controller(
 				'ImportController',
 				function($scope, $rootScope, $state, $timeout, JobComponent,
-						ProjectComponent, SiteComponent,EmployeeComponent,ChecklistComponent, $http, $stateParams,
+						ProjectComponent, SiteComponent,EmployeeComponent,ChecklistComponent, AssetComponent, $http, $stateParams,
 						$location,$interval) {
 		$rootScope.loadingStop();
 	    $rootScope.loginView = false;
@@ -350,7 +350,7 @@ angular.module('timeSheetApp')
 		   	return ($rootScope.checklistImportStatusLoad ? $rootScope.checklistImportStatusLoad : '');
 	   };   
 	    
-	   //Checklist upload file start
+	   //Employee shift upload file start
 	    $scope.uploadEmployeeShift = function() {
 		    	if($scope.selectedEmployeeShiftFile){
 		    		$rootScope.employeeShiftImportStatusLoad = true;
@@ -406,7 +406,67 @@ angular.module('timeSheetApp')
 	   $scope.employeeShiftImportStatusLoad = function(){
 		   	console.log('$scope.employeeShiftImportStatusLoad message '+ $rootScope.employeeShiftImportStatusLoad);
 		   	return ($rootScope.employeeShiftImportStatusLoad ? $rootScope.employeeShiftImportStatusLoad : '');
-	   };     
+	   };    
+	   
+	   
+	   
+	   //Asset upload file start
+	    $scope.uploadAsset = function() {
+		    	if($scope.selectedAssetFile){
+		    		$rootScope.assetImportStatusLoad = true;
+	   		console.log('************************selected asset file - ' + $scope.selectedAssetFile);
+	   		AssetComponent.importAssetFile($scope.selectedAssetFile).then(function(data){
+	   			console.log(data);
+	   			var result = data;
+	   			console.log(result.file + ', ' + result.status + ',' + result.msg);
+	   			var importStatus = {
+	       				fileName : result.file,
+	       				importMsg : result.msg
+	       		};
+	       		$rootScope.assetImportStatus = importStatus;
+	       		$rootScope.start('asset');
+	        },function(err){
+	           	  console.log('Asset Import error')
+	           	  console.log(err);
+	        });
+		  
+		  }
+	   }
+	
+	    $scope.assetImportStatus = function() {
+	    		console.log('$rootScope.assetImportStatus -'+JSON.stringify($rootScope.assetImportStatus));        		
+      		AssetComponent.importAssetStatus($rootScope.assetImportStatus.fileName).then(function(data) {
+          		if(data) {
+          			$rootScope.assetImportStatus.importStatus = data.status;
+              		console.log('*****************importStatus - '+ JSON.stringify($rootScope.assetImportStatus));
+              		$rootScope.assetImportStatus.importMsg = data.msg;
+              		console.log('**************importMsg - '+ $rootScope.assetImportStatus.importMsg);
+              		if($rootScope.assetImportStatus.importStatus == 'COMPLETED'){
+              			$rootScope.assetImportStatus.fileName = data.file;
+                  		console.log('importFile - '+ $rootScope.assetImportStatus.fileName);
+                  		$scope.stop('asset');
+                  		$rootScope.assetImportStatusLoad = false;
+                  		$timeout(function() {
+                  			$rootScope.assetImportStatus = {};
+                  	    }, 3000);
+              		}else if($rootScope.assetImportStatus.importStatus == 'FAILED'){
+                  		$scope.stop('asset');
+              		}else if(!$rootScope.assetImportStatus.importStatus){
+              			$scope.stop('asset');
+              		}else {
+              			$rootScope.assetImportStatus.fileName = '#';
+              		}
+          		}
+
+          	});
+
+	    }    
+	    
+	   
+	   $scope.assetImportStatusLoad = function(){
+		   	console.log('$scope.assetImportStatusLoad message '+ $rootScope.assetImportStatusLoad);
+		   	return ($rootScope.assetImportStatusLoad ? $rootScope.assetImportStatusLoad : '');
+	   };    
 	    
 	    	    
 	 // store the interval promise in this variable
@@ -416,6 +476,7 @@ angular.module('timeSheetApp')
 	 var promiseSite;
 	 var promiseChecklist;
 	 var promiseEmployeeShift;
+	 var promiseAsset;
 	 // starts the interval
 	    $rootScope.start = function(typeImport) {
 	      // stops any running interval to avoid two intervals running at the same time
@@ -458,6 +519,12 @@ angular.module('timeSheetApp')
 	    		promiseEmployeeShift = $interval($scope.employeeShiftImportStatus, 5000);
 	    		console.log('promise -'+promiseEmployeeShift);
 	    	}
+	    	if(typeImport == 'asset'){
+	    		$rootScope.stop('asset');
+	    		console.log('Import asset Start Method');
+	    		promiseAsset = $interval($scope.assetImportStatus, 5000);
+	    		console.log('promise -'+promiseAsset);
+	    	}
 	    };	
 	    // stops the interval
 	    $rootScope.stop = function(stopInterval) {
@@ -477,7 +544,10 @@ angular.module('timeSheetApp')
 	    	  $interval.cancel(promiseChecklist);
 	      }
 	      if(stopInterval == 'employeeShift'){
-	    	  $interval.cancel(promiseEmployeeShift);
+	    	  	$interval.cancel(promiseEmployeeShift);
+	      }
+	      if(stopInterval == 'asset'){
+	    	  	$interval.cancel(promiseAsset);
 	      }
 	    };	   
 	    

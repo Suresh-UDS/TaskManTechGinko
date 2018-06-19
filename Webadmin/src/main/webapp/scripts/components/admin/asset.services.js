@@ -254,11 +254,27 @@ angular.module('timeSheetApp')
             },
             
             findByReadingId : function(id) { 
-            	return $http.get('api/assets/'+id+'/viewReadings').then(function(response) { 
-            		return response.data;
-            	});
-            }
+	            	return $http.get('api/assets/'+id+'/viewReadings').then(function(response) { 
+	            		return response.data;
+	            	});
+            },
             
+            importAssetFile: function(file) {
+	        		var fileFormData = new FormData();
+	            fileFormData.append('assetFile', file);
+	            	return $http.post('api/asset/import', fileFormData, {
+	                    transformRequest: angular.identity,
+	                    headers: {'Content-Type': undefined}
+	
+	                }).then(function (response) {
+	            			return response.data;
+	                });
 
+            },
+            importAssetStatus: function(fileName) {
+	            	return $http.get('api/asset/import/'+fileName+"/status").then(function (response) {
+	            		return response.data;
+	            	});
+            }
         };
     });
