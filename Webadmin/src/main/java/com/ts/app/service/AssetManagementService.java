@@ -447,8 +447,8 @@ public class AssetManagementService extends AbstractService {
 		return qrCodeBase64;
 	}
 
-	public ExportResult generateReport(List<JobDTO> transactions, SearchCriteria criteria) {
-		return reportUtil.generateJobReports(transactions, null, null, criteria);
+	public ExportResult generateReport(List<AssetDTO> transactions, SearchCriteria criteria) {
+		return reportUtil.generateAssetReports(transactions, null, null, criteria);
 	}
 
 	/**

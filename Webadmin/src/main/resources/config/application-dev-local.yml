@@ -21,10 +21,10 @@ spring:
     datasource:
         driver-class-name: com.mysql.jdbc.Driver
         #url: jdbc:mysql://52.77.216.21:3306/TaskMan?useUnicode=true&characterEncoding=utf8
-        url: jdbc:mysql://localhost:3306/Taskman?useUnicode=true&characterEncoding=utf8
+        url: jdbc:mysql://localhost:3306/TaskMan_R2?useUnicode=true&characterEncoding=utf8
         name:
         username: root
-        password: root
+        password: admin
     jpa:
         database-platform: org.hibernate.dialect.MySQLInnoDBDialect
         database: MYSQL
@@ -128,6 +128,8 @@ reports:
         url: http://localhost:8088/#/job-reports
     attendance-report:
         url: http://localhost:8088/#/attendance-reports
+    asset-report:
+        url: http://localhost:8088/#/asset-report
 
 url:
     ticket-view: http://localhost:8088/#/view-ticket

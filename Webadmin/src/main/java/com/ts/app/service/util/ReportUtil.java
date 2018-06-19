@@ -12,6 +12,7 @@ import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
 import com.ts.app.domain.EmployeeAttendanceReport;
+import com.ts.app.web.rest.dto.AssetDTO;
 import com.ts.app.web.rest.dto.ExportResult;
 import com.ts.app.web.rest.dto.JobDTO;
 import com.ts.app.web.rest.dto.SearchCriteria;
@@ -128,6 +129,42 @@ public class ReportUtil {
 	}
 
 	public SearchCriteria getAttendanceReportCriteria(String uid) {
+		return cacheUtil.getSearchCriteria(uid);
+	}
+	
+	
+    public ExportResult generateAssetReports(List<AssetDTO> content, final String empId, ExportResult result, SearchCriteria criteria) {
+        if(criteria.getExportType().equalsIgnoreCase("html")) {
+            if(result == null) {
+                result = new ExportResult();
+            }
+            String uuidVal = null;
+            if(StringUtils.isNotEmpty(criteria.getExportType()) && criteria.getExportType().equalsIgnoreCase("html")) {
+                UUID uuid = UUID.randomUUID();
+                uuidVal = uuid.toString();
+                cacheUtil.putSearchCriteria(uuidVal, criteria);
+            }
+            result.setFile(uuidVal);
+            String reportUrl = env.getProperty("reports.asset-report.url");
+            result.setUrl(reportUrl + "/" + uuidVal);
+
+            //log.debug("UUID VALUE **********"+uuidVal);
+            uuidVal += ".xlsx";
+            exportUtil.updateExportStatus(uuidVal, "COMPLETED");
+
+            result.setEmpId(empId);
+            result.setStatus("COMPLETED");
+           // log.debug("RESULT OBJECT VALUES HERE *************"+result);
+            return result;
+
+        }else if(criteria.getExportType().equalsIgnoreCase("xlsx")) {
+            //return exportUtil.writeAssetReportToFile(content, empId, result);
+            return exportUtil.writeAssetExcelReportToFile(content,empId,result);
+        }
+        return result;
+    }
+    
+	public SearchCriteria getAssetReportCriteria(String uid) {
 		return cacheUtil.getSearchCriteria(uid);
 	}
 }
