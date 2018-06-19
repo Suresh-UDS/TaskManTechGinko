@@ -704,6 +704,7 @@ public class JobManagementService extends AbstractService {
 			data.append("&plannedHours="+jobDTO.getPlannedHours());
 			data.append("&location="+jobDTO.getLocationId());
 			data.append("&frequency="+jobDTO.getFrequency());
+			data.append("&duration="+jobDTO.getDuration());
 			schConfDto.setData(data.toString());
 			schConfDto.setStartDate(jobDTO.getPlannedStartTime());
 			schConfDto.setEndDate(jobDTO.getPlannedEndTime());
@@ -772,6 +773,7 @@ public class JobManagementService extends AbstractService {
 		job.setTitle(assetPpmScheduleDTO.getTitle());
 		job.setDescription(assetPpmScheduleDTO.getTitle() +" "+ assetPpmScheduleDTO.getFrequencyPrefix()+" "+assetPpmScheduleDTO.getFrequencyDuration()+" "+assetPpmScheduleDTO.getFrequency());
 		job.setMaintenanceType(assetPpmScheduleDTO.getMaintenanceType());
+		job.setSchedule(Frequency.valueOf(assetPpmScheduleDTO.getFrequency()).getTypeFrequency());
 		job.setActive(AbstractAuditingEntity.ACTIVE_YES);
 		job = jobRepository.saveAndFlush(job);
 
@@ -795,6 +797,8 @@ public class JobManagementService extends AbstractService {
 			data.append("&plannedHours="+assetPpmScheduleDTO.getFrequencyDuration());
 			//data.append("&location="+assetPpmScheduleDTO.getLocationId());
 			data.append("&frequency="+assetPpmScheduleDTO.getFrequency());
+			data.append("&duration="+assetPpmScheduleDTO.getFrequencyDuration());
+			//data.append("&schedule="+Frequency.valueOf(assetPpmScheduleDTO.getFrequency()).getTypeFrequency());
 			schConfDto.setData(data.toString());
 			schConfDto.setSchedule(Frequency.valueOf(assetPpmScheduleDTO.getFrequency()).getTypeFrequency());
 			schConfDto.setStartDate(assetPpmScheduleDTO.getStartDate());

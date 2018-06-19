@@ -579,25 +579,25 @@ public class SchedulerService extends AbstractService {
 				DateTime lastDate = currDate.dayOfMonth().withMaximumValue();
 				if(CollectionUtils.isNotEmpty(prevJobs)) {
 					Job prevJob = prevJobs.get(0);
-					currDate = addDays(currDate, dailyTask.getSchedule());
+					currDate = addDays(currDate, dailyTask.getSchedule(), dailyTask.getData());
 					if(prevJob.getPlannedStartTime().before(currDate.toDate())){
 						while (currDate.isBefore(lastDate) || currDate.isEqual(lastDate)) {
 							jobCreationTask(dailyTask, dailyTask.getJob(), dailyTask.getData(), currDate.toDate());
-							currDate = addDays(currDate, dailyTask.getSchedule());
+							currDate = addDays(currDate, dailyTask.getSchedule(), dailyTask.getData());
 						}
 					}
 				}else {
 					currDate = new DateTime(parentJob.getPlannedStartTime().getTime());
 					while (currDate.isBefore(lastDate) || currDate.isEqual(lastDate)) {
 						jobCreationTask(dailyTask, dailyTask.getJob(), dailyTask.getData(), currDate.toDate());
-						currDate = addDays(currDate, dailyTask.getSchedule());
+						currDate = addDays(currDate, dailyTask.getSchedule(), dailyTask.getData());
 					}
 				}
 			} else if (creationPolicy.equalsIgnoreCase("daily")) {
 				DateTime currDate = DateTime.now();
 				if(CollectionUtils.isNotEmpty(prevJobs)) {
 					Job prevJob = prevJobs.get(0);
-					currDate = addDays(currDate, dailyTask.getSchedule());
+					currDate = addDays(currDate, dailyTask.getSchedule(), dailyTask.getData());
 					if(prevJob.getPlannedStartTime().before(currDate.toDate())){
 						jobCreationTask(dailyTask, dailyTask.getJob(), dailyTask.getData(), currDate.toDate());
 					}
@@ -609,7 +609,7 @@ public class SchedulerService extends AbstractService {
 		}
 	}
 	
-	public void createJobsOld(SchedulerConfig dailyTask) {
+	/*public void createJobsOld(SchedulerConfig dailyTask) {
 		if ("CREATE_JOB".equals(dailyTask.getType())) {
 			if (dailyTask.getSchedule().equalsIgnoreCase(Frequency.DAY.getTypeFrequency())) {
 				String creationPolicy = env.getProperty("scheduler.dailyJob.creation");
@@ -754,18 +754,42 @@ public class SchedulerService extends AbstractService {
 		} else {
 			log.warn("Unknown scheduler config type job" + dailyTask);
 		}
-	}
+	}*/
 	
 	
-	private DateTime addDays(DateTime dateTime , String scheduleType) {
+	private DateTime addDays(DateTime dateTime , String scheduleType, String data) {
 		Frequency frequency = Frequency.valueOf(scheduleType);
+		Map<String, String> dataMap = Splitter.on("&").withKeyValueSeparator("=").split(data);
+		int duration = Integer.parseInt(dataMap.get("duration"));
+		
 		switch(frequency) {
 			case HOUR :
 				dateTime = dateTime.plusHours(1);
 			case DAY :
 				dateTime = dateTime.plusDays(1);
 			case WEEK :
-				dateTime = dateTime.plusWeeks(1);
+				switch (duration) {
+				case 1 :
+					dateTime = dateTime.plusWeeks(1);
+				case 2 :
+					dateTime = dateTime.plusWeeks(2);
+				case 3 :
+					dateTime = dateTime.plusWeeks(3);
+				case 4 :
+					dateTime = dateTime.plusWeeks(4);
+				case 5 :
+					dateTime = dateTime.plusWeeks(5);
+				case 6 :
+					dateTime = dateTime.plusWeeks(6);
+				case 7 :
+					dateTime = dateTime.plusWeeks(7);
+				case 8 :
+					dateTime = dateTime.plusWeeks(8);
+				case 9 :
+					dateTime = dateTime.plusWeeks(9);
+				case 10 :
+					dateTime = dateTime.plusWeeks(10);
+				}
 			case FORTNIGHT :
 				dateTime = dateTime.plusDays(14);
 			case MONTH :
@@ -867,6 +891,8 @@ public class SchedulerService extends AbstractService {
 		job.setDescription(dataMap.get("description"));
 		job.setSiteId(Long.parseLong(dataMap.get("siteId")));
 		job.setEmployeeId(Long.parseLong(dataMap.get("empId")));
+		//job.setSchedule(dataMap.get("schedule"));
+		job.setDuration(dataMap.get("duration"));
 		String frequency = dataMap.containsKey("frequency") ? dataMap.get("frequency") : null;
 		String plannedHours = dataMap.get("plannedHours");
 		Calendar plannedEndTimeCal = Calendar.getInstance();
