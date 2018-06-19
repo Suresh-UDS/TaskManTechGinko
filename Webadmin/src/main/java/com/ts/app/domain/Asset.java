@@ -43,7 +43,7 @@ public class Asset extends AbstractAuditingEntity implements Serializable {
     private String title;
 
     @Size(min = 1, max = 250)
-    @Column(length = 250, nullable = false)
+    @Column(length = 250, nullable = true)
     private String code;
 
     @Size(min = 1, max = 2500)
@@ -56,6 +56,8 @@ public class Asset extends AbstractAuditingEntity implements Serializable {
     @Column(name="qr_code_image")
     private String qrCodeImage;
     
+    @NotNull
+    @Column(name="asset_type", nullable = false)
     private String assetType;
     
     private String assetGroup;

@@ -100,9 +100,11 @@ import {IonicImageViewerModule} from "ionic-img-viewer";
 import {DatePicker} from "@ionic-native/date-picker";
 import{GetAssetReading} from "../pages/asset-view/get-asset-reading";
 import{GetAssetReadings} from "../pages/asset-view/get-asset-readings/get-asset-readings";
+import{CalenderPage} from "../pages/calender-page/calender-page";
 
 import{EmployeeFilter} from "../pages/employee-list/employee-filter/employee-filter";
 import {JobFilter} from "../pages/jobs/job-filter/job-filter";
+
 
 
 @NgModule({
