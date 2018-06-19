@@ -117,9 +117,9 @@
                                 <div class="TailsCon">
 
 
-                                    <div class="TailsContent" ng-controller="FeedbackController as vm">
+                                    <div class="TailsContent">
                                         <ul class="blocksListCon">
-                                            <button type="submit" ng-click="genZoneReport(item.block, item.floor,item.zone,searchForm );search()" ng-repeat="item in filteredLocations track by $index" ng-show="(($index < (vm.page * vm.numRecords)) && ($index >= ((vm.page - 1) * vm.numRecords)))">{{ item.block }}<br/>{{item.floor}}<br/>{{item.zone}}</button>
+                                           <li ng-repeat="item in filteredLocations" ng-class="item.zone == selectedZone ? 'active' : ''"> <a type="submit" ng-click="genZoneReport(item.projectId,item.siteId,item.block, item.floor,item.zone,searchForm)"  ng-show="(($index < (vm.page * vm.numRecords)) && ($index >= ((vm.page - 1) * vm.numRecords)))">{{ item.block }}<br/>{{item.floor}}<br/>{{item.zone}}</a></li>
                                         </ul>
 
                                         <div class="clear"></div>
@@ -283,7 +283,7 @@
   </form>
 
 
-    <div class="card margin-TB-5 txt-align-center" ng-hide="feedbackList">
+    <div class="card margin-TB-5 txt-align-center" ng-hide="feedbackListData">
 
         <div class="card-content">
 
@@ -291,7 +291,7 @@
                 <div loader-css="ball-pulse"></div>
             </div>
 
-            <h3>Please select a location to know the feedback</h3>
+            <h3>No feedbacks</h3>
 
         </div>
 
