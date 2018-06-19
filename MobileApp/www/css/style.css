@@ -1639,6 +1639,7 @@ ion-grid .row:before
    {
        margin-left:0px !important;
    }
+
    .gray-clr
    {
        background-color:#EEEEEE !important;
@@ -1648,6 +1649,14 @@ ion-grid .row:before
         background-color:white !important;
         border:none !important;
     }
+
+    ion-spinner * {
+        width: 30% !important;
+        height: 28px;
+        stroke: #444;
+        fill: #222;
+    }
+
 
 }
 
