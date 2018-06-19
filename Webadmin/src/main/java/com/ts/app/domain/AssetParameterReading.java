@@ -1,7 +1,7 @@
 package com.ts.app.domain;
 
 import java.io.Serializable;
-
+import java.sql.Timestamp;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -63,6 +63,18 @@ public class AssetParameterReading extends AbstractAuditingEntity implements Ser
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "assetParameterConfigId", referencedColumnName = "id", nullable = true)
     private AssetParameterConfig assetParameterConfig;
+    
+    @Column(nullable = true)
+    private Timestamp initialReadingTime;
+    
+    @Column(nullable = true)
+    private Timestamp finalReadingTime;
+    
+    @Column(nullable = true)
+    private int runHours;
+    
+    @Column(nullable = true)
+    private int runMinutues;
 
     public Long getId() {
         return id;
@@ -151,5 +163,39 @@ public class AssetParameterReading extends AbstractAuditingEntity implements Ser
 	public void setConsumptionMonitoringRequired(boolean consumptionMonitoringRequired) {
 		this.consumptionMonitoringRequired = consumptionMonitoringRequired;
 	}
+
+	public Timestamp getInitialReadingTime() {
+		return initialReadingTime;
+	}
+
+	public void setInitialReadingTime(Timestamp initialReadingTime) {
+		this.initialReadingTime = initialReadingTime;
+	}
+
+	public Timestamp getFinalReadingTime() {
+		return finalReadingTime;
+	}
+
+	public void setFinalReadingTime(Timestamp finalReadingTime) {
+		this.finalReadingTime = finalReadingTime;
+	}
+
+	public int getRunHours() {
+		return runHours;
+	}
+
+	public void setRunHours(int runHours) {
+		this.runHours = runHours;
+	}
+
+	public int getRunMinutues() {
+		return runMinutues;
+	}
+
+	public void setRunMinutues(int runMinutues) {
+		this.runMinutues = runMinutues;
+	}
+
+	
     
 }
