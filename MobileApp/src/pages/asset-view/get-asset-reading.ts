@@ -25,6 +25,8 @@ export class GetAssetReading {
     takenImages:any;
     assetConfig:any;
     current:any;
+
+
     constructor(public navCtrl: NavController, public navParams: NavParams, public modalController: ModalController,
                 public componentService:componentService, public popoverCtrl:PopoverController, public camera:Camera,
                 public assetService:AssetService) {
@@ -105,7 +107,7 @@ export class GetAssetReading {
         this.camera.getPicture(options).then((imageData) => {
 
             console.log('imageData -' +imageData);
-            imageData = imageData.replace("assets-library://", "cdvfile://localhost/assets-library/")
+            imageData = imageData.replace("assets-library://", "cdvfile://localhost/assets-library/");
             this.takenImages.push(imageData);
         })
 
@@ -129,7 +131,7 @@ export class GetAssetReading {
     }
 
     saveReading(reading){
-        console.log("Reading page");
+        console.log("Save Reading");
         console.log(reading);
         var assetReading={};
 
