@@ -714,13 +714,14 @@ public class JobManagementService extends AbstractService {
 			data.append("&siteId="+jobDTO.getSiteId());
 			data.append("&empId="+jobDTO.getEmployeeId());
 			data.append("&plannedStartTime="+jobDTO.getPlannedStartTime());
-			data.append("&plannedEndTime="+jobDTO.getPlannedEndTime());
+			data.append("&plannedEndTime="+job.getPlannedEndTime());
 			data.append("&plannedHours="+jobDTO.getPlannedHours());
 			data.append("&location="+jobDTO.getLocationId());
 			data.append("&frequency="+jobDTO.getFrequency());
 			schConfDto.setData(data.toString());
+			log.debug("Saving data to scheduler config ==== "+job.getPlannedEndTime());
 			schConfDto.setStartDate(jobDTO.getPlannedStartTime());
-			schConfDto.setEndDate(jobDTO.getPlannedEndTime());
+			schConfDto.setEndDate(job.getPlannedEndTime());
 			schConfDto.setScheduleEndDate(jobDTO.getScheduleEndDate());
 			schConfDto.setScheduleDailyExcludeWeekend(jobDTO.isScheduleDailyExcludeWeekend());
 			schConfDto.setScheduleWeeklySunday(jobDTO.isScheduleWeeklySunday());

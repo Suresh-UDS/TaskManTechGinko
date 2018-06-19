@@ -110,7 +110,7 @@ public class SchedulerService extends AbstractService {
 	@Inject EmployeeShiftRepository empShiftRepo;
 
 	@Inject Environment env;
-	
+
 	@Inject
 	public SchedulerHelperService schedulerHelperService;
 
@@ -180,7 +180,7 @@ public class SchedulerService extends AbstractService {
 						 * try { boolean shouldProcess = true;
 						 * if(dailyTask.isScheduleDailyExcludeWeekend()) { Calendar today =
 						 * Calendar.getInstance();
-						 * 
+						 *
 						 * if(today.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY ||
 						 * today.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY) { shouldProcess =
 						 * false; } } if(shouldProcess) { processDailyTasks(dailyTask); } } catch
@@ -285,7 +285,7 @@ public class SchedulerService extends AbstractService {
 	// @Scheduled(initialDelay = 60000,fixedRate = 900000) //Runs every 15 mins
 	@Scheduled(cron = "0 0 19 1/1 * ?")
 	public void endOfDayReportSchedule() {
-		
+
 
 	}
 
@@ -403,7 +403,7 @@ public class SchedulerService extends AbstractService {
 			}
 		}
 	}
-	
+
 	@Scheduled(cron = "0 */30 * * * ?")
 	public void attendanceShiftReportSchedule() {
 		Calendar cal = Calendar.getInstance();
@@ -417,12 +417,12 @@ public class SchedulerService extends AbstractService {
 		cal.add(Calendar.DAY_OF_YEAR, -1);
 		schedulerHelperService.generateDetailedAttendanceReport(this, cal.getTime(), false, true);
 	}
-	
+
 	@Scheduled(cron="0 */30 * * * ?") // runs every 30 mins
 	public void attendanceCheckOutTask() {
 		schedulerHelperService.autoCheckOutAttendance(this);
 	}
-	
+
 	public void createJobs(SchedulerConfig dailyTask) {
 		if ("CREATE_JOB".equals(dailyTask.getType())) {
 			if (dailyTask.getSchedule().equalsIgnoreCase(DAILY)) {
@@ -438,7 +438,7 @@ public class SchedulerService extends AbstractService {
 				} else if (creationPolicy.equalsIgnoreCase("daily")) {
 					jobCreationTask(dailyTask, dailyTask.getJob(), dailyTask.getData(), new Date());
 				}
-				// dailyTask.setLastRun(new Date());
+				 dailyTask.setLastRun(new Date());
 			} else if (dailyTask.getSchedule().equalsIgnoreCase(WEEKLY)) {
 				String creationPolicy = env.getProperty("scheduler.weeklyJob.creation");
 				if (creationPolicy.equalsIgnoreCase("monthly")) { // if the creation policy is set to monthly, create jobs for the rest of the

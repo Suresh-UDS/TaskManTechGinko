@@ -154,10 +154,10 @@ scheduler:
       enabled: true
       creation: monthly
    weeklyJob:
-      enabled: false
+      enabled: true
       creation: monthly
    monthlyJob:
-      enabled: false
+      enabled: true
       creation: yearly
    overdueJob:
       enabled: false
