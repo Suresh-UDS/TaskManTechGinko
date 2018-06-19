@@ -1,20 +1,7 @@
 package com.ts.app.web.rest.dto;
 
 import java.io.Serializable;
-
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
-
+import java.sql.Timestamp;
 
 
 public class AssetParameterReadingDTO extends BaseDTO implements Serializable {
@@ -44,6 +31,14 @@ public class AssetParameterReadingDTO extends BaseDTO implements Serializable {
 	private long assetParameterConfigId;
 	
 	private boolean consumptionMonitoringRequired;
+	
+	private Timestamp initialReadingTime;
+	
+	private Timestamp finalReadingTime;
+	
+	private int runHours;
+	
+	private int runMinutes;
 
 
     public Long getId() {
@@ -142,5 +137,38 @@ public class AssetParameterReadingDTO extends BaseDTO implements Serializable {
 		this.consumptionMonitoringRequired = consumptionMonitoringRequired;
 	}
 
+	public Timestamp getInitialReadingTime() {
+		return initialReadingTime;
+	}
+
+	public void setInitialReadingTime(Timestamp initialReadingTime) {
+		this.initialReadingTime = initialReadingTime;
+	}
+
+	public Timestamp getFinalReadingTime() {
+		return finalReadingTime;
+	}
+
+	public void setFinalReadingTime(Timestamp finalReadingTime) {
+		this.finalReadingTime = finalReadingTime;
+	}
+
+	public int getRunHours() {
+		return runHours;
+	}
+
+	public void setRunHours(int runHours) {
+		this.runHours = runHours;
+	}
+
+	public int getRunMinutes() {
+		return runMinutes;
+	}
+
+	public void setRunMinutes(int runMinutes) {
+		this.runMinutes = runMinutes;
+	}
+
+	
     
 }

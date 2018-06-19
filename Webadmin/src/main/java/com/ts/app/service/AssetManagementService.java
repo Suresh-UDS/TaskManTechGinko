@@ -1,5 +1,7 @@
 package com.ts.app.service;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -9,6 +11,7 @@ import java.util.List;
 import javax.inject.Inject;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.env.Environment;
@@ -981,6 +984,18 @@ public class AssetManagementService extends AbstractService {
 			assetParameterReading.setJob(null);
 		}
 		
+		Calendar now = Calendar.getInstance();
+		
+		if(assetParamReadingDTO.isConsumptionMonitoringRequired()) { 
+			if(assetParamReadingDTO.getFinalValue() > 0) {
+				assetParameterReading.setFinalReadingTime(new java.sql.Timestamp(now.getTimeInMillis()));
+			} else if(assetParamReadingDTO.getFinalValue() > 0) { 
+				assetParameterReading.setInitialReadingTime(new java.sql.Timestamp(now.getTimeInMillis()));
+			}
+		} else {
+			assetParameterReading.setInitialReadingTime(new java.sql.Timestamp(now.getTimeInMillis()));
+		}
+		
 		AssetParameterConfig assetParameterConfig = assetParamConfigRepository.findOne(assetParamReadingDTO.getAssetParameterConfigId());
 		assetParameterReading.setAssetParameterConfig(assetParameterConfig);
 		assetParameterReading = assetParamReadingRepository.save(assetParameterReading);
@@ -1090,7 +1105,7 @@ public class AssetManagementService extends AbstractService {
 							
 							if(assetParamReadingDTO.getId() > 0 && assetParamReadingDTO.isConsumptionMonitoringRequired()) { 
 																
-								if(assetParamReadingDTO.getConsumption() < prevReading.getConsumption()) {
+								if(assetParamReadingDTO.getConsumption() > prevReading.getConsumption()) {
 									
 									String type = "consumption";
 									
@@ -1148,6 +1163,18 @@ public class AssetManagementService extends AbstractService {
 							
 						case CURRENT_RUNHOUR_GREATER_THAN_PREVIOUS_RUNHOUR : 
 							
+//							if(assetParamReadingDTO.getId() > 0) { 
+//																	
+//								long milliseconds = assetParamReadingDTO.getFinalReadingTime().getTime() - prevReading.getFinalReadingTime().getTime();
+//								int seconds = (int) milliseconds / 1000;
+//								// calculate hours minutes and seconds
+//							    int hours = seconds / 3600;
+//							    int minutes = (seconds % 3600) / 60;
+//							    
+//							    assetParamReading.setRunHours(hours);
+//							    assetParamReading.setRunMinutues(minutes);
+//							    
+//							}
 							
 							
 						default:
