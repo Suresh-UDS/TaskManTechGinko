@@ -1649,6 +1649,13 @@ ion-grid .row:before
         border:none !important;
     }
 
+    ion-spinner * {
+        width: 30% !important;
+        height: 28px;
+        stroke: #444;
+        fill: #222;
+    }
+
 }
 
 
