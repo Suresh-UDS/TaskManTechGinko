@@ -1,6 +1,6 @@
 <div class="crud-form" ng-init="initLoad();loadingStart();loadProjects();assetConfig();"
 	data-unique-hash="a2ad475d60b22954085c657a73309b8f">
-	<div class="" ng-controller="AssetController">
+	<div class="" >
 		<div class="row">
             <!-- <div class="col-mod-12">
                 <div class="alert alert-success" ng-show="success">
@@ -34,49 +34,34 @@
                                                        <!---->
                                                     <!--</div>-->
                                                     <div class="wizard-navigation">
-                                                        <ul class="arrow-steps" ng-hide="assetGen.id">
+                                                        <ul class="arrow-steps" >
                                                             <li class="step active">
                                                                 <a href=".general" data-toggle="tab" >General</a>
                                                             </li>
                                                             <li class="step">
-                                                                <a >QR Code</a>
+                                                                <a ng-hide="assetGen.id">QR Code</a>
+                                                                 <a href=".qrcode" data-toggle="tab" ng-show="assetGen.id">QR Code</a>
                                                             </li>
                                                            
                                                             <li class="step">
-                                                                <a >PPM Schedule</a>
+                                                                <a ng-hide="assetGen.id">PPM Schedule</a>
+                                                                <a href=".ppmschedule" data-toggle="tab" ng-show="assetGen.id">PPM Schedule</a>
                                                             </li>
                                                             <li class="step">
-                                                                <a >AMC schedule</a>
+                                                                <a ng-hide="assetGen.id">AMC schedule</a>
+                                                                <a href=".amcschedule" data-toggle="tab" ng-show="assetGen.id">AMC schedule</a>
                                                             </li>
                                                              <li class="step">
-                                                                <a >Config</a>
+                                                                <a ng-hide="assetGen.id">Config</a>
+                                                                <a href=".config" data-toggle="tab" ng-show="assetGen.id">Config</a>
                                                             </li>
                                                             <li class="step">
-                                                                <a  >Documents</a>
-                                                            </li>
-                                                        </ul>
-                                                        <ul class="arrow-steps" ng-show="assetGen.id">
-                                                            <li class="step active">
-                                                                <a href=".general" data-toggle="tab" >General</a>
-                                                            </li>
-                                                            <li class="step">
-                                                                <a href=".qrcode" data-toggle="tab" >QR Code</a>
-                                                            </li>
-                                                           
-                                                            <li class="step">
-                                                                <a href=".ppmschedule" data-toggle="tab" >PPM Schedule</a>
-                                                            </li>
-                                                            <li class="step">
-                                                                <a href=".amcschedule" data-toggle="tab" >AMC schedule</a>
-                                                            </li>
-                                                             <li class="step">
-                                                                <a href=".config" data-toggle="tab" >Config</a>
-                                                            </li>
-                                                            <li class="step">
-                                                                <a href=".docs" data-toggle="tab" >Documents</a>
+                                                                <a  ng-hide="assetGen.id">Documents</a>
+                                                                <a href=".docs" data-toggle="tab"  ng-show="assetGen.id">Documents</a>
                                                             </li>
                                                         </ul>
                                                     </div>
+                                                    
                                                     <div class="tab-content">
                                                         <div class="tab-pane fade in active  general" id="general">
                                                             <form name="form" role="form" novalidate
@@ -131,23 +116,25 @@
 		                                                                              <div class="form-group selectcon is-empty" ng-init="loadAssetType()">
                                                                                         <div class="row">
     		                                                                                <div class="col-md-10 pad-r-0px">
-                                                                                                <label class="control-label">Type <span class="red-star">*</span></label>
-                                                                                                <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-    		                                                                                    <select class="form-control" ng-model="selectedAssetType" ng-options="assetype as assetype.name for assetype in assetTypes" name="AssetType" required>
-    		                                                                                        <option value="">Select Asset Type ..</option>
-    		                                                                                    </select>
+                                                                                                <div class="form-group">
+                                                                                                    <label class="control-label">Type <span class="red-star">*</span></label>
+                                                                                                    <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
+        		                                                                                    <select class="form-control" ng-model="selectedAssetType" ng-options="assetype as assetype.name for assetype in assetTypes" name="assetTypeName"
+                                                                                                    required>
+        		                                                                                        <option value="">Select Asset Type ..</option>
+        		                                                                                    </select>
 
-                                                                                                <div ng-show="form.$submitted || form.AssetType.$touched">
-                                                                                                    <div ng-show="form.AssetType.$dirty || form.AssetType.$invalid">
+                                                                                                     <div ng-show="form.$submitted || form.assetTypeName.$touched">
+                                                                                                        <div ng-show="form.assetTypeName.$dirty || form.assetTypeName.$invalid">
                                                                                                         <p class="help-block" style="color:maroon"
-                                                                                                           ng-show="form.AssetType.$error.required">
-                                                                                                            Asset Type is required.
-                                                                                                        </p>
-                                                                                                        
+                                                                                                             ng-show="form.assetTypeName.$error.required">
+                                                                                                                    Asset Type is required.
+                                                                                                            </p>       
+                                                                                                        </div>
                                                                                                     </div>
                                                                                                 </div>
-    		                                                                                </div>
-    		                                                                                <div class="col-md-2 pdng-top25">
+    		                                                                               </div>
+    		                                                                           <div class="col-md-2 pdng-top25">
     		                                                                                    <!-- <a href="javascript:void(0)"  data-toggle="collapse" data-parent="#accordian" data-target="#addAssetType" class="btn btn-round btn-fab btn-fab-mini btn-simple" aria-expanded="false" aria-controls="collapseExample">
     		                                                                                        <i class="material-icons">add</i>
     		                                                                                    </a> -->
@@ -250,7 +237,7 @@
                                                                                     <div class="form-group">
                                                                                         <label class="control-label">Site   <span class="red-star">*</span> </label>
                                                                                         <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                                                                        <select class="form-control " ng-model="selectedSite"  ng-options="site as site.name for site in sites" ng-change="loadBlocks();" name="AssetSite" >
+                                                                                        <select class="form-control " ng-model="selectedSite"  ng-options="site as site.name for site in sites" ng-change="loadBlocks();" name="AssetSite"  required>
                                                                                             <option value="">Select Site ...</option>
                                                                                         </select>
 
@@ -259,12 +246,7 @@
 												                                             <p class="help-block" style="color: maroon"
 												                                                ng-show="form.AssetSite.$error.required">Site is
 												                                                 required.</p>
-												                                             <p class="help-block" style="color: maroon"
-												                                                ng-show="form.AssetSite.$error.minlength">Site is
-												                                                 required to be at least 5 character.</p>
-												                                             <p class="help-block" style="color: maroon"
-												                                                ng-show="form.AssetSite.$error.maxlength">Site
-												                                                 cannot be longer than 50 characters.</p>
+												                                            
 												                                         </div>
 												                                     	</div>
 
@@ -953,7 +935,7 @@
 
                                                                         <div class="col-md-4">
                                                                             <div class="form-group">
-                                                                                <label class="control-label">Title</label>
+                                                                                <label class="control-label">Title<span class="red-star">*</span> </label>
                                                                                 <input id='ppmTitle'
                                                                                        ng-model="assetPPM.title"
                                                                                        class='form-control'
@@ -962,7 +944,22 @@
                                                                                        ng-minlength='5'
                                                                                        ng-maxlength='250'
                                                                                        ng-pattern="/^[A-Za-z0-9\s]*$/" autofocus
-                                                                                />
+                                                                                required />
+                                                                                   <div ng-show="form3.$submitted || form3.ppmTitle.$touched">
+                                                                                        <div
+                                                                                            ng-show="form3.ppmTitle.$dirty || form3.ppmTitle.$invalid">
+                                                                                            <p class="help-block" style="color:maroon"
+                                                                                               ng-show="form3.ppmTitle.$error.required">
+                                                                                                Schedule title is required.
+                                                                                            </p>
+                                                                                            <p class="help-block" style="color: maroon"
+                                                                                                    ng-show="form3.ppmTitle.$error.minlength">Schedule title
+                                                                                                     required to be at least 5 character.
+                                                                                            </p>
+
+                                                                                        </div>
+                                                                                        
+                                                                                    </div>
                                                                             </div>
                                                                         </div>
                                                                          <div class="col-md-4" ng-init="loadCheckList()">
@@ -1040,28 +1037,28 @@
                                                                     <div class="row">
                                                                         <div class="col-md-4" ng-init="loadEmployees();">
                                                                             <div class="form-group">
-                                                                                <label class="control-label">Employee<span class="red-star">*</span> </label>
+                                                                                <label class="control-label">Employee<!-- <span class="red-star">*</span> --> </label>
                                                                                 <div class="dropdown">
                                                                                     
                                                                                     <span class="form-control-feedback d-sm-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
 
-                                                                                    <select class="form-control " ng-model="selectedEmployee"  ng-options="emp as emp.name for emp in employees track by emp.id" name="employeeName" required>
+                                                                                    <select class="form-control " ng-model="selectedEmployee"  ng-options="emp as emp.name for emp in employees track by emp.id" name="employeeName" >
 
 
                                                                                         <option value="">Select Employees...</option>
                                                                                     </select>
 
-                                                                                    <div ng-show="form4.$submitted || form4.employeeName.$touched">
+                                                                                    <!-- <div ng-show="form3.$submitted || form3.employeeName.$touched">
                                                                                         <div
-                                                                                            ng-show="form4.employeeName.$dirty || form4.employeeName.$invalid">
+                                                                                            ng-show="form3.employeeName.$dirty || form3.employeeName.$invalid">
                                                                                             <p class="help-block" style="color:maroon"
-                                                                                               ng-show="form4.employeeName.$error.required">
+                                                                                               ng-show="form3.employeeName.$error.required">
                                                                                                 Employee is required.
                                                                                             </p>
 
                                                                                         </div>
                                                                                         
-                                                                                    </div>
+                                                                                    </div> -->
                                                                                 </div>
                                                                                 
                                                                             </div>
@@ -1097,7 +1094,7 @@
                                                                             </div>
                                                                         </div>
                                                                         <div class="col-md-1" style="padding-top: 25px;">
-                                                                            <a class="btn btn-success add-btn margn-top0"  ng-click="savePPMSchedule()">Add</a>
+                                                                            <a class="btn btn-success add-btn margn-top0"  ng-click="savePPMSchedule()" ng-disabled="form3.$invalid">Add</a>
                                                                         </div>
                                                                     </div>
                                                                 </div>
@@ -1161,30 +1158,31 @@
 
                                                                         <div class="col-md-4">
                                                                             <div class="form-group">
-                                                                                <label class="control-label">Title</label>
+                                                                                <label class="control-label">Title<span class="red-star">*</span></label>
                                                                                 <input id='ppmTitle'
                                                                                        ng-model="amcSchedule.title"
                                                                                        class='form-control'
-                                                                                       name='ppmTitle'
+                                                                                       name='amcTitle'
                                                                                        type='text' value=""
                                                                                        ng-minlength='5'
                                                                                        ng-maxlength='250'
                                                                                        ng-pattern="/^[A-Za-z0-9\s]*$/" autofocus
-                                                                                />
+                                                                                required />
 
-                                                                                <div ng-show="form4.$submitted || form4.ppmTitle.$touched">
-                                                                                    <div ng-show="form4.ppmTitle.$dirty || form4.ppmTitle.$invalid">
+                                                                                <div ng-show="form4.$submitted || form4.amcTitle.$touched">
+                                                                                    <div ng-show="form4.amcTitle.$dirty || form4.amcTitle.$invalid">
                                                                                         <p class="help-block" style="color:maroon"
-                                                                                           ng-show="form4.ppmTitle.$error.required">
+                                                                                           ng-show="form4.amcTitle.$error.required">
                                                                                             Schedule title is required.
                                                                                         </p>
                                                                                         
-                                                                                        <p class="help-block" style="color:maroon"
-                                                                                           ng-show="form4.assetTitle.$error.pattern">
-                                                                                            Schedule title can only contain letters, digits and space.
+                                                                                       <p class="help-block" style="color: maroon"
+                                                                                                ng-show="form4.amcTitle.$error.minlength">Schedule title
+                                                                                                 required to be at least  character.
                                                                                         </p>
                                                                                     </div>
                                                                                 </div>
+
                                                                             </div>
                                                                         </div>
                                                                         <div class="col-md-4" ng-init="loadCheckList()">
@@ -1319,7 +1317,7 @@
                                                                             </div>
                                                                         </div>
                                                                         <div class="col-md-1" style="padding-top: 25px;">
-                                                                            <a class="btn btn-success add-btn margn-top0"  ng-click="saveAmcSchedule()">Add</a>
+                                                                            <a class="btn btn-success add-btn margn-top0"  ng-click="saveAmcSchedule()" ng-disabled="form4.$invalid">Add</a>
                                                                         </div>
                                                                     </div>
                                                                 </div>
@@ -1511,7 +1509,7 @@
                                                                 </div>
 
                                                             </div>
-                                                            </form>
+                                                         
                                                             <div class="panel panel-default" style="min-height: 200px;">
 
                                                                 <div class="panel-heading">
@@ -1611,7 +1609,7 @@
                                                 id="form-button-save" ng-disabled="form.$invalid" ng-click="saveAsset()" >
                                                     <span class="btn-label">
                                             				<i class="material-icons">check</i>
-                                        				</span> Save
+                                        				</span> Save &amp; Next
                                         </button>
                                         <!--<button class="btn btn-info" type="submit"-->
                                         <!--id="save-and-go-back-button" ng-disabled="form.$invalid">-->
