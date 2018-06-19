@@ -45,6 +45,7 @@ import com.ts.app.domain.Setting;
 import com.ts.app.domain.Site;
 import com.ts.app.domain.User;
 import com.ts.app.domain.Vendor;
+import com.ts.app.domain.util.StringUtil;
 import com.ts.app.repository.AssetAMCRepository;
 import com.ts.app.repository.AssetDocumentRepository;
 import com.ts.app.repository.AssetGroupRepository;
@@ -979,6 +980,7 @@ public class AssetManagementService extends AbstractService {
 		}else{ 
 			assetParameterReading.setJob(null);
 		}
+		
 		AssetParameterConfig assetParameterConfig = assetParamConfigRepository.findOne(assetParamReadingDTO.getAssetParameterConfigId());
 		assetParameterReading.setAssetParameterConfig(assetParameterConfig);
 		assetParameterReading = assetParamReadingRepository.save(assetParameterReading);
@@ -1044,7 +1046,11 @@ public class AssetManagementService extends AbstractService {
 				Job job = jobRepository.findOne(assetParamReadingDTO.getJobId());
 				assetParamReading.setJob(job);
 			}
-			assetParamReading.setConsumption(assetParamReadingDTO.getConsumption());
+			if(assetParamReadingDTO.getInitialValue() > 0 && assetParamReadingDTO.getFinalValue() > 0) {
+				double consumption = assetParamReadingDTO.getFinalValue() - assetParamReadingDTO.getInitialValue();
+				assetParamReading.setConsumption(consumption);
+			}
+			
 			assetParamReading.setConsumptionMonitoringRequired(assetParamReadingDTO.isConsumptionMonitoringRequired());
 			assetParamReading.setInitialValue(assetParamReadingDTO.getInitialValue());
 			assetParamReading.setFinalValue(assetParamReadingDTO.getFinalValue());
@@ -1055,7 +1061,25 @@ public class AssetManagementService extends AbstractService {
 			assetParamReadingRepository.save(assetParamReading);
 			
 			if(assetParamReadingDTO.getAssetParameterConfigId() > 0 ) { 
+				
 				List<AssetParameterReadingRule> readingRuleLists = assetReadingRuleRepository.findByAssetConfigId(assetParamReadingDTO.getAssetParameterConfigId());
+				
+				AssetParameterReadingDTO prevReading = getLatestParamReading(assetParamReadingDTO.getAssetId(), assetParamReadingDTO.getAssetParameterConfigId());
+				
+				AssetParameterConfig assetParamConfig = assetParamConfigRepository.findOne(assetParamReadingDTO.getId());
+				
+				Asset asset = assetRepository.findOne(assetParamConfig.getId());
+				
+				String assetCode = asset.getCode();
+				
+				String assetName = asset.getTitle();
+				
+				Site site = siteRepository.findOne(asset.getSite().getId());
+				
+				String siteName = site.getName();
+				
+				Date date = new Date();
+				
 				for(AssetParameterReadingRule assetReadingRuleList : readingRuleLists) {
 							
 					AssetReadingRule rule = AssetReadingRule.valueOf(assetReadingRuleList.getRule());
@@ -1064,10 +1088,12 @@ public class AssetManagementService extends AbstractService {
 					
 						case CURRENT_CONSUMPTION_GREATER_THAN_PREVIOUS_CONSUMPTION :
 							
-							if(assetParamReadingDTO.getId() > 0 ) { 
-								AssetParameterReadingDTO prevReading = getLatestParamReading(assetParamReadingDTO.getAssetId(), assetParamReadingDTO.getAssetParameterConfigId());
-								
-								if(assetParamReadingDTO.getConsumption() < prevReading.getConsumption()) { 
+							if(assetParamReadingDTO.getId() > 0 && assetParamReadingDTO.isConsumptionMonitoringRequired()) { 
+																
+								if(assetParamReadingDTO.getConsumption() < prevReading.getConsumption()) {
+									
+									String type = "consumption";
+									
 									Setting setting = settingRepository.findSettingByKey(EMAIL_NOTIFICATION_READING);
 									
 									if(setting.getSettingValue() == "true") { 
@@ -1075,7 +1101,7 @@ public class AssetManagementService extends AbstractService {
 										if(settingEntity.getSettingValue().length() > 0) { 
 											List<String> emailLists = CommonUtil.convertToList(settingEntity.getSettingValue(), ",");
 											for(String email : emailLists) { 
-												mailService.sendReadingAlert(email);
+												mailService.sendReadingAlert(email, siteName, assetCode, assetName, type, date);
 											}
 										}
 									}
@@ -1084,23 +1110,45 @@ public class AssetManagementService extends AbstractService {
 							
 						case CURRENT_READING_GREATER_THAN_PREVIOUS_READING :
 							
-							if(assetParamReadingDTO.getId() > 0 ) { 
-								AssetParameterReadingDTO prevReading = getLatestParamReading(assetParamReadingDTO.getAssetId(), assetParamReadingDTO.getAssetParameterConfigId());
+							if(assetParamReadingDTO.getId() > 0 && !assetParamReadingDTO.isConsumptionMonitoringRequired()) { 
 								
-								if(assetParamReadingDTO.getValue() < prevReading.getValue()) { 
-									Setting setting = settingRepository.findSettingByKey(EMAIL_NOTIFICATION_READING);
+								String type = "reading";
+								
+								if(assetParamReadingDTO.getValue() > 0 && prevReading.getValue() > 0) { 
 									
-									if(setting.getSettingValue() == "true") { 
-										Setting settingEntity = settingRepository.findSettingByKey(EMAIL_NOTIFICATION_READING_EMAILS);
-										if(settingEntity.getSettingValue().length() > 0) { 
-											List<String> emailLists = CommonUtil.convertToList(settingEntity.getSettingValue(), ",");
-											for(String email : emailLists) { 
-												mailService.sendReadingAlert(email);
+									double currentThreshold = prevReading.getValue() - assetParamReadingDTO.getValue();
+									
+									double threshold = assetParamConfig.getThreshold();
+									
+									if(currentThreshold > threshold) { 
+										
+										Setting setting = settingRepository.findSettingByKey(EMAIL_NOTIFICATION_READING);
+										
+										if(setting.getSettingValue() == "true") { 
+											
+											Setting settingEntity = settingRepository.findSettingByKey(EMAIL_NOTIFICATION_READING_EMAILS);
+											
+											if(settingEntity.getSettingValue().length() > 0) {
+												
+												List<String> emailLists = CommonUtil.convertToList(settingEntity.getSettingValue(), ",");
+												for(String email : emailLists) { 
+													mailService.sendReadingAlert(email, siteName, assetCode, assetName, type, date);
+												}
+												
+											} else {
+												
+												log.info("There is no email ids registered");
 											}
 										}
+										
 									}
+									
 								}
 							}
+							
+						case CURRENT_RUNHOUR_GREATER_THAN_PREVIOUS_RUNHOUR : 
+							
+							
 							
 						default:
 						

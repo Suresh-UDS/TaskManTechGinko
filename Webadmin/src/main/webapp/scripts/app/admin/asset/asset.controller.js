@@ -1655,6 +1655,15 @@ angular.module('timeSheetApp')
         	});
         }
 
+        $scope.loadPPMJobs = function() { 
+        	$scope.searchCriteria.maintenanceType = "PPM";
+        	$scope.searchCriteria.assetId = $stateParams.id;
+        	console.log($scope.searchCriteria);
+        	JobComponent.search($scope.searchCriteria).then(function(data){ 
+        		console.log(data);
+        		$scope.ppmJobLists = data.transactions;
+        	});
+        }
  
 
     });

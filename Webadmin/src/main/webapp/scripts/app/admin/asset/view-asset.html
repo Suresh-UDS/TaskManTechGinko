@@ -1,5 +1,5 @@
 <div class="crud-form"
-	data-unique-hash="a2ad475d60b22954085c657a73309b8f" ng-init="viewAsset();loadAMCJobs()">
+	data-unique-hash="a2ad475d60b22954085c657a73309b8f" ng-init="viewAsset();loadAMCJobs();loadPPMJobs();">
 	<div class="">
 		<div class="row">
         	<div class="col-md-12">
@@ -420,54 +420,18 @@
                                                    </thead>
 
                                                    <tbody>
-                                                   <tr>
-                                                       <td>Weekly</td>
-                                                       <td>03/03/2018</td>
-                                                       <td>00045</td>
-                                                       <td>03/03/2018</td>
-                                                       <td>15/03/2018</td>
-                                                       <td>UDS</td>
-                                                       <td>Completed</td>
+                                                   <tr ng-repeat="ppmList in ppmJobLists">
+                                                       <td>{{ppmList.schedule}}</td>
+                                                       <td>{{ppmList.plannedStartTime | date:'dd-MMM-yyyy'}}</td>
+                                                       <td>{{ppmList.id}}</td>
+                                                       <td>{{ppmList.plannedStartTime | date:'dd-MMM-yyyy'}}</td>
+                                                       <td>{{ppmList.plannedEndTime | date:'dd-MMM-yyyy'}}</td>
+                                                       <td>{{ppmList.employeeName}}</td>
+                                                       <td>{{ppmList.jobStatus}}</td>
                                                    </tr>
                                                    <tr>
-                                                       <td>Weekly</td>
-                                                       <td>03/03/2018</td>
-                                                       <td>00045</td>
-                                                       <td>03/03/2018</td>
-                                                       <td>15/03/2018</td>
-                                                       <td>UDS</td>
-                                                       <td>Completed</td>
+                                                   	<td colspan="7" align="center" ng-show="!ppmJobLists.length">No PPM Jobs Found</td>
                                                    </tr>
-                                                   <tr>
-                                                       <td>Weekly</td>
-                                                       <td>03/03/2018</td>
-                                                       <td>00045</td>
-                                                       <td>03/03/2018</td>
-                                                       <td>15/03/2018</td>
-                                                       <td>UDS</td>
-                                                       <td>Completed</td>
-                                                   </tr>
-                                                   <tr>
-                                                       <td>Weekly</td>
-                                                       <td>03/03/2018</td>
-                                                       <td>00045</td>
-                                                       <td>03/03/2018</td>
-                                                       <td>15/03/2018</td>
-                                                       <td>UDS</td>
-                                                       <td>Completed</td>
-                                                   </tr>
-                                                   <tr>
-                                                       <td>Weekly</td>
-                                                       <td>03/03/2018</td>
-                                                       <td>00045</td>
-                                                       <td>03/03/2018</td>
-                                                       <td>15/03/2018</td>
-                                                       <td>UDS</td>
-                                                       <td>Completed</td>
-                                                   </tr>
-
-
-
                                                    </tbody>
                                                </table>
 
@@ -521,7 +485,7 @@
                                                </div>
                                            </div>
 
-                                           <div class="panel panel-default">
+<!--                                            <div class="panel panel-default">
                                                <div class="panel-heading">Schedule Filter</div>
                                                <div class="panel-body">
 
@@ -563,7 +527,7 @@
                                                    </div>
 
                                                </div>
-                                           </div>
+                                           </div> -->
 
                                            <div class="table-responsive tablecard">
                                               <table class="table table-striped">
@@ -615,7 +579,7 @@
                                        </div>
                                        <div class="tab-pane fade amc-schedule" id="amc-schedule" ng-init="loadAmcSchedule()">
 
-                                           <div class="panel panel-default">
+<!--                                            <div class="panel panel-default">
                                                <div class="panel-heading">Schedule Filter</div>
                                                <div class="panel-body">
 
@@ -657,7 +621,7 @@
                                                    </div>
 
                                                </div>
-                                           </div>
+                                           </div> -->
 
                                            <div class="table-responsive tablecard">
                                                         <table class="table table-striped">
