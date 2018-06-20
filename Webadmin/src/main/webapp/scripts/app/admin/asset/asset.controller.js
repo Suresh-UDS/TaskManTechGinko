@@ -550,8 +550,8 @@ angular.module('timeSheetApp')
                      $scope.searchCriteria.assetTypeName ="";
                 }
                 if(jQuery.isEmptyObject($scope.searchAssetGroup) == false) {
-
-                    $scope.searchCriteria.assetGroupName = $scope.searchAssetGroup.name;
+                 
+                    $scope.searchCriteria.assetGroupName = $scope.searchAssetGroup.assetgroup;
                     $scope.searchCriteria.findAll = false;
 
                 }else{
