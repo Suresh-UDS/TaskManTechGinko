@@ -493,8 +493,8 @@ angular.module('timeSheetApp')
 
             console.log('Selected Asset' + $scope.searchAssetName);
 
-            if(!$scope.searchAcquiredDate && !$scope.searchProject && !$scope.searchSite && 
-                !searchAssetGroup && !$scope.searchAssetName && !$scope.searchAssetCode && !$scope.searchAssetType) {
+            if(!$scope.searchAcquiredDate && !$scope.searchProject.id && !$scope.searchSite.id && 
+                !$scope.searchAssetGroup.id && !$scope.searchAssetName && !$scope.searchAssetCode && !$scope.searchAssetType.id) {
             
                     $scope.searchCriteria.findAll = true;
 
