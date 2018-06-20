@@ -20,6 +20,7 @@ angular.module('timeSheetApp')
         $scope.selectedAsset = {};
         $scope.selectedProject = {};
         $scope.selectedSite = {};
+        $scope.selectedSites = {};
         $scope.selectedBlock = null;
         $scope.selectedFloor = null;
         $scope.selectedZone = null;
@@ -45,6 +46,17 @@ angular.module('timeSheetApp')
         $scope.uploadAssetPhoto = {};
         $scope.amcScheduleList = {};
         $scope.ppmscheduleList ={};
+        $scope.fileCount ='0';
+        $scope.photoCount ='0';
+        $scope.searchAssetName =null;
+        $scope.searchAssetCode =null;
+        $scope.searchAssetType ={};
+        $scope.searchSite ={};
+        $scope.searchProject ={};
+        $scope.searchAssetGroup ={};
+
+        //scope.searchAcquiredDate = $filter('date')(new Date(), 'dd/MM/yyyy'); 
+        $scope.searchAcquiredDate = "";
 
 
         $scope.asset = {};
@@ -123,7 +135,7 @@ angular.module('timeSheetApp')
             }else if(nottifShow == false){
                 $timeout(function() {
                   nottifShow = true ;
-                }, 3000);
+                }, 1000);
 
             }
             
@@ -284,7 +296,7 @@ angular.module('timeSheetApp')
          $scope.loadAssetType = function () {
             AssetTypeComponent.findAll().then(function (data) {
                 //console.log("Loading all AssetType -- " , data)
-                 $scope.selectedAssetType = null;
+                 //$scope.selectedAssetType = null;
                 $scope.assetTypes = data;
             });
         }
@@ -304,9 +316,9 @@ angular.module('timeSheetApp')
         }
 
         $scope.loadBlocks = function () {
-                console.log('selected project -' + ($scope.selectedProject ? $scope.selectedProject.id : 0) + ', site -' + ($scope.selectedSite ? $scope.selectedSite.id : 0))
+                console.log('selected project -' + ($scope.selectedProject ? $scope.selectedProject.id : 0) + ', site -' + ($scope.selectedSites ? $scope.selectedSites.id : 0))
                 var projectId = $scope.selectedProject ? $scope.selectedProject.id : 0;
-                LocationComponent.findBlocks(0,$scope.selectedSite.id).then(function (data) {
+                LocationComponent.findBlocks(0,$scope.selectedSites.id).then(function (data) {
                     $scope.selectedBlock = null;
                 $scope.blocks = data;
                  console.log("Loading all blocks -- " ,  $scope.blocks);
@@ -316,7 +328,7 @@ angular.module('timeSheetApp')
 
         $scope.loadFloors = function () {
                 var projectId = $scope.selectedProject ? $scope.selectedProject.id : 0;
-                LocationComponent.findFloors(0,$scope.selectedSite.id,$scope.selectedBlock).then(function (data) {
+                LocationComponent.findFloors(0,$scope.selectedSites.id,$scope.selectedBlock).then(function (data) {
                     $scope.selectedFloor = null;
                 $scope.floors = data;
                 console.log("Loading all floors -- " ,  $scope.floors);
@@ -324,9 +336,9 @@ angular.module('timeSheetApp')
         }
 
         $scope.loadZones = function () {
-                console.log('load zones - ' + $scope.selectedSite.id +',' +$scope.selectedBlock +','+$scope.selectedFloor);
+                console.log('load zones - ' + $scope.selectedSites.id +',' +$scope.selectedBlock +','+$scope.selectedFloor);
                 var projectId = $scope.selectedProject ? $scope.selectedProject.id : 0;
-                LocationComponent.findZones(0,$scope.selectedSite.id,$scope.selectedBlock, $scope.selectedFloor).then(function (data) {
+                LocationComponent.findZones(0,$scope.selectedSites.id,$scope.selectedBlock, $scope.selectedFloor).then(function (data) {
                     $scope.selectedZone = null;
                     $scope.zones = data;
                     console.log('zones list',$scope.zones);
@@ -343,10 +355,12 @@ angular.module('timeSheetApp')
         }
 
         $scope.loadDepSites = function () {
-            ProjectComponent.findSites($scope.selectedProject.id).then(function (data) {
-                $scope.selectedSite = null;
-                $scope.sitesList = data;
-            });
+            if($scope.searchProject){
+                ProjectComponent.findSites($scope.searchProject.id).then(function (data) {
+                    $scope.searchSite = null;
+                    $scope.sites = data;
+                });
+            }
         }
 
         $scope.initMaterialWizard();
@@ -374,7 +388,7 @@ angular.module('timeSheetApp')
                 $scope.assetEdit.vendorLocation = $scope.assetList.vendorLocation;
                 $scope.selectedAssetType ={name:$scope.assetList.assetType};
                 $scope.selectedAssetGroup ={assetgroup:$scope.assetList.assetGroup};
-                $scope.selectedSite ={id:$scope.assetList.siteId,name:$scope.assetList.siteName};
+                $scope.selectedSites ={id:$scope.assetList.siteId,name:$scope.assetList.siteName};
                 $scope.selectedBlock = $scope.assetList.block;
                 $scope.selectedFloor = $scope.assetList.floor;
                 $scope.selectedZone = $scope.assetList.zone;
@@ -382,19 +396,19 @@ angular.module('timeSheetApp')
                 $scope.selectedVendor = {id:$scope.assetList.vendorId};
                 if($scope.assetList.siteId){   
                         LocationComponent.findBlocks(0,$scope.assetList.siteId).then(function (data) {
-                        $scope.selectedBlock = null;
+                        //$scope.selectedBlock = null;
                         $scope.blocks = data;
                          console.log("Loading all blocks -- " ,  $scope.blocks);
                     });
                
                        LocationComponent.findFloors(0,$scope.assetList.siteId,$scope.assetList.block).then(function (data) {
-                        $scope.selectedFloor = null;
+                        //$scope.selectedFloor = null;
                         $scope.floors = data;
                         console.log("Loading all floors -- " ,  $scope.floors);
                     });
 
                        LocationComponent.findZones(0,$scope.assetList.siteId,$scope.assetList.block,$scope.assetList.floor).then(function (data) {
-                        $scope.selectedZone = null;
+                        //$scope.selectedZone = null;
                         $scope.zones = data;
                         console.log('zones list',$scope.zones);
                    });
@@ -477,22 +491,73 @@ angular.module('timeSheetApp')
             $scope.searchCriteria.currPage = currPageVal;
             $scope.searchCriteria.findAll = false;
 
-            console.log('Selected Assets' + $scope.selectedLocation);
+            console.log('Selected Asset' + $scope.searchAssetName);
 
-            if(!$scope.selectedAsset.id) {
+            if(!$scope.searchAcquiredDate && jQuery.isEmptyObject($scope.searchProject) == true
+             && jQuery.isEmptyObject($scope.searchSite) == true && 
+                jQuery.isEmptyObject($scope.searchAssetGroup) == true && !$scope.searchAssetName && !$scope.searchAssetCode 
+                &&  jQuery.isEmptyObject($scope.searchAssetType) == true) {
             
                     $scope.searchCriteria.findAll = true;
 
             }else{
-
-                if($scope.selectedAsset.id) {
-
-                    $scope.searchCriteria.assetId = $scope.selectedAsset.id;
-
+               
+            
+                if($scope.searchAcquiredDateSer) {
+                    $scope.searchCriteria.acquiredDate = $scope.searchAcquiredDateSer;
+                }else{
+                    //$scope.searchCriteria.acquiredDate = new Date();
+                    $scope.searchCriteria.acquiredDate = "";
                 }
+
+
+                if(jQuery.isEmptyObject($scope.searchProject) == false) {
+                    $scope.searchCriteria.projectId = $scope.searchProject.id;
+                }else{
+                     $scope.searchCriteria.projectId =0;
+                }
+                if(jQuery.isEmptyObject($scope.searchSite) == false) {
+
+                    $scope.searchCriteria.siteId = $scope.searchSite.id;
+
+                }else{
+                     $scope.searchCriteria.siteId =0;
+                }
+                if(jQuery.isEmptyObject($scope.searchAssetType) == false) {
+
+                    $scope.searchCriteria.assetTypeName = $scope.searchAssetType.name;
+
+                }else{
+                     $scope.searchCriteria.assetTypeName ="";
+                }
+                if(jQuery.isEmptyObject($scope.searchAssetGroup) == false) {
+
+                    $scope.searchCriteria.assetGroupName = $scope.searchAssetGroup.name;
+
+                }else{
+                     $scope.searchCriteria.assetGroupName ="";
+                }
+
+                if($scope.searchAssetName) {
+
+                    $scope.searchCriteria.assetTitle = $scope.searchAssetName;
+
+                }else{
+                     $scope.searchCriteria.assetTitle ="";
+                }
+                if($scope.searchAssetCode) {
+
+                    $scope.searchCriteria.assetCode = $scope.searchAssetCode;
+
+                }else{
+                     $scope.searchCriteria.assetCode ="";
+                }
+                
+                
+
+
             }
 
-            console.log($scope.searchCriteria);
             //----
             if($scope.pageSort){
                 $scope.searchCriteria.sort = $scope.pageSort;
@@ -598,6 +663,11 @@ angular.module('timeSheetApp')
                 $scope.assetEditDate = e.date._d;
         });
 
+        $('input#searchAcquiredDate').on('dp.change', function(e){
+                $scope.searchAcquiredDate = $filter('date')(e.date._d, 'dd/MM/yyyy'); 
+                $scope.searchAcquiredDateSer = e.date._d;
+        });
+
         
         
          /* Create and save asset */
@@ -607,7 +677,7 @@ angular.module('timeSheetApp')
                 $scope.success = null;
                 $scope.errorSitesExists = null;
                 $scope.errorSite = null;
-                if(!$scope.selectedSite.id){
+                if(!$scope.selectedSites.id){
                     $scope.errorSite = "true";
                     $scope.showNotifications('top','center','danger','Please select site!!!');
 
@@ -620,8 +690,8 @@ angular.module('timeSheetApp')
                     if($scope.selectedServiceProvider.id){$scope.assetGen.serviceProvider = $scope.selectedServiceProvider.id;}
                     if($scope.selectedServiceWarranty.id){$scope.assetGen.serviceWarranty = $scope.selectedServiceWarranty.id;}
                     if($scope.selectedVendor.id){$scope.assetGen.vendorId = $scope.selectedVendor.id;}
-                    if($scope.selectedSite.id){$scope.assetGen.siteId = $scope.selectedSite.id;}
-                    if($scope.selectedProject.id){$scope.assetGen.projectId = $scope.selectedProject.id;}
+                    if($scope.selectedSites.id){$scope.assetGen.siteId = $scope.selectedSites.id;}
+                    //if($scope.selectedProject.id){$scope.assetGen.projectId = $scope.selectedProject.id;}
                     if($scope.selectedBlock){$scope.assetGen.block = $scope.selectedBlock;}
                     if($scope.selectedFloor){$scope.assetGen.floor = $scope.selectedFloor;}
                     if($scope.selectedZone){$scope.assetGen.zone = $scope.selectedZone;}
@@ -879,6 +949,14 @@ angular.module('timeSheetApp')
             $scope.searchCriteria = {};
             $scope.selectedSite = null;
             $scope.selectedStatus = null;
+            $scope.searchAssetName =null;
+            $scope.searchAssetCode =null;
+           //$scope.searchAcquiredDate = $filter('date')(new Date(), 'dd/MM/yyyy');
+            $scope.searchAcquiredDate = "";
+            $scope.searchAssetType ={};
+            $scope.searchSite ={};
+            $scope.searchProject ={};
+            $scope.searchAssetGroup ={};
             $scope.pages = {
                 currPage: 1,
                 totalPages: 0
@@ -1234,6 +1312,8 @@ angular.module('timeSheetApp')
 	    	AssetComponent.getAllUploadedFiles($scope.uploadObj).then(function(data){ 
                 $scope.uploadFiles = [];
 	    		$scope.uploadFiles=data;
+
+                $scope.fileCount = ($scope.uploadFiles).length;
                 
                 console.log("-- Upload files --" , $scope.uploadFiles);
 	    	});
@@ -1255,6 +1335,7 @@ angular.module('timeSheetApp')
 	    	AssetComponent.getAllUploadedPhotos($scope.photoObj).then(function(data){ 
                 $scope.uploadAssetPhotos = [];
                 $scope.uploadAssetPhotos=data;
+                $scope.photoCount = ($scope.uploadAssetPhotos).length;
 	   
                 console.log("-- Uploaded Photos --",$scope.uploadAssetPhotos);
 	    	});

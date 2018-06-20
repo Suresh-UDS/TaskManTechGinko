@@ -78,7 +78,7 @@
 
                                                                                 <div class="col-md-12">
                                                                                     <div class="form-group">
-                                                                                        <label class="control-label">Title <span class="red-star">*</span></label>
+                                                                                        <label class="control-label">Name <span class="red-star">*</span></label>
                                                                                     <input id='assetTitle'
                                                                                            ng-model="assetGen.title"
                                                                                            class='form-control'
@@ -237,7 +237,7 @@
                                                                                     <div class="form-group">
                                                                                         <label class="control-label">Site   <span class="red-star">*</span> </label>
                                                                                         <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                                                                        <select class="form-control " ng-model="selectedSite"  ng-options="site as site.name for site in sites" ng-change="loadBlocks();" name="AssetSite"  required>
+                                                                                        <select class="form-control " ng-model="selectedSites"  ng-options="site as site.name for site in sites" ng-change="loadBlocks();" name="AssetSite"  required>
                                                                                             <option value="">Select Site ...</option>
                                                                                         </select>
 
@@ -259,7 +259,7 @@
                                                                                     <div class="form-group">
                                                                                         <label class="control-label">Block  </label>
                                                                                         <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                                                                        <select class="form-control " ng-model="selectedBlock"  ng-options="block  for  block in  blocks" name="AssetBlock"  ng-change="loadFloors()">
+                                                                                        <select class="form-control " ng-model="selectedBlock"  ng-options="block  for  block in  blocks track by block" name="AssetBlock"  ng-change="loadFloors()">
                                                                                             <option value="">Select Block ...</option>
                                                                                         </select>
                                                                                     </div>
@@ -268,7 +268,7 @@
                                                                                     <div class="form-group">
                                                                                         <label class="control-label">Floor </label>
                                                                                         <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                                                                        <select class="form-control " ng-model="selectedFloor" ng-options="floor for floor in floors" name="AssetFloor" ng-change="loadZones()" >
+                                                                                        <select class="form-control " ng-model="selectedFloor" ng-options="floor for floor in floors track by floor" name="AssetFloor" ng-change="loadZones()" >
                                                                                             <option value="">Please select Floor ...</option>
                                                                                         </select>
                                                                                     </div>
@@ -277,7 +277,7 @@
                                                                                     <div class="form-group">
                                                                                         <label class="control-label">Zone  </label>
                                                                                         <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                                                                        <select class="form-control " ng-model="selectedZone"  ng-options="zone for zone in zones" name="AssetZone" >
+                                                                                        <select class="form-control " ng-model="selectedZone"  ng-options="zone for zone in zones track by zone" name="AssetZone" >
                                                                                             <option value="">Select Zone  ...</option>
                                                                                         </select>
 
@@ -1159,7 +1159,7 @@
                                                                         <div class="col-md-4">
                                                                             <div class="form-group">
                                                                                 <label class="control-label">Title<span class="red-star">*</span></label>
-                                                                                <input id='ppmTitle'
+                                                                                <input id='amcTitle'
                                                                                        ng-model="amcSchedule.title"
                                                                                        class='form-control'
                                                                                        name='amcTitle'
@@ -1177,8 +1177,8 @@
                                                                                         </p>
                                                                                         
                                                                                        <p class="help-block" style="color: maroon"
-                                                                                                ng-show="form4.amcTitle.$error.minlength">Schedule title
-                                                                                                 required to be at least  character.
+                                                                                            ng-show="form4.amcTitle.$error.minlength">Schedule title
+                                                                                             required to be at least 5  characters.
                                                                                         </p>
                                                                                     </div>
                                                                                 </div>
@@ -1260,18 +1260,18 @@
 
                                                                         <div class="col-md-4" ng-init="loadEmployees();">
                                                                             <div class="form-group">
-                                                                                <label class="control-label">Employee<span class="red-star">*</span> </label>
+                                                                                <label class="control-label">Employee<!-- <span class="red-star">*</span> --> </label>
                                                                                 <div class="dropdown">
                                                                                     
                                                                                     <span class="form-control-feedback d-sm-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
 
-                                                                                    <select class="form-control " ng-model="selectedEmployee"  ng-options="emp as emp.name for emp in employees track by emp.id" name="employeeName" required>
+                                                                                    <select class="form-control " ng-model="selectedEmployee"  ng-options="emp as emp.name for emp in employees track by emp.id" name="employeeName" >
 
 
                                                                                         <option value="">Select Employees...</option>
                                                                                     </select>
 
-                                                                                    <div ng-show="form4.$submitted || form4.employeeName.$touched">
+                                                                                   <!--  <div ng-show="form4.$submitted || form4.employeeName.$touched">
                                                                                         <div
                                                                                             ng-show="form4.employeeName.$dirty || form4.employeeName.$invalid">
                                                                                             <p class="help-block" style="color:maroon"
@@ -1281,7 +1281,7 @@
 
                                                                                         </div>
                                                                                         
-                                                                                    </div>
+                                                                                    </div> -->
                                                                                 </div>
                                                                                 
                                                                             </div>
@@ -1518,7 +1518,7 @@
                                                                 <div class="panel-body">
 
 
-                                                                   <div class="row docsRow"  ng-show="uploadFiles">
+                                                                   <div class="row docsRow"  ng-if="fileCount">
 
                                                                        <div class="col-md-2 txt-align-center DocsCon" ng-repeat="uploadFile in uploadFiles">
 
@@ -1539,7 +1539,7 @@
                                                                    </div>
 
                                                                 </div>
-                                                                <div class="row docsRow txt-align-center" ng-hide="uploadFiles" >
+                                                                <div class="row docsRow txt-align-center" ng-if="!fileCount" >
 
                                                                    <h4>No Documents</h4>
 
@@ -1554,7 +1554,7 @@
                                                                 </div>
                                                                 <div class="panel-body">
 
-                                                                    <div class="row docsRow" ng-show="uploadAssetPhotos">
+                                                                    <div class="row docsRow" ng-if="photoCount">
 
                                                                         <div class="col-md-2 txt-align-center DocsCon" ng-repeat="uploadPhoto in uploadAssetPhotos">
                                                                             <div class="DeleteBtn" ng-click="deleteConfirmDoc(uploadPhoto.id)"  onClick="$('#deleteModal').modal()" data-target="#myModal">                                 
@@ -1571,7 +1571,7 @@
                                                                         </div>
 
                                                                     </div>
-                                                                    <div class="row docsRow txt-align-center" ng-hide="uploadAssetPhotos" >
+                                                                    <div class="row docsRow txt-align-center" ng-if="!photoCount" >
 
                                                                        <h4>No Images</h4>
 
@@ -1609,7 +1609,7 @@
                                                 id="form-button-save" ng-disabled="form.$invalid" ng-click="saveAsset()" >
                                                     <span class="btn-label">
                                             				<i class="material-icons">check</i>
-                                        				</span> Save &amp; Next
+                                        				</span> Save &amp; Continue
                                         </button>
                                         <!--<button class="btn btn-info" type="submit"-->
                                         <!--id="save-and-go-back-button" ng-disabled="form.$invalid">-->

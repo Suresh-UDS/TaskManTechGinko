@@ -262,7 +262,7 @@ angular.module('timeSheetApp')
             importAssetFile: function(file) {
 	        		var fileFormData = new FormData();
 	            fileFormData.append('assetFile', file);
-	            	return $http.post('api/asset/import', fileFormData, {
+	            	return $http.post('api/assets/import', fileFormData, {
 	                    transformRequest: angular.identity,
 	                    headers: {'Content-Type': undefined}
 	
@@ -272,9 +272,43 @@ angular.module('timeSheetApp')
 
             },
             importAssetStatus: function(fileName) {
-	            	return $http.get('api/asset/import/'+fileName+"/status").then(function (response) {
+	            	return $http.get('api/assets/import/'+fileName+"/status").then(function (response) {
 	            		return response.data;
 	            	});
-            }
+            },
+            importAssetPPMFile: function(file) {
+	        		var fileFormData = new FormData();
+	            fileFormData.append('assetFilePPM', file);
+	            	return $http.post('api/assets/ppm/import', fileFormData, {
+	                    transformRequest: angular.identity,
+	                    headers: {'Content-Type': undefined}
+	
+	                }).then(function (response) {
+	            			return response.data;
+	                });
+	
+	        },
+	        importAssetPPMStatus: function(fileName) {
+	            	return $http.get('api/assets/ppm/import/'+fileName+"/status").then(function (response) {
+	            		return response.data;
+	            	});
+	        },
+	        importAssetAMCFile: function(file) {
+	        		var fileFormData = new FormData();
+	            fileFormData.append('assetFileAMC', file);
+	            	return $http.post('api/assets/amc/import', fileFormData, {
+	                    transformRequest: angular.identity,
+	                    headers: {'Content-Type': undefined}
+	
+	                }).then(function (response) {
+	            			return response.data;
+	                });
+	
+	        },
+	        importAssetAMCStatus: function(fileName) {
+	            	return $http.get('api/assets/amc/import/'+fileName+"/status").then(function (response) {
+	            		return response.data;
+	            	});
+	        } 	        
         };
     });

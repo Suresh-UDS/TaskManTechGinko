@@ -1,17 +1,13 @@
 package com.ts.app.service;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.EnumSet;
 import java.util.List;
 
 import javax.inject.Inject;
 
 import org.apache.commons.collections.CollectionUtils;
-import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.env.Environment;
@@ -38,7 +34,6 @@ import com.ts.app.domain.Checklist;
 import com.ts.app.domain.Employee;
 import com.ts.app.domain.EmployeeProjectSite;
 import com.ts.app.domain.Frequency;
-import com.ts.app.domain.FrequencyDuration;
 import com.ts.app.domain.FrequencyPrefix;
 import com.ts.app.domain.Job;
 import com.ts.app.domain.Manufacturer;
@@ -48,7 +43,6 @@ import com.ts.app.domain.Setting;
 import com.ts.app.domain.Site;
 import com.ts.app.domain.User;
 import com.ts.app.domain.Vendor;
-import com.ts.app.domain.util.StringUtil;
 import com.ts.app.repository.AssetAMCRepository;
 import com.ts.app.repository.AssetDocumentRepository;
 import com.ts.app.repository.AssetGroupRepository;
@@ -85,16 +79,15 @@ import com.ts.app.service.util.ReportUtil;
 import com.ts.app.web.rest.dto.AssetAMCScheduleDTO;
 import com.ts.app.web.rest.dto.AssetDTO;
 import com.ts.app.web.rest.dto.AssetDocumentDTO;
+import com.ts.app.web.rest.dto.AssetPPMScheduleEventDTO;
 import com.ts.app.web.rest.dto.AssetParameterConfigDTO;
 import com.ts.app.web.rest.dto.AssetParameterReadingDTO;
 import com.ts.app.web.rest.dto.AssetPpmScheduleDTO;
 import com.ts.app.web.rest.dto.AssetTypeDTO;
 import com.ts.app.web.rest.dto.AssetgroupDTO;
 import com.ts.app.web.rest.dto.BaseDTO;
-import com.ts.app.web.rest.dto.EmployeeDTO;
 import com.ts.app.web.rest.dto.ExportResult;
 import com.ts.app.web.rest.dto.ImportResult;
-import com.ts.app.web.rest.dto.JobDTO;
 import com.ts.app.web.rest.dto.SearchCriteria;
 import com.ts.app.web.rest.dto.SearchResult;
 import com.ts.app.web.rest.errors.TimesheetException;
@@ -237,8 +230,39 @@ public class AssetManagementService extends AbstractService {
 
 		asset.setActive(Asset.ACTIVE_YES);
 
-		asset = assetRepository.save(asset);
+		List<Asset> existingAssets = assetRepository.findAssetByTitle(assetDTO.getTitle());
+		log.debug("Existing asset size -" + existingAssets.size());
+		if (CollectionUtils.isEmpty(existingAssets)) {
+			asset = assetRepository.save(asset);
+		}
+		
+		//generate QR code if qr code is not already generated.
+		if(asset != null && asset.getId() > 0 && !StringUtils.isEmpty(asset.getCode()) && StringUtils.isEmpty(asset.getQrCodeImage())) {
+			generateAssetQRCode(asset.getId(), asset.getCode());
+		}
+		
+		//create asset type if does not exist
+		if(!StringUtils.isEmpty(asset.getAssetType())) {
+			AssetType assetType = assetTypeRepository.findByName(asset.getAssetType());
+			if(assetType == null) {
+				assetType = new AssetType();
+				assetType.setName(asset.getAssetType());
+				assetType.setActive("Y");
+				assetTypeRepository.save(assetType);
+			}
+		}
 
+		//create asset group if does not exist
+		if(!StringUtils.isEmpty(asset.getAssetGroup())) {
+			AssetGroup assetGroup = assetGroupRepository.findByName(asset.getAssetGroup());
+			if(assetGroup == null) {
+				assetGroup = new AssetGroup();
+				assetGroup.setAssetgroup(asset.getAssetGroup());
+				assetGroup.setActive("Y");
+				assetGroupRepository.save(assetGroup);
+			}
+		}
+		
 		List<ParameterConfig> parameterConfigs = parameterConfigRepository.findAllByAssetType(assetDTO.getAssetType());
 		if(CollectionUtils.isNotEmpty(parameterConfigs)) {
 			List<AssetParameterConfig> assetParamConfigs = new ArrayList<AssetParameterConfig>();
@@ -420,6 +444,7 @@ public class AssetManagementService extends AbstractService {
 		String qrCodeBase64 = null;
 		if (asset != null) {
 			String code = String.valueOf(asset.getCode());
+				code = asset.getSite().getId()+"_"+code;
 			qrCodeImage = QRCodeUtil.generateQRCode(code);
 			String qrCodePath = env.getProperty("qrcode.file.path");
 			String imageFileName = null;
@@ -501,8 +526,8 @@ public class AssetManagementService extends AbstractService {
 			assetAMC.setFrequency(assetAMCScheduleDTO.getFrequency());
 			assetAMC.setFrequencyDuration(assetAMCScheduleDTO.getFrequencyDuration());
 			assetAMC.setFrequencyPrefix(assetAMCScheduleDTO.getFrequencyPrefix());
-			assetAMC.setEndDate(assetAMCScheduleDTO.getEndDate());
-			assetAMC.setStartDate(assetAMCScheduleDTO.getStartDate());
+			assetAMC.setEndDate(DateUtil.convertToSQLDate(assetAMCScheduleDTO.getEndDate()));
+			assetAMC.setStartDate(DateUtil.convertToSQLDate(assetAMCScheduleDTO.getStartDate()));
 			assetAMC.setTitle(assetAMCScheduleDTO.getTitle());
 			assetAMCRepository.save(assetAMC);
 		}
@@ -539,6 +564,87 @@ public class AssetManagementService extends AbstractService {
 		}
 		return assetPpmScheduleDTOs;
 	}
+	
+	/**
+	 * Returns a list of asset PPM schedule events for the given asset Id and date range.
+	 * 
+	 * @param assetId
+	 * @param startDate
+	 * @param endDate
+	 * @return
+	 */
+	public List<AssetPPMScheduleEventDTO> getAssetPPMScheduleCalendar(long assetId, Date startDate, Date endDate) {
+		List<AssetPPMScheduleEventDTO> assetPPMScheduleEventDTOs = null;
+		List<AssetPPMSchedule> assetPpmSchedules = assetPpmScheduleRepository.findAssetPPMScheduleByAssetId(assetId);
+		if (CollectionUtils.isNotEmpty(assetPpmSchedules)) {
+			assetPPMScheduleEventDTOs = new ArrayList<AssetPPMScheduleEventDTO>();
+			Calendar currCal = Calendar.getInstance();
+			currCal.set(Calendar.HOUR_OF_DAY, 0);
+			currCal.set(Calendar.MINUTE, 0);
+			Calendar lastDate = Calendar.getInstance();
+			if(endDate == null) {
+				lastDate.add(Calendar.DAY_OF_MONTH,  lastDate.getActualMaximum(Calendar.DAY_OF_MONTH));
+			}else {
+				lastDate.setTime(endDate);
+			}
+			
+			for(AssetPPMSchedule ppmSchedule : assetPpmSchedules) {
+				Date schStartDate = ppmSchedule.getStartDate();
+				Date schEndDate = ppmSchedule.getEndDate();
+				Calendar schStartCal = Calendar.getInstance();
+				schStartCal.setTime(schStartDate);
+				Calendar schEndCal = Calendar.getInstance();
+				schEndCal.setTime(schEndDate);
+				while((schStartCal.before(currCal) || schStartCal.equals(currCal)) && !currCal.after(lastDate)) { //if ppm schedule starts before current date and not after the last date of the month.
+					AssetPPMScheduleEventDTO assetPPMScheduleEvent = new AssetPPMScheduleEventDTO();
+					assetPPMScheduleEvent.setId(ppmSchedule.getId());
+					assetPPMScheduleEvent.setTitle(ppmSchedule.getTitle());
+					assetPPMScheduleEvent.setFrequency(ppmSchedule.getFrequency());
+					assetPPMScheduleEvent.setFrequencyDuration(ppmSchedule.getFrequencyDuration());
+					assetPPMScheduleEvent.setFrequencyPrefix(ppmSchedule.getFrequencyPrefix());
+					assetPPMScheduleEvent.setStart(currCal.getTime());
+					assetPPMScheduleEvent.setAllDay(true);
+					assetPPMScheduleEventDTOs.add(assetPPMScheduleEvent);
+					addDays(currCal, ppmSchedule.getFrequency(), ppmSchedule.getFrequencyDuration());
+				}
+			}
+		}
+		return assetPPMScheduleEventDTOs;
+	}
+	
+	private void addDays(Calendar dateTime , String scheduleType, int duration) {
+		Frequency frequency = Frequency.valueOf(scheduleType);
+		
+		switch(frequency) {
+			case HOURLY :
+				dateTime.add(Calendar.HOUR_OF_DAY, 1 * duration);
+				break;
+			case DAILY :
+				dateTime.add(Calendar.DAY_OF_YEAR, 1 * duration);
+				break;
+			case WEEKLY :
+				dateTime.add(Calendar.WEEK_OF_YEAR, 1 * duration);
+				break;	
+			case FORTNIGHTLY :
+				dateTime.add(Calendar.DAY_OF_YEAR, 14 * duration);
+				break;
+			case MONTHLY :
+				dateTime.add(Calendar.MONTH, 1 * duration);
+				break;
+			case YEARLY :
+				dateTime.add(Calendar.YEAR, 1 * duration);
+				break;
+			case HALFYEARLY :
+				dateTime.add(Calendar.MONTH, 6 * duration);
+				break;
+			case QUARTERLY :
+				dateTime.add(Calendar.MONTH, 3 * duration);
+				break;
+			default:
+			
+		}
+	}
+	
 	
 	public SearchResult<AssetPpmScheduleDTO> findPPMSearchCriteria(SearchCriteria searchCriteria) {
 
@@ -597,6 +703,15 @@ public class AssetManagementService extends AbstractService {
 		}
 		return result;
 	}
+	
+	public AssetDTO findByAssetCode(String assetCode) {
+		AssetDTO assetDTO = null;
+		Asset asset = assetRepository.findByCode(assetCode);
+		if(asset != null) {
+			assetDTO = mapperUtil.toModel(asset, AssetDTO.class);
+		}
+		return assetDTO;
+	}
 
 	public SearchResult<AssetDTO> findBySearchCrieria(SearchCriteria searchCriteria) {
 
@@ -631,10 +746,24 @@ public class AssetManagementService extends AbstractService {
 						&& searchCriteria.getSiteId() > 0) {
 					page = assetRepository.findByAllCriteria(searchCriteria.getAssetTypeName(), searchCriteria.getAssetName(), searchCriteria.getProjectId(),
 							searchCriteria.getSiteId(), pageRequest);
+				} else if (!StringUtils.isEmpty(searchCriteria.getAssetTitle()) && !StringUtils.isEmpty(searchCriteria.getAssetCode())) {
+					page = assetRepository.findAssetByTitleAndCode(searchCriteria.getAssetTitle(), searchCriteria.getAssetCode(), pageRequest);
+				} else if (!StringUtils.isEmpty(searchCriteria.getAssetTitle()) && !StringUtils.isEmpty(searchCriteria.getAssetTypeName())) {
+					page = assetRepository.findAssetByTitleAndType(searchCriteria.getAssetTitle(), searchCriteria.getAssetTypeName(), pageRequest);
+				} else if (!StringUtils.isEmpty(searchCriteria.getAssetTitle()) && !StringUtils.isEmpty(searchCriteria.getAssetGroupName())) {
+					page = assetRepository.findAssetByTitleAndGroup(searchCriteria.getAssetTitle(), searchCriteria.getAssetGroupName(), pageRequest);
+				} else if (!StringUtils.isEmpty(searchCriteria.getAssetTitle()) && !StringUtils.isEmpty(searchCriteria.getSiteId())) {
+					page = assetRepository.findAssetByTitleAndSiteId(searchCriteria.getAssetTitle(), searchCriteria.getSiteId(), pageRequest);
 				} else if (!StringUtils.isEmpty(searchCriteria.getAssetCode())) {
 					page = assetRepository.findByAssetCode(searchCriteria.getAssetCode(), pageRequest);
 				} else if (!StringUtils.isEmpty(searchCriteria.getAssetTitle())) {
 					page = assetRepository.findByAssetTitle(searchCriteria.getAssetTitle(), pageRequest);
+				} else if (!StringUtils.isEmpty(searchCriteria.getAssetTypeName())) {
+					page = assetRepository.findAssetByTypeName(searchCriteria.getAssetTypeName(), pageRequest);
+				} else if (!StringUtils.isEmpty(searchCriteria.getAssetGroupName())) {
+					page = assetRepository.findAssetByGroupName(searchCriteria.getAssetGroupName(), pageRequest);
+				} else if (!StringUtils.isEmpty(searchCriteria.getAcquiredDate())) {
+					page = assetRepository.findAssetByAcquireDate(DateUtil.convertToSQLDate(searchCriteria.getAcquiredDate()), pageRequest);
 				} else if (!StringUtils.isEmpty(searchCriteria.getAssetName())) {
 					page = assetRepository.findByName(siteIds, searchCriteria.getAssetName(), pageRequest);
 				} else if (!StringUtils.isEmpty(searchCriteria.getAssetTypeName())) {
@@ -756,10 +885,40 @@ public class AssetManagementService extends AbstractService {
 	}
 
 	public ImportResult importFile(MultipartFile file, long dateTime) {
-		return importUtil.importAssetData(file, dateTime);
+		return importUtil.importAssetData(file, dateTime, false, false);
 	}
 
 	public ImportResult getImportStatus(String fileId) {
+		ImportResult er = new ImportResult();
+		// fileId += ".csv";
+		if (!StringUtils.isEmpty(fileId)) {
+			String status = importUtil.getImportStatus(fileId);
+			er.setFile(fileId);
+			er.setStatus(status);
+		}
+		return er;
+	}
+	
+	public ImportResult importPPMFile(MultipartFile file, long dateTime) {
+		return importUtil.importAssetData(file, dateTime,true, false);
+	}
+
+	public ImportResult getImportPPMStatus(String fileId) {
+		ImportResult er = new ImportResult();
+		// fileId += ".csv";
+		if (!StringUtils.isEmpty(fileId)) {
+			String status = importUtil.getImportStatus(fileId);
+			er.setFile(fileId);
+			er.setStatus(status);
+		}
+		return er;
+	}
+	
+	public ImportResult importAMCFile(MultipartFile file, long dateTime) {
+		return importUtil.importAssetData(file, dateTime, false, true);
+	}
+
+	public ImportResult getImportAMCStatus(String fileId) {
 		ImportResult er = new ImportResult();
 		// fileId += ".csv";
 		if (!StringUtils.isEmpty(fileId)) {
@@ -914,8 +1073,8 @@ public class AssetManagementService extends AbstractService {
 			assetPPMSchedule.setFrequency(assetPpmScheduleDTO.getFrequency());
 			assetPPMSchedule.setFrequencyDuration(assetPpmScheduleDTO.getFrequencyDuration());
 			assetPPMSchedule.setFrequencyPrefix(assetPpmScheduleDTO.getFrequencyPrefix());
-			assetPPMSchedule.setEndDate(assetPpmScheduleDTO.getEndDate());
-			assetPPMSchedule.setStartDate(assetPpmScheduleDTO.getStartDate());
+			assetPPMSchedule.setEndDate(DateUtil.convertToSQLDate(assetPpmScheduleDTO.getEndDate()));
+			assetPPMSchedule.setStartDate(DateUtil.convertToSQLDate(assetPpmScheduleDTO.getStartDate()));
 			assetPPMSchedule.setTitle(assetPpmScheduleDTO.getTitle());
 			assetPpmScheduleRepository.save(assetPPMSchedule);
 		}

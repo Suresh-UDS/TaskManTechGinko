@@ -77,7 +77,7 @@
 
                                                                         <div class="col-md-12">
                                                                             <div class="form-group">
-                                                                                <label class="control-label">Title<span class="red-star">*</span></label>
+                                                                                <label class="control-label">Name<span class="red-star">*</span></label>
                                                                                 <input id='assetName'
                                                                                        ng-model="assetEdit.title"
                                                                                        class='form-control'
@@ -120,13 +120,13 @@
                                                                                         <label class="control-label">Type<span class="red-star">*</span></label>
                                                                                         <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
 
-                                                                                        <select class="form-control" ng-model="selectedAssetType" ng-options="assetype as assetype.name for assetype in assetTypes track by assetype.name" name="AssetType" required>
+                                                                                        <select class="form-control" ng-model="selectedAssetType" ng-options="assetype as assetype.name for assetype in assetTypes track by assetype.name" name="assetTypeName" required>
                                                                                          <option value="">Select Asset Type ..</option>
                                                                                         </select>
-                                                                                        <div ng-show="form.$submitted || form.AssetType.$touched">
-                                                                                            <div ng-show="form.AssetType.$dirty || form.AssetType.$invalid">
+                                                                                        <div ng-show="form.$submitted || form.assetTypeName.$touched">
+                                                                                            <div ng-show="form.assetTypeName.$dirty || form.assetTypeName.$invalid">
                                                                                                 <p class="help-block" style="color:maroon"
-                                                                                                   ng-show="form.AssetType.$error.required">
+                                                                                                   ng-show="form.assetTypeName.$error.required">
                                                                                                     Asset Type is required.
                                                                                                 </p>
 
@@ -238,7 +238,7 @@
                                                                                     <div class="form-group">
                                                                                         <label class="control-label">Site   <span class="red-star">*</span> </label>
                                                                                         <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                                                                        <select class="form-control " ng-model="selectedSite"  ng-options="site as site.name for site in sites track by site.name" ng-change="loadBlocks();loadEmployees();" name="AssetSite" >
+                                                                                        <select class="form-control " ng-model="selectedSites"  ng-options="site as site.name for site in sites track by site.id" ng-change="loadBlocks();loadEmployees();" name="AssetSite" required>
                                                                                             <option value="">Select Site ...</option>
                                                                                         </select>
 
@@ -247,12 +247,6 @@
                                                                                              <p class="help-block" style="color: maroon"
                                                                                                 ng-show="form.AssetSite.$error.required">Site is
                                                                                                  required.</p>
-                                                                                             <p class="help-block" style="color: maroon"
-                                                                                                ng-show="form.AssetSite.$error.minlength">Site is
-                                                                                                 required to be at least 5 character.</p>
-                                                                                             <p class="help-block" style="color: maroon"
-                                                                                                ng-show="form.AssetSite.$error.maxlength">Site
-                                                                                                 cannot be longer than 50 characters.</p>
                                                                                          </div>
                                                                                         </div>
 
@@ -702,7 +696,7 @@
 
                                                                     </div>
 
-                                                                    <!-- <h4>{{assetList.assetCode}}</h4> -->
+                                                                    <h4>{{assetList.assetCode}}</h4>
 
                                                                     <div class="QrcodeCon" ng-show="qr_img">
 
@@ -896,7 +890,7 @@
 
                                                                     <div class="col-md-4">
                                                                         <div class="form-group">
-                                                                            <label class="control-label">Title</label>
+                                                                            <label class="control-label">Title <span class="red-star">*</span></label>
                                                                             <input id='ppmTitle'
                                                                                    ng-model="assetPPM.title"
                                                                                    class='form-control'
@@ -905,7 +899,22 @@
                                                                                    ng-minlength='5'
                                                                                    ng-maxlength='250'
                                                                                    ng-pattern="/^[A-Za-z0-9\s]*$/" autofocus
-                                                                            />
+                                                                           required />
+                                                                            <div ng-show="form3.$submitted || form3.ppmTitle.$touched">
+                                                                                <div
+                                                                                    ng-show="form3.ppmTitle.$dirty || form3.ppmTitle.$invalid">
+                                                                                    <p class="help-block" style="color:maroon"
+                                                                                       ng-show="form3.ppmTitle.$error.required">
+                                                                                        Schedule title is required.
+                                                                                    </p>
+                                                                                    <p class="help-block" style="color: maroon"
+                                                                                            ng-show="form3.ppmTitle.$error.minlength">Schedule title
+                                                                                             required to be at least 5 character.
+                                                                                    </p>
+
+                                                                                </div>
+                                                                                
+                                                                            </div>
 
                                                                         </div>
                                                                     </div>
@@ -984,28 +993,28 @@
                                                                 <div class="row">
                                                                     <div class="col-md-4" ng-init="loadEmployees();">
                                                                             <div class="form-group">
-                                                                                <label class="control-label">Employee<span class="red-star">*</span> </label>
+                                                                                <label class="control-label">Employee<!-- <span class="red-star">*</span> --> </label>
                                                                                 <div class="dropdown">
                                                                                     
                                                                                     <span class="form-control-feedback d-sm-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
 
-                                                                                    <select class="form-control " ng-model="selectedEmployee"  ng-options="emp as emp.name for emp in employees track by emp.id" name="employeeName" required>
+                                                                                    <select class="form-control " ng-model="selectedEmployee"  ng-options="emp as emp.name for emp in employees track by emp.id" name="employeeName" >
 
 
                                                                                         <option value="">Select Employees...</option>
                                                                                     </select>
 
-                                                                                    <div ng-show="form4.$submitted || form4.employeeName.$touched">
+                                                                                    <!-- <div ng-show="form3.$submitted || form3.employeeName.$touched">
                                                                                         <div
-                                                                                            ng-show="form4.employeeName.$dirty || form4.employeeName.$invalid">
+                                                                                            ng-show="form3.employeeName.$dirty || form3.employeeName.$invalid">
                                                                                             <p class="help-block" style="color:maroon"
-                                                                                               ng-show="form4.employeeName.$error.required">
+                                                                                               ng-show="form3.employeeName.$error.required">
                                                                                                 Employee is required.
                                                                                             </p>
 
                                                                                         </div>
                                                                                         
-                                                                                    </div>
+                                                                                    </div> -->
                                                                                 </div>
                                                                                 
                                                                             </div>
@@ -1045,7 +1054,7 @@
                                                                         </div>
                                                                     </div>
                                                                     <div class="col-md-1" style="padding-top: 25px;">
-                                                                        <a class="btn btn-success add-btn margn-top0"  ng-click="savePPMSchedule()">Add</a>
+                                                                        <a class="btn btn-success add-btn margn-top0"  ng-click="savePPMSchedule()" ng-disabled="form3.$invalid">Add</a>
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -1109,7 +1118,7 @@
 
                                                                 <div class="col-md-4">
                                                                     <div class="form-group">
-                                                                        <label class="control-label">Title</label>
+                                                                        <label class="control-label">Title <span class="red-star">*</span></label>
                                                                         <input id='amcTitle'
                                                                                ng-model="amcSchedule.title"
                                                                                class='form-control'
@@ -1118,7 +1127,7 @@
                                                                                ng-minlength='5'
                                                                                ng-maxlength='250'
                                                                                ng-pattern="/^[A-Za-z0-9\s]*$/" autofocus
-                                                                        />
+                                                                       required />
 
                                                                         <div ng-show="form4.$submitted || form4.amcTitle.$touched">
                                                                             <div ng-show="form4.amcTitle.$dirty || form4.amcTitle.$invalid">
@@ -1127,9 +1136,9 @@
                                                                                     Schedule title is required.
                                                                                 </p>
 
-                                                                                <p class="help-block" style="color:maroon"
-                                                                                   ng-show="form4.assetTitle.$error.pattern">
-                                                                                    Schedule title can only contain letters, digits and space.
+                                                                                <p class="help-block" style="color: maroon"
+                                                                                        ng-show="form4.amcTitle.$error.minlength">Schedule title
+                                                                                         required to be at least 5  characters.
                                                                                 </p>
                                                                             </div>
                                                                         </div>
@@ -1209,18 +1218,18 @@
                                                             <div class="row">
                                                                 <div class="col-md-4" ng-init="loadEmployees();">
                                                                     <div class="form-group">
-                                                                        <label class="control-label">Employee<span class="red-star">*</span> </label>
+                                                                        <label class="control-label">Employee<!-- <span class="red-star">*</span> --> </label>
                                                                         <div class="dropdown">
                                                                             
                                                                             <span class="form-control-feedback d-sm-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
 
-                                                                            <select class="form-control " ng-model="selectedEmployee"  ng-options="emp as emp.name for emp in employees track by emp.id" name="employeeName" required>
+                                                                            <select class="form-control " ng-model="selectedEmployee"  ng-options="emp as emp.name for emp in employees track by emp.id" name="employeeName" >
 
 
                                                                                 <option value="">Select Employees...</option>
                                                                             </select>
 
-                                                                            <div ng-show="form4.$submitted || form4.employeeName.$touched">
+                                                                           <!--  <div ng-show="form4.$submitted || form4.employeeName.$touched">
                                                                                 <div
                                                                                     ng-show="form4.employeeName.$dirty || form4.employeeName.$invalid">
                                                                                     <p class="help-block" style="color:maroon"
@@ -1230,7 +1239,7 @@
 
                                                                                 </div>
                                                                                 
-                                                                            </div>
+                                                                            </div> -->
                                                                         </div>
                                                                         
                                                                     </div>
@@ -1266,7 +1275,7 @@
                                                                     </div>
                                                                 </div>
                                                                 <div class="col-md-1" style="padding-top: 25px;">
-                                                                    <a class="btn btn-success add-btn margn-top0"  ng-click="saveAmcSchedule()">Add</a>
+                                                                    <a class="btn btn-success add-btn margn-top0"  ng-click="saveAmcSchedule()" ng-disabled="form4.$invalid">Add</a>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -1659,7 +1668,7 @@
                                                         </div>
                                                         <div class="panel-body" ng-init="getAllUploadedFiles();">
 
-                                                           <div class="row docsRow"  ng-show="uploadFiles"  >
+                                                           <div class="row docsRow" ng-if="fileCount" >
 
                                                                <div class="col-md-2 txt-align-center DocsCon" ng-repeat="uploadFile in uploadFiles">
                                                                    <div class="DeleteBtn" ng-click="deleteConfirmDoc(uploadFile.id)"  onClick="$('#deleteModal').modal()" data-target="#myModal">                                 
@@ -1675,7 +1684,7 @@
                                                                </div>
 
                                                            </div>
-                                                           <div class="row docsRow txt-align-center" ng-hide="uploadFiles" >
+                                                           <div class="row docsRow txt-align-center" ng-if="!fileCount" >
 
                                                                <h4>No Documents</h4>
 
@@ -1692,7 +1701,7 @@
                                                         </div>
                                                         <div class="panel-body" ng-init="getAllUploadedPhotos();">
 
-                                                            <div class="row docsRow" ng-show="uploadAssetPhotos" >
+                                                            <div class="row docsRow" ng-if="photoCount" >
 
                                                                 <div class="col-md-2 txt-align-center DocsCon" ng-repeat="uploadPhoto in uploadAssetPhotos">
                                                                     <div class="DeleteBtn" ng-click="deleteConfirmDoc(uploadPhoto.id)"  onClick="$('#deleteModal').modal()" data-target="#myModal">                                 
@@ -1709,7 +1718,7 @@
                                                                 </div>
 
                                                             </div>
-                                                            <div class="row docsRow txt-align-center" ng-hide="uploadAssetPhotos" >
+                                                            <div class="row docsRow txt-align-center" ng-if="!photoCount" >
 
                                                                <h4>No Images</h4>
 
@@ -1723,8 +1732,9 @@
 
                                             </div>
 
-
                                             <div class="">
+
+
 
                                                <!--  <div class="row">
 

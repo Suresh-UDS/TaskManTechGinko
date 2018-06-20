@@ -773,7 +773,7 @@ public class JobManagementService extends AbstractService {
 		job.setTitle(assetPpmScheduleDTO.getTitle());
 		job.setDescription(assetPpmScheduleDTO.getTitle() +" "+ assetPpmScheduleDTO.getFrequencyPrefix()+" "+assetPpmScheduleDTO.getFrequencyDuration()+" "+assetPpmScheduleDTO.getFrequency());
 		job.setMaintenanceType(assetPpmScheduleDTO.getMaintenanceType());
-		job.setSchedule(Frequency.valueOf(assetPpmScheduleDTO.getFrequency()).getTypeFrequency());
+		job.setSchedule(Frequency.valueOf(assetPpmScheduleDTO.getFrequency()).getValue());
 		job.setActive(AbstractAuditingEntity.ACTIVE_YES);
 		job = jobRepository.saveAndFlush(job);
 
@@ -800,7 +800,7 @@ public class JobManagementService extends AbstractService {
 			data.append("&duration="+assetPpmScheduleDTO.getFrequencyDuration());
 			//data.append("&schedule="+Frequency.valueOf(assetPpmScheduleDTO.getFrequency()).getTypeFrequency());
 			schConfDto.setData(data.toString());
-			schConfDto.setSchedule(Frequency.valueOf(assetPpmScheduleDTO.getFrequency()).getTypeFrequency());
+			schConfDto.setSchedule(Frequency.valueOf(assetPpmScheduleDTO.getFrequency()).getValue());
 			schConfDto.setStartDate(assetPpmScheduleDTO.getStartDate());
 			schConfDto.setEndDate(assetPpmScheduleDTO.getEndDate());
 			schConfDto.setScheduleEndDate(assetPpmScheduleDTO.getEndDate());
@@ -1083,7 +1083,6 @@ public class JobManagementService extends AbstractService {
 		if(job==null)  throw new TimesheetException("Job not found : "+id);
 		return job;
 	}
-
 
 
 	public JobDTO startJob(Long id) {
@@ -1457,7 +1456,7 @@ public class JobManagementService extends AbstractService {
 		job.setTitle(assetAMCScheduleDTO.getTitle());
 		job.setDescription(assetAMCScheduleDTO.getTitle() +" "+ assetAMCScheduleDTO.getFrequencyPrefix()+" "+assetAMCScheduleDTO.getFrequencyDuration()+" "+assetAMCScheduleDTO.getFrequency());
 		job.setMaintenanceType(assetAMCScheduleDTO.getMaintenanceType());
-		job.setFrequency(Frequency.valueOf(assetAMCScheduleDTO.getFrequency()).getTypeFrequency());
+		job.setFrequency(Frequency.valueOf(assetAMCScheduleDTO.getFrequency()).getValue());
 		job.setActive(job.ACTIVE_YES);
 		job = jobRepository.saveAndFlush(job);
 
@@ -1481,7 +1480,7 @@ public class JobManagementService extends AbstractService {
 			//data.append("&location="+assetPpmScheduleDTO.getLocationId());
 			data.append("&frequency="+assetAMCScheduleDTO.getFrequency());
 			schConfDto.setData(data.toString());
-			schConfDto.setSchedule(Frequency.valueOf(assetAMCScheduleDTO.getFrequency()).getTypeFrequency());
+			schConfDto.setSchedule(Frequency.valueOf(assetAMCScheduleDTO.getFrequency()).getValue());
 			schConfDto.setStartDate(assetAMCScheduleDTO.getStartDate());
 			schConfDto.setEndDate(assetAMCScheduleDTO.getEndDate());
 			schConfDto.setScheduleEndDate(assetAMCScheduleDTO.getEndDate());
