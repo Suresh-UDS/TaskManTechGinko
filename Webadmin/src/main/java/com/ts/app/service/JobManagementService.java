@@ -692,6 +692,11 @@ public class JobManagementService extends AbstractService {
 			ticket.setStatus(TicketStatus.ASSIGNED.toValue());
 			ticketRepository.save(ticket);
 		}
+
+		if(jobDTO.getParentJobId()>0){
+		    Job parentJob = jobRepository.findOne(jobDTO.getParentJobId());
+		    job.setParentJob(parentJob);
+        }
 		job = jobRepository.saveAndFlush(job);
 
 		if(jobDTO.getTicketId() > 0) {
@@ -699,6 +704,7 @@ public class JobManagementService extends AbstractService {
 			ticket.setJob(job);
 			ticketRepository.saveAndFlush(ticket);
         }
+
 
 
 		//}

@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.ts.app.domain.Job;
 import com.ts.app.domain.JobStatus;
 import com.ts.app.domain.JobType;
 import com.ts.app.domain.util.StringUtil;
@@ -75,6 +76,10 @@ public class JobDTO extends BaseDTO {
 	private List<CheckInOutImageDTO> images;
 
 	private long checkInOutId;
+
+	private long parentJobId;
+
+	private Job parentJob;
 
 	@JsonIgnoreProperties
 	private String block;
@@ -422,5 +427,21 @@ public class JobDTO extends BaseDTO {
 
     public void setCheckInOutId(long checkInOutId) {
         this.checkInOutId = checkInOutId;
+    }
+
+    public long getParentJobId() {
+        return parentJobId;
+    }
+
+    public void setParentJobId(long parentJobId) {
+        this.parentJobId = parentJobId;
+    }
+
+    public Job getParentJob() {
+        return parentJob;
+    }
+
+    public void setParentJob(Job parentJob) {
+        this.parentJob = parentJob;
     }
 }

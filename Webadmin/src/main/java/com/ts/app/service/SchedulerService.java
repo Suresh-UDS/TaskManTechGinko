@@ -157,35 +157,57 @@ public class SchedulerService extends AbstractService {
 
 	}
 
-	@Scheduled(initialDelay = 60000, fixedRate = 1800000) // Runs every 30 mins
-	// @Scheduled(cron="30 * * * * ?") //Test to run every 30 seconds
+//	@Scheduled(initialDelay = 60000, fixedRate = 1800000) // Runs every 30 mins
+	 @Scheduled(cron="30 * * * * ?") //Test to run every 30 seconds
 	public void runDailyTask() {
+	    log.debug("Run Daily Tasks");
 		if (env.getProperty("scheduler.dailyJob.enabled").equalsIgnoreCase("true")) {
-			Calendar cal = Calendar.getInstance();
+            log.debug("Daily jobs enabled");
+            Calendar cal = Calendar.getInstance();
 			cal.set(Calendar.HOUR_OF_DAY, 0);
 			cal.set(Calendar.MINUTE, 0);
 			Calendar endCal = Calendar.getInstance();
-			cal.set(Calendar.HOUR_OF_DAY, 23);
-			cal.set(Calendar.MINUTE, 59);
+			endCal.set(Calendar.HOUR_OF_DAY, 23);
+			endCal.set(Calendar.MINUTE, 59);
+            Calendar nextDay = Calendar.getInstance();
+            nextDay.add(Calendar.DATE,1);
+            nextDay.set(Calendar.HOUR_OF_DAY, 23);
+            nextDay.set(Calendar.MINUTE, 59);
+
+			java.sql.Date startDate = new java.sql.Date(cal.getTimeInMillis());
+			java.sql.Date endDate = new java.sql.Date(endCal.getTimeInMillis());
+			java.sql.Date tomorrow = new java.sql.Date(nextDay.getTimeInMillis());
 			List<SchedulerConfig> dailyTasks = schedulerConfigRepository.getDailyTask(cal.getTime());
 			log.debug("Found {} Daily Tasks", dailyTasks.size());
 
 			if (CollectionUtils.isNotEmpty(dailyTasks)) {
 				for (SchedulerConfig dailyTask : dailyTasks) {
 					long parentJobId = dailyTask.getJob().getId();
-					List<Job> job = jobRepository.findJobsByParentJobIdAndDate(parentJobId, DateUtil.convertToSQLDate(cal.getTime()), DateUtil.convertToSQLDate(endCal.getTime()));
-					if (CollectionUtils.isEmpty(job)) {
-						createJobs(dailyTask);
-						/*
-						 * try { boolean shouldProcess = true;
-						 * if(dailyTask.isScheduleDailyExcludeWeekend()) { Calendar today =
-						 * Calendar.getInstance();
-						 *
-						 * if(today.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY ||
-						 * today.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY) { shouldProcess =
-						 * false; } } if(shouldProcess) { processDailyTasks(dailyTask); } } catch
-						 * (Exception ex) { log.warn("Failed to create JOB ", ex); }
-						 */
+					log.debug("Parent job id - "+parentJobId);
+					log.debug("Parent job date - "+startDate);
+					log.debug("Parent job date - "+endDate);
+					List<Job> job = jobRepository.findJobsByParentJobIdAndDate(parentJobId, startDate, tomorrow);
+					log.debug("Parent jobs list- "+job.get(0).getId());
+					if (CollectionUtils.isEmpty(job) && job.isEmpty()) {
+					    log.debug("Parent job found");
+//						createJobs(dailyTask);
+
+						 try { boolean shouldProcess = true;
+                             if(dailyTask.isScheduleDailyExcludeWeekend()) {
+                                 log.debug("Schedule exclude weekend true");
+                                 Calendar today = Calendar.getInstance();
+                                 log.debug("Todays day---- ",today.get(Calendar.DAY_OF_WEEK));
+                                 if(today.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY || today.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY) {
+                                     shouldProcess =false;
+                                 }
+                             }
+                             if(shouldProcess) {
+                                 processDailyTasks(dailyTask);
+                             }
+						 } catch (Exception ex) {
+						     log.warn("Failed to create JOB ", ex);
+						 }
+
 					}
 				}
 				schedulerConfigRepository.save(dailyTasks);
@@ -610,6 +632,10 @@ public class SchedulerService extends AbstractService {
 		job.setScheduled(true);
 		job.setLocationId(!StringUtils.isEmpty(dataMap.get("location")) ? Long.parseLong(dataMap.get("location")) : 0);
 		job.setActive("Y");
+		job.setParentJobId(parentJob.getId());
+		job.setParentJob(parentJob);
+		log.debug("JobDTO parent job id - " + parentJob.getId());
+		log.debug("JobDTO parent job id - " + job.getParentJobId());
 		log.debug("JobDTO Details before calling saveJob - " + job);
 		jobManagementService.saveJob(job);
 		if (StringUtils.isNotEmpty(frequency) && frequency.equalsIgnoreCase(FREQ_ONCE_EVERY_HOUR)) {
