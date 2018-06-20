@@ -157,6 +157,8 @@ pushService:
    url: http://localhost:9000/
 
 scheduler:
+   job:
+      creationPolicy: monthly
    dailyJob:
       enabled: true
       creation: monthly

@@ -5,23 +5,23 @@ import java.util.stream.Stream;
 
 public enum Frequency {
 	
-	 	HOUR("HOUR"), 
-	    DAY("DAY"), 
-	    WEEK("WEEK"), 
-	    FORTNIGHT("FORTNIGHT"), 
-	    MONTH("MONTH"), 
-	    QUARTER("QUARTER"), 
-	    HALFYEAR("HALFYEAR"),
-		YEAR("YEAR");
+	 	HOURLY("HOUR"), 
+	    DAILY("DAY"), 
+	    WEEKLY("WEEK"), 
+	    FORTNIGHTLY("FORTNIGHT"), 
+	    MONTHLY("MONTH"), 
+	    QUARTERLY("QUARTER"), 
+	    HALFYEARLY("HALFYEAR"),
+		YEARLY("YEAR");
 	 
-	    private String typeFrequency;
+	    private String value;
 	 
-	    private Frequency(String typeFrequency) {
-	        this.typeFrequency = typeFrequency;
+	    private Frequency(String value) {
+	        this.value = value;
 	    }
 	    
-	    public String getTypeFrequency() {
-			return typeFrequency;
+	    public String getValue() {
+			return value;
 		}
 
 		public static Stream<Frequency> stream() {
