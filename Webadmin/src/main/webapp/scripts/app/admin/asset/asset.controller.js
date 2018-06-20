@@ -55,6 +55,7 @@ angular.module('timeSheetApp')
         $scope.searchProject ={};
         $scope.searchAssetGroup ={};
         $scope.searchAcquiredDateSer =null;
+        $scope.ppmSearchCriteria = {};
 
         //scope.searchAcquiredDate = $filter('date')(new Date(), 'dd/MM/yyyy'); 
         $scope.searchAcquiredDate = "";
@@ -1764,8 +1765,8 @@ angular.module('timeSheetApp')
         }
 
         $scope.loadPPMJobs = function() { 
-        	$scope.searchCriteria.maintenanceType = "PPM";
-        	$scope.searchCriteria.assetId = $stateParams.id;
+        	$scope.ppmSearchCriteria.maintenanceType = "PPM";
+        	$scope.ppmSearchCriteria.assetId = $stateParams.id;
         	console.log($scope.searchCriteria);
         	JobComponent.search($scope.searchCriteria).then(function(data){ 
         		console.log(data);
