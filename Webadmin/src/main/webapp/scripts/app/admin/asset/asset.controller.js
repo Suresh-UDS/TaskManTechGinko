@@ -52,6 +52,10 @@ angular.module('timeSheetApp')
         $scope.searchAssetCode =null;
         $scope.searchAssetType ={};
         $scope.searchSite ={};
+        $scope.searchProject ={};
+        $scope.searchAssetGroup ={};
+
+        $scope.searchAcquiredDate = $filter('date')(new Date(), 'dd/MM/yyyy'); 
 
 
         $scope.asset = {};
@@ -350,10 +354,12 @@ angular.module('timeSheetApp')
         }
 
         $scope.loadDepSites = function () {
-            ProjectComponent.findSites($scope.selectedProject.id).then(function (data) {
-                $scope.selectedSite = null;
-                $scope.sitesList = data;
-            });
+            if($scope.searchProject){
+                ProjectComponent.findSites($scope.searchProject.id).then(function (data) {
+                    $scope.searchSite = null;
+                    $scope.sites = data;
+                });
+            }
         }
 
         $scope.initMaterialWizard();
@@ -486,40 +492,67 @@ angular.module('timeSheetApp')
 
             console.log('Selected Asset' + $scope.searchAssetName);
 
-            if(!$scope.searchAssetName && !$scope.searchAssetCode && !$scope.searchAssetType.id && !$scope.searchSite.id) {
+            if(!$scope.searchAcquiredDate && !$scope.searchProject && !$scope.searchSite && 
+                !searchAssetGroup && !$scope.searchAssetName && !$scope.searchAssetCode && !$scope.searchAssetType) {
             
                     $scope.searchCriteria.findAll = true;
 
             }else{
+               
+               
 
-                if($scope.searchAssetName) {
+                if($scope.searchAcquiredDateSer) {
+                    $scope.searchCriteria.acquiredDate = $scope.searchAcquiredDateSer;
+                }else{
+                    $scope.searchCriteria.acquiredDate = new Date();
+                }
 
-                    $scope.searchCriteria.title = $scope.searchAssetName;
 
-                }/*else{
-                     $scope.searchCriteria.title ="";
-                }*/
-                if($scope.searchAssetCode) {
-
-                    $scope.searchCriteria.code = $scope.searchAssetCode;
-
-                }/*else{
-                     $scope.searchCriteria.assetId ="";
-                }*/
-                if($scope.searchAssetType.name) {
-
-                    $scope.searchCriteria.assetType = $scope.searchAssetType.name;
-
-                }/*else{
-                     $scope.searchCriteria.assetType =0;
-                }*/
+                if($scope.searchProject.id) {
+                    $scope.searchCriteria.projectId = $scope.searchProject.id;
+                }else{
+                     $scope.searchCriteria.projectId =0;
+                }
                 if($scope.searchSite.id) {
 
                     $scope.searchCriteria.siteId = $scope.searchSite.id;
 
-                }/*else{
+                }else{
                      $scope.searchCriteria.siteId =0;
-                }*/
+                }
+                if($scope.searchAssetType.id) {
+
+                    $scope.searchCriteria.assetTypeName = $scope.searchAssetType.name;
+
+                }else{
+                     $scope.searchCriteria.assetTypeName ="";
+                }
+                if($scope.searchAssetGroup.id) {
+
+                    $scope.searchCriteria.assetGroupName = $scope.searchAssetGroup.name;
+
+                }else{
+                     $scope.searchCriteria.assetGroupName ="";
+                }
+
+                if($scope.searchAssetName) {
+
+                    $scope.searchCriteria.assetTitle = $scope.searchAssetName;
+
+                }else{
+                     $scope.searchCriteria.assetTitle ="";
+                }
+                if($scope.searchAssetCode) {
+
+                    $scope.searchCriteria.assetCode = $scope.searchAssetCode;
+
+                }else{
+                     $scope.searchCriteria.assetCode ="";
+                }
+                
+                
+
+
             }
 
             //----
@@ -625,6 +658,11 @@ angular.module('timeSheetApp')
         $('input#acquiredDate').on('dp.change', function(e){
                 $scope.assetGen.acquiredDate = e.date._d;
                 $scope.assetEditDate = e.date._d;
+        });
+
+        $('input#searchAcquiredDate').on('dp.change', function(e){
+                $scope.searchAcquiredDate = $filter('date')(e.date._d, 'dd/MM/yyyy'); 
+                $scope.searchAcquiredDateSer = e.date._d;
         });
 
         
@@ -908,6 +946,13 @@ angular.module('timeSheetApp')
             $scope.searchCriteria = {};
             $scope.selectedSite = null;
             $scope.selectedStatus = null;
+            $scope.searchAssetName =null;
+            $scope.searchAssetCode =null;
+            $scope.searchAcquiredDate = $filter('date')(new Date(), 'dd/MM/yyyy');
+            $scope.searchAssetType ={};
+            $scope.searchSite ={};
+            $scope.searchProject ={};
+            $scope.searchAssetGroup ={};
             $scope.pages = {
                 currPage: 1,
                 totalPages: 0
