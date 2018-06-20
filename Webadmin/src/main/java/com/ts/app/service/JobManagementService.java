@@ -895,6 +895,8 @@ public class JobManagementService extends AbstractService {
 		job.setBlock(jobDTO.getBlock());
 		job.setFloor(jobDTO.getFloor());
 		job.setZone(jobDTO.getZone());
+		job.setMaintenanceType(jobDTO.getMaintenanceType());
+		
 		//add the job checklist items
 		if(CollectionUtils.isNotEmpty(job.getChecklistItems())) {
 			job.getChecklistItems().clear();
