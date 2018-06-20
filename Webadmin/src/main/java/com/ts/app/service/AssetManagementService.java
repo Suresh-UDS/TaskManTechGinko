@@ -752,7 +752,7 @@ public class AssetManagementService extends AbstractService {
 					page = assetRepository.findAssetByTitleAndType(searchCriteria.getAssetTitle(), searchCriteria.getAssetTypeName(), pageRequest);
 				} else if (!StringUtils.isEmpty(searchCriteria.getAssetTitle()) && !StringUtils.isEmpty(searchCriteria.getAssetGroupName())) {
 					page = assetRepository.findAssetByTitleAndGroup(searchCriteria.getAssetTitle(), searchCriteria.getAssetGroupName(), pageRequest);
-				} else if (!StringUtils.isEmpty(searchCriteria.getAssetTitle()) && !StringUtils.isEmpty(searchCriteria.getSiteId())) {
+				} else if (!StringUtils.isEmpty(searchCriteria.getAssetTitle()) && searchCriteria.getSiteId() > 0) {
 					page = assetRepository.findAssetByTitleAndSiteId(searchCriteria.getAssetTitle(), searchCriteria.getSiteId(), pageRequest);
 				} else if (!StringUtils.isEmpty(searchCriteria.getAssetCode())) {
 					page = assetRepository.findByAssetCode(searchCriteria.getAssetCode(), pageRequest);
