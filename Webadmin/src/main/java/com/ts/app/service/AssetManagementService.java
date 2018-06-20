@@ -444,6 +444,7 @@ public class AssetManagementService extends AbstractService {
 		String qrCodeBase64 = null;
 		if (asset != null) {
 			String code = String.valueOf(asset.getCode());
+				code = asset.getSite().getId()+"_"+code;
 			qrCodeImage = QRCodeUtil.generateQRCode(code);
 			String qrCodePath = env.getProperty("qrcode.file.path");
 			String imageFileName = null;
