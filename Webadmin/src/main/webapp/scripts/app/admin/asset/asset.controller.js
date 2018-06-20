@@ -489,19 +489,19 @@ angular.module('timeSheetApp')
             }
 
             $scope.searchCriteria.currPage = currPageVal;
-            $scope.searchCriteria.findAll = false;
 
             console.log('Selected Asset' + $scope.searchAssetName);
+            $scope.searchCriteria.findAll = false;
 
             if(!$scope.searchAcquiredDate && jQuery.isEmptyObject($scope.searchProject) == true
              && jQuery.isEmptyObject($scope.searchSite) == true && 
-                jQuery.isEmptyObject($scope.searchAssetGroup) == true && !$scope.searchAssetName && !$scope.searchAssetCode 
+                jQuery.isEmptyObject($scope.searchAssetGroup) == true &&
+                 !$scope.searchAssetName && !$scope.searchAssetCode 
                 &&  jQuery.isEmptyObject($scope.searchAssetType) == true) {
             
                     $scope.searchCriteria.findAll = true;
 
             }else{
-               
             
                 if($scope.searchAcquiredDateSer) {
                     $scope.searchCriteria.acquiredDate = $scope.searchAcquiredDateSer;
