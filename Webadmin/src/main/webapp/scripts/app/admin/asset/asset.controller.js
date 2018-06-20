@@ -493,15 +493,16 @@ angular.module('timeSheetApp')
 
             console.log('Selected Asset' + $scope.searchAssetName);
 
-            if(!$scope.searchAcquiredDate && !$scope.searchProject.id && !$scope.searchSite.id && 
-                !$scope.searchAssetGroup.id && !$scope.searchAssetName && !$scope.searchAssetCode && !$scope.searchAssetType.id) {
+            if(!$scope.searchAcquiredDate && jQuery.isEmptyObject($scope.searchProject) == true
+             && jQuery.isEmptyObject($scope.searchSite) == true && 
+                jQuery.isEmptyObject($scope.searchAssetGroup) == true && !$scope.searchAssetName && !$scope.searchAssetCode 
+                &&  jQuery.isEmptyObject($scope.searchAssetType) == true) {
             
                     $scope.searchCriteria.findAll = true;
 
             }else{
                
-               
-
+            
                 if($scope.searchAcquiredDateSer) {
                     $scope.searchCriteria.acquiredDate = $scope.searchAcquiredDateSer;
                 }else{
@@ -510,26 +511,26 @@ angular.module('timeSheetApp')
                 }
 
 
-                if($scope.searchProject.id) {
+                if(jQuery.isEmptyObject($scope.searchProject) == false) {
                     $scope.searchCriteria.projectId = $scope.searchProject.id;
                 }else{
                      $scope.searchCriteria.projectId =0;
                 }
-                if($scope.searchSite.id) {
+                if(jQuery.isEmptyObject($scope.searchSite) == false) {
 
                     $scope.searchCriteria.siteId = $scope.searchSite.id;
 
                 }else{
                      $scope.searchCriteria.siteId =0;
                 }
-                if($scope.searchAssetType.id) {
+                if(jQuery.isEmptyObject($scope.searchAssetType) == false) {
 
                     $scope.searchCriteria.assetTypeName = $scope.searchAssetType.name;
 
                 }else{
                      $scope.searchCriteria.assetTypeName ="";
                 }
-                if($scope.searchAssetGroup.id) {
+                if(jQuery.isEmptyObject($scope.searchAssetGroup) == false) {
 
                     $scope.searchCriteria.assetGroupName = $scope.searchAssetGroup.name;
 
