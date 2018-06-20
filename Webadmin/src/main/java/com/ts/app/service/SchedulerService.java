@@ -157,8 +157,8 @@ public class SchedulerService extends AbstractService {
 
 	}
 
-//	@Scheduled(initialDelay = 60000, fixedRate = 1800000) // Runs every 30 mins
-	 @Scheduled(cron="30 * * * * ?") //Test to run every 30 seconds
+	@Scheduled(initialDelay = 60000, fixedRate = 1800000) // Runs every 30 mins
+//	 @Scheduled(cron="30 * * * * ?") //Test to run every 30 seconds
 	public void runDailyTask() {
 	    log.debug("Run Daily Tasks");
 		if (env.getProperty("scheduler.dailyJob.enabled").equalsIgnoreCase("true")) {
