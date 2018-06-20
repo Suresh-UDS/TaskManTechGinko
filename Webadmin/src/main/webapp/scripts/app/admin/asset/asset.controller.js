@@ -493,10 +493,10 @@ angular.module('timeSheetApp')
 
             console.log('Selected Asset' + $scope.searchAssetName);
 
-            if(!$scope.searchAcquiredDate && jQuery.isEmptyObject($scope.searchProject) == false
-             && jQuery.isEmptyObject($scope.searchSite) == false && 
-                jQuery.isEmptyObject($scope.searchAssetGroup) == false && !$scope.searchAssetName && !$scope.searchAssetCode 
-                &&  jQuery.isEmptyObject($scope.searchAssetType) == false) {
+            if(!$scope.searchAcquiredDate && jQuery.isEmptyObject($scope.searchProject) == true
+             && jQuery.isEmptyObject($scope.searchSite) == true && 
+                jQuery.isEmptyObject($scope.searchAssetGroup) == true && !$scope.searchAssetName && !$scope.searchAssetCode 
+                &&  jQuery.isEmptyObject($scope.searchAssetType) == true) {
             
                     $scope.searchCriteria.findAll = true;
 
