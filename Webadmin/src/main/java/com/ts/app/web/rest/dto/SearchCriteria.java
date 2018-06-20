@@ -13,7 +13,7 @@ public class SearchCriteria extends Paginator {
 
 	private String jobTitle;
 
-	private String AssetTitle;
+	private String assetTitle;
 
 	private AssetType assetType;
 
@@ -149,6 +149,8 @@ public class SearchCriteria extends Paginator {
 	
 	private String assetTypeName;
 	
+	private String assetGroupName;
+	
 	private String assetName;
 	
 	private String vendorName;
@@ -162,6 +164,24 @@ public class SearchCriteria extends Paginator {
 	private String maintenanceType;
 	
 	private String assetCode;
+	
+	private Date acquiredDate;
+
+	public Date getAcquiredDate() {
+		return acquiredDate;
+	}
+
+	public void setAcquiredDate(Date acquiredDate) {
+		this.acquiredDate = acquiredDate;
+	}
+
+	public String getAssetGroupName() {
+		return assetGroupName;
+	}
+
+	public void setAssetGroupName(String assetGroupName) {
+		this.assetGroupName = assetGroupName;
+	}
 
 	public String getAssetCode() {
 		return assetCode;
@@ -413,7 +433,7 @@ public class SearchCriteria extends Paginator {
         final StringBuilder sb = new StringBuilder("SearchCriteria{");
         sb.append("id=").append(id);
         sb.append(", jobTitle='").append(jobTitle).append('\'');
-        sb.append(", AssetTitle='").append(AssetTitle).append('\'');
+        sb.append(", assetTitle='").append(assetTitle).append('\'');
         sb.append(", assetType=").append(assetType);
         sb.append(", assetStatus=").append(assetStatus);
         sb.append(", employeeId=").append(employeeId);
@@ -486,13 +506,13 @@ public class SearchCriteria extends Paginator {
         this.assetType = assetType;
     }
 
-    public String getAssetTitle() {
-        return AssetTitle;
-    }
+	public String getAssetTitle() {
+		return assetTitle;
+	}
 
-    public void setAssetTitle(String assetTitle) {
-        AssetTitle = assetTitle;
-    }
+	public void setAssetTitle(String assetTitle) {
+		this.assetTitle = assetTitle;
+	}
 
 	public long getUserRoleId() {
 		return userRoleId;
