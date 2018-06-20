@@ -25,7 +25,7 @@ public class AssetParameterReading extends AbstractAuditingEntity implements Ser
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+    private long id;
 
     @NotNull
     @Size(min = 1, max = 250)
@@ -76,13 +76,13 @@ public class AssetParameterReading extends AbstractAuditingEntity implements Ser
     @Column(nullable = true)
     private int runMinutues;
 
-    public Long getId() {
-        return id;
-    }
+	public long getId() {
+		return id;
+	}
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+	public void setId(long id) {
+		this.id = id;
+	}
 
 	public String getName() {
 		return name;
