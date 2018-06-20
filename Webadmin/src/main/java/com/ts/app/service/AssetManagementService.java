@@ -5,10 +5,12 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.EnumSet;
 import java.util.List;
+import java.util.Map;
 
 import javax.inject.Inject;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.env.Environment;
@@ -20,6 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.google.common.base.Splitter;
 import com.ts.app.domain.AbstractAuditingEntity;
 import com.ts.app.domain.Asset;
 import com.ts.app.domain.AssetAMCSchedule;
@@ -82,6 +85,7 @@ import com.ts.app.service.util.ReportUtil;
 import com.ts.app.web.rest.dto.AssetAMCScheduleDTO;
 import com.ts.app.web.rest.dto.AssetDTO;
 import com.ts.app.web.rest.dto.AssetDocumentDTO;
+import com.ts.app.web.rest.dto.AssetPPMScheduleEventDTO;
 import com.ts.app.web.rest.dto.AssetParameterConfigDTO;
 import com.ts.app.web.rest.dto.AssetParameterReadingDTO;
 import com.ts.app.web.rest.dto.AssetPpmScheduleDTO;
@@ -239,6 +243,34 @@ public class AssetManagementService extends AbstractService {
 		if (CollectionUtils.isEmpty(existingAssets)) {
 			asset = assetRepository.save(asset);
 		}
+		
+		//generate QR code if qr code is not already generated.
+		if(asset != null && asset.getId() > 0 && !StringUtils.isEmpty(asset.getCode()) && StringUtils.isEmpty(asset.getQrCodeImage())) {
+			generateAssetQRCode(asset.getId(), asset.getCode());
+		}
+		
+		//create asset type if does not exist
+		if(!StringUtils.isEmpty(asset.getAssetType())) {
+			AssetType assetType = assetTypeRepository.findByName(asset.getAssetType());
+			if(assetType == null) {
+				assetType = new AssetType();
+				assetType.setName(asset.getAssetType());
+				assetType.setActive("Y");
+				assetTypeRepository.save(assetType);
+			}
+		}
+
+		//create asset group if does not exist
+		if(!StringUtils.isEmpty(asset.getAssetGroup())) {
+			AssetGroup assetGroup = assetGroupRepository.findByName(asset.getAssetGroup());
+			if(assetGroup == null) {
+				assetGroup = new AssetGroup();
+				assetGroup.setAssetgroup(asset.getAssetGroup());
+				assetGroup.setActive("Y");
+				assetGroupRepository.save(assetGroup);
+			}
+		}
+		
 		List<ParameterConfig> parameterConfigs = parameterConfigRepository.findAllByAssetType(assetDTO.getAssetType());
 		if(CollectionUtils.isNotEmpty(parameterConfigs)) {
 			List<AssetParameterConfig> assetParamConfigs = new ArrayList<AssetParameterConfig>();
@@ -501,8 +533,8 @@ public class AssetManagementService extends AbstractService {
 			assetAMC.setFrequency(assetAMCScheduleDTO.getFrequency());
 			assetAMC.setFrequencyDuration(assetAMCScheduleDTO.getFrequencyDuration());
 			assetAMC.setFrequencyPrefix(assetAMCScheduleDTO.getFrequencyPrefix());
-			assetAMC.setEndDate(assetAMCScheduleDTO.getEndDate());
-			assetAMC.setStartDate(assetAMCScheduleDTO.getStartDate());
+			assetAMC.setEndDate(DateUtil.convertToSQLDate(assetAMCScheduleDTO.getEndDate()));
+			assetAMC.setStartDate(DateUtil.convertToSQLDate(assetAMCScheduleDTO.getStartDate()));
 			assetAMC.setTitle(assetAMCScheduleDTO.getTitle());
 			assetAMCRepository.save(assetAMC);
 		}
@@ -539,6 +571,87 @@ public class AssetManagementService extends AbstractService {
 		}
 		return assetPpmScheduleDTOs;
 	}
+	
+	/**
+	 * Returns a list of asset PPM schedule events for the given asset Id and date range.
+	 * 
+	 * @param assetId
+	 * @param startDate
+	 * @param endDate
+	 * @return
+	 */
+	public List<AssetPPMScheduleEventDTO> getAssetPPMScheduleCalendar(long assetId, Date startDate, Date endDate) {
+		List<AssetPPMScheduleEventDTO> assetPPMScheduleEventDTOs = null;
+		List<AssetPPMSchedule> assetPpmSchedules = assetPpmScheduleRepository.findAssetPPMScheduleByAssetId(assetId);
+		if (CollectionUtils.isNotEmpty(assetPpmSchedules)) {
+			assetPPMScheduleEventDTOs = new ArrayList<AssetPPMScheduleEventDTO>();
+			Calendar currCal = Calendar.getInstance();
+			currCal.set(Calendar.HOUR_OF_DAY, 0);
+			currCal.set(Calendar.MINUTE, 0);
+			Calendar lastDate = Calendar.getInstance();
+			if(endDate == null) {
+				lastDate.add(Calendar.DAY_OF_MONTH,  lastDate.getActualMaximum(Calendar.DAY_OF_MONTH));
+			}else {
+				lastDate.setTime(endDate);
+			}
+			
+			for(AssetPPMSchedule ppmSchedule : assetPpmSchedules) {
+				Date schStartDate = ppmSchedule.getStartDate();
+				Date schEndDate = ppmSchedule.getEndDate();
+				Calendar schStartCal = Calendar.getInstance();
+				schStartCal.setTime(schStartDate);
+				Calendar schEndCal = Calendar.getInstance();
+				schEndCal.setTime(schEndDate);
+				while((schStartCal.before(currCal) || schStartCal.equals(currCal)) && !currCal.after(lastDate)) { //if ppm schedule starts before current date and not after the last date of the month.
+					AssetPPMScheduleEventDTO assetPPMScheduleEvent = new AssetPPMScheduleEventDTO();
+					assetPPMScheduleEvent.setId(ppmSchedule.getId());
+					assetPPMScheduleEvent.setTitle(ppmSchedule.getTitle());
+					assetPPMScheduleEvent.setFrequency(ppmSchedule.getFrequency());
+					assetPPMScheduleEvent.setFrequencyDuration(ppmSchedule.getFrequencyDuration());
+					assetPPMScheduleEvent.setFrequencyPrefix(ppmSchedule.getFrequencyPrefix());
+					assetPPMScheduleEvent.setStart(currCal.getTime());
+					assetPPMScheduleEvent.setAllDay(true);
+					assetPPMScheduleEventDTOs.add(assetPPMScheduleEvent);
+					addDays(currCal, ppmSchedule.getFrequency(), ppmSchedule.getFrequencyDuration());
+				}
+			}
+		}
+		return assetPPMScheduleEventDTOs;
+	}
+	
+	private void addDays(Calendar dateTime , String scheduleType, int duration) {
+		Frequency frequency = Frequency.valueOf(scheduleType);
+		
+		switch(frequency) {
+			case HOURLY :
+				dateTime.add(Calendar.HOUR_OF_DAY, 1 * duration);
+				break;
+			case DAILY :
+				dateTime.add(Calendar.DAY_OF_YEAR, 1 * duration);
+				break;
+			case WEEKLY :
+				dateTime.add(Calendar.WEEK_OF_YEAR, 1 * duration);
+				break;	
+			case FORTNIGHTLY :
+				dateTime.add(Calendar.DAY_OF_YEAR, 14 * duration);
+				break;
+			case MONTHLY :
+				dateTime.add(Calendar.MONTH, 1 * duration);
+				break;
+			case YEARLY :
+				dateTime.add(Calendar.YEAR, 1 * duration);
+				break;
+			case HALFYEARLY :
+				dateTime.add(Calendar.MONTH, 6 * duration);
+				break;
+			case QUARTERLY :
+				dateTime.add(Calendar.MONTH, 3 * duration);
+				break;
+			default:
+			
+		}
+	}
+	
 	
 	public SearchResult<AssetPpmScheduleDTO> findPPMSearchCriteria(SearchCriteria searchCriteria) {
 
@@ -596,6 +709,15 @@ public class AssetManagementService extends AbstractService {
 
 		}
 		return result;
+	}
+	
+	public AssetDTO findByAssetCode(String assetCode) {
+		AssetDTO assetDTO = null;
+		Asset asset = assetRepository.findByCode(assetCode);
+		if(asset != null) {
+			assetDTO = mapperUtil.toModel(asset, AssetDTO.class);
+		}
+		return assetDTO;
 	}
 
 	public SearchResult<AssetDTO> findBySearchCrieria(SearchCriteria searchCriteria) {
@@ -752,10 +874,40 @@ public class AssetManagementService extends AbstractService {
 	}
 
 	public ImportResult importFile(MultipartFile file, long dateTime) {
-		return importUtil.importAssetData(file, dateTime);
+		return importUtil.importAssetData(file, dateTime, false, false);
 	}
 
 	public ImportResult getImportStatus(String fileId) {
+		ImportResult er = new ImportResult();
+		// fileId += ".csv";
+		if (!StringUtils.isEmpty(fileId)) {
+			String status = importUtil.getImportStatus(fileId);
+			er.setFile(fileId);
+			er.setStatus(status);
+		}
+		return er;
+	}
+	
+	public ImportResult importPPMFile(MultipartFile file, long dateTime) {
+		return importUtil.importAssetData(file, dateTime,true, false);
+	}
+
+	public ImportResult getImportPPMStatus(String fileId) {
+		ImportResult er = new ImportResult();
+		// fileId += ".csv";
+		if (!StringUtils.isEmpty(fileId)) {
+			String status = importUtil.getImportStatus(fileId);
+			er.setFile(fileId);
+			er.setStatus(status);
+		}
+		return er;
+	}
+	
+	public ImportResult importAMCFile(MultipartFile file, long dateTime) {
+		return importUtil.importAssetData(file, dateTime, false, true);
+	}
+
+	public ImportResult getImportAMCStatus(String fileId) {
 		ImportResult er = new ImportResult();
 		// fileId += ".csv";
 		if (!StringUtils.isEmpty(fileId)) {
@@ -910,8 +1062,8 @@ public class AssetManagementService extends AbstractService {
 			assetPPMSchedule.setFrequency(assetPpmScheduleDTO.getFrequency());
 			assetPPMSchedule.setFrequencyDuration(assetPpmScheduleDTO.getFrequencyDuration());
 			assetPPMSchedule.setFrequencyPrefix(assetPpmScheduleDTO.getFrequencyPrefix());
-			assetPPMSchedule.setEndDate(assetPpmScheduleDTO.getEndDate());
-			assetPPMSchedule.setStartDate(assetPpmScheduleDTO.getStartDate());
+			assetPPMSchedule.setEndDate(DateUtil.convertToSQLDate(assetPpmScheduleDTO.getEndDate()));
+			assetPPMSchedule.setStartDate(DateUtil.convertToSQLDate(assetPpmScheduleDTO.getStartDate()));
 			assetPPMSchedule.setTitle(assetPpmScheduleDTO.getTitle());
 			assetPpmScheduleRepository.save(assetPPMSchedule);
 		}

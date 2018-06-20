@@ -467,6 +467,123 @@ angular.module('timeSheetApp')
 		   	console.log('$scope.assetImportStatusLoad message '+ $rootScope.assetImportStatusLoad);
 		   	return ($rootScope.assetImportStatusLoad ? $rootScope.assetImportStatusLoad : '');
 	   };    
+	   
+	   
+	   //Asset PPM upload file start
+	    $scope.uploadAssetPPM = function() {
+		    	if($scope.selectedAssetPPMFile){
+		    		$rootScope.assetImportPPMStatusLoad = true;
+	   		console.log('************************selected asset PPM file - ' + $scope.selectedAssetPPMFile);
+	   		AssetComponent.importAssetPPMFile($scope.selectedAssetPPMFile).then(function(data){
+	   			console.log(data);
+	   			var result = data;
+	   			console.log(result.file + ', ' + result.status + ',' + result.msg);
+	   			var importStatus = {
+	       				fileName : result.file,
+	       				importMsg : result.msg
+	       		};
+	       		$rootScope.assetPPMImportStatus = importStatus;
+	       		$rootScope.start('assetPPM');
+	        },function(err){
+	           	  console.log('Asset PPM Import error')
+	           	  console.log(err);
+	        });
+		  
+		  }
+	   }
+	
+	    $scope.assetPPMImportStatus = function() {
+	    		console.log('$rootScope.assetPPMImportStatus -'+JSON.stringify($rootScope.assetPPMImportStatus));        		
+     		AssetComponent.importAssetPPMStatus($rootScope.assetPPMImportStatus.fileName).then(function(data) {
+         		if(data) {
+         			$rootScope.assetPPMImportStatus.importStatus = data.status;
+             		console.log('*****************importStatus - '+ JSON.stringify($rootScope.assetPPMImportStatus));
+             		$rootScope.assetPPMImportStatus.importMsg = data.msg;
+             		console.log('**************importMsg - '+ $rootScope.assetPPMImportStatus.importMsg);
+             		if($rootScope.assetPPMImportStatus.importStatus == 'COMPLETED'){
+             			$rootScope.assetPPMImportStatus.fileName = data.file;
+                 		console.log('importFile - '+ $rootScope.assetPPMImportStatus.fileName);
+                 		$scope.stop('assetPPM');
+                 		$rootScope.assetPPMImportStatusLoad = false;
+                 		$timeout(function() {
+                 			$rootScope.assetPPMImportStatus = {};
+                 	    }, 3000);
+             		}else if($rootScope.assetPPMImportStatus.importStatus == 'FAILED'){
+                 		$scope.stop('assetPPM');
+             		}else if(!$rootScope.assetPPMImportStatus.importStatus){
+             			$scope.stop('assetPPM');
+             		}else {
+             			$rootScope.assetPPMImportStatus.fileName = '#';
+             		}
+         		}
+
+         	});
+
+	    }    
+	    
+	   
+	   $scope.assetPPMImportStatusLoad = function(){
+		   	console.log('$scope.assetPPMImportStatusLoad message '+ $rootScope.assetPPMImportStatusLoad);
+		   	return ($rootScope.assetPPMImportStatusLoad ? $rootScope.assetPPMImportStatusLoad : '');
+	   };   
+	   
+	 //Asset AMC upload file start
+	    $scope.uploadAssetAMC = function() {
+		    	if($scope.selectedAssetAMCFile){
+		    		$rootScope.assetImportAMCStatusLoad = true;
+	   		console.log('************************selected asset AMC file - ' + $scope.selectedAssetAMCFile);
+	   		AssetComponent.importAssetAMCFile($scope.selectedAssetAMCFile).then(function(data){
+	   			console.log(data);
+	   			var result = data;
+	   			console.log(result.file + ', ' + result.status + ',' + result.msg);
+	   			var importStatus = {
+	       				fileName : result.file,
+	       				importMsg : result.msg
+	       		};
+	       		$rootScope.assetAMCImportStatus = importStatus;
+	       		$rootScope.start('assetAMC');
+	        },function(err){
+	           	  console.log('Asset AMC Import error')
+	           	  console.log(err);
+	        });
+		  
+		  }
+	   }
+	
+	    $scope.assetAMCImportStatus = function() {
+	    		console.log('$rootScope.assetAMCImportStatus -'+JSON.stringify($rootScope.assetAMCImportStatus));        		
+	    		AssetComponent.importAssetAMCStatus($rootScope.assetAMCImportStatus.fileName).then(function(data) {
+	        		if(data) {
+	        			$rootScope.assetAMCImportStatus.importStatus = data.status;
+	            		console.log('*****************importStatus - '+ JSON.stringify($rootScope.assetAMCImportStatus));
+	            		$rootScope.assetAMCImportStatus.importMsg = data.msg;
+	            		console.log('**************importMsg - '+ $rootScope.assetAMCImportStatus.importMsg);
+	            		if($rootScope.assetAMCImportStatus.importStatus == 'COMPLETED'){
+	            			$rootScope.assetAMCImportStatus.fileName = data.file;
+	                		console.log('importFile - '+ $rootScope.assetAMCImportStatus.fileName);
+	                		$scope.stop('assetAMC');
+	                		$rootScope.assetAMCImportStatusLoad = false;
+	                		$timeout(function() {
+	                			$rootScope.assetAMCImportStatus = {};
+	                	    }, 3000);
+	            		}else if($rootScope.assetAMCImportStatus.importStatus == 'FAILED'){
+	                		$scope.stop('assetAMC');
+	            		}else if(!$rootScope.assetAMCImportStatus.importStatus){
+	            			$scope.stop('assetAMC');
+	            		}else {
+	            			$rootScope.assetAMCImportStatus.fileName = '#';
+	            		}
+	        		}
+	
+	        	});
+
+	    }    
+	    
+	   
+	   $scope.assetAMCImportStatusLoad = function(){
+		   	console.log('$scope.assetAMCImportStatusLoad message '+ $rootScope.assetAMCImportStatusLoad);
+		   	return ($rootScope.assetAMCImportStatusLoad ? $rootScope.assetAMCImportStatusLoad : '');
+	   };   
 	    
 	    	    
 	 // store the interval promise in this variable
@@ -477,6 +594,8 @@ angular.module('timeSheetApp')
 	 var promiseChecklist;
 	 var promiseEmployeeShift;
 	 var promiseAsset;
+	 var promiseAssetPPM;
+	 var promiseAssetAMC;
 	 // starts the interval
 	    $rootScope.start = function(typeImport) {
 	      // stops any running interval to avoid two intervals running at the same time
@@ -525,6 +644,18 @@ angular.module('timeSheetApp')
 	    		promiseAsset = $interval($scope.assetImportStatus, 5000);
 	    		console.log('promise -'+promiseAsset);
 	    	}
+	    	if(typeImport == 'assetPPM'){
+	    		$rootScope.stop('assetPPM');
+	    		console.log('Import asset PPM Start Method');
+	    		promiseAssetPPM = $interval($scope.assetPPMImportStatus, 5000);
+	    		console.log('promise -'+promiseAssetPPM);
+	    	}
+	    	if(typeImport == 'assetAMC'){
+	    		$rootScope.stop('assetAMC');
+	    		console.log('Import asset AMC Start Method');
+	    		promiseAssetAMC = $interval($scope.assetAMCImportStatus, 5000);
+	    		console.log('promise -'+promiseAssetAMC);
+	    	}
 	    };	
 	    // stops the interval
 	    $rootScope.stop = function(stopInterval) {
@@ -548,6 +679,12 @@ angular.module('timeSheetApp')
 	      }
 	      if(stopInterval == 'asset'){
 	    	  	$interval.cancel(promiseAsset);
+	      }
+	      if(stopInterval == 'assetPPM'){
+	    	  	$interval.cancel(promiseAssetPPM);
+	      }
+	      if(stopInterval == 'assetAMC'){
+	    	  	$interval.cancel(promiseAssetAMC);
 	      }
 	    };	   
 	    

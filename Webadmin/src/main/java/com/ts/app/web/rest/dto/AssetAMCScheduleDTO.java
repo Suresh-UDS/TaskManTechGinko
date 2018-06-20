@@ -1,6 +1,6 @@
 package com.ts.app.web.rest.dto;
 
-import java.sql.Date;
+import java.util.Date;
 
 public class AssetAMCScheduleDTO extends BaseDTO {
 

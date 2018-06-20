@@ -64,7 +64,9 @@ import com.ts.app.service.ChecklistService;
 import com.ts.app.service.JobManagementService;
 import com.ts.app.service.SiteLocationService;
 import com.ts.app.service.UserService;
+import com.ts.app.web.rest.dto.AssetAMCScheduleDTO;
 import com.ts.app.web.rest.dto.AssetDTO;
+import com.ts.app.web.rest.dto.AssetPpmScheduleDTO;
 import com.ts.app.web.rest.dto.BaseDTO;
 import com.ts.app.web.rest.dto.ChecklistDTO;
 import com.ts.app.web.rest.dto.ChecklistItemDTO;
@@ -222,7 +224,7 @@ public class ImportUtil {
 
 	}
 	
-	public ImportResult importAssetData(MultipartFile file, long dateTime) {
+	public ImportResult importAssetData(MultipartFile file, long dateTime, boolean isPPM, boolean isAMC) {
         String fileName = dateTime + ".xlsx";
 		String filePath = env.getProperty(NEW_IMPORT_FOLDER) + SEPARATOR +  ASSET_FOLDER;
 		String uploadedFileName = fileUploadHelper.uploadJobImportFile(file, filePath, fileName);
@@ -234,13 +236,20 @@ public class ImportUtil {
 		}else {
 			statusMap.put(fileKey, "PROCESSING");
 		}
-		importNewFiles("asset",filePath, fileName, targetFilePath);
+		if(isPPM) {
+			importNewFiles("assetPPM",filePath, fileName, targetFilePath);
+		}else if(isAMC) {
+			importNewFiles("assetAMC",filePath, fileName, targetFilePath);
+		}else {
+			importNewFiles("asset",filePath, fileName, targetFilePath);
+		}
 		ImportResult result = new ImportResult();
 		result.setFile(fileKey);
 		result.setStatus("PROCESSING");
 		return result;
-
 	}
+	
+	
 	
 	public ImportResult importChecklistData(MultipartFile file, long dateTime) {
         String fileName = dateTime + ".xlsx";
@@ -315,7 +324,12 @@ public class ImportUtil {
 					case "asset" :
 						importAssetFromFile(fileObj.getPath());
 						break;
-						
+					case "assetPPM" :
+						importAssetPPMFromFile(fileObj.getPath());
+						break;
+					case "assetAMC" :
+						importAssetAMCFromFile(fileObj.getPath());
+						break;
 				}
 				statusMap.put(fileKey, "COMPLETED");
 				FileSystem fileSystem = FileSystems.getDefault();
@@ -630,7 +644,7 @@ public class ImportUtil {
 					assetDTO.setWarrantyExpiryDate(DateUtil.convertToDateTime(warrantyDate));
 				}
 				assetDTO.setVendorId(Long.valueOf(getCellValue(currentRow.getCell(18))));
-				assetDTO.setAssetCode(getCellValue(currentRow.getCell(19)));
+				assetDTO.setCode(getCellValue(currentRow.getCell(19)));
 				
 				assetManagementService.saveAsset(assetDTO);
 				
@@ -642,6 +656,92 @@ public class ImportUtil {
 			log.error("Error while reading the job data file for import", e);
 		}
 	}	
+	
+	private void importAssetPPMFromFile(String path) {
+		try {
+
+			FileInputStream excelFile = new FileInputStream(new File(path));
+			Workbook workbook = new XSSFWorkbook(excelFile);
+			Sheet datatypeSheet = workbook.getSheetAt(0);
+			//Iterator<Row> iterator = datatypeSheet.iterator();
+			int lastRow = datatypeSheet.getLastRowNum();
+			int r = 1;
+			
+			log.debug("Last Row number -" + lastRow);
+			for (; r <= lastRow; r++) {
+				log.debug("Current Row number -" + r);
+				Row currentRow = datatypeSheet.getRow(r);
+				
+				AssetPpmScheduleDTO assetPPMDto = new AssetPpmScheduleDTO();
+				String assetCode = getCellValue(currentRow.getCell(0));
+				AssetDTO assetDTO = assetManagementService.findByAssetCode(assetCode);
+				assetPPMDto.setAssetId(assetDTO.getId());
+				assetPPMDto.setTitle(getCellValue(currentRow.getCell(3)));
+				assetPPMDto.setFrequency(getCellValue(currentRow.getCell(4)));
+				assetPPMDto.setFrequencyDuration(Integer.parseInt(getCellValue(currentRow.getCell(4))));
+				String startDate = getCellValue(currentRow.getCell(5));
+				if(StringUtils.isNotEmpty(startDate)) {
+					assetPPMDto.setStartDate(DateUtil.convertToDateTime(startDate));
+				}
+				
+				String endDate = getCellValue(currentRow.getCell(5));
+				if(StringUtils.isNotEmpty(endDate)) {
+					assetPPMDto.setEndDate(DateUtil.convertToDateTime(endDate));
+				}
+				
+				assetManagementService.createAssetPpmSchedule(assetPPMDto);
+				
+			}
+
+		} catch (FileNotFoundException e) {
+			log.error("Error while reading the asset ppm schedule data file for import", e);
+		} catch (IOException e) {
+			log.error("Error while reading the asset ppm schedule data file for import", e);
+		}
+	}
+	
+	private void importAssetAMCFromFile(String path) {
+		try {
+
+			FileInputStream excelFile = new FileInputStream(new File(path));
+			Workbook workbook = new XSSFWorkbook(excelFile);
+			Sheet datatypeSheet = workbook.getSheetAt(0);
+			//Iterator<Row> iterator = datatypeSheet.iterator();
+			int lastRow = datatypeSheet.getLastRowNum();
+			int r = 1;
+			
+			log.debug("Last Row number -" + lastRow);
+			for (; r <= lastRow; r++) {
+				log.debug("Current Row number -" + r);
+				Row currentRow = datatypeSheet.getRow(r);
+				
+				AssetAMCScheduleDTO assetAMCDto = new AssetAMCScheduleDTO();
+				String assetCode = getCellValue(currentRow.getCell(0));
+				AssetDTO assetDTO = assetManagementService.findByAssetCode(assetCode);
+				assetAMCDto.setAssetId(assetDTO.getId());
+				assetAMCDto.setTitle(getCellValue(currentRow.getCell(3)));
+				assetAMCDto.setFrequency(getCellValue(currentRow.getCell(4)));
+				assetAMCDto.setFrequencyDuration(Integer.parseInt(getCellValue(currentRow.getCell(4))));
+				String startDate = getCellValue(currentRow.getCell(5));
+				if(StringUtils.isNotEmpty(startDate)) {
+					assetAMCDto.setStartDate(DateUtil.convertToDateTime(startDate));
+				}
+				
+				String endDate = getCellValue(currentRow.getCell(5));
+				if(StringUtils.isNotEmpty(endDate)) {
+					assetAMCDto.setEndDate(DateUtil.convertToDateTime(endDate));
+				}
+				
+				assetManagementService.createAssetAMCSchedule(assetAMCDto);
+				
+			}
+
+		} catch (FileNotFoundException e) {
+			log.error("Error while reading the asset ppm schedule data file for import", e);
+		} catch (IOException e) {
+			log.error("Error while reading the asset ppm schedule data file for import", e);
+		}
+	}
 	
 	private void importEmployeeFromFile(String path) {
 		try {

@@ -35,6 +35,7 @@ import com.ts.app.service.util.ImportUtil;
 import com.ts.app.web.rest.dto.AssetAMCScheduleDTO;
 import com.ts.app.web.rest.dto.AssetDTO;
 import com.ts.app.web.rest.dto.AssetDocumentDTO;
+import com.ts.app.web.rest.dto.AssetPPMScheduleEventDTO;
 import com.ts.app.web.rest.dto.AssetParameterConfigDTO;
 import com.ts.app.web.rest.dto.AssetParameterReadingDTO;
 import com.ts.app.web.rest.dto.AssetPpmScheduleDTO;
@@ -310,6 +311,17 @@ public class AssetResource {
 		return response;
 	}
 	
+	@RequestMapping(path = "/assets/{assetId}/ppmschedule/calendar", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	@Timed
+	public List<AssetPPMScheduleEventDTO> getAssetPPMScheduleCalendar(@RequestBody SearchCriteria searchCriteria) {
+		log.debug(">>> Asset Resource getAssetPPMScheduleCalendar request <<<");
+		log.debug("AssetId <<< " + searchCriteria.getAssetId() + " - startDate - " + searchCriteria.getCheckInDateTimeFrom() + " - endDate - " + searchCriteria.getCheckInDateTimeTo());
+
+		List<AssetPPMScheduleEventDTO> response = assetService.getAssetPPMScheduleCalendar(searchCriteria.getAssetId(), searchCriteria.getCheckInDateTimeFrom(), searchCriteria.getCheckInDateTimeTo());
+		log.debug("Get Asset PPM Schedule calendar for asset id size - " + response.size());
+		return response;
+	}
+	
 	@RequestMapping(value = { "/assets/getAllFile/{type}/{id}",
 			"/assets/getAllAssetPhoto/{type}/{id}" }, method = RequestMethod.GET)
 	public List<AssetDocumentDTO> getUploadedFiles(@PathVariable String type, @PathVariable Long id) {
@@ -429,7 +441,6 @@ public class AssetResource {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 	
-	
 	@RequestMapping(path="/assets/import", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<ImportResult> importAssetData(@RequestParam("assetFile") MultipartFile file){
 		Calendar cal = Calendar.getInstance();
@@ -439,6 +450,66 @@ public class AssetResource {
 
     @RequestMapping(value = "/assets/import/{fileId}/status",method = RequestMethod.GET)
 	public ImportResult importStatus(@PathVariable("fileId") String fileId) {
+		//log.debug("ImportStatus -  fileId -"+ fileId);
+		ImportResult result = assetService.getImportStatus(fileId);
+		if(result!=null && result.getStatus() != null) {
+			switch(result.getStatus()) {
+				case "PROCESSING" :
+					result.setMsg("Importing data...");
+					break;
+				case "COMPLETED" :
+					result.setMsg("Completed importing");
+					break;
+				case "FAILED" :
+					result.setMsg("Failed to import. Please try again");
+					break;
+				default :
+					result.setMsg("Completed importing");
+					break;
+			}
+		}
+		return result;
+	}
+    
+	@RequestMapping(path="/assets/import/ppm", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<ImportResult> importAssetPPMData(@RequestParam("assetPPMFile") MultipartFile file){
+		Calendar cal = Calendar.getInstance();
+		ImportResult result = assetService.importFile(file, cal.getTimeInMillis());
+		return new ResponseEntity<ImportResult>(result,HttpStatus.OK);
+	}
+
+    @RequestMapping(value = "/assets/import/ppm/{fileId}/status",method = RequestMethod.GET)
+	public ImportResult importPPMStatus(@PathVariable("fileId") String fileId) {
+		//log.debug("ImportStatus -  fileId -"+ fileId);
+		ImportResult result = assetService.getImportStatus(fileId);
+		if(result!=null && result.getStatus() != null) {
+			switch(result.getStatus()) {
+				case "PROCESSING" :
+					result.setMsg("Importing data...");
+					break;
+				case "COMPLETED" :
+					result.setMsg("Completed importing");
+					break;
+				case "FAILED" :
+					result.setMsg("Failed to import. Please try again");
+					break;
+				default :
+					result.setMsg("Completed importing");
+					break;
+			}
+		}
+		return result;
+	}
+    
+    @RequestMapping(path="/assets/import/amc", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<ImportResult> importAssetAMCData(@RequestParam("assetAMCFile") MultipartFile file){
+		Calendar cal = Calendar.getInstance();
+		ImportResult result = assetService.importFile(file, cal.getTimeInMillis());
+		return new ResponseEntity<ImportResult>(result,HttpStatus.OK);
+	}
+
+    @RequestMapping(value = "/assets/import/amc/{fileId}/status",method = RequestMethod.GET)
+	public ImportResult importAMCStatus(@PathVariable("fileId") String fileId) {
 		//log.debug("ImportStatus -  fileId -"+ fileId);
 		ImportResult result = assetService.getImportStatus(fileId);
 		if(result!=null && result.getStatus() != null) {
