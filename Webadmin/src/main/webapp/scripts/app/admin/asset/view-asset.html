@@ -153,7 +153,7 @@
                                                                    <tbody>
                                                                    <tr>
                                                                        <td>Manufactururer </td>
-                                                                       <td></td>
+                                                                       <td>{{assetDetail.manufacturerName}}</td>
                                                                    </tr>
                                                                    <tr>
                                                                        <td>Model Number</td>
@@ -217,7 +217,7 @@
                                                                    <tr>
                                                                        <td>Name</td>
                                                                        <td>
-                                                                           {{assetDetail.vendorName}}
+                                                                           {{assetDetail.amcVendorName}}
                                                                        </td>
                                                                    </tr>
                                                                    <tr>
@@ -672,7 +672,7 @@
                                                </div>
                                                <div class="panel-body" ng-init="getAllUploadedFiles();">
 
-                                                   <div class="row docsRow"  ng-show="uploadFiles">
+                                                   <div class="row docsRow" ng-if="fileCount" >
 
                                                        <div class="col-md-2 txt-align-center DocsCon" ng-repeat="uploadFile in uploadFiles">
                                                           <div class="DeleteBtn" ng-click="deleteConfirmDoc(uploadFile.id)"  onClick="$('#deleteModal').modal()" data-target="#myModal">                               
@@ -688,7 +688,7 @@
                                                        </div>
 
                                                    </div>
-                                                    <div class="row docsRow txt-align-center" ng-hide="uploadFiles" >
+                                                    <div class="row docsRow txt-align-center" ng-if="!fileCount"  >
 
                                                          <h4>No Documents</h4>
 
@@ -705,7 +705,7 @@
                                                </div>
                                                <div class="panel-body" ng-init="getAllUploadedPhotos();">
 
-                                                   <div class="row docsRow" ng-show="uploadAssetPhotos">
+                                                   <div class="row docsRow" ng-if="photoCount" >
 
                                                         <div class="col-md-2 txt-align-center DocsCon" ng-repeat="uploadPhoto in uploadAssetPhotos">
                                                             <div class="DeleteBtn" ng-click="deleteConfirmDoc(uploadPhoto.id)"  onClick="$('#deleteModal').modal()" data-target="#myModal">                                 
@@ -723,7 +723,7 @@
 
                                                     </div>
 
-                                                    <div class="row docsRow txt-align-center" ng-hide="uploadAssetPhotos" >
+                                                    <div class="row docsRow txt-align-center" ng-if="!photoCount" >
 
                                                        <h4>No Images</h4>
 
