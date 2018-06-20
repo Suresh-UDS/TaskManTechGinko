@@ -55,7 +55,8 @@ angular.module('timeSheetApp')
         $scope.searchProject ={};
         $scope.searchAssetGroup ={};
 
-        $scope.searchAcquiredDate = $filter('date')(new Date(), 'dd/MM/yyyy'); 
+        //scope.searchAcquiredDate = $filter('date')(new Date(), 'dd/MM/yyyy'); 
+        $scope.searchAcquiredDate = "";
 
 
         $scope.asset = {};
@@ -504,7 +505,8 @@ angular.module('timeSheetApp')
                 if($scope.searchAcquiredDateSer) {
                     $scope.searchCriteria.acquiredDate = $scope.searchAcquiredDateSer;
                 }else{
-                    $scope.searchCriteria.acquiredDate = new Date();
+                    //$scope.searchCriteria.acquiredDate = new Date();
+                    $scope.searchCriteria.acquiredDate = "";
                 }
 
 
@@ -948,7 +950,8 @@ angular.module('timeSheetApp')
             $scope.selectedStatus = null;
             $scope.searchAssetName =null;
             $scope.searchAssetCode =null;
-            $scope.searchAcquiredDate = $filter('date')(new Date(), 'dd/MM/yyyy');
+           //$scope.searchAcquiredDate = $filter('date')(new Date(), 'dd/MM/yyyy');
+            $scope.searchAcquiredDate = "";
             $scope.searchAssetType ={};
             $scope.searchSite ={};
             $scope.searchProject ={};
