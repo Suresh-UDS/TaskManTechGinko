@@ -160,6 +160,16 @@ public class SearchCriteria extends Paginator {
 	private boolean notCheckedOut;
 	
 	private String maintenanceType;
+	
+	private String assetCode;
+
+	public String getAssetCode() {
+		return assetCode;
+	}
+
+	public void setAssetCode(String assetCode) {
+		this.assetCode = assetCode;
+	}
 
 	public long getId() {
 		return id;

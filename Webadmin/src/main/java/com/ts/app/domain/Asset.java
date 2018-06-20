@@ -56,6 +56,8 @@ public class Asset extends AbstractAuditingEntity implements Serializable {
     @Column(name="qr_code_image")
     private String qrCodeImage;
     
+    @NotNull
+    @Column(name="asset_type", nullable = false)
     private String assetType;
     
     private String assetGroup;

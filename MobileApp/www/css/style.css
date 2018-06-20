@@ -1639,7 +1639,6 @@ ion-grid .row:before
    {
        margin-left:0px !important;
    }
-
    .gray-clr
    {
        background-color:#EEEEEE !important;
@@ -1656,7 +1655,6 @@ ion-grid .row:before
         stroke: #444;
         fill: #222;
     }
-
 
 }
 

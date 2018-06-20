@@ -123,7 +123,7 @@ angular.module('timeSheetApp')
             }else if(nottifShow == false){
                 $timeout(function() {
                   nottifShow = true ;
-                }, 8000);
+                }, 3000);
 
             }
             
@@ -185,6 +185,8 @@ angular.module('timeSheetApp')
                     $scope.success = 'OK';
 
                     $scope.showNotifications('top','center','success','PPM schedule Added');
+
+                    $scope.assetPPM = {};
        
                     $scope.loadPPMSchedule();
 
@@ -216,7 +218,7 @@ angular.module('timeSheetApp')
 
         $scope.loadManufacturer = function () {
             ManufacturerComponent.findAll().then(function (data) {
-                console.log("Loading all Manufacturer -- " , data);
+                //console.log("Loading all Manufacturer -- " , data);
                 $scope.manufacturers = data;
             });
         }
@@ -243,7 +245,7 @@ angular.module('timeSheetApp')
 
          $scope.loadVendor = function () {
             VendorComponent.findAll().then(function (data) {
-                console.log("Loading all Vendor -- " , data)
+                //console.log("Loading all Vendor -- " , data)
                 $scope.vendors = data;
             });
         }
@@ -270,25 +272,26 @@ angular.module('timeSheetApp')
         }
 
 
-           $scope.createAssetType = function () {
+         /*  $scope.createAssetType = function () {
                AssetTypeComponent.create().then(function (data) {
                 console.log("Loading all AssetType -- " , data)
                 $scope.assetTypes = data;
             });
-        }
+        }*/
 
 
 
          $scope.loadAssetType = function () {
             AssetTypeComponent.findAll().then(function (data) {
-                console.log("Loading all AssetType -- " , data)
+                //console.log("Loading all AssetType -- " , data)
+                 $scope.selectedAssetType = null;
                 $scope.assetTypes = data;
             });
         }
 
         $scope.loadAssetGroup = function () {
             AssetComponent.loadAssetGroup().then(function (data) {
-                console.log("Loading all Asset Group -- " , data)
+                //console.log("Loading all Asset Group -- " , data)
                 $scope.assetGroups = data;
             });
         }
@@ -1194,6 +1197,7 @@ angular.module('timeSheetApp')
                     $scope.success = 'OK';
                     $scope.showNotifications('top','center','success','Asset Parameter Saved Successfully');
                     $scope.assetConfig();
+                    $scope.parameterConfig = {};
                     //$scope.loadAllParameters();
                 }).catch(function (response) {
                     $scope.success = null;
@@ -1496,6 +1500,7 @@ angular.module('timeSheetApp')
     	    			//$scope.amcScheduleList.push(data);
                         $scope.loadAmcSchedule();
                         $scope.showNotifications('top','center','success','AMC Schedule Saved Successfully');
+                        $scope.amcSchedule = {};
 
     	    			
     	    		}

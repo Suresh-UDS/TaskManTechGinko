@@ -78,15 +78,8 @@ public class AssetResource {
 		log.debug(">>> Asset DTO save request <<<");
 		
 		try {
-			if(!assetService.isDuplicate(assetDTO)) {
-				log.debug(">>> going to create <<<");
-				assetDTO = assetService.saveAsset(assetDTO);
-			}else {
-				log.debug(">>> duplicate <<<");
-				assetDTO.setMessage("error.duplicateRecordError");
-				return new ResponseEntity<>(assetDTO,HttpStatus.BAD_REQUEST);
-			}
-		}catch(Exception e) {
+			assetDTO = assetService.saveAsset(assetDTO);
+			}catch(Exception e) {
 			throw new TimesheetException(e, assetDTO);
 		}
 		

@@ -3,14 +3,11 @@ package com.ts.app.service;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.EnumSet;
 import java.util.List;
-import java.util.Map;
 
 import javax.inject.Inject;
 
 import org.apache.commons.collections.CollectionUtils;
-import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.env.Environment;
@@ -22,7 +19,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.google.common.base.Splitter;
 import com.ts.app.domain.AbstractAuditingEntity;
 import com.ts.app.domain.Asset;
 import com.ts.app.domain.AssetAMCSchedule;
@@ -38,7 +34,6 @@ import com.ts.app.domain.Checklist;
 import com.ts.app.domain.Employee;
 import com.ts.app.domain.EmployeeProjectSite;
 import com.ts.app.domain.Frequency;
-import com.ts.app.domain.FrequencyDuration;
 import com.ts.app.domain.FrequencyPrefix;
 import com.ts.app.domain.Job;
 import com.ts.app.domain.Manufacturer;
@@ -48,7 +43,6 @@ import com.ts.app.domain.Setting;
 import com.ts.app.domain.Site;
 import com.ts.app.domain.User;
 import com.ts.app.domain.Vendor;
-import com.ts.app.domain.util.StringUtil;
 import com.ts.app.repository.AssetAMCRepository;
 import com.ts.app.repository.AssetDocumentRepository;
 import com.ts.app.repository.AssetGroupRepository;
@@ -92,10 +86,8 @@ import com.ts.app.web.rest.dto.AssetPpmScheduleDTO;
 import com.ts.app.web.rest.dto.AssetTypeDTO;
 import com.ts.app.web.rest.dto.AssetgroupDTO;
 import com.ts.app.web.rest.dto.BaseDTO;
-import com.ts.app.web.rest.dto.EmployeeDTO;
 import com.ts.app.web.rest.dto.ExportResult;
 import com.ts.app.web.rest.dto.ImportResult;
-import com.ts.app.web.rest.dto.JobDTO;
 import com.ts.app.web.rest.dto.SearchCriteria;
 import com.ts.app.web.rest.dto.SearchResult;
 import com.ts.app.web.rest.errors.TimesheetException;
@@ -731,7 +723,7 @@ public class AssetManagementService extends AbstractService {
 		for (EmployeeProjectSite site : sites) {
 			siteIds.add(site.getSite().getId());
 		}
-
+		
 		if (searchCriteria != null) {
 			Pageable pageRequest = null;
 			if (!StringUtils.isEmpty(searchCriteria.getColumnName())) {
@@ -753,6 +745,10 @@ public class AssetManagementService extends AbstractService {
 						&& searchCriteria.getSiteId() > 0) {
 					page = assetRepository.findByAllCriteria(searchCriteria.getAssetTypeName(), searchCriteria.getAssetName(), searchCriteria.getProjectId(),
 							searchCriteria.getSiteId(), pageRequest);
+				} else if (!StringUtils.isEmpty(searchCriteria.getAssetCode())) {
+					page = assetRepository.findByAssetCode(searchCriteria.getAssetCode(), pageRequest);
+				} else if (!StringUtils.isEmpty(searchCriteria.getAssetTitle())) {
+					page = assetRepository.findByAssetTitle(searchCriteria.getAssetTitle(), pageRequest);
 				} else if (!StringUtils.isEmpty(searchCriteria.getAssetName())) {
 					page = assetRepository.findByName(siteIds, searchCriteria.getAssetName(), pageRequest);
 				} else if (!StringUtils.isEmpty(searchCriteria.getAssetTypeName())) {
@@ -1133,6 +1129,18 @@ public class AssetManagementService extends AbstractService {
 			assetParameterReading.setJob(null);
 		}
 		
+		Calendar now = Calendar.getInstance();
+		
+		if(assetParamReadingDTO.isConsumptionMonitoringRequired()) { 
+			if(assetParamReadingDTO.getFinalValue() > 0) {
+				assetParameterReading.setFinalReadingTime(new java.sql.Timestamp(now.getTimeInMillis()));
+			} else if(assetParamReadingDTO.getFinalValue() > 0) { 
+				assetParameterReading.setInitialReadingTime(new java.sql.Timestamp(now.getTimeInMillis()));
+			}
+		} else {
+			assetParameterReading.setInitialReadingTime(new java.sql.Timestamp(now.getTimeInMillis()));
+		}
+		
 		AssetParameterConfig assetParameterConfig = assetParamConfigRepository.findOne(assetParamReadingDTO.getAssetParameterConfigId());
 		assetParameterReading.setAssetParameterConfig(assetParameterConfig);
 		assetParameterReading = assetParamReadingRepository.save(assetParameterReading);
@@ -1242,7 +1250,7 @@ public class AssetManagementService extends AbstractService {
 							
 							if(assetParamReadingDTO.getId() > 0 && assetParamReadingDTO.isConsumptionMonitoringRequired()) { 
 																
-								if(assetParamReadingDTO.getConsumption() < prevReading.getConsumption()) {
+								if(assetParamReadingDTO.getConsumption() > prevReading.getConsumption()) {
 									
 									String type = "consumption";
 									
@@ -1300,6 +1308,18 @@ public class AssetManagementService extends AbstractService {
 							
 						case CURRENT_RUNHOUR_GREATER_THAN_PREVIOUS_RUNHOUR : 
 							
+//							if(assetParamReadingDTO.getId() > 0) { 
+//																	
+//								long milliseconds = assetParamReadingDTO.getFinalReadingTime().getTime() - prevReading.getFinalReadingTime().getTime();
+//								int seconds = (int) milliseconds / 1000;
+//								// calculate hours minutes and seconds
+//							    int hours = seconds / 3600;
+//							    int minutes = (seconds % 3600) / 60;
+//							    
+//							    assetParamReading.setRunHours(hours);
+//							    assetParamReading.setRunMinutues(minutes);
+//							    
+//							}
 							
 							
 						default:
