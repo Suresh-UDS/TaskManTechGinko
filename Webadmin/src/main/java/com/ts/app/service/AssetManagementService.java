@@ -1221,10 +1221,14 @@ public class AssetManagementService extends AbstractService {
 				AssetParameterConfig assetParameterConfig = assetParamConfigRepository.findOne(assetParamReadingDTO.getAssetParameterConfigId());
 				assetParamReading.setAssetParameterConfig(assetParameterConfig);
 			}
+			
 			if(assetParamReadingDTO.getJobId() > 0){ 
 				Job job = jobRepository.findOne(assetParamReadingDTO.getJobId());
 				assetParamReading.setJob(job);
+			} else {
+				assetParamReading.setJob(null);
 			}
+			
 			if(assetParamReadingDTO.getInitialValue() > 0 && assetParamReadingDTO.getFinalValue() > 0) {
 				double consumption = assetParamReadingDTO.getFinalValue() - assetParamReadingDTO.getInitialValue();
 				assetParamReading.setConsumption(consumption);
