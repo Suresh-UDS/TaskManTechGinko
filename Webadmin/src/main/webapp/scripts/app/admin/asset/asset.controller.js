@@ -54,6 +54,7 @@ angular.module('timeSheetApp')
         $scope.searchSite ={};
         $scope.searchProject ={};
         $scope.searchAssetGroup ={};
+        $scope.searchAcquiredDateSer =null;
 
         //scope.searchAcquiredDate = $filter('date')(new Date(), 'dd/MM/yyyy'); 
         $scope.searchAcquiredDate = "";
@@ -489,22 +490,27 @@ angular.module('timeSheetApp')
             }
 
             $scope.searchCriteria.currPage = currPageVal;
-            $scope.searchCriteria.findAll = false;
 
             console.log('Selected Asset' + $scope.searchAssetName);
-
+            
             if(!$scope.searchAcquiredDate && jQuery.isEmptyObject($scope.searchProject) == true
              && jQuery.isEmptyObject($scope.searchSite) == true && 
-                jQuery.isEmptyObject($scope.searchAssetGroup) == true && !$scope.searchAssetName && !$scope.searchAssetCode 
+                jQuery.isEmptyObject($scope.searchAssetGroup) == true &&
+                 !$scope.searchAssetName && !$scope.searchAssetCode 
                 &&  jQuery.isEmptyObject($scope.searchAssetType) == true) {
             
                     $scope.searchCriteria.findAll = true;
 
-            }else{
-               
+            }
             
-                if($scope.searchAcquiredDateSer) {
+                if($scope.searchAcquiredDate !="") {
+                    if($scope.searchAcquiredDate != undefined){
                     $scope.searchCriteria.acquiredDate = $scope.searchAcquiredDateSer;
+                    $scope.searchCriteria.findAll = false;
+                   }else{
+                    $scope.searchCriteria.acquiredDate = "";
+                    $scope.searchCriteria.findAll = true;
+                   }
                 }else{
                     //$scope.searchCriteria.acquiredDate = new Date();
                     $scope.searchCriteria.acquiredDate = "";
@@ -512,13 +518,25 @@ angular.module('timeSheetApp')
 
 
                 if(jQuery.isEmptyObject($scope.searchProject) == false) {
+                   if($scope.searchProject.id != undefined){
                     $scope.searchCriteria.projectId = $scope.searchProject.id;
+                    $scope.searchCriteria.findAll = false;
+                   }else{
+                    $scope.searchCriteria.projectId = 0;
+                    $scope.searchCriteria.findAll = true;
+                   }
+                   
                 }else{
                      $scope.searchCriteria.projectId =0;
                 }
                 if(jQuery.isEmptyObject($scope.searchSite) == false) {
-
+                   if($scope.searchSite.id != undefined){
                     $scope.searchCriteria.siteId = $scope.searchSite.id;
+                    $scope.searchCriteria.findAll = false;
+                    }else{
+                    $scope.searchCriteria.siteId = 0;
+                    $scope.searchCriteria.findAll = true;
+                   }
 
                 }else{
                      $scope.searchCriteria.siteId =0;
@@ -526,28 +544,32 @@ angular.module('timeSheetApp')
                 if(jQuery.isEmptyObject($scope.searchAssetType) == false) {
 
                     $scope.searchCriteria.assetTypeName = $scope.searchAssetType.name;
+                    $scope.searchCriteria.findAll = false;
 
                 }else{
                      $scope.searchCriteria.assetTypeName ="";
                 }
                 if(jQuery.isEmptyObject($scope.searchAssetGroup) == false) {
-
-                    $scope.searchCriteria.assetGroupName = $scope.searchAssetGroup.name;
+                 
+                    $scope.searchCriteria.assetGroupName = $scope.searchAssetGroup.assetgroup;
+                    $scope.searchCriteria.findAll = false;
 
                 }else{
                      $scope.searchCriteria.assetGroupName ="";
                 }
 
-                if($scope.searchAssetName) {
+                if($scope.searchAssetName != null) {
 
                     $scope.searchCriteria.assetTitle = $scope.searchAssetName;
+                    $scope.searchCriteria.findAll = false;
 
                 }else{
                      $scope.searchCriteria.assetTitle ="";
                 }
-                if($scope.searchAssetCode) {
+                if($scope.searchAssetCode != null) {
 
                     $scope.searchCriteria.assetCode = $scope.searchAssetCode;
+                    $scope.searchCriteria.findAll = false;
 
                 }else{
                      $scope.searchCriteria.assetCode ="";
@@ -556,7 +578,7 @@ angular.module('timeSheetApp')
                 
 
 
-            }
+            
 
             //----
             if($scope.pageSort){
