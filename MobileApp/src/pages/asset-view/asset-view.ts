@@ -326,8 +326,8 @@ export class AssetView {
         if(categories == 'jobs')
         {
             var jobSearchCriteria={
-                checkInDateFrom:fromDate.toISOString(),
-                CheckInDateTo:toDate.toISOString(),
+                checkInDateTimeFrom:fromDate.toISOString(),
+                checkInDateTimeTo:toDate.toISOString(),
                 assetId:this.assetDetails.id
             };
 
