@@ -52,7 +52,7 @@ export class AssetView {
     {
         // let dateModal=this.modalCtrl.create(DateModal)
         // dateModal.present()
-        this.navCtrl.push(CalenderPage);
+        this.navCtrl.push(CalenderPage,{assetDetails:this.assetDetails});
     }
 
   ionViewDidLoad() {
