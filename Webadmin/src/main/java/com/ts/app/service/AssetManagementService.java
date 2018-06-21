@@ -1269,7 +1269,7 @@ public class AssetManagementService extends AbstractService {
 							
 							if(assetParamReadingDTO.getId() > 0 && assetParamReadingDTO.isConsumptionMonitoringRequired()) { 
 								
-								String type = "consumption";
+								String type = "current consumption";
 									
 								double currentThreshold = assetParamReadingDTO.getConsumption() - prevReading.getConsumption();
 								
@@ -1329,7 +1329,7 @@ public class AssetManagementService extends AbstractService {
 							
 						case CURRENT_READING_GREATER_THAN_THRESHOLD_VALUE : 
 							
-							String type = "reading";
+							String type = "current reading";
 						
 							double currentThreshold = prevReading.getValue() - assetParamReadingDTO.getValue();
 							
