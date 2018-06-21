@@ -75,6 +75,12 @@ public class AssetParameterReading extends AbstractAuditingEntity implements Ser
     
     @Column(nullable = true)
     private int runMinutues;
+    
+    @Column(nullable = true)
+    private int min;
+    
+    @Column(nullable = true)
+    private int max;
 
 	public long getId() {
 		return id;
@@ -194,6 +200,22 @@ public class AssetParameterReading extends AbstractAuditingEntity implements Ser
 
 	public void setRunMinutues(int runMinutues) {
 		this.runMinutues = runMinutues;
+	}
+
+	public int getMin() {
+		return min;
+	}
+
+	public void setMin(int min) {
+		this.min = min;
+	}
+
+	public int getMax() {
+		return max;
+	}
+
+	public void setMax(int max) {
+		this.max = max;
 	}
 
 	
