@@ -592,13 +592,13 @@ public class AssetManagementService extends AbstractService {
 		if(CollectionUtils.isNotEmpty(assets)) {
 			List<AssetPPMScheduleEventDTO> eventDTOs = new ArrayList<AssetPPMScheduleEventDTO>();
 			Calendar startCal = Calendar.getInstance();
-			startCal.set(Calendar.DAY_OF_YEAR, 1);
-			startCal.set(Calendar.MONTH, 1);
+			startCal.set(Calendar.MONTH, 0);
+			startCal.set(Calendar.DAY_OF_MONTH, 1);
 			startCal.set(Calendar.HOUR_OF_DAY, 0);
 			startCal.set(Calendar.MINUTE, 0);
 			Calendar endCal = Calendar.getInstance();
-			endCal.set(Calendar.DAY_OF_YEAR, 31);
-			endCal.set(Calendar.MONTH, 12);
+			endCal.set(Calendar.MONTH, 11);
+			endCal.set(Calendar.DAY_OF_YEAR, endCal.getActualMaximum(Calendar.DAY_OF_YEAR));
 			endCal.set(Calendar.HOUR_OF_DAY, 23);
 			endCal.set(Calendar.MINUTE, 59);
 			for(Asset asset : assets) {
@@ -650,8 +650,10 @@ public class AssetManagementService extends AbstractService {
 					AssetPPMScheduleEventDTO assetPPMScheduleEvent = new AssetPPMScheduleEventDTO();
 					assetPPMScheduleEvent.setId(ppmSchedule.getId());
 					assetPPMScheduleEvent.setTitle(ppmSchedule.getTitle());
-					assetPPMScheduleEvent.setAssetTitle(ppmSchedule.getAsset().getTitle());
-					assetPPMScheduleEvent.setAssetCode(ppmSchedule.getAsset().getCode());
+					Asset asset = ppmSchedule.getAsset();
+					assetPPMScheduleEvent.setAssetId(asset.getId());
+					assetPPMScheduleEvent.setAssetTitle(asset.getTitle());
+					assetPPMScheduleEvent.setAssetCode(asset.getCode());
 					assetPPMScheduleEvent.setFrequency(ppmSchedule.getFrequency());
 					assetPPMScheduleEvent.setFrequencyDuration(ppmSchedule.getFrequencyDuration());
 					assetPPMScheduleEvent.setFrequencyPrefix(ppmSchedule.getFrequencyPrefix());
