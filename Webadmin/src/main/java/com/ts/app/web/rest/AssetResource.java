@@ -579,4 +579,18 @@ public class AssetResource {
 		response.setHeader("Content-Disposition", "attachment; filename=\"" + fileId + ".xlsx\"");
 		return content;
 	}
+	
+    @RequestMapping(value = "/assets/52week/export", method = RequestMethod.POST)
+	public ExportResponse exportAsset52WeekSchedule(@RequestBody SearchCriteria searchCriteria) {
+		// log.debug("JOB EXPORT STARTS HERE **********");
+		ExportResponse resp = new ExportResponse();
+		if (searchCriteria != null) {
+			searchCriteria.setUserId(SecurityUtils.getCurrentUserId());
+			ExportResult result = assetService.generate52WeekSchedule(searchCriteria.getSiteId(), searchCriteria.getAssetId());
+			resp.addResult(result);
+
+			// log.debug("RESPONSE FOR OBJECT resp *************"+resp);
+		}
+		return resp;
+	}
 }
