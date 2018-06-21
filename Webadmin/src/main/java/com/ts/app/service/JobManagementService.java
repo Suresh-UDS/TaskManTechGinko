@@ -680,6 +680,8 @@ public class JobManagementService extends AbstractService {
 			ticket.setStatus(TicketStatus.ASSIGNED.toValue());
 			ticketRepository.save(ticket);
 		}
+	
+		
 		job = jobRepository.saveAndFlush(job);
 
 		if(jobDTO.getTicketId() > 0) {
@@ -687,6 +689,8 @@ public class JobManagementService extends AbstractService {
 			ticket.setJob(job);
 			ticketRepository.saveAndFlush(ticket);
         }
+		
+				
 
 
 		//}
@@ -777,7 +781,7 @@ public class JobManagementService extends AbstractService {
 		job.setMaintenanceType(assetPpmScheduleDTO.getMaintenanceType());
 		job.setSchedule(Frequency.valueOf(assetPpmScheduleDTO.getFrequency()).getValue());
 		job.setActive(AbstractAuditingEntity.ACTIVE_YES);
-		job = jobRepository.saveAndFlush(job);
+		job = jobRepository.save(job);
 
 		log.debug(">>> After Save Job: <<<"+job.getId());
 
@@ -895,8 +899,8 @@ public class JobManagementService extends AbstractService {
 		job.setBlock(jobDTO.getBlock());
 		job.setFloor(jobDTO.getFloor());
 		job.setZone(jobDTO.getZone());
+		//maintenance type PPM or AMC
 		job.setMaintenanceType(jobDTO.getMaintenanceType());
-		
 		//add the job checklist items
 		if(CollectionUtils.isNotEmpty(job.getChecklistItems())) {
 			job.getChecklistItems().clear();
@@ -1483,6 +1487,7 @@ public class JobManagementService extends AbstractService {
 			data.append("&plannedHours="+assetAMCScheduleDTO.getFrequencyDuration());
 			//data.append("&location="+assetPpmScheduleDTO.getLocationId());
 			data.append("&frequency="+assetAMCScheduleDTO.getFrequency());
+			data.append("&duration="+assetAMCScheduleDTO.getFrequencyDuration());			
 			schConfDto.setData(data.toString());
 			schConfDto.setSchedule(Frequency.valueOf(assetAMCScheduleDTO.getFrequency()).getValue());
 			schConfDto.setStartDate(assetAMCScheduleDTO.getStartDate());
