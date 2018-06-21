@@ -646,7 +646,7 @@ public class AssetManagementService extends AbstractService {
 				schStartCal.setTime(schStartDate);
 				Calendar schEndCal = Calendar.getInstance();
 				schEndCal.setTime(schEndDate);
-				while((schStartCal.before(currCal) || schStartCal.equals(currCal)) && !currCal.after(lastDate)) { //if ppm schedule starts before current date and not after the last date of the month.
+				while((currCal.before(schStartCal) || schStartCal.equals(currCal)) && !currCal.after(lastDate)) { //if ppm schedule starts before current date and not after the last date of the month.
 					AssetPPMScheduleEventDTO assetPPMScheduleEvent = new AssetPPMScheduleEventDTO();
 					assetPPMScheduleEvent.setId(ppmSchedule.getId());
 					assetPPMScheduleEvent.setTitle(ppmSchedule.getTitle());

@@ -923,6 +923,28 @@ angular.module('timeSheetApp')
             }
         }  
 
+        $scope.load52WeekSchedule = function() {
+        		console.log('site selection - ' + JSON.stringify($scope.searchSite));
+        		if($scope.searchSite && $scope.searchSite.id) {
+            		$scope.searchCriteria.siteId = $scope.searchSite.id;
+            		AssetComponent.exportAsset52WeekSchedule($scope.searchCriteria).then(function(data){
+            			console.log("response for 52week schedule - "+ JSON.stringify(data));
+            			if(data) {
+            				if(data.results) {
+            					$scope.scheduleWebLink = data.results[0].webLink;
+            					$location.path('/schedule-list');            					
+            				}else {
+            					$scope.showNotifications('top','center','error','Unable to get 52 week schedule for the site');
+            				}
+            			}else {
+            				$scope.showNotifications('top','center','error','Unable to get 52 week schedule for the site');
+            			}
+            		});
+        		}else {
+        			$scope.showNotifications('top','center','error','Please select a site to view 52 week schedule');
+        		}
+        }
+        
 
         $scope.refreshPage = function(){
                $scope.loadAssets();

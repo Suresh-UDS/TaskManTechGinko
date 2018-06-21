@@ -69,7 +69,8 @@ public class GoogleSheetsUtil {
 		return new AuthorizationCodeInstalledApp(flow, new LocalServerReceiver()).authorize("user");
 	}
 
-	public static void upload(String name, String fileName)  {
+	public static String upload(String name, String fileName)  {
+		String webFileLink = null;
         // Build a new authorized API client service.
 		try {
 	        final NetHttpTransport HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport();
@@ -100,7 +101,9 @@ public class GoogleSheetsUtil {
 		        
 		        service.getGoogleClientRequestInitializer().initialize(request);
 		        
-		        request.execute();
+		        file = request.execute();
+		        
+		        webFileLink = file.getWebViewLink();
 		        
 		        // Print the names and IDs for up to 10 files.
 		        FileList result = service.files().list()
@@ -109,18 +112,19 @@ public class GoogleSheetsUtil {
 		                .execute();
 		        List<File> files = result.getFiles();
 		        if (files == null || files.isEmpty()) {
-		            System.out.println("No files found.");
+		            log.debug("No files found.");
 		        } else {
-		            System.out.println("Files:");
+		        		log.debug("Files:");
 		            for (File fileObj : files) {
-		                System.out.printf("%s (%s)\n", fileObj.getName(), fileObj.getId());
+		            		log.debug("%s (%s)\n", fileObj.getName(), fileObj.getId());
 		            }
 		        }
 	        }catch(Exception e) {
-	        		
+	        		log.error("Error while creating file in google drive",e);
 	        }
 		}catch(Exception e ) {
-			
+			log.error("Error while uploading file to google drive",e);
 		}
+		return webFileLink;
 	}
 }

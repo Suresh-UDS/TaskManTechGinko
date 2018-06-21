@@ -309,6 +309,11 @@ angular.module('timeSheetApp')
 	            	return $http.get('api/assets/amc/import/'+fileName+"/status").then(function (response) {
 	            		return response.data;
 	            	});
-	        } 	        
+	        },
+	        exportAsset52WeekSchedule: function(searchCriteria) {
+	            	return $http.post('api/assets/52week/export', searchCriteria).then(function (response) {
+	            		return response.data;
+	            	});
+	        } 	 	        
         };
     });
