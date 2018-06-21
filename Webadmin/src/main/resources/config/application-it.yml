@@ -86,6 +86,12 @@ import:
         path:
             new: /opt/imports/new
             completed: /opt/imports/completed
+asset:
+   file:
+       path: /opt/asset/uploads/site      
+   weekly:
+       template:
+           path: /opt/template/Asset_52Week_Report_Format.xlsx
 max:
     user: 10
     userGroup: 2
