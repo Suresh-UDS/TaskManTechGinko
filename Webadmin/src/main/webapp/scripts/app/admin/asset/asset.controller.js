@@ -54,6 +54,8 @@ angular.module('timeSheetApp')
         $scope.searchSite ={};
         $scope.searchProject ={};
         $scope.searchAssetGroup ={};
+        $scope.searchAcquiredDateSer =null;
+        $scope.ppmSearchCriteria = {};
 
         //scope.searchAcquiredDate = $filter('date')(new Date(), 'dd/MM/yyyy'); 
         $scope.searchAcquiredDate = "";
@@ -489,64 +491,86 @@ angular.module('timeSheetApp')
             }
 
             $scope.searchCriteria.currPage = currPageVal;
-            $scope.searchCriteria.findAll = false;
 
             console.log('Selected Asset' + $scope.searchAssetName);
-
-            if(!$scope.searchAcquiredDate && !$scope.searchProject.id && !$scope.searchSite.id && 
-                !$scope.searchAssetGroup.id && !$scope.searchAssetName && !$scope.searchAssetCode && !$scope.searchAssetType.id) {
+            
+            if(!$scope.searchAcquiredDate && jQuery.isEmptyObject($scope.searchProject) == true
+             && jQuery.isEmptyObject($scope.searchSite) == true && 
+                jQuery.isEmptyObject($scope.searchAssetGroup) == true &&
+                 !$scope.searchAssetName && !$scope.searchAssetCode 
+                &&  jQuery.isEmptyObject($scope.searchAssetType) == true) {
             
                     $scope.searchCriteria.findAll = true;
 
-            }else{
-               
-               
-
-                if($scope.searchAcquiredDateSer) {
+            }
+            
+                if($scope.searchAcquiredDate !="") {
+                    if($scope.searchAcquiredDate != undefined){
                     $scope.searchCriteria.acquiredDate = $scope.searchAcquiredDateSer;
+                    $scope.searchCriteria.findAll = false;
+                   }else{
+                    $scope.searchCriteria.acquiredDate = "";
+                    $scope.searchCriteria.findAll = true;
+                   }
                 }else{
                     //$scope.searchCriteria.acquiredDate = new Date();
                     $scope.searchCriteria.acquiredDate = "";
                 }
 
 
-                if($scope.searchProject.id) {
+                if(jQuery.isEmptyObject($scope.searchProject) == false) {
+                   if($scope.searchProject.id != undefined){
                     $scope.searchCriteria.projectId = $scope.searchProject.id;
+                    $scope.searchCriteria.findAll = false;
+                   }else{
+                    $scope.searchCriteria.projectId = 0;
+                    $scope.searchCriteria.findAll = true;
+                   }
+                   
                 }else{
                      $scope.searchCriteria.projectId =0;
                 }
-                if($scope.searchSite.id) {
-
+                if(jQuery.isEmptyObject($scope.searchSite) == false) {
+                   if($scope.searchSite.id != undefined){
                     $scope.searchCriteria.siteId = $scope.searchSite.id;
+                    $scope.searchCriteria.findAll = false;
+                    }else{
+                    $scope.searchCriteria.siteId = 0;
+                    $scope.searchCriteria.findAll = true;
+                   }
 
                 }else{
                      $scope.searchCriteria.siteId =0;
                 }
-                if($scope.searchAssetType.id) {
+                if(jQuery.isEmptyObject($scope.searchAssetType) == false) {
 
                     $scope.searchCriteria.assetTypeName = $scope.searchAssetType.name;
+                    $scope.searchCriteria.findAll = false;
 
                 }else{
                      $scope.searchCriteria.assetTypeName ="";
                 }
-                if($scope.searchAssetGroup.id) {
-
-                    $scope.searchCriteria.assetGroupName = $scope.searchAssetGroup.name;
+                if(jQuery.isEmptyObject($scope.searchAssetGroup) == false) {
+                 
+                    $scope.searchCriteria.assetGroupName = $scope.searchAssetGroup.assetgroup;
+                    $scope.searchCriteria.findAll = false;
 
                 }else{
                      $scope.searchCriteria.assetGroupName ="";
                 }
 
-                if($scope.searchAssetName) {
+                if($scope.searchAssetName != null) {
 
                     $scope.searchCriteria.assetTitle = $scope.searchAssetName;
+                    $scope.searchCriteria.findAll = false;
 
                 }else{
                      $scope.searchCriteria.assetTitle ="";
                 }
-                if($scope.searchAssetCode) {
+                if($scope.searchAssetCode != null) {
 
                     $scope.searchCriteria.assetCode = $scope.searchAssetCode;
+                    $scope.searchCriteria.findAll = false;
 
                 }else{
                      $scope.searchCriteria.assetCode ="";
@@ -555,7 +579,7 @@ angular.module('timeSheetApp')
                 
 
 
-            }
+            
 
             //----
             if($scope.pageSort){
@@ -1741,8 +1765,8 @@ angular.module('timeSheetApp')
         }
 
         $scope.loadPPMJobs = function() { 
-        	$scope.searchCriteria.maintenanceType = "PPM";
-        	$scope.searchCriteria.assetId = $stateParams.id;
+        	$scope.ppmSearchCriteria.maintenanceType = "PPM";
+        	$scope.ppmSearchCriteria.assetId = $stateParams.id;
         	console.log($scope.searchCriteria);
         	JobComponent.search($scope.searchCriteria).then(function(data){ 
         		console.log(data);

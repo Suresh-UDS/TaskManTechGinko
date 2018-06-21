@@ -444,6 +444,7 @@ public class AssetManagementService extends AbstractService {
 		String qrCodeBase64 = null;
 		if (asset != null) {
 			String code = String.valueOf(asset.getCode());
+				code = asset.getSite().getId()+"_"+code;
 			qrCodeImage = QRCodeUtil.generateQRCode(code);
 			String qrCodePath = env.getProperty("qrcode.file.path");
 			String imageFileName = null;
@@ -751,8 +752,12 @@ public class AssetManagementService extends AbstractService {
 					page = assetRepository.findAssetByTitleAndType(searchCriteria.getAssetTitle(), searchCriteria.getAssetTypeName(), pageRequest);
 				} else if (!StringUtils.isEmpty(searchCriteria.getAssetTitle()) && !StringUtils.isEmpty(searchCriteria.getAssetGroupName())) {
 					page = assetRepository.findAssetByTitleAndGroup(searchCriteria.getAssetTitle(), searchCriteria.getAssetGroupName(), pageRequest);
-				} else if (!StringUtils.isEmpty(searchCriteria.getAssetTitle()) && !StringUtils.isEmpty(searchCriteria.getSiteId())) {
+				} else if (!StringUtils.isEmpty(searchCriteria.getAssetTitle()) && searchCriteria.getSiteId() > 0) {
 					page = assetRepository.findAssetByTitleAndSiteId(searchCriteria.getAssetTitle(), searchCriteria.getSiteId(), pageRequest);
+				} else if (!StringUtils.isEmpty(searchCriteria.getAssetTitle()) && searchCriteria.getProjectId() > 0) {
+					page = assetRepository.findAssetByTitleAndProjectId(searchCriteria.getAssetTitle(), searchCriteria.getProjectId(), pageRequest);
+				} else if (!StringUtils.isEmpty(searchCriteria.getAssetTitle()) && !StringUtils.isEmpty(searchCriteria.getAcquiredDate())) {
+					page = assetRepository.findAssetByTitleAndAcquiredDate(searchCriteria.getAssetTitle(), DateUtil.convertToSQLDate(searchCriteria.getAcquiredDate()), pageRequest);
 				} else if (!StringUtils.isEmpty(searchCriteria.getAssetCode())) {
 					page = assetRepository.findByAssetCode(searchCriteria.getAssetCode(), pageRequest);
 				} else if (!StringUtils.isEmpty(searchCriteria.getAssetTitle())) {
@@ -1148,7 +1153,8 @@ public class AssetManagementService extends AbstractService {
 		if(assetParamReadingDTO.isConsumptionMonitoringRequired()) { 
 			if(assetParamReadingDTO.getFinalValue() > 0) {
 				assetParameterReading.setFinalReadingTime(new java.sql.Timestamp(now.getTimeInMillis()));
-			} else if(assetParamReadingDTO.getFinalValue() > 0) { 
+			} 
+			if(assetParamReadingDTO.getInitialValue() > 0) { 
 				assetParameterReading.setInitialReadingTime(new java.sql.Timestamp(now.getTimeInMillis()));
 			}
 		} else {
@@ -1188,7 +1194,10 @@ public class AssetManagementService extends AbstractService {
 
 	public AssetParameterReadingDTO getLatestParamReading(long assetId, long assetParamId) {
 		List<AssetParameterReading> assetParamReadings = assetRepository.findAssetReadingById(assetId, assetParamId);
-		AssetParameterReading assetLatestParamReading = assetParamReadings.get(0);
+		AssetParameterReading assetLatestParamReading = null;
+		if(CollectionUtils.isNotEmpty(assetParamReadings)) { 
+			assetLatestParamReading = assetParamReadings.get(0);
+		}
 		return mapperUtil.toModel(assetLatestParamReading, AssetParameterReadingDTO.class);
 	}
 	
@@ -1216,10 +1225,14 @@ public class AssetManagementService extends AbstractService {
 				AssetParameterConfig assetParameterConfig = assetParamConfigRepository.findOne(assetParamReadingDTO.getAssetParameterConfigId());
 				assetParamReading.setAssetParameterConfig(assetParameterConfig);
 			}
+			
 			if(assetParamReadingDTO.getJobId() > 0){ 
 				Job job = jobRepository.findOne(assetParamReadingDTO.getJobId());
 				assetParamReading.setJob(job);
+			} else {
+				assetParamReading.setJob(null);
 			}
+			
 			if(assetParamReadingDTO.getInitialValue() > 0 && assetParamReadingDTO.getFinalValue() > 0) {
 				double consumption = assetParamReadingDTO.getFinalValue() - assetParamReadingDTO.getInitialValue();
 				assetParamReading.setConsumption(consumption);
@@ -1282,58 +1295,124 @@ public class AssetManagementService extends AbstractService {
 								}
 							}
 							
+						case CURRENT_CONSUMPTION_GREATER_THAN_THRESHOLD_VALUE :
+							
+							if(assetParamReadingDTO.getId() > 0 && assetParamReadingDTO.isConsumptionMonitoringRequired()) { 
+								
+								String type = "consumption";
+								
+								if(assetParamReadingDTO.getConsumption() > 0 &&  prevReading.getConsumption() > 0) {
+									
+									double currentThreshold = assetParamReadingDTO.getConsumption() - prevReading.getConsumption();
+									
+									double threshold = assetParamConfig.getThreshold();
+									
+									if(currentThreshold > threshold) {
+									
+										Setting setting = settingRepository.findSettingByKey(EMAIL_NOTIFICATION_READING);
+										
+										if(setting.getSettingValue() == "true") { 
+											Setting settingEntity = settingRepository.findSettingByKey(EMAIL_NOTIFICATION_READING_EMAILS);
+											if(settingEntity.getSettingValue().length() > 0) { 
+												List<String> emailLists = CommonUtil.convertToList(settingEntity.getSettingValue(), ",");
+												for(String email : emailLists) { 
+													mailService.sendReadingAlert(email, siteName, assetCode, assetName, type, date);
+												}
+											}
+										}
+									
+									}
+								}
+							}
+							
+							
 						case CURRENT_READING_GREATER_THAN_PREVIOUS_READING :
 							
 							if(assetParamReadingDTO.getId() > 0 && !assetParamReadingDTO.isConsumptionMonitoringRequired()) { 
 								
 								String type = "reading";
 								
-								if(assetParamReadingDTO.getValue() > 0 && prevReading.getValue() > 0) { 
+								if(assetParamReadingDTO.getValue() > prevReading.getValue()) { 
+																		
+									Setting setting = settingRepository.findSettingByKey(EMAIL_NOTIFICATION_READING);
 									
-									double currentThreshold = prevReading.getValue() - assetParamReadingDTO.getValue();
-									
-									double threshold = assetParamConfig.getThreshold();
-									
-									if(currentThreshold > threshold) { 
+									if(setting.getSettingValue() == "true") { 
 										
-										Setting setting = settingRepository.findSettingByKey(EMAIL_NOTIFICATION_READING);
+										Setting settingEntity = settingRepository.findSettingByKey(EMAIL_NOTIFICATION_READING_EMAILS);
 										
-										if(setting.getSettingValue() == "true") { 
+										if(settingEntity.getSettingValue().length() > 0) {
 											
-											Setting settingEntity = settingRepository.findSettingByKey(EMAIL_NOTIFICATION_READING_EMAILS);
-											
-											if(settingEntity.getSettingValue().length() > 0) {
-												
-												List<String> emailLists = CommonUtil.convertToList(settingEntity.getSettingValue(), ",");
-												for(String email : emailLists) { 
-													mailService.sendReadingAlert(email, siteName, assetCode, assetName, type, date);
-												}
-												
-											} else {
-												
-												log.info("There is no email ids registered");
+											List<String> emailLists = CommonUtil.convertToList(settingEntity.getSettingValue(), ",");
+											for(String email : emailLists) { 
+												mailService.sendReadingAlert(email, siteName, assetCode, assetName, type, date);
 											}
+											
+										} else {
+											
+											log.info("There is no email ids registered");
+										}
+									}
+										
+								}
+							}
+							
+						case CURRENT_READING_GREATER_THAN_THRESHOLD_VALUE : 
+							
+							String type = "reading";
+						
+							double currentThreshold = prevReading.getValue() - assetParamReadingDTO.getValue();
+							
+							double threshold = assetParamConfig.getThreshold();
+							
+							if(currentThreshold > threshold) { 
+								
+								Setting setting = settingRepository.findSettingByKey(EMAIL_NOTIFICATION_READING);
+								
+								if(setting.getSettingValue() == "true") { 
+									
+									Setting settingEntity = settingRepository.findSettingByKey(EMAIL_NOTIFICATION_READING_EMAILS);
+									
+									if(settingEntity.getSettingValue().length() > 0) {
+										
+										List<String> emailLists = CommonUtil.convertToList(settingEntity.getSettingValue(), ",");
+										for(String email : emailLists) { 
+											mailService.sendReadingAlert(email, siteName, assetCode, assetName, type, date);
 										}
 										
+									} else {
+										
+										log.info("There is no email ids registered");
 									}
-									
 								}
+								
 							}
 							
 						case CURRENT_RUNHOUR_GREATER_THAN_PREVIOUS_RUNHOUR : 
 							
-//							if(assetParamReadingDTO.getId() > 0) { 
-//																	
-//								long milliseconds = assetParamReadingDTO.getFinalReadingTime().getTime() - prevReading.getFinalReadingTime().getTime();
-//								int seconds = (int) milliseconds / 1000;
-//								// calculate hours minutes and seconds
-//							    int hours = seconds / 3600;
-//							    int minutes = (seconds % 3600) / 60;
-//							    
-//							    assetParamReading.setRunHours(hours);
-//							    assetParamReading.setRunMinutues(minutes);
-//							    
-//							}
+							if(assetParamReadingDTO.getId() > 0 && assetParamReadingDTO.isConsumptionMonitoringRequired()) { 
+																	
+								long milliseconds = assetParamReadingDTO.getFinalReadingTime().getTime() - assetParamReadingDTO.getInitialReadingTime().getTime();
+								int seconds = (int) milliseconds / 1000;
+								
+								// calculate hours minutes and seconds
+							    int hours = seconds / 3600;
+							    int minutes = (seconds % 3600) / 60;
+							    
+							    assetParamReading.setRunHours(hours);
+							    assetParamReading.setRunMinutues(minutes);
+							    
+							} else if(assetParamReadingDTO.getId() > 0 && !assetParamReadingDTO.isConsumptionMonitoringRequired()) { 
+								
+								long milliseconds = assetParamReadingDTO.getInitialReadingTime().getTime() - prevReading.getInitialReadingTime().getTime();
+								int seconds = (int) milliseconds / 1000;
+								
+								// calculate hours minutes and seconds
+							    int hours = seconds / 3600;
+							    int minutes = (seconds % 3600) / 60;
+							    
+							    assetParamReading.setRunHours(hours);
+							    assetParamReading.setRunMinutues(minutes);
+							}
 							
 							
 						default:
