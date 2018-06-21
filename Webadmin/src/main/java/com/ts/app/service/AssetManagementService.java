@@ -1504,5 +1504,10 @@ public class AssetManagementService extends AbstractService {
 			return mapperUtil.toModel(assetParamReading, AssetParameterReadingDTO.class);
 	}
 	
+	public AssetReadingRule[] getAllRules() { 
+		AssetReadingRule[] types = AssetReadingRule.values();
+		return types;
+	}
+	
 
 }

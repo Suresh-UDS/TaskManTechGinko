@@ -39,6 +39,8 @@ public class AssetParameterReadingRule extends AbstractAuditingEntity implements
 	private String rule;
 	
 	private boolean alertRequired;
+	
+	private boolean validationRequired;
 
 	public long getId() {
 		return id;
@@ -78,6 +80,14 @@ public class AssetParameterReadingRule extends AbstractAuditingEntity implements
 
 	public void setAlertRequired(boolean alertRequired) {
 		this.alertRequired = alertRequired;
+	}
+
+	public boolean isValidationRequired() {
+		return validationRequired;
+	}
+
+	public void setValidationRequired(boolean validationRequired) {
+		this.validationRequired = validationRequired;
 	}
 	
 	
