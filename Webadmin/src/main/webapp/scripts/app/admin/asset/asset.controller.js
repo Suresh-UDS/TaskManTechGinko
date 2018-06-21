@@ -189,7 +189,7 @@ angular.module('timeSheetApp')
                 }
     	    	$scope.assetPPM.maintenanceType = 'PPM';
     	    	
-                console.log("To be created PPM",$scope.assetPPM);
+                console.log("To be create PPM",$scope.assetPPM);
 
             	AssetComponent.createPPM($scope.assetPPM).then(function(response) {
 
@@ -200,6 +200,14 @@ angular.module('timeSheetApp')
                     $scope.showNotifications('top','center','success','PPM schedule Added');
 
                     $scope.assetPPM = {};
+                    $scope.selectedChecklist = {};
+                    $scope.selectedEmployee = {};
+                    $scope.selectedFrequency = {};
+                    $scope.selectedTimeInterval = {};
+                    $scope.selectedFrequnceyOccurrence = {};
+
+                    $("#dateFilterPpmFrom").val("");
+                    $("#dateFilterPpmTo").val("");
        
                     $scope.loadPPMSchedule();
 
@@ -979,6 +987,7 @@ angular.module('timeSheetApp')
             $scope.searchSite ={};
             $scope.searchProject ={};
             $scope.searchAssetGroup ={};
+
             $scope.pages = {
                 currPage: 1,
                 totalPages: 0
@@ -1298,6 +1307,10 @@ angular.module('timeSheetApp')
                     $scope.showNotifications('top','center','success','Asset Parameter Saved Successfully');
                     $scope.assetConfig();
                     $scope.parameterConfig = {};
+                    $scope.consumptionMonitoringRequired = "";
+                    $scope.selectedParameterUOM = {};
+                    $scope.selectedParameter = {};
+                       
                     //$scope.loadAllParameters();
                 }).catch(function (response) {
                     $scope.success = null;
@@ -1520,6 +1533,7 @@ angular.module('timeSheetApp')
 	    }
 	    
 	    $scope.frequencyDurations= [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+       
 	    
 	    $('input#dateFilterAmcFrom').on('dp.change', function(e){
             $scope.amcSchedule.startDate = e.date._d;
@@ -1604,6 +1618,16 @@ angular.module('timeSheetApp')
                         $scope.loadAmcSchedule();
                         $scope.showNotifications('top','center','success','AMC Schedule Saved Successfully');
                         $scope.amcSchedule = {};
+
+                        $scope.selectedChecklist = {};
+                        $scope.selectedEmployee = {};
+                        $scope.selectedFrequencyPrefix = {};
+                        $scope.selectedFreqDuration = {};
+                        $scope.selectedFrequency = {};
+
+                        $("#dateFilterAmcFrom").val("");
+                        $("#dateFilterAmcTo").val("");
+
 
     	    			
     	    		}
