@@ -13,7 +13,7 @@ public interface AssetReadingRuleRepository extends JpaRepository<AssetParameter
 	@Query("SELECT ar FROM AssetParameterReadingRule ar WHERE ar.active='Y' order by ar.createdDate")
 	List<AssetParameterReadingRule> findAll();
 	
-	@Query("SELECT a FROM AssetParameterReadingRule a WHERE a.asseParameterConfig.id= :assetConfigId and a.active='Y'")
+	@Query("SELECT a FROM AssetParameterReadingRule a WHERE a.assetParameterConfig.id= :assetConfigId and a.active='Y'")
 	List<AssetParameterReadingRule> findByAssetConfigId(@Param("assetConfigId") long assetConfigId);
 
 }

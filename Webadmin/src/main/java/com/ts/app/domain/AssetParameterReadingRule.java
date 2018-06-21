@@ -30,8 +30,8 @@ public class AssetParameterReadingRule extends AbstractAuditingEntity implements
 	private Asset asset;
 	
 	@ManyToOne(fetch = FetchType.LAZY, cascade={CascadeType.ALL})
-	@JoinColumn(name= "asseParameterConfigId", referencedColumnName = "id", nullable = true)
-	private AssetParameterConfig asseParameterConfig;
+	@JoinColumn(name= "assetParameterConfigId", referencedColumnName = "id", nullable = true)
+	private AssetParameterConfig assetParameterConfig;
 	
 	@NotNull
 	@Size(min = 1, max = 250)
@@ -56,12 +56,12 @@ public class AssetParameterReadingRule extends AbstractAuditingEntity implements
 		this.asset = asset;
 	}
 
-	public AssetParameterConfig getAsseParameterConfig() {
-		return asseParameterConfig;
+	public AssetParameterConfig getAssetParameterConfig() {
+		return assetParameterConfig;
 	}
 
-	public void setAsseParameterConfig(AssetParameterConfig asseParameterConfig) {
-		this.asseParameterConfig = asseParameterConfig;
+	public void setAssetParameterConfig(AssetParameterConfig assetParameterConfig) {
+		this.assetParameterConfig = assetParameterConfig;
 	}
 
 	public String getRule() {
