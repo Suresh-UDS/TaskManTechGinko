@@ -1790,6 +1790,7 @@ angular.module('timeSheetApp')
         }
         
         $scope.viewAssetReading = function(id) {
+            $scope.viewRead = id;
         	AssetComponent.findByReadingId(id).then(function(data){ 
         		console.log(data);
         		$scope.readingData = data;
