@@ -81,6 +81,10 @@ public class Ticket extends AbstractAuditingEntity implements Serializable {
     
     private String quotationId;
     
+    private boolean pendingAtClient;
+    
+    private boolean pendingAtuds;
+    
     public Long getId() {
         return id;
     }
@@ -247,6 +251,22 @@ public class Ticket extends AbstractAuditingEntity implements Serializable {
 
 	public void setQuotationId(String quotationId) {
 		this.quotationId = quotationId;
+	}
+
+	public boolean isPendingAtClient() {
+		return pendingAtClient;
+	}
+
+	public void setPendingAtClient(boolean pendingAtClient) {
+		this.pendingAtClient = pendingAtClient;
+	}
+
+	public boolean isPendingAtuds() {
+		return pendingAtuds;
+	}
+
+	public void setPendingAtuds(boolean pendingAtuds) {
+		this.pendingAtuds = pendingAtuds;
 	}
 
 	

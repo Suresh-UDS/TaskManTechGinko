@@ -1,13 +1,15 @@
 package com.ts.app.web.rest;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.Optional;
+import java.util.List;
 
 import javax.inject.Inject;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -20,6 +22,7 @@ import com.ts.app.security.SecurityUtils;
 import com.ts.app.service.ReportService;
 import com.ts.app.service.SchedulerService;
 import com.ts.app.web.rest.dto.ReportResult;
+
 
 /**
  * REST controller for report generation
@@ -47,6 +50,20 @@ public class ReportResource {
 	public ReportResult getAttendanceStatusByProject(@PathVariable Long projectId, @PathVariable("selectedDate") Date selectedDate) {
 		long userId = SecurityUtils.getCurrentUserId();
 		return reportService.getAttendanceStatsByProjectIdDateRange(userId, projectId, selectedDate, selectedDate);
+	}
+	
+	@RequestMapping(value = "/reports/ticket/site/{siteId}/fromDate/{fromDate}/toDate/{toDate}", method = RequestMethod.GET)
+	public ReportResult getTicketStatsBySite(@PathVariable Long siteId, @PathVariable("fromDate") @DateTimeFormat(pattern="dd-MM-yyyy") Date fromDate,@PathVariable("toDate") @DateTimeFormat(pattern="dd-MM-yyyy") Date toDate) {
+		long userId = SecurityUtils.getCurrentUserId();
+		List<Long> siteIds = new ArrayList<Long>();
+		siteIds.add(siteId);
+		return reportService.getTicketStatsDateRange(userId, siteIds, fromDate, toDate);
+	}
+	
+	@RequestMapping(value = "/reports/ticket/project/{projectId}/fromDate/{fromDate}/toDate/{toDate}", method = RequestMethod.GET)
+	public ReportResult getTicketStatsByProject(@PathVariable Long projectId, @PathVariable("fromDate") @DateTimeFormat(pattern="dd-MM-yyyy") Date fromDate,@PathVariable("toDate") @DateTimeFormat(pattern="dd-MM-yyyy") Date toDate) {
+		long userId = SecurityUtils.getCurrentUserId();
+		return reportService.getTicketStatsByProjectAndDateRange(userId, projectId, fromDate, toDate);
 	}
 	
 	@RequestMapping(value = "/reports/attendance/consolidated", method = RequestMethod.GET)

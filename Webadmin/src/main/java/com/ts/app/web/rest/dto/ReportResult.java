@@ -49,7 +49,17 @@ public class ReportResult {
 	Map<java.sql.Date,Long> completedCountMap;
 	
 	Map<java.sql.Date,Long> overdueCountMap;
-
+	
+    long totalNewTicketCount;
+    long totalClosedTicketCount;
+    long totalPendingTicketCount;
+    long totalPendingDueToClientTicketCount;
+    long totalPendingDueToCompanyTicketCount;	
+	
+    Map<String, Long> openTicketCounts;
+    
+    Map<String, Long> closedTicketCounts;
+    
 	public String getSiteName() {
 		return siteName;
 	}
@@ -225,6 +235,62 @@ public class ReportResult {
 
 	public void setProjectName(long projectName) {
 		this.projectName = projectName;
+	}
+
+	public long getTotalNewTicketCount() {
+		return totalNewTicketCount;
+	}
+
+	public void setTotalNewTicketCount(long totalNewTicketCount) {
+		this.totalNewTicketCount = totalNewTicketCount;
+	}
+
+	public long getTotalClosedTicketCount() {
+		return totalClosedTicketCount;
+	}
+
+	public void setTotalClosedTicketCount(long totalClosedTicketCount) {
+		this.totalClosedTicketCount = totalClosedTicketCount;
+	}
+
+	public long getTotalPendingTicketCount() {
+		return totalPendingTicketCount;
+	}
+
+	public void setTotalPendingTicketCount(long totalPendingTicketCount) {
+		this.totalPendingTicketCount = totalPendingTicketCount;
+	}
+
+	public long getTotalPendingDueToClientTicketCount() {
+		return totalPendingDueToClientTicketCount;
+	}
+
+	public void setTotalPendingDueToClientTicketCount(long totalPendingDueToClientTicketCount) {
+		this.totalPendingDueToClientTicketCount = totalPendingDueToClientTicketCount;
+	}
+
+	public long getTotalPendingDueToCompanyTicketCount() {
+		return totalPendingDueToCompanyTicketCount;
+	}
+
+	public void setTotalPendingDueToCompanyTicketCount(long totalPendingDueToCompanyTicketCount) {
+		this.totalPendingDueToCompanyTicketCount = totalPendingDueToCompanyTicketCount;
+	}
+
+	public Map<String, Long> getOpenTicketCounts() {
+		return openTicketCounts;
+	}
+
+	public void setOpenTicketCounts(Map<String, Long> openTicketCounts) {
+		this.openTicketCounts = openTicketCounts;
+	}
+
+	public Map<String, Long> getClosedTicketCounts() {
+		return closedTicketCounts;
+	}
+
+	public void setClosedTicketCounts(Map<String, Long> closedTicketCounts) {
+		this.closedTicketCounts = closedTicketCounts;
 	}
     
     
