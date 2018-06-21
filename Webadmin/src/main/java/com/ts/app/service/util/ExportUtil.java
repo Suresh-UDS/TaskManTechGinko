@@ -693,7 +693,7 @@ public class ExportUtil {
 			xssfWorkbook.write(fileOutputStream);
 			fileOutputStream.close();
 			//upload to google drive
-			GoogleSheetsUtil.upload(exportFileName,filePath);
+			String webFileLink = GoogleSheetsUtil.upload(exportFileName,filePath);
 			
 		} catch (IOException e) {
 			log.error("Error while flushing/closing  !!!");

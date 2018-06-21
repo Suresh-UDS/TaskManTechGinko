@@ -911,6 +911,10 @@
                                                                                             ng-show="form3.ppmTitle.$error.minlength">Schedule title
                                                                                              required to be at least 5 character.
                                                                                     </p>
+                                                                                    <p class="help-block" style="color:maroon"
+                                                                                       ng-show="form.ppmTitle.$error.pattern">
+                                                                                        Schedule title can only contain letters, digits and space.
+                                                                                    </p>
 
                                                                                 </div>
                                                                                 
@@ -948,17 +952,40 @@
                                                                     </div>
                                                                     <div class="col-md-2">
                                                                         <div class="form-group">
-                                                                            <label class="control-label">From Date</label>
+                                                                            <label class="control-label">From Date<span class="red-star">*</span></label>
                                                                             <span class="form-control-feedback calender-icon"><i class="material-icons">date_range</i></span>
-                                                                            <input type="text" class="form-control datepicker"  id="dateFilterPpmFrom"  placeholder="{{dateFilterPpmFrom | date:'dd-MMM-yyyy'}}"/>
+                                                                            <input  type="text" class="form-control datepicker"  id="dateFilterPpmFrom"  ng-model="ppmFrom" placeholder="{{dateFilterPpmFrom | date:'dd-MMM-yyyy'}}"  name="PpmFrom" required />
+                                                                            <div ng-show="form3.$submitted || form3.PpmFrom.$touched">
+                                                                                <div
+                                                                                    ng-show="form3.PpmFrom.$dirty || form3.PpmFrom.$invalid">
+                                                                                    <p class="help-block" style="color:maroon"
+                                                                                       ng-show="form3.PpmFrom.$error.required">
+                                                                                        From date is required.
+                                                                                    </p>
+                                                                                   
+                                                                                </div>
+                                                                                
+                                                                            </div>
 
                                                                         </div>
                                                                     </div>
                                                                     <div class="col-md-2">
                                                                         <div class="form-group">
-                                                                            <label class="control-label">To Date</label>
+                                                                            <label class="control-label">To Date<span class="red-star">*</span></label>
                                                                             <span class="form-control-feedback calender-icon"><i class="material-icons">date_range</i></span>
-                                                                            <input type="text" class="form-control datepicker"  id="dateFilterPpmTo"  placeholder="{{dateFilterPpmTo | date:'dd-MMM-yyyy'}}"/>
+                                                                            <input type="text" class="form-control datepicker"  id="dateFilterPpmTo" ng-model="ppmTo"  placeholder="{{dateFilterPpmTo | date:'dd-MMM-yyyy'}}"  name ="PpmTo" required />
+                                                                            <div ng-show="form3.$submitted || form3.PpmTo.$touched">
+                                                                                <div
+                                                                                    ng-show="form3.PpmTo.$dirty || form3.PpmTo.$invalid">
+                                                                                    <p class="help-block" style="color:maroon"
+                                                                                       ng-show="form3.PpmTo.$error.required">
+                                                                                        To date is required.
+                                                                                    </p>
+                                                                                  
+
+                                                                                </div>
+                                                                                
+                                                                            </div>
 
                                                                         </div>
                                                                     </div>
@@ -1174,17 +1201,39 @@
                                                                 </div>
                                                                     <div class="col-md-2">
                                                                         <div class="form-group">
-                                                                            <label class="control-label">From Date</label>
+                                                                            <label class="control-label">From Date<span class="red-star">*</span></label>
                                                                             <span class="form-control-feedback calender-icon"><i class="material-icons">date_range</i></span>
-                                                                            <input type="text" class="form-control datepicker"  id="dateFilterAmcFrom"  placeholder="{{dateFilterAmcFrom | date:'dd-MMM-yyyy'}}"/>
+                                                                            <input type="text" class="form-control datepicker"  id="dateFilterAmcFrom" ng-model="amcFrom" name="AmcFrom" placeholder="{{dateFilterAmcFrom | date:'dd-MMM-yyyy'}}"/ required>
+                                                                            <div ng-show="form4.$submitted || form4.AmcFrom.$touched">
+                                                                                <div
+                                                                                    ng-show="form4.AmcFrom.$dirty || form4.AmcFrom.$invalid">
+                                                                                    <p class="help-block" style="color:maroon"
+                                                                                       ng-show="form4.AmcFrom.$error.required">
+                                                                                        From date is required.
+                                                                                    </p>
+                                                                                   
+                                                                                </div>
+                                                                                
+                                                                            </div>
 
                                                                         </div>
                                                                     </div>
                                                                     <div class="col-md-2">
                                                                         <div class="form-group">
-                                                                            <label class="control-label">To Date</label>
+                                                                            <label class="control-label">To Date<span class="red-star">*</span></label>
                                                                             <span class="form-control-feedback calender-icon"><i class="material-icons">date_range</i></span>
-                                                                            <input type="text" class="form-control datepicker"  id="dateFilterAmcTo"  placeholder="{{dateFilterAmcTo | date:'dd-MMM-yyyy'}}"/>
+                                                                            <input type="text" class="form-control datepicker"  id="dateFilterAmcTo"  ng-model="amcTo" name="AmcTo" placeholder="{{dateFilterAmcTo | date:'dd-MMM-yyyy'}}"/ required>
+                                                                            <div ng-show="form4.$submitted || form4.AmcTo.$touched">
+                                                                                <div
+                                                                                    ng-show="form4.AmcTo.$dirty || form4.AmcTo.$invalid">
+                                                                                    <p class="help-block" style="color:maroon"
+                                                                                       ng-show="form4.AmcTo.$error.required">
+                                                                                        To date is required.
+                                                                                    </p>
+                                                                                   
+                                                                                </div>
+                                                                                
+                                                                            </div>
 
                                                                         </div>
                                                                     </div>
@@ -1362,7 +1411,7 @@
                                                                             <div class="form-group selectcon is-empty SelectWithAddbtnCon">
 
                                                                                 <div class="" style="float:left;width:90%;">
-                                                                                    <label class="control-label">Select Parameter </label>
+                                                                                    <label class="control-label">Select Parameter<span class="red-star">*</span> </label>
                                                                                     <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
                                                                                     <select class="form-control ng-pristine ng-valid ng-touched" ng-model="selectedParameter" name="param" ng-options="parameter as parameter.name for parameter in parameters" tabindex="0" aria-invalid="false" required>
                                                                                     <option value="" class="" selected="selected">Select Parameter ..</option>
@@ -1399,7 +1448,7 @@
                                                                             <div class="form-group selectcon is-empty SelectWithAddbtnCon">
 
                                                                                 <div class="" style="float:left;width:90%;">
-                                                                                    <label class="control-label">Select Units</label>
+                                                                                    <label class="control-label">Select Units<span class="red-star">*</span></label>
                                                                                     <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
                                                                                     <select class="form-control ng-pristine ng-valid ng-touched" ng-model="selectedParameterUOM" name="paramUOM"  ng-options="parameterUOM as parameterUOM.uom for parameterUOM in parameterUOMs" tabindex="0" aria-invalid="false" required>
                                                                                     <option value="" class="" selected="selected">Select Units ..</option>
@@ -1751,10 +1800,10 @@
                                                     </div>
                                                 </div> -->
 
-                                                <div class="row" ng-hide="upView">
+                                                <div class="row">
                                                     <div class="col-md-12" style="text-align:right;">
 
-                                                        <button class="btn btn-success" type="submit"
+                                                        <button class="btn btn-success" type="submit" ng-hide="upView"
                                                                 id="form-button-save" ng-disabled="form.$invalid" ng-click="updateAsset();">
                                                             <span class="btn-label">
                                                             <i class="material-icons">check</i>
