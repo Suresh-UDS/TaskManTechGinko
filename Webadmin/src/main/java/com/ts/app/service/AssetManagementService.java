@@ -1250,7 +1250,7 @@ public class AssetManagementService extends AbstractService {
 									
 									Setting setting = settingRepository.findSettingByKey(EMAIL_NOTIFICATION_READING);
 									
-									if(setting.getSettingValue().equalsIgnoreCase("true")) { 
+									if(setting.getSettingValue().equalsIgnoreCase("true") ) { 
 										Setting settingEntity = settingRepository.findSettingByKey(EMAIL_NOTIFICATION_READING_EMAILS);
 										if(settingEntity.getSettingValue().length() > 0) { 
 											List<String> emailLists = CommonUtil.convertToList(settingEntity.getSettingValue(), ",");
@@ -1279,7 +1279,7 @@ public class AssetManagementService extends AbstractService {
 								
 									Setting setting = settingRepository.findSettingByKey(EMAIL_NOTIFICATION_READING);
 									
-									if(setting.getSettingValue() == "true") { 
+									if(setting.getSettingValue().equalsIgnoreCase("true") ) { 
 										Setting settingEntity = settingRepository.findSettingByKey(EMAIL_NOTIFICATION_READING_EMAILS);
 										if(settingEntity.getSettingValue().length() > 0) { 
 											List<String> emailLists = CommonUtil.convertToList(settingEntity.getSettingValue(), ",");
@@ -1305,7 +1305,7 @@ public class AssetManagementService extends AbstractService {
 																		
 									Setting setting = settingRepository.findSettingByKey(EMAIL_NOTIFICATION_READING);
 									
-									if(setting.getSettingValue().equalsIgnoreCase("true")) { 
+									if(setting.getSettingValue().equalsIgnoreCase("true") ) { 
 										
 										Setting settingEntity = settingRepository.findSettingByKey(EMAIL_NOTIFICATION_READING_EMAILS);
 										
@@ -1339,7 +1339,7 @@ public class AssetManagementService extends AbstractService {
 								
 								Setting setting = settingRepository.findSettingByKey(EMAIL_NOTIFICATION_READING);
 								
-								if(setting.getSettingValue().equalsIgnoreCase("true")) { 
+								if(setting.getSettingValue().equalsIgnoreCase("true") ) { 
 									
 									Setting settingEntity = settingRepository.findSettingByKey(EMAIL_NOTIFICATION_READING_EMAILS);
 									
