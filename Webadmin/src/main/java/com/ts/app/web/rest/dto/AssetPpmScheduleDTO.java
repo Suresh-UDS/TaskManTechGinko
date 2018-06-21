@@ -5,14 +5,14 @@ import java.util.Date;
 public class AssetPpmScheduleDTO extends BaseDTO {
     private long id;
 	private String title;
-	private Long checklistId;
+	private long checklistId;
 	private String checklistName;
 	private Date startDate;
 	private Date endDate;
 	private String frequencyPrefix;
 	private int frequencyDuration;
 	private String frequency;
-	private Long assetId;
+	private long assetId;
 	private long empId;
 	private String maintenanceType;
 
@@ -46,10 +46,10 @@ public class AssetPpmScheduleDTO extends BaseDTO {
 	public void setTitle(String title) {
 		this.title = title;
 	}
-	public Long getChecklistId() {
+	public long getChecklistId() {
 		return checklistId;
 	}
-	public void setChecklistId(Long checklistId) {
+	public void setChecklistId(long checklistId) {
 		this.checklistId = checklistId;
 	}
 	public Date getStartDate() {
@@ -82,10 +82,10 @@ public class AssetPpmScheduleDTO extends BaseDTO {
 	public void setFrequency(String frequency) {
 		this.frequency = frequency;
 	}
-	public Long getAssetId() {
+	public long getAssetId() {
 		return assetId;
 	}
-	public void setAssetId(Long assetId) {
+	public void setAssetId(long assetId) {
 		this.assetId = assetId;
 	}
 	

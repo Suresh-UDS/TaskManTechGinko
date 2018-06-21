@@ -62,7 +62,17 @@ public class AssetAMCSchedule extends AbstractAuditingEntity {
 	@JoinColumn(name = "assetId", referencedColumnName = "id", nullable = true)
 	private Asset asset;
 	
+	private String maintenanceType;
+
 	private long empId;
+
+	public String getMaintenanceType() {
+		return maintenanceType;
+	}
+
+	public void setMaintenanceType(String maintenanceType) {
+		this.maintenanceType = maintenanceType;
+	}
 
 	public long getId() {
 		return id;

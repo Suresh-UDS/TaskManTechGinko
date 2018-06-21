@@ -92,7 +92,9 @@ import:
 asset:
    file:
        path: opt/uploads/site      
-
+   weekly:
+       template:
+           path: /opt/template/Asset_52Week_Report_Format.xlsx
 multipart:
    maxFileSize: 15MB
    maxRequestSize: 15MB

@@ -35,9 +35,11 @@ import org.springframework.stereotype.Component;
 
 import com.ts.app.domain.AbstractAuditingEntity;
 import com.ts.app.domain.EmployeeAttendanceReport;
+import com.ts.app.domain.Frequency;
 import com.ts.app.domain.Job;
 import com.ts.app.domain.JobStatus;
 import com.ts.app.web.rest.dto.AssetDTO;
+import com.ts.app.web.rest.dto.AssetPPMScheduleEventDTO;
 import com.ts.app.web.rest.dto.AttendanceDTO;
 import com.ts.app.web.rest.dto.BaseDTO;
 import com.ts.app.web.rest.dto.EmployeeDTO;
@@ -608,6 +610,133 @@ public class ExportUtil {
 		result.setFile(fileName.substring(0, fileName.indexOf('.')));
 		result.setStatus(getExportStatus(fileName));
 		return result;
+	}
+	
+	
+	public ExportResult write52WeekScheduleToFile(String siteName, List<AssetPPMScheduleEventDTO> content, ExportResult result) {
+		boolean isAppend = (result != null);
+		log.debug("result = " + result + ", isAppend=" + isAppend);
+		if (result == null) {
+			result = new ExportResult();
+		}
+		// Create the CSVFormat object with "\n" as a record delimiter
+		String fileName = null;
+		if (StringUtils.isEmpty(result.getFile())) {
+			if (StringUtils.isNotEmpty(siteName)) {
+				fileName = siteName + "_" + System.currentTimeMillis() + ".xlsx";
+			} else {
+				fileName = System.currentTimeMillis() + ".xlsx";
+			}
+		} else {
+			fileName = result.getFile() + ".xlsx";
+		}
+		if (statusMap.containsKey(fileName)) {
+			String status = statusMap.get(fileName);
+			log.debug("Current status for filename -" + fileName + ", status -" + status);
+		} else {
+			statusMap.put(fileName, "PROCESSING");
+		}
+		final String exportFileName = fileName;
+
+		// TODO Auto-generated method stub
+		String filePath = env.getProperty("export.file.path");
+		FileSystem fileSystem = FileSystems.getDefault();
+		Path path = fileSystem.getPath(filePath);
+		if (!Files.exists(path)) {
+			Path newEmpPath = Paths.get(filePath);
+			try {
+				Files.createDirectory(newEmpPath);
+
+			} catch (IOException e) {
+				log.error("Error while creating path " + newEmpPath);
+			}
+		}
+		filePath += "/" + exportFileName;
+
+		String templatePath = env.getProperty("asset.weekly.template.path");
+		FileInputStream fis = null;
+		XSSFWorkbook xssfWorkbook = null;
+		try {
+			fis = new FileInputStream(templatePath);
+			xssfWorkbook = new XSSFWorkbook(fis);
+		} catch (IOException e1) {
+			log.error("Error while opening the attendance template file",e1);
+		}
+		
+		int rowNum = 3;
+		
+		XSSFSheet xssfSheet = xssfWorkbook.getSheetAt(0);
+
+		for (AssetPPMScheduleEventDTO scheduleEvent : content) {
+
+			Row dataRow = xssfSheet.getRow(rowNum++);
+
+			dataRow.getCell(0).setCellValue(scheduleEvent.getTitle());
+			dataRow.getCell(1).setCellValue(scheduleEvent.getAssetTitle());
+			dataRow.getCell(2).setCellValue(scheduleEvent.getAssetCode());
+			dataRow.getCell(3).setCellValue(scheduleEvent.getAssetCode());
+			String freqCode = getFrequencyCode(scheduleEvent.getFrequency());
+			dataRow.getCell(4).setCellValue(freqCode);
+			//week wise assignment
+			int weekStartCell = 6;
+			int weekDataCell = weekStartCell + (scheduleEvent.getWeek() -1); //minus 1 to get the cell index
+			dataRow.getCell(weekDataCell).setCellValue(freqCode);
+
+		}
+
+		log.info(filePath + " 52 week asset ppm schedules excel file was created successfully !!!");
+		statusMap.put(filePath, "COMPLETED");
+
+		FileOutputStream fileOutputStream = null;
+		try {
+			fileOutputStream = new FileOutputStream(filePath);
+			xssfWorkbook.write(fileOutputStream);
+			fileOutputStream.close();
+			//upload to google drive
+			GoogleSheetsUtil.upload(exportFileName,filePath);
+			
+		} catch (IOException e) {
+			log.error("Error while flushing/closing  !!!");
+			statusMap.put(filePath, "FAILED");
+		}
+
+		result.setFile(fileName.substring(0, fileName.indexOf('.')));
+		result.setStatus(getExportStatus(fileName));
+		return result;
+	}
+	
+	private String getFrequencyCode(String frequency) {
+		String freqCode = "W";
+		Frequency freq = Frequency.fromValue(frequency);
+		switch(freq) {
+			case HOUR:
+				freqCode = "H";
+				break;
+			case DAY:
+				freqCode = "D";
+				break;
+			case WEEK:
+				freqCode = "W";
+				break;
+			case MONTH:
+				freqCode = "M";
+				break;
+			case FORTNIGHT:
+				freqCode = "F";
+				break;
+			case QUARTER:
+				freqCode = "Q";
+				break;
+			case HALFYEAR:
+				freqCode = "HY";
+				break;
+			case YEAR:
+				freqCode = "Y";
+				break;
+			default:
+				
+		}
+		return freqCode;
 	}
 
 	public ExportResult writeToCsvFile(List<AttendanceDTO> content, final String empId, ExportResult result) {

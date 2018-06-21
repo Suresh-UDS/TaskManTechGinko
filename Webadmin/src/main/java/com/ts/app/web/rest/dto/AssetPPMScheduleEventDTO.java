@@ -11,9 +11,12 @@ public class AssetPPMScheduleEventDTO extends BaseDTO {
 	private int frequencyDuration;
 	private String frequency;
 	private Long assetId;
+	private String assetTitle;
+	private String assetCode;
 	private long empId;
 	private String maintenanceType;
 	private boolean allDay;
+	private int week;
 
 	public String getMaintenanceType() {
 		return maintenanceType;
@@ -93,6 +96,30 @@ public class AssetPPMScheduleEventDTO extends BaseDTO {
 
 	public void setAllDay(boolean allDay) {
 		this.allDay = allDay;
+	}
+
+	public String getAssetTitle() {
+		return assetTitle;
+	}
+
+	public void setAssetTitle(String assetTitle) {
+		this.assetTitle = assetTitle;
+	}
+
+	public String getAssetCode() {
+		return assetCode;
+	}
+
+	public void setAssetCode(String assetCode) {
+		this.assetCode = assetCode;
+	}
+
+	public int getWeek() {
+		return week;
+	}
+
+	public void setWeek(int week) {
+		this.week = week;
 	}
 	
 	

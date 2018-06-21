@@ -31,6 +31,12 @@ angular.module('timeSheetApp')
         $rootScope.siteImportStatusLoad = false;
         $rootScope.employeeImportStatus = {};
         $rootScope.employeeShiftImportStatusLoad = false;
+        $rootScope.assetImportStatus = {};
+        $rootScope.assetImportStatusLoad = false;
+        $rootScope.assetPPMImportStatus = {};
+        $rootScope.assetPPMImportStatusLoad = false;
+        $rootScope.assetAMCImportStatus = {};
+        $rootScope.assetAMCImportStatusLoad = false;
         $scope.importStatus;
         $scope.importEmployeeStatus;
         $scope.pager = {};
