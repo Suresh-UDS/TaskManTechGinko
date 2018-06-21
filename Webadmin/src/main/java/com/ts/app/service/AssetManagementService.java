@@ -1480,6 +1480,19 @@ public class AssetManagementService extends AbstractService {
 				assetParamReading.setConsumption(consumption);
 			}
 			
+			Calendar now = Calendar.getInstance();
+			
+			if(assetParamReadingDTO.isConsumptionMonitoringRequired()) { 
+				if(assetParamReadingDTO.getFinalValue() > 0) {
+					assetParamReading.setFinalReadingTime(new java.sql.Timestamp(now.getTimeInMillis()));
+				} 
+				if(assetParamReadingDTO.getInitialValue() > 0) { 
+					assetParamReading.setInitialReadingTime(new java.sql.Timestamp(now.getTimeInMillis()));
+				}
+			} else {
+				assetParamReading.setInitialReadingTime(new java.sql.Timestamp(now.getTimeInMillis()));
+			}
+			
 			assetParamReading.setConsumptionMonitoringRequired(assetParamReadingDTO.isConsumptionMonitoringRequired());
 			assetParamReading.setInitialValue(assetParamReadingDTO.getInitialValue());
 			assetParamReading.setFinalValue(assetParamReadingDTO.getFinalValue());
