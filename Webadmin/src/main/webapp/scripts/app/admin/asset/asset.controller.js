@@ -1832,7 +1832,7 @@ angular.module('timeSheetApp')
         	$scope.ppmSearchCriteria.maintenanceType = "PPM";
         	$scope.ppmSearchCriteria.assetId = $stateParams.id;
         	console.log($scope.searchCriteria);
-        	JobComponent.search($scope.searchCriteria).then(function(data){ 
+        	JobComponent.search($scope.ppmSearchCriteria).then(function(data){ 
         		console.log(data);
         		$scope.ppmJobLists = data.transactions;
         	});
