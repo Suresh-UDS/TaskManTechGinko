@@ -1211,47 +1211,18 @@ public class AssetManagementService extends AbstractService {
     }
 
 	public AssetParameterReadingDTO updateAssetReadings(AssetParameterReadingDTO assetParamReadingDTO) {
+		
+			AssetParameterReadingDTO prevReading = getLatestParamReading(assetParamReadingDTO.getAssetId(), assetParamReadingDTO.getAssetParameterConfigId());
 
 			AssetParameterReading assetParamReading = assetParamReadingRepository.findOne(assetParamReadingDTO.getId());
-			if(assetParamReadingDTO.getAssetId() > 0){ 
-				Asset asset = assetRepository.findOne(assetParamReadingDTO.getAssetId());
-				assetParamReading.setAsset(asset);
-			}
-			if(assetParamReadingDTO.getAssetParameterConfigId() > 0){ 
-				AssetParameterConfig assetParameterConfig = assetParamConfigRepository.findOne(assetParamReadingDTO.getAssetParameterConfigId());
-				assetParamReading.setAssetParameterConfig(assetParameterConfig);
-			}
-			
-			if(assetParamReadingDTO.getJobId() > 0){ 
-				Job job = jobRepository.findOne(assetParamReadingDTO.getJobId());
-				assetParamReading.setJob(job);
-			} else {
-				assetParamReading.setJob(null);
-			}
-			
-			if(assetParamReadingDTO.getInitialValue() > 0 && assetParamReadingDTO.getFinalValue() > 0) {
-				double consumption = assetParamReadingDTO.getFinalValue() - assetParamReadingDTO.getInitialValue();
-				assetParamReading.setConsumption(consumption);
-			}
-			
-			assetParamReading.setConsumptionMonitoringRequired(assetParamReadingDTO.isConsumptionMonitoringRequired());
-			assetParamReading.setInitialValue(assetParamReadingDTO.getInitialValue());
-			assetParamReading.setFinalValue(assetParamReadingDTO.getFinalValue());
-			assetParamReading.setCreatedDate(assetParamReadingDTO.getCreatedDate());
-			assetParamReading.setName(assetParamReadingDTO.getName());
-			assetParamReading.setUom(assetParamReadingDTO.getUom());
-			assetParamReading.setValue(assetParamReadingDTO.getValue());
-			assetParamReadingRepository.save(assetParamReading);
 			
 			if(assetParamReadingDTO.getAssetParameterConfigId() > 0 ) { 
 				
 				List<AssetParameterReadingRule> readingRuleLists = assetReadingRuleRepository.findByAssetConfigId(assetParamReadingDTO.getAssetParameterConfigId());
-				
-				AssetParameterReadingDTO prevReading = getLatestParamReading(assetParamReadingDTO.getAssetId(), assetParamReadingDTO.getAssetParameterConfigId());
-				
+								
 				AssetParameterConfig assetParamConfig = assetParamConfigRepository.findOne(assetParamReadingDTO.getId());
 				
-				Asset asset = assetRepository.findOne(assetParamConfig.getId());
+				Asset asset = assetRepository.findOne(assetParamReadingDTO.getAssetId());
 				
 				String assetCode = asset.getCode();
 				
@@ -1279,7 +1250,7 @@ public class AssetManagementService extends AbstractService {
 									
 									Setting setting = settingRepository.findSettingByKey(EMAIL_NOTIFICATION_READING);
 									
-									if(setting.getSettingValue() == "true") { 
+									if(setting.getSettingValue().equalsIgnoreCase("true")) { 
 										Setting settingEntity = settingRepository.findSettingByKey(EMAIL_NOTIFICATION_READING_EMAILS);
 										if(settingEntity.getSettingValue().length() > 0) { 
 											List<String> emailLists = CommonUtil.convertToList(settingEntity.getSettingValue(), ",");
@@ -1291,35 +1262,37 @@ public class AssetManagementService extends AbstractService {
 								}
 							}
 							
+						break;
+							
+							
 						case CURRENT_CONSUMPTION_GREATER_THAN_THRESHOLD_VALUE :
 							
 							if(assetParamReadingDTO.getId() > 0 && assetParamReadingDTO.isConsumptionMonitoringRequired()) { 
 								
 								String type = "consumption";
+									
+								double currentThreshold = assetParamReadingDTO.getConsumption() - prevReading.getConsumption();
 								
-								if(assetParamReadingDTO.getConsumption() > 0 &&  prevReading.getConsumption() > 0) {
+								double threshold = assetParamConfig.getThreshold();
+								
+								if(currentThreshold > threshold) {
+								
+									Setting setting = settingRepository.findSettingByKey(EMAIL_NOTIFICATION_READING);
 									
-									double currentThreshold = assetParamReadingDTO.getConsumption() - prevReading.getConsumption();
-									
-									double threshold = assetParamConfig.getThreshold();
-									
-									if(currentThreshold > threshold) {
-									
-										Setting setting = settingRepository.findSettingByKey(EMAIL_NOTIFICATION_READING);
-										
-										if(setting.getSettingValue() == "true") { 
-											Setting settingEntity = settingRepository.findSettingByKey(EMAIL_NOTIFICATION_READING_EMAILS);
-											if(settingEntity.getSettingValue().length() > 0) { 
-												List<String> emailLists = CommonUtil.convertToList(settingEntity.getSettingValue(), ",");
-												for(String email : emailLists) { 
-													mailService.sendReadingAlert(email, siteName, assetCode, assetName, type, date);
-												}
+									if(setting.getSettingValue() == "true") { 
+										Setting settingEntity = settingRepository.findSettingByKey(EMAIL_NOTIFICATION_READING_EMAILS);
+										if(settingEntity.getSettingValue().length() > 0) { 
+											List<String> emailLists = CommonUtil.convertToList(settingEntity.getSettingValue(), ",");
+											for(String email : emailLists) { 
+												mailService.sendReadingAlert(email, siteName, assetCode, assetName, type, date);
 											}
 										}
-									
 									}
+								
 								}
 							}
+							
+						break;
 							
 							
 						case CURRENT_READING_GREATER_THAN_PREVIOUS_READING :
@@ -1332,7 +1305,7 @@ public class AssetManagementService extends AbstractService {
 																		
 									Setting setting = settingRepository.findSettingByKey(EMAIL_NOTIFICATION_READING);
 									
-									if(setting.getSettingValue() == "true") { 
+									if(setting.getSettingValue().equalsIgnoreCase("true")) { 
 										
 										Setting settingEntity = settingRepository.findSettingByKey(EMAIL_NOTIFICATION_READING_EMAILS);
 										
@@ -1352,6 +1325,8 @@ public class AssetManagementService extends AbstractService {
 								}
 							}
 							
+						break;
+							
 						case CURRENT_READING_GREATER_THAN_THRESHOLD_VALUE : 
 							
 							String type = "reading";
@@ -1364,7 +1339,7 @@ public class AssetManagementService extends AbstractService {
 								
 								Setting setting = settingRepository.findSettingByKey(EMAIL_NOTIFICATION_READING);
 								
-								if(setting.getSettingValue() == "true") { 
+								if(setting.getSettingValue().equalsIgnoreCase("true")) { 
 									
 									Setting settingEntity = settingRepository.findSettingByKey(EMAIL_NOTIFICATION_READING_EMAILS);
 									
@@ -1382,6 +1357,8 @@ public class AssetManagementService extends AbstractService {
 								}
 								
 							}
+							
+						break;
 							
 						case CURRENT_RUNHOUR_GREATER_THAN_PREVIOUS_RUNHOUR : 
 							
@@ -1410,15 +1387,44 @@ public class AssetManagementService extends AbstractService {
 							    assetParamReading.setRunMinutues(minutes);
 							}
 							
-							
+						break;
+
 						default:
 						
 					}
 					
 				}
 			}
+			
+			if(assetParamReadingDTO.getAssetId() > 0){ 
+				Asset asset = assetRepository.findOne(assetParamReadingDTO.getAssetId());
+				assetParamReading.setAsset(asset);
+			}
+			if(assetParamReadingDTO.getAssetParameterConfigId() > 0){ 
+				AssetParameterConfig assetParameterConfig = assetParamConfigRepository.findOne(assetParamReadingDTO.getAssetParameterConfigId());
+				assetParamReading.setAssetParameterConfig(assetParameterConfig);
+			}
+			
+			if(assetParamReadingDTO.getJobId() > 0){ 
+				Job job = jobRepository.findOne(assetParamReadingDTO.getJobId());
+				assetParamReading.setJob(job);
+			} else {
+				assetParamReading.setJob(null);
+			}
+			
+			if(assetParamReadingDTO.getInitialValue() > 0 && assetParamReadingDTO.getFinalValue() > 0) {
+				double consumption = assetParamReadingDTO.getFinalValue() - assetParamReadingDTO.getInitialValue();
+				assetParamReading.setConsumption(consumption);
+			}
+			
+			assetParamReading.setConsumptionMonitoringRequired(assetParamReadingDTO.isConsumptionMonitoringRequired());
+			assetParamReading.setInitialValue(assetParamReadingDTO.getInitialValue());
+			assetParamReading.setFinalValue(assetParamReadingDTO.getFinalValue());
+			assetParamReading.setName(assetParamReadingDTO.getName());
+			assetParamReading.setUom(assetParamReadingDTO.getUom());
+			assetParamReading.setValue(assetParamReadingDTO.getValue());
 		
-		
+			assetParamReadingRepository.save(assetParamReading);
 			return mapperUtil.toModel(assetParamReading, AssetParameterReadingDTO.class);
 	}
 	

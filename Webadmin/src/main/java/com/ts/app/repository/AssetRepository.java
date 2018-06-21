@@ -84,7 +84,7 @@ public interface AssetRepository extends JpaRepository<Asset, Long>,JpaSpecifica
     @Query("SELECT e FROM Asset e WHERE e.active='Y' order by e.title")
     Page<Asset> findAllAsset(Pageable pageRequest);
 
-    @Query("SELECT r FROM AssetParameterReading r WHERE r.asset.id = :assetId and r.active = 'Y' order by r.name")
+    @Query("SELECT r FROM AssetParameterReading r WHERE r.asset.id = :assetId and r.active = 'Y' order by r.createdDate DESC")
 	List<AssetParameterReading> findByAssetReading(@Param("assetId") long assetId);
     
     @Query("SELECT r FROM AssetParameterReading r WHERE r.asset.id = :assetId and r.assetParameterConfig.id = :assetParamId and r.active = 'Y' order by r.createdDate DESC")
