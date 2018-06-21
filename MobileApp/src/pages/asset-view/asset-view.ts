@@ -1,5 +1,5 @@
 import {Component, ElementRef, ViewChild} from '@angular/core';
-import {Item, ItemSliding, ModalController, NavController, NavParams} from "ionic-angular";
+import {FabContainer, Item, ItemSliding, ModalController, NavController, NavParams} from "ionic-angular";
 import {GetAssetReading} from "./get-asset-reading";
 import {JobService} from "../service/jobService";
 import {componentService} from "../service/componentService";
@@ -13,6 +13,7 @@ import {Camera, CameraOptions} from "@ionic-native/camera";
 import { DatePicker } from '@ionic-native/date-picker';
 import {AssetService} from "../service/assetService";
 import{CalenderPage} from "../calender-page/calender-page";
+import {CreateJobPage} from "../jobs/add-job";
 
 
 /**
@@ -52,7 +53,7 @@ export class AssetView {
     {
         // let dateModal=this.modalCtrl.create(DateModal)
         // dateModal.present()
-        this.navCtrl.push(CalenderPage);
+        this.navCtrl.push(CalenderPage,{assetDetails:this.assetDetails});
     }
 
   ionViewDidLoad() {
@@ -72,10 +73,11 @@ export class AssetView {
     }
 
     // Segment Change
-    segmentChange(categories)
+    segmentChange(categories,fab:FabContainer)
     {
         this.fromDate="";
         this.toDate="";
+        fab.close();
     }
     //
 
@@ -260,6 +262,15 @@ export class AssetView {
         item.setElementClass("active-slide", false);
         item.setElementClass("active-options-right", false);
     }
+
+    // Create Job
+
+    createJob()
+    {
+        this.navCtrl.push(CreateJobPage,{assetDetails : this.assetDetails});
+    }
+
+
     //
 
 
@@ -311,17 +322,24 @@ export class AssetView {
         // this.componentService.showLoader("")
         console.log("From Date:" + fromDate.toISOString());
         console.log("To Date:" + toDate.toISOString());
-        var searchCriteria={
-            fromDate:fromDate.toISOString(),
-            toDate:toDate.toISOString(),
-            assetId:this.assetDetails.id
-        };
+
         if(categories == 'jobs')
         {
-            this.getJobs(searchCriteria)
+            var jobSearchCriteria={
+                checkInDateTimeFrom:fromDate.toISOString(),
+                checkInDateTimeTo:toDate.toISOString(),
+                assetId:this.assetDetails.id
+            };
+
+            this.getJobs(jobSearchCriteria)
         }
         else if(this.categories == 'tickets')
         {
+            var searchCriteria={
+                fromDate:fromDate.toISOString(),
+                toDate:toDate.toISOString(),
+                assetId:this.assetDetails.id
+            };
             this.componentService.showLoader("")
             this.getTickets(searchCriteria);
         }
@@ -448,6 +466,13 @@ export class AssetView {
                 console.log(error)
                 console.log("Getting Ticket errors")
             })
+    }
+
+    //create Ticket
+
+    createTicket()
+    {
+        this.navCtrl.push(CreateTicket,{assetDetails : this.assetDetails});
     }
 
 }

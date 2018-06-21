@@ -12,6 +12,8 @@ public class ExportResult {
 	
 	private String url;
 	
+	private String webLink;
+	
 	
 
 	public String getMsg() {
@@ -52,6 +54,14 @@ public class ExportResult {
 
 	public void setUrl(String url) {
 		this.url = url;
+	}
+
+	public String getWebLink() {
+		return webLink;
+	}
+
+	public void setWebLink(String webLink) {
+		this.webLink = webLink;
 	}
 	
 	

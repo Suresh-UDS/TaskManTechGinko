@@ -61,13 +61,13 @@ public class AssetResource {
 
 	@Inject
 	private AssetManagementService assetService;
-	
+
 	@Inject
 	private FileUploadHelper fileUploaderUtils;
-	
+
 	@Autowired
     private ServletContext servletContext;
-	
+
 	@Inject
 	private ImportUtil importUtil;
 
@@ -76,13 +76,13 @@ public class AssetResource {
 	@Timed
 	public ResponseEntity<?> saveAsset(@Valid @RequestBody AssetDTO assetDTO, HttpServletRequest request) {
 		log.debug(">>> Asset DTO save request <<<");
-		
+
 		try {
 			assetDTO = assetService.saveAsset(assetDTO);
 			}catch(Exception e) {
 			throw new TimesheetException(e, assetDTO);
 		}
-		
+
 		log.debug("Asset new id - " + assetDTO.getId());
 		return new ResponseEntity<>(assetDTO, HttpStatus.CREATED);
 	}
@@ -113,7 +113,7 @@ public class AssetResource {
 		}
 		return result;
 	}
-	
+
 	@RequestMapping(path = "/assets/{assetId}/ppmschedulelist", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	@Timed
 	public List<AssetPpmScheduleDTO> getAssetPPMSchedule(@PathVariable("assetId") long assetId) {
@@ -126,7 +126,7 @@ public class AssetResource {
 		}
 		return response;
 	}
-	
+
 	@RequestMapping(path = "/site/{id}/asset", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public List<AssetDTO> getSiteAssets(@PathVariable("id") Long siteId) {
 		return assetService.getSiteAssets(siteId);
@@ -153,7 +153,7 @@ public class AssetResource {
 		AssetDTO response = assetService.updateAsset(assetDTO);
 		return new ResponseEntity<>(response, HttpStatus.CREATED);
 	}
-	
+
 	@RequestMapping(value = "/asset/{id}", method = RequestMethod.DELETE)
 	public ResponseEntity<?> delete(@PathVariable Long id) {
 		log.debug(">>> Inside Asset Delete " + id);
@@ -249,7 +249,7 @@ public class AssetResource {
 			HttpServletRequest request) {
 		log.debug(">>> Asset DTO saveAssetPPMSchedule request <<<");
 		log.debug("Title <<<" + assetPpmScheduleDTO.getTitle());
-		
+
 		try {
 			if(!assetService.isDuplicatePPMSchedule(assetPpmScheduleDTO)) {
 				log.debug(">>> going to create <<<");
@@ -259,12 +259,12 @@ public class AssetResource {
 				assetPpmScheduleDTO.setMessage("error.duplicateRecordError");
 				return new ResponseEntity<>(assetPpmScheduleDTO,HttpStatus.BAD_REQUEST);
 			}
-			
+
 
 		}catch(Exception e) {
 			throw new TimesheetException(e, assetPpmScheduleDTO);
 		}
-		
+
 		log.debug("Asset PPM Schedule new id - " + assetPpmScheduleDTO.getId());
 		return new ResponseEntity<>(assetPpmScheduleDTO, HttpStatus.CREATED);
 	}*/
@@ -280,7 +280,7 @@ public class AssetResource {
 		log.debug("Asset PPM Schedule save response - " + response);
 		return new ResponseEntity<>(response, HttpStatus.CREATED);
 	}
-	
+
 	@RequestMapping(path = "/assets/ppmschedule", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE)
 	@Timed
 	public ResponseEntity<?> updateAssetPPMSchedule(@Valid @RequestBody AssetPpmScheduleDTO assetPpmScheduleDTO,
@@ -303,18 +303,18 @@ public class AssetResource {
 		log.debug("Get Asset PPM Schedule for asset id size - " + response.size());
 		return response;
 	}
-	
-	@RequestMapping(path = "/assets/{assetId}/ppmschedule/calendar", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+
+	@RequestMapping(path = "/assets/{assetId}/ppmschedule/calendar", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
 	@Timed
 	public List<AssetPPMScheduleEventDTO> getAssetPPMScheduleCalendar(@RequestBody SearchCriteria searchCriteria) {
 		log.debug(">>> Asset Resource getAssetPPMScheduleCalendar request <<<");
 		log.debug("AssetId <<< " + searchCriteria.getAssetId() + " - startDate - " + searchCriteria.getCheckInDateTimeFrom() + " - endDate - " + searchCriteria.getCheckInDateTimeTo());
 
 		List<AssetPPMScheduleEventDTO> response = assetService.getAssetPPMScheduleCalendar(searchCriteria.getAssetId(), searchCriteria.getCheckInDateTimeFrom(), searchCriteria.getCheckInDateTimeTo());
-		log.debug("Get Asset PPM Schedule calendar for asset id size - " + response.size());
+		log.debug("Get Asset PPM Schedule calendar for asset id size - " + response);
 		return response;
 	}
-	
+
 	@RequestMapping(value = { "/assets/getAllFile/{type}/{id}",
 			"/assets/getAllAssetPhoto/{type}/{id}" }, method = RequestMethod.GET)
 	public List<AssetDocumentDTO> getUploadedFiles(@PathVariable String type, @PathVariable Long id) {
@@ -322,7 +322,7 @@ public class AssetResource {
 		result = assetService.findAllDocuments(type, id);
 		return result;
 	}
-	
+
 	@RequestMapping(path = "/assets/amcschedule", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
 	@Timed
 	public ResponseEntity<?> saveAssetAMCSchedule(@Valid @RequestBody AssetAMCScheduleDTO assetAMCScheduleDTO,
@@ -346,7 +346,7 @@ public class AssetResource {
 		log.debug("Asset AMC Schedule update response - " + response);
 		return new ResponseEntity<>(response, HttpStatus.CREATED);
 	}
-	
+
 	@RequestMapping(path = "/assets/{assetId}/amcschedule", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	@Timed
 	public List<AssetAMCScheduleDTO> getAssetAMCSchedule(@PathVariable("assetId") long assetId) {
@@ -357,7 +357,7 @@ public class AssetResource {
 		log.debug("Get Asset AMC Schedule for asset id - " + response);
 		return response;
 	}
-	
+
 	@RequestMapping(value = "/assets/viewFile/{documentId}/{fileName:.+}",method = RequestMethod.GET)
 	public ResponseEntity<byte[]> getUploadFile(@PathVariable("documentId") long documentId, @PathVariable("fileName") String fileName, HttpServletResponse response) throws IOException {
 		log.debug("DocumentId" +documentId);
@@ -371,12 +371,12 @@ public class AssetResource {
 		response.setHeader("Content-Disposition","attachment; filename=\"" + fileName + "\"");
 		return new ResponseEntity<byte[]>(content, HttpStatus.OK);
 	}
-	
+
 	@RequestMapping(value = "/assets/saveReadings", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> saveAssetReadings(@Valid @RequestBody AssetParameterReadingDTO assetParamReadingDTO, HttpServletRequest request) {
 		log.debug("Save Asset Parameter Reading" +assetParamReadingDTO.getName());
 		log.debug("Save Asset Parameter Reading" +assetParamReadingDTO.getAssetParameterConfigId());
-		try{ 
+		try{
 			assetParamReadingDTO.setUserId(SecurityUtils.getCurrentUserId());
 			if(assetParamReadingDTO.getId() > 0) {
 				log.debug("Update Asset Parameter Reading" +assetParamReadingDTO.getId());
@@ -384,56 +384,56 @@ public class AssetResource {
 			}else{
 				assetParamReadingDTO = assetService.saveAssetReadings(assetParamReadingDTO);
 			}
-			
-			
-		} catch(TimesheetException e){ 
+
+
+		} catch(TimesheetException e){
 			throw new TimesheetException(e, assetParamReadingDTO);
 		}
 		return new ResponseEntity<>(assetParamReadingDTO, HttpStatus.CREATED);
 	}
-	
+
 	@RequestMapping(value = "/assets/{id}/viewReadings", method = RequestMethod.GET)
 	public AssetParameterReadingDTO getReadings(@PathVariable("id") long id) {
 		AssetParameterReadingDTO result = null;
 		result = assetService.viewReadings(id);
 		return result;
 	}
-	
-	@RequestMapping(value="/assets/amc/frequency", method = RequestMethod.GET) 
-	public Frequency[] getAllFrequency() { 
+
+	@RequestMapping(value="/assets/amc/frequency", method = RequestMethod.GET)
+	public Frequency[] getAllFrequency() {
 		Frequency[] List = null;
 		List = assetService.getAllType();
 		return List;
 	}
-	
-	@RequestMapping(value="/assets/amc/frequencyPrefix", method = RequestMethod.GET) 
-	public FrequencyPrefix[] getAllFrequencyPrefix() { 
+
+	@RequestMapping(value="/assets/amc/frequencyPrefix", method = RequestMethod.GET)
+	public FrequencyPrefix[] getAllFrequencyPrefix() {
 		FrequencyPrefix[] List = null;
 		List = assetService.getAllPrefixs();
 		return List;
 	}
-	
+
 	@RequestMapping(value = "/assets/{assetId}/viewAssetReadings", method = RequestMethod.GET)
 	public List<AssetParameterReadingDTO> getAssetReadings(@PathVariable("assetId") long assetId) {
 		List<AssetParameterReadingDTO> result = null;
 		result = assetService.viewAssetReadings(assetId);
 		return result;
 	}
-	
+
 	@RequestMapping(value = "/assets/{assetId}/getLatestReading/{assetParamId}", method = RequestMethod.GET)
 	public AssetParameterReadingDTO getLatestReading(@PathVariable("assetId") long assetId, @PathVariable("assetParamId") long assetParamId) {
 		AssetParameterReadingDTO result = null;
 		result = assetService.getLatestParamReading(assetId, assetParamId);
 		return result;
 	}
-	
+
 	@RequestMapping(value = "/assets/{id}/document/image", method = RequestMethod.DELETE)
     public ResponseEntity<?>  deleteImages(@PathVariable("id") long id) {
         log.debug("images ids -"+id);
         assetService.deleteImages(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
-	
+
 	@RequestMapping(path="/assets/import", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<ImportResult> importAssetData(@RequestParam("assetFile") MultipartFile file){
 		Calendar cal = Calendar.getInstance();
@@ -463,15 +463,15 @@ public class AssetResource {
 		}
 		return result;
 	}
-    
-	@RequestMapping(path="/assets/import/ppm", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+
+	@RequestMapping(path="/assets/ppm/import", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<ImportResult> importAssetPPMData(@RequestParam("assetPPMFile") MultipartFile file){
 		Calendar cal = Calendar.getInstance();
-		ImportResult result = assetService.importFile(file, cal.getTimeInMillis());
+		ImportResult result = assetService.importPPMFile(file, cal.getTimeInMillis());
 		return new ResponseEntity<ImportResult>(result,HttpStatus.OK);
 	}
 
-    @RequestMapping(value = "/assets/import/ppm/{fileId}/status",method = RequestMethod.GET)
+    @RequestMapping(value = "/assets/ppm/import/{fileId}/status",method = RequestMethod.GET)
 	public ImportResult importPPMStatus(@PathVariable("fileId") String fileId) {
 		//log.debug("ImportStatus -  fileId -"+ fileId);
 		ImportResult result = assetService.getImportStatus(fileId);
@@ -493,15 +493,15 @@ public class AssetResource {
 		}
 		return result;
 	}
-    
-    @RequestMapping(path="/assets/import/amc", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+
+    @RequestMapping(path="/assets/amc/import", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<ImportResult> importAssetAMCData(@RequestParam("assetAMCFile") MultipartFile file){
 		Calendar cal = Calendar.getInstance();
-		ImportResult result = assetService.importFile(file, cal.getTimeInMillis());
+		ImportResult result = assetService.importAMCFile(file, cal.getTimeInMillis());
 		return new ResponseEntity<ImportResult>(result,HttpStatus.OK);
 	}
 
-    @RequestMapping(value = "/assets/import/amc/{fileId}/status",method = RequestMethod.GET)
+    @RequestMapping(value = "/assets/amc/import/{fileId}/status",method = RequestMethod.GET)
 	public ImportResult importAMCStatus(@PathVariable("fileId") String fileId) {
 		//log.debug("ImportStatus -  fileId -"+ fileId);
 		ImportResult result = assetService.getImportStatus(fileId);
@@ -523,7 +523,7 @@ public class AssetResource {
 		}
 		return result;
 	}
-    
+
     @RequestMapping(value = "/asset/export", method = RequestMethod.POST)
 	public ExportResponse exportAsset(@RequestBody SearchCriteria searchCriteria) {
 		// log.debug("JOB EXPORT STARTS HERE **********");
@@ -578,5 +578,19 @@ public class AssetResource {
 		response.setHeader("Content-Transfer-Encoding", "binary");
 		response.setHeader("Content-Disposition", "attachment; filename=\"" + fileId + ".xlsx\"");
 		return content;
+	}
+	
+    @RequestMapping(value = "/assets/52week/export", method = RequestMethod.POST)
+	public ExportResponse exportAsset52WeekSchedule(@RequestBody SearchCriteria searchCriteria) {
+		// log.debug("JOB EXPORT STARTS HERE **********");
+		ExportResponse resp = new ExportResponse();
+		if (searchCriteria != null) {
+			searchCriteria.setUserId(SecurityUtils.getCurrentUserId());
+			ExportResult result = assetService.generate52WeekSchedule(searchCriteria.getSiteId(), searchCriteria.getAssetId());
+			resp.addResult(result);
+
+			// log.debug("RESPONSE FOR OBJECT resp *************"+resp);
+		}
+		return resp;
 	}
 }
