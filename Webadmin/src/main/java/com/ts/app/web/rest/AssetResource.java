@@ -464,14 +464,14 @@ public class AssetResource {
 		return result;
 	}
     
-	@RequestMapping(path="/assets/import/ppm", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+	@RequestMapping(path="/assets/ppm/import", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<ImportResult> importAssetPPMData(@RequestParam("assetPPMFile") MultipartFile file){
 		Calendar cal = Calendar.getInstance();
-		ImportResult result = assetService.importFile(file, cal.getTimeInMillis());
+		ImportResult result = assetService.importPPMFile(file, cal.getTimeInMillis());
 		return new ResponseEntity<ImportResult>(result,HttpStatus.OK);
 	}
 
-    @RequestMapping(value = "/assets/import/ppm/{fileId}/status",method = RequestMethod.GET)
+    @RequestMapping(value = "/assets/ppm/import/{fileId}/status",method = RequestMethod.GET)
 	public ImportResult importPPMStatus(@PathVariable("fileId") String fileId) {
 		//log.debug("ImportStatus -  fileId -"+ fileId);
 		ImportResult result = assetService.getImportStatus(fileId);
@@ -494,14 +494,14 @@ public class AssetResource {
 		return result;
 	}
     
-    @RequestMapping(path="/assets/import/amc", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(path="/assets/amc/import", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<ImportResult> importAssetAMCData(@RequestParam("assetAMCFile") MultipartFile file){
 		Calendar cal = Calendar.getInstance();
-		ImportResult result = assetService.importFile(file, cal.getTimeInMillis());
+		ImportResult result = assetService.importAMCFile(file, cal.getTimeInMillis());
 		return new ResponseEntity<ImportResult>(result,HttpStatus.OK);
 	}
 
-    @RequestMapping(value = "/assets/import/amc/{fileId}/status",method = RequestMethod.GET)
+    @RequestMapping(value = "/assets/amc/import/{fileId}/status",method = RequestMethod.GET)
 	public ImportResult importAMCStatus(@PathVariable("fileId") String fileId) {
 		//log.debug("ImportStatus -  fileId -"+ fileId);
 		ImportResult result = assetService.getImportStatus(fileId);

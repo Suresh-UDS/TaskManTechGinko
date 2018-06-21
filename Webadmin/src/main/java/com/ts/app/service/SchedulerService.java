@@ -176,7 +176,7 @@ public class SchedulerService extends AbstractService {
 			endCal.set(Calendar.HOUR_OF_DAY, 23);
 			endCal.set(Calendar.MINUTE, 59);
 			//List<SchedulerConfig> dailyTasks = schedulerConfigRepository.getDailyTask(cal.getTime());
-			List<SchedulerConfig> dailyTasks = schedulerConfigRepository.findScheduledTask(cal.getTime(), Frequency.DAILY.getValue());
+			List<SchedulerConfig> dailyTasks = schedulerConfigRepository.findScheduledTask(cal.getTime(), Frequency.DAY.getValue());
 			log.debug("Found {} Daily Tasks", dailyTasks.size());
 
 			if (CollectionUtils.isNotEmpty(dailyTasks)) {
@@ -206,7 +206,7 @@ public class SchedulerService extends AbstractService {
 			endCal.set(Calendar.HOUR_OF_DAY, 23);
 			endCal.set(Calendar.MINUTE, 59);
 			//List<SchedulerConfig> weeklyTasks = schedulerConfigRepository.getWeeklyTask(cal.getTime());
-			List<SchedulerConfig> weeklyTasks = schedulerConfigRepository.findScheduledTask(cal.getTime(), Frequency.WEEKLY.getValue());
+			List<SchedulerConfig> weeklyTasks = schedulerConfigRepository.findScheduledTask(cal.getTime(), Frequency.WEEK.getValue());
 			log.debug("Found {} Weekly Tasks", weeklyTasks.size());
 
 			if (CollectionUtils.isNotEmpty(weeklyTasks)) {
@@ -301,7 +301,7 @@ public class SchedulerService extends AbstractService {
 			endCal.set(Calendar.HOUR_OF_DAY, 23);
 			endCal.set(Calendar.MINUTE, 59);
 			//List<SchedulerConfig> monthlyTasks = schedulerConfigRepository.getMonthlyTask(cal.getTime());
-			List<SchedulerConfig> monthlyTasks = schedulerConfigRepository.findScheduledTask(cal.getTime(), Frequency.MONTHLY.getValue());
+			List<SchedulerConfig> monthlyTasks = schedulerConfigRepository.findScheduledTask(cal.getTime(), Frequency.MONTH.getValue());
 			log.debug("Found {} Monthly Tasks", monthlyTasks.size());
 
 			if (CollectionUtils.isNotEmpty(monthlyTasks)) {
@@ -339,7 +339,7 @@ public class SchedulerService extends AbstractService {
 			endCal.set(Calendar.HOUR_OF_DAY, 23);
 			endCal.set(Calendar.MINUTE, 59);
 			//List<SchedulerConfig> monthlyTasks = schedulerConfigRepository.getMonthlyTask(cal.getTime());
-			List<SchedulerConfig> fortnightlyTasks = schedulerConfigRepository.findScheduledTask(cal.getTime(), Frequency.FORTNIGHTLY.getValue());
+			List<SchedulerConfig> fortnightlyTasks = schedulerConfigRepository.findScheduledTask(cal.getTime(), Frequency.FORTNIGHT.getValue());
 			log.debug("Found {} Monthly Tasks", fortnightlyTasks.size());
 
 			if (CollectionUtils.isNotEmpty(fortnightlyTasks)) {
@@ -371,7 +371,7 @@ public class SchedulerService extends AbstractService {
 			endCal.add(Calendar.DAY_OF_MONTH, 1);
 			endCal.set(Calendar.HOUR_OF_DAY, 23);
 			endCal.set(Calendar.MINUTE, 59);
-			List<SchedulerConfig> quarterlyTasks = schedulerConfigRepository.findScheduledTask(cal.getTime(), Frequency.QUARTERLY.getValue());
+			List<SchedulerConfig> quarterlyTasks = schedulerConfigRepository.findScheduledTask(cal.getTime(), Frequency.QUARTER.getValue());
 			log.debug("Found {} Monthly Tasks", quarterlyTasks.size());
 
 			if (CollectionUtils.isNotEmpty(quarterlyTasks)) {
@@ -403,7 +403,7 @@ public class SchedulerService extends AbstractService {
 			endCal.add(Calendar.DAY_OF_MONTH, 1);
 			endCal.set(Calendar.HOUR_OF_DAY, 23);
 			endCal.set(Calendar.MINUTE, 59);
-			List<SchedulerConfig> halfyearlyTasks = schedulerConfigRepository.findScheduledTask(cal.getTime(), Frequency.HALFYEARLY.getValue());
+			List<SchedulerConfig> halfyearlyTasks = schedulerConfigRepository.findScheduledTask(cal.getTime(), Frequency.HALFYEAR.getValue());
 			log.debug("Found {} Monthly Tasks", halfyearlyTasks.size());
 
 			if (CollectionUtils.isNotEmpty(halfyearlyTasks)) {
@@ -435,7 +435,7 @@ public class SchedulerService extends AbstractService {
 			endCal.add(Calendar.DAY_OF_MONTH, 1);
 			endCal.set(Calendar.HOUR_OF_DAY, 23);
 			endCal.set(Calendar.MINUTE, 59);
-			List<SchedulerConfig> yearlyTasks = schedulerConfigRepository.findScheduledTask(cal.getTime(), Frequency.YEARLY.getValue());
+			List<SchedulerConfig> yearlyTasks = schedulerConfigRepository.findScheduledTask(cal.getTime(), Frequency.YEAR.getValue());
 			log.debug("Found {} Monthly Tasks", yearlyTasks.size());
 
 			if (CollectionUtils.isNotEmpty(yearlyTasks)) {
@@ -747,6 +747,8 @@ public class SchedulerService extends AbstractService {
 			PageRequest pageRequest = new PageRequest(1, 1);
 			Job parentJob = scheduledTask.getJob();
 			List<Job> prevJobs = jobRepository.findLastJobByParentJobId(parentJob.getId(), pageRequest);
+			DateTime today = DateTime.now();
+			today = today.withHourOfDay(0); //set today's hour to 0
 			if (creationPolicy.equalsIgnoreCase("monthly")) { // if the creation policy is set to monthly, create jobs for the rest of the
 																// month
 				DateTime currDate = DateTime.now();
@@ -755,15 +757,19 @@ public class SchedulerService extends AbstractService {
 					Job prevJob = prevJobs.get(0);
 					currDate = addDays(currDate, scheduledTask.getSchedule(), scheduledTask.getData());
 					if(prevJob.getPlannedStartTime().before(currDate.toDate())){
-						while (currDate.isBefore(lastDate) || currDate.isEqual(lastDate)) {
-							jobCreationTask(scheduledTask, scheduledTask.getJob(), scheduledTask.getData(), currDate.toDate());
+						while ((currDate.isBefore(lastDate) || currDate.isEqual(lastDate))) { //create task for future dates.
+							if(currDate.isAfter(today)) {
+								jobCreationTask(scheduledTask, scheduledTask.getJob(), scheduledTask.getData(), currDate.toDate());
+							}
 							currDate = addDays(currDate, scheduledTask.getSchedule(), scheduledTask.getData());
 						}
 					}
 				}else {
 					currDate = new DateTime(parentJob.getPlannedStartTime().getTime());
-					while (currDate.isBefore(lastDate) || currDate.isEqual(lastDate)) {
-						jobCreationTask(scheduledTask, scheduledTask.getJob(), scheduledTask.getData(), currDate.toDate());
+					while ((currDate.isBefore(lastDate) || currDate.isEqual(lastDate))) { // create task for future dates.
+						if(currDate.isAfter(today)) {
+							jobCreationTask(scheduledTask, scheduledTask.getJob(), scheduledTask.getData(), currDate.toDate());
+						}
 						currDate = addDays(currDate, scheduledTask.getSchedule(), scheduledTask.getData());
 					}
 				}
@@ -773,11 +779,15 @@ public class SchedulerService extends AbstractService {
 					Job prevJob = prevJobs.get(0);
 					currDate = addDays(currDate, scheduledTask.getSchedule(), scheduledTask.getData());
 					if(prevJob.getPlannedStartTime().before(currDate.toDate())){
-						jobCreationTask(scheduledTask, scheduledTask.getJob(), scheduledTask.getData(), currDate.toDate());
+						if(currDate.isAfter(today)) {
+							jobCreationTask(scheduledTask, scheduledTask.getJob(), scheduledTask.getData(), currDate.toDate());
+						}
 					}
 				}else {
 					currDate = new DateTime(parentJob.getPlannedStartTime().getTime());
-					jobCreationTask(scheduledTask, scheduledTask.getJob(), scheduledTask.getData(), currDate.toDate());
+					if(currDate.isAfter(today)) {
+						jobCreationTask(scheduledTask, scheduledTask.getJob(), scheduledTask.getData(), currDate.toDate());
+					}
 				}
 			}
 		}
@@ -932,33 +942,33 @@ public class SchedulerService extends AbstractService {
 	
 	
 	private DateTime addDays(DateTime dateTime , String scheduleType, String data) {
-		Frequency frequency = Frequency.valueOf(scheduleType);
+		Frequency frequency = Frequency.fromValue(scheduleType);
 		Map<String, String> dataMap = Splitter.on("&").withKeyValueSeparator("=").split(data);
 		int duration = Integer.parseInt(dataMap.get("duration"));
 		
 		switch(frequency) {
-			case HOURLY :
+			case HOUR :
 				dateTime = dateTime.plusHours(1 * duration);
 				break;
-			case DAILY :
+			case DAY :
 				dateTime = dateTime.plusDays(1 * duration);
 				break;
-			case WEEKLY :
+			case WEEK :
 				dateTime = dateTime.plusWeeks(1 * duration);
 				break;	
-			case FORTNIGHTLY :
+			case FORTNIGHT :
 				dateTime = dateTime.plusDays(14 * duration);
 				break;
-			case MONTHLY :
+			case MONTH :
 				dateTime = dateTime.plusMonths(1 * duration);
 				break;
-			case YEARLY :
+			case YEAR :
 				dateTime = dateTime.plusYears(1 * duration);
 				break;
-			case HALFYEARLY :
+			case HALFYEAR :
 				dateTime = dateTime.plusMonths(6 * duration);
 				break;
-			case QUARTERLY :
+			case QUARTER :
 				dateTime = dateTime.plusMonths(3 * duration);
 				break;
 			default:
@@ -1097,6 +1107,8 @@ public class SchedulerService extends AbstractService {
 		job.setScheduled(true);
 		job.setLocationId(!StringUtils.isEmpty(dataMap.get("location")) ? Long.parseLong(dataMap.get("location")) : 0);
 		job.setActive("Y");
+		job.setMaintenanceType(parentJob.getMaintenanceType());
+		job.setAssetId(parentJob.getAsset().getId());
 		log.debug("JobDTO Details before calling saveJob - " + job);
 		jobManagementService.saveJob(job);
 		if (StringUtils.isNotEmpty(frequency) && frequency.equalsIgnoreCase(FREQ_ONCE_EVERY_HOUR)) {
