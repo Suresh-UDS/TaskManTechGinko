@@ -508,7 +508,7 @@ public class SchedulerHelperService extends AbstractService {
 											// dailyAttn.setLongitudeOut(dailyAttn.getLongitudeOut());
 											dailyAttn.setNotCheckedOut(true); // mark the attendance as not checked out.
 											schedulerService.attendanceRepository.save(dailyAttn);
-										} else if (checkInCal.after(prevDayEndCal) && currCal.after(prevDayEndCal)) {
+										} else if (checkInCal.before(prevDayEndCal) && currCal.after(prevDayEndCal)) {
 											dailyAttn.setNotCheckedOut(true); // mark the attendance as not checked out.
 											schedulerService.attendanceRepository.save(dailyAttn);
 										}
