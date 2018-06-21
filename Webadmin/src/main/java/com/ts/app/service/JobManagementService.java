@@ -663,6 +663,8 @@ public class JobManagementService extends AbstractService {
 		Calendar calEnd = Calendar.getInstance();
 		calEnd.set(Calendar.HOUR_OF_DAY, 11);
 		calEnd.set(Calendar.MINUTE,59);
+		
+		job.setMaintenanceType(jobDTO.getMaintenanceType());
 
 		java.sql.Date startDate = new java.sql.Date(calStart.getTimeInMillis());
 		java.sql.Date endDate = new java.sql.Date(calEnd.getTimeInMillis());
@@ -893,6 +895,8 @@ public class JobManagementService extends AbstractService {
 		job.setBlock(jobDTO.getBlock());
 		job.setFloor(jobDTO.getFloor());
 		job.setZone(jobDTO.getZone());
+		job.setMaintenanceType(jobDTO.getMaintenanceType());
+		
 		//add the job checklist items
 		if(CollectionUtils.isNotEmpty(job.getChecklistItems())) {
 			job.getChecklistItems().clear();
