@@ -960,6 +960,7 @@ angular.module('timeSheetApp')
         	AssetComponent.remove($scope.deleteAssetId).then(function(){
                 
             	$scope.success = 'OK';
+                $scope.showNotifications('top','center','success','Asset Deleted Successfully!!');
             	$scope.loadAssets();
         	});
         }
@@ -972,7 +973,8 @@ angular.module('timeSheetApp')
 
         $scope.deleteDoc = function () {
             AssetComponent.deleteDoc($scope.deleteDocId).then(function(){
-                
+
+                $scope.showNotifications('top','center','success','Document Deleted Successfully!!');
                 $scope.getAllUploadedFiles();
                 $scope.getAllUploadedPhotos();
             });

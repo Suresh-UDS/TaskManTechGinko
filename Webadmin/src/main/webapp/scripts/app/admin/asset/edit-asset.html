@@ -631,9 +631,9 @@
                                                                 </div>
                                                                 <div class="col-md-4" style="text-align: right">
 
-                                                                    <!-- <button class="btn btn-success add-btn margn-tb0">
-                                                                        <i class="material-icons">print</i> Print
-                                                                    </button> -->
+                                                                    <button class="btn btn-success add-btn margn-tb0" ng-click="printDiv('printable')" >
+                                                                       <i class="material-icons">print</i> Print
+                                                                   </button>
                                                                     <!-- <button class="btn btn-warning add-btn margn-tb0">
                                                                         <i class="material-icons">autorenew</i> Refresh
                                                                     </button> -->
@@ -643,10 +643,10 @@
                                                             </div>
 
                                                         </div>
-                                                        <div class="panel-body">
+                                                        <div class="panel-body" >
                                                             <div class="row">
                                                                 <form name="form2" role="form" novalidate
-                                                    class="form-horizontal">
+                                                                class="form-horizontal">
 
                                                                 <div class="col-md-6 col-md-offset-3" style="text-align: center;">
 
@@ -676,14 +676,21 @@
                                                                         </div>
 
                                                                     </div>
-
-                                                                    <div style="text-align: center">
+                                                                     <div style="text-align: center">
 
                                                                         <button class="btn btn-success add-btn margn-tb0" ng-click="createQrCode()" ng-disabled="form2.$invalid">
                                                                             <i class="material-icons">autorenew</i> Generate
                                                                         </button>
 
                                                                     </div>
+
+                                                                </div>
+                                                                 </form>
+                                                            </div>
+
+                                                            <div class="row" id="printable">
+
+                                                               <div class="col-md-6 col-md-offset-3" style="text-align: center;">
 
                                                                     <h4>{{assetList.assetCode}}</h4>
 
@@ -692,13 +699,32 @@
                                                                         <img src="{{qr_img}}" width="50%">
 
                                                                     </div>
-
                                                                 </div>
-                                                                 </form>
-                                                            </div>
 
+                                                               <div class="col-md-8 col-md-offset-3" style="text-align: left;">
+                                                                      <div class="row">
+                                                                         <div class="col-md-7">   
 
-                                                        </div>
+                                                                             <p><span class="txtBold">Asset</span>  : {{assetList.title}}</p>
+                                                                             <p><span class="txtBold">Type </span> : {{assetList.assetType}}</p>
+                                                                             <p><span class="txtBold">Group</span>  : {{assetList.assetGroup}}</p>
+
+                                                                             
+                                                                             </div>
+                                                                             <div class="col-md-5">   
+
+                                                                             <p><span class="txtBold">Site</span> : {{assetList.siteName}}</p>
+                                                                             <p><span class="txtBold">Manufacturer</span>  : {{assetList.manufacturerName}}</p>
+                                                                             <p><span class="txtBold">Vendor</span>  : {{assetList.amcVendorName}}</p>
+
+                                                                         
+                                                                         </div>
+                                                                     </div>
+                                                                 </div>
+
+                                                               </div>
+
+                                                         </div>
                                                     </div>
 
                                                 </div>
