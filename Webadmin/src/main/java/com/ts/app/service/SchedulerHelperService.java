@@ -46,33 +46,33 @@ import com.ts.app.web.rest.dto.SearchCriteria;
 @Service
 @Transactional
 public class SchedulerHelperService extends AbstractService {
-	
+
 	final Logger log = LoggerFactory.getLogger(SchedulerHelperService.class);
 
 	@Inject
 	private PushService pushService;
-	
+
 	@Inject
 	private MailService mailService;
-	
+
 	@Inject
 	private JobRepository jobRepository;
-	
+
 	@Inject
 	private SettingsRepository settingRepository;
-	
+
 	@Inject
 	private ProjectRepository projectRepository;
-	
+
 	@Inject
 	private JobManagementService jobManagementService;
-	
+
 	@Inject
 	private ExportUtil exportUtil;
-	
+
 	@Inject
 	private Environment env;
-	
+
 	public void eodJobReport() {
 		if (env.getProperty("scheduler.eodJobReport.enabled").equalsIgnoreCase("true")) {
 			Calendar cal = Calendar.getInstance();
@@ -216,10 +216,10 @@ public class SchedulerHelperService extends AbstractService {
 					}
 				}
 			}
-		}		
+		}
 	}
-	
-	
+
+
 	@Transactional
 	public void generateDetailedAttendanceReport(SchedulerService schedulerService, Date date, boolean shiftAlert, boolean dayReport) {
 		if (schedulerService.env.getProperty("scheduler.attendanceDetailReport.enabled").equalsIgnoreCase("true")) {
@@ -508,7 +508,7 @@ public class SchedulerHelperService extends AbstractService {
 											// dailyAttn.setLongitudeOut(dailyAttn.getLongitudeOut());
 											dailyAttn.setNotCheckedOut(true); // mark the attendance as not checked out.
 											schedulerService.attendanceRepository.save(dailyAttn);
-										} else if (currCal.after(prevDayEndCal)) {
+										} else if (checkInCal.after(prevDayEndCal) && currCal.after(prevDayEndCal)) {
 											dailyAttn.setNotCheckedOut(true); // mark the attendance as not checked out.
 											schedulerService.attendanceRepository.save(dailyAttn);
 										}
