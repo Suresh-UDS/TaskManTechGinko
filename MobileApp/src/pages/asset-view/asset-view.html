@@ -18,8 +18,8 @@
             <ion-segment-button value="amc" (ionSelect)="getAssetAMCSchedule()">AMC </ion-segment-button>
             <ion-segment-button value="config" (ionSelect)="getAssetConfig()">Config </ion-segment-button>
             <ion-segment-button value="readings" (ionSelect)="getReading()">Readings</ion-segment-button>
-            <ion-segment-button value="jobs" (ionSelect)="getJobs(searchCriteria)">Jobs</ion-segment-button>
-            <ion-segment-button value="tickets" (ionSelect)="getTickets(searchCriteria)">Tickets</ion-segment-button>
+            <ion-segment-button value="jobs" (ionSelect)="getJobs(jobSearchCriteria)">Jobs</ion-segment-button>
+            <ion-segment-button value="tickets" (ionSelect)="getTickets(ticketSearchCriteria)">Tickets</ion-segment-button>
         </ion-segment>
     </ion-toolbar>
     <div [ngSwitch]="true">
@@ -101,7 +101,7 @@
         <!--</button>-->
     <!--</ion-fab>-->
 
-<div [ngSwitch]="categories">
+<div [ngSwitch]="categories" margin-top="">
     <ion-list *ngSwitchCase="'details'" padding-left="" padding-right="">
         <!--<ion-fab left bottom mini (click)="addAssetImage()"   >-->
             <!--<ion-label color="light" class="margin0 bg-orange " padding-right padding-left>Add</ion-label>-->
@@ -377,7 +377,7 @@
         </div>
     </ion-list>
 
-    <div *ngSwitchCase="'config'" margin-left="" margin-right="">
+    <div *ngSwitchCase="'config'" margin-left="" margin-right="" >
 
         <div text-center="" *ngIf="!assetDetails.config || assetDetails.config?.length<0">
             <ion-card text-center="">
@@ -464,7 +464,7 @@
             <!--</button>-->
         <!--</ion-fab>-->
 
-        <div text-center="" *ngIf="!assetDetails.jobs || assetDetails.jobs?.length<0">
+        <div text-center="" *ngIf="!assetDetails.jobs || assetDetails.jobs?.length<0" margin-top>
             <ion-card text-center="">
                 <ion-card-content>
                     No Data found
@@ -565,7 +565,7 @@
 
     <ion-list *ngSwitchCase="'tickets'" style="margin-top : 56px" padding-left="" padding-right="">
 
-        <div text-center *ngIf="!assetDetails.tickets || assetDetails.tickets?.length<0">
+        <div text-center *ngIf="assetDetails.tickets?.length==0">
             <ion-card text-center="">
                 <ion-card-content>
                     No Data found
