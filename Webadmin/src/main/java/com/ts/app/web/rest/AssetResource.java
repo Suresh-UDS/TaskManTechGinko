@@ -311,7 +311,7 @@ public class AssetResource {
 		log.debug("AssetId <<< " + searchCriteria.getAssetId() + " - startDate - " + searchCriteria.getCheckInDateTimeFrom() + " - endDate - " + searchCriteria.getCheckInDateTimeTo());
 
 		List<AssetPPMScheduleEventDTO> response = assetService.getAssetPPMScheduleCalendar(searchCriteria.getAssetId(), searchCriteria.getCheckInDateTimeFrom(), searchCriteria.getCheckInDateTimeTo());
-		log.debug("Get Asset PPM Schedule calendar for asset id size - " + response.size());
+		log.debug("Get Asset PPM Schedule calendar for asset id size - " + response);
 		return response;
 	}
 
