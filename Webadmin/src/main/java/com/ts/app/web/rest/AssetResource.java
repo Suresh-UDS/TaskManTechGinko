@@ -378,7 +378,7 @@ public class AssetResource {
 		log.debug("Save Asset Parameter Reading" +assetParamReadingDTO.getAssetParameterConfigId());
 		try{ 
 			assetParamReadingDTO.setUserId(SecurityUtils.getCurrentUserId());
-			if(assetParamReadingDTO.getId() != null) {
+			if(assetParamReadingDTO.getId() > 0) {
 				log.debug("Update Asset Parameter Reading" +assetParamReadingDTO.getId());
 				assetParamReadingDTO = assetService.updateAssetReadings(assetParamReadingDTO);
 			}else{

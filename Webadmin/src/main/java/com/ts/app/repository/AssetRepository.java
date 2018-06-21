@@ -1,5 +1,6 @@
 package com.ts.app.repository;
 
+import java.sql.Date;
 import java.util.List;
 
 import org.springframework.data.domain.Page;
@@ -36,6 +37,15 @@ public interface AssetRepository extends JpaRepository<Asset, Long>,JpaSpecifica
     @Query("SELECT a from Asset a where a.code like '%' || :code || '%' and a.active = 'Y'  order by a.title")
     Page<Asset> findByAssetCode(@Param("code") String code, Pageable pageRequest);
     
+    @Query("SELECT a from Asset a where a.assetType = :assetType and a.active = 'Y'  order by a.title")
+    Page<Asset> findAssetByTypeName(@Param("assetType") String assetType, Pageable pageRequest);
+    
+    @Query("SELECT a from Asset a where a.assetGroup = :assetGroup and a.active = 'Y'  order by a.title")
+    Page<Asset> findAssetByGroupName(@Param("assetGroup") String assetGroup, Pageable pageRequest);
+    
+    @Query("SELECT a from Asset a where a.acquiredDate = :acquiredDate and a.active = 'Y'  order by a.title")
+    Page<Asset> findAssetByAcquireDate(@Param("acquiredDate") Date acquiredDate, Pageable pageRequest);
+    
     @Query("SELECT a from Asset a where a.title like '%' || :name || '%' and a.active = 'Y'  order by a.title")
     Page<Asset> findByAssetTitle(@Param("name") String name, Pageable pageRequest);
     
@@ -55,6 +65,24 @@ public interface AssetRepository extends JpaRepository<Asset, Long>,JpaSpecifica
 
     @Query("SELECT a from Asset a where a.assetType = :assetType and a.title like '%' || :name || '%' and a.site.project.id = :projectId and a.site.id = :siteId and a.active = 'Y'  order by a.title")
     Page<Asset> findByAllCriteria(@Param("assetType") String assetType, @Param("name") String name,@Param("projectId") long projectId,@Param("siteId") long siteId, Pageable pageRequest);
+    
+    @Query("SELECT a from Asset a where a.title like '%' || :title || '%' and a.code like '%' || :code || '%' and a.active = 'Y'  order by a.title")
+    Page<Asset> findAssetByTitleAndCode(@Param("title") String title, @Param("code") String code, Pageable pageRequest);
+    
+    @Query("SELECT a from Asset a where a.title like '%' || :title || '%' and a.assetType = :assetType and a.active = 'Y'  order by a.title")
+    Page<Asset> findAssetByTitleAndType(@Param("title") String title, @Param("assetType") String assetType, Pageable pageRequest);
+    
+    @Query("SELECT a from Asset a where a.title like '%' || :title || '%' and a.site.id = :siteId and a.active = 'Y'  order by a.title")
+    Page<Asset> findAssetByTitleAndSiteId(@Param("title") String title, @Param("siteId") long siteId, Pageable pageRequest);
+    
+    @Query("SELECT a from Asset a where a.title like '%' || :title || '%' and a.site.project.id = :projectId and a.active = 'Y'  order by a.title")
+    Page<Asset> findAssetByTitleAndProjectId(@Param("title") String title, @Param("projectId") long projectId, Pageable pageRequest);
+    
+    @Query("SELECT a from Asset a where a.title like '%' || :title || '%' and a.acquiredDate = :acquiredDate and a.active = 'Y'  order by a.title")
+    Page<Asset> findAssetByTitleAndAcquiredDate(@Param("title") String title, @Param("acquiredDate") Date acquiredDate, Pageable pageRequest);
+    
+    @Query("SELECT a from Asset a where a.title like '%' || :title || '%' and a.assetGroup = :assetGroup and a.active = 'Y'  order by a.title")
+    Page<Asset> findAssetByTitleAndGroup(@Param("title") String title, @Param("assetGroup") String assetGroup, Pageable pageRequest);
     
     @Query("SELECT a from Asset a where a.site.id in (:siteIds) and a.active = 'Y'  order by a.title")
     Page<Asset> findAll(@Param("siteIds") List<Long> siteIds,  Pageable pageRequest);

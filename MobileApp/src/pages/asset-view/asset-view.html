@@ -12,7 +12,7 @@
     <ion-title>{{assetDetails.title}}</ion-title>
   </ion-navbar>
     <ion-toolbar class="tool-bar">
-        <ion-segment [(ngModel)]="categories" class="segmnt margin-auto" color="#ff9800" (ionChange)="segmentChange(categories)">
+        <ion-segment [(ngModel)]="categories" class="segmnt margin-auto" color="#ff9800" (ionChange)="segmentChange(categories,fab)">
             <ion-segment-button value="details" >Details</ion-segment-button>
             <ion-segment-button value="ppm" (ionSelect)="getAssetPPMSchedule()">PPM </ion-segment-button>
             <ion-segment-button value="amc" (ionSelect)="getAssetAMCSchedule()">AMC </ion-segment-button>
@@ -57,21 +57,54 @@
 
 </ion-header>
 
-<ion-content class="margin-top20">
+<ion-content>
 
-    <ion-fab right bottom mini (click)="getReadings()"  margin>
-        <ion-label color="light" class="margin0 bg-orange">Reading</ion-label>
-        <button ion-fab color="primary" class="margin-auto margin-top5">
-            <!--<i class="material-icons">network_check</i>-->
-            <ion-icon name="speedometer" class="fnt-35"></ion-icon>
-            <!--<i class="fa fa-tachometer-alt"></i>-->
+    <ion-fab right bottom mini  margin-bottom="" #fab>
+        <button ion-fab color="dark">
+            <ion-icon name="md-add" class="clr-orange"></ion-icon>
         </button>
+        <ion-fab-list side="top" fab-list-margin class="margin-left-right0" [ngSwitch]="categories">
+
+            <ion-label color="dark" class="margin0 bg-orange"  >Reading</ion-label>
+            <button ion-fab color="primary" (click)="getReadings()" >
+                <ion-icon name="speedometer" class="fnt-35"></ion-icon>
+            </button>
+
+            <ion-label color="dark" class="margin0 bg-orange"  *ngSwitchCase =" 'jobs' ">Job</ion-label>
+            <button ion-fab color="primary" (click)="createJob()" *ngSwitchCase =" 'jobs' ">
+                <ion-icon name="ios-construct-outline" class="fnt-35"></ion-icon>
+            </button>
+
+            <ion-label color="dark" class="margin0 bg-orange"  *ngSwitchCase =" 'details' ">Image</ion-label>
+            <button ion-fab color="primary" (click)="addAssetImage()" *ngSwitchCase =" 'details'" >
+                <ion-icon name="camera" class="fnt-24"></ion-icon>
+            </button>
+
+            <ion-label color="dark" class="margin0 bg-orange"  *ngSwitchCase =" 'tickets' ">Ticket</ion-label>
+            <button ion-fab color="primary" (click)="createTicket()" *ngSwitchCase =" 'tickets' ">
+                <ion-icon name="ios-construct-outline" class="fnt-35"></ion-icon>
+            </button>
+
+        </ion-fab-list>
     </ion-fab>
+
+
+
+
+
+    <!--<ion-fab right bottom mini (click)="getReadings()"  margin>-->
+        <!--<ion-label color="light" class="margin0 bg-orange">Reading</ion-label>-->
+        <!--<button ion-fab color="primary" class="margin-auto margin-top5">-->
+            <!--&lt;!&ndash;<i class="material-icons">network_check</i>&ndash;&gt;-->
+            <!--<ion-icon name="speedometer" class="fnt-35"></ion-icon>-->
+            <!--&lt;!&ndash;<i class="fa fa-tachometer-alt"></i>&ndash;&gt;-->
+        <!--</button>-->
+    <!--</ion-fab>-->
 
 <div [ngSwitch]="categories">
     <ion-list *ngSwitchCase="'details'" padding-left="" padding-right="">
         <!--<ion-fab left bottom mini (click)="addAssetImage()"   >-->
-            <!--<ion-label color="light" class="margin0 bg-orange padding-left-right20">Add</ion-label>-->
+            <!--<ion-label color="light" class="margin0 bg-orange " padding-right padding-left>Add</ion-label>-->
             <!--<button ion-fab color="primary" class="margin-auto margin-top5">-->
                 <!--<ion-icon name="camera"></ion-icon>-->
             <!--</button>-->
@@ -224,9 +257,11 @@
 
     </ion-list>
     <ion-list *ngSwitchCase="'ppm'" padding-left="" padding-right="">
-
+        <div float-right margin-top>
+            <ion-icon ios="ios-calendar" md="md-calendar" class="green fnt-25 padding-right10"(click)="showCalendar()"></ion-icon>
+        </div>
         <div text-center="" *ngIf="!assetDetails.ppms || assetDetails.ppms.length < 0">
-            <ion-card text-center="">
+            <ion-card text-center>
                 <ion-card-content>
                     No Data found
                 </ion-card-content>
@@ -342,7 +377,7 @@
         </div>
     </ion-list>
 
-    <div *ngSwitchCase="'config'">
+    <div *ngSwitchCase="'config'" margin-left="" margin-right="">
 
         <div text-center="" *ngIf="!assetDetails.config || assetDetails.config?.length<0">
             <ion-card text-center="">
@@ -419,7 +454,16 @@
 
     </div>
 
-    <ion-list *ngSwitchCase="'jobs'" style="margin-top : 56px" padding-left="" padding-right="">
+    <ion-list *ngSwitchCase="'jobs'"  padding-left="" padding-right="" style="margin-top: 56px">
+
+
+        <!--<ion-fab left bottom mini (click)="createJob()"  margin>-->
+            <!--<ion-label color="light" class="margin0 bg-orange" padding-left=" " padding-right="">Job</ion-label>-->
+            <!--<button ion-fab color="primary" class="margin-auto margin-top5">-->
+                <!--<ion-icon name="add"></ion-icon>-->
+            <!--</button>-->
+        <!--</ion-fab>-->
+
         <div text-center="" *ngIf="!assetDetails.jobs || assetDetails.jobs?.length<0">
             <ion-card text-center="">
                 <ion-card-content>
@@ -521,7 +565,7 @@
 
     <ion-list *ngSwitchCase="'tickets'" style="margin-top : 56px" padding-left="" padding-right="">
 
-        <div text-center="" *ngIf="!assetDetails.tickets || assetDetails.tickets?.length<0">
+        <div text-center *ngIf="!assetDetails.tickets || assetDetails.tickets?.length<0">
             <ion-card text-center="">
                 <ion-card-content>
                     No Data found
@@ -603,7 +647,7 @@
         <div  *ngIf="(!assetDetails.reading || assetDetails.reading.length < 0) && spinner" text-center class="margin-top25">
             <ion-spinner name="circles"></ion-spinner>
         </div>
-        <div *ngIf="(!assetDetails.reading || assetDetails.reading.length < 0) && !spinner">
+        <div *ngIf="(!assetDetails.reading || assetDetails.reading.length < 0) && !spinner"  text-center>
             <ion-card text-center>
                 <ion-card-content>
                     No Data found
