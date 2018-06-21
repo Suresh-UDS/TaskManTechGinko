@@ -44,7 +44,7 @@ export class CreateTicket {
     ticketImage:any;
     takenImages:any;
     fileTransfer: FileTransferObject = this.transfer.create();
-
+    assetDetails:any;
 
     constructor(public navCtrl: NavController, public navParams: NavParams, public siteService:SiteService,public camera:Camera,public popoverCtrl: PopoverController,
                 public jobService:JobService, public cs:componentService, public employeeService:EmployeeService,@Inject(MY_CONFIG_TOKEN) private config:ApplicationConfig,private transfer: FileTransfer) {
@@ -53,7 +53,10 @@ export class CreateTicket {
       this.severities = ['Low','Medium','High'];
       this.severity = this.severities[0];
       this.takenImages=[];
-  }
+      this.assetDetails = this.navParams.get('assetDetails')
+      this.empPlace="Employee"
+
+    }
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad CreateTicket');
@@ -135,6 +138,10 @@ export class CreateTicket {
 
               };
 
+              if(this.assetDetails)
+              {
+                  this.newTicket.assetId = this.assetDetails.assetId;
+              }
 
               this.jobService.createTicket(this.newTicket).subscribe(
                   response=> {

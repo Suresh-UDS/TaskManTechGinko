@@ -129,6 +129,15 @@ export class AssetService {
         )
     }
 
+    getPPMScheduleCalendar(assetId,searchCriteria):Observable<any>{
+        return this.http.post(this.config.Url+'api/assets/'+assetId+'/ppmschedule/calendar',{searchCriteria}).map(
+            response=>{
+                console.log("Response for ppm schedule calendar");
+                return response;
+            }
+        )
+    }
+
 
 
 }

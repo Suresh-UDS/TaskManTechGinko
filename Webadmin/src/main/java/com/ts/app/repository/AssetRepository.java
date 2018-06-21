@@ -49,7 +49,7 @@ public interface AssetRepository extends JpaRepository<Asset, Long>,JpaSpecifica
     @Query("SELECT a from Asset a where a.title like '%' || :name || '%' and a.active = 'Y'  order by a.title")
     Page<Asset> findByAssetTitle(@Param("name") String name, Pageable pageRequest);
     
-    List<Asset> findBySiteId(Long siteId);
+    List<Asset> findBySiteId(long siteId);
     
     @Query("SELECT a from Asset a where a.site.id = :siteId and a.active = 'Y'  order by a.title")
     Page<Asset> findBySiteId(@Param("siteId") long siteId, Pageable pageRequest);
@@ -74,6 +74,12 @@ public interface AssetRepository extends JpaRepository<Asset, Long>,JpaSpecifica
     
     @Query("SELECT a from Asset a where a.title like '%' || :title || '%' and a.site.id = :siteId and a.active = 'Y'  order by a.title")
     Page<Asset> findAssetByTitleAndSiteId(@Param("title") String title, @Param("siteId") long siteId, Pageable pageRequest);
+    
+    @Query("SELECT a from Asset a where a.title like '%' || :title || '%' and a.site.project.id = :projectId and a.active = 'Y'  order by a.title")
+    Page<Asset> findAssetByTitleAndProjectId(@Param("title") String title, @Param("projectId") long projectId, Pageable pageRequest);
+    
+    @Query("SELECT a from Asset a where a.title like '%' || :title || '%' and a.acquiredDate = :acquiredDate and a.active = 'Y'  order by a.title")
+    Page<Asset> findAssetByTitleAndAcquiredDate(@Param("title") String title, @Param("acquiredDate") Date acquiredDate, Pageable pageRequest);
     
     @Query("SELECT a from Asset a where a.title like '%' || :title || '%' and a.assetGroup = :assetGroup and a.active = 'Y'  order by a.title")
     Page<Asset> findAssetByTitleAndGroup(@Param("title") String title, @Param("assetGroup") String assetGroup, Pageable pageRequest);

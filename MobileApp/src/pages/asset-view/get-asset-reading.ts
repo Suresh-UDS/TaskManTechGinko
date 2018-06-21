@@ -7,6 +7,7 @@ import {componentService} from "../service/componentService";
 import {JobPopoverPage} from "../jobs/job-popover";
 import {Camera, CameraOptions} from "@ionic-native/camera";
 import{AssetService} from "../service/assetService";
+import {CalenderPage} from "../calender-page/calender-page";
 
 /**
  * Generated class for the GetAssetReadings page.
@@ -46,6 +47,10 @@ export class GetAssetReading {
         // this.collapseHide
     }
 
+    showCalendar(){
+        this.navCtrl.push(CalenderPage);
+    }
+
 
     getAssetConfigsReading()
     {
@@ -68,7 +73,7 @@ export class GetAssetReading {
                                     config.previousValue=response.value;
                                 }
                             }
-                            else if(response.finalValue<0)
+                            else if(response.finalValue<=0)
                             {
                                 config.previousValue=response.initialValue;
                                 config.reading=response.initialValue;

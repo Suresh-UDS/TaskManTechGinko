@@ -278,7 +278,7 @@ angular.module('timeSheetApp')
             },
             importAssetPPMFile: function(file) {
 	        		var fileFormData = new FormData();
-	            fileFormData.append('assetFilePPM', file);
+	            fileFormData.append('assetPPMFile', file);
 	            	return $http.post('api/assets/ppm/import', fileFormData, {
 	                    transformRequest: angular.identity,
 	                    headers: {'Content-Type': undefined}
@@ -295,7 +295,7 @@ angular.module('timeSheetApp')
 	        },
 	        importAssetAMCFile: function(file) {
 	        		var fileFormData = new FormData();
-	            fileFormData.append('assetFileAMC', file);
+	            fileFormData.append('assetAMCFile', file);
 	            	return $http.post('api/assets/amc/import', fileFormData, {
 	                    transformRequest: angular.identity,
 	                    headers: {'Content-Type': undefined}

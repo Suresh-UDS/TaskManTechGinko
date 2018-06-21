@@ -182,7 +182,10 @@ dependencies {
 	compile 'com.google.cloud:google-cloud-vision:1.14.0'
 	//compile "org.springframework.data:spring-data-redis:2.0.2.RELEASE"
 	//compile "redis.clients:jedis:2.9.0"
-    
+    compile 'com.google.api-client:google-api-client:1.23.0'
+    compile 'com.google.oauth-client:google-oauth-client-jetty:1.23.0'
+    compile 'com.google.apis:google-api-services-sheets:v4-rev516-1.23.0'
+    compile 'com.google.apis:google-api-services-drive:v3-rev110-1.23.0'    
 }
 
 compileJava.dependsOn(processResources)

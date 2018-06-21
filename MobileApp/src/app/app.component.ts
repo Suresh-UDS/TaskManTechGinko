@@ -109,8 +109,11 @@ export class MyApp {
           console.log("Back button event");
           console.log(view);
           console.log(this.nav.canGoBack());
-          console.log(this.ionicApp._modalPortal.getActive());
-          if(this.nav.canGoBack())
+          if(this.ionicApp._overlayPortal.getActive())
+          {
+              this.ionicApp._overlayPortal.getActive().dismiss();
+          }
+          else if(this.nav.canGoBack())
           {
               this.nav.pop();
           }
