@@ -117,6 +117,24 @@
                                                     </td>
 
                                                 </tr>
+
+                                                <tr ng-if="job.pendingAtUDS">
+
+                                                    <td>Job Pending Status </td>
+                                                    <td>
+                                                        Job Pending at UDS
+                                                    </td>
+
+                                                </tr>
+
+                                                <tr ng-if="job.pendingAtClient">
+
+                                                    <td>Job Pending Status </td>
+                                                    <td>
+                                                        Job Pending at {{job.siteProjectName}}
+                                                    </td>
+
+                                                </tr>
                                                 <tr>
 
                                                     <td>Type </td>

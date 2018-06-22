@@ -201,6 +201,8 @@ angular.module('timeSheetApp')
                 $scope.loadingStop();
         	    console.log("Job details",data);
         		$scope.job=data;
+        		$scope.job.pendingStatus='pendingAtUDS';
+        		$scope.job.pendingAtUDS=true;
         		$scope.selectedSite = {id : data.siteId,name : data.siteName};
         		$scope.loadEmployees().then(function(employees){
         			console.log('load employees ');
@@ -308,7 +310,7 @@ angular.module('timeSheetApp')
 	            	$scope.job.schedule = 'ONCE';
 	            	$scope.job.active = 'Y';
 	            	$scope.job.plannedHours = 1;
-                $scope.job.plannedStartTime = $filter('date')(new Date(), 'EEE, dd MMM yyyy HH:mm:ss Z');
+                    $scope.job.plannedStartTime = $filter('date')(new Date(), 'EEE, dd MMM yyyy HH:mm:ss Z');
 
 	        	}
 	        	if($stateParams.ticketId){

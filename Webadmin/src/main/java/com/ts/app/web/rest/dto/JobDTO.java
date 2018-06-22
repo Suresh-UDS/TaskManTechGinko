@@ -81,6 +81,10 @@ public class JobDTO extends BaseDTO {
 
 	private Job parentJob;
 
+	private boolean pendingAtUDS;
+
+	private boolean pendingAtClient;
+
 	@JsonIgnoreProperties
 	private String block;
 
@@ -443,5 +447,21 @@ public class JobDTO extends BaseDTO {
 
     public void setParentJob(Job parentJob) {
         this.parentJob = parentJob;
+    }
+
+    public boolean isPendingAtUDS() {
+        return pendingAtUDS;
+    }
+
+    public void setPendingAtUDS(boolean pendingAtUDS) {
+        this.pendingAtUDS = pendingAtUDS;
+    }
+
+    public boolean isPendingAtClient() {
+        return pendingAtClient;
+    }
+
+    public void setPendingAtClient(boolean pendingAtClient) {
+        this.pendingAtClient = pendingAtClient;
     }
 }

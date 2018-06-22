@@ -56,15 +56,15 @@ public class Ticket extends AbstractAuditingEntity implements Serializable {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "assigned_to_id", nullable = true)
     private Employee assignedTo;
-    
+
     private Date assignedOn;
-    
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "closed_by_id", nullable = true)
     private Employee closedBy;
-    
+
     private Date closedOn;
-    
+
     private String reportingTo;
 
     private String image;
@@ -76,11 +76,15 @@ public class Ticket extends AbstractAuditingEntity implements Serializable {
     private String type;
 
     private String severity;
-    
+
     private String category;
-    
+
     private String quotationId;
-    
+
+    private boolean pendingAtUDS;
+
+    private boolean pendingAtClient;
+
     public Long getId() {
         return id;
     }
@@ -249,7 +253,20 @@ public class Ticket extends AbstractAuditingEntity implements Serializable {
 		this.quotationId = quotationId;
 	}
 
-	
-    
-	
+
+    public boolean isPendingAtUDS() {
+        return pendingAtUDS;
+    }
+
+    public void setPendingAtUDS(boolean pendingAtUDS) {
+        this.pendingAtUDS = pendingAtUDS;
+    }
+
+    public boolean isPendingAtClient() {
+        return pendingAtClient;
+    }
+
+    public void setPendingAtClient(boolean pendingAtClient) {
+        this.pendingAtClient = pendingAtClient;
+    }
 }

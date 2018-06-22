@@ -130,6 +130,7 @@ public class JobManagementResource {
 	public ResponseEntity<?> updateJob(@Valid @RequestBody JobDTO jobDTO, HttpServletRequest request, @PathVariable("id") Long id) {
 		if(jobDTO.getId() == 0) jobDTO.setId(id);
 		log.debug("Job Details in updateJob = "+ jobDTO);
+
 		JobDTO response = jobService.updateJob(jobDTO);
         if(response != null) {
 

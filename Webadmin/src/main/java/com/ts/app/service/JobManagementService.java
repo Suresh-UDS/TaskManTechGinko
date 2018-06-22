@@ -825,6 +825,13 @@ public class JobManagementService extends AbstractService {
 		job.setBlock(jobDTO.getBlock());
 		job.setFloor(jobDTO.getFloor());
 		job.setZone(jobDTO.getZone());
+		if(jobDTO.isPendingAtClient()){
+            job.setPendingAtClient(jobDTO.isPendingAtClient());
+        }
+
+        if(jobDTO.isPendingAtUDS()){
+		    job.setPendingAtUDS(jobDTO.isPendingAtUDS());
+        }
 		//add the job checklist items
 		if(CollectionUtils.isNotEmpty(job.getChecklistItems())) {
 			job.getChecklistItems().clear();
@@ -964,6 +971,12 @@ public class JobManagementService extends AbstractService {
 	public JobDTO updateJob(JobDTO jobDTO) {
 		Job job = findJob(jobDTO.getId());
 		mapToEntity(jobDTO, job);
+
+		if(jobDTO.getTicketId()>0){
+		    Ticket ticket = ticketRepository.findOne(jobDTO.getTicketId());
+            TicketDTO ticketDTO = mapperUtil.toModel(ticket,TicketDTO.class);
+            ticketManagementService.updateTicketPendingStatus(ticketDTO);
+        }
 		if(jobDTO.getJobStatus().equals(JobStatus.COMPLETED)) {
 			onlyCompleteJob(job);
 		}else {
