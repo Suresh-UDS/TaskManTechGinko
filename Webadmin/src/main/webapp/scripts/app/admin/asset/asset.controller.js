@@ -95,6 +95,7 @@ angular.module('timeSheetApp')
         console.log("state params",$stateParams);
                     
         var that =  $scope;
+        $rootScope.exportStatusObj  ={};
 
         $scope.calendar = {
             actualStart : false,
@@ -1832,15 +1833,16 @@ angular.module('timeSheetApp')
         }
 
         $scope.loadPPMJobs = function() { 
-        	$scope.ppmSearchCriteria.maintenanceType = "PPM";
-        	$scope.ppmSearchCriteria.assetId = $stateParams.id;
-        	console.log($scope.searchCriteria);
-        	JobComponent.search($scope.ppmSearchCriteria).then(function(data){ 
-        		console.log(data);
-        		$scope.ppmJobLists = data.transactions;
-        	});
+	        	$scope.ppmSearchCriteria.maintenanceType = "PPM";
+	        	$scope.ppmSearchCriteria.assetId = $stateParams.id;
+	        	console.log($scope.searchCriteria);
+	        	JobComponent.search($scope.ppmSearchCriteria).then(function(data){ 
+	        		console.log(data);
+	        		$scope.ppmJobLists = data.transactions;
+	        	});
         }
         
+
         $scope.loadAllRules = function() {
         	AssetComponent.getAllRules().then(function(data) { 
         		console.log(data);

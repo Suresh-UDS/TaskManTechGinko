@@ -92,7 +92,7 @@ angular.module('timeSheetApp')
         $scope.init = function() {
                 $scope.loadPageTop();
                 $scope.loadAllProjects();
-                $scope.loadAssetStatuses();
+                //$scope.loadAssetStatuses();
                 $scope.loadSites();
                 $scope.loadAssets();
         }
@@ -270,7 +270,7 @@ angular.module('timeSheetApp')
 
 
             //AssetComponent.searchAssets($scope.searchCriteria, reportUid).then(function (data) {
-            AssetComponent.searchAssets($scope.searchCriteria).then(function (data) {
+            AssetComponent.search($scope.searchCriteria).then(function (data) {
                 $scope.assetsData = data.transactions;
                 $scope.assetsDataLoader = true;
                 console.log('Asset search result list -' + JSON.stringify($scope.assetsData));

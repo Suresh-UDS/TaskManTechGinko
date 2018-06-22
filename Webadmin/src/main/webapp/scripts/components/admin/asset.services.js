@@ -315,10 +315,30 @@ angular.module('timeSheetApp')
 	            		return response.data;
 	            	});
 	        },
+
 	        getAllRules : function() {
 	        	return $http.get('api/assets/readingRules').then(function (response) { 
 	        		return response.data;
 	        	});
-	        }
+	        },
+
+	        
+	        exportAllData: function(searchCriteria) {
+	            	return $http.post('api/assets/export', searchCriteria).then(function (response) {
+	            		return response.data;
+	            	});
+	        },
+	        exportStatus: function(fileName) {
+	            	return $http.get('api/assets/export/'+fileName+"/status").then(function (response) {
+	            		return response.data;
+	            	});
+	        },
+	
+	        getExportFile: function(fileName) {
+	            	return $http.get('api/assets/export/'+fileName).then(function (response) {
+	            		return response.data;
+	            	});
+	        },
+	        
         };
     });
