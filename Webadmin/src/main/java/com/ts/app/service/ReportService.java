@@ -455,8 +455,7 @@ public class ReportService extends AbstractService {
         ZonedDateTime startZDate = sqlDate.toLocalDate().atStartOfDay(zone);
 
         java.sql.Date sqlEndDate = new java.sql.Date(endCal.getTimeInMillis());
-        ZonedDateTime endZDate = sqlEndDate.toLocalDate().atStartOfDay(zone);
-        endZDate = endZDate.withHour(23).withMinute(59);
+        ZonedDateTime endZDate = sqlEndDate.toLocalDate().atTime(23, 59).atZone(zone);
         long totalNewTicketCount = 0;
         long totalClosedTicketCount = 0;
         long totalPendingTicketCount = 0;
