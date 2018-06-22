@@ -15,7 +15,6 @@ import {AssetService} from "../service/assetService";
 import{CalenderPage} from "../calender-page/calender-page";
 import {CreateJobPage} from "../jobs/add-job";
 
-
 /**
  * Generated class for the AssetView page.
  *
@@ -79,7 +78,15 @@ export class AssetView {
   }
 
     getReadings(){
-        this.navCtrl.push(GetAssetReading,{assetDetails:this.assetDetails});
+        // this.navCtrl.push(GetAssetReading,{assetDetails:this.assetDetails});
+
+        let profileModal = this.modalCtrl.create(GetAssetReading, {assetDetails:this.assetDetails });
+        profileModal.onDidDismiss(data => {
+            console.log(data);
+            this.getReading();
+        });
+        profileModal.present();
+
     }
 
     // Segment Change
@@ -448,6 +455,8 @@ export class AssetView {
 
     // Reading
     getReading(){
+        this.assetDetails.reading=null;
+        this.spinner=true;
         this.assetService.viewReading(this.assetDetails.id).subscribe(
             response=>
             {

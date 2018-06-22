@@ -40,10 +40,6 @@ public class AssetParameterReadingDTO extends BaseDTO implements Serializable {
 	
 	private int runMinutes;
 	
-	private int min;
-	
-	private int max;
-	
 	public long getId() {
 		return id;
 	}
@@ -170,22 +166,6 @@ public class AssetParameterReadingDTO extends BaseDTO implements Serializable {
 
 	public void setRunMinutes(int runMinutes) {
 		this.runMinutes = runMinutes;
-	}
-
-	public int getMin() {
-		return min;
-	}
-
-	public void setMin(int min) {
-		this.min = min;
-	}
-
-	public int getMax() {
-		return max;
-	}
-
-	public void setMax(int max) {
-		this.max = max;
 	}
 
 	

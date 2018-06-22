@@ -45,7 +45,7 @@ export class InitFeedbackPage {
   constructor(public navCtrl: NavController,public myService:authService,public component:componentService, private siteService: SiteService, private feedbackService: FeedbackService) {
         // this.loadFeedbackMappings();
 
-      this.bgClr=["#552D56","#673553","#AF5E6C","#DE8275","#FFAB88","#FF6C54","#FF8A54","#FFA754","#FFC153","#552D56"]
+      this.bgClr=["#986300","#cb8400","#feae19","#fec04c","#fed27f","#fedb99","#fee4b2","#feedcc","#fef6e5","#ffffff"]
 
 
 
