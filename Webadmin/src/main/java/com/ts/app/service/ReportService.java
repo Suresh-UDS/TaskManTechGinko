@@ -1,6 +1,7 @@
 package com.ts.app.service;
 
 import java.math.BigDecimal;
+import java.sql.Timestamp;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
@@ -9,7 +10,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.TimeZone;
 
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
@@ -35,6 +35,7 @@ import com.ts.app.repository.JobRepository;
 import com.ts.app.repository.SiteRepository;
 import com.ts.app.repository.TicketRepository;
 import com.ts.app.repository.UserRepository;
+import com.ts.app.service.util.DateUtil;
 import com.ts.app.web.rest.dto.ReportResult;
 
 @Service
@@ -445,22 +446,25 @@ public class ReportService extends AbstractService {
         Calendar startCal = DateUtils.toCalendar(selectedDate);
 	    	startCal.set(Calendar.HOUR_OF_DAY, 0);
 	    	startCal.set(Calendar.MINUTE, 0);
-	    	startCal.setTimeZone(TimeZone.getDefault());
+	    	//startCal.setTimeZone(TimeZone.getDefault());
 	    	Calendar endCal = DateUtils.toCalendar(endDate);
 	    	endCal.set(Calendar.HOUR_OF_DAY, 23);
 	    	endCal.set(Calendar.MINUTE, 59);
-	    	endCal.setTimeZone(TimeZone.getDefault());
-        java.sql.Date sqlDate = new java.sql.Date(startCal.getTimeInMillis());
-	    	ZoneId  zone = ZoneId.of("Asia/Singapore");
-        ZonedDateTime startZDate = sqlDate.toLocalDate().atStartOfDay(zone);
+	    	//endCal.setTimeZone(TimeZone.getDefault());
+        //java.sql.Date sqlDate = new java.sql.Date(startCal.getTimeInMillis());
+        Timestamp sqlDate = DateUtil.convertToTimestamp(startCal.getTime());
+	    	ZoneId  zone = ZoneId.of("Asia/Kolkata");
+        ZonedDateTime startZDate = sqlDate.toLocalDateTime().atZone(zone).withHour(0).withMinute(0);
 
-        java.sql.Date sqlEndDate = new java.sql.Date(endCal.getTimeInMillis());
-        ZonedDateTime endZDate = sqlEndDate.toLocalDate().atTime(23, 59).atZone(zone);
+        //java.sql.Date sqlEndDate = new java.sql.Date(endCal.getTimeInMillis());
+        Timestamp sqlEndDate = DateUtil.convertToTimestamp(endCal.getTime());
+        ZonedDateTime endZDate = sqlEndDate.toLocalDateTime().atZone(zone).withHour(23).withMinute(59);
         long totalNewTicketCount = 0;
         long totalClosedTicketCount = 0;
         long totalPendingTicketCount = 0;
         long totalPendingDueToClientTicketCount = 0;
         long totalPendingDueToCompanyTicketCount = 0;
+        log.info("Ticket report params : siteId - "+ siteIds + ", startZDate - " + startZDate + ", endZDate -" + endZDate );
 
         totalNewTicketCount = ticketRepository.findCountBySiteIdAndDateRange(siteIds, startZDate, endZDate);
 
