@@ -257,7 +257,7 @@
 
     </ion-list>
     <ion-list *ngSwitchCase="'ppm'" padding-left="" padding-right="">
-        <div float-right margin-top>
+        <div float-right margin-top *ngIf="assetDetails.ppms">
             <ion-icon ios="ios-calendar" md="md-calendar" class="green fnt-25 padding-right10"(click)="showCalendar()"></ion-icon>
         </div>
         <div text-center="" *ngIf="!assetDetails.ppms || assetDetails.ppms.length < 0">
@@ -268,7 +268,7 @@
             </ion-card>
         </div>
 
-        <div  class="white-bg" *ngFor="let ppm of assetDetails.ppms;let k=index" >
+        <div  class="white-bg margin-top25" *ngFor="let ppm of assetDetails.ppms;let k=index" >
 
             <div class="padding-left16 padding-top5" >
                 <ion-row class="margin0">
@@ -317,7 +317,7 @@
     </ion-list>
 
     <ion-list *ngSwitchCase="'amc'" padding-left="" padding-right="">
-        <div float-right margin-top>
+        <div float-right margin-top *ngIf="assetDetails.amcs">
             <ion-icon ios="ios-calendar" md="md-calendar" class="green fnt-25 padding-right10"(click)="showCalendar()"></ion-icon>
         </div>
         <div text-center="" *ngIf="!assetDetails.amcs || assetDetails.amcs.length < 0">
@@ -328,7 +328,7 @@
             </ion-card>
         </div>
 
-        <div  class="white-bg" *ngFor="let amc of assetDetails.amcs;let k=index" >
+        <div  class="white-bg margin-top25" *ngFor="let amc of assetDetails.amcs;let k=index" >
 
             <div class="padding-left16 padding-top5" >
                 <ion-row class="margin0">
