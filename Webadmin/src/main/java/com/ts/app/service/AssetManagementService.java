@@ -894,7 +894,7 @@ public class AssetManagementService extends AbstractService {
 		assetDTO.setSiteName(asset.getSite().getName());
 		assetDTO.setAssetType(asset.getAssetType());
 		assetDTO.setAssetGroup(asset.getAssetGroup());
-
+		assetDTO.setQrCodeImage(asset.getQrCodeImage());
 		return assetDTO;
 	}
 

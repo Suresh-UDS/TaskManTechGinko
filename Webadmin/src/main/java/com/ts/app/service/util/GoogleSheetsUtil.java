@@ -48,7 +48,7 @@ public class GoogleSheetsUtil {
 	 * Global instance of the scopes required by this quickstart. If modifying these
 	 * scopes, delete your previously saved credentials/ folder.
 	 */
-	private static final List<String> SCOPES = Collections.singletonList(DriveScopes.DRIVE_METADATA_READONLY);
+	private static final List<String> SCOPES = Collections.singletonList(DriveScopes.DRIVE_FILE);
 	private static final String CLIENT_SECRET_DIR = "client_secret_872397104992-ilhar6nqjp1l4cdat5n82i25ncn82s87.apps.googleusercontent.com.json";
 
 	/**
