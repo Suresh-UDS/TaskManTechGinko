@@ -10,7 +10,7 @@ import {SiteService} from "../service/siteService";
 import {EmployeeService} from "../service/employeeService";
 
 @Component({
-  selector: 'page-add-job',
+  selector: 'page-job',
   templateUrl: 'add-job.html'
 })
 export class CreateJobPage {
@@ -42,8 +42,10 @@ export class CreateJobPage {
     empPlace:any;
     msg:any;
     ticket:any;
+    assetDetails:any;
     constructor(public navCtrl: NavController,public component:componentService,public navParams:NavParams,public myService:authService, public authService: authService, private loadingCtrl:LoadingController, private jobService: JobService, private attendanceService: AttendanceService, private siteService: SiteService, private employeeService:EmployeeService) {
         this.jobDetails=this.navParams.get('job');
+        this.assetDetails = this.navParams.get('assetDetails')
         console.log(this.navParams.get('ticketDetails'));
         if(this.navParams.get('ticketDetails')){
             this.ticket = this.navParams.get('ticketDetails');
@@ -138,6 +140,25 @@ export class CreateJobPage {
                     "ticketId":this.ticket.id
                 }
             }
+            else if(this.assetDetails)
+            {
+                this.newJob={
+                    "title":this.title,
+                    "description":this.description,
+                    "plannedStartTime":this.plannedStartTime,
+                    "plannedEndTime":this.plannedEndTime,
+                    "plannedHours":this.plannedHours,
+                    "jobStatus":"ASSIGNED",
+                    "comments":"test",
+                    "siteId":this.siteId,
+                    "employeeId":this.employ,
+                    "userId":this.userId,
+                    "locationId":1,
+                    "assetId":this.assetDetails.id
+                }
+            }
+
+
 
 
             this.jobService.createJob(this.newJob).subscribe(

@@ -176,6 +176,7 @@ import {JobFilter} from "../pages/jobs/job-filter/job-filter";
       EmployeeFilter,
       GetAssetReading,
       GetAssetReadings,
+      CalenderPage,
   ],
   imports: [
     BrowserModule,
@@ -258,6 +259,7 @@ import {JobFilter} from "../pages/jobs/job-filter/job-filter";
       SplashLogo,
     ScanQR,
       GetAssetReadings,
+      CalenderPage,
 
 
 

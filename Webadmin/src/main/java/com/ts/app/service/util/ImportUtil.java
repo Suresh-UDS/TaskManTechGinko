@@ -631,17 +631,17 @@ public class ImportUtil {
 				assetDTO.setManufacturerId(Long.valueOf(getCellValue(currentRow.getCell(9))));
 				assetDTO.setModelNumber(getCellValue(currentRow.getCell(10)));
 				assetDTO.setSerialNumber(getCellValue(currentRow.getCell(11)));
-				String acquiredDate = getCellValue(currentRow.getCell(12));
-				if(StringUtils.isNotEmpty(acquiredDate)) {
-					assetDTO.setAcquiredDate(DateUtil.convertToDateTime(acquiredDate));
+				Date acquiredDate = currentRow.getCell(12) != null ? currentRow.getCell(12).getDateCellValue() : null;
+				if(acquiredDate != null) {
+					assetDTO.setAcquiredDate(acquiredDate);
 				}
 				assetDTO.setPurchasePrice(Double.valueOf(getCellValue(currentRow.getCell(13))));
 				assetDTO.setCurrentPrice(Double.valueOf(getCellValue(currentRow.getCell(14))));
 				assetDTO.setEstimatedDisposePrice(Double.valueOf(getCellValue(currentRow.getCell(15))));
 				assetDTO.setWarrantyType(getCellValue(currentRow.getCell(16)));
-				String warrantyDate = getCellValue(currentRow.getCell(17));
-				if(StringUtils.isNotEmpty(warrantyDate)) {
-					assetDTO.setWarrantyExpiryDate(DateUtil.convertToDateTime(warrantyDate));
+				Date warrantyDate = currentRow.getCell(17) != null ? currentRow.getCell(17).getDateCellValue() : null;
+				if(warrantyDate != null) {
+					assetDTO.setWarrantyExpiryDate(warrantyDate);
 				}
 				assetDTO.setVendorId(Long.valueOf(getCellValue(currentRow.getCell(18))));
 				assetDTO.setCode(getCellValue(currentRow.getCell(19)));
@@ -678,16 +678,17 @@ public class ImportUtil {
 				assetPPMDto.setAssetId(assetDTO.getId());
 				assetPPMDto.setTitle(getCellValue(currentRow.getCell(3)));
 				assetPPMDto.setFrequency(getCellValue(currentRow.getCell(4)));
-				assetPPMDto.setFrequencyDuration(Integer.parseInt(getCellValue(currentRow.getCell(4))));
-				String startDate = getCellValue(currentRow.getCell(5));
-				if(StringUtils.isNotEmpty(startDate)) {
-					assetPPMDto.setStartDate(DateUtil.convertToDateTime(startDate));
+				assetPPMDto.setFrequencyDuration(Integer.parseInt(getCellValue(currentRow.getCell(5))));
+				Date startDate = currentRow.getCell(6) != null ? currentRow.getCell(6).getDateCellValue() : null;
+				if(startDate != null) {
+					assetPPMDto.setStartDate(startDate);
 				}
 				
-				String endDate = getCellValue(currentRow.getCell(5));
-				if(StringUtils.isNotEmpty(endDate)) {
-					assetPPMDto.setEndDate(DateUtil.convertToDateTime(endDate));
+				Date endDate = currentRow.getCell(7) != null ? currentRow.getCell(7).getDateCellValue() : null;
+				if(endDate != null) {
+					assetPPMDto.setEndDate(endDate);
 				}
+				assetPPMDto.setEmpId(Long.parseLong(getCellValue(currentRow.getCell(8))));
 				
 				assetManagementService.createAssetPpmSchedule(assetPPMDto);
 				
@@ -721,17 +722,18 @@ public class ImportUtil {
 				assetAMCDto.setAssetId(assetDTO.getId());
 				assetAMCDto.setTitle(getCellValue(currentRow.getCell(3)));
 				assetAMCDto.setFrequency(getCellValue(currentRow.getCell(4)));
-				assetAMCDto.setFrequencyDuration(Integer.parseInt(getCellValue(currentRow.getCell(4))));
-				String startDate = getCellValue(currentRow.getCell(5));
-				if(StringUtils.isNotEmpty(startDate)) {
-					assetAMCDto.setStartDate(DateUtil.convertToDateTime(startDate));
+				assetAMCDto.setFrequencyDuration(Integer.parseInt(getCellValue(currentRow.getCell(5))));
+				Date startDate = currentRow.getCell(6) != null ? currentRow.getCell(6).getDateCellValue() : null;
+				if(startDate != null) {
+					assetAMCDto.setStartDate(startDate);
 				}
 				
-				String endDate = getCellValue(currentRow.getCell(5));
-				if(StringUtils.isNotEmpty(endDate)) {
-					assetAMCDto.setEndDate(DateUtil.convertToDateTime(endDate));
+				Date endDate = currentRow.getCell(7) != null ? currentRow.getCell(7).getDateCellValue() : null;
+				if(endDate != null) {
+					assetAMCDto.setEndDate(endDate);
 				}
-				
+				assetAMCDto.setEmpId(Long.parseLong(getCellValue(currentRow.getCell(8))));
+				assetAMCDto.setFrequencyPrefix("Every");
 				assetManagementService.createAssetAMCSchedule(assetAMCDto);
 				
 			}

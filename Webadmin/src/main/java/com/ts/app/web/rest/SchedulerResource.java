@@ -64,25 +64,25 @@ public class SchedulerResource {
 	public ResponseEntity<?> createDailyJobs(@RequestParam("schedule") String schedule) {
 		Frequency freq = Frequency.valueOf(schedule);
 		switch(freq) {
-			case DAILY:
+			case DAY:
 				schedulerService.createDailyTask();
 				break;
-			case WEEKLY:
+			case WEEK:
 				schedulerService.createWeeklyTask();
 				break;
-			case FORTNIGHTLY:
+			case FORTNIGHT:
 				schedulerService.createFortnightlyTask();
 				break;
-			case MONTHLY:
+			case MONTH:
 				schedulerService.createMonthlyTask();
 				break;
-			case QUARTERLY:
+			case QUARTER:
 				schedulerService.createQuarterlyTask();
 				break;
-			case HALFYEARLY:
+			case HALFYEAR:
 				schedulerService.createHalfYearlyTask();
 				break;
-			case YEARLY:
+			case YEAR:
 				schedulerService.createYearlyTask();
 				break;
 			default:

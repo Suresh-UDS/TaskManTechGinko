@@ -336,29 +336,24 @@
                                                                                                ng-model="assetGen.modelNumber"
                                                                                                class='form-control'
                                                                                                name='assetModel'
-                                                                                               type='text' value=""
+                                                                                               type='text' 
+                                                                                               ng-maxlength='250'
+                                                                                               ng-pattern="/^[A-Za-z0-9\s]*$/"
                                                                                                autofocus
                                                                                                 />
-																						<!-- <div ng-show="form.$submitted || form.assetModel.$touched">
+																						<div ng-show="form.$submitted || form.assetModel.$touched">
 																							<div ng-show="form.assetModel.$dirty || form.assetModel.$invalid">
-																								<p class="help-block" style="color:maroon"
-																								   ng-show="form.assetModel.$error.required">
-																									Asset Model is required.
-																								</p>
-																								<p class="help-block" style="color:maroon"
-																								   ng-show="form.assetModel.$error.minlength">
-																									Asset Model is required to be at least 5 character.
-																								</p>
+																								
 																								<p class="help-block" style="color:maroon"
 																								   ng-show="form.assetModel.$error.maxlength">
-																									Asset Model cannot be longer than 250 characters.
+																									Model Number cannot be longer than 250 characters.
 																								</p>
 																								<p class="help-block" style="color:maroon"
 																								   ng-show="form.assetModel.$error.pattern">
-																									Asset Model can only contain letters, digits and space.
+																									Model Number can only contain letters, digits and space.
 																								</p>
 																							</div>
-																						</div> -->
+																						</div>
 
                                                                                     </div>
                                                                                  </div>
@@ -371,29 +366,23 @@
                                                                                                ng-model="assetGen.serialNumber"
                                                                                                class='form-control'
                                                                                                name='assetSerial'
-                                                                                               type='text' value=""
+                                                                                               type='text' ng-maxlength='250'
+                                                                                               ng-pattern="/^[A-Za-z0-9\s]*$/"
                                                                                                autofocus
                                                                                                 />
-																						<!-- <div ng-show="form.$submitted || form.assetSerial.$touched">
+																						<div ng-show="form.$submitted || form.assetSerial.$touched">
 																							<div ng-show="form.assetSerial.$dirty || form.assetSerial.$invalid">
-																								<p class="help-block" style="color:maroon"
-																								   ng-show="form.assetSerial.$error.required">
-																									Asset Serial is required.
-																								</p>
-																								<p class="help-block" style="color:maroon"
-																								   ng-show="form.assetSerial.$error.minlength">
-																									Asset Serial is required to be at least 5 character.
-																								</p>
+																								
 																								<p class="help-block" style="color:maroon"
 																								   ng-show="form.assetSerial.$error.maxlength">
-																									Asset Serial cannot be longer than 250 characters.
+																									Serial number cannot be longer than 250 characters.
 																								</p>
 																								<p class="help-block" style="color:maroon"
 																								   ng-show="form.assetSerial.$error.pattern">
-																									Asset Serial can only contain letters, digits and space.
+																									Serial number can only contain letters, digits and space.
 																								</p>
 																							</div>
-																						</div> -->
+																						</div>
                                                                                     </div>
                                                                                 </div>
                                                                                 <div class="col-md-6">
@@ -417,7 +406,7 @@
                                                                                                  />
                                                                                         <div ng-show="form.$submitted || form.assetPurchase.$touched">
                                                                                             <div ng-show="form.assetPurchase.$dirty || form.assetPurchase.$invalid">
-                                                                                               
+
                                                                                                 <p class="help-block" style="color:maroon"
                                                                                                    ng-show="form.assetPurchase.$error.pattern">
                                                                                                     Purchase price can only contain numbers.
@@ -720,7 +709,7 @@
 
                                                                             <div style="text-align: center">
 
-                                                                                <button class="btn btn-success add-btn margn-tb0" ng-click="createQrCode()">
+                                                                                <button class="btn btn-success add-btn margn-tb0" ng-click="createQrCode()" ng-disabled="form1.$invalid">
                                                                                     <i class="material-icons" >autorenew</i> Generate
                                                                                 </button>
 
@@ -774,7 +763,7 @@
                                                                                             <div class="form-group selectcon is-empty SelectWithAddbtnCon">
 
                                                                                                 <div class="" style="float:left;width:90%;">
-                                                                                                    <label class="control-label">Select Parameter </label>
+                                                                                                    <label class="control-label">Select Parameter<span class="red-star">*</span> </label>
                                                                                                     <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
                                                                                                     <select class="form-control ng-pristine ng-valid ng-touched" ng-model="selectedParameter" name="param"  ng-options="parameter as parameter.name for parameter in parameters" tabindex="0" aria-invalid="false" required>
                                                                                                         <option value="" class="" selected="selected">Select Parameter ..</option>
@@ -811,7 +800,7 @@
                                                                                             <div class="form-group selectcon is-empty SelectWithAddbtnCon">
 
                                                                                                 <div class="" style="float:left;width:90%;">
-                                                                                                    <label class="control-label">Select Units</label>
+                                                                                                    <label class="control-label">Select Units<span class="red-star">*</span></label>
                                                                                                     <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
                                                                                                     <select class="form-control ng-pristine ng-valid ng-touched" ng-model="selectedParameterUOM" name="parameterUOM"  ng-options="parameterUOM as parameterUOM.uom for parameterUOM in parameterUOMs" tabindex="0" aria-invalid="false" required>
                                                                                                         <option value="" class="" selected="selected">Select Units ..</option>
@@ -857,7 +846,7 @@
                                                                                         </div>
 
                                                                                         <div class="col-md-4 txt-align-rgt">
-                                                                                            <button class="btn btn-success" ng-click="saveAssetParamConfig()" ng-disabled="form6.$invalid"
+                                                                                            <button class="btn btn-success" ng-click="saveAssetParamConfig()" ng-disabled="form2.$invalid"
                                                                                                     id="form-button-add">
                                                                                                 <span class="btn-label"><i class="material-icons">add</i></span> Add
                                                                                             </button>
@@ -940,8 +929,7 @@
                                                                                        ng-model="assetPPM.title"
                                                                                        class='form-control'
                                                                                        name='ppmTitle'
-                                                                                       type='text' value=""
-                                                                                       ng-minlength='5'
+                                                                                       type='text'
                                                                                        ng-maxlength='250'
                                                                                        ng-pattern="/^[A-Za-z0-9\s]*$/" autofocus
                                                                                 required />
@@ -953,8 +941,8 @@
                                                                                                 Schedule title is required.
                                                                                             </p>
                                                                                             <p class="help-block" style="color: maroon"
-                                                                                                    ng-show="form3.ppmTitle.$error.minlength">Schedule title
-                                                                                                     required to be at least 5 character.
+                                                                                                ng-show="form3.ppmTitle.$error.pattern">Schedule title
+                                                                                                 can only contain letters, digits and space.
                                                                                             </p>
 
                                                                                         </div>
@@ -992,17 +980,40 @@
                                                                     </div>
                                                                         <div class="col-md-2">
                                                                             <div class="form-group">
-                                                                                <label class="control-label">From Date</label>
+                                                                                <label class="control-label">From Date<span class="red-star">*</span></label>
                                                                                 <span class="form-control-feedback calender-icon"><i class="material-icons">date_range</i></span>
-                                                                                <input type="text" class="form-control datepicker"  id="dateFilterPpmFrom"  placeholder="{{dateFilterPpmFrom | date:'dd-MMM-yyyy'}}"/>
+                                                                                <input type="text" class="form-control datepicker"  id="dateFilterPpmFrom" name="PpmFrom" ng-model="ppmFrom"  placeholder="{{dateFilterPpmFrom | date:'dd-MMM-yyyy'}}" required />
+                                                                                <div ng-show="form3.$submitted || form3.PpmFrom.$touched">
+                                                                                    <div
+                                                                                        ng-show="form3.PpmFrom.$dirty || form3.PpmFrom.$invalid">
+                                                                                        <p class="help-block" style="color:maroon"
+                                                                                           ng-show="form3.PpmFrom.$error.required">
+                                                                                            From date is required.
+                                                                                        </p>
+                                                                                       
+                                                                                    </div>
+                                                                                    
+                                                                                </div>
 
                                                                             </div>
                                                                         </div>
                                                                         <div class="col-md-2">
                                                                             <div class="form-group">
-                                                                                <label class="control-label">To Date</label>
+                                                                                <label class="control-label">To Date<span class="red-star">*</span></label>
                                                                                 <span class="form-control-feedback calender-icon"><i class="material-icons">date_range</i></span>
-                                                                                <input type="text" class="form-control datepicker"  id="dateFilterPpmTo"  placeholder="{{dateFilterPpmTo | date:'dd-MMM-yyyy'}}"/>
+                                                                                <input type="text" class="form-control datepicker"  id="dateFilterPpmTo" name="PpmTo" ng-model="ppmTo"  placeholder="{{dateFilterPpmTo | date:'dd-MMM-yyyy'}}" required />
+                                                                                <div ng-show="form3.$submitted || form3.PpmTo.$touched">
+                                                                                    <div
+                                                                                        ng-show="form3.PpmTo.$dirty || form3.PpmTo.$invalid">
+                                                                                        <p class="help-block" style="color:maroon"
+                                                                                           ng-show="form3.PpmTo.$error.required">
+                                                                                            To date is required.
+                                                                                        </p>
+                                                                                      
+
+                                                                                    </div>
+                                                                                    
+                                                                                </div>
 
                                                                             </div>
                                                                         </div>
@@ -1163,23 +1174,22 @@
                                                                                        ng-model="amcSchedule.title"
                                                                                        class='form-control'
                                                                                        name='amcTitle'
-                                                                                       type='text' value=""
-                                                                                       ng-minlength='5'
+                                                                                       type='text' 
                                                                                        ng-maxlength='250'
                                                                                        ng-pattern="/^[A-Za-z0-9\s]*$/" autofocus
                                                                                 required />
 
                                                                                 <div ng-show="form4.$submitted || form4.amcTitle.$touched">
                                                                                     <div ng-show="form4.amcTitle.$dirty || form4.amcTitle.$invalid">
-                                                                                        <p class="help-block" style="color:maroon"
-                                                                                           ng-show="form4.amcTitle.$error.required">
-                                                                                            Schedule title is required.
-                                                                                        </p>
-                                                                                        
-                                                                                       <p class="help-block" style="color: maroon"
-                                                                                            ng-show="form4.amcTitle.$error.minlength">Schedule title
-                                                                                             required to be at least 5  characters.
-                                                                                        </p>
+                                                                                            <p class="help-block" style="color:maroon"
+                                                                                               ng-show="form4.amcTitle.$error.required">
+                                                                                                Schedule title is required.
+                                                                                            </p>
+                                                                                            
+                                                                                           <p class="help-block" style="color: maroon"
+                                                                                                ng-show="form3.amcTitle.$error.pattern">Schedule title
+                                                                                                 can only contain letters, digits and space.
+                                                                                            </p>
                                                                                     </div>
                                                                                 </div>
 
@@ -1215,17 +1225,39 @@
                                                                         </div>
                                                                             <div class="col-md-2">
                                                                                 <div class="form-group">
-                                                                                    <label class="control-label">From Date</label>
+                                                                                    <label class="control-label">From Date<span class="red-star">*</span></label>
                                                                                     <span class="form-control-feedback calender-icon"><i class="material-icons">date_range</i></span>
-                                                                                    <input type="text" class="form-control datepicker"  id="dateFilterAmcFrom"  placeholder="{{dateFilterAmcFrom | date:'dd-MMM-yyyy'}}"/>
+                                                                                    <input type="text" class="form-control datepicker"  name="AmcFrom"  ng-model ="amcFrom" id="dateFilterAmcFrom"  placeholder="{{dateFilterAmcFrom | date:'dd-MMM-yyyy'}}" required/>
+                                                                                    <div ng-show="form4.$submitted || form4.AmcFrom.$touched">
+                                                                                        <div
+                                                                                            ng-show="form4.AmcFrom.$dirty || form4.AmcFrom.$invalid">
+                                                                                            <p class="help-block" style="color:maroon"
+                                                                                               ng-show="form4.AmcFrom.$error.required">
+                                                                                                From date is required.
+                                                                                            </p>
+                                                                                           
+                                                                                        </div>
+                                                                                        
+                                                                                    </div>
 
                                                                                 </div>
                                                                             </div>
                                                                             <div class="col-md-2">
                                                                                 <div class="form-group">
-                                                                                    <label class="control-label">To Date</label>
+                                                                                    <label class="control-label">To Date<span class="red-star">*</span></label>
                                                                                     <span class="form-control-feedback calender-icon"><i class="material-icons">date_range</i></span>
-                                                                                    <input type="text" class="form-control datepicker"  id="dateFilterAmcTo"  placeholder="{{dateFilterAmcTo | date:'dd-MMM-yyyy'}}"/>
+                                                                                    <input type="text" class="form-control datepicker"  id="dateFilterAmcTo" name="AmcTo"  ng-model ="amcTo" placeholder="{{dateFilterAmcTo | date:'dd-MMM-yyyy'}}" required />
+                                                                                    <div ng-show="form4.$submitted || form4.AmcTo.$touched">
+                                                                                        <div
+                                                                                            ng-show="form4.AmcTo.$dirty || form4.AmcTo.$invalid">
+                                                                                            <p class="help-block" style="color:maroon"
+                                                                                               ng-show="form4.AmcTo.$error.required">
+                                                                                                From date is required.
+                                                                                            </p>
+                                                                                           
+                                                                                        </div>
+                                                                                        
+                                                                                    </div>
 
                                                                                 </div>
                                                                             </div>
@@ -1387,8 +1419,9 @@
                                                                                                ng-model="uploadAsset.title"
                                                                                                class='form-control'
                                                                                                name='fileTitle'
-                                                                                               type='text' value=""
-                                                                                                autofocus required
+                                                                                               type='text' 
+                                                                                               ng-maxlength='250'
+                                                                                               autofocus required
                                                                                         />
                                                                                         <div ng-show="importClientForm.$submitted || importClientForm.fileTitle.$touched">
                                                                                             <div
@@ -1396,6 +1429,10 @@
                                                                                                 <p class="help-block" style="color:maroon"
                                                                                                    ng-show="importClientForm.fileTitle.$error.required">
                                                                                                     File title is required.
+                                                                                                </p>
+                                                                                                <p class="help-block" style="color:maroon"
+                                                                                                   ng-show="importClientForm.fileTitle.$error.maxlength">
+                                                                                                    File title cannot be longer than 250 characters.
                                                                                                 </p>
 
                                                                                             </div>
@@ -1449,7 +1486,8 @@
                                                                                               ng-model="uploadAssetPhoto.title"
                                                                                               class='form-control'
                                                                                               name='photoTitle'
-                                                                                              type='text' value=""
+                                                                                              type='text' 
+                                                                                              ng-maxlength='250'
                                                                                               autofocus required
                                                                                        />
                                                                                        <div ng-show="importClientForm1.$submitted || importClientForm1.photoTitle.$touched">
@@ -1458,6 +1496,10 @@
                                                                                                 <p class="help-block" style="color:maroon"
                                                                                                    ng-show="importClientForm1.photoTitle.$error.required">
                                                                                                     Photo title is required.
+                                                                                                </p>
+                                                                                                <p class="help-block" style="color:maroon"
+                                                                                                   ng-show="importClientForm1.photoTitle.$error.maxlength">
+                                                                                                    Photo title cannot be longer than 250 characters.
                                                                                                 </p>
 
                                                                                             </div>
@@ -1602,14 +1644,14 @@
 
 
 
-                                <div class="row" ng-hide="assetGen.id" >
+                                <div class="row" >
 
                                     <div class="col-sm-offset-8 col-sm-4 txt-align-rgt">
-                                        <button class="btn btn-success" type="submit"
+                                        <button class="btn btn-success" type="submit" ng-hide="assetGen.id" 
                                                 id="form-button-save" ng-disabled="form.$invalid" ng-click="saveAsset()" >
                                                     <span class="btn-label">
                                             				<i class="material-icons">check</i>
-                                        				</span> Save &amp; Next
+                                        				</span> Save &amp; Continue
                                         </button>
                                         <!--<button class="btn btn-info" type="submit"-->
                                         <!--id="save-and-go-back-button" ng-disabled="form.$invalid">-->
@@ -1668,7 +1710,25 @@
                 <form name="addAssetTypeForm">
                     <div class="row">
                         <div class="col-md-12 txt-align-center">
-                            <input class="" id="addAssetTypeInput" ng-model="assetType.name"   name="AssetType" type="text" value="" ng-required="true"/>
+                            <input class="" id="addAssetTypeInput" ng-model="assetType.name"   name="AssetType" type="text" value="" ng-required="true" ng-maxlength='250'
+                            ng-pattern="/^[A-Za-z0-9\s]*$/"
+                            />
+                             <div ng-show="addAssetTypeForm.$submitted || addAssetTypeForm.AssetType.$touched">
+                                <div ng-show="addAssetTypeForm.AssetType.$dirty || addAssetTypeForm.AssetType.$invalid">
+                                    <p class="help-block" style="color:maroon"
+                                       ng-show="form.AssetType.$error.required">
+                                        Asset Type is required.
+                                    </p>
+                                    <p class="help-block" style="color:maroon"
+                                       ng-show="addAssetTypeForm.AssetType.$error.maxlength">
+                                        Asset Type cannot be longer than 250 characters.
+                                    </p>
+                                    <p class="help-block" style="color:maroon"
+                                       ng-show="addAssetTypeForm.AssetType.$error.pattern">
+                                        Asset Type can only contain letters, digits and space.
+                                    </p>
+                                </div>
+                            </div>
                             <input type="submit" ng-click="addAssetType()" data-dismiss="modal" class="btn btn-success" name="add" value="Add" ng-disabled="addAssetTypeForm.$invalid">
                         </div>
                     </div>
@@ -1697,7 +1757,24 @@
                 <form name="addGroupForm">
                     <div class="row">
                         <div class="col-md-12 txt-align-center">
-                            <input class="" id="assetgroupName" ng-model="assetGroup.assetgroup"   name="assetgroupName" type="text" value="" ng-required="true"/>
+                            <input class="" id="assetgroupName" ng-model="assetGroup.assetgroup"   name="assetgroupName" type="text" value="" ng-required="true" ng-maxlength='250'
+                            ng-pattern="/^[A-Za-z0-9\s]*$/" />
+                            <div ng-show="addGroupForm.$submitted || addGroupForm.assetgroupName.$touched">
+                                <div ng-show="addGroupForm.assetgroupName.$dirty || addGroupForm.assetgroupName.$invalid">
+                                    <p class="help-block" style="color:maroon"
+                                       ng-show="addGroupForm.assetgroupName.$error.required">
+                                       Asset Group is required.
+                                    </p>
+                                    <p class="help-block" style="color:maroon"
+                                       ng-show="addGroupForm.assetgroupName.$error.maxlength">
+                                        Asset Group cannot be longer than 250 characters.
+                                    </p>
+                                    <p class="help-block" style="color:maroon"
+                                       ng-show="addGroupForm.assetgroupName.$error.pattern">
+                                       Asset Group can only contain letters, digits and space.
+                                    </p>
+                                </div>
+                            </div>
                             <input type="submit" ng-click="addAssetGroup()" data-dismiss="modal" class="btn btn-success" name="add" value="Add" ng-disabled="addGroupForm.$invalid">
                         </div>
                     </div>
@@ -1726,7 +1803,24 @@
                 <form name="addManufacturerForm">
                     <div class="row">
                         <div class="col-md-12 txt-align-center">
-                            <input class="" id="assetManufacturerName" ng-model="manufacturer.name"   name="assetManufacturerName" type="text" value="" ng-required="true"/>
+                            <input class="" id="assetManufacturerName" ng-model="manufacturer.name"   name="assetManufacturerName" type="text" ng-maxlength='250'
+                            ng-pattern="/^[A-Za-z0-9\s]*$/" ng-required="true"/>
+                            <div ng-show="addManufacturerForm.$submitted || addManufacturerForm.assetManufacturerName.$touched">
+                                <div ng-show="addManufacturerForm.assetManufacturerName.$dirty || addManufacturerForm.assetManufacturerName.$invalid">
+                                    <p class="help-block" style="color:maroon"
+                                       ng-show="addManufacturerForm.assetManufacturerName.$error.required">
+                                       Manufacturer is required.
+                                    </p>
+                                    <p class="help-block" style="color:maroon"
+                                       ng-show="addManufacturerForm.assetManufacturerName.$error.maxlength">
+                                        Manufacturer cannot be longer than 250 characters.
+                                    </p>
+                                    <p class="help-block" style="color:maroon"
+                                       ng-show="addManufacturerForm.assetManufacturerName.$error.pattern">
+                                       Manufacturer can only contain letters, digits and space.
+                                    </p>
+                                </div>
+                            </div>
                             <input type="submit" ng-click="addManufacturer()" data-dismiss="modal" class="btn btn-success" name="add" value="Add" ng-disabled="addManufacturerForm.$invalid">
                         </div>
                     </div>
@@ -1750,15 +1844,33 @@
                 <h4 class="modal-title">Add Service Provider</h4>
             </div>
             <div class="modal-body">
+            <form name="addProviderForm">
                 <div class="row">
                 <div class="col-md-9">
-                    <input class="input-desc" id="assetProvider" ng-model="Provider.name"   name="assetProvider" type="text" value=""/>
+                    <input class="input-desc" id="assetProvider" ng-model="Provider.name"   name="assetProvider" type="text" ng-maxlength='250' ng-pattern="/^[A-Za-z0-9\s]*$/" />
+                    <div ng-show="addProviderForm.$submitted || addProviderForm.assetProvider.$touched">
+                        <div ng-show="addProviderForm.assetProvider.$dirty || addProviderForm.assetProvider.$invalid">
+                            <p class="help-block" style="color:maroon"
+                               ng-show="addProviderForm.assetProvider.$error.required">
+                               Service Provider is required.
+                            </p>
+                            <p class="help-block" style="color:maroon"
+                               ng-show="addProviderForm.assetProvider.$error.maxlength">
+                                Service Provider cannot be longer than 250 characters.
+                            </p>
+                            <p class="help-block" style="color:maroon"
+                               ng-show="addProviderForm.assetProvider.$error.pattern">
+                               Service Provider can only contain letters, digits and space.
+                            </p>
+                        </div>
+                    </div>
                 </div>
                 <div class="col-md-3 pull-left">
                     <a class="btn btn-success"  ng-click="addProvider()" data-dismiss="modal">Add</a>
                 </div>
                 <div class="clear"></div>
                 </div>
+            </form>
             </div>
 
         </div>
@@ -1779,7 +1891,23 @@
                 <form name="addWarrantyForm">
                     <div class="row">
                         <div class="col-md-12 txt-align-center">
-                            <input class="" id="assetWarranty" ng-model="Warranty.name"   name="assetWarrantye" type="text" value="" ng-required="true"/>
+                            <input class="" id="assetWarranty" ng-model="Warranty.name"   name="assetWarrantye" type="text"  ng-required="true" ng-maxlength='250' ng-pattern="/^[A-Za-z0-9\s]*$/" />
+                            <div ng-show="addWarrantyForm.$submitted || addWarrantyForm.assetWarrantye.$touched">
+                                <div ng-show="addWarrantyForm.assetWarrantye.$dirty || addWarrantyForm.assetWarrantye.$invalid">
+                                    <p class="help-block" style="color:maroon"
+                                       ng-show="addWarrantyForm.assetWarrantye.$error.required">
+                                       Service Warranty is required.
+                                    </p>
+                                    <p class="help-block" style="color:maroon"
+                                       ng-show="addWarrantyForm.assetWarrantye.$error.maxlength">
+                                       Service Warranty cannot be longer than 250 characters.
+                                    </p>
+                                    <p class="help-block" style="color:maroon"
+                                       ng-show="addWarrantyForm.assetWarrantye.$error.pattern">
+                                       Service Warranty can only contain letters, digits and space.
+                                    </p>
+                                </div>
+                            </div>
                             <input type="submit" ng-click="addWarranty()" data-dismiss="modal" class="btn btn-success" name="add" value="Add" ng-disabled="addWarrantyForm.$invalid">
                         </div>
                     </div>
@@ -1805,7 +1933,23 @@
                 <form name="addVendorForm">
                     <div class="row">
                         <div class="col-md-12 txt-align-center">
-                            <input class="" id="assetVendorName" ng-model="vendor.name"   name="assetVendorName" type="text" value="" ng-required="true" />
+                            <input class="" id="assetVendorName" ng-model="vendor.name"   name="assetVendorName" type="text" value="" ng-required="true" ng-maxlength='250' ng-pattern="/^[A-Za-z0-9\s]*$/" />
+                            <div ng-show="addVendorForm.$submitted || addVendorForm.assetVendorName.$touched">
+                                <div ng-show="addVendorForm.assetVendorName.$dirty || addVendorForm.assetVendorName.$invalid">
+                                    <p class="help-block" style="color:maroon"
+                                       ng-show="addVendorForm.assetVendorName.$error.required">
+                                       Vendor is required.
+                                    </p>
+                                    <p class="help-block" style="color:maroon"
+                                       ng-show="addVendorForm.assetVendorName.$error.maxlength">
+                                        Vendor cannot be longer than 250 characters.
+                                    </p>
+                                    <p class="help-block" style="color:maroon"
+                                       ng-show="addVendorForm.assetVendorName.$error.pattern">
+                                       Vendor can only contain letters, digits and space.
+                                    </p>
+                                </div>
+                            </div>
                             <input type="submit" ng-click="addVendor()" data-dismiss="modal" class="btn btn-success" name="add" value="Add" ng-disabled="addVendorForm.$invalid">
                         </div>
                     </div>
@@ -1825,14 +1969,30 @@
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal"
                         aria-hidden="true">&times;</button>
-                <h4 class="modal-title">Add Units</h4>
+                <h4 class="modal-title">Add Parameter</h4>
             </div>
             <div class="modal-body">
 
                 <form name="addParametForm">
                     <div class="row">
                         <div class="col-md-12 txt-align-center">
-                            <input class="" id="addParametName" ng-model="parameter.name"   name="addParametName" type="text" value="" ng-required="true"/>
+                            <input class="" id="addParametName" ng-model="parameter.name"   name="addParametName" type="text" value="" ng-required="true" ng-maxlength='250' ng-pattern="/^[A-Za-z0-9\s]*$/" />
+                            <div ng-show="addParametForm.$submitted || addParametForm.addParametName.$touched">
+                                <div ng-show="addParametForm.addParametName.$dirty || addParametForm.addParametName.$invalid">
+                                    <p class="help-block" style="color:maroon"
+                                       ng-show="addVendorForm.addParametName.$error.required">
+                                       Parameter is required.
+                                    </p>
+                                    <p class="help-block" style="color:maroon"
+                                       ng-show="addParametForm.addParametName.$error.maxlength">
+                                        Parameter cannot be longer than 250 characters.
+                                    </p>
+                                    <p class="help-block" style="color:maroon"
+                                       ng-show="addParametForm.addParametName.$error.pattern">
+                                       Parameter can only contain letters, digits and space.
+                                    </p>
+                                </div>
+                            </div>
                             <input type="submit" ng-click="addParameter()" data-dismiss="modal" class="btn btn-success" name="add" value="Add" ng-disabled="addParametForm.$invalid">
                         </div>
                     </div>
@@ -1852,14 +2012,30 @@
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal"
                         aria-hidden="true">&times;</button>
-                <h4 class="modal-title">Add Vendor</h4>
+                <h4 class="modal-title">Add Units</h4>
             </div>
             <div class="modal-body">
 
                 <form name="addUnitsForm">
                     <div class="row">
                         <div class="col-md-12 txt-align-center">
-                            <input class="" id="addUnitsName" ng-model="parameterUOM.uom"   name="addUnitsName" type="text" value="" ng-required="true"/>
+                            <input class="" id="addUnitsName" ng-model="parameterUOM.uom"   name="addUnitsName" type="text" value="" ng-required="true" ng-maxlength='250' ng-pattern="/^[A-Za-z0-9\s]*$/" />
+                            <div ng-show="addUnitsForm.$submitted || addUnitsForm.addUnitsName.$touched">
+                                <div ng-show="addUnitsForm.addUnitsName.$dirty || addUnitsForm.addUnitsName.$invalid">
+                                    <p class="help-block" style="color:maroon"
+                                       ng-show="addUnitsForm.addUnitsName.$error.required">
+                                       Units is required.
+                                    </p>
+                                    <p class="help-block" style="color:maroon"
+                                       ng-show="addUnitsForm.addUnitsName.$error.maxlength">
+                                        Units cannot be longer than 250 characters.
+                                    </p>
+                                    <p class="help-block" style="color:maroon"
+                                       ng-show="addUnitsForm.addUnitsName.$error.pattern">
+                                       Units can only contain letters, digits and space.
+                                    </p>
+                                </div>
+                            </div>
                             <input type="submit" ng-click="addParameterUOM()" data-dismiss="modal" class="btn btn-success" name="add" value="Add" ng-disabled="addUnitsForm.$invalid">
                         </div>
                     </div>
@@ -1878,8 +2054,8 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal"
-                        aria-hidden="true">&times;</button>
-                <h4 class="modal-title">Add Vendor</h4>
+                        aria-hidden="true" ng-maxlength='250' ng-pattern="/^[A-Za-z0-9\s]*$/" >&times;</button>
+                <h4 class="modal-title">Add Checklist</h4>
             </div>
             <div class="modal-body">
 
@@ -1887,6 +2063,22 @@
                     <div class="row">
                         <div class="col-md-12 txt-align-center">
                             <input class="" id="addChecklistName" ng-model="addChecklist.name"   name="addChecklistName" type="text" value="" ng-required="true"/>
+                            <div ng-show="addChecklistForm.$submitted || addChecklistForm.addChecklistName.$touched">
+                                <div ng-show="addChecklistForm.addChecklistName.$dirty || addChecklistForm.addChecklistName.$invalid">
+                                    <p class="help-block" style="color:maroon"
+                                       ng-show="addChecklistForm.addChecklistName.$error.required">
+                                       Checklist is required.
+                                    </p>
+                                    <p class="help-block" style="color:maroon"
+                                       ng-show="addChecklistForm.addChecklistName.$error.maxlength">
+                                        Checklist cannot be longer than 250 characters.
+                                    </p>
+                                    <p class="help-block" style="color:maroon"
+                                       ng-show="addChecklistForm.addChecklistName.$error.pattern">
+                                       Checklist can only contain letters, digits and space.
+                                    </p>
+                                </div>
+                            </div>
                             <input type="submit" ng-click="addChecklist()" data-dismiss="modal" class="btn btn-success" name="add" value="Add" ng-disabled="addChecklist.$invalid">
                         </div>
                     </div>

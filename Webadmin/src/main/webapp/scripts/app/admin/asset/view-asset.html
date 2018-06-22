@@ -793,7 +793,7 @@
                                           <div class="">
 
                                               <ul class="nav nav-pills nav-pills-warning">
-                                                  <li class="active" ng-repeat="reading in assetReadings">
+                                                  <li ng-class="reading.id == viewRead ? 'active' : ''" ng-repeat="reading in assetReadings">
                                                       <a href=".Fuel" data-toggle="tab" ng-click="viewAssetReading(reading.id)">{{reading.name}}</a>
                                                   </li>
                                                   <li class="active" ng-show="!assetReadings.length">

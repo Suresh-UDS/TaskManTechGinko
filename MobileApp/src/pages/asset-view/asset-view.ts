@@ -1,5 +1,5 @@
 import {Component, ElementRef, ViewChild} from '@angular/core';
-import {Item, ItemSliding, ModalController, NavController, NavParams} from "ionic-angular";
+import {FabContainer, Item, ItemSliding, ModalController, NavController, NavParams} from "ionic-angular";
 import {GetAssetReading} from "./get-asset-reading";
 import {JobService} from "../service/jobService";
 import {componentService} from "../service/componentService";
@@ -13,6 +13,7 @@ import {Camera, CameraOptions} from "@ionic-native/camera";
 import { DatePicker } from '@ionic-native/date-picker';
 import {AssetService} from "../service/assetService";
 import{CalenderPage} from "../calender-page/calender-page";
+import {CreateJobPage} from "../jobs/add-job";
 
 
 /**
@@ -40,6 +41,8 @@ export class AssetView {
     viewButton:any;
     searchCriteria:any;
     spinner:any;
+    jobSearchCriteria:any;
+    ticketSearchCriteria:any;
 
   constructor(public camera: Camera,private modalCtrl:ModalController,private datePicker: DatePicker,private componentService:componentService,public navCtrl: NavController, public navParams: NavParams, public jobService:JobService, public assetService:AssetService) {
 
@@ -52,7 +55,7 @@ export class AssetView {
     {
         // let dateModal=this.modalCtrl.create(DateModal)
         // dateModal.present()
-        this.navCtrl.push(CalenderPage);
+        this.navCtrl.push(CalenderPage,{assetDetails:this.assetDetails});
     }
 
   ionViewDidLoad() {
@@ -64,6 +67,14 @@ export class AssetView {
           assetId:this.assetDetails.id
       }
 
+      this.jobSearchCriteria={
+          assetId:this.assetDetails.id
+      }
+
+      this.ticketSearchCriteria={
+          assetId:this.assetDetails.id
+      }
+
       this.getAssetById();
   }
 
@@ -72,10 +83,17 @@ export class AssetView {
     }
 
     // Segment Change
-    segmentChange(categories)
+    segmentChange(categories,fab:FabContainer)
     {
         this.fromDate="";
         this.toDate="";
+        fab.close();
+        this.jobSearchCriteria={
+            assetId:this.assetDetails.id
+        }
+        this.ticketSearchCriteria={
+            assetId:this.assetDetails.id
+        }
     }
     //
 
@@ -90,6 +108,7 @@ export class AssetView {
 
         this.camera.getPicture(options).then((imageData) => {
 
+            imageData = imageData.replace("assets-library://", "cdvfile://localhost/assets-library/")
             console.log('imageData -' +imageData);
 
         })
@@ -103,7 +122,7 @@ export class AssetView {
         this.componentService.showLoader("");
         if(segment=='jobs')
         {
-            this.getJobs(this.searchCriteria);
+            this.getJobs(this.jobSearchCriteria);
             refresher.complete();
             // this.componentService.showLoader("");
         }
@@ -260,6 +279,15 @@ export class AssetView {
         item.setElementClass("active-slide", false);
         item.setElementClass("active-options-right", false);
     }
+
+    // Create Job
+
+    createJob()
+    {
+        this.navCtrl.push(CreateJobPage,{assetDetails : this.assetDetails});
+    }
+
+
     //
 
 
@@ -270,7 +298,8 @@ export class AssetView {
         this.datePicker.show({
             date: new Date(),
             mode: 'date',
-            androidTheme: this.datePicker.ANDROID_THEMES.THEME_HOLO_DARK
+            androidTheme: this.datePicker.ANDROID_THEMES.THEME_HOLO_DARK,
+            allowFutureDates:false
         }).then(
             date => {
                 this.fromDate=date;
@@ -291,7 +320,8 @@ export class AssetView {
         this.datePicker.show({
             date: new Date(),
             mode: 'date',
-            androidTheme: this.datePicker.ANDROID_THEMES.THEME_HOLO_DARK
+            androidTheme: this.datePicker.ANDROID_THEMES.THEME_HOLO_DARK,
+            allowFutureDates:false
         }).then(
             date => {
                 this.toDate=date;
@@ -311,19 +341,26 @@ export class AssetView {
         // this.componentService.showLoader("")
         console.log("From Date:" + fromDate.toISOString());
         console.log("To Date:" + toDate.toISOString());
-        var searchCriteria={
-            fromDate:fromDate.toISOString(),
-            toDate:toDate.toISOString(),
-            assetId:this.assetDetails.id
-        };
+
         if(categories == 'jobs')
         {
-            this.getJobs(searchCriteria)
+            this.jobSearchCriteria={
+                checkInDateTimeFrom:fromDate.toISOString(),
+                checkInDateTimeTo:toDate.toISOString(),
+                assetId:this.assetDetails.id
+            };
+
+            this.getJobs(this.jobSearchCriteria)
         }
         else if(this.categories == 'tickets')
         {
+            this.ticketSearchCriteria={
+                fromDate:fromDate.toISOString(),
+                toDate:toDate.toISOString(),
+                assetId:this.assetDetails.id
+            };
             this.componentService.showLoader("")
-            this.getTickets(searchCriteria);
+            this.getTickets(this.ticketSearchCriteria);
         }
 
     }
@@ -442,12 +479,19 @@ export class AssetView {
                 console.log("Getting tickets response");
                 console.log(response);
                 this.assetDetails.tickets = response.transactions;
+                console.log(this.assetDetails.tickets)
             },
             error=>{
                 this.componentService.closeLoader()
                 console.log(error)
                 console.log("Getting Ticket errors")
             })
+    }
+
+    //create Ticket
+    createTicket()
+    {
+        this.navCtrl.push(CreateTicket,{assetDetails : this.assetDetails});
     }
 
 }

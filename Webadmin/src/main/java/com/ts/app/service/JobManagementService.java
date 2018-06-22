@@ -663,6 +663,8 @@ public class JobManagementService extends AbstractService {
 		Calendar calEnd = Calendar.getInstance();
 		calEnd.set(Calendar.HOUR_OF_DAY, 11);
 		calEnd.set(Calendar.MINUTE,59);
+		
+		job.setMaintenanceType(jobDTO.getMaintenanceType());
 
 		java.sql.Date startDate = new java.sql.Date(calStart.getTimeInMillis());
 		java.sql.Date endDate = new java.sql.Date(calEnd.getTimeInMillis());
@@ -678,6 +680,8 @@ public class JobManagementService extends AbstractService {
 			ticket.setStatus(TicketStatus.ASSIGNED.toValue());
 			ticketRepository.save(ticket);
 		}
+	
+		
 		job = jobRepository.saveAndFlush(job);
 
 		if(jobDTO.getTicketId() > 0) {
@@ -685,6 +689,8 @@ public class JobManagementService extends AbstractService {
 			ticket.setJob(job);
 			ticketRepository.saveAndFlush(ticket);
         }
+		
+				
 
 
 		//}
@@ -775,7 +781,7 @@ public class JobManagementService extends AbstractService {
 		job.setMaintenanceType(assetPpmScheduleDTO.getMaintenanceType());
 		job.setSchedule(Frequency.valueOf(assetPpmScheduleDTO.getFrequency()).getValue());
 		job.setActive(AbstractAuditingEntity.ACTIVE_YES);
-		job = jobRepository.saveAndFlush(job);
+		job = jobRepository.save(job);
 
 		log.debug(">>> After Save Job: <<<"+job.getId());
 
@@ -893,6 +899,8 @@ public class JobManagementService extends AbstractService {
 		job.setBlock(jobDTO.getBlock());
 		job.setFloor(jobDTO.getFloor());
 		job.setZone(jobDTO.getZone());
+		//maintenance type PPM or AMC
+		job.setMaintenanceType(jobDTO.getMaintenanceType());
 		//add the job checklist items
 		if(CollectionUtils.isNotEmpty(job.getChecklistItems())) {
 			job.getChecklistItems().clear();
@@ -1449,10 +1457,22 @@ public class JobManagementService extends AbstractService {
 		log.debug("Before saving new job -"+ job);
 		log.debug("start Date  -"+ startDate + ", end date -" + endDate);
 		
+		Calendar startTime = Calendar.getInstance();
+		startTime.setTime(assetAMCScheduleDTO.getStartDate());
+		startTime.set(Calendar.HOUR_OF_DAY, 0);
+		startTime.set(Calendar.MINUTE, 0);
+		startTime.getTime();
+		
+		Calendar endTime = Calendar.getInstance();
+		endTime.setTime(assetAMCScheduleDTO.getEndDate());
+		endTime.set(Calendar.HOUR_OF_DAY, 11);
+		endTime.set(Calendar.MINUTE, 59);
+		endTime.getTime();
+		
 		job.setEmployee(employee);
 		job.setSite(site);
-		job.setPlannedStartTime(startDate);
-		job.setPlannedEndTime(endDate);
+		job.setPlannedStartTime(startTime.getTime());
+		job.setPlannedEndTime(endTime.getTime());
 		job.setTitle(assetAMCScheduleDTO.getTitle());
 		job.setDescription(assetAMCScheduleDTO.getTitle() +" "+ assetAMCScheduleDTO.getFrequencyPrefix()+" "+assetAMCScheduleDTO.getFrequencyDuration()+" "+assetAMCScheduleDTO.getFrequency());
 		job.setMaintenanceType(assetAMCScheduleDTO.getMaintenanceType());
@@ -1474,11 +1494,12 @@ public class JobManagementService extends AbstractService {
 			data.append("&siteId="+site.getId());
 			data.append("&empId="+employee.getId());
 			//data.append("&empId="+assetPpmScheduleDTO.getEmployeeId());
-			data.append("&plannedStartTime="+assetAMCScheduleDTO.getStartDate());
-			data.append("&plannedEndTime="+assetAMCScheduleDTO.getEndDate());
+			data.append("&plannedStartTime="+startTime.getTime());
+			data.append("&plannedEndTime="+endTime.getTime());
 			data.append("&plannedHours="+assetAMCScheduleDTO.getFrequencyDuration());
 			//data.append("&location="+assetPpmScheduleDTO.getLocationId());
 			data.append("&frequency="+assetAMCScheduleDTO.getFrequency());
+			data.append("&duration="+assetAMCScheduleDTO.getFrequencyDuration());			
 			schConfDto.setData(data.toString());
 			schConfDto.setSchedule(Frequency.valueOf(assetAMCScheduleDTO.getFrequency()).getValue());
 			schConfDto.setStartDate(assetAMCScheduleDTO.getStartDate());

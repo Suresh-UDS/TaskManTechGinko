@@ -8,7 +8,7 @@ public class AssetParameterReadingDTO extends BaseDTO implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    private Long id;
+    private long id;
 
     private String name;
 
@@ -39,15 +39,18 @@ public class AssetParameterReadingDTO extends BaseDTO implements Serializable {
 	private int runHours;
 	
 	private int runMinutes;
+	
+	private int min;
+	
+	private int max;
+	
+	public long getId() {
+		return id;
+	}
 
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
+	public void setId(long id) {
+		this.id = id;
+	}
 
 	public String getName() {
 		return name;
@@ -167,6 +170,22 @@ public class AssetParameterReadingDTO extends BaseDTO implements Serializable {
 
 	public void setRunMinutes(int runMinutes) {
 		this.runMinutes = runMinutes;
+	}
+
+	public int getMin() {
+		return min;
+	}
+
+	public void setMin(int min) {
+		this.min = min;
+	}
+
+	public int getMax() {
+		return max;
+	}
+
+	public void setMax(int max) {
+		this.max = max;
 	}
 
 	
