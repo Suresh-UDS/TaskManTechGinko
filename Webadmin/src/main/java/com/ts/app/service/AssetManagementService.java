@@ -14,6 +14,8 @@ import org.springframework.core.env.Environment;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
@@ -1196,35 +1198,130 @@ public class AssetManagementService extends AbstractService {
 	}
 
 	public AssetParameterReadingDTO saveAssetReadings(AssetParameterReadingDTO assetParamReadingDTO) {
+		
 		AssetParameterReading assetParameterReading = mapperUtil.toEntity(assetParamReadingDTO, AssetParameterReading.class);
-		assetParameterReading.setActive(AssetParameterReading.ACTIVE_YES);
+		
+		AssetParameterReadingDTO prevReading = getLatestParamReading(assetParamReadingDTO.getAssetId(), assetParamReadingDTO.getAssetParameterConfigId());
+		
+		List<AssetParameterReadingRule> readingRuleLists = assetReadingRuleRepository.findByAssetConfigId(assetParamReadingDTO.getAssetParameterConfigId());
+		
 		Asset asset = assetRepository.findOne(assetParamReadingDTO.getAssetId());
-		assetParameterReading.setAsset(asset);
-		if(assetParamReadingDTO.getJobId() > 0) {
-			Job jobEntity = jobRepository.findOne(assetParamReadingDTO.getJobId());
-			assetParameterReading.setJob(jobEntity);
-		}else{ 
-			assetParameterReading.setJob(null);
+		
+		String assetCode = asset.getCode();
+		
+		String assetName = asset.getTitle();
+		
+		Site site = siteRepository.findOne(asset.getSite().getId());
+		
+		String siteName = site.getName();
+		
+		Date date = new Date();
+		
+		boolean checkInvalidEntry = false;
+		
+		if(prevReading != null) { 
+			
+			for(AssetParameterReadingRule assetReadingRuleList : readingRuleLists) { 
+				
+				AssetReadingRule rule = AssetReadingRule.valueOf(assetReadingRuleList.getRule());
+				
+				switch(rule) { 
+					
+				case CURRENT_READING_GREATER_THAN_PREVIOUS_READING :
+					
+					if(!assetParameterReading.isConsumptionMonitoringRequired()) { 
+						
+						String type = "reading";
+						
+						if(assetParamReadingDTO.getValue() > prevReading.getValue()) { 
+																
+							Setting setting = settingRepository.findSettingByKey(EMAIL_NOTIFICATION_READING);
+							
+							if(setting.getSettingValue().equalsIgnoreCase("true") ) { 
+								
+								Setting settingEntity = settingRepository.findSettingByKey(EMAIL_NOTIFICATION_READING_EMAILS);
+								
+								if(settingEntity.getSettingValue().length() > 0) {
+									
+									List<String> emailLists = CommonUtil.convertToList(settingEntity.getSettingValue(), ",");
+									for(String email : emailLists) { 
+										mailService.sendReadingAlert(email, siteName, assetCode, assetName, type, date);
+									}
+									
+								} else {
+									
+									log.info("There is no email ids registered");
+								}
+							}
+								
+						}
+					}
+					
+				case CURRENT_READING_LESS_THAN_PREVIOUS_READING :
+					
+					if(!assetParamReadingDTO.isConsumptionMonitoringRequired()) { 
+						
+						if(assetParamReadingDTO.getValue() < prevReading.getValue()) { 
+							
+							if(assetReadingRuleList.isValidationRequired()) { 
+								
+								checkInvalidEntry = true;
+																											
+							}
+						}
+						
+					}
+					
+				default:
+				
+				}
+				
+			}
 		}
+
 		
-		Calendar now = Calendar.getInstance();
-		
-		if(assetParamReadingDTO.isConsumptionMonitoringRequired()) { 
-			if(assetParamReadingDTO.getFinalValue() > 0) {
-				assetParameterReading.setFinalReadingTime(new java.sql.Timestamp(now.getTimeInMillis()));
-			} 
-			if(assetParamReadingDTO.getInitialValue() > 0) { 
+		if(checkInvalidEntry) {
+			
+			AssetParameterReadingDTO assetParamEntity = new AssetParameterReadingDTO();
+			assetParamEntity.setMessage("Invalid Entry");
+			return assetParamEntity;
+			
+		} else { 
+			
+			assetParameterReading.setActive(AssetParameterReading.ACTIVE_YES);
+			Asset assetEntity = assetRepository.findOne(assetParamReadingDTO.getAssetId());
+			assetParameterReading.setAsset(assetEntity);
+			if(assetParamReadingDTO.getJobId() > 0) {
+				Job jobEntity = jobRepository.findOne(assetParamReadingDTO.getJobId());
+				assetParameterReading.setJob(jobEntity);
+			}else{ 
+				assetParameterReading.setJob(null);
+			}
+			
+			Calendar now = Calendar.getInstance();
+			
+			if(assetParamReadingDTO.isConsumptionMonitoringRequired()) { 
+				if(assetParamReadingDTO.getFinalValue() > 0) {
+					assetParameterReading.setFinalReadingTime(new java.sql.Timestamp(now.getTimeInMillis()));
+				} 
+				if(assetParamReadingDTO.getInitialValue() > 0) { 
+					assetParameterReading.setInitialReadingTime(new java.sql.Timestamp(now.getTimeInMillis()));
+				}
+				
+				
+			} else {
 				assetParameterReading.setInitialReadingTime(new java.sql.Timestamp(now.getTimeInMillis()));
 			}
-		} else {
-			assetParameterReading.setInitialReadingTime(new java.sql.Timestamp(now.getTimeInMillis()));
+			
+			AssetParameterConfig assetParameterConfig = assetParamConfigRepository.findOne(assetParamReadingDTO.getAssetParameterConfigId());
+			assetParameterReading.setAssetParameterConfig(assetParameterConfig);
+			assetParameterReading = assetParamReadingRepository.save(assetParameterReading);
+			assetParamReadingDTO = mapperUtil.toModel(assetParameterReading, AssetParameterReadingDTO.class);
+			return assetParamReadingDTO;
+			
 		}
 		
-		AssetParameterConfig assetParameterConfig = assetParamConfigRepository.findOne(assetParamReadingDTO.getAssetParameterConfigId());
-		assetParameterReading.setAssetParameterConfig(assetParameterConfig);
-		assetParameterReading = assetParamReadingRepository.save(assetParameterReading);
-		assetParamReadingDTO = mapperUtil.toModel(assetParameterReading, AssetParameterReadingDTO.class);
-		return assetParamReadingDTO;
+
 	}
 
 	public AssetParameterReadingDTO viewReadings(long id) {
@@ -1278,6 +1375,8 @@ public class AssetManagementService extends AbstractService {
 			AssetParameterReadingDTO prevReading = getLatestParamReading(assetParamReadingDTO.getAssetId(), assetParamReadingDTO.getAssetParameterConfigId());
 
 			AssetParameterReading assetParamReading = assetParamReadingRepository.findOne(assetParamReadingDTO.getId());
+			
+			boolean invalidEntry = false;
 			
 			if(assetParamReadingDTO.getAssetParameterConfigId() > 0 ) { 
 				
@@ -1422,6 +1521,24 @@ public class AssetManagementService extends AbstractService {
 							}
 							
 						break;
+						
+						case CURRENT_READING_LESS_THAN_PREVIOUS_READING : 
+							
+							if(!assetParamReadingDTO.isConsumptionMonitoringRequired()) { 
+								
+								if(assetParamReadingDTO.getValue() < prevReading.getValue()) { 
+									
+									if(assetReadingRuleList.isValidationRequired()) { 
+										
+										invalidEntry = true;
+																													
+									}
+								}
+								
+							}
+							
+							
+						break;
 							
 						case CURRENT_RUNHOUR_GREATER_THAN_PREVIOUS_RUNHOUR : 
 							
@@ -1499,9 +1616,20 @@ public class AssetManagementService extends AbstractService {
 			assetParamReading.setName(assetParamReadingDTO.getName());
 			assetParamReading.setUom(assetParamReadingDTO.getUom());
 			assetParamReading.setValue(assetParamReadingDTO.getValue());
-		
-			assetParamReadingRepository.save(assetParamReading);
-			return mapperUtil.toModel(assetParamReading, AssetParameterReadingDTO.class);
+			
+			if(invalidEntry) {
+				
+				AssetParameterReadingDTO assetReadingDTO = new AssetParameterReadingDTO();
+				assetReadingDTO.setMessage("Invalid Entry");
+				return assetReadingDTO;
+				
+			} else {
+				
+				assetParamReadingRepository.save(assetParamReading);
+				assetParamReadingDTO = mapperUtil.toModel(assetParamReading, AssetParameterReadingDTO.class);
+				return assetParamReadingDTO;
+				
+			}
 	}
 	
 	public AssetReadingRule[] getAllRules() { 
