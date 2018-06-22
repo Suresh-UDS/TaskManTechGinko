@@ -1,5 +1,6 @@
 package com.ts.app.repository;
 
+import java.sql.Date;
 import java.time.ZonedDateTime;
 import java.util.List;
 
@@ -16,7 +17,7 @@ public interface TicketRepository extends JpaRepository<Ticket,Long>, JpaSpecifi
 
     @Query("SELECT t FROM Ticket t where t.createdDate between :startDate and :endDate")
     Page<Ticket> findAll(@Param("startDate") ZonedDateTime startDate,@Param("endDate") ZonedDateTime endDate,Pageable pageRequest);
-    
+
     @Query("SELECT t FROM Ticket t where t.site.id = :siteId and t.createdDate between :startDate and :endDate")
     Page<Ticket> findBySiteId(@Param("siteId") long siteId,@Param("startDate") ZonedDateTime startDate,@Param("endDate") ZonedDateTime endDate,Pageable pageRequest);
 
@@ -31,7 +32,7 @@ public interface TicketRepository extends JpaRepository<Ticket,Long>, JpaSpecifi
 
     @Query("SELECT t FROM Ticket t where t.status = :status and t.createdDate between :startDate and :endDate")
     Page<Ticket> findByStatus(@Param("status") String status,@Param("startDate") ZonedDateTime startDate,@Param("endDate") ZonedDateTime endDate,Pageable pageRequest);
-    
+
     @Query("SELECT t FROM Ticket t where t.createdDate between :startDate and :endDate")
     Page<Ticket> findByDateRange(@Param("startDate") ZonedDateTime startDate,@Param("endDate") ZonedDateTime endDate,Pageable pageRequest);
 
@@ -49,7 +50,7 @@ public interface TicketRepository extends JpaRepository<Ticket,Long>, JpaSpecifi
 
     @Query("SELECT t FROM Ticket t where t.site.project.id = :projectId and (t.employee.id in (:empIds) or t.assignedTo.id in (:empIds) ) and t.createdDate between :startDate and :endDate")
     Page<Ticket> findByProjectIdAndEmpId(@Param("projectId") long siteId,@Param("empIds") List<Long> empIds,@Param("startDate") ZonedDateTime startDate,@Param("endDate") ZonedDateTime endDate, Pageable pageRequest);
-    
+
     @Query("SELECT t FROM Ticket t where t.site.id = :siteId and t.status = :status and (t.employee.id in (:empIds) or t.assignedTo.id in (:empIds) ) and t.createdDate between :startDate and :endDate")
     Page<Ticket> findBySiteIdStatusAndEmpId(@Param("siteId") long siteId,@Param("status") String status,@Param("empIds") List<Long> empIds,@Param("startDate") ZonedDateTime startDate,@Param("endDate") ZonedDateTime endDate, Pageable pageRequest);
 
@@ -59,4 +60,27 @@ public interface TicketRepository extends JpaRepository<Ticket,Long>, JpaSpecifi
     @Query("SELECT t FROM Ticket t where t.status = :status and (t.site.id in (:siteIds) or t.employee.id in (:empIds) or t.assignedTo.id in (:empIds) ) and t.createdDate between :startDate and :endDate")
     Page<Ticket> findByStatusAndEmpId(@Param("siteIds") List<Long> siteIds, @Param("status") String status,@Param("empIds") List<Long> empIds,@Param("startDate") ZonedDateTime startDate,@Param("endDate") ZonedDateTime endDate, Pageable pageRequest);
 
+    @Query("SELECT count(t) from Ticket t where t.site.id IN (:siteIds) and  t.createdDate between :startDate and :endDate ")
+	long findCountBySiteIdAndDateRange(@Param("siteIds") List<Long> siteIds, @Param("startDate") ZonedDateTime startDate, @Param("endDate") ZonedDateTime endDate);
+
+    @Query("SELECT count(t) from Ticket t where t.site.id IN (:siteIds) and t.status = :status and t.createdDate between :startDate and :endDate ")
+	long findCountBySiteIdStatusAndDateRange(@Param("siteIds") List<Long> siteIds, @Param("status") String status, @Param("startDate") ZonedDateTime startDate, @Param("endDate") ZonedDateTime endDate);
+
+    @Query("SELECT count(t) from Ticket t where t.site.id IN (:siteIds) and t.status <> 'Closed' and t.createdDate between :startDate and :endDate ")
+	long findOpenCountBySiteIdAndDateRange(@Param("siteIds") List<Long> siteIds, @Param("startDate") ZonedDateTime startDate, @Param("endDate") ZonedDateTime endDate);
+
+    @Query("SELECT count(t) from Ticket t where t.site.id IN (:siteIds) and t.status <> 'Closed' and t.pendingAtClient = TRUE and t.createdDate between :startDate and :endDate ")
+	long findOpenCountBySiteIdAndDateRangeDueToClient(@Param("siteIds") List<Long> siteIds, @Param("startDate") ZonedDateTime startDate, @Param("endDate") ZonedDateTime endDate);
+
+    @Query("SELECT count(t) from Ticket t where t.site.id IN (:siteIds) and t.status <> 'Closed' and t.pendingAtUDS = TRUE and t.createdDate between :startDate and :endDate ")
+	long findOpenCountBySiteIdAndDateRangeDueToCompany(@Param("siteIds") List<Long> siteIds, @Param("startDate") ZonedDateTime startDate, @Param("endDate") ZonedDateTime endDate);
+
+    //@Query("select sum(cnt) from (select timediff, count(id) as cnt from (SELECT datediff(now(),t.createdDate) as timediff, t.id as id from Ticket t where t.site.id IN (:siteIds) and t.status <> 'Closed'  and t.createdDate between :startDate and :endDate) as timediffresult group by timediff) as result where timediff >= :min and timediff <= :max ")
+	//long findPendingCountBySiteIdDateRangeAndGroupByDays(@Param("siteIds") List<Long> siteIds,  @Param("min") int min, @Param("max") int max, @Param("startDate") Date startDate, @Param("endDate") Date endDate);
+
+    //@Query("select sum(result.cnt) from (select timediff, count(id) as cnt from (SELECT datediff(now(),t.createdDate) as timediff, t.id as id from Ticket t where t.site.id IN (:siteIds) and t.status = 'Closed' and t.createdDate between :startDate and :endDate) as timediffresult group by timediff) as result where timediff >= :min and timediff <= :max ")
+	//long findClosedCountBySiteIdDateRangeAndGroupByDays(@Param("siteIds") List<Long> siteIds,  @Param("min") int min, @Param("max") int max, @Param("startDate") Date startDate, @Param("endDate") Date endDate);
+
+    //@Query("SELECT count(t) from Ticket t where t.site.id IN (:siteIds) and t.status = :status and t.createdDate between :startDate and :endDate ")
+	//long findCountBySiteIdStatusAndDateRange(@Param("siteIds") List<Long> siteIds, @Param("status") String status, @Param("startDate") Date startDate, @Param("endDate") Date endDate);
 }

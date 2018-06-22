@@ -253,7 +253,6 @@ public class Ticket extends AbstractAuditingEntity implements Serializable {
 		this.quotationId = quotationId;
 	}
 
-
     public boolean isPendingAtUDS() {
         return pendingAtUDS;
     }
