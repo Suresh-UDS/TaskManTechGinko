@@ -78,7 +78,7 @@ angular.module('timeSheetApp')
             $scope.endDate = $scope.selectedToDate.getDate() + '-' + ($scope.selectedToDate.getMonth() +1) + '-' + $scope.selectedToDate.getFullYear();
             console.log("EndDate---"+$scope.endDate);
 
-            DashboardComponent.loadTicketChartData(2,$scope.startDate,$scope.endDate).then(function(response){
+            DashboardComponent.loadTicketChartData($scope.selectedSite.id,$scope.startDate,$scope.endDate).then(function(response){
                 console.log("Dashboard ticket data_________");
                 console.log(response);
                 console.log(response.closedTicketCounts);
