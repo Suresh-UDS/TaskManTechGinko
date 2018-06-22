@@ -25,14 +25,56 @@ export class AssetList {
     page:1;
     totalPages:0;
     open:any;
-  constructor(public componentService:componentService, public navCtrl: NavController, public navParams: NavParams, public modalController:ModalController, public qrScanner:QRScanner, public assetService:AssetService) {
+    qr:any;
+    assetDetails:any;
+  constructor(public modalCtrl:ModalController,public componentService:componentService, public navCtrl: NavController, public navParams: NavParams, public modalController:ModalController, public qrScanner:QRScanner, public assetService:AssetService) {
     this.assetList = [];
     this.searchCriteria = {};
+    // this.qr = this.navParams.get('qr')
+
+
+  }
+
+  ionViewWillEnter()
+  {
+
   }
 
   ionViewDidLoad() {
-    console.log('ionViewDidLoad AssetList');
-    this.componentService.showLoader("Loading Assets")
+
+      console.log('ionViewDidLoad AssetList');
+      this.componentService.showLoader("Loading Assets")
+      if(this.navParams.get('text'))
+      {
+          this.componentService.closeLoader();
+          var text = this.navParams.get('text');
+          this.assetService.getAssetByCode(text).subscribe(
+              response=>{
+                  this.componentService.showToastMessage('Asset found, navigating..','bottom')
+                  console.log("Search by asset code response");
+                  console.log(response);
+                  window.document.querySelector('ion-app').classList.add('transparentBody')
+                  // this.navCtrl.setRoot(AssetList,{assetDetails:response,qr:true});
+                  this.navCtrl.push(AssetView,{assetDetails:response});
+
+              },
+              err=>{
+                  console.log("Error in getting asset by code");
+                  console.log(err);
+                  this.componentService.showToastMessage('Asset not found, please try again','bottom')
+              }
+          )
+      }
+
+
+
+
+
+      // if(this.navParams.get('qr'))
+      // {
+      //     console.log("------------------------------------------------------")
+      //     this.viewAsset(this.assetDetails);
+      // }
 
     this.assetService.findAllAssets().subscribe(
         response=>{
@@ -126,6 +168,14 @@ export class AssetList {
 
   scanQR(){
       this.navCtrl.push(ScanQR)
+
+
+      // let modal = this.modalCtrl.create(ScanQR);
+      // modal.present();
+      //
+      // modal.onDidDismiss(data => {
+      //     this.viewAsset(data)
+      // });
   }
 
   searchAssets(){
