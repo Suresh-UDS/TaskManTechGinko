@@ -1627,13 +1627,14 @@ public class AssetManagementService extends AbstractService {
 			if(invalidEntry) {
 				
 				AssetParameterReadingDTO assetReadingDTO = new AssetParameterReadingDTO();
-				assetReadingDTO.setMessage("Invalid Entry");
+				assetReadingDTO.setErrorStatus(true);
 				return assetReadingDTO;
 				
 			} else {
 				
 				assetParamReadingRepository.save(assetParamReading);
 				assetParamReadingDTO = mapperUtil.toModel(assetParamReading, AssetParameterReadingDTO.class);
+				assetParamReadingDTO.setErrorStatus(false);
 				return assetParamReadingDTO;
 				
 			}
