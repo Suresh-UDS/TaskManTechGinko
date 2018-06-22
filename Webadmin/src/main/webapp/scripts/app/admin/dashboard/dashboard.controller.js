@@ -44,7 +44,7 @@ angular.module('timeSheetApp')
                 $scope.loadingStart();
                 $scope.loadChartData();
 
-        }
+        };
 
         $scope.loadJobs = function(siteId){
             var siteId = 176;
@@ -56,9 +56,14 @@ angular.module('timeSheetApp')
 
         $scope.loadChartData = function () {
             $scope.openTicketsCountArray = [];
+            $scope.openTicketsLabels = [];
             $scope.closedTicketsCountArray = [];
+            $scope.closedTicketsLabels = [];
             $scope.overAllTicketsCountArray = [];
-            
+
+            $scope.overallTicketLabels = ['New', 'Closed', 'Pending', 'Pending with Client', 'Pending with UDS'];
+            $scope.overallTicketSeries = ['New', 'Closed','Pending', 'Pending with Client', 'Pending with UDS'];
+
             $scope.startDate = new Date();
             $scope.endDate =  new Date($scope.startDate.getTime() - (100 * 24 * 60 * 60 * 1000));
             // var last = new Date(date.getTime() - (days * 24 * 60 * 60 * 1000));
@@ -72,7 +77,7 @@ angular.module('timeSheetApp')
             console.log("Startdate---"+$scope.startDate);
             $scope.endDate = $scope.selectedToDate.getDate() + '-' + ($scope.selectedToDate.getMonth() +1) + '-' + $scope.selectedToDate.getFullYear();
             console.log("EndDate---"+$scope.endDate);
-            
+
             DashboardComponent.loadTicketChartData(2,$scope.startDate,$scope.endDate).then(function(response){
                 console.log("Dashboard ticket data_________");
                 console.log(response);
@@ -83,32 +88,143 @@ angular.module('timeSheetApp')
                     console.log(key);
                     console.log(response.openTicketCounts[key]);
                     $scope.openTicketsCountArray.push(response.openTicketCounts[key]);
+                   $scope.openTicketsLabels.push(key);
                 }
 
                 for(var key in response.closedTicketCounts){
                     console.log(key);
                     console.log(response.closedTicketCounts[key]);
                     $scope.closedTicketsCountArray.push(response.closedTicketCounts[key]);
+                    $scope.closedTicketsLabels.push(key);
                 }
 
+                var ctx = document.getElementById("bar").getContext('2d');
+                $scope.myChart = new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels:$scope.openTicketsLabels ,
+                        datasets: [{
+                            // label: '# of Votes',
+                            data:$scope.openTicketsCountArray ,
+                            backgroundColor: [
+                                'rgba(255, 99, 132, 0.2)',
+                                'rgba(54, 162, 235, 0.2)',
+                                'rgba(255, 206, 86, 0.2)',
+                                'rgba(75, 192, 192, 0.2)',
+                                'rgba(153, 102, 255, 0.2)'
+                            ],
+                            borderColor: [
+                                'rgba(255,99,132,1)',
+                                'rgba(54, 162, 235, 1)',
+                                'rgba(255, 206, 86, 1)',
+                                'rgba(75, 192, 192, 1)',
+                                'rgba(153, 102, 255, 1)'
+                            ],
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        scales: {
+                            yAxes: [{
+                                ticks: {
+                                    beginAtZero:true
+                                }
+                            }]
+                        }
+                    }
+                });
+
+                var ctx2 = document.getElementById("bar2").getContext('2d');
+                $scope.myChart = new Chart(ctx2, {
+                    type: 'bar',
+                    data: {
+                        labels:$scope.closedTicketsLabels ,
+                        datasets: [{
+                            // label: '# of Votes',
+                            data:$scope.closedTicketsCountArray ,
+                            backgroundColor: [
+                                'rgba(255, 99, 132, 0.2)',
+                                'rgba(54, 162, 235, 0.2)',
+                                'rgba(255, 206, 86, 0.2)',
+                                'rgba(75, 192, 192, 0.2)',
+                                'rgba(153, 102, 255, 0.2)'
+                            ],
+                            borderColor: [
+                                'rgba(255,99,132,1)',
+                                'rgba(54, 162, 235, 1)',
+                                'rgba(255, 206, 86, 1)',
+                                'rgba(75, 192, 192, 1)',
+                                'rgba(153, 102, 255, 1)'
+                            ],
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        scales: {
+                            yAxes: [{
+                                ticks: {
+                                    beginAtZero:true
+                                }
+                            }]
+                        }
+                    }
+                });
+
+                var ctx3 = document.getElementById("bar3").getContext('2d');
+                $scope.myChart = new Chart(ctx3, {
+                    type: 'bar',
+                    data: {
+                        labels:$scope.overallTicketLabels ,
+                        datasets: [{
+                            // label: '# of Votes',
+                            data:$scope.overAllTicketsCountArray ,
+                            backgroundColor: [
+                                'rgba(255, 99, 132, 0.2)',
+                                'rgba(54, 162, 235, 0.2)',
+                                'rgba(255, 206, 86, 0.2)',
+                                'rgba(75, 192, 192, 0.2)',
+                                'rgba(153, 102, 255, 0.2)'
+                            ],
+                            borderColor: [
+                                'rgba(255,99,132,1)',
+                                'rgba(54, 162, 235, 1)',
+                                'rgba(255, 206, 86, 1)',
+                                'rgba(75, 192, 192, 1)',
+                                'rgba(153, 102, 255, 1)'
+                            ],
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        scales: {
+                            yAxes: [{
+                                ticks: {
+                                    beginAtZero:true
+                                }
+                            }]
+                        }
+                    }
+                });
+
                 $scope.closedTicketsLabels = ['0-3 days', '3-5 days', '5-7 days', '7-10 days', '10 and Above'];
-                $scope.openTicketsLabels = ['0-3 days', '3-5 days', '5-7 days', '7-10 days', '10 and Above'];
+                // $scope.openTicketsLabels = ['0-3 days', '3-5 days', '5-7 days', '7-10 days', '10 and Above'];
                 $scope.closedTicketsSeries = ['0-3 days', '3-5 days', '5-7 days', '7-10 days','Above 10'];
                 $scope.openTicketsSeries = ['0-3 days', '3-5 days', '5-7 days', '7-10 days','Above 10'];
 
                 $scope.overallTicketLabels = ['New', 'Closed', 'Pending', 'Pending with Client', 'Pending with UDS'];
                 $scope.overallTicketSeries = ['New', 'Closed','Pending', 'Pending with Client', 'Pending with UDS'];
-                
-                
+
+
                 $scope.overAllTicketsCountArray.push(response.totalNewTicketCount);
                 $scope.overAllTicketsCountArray.push(response.totalClosedTicketCount);
                 $scope.overAllTicketsCountArray.push(response.totalPendingTicketCount);
                 $scope.overAllTicketsCountArray.push(response.totalPendingDueToClientTicketCount);
                 $scope.overAllTicketsCountArray.push(response.totalPendingDueToCompanyTicketCount);
-                
+
                 $scope.overallTicketData = $scope.overAllTicketsCountArray;
                 $scope.openTicketsData = $scope.openTicketsCountArray;
                 $scope.closedTicketsData = $scope.closedTicketsCountArray;
+
             });
         }
 
@@ -214,6 +330,7 @@ angular.module('timeSheetApp')
         		}
         		$scope.loadJobReport();
         		$scope.loadChartData();
+        		// $scope.myChart.update();
         }
 
         $scope.refreshReportByProject = function() {
