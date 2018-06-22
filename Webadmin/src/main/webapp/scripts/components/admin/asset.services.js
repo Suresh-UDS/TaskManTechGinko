@@ -314,6 +314,11 @@ angular.module('timeSheetApp')
 	            	return $http.post('api/assets/52week/export', searchCriteria).then(function (response) {
 	            		return response.data;
 	            	});
-	        } 	 	        
+	        },
+	        getAllRules : function() {
+	        	return $http.get('api/assets/readingRules').then(function (response) { 
+	        		return response.data;
+	        	});
+	        }
         };
     });

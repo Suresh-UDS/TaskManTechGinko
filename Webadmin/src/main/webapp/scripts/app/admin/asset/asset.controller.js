@@ -1840,6 +1840,12 @@ angular.module('timeSheetApp')
         		$scope.ppmJobLists = data.transactions;
         	});
         }
+        
+        $scope.loadAllRules = function() {
+        	AssetComponent.getAllRules().then(function(data) { 
+        		console.log(data);
+        	});
+        }
  
 
     });
