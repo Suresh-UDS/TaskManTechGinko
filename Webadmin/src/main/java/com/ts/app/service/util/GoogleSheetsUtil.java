@@ -74,8 +74,9 @@ public class GoogleSheetsUtil {
 		return new AuthorizationCodeInstalledApp(flow, new LocalServerReceiver()).authorize("user");
 	}
 
-	public static String upload(String name, String fileName)  {
+	public static String[] upload(String name, String fileName)  {
 		String webFileLink = null;
+		String webContentLink = null;
         // Build a new authorized API client service.
 		try {
 	        final NetHttpTransport HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport();
@@ -104,67 +105,72 @@ public class GoogleSheetsUtil {
 	        ByteArrayContent mediaContent = new ByteArrayContent(mimeType, content);
 	        try {
 	        		Drive.Files.Create create = service.files().create(body, mediaContent);
-	        		create.setFields("id, name, webViewLink");
+	        		create.setFields("id, name, webViewLink, webContentLink");
 		        service.getGoogleClientRequestInitializer().initialize(create);
 		        
 		        File file = create.execute();
 		        
 		        
-//		        //set file permissions.
-//		        BatchRequest batch = service.batch();
-//		        Permission userPermission = new Permission()
-//		            .setType("user")
-//		            .setRole("writer")
-//		            .setEmailAddress("gnanaprakash@techginko.com");
-//		        service.permissions().create(file.getId(), userPermission)
-//		            .setFields("id")
-//		            .queue(batch, new JsonBatchCallback<Permission>() {
-//		            	  @Override
-//		            	  public void onFailure(GoogleJsonError e,
-//		            	                        HttpHeaders responseHeaders)
-//		            	      throws IOException {
-//		            	    // Handle error
-//		            	    log.error(e.getMessage());
-//		            	  }
-//
-//		            	  @Override
-//		            	  public void onSuccess(Permission permission,
-//		            	                        HttpHeaders responseHeaders)
-//		            	      throws IOException {
-//		            	    log.debug("Permission ID: " + permission.getId());
-//		            	  }
-//		            	});
-//
-//		        Permission domainPermission = new Permission()
-//		            .setType("anyone")
-//		            .setRole("reader");
-//		            
-//		        service.permissions().create(file.getId(), domainPermission)
-//		            .setFields("id")
-//		            .queue(batch, new JsonBatchCallback<Permission>() {
-//		            	  @Override
-//		            	  public void onFailure(GoogleJsonError e,
-//		            	                        HttpHeaders responseHeaders)
-//		            	      throws IOException {
-//		            	    // Handle error
-//		            	    log.error(e.getMessage());
-//		            	  }
-//
-//		            	  @Override
-//		            	  public void onSuccess(Permission permission,
-//		            	                        HttpHeaders responseHeaders)
-//		            	      throws IOException {
-//		            	    log.debug("Permission ID: " + permission.getId());
-//		            	  }
-//		            	});
-//
-//		        batch.execute();		        
-		        webFileLink = file.getWebViewLink();
+		        //set file permissions.
+		        BatchRequest batch = service.batch();
+		        Permission userPermission = new Permission()
+		            .setType("user")
+		            .setRole("writer")
+		            .setEmailAddress("gnanaprakash@techginko.com");
+		        service.permissions().create(file.getId(), userPermission)
+		            .setFields("id")
+		            .queue(batch, new JsonBatchCallback<Permission>() {
+		            	  @Override
+		            	  public void onFailure(GoogleJsonError e,
+		            	                        HttpHeaders responseHeaders)
+		            	      throws IOException {
+		            	    // Handle error
+		            	    log.error(e.getMessage());
+		            	  }
 
+		            	  @Override
+		            	  public void onSuccess(Permission permission,
+		            	                        HttpHeaders responseHeaders)
+		            	      throws IOException {
+		            	    log.debug("Permission ID: " + permission.getId());
+		            	  }
+		            	});
+
+		        Permission domainPermission = new Permission()
+		            .setType("anyone")
+		            .setRole("reader");
+		            
+		        service.permissions().create(file.getId(), domainPermission)
+		            .setFields("id")
+		            .queue(batch, new JsonBatchCallback<Permission>() {
+		            	  @Override
+		            	  public void onFailure(GoogleJsonError e,
+		            	                        HttpHeaders responseHeaders)
+		            	      throws IOException {
+		            	    // Handle error
+		            	    log.error(e.getMessage());
+		            	  }
+
+		            	  @Override
+		            	  public void onSuccess(Permission permission,
+		            	                        HttpHeaders responseHeaders)
+		            	      throws IOException {
+		            	    log.debug("Permission ID: " + permission.getId());
+		            	  }
+		            	});
+
+		        batch.execute();		        
+		        webFileLink = file.getWebViewLink();
+		        //webContentLink = file.getWebContentLink();
+		        //form downloadable url
+		        int replaceIndex = webFileLink.indexOf("edit");
+		        StringBuffer sbf = new StringBuffer(webFileLink);
+		        sbf.replace(replaceIndex, webFileLink.length(), "export?format=xlsx");
+		        webContentLink = sbf.toString();
 		        // Print the names and IDs for up to 10 files.
 		        FileList result = service.files().list()
 		                .setPageSize(10)
-		                .setFields("nextPageToken, files(id, name)")
+		                .setFields("nextPageToken, files(id, name, webViewLink, webContentLink)")
 		                .execute();
 		        List<File> files = result.getFiles();
 		        if (files == null || files.isEmpty()) {
@@ -181,6 +187,9 @@ public class GoogleSheetsUtil {
 		}catch(Exception e ) {
 			log.error("Error while uploading file to google drive",e);
 		}
-		return webFileLink;
+		String[] response = new String[2];
+		response[0] = webFileLink;
+		response[1] = webContentLink;
+		return response;
 	}
 }

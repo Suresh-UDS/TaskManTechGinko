@@ -196,7 +196,12 @@ angular.module('timeSheetApp', ['LocalStorageModule',
             is: function(val) { return [true,false,0,1].indexOf(val) >= 0 },
             pattern: /bool|true|0|1/
         });
-    }]);;
+    }])
+    .filter('trusted', ['$sce', function ($sce) {
+	    return function(url) {
+	        return $sce.trustAsResourceUrl(url);
+	    };
+    }]);
 
     angular.module('App.filters', []).filter('zpad', function() {
     	return function(input, n) {
