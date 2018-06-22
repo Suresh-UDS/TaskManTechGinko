@@ -139,46 +139,117 @@ export class GetAssetReading {
         console.log("Save Reading");
         console.log(reading);
         var assetReading={};
+        console.log(reading.currentValue);
+        console.log(reading.min);
+        console.log(reading.max);
+
 
         if(reading.consumptionMonitoringRequired && reading.previousReadingId>0){
-            assetReading = {
-                name:reading.name,
-                uom:reading.uom,
-                initialValue:reading.previousValue,
-                finalValue:reading.currentValue,
-                consumption:reading.currentValue-reading.previousValue,
-                assetId:reading.assetId,
-                assetParameterConfigId:reading.id,
-                consumptionMonitoringRequired:reading.consumptionMonitoringRequired,
-                id:reading.previousReadingId
+            console.log(reading.currentValue);
 
-            };
-            console.log(assetReading);
-            this.assetSaveReading(assetReading);
+            if( reading.max>0){
+                if(reading.currentValue>reading.min && reading.currentValue<reading.max){
+                    assetReading = {
+                        name:reading.name,
+                        uom:reading.uom,
+                        initialValue:reading.previousValue,
+                        finalValue:reading.currentValue,
+                        consumption:reading.currentValue-reading.previousValue,
+                        assetId:reading.assetId,
+                        assetParameterConfigId:reading.id,
+                        consumptionMonitoringRequired:reading.consumptionMonitoringRequired,
+                        id:reading.previousReadingId
+
+                    };
+                    console.log(assetReading);
+                    this.assetSaveReading(assetReading);
+                }else{
+                    var msg = "Asset reading should be greater than "+reading.min+"or less than "+reading.max;
+                    this.componentService.showToastMessage(msg,'bottom');
+                }
+
+            }else{
+                assetReading = {
+                    name:reading.name,
+                    uom:reading.uom,
+                    initialValue:reading.previousValue,
+                    finalValue:reading.currentValue,
+                    consumption:reading.currentValue-reading.previousValue,
+                    assetId:reading.assetId,
+                    assetParameterConfigId:reading.id,
+                    consumptionMonitoringRequired:reading.consumptionMonitoringRequired,
+                    id:reading.previousReadingId
+
+                };
+                console.log(assetReading);
+                this.assetSaveReading(assetReading);
+            }
+
+
         }else if(reading.consumptionMonitoringRequired){
-            assetReading = {
-                name:reading.name,
-                uom:reading.uom,
-                initialValue:reading.previousValue,
-                finalValue:reading.currentValue,
-                consumption:reading.currentValue-reading.previousValue,
-                assetId:reading.assetId,
-                assetParameterConfigId:reading.id,
-                consumptionMonitoringRequired:reading.consumptionMonitoringRequired,
-            };
-            console.log(assetReading);
-            this.assetSaveReading(assetReading);
+            if( reading.max>0) {
+                if (reading.currentValue > reading.min && reading.currentValue < reading.max) {
+                    assetReading = {
+                        name:reading.name,
+                        uom:reading.uom,
+                        initialValue:reading.previousValue,
+                        finalValue:reading.currentValue,
+                        consumption:reading.currentValue-reading.previousValue,
+                        assetId:reading.assetId,
+                        assetParameterConfigId:reading.id,
+                        consumptionMonitoringRequired:reading.consumptionMonitoringRequired,
+                    };
+                    console.log(assetReading);
+                    this.assetSaveReading(assetReading);
+                }else{
+                    var msg = "Asset reading should be greater than "+reading.min+"or less than "+reading.max;
+                    this.componentService.showToastMessage(msg,'bottom');
+                }
+            }else{
+                assetReading = {
+                    name:reading.name,
+                    uom:reading.uom,
+                    initialValue:reading.previousValue,
+                    finalValue:reading.currentValue,
+                    consumption:reading.currentValue-reading.previousValue,
+                    assetId:reading.assetId,
+                    assetParameterConfigId:reading.id,
+                    consumptionMonitoringRequired:reading.consumptionMonitoringRequired,
+                };
+                console.log(assetReading);
+                this.assetSaveReading(assetReading);
+            }
+
         }else{
-            assetReading = {
-                name:reading.name,
-                uom:reading.uom,
-                value:reading.currentValue,
-                assetId:reading.assetId,
-                assetParameterConfigId:reading.id,
-                consumptionMonitoringRequired:reading.consumptionMonitoringRequired,
-            };
-            console.log(assetReading);
-            this.assetSaveReading(assetReading);
+            if( this.assetConfig.max>0) {
+                if (reading.currentValue > reading.min && reading.currentValue < reading.max) {
+                    assetReading = {
+                        name:reading.name,
+                        uom:reading.uom,
+                        value:reading.currentValue,
+                        assetId:reading.assetId,
+                        assetParameterConfigId:reading.id,
+                        consumptionMonitoringRequired:reading.consumptionMonitoringRequired,
+                    };
+                    console.log(assetReading);
+                    this.assetSaveReading(assetReading);
+                }else{
+                    var msg = "Asset reading should be greater than "+reading.min+"or less than "+reading.max;
+                    this.componentService.showToastMessage(msg,'bottom');
+                }
+            }else{
+                assetReading = {
+                    name:reading.name,
+                    uom:reading.uom,
+                    value:reading.currentValue,
+                    assetId:reading.assetId,
+                    assetParameterConfigId:reading.id,
+                    consumptionMonitoringRequired:reading.consumptionMonitoringRequired,
+                };
+                console.log(assetReading);
+                this.assetSaveReading(assetReading);
+            }
+
         }
 
 
