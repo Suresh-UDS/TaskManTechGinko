@@ -51,18 +51,18 @@ public class ReportService extends AbstractService {
 
     @Inject
     private EmployeeRepository employeeRepository;
-    
+
     @Inject
     private UserRepository userRepository;
 
     @Inject
     private AttendanceRepository attendanceRepository;
-    
+
     @Inject
     private TicketRepository ticketRepository;
-    
+
     @PersistenceContext
-	private EntityManager manager; 
+	private EntityManager manager;
 
 	public ReportResult getJobStats(Long siteId, Date selectedDate) {
 		java.sql.Date sqlDate = new java.sql.Date(DateUtils.toCalendar(selectedDate).getTimeInMillis());
@@ -144,7 +144,7 @@ public class ReportService extends AbstractService {
         log.debug(String.valueOf(completedJobTAT));
         return reportResult;
     }
-    
+
     public ReportResult jobCountGroupByDate(Long siteId, Date selectedDate, Date endDate) {
         java.sql.Date sqlDate = new java.sql.Date(DateUtils.toCalendar(selectedDate).getTimeInMillis());
         java.sql.Date sqlEndDate = new java.sql.Date(DateUtils.toCalendar(endDate).getTimeInMillis());
@@ -280,7 +280,7 @@ public class ReportService extends AbstractService {
         			if(!user.getUserRole().getName().equalsIgnoreCase("Admin")) {
 	        			Employee emp = user.getEmployee();
 	        			List<EmployeeProjectSite> projSites = emp.getProjectSites();
-	        			List<Long> siteIds = new ArrayList<Long>(); 
+	        			List<Long> siteIds = new ArrayList<Long>();
 	        			if(CollectionUtils.isNotEmpty(projSites)) {
 	        				for(EmployeeProjectSite projSite : projSites) {
 	        					siteIds.add(projSite.getSite().getId());
@@ -288,7 +288,7 @@ public class ReportService extends AbstractService {
 	        			}
 	        			totalEmployeeCount = employeeRepository.findTotalCountBySites(siteIds);
         			}else {
-        				totalEmployeeCount = employeeRepository.findTotalCount();	
+        				totalEmployeeCount = employeeRepository.findTotalCount();
         			}
         		}else {
         			totalEmployeeCount = employeeRepository.findTotalCount();
@@ -302,7 +302,7 @@ public class ReportService extends AbstractService {
         			if(!user.getUserRole().getName().equalsIgnoreCase("Admin")) {
 	        			Employee emp = user.getEmployee();
 	        			List<EmployeeProjectSite> projSites = emp.getProjectSites();
-	        			List<Long> siteIds = new ArrayList<Long>(); 
+	        			List<Long> siteIds = new ArrayList<Long>();
 	        			if(CollectionUtils.isNotEmpty(projSites)) {
 	        				for(EmployeeProjectSite projSite : projSites) {
 	        					siteIds.add(projSite.getSite().getId());
@@ -325,7 +325,7 @@ public class ReportService extends AbstractService {
         reportResult.setAbsentEmployeeCount(absentEmployeeCount);
         return reportResult;
     }
-    
+
     public ReportResult getAttendanceStatsByProjectIdDateRange(long userId, Long projectId, Date selectedDate, Date endDate) {
         log.info("Attendance report params : projectId - "+ projectId + ", selectedDate - " + selectedDate + ", endDate -" + endDate );
         Calendar startCal = DateUtils.toCalendar(selectedDate);
@@ -350,7 +350,7 @@ public class ReportService extends AbstractService {
         			}else {
 	        			Employee emp = user.getEmployee();
 	        			List<EmployeeProjectSite> projSites = emp.getProjectSites();
-	        			List<Long> projIds = new ArrayList<Long>(); 
+	        			List<Long> projIds = new ArrayList<Long>();
 	        			if(CollectionUtils.isNotEmpty(projSites)) {
 	        				for(EmployeeProjectSite projSite : projSites) {
 	        					projIds.add(projSite.getProject().getId());
@@ -368,11 +368,11 @@ public class ReportService extends AbstractService {
         		if(userId > 0) {
         			User user = userRepository.findOne(userId);
         			if(user.getUserRole().getName().equalsIgnoreCase("Admin")) {
-        				presentEmployeeCount = attendanceRepository.findCountByCheckInTime(sqlDate, sqlEndDate);	
-        			}else {	
+        				presentEmployeeCount = attendanceRepository.findCountByCheckInTime(sqlDate, sqlEndDate);
+        			}else {
 	        			Employee emp = user.getEmployee();
 	        			List<EmployeeProjectSite> projSites = emp.getProjectSites();
-	        			List<Long> siteIds = new ArrayList<Long>(); 
+	        			List<Long> siteIds = new ArrayList<Long>();
 	        			if(CollectionUtils.isNotEmpty(projSites)) {
 	        				for(EmployeeProjectSite projSite : projSites) {
 	        					siteIds.add(projSite.getSite().getId());
@@ -392,10 +392,10 @@ public class ReportService extends AbstractService {
         reportResult.setAbsentEmployeeCount(absentEmployeeCount);
         return reportResult;
     }
-    
+
     public ReportResult getAttendanceStatsDateRange(Long siteId) {
         log.info("Attendance report params : siteId - "+ siteId);
-        Calendar toCal = Calendar.getInstance(); 
+        Calendar toCal = Calendar.getInstance();
         Calendar fromCal = Calendar.getInstance();
         	fromCal.add(Calendar.DAY_OF_MONTH, -10);
 	    	fromCal.set(Calendar.HOUR_OF_DAY, 0);
@@ -438,7 +438,7 @@ public class ReportService extends AbstractService {
     		}
     		return new ReportResult();
     }
-    
+
 
     public ReportResult getTicketStatsDateRange(long userId, List<Long> siteIds, Date selectedDate, Date endDate) {
         log.info("Ticket report params : siteId - "+ siteIds + ", selectedDate - " + selectedDate + ", endDate -" + endDate );
@@ -452,8 +452,8 @@ public class ReportService extends AbstractService {
 	    	endCal.setTimeZone(TimeZone.getDefault());
         java.sql.Date sqlDate = new java.sql.Date(startCal.getTimeInMillis());
 	    	ZoneId  zone = ZoneId.of("Asia/Singapore");
-        ZonedDateTime startZDate = sqlDate.toLocalDate().atStartOfDay(zone); 
-        
+        ZonedDateTime startZDate = sqlDate.toLocalDate().atStartOfDay(zone);
+
         java.sql.Date sqlEndDate = new java.sql.Date(endCal.getTimeInMillis());
         ZonedDateTime endZDate = sqlEndDate.toLocalDate().atStartOfDay(zone);
         long totalNewTicketCount = 0;
@@ -461,24 +461,24 @@ public class ReportService extends AbstractService {
         long totalPendingTicketCount = 0;
         long totalPendingDueToClientTicketCount = 0;
         long totalPendingDueToCompanyTicketCount = 0;
-        
+
         totalNewTicketCount = ticketRepository.findCountBySiteIdAndDateRange(siteIds, startZDate, endZDate);
-        
+
         totalPendingTicketCount = ticketRepository.findOpenCountBySiteIdAndDateRange(siteIds, startZDate, endZDate);
-        
+
         totalClosedTicketCount = ticketRepository.findCountBySiteIdStatusAndDateRange(siteIds, "Closed", startZDate, endZDate);
-        
+
         totalPendingDueToClientTicketCount = ticketRepository.findOpenCountBySiteIdAndDateRangeDueToClient(siteIds, startZDate, endZDate);
-        
+
         totalPendingDueToCompanyTicketCount = ticketRepository.findOpenCountBySiteIdAndDateRangeDueToCompany(siteIds, startZDate, endZDate);
-        
+
         //open ticket counts for different day range
-        Map<String, Long> openTicketCounts = new HashMap<String, Long>(); 
+        Map<String, Long> openTicketCounts = new HashMap<String, Long>();
         int min = 0;
         int max = 3;
         String range = min +"-"+max;
-        
-        
+
+
         openTicketCounts.put(range, getPendingTicketCountByDayRange(siteIds, min, max, sqlDate, sqlEndDate));
         min = 3;
         max = 5;
@@ -498,7 +498,7 @@ public class ReportService extends AbstractService {
         openTicketCounts.put(range, getPendingTicketCountByDayRange(siteIds, min, max, sqlDate, sqlEndDate));
 
         //closed ticket counts for different day range
-        Map<String, Long> closedTicketCounts = new HashMap<String, Long>(); 
+        Map<String, Long> closedTicketCounts = new HashMap<String, Long>();
 
         min = 0;
         max = 3;
@@ -520,8 +520,8 @@ public class ReportService extends AbstractService {
         max = 365;
         range = "> " + min;
         closedTicketCounts.put(range, getClosedTicketCountByDayRange(siteIds, min, max, sqlDate, sqlEndDate));
-        
-        
+
+
         ReportResult reportResult = new ReportResult();
         //reportResult.setSiteId(siteId);
         reportResult.setTotalNewTicketCount(totalNewTicketCount);
@@ -529,36 +529,37 @@ public class ReportService extends AbstractService {
         reportResult.setTotalClosedTicketCount(totalClosedTicketCount);
         reportResult.setTotalPendingDueToClientTicketCount(totalPendingDueToClientTicketCount);
         reportResult.setTotalPendingDueToCompanyTicketCount(totalPendingDueToCompanyTicketCount);
-        
+
         reportResult.setOpenTicketCounts(openTicketCounts);
-        
+
         reportResult.setClosedTicketCounts(closedTicketCounts);
-        
+
         return reportResult;
     }
-    
+
     private Long getPendingTicketCountByDayRange(List<Long> siteIds, int min, int max, Date sqlDate, Date sqlEndDate) {
-        Query query = manager.createNativeQuery("select sum(cnt) from (select timediff, count(id) as cnt from (SELECT datediff(now(),t.created_date) as timediff, t.id as id from Ticket t where t.site_id IN (:siteIds) and t.status <> 'Closed'  and t.created_date between :startDate and :endDate) as timediffresult group by timediff) as result where timediff >= :min and timediff <= :max ");
+        Query query = manager.createNativeQuery("select sum(cnt) from (select timediff, count(id) as cnt from (SELECT datediff(now(),t.created_date) as timediff, t.id as id from ticket t where t.site_id IN (:siteIds) and t.status <> 'Closed'  and t.created_date between :startDate and :endDate) as timediffresult group by timediff) as result where timediff >= :min and timediff <= :max ");
         query.setParameter("siteIds", siteIds);
         query.setParameter("min", min);
         query.setParameter("max", max);
         query.setParameter("startDate", sqlDate);
         query.setParameter("endDate", sqlEndDate);
-        	
+
         Object result = query.getSingleResult();
         BigDecimal resultVal = (BigDecimal)result;
+        log.debug("Pending result counts ----"+result);
         return resultVal != null ? resultVal.longValue() : 0;
 
     }
-    
+
     private Long getClosedTicketCountByDayRange(List<Long> siteIds, int min, int max, Date sqlDate, Date sqlEndDate) {
-        Query query = manager.createNativeQuery("select sum(result.cnt) from (select timediff, count(id) as cnt from (SELECT datediff(now(),t.created_date) as timediff, t.id as id from Ticket t where t.site_id IN (:siteIds) and t.status = 'Closed' and t.created_date between :startDate and :endDate) as timediffresult group by timediff) as result where timediff >= :min and timediff <= :max ");
+        Query query = manager.createNativeQuery("select sum(result.cnt) from (select timediff, count(id) as cnt from (SELECT datediff(now(),t.created_date) as timediff, t.id as id from ticket t where t.site_id IN (:siteIds) and t.status = 'Closed' and t.created_date between :startDate and :endDate) as timediffresult group by timediff) as result where timediff >= :min and timediff <= :max ");
         query.setParameter("siteIds", siteIds);
         query.setParameter("min", min);
         query.setParameter("max", max);
         query.setParameter("startDate", sqlDate);
         query.setParameter("endDate", sqlEndDate);
-        	
+
         Object result = query.getSingleResult();
         BigDecimal resultVal = (BigDecimal)result;
         return resultVal != null ? resultVal.longValue() : 0;

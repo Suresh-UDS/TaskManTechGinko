@@ -279,7 +279,184 @@
             </div>
         </div>
 
+        <div class="panel panel-default">
+            <div class="panel-heading">Open Call Tickets</div>
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-md-8">
+                        <canvas id="bar" class="chart chart-bar"
+                                chart-data="data" chart-labels="labels"> chart-series="series"
+                        </canvas>
+                    </div>
 
+                    <div class="col-md-4">
+                        <div class="card-content">
+                            <div class="table-responsive">
+                                <table class="table">
+                                    <thead>
+                                    <tr>
+                                        <th>Range</th>
+                                        <th>Count</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr>
+                                        <td>0-3</td>
+                                        <td class="">{{openTicketsCountArray[0]}}</td>
+
+                                    </tr>
+                                    <tr>
+                                        <td>3-5</td>
+                                        <td class="">{{openTicketsCountArray[1]}}</td>
+
+
+                                    </tr>
+                                    <tr>
+                                        <td>5-7</td>
+                                        <td class="">{{openTicketsCountArray[2]}}</td>
+
+
+                                    </tr>
+                                    <tr>
+                                        <td>7-10</td>
+                                        <td class="">{{openTicketsCountArray[3]}}</td>
+
+
+                                    </tr>
+                                    <tr>
+                                        <td>>10</td>
+                                        <td class="">{{openTicketsCountArray[4]}}</td>
+                                    </tr>
+
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="panel panel-default">
+            <div class="panel-heading"> Closed Call Tickets</div>
+            <div class="panel-body">
+                <div class="row">
+
+
+                    <div class="col-md-4">
+                        <div class="card-content">
+                            <div class="table-responsive">
+                                <table class="table">
+                                    <thead>
+                                    <tr>
+                                        <th>Range</th>
+                                        <th>Count</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr>
+                                        <td>0-3</td>
+                                        <td class="">{{closedTicketsCountArray[0]}}</td>
+
+                                    </tr>
+                                    <tr>
+                                        <td>3-5</td>
+                                        <td class="">{{closedTicketsCountArray[1]}}</td>
+
+
+                                    </tr>
+                                    <tr>
+                                        <td>5-7</td>
+                                        <td class="">{{closedTicketsCountArray[2]}}</td>
+
+
+                                    </tr>
+                                    <tr>
+                                        <td>7-10</td>
+                                        <td class="">{{closedTicketsCountArray[3]}}</td>
+
+
+                                    </tr>
+                                    <tr>
+                                        <td>>10</td>
+                                        <td class="">{{closedTicketsCountArray[4]}}</td>
+                                    </tr>
+
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-8">
+                        <canvas id="bar2" class="chart chart-bar"
+                                chart-data="closedTicketsData" chart-labels="closedTicketsLabel"> chart-series="series"
+                        </canvas>
+                    </div>
+
+                    </div>
+                </div>
+        </div>
+        <div class="panel panel-default">
+            <div class="panel-heading">Overall Tickets</div>
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-md-8">
+                        <canvas id="bar3" class="chart chart-bar"
+                                chart-data="data" chart-labels="labels"> chart-series="series"
+                        </canvas>
+                    </div>
+
+                    <div class="col-md-4">
+                        <div class="card-content">
+                            <div class="table-responsive">
+                                <table class="table">
+                                    <thead>
+                                    <tr>
+                                        <th>Range</th>
+                                        <th>Count</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr>
+                                        <td>Total New Tickets</td>
+                                        <td class="">{{chartsDataResponse.totalNewTicketCount}}</td>
+
+                                    </tr>
+                                    <tr>
+                                        <td>Total Tickets Closed</td>
+                                        <td class="">{{chartsDataResponse.totalClosedTicketCount}}</td>
+
+
+                                    </tr>
+                                    <tr>
+                                        <td>Total tickets Pending</td>
+                                        <td class="">{{chartsDataResponse.totalPendingTicketCount}}</td>
+
+
+                                    </tr>
+                                    <tr>
+                                        <td>Total Tickets pending Due to {{chartsDataResponse.projectName}}</td>
+                                        <td class="">{{chartsDataResponse.totalPendingDueToClientTicketCount}}</td>
+
+
+                                    </tr>
+                                    <tr>
+                                        <td>Total Tickets pending due to UDS</td>
+                                        <td class="">{{chartsDataResponse.totalPendingDueToCompanyTicketCount}}</td>
+                                    </tr>
+
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        </div>
 
 
 
