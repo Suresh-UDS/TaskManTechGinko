@@ -57,6 +57,8 @@ angular.module('timeSheetApp')
         $scope.loadChartData = function () {
             $scope.openTicketsCountArray = [];
             $scope.closedTicketsCountArray = [];
+            $scope.overAllTicketsCountArray = [];
+            
             $scope.startDate = new Date();
             $scope.endDate =  new Date($scope.startDate.getTime() - (100 * 24 * 60 * 60 * 1000));
             // var last = new Date(date.getTime() - (days * 24 * 60 * 60 * 1000));
@@ -64,6 +66,13 @@ angular.module('timeSheetApp')
             $scope.endDate = $scope.endDate.getDate()+'-0'+($scope.endDate.getMonth()+1)+'-'+$scope.endDate.getFullYear();
             console.log("Startdate---"+$scope.startDate);
             console.log("EndDate---"+$scope.endDate);
+            $scope.selectedFromDate.setHours(0,0,0,0);
+            $scope.selectedToDate.setHours(23,59,59,0);
+            $scope.startDate = $scope.selectedFromDate.getDate() + '-' + ($scope.selectedFromDate.getMonth() +1) + '-' + $scope.selectedFromDate.getFullYear();
+            console.log("Startdate---"+$scope.startDate);
+            $scope.endDate = $scope.selectedToDate.getDate() + '-' + ($scope.selectedToDate.getMonth() +1) + '-' + $scope.selectedToDate.getFullYear();
+            console.log("EndDate---"+$scope.endDate);
+            
             DashboardComponent.loadTicketChartData(2,$scope.startDate,$scope.endDate).then(function(response){
                 console.log("Dashboard ticket data_________");
                 console.log(response);
@@ -82,14 +91,22 @@ angular.module('timeSheetApp')
                     $scope.closedTicketsCountArray.push(response.closedTicketCounts[key]);
                 }
 
-                $scope.labels = ['0-3', '3-5', '5-7', '7-10', '10 and Above'];
-                $scope.closedTicketsLabels = ['0-3', '3-5', '5-7', '7-10', '10 and Above'];
-                $scope.openTicketsLabels = ['0-3', '3-5', '5-7', '7-10', '10 and Above'];
-                $scope.series = ['0-3', '3-5','5-7','7-10','Above 10'];
-                $scope.closedTicketsSeries = ['0-3', '3-5','5-7','7-10','Above 10'];
-                $scope.openTicketsSeries = ['0-3', '3-5','5-7','7-10','Above 10'];
+                $scope.closedTicketsLabels = ['0-3 days', '3-5 days', '5-7 days', '7-10 days', '10 and Above'];
+                $scope.openTicketsLabels = ['0-3 days', '3-5 days', '5-7 days', '7-10 days', '10 and Above'];
+                $scope.closedTicketsSeries = ['0-3 days', '3-5 days', '5-7 days', '7-10 days','Above 10'];
+                $scope.openTicketsSeries = ['0-3 days', '3-5 days', '5-7 days', '7-10 days','Above 10'];
 
-                $scope.data = $scope.openTicketsCountArray;
+                $scope.overallTicketLabels = ['New', 'Closed', 'Pending', 'Pending with Client', 'Pending with UDS'];
+                $scope.overallTicketSeries = ['New', 'Closed','Pending', 'Pending with Client', 'Pending with UDS'];
+                
+                
+                $scope.overAllTicketsCountArray.push(response.totalNewTicketCount);
+                $scope.overAllTicketsCountArray.push(response.totalClosedTicketCount);
+                $scope.overAllTicketsCountArray.push(response.totalPendingTicketCount);
+                $scope.overAllTicketsCountArray.push(response.totalPendingDueToClientTicketCount);
+                $scope.overAllTicketsCountArray.push(response.totalPendingDueToCompanyTicketCount);
+                
+                $scope.overallTicketData = $scope.overAllTicketsCountArray;
                 $scope.openTicketsData = $scope.openTicketsCountArray;
                 $scope.closedTicketsData = $scope.closedTicketsCountArray;
             });
@@ -196,6 +213,7 @@ angular.module('timeSheetApp')
         			$scope.refreshReportByProject();
         		}
         		$scope.loadJobReport();
+        		$scope.loadChartData();
         }
 
         $scope.refreshReportByProject = function() {

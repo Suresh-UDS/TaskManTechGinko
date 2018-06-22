@@ -133,7 +133,7 @@
             </div>
         </div>
 
-        <div class="panel panel-default">
+        <div class="panel panel-default" has-permission="Jobs:List">
             <div class="panel-heading">Jobs</div>
             <div class="panel-body">
 
@@ -206,7 +206,7 @@
             </div>
         </div>
 
-        <div class="panel panel-default">
+        <div class="panel panel-default" has-permission="Attendance:List">
             <div class="panel-heading">Attendance</div>
             <div class="panel-body">
 
@@ -279,13 +279,13 @@
             </div>
         </div>
 
-        <div class="panel panel-default">
+        <div class="panel panel-default" has-permission="Tickets:List">
             <div class="panel-heading">Open Call Tickets</div>
             <div class="panel-body">
                 <div class="row">
                     <div class="col-md-8">
                         <canvas id="bar" class="chart chart-bar"
-                                chart-data="data" chart-labels="labels"> chart-series="series"
+                                chart-data="openTicketsData" chart-labels="openTicketsLabels" chart-series="openTicketsSeries">
                         </canvas>
                     </div>
 
@@ -389,7 +389,7 @@
 
                     <div class="col-md-8">
                         <canvas id="bar2" class="chart chart-bar"
-                                chart-data="closedTicketsData" chart-labels="closedTicketsLabel"> chart-series="series"
+                                chart-data="closedTicketsData" chart-labels="closedTicketsLabels" chart-series="closedTicketsSeries">
                         </canvas>
                     </div>
 
@@ -402,7 +402,7 @@
                 <div class="row">
                     <div class="col-md-8">
                         <canvas id="bar3" class="chart chart-bar"
-                                chart-data="data" chart-labels="labels"> chart-series="series"
+                                chart-data="overallTicketData" chart-labels="overallTicketLabels" chart-series="overallTicketSeries">
                         </canvas>
                     </div>
 
