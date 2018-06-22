@@ -12,8 +12,8 @@
     <ion-title>{{assetDetails.title}}</ion-title>
       <ion-buttons right [ngSwitch]="true" >
           <div  *ngIf="assetDetails.ppms" >
-              <button ion-button icon-only class="padding-right10"  *ngSwitchCase=" categories === 'ppm' ">
-                  <ion-icon ios="ios-calendar" md="md-calendar" class="green fnt-25 padding-right10"(click)="showCalendar()"></ion-icon>
+              <button ion-button icon-only class="padding-right10"  *ngSwitchCase=" categories === 'ppm' " (click)="showCalendar()">
+                  <ion-icon ios="ios-calendar" md="md-calendar" class="green fnt-25 padding-right10" ></ion-icon>
               </button>
           </div>
       </ion-buttons>
