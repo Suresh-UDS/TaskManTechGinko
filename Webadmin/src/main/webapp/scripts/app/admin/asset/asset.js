@@ -128,6 +128,23 @@ angular.module('timeSheetApp')
             resolve: {
 
             }
+        }).state('qr-code-list', {
+            parent: 'manage',
+            url: '/qr-code-list',
+            controller: 'AssetController',
+            data: {
+                authorities: [],
+                pageTitle: 'Asset Qr Code Details'
+            },
+            views: {
+                'content@': {
+                    templateUrl: 'scripts/app/admin/asset/qr-code-list.html',
+                    controller: 'AssetController'
+                }
+            },
+            resolve: {
+
+            }
         }).state('view-grid', {
             parent: 'manage',
             url: '/view-grid',
