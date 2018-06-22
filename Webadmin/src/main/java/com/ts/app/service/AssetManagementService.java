@@ -1262,6 +1262,7 @@ public class AssetManagementService extends AbstractService {
 						}
 					}
 					
+					
 				case CURRENT_READING_LESS_THAN_PREVIOUS_READING :
 					
 					if(!assetParamReadingDTO.isConsumptionMonitoringRequired()) { 
@@ -1288,12 +1289,13 @@ public class AssetManagementService extends AbstractService {
 		if(checkInvalidEntry) {
 			
 			AssetParameterReadingDTO assetParamEntity = new AssetParameterReadingDTO();
-			assetParamEntity.setMessage("Invalid Entry");
+			assetParamEntity.setErrorStatus(true);
 			return assetParamEntity;
 			
 		} else { 
 			
 			assetParameterReading.setActive(AssetParameterReading.ACTIVE_YES);
+			assetParamReadingDTO.setErrorStatus(false);
 			Asset assetEntity = assetRepository.findOne(assetParamReadingDTO.getAssetId());
 			assetParameterReading.setAsset(assetEntity);
 			if(assetParamReadingDTO.getJobId() > 0) {

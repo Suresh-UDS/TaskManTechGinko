@@ -934,8 +934,9 @@ angular.module('timeSheetApp')
             			console.log("response for 52week schedule - "+ JSON.stringify(data));
             			if(data) {
             				if(data.results) {
-            					$scope.scheduleWebLink = data.results[0].webLink;
-            					$location.path('/schedule-list');
+            					$rootScope.scheduleWebLink = data.results[0].webLink;
+            					$rootScope.scheduleWebContentLink = data.results[0].webContentLink;
+            					$location.path('/schedule-list');            					
             				}else {
             					$scope.showNotifications('top','center','error','Unable to get 52 week schedule for the site');
             				}

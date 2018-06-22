@@ -14,6 +14,8 @@ public class ExportResult {
 	
 	private String webLink;
 	
+	private String webContentLink;
+	
 	
 
 	public String getMsg() {
@@ -62,6 +64,14 @@ public class ExportResult {
 
 	public void setWebLink(String webLink) {
 		this.webLink = webLink;
+	}
+
+	public String getWebContentLink() {
+		return webContentLink;
+	}
+
+	public void setWebContentLink(String webContentLink) {
+		this.webContentLink = webContentLink;
 	}
 	
 	
