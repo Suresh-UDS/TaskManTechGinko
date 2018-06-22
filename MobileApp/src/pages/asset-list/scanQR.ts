@@ -1,11 +1,12 @@
 import { Component } from '@angular/core';
-import {NavController, NavParams} from "ionic-angular";
+import {NavController, NavParams, ViewController} from "ionic-angular";
 import {ModalController} from "ionic-angular";
 import {AssetFilter} from "./asset-filter";
 import {QRScanner, QRScannerStatus} from "@ionic-native/qr-scanner";
 import {AssetView} from "../asset-view/asset-view";
 import {AssetService} from "../service/assetService";
 import {componentService} from "../service/componentService";
+import {AssetList} from "./asset-list";
 
 /**
  * Generated class for the AssetList page.
@@ -20,8 +21,10 @@ import {componentService} from "../service/componentService";
 export class ScanQR {
 
     assetList: any;
+    data:any;
 
-    constructor(public navCtrl: NavController, public navParams: NavParams, public modalController: ModalController, public qrScanner: QRScanner, public assetService:AssetService, public cs:componentService) {
+    constructor(public viewCtrl: ViewController,public navCtrl: NavController, public navParams: NavParams, public modalController: ModalController, public qrScanner: QRScanner, public assetService:AssetService, public cs:componentService) {
+
 
     }
 
@@ -35,21 +38,24 @@ export class ScanQR {
                 if(text!=""){
                     this.qrScanner.hide();
                     scanSub.unsubscribe();
-                    this.navCtrl.pop();
-                    this.assetService.getAssetByCode(text).subscribe(
-                        response=>{
-                            this.cs.showToastMessage('Asset found, navigating..','bottom')
-                            console.log("Search by asset code response");
-                            console.log(response);
-                            window.document.querySelector('ion-app').classList.add('transparentBody')
-                            this.navCtrl.push(AssetView,{assetDetails:response});
-                        },
-                        err=>{
-                            console.log("Error in getting asset by code");
-                            console.log(err);
-                            this.cs.showToastMessage('Asset not found, please try again','bottom')
-                        }
-                    )
+                    this.navCtrl.setRoot(AssetList,{text:text})
+                    // this.navCtrl.pop();
+                    // this.assetService.getAssetByCode(text).subscribe(
+                    //     response=>{
+                    //         this.cs.showToastMessage('Asset found, navigating..','bottom')
+                    //         console.log("Search by asset code response");
+                    //         console.log(response);
+                    //         window.document.querySelector('ion-app').classList.add('transparentBody')
+                    //         // this.navCtrl.setRoot(AssetList,{assetDetails:response,qr:true});
+                    //         this.navCtrl.push(AssetView,{assetDetails:response});
+                    //
+                    //     },
+                    //     err=>{
+                    //         console.log("Error in getting asset by code");
+                    //         console.log(err);
+                    //         this.cs.showToastMessage('Asset not found, please try again','bottom')
+                    //     }
+                    // )
                 }else {
                     this.qrScanner.hide();
                     scanSub.unsubscribe();
@@ -73,5 +79,7 @@ export class ScanQR {
         })
             .catch((e:any)=>console.log("error is",e));
     }
+
+
 
 }
