@@ -49,6 +49,10 @@ public class AssetParameterConfig extends AbstractAuditingEntity implements Seri
 	private Asset asset;    
     
     private double threshold;
+    
+    private int min;
+    
+    private int max;
 
     public Long getId() {
         return id;
@@ -104,6 +108,22 @@ public class AssetParameterConfig extends AbstractAuditingEntity implements Seri
 
 	public void setThreshold(double threshold) {
 		this.threshold = threshold;
+	}
+
+	public int getMin() {
+		return min;
+	}
+
+	public void setMin(int min) {
+		this.min = min;
+	}
+
+	public int getMax() {
+		return max;
+	}
+
+	public void setMax(int max) {
+		this.max = max;
 	}
 
     

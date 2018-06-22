@@ -1,5 +1,5 @@
 import {Component, ElementRef, ViewChild} from '@angular/core';
-import {NavController, NavParams, PopoverController} from "ionic-angular";
+import {NavController, NavParams, PopoverController, ViewController} from "ionic-angular";
 import {ModalController} from "ionic-angular";
 // import {QRScanner, QRScannerStatus} from "@ionic-native/qr-scanner";
 import {AssetView} from "../asset-view/asset-view";
@@ -30,7 +30,7 @@ export class GetAssetReading {
 
     constructor(public navCtrl: NavController, public navParams: NavParams, public modalController: ModalController,
                 public componentService:componentService, public popoverCtrl:PopoverController, public camera:Camera,
-                public assetService:AssetService) {
+                public assetService:AssetService,public viewCtrl:ViewController) {
         this.assetDetails = this.navParams.get('assetDetails');
         console.log(this.navParams.get('assetDetails'));
         this.dateTime = new Date();
@@ -150,7 +150,7 @@ export class GetAssetReading {
                 assetId:reading.assetId,
                 assetParameterConfigId:reading.id,
                 consumptionMonitoringRequired:reading.consumptionMonitoringRequired,
-                readingId:reading.previousReadingId
+                id:reading.previousReadingId
 
             };
             console.log(assetReading);
@@ -191,7 +191,8 @@ export class GetAssetReading {
                 console.log("Save Reading Response");
                 console.log(response);
                 this.componentService.showToastMessage('Reading Saved','bottom');
-                this.navCtrl.pop();
+                    let data = { 'foo': 'bar' };
+                    this.viewCtrl.dismiss(data);
             },
             error=>
             {
