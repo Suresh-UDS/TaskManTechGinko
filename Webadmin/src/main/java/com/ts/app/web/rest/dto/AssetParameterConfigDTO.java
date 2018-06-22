@@ -25,6 +25,12 @@ public class AssetParameterConfigDTO extends BaseDTO implements Serializable {
     
     private String assetTitle;
     
+    private double threshold;
+    
+    private int min;
+    
+    private int max;
+    
     public Long getId() {
         return id;
     }
@@ -79,6 +85,30 @@ public class AssetParameterConfigDTO extends BaseDTO implements Serializable {
 
 	public void setAssetTitle(String assetTitle) {
 		this.assetTitle = assetTitle;
+	}
+
+	public double getThreshold() {
+		return threshold;
+	}
+
+	public void setThreshold(double threshold) {
+		this.threshold = threshold;
+	}
+
+	public int getMin() {
+		return min;
+	}
+
+	public void setMin(int min) {
+		this.min = min;
+	}
+
+	public int getMax() {
+		return max;
+	}
+
+	public void setMax(int max) {
+		this.max = max;
 	}
 
 	
