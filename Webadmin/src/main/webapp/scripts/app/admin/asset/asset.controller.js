@@ -95,6 +95,7 @@ angular.module('timeSheetApp')
         console.log("state params",$stateParams);
                     
         var that =  $scope;
+        $rootScope.exportStatusObj  ={};
 
         $scope.calendar = {
             actualStart : false,
@@ -960,6 +961,7 @@ angular.module('timeSheetApp')
         	AssetComponent.remove($scope.deleteAssetId).then(function(){
                 
             	$scope.success = 'OK';
+                $scope.showNotifications('top','center','success','Asset Deleted Successfully!!');
             	$scope.loadAssets();
         	});
         }
@@ -972,7 +974,8 @@ angular.module('timeSheetApp')
 
         $scope.deleteDoc = function () {
             AssetComponent.deleteDoc($scope.deleteDocId).then(function(){
-                
+
+                $scope.showNotifications('top','center','success','Document Deleted Successfully!!');
                 $scope.getAllUploadedFiles();
                 $scope.getAllUploadedPhotos();
             });
@@ -1788,6 +1791,7 @@ angular.module('timeSheetApp')
         }
         
         $scope.viewAssetReading = function(id) {
+            $scope.viewRead = id;
         	AssetComponent.findByReadingId(id).then(function(data){ 
         		console.log(data);
         		$scope.readingData = data;
@@ -1829,14 +1833,16 @@ angular.module('timeSheetApp')
         }
 
         $scope.loadPPMJobs = function() { 
-        	$scope.ppmSearchCriteria.maintenanceType = "PPM";
-        	$scope.ppmSearchCriteria.assetId = $stateParams.id;
-        	console.log($scope.searchCriteria);
-        	JobComponent.search($scope.searchCriteria).then(function(data){ 
-        		console.log(data);
-        		$scope.ppmJobLists = data.transactions;
-        	});
+	        	$scope.ppmSearchCriteria.maintenanceType = "PPM";
+	        	$scope.ppmSearchCriteria.assetId = $stateParams.id;
+	        	console.log($scope.searchCriteria);
+	        	JobComponent.search($scope.ppmSearchCriteria).then(function(data){ 
+	        		console.log(data);
+	        		$scope.ppmJobLists = data.transactions;
+	        	});
         }
+        
+        
  
 
     });

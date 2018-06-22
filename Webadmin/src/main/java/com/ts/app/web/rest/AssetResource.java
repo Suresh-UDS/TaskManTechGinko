@@ -26,6 +26,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.codahale.metrics.annotation.Timed;
+import com.ts.app.domain.AssetReadingRule;
 import com.ts.app.domain.Frequency;
 import com.ts.app.domain.FrequencyPrefix;
 import com.ts.app.security.SecurityUtils;
@@ -524,7 +525,7 @@ public class AssetResource {
 		return result;
 	}
 
-    @RequestMapping(value = "/asset/export", method = RequestMethod.POST)
+    @RequestMapping(value = "/assets/export", method = RequestMethod.POST)
 	public ExportResponse exportAsset(@RequestBody SearchCriteria searchCriteria) {
 		// log.debug("JOB EXPORT STARTS HERE **********");
 		ExportResponse resp = new ExportResponse();
@@ -539,7 +540,7 @@ public class AssetResource {
 		return resp;
 	}
 
-	@RequestMapping(value = "/asset/export/{fileId}/status", method = RequestMethod.GET)
+	@RequestMapping(value = "/assets/export/{fileId}/status", method = RequestMethod.GET)
 	public ExportResult exportStatus(@PathVariable("fileId") String fileId) {
 		// log.debug("ExportStatus - fileId -"+ fileId);
 		ExportResult result = assetService.getExportStatus(fileId);
@@ -556,7 +557,7 @@ public class AssetResource {
 				result.setMsg("Download");
 				// log.debug("DOWNLOAD FILE PROCESSING HERE ************"+result.getMsg());
 				// log.debug("FILE ID IN API CALLING ************"+fileId);
-				result.setFile("/api/asset/export/" + fileId);
+				result.setFile("/api/assets/export/" + fileId);
 				// log.debug("DOWNLOADED FILE IS ************"+result.getFile());
 				break;
 			case "FAILED":
@@ -570,7 +571,7 @@ public class AssetResource {
 		return result;
 	}
 
-	@RequestMapping(value = "/asset/export/{fileId}", method = RequestMethod.GET)
+	@RequestMapping(value = "/assets/export/{fileId}", method = RequestMethod.GET)
 	public byte[] getExportFile(@PathVariable("fileId") String fileId, HttpServletResponse response) {
 		byte[] content = assetService.getExportFile(fileId);
 		response.setContentType("Application/x-msexcel");
@@ -592,5 +593,12 @@ public class AssetResource {
 			// log.debug("RESPONSE FOR OBJECT resp *************"+resp);
 		}
 		return resp;
+	}
+    
+    @RequestMapping(value="/assets/readingRules", method = RequestMethod.GET)
+	public AssetReadingRule[] getAllRules() {
+    	AssetReadingRule[] List = null;
+		List = assetService.getAllRules();
+		return List;
 	}
 }
