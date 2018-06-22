@@ -34,7 +34,7 @@ springBoot {
 }
 
 bootRun {
-    addResources = true
+    addResources = false
 }
 
 //apply from: 'yeoman.gradle'
