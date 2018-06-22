@@ -362,6 +362,16 @@ export class AssetView {
             this.componentService.showLoader("")
             this.getTickets(this.ticketSearchCriteria);
         }
+        else if(this.categories == 'readings')
+        {
+            console.log("From Date:" + fromDate.toISOString());
+                console.log("To Date:" + toDate.toISOString());
+                var searchCriteria={
+                    fromDate:fromDate.toISOString(),
+                    toDate:toDate.toISOString(),
+                    assetId:this.assetDetails.id
+                };
+        }
 
     }
     //
@@ -455,16 +465,16 @@ export class AssetView {
     }
 
     // Reading Date Search
-    readingDateSearch(fromDate,toDate) {
-        // this.componentService.showLoader("")
-        console.log("From Date:" + fromDate.toISOString());
-        console.log("To Date:" + toDate.toISOString());
-        var searchCriteria={
-            fromDate:fromDate.toISOString(),
-            toDate:toDate.toISOString(),
-            assetId:this.assetDetails.id
-        };
-    }
+    // readingDateSearch(fromDate,toDate) {
+    //     // this.componentService.showLoader("")
+    //     console.log("From Date:" + fromDate.toISOString());
+    //     console.log("To Date:" + toDate.toISOString());
+    //     var searchCriteria={
+    //         fromDate:fromDate.toISOString(),
+    //         toDate:toDate.toISOString(),
+    //         assetId:this.assetDetails.id
+    //     };
+    // }
     //
 
 
