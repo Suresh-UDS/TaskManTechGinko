@@ -699,8 +699,9 @@ public class ExportUtil {
 			xssfWorkbook.write(fileOutputStream);
 			fileOutputStream.close();
 			//upload to google drive
-			String webFileLink = GoogleSheetsUtil.upload(exportFileName,filePath);
-			
+			String[] fileDetails = GoogleSheetsUtil.upload(exportFileName,filePath);
+			result.setWebLink(fileDetails[0]);
+			result.setWebContentLink(fileDetails[1]);
 		} catch (IOException e) {
 			log.error("Error while flushing/closing  !!!");
 			statusMap.put(filePath, "FAILED");
