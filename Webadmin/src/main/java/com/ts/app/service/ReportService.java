@@ -537,6 +537,11 @@ public class ReportService extends AbstractService {
         reportResult.setOpenTicketCounts(openTicketCounts);
 
         reportResult.setClosedTicketCounts(closedTicketCounts);
+        
+        //site name and project name
+        long siteId = siteIds.get(0);
+        Site site = siteRepository.findOne(siteId);
+        reportResult.setProjectName(site.getProject().getName());
 
         return reportResult;
     }

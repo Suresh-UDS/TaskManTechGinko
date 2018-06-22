@@ -8,7 +8,7 @@ public class ReportResult {
 
 	long projectId;
 	
-	long projectName;
+	String projectName;
 	
 	long siteId;
 
@@ -229,11 +229,11 @@ public class ReportResult {
 		this.projectId = projectId;
 	}
 
-	public long getProjectName() {
+	public String getProjectName() {
 		return projectName;
 	}
 
-	public void setProjectName(long projectName) {
+	public void setProjectName(String projectName) {
 		this.projectName = projectName;
 	}
 
