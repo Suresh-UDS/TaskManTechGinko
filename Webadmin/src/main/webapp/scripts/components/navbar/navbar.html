@@ -188,33 +188,33 @@ Tip 3: you can change the color of the sidebar with data-background-color="white
                     <p>Tickets</p>
                 </a>
             </li>
-            <!--<li has-permission="Inventory:List" ng-class="{active: $state.includes('admin')}">-->
-                <!--<a data-toggle="collapse" data-target="#Inventory" href="#">-->
-                    <!--<i class="material-icons">location_city</i>-->
-                    <!--<p> Inventory-->
-                        <!--<b class="caret"></b>-->
-                    <!--</p>-->
-                <!--</a>-->
-                <!--<div class="collapse" id="Inventory" has-permission="Inventory:List">-->
-                    <!--<ul class="nav SubNav">-->
+            <li  ng-class="{active: $state.includes('admin')}">
+                <a data-toggle="collapse" data-target="#Inventory" href="#">
+                    <i class="material-icons">location_city</i>
+                    <p> Inventory
+                        <b class="caret"></b>
+                    </p>
+                </a>
+                <div class="collapse" id="Inventory" >
+                    <ul class="nav SubNav">
 
-                        <!--<li ui-sref-active="active"  >-->
-                            <!--<a ui-sref="inventory-list">-->
-                                <!--<i class="material-icons">location_city</i>-->
-                                <!--<p>Inventory Master</p>-->
-                            <!--</a>-->
-                        <!--</li>-->
-                        <!--<li ui-sref-active="active"  >-->
-                            <!--<a ui-sref="inventory-transaction-list">-->
-                                <!--<i class="material-icons">location_city</i>-->
-                                <!--<p>Inventory Transaction</p>-->
-                            <!--</a>-->
-                        <!--</li>-->
+                        <li ui-sref-active="active"  >
+                            <a ui-sref="inventory-list">
+                                <i class="material-icons">location_city</i>
+                                <p>Inventory Master</p>
+                            </a>
+                        </li>
+                        <li ui-sref-active="active"  >
+                            <a ui-sref="inventory-transaction-list">
+                                <i class="material-icons">location_city</i>
+                                <p>Inventory Transaction</p>
+                            </a>
+                        </li>
 
 
-                    <!--</ul>-->
-                <!--</div>-->
-            <!--</li>-->
+                    </ul>
+                </div>
+            </li>
             <li has-permission="Reports:List" ng-class="{active: $state.includes('reports')}">
                 <a data-toggle="collapse" data-target="#formsExamples" href="#">
                     <i class="material-icons">content_paste</i>
