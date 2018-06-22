@@ -1,6 +1,11 @@
 <ion-header>
     <ion-navbar>
         <ion-title>{{assetDetails.title}}</ion-title>
+        <ion-buttons right>
+                <button ion-button icon-only class="padding-right10"  (click)="dismiss()">
+                    <ion-icon ios="ios-close" md="md-close" class="fnt-25 padding-right10" ></ion-icon>
+                </button>
+        </ion-buttons>
     </ion-navbar>
 </ion-header>
 
@@ -36,7 +41,7 @@
                                     <ion-label class="margin0">{{config.uom}}</ion-label>
                                 </ion-col>
                             </ion-row>
-                            <ion-row class="margin0" *ngIf="config.reading">
+                            <ion-row class="margin0" *ngIf="config.reading ">
                                 <ion-col col-4>
                                     <ion-label class="margin0 padding0">Final Reading:</ion-label>
                                 </ion-col>
