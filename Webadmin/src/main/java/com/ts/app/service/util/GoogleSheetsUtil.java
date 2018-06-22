@@ -94,73 +94,71 @@ public class GoogleSheetsUtil {
 	        File body = new File();
 	        body.setName(name);
 	        body.setMimeType(mimeType);
-	        Capabilities cap = new Capabilities();
-	        cap.setCanAddChildren(true);
-	        body.setCapabilities(cap);
+//	        Capabilities cap = new Capabilities();
+//	        cap.setCanAddChildren(true);
+//	        body.setCapabilities(cap);
 	
 	        // File's content.
 	        FileInputStream fis = new FileInputStream(fileName);
 	        byte[] content = IOUtils.toByteArray(fis);
 	        ByteArrayContent mediaContent = new ByteArrayContent(mimeType, content);
 	        try {
-	          File file = service.files().create(body, mediaContent).execute();
-	        
-		        Create request = service.files().create(file);
+	        		Drive.Files.Create create = service.files().create(body, mediaContent);
+	        		create.setFields("id, name, webViewLink");
+		        service.getGoogleClientRequestInitializer().initialize(create);
 		        
-		        service.getGoogleClientRequestInitializer().initialize(request);
-		        
-		        file = request.execute();
+		        File file = create.execute();
 		        
 		        
-		        //set file permissions.
-		        BatchRequest batch = service.batch();
-		        Permission userPermission = new Permission()
-		            .setType("user")
-		            .setRole("writer")
-		            .setEmailAddress("gnanaprakash@techginko.com");
-		        service.permissions().create(file.getId(), userPermission)
-		            .setFields("id")
-		            .queue(batch, new JsonBatchCallback<Permission>() {
-		            	  @Override
-		            	  public void onFailure(GoogleJsonError e,
-		            	                        HttpHeaders responseHeaders)
-		            	      throws IOException {
-		            	    // Handle error
-		            	    log.error(e.getMessage());
-		            	  }
-
-		            	  @Override
-		            	  public void onSuccess(Permission permission,
-		            	                        HttpHeaders responseHeaders)
-		            	      throws IOException {
-		            	    log.debug("Permission ID: " + permission.getId());
-		            	  }
-		            	});
-
-		        Permission domainPermission = new Permission()
-		            .setType("anyone")
-		            .setRole("reader");
-		            
-		        service.permissions().create(file.getId(), domainPermission)
-		            .setFields("id")
-		            .queue(batch, new JsonBatchCallback<Permission>() {
-		            	  @Override
-		            	  public void onFailure(GoogleJsonError e,
-		            	                        HttpHeaders responseHeaders)
-		            	      throws IOException {
-		            	    // Handle error
-		            	    log.error(e.getMessage());
-		            	  }
-
-		            	  @Override
-		            	  public void onSuccess(Permission permission,
-		            	                        HttpHeaders responseHeaders)
-		            	      throws IOException {
-		            	    log.debug("Permission ID: " + permission.getId());
-		            	  }
-		            	});
-
-		        batch.execute();		        
+//		        //set file permissions.
+//		        BatchRequest batch = service.batch();
+//		        Permission userPermission = new Permission()
+//		            .setType("user")
+//		            .setRole("writer")
+//		            .setEmailAddress("gnanaprakash@techginko.com");
+//		        service.permissions().create(file.getId(), userPermission)
+//		            .setFields("id")
+//		            .queue(batch, new JsonBatchCallback<Permission>() {
+//		            	  @Override
+//		            	  public void onFailure(GoogleJsonError e,
+//		            	                        HttpHeaders responseHeaders)
+//		            	      throws IOException {
+//		            	    // Handle error
+//		            	    log.error(e.getMessage());
+//		            	  }
+//
+//		            	  @Override
+//		            	  public void onSuccess(Permission permission,
+//		            	                        HttpHeaders responseHeaders)
+//		            	      throws IOException {
+//		            	    log.debug("Permission ID: " + permission.getId());
+//		            	  }
+//		            	});
+//
+//		        Permission domainPermission = new Permission()
+//		            .setType("anyone")
+//		            .setRole("reader");
+//		            
+//		        service.permissions().create(file.getId(), domainPermission)
+//		            .setFields("id")
+//		            .queue(batch, new JsonBatchCallback<Permission>() {
+//		            	  @Override
+//		            	  public void onFailure(GoogleJsonError e,
+//		            	                        HttpHeaders responseHeaders)
+//		            	      throws IOException {
+//		            	    // Handle error
+//		            	    log.error(e.getMessage());
+//		            	  }
+//
+//		            	  @Override
+//		            	  public void onSuccess(Permission permission,
+//		            	                        HttpHeaders responseHeaders)
+//		            	      throws IOException {
+//		            	    log.debug("Permission ID: " + permission.getId());
+//		            	  }
+//		            	});
+//
+//		        batch.execute();		        
 		        webFileLink = file.getWebViewLink();
 
 		        // Print the names and IDs for up to 10 files.

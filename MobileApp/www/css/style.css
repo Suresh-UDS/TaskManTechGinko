@@ -201,6 +201,12 @@ container-scroll::-webkit-scrollbar-thumb
 {
   margin-bottom:20px;
 }
+.padding-left0{
+    padding-left:0px !important;
+}
+.padding-right0{
+    padding-right:0px !important;
+}
 .padding-left5
 {
   padding-left: 5px !important;

@@ -1846,5 +1846,12 @@ angular.module('timeSheetApp')
 
 
 
+        $scope.loadAllRules = function() {
+        	AssetComponent.getAllRules().then(function(data) {
+        		console.log(data);
+        	});
+        }
+
+
 
     });
