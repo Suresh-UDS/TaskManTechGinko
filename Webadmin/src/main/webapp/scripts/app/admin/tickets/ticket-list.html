@@ -402,6 +402,16 @@
                                     <td>{{listStatus}}</td>
 
                                   </tr>
+
+                                 <tr ng-if="tickets.status !='Completed'" >
+                                     <td>Pending Status </td>
+                                     <td>
+                                         {{listPendingStatus}}
+                                     </td>
+
+                                 </tr>
+
+
 								<tr>
                                       <td>Image</td>
                                       <td>

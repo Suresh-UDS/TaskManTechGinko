@@ -118,7 +118,7 @@
 
                                                 </tr>
 
-                                                <tr ng-if="job.pendingAtUDS">
+                                                <tr ng-if="job.pendingAtUDS && job.status !='COMPLETED'">
 
                                                     <td>Job Pending Status </td>
                                                     <td>
@@ -127,7 +127,7 @@
 
                                                 </tr>
 
-                                                <tr ng-if="job.pendingAtClient">
+                                                <tr ng-if="job.pendingAtClient && job.status !='COMPLETED'">
 
                                                     <td>Job Pending Status </td>
                                                     <td>

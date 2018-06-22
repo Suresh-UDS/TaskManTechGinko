@@ -362,7 +362,25 @@ angular.module('timeSheetApp')
 	        	$scope.error = null;
 	        	$scope.success =null;
 	        	$scope.errorProjectExists = null;
-	        	$scope.job.ticketId = $stateParams.ticketId;
+	        	if($scope.isEdit){
+	        	    // $scope.job.ticketId
+                }else{
+                    $scope.job.ticketId = $stateParams.ticketId;
+                }
+	        	console.log($scope.job.pendingStatus);
+	        	if($scope.job.pendingStatus && $scope.job.pendingStatus=='pendingAtUDS'){
+	        	    $scope.job.pendingAtUDS = true;
+                    $scope.job.pendingAtClient = false;
+
+                }else if($scope.job.pendingStatus=='pendingAtClient'){
+                    $scope.job.pendingAtClient = true;
+                    $scope.job.pendingAtUDS = false;
+
+                }else{
+                    $scope.job.pendingAtUDS = true;
+                    $scope.job.pendingAtClient = false;
+
+                }
 	        	if($scope.selectedChecklist) {
 		        	var items = $scope.selectedChecklist.items;
 		        	for(var i =0; i<items.length;i++) {

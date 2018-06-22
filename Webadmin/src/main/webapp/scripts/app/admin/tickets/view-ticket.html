@@ -39,21 +39,39 @@
                                                 <tr>
                                                     <td>Severity</td>
                                                     <td>
-                                                        
+
                                                      {{tickets.severity}}
-                                                    
+
                                                     </td>
 
                                                 </tr>
                                                 <tr>
                                                     <td>Status</td>
                                                     <td>
-                                                        
+
                                                      {{tickets.status}}
-                                                    
+
                                                     </td>
 
-                                                </tr>                                             
+                                                </tr>
+
+                                                <tr ng-if="!tickets.pendingAtClient && tickets.status !='Completed'">
+
+                                                    <td>Pending Status </td>
+                                                    <td>
+                                                        Ticket Pending at UDS
+                                                    </td>
+
+                                                </tr>
+
+                                                <tr ng-if="tickets.pendingAtClient && tickets.status !='Completed'">
+
+                                                    <td>Pending Status </td>
+                                                    <td>
+                                                        Ticket Pending at {{tickets.siteProjectName}}
+                                                    </td>
+
+                                                </tr>
 
 
                                                 </tbody>
@@ -86,7 +104,7 @@
                                                     <td>{{selectedEmployee.name}}</td>
 
                                                 </tr>
-                                          
+
                                                 </tbody>
                                             </table>
                                         </div>
@@ -100,8 +118,8 @@
 	                            <div class="panel panel-default">
 	                                    <div class="panel-heading">Image</div>
 	                                    <div class="panel-body">
-	
-	
+
+
 	                                        <div class="table-responsive">
 	                                            <table class="table">
 	                                                <tbody>
@@ -116,11 +134,11 @@
 	                                                </tbody>
 	                                            </table>
 	                                        </div>
-	
+
 	                                    </div>
 	                                </div>
                             </div>
-                            
+
                             <div class="col-md-4">
 
                                 <div class="panel panel-default">
@@ -134,7 +152,7 @@
                                                     <td>Comments</td>
                                                     <td>{{tickets.Comments}}</td>
                                                 </tr>
-                                                
+
 
                                                 </tbody>
                                             </table>
@@ -148,7 +166,7 @@
 
                         </div>
 
-                        
+
 
 
 
@@ -181,7 +199,7 @@
 									<i class=""></i> Back
 								</button>
 								<a ng-if="(tickets.status != 'Closed')" ng-class="{active: $state.includes('admin')}"   ng-click="closeTicket(tickets.id)"   onClick="$('#deleteModalNew').modal()" data-target="#myModal"   class="btn btn-simple btn-info">close ticket</a>
-                                 <a ng-if="tickets.status == 'Closed'"class="btn btn-simple btn-info">Reopen ticket</a>								
+                                 <a ng-if="tickets.status == 'Closed'"class="btn btn-simple btn-info">Reopen ticket</a>
 							</div>
 						</div>
 					</form>
