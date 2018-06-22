@@ -666,21 +666,27 @@ public class ExportUtil {
 		int rowNum = 3;
 		
 		XSSFSheet xssfSheet = xssfWorkbook.getSheetAt(0);
-
+		long prevAssetIdInLoop = 0;
+		String freqCode = null;
+		Row dataRow = null;
 		for (AssetPPMScheduleEventDTO scheduleEvent : content) {
+			String currFreqCode = getFrequencyCode(scheduleEvent.getFrequency());
 
-			Row dataRow = xssfSheet.getRow(rowNum++);
-
-			dataRow.getCell(0).setCellValue(scheduleEvent.getTitle());
-			dataRow.getCell(1).setCellValue(scheduleEvent.getAssetTitle());
-			dataRow.getCell(2).setCellValue(scheduleEvent.getAssetCode());
-			dataRow.getCell(3).setCellValue(scheduleEvent.getAssetCode());
-			String freqCode = getFrequencyCode(scheduleEvent.getFrequency());
-			dataRow.getCell(4).setCellValue(freqCode);
+			if(scheduleEvent.getAssetId() != prevAssetIdInLoop || StringUtils.isEmpty(freqCode) || !freqCode.equalsIgnoreCase(currFreqCode)) {
+				dataRow = xssfSheet.getRow(rowNum++);
+	
+				dataRow.getCell(0).setCellValue(scheduleEvent.getTitle());
+				dataRow.getCell(1).setCellValue(scheduleEvent.getAssetTitle());
+				dataRow.getCell(2).setCellValue(scheduleEvent.getAssetCode());
+				dataRow.getCell(3).setCellValue(scheduleEvent.getAssetCode());
+				dataRow.getCell(4).setCellValue(currFreqCode);
+			}
 			//week wise assignment
 			int weekStartCell = 6;
 			int weekDataCell = weekStartCell + (scheduleEvent.getWeek() -1); //minus 1 to get the cell index
-			dataRow.getCell(weekDataCell).setCellValue(freqCode);
+			dataRow.getCell(weekDataCell).setCellValue(currFreqCode);
+			prevAssetIdInLoop = scheduleEvent.getAssetId();
+			freqCode = currFreqCode;
 
 		}
 
@@ -693,7 +699,7 @@ public class ExportUtil {
 			xssfWorkbook.write(fileOutputStream);
 			fileOutputStream.close();
 			//upload to google drive
-			GoogleSheetsUtil.upload(exportFileName,filePath);
+			String webFileLink = GoogleSheetsUtil.upload(exportFileName,filePath);
 			
 		} catch (IOException e) {
 			log.error("Error while flushing/closing  !!!");

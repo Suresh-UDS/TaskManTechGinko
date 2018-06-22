@@ -56,6 +56,10 @@ angular.module('timeSheetApp')
         $scope.searchAssetGroup ={};
         $scope.searchAcquiredDateSer =null;
         $scope.ppmSearchCriteria = {};
+        $scope.ppmFrom = null;
+        $scope.ppmTo = null;
+        $scope.amcFrom = null;
+        $scope.amcTo = null;
 
         //scope.searchAcquiredDate = $filter('date')(new Date(), 'dd/MM/yyyy'); 
         $scope.searchAcquiredDate = "";
@@ -91,6 +95,7 @@ angular.module('timeSheetApp')
         console.log("state params",$stateParams);
                     
         var that =  $scope;
+        $rootScope.exportStatusObj  ={};
 
         $scope.calendar = {
             actualStart : false,
@@ -147,10 +152,12 @@ angular.module('timeSheetApp')
 
         $('input#dateFilterPpmFrom').on('dp.change', function(e){
             $scope.assetPPM.startDate = e.date._d;
+            $scope.ppmFrom = $filter('date')(e.date._d, 'dd/MM/yyyy');
         });
         
         $('input#dateFilterPpmTo').on('dp.change', function(e){
             $scope.assetPPM.endDate = e.date._d;
+            $scope.ppmTo = $filter('date')(e.date._d, 'dd/MM/yyyy');
         });
 
         $scope.savePPMSchedule = function (){
@@ -190,7 +197,7 @@ angular.module('timeSheetApp')
                 }
     	    	$scope.assetPPM.maintenanceType = 'PPM';
     	    	
-                console.log("To be created PPM",$scope.assetPPM);
+                console.log("To be create PPM",$scope.assetPPM);
 
             	AssetComponent.createPPM($scope.assetPPM).then(function(response) {
 
@@ -201,6 +208,16 @@ angular.module('timeSheetApp')
                     $scope.showNotifications('top','center','success','PPM schedule Added');
 
                     $scope.assetPPM = {};
+                    $scope.selectedChecklist = {};
+                    $scope.selectedEmployee = {};
+                    $scope.selectedFrequency = {};
+                    $scope.selectedTimeInterval = {};
+                    $scope.selectedFrequnceyOccurrence = {};
+                    $scope.ppmFrom = "";
+                    $scope.ppmTo = "";
+
+                    $("#dateFilterPpmFrom").val("");
+                    $("#dateFilterPpmTo").val("");
        
                     $scope.loadPPMSchedule();
 
@@ -907,6 +924,28 @@ angular.module('timeSheetApp')
             }
         }  
 
+        $scope.load52WeekSchedule = function() {
+        		console.log('site selection - ' + JSON.stringify($scope.searchSite));
+        		if($scope.searchSite && $scope.searchSite.id) {
+            		$scope.searchCriteria.siteId = $scope.searchSite.id;
+            		AssetComponent.exportAsset52WeekSchedule($scope.searchCriteria).then(function(data){
+            			console.log("response for 52week schedule - "+ JSON.stringify(data));
+            			if(data) {
+            				if(data.results) {
+            					$scope.scheduleWebLink = data.results[0].webLink;
+            					$location.path('/schedule-list');            					
+            				}else {
+            					$scope.showNotifications('top','center','error','Unable to get 52 week schedule for the site');
+            				}
+            			}else {
+            				$scope.showNotifications('top','center','error','Unable to get 52 week schedule for the site');
+            			}
+            		});
+        		}else {
+        			$scope.showNotifications('top','center','error','Please select a site to view 52 week schedule');
+        		}
+        }
+        
 
         $scope.refreshPage = function(){
                $scope.loadAssets();
@@ -922,6 +961,7 @@ angular.module('timeSheetApp')
         	AssetComponent.remove($scope.deleteAssetId).then(function(){
                 
             	$scope.success = 'OK';
+                $scope.showNotifications('top','center','success','Asset Deleted Successfully!!');
             	$scope.loadAssets();
         	});
         }
@@ -934,7 +974,8 @@ angular.module('timeSheetApp')
 
         $scope.deleteDoc = function () {
             AssetComponent.deleteDoc($scope.deleteDocId).then(function(){
-                
+
+                $scope.showNotifications('top','center','success','Document Deleted Successfully!!');
                 $scope.getAllUploadedFiles();
                 $scope.getAllUploadedPhotos();
             });
@@ -980,6 +1021,7 @@ angular.module('timeSheetApp')
             $scope.searchSite ={};
             $scope.searchProject ={};
             $scope.searchAssetGroup ={};
+
             $scope.pages = {
                 currPage: 1,
                 totalPages: 0
@@ -1299,6 +1341,10 @@ angular.module('timeSheetApp')
                     $scope.showNotifications('top','center','success','Asset Parameter Saved Successfully');
                     $scope.assetConfig();
                     $scope.parameterConfig = {};
+                    $scope.consumptionMonitoringRequired = "";
+                    $scope.selectedParameterUOM = {};
+                    $scope.selectedParameter = {};
+                       
                     //$scope.loadAllParameters();
                 }).catch(function (response) {
                     $scope.success = null;
@@ -1398,6 +1444,8 @@ angular.module('timeSheetApp')
     	        		}else{ 
     	        			console.log('No data found!');
     	        		}
+                        $scope.uploadAsset  ={};
+                        $scope.selectedClientFile = "";
     	        		
     	        	},function(err){
     	        		console.log('Import error');
@@ -1447,6 +1495,9 @@ angular.module('timeSheetApp')
 	        		}else{ 
 	        			console.log('No data found!');
 	        		}
+
+                    $scope.uploadAssetPhoto  ={};
+                    $scope.selectedPhotoFile = "";
 	        		
 	        	},function(err){
 	        		console.log('Import error');
@@ -1521,13 +1572,16 @@ angular.module('timeSheetApp')
 	    }
 	    
 	    $scope.frequencyDurations= [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+       
 	    
 	    $('input#dateFilterAmcFrom').on('dp.change', function(e){
             $scope.amcSchedule.startDate = e.date._d;
+            $scope.amcFrom = $filter('date')(e.date._d, 'dd/MM/yyyy');
         });
         
         $('input#dateFilterAmcTo').on('dp.change', function(e){
             $scope.amcSchedule.endDate = e.date._d;
+            $scope.amcTo = $filter('date')(e.date._d, 'dd/MM/yyyy');
         });
 	    
 	    $scope.loadCheckList = function() { 
@@ -1605,6 +1659,19 @@ angular.module('timeSheetApp')
                         $scope.loadAmcSchedule();
                         $scope.showNotifications('top','center','success','AMC Schedule Saved Successfully');
                         $scope.amcSchedule = {};
+
+                        $scope.selectedChecklist = {};
+                        $scope.selectedEmployee = {};
+                        $scope.selectedFrequencyPrefix = {};
+                        $scope.selectedFreqDuration = {};
+                        $scope.selectedFrequency = {};
+
+                        $scope.amcFrom = "";
+                        $scope.amcTo = "";
+
+                        $("#dateFilterAmcFrom").val("");
+                        $("#dateFilterAmcTo").val("");
+
 
     	    			
     	    		}
@@ -1724,6 +1791,7 @@ angular.module('timeSheetApp')
         }
         
         $scope.viewAssetReading = function(id) {
+            $scope.viewRead = id;
         	AssetComponent.findByReadingId(id).then(function(data){ 
         		console.log(data);
         		$scope.readingData = data;
@@ -1765,14 +1833,16 @@ angular.module('timeSheetApp')
         }
 
         $scope.loadPPMJobs = function() { 
-        	$scope.ppmSearchCriteria.maintenanceType = "PPM";
-        	$scope.ppmSearchCriteria.assetId = $stateParams.id;
-        	console.log($scope.searchCriteria);
-        	JobComponent.search($scope.searchCriteria).then(function(data){ 
-        		console.log(data);
-        		$scope.ppmJobLists = data.transactions;
-        	});
+	        	$scope.ppmSearchCriteria.maintenanceType = "PPM";
+	        	$scope.ppmSearchCriteria.assetId = $stateParams.id;
+	        	console.log($scope.searchCriteria);
+	        	JobComponent.search($scope.ppmSearchCriteria).then(function(data){ 
+	        		console.log(data);
+	        		$scope.ppmJobLists = data.transactions;
+	        	});
         }
+        
+        
  
 
     });

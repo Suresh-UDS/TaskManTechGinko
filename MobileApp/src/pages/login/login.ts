@@ -115,11 +115,13 @@ export class LoginPage {
 
                if(error.type==2)
                {
-               this.msg='Invalid UserName and Password'
+                    this.msg = 'Invalid UserName and Password'
+                    this.password = "";
                }
                if(error.type==3)
                {
-               this.msg='Server Unreachable'
+                    this.msg = 'Server Unreachable'
+                    this.password = "";
                }
 
                 this.component.showToastMessage(this.msg,'center');

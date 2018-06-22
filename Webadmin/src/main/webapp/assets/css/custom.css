@@ -75,7 +75,10 @@ ul.checkList li
 .p-t-1, .p-y-1 {
     padding-top: 10px!important;
 }
-
+.RightAddBtn
+{
+    padding:20px 5px 5px 5px;
+}
 .green-1
 {
 	background: #4caf50 !important;
@@ -265,7 +268,11 @@ ul.chatlinesList
   height: auto !important;
   border-radius: 0 !important;
 }
-
+.qrcodeList
+{
+    padding: 20px 0;
+    border-bottom: 1px dashed #dfdfdf;
+}
 
 .navbar .dropdown-menu li a:hover, .navbar .dropdown-menu li a:focus, .navbar .dropdown-menu li a:active, .navbar.navbar-default .dropdown-menu li a:hover, .navbar.navbar-default .dropdown-menu li a:focus, .navbar.navbar-default .dropdown-menu li a:active
 {

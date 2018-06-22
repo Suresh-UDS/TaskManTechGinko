@@ -65,8 +65,8 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div>   
-                                          
+                                        </div>
+
                                         <div class="row" >
                                              <div class="col-xs-12 col-md-3">
 
@@ -114,17 +114,20 @@
                                                     <button type="submit" class="btn btn-circle blue-clr" ng-disabled="searchForm.$invalid">
                                                         <i class="material-icons">search</i>
                                                     </button>
-                                                    <button ui-sref="add-asset" has-permission="Site:Create" ng-class="{active: $state.includes('admin')}"  class="btn btn-circle green-clr">
+                                                    <button ui-sref="add-asset" has-permission="Site:Create" ng-class="{active: $state.includes('admin')}"  class="btn btn-circle green-clr" title="Add Asset">
                                                         <i class="material-icons">add</i>
                                                     </button>
                                                     <!-- <button  class="btn btn-circle orange-clr"  ui-sref="view-calendar" title="Asset events">
                                                         <i class="material-icons">grid_on</i>
                                                     </button> -->
-                                                    <button ng-click="refreshPage()" class="btn btn-circle orange-clr">
+                                                    <button ng-click="refreshPage()" class="btn btn-circle orange-clr" title="Reload">
                                                         <i class="material-icons">refresh</i>
                                                     </button>
-                                                    <button ui-sref="schedule-list"  class="btn btn-circle orange-clr">
+                                                    <button ng-click="load52WeekSchedule()" class="btn btn-circle orange-clr" title="52 Week Schedule">
                                                         <i class="material-icons">assignment</i>
+                                                    </button>
+                                                    <button ui-sref="qr-code-list"  class="btn btn-circle orange-clr" title="Generate QR Code">
+                                                        <i class="material-icons">dashboard</i>
                                                     </button>
 
                                                  </div>
@@ -137,12 +140,20 @@
                         </div>
                     </div>
 
-                
+
                     <div class="table-responsive">
                         <table class="table table-striped" >
 
                             <thead>
+
                             <tr>
+                                <th>
+                                    <div class="checkbox form-horizontal-checkbox">
+                                        <label>
+                                            <input type="checkbox" name="optionsCheckboxes">
+                                        </label>
+                                    </div>
+                                </th>
                                 <th>Asset Code
                                     <span class="sortingIcons">
                                         <span ng-click="columnAscOrder('assetCode')" ng-class="isActiveAsc == 'assetCode' ? 'active' : ''" >
@@ -195,7 +206,7 @@
                                         </span>
                                     </span>
                                 </th> -->
-                               
+
                                 <th>Site
                                     <span class="sortingIcons">
                                         <span ng-click="columnAscOrder('siteName')" ng-class="isActiveAsc == 'siteName' ? 'active' : ''" >
@@ -206,13 +217,20 @@
                                         </span>
                                     </span>
                                 </th>
-                                
+
                                 <th class="disabled-sorting text-right">Actions</th>
                             </tr>
                             </thead>
 
                             <tbody>
                             <tr ng-repeat="asset in assets">
+                            <td>
+                                <div class="checkbox form-horizontal-checkbox">
+                                    <label>
+                                        <input type="checkbox" name="optionsCheckboxes">
+                                    </label>
+                                </div>
+                            </td>
                                 <td>{{asset.code}}</td>
                                 <td>{{asset.title}}</td>
                                 <td>{{asset.assetType}}</td>
