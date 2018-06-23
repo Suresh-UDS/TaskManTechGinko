@@ -60,6 +60,13 @@ angular.module('timeSheetApp')
             $scope.closedTicketsCountArray = [];
             $scope.closedTicketsLabels = [];
             $scope.overAllTicketsCountArray = [];
+            $scope.openTicketsDataArray = [];
+            $scope.closedTicketsDataArray = [];
+
+            // $scope.closedTicketsLabels = ['0-3 days', '3-5 days', '5-7 days', '7-10 days', '10 and Above'];
+            // // $scope.openTicketsLabels = ['0-3 days', '3-5 days', '5-7 days', '7-10 days', '10 and Above'];
+            // $scope.closedTicketsSeries = ['0-3 days', '3-5 days', '5-7 days', '7-10 days','Above 10'];
+            // $scope.openTicketsSeries = ['0-3 days', '3-5 days', '5-7 days', '7-10 days','Above 10'];
 
             $scope.overallTicketLabels = ['New', 'Closed', 'Pending', 'Pending with Client', 'Pending with UDS'];
             $scope.overallTicketSeries = ['New', 'Closed','Pending', 'Pending with Client', 'Pending with UDS'];
@@ -84,18 +91,26 @@ angular.module('timeSheetApp')
                 console.log(response.closedTicketCounts);
                 console.log(response.openTicketCounts);
                 $scope.chartsDataResponse = response;
+                var openTicketsData = {};
                 for(var key in response.openTicketCounts){
                     console.log(key);
                     console.log(response.openTicketCounts[key]);
                     $scope.openTicketsCountArray.push(response.openTicketCounts[key]);
-                   $scope.openTicketsLabels.push(key);
-                }
+                    $scope.openTicketsLabels.push(key);
+                    openTicketsData.label = key;
+                    openTicketsData.data = response.openTicketCounts[key];
+                    $scope.openTicketsDataArray.push(openTicketsData);
 
+                }
+                var closedTicketData = {};
                 for(var key in response.closedTicketCounts){
                     console.log(key);
                     console.log(response.closedTicketCounts[key]);
                     $scope.closedTicketsCountArray.push(response.closedTicketCounts[key]);
                     $scope.closedTicketsLabels.push(key);
+                    closedTicketData.label = key;
+                    closedTicketData.data = response.closedTicketCounts[key];
+                    $scope.closedTicketsDataArray.push(closedTicketData);
                 }
 
                 var ctx = document.getElementById("bar").getContext('2d');
@@ -206,13 +221,7 @@ angular.module('timeSheetApp')
                     }
                 });
 
-                $scope.closedTicketsLabels = ['0-3 days', '3-5 days', '5-7 days', '7-10 days', '10 and Above'];
-                // $scope.openTicketsLabels = ['0-3 days', '3-5 days', '5-7 days', '7-10 days', '10 and Above'];
-                $scope.closedTicketsSeries = ['0-3 days', '3-5 days', '5-7 days', '7-10 days','Above 10'];
-                $scope.openTicketsSeries = ['0-3 days', '3-5 days', '5-7 days', '7-10 days','Above 10'];
 
-                $scope.overallTicketLabels = ['New', 'Closed', 'Pending', 'Pending with Client', 'Pending with UDS'];
-                $scope.overallTicketSeries = ['New', 'Closed','Pending', 'Pending with Client', 'Pending with UDS'];
 
 
                 $scope.overAllTicketsCountArray.push(response.totalNewTicketCount);
