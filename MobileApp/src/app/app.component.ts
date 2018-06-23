@@ -1,5 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
-import {Events, Nav, Platform, ToastController} from 'ionic-angular';
+import {Events, IonicApp, MenuController, Nav, Platform, ToastController} from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import {BatteryStatus, BatteryStatusResponse} from "@ionic-native/battery-status";
@@ -45,7 +45,7 @@ export class MyApp {
 
   pages: Array<{title: string, component: any,active:any,icon:any,permission:any}>;
 
-  constructor(public platform: Platform,private backgroundMode: BackgroundMode, public statusBar: StatusBar,public component:componentService,public toastCtrl: ToastController, public splashScreen: SplashScreen, private oneSignal: OneSignal, public events:Events, private batteryStatus: BatteryStatus, private appVersion:AppVersion, private authService:authService) {
+  constructor(private ionicApp: IonicApp,public menuCtrl:MenuController,public platform: Platform,private backgroundMode: BackgroundMode, public statusBar: StatusBar,public component:componentService,public toastCtrl: ToastController, public splashScreen: SplashScreen, private oneSignal: OneSignal, public events:Events, private batteryStatus: BatteryStatus, private appVersion:AppVersion, private authService:authService) {
     this.initializeApp();
       this.events.subscribe('permissions:set',(permission)=>{
           console.log("Event permission in component");
@@ -64,14 +64,46 @@ export class MyApp {
           }
       );
 
+      // platform.registerBackButtonAction(() => {
+      //     let view = this.nav.getActive();
+      //     console.log("Back button event");
+      //     console.log(view);
+      //     console.log(this.nav.canGoBack());
+      //     if(this.nav.canGoBack())
+      //     {
+      //           this.nav.pop();
+      //     }
+      //     else if (this.counter == 0) {
+      //         this.counter++;
+      //         this.component.showToastMessage('Press again to exit','center');
+      //         setTimeout(() => { this.counter = 0 }, 3000)
+      //     } else {
+      //         // console.log("exitapp");
+      //         platform.exitApp();
+      //     }
+      // }, 0);
+
+
       platform.registerBackButtonAction(() => {
           let view = this.nav.getActive();
           console.log("Back button event");
           console.log(view);
           console.log(this.nav.canGoBack());
-          if(this.nav.canGoBack())
+          if(this.ionicApp._overlayPortal.getActive())
           {
-                this.nav.pop();
+              this.ionicApp._overlayPortal.getActive().dismiss();
+          }
+          else if(this.nav.canGoBack())
+          {
+              this.nav.pop();
+          }
+          else if(this.menuCtrl.isOpen())
+          {
+              this.menuCtrl.close();
+          }
+          else if(this.ionicApp._modalPortal.getActive())
+          {
+              this.ionicApp._modalPortal.getActive().dismiss();
           }
           else if (this.counter == 0) {
               this.counter++;
@@ -82,6 +114,13 @@ export class MyApp {
               platform.exitApp();
           }
       }, 0);
+
+
+
+
+
+
+
 
     // used for an example of ngFor and navigation
     this.pages = [
