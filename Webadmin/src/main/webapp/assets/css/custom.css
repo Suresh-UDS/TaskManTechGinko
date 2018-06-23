@@ -1477,3 +1477,7 @@ div.bouncing-container .arrow-down {
 }
 
 /* End Tool Tip */
+
+.job-txt:hover {
+    text-decoration: underline;
+}

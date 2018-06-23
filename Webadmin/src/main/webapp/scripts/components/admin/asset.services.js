@@ -340,5 +340,11 @@ angular.module('timeSheetApp')
 	            	});
 	        },
 	        
+	        deleteConfigById : function(id) { 
+	        	return $http.delete('api/assets/removeConfig/'+id).then(function (response) { 
+	        		return response.data;
+	        	});
+	        }
+	        
         };
     });

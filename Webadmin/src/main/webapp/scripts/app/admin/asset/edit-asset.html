@@ -819,9 +819,9 @@
 
                                                             <tbody>
                                                             <tr ng-repeat="ppmList in ppmJobLists">
-                                                                <td>{{ppmList.schedule}}</td>
+                                                                <td>{{ppmList.description}}</td>
                                                                 <td>{{ppmList.plannedStartTime | date:'dd-MMM-yyyy'}}</td>
-                                                                <td>{{ppmList.id}}</td>
+                                                                <td><a class="job-txt" has-authority="ROLE_ADMIN" ui-sref="view-job({ id: ppmList.id })">{{ppmList.id}}</a></td>
                                                                 <td>{{ppmList.plannedStartTime | date:'dd-MMM-yyyy'}}</td>
                                                                 <td>{{ppmList.plannedEndTime | date:'dd-MMM-yyyy'}}</td>
                                                                 <td>{{ppmList.employeeName}}</td>
@@ -856,9 +856,9 @@
 
                                                             <tbody>
                                                             <tr ng-repeat="amcList in amcJobLists">
-                                                                <td>{{amcList.schedule}}</td>
+                                                                <td>{{amcList.description}}</td>
                                                                 <td>{{amcList.plannedStartTime | date:'dd-MMM-yyyy'}}</td>
-                                                                <td>{{amcList.id}}</td>
+                                                                <td><a class="job-txt" has-authority="ROLE_ADMIN" ui-sref="view-job({ id: amcList.id })">{{amcList.id}}</a></td>
                                                                 <td>{{amcList.plannedStartTime | date:'dd-MMM-yyyy'}}</td>
                                                                 <td>{{amcList.plannedEndTime | date:'dd-MMM-yyyy'}}</td>
                                                                 <td>{{amcList.employeeName}}</td>

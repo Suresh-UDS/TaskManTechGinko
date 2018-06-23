@@ -1275,6 +1275,8 @@ angular.module('timeSheetApp')
         $scope.deleteAssetConfig = function(id) {
         	AssetComponent.deleteConfigById(id).then(function(data){
         		console.log(data);
+        		$scope.assetParameters = data;
+        		
         	});
         }
 

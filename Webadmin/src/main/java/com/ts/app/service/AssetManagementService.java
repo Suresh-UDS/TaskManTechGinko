@@ -174,7 +174,7 @@ public class AssetManagementService extends AbstractService {
 	private AssetGroupRepository assetGroupRepository;
 
 	@Inject
-	private ProjectRepository projectRepositoy;
+	private ProjectRepository projectRepository;
 
 	@Inject
 	private ManufacturerRepository manufacturerRepository;
@@ -414,7 +414,7 @@ public class AssetManagementService extends AbstractService {
 		asset.setPurchasePrice(assetDTO.getPurchasePrice());
 		asset.setCurrentPrice(assetDTO.getCurrentPrice());
 		asset.setEstimatedDisposePrice(assetDTO.getEstimatedDisposePrice());
-		asset.setCode(assetDTO.getCode());
+//		asset.setCode(assetDTO.getCode());
 		if (!StringUtils.isEmpty(assetDTO.getEndTime())) {
 			asset.setEndTime(DateUtil.convertToSQLDate(assetDTO.getEndTime()));
 		}
@@ -441,14 +441,16 @@ public class AssetManagementService extends AbstractService {
 	
 	public String generateAssetQRCode(long assetId, String assetCode) {
 		Asset asset = assetRepository.findOne(assetId);
-		asset.setCode(assetCode);
+		long siteId = asset.getSite().getId();
+		String code = String.valueOf(siteId)+"_"+assetCode;
+		asset.setCode(code);
 		assetRepository.save(asset);
 		byte[] qrCodeImage = null;
 		String qrCodeBase64 = null;
 		if (asset != null) {
-			String code = String.valueOf(asset.getCode());
-				code = asset.getSite().getId()+"_"+code;
-			qrCodeImage = QRCodeUtil.generateQRCode(code);
+			String codeName = String.valueOf(asset.getCode());
+				codeName = asset.getSite().getId()+"_"+codeName;
+			qrCodeImage = QRCodeUtil.generateQRCode(codeName);
 			String qrCodePath = env.getProperty("qrcode.file.path");
 			String imageFileName = null;
 			if (org.apache.commons.lang3.StringUtils.isNotEmpty(qrCodePath)) {
@@ -1016,7 +1018,7 @@ public class AssetManagementService extends AbstractService {
 	}
 
 	private Project getProject(long projectId) {
-		Project project = projectRepositoy.findOne(projectId);
+		Project project = projectRepository.findOne(projectId);
 		if (project == null)
 			throw new TimesheetException("Project not found : " + projectId);
 		return project;
