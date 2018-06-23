@@ -64,8 +64,8 @@ angular.module('timeSheetApp')
             $scope.overallTicketLabels = ['New', 'Closed', 'Pending', 'Pending with Client', 'Pending with UDS'];
             $scope.overallTicketSeries = ['New', 'Closed','Pending', 'Pending with Client', 'Pending with UDS'];
 
-            $scope.startDate = new Date();
-            $scope.endDate =  new Date($scope.startDate.getTime() - (100 * 24 * 60 * 60 * 1000));
+            $scope.startDate = new Date($scope.selectedFromDate);
+            $scope.endDate =  new Date($scope.selectedToDate);
             // var last = new Date(date.getTime() - (days * 24 * 60 * 60 * 1000));
             $scope.startDate = $scope.startDate.getDate()+'-0'+($scope.startDate.getUTCMonth()+1)+'-'+$scope.startDate.getFullYear();
             $scope.endDate = $scope.endDate.getDate()+'-0'+($scope.endDate.getMonth()+1)+'-'+$scope.endDate.getFullYear();
