@@ -160,8 +160,16 @@ public class TicketManagementService extends AbstractService {
     public void updateTicketPendingStatus(TicketDTO ticketDTO){
 
         Ticket ticket = ticketRepository.findOne(ticketDTO.getId());
-        ticket.setPendingAtClient(ticketDTO.isPendingAtClient());
-        ticket.setPendingAtUDS(ticketDTO.isPendingAtUDS());
+        if(ticketDTO.isPendingAtUDS()){
+            ticket.setPendingAtUDS(true);
+            ticket.setPendingAtClient(false);
+        }else if(ticketDTO.isPendingAtClient()){
+            ticket.setPendingAtClient(true);
+            ticket.setPendingAtUDS(false);
+        }else{
+            ticket.setPendingAtUDS(false);
+            ticket.setPendingAtClient(false);
+        }
         ticketRepository.saveAndFlush(ticket);
 
     }

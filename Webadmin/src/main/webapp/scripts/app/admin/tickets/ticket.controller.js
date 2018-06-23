@@ -275,7 +275,7 @@ angular.module('timeSheetApp')
                 }else if(tlist.pendingAtClient){
                     $scope.listPendingStatus = "Pending at "+$scope.listSite;
                 }else{
-                    $scope.listPendingStatus = "Pending at UDS"
+                    $scope.listPendingStatus = "Completed"
                 }
                 if(tlist.image){
                     console.log("image found");

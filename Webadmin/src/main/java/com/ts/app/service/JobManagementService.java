@@ -978,7 +978,10 @@ public class JobManagementService extends AbstractService {
 		    log.debug("ticket is pressent----"+jobDTO.isPendingAtClient());
 		    Ticket ticket = ticketRepository.findOne(jobDTO.getTicketId());
             TicketDTO ticketDTO = mapperUtil.toModel(ticket,TicketDTO.class);
-            if(jobDTO.isPendingAtUDS()){
+            if(jobDTO.getJobStatus().equals(JobStatus.COMPLETED)) {
+                ticketDTO.setPendingAtClient(false);
+                ticketDTO.setPendingAtUDS(false);
+            }else if(jobDTO.isPendingAtUDS()){
                 ticketDTO.setPendingAtUDS(jobDTO.isPendingAtUDS());
             }else{
                 ticketDTO.setPendingAtClient(jobDTO.isPendingAtClient());
