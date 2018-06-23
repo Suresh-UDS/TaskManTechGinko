@@ -236,8 +236,8 @@
                                 <td>{{ticket.createdDate | date:'MM/dd/yyyy @ h:mma'}}</td>
                                 <td>{{ticket.assignedToName}}</td>
                                 <td>{{ticket.status}}
-                                <p ng-if="ticket.pendingAtUDS">Pending At UDS</p>
-                                <p ng-if="ticket.pendingAtClient">Pending At {{ticket.siteName}}</p>
+                                <p ng-if="ticket.pendingAtUDS && ticket.status != 'Closed' ">Pending At UDS</p>
+                                <p ng-if="ticket.pendingAtClient && ticket.status != 'Closed'">Pending At {{ticket.siteName}}</p>
                                 </td>
 
 
