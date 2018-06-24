@@ -661,6 +661,8 @@ public class    EmployeeService extends AbstractService {
 	        		empDto.setName(emp.getName());
 	        		empDto.setFullName(emp.getFullName());
 	        		empDto.setLastName(emp.getLastName());
+	        		empDto.setFaceAuthorised(emp.isFaceAuthorised());
+	        		empDto.setFaceIdEnrolled(emp.isFaceIdEnrolled());
                 SearchCriteria sc = new SearchCriteria();
                 sc.setEmployeeEmpId(emp.getEmpId());
                 sc.setSiteId(siteId);
