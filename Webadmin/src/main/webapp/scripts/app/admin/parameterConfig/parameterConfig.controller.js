@@ -32,6 +32,8 @@ angular.module('timeSheetApp')
         $scope.consumptionMonitoringRequired = {value:false};
         $scope.alertRequired = {value: true};
         $scope.validationRequired = {value: true};
+        
+        $scope.selectedThreshold;
 
         console.log($stateParams)
                     var that =  $scope;
@@ -242,8 +244,16 @@ angular.module('timeSheetApp')
 	        	if($scope.selectedParameterUOM){
 	        	    $scope.parameterConfig.uom = $scope.selectedParameterUOM.uom;
 	        	}
+	        	if($scope.selectedThreshold){
+	        		$scope.parameterConfig.threshold = $scope.selectedThreshold;
+	        	}
+	        	if($scope.selectedRule){
+	        		$scope.parameterConfig.rule = $scope.selectedRule;
+	        	}
 
 	        	$scope.parameterConfig.consumptionMonitoringRequired  = $scope.consumptionMonitoringRequired.value;
+	        	$scope.parameterConfig.validationRequired = $scope.validationRequired.value;
+	        	$scope.parameterConfig.alertRequired = $scope.alertRequired.value;
 	        	console.log('parameterConfig details ='+ JSON.stringify($scope.parameterConfig));
 	        	//var post = $scope.isEdit ? ParameterConfigComponent.update : ParameterConfigComponent.create
                 //post($scope.parameterConfig).then(function () {
@@ -263,7 +273,7 @@ angular.module('timeSheetApp')
                         $scope.showNotifications('top','center','danger','Unable to create Parameter Configuration');
 	                    $scope.error = 'ERROR';
 	                }
-	            });;
+	            });
 
         }
 
