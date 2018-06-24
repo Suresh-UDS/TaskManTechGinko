@@ -654,23 +654,29 @@ public class    EmployeeService extends AbstractService {
         if(CollectionUtils.isNotEmpty(entities)) {
             employeeDtos = new ArrayList<EmployeeDTO>();
             for(Employee emp : entities) {
-                EmployeeDTO employeeDTO = mapToModel(emp);
+                //EmployeeDTO employeeDTO = mapToModel(emp);
+          		EmployeeDTO empDto = new EmployeeDTO();
+	        		empDto.setId(emp.getId());
+	        		empDto.setEmpId(emp.getEmpId());
+	        		empDto.setName(emp.getName());
+	        		empDto.setFullName(emp.getFullName());
+	        		empDto.setLastName(emp.getLastName());
                 SearchCriteria sc = new SearchCriteria();
                 sc.setEmployeeEmpId(emp.getEmpId());
                 sc.setSiteId(siteId);
                 sc.setEmployeeId(emp.getId());
-                List<AttendanceDTO> result = attendanceService.findByEmpId(sc);
+                List<AttendanceDTO> result = attendanceService.findEmpCheckInInfo(sc);
                 if(CollectionUtils.isNotEmpty(result)){
                     AttendanceDTO attendanceDTO = result.get(0);
                     log.debug("Employee checked in "+result.size());
-                    employeeDTO.setCheckedIn(true);
-                    employeeDTO.setNotCheckedOut(attendanceDTO.isNotCheckedOut());
-                    employeeDTO.setAttendanceId(attendanceDTO.getId());
+                    empDto.setCheckedIn(true);
+                    empDto.setNotCheckedOut(attendanceDTO.isNotCheckedOut());
+                    empDto.setAttendanceId(attendanceDTO.getId());
                 }else{
                     log.debug("Employee checked false "+result.size());
-                    employeeDTO.setCheckedIn(false);
+                    empDto.setCheckedIn(false);
                 }
-                employeeDtos.add(employeeDTO);
+                employeeDtos.add(empDto);
 
             }
         }

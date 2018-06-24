@@ -364,6 +364,39 @@ public class AttendanceService extends AbstractService {
 		}
 		return mapperUtil.toModelList(transactions, AttendanceDTO.class);
 	}
+	
+	public List<AttendanceDTO> findEmpCheckInInfo(SearchCriteria searchCriteria) {
+		log.debug("search Criteria", searchCriteria);
+		List<AttendanceDTO> attnDtos = new ArrayList<AttendanceDTO>();
+		List<Attendance> transactions = null;
+		if (searchCriteria != null) {
+
+			Calendar startCal = Calendar.getInstance();
+			startCal.set(Calendar.HOUR_OF_DAY, 0);
+			startCal.set(Calendar.MINUTE, 0);
+			startCal.set(Calendar.SECOND, 0);
+			Calendar endCal = Calendar.getInstance();
+			endCal.set(Calendar.HOUR_OF_DAY, 23);
+			endCal.set(Calendar.MINUTE, 59);
+			endCal.set(Calendar.SECOND, 0);
+			searchCriteria.setCheckInDateTimeFrom(startCal.getTime());
+			searchCriteria.setCheckInDateTimeTo(endCal.getTime());
+			Long employeeId = searchCriteria.getEmployeeId();
+			java.sql.Date startDate = new java.sql.Date(searchCriteria.getCheckInDateTimeFrom().getTime());
+			java.sql.Date toDate = new java.sql.Date(searchCriteria.getCheckInDateTimeTo().getTime());
+			transactions = attendanceRepository.findBySiteIdEmpId(searchCriteria.getProjectId(), searchCriteria.getSiteId(), searchCriteria.getEmployeeEmpId());
+		}
+		if(CollectionUtils.isNotEmpty(transactions)) {
+			for(Attendance attn : transactions) {
+				AttendanceDTO attnDto = new AttendanceDTO();
+				attnDto.setNotCheckedOut(attn.isNotCheckedOut());
+				attnDto.setId(attn.getId());
+				attnDtos.add(attnDto);
+			}
+		}
+		//return mapperUtil.toModelList(transactions, AttendanceDTO.class);
+		return attnDtos;
+	}
 
 	public String getAttendanceImage(long id, String empId) {
 		String attendanceBase64 = null;
