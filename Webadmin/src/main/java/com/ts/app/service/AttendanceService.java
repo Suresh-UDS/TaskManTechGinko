@@ -2,6 +2,7 @@ package com.ts.app.service;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -364,7 +365,7 @@ public class AttendanceService extends AbstractService {
 		}
 		return mapperUtil.toModelList(transactions, AttendanceDTO.class);
 	}
-	
+
 	public List<AttendanceDTO> findEmpCheckInInfo(SearchCriteria searchCriteria) {
 		log.debug("search Criteria", searchCriteria);
 		List<AttendanceDTO> attnDtos = new ArrayList<AttendanceDTO>();
@@ -391,6 +392,8 @@ public class AttendanceService extends AbstractService {
 				AttendanceDTO attnDto = new AttendanceDTO();
 				attnDto.setNotCheckedOut(attn.isNotCheckedOut());
 				attnDto.setId(attn.getId());
+				attnDto.setSiteId(attn.getSite().getId());
+				attnDto.setSiteName(attn.getSite().getName());
 				attnDtos.add(attnDto);
 			}
 		}

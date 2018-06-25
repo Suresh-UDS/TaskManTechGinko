@@ -47,6 +47,8 @@ public class Attendance extends AbstractAuditingEntity implements Serializable{
 
 	private String action;
 
+	private boolean offline;
+
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "siteId", nullable = false)
 	private Site site;
@@ -54,11 +56,11 @@ public class Attendance extends AbstractAuditingEntity implements Serializable{
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "employeeId", nullable = false)
 	private Employee employee;
-	
+
 	private String shiftStartTime;
-	
+
 	private String shiftEndTime;
-	
+
 	private boolean notCheckedOut;
 
 	public Long getId() {
@@ -192,6 +194,13 @@ public class Attendance extends AbstractAuditingEntity implements Serializable{
 	public void setNotCheckedOut(boolean notCheckedOut) {
 		this.notCheckedOut = notCheckedOut;
 	}
-    
-    
+
+
+    public boolean isOffline() {
+        return offline;
+    }
+
+    public void setOffline(boolean offline) {
+        this.offline = offline;
+    }
 }

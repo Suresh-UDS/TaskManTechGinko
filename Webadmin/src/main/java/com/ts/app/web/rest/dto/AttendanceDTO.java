@@ -53,13 +53,15 @@ public class AttendanceDTO extends BaseDTO implements Serializable{
     private String attendanceIn;
 
     private String attendanceOut;
-    
+
 	private String shiftStartTime;
-	
+
 	private String shiftEndTime;
 
 	private boolean notCheckedOut;
-	
+
+	private boolean offline;
+
 	public Long getId() {
 		return id;
 	}
@@ -228,6 +230,13 @@ public class AttendanceDTO extends BaseDTO implements Serializable{
 	public void setNotCheckedOut(boolean notCheckedOut) {
 		this.notCheckedOut = notCheckedOut;
 	}
-    
-    
+
+
+    public boolean isOffline() {
+        return offline;
+    }
+
+    public void setOffline(boolean offline) {
+        this.offline = offline;
+    }
 }
