@@ -88,30 +88,33 @@ angular.module('timeSheetApp')
             DashboardComponent.loadTicketChartData($scope.selectedSite.id,$scope.startDate,$scope.endDate).then(function(response){
                 console.log("Dashboard ticket data_________");
                 console.log(response);
-                console.log(response.closedTicketCounts);
+                console.log(response.closedTicketCounts["0-3"]);
                 console.log(response.openTicketCounts);
                 $scope.chartsDataResponse = response;
                 var openTicketsData = {};
-                for(var key in response.openTicketCounts){
-                    console.log(key);
-                    console.log(response.openTicketCounts[key]);
-                    $scope.openTicketsCountArray.push(response.openTicketCounts[key]);
-                    $scope.openTicketsLabels.push(key);
-                    openTicketsData.label = key;
-                    openTicketsData.data = response.openTicketCounts[key];
-                    $scope.openTicketsDataArray.push(openTicketsData);
+                $scope.openTicketsCountArray.push(response.openTicketCounts["0-3"]);
+                $scope.openTicketsLabels.push("0-3");
+                $scope.openTicketsCountArray.push(response.openTicketCounts["4-5"]);
+                $scope.openTicketsLabels.push("4-5");
+                $scope.openTicketsCountArray.push(response.openTicketCounts["6-7"]);
+                $scope.openTicketsLabels.push("6-7");
+                $scope.openTicketsCountArray.push(response.openTicketCounts["8-10"]);
+                $scope.openTicketsLabels.push("8-10");
+                $scope.openTicketsCountArray.push(response.openTicketCounts["11-365"]);
+                $scope.openTicketsLabels.push(">-11");
 
-                }
-                var closedTicketData = {};
-                for(var key in response.closedTicketCounts){
-                    console.log(key);
-                    console.log(response.closedTicketCounts[key]);
-                    $scope.closedTicketsCountArray.push(response.closedTicketCounts[key]);
-                    $scope.closedTicketsLabels.push(key);
-                    closedTicketData.label = key;
-                    closedTicketData.data = response.closedTicketCounts[key];
-                    $scope.closedTicketsDataArray.push(closedTicketData);
-                }
+                $scope.closedTicketsCountArray.push(response.openTicketCounts["0-3"]);
+                $scope.closedTicketsLabels.push("0-3");
+                $scope.closedTicketsCountArray.push(response.openTicketCounts["4-5"]);
+                $scope.closedTicketsLabels.push("4-5");
+                $scope.closedTicketsCountArray.push(response.openTicketCounts["6-7"]);
+                $scope.closedTicketsLabels.push("6-7");
+                $scope.closedTicketsCountArray.push(response.openTicketCounts["8-10"]);
+                $scope.closedTicketsLabels.push("8-10");
+                $scope.closedTicketsCountArray.push(response.openTicketCounts["11-365"]);
+                $scope.closedTicketsLabels.push(">-11");
+
+
 
                 var ctx = document.getElementById("bar").getContext('2d');
                 $scope.myChart = new Chart(ctx, {
