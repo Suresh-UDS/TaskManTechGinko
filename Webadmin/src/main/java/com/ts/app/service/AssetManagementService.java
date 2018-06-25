@@ -46,10 +46,12 @@ import com.ts.app.domain.Setting;
 import com.ts.app.domain.Site;
 import com.ts.app.domain.User;
 import com.ts.app.domain.Vendor;
+import com.ts.app.domain.util.StringUtil;
 import com.ts.app.repository.AssetAMCRepository;
 import com.ts.app.repository.AssetDocumentRepository;
 import com.ts.app.repository.AssetGroupRepository;
 import com.ts.app.repository.AssetParamReadingRepository;
+import com.ts.app.repository.AssetParamRuleRepository;
 import com.ts.app.repository.AssetParameterConfigRepository;
 import com.ts.app.repository.AssetPpmScheduleRepository;
 import com.ts.app.repository.AssetReadingRuleRepository;
@@ -211,6 +213,9 @@ public class AssetManagementService extends AbstractService {
 	
 	@Inject
 	private SettingsRepository settingRepository;
+	
+	@Inject
+	private AssetParamRuleRepository assetParamRuleRepository;
 	
 	
 	public static final String EMAIL_NOTIFICATION_READING = "email.notification.reading";
@@ -1061,7 +1066,7 @@ public class AssetManagementService extends AbstractService {
 		assetParamConfig.setAsset(asset);
 		assetParamConfig = assetParamConfigRepository.save(assetParamConfig);
 		assetParamConfigDTO = mapperUtil.toModel(assetParamConfig, AssetParameterConfigDTO.class);
-		if(assetParamConfigDTO.getId() != null) { 
+		if(assetParamConfigDTO.getId() > 0 && assetParamConfigDTO.getRule() != null) { 
 			AssetParameterReadingRule ruleEntity = new AssetParameterReadingRule();
 			ruleEntity.setAlertRequired(assetParamConfigDTO.isAlertRequired());
 			ruleEntity.setRule(assetParamConfigDTO.getRule());
@@ -1070,6 +1075,7 @@ public class AssetManagementService extends AbstractService {
 			ruleEntity.setActive(AssetParameterReadingRule.ACTIVE_YES);
 			AssetParameterConfig assetParameterConfig = assetParamConfigRepository.findOne(assetParamConfigDTO.getId());
 			ruleEntity.setAssetParameterConfig(assetParameterConfig);
+			assetParamRuleRepository.save(ruleEntity);
 		}
 		return assetParamConfigDTO;
 	}
