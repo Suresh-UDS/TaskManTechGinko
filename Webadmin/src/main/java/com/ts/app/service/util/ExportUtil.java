@@ -73,7 +73,7 @@ public class ExportUtil {
 			"STATUS" };
 	private String[] ATTD_HEADER = { "EMPLOYEE ID", "EMPLOYEE NAME", "SITE", "CLIENT", "CHECK IN", "CHECK OUT",
 			"CHECK OUT IMAGE" };
-	private String[] TICKET_HEADER = { "ID", "SITE", "ISSUE", "STATUS", "CATEGORY", "SEVERITY", "INITIATOR",
+	private String[] TICKET_HEADER = { "ID", "SITE", "ISSUE", "STATUS", "PENDING STATUS","CATEGORY", "SEVERITY", "INITIATOR",
 			"INITIATED ON", "ASSIGNED TO", "ASSIGNED ON", "CLOSED BY", "CLOSED ON" };
 
 	@Inject
@@ -686,8 +686,8 @@ public class ExportUtil {
 						record.add(transaction.getCreatedDate());
 						record.add(String.valueOf(transaction.getEmployeeEmpId()));
 						record.add(transaction.getEmployeeFullName());
-						record.add(DateUtil.convertUTCToIST(transaction.getCheckInTime()));
-						record.add(DateUtil.convertUTCToIST(transaction.getCheckOutTime()));
+						record.add(DateUtil.convertUTCToIST(DateUtil.convertToTimestamp(transaction.getCheckInTime())));
+						record.add(DateUtil.convertUTCToIST(DateUtil.convertToTimestamp(transaction.getCheckOutTime())));
 						csvFilePrinter.printRecord(record);
 					}
 					log.info(exportFileName + " CSV file was created successfully !!!");
@@ -1319,14 +1319,15 @@ public class ExportUtil {
 					dataRow.createCell(1).setCellValue(transaction.getSiteName());
 					dataRow.createCell(2).setCellValue(transaction.getTitle());
 					dataRow.createCell(3).setCellValue(transaction.getStatus());
-					dataRow.createCell(4).setCellValue(transaction.getCategory());
-					dataRow.createCell(5).setCellValue(transaction.getSeverity());
-					dataRow.createCell(6).setCellValue(transaction.getCreatedBy());
-					dataRow.createCell(7).setCellValue(String.valueOf(transaction.getCreatedDate()));
-					dataRow.createCell(8).setCellValue(transaction.getAssignedToName());
-					dataRow.createCell(9).setCellValue(String.valueOf(transaction.getAssignedOn()));
-					dataRow.createCell(10).setCellValue(transaction.getClosedByName());
-					dataRow.createCell(11).setCellValue(
+					dataRow.createCell(4).setCellValue(transaction.isPendingAtClient() ? "PENDING WITH CLIENT" : (transaction.isPendingAtUDS() ? "PENDING WITH UDS" : ""));
+					dataRow.createCell(5).setCellValue(transaction.getCategory());
+					dataRow.createCell(6).setCellValue(transaction.getSeverity());
+					dataRow.createCell(7).setCellValue(transaction.getCreatedBy());
+					dataRow.createCell(8).setCellValue(String.valueOf(transaction.getCreatedDate()));
+					dataRow.createCell(9).setCellValue(transaction.getAssignedToName());
+					dataRow.createCell(10).setCellValue(String.valueOf(transaction.getAssignedOn()));
+					dataRow.createCell(11).setCellValue(transaction.getClosedByName());
+					dataRow.createCell(12).setCellValue(
 							transaction.getClosedOn() != null ? String.valueOf(transaction.getClosedOn()) : "");
 				}
 
