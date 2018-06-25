@@ -153,7 +153,7 @@ export class QuotationPage {
       this.siteService.findSites(projectId).subscribe(
           response=>{
               this.sites = response.json();
-              this.selectedSite = response[0];
+              this.selectedSite = response[1];
           }
       )
   }
