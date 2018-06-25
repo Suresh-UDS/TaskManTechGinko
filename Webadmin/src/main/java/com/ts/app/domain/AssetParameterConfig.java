@@ -53,6 +53,12 @@ public class AssetParameterConfig extends AbstractAuditingEntity implements Seri
     private int min;
     
     private int max;
+    
+    private String rule;
+    
+    private boolean validationRequired;
+    
+    private boolean alertRequired;
 
     public Long getId() {
         return id;
@@ -124,6 +130,30 @@ public class AssetParameterConfig extends AbstractAuditingEntity implements Seri
 
 	public void setMax(int max) {
 		this.max = max;
+	}
+
+	public String getRule() {
+		return rule;
+	}
+
+	public void setRule(String rule) {
+		this.rule = rule;
+	}
+
+	public boolean isValidationRequired() {
+		return validationRequired;
+	}
+
+	public void setValidationRequired(boolean validationRequired) {
+		this.validationRequired = validationRequired;
+	}
+
+	public boolean isAlertRequired() {
+		return alertRequired;
+	}
+
+	public void setAlertRequired(boolean alertRequired) {
+		this.alertRequired = alertRequired;
 	}
 
     

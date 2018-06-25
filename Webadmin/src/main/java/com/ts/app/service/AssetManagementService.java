@@ -1061,6 +1061,16 @@ public class AssetManagementService extends AbstractService {
 		assetParamConfig.setAsset(asset);
 		assetParamConfig = assetParamConfigRepository.save(assetParamConfig);
 		assetParamConfigDTO = mapperUtil.toModel(assetParamConfig, AssetParameterConfigDTO.class);
+		if(assetParamConfigDTO.getId() != null) { 
+			AssetParameterReadingRule ruleEntity = new AssetParameterReadingRule();
+			ruleEntity.setAlertRequired(assetParamConfigDTO.isAlertRequired());
+			ruleEntity.setRule(assetParamConfigDTO.getRule());
+			ruleEntity.setValidationRequired(assetParamConfigDTO.isValidationRequired());
+			ruleEntity.setAsset(asset);
+			ruleEntity.setActive(AssetParameterReadingRule.ACTIVE_YES);
+			AssetParameterConfig assetParameterConfig = assetParamConfigRepository.findOne(assetParamConfigDTO.getId());
+			ruleEntity.setAssetParameterConfig(assetParameterConfig);
+		}
 		return assetParamConfigDTO;
 	}
 

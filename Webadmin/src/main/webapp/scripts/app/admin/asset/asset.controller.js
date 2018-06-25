@@ -87,6 +87,10 @@ angular.module('timeSheetApp')
         $scope.vendor = {};
 
         $scope.consumptionMonitoringRequired = false;
+        
+        $scope.validationRequired = false;
+        
+        $scope.alertRequired = false;
 
         $scope.selectedClientFile;
 
@@ -1318,7 +1322,22 @@ angular.module('timeSheetApp')
                 	if($scope.selectedParameterUOM){
                 	    $scope.parameterConfig.uom = $scope.selectedParameterUOM.uom;
                 	}
-                	$scope.parameterConfig.consumptionMonitoringRequired  = $scope.consumptionMonitoringRequired
+                	if($scope.selectedThreshold) { 
+                		$scope.parameterConfig.threshold = $scope.selectedThreshold;
+                	}
+                	if($scope.selectedMinValue) { 
+                		$scope.parameterConfig.min = $scope.selectedMinValue;
+                	}
+                	if($scope.selectedMaxValue) { 
+                		$scope.parameterConfig.max = $scope.selectedMaxValue;
+                	}
+                	if($scope.selectedRule){
+    	        		$scope.parameterConfig.rule = $scope.selectedRule;
+    	        	}
+                	$scope.parameterConfig.consumptionMonitoringRequired  = $scope.consumptionMonitoringRequired;
+                	$scope.parameterConfig.validationRequired  = $scope.validationRequired;
+                	$scope.parameterConfig.alertRequired  = $scope.alertRequired
+                	
                 	console.log('Edit parameterConfig details ='+ JSON.stringify($scope.parameterConfig));
 
                 }else if($scope.assetGen.id){
@@ -1337,7 +1356,21 @@ angular.module('timeSheetApp')
                     if($scope.selectedParameterUOM){
                         $scope.parameterConfig.uom = $scope.selectedParameterUOM.uom;
                     }
-                    $scope.parameterConfig.consumptionMonitoringRequired  = $scope.consumptionMonitoringRequired
+                    if($scope.selectedThreshold) { 
+                		$scope.parameterConfig.threshold = $scope.selectedThreshold;
+                	}
+                	if($scope.selectedMinValue) { 
+                		$scope.parameterConfig.min = $scope.selectedMinValue;
+                	}
+                	if($scope.selectedMaxValue) { 
+                		$scope.parameterConfig.max = $scope.selectedMaxValue;
+                	}
+                	if($scope.selectedRule){
+    	        		$scope.parameterConfig.rule = $scope.selectedRule;
+    	        	}
+                    $scope.parameterConfig.consumptionMonitoringRequired  = $scope.consumptionMonitoringRequired;
+                    $scope.parameterConfig.validationRequired  = $scope.validationRequired;
+                	$scope.parameterConfig.alertRequired  = $scope.alertRequired
                     console.log('Add parameterConfig details ='+ JSON.stringify($scope.parameterConfig));
                 }
 
@@ -1852,6 +1885,7 @@ angular.module('timeSheetApp')
         $scope.loadAllRules = function() {
         	AssetComponent.getAllRules().then(function(data) {
         		console.log(data);
+        		$scope.readingRules = data;
         	});
         }
 
