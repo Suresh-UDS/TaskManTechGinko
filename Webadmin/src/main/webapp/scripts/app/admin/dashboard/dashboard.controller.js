@@ -103,15 +103,15 @@ angular.module('timeSheetApp')
                 $scope.openTicketsCountArray.push(response.openTicketCounts["11-365"]);
                 $scope.openTicketsLabels.push(">-11");
 
-                $scope.closedTicketsCountArray.push(response.openTicketCounts["0-3"]);
+                $scope.closedTicketsCountArray.push(response.closedTicketCounts["0-3"]);
                 $scope.closedTicketsLabels.push("0-3");
-                $scope.closedTicketsCountArray.push(response.openTicketCounts["4-5"]);
+                $scope.closedTicketsCountArray.push(response.closedTicketCounts["4-5"]);
                 $scope.closedTicketsLabels.push("4-5");
-                $scope.closedTicketsCountArray.push(response.openTicketCounts["6-7"]);
+                $scope.closedTicketsCountArray.push(response.closedTicketCounts["6-7"]);
                 $scope.closedTicketsLabels.push("6-7");
-                $scope.closedTicketsCountArray.push(response.openTicketCounts["8-10"]);
+                $scope.closedTicketsCountArray.push(response.closedTicketCounts["8-10"]);
                 $scope.closedTicketsLabels.push("8-10");
-                $scope.closedTicketsCountArray.push(response.openTicketCounts["11-365"]);
+                $scope.closedTicketsCountArray.push(response.closedTicketCounts["11-365"]);
                 $scope.closedTicketsLabels.push(">-11");
 
 
