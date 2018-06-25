@@ -146,7 +146,7 @@ public class    EmployeeService extends AbstractService {
 
     @Inject
     private AttendanceService attendanceService;
-    
+
     @Inject
     private UserRoleService userRoleService;
 
@@ -226,7 +226,7 @@ public class    EmployeeService extends AbstractService {
 				if(userRoleDTO.getName().startsWith("Client")) {
 					employee.setClient(true); //mark the employee as client employee
 				}
-			}	
+			}
 			employee = employeeRepository.save(employee);
 			//create user if opted.
 			if(employeeDto.isCreateUser() && employeeDto.getUserRoleId() > 0) {
@@ -241,7 +241,7 @@ public class    EmployeeService extends AbstractService {
 				user.setEmployeeId(employee.getId());
 				user.setActivated(true);
 				userService.createUserInformation(user);
-				
+
 			}
 
 			log.debug("Created Information for Employee: {}", employee);
@@ -333,8 +333,8 @@ public class    EmployeeService extends AbstractService {
 			if(userRoleDTO.getName().startsWith("Client")) {
 				employee.setClient(true); //mark the employee as client employee
 			}
-		}	
-		
+		}
+
 		employeeRepository.saveAndFlush(employeeUpdate);
 		employee = mapperUtil.toModel(employeeUpdate, EmployeeDTO.class);
 		return employee;
@@ -836,13 +836,13 @@ public class    EmployeeService extends AbstractService {
 			java.sql.Date toDate = DateUtil.convertToSQLDate(DateUtil.convertUTCToIST(endCal));
 
 			log.debug("findBySearchCriteria - "+searchCriteria.getSiteId() +", "+searchCriteria.getEmployeeId() +", "+searchCriteria.getProjectId());
-			
-			boolean isClient = false; 
-			
+
+			boolean isClient = false;
+
 			if(user != null && user.getUserRole() != null) {
 				isClient = user.getUserRole().getName().equalsIgnoreCase(UserRoleEnum.ADMIN.toValue());
 			}
-			
+
 			if((searchCriteria.getSiteId() != 0 && searchCriteria.getProjectId() != 0)) {
 				if(searchCriteria.getFromDate() != null) {
 					page = employeeRepository.findBySiteIdAndProjectId(searchCriteria.getProjectId(), searchCriteria.getSiteId(),startDate, toDate, isClient, pageRequest);
