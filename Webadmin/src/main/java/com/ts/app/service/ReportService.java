@@ -484,19 +484,19 @@ public class ReportService extends AbstractService {
 
 
         openTicketCounts.put(range, getPendingTicketCountByDayRange(siteIds, min, max, sqlDate, sqlEndDate));
-        min = 3;
+        min = 4;
         max = 5;
         range = min +"-"+max;
         openTicketCounts.put(range, getPendingTicketCountByDayRange(siteIds, min, max, sqlDate, sqlEndDate));
-        min = 5;
+        min = 6;
         max = 7;
         range = min +"-"+max;
         openTicketCounts.put(range, getPendingTicketCountByDayRange(siteIds, min, max, sqlDate, sqlEndDate));
-        min = 7;
+        min = 8;
         max = 10;
         range = min +"-"+max;
         openTicketCounts.put(range, getPendingTicketCountByDayRange(siteIds, min, max, sqlDate, sqlEndDate));
-        min = 10;
+        min = 11;
         max = 365;
         range = min +"-"+max;
         openTicketCounts.put(range, getPendingTicketCountByDayRange(siteIds, min, max, sqlDate, sqlEndDate));
@@ -508,19 +508,19 @@ public class ReportService extends AbstractService {
         max = 3;
         range = min +"-"+max;
         closedTicketCounts.put(range, getClosedTicketCountByDayRange(siteIds, min, max, sqlDate, sqlEndDate));
-        min = 3;
+        min = 4;
         max = 5;
         range = min +"-"+max;
         closedTicketCounts.put(range, getClosedTicketCountByDayRange(siteIds, min, max, sqlDate, sqlEndDate));
-        min = 5;
+        min = 6;
         max = 7;
         range = min +"-"+max;
         closedTicketCounts.put(range, getClosedTicketCountByDayRange(siteIds, min, max, sqlDate, sqlEndDate));
-        min = 7;
+        min = 8;
         max = 10;
         range = min +"-"+max;
         closedTicketCounts.put(range, getClosedTicketCountByDayRange(siteIds, min, max, sqlDate, sqlEndDate));
-        min = 10;
+        min = 11;
         max = 365;
         range = "> " + min;
         closedTicketCounts.put(range, getClosedTicketCountByDayRange(siteIds, min, max, sqlDate, sqlEndDate));
@@ -537,7 +537,7 @@ public class ReportService extends AbstractService {
         reportResult.setOpenTicketCounts(openTicketCounts);
 
         reportResult.setClosedTicketCounts(closedTicketCounts);
-        
+
         //site name and project name
         long siteId = siteIds.get(0);
         Site site = siteRepository.findOne(siteId);
