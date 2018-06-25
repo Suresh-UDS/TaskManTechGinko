@@ -34,6 +34,7 @@ import com.ts.app.repository.AttendanceRepository;
 import com.ts.app.repository.EmployeeRepository;
 import com.ts.app.repository.SiteRepository;
 import com.ts.app.repository.UserRepository;
+import com.ts.app.service.util.DateUtil;
 import com.ts.app.service.util.ExportUtil;
 import com.ts.app.service.util.FileUploadHelper;
 import com.ts.app.service.util.MapperUtil;
@@ -106,7 +107,7 @@ public class AttendanceService extends AbstractService {
         dbAttn.setLongitudeOut(attn.getLongitudeOut());
         dbAttn.setOffline(attnDto.isOffline());
         if(dbAttn.isOffline()){
-//            dbAttn.setCheckOutTime(new java.sql.Timestamp(attnDto.getCheckOutTime()));
+            dbAttn.setCheckOutTime(DateUtil.convertToTimestamp(attnDto.getCheckOutTime()));
         }
         findShiftTiming(false, attnDto, dbAttn);
 
@@ -252,7 +253,7 @@ public class AttendanceService extends AbstractService {
 			attn.setLongitudeIn(attnDto.getLongitudeIn());
 			attn.setOffline(attnDto.isOffline());
 			if(attn.isOffline()){
-//			    attn.setCheckInTime(attnDto.getCheckInTime());
+			    attn.setCheckInTime(DateUtil.convertToTimestamp(attnDto.getCheckInTime()));
             }
 			log.debug("attendance employee details"+attn.getEmployee().getId());
 			Calendar now = Calendar.getInstance();
@@ -399,8 +400,9 @@ public class AttendanceService extends AbstractService {
 				AttendanceDTO attnDto = new AttendanceDTO();
 				attnDto.setNotCheckedOut(attn.isNotCheckedOut());
 				attnDto.setId(attn.getId());
-				attnDto.setSiteId(attn.getSite().getId());
-				attnDto.setSiteName(attn.getSite().getName());
+				Site site = attn.getSite();
+				attnDto.setSiteId(site.getId());
+				attnDto.setSiteName(site.getName());
 				attnDtos.add(attnDto);
 			}
 		}

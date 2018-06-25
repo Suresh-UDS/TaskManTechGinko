@@ -668,12 +668,14 @@ public class    EmployeeService extends AbstractService {
                 sc.setSiteId(siteId);
                 sc.setEmployeeId(emp.getId());
                 List<AttendanceDTO> result = attendanceService.findEmpCheckInInfo(sc);
-                if(CollectionUtils.isNotEmpty(result)){
+                if(CollectionUtils.isNotEmpty(result)) {
                     AttendanceDTO attendanceDTO = result.get(0);
                     log.debug("Employee checked in "+result.size());
                     empDto.setCheckedIn(true);
                     empDto.setNotCheckedOut(attendanceDTO.isNotCheckedOut());
                     empDto.setAttendanceId(attendanceDTO.getId());
+                    empDto.setSiteId(attendanceDTO.getSiteId());
+                    empDto.setSiteName(attendanceDTO.getSiteName());
                 }else{
                     log.debug("Employee checked false "+result.size());
                     empDto.setCheckedIn(false);
