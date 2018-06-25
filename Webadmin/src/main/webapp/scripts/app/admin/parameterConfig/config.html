@@ -105,17 +105,83 @@
                                     </div>
 
                                 </div>
+                                
+                                <div class="row" >
+
+                                    <div class="col-md-4">
+                                        <div class="form-group selectcon is-empty SelectWithAddbtnCon" ng-init="loadAllRules()">
+                                            <div class="row">
+                                                <div class="col-md-10 pad-r-0px">
+                                                    <label class="control-label">Rules</label>
+                                                    <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
+                                                    <select class="form-control" ng-model="selectedRule" ng-options="rule for rule in readingRules">
+                                                        <option value="">Select Rule ..</option>
+                                                    </select>
+                                                </div>
+                                                <!-- <div class="col-md-2 ">
+                                                    <a href="javascript:void(0)"  data-toggle="collapse" data-parent="#accordian" data-target="#addAssetType" class="btn btn-round btn-fab btn-fab-mini btn-simple" aria-expanded="false" aria-controls="collapseExample">
+                                                        <i class="material-icons">add</i>
+                                                    </a>
+
+                                                    <a  has-permission="" class="btn btn-round btn-fab btn-fab-mini btn-simple"  onClick="$('#addAssetType').modal()" data-target="#myModal"><i class="material-icons">add</i><div class="ripple-container" ></div></a>
+                                                </div> -->
+                                            </div>
+
+                                            <!-- <div class="collapse"  id="addAssetType">
+                                                <div class="">
+                                                    <input class="input-desc" id="addAssetTypeInput" ng-model="assetType.name"   name="AssetType" type="text" value=""/>
+                                              <a class="btn btn-success"  ng-click="addAssetType()">Add</a>
+                                                </div>
+                                            </div> -->
+
+                                        </div>
+
+                                    </div>
+                                    <div class="col-md-4">
+
+                                         <div class="form-group selectcon is-empty SelectWithAddbtnCon">
+                                              <label class="control-label">Threshold</label>
+                                          <input id='threshold'
+                                                 ng-model="selectedThreshold"
+                                                 class='form-control'
+                                                 name='threshold'
+                                                 type='text' value=""
+                                                 ng-pattern="/^[A-Za-z0-9\s]*$/" autofocus
+                                                  />
+                                          </div>
+
+                                    </div>
+                                    
+                                    <div class="col-md-4">
+                                        <div class="checkbox">
+                                            <label style="padding-top: 20px">
+                                                <input type="checkbox" name="terms" ng-model="alertRequired.value"> Alert Required
+                                            </label>
+                                        </div>
+                                    </div>
+                                    
+
+                                </div>
+                                
 
                                 <div class="row">
 
-                                    <div class="col-md-6">
+                                    <div class="col-md-4">
+                                        <div class="checkbox">
+                                            <label>
+                                                <input type="checkbox" name="terms" ng-model="validationRequired.value"> Validation Required
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
                                         <div class="checkbox">
                                             <label>
                                                 <input type="checkbox" name="terms" ng-model="consumptionMonitoringRequired.value" > Consumption Monitoring Required
                                             </label>
                                         </div>
                                     </div>
-                                    <div class="col-md-6 txt-align-rgt">
+                                   
+                                    <div class="col-md-4 txt-align-rgt">
                                         <button class="btn btn-success" type="submit"
                                                 id="form-button-add">
                                             <span class="btn-label"><i class="material-icons">add</i></span> Add

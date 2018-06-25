@@ -30,5 +30,8 @@ public interface ParameterConfigRepository extends JpaRepository<ParameterConfig
 	@Query("SELECT m FROM ParameterConfig m WHERE m.assetType = :assetType and m.name like '%' || :name || '%' and m.active='Y' order by m.name")
 	Page<ParameterConfig> findAll(@Param("assetType") String assetType, @Param("name") String name, Pageable pageRequest);
 
+	@Query("SELECT c FROM ParameterConfig c WHERE c.active='Y' order by c.createdDate DESC")
+	Page<ParameterConfig> findAllConfig(Pageable pageRequest);
+
 
 }

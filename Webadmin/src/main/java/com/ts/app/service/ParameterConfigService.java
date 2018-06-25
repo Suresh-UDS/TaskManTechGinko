@@ -109,6 +109,9 @@ public class ParameterConfigService extends AbstractService {
 		parameterConfigDTO.setId(parameterConfig.getId());
 		parameterConfigDTO.setName(parameterConfig.getName());
 		parameterConfigDTO.setUom(parameterConfig.getUom());
+		parameterConfigDTO.setAlertRequired(parameterConfig.isAlertRequired());
+		parameterConfigDTO.setValidationRequired(parameterConfig.isValidationRequired());
+		parameterConfigDTO.setConsumptionMonitoringRequired(parameterConfig.isConsumptionMonitoringRequired());
 		parameterConfigDTO.setAssetType(parameterConfig.getAssetType());
 		return parameterConfigDTO;
 	}
@@ -171,7 +174,7 @@ public class ParameterConfigService extends AbstractService {
 					page = parameterConfigRepository.findAllByName(searchCriteria.getName(), pageRequest);
 				}
 			}else {
-				page = parameterConfigRepository.findAll(pageRequest);
+				page = parameterConfigRepository.findAllConfig(pageRequest);
 			}
 			if(page != null) {
 				if(transactions == null) {
