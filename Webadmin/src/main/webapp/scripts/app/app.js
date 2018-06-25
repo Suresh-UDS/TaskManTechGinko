@@ -119,7 +119,7 @@ angular.module('timeSheetApp', ['LocalStorageModule',
 
         $rootScope.loadPageTop = function(){
 
-            $("#loadPage").animate({scrollTop: 0}, 2000);
+            $("#loadPage").animate({scrollTop: 0}, 1500);
         }
 
 
