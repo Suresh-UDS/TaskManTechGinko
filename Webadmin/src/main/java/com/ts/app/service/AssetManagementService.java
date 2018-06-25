@@ -46,10 +46,12 @@ import com.ts.app.domain.Setting;
 import com.ts.app.domain.Site;
 import com.ts.app.domain.User;
 import com.ts.app.domain.Vendor;
+import com.ts.app.domain.util.StringUtil;
 import com.ts.app.repository.AssetAMCRepository;
 import com.ts.app.repository.AssetDocumentRepository;
 import com.ts.app.repository.AssetGroupRepository;
 import com.ts.app.repository.AssetParamReadingRepository;
+import com.ts.app.repository.AssetParamRuleRepository;
 import com.ts.app.repository.AssetParameterConfigRepository;
 import com.ts.app.repository.AssetPpmScheduleRepository;
 import com.ts.app.repository.AssetReadingRuleRepository;
@@ -174,7 +176,7 @@ public class AssetManagementService extends AbstractService {
 	private AssetGroupRepository assetGroupRepository;
 
 	@Inject
-	private ProjectRepository projectRepositoy;
+	private ProjectRepository projectRepository;
 
 	@Inject
 	private ManufacturerRepository manufacturerRepository;
@@ -211,6 +213,9 @@ public class AssetManagementService extends AbstractService {
 	
 	@Inject
 	private SettingsRepository settingRepository;
+	
+	@Inject
+	private AssetParamRuleRepository assetParamRuleRepository;
 	
 	
 	public static final String EMAIL_NOTIFICATION_READING = "email.notification.reading";
@@ -414,7 +419,7 @@ public class AssetManagementService extends AbstractService {
 		asset.setPurchasePrice(assetDTO.getPurchasePrice());
 		asset.setCurrentPrice(assetDTO.getCurrentPrice());
 		asset.setEstimatedDisposePrice(assetDTO.getEstimatedDisposePrice());
-		asset.setCode(assetDTO.getCode());
+//		asset.setCode(assetDTO.getCode());
 		if (!StringUtils.isEmpty(assetDTO.getEndTime())) {
 			asset.setEndTime(DateUtil.convertToSQLDate(assetDTO.getEndTime()));
 		}
@@ -441,14 +446,16 @@ public class AssetManagementService extends AbstractService {
 	
 	public String generateAssetQRCode(long assetId, String assetCode) {
 		Asset asset = assetRepository.findOne(assetId);
-		asset.setCode(assetCode);
+		long siteId = asset.getSite().getId();
+		String code = String.valueOf(siteId)+"_"+assetCode;
+		asset.setCode(code);
 		assetRepository.save(asset);
 		byte[] qrCodeImage = null;
 		String qrCodeBase64 = null;
 		if (asset != null) {
-			String code = String.valueOf(asset.getCode());
-				code = asset.getSite().getId()+"_"+code;
-			qrCodeImage = QRCodeUtil.generateQRCode(code);
+			String codeName = String.valueOf(asset.getCode());
+				codeName = asset.getSite().getId()+"_"+codeName;
+			qrCodeImage = QRCodeUtil.generateQRCode(codeName);
 			String qrCodePath = env.getProperty("qrcode.file.path");
 			String imageFileName = null;
 			if (org.apache.commons.lang3.StringUtils.isNotEmpty(qrCodePath)) {
@@ -1016,7 +1023,7 @@ public class AssetManagementService extends AbstractService {
 	}
 
 	private Project getProject(long projectId) {
-		Project project = projectRepositoy.findOne(projectId);
+		Project project = projectRepository.findOne(projectId);
 		if (project == null)
 			throw new TimesheetException("Project not found : " + projectId);
 		return project;
@@ -1059,6 +1066,17 @@ public class AssetManagementService extends AbstractService {
 		assetParamConfig.setAsset(asset);
 		assetParamConfig = assetParamConfigRepository.save(assetParamConfig);
 		assetParamConfigDTO = mapperUtil.toModel(assetParamConfig, AssetParameterConfigDTO.class);
+		if(assetParamConfigDTO.getId() > 0 && assetParamConfigDTO.getRule() != null) { 
+			AssetParameterReadingRule ruleEntity = new AssetParameterReadingRule();
+			ruleEntity.setAlertRequired(assetParamConfigDTO.isAlertRequired());
+			ruleEntity.setRule(assetParamConfigDTO.getRule());
+			ruleEntity.setValidationRequired(assetParamConfigDTO.isValidationRequired());
+			ruleEntity.setAsset(asset);
+			ruleEntity.setActive(AssetParameterReadingRule.ACTIVE_YES);
+			AssetParameterConfig assetParameterConfig = assetParamConfigRepository.findOne(assetParamConfigDTO.getId());
+			ruleEntity.setAssetParameterConfig(assetParameterConfig);
+			assetParamRuleRepository.save(ruleEntity);
+		}
 		return assetParamConfigDTO;
 	}
 

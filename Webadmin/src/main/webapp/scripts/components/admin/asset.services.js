@@ -82,8 +82,8 @@ angular.module('timeSheetApp')
                 });
             },
 
-            findByAssetPPM : function(id) { 
-                return $http.get('api/assets/'+id+'/ppmschedulelist').then(function(response) { 
+            findByAssetPPM : function(id) {
+                return $http.get('api/assets/'+id+'/ppmschedulelist').then(function(response) {
                     return response.data;
                 });
             },
@@ -93,20 +93,20 @@ angular.module('timeSheetApp')
                     return response.data;
                 });
             },
-             createAssetType : function() { 
-                return $http.post('api/assets/type').then(function (response) { 
+             createAssetType : function() {
+                return $http.post('api/assets/type').then(function (response) {
                     return response.data;
                 });
-                
-            },
-            
 
-            
-            loadAssetType : function() { 
-            	return $http.get('api/assets/type').then(function (response) { 
+            },
+
+
+
+            loadAssetType : function() {
+            	return $http.get('api/assets/type').then(function (response) {
             		return response.data;
             	});
-            	
+
             },
 
             createAssetGroup :function(assetGroup,callback){
@@ -121,29 +121,29 @@ angular.module('timeSheetApp')
                     })
 
             },
-            
 
-            
-            loadAssetGroup : function() { 
-                return $http.get('api/assetgroup').then(function (response) { 
+
+
+            loadAssetGroup : function() {
+                return $http.get('api/assetgroup').then(function (response) {
                     return response.data;
                 });
-                
-            },
-            
 
-            findByAssetConfig : function(data) { 
-            	return $http.post('api/assets/config', data).then(function (response) { 
+            },
+
+
+            findByAssetConfig : function(data) {
+            	return $http.post('api/assets/config', data).then(function (response) {
             		return response.data;
             	});
             },
-            
-            deleteDoc : function(id) { 
-            	return $http.delete('/assets/'+id+'/document/image').then(function(reaponse){ 
+
+            deleteDoc : function(id) {
+            	return $http.delete('/assets/'+id+'/document/image').then(function(reaponse){
             		return response.data;
             	});
             },
-            
+
             createAssetParamConfig : function(assetParam, callback) {
 
                 console.log("asset requsest -- ",assetParam);
@@ -157,16 +157,16 @@ angular.module('timeSheetApp')
                         return cb(err);
                     });
             },
-            
-            uploadAssetFile : function(asset) { 
+
+            uploadAssetFile : function(asset) {
             	var file = asset.uploadFile;
             	var fileFormData = new FormData();
-            	
+
         	 	fileFormData.append('title', asset.title);
              	fileFormData.append('assetId', asset.assetId);
              	fileFormData.append('uploadFile', file);
              	fileFormData.append('type', asset.type);
-               
+
             	return $http.post('api/assets/uploadFile', fileFormData, {
                     transformRequest: angular.identity,
                     headers: {'Content-Type': undefined}
@@ -174,34 +174,34 @@ angular.module('timeSheetApp')
             			return response.data;
                 });
             },
-            
-            getAllUploadedFiles : function(obj) { 
-            	return $http.get('api/assets/getAllFile/'+obj.type+'/'+obj.assetId).then(function(response){ 
+
+            getAllUploadedFiles : function(obj) {
+            	return $http.get('api/assets/getAllFile/'+obj.type+'/'+obj.assetId).then(function(response){
             		return response.data;
             	});
             },
-             createQr : function(qr) { 
-                return $http.get('api/asset/'+qr.id+'/qrcode/'+qr.code).then(function(response){ 
+             createQr : function(qr) {
+                return $http.get('api/asset/'+qr.id+'/qrcode/'+qr.code).then(function(response){
                     return response.data;
 
                 });
             },
-            genQrCode : function(qr) { 
-                
-                return $http.get('api/asset/qrcode/'+qr.id).then(function(response){ 
+            genQrCode : function(qr) {
+
+                return $http.get('api/asset/qrcode/'+qr.id).then(function(response){
                     return response.data;
 
                 });
             },
-            uploadAssetPhoto : function(asset) { 
+            uploadAssetPhoto : function(asset) {
             	var file = asset.uploadFile;
             	var fileFormData = new FormData();
-            	
+
         	 	fileFormData.append('title', asset.title);
              	fileFormData.append('assetId', asset.assetId);
              	fileFormData.append('uploadFile', file);
              	fileFormData.append('type', asset.type);
-               
+
             	return $http.post('api/assets/uploadAssetPhoto', fileFormData, {
                     transformRequest: angular.identity,
                     headers: {'Content-Type': undefined}
@@ -209,63 +209,68 @@ angular.module('timeSheetApp')
             			return response.data;
                 });
             },
-            
-            getAllUploadedPhotos : function(obj) { 
-            	return $http.get('api/assets/getAllAssetPhoto/'+obj.type+'/'+obj.assetId).then(function(response){ 
+
+            getAllUploadedPhotos : function(obj) {
+            	return $http.get('api/assets/getAllAssetPhoto/'+obj.type+'/'+obj.assetId).then(function(response){
             		return response.data;
             	});
             },
-            
-            readFile : function(document) { 
+            getPPMScheduleCalendar : function(assetId,searchCriteria) {
+                return $http.get('api/assets/'+assetId+'/ppmschedule/calendar').then(function(response){
+                    return response.data;
+                });
+            },
+
+            readFile : function(document) {
             	return $http.get('api/assets/viewFile/'+document.id+'/'+document.fileName, {responseType: 'arraybuffer'}).then(function(response){
             		return response.data;
             	});
 
             },
-            
-            saveAmcSchedule : function(schedule) { 
+
+            saveAmcSchedule : function(schedule) {
             	return $http.post('api/assets/amcschedule', schedule).then(function(response){
             		return response.data;
             	});
             },
-            
-            getAllPrefix : function() { 
+
+            getAllPrefix : function() {
             	return $http.get('api/assets/amc/frequencyPrefix').then(function(response){
             		return response.data;
             	});
             },
-            
+
             getAllFrequencies : function() {
             	return $http.get('api/assets/amc/frequency').then(function(response){
             		return response.data;
             	});
             },
-            
-            findByAssetAMC : function(id) { 
-            	return $http.get('api//assets/'+id+'/amcschedule').then(function(response) { 
+
+            findByAssetAMC : function(id) {
+            	return $http.get('api//assets/'+id+'/amcschedule').then(function(response) {
             		return response.data;
             	});
             },
-            
-            findByAssetReadings : function(id) { 
-            	return $http.get('api/assets/'+id+'/viewAssetReadings').then(function(response) { 
+
+            findByAssetReadings : function(id) {
+            	return $http.get('api/assets/'+id+'/viewAssetReadings').then(function(response) {
             		return response.data;
             	});
             },
-            
-            findByReadingId : function(id) { 
-	            	return $http.get('api/assets/'+id+'/viewReadings').then(function(response) { 
+
+            findByReadingId : function(id) {
+	            	return $http.get('api/assets/'+id+'/viewReadings').then(function(response) {
 	            		return response.data;
 	            	});
             },
-            
+
             importAssetFile: function(file) {
 	        		var fileFormData = new FormData();
 	            fileFormData.append('assetFile', file);
 	            	return $http.post('api/assets/import', fileFormData, {
 	                    transformRequest: angular.identity,
 	                    headers: {'Content-Type': undefined}
-	
+
 	                }).then(function (response) {
 	            			return response.data;
 	                });
@@ -282,11 +287,11 @@ angular.module('timeSheetApp')
 	            	return $http.post('api/assets/ppm/import', fileFormData, {
 	                    transformRequest: angular.identity,
 	                    headers: {'Content-Type': undefined}
-	
+
 	                }).then(function (response) {
 	            			return response.data;
 	                });
-	
+
 	        },
 	        importAssetPPMStatus: function(fileName) {
 	            	return $http.get('api/assets/ppm/import/'+fileName+"/status").then(function (response) {
@@ -299,11 +304,11 @@ angular.module('timeSheetApp')
 	            	return $http.post('api/assets/amc/import', fileFormData, {
 	                    transformRequest: angular.identity,
 	                    headers: {'Content-Type': undefined}
-	
+
 	                }).then(function (response) {
 	            			return response.data;
 	                });
-	
+
 	        },
 	        importAssetAMCStatus: function(fileName) {
 	            	return $http.get('api/assets/amc/import/'+fileName+"/status").then(function (response) {
@@ -317,12 +322,12 @@ angular.module('timeSheetApp')
 	        },
 
 	        getAllRules : function() {
-	        	return $http.get('api/assets/readingRules').then(function (response) { 
+	        	return $http.get('api/assets/readingRules').then(function (response) {
 	        		return response.data;
 	        	});
 	        },
 
-	        
+
 	        exportAllData: function(searchCriteria) {
 	            	return $http.post('api/assets/export', searchCriteria).then(function (response) {
 	            		return response.data;
@@ -333,12 +338,17 @@ angular.module('timeSheetApp')
 	            		return response.data;
 	            	});
 	        },
-	
+
 	        getExportFile: function(fileName) {
 	            	return $http.get('api/assets/export/'+fileName).then(function (response) {
 	            		return response.data;
 	            	});
 	        },
-	        
+	        deleteConfigById : function(id) {
+	        	return $http.delete('api/assets/removeConfig/'+id).then(function (response) {
+	        		return response.data;
+	        	});
+	        }
+
         };
     });

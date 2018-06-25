@@ -4,7 +4,7 @@ angular.module('timeSheetApp')
 		    .controller(
 				'ParameterConfigController',
 				function($scope, $rootScope, $state, $timeout, ParameterConfigComponent,ParameterComponent,
-                 ParameterUOMComponent, AssetTypeComponent,
+                 ParameterUOMComponent, AssetTypeComponent,AssetComponent,
 						$http, $stateParams,
 						$location,PaginationComponent) {
         $rootScope.loadingStop();
@@ -30,6 +30,10 @@ angular.module('timeSheetApp')
         $scope.selectedParameterUOM = {};
         
         $scope.consumptionMonitoringRequired = {value:false};
+        $scope.alertRequired = {value: true};
+        $scope.validationRequired = {value: true};
+        
+        $scope.selectedThreshold;
 
         console.log($stateParams)
                     var that =  $scope;
@@ -233,15 +237,23 @@ angular.module('timeSheetApp')
 	        	$scope.success =null;
 	        	if($scope.selectedAssetType){
 	        	    $scope.parameterConfig.assetType = $scope.selectedAssetType.name;
-	        }
+	        	}
 	        	if($scope.selectedParameter){
 	        	    $scope.parameterConfig.name = $scope.selectedParameter.name;
-	        }
+	        	}
 	        	if($scope.selectedParameterUOM){
 	        	    $scope.parameterConfig.uom = $scope.selectedParameterUOM.uom;
-	        }
+	        	}
+	        	if($scope.selectedThreshold){
+	        		$scope.parameterConfig.threshold = $scope.selectedThreshold;
+	        	}
+	        	if($scope.selectedRule){
+	        		$scope.parameterConfig.rule = $scope.selectedRule;
+	        	}
 
 	        	$scope.parameterConfig.consumptionMonitoringRequired  = $scope.consumptionMonitoringRequired.value;
+	        	$scope.parameterConfig.validationRequired = $scope.validationRequired.value;
+	        	$scope.parameterConfig.alertRequired = $scope.alertRequired.value;
 	        	console.log('parameterConfig details ='+ JSON.stringify($scope.parameterConfig));
 	        	//var post = $scope.isEdit ? ParameterConfigComponent.update : ParameterConfigComponent.create
                 //post($scope.parameterConfig).then(function () {
@@ -261,7 +273,7 @@ angular.module('timeSheetApp')
                         $scope.showNotifications('top','center','danger','Unable to create Parameter Configuration');
 	                    $scope.error = 'ERROR';
 	                }
-	            });;
+	            });
 
         }
 
@@ -285,7 +297,12 @@ angular.module('timeSheetApp')
         }
 
       
-
+        $scope.loadAllRules = function() {
+        	AssetComponent.getAllRules().then(function(data) {
+        		console.log(data);
+        		$scope.readingRules = data;
+        	});
+        }
         
 
         $scope.clearFilter = function() {

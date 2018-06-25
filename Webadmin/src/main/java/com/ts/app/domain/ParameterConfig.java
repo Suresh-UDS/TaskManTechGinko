@@ -21,7 +21,7 @@ public class ParameterConfig extends AbstractAuditingEntity implements Serializa
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+    private long id;
 
     @NotNull
     @Size(min = 1, max = 250)
@@ -39,14 +39,24 @@ public class ParameterConfig extends AbstractAuditingEntity implements Serializa
     private String uom;
     
     private boolean consumptionMonitoringRequired;
+    
+    private boolean validationRequired;
+    
+    private boolean alertRequired;
+    
+    private double threshold;
+    
+    @Size(min = 1, max = 250)
+    @Column(length = 250, nullable = true)
+    private String rule;
+    
+	public long getId() {
+		return id;
+	}
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
+	public void setId(long id) {
+		this.id = id;
+	}
 
 	public String getAssetType() {
 		return assetType;
@@ -78,6 +88,38 @@ public class ParameterConfig extends AbstractAuditingEntity implements Serializa
 
 	public void setConsumptionMonitoringRequired(boolean consumptionMonitoringRequired) {
 		this.consumptionMonitoringRequired = consumptionMonitoringRequired;
+	}
+
+	public boolean isValidationRequired() {
+		return validationRequired;
+	}
+
+	public void setValidationRequired(boolean validationRequired) {
+		this.validationRequired = validationRequired;
+	}
+
+	public boolean isAlertRequired() {
+		return alertRequired;
+	}
+
+	public void setAlertRequired(boolean alertRequired) {
+		this.alertRequired = alertRequired;
+	}
+
+	public double getThreshold() {
+		return threshold;
+	}
+
+	public void setThreshold(double threshold) {
+		this.threshold = threshold;
+	}
+
+	public String getRule() {
+		return rule;
+	}
+
+	public void setRule(String rule) {
+		this.rule = rule;
 	}
 
     

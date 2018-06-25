@@ -86,7 +86,13 @@ angular.module('timeSheetApp')
         $scope.manufacturer = {};
         $scope.vendor = {};
 
+        $scope.PPMScheduleCalendar = {};
+
         $scope.consumptionMonitoringRequired = false;
+        
+        $scope.validationRequired = false;
+        
+        $scope.alertRequired = false;
 
         $scope.selectedClientFile;
 
@@ -663,9 +669,24 @@ angular.module('timeSheetApp')
                 $scope.assetDetail= data;
                 $scope.assetConfig();
                 $scope.genQrCodes();
+                $scope.loadCalendar();
 
             });
         }
+
+        $scope.loadCalendar = function () {
+
+            AssetComponent.getPPMScheduleCalendar().then(function(data){
+
+                console.log("Asset Calendar details ==" + JSON.stringify(data));
+
+                $scope.PPMScheduleCalendar = data;
+            });
+
+
+        }
+
+        $scope.loadCalendar();
 
 
         $scope.assetConfig=function(){
@@ -1275,6 +1296,8 @@ angular.module('timeSheetApp')
         $scope.deleteAssetConfig = function(id) {
         	AssetComponent.deleteConfigById(id).then(function(data){
         		console.log(data);
+        		$scope.assetParameters = data;
+        		
         	});
         }
 
@@ -1316,7 +1339,22 @@ angular.module('timeSheetApp')
                 	if($scope.selectedParameterUOM){
                 	    $scope.parameterConfig.uom = $scope.selectedParameterUOM.uom;
                 	}
-                	$scope.parameterConfig.consumptionMonitoringRequired  = $scope.consumptionMonitoringRequired
+                	if($scope.selectedThreshold) { 
+                		$scope.parameterConfig.threshold = $scope.selectedThreshold;
+                	}
+                	if($scope.selectedMinValue) { 
+                		$scope.parameterConfig.min = $scope.selectedMinValue;
+                	}
+                	if($scope.selectedMaxValue) { 
+                		$scope.parameterConfig.max = $scope.selectedMaxValue;
+                	}
+                	if($scope.selectedRule){
+    	        		$scope.parameterConfig.rule = $scope.selectedRule;
+    	        	}
+                	$scope.parameterConfig.consumptionMonitoringRequired  = $scope.consumptionMonitoringRequired;
+                	$scope.parameterConfig.validationRequired  = $scope.validationRequired;
+                	$scope.parameterConfig.alertRequired  = $scope.alertRequired
+                	
                 	console.log('Edit parameterConfig details ='+ JSON.stringify($scope.parameterConfig));
 
                 }else if($scope.assetGen.id){
@@ -1335,7 +1373,21 @@ angular.module('timeSheetApp')
                     if($scope.selectedParameterUOM){
                         $scope.parameterConfig.uom = $scope.selectedParameterUOM.uom;
                     }
-                    $scope.parameterConfig.consumptionMonitoringRequired  = $scope.consumptionMonitoringRequired
+                    if($scope.selectedThreshold) { 
+                		$scope.parameterConfig.threshold = $scope.selectedThreshold;
+                	}
+                	if($scope.selectedMinValue) { 
+                		$scope.parameterConfig.min = $scope.selectedMinValue;
+                	}
+                	if($scope.selectedMaxValue) { 
+                		$scope.parameterConfig.max = $scope.selectedMaxValue;
+                	}
+                	if($scope.selectedRule){
+    	        		$scope.parameterConfig.rule = $scope.selectedRule;
+    	        	}
+                    $scope.parameterConfig.consumptionMonitoringRequired  = $scope.consumptionMonitoringRequired;
+                    $scope.parameterConfig.validationRequired  = $scope.validationRequired;
+                	$scope.parameterConfig.alertRequired  = $scope.alertRequired
                     console.log('Add parameterConfig details ='+ JSON.stringify($scope.parameterConfig));
                 }
 
@@ -1850,6 +1902,7 @@ angular.module('timeSheetApp')
         $scope.loadAllRules = function() {
         	AssetComponent.getAllRules().then(function(data) {
         		console.log(data);
+        		$scope.readingRules = data;
         	});
         }
 

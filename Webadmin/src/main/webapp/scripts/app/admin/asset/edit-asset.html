@@ -819,9 +819,9 @@
 
                                                             <tbody>
                                                             <tr ng-repeat="ppmList in ppmJobLists">
-                                                                <td>{{ppmList.schedule}}</td>
+                                                                <td>{{ppmList.description}}</td>
                                                                 <td>{{ppmList.plannedStartTime | date:'dd-MMM-yyyy'}}</td>
-                                                                <td>{{ppmList.id}}</td>
+                                                                <td><a class="job-txt" has-authority="ROLE_ADMIN" ui-sref="view-job({ id: ppmList.id })">{{ppmList.id}}</a></td>
                                                                 <td>{{ppmList.plannedStartTime | date:'dd-MMM-yyyy'}}</td>
                                                                 <td>{{ppmList.plannedEndTime | date:'dd-MMM-yyyy'}}</td>
                                                                 <td>{{ppmList.employeeName}}</td>
@@ -856,9 +856,9 @@
 
                                                             <tbody>
                                                             <tr ng-repeat="amcList in amcJobLists">
-                                                                <td>{{amcList.schedule}}</td>
+                                                                <td>{{amcList.description}}</td>
                                                                 <td>{{amcList.plannedStartTime | date:'dd-MMM-yyyy'}}</td>
-                                                                <td>{{amcList.id}}</td>
+                                                                <td><a class="job-txt" has-authority="ROLE_ADMIN" ui-sref="view-job({ id: amcList.id })">{{amcList.id}}</a></td>
                                                                 <td>{{amcList.plannedStartTime | date:'dd-MMM-yyyy'}}</td>
                                                                 <td>{{amcList.plannedEndTime | date:'dd-MMM-yyyy'}}</td>
                                                                 <td>{{amcList.employeeName}}</td>
@@ -1489,6 +1489,133 @@
                                                                         </div>
 
                                                                     </div>
+                                                                    
+                                                                     <div class="row">
+
+
+                                                                        <div class="col-md-6">
+
+                                                                            <div class="form-group selectcon is-empty SelectWithAddbtnCon">
+
+                                                                                <div class="" style="float:left;width:90%;" ng-init="loadAllRules()">
+                                                                                    <label class="control-label">Select Rule </label>
+                                                                                    <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
+                                                                                    <select class="form-control ng-pristine ng-valid ng-touched" ng-model="selectedRule" name="param" ng-options="rule for rule in readingRules" tabindex="0" aria-invalid="false" required>
+                                                                                    <option value="" class="" selected="selected">Select Rule ..</option>
+                                                                                    </select>
+                                                                                    <!-- <div ng-show="form6.$submitted || form6.param.$touched">
+                                                                                        <div ng-show="form6.param.$dirty || form6.param.$invalid">
+                                                                                            <p class="help-block" style="color:maroon"
+                                                                                               ng-show="form6.param.$error.required">
+                                                                                                Parameter is required.
+                                                                                            </p>
+
+                                                                                        </div>
+                                                                                    </div> -->
+                                                                                </div>
+                                                                                <!-- <div class="" style="float:left;">
+                                                                                    <a href="javascript:;" data-toggle="collapse" data-parent="#accordian" data-target="#addParamet" class="btn btn-round btn-fab btn-fab-mini btn-simple" aria-expanded="false" aria-controls="collapseExample">
+                                                                                        <i class="material-icons">add</i>
+                                                                                    </a>
+                                                                                    <a  has-permission="" class="btn btn-round btn-fab btn-fab-mini btn-simple"  onClick="$('#addParamet').modal()" data-target="#myModal"><i class="material-icons">add</i><div class="ripple-container" ></div></a>
+                                                                                </div> -->
+                                                                                <!-- <div class="clear"></div>
+                                                                                <div class="collapse" id="addParamet">
+                                                                                    <div class="">
+                                                                                        <input class="input-desc ng-pristine ng-untouched ng-valid" id="assetgroupName" ng-model="parameter.name" name="assetgroupName" type="text" value="" tabindex="0" aria-invalid="false">
+                                                                                        <a class="btn btn-success" ng-click="addParameter()" tabindex="0">Add</a>
+                                                                                    </div>
+                                                                                </div>
+                                                                                <span class="material-input"></span> -->
+                                                                            </div>
+
+                                                                        </div>
+
+                                                                        <div class="col-md-6">
+                                                                            <div class="form-group selectcon is-empty SelectWithAddbtnCon">
+
+                                                                                <div class="" style="float:left;width:90%;">
+                                                                                    <label class="control-label">Threshold</label>
+                                                                                    <input id='threshold'
+									                                                 ng-model="selectedThreshold"
+									                                                 class='form-control'
+									                                                 name='threshold'
+									                                                 type='text' value=""
+									                                                 ng-pattern="/^[A-Za-z0-9\s]*$/" autofocus
+									                                                  />
+                                                                                    <!-- <div ng-show="form6.$submitted || form6.paramUOM.$touched">
+                                                                                        <div ng-show="form6.paramUOM.$dirty || form6.paramUOM.$invalid">
+                                                                                            <p class="help-block" style="color:maroon"
+                                                                                               ng-show="form6.paramUOM.$error.required">
+                                                                                                Parameter UOM is required.
+                                                                                            </p>
+
+                                                                                        </div>
+                                                                                    </div> -->
+                                                                                </div>
+                                                                               <!--  <div class="" style="float:left;">
+                                                                                    <a href="javascript:;" data-toggle="collapse" data-parent="#accordian" data-target="#addUnits" class="btn btn-round btn-fab btn-fab-mini btn-simple" aria-expanded="false" aria-controls="collapseExample">
+                                                                                        <i class="material-icons">add</i>
+                                                                                    </a>
+                                                                                    <a  has-permission="" class="btn btn-round btn-fab btn-fab-mini btn-simple"  onClick="$('#addUnits').modal()" data-target="#myModal"><i class="material-icons">add</i><div class="ripple-container" ></div></a>
+                                                                                </div> -->
+                                                                                <!-- <div class="clear"></div>
+                                                                                <div class="collapse" id="addUnits">
+                                                                                    <div class="">
+                                                                                        <input class="input-desc ng-pristine ng-untouched ng-valid" id="assetgroupName" ng-model="parameterUOM.uom" name="assetgroupName" type="text" value="" tabindex="0" aria-invalid="false">
+                                                                                        <a class="btn btn-success" ng-click="addParameterUOM()" tabindex="0">Add</a>
+                                                                                    </div>
+                                                                                </div>
+                                                                                <span class="material-input"></span> -->
+                                                                            </div>
+                                                                        </div>
+
+                                                                    </div>
+                                                                    
+                                                                     <div class="row">
+                                                                        <div class="col-md-2">
+                                                                            <div class="form-group">
+                                                                                <label class="control-label">Min Value  </label>
+                                                                                <input id='min'
+									                                                 ng-model="selectedMinValue"
+									                                                 class='form-control'
+									                                                 name='threshold'
+									                                                 type='text' value=""
+									                                                 ng-pattern="/^[A-Za-z0-9\s]*$/" autofocus
+									                                                  />
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="col-md-2">
+                                                                             <div class="form-group">
+                                                                                <label class="control-label">Max Value </label>
+                                                                                <input id='max'
+									                                                 ng-model="selectedMaxValue"
+									                                                 class='form-control'
+									                                                 name='threshold'
+									                                                 type='text' value=""
+									                                                 ng-pattern="/^[A-Za-z0-9\s]*$/" autofocus
+									                                                  />
+                                                                            </div>
+                                                                        </div>
+                                                                        
+                                                                        <div class="col-md-2 col-md-offset-2">
+                                                                            <div class="checkbox" style="padding-top: 25px">
+                                                                                <label>
+                                                                                    <input type="checkbox" ng-model="alertRequired" name="terms"> Alert Required
+                                                                                </label>
+                                                                            </div>
+                                                                        </div>
+                                                                        
+                                                                        <div class="col-md-2">
+                                                                            <div class="checkbox" style="padding-top: 25px">
+                                                                                <label>
+                                                                                    <input type="checkbox" ng-model="validationRequired" name="terms"> Validation Required
+                                                                                </label>
+                                                                            </div>
+                                                                        </div>
+                                                                  
+
+                                                                    </div>
 
 
                                                                     <div class="row">
@@ -1500,6 +1627,8 @@
                                                                                 </label>
                                                                             </div>
                                                                         </div>
+                                                                        
+                                                                        
 
                                                                         <div class="col-md-4 txt-align-rgt">
                                                                             <button class="btn btn-success" ng-disabled="form6.$invalid" ng-click="saveAssetParamConfig()"
@@ -1530,7 +1659,11 @@
                                                                             <tr>
                                                                                 <th>Type</th>
                                                                                 <th>Units</th>
+                                                                                <th>Rule</th>
+                                                                                <th>Min Value</th>
+                                                                                <th>Max Value</th>
                                                                                 <th>Consumption</th>
+                                                                                
                                                                                 <th class="text-right" >Actions</th>
                                                                             </tr>
 
@@ -1541,6 +1674,9 @@
                                                                                 <tr ng-repeat="assetParam in assetParameters">
                                                                                     <td>{{assetParam.assetType}}</td>
                                                                                     <td>{{assetParam.uom}}</td>
+                                                                                    <td>{{assetParam.rule}}</td>
+                                                                                    <td>{{assetParam.min}}</td>
+                                                                                    <td>{{assetParam.max}}</td>
                                                                                     <td>
                                                                                         <div class="checkbox">
                                                                                             <label>
@@ -1548,6 +1684,20 @@
                                                                                             </label>
                                                                                         </div>
                                                                                     </td>
+                                                                                    <!-- <td>
+                                                                                         <div class="checkbox">
+                                                                                             <label>
+                                                                                                 <input type="checkbox" name="Consumption" ng-model="assetParam.alertRequired" disabled >
+                                                                                             </label>
+                                                                                         </div>
+                                                                                     </td>
+                                                                                     <td>
+                                                                                         <div class="checkbox">
+                                                                                             <label>
+                                                                                                 <input type="checkbox" name="Consumption" ng-model="assetParam.validationRequired" disabled >
+                                                                                             </label>
+                                                                                         </div>
+                                                                                     </td> -->
                                                                                     <td class="text-right">
                                                                                         <a  has-permission="" ui-sref="" class="btn btn-simple btn-danger" ng-click="deleteAssetConfig(assetParam.id)"><i class="material-icons">delete_forever</i><div class="ripple-container"></div></a>
                                                                                     </td>
