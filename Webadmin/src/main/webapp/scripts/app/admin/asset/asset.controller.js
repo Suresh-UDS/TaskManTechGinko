@@ -86,6 +86,8 @@ angular.module('timeSheetApp')
         $scope.manufacturer = {};
         $scope.vendor = {};
 
+        $scope.PPMScheduleCalendar = {};
+
         $scope.consumptionMonitoringRequired = false;
 
         $scope.selectedClientFile;
@@ -663,9 +665,24 @@ angular.module('timeSheetApp')
                 $scope.assetDetail= data;
                 $scope.assetConfig();
                 $scope.genQrCodes();
+                $scope.loadCalendar();
 
             });
         }
+
+        $scope.loadCalendar = function () {
+
+            AssetComponent.getPPMScheduleCalendar().then(function(data){
+
+                console.log("Asset Calendar details ==" + JSON.stringify(data));
+
+                $scope.PPMScheduleCalendar = data;
+            });
+
+
+        }
+
+        $scope.loadCalendar();
 
 
         $scope.assetConfig=function(){
