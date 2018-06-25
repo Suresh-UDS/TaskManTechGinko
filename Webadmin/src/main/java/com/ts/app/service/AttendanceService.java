@@ -104,7 +104,10 @@ public class AttendanceService extends AbstractService {
         }
         dbAttn.setLatitudeOut(attn.getLatitudeOut());
         dbAttn.setLongitudeOut(attn.getLongitudeOut());
-
+        dbAttn.setOffline(attnDto.isOffline());
+        if(dbAttn.isOffline()){
+//            dbAttn.setCheckOutTime(new java.sql.Timestamp(attnDto.getCheckOutTime()));
+        }
         findShiftTiming(false, attnDto, dbAttn);
 
         dbAttn = attendanceRepository.save(dbAttn);
@@ -247,6 +250,10 @@ public class AttendanceService extends AbstractService {
 			attn.setEmployee(emp);
 			attn.setLatitudeIn(attnDto.getLatitudeIn());
 			attn.setLongitudeIn(attnDto.getLongitudeIn());
+			attn.setOffline(attnDto.isOffline());
+			if(attn.isOffline()){
+//			    attn.setCheckInTime(attnDto.getCheckInTime());
+            }
 			log.debug("attendance employee details"+attn.getEmployee().getId());
 			Calendar now = Calendar.getInstance();
 			attn.setCheckInTime(new java.sql.Timestamp(now.getTimeInMillis()));
