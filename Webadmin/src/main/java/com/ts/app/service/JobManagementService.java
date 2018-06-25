@@ -982,9 +982,11 @@ public class JobManagementService extends AbstractService {
                 ticketDTO.setPendingAtClient(false);
                 ticketDTO.setPendingAtUDS(false);
             }else if(jobDTO.isPendingAtUDS()){
-                ticketDTO.setPendingAtUDS(jobDTO.isPendingAtUDS());
+                ticketDTO.setPendingAtUDS(true);
+                ticketDTO.setPendingAtClient(false);
             }else{
-                ticketDTO.setPendingAtClient(jobDTO.isPendingAtClient());
+                ticketDTO.setPendingAtClient(true);
+                ticketDTO.setPendingAtUDS(false);
             }
             ticketManagementService.updateTicketPendingStatus(ticketDTO);
         }
