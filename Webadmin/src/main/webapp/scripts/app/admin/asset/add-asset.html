@@ -1000,10 +1000,11 @@
                                                                                             <tr>
                                                                                                 <th>Type</th>
                                                                                                 <th>Units</th>
-                                                                                                <th>Rule</th>                                                                                              
+                                                                                                <th>Rule</th>  
+                                                                                                <th>Min Value</th>
+                                                                                                <th>Max Value</th>                                                                                            
                                                                                                 <th>Consumption</th>
-                                                                                                <th>Alert</th>
-                                                                                                <th>Validation</th>
+                                                                                                
                                                                                                 <th class="text-right" >Actions</th>
                                                                                             </tr>
 
@@ -1015,6 +1016,8 @@
                                                                                                     <td>{{assetParam.assetType}}</td>
                                                                                                     <td>{{assetParam.uom}}</td>
                                                                                                     <td>{{assetParam.rule}}</td>
+                                                                                                    <td>{{assetParam.min}}</td>
+                                                                                                    <td>{{assetParam.max}}</td>
                                                                                                     <td>
                                                                                                         <div class="checkbox">
                                                                                                             <label>
@@ -1022,7 +1025,7 @@
                                                                                                             </label>
                                                                                                         </div>
                                                                                                     </td>
-                                                                                                    <td>
+                                                                                                    <!-- <td>
                                                                                                         <div class="checkbox">
                                                                                                             <label>
                                                                                                                 <input type="checkbox" name="Consumption" ng-model="assetParam.alertRequired" disabled >
@@ -1035,7 +1038,7 @@
                                                                                                                 <input type="checkbox" name="Consumption" ng-model="assetParam.validationRequired" disabled >
                                                                                                             </label>
                                                                                                         </div>
-                                                                                                    </td>
+                                                                                                    </td> -->
                                                                                                     <td class="text-right">
                                                                                                         <a  has-permission="" ui-sref="" class="btn btn-simple btn-danger" ng-click="deleteAssetConfig(assetParam.id)"><i class="material-icons">delete_forever</i><div class="ripple-container"></div></a>
                                                                                                     </td>
