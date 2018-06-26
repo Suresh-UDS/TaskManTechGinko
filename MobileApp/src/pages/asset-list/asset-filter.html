@@ -83,25 +83,24 @@
 
 <ion-header>
     <ion-toolbar>
-        <ion-title text-center>Asset List</ion-title>
+        <ion-title text-center>Asset Filter</ion-title>
         <ion-buttons right="">
-            <button ion-button color="primary" icon-only (click)="dismiss()" class="padding-right10">
-                <i class="fa fa-times fnt-24"></i>
+            <button ion-button color="fnt-black" icon-only (click)="dismiss()" class="padding-right10">
+                <ion-icon ios="ios-close" md="md-close" class="fnt-24"></ion-icon>
             </button>
         </ion-buttons>
     </ion-toolbar>
 </ion-header>
 
 <ion-content class="width90 margin-auto filter-modal bg-white">
-
-    <div class="bg-orange">
-        <h5 text-center="" class="clr-white" no-margin="">Asset Filter</h5>
-    </div>
+    <!--<div class="bg-orange">-->
+        <!--<h5 text-center="" class="clr-white" no-margin="">Asset Filter</h5>-->
+    <!--</div>-->
     <div class="InitFeedbackCon">
         <div class="InputCon">
             <ion-list>
                 <ion-item>
-                    <ion-label text-capitalize="" class="client-label">Client :</ion-label>
+                    <ion-label text-capitalize class="client-label">Client :</ion-label>
                     <ion-select [selectOptions]="selectOptions" interface="popover" [(ngModel)]="selectedProject">
                         <ion-option *ngFor="let p of clientList;let i=index" [value]="p" (ionSelect)="selectSite(p)"> {{p.name}}</ion-option>
                     </ion-select>
@@ -129,22 +128,22 @@
 
                 <div padding="" class="height30">
                     <ion-list >
-                        <h3 class="clr-orange">Asset Type</h3>
+                        <p class="clr-orange">Asset Type</p>
                         <!--<ion-scroll scrollY="true" style="width: 100%; height: 100%;">-->
                             <ion-item *ngFor="let type of assetType;let i = index" class="check-style">
                                 <ion-label>{{ type.name }}</ion-label>
-                                <ion-checkbox [(ngModel)]=" type.name " (ionChange)="typeChange(i)" class="margin-right0"></ion-checkbox>
+                                <ion-checkbox [(ngModel)]="type.selected"  class="margin-right0" value="type.name" (ionChange)="typeChange(type)"></ion-checkbox>
                             </ion-item>
 
                     </ion-list>
                 </div>
 
-                <div padding="" margin-top="">
+                <div padding margin-top>
                     <ion-list >
-                        <h3 class="clr-orange">Asset Group</h3>
+                        <p class="clr-orange">Asset Group</p>
                         <ion-item *ngFor=" let group of assetGroup;let j = index " class="check-style">
                             <ion-label>{{ group.assetgroup }}</ion-label>
-                            <ion-checkbox [(ngModel)]=" group.assetgroup " (ionChange)="groupChange(j)" class="margin-right0"></ion-checkbox>
+                            <ion-checkbox [(ngModel)]="group.selected" class="margin-right0" value="group.assetgroup" (ionChange)=" groupChange(group)"></ion-checkbox>
                         </ion-item>
                     </ion-list>
                 </div>
@@ -155,7 +154,7 @@
 <ion-footer>
     <ion-toolbar class="align-center">
         <button class="btn btn-warning center" (click)="filterAssets()">
-            Search
+            Apply
         </button>
     </ion-toolbar>
 </ion-footer>

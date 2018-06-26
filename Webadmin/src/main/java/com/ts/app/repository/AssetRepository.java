@@ -83,6 +83,56 @@ public interface AssetRepository extends JpaRepository<Asset, Long>,JpaSpecifica
     
     @Query("SELECT a from Asset a where a.title like '%' || :title || '%' and a.assetGroup = :assetGroup and a.active = 'Y'  order by a.title")
     Page<Asset> findAssetByTitleAndGroup(@Param("title") String title, @Param("assetGroup") String assetGroup, Pageable pageRequest);
+        
+    @Query("SELECT a from Asset a where a.code like '%' || :code || '%' and a.assetType = :assetType and a.active = 'Y'  order by a.title")
+    Page<Asset> findAssetByCodeAndType(@Param("code") String code, @Param("assetType") String assetType, Pageable pageRequest);
+    
+    @Query("SELECT a from Asset a where a.code like '%' || :code || '%' and a.site.id = :siteId and a.active = 'Y'  order by a.title")
+    Page<Asset> findAssetByCodeAndSiteId(@Param("code") String code, @Param("siteId") long siteId, Pageable pageRequest);
+    
+    @Query("SELECT a from Asset a where a.code like '%' || :code || '%' and a.site.project.id = :projectId and a.active = 'Y'  order by a.title")
+    Page<Asset> findAssetByCodeAndProjectId(@Param("code") String code, @Param("projectId") long projectId, Pageable pageRequest);
+    
+    @Query("SELECT a from Asset a where a.code like '%' || :code || '%' and a.acquiredDate = :acquiredDate and a.active = 'Y'  order by a.title")
+    Page<Asset> findAssetByCodeAndAcquiredDate(@Param("code") String code, @Param("acquiredDate") Date acquiredDate, Pageable pageRequest);
+    
+    @Query("SELECT a from Asset a where a.code like '%' || :code || '%' and a.assetGroup = :assetGroup and a.active = 'Y'  order by a.title")
+    Page<Asset> findAssetByCodeAndGroup(@Param("code") String code, @Param("assetGroup") String assetGroup, Pageable pageRequest);
+    
+    
+    @Query("SELECT a from Asset a where a.assetGroup = :assetGroup and a.assetType = :assetType and a.active = 'Y'  order by a.title")
+    Page<Asset> findAssetByGroupAndType(@Param("assetGroup") String assetGroup, @Param("assetType") String assetType, Pageable pageRequest);
+    
+    @Query("SELECT a from Asset a where a.assetGroup = :assetGroup and a.site.id = :siteId and a.active = 'Y'  order by a.title")
+    Page<Asset> findAssetByGroupAndSiteId(@Param("assetGroup") String assetGroup, @Param("siteId") long siteId, Pageable pageRequest);
+    
+    @Query("SELECT a from Asset a where a.assetGroup = :assetGroup and a.site.project.id = :projectId and a.active = 'Y'  order by a.title")
+    Page<Asset> findAssetByGroupAndProjectId(@Param("assetGroup") String assetGroup, @Param("projectId") long projectId, Pageable pageRequest);
+    
+    @Query("SELECT a from Asset a where a.assetGroup = :assetGroup and a.acquiredDate = :acquiredDate and a.active = 'Y'  order by a.title")
+    Page<Asset> findAssetByGroupAndAcquiredDate(@Param("assetGroup") String assetGroup, @Param("acquiredDate") Date acquiredDate, Pageable pageRequest);    
+   
+    
+    @Query("SELECT a from Asset a where a.assetType = :assetType and a.site.id = :siteId and a.active = 'Y'  order by a.title")
+    Page<Asset> findAssetByTypeAndSiteId(@Param("assetType") String assetType, @Param("siteId") long siteId, Pageable pageRequest);
+    
+    @Query("SELECT a from Asset a where a.assetType = :assetType and a.site.project.id = :projectId and a.active = 'Y'  order by a.title")
+    Page<Asset> findAssetByTypeAndProjectId(@Param("assetType") String assetType, @Param("projectId") long projectId, Pageable pageRequest);
+    
+    @Query("SELECT a from Asset a where a.assetType = :assetType and a.acquiredDate = :acquiredDate and a.active = 'Y'  order by a.title")
+    Page<Asset> findAssetByTypeAndAcquiredDate(@Param("assetType") String assetType, @Param("acquiredDate") Date acquiredDate, Pageable pageRequest);    
+
+        
+    @Query("SELECT a from Asset a where a.site.id = :siteId and a.site.project.id = :projectId and a.active = 'Y'  order by a.title")
+    Page<Asset> findAssetBySiteAndProjectId(@Param("siteId") long siteId, @Param("projectId") long projectId, Pageable pageRequest);
+    
+    @Query("SELECT a from Asset a where a.site.id = :siteId and a.acquiredDate = :acquiredDate and a.active = 'Y'  order by a.title")
+    Page<Asset> findAssetBySiteAndAcquiredDate(@Param("siteId") long siteId, @Param("acquiredDate") Date acquiredDate, Pageable pageRequest);    
+
+    
+    @Query("SELECT a from Asset a where a.site.project.id = :projectId and a.acquiredDate = :acquiredDate and a.active = 'Y'  order by a.title")
+    Page<Asset> findAssetByProjectAndAcquiredDate(@Param("projectId") long projectId, @Param("acquiredDate") Date acquiredDate, Pageable pageRequest);
+    
     
     @Query("SELECT a from Asset a where a.site.id in (:siteIds) and a.active = 'Y'  order by a.title")
     Page<Asset> findAll(@Param("siteIds") List<Long> siteIds,  Pageable pageRequest);
