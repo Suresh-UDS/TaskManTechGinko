@@ -14,7 +14,7 @@ import com.ts.app.domain.AssetPPMSchedule;
 
 public interface AssetPpmScheduleRepository extends JpaRepository<AssetPPMSchedule, Long>,JpaSpecificationExecutor<AssetPPMSchedule> {
 
-	@Query("SELECT a from AssetPPMSchedule a where a.asset.id = :assetId and a.maintenanceType = :type order by a.createdDate")
+	@Query("SELECT a from AssetPPMSchedule a where a.asset.id = :assetId and a.maintenanceType = :type order by a.createdDate DESC")
     List<AssetPPMSchedule> findAssetPPMScheduleByAssetId(@Param("assetId") long assetId, @Param("type") String type);
 	
 	 @Query("SELECT a from AssetPPMSchedule a where a.asset.id = :assetId and a.active = 'Y'  order by a.title")
