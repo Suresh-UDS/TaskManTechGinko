@@ -494,7 +494,7 @@ angular.module('timeSheetApp')
          $scope.loadAssets = function(){
             $scope.clearFilter();
             $scope.search();
-            $scope.genQrCodes();
+            //$scope.genQrCodes();
 
         }
 

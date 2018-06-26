@@ -294,17 +294,6 @@ public class AssetResource {
 		return new ResponseEntity<>(response, HttpStatus.CREATED);
 	}
 
-	@RequestMapping(path = "/assets/{assetId}/ppmschedule", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-	@Timed
-	public List<AssetPpmScheduleDTO> getAssetPPMSchedule(@PathVariable("assetId") Long assetId) {
-		log.debug(">>> Asset Resource getAssetPPMSchedule request <<<");
-		log.debug("AssetId <<< " + assetId);
-
-		List<AssetPpmScheduleDTO> response = assetService.getAssetPPMSchedule(assetId);
-		log.debug("Get Asset PPM Schedule for asset id size - " + response.size());
-		return response;
-	}
-
 	@RequestMapping(path = "/assets/{assetId}/ppmschedule/calendar", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
 	@Timed
 	public List<AssetPPMScheduleEventDTO> getAssetPPMScheduleCalendar(@RequestBody SearchCriteria searchCriteria) {
