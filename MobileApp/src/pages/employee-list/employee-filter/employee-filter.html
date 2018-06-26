@@ -27,7 +27,7 @@
       <ion-list>
         <ion-item>
           <ion-label>Client</ion-label>
-          <ion-select [selectOptions]="selectOptions" interface="popover" [(ngModel)]="selectedProject">
+          <ion-select  interface="popover" [(ngModel)]="selectedProject">
             <ion-option *ngFor="let p of clientList;let i=index" [value]="p" (ionSelect)="selectSite(p)"> {{p.name}}</ion-option>
           </ion-select>
         </ion-item>
@@ -72,7 +72,7 @@
           </ion-item>
         </div>
 
-        <ion-row no-margin class="" no-padding="" >
+        <ion-row no-margin class no-padding>
           <ion-col col-5 class="ver-center  margin-right15" (click)="selectFromDate()">
             <ion-col col-2  class="ver-center padding-bottom1 primary-border-bottom">
               <ion-icon ios="ios-calendar" md="md-calendar"  class="fnt-24 clr-orange"></ion-icon>

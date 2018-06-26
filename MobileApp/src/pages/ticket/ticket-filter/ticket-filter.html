@@ -29,7 +29,7 @@
             <ion-list>
                 <ion-item>
                     <ion-label>Client</ion-label>
-                    <ion-select [selectOptions]="selectOptions" interface="popover" [(ngModel)]="selectedProject">
+                    <ion-select  interface="popover" [(ngModel)]="selectedProject">
                         <ion-option *ngFor="let p of clientList;let i=index" [value]="p" (ionSelect)="selectSite(p)"> {{p.name}}</ion-option>
                     </ion-select>
                 </ion-item>

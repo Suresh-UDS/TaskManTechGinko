@@ -5,4 +5,25 @@ page-calender-page {
     padding-right:0px !important;
     padding-left:0px !important;
   }
+  a.fc-more {
+    /* margin: 1px 3px; */
+    margin:0px !important;
+    font-size: .85em;
+    cursor: pointer;
+    text-decoration: none;
+  }
+  a {
+    /* color: orange; */
+    color: white !important;
+    background-color:#64b364 !important;
+  }
+  .fc button, .fc button:hover, .fc button:focus, .fc button:active, .fc button.active,
+  .fc button:active:focus, .fc button:active:hover, .fc button.active:focus, .fc button.active:hover, .open>
+  .fc button.dropdown-toggle, .open>.fc button.dropdown-toggle:focus, .open>.fc button.dropdown-toggle:hover,
+  .fc button.btn-primary, .fc button.btn-primary:hover, .fc button.btn-primary:focus, .fc button.btn-primary:active,
+  .fc button.btn-primary.active, .fc button.btn-primary:active:focus, .fc button.btn-primary:active:hover,
+  .fc button.btn-primary.active:focus, .fc button.btn-primary.active:hover, .open>.fc button.btn-primary.dropdown-toggle, .open>
+  .fc button.btn-primary.dropdown-toggle:focus, .open>.fc button.btn-primary.dropdown-toggle:hover{
+    background-color:orange !important;
+  }
 }

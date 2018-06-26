@@ -72,7 +72,7 @@ ppmSchedule:any;
         const d = today.getDate();
 
         $calendar.fullCalendar({
-            viewRender: function(view: any, element: any) {
+            viewRender: function (view: any, element: any) {
                 // We make sure that we activate the perfect scrollbar when the view isn't on Month
                 if (view.name !== 'month') {
                     const $fc_scroller = $('.fc-scroller');
@@ -80,9 +80,9 @@ ppmSchedule:any;
                 }
             },
             header: {
-                left:'title',
-                center:'today',
-                right:'prev,next',
+                left: 'title',
+                center: 'today',
+                right: 'prev,next',
             },
             defaultDate: today,
             selectable: true,
@@ -100,7 +100,7 @@ ppmSchedule:any;
                 }
             },
 
-            select: function(start: any, end: any) {
+            select: function (start: any, end: any) {
                 // on select we show the Sweet Alert modal with an input
                 swal({
                     title: 'Create an Event',
@@ -111,7 +111,7 @@ ppmSchedule:any;
                     confirmButtonClass: 'btn btn-success',
                     cancelButtonClass: 'btn btn-danger',
                     buttonsStyling: false
-                }).then(function(result: any) {
+                }).then(function (result: any) {
 
                     let eventData;
                     const event_title = $('#input-field').val();
@@ -128,11 +128,12 @@ ppmSchedule:any;
                     $calendar.fullCalendar('unselect');
 
                 });
+
+
             },
             editable: true,
-            eventLimit:1, // allow "more" link when too many events
-            events:this.ppmSchedule,
-            className: 'event-rose',
+            eventLimit: 1, // allow "more" link when too many events
+            events: this.ppmSchedule,
 
 
             // color classes: [ event-blue | event-azure | event-green | event-orange | event-red ]

@@ -19,7 +19,7 @@
             <ion-col col-12>
                 <div class="form-group label-floating">
                     <label class="control-label" >Client</label>
-                    <ion-select [(ngModel)]="selectedProject" class="select-box padding-left0" placeholder="Choose Client" name="projectName" #site="ngModel" required>
+                    <ion-select [(ngModel)]="selectedProject" class="select-box padding-left0" placeholder="Choose Client" name="projectName" #site="ngModel" required interface="popover">
                         <ion-option *ngFor="let p of allProjects" [value]="p.name" (ionSelect)="getSites(p.id)">{{p.name}}</ion-option>
                     </ion-select>
                 </div>
@@ -29,7 +29,7 @@
             <ion-col col-12>
                 <div class="form-group label-floating">
                     <label class="control-label" >Site</label>
-                    <ion-select [(ngModel)]="selectedSite" class="select-box padding-left0" id="siteName" placeholder="Choose Site" name="siteName" #site="ngModel" required >
+                    <ion-select [(ngModel)]="selectedSite" class="select-box padding-left0" id="siteName" placeholder="Choose Site" name="siteName" #site="ngModel" required interface="popover">
                         <ion-option *ngFor="let site of sites" [value]="site.name" (ionSelect)="searchQuotations(site.id)">{{site.name}}</ion-option>
                     </ion-select>
                 </div>
