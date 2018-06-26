@@ -34,6 +34,7 @@ angular.module('timeSheetApp')
         $scope.validationRequired = {value: true};
         
         $scope.selectedThreshold;
+        $scope.btnDisabled = false;
 
         console.log($stateParams)
                     var that =  $scope;
@@ -233,6 +234,7 @@ angular.module('timeSheetApp')
 
 
         $scope.saveParameterConfig = function () {
+                $scope.btnDisabled = true;
 	        	$scope.error = null;
 	        	$scope.success =null;
 	        	if($scope.selectedAssetType){
@@ -267,12 +269,14 @@ angular.module('timeSheetApp')
                     $scope.selectedParameter ={};
                     $scope.selectedParameterUOM ={};
                     $scope.selectedRule ={};
+                    $scope.btnDisabled = false;
                     $scope.selectedThreshold =null;
                     $scope.validationRequired.value =false;
                     $scope.consumptionMonitoringRequired.value =false;
 
 	                //$location.path('/parameter-config');
 	            }).catch(function (response) {
+                    $scope.btnDisabled = false;
 	                $scope.success = null;
 	                console.log('Error - '+ response.data);
 	                if (response.status === 400 && response.data.message === 'error.duplicateRecordError') {
