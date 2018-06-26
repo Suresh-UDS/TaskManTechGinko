@@ -1650,6 +1650,25 @@ public class AssetManagementService extends AbstractService {
 		AssetReadingRule[] types = AssetReadingRule.values();
 		return types;
 	}
+
+	public void updateAssetConfig(AssetParameterConfigDTO assetParameterConfigDTO) {
+		AssetParameterConfig assetParamConfig = assetParamConfigRepository.findOne(assetParameterConfigDTO.getId());
+		mapToEntity(assetParamConfig, assetParameterConfigDTO);
+		assetParamConfigRepository.saveAndFlush(assetParamConfig);
+	}
+
+	private void mapToEntity(AssetParameterConfig assetParamConfig, AssetParameterConfigDTO assetParameterConfigDTO) {
+		assetParamConfig.setAlertRequired(assetParameterConfigDTO.isAlertRequired());
+		assetParamConfig.setThreshold(assetParameterConfigDTO.getThreshold());
+		assetParamConfig.setAssetType(assetParameterConfigDTO.getAssetType());
+		assetParamConfig.setConsumptionMonitoringRequired(assetParameterConfigDTO.isConsumptionMonitoringRequired());
+		assetParamConfig.setMax(assetParameterConfigDTO.getMax());
+		assetParamConfig.setMin(assetParameterConfigDTO.getMin());
+		assetParamConfig.setName(assetParameterConfigDTO.getName());
+		assetParamConfig.setRule(assetParameterConfigDTO.getRule());
+		assetParamConfig.setUom(assetParameterConfigDTO.getUom());
+		assetParamConfig.setValidationRequired(assetParameterConfigDTO.isValidationRequired());
+	}
 	
 
 }
