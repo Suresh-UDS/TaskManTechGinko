@@ -371,9 +371,9 @@
                                                                                            class='form-control'
                                                                                            name='assetSerial'
                                                                                            type='text' ng-maxlength='250'
-                                                                                            ng-pattern="/^[A-Za-z0-9\s]*$/"
                                                                                            autofocus
                                                                                             />
+                                                                                             <!-- ng-pattern="/^[A-Za-z0-9\s]*$/" -->
                                                                                    <div ng-show="form.$submitted || form.assetSerial.$touched">
                                                                                             <div ng-show="form.assetSerial.$dirty || form.assetSerial.$invalid">
                                                                                                 
@@ -381,10 +381,10 @@
                                                                                                    ng-show="form.assetSerial.$error.maxlength">
                                                                                                     Serial number cannot be longer than 250 characters.
                                                                                                 </p>
-                                                                                                <p class="help-block" style="color:maroon"
+                                                                                                <!-- <p class="help-block" style="color:maroon"
                                                                                                    ng-show="form.assetSerial.$error.pattern">
                                                                                                     Serial number can only contain letters, digits and space.
-                                                                                                </p>
+                                                                                                </p> -->
                                                                                             </div>
                                                                                         </div>
                                                                                 </div>
@@ -1763,7 +1763,7 @@
                                                                         <div class="col-md-12">
                                                                             <div class="form-group label-floating is-empty is-fileinput row">
                                                                                 <div class="col-md-6 pdng-top13">
-                                                                                    <input type="file" class="form-control ng-pristine ng-valid ng-touched" style="opacity:100;position:relative" file-model="" ng-model="selectedClientFile" name="clientFile" tabindex="0" aria-invalid="false" ng-maxlength="250" required>
+                                                                                    <input type="file" class="form-control ng-pristine ng-valid ng-touched" style="opacity:100;position:relative" file-model="" ng-model="selectedClientFile" name="clientFile" tabindex="0" aria-invalid="false" required>
                                                                                     <div ng-show="importClientForm.$submitted || importClientForm.clientFile.$touched">
                                                                                         <div
                                                                                             ng-show="importClientForm.clientFile.$dirty || importClientForm.clientFile.$invalid">
@@ -1771,10 +1771,10 @@
                                                                                                ng-show="importClientForm.clientFile.$error.required">
                                                                                                 File title  is required.
                                                                                             </p>
-                                                                                            <p class="help-block" style="color:maroon"
+                                                                                            <!-- <p class="help-block" style="color:maroon"
                                                                                                    ng-show="importClientForm.clientFile.$error.maxlength">
                                                                                              File title cannot be longer than 250 characters.
-                                                                                            </p>
+                                                                                            </p> -->
 
                                                                                         </div>
                                                                                         
