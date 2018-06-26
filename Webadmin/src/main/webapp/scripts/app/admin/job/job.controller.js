@@ -129,7 +129,7 @@ angular.module('timeSheetApp')
 	    		var projectId = $scope.selectedProject ? $scope.selectedProject.id : 0;
 	    		LocationComponent.findBlocks(projectId,$scope.selectedSite.id).then(function (data) {
 	    			$scope.selectedBlock = null;
-	            $scope.selectedBlock = data;
+	            $scope.blocks = data;
 	        });
 	    };
 
@@ -138,7 +138,7 @@ angular.module('timeSheetApp')
         		var projectId = $scope.selectedProject ? $scope.selectedProject.id : 0;
 	    		LocationComponent.findFloors(projectId,$scope.selectedSite.id,$scope.selectedBlock).then(function (data) {
 	    			$scope.selectedFloor = null;
-	            $scope.selectedFloor = data;
+	            $scope.floors = data;
 	        });
 	    };
 
@@ -147,7 +147,7 @@ angular.module('timeSheetApp')
 	    		var projectId = $scope.selectedProject ? $scope.selectedProject.id : 0;
 	    		LocationComponent.findZones(projectId,$scope.selectedSite.id,$scope.selectedBlock, $scope.selectedFloor).then(function (data) {
 	    			$scope.selectedZone = null;
-	            $scope.selectedZone = data;
+	            $scope.zones = data;
 	        });
 	    };
 
