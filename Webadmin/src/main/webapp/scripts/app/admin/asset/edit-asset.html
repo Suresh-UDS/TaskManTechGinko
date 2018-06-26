@@ -371,9 +371,9 @@
                                                                                            class='form-control'
                                                                                            name='assetSerial'
                                                                                            type='text' ng-maxlength='250'
-                                                                                            ng-pattern="/^[A-Za-z0-9\s]*$/"
                                                                                            autofocus
                                                                                             />
+                                                                                             <!-- ng-pattern="/^[A-Za-z0-9\s]*$/" -->
                                                                                    <div ng-show="form.$submitted || form.assetSerial.$touched">
                                                                                             <div ng-show="form.assetSerial.$dirty || form.assetSerial.$invalid">
                                                                                                 
@@ -381,10 +381,10 @@
                                                                                                    ng-show="form.assetSerial.$error.maxlength">
                                                                                                     Serial number cannot be longer than 250 characters.
                                                                                                 </p>
-                                                                                                <p class="help-block" style="color:maroon"
+                                                                                                <!-- <p class="help-block" style="color:maroon"
                                                                                                    ng-show="form.assetSerial.$error.pattern">
                                                                                                     Serial number can only contain letters, digits and space.
-                                                                                                </p>
+                                                                                                </p> -->
                                                                                             </div>
                                                                                         </div>
                                                                                 </div>
