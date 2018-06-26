@@ -559,7 +559,8 @@ public class AssetManagementService extends AbstractService {
 	 */
 	public List<AssetAMCScheduleDTO> getAssetAMCSchedules(long assetId) {
 		List<AssetAMCScheduleDTO> assetAMCScheduleDTOs = null;
-		List<AssetAMCSchedule> assetAMCSchedules = assetAMCRepository.findAssetAMCScheduleByAssetId(assetId);
+		String type = MaintenanceType.valueOf("AMC").getValue();
+		List<AssetAMCSchedule> assetAMCSchedules = assetAMCRepository.findAssetAMCScheduleByAssetId(assetId, type);
 		if (CollectionUtils.isNotEmpty(assetAMCSchedules)) {
 			assetAMCScheduleDTOs = mapperUtil.toModelList(assetAMCSchedules, AssetAMCScheduleDTO.class);
 		}
@@ -574,7 +575,8 @@ public class AssetManagementService extends AbstractService {
 	 */
 	public List<AssetPpmScheduleDTO> getAssetPPMSchedules(long assetId) {
 		List<AssetPpmScheduleDTO> assetPpmScheduleDTOs = null;
-		List<AssetPPMSchedule> assetPpmSchedules = assetPpmScheduleRepository.findAssetPPMScheduleByAssetId(assetId);
+		String type = MaintenanceType.valueOf("PPM").getValue();
+		List<AssetPPMSchedule> assetPpmSchedules = assetPpmScheduleRepository.findAssetPPMScheduleByAssetId(assetId, type);
 		if (CollectionUtils.isNotEmpty(assetPpmSchedules)) {
 			assetPpmScheduleDTOs = mapperUtil.toModelList(assetPpmSchedules, AssetPpmScheduleDTO.class);
 		}
@@ -632,7 +634,8 @@ public class AssetManagementService extends AbstractService {
 	 */
 	public List<AssetPPMScheduleEventDTO> getAssetPPMScheduleCalendar(long assetId, Date startDate, Date endDate) {
 		List<AssetPPMScheduleEventDTO> assetPPMScheduleEventDTOs = null;
-		List<AssetPPMSchedule> assetPpmSchedules = assetPpmScheduleRepository.findAssetPPMScheduleByAssetId(assetId);
+		String type = MaintenanceType.valueOf("PPM").getValue();
+		List<AssetPPMSchedule> assetPpmSchedules = assetPpmScheduleRepository.findAssetPPMScheduleByAssetId(assetId, type);
 		if (CollectionUtils.isNotEmpty(assetPpmSchedules)) {
 			assetPPMScheduleEventDTOs = new ArrayList<AssetPPMScheduleEventDTO>();
 			Calendar currCal = Calendar.getInstance();
@@ -1168,21 +1171,6 @@ public class AssetManagementService extends AbstractService {
 		}
 		return mapperUtil.toModel(assetPPMSchedule, AssetPpmScheduleDTO.class);
 
-	}
-
-	/**
-	 * Returns a list of asset AMC schedule information for the given asset Id.
-	 * 
-	 * @param assetId
-	 * @return
-	 */
-	public List<AssetPpmScheduleDTO> getAssetPPMSchedule(Long assetId) {
-		List<AssetPpmScheduleDTO> assetPpmScheduleDTOs = null;
-		List<AssetPPMSchedule> assetPPMSchedules = assetPpmScheduleRepository.findAssetPPMScheduleByAssetId(assetId);
-		if (CollectionUtils.isNotEmpty(assetPPMSchedules)) {
-			assetPpmScheduleDTOs = mapperUtil.toModelList(assetPPMSchedules, AssetPpmScheduleDTO.class);
-		}
-		return assetPpmScheduleDTOs;
 	}
 
 	@Transactional

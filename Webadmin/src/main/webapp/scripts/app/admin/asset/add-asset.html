@@ -95,7 +95,7 @@
                                                                                                    ng-show="form.assetTitle.$error.required">
                                                                                                     Asset title is required.
                                                                                                 </p>
-                                                                                                <p class="help-block" style="color:maroon"
+                                                                                                <p class="help-block" style="color:maroon;"
                                                                                                    ng-show="form.assetTitle.$error.minlength">
                                                                                                     Asset title is required to be at least 5 character.
                                                                                                 </p>
@@ -103,7 +103,7 @@
                                                                                                    ng-show="form.assetTitle.$error.maxlength">
                                                                                                     Asset title cannot be longer than 250 characters.
                                                                                                 </p>
-                                                                                                <p class="help-block" style="color:maroon"
+                                                                                                <p class="help-block" style="color:maroon;background: #fff;z-index: 1000;"
                                                                                                    ng-show="form.assetTitle.$error.pattern">
                                                                                                     asset title can only contain letters, digits and space.
                                                                                                 </p>
@@ -367,9 +367,9 @@
                                                                                                class='form-control'
                                                                                                name='assetSerial'
                                                                                                type='text' ng-maxlength='250'
-                                                                                               ng-pattern="/^[A-Za-z0-9\s]*$/"
                                                                                                autofocus
                                                                                                 />
+                                                                                                <!-- ng-pattern="/^[A-Za-z0-9\s]*$/" -->
 																						<div ng-show="form.$submitted || form.assetSerial.$touched">
 																							<div ng-show="form.assetSerial.$dirty || form.assetSerial.$invalid">
 																								
@@ -1568,7 +1568,7 @@
                                                                                                class='form-control'
                                                                                                name='fileTitle'
                                                                                                type='text' 
-                                                                                               ng-maxlength='250'
+                                                                                               
                                                                                                autofocus required
                                                                                         />
                                                                                         <div ng-show="importClientForm.$submitted || importClientForm.fileTitle.$touched">
@@ -1578,10 +1578,10 @@
                                                                                                    ng-show="importClientForm.fileTitle.$error.required">
                                                                                                     File title is required.
                                                                                                 </p>
-                                                                                                <p class="help-block" style="color:maroon"
+                                                                                                <!-- <p class="help-block" style="color:maroon"
                                                                                                    ng-show="importClientForm.fileTitle.$error.maxlength">
                                                                                                     File title cannot be longer than 250 characters.
-                                                                                                </p>
+                                                                                                </p> -->
 
                                                                                             </div>
                                                                                             
@@ -1635,7 +1635,7 @@
                                                                                               class='form-control'
                                                                                               name='photoTitle'
                                                                                               type='text' 
-                                                                                              ng-maxlength='250'
+                                                                                              
                                                                                               autofocus required
                                                                                        />
                                                                                        <div ng-show="importClientForm1.$submitted || importClientForm1.photoTitle.$touched">
@@ -1645,10 +1645,10 @@
                                                                                                    ng-show="importClientForm1.photoTitle.$error.required">
                                                                                                     Photo title is required.
                                                                                                 </p>
-                                                                                                <p class="help-block" style="color:maroon"
+                                                                                                <!-- <p class="help-block" style="color:maroon"
                                                                                                    ng-show="importClientForm1.photoTitle.$error.maxlength">
                                                                                                     Photo title cannot be longer than 250 characters.
-                                                                                                </p>
+                                                                                                </p> -->
 
                                                                                             </div>
                                                                                             
