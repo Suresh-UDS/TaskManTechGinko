@@ -826,7 +826,49 @@ public class AssetManagementService extends AbstractService {
 					page = assetRepository.findAssetByTitleAndProjectId(searchCriteria.getAssetTitle(), searchCriteria.getProjectId(), pageRequest);
 				} else if (!StringUtils.isEmpty(searchCriteria.getAssetTitle()) && !StringUtils.isEmpty(searchCriteria.getAcquiredDate())) {
 					page = assetRepository.findAssetByTitleAndAcquiredDate(searchCriteria.getAssetTitle(), DateUtil.convertToSQLDate(searchCriteria.getAcquiredDate()), pageRequest);
-				} else if (!StringUtils.isEmpty(searchCriteria.getAssetCode())) {
+				} 
+				
+				else if (!StringUtils.isEmpty(searchCriteria.getAssetCode()) && !StringUtils.isEmpty(searchCriteria.getAssetTypeName())) {
+					page = assetRepository.findAssetByCodeAndType(searchCriteria.getAssetCode(), searchCriteria.getAssetTypeName(), pageRequest);
+				} else if (!StringUtils.isEmpty(searchCriteria.getAssetCode()) && !StringUtils.isEmpty(searchCriteria.getAssetGroupName())) {
+					page = assetRepository.findAssetByCodeAndGroup(searchCriteria.getAssetCode(), searchCriteria.getAssetGroupName(), pageRequest);
+				} else if (!StringUtils.isEmpty(searchCriteria.getAssetCode()) && searchCriteria.getSiteId() > 0) {
+					page = assetRepository.findAssetByCodeAndSiteId(searchCriteria.getAssetCode(), searchCriteria.getSiteId(), pageRequest);
+				} else if (!StringUtils.isEmpty(searchCriteria.getAssetCode()) && searchCriteria.getProjectId() > 0) {
+					page = assetRepository.findAssetByCodeAndProjectId(searchCriteria.getAssetCode(), searchCriteria.getProjectId(), pageRequest);
+				} else if (!StringUtils.isEmpty(searchCriteria.getAssetCode()) && !StringUtils.isEmpty(searchCriteria.getAcquiredDate())) {
+					page = assetRepository.findAssetByCodeAndAcquiredDate(searchCriteria.getAssetCode(), DateUtil.convertToSQLDate(searchCriteria.getAcquiredDate()), pageRequest);
+				}
+				
+				else if (!StringUtils.isEmpty(searchCriteria.getAssetGroupName()) && !StringUtils.isEmpty(searchCriteria.getAssetTypeName())) {
+					page = assetRepository.findAssetByGroupAndType(searchCriteria.getAssetGroupName(), searchCriteria.getAssetTypeName(), pageRequest);
+				} else if (!StringUtils.isEmpty(searchCriteria.getAssetGroupName()) && searchCriteria.getSiteId() > 0) {
+					page = assetRepository.findAssetByGroupAndSiteId(searchCriteria.getAssetGroupName(), searchCriteria.getSiteId(), pageRequest);
+				} else if (!StringUtils.isEmpty(searchCriteria.getAssetGroupName()) && searchCriteria.getProjectId() > 0) {
+					page = assetRepository.findAssetByGroupAndProjectId(searchCriteria.getAssetGroupName(), searchCriteria.getProjectId(), pageRequest);
+				} else if (!StringUtils.isEmpty(searchCriteria.getAssetGroupName()) && !StringUtils.isEmpty(searchCriteria.getAcquiredDate())) {
+					page = assetRepository.findAssetByGroupAndAcquiredDate(searchCriteria.getAssetGroupName(), DateUtil.convertToSQLDate(searchCriteria.getAcquiredDate()), pageRequest);
+				}
+				
+				else if (!StringUtils.isEmpty(searchCriteria.getAssetTypeName()) && searchCriteria.getSiteId() > 0) {
+					page = assetRepository.findAssetByTypeAndSiteId(searchCriteria.getAssetTypeName(), searchCriteria.getSiteId(), pageRequest);
+				} else if (!StringUtils.isEmpty(searchCriteria.getAssetTypeName()) && searchCriteria.getProjectId() > 0) {
+					page = assetRepository.findAssetByTypeAndProjectId(searchCriteria.getAssetTypeName(), searchCriteria.getProjectId(), pageRequest);
+				} else if (!StringUtils.isEmpty(searchCriteria.getAssetTypeName()) && !StringUtils.isEmpty(searchCriteria.getAcquiredDate())) {
+					page = assetRepository.findAssetByTypeAndAcquiredDate(searchCriteria.getAssetTypeName(), DateUtil.convertToSQLDate(searchCriteria.getAcquiredDate()), pageRequest);
+				}
+				
+				 else if (!StringUtils.isEmpty(searchCriteria.getSiteId() > 0) && searchCriteria.getProjectId() > 0) {
+					page = assetRepository.findAssetBySiteAndProjectId(searchCriteria.getSiteId(), searchCriteria.getProjectId(), pageRequest);
+				} else if (!StringUtils.isEmpty(searchCriteria.getSiteId() > 0) && !StringUtils.isEmpty(searchCriteria.getAcquiredDate())) {
+					page = assetRepository.findAssetBySiteAndAcquiredDate(searchCriteria.getSiteId(), DateUtil.convertToSQLDate(searchCriteria.getAcquiredDate()), pageRequest);
+				}
+								
+				else if (!StringUtils.isEmpty(searchCriteria.getProjectId() > 0) && !StringUtils.isEmpty(searchCriteria.getAcquiredDate())) {
+					page = assetRepository.findAssetByProjectAndAcquiredDate(searchCriteria.getProjectId(), DateUtil.convertToSQLDate(searchCriteria.getAcquiredDate()), pageRequest);
+				}
+				
+				else if (!StringUtils.isEmpty(searchCriteria.getAssetCode())) {
 					page = assetRepository.findByAssetCode(searchCriteria.getAssetCode(), pageRequest);
 				} else if (!StringUtils.isEmpty(searchCriteria.getAssetTitle())) {
 					page = assetRepository.findByAssetTitle(searchCriteria.getAssetTitle(), pageRequest);

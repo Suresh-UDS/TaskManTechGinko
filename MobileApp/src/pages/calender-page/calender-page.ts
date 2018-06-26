@@ -23,7 +23,6 @@ searchCriteria:any;
 ppmSchedule:any;
   constructor(public navCtrl: NavController, public navParams: NavParams, private assetService:AssetService) {
       this.assetDetails=this.navParams.get('assetDetails');
-
   }
 
   ionViewDidLoad() {
@@ -51,7 +50,7 @@ ppmSchedule:any;
                   this.ppmSchedule.forEach(function(value){
                       value.description=value.assetTitle;
                       value.title=value.title+'-'+value.assetTitle;
-                  })
+                  });
                   this.loadCalendar();
               }else{
                   console.log('Error Response');
@@ -132,8 +131,10 @@ ppmSchedule:any;
 
             },
             editable: true,
-            eventLimit: 1, // allow "more" link when too many events
+            eventLimit:1,                                                    // allow "more" link when too many events
+            eventLimitText:"",
             events: this.ppmSchedule,
+            
 
 
             // color classes: [ event-blue | event-azure | event-green | event-orange | event-red ]
