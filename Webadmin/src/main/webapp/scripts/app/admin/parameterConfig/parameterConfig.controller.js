@@ -262,6 +262,15 @@ angular.module('timeSheetApp')
 	                $scope.success = 'OK';
 	                $scope.showNotifications('top','center','success','Parameter Configuration Saved Successfully');
                     $scope.loadParameterConfigs();
+                    $scope.parameterConfig = {};
+                    $scope.selectedAssetType ={};
+                    $scope.selectedParameter ={};
+                    $scope.selectedParameterUOM ={};
+                    $scope.selectedRule ={};
+                    $scope.selectedThreshold =null;
+                    $scope.validationRequired.value =false;
+                    $scope.consumptionMonitoringRequired.value =false;
+
 	                //$location.path('/parameter-config');
 	            }).catch(function (response) {
 	                $scope.success = null;
