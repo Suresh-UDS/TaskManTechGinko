@@ -32,6 +32,8 @@ export class AssetFilter {
     pageSort:15;
     count=0;
     assetType:any;
+    selectedAssetType:any;
+
     constructor(public navCtrl: NavController, public navParams: NavParams, public viewCtrl: ViewController, public component:componentService,
                 public siteService:SiteService, public assetService:AssetService) {
 
@@ -123,22 +125,34 @@ export class AssetFilter {
         this.viewCtrl.dismiss();
     }
 
-    typeChange(i)
+    typeChange(type)
     {
-        this.assetType[i].status = true;
+       this.selectedAssetType=type.name;
     }
-    groupChange(i)
+    groupChange(group)
     {
-        this.assetGroup[i].status = true;
+       this.selectedAssetGroup=group.assetgroup;
     }
 
     filterAssets(){
-        this.searchCriteria = {
-            siteId:this.selectedSite.id,
-            projectId:this.selectedProject.id,
-            assetType:this.assetType,
-            assetGroup:this.assetGroup
-        };
+        // this.searchCriteria = {
+        //     siteId:this.selectedSite.id,
+        //     projectId:this.selectedProject.id,
+        //     assetType:this.selectedAssetType,
+        //     assetGroup:this.selectedAssetGroup
+        // };
+        if(this.selectedAssetGroup){
+         this.searchCriteria.assetGroup=this.selectedAssetGroup;
+        }
+        if(this.selectedAssetType){
+            this.searchCriteria.assetType=this.selectedAssetType;
+        }
+        if(this.selectedProject){
+            this.searchCriteria.projectId=this.selectedProject;
+        }
+        if(this.selectedSite){
+            this.searchCriteria.siteId=this.selectedSite;
+        }
         console.log(this.searchCriteria);
 
         this.viewCtrl.dismiss(this.searchCriteria);
