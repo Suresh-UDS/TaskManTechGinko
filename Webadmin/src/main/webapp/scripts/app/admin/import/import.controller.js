@@ -308,7 +308,7 @@ angular.module('timeSheetApp')
 		     $scope.locationImportStatus = function() {
 		        	console.log('$rootScope.locationImportStatus -'+JSON.stringify($rootScope.locationImportStatus));
 		        		
-		        	SiteComponent.importStatus($rootScope.locationImportStatus.fileName).then(function(data) {
+		        LocationComponent.importStatus($rootScope.locationImportStatus.fileName).then(function(data) {
 		            		if(data) {
 		            			$rootScope.locationImportStatus.importStatus = data.status;
 		                		console.log('*****************importStatus - '+ JSON.stringify($rootScope.locationImportStatus));
