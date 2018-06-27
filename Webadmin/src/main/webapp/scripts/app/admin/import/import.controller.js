@@ -4,7 +4,7 @@ angular.module('timeSheetApp')
 		    .controller(
 				'ImportController',
 				function($scope, $rootScope, $state, $timeout, JobComponent,
-						ProjectComponent, SiteComponent,EmployeeComponent,ChecklistComponent, $http, $stateParams,
+						ProjectComponent, SiteComponent,EmployeeComponent,ChecklistComponent, LocationComponent, $http, $stateParams,
 						$location,$interval) {
 		$rootScope.loadingStop();
 	    $rootScope.loginView = false;
