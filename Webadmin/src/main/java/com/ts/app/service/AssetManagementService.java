@@ -56,6 +56,7 @@ import com.ts.app.repository.AssetParameterConfigRepository;
 import com.ts.app.repository.AssetPpmScheduleRepository;
 import com.ts.app.repository.AssetReadingRuleRepository;
 import com.ts.app.repository.AssetRepository;
+import com.ts.app.repository.AssetSpecification;
 import com.ts.app.repository.AssetTypeRepository;
 import com.ts.app.repository.CheckInOutImageRepository;
 import com.ts.app.repository.CheckInOutRepository;
@@ -786,7 +787,9 @@ public class AssetManagementService extends AbstractService {
 		// -------
 		SearchResult<AssetDTO> result = new SearchResult<AssetDTO>();
 		User user = userRepository.findOne(searchCriteria.getUserId());
+		log.debug(">>> user <<<"+ user.getFirstName() +" and "+user.getId());
 		Employee employee = user.getEmployee();
+		log.debug(">>> user <<<"+ employee.getFullName() +" and "+employee.getId());
 		List<EmployeeProjectSite> sites = employee.getProjectSites();
 		List<Long> siteIds = new ArrayList<Long>();
 		for (EmployeeProjectSite site : sites) {
@@ -807,9 +810,15 @@ public class AssetManagementService extends AbstractService {
 				}
 			}
 			Page<Asset> page = null;
+			List<Asset> allAssetsList = new ArrayList<Asset>();
 			List<AssetDTO> transactions = null;
 			log.debug("name =" + searchCriteria.getAssetName() + " ,  assetType = " + searchCriteria.getAssetTypeName());
+			
+            log.debug("AssetSpecification toPredicate - searchCriteria get consolidated status -"+ searchCriteria.isConsolidated());
+
 			if (!searchCriteria.isFindAll()) {
+				log.debug(">>> inside search findall <<<");
+				
 				if (!StringUtils.isEmpty(searchCriteria.getAssetTypeName()) && !StringUtils.isEmpty(searchCriteria.getAssetName()) && searchCriteria.getProjectId() > 0
 						&& searchCriteria.getSiteId() > 0) {
 					page = assetRepository.findByAllCriteria(searchCriteria.getAssetTypeName(), searchCriteria.getAssetName(), searchCriteria.getProjectId(),
@@ -888,12 +897,18 @@ public class AssetManagementService extends AbstractService {
 					page = assetRepository.findByProjectId(searchCriteria.getProjectId(), pageRequest);
 				}
 			} else {
+				log.debug(">>> inside search findall else part <<<");
 				if (CollectionUtils.isNotEmpty(siteIds)) {
 					page = assetRepository.findAll(siteIds, pageRequest);
 				} else {
 					page = assetRepository.findAllAsset(pageRequest);
 				}
 			}
+			/*if(!searchCriteria.isConsolidated()) {
+				log.debug(">>> inside search consolidate <<<");
+    			page = assetRepository.findAll(new AssetSpecification(searchCriteria,true),pageRequest);
+    		}*/
+			
 			if (page != null) {
 				if (transactions == null) {
 					transactions = new ArrayList<AssetDTO>();
