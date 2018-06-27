@@ -550,8 +550,8 @@ public class ImportUtil {
 				log.debug("Current Row number -" + r+"Last Row : "+lastRow);
 				Row currentRow = datatypeSheet.getRow(r);
 				LocationDTO locationDTO = new LocationDTO();
-				locationDTO.setProjectId(Long.valueOf(currentRow.getCell(1).getStringCellValue()));
-				locationDTO.setSiteId(Long.valueOf(currentRow.getCell(3).getStringCellValue()));
+				locationDTO.setProjectId(Long.valueOf(getCellValue(currentRow.getCell(1))));
+				locationDTO.setSiteId(Long.valueOf(getCellValue(currentRow.getCell(1))));
 				locationDTO.setBlock(currentRow.getCell(5).getStringCellValue());
 				locationDTO.setFloor(currentRow.getCell(6).getStringCellValue());
 				locationDTO.setZone(currentRow.getCell(8).getStringCellValue());
