@@ -389,7 +389,7 @@
 
     <ion-list *ngSwitchCase="'config'" padding-left="" padding-right="" >
 
-        <div text-center="" *ngIf="!assetDetails.config || assetDetails.config?.length<0">
+        <div text-center="" *ngIf="!assetDetails.config || assetDetails.config.length == 0">
             <ion-card text-center="">
                 <ion-card-content>
                     No Data found
