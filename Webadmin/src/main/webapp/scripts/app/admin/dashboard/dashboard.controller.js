@@ -62,6 +62,10 @@ angular.module('timeSheetApp')
             document.body.innerHTML = originalContents;
         }
 
+        $scope.printPage = function () {
+            window.print();
+        }
+
         $scope.loadChartData = function () {
             $scope.openTicketsCountArray = [];
             $scope.openTicketsLabels = [];
