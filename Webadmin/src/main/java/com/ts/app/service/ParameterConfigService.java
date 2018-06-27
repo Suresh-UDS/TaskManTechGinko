@@ -102,6 +102,11 @@ public class ParameterConfigService extends AbstractService {
 		parameterConfig.setName(parameterConfigDTO.getName());
 		parameterConfig.setUom(parameterConfigDTO.getUom());
 		parameterConfig.setAssetType(parameterConfigDTO.getAssetType());
+		parameterConfig.setRule(parameterConfigDTO.getRule());
+		parameterConfig.setAlertRequired(parameterConfigDTO.isAlertRequired());
+		parameterConfig.setConsumptionMonitoringRequired(parameterConfigDTO.isConsumptionMonitoringRequired());
+		parameterConfig.setValidationRequired(parameterConfigDTO.isValidationRequired());
+		parameterConfig.setThreshold(parameterConfigDTO.getThreshold());
 	}
 
 	private ParameterConfigDTO mapToModel(ParameterConfig parameterConfig, boolean includeShifts) {

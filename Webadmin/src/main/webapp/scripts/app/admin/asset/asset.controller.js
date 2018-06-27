@@ -60,6 +60,7 @@ angular.module('timeSheetApp')
         $scope.ppmTo = null;
         $scope.amcFrom = null;
         $scope.amcTo = null;
+        $scope.btnDisabled = false;
 
         //scope.searchAcquiredDate = $filter('date')(new Date(), 'dd/MM/yyyy');
         $scope.searchAcquiredDate = "";
@@ -736,6 +737,8 @@ angular.module('timeSheetApp')
          /* Create and save asset */
 
         $scope.saveAsset = function () {
+                $rootScope.loadingStart();
+                $scope.btnDisabled = true;
                 $scope.error = null;
                 $scope.success = null;
                 $scope.errorSitesExists = null;
@@ -765,12 +768,14 @@ angular.module('timeSheetApp')
                         $scope.assetGen.id=response.id;
                         $scope.assetGen.siteId=response.siteId;
                         $scope.success = 'OK';
+                        $rootScope.loadingStop();
                         $scope.showNotifications('top','center','success','Asset Added');
                         $scope.loadEmployees();
                         //$scope.loadAssets();
                         //$location.path('/assets');
 
                     }).catch(function (response) {
+                        $rootScope.loadingStop();
                         $scope.success = null;
                         console.log('Error - '+ response.data);
                         console.log('status - '+ response.status + ' , message - ' + response.data.message);
@@ -792,7 +797,8 @@ angular.module('timeSheetApp')
         /* Create and save QR code */
 
        $scope.createQrCode= function(){
-
+        
+        $rootScope.loadingStart();
 
         if(!$scope.assetGen.id && !$stateParams.id){
 
@@ -826,6 +832,7 @@ angular.module('timeSheetApp')
 
        $scope.genQrCodes= function(){
 
+
               if($stateParams.id){
 
                 var qr_id ={id:$stateParams.id};
@@ -834,7 +841,7 @@ angular.module('timeSheetApp')
 
                 var qr_id ={id:$scope.assetGen.id};
               }
-              $rootScope.loadingStart();
+              
 
               $scope.qr_img = "";
 
@@ -853,6 +860,7 @@ angular.module('timeSheetApp')
        /* Update and save asset */
 
         $scope.updateAsset = function () {
+            $rootScope.loadingStart();
         	$scope.error = null;
         	$scope.success =null;
 
@@ -912,13 +920,14 @@ angular.module('timeSheetApp')
         	AssetComponent.update($scope.assetEdit).then(function () {
 
                 $scope.success = 'OK';
+                $rootScope.loadingStop();
                  $scope.showNotifications('top','center','success','Asset Updated!!');
                  $scope.loadAssets();
 
             	//$location.path('/assets');
 
             }).catch(function (response) {
-
+                $rootScope.loadingStop();
                 $scope.success = null;
 
                 console.log('Error - '+ response.data);
@@ -1904,6 +1913,12 @@ angular.module('timeSheetApp')
         		console.log(data);
         		$scope.readingRules = data;
         	});
+        }
+
+        $scope.cancel = function(){
+
+             $location.path('/assets');
+                
         }
 
 

@@ -590,4 +590,20 @@ public class AssetResource {
 		List = assetService.getAllRules();
 		return List;
 	}
+    
+    @RequestMapping(value = "/assets/update/config", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> updateAssetConfig(@Valid @RequestBody AssetParameterConfigDTO assetParameterConfigDTO, HttpServletRequest request) {
+    	try { 
+    		assetService.updateAssetConfig(assetParameterConfigDTO);
+    	} catch(Exception e) { 
+    		throw new TimesheetException("Error while updating AssetConfig" + e);
+    	}
+    	
+    	return new ResponseEntity<>(HttpStatus.CREATED);
+    }
+    
+    
+    
+    
+    
 }
