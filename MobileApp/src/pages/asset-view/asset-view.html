@@ -270,7 +270,11 @@
             <!--<ion-icon ios="ios-calendar" md="md-calendar" class="green fnt-25 padding-right10 margn-btom20"(click)="showCalendar()"></ion-icon>-->
         <!--</div>-->
 
-        <div text-center="" *ngIf="!assetDetails.ppms || assetDetails.ppms.length < 0">
+        <div  *ngIf="(!assetDetails.ppms || assetDetails.ppms.length < 0) && spinner" text-center class="margin-top25">
+            <ion-spinner name="circles"></ion-spinner>
+        </div>
+
+        <div text-center="" *ngIf=" (!assetDetails.ppms || assetDetails.ppms.length < 0) && !spinner ">
             <ion-card text-center>
                 <ion-card-content>
                     No Data found
@@ -330,7 +334,11 @@
         <!--<div float-right  *ngIf="assetDetails.amcs" class="margn-btom20">-->
             <!--<ion-icon ios="ios-calendar" md="md-calendar" class="green fnt-25 padding-right10"(click)="showCalendar()"></ion-icon>-->
         <!--</div>-->
-        <div text-center="" *ngIf="!assetDetails.amcs || assetDetails.amcs.length < 0">
+        <div  *ngIf="(!assetDetails.amcs || assetDetails.amcs.length < 0) && spinner" text-center class="margin-top25">
+            <ion-spinner name="circles"></ion-spinner>
+        </div>
+
+        <div text-center="" *ngIf="(!assetDetails.amcs || assetDetails.amcs.length < 0) && !spinner">
             <ion-card text-center="">
                 <ion-card-content>
                     No Data found
@@ -389,7 +397,11 @@
 
     <ion-list *ngSwitchCase="'config'" padding-left="" padding-right="" >
 
-        <div text-center="" *ngIf="!assetDetails.config || assetDetails.config?.length<0">
+        <div  *ngIf="(!assetDetails.config || assetDetails.config.length == 0) && spinner" text-center class="margin-top25">
+            <ion-spinner name="circles"></ion-spinner>
+        </div>
+
+        <div text-center="" *ngIf="(!assetDetails.config || assetDetails.config.length == 0) && !spinner">
             <ion-card text-center="">
                 <ion-card-content>
                     No Data found
@@ -473,8 +485,12 @@
                 <!--<ion-icon name="add"></ion-icon>-->
             <!--</button>-->
         <!--</ion-fab>-->
+        <div  *ngIf="(!assetDetails.jobs || assetDetails.jobs.length < 0) && spinner" text-center class="margin-top25">
+            <ion-spinner name="circles"></ion-spinner>
+        </div>
 
-        <div text-center="" *ngIf="!assetDetails.jobs || assetDetails.jobs?.length<0" margin-top>
+
+        <div text-center="" *ngIf="(!assetDetails.jobs || assetDetails.jobs?.length<0) && !spinner" margin-top>
             <ion-card text-center="">
                 <ion-card-content>
                     No Data found
@@ -575,7 +591,11 @@
 
     <ion-list *ngSwitchCase="'tickets'" style="margin-top : 56px" padding-left="" padding-right="">
 
-        <div text-center *ngIf="assetDetails.tickets?.length==0">
+        <div  *ngIf="(assetDetails.tickets?.length == 0) && spinner" text-center class="margin-top25">
+            <ion-spinner name="circles"></ion-spinner>
+        </div>
+
+        <div text-center *ngIf="(assetDetails.tickets?.length == 0) && !spinner">
             <ion-card text-center="">
                 <ion-card-content>
                     No Data found

@@ -135,6 +135,7 @@ export class AssetFilter {
     }
 
     filterAssets(){
+        this.searchCriteria={};
         // this.searchCriteria = {
         //     siteId:this.selectedSite.id,
         //     projectId:this.selectedProject.id,

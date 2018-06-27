@@ -264,7 +264,8 @@ ul.chatlinesList
 }
 .card .QrcodeCon img
 {
-  width: 100% !important;
+  /*width: 100% !important;*/
+  width: 50% !important;
   height: auto !important;
   border-radius: 0 !important;
 }
