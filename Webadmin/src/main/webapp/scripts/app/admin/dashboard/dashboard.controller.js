@@ -12,8 +12,8 @@ angular.module('timeSheetApp')
             $(".content").removeClass("remove-mr");
             $(".main-panel").removeClass("remove-hght");
         }
-    	$scope.selectedProject;
-        $scope.selectedSite;
+    	$scope.selectedProject ={};
+        $scope.selectedSite ={};
         $scope.siteCount;
         $scope.totalEmployeeCount;
         $scope.employeeCount;
