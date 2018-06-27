@@ -148,8 +148,10 @@ export class AssetView {
         // var searchCriteria={
         //     assetId:this.assetDetails.id
         // }
+        this.spinner = true;
         this.jobService.getJobs(searchCriteria).subscribe(
             response=>{
+                this.spinner = false;
                 this.componentService.closeLoader();
                 console.log("Getting Jobs response");
                 console.log(response);
@@ -159,6 +161,7 @@ export class AssetView {
                 console.log(this.assetDetails.jobs)
             },
             error=>{
+                this.spinner = false;
                 this.componentService.closeLoader();
                 console.log(error)
                 console.log("Getting Jobs errors")
@@ -405,14 +408,17 @@ export class AssetView {
     // PPM
     getAssetPPMSchedule()
     {
+        this.spinner = true;
         this.assetService.getAssetPPMSchedule(this.assetDetails.id).subscribe(
             response=>{
+                this.spinner = false;
                 this.componentService.closeLoader();
                 console.log("Get asset PPM response");
                 console.log(response);
                 this.assetDetails.ppms = response;
             },
             error=>{
+                this.spinner = false;
                 this.componentService.closeLoader();
                 console.log("Get asset PPM error");
                 console.log(error);
@@ -423,14 +429,17 @@ export class AssetView {
     // AMC
     getAssetAMCSchedule()
     {
+        this.spinner = true;
         this.assetService.getAssetAMCSchedule(this.assetDetails.id).subscribe(
             response=>{
+                this.spinner = false;
                 this.componentService.closeLoader()
                 console.log("Get asset AMC response");
                 this.assetDetails.amcs = response;
                 console.log(this.assetDetails.amcs);
             },
             error=>{
+                this.spinner = false;
                 this.componentService.closeLoader()
                 console.log("Get asset AMC error");
                 console.log(error);
@@ -439,14 +448,17 @@ export class AssetView {
 
     // Config
     getAssetConfig(){
+        this.spinner=true;
         console.log(this.assetDetails.config);
         this.assetService.getAssetConfig(this.assetDetails.assetType,this.assetDetails.id).subscribe(
             response=>{
+                this.spinner = false;
                 this.componentService.closeLoader()
                 console.log("Asset config");
                 console.log(response);
                 this.assetDetails.config = response;
             },err=>{
+                this.spinner = false;
                 this.componentService.closeLoader();
                 console.log("Error in getting asset config");
                 console.log(err);
@@ -492,8 +504,10 @@ export class AssetView {
     // Tickets
     getTickets(searchCriteria)
     {
+        this.spinner = true;
         this.jobService.searchTickets(searchCriteria).subscribe(
             response=>{
+                this.spinner = false;
                 this.componentService.closeLoader()
                 console.log("Getting tickets response");
                 console.log(response);
@@ -501,6 +515,7 @@ export class AssetView {
                 console.log(this.assetDetails.tickets)
             },
             error=>{
+                this.spinner = false;
                 this.componentService.closeLoader()
                 console.log(error)
                 console.log("Getting Ticket errors")
