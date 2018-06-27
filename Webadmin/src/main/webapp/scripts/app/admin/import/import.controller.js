@@ -284,7 +284,63 @@ angular.module('timeSheetApp')
 			    	return ($rootScope.siteImportStatusLoad ? $rootScope.siteImportStatusLoad : '');
 			}; 
 	     
-	     
+			 // upload Location File start
+		     $scope.uploadLocationsFile = function(){
+		    	 if($scope.selectedLocationFile){
+		    		 $rootScope.locationImportStatusLoad = true;
+		        	console.log('selected location file -'+ $scope.selectedLocationFile);
+		        	LocationComponent.importLocationFile($scope.selectedLocationFile).then(function(data){
+		        		console.log(data);
+		        		var result = data;
+		        		console.log(result.file + ', '+result.status + ',' + result.msg);
+		        		var importStatus = {
+		        				fileName : result.file,
+		        				importMsg : result.msg
+		        		};
+		        		$rootScope.locationImportStatus = importStatus;
+		        		$rootScope.start('location');	        		
+		        	},function(err){
+		        		console.log();
+		        	});
+		    	 }
+		     }
+		     
+		     $scope.locationImportStatus = function() {
+		        	console.log('$rootScope.locationImportStatus -'+JSON.stringify($rootScope.locationImportStatus));
+		        		
+		        	SiteComponent.importStatus($rootScope.locationImportStatus.fileName).then(function(data) {
+		            		if(data) {
+		            			$rootScope.locationImportStatus.importStatus = data.status;
+		                		console.log('*****************importStatus - '+ JSON.stringify($rootScope.locationImportStatus));
+		                		$rootScope.locationImportStatus.importMsg = data.msg;
+		                		console.log('**************importMsg - '+ $rootScope.locationImportStatus.importMsg);
+		                		if($rootScope.locationImportStatus.importStatus == 'COMPLETED'){
+		                			$rootScope.locationImportStatus.fileName = data.file;
+		                    		console.log('importFile - '+ $rootScope.locationImportStatus.fileName);
+		                    		$scope.stop('location');
+		                    		$rootScope.locationImportStatusLoad = false;
+		                    		$timeout(function() {
+		                    			$rootScope.locationImportStatus = {};
+		                    	    }, 3000);
+		                		}else if($rootScope.locationImportStatus.importStatus == 'FAILED'){
+		                    		$scope.stop('client');
+		                		}else if(!$rootScope.locationImportStatus.importStatus){
+		                			$scope.stop('client');
+		                		}else {
+		                			$rootScope.locationImportStatus.fileName = '#';
+		                		}
+		            		}
+		            	});
+		    }
+		    
+		     /*$scope.locationImportMsg = function() {
+				   return ($rootScope.locationImportStatus ? $rootScope.locationImportStatus.importMsg : '');
+				};  */
+				$scope.locationImportStatusLoad = function(){
+				    	console.log('$scope.locationImportStatusLoad message '+ $rootScope.locationImportStatusLoad);
+				    	return ($rootScope.locationImportStatusLoad ? $rootScope.locationImportStatusLoad : '');
+				}; 
+		     
 	        
 	        
 	      // site file end  

@@ -60,6 +60,25 @@ angular.module('timeSheetApp')
                 return $http.post('api/location/search', searchCriteria).then(function (response) {
                     return response.data;
                 });
-            }
+            },
+            importLocationFile: function(file) {
+				var fileFormData = new FormData();
+				fileFormData.append('locationFile', file);
+				return $http.post('api/location/import', fileFormData, {
+					transformRequest: angular.identity,
+					headers: {'Content-Type': undefined}
+
+				}).then(function (response) {
+						return response.data;
+				});
+
+
+			},
+			importStatus: function(fileName) {
+				console.log('import location service file name : '+fileName);
+					return $http.get('api/location/import/'+fileName+"/status").then(function (response) {
+						return response.data;
+					});
+			}            
         };
     });

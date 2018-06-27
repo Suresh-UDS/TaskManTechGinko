@@ -1,5 +1,6 @@
 package com.ts.app.web.rest;
 
+import java.util.Calendar;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -15,10 +16,14 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.codahale.metrics.annotation.Timed;
 import com.ts.app.service.LocationService;
+import com.ts.app.service.util.ImportUtil;
+import com.ts.app.web.rest.dto.ImportResult;
 import com.ts.app.web.rest.dto.LocationDTO;
 import com.ts.app.web.rest.dto.SearchCriteria;
 import com.ts.app.web.rest.dto.SearchResult;
@@ -32,6 +37,10 @@ public class LocationResource {
 
     @Inject
     private LocationService locationService;
+
+    @Inject
+	private ImportUtil importUtil;
+    
     
     @RequestMapping(value = "/location", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
@@ -83,6 +92,35 @@ public class LocationResource {
         return result;
     }   
     
-   
+    @RequestMapping(value = "/location/import", method = RequestMethod.POST)
+    public ResponseEntity<ImportResult> importLocationData(@RequestParam("locationFile") MultipartFile file){
+    	log.info("--Invoked Location Import --");
+		Calendar cal = Calendar.getInstance();
+		ImportResult result = importUtil.importLocationData(file, cal.getTimeInMillis());
+		return new ResponseEntity<ImportResult>(result,HttpStatus.OK);
+	}
+
+    @RequestMapping(value = "/site/import/{fileId}/status",method = RequestMethod.GET)
+	public ImportResult importStatus(@PathVariable("fileId") String fileId) {
+		log.debug("ImportStatus -  fileId -"+ fileId);
+		ImportResult result = locationService.getImportStatus(fileId);
+		if(result!=null && result.getStatus() != null) {
+			switch(result.getStatus()) {
+				case "PROCESSING" :
+					result.setMsg("Importing data...");
+					break;
+				case "COMPLETED" :
+					result.setMsg("Completed importing");
+					break;
+				case "FAILED" :
+					result.setMsg("Failed to import. Please try again");
+					break;
+				default :
+					result.setMsg("Completed importing");
+					break;
+			}
+		}
+		return result;
+	}
 
 }
