@@ -100,7 +100,7 @@ public class LocationResource {
 		return new ResponseEntity<ImportResult>(result,HttpStatus.OK);
 	}
 
-    @RequestMapping(value = "/site/import/{fileId}/status",method = RequestMethod.GET)
+    @RequestMapping(value = "/location/import/{fileId}/status",method = RequestMethod.GET)
 	public ImportResult importStatus(@PathVariable("fileId") String fileId) {
 		log.debug("ImportStatus -  fileId -"+ fileId);
 		ImportResult result = locationService.getImportStatus(fileId);
