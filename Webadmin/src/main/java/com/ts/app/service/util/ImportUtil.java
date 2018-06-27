@@ -551,7 +551,7 @@ public class ImportUtil {
 				Row currentRow = datatypeSheet.getRow(r);
 				LocationDTO locationDTO = new LocationDTO();
 				locationDTO.setProjectId(Long.valueOf(getCellValue(currentRow.getCell(1))));
-				locationDTO.setSiteId(Long.valueOf(getCellValue(currentRow.getCell(1))));
+				locationDTO.setSiteId(Long.valueOf(getCellValue(currentRow.getCell(3))));
 				locationDTO.setBlock(currentRow.getCell(5).getStringCellValue());
 				locationDTO.setFloor(currentRow.getCell(6).getStringCellValue());
 				locationDTO.setZone(currentRow.getCell(8).getStringCellValue());
