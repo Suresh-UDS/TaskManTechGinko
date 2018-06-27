@@ -187,7 +187,7 @@ public class SchedulerService extends AbstractService {
 					log.debug("Parent job date - "+startDate);
 					log.debug("Parent job date - "+endDate);
 					List<Job> job = jobRepository.findJobsByParentJobIdAndDate(parentJobId, startDate, tomorrow);
-					log.debug("Parent jobs list- "+job.get(0).getId());
+//					log.debug("Parent jobs list- "+job.get(0).getId());
 					if (CollectionUtils.isEmpty(job) && job.isEmpty()) {
 					    log.debug("Parent job found");
 //						createJobs(dailyTask);
@@ -202,7 +202,7 @@ public class SchedulerService extends AbstractService {
                                  }
                              }
                              if(shouldProcess) {
-                                 processDailyTasks(dailyTask);
+                                 createJobs(dailyTask);
                              }
 						 } catch (Exception ex) {
 						     log.warn("Failed to create JOB ", ex);
