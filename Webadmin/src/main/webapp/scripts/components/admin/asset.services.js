@@ -162,7 +162,7 @@ angular.module('timeSheetApp')
 
                 console.log("asset requsest -- ",assetParam);
                 var cb = callback || angular.noop;
-                return $http.post('api/assets/update/config', assetParam).then(
+                return $http.put('api/assets/update/config', assetParam).then(
                     function (response) {
                         return cb(response);
                     }).catch(
@@ -170,6 +170,11 @@ angular.module('timeSheetApp')
                         console.log(JSON.stringify(err));
                         return cb(err);
                     });
+            },
+            getAssetParamConfig : function(param) {
+                return $http.get('api/assets/config/'+param).then(function(response){
+                    return response.data;
+                });
             },
 
             uploadAssetFile : function(asset) {

@@ -1402,7 +1402,7 @@
 
                                                         <div class="col-md-12">
                                                             <form name="form6" role="form" novalidate
-                                                            class="form-horizontal">
+                                                            class="form-horizontal"  ng-submit="saveAssetParamConfig()">
                                                             <div class="panel panel-default" style="min-height: 200px;">
 
                                                                 <div class="panel-heading">
@@ -1421,7 +1421,7 @@
                                                                                 <div class="" style="float:left;width:90%;">
                                                                                     <label class="control-label">Select Parameter<span class="red-star">*</span> </label>
                                                                                     <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                                                                    <select class="form-control ng-pristine ng-valid ng-touched" ng-model="selectedParameter" name="param" ng-options="parameter as parameter.name for parameter in parameters" tabindex="0" aria-invalid="false" required>
+                                                                                    <select class="form-control ng-pristine ng-valid ng-touched" ng-model="selectedParameter" name="param" ng-options="parameter as parameter.name for parameter in parameters track by parameter.name" tabindex="0" aria-invalid="false" required>
                                                                                     <option value="" class="" selected="selected">Select Parameter ..</option>
                                                                                     </select>
                                                                                     <div ng-show="form6.$submitted || form6.param.$touched">
@@ -1458,7 +1458,7 @@
                                                                                 <div class="" style="float:left;width:90%;">
                                                                                     <label class="control-label">Select Units<span class="red-star">*</span></label>
                                                                                     <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                                                                    <select class="form-control ng-pristine ng-valid ng-touched" ng-model="selectedParameterUOM" name="paramUOM"  ng-options="parameterUOM as parameterUOM.uom for parameterUOM in parameterUOMs" tabindex="0" aria-invalid="false" required>
+                                                                                    <select class="form-control ng-pristine ng-valid ng-touched" ng-model="selectedParameterUOM" name="paramUOM"  ng-options="parameterUOM as parameterUOM.uom for parameterUOM in parameterUOMs track by parameterUOM.uom" tabindex="0" aria-invalid="false" required>
                                                                                     <option value="" class="" selected="selected">Select Units ..</option>
                                                                                     </select>
                                                                                     <div ng-show="form6.$submitted || form6.paramUOM.$touched">
@@ -1630,10 +1630,18 @@
                                                                         
                                                                         
 
-                                                                        <div class="col-md-4 txt-align-rgt">
-                                                                            <button class="btn btn-success" ng-disabled="form6.$invalid" ng-click="saveAssetParamConfig()"
+                                                                        <div class="col-md-4 txt-align-rgt" ng-switch="isEdit">
+                                                                            <button class="btn btn-success" ng-disabled="form6.$invalid" ng-switch-when="false" 
                                                                                     id="form-button-add">
                                                                                 <span class="btn-label"><i class="material-icons">add</i></span> Add
+                                                                            </button>
+                                                                            <button class="btn btn-success" type="submit" ng-switch-when="true" 
+                                                                                    id="form-button-add"  ng-disabled="form.$invalid || btnDisabled">
+                                                                                <span class="btn-label"><i class="material-icons">save</i></span> Update
+                                                                            </button>
+                                                                            <button class="btn btn-danger" type="button"
+                                                                                    ng-click="clear();" id="cancel-button">
+                                                                                <i class="material-icons">close</i> Clear
                                                                             </button>
                                                                         </div>
 
@@ -1699,7 +1707,8 @@
                                                                                          </div>
                                                                                      </td> -->
                                                                                     <td class="text-right">
-                                                                                        <a  has-permission="" ui-sref="" class="btn btn-simple btn-danger" ng-click="deleteAssetConfig(assetParam.id)"><i class="material-icons">delete_forever</i><div class="ripple-container"></div></a>
+                                                                                        <a  ng-click="getParameterConfigDetails(assetParam.id ,'edit')"  has-permission="Config:Edit"   class="btn btn-simple btn-info"><i class="material-icons">edit</i></a>
+                                                                                        <a  has-permission="Config:Delete" ui-sref="" class="btn btn-simple btn-danger" ng-click="deleteAssetConfig(assetParam.id)"><i class="material-icons">delete_forever</i><div class="ripple-container"></div></a>
                                                                                     </td>
 
                                                                                 </tr>
