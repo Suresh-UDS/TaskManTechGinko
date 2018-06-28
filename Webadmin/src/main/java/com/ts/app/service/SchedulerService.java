@@ -621,19 +621,19 @@ public class SchedulerService extends AbstractService {
 		job.setParentJobId(parentJob.getId());
 		job.setParentJob(parentJob);
 //		job.setChecklistItems(parentJob.getChecklistItems());
-        if(CollectionUtils.isNotEmpty(parentJob.getChecklistItems())) {
-            List<JobChecklist> jobclDtoList = parentJob.getChecklistItems();
-            List<JobChecklistDTO> checklistItems = new ArrayList<JobChecklistDTO>();
-            for(JobChecklist jobclDto : jobclDtoList) {
-                JobChecklistDTO checklist = mapperUtil.toModel(jobclDto, JobChecklistDTO.class);
-                checklistItems.add(checklist);
-            }
-            if(job.getChecklistItems() != null) {
-                job.getChecklistItems().addAll(checklistItems);
-            }else {
-                job.setChecklistItems(checklistItems);
-            }
-        }
+//        if(CollectionUtils.isNotEmpty(parentJob.getChecklistItems())) {
+//            List<JobChecklist> jobclDtoList = parentJob.getChecklistItems();
+//            List<JobChecklistDTO> checklistItems = new ArrayList<JobChecklistDTO>();
+//            for(JobChecklist jobclDto : jobclDtoList) {
+//                JobChecklistDTO checklist = mapperUtil.toModel(jobclDto, JobChecklistDTO.class);
+//                checklistItems.add(checklist);
+//            }
+//            if(job.getChecklistItems() != null) {
+//                job.getChecklistItems().addAll(checklistItems);
+//            }else {
+//                job.setChecklistItems(checklistItems);
+//            }
+//        }
 		log.debug("JobDTO parent job id - " + parentJob.getId());
 		log.debug("JobDTO parent job id - " + job.getParentJobId());
 		log.debug("JobDTO Details before calling saveJob - " + job);
