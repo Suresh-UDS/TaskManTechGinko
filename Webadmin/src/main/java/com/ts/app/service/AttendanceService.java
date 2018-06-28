@@ -271,7 +271,10 @@ public class AttendanceService extends AbstractService {
     				List<AttendanceDTO> attns =  result.getTransactions();
     	            if(CollectionUtils.isNotEmpty(attns)) {
     	                AttendanceDTO prevAttnDto = attns.get(0);
-    	                attn.setContinuedAttendance(attendanceRepository.findOne(prevAttnDto.getId()));
+    	                Attendance prevAttn = attendanceRepository.findOne(prevAttnDto.getId());
+    	                Hibernate.initialize(prevAttn.getSite());
+    	                Hibernate.initialize(prevAttn.getEmployee());
+    	                attn.setContinuedAttendance(prevAttn);
     	            }
     	            
     			}
