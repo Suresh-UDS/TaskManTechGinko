@@ -602,6 +602,13 @@ public class AssetResource {
     	return new ResponseEntity<>(HttpStatus.CREATED);
     }
     
+    @RequestMapping(value = "/assets/config/{id}", method = RequestMethod.GET)
+    public AssetParameterConfigDTO getAssetConfig(@PathVariable("id") long id, HttpServletRequest request) { 
+    	AssetParameterConfigDTO result = null;
+    	result = assetService.getAssetConfig(id);
+    	return result;
+    }
+    
     
     
     

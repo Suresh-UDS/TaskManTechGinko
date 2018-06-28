@@ -16,6 +16,8 @@ import {CreateEmployeePage} from "../employee-list/create-employee";
 import {CompleteJobPage} from "../jobs/completeJob";
 import {ViewJobPage} from "../jobs/view-job";
 import {LoginPage} from "../login/login";
+import{SiteListPage} from "../site-list/site-list";
+
 declare var demo;
 @Component({
   selector: 'page-dashboard',
@@ -58,6 +60,7 @@ export class DashboardPage {
     platform:any;
     addEmployee:any;
     slideIndex:any;
+    attendance:any;
 
   constructor(public renderer: Renderer,public plt: Platform,public myService:authService,private loadingCtrl:LoadingController,public navCtrl: NavController,public component:componentService,public authService:authService,public modalCtrl: ModalController,
               private datePickerProvider: DatePickerProvider, private siteService:SiteService, private employeeService: EmployeeService, private jobService:JobService, public events:Events, private actionSheetCtrl:ActionSheetController) {
@@ -66,7 +69,8 @@ export class DashboardPage {
       this.rateCard=CreateQuotationPage;
       this.addJob=CreateJobPage;
       this.addQuotation=CreateQuotationPage;
-      this.addEmployee=CreateEmployeePage
+      this.addEmployee=CreateEmployeePage;
+      this.attendance=SiteListPage;
 
     this.categories='overdue';
     this.selectDate=new Date();

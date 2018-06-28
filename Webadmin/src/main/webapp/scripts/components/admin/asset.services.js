@@ -158,6 +158,20 @@ angular.module('timeSheetApp')
                     });
             },
 
+            updateAssetParamConfig : function(assetParam, callback) {
+
+                console.log("asset requsest -- ",assetParam);
+                var cb = callback || angular.noop;
+                return $http.post('api/assets/update/config', assetParam).then(
+                    function (response) {
+                        return cb(response);
+                    }).catch(
+                    function (err) {
+                        console.log(JSON.stringify(err));
+                        return cb(err);
+                    });
+            },
+
             uploadAssetFile : function(asset) {
             	var file = asset.uploadFile;
             	var fileFormData = new FormData();

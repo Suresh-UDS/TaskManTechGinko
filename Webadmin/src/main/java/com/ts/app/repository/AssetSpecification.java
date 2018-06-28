@@ -66,44 +66,11 @@ public class AssetSpecification implements Specification<Asset> {
 			predicates.add(builder.equal(root.get("acquiredDate"), searchCriteria.getAcquiredDate()));
 		}
 
-		/*
-		 * if(StringUtils.isNotEmpty(searchCriteria.getMaintenanceType()) &&
-		 * searchCriteria.getAssetId() != 0 ) {
-		 * predicates.add(builder.and(builder.equal(root.get("maintenanceType"),
-		 * searchCriteria.getMaintenanceType()),
-		 * builder.equal(root.get("asset").get("id"), searchCriteria.getAssetId()))); }
-		 */
-
 		query.orderBy(builder.desc(root.get("title")));
 
 		List<Predicate> orPredicates = new ArrayList<>();
 		log.debug("AssetSpecification toPredicate - searchCriteria userId -" + searchCriteria.getUserId());
 
-		/*if (searchCriteria.getSiteId() == 0 && !searchCriteria.isAdmin()) {
-			log.debug(">>> asset specification 1 <<<");
-			orPredicates.add(builder.equal(root.get("employee").get("user").get("id"), searchCriteria.getUserId()));
-		} else if (searchCriteria.getSiteId() > 0) {
-			log.debug(">>> asset specification 2 <<<");
-			if (!searchCriteria.isAdmin()) {
-				orPredicates.add(builder.equal(root.get("employee").get("user").get("id"), searchCriteria.getUserId()));
-			}
-			if (CollectionUtils.isNotEmpty(searchCriteria.getSubordinateIds())) {
-				log.debug(">>> asset specification 3 <<<");
-				orPredicates.add(root.get("employee").get("id").in(searchCriteria.getSubordinateIds()));
-			}
-		}
-		if (CollectionUtils.isNotEmpty(searchCriteria.getSiteIds())) {
-			log.debug(">>> asset specification 4 <<<");
-			Predicate path = root.get("site").get("id").in(searchCriteria.getSiteIds());
-			orPredicates.add(path);
-		}
-
-		log.debug(
-				"AssetSpecification toPredicate - searchCriteria subordinateIds -" + searchCriteria.getSubordinateIds());
-		if (searchCriteria.getSiteId() == 0 && CollectionUtils.isNotEmpty(searchCriteria.getSubordinateIds())) {
-			log.debug(">>> asset specification 5 <<<");
-			orPredicates.add(root.get("employee").get("id").in(searchCriteria.getSubordinateIds()));
-		}*/
 		Predicate finalExp = null;
 		if (orPredicates.size() > 0) {
 			finalExp = builder.or(orPredicates.toArray(new Predicate[orPredicates.size()]));

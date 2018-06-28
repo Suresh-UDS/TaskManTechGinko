@@ -319,16 +319,18 @@ angular.module('timeSheetApp')
         }
 
         $scope.deleteConfirm = function (id){
+
         		$scope.deleteParamConId= id;
 
         }
 
         $scope.deleteParameterConfig = function () {
-
+                $scope.loadingStart();
         		ParameterConfigComponent.remove($scope.deleteParamConId).then(function(){
 	            	$scope.success = 'OK';
                     $scope.initLoad();
 	            	$scope.loadParameterConfigs();
+                    $scope.loadingStop();
 	        	});
         }
 
