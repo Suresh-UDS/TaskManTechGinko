@@ -1334,9 +1334,11 @@ angular.module('timeSheetApp')
         }
 
         $scope.loadAllParameters = function() {
+            $scope.loadStart();
     		ParameterComponent.findAll().then(function (data) {
 	            $scope.selectedParameter = null;
 	            $scope.parameters = data;
+                $scope.loadStop();
     		});
         }
 
