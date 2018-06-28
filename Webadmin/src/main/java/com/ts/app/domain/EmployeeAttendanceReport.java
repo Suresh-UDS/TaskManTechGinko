@@ -43,13 +43,17 @@ public class EmployeeAttendanceReport implements Serializable {
     
     private String status = "PRESENT";
     
+    private boolean shiftContinued;
+    
+    private String continuedShiftTime;
+    
     public EmployeeAttendanceReport() {
     	
     }
 
 
     public EmployeeAttendanceReport(long empId, String employeeId, String name, String lastName, String siteName, 
-    								String projectName, Date checkInTime, Date checkOutTime, String shiftStartTime, String shiftEndTime) {
+    								String projectName, Date checkInTime, Date checkOutTime, String shiftStartTime, String shiftEndTime, long continuedAttendance) {
        // this.Image = image;
     		this.empId = empId;
         this.employeeId = employeeId;
@@ -61,7 +65,7 @@ public class EmployeeAttendanceReport implements Serializable {
         this.checkOutTime = checkOutTime;
         this.shiftStartTime = shiftStartTime;
         this.shiftEndTime = shiftEndTime;
-
+        shiftContinued = (continuedAttendance > 0 ? true : false);
     }
 
     // public byte[] getImage() { return Image; }
@@ -172,6 +176,26 @@ public class EmployeeAttendanceReport implements Serializable {
 
 	public void setStatus(String status) {
 		this.status = status;
+	}
+
+
+	public boolean isShiftContinued() {
+		return shiftContinued;
+	}
+
+
+	public void setShiftContinued(boolean shiftContinued) {
+		this.shiftContinued = shiftContinued;
+	}
+
+
+	public String getContinuedShiftTime() {
+		return continuedShiftTime;
+	}
+
+
+	public void setContinuedShiftTime(String continuedShiftTime) {
+		this.continuedShiftTime = continuedShiftTime;
 	}
 
     

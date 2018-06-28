@@ -243,7 +243,7 @@ public class AttendanceService extends AbstractService {
 		sc.setCheckInDateTimeTo(endCal.getTime());
 		log.debug("seach criteria"+" - " +sc.getEmployeeEmpId()+" - " +sc.getSiteId()+" - " +sc.getCheckInDateTimeFrom()+" - " +sc.getCheckInDateTimeTo());
 		SearchResult<AttendanceDTO> result = findBySearchCrieria(sc);
-		if(result == null || CollectionUtils.isEmpty(result.getTransactions())) {
+		//if(result == null || CollectionUtils.isEmpty(result.getTransactions())) {
 		    log.debug("no transactions" + attnDto.getEmployeeEmpId());
 			Employee emp = employeeRepository.findByEmpId(attnDto.getEmployeeEmpId());
 			Site site = siteRepository.findOne(attnDto.getSiteId());
@@ -267,10 +267,22 @@ public class AttendanceService extends AbstractService {
             }
             //mark the shift timings
             findShiftTiming(true,attnDto, attn);
+    			if(result != null && !CollectionUtils.isEmpty(result.getTransactions())) {
+    				List<AttendanceDTO> attns =  result.getTransactions();
+    	            if(CollectionUtils.isNotEmpty(attns)) {
+    	                AttendanceDTO prevAttnDto = attns.get(0);
+    	                Attendance prevAttn = attendanceRepository.findOne(prevAttnDto.getId());
+    	                Hibernate.initialize(prevAttn.getSite());
+    	                Hibernate.initialize(prevAttn.getEmployee());
+    	                attn.setContinuedAttendance(prevAttn);
+    	            }
+    	            
+    			}
 
 			attn = attendanceRepository.save(attn);
 			log.debug("Attendance marked: {}", attn);
 			attnDto = mapperUtil.toModel(attn, AttendanceDTO.class);
+		/*
 		}else {
             List<AttendanceDTO> attns =  result.getTransactions();
             if(CollectionUtils.isNotEmpty(attns)) {
@@ -279,6 +291,7 @@ public class AttendanceService extends AbstractService {
             log.debug("Attendance already marked: {}", attnDto);
 
 		}
+		*/
 		return attnDto;
 	}
 
@@ -589,7 +602,7 @@ public class AttendanceService extends AbstractService {
 		if (CollectionUtils.isNotEmpty(transactions)) {
 			for (AttendanceDTO attn : transactions) {
 				EmployeeAttendanceReport reportData = new EmployeeAttendanceReport(attn.getEmployeeId(), attn.getEmployeeEmpId(), attn.getEmployeeFullName(), null,
-						attn.getSiteName(), null, attn.getCheckInTime(), attn.getCheckOutTime(), attn.getShiftStartTime(), attn.getShiftEndTime());
+						attn.getSiteName(), null, attn.getCheckInTime(), attn.getCheckOutTime(), attn.getShiftStartTime(), attn.getShiftEndTime(), attn.getContinuedAttendanceId());
 				attendanceReportList.add(reportData);
 			}
 		}

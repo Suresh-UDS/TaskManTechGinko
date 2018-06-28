@@ -72,7 +72,7 @@ public class ExportUtil {
 	private String[] JOB_HEADER = { "SITE", "TITLE", "EMPLOYEE", "TYPE", "PLANNED START TIME", "COMPLETED TIME",
 			"STATUS" };
 	private String[] ATTD_HEADER = { "EMPLOYEE ID", "EMPLOYEE NAME", "SITE", "CLIENT", "CHECK IN", "CHECK OUT",
-			"CHECK OUT IMAGE" };
+			"CHECK OUT IMAGE", "SHIFT CONTINUED" };
 	private String[] TICKET_HEADER = { "ID", "SITE", "ISSUE", "STATUS", "PENDING STATUS","CATEGORY", "SEVERITY", "INITIATOR",
 			"INITIATED ON", "ASSIGNED TO", "ASSIGNED ON", "CLOSED BY", "CLOSED ON" };
 
@@ -418,6 +418,7 @@ public class ExportUtil {
 					dataRow.createCell(3).setCellValue(transaction.getProjectName());
 					dataRow.createCell(4).setCellValue(transaction.getCheckInTime() != null ? String.valueOf(transaction.getCheckInTime()) : "");
 					dataRow.createCell(5).setCellValue(transaction.getCheckOutTime() != null ? String.valueOf(transaction.getCheckOutTime()) : "");
+					dataRow.createCell(6).setCellValue(transaction.isShiftContinued() ?  "SHIFT CONTINUED" : "");
 					/*
 					 * Blob blob = null; byte[] img = blob.getBytes(1,(int)blob.length());
 					 * BufferedImage i = null; try { i = ImageIO.read(new
@@ -583,6 +584,7 @@ public class ExportUtil {
 			dataRow.getCell(4).setCellValue(transaction.getCheckInTime() != null ? String.valueOf(transaction.getCheckInTime()) : "");
 			dataRow.getCell(5).setCellValue(transaction.getCheckOutTime() != null ? String.valueOf(transaction.getCheckOutTime()) : "");
 			dataRow.getCell(6).setCellValue(transaction.getStatus());
+			dataRow.getCell(7).setCellValue(transaction.isShiftContinued() ? "SHIFT CONTINUED" : "");
 
 		}
 

@@ -92,7 +92,7 @@ public class MailService {
             if(isMultipart){
             	if(!StringUtils.isEmpty(fileName)) {
 	                FileSystemResource file =new FileSystemResource(exportPath+"/" +fileName+".xlsx");
-	                message.addAttachment(file.getFilename(),file);
+	                message.addAttachment(file.getFilename(),file, "text/html");
             	}
             }
             javaMailSender.send(mimeMessage);
@@ -229,7 +229,8 @@ public class MailService {
     }
 
     @Async
-    public void sendAttendanceDetailedReportEmail(String siteName, String emailIds, String reportData, String file, String baseUrl, Date currDate) {
+    public void sendAttendanceDetailedReportEmail(String siteName, String emailIds, String reportData, String file, String baseUrl, Date currDate, 
+    							Map<String,String> summaryData, Map<String,Map<String,Integer>> siteWiseSummary, Map<String,List<Map<String,String>>> consolidatedData) {
         log.debug("Sending attendance detailed report e-mail to '{}'", emailIds);
         Locale locale = Locale.forLanguageTag("en-US");
         Context context = new Context(locale);
@@ -237,6 +238,9 @@ public class MailService {
         context.setVariable("fileName",file);
         context.setVariable("date", DateUtil.formatToDateString(currDate));
         context.setVariable("reportData", reportData);
+        context.setVariable("summaryData", summaryData);
+        context.setVariable("siteWiseSummary", siteWiseSummary);
+        context.setVariable("consolidatedData", consolidatedData);
         String content = templateEngine.process("attendanceDetailedReportEmail", context);
         String subject = messageSource.getMessage("email.attendance.detailed.report.title", null, locale);
         subject += " - " + siteName;

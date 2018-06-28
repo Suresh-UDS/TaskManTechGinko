@@ -61,6 +61,8 @@ public class AttendanceDTO extends BaseDTO implements Serializable{
 	private boolean notCheckedOut;
 
 	private boolean offline;
+	
+	private long continuedAttendanceId;
 
 	public Long getId() {
 		return id;
@@ -239,6 +241,14 @@ public class AttendanceDTO extends BaseDTO implements Serializable{
 
 	public void setCheckOutTime(Date checkOutTime) {
 		this.checkOutTime = checkOutTime;
+	}
+
+	public long getContinuedAttendanceId() {
+		return continuedAttendanceId;
+	}
+
+	public void setContinuedAttendanceId(long continuedAttendanceId) {
+		this.continuedAttendanceId = continuedAttendanceId;
 	}
     
     

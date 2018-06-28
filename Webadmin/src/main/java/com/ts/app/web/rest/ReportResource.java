@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.ts.app.security.SecurityUtils;
 import com.ts.app.service.ReportService;
+import com.ts.app.service.SchedulerHelperService;
 import com.ts.app.service.SchedulerService;
 import com.ts.app.web.rest.dto.ReportResult;
 
@@ -38,6 +39,9 @@ public class ReportResource {
 	
 	@Inject
 	private SchedulerService schedulerService;
+	
+	@Inject
+	private SchedulerHelperService schedulerHelperService;
 
 
 	@RequestMapping(value = "/reports/attendance/site/{siteId}/selectedDate/{selectedDate}", method = RequestMethod.GET)
@@ -80,7 +84,7 @@ public class ReportResource {
 			currCal.set(Calendar.MINUTE,0);
 			attnDate = currCal.getTime();
 		}		
-		schedulerService.schedulerHelperService.generateDetailedAttendanceReport(schedulerService, attnDate, false, true);
+		schedulerHelperService.generateDetailedAttendanceReport(attnDate, false, true);
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 	

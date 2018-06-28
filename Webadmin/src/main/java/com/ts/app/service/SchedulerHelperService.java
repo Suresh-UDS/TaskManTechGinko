@@ -31,6 +31,9 @@ import com.ts.app.domain.Project;
 import com.ts.app.domain.Setting;
 import com.ts.app.domain.Shift;
 import com.ts.app.domain.Site;
+import com.ts.app.repository.AttendanceRepository;
+import com.ts.app.repository.EmployeeRepository;
+import com.ts.app.repository.EmployeeShiftRepository;
 import com.ts.app.repository.JobRepository;
 import com.ts.app.repository.ProjectRepository;
 import com.ts.app.repository.SettingsRepository;
@@ -63,6 +66,15 @@ public class SchedulerHelperService extends AbstractService {
 
 	@Inject
 	private ProjectRepository projectRepository;
+	
+	@Inject
+	private EmployeeShiftRepository empShiftRepo;
+
+	@Inject
+	private EmployeeRepository employeeRepository;
+	
+	@Inject
+	private AttendanceRepository attendanceRepository;
 
 	@Inject
 	private JobManagementService jobManagementService;
@@ -221,8 +233,8 @@ public class SchedulerHelperService extends AbstractService {
 
 
 	@Transactional
-	public void generateDetailedAttendanceReport(SchedulerService schedulerService, Date date, boolean shiftAlert, boolean dayReport) {
-		if (schedulerService.env.getProperty("scheduler.attendanceDetailReport.enabled").equalsIgnoreCase("true")) {
+	public void generateDetailedAttendanceReport(Date date, boolean shiftAlert, boolean dayReport) {
+		if (env.getProperty("scheduler.attendanceDetailReport.enabled").equalsIgnoreCase("true")) {
 			Calendar cal = Calendar.getInstance();
 			cal.setTime(date);
 			//cal.add(Calendar.DAY_OF_MONTH, -1);
@@ -237,7 +249,7 @@ public class SchedulerHelperService extends AbstractService {
 			dayEndcal.set(Calendar.MINUTE, 59);
 			dayEndcal.set(Calendar.SECOND, 0);
 			dayEndcal.set(Calendar.MILLISECOND, 0);
-			List<Project> projects = schedulerService.projectRepository.findAll();
+			List<Project> projects = projectRepository.findAll();
 			for (Project proj : projects) {
 				int projEmployees = 0;
 				int projPresent = 0;
@@ -251,17 +263,19 @@ public class SchedulerHelperService extends AbstractService {
 				Hibernate.initialize(proj.getSite());
 				Set<Site> sites = proj.getSite();
 				Iterator<Site> siteItr = sites.iterator();
-				List<Setting> settings = schedulerService.settingRepository.findSettingByKeyAndProjectId(SettingsService.EMAIL_NOTIFICATION_ATTENDANCE, proj.getId());
+				List<Setting> settings = settingRepository.findSettingByKeyAndProjectId(SettingsService.EMAIL_NOTIFICATION_ATTENDANCE, proj.getId());
 				Setting attendanceReports = null;
 				if (CollectionUtils.isNotEmpty(settings)) {
 					attendanceReports = settings.get(0);
 				}
 				long empCntInShift = 0;
 				if (attendanceReports != null && attendanceReports.getSettingValue().equalsIgnoreCase("true")) {
+					Map<String, Map<String, Integer>> shiftWiseSummary = new HashMap<String,Map<String, Integer>>();
 					List<EmployeeAttendanceReport> empAttnList = new ArrayList<EmployeeAttendanceReport>();
 					List<EmployeeAttendanceReport> siteAttnList = null;
 					List<Map<String, String>> siteShiftConsolidatedData = new ArrayList<Map<String, String>>();
 					List<Map<String, String>> consolidatedData = new ArrayList<Map<String, String>>();
+					Map<String,List<Map<String, String>>> siteWiseConsolidatedMap = new HashMap<String,List<Map<String, String>>>();
 					StringBuilder content = new StringBuilder();
 					while (siteItr.hasNext()) {
 						Site site = siteItr.next();
@@ -296,13 +310,13 @@ public class SchedulerHelperService extends AbstractService {
 								// long empCntInShift = 0;
 								// //employeeRepository.findEmployeeCountBySiteAndShift(site.getId(),
 								// shift.getStartTime(), shift.getEndTime());
-								empCntInShift = schedulerService.empShiftRepo.findEmployeeCountBySiteAndShift(site.getId(), DateUtil.convertToSQLDate(startCal.getTime()),
+								empCntInShift = empShiftRepo.findEmployeeCountBySiteAndShift(site.getId(), DateUtil.convertToSQLDate(startCal.getTime()),
 										DateUtil.convertToSQLDate(endCal.getTime()));
 								if (empCntInShift == 0) {
-									empCntInShift = schedulerService.employeeRepository.findCountBySiteId(site.getId());
+									empCntInShift = employeeRepository.findCountBySiteId(site.getId());
 								}
 
-								long attendanceCount = schedulerService.attendanceRepository.findCountBySiteAndCheckInTime(site.getId(), DateUtil.convertToSQLDate(startCal.getTime()),
+								long attendanceCount = attendanceRepository.findCountBySiteAndCheckInTime(site.getId(), DateUtil.convertToSQLDate(startCal.getTime()),
 										DateUtil.convertToSQLDate(endCal.getTime()));
 								// List<EmployeeAttendanceReport> empAttnList =
 								// attendanceRepository.findBySiteId(site.getId(),
@@ -325,6 +339,25 @@ public class SchedulerHelperService extends AbstractService {
 								data.put("TotalEmployees", String.valueOf(empCntInShift));
 								data.put("Present", String.valueOf(attendanceCount));
 								data.put("Absent", String.valueOf(absentCount));
+								
+								String shiftTime = shift.getStartTime()+"-"+shift.getEndTime();
+								Map<String, Integer> shiftWiseCount = null;
+								if(shiftWiseSummary.containsKey(shiftTime)) {
+									shiftWiseCount = shiftWiseSummary.get(shiftTime);
+								}else {
+									shiftWiseCount = new HashMap<String,Integer>();
+								}
+								int shiftWiseTotalEmpCnt = shiftWiseCount.containsKey("TotalEmployees") ? shiftWiseCount.get("TotalEmployees") : 0;
+								int shiftWisePresentEmpCnt = shiftWiseCount.containsKey("Present") ? shiftWiseCount.get("Present") : 0;
+								int shiftWiseAbsentEmpCnt = shiftWiseCount.containsKey("Absent") ? shiftWiseCount.get("Absent") : 0;
+
+								shiftWiseTotalEmpCnt += empCntInShift;
+								shiftWisePresentEmpCnt += attendanceCount;
+								shiftWiseAbsentEmpCnt += absentCount;
+								shiftWiseCount.put("TotalEmployees", shiftWiseTotalEmpCnt);
+								shiftWiseCount.put("Present", shiftWisePresentEmpCnt);
+								shiftWiseCount.put("Absent", shiftWiseAbsentEmpCnt);
+								shiftWiseSummary.put(shiftTime, shiftWiseCount);
 								projEmployees += empCntInShift;
 								projPresent += attendanceCount;
 								projAbsent += absentCount;
@@ -332,14 +365,23 @@ public class SchedulerHelperService extends AbstractService {
 									//shiftAlert = true;
 									siteShiftConsolidatedData.add(data);
 								}
+								List<Map<String,String>> siteShiftData = null;
+								if(siteWiseConsolidatedMap.containsKey(site.getName())) {
+									siteShiftData = siteWiseConsolidatedMap.get(site.getName());
+								}else {
+									siteShiftData = new ArrayList<Map<String,String>>();
+								}
+								siteShiftData.add(data);
+								siteWiseConsolidatedMap.put(site.getName(),siteShiftData);
+								
 								consolidatedData.add(data);
-								schedulerService.log.debug("Site Name  - "+ site.getName() + ", -shift start time -" + shift.getStartTime() + ", shift end time -" + shift.getEndTime() + ", shift alert -" + shiftAlert);
+								log.debug("Site Name  - "+ site.getName() + ", -shift start time -" + shift.getStartTime() + ", shift end time -" + shift.getEndTime() + ", shift alert -" + shiftAlert);
 								// }
 							}
 						} else {
-							empCntInShift = schedulerService.employeeRepository.findCountBySiteId(site.getId());
+							empCntInShift = employeeRepository.findCountBySiteId(site.getId());
 
-							long attendanceCount = schedulerService.attendanceRepository.findCountBySiteAndCheckInTime(site.getId(), DateUtil.convertToSQLDate(cal.getTime()),
+							long attendanceCount = attendanceRepository.findCountBySiteAndCheckInTime(site.getId(), DateUtil.convertToSQLDate(cal.getTime()),
 									DateUtil.convertToSQLDate(dayEndcal.getTime()));
 							// List<EmployeeAttendanceReport> empAttnList =
 							// attendanceRepository.findBySiteId(site.getId(),
@@ -367,7 +409,7 @@ public class SchedulerHelperService extends AbstractService {
 							consolidatedData.add(data);
 
 						}
-						siteAttnList = schedulerService.attendanceRepository.findBySiteId(site.getId(), DateUtil.convertToSQLDate(cal.getTime()),
+						siteAttnList = attendanceRepository.findBySiteId(site.getId(), DateUtil.convertToSQLDate(cal.getTime()),
 								DateUtil.convertToSQLDate(dayEndcal.getTime()));
 						List<Long> empPresentList = new ArrayList<Long>();
 						if (CollectionUtils.isNotEmpty(siteAttnList)) {
@@ -377,9 +419,9 @@ public class SchedulerHelperService extends AbstractService {
 						}
 						List<Employee> empNotMarkedAttn = null;
 						if (CollectionUtils.isNotEmpty(empPresentList)) {
-							empNotMarkedAttn = schedulerService.employeeRepository.findNonMatchingBySiteId(site.getId(), empPresentList);
+							empNotMarkedAttn = employeeRepository.findNonMatchingBySiteId(site.getId(), empPresentList);
 						} else {
-							empNotMarkedAttn = schedulerService.employeeRepository.findBySiteId(site.getId());
+							empNotMarkedAttn = employeeRepository.findBySiteId(site.getId());
 						}
 						if (CollectionUtils.isNotEmpty(empNotMarkedAttn)) {
 							for (Employee emp : empNotMarkedAttn) {
@@ -396,11 +438,11 @@ public class SchedulerHelperService extends AbstractService {
 								siteAttnList.add(empAttnRep);
 							}
 						}
-						schedulerService.log.debug("send detailed report");
+						log.debug("send detailed report");
 						empAttnList.addAll(siteAttnList);
 					}
 					// summary map
-					settings = schedulerService.settingRepository.findSettingByKeyAndProjectId(SettingsService.EMAIL_NOTIFICATION_ATTENDANCE_EMAILS, proj.getId());
+					settings = settingRepository.findSettingByKeyAndProjectId(SettingsService.EMAIL_NOTIFICATION_ATTENDANCE_EMAILS, proj.getId());
 					Setting attendanceReportEmails = null;
 					if (CollectionUtils.isNotEmpty(settings)) {
 						attendanceReportEmails = settings.get(0);
@@ -408,7 +450,7 @@ public class SchedulerHelperService extends AbstractService {
 
 					Map<String, String> summaryMap = new HashMap<String, String>();
 					//get total employee count
-					long projEmpCnt = schedulerService.employeeRepository.findCountByProjectId(proj.getId());
+					long projEmpCnt = employeeRepository.findCountByProjectId(proj.getId());
 
 					summaryMap.put("TotalEmployees", String.valueOf(projEmpCnt));
 					summaryMap.put("TotalPresent", String.valueOf(projPresent));
@@ -418,13 +460,13 @@ public class SchedulerHelperService extends AbstractService {
 					content.append("Total employees - " + projEmpCnt + SchedulerService.LINE_SEPARATOR);
 					content.append("Present - " + projPresent + SchedulerService.LINE_SEPARATOR);
 					content.append("Absent - " + (projEmpCnt - projPresent) + SchedulerService.LINE_SEPARATOR);
-					schedulerService.log.debug("Project Name  - "+ proj.getName() + ", shift alert -" + shiftAlert + ", dayReport -" + dayReport);
+					log.debug("Project Name  - "+ proj.getName() + ", shift alert -" + shiftAlert + ", dayReport -" + dayReport);
 					// send reports in email.
 					if (attendanceReportEmails != null && projEmployees > 0 && ((shiftAlert && siteShiftConsolidatedData.size() > 0) || dayReport)) {
 						ExportResult exportResult = null;
-						exportResult = schedulerService.exportUtil.writeAttendanceReportToFile(proj.getName(), empAttnList, consolidatedData, summaryMap, null, exportResult);
-						schedulerService.mailService.sendAttendanceDetailedReportEmail(proj.getName(), attendanceReportEmails.getSettingValue(), content.toString(), exportResult.getFile(), null,
-								cal.getTime());
+						exportResult = exportUtil.writeAttendanceReportToFile(proj.getName(), empAttnList, consolidatedData, summaryMap, null, exportResult);
+						mailService.sendAttendanceDetailedReportEmail(proj.getName(), attendanceReportEmails.getSettingValue(), content.toString(), exportResult.getFile(), null,
+								cal.getTime(), summaryMap, shiftWiseSummary, siteWiseConsolidatedMap);
 					}
 				}
 			}
@@ -448,8 +490,8 @@ public class SchedulerHelperService extends AbstractService {
 		java.sql.Date startDate = new java.sql.Date(startCal.getTimeInMillis());
 		java.sql.Date endDate = new java.sql.Date(endCal.getTimeInMillis());
 		java.sql.Date currDate = new java.sql.Date(currCal.getTimeInMillis());
-		List<Attendance> dailyAttnList = schedulerService.attendanceRepository.findByCheckInDateAndNotCheckout(currDate);
-		schedulerService.log.debug("Found {} Daily Attendance", dailyAttnList.size());
+		List<Attendance> dailyAttnList = attendanceRepository.findByCheckInDateAndNotCheckout(currDate);
+		log.debug("Found {} Daily Attendance", dailyAttnList.size());
 
 		if (CollectionUtils.isNotEmpty(dailyAttnList)) {
 			for (Attendance dailyAttn : dailyAttnList) {
@@ -481,25 +523,25 @@ public class SchedulerHelperService extends AbstractService {
 								shiftEndCal.set(Calendar.MINUTE, Integer.parseInt(endTimeUnits[1]));
 								shiftEndCal.set(Calendar.SECOND, 0);
 								shiftEndCal.set(Calendar.MILLISECOND, 0);
-								schedulerService.log.debug("site - "+ site.getId());
-								schedulerService.log.debug("shift start time - "+ DateUtil.convertToTimestamp(shiftStartCal.getTime()));
-								schedulerService.log.debug("shift end time - "+ DateUtil.convertToTimestamp(shiftEndCal.getTime()));
-								EmployeeShift empShift = schedulerService.empShiftRepo.findEmployeeShiftBySiteAndShift(site.getId(), DateUtil.convertToTimestamp(shiftStartCal.getTime()),
+								log.debug("site - "+ site.getId());
+								log.debug("shift start time - "+ DateUtil.convertToTimestamp(shiftStartCal.getTime()));
+								log.debug("shift end time - "+ DateUtil.convertToTimestamp(shiftEndCal.getTime()));
+								EmployeeShift empShift = empShiftRepo.findEmployeeShiftBySiteAndShift(site.getId(), DateUtil.convertToTimestamp(shiftStartCal.getTime()),
 										DateUtil.convertToTimestamp(shiftEndCal.getTime()));
-								schedulerService.log.debug("EmpShift - "+ empShift);
+								log.debug("EmpShift - "+ empShift);
 								Calendar checkInCal = Calendar.getInstance();
 								checkInCal.setTimeInMillis(dailyAttn.getCheckInTime().getTime());
-								schedulerService.log.debug("checkin cal - "+ checkInCal.getTime());
+								log.debug("checkin cal - "+ checkInCal.getTime());
 								if (empShift != null) { // if employee shift assignment matches with site shift
-                                    schedulerService.log.debug("Employee shift found");
-                                    schedulerService.log.debug("Shift end time "+shiftEndCal.getTime());
-                                    schedulerService.log.debug("Current time "+currCal.getTime());
-                                    schedulerService.log.debug("checkiin time "+checkInCal.getTime());
+                                    log.debug("Employee shift found");
+                                    log.debug("Shift end time "+shiftEndCal.getTime());
+                                    log.debug("Current time "+currCal.getTime());
+                                    log.debug("checkiin time "+checkInCal.getTime());
                                     // shift end time
                                     if (checkInCal.before(shiftEndCal) && shiftEndCal.before(currCal)) { // if the employee checked in before the
 										// send alert
-                                        schedulerService.log.debug("Shift end time "+shiftEndCal.getTime());
-                                        schedulerService.log.debug("Current time "+currCal.getTime());
+                                        log.debug("Shift end time "+shiftEndCal.getTime());
+                                        log.debug("Current time "+currCal.getTime());
 										if (currCal.after(endCal)) { // if the shift ends before EOD midnight.
 											// check out automatically
 											// dailyAttn.setCheckOutTime(new Timestamp(currCal.getTimeInMillis()));
@@ -507,23 +549,23 @@ public class SchedulerHelperService extends AbstractService {
 											// dailyAttn.setLatitudeOut(dailyAttn.getLatitudeOut());
 											// dailyAttn.setLongitudeOut(dailyAttn.getLongitudeOut());
 											dailyAttn.setNotCheckedOut(true); // mark the attendance as not checked out.
-											schedulerService.attendanceRepository.save(dailyAttn);
+											attendanceRepository.save(dailyAttn);
 										} else if (checkInCal.before(prevDayEndCal) && currCal.after(prevDayEndCal)) {
 											dailyAttn.setNotCheckedOut(true); // mark the attendance as not checked out.
-											schedulerService.attendanceRepository.save(dailyAttn);
+											attendanceRepository.save(dailyAttn);
 										}
 										// send email notifications
 										Map<String, Object> values = new HashMap<String, Object>();
 										values.put("checkInTime", DateUtil.formatToDateTimeString(checkInCal.getTime()));
 										values.put("site", site.getName());
-										schedulerService.mailService.sendAttendanceCheckouAlertEmail(emp.getEmail(), values);
+										mailService.sendAttendanceCheckouAlertEmail(emp.getEmail(), values);
 										long userId = emp.getUser().getId();
 										long[] userIds = new long[1];
 										userIds[0] = userId;
-										schedulerService.pushService.sendAttendanceCheckoutAlert(userIds, values);
+										pushService.sendAttendanceCheckoutAlert(userIds, values);
 										break;
 									}else{
-                                        schedulerService.log.debug("Shift end time else condition");
+                                        log.debug("Shift end time else condition");
                                     }
 								} else {
 									if (checkInCal.before(prevDayEndCal) && currCal.after(prevDayEndCal)) {
@@ -532,11 +574,11 @@ public class SchedulerHelperService extends AbstractService {
 										Map<String, Object> values = new HashMap<String, Object>();
 										values.put("checkInTime", DateUtil.formatToDateTimeString(checkInCal.getTime()));
 										values.put("site", site.getName());
-										schedulerService.mailService.sendAttendanceCheckouAlertEmail(emp.getEmail(), values);
+										mailService.sendAttendanceCheckouAlertEmail(emp.getEmail(), values);
 										long userId = emp.getUser().getId();
 										long[] userIds = new long[1];
 										userIds[0] = userId;
-										schedulerService.pushService.sendAttendanceCheckoutAlert(userIds, values);
+										pushService.sendAttendanceCheckoutAlert(userIds, values);
 										break;
 									}
 								}
@@ -545,7 +587,7 @@ public class SchedulerHelperService extends AbstractService {
 					}
 
 				} catch (Exception ex) {
-					schedulerService.log.warn("Failed to checkout daily attendance  ", ex);
+					log.warn("Failed to checkout daily attendance  ", ex);
 				}
 			}
 		}
