@@ -157,6 +157,11 @@ angular.module('timeSheetApp')
         		$scope.isEdit = (mode == 'edit' ? true : false)
             ParameterConfigComponent.findById(id).then(function (data) {
                 $scope.parameterConfig = data;
+                console.log('Parameter by id',$scope.parameterConfig);
+                $scope.selectedAssetType = {name:$scope.parameterConfig.assetType};
+                $scope.selectedParameter = {name:$scope.parameterConfig.name};
+                $scope.selectedParameterUOM = {name:$scope.parameterConfig.uom};
+                $scope.selectedRule = {rule:$scope.parameterConfig.rule};
             });
         };
 
