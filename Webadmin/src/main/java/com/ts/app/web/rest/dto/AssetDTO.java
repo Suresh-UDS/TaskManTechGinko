@@ -49,7 +49,7 @@ public class AssetDTO extends BaseDTO {
     private String assetPpmTitle;
     private String warrantyType;
 
-    public long getAssetTypeId() {
+	public long getAssetTypeId() {
 		return assetTypeId;
 	}
 	public void setAssetTypeId(long assetTypeId) {

@@ -163,7 +163,7 @@ public class AssetResource {
 	}
 
 	@RequestMapping(value = "/asset/{id}/qrcode/{code}", method = RequestMethod.GET, produces = MediaType.IMAGE_PNG_VALUE)
-	public String generateAssetQRCode(@PathVariable("id") long assetId, @PathVariable("code") String assetCode) {
+	public AssetDTO generateAssetQRCode(@PathVariable("id") long assetId, @PathVariable("code") String assetCode) {
 		return assetService.generateAssetQRCode(assetId, assetCode);
 	}
 
@@ -600,6 +600,13 @@ public class AssetResource {
     	}
     	
     	return new ResponseEntity<>(HttpStatus.CREATED);
+    }
+    
+    @RequestMapping(value = "/assets/config/{id}", method = RequestMethod.GET)
+    public AssetParameterConfigDTO getAssetConfig(@PathVariable("id") long id, HttpServletRequest request) { 
+    	AssetParameterConfigDTO result = null;
+    	result = assetService.getAssetConfig(id);
+    	return result;
     }
     
     

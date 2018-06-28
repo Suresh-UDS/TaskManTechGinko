@@ -56,6 +56,7 @@ import com.ts.app.repository.AssetParameterConfigRepository;
 import com.ts.app.repository.AssetPpmScheduleRepository;
 import com.ts.app.repository.AssetReadingRuleRepository;
 import com.ts.app.repository.AssetRepository;
+import com.ts.app.repository.AssetSpecification;
 import com.ts.app.repository.AssetTypeRepository;
 import com.ts.app.repository.CheckInOutImageRepository;
 import com.ts.app.repository.CheckInOutRepository;
@@ -444,7 +445,7 @@ public class AssetManagementService extends AbstractService {
 		assetRepository.save(asset);
 	}
 	
-	public String generateAssetQRCode(long assetId, String assetCode) {
+	public AssetDTO generateAssetQRCode(long assetId, String assetCode) {
 		Asset asset = assetRepository.findOne(assetId);
 		long siteId = asset.getSite().getId();
 		String code = String.valueOf(siteId)+"_"+assetCode;
@@ -466,22 +467,25 @@ public class AssetManagementService extends AbstractService {
 			if (qrCodeImage != null && org.apache.commons.lang3.StringUtils.isNotBlank(imageFileName)) {
 				qrCodeBase64 = fileUploadHelper.readQrCodeFile(imageFileName);
 			}
-		}
-		return qrCodeBase64;
+	}
+	return mapperUtil.toModel(asset, AssetDTO.class);
 	}
 
 	public String getQRCode(long assetId) {
+		log.debug(">>> get QR Code <<<");
 		Asset asset = assetRepository.findOne(assetId);
 		String qrCodeBase64 = null;
 		String imageFileName = null;
+		String assetcode = asset.getCode();
 		if (asset != null) {
 			imageFileName = asset.getQrCodeImage();
 			if (org.apache.commons.lang3.StringUtils.isNotBlank(imageFileName)) {
 				qrCodeBase64 = fileUploadHelper.readQrCodeFile(imageFileName);
 			}
 		}
+		qrCodeBase64 = qrCodeBase64 + "." + assetcode;
 		return qrCodeBase64;
-	}
+		}
 
 	public ExportResult generateReport(List<AssetDTO> transactions, SearchCriteria criteria) {
 		return reportUtil.generateAssetReports(transactions, null, null, criteria);
@@ -786,7 +790,9 @@ public class AssetManagementService extends AbstractService {
 		// -------
 		SearchResult<AssetDTO> result = new SearchResult<AssetDTO>();
 		User user = userRepository.findOne(searchCriteria.getUserId());
+		log.debug(">>> user <<<"+ user.getFirstName() +" and "+user.getId());
 		Employee employee = user.getEmployee();
+		log.debug(">>> user <<<"+ employee.getFullName() +" and "+employee.getId());
 		List<EmployeeProjectSite> sites = employee.getProjectSites();
 		List<Long> siteIds = new ArrayList<Long>();
 		for (EmployeeProjectSite site : sites) {
@@ -807,9 +813,15 @@ public class AssetManagementService extends AbstractService {
 				}
 			}
 			Page<Asset> page = null;
+			List<Asset> allAssetsList = new ArrayList<Asset>();
 			List<AssetDTO> transactions = null;
 			log.debug("name =" + searchCriteria.getAssetName() + " ,  assetType = " + searchCriteria.getAssetTypeName());
-			if (!searchCriteria.isFindAll()) {
+			
+            log.debug("AssetSpecification toPredicate - searchCriteria get consolidated status -"+ searchCriteria.isConsolidated());
+
+/*			if (!searchCriteria.isFindAll()) {
+				log.debug(">>> inside search findall <<<");
+				
 				if (!StringUtils.isEmpty(searchCriteria.getAssetTypeName()) && !StringUtils.isEmpty(searchCriteria.getAssetName()) && searchCriteria.getProjectId() > 0
 						&& searchCriteria.getSiteId() > 0) {
 					page = assetRepository.findByAllCriteria(searchCriteria.getAssetTypeName(), searchCriteria.getAssetName(), searchCriteria.getProjectId(),
@@ -888,13 +900,20 @@ public class AssetManagementService extends AbstractService {
 					page = assetRepository.findByProjectId(searchCriteria.getProjectId(), pageRequest);
 				}
 			} else {
+				log.debug(">>> inside search findall else part <<<");
 				if (CollectionUtils.isNotEmpty(siteIds)) {
 					page = assetRepository.findAll(siteIds, pageRequest);
 				} else {
 					page = assetRepository.findAllAsset(pageRequest);
 				}
-			}
-			if (page != null) {
+			}*/
+			if(!searchCriteria.isConsolidated()) {
+				log.debug(">>> inside search consolidate <<<");
+    			page = assetRepository.findAll(new AssetSpecification(searchCriteria,true),pageRequest);
+    			allAssetsList.addAll(page.getContent());
+    		}
+			
+			/*if (page != null) {
 				if (transactions == null) {
 					transactions = new ArrayList<AssetDTO>();
 				}
@@ -907,8 +926,16 @@ public class AssetManagementService extends AbstractService {
 				if (CollectionUtils.isNotEmpty(transactions)) {
 					buildSearchResult(searchCriteria, page, transactions, result);
 				}
+			}*/
+			if(CollectionUtils.isNotEmpty(allAssetsList)) {
+				if(transactions == null) {
+					transactions = new ArrayList<AssetDTO>();
+				}
+	        		for(Asset asset : allAssetsList) {
+	        			transactions.add(mapperUtil.toModel(asset, AssetDTO.class));
+	        		}
+				buildSearchResult(searchCriteria, page, transactions,result);
 			}
-
 		}
 		return result;
 	}
@@ -1710,6 +1737,12 @@ public class AssetManagementService extends AbstractService {
 		assetParamConfig.setRule(assetParameterConfigDTO.getRule());
 		assetParamConfig.setUom(assetParameterConfigDTO.getUom());
 		assetParamConfig.setValidationRequired(assetParameterConfigDTO.isValidationRequired());
+	}
+
+	public AssetParameterConfigDTO getAssetConfig(long id) {
+		// TODO Auto-generated method stub
+		AssetParameterConfig assetConfigEntity = assetParamConfigRepository.findOne(id);
+		return mapperUtil.toModel(assetConfigEntity, AssetParameterConfigDTO.class);
 	}
 	
 

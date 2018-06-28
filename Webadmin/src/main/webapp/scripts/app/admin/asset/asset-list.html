@@ -4,8 +4,49 @@
 
     <div class="row">
 
+
+        <div class="col-md-6 txt-align-lft">
+
+            <button class="btn btn-info add-btn margn-tb0" data-toggle="modal" data-target="#basicFilter" tabindex="0">
+                <i class="material-icons">filter_list</i> Basic Filter
+                <div class="ripple-container"></div>
+            </button>
+            <button class="btn btn-success add-btn margn-tb0" data-toggle="modal" data-target="#advancedFilter" tabindex="0">
+                <i class="material-icons">filter_list</i> Advanced Filter
+                <div class="ripple-container"></div>
+            </button>
+
+        </div>
+
+        <div class="col-md-6 txt-align-rgt">
+            <!--<button type="submit" class="btn btn-circle blue-clr" ng-disabled="searchForm.$invalid">-->
+            <!--<i class="material-icons">search</i>-->
+            <!--</button>-->
+            <button ui-sref="add-asset" has-permission="Site:Create" ng-class="{active: $state.includes('admin')}"  class="btn btn-circle green-clr" title="Add Asset">
+                <i class="material-icons">add</i>
+            </button>
+            <!-- <button  class="btn btn-circle orange-clr"  ui-sref="view-calendar" title="Asset events">
+                <i class="material-icons">grid_on</i>
+            </button> -->
+            <button ng-click="refreshPage()" class="btn btn-circle orange-clr" title="Reload">
+                <i class="material-icons">refresh</i>
+            </button>
+            <button ng-click="load52WeekSchedule()" class="btn btn-circle orange-clr" title="52 Week Schedule">
+                <i class="material-icons">assignment</i>
+            </button>
+            <button ui-sref="qr-code-list"  class="btn btn-circle orange-clr" title="Generate QR Code">
+                <i class="material-icons">dashboard</i>
+            </button>
+
+        </div>
+
+    </div>
+
+    <div class="row">
+
         <div class="col-md-12">
-            <div class="card tablecard">
+
+            <div class="card tablecard margin-TB-5">
                 <div class="card-content">
 
                     <!-- <div class="bouncing-container asset" ng-show="!assets">
@@ -15,128 +56,131 @@
                         <div class="arrow-down"></div>
                     </div> -->
 
+
+
+
                     <div class="row" ng-init="loadProjects();loadAssetType();loadAssetGroup();">
                         <div class="col-md-12">
-                            <div class="card formcard FilterCard">
-                                <div class="card-content">
-                                    <form name="searchForm"  ng-submit="searchFilter()" novalidate >
+                            <!--<div class="card formcard FilterCard">-->
+                                <!--<div class="card-content">-->
+                                    <!--<form name="searchForm"  ng-submit="searchFilter()" novalidate >-->
 
-                                        <div class="row" >
-                                             <div class="col-xs-12 col-md-3">
-                                                <div class="form-group">
-                                                    <div class="dropdown">
-                                                        <label class="label-control">Acquired Date</label>
-                                                        <span class="form-control-feedback calender-icon"><i class="material-icons">date_range</i></span>
-                                                        <input type="text" class="form-control datepicker"  id="searchAcquiredDate" placeholder="DD/MM/YYYY"  ng-model="searchAcquiredDate"/>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-xs-12 col-md-3">
-                                                <div class="form-group" >
-                                                    <div class="dropdown">
-                                                        <label class="label-control">Client</label>
-                                                        <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                                        <select class="form-control " ng-model="searchProject" ng-change="loadDepSites()" ng-options="project as project.name for project in projects" ng-pattern="Select Client" >
-                                                            <option value="">Select Client...</option>
-                                                        </select>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                              <div class="col-xs-12 col-md-3">
-                                                <div class="dropdown">
-                                                    <div class="form-group">
-                                                        <label class="label-control">Site</label>
-                                                         <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                                        <select class="form-control " ng-model="searchSite"  ng-options="site as site.name for site in sites" ng-pattern="Select Site">
-                                                            <option value="">Select Site...</option>
-                                                        </select>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-xs-12 col-md-3">
+                                        <!--<div class="row" >-->
+                                             <!--<div class="col-xs-12 col-md-3">-->
+                                                <!--<div class="form-group">-->
+                                                    <!--<div class="dropdown">-->
+                                                        <!--<label class="label-control">Acquired Date</label>-->
+                                                        <!--<span class="form-control-feedback calender-icon"><i class="material-icons">date_range</i></span>-->
+                                                        <!--<input type="text" class="form-control datepicker"  id="searchAcquiredDate" placeholder="DD/MM/YYYY"  ng-model="searchAcquiredDate"/>-->
+                                                    <!--</div>-->
+                                                <!--</div>-->
+                                            <!--</div>-->
+                                            <!--<div class="col-xs-12 col-md-3">-->
+                                                <!--<div class="form-group" >-->
+                                                    <!--<div class="dropdown">-->
+                                                        <!--<label class="label-control">Client</label>-->
+                                                        <!--<span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>-->
+                                                        <!--<select class="form-control " ng-model="searchProject" ng-change="loadDepSites()" ng-options="project as project.name for project in projects" ng-pattern="Select Client" >-->
+                                                            <!--<option value="">Select Client...</option>-->
+                                                        <!--</select>-->
+                                                    <!--</div>-->
+                                                <!--</div>-->
+                                            <!--</div>-->
+                                              <!--<div class="col-xs-12 col-md-3">-->
+                                                <!--<div class="dropdown">-->
+                                                    <!--<div class="form-group">-->
+                                                        <!--<label class="label-control">Site</label>-->
+                                                         <!--<span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>-->
+                                                        <!--<select class="form-control " ng-model="searchSite"  ng-options="site as site.name for site in sites" ng-pattern="Select Site">-->
+                                                            <!--<option value="">Select Site...</option>-->
+                                                        <!--</select>-->
+                                                    <!--</div>-->
+                                                <!--</div>-->
+                                            <!--</div>-->
+                                            <!--<div class="col-xs-12 col-md-3">-->
 
-                                                <div class="dropdown">
-                                                    <div class="form-group">
-                                                        <label class="label-control">Asset Type</label>
-                                                         <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                                        <select class="form-control " ng-model="searchAssetType"  ng-options="assetype as assetype.name for assetype in assetTypes track by assetype.name" ng-pattern="Select Asset Type">
-                                                            <option value="">Select Asset Type...</option>
-                                                        </select>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
+                                                <!--<div class="dropdown">-->
+                                                    <!--<div class="form-group">-->
+                                                        <!--<label class="label-control">Asset Type</label>-->
+                                                         <!--<span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>-->
+                                                        <!--<select class="form-control " ng-model="searchAssetType"  ng-options="assetype as assetype.name for assetype in assetTypes track by assetype.name" ng-pattern="Select Asset Type">-->
+                                                            <!--<option value="">Select Asset Type...</option>-->
+                                                        <!--</select>-->
+                                                    <!--</div>-->
+                                                <!--</div>-->
+                                            <!--</div>-->
+                                        <!--</div>-->
 
-                                        <div class="row" >
-                                             <div class="col-xs-12 col-md-3">
+                                        <!--<div class="row" >-->
+                                             <!--<div class="col-xs-12 col-md-3">-->
 
-                                                <div class="dropdown">
-                                                    <div class="form-group">
-                                                        <label class="label-control">Asset Group</label>
-                                                         <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                                        <select class="form-control" ng-model="searchAssetGroup" ng-options="assetgroup as assetgroup.assetgroup for assetgroup in assetGroups track by assetgroup.assetgroup" ng-pattern="Select Asset Group">
+                                                <!--<div class="dropdown">-->
+                                                    <!--<div class="form-group">-->
+                                                        <!--<label class="label-control">Asset Group</label>-->
+                                                         <!--<span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>-->
+                                                        <!--<select class="form-control" ng-model="searchAssetGroup" ng-options="assetgroup as assetgroup.assetgroup for assetgroup in assetGroups track by assetgroup.assetgroup" ng-pattern="Select Asset Group">-->
 
-                                                            <option value="">Select Asset Group...</option>
-                                                        </select>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-xs-12 col-md-3">
-                                                <div class="form-group" >
-                                                    <div class="dropdown">
-                                                        <label class="label-control"></label>
-                                                        <input type="text"
-                                                               class="form-control border-bottom-input"
-                                                               placeholder="Asset Name"
-                                                               ng-model="searchAssetName"
-                                                        />
+                                                            <!--<option value="">Select Asset Group...</option>-->
+                                                        <!--</select>-->
+                                                    <!--</div>-->
+                                                <!--</div>-->
+                                            <!--</div>-->
+                                            <!--<div class="col-xs-12 col-md-3">-->
+                                                <!--<div class="form-group" >-->
+                                                    <!--<div class="dropdown">-->
+                                                        <!--<label class="label-control"></label>-->
+                                                        <!--<input type="text"-->
+                                                               <!--class="form-control border-bottom-input"-->
+                                                               <!--placeholder="Asset Name"-->
+                                                               <!--ng-model="searchAssetName"-->
+                                                        <!--/>-->
 
-                                                    </div>
-                                                </div>
-                                            </div>
+                                                    <!--</div>-->
+                                                <!--</div>-->
+                                            <!--</div>-->
 
-                                            <div class="col-xs-12 col-md-3">
-                                                <div class="form-group" >
-                                                    <div class="dropdown">
-                                                        <label class="label-control"></label>
-                                                        <input type="text"
-                                                               class="form-control border-bottom-input"
-                                                               placeholder="Asset Code"
-                                                               ng-model="searchAssetCode"
-                                                        />
+                                            <!--<div class="col-xs-12 col-md-3">-->
+                                                <!--<div class="form-group" >-->
+                                                    <!--<div class="dropdown">-->
+                                                        <!--<label class="label-control"></label>-->
+                                                        <!--<input type="text"-->
+                                                               <!--class="form-control border-bottom-input"-->
+                                                               <!--placeholder="Asset Code"-->
+                                                               <!--ng-model="searchAssetCode"-->
+                                                        <!--/>-->
 
-                                                    </div>
-                                                </div>
-                                            </div>
+                                                    <!--</div>-->
+                                                <!--</div>-->
+                                            <!--</div>-->
 
-                                            <div class="col-xs-12 col-md-3">
-                                                <div class="floatR form-group pull-right">
-                                                    <button type="submit" class="btn btn-circle blue-clr" ng-disabled="searchForm.$invalid">
-                                                        <i class="material-icons">search</i>
-                                                    </button>
-                                                    <button ui-sref="add-asset" has-permission="Site:Create" ng-class="{active: $state.includes('admin')}"  class="btn btn-circle green-clr" title="Add Asset">
-                                                        <i class="material-icons">add</i>
-                                                    </button>
-                                                    <!-- <button  class="btn btn-circle orange-clr"  ui-sref="view-calendar" title="Asset events">
-                                                        <i class="material-icons">grid_on</i>
-                                                    </button> -->
-                                                    <button ng-click="refreshPage()" class="btn btn-circle orange-clr" title="Reload">
-                                                        <i class="material-icons">refresh</i>
-                                                    </button>
-                                                    <button ng-click="load52WeekSchedule()" class="btn btn-circle orange-clr" title="52 Week Schedule">
-                                                        <i class="material-icons">assignment</i>
-                                                    </button>
-                                                    <button ui-sref="qr-code-list"  class="btn btn-circle orange-clr" title="Generate QR Code">
-                                                        <i class="material-icons">dashboard</i>
-                                                    </button>
+                                            <!--<div class="col-xs-12 col-md-3">-->
+                                                <!--<div class="floatR form-group pull-right">-->
+                                                    <!--<button type="submit" class="btn btn-circle blue-clr" ng-disabled="searchForm.$invalid">-->
+                                                        <!--<i class="material-icons">search</i>-->
+                                                    <!--</button>-->
+                                                    <!--<button ui-sref="add-asset" has-permission="Site:Create" ng-class="{active: $state.includes('admin')}"  class="btn btn-circle green-clr" title="Add Asset">-->
+                                                        <!--<i class="material-icons">add</i>-->
+                                                    <!--</button>-->
+                                                    <!--&lt;!&ndash; <button  class="btn btn-circle orange-clr"  ui-sref="view-calendar" title="Asset events">-->
+                                                        <!--<i class="material-icons">grid_on</i>-->
+                                                    <!--</button> &ndash;&gt;-->
+                                                    <!--<button ng-click="refreshPage()" class="btn btn-circle orange-clr" title="Reload">-->
+                                                        <!--<i class="material-icons">refresh</i>-->
+                                                    <!--</button>-->
+                                                    <!--<button ng-click="load52WeekSchedule()" class="btn btn-circle orange-clr" title="52 Week Schedule">-->
+                                                        <!--<i class="material-icons">assignment</i>-->
+                                                    <!--</button>-->
+                                                    <!--<button ui-sref="qr-code-list"  class="btn btn-circle orange-clr" title="Generate QR Code">-->
+                                                        <!--<i class="material-icons">dashboard</i>-->
+                                                    <!--</button>-->
 
-                                                 </div>
-                                                 <div class="clearfix"></div>
-                                            </div>
-                                        </div>
-                                    </form>
-                                </div>
-                            </div>
+                                                 <!--</div>-->
+                                                 <!--<div class="clearfix"></div>-->
+                                            <!--</div>-->
+                                        <!--</div>-->
+                                    <!--</form>-->
+                                <!--</div>-->
+                            <!--</div>-->
                         </div>
                     </div>
 
@@ -238,11 +282,11 @@
                                 <!-- <td>{{asset.status}}</td> -->
                                 <td>{{asset.siteName}}</td>
                                 <td class="text-right">
-                                    <a   has-authority="ROLE_ADMIN" ui-sref="view-asset({ id: asset.id })"  has-permission="Asset:View"   class="btn btn-simple btn-info btn-icon like"><i class="material-icons">remove_red_eye</i></a>
+                                    <a   has-authority="ROLE_ADMIN" ui-sref="view-asset({ id: asset.id })"  has-permission="Asset:View"  title="View Asset"  class="btn btn-simple btn-info btn-icon like"><i class="material-icons">remove_red_eye</i></a>
 
-                                    <a  ng-class="{active: $state.includes('admin')}" has-permission="Asset:Edit" has-authority="ROLE_ADMIN" ui-sref="edit-asset({ id: asset.id })"  class="btn btn-simple btn-info"><i class="material-icons">edit</i></a>
+                                    <a  ng-class="{active: $state.includes('admin')}" has-permission="Asset:Edit" has-authority="ROLE_ADMIN" title="Edit Asset" ui-sref="edit-asset({ id: asset.id })"  class="btn btn-simple btn-info"><i class="material-icons">edit</i></a>
 
-                                    <a ng-class="{active: $state.includes('admin')}" has-permission="Asset:Delete" has-authority="ROLE_ADMIN"  ng-click="deleteConfirm(asset.id)"  onClick="$('#deleteModal').modal()" data-target="#myModal"   class="btn btn-simple btn-danger"><i class="material-icons">close</i></a>
+                                    <a ng-class="{active: $state.includes('admin')}" has-permission="Asset:Delete" has-authority="ROLE_ADMIN" title="Delete Asset"  ng-click="deleteConfirm(asset.id)"  onClick="$('#deleteModal').modal()" data-target="#myModal"   class="btn btn-simple btn-danger"><i class="material-icons">close</i></a>
 
                                 </td>
 
@@ -313,3 +357,149 @@
 
 	</div>
 </div>
+
+
+<!-- Classic Modal -->
+<div class="modal fade BasicFilterModal" id="basicFilter" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form name="searchForm"  ng-submit="searchFilter()" novalidate >
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    <i class="material-icons">clear</i>
+                </button>
+                <h4 class="modal-title">Basic Filter</h4>
+            </div>
+            <div class="modal-body">
+
+                    <div class="row">
+
+                        <div class="col-xs-12 col-md-4">
+                            <div class="form-group" >
+                                <div class="dropdown">
+                                    <label class="label-control">Client</label>
+                                    <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
+                                    <select class="form-control " ng-model="searchProject" ng-change="loadDepSites()" ng-options="project as project.name for project in projects" ng-pattern="Select Client" >
+                                        <option value="">Select Client...</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-md-4">
+                            <div class="dropdown">
+                                <div class="form-group">
+                                    <label class="label-control">Site</label>
+                                    <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
+                                    <select class="form-control " ng-model="searchSite"  ng-options="site as site.name for site in sites" ng-pattern="Select Site">
+                                        <option value="">Select Site...</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+
+
+                    </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="submit" class="btn btn-success btn-simple" data-dismiss="modal" ng-disabled="searchForm.$invalid">Apply Filter</button>
+                <!--<button type="button" class="btn btn-danger btn-simple" data-dismiss="modal">Close</button>-->
+            </div>
+            </form>
+        </div>
+    </div>
+</div>
+<!--  End Modal -->
+
+<!-- Classic Modal -->
+<div class="modal fade AdvancedFilterModal" id="advancedFilter" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form name="searchForm"  ng-submit="searchFilter()" novalidate >
+
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    <i class="material-icons">clear</i>
+                </button>
+                <h4 class="modal-title">Advanced Filter</h4>
+            </div>
+            <div class="modal-body">
+
+                <div class="row">
+                    <div class="col-xs-12 col-md-4">
+                        <div class="form-group">
+                            <div class="dropdown">
+                                <label class="label-control">Acquired Date</label>
+                                <span class="form-control-feedback calender-icon"><i class="material-icons">date_range</i></span>
+                                <input type="text" class="form-control datepicker"  id="searchAcquiredDate" placeholder="DD/MM/YYYY"  ng-model="searchAcquiredDate"/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-md-4">
+
+                        <div class="dropdown">
+                            <div class="form-group">
+                                <label class="label-control">Asset Type</label>
+                                <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
+                                <select class="form-control " ng-model="searchAssetType"  ng-options="assetype as assetype.name for assetype in assetTypes track by assetype.name" ng-pattern="Select Asset Type">
+                                    <option value="">Select Asset Type...</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-md-4">
+
+                        <div class="dropdown">
+                            <div class="form-group">
+                                <label class="label-control">Asset Group</label>
+                                <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
+                                <select class="form-control" ng-model="searchAssetGroup" ng-options="assetgroup as assetgroup.assetgroup for assetgroup in assetGroups track by assetgroup.assetgroup" ng-pattern="Select Asset Group">
+
+                                    <option value="">Select Asset Group...</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+
+                    <div class="col-xs-12 col-md-4">
+                        <div class="form-group" >
+                            <div class="dropdown">
+                                <label class="label-control"></label>
+                                <input type="text"
+                                       class="form-control border-bottom-input"
+                                       placeholder="Asset Name"
+                                       ng-model="searchAssetName"
+                                />
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-md-4">
+                        <div class="form-group" >
+                            <div class="dropdown">
+                                <label class="label-control"></label>
+                                <input type="text"
+                                       class="form-control border-bottom-input"
+                                       placeholder="Asset Code"
+                                       ng-model="searchAssetCode"
+                                />
+
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="submit" class="btn btn-success btn-simple" data-dismiss="modal" ng-disabled="searchForm.$invalid">Apply Filter</button>
+                <!--<button type="button" class="btn btn-danger btn-simple" data-dismiss="modal">Close</button>-->
+            </div>
+            </form>
+        </div>
+    </div>
+</div>
+<!--  End Modal -->
