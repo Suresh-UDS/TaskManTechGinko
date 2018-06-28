@@ -447,12 +447,12 @@ public class AssetManagementService extends AbstractService {
 	
 	public AssetDTO generateAssetQRCode(long assetId, String assetCode) {
 		Asset asset = assetRepository.findOne(assetId);
-		AssetDTO assetDTO = new AssetDTO();
 		long siteId = asset.getSite().getId();
 		String code = String.valueOf(siteId)+"_"+assetCode;
 		asset.setCode(code);
 		assetRepository.save(asset);
 		byte[] qrCodeImage = null;
+		String qrCodeBase64 = null;
 		if (asset != null) {
 			String codeName = String.valueOf(asset.getCode());
 				codeName = asset.getSite().getId()+"_"+codeName;
@@ -464,27 +464,26 @@ public class AssetManagementService extends AbstractService {
 				asset.setQrCodeImage(imageFileName);
 				assetRepository.save(asset);
 			}
-			assetDTO = mapperUtil.toModel(asset, AssetDTO.class);
 			if (qrCodeImage != null && org.apache.commons.lang3.StringUtils.isNotBlank(imageFileName)) {
-				assetDTO.setQrCodeBase64(fileUploadHelper.readQrCodeFile(imageFileName));
+				qrCodeBase64 = fileUploadHelper.readQrCodeFile(imageFileName);
 			}
-		}
-		return assetDTO;
+	}
+	return mapperUtil.toModel(asset, AssetDTO.class);
 	}
 
-	public AssetDTO getQRCode(long assetId) {
+	public String getQRCode(long assetId) {
+		log.debug(">>> get QR Code <<<");
 		Asset asset = assetRepository.findOne(assetId);
-		AssetDTO assetDTO = new AssetDTO();
+		String qrCodeBase64 = null;
 		String imageFileName = null;
 		if (asset != null) {
 			imageFileName = asset.getQrCodeImage();
-			assetDTO = mapperUtil.toModel(asset, AssetDTO.class);
 			if (org.apache.commons.lang3.StringUtils.isNotBlank(imageFileName)) {
-				assetDTO.setQrCodeBase64(fileUploadHelper.readQrCodeFile(imageFileName));
+				qrCodeBase64 = fileUploadHelper.readQrCodeFile(imageFileName);
 			}
 		}
-		return assetDTO;
-	}
+		return qrCodeBase64;
+		}
 
 	public ExportResult generateReport(List<AssetDTO> transactions, SearchCriteria criteria) {
 		return reportUtil.generateAssetReports(transactions, null, null, criteria);
@@ -818,7 +817,7 @@ public class AssetManagementService extends AbstractService {
 			
             log.debug("AssetSpecification toPredicate - searchCriteria get consolidated status -"+ searchCriteria.isConsolidated());
 
-			if (!searchCriteria.isFindAll()) {
+/*			if (!searchCriteria.isFindAll()) {
 				log.debug(">>> inside search findall <<<");
 				
 				if (!StringUtils.isEmpty(searchCriteria.getAssetTypeName()) && !StringUtils.isEmpty(searchCriteria.getAssetName()) && searchCriteria.getProjectId() > 0
@@ -905,13 +904,14 @@ public class AssetManagementService extends AbstractService {
 				} else {
 					page = assetRepository.findAllAsset(pageRequest);
 				}
-			}
-			/*if(!searchCriteria.isConsolidated()) {
+			}*/
+			if(!searchCriteria.isConsolidated()) {
 				log.debug(">>> inside search consolidate <<<");
     			page = assetRepository.findAll(new AssetSpecification(searchCriteria,true),pageRequest);
-    		}*/
+    			allAssetsList.addAll(page.getContent());
+    		}
 			
-			if (page != null) {
+			/*if (page != null) {
 				if (transactions == null) {
 					transactions = new ArrayList<AssetDTO>();
 				}
@@ -924,8 +924,16 @@ public class AssetManagementService extends AbstractService {
 				if (CollectionUtils.isNotEmpty(transactions)) {
 					buildSearchResult(searchCriteria, page, transactions, result);
 				}
+			}*/
+			if(CollectionUtils.isNotEmpty(allAssetsList)) {
+				if(transactions == null) {
+					transactions = new ArrayList<AssetDTO>();
+				}
+	        		for(Asset asset : allAssetsList) {
+	        			transactions.add(mapperUtil.toModel(asset, AssetDTO.class));
+	        		}
+				buildSearchResult(searchCriteria, page, transactions,result);
 			}
-
 		}
 		return result;
 	}
