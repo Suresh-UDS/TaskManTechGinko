@@ -3,6 +3,7 @@ package com.ts.app.domain;
 import java.io.Serializable;
 import java.sql.Timestamp;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -10,6 +11,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -62,6 +64,10 @@ public class Attendance extends AbstractAuditingEntity implements Serializable{
 	private String shiftEndTime;
 
 	private boolean notCheckedOut;
+	
+	@OneToOne(fetch = FetchType.LAZY, cascade={CascadeType.MERGE,CascadeType.PERSIST,CascadeType.REFRESH})
+	@JoinColumn(name = "continuedAttendanceId", referencedColumnName = "id", nullable = true)
+	private Attendance continuedAttendance;
 
 	public Long getId() {
 		return id;
@@ -203,4 +209,14 @@ public class Attendance extends AbstractAuditingEntity implements Serializable{
     public void setOffline(boolean offline) {
         this.offline = offline;
     }
+
+	public Attendance getContinuedAttendance() {
+		return continuedAttendance;
+	}
+
+	public void setContinuedAttendance(Attendance continuedAttendance) {
+		this.continuedAttendance = continuedAttendance;
+	}
+    
+    
 }

@@ -429,7 +429,7 @@ public class SchedulerService extends AbstractService {
 	@Scheduled(cron = "0 */30 * * * ?")
 	public void attendanceShiftReportSchedule() {
 		Calendar cal = Calendar.getInstance();
-		schedulerHelperService.generateDetailedAttendanceReport(this, cal.getTime(), true, false);
+		schedulerHelperService.generateDetailedAttendanceReport(cal.getTime(), true, false);
 	}
 
 
@@ -437,7 +437,7 @@ public class SchedulerService extends AbstractService {
 	public void attendanceDetailReportSchedule() {
 		Calendar cal = Calendar.getInstance();
 		cal.add(Calendar.DAY_OF_YEAR, -1);
-		schedulerHelperService.generateDetailedAttendanceReport(this, cal.getTime(), false, true);
+		schedulerHelperService.generateDetailedAttendanceReport(cal.getTime(), false, true);
 	}
 
 	@Scheduled(cron="0 */30 * * * ?") // runs every 30 mins
