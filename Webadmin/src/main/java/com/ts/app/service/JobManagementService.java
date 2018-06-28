@@ -208,6 +208,7 @@ public class JobManagementService extends AbstractService {
                 pageRequest = createPageSort(searchCriteria.getCurrPage(), searchCriteria.getSort(), sort);
 
             }else{
+                log.debug("Sorting object not found",searchCriteria.isReport());
                 if (searchCriteria.isReport()) {
                     pageRequest = createPageRequest(searchCriteria.getCurrPage(), true);
                 } else {
