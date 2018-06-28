@@ -163,8 +163,8 @@ public class AssetResource {
 	}
 
 	@RequestMapping(value = "/asset/{id}/qrcode/{code}", method = RequestMethod.GET, produces = MediaType.IMAGE_PNG_VALUE)
-	public AssetDTO generateAssetQRCode(@PathVariable("id") long assetId, @PathVariable("code") String assetCode) {
-		return assetService.generateAssetQRCode(assetId, assetCode);
+	public void generateAssetQRCode(@PathVariable("id") long assetId, @PathVariable("code") String assetCode) {
+		assetService.generateAssetQRCode(assetId, assetCode);
 	}
 
 	@RequestMapping(path = "/asset/qrcode/{id}", method = RequestMethod.GET, produces = MediaType.IMAGE_PNG_VALUE)

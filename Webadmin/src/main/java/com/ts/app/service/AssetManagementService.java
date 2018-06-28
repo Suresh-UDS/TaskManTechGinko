@@ -445,7 +445,7 @@ public class AssetManagementService extends AbstractService {
 		assetRepository.save(asset);
 	}
 	
-	public AssetDTO generateAssetQRCode(long assetId, String assetCode) {
+	public void generateAssetQRCode(long assetId, String assetCode) {
 		Asset asset = assetRepository.findOne(assetId);
 		long siteId = asset.getSite().getId();
 		String code = String.valueOf(siteId)+"_"+assetCode;
@@ -468,7 +468,7 @@ public class AssetManagementService extends AbstractService {
 				qrCodeBase64 = fileUploadHelper.readQrCodeFile(imageFileName);
 			}
 	}
-	return mapperUtil.toModel(asset, AssetDTO.class);
+		getQRCode(asset.getId());
 	}
 
 	public String getQRCode(long assetId) {
