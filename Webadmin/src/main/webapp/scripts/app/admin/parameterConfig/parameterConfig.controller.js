@@ -271,12 +271,21 @@ angular.module('timeSheetApp')
 	        	$scope.parameterConfig.validationRequired = $scope.validationRequired.value;
 	        	$scope.parameterConfig.alertRequired = $scope.alertRequired.value;
 	        	console.log('parameterConfig details ='+ JSON.stringify($scope.parameterConfig));
-	        	//var post = $scope.isEdit ? ParameterConfigComponent.update : ParameterConfigComponent.create
-                //post($scope.parameterConfig).then(function () {
+	        	var post = $scope.isEdit ? ParameterConfigComponent.update : ParameterConfigComponent.create
+                post($scope.parameterConfig).then(function () {
             
-	        	ParameterConfigComponent.create($scope.parameterConfig).then(function () {
+	        	//ParameterConfigComponent.create($scope.parameterConfig).then(function () {
 	                $scope.success = 'OK';
-	                $scope.showNotifications('top','center','success','Parameter Configuration Saved Successfully');
+                    if(!$scope.isEdit){
+
+                    $scope.showNotifications('top','center','success','Parameter Configuration Saved Successfully');
+
+                    }else{
+
+                    $scope.showNotifications('top','center','success','Parameter Configuration Updated Successfully');
+
+                    }
+	                
                     $scope.loadParameterConfigs();
                     $scope.parameterConfig = {};
                     $scope.selectedAssetType ={};
