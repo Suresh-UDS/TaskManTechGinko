@@ -389,8 +389,8 @@ angular.module('timeSheetApp')
 
             }
             else{
-                $scope.searchCriteria.columnName ="id";
-                $scope.searchCriteria.sortByAsc = true;
+                // $scope.searchCriteria.columnName ="id";
+                // $scope.searchCriteria.sortByAsc = true;
             }
 
 
