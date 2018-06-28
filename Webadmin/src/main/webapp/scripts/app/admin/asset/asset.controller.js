@@ -836,12 +836,20 @@ angular.module('timeSheetApp')
         }
 
             //alert("code:"  + qr.code + "id:" + qr.id);
+            $scope.qr_img = "";
+            $scope.assetCode = "";
 
-            AssetComponent.createQr(qr).then(function(){
+            AssetComponent.createQr(qr).then(function(response){
 
                 $scope.success = 'OK';
+                var qrAry  = response.split('.');
 
-                $scope.genQrCodes();
+             $scope.qr_img = qrAry[0];
+             $scope.assetCode = qrAry[1];
+
+             console.log('create qr---'qrAry);
+
+                //$scope.genQrCodes();
             });
         }
     }
@@ -873,7 +881,7 @@ angular.module('timeSheetApp')
              $scope.qr_img = qrAry[0];
              $scope.assetCode = qrAry[1];
 
-             console.log(qrAry);
+             console.log('get qr---',qrAry);
 
              $rootScope.loadingStop();
 
