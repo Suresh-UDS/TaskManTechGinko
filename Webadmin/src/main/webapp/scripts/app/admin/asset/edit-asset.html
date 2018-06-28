@@ -36,7 +36,7 @@
                                                     <a href=".General" data-toggle="tab" ng-click="uView('on')"> General</a>
                                                 </li>
                                                 <li class="">
-                                                    <a href=".qr-code" data-toggle="tab" ng-click="uView('off')"
+                                                    <a href=".qr-code" data-toggle="tab" ng-click="uView('off');genQrCodes();"
                                                        > QR Code</a>
                                                 </li>
                                                 <li class=""><a href=".ppm-schedule" data-toggle="tab" ng-click="uView('off')"
@@ -692,7 +692,7 @@
 
                                                                <div class="col-md-6 col-md-offset-3" style="text-align: center;">
 
-                                                                    <h4>{{assetList.assetCode}}</h4>
+                                                                    <h4>{{assetCode}}</h4>
 
                                                                     <div class="QrcodeCon" ng-show="qr_img">
 

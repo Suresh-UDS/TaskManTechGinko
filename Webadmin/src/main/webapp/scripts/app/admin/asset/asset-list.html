@@ -42,7 +42,7 @@
 
     </div>
 
-    <div class="row">
+    <div class="row" ng-init="loadProjects();loadAssetType();loadAssetGroup();">
 
         <div class="col-md-12">
 
@@ -56,10 +56,7 @@
                         <div class="arrow-down"></div>
                     </div> -->
 
-
-
-
-                    <div class="row" ng-init="loadProjects();loadAssetType();loadAssetGroup();">
+                    <div class="row">
                         <div class="col-md-12">
                             <!--<div class="card formcard FilterCard">-->
                                 <!--<div class="card-content">-->
@@ -281,12 +278,21 @@
                                 <td>{{asset.assetGroup}}</td>
                                 <!-- <td>{{asset.status}}</td> -->
                                 <td>{{asset.siteName}}</td>
-                                <td class="text-right">
-                                    <a   has-authority="ROLE_ADMIN" ui-sref="view-asset({ id: asset.id })"  has-permission="Asset:View"  title="View Asset"  class="btn btn-simple btn-info btn-icon like"><i class="material-icons">remove_red_eye</i></a>
+                                <td class="text-right hoverMe">
 
-                                    <a  ng-class="{active: $state.includes('admin')}" has-permission="Asset:Edit" has-authority="ROLE_ADMIN" title="Edit Asset" ui-sref="edit-asset({ id: asset.id })"  class="btn btn-simple btn-info"><i class="material-icons">edit</i></a>
+                                    <a   has-authority="ROLE_ADMIN"  title="View More Action"  class="btn btn-simple btn-info btn-icon like"><i class="material-icons">more_vert</i></a>
 
-                                    <a ng-class="{active: $state.includes('admin')}" has-permission="Asset:Delete" has-authority="ROLE_ADMIN" title="Delete Asset"  ng-click="deleteConfirm(asset.id)"  onClick="$('#deleteModal').modal()" data-target="#myModal"   class="btn btn-simple btn-danger"><i class="material-icons">close</i></a>
+                                    <div class="HoverBx">
+
+                                        <a   has-authority="ROLE_ADMIN" ui-sref="view-asset({ id: asset.id })"  has-permission="Asset:View"  title="View Asset"  class="btn btn-simple btn-info btn-icon like"><i class="material-icons">remove_red_eye</i></a>
+
+                                        <a  ng-class="{active: $state.includes('admin')}" has-permission="Asset:Edit" has-authority="ROLE_ADMIN" title="Edit Asset" ui-sref="edit-asset({ id: asset.id })"  class="btn btn-simple btn-info"><i class="material-icons">edit</i></a>
+
+                                        <a ng-class="{active: $state.includes('admin')}" has-permission="Asset:Delete" has-authority="ROLE_ADMIN" title="Delete Asset"  ng-click="deleteConfirm(asset.id)"  onClick="$('#deleteModal').modal()" data-target="#myModal"   class="btn btn-simple btn-danger"><i class="material-icons">close</i></a>
+
+                                    </div>
+
+
 
                                 </td>
 
@@ -360,7 +366,7 @@
 
 
 <!-- Classic Modal -->
-<div class="modal fade BasicFilterModal" id="basicFilter" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<div class="modal fade BasicFilterModal FilterModalCon" id="basicFilter" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <form name="searchForm"  ng-submit="searchFilter()" novalidate >
@@ -413,7 +419,7 @@
 <!--  End Modal -->
 
 <!-- Classic Modal -->
-<div class="modal fade AdvancedFilterModal" id="advancedFilter" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<div class="modal fade AdvancedFilterModal FilterModalCon" id="advancedFilter" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <form name="searchForm"  ng-submit="searchFilter()" novalidate >
