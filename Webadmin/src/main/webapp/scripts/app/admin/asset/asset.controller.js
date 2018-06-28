@@ -852,7 +852,6 @@ angular.module('timeSheetApp')
 
        $scope.genQrCodes= function(){
 
-
               if($stateParams.id){
 
                 var qr_id ={id:$stateParams.id};
@@ -864,11 +863,17 @@ angular.module('timeSheetApp')
               
 
               $scope.qr_img = "";
+              $scope.assetCode = "";
 
 
             AssetComponent.genQrCode(qr_id).then(function(response){
 
-             $scope.qr_img = response;
+                var qrAry  = response.split('.');
+
+             $scope.qr_img = qrAry[0];
+             $scope.assetCode = qrAry[1];
+
+             console.log(qrAry);
 
              $rootScope.loadingStop();
 
@@ -1334,11 +1339,11 @@ angular.module('timeSheetApp')
         }
 
         $scope.loadAllParameters = function() {
-            $scope.loadStart();
+            //$rootScope.loadingStart();
     		ParameterComponent.findAll().then(function (data) {
 	            $scope.selectedParameter = null;
 	            $scope.parameters = data;
-                $scope.loadStop();
+                //$rootScope.loadingStop();
     		});
         }
 
