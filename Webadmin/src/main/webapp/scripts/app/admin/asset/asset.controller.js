@@ -471,7 +471,7 @@ angular.module('timeSheetApp')
 
         /* Sorting functions*/
 
-        $scope.isActiveAsc = 'assetCode';
+        //$scope.isActiveAsc = 'assetCode';
         $scope.isActiveDesc = '';
 
         $scope.columnAscOrder = function(field){
@@ -852,10 +852,11 @@ angular.module('timeSheetApp')
 
              $rootScope.loadingStop();
 
-            }).catch(function(){
+            });
+            /*.catch(function(){
                 $scope.showNotifications('top','center','danger','Error to retrieve  qr code..');
                 $rootScope.loadingStop();
-            });
+            });*/
 
        }
 

@@ -20,7 +20,6 @@ public class AssetDTO extends BaseDTO {
     private Date startTime;
     private boolean udsAsset;
     private String qrCodeImage;
-    private String qrCodeBase64;
     private String group;
     private String type;
     private String assetType;
@@ -50,12 +49,6 @@ public class AssetDTO extends BaseDTO {
     private String assetPpmTitle;
     private String warrantyType;
 
-    public String getQrCodeBase64() {
-		return qrCodeBase64;
-	}
-	public void setQrCodeBase64(String qrCodeBase64) {
-		this.qrCodeBase64 = qrCodeBase64;
-	}
 	public long getAssetTypeId() {
 		return assetTypeId;
 	}

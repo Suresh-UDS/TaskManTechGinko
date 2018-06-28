@@ -447,12 +447,12 @@ public class AssetManagementService extends AbstractService {
 	
 	public AssetDTO generateAssetQRCode(long assetId, String assetCode) {
 		Asset asset = assetRepository.findOne(assetId);
-		AssetDTO assetDTO = new AssetDTO();
 		long siteId = asset.getSite().getId();
 		String code = String.valueOf(siteId)+"_"+assetCode;
 		asset.setCode(code);
 		assetRepository.save(asset);
 		byte[] qrCodeImage = null;
+		String qrCodeBase64 = null;
 		if (asset != null) {
 			String codeName = String.valueOf(asset.getCode());
 				codeName = asset.getSite().getId()+"_"+codeName;
@@ -464,27 +464,26 @@ public class AssetManagementService extends AbstractService {
 				asset.setQrCodeImage(imageFileName);
 				assetRepository.save(asset);
 			}
-			assetDTO = mapperUtil.toModel(asset, AssetDTO.class);
 			if (qrCodeImage != null && org.apache.commons.lang3.StringUtils.isNotBlank(imageFileName)) {
-				assetDTO.setQrCodeBase64(fileUploadHelper.readQrCodeFile(imageFileName));
+				qrCodeBase64 = fileUploadHelper.readQrCodeFile(imageFileName);
 			}
-		}
-		return assetDTO;
+	}
+	return mapperUtil.toModel(asset, AssetDTO.class);
 	}
 
-	public AssetDTO getQRCode(long assetId) {
+	public String getQRCode(long assetId) {
+		log.debug(">>> get QR Code <<<");
 		Asset asset = assetRepository.findOne(assetId);
-		AssetDTO assetDTO = new AssetDTO();
+		String qrCodeBase64 = null;
 		String imageFileName = null;
 		if (asset != null) {
 			imageFileName = asset.getQrCodeImage();
-			assetDTO = mapperUtil.toModel(asset, AssetDTO.class);
 			if (org.apache.commons.lang3.StringUtils.isNotBlank(imageFileName)) {
-				assetDTO.setQrCodeBase64(fileUploadHelper.readQrCodeFile(imageFileName));
+				qrCodeBase64 = fileUploadHelper.readQrCodeFile(imageFileName);
 			}
 		}
-		return assetDTO;
-	}
+		return qrCodeBase64;
+		}
 
 	public ExportResult generateReport(List<AssetDTO> transactions, SearchCriteria criteria) {
 		return reportUtil.generateAssetReports(transactions, null, null, criteria);
