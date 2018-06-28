@@ -104,7 +104,7 @@ import{CalenderPage} from "../pages/calender-page/calender-page";
 
 import{EmployeeFilter} from "../pages/employee-list/employee-filter/employee-filter";
 import {JobFilter} from "../pages/jobs/job-filter/job-filter";
-
+import{SQLite,SQLiteObject} from "@ionic-native/sqlite";
 
 
 @NgModule({
@@ -294,6 +294,7 @@ import {JobFilter} from "../pages/jobs/job-filter/job-filter";
       AppVersion,
       QRScanner,
       FabContainer,
+      SQLite,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
       {provide:MY_CONFIG_TOKEN, useValue: AppConfig}
   ]

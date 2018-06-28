@@ -445,7 +445,7 @@ public class AssetManagementService extends AbstractService {
 		assetRepository.save(asset);
 	}
 	
-	public AssetDTO generateAssetQRCode(long assetId, String assetCode) {
+	public void generateAssetQRCode(long assetId, String assetCode) {
 		Asset asset = assetRepository.findOne(assetId);
 		long siteId = asset.getSite().getId();
 		String code = String.valueOf(siteId)+"_"+assetCode;
@@ -468,7 +468,7 @@ public class AssetManagementService extends AbstractService {
 				qrCodeBase64 = fileUploadHelper.readQrCodeFile(imageFileName);
 			}
 	}
-	return mapperUtil.toModel(asset, AssetDTO.class);
+		getQRCode(asset.getId());
 	}
 
 	public String getQRCode(long assetId) {
@@ -476,12 +476,14 @@ public class AssetManagementService extends AbstractService {
 		Asset asset = assetRepository.findOne(assetId);
 		String qrCodeBase64 = null;
 		String imageFileName = null;
+		String assetcode = asset.getCode();
 		if (asset != null) {
 			imageFileName = asset.getQrCodeImage();
 			if (org.apache.commons.lang3.StringUtils.isNotBlank(imageFileName)) {
 				qrCodeBase64 = fileUploadHelper.readQrCodeFile(imageFileName);
 			}
 		}
+		qrCodeBase64 = qrCodeBase64 + "." + assetcode;
 		return qrCodeBase64;
 		}
 
@@ -1735,6 +1737,12 @@ public class AssetManagementService extends AbstractService {
 		assetParamConfig.setRule(assetParameterConfigDTO.getRule());
 		assetParamConfig.setUom(assetParameterConfigDTO.getUom());
 		assetParamConfig.setValidationRequired(assetParameterConfigDTO.isValidationRequired());
+	}
+
+	public AssetParameterConfigDTO getAssetConfig(long id) {
+		// TODO Auto-generated method stub
+		AssetParameterConfig assetConfigEntity = assetParamConfigRepository.findOne(id);
+		return mapperUtil.toModel(assetConfigEntity, AssetParameterConfigDTO.class);
 	}
 	
 
