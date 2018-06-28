@@ -1738,6 +1738,12 @@ public class AssetManagementService extends AbstractService {
 		assetParamConfig.setUom(assetParameterConfigDTO.getUom());
 		assetParamConfig.setValidationRequired(assetParameterConfigDTO.isValidationRequired());
 	}
+
+	public AssetParameterConfigDTO getAssetConfig(long id) {
+		// TODO Auto-generated method stub
+		AssetParameterConfig assetConfigEntity = assetParamConfigRepository.findOne(id);
+		return mapperUtil.toModel(assetConfigEntity, AssetParameterConfigDTO.class);
+	}
 	
 
 }
