@@ -333,7 +333,7 @@ angular.module('timeSheetApp')
         	var currPageVal = ($scope.pages ? $scope.pages.currPage : 1);
         		var searchCriteria = {
             			currPage : currPageVal,
-                        isList:true
+                        isReport:true
             	}
             	$scope.searchCriteria = searchCriteria;
         	//}
