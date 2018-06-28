@@ -16,7 +16,8 @@ angular.module('timeSheetApp')
         $scope.pager = {};
         $scope.searchCriteria = {};
         $scope.pages = { currPage : 1};
-        $scope.isEdit = !!$stateParams.id;
+        //$scope.isEdit = !!$stateParams.id;
+        $scope.isEdit = false;
         $scope.selectedAsset = {};
         $scope.selectedProject = {};
         $scope.selectedSite = {};
@@ -61,6 +62,16 @@ angular.module('timeSheetApp')
         $scope.amcFrom = null;
         $scope.amcTo = null;
         $scope.btnDisabled = false;
+        $scope.selectedAssetType = {};
+        $scope.selectedParameter = {};
+        $scope.selectedParameterUOM = {};
+        $scope.selectedRule = "";
+        $scope.selectedThreshold =null;
+        $scope.validationRequired = false;
+        $scope.consumptionMonitoringRequired = false;
+        $scope.alertRequired = false;
+        $scope.selectedMinValue = null;
+        $scope.selectedMaxValue = null;
 
         //scope.searchAcquiredDate = $filter('date')(new Date(), 'dd/MM/yyyy');
         $scope.searchAcquiredDate = "";
@@ -440,7 +451,7 @@ angular.module('timeSheetApp')
                    });
                 }
 
-                $scope.genQrCodes();
+                //$scope.genQrCodes();
 
                 $rootScope.loadingStop();
 
@@ -725,17 +736,19 @@ angular.module('timeSheetApp')
                 $rootScope.loadPageTop();
                 $rootScope.loadingStart();
                 $scope.isEdit = (mode == 'edit' ? true : false)
-            AssetComponent.findById(id).then(function (data) {
+            AssetComponent.getAssetParamConfig(id).then(function (data) {
                 $scope.parameterConfig = data;
                 console.log('Parameter by id',$scope.parameterConfig);
-                $scope.selectedAssetType = {name:$scope.parameterConfig.assetType};
+                //$scope.selectedAssetType = {name:$scope.parameterConfig.assetType};
                 $scope.selectedParameter = {name:$scope.parameterConfig.name};
                 $scope.selectedParameterUOM = {uom:$scope.parameterConfig.uom};
                 $scope.selectedRule = $scope.parameterConfig.rule;
                 $scope.selectedThreshold = $scope.parameterConfig.threshold;
-                $scope.validationRequired.value = $scope.parameterConfig.validationRequired;
-                $scope.consumptionMonitoringRequired.value = $scope.parameterConfig.consumptionMonitoringRequired;
-                $scope.alertRequired.value = $scope.parameterConfig.alertRequired;
+                $scope.validationRequired = $scope.parameterConfig.validationRequired;
+                $scope.consumptionMonitoringRequired = $scope.parameterConfig.consumptionMonitoringRequired;
+                $scope.alertRequired = $scope.parameterConfig.alertRequired;
+                $scope.selectedMinValue = $scope.parameterConfig.max;
+                $scope.selectedMaxValue = $scope.parameterConfig.min;
                 $rootScope.loadingStop();
 
             });
@@ -791,11 +804,13 @@ angular.module('timeSheetApp')
                         $rootScope.loadingStop();
                         $scope.showNotifications('top','center','success','Asset Added');
                         $scope.loadEmployees();
+                        $scope.btnDisabled= false;
                         //$scope.loadAssets();
                         //$location.path('/assets');
 
                     }).catch(function (response) {
                         $rootScope.loadingStop();
+                        $scope.btnDisabled= false;
                         $scope.success = null;
                         console.log('Error - '+ response.data);
                         console.log('status - '+ response.status + ' , message - ' + response.data.message);
@@ -841,13 +856,17 @@ angular.module('timeSheetApp')
 
             AssetComponent.createQr(qr).then(function(response){
 
-                $scope.success = 'OK';
+                console.log('response qr---',response);
+
+                //$scope.success = 'OK';
                 var qrAry  = response.split('.');
 
              $scope.qr_img = qrAry[0];
              $scope.assetCode = qrAry[1];
 
-             console.log('create qr---'qrAry);
+             console.log('create qr---',qrAry);
+
+             $rootScope.loadingStop();
 
                 //$scope.genQrCodes();
             });
@@ -859,6 +878,8 @@ angular.module('timeSheetApp')
        /* View QR code by asset id */
 
        $scope.genQrCodes= function(){
+
+        $rootScope.loadingStart();
 
               if($stateParams.id){
 
@@ -1097,6 +1118,20 @@ angular.module('timeSheetApp')
             }
             //$scope.search();
         };
+
+        $scope.clear = function() {
+                $scope.selectedAssetType = {};
+                $scope.selectedParameter = {};
+                $scope.selectedParameterUOM = {};
+                $scope.selectedRule = "";
+                $scope.selectedThreshold =null;
+                $scope.validationRequired = false;
+                $scope.consumptionMonitoringRequired = false;
+                $scope.alertRequired = false;
+                $scope.selectedMinValue = null;
+                $scope.selectedMaxValue = null;
+                $scope.isEdit = false;
+        }
 
         //init load
         $scope.initLoad = function(){
@@ -1351,6 +1386,7 @@ angular.module('timeSheetApp')
     		ParameterComponent.findAll().then(function (data) {
 	            $scope.selectedParameter = null;
 	            $scope.parameters = data;
+                console.log('param list --',$scope.parameters);
                 //$rootScope.loadingStop();
     		});
         }
@@ -1367,6 +1403,8 @@ angular.module('timeSheetApp')
 
 
 	    $scope.saveAssetParamConfig = function () {
+            $rootScope.loadingStart;
+            $scope.btnDisabled = true;
         	$scope.error = null;
         	$scope.success =null;
           if(!$scope.assetGen.id && !$stateParams.id){
@@ -1438,17 +1476,31 @@ angular.module('timeSheetApp')
                     console.log('Add parameterConfig details ='+ JSON.stringify($scope.parameterConfig));
                 }
 
-            	AssetComponent.createAssetParamConfig($scope.parameterConfig).then(function () {
+                var post = $scope.isEdit ? AssetComponent.updateAssetParamConfig : AssetComponent.createAssetParamConfig;
+                post($scope.parameterConfig).then(function () {
+
+            	//AssetComponent.createAssetParamConfig($scope.parameterConfig).then(function () {
                     $scope.success = 'OK';
+                    if(!$scope.isEdit){
+
                     $scope.showNotifications('top','center','success','Asset Parameter Saved Successfully');
+
+                    }else{
+
+                     $scope.showNotifications('top','center','success','Asset Parameter Updated Successfully');
+
+                    }
+                   
                     $scope.assetConfig();
                     $scope.parameterConfig = {};
                     $scope.consumptionMonitoringRequired = "";
                     $scope.selectedParameterUOM = {};
                     $scope.selectedParameter = {};
+                    $rootScope.loadingStop();
 
                     //$scope.loadAllParameters();
                 }).catch(function (response) {
+                    $rootScope.loadingStop();
                     $scope.success = null;
                     console.log('Error - '+ response.data);
                     if (response.status === 400 && response.data.message === 'error.duplicateRecordError') {
