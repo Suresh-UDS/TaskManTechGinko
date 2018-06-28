@@ -1,11 +1,13 @@
 <!--<script src="bower_components/jquery/dist/jquery.js"></script>-->
 
 <div ng-cloak ng-init="loadPageTop()">
-    <div class="txt-align-rgt margn-btm-8">
-        <button class="btn btn-success add-btn margn-tb0" ng-click="printDiv('printable')" >
-            <i class="material-icons">print</i> Print
-        </button>
-    </div>
+
+    <!--Print option at top of the page-->
+    <!--<div class="txt-align-rgt margn-btm-8">-->
+        <!--<button class="btn btn-success add-btn margn-tb0" ng-click="printDiv('printable')" >-->
+            <!--<i class="material-icons">print</i> Print-->
+        <!--</button>-->
+    <!--</div>-->
 
     <div class="DashboardCardsCon">
 
@@ -283,7 +285,7 @@
                   </div>
               </div>
 
-              <div class="panel panel-default" has-permission="Tickets:List">
+              <div class="panel panel-default" has-permission="TicketCharts:View">
                   <div class="panel-heading">Open Call Tickets</div>
                   <div class="panel-body">
                       <div class="row">
@@ -339,7 +341,7 @@
                       </div>
                   </div>
               </div>
-              <div class="panel panel-default">
+              <div class="panel panel-default" has-permission="TicketCharts:View">
                   <div class="panel-heading"> Closed Call Tickets</div>
                   <div class="panel-body">
                       <div class="row">
@@ -399,7 +401,7 @@
                       </div>
                   </div>
               </div>
-              <div class="panel panel-default">
+              <div class="panel panel-default" has-permission="TicketCharts:View">
                   <div class="panel-heading">Overall Tickets</div>
                   <div class="panel-body">
                       <div class="row">

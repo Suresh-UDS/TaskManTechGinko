@@ -78,7 +78,7 @@ export class FeedbackPage {
                 this.component.closeLoader();
                 demo.showSwal('feedback-success','Thank you!','For your Feedback');
                 // this.navCtrl.setRoot(InitFeedbackZone,{feedback:this.navParams.data.feedback,project:this.navParams.data.project,site:this.navParams.data.site,location:this.navParams.data.location});
-                this.navCtrl.setRoot(SelectFeedbackPage,{feedback:this.navParams.data.feedback,project:this.navParams.data.project,site:this.navParams.data.site,location:this.navParams.data.location});
+                this.navCtrl.setRoot(SelectFeedbackPage,{fb:this.navParams.data.fb,feedback:this.navParams.data.feedback,project:this.navParams.data.project,site:this.navParams.data.site,location:this.navParams.data.location});
             },err=>{
                 console.log("error in saving feedback");
                 this.component.closeLoader();
