@@ -476,12 +476,14 @@ public class AssetManagementService extends AbstractService {
 		Asset asset = assetRepository.findOne(assetId);
 		String qrCodeBase64 = null;
 		String imageFileName = null;
+		String assetcode = asset.getCode();
 		if (asset != null) {
 			imageFileName = asset.getQrCodeImage();
 			if (org.apache.commons.lang3.StringUtils.isNotBlank(imageFileName)) {
 				qrCodeBase64 = fileUploadHelper.readQrCodeFile(imageFileName);
 			}
 		}
+		qrCodeBase64 = qrCodeBase64 + "." + assetcode;
 		return qrCodeBase64;
 		}
 
