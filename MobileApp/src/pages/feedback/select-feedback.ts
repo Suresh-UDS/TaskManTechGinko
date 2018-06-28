@@ -22,6 +22,7 @@ export class SelectFeedbackPage {
       this.feedback = this.navParams.data.feedback;
       this.fb=this.navParams.data.fb;
 
+      console.log(this.fb)
 
       platform.registerBackButtonAction(() => {
           let view = this.navCtrl.getActive();
@@ -31,6 +32,11 @@ export class SelectFeedbackPage {
           if(view.name == 'SelectFeedbackPage') {
               this.navCtrl.setRoot(InitFeedbackZone,{feedback:this.navParams.data.feedback,project:this.navParams.data.project,site:this.navParams.data.site,location:this.navParams.data.location});
           }
+          else if(this.navCtrl.canGoBack())
+          {
+              this.navCtrl.pop();
+          }
+
       }, 0);
 
 
