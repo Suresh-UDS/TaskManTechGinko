@@ -721,6 +721,26 @@ angular.module('timeSheetApp')
 
         }
 
+        $scope.getParameterConfigDetails = function(id, mode) {
+                $rootScope.loadPageTop();
+                $rootScope.loadingStart();
+                $scope.isEdit = (mode == 'edit' ? true : false)
+            AssetComponent.findById(id).then(function (data) {
+                $scope.parameterConfig = data;
+                console.log('Parameter by id',$scope.parameterConfig);
+                $scope.selectedAssetType = {name:$scope.parameterConfig.assetType};
+                $scope.selectedParameter = {name:$scope.parameterConfig.name};
+                $scope.selectedParameterUOM = {uom:$scope.parameterConfig.uom};
+                $scope.selectedRule = $scope.parameterConfig.rule;
+                $scope.selectedThreshold = $scope.parameterConfig.threshold;
+                $scope.validationRequired.value = $scope.parameterConfig.validationRequired;
+                $scope.consumptionMonitoringRequired.value = $scope.parameterConfig.consumptionMonitoringRequired;
+                $scope.alertRequired.value = $scope.parameterConfig.alertRequired;
+                $rootScope.loadingStop();
+
+            });
+        };
+
 
         $('input#acquiredDate').on('dp.change', function(e){
                 $scope.assetGen.acquiredDate = e.date._d;
