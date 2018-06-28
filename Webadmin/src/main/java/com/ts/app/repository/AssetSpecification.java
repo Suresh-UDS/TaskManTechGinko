@@ -44,12 +44,12 @@ public class AssetSpecification implements Specification<Asset> {
 			predicates.add(builder.equal(root.get("site").get("id"), searchCriteria.getSiteId()));
 		}
 		log.debug("AssetSpecification toPredicate - searchCriteria assetTitle -" + searchCriteria.getAssetTitle());
-		if (searchCriteria.getAssetTitle() != null) {
+		if (searchCriteria.getAssetTitle() != null && searchCriteria.getAssetTitle() != "") {
 			predicates.add(builder.like(builder.lower(root.get("title")),
 					"%" + searchCriteria.getAssetTitle().toLowerCase() + "%"));
 		}
 		log.debug("AssetSpecification toPredicate - searchCriteria asset code -" + searchCriteria.getAssetCode());
-		if (searchCriteria.getAssetCode() != null) {
+		if (searchCriteria.getAssetCode() != null && searchCriteria.getAssetCode() !="") {
 			predicates.add(builder.like(builder.lower(root.get("code")),
 					"%" + searchCriteria.getAssetCode().toLowerCase() + "%"));
 		}
@@ -58,7 +58,7 @@ public class AssetSpecification implements Specification<Asset> {
 			predicates.add(builder.equal(root.get("assetType"), searchCriteria.getAssetTypeName()));
 		}
 		log.debug("AssetSpecification toPredicate - searchCriteria assetgroup -" + searchCriteria.getAssetGroupName());
-		if (searchCriteria.getAssetGroupName() != null) {
+		if (searchCriteria.getAssetGroupName() != null && searchCriteria.getAssetGroupName() !="") {
 			predicates.add(builder.equal(root.get("assetGroup"), searchCriteria.getAssetGroupName()));
 		}
 		log.debug("AssetSpecification toPredicate - searchCriteria acquiredate -" + searchCriteria.getAcquiredDate());

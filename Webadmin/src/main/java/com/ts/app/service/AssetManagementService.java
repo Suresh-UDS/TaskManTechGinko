@@ -818,7 +818,7 @@ public class AssetManagementService extends AbstractService {
 			
             log.debug("AssetSpecification toPredicate - searchCriteria get consolidated status -"+ searchCriteria.isConsolidated());
 
-			if (!searchCriteria.isFindAll()) {
+/*			if (!searchCriteria.isFindAll()) {
 				log.debug(">>> inside search findall <<<");
 				
 				if (!StringUtils.isEmpty(searchCriteria.getAssetTypeName()) && !StringUtils.isEmpty(searchCriteria.getAssetName()) && searchCriteria.getProjectId() > 0
@@ -905,13 +905,14 @@ public class AssetManagementService extends AbstractService {
 				} else {
 					page = assetRepository.findAllAsset(pageRequest);
 				}
-			}
-			/*if(!searchCriteria.isConsolidated()) {
+			}*/
+			if(!searchCriteria.isConsolidated()) {
 				log.debug(">>> inside search consolidate <<<");
     			page = assetRepository.findAll(new AssetSpecification(searchCriteria,true),pageRequest);
-    		}*/
+    			allAssetsList.addAll(page.getContent());
+    		}
 			
-			if (page != null) {
+			/*if (page != null) {
 				if (transactions == null) {
 					transactions = new ArrayList<AssetDTO>();
 				}
@@ -924,8 +925,16 @@ public class AssetManagementService extends AbstractService {
 				if (CollectionUtils.isNotEmpty(transactions)) {
 					buildSearchResult(searchCriteria, page, transactions, result);
 				}
+			}*/
+			if(CollectionUtils.isNotEmpty(allAssetsList)) {
+				if(transactions == null) {
+					transactions = new ArrayList<AssetDTO>();
+				}
+	        		for(Asset asset : allAssetsList) {
+	        			transactions.add(mapperUtil.toModel(asset, AssetDTO.class));
+	        		}
+				buildSearchResult(searchCriteria, page, transactions,result);
 			}
-
 		}
 		return result;
 	}
