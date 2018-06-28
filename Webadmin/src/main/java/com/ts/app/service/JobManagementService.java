@@ -208,7 +208,11 @@ public class JobManagementService extends AbstractService {
                 pageRequest = createPageSort(searchCriteria.getCurrPage(), searchCriteria.getSort(), sort);
 
             }else{
-                pageRequest = createPageRequest(searchCriteria.getCurrPage());
+                if (searchCriteria.isReport()) {
+                    pageRequest = createPageRequest(searchCriteria.getCurrPage(), true);
+                } else {
+                    pageRequest = createPageRequest(searchCriteria.getCurrPage());
+                }
             }
 
 
