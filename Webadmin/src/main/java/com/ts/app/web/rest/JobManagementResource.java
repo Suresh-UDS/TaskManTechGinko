@@ -413,10 +413,11 @@ public class JobManagementResource {
 
     @RequestMapping(value = "/job/export",method = RequestMethod.POST)
     public ExportResponse exportJob(@RequestBody SearchCriteria searchCriteria) {
-	    //log.debug("JOB EXPORT STARTS HERE **********");
+	    log.debug("JOB EXPORT STARTS HERE **********"+searchCriteria.isReport());
         ExportResponse resp = new ExportResponse();
         if(searchCriteria != null) {
             searchCriteria.setUserId(SecurityUtils.getCurrentUserId());
+            searchCriteria.setReport(true);
             SearchResult<JobDTO> result = jobService.findBySearchCrieria(searchCriteria, true);
             List<JobDTO> results = result.getTransactions();
             resp.addResult(jobService.generateReport(results, searchCriteria));
