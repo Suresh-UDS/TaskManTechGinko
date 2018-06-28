@@ -51,11 +51,11 @@ public class Attendance extends AbstractAuditingEntity implements Serializable{
 
 	private boolean offline;
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.LAZY, cascade={CascadeType.REFRESH})
 	@JoinColumn(name = "siteId", nullable = false)
 	private Site site;
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.LAZY, cascade={CascadeType.REFRESH})
 	@JoinColumn(name = "employeeId", nullable = false)
 	private Employee employee;
 

@@ -533,6 +533,13 @@ angular.module('timeSheetApp')
                 $scope.loadSelectedRole($scope.employee.userRoleId);
                 $scope.sites = $scope.employee.projectSites;
             });
+            EmployeeComponent.getEmployeeCurrentAttendance(id).then(function(data) {
+                console.log("Attendance Data");
+                if (data) {
+                    console.log("Already checked in");
+                    $scope.isCheckedIn = true;
+                }
+            })
         };
 
         $scope.getEmployeeByEmpId = function() {
@@ -854,9 +861,9 @@ angular.module('timeSheetApp')
 
 
         $scope.checkOut = function(siteId,employeeEmpId,id){
-            EmployeeComponent.getAttendance(id).then(function(data) {
+            EmployeeComponent.getEmployeeCurrentAttendance(id).then(function(data) {
                 console.log("Attendance Data");
-                if (data[0]) {
+                if (data) {
                     console.log("Already checked in");
 
                     if (navigator.geolocation) {
@@ -870,7 +877,7 @@ angular.module('timeSheetApp')
                                 checkOutData.employeeEmpId = employeeEmpId;
                                 checkOutData.latitudeOut = position.coords.latitude;
                                 checkOutData.longitudeOut = position.coords.longitude;
-                                checkOutData.id = data[0].id;
+                                checkOutData.id = data.id;
                                 EmployeeComponent.checkOut(checkOutData).then(function (data) {
                                     console.log("attendance marked");
                                     console.log(data)

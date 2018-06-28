@@ -119,7 +119,12 @@ public class AttendanceResource {
 		return attendanceService.findOne(id);
 	}
 
-    @RequestMapping(value = "/attendance/search",method = RequestMethod.POST)
+	@RequestMapping(value = "/attendance/employee/{empId}", method = RequestMethod.GET)
+	public AttendanceDTO getEmployeeCurrentAttendance(@PathVariable("empId") Long empId) {
+		return attendanceService.findCurrentCheckInByEmpId(empId);
+	}
+
+	@RequestMapping(value = "/attendance/search",method = RequestMethod.POST)
     public SearchResult<AttendanceDTO> searchAttendance(@RequestBody SearchCriteria searchCriteria) {
         SearchResult<AttendanceDTO> result = null;
         log.debug("Search Attendance- "+searchCriteria.getCheckInDateTimeFrom());
