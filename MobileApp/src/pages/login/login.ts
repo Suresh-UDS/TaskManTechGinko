@@ -9,6 +9,7 @@ import {componentService} from "../service/componentService";
 import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import { Toast } from '@ionic-native/toast';
 import {EmployeeService} from "../service/employeeService";
+import{SQLite,SQLiteObject} from "@ionic-native/sqlite";
 
 /**
  * Generated class for the LoginPage page.
@@ -32,7 +33,9 @@ export class LoginPage {
   type : FormGroup;
   module:any;
   permission:any;
-  constructor(public navCtrl: NavController,public component:componentService,private formBuilder: FormBuilder,public menuCtrl:MenuController, public toastCtrl:ToastController,private toast: Toast,public navParams: NavParams,public myService:authService, public employeeService: EmployeeService, public events:Events) {
+  constructor(public navCtrl: NavController,public component:componentService,private formBuilder: FormBuilder,public menuCtrl:MenuController, public toastCtrl:ToastController,private toast: Toast,
+              public navParams: NavParams,public myService:authService, public employeeService: EmployeeService,
+              public events:Events,private sqlite:SQLite) {
       this.permission=[
           {module:null,
               action:null}
@@ -81,12 +84,13 @@ export class LoginPage {
               window.localStorage.setItem('employeeEmpId', response.json().employee.empId);
               window.localStorage.setItem('employeeUserId', response.json().employee.userId);
               window.localStorage.setItem('employeeDetails', JSON.stringify(response.json()));
+
               var employee = response.json().employee;
 
               if (response.status == 200) {
-                  window.location.reload()
+                  window.location.reload();
                   this.navCtrl.setRoot(TabsPage);
-                this.component.closeLoader();
+                  this.component.closeLoader();
               }
 
                 else {
@@ -115,12 +119,12 @@ export class LoginPage {
 
                if(error.type==2)
                {
-                    this.msg = 'Invalid UserName and Password'
+                    this.msg = 'Invalid UserName and Password';
                     this.password = "";
                }
                if(error.type==3)
                {
-                    this.msg = 'Server Unreachable'
+                    this.msg = 'Server Unreachable';
                     this.password = "";
                }
 
@@ -156,9 +160,7 @@ export class LoginPage {
 
   }
   ionViewDidEnter(){
-
     //this.callValidation();
-
   }
 
 
