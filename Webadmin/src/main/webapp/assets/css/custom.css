@@ -466,16 +466,24 @@ textarea.form-control {
 {
     display: block;
 }
+.HoverBx a i
+{
+    transition: font-size 2s linear 1s;
+}
 .HoverBx a:hover i
 {
     color: orange;
     font-size: 25px;
+
 }
 .btn.btn-primary, .btn.btn-primary:hover, .btn.btn-primary:focus, .btn.btn-primary:active, .btn.btn-primary.active, .btn.btn-primary:active:focus, .btn.btn-primary:active:hover, .btn.btn-primary.active:focus, .btn.btn-primary.active:hover, .open>.btn.btn-primary.dropdown-toggle, .open>.btn.btn-primary.dropdown-toggle:focus, .open>.btn.btn-primary.dropdown-toggle:hover, .navbar .navbar-nav>li>a.btn.btn-primary, .navbar .navbar-nav>li>a.btn.btn-primary:hover, .navbar .navbar-nav>li>a.btn.btn-primary:focus, .navbar .navbar-nav>li>a.btn.btn-primary:active, .navbar .navbar-nav>li>a.btn.btn-primary.active, .navbar .navbar-nav>li>a.btn.btn-primary:active:focus, .navbar .navbar-nav>li>a.btn.btn-primary:active:hover, .navbar .navbar-nav>li>a.btn.btn-primary.active:focus, .navbar .navbar-nav>li>a.btn.btn-primary.active:hover, .open>.navbar .navbar-nav>li>a.btn.btn-primary.dropdown-toggle, .open>.navbar .navbar-nav>li>a.btn.btn-primary.dropdown-toggle:focus, .open>.navbar .navbar-nav>li>a.btn.btn-primary.dropdown-toggle:hover
 {
   background-color: #ff9800;
 }
-
+.FilterModalCon .modal-footer .btn-simple
+{
+    border: 1px solid;
+}
 .btn-group.open>.dropdown-toggle.btn.btn-primary, .btn-group-vertical.open>.dropdown-toggle.btn.btn-primary
 {
   background-color: #ff9800;
