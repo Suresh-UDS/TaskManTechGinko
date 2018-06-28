@@ -13,10 +13,10 @@
 <p th:text="#{email.attendance.detailed.report.text1(${date})}">
 
 </p>
-<p th:text="#{email.attendance.detailed.report.content(${reportData})}">
+<!-- <p th:text="#{email.attendance.detailed.report.content(${reportData})}">
 </p>
-
-<table border="1" style="border-collapse:collapse">
+ -->
+<table border="1" cellpadding="5"  style="border-collapse:collapse;marging-bottom:10px">
 	<tr>
 		<th>SHIFT</th>
 		<th>TOTAL MANDAYS</th>
@@ -42,7 +42,7 @@
 <br/>
 <br/>
 
-<table th:each="element : ${consolidatedData}" border="1" style="border-collapse:collapse">
+<table th:each="element : ${consolidatedData}" border="1" cellpadding="5"  style="border-collapse:collapse;margin-bottom:20px;">
 	<tr>
 		<th>SITE</th>
 		<th>SHIFT</th>

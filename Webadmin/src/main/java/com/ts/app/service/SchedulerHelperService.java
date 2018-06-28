@@ -464,7 +464,7 @@ public class SchedulerHelperService extends AbstractService {
 					// send reports in email.
 					if (attendanceReportEmails != null && projEmployees > 0 && ((shiftAlert && siteShiftConsolidatedData.size() > 0) || dayReport)) {
 						ExportResult exportResult = null;
-						exportResult = exportUtil.writeAttendanceReportToFile(proj.getName(), empAttnList, consolidatedData, summaryMap, null, exportResult);
+						exportResult = exportUtil.writeAttendanceReportToFile(proj.getName(), empAttnList, consolidatedData, summaryMap, shiftWiseSummary, null, exportResult);
 						mailService.sendAttendanceDetailedReportEmail(proj.getName(), attendanceReportEmails.getSettingValue(), content.toString(), exportResult.getFile(), null,
 								cal.getTime(), summaryMap, shiftWiseSummary, siteWiseConsolidatedMap);
 					}
