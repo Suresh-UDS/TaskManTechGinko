@@ -28,6 +28,7 @@ angular.module('timeSheetApp')
         $scope.selectedAssetType = {};
         $scope.selectedParameter = {};
         $scope.selectedParameterUOM = {};
+        $scope.selectedRule ="";
         
         $scope.consumptionMonitoringRequired = {value:false};
         $scope.alertRequired = {value: true};
@@ -154,14 +155,22 @@ angular.module('timeSheetApp')
 	    };
         
         $scope.getParameterConfigDetails = function(id, mode) {
+                $rootScope.loadPageTop();
+                $rootScope.loadingStart();
         		$scope.isEdit = (mode == 'edit' ? true : false)
             ParameterConfigComponent.findById(id).then(function (data) {
                 $scope.parameterConfig = data;
                 console.log('Parameter by id',$scope.parameterConfig);
                 $scope.selectedAssetType = {name:$scope.parameterConfig.assetType};
                 $scope.selectedParameter = {name:$scope.parameterConfig.name};
-                $scope.selectedParameterUOM = {name:$scope.parameterConfig.uom};
-                $scope.selectedRule = {rule:$scope.parameterConfig.rule};
+                $scope.selectedParameterUOM = {uom:$scope.parameterConfig.uom};
+                $scope.selectedRule = $scope.parameterConfig.rule;
+                $scope.selectedThreshold = $scope.parameterConfig.threshold;
+                $scope.validationRequired.value = $scope.parameterConfig.validationRequired;
+                $scope.consumptionMonitoringRequired.value = $scope.parameterConfig.consumptionMonitoringRequired;
+                $scope.alertRequired.value = $scope.parameterConfig.alertRequired;
+                $rootScope.loadingStop();
+
             });
         };
 
@@ -262,18 +271,27 @@ angular.module('timeSheetApp')
 	        	$scope.parameterConfig.validationRequired = $scope.validationRequired.value;
 	        	$scope.parameterConfig.alertRequired = $scope.alertRequired.value;
 	        	console.log('parameterConfig details ='+ JSON.stringify($scope.parameterConfig));
-	        	//var post = $scope.isEdit ? ParameterConfigComponent.update : ParameterConfigComponent.create
-                //post($scope.parameterConfig).then(function () {
+	        	var post = $scope.isEdit ? ParameterConfigComponent.update : ParameterConfigComponent.create
+                post($scope.parameterConfig).then(function () {
             
-	        	ParameterConfigComponent.create($scope.parameterConfig).then(function () {
+	        	//ParameterConfigComponent.create($scope.parameterConfig).then(function () {
 	                $scope.success = 'OK';
-	                $scope.showNotifications('top','center','success','Parameter Configuration Saved Successfully');
+                    if(!$scope.isEdit){
+
+                    $scope.showNotifications('top','center','success','Parameter Configuration Saved Successfully');
+
+                    }else{
+
+                    $scope.showNotifications('top','center','success','Parameter Configuration Updated Successfully');
+
+                    }
+	                
                     $scope.loadParameterConfigs();
                     $scope.parameterConfig = {};
                     $scope.selectedAssetType ={};
                     $scope.selectedParameter ={};
                     $scope.selectedParameterUOM ={};
-                    $scope.selectedRule ={};
+                    $scope.selectedRule ="";
                     $scope.btnDisabled = false;
                     $scope.selectedThreshold =null;
                     $scope.validationRequired.value =false;
@@ -317,7 +335,7 @@ angular.module('timeSheetApp')
       
         $scope.loadAllRules = function() {
         	AssetComponent.getAllRules().then(function(data) {
-        		console.log(data);
+        		console.log('Reading rules--',data);
         		$scope.readingRules = data;
         	});
         }
@@ -333,6 +351,18 @@ angular.module('timeSheetApp')
                 totalPages: 0
             }
             //$scope.search();
+        }
+
+         $scope.cancel = function() {
+                $scope.selectedAssetType = {};
+                $scope.selectedParameter = {};
+                $scope.selectedParameterUOM = {};
+                $scope.selectedRule = "";
+                $scope.selectedThreshold =null;
+                $scope.validationRequired.value = false;
+                $scope.consumptionMonitoringRequired.value = false;
+                $scope.alertRequired.value = false;
+                $scope.isEdit = false;
         }
 
         // init load
