@@ -93,6 +93,7 @@ export class EmployeeList {
           this.lattitude = 0;
           this.longitude = 0;
       });
+
   }
 
   getEmployeeAttendance(employeeId){
