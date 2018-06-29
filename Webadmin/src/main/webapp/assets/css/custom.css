@@ -353,7 +353,7 @@ span.d-md-arrow-icon
 }
 span.d-arrow-icon
 {
-  padding-top: 32px;
+  padding-top: 28px;
 }
 span.d-big-arrow-icon {
     padding-top: 38px;
@@ -434,7 +434,7 @@ button.btn.btn-circle:hover
      margin: 5px 0;
 }
 textarea.form-control {
-    height: 36px;
+    height: 60px;
 }
 
 .line-scale-party>div, .line-scale>div
