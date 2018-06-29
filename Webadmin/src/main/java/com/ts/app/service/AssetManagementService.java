@@ -11,6 +11,7 @@ import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -1267,9 +1268,6 @@ public class AssetManagementService extends AbstractService {
 		// TODO Auto-generated method stub
 		Date uploadDate = new Date();
 		Calendar cal = Calendar.getInstance();
-		String extension = FilenameUtils.getExtension(file.getOriginalFilename());
-		if(extension == "")
-		{
 		Asset assetEntity = assetRepository.findOne(assetDocumentDTO.getAssetId());
 		String assetCode = assetEntity.getCode();
 		Long siteId = assetEntity.getSite().getId();
@@ -1282,9 +1280,6 @@ public class AssetManagementService extends AbstractService {
 		assetDocument = assetDocumentRepository.save(assetDocument);
 		assetDocumentDTO = mapperUtil.toModel(assetDocument, AssetDocumentDTO.class);
 		return assetDocumentDTO;
-		}
-		else
-		return null;
 	}
 
 	public List<AssetDocumentDTO> findAllDocuments(String type, Long assetId) {

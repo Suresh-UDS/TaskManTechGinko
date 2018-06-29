@@ -1,4 +1,4 @@
-<div class="crud-form" ng-init="editAsset();loadingStart();assetConfig();loadAllParameters();loadAllParameterUOMs();loadAMCJobs();loadPPMJobs();"
+<div class="crud-form" ng-init="editAsset();loadingStart();loadAllParameters();loadAllParameterUOMs();"
 	data-unique-hash="a2ad475d60b22954085c657a73309b8f">
 	<div class="">
 		<div class="row">
@@ -39,18 +39,18 @@
                                                     <a href=".qr-code" data-toggle="tab" ng-click="uView('off');genQrCodes();"
                                                        > QR Code</a>
                                                 </li>
-                                                <li class=""><a href=".ppm-schedule" data-toggle="tab" ng-click="uView('off')"
+                                                <li class=""><a href=".ppm-schedule" data-toggle="tab" ng-click="uView('off');loadPPMSchedule();"
                                                                 >PPM Schedule</a></li>
-                                                <li class=""><a href=".amcschedule" data-toggle="tab" ng-click="uView('off')"
+                                                <li class=""><a href=".amcschedule" data-toggle="tab" ng-click="uView('off');loadAmcSchedule();"
                                                                 >AMC schedule</a></li>
-                                                <li class=""><a href=".Config" data-toggle="tab" ng-click="uView('off')"
+                                                <li class=""><a href=".Config" data-toggle="tab" ng-click="uView('off');assetConfig();"
                                                 >Config</a></li>
 
-                                                <li class=""><a href=".docs" data-toggle="tab" ng-click="uView('off')"
+                                                <li class=""><a href=".docs" data-toggle="tab" ng-click="uView('off');getAllUploadedFiles();getAllUploadedPhotos();"
                                                                 >Documents</a></li>
-                                                <li class=""><a href=".ppm-jobs" data-toggle="tab" ng-click="uView('off')"
+                                                <li class=""><a href=".ppm-jobs" data-toggle="tab" ng-click="uView('off');loadPPMJobs();"
                                                 >PPM Jobs</a></li>
-                                                <li class=""><a href=".amc-jobs" data-toggle="tab" ng-click="uView('off')"
+                                                <li class=""><a href=".amc-jobs" data-toggle="tab" ng-click="uView('off');loadAMCJobs();"
                                                 >AMC Jobs</a></li>
                                                 <li class="">
                                                     <a href=".tickets" data-toggle="tab" ng-click="uView('off')"
@@ -895,9 +895,9 @@
                                                                     />
                                                                 </div> -->
 
-                                                <div class="tab-pane fade ppm-schedule" id="ppm-schedulee" ng-init="loadPPMSchedule()">
+                                                <div class="tab-pane fade ppm-schedule" id="ppm-schedulee" >
                                                     <form name="form3" role="form" novalidate
-                                                    class="form-horizontal" ng-init="initPPMSchedule()">
+                                                    class="form-horizontal">
                                                         <div class="panel panel-default">
                                                             <div class="panel-heading">New Schedule</div>
                                                             <div class="panel-body">
@@ -968,12 +968,16 @@
                                                                             <div ng-show="form3.$submitted || form3.PpmFrom.$touched">
                                                                                 <div
                                                                                     ng-show="form3.PpmFrom.$dirty || form3.PpmFrom.$invalid">
-                                                                                    <p class="help-block" style="color:maroon"
+                                                                                    <p class="help-block" style="width:100%;z-index:1000;background:#fff;color:maroon"
                                                                                        ng-show="form3.PpmFrom.$error.required">
                                                                                         From date is required.
                                                                                     </p>
                                                                                    
                                                                                 </div>
+                                                                                <p class="help-block" style="color:maroon"
+                                                                                       ng-show="ppmFromMsg">
+                                                                                        Fromdate cannot be greater than To date.
+                                                                                </p>
                                                                                 
                                                                             </div>
 
@@ -987,13 +991,17 @@
                                                                             <div ng-show="form3.$submitted || form3.PpmTo.$touched">
                                                                                 <div
                                                                                     ng-show="form3.PpmTo.$dirty || form3.PpmTo.$invalid">
-                                                                                    <p class="help-block" style="color:maroon"
+                                                                                    <p class="help-block" style="width:100%;z-index:1000;background:#fff;color:maroon"
                                                                                        ng-show="form3.PpmTo.$error.required">
                                                                                         To date is required.
                                                                                     </p>
                                                                                   
 
                                                                                 </div>
+                                                                                <p class="help-block" style="color:maroon"
+                                                                                       ng-show="ppmToMsg">
+                                                                                        Todate cannot be lesser than From date.
+                                                                                </p>
                                                                                 
                                                                             </div>
 
@@ -1091,7 +1099,7 @@
                                                                         </div>
                                                                     </div>
                                                                     <div class="col-md-1" style="padding-top: 25px;">
-                                                                        <a class="btn btn-success add-btn margn-top0"  ng-click="savePPMSchedule()" ng-disabled="form3.$invalid">Add</a>
+                                                                        <a class="btn btn-success add-btn margn-top0"  ng-click="savePPMSchedule()" ng-disabled="form3.$invalid || ppmFromMsg || ppmToMsg">Add</a>
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -1145,7 +1153,7 @@
                                                         </div>
                                                     </form>
                                                 </div>
-                                                <div class="tab-pane fade amcschedule" id="amc-schedule" ng-init="loadAmcSchedule()">
+                                                <div class="tab-pane fade amcschedule" id="amc-schedule" >
                                                     <form name="form4" role="form" novalidate
                                                     class="form-horizontal">
                                                     <div class="panel panel-default">
@@ -1215,12 +1223,17 @@
                                                                             <div ng-show="form4.$submitted || form4.AmcFrom.$touched">
                                                                                 <div
                                                                                     ng-show="form4.AmcFrom.$dirty || form4.AmcFrom.$invalid">
-                                                                                    <p class="help-block" style="color:maroon"
+                                                                                    <p class="help-block" style="width:100%;z-index:1000;background:#fff;color:maroon"
                                                                                        ng-show="form4.AmcFrom.$error.required">
                                                                                         From date is required.
                                                                                     </p>
+                                                                                    
                                                                                    
                                                                                 </div>
+                                                                                <p class="help-block" style="color:maroon"
+                                                                                       ng-show="amcFromMsg">
+                                                                                        Fromdate cannot be greater than To date.
+                                                                                </p>
                                                                                 
                                                                             </div>
 
@@ -1234,12 +1247,17 @@
                                                                             <div ng-show="form4.$submitted || form4.AmcTo.$touched">
                                                                                 <div
                                                                                     ng-show="form4.AmcTo.$dirty || form4.AmcTo.$invalid">
-                                                                                    <p class="help-block" style="color:maroon"
+                                                                                    <p class="help-block" style="width:100%;z-index:1000;background:#fff;color:maroon"
                                                                                        ng-show="form4.AmcTo.$error.required">
                                                                                         To date is required.
                                                                                     </p>
+                                                                                    
                                                                                    
                                                                                 </div>
+                                                                                <p class="help-block" style="color:maroon"
+                                                                                       ng-show="amcToMsg">
+                                                                                        Todate cannot be lesser than From date.
+                                                                                </p>
                                                                                 
                                                                             </div>
 
@@ -1332,7 +1350,7 @@
                                                                     </div>
                                                                 </div>
                                                                 <div class="col-md-1" style="padding-top: 25px;">
-                                                                    <a class="btn btn-success add-btn margn-top0"  ng-click="saveAmcSchedule()" ng-disabled="form4.$invalid">Add</a>
+                                                                    <a class="btn btn-success add-btn margn-top0"  ng-click="saveAmcSchedule()" ng-disabled="form4.$invalid || amcFromMsg || amcToMsg">Add</a>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -1708,7 +1726,7 @@
                                                                                      </td> -->
                                                                                     <td class="text-right">
                                                                                         <a  ng-click="getParameterConfigDetails(assetParam.id ,'edit')"  has-permission="Config:Edit"   class="btn btn-simple btn-info"><i class="material-icons">edit</i></a>
-                                                                                        <a  has-permission="Config:Delete" ui-sref="" class="btn btn-simple btn-danger" ng-click="deleteAssetConfig(assetParam.id)"><i class="material-icons">delete_forever</i><div class="ripple-container"></div></a>
+                                                                                        <a  has-permission="Config:Delete" ui-sref="" class="btn btn-simple btn-danger" ng-click="deleteConfigConfirm(assetParam.id)"><i class="material-icons" onClick="$('#deleteModalConfig').modal()" data-target="#myModal">delete_forever</i><div class="ripple-container"></div></a>
                                                                                     </td>
 
                                                                                 </tr>
@@ -1772,25 +1790,29 @@
                                                                         <div class="col-md-12">
                                                                             <div class="form-group label-floating is-empty is-fileinput row">
                                                                                 <div class="col-md-6 pdng-top13">
-                                                                                    <input type="file" class="form-control ng-pristine ng-valid ng-touched" style="opacity:100;position:relative" file-model="" ng-model="selectedClientFile" name="clientFile" tabindex="0" aria-invalid="false" required>
+                                                                                    <input type="file" class="form-control ng-pristine ng-valid ng-touched" style="opacity:100;position:relative" file-model="" ng-model="selectedClientFile" name="clientFile" tabindex="0" aria-invalid="false" required onchange="angular.element(this).scope().uploadfileValidation(this.files)">
                                                                                     <div ng-show="importClientForm.$submitted || importClientForm.clientFile.$touched">
                                                                                         <div
                                                                                             ng-show="importClientForm.clientFile.$dirty || importClientForm.clientFile.$invalid">
-                                                                                            <p class="help-block" style="color:maroon"
+                                                                                            <p class="help-block" style="width:100%;z-index:1000;background:#fff;color:maroon"
                                                                                                ng-show="importClientForm.clientFile.$error.required">
-                                                                                                File title  is required.
+                                                                                                File is required.
                                                                                             </p>
-                                                                                            <!-- <p class="help-block" style="color:maroon"
-                                                                                                   ng-show="importClientForm.clientFile.$error.maxlength">
-                                                                                             File title cannot be longer than 250 characters.
-                                                                                            </p> -->
+                                                                                            <p class="help-block" style="width:100%;z-index:999;background:#fff;color:maroon"
+                                                                                               ng-show="fileNotValid">
+                                                                                                 doc,docx,xls,xlsx,csv,txt,pdf files only accepted.
+                                                                                            </p>
+                                                                                            <p class="help-block" style="color:maroon"
+                                                                                               ng-show="fileSizeHigh">
+                                                                                                 File size 15MB below only accepted.
+                                                                                            </p>
 
                                                                                         </div>
                                                                                         
                                                                                     </div>
                                                                                 </div>
                                                                                 <div class="col-md-6">
-                                                                                    <button class="btn btn-success" tabindex="0" ng-click="uploadAssetFile()" ng-disabled="importClientForm.$invalid">
+                                                                                    <button class="btn btn-success" tabindex="0" ng-click="uploadAssetFile()" ng-disabled="importClientForm.$invalid || fileNotValid || fileSizeHigh">
                                                                                 <span class="btn-label">
                                                                                     <i class="material-icons">file_upload</i>
                                                                                 </span>Upload Docs
@@ -1837,6 +1859,7 @@
                                                                                              Photo title cannot be longer than 250 characters.
                                                                                         </p>
 
+
                                                                                     </div>
                                                                                     
                                                                                 </div>
@@ -1845,13 +1868,21 @@
                                                                        <div class="col-md-12">
                                                                            <div class="form-group label-floating is-empty is-fileinput row">
                                                                                <div class="col-md-6 pdng-top13">
-                                                                                   <input type="file" class="form-control ng-pristine ng-valid ng-touched" style="opacity:100;position:relative" file-model="" ng-model="selectedPhotoFile" name="clientFile1" tabindex="0" aria-invalid="false" required>
+                                                                                   <input type="file" class="form-control ng-pristine ng-valid ng-touched" style="opacity:100;position:relative" file-model="" ng-model="selectedPhotoFile" name="clientFile1" tabindex="0" aria-invalid="false" required onchange="angular.element(this).scope().uploadImage(this.files)">
                                                                                    <div ng-show="importClientForm1.$submitted || importClientForm1.clientFile1.$touched">
                                                                                         <div
                                                                                             ng-show="importClientForm1.clientFile1.$dirty || importClientForm1.clientFile1.$invalid">
-                                                                                            <p class="help-block" style="color:maroon"
+                                                                                            <p class="help-block" style="width:100%;z-index:1000;background:#fff;color:maroon"
                                                                                                ng-show="importClientForm1.clientFile1.$error.required">
                                                                                                 Photo  is required.
+                                                                                            </p>
+                                                                                            <p class="help-block" style="width:100%;z-index:999;background:#fff;color:maroon"
+                                                                                               ng-show="imgNotValid">
+                                                                                                 jpg,jpeg,png files only accepted.
+                                                                                            </p>
+                                                                                            <p class="help-block" style="color:maroon"
+                                                                                               ng-show="imgSizeHigh">
+                                                                                                 File size 15MB below only accepted.
                                                                                             </p>
 
                                                                                         </div>
@@ -1859,7 +1890,7 @@
                                                                                     </div>
                                                                                </div>
                                                                                <div class="col-md-6">
-                                                                                   <button class="btn btn-success" tabindex="0" ng-click="uploadAssetPhotoFile()" ng-disabled="importClientForm1.$invalid">
+                                                                                   <button class="btn btn-success" tabindex="0" ng-click="uploadAssetPhotoFile()" ng-disabled="importClientForm1.$invalid || imgNotValid || imgSizeHigh">
                                                                                 <span class="btn-label">
                                                                                     <i class="material-icons">file_upload</i>
                                                                                 </span>Upload Docs
@@ -1892,7 +1923,7 @@
                                                         <div class="panel-heading">
                                                             Documents
                                                         </div>
-                                                        <div class="panel-body" ng-init="getAllUploadedFiles();">
+                                                        <div class="panel-body" >
 
                                                            <div class="row docsRow" ng-if="fileCount" >
 
@@ -1925,7 +1956,7 @@
                                                         <div class="panel-heading">
                                                             Photos
                                                         </div>
-                                                        <div class="panel-body" ng-init="getAllUploadedPhotos();">
+                                                        <div class="panel-body" >
 
                                                             <div class="row docsRow" ng-if="photoCount" >
 
@@ -2470,3 +2501,25 @@
 
     </div>
 <!-- Add Document/Image delete  dialog -->
+
+<div class="row">
+
+    <div id="deleteModalConfig" data-backdrop="false" class="modal fade"
+        tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+        aria-hidden="true">
+        <div class="delete-dialog">
+            <div class="modal-content">
+                <div class="modal-body">
+                    Are you sure to delete the Parameter Configuration?<br>
+                </div>
+                <div class="delete-footer">
+                    <button type="button" ng-click="deleteAssetConfig()"
+                        class="btn btn-danger-outline text-danger" data-dismiss="modal">Confirm</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>

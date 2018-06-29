@@ -1,5 +1,5 @@
 <div class="crud-form"
-	data-unique-hash="a2ad475d60b22954085c657a73309b8f" ng-init="viewAsset();loadAMCJobs();loadPPMJobs();">
+	data-unique-hash="a2ad475d60b22954085c657a73309b8f" ng-init="viewAsset();">
 	<div class="">
 		<div class="row">
         	<div class="col-md-12">
@@ -22,27 +22,27 @@
                                        </li>
                                        <li class="">
                                            <a href=".qr-code" data-toggle="tab"
-                                                       > QR Code</a>
+                                                      ng-click="genQrCodes()" > QR Code</a>
                                        </li>
                                        <li class=""><a href=".ppm-schedule" data-toggle="tab"
-                                                       >PPM Schedule</a></li>
-                                       <li class=""><a href=".amc-schedule" data-toggle="tab"
+                                                       ng-click="loadPPMSchedule()">PPM Schedule</a></li>
+                                       <li class=""><a href=".amc-schedule" data-toggle="tab" ng-click="loadAmcSchedule()"
                                                        >AMC schedule</a></li>
                                        <li class=""><a href=".Config" data-toggle="tab"
-                                       >Config</a></li>
+                                       ng-click="assetConfig()">Config</a></li>
 
                                        <li class=""><a href=".Documents" data-toggle="tab"
-                                                      >Documents</a></li>
+                                                     ng-click="getAllUploadedFiles();getAllUploadedPhotos();" >Documents</a></li>
                                        <li class=""><a href=".ppm-tasks" data-toggle="tab"
-                                       >PPM Jobs</a></li>
+                                       ng-click="loadPPMJobs();">PPM Jobs</a></li>
                                        <li class=""><a href=".amc-tasks" data-toggle="tab"
-                                       >AMC Jobs</a></li>
+                                       ng-click="loadAMCJobs();">AMC Jobs</a></li>
                                        <li class="">
                                            <a href=".Tickets" data-toggle="tab"
                                            > Tickets</a>
                                        </li>
                                        <li class=""><a href=".Readings" data-toggle="tab"
-                                       >Readings</a></li>
+                                       ng-click="loadAssetReadings()">Readings</a></li>
 
                                    </ul>
                                    <div class="tab-content TabsContent ViewTables" style="">
@@ -286,13 +286,14 @@
 
                                                        <div class="col-md-6 col-md-offset-3" style="text-align: center;">
 
-                                                           <h4><span class="txtBold">Asset Code :</span> {{assetDetail.assetCode}}</h4>
+                                                           <h4><span class="txtBold">Asset Code :</span> {{assetCode}}</h4>
 
-                                                           <div class="QrcodeCon">
 
-                                                               <img src="{{qr_img}}" width="50%">
+                                                            <div class="QrcodeCon" ng-show="qr_img">
 
-                                                           </div>
+                                                                <img src="{{qr_img}}" width="50%">
+
+                                                            </div>
 
                                                        </div>
 
@@ -475,7 +476,7 @@
                                            </div>
 
                                        </div>
-                                       <div class="tab-pane in ppm-schedule" id="ppm-schedule" ng-init="loadPPMSchedule()">
+                                       <div class="tab-pane in ppm-schedule" id="ppm-schedule" >
 
                                            <div class="row">
                                                <div class="col-md-12 text-right">
@@ -577,7 +578,7 @@
                                           </div>
 
                                        </div>
-                                       <div class="tab-pane fade amc-schedule" id="amc-schedule" ng-init="loadAmcSchedule()">
+                                       <div class="tab-pane fade amc-schedule" id="amc-schedule" >
 
 <!--                                            <div class="panel panel-default">
                                                <div class="panel-heading">Schedule Filter</div>
@@ -670,7 +671,7 @@
                                                <div class="panel-heading">
                                                    Documents
                                                </div>
-                                               <div class="panel-body" ng-init="getAllUploadedFiles();">
+                                               <div class="panel-body" >
 
                                                    <div class="row docsRow" ng-if="fileCount" >
 
@@ -703,7 +704,7 @@
                                                <div class="panel-heading">
                                                    Photos
                                                </div>
-                                               <div class="panel-body" ng-init="getAllUploadedPhotos();">
+                                               <div class="panel-body" >
 
                                                    <div class="row docsRow" ng-if="photoCount" >
 
@@ -812,7 +813,7 @@
                                            </div>
 
                                        </div>
-                                       <div class="tab-pane fade Readings" id="Readings" ng-init="loadAssetReadings()">
+                                       <div class="tab-pane fade Readings" id="Readings" >
 
                                           <div class="">
 

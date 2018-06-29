@@ -27,21 +27,21 @@
                             <div class="panel-body">
 
                                 <div class="row">
-                                    <div class="col-md-5">
+                                    <div class="col-md-12">
                                         <div class="form-group  ">
-                                            <label class="control-label">Name </label>
+                                            <label class="control-label">Name <span class="red-star">*</span></label>
                                             <input type="text" class="form-control"   name='inventory-name'
                                                    ng-model="inventory.name" ng-minlength='2' ng-maxlength='50' required autocomplete="off"/>
 
                                         </div>
                                     </div>
 
-                                    <div class="col-md-7">
+                                    <div class="col-md-12">
                                         <div class="form-group selectcon is-empty">
 
                                             <div class="row">
                                                 <div class="col-md-10 pad-r-0px">
-                                                    <label class="control-label">Group</label>
+                                                    <label class="control-label">Group <span class="red-star">*</span></label>
                                                     <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
                                                     <select class="form-control">
                                                         <option value="">Select Item Group ..</option>
@@ -55,9 +55,9 @@
                                         </div>
                                     </div>
 
-                                    <div class="col-md-6">
+                                    <div class="col-md-12">
                                         <div class="form-group ">
-                                            <label class="control-label">Item  </label>
+                                            <label class="control-label">Item Code <span class="red-star">*</span> </label>
                                             <input type="text" class="form-control"   name='item'
                                                    ng-model="inventory.item"  required autocomplete="off"/>
                                         </div>
@@ -65,8 +65,7 @@
                                     <div class="col-md-12">
                                         <div class="form-group ">
                                             <label class="control-label">Description  </label>
-                                            <input type="text" class="form-control"   name='desc'
-                                                   ng-model="inventory.desc"  required autocomplete="off"/>
+                                            <textarea class="form-control" placeholder="Description here...." rows="7"></textarea>
                                         </div>
                                     </div>
 
@@ -80,10 +79,8 @@
 
                     </div>
                     <div class="col-md-6">
-
-
                         <div class="panel panel-default">
-                            <div class="panel-heading">Location</div>
+                            <div class="panel-heading">Location <span class="red-star">*</span></div>
                             <div class="panel-body">
 
                                 <div class="row">
@@ -92,7 +89,7 @@
                                         <div class="form-group no-padding" >
                                             <div class="dropdown">
                                                 <div class="form-group">
-                                                    <label class="control-label">Select Client</label>
+                                                    <label class="control-label">Select Client <span class="red-star">*</span></label>
                                                     <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
                                                     <select class="form-control">
                                                         <option value="">Select Client...</option>
@@ -107,7 +104,7 @@
                                         <div class="form-group no-padding" >
                                             <div class="dropdown">
                                                 <div class="form-group">
-                                                    <label class="control-label">Select Site</label>
+                                                    <label class="control-label">Select Site <span class="red-star">*</span></label>
                                                     <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
                                                     <select class="form-control">
                                                         <option value="">Select Site...</option>
@@ -124,7 +121,37 @@
                             </div>
                         </div>
 
+                        <div class="panel panel-default">
+                            <div class="panel-heading">Manufacturer Details </div>
+                            <div class="panel-body">
 
+                                <div class="row">
+                                    <div class="col-md-12">
+
+                                        <div class="form-group selectcon is-empty">
+
+                                            <div class="row">
+                                                <div class="col-md-10 pad-r-0px">
+                                                    <label class="control-label">Manufacturer</label>
+                                                    <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
+                                                    <select class="form-control">
+                                                        <option value="">Select Manufacturer</option>
+                                                    </select>
+                                                </div>
+                                                <div class="col-md-2 RightAddBtn">
+                                                    <a  has-permission="" class="btn btn-round btn-fab btn-fab-mini btn-simple" data-toggle="modal"  data-target="#addManufacturer"><i class="material-icons">add</i><div class="ripple-container" ></div></a>
+                                                </div>
+                                            </div>
+
+                                        </div>
+
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+                        </div>
                     </div>
 
                 </div>
@@ -132,20 +159,31 @@
                 <div class="row">
 
                     <div class="col-md-6">
-
-
                         <div class="panel panel-default">
                             <div class="panel-heading">Stock Information</div>
                             <div class="panel-body">
 
                                 <div class="row">
                                     <div class="col-md-6">
-                                        <div class="form-group  ">
-                                            <label class="control-label">UOM</label>
-                                            <input type="text" class="form-control"   name='uom'
-                                                   ng-model="inventory.uom" ng-minlength='2' ng-maxlength='50' required autocomplete="off"/>
+
+                                        <div class="form-group selectcon is-empty">
+
+                                            <div class="row">
+                                                <div class="col-md-10 pad-r-0px">
+                                                    <label class="control-label">UOM</label>
+                                                    <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
+                                                    <select class="form-control">
+                                                        <option value="">Select UOM</option>
+                                                    </select>
+                                                </div>
+                                                <div class="col-md-2 RightAddBtn">
+                                                    <a  has-permission="" class="btn btn-round btn-fab btn-fab-mini btn-simple" data-toggle="modal"  data-target="#addUom"><i class="material-icons">add</i><div class="ripple-container" ></div></a>
+                                                </div>
+                                            </div>
 
                                         </div>
+
+
                                     </div>
 
 
@@ -172,51 +210,6 @@
 
                             </div>
                         </div>
-
-
-                    </div>
-
-                    <div class="col-md-6">
-
-
-                        <div class="panel panel-default">
-                            <div class="panel-heading">Manufacturer Details </div>
-                            <div class="panel-body">
-
-                                <div class="row">
-                                    <div class="col-md-12">
-
-                                        <div class="form-group selectcon is-empty">
-
-                                            <div class="row">
-                                                <div class="col-md-10 pad-r-0px">
-                                                    <label class="control-label">Manufacturer</label>
-                                                    <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                                    <select class="form-control">
-                                                        <option value="">Select Manufacturer</option>
-                                                    </select>
-                                                </div>
-                                                <div class="col-md-2 RightAddBtn">
-                                                    <a  has-permission="" class="btn btn-round btn-fab btn-fab-mini btn-simple" data-toggle="modal"  data-target="#addManufacturer"><i class="material-icons">add</i><div class="ripple-container" ></div></a>
-                                                </div>
-                                            </div>
-
-                                        </div>
-
-                                        <div class="form-group  ">
-                                            <label class="control-label">Manufacturer name </label>
-                                            <input type="text" class="form-control"   name='manufacturername'
-                                                   ng-model="inventory.manufacturername" ng-minlength='2' ng-maxlength='50' required autocomplete="off"/>
-
-                                        </div>
-                                    </div>
-
-                                </div>
-
-                            </div>
-                        </div>
-
-
                     </div>
 
                 </div>
@@ -273,7 +266,7 @@
 </div>
 
 
-<!-- Add item group dialog -->
+<!-- Start Add item group dialog -->
 
 <div id="addItemGroup" class="add-input-modal modal fade">
     <div class="modal-dialog">
@@ -300,9 +293,9 @@
         </div>
     </div>
 </div>
-<!-- Add item group dialog -->
+<!-- End Add item group dialog -->
 
-<!-- Add Manufacturer dialog -->
+<!-- Start Add Manufacturer dialog -->
 
 <div id="addManufacturer" class="add-input-modal modal fade">
     <div class="modal-dialog">
@@ -330,6 +323,35 @@
     </div>
 </div>
 <!-- End Add Manufacturer dialog -->
+
+<!-- Start Add UOM dialog -->
+
+<div id="addUom" class="add-input-modal modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"
+                        aria-hidden="true">&times;</button>
+                <h4 class="modal-title">Add UOM</h4>
+            </div>
+            <div class="modal-body">
+
+                <form name="addGroupForm">
+                    <div class="row">
+                        <div class="col-md-12 txt-align-center">
+                            <input class="" id="uomName"    name="uomName" type="text" value="" ng-required="true"/>
+                            <input type="submit"  data-dismiss="modal" class="btn btn-success" name="add" value="Add">
+                        </div>
+                    </div>
+                </form>
+
+
+            </div>
+
+        </div>
+    </div>
+</div>
+<!-- End Add UOM dialog -->
 
 
 
