@@ -2052,14 +2052,26 @@ angular.module('timeSheetApp')
         }
 
             $scope.imgNotValid=true;
+            $scope.imgSizeHigh=true;
           
 
             $scope.uploadImage = function (files) {  
 
                var ext = files[0].name.match(/\.(.+)$/)[1];
 
+
                 if(angular.lowercase(ext) ==='jpg' || angular.lowercase(ext) ==='jpeg' || angular.lowercase(ext) ==='png'){
                    $scope.imgNotValid=false;
+                   
+
+                    if(files[0].size < 15000000){
+
+                        $scope.imgSizeHigh=false;
+
+                    }else{
+
+                        $scope.imgSizeHigh=true;
+                    }
                
                 }  
                 else{
@@ -2070,6 +2082,7 @@ angular.module('timeSheetApp')
             }
 
             $scope.fileNotValid=true;
+            $scope.fileSizeHigh=true;
 
             $scope.uploadfileValidation = function (files) {  
 
@@ -2079,6 +2092,15 @@ angular.module('timeSheetApp')
                     || angular.lowercase(ext) ==='xls'|| angular.lowercase(ext) ==='xlsx' || angular.lowercase(ext) ==='txt'
                     || angular.lowercase(ext) ==='csv' || angular.lowercase(ext) ==='pdf'){
                    $scope.fileNotValid=false;
+
+                    if(files[0].size < 15000000){
+
+                        $scope.fileSizeHigh=false;
+
+                    }else{
+                        
+                        $scope.fileSizeHigh=true;
+                    }
                
                 }  
                 else{

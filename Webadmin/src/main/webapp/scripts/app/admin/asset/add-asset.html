@@ -1652,17 +1652,21 @@
                                                                                                    ng-show="importClientForm.clientFile.$error.required">
                                                                                                     File  is required.
                                                                                                 </p>
-                                                                                                    <p class="help-block" style="color:maroon"
+                                                                                                    <p class="help-block" style="width:100%;z-index:999;background:#fff;color:maroon"
                                                                                                    ng-show="fileNotValid">
                                                                                                      doc,docx,xls,xlsx,csv,txt,pdf files only accepted.
                                                                                                 </p>
+                                                                                                <p class="help-block" style="color:maroon"
+                                                                                               ng-show="fileSizeHigh">
+                                                                                                 File size 15MB below only accepted.
+                                                                                               </p>
 
                                                                                             </div>
                                                                                             
                                                                                         </div>
                                                                                     </div>
                                                                                     <div class="col-md-6">
-                                                                                        <button class="btn btn-success" tabindex="0" ng-click="uploadAssetFile()" ng-disabled="importClientForm.$invalid || fileNotValid">
+                                                                                        <button class="btn btn-success" tabindex="0" ng-click="uploadAssetFile()" ng-disabled="importClientForm.$invalid || fileNotValid || fileSizeHigh">
                                                                                     <span class="btn-label">
                                                                                         <i class="material-icons">file_upload</i>
                                                                                     </span>Upload Docs
@@ -1723,17 +1727,21 @@
                                                                                                    ng-show="importClientForm1.clientFile1.$error.required">
                                                                                                     Photo  is required.
                                                                                                 </p>
-                                                                                                    <p class="help-block" style="color:maroon"
+                                                                                                    <p class="help-block" style="width:100%;z-index:999;background:#fff;color:maroon"
                                                                                                    ng-show="imgNotValid">
                                                                                                      jpg,jpeg,png files only accepted.
                                                                                                 </p>
+                                                                                                <p class="help-block" style="color:maroon"
+                                                                                               ng-show="imgSizeHigh">
+                                                                                                 File size 15MB below only accepted.
+                                                                                               </p>
 
                                                                                             </div>
                                                                                             
                                                                                         </div>
                                                                                    </div>
                                                                                    <div class="col-md-6">
-                                                                                       <button class="btn btn-success" tabindex="0" ng-click="uploadAssetPhotoFile()"  ng-disabled="importClientForm1.$invalid || imgNotValid">
+                                                                                       <button class="btn btn-success" tabindex="0" ng-click="uploadAssetPhotoFile()"  ng-disabled="importClientForm1.$invalid || imgNotValid || imgSizeHigh">
                                                                                     <span class="btn-label">
                                                                                         <i class="material-icons">file_upload</i>
                                                                                     </span>Upload Docs

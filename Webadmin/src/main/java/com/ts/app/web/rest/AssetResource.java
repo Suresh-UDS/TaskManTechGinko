@@ -248,7 +248,6 @@ public class AssetResource {
 		assetDocumentDTO.setTitle(title);
 		assetDocumentDTO.setType(type);
 		String extension = FilenameUtils.getExtension(file.getOriginalFilename());
-		//String[] ext = { ".pdf", ".xlsx", ".xls", ".docs", ".doc", ".csv" };
 		String ext = env.getProperty("extensionFile");
 		String[] arrExt = ext.split(",");
 		for (String exten : arrExt) {
@@ -266,8 +265,7 @@ public class AssetResource {
 		assetDocumentDTO.setAssetId(assetId);
 		assetDocumentDTO.setTitle(title);
 		assetDocumentDTO.setType(type);
-		String extension = FilenameUtils.getExtension(file.getOriginalFilename());
-		//String[] ext = { ".jpeg", ".jpg", ".png" };
+		String extension = FilenameUtils.getExtension(file.getOriginalFilename()); 
 		String ext = env.getProperty("extensionImg");
 		String[] arrExt = ext.split(",");
 		for (String exten : arrExt) 
