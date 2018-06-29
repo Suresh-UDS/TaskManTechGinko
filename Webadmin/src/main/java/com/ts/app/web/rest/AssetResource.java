@@ -33,6 +33,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.codahale.metrics.annotation.Timed;
 import com.ts.app.domain.AssetReadingRule;
+import com.ts.app.domain.AssetStatus;
 import com.ts.app.domain.Frequency;
 import com.ts.app.domain.FrequencyPrefix;
 import com.ts.app.security.SecurityUtils;
@@ -280,6 +281,16 @@ public class AssetResource {
 		log.info("Get All Asset Type");
 		return assetService.findAllAssetType();
 	}
+	
+//	Asset Status
+	@RequestMapping(value = "/assets/assetstatus", method = RequestMethod.GET)
+	public AssetStatus[]  getAssetStatus() {
+		log.info("Get Asset Status");
+		AssetStatus[] assetStatus = null;
+		assetStatus = assetService.getAssetStatus();
+		return assetStatus;
+	}
+//	
 
 	@RequestMapping(value = "/assets/config", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<List<AssetParameterConfigDTO>> getAssetConfig(
@@ -346,7 +357,7 @@ public class AssetResource {
 		String[] arrExt = ext.split(",");
 		for (String exten : arrExt) 
 		{	
-			if (extension.equals(exten)) {
+			if (extension.equalsIgnoreCase(exten)) {
 				assetDocumentDTO = assetService.uploadFile(assetDocumentDTO, file);
 			}
 		}

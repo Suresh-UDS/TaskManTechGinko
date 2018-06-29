@@ -215,6 +215,12 @@ Tip 3: you can change the color of the sidebar with data-background-color="white
                     </ul>
                 </div>
             </li>
+            <li ui-sref-active="active">
+                <a ui-sref="sla-list">
+                    <i class="material-icons">tab</i>
+                    <p>SLA Management</p>
+                </a>
+            </li>
             <li has-permission="Reports:List" ng-class="{active: $state.includes('reports')}">
                 <a data-toggle="collapse" data-target="#formsExamples" href="#">
                     <i class="material-icons">content_paste</i>

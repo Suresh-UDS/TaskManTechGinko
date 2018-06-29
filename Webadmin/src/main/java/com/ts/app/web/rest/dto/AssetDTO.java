@@ -26,10 +26,11 @@ public class AssetDTO extends BaseDTO {
     private long assetTypeId;
     private String assetGroup;
     private long assetGroupId;
+    private String status;
     private String block;
     private String floor;
     private String zone;
-    private double addressLat;
+	private double addressLat;
 	private double addressLng;
 	private long manufacturerId;
 	private String manufacturerName;
@@ -110,6 +111,12 @@ public class AssetDTO extends BaseDTO {
 	}
 	public void setAssetGroup(String assetGroup) {
 		this.assetGroup = assetGroup;
+	}
+	public String getStatus() {
+		return status;
+	}
+	public void setStatus(String status) {
+		this.status = status;
 	}
 	public String getBlock() {
 		return block;

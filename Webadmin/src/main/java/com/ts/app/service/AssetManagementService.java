@@ -33,6 +33,7 @@ import com.ts.app.domain.AssetParameterConfig;
 import com.ts.app.domain.AssetParameterReading;
 import com.ts.app.domain.AssetParameterReadingRule;
 import com.ts.app.domain.AssetReadingRule;
+import com.ts.app.domain.AssetStatus;
 import com.ts.app.domain.AssetType;
 import com.ts.app.domain.Checklist;
 import com.ts.app.domain.Employee;
@@ -425,6 +426,7 @@ public class AssetManagementService extends AbstractService {
 			Vendor vendor = getVendor(assetDTO.getVendorId());
 			asset.setAmcVendor(vendor);
 		}
+		asset.setStatus(assetDTO.getStatus());
 		asset.setBlock(assetDTO.getBlock());
 		asset.setFloor(assetDTO.getFloor());
 		asset.setZone(assetDTO.getZone());
@@ -454,7 +456,6 @@ public class AssetManagementService extends AbstractService {
 		Asset asset = assetRepository.findOne(assetDTO.getId());
 		mapToEntityAssets(assetDTO, asset);
 		asset = assetRepository.save(asset);
-
 		return mapperUtil.toModel(asset, AssetDTO.class);
 	}
 
@@ -1133,6 +1134,14 @@ public class AssetManagementService extends AbstractService {
 		return mapperUtil.toModelList(assetgroup, AssetgroupDTO.class);
 	}
 
+//	Asset status
+	public AssetStatus[] getAssetStatus(){
+		log.info("Assetstatus service");
+		AssetStatus[] status = AssetStatus.values();
+		return status;
+	}
+//	
+	
 	public List<AssetTypeDTO> findAllAssetType() {
 		List<AssetType> assetType = assetTypeRepository.findAll();
 		return mapperUtil.toModelList(assetType, AssetTypeDTO.class);
