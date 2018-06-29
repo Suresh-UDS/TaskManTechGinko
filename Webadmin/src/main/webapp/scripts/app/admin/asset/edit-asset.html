@@ -578,11 +578,11 @@
                                                                                <div class="col-md-6">
                                                                                 <div class="form-group selectcon is-empty">
 
-                                                                                    <div class="row">
+                                                                                    <div class="row" ng-init="loadWarranty();">
                                                                                         <div class="col-md-10 pad-r-0px">
                                                                                             <label class="control-label">Service Warranty Type </label>
                                                                                             <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                                                                            <select class="form-control" ng-model="selectedServiceWarranty" ng-options="servicewarranty.servicewarranty as servicewarranty.servicewarranty for servicewarranty in servicewarranties">
+                                                                                            <select class="form-control" ng-model="selectedServiceWarranty" ng-options="servicewarranty as servicewarranty.name for servicewarranty in servicewarranties track by servicewarranty.name ">
                                                                                                 <option value="">Select Service Warranty Type ..</option>
                                                                                             </select>
 

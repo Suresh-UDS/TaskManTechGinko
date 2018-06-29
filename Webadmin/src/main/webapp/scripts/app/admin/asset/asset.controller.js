@@ -353,6 +353,34 @@ angular.module('timeSheetApp')
 
         }
 
+         $scope.loadWarranty = function () {
+            AssetComponent.getWarList().then(function (data) {
+                console.log("Loading all service warranties -- " , data)
+                $scope.servicewarranties = data;
+            });
+        }
+
+        $scope.addWarranty = function () {
+
+            console.log("add Warranty",$scope.Warranty);
+            if($scope.Warranty){
+
+                console.log("Asset Type entered");
+                AssetComponent.createWar($scope.Warranty).then(function (response) {
+                    console.log(response);
+                    $scope.servicewarranties = {};
+                    $scope.showNotifications('top','center','success','Service Warranty Added Successfully');
+                    $scope.loadWarranty();
+
+
+                })
+            }else{
+                console.log("Warranty not entered");
+            }
+
+
+        }
+
 
          /*  $scope.createAssetType = function () {
                AssetTypeComponent.create().then(function (data) {
@@ -465,6 +493,7 @@ angular.module('timeSheetApp')
                 $scope.selectedZone = $scope.assetList.zone;
                 $scope.selectedManufacturer = {id:$scope.assetList.manufacturerId,name:$scope.assetList.manufacturerName};
                 $scope.selectedVendor = {id:$scope.assetList.vendorId};
+                $scope.selectedServiceWarranty = {name:$scope.assetList.warrantyType};
                 if($scope.assetList.siteId){
                         LocationComponent.findBlocks(0,$scope.assetList.siteId).then(function (data) {
                         //$scope.selectedBlock = null;
@@ -714,12 +743,16 @@ angular.module('timeSheetApp')
         $scope.viewAsset = function(){
 
             var assetId = $stateParams.id;
+             $rootScope.loadingStart();
 
             AssetComponent.findById(assetId).then(function(data){
                 console.log("Asset details List==" + JSON.stringify(data));
                 $scope.assetDetail= data;
+                 $rootScope.loadingStop();
                 //$scope.loadCalendar();
 
+            }).catch(function(response){
+               $rootScope.loadingStop();
             });
         }
 
@@ -827,7 +860,7 @@ angular.module('timeSheetApp')
                     if($scope.selectedAssetStatus.id){ $scope.assetGen.assetStatus = $scope.selectedAssetStatus.id;}
                     if($scope.selectedManufacturer.id){$scope.assetGen.manufacturerId = $scope.selectedManufacturer.id;}
                     if($scope.selectedServiceProvider.id){$scope.assetGen.serviceProvider = $scope.selectedServiceProvider.id;}
-                    if($scope.selectedServiceWarranty.id){$scope.assetGen.serviceWarranty = $scope.selectedServiceWarranty.id;}
+                    if($scope.selectedServiceWarranty.id){$scope.assetGen.warrantyType = $scope.selectedServiceWarranty.name;}
                     if($scope.selectedVendor.id){$scope.assetGen.vendorId = $scope.selectedVendor.id;}
                     if($scope.selectedSites.id){$scope.assetGen.siteId = $scope.selectedSites.id;}
                     //if($scope.selectedProject.id){$scope.assetGen.projectId = $scope.selectedProject.id;}
@@ -1003,6 +1036,12 @@ angular.module('timeSheetApp')
                 else{
                     $scope.assetEdit.vendorId = $scope.assetList.vendorId;
                 }
+                if($scope.selectedServiceWarranty){
+                   $scope.assetEdit.warrantyType = $scope.selectedServiceWarranty.name;
+                }
+                else{
+                    $scope.assetEdit.warrantyType = $scope.assetList.warrantyType;
+                }
                 if($scope.assetEditDate){
                     $scope.assetEdit.acquiredDate = $scope.assetEditDate;
                     $scope.assetEdit.acquiredDate1 = $filter('date')($scope.assetEditDate, 'dd/MM/yyyy');
@@ -1019,7 +1058,7 @@ angular.module('timeSheetApp')
                 $scope.success = 'OK';
                 $rootScope.loadingStop();
                  $scope.showNotifications('top','center','success','Asset Updated!!');
-                 $scope.loadAssets();
+                 //$scope.loadAssets();
 
             	//$location.path('/assets');
 

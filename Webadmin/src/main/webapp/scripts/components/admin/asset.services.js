@@ -367,7 +367,26 @@ angular.module('timeSheetApp')
 	        	return $http.delete('api/assets/removeConfig/'+id).then(function (response) {
 	        		return response.data;
 	        	});
-	        }
+	        },
+             createWar : function(ServiceWarnty,callback){
+                var cb = callback || angular.noop;
+                return $http.post('api/assetwarrantytype',ServiceWarnty).then(
+                    function (response) {
+                        return cb(response);
+                    }).catch(
+                    function (err) {
+                        console.log(JSON.stringify(err));
+                        return cb(err);
+                    })
+
+            },
+            getWarList: function () {
+                return $http.get('api/assetwarrantytype').then(function (response) {
+                    return response.data;
+                });
+            }
+           
+
 
         };
     });
