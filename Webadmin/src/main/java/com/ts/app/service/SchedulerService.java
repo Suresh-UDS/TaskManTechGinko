@@ -12,6 +12,8 @@ import java.util.Set;
 
 import javax.inject.Inject;
 
+import com.ts.app.domain.*;
+import com.ts.app.web.rest.dto.*;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateUtils;
@@ -26,15 +28,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.google.common.base.Splitter;
 import com.google.common.primitives.Longs;
-import com.ts.app.domain.AbstractAuditingEntity;
-import com.ts.app.domain.Employee;
-import com.ts.app.domain.Job;
-import com.ts.app.domain.JobStatus;
-import com.ts.app.domain.Project;
-import com.ts.app.domain.SchedulerConfig;
-import com.ts.app.domain.Setting;
-import com.ts.app.domain.Shift;
-import com.ts.app.domain.Site;
 import com.ts.app.repository.AttendanceRepository;
 import com.ts.app.repository.EmployeeRepository;
 import com.ts.app.repository.EmployeeShiftRepository;
@@ -46,13 +39,6 @@ import com.ts.app.repository.SiteRepository;
 import com.ts.app.service.util.DateUtil;
 import com.ts.app.service.util.ExportUtil;
 import com.ts.app.service.util.MapperUtil;
-import com.ts.app.web.rest.dto.BaseDTO;
-import com.ts.app.web.rest.dto.ExportResult;
-import com.ts.app.web.rest.dto.JobDTO;
-import com.ts.app.web.rest.dto.ReportResult;
-import com.ts.app.web.rest.dto.SchedulerConfigDTO;
-import com.ts.app.web.rest.dto.SearchCriteria;
-import com.ts.app.web.rest.dto.SearchResult;
 import com.ts.app.web.rest.errors.TimesheetException;
 
 /**
@@ -152,7 +138,10 @@ public class SchedulerService extends AbstractService {
 			entity.setActive("Y");
 			entity = schedulerConfigRepository.save(entity);
 			// create jobs based on the creation policy
-			createJobs(entity);
+			//createJobs(entity);
+			runDailyTask();
+			runWeeklyTask();
+			runMonthlyTask();
 		}
 
 	}
@@ -610,6 +599,7 @@ public class SchedulerService extends AbstractService {
 		log.debug("Start time hours =" + sHr + ", start time mins -" + sMin);
 		startTime.set(Calendar.HOUR_OF_DAY, sHr);
 		startTime.set(Calendar.MINUTE, sMin);
+		startTime.set(Calendar.SECOND, 0);
 		startTime.getTime(); // to recalculate
 		cal = DateUtils.toCalendar(eHrs);
 		int eHr = cal.get(Calendar.HOUR_OF_DAY);
@@ -619,10 +609,12 @@ public class SchedulerService extends AbstractService {
 			endTime.set(Calendar.HOUR_OF_DAY, startTime.get(Calendar.HOUR_OF_DAY));
 			endTime.add(Calendar.HOUR_OF_DAY, 1);
 			endTime.set(Calendar.MINUTE, eMin);
+			endTime.set(Calendar.SECOND, 0);
 			endTime.getTime(); // to recalculate
 		} else {
 			endTime.set(Calendar.HOUR_OF_DAY, eHr);
 			endTime.set(Calendar.MINUTE, eMin);
+			endTime.set(Calendar.SECOND, 0);
 			endTime.getTime(); // to recalculate
 		}
 
@@ -630,10 +622,31 @@ public class SchedulerService extends AbstractService {
 		job.setPlannedEndTime(endTime.getTime());
 		job.setPlannedHours(Integer.parseInt(plannedHours));
 		job.setScheduled(true);
+		job.setJobType(parentJob.getType());
+		job.setSchedule("ONCE");
 		job.setLocationId(!StringUtils.isEmpty(dataMap.get("location")) ? Long.parseLong(dataMap.get("location")) : 0);
 		job.setActive("Y");
 		job.setParentJobId(parentJob.getId());
 		job.setParentJob(parentJob);
+		//job.setChecklistItems(parentJob.getChecklistItems());
+        if(CollectionUtils.isNotEmpty(parentJob.getChecklistItems())) {
+            List<JobChecklist> jobChecklistItems = parentJob.getChecklistItems();
+            List<JobChecklistDTO> jobChecklistDtoItems = new ArrayList<JobChecklistDTO>();
+            for(JobChecklist jobclDto : jobChecklistItems) {
+                JobChecklistDTO checklist = new JobChecklistDTO();
+                checklist.setActive(jobclDto.getActive());
+                checklist.setChecklistId(jobclDto.getChecklistId());
+                checklist.setChecklistItemId(jobclDto.getChecklistItemId());
+                checklist.setChecklistItemName(jobclDto.getChecklistItemName());
+                checklist.setChecklistName(jobclDto.getChecklistName());
+                jobChecklistDtoItems.add(checklist);
+            }
+            if(job.getChecklistItems() != null) {
+                job.getChecklistItems().addAll(jobChecklistDtoItems);
+            }else {
+                job.setChecklistItems(jobChecklistDtoItems);
+            }
+        }
 		log.debug("JobDTO parent job id - " + parentJob.getId());
 		log.debug("JobDTO parent job id - " + job.getParentJobId());
 		log.debug("JobDTO Details before calling saveJob - " + job);

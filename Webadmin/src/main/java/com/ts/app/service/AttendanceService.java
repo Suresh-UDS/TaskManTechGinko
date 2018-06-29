@@ -271,7 +271,10 @@ public class AttendanceService extends AbstractService {
     				List<AttendanceDTO> attns =  result.getTransactions();
     	            if(CollectionUtils.isNotEmpty(attns)) {
     	                AttendanceDTO prevAttnDto = attns.get(0);
-    	                attn.setContinuedAttendance(attendanceRepository.findOne(prevAttnDto.getId()));
+    	                Attendance prevAttn = attendanceRepository.findOne(prevAttnDto.getId());
+    	                Hibernate.initialize(prevAttn.getSite());
+    	                Hibernate.initialize(prevAttn.getEmployee());
+    	                attn.setContinuedAttendance(prevAttn);
     	            }
     	            
     			}
@@ -430,6 +433,23 @@ public class AttendanceService extends AbstractService {
 
 	}
 
+	public AttendanceDTO findCurrentCheckInByEmpId(long empId) {
+		AttendanceDTO attnDto = null;
+		Calendar startCal = Calendar.getInstance();
+		startCal.set(Calendar.HOUR_OF_DAY, 0);
+		startCal.set(Calendar.MINUTE, 0);
+		startCal.set(Calendar.SECOND, 0);
+		Calendar endCal = Calendar.getInstance();
+		endCal.set(Calendar.HOUR_OF_DAY, 23);
+		endCal.set(Calendar.MINUTE, 59);
+		endCal.set(Calendar.SECOND, 0);
+		Attendance attn = attendanceRepository.findCurrentCheckIn(empId, DateUtil.convertToSQLDate(startCal.getTime()), DateUtil.convertToSQLDate(endCal.getTime()));
+		if(attn != null) {
+			attnDto = mapperUtil.toModel(attn, AttendanceDTO.class);
+		}
+		return attnDto;
+	}
+	
 	public AttendanceDTO findOne(Long attnId) {
 		Attendance entity = attendanceRepository.findOne(attnId);
 		return mapperUtil.toModel(entity, AttendanceDTO.class);

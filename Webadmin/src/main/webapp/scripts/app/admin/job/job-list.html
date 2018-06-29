@@ -227,8 +227,9 @@
                                         </span>
                                     </span>
                                 </th> -->
-                                
-                                <th class="disabled-sorting text-right">Actions</th>
+                                <th class="disabled-sorting">Job Category</th>
+                                <th class="disabled-sorting">Job Schedule</th>
+                                <th class="disabled-sorting">Actions</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -240,8 +241,8 @@
                                 <td><label ng-bind="job.plannedStartTime | date:'dd-MMM-yyyy hh:mm a'"/></td>
                                 <td><label ng-bind="job.actualEndTime | date:'dd-MMM-yyyy hh:mm a'"/></td>
                                 <td>{{job.status}}</td>
-                                
-
+                                <td>{{job.jobType}}</td>
+								<td>{{job.schedule}}</td>
                                 <td class="text-right">
 
                                     <a ng-click="getCheckInDetails(employee.id)" ui-sref="view-job({ id: job.id })"   class="btn btn-simple btn-info btn-icon like"><i class="material-icons">remove_red_eye</i></a>

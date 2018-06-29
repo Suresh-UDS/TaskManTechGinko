@@ -122,6 +122,12 @@ angular.module('timeSheetApp')
                     return response.data;
                 })
             },
+            getEmployeeCurrentAttendance:function(id){
+                return $http.get('api/attendance/employee/'+id).then(function (response) {
+                    console.log(JSON.stringify(response.data));
+                    return response.data;
+                })
+            },
             getSites: function(id){
                 console.log(id)
                 return $http.get('api/site/employee/'+id,{empId:id}).then(function (response) {

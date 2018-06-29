@@ -80,17 +80,25 @@ export class FeedbackQuestionPage {
       console.log(this.questions);
 
       var results = [];
-      // for(let q of this.questions){
-      //     let result = {};
-      //     if(q.answer){
-      //          q.answer = true;
-      //     }else{
-      //         q.answer = false;
-      //     }
-      //
-      //     results.push(result);
-      //     console.log(results)
-      // }
+      for(let q of this.questions){
+          let result = {};
+
+          if(q.answerType == 'RATING')
+          {
+              if(!q.answer){
+                  q.answer = 1;
+              }
+          }
+          else
+          {
+              if(!q.answer){
+                  q.answer = false;
+              }
+          }
+
+          results.push(result);
+          console.log(results)
+      }
 
         // this.navCtrl.push(FeedbackPage,{feedback:this.navParams.data.feedback,fb:this.navParams.data.fb,question:this.questions,remarks:this.remarks,overallFeedback:this.navParams.data.overallFeedback,project:this.navParams.data.project,site:this.navParams.data.site,location:this.navParams.data.location});
       this.feedbackTransaction = {

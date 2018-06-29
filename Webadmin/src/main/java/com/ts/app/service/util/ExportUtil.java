@@ -11,8 +11,10 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 import javax.inject.Inject;
@@ -458,7 +460,7 @@ public class ExportUtil {
 	}
 
 	public ExportResult writeAttendanceReportToFile(String projName, List<EmployeeAttendanceReport> content, List<Map<String,String>> consolidatedData, Map<String, String> summary,
-			final String empId, ExportResult result) {
+			Map<String, Map<String, Integer>> shiftWiseSummary, final String empId, ExportResult result) {
 		boolean isAppend = (result != null);
 		log.debug("result = " + result + ", isAppend=" + isAppend);
 		if (result == null) {
@@ -547,18 +549,41 @@ public class ExportUtil {
 			Row dataRow = consSheet.getRow(rowNum++);
 			dataRow.getCell(0).setCellValue(data.get("SiteName") != null ? data.get("SiteName") : "");
 			dataRow.getCell(1).setCellValue((data.get("ShiftStartTime") != null ? data.get("ShiftStartTime") : "") + " - " + (data.get("ShiftEndTime") != null ? data.get("ShiftEndTime") : ""));
-			dataRow.getCell(2).setCellValue(data.get("TotalEmployees"));
-			dataRow.getCell(3).setCellValue(data.get("Present"));
-			dataRow.getCell(4).setCellValue(data.get("Absent"));
+			dataRow.getCell(2).setCellValue(data.get("Present"));
+			//dataRow.getCell(3).setCellValue(data.get("Present"));
+			//dataRow.getCell(4).setCellValue(data.get("Absent"));
 		}
 		
 		rowNum++;
 		
 		Row summaryRow = consSheet.getRow(rowNum);
-		summaryRow.getCell(0).setCellValue("Total");
-		summaryRow.getCell(2).setCellValue(summary.get("TotalEmployees"));
-		summaryRow.getCell(3).setCellValue(summary.get("TotalPresent"));
-		summaryRow.getCell(4).setCellValue(summary.get("TotalAbsent"));
+		summaryRow.getCell(0).setCellValue("Total Mandays Per Day");
+		summaryRow.getCell(2).setCellValue(summary.get("TotalPresent"));
+		//summaryRow.getCell(3).setCellValue(summary.get("TotalPresent"));
+		//summaryRow.getCell(4).setCellValue(summary.get("TotalAbsent"));
+		
+		rowNum++;
+		if(shiftWiseSummary != null && shiftWiseSummary.size() > 0) {
+			Row shiftWiseTitleRow = consSheet.getRow(rowNum);
+			rowNum++;
+			shiftWiseTitleRow.getCell(0).setCellValue("SHIFT WISE PRESENT FOR " + shiftWiseSummary.size() + " SITES");
+			Set<String> keys = shiftWiseSummary.keySet();
+			Iterator<String> keyItr = keys.iterator();
+			while(keyItr.hasNext()) {
+				Row shiftWiseSummaryRow = consSheet.getRow(rowNum);
+				String shiftTiming = keyItr.next();
+				Map<String, Integer> shiftWise = shiftWiseSummary.get(shiftTiming);
+				shiftWiseSummaryRow.getCell(0).setCellValue(shiftTiming);
+				shiftWiseSummaryRow.getCell(2).setCellValue(shiftWise.get("Present"));
+				rowNum++;
+			}
+		}
+		
+		
+		//summaryRow.getCell(2).setCellValue(summary.get("TotalEmployees"));
+		//summaryRow.getCell(3).setCellValue(summary.get("TotalPresent"));
+		//summaryRow.getCell(4).setCellValue(summary.get("TotalAbsent"));
+		
 		
 		
 		// create worksheet with title

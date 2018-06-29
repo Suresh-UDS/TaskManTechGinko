@@ -59,6 +59,8 @@ import {InitFeedbackPage} from "../pages/feedback/init-feedback";
 import { FileTransfer, FileUploadOptions, FileTransferObject } from '@ionic-native/file-transfer';
 import { File } from '@ionic-native/file';
 import {ForgotPassword} from "../pages/forgot-password/forgot-password";
+import { Network } from '@ionic-native/network';
+
 
 import {CreateEmployeePage} from "../pages/employee-list/create-employee";
 import {OneSignal} from "@ionic-native/onesignal";
@@ -90,6 +92,7 @@ import {ViewTicket} from "../pages/ticket/view-ticket";
 import {FeedbackGridPage} from "../pages/feedback/feedback-grid";
 import {AppVersion} from "@ionic-native/app-version";
 import {HasPermission} from "../components/has-permission/has-permission";
+import {OfflineAttendance} from "../pages/employee/offline-attendance";
 
 @NgModule({
   declarations: [
@@ -149,7 +152,8 @@ import {HasPermission} from "../components/has-permission/has-permission";
       CreateTicket,
       ViewTicket,
       HasPermission,
-      ForgotPassword
+      ForgotPassword,
+      OfflineAttendance
   ],
   imports: [
     BrowserModule,
@@ -220,7 +224,8 @@ import {HasPermission} from "../components/has-permission/has-permission";
       Ticket,
       CreateTicket,
       ViewTicket,
-      ForgotPassword
+      ForgotPassword,
+      OfflineAttendance
   ],
   providers: [
     StatusBar,
@@ -242,12 +247,12 @@ import {HasPermission} from "../components/has-permission/has-permission";
       Toast,
       OneSignal,
     componentService,
-      OneSignal,
       BatteryStatus,
     Toast,
     FileTransfer,
     File,
       AppVersion,
+      Network,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
       {provide:MY_CONFIG_TOKEN, useValue: AppConfig}
   ]

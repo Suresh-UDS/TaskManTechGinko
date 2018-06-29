@@ -9,6 +9,8 @@ import {componentService} from "../service/componentService";
 import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import { Toast } from '@ionic-native/toast';
 import {EmployeeService} from "../service/employeeService";
+import {SiteService} from "../service/siteService";
+import {forEach} from "@angular/router/src/utils/collection";
 
 /**
  * Generated class for the LoginPage page.
@@ -32,12 +34,13 @@ export class LoginPage {
   type : FormGroup;
   module:any;
   permission:any;
-  constructor(public navCtrl: NavController,public component:componentService,private formBuilder: FormBuilder,public menuCtrl:MenuController, public toastCtrl:ToastController,private toast: Toast,public navParams: NavParams,public myService:authService, public employeeService: EmployeeService, public events:Events) {
+  employeeProjectSite:any;
+  constructor(public navCtrl: NavController,public component:componentService,private formBuilder: FormBuilder,public menuCtrl:MenuController, public toastCtrl:ToastController,private toast: Toast,public navParams: NavParams,public myService:authService, public employeeService: EmployeeService, public events:Events, public siteService:SiteService) {
       this.permission=[
           {module:null,
               action:null}
       ];
-
+    this.employeeProjectSite = [];
   }
 
   ionViewDidLoad() {
@@ -81,6 +84,7 @@ export class LoginPage {
               window.localStorage.setItem('employeeEmpId', response.json().employee.empId);
               window.localStorage.setItem('employeeUserId', response.json().employee.userId);
               window.localStorage.setItem('employeeDetails', JSON.stringify(response.json()));
+              window.localStorage.setItem('projectSites',JSON.stringify(response.json().employee.projectSites));
               var employee = response.json().employee;
 
               if (response.status == 200) {

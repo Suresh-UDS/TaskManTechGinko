@@ -30,6 +30,7 @@ import {componentService} from "../pages/service/componentService";
 import {Ticket} from "../pages/ticket/ticket";
 import {authService} from "../pages/service/authService";
 import {ForgotPassword} from "../pages/forgot-password/forgot-password";
+import {Network} from "@ionic-native/network";
 
 @Component({
   templateUrl: 'app.html'
@@ -45,7 +46,7 @@ export class MyApp {
 
   pages: Array<{title: string, component: any,active:any,icon:any,permission:any}>;
 
-  constructor(private ionicApp: IonicApp,public menuCtrl:MenuController,public platform: Platform,private backgroundMode: BackgroundMode, public statusBar: StatusBar,public component:componentService,public toastCtrl: ToastController, public splashScreen: SplashScreen, private oneSignal: OneSignal, public events:Events, private batteryStatus: BatteryStatus, private appVersion:AppVersion, private authService:authService) {
+  constructor(private ionicApp: IonicApp,public menuCtrl:MenuController,public platform: Platform,private backgroundMode: BackgroundMode, public statusBar: StatusBar,public component:componentService,public toastCtrl: ToastController, public splashScreen: SplashScreen, private oneSignal: OneSignal, public events:Events, private batteryStatus: BatteryStatus, private appVersion:AppVersion, private authService:authService,private network:Network) {
     this.initializeApp();
       this.events.subscribe('permissions:set',(permission)=>{
           console.log("Event permission in component");
@@ -63,6 +64,7 @@ export class MyApp {
               console.log(status.level,status.isPlugged);
           }
       );
+
 
       // platform.registerBackButtonAction(() => {
       //     let view = this.nav.getActive();
@@ -195,6 +197,23 @@ export class MyApp {
 
 
         this.oneSignal.endInit();
+
+
+        let disconnectSubscription  = this.network.onDisconnect().subscribe(
+            ()=>{
+                console.log('Network Disconnected:-(');
+                this.events.publish('isOnline','no');
+
+            }
+        );
+
+
+        let connectSubscription = this.network.onConnect().subscribe(
+            ()=>{
+                console.log('Network connected :-)');
+                this.events.publish('isOnline','yes');
+            }
+        );
 
 
 
