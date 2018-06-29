@@ -270,7 +270,7 @@ public class AssetResource {
 		String[] arrExt = ext.split(",");
 		for (String exten : arrExt) 
 		{	
-			if (extension.equals(exten)) {
+			if (extension.equalsIgnoreCase(exten)) {
 				assetDocumentDTO = assetService.uploadFile(assetDocumentDTO, file);
 			}
 		}
