@@ -20,8 +20,8 @@ spring:
             enabled: false # we use Grunt + BrowserSync for livereload
     datasource:
         driver-class-name: com.mysql.jdbc.Driver
-        #url: jdbc:mysql://52.77.216.21:3306/TaskMan?useUnicode=true&characterEncoding=utf8
-        url: jdbc:mysql://localhost:3306/Taskman?useUnicode=true&characterEncoding=utf8
+        url: jdbc:mysql://ec2-54.255.148.73.ap-southeast-1.compute.amazonaws.com:3306/TaskMan?useUnicode=true&characterEncoding=utf8
+        #url: jdbc:mysql://localhost:3306/Taskman?useUnicode=true&characterEncoding=utf8
         name:
         username: root
         password: tgadmin123#
@@ -88,7 +88,10 @@ import:
     file:
         path:
             new: /opt/imports/new
-            completed: /opt/imports/completed        
+            completed: /opt/imports/completed
+           
+extensionImg: .jpeg,.jpg,.png    
+extensionFile: .pdf,.xlsx,.xls,.docs,.doc,.csv        
 
 asset:
    file:
