@@ -628,23 +628,24 @@ public class SchedulerService extends AbstractService {
 		job.setActive("Y");
 		job.setParentJobId(parentJob.getId());
 		job.setParentJob(parentJob);
-		//job.setChecklistItems(parentJob.getChecklistItems());
+		job.setJobType(parentJob.getType());
+		log.debug("Job status in scheduler {}",job.getJobStatus());
         if(CollectionUtils.isNotEmpty(parentJob.getChecklistItems())) {
-            List<JobChecklist> jobChecklistItems = parentJob.getChecklistItems();
-            List<JobChecklistDTO> jobChecklistDtoItems = new ArrayList<JobChecklistDTO>();
-            for(JobChecklist jobclDto : jobChecklistItems) {
+            List<JobChecklist> jobclList = parentJob.getChecklistItems();
+            List<JobChecklistDTO> checklistItems = new ArrayList<JobChecklistDTO>();
+            for(JobChecklist jobcl : jobclList) {
                 JobChecklistDTO checklist = new JobChecklistDTO();
-                checklist.setActive(jobclDto.getActive());
-                checklist.setChecklistId(jobclDto.getChecklistId());
-                checklist.setChecklistItemId(jobclDto.getChecklistItemId());
-                checklist.setChecklistItemName(jobclDto.getChecklistItemName());
-                checklist.setChecklistName(jobclDto.getChecklistName());
-                jobChecklistDtoItems.add(checklist);
+                checklist.setChecklistId(jobcl.getChecklistId());
+                checklist.setChecklistName(jobcl.getChecklistName());
+                checklist.setChecklistItemId(jobcl.getChecklistItemId());
+                checklist.setChecklistItemName(jobcl.getChecklistItemName());
+                checklistItems.add(checklist);
+
             }
             if(job.getChecklistItems() != null) {
-                job.getChecklistItems().addAll(jobChecklistDtoItems);
+                job.getChecklistItems().addAll(checklistItems);
             }else {
-                job.setChecklistItems(jobChecklistDtoItems);
+                job.setChecklistItems(checklistItems);
             }
         }
 		log.debug("JobDTO parent job id - " + parentJob.getId());
