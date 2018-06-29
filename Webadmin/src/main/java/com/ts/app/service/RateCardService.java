@@ -339,7 +339,7 @@ public class RateCardService extends AbstractService {
             }
             if(!StringUtils.isEmpty(quotationDto.get_id()) && quotationDto.getMode().equalsIgnoreCase("edit")) {
             		url = quotationSvcEndPoint+"/quotation/edit";
-            }else if(!StringUtils.isEmpty(quotationDto.get_id()) && quotationDto.getMode().equalsIgnoreCase("submit")) {
+            }else if(quotationDto.getMode().equalsIgnoreCase("submit")) {
             		Setting quotationAlertSetting = null;
 				List<Setting> settings = settingRepository.findSettingByKeyAndSiteId(SettingsService.EMAIL_NOTIFICATION_QUOTATION, quotationDto.getSiteId());
 				if(CollectionUtils.isNotEmpty(settings)) {
