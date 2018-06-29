@@ -138,7 +138,10 @@ public class SchedulerService extends AbstractService {
 			entity.setActive("Y");
 			entity = schedulerConfigRepository.save(entity);
 			// create jobs based on the creation policy
-			createJobs(entity);
+			//createJobs(entity);
+			runDailyTask();
+			runWeeklyTask();
+			runMonthlyTask();
 		}
 
 	}
@@ -619,6 +622,8 @@ public class SchedulerService extends AbstractService {
 		job.setPlannedEndTime(endTime.getTime());
 		job.setPlannedHours(Integer.parseInt(plannedHours));
 		job.setScheduled(true);
+		job.setJobType(parentJob.getType());
+		job.setSchedule("ONCE");
 		job.setLocationId(!StringUtils.isEmpty(dataMap.get("location")) ? Long.parseLong(dataMap.get("location")) : 0);
 		job.setActive("Y");
 		job.setParentJobId(parentJob.getId());

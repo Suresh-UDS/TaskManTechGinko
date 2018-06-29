@@ -768,6 +768,7 @@ public class JobManagementService extends AbstractService {
 		dto.setActualMinutes(job.getActualMinutes());
 		dto.setSchedule(job.getSchedule());
 		dto.setScheduled(job.isScheduled());
+		dto.setJobType(job.getType());
 		return dto;
 	}
 
