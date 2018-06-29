@@ -259,13 +259,13 @@ angular.module('timeSheetApp')
         }
 
         $scope.deleteConfirm = function (vendor){
-        		$scope.deleteVendorId= vendor.id;
+        		$scope.deleteVendorId= vendor;
         }
 
         $scope.deleteVendor = function () {
         		VendorComponent.remove($scope.deleteVendorId).then(function(){
 	            	$scope.success = 'OK';
-	            	$state.reload();
+	            	$scope.loadVendors();
 	        	});
         };
 
