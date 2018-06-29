@@ -1772,25 +1772,25 @@
                                                                         <div class="col-md-12">
                                                                             <div class="form-group label-floating is-empty is-fileinput row">
                                                                                 <div class="col-md-6 pdng-top13">
-                                                                                    <input type="file" class="form-control ng-pristine ng-valid ng-touched" style="opacity:100;position:relative" file-model="" ng-model="selectedClientFile" name="clientFile" tabindex="0" aria-invalid="false" required>
+                                                                                    <input type="file" class="form-control ng-pristine ng-valid ng-touched" style="opacity:100;position:relative" file-model="" ng-model="selectedClientFile" name="clientFile" tabindex="0" aria-invalid="false" required onchange="angular.element(this).scope().uploadfileValidation(this.files)">
                                                                                     <div ng-show="importClientForm.$submitted || importClientForm.clientFile.$touched">
                                                                                         <div
                                                                                             ng-show="importClientForm.clientFile.$dirty || importClientForm.clientFile.$invalid">
-                                                                                            <p class="help-block" style="color:maroon"
+                                                                                            <p class="help-block" style="width:100%;z-index:1000;background:#fff;color:maroon"
                                                                                                ng-show="importClientForm.clientFile.$error.required">
-                                                                                                File title  is required.
+                                                                                                File is required.
                                                                                             </p>
-                                                                                            <!-- <p class="help-block" style="color:maroon"
-                                                                                                   ng-show="importClientForm.clientFile.$error.maxlength">
-                                                                                             File title cannot be longer than 250 characters.
-                                                                                            </p> -->
+                                                                                            <p class="help-block" style="color:maroon"
+                                                                                               ng-show="fileNotValid">
+                                                                                                 doc,docx,xls,xlsx,csv,txt,pdf files only accepted.
+                                                                                            </p>
 
                                                                                         </div>
                                                                                         
                                                                                     </div>
                                                                                 </div>
                                                                                 <div class="col-md-6">
-                                                                                    <button class="btn btn-success" tabindex="0" ng-click="uploadAssetFile()" ng-disabled="importClientForm.$invalid">
+                                                                                    <button class="btn btn-success" tabindex="0" ng-click="uploadAssetFile()" ng-disabled="importClientForm.$invalid || fileNotValid">
                                                                                 <span class="btn-label">
                                                                                     <i class="material-icons">file_upload</i>
                                                                                 </span>Upload Docs
@@ -1845,13 +1845,17 @@
                                                                        <div class="col-md-12">
                                                                            <div class="form-group label-floating is-empty is-fileinput row">
                                                                                <div class="col-md-6 pdng-top13">
-                                                                                   <input type="file" class="form-control ng-pristine ng-valid ng-touched" style="opacity:100;position:relative" file-model="" ng-model="selectedPhotoFile" name="clientFile1" tabindex="0" aria-invalid="false" required>
+                                                                                   <input type="file" class="form-control ng-pristine ng-valid ng-touched" style="opacity:100;position:relative" file-model="" ng-model="selectedPhotoFile" name="clientFile1" tabindex="0" aria-invalid="false" required onchange="angular.element(this).scope().uploadImage(this.files)">
                                                                                    <div ng-show="importClientForm1.$submitted || importClientForm1.clientFile1.$touched">
                                                                                         <div
                                                                                             ng-show="importClientForm1.clientFile1.$dirty || importClientForm1.clientFile1.$invalid">
-                                                                                            <p class="help-block" style="color:maroon"
+                                                                                            <p class="help-block" style="width:100%;z-index:1000;background:#fff;color:maroon"
                                                                                                ng-show="importClientForm1.clientFile1.$error.required">
                                                                                                 Photo  is required.
+                                                                                            </p>
+                                                                                            <p class="help-block" style="color:maroon"
+                                                                                               ng-show="imgNotValid">
+                                                                                                 jpg,jpeg,png files only accepted.
                                                                                             </p>
 
                                                                                         </div>
@@ -1859,7 +1863,7 @@
                                                                                     </div>
                                                                                </div>
                                                                                <div class="col-md-6">
-                                                                                   <button class="btn btn-success" tabindex="0" ng-click="uploadAssetPhotoFile()" ng-disabled="importClientForm1.$invalid">
+                                                                                   <button class="btn btn-success" tabindex="0" ng-click="uploadAssetPhotoFile()" ng-disabled="importClientForm1.$invalid || imgNotValid">
                                                                                 <span class="btn-label">
                                                                                     <i class="material-icons">file_upload</i>
                                                                                 </span>Upload Docs
