@@ -166,16 +166,45 @@ angular.module('timeSheetApp')
 
         }
 
-
+        $scope.ppmFromMsg =false;
 
         $('input#dateFilterPpmFrom').on('dp.change', function(e){
             $scope.assetPPM.startDate = e.date._d;
             $scope.ppmFrom = $filter('date')(e.date._d, 'dd/MM/yyyy');
+
+            if($scope.assetPPM.startDate > $scope.assetPPM.endDate) {
+
+                    //scope.showNotifications('top','center','danger','From date cannot be greater than To date');
+                    $scope.ppmFromMsg = true;
+                    
+                    
+                    //return false;
+            }else {
+              
+               $scope.ppmFromMsg =false;
+               
+           
+            }
         });
+
+        $scope.ppmToMsg =false;
 
         $('input#dateFilterPpmTo').on('dp.change', function(e){
             $scope.assetPPM.endDate = e.date._d;
             $scope.ppmTo = $filter('date')(e.date._d, 'dd/MM/yyyy');
+
+            if($scope.assetPPM.endDate < $scope.assetPPM.startDate) {
+                    //$scope.showNotifications('top','center','danger','To date cannot be lesser than From date');
+                    $scope.ppmToMsg =true;
+                    
+                   
+                    //return false;
+            }else {
+               
+                 $scope.ppmToMsg =false;
+                 
+               
+            }
         });
 
         $scope.savePPMSchedule = function (){
@@ -478,7 +507,10 @@ angular.module('timeSheetApp')
         		}*/
         		/*$scope.asset.selectedSite = {id : data.siteId,name : data.siteName}
         		console.log($scope.selectedSite)*/
-        	})
+        	}).catch(function(response){
+                $rootScope.loadingStop();
+               
+            });
         }
 
 
@@ -756,6 +788,9 @@ angular.module('timeSheetApp')
                 $scope.selectedMaxValue = $scope.parameterConfig.min;
                 $rootScope.loadingStop();
 
+            }).catch(function(response){
+                $rootScope.loadingStop();
+               
             });
         };
 
@@ -1555,7 +1590,9 @@ angular.module('timeSheetApp')
                 $scope.fileCount = ($scope.uploadFiles).length;
 
                 console.log("-- Upload files --" , $scope.uploadFiles);
-	    	});
+	    	}).catch(function(response){
+                $rootScope.loadingStop();
+            });
 	    }
 
 	    $scope.getAllUploadedPhotos = function() {
@@ -1580,7 +1617,9 @@ angular.module('timeSheetApp')
                 $scope.photoCount = ($scope.uploadAssetPhotos).length;
 
                 console.log("-- Uploaded Photos --",$scope.uploadAssetPhotos);
-	    	});
+	    	}).catch(function(response){
+                $rootScope.loadingStop();
+            });
 	    }
 
 	    $scope.uploadAssetFile = function() {
@@ -1627,7 +1666,10 @@ angular.module('timeSheetApp')
     	        	},function(err){
     	        		console.log('Import error');
     	        		console.log(err);
-    	        	});
+    	        	}).catch(function(response){
+                $rootScope.loadingStop();
+                $scope.showNotifications('top','center','danger','Unable to  upload file..');
+            });
             	} else {
             		console.log('select a file');
             	}
@@ -1680,7 +1722,10 @@ angular.module('timeSheetApp')
 	        	},function(err){
 	        		console.log('Import error');
 	        		console.log(err);
-	        	});
+	        	}).catch(function(response){
+                $rootScope.loadingStop();
+                $scope.showNotifications('top','center','danger','Unable to  upload file..');
+            });
         	} else {
         		console.log('select a file');
         	}
@@ -1750,16 +1795,46 @@ angular.module('timeSheetApp')
 	    }
 
 	    $scope.frequencyDurations= [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
-
+        
+        $scope.amcFromMsg =false;
 
 	    $('input#dateFilterAmcFrom').on('dp.change', function(e){
             $scope.amcSchedule.startDate = e.date._d;
             $scope.amcFrom = $filter('date')(e.date._d, 'dd/MM/yyyy');
+
+            if($scope.amcSchedule.startDate > $scope.amcSchedule.endDate) {
+
+                    //scope.showNotifications('top','center','danger','From date cannot be greater than To date');
+                    $scope.amcFromMsg = true;
+                    
+                    
+                    //return false;
+            }else {
+              
+               $scope.amcFromMsg =false;
+               
+           
+            }
         });
+
+         $scope.amcToMsg =false;
 
         $('input#dateFilterAmcTo').on('dp.change', function(e){
             $scope.amcSchedule.endDate = e.date._d;
             $scope.amcTo = $filter('date')(e.date._d, 'dd/MM/yyyy');
+
+            if($scope.amcSchedule.endDate < $scope.amcSchedule.startDate) {
+                    //$scope.showNotifications('top','center','danger','To date cannot be lesser than From date');
+                    $scope.amcToMsg =true;
+                    
+                   
+                    //return false;
+            }else {
+               
+                 $scope.amcToMsg =false;
+                 
+               
+            }
         });
 
 	    $scope.loadCheckList = function() {
@@ -2050,6 +2125,68 @@ angular.module('timeSheetApp')
              $location.path('/assets');
                 
         }
+
+            $scope.imgNotValid=true;
+            $scope.imgSizeHigh=true;
+          
+
+            $scope.uploadImage = function (files) {  
+
+               var ext = files[0].name.match(/\.(.+)$/)[1];
+
+
+                if(angular.lowercase(ext) ==='jpg' || angular.lowercase(ext) ==='jpeg' || angular.lowercase(ext) ==='png'){
+                   $scope.imgNotValid=false;
+                   
+
+                    if(files[0].size < 15000000){
+
+                        $scope.imgSizeHigh=false;
+
+                    }else{
+
+                        $scope.imgSizeHigh=true;
+                    }
+               
+                }  
+                else{
+                   $scope.imgNotValid=true;
+                   
+                }
+
+            }
+
+            $scope.fileNotValid=true;
+            $scope.fileSizeHigh=true;
+
+            $scope.uploadfileValidation = function (files) {  
+
+               var ext = files[0].name.match(/\.(.+)$/)[1];
+
+                if(angular.lowercase(ext) ==='doc' || angular.lowercase(ext) ==='docx' 
+                    || angular.lowercase(ext) ==='xls'|| angular.lowercase(ext) ==='xlsx' || angular.lowercase(ext) ==='txt'
+                    || angular.lowercase(ext) ==='csv' || angular.lowercase(ext) ==='pdf'){
+                   $scope.fileNotValid=false;
+
+                    if(files[0].size < 15000000){
+
+                        $scope.fileSizeHigh=false;
+
+                    }else{
+                        
+                        $scope.fileSizeHigh=true;
+                    }
+               
+                }  
+                else{
+                   $scope.fileNotValid=true;
+                   
+                }
+
+            }
+
+
+       
 
 
 

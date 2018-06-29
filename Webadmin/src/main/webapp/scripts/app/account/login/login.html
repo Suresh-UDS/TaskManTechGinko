@@ -1,33 +1,19 @@
 
 
 <div class="row" ng-init="loadPageTop()">
-    <div class="col-md-4 col-sm-6 col-md-offset-4 col-sm-offset-4" style="margin-top: 2%;">
+    <div class="alert alert-danger col-lg-6 col-md-6 col-lg-offset-3 col-md-offset-3 txt-align-center" ng-show="authenticationError">
+        <strong>Failed to sign in!</strong> Please check your credentials and try again.
+    </div>
+    <div class="col-lg-4 col-md-4 col-sm-6 col-md-offset-4 col-sm-offset-4 col-lg-offset-4" style="margin-top: 2%;">
         <form method="#" action="#" role="form" ng-submit="login($event)">
             <div class="card card-login card-hidden">
-                <div class="alert alert-danger" ng-show="authenticationError">
-                    <strong>Failed to sign in!</strong> Please check your credentials and try again.
-                </div>
                 <div class="card-header text-center" data-background-color="orange">
                     <h4 class="card-title">Login</h4>
-                    <!--<div class="social-line">-->
-                        <!--<a href="#btn" class="btn btn-just-icon btn-simple">-->
-                            <!--<i class="fa fa-facebook-square"></i>-->
-                        <!--</a>-->
-                        <!--<a href="#pablo" class="btn btn-just-icon btn-simple">-->
-                            <!--<i class="fa fa-twitter"></i>-->
-                        <!--</a>-->
-                        <!--<a href="#eugen" class="btn btn-just-icon btn-simple">-->
-                            <!--<i class="fa fa-google-plus"></i>-->
-                        <!--</a>-->
-                    <!--</div>-->
                 </div>
-                <!--<p class="category text-center">-->
-                    <!--Or Be Classical-->
-                <!--</p>-->
                 <div class="card-content">
                     <div ng-show="resLoader" class="text-center" >
                         <!-- <img src="/assets/img/spinner.gif">Login… -->
-                       <span>Login </span><span  loader-css="ball-pulse"></span>
+                       <span>Login... </span><span  loader-css="ball-pulse"></span>
 
                     </div>
                     <div class="input-group">

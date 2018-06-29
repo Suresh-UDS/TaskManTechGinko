@@ -43,6 +43,8 @@ public class AssetDTO extends BaseDTO {
     private double currentPrice;
     private double estimatedDisposePrice;
     private Date warrantyExpiryDate;
+    private Date warrantyFromDate;
+    private Date warrantyToDate;
     private String assetCode;
     private String amcDocumentTitle;
     private String amcDocumentFile;
@@ -50,6 +52,18 @@ public class AssetDTO extends BaseDTO {
     private String assetPpmTitle;
     private String warrantyType;
 
+	public Date getWarrantyFromDate() {
+		return warrantyFromDate;
+	}
+	public void setWarrantyFromDate(Date warrantyFromDate) {
+		this.warrantyFromDate = warrantyFromDate;
+	}
+	public Date getWarrantyToDate() {
+		return warrantyToDate;
+	}
+	public void setWarrantyToDate(Date warrantyToDate) {
+		this.warrantyToDate = warrantyToDate;
+	}
 	public long getAssetTypeId() {
 		return assetTypeId;
 	}

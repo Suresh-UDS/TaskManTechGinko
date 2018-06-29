@@ -11,6 +11,7 @@ import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -48,6 +49,7 @@ import com.ts.app.domain.Setting;
 import com.ts.app.domain.Site;
 import com.ts.app.domain.User;
 import com.ts.app.domain.Vendor;
+import com.ts.app.domain.WarrantyType;
 import com.ts.app.domain.util.StringUtil;
 import com.ts.app.repository.AssetAMCRepository;
 import com.ts.app.repository.AssetDocumentRepository;
@@ -76,6 +78,7 @@ import com.ts.app.repository.SiteRepository;
 import com.ts.app.repository.TicketRepository;
 import com.ts.app.repository.UserRepository;
 import com.ts.app.repository.VendorRepository;
+import com.ts.app.repository.WarrantyTypeRepository;
 import com.ts.app.service.util.CommonUtil;
 import com.ts.app.service.util.DateUtil;
 import com.ts.app.service.util.ExportUtil;
@@ -220,6 +223,8 @@ public class AssetManagementService extends AbstractService {
 	@Inject
 	private AssetParamRuleRepository assetParamRuleRepository;
 	
+	@Inject
+	private WarrantyTypeRepository warrantyTypeRepository;
 	
 	public static final String EMAIL_NOTIFICATION_READING = "email.notification.reading";
 	
@@ -241,11 +246,7 @@ public class AssetManagementService extends AbstractService {
 
 		asset.setActive(Asset.ACTIVE_YES);
 
-		List<Asset> existingAssets = assetRepository.findAssetByTitle(assetDTO.getTitle());
-		log.debug("Existing asset size -" + existingAssets.size());
-		if (CollectionUtils.isEmpty(existingAssets)) {
-			asset = assetRepository.save(asset);
-		}
+		asset = assetRepository.save(asset);
 		
 		//generate QR code if qr code is not already generated.
 		if(asset != null && asset.getId() > 0 && !StringUtils.isEmpty(asset.getCode()) && StringUtils.isEmpty(asset.getQrCodeImage())) {
@@ -274,6 +275,17 @@ public class AssetManagementService extends AbstractService {
 			}
 		}
 		
+		//create asset type if does not exist
+		if(!StringUtils.isEmpty(asset.getWarrantyType())) {
+			WarrantyType warrantyType = warrantyTypeRepository.findByName(asset.getWarrantyType());
+			if(warrantyType == null) {
+				warrantyType = new WarrantyType();
+				warrantyType.setName(asset.getWarrantyType());
+				warrantyType.setActive("Y");
+				warrantyTypeRepository.save(warrantyType);
+			}
+		}
+				
 		List<ParameterConfig> parameterConfigs = parameterConfigRepository.findAllByAssetType(assetDTO.getAssetType());
 		if(CollectionUtils.isNotEmpty(parameterConfigs)) {
 			List<AssetParameterConfig> assetParamConfigs = new ArrayList<AssetParameterConfig>();
@@ -399,6 +411,7 @@ public class AssetManagementService extends AbstractService {
 	private void mapToEntityAssets(AssetDTO assetDTO, Asset asset) {
 		asset.setTitle(assetDTO.getTitle());
 		asset.setAssetType(assetDTO.getAssetType());
+		asset.setWarrantyType(assetDTO.getWarrantyType());
 		asset.setAssetGroup(assetDTO.getAssetGroup());
 		asset.setDescription(assetDTO.getDescription());
 		if (assetDTO.getSiteId() != asset.getSite().getId()) {
@@ -419,7 +432,13 @@ public class AssetManagementService extends AbstractService {
 		asset.setZone(assetDTO.getZone());
 		asset.setModelNumber(assetDTO.getModelNumber());
 		asset.setSerialNumber(assetDTO.getSerialNumber());
+		if (!StringUtils.isEmpty(assetDTO.getAcquiredDate())) {
 		asset.setAcquiredDate(DateUtil.convertToSQLDate(assetDTO.getAcquiredDate()));
+		}
+		if (!StringUtils.isEmpty(assetDTO.getWarrantyFromDate()) && !StringUtils.isEmpty(assetDTO.getWarrantyToDate())) {
+		asset.setWarrantyFromDate(DateUtil.convertToSQLDate(assetDTO.getWarrantyFromDate()));
+		asset.setWarrantyToDate(DateUtil.convertToSQLDate(assetDTO.getWarrantyToDate()));
+		}
 		asset.setPurchasePrice(assetDTO.getPurchasePrice());
 		asset.setCurrentPrice(assetDTO.getCurrentPrice());
 		asset.setEstimatedDisposePrice(assetDTO.getEstimatedDisposePrice());

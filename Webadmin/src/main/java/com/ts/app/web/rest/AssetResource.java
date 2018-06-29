@@ -1,7 +1,10 @@
 package com.ts.app.web.rest;
 
 import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -18,6 +21,7 @@ import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -34,6 +38,7 @@ import com.ts.app.domain.Frequency;
 import com.ts.app.domain.FrequencyPrefix;
 import com.ts.app.security.SecurityUtils;
 import com.ts.app.service.AssetManagementService;
+import com.ts.app.service.WarrantyTypeService;
 import com.ts.app.service.util.FileUploadHelper;
 import com.ts.app.service.util.ImportUtil;
 import com.ts.app.web.rest.dto.AssetAMCScheduleDTO;
@@ -51,6 +56,7 @@ import com.ts.app.web.rest.dto.ImportResult;
 import com.ts.app.web.rest.dto.SearchCriteria;
 import com.ts.app.web.rest.dto.SearchResult;
 import com.ts.app.web.rest.dto.TicketDTO;
+import com.ts.app.web.rest.dto.WarrantyTypeDTO;
 import com.ts.app.web.rest.errors.TimesheetException;
 
 /**
@@ -66,6 +72,9 @@ public class AssetResource {
 	@Inject
 	private AssetManagementService assetService;
 
+	@Inject
+	private WarrantyTypeService warrantyTypeService;
+	
 	@Inject
 	private FileUploadHelper fileUploaderUtils;
 
@@ -83,7 +92,27 @@ public class AssetResource {
 	@Timed
 	public ResponseEntity<?> saveAsset(@Valid @RequestBody AssetDTO assetDTO, HttpServletRequest request) {
 		log.debug(">>> Asset DTO save request <<<");
-
+		
+		if (!StringUtils.isEmpty(assetDTO.getWarrantyFromDate()) && !StringUtils.isEmpty(assetDTO.getWarrantyToDate())) {
+			try{
+				SimpleDateFormat sdf=new SimpleDateFormat("E MMM dd HH:mm:ss z yyyy");
+		        Date fromdate=sdf.parse(String.valueOf(assetDTO.getWarrantyFromDate()));
+		        Date todate=sdf.parse(String.valueOf(assetDTO.getWarrantyToDate()));
+		        SimpleDateFormat sdf2=new SimpleDateFormat("MMM dd,yyyy HH:mm:ss");
+		        log.debug("<<< From Date "+sdf2.format(fromdate));
+		        log.debug("<<< To Date "+sdf2.format(todate));
+	
+		        if(fromdate.after(todate)){
+	                log.debug("<<< Warranty From Date is after Warranty To Date");
+	                assetDTO.setMessage("Warranty From Date is after Warranty To Date");
+					return new ResponseEntity<>(assetDTO,HttpStatus.BAD_REQUEST);
+	            }
+	        }
+	        catch(Exception e){
+	        	throw new TimesheetException(e, assetDTO);	
+	        }
+		}
+		
 		try {
 			assetDTO = assetService.saveAsset(assetDTO);
 		} catch (Exception e) {
@@ -157,8 +186,34 @@ public class AssetResource {
 		log.debug(">>> asset id : " + id);
 		if (assetDTO.getId() > 0)
 			assetDTO.setId(id);
-		AssetDTO response = assetService.updateAsset(assetDTO);
-		return new ResponseEntity<>(response, HttpStatus.CREATED);
+		if (!StringUtils.isEmpty(assetDTO.getWarrantyFromDate()) && !StringUtils.isEmpty(assetDTO.getWarrantyToDate())) {
+			try{
+				SimpleDateFormat sdf=new SimpleDateFormat("E MMM dd HH:mm:ss z yyyy");
+		        Date fromdate=sdf.parse(String.valueOf(assetDTO.getWarrantyFromDate()));
+		        Date todate=sdf.parse(String.valueOf(assetDTO.getWarrantyToDate()));
+		        SimpleDateFormat sdf2=new SimpleDateFormat("MMM dd,yyyy HH:mm:ss");
+		        log.debug("<<< From Date "+sdf2.format(fromdate));
+		        log.debug("<<< To Date "+sdf2.format(todate));
+	
+		        if(fromdate.after(todate)){
+	                log.debug("<<< Warranty From Date is after Warranty To Date");
+	                assetDTO.setMessage("Warranty From Date is after Warranty To Date");
+					return new ResponseEntity<>(assetDTO,HttpStatus.BAD_REQUEST);
+	            }
+	        }
+	        catch(Exception e){
+	        	throw new TimesheetException(e, assetDTO);	
+	        }
+		}
+		
+		try {
+			assetDTO = assetService.updateAsset(assetDTO);
+			}catch(Exception e) {
+			throw new TimesheetException(e, assetDTO);
+		}
+
+		log.debug("Asset new id - " + assetDTO.getId());
+		return new ResponseEntity<>(assetDTO, HttpStatus.CREATED);
 	}
 
 	@RequestMapping(value = "/asset/{id}", method = RequestMethod.DELETE)
@@ -200,6 +255,27 @@ public class AssetResource {
 		return assetService.findAllAssetGroups();
 	}
 
+	@RequestMapping(value = "/assetwarrantytype", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+	@Timed
+	public ResponseEntity<?> saveWarrantyType(@Valid @RequestBody WarrantyTypeDTO warrantyTypeDTO,
+			HttpServletRequest request) {
+		log.info(">>> Inside the save assetwarrantytype -");
+		log.info(">>> Inside Save assetwarrantytype <<< " + warrantyTypeDTO.getName());
+		long userId = SecurityUtils.getCurrentUserId();
+		try {
+			warrantyTypeDTO = warrantyTypeService.createWarrantyTypeInformation(warrantyTypeDTO);
+		} catch (Exception e) {
+			throw new TimesheetException(e, warrantyTypeDTO);
+		}
+		return new ResponseEntity<>(HttpStatus.CREATED);
+	}
+
+	@RequestMapping(value = "/assetwarrantytype", method = RequestMethod.GET)
+	public List<WarrantyTypeDTO> findAllWarrantyTypes() {
+		log.info("--Invoked AssetResource.findAllWarrantyTypes --");
+		return warrantyTypeService.findAll();
+	}
+	
 	@RequestMapping(value = "/assets/type", method = RequestMethod.GET)
 	public List<AssetTypeDTO> findAllAssetType() {
 		log.info("Get All Asset Type");
@@ -259,7 +335,6 @@ public class AssetResource {
 		assetDocumentDTO.setTitle(title);
 		assetDocumentDTO.setType(type);
 		String extension = FilenameUtils.getExtension(file.getOriginalFilename());
-		//String[] ext = { ".pdf", ".xlsx", ".xls", ".docs", ".doc", ".csv" };
 		String ext = env.getProperty("extensionFile");
 		String[] arrExt = ext.split(",");
 		for (String exten : arrExt) {
@@ -277,13 +352,12 @@ public class AssetResource {
 		assetDocumentDTO.setAssetId(assetId);
 		assetDocumentDTO.setTitle(title);
 		assetDocumentDTO.setType(type);
-		String extension = FilenameUtils.getExtension(file.getOriginalFilename());
-		//String[] ext = { ".jpeg", ".jpg", ".png" };
+		String extension = FilenameUtils.getExtension(file.getOriginalFilename()); 
 		String ext = env.getProperty("extensionImg");
 		String[] arrExt = ext.split(",");
 		for (String exten : arrExt) 
 		{	
-			if (extension.equals(exten)) {
+			if (extension.equalsIgnoreCase(exten)) {
 				assetDocumentDTO = assetService.uploadFile(assetDocumentDTO, file);
 			}
 		}
