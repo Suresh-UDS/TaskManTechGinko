@@ -8,6 +8,7 @@ import java.util.List;
 import javax.inject.Inject;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.io.FilenameUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.env.Environment;
@@ -445,7 +446,7 @@ public class AssetManagementService extends AbstractService {
 		assetRepository.save(asset);
 	}
 	
-	public AssetDTO generateAssetQRCode(long assetId, String assetCode) {
+	public String generateAssetQRCode(long assetId, String assetCode) {
 		Asset asset = assetRepository.findOne(assetId);
 		long siteId = asset.getSite().getId();
 		String code = String.valueOf(siteId)+"_"+assetCode;
@@ -468,7 +469,8 @@ public class AssetManagementService extends AbstractService {
 				qrCodeBase64 = fileUploadHelper.readQrCodeFile(imageFileName);
 			}
 	}
-	return mapperUtil.toModel(asset, AssetDTO.class);
+		log.debug("*****************"+asset.getId());
+		return getQRCode(asset.getId());
 	}
 
 	public String getQRCode(long assetId) {
@@ -1247,6 +1249,9 @@ public class AssetManagementService extends AbstractService {
 		// TODO Auto-generated method stub
 		Date uploadDate = new Date();
 		Calendar cal = Calendar.getInstance();
+		String extension = FilenameUtils.getExtension(file.getOriginalFilename());
+		if(extension == "")
+		{
 		Asset assetEntity = assetRepository.findOne(assetDocumentDTO.getAssetId());
 		String assetCode = assetEntity.getCode();
 		Long siteId = assetEntity.getSite().getId();
@@ -1259,6 +1264,9 @@ public class AssetManagementService extends AbstractService {
 		assetDocument = assetDocumentRepository.save(assetDocument);
 		assetDocumentDTO = mapperUtil.toModel(assetDocument, AssetDocumentDTO.class);
 		return assetDocumentDTO;
+		}
+		else
+		return null;
 	}
 
 	public List<AssetDocumentDTO> findAllDocuments(String type, Long assetId) {
