@@ -14,6 +14,7 @@ import org.apache.commons.io.FilenameUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -72,6 +73,9 @@ public class AssetResource {
 
 	@Inject
 	private ImportUtil importUtil;
+	
+	@Inject
+	private Environment env;
 
 	// Asset
 	@RequestMapping(path = "/asset", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -244,8 +248,10 @@ public class AssetResource {
 		assetDocumentDTO.setTitle(title);
 		assetDocumentDTO.setType(type);
 		String extension = FilenameUtils.getExtension(file.getOriginalFilename());
-		String[] ext = { ".pdf", ".xlsx", ".xls", ".docs", ".doc", ".csv" };
-		for (String exten : ext) {
+		//String[] ext = { ".pdf", ".xlsx", ".xls", ".docs", ".doc", ".csv" };
+		String ext = env.getProperty("extensionFile");
+		String[] arrExt = ext.split(",");
+		for (String exten : arrExt) {
 			if (extension.equals(exten)) {
 				assetDocumentDTO = assetService.uploadFile(assetDocumentDTO, file);
 			}
@@ -261,8 +267,11 @@ public class AssetResource {
 		assetDocumentDTO.setTitle(title);
 		assetDocumentDTO.setType(type);
 		String extension = FilenameUtils.getExtension(file.getOriginalFilename());
-		String[] ext = { ".jpeg", ".jpg", ".png" };
-		for (String exten : ext) {
+		//String[] ext = { ".jpeg", ".jpg", ".png" };
+		String ext = env.getProperty("extensionImg");
+		String[] arrExt = ext.split(",");
+		for (String exten : arrExt) 
+		{	
 			if (extension.equals(exten)) {
 				assetDocumentDTO = assetService.uploadFile(assetDocumentDTO, file);
 			}
