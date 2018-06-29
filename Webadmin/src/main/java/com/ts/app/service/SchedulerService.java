@@ -138,7 +138,10 @@ public class SchedulerService extends AbstractService {
 			entity.setActive("Y");
 			entity = schedulerConfigRepository.save(entity);
 			// create jobs based on the creation policy
-			createJobs(entity);
+			//createJobs(entity);
+			runDailyTask();
+			runWeeklyTask();
+			runMonthlyTask();
 		}
 
 	}
@@ -596,6 +599,7 @@ public class SchedulerService extends AbstractService {
 		log.debug("Start time hours =" + sHr + ", start time mins -" + sMin);
 		startTime.set(Calendar.HOUR_OF_DAY, sHr);
 		startTime.set(Calendar.MINUTE, sMin);
+		startTime.set(Calendar.SECOND, 0);
 		startTime.getTime(); // to recalculate
 		cal = DateUtils.toCalendar(eHrs);
 		int eHr = cal.get(Calendar.HOUR_OF_DAY);
@@ -605,10 +609,12 @@ public class SchedulerService extends AbstractService {
 			endTime.set(Calendar.HOUR_OF_DAY, startTime.get(Calendar.HOUR_OF_DAY));
 			endTime.add(Calendar.HOUR_OF_DAY, 1);
 			endTime.set(Calendar.MINUTE, eMin);
+			endTime.set(Calendar.SECOND, 0);
 			endTime.getTime(); // to recalculate
 		} else {
 			endTime.set(Calendar.HOUR_OF_DAY, eHr);
 			endTime.set(Calendar.MINUTE, eMin);
+			endTime.set(Calendar.SECOND, 0);
 			endTime.getTime(); // to recalculate
 		}
 
@@ -616,32 +622,31 @@ public class SchedulerService extends AbstractService {
 		job.setPlannedEndTime(endTime.getTime());
 		job.setPlannedHours(Integer.parseInt(plannedHours));
 		job.setScheduled(true);
+		job.setJobType(parentJob.getType());
+		job.setSchedule("ONCE");
 		job.setLocationId(!StringUtils.isEmpty(dataMap.get("location")) ? Long.parseLong(dataMap.get("location")) : 0);
 		job.setActive("Y");
 		job.setParentJobId(parentJob.getId());
 		job.setParentJob(parentJob);
-		job.setJobType(parentJob.getType());
-		log.debug("Job status in scheduler {}",job.getJobStatus());
+		//job.setChecklistItems(parentJob.getChecklistItems());
         if(CollectionUtils.isNotEmpty(parentJob.getChecklistItems())) {
-            List<JobChecklist> jobclList = parentJob.getChecklistItems();
-            List<JobChecklistDTO> checklistItems = new ArrayList<JobChecklistDTO>();
-            for(JobChecklist jobcl : jobclList) {
+            List<JobChecklist> jobChecklistItems = parentJob.getChecklistItems();
+            List<JobChecklistDTO> jobChecklistDtoItems = new ArrayList<JobChecklistDTO>();
+            for(JobChecklist jobclDto : jobChecklistItems) {
                 JobChecklistDTO checklist = new JobChecklistDTO();
-                checklist.setChecklistId(jobcl.getChecklistId());
-                checklist.setChecklistName(jobcl.getChecklistName());
-                checklist.setChecklistItemId(jobcl.getChecklistItemId());
-                checklist.setChecklistItemName(jobcl.getChecklistItemName());
-                checklistItems.add(checklist);
-
+                checklist.setActive(jobclDto.getActive());
+                checklist.setChecklistId(jobclDto.getChecklistId());
+                checklist.setChecklistItemId(jobclDto.getChecklistItemId());
+                checklist.setChecklistItemName(jobclDto.getChecklistItemName());
+                checklist.setChecklistName(jobclDto.getChecklistName());
+                jobChecklistDtoItems.add(checklist);
             }
             if(job.getChecklistItems() != null) {
-                job.getChecklistItems().addAll(checklistItems);
+                job.getChecklistItems().addAll(jobChecklistDtoItems);
             }else {
-                job.setChecklistItems(checklistItems);
+                job.setChecklistItems(jobChecklistDtoItems);
             }
         }
-//		List<JobChecklistDTO> jobChecklistDTO = mapperUtil.toModelList(parentJob.getChecklistItems(),JobChecklistDTO.class);
-//		job.setChecklistItems(jobChecklistDTO);
 		log.debug("JobDTO parent job id - " + parentJob.getId());
 		log.debug("JobDTO parent job id - " + job.getParentJobId());
 		log.debug("JobDTO Details before calling saveJob - " + job);
