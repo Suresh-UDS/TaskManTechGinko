@@ -304,7 +304,7 @@ public class SchedulerHelperService extends AbstractService {
 								endCal.set(Calendar.SECOND, 0);
 								endCal.set(Calendar.MILLISECOND, 0);
 								Calendar currCal = Calendar.getInstance();
-								currCal.add(Calendar.HOUR_OF_DAY, 1);
+								//currCal.add(Calendar.HOUR_OF_DAY, 1);
 								long timeDiff = currCal.getTimeInMillis() - startCal.getTimeInMillis();
 								// if(currCal.equals(startCal) || (timeDiff >= 0 && timeDiff <= 3600000)) {
 								// long empCntInShift = 0;
