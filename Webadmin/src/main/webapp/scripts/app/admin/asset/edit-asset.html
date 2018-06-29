@@ -968,12 +968,16 @@
                                                                             <div ng-show="form3.$submitted || form3.PpmFrom.$touched">
                                                                                 <div
                                                                                     ng-show="form3.PpmFrom.$dirty || form3.PpmFrom.$invalid">
-                                                                                    <p class="help-block" style="color:maroon"
+                                                                                    <p class="help-block" style="width:100%;z-index:1000;background:#fff;color:maroon"
                                                                                        ng-show="form3.PpmFrom.$error.required">
                                                                                         From date is required.
                                                                                     </p>
                                                                                    
                                                                                 </div>
+                                                                                <p class="help-block" style="color:maroon"
+                                                                                       ng-show="ppmFromMsg">
+                                                                                        Fromdate cannot be greater than To date.
+                                                                                </p>
                                                                                 
                                                                             </div>
 
@@ -987,13 +991,17 @@
                                                                             <div ng-show="form3.$submitted || form3.PpmTo.$touched">
                                                                                 <div
                                                                                     ng-show="form3.PpmTo.$dirty || form3.PpmTo.$invalid">
-                                                                                    <p class="help-block" style="color:maroon"
+                                                                                    <p class="help-block" style="width:100%;z-index:1000;background:#fff;color:maroon"
                                                                                        ng-show="form3.PpmTo.$error.required">
                                                                                         To date is required.
                                                                                     </p>
                                                                                   
 
                                                                                 </div>
+                                                                                <p class="help-block" style="color:maroon"
+                                                                                       ng-show="ppmToMsg">
+                                                                                        Todate cannot be lesser than From date.
+                                                                                </p>
                                                                                 
                                                                             </div>
 
@@ -1091,7 +1099,7 @@
                                                                         </div>
                                                                     </div>
                                                                     <div class="col-md-1" style="padding-top: 25px;">
-                                                                        <a class="btn btn-success add-btn margn-top0"  ng-click="savePPMSchedule()" ng-disabled="form3.$invalid">Add</a>
+                                                                        <a class="btn btn-success add-btn margn-top0"  ng-click="savePPMSchedule()" ng-disabled="form3.$invalid || ppmFromMsg || ppmToMsg">Add</a>
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -1215,12 +1223,17 @@
                                                                             <div ng-show="form4.$submitted || form4.AmcFrom.$touched">
                                                                                 <div
                                                                                     ng-show="form4.AmcFrom.$dirty || form4.AmcFrom.$invalid">
-                                                                                    <p class="help-block" style="color:maroon"
+                                                                                    <p class="help-block" style="width:100%;z-index:1000;background:#fff;color:maroon"
                                                                                        ng-show="form4.AmcFrom.$error.required">
                                                                                         From date is required.
                                                                                     </p>
+                                                                                    
                                                                                    
                                                                                 </div>
+                                                                                <p class="help-block" style="color:maroon"
+                                                                                       ng-show="amcFromMsg">
+                                                                                        Fromdate cannot be greater than To date.
+                                                                                </p>
                                                                                 
                                                                             </div>
 
@@ -1234,12 +1247,17 @@
                                                                             <div ng-show="form4.$submitted || form4.AmcTo.$touched">
                                                                                 <div
                                                                                     ng-show="form4.AmcTo.$dirty || form4.AmcTo.$invalid">
-                                                                                    <p class="help-block" style="color:maroon"
+                                                                                    <p class="help-block" style="width:100%;z-index:1000;background:#fff;color:maroon"
                                                                                        ng-show="form4.AmcTo.$error.required">
                                                                                         To date is required.
                                                                                     </p>
+                                                                                    
                                                                                    
                                                                                 </div>
+                                                                                <p class="help-block" style="color:maroon"
+                                                                                       ng-show="amcToMsg">
+                                                                                        Todate cannot be lesser than From date.
+                                                                                </p>
                                                                                 
                                                                             </div>
 
@@ -1332,7 +1350,7 @@
                                                                     </div>
                                                                 </div>
                                                                 <div class="col-md-1" style="padding-top: 25px;">
-                                                                    <a class="btn btn-success add-btn margn-top0"  ng-click="saveAmcSchedule()" ng-disabled="form4.$invalid">Add</a>
+                                                                    <a class="btn btn-success add-btn margn-top0"  ng-click="saveAmcSchedule()" ng-disabled="form4.$invalid || amcFromMsg || amcToMsg">Add</a>
                                                                 </div>
                                                             </div>
                                                         </div>
