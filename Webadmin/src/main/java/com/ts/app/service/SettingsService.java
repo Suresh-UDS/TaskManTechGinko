@@ -351,8 +351,8 @@ public class SettingsService extends AbstractService {
 	}
 
 
-    public ApplicationVersionControl  findApplicationVersionCode(String applicationType) {
-        ApplicationVersionControl applicationVersionControl = applicationVersionControlRepository.findByApplicationStoreName(applicationType);
+    public List<ApplicationVersionControl>  findApplicationVersionCode() {
+        List<ApplicationVersionControl> applicationVersionControl = applicationVersionControlRepository.findAll();
         return applicationVersionControl;
     }
 
