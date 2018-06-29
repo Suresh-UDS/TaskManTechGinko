@@ -2051,6 +2051,46 @@ angular.module('timeSheetApp')
                 
         }
 
+            $scope.imgNotValid=true;
+          
+
+            $scope.uploadImage = function (files) {  
+
+               var ext = files[0].name.match(/\.(.+)$/)[1];
+
+                if(angular.lowercase(ext) ==='jpg' || angular.lowercase(ext) ==='jpeg' || angular.lowercase(ext) ==='png'){
+                   $scope.imgNotValid=false;
+               
+                }  
+                else{
+                   $scope.imgNotValid=true;
+                   
+                }
+
+            }
+
+            $scope.fileNotValid=true;
+
+            $scope.uploadfileValidation = function (files) {  
+
+               var ext = files[0].name.match(/\.(.+)$/)[1];
+
+                if(angular.lowercase(ext) ==='doc' || angular.lowercase(ext) ==='docx' 
+                    || angular.lowercase(ext) ==='xls'|| angular.lowercase(ext) ==='xlsx' || angular.lowercase(ext) ==='txt'
+                    || angular.lowercase(ext) ==='csv' || angular.lowercase(ext) ==='pdf'){
+                   $scope.fileNotValid=false;
+               
+                }  
+                else{
+                   $scope.fileNotValid=true;
+                   
+                }
+
+            }
+
+
+       
+
 
 
     });
