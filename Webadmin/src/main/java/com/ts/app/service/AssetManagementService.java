@@ -1249,9 +1249,6 @@ public class AssetManagementService extends AbstractService {
 		// TODO Auto-generated method stub
 		Date uploadDate = new Date();
 		Calendar cal = Calendar.getInstance();
-		String extension = FilenameUtils.getExtension(file.getOriginalFilename());
-		if(extension == "")
-		{
 		Asset assetEntity = assetRepository.findOne(assetDocumentDTO.getAssetId());
 		String assetCode = assetEntity.getCode();
 		Long siteId = assetEntity.getSite().getId();
@@ -1264,9 +1261,6 @@ public class AssetManagementService extends AbstractService {
 		assetDocument = assetDocumentRepository.save(assetDocument);
 		assetDocumentDTO = mapperUtil.toModel(assetDocument, AssetDocumentDTO.class);
 		return assetDocumentDTO;
-		}
-		else
-		return null;
 	}
 
 	public List<AssetDocumentDTO> findAllDocuments(String type, Long assetId) {
