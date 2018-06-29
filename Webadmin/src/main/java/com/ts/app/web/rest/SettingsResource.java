@@ -65,7 +65,7 @@ public class SettingsResource {
 		return settings;
 	}
 
-    @RequestMapping(value = "/settings/{applicationType}/application/version", method = RequestMethod.GET)
+    @RequestMapping(value = "/version/{applicationType}/application", method = RequestMethod.GET)
     public ApplicationVersionControl findVersion(@PathVariable("applicationType") String applicationType) {
         log.info("--Invoked SettingsResource.findAll --");
         ApplicationVersionControl settings = settingsService.findApplicationVersionCode(applicationType);
