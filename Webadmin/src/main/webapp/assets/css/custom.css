@@ -458,9 +458,13 @@ textarea.form-control {
     display: none;
     position: absolute;
     top: 16px;
-    right: 30px;
+    right: 10px;
     width: 140px;
     transition: all 0.3s ease;
+}
+.hoverMe:hover .Viewmore
+{
+    display: none;
 }
 .hoverMe:hover .HoverBx
 {
@@ -468,7 +472,7 @@ textarea.form-control {
 }
 .HoverBx a i
 {
-    transition: font-size 2s linear 1s;
+    transition: font-size .2s linear .1s;
 }
 .HoverBx a:hover i
 {
@@ -819,7 +823,11 @@ p.blocktxt
   border: 2px solid #ff9800;
 }
 
-
+.escalationLevelCon h4
+{
+    background: #f9f9f9;
+    padding-left: 10px;
+}
 
 .form-group.label-floating label.control-label, .form-group.label-placeholder label.control-label
 {
