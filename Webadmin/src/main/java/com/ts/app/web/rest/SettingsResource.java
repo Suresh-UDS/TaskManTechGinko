@@ -6,6 +6,7 @@ import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
+import com.ts.app.domain.ApplicationVersionControl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -43,7 +44,7 @@ public class SettingsResource {
 	 * POST /settings -> save the settings.
 	 */
 	@RequestMapping(value = "/settings", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-	@Timed 
+	@Timed
 	public ResponseEntity<?> saveSettings(@Valid @RequestBody SettingsDTO settingsDTO, HttpServletRequest request) {
 		log.info("Inside the saveSettings -");
 		SettingsDTO settingsUpdated = null;
@@ -63,6 +64,13 @@ public class SettingsResource {
 		SettingsDTO settings = settingsService.findAll(projId, siteId);
 		return settings;
 	}
+
+    @RequestMapping(value = "/version/application", method = RequestMethod.GET)
+    public List<ApplicationVersionControl> findVersion() {
+        log.info("--Invoked SettingsResource.findAll --");
+        List<ApplicationVersionControl> settings = settingsService.findApplicationVersionCode();
+        return settings;
+    }
 
 
 }
