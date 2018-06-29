@@ -369,7 +369,7 @@
 <div class="modal fade BasicFilterModal FilterModalCon" id="basicFilter" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
-            <form name="searchForm"  ng-submit="searchFilter()" novalidate >
+            <form name="searchForm"   novalidate >
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
                     <i class="material-icons">clear</i>
@@ -409,7 +409,7 @@
 
             </div>
             <div class="modal-footer">
-                <button type="submit" class="btn btn-success btn-simple" data-dismiss="modal" ng-disabled="searchForm.$invalid">Apply Filter</button>
+                <button type="submit" class="btn btn-success btn-simple" ng-click = "searchFilter()" data-dismiss="modal" ng-disabled="searchForm.$invalid">Apply Filter</button>
                 <!--<button type="button" class="btn btn-danger btn-simple" data-dismiss="modal">Close</button>-->
             </div>
             </form>
@@ -422,7 +422,7 @@
 <div class="modal fade AdvancedFilterModal FilterModalCon" id="advancedFilter" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
-            <form name="searchForm"  ng-submit="searchFilter()" novalidate >
+            <form name="searchForm"   novalidate >
 
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
@@ -501,7 +501,7 @@
 
             </div>
             <div class="modal-footer">
-                <button type="submit" class="btn btn-success btn-simple" data-dismiss="modal" ng-disabled="searchForm.$invalid">Apply Filter</button>
+                <button type="submit" class="btn btn-success btn-simple" ng-click = "searchFilter()" data-dismiss="modal" ng-disabled="searchForm.$invalid">Apply Filter</button>
                 <!--<button type="button" class="btn btn-danger btn-simple" data-dismiss="modal">Close</button>-->
             </div>
             </form>
