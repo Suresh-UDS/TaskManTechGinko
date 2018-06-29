@@ -62,9 +62,11 @@ public class Asset extends AbstractAuditingEntity implements Serializable {
     
     private String assetGroup;
     
+    private String status;
+    
     private String block;
     
-    private String floor;
+	private String floor;
     
     private String zone;
     
@@ -186,6 +188,12 @@ public class Asset extends AbstractAuditingEntity implements Serializable {
 	}
 	public void setAssetGroup(String assetGroup) {
 		this.assetGroup = assetGroup;
+	}
+	public String getStatus() {
+		return status;
+	}
+	public void setStatus(String status) {
+		this.status = status;
 	}
 	public String getBlock() {
 		return block;
