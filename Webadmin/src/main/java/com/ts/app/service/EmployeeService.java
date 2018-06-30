@@ -369,6 +369,17 @@ public class    EmployeeService extends AbstractService {
         employeeRepository.save(employeeUpdate);
 		//employeeRepository.delete(employeeUpdate);
 	}
+	
+	public void deleteEmployeeShift(long id) {
+		log.debug("Inside Employee Shift Delete");
+		EmployeeShift employeeShiftUpdate = employeeShiftRepository.findOne(id);
+        Calendar currCal = Calendar.getInstance();
+        Calendar startCal = Calendar.getInstance();
+        startCal.setTimeInMillis(employeeShiftUpdate.getStartTime().getTime());
+        if(currCal.before(startCal)) {
+    			employeeShiftRepository.delete(employeeShiftUpdate);
+        }
+	}
 
 	public List<SiteDTO> deleteEmployeeSite(Long id, Long siteId) {
 		log.debug("Inside delete employee site");
@@ -1120,6 +1131,7 @@ public class    EmployeeService extends AbstractService {
 		EmployeeShiftDTO empShiftDto = new EmployeeShiftDTO();
 		empShiftDto.setId(employeeShift.getId());
 		empShiftDto.setEmployeeId(employeeShift.getEmployee().getId());
+		empShiftDto.setEmployeeEmpId(employeeShift.getEmployee().getEmpId());
 		empShiftDto.setEmployeeFullName(employeeShift.getEmployee().getFullName());
 		Calendar startCal = Calendar.getInstance();  
 		startCal.setTimeInMillis(employeeShift.getStartTime().getTime());

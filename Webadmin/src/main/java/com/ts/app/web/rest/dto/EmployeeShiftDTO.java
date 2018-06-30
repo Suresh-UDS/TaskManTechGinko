@@ -14,6 +14,8 @@ public class EmployeeShiftDTO extends BaseDTO implements Serializable {
 	
 	private long employeeId;
 	
+	private String employeeEmpId;
+	
 	private String employeeFullName;
 	
 	private long siteId;
@@ -38,6 +40,14 @@ public class EmployeeShiftDTO extends BaseDTO implements Serializable {
 
 	public void setEmployeeId(long employeeId) {
 		this.employeeId = employeeId;
+	}
+	
+	public String getEmployeeEmpId() {
+		return employeeEmpId;
+	}
+
+	public void setEmployeeEmpId(String employeeEmpId) {
+		this.employeeEmpId = employeeEmpId;
 	}
 
 	public String getEmployeeFullName() {

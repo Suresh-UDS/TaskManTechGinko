@@ -138,9 +138,21 @@ public class EmployeeResource {
 	@RequestMapping(value = "/employee/shift", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE)
 	@Timed
 	public ResponseEntity<?> updateEmployeeShift(@Valid @RequestBody EmployeeShiftDTO employeeShift, HttpServletRequest request) {
-		log.info("Inside Update" + employeeShift.getSiteName() + " , "+ employeeShift.get);
+		log.info("Inside Update" + employeeShift.getSiteName() + " , "+ employeeShift.getEmployeeFullName());
 		try {
-			employeeService.updateEmployeeShift(employeeShift,false);
+			employeeService.updateEmployeeShift(employeeShift);
+		}catch(Exception e) {
+			throw new TimesheetException(e, employeeShift);
+		}
+		return new ResponseEntity<>(HttpStatus.OK);
+	}
+	
+	@RequestMapping(value = "/employee/shift", method = RequestMethod.DELETE, produces = MediaType.APPLICATION_JSON_VALUE)
+	@Timed
+	public ResponseEntity<?> deleteEmployeeShift(@Valid @RequestBody EmployeeShiftDTO employeeShift, HttpServletRequest request) {
+		log.info("Inside Update" + employeeShift.getSiteName() + " , "+ employeeShift.getEmployeeFullName());
+		try {
+			employeeService.updateEmployeeShift(employeeShift);
 		}catch(Exception e) {
 			throw new TimesheetException(e, employeeShift);
 		}

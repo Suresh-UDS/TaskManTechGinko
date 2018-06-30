@@ -252,6 +252,16 @@ public class SiteService extends AbstractService {
 		}
 		return mapperUtil.toModel(entity, SiteDTO.class);
 	}
+	
+	public List<ShiftDTO> findShifts(Long id) {
+		
+		Site entity = siteRepository.findOne(id);
+		if(entity != null) {
+			Hibernate.initialize(entity.getShifts());
+			entity.getShifts();
+		}
+		return mapperUtil.toModel(entity, SiteDTO.class);
+	}
 
 	public List<SiteDTO> searchSiteList(SearchCriteria searchCriteria){
 	    User user= userRepository.findOne(searchCriteria.getUserId());
