@@ -823,6 +823,7 @@ public class JobManagementService extends AbstractService {
 		JobDTO dto = new JobDTO();
 		dto.setId(job.getId());
 		dto.setTitle(job.getTitle());
+		dto.setAssetId(job.getAsset().getId());
 		dto.setSiteId(job.getSite().getId());
 		dto.setSiteName(job.getSite().getName());
 		dto.setDescription(job.getDescription());
@@ -836,6 +837,7 @@ public class JobManagementService extends AbstractService {
 		dto.setActualEndTime(job.getActualEndTime());
 		dto.setActualHours(job.getActualHours());
 		dto.setActualMinutes(job.getActualMinutes());
+		dto.setMaintenanceType(job.getMaintenanceType());
 		return dto;
 	}
 
