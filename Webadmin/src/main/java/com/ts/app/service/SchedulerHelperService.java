@@ -533,7 +533,7 @@ public class SchedulerHelperService extends AbstractService {
 								log.debug("site - "+ site.getId());
 								log.debug("shift start time - "+ DateUtil.convertToTimestamp(shiftStartCal.getTime()));
 								log.debug("shift end time - "+ DateUtil.convertToTimestamp(shiftEndCal.getTime()));
-								EmployeeShift empShift = empShiftRepo.findEmployeeShiftBySiteAndShift(site.getId(), DateUtil.convertToTimestamp(shiftStartCal.getTime()),
+								EmployeeShift empShift = empShiftRepo.findEmployeeShiftBySiteAndShift(site.getId(), emp.getId(), DateUtil.convertToTimestamp(shiftStartCal.getTime()),
 										DateUtil.convertToTimestamp(shiftEndCal.getTime()));
 								log.debug("EmpShift - "+ empShift);
 								if (empShift != null) { // if employee shift assignment matches with site shift
