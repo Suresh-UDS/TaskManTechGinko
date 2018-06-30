@@ -65,7 +65,7 @@ public class Attendance extends AbstractAuditingEntity implements Serializable{
 
 	private boolean notCheckedOut;
 	
-	@OneToOne(fetch = FetchType.LAZY, cascade={CascadeType.MERGE,CascadeType.PERSIST,CascadeType.REFRESH})
+	@OneToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "continuedAttendanceId", referencedColumnName = "id", nullable = true)
 	private Attendance continuedAttendance;
 

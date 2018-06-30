@@ -498,12 +498,16 @@ public class SchedulerHelperService extends AbstractService {
 				try {
 					Hibernate.initialize(dailyAttn.getEmployee());
 					Employee emp = dailyAttn.getEmployee();
+					Calendar checkInCal = Calendar.getInstance();
+					checkInCal.setTimeInMillis(dailyAttn.getCheckInTime().getTime());
+					log.debug("checkin cal - "+ checkInCal.getTime());
 					if (emp != null) {
 						Hibernate.initialize(emp.getProjectSites());
 						List<EmployeeProjectSite> projSites = emp.getProjectSites();
 						for (EmployeeProjectSite projSite : projSites) {
 							Site site = projSite.getSite();
 							List<Shift> shifts = site.getShifts();
+							boolean empShiftMatch = false; 
 							for (Shift shift : shifts) {
 								String startTime = shift.getStartTime();
 								String[] startTimeUnits = startTime.split(":");
@@ -523,15 +527,15 @@ public class SchedulerHelperService extends AbstractService {
 								shiftEndCal.set(Calendar.MINUTE, Integer.parseInt(endTimeUnits[1]));
 								shiftEndCal.set(Calendar.SECOND, 0);
 								shiftEndCal.set(Calendar.MILLISECOND, 0);
+								if(shiftEndCal.before(shiftStartCal)) {
+									shiftEndCal.add(Calendar.DAY_OF_MONTH, 1);
+								}
 								log.debug("site - "+ site.getId());
 								log.debug("shift start time - "+ DateUtil.convertToTimestamp(shiftStartCal.getTime()));
 								log.debug("shift end time - "+ DateUtil.convertToTimestamp(shiftEndCal.getTime()));
 								EmployeeShift empShift = empShiftRepo.findEmployeeShiftBySiteAndShift(site.getId(), DateUtil.convertToTimestamp(shiftStartCal.getTime()),
 										DateUtil.convertToTimestamp(shiftEndCal.getTime()));
 								log.debug("EmpShift - "+ empShift);
-								Calendar checkInCal = Calendar.getInstance();
-								checkInCal.setTimeInMillis(dailyAttn.getCheckInTime().getTime());
-								log.debug("checkin cal - "+ checkInCal.getTime());
 								if (empShift != null) { // if employee shift assignment matches with site shift
                                     log.debug("Employee shift found");
                                     log.debug("Shift end time "+shiftEndCal.getTime());
@@ -542,7 +546,7 @@ public class SchedulerHelperService extends AbstractService {
 										// send alert
                                         log.debug("Shift end time "+shiftEndCal.getTime());
                                         log.debug("Current time "+currCal.getTime());
-										if (currCal.after(endCal)) { // if the shift ends before EOD midnight.
+										if (currCal.after(endCal)) { // if the shift ends beforee EOD midnight.
 											// check out automatically
 											// dailyAttn.setCheckOutTime(new Timestamp(currCal.getTimeInMillis()));
 											// dailyAttn.setShiftEndTime(endTime);
@@ -563,26 +567,30 @@ public class SchedulerHelperService extends AbstractService {
 										long[] userIds = new long[1];
 										userIds[0] = userId;
 										pushService.sendAttendanceCheckoutAlert(userIds, values);
+										empShiftMatch = true;
 										break;
 									}else{
                                         log.debug("Shift end time else condition");
                                     }
-								} else {
-									if (checkInCal.before(prevDayEndCal) && currCal.after(prevDayEndCal)) {
-										dailyAttn.setNotCheckedOut(true); // mark the attendance as not checked out.
-										// send email notifications
-										Map<String, Object> values = new HashMap<String, Object>();
-										values.put("checkInTime", DateUtil.formatToDateTimeString(checkInCal.getTime()));
-										values.put("site", site.getName());
-										mailService.sendAttendanceCheckouAlertEmail(emp.getEmail(), values);
-										long userId = emp.getUser().getId();
-										long[] userIds = new long[1];
-										userIds[0] = userId;
-										pushService.sendAttendanceCheckoutAlert(userIds, values);
-										break;
-									}
+                                    empShiftMatch = true;
 								}
 							}
+							if(!empShiftMatch) {
+								if (checkInCal.before(prevDayEndCal) && currCal.after(prevDayEndCal)) {
+									dailyAttn.setNotCheckedOut(true); // mark the attendance as not checked out.
+									// send email notifications
+									Map<String, Object> values = new HashMap<String, Object>();
+									values.put("checkInTime", DateUtil.formatToDateTimeString(checkInCal.getTime()));
+									values.put("site", site.getName());
+									mailService.sendAttendanceCheckouAlertEmail(emp.getEmail(), values);
+									long userId = emp.getUser().getId();
+									long[] userIds = new long[1];
+									userIds[0] = userId;
+									pushService.sendAttendanceCheckoutAlert(userIds, values);
+									break;
+								}
+							}
+
 						}
 					}
 

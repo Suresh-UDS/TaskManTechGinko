@@ -277,6 +277,8 @@ public class AttendanceService extends AbstractService {
     	                attn.setContinuedAttendance(prevAttn);
     	            }
     	            
+    			}else {
+    				attn.setContinuedAttendance(null);
     			}
 
 			attn = attendanceRepository.save(attn);
