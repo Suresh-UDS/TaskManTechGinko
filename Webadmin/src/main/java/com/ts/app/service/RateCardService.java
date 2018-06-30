@@ -360,6 +360,11 @@ public class RateCardService extends AbstractService {
             }else if(quotationDto.getMode().equalsIgnoreCase("submit")) {
             		if(!StringUtils.isEmpty(quotationDto.get_id())) { 
             			url = quotationSvcEndPoint+"/quotation/send";
+            		}else {
+	    	        		quotationDto.setCreatedByUserId(currUserId);
+	    	        		quotationDto.setCreateByUserName(currUser.getLogin());
+        	            request.put("createdByUserId", quotationDto.getCreatedByUserId());
+        	            request.put("createdByUserName", quotationDto.getCreateByUserName());
             		}
             		quotationDto.setDrafted(false);
             		quotationDto.setSubmitted(true);
