@@ -1,8 +1,6 @@
 package com.ts.app.web.rest;
 
 import java.util.Calendar;
-import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -10,17 +8,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
-import com.ts.app.domain.Employee;
-import com.ts.app.domain.User;
-import com.ts.app.repository.UserRepository;
-import com.ts.app.service.JobManagementService;
-import com.ts.app.service.MailService;
-import com.ts.app.service.NotificationService;
-import com.ts.app.service.util.ImportUtil;
-import com.ts.app.service.UserService;
-import com.ts.app.service.util.QRCodeUtil;
-import com.ts.app.web.rest.dto.*;
-import org.apache.commons.collections.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -36,8 +23,29 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.codahale.metrics.annotation.Timed;
+import com.ts.app.repository.UserRepository;
 import com.ts.app.security.SecurityUtils;
 import com.ts.app.service.EmployeeService;
+import com.ts.app.service.JobManagementService;
+import com.ts.app.service.MailService;
+import com.ts.app.service.NotificationService;
+import com.ts.app.service.UserService;
+import com.ts.app.service.util.ImportUtil;
+import com.ts.app.web.rest.dto.CheckInOutDTO;
+import com.ts.app.web.rest.dto.CheckInOutImageDTO;
+import com.ts.app.web.rest.dto.DesignationDTO;
+import com.ts.app.web.rest.dto.EmployeeDTO;
+import com.ts.app.web.rest.dto.EmployeeHistoryDTO;
+import com.ts.app.web.rest.dto.EmployeeShiftDTO;
+import com.ts.app.web.rest.dto.ExportResponse;
+import com.ts.app.web.rest.dto.ExportResult;
+import com.ts.app.web.rest.dto.ImageDeleteRequest;
+import com.ts.app.web.rest.dto.ImportResult;
+import com.ts.app.web.rest.dto.ProjectDTO;
+import com.ts.app.web.rest.dto.RelieverDTO;
+import com.ts.app.web.rest.dto.SearchCriteria;
+import com.ts.app.web.rest.dto.SearchResult;
+import com.ts.app.web.rest.dto.SiteDTO;
 import com.ts.app.web.rest.errors.TimesheetException;
 import com.ts.app.web.rest.util.TokenUtils;
 
@@ -123,6 +131,18 @@ public class EmployeeResource {
 			employeeService.updateEmployee(employee,false);
 		}catch(Exception e) {
 			throw new TimesheetException(e, employee);
+		}
+		return new ResponseEntity<>(HttpStatus.OK);
+	}
+	
+	@RequestMapping(value = "/employee/shift", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE)
+	@Timed
+	public ResponseEntity<?> updateEmployeeShift(@Valid @RequestBody EmployeeShiftDTO employeeShift, HttpServletRequest request) {
+		log.info("Inside Update" + employeeShift.getSiteName() + " , "+ employeeShift.get);
+		try {
+			employeeService.updateEmployeeShift(employeeShift,false);
+		}catch(Exception e) {
+			throw new TimesheetException(e, employeeShift);
 		}
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
