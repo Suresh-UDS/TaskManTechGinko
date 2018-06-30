@@ -318,6 +318,19 @@ public class EmployeeResource {
         }
         return result;
     }
+    
+    @RequestMapping(value = "/employee/shift/search",method = RequestMethod.POST)
+    public SearchResult<EmployeeShiftDTO> searchEmployeesShift(@RequestBody SearchCriteria searchCriteria) {
+        if(searchCriteria != null) {
+            log.debug("search criteria - " + searchCriteria.getEmployeeEmpId() + " , " + searchCriteria.getProjectId() + " , " + searchCriteria.getSiteId());
+            searchCriteria.setUserId(SecurityUtils.getCurrentUserId());
+        }
+        SearchResult<EmployeeShiftDTO> result = null;
+        if(searchCriteria != null) {
+            result = employeeService.findEmpShiftBySearchCriteria(searchCriteria);
+        }
+        return result;
+    }
 
     @RequestMapping(value = "/employee/relievers", method = RequestMethod.GET)
     public List<EmployeeDTO> findAllRelievers() {

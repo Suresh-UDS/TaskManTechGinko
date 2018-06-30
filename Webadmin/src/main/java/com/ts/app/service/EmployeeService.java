@@ -18,6 +18,7 @@ import javax.inject.Inject;
 import com.ts.app.web.rest.dto.*;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.assertj.core.error.ShouldBeInTheFuture;
 import org.hibernate.Hibernate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -51,6 +52,7 @@ import com.ts.app.repository.DesignationRepository;
 import com.ts.app.repository.DeviceRepository;
 import com.ts.app.repository.EmployeeHistoryRepository;
 import com.ts.app.repository.EmployeeRepository;
+import com.ts.app.repository.EmployeeShiftRepository;
 import com.ts.app.repository.JobRepository;
 import com.ts.app.repository.ProjectRepository;
 import com.ts.app.repository.SiteRepository;
@@ -149,6 +151,9 @@ public class    EmployeeService extends AbstractService {
 
     @Inject
     private UserRoleService userRoleService;
+    
+    @Inject
+    private EmployeeShiftRepository employeeShiftRepository;
 
 	@Inject
 	private Environment env;
@@ -338,6 +343,22 @@ public class    EmployeeService extends AbstractService {
 		employeeRepository.saveAndFlush(employeeUpdate);
 		employee = mapperUtil.toModel(employeeUpdate, EmployeeDTO.class);
 		return employee;
+	}
+	
+	public EmployeeShiftDTO updateEmployeeShift(EmployeeShiftDTO employeeShift) {
+		log.debug("Inside Employee Shift Update");
+		EmployeeShift employeeShiftUpdate = employeeShiftRepository.findOne(employeeShift.getId());
+	    ZoneId  zone = ZoneId.of("Asia/Kolkata");
+	    ZonedDateTime zdt   = ZonedDateTime.of(LocalDateTime.now(), zone);
+		employeeShiftUpdate.setLastModifiedDate(zdt);
+		//udpate site
+		Site site = siteRepository.findOne(employeeShift.getSiteId());
+		employeeShiftUpdate.setSite(site);
+		employeeShiftUpdate.setStartTime(DateUtil.convertToTimestamp(employeeShift.getStartTime()));
+		employeeShiftUpdate.setEndTime(DateUtil.convertToTimestamp(employeeShift.getEndTime()));
+		employeeShiftRepository.saveAndFlush(employeeShiftUpdate);
+		employeeShift = mapperUtil.toModel(employeeShiftUpdate, EmployeeShiftDTO.class);
+		return employeeShift;
 	}
 
 
@@ -930,6 +951,70 @@ public class    EmployeeService extends AbstractService {
 		}
 		return result;
 	}
+	
+	public SearchResult<EmployeeShiftDTO> findEmpShiftBySearchCriteria(SearchCriteria searchCriteria) {
+		User user = userRepository.findOne(searchCriteria.getUserId());
+		SearchResult<EmployeeShiftDTO> result = new SearchResult<EmployeeShiftDTO>();
+		if(searchCriteria != null) {
+			Pageable pageRequest = null;
+			if(searchCriteria.isList()) {
+				pageRequest = createPageRequest(searchCriteria.getCurrPage(), true);
+			}else {
+				pageRequest = createPageRequest(searchCriteria.getCurrPage());
+			}
+
+			Page<EmployeeShift> page = null;
+			List<EmployeeShiftDTO> transactions = null;
+
+            Calendar startCal = Calendar.getInstance(TimeZone.getTimeZone("Asia/Kolkata"));
+            if(searchCriteria.getFromDate() != null) {
+            		startCal.setTime(searchCriteria.getFromDate());
+            }
+	    		startCal.set(Calendar.HOUR_OF_DAY, 0);
+	    		startCal.set(Calendar.MINUTE, 0);
+	    		startCal.set(Calendar.SECOND, 0);
+	    		Calendar endCal = Calendar.getInstance(TimeZone.getTimeZone("Asia/Kolkata"));
+	    		if(searchCriteria.getToDate() != null) {
+	    			endCal.setTime(searchCriteria.getToDate());
+	    		}
+	    		endCal.set(Calendar.HOUR_OF_DAY, 23);
+	    		endCal.set(Calendar.MINUTE, 59);
+	    		endCal.set(Calendar.SECOND, 0);
+
+			java.sql.Timestamp startDate = DateUtil.convertToTimestamp(startCal.getTime());
+			java.sql.Timestamp toDate = DateUtil.convertToTimestamp(endCal.getTime());
+
+			
+			log.debug("findBySearchCriteria - "+searchCriteria.getSiteId() +", "+searchCriteria.getEmployeeId() +", "+searchCriteria.getProjectId());
+
+			boolean isClient = false;
+
+			if(user != null && user.getUserRole() != null) {
+				isClient = user.getUserRole().getName().equalsIgnoreCase(UserRoleEnum.ADMIN.toValue());
+			}
+
+			if(searchCriteria.getSiteId() > 0) {
+				page = employeeShiftRepository.findEmployeeShiftBySiteAndDate(searchCriteria.getSiteId(), startDate, toDate, pageRequest);
+			}
+
+			if(page != null) {
+				//transactions = mapperUtil.toModelList(page.getContent(), EmployeeDTO.class);
+				if(transactions == null) {
+					transactions = new ArrayList<EmployeeShiftDTO>();
+				}
+				List<EmployeeShift> empShiftList =  page.getContent();
+				if(CollectionUtils.isNotEmpty(empShiftList)) {
+					for(EmployeeShift empShift : empShiftList) {
+						transactions.add(mapToModel(empShift));
+					}
+				}
+				if(CollectionUtils.isNotEmpty(transactions)) {
+					buildEmployeeShiftSearchResult(searchCriteria, page, transactions,result);
+				}
+			}
+		}
+		return result;
+	}
 
 	public String generateQRCode(long empId) {
 		Employee empEntity = employeeRepository.findOne(empId);
@@ -953,6 +1038,19 @@ public class    EmployeeService extends AbstractService {
 	}
 
 	private void buildSearchResult(SearchCriteria searchCriteria, Page<Employee> page, List<EmployeeDTO> transactions, SearchResult<EmployeeDTO> result) {
+		if(page != null) {
+			result.setTotalPages(page.getTotalPages());
+		}
+		result.setCurrPage(page.getNumber() + 1);
+		result.setTotalCount(page.getTotalElements());
+        result.setStartInd((result.getCurrPage() - 1) * 10 + 1);
+        result.setEndInd((result.getTotalCount() > 10  ? (result.getCurrPage()) * 10 : result.getTotalCount()));
+
+		result.setTransactions(transactions);
+		return;
+	}
+	
+	private void buildEmployeeShiftSearchResult(SearchCriteria searchCriteria, Page<EmployeeShift> page, List<EmployeeShiftDTO> transactions, SearchResult<EmployeeShiftDTO> result) {
 		if(page != null) {
 			result.setTotalPages(page.getTotalPages());
 		}
@@ -1016,6 +1114,22 @@ public class    EmployeeService extends AbstractService {
     		empDto.setSiteName(CollectionUtils.isNotEmpty(employee.getProjectSites()) ? employee.getProjectSites().get(0).getSite().getName() : "");
     		empDto.setClient(employee.isClient());
     		return empDto;
+    }
+    
+    private EmployeeShiftDTO mapToModel(EmployeeShift employeeShift) {
+		EmployeeShiftDTO empShiftDto = new EmployeeShiftDTO();
+		empShiftDto.setId(employeeShift.getId());
+		empShiftDto.setEmployeeId(employeeShift.getEmployee().getId());
+		empShiftDto.setEmployeeFullName(employeeShift.getEmployee().getFullName());
+		Calendar startCal = Calendar.getInstance();  
+		startCal.setTimeInMillis(employeeShift.getStartTime().getTime());
+		empShiftDto.setStartTime(startCal.getTime());
+		Calendar endCal = Calendar.getInstance();  
+		endCal.setTimeInMillis(employeeShift.getEndTime().getTime());
+		empShiftDto.setEndTime(endCal.getTime());
+		empShiftDto.setSiteId(employeeShift.getSite().getId());
+		empShiftDto.setSiteName(employeeShift.getSite().getName());
+		return empShiftDto;
     }
 
 }
