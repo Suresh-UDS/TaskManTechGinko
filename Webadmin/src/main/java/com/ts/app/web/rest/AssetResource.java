@@ -334,14 +334,14 @@ public class AssetResource {
 		assetDocumentDTO.setAssetId(assetId);
 		assetDocumentDTO.setTitle(title);
 		assetDocumentDTO.setType(type);
-		String extension = FilenameUtils.getExtension(file.getOriginalFilename());
+		/*String extension = FilenameUtils.getExtension(file.getOriginalFilename());
 		String ext = env.getProperty("extensionFile");
 		String[] arrExt = ext.split(",");
 		for (String exten : arrExt) {
-			if (extension.equals(exten)) {
+			if (extension.equals(exten)) {*/
 				assetDocumentDTO = assetService.uploadFile(assetDocumentDTO, file);
-			}
-		}
+			//}
+		//}
 		return new ResponseEntity<>(assetDocumentDTO, HttpStatus.OK);
 	}
 
