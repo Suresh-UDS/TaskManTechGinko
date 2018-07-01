@@ -8,17 +8,14 @@ import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 import java.util.TimeZone;
 
 import javax.inject.Inject;
 
-import com.ts.app.web.rest.dto.*;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.assertj.core.error.ShouldBeInTheFuture;
 import org.hibernate.Hibernate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -43,7 +40,6 @@ import com.ts.app.domain.Job;
 import com.ts.app.domain.Project;
 import com.ts.app.domain.Site;
 import com.ts.app.domain.User;
-import com.ts.app.domain.UserRole;
 import com.ts.app.domain.UserRoleEnum;
 import com.ts.app.repository.AttendanceRepository;
 import com.ts.app.repository.CheckInOutImageRepository;
@@ -63,6 +59,7 @@ import com.ts.app.service.util.ExportUtil;
 import com.ts.app.service.util.FileUploadHelper;
 import com.ts.app.service.util.MapperUtil;
 import com.ts.app.service.util.QRCodeUtil;
+import com.ts.app.web.rest.dto.AttendanceDTO;
 import com.ts.app.web.rest.dto.BaseDTO;
 import com.ts.app.web.rest.dto.CheckInOutDTO;
 import com.ts.app.web.rest.dto.CheckInOutImageDTO;
@@ -70,6 +67,7 @@ import com.ts.app.web.rest.dto.DesignationDTO;
 import com.ts.app.web.rest.dto.EmployeeDTO;
 import com.ts.app.web.rest.dto.EmployeeHistoryDTO;
 import com.ts.app.web.rest.dto.EmployeeProjectSiteDTO;
+import com.ts.app.web.rest.dto.EmployeeShiftDTO;
 import com.ts.app.web.rest.dto.ExportResult;
 import com.ts.app.web.rest.dto.ImageDeleteRequest;
 import com.ts.app.web.rest.dto.JobDTO;
@@ -985,8 +983,8 @@ public class    EmployeeService extends AbstractService {
 	    		startCal.set(Calendar.MINUTE, 0);
 	    		startCal.set(Calendar.SECOND, 0);
 	    		Calendar endCal = Calendar.getInstance(TimeZone.getTimeZone("Asia/Kolkata"));
-	    		if(searchCriteria.getToDate() != null) {
-	    			endCal.setTime(searchCriteria.getToDate());
+	    		if(searchCriteria.getFromDate() != null) {
+	    			endCal.setTime(searchCriteria.getFromDate());
 	    		}
 	    		endCal.set(Calendar.HOUR_OF_DAY, 23);
 	    		endCal.set(Calendar.MINUTE, 59);

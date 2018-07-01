@@ -26,7 +26,7 @@
 
                     <div class="SearchTable" ng-init="loadSites()">
 
-                        <form name="searchForm"  ng-submit="searchFilter()" novalidate >
+                        <form name="searchForm"  ng-submit="searchShiftFilter()" novalidate >
 
                             <div class="row">
 
@@ -184,20 +184,20 @@
 	                                    <option value="">Select Site...</option>
 	                                </select>
                                 </td>
-                                <td>{{employeeShift.endTime}}</td>
-                                <td></td>
-                                <td></td>
+                                <td>
+								   <select class="form-control " ng-model="employeeShift.startTime"  ng-options="shift as shift.startDateTime for shift in shifts track by startDateTime">
+	                                    <option value="">Select Start Time...</option>
+	                                </select>
+                                </td>
+                                <td>
+								   <select class="form-control " ng-model="employeeShift.endTime"  ng-options="shift as shift.endDateTime for shift in shifts track by endDateTime">
+	                                    <option value="">Select End Time...</option>
+	                                </select>
+                                </td>
+
                                 <td class="text-right">
 
-                                    <button ng-disabled="employee.left" title="View"  ng-click="getEmployeeDetails(employee.id)" has-permission="Employee:Edit" data-toggle="modal" data-target="#ViewModal"    class="btn btn-simple btn-info btn-icon like"><i style="font-size: 20px" class="material-icons">remove_red_eye</i></button>
-                                    <!--<button ng-disabled="employee.left" title="View"  ng-click="getCheckInDetails(employee.id)" has-permission="Employee:Edit" ui-sref="view-employee({ id: employee.id })"   class="btn btn-simple btn-info btn-icon like"><i style="font-size: 20px" class="material-icons">remove_red_eye</i></button>-->
-                                    <button ng-disabled="employee.left" title="Mark Attendance "   data-toggle="modal" has-permission="Employee:Edit" data-target="#noticeModal" ng-click="getEmployeeDetails(employee.id)"  class="btn btn-simple btn-info btn-icon like"><i style="font-size: 20px" class="material-icons">date_range</i></button>
-                                    <button ng-disabled="employee.left" ng-class="{active: $state.includes('admin')}"  has-permission="Employee:Edit"  ui-sref="edit-employee({ id: employee.id })" type="button" rel="tooltip" title="Edit Profile" class="btn btn-success btn-simple btn-xs">
-                                        <i style="font-size: 20px !important;" class="fa fa-edit"></i>
-                                    </button>
-                                    <button ng-disabled="employee.left" title="Mark Left"   has-permission="Employee:Edit"  data-toggle="modal" data-target="#leftModal" data-dismiss="#leftModal" ng-click="employeeDetails(employee.id)"  class="btn btn-simple btn-info btn-icon like"> <i style="font-size: 20px !important; color: #942a25" class="fas fa-user-times"></i></button>
-                                    <!--<button ng-disabled="employee.left" title="Site Transfer"   has-authority="ROLE_ADMIN"  data-toggle="modal" data-target="#siteTransferModal" data-dismiss="#siteTransferModal"   class="btn btn-simple btn-info btn-icon like" ng-click="siteTransferDetails(employee);loadSites()" > <i style="font-size: 20px; color: orangered" class="material-icons">transfer_within_a_station</i></button>-->
-                                    <button ng-if="!employee.reliever" ng-disabled="employee.left" title="Relieve Employee"   has-permission="Employee:Edit"  data-toggle="modal" data-target="#relieverConfirmation" data-dismiss="#relieverConfirmation" ng-click="getRelievers(employee)"   class="btn btn-simple btn-info btn-icon like"> <i style="font-size: 20px" class="material-icons">assignment_ind</i></button>
+                                    <button title="Delete shift"   has-permission="EmployeeShift:Delete"  data-toggle="modal" data-target="#relieverConfirmation" data-dismiss="#relieverConfirmation" ng-click="deleteShift(employeeShift)"   class="btn btn-simple btn-info btn-icon like"> <i style="font-size: 20px" class="material-icons">assignment_ind</i></button>
                                 </td>
 
                             </tr>
