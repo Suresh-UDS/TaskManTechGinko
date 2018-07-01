@@ -60,7 +60,7 @@ angular.module('timeSheetApp')
         $scope.SelectedDesig = {};
 
         $scope.pageSort = 10;
-        $scope.selectedDate = $filter('date')(new Date(), 'dd-MM-yyyy');
+        $scope.selectedDate = $filter('date')(new Date(), 'yyyy-MM-dd');
 
         $scope.initCalender = function(){
 
@@ -86,7 +86,7 @@ angular.module('timeSheetApp')
             console.log(e.date);
 
             console.log(e.date._d);
-            $scope.selectedDate = $filter('date')(e.date._d, 'dd-MM-yyyy');
+            $scope.selectedDate = $filter('date')(e.date._d, 'yyyy-MM-dd');
         });
 
         $scope.projectSiteList = [];
@@ -899,6 +899,7 @@ angular.module('timeSheetApp')
 	             
 	            SiteComponent.findShifts($scope.searchCriteria.siteId, $scope.searchCriteria.fromDate).then(function(data){
 	            		$scope.shifts = data;
+	            		console.log(JSON.stringify($scope.shifts));
 	            });	 
 	             
 	             

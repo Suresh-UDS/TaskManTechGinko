@@ -259,6 +259,8 @@ public class SiteService extends AbstractService {
 		Site entity = siteRepository.findOne(id);
 		Calendar cal = Calendar.getInstance();
 		cal.setTime(date);
+		Calendar endCal = Calendar.getInstance();
+		endCal.setTime(date);
 		if(entity != null) {
 			Hibernate.initialize(entity.getShifts());
 			List<Shift> shifts = entity.getShifts();
@@ -271,10 +273,10 @@ public class SiteService extends AbstractService {
 					cal.set(Calendar.SECOND, 0);
 					shiftDto.setStartDateTime(cal.getTime());
 					String[] endTime = shiftDto.getEndTime().split(":");
-					cal.set(Calendar.HOUR_OF_DAY, Integer.parseInt(endTime[0]));
-					cal.set(Calendar.MINUTE, Integer.parseInt(endTime[1]));
-					cal.set(Calendar.SECOND, 0);
-					shiftDto.setEndDateTime(cal.getTime());
+					endCal.set(Calendar.HOUR_OF_DAY, Integer.parseInt(endTime[0]));
+					endCal.set(Calendar.MINUTE, Integer.parseInt(endTime[1]));
+					endCal.set(Calendar.SECOND, 0);
+					shiftDto.setEndDateTime(endCal.getTime());
 					shiftDtos.add(shiftDto);
 				}
 			}

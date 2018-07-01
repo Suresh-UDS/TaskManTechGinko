@@ -117,7 +117,7 @@ public class SiteResource {
 	}
 	
 	@RequestMapping(value = "/site/{id}/shifts/{date}", method = RequestMethod.GET)
-	public List<ShiftDTO> getShifts(@PathVariable("id") long id, @PathVariable("date") @DateTimeFormat(pattern="dd-MM-yyyy") Date date) {
+	public List<ShiftDTO> getShifts(@PathVariable("id") long id, @PathVariable("date") @DateTimeFormat(pattern="yyyy-MM-dd") Date date) {
 		return siteService.findShifts(id, date);
 	}
 
