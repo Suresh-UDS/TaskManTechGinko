@@ -42,7 +42,7 @@
             </div>
             <div  class="white-bg" *ngFor="let job of todaysJobs" >
 
-                <div class="padding-left16 padding-top5">
+                <div class="padding-left16 padding-top5" *ngIf="job.schedule == 'ONCE' || job.schedule==null ">
                     <ion-row class="margin0">
 
                         <ion-col col-2 class="ver-center">
@@ -75,7 +75,7 @@
 
                     </ion-row>
                 </div>
-                <ion-item-sliding #slidingItem>
+                <ion-item-sliding #slidingItem *ngIf="job.schedule == 'ONCE' || job.schedule==null ">
 
                     <ion-item #item class="item-fnt padding-left0" >
                         <!--<div class="padding-left16">-->
@@ -134,7 +134,7 @@
             </ion-refresher>
 
             <div  class="white-bg" *ngFor="let job of allJobs" >
-                <div class="padding-left16 padding-top5">
+                <div class="padding-left16 padding-top5" *ngIf="job.schedule == 'ONCE' || job.schedule==null ">
                 <ion-row class="margin0">
 
                     <ion-col col-2 class="ver-center">
@@ -167,7 +167,7 @@
 
                 </ion-row>
                 </div>
-            <ion-item-sliding #slidingItem>
+            <ion-item-sliding #slidingItem *ngIf="job.schedule == 'ONCE' || job.schedule==null ">
 
                 <ion-item #item class="item-fnt padding-left0" >
                     <!--<div class="padding-left16">-->

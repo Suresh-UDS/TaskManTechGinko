@@ -13785,7 +13785,7 @@ footer .btn {
         display: block;
     }
     .card .card-header.card-header-text {
-        display: block;
+        /*display: block;*/
     }
     .navbar-form .form-group {
         margin-bottom: 0;

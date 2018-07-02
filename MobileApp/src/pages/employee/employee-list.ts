@@ -11,6 +11,10 @@ import {SiteService} from "../service/siteService";
 import {AttendanceService} from "../service/attendanceService";
 import {componentService} from "../service/componentService";
 import {AttendanceViewPage} from "../attendance-view/attendance-view";
+import {Diagnostic} from "@ionic-native/diagnostic";
+import {LocationAccuracy} from "@ionic-native/location-accuracy";
+
+declare  var demo ;
 
 /**
  * Generated class for the EmployeeList page.
@@ -37,8 +41,8 @@ export class EmployeeList {
   attendanceId:any;
   loader:any;
   constructor(public navCtrl: NavController,public component:componentService, public navParams: NavParams, private  authService: authService, public camera: Camera,
-              private loadingCtrl:LoadingController, private geolocation:Geolocation, private toastCtrl:ToastController,
-              private geoFence:Geofence, private employeeService: EmployeeService, private jobService: JobService, private siteService:SiteService, private attendanceService:AttendanceService) {
+              private loadingCtrl:LoadingController, private geolocation:Geolocation, private toastCtrl:ToastController, private locationAccuracy:LocationAccuracy,
+              private geoFence:Geofence, private employeeService: EmployeeService, private jobService: JobService, private siteService:SiteService, private attendanceService:AttendanceService, private diagonistic:Diagnostic) {
 
         this.lattitude = 0;
         this.longitude = 0;
@@ -107,8 +111,31 @@ export class EmployeeList {
 
 
   ionViewWillEnter(){
-      this.getEmployees();
+      console.log("Attendnace page location availability");
+      this.diagonistic.getLocationMode().then((isAvailable)=>{
+          console.log(isAvailable);
+          if(isAvailable == 'location_off'){
+              this.locationAccuracy.canRequest().then((canRequest: boolean) => {
 
+                  if (canRequest) {
+                      // the accuracy option will be ignored by iOS
+                      this.locationAccuracy.request(this.locationAccuracy.REQUEST_PRIORITY_HIGH_ACCURACY).then(
+                          () => console.log('Request successful'),
+                          error => {console.log('Error requesting location permissions', error);
+                              demo.showSwal('warning-message-and-confirmation-ok','GPS Not available','Please turn GPS on');
+                              this.navCtrl.pop();
+                          }
+                      );
+                  }
+              });
+          }else{
+              this.component.showToastMessage('GPS Available','bottom');
+          }
+      }).catch((e)=>{
+          demo.showSwal('warning-message-and-confirmation-ok','GPS Not available','Please turn GPS on');
+          this.navCtrl.pop();
+      });
+      this.getEmployees();
   }
 
   isEmployeeCheckedIn(employeeId){
@@ -308,6 +335,8 @@ export class EmployeeList {
           if(response && response.status === 200){
               var msg='Face Verified and Attendance marked Successfully';
               this.showSuccessToast(msg);
+              this.getEmployees();
+
           }
       },error=>{
           var msg = 'Attendance Not Marked';
@@ -325,6 +354,8 @@ export class EmployeeList {
           if(response && response.status === 200){
               var msg='Face Verified and Attendance marked Successfully';
               this.showSuccessToast(msg);
+              this.getEmployees();
+
           }
       },error=>{
           var msg = 'Attendance Not Marked';

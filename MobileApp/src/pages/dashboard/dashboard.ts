@@ -151,6 +151,7 @@ export class DashboardPage {
         error=>{
           console.log('ionViewDidLoad SitePage:'+error);
             this.component.closeLoader();
+            // this.navCtrl.push(LoginPage);
 
         }
     );
