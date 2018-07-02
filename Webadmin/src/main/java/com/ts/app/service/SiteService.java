@@ -1,9 +1,12 @@
 package com.ts.app.service;
 
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.TimeZone;
 
 import javax.inject.Inject;
 
@@ -257,9 +260,9 @@ public class SiteService extends AbstractService {
 	public List<ShiftDTO> findShifts(long id, Date date) {
 		List<ShiftDTO> shiftDtos = new ArrayList<ShiftDTO>();
 		Site entity = siteRepository.findOne(id);
-		Calendar cal = Calendar.getInstance();
+		Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("Asia/Kolkata"));
 		cal.setTime(date);
-		Calendar endCal = Calendar.getInstance();
+		Calendar endCal = Calendar.getInstance(TimeZone.getTimeZone("Asia/Kolkata"));
 		endCal.setTime(date);
 		if(entity != null) {
 			Hibernate.initialize(entity.getShifts());

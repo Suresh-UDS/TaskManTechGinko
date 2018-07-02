@@ -343,6 +343,14 @@ public class    EmployeeService extends AbstractService {
 		return employee;
 	}
 	
+	public void updateEmployeeShifts(List<EmployeeShiftDTO> employeeShifts) {
+		if(CollectionUtils.isNotEmpty(employeeShifts)) {
+			for(EmployeeShiftDTO empShiftDto : employeeShifts) {
+				updateEmployeeShift(empShiftDto);
+			}
+		}
+	}
+	
 	public EmployeeShiftDTO updateEmployeeShift(EmployeeShiftDTO employeeShift) {
 		log.debug("Inside Employee Shift Update");
 		EmployeeShift employeeShiftUpdate = employeeShiftRepository.findOne(employeeShift.getId());
@@ -1131,10 +1139,10 @@ public class    EmployeeService extends AbstractService {
 		empShiftDto.setEmployeeId(employeeShift.getEmployee().getId());
 		empShiftDto.setEmployeeEmpId(employeeShift.getEmployee().getEmpId());
 		empShiftDto.setEmployeeFullName(employeeShift.getEmployee().getFullName());
-		Calendar startCal = Calendar.getInstance();  
+		Calendar startCal = Calendar.getInstance(TimeZone.getTimeZone("Asia/Kolkata"));  
 		startCal.setTimeInMillis(employeeShift.getStartTime().getTime());
 		empShiftDto.setStartTime(startCal.getTime());
-		Calendar endCal = Calendar.getInstance();  
+		Calendar endCal = Calendar.getInstance(TimeZone.getTimeZone("Asia/Kolkata"));  
 		endCal.setTimeInMillis(employeeShift.getEndTime().getTime());
 		empShiftDto.setEndTime(endCal.getTime());
 		empShiftDto.setSiteId(employeeShift.getSite().getId());

@@ -58,9 +58,17 @@ angular.module('timeSheetApp')
         $scope.selectedRole;
 
         $scope.SelectedDesig = {};
+        
+        $scope.selectedStartDateTime = null;
+        
+        $scope.selectedEndDateTime = null;
 
         $scope.pageSort = 10;
         $scope.selectedDate = $filter('date')(new Date(), 'yyyy-MM-dd');
+        
+        $scope.modifiedEmpShifts = [];
+        
+        $scope.modified = false;
 
         $scope.initCalender = function(){
 
@@ -820,6 +828,63 @@ angular.module('timeSheetApp')
         
         };
         
+        $scope.updateStartTime = function(empShift,selectedStartDateTime) {
+        		console.log('updateStartTime called - ' + selectedStartDateTime);
+        	 	if(selectedStartDateTime) {
+        	 		empShift.startTime = selectedStartDateTime.startDateTime;
+        	 		$scope.modifiedEmpShifts.push(empShift);
+        	 		$scope.modified = true;
+        	 	}
+        }
+        
+        $scope.updateEndTime = function(empShift,selectedEndDateTime) {
+        		console.log('updateEndTime called - ' + selectedEndDateTime);
+	    	 	if(selectedEndDateTime) {
+	    	 		empShift.endTime = selectedEndDateTime.endDateTime;
+	    	 		$scope.modifiedEmpShifts.push(empShift);
+	    	 		$scope.modified = true;
+	    	 	}
+	    }
+        
+        $scope.updateEmpShiftSite = function(empShift) {
+        		console.log('updateEmpShiftSite called - ' + JSON.stringify(empShift));
+    	 		$scope.modifiedEmpShifts.push(empShift);
+    	 		$scope.modified = true;
+	    }
+        
+        $scope.updateEmployeeShifts = function() {
+        		if($scope.modifiedEmpShifts && $scope.modifiedEmpShifts.length > 0) {
+	    	        	EmployeeComponent.updateEmployeeShifts($scope.modifiedEmpShifts).then(function (data) {
+	    	        		if(data) {
+	    	        			$scope.showNotifications('top','center','success','Employee shift details updated successfully ');
+	    	        			$scope.searchShift();
+	    	        		}else {
+	    	        			$scope.showNotifications('top','center','danger','Failed to save employee shift details');
+	    	        		}
+	    	        	})
+        		}else {
+        			$scope.showNotifications('top','center','danger','No change to employee shift details');
+        		}
+        }
+
+        $scope.deleteConfirm = function (empShift){
+	    		$scope.confirmDeleteEmpShift = empShift;
+	    }
+        
+        
+        $scope.deleteShift = function() {
+        		EmployeeComponent.deleteEmployeeShift($scope.confirmDeleteEmpShift).then(function(data){
+        			console.log('delete shift data - ' + data)
+        			if(data) {
+    	        			$scope.showNotifications('top','center','success','Employee shift details removed successfully ');
+    	        			$scope.searchShift();
+    	        		}else {
+    	        			$scope.showNotifications('top','center','danger','Failed to remove employee shift details');
+    	        		}
+        		})
+        		$(".modal").hide();
+        }
+
         $scope.searchShiftFilter = function () {
             $scope.setPage(1);
             $scope.searchShift();

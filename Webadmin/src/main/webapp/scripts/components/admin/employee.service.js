@@ -68,6 +68,33 @@ angular.module('timeSheetApp')
 	            		return response.data;
 	            	});
             },
+            
+            updateEmployeeShifts: function(empShifts) {
+	            	return $http.put('api/employee/shifts', empShifts).then(function (response) {
+	            		return response;
+	            	});
+	        },
+	        
+	        deleteEmployeeShift: function(empShift) {
+		        return 	$http({
+	            	    method: 'DELETE',
+	            	    url: 'api/employee/shift/' + empShift.id,
+	            	    headers: {
+	            	        'Content-type': 'application/json;charset=utf-8'
+	            	    }
+	            	})
+	            	.then(function(response) {
+	            	    console.log(response);
+	            	    return response;
+	            	}, function(rejection) {
+	            	    console.log(rejection);
+	            	    return response;
+	            	});
+	        	
+		        	
+	        		
+	        },
+	        
             deleteEmployeeSite: function (empId,siteId) {
 
             	$http({

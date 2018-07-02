@@ -147,14 +147,26 @@ public class EmployeeResource {
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 	
-	@RequestMapping(value = "/employee/shift", method = RequestMethod.DELETE, produces = MediaType.APPLICATION_JSON_VALUE)
+	@RequestMapping(value = "/employee/shifts", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE)
 	@Timed
-	public ResponseEntity<?> deleteEmployeeShift(@Valid @RequestBody EmployeeShiftDTO employeeShift, HttpServletRequest request) {
-		log.info("Inside Update" + employeeShift.getSiteName() + " , "+ employeeShift.getEmployeeFullName());
+	public ResponseEntity<?> updateEmployeeShifts(@Valid @RequestBody List<EmployeeShiftDTO> employeeShifts, HttpServletRequest request) {
+		log.info("Inside Update of multiple shifts");
 		try {
-			employeeService.updateEmployeeShift(employeeShift);
+			employeeService.updateEmployeeShifts(employeeShifts);
 		}catch(Exception e) {
-			throw new TimesheetException(e, employeeShift);
+			throw new TimesheetException(e);
+		}
+		return new ResponseEntity<>(HttpStatus.OK);
+	}
+	
+	@RequestMapping(value = "/employee/shift/{id}", method = RequestMethod.DELETE, produces = MediaType.APPLICATION_JSON_VALUE)
+	@Timed
+	public ResponseEntity<?> deleteEmployeeShift(@PathVariable("id") long id, HttpServletRequest request) {
+		log.info("Inside Shif Delete -" + id);
+		try {
+			employeeService.deleteEmployeeShift(id);
+		}catch(Exception e) {
+			throw new TimesheetException(e);
 		}
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
