@@ -818,8 +818,8 @@ angular.module('timeSheetApp')
                 $scope.validationRequired = $scope.parameterConfig.validationRequired;
                 $scope.consumptionMonitoringRequired = $scope.parameterConfig.consumptionMonitoringRequired;
                 $scope.alertRequired = $scope.parameterConfig.alertRequired;
-                $scope.selectedMinValue = $scope.parameterConfig.max;
-                $scope.selectedMaxValue = $scope.parameterConfig.min;
+                $scope.selectedMinValue = $scope.parameterConfig.min;
+                $scope.selectedMaxValue = $scope.parameterConfig.max;
                 $rootScope.loadingStop();
 
             }).catch(function(response){
