@@ -353,7 +353,7 @@ span.d-md-arrow-icon
 }
 span.d-arrow-icon
 {
-  padding-top: 28px;
+  padding-top: 32px;
 }
 span.d-big-arrow-icon {
     padding-top: 38px;
@@ -643,7 +643,7 @@ span.red-star
 }
 .SelectWithAddbtnCon span.d-arrow-icon
 {
-    padding-right: 18%;
+    padding-right: 16%;
 }
 .SelectWithAddbtnCon .btn.btn-fab.btn-fab-mini
 {
