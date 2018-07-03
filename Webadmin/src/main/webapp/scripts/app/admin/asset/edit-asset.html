@@ -347,7 +347,7 @@
                                                                                                 />
                                                                                         <div ng-show="form.$submitted || form.assetModel.$touched">
                                                                                             <div ng-show="form.assetModel.$dirty || form.assetModel.$invalid">
-                                                                                                
+
                                                                                                 <p class="help-block" style="color:maroon"
                                                                                                    ng-show="form.assetModel.$error.maxlength">
                                                                                                     Model Number cannot be longer than 250 characters.
@@ -376,7 +376,7 @@
                                                                                              <!-- ng-pattern="/^[A-Za-z0-9\s]*$/" -->
                                                                                    <div ng-show="form.$submitted || form.assetSerial.$touched">
                                                                                             <div ng-show="form.assetSerial.$dirty || form.assetSerial.$invalid">
-                                                                                                
+
                                                                                                 <p class="help-block" style="color:maroon"
                                                                                                    ng-show="form.assetSerial.$error.maxlength">
                                                                                                     Serial number cannot be longer than 250 characters.
@@ -703,21 +703,21 @@
 
                                                                <div class="col-md-8 col-md-offset-3" style="text-align: left;">
                                                                       <div class="row">
-                                                                         <div class="col-md-7">   
+                                                                         <div class="col-md-7">
 
                                                                              <p><span class="txtBold">Asset</span>  : {{assetList.title}}</p>
                                                                              <p><span class="txtBold">Type </span> : {{assetList.assetType}}</p>
                                                                              <p><span class="txtBold">Group</span>  : {{assetList.assetGroup}}</p>
 
-                                                                             
+
                                                                              </div>
-                                                                             <div class="col-md-5">   
+                                                                             <div class="col-md-5">
 
                                                                              <p><span class="txtBold">Site</span> : {{assetList.siteName}}</p>
                                                                              <p><span class="txtBold">Manufacturer</span>  : {{assetList.manufacturerName}}</p>
                                                                              <p><span class="txtBold">Vendor</span>  : {{assetList.amcVendorName}}</p>
 
-                                                                         
+
                                                                          </div>
                                                                      </div>
                                                                  </div>
@@ -910,7 +910,7 @@
                                                                                    ng-model="assetPPM.title"
                                                                                    class='form-control'
                                                                                    name='ppmTitle'
-                                                                                   type='text' 
+                                                                                   type='text'
                                                                                    ng-maxlength='250'
                                                                                     autofocus
                                                                            required />
@@ -927,7 +927,7 @@
                                                                                     </p>
 
                                                                                 </div>
-                                                                                
+
                                                                             </div>
 
                                                                         </div>
@@ -948,7 +948,7 @@
                                                                                     </a> -->
                                                                                     <a  has-permission="" class="btn btn-round btn-fab btn-fab-mini btn-simple"  onClick="$('#addChecklist').modal()" data-target="#myModal"><i class="material-icons">add</i><div class="ripple-container" ></div></a>
                                                                                 </div>
-                                                                             
+
                                                                                <!--  <div class="clear"></div>
                                                                                 <div class="collapse" id="addAssetGroup">
                                                                                     <div class="">
@@ -972,13 +972,13 @@
                                                                                        ng-show="form3.PpmFrom.$error.required">
                                                                                         From date is required.
                                                                                     </p>
-                                                                                   
+
                                                                                 </div>
                                                                                 <p class="help-block" style="color:maroon"
                                                                                        ng-show="ppmFromMsg">
                                                                                         Fromdate cannot be greater than To date.
                                                                                 </p>
-                                                                                
+
                                                                             </div>
 
                                                                         </div>
@@ -995,14 +995,14 @@
                                                                                        ng-show="form3.PpmTo.$error.required">
                                                                                         To date is required.
                                                                                     </p>
-                                                                                  
+
 
                                                                                 </div>
                                                                                 <p class="help-block" style="color:maroon"
                                                                                        ng-show="ppmToMsg">
                                                                                         Todate cannot be lesser than From date.
                                                                                 </p>
-                                                                                
+
                                                                             </div>
 
                                                                         </div>
@@ -1040,7 +1040,7 @@
                                                                             <div class="form-group">
                                                                                 <label class="control-label">Employee<!-- <span class="red-star">*</span> --> </label>
                                                                                 <div class="dropdown">
-                                                                                    
+
                                                                                     <span class="form-control-feedback d-sm-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
 
                                                                                     <select class="form-control " ng-model="selectedEmployee" ng-click="loadEmployees();" ng-options="emp as emp.name for emp in employees track by emp.id" name="employeeName" >
@@ -1058,10 +1058,10 @@
                                                                                             </p>
 
                                                                                         </div>
-                                                                                        
+
                                                                                     </div> -->
                                                                                 </div>
-                                                                                
+
                                                                             </div>
 
                                                                         </div>
@@ -1071,7 +1071,7 @@
                                                                             <div class="form-group">
                                                                                 <label class="control-label">Select Frequency</label>
                                                                                 <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                                                               
+
                                                                                 <select class="form-control" ng-model="selectedFrequency" ng-options="frequencyPrefix for frequencyPrefix in frequencyPrefixies">
                                                                                 <option value="">Select..</option>
                                                                                 </select>
@@ -1082,7 +1082,7 @@
                                                                         <div class="form-group">
                                                                             <label class="control-label">&nbsp;</label>
                                                                             <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                                                            
+
                                                                             <select class="form-control" ng-model="selectedTimeInterval" ng-options="frequencyDuration for frequencyDuration in frequencyDurations">
                                                                                     <option value="">selected..</option>
                                                                             </select>
@@ -1092,7 +1092,7 @@
                                                                         <div class="form-group">
                                                                             <label class="control-label">&nbsp;</label>
                                                                             <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                                                            
+
                                                                             <select class="form-control" ng-model="selectedFrequnceyOccurrence" ng-options="frequency for frequency in frequencies">
                                                                                     <option value="">select..</option>
                                                                             </select>
@@ -1128,7 +1128,7 @@
                                                                        <div class="CheckListBx">
                                                                            <div class="bootstrap-tagsinput" ng-repeat="checkListItem in ppmSchedules.items">
                                                                                <span class="tag label label-info">{{checkListItem.name}}<span data-role="remove"></span></span>
-        
+
                                                                            </div>
                                                                        </div>
 
@@ -1168,7 +1168,7 @@
                                                                                ng-model="amcSchedule.title"
                                                                                class='form-control'
                                                                                name='amcTitle'
-                                                                               type='text' 
+                                                                               type='text'
                                                                                ng-maxlength='250' autofocus
                                                                        required />
 
@@ -1227,14 +1227,14 @@
                                                                                        ng-show="form4.AmcFrom.$error.required">
                                                                                         From date is required.
                                                                                     </p>
-                                                                                    
-                                                                                   
+
+
                                                                                 </div>
                                                                                 <p class="help-block" style="color:maroon"
                                                                                        ng-show="amcFromMsg">
                                                                                         Fromdate cannot be greater than To date.
                                                                                 </p>
-                                                                                
+
                                                                             </div>
 
                                                                         </div>
@@ -1251,14 +1251,14 @@
                                                                                        ng-show="form4.AmcTo.$error.required">
                                                                                         To date is required.
                                                                                     </p>
-                                                                                    
-                                                                                   
+
+
                                                                                 </div>
                                                                                 <p class="help-block" style="color:maroon"
                                                                                        ng-show="amcToMsg">
                                                                                         Todate cannot be lesser than From date.
                                                                                 </p>
-                                                                                
+
                                                                             </div>
 
                                                                         </div>
@@ -1295,7 +1295,7 @@
                                                                     <div class="form-group">
                                                                         <label class="control-label">Employee<!-- <span class="red-star">*</span> --> </label>
                                                                         <div class="dropdown">
-                                                                            
+
                                                                             <span class="form-control-feedback d-sm-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
 
                                                                             <select class="form-control " ng-click="loadEmployees();" ng-model="selectedEmployee"  ng-options="emp as emp.name for emp in employees track by emp.id" name="employeeName" >
@@ -1313,10 +1313,10 @@
                                                                                     </p>
 
                                                                                 </div>
-                                                                                
+
                                                                             </div> -->
                                                                         </div>
-                                                                        
+
                                                                     </div>
 
                                                                 </div>
@@ -1389,7 +1389,7 @@
                                                                    <div class="CheckListBx">
                                                                        <div class="bootstrap-tagsinput" ng-repeat="checkListItemAmc in amcSchedule.items">
                                                                            <span class="tag label label-info">{{checkListItemAmc.name}}<span data-role="remove"></span></span>
-    
+
                                                                        </div>
                                                                    </div>
 
@@ -1507,11 +1507,11 @@
                                                                         </div>
 
                                                                     </div>
-                                                                    
+
                                                                      <div class="row">
 
 
-                                                                        <div class="col-md-6">
+                                                                        <div class="col-md-8">
 
                                                                             <div class="form-group selectcon is-empty SelectWithAddbtnCon">
 
@@ -1549,7 +1549,7 @@
 
                                                                         </div>
 
-                                                                        <div class="col-md-6">
+                                                                        <div class="col-md-4">
                                                                             <div class="form-group selectcon is-empty SelectWithAddbtnCon">
 
                                                                                 <div class="" style="float:left;width:90%;">
@@ -1589,7 +1589,7 @@
                                                                         </div>
 
                                                                     </div>
-                                                                    
+
                                                                      <div class="row">
                                                                         <div class="col-md-2">
                                                                             <div class="form-group">
@@ -1615,15 +1615,15 @@
 									                                                  />
                                                                             </div>
                                                                         </div>
-                                                                        
-                                                                        <div class="col-md-2 col-md-offset-2">
+
+                                                                        <div class="col-md-2 col-md-offset-1">
                                                                             <div class="checkbox" style="padding-top: 25px">
                                                                                 <label>
                                                                                     <input type="checkbox" ng-model="alertRequired" name="terms"> Alert Required
                                                                                 </label>
                                                                             </div>
                                                                         </div>
-                                                                        
+
                                                                         <div class="col-md-2">
                                                                             <div class="checkbox" style="padding-top: 25px">
                                                                                 <label>
@@ -1631,29 +1631,26 @@
                                                                                 </label>
                                                                             </div>
                                                                         </div>
-                                                                  
+                                                                         <div class="col-md-3">
+                                                                             <div class="checkbox"  style="padding-top: 25px">
+                                                                                 <label>
+                                                                                     <input type="checkbox" ng-model="consumptionMonitoringRequired" name="terms"> Consumption Monitor Reading
+                                                                                 </label>
+                                                                             </div>
+                                                                         </div>
+
 
                                                                     </div>
 
 
                                                                     <div class="row">
 
-                                                                        <div class="col-md-8">
-                                                                            <div class="checkbox">
-                                                                                <label>
-                                                                                    <input type="checkbox" ng-model="consumptionMonitoringRequired" name="terms"> Consumption Monitor Reading
-                                                                                </label>
-                                                                            </div>
-                                                                        </div>
-                                                                        
-                                                                        
-
-                                                                        <div class="col-md-4 txt-align-rgt" ng-switch="isEdit">
-                                                                            <button class="btn btn-success" ng-disabled="form6.$invalid" ng-switch-when="false" 
+                                                                        <div class="col-md-12 txt-align-rgt" ng-switch="isEdit">
+                                                                            <button class="btn btn-success" ng-disabled="form6.$invalid" ng-switch-when="false"
                                                                                     id="form-button-add">
                                                                                 <span class="btn-label"><i class="material-icons">add</i></span> Add
                                                                             </button>
-                                                                            <button class="btn btn-success" type="submit" ng-switch-when="true" 
+                                                                            <button class="btn btn-success" type="submit" ng-switch-when="true"
                                                                                     id="form-button-add"  ng-disabled="form.$invalid || btnDisabled">
                                                                                 <span class="btn-label"><i class="material-icons">save</i></span> Update
                                                                             </button>
@@ -1689,8 +1686,7 @@
                                                                                 <th>Min Value</th>
                                                                                 <th>Max Value</th>
                                                                                 <th>Consumption</th>
-                                                                                
-                                                                                <th class="text-right" >Actions</th>
+                                                                                <th class="text-right" width="100px">Actions</th>
                                                                             </tr>
 
                                                                             </thead>
@@ -1746,7 +1742,7 @@
 
                                                 </div>
                                                 <div class="tab-pane fade docs" id="docs">
-                                                    
+
                                                     <div class="panel panel-default" style="min-height: 200px;">
 
                                                         <div class="panel-heading">
@@ -1783,7 +1779,7 @@
                                                                                         </p>
 
                                                                                     </div>
-                                                                                    
+
                                                                                 </div>
                                                                             </div>
                                                                         </div>
@@ -1808,7 +1804,7 @@
                                                                                             </p>
 
                                                                                         </div>
-                                                                                        
+
                                                                                     </div>
                                                                                 </div>
                                                                                 <div class="col-md-6">
@@ -1861,7 +1857,7 @@
 
 
                                                                                     </div>
-                                                                                    
+
                                                                                 </div>
                                                                            </div>
                                                                        </div>
@@ -1886,7 +1882,7 @@
                                                                                             </p>
 
                                                                                         </div>
-                                                                                        
+
                                                                                     </div>
                                                                                </div>
                                                                                <div class="col-md-6">
@@ -1917,7 +1913,7 @@
                                                         </div>
 
                                                     </div>
-                                                    
+
                                                     <div class="panel panel-default" style="min-height: 200px;">
 
                                                         <div class="panel-heading">
@@ -1928,7 +1924,7 @@
                                                            <div class="row docsRow" ng-if="fileCount" >
 
                                                                <div class="col-md-2 txt-align-center DocsCon" ng-repeat="uploadFile in uploadFiles">
-                                                                   <div class="DeleteBtn" ng-click="deleteConfirmDoc(uploadFile.id)"  onClick="$('#deleteModal').modal()" data-target="#myModal">                                 
+                                                                   <div class="DeleteBtn" ng-click="deleteConfirmDoc(uploadFile.id)"  onClick="$('#deleteModal').modal()" data-target="#myModal">
                                                                      <i class="material-icons">close</i>
                                                                  </div>
                                                                    <a href="#" ng-click="showFile(uploadFile.id, uploadFile.file)">
@@ -1961,7 +1957,7 @@
                                                             <div class="row docsRow" ng-if="photoCount" >
 
                                                                 <div class="col-md-2 txt-align-center DocsCon" ng-repeat="uploadPhoto in uploadAssetPhotos">
-                                                                    <div class="DeleteBtn" ng-click="deleteConfirmDoc(uploadPhoto.id)"  onClick="$('#deleteModal').modal()" data-target="#myModal">                                 
+                                                                    <div class="DeleteBtn" ng-click="deleteConfirmDoc(uploadPhoto.id)"  onClick="$('#deleteModal').modal()" data-target="#myModal">
                                                                          <i class="material-icons">close</i>
                                                                      </div>
                                                                     <a href="#" ng-click="showFile(uploadPhoto.id, uploadPhoto.file)">
