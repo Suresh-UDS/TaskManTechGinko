@@ -365,6 +365,16 @@ span.d-big-arrow-icon {
   font-weight: bold;
 
 }
+.OverlayBx
+{
+      position: absolute;
+    width: 100%;
+    height: 60px;
+    z-index: 10;
+    /* background: #000; */
+    top: -12px;
+}
+
 select{
   padding-right:27px !important;
 }

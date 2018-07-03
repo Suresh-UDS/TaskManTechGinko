@@ -1051,7 +1051,7 @@
 
                                                                                     <span class="form-control-feedback d-sm-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
 
-                                                                                    <select class="form-control " ng-model="selectedEmployee" ng-click="loadEmployees();" ng-options="emp as emp.name for emp in employees track by emp.id" name="employeeName" >
+                                                                                    <select class="form-control " ng-model="selectedEmployee"  ng-options="emp as emp.name for emp in employees track by emp.id" name="employeeName" >
 
 
                                                                                         <option value="">Select Employees...</option>
@@ -1306,7 +1306,7 @@
 
                                                                             <span class="form-control-feedback d-sm-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
 
-                                                                            <select class="form-control " ng-click="loadEmployees();" ng-model="selectedEmployee"  ng-options="emp as emp.name for emp in employees track by emp.id" name="employeeName" >
+                                                                            <select class="form-control "  ng-model="selectedEmployee"  ng-options="emp as emp.name for emp in employees track by emp.id" name="employeeName" >
 
 
                                                                                 <option value="">Select Employees...</option>
