@@ -186,10 +186,10 @@
 
                                                                     <div class="row">
                                                                         <div class="col-md-12">
-                                                                            <div class="form-group">
+                                                                            <div class="form-group" ng-init="loadStatus();">
                                                                                 <label class="control-label">Status</label>
                                                                                 <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                                                                <select class="form-control" ng-model="selectedAssetStatus" ng-options="status.status as status.status for status in statuses">
+                                                                                <select class="form-control" ng-model="selectedAssetStatus" ng-options="status for status in statuses track by status">
                                                                                     <option value="">Select Status ..</option>
                                                                                 </select>
                                                                             </div>
@@ -1036,14 +1036,14 @@
                                                                     </div>
                                                                 </div>
                                                                 <div class="row">
-                                                                    <div class="col-md-4" ng-init="loadEmployees();">
+                                                                    <div class="col-md-4" >
                                                                             <div class="form-group">
                                                                                 <label class="control-label">Employee<!-- <span class="red-star">*</span> --> </label>
                                                                                 <div class="dropdown">
                                                                                     
                                                                                     <span class="form-control-feedback d-sm-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
 
-                                                                                    <select class="form-control " ng-model="selectedEmployee"  ng-options="emp as emp.name for emp in employees track by emp.id" name="employeeName" >
+                                                                                    <select class="form-control " ng-model="selectedEmployee" ng-click="loadEmployees();" ng-options="emp as emp.name for emp in employees track by emp.id" name="employeeName" >
 
 
                                                                                         <option value="">Select Employees...</option>
@@ -1291,14 +1291,14 @@
                                                                 </div>
                                                             </div>
                                                             <div class="row">
-                                                                <div class="col-md-4" ng-init="loadEmployees();">
+                                                                <div class="col-md-4">
                                                                     <div class="form-group">
                                                                         <label class="control-label">Employee<!-- <span class="red-star">*</span> --> </label>
                                                                         <div class="dropdown">
                                                                             
                                                                             <span class="form-control-feedback d-sm-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
 
-                                                                            <select class="form-control " ng-model="selectedEmployee"  ng-options="emp as emp.name for emp in employees track by emp.id" name="employeeName" >
+                                                                            <select class="form-control " ng-click="loadEmployees();" ng-model="selectedEmployee"  ng-options="emp as emp.name for emp in employees track by emp.id" name="employeeName" >
 
 
                                                                                 <option value="">Select Employees...</option>

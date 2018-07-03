@@ -384,6 +384,12 @@ angular.module('timeSheetApp')
                 return $http.get('api/assetwarrantytype').then(function (response) {
                     return response.data;
                 });
+            },
+
+             getStatus: function () {
+                return $http.get('api/assets/assetstatus').then(function (response) {
+                    return response.data;
+                });
             }
            
 
