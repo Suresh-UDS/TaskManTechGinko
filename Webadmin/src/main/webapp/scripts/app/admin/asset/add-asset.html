@@ -45,19 +45,19 @@
                                                        
                                                         <li class="step">
                                                             <a ng-hide="assetGen.id">PPM Schedule</a>
-                                                            <a href=".ppmschedule" data-toggle="tab" ng-click="initPPMSchedule()" ng-show="assetGen.id">PPM Schedule</a>
+                                                            <a href=".ppmschedule" data-toggle="tab"  ng-show="assetGen.id">PPM Schedule</a>
                                                         </li>
                                                         <li class="step">
                                                             <a ng-hide="assetGen.id">AMC schedule</a>
-                                                            <a href=".amcschedule" data-toggle="tab" ng-click="loadAmcSchedule()" ng-show="assetGen.id">AMC schedule</a>
+                                                            <a href=".amcschedule" data-toggle="tab"  ng-show="assetGen.id">AMC schedule</a>
                                                         </li>
                                                          <li class="step">
                                                             <a ng-hide="assetGen.id">Config</a>
-                                                            <a href=".config" data-toggle="tab" ng-click="assetConfig()"  ng-show="assetGen.id">Config</a>
+                                                            <a href=".config" data-toggle="tab"  ng-show="assetGen.id">Config</a>
                                                         </li>
                                                         <li class="step">
                                                             <a  ng-hide="assetGen.id">Documents</a>
-                                                            <a href=".docs" data-toggle="tab"  ng-click="getAllUploadedFiles();getAllUploadedPhotos();" ng-show="assetGen.id">Documents</a>
+                                                            <a href=".docs" data-toggle="tab"  ng-show="assetGen.id">Documents</a>
 
                                                         </li>
                                                     </ul>
@@ -189,9 +189,17 @@
                                                                                 <div class="form-group" ng-init="loadStatus();">
                                                                                     <label class="control-label">Status<span class="red-star">*</span></label>
                                                                                     <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                                                                    <select class="form-control" ng-model="selectedAssetStatus" ng-options="status  for status in statuses">
+                                                                                    <select class="form-control" ng-model="selectedAssetStatus" ng-options="status  for status in statuses" name="AssetStatus" required>
                                                                                         <option value="">Select Status ..</option>
                                                                                     </select>
+                                                                                    <div ng-show="form.$submitted || form.AssetStatus.$touched">
+                                                                                         <div ng-show="form.AssetStatus.$dirty || form.AssetStatus.$invalid">
+                                                                                         <p class="help-block" style="color: maroon"
+                                                                                            ng-show="form.AssetStatus.$error.required">Status is
+                                                                                             required.</p>
+                                                                                            
+                                                                                         </div>
+                                                                                    </div>
                                                                                 </div>
                                                                             </div>
 
