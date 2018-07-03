@@ -1,7 +1,10 @@
 package com.ts.app.repository;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.TimeZone;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -15,6 +18,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.data.jpa.domain.Specification;
 
 import com.ts.app.domain.Asset;
+import com.ts.app.service.util.DateUtil;
 import com.ts.app.web.rest.dto.SearchCriteria;
 
 public class AssetSpecification implements Specification<Asset> {
@@ -62,9 +66,36 @@ public class AssetSpecification implements Specification<Asset> {
 			predicates.add(builder.equal(root.get("assetGroup"), searchCriteria.getAssetGroupName()));
 		}
 		log.debug("AssetSpecification toPredicate - searchCriteria acquiredate -" + searchCriteria.getAcquiredDate());
-		if (searchCriteria.getAcquiredDate() != null) {
+		/*if (searchCriteria.getAcquiredDate() != null) {
 			predicates.add(builder.equal(root.get("acquiredDate"), searchCriteria.getAcquiredDate()));
-		}
+		}*/
+		
+		if(searchCriteria.getAcquiredDate() != null){
+        	if(root.get("acquiredDate") != null) {
+            	//Date plannedDate = (Date)root.get("acquiredDate");
+            	Date checkInDate = searchCriteria.getAcquiredDate();
+
+            	Calendar checkInDateFrom = Calendar.getInstance(TimeZone.getTimeZone("Asia/Kolkata"));
+            	checkInDateFrom.setTime(checkInDate);
+
+            	checkInDateFrom.set(Calendar.HOUR_OF_DAY, 0);
+            	checkInDateFrom.set(Calendar.MINUTE,0);
+            	checkInDateFrom.set(Calendar.SECOND,0);
+            	Date fromDt = DateUtil.convertUTCToIST(checkInDateFrom);
+            	//String fromDt = DateUtil.formatUTCToIST(checkInDateFrom);
+            	Calendar checkInDateTo = Calendar.getInstance(TimeZone.getTimeZone("Asia/Kolkata"));
+            	checkInDateTo.setTime(checkInDate);
+
+            	checkInDateTo.set(Calendar.HOUR_OF_DAY, 23);
+            	checkInDateTo.set(Calendar.MINUTE,59);
+            	checkInDateTo.set(Calendar.SECOND,0);
+            	Date toDt = DateUtil.convertUTCToIST(checkInDateTo);
+            	//String toDt = DateUtil.formatUTCToIST(checkInDateTo);
+
+            	log.debug("search Criteria - checkInDateTimeFrom - "+ fromDt + " , to Date -" + toDt);
+        		predicates.add(builder.between(root.get("acquiredDate"), fromDt,toDt));
+        	}
+    	}
 
 		query.orderBy(builder.desc(root.get("title")));
 
