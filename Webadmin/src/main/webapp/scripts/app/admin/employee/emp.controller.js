@@ -3,7 +3,7 @@
 angular.module('timeSheetApp')
     .controller('EmployeeController', function ($rootScope,$window, $scope, $state,
      $timeout, ProjectComponent, SiteComponent, EmployeeComponent,LocationComponent,
-      UserRoleComponent, $http,$stateParams,$location,PaginationComponent) {
+      UserRoleComponent, $http,$stateParams,$location,PaginationComponent,$filter) {
         $rootScope.loadingStop();
         $rootScope.loginView = false;
         $scope.success = null;
@@ -58,8 +58,17 @@ angular.module('timeSheetApp')
         $scope.selectedRole;
 
         $scope.SelectedDesig = {};
+        
+        $scope.selectedStartDateTime = null;
+        
+        $scope.selectedEndDateTime = null;
 
         $scope.pageSort = 10;
+        $scope.selectedDate = $filter('date')(new Date(), 'yyyy-MM-dd');
+        
+        $scope.modifiedEmpShifts = [];
+        
+        $scope.modified = false;
 
         $scope.initCalender = function(){
 
@@ -79,6 +88,13 @@ angular.module('timeSheetApp')
 
             console.log(e.date._d);
             $scope.relieverDateTo = e.date._d;
+        });
+        
+        $('#selectedDate').on('dp.change', function(e){
+            console.log(e.date);
+
+            console.log(e.date._d);
+            $scope.selectedDate = $filter('date')(e.date._d, 'yyyy-MM-dd');
         });
 
         $scope.projectSiteList = [];
@@ -728,89 +744,232 @@ angular.module('timeSheetApp')
          }
 
         $scope.search = function () {
-        	var currPageVal = ($scope.pages ? $scope.pages.currPage : 1);
-        	if(!$scope.searchCriteria) {
-            	var searchCriteria = {
-            			currPage : currPageVal
-            	};
-            	$scope.searchCriteria = searchCriteria;
-        	}
-    		console.log('criteria in root scope -'+JSON.stringify($rootScope.searchCriteriaEmployees));
-    		console.log('criteria in scope -'+JSON.stringify($scope.searchCriteria));
-
-        	console.log('Selected  project -' + $scope.selectedEmployeeName + ", " + $scope.selectedProject +" , "+ $scope.selectedSite);
-
-            $scope.searchCriteria.currPage = currPageVal;
-            $scope.searchCriteria.findAll = false;
-
-             if( !$scope.selectedProject && !$scope.selectedSite 
-                && !$scope.selectedEmployeeId && !$scope.selectedEmployeeName) {
-                $scope.searchCriteria.findAll = true;
-            }
-            if($scope.selectedProject) {
-                    $scope.searchCriteria.projectId = $scope.selectedProject.id;
-                
-            }
-
-            if($scope.selectedSite) {
-                    $scope.searchCriteria.siteId = $scope.selectedSite.id;
-            }
-                    
-            if($scope.selectedEmployeeId){
-                   $scope.searchCriteria.employeeEmpId = $scope.selectedEmployeeId;
-            }
-
-            if($scope.selectedEmployeeName){
-                   $scope.searchCriteria.name = $scope.selectedEmployeeName;
-            }
-
-            //-------
-            if($scope.pageSort){
-                $scope.searchCriteria.sort = $scope.pageSort;
-            }
-
-            if($scope.selectedColumn){
-
-                $scope.searchCriteria.columnName = $scope.selectedColumn;
-                $scope.searchCriteria.sortByAsc = $scope.isAscOrder;
-
-            }
-            else{
-                $scope.searchCriteria.columnName ="id";
-                $scope.searchCriteria.sortByAsc = true;
-            }
-
-            console.log("search criteria",$scope.searchCriteria);
-             $scope.employees = '';
-             $scope.employeesLoader = false;
-             $scope.loadPageTop();
-
-        	EmployeeComponent.search($scope.searchCriteria).then(function (data) {
-                $scope.employees = data.transactions;
-                $scope.employeesLoader = true;
-
-                /*
-                    ** Call pagination  main function **
-                */
-                 $scope.pager = {};
-                 $scope.pager = PaginationComponent.GetPager(data.totalCount, $scope.pages.currPage);
-                 $scope.totalCountPages = data.totalCount;
-
-                console.log("Pagination",$scope.pager);
-                console.log('Employees list -' + JSON.stringify($scope.employees));
-                $scope.pages.currPage = data.currPage;
-                $scope.pages.totalPages = data.totalPages;
-
-                if($scope.employees && $scope.employees.length > 0 ){
-                    $scope.showCurrPage = data.currPage;
-                    $scope.pageEntries = $scope.employees.length;
-                    $scope.totalCountPages = data.totalCount;
-                    $scope.pageSort = 10;
-                }
-
-            });
+	        	var currPageVal = ($scope.pages ? $scope.pages.currPage : 1);
+	        	if(!$scope.searchCriteria) {
+	            	var searchCriteria = {
+	            			currPage : currPageVal
+	            	};
+	            	$scope.searchCriteria = searchCriteria;
+	        	}
+	    		console.log('criteria in root scope -'+JSON.stringify($rootScope.searchCriteriaEmployees));
+	    		console.log('criteria in scope -'+JSON.stringify($scope.searchCriteria));
+	
+	        	console.log('Selected  project -' + $scope.selectedEmployeeName + ", " + $scope.selectedProject +" , "+ $scope.selectedSite);
+	
+	            $scope.searchCriteria.currPage = currPageVal;
+	            $scope.searchCriteria.findAll = false;
+	
+	             if( !$scope.selectedProject && !$scope.selectedSite 
+	                && !$scope.selectedEmployeeId && !$scope.selectedEmployeeName) {
+	                $scope.searchCriteria.findAll = true;
+	            }
+	            if($scope.selectedProject) {
+	                    $scope.searchCriteria.projectId = $scope.selectedProject.id;
+	                
+	            }
+	
+	            if($scope.selectedSite) {
+	                    $scope.searchCriteria.siteId = $scope.selectedSite.id;
+	            }
+	                    
+	            if($scope.selectedEmployeeId){
+	                   $scope.searchCriteria.employeeEmpId = $scope.selectedEmployeeId;
+	            }
+	
+	            if($scope.selectedEmployeeName){
+	                   $scope.searchCriteria.name = $scope.selectedEmployeeName;
+	            }
+	
+	            //-------
+	            if($scope.pageSort){
+	                $scope.searchCriteria.sort = $scope.pageSort;
+	            }
+	
+	            if($scope.selectedColumn){
+	
+	                $scope.searchCriteria.columnName = $scope.selectedColumn;
+	                $scope.searchCriteria.sortByAsc = $scope.isAscOrder;
+	
+	            }
+	            else{
+	                $scope.searchCriteria.columnName ="id";
+	                $scope.searchCriteria.sortByAsc = true;
+	            }
+	
+	            console.log("search criteria",$scope.searchCriteria);
+	             $scope.employees = '';
+	             $scope.employeesLoader = false;
+	             $scope.loadPageTop();
+	
+	             EmployeeComponent.search($scope.searchCriteria).then(function (data) {
+	                $scope.employees = data.transactions;
+	                $scope.employeesLoader = true;
+	
+	                /*
+	                    ** Call pagination  main function **
+	                */
+	                 $scope.pager = {};
+	                 $scope.pager = PaginationComponent.GetPager(data.totalCount, $scope.pages.currPage);
+	                 $scope.totalCountPages = data.totalCount;
+	
+	                console.log("Pagination",$scope.pager);
+	                console.log('Employees list -' + JSON.stringify($scope.employees));
+	                $scope.pages.currPage = data.currPage;
+	                $scope.pages.totalPages = data.totalPages;
+	
+	                if($scope.employees && $scope.employees.length > 0 ){
+	                    $scope.showCurrPage = data.currPage;
+	                    $scope.pageEntries = $scope.employees.length;
+	                    $scope.totalCountPages = data.totalCount;
+	                    $scope.pageSort = 10;
+	                }
+	
+	            });
         
         };
+        
+        $scope.updateStartTime = function(empShift,selectedStartDateTime) {
+        		console.log('updateStartTime called - ' + selectedStartDateTime);
+        	 	if(selectedStartDateTime) {
+        	 		empShift.startTime = selectedStartDateTime.startDateTime;
+        	 		$scope.modifiedEmpShifts.push(empShift);
+        	 		$scope.modified = true;
+        	 	}
+        }
+        
+        $scope.updateEndTime = function(empShift,selectedEndDateTime) {
+        		console.log('updateEndTime called - ' + selectedEndDateTime);
+	    	 	if(selectedEndDateTime) {
+	    	 		empShift.endTime = selectedEndDateTime.endDateTime;
+	    	 		$scope.modifiedEmpShifts.push(empShift);
+	    	 		$scope.modified = true;
+	    	 	}
+	    }
+        
+        $scope.updateEmpShiftSite = function(empShift) {
+        		console.log('updateEmpShiftSite called - ' + JSON.stringify(empShift));
+    	 		$scope.modifiedEmpShifts.push(empShift);
+    	 		$scope.modified = true;
+	    }
+        
+        $scope.updateEmployeeShifts = function() {
+        		if($scope.modifiedEmpShifts && $scope.modifiedEmpShifts.length > 0) {
+	    	        	EmployeeComponent.updateEmployeeShifts($scope.modifiedEmpShifts).then(function (data) {
+	    	        		if(data) {
+	    	        			$scope.showNotifications('top','center','success','Employee shift details updated successfully ');
+	    	        			$scope.searchShift();
+	    	        		}else {
+	    	        			$scope.showNotifications('top','center','danger','Failed to save employee shift details');
+	    	        		}
+	    	        	})
+        		}else {
+        			$scope.showNotifications('top','center','danger','No change to employee shift details');
+        		}
+        }
+
+        $scope.deleteConfirm = function (empShift){
+	    		$scope.confirmDeleteEmpShift = empShift;
+	    }
+        
+        
+        $scope.deleteShift = function() {
+        		EmployeeComponent.deleteEmployeeShift($scope.confirmDeleteEmpShift).then(function(data){
+        			console.log('delete shift data - ' + data)
+        			if(data) {
+    	        			$scope.showNotifications('top','center','success','Employee shift details removed successfully ');
+    	        			$scope.searchShift();
+    	        		}else {
+    	        			$scope.showNotifications('top','center','danger','Failed to remove employee shift details');
+    	        		}
+        		})
+        		$(".modal").hide();
+        }
+
+        $scope.searchShiftFilter = function () {
+            $scope.setPage(1);
+            $scope.searchShift();
+         }
+        
+        $scope.searchShift = function () {
+	        	var currPageVal = ($scope.pages ? $scope.pages.currPage : 1);
+	        	if(!$scope.searchCriteria) {
+	            	var searchCriteria = {
+	            			currPage : currPageVal
+	            	};
+	            	$scope.searchCriteria = searchCriteria;
+	        	}
+	    		console.log('criteria in root scope -'+JSON.stringify($rootScope.searchCriteriaEmployeeShifts));
+	    		console.log('criteria in scope -'+JSON.stringify($scope.searchCriteria));
+	
+	        	console.log('Selected  project -' + $scope.selectedProject +" , "+ $scope.selectedSite);
+	
+	            $scope.searchCriteria.currPage = currPageVal;
+	            $scope.searchCriteria.findAll = false;
+	
+	            if($scope.selectedProject) {
+	                    $scope.searchCriteria.projectId = $scope.selectedProject.id;
+	            }
+	
+	            if($scope.selectedSite) {
+	                    $scope.searchCriteria.siteId = $scope.selectedSite.id;
+	            }
+	                    
+	            //-------
+	            if($scope.pageSort){
+	                $scope.searchCriteria.sort = $scope.pageSort;
+	            }
+	
+	            if($scope.selectedColumn){
+	
+	                $scope.searchCriteria.columnName = $scope.selectedColumn;
+	                $scope.searchCriteria.sortByAsc = $scope.isAscOrder;
+	
+	            }
+	            else{
+	                $scope.searchCriteria.columnName ="id";
+	                $scope.searchCriteria.sortByAsc = true;
+	            }
+	            
+	            $scope.searchCriteria.fromDate = $scope.selectedDate;
+	
+	            console.log("search criteria",$scope.searchCriteria);
+	             $scope.employees = '';
+	             $scope.employeesLoader = false;
+	             $scope.loadPageTop();
+	
+	             EmployeeComponent.searchShift($scope.searchCriteria).then(function (data) {
+	                $scope.employeeShifts = data.transactions;
+	                $scope.employeesLoader = true;
+	
+	                /*
+	                    ** Call pagination  main function **
+	                */
+	                 $scope.pager = {};
+	                 $scope.pager = PaginationComponent.GetPager(data.totalCount, $scope.pages.currPage);
+	                 $scope.totalCountPages = data.totalCount;
+	
+	                console.log("Pagination",$scope.pager);
+	                console.log('Employee Shift list -' + JSON.stringify($scope.employeeShifts));
+	                $scope.pages.currPage = data.currPage;
+	                $scope.pages.totalPages = data.totalPages;
+	
+	                if($scope.employeeShifts && $scope.employeeShifts.length > 0 ){
+	                    $scope.showCurrPage = data.currPage;
+	                    $scope.pageEntries = $scope.employeeShifts.length;
+	                    $scope.totalCountPages = data.totalCount;
+	                    $scope.pageSort = 10;
+	                }
+	
+	            });
+	             
+	            SiteComponent.findShifts($scope.searchCriteria.siteId, $scope.searchCriteria.fromDate).then(function(data){
+	            		$scope.shifts = data;
+	            		console.log(JSON.stringify($scope.shifts));
+	            });	 
+	             
+	             
+	    
+	    };
 
         $scope.checkIn = function(siteId,employeeEmpId,id){
             EmployeeComponent.getAttendance(id).then(function(data) {

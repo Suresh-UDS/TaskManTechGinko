@@ -20,6 +20,23 @@ angular.module('timeSheetApp')
                 resolve: {
                     
                 }
+            }).state('employeeShifts', {
+                parent: 'manage',
+                url: '/employeeShifts',
+                controller: 'EmployeeController',
+                data: {
+                    authorities: [],
+                    pageTitle: 'Employee Shift'
+                },
+                views: {
+                    'content@': {
+                        templateUrl: 'scripts/app/admin/employee/emp-shift-list.html',
+                        controller: 'EmployeeController'
+                    }
+                },
+                resolve: {
+                    
+                }
             });      
        
     });

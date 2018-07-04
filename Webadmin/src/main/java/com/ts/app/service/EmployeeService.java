@@ -8,14 +8,12 @@ import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 import java.util.TimeZone;
 
 import javax.inject.Inject;
 
-import com.ts.app.web.rest.dto.*;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.Hibernate;
@@ -42,7 +40,6 @@ import com.ts.app.domain.Job;
 import com.ts.app.domain.Project;
 import com.ts.app.domain.Site;
 import com.ts.app.domain.User;
-import com.ts.app.domain.UserRole;
 import com.ts.app.domain.UserRoleEnum;
 import com.ts.app.repository.AttendanceRepository;
 import com.ts.app.repository.CheckInOutImageRepository;
@@ -51,6 +48,7 @@ import com.ts.app.repository.DesignationRepository;
 import com.ts.app.repository.DeviceRepository;
 import com.ts.app.repository.EmployeeHistoryRepository;
 import com.ts.app.repository.EmployeeRepository;
+import com.ts.app.repository.EmployeeShiftRepository;
 import com.ts.app.repository.JobRepository;
 import com.ts.app.repository.ProjectRepository;
 import com.ts.app.repository.SiteRepository;
@@ -61,6 +59,7 @@ import com.ts.app.service.util.ExportUtil;
 import com.ts.app.service.util.FileUploadHelper;
 import com.ts.app.service.util.MapperUtil;
 import com.ts.app.service.util.QRCodeUtil;
+import com.ts.app.web.rest.dto.AttendanceDTO;
 import com.ts.app.web.rest.dto.BaseDTO;
 import com.ts.app.web.rest.dto.CheckInOutDTO;
 import com.ts.app.web.rest.dto.CheckInOutImageDTO;
@@ -68,6 +67,7 @@ import com.ts.app.web.rest.dto.DesignationDTO;
 import com.ts.app.web.rest.dto.EmployeeDTO;
 import com.ts.app.web.rest.dto.EmployeeHistoryDTO;
 import com.ts.app.web.rest.dto.EmployeeProjectSiteDTO;
+import com.ts.app.web.rest.dto.EmployeeShiftDTO;
 import com.ts.app.web.rest.dto.ExportResult;
 import com.ts.app.web.rest.dto.ImageDeleteRequest;
 import com.ts.app.web.rest.dto.JobDTO;
@@ -149,6 +149,9 @@ public class    EmployeeService extends AbstractService {
 
     @Inject
     private UserRoleService userRoleService;
+    
+    @Inject
+    private EmployeeShiftRepository employeeShiftRepository;
 
 	@Inject
 	private Environment env;
@@ -339,6 +342,30 @@ public class    EmployeeService extends AbstractService {
 		employee = mapperUtil.toModel(employeeUpdate, EmployeeDTO.class);
 		return employee;
 	}
+	
+	public void updateEmployeeShifts(List<EmployeeShiftDTO> employeeShifts) {
+		if(CollectionUtils.isNotEmpty(employeeShifts)) {
+			for(EmployeeShiftDTO empShiftDto : employeeShifts) {
+				updateEmployeeShift(empShiftDto);
+			}
+		}
+	}
+	
+	public EmployeeShiftDTO updateEmployeeShift(EmployeeShiftDTO employeeShift) {
+		log.debug("Inside Employee Shift Update");
+		EmployeeShift employeeShiftUpdate = employeeShiftRepository.findOne(employeeShift.getId());
+	    ZoneId  zone = ZoneId.of("Asia/Kolkata");
+	    ZonedDateTime zdt   = ZonedDateTime.of(LocalDateTime.now(), zone);
+		employeeShiftUpdate.setLastModifiedDate(zdt);
+		//udpate site
+		Site site = siteRepository.findOne(employeeShift.getSiteId());
+		employeeShiftUpdate.setSite(site);
+		employeeShiftUpdate.setStartTime(DateUtil.convertToTimestamp(employeeShift.getStartTime()));
+		employeeShiftUpdate.setEndTime(DateUtil.convertToTimestamp(employeeShift.getEndTime()));
+		employeeShiftRepository.saveAndFlush(employeeShiftUpdate);
+		employeeShift = mapperUtil.toModel(employeeShiftUpdate, EmployeeShiftDTO.class);
+		return employeeShift;
+	}
 
 
 	public void deleteEmployee(Long id) {
@@ -347,6 +374,17 @@ public class    EmployeeService extends AbstractService {
         employeeUpdate.setActive(Employee.ACTIVE_NO);
         employeeRepository.save(employeeUpdate);
 		//employeeRepository.delete(employeeUpdate);
+	}
+	
+	public void deleteEmployeeShift(long id) {
+		log.debug("Inside Employee Shift Delete");
+		EmployeeShift employeeShiftUpdate = employeeShiftRepository.findOne(id);
+        Calendar currCal = Calendar.getInstance();
+        Calendar startCal = Calendar.getInstance();
+        startCal.setTimeInMillis(employeeShiftUpdate.getStartTime().getTime());
+        if(currCal.before(startCal)) {
+    			employeeShiftRepository.delete(employeeShiftUpdate);
+        }
 	}
 
 	public List<SiteDTO> deleteEmployeeSite(Long id, Long siteId) {
@@ -930,6 +968,70 @@ public class    EmployeeService extends AbstractService {
 		}
 		return result;
 	}
+	
+	public SearchResult<EmployeeShiftDTO> findEmpShiftBySearchCriteria(SearchCriteria searchCriteria) {
+		User user = userRepository.findOne(searchCriteria.getUserId());
+		SearchResult<EmployeeShiftDTO> result = new SearchResult<EmployeeShiftDTO>();
+		if(searchCriteria != null) {
+			Pageable pageRequest = null;
+			if(searchCriteria.isList()) {
+				pageRequest = createPageRequest(searchCriteria.getCurrPage(), true);
+			}else {
+				pageRequest = createPageRequest(searchCriteria.getCurrPage());
+			}
+
+			Page<EmployeeShift> page = null;
+			List<EmployeeShiftDTO> transactions = null;
+
+            Calendar startCal = Calendar.getInstance(TimeZone.getTimeZone("Asia/Kolkata"));
+            if(searchCriteria.getFromDate() != null) {
+            		startCal.setTime(searchCriteria.getFromDate());
+            }
+	    		startCal.set(Calendar.HOUR_OF_DAY, 0);
+	    		startCal.set(Calendar.MINUTE, 0);
+	    		startCal.set(Calendar.SECOND, 0);
+	    		Calendar endCal = Calendar.getInstance(TimeZone.getTimeZone("Asia/Kolkata"));
+	    		if(searchCriteria.getFromDate() != null) {
+	    			endCal.setTime(searchCriteria.getFromDate());
+	    		}
+	    		endCal.set(Calendar.HOUR_OF_DAY, 23);
+	    		endCal.set(Calendar.MINUTE, 59);
+	    		endCal.set(Calendar.SECOND, 0);
+
+			java.sql.Timestamp startDate = DateUtil.convertToTimestamp(startCal.getTime());
+			java.sql.Timestamp toDate = DateUtil.convertToTimestamp(endCal.getTime());
+
+			
+			log.debug("findBySearchCriteria - "+searchCriteria.getSiteId() +", "+searchCriteria.getEmployeeId() +", "+searchCriteria.getProjectId());
+
+			boolean isClient = false;
+
+			if(user != null && user.getUserRole() != null) {
+				isClient = user.getUserRole().getName().equalsIgnoreCase(UserRoleEnum.ADMIN.toValue());
+			}
+
+			if(searchCriteria.getSiteId() > 0) {
+				page = employeeShiftRepository.findEmployeeShiftBySiteAndDate(searchCriteria.getSiteId(), startDate, toDate, pageRequest);
+			}
+
+			if(page != null) {
+				//transactions = mapperUtil.toModelList(page.getContent(), EmployeeDTO.class);
+				if(transactions == null) {
+					transactions = new ArrayList<EmployeeShiftDTO>();
+				}
+				List<EmployeeShift> empShiftList =  page.getContent();
+				if(CollectionUtils.isNotEmpty(empShiftList)) {
+					for(EmployeeShift empShift : empShiftList) {
+						transactions.add(mapToModel(empShift));
+					}
+				}
+				if(CollectionUtils.isNotEmpty(transactions)) {
+					buildEmployeeShiftSearchResult(searchCriteria, page, transactions,result);
+				}
+			}
+		}
+		return result;
+	}
 
 	public String generateQRCode(long empId) {
 		Employee empEntity = employeeRepository.findOne(empId);
@@ -953,6 +1055,19 @@ public class    EmployeeService extends AbstractService {
 	}
 
 	private void buildSearchResult(SearchCriteria searchCriteria, Page<Employee> page, List<EmployeeDTO> transactions, SearchResult<EmployeeDTO> result) {
+		if(page != null) {
+			result.setTotalPages(page.getTotalPages());
+		}
+		result.setCurrPage(page.getNumber() + 1);
+		result.setTotalCount(page.getTotalElements());
+        result.setStartInd((result.getCurrPage() - 1) * 10 + 1);
+        result.setEndInd((result.getTotalCount() > 10  ? (result.getCurrPage()) * 10 : result.getTotalCount()));
+
+		result.setTransactions(transactions);
+		return;
+	}
+	
+	private void buildEmployeeShiftSearchResult(SearchCriteria searchCriteria, Page<EmployeeShift> page, List<EmployeeShiftDTO> transactions, SearchResult<EmployeeShiftDTO> result) {
 		if(page != null) {
 			result.setTotalPages(page.getTotalPages());
 		}
@@ -1016,6 +1131,23 @@ public class    EmployeeService extends AbstractService {
     		empDto.setSiteName(CollectionUtils.isNotEmpty(employee.getProjectSites()) ? employee.getProjectSites().get(0).getSite().getName() : "");
     		empDto.setClient(employee.isClient());
     		return empDto;
+    }
+    
+    private EmployeeShiftDTO mapToModel(EmployeeShift employeeShift) {
+		EmployeeShiftDTO empShiftDto = new EmployeeShiftDTO();
+		empShiftDto.setId(employeeShift.getId());
+		empShiftDto.setEmployeeId(employeeShift.getEmployee().getId());
+		empShiftDto.setEmployeeEmpId(employeeShift.getEmployee().getEmpId());
+		empShiftDto.setEmployeeFullName(employeeShift.getEmployee().getFullName());
+		Calendar startCal = Calendar.getInstance(TimeZone.getTimeZone("Asia/Kolkata"));  
+		startCal.setTimeInMillis(employeeShift.getStartTime().getTime());
+		empShiftDto.setStartTime(startCal.getTime());
+		Calendar endCal = Calendar.getInstance(TimeZone.getTimeZone("Asia/Kolkata"));  
+		endCal.setTimeInMillis(employeeShift.getEndTime().getTime());
+		empShiftDto.setEndTime(endCal.getTime());
+		empShiftDto.setSiteId(employeeShift.getSite().getId());
+		empShiftDto.setSiteName(employeeShift.getSite().getName());
+		return empShiftDto;
     }
 
 }

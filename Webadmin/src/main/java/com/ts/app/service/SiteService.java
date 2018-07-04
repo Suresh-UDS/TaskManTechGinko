@@ -1,7 +1,12 @@
 package com.ts.app.service;
 
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.TimeZone;
 
 import javax.inject.Inject;
 
@@ -27,7 +32,6 @@ import com.ts.app.repository.UserRepository;
 import com.ts.app.service.util.ImportUtil;
 import com.ts.app.service.util.MapperUtil;
 import com.ts.app.web.rest.dto.BaseDTO;
-import com.ts.app.web.rest.dto.EmployeeDTO;
 import com.ts.app.web.rest.dto.ImportResult;
 import com.ts.app.web.rest.dto.SearchCriteria;
 import com.ts.app.web.rest.dto.SearchResult;
@@ -251,6 +255,36 @@ public class SiteService extends AbstractService {
 			Hibernate.initialize(entity.getShifts());
 		}
 		return mapperUtil.toModel(entity, SiteDTO.class);
+	}
+	
+	public List<ShiftDTO> findShifts(long id, Date date) {
+		List<ShiftDTO> shiftDtos = new ArrayList<ShiftDTO>();
+		Site entity = siteRepository.findOne(id);
+		Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("Asia/Kolkata"));
+		cal.setTime(date);
+		Calendar endCal = Calendar.getInstance(TimeZone.getTimeZone("Asia/Kolkata"));
+		endCal.setTime(date);
+		if(entity != null) {
+			Hibernate.initialize(entity.getShifts());
+			List<Shift> shifts = entity.getShifts();
+			if(CollectionUtils.isNotEmpty(shifts)) {
+				for(Shift shift : shifts) {
+					ShiftDTO shiftDto = mapperUtil.toModel(shift, ShiftDTO.class);
+					String[] startTime = shiftDto.getStartTime().split(":");
+					cal.set(Calendar.HOUR_OF_DAY, Integer.parseInt(startTime[0]));
+					cal.set(Calendar.MINUTE, Integer.parseInt(startTime[1]));
+					cal.set(Calendar.SECOND, 0);
+					shiftDto.setStartDateTime(cal.getTime());
+					String[] endTime = shiftDto.getEndTime().split(":");
+					endCal.set(Calendar.HOUR_OF_DAY, Integer.parseInt(endTime[0]));
+					endCal.set(Calendar.MINUTE, Integer.parseInt(endTime[1]));
+					endCal.set(Calendar.SECOND, 0);
+					shiftDto.setEndDateTime(endCal.getTime());
+					shiftDtos.add(shiftDto);
+				}
+			}
+		}
+		return shiftDtos;
 	}
 
 	public List<SiteDTO> searchSiteList(SearchCriteria searchCriteria){
