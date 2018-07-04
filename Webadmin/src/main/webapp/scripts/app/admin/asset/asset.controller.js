@@ -31,7 +31,7 @@ angular.module('timeSheetApp')
         $scope.selectedConfig = null;
         $scope.selectedAssetType = {};
         $scope.selectedAssetGroup = {};
-        $scope.selectedAssetStatus = {};
+        $scope.selectedAssetStatus = null;
         $scope.selectedManufacturer = {};
         $scope.selectedServiceProvider = {};
         $scope.selectedServiceWarranty = {};
@@ -522,6 +522,7 @@ angular.module('timeSheetApp')
                 $scope.selectedManufacturer = {id:$scope.assetList.manufacturerId,name:$scope.assetList.manufacturerName};
                 $scope.selectedVendor = {id:$scope.assetList.vendorId};
                 $scope.selectedServiceWarranty = {name:$scope.assetList.warrantyType};
+                $scope.selectedAssetStatus = $scope.assetList.status;
                 if($scope.assetList.siteId){
                         LocationComponent.findBlocks(0,$scope.assetList.siteId).then(function (data) {
                         //$scope.selectedBlock = null;
@@ -845,8 +846,8 @@ angular.module('timeSheetApp')
                 $scope.validationRequired = $scope.parameterConfig.validationRequired;
                 $scope.consumptionMonitoringRequired = $scope.parameterConfig.consumptionMonitoringRequired;
                 $scope.alertRequired = $scope.parameterConfig.alertRequired;
-                $scope.selectedMinValue = $scope.parameterConfig.max;
-                $scope.selectedMaxValue = $scope.parameterConfig.min;
+                $scope.selectedMinValue = $scope.parameterConfig.min;
+                $scope.selectedMaxValue = $scope.parameterConfig.max;
                 $rootScope.loadingStop();
 
             }).catch(function(response){
@@ -885,7 +886,7 @@ angular.module('timeSheetApp')
 
                     if($scope.selectedAssetType.id){ $scope.assetGen.assetType = $scope.selectedAssetType.name; }
                     if($scope.selectedAssetGroup.id){ $scope.assetGen.assetGroup = $scope.selectedAssetGroup.assetgroup;}
-                    if($scope.selectedAssetStatus.id){ $scope.assetGen.assetStatus = $scope.selectedAssetStatus.id;}
+                    if($scope.selectedAssetStatus){ $scope.assetGen.status = $scope.selectedAssetStatus;}
                     if($scope.selectedManufacturer.id){$scope.assetGen.manufacturerId = $scope.selectedManufacturer.id;}
                     if($scope.selectedServiceProvider.id){$scope.assetGen.serviceProvider = $scope.selectedServiceProvider.id;}
                     if($scope.selectedServiceWarranty.id){$scope.assetGen.warrantyType = $scope.selectedServiceWarranty.name;}
@@ -1069,6 +1070,11 @@ angular.module('timeSheetApp')
                 }
                 else{
                     $scope.assetEdit.warrantyType = $scope.assetList.warrantyType;
+                }
+                if($scope.selectedAssetStatus){
+                    $scope.assetEdit.status = $scope.selectedAssetStatus;
+                }else{
+                    $scope.assetEdit.status = $scope.assetList.status;
                 }
                 if($scope.assetEditDate){
                     $scope.assetEdit.acquiredDate = $scope.assetEditDate;
@@ -2187,7 +2193,13 @@ angular.module('timeSheetApp')
 	        		$scope.ppmJobLists = data.transactions;
 	        	});
         }
-
+        
+        $scope.loadStatus = function() {
+            AssetComponent.getStatus().then(function(data) {
+                console.log('Asset status list-- ',data);
+                $scope.statuses = data;
+            });
+        }
 
 
         $scope.loadAllRules = function() {
@@ -2196,6 +2208,7 @@ angular.module('timeSheetApp')
         		$scope.readingRules = data;
         	});
         }
+
 
         $scope.cancel = function(){
 

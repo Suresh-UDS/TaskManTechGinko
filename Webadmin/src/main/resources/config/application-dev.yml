@@ -90,8 +90,8 @@ import:
             new: /opt/imports/new
             completed: /opt/imports/completed
            
-extensionImg: .jpeg,.jpg,.png    
-extensionFile: .pdf,.xlsx,.xls,.docs,.doc,.csv        
+extensionImg: jpeg,jpg,png    
+extensionFile: pdf,xlsx,xls,docs,doc,csv,txt       
 
 asset:
    file:

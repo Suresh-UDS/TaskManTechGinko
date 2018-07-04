@@ -33,35 +33,40 @@
                                                 <!--<div class="wizard-header">-->
                                                    <!---->
                                                 <!--</div>-->
-                                                <div class="wizard-navigation">
+                                                <div class="wizard-navigation" >
+                                                    <div  ng-class="!assetGen.id ? 'OverlayBx' : ''" ></div>
                                                     <ul class="arrow-steps" >
                                                         <li class="step active">
                                                             <a href=".general" data-toggle="tab" >General</a>
                                                         </li>
                                                         <li class="step">
-                                                            <a ng-hide="assetGen.id">QR Code</a>
-                                                             <a href=".qrcode" data-toggle="tab" ng-show="assetGen.id">QR Code</a>
+                                                            
+                                                            <a href=".qrcode" data-toggle="tab">QR Code</a>
+                                                            
                                                         </li>
                                                        
                                                         <li class="step">
-                                                            <a ng-hide="assetGen.id">PPM Schedule</a>
-                                                            <a href=".ppmschedule" data-toggle="tab" ng-click="initPPMSchedule()" ng-show="assetGen.id">PPM Schedule</a>
+                                                            
+                                                            <a href=".ppmschedule" data-toggle="tab">PPM Schedule</a>
+                                                            
                                                         </li>
                                                         <li class="step">
                                                             <a ng-hide="assetGen.id">Vendor Management</a>
                                                             <a href=".amcschedule" data-toggle="tab" ng-click="loadAmcSchedule()" ng-show="assetGen.id">AMC schedule</a>
                                                         </li>
-                                                         <li class="step">
-                                                            <a ng-hide="assetGen.id">Config</a>
-                                                            <a href=".config" data-toggle="tab" ng-click="assetConfig()"  ng-show="assetGen.id">Config</a>
+                                                         <li class="step" >
+                                                            
+                                                            <a href=".config" data-toggle="tab" >Config</a>
                                                         </li>
                                                         <li class="step">
-                                                            <a  ng-hide="assetGen.id">Documents</a>
-                                                            <a href=".docs" data-toggle="tab"  ng-click="getAllUploadedFiles();getAllUploadedPhotos();" ng-show="assetGen.id">Documents</a>
-
+                                                            
+                                                            <a href=".docs" data-toggle="tab">Documents</a>
+                                                            
                                                         </li>
                                                     </ul>
+                                                    
                                                 </div>
+                                               
                                                 
                                                 <div class="tab-content">
                                                     <div class="tab-pane fade in active  general" id="general">
@@ -89,6 +94,7 @@
                                                                                        ng-maxlength='250'
                                                                                        ng-pattern="/^[A-Za-z0-9\s]*$/" autofocus
                                                                                        required />
+
 
                                                                                     <div ng-show="form.$submitted || form.assetTitle.$touched">
                                                                                         <div ng-show="form.assetTitle.$dirty || form.assetTitle.$invalid">
@@ -186,12 +192,20 @@
 
                                                                         <div class="row">
                                                                             <div class="col-md-12">
-                                                                                <div class="form-group">
-                                                                                    <label class="control-label">Status</label>
+                                                                                <div class="form-group" ng-init="loadStatus();">
+                                                                                    <label class="control-label">Status<span class="red-star">*</span></label>
                                                                                     <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                                                                    <select class="form-control" ng-model="selectedAssetStatus" ng-options="status.status as status.status for status in statuses">
+                                                                                    <select class="form-control" ng-model="selectedAssetStatus" ng-options="status  for status in statuses" name="AssetStatus" required>
                                                                                         <option value="">Select Status ..</option>
                                                                                     </select>
+                                                                                    <div ng-show="form.$submitted || form.AssetStatus.$touched">
+                                                                                         <div ng-show="form.AssetStatus.$dirty || form.AssetStatus.$invalid">
+                                                                                         <p class="help-block" style="color: maroon"
+                                                                                            ng-show="form.AssetStatus.$error.required">Status is
+                                                                                             required.</p>
+                                                                                            
+                                                                                         </div>
+                                                                                    </div>
                                                                                 </div>
                                                                             </div>
 
@@ -238,7 +252,7 @@
                                                                                 <div class="form-group">
                                                                                     <label class="control-label">Site   <span class="red-star">*</span> </label>
                                                                                     <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                                                                    <select class="form-control " ng-model="selectedSites"  ng-options="site as site.name for site in sites" ng-change="loadBlocks();" name="AssetSite"  required>
+                                                                                    <select class="form-control " ng-model="selectedSites"  ng-options="site as site.name for site in sites" ng-change="loadBlocks();loadEmployees();" name="AssetSite"  required>
                                                                                         <option value="">Select Site ...</option>
                                                                                     </select>
 
@@ -787,7 +801,7 @@
                                                             </div>
                                                             <div class="panel-body">
 
-                                                                <div class="row">
+                                                                <div class="row" ng-init="loadAllParameters();loadAllParameterUOMs();">
 
                                                                     <div class="col-md-12">
                                                                         <div class="panel panel-default" style="min-height: 200px;">
@@ -1246,7 +1260,7 @@
                                                                     </div>
                                                                 </div>
                                                                 <div class="row">
-                                                                    <div class="col-md-4" ng-init="loadEmployees();">
+                                                                    <div class="col-md-4" >
                                                                         <div class="form-group">
                                                                             <label class="control-label">Employee<!-- <span class="red-star">*</span> --> </label>
                                                                             <div class="dropdown">
@@ -1573,14 +1587,14 @@
                                                                 </div>
                                                                 <div class="row">
 
-                                                                    <div class="col-md-4" ng-init="loadEmployees();">
+                                                                    <div class="col-md-4" >
                                                                         <div class="form-group">
                                                                             <label class="control-label">Employee<!-- <span class="red-star">*</span> --> </label>
                                                                             <div class="dropdown">
                                                                                 
                                                                                 <span class="form-control-feedback d-sm-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
 
-                                                                                <select class="form-control " ng-model="selectedEmployee"  ng-options="emp as emp.name for emp in employees track by emp.id" name="employeeName" >
+                                                                                <select class="form-control " ng-model="selectedEmployee"   ng-options="emp as emp.name for emp in employees track by emp.id" name="employeeName" >
 
 
                                                                                     <option value="">Select Employees...</option>
@@ -1978,7 +1992,8 @@
 
                                                     </div>
                                                 </div>
-                                                <div class="wizard-footer" ng-show="assetGen.id" >
+                                               
+                                                <div class="wizard-footer"  ng-show="assetGen.id">
                                                     <div class="pull-right">
                                                         <input type='button' class='btn btn-next btn-fill btn-default btn-wd' name='next' value='Next'  />
                                                         <!-- <input type='button' class='btn btn-finish btn-fill btn-success btn-wd' name='finish' value='Finish' /> -->

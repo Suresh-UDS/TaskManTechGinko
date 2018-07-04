@@ -334,14 +334,16 @@ public class AssetResource {
 		assetDocumentDTO.setAssetId(assetId);
 		assetDocumentDTO.setTitle(title);
 		assetDocumentDTO.setType(type);
-		/*String extension = FilenameUtils.getExtension(file.getOriginalFilename());
+		String extension = FilenameUtils.getExtension(file.getOriginalFilename());
+		log.debug("********** file extension : "+ extension);
 		String ext = env.getProperty("extensionFile");
+		log.debug("********** validation extension : "+ ext);
 		String[] arrExt = ext.split(",");
 		for (String exten : arrExt) {
-			if (extension.equals(exten)) {*/
+			if (extension.equals(exten)) {
 				assetDocumentDTO = assetService.uploadFile(assetDocumentDTO, file);
-			//}
-		//}
+			}
+		}
 		return new ResponseEntity<>(assetDocumentDTO, HttpStatus.OK);
 	}
 
@@ -352,11 +354,14 @@ public class AssetResource {
 		assetDocumentDTO.setAssetId(assetId);
 		assetDocumentDTO.setTitle(title);
 		assetDocumentDTO.setType(type);
-		String extension = FilenameUtils.getExtension(file.getOriginalFilename()); 
+		String extension = FilenameUtils.getExtension(file.getOriginalFilename());
+		log.debug("********file extension : "+extension);
 		String ext = env.getProperty("extensionImg");
+		log.debug("********** validation extension : "+ ext);
 		String[] arrExt = ext.split(",");
 		for (String exten : arrExt) 
 		{	
+			log.debug("**********file extension read : " + exten);
 			if (extension.equalsIgnoreCase(exten)) {
 				assetDocumentDTO = assetService.uploadFile(assetDocumentDTO, file);
 			}

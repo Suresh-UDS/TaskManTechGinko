@@ -34,6 +34,7 @@ import com.ts.app.domain.AssetParameterReading;
 import com.ts.app.domain.AssetParameterReadingRule;
 import com.ts.app.domain.AssetReadingRule;
 import com.ts.app.domain.AssetStatus;
+import com.ts.app.domain.AssetStatusHistory;
 import com.ts.app.domain.AssetType;
 import com.ts.app.domain.Checklist;
 import com.ts.app.domain.Employee;
@@ -61,6 +62,7 @@ import com.ts.app.repository.AssetPpmScheduleRepository;
 import com.ts.app.repository.AssetReadingRuleRepository;
 import com.ts.app.repository.AssetRepository;
 import com.ts.app.repository.AssetSpecification;
+import com.ts.app.repository.AssetStatusHistoryRepository;
 import com.ts.app.repository.AssetTypeRepository;
 import com.ts.app.repository.CheckInOutImageRepository;
 import com.ts.app.repository.CheckInOutRepository;
@@ -226,6 +228,9 @@ public class AssetManagementService extends AbstractService {
 	@Inject
 	private WarrantyTypeRepository warrantyTypeRepository;
 	
+	@Inject
+	private AssetStatusHistoryRepository assetStatusHistoryRepository;
+	
 	public static final String EMAIL_NOTIFICATION_READING = "email.notification.reading";
 	
 	public static final String EMAIL_NOTIFICATION_READING_EMAILS = "email.notification.reading.emails";
@@ -244,9 +249,22 @@ public class AssetManagementService extends AbstractService {
 		Vendor vendor = getVendor(assetDTO.getVendorId());
 		asset.setAmcVendor(vendor);
 
+		//create status history
+		if(!StringUtils.isEmpty(AssetStatus.valueOf(assetDTO.getStatus()).getStatus())) {
+			AssetStatusHistory assetStatusHistory = new AssetStatusHistory();
+			assetStatusHistory.setStatus(AssetStatus.valueOf(assetDTO.getStatus()).getStatus());
+			assetStatusHistory.setActive("Y");
+			assetStatusHistory = assetStatusHistoryRepository.findOne(assetStatusHistoryRepository.save(assetStatusHistory).getId());
+			asset.setAssetStatusHistory(assetStatusHistory);
+		}
+		
 		asset.setActive(Asset.ACTIVE_YES);
 
 		asset = assetRepository.save(asset);
+		
+		AssetStatusHistory assetStatusHistory = assetStatusHistoryRepository.findOne(asset.getAssetStatusHistory().getId());
+		assetStatusHistory.setAsset(asset);
+		assetStatusHistoryRepository.save(assetStatusHistory);
 		
 		//generate QR code if qr code is not already generated.
 		if(asset != null && asset.getId() > 0 && !StringUtils.isEmpty(asset.getCode()) && StringUtils.isEmpty(asset.getQrCodeImage())) {
@@ -275,7 +293,7 @@ public class AssetManagementService extends AbstractService {
 			}
 		}
 		
-		//create asset type if does not exist
+		//create asset warranty type if does not exist
 		if(!StringUtils.isEmpty(asset.getWarrantyType())) {
 			WarrantyType warrantyType = warrantyTypeRepository.findByName(asset.getWarrantyType());
 			if(warrantyType == null) {
@@ -412,6 +430,15 @@ public class AssetManagementService extends AbstractService {
 		asset.setTitle(assetDTO.getTitle());
 		asset.setAssetType(assetDTO.getAssetType());
 		asset.setWarrantyType(assetDTO.getWarrantyType());
+		
+		//update status history
+		if(!StringUtils.isEmpty(AssetStatus.valueOf(assetDTO.getStatus()).getStatus())) {
+			AssetStatusHistory assetStatusHistory = new AssetStatusHistory();
+			assetStatusHistory.setStatus(AssetStatus.valueOf(assetDTO.getStatus()).getStatus());
+			assetStatusHistory.setActive("Y");
+			assetStatusHistory = assetStatusHistoryRepository.findOne(assetStatusHistoryRepository.save(assetStatusHistory).getId());
+			asset.setAssetStatusHistory(assetStatusHistory);
+		}
 		asset.setAssetGroup(assetDTO.getAssetGroup());
 		asset.setDescription(assetDTO.getDescription());
 		if (assetDTO.getSiteId() != asset.getSite().getId()) {
@@ -426,7 +453,7 @@ public class AssetManagementService extends AbstractService {
 			Vendor vendor = getVendor(assetDTO.getVendorId());
 			asset.setAmcVendor(vendor);
 		}
-		asset.setStatus(assetDTO.getStatus());
+		asset.setStatus(AssetStatus.valueOf(assetDTO.getStatus()).getStatus());
 		asset.setBlock(assetDTO.getBlock());
 		asset.setFloor(assetDTO.getFloor());
 		asset.setZone(assetDTO.getZone());
@@ -456,9 +483,14 @@ public class AssetManagementService extends AbstractService {
 		Asset asset = assetRepository.findOne(assetDTO.getId());
 		mapToEntityAssets(assetDTO, asset);
 		asset = assetRepository.save(asset);
+		
+		AssetStatusHistory assetStatusHistory = assetStatusHistoryRepository.findOne(asset.getAssetStatusHistory().getId());
+		assetStatusHistory.setAsset(asset);
+		assetStatusHistoryRepository.save(assetStatusHistory);
+		
 		return mapperUtil.toModel(asset, AssetDTO.class);
 	}
-
+	
 	public void deleteAsset(Long id) {
 		log.debug(">>> Inside Asset Delete Service");
 		Asset asset = assetRepository.findOne(id);

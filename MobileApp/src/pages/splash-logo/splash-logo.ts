@@ -3,6 +3,7 @@ import {NavController,NavParams,ViewController} from "ionic-angular";
 import {SplashScreen} from "@ionic-native/splash-screen";
 
 
+
 /**
  * Generated class for the Splash page.
  *

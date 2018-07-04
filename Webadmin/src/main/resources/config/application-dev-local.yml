@@ -85,8 +85,8 @@ quotation:
 ticket:
     file:
         path:  /opt/ticket    
-extensionImg: .jpeg,.jpg,.png    
-extensionFile: .pdf,.xlsx,.xls,.docs,.doc,.csv
+extensionImg: jpeg,jpg,png    
+extensionFile: pdf,xlsx,xls,docs,doc,csv,txt
 
 import:
     file:
