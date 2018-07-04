@@ -62,6 +62,8 @@ angular.module('timeSheetApp')
         $scope.selectedStartDateTime = null;
         
         $scope.selectedEndDateTime = null;
+        
+        $scope.selectedShiftDateTime = null;
 
         $scope.pageSort = 10;
         $scope.selectedDate = $filter('date')(new Date(), 'yyyy-MM-dd');
@@ -846,8 +848,20 @@ angular.module('timeSheetApp')
 	    	 	}
 	    }
         
-        $scope.updateEmpShiftSite = function(empShift) {
-        		console.log('updateEmpShiftSite called - ' + JSON.stringify(empShift));
+        $scope.updateShiftTime = function(empShift,selectedShiftDateTime) {
+	    		console.log('updateShiftTime called - ' + selectedShiftDateTime);
+	    	 	if(selectedShiftDateTime) {
+	    	 		empShift.startTime = selectedShiftDateTime.startDateTime;
+	    	 		empShift.endTime = selectedShiftDateTime.endDateTime;
+	    	 		$scope.modifiedEmpShifts.push(empShift);
+	    	 		$scope.modified = true;
+	    	 	}
+	    }
+
+        
+        $scope.updateEmpShiftSite = function(empShift,selectedShiftSite) {
+        		console.log('updateEmpShiftSite called - ' + JSON.stringify(selectedShiftSite));
+        		empShift.siteId = selectedShiftSite.id;
     	 		$scope.modifiedEmpShifts.push(empShift);
     	 		$scope.modified = true;
 	    }

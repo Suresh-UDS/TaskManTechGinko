@@ -169,8 +169,8 @@
                                     </span>
 
                                 </th>
-                                <th>Shift Start Time</th>
-                                <th>Shift End Time</th>
+                                <th>Shift Time</th>
+                                <!-- <th>Shift End Time</th> -->
                                 <th class="disabled-sorting text-right">Actions</th>
                             </tr>
                             </thead>
@@ -181,11 +181,17 @@
                                 <td>{{employeeShift.employeeFullName}}</td>
 							   <td>
 							   	   {{employeeShift.siteName}}	
-								   <select class="form-control " ng-model="employeeShift.siteId" ng-change="updateEmpShiftSite(employeeShift)"  ng-options="site as site.name for site in sites track by site.id">
+								   <select class="form-control " ng-model="selectedShiftSite" ng-change="updateEmpShiftSite(employeeShift, selectedShiftSite)"  ng-options="site as site.name for site in sites track by site.id">
 	                                    <option value="">Select Site...</option>
 	                                </select>
                                 </td>
                                 <td>
+                                	   {{employeeShift.startTime | date:'dd-MM-yyyy HH:mm'}} - {{employeeShift.endTime | date:'dd-MM-yyyy HH:mm'}}
+								   <select class="form-control" ng-model="selectedShiftDateTime" ng-change="updateShiftTime(employeeShift,selectedShiftDateTime)" ng-options="shift as (shift.startDateTime | date:'dd-MM-yyyy HH:mm') + '  -  ' + (shift.endDateTime | date:'dd-MM-yyyy HH:mm') for shift in shifts">
+	                                    <option value="">Select Start Time...</option>
+	                                </select>
+                                </td>
+                                <!-- td>
                                 	   {{employeeShift.startTime | date:'dd-MM-yyyy HH:mm'}}
 								   <select class="form-control" ng-model="selectedStartDateTime" ng-change="updateStartTime(employeeShift,selectedStartDateTime)" ng-options="shift as shift.startDateTime | date:'dd-MM-yyyy HH:mm' for shift in shifts">
 	                                    <option value="">Select Start Time...</option>
@@ -196,7 +202,7 @@
 								   <select class="form-control" ng-model="selectedEndDateTime" ng-change="updateEndTime(employeeShift,selectedEndDateTime)"  ng-options="shift as shift.endDateTime | date:'dd-MM-yyyy HH:mm' for shift in shifts">
 	                                    <option value="">Select End Time...</option>
 	                                </select>
-                                </td>
+                                </td-->
 
                                 <td class="text-right">
 
