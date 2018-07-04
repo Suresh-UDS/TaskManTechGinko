@@ -1,5 +1,6 @@
 package com.ts.app.web.rest.dto;
 
+import java.time.ZonedDateTime;
 import java.util.Date;
 
 public class AssetPpmScheduleDTO extends BaseDTO {
@@ -15,6 +16,12 @@ public class AssetPpmScheduleDTO extends BaseDTO {
 	private long assetId;
 	private long empId;
 	private String maintenanceType;
+	
+	private ZonedDateTime jobStartTime;
+	private ZonedDateTime jobEndTime;
+	private int plannedHours;	
+	
+	private String[] shiftTimings;
 
 	public String getMaintenanceType() {
 		return maintenanceType;
@@ -88,5 +95,31 @@ public class AssetPpmScheduleDTO extends BaseDTO {
 	public void setAssetId(long assetId) {
 		this.assetId = assetId;
 	}
+
+	public ZonedDateTime getJobStartTime() {
+		return jobStartTime;
+	}
+	public void setJobStartTime(ZonedDateTime jobStartTime) {
+		this.jobStartTime = jobStartTime;
+	}
+	public ZonedDateTime getJobEndTime() {
+		return jobEndTime;
+	}
+	public void setJobEndTime(ZonedDateTime jobEndTime) {
+		this.jobEndTime = jobEndTime;
+	}
+	public int getPlannedHours() {
+		return plannedHours;
+	}
+	public void setPlannedHours(int plannedHours) {
+		this.plannedHours = plannedHours;
+	}
+	public String[] getShiftTimings() {
+		return shiftTimings;
+	}
+	public void setShiftTimings(String[] shiftTimings) {
+		this.shiftTimings = shiftTimings;
+	}
+	
 	
 }

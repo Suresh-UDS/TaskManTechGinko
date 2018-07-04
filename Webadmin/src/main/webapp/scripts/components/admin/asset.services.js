@@ -266,7 +266,7 @@ angular.module('timeSheetApp')
             },
 
             findByAssetAMC : function(id) {
-            	return $http.get('api//assets/'+id+'/amcschedule').then(function(response) {
+            	return $http.get('api/assets/'+id+'/amcschedule').then(function(response) {
             		return response.data;
             	});
             },
@@ -382,6 +382,12 @@ angular.module('timeSheetApp')
             },
             getWarList: function () {
                 return $http.get('api/assetwarrantytype').then(function (response) {
+                    return response.data;
+                });
+            },
+
+             getStatus: function () {
+                return $http.get('api/assets/assetstatus').then(function (response) {
                     return response.data;
                 });
             }

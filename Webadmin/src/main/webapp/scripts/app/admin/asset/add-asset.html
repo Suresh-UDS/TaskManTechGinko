@@ -33,35 +33,40 @@
                                                 <!--<div class="wizard-header">-->
                                                    <!---->
                                                 <!--</div>-->
-                                                <div class="wizard-navigation">
+                                                <div class="wizard-navigation" >
+                                                    <div  ng-class="!assetGen.id ? 'OverlayBx' : ''" ></div>
                                                     <ul class="arrow-steps" >
                                                         <li class="step active">
                                                             <a href=".general" data-toggle="tab" >General</a>
                                                         </li>
                                                         <li class="step">
-                                                            <a ng-hide="assetGen.id">QR Code</a>
-                                                             <a href=".qrcode" data-toggle="tab" ng-show="assetGen.id">QR Code</a>
+                                                            
+                                                            <a href=".qrcode" data-toggle="tab">QR Code</a>
+                                                            
                                                         </li>
                                                        
                                                         <li class="step">
-                                                            <a ng-hide="assetGen.id">PPM Schedule</a>
-                                                            <a href=".ppmschedule" data-toggle="tab" ng-click="initPPMSchedule()" ng-show="assetGen.id">PPM Schedule</a>
+                                                            
+                                                            <a href=".ppmschedule" data-toggle="tab">PPM Schedule</a>
+                                                            
                                                         </li>
                                                         <li class="step">
-                                                            <a ng-hide="assetGen.id">AMC schedule</a>
+                                                            <a ng-hide="assetGen.id">Vendor Management</a>
                                                             <a href=".amcschedule" data-toggle="tab" ng-click="loadAmcSchedule()" ng-show="assetGen.id">AMC schedule</a>
                                                         </li>
-                                                         <li class="step">
-                                                            <a ng-hide="assetGen.id">Config</a>
-                                                            <a href=".config" data-toggle="tab" ng-click="assetConfig()"  ng-show="assetGen.id">Config</a>
+                                                         <li class="step" >
+                                                            
+                                                            <a href=".config" data-toggle="tab" >Config</a>
                                                         </li>
                                                         <li class="step">
-                                                            <a  ng-hide="assetGen.id">Documents</a>
-                                                            <a href=".docs" data-toggle="tab"  ng-click="getAllUploadedFiles();getAllUploadedPhotos();" ng-show="assetGen.id">Documents</a>
-
+                                                            
+                                                            <a href=".docs" data-toggle="tab">Documents</a>
+                                                            
                                                         </li>
                                                     </ul>
+                                                    
                                                 </div>
+                                               
                                                 
                                                 <div class="tab-content">
                                                     <div class="tab-pane fade in active  general" id="general">
@@ -89,6 +94,7 @@
                                                                                        ng-maxlength='250'
                                                                                        ng-pattern="/^[A-Za-z0-9\s]*$/" autofocus
                                                                                        required />
+
 
                                                                                     <div ng-show="form.$submitted || form.assetTitle.$touched">
                                                                                         <div ng-show="form.assetTitle.$dirty || form.assetTitle.$invalid">
@@ -186,12 +192,20 @@
 
                                                                         <div class="row">
                                                                             <div class="col-md-12">
-                                                                                <div class="form-group">
-                                                                                    <label class="control-label">Status</label>
+                                                                                <div class="form-group" ng-init="loadStatus();">
+                                                                                    <label class="control-label">Status<span class="red-star">*</span></label>
                                                                                     <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                                                                    <select class="form-control" ng-model="selectedAssetStatus" ng-options="status.status as status.status for status in statuses">
+                                                                                    <select class="form-control" ng-model="selectedAssetStatus" ng-options="status  for status in statuses" name="AssetStatus" required>
                                                                                         <option value="">Select Status ..</option>
                                                                                     </select>
+                                                                                    <div ng-show="form.$submitted || form.AssetStatus.$touched">
+                                                                                         <div ng-show="form.AssetStatus.$dirty || form.AssetStatus.$invalid">
+                                                                                         <p class="help-block" style="color: maroon"
+                                                                                            ng-show="form.AssetStatus.$error.required">Status is
+                                                                                             required.</p>
+                                                                                            
+                                                                                         </div>
+                                                                                    </div>
                                                                                 </div>
                                                                             </div>
 
@@ -238,7 +252,7 @@
                                                                                 <div class="form-group">
                                                                                     <label class="control-label">Site   <span class="red-star">*</span> </label>
                                                                                     <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                                                                    <select class="form-control " ng-model="selectedSites"  ng-options="site as site.name for site in sites" ng-change="loadBlocks();" name="AssetSite"  required>
+                                                                                    <select class="form-control " ng-model="selectedSites"  ng-options="site as site.name for site in sites" ng-change="loadBlocks();loadEmployees();" name="AssetSite"  required>
                                                                                         <option value="">Select Site ...</option>
                                                                                     </select>
 
@@ -787,7 +801,7 @@
                                                             </div>
                                                             <div class="panel-body">
 
-                                                                <div class="row">
+                                                                <div class="row" ng-init="loadAllParameters();loadAllParameterUOMs();">
 
                                                                     <div class="col-md-12">
                                                                         <div class="panel panel-default" style="min-height: 200px;">
@@ -877,7 +891,7 @@
 
                                                                                 </div>
                                                                                 
-                                                                                                                                                     <div class="row">
+                                                               <div class="row">
 
 
                                                                     <div class="col-md-6">
@@ -1246,7 +1260,7 @@
                                                                     </div>
                                                                 </div>
                                                                 <div class="row">
-                                                                    <div class="col-md-4" ng-init="loadEmployees();">
+                                                                    <div class="col-md-4" >
                                                                         <div class="form-group">
                                                                             <label class="control-label">Employee<!-- <span class="red-star">*</span> --> </label>
                                                                             <div class="dropdown">
@@ -1301,6 +1315,59 @@
                                                                             <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
                                                                             <select class="form-control" ng-model="selectedFrequnceyOccurrence" ng-options="frequency for frequency in frequencies">
                                                                                 <option value="">select..</option>
+                                                                            </select>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="col-md-3" >
+                                                                    		<div class="form-group">
+						                                                    <label class="control-label">Start Date Time<span class="red-star">*</span></label>
+						                                                    <span class="form-control-feedback calender-icon"><i class="material-icons">date_range</i></span>
+						                                                    <input type="text" class="form-control datetimepicker"  id="ppmJobStartTime"  ng-model="assetPPM.jobStartTime" required/>
+																		   <div ng-show="form3.$submitted || form3.ppmJobStartTime.$touched">
+                                                                                <div
+                                                                                    ng-show="form3.ppmJobStartTime.$dirty || form3.ppmJobStartTime.$invalid">
+                                                                                    <p class="help-block" style="color:maroon"
+                                                                                       ng-show="form3.ppmJobStartTime.$error.required">
+                                                                                        Required
+                                                                                    </p>
+                                                                                  
+
+                                                                                </div>
+                                                                                
+                                                                            </div>		
+						                                                </div>	
+                                                                    </div>
+                                                                    <div class="col-md-3">
+                                                                    		<div class="form-group">
+						                                                    <label class="control-label">Hours<span class="red-star">*</span> </label>
+						                                                    <input
+						                                                        class="form-control"
+						                                                        name="plannedHours"
+						                                                        type="number"
+						                                                     	   value="1"
+						                                                     	   min="1"   
+						                                                        ng-model="assetPPM.plannedHours"
+						                                                        required
+						                                                    />
+						
+						                                                    <div ng-show="form.$submitted || form.plannedHours.$touched">
+						                                                        <div
+						                                                            ng-show="form.plannedHours.$dirty || form.plannedHours.$invalid">
+						                                                            <p class="help-block" style="color:maroon"
+						                                                               ng-show="form.plannedHours.$error.required">
+						                                                                Required
+						                                                            </p>
+						                                                        </div>
+						                                                    </div>
+						                                                </div>
+                                                                    
+                                                                    </div>
+                                                                    <div class="col-md-3" ng-init="loadSiteShifts()">
+                                                                        <div class="form-group">
+                                                                            <label class="control-label">Shift</label>
+                                                                            <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
+                                                                            <select class="form-control" ng-model="selectedShift" ng-options="shift as shift.startTime +'-' +shift.endTime for shift in shifts">
+                                                                                <option value="">Select Shift..</option>
                                                                             </select>
                                                                         </div>
                                                                     </div>
@@ -1365,8 +1432,38 @@
                                                         <div class="panel panel-default">
                                                             <div class="panel-heading">New Schedule</div>
                                                             <div class="panel-body">
+                                                            	   <div class="row">
+                                                            	   		<div class="col-md-2">
+                                                                        <div class="form-group selectcon is-empty SelectWithAddbtnCon">
+                                                                            <div class="row">
+                                                                                <div class="col-md-10 pad-r-0px">
+                                                                                    <label class="control-label">Type</label>
+                                                                                    <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
+                                                                                        <select class="form-control ng-pristine ng-valid ng-touched" ng-model="amcSchedule.maintenanceType" tabindex="0" aria-invalid="false">
+                                                                                            <option value="" >Select Maintenance Type..</option>
+                                                                                            <option value="amc" >AMC</option>
+                                                                                            <option value="dlp" >DLP</option>
+                                                                                        </select>
+                                                                                </div>
+                                                                                <!-- div class="col-md-2">
+                                                                                    <a  has-permission="" class="btn btn-round btn-fab btn-fab-mini btn-simple"  onClick="$('#addChecklist').modal()" data-target="#myModal"><i class="material-icons">add</i><div class="ripple-container" ></div></a>
+                                                                                </div-->
+                                                                             
+                                                                               <!--  <div class="clear"></div>
+                                                                                <div class="collapse" id="addAssetGroup">
+                                                                                    <div class="">
+                                                                                        <input class="input-desc ng-pristine ng-untouched ng-valid" id="assetgroupName" ng-model="" name="assetgroupName" type="text" value="" tabindex="0" aria-invalid="false">
+                                                                                        <a class="btn btn-success" ng-click="" tabindex="0">Add</a>
+                                                                                    </div>
+                                                                                </div>
+                                                                                <span class="material-input"></span></div> -->
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                            	   
+                                                            	   </div>	
                                                                 <div class="row">
-
+																   
                                                                     <div class="col-md-4">
                                                                         <div class="form-group">
                                                                             <label class="control-label">Title<span class="red-star">*</span></label>
@@ -1452,7 +1549,7 @@
                                                                                         ng-show="form4.AmcTo.$dirty || form4.AmcTo.$invalid">
                                                                                         <p class="help-block" style="color:maroon"
                                                                                            ng-show="form4.AmcTo.$error.required">
-                                                                                            From date is required.
+                                                                                            To date is required.
                                                                                         </p>
                                                                                        
                                                                                     </div>
@@ -1490,14 +1587,14 @@
                                                                 </div>
                                                                 <div class="row">
 
-                                                                    <div class="col-md-4" ng-init="loadEmployees();">
+                                                                    <div class="col-md-4" >
                                                                         <div class="form-group">
                                                                             <label class="control-label">Employee<!-- <span class="red-star">*</span> --> </label>
                                                                             <div class="dropdown">
                                                                                 
                                                                                 <span class="form-control-feedback d-sm-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
 
-                                                                                <select class="form-control " ng-model="selectedEmployee"  ng-options="emp as emp.name for emp in employees track by emp.id" name="employeeName" >
+                                                                                <select class="form-control " ng-model="selectedEmployee"   ng-options="emp as emp.name for emp in employees track by emp.id" name="employeeName" >
 
 
                                                                                     <option value="">Select Employees...</option>
@@ -1545,6 +1642,59 @@
                                                                             <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
                                                                             <select class="form-control" ng-model="selectedFrequency" ng-options="frequency for frequency in frequencies">
                                                                                 <option value="">select..</option>
+                                                                            </select>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="col-md-3" >
+                                                                    		<div class="form-group">
+						                                                    <label class="control-label">Start Date Time<span class="red-star">*</span></label>
+						                                                    <span class="form-control-feedback calender-icon"><i class="material-icons">date_range</i></span>
+						                                                    <input type="text" class="form-control datetimepicker"  id="amcJobStartTime"  ng-model="amcSchedule.jobStartTime" required/>
+																		   <div ng-show="form3.$submitted || form3.amcJobStartTime.$touched">
+                                                                                <div
+                                                                                    ng-show="form3.amcJobStartTime.$dirty || form3.amcJobStartTime.$invalid">
+                                                                                    <p class="help-block" style="color:maroon"
+                                                                                       ng-show="form3.amcJobStartTime.$error.required">
+                                                                                        Required
+                                                                                    </p>
+                                                                                  
+
+                                                                                </div>
+                                                                                
+                                                                            </div>		
+						                                                </div>	
+                                                                    </div>
+                                                                    <div class="col-md-3">
+                                                                    		<div class="form-group">
+						                                                    <label class="control-label">Hours<span class="red-star">*</span> </label>
+						                                                    <input
+						                                                        class="form-control"
+						                                                        name="plannedHours"
+						                                                        type="number"
+						                                                     	   value="1"
+						                                                     	   min="1"   
+						                                                        ng-model="amcSchedule.plannedHours"
+						                                                        required
+						                                                    />
+						
+						                                                    <div ng-show="form.$submitted || form.plannedHours.$touched">
+						                                                        <div
+						                                                            ng-show="form.plannedHours.$dirty || form.plannedHours.$invalid">
+						                                                            <p class="help-block" style="color:maroon"
+						                                                               ng-show="form.plannedHours.$error.required">
+						                                                                Required
+						                                                            </p>
+						                                                        </div>
+						                                                    </div>
+						                                                </div>
+                                                                    
+                                                                    </div>
+                                                                    <div class="col-md-3" ng-init="loadSiteShifts()">
+                                                                        <div class="form-group">
+                                                                            <label class="control-label">Shift</label>
+                                                                            <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
+                                                                            <select class="form-control" ng-model="selectedShift" ng-options="shift as shift.startTime +'-' +shift.endTime for shift in shifts">
+                                                                                <option value="">Select Shift..</option>
                                                                             </select>
                                                                         </div>
                                                                     </div>
@@ -1842,7 +1992,8 @@
 
                                                     </div>
                                                 </div>
-                                                <div class="wizard-footer" ng-show="assetGen.id" >
+                                               
+                                                <div class="wizard-footer"  ng-show="assetGen.id">
                                                     <div class="pull-right">
                                                         <input type='button' class='btn btn-next btn-fill btn-default btn-wd' name='next' value='Next'  />
                                                         <!-- <input type='button' class='btn btn-finish btn-fill btn-success btn-wd' name='finish' value='Finish' /> -->

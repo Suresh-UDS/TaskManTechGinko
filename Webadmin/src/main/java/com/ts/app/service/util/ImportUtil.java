@@ -645,7 +645,7 @@ public class ImportUtil {
 				}
 				assetDTO.setVendorId(Long.valueOf(getCellValue(currentRow.getCell(18))));
 				assetDTO.setCode(getCellValue(currentRow.getCell(19)));
-				
+				assetDTO.setStatus(getCellValue(currentRow.getCell(20)));
 				assetManagementService.saveAsset(assetDTO);
 				
 			}
@@ -688,7 +688,14 @@ public class ImportUtil {
 				if(endDate != null) {
 					assetPPMDto.setEndDate(endDate);
 				}
-				assetPPMDto.setEmpId(Long.parseLong(getCellValue(currentRow.getCell(8))));
+				Date startDateTime = currentRow.getCell(8) != null ? currentRow.getCell(8).getDateCellValue() : null;
+				if(startDateTime != null) {
+					assetPPMDto.setJobStartTime(DateUtil.convertToZDT(startDateTime));
+				}
+				
+				assetPPMDto.setPlannedHours(Integer.parseInt(getCellValue(currentRow.getCell(9))));
+				
+				assetPPMDto.setEmpId(Long.parseLong(getCellValue(currentRow.getCell(10))));
 				
 				assetManagementService.createAssetPpmSchedule(assetPPMDto);
 				
@@ -732,16 +739,23 @@ public class ImportUtil {
 				if(endDate != null) {
 					assetAMCDto.setEndDate(endDate);
 				}
-				assetAMCDto.setEmpId(Long.parseLong(getCellValue(currentRow.getCell(8))));
+				Date startDateTime = currentRow.getCell(8) != null ? currentRow.getCell(8).getDateCellValue() : null;
+				if(startDateTime != null) {
+					assetAMCDto.setJobStartTime(DateUtil.convertToZDT(startDateTime));
+				}
+				
+				assetAMCDto.setPlannedHours(Integer.parseInt(getCellValue(currentRow.getCell(9))));
+				
+				assetAMCDto.setEmpId(Long.parseLong(getCellValue(currentRow.getCell(10))));
 				assetAMCDto.setFrequencyPrefix("Every");
 				assetManagementService.createAssetAMCSchedule(assetAMCDto);
 				
 			}
 
 		} catch (FileNotFoundException e) {
-			log.error("Error while reading the asset ppm schedule data file for import", e);
+			log.error("Error while reading the asset amc schedule data file for import", e);
 		} catch (IOException e) {
-			log.error("Error while reading the asset ppm schedule data file for import", e);
+			log.error("Error while reading the asset amc schedule data file for import", e);
 		}
 	}
 	
