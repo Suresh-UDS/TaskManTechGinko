@@ -148,9 +148,6 @@ public class AssetManagementService extends AbstractService {
 	private NotificationRepository notificationRepository;
 
 	@Inject
-	private SchedulerService schedulerService;
-
-	@Inject
 	private ExportUtil exportUtil;
 
 	@Inject
