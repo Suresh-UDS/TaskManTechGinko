@@ -266,7 +266,7 @@ angular.module('timeSheetApp')
             },
 
             findByAssetAMC : function(id) {
-            	return $http.get('api//assets/'+id+'/amcschedule').then(function(response) {
+            	return $http.get('api/assets/'+id+'/amcschedule').then(function(response) {
             		return response.data;
             	});
             },

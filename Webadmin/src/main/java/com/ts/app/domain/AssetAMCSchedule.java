@@ -1,6 +1,7 @@
 package com.ts.app.domain;
 
 import java.sql.Date;
+import java.time.ZonedDateTime;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -65,7 +66,13 @@ public class AssetAMCSchedule extends AbstractAuditingEntity {
 	private String maintenanceType;
 
 	private long empId;
+	
+	private ZonedDateTime jobStartTime;
+	private ZonedDateTime jobEndTime;
+	private int plannedHours;	
 
+	private String[] shiftTimings;
+	
 	public String getMaintenanceType() {
 		return maintenanceType;
 	}
@@ -152,6 +159,38 @@ public class AssetAMCSchedule extends AbstractAuditingEntity {
 
 	public void setEmpId(long empId) {
 		this.empId = empId;
+	}
+
+	public ZonedDateTime getJobStartTime() {
+		return jobStartTime;
+	}
+
+	public void setJobStartTime(ZonedDateTime jobStartTime) {
+		this.jobStartTime = jobStartTime;
+	}
+
+	public ZonedDateTime getJobEndTime() {
+		return jobEndTime;
+	}
+
+	public void setJobEndTime(ZonedDateTime jobEndTime) {
+		this.jobEndTime = jobEndTime;
+	}
+
+	public int getPlannedHours() {
+		return plannedHours;
+	}
+
+	public void setPlannedHours(int plannedHours) {
+		this.plannedHours = plannedHours;
+	}
+
+	public String[] getShiftTimings() {
+		return shiftTimings;
+	}
+
+	public void setShiftTimings(String[] shiftTimings) {
+		this.shiftTimings = shiftTimings;
 	}
 	
 	
