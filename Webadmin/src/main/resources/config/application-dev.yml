@@ -69,6 +69,10 @@ export:
 qrcode:
     file:
          path: /opt/qrcode
+
+locationQRCode:
+    file:
+        path: /opt/location/qrcode
 attendance:
     shiftStartLeadTime: 1
     shiftEndLeadTime: 1

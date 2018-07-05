@@ -295,11 +295,21 @@ public class JobManagementResource {
 	public SearchResult<JobDTO> searchJobsForEmployee(@RequestBody SearchCriteria searchCriteria) {
 		SearchResult<JobDTO> result = null;
 		if(searchCriteria != null) {
-			jobService.updateJobStatus(searchCriteria.getSiteId(), searchCriteria   .getJobStatus());
+			jobService.updateJobStatus(searchCriteria.getSiteId(), searchCriteria.getJobStatus());
 			result = jobService.findBySearchCrieria(searchCriteria,false);
 		}
 		return result;
 	}
+
+    @RequestMapping(value = "/location/jobs/search",method = RequestMethod.POST)
+    public SearchResult<JobDTO> searchJobsByLocation(@RequestBody SearchCriteria searchCriteria) {
+        SearchResult<JobDTO> result = null;
+        if(searchCriteria != null) {
+            jobService.updateJobStatus(searchCriteria.getSiteId(), searchCriteria   .getJobStatus());
+            result = jobService.findBySearchCrieria(searchCriteria,false);
+        }
+        return result;
+    }
 
     @RequestMapping(value = "/employee/jobs/search/selectedDate",method = RequestMethod.POST)
     public SearchResult<JobDTO> findByDateSelected(@RequestBody SearchCriteria searchCriteria) {
@@ -473,5 +483,8 @@ public class JobManagementResource {
         log.info("--Invoked findCheckInOut By JobId--"+jobId);
         return jobService.findCheckInOutByJob(jobId);
     }
+
+
+
 
 }

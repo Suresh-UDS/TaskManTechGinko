@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('timeSheetApp')
-    .controller('LocationController', function ($rootScope, $scope, $state, $timeout, 
+    .controller('LocationController', function ($rootScope, $scope, $state, $timeout,
         LocationComponent,ProjectComponent, SiteComponent, $http, $stateParams,
          $location,PaginationComponent ) {
         $rootScope.loadingStop();
@@ -37,7 +37,7 @@ angular.module('timeSheetApp')
                 $scope.sitesList = data;
             });
         };
-        
+
          $scope.loadDepSites = function () {
             ProjectComponent.findSites($scope.selectedProject.id).then(function (data) {
                 $scope.selectedSite = null;
@@ -76,7 +76,7 @@ angular.module('timeSheetApp')
 
 
         $scope.refreshPage = function() {
-    			
+
     			$scope.loadLocations();
         };
 
@@ -215,7 +215,7 @@ angular.module('timeSheetApp')
             }
 
             if($scope.selectedColumn){
-              
+
                 $scope.searchCriteria.columnName = $scope.selectedColumn;
                 $scope.searchCriteria.sortByAsc = $scope.isAscOrder;
 
@@ -223,7 +223,7 @@ angular.module('timeSheetApp')
                 $scope.searchCriteria.columnName ="id";
                 $scope.searchCriteria.sortByAsc = true;
             }
-             
+
              console.log("search criteria",$scope.searchCriteria);
                 $scope.locations = '';
                 $scope.locationsLoader = false;
@@ -251,11 +251,11 @@ angular.module('timeSheetApp')
                     $scope.showCurrPage = data.currPage;
                     $scope.pageEntries = $scope.locations.length;
                     $scope.totalCountPages = data.totalCount;
-                    $scope.pageSort = 10; 
+                    $scope.pageSort = 10;
 
                 }
             });
-            
+
         };
 
 
@@ -289,7 +289,7 @@ angular.module('timeSheetApp')
              $scope.setPage(1);
          };
 
-      
+
 
        /*
         ** Pagination init function **
@@ -307,6 +307,25 @@ angular.module('timeSheetApp')
             $scope.pages.currPage = page;
             $scope.search();
         };
+
+        $scope.generateQR = function(siteId,locationId){
+            var qr = {
+                siteId:siteId,
+                locationId:locationId
+            };
+            console.log(qr.siteId);
+            console.log(qr.locationId);
+            LocationComponent.createQr(qr).then(function(response){
+
+                console.log('response qr---',response);
+
+                var qrAry  = response.split('.');
+                $scope.qr_img = qrAry[0];
+                $scope.assetCode = qrAry[1];
+                console.log('create qr---',qrAry);
+
+            });
+        }
 
     });
 

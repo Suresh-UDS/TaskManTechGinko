@@ -6,6 +6,7 @@ import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
+import com.ts.app.Application;
 import com.ts.app.domain.ApplicationVersionControl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -65,11 +66,14 @@ public class SettingsResource {
 		return settings;
 	}
 
-    @RequestMapping(value = "/version/application", method = RequestMethod.GET)
-    public List<ApplicationVersionControl> findVersion() {
-        log.info("--Invoked SettingsResource.findAll --");
-        List<ApplicationVersionControl> settings = settingsService.findApplicationVersionCode();
-        return settings;
+    @RequestMapping(value = "/version/application", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @Timed
+    public List<ApplicationVersionControl> findVersion(HttpServletRequest request) {
+        log.info("Inside the find Version -");
+
+        List<ApplicationVersionControl> applicationVersionControls = settingsService.findApplicationVersionCode();
+
+        return applicationVersionControls;
     }
 
 

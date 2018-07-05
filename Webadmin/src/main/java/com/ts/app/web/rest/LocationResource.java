@@ -40,8 +40,8 @@ public class LocationResource {
 
     @Inject
 	private ImportUtil importUtil;
-    
-    
+
+
     @RequestMapping(value = "/location", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
     public ResponseEntity<?> saveLocation(@Valid @RequestBody LocationDTO locationDTO, HttpServletRequest request) {
@@ -56,7 +56,7 @@ public class LocationResource {
         }
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
-    
+
     @RequestMapping(value = "/locations", method = RequestMethod.GET)
     public List<LocationDTO> findAll(@RequestBody SearchCriteria searchCriteria) {
         log.info("--Invoked LocationResource.findAllLocation --");
@@ -67,12 +67,12 @@ public class LocationResource {
     public LocationDTO getLocation(@PathVariable Long id) {
         return locationService.findOne(id);
     }
-    
+
     @RequestMapping(value = "/location/project/{projectId}/site/{siteId}/block", method = RequestMethod.GET)
     public List<String> getBlocks(@PathVariable("projectId") long projectId,@PathVariable("siteId") long siteId) {
         return locationService.findBlocks(projectId, siteId);
     }
-    
+
     @RequestMapping(value = "/location/project/{projectId}/site/{siteId}/block/{block}/floor", method = RequestMethod.GET)
     public List<String> getFloors(@PathVariable("projectId") long projectId,@PathVariable("siteId") long siteId, @PathVariable("block") String block) {
         return locationService.findFloors(projectId, siteId, block);
@@ -90,8 +90,8 @@ public class LocationResource {
             result = locationService.findBySearchCrieria(searchCriteria);
         }
         return result;
-    }   
-    
+    }
+
     @RequestMapping(value = "/location/import", method = RequestMethod.POST)
     public ResponseEntity<ImportResult> importLocationData(@RequestParam("locationFile") MultipartFile file){
     	log.info("--Invoked Location Import --");
@@ -99,6 +99,11 @@ public class LocationResource {
 		ImportResult result = importUtil.importLocationData(file, cal.getTimeInMillis());
 		return new ResponseEntity<ImportResult>(result,HttpStatus.OK);
 	}
+
+    @RequestMapping(value = "/location/{id}/qrcode/{siteId}", method = RequestMethod.GET, produces = MediaType.IMAGE_PNG_VALUE)
+    public String generateAssetQRCode(@PathVariable("id") long locationId, @PathVariable("siteId") long siteId) {
+        return locationService.generateLocationQRCode(locationId, siteId);
+    }
 
     @RequestMapping(value = "/location/import/{fileId}/status",method = RequestMethod.GET)
 	public ImportResult importStatus(@PathVariable("fileId") String fileId) {
