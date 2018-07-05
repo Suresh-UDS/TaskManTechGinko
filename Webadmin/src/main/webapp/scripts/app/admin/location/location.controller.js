@@ -233,6 +233,28 @@ angular.module('timeSheetApp')
                 $scope.locations = data.transactions;
                 $scope.locationsLoader = true;
 
+                // if($scope.locations){
+                //     for(var i=0;i<$scope.locations.length;i++){
+                //         var qr ={
+                //             siteId:$scope.locations[i].siteId,
+                //             locationId:$scope.locations[i].id
+                //         };
+                //         LocationComponent.createQr(qr).then(function(response){
+                //
+                //             console.log('response qr---',response);
+                //
+                //             var qrAry  = response.split('.');
+                //             $scope.qr_img = qrAry[0];
+                //             $scope.assetCode = qrAry[1];
+                //             console.log('create qr---',qrAry);
+                //
+                //         });
+                //         $scope.locations[i].qr_img = $scope.qr_img;
+                //         console.log('qr')
+                //         console.log($scope.locations[i]);
+                //     }
+                // }
+
                 /*
                     ** Call pagination  main function **
                 */
@@ -308,7 +330,7 @@ angular.module('timeSheetApp')
             $scope.search();
         };
 
-        $scope.generateQR = function(siteId,locationId){
+            $scope.generateQR = function(siteId,locationId){
             var qr = {
                 siteId:siteId,
                 locationId:locationId
@@ -322,10 +344,19 @@ angular.module('timeSheetApp')
                 var qrAry  = response.split('.');
                 $scope.qr_img = qrAry[0];
                 $scope.assetCode = qrAry[1];
-                console.log('create qr---',qrAry);
+                var eleId = 'qrImage';
+                var ele = document.getElementById(eleId);
+                ele.setAttribute('src',image);
+                console.log('create qr---',$scope.qr_img);
 
             });
         }
+
+        $scope.loadQRImage = function(image,qId) {
+            var eleId = 'qrImage';
+            var ele = document.getElementById(eleId);
+            ele.setAttribute('src',image);
+        };
 
     });
 

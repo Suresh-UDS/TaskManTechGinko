@@ -184,7 +184,11 @@
                                 <td>{{location.floor}}</td>
                                 <td>{{location.zone}}</td>
                                 <td>
-                                    <button  title="Generate QR"   data-toggle="modal" data-target="#qrcodeModal" data-dismiss="#qrcodeModal" class="btn btn-simple btn-info btn-icon like" ng-click="generateQR(location.siteId,location.id)"> <i style="font-size: 20px !important; color: #942a25" class="fas fa-user-times"></i></button>
+                                    <!--<button  title="Generate QR"   data-toggle="modal" data-target="#qrcodeModal" data-dismiss="#qrcodeModal" class="btn btn-simple btn-info btn-icon like" ng-click="generateQR(location.siteId,location.id)"> <i style="font-size: 20px !important; " class="fa fa-qrcode"></i></button>-->
+                                    <a id="images" href="#" onClick="$('#myModalNew').modal()" data-target="#myModalNew" data-dismiss="#myModalNew" ng-click="generateQR(location.siteId,location.id)">
+                                        <i style="font-size: 20px !important; color: #942a25" class="fa fa-qrcode"></i>
+                                    </a>
+
                                 </td>
                                 <!-- <td><a  has-authority="ROLE_ADMIN" ng-click="" ui-sref=""   class="btn btn-simple btn-info btn-icon like"><i class="material-icons">remove_red_eye</i></a></td> -->
                             </tr>
@@ -273,18 +277,29 @@
 
 
 
-<div class="modal fade" id="qrcodeModal" tabindex="-1" role="dialog" aria-labelledby="qrcodeModal" aria-hidden="true">
-    <div class="modal-dialog modal-notice">
+<div id="myModalNew" class="modal fade" data-backdrop="false" tabindex="-1" role="dialog"
+     aria-labelledby="myModalLabel" aria-hidden="true" >
+    <div class="modal-dialog">
         <div class="modal-content">
-            <div class="QrcodeCon" ng-show="qr_img">
+            <div class="modal-body">
+                <table >
+                    <thead>
+                    <tr >
+                        <th style="text-align: center">Qr Code Image</th>
 
-                <img src="{{qr_img}}" width="50%">
+                    </tr>
+                    </thead>
+                    <tr>
+
+                        <td><img id="qrImage" width="250" height="250" src="#"
+                                 class="img-responsive"></td>
+                    </tr>
+
+                </table>
 
             </div>
-            <div class="QrcodeCon" ng-show="!qr_img">
-
-                <h4>--No QR image--</h4>
-
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
             </div>
         </div>
     </div>
