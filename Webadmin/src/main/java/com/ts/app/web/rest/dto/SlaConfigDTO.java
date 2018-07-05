@@ -1,5 +1,8 @@
 package com.ts.app.web.rest.dto;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class SlaConfigDTO extends BaseDTO{
 
 	
@@ -13,7 +16,7 @@ public class SlaConfigDTO extends BaseDTO{
 	
 	private String processType;
 	
-	private String category;
+	private ArrayList<String> category;
 	
 	private String severity;
 	
@@ -85,11 +88,12 @@ public class SlaConfigDTO extends BaseDTO{
 		this.processType = processType;
 	}
 
-	public String getCategory() {
+
+	public ArrayList<String> getCategory() {
 		return category;
 	}
 
-	public void setCategory(String category) {
+	public void setCategory(ArrayList<String> category) {
 		this.category = category;
 	}
 
