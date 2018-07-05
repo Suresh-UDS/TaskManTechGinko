@@ -1,70 +1,19 @@
 'use strict';
 
 angular.module('timeSheetApp')
-    .controller('SlaController', function ($rootScope, $scope, $state, $timeout, ProjectComponent, SiteComponent,$http,$stateParams,$location) {
+    .controller('SlaController', function ($rootScope, $scope, $state, $timeout,
+    		ProjectComponent, SiteComponent, SlaComponent, $http,$stateParams,$location) {
 
 
+    	$scope.sla = {};
     	$rootScope.loginView = false;
-    	$scope.search = function () {
-        	var currPageVal = ($scope.pages ? $scope.pages.currPage : 1);
-        	if(!$scope.searchCriteria) {
-            	var searchCriteria = {
-            			currPage : currPageVal
-            	}
-            	$scope.searchCriteria = searchCriteria;
-        	}
-
-        	$scope.searchCriteria.currPage = currPageVal;
-        	console.log('Selected  module action -' + $scope.selectedInventorylist);
-
-        	if(!$scope.selectedInventorylist) {
-        		if($rootScope.searchCriteriaInventorylist) {
-            		$scope.searchCriteria = $rootScope.searchCriteriaInventorylist;
-        		}else {
-        			$scope.searchCriteria.findAll = true;
-        		}
-
-        	}else {
-	        	if($scope.selectedInventorylist) {
-	        		$scope.searchCriteria.findAll = false;
-		        	$scope.searchCriteria.inventorylistId = $scope.selectedInventorylist.id;
-		        	$scope.searchCriteria.name = $scope.selectedInventorylist.name;
-		        	$scope.searchCriteria.activeFlag = $scope.selectedInventorylist.activeFlag;
-		        	console.log('selected inventory id ='+ $scope.searchCriteria.inventorylistId);
-	        	}else {
-	        		$scope.searchCriteria.inventorylistId = 0;
-	        	}
-        	}
-        	console.log($scope.searchCriteria);
-        	InventorylistComponent.search($scope.searchCriteria).then(function (data) {
-                $scope.inventorylist = data.transactions;
-                $scope.loadingStop();
-                $scope.inventorylistLoader = true;
-                console.log($scope.checklists);
-                $scope.pages.currPage = data.currPage;
-                $scope.pages.totalPages = data.totalPages;
-                if($scope.checklists == null){
-                    $scope.pages.startInd = 0;
-                }else{
-                    $scope.pages.startInd = (data.currPage - 1) * 10 + 1;
-                }
-
-                $scope.pages.endInd = data.totalCount > 10  ? (data.currPage) * 10 : data.totalCount ;
-                $scope.pages.totalCnt = data.totalCount;
-            	$scope.hide = true;
-            });
-        	$rootScope.searchCriteriaChecklist = $scope.searchCriteria;
-        	if($scope.pages.currPage == 1) {
-            	$scope.firstStyle();
-        	}
-        };
-
-
+    	$scope.selectedProject = {};
+    	$scope.selectedSite = {};
+    	
 			//init load
 			$scope.initLoad = function(){
+				$scope.loadProjects();
 			     $scope.loadPageTop();
-			     $scope.loadInventory();
-			     $scope.init();
 
 			 }
 
@@ -93,7 +42,53 @@ angular.module('timeSheetApp')
                     console.log("Calling loader");
                     $('.pageCenter').hide();$('.overlay').hide();
 
-                }
+                };
+                
+               // List ALL SLA 
 
-
+                $scope.loadSlaList = function () {
+                	SlaComponent.findAll().then(function (data) {
+                        $scope.slaList = data;
+                        console.log("SLA Loading data");
+                        console.log(data);
+                         $scope.loadingStop();
+                    });
+                };
+                
+                $scope.addSla = function() {
+                	console.log($scope.sla);
+                	console.log(selectedProject.name);
+                	console.log(selectedSite.name);
+                	$scope.sla.projectName = selectedProject.name;
+                	$scope.sla.siteName = selectedSite.name;
+                	SlaComponent.createSla($scope.sla).then(function (data) {
+                		$scope.saveSla = data;
+                		console.log("SLA saving");
+                		console.log(data);
+                		$scope.loadingStop();
+                	});
+                };
+                
+                $scope.loadProjects = function() {
+                	ProjectComponent.findAll().then(function (data) {
+                		console.log("SLA projects");
+                		$scope.projects = data;
+                		console.log(data);
+                		$scope.loadingStop();
+                	});
+                	
+                };
+                
+                $scope.loadSites = function () {
+                	console.log('selected project - ' + JSON.stringify($scope.selectedProject));
+                	if($scope.selectedProject) {
+                    	ProjectComponent.findSites($scope.selectedProject.id).then(function (data) {
+                            $scope.sites = data;
+                        });
+                	}else {
+                    	SiteComponent.findAll().then(function (data) {
+                            $scope.sites = data;
+                        });
+                	}
+                };
     });
