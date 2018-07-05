@@ -241,9 +241,11 @@ public class LocationService extends AbstractService {
 		return er;
 	}
 
-    public String generateLocationQRCode(long siteId, long location) {
+    public String generateLocationQRCode(long location, long siteId) {
         Location loc = locationRepository.findOne(location);
 //        long siteId = asset.getSite().getId();
+        log.debug("Selected location"+loc.getId());
+
         byte[] qrCodeImage = null;
         String qrCodeBase64 = null;
         if (loc != null) {
@@ -268,6 +270,7 @@ public class LocationService extends AbstractService {
     public String getQRCode(long locationId) {
         log.debug(">>> get QR Code <<<");
         Location loc = locationRepository.findOne(locationId);
+        log.debug(loc.getQrCodeImage());
         String qrCodeBase64 = null;
         String imageFileName = null;
         if (loc != null) {
