@@ -46,6 +46,8 @@ public class ManufacturerSpecification implements Specification<Manufacturer> {
 			predicates.add(builder.equal(root.get("assetType"), searchCriteria.getAssetTypeName()));
 		}
 		
+		predicates.add(builder.equal(root.get("active"), "Y"));
+
 		query.orderBy(builder.desc(root.get("name")));
 
 		List<Predicate> orPredicates = new ArrayList<>();
