@@ -860,8 +860,10 @@ angular.module('timeSheetApp')
 
 
         $('input#acquiredDate').on('dp.change', function(e){
-                $scope.assetGen.acquiredDate = e.date._d;
-                $scope.assetEditDate = e.date._d;
+                //$scope.assetGen.acquiredDate = e.date._d;
+                //$scope.assetEditDate = e.date._d;
+                $scope.assetGen.acquiredDate = $filter('date')(e.date._d, 'EEE, dd MMM yyyy HH:mm:ss Z');
+                $scope.assetEditDate = $filter('date')(e.date._d, 'EEE, dd MMM yyyy HH:mm:ss Z');
         });
 
         $('input#searchAcquiredDate').on('dp.change', function(e){
