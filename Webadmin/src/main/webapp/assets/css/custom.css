@@ -660,6 +660,11 @@ span.red-star
     margin-top: 23px;
 }
 
+.ps-container>.ps-scrollbar-y-rail
+{
+    opacity: 1;
+}
+
 .jobcards .card [data-background-color],.cardsCon .card [data-background-color]
 {
  /* border: 1px solid #ccc;

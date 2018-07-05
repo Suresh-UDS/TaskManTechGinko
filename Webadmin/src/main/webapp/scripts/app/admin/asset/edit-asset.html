@@ -197,7 +197,7 @@
                                                                                      <p class="help-block" style="color: maroon"
                                                                                         ng-show="form.AssetStatus.$error.required">Status is
                                                                                          required.</p>
-                                                                                        
+
                                                                                      </div>
                                                                                 </div>
                                                                             </div>
@@ -1016,7 +1016,7 @@
                                                                         </div>
                                                                     </div>
 
-                                                                    
+
 
 
                                                                 </div>
@@ -1095,7 +1095,7 @@
                                                                             </select>
                                                                         </div>
                                                                     </div>
-                                                                    
+
                                                                     <div class="col-md-3" >
                                                                     		<div class="form-group">
 						                                                    <label class="control-label">Start Date Time<span class="red-star">*</span></label>
@@ -1108,12 +1108,12 @@
                                                                                        ng-show="form3.ppmJobStartTime.$error.required">
                                                                                         Required
                                                                                     </p>
-                                                                                  
+
 
                                                                                 </div>
-                                                                                
-                                                                            </div>		
-						                                                </div>	
+
+                                                                            </div>
+						                                                </div>
                                                                     </div>
                                                                     <div class="col-md-3">
                                                                     		<div class="form-group">
@@ -1123,11 +1123,11 @@
 						                                                        name="plannedHours"
 						                                                        type="number"
 						                                                     	   value="1"
-						                                                     	   min="1"   
+						                                                     	   min="1"
 						                                                        ng-model="assetPPM.plannedHours"
 						                                                        required
 						                                                    />
-						
+
 						                                                    <div ng-show="form.$submitted || form.plannedHours.$touched">
 						                                                        <div
 						                                                            ng-show="form.plannedHours.$dirty || form.plannedHours.$invalid">
@@ -1138,7 +1138,7 @@
 						                                                        </div>
 						                                                    </div>
 						                                                </div>
-                                                                    
+
                                                                     </div>
                                                                     <div class="col-md-3" ng-init="loadSiteShifts()">
                                                                         <div class="form-group">
@@ -1149,7 +1149,7 @@
                                                                             </select>
                                                                         </div>
                                                                     </div>
-                                                                    
+
                                                                     <div class="col-md-1" style="padding-top: 25px;">
                                                                         <a class="btn btn-success add-btn margn-top0"  ng-click="savePPMSchedule()" ng-disabled="form3.$invalid || ppmFromMsg || ppmToMsg">Add</a>
                                                                     </div>
@@ -1195,7 +1195,7 @@
                                                                     <td>{{ppmSchedules.endDate}}</td>
                                                                     <td>{{ppmSchedules.frequencyPrefix}}&nbsp; {{ppmSchedules.frequencyDuration}}&nbsp; {{ppmSchedules.frequency}}</td>
                                                                     <td class="text-right">
-                                                                        <a  ng-class="{active: $state.includes('admin')}"  has-permission="" ui-sref=""  class="btn btn-simple btn-danger"><i class="material-icons">delete_forever</i></a>
+                                                                        <!--<a  ng-class="{active: $state.includes('admin')}"  has-permission="" ui-sref=""  class="btn btn-simple btn-danger"><i class="material-icons">delete_forever</i></a>-->
                                                                     </td>
                                                                 </tr>
 
@@ -1212,7 +1212,7 @@
                                                         <div class="panel-heading">New Schedule</div>
                                                         <div class="panel-body">
                                                             <div class="row">
-															   <div class="col-md-2">
+															    <div class="col-md-3">
                                                                     <div class="form-group selectcon is-empty SelectWithAddbtnCon">
                                                                         <div class="row">
                                                                             <div class="col-md-10 pad-r-0px">
@@ -1230,7 +1230,7 @@
                                                                                 </a> -->
                                                                                 <a  has-permission="" class="btn btn-round btn-fab btn-fab-mini btn-simple"  onClick="$('#addChecklist').modal()" data-target="#myModal"><i class="material-icons">add</i><div class="ripple-container" ></div></a>
                                                                             </div>
-                                                                         
+
                                                                            <!--  <div class="clear"></div>
                                                                             <div class="collapse" id="addAssetGroup">
                                                                                 <div class="">
@@ -1241,7 +1241,7 @@
                                                                             <span class="material-input"></span></div> -->
                                                                         </div>
                                                                     </div>
-                                                                </div> 	
+                                                                </div>
                                                                 <div class="col-md-4">
                                                                     <div class="form-group">
                                                                         <label class="control-label">Title <span class="red-star">*</span></label>
@@ -1268,7 +1268,7 @@
                                                                         </div>
                                                                     </div>
                                                                 </div>
-                                                                <div class="col-md-4" ng-init="loadCheckList()">
+                                                                <div class="col-md-3" ng-init="loadCheckList()">
                                                                     <div class="form-group selectcon is-empty SelectWithAddbtnCon">
                                                                         <div class="row">
                                                                             <div class="col-md-10 pad-r-0px">
@@ -1296,82 +1296,56 @@
                                                                         </div>
                                                                     </div>
                                                                 </div>
-                                                                    <div class="col-md-2">
-                                                                        <div class="form-group">
-                                                                            <label class="control-label">From Date<span class="red-star">*</span></label>
-                                                                            <span class="form-control-feedback calender-icon"><i class="material-icons">date_range</i></span>
-                                                                            <input type="text" class="form-control datepicker"  id="dateFilterAmcFrom" ng-model="amcFrom" name="AmcFrom" placeholder="{{dateFilterAmcFrom | date:'dd-MMM-yyyy'}}"/ required>
-                                                                            <div ng-show="form4.$submitted || form4.AmcFrom.$touched">
-                                                                                <div
-                                                                                    ng-show="form4.AmcFrom.$dirty || form4.AmcFrom.$invalid">
-                                                                                    <p class="help-block" style="width:100%;z-index:1000;background:#fff;color:maroon"
-                                                                                       ng-show="form4.AmcFrom.$error.required">
-                                                                                        From date is required.
-                                                                                    </p>
-
-
-                                                                                </div>
-                                                                                <p class="help-block" style="color:maroon"
-                                                                                       ng-show="amcFromMsg">
-                                                                                        Fromdate cannot be greater than To date.
+                                                                <div class="col-md-2">
+                                                                    <div class="form-group">
+                                                                        <label class="control-label">From Date<span class="red-star">*</span></label>
+                                                                        <span class="form-control-feedback calender-icon"><i class="material-icons">date_range</i></span>
+                                                                        <input type="text" class="form-control datepicker"  id="dateFilterAmcFrom" ng-model="amcFrom" name="AmcFrom" placeholder="{{dateFilterAmcFrom | date:'dd-MMM-yyyy'}}"/ required>
+                                                                        <div ng-show="form4.$submitted || form4.AmcFrom.$touched">
+                                                                            <div
+                                                                                ng-show="form4.AmcFrom.$dirty || form4.AmcFrom.$invalid">
+                                                                                <p class="help-block" style="width:100%;z-index:1000;background:#fff;color:maroon"
+                                                                                   ng-show="form4.AmcFrom.$error.required">
+                                                                                    From date is required.
                                                                                 </p>
 
-                                                                            </div>
-
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class="col-md-2">
-                                                                        <div class="form-group">
-                                                                            <label class="control-label">To Date<span class="red-star">*</span></label>
-                                                                            <span class="form-control-feedback calender-icon"><i class="material-icons">date_range</i></span>
-                                                                            <input type="text" class="form-control datepicker"  id="dateFilterAmcTo"  ng-model="amcTo" name="AmcTo" placeholder="{{dateFilterAmcTo | date:'dd-MMM-yyyy'}}"/ required>
-                                                                            <div ng-show="form4.$submitted || form4.AmcTo.$touched">
-                                                                                <div
-                                                                                    ng-show="form4.AmcTo.$dirty || form4.AmcTo.$invalid">
-                                                                                    <p class="help-block" style="width:100%;z-index:1000;background:#fff;color:maroon"
-                                                                                       ng-show="form4.AmcTo.$error.required">
-                                                                                        To date is required.
-                                                                                    </p>
-
-
-                                                                                </div>
-                                                                                <p class="help-block" style="color:maroon"
-                                                                                       ng-show="amcToMsg">
-                                                                                        Todate cannot be lesser than From date.
-                                                                                </p>
 
                                                                             </div>
+                                                                            <p class="help-block" style="color:maroon"
+                                                                               ng-show="amcFromMsg">
+                                                                                Fromdate cannot be greater than To date.
+                                                                            </p>
 
                                                                         </div>
-                                                                    </div>
 
-                                                                    <!--<div class="col-md-2">-->
-
-                                                                    <!--<div class="form-group" style="padding-top: 20px;">-->
-                                                                    <!--<div class="checkbox">-->
-                                                                    <!--<label>-->
-                                                                    <!--<input type="checkbox" name="terms"> Active-->
-                                                                    <!--</label>-->
-                                                                    <!--</div>-->
-                                                                    <!--</div>-->
-
-
-                                                                    <!--</div>-->
-
-                                                            </div>
-                                                            <div class="row">
-                                                                <div class="col-md-5">
-                                                                    <div class="collapse" id="addDesignation1">
-
-                                                                        <div class="">
-                                                                            <input class="input-desc" id='' ng-model=""
-                                                                                   name='' type='text' value=""/>
-                                                                            <a class="btn btn-success add-btn margn-top0"  ng-click="">Add</a>
-                                                                        </div>
                                                                     </div>
                                                                 </div>
                                                             </div>
                                                             <div class="row">
+                                                                <div class="col-md-2">
+                                                                    <div class="form-group">
+                                                                        <label class="control-label">To Date<span class="red-star">*</span></label>
+                                                                        <span class="form-control-feedback calender-icon"><i class="material-icons">date_range</i></span>
+                                                                        <input type="text" class="form-control datepicker"  id="dateFilterAmcTo"  ng-model="amcTo" name="AmcTo" placeholder="{{dateFilterAmcTo | date:'dd-MMM-yyyy'}}"/ required>
+                                                                        <div ng-show="form4.$submitted || form4.AmcTo.$touched">
+                                                                            <div
+                                                                                ng-show="form4.AmcTo.$dirty || form4.AmcTo.$invalid">
+                                                                                <p class="help-block" style="width:100%;z-index:1000;background:#fff;color:maroon"
+                                                                                   ng-show="form4.AmcTo.$error.required">
+                                                                                    To date is required.
+                                                                                </p>
+
+
+                                                                            </div>
+                                                                            <p class="help-block" style="color:maroon"
+                                                                               ng-show="amcToMsg">
+                                                                                Todate cannot be lesser than From date.
+                                                                            </p>
+
+                                                                        </div>
+
+                                                                    </div>
+                                                                </div>
                                                                 <div class="col-md-4">
                                                                     <div class="form-group">
                                                                         <label class="control-label">Employee<!-- <span class="red-star">*</span> --> </label>
@@ -1385,17 +1359,17 @@
                                                                                 <option value="">Select Employees...</option>
                                                                             </select>
 
-                                                                           <!--  <div ng-show="form4.$submitted || form4.employeeName.$touched">
-                                                                                <div
-                                                                                    ng-show="form4.employeeName.$dirty || form4.employeeName.$invalid">
-                                                                                    <p class="help-block" style="color:maroon"
-                                                                                       ng-show="form4.employeeName.$error.required">
-                                                                                        Employee is required.
-                                                                                    </p>
+                                                                            <!--  <div ng-show="form4.$submitted || form4.employeeName.$touched">
+                                                                                 <div
+                                                                                     ng-show="form4.employeeName.$dirty || form4.employeeName.$invalid">
+                                                                                     <p class="help-block" style="color:maroon"
+                                                                                        ng-show="form4.employeeName.$error.required">
+                                                                                         Employee is required.
+                                                                                     </p>
 
-                                                                                </div>
+                                                                                 </div>
 
-                                                                            </div> -->
+                                                                             </div> -->
                                                                         </div>
 
                                                                     </div>
@@ -1421,7 +1395,7 @@
                                                                         </select>
                                                                     </div>
                                                                 </div>
-                                                                <div class="col-md-3" ng-init="loadFreq()">
+                                                                <div class="col-md-2" ng-init="loadFreq()">
                                                                     <div class="form-group">
                                                                         <label class="control-label">&nbsp;</label>
                                                                         <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
@@ -1430,7 +1404,8 @@
                                                                         </select>
                                                                     </div>
                                                                 </div>
-                                                                
+                                                            </div>
+                                                            <div class="row">
                                                                 <div class="col-md-3" >
                                                                     		<div class="form-group">
 						                                                    <label class="control-label">Start Date Time<span class="red-star">*</span></label>
@@ -1443,14 +1418,14 @@
                                                                                        ng-show="form3.amcJobStartTime.$error.required">
                                                                                         Required
                                                                                     </p>
-                                                                                  
+
 
                                                                                 </div>
-                                                                                
-                                                                            </div>		
-						                                                </div>	
+
+                                                                            </div>
+						                                                </div>
                                                                     </div>
-                                                                    <div class="col-md-3">
+                                                                <div class="col-md-3">
                                                                     		<div class="form-group">
 						                                                    <label class="control-label">Hours<span class="red-star">*</span> </label>
 						                                                    <input
@@ -1458,11 +1433,11 @@
 						                                                        name="plannedHours"
 						                                                        type="number"
 						                                                     	   value="1"
-						                                                     	   min="1"   
+						                                                     	   min="1"
 						                                                        ng-model="amcSchedule.plannedHours"
 						                                                        required
 						                                                    />
-						
+
 						                                                    <div ng-show="form.$submitted || form.plannedHours.$touched">
 						                                                        <div
 						                                                            ng-show="form.plannedHours.$dirty || form.plannedHours.$invalid">
@@ -1473,9 +1448,9 @@
 						                                                        </div>
 						                                                    </div>
 						                                                </div>
-                                                                    
+
                                                                     </div>
-                                                                    <div class="col-md-3" ng-init="loadSiteShifts()">
+                                                                <div class="col-md-3" ng-init="loadSiteShifts()">
                                                                         <div class="form-group">
                                                                             <label class="control-label">Shift</label>
                                                                             <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
@@ -1484,7 +1459,7 @@
                                                                             </select>
                                                                         </div>
                                                                     </div>
-                                                                <div class="col-md-1" style="padding-top: 25px;">
+                                                                <div class="col-md-3 txt-align-rgt" style="padding-top: 25px;">
                                                                     <a class="btn btn-success add-btn margn-top0"  ng-click="saveAmcSchedule()" ng-disabled="form4.$invalid || amcFromMsg || amcToMsg">Add</a>
                                                                 </div>
                                                             </div>
@@ -1539,7 +1514,7 @@
                                                                 <td>{{amcSchedule.endDate}}</td>
                                                                 <td>{{amcSchedule.frequencyPrefix}}&nbsp; {{amcSchedule.frequencyDuration}}&nbsp; {{amcSchedule.frequency}}</td>
                                                                 <td class="text-right">
-                                                                    <a  ng-class="{active: $state.includes('admin')}"  has-permission="" ui-sref=""  class="btn btn-simple btn-danger"><i class="material-icons">delete_forever</i></a>
+                                                                    <!--<a  ng-class="{active: $state.includes('admin')}"  has-permission="" ui-sref=""  class="btn btn-simple btn-danger"><i class="material-icons">delete_forever</i></a>-->
                                                                 </td>
                                                             </tr>
 
