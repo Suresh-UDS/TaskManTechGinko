@@ -12,6 +12,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.method.P;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -66,6 +67,11 @@ public class LocationResource {
     @RequestMapping(value = "/location/{id}", method = RequestMethod.GET)
     public LocationDTO getLocation(@PathVariable Long id) {
         return locationService.findOne(id);
+    }
+
+    @RequestMapping(value = "/location/block/{block}/floor/{floor}/zone/{zone}/siteId/{siteId}", method = RequestMethod.GET)
+    public LocationDTO getLocationId(@PathVariable String block, @PathVariable String floor, @PathVariable String zone, @PathVariable long siteId) {
+        return locationService.findId(siteId,block,floor,zone);
     }
 
     @RequestMapping(value = "/location/project/{projectId}/site/{siteId}/block", method = RequestMethod.GET)

@@ -108,6 +108,12 @@ public class LocationService extends AbstractService {
 		return mapperUtil.toModel(entity, LocationDTO.class);
 	}
 
+    public LocationDTO findId(Long siteId, String block, String floor, String zone) {
+        List<Location> entity = locationRepository.findByAll(siteId,block,floor,zone);
+        Location locationEntity = entity.get(0);
+        return mapperUtil.toModel(locationEntity, LocationDTO.class);
+    }
+
 	public List<String> findBlocks(long projectId, long siteId) {
 		if(projectId > 0) {
 			return locationRepository.findBlocks(projectId, siteId);
@@ -132,7 +138,7 @@ public class LocationService extends AbstractService {
 		}
 	}
 
-	public SearchResult<LocationDTO> findBySearchCrieria(SearchCriteria searchCriteria) {
+	public SearchResult<LocationDTO>  findBySearchCrieria(SearchCriteria searchCriteria) {
 		SearchResult<LocationDTO> result = new SearchResult<LocationDTO>();
 		if(searchCriteria != null) {
 

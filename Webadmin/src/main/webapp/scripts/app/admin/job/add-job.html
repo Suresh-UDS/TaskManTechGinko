@@ -120,11 +120,11 @@
                                                 </div>
 
                                             </div>
-                                            
+
 
                                         </div>
                                         <div class="row">
-                                            
+
                                             <div class="col-md-6">
                                                 <div class="form-group">
                                                     <label class="control-label">Employee<span class="red-star">*</span> </label>
@@ -153,10 +153,10 @@
 	                                                            </p>
 
                                                             </div>
-                                                            
+
                                                         </div>
                                                     </div>
-                                                    
+
                                                 </div>
 
                                             </div>
@@ -195,9 +195,9 @@
 
 
                             </div>
-                            
+
                             <div class="col-md-6">
-                            
+
                             		<div class="panel panel-default">
                             			<div class="panel-heading">Location</div>
                             			<div class="panel-body">
@@ -229,7 +229,7 @@
                                                 </div>
 
                                             </div>
-                            					
+
                             				</div>
                             				<div class="row">
                             				<div class="col-md-4">
@@ -251,7 +251,7 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                            
+
                                             <div class="col-md-4">
                                                 <div class="form-group ">
                                                     <label class="control-label">Floor <!-- <span class="red-star">*</span> --> </label>
@@ -271,13 +271,13 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                            
+
                                             <div class="col-md-4">
                                                 <div class="form-group ">
                                                     <label class="control-label">Zone<!--  <span class="red-star">*</span> --> </label>
                                                     <div class="dropdown">
                                                     <span class="form-control-feedback d-sm-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-													<select class="form-control " ng-model="selectedZone"  ng-options="zone as zone for zone in zones track by zone" name="zone">
+													<select class="form-control " ng-model="selectedZone" ng-change="getLocationDetails(selectedBlock,selectedFloor,selectedZone)"  ng-options="zone as zone for zone in zones track by zone" name="zone">
                                                         <option value="">Select Zone...</option>
                                                     </select>
                                                    	 <div ng-show="form.$submitted || form.floor.$touched">
@@ -292,12 +292,12 @@
                                                 </div>
                                             </div>
                             				</div>
-                            			
+
                             			</div>
                             		</div>
                             </div>
-                            
-                            
+
+
 
                         </div>
 
@@ -361,7 +361,7 @@
                                                         name="plannedHours"
                                                         type="number"
                                                      	   value="1"
-                                                     	   min="1"   
+                                                     	   min="1"
                                                         ng-model="job.plannedHours"
                                                         required
                                                     >
@@ -485,8 +485,8 @@
 
 
                             </div>
-                            
-                            
+
+
                             <div class="col-md-6">
 
                                 <div class="panel panel-default">
@@ -584,13 +584,13 @@
                                                             </label>
                                                         </div>
                                                     </div>
-                                                    
+
                                                     <div class="" ng-show="job.schedule == 'MONTHLY'">
                                                            <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
                                                     		<select class="form-control " ng-model="job.scheduleMonthlyDay"  ng-options="day as day for day in monthDays">
                                                             <option value="">Please select the day of month...</option>
                                                          </select>
-                                                    
+
                                                     </div>
 
                                                     <div ng-show="(form.$submitted || form.schedule.$touched) && (form.schedule == 'DAILY' || form.schedule == 'WEEKLY' || form.schedule == 'MONTHLY')">

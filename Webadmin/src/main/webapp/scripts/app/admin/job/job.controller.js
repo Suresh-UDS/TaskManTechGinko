@@ -151,6 +151,21 @@ angular.module('timeSheetApp')
 	        });
 	    };
 
+	    $scope.getLocationDetails = function(block,floor,zone){
+	        console.log('Loaded location data');
+	        var search={
+	            projectId:$scope.selectedSite.projectId,
+	            siteId:$scope.selectedSite.id,
+                block:block,
+                floor:floor,
+                zone:zone
+            };
+	        LocationComponent.findId($scope.selectedSite.id,block,floor,zone).then(function (data) {
+                console.log(data);
+                $scope.job.locationId = data.id;
+            })
+        }
+
         $scope.loadJobStatuses = function(){
             JobComponent.loadJobStatuses().then(function(data){
                $scope.selectedLocation = null;
