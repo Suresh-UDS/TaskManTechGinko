@@ -1,5 +1,5 @@
 
-<div class="col-lg-2 col-sm-12 loginPage" ng-show="loginView">
+<div class="col-lg-2 col-sm-12 loginPage" ng-show="loginView" ng-init="initscrollbar()">
         <a href="#" class="simple-text logo-mini black">
             T
         </a>
@@ -8,7 +8,7 @@
         </a>
 
 </div>
-<div ng-switch="isAuthenticated()" class="sidebar" data-active-color="orange" data-background-color="black" data-image="../assets/img/sidebar-1.jpg" ng-hide="loginView">
+<div ng-switch="isAuthenticated()"  class="sidebar" data-active-color="orange" data-background-color="black" data-image="../assets/img/sidebar-1.jpg" ng-hide="loginView">
     <!--
 Tip 1: You can change the color of active element of the sidebar using: data-active-color="purple | blue | green | orange | red | rose"
 Tip 2: you can also add an image using data-image tag
@@ -24,67 +24,7 @@ Tip 3: you can change the color of the sidebar with data-background-color="white
 
     </div>
 
-    <div class="sidebar-wrapper" id="sidebarWrapper" >
-        <!-- <div class="user">
-
-            <div class="photo pull-left">
-                <img src="../assets/img/faces/avatar.png" />
-            </div>
-
-             <div class="info" ng-switch-when="true" >
-                <a ng-click="logout()" >
-                    <span class="sidebar-mini">L</span>
-                    <span class="sidebar-normal">Logout</span>
-                </a>
-
-
-            </div > -->
-             <!--<div class="info pull-left" ng-switch-when="true">
-                  <div class="collapsed white" data-toggle="collapse" data-target="#userPanel">
-                    <span class="sidebar-normal">{{accountName}} </span>
-                    <i class="fa fa-fw fa-chevron-down"></i>
-                  </div>
-                  <div class="collapse" id="userPanel">
-                      <a ng-click="logout()" class='logout'>
-                        //<span class="sidebar-mini">L</span> //-->
-                        <!--<span class="sidebar-normal" >Logout</span>
-                     </a>
-                  </div>
-            </div>
-            <div class="info" ng-switch-when="false">
-                <a ui-sref="login" >
-                    //<span class="sidebar-mini">L</span>//-->
-                   <!-- <span class="sidebar-normal">Login</span>
-                </a>
-            </div>
-            <dir class="clearfix"></dir>-->
-            <!--<div class="info">-->
-                <!--<a data-toggle="collapse" data-target="#collapseExample" href="#" class="collapsed">-->
-                            <!--<span>-->
-                                <!--Admin-->
-                                <!--<b class="caret"></b>-->
-                            <!--</span>-->
-                <!--</a>-->
-                <!--<div class="clearfix"></div>-->
-                <!--<div class="collapse" id="collapseExample">-->
-                    <!--<ul class="nav">-->
-
-                        <!--<li ng-click="logout()" ng-switch-when="true">-->
-                            <!--<a href="#" >-->
-                                <!--<span class="sidebar-mini"> L </span>-->
-                                <!--<span class="sidebar-normal"> Logout </span>-->
-                            <!--</a>-->
-                        <!--</li>-->
-                        <!--<li  ng-switch-when="false">-->
-                            <!--<a ui-sref="login" >-->
-                                <!--<span class="sidebar-mini"> L </span>-->
-                                <!--<span class="sidebar-normal"> Login </span>-->
-                            <!--</a>-->
-                        <!--</li>-->
-                    <!--</ul>-->
-                <!--</div>-->
-            <!--</div>-->
-       <!-- </div> -->
+    <div class="sidebar-wrapper ps-container ps-theme-default ps-active-y" id="sidebarWrapper">
         <ul class="nav" ng-switch-when="true">
             <li ui-sref-active="active" >
                 <a ui-sref="dashboard">
@@ -214,6 +154,12 @@ Tip 3: you can change the color of the sidebar with data-background-color="white
 
                     </ul>
                 </div>
+            </li>
+            <li ui-sref-active="active">
+                <a ui-sref="sla-list">
+                    <i class="material-icons">tab</i>
+                    <p>SLA Management</p>
+                </a>
             </li>
             <li has-permission="Reports:List" ng-class="{active: $state.includes('reports')}">
                 <a data-toggle="collapse" data-target="#formsExamples" href="#">
@@ -363,6 +309,8 @@ Tip 3: you can change the color of the sidebar with data-background-color="white
 
 
         </ul>
+
+        <!--<div class="ps-scrollbar-y-rail" style="top: 0px; right: 0px; height: 334px;"><div class="ps-scrollbar-y" tabindex="0" style="top: 0px; height: 86px;"></div></div>-->
     </div>
 
     <div class="sidebar-background" style="background-image: url(../assets/img/sidebar-1.jpg) "></div>

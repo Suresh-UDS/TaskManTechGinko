@@ -22,6 +22,8 @@ spring:
         driver-class-name: com.mysql.jdbc.Driver
         #url: jdbc:mysql://ec2-54-255-148-73.ap-southeast-1.compute.amazonaws.com:3306/Taskman?useUnicode=true&characterEncoding=utf8
         url: jdbc:mysql://localhost:3306/TaskMan?useUnicode=true&characterEncoding=utf8
+        #url: jdbc:mysql://localhost:3306/TaskMan_R2?useUnicode=true&characterEncoding=utf8
+        #url: jdbc:mysql://localhost:3306/Taskman?useUnicode=true&characterEncoding=utf8
         name:
         username: root
         password: root
@@ -83,7 +85,10 @@ quotation:
         path:  /opt/quotation
 ticket:
     file:
-        path:  /opt/ticket        
+        path:  /opt/ticket    
+extensionImg: jpeg,jpg,png    
+extensionFile: pdf,xlsx,xls,docs,doc,csv,txt
+
 import:
     file:
         path:

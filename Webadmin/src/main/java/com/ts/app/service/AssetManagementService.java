@@ -8,9 +8,11 @@ import java.util.List;
 import javax.inject.Inject;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.io.FilenameUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -32,6 +34,8 @@ import com.ts.app.domain.AssetParameterConfig;
 import com.ts.app.domain.AssetParameterReading;
 import com.ts.app.domain.AssetParameterReadingRule;
 import com.ts.app.domain.AssetReadingRule;
+import com.ts.app.domain.AssetStatus;
+import com.ts.app.domain.AssetStatusHistory;
 import com.ts.app.domain.AssetType;
 import com.ts.app.domain.Checklist;
 import com.ts.app.domain.Employee;
@@ -47,6 +51,7 @@ import com.ts.app.domain.Setting;
 import com.ts.app.domain.Site;
 import com.ts.app.domain.User;
 import com.ts.app.domain.Vendor;
+import com.ts.app.domain.WarrantyType;
 import com.ts.app.domain.util.StringUtil;
 import com.ts.app.repository.AssetAMCRepository;
 import com.ts.app.repository.AssetDocumentRepository;
@@ -58,6 +63,7 @@ import com.ts.app.repository.AssetPpmScheduleRepository;
 import com.ts.app.repository.AssetReadingRuleRepository;
 import com.ts.app.repository.AssetRepository;
 import com.ts.app.repository.AssetSpecification;
+import com.ts.app.repository.AssetStatusHistoryRepository;
 import com.ts.app.repository.AssetTypeRepository;
 import com.ts.app.repository.CheckInOutImageRepository;
 import com.ts.app.repository.CheckInOutRepository;
@@ -76,6 +82,7 @@ import com.ts.app.repository.TicketRepository;
 import com.ts.app.repository.UserRepository;
 import com.ts.app.repository.VendorRepository;
 import com.ts.app.service.util.AmazonS3Utils;
+import com.ts.app.repository.WarrantyTypeRepository;
 import com.ts.app.service.util.CommonUtil;
 import com.ts.app.service.util.DateUtil;
 import com.ts.app.service.util.ExportUtil;
@@ -140,10 +147,7 @@ public class AssetManagementService extends AbstractService {
 	private UserRepository userRepository;
 
 	@Inject
-	private NotificationRepository notificationRepository;
-
-	@Inject
-	private SchedulerService schedulerService;
+	private NotificationRepository notificationRepository ;
 
 	@Inject
 	private ExportUtil exportUtil;
@@ -223,6 +227,11 @@ public class AssetManagementService extends AbstractService {
 	@Inject
 	private AmazonS3Utils s3ServiceUtils;
 	
+	@Inject
+	private WarrantyTypeRepository warrantyTypeRepository;
+	
+	@Inject
+	private AssetStatusHistoryRepository assetStatusHistoryRepository;
 	
 	public static final String EMAIL_NOTIFICATION_READING = "email.notification.reading";
 	
@@ -251,13 +260,22 @@ public class AssetManagementService extends AbstractService {
 		Vendor vendor = getVendor(assetDTO.getVendorId());
 		asset.setAmcVendor(vendor);
 
+		//create status history
+		if(!StringUtils.isEmpty(AssetStatus.valueOf(assetDTO.getStatus()).getStatus())) {
+			AssetStatusHistory assetStatusHistory = new AssetStatusHistory();
+			assetStatusHistory.setStatus(AssetStatus.valueOf(assetDTO.getStatus()).getStatus());
+			assetStatusHistory.setActive("Y");
+			assetStatusHistory = assetStatusHistoryRepository.findOne(assetStatusHistoryRepository.save(assetStatusHistory).getId());
+			asset.setAssetStatusHistory(assetStatusHistory);
+		}
+		
 		asset.setActive(Asset.ACTIVE_YES);
 
-		List<Asset> existingAssets = assetRepository.findAssetByTitle(assetDTO.getTitle());
-		log.debug("Existing asset size -" + existingAssets.size());
-		if (CollectionUtils.isEmpty(existingAssets)) {
-			asset = assetRepository.save(asset);
-		}
+		asset = assetRepository.save(asset);
+		
+		AssetStatusHistory assetStatusHistory = assetStatusHistoryRepository.findOne(asset.getAssetStatusHistory().getId());
+		assetStatusHistory.setAsset(asset);
+		assetStatusHistoryRepository.save(assetStatusHistory);
 		
 		//generate QR code if qr code is not already generated.
 		if(asset != null && asset.getId() > 0 && !StringUtils.isEmpty(asset.getCode()) && StringUtils.isEmpty(asset.getQrCodeImage())) {
@@ -286,6 +304,17 @@ public class AssetManagementService extends AbstractService {
 			}
 		}
 		
+		//create asset warranty type if does not exist
+		if(!StringUtils.isEmpty(asset.getWarrantyType())) {
+			WarrantyType warrantyType = warrantyTypeRepository.findByName(asset.getWarrantyType());
+			if(warrantyType == null) {
+				warrantyType = new WarrantyType();
+				warrantyType.setName(asset.getWarrantyType());
+				warrantyType.setActive("Y");
+				warrantyTypeRepository.save(warrantyType);
+			}
+		}
+				
 		List<ParameterConfig> parameterConfigs = parameterConfigRepository.findAllByAssetType(assetDTO.getAssetType());
 		if(CollectionUtils.isNotEmpty(parameterConfigs)) {
 			List<AssetParameterConfig> assetParamConfigs = new ArrayList<AssetParameterConfig>();
@@ -411,6 +440,16 @@ public class AssetManagementService extends AbstractService {
 	private void mapToEntityAssets(AssetDTO assetDTO, Asset asset) {
 		asset.setTitle(assetDTO.getTitle());
 		asset.setAssetType(assetDTO.getAssetType());
+		asset.setWarrantyType(assetDTO.getWarrantyType());
+		
+		//update status history
+		if(!StringUtils.isEmpty(AssetStatus.valueOf(assetDTO.getStatus()).getStatus())) {
+			AssetStatusHistory assetStatusHistory = new AssetStatusHistory();
+			assetStatusHistory.setStatus(AssetStatus.valueOf(assetDTO.getStatus()).getStatus());
+			assetStatusHistory.setActive("Y");
+			assetStatusHistory = assetStatusHistoryRepository.findOne(assetStatusHistoryRepository.save(assetStatusHistory).getId());
+			asset.setAssetStatusHistory(assetStatusHistory);
+		}
 		asset.setAssetGroup(assetDTO.getAssetGroup());
 		asset.setDescription(assetDTO.getDescription());
 		if (assetDTO.getSiteId() != asset.getSite().getId()) {
@@ -425,12 +464,19 @@ public class AssetManagementService extends AbstractService {
 			Vendor vendor = getVendor(assetDTO.getVendorId());
 			asset.setAmcVendor(vendor);
 		}
+		asset.setStatus(AssetStatus.valueOf(assetDTO.getStatus()).getStatus());
 		asset.setBlock(assetDTO.getBlock());
 		asset.setFloor(assetDTO.getFloor());
 		asset.setZone(assetDTO.getZone());
 		asset.setModelNumber(assetDTO.getModelNumber());
 		asset.setSerialNumber(assetDTO.getSerialNumber());
+		if (!StringUtils.isEmpty(assetDTO.getAcquiredDate())) {
 		asset.setAcquiredDate(DateUtil.convertToSQLDate(assetDTO.getAcquiredDate()));
+		}
+		if (!StringUtils.isEmpty(assetDTO.getWarrantyFromDate()) && !StringUtils.isEmpty(assetDTO.getWarrantyToDate())) {
+		asset.setWarrantyFromDate(DateUtil.convertToSQLDate(assetDTO.getWarrantyFromDate()));
+		asset.setWarrantyToDate(DateUtil.convertToSQLDate(assetDTO.getWarrantyToDate()));
+		}
 		asset.setPurchasePrice(assetDTO.getPurchasePrice());
 		asset.setCurrentPrice(assetDTO.getCurrentPrice());
 		asset.setEstimatedDisposePrice(assetDTO.getEstimatedDisposePrice());
@@ -448,10 +494,14 @@ public class AssetManagementService extends AbstractService {
 		Asset asset = assetRepository.findOne(assetDTO.getId());
 		mapToEntityAssets(assetDTO, asset);
 		asset = assetRepository.save(asset);
-
+		
+		AssetStatusHistory assetStatusHistory = assetStatusHistoryRepository.findOne(asset.getAssetStatusHistory().getId());
+		assetStatusHistory.setAsset(asset);
+		assetStatusHistoryRepository.save(assetStatusHistory);
+		
 		return mapperUtil.toModel(asset, AssetDTO.class);
 	}
-
+	
 	public void deleteAsset(Long id) {
 		log.debug(">>> Inside Asset Delete Service");
 		Asset asset = assetRepository.findOne(id);
@@ -459,7 +509,7 @@ public class AssetManagementService extends AbstractService {
 		assetRepository.save(asset);
 	}
 	
-	public AssetDTO generateAssetQRCode(long assetId, String assetCode) {
+	public String generateAssetQRCode(long assetId, String assetCode) {
 		Asset asset = assetRepository.findOne(assetId);
 		long siteId = asset.getSite().getId();
 		String code = String.valueOf(siteId)+"_"+assetCode;
@@ -482,7 +532,8 @@ public class AssetManagementService extends AbstractService {
 				qrCodeBase64 = fileUploadHelper.readQrCodeFile(imageFileName);
 			}
 	}
-	return mapperUtil.toModel(asset, AssetDTO.class);
+		log.debug("*****************"+asset.getId());
+		return getQRCode(asset.getId());
 	}
 
 	public String getQRCode(long assetId) {
@@ -515,7 +566,7 @@ public class AssetManagementService extends AbstractService {
 		log.debug("Create assets AMC schedule");
 
 		AssetAMCSchedule assetAMC = mapperUtil.toEntity(assetAMCScheduleDTO, AssetAMCSchedule.class);
-		assetAMC.setMaintenanceType(MaintenanceType.AMC.getValue());
+		//assetAMC.setMaintenanceType(MaintenanceType.AMC.getValue());
 		
 		if(assetAMCScheduleDTO.getChecklistId() > 0) {
 			Checklist checklist = checklistRepository.findOne(assetAMCScheduleDTO.getChecklistId());
@@ -1126,6 +1177,14 @@ public class AssetManagementService extends AbstractService {
 		return mapperUtil.toModelList(assetgroup, AssetgroupDTO.class);
 	}
 
+//	Asset status
+	public AssetStatus[] getAssetStatus(){
+		log.info("Assetstatus service");
+		AssetStatus[] status = AssetStatus.values();
+		return status;
+	}
+//	
+	
 	public List<AssetTypeDTO> findAllAssetType() {
 		List<AssetType> assetType = assetTypeRepository.findAll();
 		return mapperUtil.toModelList(assetType, AssetTypeDTO.class);

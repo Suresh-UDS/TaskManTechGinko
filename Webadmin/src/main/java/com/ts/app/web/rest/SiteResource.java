@@ -29,6 +29,7 @@ import com.ts.app.web.rest.dto.EmployeeDTO;
 import com.ts.app.web.rest.dto.ImportResult;
 import com.ts.app.web.rest.dto.SearchCriteria;
 import com.ts.app.web.rest.dto.SearchResult;
+import com.ts.app.web.rest.dto.ShiftDTO;
 import com.ts.app.web.rest.dto.SiteDTO;
 import com.ts.app.web.rest.errors.TimesheetException;
 import com.ts.app.web.rest.util.TokenUtils;
@@ -111,6 +112,11 @@ public class SiteResource {
 		return siteService.findOne(id);
 		// .map((entity) -> new ResponseEntity<>(entity, HttpStatus.OK))
 		// .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+	}
+	
+	@RequestMapping(value = "/site/{id}/shifts", method = RequestMethod.GET)
+	public List<ShiftDTO> getShifts(@PathVariable long id) {
+		return siteService.findSiteShifts(id);
 	}
 
 	@RequestMapping(value = "/site/search",method = RequestMethod.POST)

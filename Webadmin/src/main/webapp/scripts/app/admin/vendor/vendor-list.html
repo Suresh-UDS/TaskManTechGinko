@@ -126,6 +126,7 @@
 	                                     <a data-toggle="modal"  data-target="#RightModal-View" ng-click="getVendorDetails(vendor.id, 'view')"  has-permission="Vendor:View"   class="btn btn-simple btn-info"><i class="material-icons">visibility</i></a>
 	                                    <!--  <a data-toggle="modal"  data-target="#RightModal-Edit" ng-click="getVendorDetails(vendor.id, 'edit')"  has-permission="Vendor:Edit"   class="btn btn-simple btn-info"><i class="material-icons">edit</i></a> -->
                                         <a  ui-sref="edit-vendor({ id: vendor.id })"  has-permission="Vendor:Edit"   class="btn btn-simple btn-info"><i class="material-icons">edit</i></a>
+                                        <a  has-permission="Vendor:Delete" ui-sref="" class="btn btn-simple btn-danger" ng-click="deleteConfirm(vendor.id)" onClick="$('#deleteVendor').modal()" data-target="#myModal"><i class="material-icons">delete_forever</i><div class="ripple-container"></div></a>
 	                                 </td>
 								
 								</tr>
@@ -591,3 +592,25 @@
         </div><!-- modal-content -->
     </div><!-- modal-dialog -->
 </div><!--End View modal -->
+
+<div class="row">
+
+    <div id="deleteVendor" data-backdrop="false" class="modal fade"
+        tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+        aria-hidden="true">
+        <div class="delete-dialog">
+            <div class="modal-content">
+                <div class="modal-body">
+                    Are you sure to delete the Vendor?<br>
+                </div>
+                <div class="delete-footer">
+                    <button type="button" ng-click="deleteVendor()"
+                        class="btn btn-danger-outline text-danger" data-dismiss="modal">Confirm</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>

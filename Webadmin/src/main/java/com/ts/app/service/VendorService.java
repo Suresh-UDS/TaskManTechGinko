@@ -18,6 +18,7 @@ import org.springframework.util.StringUtils;
 import com.ts.app.domain.AbstractAuditingEntity;
 import com.ts.app.domain.Vendor;
 import com.ts.app.repository.VendorRepository;
+import com.ts.app.repository.VendorSpecification;
 import com.ts.app.repository.UserRepository;
 import com.ts.app.service.util.ImportUtil;
 import com.ts.app.service.util.MapperUtil;
@@ -131,16 +132,22 @@ public class VendorService extends AbstractService {
             		}
             }
             Page<Vendor> page = null;
+			List<Vendor> allVendorList = new ArrayList<Vendor>();
 			List<VendorDTO> transactions = null;
 			log.debug("Vendor  name = "+ searchCriteria.getVendorName() );
-			if(!searchCriteria.isFindAll()) {
+			/*if(!searchCriteria.isFindAll()) {
 				if(StringUtils.isEmpty(searchCriteria.getVendorName())) {
 					page = vendorRepository.findAllByName(searchCriteria.getVendorName(), pageRequest);
 				}
 			}else {
 				page = vendorRepository.findAll(pageRequest);
-			}
-			if(page != null) {
+			}*/
+			if(!searchCriteria.isConsolidated()) {
+				log.debug(">>> inside search consolidate <<<");
+    			page = vendorRepository.findAll(new VendorSpecification(searchCriteria,true),pageRequest);
+    			allVendorList.addAll(page.getContent());
+    		}
+			/*if(page != null) {
 				if(transactions == null) {
 					transactions = new ArrayList<VendorDTO>();
 				}
@@ -153,8 +160,16 @@ public class VendorService extends AbstractService {
 				if(CollectionUtils.isNotEmpty(transactions)) {
 					buildSearchResult(searchCriteria, page, transactions,result);
 				}
+			}*/
+			if(CollectionUtils.isNotEmpty(allVendorList)) {
+				if(transactions == null) {
+					transactions = new ArrayList<VendorDTO>();
+				}
+	        		for(Vendor vendor : allVendorList) {
+	        			transactions.add(mapperUtil.toModel(vendor, VendorDTO.class));
+	        		}
+				buildSearchResult(searchCriteria, page, transactions,result);
 			}
-
 		}
 		return result;
 	}

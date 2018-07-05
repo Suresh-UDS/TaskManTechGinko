@@ -149,6 +149,8 @@ public class SearchCriteria extends Paginator {
 	
 	private String assetTypeName;
 	
+	private String warrantyTypeName;
+	
 	private String assetGroupName;
 	
 	private String assetName;
@@ -166,6 +168,14 @@ public class SearchCriteria extends Paginator {
 	private String assetCode;
 	
 	private Date acquiredDate;
+
+	public String getWarrantyTypeName() {
+		return warrantyTypeName;
+	}
+
+	public void setWarrantyTypeName(String warrantyTypeName) {
+		this.warrantyTypeName = warrantyTypeName;
+	}
 
 	public Date getAcquiredDate() {
 		return acquiredDate;

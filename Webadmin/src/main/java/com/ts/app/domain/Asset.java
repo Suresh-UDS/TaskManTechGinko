@@ -53,6 +53,10 @@ public class Asset extends AbstractAuditingEntity implements Serializable {
     @JoinColumn(name = "siteId", nullable = false)
     private Site site;
     
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "assetStatusHistoryId", nullable = false)
+    private AssetStatusHistory assetStatusHistory;
+    
     @Column(name="qr_code_image")
     private String qrCodeImage;
     
@@ -62,9 +66,11 @@ public class Asset extends AbstractAuditingEntity implements Serializable {
     
     private String assetGroup;
     
+    private String status;
+    
     private String block;
     
-    private String floor;
+	private String floor;
     
     private String zone;
     
@@ -95,7 +101,11 @@ public class Asset extends AbstractAuditingEntity implements Serializable {
     private double estimatedDisposePrice;
     
     private Date warrentyExpiryDate;
-        
+    
+    private Date warrantyFromDate;
+
+    private Date warrantyToDate;
+
 	@OneToMany(mappedBy="asset",cascade={CascadeType.ALL}, fetch = FetchType.LAZY, orphanRemoval = true)
     private List<AssetPPMSchedule> ppmSchedules;
     
@@ -109,6 +119,18 @@ public class Asset extends AbstractAuditingEntity implements Serializable {
 	
 	private String warrantyType;
 
+	public Date getWarrantyFromDate() {
+		return warrantyFromDate;
+	}
+	public void setWarrantyFromDate(Date warrantyFromDate) {
+		this.warrantyFromDate = warrantyFromDate;
+	}
+	public Date getWarrantyToDate() {
+		return warrantyToDate;
+	}
+	public void setWarrantyToDate(Date warrantyToDate) {
+		this.warrantyToDate = warrantyToDate;
+	}
 	public long getId() {
         return id;
     }
@@ -186,6 +208,12 @@ public class Asset extends AbstractAuditingEntity implements Serializable {
 	}
 	public void setAssetGroup(String assetGroup) {
 		this.assetGroup = assetGroup;
+	}
+	public String getStatus() {
+		return status;
+	}
+	public void setStatus(String status) {
+		this.status = status;
 	}
 	public String getBlock() {
 		return block;
@@ -294,6 +322,12 @@ public class Asset extends AbstractAuditingEntity implements Serializable {
 	}
 	public void setWarrantyType(String warrantyType) {
 		this.warrantyType = warrantyType;
+	}
+	public AssetStatusHistory getAssetStatusHistory() {
+		return assetStatusHistory;
+	}
+	public void setAssetStatusHistory(AssetStatusHistory assetStatusHistory) {
+		this.assetStatusHistory = assetStatusHistory;
 	}
     
 }

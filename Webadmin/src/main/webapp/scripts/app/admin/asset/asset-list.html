@@ -42,7 +42,7 @@
 
     </div>
 
-    <div class="row">
+    <div class="row" ng-init="loadProjects();loadAssetType();loadAssetGroup();">
 
         <div class="col-md-12">
 
@@ -56,10 +56,7 @@
                         <div class="arrow-down"></div>
                     </div> -->
 
-
-
-
-                    <div class="row" ng-init="loadProjects();loadAssetType();loadAssetGroup();">
+                    <div class="row">
                         <div class="col-md-12">
                             <!--<div class="card formcard FilterCard">-->
                                 <!--<div class="card-content">-->
@@ -200,10 +197,10 @@
                                 </th>
                                 <th>Asset Code
                                     <span class="sortingIcons">
-                                        <span ng-click="columnAscOrder('assetCode')" ng-class="isActiveAsc == 'assetCode' ? 'active' : ''" >
+                                        <span ng-click="columnAscOrder('code')" ng-class="isActiveAsc == 'code' ? 'active' : ''" >
                                             <i  class="fa fa-caret-up"></i>
                                         </span>
-                                        <span ng-click="columnDescOrder('assetCode')" ng-class="isActiveDesc == 'assetCode' ? 'active' : ''" >
+                                        <span ng-click="columnDescOrder('code')" ng-class="isActiveDesc == 'code' ? 'active' : ''" >
                                              <i  ng-class="class" class="fa fa-caret-down"></i>
                                         </span>
                                     </span>
@@ -211,10 +208,10 @@
                                 </th>
                                 <th>Asset Name
                                     <span class="sortingIcons">
-                                        <span ng-click="columnAscOrder('assetTitle')" ng-class="isActiveAsc == 'assetTitle' ? 'active' : ''" >
+                                        <span ng-click="columnAscOrder('title')" ng-class="isActiveAsc == 'title' ? 'active' : ''" >
                                             <i  class="fa fa-caret-up"></i>
                                         </span>
-                                        <span ng-click="columnDescOrder('assetTitle')" ng-class="isActiveDesc == 'assetTitle' ? 'active' : ''" >
+                                        <span ng-click="columnDescOrder('title')" ng-class="isActiveDesc == 'title' ? 'active' : ''" >
                                              <i  ng-class="class" class="fa fa-caret-down"></i>
                                         </span>
                                     </span>
@@ -222,20 +219,20 @@
                                 </th>
                                 <th>Asset Type
                                      <span class="sortingIcons">
-                                        <span ng-click="columnAscOrder('assetTypeName')" ng-class="isActiveAsc == 'assetTypeName' ? 'active' : ''" >
+                                        <span ng-click="columnAscOrder('assetType')" ng-class="isActiveAsc == 'assetType' ? 'active' : ''" >
                                             <i  class="fa fa-caret-up"></i>
                                         </span>
-                                        <span ng-click="columnDescOrder('assetTypeName')" ng-class="isActiveDesc == 'assetTypeName' ? 'active' : ''" >
+                                        <span ng-click="columnDescOrder('assetType')" ng-class="isActiveDesc == 'assetType' ? 'active' : ''" >
                                              <i  ng-class="class" class="fa fa-caret-down"></i>
                                         </span>
                                     </span>
                                 </th>
                                 <th>Asset Group
                                     <span class="sortingIcons">
-                                        <span ng-click="columnAscOrder('assetGroupName')" ng-class="isActiveAsc == 'assetGroupName' ? 'active' : ''" >
+                                        <span ng-click="columnAscOrder('assetGroup')" ng-class="isActiveAsc == 'assetGroup' ? 'active' : ''" >
                                             <i  class="fa fa-caret-up"></i>
                                         </span>
-                                        <span ng-click="columnDescOrder('assetGroupName')" ng-class="isActiveDesc == 'assetGroupName' ? 'active' : ''" >
+                                        <span ng-click="columnDescOrder('assetGroup')" ng-class="isActiveDesc == 'assetGroup' ? 'active' : ''" >
                                              <i  ng-class="class" class="fa fa-caret-down"></i>
                                         </span>
                                     </span>
@@ -281,12 +278,21 @@
                                 <td>{{asset.assetGroup}}</td>
                                 <!-- <td>{{asset.status}}</td> -->
                                 <td>{{asset.siteName}}</td>
-                                <td class="text-right">
-                                    <a   has-authority="ROLE_ADMIN" ui-sref="view-asset({ id: asset.id })"  has-permission="Asset:View"  title="View Asset"  class="btn btn-simple btn-info btn-icon like"><i class="material-icons">remove_red_eye</i></a>
+                                <td class="text-right hoverMe">
 
-                                    <a  ng-class="{active: $state.includes('admin')}" has-permission="Asset:Edit" has-authority="ROLE_ADMIN" title="Edit Asset" ui-sref="edit-asset({ id: asset.id })"  class="btn btn-simple btn-info"><i class="material-icons">edit</i></a>
+                                    <a   has-authority="ROLE_ADMIN"  title="View More Action"  class="btn btn-simple btn-info btn-icon like Viewmore"><i class="material-icons">more_vert</i></a>
 
-                                    <a ng-class="{active: $state.includes('admin')}" has-permission="Asset:Delete" has-authority="ROLE_ADMIN" title="Delete Asset"  ng-click="deleteConfirm(asset.id)"  onClick="$('#deleteModal').modal()" data-target="#myModal"   class="btn btn-simple btn-danger"><i class="material-icons">close</i></a>
+                                    <div class="HoverBx">
+
+                                        <a   has-authority="ROLE_ADMIN" ui-sref="view-asset({ id: asset.id })"  has-permission="Asset:View"  title="View Asset"  class="btn btn-simple btn-info btn-icon like"><i class="material-icons">remove_red_eye</i></a>
+
+                                        <a  ng-class="{active: $state.includes('admin')}" has-permission="Asset:Edit" has-authority="ROLE_ADMIN" title="Edit Asset" ui-sref="edit-asset({ id: asset.id })"  class="btn btn-simple btn-info"><i class="material-icons">edit</i></a>
+
+                                        <a ng-class="{active: $state.includes('admin')}" has-permission="Asset:Delete" has-authority="ROLE_ADMIN" title="Delete Asset"  ng-click="deleteConfirm(asset.id)"  onClick="$('#deleteModal').modal()" data-target="#myModal"   class="btn btn-simple btn-danger"><i class="material-icons">close</i></a>
+
+                                    </div>
+
+
 
                                 </td>
 
@@ -359,11 +365,11 @@
 </div>
 
 
-<!-- Classic Modal -->
-<div class="modal fade BasicFilterModal" id="basicFilter" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<!-- BasicFilterModal -->
+<div class="modal fade BasicFilterModal FilterModalCon" id="basicFilter" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
-            <form name="searchForm"  ng-submit="searchFilter()" novalidate >
+            <form name="searchForm"   novalidate >
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
                     <i class="material-icons">clear</i>
@@ -403,7 +409,7 @@
 
             </div>
             <div class="modal-footer">
-                <button type="submit" class="btn btn-success btn-simple" data-dismiss="modal" ng-disabled="searchForm.$invalid">Apply Filter</button>
+                <button type="submit" class="btn btn-success btn-simple" ng-click = "searchFilter()" data-dismiss="modal" ng-disabled="searchForm.$invalid">Apply Filter</button>
                 <!--<button type="button" class="btn btn-danger btn-simple" data-dismiss="modal">Close</button>-->
             </div>
             </form>
@@ -412,11 +418,11 @@
 </div>
 <!--  End Modal -->
 
-<!-- Classic Modal -->
-<div class="modal fade AdvancedFilterModal" id="advancedFilter" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<!-- AdvancedFilterModal -->
+<div class="modal fade AdvancedFilterModal FilterModalCon" id="advancedFilter" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
-            <form name="searchForm"  ng-submit="searchFilter()" novalidate >
+            <form name="searchForm"   novalidate >
 
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
@@ -495,7 +501,7 @@
 
             </div>
             <div class="modal-footer">
-                <button type="submit" class="btn btn-success btn-simple" data-dismiss="modal" ng-disabled="searchForm.$invalid">Apply Filter</button>
+                <button type="submit" class="btn btn-success btn-simple" ng-click = "searchFilter()" data-dismiss="modal" ng-disabled="searchForm.$invalid">Apply Filter</button>
                 <!--<button type="button" class="btn btn-danger btn-simple" data-dismiss="modal">Close</button>-->
             </div>
             </form>

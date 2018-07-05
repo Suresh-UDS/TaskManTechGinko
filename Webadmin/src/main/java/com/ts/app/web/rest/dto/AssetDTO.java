@@ -26,10 +26,11 @@ public class AssetDTO extends BaseDTO {
     private long assetTypeId;
     private String assetGroup;
     private long assetGroupId;
+    private String status;
     private String block;
     private String floor;
     private String zone;
-    private double addressLat;
+	private double addressLat;
 	private double addressLng;
 	private long manufacturerId;
 	private String manufacturerName;
@@ -42,6 +43,8 @@ public class AssetDTO extends BaseDTO {
     private double currentPrice;
     private double estimatedDisposePrice;
     private Date warrantyExpiryDate;
+    private Date warrantyFromDate;
+    private Date warrantyToDate;
     private String assetCode;
     private String amcDocumentTitle;
     private String amcDocumentFile;
@@ -49,6 +52,18 @@ public class AssetDTO extends BaseDTO {
     private String assetPpmTitle;
     private String warrantyType;
 
+	public Date getWarrantyFromDate() {
+		return warrantyFromDate;
+	}
+	public void setWarrantyFromDate(Date warrantyFromDate) {
+		this.warrantyFromDate = warrantyFromDate;
+	}
+	public Date getWarrantyToDate() {
+		return warrantyToDate;
+	}
+	public void setWarrantyToDate(Date warrantyToDate) {
+		this.warrantyToDate = warrantyToDate;
+	}
 	public long getAssetTypeId() {
 		return assetTypeId;
 	}
@@ -96,6 +111,12 @@ public class AssetDTO extends BaseDTO {
 	}
 	public void setAssetGroup(String assetGroup) {
 		this.assetGroup = assetGroup;
+	}
+	public String getStatus() {
+		return status;
+	}
+	public void setStatus(String status) {
+		this.status = status;
 	}
 	public String getBlock() {
 		return block;
