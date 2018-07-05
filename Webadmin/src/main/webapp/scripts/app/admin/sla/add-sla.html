@@ -34,10 +34,8 @@
                                                 <div class="form-group">
                                                     <label class="control-label">Select Client <span class="red-star">*</span></label>
                                                     <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                                    <select class="form-control">
+                                                    <select ng-options = "project as prj.name for prj in projects" ng-model = "selectedProject" ng-change = "loadSites()" class="form-control">
                                                         <option value="">Select Client...</option>
-                                                        <option value="uds">UDS</option>
-                                                        <option value="zappy">Zappy</option>
                                                     </select>
                                                 </div>
                                             </div>
@@ -49,10 +47,8 @@
                                                 <div class="form-group">
                                                     <label class="control-label">Select Site <span class="red-star">*</span></label>
                                                     <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                                    <select class="form-control">
+                                                    <select ng-options = "site as site.name for site in sites" ng-model = "selectedSite" class="form-control">
                                                         <option value="">Select Site...</option>
-                                                        <option value="">CMRL</option>
-                                                        <option value="">HDFC</option>
                                                     </select>
                                                 </div>
                                             </div>
@@ -84,7 +80,7 @@
                                                 <div class="form-group">
                                                     <label class="control-label">Select Process Type  <span class="red-star">*</span></label>
                                                     <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                                    <select  class="form-control">
+                                                    <select ng-model = "sla.processtype" class="form-control">
                                                         <option value="Tickets">Tickets</option>
                                                         <option value="Jobs">Jobs</option>
 
@@ -101,7 +97,7 @@
                                             <div class="dropdown">
                                                 <div class="form-group">
                                                     <label class="control-label">Select Category <span class="red-star">*</span></label>
-                                                    <select multiple class="form-control">
+                                                    <select ng-model = "sla.category" multiple class="form-control">
                                                         <option value="Electrical">Electrical</option>
                                                         <option value="Cleaning">Cleaning</option>
                                                         <option value="Beauty">Beauty</option>
@@ -127,7 +123,7 @@
                                                         <div class="form-group">
                                                             <label class="control-label">Select Severity  <span class="red-star">*</span></label>
                                                             <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                                            <select  class="form-control">
+                                                            <select ng-model = "sla.severity" class="form-control">
                                                                 <option value="Low">Low</option>
                                                                 <option value="Medium">Medium</option>
                                                                 <option value="High">High</option>
@@ -144,7 +140,7 @@
 
                                                 <div class="form-group no-padding">
                                                     <label class="control-label">Hours</label>
-                                                    <input type="number" class="form-control ng-valid ng-dirty ng-touched" ng-model="newChecklistItem.name" tabindex="0" aria-invalid="false" autocomplete="off">
+                                                    <input type="number" class="form-control ng-valid ng-dirty ng-touched" ng-model="sla.hrs" tabindex="0" aria-invalid="false" autocomplete="off">
                                                     <span class="material-input"></span></div>
 
                                             </div>
@@ -237,21 +233,21 @@
                                             <div class="col-md-2">
                                                 <div class="form-group no-padding">
                                                     <label class="control-label">Hours</label>
-                                                    <input type="number" class="form-control ng-valid ng-dirty ng-touched"  tabindex="0" aria-invalid="false" autocomplete="off">
+                                                    <input type="number" ng-model = "sla.ehrs1" class="form-control ng-valid ng-dirty ng-touched"  tabindex="0" aria-invalid="false" autocomplete="off">
                                                     <span class="material-input"></span>
                                                 </div>
                                             </div>
                                             <div class="col-md-2">
                                                 <div class="form-group no-padding">
                                                     <label class="control-label">Mins</label>
-                                                    <input type="number" class="form-control ng-valid ng-dirty ng-touched"  tabindex="0" aria-invalid="false" autocomplete="off">
+                                                    <input type="number" ng-model = "sla.emins1" class="form-control ng-valid ng-dirty ng-touched"  tabindex="0" aria-invalid="false" autocomplete="off">
                                                     <span class="material-input"></span>
                                                 </div>
                                             </div>
                                             <div class="col-md-8">
                                                 <div class="form-group no-padding">
                                                     <label class="control-label">Email</label>
-                                                    <input type="text" class="form-control ng-valid ng-dirty ng-touched"  tabindex="0" aria-invalid="false" autocomplete="off">
+                                                    <input type="text" ng-model = "sla.email1" class="form-control ng-valid ng-dirty ng-touched"  tabindex="0" aria-invalid="false" autocomplete="off">
                                                     <span class="material-input"></span>
                                                 </div>
                                             </div>
@@ -265,21 +261,21 @@
                                             <div class="col-md-2">
                                                 <div class="form-group no-padding">
                                                     <label class="control-label">Hours</label>
-                                                    <input type="number" class="form-control ng-valid ng-dirty ng-touched"  tabindex="0" aria-invalid="false" autocomplete="off">
+                                                    <input type="number" ng-model = "sla.ehrs2" class="form-control ng-valid ng-dirty ng-touched"  tabindex="0" aria-invalid="false" autocomplete="off">
                                                     <span class="material-input"></span>
                                                 </div>
                                             </div>
                                             <div class="col-md-2">
                                                 <div class="form-group no-padding">
                                                     <label class="control-label">Mins</label>
-                                                    <input type="number" class="form-control ng-valid ng-dirty ng-touched"  tabindex="0" aria-invalid="false" autocomplete="off">
+                                                    <input type="number" ng-model = "sla.emins2" class="form-control ng-valid ng-dirty ng-touched"  tabindex="0" aria-invalid="false" autocomplete="off">
                                                     <span class="material-input"></span>
                                                 </div>
                                             </div>
                                             <div class="col-md-8">
                                                 <div class="form-group no-padding">
                                                     <label class="control-label">Email</label>
-                                                    <input type="text" class="form-control ng-valid ng-dirty ng-touched"  tabindex="0" aria-invalid="false" autocomplete="off">
+                                                    <input type="text" ng-model = "sla.email2" class="form-control ng-valid ng-dirty ng-touched"  tabindex="0" aria-invalid="false" autocomplete="off">
                                                     <span class="material-input"></span>
                                                 </div>
                                             </div>
@@ -293,21 +289,21 @@
                                             <div class="col-md-2">
                                                 <div class="form-group no-padding">
                                                     <label class="control-label">Hours</label>
-                                                    <input type="number" class="form-control ng-valid ng-dirty ng-touched"  tabindex="0" aria-invalid="false" autocomplete="off">
+                                                    <input type="number" ng-model = "sla.ehrs3" class="form-control ng-valid ng-dirty ng-touched"  tabindex="0" aria-invalid="false" autocomplete="off">
                                                     <span class="material-input"></span>
                                                 </div>
                                             </div>
                                             <div class="col-md-2">
                                                 <div class="form-group no-padding">
                                                     <label class="control-label">Mins</label>
-                                                    <input type="number" class="form-control ng-valid ng-dirty ng-touched"  tabindex="0" aria-invalid="false" autocomplete="off">
+                                                    <input type="number" ng-model = "sla.emins3" class="form-control ng-valid ng-dirty ng-touched"  tabindex="0" aria-invalid="false" autocomplete="off">
                                                     <span class="material-input"></span>
                                                 </div>
                                             </div>
                                             <div class="col-md-8">
                                                 <div class="form-group no-padding">
                                                     <label class="control-label">Email</label>
-                                                    <input type="text" class="form-control ng-valid ng-dirty ng-touched"  tabindex="0" aria-invalid="false" autocomplete="off">
+                                                    <input type="text" ng-model = "sla.email3" class="form-control ng-valid ng-dirty ng-touched"  tabindex="0" aria-invalid="false" autocomplete="off">
                                                     <span class="material-input"></span>
                                                 </div>
                                             </div>
@@ -321,21 +317,21 @@
                                             <div class="col-md-2">
                                                 <div class="form-group no-padding">
                                                     <label class="control-label">Hours</label>
-                                                    <input type="number" class="form-control ng-valid ng-dirty ng-touched"  tabindex="0" aria-invalid="false" autocomplete="off">
+                                                    <input type="number" ng-model = "sla.ehrs4" class="form-control ng-valid ng-dirty ng-touched"  tabindex="0" aria-invalid="false" autocomplete="off">
                                                     <span class="material-input"></span>
                                                 </div>
                                             </div>
                                             <div class="col-md-2">
                                                 <div class="form-group no-padding">
                                                     <label class="control-label">Mins</label>
-                                                    <input type="number" class="form-control ng-valid ng-dirty ng-touched"  tabindex="0" aria-invalid="false" autocomplete="off">
+                                                    <input type="number" ng-model = "sla.emins4" class="form-control ng-valid ng-dirty ng-touched"  tabindex="0" aria-invalid="false" autocomplete="off">
                                                     <span class="material-input"></span>
                                                 </div>
                                             </div>
                                             <div class="col-md-8">
                                                 <div class="form-group no-padding">
                                                     <label class="control-label">Email</label>
-                                                    <input type="text" class="form-control ng-valid ng-dirty ng-touched"  tabindex="0" aria-invalid="false" autocomplete="off">
+                                                    <input type="text" ng-model = "sla.email4" class="form-control ng-valid ng-dirty ng-touched"  tabindex="0" aria-invalid="false" autocomplete="off">
                                                     <span class="material-input"></span>
                                                 </div>
                                             </div>
@@ -361,7 +357,7 @@
                         <button type="submit" ng-click="cancelsla()"
                                 id="cancel-button"   class="btn btn-danger pull-right"> <i class="material-icons">close</i> Cancel</button>
 
-                        <button type="submit" type="submit"
+                        <button type="submit" ng-click = "addSla(sla)"
                                 id="form-button-save" ng-disabled="form.$invalid"  class="btn btn-success pull-right"><span class="btn-label">
                                             <i class="material-icons">check</i>
                                         </span>Create SLA</button>
