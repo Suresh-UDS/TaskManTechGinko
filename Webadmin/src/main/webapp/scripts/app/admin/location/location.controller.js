@@ -346,7 +346,7 @@ angular.module('timeSheetApp')
                 $scope.assetCode = qrAry[1];
                 var eleId = 'qrImage';
                 var ele = document.getElementById(eleId);
-                ele.setAttribute('src',image);
+                ele.setAttribute('src',$scope.qr_img);
                 console.log('create qr---',$scope.qr_img);
 
             });
