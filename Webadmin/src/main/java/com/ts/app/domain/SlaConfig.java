@@ -1,6 +1,8 @@
 package com.ts.app.domain;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -29,7 +31,7 @@ public class SlaConfig extends AbstractAuditingEntity implements Serializable{
 	private String processType;
 	
 	@Column(nullable = false)
-	private String category;
+	private ArrayList<String> category = new ArrayList<String>();
 	
 	private String severity;
 	
@@ -85,11 +87,12 @@ public class SlaConfig extends AbstractAuditingEntity implements Serializable{
 		this.processType = processType;
 	}
 
-	public String getCategory() {
+
+	public ArrayList<String> getCategory() {
 		return category;
 	}
 
-	public void setCategory(String category) {
+	public void setCategory(ArrayList<String> category) {
 		this.category = category;
 	}
 
