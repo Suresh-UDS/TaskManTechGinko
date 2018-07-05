@@ -769,6 +769,11 @@ public class JobManagementService extends AbstractService {
 		dto.setSchedule(job.getSchedule());
 		dto.setScheduled(job.isScheduled());
 		dto.setJobType(job.getType());
+		Ticket ticket = job.getTicket();
+		if(ticket != null) {
+			dto.setTicketId(ticket.getId());
+			dto.setTicketName(ticket.getTitle());
+		}
 		return dto;
 	}
 

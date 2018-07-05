@@ -8,6 +8,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.TimeZone;
 
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -102,16 +103,20 @@ public class DateUtil {
 	}
 	
 	public static String formatToDateString(Date date) {
-        DateFormat dtFormat = new SimpleDateFormat("dd-MMM-yyyy");
-        String strDate = dtFormat.format(date);
-        return strDate;
-
+		if(date != null) {
+	        DateFormat dtFormat = new SimpleDateFormat("dd-MMM-yyyy");
+	        String strDate = dtFormat.format(date);
+	        return strDate;
+		}
+		return StringUtils.EMPTY;
 	}
 	
 	public static String formatToDateTimeString(Date date) {
-        DateFormat dtFormat = new SimpleDateFormat("dd-MMM-yyyy hh:mm a");
-        String strDate = dtFormat.format(date);
-        return strDate;
-
+		if(date != null) {
+	        DateFormat dtFormat = new SimpleDateFormat("dd-MMM-yyyy hh:mm a");
+	        String strDate = dtFormat.format(date);
+	        return strDate;
+		}
+		return StringUtils.EMPTY;
 	}
 }

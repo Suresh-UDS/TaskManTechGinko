@@ -85,7 +85,11 @@ public class JobSpecification implements Specification<Job> {
 		            	Date fromDt = DateUtil.convertUTCToIST(checkInDateFrom);
 		            	//String fromDt = DateUtil.formatUTCToIST(checkInDateFrom);
 		            	Calendar checkInDateTo = Calendar.getInstance(TimeZone.getTimeZone("Asia/Kolkata"));
-		            	checkInDateTo.setTime(checkInDate);
+		            	if(searchCriteria.getCheckInDateTimeTo() != null) {
+			        		checkInDateTo.setTime(searchCriteria.getCheckInDateTimeTo());
+			        	}else {
+			        		checkInDateTo.setTime(checkInDate);
+			        	}
 
 		            	checkInDateTo.set(Calendar.HOUR_OF_DAY, 23);
 		            	checkInDateTo.set(Calendar.MINUTE,59);

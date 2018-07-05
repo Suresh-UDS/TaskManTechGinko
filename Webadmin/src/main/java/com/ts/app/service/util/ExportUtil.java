@@ -11,6 +11,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -39,6 +40,7 @@ import com.ts.app.domain.AbstractAuditingEntity;
 import com.ts.app.domain.EmployeeAttendanceReport;
 import com.ts.app.domain.Job;
 import com.ts.app.domain.JobStatus;
+import com.ts.app.domain.Ticket;
 import com.ts.app.web.rest.dto.AttendanceDTO;
 import com.ts.app.web.rest.dto.BaseDTO;
 import com.ts.app.web.rest.dto.EmployeeDTO;
@@ -58,8 +60,8 @@ public class ExportUtil {
 
 	// CSV file header
 	private static final Object[] FILE_HEADER = { "ID", "TITLE", "DATE", "COMPLETED TIME", "SITE", "LOCATION" };
-	private static final Object[] JOB_DETAIL_REPORT_FILE_HEADER = { "SITE", "TITLE", "EMPLOYEE", "TYPE",
-			"PLANNED START TIME", "COMPLETED TIME", "STATUS" };
+	private static final Object[] JOB_DETAIL_REPORT_FILE_HEADER = { "SITE", "TITLE", "DESCRIPTION", "EMPLOYEE", "TYPE",
+			"PLANNED START TIME", "COMPLETED TIME", "STATUS", "TICKET_ID", "TICKET DESCRIPTION" };
 	private static final Object[] CONSOLIDATED_REPORT_FILE_HEADER = { "SITE", "LOCATION", "ASSIGNED JOBS",
 			"COMPLETED JOBS", "OVERDUE JOBS", "TAT" };
 	private static final Object[] DETAIL_REPORT_FILE_HEADER = { "SITE", "DATE", "EMPLOYEE ID", "EMPLOYEE NAME",
@@ -71,11 +73,11 @@ public class ExportUtil {
 
 	private String[] EMP_HEADER = { "EMPLOYEE ID", "EMPLOYEE NAME", "DESIGNATION", "REPORTING TO", "CLIENT", "SITE",
 			"ACTIVE" };
-	private String[] JOB_HEADER = { "SITE", "TITLE", "EMPLOYEE", "TYPE", "PLANNED START TIME", "COMPLETED TIME",
-			"STATUS" };
+	private String[] JOB_HEADER = { "SITE", "TITLE", "DESCRIPTION", "EMPLOYEE", "TYPE", "PLANNED START TIME", "COMPLETED TIME",
+			"STATUS", "TICKET ID", "TICKET TITLE" };
 	private String[] ATTD_HEADER = { "EMPLOYEE ID", "EMPLOYEE NAME", "SITE", "CLIENT", "CHECK IN", "CHECK OUT",
 			"CHECK OUT IMAGE", "SHIFT CONTINUED" };
-	private String[] TICKET_HEADER = { "ID", "SITE", "ISSUE", "STATUS", "PENDING STATUS","CATEGORY", "SEVERITY", "INITIATOR",
+	private String[] TICKET_HEADER = { "ID", "SITE", "ISSUE", "DESCRIPTION","STATUS", "PENDING STATUS","CATEGORY", "SEVERITY", "INITIATOR",
 			"INITIATED ON", "ASSIGNED TO", "ASSIGNED ON", "CLOSED BY", "CLOSED ON" };
 
 	@Inject
@@ -218,12 +220,19 @@ public class ExportUtil {
 			Hibernate.initialize(job.getSite());
 			jobDto.setSiteName(job.getSite().getName());
 			jobDto.setTitle(job.getTitle());
+			jobDto.setDescription(job.getDescription());
 			Hibernate.initialize(job.getEmployee());
 			jobDto.setEmployeeName(job.getEmployee().getName());
 			jobDto.setJobType(job.getType());
 			jobDto.setPlannedStartTime(job.getPlannedStartTime());
 			jobDto.setActualEndTime(job.getActualEndTime());
 			jobDto.setJobStatus(job.getStatus());
+			Hibernate.initialize(job.getTicket());
+			Ticket ticket = job.getTicket();
+			if(ticket != null) {
+				jobDto.setTicketId(ticket.getId());
+				jobDto.setTicketName(ticket.getTitle());
+			}
 			jobs.add(jobDto);
 		}
 		return writeJobReportToFile(jobs, null, result);
@@ -304,12 +313,15 @@ public class ExportUtil {
 						log.debug("Writing transaction record for site :" + transaction.getSiteName());
 						record.add(transaction.getSiteName());
 						record.add(String.valueOf(transaction.getTitle()));
+						record.add(transaction.getDescription());
 						record.add(transaction.getEmployeeName());
 						record.add(transaction.getJobType());
-						record.add(transaction.getPlannedStartTime());
+						record.add(DateUtil.formatToDateTimeString(transaction.getPlannedStartTime()));
 						record.add(transaction.getActualEndTime());
 						record.add(transaction.getJobStatus() != null ? transaction.getJobStatus().name()
 								: JobStatus.OPEN.name());
+						record.add(transaction.getTicketId());
+						record.add(transaction.getTicketName());
 						csvFilePrinter.printRecord(record);
 					}
 					log.info(exportFileName + " CSV file was created successfully !!!");
@@ -1235,13 +1247,16 @@ public class ExportUtil {
 
 					dataRow.createCell(0).setCellValue(transaction.getSiteName());
 					dataRow.createCell(1).setCellValue(transaction.getTitle());
-					dataRow.createCell(2).setCellValue(transaction.getEmployeeName());
-					dataRow.createCell(3).setCellValue(String.valueOf(transaction.getJobType()));
-					dataRow.createCell(4).setCellValue(String.valueOf(transaction.getPlannedStartTime()));
-					dataRow.createCell(5).setCellValue(String.valueOf(transaction.getActualEndTime()));
-					dataRow.createCell(6)
+					dataRow.createCell(2).setCellValue(transaction.getDescription());
+					dataRow.createCell(3).setCellValue(transaction.getEmployeeName());
+					dataRow.createCell(4).setCellValue(String.valueOf(transaction.getJobType()));
+					dataRow.createCell(5).setCellValue(DateUtil.formatToDateTimeString(transaction.getPlannedStartTime()));
+					dataRow.createCell(6).setCellValue(DateUtil.formatToDateTimeString(transaction.getActualEndTime()));
+					dataRow.createCell(7)
 							.setCellValue(transaction.getJobStatus() != null ? transaction.getJobStatus().name()
 									: JobStatus.OPEN.name());
+					dataRow.createCell(8).setCellValue(transaction.getTicketId() > 0 ? transaction.getTicketId() +"" : "");
+					dataRow.createCell(9).setCellValue(transaction.getTicketName());
 				}
 
 				for (int i = 0; i < JOB_HEADER.length; i++) {
@@ -1345,17 +1360,18 @@ public class ExportUtil {
 					dataRow.createCell(0).setCellValue(transaction.getId());
 					dataRow.createCell(1).setCellValue(transaction.getSiteName());
 					dataRow.createCell(2).setCellValue(transaction.getTitle());
-					dataRow.createCell(3).setCellValue(transaction.getStatus());
-					dataRow.createCell(4).setCellValue(transaction.isPendingAtClient() ? "PENDING WITH CLIENT" : (transaction.isPendingAtUDS() ? "PENDING WITH UDS" : ""));
-					dataRow.createCell(5).setCellValue(transaction.getCategory());
-					dataRow.createCell(6).setCellValue(transaction.getSeverity());
-					dataRow.createCell(7).setCellValue(transaction.getCreatedBy());
-					dataRow.createCell(8).setCellValue(String.valueOf(transaction.getCreatedDate()));
-					dataRow.createCell(9).setCellValue(transaction.getAssignedToName());
-					dataRow.createCell(10).setCellValue(String.valueOf(transaction.getAssignedOn()));
-					dataRow.createCell(11).setCellValue(transaction.getClosedByName());
-					dataRow.createCell(12).setCellValue(
-							transaction.getClosedOn() != null ? String.valueOf(transaction.getClosedOn()) : "");
+					dataRow.createCell(3).setCellValue(transaction.getDescription());
+					dataRow.createCell(4).setCellValue(transaction.getStatus());
+					dataRow.createCell(5).setCellValue(transaction.isPendingAtClient() ? "PENDING WITH CLIENT" : (transaction.isPendingAtUDS() ? "PENDING WITH UDS" : ""));
+					dataRow.createCell(6).setCellValue(transaction.getCategory());
+					dataRow.createCell(7).setCellValue(transaction.getSeverity());
+					dataRow.createCell(8).setCellValue(transaction.getCreatedBy());
+					dataRow.createCell(9).setCellValue(DateUtil.formatToDateTimeString(Date.from(transaction.getCreatedDate().toInstant())));
+					dataRow.createCell(10).setCellValue(transaction.getAssignedToName());
+					dataRow.createCell(11).setCellValue(transaction.getAssignedOn() != null ? DateUtil.formatToDateTimeString(Date.from(transaction.getAssignedOn().toInstant())) : "");
+					dataRow.createCell(12).setCellValue(transaction.getClosedByName());
+					dataRow.createCell(13).setCellValue(
+							transaction.getClosedOn() != null ? DateUtil.formatToDateTimeString(Date.from(transaction.getClosedOn().toInstant())) : "");
 				}
 
 				for (int i = 0; i < TICKET_HEADER.length; i++) {
