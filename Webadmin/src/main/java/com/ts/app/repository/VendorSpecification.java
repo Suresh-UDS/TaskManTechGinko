@@ -38,6 +38,8 @@ public class VendorSpecification implements Specification<Vendor> {
 					"%" + searchCriteria.getVendorName().toLowerCase() + "%"));
 		}
 		
+		predicates.add(builder.equal(root.get("active"), "Y"));
+
 		query.orderBy(builder.desc(root.get("name")));
 
 		List<Predicate> orPredicates = new ArrayList<>();
