@@ -420,8 +420,9 @@ public class AssetResource {
 	@RequestMapping(value = "/assets/{id}/document/image", method = RequestMethod.DELETE)
     public ResponseEntity<?>  deleteImages(@PathVariable("id") long id) {
         log.debug("images ids -"+id);
-        assetService.deleteImages(id);
-        return new ResponseEntity<>(HttpStatus.OK);
+        String result = null;
+        result = assetService.deleteImages(id);
+        return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
 	@RequestMapping(path="/assets/import", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)

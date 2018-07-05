@@ -10,6 +10,7 @@ import javax.inject.Inject;
 import org.apache.commons.collections.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.env.Environment;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -74,6 +75,7 @@ import com.ts.app.repository.SiteRepository;
 import com.ts.app.repository.TicketRepository;
 import com.ts.app.repository.UserRepository;
 import com.ts.app.repository.VendorRepository;
+import com.ts.app.service.util.AmazonS3Utils;
 import com.ts.app.service.util.CommonUtil;
 import com.ts.app.service.util.DateUtil;
 import com.ts.app.service.util.ExportUtil;
@@ -218,10 +220,22 @@ public class AssetManagementService extends AbstractService {
 	@Inject
 	private AssetParamRuleRepository assetParamRuleRepository;
 	
+	@Inject
+	private AmazonS3Utils s3ServiceUtils;
+	
 	
 	public static final String EMAIL_NOTIFICATION_READING = "email.notification.reading";
 	
 	public static final String EMAIL_NOTIFICATION_READING_EMAILS = "email.notification.reading.emails";
+	
+	@Value("${AWS.s3-cloudfront-url}")
+	private String cloudFrontUrl;
+	
+	@Value("${AWS.s3-bucketEnv}")
+	private String bucketEnv;
+	
+	@Value("${AWS.s3-asset-path}")
+	private String assetFilePath;
 
 	// Asset
 	public AssetDTO saveAsset(AssetDTO assetDTO) {
@@ -457,10 +471,10 @@ public class AssetManagementService extends AbstractService {
 			String codeName = String.valueOf(asset.getCode());
 				codeName = asset.getSite().getId()+"_"+codeName;
 			qrCodeImage = QRCodeUtil.generateQRCode(codeName);
-			String qrCodePath = env.getProperty("qrcode.file.path");
+			String qrCodePath = env.getProperty("AWS.s3-qrcode-path");
 			String imageFileName = null;
 			if (org.apache.commons.lang3.StringUtils.isNotEmpty(qrCodePath)) {
-				imageFileName = fileUploadHelper.uploadQrCodeFile(code, qrCodeImage);
+				imageFileName = s3ServiceUtils.uploadQrCodeFile(code, qrCodeImage);
 				asset.setQrCodeImage(imageFileName);
 				assetRepository.save(asset);
 			}
@@ -1246,25 +1260,28 @@ public class AssetManagementService extends AbstractService {
 	public AssetDocumentDTO uploadFile(AssetDocumentDTO assetDocumentDTO, MultipartFile file) {
 		// TODO Auto-generated method stub
 		Date uploadDate = new Date();
-		Calendar cal = Calendar.getInstance();
 		Asset assetEntity = assetRepository.findOne(assetDocumentDTO.getAssetId());
 		String assetCode = assetEntity.getCode();
-		Long siteId = assetEntity.getSite().getId();
-		String fileName = fileUploadHelper.uploadAssetDcmFile(assetCode, siteId, file, cal.getTimeInMillis());
-		assetDocumentDTO.setFile(fileName);
+		assetDocumentDTO = s3ServiceUtils.uploadAssetFile(assetCode, file, assetDocumentDTO);
+		assetDocumentDTO.setFile(assetDocumentDTO.getFile());
 		assetDocumentDTO.setUploadedDate(uploadDate);
 		assetDocumentDTO.setTitle(assetDocumentDTO.getTitle());
 		AssetDocument assetDocument = mapperUtil.toEntity(assetDocumentDTO, AssetDocument.class);
 		assetDocument.setActive(AssetDocument.ACTIVE_YES);
 		assetDocument = assetDocumentRepository.save(assetDocument);
-		assetDocumentDTO = mapperUtil.toModel(assetDocument, AssetDocumentDTO.class);
+//		assetDocumentDTO = mapperUtil.toModel(assetDocument, AssetDocumentDTO.class);
+		assetDocumentDTO.setUrl(assetDocumentDTO.getUrl());
 		return assetDocumentDTO;
 	}
 
 	public List<AssetDocumentDTO> findAllDocuments(String type, Long assetId) {
 		// TODO Auto-generated method stub
 		List<AssetDocument> assetDocument = assetDocumentRepository.findAllByType(type, assetId);
-		return mapperUtil.toModelList(assetDocument, AssetDocumentDTO.class);
+		List<AssetDocumentDTO> assetDocumentDTO = mapperUtil.toModelList(assetDocument, AssetDocumentDTO.class);
+		for(AssetDocumentDTO assetDoc : assetDocumentDTO) { 
+			assetDoc.setUrl(cloudFrontUrl + bucketEnv + assetFilePath + assetDoc.getFile());
+		}
+		return assetDocumentDTO;
 	}
 
 	public byte[] getUploadedFile(long documentId) {
@@ -1440,16 +1457,14 @@ public class AssetManagementService extends AbstractService {
 	}
 	
 	@Transactional
-    public void deleteImages(long id) {
+    public String deleteImages(long id) {
 		AssetDocument assetDocumentEntity = assetDocumentRepository.findOne(id);
-		Long assetId = assetDocumentEntity.getAsset().getId();
 		String file = assetDocumentEntity.getFile(); 
-		Asset asset = assetRepository.findOne(assetId);
-		String assetCode = asset.getCode();
-		Long siteId = asset.getSite().getId();
-		String fileName = fileUploadHelper.deleteAssetFile(assetCode, siteId, file);
+		String keyObject = bucketEnv + assetFilePath;
+		String fileName = s3ServiceUtils.deleteAssetFile(keyObject, file);
 		log.info("The " + fileName + " was deleted successfully.");
 		assetDocumentRepository.delete(id);
+		return "The " + fileName + " was deleted successfully.";
     }
 
 	public AssetParameterReadingDTO updateAssetReadings(AssetParameterReadingDTO assetParamReadingDTO) {
