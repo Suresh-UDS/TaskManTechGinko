@@ -108,6 +108,8 @@ public class JobSpecification implements Specification<Job> {
 	            	}
 	        	}
 
+    		predicates.add(builder.equal(root.get("active"), "Y"));
+
     		query.orderBy(builder.desc(root.get("id")));
             //Predicate firstStage = builder.and(predicates.toArray(new Predicate[predicates.size()]));
             List<Predicate> orPredicates = new ArrayList<>();
