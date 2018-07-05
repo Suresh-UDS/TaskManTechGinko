@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('timeSheetApp')
-    .controller('HeaderController', function ($rootScope,$scope, $location, $state, 
+    .controller('HeaderController', function ($rootScope,$scope, $location, $state,
         Auth, Principal, ENV, $interval) {
         $rootScope.isAuthenticated = Principal.isAuthenticated;
         $scope.$state = $state;
@@ -16,8 +16,8 @@ angular.module('timeSheetApp')
       // Session timeout
        $interval(function(){
 
-        if($rootScope.isAuthenticated() == false){  
-         
+        if($rootScope.isAuthenticated() == false){
+
              $scope.loadingStop();
              var absUrl = $location.absUrl();
              var array = absUrl.split("/");
@@ -25,14 +25,16 @@ angular.module('timeSheetApp')
                 $rootScope.stateValue = array[4];
              }
              $state.go('login');
-         
+
             }
 
         },0);
 
         $scope.initscrollbar = function()
              {
-               $('#sidebarWrapper').perfectScrollbar();
+                 console.log("---- Calling scrollbar ---- ");
+
+               $('.sidebar .sidebar-wrapper').perfectScrollbar();
 
              }
               $scope.initscrollbar();
@@ -55,13 +57,13 @@ angular.module('timeSheetApp')
                  }
 
                  //alert($rootScope.accountName);
-                 
+
              });
         };
 
         $rootScope.inits();
-             
-             
+
+
 
         $('#minimizeSidebar').click(function() {
             var $btn = $(this);
@@ -86,11 +88,11 @@ angular.module('timeSheetApp')
         });
 
          $scope.loadingStop = function(){
-            
+
             //console.log("Calling loader");
             $('.pageCenter').hide();$('.overlay').hide();
-                    
+
         };
-   
+
 
     });

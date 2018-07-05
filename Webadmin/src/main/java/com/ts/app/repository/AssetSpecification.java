@@ -96,6 +96,8 @@ public class AssetSpecification implements Specification<Asset> {
         		predicates.add(builder.between(root.get("acquiredDate"), fromDt,toDt));
         	}
     	}
+		
+		predicates.add(builder.equal(root.get("active"), "Y"));
 
 		query.orderBy(builder.desc(root.get("title")));
 

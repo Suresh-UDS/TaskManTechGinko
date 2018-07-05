@@ -1,5 +1,6 @@
 package com.ts.app.service;
 
+import java.time.temporal.TemporalField;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -29,6 +30,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
@@ -730,6 +732,7 @@ public class JobManagementService extends AbstractService {
 		return mapperUtil.toModel(job, JobDTO.class);
 	}
 	
+	
 	public ResponseEntity<?> createJob(AssetPpmScheduleDTO assetPpmScheduleDTO) {
 		log.debug(">>> assetPpmSchedule Title from CreateJOb <<<"+assetPpmScheduleDTO.getTitle()+" Employee Id "+assetPpmScheduleDTO.getEmpId());
 		
@@ -747,35 +750,44 @@ public class JobManagementService extends AbstractService {
 			job.setStatus(JobStatus.OPEN);
 		}
 
-		Calendar calStart = Calendar.getInstance();
-		calStart.set(Calendar.HOUR_OF_DAY, 0);
-		calStart.set(Calendar.MINUTE,0);
-		Calendar calEnd = Calendar.getInstance();
-		calEnd.set(Calendar.HOUR_OF_DAY, 11);
-		calEnd.set(Calendar.MINUTE,59);
+//		Calendar calStart = Calendar.getInstance();
+//		calStart.set(Calendar.HOUR_OF_DAY, 0);
+//		calStart.set(Calendar.MINUTE,0);
+//		Calendar calEnd = Calendar.getInstance();
+//		calEnd.set(Calendar.HOUR_OF_DAY, 11);
+//		calEnd.set(Calendar.MINUTE,59);
 
-		java.sql.Date startDate = new java.sql.Date(calStart.getTimeInMillis());
-		java.sql.Date endDate = new java.sql.Date(calEnd.getTimeInMillis());
+		//java.sql.Date startDate = new java.sql.Date(calStart.getTimeInMillis());
+		//java.sql.Date endDate = new java.sql.Date(calEnd.getTimeInMillis());
 		log.debug("Before saving new job -"+ job);
-		log.debug("start Date  -"+ startDate + ", end date -" + endDate);
+		//log.debug("start Date  -"+ startDate + ", end date -" + endDate);
 
 		job.setEmployee(employee);
 		job.setSite(site);
 		
+		Calendar jobStartTime = Calendar.getInstance();
+		jobStartTime.setTimeInMillis(assetPpmScheduleDTO.getJobStartTime().toInstant().toEpochMilli());
+
 		Calendar startTime = Calendar.getInstance();
 		startTime.setTime(assetPpmScheduleDTO.getStartDate());
-		startTime.set(Calendar.HOUR_OF_DAY, 0);
-		startTime.set(Calendar.MINUTE, 0);
-		startTime.getTime();
+		startTime.set(Calendar.HOUR_OF_DAY, jobStartTime.get(Calendar.HOUR_OF_DAY));
+		startTime.set(Calendar.MINUTE, jobStartTime.get(Calendar.MINUTE));
+		startTime.getTime();		
 		
-		Calendar endTime = Calendar.getInstance();
-		endTime.setTime(assetPpmScheduleDTO.getEndDate());
-		endTime.set(Calendar.HOUR_OF_DAY, 11);
-		endTime.set(Calendar.MINUTE, 59);
-		endTime.getTime();
+		Calendar plannedEndTime = Calendar.getInstance();
+		plannedEndTime.setTime(jobStartTime.getTime());
+		plannedEndTime.add(Calendar.HOUR_OF_DAY, assetPpmScheduleDTO.getPlannedHours());
+		plannedEndTime.getTime();		
+		
+		Calendar scheduleEndDateTime = Calendar.getInstance();
+		scheduleEndDateTime.setTime(assetPpmScheduleDTO.getEndDate());
+		scheduleEndDateTime.set(Calendar.HOUR_OF_DAY, 11);
+		scheduleEndDateTime.set(Calendar.MINUTE, 59);
+		scheduleEndDateTime.getTime();
 		
 		job.setPlannedStartTime(startTime.getTime());
-		job.setPlannedEndTime(endTime.getTime());
+		job.setPlannedEndTime(plannedEndTime.getTime());
+		job.setScheduleEndDate(scheduleEndDateTime.getTime());
 		job.setTitle(assetPpmScheduleDTO.getTitle());
 		job.setDescription(assetPpmScheduleDTO.getTitle() +" "+ assetPpmScheduleDTO.getFrequencyPrefix()+" "+assetPpmScheduleDTO.getFrequencyDuration()+" "+assetPpmScheduleDTO.getFrequency());
 		job.setMaintenanceType(assetPpmScheduleDTO.getMaintenanceType());
@@ -799,7 +811,7 @@ public class JobManagementService extends AbstractService {
 			data.append("&empId="+employee.getId());
 			//data.append("&empId="+assetPpmScheduleDTO.getEmployeeId());
 			data.append("&plannedStartTime="+startTime.getTime());
-			data.append("&plannedEndTime="+endTime.getTime());
+			data.append("&plannedEndTime="+scheduleEndDateTime.getTime());
 			data.append("&plannedHours="+assetPpmScheduleDTO.getFrequencyDuration());
 			//data.append("&location="+assetPpmScheduleDTO.getLocationId());
 			data.append("&frequency="+assetPpmScheduleDTO.getFrequency());
@@ -1427,6 +1439,7 @@ public class JobManagementService extends AbstractService {
 		return er;
 	}
 
+	
 	public ResponseEntity<?> createAMCJobs(AssetAMCScheduleDTO assetAMCScheduleDTO) {
 
 		log.debug(">>> assetAMCSchedule Title from CreateAMCJob <<<"+assetAMCScheduleDTO.getTitle());
@@ -1447,6 +1460,7 @@ public class JobManagementService extends AbstractService {
 			job.setStatus(JobStatus.OPEN);
 		}
 
+		/*
 		Calendar calStart = Calendar.getInstance();
 		calStart.set(Calendar.HOUR_OF_DAY, 0);
 		calStart.set(Calendar.MINUTE,0);
@@ -1470,11 +1484,35 @@ public class JobManagementService extends AbstractService {
 		endTime.set(Calendar.HOUR_OF_DAY, 11);
 		endTime.set(Calendar.MINUTE, 59);
 		endTime.getTime();
+		*/
+		
+		Calendar jobStartTime = Calendar.getInstance();
+		jobStartTime.setTimeInMillis(assetAMCScheduleDTO.getJobStartTime().toInstant().toEpochMilli());
+
+		Calendar startTime = Calendar.getInstance();
+		startTime.setTime(assetAMCScheduleDTO.getStartDate());
+		startTime.set(Calendar.HOUR_OF_DAY, jobStartTime.get(Calendar.HOUR_OF_DAY));
+		startTime.set(Calendar.MINUTE, jobStartTime.get(Calendar.MINUTE));
+		startTime.getTime();		
+		
+		Calendar plannedEndTime = Calendar.getInstance();
+		plannedEndTime.setTime(jobStartTime.getTime());
+		plannedEndTime.add(Calendar.HOUR_OF_DAY, assetAMCScheduleDTO.getPlannedHours());
+		plannedEndTime.getTime();		
+		
+		Calendar scheduleEndDateTime = Calendar.getInstance();
+		scheduleEndDateTime.setTime(assetAMCScheduleDTO.getEndDate());
+		scheduleEndDateTime.set(Calendar.HOUR_OF_DAY, 11);
+		scheduleEndDateTime.set(Calendar.MINUTE, 59);
+		scheduleEndDateTime.getTime();
+		
+		job.setPlannedStartTime(startTime.getTime());
+		job.setPlannedEndTime(plannedEndTime.getTime());
+		job.setScheduleEndDate(scheduleEndDateTime.getTime());
+		
 		
 		job.setEmployee(employee);
 		job.setSite(site);
-		job.setPlannedStartTime(startTime.getTime());
-		job.setPlannedEndTime(endTime.getTime());
 		job.setTitle(assetAMCScheduleDTO.getTitle());
 		job.setDescription(assetAMCScheduleDTO.getTitle() +" "+ assetAMCScheduleDTO.getFrequencyPrefix()+" "+assetAMCScheduleDTO.getFrequencyDuration()+" "+assetAMCScheduleDTO.getFrequency());
 		job.setMaintenanceType(assetAMCScheduleDTO.getMaintenanceType());
@@ -1497,8 +1535,8 @@ public class JobManagementService extends AbstractService {
 			data.append("&empId="+employee.getId());
 			//data.append("&empId="+assetPpmScheduleDTO.getEmployeeId());
 			data.append("&plannedStartTime="+startTime.getTime());
-			data.append("&plannedEndTime="+endTime.getTime());
-			data.append("&plannedHours="+assetAMCScheduleDTO.getFrequencyDuration());
+			data.append("&plannedEndTime="+plannedEndTime.getTime());
+			data.append("&plannedHours="+assetAMCScheduleDTO.getPlannedHours());
 			//data.append("&location="+assetPpmScheduleDTO.getLocationId());
 			data.append("&frequency="+assetAMCScheduleDTO.getFrequency());
 			data.append("&duration="+assetAMCScheduleDTO.getFrequencyDuration());			

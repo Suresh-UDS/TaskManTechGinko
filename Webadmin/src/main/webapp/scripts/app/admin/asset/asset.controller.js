@@ -206,6 +206,17 @@ angular.module('timeSheetApp')
                
             }
         });
+        
+        $('input#ppmJobStartTime').on('dp.change', function(e){
+            $scope.assetPPM.jobStartTime = e.date._d;
+            $scope.ppmTo = $filter('date')(e.date._d, 'dd/MM/yyyy HH:mm');
+        });
+        
+
+        
+        $scope.initPPMSchedule = function() {
+        		$scope.loadSiteShifts();
+        	}
 
         $scope.savePPMSchedule = function (){
 
@@ -242,7 +253,14 @@ angular.module('timeSheetApp')
                 if($scope.selectedTimeInterval) {
                     $scope.assetPPM.frequencyDuration = $scope.selectedTimeInterval;
                 }
-    	    	$scope.assetPPM.maintenanceType = 'PPM';
+    	    			$scope.assetPPM.maintenanceType = 'PPM';
+    	    			
+    	    			$scope.shiftTimings = [];
+		    	    	if($scope.selectedShift) {
+			    	    	$scope.shiftTimings.push($scope.selectedShift.startTime +'-' +$scope.selectedShift.endTime);
+		    	    	}
+		    	    	
+		    	    	$scope.assetPPM.shiftTimings = $scope.shiftTimings;
 
                 console.log("To be create PPM",$scope.assetPPM);
 
@@ -415,6 +433,7 @@ angular.module('timeSheetApp')
 
         $scope.loadBlocks = function () {
                 console.log('selected project -' + ($scope.selectedProject ? $scope.selectedProject.id : 0) + ', site -' + ($scope.selectedSites ? $scope.selectedSites.id : 0))
+                $rootScope.selectedSite = $scope.selectedSites;
                 var projectId = $scope.selectedProject ? $scope.selectedProject.id : 0;
                 LocationComponent.findBlocks(0,$scope.selectedSites.id).then(function (data) {
                     $scope.selectedBlock = null;
@@ -461,6 +480,15 @@ angular.module('timeSheetApp')
             }
         }
 
+        $scope.loadSiteShifts = function() {
+        		console.log('selected site - ' + JSON.stringify($rootScope.selectedSite))
+        		if($rootScope.selectedSite) {
+            		SiteComponent.findShifts($rootScope.selectedSite.id).then(function(data){
+            			$scope.shifts = data;
+            		});
+        		}
+        }
+        
         $scope.initMaterialWizard();
 
         $scope.editAsset = function(){
@@ -554,6 +582,7 @@ angular.module('timeSheetApp')
 
         $scope.columnAscOrder = function(field){
             $scope.selectedColumn = field;
+            console.log('>>> selected coloumn <<< '+$scope.selectedColumn);
             $scope.isActiveAsc = field;
             $scope.isActiveDesc = '';
             $scope.isAscOrder = true;
@@ -695,8 +724,9 @@ angular.module('timeSheetApp')
             if($scope.selectedColumn){
 
                 $scope.searchCriteria.columnName = $scope.selectedColumn;
+                console.log('>>> $scope.searchCriteria.columnName <<< '+$scope.searchCriteria.columnName);
                 $scope.searchCriteria.sortByAsc = $scope.isAscOrder;
-
+                console.log('>>> $scope.searchCriteria.sortByAsc <<< '+$scope.searchCriteria.sortByAsc);
             }else{
                 $scope.searchCriteria.columnName ="id";
                 $scope.searchCriteria.sortByAsc = true;
@@ -818,8 +848,8 @@ angular.module('timeSheetApp')
                 $scope.validationRequired = $scope.parameterConfig.validationRequired;
                 $scope.consumptionMonitoringRequired = $scope.parameterConfig.consumptionMonitoringRequired;
                 $scope.alertRequired = $scope.parameterConfig.alertRequired;
-                $scope.selectedMinValue = $scope.parameterConfig.max;
-                $scope.selectedMaxValue = $scope.parameterConfig.min;
+                $scope.selectedMinValue = $scope.parameterConfig.min;
+                $scope.selectedMaxValue = $scope.parameterConfig.max;
                 $rootScope.loadingStop();
 
             }).catch(function(response){
@@ -1133,12 +1163,12 @@ angular.module('timeSheetApp')
 
 
         $scope.deleteAsset = function () {
-        	AssetComponent.remove($scope.deleteAssetId).then(function(){
-
-            	$scope.success = 'OK';
-                $scope.showNotifications('top','center','success','Asset Deleted Successfully!!');
-            	$scope.loadAssets();
-        	});
+	        	AssetComponent.remove($scope.deleteAssetId).then(function(){
+	
+	            	$scope.success = 'OK';
+	                $scope.showNotifications('top','center','success','Asset Deleted Successfully!!');
+	            	$scope.loadAssets();
+	        	});
         }
 
         $scope.deleteConfirmDoc = function (id){
@@ -1881,6 +1911,11 @@ angular.module('timeSheetApp')
                
             }
         });
+        
+        $('input#amcJobStartTime').on('dp.change', function(e){
+            $scope.amcSchedule.jobStartTime = e.date._d;
+            $scope.ppmTo = $filter('date')(e.date._d, 'dd/MM/yyyy HH:mm');
+        });
 
 	    $scope.loadCheckList = function() {
             ChecklistComponent.findAll().then(function(data){
@@ -1913,7 +1948,7 @@ angular.module('timeSheetApp')
 
                   $scope.showNotifications('top','center','danger','Please create asset first..');
 
-                }else{
+            }else{
 
                 if($scope.assetGen.id){
 
@@ -1924,73 +1959,78 @@ angular.module('timeSheetApp')
                      $scope.amcSchedule.assetId = $stateParams.id;
                 }
 
-    	    	console.log($scope.selectedChecklist);
+    	    			console.log($scope.selectedChecklist);
 
 
-                 if($scope.selectedEmployee){
+                if($scope.selectedEmployee){
                     $scope.amcSchedule.empId = $scope.selectedEmployee.id;
                 }
 
-    	    	if($scope.selectedChecklist){
-    	    		$scope.amcSchedule.checklistId = $scope.selectedChecklist.id;
-    	    	}
-
-    	    	if($scope.selectedFrequencyPrefix) {
-    	    		$scope.amcSchedule.frequencyPrefix = $scope.selectedFrequencyPrefix;
-    	    	}
-    	    	if($scope.selectedFrequency) {
-    	    		$scope.amcSchedule.frequency = $scope.selectedFrequency;
-    	    	}
-    	    	if($scope.selectedFreqDuration) {
-    	    		$scope.amcSchedule.frequencyDuration = $scope.selectedFreqDuration;
-    	    	}
-
-    	    	$scope.amcSchedule.maintenanceType = 'AMC';
-
-    	    	console.log("To be create AMC schedule",$scope.amcSchedule);
-
-                 $rootScope.loadingStart();
-
-    	    	AssetComponent.saveAmcSchedule($scope.amcSchedule).then(function(data){
-    	    		console.log(data);
-    	    		if(data && data.checklistId) {
-    	    			console.log(data.checklistId);
-    	    			//$scope.amcScheduleList.push(data);
-                        $scope.loadAmcSchedule();
-                        $scope.showNotifications('top','center','success','AMC Schedule Saved Successfully');
-                        $scope.amcSchedule = {};
-
-                        $scope.selectedChecklist = {};
-                        $scope.selectedEmployee = {};
-                        $scope.selectedFrequencyPrefix = {};
-                        $scope.selectedFreqDuration = {};
-                        $scope.selectedFrequency = {};
-
-                        $scope.amcFrom = "";
-                        $scope.amcTo = "";
-
-                        $("#dateFilterAmcFrom").val("");
-                        $("#dateFilterAmcTo").val("");
-                        $rootScope.loadingStop();
-
-
-    	    		}
-    	    	}).catch(function (response) {
-
-                    $rootScope.loadingStop();
-
-                if (response.status === 400 && response.data.message === 'error.duplicateRecordError') {
-                    $scope.errorProjectExists = 'ERROR';
-                    $scope.showNotifications('top','center','danger','AMC Schedule Already Exists');
-                } else {
-                    $scope.error = 'ERROR';
-                     $scope.showNotifications('top','center','danger','Error in creating AMC Schedule. Please try again later..');
-                }
-
-
-            });
-
-            }
+	    	    		if($scope.selectedChecklist){
+		    	    		$scope.amcSchedule.checklistId = $scope.selectedChecklist.id;
+		    	    	}
+		
+		    	    	if($scope.selectedFrequencyPrefix) {
+		    	    		$scope.amcSchedule.frequencyPrefix = $scope.selectedFrequencyPrefix;
+		    	    	}
+		    	    	if($scope.selectedFrequency) {
+		    	    		$scope.amcSchedule.frequency = $scope.selectedFrequency;
+		    	    	}
+		    	    	if($scope.selectedFreqDuration) {
+		    	    		$scope.amcSchedule.frequencyDuration = $scope.selectedFreqDuration;
+		    	    	}
+		
+		    	    	$scope.shiftTimings = [];
+		    	    	if($scope.selectedShift) {
+			    	    	$scope.shiftTimings.push($scope.selectedShift.startTime +'-' +$scope.selectedShift.endTime);
+		    	    	}
+		    	    	$scope.amcSchedule.shiftTimings = $scope.shiftTimings;
+		    	    	//$scope.amcSchedule.maintenanceType = 'AMC';
+		
+		    	    	console.log("To be create AMC schedule",$scope.amcSchedule);
+		
+		        $rootScope.loadingStart();
+		
+		    	    	AssetComponent.saveAmcSchedule($scope.amcSchedule).then(function(data){
+		    	    		console.log(data);
+		    	    		if(data) {
+		    	    			console.log(data.checklistId);
+		    	    			//$scope.amcScheduleList.push(data);
+		                        $scope.loadAmcSchedule();
+		                        $scope.showNotifications('top','center','success','AMC Schedule Saved Successfully');
+		                        $scope.amcSchedule = {};
+		
+		                        $scope.selectedChecklist = {};
+		                        $scope.selectedEmployee = {};
+		                        $scope.selectedFrequencyPrefix = {};
+		                        $scope.selectedFreqDuration = {};
+		                        $scope.selectedFrequency = {};
+		
+		                        $scope.amcFrom = "";
+		                        $scope.amcTo = "";
+		
+		                        $("#dateFilterAmcFrom").val("");
+		                        $("#dateFilterAmcTo").val("");
+		                        $rootScope.loadingStop();
+		
+		
+		    	    		}
+		    	    	}).catch(function (response) {
+	
+	                    $rootScope.loadingStop();
+	
+	                if (response.status === 400 && response.data.message === 'error.duplicateRecordError') {
+	                    $scope.errorProjectExists = 'ERROR';
+	                    $scope.showNotifications('top','center','danger','AMC Schedule Already Exists');
+	                } else {
+	                    $scope.error = 'ERROR';
+	                     $scope.showNotifications('top','center','danger','Error in creating AMC Schedule. Please try again later..');
+	                }
+	
+	
+	            });
+	
+	       }
 
 	    }
 

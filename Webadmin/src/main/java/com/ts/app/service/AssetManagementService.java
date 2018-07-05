@@ -145,10 +145,7 @@ public class AssetManagementService extends AbstractService {
 	private UserRepository userRepository;
 
 	@Inject
-	private NotificationRepository notificationRepository;
-
-	@Inject
-	private SchedulerService schedulerService;
+	private NotificationRepository notificationRepository ;
 
 	@Inject
 	private ExportUtil exportUtil;
@@ -555,7 +552,7 @@ public class AssetManagementService extends AbstractService {
 		log.debug("Create assets AMC schedule");
 
 		AssetAMCSchedule assetAMC = mapperUtil.toEntity(assetAMCScheduleDTO, AssetAMCSchedule.class);
-		assetAMC.setMaintenanceType(MaintenanceType.AMC.getValue());
+		//assetAMC.setMaintenanceType(MaintenanceType.AMC.getValue());
 		
 		if(assetAMCScheduleDTO.getChecklistId() > 0) {
 			Checklist checklist = checklistRepository.findOne(assetAMCScheduleDTO.getChecklistId());

@@ -84,7 +84,7 @@ angular.module('timeSheetApp', ['LocalStorageModule',
         $rootScope.back = function() {
             // If previous state is 'activate' or do not exist go to 'home'
             if ($rootScope.previousStateName === 'activate' || $state.get($rootScope.previousStateName) === null) {
-                
+
                 if($rootScope.stateValue != ""){
                     $rootScope.stateValue;
                     $(".content").removeClass("remove-mr");
@@ -95,7 +95,7 @@ angular.module('timeSheetApp', ['LocalStorageModule',
                 else{
                 $state.go('dashboard');
             }
-              
+
               $rootScope.stateValue ="";
             } else {
                 $state.go($rootScope.previousStateName, $rootScope.previousStateParams);
@@ -137,6 +137,16 @@ angular.module('timeSheetApp', ['LocalStorageModule',
             $("#loadPage").animate({scrollTop: 0}, 0);
         }
 
+        //Perfect scroll bar INIT
+
+        // $rootScope.initScrollBar = function(){
+        //
+        //     console.log("-- Calling scrollbar -- ");
+        //
+        //     $('.sidebar .sidebar-wrapper').perfectScrollbar();
+        // }
+        //
+        // $rootScope.initScrollBar();
 
     })
     .config(function ($stateProvider, $urlRouterProvider, $httpProvider, $locationProvider,  httpRequestInterceptorCacheBusterProvider,uiGmapGoogleMapApiProvider) {

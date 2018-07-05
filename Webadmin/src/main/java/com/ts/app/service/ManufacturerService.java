@@ -18,6 +18,7 @@ import org.springframework.util.StringUtils;
 import com.ts.app.domain.AbstractAuditingEntity;
 import com.ts.app.domain.Manufacturer;
 import com.ts.app.repository.ManufacturerRepository;
+import com.ts.app.repository.ManufacturerSpecification;
 import com.ts.app.repository.UserRepository;
 import com.ts.app.service.util.ImportUtil;
 import com.ts.app.service.util.MapperUtil;
@@ -133,9 +134,10 @@ public class ManufacturerService extends AbstractService {
             		}
             }
             Page<Manufacturer> page = null;
+			List<Manufacturer> allManufacturerList = new ArrayList<Manufacturer>();
 			List<ManufacturerDTO> transactions = null;
 			log.debug("Manufacturer id = "+ searchCriteria.getManufacturerId() + ", name = "+ searchCriteria.getManufacturerName() + " ,  assetType = "+ searchCriteria.getAssetTypeName());
-			if(!searchCriteria.isFindAll()) {
+			/*if(!searchCriteria.isFindAll()) {
 				if(!StringUtils.isEmpty(searchCriteria.getAssetTypeName()) && StringUtils.isEmpty(searchCriteria.getManufacturerName())) {
 					page = manufacturerRepository.findAllByAssetType(searchCriteria.getAssetTypeName(), pageRequest);
 				}else if(StringUtils.isEmpty(searchCriteria.getAssetTypeName()) && !StringUtils.isEmpty(searchCriteria.getManufacturerName())) {
@@ -145,8 +147,13 @@ public class ManufacturerService extends AbstractService {
 				}
 			}else {
 				page = manufacturerRepository.findAll(pageRequest);
-			}
-			if(page != null) {
+			}*/
+			if(!searchCriteria.isConsolidated()) {
+				log.debug(">>> inside search consolidate <<<");
+    			page = manufacturerRepository.findAll(new ManufacturerSpecification(searchCriteria,true),pageRequest);
+    			allManufacturerList.addAll(page.getContent());
+    		}
+			/*if(page != null) {
 				if(transactions == null) {
 					transactions = new ArrayList<ManufacturerDTO>();
 				}
@@ -159,8 +166,16 @@ public class ManufacturerService extends AbstractService {
 				if(CollectionUtils.isNotEmpty(transactions)) {
 					buildSearchResult(searchCriteria, page, transactions,result);
 				}
+			}*/
+			if(CollectionUtils.isNotEmpty(allManufacturerList)) {
+				if(transactions == null) {
+					transactions = new ArrayList<ManufacturerDTO>();
+				}
+	        		for(Manufacturer manufacturer : allManufacturerList) {
+	        			transactions.add(mapperUtil.toModel(manufacturer, ManufacturerDTO.class));
+	        		}
+				buildSearchResult(searchCriteria, page, transactions,result);
 			}
-
 		}
 		return result;
 	}
