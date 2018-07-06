@@ -1264,7 +1264,7 @@ demo = {
         }, {
             type: type,
             //timer: 98000,
-            timer: 3000,
+            timer: 100,
             placement: {
                 from: from,
                 align: align

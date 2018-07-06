@@ -222,7 +222,17 @@
                                                                    </tr>
                                                                    <tr>
                                                                        <td>Warranty Type</td>
-                                                                       <td> </td>
+                                                                       <td> {{assetDetail.warrantyType}}</td>
+
+                                                                   </tr>
+                                                                   <tr>
+                                                                       <td>From Date</td>
+                                                                       <td> {{assetDetail.warrantyFromDate}}</td>
+
+                                                                   </tr>
+                                                                   <tr>
+                                                                       <td>To Date</td>
+                                                                       <td> {{assetDetail.warrantyToDate}}</td>
 
                                                                    </tr>
                                                                    <!-- <tr>
@@ -480,7 +490,7 @@
 
                                            <div class="row">
                                                <div class="col-md-12 text-right">
-                                                   <a  class="btn btn-simple btn-warning cal-btn" data-toggle="modal" data-target="#RightModal-View" title="Calender" ><i class="material-icons">date_range</i>
+                                                   <a  class="btn btn-simple btn-warning cal-btn" data-toggle="modal" data-target="#RightModal-View" title="Calender" ng-click="loadCalendar(assetDetail.id)"><i class="material-icons">date_range</i>
 
                                                    </a>
                                                </div>

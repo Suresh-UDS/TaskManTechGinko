@@ -602,6 +602,7 @@
                                                                                             <a  has-permission="" class="btn btn-round btn-fab btn-fab-mini btn-simple"  onClick="$('#addWarranty').modal()" data-target="#myModal"><i class="material-icons">add</i><div class="ripple-container" ></div></a>
                                                                                         </div>
                                                                                     </div>
+                                                                                    
 
                                                                                 </div>
                                                                                 <!-- <div class="collapse" id="addWarrantyType">
@@ -616,6 +617,58 @@
 
 
                                                                         </div>
+                                                                        <div class="row">
+                                                                                        <div class="col-md-6">
+                                                                                            <div class="form-group">
+                                                                                                <label class="control-label">From Date</label>
+                                                                                                <span class="form-control-feedback calender-icon"><i class="material-icons">date_range</i></span>
+                                                                                                <input type="text" class="form-control datepicker"  id="warFromDate" ng-model ="assetEdit.warFromDate" placeholder="{{warFromDate | date:'dd-MMM-yyyy'}}" name="warFromDate"/>
+                                                                                                <div ng-show="form.$submitted || form.warFromDate.$touched">
+                                                                                                    <!-- <div
+                                                                                                        ng-show="form.warFromDate.$dirty || form.warFromDate.$invalid">
+                                                                                                        <p class="help-block" style="width:100%;z-index:1000;background:#fff;color:maroon"
+                                                                                                           ng-show="form.warFromDate.$error.required">
+                                                                                                            To date is required.
+                                                                                                        </p>
+
+
+                                                                                                    </div> -->
+                                                                                                    <p class="help-block" style="color:maroon"
+                                                                                                       ng-show="warFromMsg">
+                                                                                                        From date cannot be lesser than To date.
+                                                                                                    </p>
+
+                                                                                                </div>
+
+                                                                                            </div>
+
+                                                                                        </div>
+                                                                                         <div class="col-md-6">
+                                                                                            <div class="form-group">
+                                                                                                <label class="control-label">To Date</label>
+                                                                                                <span class="form-control-feedback calender-icon"><i class="material-icons">date_range</i></span>
+                                                                                                <input type="text" class="form-control datepicker"  id="warToDate" ng-model ="assetEdit.warToDate" name="warToDate" placeholder="{{warToDate | date:'dd-MMM-yyyy'}}"/>
+                                                                                                <div ng-show="form.$submitted || form.warToDate.$touched">
+                                                                                                    <!-- <div
+                                                                                                        ng-show="form.warToDate.$dirty || form.warToDate.$invalid">
+                                                                                                        <p class="help-block" style="width:100%;z-index:1000;background:#fff;color:maroon"
+                                                                                                           ng-show="form.warToDate.$error.required">
+                                                                                                            To date is required.
+                                                                                                        </p>
+
+
+                                                                                                    </div> -->
+                                                                                                    <p class="help-block" style="color:maroon"
+                                                                                                       ng-show="warToMsg">
+                                                                                                        To date cannot be lesser than From date.
+                                                                                                    </p>
+
+                                                                                                </div>
+
+                                                                                            </div>
+
+                                                                                        </div>
+                                                                                    </div>
 
 
                                                                 </div>
@@ -1761,7 +1814,7 @@
                                                                                 <span class="btn-label"><i class="material-icons">add</i></span> Add
                                                                             </button>
                                                                             <button class="btn btn-success" type="submit" ng-switch-when="true"
-                                                                                    id="form-button-add"  ng-disabled="form.$invalid || btnDisabled">
+                                                                                    id="form-button-add"  ng-disabled="form6.$invalid || btnDisabled">
                                                                                 <span class="btn-label"><i class="material-icons">save</i></span> Update
                                                                             </button>
                                                                             <button class="btn btn-danger" type="button"
@@ -2118,7 +2171,7 @@
                                                     <div class="col-md-12" style="text-align:right;">
 
                                                         <button class="btn btn-success" type="submit" ng-hide="upView"
-                                                                id="form-button-save" ng-disabled="form.$invalid" ng-click="updateAsset();">
+                                                                id="form-button-save" ng-disabled="form.$invalid || btnDisabled" ng-click="updateAsset();">
                                                             <span class="btn-label">
                                                             <i class="material-icons">check</i>
                                                         </span> Update
