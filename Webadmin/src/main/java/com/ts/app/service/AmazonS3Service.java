@@ -162,9 +162,10 @@ public class AmazonS3Service {
     	
     }
 
-	public void uploadQrToS3bucket(String filename, String qrCodeImage) {
+	public String uploadQrToS3bucket(String filename, String qrCodeImage) {
 		// TODO Auto-generated method stub
 		String key = bucketEnv + qrCodePath + filename;
+		String prefixUrl = "";
 		try {
 			
 			byte[] bI = org.apache.commons.codec.binary.Base64.decodeBase64((qrCodeImage.substring(qrCodeImage.indexOf(",")+1)).getBytes());
@@ -175,15 +176,17 @@ public class AmazonS3Service {
 			metadata.setContentLength(bI.length);
 			metadata.setContentType("image/png");
 			metadata.setCacheControl("public, max-age=31536000");
-			s3client.setObjectAcl(bucketName, key, CannedAccessControlList.PublicRead);
+		
 			PutObjectResult result = s3client.putObject(bucketName, key, fis, metadata);
+			s3client.setObjectAcl(bucketName, key, CannedAccessControlList.PublicRead);
 			log.debug("result of object request -" + result);
+			prefixUrl = cloudFrontUrl + key;
 			
 		} catch(AmazonS3Exception e) {
 			log.info("Error while upload a QRcode -" +e);
 			e.printStackTrace();
 		}
-		
+		 return prefixUrl;
 	}
 
 	public void uploadAttdFileToS3bucket(String fileName, File file) {

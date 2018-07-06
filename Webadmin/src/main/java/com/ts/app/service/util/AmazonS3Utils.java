@@ -14,6 +14,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.ts.app.service.AmazonS3Service;
+import com.ts.app.web.rest.dto.AssetDTO;
 import com.ts.app.web.rest.dto.AssetDocumentDTO;
 
 @Component
@@ -55,19 +56,22 @@ public class AmazonS3Utils {
     }
     
     
-    public String uploadQrCodeFile(String code, byte[] qrCodeImage) { 
+    public AssetDTO uploadQrCodeFile(String code, byte[] qrCodeImage, AssetDTO assetDTO) { 
     	String filename = code +".png";
+    	String fileUrl = "";
     	String imageDataString = "data:image/png;base64,";
     	try {
 	        // Converting Image byte array into Base64 String
 	        imageDataString += Base64.getEncoder().encodeToString(qrCodeImage);
 	        log.debug("base64 string" +imageDataString);
-    		amazonS3Service.uploadQrToS3bucket(filename, imageDataString);
+	        fileUrl = amazonS3Service.uploadQrToS3bucket(filename, imageDataString);
+	        assetDTO.setQrCodeImage(filename);
+	        assetDTO.setUrl(fileUrl);
     	} catch(Exception e) { 
     		e.printStackTrace();
     	}
     	
-		return filename;
+		return assetDTO;
     }
     
     public String uploadAttendanceFile(String empId, String action, MultipartFile multipartFile, long dateTime) {
