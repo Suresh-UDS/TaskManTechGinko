@@ -7,6 +7,13 @@ import {AssetView} from "../asset-view/asset-view";
 import {ScanQR} from "./scanQR";
 import {AssetService} from "../service/assetService";
 import {componentService} from "../service/componentService";
+import {SQLitePorter} from "@ionic-native/sqlite-porter";
+// import {win} from "@angular/platform-browser/src/browser/tools/browser";
+import {SQLite, SQLiteObject} from "@ionic-native/sqlite";
+import {SiteService} from "../service/siteService";
+import {DBService} from "../service/dbService";
+import {Network} from "@ionic-native/network";
+import { Diagnostic } from '@ionic-native/diagnostic';
 
 /**
  * Generated class for the AssetList page.
@@ -27,8 +34,15 @@ export class AssetList {
     open:any;
     qr:any;
     assetDetails:any;
-  constructor(public modalCtrl:ModalController,public componentService:componentService, public navCtrl: NavController, public navParams: NavParams, public modalController:ModalController, public qrScanner:QRScanner, public assetService:AssetService) {
+
+    sites:any;
+    test:any;
+    database:any;
+    asset:any;
+    db:any;
+  constructor(public modalCtrl:ModalController,private diagnostic: Diagnostic,private sqlite: SQLite,public componentService:componentService, public navCtrl: NavController, public navParams: NavParams, public modalController:ModalController, public qrScanner:QRScanner, public assetService:AssetService,public dbService:DBService) {
     this.assetList = [];
+    this.test = [];
     this.searchCriteria = {};
     // this.qr = this.navParams.get('qr')
 
@@ -44,10 +58,57 @@ export class AssetList {
 
       console.log('ionViewDidLoad AssetList');
       this.componentService.showLoader("Loading Assets")
+
+
+
+
+    this.open = true;
+      // After Set Pagination
+      // var searchCriteria={}
+      // this.getAsset(searchCriteria)
+
+
+
+          //offline
+      // setTimeout(() => {
+      //     this.dbService.getAsset().then(
+      //         (res)=>{
+      //             this.componentService.closeLoader()
+      //             console.log(res)
+      //             this.assetList = res;
+      //             // this.dbService.setAMC();
+      //             // this.dbService.setPPM();
+      //             // this.dbService.setConfig();
+      //             // this.dbService.setJobs();
+      //             // this.dbService.setSites();
+      //         },
+      //         (err)=>{
+      //
+      //         })
+      // },3000)
+
+
+
+              //online
+              this.assetService.findAllAssets().subscribe(
+                  response=>{
+                      this.componentService.closeLoader()
+                      console.log(response);
+                      this.assetList = response;
+                  },
+                  error=>{
+                      console.log("")
+                  }
+              );
+
+
       if(this.navParams.get('text'))
       {
           this.componentService.closeLoader();
           var text = this.navParams.get('text');
+
+
+          // this.dbService.getAssetByCode(text).then(
           this.assetService.getAssetByCode(text).subscribe(
               response=>{
                   this.componentService.showToastMessage('Asset found, navigating..','bottom')
@@ -64,35 +125,11 @@ export class AssetList {
                   this.componentService.showToastMessage('Asset not found, please try again','bottom')
               }
           )
+
+
+
       }
 
-
-
-
-
-      // if(this.navParams.get('qr'))
-      // {
-      //     console.log("------------------------------------------------------")
-      //     this.viewAsset(this.assetDetails);
-      // }
-
-    this.assetService.findAllAssets().subscribe(
-        response=>{
-            this.componentService.closeLoader()
-            console.log(response);
-            this.assetList = response;
-        },
-        error=>{
-            console.log("")
-        }
-    );
-
-    this.open = true;
-
-
-      // After Set Pagination
-      // var searchCriteria={}
-      // this.getAsset(searchCriteria)
   }
 
   getAsset(searchCriteria)
@@ -236,4 +273,7 @@ export class AssetList {
 
 
     }
+
+
+
 }
