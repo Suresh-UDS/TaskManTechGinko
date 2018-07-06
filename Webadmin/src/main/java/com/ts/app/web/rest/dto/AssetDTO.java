@@ -39,7 +39,7 @@ public class AssetDTO extends BaseDTO {
 	private String amcVendorName;
 	private String modelNumber;
     private String serialNumber;
-    private ZonedDateTime acquiredDate;
+    private Date acquiredDate;
     private double purchasePrice;
     private double currentPrice;
     private double estimatedDisposePrice;
@@ -174,10 +174,11 @@ public class AssetDTO extends BaseDTO {
 	public void setSerialNumber(String serialNumber) {
 		this.serialNumber = serialNumber;
 	}
-	public ZonedDateTime getAcquiredDate() {
+	
+	public Date getAcquiredDate() {
 		return acquiredDate;
 	}
-	public void setAcquiredDate(ZonedDateTime acquiredDate) {
+	public void setAcquiredDate(Date acquiredDate) {
 		this.acquiredDate = acquiredDate;
 	}
 	public double getPurchasePrice() {

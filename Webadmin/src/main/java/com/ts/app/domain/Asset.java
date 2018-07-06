@@ -93,7 +93,7 @@ public class Asset extends AbstractAuditingEntity implements Serializable {
     
     private String serialNumber;
     
-    private ZonedDateTime acquiredDate;
+    private Date acquiredDate;
     
     private double purchasePrice;
     
@@ -270,10 +270,11 @@ public class Asset extends AbstractAuditingEntity implements Serializable {
 	public void setSerialNumber(String serialNumber) {
 		this.serialNumber = serialNumber;
 	}
-	public ZonedDateTime getAcquiredDate() {
+	
+	public Date getAcquiredDate() {
 		return acquiredDate;
 	}
-	public void setAcquiredDate(ZonedDateTime acquiredDate) {
+	public void setAcquiredDate(Date acquiredDate) {
 		this.acquiredDate = acquiredDate;
 	}
 	public double getPurchasePrice() {

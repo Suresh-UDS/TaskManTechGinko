@@ -891,9 +891,12 @@ angular.module('timeSheetApp')
         $scope.warFromMsg =false;
 
         $('input#acquiredDate').on('dp.change', function(e){
-                $scope.assetGen.acquiredDate = new Date(e.date._d).toISOString();
+        		
+        		var aqDate = $filter('date')(e.date._d, 'yyyy-MM-dd');
+//        		alert(aqDate);
+                $scope.assetGen.acquiredDate = aqDate;
 
-                $scope.assetEditDate = new Date(e.date._d).toISOString();
+                $scope.assetEditDate = aqDate;
                 //$scope.assetGen.acquiredDate = $filter('date')(e.date._d, 'EEE, dd MMM yyyy HH:mm:ss Z');
                 //$scope.assetEditDate = $filter('date')(e.date._d, 'EEE, dd MMM yyyy HH:mm:ss Z');
         });
