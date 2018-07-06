@@ -530,7 +530,6 @@ public class AssetManagementService extends AbstractService {
 		AssetDTO assetDTO = new AssetDTO();
 		if (asset != null) {
 			String codeName = String.valueOf(asset.getCode());
-				codeName = asset.getSite().getId()+"_"+codeName;
 			qrCodeImage = QRCodeUtil.generateQRCode(codeName);
 			String qrCodePath = env.getProperty("AWS.s3-qrcode-path");
 			if (org.apache.commons.lang3.StringUtils.isNotEmpty(qrCodePath)) {
