@@ -84,9 +84,6 @@ public class TicketManagementService extends AbstractService {
     private NotificationRepository notificationRepository;
 
     @Inject
-    private SchedulerService schedulerService;
-
-    @Inject
     private MailService mailService;
 
     @Inject

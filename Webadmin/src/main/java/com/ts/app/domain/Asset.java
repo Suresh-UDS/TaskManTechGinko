@@ -2,6 +2,7 @@ package com.ts.app.domain;
 
 import java.io.Serializable;
 import java.sql.Date;
+import java.time.ZonedDateTime;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -53,6 +54,10 @@ public class Asset extends AbstractAuditingEntity implements Serializable {
     @JoinColumn(name = "siteId", nullable = false)
     private Site site;
     
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "assetStatusHistoryId", nullable = false)
+    private AssetStatusHistory assetStatusHistory;
+    
     @Column(name="qr_code_image")
     private String qrCodeImage;
     
@@ -88,7 +93,7 @@ public class Asset extends AbstractAuditingEntity implements Serializable {
     
     private String serialNumber;
     
-    private Date acquiredDate;
+    private ZonedDateTime acquiredDate;
     
     private double purchasePrice;
     
@@ -265,10 +270,10 @@ public class Asset extends AbstractAuditingEntity implements Serializable {
 	public void setSerialNumber(String serialNumber) {
 		this.serialNumber = serialNumber;
 	}
-	public Date getAcquiredDate() {
+	public ZonedDateTime getAcquiredDate() {
 		return acquiredDate;
 	}
-	public void setAcquiredDate(Date acquiredDate) {
+	public void setAcquiredDate(ZonedDateTime acquiredDate) {
 		this.acquiredDate = acquiredDate;
 	}
 	public double getPurchasePrice() {
@@ -318,6 +323,12 @@ public class Asset extends AbstractAuditingEntity implements Serializable {
 	}
 	public void setWarrantyType(String warrantyType) {
 		this.warrantyType = warrantyType;
+	}
+	public AssetStatusHistory getAssetStatusHistory() {
+		return assetStatusHistory;
+	}
+	public void setAssetStatusHistory(AssetStatusHistory assetStatusHistory) {
+		this.assetStatusHistory = assetStatusHistory;
 	}
     
 }

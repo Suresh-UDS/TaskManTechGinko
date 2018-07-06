@@ -1,4 +1,4 @@
-<nav class="navbar navbar-transparent navbar-absolute TopNavbar" ng-switch="isLoggedIn" ng-hide="loginView">
+<nav class="navbar navbar-transparent navbar-absolute TopNavbar" ng-switch="isLoggedIn" ng-init="initscrollbar()" ng-hide="loginView">
     <div class="container-fluid">
         <div class="navbar-minimize">
             <button id="minimizeSidebar" class="btn btn-round btn-white btn-fill btn-just-icon no-padding">
@@ -47,14 +47,14 @@
             <li class="dropdown">
                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                         <i class="material-icons white">person</i>
-                        
+
                     </a>
                     <ul class="dropdown-menu">
                         <li ng-switch-when="true">
-			              <a ui-sref="#" >   
+			              <a ui-sref="#" >
                              <i class="material-icons">account_circle</i>
 			                 <span class="sidebar-normal">{{accountNames}}</span>
-			              </a>  
+			              </a>
 			             </li>
 			             <li ng-switch-when="false">
 			                <a ui-sref="login" >
@@ -68,20 +68,20 @@
 	                        <!--<span class="sidebar-mini">L</span>-->
                             <i class="material-icons">power_settings_new</i>
 	                        <span class="sidebar-normal" >Logout</span>
-	                      </a>       
-			 
+	                      </a>
+
 			             </li>
-			            
-                        
+
+
                     </ul>
-            
+
             </li>
             <li class="separator hidden-lg hidden-md"></li>
             </ul>
-            
-  
+
+
 
         </div>
-        
+
     </div>
 </nav>

@@ -1,5 +1,6 @@
 package com.ts.app.web.rest.dto;
 
+import java.time.ZonedDateTime;
 import java.util.Date;
 
 /**
@@ -38,7 +39,7 @@ public class AssetDTO extends BaseDTO {
 	private String amcVendorName;
 	private String modelNumber;
     private String serialNumber;
-    private Date acquiredDate;
+    private ZonedDateTime acquiredDate;
     private double purchasePrice;
     private double currentPrice;
     private double estimatedDisposePrice;
@@ -51,6 +52,7 @@ public class AssetDTO extends BaseDTO {
     private Date amcDocumentUploadDate;
     private String assetPpmTitle;
     private String warrantyType;
+    private String url;
 
 	public Date getWarrantyFromDate() {
 		return warrantyFromDate;
@@ -172,10 +174,10 @@ public class AssetDTO extends BaseDTO {
 	public void setSerialNumber(String serialNumber) {
 		this.serialNumber = serialNumber;
 	}
-	public Date getAcquiredDate() {
+	public ZonedDateTime getAcquiredDate() {
 		return acquiredDate;
 	}
-	public void setAcquiredDate(Date acquiredDate) {
+	public void setAcquiredDate(ZonedDateTime acquiredDate) {
 		this.acquiredDate = acquiredDate;
 	}
 	public double getPurchasePrice() {
@@ -339,6 +341,12 @@ public class AssetDTO extends BaseDTO {
 	}
 	public void setProjectName(String projectName) {
 		this.projectName = projectName;
+	}
+	public String getUrl() {
+		return url;
+	}
+	public void setUrl(String url) {
+		this.url = url;
 	}
 	
 	

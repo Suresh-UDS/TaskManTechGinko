@@ -69,14 +69,18 @@ public class JobSpecification implements Specification<Job> {
             if(StringUtils.isNotEmpty(searchCriteria.getJobTypeName())){
         			predicates.add(builder.equal(root.get("type"),  JobType.getType(searchCriteria.getJobTypeName())));
         		}
-            if(StringUtils.isNotEmpty(searchCriteria.getMaintenanceType()) && searchCriteria.getAssetId() != 0 ) { 
+            /*if(StringUtils.isNotEmpty(searchCriteria.getMaintenanceType()) && searchCriteria.getAssetId() != 0 ) { 
             	predicates.add(builder.and(builder.equal(root.get("maintenanceType"), searchCriteria.getMaintenanceType()), builder.equal(root.get("asset").get("id"), searchCriteria.getAssetId())));
-            }
+            }*/
             
             if(searchCriteria.getAssetId() != 0) { 
             	predicates.add(builder.equal(root.get("asset").get("id"),  searchCriteria.getAssetId()));
             }
 
+            if(StringUtils.isNotEmpty(searchCriteria.getMaintenanceType())) { 
+            	predicates.add(builder.equal(root.get("maintenanceType"), searchCriteria.getMaintenanceType()));
+            }
+            
             if(searchCriteria.getCheckInDateTimeFrom() != null){
 	            	if(root.get("plannedStartTime") != null) {
 		            	//Date plannedDate = (Date)root.get("plannedStartTime");
@@ -103,6 +107,8 @@ public class JobSpecification implements Specification<Job> {
 		        		predicates.add(builder.between(root.get("plannedStartTime"), fromDt,toDt));
 	            	}
 	        	}
+
+    		predicates.add(builder.equal(root.get("active"), "Y"));
 
     		query.orderBy(builder.desc(root.get("id")));
             //Predicate firstStage = builder.and(predicates.toArray(new Predicate[predicates.size()]));

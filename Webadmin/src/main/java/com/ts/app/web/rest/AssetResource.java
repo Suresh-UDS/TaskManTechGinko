@@ -223,15 +223,28 @@ public class AssetResource {
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 
-	@RequestMapping(value = "/asset/{id}/qrcode/{code}", method = RequestMethod.GET, produces = MediaType.IMAGE_PNG_VALUE)
-	public String generateAssetQRCode(@PathVariable("id") long assetId, @PathVariable("code") String assetCode) {
-		return assetService.generateAssetQRCode(assetId, assetCode);
+	@RequestMapping(value = "/asset/{id}/qrcode/{code}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	public AssetDTO generateAssetQRCode(@PathVariable("id") long assetId, @PathVariable("code") String assetCode) {
+		AssetDTO result = null;
+		try { 
+			result = assetService.generateAssetQRCode(assetId, assetCode);
+		} catch(Exception e) {
+			throw new TimesheetException("Error while generating QR-Code" +e);
+		}
+		
+		return result;
 	}
 
-	@RequestMapping(path = "/asset/qrcode/{id}", method = RequestMethod.GET, produces = MediaType.IMAGE_PNG_VALUE)
-	public String getQRCode(@PathVariable("id") Long id) {
+	@RequestMapping(path = "/asset/qrcode/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	public AssetDTO getQRCode(@PathVariable("id") Long id) {
 		log.debug(">>> get QR Code! <<<");
-		return assetService.getQRCode(id);
+		AssetDTO result = null;
+		try { 
+			result = assetService.getQRCode(id);
+		} catch(Exception e) { 
+			throw new TimesheetException("Error while get a QR-Code" +e);
+		}
+		return result;
 	}
 
 	@RequestMapping(value = "/assetgroup", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -334,14 +347,17 @@ public class AssetResource {
 		assetDocumentDTO.setAssetId(assetId);
 		assetDocumentDTO.setTitle(title);
 		assetDocumentDTO.setType(type);
-		/*String extension = FilenameUtils.getExtension(file.getOriginalFilename());
+		String extension = FilenameUtils.getExtension(file.getOriginalFilename());
+		log.debug("********** file extension : "+ extension);
 		String ext = env.getProperty("extensionFile");
+		log.debug("********** validation extension : "+ ext);
 		String[] arrExt = ext.split(",");
 		for (String exten : arrExt) {
-			if (extension.equals(exten)) {*/
+			if (extension.equals(exten)) {
 				assetDocumentDTO = assetService.uploadFile(assetDocumentDTO, file);
-			//}
-		//}
+				assetDocumentDTO.setExtension(extension);
+			}
+		}
 		return new ResponseEntity<>(assetDocumentDTO, HttpStatus.OK);
 	}
 
@@ -352,13 +368,17 @@ public class AssetResource {
 		assetDocumentDTO.setAssetId(assetId);
 		assetDocumentDTO.setTitle(title);
 		assetDocumentDTO.setType(type);
-		String extension = FilenameUtils.getExtension(file.getOriginalFilename()); 
+		String extension = FilenameUtils.getExtension(file.getOriginalFilename());
+		log.debug("********file extension : "+extension);
 		String ext = env.getProperty("extensionImg");
+		log.debug("********** validation extension : "+ ext);
 		String[] arrExt = ext.split(",");
 		for (String exten : arrExt) 
 		{	
+			log.debug("**********file extension read : " + exten);
 			if (extension.equalsIgnoreCase(exten)) {
 				assetDocumentDTO = assetService.uploadFile(assetDocumentDTO, file);
+				assetDocumentDTO.setExtension(extension);
 			}
 		}
 		return new ResponseEntity<>(assetDocumentDTO, HttpStatus.OK);
@@ -539,14 +559,15 @@ public class AssetResource {
 	}
 
 	@RequestMapping(value = "/assets/{id}/document/image", method = RequestMethod.DELETE)
-	public ResponseEntity<?> deleteImages(@PathVariable("id") long id) {
-		log.debug("images ids -" + id);
-		assetService.deleteImages(id);
-		return new ResponseEntity<>(HttpStatus.OK);
-	}
+    public ResponseEntity<?>  deleteImages(@PathVariable("id") long id) {
+        log.debug("images ids -"+id);
+        String result = null;
+        result = assetService.deleteImages(id);
+        return new ResponseEntity<>(result, HttpStatus.OK);
+    }
 
-	@RequestMapping(path = "/assets/import", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<ImportResult> importAssetData(@RequestParam("assetFile") MultipartFile file) {
+	@RequestMapping(path="/assets/import", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<ImportResult> importAssetData(@RequestParam("assetFile") MultipartFile file){
 		Calendar cal = Calendar.getInstance();
 		ImportResult result = assetService.importFile(file, cal.getTimeInMillis());
 		return new ResponseEntity<ImportResult>(result, HttpStatus.OK);
