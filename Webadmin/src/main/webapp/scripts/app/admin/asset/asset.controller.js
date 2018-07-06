@@ -31,7 +31,7 @@ angular.module('timeSheetApp')
         $scope.selectedConfig = null;
         $scope.selectedAssetType = {};
         $scope.selectedAssetGroup = {};
-        $scope.selectedAssetStatus = null;
+        $scope.selectedAssetStatus = "COMMISSIONED";
         $scope.selectedManufacturer = {};
         $scope.selectedServiceProvider = {};
         $scope.selectedServiceWarranty = {};
@@ -219,8 +219,10 @@ angular.module('timeSheetApp')
         	}
 
         $scope.savePPMSchedule = function (){
+            
 
         	console.log(" --- Create asset ppm ---" ,$scope.assetPPM.title);
+
 
             if(!$scope.assetGen.id && !$stateParams.id){
 
@@ -268,6 +270,8 @@ angular.module('timeSheetApp')
 
             	AssetComponent.createPPM($scope.assetPPM).then(function(response) {
 
+
+
                     //console.log("PPM schedule response",JSON.stringify(response));
 
                     $scope.success = 'OK';
@@ -287,6 +291,7 @@ angular.module('timeSheetApp')
                     $("#dateFilterPpmTo").val("");
 
                     $scope.loadPPMSchedule();
+                    $scope.loadSiteShifts();
                     $scope.loadingStop();
 
                 }).catch(function (response) {
@@ -490,10 +495,11 @@ angular.module('timeSheetApp')
         }
 
         $scope.loadSiteShifts = function() {
-        		console.log('selected site - ' + JSON.stringify($rootScope.selectedSite))
-        		if($rootScope.selectedSite) {
-            		SiteComponent.findShifts($rootScope.selectedSite.id).then(function(data){
+        		console.log('selected site - ' + JSON.stringify($scope.selectedSites));
+        		if($scope.selectedSites) {
+            		SiteComponent.findShifts($scope.selectedSites.id).then(function(data){
             			$scope.shifts = data;
+                        console.log('selected shifts - ' + JSON.stringify($scope.shifts));
             		});
         		}
         }
@@ -553,6 +559,8 @@ angular.module('timeSheetApp')
                         console.log('zones list',$scope.zones);
                    });
                 }
+
+                $scope.loadSiteShifts();
 
                 //$scope.genQrCodes();
 
@@ -965,7 +973,6 @@ angular.module('timeSheetApp')
                     if($scope.selectedZone){$scope.assetGen.zone = $scope.selectedZone;}
 
                     console.log("Asset Create List -- ",$scope.assetGen);
-                    return false;
                     AssetComponent.create($scope.assetGen).then(function(response) {
                         console.log("Asset response",JSON.stringify(response));
                         $scope.assetGen.id=response.id;
