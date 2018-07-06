@@ -20,6 +20,8 @@ public class AssetDocumentDTO extends BaseDTO implements Serializable {
 	 private Date uploadedDate;
 	 
 	 private String type;
+	 
+	 private String url;
 
 	public Long getId() {
 		return id;
@@ -71,6 +73,14 @@ public class AssetDocumentDTO extends BaseDTO implements Serializable {
 
 	public void setType(String type) {
 		this.type = type;
+	}
+
+	public String getUrl() {
+		return url;
+	}
+
+	public void setUrl(String url) {
+		this.url = url;
 	}
 	 
 	 
