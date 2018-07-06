@@ -235,10 +235,16 @@ public class AssetResource {
 		return result;
 	}
 
-	@RequestMapping(path = "/asset/qrcode/{id}", method = RequestMethod.GET, produces = MediaType.IMAGE_PNG_VALUE)
-	public String getQRCode(@PathVariable("id") Long id) {
+	@RequestMapping(path = "/asset/qrcode/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	public AssetDTO getQRCode(@PathVariable("id") Long id) {
 		log.debug(">>> get QR Code! <<<");
-		return assetService.getQRCode(id);
+		AssetDTO result = null;
+		try { 
+			result = assetService.getQRCode(id);
+		} catch(Exception e) { 
+			throw new TimesheetException("Error while get a QR-Code" +e);
+		}
+		return result;
 	}
 
 	@RequestMapping(value = "/assetgroup", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -349,6 +355,7 @@ public class AssetResource {
 		for (String exten : arrExt) {
 			if (extension.equals(exten)) {
 				assetDocumentDTO = assetService.uploadFile(assetDocumentDTO, file);
+				assetDocumentDTO.setExtension(extension);
 			}
 		}
 		return new ResponseEntity<>(assetDocumentDTO, HttpStatus.OK);
@@ -371,6 +378,7 @@ public class AssetResource {
 			log.debug("**********file extension read : " + exten);
 			if (extension.equalsIgnoreCase(exten)) {
 				assetDocumentDTO = assetService.uploadFile(assetDocumentDTO, file);
+				assetDocumentDTO.setExtension(extension);
 			}
 		}
 		return new ResponseEntity<>(assetDocumentDTO, HttpStatus.OK);

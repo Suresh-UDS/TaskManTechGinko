@@ -965,12 +965,12 @@ angular.module('timeSheetApp')
                 console.log('response qr---',response);
 
                 //$scope.success = 'OK';
-                var qrAry  = response.split('.');
+//                var qrAry  = response.split('.');
 
-             $scope.qr_img = qrAry[0];
-             $scope.assetCode = qrAry[1];
+             $scope.qr_img = response.url;
+             $scope.assetCode = response.code;
 
-             console.log('create qr---',qrAry);
+//             console.log('create qr---',qrAry);
 
              $rootScope.loadingStop();
 
@@ -1003,12 +1003,12 @@ angular.module('timeSheetApp')
 
             AssetComponent.genQrCode(qr_id).then(function(response){
 
-                var qrAry  = response.split('.');
+//                var qrAry  = response.split('.');
 
-             $scope.qr_img = qrAry[0];
-             $scope.assetCode = qrAry[1];
+             $scope.qr_img = response.url;
+             $scope.assetCode = response.code;
 
-             console.log('get qr---',qrAry);
+             console.log('get qr---',response);
 
              $rootScope.loadingStop();
 
@@ -1663,7 +1663,7 @@ angular.module('timeSheetApp')
                 $rootScope.loadingStop();
                 $scope.uploadFiles = [];
 	    		$scope.uploadFiles=data;
-
+	    		
                 $scope.fileCount = ($scope.uploadFiles).length;
 
                 console.log("-- Upload files --" , $scope.uploadFiles);

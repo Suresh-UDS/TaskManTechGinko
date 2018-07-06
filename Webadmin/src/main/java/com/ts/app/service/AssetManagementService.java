@@ -245,6 +245,9 @@ public class AssetManagementService extends AbstractService {
 	
 	@Value("${AWS.s3-asset-path}")
 	private String assetFilePath;
+	
+	@Value("${AWS.s3-qrcode-path}")
+	private String qrcodePath;
 
 	// Asset
 	public AssetDTO saveAsset(AssetDTO assetDTO) {
@@ -537,20 +540,22 @@ public class AssetManagementService extends AbstractService {
 		return assetDTO;
 	}
 
-	public String getQRCode(long assetId) {
+	public AssetDTO getQRCode(long assetId) {
 		log.debug(">>> get QR Code <<<");
+		AssetDTO assetDTO = new AssetDTO();
 		Asset asset = assetRepository.findOne(assetId);
-		String qrCodeBase64 = null;
-		String imageFileName = null;
+//		String qrCodeBase64 = null;
+		String imageFileUrl = "" ;
 		String assetcode = asset.getCode();
 		if (asset != null) {
-			imageFileName = asset.getQrCodeImage();
-			if (org.apache.commons.lang3.StringUtils.isNotBlank(imageFileName)) {
-				qrCodeBase64 = fileUploadHelper.readQrCodeFile(imageFileName);
+			imageFileUrl = cloudFrontUrl + bucketEnv + qrcodePath + asset.getQrCodeImage();
+			if (org.apache.commons.lang3.StringUtils.isNotBlank(imageFileUrl)) {
+				assetDTO.setCode(assetcode);
+				assetDTO.setUrl(imageFileUrl);
 			}
 		}
-		qrCodeBase64 = qrCodeBase64 + "." + assetcode;
-		return qrCodeBase64;
+//		qrCodeBase64 = qrCodeBase64 + "." + assetcode;
+		return assetDTO;
 		}
 
 	public ExportResult generateReport(List<AssetDTO> transactions, SearchCriteria criteria) {
@@ -1339,7 +1344,9 @@ public class AssetManagementService extends AbstractService {
 		List<AssetDocument> assetDocument = assetDocumentRepository.findAllByType(type, assetId);
 		List<AssetDocumentDTO> assetDocumentDTO = mapperUtil.toModelList(assetDocument, AssetDocumentDTO.class);
 		for(AssetDocumentDTO assetDoc : assetDocumentDTO) { 
+			String extension = FilenameUtils.getExtension(assetDoc.getFile());
 			assetDoc.setUrl(cloudFrontUrl + bucketEnv + assetFilePath + assetDoc.getFile());
+			assetDoc.setExtension(extension);
 		}
 		return assetDocumentDTO;
 	}
