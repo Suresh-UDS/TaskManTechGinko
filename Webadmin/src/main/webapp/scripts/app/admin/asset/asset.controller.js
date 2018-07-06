@@ -588,7 +588,7 @@ angular.module('timeSheetApp')
 
         /* Sorting functions*/
 
-        //$scope.isActiveAsc = 'assetCode';
+        $scope.isActiveAsc = 'assetCode';
         $scope.isActiveDesc = '';
 
         $scope.columnAscOrder = function(field){
@@ -883,10 +883,10 @@ angular.module('timeSheetApp')
         $scope.warFromMsg =false;
 
         $('input#acquiredDate').on('dp.change', function(e){
-                //$scope.assetGen.acquiredDate = e.date._d;
-                //$scope.assetEditDate = e.date._d;
-                $scope.assetGen.acquiredDate = $filter('date')(e.date._d, 'EEE, dd MMM yyyy HH:mm:ss Z');
-                $scope.assetEditDate = $filter('date')(e.date._d, 'EEE, dd MMM yyyy HH:mm:ss Z');
+                $scope.assetGen.acquiredDate = e.date._d;
+                $scope.assetEditDate = e.date._d;
+                //$scope.assetGen.acquiredDate = $filter('date')(e.date._d, 'EEE, dd MMM yyyy HH:mm:ss Z');
+                //$scope.assetEditDate = $filter('date')(e.date._d, 'EEE, dd MMM yyyy HH:mm:ss Z');
         });
         
 
