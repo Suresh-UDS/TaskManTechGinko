@@ -633,7 +633,7 @@ public class ImportUtil {
 				assetDTO.setSerialNumber(getCellValue(currentRow.getCell(11)));
 				Date acquiredDate = currentRow.getCell(12) != null ? currentRow.getCell(12).getDateCellValue() : null;
 				if(acquiredDate != null) {
-					assetDTO.setAcquiredDate(acquiredDate);
+					assetDTO.setAcquiredDate(DateUtil.convertToZDT(acquiredDate));
 				}
 				assetDTO.setPurchasePrice(Double.valueOf(getCellValue(currentRow.getCell(13))));
 				assetDTO.setCurrentPrice(Double.valueOf(getCellValue(currentRow.getCell(14))));
