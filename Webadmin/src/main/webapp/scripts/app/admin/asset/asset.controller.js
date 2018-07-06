@@ -31,7 +31,7 @@ angular.module('timeSheetApp')
         $scope.selectedConfig = null;
         $scope.selectedAssetType = {};
         $scope.selectedAssetGroup = {};
-        $scope.selectedAssetStatus = null;
+        $scope.selectedAssetStatus = "COMMISSIONED";
         $scope.selectedManufacturer = {};
         $scope.selectedServiceProvider = {};
         $scope.selectedServiceWarranty = {};
@@ -219,8 +219,10 @@ angular.module('timeSheetApp')
         	}
 
         $scope.savePPMSchedule = function (){
+            
 
         	console.log(" --- Create asset ppm ---" ,$scope.assetPPM.title);
+
 
             if(!$scope.assetGen.id && !$stateParams.id){
 
@@ -268,6 +270,8 @@ angular.module('timeSheetApp')
 
             	AssetComponent.createPPM($scope.assetPPM).then(function(response) {
 
+
+
                     //console.log("PPM schedule response",JSON.stringify(response));
 
                     $scope.success = 'OK';
@@ -287,6 +291,7 @@ angular.module('timeSheetApp')
                     $("#dateFilterPpmTo").val("");
 
                     $scope.loadPPMSchedule();
+                    $scope.loadSiteShifts();
                     $scope.loadingStop();
 
                 }).catch(function (response) {
@@ -490,10 +495,11 @@ angular.module('timeSheetApp')
         }
 
         $scope.loadSiteShifts = function() {
-        		console.log('selected site - ' + JSON.stringify($rootScope.selectedSite))
-        		if($rootScope.selectedSite) {
-            		SiteComponent.findShifts($rootScope.selectedSite.id).then(function(data){
+        		console.log('selected site - ' + JSON.stringify($scope.selectedSites));
+        		if($scope.selectedSites) {
+            		SiteComponent.findShifts($scope.selectedSites.id).then(function(data){
             			$scope.shifts = data;
+                        console.log('selected shifts - ' + JSON.stringify($scope.shifts));
             		});
         		}
         }
@@ -553,6 +559,8 @@ angular.module('timeSheetApp')
                         console.log('zones list',$scope.zones);
                    });
                 }
+
+                $scope.loadSiteShifts();
 
                 //$scope.genQrCodes();
 
@@ -883,15 +891,17 @@ angular.module('timeSheetApp')
         $scope.warFromMsg =false;
 
         $('input#acquiredDate').on('dp.change', function(e){
-                $scope.assetGen.acquiredDate = e.date._d;
-                $scope.assetEditDate = e.date._d;
+                $scope.assetGen.acquiredDate = new Date(e.date._d).toISOString();
+
+                $scope.assetEditDate = new Date(e.date._d).toISOString();
                 //$scope.assetGen.acquiredDate = $filter('date')(e.date._d, 'EEE, dd MMM yyyy HH:mm:ss Z');
                 //$scope.assetEditDate = $filter('date')(e.date._d, 'EEE, dd MMM yyyy HH:mm:ss Z');
         });
         
 
         $('input#warFromDate').on('dp.change', function(e){
-            $scope.assetGen.warrantyFromDate = e.date._d;
+            $scope.assetGen.warrantyFromDate =  new Date(e.date._d).toISOString();
+
             $scope.warFromDate = $filter('date')(e.date._d, 'yyyy-MM-dd');
 
             if($scope.assetGen.startDate > $scope.assetGen.endDate) {
@@ -912,7 +922,7 @@ angular.module('timeSheetApp')
          $scope.warToMsg =false;
 
         $('input#warToDate').on('dp.change', function(e){
-            $scope.assetGen.warrantyToDate = e.date._d;
+            $scope.assetGen.warrantyToDate = new Date(e.date._d).toISOString();
             $scope.warToDate = $filter('date')(e.date._d, 'yyyy-MM-dd');
 
             if($scope.assetGen.endDate < $scope.assetGen.startDate) {
@@ -931,7 +941,7 @@ angular.module('timeSheetApp')
 
         $('input#searchAcquiredDate').on('dp.change', function(e){
                 $scope.searchAcquiredDate = $filter('date')(e.date._d, 'dd-MM-yyyy');
-                $scope.searchAcquiredDateSer = e.date._d;
+                $scope.searchAcquiredDateSer = new Date(e.date._d).toISOString();
         });
 
 
@@ -965,7 +975,6 @@ angular.module('timeSheetApp')
                     if($scope.selectedZone){$scope.assetGen.zone = $scope.selectedZone;}
 
                     console.log("Asset Create List -- ",$scope.assetGen);
-                    return false;
                     AssetComponent.create($scope.assetGen).then(function(response) {
                         console.log("Asset response",JSON.stringify(response));
                         $scope.assetGen.id=response.id;
@@ -1029,12 +1038,12 @@ angular.module('timeSheetApp')
                 console.log('response qr---',response);
 
                 //$scope.success = 'OK';
-                var qrAry  = response.split('.');
+//                var qrAry  = response.split('.');
 
-             $scope.qr_img = qrAry[0];
-             $scope.assetCode = qrAry[1];
+             $scope.qr_img = response.url;
+             $scope.assetCode = response.code;
 
-             console.log('create qr---',qrAry);
+//             console.log('create qr---',qrAry);
 
              $rootScope.loadingStop();
 
@@ -1070,12 +1079,12 @@ angular.module('timeSheetApp')
 
             AssetComponent.genQrCode(qr_id).then(function(response){
 
-                var qrAry  = response.split('.');
+//                var qrAry  = response.split('.');
 
-             $scope.qr_img = qrAry[0];
-             $scope.assetCode = qrAry[1];
+             $scope.qr_img = response.url;
+             $scope.assetCode = response.code;
 
-             console.log('get qr---',qrAry);
+             console.log('get qr---',response);
 
              $rootScope.loadingStop();
 
@@ -1753,7 +1762,7 @@ angular.module('timeSheetApp')
                 $rootScope.loadingStop();
                 $scope.uploadFiles = [];
 	    		$scope.uploadFiles=data;
-
+	    		
                 $scope.fileCount = ($scope.uploadFiles).length;
 
                 console.log("-- Upload files --" , $scope.uploadFiles);

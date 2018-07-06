@@ -757,7 +757,7 @@
 
                                                                     <div class="QrcodeCon" ng-show="qr_img">
 
-                                                                        <img src="{{qr_img}}" width="50%">
+                                                                        <img ng-src="{{qr_img}}" width="50%">
 
                                                                     </div>
                                                                 </div>
@@ -971,10 +971,11 @@
                                                                                    ng-model="assetPPM.title"
                                                                                    class='form-control'
                                                                                    name='ppmTitle'
+                                                                                   value=""
                                                                                    type='text'
                                                                                    ng-maxlength='250'
                                                                                     autofocus
-                                                                           required />
+                                                                           ng-required="true" />
                                                                             <div ng-show="form3.$submitted || form3.ppmTitle.$touched">
                                                                                 <div
                                                                                     ng-show="form3.ppmTitle.$dirty || form3.ppmTitle.$invalid">
@@ -1031,7 +1032,7 @@
                                                                                     ng-show="form3.PpmFrom.$dirty || form3.PpmFrom.$invalid">
                                                                                     <p class="help-block" style="width:100%;z-index:1000;background:#fff;color:maroon"
                                                                                        ng-show="form3.PpmFrom.$error.required">
-                                                                                        From date is required.
+                                                                                        Fromdate is required.
                                                                                     </p>
 
                                                                                 </div>
@@ -1054,14 +1055,14 @@
                                                                                     ng-show="form3.PpmTo.$dirty || form3.PpmTo.$invalid">
                                                                                     <p class="help-block" style="width:100%;z-index:1000;background:#fff;color:maroon"
                                                                                        ng-show="form3.PpmTo.$error.required">
-                                                                                        To date is required.
+                                                                                        Todate is required.
                                                                                     </p>
 
 
                                                                                 </div>
                                                                                 <p class="help-block" style="color:maroon"
                                                                                        ng-show="ppmToMsg">
-                                                                                        Todate cannot be lesser than From date.
+                                                                                        Todate cannot be lesser than Fromdate.
                                                                                 </p>
 
                                                                             </div>
@@ -1153,7 +1154,7 @@
                                                                     		<div class="form-group">
 						                                                    <label class="control-label">Start Date Time<span class="red-star">*</span></label>
 						                                                    <span class="form-control-feedback calender-icon"><i class="material-icons">date_range</i></span>
-						                                                    <input type="text" class="form-control datetimepicker"  id="ppmJobStartTime"  ng-model="assetPPM.jobStartTime" required/>
+						                                                    <input type="text" class="form-control datetimepicker"  id="ppmJobStartTime"  ng-model="assetPPM.jobStartTime" ng-required="true"/>
 																		   <div ng-show="form3.$submitted || form3.ppmJobStartTime.$touched">
                                                                                 <div
                                                                                     ng-show="form3.ppmJobStartTime.$dirty || form3.ppmJobStartTime.$invalid">
@@ -1178,7 +1179,7 @@
 						                                                     	   value="1"
 						                                                     	   min="1"
 						                                                        ng-model="assetPPM.plannedHours"
-						                                                        required
+						                                                        ng-required="true"
 						                                                    />
 
 						                                                    <div ng-show="form.$submitted || form.plannedHours.$touched">
@@ -1193,7 +1194,7 @@
 						                                                </div>
 
                                                                     </div>
-                                                                    <div class="col-md-3" ng-init="loadSiteShifts()">
+                                                                    <div class="col-md-3" >
                                                                         <div class="form-group">
                                                                             <label class="control-label">Shift</label>
                                                                             <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
@@ -2090,10 +2091,10 @@
                                                                    <div class="DeleteBtn" ng-click="deleteConfirmDoc(uploadFile.id)"  onClick="$('#deleteModal').modal()" data-target="#myModal">
                                                                      <i class="material-icons">close</i>
                                                                  </div>
-                                                                   <a href="#" ng-click="showFile(uploadFile.id, uploadFile.file)">
-                                                                       <img src="assets/img/Docs-icon.png" alt="docs" />
+                                                                   <a href="#" ng-click="">
+                                                                       <img src="assets/img/{{uploadFile.extension}}.png" alt="docs" />
                                                                    </a>
-                                                                   <p>{{uploadFile.title}}</p>
+                                                                   <p style="padding-top: 10px;font-weight: 400;font-size: 15px">{{uploadFile.title}}</p>
                                                                    <div  ng-if="uploadFile.id == download">
                                                                    	<a href="{{content}}" download>download</a>
                                                                    </div>
@@ -2123,11 +2124,11 @@
                                                                     <div class="DeleteBtn" ng-click="deleteConfirmDoc(uploadPhoto.id)"  onClick="$('#deleteModal').modal()" data-target="#myModal">
                                                                          <i class="material-icons">close</i>
                                                                      </div>
-                                                                    <a href="#" ng-click="showFile(uploadPhoto.id, uploadPhoto.file)">
+                                                                    <a href="#" ng-click="">
                                                                         <!-- <img src="D:\asset\uploads\site\{{uploadPhoto.id}}\{{uploadPhoto.file}}" alt="docs" ng-click="showFile(uploadPhoto.id, uploadPhoto.file)"/> -->
-                                                                        <img src="assets/img/img.png" alt="docs" />
+                                                                        <img src="assets/img/{{uploadPhoto.extension}}.png" alt="docs" />
                                                                     </a>
-                                                                    <p>{{uploadPhoto.title}}</p>
+                                                                    <p style="padding-top: 10px;font-weight: 400;font-size: 15px">{{uploadPhoto.title}}</p>
                                                                     <div ng-if="uploadPhoto.id == download">
                                                                    	<a href="{{content}}" download>download</a>
                                                                    </div>
