@@ -30,14 +30,14 @@ angular.module('timeSheetApp')
 
         },0);
 
-        $scope.initscrollbar = function()
-             {
-                 console.log("---- Calling scrollbar ---- ");
-
-               $('.sidebar .sidebar-wrapper').perfectScrollbar();
-
-             }
-              $scope.initscrollbar();
+        // $scope.initscrollbar = function()
+        //      {
+        //          console.log("---- Calling scrollbar ---- ");
+        //
+        //        $('.sidebar .sidebar-wrapper').perfectScrollbar();
+        //
+        //      }
+        //       $scope.initscrollbar();
 
         $rootScope.inits = function()
         {
