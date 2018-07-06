@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.TimeZone;
 
 import javax.inject.Inject;
 
@@ -245,11 +246,14 @@ public class AssetManagementService extends AbstractService {
 	
 	@Value("${AWS.s3-asset-path}")
 	private String assetFilePath;
+	
+	@Value("${AWS.s3-qrcode-path}")
+	private String qrcodePath;
 
 	// Asset
 	public AssetDTO saveAsset(AssetDTO assetDTO) {
 		log.debug("assets service with assettype " + assetDTO.getAssetType());
-
+        
 		Asset asset = mapperUtil.toEntity(assetDTO, Asset.class);
 		Site site = getSite(assetDTO.getSiteId());
 		asset.setSite(site);
@@ -271,8 +275,14 @@ public class AssetManagementService extends AbstractService {
 		
 		asset.setActive(Asset.ACTIVE_YES);
 
-		asset = assetRepository.save(asset);
-		
+		/*Calendar checkInDateFrom = Calendar.getInstance(TimeZone.getTimeZone("Asia/Kolkata"));
+        checkInDateFrom.setTime(assetDTO.getAcquiredDate());
+        
+        asset.setAcquiredDate(DateUtil.convertToSQLDate(DateUtil.convertUTCToIST(checkInDateFrom)));*/
+        
+		/*asset.setAcquiredDate(DateUtil.convertToSQLDate(assetDTO.getAcquiredDate()));
+		asset = assetRepository.save(asset);*/
+		 
 		AssetStatusHistory assetStatusHistory = assetStatusHistoryRepository.findOne(asset.getAssetStatusHistory().getId());
 		assetStatusHistory.setAsset(asset);
 		assetStatusHistoryRepository.save(assetStatusHistory);
@@ -470,9 +480,9 @@ public class AssetManagementService extends AbstractService {
 		asset.setZone(assetDTO.getZone());
 		asset.setModelNumber(assetDTO.getModelNumber());
 		asset.setSerialNumber(assetDTO.getSerialNumber());
-		if (!StringUtils.isEmpty(assetDTO.getAcquiredDate())) {
+		/*if (!StringUtils.isEmpty(assetDTO.getAcquiredDate())) {
 		asset.setAcquiredDate(DateUtil.convertToSQLDate(assetDTO.getAcquiredDate()));
-		}
+		}*/
 		if (!StringUtils.isEmpty(assetDTO.getWarrantyFromDate()) && !StringUtils.isEmpty(assetDTO.getWarrantyToDate())) {
 		asset.setWarrantyFromDate(DateUtil.convertToSQLDate(assetDTO.getWarrantyFromDate()));
 		asset.setWarrantyToDate(DateUtil.convertToSQLDate(assetDTO.getWarrantyToDate()));
@@ -537,20 +547,22 @@ public class AssetManagementService extends AbstractService {
 		return assetDTO;
 	}
 
-	public String getQRCode(long assetId) {
+	public AssetDTO getQRCode(long assetId) {
 		log.debug(">>> get QR Code <<<");
+		AssetDTO assetDTO = new AssetDTO();
 		Asset asset = assetRepository.findOne(assetId);
-		String qrCodeBase64 = null;
-		String imageFileName = null;
+//		String qrCodeBase64 = null;
+		String imageFileUrl = "" ;
 		String assetcode = asset.getCode();
 		if (asset != null) {
-			imageFileName = asset.getQrCodeImage();
-			if (org.apache.commons.lang3.StringUtils.isNotBlank(imageFileName)) {
-				qrCodeBase64 = fileUploadHelper.readQrCodeFile(imageFileName);
+			imageFileUrl = cloudFrontUrl + bucketEnv + qrcodePath + asset.getQrCodeImage();
+			if (org.apache.commons.lang3.StringUtils.isNotBlank(imageFileUrl)) {
+				assetDTO.setCode(assetcode);
+				assetDTO.setUrl(imageFileUrl);
 			}
 		}
-		qrCodeBase64 = qrCodeBase64 + "." + assetcode;
-		return qrCodeBase64;
+//		qrCodeBase64 = qrCodeBase64 + "." + assetcode;
+		return assetDTO;
 		}
 
 	public ExportResult generateReport(List<AssetDTO> transactions, SearchCriteria criteria) {
@@ -1339,7 +1351,9 @@ public class AssetManagementService extends AbstractService {
 		List<AssetDocument> assetDocument = assetDocumentRepository.findAllByType(type, assetId);
 		List<AssetDocumentDTO> assetDocumentDTO = mapperUtil.toModelList(assetDocument, AssetDocumentDTO.class);
 		for(AssetDocumentDTO assetDoc : assetDocumentDTO) { 
+			String extension = FilenameUtils.getExtension(assetDoc.getFile());
 			assetDoc.setUrl(cloudFrontUrl + bucketEnv + assetFilePath + assetDoc.getFile());
+			assetDoc.setExtension(extension);
 		}
 		return assetDocumentDTO;
 	}
