@@ -891,16 +891,16 @@ angular.module('timeSheetApp')
         $scope.warFromMsg =false;
 
         $('input#acquiredDate').on('dp.change', function(e){
-                $scope.assetGen.acquiredDate = new Date(e.date._d).toISOString();
+                $scope.assetGen.acquiredDate = e.date._d;
 
-                $scope.assetEditDate = new Date(e.date._d).toISOString();
+                $scope.assetEditDate = e.date._d;
                 //$scope.assetGen.acquiredDate = $filter('date')(e.date._d, 'EEE, dd MMM yyyy HH:mm:ss Z');
                 //$scope.assetEditDate = $filter('date')(e.date._d, 'EEE, dd MMM yyyy HH:mm:ss Z');
         });
         
 
         $('input#warFromDate').on('dp.change', function(e){
-            $scope.assetGen.warrantyFromDate =  new Date(e.date._d).toISOString();
+            $scope.assetGen.warrantyFromDate =  e.date._d;
 
             $scope.warFromDate = $filter('date')(e.date._d, 'yyyy-MM-dd');
 
@@ -922,7 +922,7 @@ angular.module('timeSheetApp')
          $scope.warToMsg =false;
 
         $('input#warToDate').on('dp.change', function(e){
-            $scope.assetGen.warrantyToDate = new Date(e.date._d).toISOString();
+            $scope.assetGen.warrantyToDate = e.date._d;
             $scope.warToDate = $filter('date')(e.date._d, 'yyyy-MM-dd');
 
             if($scope.assetGen.endDate < $scope.assetGen.startDate) {
@@ -941,7 +941,7 @@ angular.module('timeSheetApp')
 
         $('input#searchAcquiredDate').on('dp.change', function(e){
                 $scope.searchAcquiredDate = $filter('date')(e.date._d, 'dd-MM-yyyy');
-                $scope.searchAcquiredDateSer = new Date(e.date._d).toISOString();
+                $scope.searchAcquiredDateSer = e.date._d;
         });
 
 
@@ -2090,7 +2090,7 @@ angular.module('timeSheetApp')
 		
 		    	    	console.log("To be create AMC schedule",$scope.amcSchedule);
 		
-		        $rootScope.loadingStart();
+		                 $rootScope.loadingStart();
 		
 		    	    	AssetComponent.saveAmcSchedule($scope.amcSchedule).then(function(data){
 		    	    		console.log(data);
