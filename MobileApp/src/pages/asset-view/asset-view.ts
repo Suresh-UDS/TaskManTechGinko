@@ -1,4 +1,4 @@
-import {Component, ElementRef, ViewChild} from '@angular/core';
+import {Component, ElementRef, Inject, ViewChild} from '@angular/core';
 import {FabContainer, Item, ItemSliding, ModalController, NavController, NavParams} from "ionic-angular";
 import {GetAssetReading} from "./get-asset-reading";
 import {JobService} from "../service/jobService";
@@ -14,6 +14,9 @@ import { DatePicker } from '@ionic-native/date-picker';
 import {AssetService} from "../service/assetService";
 import{CalenderPage} from "../calender-page/calender-page";
 import {CreateJobPage} from "../jobs/add-job";
+import {DBService} from "../service/dbService";
+import {FileTransferObject, FileUploadOptions, FileTransfer} from "@ionic-native/file-transfer";
+import {ApplicationConfig, MY_CONFIG_TOKEN} from "../service/app-config";
 
 /**
  * Generated class for the AssetView page.
@@ -42,8 +45,10 @@ export class AssetView {
     spinner:any;
     jobSearchCriteria:any;
     ticketSearchCriteria:any;
+    fileTransfer: FileTransferObject = this.transfer.create();
 
-  constructor(public camera: Camera,private modalCtrl:ModalController,private datePicker: DatePicker,private componentService:componentService,public navCtrl: NavController, public navParams: NavParams, public jobService:JobService, public assetService:AssetService) {
+
+    constructor(public dbService:DBService,public camera: Camera,@Inject(MY_CONFIG_TOKEN) private config:ApplicationConfig,private transfer: FileTransfer,private modalCtrl:ModalController,private datePicker: DatePicker,private componentService:componentService,public navCtrl: NavController, public navParams: NavParams, public jobService:JobService, public assetService:AssetService) {
 
     this.assetDetails = this.navParams.data.assetDetails;
     this.categories = 'details';
@@ -118,6 +123,34 @@ export class AssetView {
             imageData = imageData.replace("assets-library://", "cdvfile://localhost/assets-library/")
             console.log('imageData -' +imageData);
 
+            let token_header=window.localStorage.getItem('session');
+            let options: FileUploadOptions = {
+                fileKey: 'uploadFile',
+                fileName:'uploadFile',
+                headers:{
+                    'X-Auth-Token':token_header
+                },
+                params:{
+                    title : this.assetDetails.title,
+                    assetId : this.assetDetails.id,
+                    type : "image"
+                }
+            };
+
+            this.fileTransfer.upload(imageData, this.config.Url+'api/assets/uploadAssetPhoto', options)
+                .then((data) => {
+                    console.log(data.response);
+                    console.log("image upload");
+                    this.componentService.closeLoader();
+                    this.navCtrl.pop();
+                }, (err) => {
+                    console.log(err);
+                    console.log("image upload fail");
+                    this.componentService.closeLoader();
+                })
+
+
+
         })
 
     }
@@ -149,6 +182,20 @@ export class AssetView {
         //     assetId:this.assetDetails.id
         // }
         this.spinner = true;
+        //offline
+        // this.dbService.getJobs(this.assetDetails.id).then(
+        //     (res)=>{
+        //         this.componentService.closeLoader()
+        //         console.log(res)
+        //         this.assetDetails.jobs = res;
+        //     },
+        //     (err)=>{
+        //
+        //     }
+        // )
+
+
+        //Online
         this.jobService.getJobs(searchCriteria).subscribe(
             response=>{
                 this.spinner = false;
@@ -389,18 +436,20 @@ export class AssetView {
 
 
     getAssetById(){
-        this.assetService.getAssetById(this.assetDetails.id).subscribe(
-            response=>{
-                this.componentService.closeLoader();
-                console.log("Asset by id");
-                console.log(response);
-                this.assetDetails = response;
-            },err=>{
-                this.componentService.closeLoader();
-                console.log("Error in getting asset by id");
-                console.log(err);
-            }
-        )
+        this.componentService.closeLoader();
+        //Online
+        // this.assetService.getAssetById(this.assetDetails.id).subscribe(
+        //     response=>{
+        //         this.componentService.closeLoader();
+        //         console.log("Asset by id");
+        //         console.log(response);
+        //         this.assetDetails = response;
+        //     },err=>{
+        //         this.componentService.closeLoader();
+        //         console.log("Error in getting asset by id");
+        //         console.log(err);
+        //     }
+        // )
 
     }
 
@@ -409,20 +458,33 @@ export class AssetView {
     getAssetPPMSchedule()
     {
         this.spinner = true;
-        this.assetService.getAssetPPMSchedule(this.assetDetails.id).subscribe(
-            response=>{
-                this.spinner = false;
-                this.componentService.closeLoader();
-                console.log("Get asset PPM response");
-                console.log(response);
-                this.assetDetails.ppms = response;
+        //offline
+        this.dbService.getPPM(this.assetDetails.id).then(
+            (res)=>{
+                this.componentService.closeLoader()
+                console.log(res)
+                this.assetDetails.ppms = res;
             },
-            error=>{
-                this.spinner = false;
-                this.componentService.closeLoader();
-                console.log("Get asset PPM error");
-                console.log(error);
-            })
+            (err)=>{
+
+            }
+        )
+
+        //Online
+        // this.assetService.getAssetPPMSchedule(this.assetDetails.id).subscribe(
+        //     response=>{
+        //         this.spinner = false;
+        //         this.componentService.closeLoader();
+        //         console.log("Get asset PPM response");
+        //         console.log(response);
+        //         this.assetDetails.ppms = response;
+        //     },
+        //     error=>{
+        //         this.spinner = false;
+        //         this.componentService.closeLoader();
+        //         console.log("Get asset PPM error");
+        //         console.log(error);
+        //     })
     }
 
 
@@ -430,39 +492,70 @@ export class AssetView {
     getAssetAMCSchedule()
     {
         this.spinner = true;
-        this.assetService.getAssetAMCSchedule(this.assetDetails.id).subscribe(
-            response=>{
-                this.spinner = false;
+
+        //offline
+        this.dbService.getAMC(this.assetDetails.id).then(
+            (res)=>{
                 this.componentService.closeLoader()
-                console.log("Get asset AMC response");
-                this.assetDetails.amcs = response;
-                console.log(this.assetDetails.amcs);
+                console.log(res)
+                this.assetDetails.amcs = res;
             },
-            error=>{
-                this.spinner = false;
-                this.componentService.closeLoader()
-                console.log("Get asset AMC error");
-                console.log(error);
-            })
+            (err)=>{
+
+            }
+        )
+
+
+        //Online
+        // this.assetService.getAssetAMCSchedule(this.assetDetails.id).subscribe(
+        //     response=>{
+        //         this.spinner = false;
+        //         this.componentService.closeLoader()
+        //         console.log("Get asset AMC response");
+        //         this.assetDetails.amcs = response;
+        //         console.log(this.assetDetails.amcs);
+        //     },
+        //     error=>{
+        //         this.spinner = false;
+        //         this.componentService.closeLoader()
+        //         console.log("Get asset AMC error");
+        //         console.log(error);
+        //     })
     }
 
     // Config
     getAssetConfig(){
         this.spinner=true;
-        console.log(this.assetDetails.config);
-        this.assetService.getAssetConfig(this.assetDetails.assetType,this.assetDetails.id).subscribe(
-            response=>{
-                this.spinner = false;
+
+        //offline
+        this.dbService.getConfig(this.assetDetails.id).then(
+            (res)=>{
                 this.componentService.closeLoader()
-                console.log("Asset config");
-                console.log(response);
-                this.assetDetails.config = response;
-            },err=>{
-                this.spinner = false;
-                this.componentService.closeLoader();
-                console.log("Error in getting asset config");
-                console.log(err);
-            })
+                console.log(res)
+                this.assetDetails.config = res;
+                console.log(this.assetDetails.config)
+            },
+            (err)=>{
+
+            }
+        )
+
+
+        //online
+        // console.log(this.assetDetails.config);
+        // this.assetService.getAssetConfig(this.assetDetails.assetType,this.assetDetails.id).subscribe(
+        //     response=>{
+        //         this.spinner = false;
+        //         this.componentService.closeLoader()
+        //         console.log("Asset config");
+        //         console.log(response);
+        //         this.assetDetails.config = response;
+        //     },err=>{
+        //         this.spinner = false;
+        //         this.componentService.closeLoader();
+        //         console.log("Error in getting asset config");
+        //         console.log(err);
+        //     })
     }
 
     // Reading

@@ -234,7 +234,6 @@
               </ion-row>
           </div>
       </div>
-
       <div class="card">
           <div class="panel-heading card-header-md-clr-orange">AMC Vendor Details</div>
           <div class="card-content table-responsive padding-top0">
@@ -519,7 +518,11 @@
                         <div class="border-btm padding-bottom5 ln-ght20" text-capitalize>
                             <p text-left class="margin0">{{job.title}}</p>
                             <p text-left class="margin0">{{job.employeeName}}</p>
-                            <p text-left class="margin0">{{job.siteProjectName}} - {{job.siteName}}</p>
+                            <p text-left class="margin0">{{job.siteProjectName}} - {{job.siteName}} -
+                                <span>
+                                    <h6 text-uppercase="" text-right="" class="margin0 display-inline" [ngClass]="{'green' : (job.maintenanceType) == 'amc', 'blue' : (job.maintenanceType) == 'ppm' }">{{job.maintenanceType}}</h6>
+                                </span>
+                            </p>
                         </div>
                     </ion-col>
                     <ion-col col-2 class="padding-left0 ver-center">

@@ -1553,3 +1553,11 @@ div.bouncing-container .arrow-down {
 .job-txt:hover {
     text-decoration: underline;
 }
+
+#loop:hover img {
+    opacity: .5;
+}
+
+#loop2:hover img {
+    opacity: .5;
+}

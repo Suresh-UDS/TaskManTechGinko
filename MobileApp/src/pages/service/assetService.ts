@@ -59,19 +59,21 @@ export class AssetService {
     getAssetById(assetId):Observable<any>{
         return this.http.get(this.config.Url+'api/asset/'+assetId).map(
             response=>{
-                console.log("Get asset by Id");
-                console.log(response);
+                // console.log("Get asset by Id");
+                // console.log(response);
                 return response.json();
             }
         )
     }
 
     getAssetPPMSchedule(assetId):Observable<any>{
-        return this.http.get(this.config.Url+'api/assets/'+assetId+'/ppmschedule').map(
+        return this.http.get(this.config.Url+'api/assets/'+assetId+'/ppmschedulelist').map(
             response=>{
                 console.log("Get asset AMC Schedule by Id");
                 console.log(response);
                 return response.json();
+            },error=>{
+               console.log(error)
             })
     }
     getAssetAMCSchedule(assetId):Observable<any>{
@@ -142,7 +144,6 @@ export class AssetService {
             }
         )
     }
-
 
 
 }

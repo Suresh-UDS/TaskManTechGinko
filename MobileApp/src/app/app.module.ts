@@ -60,6 +60,8 @@ import { FileTransfer, FileUploadOptions, FileTransferObject } from '@ionic-nati
 import { File } from '@ionic-native/file';
 import{TicketFilter} from "../pages/ticket/ticket-filter/ticket-filter";
 
+import {SQLitePorter} from "@ionic-native/sqlite-porter";
+
 import {CreateEmployeePage} from "../pages/employee-list/create-employee";
 import {OneSignal} from "@ionic-native/onesignal";
 // import {GoogleMaps} from "@ionic-native/google-maps";
@@ -105,6 +107,9 @@ import{CalenderPage} from "../pages/calender-page/calender-page";
 import{EmployeeFilter} from "../pages/employee-list/employee-filter/employee-filter";
 import {JobFilter} from "../pages/jobs/job-filter/job-filter";
 import{SQLite,SQLiteObject} from "@ionic-native/sqlite";
+import {DBService} from "../pages/service/dbService";
+import {Network} from "@ionic-native/network";
+import {Diagnostic} from "@ionic-native/diagnostic";
 
 
 @NgModule({
@@ -276,6 +281,7 @@ import{SQLite,SQLiteObject} from "@ionic-native/sqlite";
       QuotationService,
       SiteService,
       AssetService,
+      DBService,
     authService,
     HttpClient,
     Geolocation,
@@ -294,6 +300,7 @@ import{SQLite,SQLiteObject} from "@ionic-native/sqlite";
       AppVersion,
       QRScanner,
       FabContainer,
+      Diagnostic,
       SQLite,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
       {provide:MY_CONFIG_TOKEN, useValue: AppConfig}
