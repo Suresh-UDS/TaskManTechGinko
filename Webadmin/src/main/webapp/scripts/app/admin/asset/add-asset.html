@@ -1932,8 +1932,8 @@
                                                                          <div class="DeleteBtn" ng-click="deleteConfirmDoc(uploadFile.id)"  onClick="$('#deleteModal').modal()" data-target="#myModal">
                                                                              <i class="material-icons">close</i>
                                                                          </div>
-                                                                       <a href="#" ng-click="showFile(uploadFile.id, uploadFile.file)">
-                                                                           <img src="assets/img/Docs-icon.png" alt="docs" />
+                                                                       <a href="{{uploadFile.url}}" id="loop">
+                                                                           <img src="assets/img/{{uploadFile.extension}}.png" alt="docs" title="Download"/>
                                                                            <!-- <img src="assets/img/Docs-icon.png" alt="docs" /> -->
                                                                        </a>
                                                                        <p>{{uploadFile.title}}</p>
@@ -1967,9 +1967,9 @@
                                                                         <div class="DeleteBtn" ng-click="deleteConfirmDoc(uploadPhoto.id)"  onClick="$('#deleteModal').modal()" data-target="#myModal">
                                                                         	 <i class="material-icons">close</i>
                                                                          </div>
-                                                                        <a href="#" ng-click="showFile(uploadPhoto.id, uploadPhoto.file)">
+                                                                        <a href="{{uploadPhoto.url}}" id="loop2">
                                                                             <!-- <img src="D:\asset\uploads\site\{{uploadPhoto.id}}\{{uploadPhoto.file}}" alt="docs" /> -->
-                                                                            <img src="assets/img/img.png" alt="docs" />
+                                                                            <img src="assets/img/{{uploadFile.extension}}.png" alt="docs" title="Download"/>
                                                                         </a>
                                                                         <p>{{uploadPhoto.title}}</p>
                                                                         <div ng-if="uploadPhoto.id == download">
