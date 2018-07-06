@@ -52,6 +52,7 @@ public class AssetDTO extends BaseDTO {
     private Date amcDocumentUploadDate;
     private String assetPpmTitle;
     private String warrantyType;
+    private String url;
 
 	public Date getWarrantyFromDate() {
 		return warrantyFromDate;
@@ -340,6 +341,12 @@ public class AssetDTO extends BaseDTO {
 	}
 	public void setProjectName(String projectName) {
 		this.projectName = projectName;
+	}
+	public String getUrl() {
+		return url;
+	}
+	public void setUrl(String url) {
+		this.url = url;
 	}
 	
 	
