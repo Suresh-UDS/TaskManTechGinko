@@ -16,6 +16,8 @@ import org.springframework.web.multipart.MultipartFile;
 import com.ts.app.service.AmazonS3Service;
 import com.ts.app.web.rest.dto.AssetDTO;
 import com.ts.app.web.rest.dto.AssetDocumentDTO;
+import com.ts.app.web.rest.dto.QuotationDTO;
+import com.ts.app.web.rest.dto.TicketDTO;
 
 @Component
 public class AmazonS3Utils {
@@ -88,29 +90,34 @@ public class AmazonS3Utils {
     	
     }
     
-    public String uploadQuotationFile(String quotationId, MultipartFile multipartfile, long dateTime) { 
-    	String name = quotationId + "_" + dateTime + ".jpg";
+    public QuotationDTO uploadQuotationFile(String quotationId, MultipartFile multipartfile, long dateTime, QuotationDTO quotationDTO) { 
+    	String fileUrl = "";
+    	String quotationFileName = quotationId + "_" + dateTime + ".jpg";
     	try {
     		File file = convertMultiPartToFile(multipartfile);
-    		String fileName = name;
-    		amazonS3Service.uploadQuotationToS3(fileName, file);
+    		fileUrl = amazonS3Service.uploadQuotationToS3(quotationFileName, file);
+    		quotationDTO.setQuotationFileName(quotationFileName);
+    		quotationDTO.setUrl(fileUrl);
     	} catch(Exception e) {
     		e.printStackTrace();
     	}
     	
-		return name;
+		return quotationDTO;
     } 
     
-    public String uploadTicketFile(long ticketId, MultipartFile mulitipartfile, long dateTime) {
+    public TicketDTO uploadTicketFile(long ticketId, MultipartFile mulitipartfile, long dateTime, TicketDTO ticketDTO) {
+    	String fileUrl = "";
         String name = ticketId + "_" + dateTime + ".jpg";
         try { 
         	File file = convertMultiPartToFile(mulitipartfile);
         	String fileName = name;
-        	amazonS3Service.uploadTicketFileToS3(fileName, file);
+        	fileUrl = amazonS3Service.uploadTicketFileToS3(fileName, file);
+        	ticketDTO.setImage(fileName);
+        	ticketDTO.setUrl(fileUrl);
         } catch(Exception e) { 
         	e.printStackTrace();
         }
-        return name;
+        return ticketDTO;
     }
 
 	public String deleteAssetFile(String key, String file) {

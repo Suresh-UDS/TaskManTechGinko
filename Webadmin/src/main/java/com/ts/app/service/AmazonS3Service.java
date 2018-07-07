@@ -213,9 +213,10 @@ public class AmazonS3Service {
 		
 	}
 
-	public void uploadQuotationToS3(String fileName, File file) {
+	public String uploadQuotationToS3(String fileName, File file) {
 		// TODO Auto-generated method stub
 		log.debug("Upload Quotation file to S3 bucket -" +fileName);
+		String prefixUrl = "";
 		try { 
 			String folder = bucketEnv + quotationPath + fileName;
 			String ext = FilenameUtils.getExtension(fileName);
@@ -229,18 +230,20 @@ public class AmazonS3Service {
 											 	.withCannedAcl(CannedAccessControlList.PublicRead));
 			log.info("------ Quotation Upload File done ------");
 			log.debug("Result from S3 -" +result);
-											 
+			prefixUrl = cloudFrontUrl + folder;								 
 		} catch(AmazonS3Exception e) { 
 			e.printStackTrace();
 		}
 		
+		return prefixUrl;
+		
 	}
 
-	public void uploadTicketFileToS3(String fileName, File file) {
+	public String uploadTicketFileToS3(String fileName, File file) {
 		// TODO Auto-generated method stub
 		log.debug("Upload Ticket File to S3 bucket" +fileName);
+		String prefixUrl = "";
 		try {
-			
 			String folder = bucketEnv + ticketPath + fileName;
 			String ext = FilenameUtils.getExtension(fileName);
 			
@@ -253,10 +256,13 @@ public class AmazonS3Service {
 												.withCannedAcl(CannedAccessControlList.PublicRead));
 			log.info("-------- Ticket File Uplaod Done -------");
 			log.debug("Result from S3 - " + result);
+			prefixUrl = cloudFrontUrl + folder;
 			
 		}catch(AmazonS3Exception e){ 
 			e.printStackTrace();
 		}
+		
+		return prefixUrl;
 		
 	}
     
