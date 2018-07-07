@@ -70,36 +70,36 @@ export class AssetList {
 
 
           //offline
-      // setTimeout(() => {
-      //     this.dbService.getAsset().then(
-      //         (res)=>{
-      //             this.componentService.closeLoader()
-      //             console.log(res)
-      //             this.assetList = res;
-      //             // this.dbService.setAMC();
-      //             // this.dbService.setPPM();
-      //             // this.dbService.setConfig();
-      //             // this.dbService.setJobs();
-      //             // this.dbService.setSites();
-      //         },
-      //         (err)=>{
-      //
-      //         })
-      // },3000)
+      setTimeout(() => {
+          this.dbService.getAsset().then(
+              (res)=>{
+                  this.componentService.closeLoader()
+                  console.log(res)
+                  this.assetList = res;
+                  // this.dbService.setAMC();
+                  // this.dbService.setPPM();
+                  // this.dbService.setConfig();
+                  // this.dbService.setJobs();
+                  // this.dbService.setSites();
+              },
+              (err)=>{
+
+              })
+      },3000)
 
 
 
               //online
-              this.assetService.findAllAssets().subscribe(
-                  response=>{
-                      this.componentService.closeLoader()
-                      console.log(response);
-                      this.assetList = response;
-                  },
-                  error=>{
-                      console.log("")
-                  }
-              );
+              // this.assetService.findAllAssets().subscribe(
+              //     response=>{
+              //         this.componentService.closeLoader()
+              //         console.log(response);
+              //         this.assetList = response;
+              //     },
+              //     error=>{
+              //         console.log("")
+              //     }
+              // );
 
 
       if(this.navParams.get('text'))
@@ -131,6 +131,51 @@ export class AssetList {
       }
 
   }
+
+
+
+    setDataSync()
+    {
+        this.componentService.showLoader("Data Sync");
+        this.dbService.setAsset().then(
+            response=>{
+                console.log(response)
+                this.dbService.setPPM().then(
+                    response=>{
+                        console.log(response)
+                        this.dbService.setAMC().then(
+                            response=>{
+                                console.log(response)
+                                this.dbService.setConfig().then(
+                                    response=>{
+                                        console.log(response)
+                                        this.dbService.setJobs().then(
+                                            response=>{
+                                                console.log(response)
+                                                this.dbService.setTickets().then(
+                                                    response=> {
+                                                        console.log(response)
+                                                        this.dbService.setSites().then(
+                                                            response=> {
+                                                                console.log(response)
+                                                                this.dbService.setEmployee().then(
+                                                                    response=> {
+                                                                        console.log(response)
+                                                                        this.componentService.closeLoader()
+                                                                    })
+                                                            })
+
+                                                    })
+
+                                            })
+                                    })
+                            })
+                    })
+            })
+    }
+
+
+
 
   getAsset(searchCriteria)
   {

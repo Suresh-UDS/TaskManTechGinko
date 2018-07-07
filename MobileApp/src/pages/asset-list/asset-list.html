@@ -21,6 +21,8 @@
 
 <ion-content padding>
 
+    <button ion-button full (click)="setDataSync()">Date Sync</button>
+
     <!--<ion-fab right bottom (click)="openFilters()"   >-->
         <!--<button ion-fab color="primary"> <ion-icon name="funnel"></ion-icon></button>-->
     <!--</ion-fab>-->
@@ -30,6 +32,8 @@
     </ion-fab>
 
   <ion-list>
+
+
 
       <ion-refresher (ionRefresh)="doRefresh($event)">
           <ion-refresher-content></ion-refresher-content>
