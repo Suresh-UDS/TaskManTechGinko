@@ -957,7 +957,7 @@
                                                                 </div> -->
 
                                                 <div class="tab-pane fade ppm-schedule" id="ppm-schedulee" >
-                                                    <form name="form3" role="form" novalidate
+                                                    <form name="form3" role="form" ng-submit="savePPMSchedule()" novalidate
                                                     class="form-horizontal">
                                                         <div class="panel panel-default">
                                                             <div class="panel-heading">New Schedule</div>
@@ -1205,7 +1205,7 @@
                                                                     </div>
 
                                                                     <div class="col-md-1" style="padding-top: 25px;">
-                                                                        <a class="btn btn-success add-btn margn-top0"  ng-click="savePPMSchedule()" ng-disabled="form3.$invalid || ppmFromMsg || ppmToMsg">Add</a>
+                                                                        <button  type="submit" class="btn btn-success add-btn margn-top0"   ng-disabled="form3.$invalid || ppmFromMsg || ppmToMsg">Add</button>
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -1260,7 +1260,7 @@
                                                     
                                                 </div>
                                                 <div class="tab-pane fade amcschedule" id="amc-schedule" >
-                                                    <form name="form4" role="form" novalidate
+                                                    <form name="form4" role="form"  ng-submit="saveAmcSchedule()" novalidate
                                                     class="form-horizontal">
                                                     <div class="panel panel-default">
                                                         <div class="panel-heading">New Schedule</div>
@@ -1514,7 +1514,7 @@
                                                                         </div>
                                                                     </div>
                                                                 <div class="col-md-3 txt-align-rgt" style="padding-top: 25px;">
-                                                                    <a class="btn btn-success add-btn margn-top0"  ng-click="saveAmcSchedule()" ng-disabled="form4.$invalid || amcFromMsg || amcToMsg">Add</a>
+                                                                    <button  type="submit" class="btn btn-success add-btn margn-top0"  ng-disabled="form4.$invalid || amcFromMsg || amcToMsg">Add</button>
                                                                 </div>
                                                             </div>
                                                         </div>

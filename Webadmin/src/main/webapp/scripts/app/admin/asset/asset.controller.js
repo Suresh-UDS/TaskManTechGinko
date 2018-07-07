@@ -27,6 +27,7 @@ angular.module('timeSheetApp')
         $scope.selectedZone = null;
         $scope.pageSort = 10;
         $scope.assetGen ={};
+        $scope.assetVal ={};
         $scope.assetPPM ={};
         $scope.selectedConfig = null;
         $scope.selectedAssetType = {};
@@ -224,15 +225,15 @@ angular.module('timeSheetApp')
         	console.log(" --- Create asset ppm ---" ,$scope.assetPPM.title);
 
 
-            if(!$scope.assetGen.id && !$stateParams.id){
+            if(!$scope.assetVal.id && !$stateParams.id){
 
                   $scope.showNotifications('top','center','danger','Please create asset first..');
 
             }else{
 
-                if($scope.assetGen.id){
+                if($scope.assetVal.id){
 
-                   $scope.assetPPM.assetId = $scope.assetGen.id;
+                   $scope.assetPPM.assetId = $scope.assetVal.id;
 
                 }else if($stateParams.id){
 
@@ -841,10 +842,10 @@ angular.module('timeSheetApp')
 
                 $scope.assetConfigs.assetId = $stateParams.id;
             }
-            else if($scope.assetGen.id){
+            else if($scope.assetval.id){
 
                 $scope.assetConfigs.assetType = $scope.selectedAssetType.name;
-                $scope.assetConfigs.assetId = $scope.assetGen.id;
+                $scope.assetConfigs.assetId = $scope.assetVal.id;
             }
                console.log("Asset Config load" ,$scope.assetConfigs);
 
@@ -891,16 +892,20 @@ angular.module('timeSheetApp')
         $scope.warFromMsg =false;
 
         $('input#acquiredDate').on('dp.change', function(e){
-                $scope.assetGen.acquiredDate = new Date(e.date._d).toISOString();
+        	
+        		var aqDate = $filter('date')(e.date._d, 'yyyy-MM-dd');
+//        		alert(aqDate);
+                $scope.assetGen.acquiredDate = aqDate;
 
-                $scope.assetEditDate = new Date(e.date._d).toISOString();
+                $scope.assetEditDate = aqDate;
+
                 //$scope.assetGen.acquiredDate = $filter('date')(e.date._d, 'EEE, dd MMM yyyy HH:mm:ss Z');
                 //$scope.assetEditDate = $filter('date')(e.date._d, 'EEE, dd MMM yyyy HH:mm:ss Z');
         });
         
 
         $('input#warFromDate').on('dp.change', function(e){
-            $scope.assetGen.warrantyFromDate =  new Date(e.date._d).toISOString();
+            $scope.assetGen.warrantyFromDate =  e.date._d;
 
             $scope.warFromDate = $filter('date')(e.date._d, 'yyyy-MM-dd');
 
@@ -922,7 +927,7 @@ angular.module('timeSheetApp')
          $scope.warToMsg =false;
 
         $('input#warToDate').on('dp.change', function(e){
-            $scope.assetGen.warrantyToDate = new Date(e.date._d).toISOString();
+            $scope.assetGen.warrantyToDate = e.date._d;
             $scope.warToDate = $filter('date')(e.date._d, 'yyyy-MM-dd');
 
             if($scope.assetGen.endDate < $scope.assetGen.startDate) {
@@ -941,7 +946,7 @@ angular.module('timeSheetApp')
 
         $('input#searchAcquiredDate').on('dp.change', function(e){
                 $scope.searchAcquiredDate = $filter('date')(e.date._d, 'dd-MM-yyyy');
-                $scope.searchAcquiredDateSer = new Date(e.date._d).toISOString();
+                $scope.searchAcquiredDateSer = e.date._d;
         });
 
 
@@ -977,8 +982,8 @@ angular.module('timeSheetApp')
                     console.log("Asset Create List -- ",$scope.assetGen);
                     AssetComponent.create($scope.assetGen).then(function(response) {
                         console.log("Asset response",JSON.stringify(response));
-                        $scope.assetGen.id=response.id;
-                        $scope.assetGen.siteId=response.siteId;
+                        $scope.assetVal.id=response.id;
+                        $scope.assetVal.siteId=response.siteId;
                         $scope.success = 'OK';
                         $rootScope.loadingStop();
                         $scope.showNotifications('top','center','success','Asset has been added Successfully!!');
@@ -1014,15 +1019,15 @@ angular.module('timeSheetApp')
         
         $rootScope.loadingStart();
 
-        if(!$scope.assetGen.id && !$stateParams.id){
+        if(!$scope.assetVal.id && !$stateParams.id){
 
           $scope.showNotifications('top','center','danger','Please create asset first..');
 
         }else{
 
-        if($scope.assetGen.id){
+        if($scope.assetVal.id){
 
-            var qr = {id:$scope.assetGen.id,code:$scope.assetGen.assetcode};
+            var qr = {id:$scope.assetVal.id,code:$scope.assetGen.assetcode};
 
         }else if($stateParams.id){
 
@@ -1067,9 +1072,9 @@ angular.module('timeSheetApp')
 
                 var qr_id ={id:$stateParams.id};
 
-              }else if($scope.assetGen.id){
+              }else if($scope.assetVal.id){
 
-                var qr_id ={id:$scope.assetGen.id};
+                var qr_id ={id:$scope.assetVal.id};
               }
               
 
@@ -1416,9 +1421,9 @@ angular.module('timeSheetApp')
 
             var item_ar = [];
 
-            if($scope.assetGen.id){
+            if($scope.assetVal.id){
 
-                    var assetId= $scope.assetGen.id;
+                    var assetId= $scope.assetVal.id;
 
                 }else if($stateParams.id){
 
@@ -1632,7 +1637,7 @@ angular.module('timeSheetApp')
             $scope.btnDisabled = true;
         	$scope.error = null;
         	$scope.success =null;
-          if(!$scope.assetGen.id && !$stateParams.id){
+          if(!$scope.assetVal.id && !$stateParams.id){
 
               $scope.showNotifications('top','center','danger','Please create asset first..');
 
@@ -1667,9 +1672,9 @@ angular.module('timeSheetApp')
                 	
                 	console.log('Edit parameterConfig details ='+ JSON.stringify($scope.parameterConfig));
 
-                }else if($scope.assetGen.id){
+                }else if($scope.assetVal.id){
 
-                    $scope.parameterConfig.assetId = $scope.assetGen.id;
+                    $scope.parameterConfig.assetId = $scope.assetVal.id;
 
                     if($scope.selectedAssetType.name){
 
@@ -1748,9 +1753,9 @@ angular.module('timeSheetApp')
 	    	$scope.uploadObj.type = 'document';
 
 
-            if($scope.assetGen.id){
+            if($scope.assetVal.id){
 
-                $scope.uploadObj.assetId = $scope.assetGen.id;
+                $scope.uploadObj.assetId = $scope.assetVal.id;
 
             }else if($stateParams.id){
 
@@ -1777,9 +1782,9 @@ angular.module('timeSheetApp')
 
 	    	$scope.photoObj.type = 'image';
 
-            if($scope.assetGen.id){
+            if($scope.assetVal.id){
 
-                $scope.photoObj.assetId = $scope.assetGen.id;
+                $scope.photoObj.assetId = $scope.assetVal.id;
 
             }else if($stateParams.id){
 
@@ -1800,7 +1805,7 @@ angular.module('timeSheetApp')
 
 	    $scope.uploadAssetFile = function() {
 
-                if(!$scope.assetGen.id && !$stateParams.id){
+                if(!$scope.assetVal.id && !$stateParams.id){
 
                       $scope.showNotifications('top','center','danger','Please create asset first..');
 
@@ -1810,8 +1815,8 @@ angular.module('timeSheetApp')
 
     	        	console.log("file title - " + $scope.uploadAsset.title + "file name -" + $scope.selectedClientFile);
 
-                    if($scope.assetGen.id){
-                        $scope.uploadAsset.assetId = $scope.assetGen.id;
+                    if($scope.assetVal.id){
+                        $scope.uploadAsset.assetId = $scope.assetVal.id;
 
                     }else if($stateParams.id){
 
@@ -1855,7 +1860,7 @@ angular.module('timeSheetApp')
 
 	    $scope.uploadAssetPhotoFile = function() {
 
-        if(!$scope.assetGen.id && !$stateParams.id){
+        if(!$scope.assetVal.id && !$stateParams.id){
 
             $scope.showNotifications('top','center','danger','Please create asset first..');
 
@@ -1869,8 +1874,8 @@ angular.module('timeSheetApp')
 
 	        	$scope.uploadAssetPhoto.uploadFile = $scope.selectedPhotoFile;
 
-                if($scope.assetGen.id){
-                        $scope.uploadAssetPhoto.assetId = $scope.assetGen.id;
+                if($scope.assetVal.id){
+                        $scope.uploadAssetPhoto.assetId = $scope.assetVal.id;
 
                     }else if($stateParams.id){
 
@@ -2045,15 +2050,15 @@ angular.module('timeSheetApp')
 
 	    $scope.saveAmcSchedule = function() {
 
-            if(!$scope.assetGen.id && !$stateParams.id){
+            if(!$scope.assetVal.id && !$stateParams.id){
 
                   $scope.showNotifications('top','center','danger','Please create asset first..');
 
             }else{
 
-                if($scope.assetGen.id){
+                if($scope.assetVal.id){
 
-                    $scope.amcSchedule.assetId= $scope.assetGen.id;
+                    $scope.amcSchedule.assetId= $scope.assetVal.id;
 
                 }else if($stateParams.id){
 
@@ -2090,7 +2095,7 @@ angular.module('timeSheetApp')
 		
 		    	    	console.log("To be create AMC schedule",$scope.amcSchedule);
 		
-		        $rootScope.loadingStart();
+		                 $rootScope.loadingStart();
 		
 		    	    	AssetComponent.saveAmcSchedule($scope.amcSchedule).then(function(data){
 		    	    		console.log(data);
@@ -2141,9 +2146,9 @@ angular.module('timeSheetApp')
 
             var item_ar = [];
 
-            if($scope.assetGen.id){
+            if($scope.assetVal.id){
 
-                    var assetId= $scope.assetGen.id;
+                    var assetId= $scope.assetVal.id;
 
                 }else if($stateParams.id){
 
@@ -2258,8 +2263,8 @@ angular.module('timeSheetApp')
             //var deferred = $q.defer();
             if($scope.assetList.siteId){
                var empParam = {siteId:$scope.assetList.siteId,list:true};
-            } else if($scope.assetGen.siteId) {
-                var empParam = {siteId:$scope.assetGen.siteId,list:true};
+            } else if($scope.assetVal.siteId) {
+                var empParam = {siteId:$scope.assetVal.siteId,list:true};
             }
 
             //alert(empParam.siteId);

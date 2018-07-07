@@ -34,7 +34,7 @@
                                                    <!---->
                                                 <!--</div>-->
                                                 <div class="wizard-navigation" >
-                                                    <div  ng-class="!assetGen.id ? 'OverlayBx' : ''" ></div>
+                                                    <div  ng-class="!assetVal.id ? 'OverlayBx' : ''" ></div>
                                                     <ul class="arrow-steps" >
                                                         <li class="step active">
                                                             <a href=".general" data-toggle="tab" >General</a>
@@ -1180,7 +1180,7 @@
                                                     </form>
                                                     </div>
                                                     <div class="tab-pane fade ppmschedule" id="ppmschedule" >
-                                                        <form name="form3" role="form" novalidate
+                                                        <form name="form3" role="form"  ng-submit="savePPMSchedule()" novalidate
                                                     class="form-horizontal" >
                                                         <div class="panel panel-default">
                                                             <div class="panel-heading">New Schedule</div>
@@ -1256,6 +1256,10 @@
                                                                                     </p>
 
                                                                                 </div>
+                                                                                 <p class="help-block" style="color:maroon"
+                                                                                       ng-show="ppmFromMsg">
+                                                                                        Fromdate cannot be greater than To date.
+                                                                                </p>
 
                                                                             </div>
 
@@ -1276,6 +1280,10 @@
 
 
                                                                                 </div>
+                                                                                <p class="help-block" style="color:maroon"
+                                                                                       ng-show="ppmToMsg">
+                                                                                        Todate cannot be lesser than Fromdate.
+                                                                                </p>
 
                                                                             </div>
 
@@ -1355,7 +1363,7 @@
                                                                                     ng-show="form3.ppmJobStartTime.$dirty || form3.ppmJobStartTime.$invalid">
                                                                                     <p class="help-block" style="color:maroon"
                                                                                        ng-show="form3.ppmJobStartTime.$error.required">
-                                                                                        Required
+                                                                                        Start date required
                                                                                     </p>
 
 
@@ -1382,7 +1390,7 @@
 						                                                            ng-show="form.plannedHours.$dirty || form.plannedHours.$invalid">
 						                                                            <p class="help-block" style="color:maroon"
 						                                                               ng-show="form.plannedHours.$error.required">
-						                                                                Required
+						                                                               Hours required
 						                                                            </p>
 						                                                        </div>
 						                                                    </div>
@@ -1399,7 +1407,7 @@
                                                                         </div>
                                                                     </div>
                                                                     <div class="col-md-5 txt-align-rgt" style="padding-top: 25px;">
-                                                                        <a class="btn btn-success add-btn margn-top0"  ng-click="savePPMSchedule()" ng-disabled="form3.$invalid">Add</a>
+                                                                        <button  type="submit" class="btn btn-success add-btn margn-top0"   ng-disabled="form3.$invalid|| ppmFromMsg || ppmToMsg"">Add</button>
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -1455,7 +1463,7 @@
                                                     </div>
                                                     <div class="tab-pane fade amcschedule" id="amc-schedule" >
                                                         <form name="form4" role="form" novalidate
-                                                        class="form-horizontal">
+                                                        class="form-horizontal" ng-submit="saveAmcSchedule()">
                                                         <div class="panel panel-default">
                                                             <div class="panel-heading">New Schedule</div>
                                                             <div class="panel-body">
@@ -1697,7 +1705,7 @@
                                                                         </div>
                                                                     </div>
                                                                     <div class="col-md-5 txt-align-rgt" style="padding-top: 25px;">
-                                                                        <a class="btn btn-success add-btn margn-top0"  ng-click="saveAmcSchedule()" ng-disabled="form4.$invalid">Add</a>
+                                                                        <button  type="submit" class="btn btn-success add-btn margn-top0"    ng-disabled="form4.$invalid|| amcFromMsg || amcToMsg">Add</button>
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -1991,7 +1999,7 @@
                                                     </div>
                                                 </div>
 
-                                                <div class="wizard-footer"  ng-show="assetGen.id">
+                                                <div class="wizard-footer"  ng-show="assetVal.id">
                                                     <div class="pull-right">
                                                         <input type='button' class='btn btn-next btn-fill btn-default btn-wd' name='next' value='Next'  />
                                                         <!-- <input type='button' class='btn btn-finish btn-fill btn-success btn-wd' name='finish' value='Finish' /> -->
@@ -2013,7 +2021,7 @@
                                 <div class="row" >
 
                                     <div class="col-sm-offset-8 col-sm-4 txt-align-rgt">
-                                        <button class="btn btn-success" type="submit" ng-hide="assetGen.id"
+                                        <button class="btn btn-success" type="submit" ng-hide="assetVal.id"
                                                 id="form-button-save" ng-disabled="form.$invalid || btnDisabled" ng-click="saveAsset()" >
                                                     <span class="btn-label">
                                             				<i class="material-icons">check</i>
