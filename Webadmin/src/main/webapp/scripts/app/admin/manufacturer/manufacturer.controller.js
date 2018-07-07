@@ -12,10 +12,13 @@ angular.module('timeSheetApp')
         $scope.error = null;
         $scope.doNotMatch = null;
         $scope.pager = {};
+        $scope.pageSort = 10;
         $scope.searchCriteria = {};
         $scope.pages = { currPage : 1};
         $scope.isEdit = !!$stateParams.id;
-        $scope.selectedAssetType = null;
+        $scope.selectedAssetType = {};
+        $scope.searchAssetType = null;
+            $scope.searchName = null;
         $scope.manufacturer = {};
         $scope.pager = {};
 
@@ -61,21 +64,26 @@ angular.module('timeSheetApp')
         		AssetTypeComponent.findAll().then(function (data) {
                 $scope.selectedAssetType = null;
                 $scope.assetTypes = data;
-                $scope.loadingStop();
+                console.log('Asset type',$scope.assetTypes); 
             });
         }
         
         $scope.getManufacturerDetails = function(id, mode) {
+                $rootScope.loadingStart();
         		$scope.isEdit = (mode == 'edit' ? true : false)
             ManufacturerComponent.findById(id).then(function (data) {
                 $scope.manufacturer = data;
+                 $rootScope.loadingStop();
             });
         };
 
         $scope.editManufacturer = function(){
+            $rootScope.loadingStart();
         		ManufacturerComponent.findById($stateParams.id).then(function(data){
-	        		$scope.manufacturer=data;
-	        		console.log($scope.manufacturer);
+                    $scope.manufacturer=data;
+	        		$scope.selectedAssetType = {name : $scope.manufacturer.assetType};
+	        		console.log('Manufacturer details by id',$scope.manufacturer);
+                    $rootScope.loadingStop();
 	        	})
         };
         
@@ -87,7 +95,7 @@ angular.module('timeSheetApp')
                 $location.path('/manufacturer-list');
         };
 
-         $scope.isActiveAsc = 'id';
+         $scope.isActiveAsc = 'assetType';
         $scope.isActiveDesc = '';
 
         $scope.columnAscOrder = function(field){
@@ -95,8 +103,8 @@ angular.module('timeSheetApp')
             $scope.isActiveAsc = field;
             $scope.isActiveDesc = '';
             $scope.isAscOrder = true;
-            $scope.search();
-            //$scope.loadTickets();
+            //$scope.search();
+            $scope.loadManufacturers();
         }
 
         $scope.columnDescOrder = function(field){
@@ -104,8 +112,8 @@ angular.module('timeSheetApp')
             $scope.isActiveDesc = field;
             $scope.isActiveAsc = '';
             $scope.isAscOrder = false;
-            $scope.search();
-            //$scope.loadTickets();
+            //$scope.search();
+            $scope.loadManufacturers();
         }
 
         $scope.searchFilter = function () {
@@ -114,6 +122,7 @@ angular.module('timeSheetApp')
          }
 
         $scope.search = function () {
+           
             var currPageVal = ($scope.pages ? $scope.pages.currPage : 1);
             var searchCriteria = {
                 currPage : currPageVal
@@ -125,16 +134,33 @@ angular.module('timeSheetApp')
             $scope.searchCriteria.currPage = currPageVal;
             $scope.searchCriteria.findAll = false;
 
-             if(!$scope.selectedName && !$scope.selectedAssetType) {
+             if(!$scope.searchName && !$scope.searchAssetType) {
                 $scope.searchCriteria.findAll = true;
             }
 
-            if($scope.selectedName) {
-                    $scope.searchCriteria.name = $scope.selectedName;
+            if($scope.searchName) {
+                    $scope.searchCriteria.manufacturerName = $scope.searchName;
                 }
-                if($scope.selectedAssetType) {
-                    $scope.searchCriteria.id = $scope.selectedAssetType.id;
+                if($scope.searchAssetType) {
+                    $scope.searchCriteria.assetTypeName = $scope.searchAssetType.name;
                 }
+
+
+            //----
+            if($scope.pageSort){
+                $scope.searchCriteria.sort = $scope.pageSort;
+            }
+
+            if($scope.selectedColumn){
+
+                $scope.searchCriteria.columnName = $scope.selectedColumn;
+                console.log('>>> $scope.searchCriteria.columnName <<< '+$scope.searchCriteria.columnName);
+                $scope.searchCriteria.sortByAsc = $scope.isAscOrder;
+                console.log('>>> $scope.searchCriteria.sortByAsc <<< '+$scope.searchCriteria.sortByAsc);
+            }else{
+                $scope.searchCriteria.columnName ="assetType";
+                $scope.searchCriteria.sortByAsc = true;
+            }
 
            
             console.log("search criteria",$scope.searchCriteria);
@@ -142,10 +168,11 @@ angular.module('timeSheetApp')
                      $scope.manufacturersLoader = false;
                      $scope.loadPageTop();
             ManufacturerComponent.search($scope.searchCriteria).then(function (data) {
+
                 console.log(data);
                 $scope.manufacturers = data.transactions;
                 $scope.manufacturersLoader = true;
-                $scope.loadingStop();
+                
 
                 /*
                     ** Call pagination  main function **
@@ -173,7 +200,7 @@ angular.module('timeSheetApp')
 
 
 
-        $scope.initPage=function (){
+        /*$scope.initPage=function (){
 
             $scope.loadAllAssetTypes();
         		if($scope.isEdit){
@@ -182,12 +209,13 @@ angular.module('timeSheetApp')
         		}else {
         		}
         }
-
+*/
 
 
         $scope.saveManufacturer = function () {
 	        	$scope.error = null;
 	        	$scope.success =null;
+                $rootScope.loadingStart();
 
 	        	if($scope.selectedAssetType.name !=""){
 	        	    $scope.manufacturer.assetType = $scope.selectedAssetType.name;
@@ -200,9 +228,11 @@ angular.module('timeSheetApp')
                 //post($scope.manufacturer).then(function () {
 	        	 ManufacturerComponent.create($scope.manufacturer).then(function () {
 	                $scope.success = 'OK';
+                    $rootScope.loadingStop();
 	                $scope.showNotifications('top','center','success','Manufacturer Saved Successfully');
 	                $location.path('/manufacturer-list');
 	            }).catch(function (response) {
+                    $rootScope.loadingStop();
 	                $scope.success = null;
 	                console.log('Error - '+ response.data);
 	                if (response.status === 400 && response.data.message === 'error.duplicateRecordError') {
@@ -219,6 +249,7 @@ angular.module('timeSheetApp')
         $scope.UpdateManufacturer = function () {
                 $scope.error = null;
                 $scope.success =null;
+                $rootScope.loadingStart();
 
                 if($scope.selectedAssetType){
                     $scope.manufacturer.assetType = $scope.selectedAssetType.name;
@@ -229,10 +260,12 @@ angular.module('timeSheetApp')
                 //var post = $scope.isEdit ? ManufacturerComponent.update : ManufacturerComponent.create
                 //post($scope.manufacturer).then(function () {
                  ManufacturerComponent.update($scope.manufacturer).then(function () {
+                    $rootScope.loadingStop();
                     $scope.success = 'OK';
                     $scope.showNotifications('top','center','success','Manufacturer updated Successfully');
                     $location.path('/manufacturer-list');
                 }).catch(function (response) {
+                    $rootScope.loadingStop();
                     $scope.success = null;
                     console.log('Error - '+ response.data);
                     if (response.status === 400 && response.data.message === 'error.duplicateRecordError') {
@@ -271,6 +304,8 @@ angular.module('timeSheetApp')
             $scope.selectedProject = null;
             $scope.selectedAssetType = null;
             $scope.selectedName = null;
+            $scope.searchAssetType = null;
+            $scope.searchName = null;
             $scope.searchCriteria = {};
             $scope.selectedSite = null;
             $scope.selectedStatus = null;
@@ -284,7 +319,7 @@ angular.module('timeSheetApp')
         // init load
         $scope.initLoad = function(){ 
              $scope.loadPageTop(); 
-             $scope.initPage(); 
+             //$scope.initPage(); 
           
          }
         

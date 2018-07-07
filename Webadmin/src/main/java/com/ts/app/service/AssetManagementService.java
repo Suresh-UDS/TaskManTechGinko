@@ -278,8 +278,8 @@ public class AssetManagementService extends AbstractService {
         
         asset.setAcquiredDate(DateUtil.convertToSQLDate(DateUtil.convertUTCToIST(checkInDateFrom)));*/
         
-		/*asset.setAcquiredDate(DateUtil.convertToSQLDate(assetDTO.getAcquiredDate()));
-		asset = assetRepository.save(asset);*/
+		/*asset.setAcquiredDate(DateUtil.convertToSQLDate(assetDTO.getAcquiredDate()));*/
+		asset = assetRepository.save(asset);
 		 
 		//AssetStatusHistory assetStatusHistory = assetStatusHistoryRepository.findOne(asset.getAssetStatusHistory().getId());
 		//assetStatusHistory.setAsset(asset);

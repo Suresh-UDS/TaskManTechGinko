@@ -17,74 +17,48 @@
             <form ng-show="!success" name="form" role="form" novalidate
                   ng-submit="saveInventory()">
 
-
                 <div class="row">
 
-                    <div class="col-md-6 col-md-offset-3">
-
-                        <div class="panel panel-default">
-                            <div class="panel-heading">Location <span class="red-star">*</span></div>
-                            <div class="panel-body">
-
-                                <div class="row">
-
-                                    <div class="col-md-6">
-                                        <div class="form-group no-padding" >
-                                            <div class="dropdown">
-                                                <div class="form-group">
-                                                    <label class="control-label">Select Client <span class="red-star">*</span></label>
-                                                    <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                                    <select class="form-control">
-                                                        <option value="">Select Client...</option>
-                                                        <option value="uds">UDS</option>
-                                                        <option value="zappy">Zappy</option>
-                                                    </select>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <div class="form-group no-padding" >
-                                            <div class="dropdown">
-                                                <div class="form-group">
-                                                    <label class="control-label">Select Site <span class="red-star">*</span></label>
-                                                    <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                                    <select class="form-control">
-                                                        <option value="">Select Site...</option>
-                                                        <option value="">CMRL</option>
-                                                        <option value="">HDFC</option>
-                                                    </select>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                </div>
-
-                            </div>
-                        </div>
-
-                    </div>
-
-                </div>
-
-                <div class="row">
-
-                    <div class="col-md-6">
+                    <div class="col-md-12">
                         <div class="panel panel-default">
                             <div class="panel-heading">SLA Info</div>
                             <div class="panel-body">
 
                                 <div class="row">
-
-                                    <div class="col-md-6">
+                                    <div class="col-md-3">
+                                        <div class="form-group no-padding" >
+                                            <div class="dropdown">
+                                                <div class="form-group">
+                                                    <label class="control-label">Select Client <span class="red-star">*</span></label>
+                                                    <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
+                                                    <select ng-options = "project as prj.name for prj in projects" ng-model = "selectedProject" ng-change = "loadSites()" class="form-control">
+                                                        <option value="">Select Client...</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group no-padding" >
+                                            <div class="dropdown">
+                                                <div class="form-group">
+                                                    <label class="control-label">Select Site <span class="red-star">*</span></label>
+                                                    <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
+                                                    <select ng-options = "site as site.name for site in sites" ng-model = "selectedSite" class="form-control">
+                                                        <option value="">Select Site...</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
 
                                         <div class="form-group no-padding" >
                                             <div class="dropdown">
                                                 <div class="form-group">
                                                     <label class="control-label">Select Process Type  <span class="red-star">*</span></label>
                                                     <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                                    <select  class="form-control">
+                                                    <select ng-model = "sla.processtype" class="form-control">
                                                         <option value="Tickets">Tickets</option>
                                                         <option value="Jobs">Jobs</option>
 
@@ -95,13 +69,12 @@
 
 
                                     </div>
-
-                                    <div class="col-md-6">
+                                    <div class="col-md-3">
                                         <div class="form-group no-padding" >
                                             <div class="dropdown">
                                                 <div class="form-group">
                                                     <label class="control-label">Select Category <span class="red-star">*</span></label>
-                                                    <select multiple class="form-control">
+                                                    <select ng-model = "sla.category" multiple class="form-control">
                                                         <option value="Electrical">Electrical</option>
                                                         <option value="Cleaning">Cleaning</option>
                                                         <option value="Beauty">Beauty</option>
@@ -113,101 +86,79 @@
                                             </div>
                                         </div>
                                     </div>
+                                </div>
 
+                                <div class="row">
 
-                                    <div class="col-md-12">
+                                    <div class="col-md-3">
 
-
-                                        <div class="row">
-
-                                            <div class="col-md-4">
-
-                                                <div class="form-group no-padding" >
-                                                    <div class="dropdown">
-                                                        <div class="form-group">
-                                                            <label class="control-label">Select Severity  <span class="red-star">*</span></label>
-                                                            <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                                            <select  class="form-control">
-                                                                <option value="Low">Low</option>
-                                                                <option value="Medium">Medium</option>
-                                                                <option value="High">High</option>
-                                                                <option value="High">Critical</option>
-                                                            </select>
-                                                        </div>
-                                                    </div>
+                                        <div class="form-group no-padding" >
+                                            <div class="dropdown">
+                                                <div class="form-group">
+                                                    <label class="control-label">Select Severity  <span class="red-star">*</span></label>
+                                                    <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
+                                                    <select ng-model = "sla.severity" class="form-control">
+                                                        <option value="Low">Low</option>
+                                                        <option value="Medium">Medium</option>
+                                                        <option value="High">High</option>
+                                                        <option value="High">Critical</option>
+                                                    </select>
                                                 </div>
-
-
                                             </div>
-
-                                            <div class="col-md-3">
-
-                                                <div class="form-group no-padding">
-                                                    <label class="control-label">Hours</label>
-                                                    <input type="number" class="form-control ng-valid ng-dirty ng-touched" ng-model="newChecklistItem.name" tabindex="0" aria-invalid="false" autocomplete="off">
-                                                    <span class="material-input"></span></div>
-
-                                            </div>
-                                            <div class="col-md-3">
-
-                                                <button class="btn btn-success margn-top15"  tabindex="0">
-                                                        <span class="btn-label">
-                                                            <i class="material-icons">add</i>
-                                                        </span>
-                                                    Add
-                                                    <div class="ripple-container"></div></button>
-
-                                            </div>
-
                                         </div>
 
+
+                                    </div>
+                                    <div class="col-md-2">
+
+                                        <div class="form-group no-padding">
+                                            <label class="control-label">Hours</label>
+                                            <input type="number" class="form-control ng-valid ng-dirty ng-touched" ng-model="sla.hrs" tabindex="0" aria-invalid="false" autocomplete="off">
+                                            <span class="material-input"></span></div>
+
+                                    </div>
+                                    <div class="col-md-7 txt-align-rgt">
+                                        <button class="btn btn-success margn-top15"  data-toggle="modal" data-target="#AddEscalationLevel" tabindex="0">
+                                            <span class="btn-label">
+                                                <i class="material-icons">add</i>
+                                            </span>
+                                            Add Escalation
+                                            <div class="ripple-container"></div>
+                                        </button>
                                     </div>
 
+                                </div>
+
+                                <div class="row">
                                     <div class="col-md-12">
                                         <div class="table-responsive tablecard">
                                             <table class="table table-hover">
                                                 <thead>
                                                 <tr>
+                                                    <th>Process Type</th>
                                                     <th>Severity </th>
                                                     <th>Hours</th>
                                                     <th>Categories</th>
+                                                    <th>Escalation Level</th>
                                                     <th class="text-right">Actions</th>
                                                 </tr>
                                                 </thead>
                                                 <tbody>
                                                 <tr>
+                                                    <td>Jobs</td>
                                                     <td>Low</td>
                                                     <td>48</td>
                                                     <td><span class="tag label label-info">Cleaning<span data-role="remove"></span></span>
                                                         <span class="tag label label-info">Electrical<span data-role="remove"></span></span>
                                                     </td>
-                                                    <td class="text-right">
-                                                        <a  ng-class="{active: $state.includes('admin')}"     class="btn btn-simple btn-info"><i class="material-icons">edit</i></a>
-
-                                                        <a ng-class="{active: $state.includes('admin')}"    onClick="$('#deleteModal').modal()" data-target="#myModal"  class="btn btn-simple btn-danger"><i class="material-icons">close</i></a>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td>Low</td>
-                                                    <td>48</td>
-                                                    <td><span class="tag label label-info">Cleaning<span data-role="remove"></span></span>
-                                                        <span class="tag label label-info">Electrical<span data-role="remove"></span></span>
+                                                    <td>
+                                                        <span class="tag label label-default">Level 1</span>
+                                                        <span class="tag label label-default">Level 2</span>
+                                                        <span class="tag label label-default">Level 3</span>
+                                                        <span class="tag label label-default">Level 4</span>
                                                     </td>
                                                     <td class="text-right">
-                                                        <a  ng-class="{active: $state.includes('admin')}"     class="btn btn-simple btn-info"><i class="material-icons">edit</i></a>
-
-                                                        <a ng-class="{active: $state.includes('admin')}"    onClick="$('#deleteModal').modal()" data-target="#myModal"  class="btn btn-simple btn-danger"><i class="material-icons">close</i></a>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td>Low</td>
-                                                    <td>48</td>
-                                                    <td><span class="tag label label-info">Cleaning<span data-role="remove"></span></span>
-                                                        <span class="tag label label-info">Electrical<span data-role="remove"></span></span>
-                                                    </td>
-                                                    <td class="text-right">
-                                                        <a  ng-class="{active: $state.includes('admin')}"     class="btn btn-simple btn-info"><i class="material-icons">edit</i></a>
-
+                                                        <!--<a  ng-class="{active: $state.includes('admin')}"     class="btn btn-simple btn-info"><i class="material-icons">edit</i></a>-->
                                                         <a ng-class="{active: $state.includes('admin')}"    onClick="$('#deleteModal').modal()" data-target="#myModal"  class="btn btn-simple btn-danger"><i class="material-icons">close</i></a>
                                                     </td>
                                                 </tr>
@@ -217,141 +168,15 @@
 
                                         </div>
                                     </div>
-
-
-
                                 </div>
+
 
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-6">
-                        <div class="panel panel-default">
-                            <div class="panel-heading">Escalation Level</div>
-                            <div class="panel-body escalationLevelCon">
 
-                                <div class="row">
-                                    <div class="col-md-12">
-                                        <h4>Level 4</h4>
-                                        <div class="row">
-                                            <div class="col-md-2">
-                                                <div class="form-group no-padding">
-                                                    <label class="control-label">Hours</label>
-                                                    <input type="number" class="form-control ng-valid ng-dirty ng-touched"  tabindex="0" aria-invalid="false" autocomplete="off">
-                                                    <span class="material-input"></span>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-2">
-                                                <div class="form-group no-padding">
-                                                    <label class="control-label">Mins</label>
-                                                    <input type="number" class="form-control ng-valid ng-dirty ng-touched"  tabindex="0" aria-invalid="false" autocomplete="off">
-                                                    <span class="material-input"></span>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-8">
-                                                <div class="form-group no-padding">
-                                                    <label class="control-label">Email</label>
-                                                    <input type="text" class="form-control ng-valid ng-dirty ng-touched"  tabindex="0" aria-invalid="false" autocomplete="off">
-                                                    <span class="material-input"></span>
-                                                </div>
-                                            </div>
-
-                                        </div>
-                                    </div>
-                                    <div class="col-md-12">
-                                        <h4>Level 3</h4>
-                                        <div class="row">
-
-                                            <div class="col-md-2">
-                                                <div class="form-group no-padding">
-                                                    <label class="control-label">Hours</label>
-                                                    <input type="number" class="form-control ng-valid ng-dirty ng-touched"  tabindex="0" aria-invalid="false" autocomplete="off">
-                                                    <span class="material-input"></span>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-2">
-                                                <div class="form-group no-padding">
-                                                    <label class="control-label">Mins</label>
-                                                    <input type="number" class="form-control ng-valid ng-dirty ng-touched"  tabindex="0" aria-invalid="false" autocomplete="off">
-                                                    <span class="material-input"></span>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-8">
-                                                <div class="form-group no-padding">
-                                                    <label class="control-label">Email</label>
-                                                    <input type="text" class="form-control ng-valid ng-dirty ng-touched"  tabindex="0" aria-invalid="false" autocomplete="off">
-                                                    <span class="material-input"></span>
-                                                </div>
-                                            </div>
-
-                                        </div>
-                                    </div>
-                                    <div class="col-md-12">
-                                        <h4>Level 2</h4>
-                                        <div class="row">
-
-                                            <div class="col-md-2">
-                                                <div class="form-group no-padding">
-                                                    <label class="control-label">Hours</label>
-                                                    <input type="number" class="form-control ng-valid ng-dirty ng-touched"  tabindex="0" aria-invalid="false" autocomplete="off">
-                                                    <span class="material-input"></span>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-2">
-                                                <div class="form-group no-padding">
-                                                    <label class="control-label">Mins</label>
-                                                    <input type="number" class="form-control ng-valid ng-dirty ng-touched"  tabindex="0" aria-invalid="false" autocomplete="off">
-                                                    <span class="material-input"></span>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-8">
-                                                <div class="form-group no-padding">
-                                                    <label class="control-label">Email</label>
-                                                    <input type="text" class="form-control ng-valid ng-dirty ng-touched"  tabindex="0" aria-invalid="false" autocomplete="off">
-                                                    <span class="material-input"></span>
-                                                </div>
-                                            </div>
-
-                                        </div>
-                                    </div>
-                                    <div class="col-md-12">
-                                        <h4>Level 1</h4>
-                                        <div class="row">
-
-                                            <div class="col-md-2">
-                                                <div class="form-group no-padding">
-                                                    <label class="control-label">Hours</label>
-                                                    <input type="number" class="form-control ng-valid ng-dirty ng-touched"  tabindex="0" aria-invalid="false" autocomplete="off">
-                                                    <span class="material-input"></span>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-2">
-                                                <div class="form-group no-padding">
-                                                    <label class="control-label">Mins</label>
-                                                    <input type="number" class="form-control ng-valid ng-dirty ng-touched"  tabindex="0" aria-invalid="false" autocomplete="off">
-                                                    <span class="material-input"></span>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-8">
-                                                <div class="form-group no-padding">
-                                                    <label class="control-label">Email</label>
-                                                    <input type="text" class="form-control ng-valid ng-dirty ng-touched"  tabindex="0" aria-invalid="false" autocomplete="off">
-                                                    <span class="material-input"></span>
-                                                </div>
-                                            </div>
-
-                                        </div>
-                                    </div>
-
-
-                                </div>
-
-                            </div>
-                        </div>
-                    </div>
 
                 </div>
-
 
 
                 <div class="row">
@@ -406,3 +231,138 @@
 </div>
 
 
+<!-- AdvancedFilterModal -->
+<div class="modal fade AdvancedFilterModal FilterModalCon" id="AddEscalationLevel" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form name="searchForm"   novalidate >
+
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                        <i class="material-icons">clear</i>
+                    </button>
+                    <h4 class="modal-title">Add Escalation Level</h4>
+                </div>
+                <div class="modal-body">
+
+                    <div class="row">
+
+                        <div class="col-md-2">
+
+                            <div class="form-group no-padding">
+                                <div class="dropdown">
+                                    <div class="form-group">
+                                        <label class="control-label">Select Level  <span class="red-star">*</span></label>
+                                        <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
+                                        <select ng-model = "sla.processtype" class="form-control">
+                                            <option value="level1">Level 1</option>
+                                            <option value="level2">Level 2</option>
+                                            <option value="level3">Level 3</option>
+                                            <option value="level4">Level 4</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="col-md-1">
+                            <div class="form-group no-padding">
+                                <label class="control-label">Hours</label>
+                                <input type="number" ng-model = "sla.ehrs4" class="form-control ng-valid ng-dirty ng-touched"  tabindex="0" aria-invalid="false" autocomplete="off">
+                                <span class="material-input"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-1">
+                            <div class="form-group no-padding">
+                                <label class="control-label">Mins</label>
+                                <input type="number" ng-model = "sla.emins4" class="form-control ng-valid ng-dirty ng-touched"  tabindex="0" aria-invalid="false" autocomplete="off">
+                                <span class="material-input"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group no-padding">
+                                <label class="control-label">Email</label>
+                                <input type="text" ng-model = "sla.email4" class="form-control ng-valid ng-dirty ng-touched"  tabindex="0" aria-invalid="false" autocomplete="off">
+                                <span class="material-input"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-2 txt-align-rgt">
+                            <button class="btn btn-success margn-top15"  tabindex="0">Add</button>
+                        </div>
+
+                    </div>
+
+                    <div class="row">
+
+                        <div class="table-responsive tablecard">
+                            <table class="table table-hover">
+                                <thead>
+                                <tr>
+                                    <th>Levels</th>
+                                    <th>Hours </th>
+                                    <th>Mins </th>
+                                    <th>Emails </th>
+                                    <th class="text-right">Actions</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                    <td>Level 1</td>
+                                    <td>2</td>
+                                    <td>30</td>
+                                    <td>
+                                        <span class="tag label label-default">admin@uds.in</span>
+                                        <span class="tag label label-default">support@uds.in</span>
+                                        <span class="tag label label-default">info@uds.in</span>
+                                    </td>
+                                    <td class="text-right">
+                                        <a  ng-class="{active: $state.includes('admin')}"     class="btn btn-simple btn-info"><i class="material-icons">edit</i></a>
+                                        <a ng-class="{active: $state.includes('admin')}"    onClick="$('#deleteModal').modal()" data-target="#myModal"  class="btn btn-simple btn-danger"><i class="material-icons">close</i></a>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Level 1</td>
+                                    <td>2</td>
+                                    <td>30</td>
+                                    <td>
+                                        <span class="tag label label-default">admin@uds.in</span>
+                                        <span class="tag label label-default">support@uds.in</span>
+                                        <span class="tag label label-default">info@uds.in</span>
+                                    </td>
+                                    <td class="text-right">
+                                        <a  ng-class="{active: $state.includes('admin')}"     class="btn btn-simple btn-info"><i class="material-icons">edit</i></a>
+                                        <a ng-class="{active: $state.includes('admin')}"    onClick="$('#deleteModal').modal()" data-target="#myModal"  class="btn btn-simple btn-danger"><i class="material-icons">close</i></a>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Level 1</td>
+                                    <td>2</td>
+                                    <td>30</td>
+                                    <td>
+                                        <span class="tag label label-default">admin@uds.in</span>
+                                        <span class="tag label label-default">support@uds.in</span>
+                                        <span class="tag label label-default">info@uds.in</span>
+                                    </td>
+                                    <td class="text-right">
+                                        <a  ng-class="{active: $state.includes('admin')}"     class="btn btn-simple btn-info"><i class="material-icons">edit</i></a>
+                                        <a ng-class="{active: $state.includes('admin')}"    onClick="$('#deleteModal').modal()" data-target="#myModal"  class="btn btn-simple btn-danger"><i class="material-icons">close</i></a>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+
+                        </div>
+
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-success btn-simple"  data-dismiss="modal" ng-disabled="searchForm.$invalid">Save</button>
+                    <!--<button type="button" class="btn btn-danger btn-simple" data-dismiss="modal">Close</button>-->
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<!--  End Modal -->
