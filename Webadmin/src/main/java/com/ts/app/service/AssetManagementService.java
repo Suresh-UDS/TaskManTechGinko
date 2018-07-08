@@ -5,12 +5,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
-<<<<<<< HEAD
 import java.util.Map;
 import java.util.TimeZone;
-=======
->>>>>>> f3df114a686974accd8feb8fadf96f4a84beab74
-
 import javax.inject.Inject;
 
 import org.apache.commons.collections.CollectionUtils;
