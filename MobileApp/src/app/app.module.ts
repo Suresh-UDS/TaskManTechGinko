@@ -60,8 +60,6 @@ import { FileTransfer, FileUploadOptions, FileTransferObject } from '@ionic-nati
 import { File } from '@ionic-native/file';
 import {ForgotPassword} from "../pages/forgot-password/forgot-password";
 import { Network } from '@ionic-native/network';
-
-
 import {CreateEmployeePage} from "../pages/employee-list/create-employee";
 import {OneSignal} from "@ionic-native/onesignal";
 // import {GoogleMaps} from "@ionic-native/google-maps";
@@ -80,9 +78,7 @@ import {QuotationImagePopoverPage} from "../pages/quotation/quotation-image-popo
 import { BackgroundMode } from '@ionic-native/background-mode';
 import { NativeAudio } from '@ionic-native/native-audio';
 import {SelectFeedbackPage} from "../pages/feedback/select-feedback";
-
 import {FeedbackZone} from "../pages/feedback/feedbackZone";
-
 import {InitFeedbackZone} from "../pages/feedback/init-feedback-zone";
 import {WizardFeedbackEntry} from "../pages/feedback/wizard-feedback-entry";
 import {FeedbackQuestionsForm} from "../pages/feedback/feedback-questions-form";
@@ -93,6 +89,16 @@ import {FeedbackGridPage} from "../pages/feedback/feedback-grid";
 import {AppVersion} from "@ionic-native/app-version";
 import {HasPermission} from "../components/has-permission/has-permission";
 import {OfflineAttendance} from "../pages/employee/offline-attendance";
+import {SQLite} from "@ionic-native/sqlite";
+import {Diagnostic} from "@ionic-native/diagnostic";
+import {LocationAccuracy} from "@ionic-native/location-accuracy";
+import {SplashLogo} from "../pages/splash-logo/splash-logo";
+import {Market} from "@ionic-native/market";
+import {UpdateApp} from "../pages/update-app/update-app";
+import {QRScanner} from "@ionic-native/qr-scanner";
+import {ScanQR} from "../pages/jobs/scanQR";
+import {DBService} from "../pages/service/dbService";
+import {OfflineAttendanceSites} from "../pages/employee/offline-attendance-sites";
 
 @NgModule({
   declarations: [
@@ -116,12 +122,12 @@ import {OfflineAttendance} from "../pages/employee/offline-attendance";
     QuotationViewPage,
     QuotationImagePopoverPage,
     CreateQuotationPage,
-      CreateQuotationPage2,
-      ApprovedQuotationPage,
-      DraftedQuotationPage,
-      SubmittedQuotationPage,
-      ArchivedQuotationPage,
-      ViewQuotationPage,
+    CreateQuotationPage2,
+    ApprovedQuotationPage,
+    DraftedQuotationPage,
+    SubmittedQuotationPage,
+    ArchivedQuotationPage,
+    ViewQuotationPage,
     AttendancePage,
     AttendancePopoverPage,
     EmployeeDetailPage,
@@ -133,8 +139,8 @@ import {OfflineAttendance} from "../pages/employee/offline-attendance";
     CreateRateCardPage,
     CreateJobPage,
     CompleteJobPage,
-      IonSimpleWizardStep,
-      IonSimpleWizard,
+    IonSimpleWizardStep,
+    IonSimpleWizard,
     CreateQuotationPage3,
     CreateEmployeePage,
     FeedbackPage,
@@ -142,18 +148,22 @@ import {OfflineAttendance} from "../pages/employee/offline-attendance";
     FeedbackQuestionPage,
     InitFeedbackPage,
     FeedbackDashboardPage,
-      FeedbackZone,
-      SelectFeedbackPage,
-      InitFeedbackZone,
-      FeedbackQuestionsForm,
-      FeedbackGridPage,
-      WizardFeedbackEntry,
-      Ticket,
-      CreateTicket,
-      ViewTicket,
-      HasPermission,
-      ForgotPassword,
-      OfflineAttendance
+    FeedbackZone,
+    SelectFeedbackPage,
+    InitFeedbackZone,
+    FeedbackQuestionsForm,
+    FeedbackGridPage,
+    WizardFeedbackEntry,
+    Ticket,
+    CreateTicket,
+    ViewTicket,
+    HasPermission,
+    ForgotPassword,
+    OfflineAttendance,
+    SplashLogo,
+    UpdateApp,
+    ScanQR,
+    OfflineAttendanceSites
   ],
   imports: [
     BrowserModule,
@@ -189,12 +199,12 @@ import {OfflineAttendance} from "../pages/employee/offline-attendance";
     QuotationImagePopoverPage,
     QuotationViewPage,
     CreateQuotationPage,
-      CreateQuotationPage2,
-      ApprovedQuotationPage,
-      DraftedQuotationPage,
-      SubmittedQuotationPage,
-      ArchivedQuotationPage,
-      ViewQuotationPage,
+    CreateQuotationPage2,
+    ApprovedQuotationPage,
+    DraftedQuotationPage,
+    SubmittedQuotationPage,
+    ArchivedQuotationPage,
+    ViewQuotationPage,
     AttendancePage,
     AttendancePopoverPage,
     EmployeeDetailPage,
@@ -205,9 +215,9 @@ import {OfflineAttendance} from "../pages/employee/offline-attendance";
     RateCardPage,
     CreateRateCardPage,
     CreateJobPage,
-      CompleteJobPage,
-      IonSimpleWizardStep,
-      IonSimpleWizard,
+    CompleteJobPage,
+    IonSimpleWizardStep,
+    IonSimpleWizard,
     CreateQuotationPage3,
     CreateEmployeePage,
     FeedbackPage,
@@ -215,44 +225,54 @@ import {OfflineAttendance} from "../pages/employee/offline-attendance";
     InitFeedbackPage,
     FeedbackGridPage,
     JobPopoverPage,
-      FeedbackZone,
+    FeedbackZone,
     FeedbackDashboardPage,
-      SelectFeedbackPage,
-      InitFeedbackZone,
-      FeedbackQuestionsForm,
-      WizardFeedbackEntry,
-      Ticket,
-      CreateTicket,
-      ViewTicket,
-      ForgotPassword,
-      OfflineAttendance
+    SelectFeedbackPage,
+    InitFeedbackZone,
+    FeedbackQuestionsForm,
+    WizardFeedbackEntry,
+    Ticket,
+    CreateTicket,
+    ViewTicket,
+    ForgotPassword,
+    OfflineAttendance,
+    SplashLogo,
+    UpdateApp,
+    ScanQR,
+    OfflineAttendanceSites
   ],
   providers: [
     StatusBar,
     SplashScreen,
     Camera,
-      NativeAudio,
-      AttendanceService,
-      EmployeeService,
-      FeedbackService,
-      JobService,
-      QuotationService,
-      SiteService,
+    NativeAudio,
+    AttendanceService,
+    EmployeeService,
+    FeedbackService,
+    JobService,
+    QuotationService,
+    SiteService,
     authService,
     HttpClient,
     Geolocation,
-      BackgroundMode,
+    BackgroundMode,
     Geofence,
-      // GoogleMaps,
-      Toast,
-      OneSignal,
+    // GoogleMaps,
+    Toast,
+    OneSignal,
     componentService,
-      BatteryStatus,
+    BatteryStatus,
     Toast,
     FileTransfer,
     File,
-      AppVersion,
-      Network,
+    AppVersion,
+    Network,
+    SQLite,
+    Diagnostic,
+    LocationAccuracy,
+    Market,
+    QRScanner,
+    DBService,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
       {provide:MY_CONFIG_TOKEN, useValue: AppConfig}
   ]

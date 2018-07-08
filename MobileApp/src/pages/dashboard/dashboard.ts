@@ -1,6 +1,6 @@
 import { Component, Input, ViewChild, ElementRef, Renderer } from '@angular/core';
 import {
-    ActionSheetController, Events, Item, ItemSliding, LoadingController, ModalController,
+    ActionSheetController, AlertController, Events, Item, ItemSliding, LoadingController, ModalController,
     NavController, Platform
 } from 'ionic-angular';
 import {authService} from "../service/authService";
@@ -16,6 +16,7 @@ import {CreateEmployeePage} from "../employee-list/create-employee";
 import {CompleteJobPage} from "../jobs/completeJob";
 import {ViewJobPage} from "../jobs/view-job";
 import {LoginPage} from "../login/login";
+import {DBService} from "../service/dbService";
 declare var demo;
 @Component({
   selector: 'page-dashboard',
@@ -60,7 +61,7 @@ export class DashboardPage {
     slideIndex:any;
 
   constructor(public renderer: Renderer,public plt: Platform,public myService:authService,private loadingCtrl:LoadingController,public navCtrl: NavController,public component:componentService,public authService:authService,public modalCtrl: ModalController,
-              private datePickerProvider: DatePickerProvider, private siteService:SiteService, private employeeService: EmployeeService, private jobService:JobService, public events:Events, private actionSheetCtrl:ActionSheetController) {
+              private datePickerProvider: DatePickerProvider, private siteService:SiteService, private employeeService: EmployeeService, private jobService:JobService, public events:Events, private actionSheetCtrl:ActionSheetController, private alertController:AlertController, private dbService:DBService) {
 
 
       this.rateCard=CreateQuotationPage;
@@ -433,6 +434,38 @@ export class DashboardPage {
         });
 
         actionSheet.present();
+    }
+
+    syncData(){
+        let alert =this.alertController.create({
+            title:'Confirm Sync',
+            message:'Network available do you wish to sync to local?',
+            buttons:[{
+                text:'Cancel',
+                role:'cancel',
+                handler:()=>{
+                    console.log('Cancel clicked');
+
+                }
+            },{
+                text:'Sync',
+                handler:()=>{
+                    this.dbService.setSites().then(data=>{
+                        console.log(data);
+                        this.dbService.setEmployee().then(response=>{
+                            console.log(response);
+                        },err=>{
+                            console.log(err)
+                        })
+                    },err=>{
+                        console.log(err);
+                    })
+
+                }
+            }]
+        })
+
+        alert.present();
     }
 
 

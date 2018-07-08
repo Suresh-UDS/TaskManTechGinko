@@ -13,8 +13,18 @@ import {componentService} from "../service/componentService";
 import {Network} from "@ionic-native/network";
 import {SiteService} from "../service/siteService";
 import {AttendanceService} from "../service/attendanceService";
-import {SiteListPage} from "../site-list/site-list";
 import {OfflineAttendance} from "../employee/offline-attendance";
+import {SQLite,SQLiteObject} from "@ionic-native/sqlite";
+import {authService} from "../service/authService";
+import {AppVersion} from "@ionic-native/app-version";
+import {Market} from "@ionic-native/market";
+import {Platform} from "ionic-angular";
+import {SplashLogo} from "../splash-logo/splash-logo";
+import {UpdateApp} from "../update-app/update-app";
+import {OfflineAttendanceSites} from "../employee/offline-attendance-sites";
+import {AlertController} from "ionic-angular";
+import {DBService} from "../service/dbService";
+
 declare  var demo ;
 
 @Component({
@@ -30,8 +40,10 @@ export class TabsPage {
   sites:any;
   offlineAttendanceData:any;
   offlineEmployeeList:any;
+  appVersionNumber:any;
   isOnline:boolean;
-  constructor(public events:Events, private navCtrl:NavController, private component:componentService, private network:Network, private siteService:SiteService, private attendanceService:AttendanceService) {
+  appPackageName:any;
+  constructor(public events:Events, private navCtrl:NavController, private component:componentService, private network:Network, private siteService:SiteService, private attendanceService:AttendanceService, private sqlite:SQLite, private authService:authService, private appVersion:AppVersion, private market:Market, private platform:Platform, private alertController:AlertController, private dbService:DBService) {
     this.DashboardTab=DashboardPage;
     this.QuotationTab=QuotationPage;
     this.CustomerDetailTab=CustomerDetailPage;
@@ -47,54 +59,95 @@ export class TabsPage {
             this.isOnline=true;
         }
     });
-
-    // this.events.subscribe('userType',(type)=>{
-    //   console.log(type);
-    //   this.userType = type;
-    // })
-      this.userType = window.localStorage.getItem('userRole');
-      console.log("Sites from localstorgage");
-      console.log(JSON.parse(window.localStorage.getItem('projectSites')));
-      console.log(JSON.parse(window.localStorage.getItem('offlineAttendanceData')));
-      if(JSON.parse(window.localStorage.getItem('projectSites')) && JSON.parse(window.localStorage.getItem('projectSites')).length>0){
-          this.sites=JSON.parse(window.localStorage.getItem('projectSites'));
-      }
-
-      if(JSON.parse(window.localStorage.getItem('offlineAttendanceData')) && JSON.parse(window.localStorage.getItem('offlineAttendanceData')).length>0){
-          this.offlineEmployeeList=JSON.parse(window.localStorage.getItem('offlineAttendanceData'));
-      }
   }
   ionViewDidLoad() {
     console.log('ionViewDidLoad TabsPage');
+
+    this.appVersion.getPackageName().then(response=>{
+        this.appPackageName=response;
+    });
+
+    this.appVersion.getVersionNumber().then(response=>{
+        this.appVersionNumber = response;
+    });
+
+
+    this.authService.getCurrentVersion('Android').subscribe(
+        response=>{
+            var currentVersion = response.json()[0];
+            console.log(currentVersion.applicationVersion);
+            console.log(this.appVersionNumber);
+            if(this.appVersionNumber && this.appVersionNumber != currentVersion.applicationVersion ){
+                console.log("Application needs to be updated");
+                this.navCtrl.push(UpdateApp);
+
+            }else{
+                console.log("Application up to date");
+
+                // this.market.open(this.appPackageName);
+                // this.platform.exitApp();
+            }
+        }
+    );
     console.log(this.network.type);
+    var session = window.localStorage.getItem('session');
       if(window.localStorage.getItem('session')){
           console.log("Session available");
-          if(this.network.type == 'none'){
-              this.navCtrl.push(SiteListPage,{sites:this.sites})
-              console.log("Network not available");
-              if(this.offlineEmployeeList && this.offlineEmployeeList.length>0){
-                  this.navCtrl.setRoot(OfflineAttendance,{employeeList:this.offlineEmployeeList})
-              }else{
-                  demo.showSwal('feedback-warning','No Information found locally, please sync your device online to enable offline attendance..');
 
-                  console.log("No employee information available");
-              }
+          if(this.network.type!='none'){
+
           }else{
-              this.loadSiteAttendance();
-              this.markOfflineAttendance();
+              this.navCtrl.setRoot(OfflineAttendanceSites);
           }
+
+          // this.createLocalDB();
           // this.component.showToastMessage('Previous Login Detected, Login automatically','bottom');
       }else{
           console.log("Session not Available");
           this.component.showToastMessage('Session not available, please login','bottom');
           this.navCtrl.setRoot(LoginPage);
       }
+
   }
 
   ionViewEnter(){
 
-
   }
+
+  createLocalDB(){
+      this.siteService.searchSite().subscribe(response=>{
+          var siteList = response.json();
+          this.callSqlLite(siteList)
+      })
+  }
+
+    callSqlLite(siteList)
+    {
+        this.sqlite.create({
+            name: 'data.db',
+            location: 'default'
+        })
+            .then((db: SQLiteObject) => {
+
+                db.executeSql('DROP TABLE assetList',{})
+
+                db.executeSql('create table IF NOT EXISTS assetList(id INT,name VARCHAR(32))', {})
+                    .then(() => console.log('Executed SQL'))
+                    .catch(e => console.log(e));
+
+
+                for (var i = 0; i < siteList.length; i++) {
+                    var query = "INSERT INTO assetList (id,name) VALUES (?,?)";
+
+                    db.executeSql(query, [siteList[i].id, siteList[i].name])
+                        .then(() => console.log('Executed SQL'))
+                        .catch(e => console.log(e));
+                }
+
+            })
+
+    }
+
 
   loadSiteAttendance(){
       window.localStorage.removeItem('offlineAttendanceData');

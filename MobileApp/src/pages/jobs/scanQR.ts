@@ -1,12 +1,9 @@
 import { Component } from '@angular/core';
 import {NavController, NavParams, ViewController} from "ionic-angular";
 import {ModalController} from "ionic-angular";
-import {AssetFilter} from "./asset-filter";
 import {QRScanner, QRScannerStatus} from "@ionic-native/qr-scanner";
-import {AssetView} from "../asset-view/asset-view";
-import {AssetService} from "../service/assetService";
 import {componentService} from "../service/componentService";
-import {AssetList} from "./asset-list";
+import {JobsPage} from "./jobs";
 
 /**
  * Generated class for the AssetList page.
@@ -23,7 +20,7 @@ export class ScanQR {
     assetList: any;
     data:any;
 
-    constructor(public viewCtrl: ViewController,public navCtrl: NavController, public navParams: NavParams, public modalController: ModalController, public qrScanner: QRScanner, public assetService:AssetService, public cs:componentService) {
+    constructor(public viewCtrl: ViewController,public navCtrl: NavController, public navParams: NavParams, public modalController: ModalController, public qrScanner: QRScanner,  public cs:componentService) {
 
 
     }
@@ -35,33 +32,21 @@ export class ScanQR {
             this.qrScanner.show();
             let scanSub = this.qrScanner.scan().subscribe((text:String)=>{
                 console.log('Scanned Something',text);
+                console.log(text.split('_'));
+                var scannedData = text.split('_');
+                var siteId = scannedData[0];
+                var locationId =scannedData[1];
                 if(text!=""){
                     this.qrScanner.hide();
                     scanSub.unsubscribe();
-                    this.navCtrl.setRoot(AssetList,{text:text})
-                    // this.navCtrl.pop();
-                    // this.assetService.getAssetByCode(text).subscribe(
-                    //     response=>{
-                    //         this.cs.showToastMessage('Asset found, navigating..','bottom')
-                    //         console.log("Search by asset code response");
-                    //         console.log(response);
-                    //         window.document.querySelector('ion-app').classList.add('transparentBody')
-                    //         // this.navCtrl.setRoot(AssetList,{assetDetails:response,qr:true});
-                    //         this.navCtrl.push(AssetView,{assetDetails:response});
-                    //
-                    //     },
-                    //     err=>{
-                    //         console.log("Error in getting asset by code");
-                    //         console.log(err);
-                    //         this.cs.showToastMessage('Asset not found, please try again','bottom')
-                    //     }
-                    // )
+                    this.navCtrl.setRoot(JobsPage,{siteId:siteId,locationId:locationId});
+                    this.cs.showToastMessage('Jobs for the location','bottom');
                 }else {
                     this.qrScanner.hide();
                     scanSub.unsubscribe();
-                    this.navCtrl.pop();
+                    this.navCtrl.setRoot(JobsPage);
                     window.document.querySelector('ion-app').classList.add('transparentBody')
-                    this.cs.showToastMessage('Asset not found, please try again','bottom')
+                    this.cs.showToastMessage('Jobs not found, please try again','bottom')
                 }
                 this.qrScanner.hide();
                 scanSub.unsubscribe();
