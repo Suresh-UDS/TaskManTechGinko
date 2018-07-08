@@ -141,7 +141,7 @@ public interface AssetRepository extends JpaRepository<Asset, Long>,JpaSpecifica
     Page<Asset> findAllAsset(Pageable pageRequest);
 
     @Query("SELECT r FROM AssetParameterReading r WHERE r.asset.id = :assetId and r.active = 'Y' order by r.createdDate DESC")
-	List<AssetParameterReading> findByAssetReading(@Param("assetId") long assetId);
+	Page<AssetParameterReading> findByAssetReading(@Param("assetId") long assetId, Pageable pageRequest);
     
     @Query("SELECT r FROM AssetParameterReading r WHERE r.asset.id = :assetId and r.assetParameterConfig.id = :assetParamId and r.active = 'Y' order by r.createdDate DESC")
 	List<AssetParameterReading> findAssetReadingById(@Param("assetId") long assetId, @Param("assetParamId") long assetParamId);

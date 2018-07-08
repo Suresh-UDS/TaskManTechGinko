@@ -544,9 +544,11 @@ public class AssetResource {
 	}
 
 	@RequestMapping(value = "/assets/{assetId}/viewAssetReadings", method = RequestMethod.GET)
-	public List<AssetParameterReadingDTO> getAssetReadings(@PathVariable("assetId") long assetId) {
-		List<AssetParameterReadingDTO> result = null;
-		result = assetService.viewAssetReadings(assetId);
+	public SearchResult<AssetParameterReadingDTO> getAssetReadings(@PathVariable("assetId") long assetId) {
+		SearchResult<AssetParameterReadingDTO> result = null;
+		SearchCriteria searchCriteria = new SearchCriteria();
+		searchCriteria.setAssetId(assetId);
+		result = assetService.viewAssetReadings(searchCriteria);
 		return result;
 	}
 
