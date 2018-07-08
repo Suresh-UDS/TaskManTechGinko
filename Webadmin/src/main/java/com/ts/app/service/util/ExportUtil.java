@@ -1368,10 +1368,10 @@ public class ExportUtil {
 					dataRow.createCell(8).setCellValue(transaction.getCreatedBy());
 					dataRow.createCell(9).setCellValue(DateUtil.formatToDateTimeString(Date.from(transaction.getCreatedDate().toInstant())));
 					dataRow.createCell(10).setCellValue(transaction.getAssignedToName());
-					dataRow.createCell(11).setCellValue(transaction.getAssignedOn() != null ? DateUtil.formatToDateTimeString(Date.from(transaction.getAssignedOn().toInstant())) : "");
+					dataRow.createCell(11).setCellValue(transaction.getAssignedOn() != null ? DateUtil.formatToDateTimeString(transaction.getAssignedOn()) : "");
 					dataRow.createCell(12).setCellValue(transaction.getClosedByName());
 					dataRow.createCell(13).setCellValue(
-							transaction.getClosedOn() != null ? DateUtil.formatToDateTimeString(Date.from(transaction.getClosedOn().toInstant())) : "");
+							transaction.getClosedOn() != null ? DateUtil.formatToDateTimeString(transaction.getClosedOn()) : "");
 				}
 
 				for (int i = 0; i < TICKET_HEADER.length; i++) {
