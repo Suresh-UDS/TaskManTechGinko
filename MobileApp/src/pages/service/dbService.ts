@@ -60,11 +60,12 @@ export class DBService {
     //Config Table
 
     //Site
-    dropTable(){
-        this.db.executeSql("DROP TABLE site");
-    }
+    // dropTable(){
+    //     this.db.executeSql("DROP TABLE site");
+    // }
     setSites()
     {
+        this.db.executeSql("DROP TABLE site");
         return new Promise((resolve, reject) => {
             setTimeout(() => {
                 this.db.executeSql("DROP TABLE site",{});
@@ -111,7 +112,6 @@ export class DBService {
             this.siteService.searchSite().subscribe(response=>{
                 var sites = response.json();
                 setTimeout(() => {
-                    this.db.executeSql("DROP TABLE employee", {})
                     console.log("Set Site Data");
                     var employee;
                     var param = [];
@@ -122,16 +122,16 @@ export class DBService {
                             console.log(employee);
                             if (employee.length > 0) {
                                 for (var i = 0; i < employee.length; i++) {
-                                    param.push([employee[i].id], employee[i].name, employee[i].empId, employee[i].active, employee[i].siteId);
+                                    param.push([employee[i].id,employee[i].employeeEmpId, employee[i].employeeId, employee[i].employeeFullName,employee[i].active,employee[i].checkInTime,employee[i].checkInImage,employee[i].checkOutTime,employee[i].checkOutImage,employee[i].siteId]);
                                 }
                             }
                         })
                     }
 
                     var tablename = 'employee';
-                    var createQuery = "create table if not exists employee(id INT,name TEXT,empId TEXT,active,siteId)"
-                    var insertQuery = "insert into employee(id,name,empId,active,siteId) values(?,?,?,?,?)";
-                    var updateQuery = "update employee set name=?,empId=?,active=?,siteId=? where id=? ";
+                    var createQuery = "create table if not exists employee(id INT,employeeEmpId INT,employeeId INT,employeeFullName TEXT,active TEXT,checkInTime TEXT,checkInImage TEXT,checkOutTime TEXT,checkOutImage TEXT,siteId TEXT)"
+                    var insertQuery = "insert into employee(id,employeeEmpId,employeeId,employeeFullName,active,checkInTime,checkInImage,checkOutTime,checkOutImage,siteId) values(?,?,?,?,?,?,?,?,?,?)";
+                    var updateQuery = "update employee set employeeEmpId,employeeId,employeeFullName,active,checkInTime,checkInImage,checkOutTime,checkOutImage,siteId where id=? ";
                     setTimeout(() => {
                         this.create(tablename, createQuery, insertQuery, updateQuery, param).then(
                             response=>{
@@ -262,16 +262,16 @@ export class DBService {
     }
 
     getSiteEmployee(siteId){
-        console.log("ID:")
+        console.log("ID:"+siteId)
         this.selectEmployee.splice(0,this.selectEmployee.length);
         return new Promise((resolve, reject) => {
             setTimeout(() => {
                 console.log("**************")
                 console.log(this.db);
                 console.log("Select Site Table");
-                var addQuery = "select * from employee where siteId="+siteId;
+                var addQuery = "select * from employee where siteId=?";
                 console.log(addQuery);
-                this.db.executeSql(addQuery,{}).then((data)=> {
+                this.db.executeSql(addQuery,[siteId]).then((data)=> {
                     if (data.rows.length > 0) {
                         for (var i = 0; i < data.rows.length; i++) {
                             this.selectEmployee.push(data.rows.item(i))
