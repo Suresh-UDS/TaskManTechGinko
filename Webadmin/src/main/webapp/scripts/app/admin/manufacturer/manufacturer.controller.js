@@ -41,7 +41,7 @@ angular.module('timeSheetApp')
 
         $scope.initCalender();
 
-        demo.initFullCalendar();
+        //demo.initFullCalendar();
 
         $scope.openCalendar = function(e,cmp) {
             e.preventDefault();

@@ -271,8 +271,8 @@ angular.module('timeSheetApp')
             	});
             },
 
-            findByAssetReadings : function(id) {
-            	return $http.get('api/assets/'+id+'/viewAssetReadings').then(function(response) {
+            findByAssetReadings : function(searchCriteria) {
+            	return $http.post('api/assets/viewAssetReadings', searchCriteria).then(function(response) {
             		return response.data;
             	});
             },
