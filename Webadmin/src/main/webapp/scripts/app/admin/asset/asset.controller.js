@@ -1050,19 +1050,11 @@ angular.module('timeSheetApp')
             $scope.assetCode = "";
 
             AssetComponent.createQr(qr).then(function(response){
-
                 console.log('response qr---',response);
-
-                //$scope.success = 'OK';
-//                var qrAry  = response.split('.');
-
-             $scope.qr_img = response.url;
-             $scope.assetCode = response.code;
-
+                $scope.qr_img = response.url;
+                $scope.assetCode = response.code;
 //             console.log('create qr---',qrAry);
-
              $rootScope.loadingStop();
-
                 //$scope.genQrCodes();
             }).catch(function(){
                 $scope.showNotifications('top','center','danger','Error in create Qr. Please try again later..');
@@ -1094,15 +1086,11 @@ angular.module('timeSheetApp')
 
 
             AssetComponent.genQrCode(qr_id).then(function(response){
-
-//                var qrAry  = response.split('.');
-
-             $scope.qr_img = response.url;
-             $scope.assetCode = response.code;
-
-             console.log('get qr---',response);
-
-             $rootScope.loadingStop();
+	             $scope.qr_img = response.url;
+	             $scope.assetCode = response.code;
+	             console.log('get qr---',response);
+	
+	             $rootScope.loadingStop();
 
             });
             /*.catch(function(){
