@@ -1060,7 +1060,7 @@ demo = {
 
     },
 
-    initFullCalendar: function() {
+    /*initFullCalendar: function() {
         $calendar = $('#fullCalendar');
 
         today = new Date();
@@ -1253,7 +1253,7 @@ demo = {
 
 
         });
-    },
+    },*/
 
     showNotification: function(from, align, type,msg) {
 
