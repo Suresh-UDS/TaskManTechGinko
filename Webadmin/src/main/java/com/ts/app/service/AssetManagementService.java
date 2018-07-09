@@ -3,8 +3,10 @@ package com.ts.app.service;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
-
+import java.util.Map;
+import java.util.TimeZone;
 import javax.inject.Inject;
 
 import org.apache.commons.collections.CollectionUtils;
@@ -917,7 +919,7 @@ public class AssetManagementService extends AbstractService {
 			log.debug("name =" + searchCriteria.getAssetName() + " ,  assetType = " + searchCriteria.getAssetTypeName());
 			
             log.debug("AssetSpecification toPredicate - searchCriteria get consolidated status -"+ searchCriteria.isConsolidated());
-
+            
 /*			if (!searchCriteria.isFindAll()) {
 				log.debug(">>> inside search findall <<<");
 				
@@ -1025,6 +1027,7 @@ public class AssetManagementService extends AbstractService {
 				if (CollectionUtils.isNotEmpty(transactions)) {
 					buildSearchResult(searchCriteria, page, transactions, result);
 				}
+				
 			}*/
 			if(CollectionUtils.isNotEmpty(allAssetsList)) {
 				if(transactions == null) {
@@ -1533,13 +1536,43 @@ public class AssetManagementService extends AbstractService {
 		return prefixs;
 	}
 
-	public List<AssetParameterReadingDTO> viewAssetReadings(long assetId) {
-		List<AssetParameterReadingDTO> assetParameterReadingDTO = null;
-		List<AssetParameterReading> assetParameterReading = assetRepository.findByAssetReading(assetId);
-		if (CollectionUtils.isNotEmpty(assetParameterReading)) {
-			assetParameterReadingDTO = mapperUtil.toModelList(assetParameterReading, AssetParameterReadingDTO.class);
+	public SearchResult<AssetParameterReadingDTO> viewAssetReadings(SearchCriteria searchCriteria) {
+		SearchResult<AssetParameterReadingDTO> result = new SearchResult<AssetParameterReadingDTO>();
+
+		Pageable pageRequest = null;
+		Page<AssetParameterReading> page = null;
+		List<AssetParameterReading> allAssetsList = new ArrayList<AssetParameterReading>();
+		List<AssetParameterReadingDTO> transactions = null;
+		
+		page = assetRepository.findByAssetReading(searchCriteria.getAssetId(), pageRequest);
+		allAssetsList.addAll(page.getContent());
+		
+		if(CollectionUtils.isNotEmpty(allAssetsList)) {
+			if(transactions == null) {
+				transactions = new ArrayList<AssetParameterReadingDTO>();
+			}
+        		for(AssetParameterReading assetReading : allAssetsList) {
+        			transactions.add(mapperUtil.toModel(assetReading, AssetParameterReadingDTO.class));
+        		}
+			buildSearchResultReading(searchCriteria, page, transactions,result);
 		}
-		return assetParameterReadingDTO;
+		
+		return result;
+	}
+
+	private void buildSearchResultReading(SearchCriteria searchCriteria, Page<AssetParameterReading> page,
+			List<AssetParameterReadingDTO> transactions, SearchResult<AssetParameterReadingDTO> result) {
+		// TODO Auto-generated method stub
+			if (page != null) {
+				result.setTotalPages(page.getTotalPages());
+			}
+			result.setCurrPage(page.getNumber() + 1);
+			result.setTotalCount(page.getTotalElements());
+			result.setStartInd((result.getCurrPage() - 1) * 10 + 1);
+			result.setEndInd((result.getTotalCount() > 10 ? (result.getCurrPage()) * 10 : result.getTotalCount()));
+	
+			result.setTransactions(transactions);
+			return;
 	}
 
 	public AssetParameterReadingDTO getLatestParamReading(long assetId, long assetParamId) {
