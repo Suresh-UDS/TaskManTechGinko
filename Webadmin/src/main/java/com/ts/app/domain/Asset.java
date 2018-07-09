@@ -43,7 +43,7 @@ public class Asset extends AbstractAuditingEntity implements Serializable {
     private String title;
 
     @Size(min = 1, max = 250)
-    @Column(length = 250)
+    @Column(length = 250, unique=true)
     private String code;
 
     @Size(min = 1, max = 2500)
