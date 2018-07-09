@@ -6,6 +6,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import javax.inject.Inject;
 import javax.servlet.ServletContext;
@@ -224,8 +225,8 @@ public class AssetResource {
 	}
 
 	@RequestMapping(value = "/asset/{id}/qrcode/{code}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-	public AssetDTO generateAssetQRCode(@PathVariable("id") long assetId, @PathVariable("code") String assetCode) {
-		AssetDTO result = null;
+	public Map<String, Object> generateAssetQRCode(@PathVariable("id") long assetId, @PathVariable("code") String assetCode) {
+		Map<String, Object> result = null;
 		try { 
 			result = assetService.generateAssetQRCode(assetId, assetCode);
 		} catch(Exception e) {
@@ -236,9 +237,9 @@ public class AssetResource {
 	}
 
 	@RequestMapping(path = "/asset/qrcode/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-	public AssetDTO getQRCode(@PathVariable("id") Long id) {
+	public Map<String, Object> getQRCode(@PathVariable("id") Long id) {
 		log.debug(">>> get QR Code! <<<");
-		AssetDTO result = null;
+		Map<String, Object> result = null;
 		try { 
 			result = assetService.getQRCode(id);
 		} catch(Exception e) { 

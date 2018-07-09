@@ -98,7 +98,7 @@
     <!--</div>-->
     <div class="InitFeedbackCon">
         <div class="InputCon">
-            <ion-list>
+
                 <ion-item>
                     <ion-label text-capitalize class="client-label">Client :</ion-label>
                     <ion-select [selectOptions]="selectOptions" interface="popover" [(ngModel)]="selectedProject">
@@ -126,28 +126,27 @@
                 </div>
 
 
-                <div  class="height30" margin-top text-center padding>
+                <div  margin-top text-center padding>
                     <ion-list >
-                        <p class="clr-orange">Asset Type</p>
+                        <h5 class="clr-orange" text-center>Asset Type</h5>
                         <!--<ion-scroll scrollY="true" style="width: 100%; height: 100%;">-->
                             <ion-item *ngFor="let type of assetType;let i = index" class="check-style">
                                 <ion-label>{{ type.name }}</ion-label>
                                 <ion-checkbox [(ngModel)]="type.selected"  class="margin-right0 checkbox-margin" value="type.name" (ionChange)="typeChange(type)"></ion-checkbox>
                             </ion-item>
-
                     </ion-list>
                 </div>
 
-                <div margin-top text-center padding>
-                    <ion-list >
-                        <p class="clr-orange">Asset Group</p>
+                <div   margin-top text-center padding>
+                    <ion-list>
+                        <h5 class="clr-orange" text-center>Asset Group</h5>
                         <ion-item *ngFor=" let group of assetGroup;let j = index " class="check-style">
                             <ion-label>{{ group.assetgroup }}</ion-label>
                             <ion-checkbox [(ngModel)]="group.selected" class="margin-right0 checkbox-margin" value="group.assetgroup" (ionChange)=" groupChange(group)"></ion-checkbox>
                         </ion-item>
                     </ion-list>
                 </div>
-            </ion-list>
+
         </div>
     </div>
 </ion-content>
