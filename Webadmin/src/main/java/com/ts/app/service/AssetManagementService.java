@@ -1560,8 +1560,15 @@ public class AssetManagementService extends AbstractService {
 			Page<AssetParameterReading> page = null;
 			List<AssetParameterReading> allAssetsList = new ArrayList<AssetParameterReading>();
 			List<AssetParameterReadingDTO> transactions = null;
-		
-			page = assetRepository.findByAssetReading(searchCriteria.getAssetId(), pageRequest);
+			
+			if(searchCriteria.getReadingFromDate() != null && searchCriteria.getReadingToDate() != null) { 
+				page = assetRepository.findAssetReadingByDate(searchCriteria.getAssetId(), searchCriteria.getReadingFromDate(), searchCriteria.getReadingToDate(), pageRequest);
+			}else if(searchCriteria.getParamName() != null && searchCriteria.getAssetId() > 0){
+				page = assetRepository.findReadingByName(searchCriteria.getParamName(), searchCriteria.getAssetId(), pageRequest);
+			}else {
+				page = assetRepository.findByAssetReading(searchCriteria.getAssetId(), pageRequest);
+			}
+	
 			allAssetsList.addAll(page.getContent());
 		
 			if(CollectionUtils.isNotEmpty(allAssetsList)) {
