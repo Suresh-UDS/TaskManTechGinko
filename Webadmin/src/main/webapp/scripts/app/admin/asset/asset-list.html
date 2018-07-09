@@ -188,13 +188,13 @@
                             <thead>
 
                             <tr>
-                                <th>
+                                <!-- <th>
                                     <div class="checkbox form-horizontal-checkbox">
                                         <label>
                                             <input type="checkbox" name="optionsCheckboxes">
                                         </label>
                                     </div>
-                                </th>
+                                </th> -->
                                 <th>Asset Code
                                     <span class="sortingIcons">
                                         <span ng-click="columnAscOrder('assetCode')" ng-class="isActiveAsc == 'assetCode' ? 'active' : ''" >
@@ -265,13 +265,13 @@
 
                             <tbody>
                             <tr ng-repeat="asset in assets">
-                            <td>
+                            <!-- <td>
                                 <div class="checkbox form-horizontal-checkbox">
                                     <label>
                                         <input type="checkbox" name="optionsCheckboxes">
                                     </label>
                                 </div>
-                            </td>
+                            </td> -->
                                 <td>{{asset.code}}</td>
                                 <td>{{asset.title}}</td>
                                 <td>{{asset.assetType}}</td>

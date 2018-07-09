@@ -235,7 +235,7 @@ angular.module('timeSheetApp')
             	});
             },
             getPPMScheduleCalendar : function(assetId,searchCriteria) {
-                return $http.post('api/assets/'+assetId+'/ppmschedule/calendar').then(function(response){
+                return $http.post('api/assets/'+assetId+'/ppmschedule/calendar',searchCriteria).then(function(response){
                     return response.data;
                 });
             },
