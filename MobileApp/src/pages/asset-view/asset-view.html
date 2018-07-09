@@ -28,6 +28,7 @@
             <ion-segment-button value="readings" (ionSelect)="getReading()">Readings</ion-segment-button>
             <ion-segment-button value="jobs" (ionSelect)="getJobs(jobSearchCriteria)">Jobs</ion-segment-button>
             <ion-segment-button value="tickets" (ionSelect)="getTickets(ticketSearchCriteria)">Tickets</ion-segment-button>
+            <ion-segment-button value="history">History</ion-segment-button>
         </ion-segment>
     </ion-toolbar>
     <div [ngSwitch]="true">
@@ -612,14 +613,15 @@
         <div  class="white-bg" *ngFor="let ticket of assetDetails.tickets" (click)="viewTicket(ticket)">
             <div class="padding-left16 padding-top5">
                 <ion-row class="margin0">
-                    <ion-col col-2 class="ver-center">
+                    <ion-col col-9 class="ver-center">
                         <ion-icon *ngIf="ticket.status=='Open'" style="color:red" ios="ios-alert" md="md-alert" class="fnt-24"></ion-icon>
                         <ion-icon *ngIf="ticket.status=='Closed'" style="color:green" ios="ios-checkmark-circle" md="md-checkmark-circle" class="fnt-24"></ion-icon>
                         <ion-icon *ngIf="ticket.status=='OnGoing' || ticket.status =='Assigned'" style="color: orangered" ios="ios-help-circle" md="md-help-circle" class="fnt-24"></ion-icon>
                     </ion-col>
-                    <ion-col col-8 class="padding-left5">
+                    <ion-col col-3 class="padding-left5">
                         <div class="border-btm padding-bottom5 ln-ght20" text-capitalize>
-                            <p text-left class="margin0"><span>{{ticket.title}}</span><span float-right>{{ticket.status}}</span></p>
+                            <p text-left class="margin0">{{ticket.title}}</p>
+                            <p float-right>{{ticket.status}}</p>
                         </div>
                     </ion-col>
                 </ion-row>
@@ -694,9 +696,8 @@
                         <tr>
                             <th class="text-center clr-orange">Date</th>
                             <th class="text-center clr-orange" >Type</th>
-                            <th class="text-center clr-orange" >Initial value</th>
-                            <th class="text-center clr-orange">Final value</th>
                             <th class="text-center clr-orange" >Consumption</th>
+                            <th class="text-center clr-orange">Reading</th>
                             <th class="text-center clr-orange">Uom</th>
                         </tr>
                         </thead>
@@ -705,11 +706,12 @@
                             <td class="text-center">{{readings.createdDate| date : 'dd/ MM /yy'}}
                             <p>{{readings.createdDate|date : 'hh:mm a'}}</p></td>
                             <td class="text-center">{{readings.name}}</td>
-                            <td class="text-center" *ngIf="readings.consumption">{{readings.initialValue}}</td>
-                            <td class="text-center" *ngIf="!readings.consumption">NA</td>
-                            <td class="text-center">{{readings.finalValue}}</td>
-                            <td class="text-center" *ngIf="readings.consumption">{{readings.consumption}}</td>
-                            <td class="text-center" *ngIf="!readings.consumption">NA</td>
+                            <td class="text-center" *ngIf="readings.consumption">{{readings.consumption}}
+                                <p class="clr-orange">Initial Value:<span class="clr-black">{{readings.initialValue}}</span></p>
+                                <p class="clr-orange">Final Value:<span class="clr-black">{{readings.finalValue}}</span></p>
+                            </td>
+                            <td class="text-center" *ngIf="readings.value>0">NA</td>
+                            <td text-center>{{readings.value}}</td>
                             <td class="text-center">{{readings.uom}}</td>
                         </tr>
                         </tbody>
@@ -721,6 +723,41 @@
         <!--<ion-infinite-scroll *ngIf="page<totalPages" (ionInfinite)="readingScroll($event)">-->
             <!--<ion-infinite-scroll-content></ion-infinite-scroll-content>-->
         <!--</ion-infinite-scroll>-->
+    </ion-list>
+
+    <ion-list *ngSwitchCase="'history'">
+            <div class="col-md-6 p-l-30 p-r-30">
+
+                    <div class="white-bg">
+                        <div class="padding-left16 padding-top5" >
+                            <ion-row class="margin0 margin-top40 border-btm">
+                                <ion-col col-4 class="ver-center">
+                                    <button ion-button clear color="primary" class="">
+                                        <ion-icon name="md-clock" class="green fnt-24"></ion-icon>
+                                    </button>
+                                </ion-col>
+                                <ion-col col-8 class="padding-left5">
+                                    <div class=" padding-bottom5 ln-ght20" text-capitalize>
+                                        <p text-left class="margin0">Asset title</p>
+                                        <p text-left class="margin0">site name</p>
+                                    </div>
+                                </ion-col>
+
+                            </ion-row>
+                            <ion-row class="margin0">
+                                <ion-col col-6 class="ver-center">
+                                    <div class=" padding-bottom5 ln-ght20" text-capitalize>
+                                        <p text-left class="margin0">status</p>
+                                    </div>
+                                </ion-col>
+                                <ion-col col-6>
+                                    <p text-right class="margin0">Employee name</p>
+                                </ion-col>
+                            </ion-row>
+                        </div>
+                </div>
+
+        </div>
     </ion-list>
 </div>
 </ion-content>
