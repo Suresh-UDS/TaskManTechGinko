@@ -1544,21 +1544,35 @@ public class AssetManagementService extends AbstractService {
 		SearchResult<AssetParameterReadingDTO> result = new SearchResult<AssetParameterReadingDTO>();
 
 		Pageable pageRequest = null;
-		Page<AssetParameterReading> page = null;
-		List<AssetParameterReading> allAssetsList = new ArrayList<AssetParameterReading>();
-		List<AssetParameterReadingDTO> transactions = null;
-		
-		page = assetRepository.findByAssetReading(searchCriteria.getAssetId(), pageRequest);
-		allAssetsList.addAll(page.getContent());
-		
-		if(CollectionUtils.isNotEmpty(allAssetsList)) {
-			if(transactions == null) {
-				transactions = new ArrayList<AssetParameterReadingDTO>();
+		if(searchCriteria != null) {
+			if (!StringUtils.isEmpty(searchCriteria.getColumnName())) {
+				Sort sort = new Sort(searchCriteria.isSortByAsc() ? Sort.Direction.ASC : Sort.Direction.DESC, searchCriteria.getColumnName());
+				log.debug("Sorting object" + sort);
+				pageRequest = createPageSort(searchCriteria.getCurrPage(), searchCriteria.getSort(), sort);
+			} else {
+				if (searchCriteria.isList()) {
+					pageRequest = createPageRequest(searchCriteria.getCurrPage(), true);
+				} else {
+					pageRequest = createPageRequest(searchCriteria.getCurrPage());
+				}
 			}
-        		for(AssetParameterReading assetReading : allAssetsList) {
-        			transactions.add(mapperUtil.toModel(assetReading, AssetParameterReadingDTO.class));
-        		}
-			buildSearchResultReading(searchCriteria, page, transactions,result);
+
+			Page<AssetParameterReading> page = null;
+			List<AssetParameterReading> allAssetsList = new ArrayList<AssetParameterReading>();
+			List<AssetParameterReadingDTO> transactions = null;
+		
+			page = assetRepository.findByAssetReading(searchCriteria.getAssetId(), pageRequest);
+			allAssetsList.addAll(page.getContent());
+		
+			if(CollectionUtils.isNotEmpty(allAssetsList)) {
+				if(transactions == null) {
+					transactions = new ArrayList<AssetParameterReadingDTO>();
+				}
+	        		for(AssetParameterReading assetReading : allAssetsList) {
+	        			transactions.add(mapperUtil.toModel(assetReading, AssetParameterReadingDTO.class));
+	        		}
+				buildSearchResultReading(searchCriteria, page, transactions,result);
+			}
 		}
 		
 		return result;
