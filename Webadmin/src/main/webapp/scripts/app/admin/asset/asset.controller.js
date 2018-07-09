@@ -59,6 +59,7 @@ angular.module('timeSheetApp')
         $scope.searchAcquiredDateSer =null;
         $scope.ppmSearchCriteria = {};
         $scope.amcSearchCriteria = {};
+        $scope.redSearchCriteria = {};
         $scope.ppmFrom = null;
         $scope.ppmTo = null;
         $scope.amcFrom = null;
@@ -1509,6 +1510,8 @@ angular.module('timeSheetApp')
                 
                 $scope.loadAMCJobs();
 
+            }else if($scope.redSearchCriteria.module == "Readings"){
+                $scope.loadAssetReadings();
             }else{
                $scope.search(); 
             }
@@ -2250,13 +2253,39 @@ angular.module('timeSheetApp')
 
         $scope.loadAssetReadings = function() {
             $rootScope.loadingStart();
-        	var id = $stateParams.id;
-        	AssetComponent.findByAssetReadings(id).then(function(data){
+            var redCurrPageVal = ($scope.pages ? $scope.pages.currPage : 1);
+                    if(!$scope.redSearchCriteria) {
+                        var redSearchCriteria = {
+                                currPage : redCurrPageVal
+                        };
+                        $scope.redSearchCriteria = redSearchCriteria;
+                    }
+
+                $scope.redSearchCriteria.currPage = redCurrPageVal;
+                $scope.redSearchCriteria.module = "Readings";
+                $scope.redSearchCriteria.assetId = $stateParams.id;
+            $scope.assetReadings = "";
+        	console.log('Readings search criteria',$scope.redSearchCriteria);
+        	AssetComponent.findByAssetReadings($scope.redSearchCriteria).then(function(data){
                 $rootScope.loadingStop();
         		console.log('View Readings - ' +JSON.stringify(data));
-        		if(data.length > 0) {
-        			$scope.assetReadings = data;
-            		$scope.viewAssetReading(data[0].id);
+        		if(data.transactions.length > 0) {
+        			$scope.assetReadings = data.transactions;
+            		$scope.viewAssetReading(data.transactions[0].id);
+
+
+                 /*
+                ** Call pagination  main function **
+                */
+
+                $scope.pager = {};
+                $scope.pager = PaginationComponent.GetPager(data.totalCount, $scope.pages.currPage);
+                $scope.totalCountPages = data.totalCount;
+
+                console.log("Pagination",$scope.pager);
+                console.log("Readings List - ", data);
+
+
         		}else{
         			console.log('No readings');
         			$scope.noReading = true;
