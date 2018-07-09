@@ -815,6 +815,8 @@ angular.module('timeSheetApp')
 
         $scope.loadCalendar = function (startDate = firstDay,endDate = lastDay) {
 
+           // $scope.initFullCalendar([]);
+
             $rootScope.loadingStart();
 
             var scheduleObj = {assetId:$stateParams.id,checkInDateTimeFrom:startDate,checkInDateTimeTo:endDate};
@@ -2600,7 +2602,7 @@ angular.module('timeSheetApp')
         });
     }
 
-    //$scope.initFullCalendar();
+
 
 
     });
