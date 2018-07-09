@@ -9,6 +9,7 @@ import {AttendanceService} from "../service/attendanceService";
 import {SiteService} from "../service/siteService";
 import {componentService} from "../service/componentService";
 import {DBService} from "../service/dbService";
+import {OfflineAttendance} from "./offline-attendance";
 
 /**
  * Generated class for the SiteListPage page.
@@ -99,8 +100,11 @@ export class OfflineAttendanceSites {
     }
 
     gotoEmployeeList(site){
+        this.component.showLoader("")
         this.dbService.getSiteEmployee(site.id).then((response)=>{
             console.log(response);
+            this.component.closeLoader()
+            this.navCtrl.push(OfflineAttendance,{employeeList:response})
         });
     }
 }

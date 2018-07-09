@@ -71,24 +71,24 @@ export class TabsPage {
         this.appVersionNumber = response;
     });
 
-
-    this.authService.getCurrentVersion('Android').subscribe(
-        response=>{
-            var currentVersion = response.json()[0];
-            console.log(currentVersion.applicationVersion);
-            console.log(this.appVersionNumber);
-            if(this.appVersionNumber && this.appVersionNumber != currentVersion.applicationVersion ){
-                console.log("Application needs to be updated");
-                this.navCtrl.push(UpdateApp);
-
-            }else{
-                console.log("Application up to date");
-
-                // this.market.open(this.appPackageName);
-                // this.platform.exitApp();
-            }
-        }
-    );
+      this.markOfflineAttendance()
+    // this.authService.getCurrentVersion('Android').subscribe(
+    //     response=>{
+    //         var currentVersion = response.json()[0];
+    //         console.log(currentVersion.applicationVersion);
+    //         console.log(this.appVersionNumber);
+    //         if(this.appVersionNumber && this.appVersionNumber != currentVersion.applicationVersion ){
+    //             console.log("Application needs to be updated");
+    //             this.navCtrl.push(UpdateApp);
+    //
+    //         }else{
+    //             console.log("Application up to date");
+    //
+    //             // this.market.open(this.appPackageName);
+    //             // this.platform.exitApp();
+    //         }
+    //     }
+    // );
     console.log(this.network.type);
     var session = window.localStorage.getItem('session');
       if(window.localStorage.getItem('session')){
@@ -169,28 +169,46 @@ export class TabsPage {
     if(window.localStorage.getItem('attendanceCheckInData')){
         console.log("unsynced checkin information available in local storage");
         var offlineData = JSON.parse(window.localStorage.getItem('attendanceCheckInData'));
-        this.attendanceService.markAttendanceCheckIn(offlineData.siteId,offlineData.empId,offlineData.lat,offlineData.lng,offlineData.imageData).subscribe(
-            response=>{
-                console.log("Offline attendance data synced to server");
-                console.log("Clearing local storage");
-                window.localStorage.removeItem('attendanceCheckInData');
-                if(window.localStorage.getItem('attendanceCheckOutData')){
-                    console.log("unsynced checkout information available in local storage");
-                    var offlineData = JSON.parse(window.localStorage.getItem('attendanceCheckOutData'));
-                    this.attendanceService.markAttendanceCheckOut(offlineData.siteId,offlineData.empId,offlineData.lat,offlineData.lng,offlineData.imageData,response.id).subscribe(
-                        response=>{
-                            console.log("Offline attendance data synced to server");
-                            console.log("Clearing local storage");
-                            window.localStorage.removeItem('attendanceCheckOutData');
-                        },error2 => {
-                            console.log("Error in syncing attendance to server");
+
+        this.dbService.getAttendance().then(response=>{
+            console.log(response);
+            // this.componentService.closeLoader()
+            var data = []
+            data.push(response)
+            for(var i=0;i<data.length;i++) {
+                console.log("==================")
+                console.log(data[i])
+                this.attendanceService.markAttendanceCheckIn(data[i].siteId, data[i].employeeEmpId, data[i].latitudeIn, data[i].longitudeIn, data[i].checkInImage).subscribe(
+                    response => {
+                        console.log("Offline attendance data synced to server");
+                        console.log("Clearing local storage");
+                        window.localStorage.removeItem('attendanceCheckInData');
+                        if (window.localStorage.getItem('attendanceCheckOutData')) {
+                            console.log("unsynced checkout information available in local storage");
+                            var offlineData = JSON.parse(window.localStorage.getItem('attendanceCheckOutData'));
+                            this.attendanceService.markAttendanceCheckOut(data[i].siteId, data[i].employeeEmpId, data[i].latitudeIn, data[i].longitudeIn, data[i].checkInImage, response.id).subscribe(
+                                response => {
+                                    console.log("Offline attendance data synced to server");
+                                    console.log("Clearing local storage");
+                                    window.localStorage.removeItem('attendanceCheckOutData');
+                                }, error2 => {
+                                    console.log("Error in syncing attendance to server");
+                                }
+                            )
                         }
-                    )
-                }
-            },error2 => {
-                console.log("Error in syncing attendance to server");
+                    }, error2 => {
+                        console.log("Error in syncing attendance to server");
+                    }
+                )
             }
-        )
+        },err=>{
+            console.log(err)
+        })
+
+
+
+
+
 
     }else if(window.localStorage.getItem('attendanceCheckOutData')){
         console.log("unsynced checkout information available in local storage");

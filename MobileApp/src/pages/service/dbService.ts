@@ -30,6 +30,7 @@ export class DBService {
     selectAMC:any;
     selectPPM:any;
     selectConfig:any;
+    selectAttendance:any;
 
     constructor(private sqlite: SQLite,private componentService:componentService,private jobService:JobService,
                 private siteService:SiteService,public employeeService:EmployeeService,public attendanceService:AttendanceService) {
@@ -41,6 +42,7 @@ export class DBService {
         this.selectAMC = [];
         this.selectPPM = [];
         this.selectConfig = [];
+        this.selectAttendance = []
 
         this.sqlite.create({
             name: 'data.db',
@@ -65,6 +67,7 @@ export class DBService {
     // }
     setSites()
     {
+        console.log(this.db)
         this.db.executeSql("DROP TABLE site");
         return new Promise((resolve, reject) => {
             setTimeout(() => {
@@ -122,16 +125,16 @@ export class DBService {
                             console.log(employee);
                             if (employee.length > 0) {
                                 for (var i = 0; i < employee.length; i++) {
-                                    param.push([employee[i].id,employee[i].employeeEmpId, employee[i].employeeId, employee[i].employeeFullName,employee[i].active,employee[i].checkInTime,employee[i].checkInImage,employee[i].checkOutTime,employee[i].checkOutImage,employee[i].siteId]);
+                                    param.push([employee[i].id,employee[i].employeeEmpId, employee[i].employeeId, employee[i].employeeFullName,employee[i].active,employee[i].checkInTime,employee[i].checkInImage,employee[i].checkOutTime,employee[i].checkOutImage,employee[i].siteId,employee[i].notCheckedOut,employee[i].siteName]);
                                 }
                             }
                         })
                     }
 
                     var tablename = 'employee';
-                    var createQuery = "create table if not exists employee(id INT,employeeEmpId INT,employeeId INT,employeeFullName TEXT,active TEXT,checkInTime TEXT,checkInImage TEXT,checkOutTime TEXT,checkOutImage TEXT,siteId TEXT)"
-                    var insertQuery = "insert into employee(id,employeeEmpId,employeeId,employeeFullName,active,checkInTime,checkInImage,checkOutTime,checkOutImage,siteId) values(?,?,?,?,?,?,?,?,?,?)";
-                    var updateQuery = "update employee set employeeEmpId,employeeId,employeeFullName,active,checkInTime,checkInImage,checkOutTime,checkOutImage,siteId where id=? ";
+                    var createQuery = "create table if not exists employee(id INT,employeeEmpId INT,employeeId INT,employeeFullName TEXT,active TEXT,checkInTime TEXT,checkInImage TEXT,checkOutTime TEXT,checkOutImage TEXT,siteId TEXT,notCheckedOut TEXT,siteName TEXT)"
+                    var insertQuery = "insert into employee(id,employeeEmpId,employeeId,employeeFullName,active,checkInTime,checkInImage,checkOutTime,checkOutImage,siteId,notCheckedOut,siteName) values(?,?,?,?,?,?,?,?,?,?,?,?)";
+                    var updateQuery = "update employee set employeeEmpId,employeeId,employeeFullName,active,checkInTime,checkInImage,checkOutTime,checkOutImage,siteId,notCheckedOut,siteName where id=? ";
                     setTimeout(() => {
                         this.create(tablename, createQuery, insertQuery, updateQuery, param).then(
                             response=>{
@@ -146,6 +149,36 @@ export class DBService {
 
         })
     }
+
+
+    //Attendance set
+    setAttendance(attendance)
+    {
+
+
+        return new Promise((resolve, reject) => {
+          setTimeout(()=>{
+              var param = [ attendance.siteId, attendance.employeeEmpId, attendance.lattitude,attendance.longitudeIn, attendance.checkInImage, attendance.checkInTime,attendance.offlineAttendance];
+              var createQuery = "create table if not exists attendance(id INTEGER  PRIMARY KEY  AUTOINCREMENT,siteId INT,employeeEmpId INT,latitudeIn TEXT,longitudeIn TEXT,checkInImage TEXT,checkInTime TEXT,offlineAttendance BOOLEAN)"
+              var insertQuery = "insert into attendance(siteId,employeeEmpId,latitudeIn,longitudeIn,checkInImage,checkInTime,offlineAttendance) values(?,?,?,?,?,?,?)";
+
+
+              this.db.executeSql(createQuery, {}).then((data) => {
+                  console.log(data);
+                  this.db.executeSql(insertQuery, param).then((data) => {
+                      console.log(data)//
+                      resolve("")
+                  }, (error) => {
+                      console.log("ERROR: " + JSON.stringify(error))
+                  })
+              },(error)=>{
+                  console.log("ERROR: " + JSON.stringify(error))
+              })
+
+              },3000)
+        })
+    }
+
 
     //Create table
     create(tbl,create,insert,update,param)
@@ -199,7 +232,7 @@ export class DBService {
         })
     }
 
-    ///Attendance set
+
 
     //***Get data from sqlite table***/
 
@@ -251,6 +284,7 @@ export class DBService {
                             this.selectEmployee.push(data.rows.item(i))
                         }
                         console.log(this.selectEmployee)
+                        resolve(this.selectEmployee);
                     }
                 },(error) => {
                     console.log("ERROR: " + JSON.stringify(error))
@@ -277,6 +311,33 @@ export class DBService {
                             this.selectEmployee.push(data.rows.item(i))
                         }
                         console.log(this.selectEmployee)
+                        resolve(this.selectEmployee);
+                    }
+                },(error) => {
+                    console.log("ERROR: " + JSON.stringify(error))
+                })
+            }, 3000)
+
+        })
+    }
+
+    getAttendance(){
+        console.log("ID:")
+        this.selectAttendance.splice(0,this.selectAttendance.length);
+        return new Promise((resolve, reject) => {
+            setTimeout(() => {
+                console.log("**************")
+                console.log(this.db);
+                console.log("Select attendance Table");
+                var addQuery = "select * from attendance";
+                console.log(addQuery);
+                this.db.executeSql(addQuery,{}).then((data)=> {
+                    if (data.rows.length > 0) {
+                        for (var i = 0; i < data.rows.length; i++) {
+                            this.selectAttendance.push(data.rows.item(i))
+                        }
+                        console.log(this.selectAttendance)
+                        resolve(this.selectAttendance);
                     }
                 },(error) => {
                     console.log("ERROR: " + JSON.stringify(error))

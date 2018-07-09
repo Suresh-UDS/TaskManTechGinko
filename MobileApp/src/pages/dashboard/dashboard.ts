@@ -60,7 +60,7 @@ export class DashboardPage {
     addEmployee:any;
     slideIndex:any;
 
-  constructor(public renderer: Renderer,public plt: Platform,public myService:authService,private loadingCtrl:LoadingController,public navCtrl: NavController,public component:componentService,public authService:authService,public modalCtrl: ModalController,
+  constructor(public renderer: Renderer,public componentService:componentService,public plt: Platform,public myService:authService,private loadingCtrl:LoadingController,public navCtrl: NavController,public component:componentService,public authService:authService,public modalCtrl: ModalController,
               private datePickerProvider: DatePickerProvider, private siteService:SiteService, private employeeService: EmployeeService, private jobService:JobService, public events:Events, private actionSheetCtrl:ActionSheetController, private alertController:AlertController, private dbService:DBService) {
 
 
@@ -450,10 +450,12 @@ export class DashboardPage {
             },{
                 text:'Sync',
                 handler:()=>{
+                    this.componentService.showLoader("Data Sync")
                     this.dbService.setSites().then(data=>{
                         console.log(data);
                         this.dbService.setEmployee().then(response=>{
                             console.log(response);
+                            this.componentService.closeLoader()
                         },err=>{
                             console.log(err)
                         })

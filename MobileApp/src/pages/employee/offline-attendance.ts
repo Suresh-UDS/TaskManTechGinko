@@ -12,6 +12,7 @@ import {AttendanceService} from "../service/attendanceService";
 import {componentService} from "../service/componentService";
 import {AttendanceViewPage} from "../attendance-view/attendance-view";
 import {TabsPage} from "../tabs/tabs";
+import {DBService} from "../service/dbService";
 declare  var demo ;
 
 /**
@@ -39,7 +40,7 @@ export class OfflineAttendance {
     attendanceId:any;
     loader:any;
     showCheckIn:boolean;
-    constructor(public navCtrl: NavController,public component:componentService, public navParams: NavParams, private  authService: authService, public camera: Camera,
+    constructor(public navCtrl: NavController,private dbService:DBService,public component:componentService, public navParams: NavParams, private  authService: authService, public camera: Camera,
                 private loadingCtrl:LoadingController, private geolocation:Geolocation, private toastCtrl:ToastController,
                 private geoFence:Geofence, private employeeService: EmployeeService, private jobService: JobService, private siteService:SiteService, private attendanceService:AttendanceService) {
 
@@ -49,7 +50,7 @@ export class OfflineAttendance {
         this.site = this.navParams.get('site');
         console.log(this.navParams.get('employeeList'));
         this.employeeList = this.navParams.get('employeeList');
-        this.employeeList = this.employeeList[0];
+        // this.employeeList = this.employeeList[0];
     }
 
     viewList(i)
@@ -150,20 +151,27 @@ export class OfflineAttendance {
 
 
     saveAttendanceInLocal(employee,imageData){
+        this.component.showLoader("save attendance")
         var attendanceData = {
             siteId:employee.siteId,
-            employeeEmpId:employee.empId,
+            employeeEmpId:employee.employeeEmpId,
             latitudeIn:this.lattitude,
             longitudeIn:this.longitude,
             checkInImage:imageData,
             checkInTime:new Date(),
             offlineAttendance:true
-
         };
 
-        window.localStorage.setItem('attendanceCheckInData',JSON.stringify(attendanceData));
-        this.navCtrl.setRoot(TabsPage);
-        demo.showSwal('feedback-success','Attendance marked locally, please connect to network to sync it to server!');
+        this.dbService.setAttendance(attendanceData).then(response=>{
+            console.log(response);
+            this.component.closeLoader()
+        },err=>{
+            console.log(err)
+        })
+
+        // window.localStorage.setItem('attendanceCheckInData',JSON.stringify(attendanceData));
+        // this.navCtrl.setRoot(TabsPage);
+        // demo.showSwal('feedback-success','Attendance marked locally, please connect to network to sync it to server!');
 
     }
 
