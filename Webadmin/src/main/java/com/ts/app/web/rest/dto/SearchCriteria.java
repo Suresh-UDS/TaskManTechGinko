@@ -4,6 +4,7 @@ import com.ts.app.domain.AssetStatus;
 import com.ts.app.domain.AssetType;
 import com.ts.app.domain.JobStatus;
 
+import java.time.ZonedDateTime;
 import java.util.Date;
 import java.util.List;
 
@@ -168,6 +169,12 @@ public class SearchCriteria extends Paginator {
 	private String assetCode;
 	
 	private Date acquiredDate;
+	
+	private ZonedDateTime readingFromDate;
+	
+	private ZonedDateTime readingToDate;
+	
+	private String paramName;
 
 	public String getWarrantyTypeName() {
 		return warrantyTypeName;
@@ -888,5 +895,29 @@ public class SearchCriteria extends Paginator {
 
 	public void setMaintenanceType(String maintenanceType) {
 		this.maintenanceType = maintenanceType;
+	}
+
+	public ZonedDateTime getReadingFromDate() {
+		return readingFromDate;
+	}
+
+	public void setReadingFromDate(ZonedDateTime readingFromDate) {
+		this.readingFromDate = readingFromDate;
+	}
+
+	public ZonedDateTime getReadingToDate() {
+		return readingToDate;
+	}
+
+	public void setReadingToDate(ZonedDateTime readingToDate) {
+		this.readingToDate = readingToDate;
+	}
+
+	public String getParamName() {
+		return paramName;
+	}
+
+	public void setParamName(String paramName) {
+		this.paramName = paramName;
 	}
 }
