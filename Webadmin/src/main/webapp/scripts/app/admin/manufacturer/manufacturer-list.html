@@ -13,14 +13,14 @@
                                 <div class="card-content">
                                     <form name="searchForm"  ng-submit="searchFilter();" novalidate >
 
-                                        <div class="row" >
+                                        <div class="row" ng-init="loadAllAssetTypes()">
                                             <div class="col-xs-12 col-md-4">
                                                 <div class="form-group no-padding" >
                                                     <div class="dropdown">
                                                         <div class="form-group">
                                                             <label class="control-label">Select Asset Type</label>
                                                             <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-														<select class="form-control " ng-model="selectedAssetType"  ng-options="assetType as assetType.name for assetType in assetTypes">
+														<select class="form-control " ng-model="searchAssetType"  ng-options="assetType as assetType.name for assetType in assetTypes">
                                                         		<option value="">Select Asset Type...</option>
                                                     		</select>
                                                         </div>
@@ -35,10 +35,8 @@
                                                             <input id='name'
                                                                    class='form-control'
                                                                    name='name'
+                                                                   ng-model="searchName"
                                                                    type='text' value=""
-                                                                   ng-minlength='5'
-                                                                   ng-maxlength='250'
-                                                                   ng-pattern="/^[A-Za-z0-9\s]*$/" autofocus
                                                             />
                                                         </div>
                                                     </div>
@@ -77,10 +75,10 @@
                             <tr>
                                 <th width="20%">Asset Type
                                     <span class="sortingIcons">
-                                        <span ng-click="columnAscOrder('id')" ng-class="isActiveAsc == 'id' ? 'active' : ''" >
+                                        <span ng-click="columnAscOrder('assetType')" ng-class="isActiveAsc == 'assetType' ? 'active' : ''" >
                                             <i  class="fa fa-caret-up"></i>
                                         </span>
-                                        <span ng-click="columnDescOrder('id')" ng-class="isActiveDesc == 'id' ? 'active' : ''" >
+                                        <span ng-click="columnDescOrder('assetType')" ng-class="isActiveDesc == 'assetType' ? 'active' : ''" >
                                              <i  ng-class="class" class="fa fa-caret-down"></i>
                                         </span>
                                     </span>
@@ -98,10 +96,10 @@
                                 <th width="20%">Person Name
 
                                     <span class="sortingIcons">
-                                        <span ng-click="columnAscOrder('address')" ng-class="isActiveAsc == 'address' ? 'active' : ''" >
+                                        <span ng-click="columnAscOrder('contactFirstName')" ng-class="isActiveAsc == 'contactFirstName' ? 'active' : ''" >
                                              <i  class="fa fa-caret-up"></i>
                                         </span>
-                                        <span ng-click="columnDescOrder('address')" ng-class="isActiveDesc == 'address' ? 'active' : ''">
+                                        <span ng-click="columnDescOrder('contactFirstName')" ng-class="isActiveDesc == 'contactFirstName' ? 'active' : ''">
                                             <i  class="fa fa-caret-down"></i>
                                         </span>
                                     </span>

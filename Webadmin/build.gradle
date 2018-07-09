@@ -33,7 +33,22 @@ springBoot {
     executable = true
 }
 
+task pathingJar(type: Jar) {
+      dependsOn configurations.runtime
+      appendix = 'pathing'
+
+      doFirst {
+         manifest {
+             attributes "Class-Path": configurations.runtime.files.collect {it.toURL().toString().replaceFirst("file:/", '/')}.join(" ")
+         }
+     }
+ }
+
 bootRun {
+     dependsOn pathingJar
+     doFirst {
+         classpath = files("$buildDir/classes/main", "$buildDir/resources/main", pathingJar.archivePath)
+     }
     addResources = false
 }
 
@@ -70,6 +85,10 @@ description = ''
 
 configurations {
     providedRuntime
+}
+
+project.plugins.each {
+   println it
 }
 
 repositories {
@@ -185,7 +204,9 @@ dependencies {
     compile 'com.google.api-client:google-api-client:1.23.0'
     compile 'com.google.oauth-client:google-oauth-client-jetty:1.23.0'
     compile 'com.google.apis:google-api-services-sheets:v4-rev516-1.23.0'
-    compile 'com.google.apis:google-api-services-drive:v3-rev110-1.23.0'    
+    compile 'com.google.apis:google-api-services-drive:v3-rev110-1.23.0'  
+    
+    compile group: 'com.amazonaws', name: 'aws-java-sdk', version: '1.11.163' 
 }
 
 compileJava.dependsOn(processResources)
@@ -193,7 +214,7 @@ compileJava.dependsOn(processResources)
 clean {
     delete "target"
 }
-
+ 
 task wrapper(type: Wrapper) {
     gradleVersion = '2.7'
 }

@@ -188,13 +188,13 @@
                             <thead>
 
                             <tr>
-                                <th>
+                                <!-- <th>
                                     <div class="checkbox form-horizontal-checkbox">
                                         <label>
                                             <input type="checkbox" name="optionsCheckboxes">
                                         </label>
                                     </div>
-                                </th>
+                                </th> -->
                                 <th>Asset Code
                                     <span class="sortingIcons">
                                         <span ng-click="columnAscOrder('assetCode')" ng-class="isActiveAsc == 'assetCode' ? 'active' : ''" >
@@ -208,10 +208,10 @@
                                 </th>
                                 <th>Asset Name
                                     <span class="sortingIcons">
-                                        <span ng-click="columnAscOrder('assetTitle')" ng-class="isActiveAsc == 'assetTitle' ? 'active' : ''" >
+                                        <span ng-click="columnAscOrder('title')" ng-class="isActiveAsc == 'title' ? 'active' : ''" >
                                             <i  class="fa fa-caret-up"></i>
                                         </span>
-                                        <span ng-click="columnDescOrder('assetTitle')" ng-class="isActiveDesc == 'assetTitle' ? 'active' : ''" >
+                                        <span ng-click="columnDescOrder('title')" ng-class="isActiveDesc == 'title' ? 'active' : ''" >
                                              <i  ng-class="class" class="fa fa-caret-down"></i>
                                         </span>
                                     </span>
@@ -219,20 +219,20 @@
                                 </th>
                                 <th>Asset Type
                                      <span class="sortingIcons">
-                                        <span ng-click="columnAscOrder('assetTypeName')" ng-class="isActiveAsc == 'assetTypeName' ? 'active' : ''" >
+                                        <span ng-click="columnAscOrder('assetType')" ng-class="isActiveAsc == 'assetType' ? 'active' : ''" >
                                             <i  class="fa fa-caret-up"></i>
                                         </span>
-                                        <span ng-click="columnDescOrder('assetTypeName')" ng-class="isActiveDesc == 'assetTypeName' ? 'active' : ''" >
+                                        <span ng-click="columnDescOrder('assetType')" ng-class="isActiveDesc == 'assetType' ? 'active' : ''" >
                                              <i  ng-class="class" class="fa fa-caret-down"></i>
                                         </span>
                                     </span>
                                 </th>
                                 <th>Asset Group
                                     <span class="sortingIcons">
-                                        <span ng-click="columnAscOrder('assetGroupName')" ng-class="isActiveAsc == 'assetGroupName' ? 'active' : ''" >
+                                        <span ng-click="columnAscOrder('assetGroup')" ng-class="isActiveAsc == 'assetGroup' ? 'active' : ''" >
                                             <i  class="fa fa-caret-up"></i>
                                         </span>
-                                        <span ng-click="columnDescOrder('assetGroupName')" ng-class="isActiveDesc == 'assetGroupName' ? 'active' : ''" >
+                                        <span ng-click="columnDescOrder('assetGroup')" ng-class="isActiveDesc == 'assetGroup' ? 'active' : ''" >
                                              <i  ng-class="class" class="fa fa-caret-down"></i>
                                         </span>
                                     </span>
@@ -265,13 +265,13 @@
 
                             <tbody>
                             <tr ng-repeat="asset in assets">
-                            <td>
+                            <!-- <td>
                                 <div class="checkbox form-horizontal-checkbox">
                                     <label>
                                         <input type="checkbox" name="optionsCheckboxes">
                                     </label>
                                 </div>
-                            </td>
+                            </td> -->
                                 <td>{{asset.code}}</td>
                                 <td>{{asset.title}}</td>
                                 <td>{{asset.assetType}}</td>

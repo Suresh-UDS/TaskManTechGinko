@@ -3,21 +3,21 @@ package com.ts.app.service;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
-
+import java.util.Map;
+import java.util.TimeZone;
 import javax.inject.Inject;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.context.annotation.PropertySource;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.env.Environment;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
@@ -33,7 +33,9 @@ import com.ts.app.domain.AssetParameterConfig;
 import com.ts.app.domain.AssetParameterReading;
 import com.ts.app.domain.AssetParameterReadingRule;
 import com.ts.app.domain.AssetReadingRule;
+import com.ts.app.domain.AssetSiteHistory;
 import com.ts.app.domain.AssetStatus;
+import com.ts.app.domain.AssetStatusHistory;
 import com.ts.app.domain.AssetType;
 import com.ts.app.domain.Checklist;
 import com.ts.app.domain.Employee;
@@ -50,7 +52,6 @@ import com.ts.app.domain.Site;
 import com.ts.app.domain.User;
 import com.ts.app.domain.Vendor;
 import com.ts.app.domain.WarrantyType;
-import com.ts.app.domain.util.StringUtil;
 import com.ts.app.repository.AssetAMCRepository;
 import com.ts.app.repository.AssetDocumentRepository;
 import com.ts.app.repository.AssetGroupRepository;
@@ -61,6 +62,7 @@ import com.ts.app.repository.AssetPpmScheduleRepository;
 import com.ts.app.repository.AssetReadingRuleRepository;
 import com.ts.app.repository.AssetRepository;
 import com.ts.app.repository.AssetSpecification;
+import com.ts.app.repository.AssetStatusHistoryRepository;
 import com.ts.app.repository.AssetTypeRepository;
 import com.ts.app.repository.CheckInOutImageRepository;
 import com.ts.app.repository.CheckInOutRepository;
@@ -79,6 +81,7 @@ import com.ts.app.repository.TicketRepository;
 import com.ts.app.repository.UserRepository;
 import com.ts.app.repository.VendorRepository;
 import com.ts.app.repository.WarrantyTypeRepository;
+import com.ts.app.service.util.AmazonS3Utils;
 import com.ts.app.service.util.CommonUtil;
 import com.ts.app.service.util.DateUtil;
 import com.ts.app.service.util.ExportUtil;
@@ -143,10 +146,7 @@ public class AssetManagementService extends AbstractService {
 	private UserRepository userRepository;
 
 	@Inject
-	private NotificationRepository notificationRepository;
-
-	@Inject
-	private SchedulerService schedulerService;
+	private NotificationRepository notificationRepository ;
 
 	@Inject
 	private ExportUtil exportUtil;
@@ -224,16 +224,34 @@ public class AssetManagementService extends AbstractService {
 	private AssetParamRuleRepository assetParamRuleRepository;
 	
 	@Inject
+	private AmazonS3Utils s3ServiceUtils;
+	
+	@Inject
 	private WarrantyTypeRepository warrantyTypeRepository;
+	
+	@Inject
+	private AssetStatusHistoryRepository assetStatusHistoryRepository;
 	
 	public static final String EMAIL_NOTIFICATION_READING = "email.notification.reading";
 	
 	public static final String EMAIL_NOTIFICATION_READING_EMAILS = "email.notification.reading.emails";
+	
+	@Value("${AWS.s3-cloudfront-url}")
+	private String cloudFrontUrl;
+	
+	@Value("${AWS.s3-bucketEnv}")
+	private String bucketEnv;
+	
+	@Value("${AWS.s3-asset-path}")
+	private String assetFilePath;
+	
+	@Value("${AWS.s3-qrcode-path}")
+	private String qrcodePath;
 
 	// Asset
 	public AssetDTO saveAsset(AssetDTO assetDTO) {
 		log.debug("assets service with assettype " + assetDTO.getAssetType());
-
+        
 		Asset asset = mapperUtil.toEntity(assetDTO, Asset.class);
 		Site site = getSite(assetDTO.getSiteId());
 		asset.setSite(site);
@@ -244,9 +262,30 @@ public class AssetManagementService extends AbstractService {
 		Vendor vendor = getVendor(assetDTO.getVendorId());
 		asset.setAmcVendor(vendor);
 
+		//create status history
+		if(!StringUtils.isEmpty(AssetStatus.valueOf(assetDTO.getStatus()).getStatus())) {
+			AssetStatusHistory assetStatusHistory = new AssetStatusHistory();
+			assetStatusHistory.setStatus(AssetStatus.valueOf(assetDTO.getStatus()).getStatus());
+			assetStatusHistory.setActive("Y");
+			assetStatusHistory.setAsset(asset);
+			List<AssetStatusHistory> assetStatusHistoryList = new ArrayList<AssetStatusHistory>();
+			assetStatusHistoryList.add(assetStatusHistory);
+			asset.setAssetStatusHistory(assetStatusHistoryList);
+		}
+		
 		asset.setActive(Asset.ACTIVE_YES);
 
+		/*Calendar checkInDateFrom = Calendar.getInstance(TimeZone.getTimeZone("Asia/Kolkata"));
+        checkInDateFrom.setTime(assetDTO.getAcquiredDate());
+        
+        asset.setAcquiredDate(DateUtil.convertToSQLDate(DateUtil.convertUTCToIST(checkInDateFrom)));*/
+        
+		/*asset.setAcquiredDate(DateUtil.convertToSQLDate(assetDTO.getAcquiredDate()));*/
 		asset = assetRepository.save(asset);
+		 
+		//AssetStatusHistory assetStatusHistory = assetStatusHistoryRepository.findOne(asset.getAssetStatusHistory().getId());
+		//assetStatusHistory.setAsset(asset);
+		//assetStatusHistoryRepository.save(assetStatusHistory);
 		
 		//generate QR code if qr code is not already generated.
 		if(asset != null && asset.getId() > 0 && !StringUtils.isEmpty(asset.getCode()) && StringUtils.isEmpty(asset.getQrCodeImage())) {
@@ -275,7 +314,7 @@ public class AssetManagementService extends AbstractService {
 			}
 		}
 		
-		//create asset type if does not exist
+		//create asset warranty type if does not exist
 		if(!StringUtils.isEmpty(asset.getWarrantyType())) {
 			WarrantyType warrantyType = warrantyTypeRepository.findByName(asset.getWarrantyType());
 			if(warrantyType == null) {
@@ -285,6 +324,17 @@ public class AssetManagementService extends AbstractService {
 				warrantyTypeRepository.save(warrantyType);
 			}
 		}
+		
+		//create site history
+		if(assetDTO.getSiteId() > 0) {
+			AssetSiteHistory assetSiteHistory = new AssetSiteHistory();
+			assetSiteHistory.setSite(site);
+			assetSiteHistory.setActive("Y");
+			assetSiteHistory.setAsset(asset);
+			List<AssetSiteHistory> assetSiteHistoryList = new ArrayList<AssetSiteHistory>();
+			assetSiteHistoryList.add(assetSiteHistory);
+			asset.setAssetSiteHistory(assetSiteHistoryList);
+		}		
 				
 		List<ParameterConfig> parameterConfigs = parameterConfigRepository.findAllByAssetType(assetDTO.getAssetType());
 		if(CollectionUtils.isNotEmpty(parameterConfigs)) {
@@ -412,11 +462,37 @@ public class AssetManagementService extends AbstractService {
 		asset.setTitle(assetDTO.getTitle());
 		asset.setAssetType(assetDTO.getAssetType());
 		asset.setWarrantyType(assetDTO.getWarrantyType());
+		
+		//update status history
+		if(!StringUtils.isEmpty(assetDTO.getStatus())
+				&& assetDTO.getStatus().equalsIgnoreCase(asset.getStatus())) {
+			AssetStatusHistory assetStatusHistory = new AssetStatusHistory();
+			assetStatusHistory.setStatus(AssetStatus.valueOf(assetDTO.getStatus()).getStatus());
+			assetStatusHistory.setActive("Y");
+			assetStatusHistory.setAsset(asset);
+			List<AssetStatusHistory> assetStatusHistoryList = asset.getAssetStatusHistory();
+			if(CollectionUtils.isEmpty(assetStatusHistoryList)) {
+				assetStatusHistoryList = new ArrayList<AssetStatusHistory>();
+			}
+			asset.setAssetStatusHistory(assetStatusHistoryList);
+		}
+		
 		asset.setAssetGroup(assetDTO.getAssetGroup());
 		asset.setDescription(assetDTO.getDescription());
-		if (assetDTO.getSiteId() != asset.getSite().getId()) {
+		//update site history
+		Site currSite = asset.getSite();
+		if (assetDTO.getSiteId() != currSite.getId()) {
 			Site site = getSite(assetDTO.getSiteId());
 			asset.setSite(site);
+			AssetSiteHistory assetSiteHistory = new AssetSiteHistory();
+			assetSiteHistory.setSite(site);
+			assetSiteHistory.setActive("Y");
+			assetSiteHistory.setAsset(asset);
+			List<AssetSiteHistory> assetSiteHistoryList = asset.getAssetSiteHistory();
+			if(CollectionUtils.isEmpty(assetSiteHistoryList)) {
+				assetSiteHistoryList = new ArrayList<AssetSiteHistory>();
+			}
+			asset.setAssetSiteHistory(assetSiteHistoryList);
 		}
 		if (assetDTO.getManufacturerId() != asset.getManufacturer().getId()) {
 			Manufacturer manufacturer = getManufacturer(assetDTO.getManufacturerId());
@@ -426,7 +502,7 @@ public class AssetManagementService extends AbstractService {
 			Vendor vendor = getVendor(assetDTO.getVendorId());
 			asset.setAmcVendor(vendor);
 		}
-		asset.setStatus(assetDTO.getStatus());
+		asset.setStatus(AssetStatus.valueOf(assetDTO.getStatus()).getStatus());
 		asset.setBlock(assetDTO.getBlock());
 		asset.setFloor(assetDTO.getFloor());
 		asset.setZone(assetDTO.getZone());
@@ -456,9 +532,10 @@ public class AssetManagementService extends AbstractService {
 		Asset asset = assetRepository.findOne(assetDTO.getId());
 		mapToEntityAssets(assetDTO, asset);
 		asset = assetRepository.save(asset);
+				
 		return mapperUtil.toModel(asset, AssetDTO.class);
 	}
-
+	
 	public void deleteAsset(Long id) {
 		log.debug(">>> Inside Asset Delete Service");
 		Asset asset = assetRepository.findOne(id);
@@ -466,47 +543,53 @@ public class AssetManagementService extends AbstractService {
 		assetRepository.save(asset);
 	}
 	
-	public String generateAssetQRCode(long assetId, String assetCode) {
+	public Map<String, Object> generateAssetQRCode(long assetId, String assetCode) {
 		Asset asset = assetRepository.findOne(assetId);
 		long siteId = asset.getSite().getId();
 		String code = String.valueOf(siteId)+"_"+assetCode;
 		asset.setCode(code);
 		assetRepository.save(asset);
 		byte[] qrCodeImage = null;
-		String qrCodeBase64 = null;
+		Map<String, Object> qrCodeObject = new HashMap<>();
+//		String qrCodeBase64 = null;
+		AssetDTO assetDTO = new AssetDTO();
 		if (asset != null) {
 			String codeName = String.valueOf(asset.getCode());
-				codeName = asset.getSite().getId()+"_"+codeName;
 			qrCodeImage = QRCodeUtil.generateQRCode(codeName);
-			String qrCodePath = env.getProperty("qrcode.file.path");
-			String imageFileName = null;
+			String qrCodePath = env.getProperty("AWS.s3-qrcode-path");
 			if (org.apache.commons.lang3.StringUtils.isNotEmpty(qrCodePath)) {
-				imageFileName = fileUploadHelper.uploadQrCodeFile(code, qrCodeImage);
-				asset.setQrCodeImage(imageFileName);
+				assetDTO = s3ServiceUtils.uploadQrCodeFile(code, qrCodeImage, assetDTO);
+				qrCodeObject.put("code", code);
+				qrCodeObject.put("url", assetDTO.getUrl());
+				qrCodeObject.put("imageName", assetDTO.getQrCodeImage());
+				asset.setQrCodeImage(assetDTO.getQrCodeImage());
 				assetRepository.save(asset);
 			}
-			if (qrCodeImage != null && org.apache.commons.lang3.StringUtils.isNotBlank(imageFileName)) {
-				qrCodeBase64 = fileUploadHelper.readQrCodeFile(imageFileName);
-			}
+//			if (qrCodeImage != null && org.apache.commons.lang3.StringUtils.isNotBlank(imageFileName)) {
+//				qrCodeBase64 = fileUploadHelper.readQrCodeFile(imageFileName);
+//			}
 	}
-		log.debug("*****************"+asset.getId());
-		return getQRCode(asset.getId());
+		log.debug("*****************"+ asset.getId());
+		return qrCodeObject;
 	}
 
-	public String getQRCode(long assetId) {
+	public Map<String, Object> getQRCode(long assetId) {
 		log.debug(">>> get QR Code <<<");
+//		AssetDTO assetDTO = new AssetDTO();
+		Map<String, Object> hm = new HashMap<>();		
 		Asset asset = assetRepository.findOne(assetId);
-		String qrCodeBase64 = null;
-		String imageFileName = null;
+//		String qrCodeBase64 = null;
+		String imageFileUrl = "" ;
 		String assetcode = asset.getCode();
 		if (asset != null) {
-			imageFileName = asset.getQrCodeImage();
-			if (org.apache.commons.lang3.StringUtils.isNotBlank(imageFileName)) {
-				qrCodeBase64 = fileUploadHelper.readQrCodeFile(imageFileName);
+			imageFileUrl = cloudFrontUrl + bucketEnv + qrcodePath + asset.getQrCodeImage();
+			if (org.apache.commons.lang3.StringUtils.isNotBlank(imageFileUrl)) {
+				hm.put("code", assetcode);
+				hm.put("url", imageFileUrl);
 			}
 		}
-		qrCodeBase64 = qrCodeBase64 + "." + assetcode;
-		return qrCodeBase64;
+//		qrCodeBase64 = qrCodeBase64 + "." + assetcode;
+		return hm;
 		}
 
 	public ExportResult generateReport(List<AssetDTO> transactions, SearchCriteria criteria) {
@@ -523,7 +606,7 @@ public class AssetManagementService extends AbstractService {
 		log.debug("Create assets AMC schedule");
 
 		AssetAMCSchedule assetAMC = mapperUtil.toEntity(assetAMCScheduleDTO, AssetAMCSchedule.class);
-		assetAMC.setMaintenanceType(MaintenanceType.AMC.getValue());
+		//assetAMC.setMaintenanceType(MaintenanceType.AMC.getValue());
 		
 		if(assetAMCScheduleDTO.getChecklistId() > 0) {
 			Checklist checklist = checklistRepository.findOne(assetAMCScheduleDTO.getChecklistId());
@@ -840,7 +923,7 @@ public class AssetManagementService extends AbstractService {
 			log.debug("name =" + searchCriteria.getAssetName() + " ,  assetType = " + searchCriteria.getAssetTypeName());
 			
             log.debug("AssetSpecification toPredicate - searchCriteria get consolidated status -"+ searchCriteria.isConsolidated());
-
+            
 /*			if (!searchCriteria.isFindAll()) {
 				log.debug(">>> inside search findall <<<");
 				
@@ -948,6 +1031,7 @@ public class AssetManagementService extends AbstractService {
 				if (CollectionUtils.isNotEmpty(transactions)) {
 					buildSearchResult(searchCriteria, page, transactions, result);
 				}
+				
 			}*/
 			if(CollectionUtils.isNotEmpty(allAssetsList)) {
 				if(transactions == null) {
@@ -1276,25 +1360,30 @@ public class AssetManagementService extends AbstractService {
 	public AssetDocumentDTO uploadFile(AssetDocumentDTO assetDocumentDTO, MultipartFile file) {
 		// TODO Auto-generated method stub
 		Date uploadDate = new Date();
-		Calendar cal = Calendar.getInstance();
 		Asset assetEntity = assetRepository.findOne(assetDocumentDTO.getAssetId());
 		String assetCode = assetEntity.getCode();
-		Long siteId = assetEntity.getSite().getId();
-		String fileName = fileUploadHelper.uploadAssetDcmFile(assetCode, siteId, file, cal.getTimeInMillis());
-		assetDocumentDTO.setFile(fileName);
+		assetDocumentDTO = s3ServiceUtils.uploadAssetFile(assetCode, file, assetDocumentDTO);
+		assetDocumentDTO.setFile(assetDocumentDTO.getFile());
 		assetDocumentDTO.setUploadedDate(uploadDate);
 		assetDocumentDTO.setTitle(assetDocumentDTO.getTitle());
 		AssetDocument assetDocument = mapperUtil.toEntity(assetDocumentDTO, AssetDocument.class);
 		assetDocument.setActive(AssetDocument.ACTIVE_YES);
 		assetDocument = assetDocumentRepository.save(assetDocument);
-		assetDocumentDTO = mapperUtil.toModel(assetDocument, AssetDocumentDTO.class);
+//		assetDocumentDTO = mapperUtil.toModel(assetDocument, AssetDocumentDTO.class);
+		assetDocumentDTO.setUrl(assetDocumentDTO.getUrl());
 		return assetDocumentDTO;
 	}
 
 	public List<AssetDocumentDTO> findAllDocuments(String type, Long assetId) {
 		// TODO Auto-generated method stub
 		List<AssetDocument> assetDocument = assetDocumentRepository.findAllByType(type, assetId);
-		return mapperUtil.toModelList(assetDocument, AssetDocumentDTO.class);
+		List<AssetDocumentDTO> assetDocumentDTO = mapperUtil.toModelList(assetDocument, AssetDocumentDTO.class);
+		for(AssetDocumentDTO assetDoc : assetDocumentDTO) { 
+			String extension = FilenameUtils.getExtension(assetDoc.getFile());
+			assetDoc.setUrl(cloudFrontUrl + bucketEnv + assetFilePath + assetDoc.getFile());
+			assetDoc.setExtension(extension);
+		}
+		return assetDocumentDTO;
 	}
 
 	public byte[] getUploadedFile(long documentId) {
@@ -1451,13 +1540,43 @@ public class AssetManagementService extends AbstractService {
 		return prefixs;
 	}
 
-	public List<AssetParameterReadingDTO> viewAssetReadings(long assetId) {
-		List<AssetParameterReadingDTO> assetParameterReadingDTO = null;
-		List<AssetParameterReading> assetParameterReading = assetRepository.findByAssetReading(assetId);
-		if (CollectionUtils.isNotEmpty(assetParameterReading)) {
-			assetParameterReadingDTO = mapperUtil.toModelList(assetParameterReading, AssetParameterReadingDTO.class);
+	public SearchResult<AssetParameterReadingDTO> viewAssetReadings(SearchCriteria searchCriteria) {
+		SearchResult<AssetParameterReadingDTO> result = new SearchResult<AssetParameterReadingDTO>();
+
+		Pageable pageRequest = null;
+		Page<AssetParameterReading> page = null;
+		List<AssetParameterReading> allAssetsList = new ArrayList<AssetParameterReading>();
+		List<AssetParameterReadingDTO> transactions = null;
+		
+		page = assetRepository.findByAssetReading(searchCriteria.getAssetId(), pageRequest);
+		allAssetsList.addAll(page.getContent());
+		
+		if(CollectionUtils.isNotEmpty(allAssetsList)) {
+			if(transactions == null) {
+				transactions = new ArrayList<AssetParameterReadingDTO>();
+			}
+        		for(AssetParameterReading assetReading : allAssetsList) {
+        			transactions.add(mapperUtil.toModel(assetReading, AssetParameterReadingDTO.class));
+        		}
+			buildSearchResultReading(searchCriteria, page, transactions,result);
 		}
-		return assetParameterReadingDTO;
+		
+		return result;
+	}
+
+	private void buildSearchResultReading(SearchCriteria searchCriteria, Page<AssetParameterReading> page,
+			List<AssetParameterReadingDTO> transactions, SearchResult<AssetParameterReadingDTO> result) {
+		// TODO Auto-generated method stub
+			if (page != null) {
+				result.setTotalPages(page.getTotalPages());
+			}
+			result.setCurrPage(page.getNumber() + 1);
+			result.setTotalCount(page.getTotalElements());
+			result.setStartInd((result.getCurrPage() - 1) * 10 + 1);
+			result.setEndInd((result.getTotalCount() > 10 ? (result.getCurrPage()) * 10 : result.getTotalCount()));
+	
+			result.setTransactions(transactions);
+			return;
 	}
 
 	public AssetParameterReadingDTO getLatestParamReading(long assetId, long assetParamId) {
@@ -1470,16 +1589,14 @@ public class AssetManagementService extends AbstractService {
 	}
 	
 	@Transactional
-    public void deleteImages(long id) {
+    public String deleteImages(long id) {
 		AssetDocument assetDocumentEntity = assetDocumentRepository.findOne(id);
-		Long assetId = assetDocumentEntity.getAsset().getId();
 		String file = assetDocumentEntity.getFile(); 
-		Asset asset = assetRepository.findOne(assetId);
-		String assetCode = asset.getCode();
-		Long siteId = asset.getSite().getId();
-		String fileName = fileUploadHelper.deleteAssetFile(assetCode, siteId, file);
+		String keyObject = bucketEnv + assetFilePath;
+		String fileName = s3ServiceUtils.deleteAssetFile(keyObject, file);
 		log.info("The " + fileName + " was deleted successfully.");
 		assetDocumentRepository.delete(id);
+		return "The " + fileName + " was deleted successfully.";
     }
 
 	public AssetParameterReadingDTO updateAssetReadings(AssetParameterReadingDTO assetParamReadingDTO) {

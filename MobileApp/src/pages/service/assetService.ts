@@ -59,8 +59,8 @@ export class AssetService {
     getAssetById(assetId):Observable<any>{
         return this.http.get(this.config.Url+'api/asset/'+assetId).map(
             response=>{
-                console.log("Get asset by Id");
-                console.log(response);
+                // console.log("Get asset by Id");
+                // console.log(response);
                 return response.json();
             }
         )
@@ -72,6 +72,8 @@ export class AssetService {
                 console.log("Get asset PPM Schedule by Id");
                 console.log(response);
                 return response.json();
+            },error=>{
+               console.log(error)
             })
     }
     getAssetAMCSchedule(assetId):Observable<any>{
@@ -142,7 +144,6 @@ export class AssetService {
             }
         )
     }
-
 
 
 }

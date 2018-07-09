@@ -192,7 +192,7 @@
                                                                        <td></td>
 
                                                                    </tr> -->
-                                                                   
+
 
 
                                                                    </tbody>
@@ -222,7 +222,17 @@
                                                                    </tr>
                                                                    <tr>
                                                                        <td>Warranty Type</td>
-                                                                       <td> </td>
+                                                                       <td> {{assetDetail.warrantyType}}</td>
+
+                                                                   </tr>
+                                                                   <tr>
+                                                                       <td>From Date</td>
+                                                                       <td> {{assetDetail.warrantyFromDate}}</td>
+
+                                                                   </tr>
+                                                                   <tr>
+                                                                       <td>To Date</td>
+                                                                       <td> {{assetDetail.warrantyToDate}}</td>
 
                                                                    </tr>
                                                                    <!-- <tr>
@@ -303,28 +313,28 @@
 
                                                        <div class="col-md-8 col-md-offset-3" style="text-align: left;">
                                                           <div class="row">
-                                                             <div class="col-md-7">   
+                                                             <div class="col-md-7">
 
                                                              <p><span class="txtBold">Asset</span>  : {{assetDetail.title}}</p>
                                                              <p><span class="txtBold">Type </span> : {{assetDetail.assetType}}</p>
                                                              <p><span class="txtBold">Group</span>  : {{assetDetail.assetGroup}}</p>
 
-                                                             
+
                                                              </div>
-                                                             <div class="col-md-5">   
+                                                             <div class="col-md-5">
 
                                                              <p><span class="txtBold">Site</span> : {{assetDetail.siteName}}</p>
                                                              <p><span class="txtBold">Manufacturer</span>  : {{assetDetail.manufacturerName}}</p>
                                                              <p><span class="txtBold">Vendor</span>  : {{assetDetail.amcVendorName}}</p>
 
-                                                             
+
                                                              </div>
                                                          </div>
                                                        </div>
 
                                                    </div>
 
-                                                  
+
 
 
                                                </div>
@@ -425,8 +435,8 @@
                                                        <td>{{ppmList.description}}</td>
                                                        <td>{{ppmList.plannedStartTime | date:'dd-MMM-yyyy'}}</td>
                                                        <td><a class="job-txt" has-authority="ROLE_ADMIN" ui-sref="view-job({ id: ppmList.id })">{{ppmList.id}}</a></td>
-                                                       <td>{{ppmList.plannedStartTime | date:'dd-MMM-yyyy'}}</td>
-                                                       <td>{{ppmList.plannedEndTime | date:'dd-MMM-yyyy'}}</td>
+                                                       <td>{{ppmList.plannedStartTime | date:'dd-MMM-yyyy HH:mm'}}</td>
+                                                       <td>{{ppmList.plannedEndTime | date:'dd-MMM-yyyy HH:mm'}}</td>
                                                        <td>{{ppmList.employeeName}}</td>
                                                        <td>{{ppmList.jobStatus}}</td>
                                                    </tr>
@@ -437,6 +447,11 @@
                                                </table>
 
                                            </div>
+                                            <!-- Pagination directive start -->
+
+                                            <pagination-new></pagination-new>
+
+                                            <!-- Pagination directive end -->
 
                                        </div>
                                        <div class="tab-pane in amc-tasks" id="amc-tasks">
@@ -475,14 +490,21 @@
 
                                            </div>
 
+                                            <!-- Pagination directive start -->
+
+                                            <pagination-new></pagination-new>
+
+                                            <!-- Pagination directive end -->
+
                                        </div>
                                        <div class="tab-pane in ppm-schedule" id="ppm-schedule" >
 
                                            <div class="row">
                                                <div class="col-md-12 text-right">
-                                                   <a  class="btn btn-simple btn-warning cal-btn" data-toggle="modal" data-target="#RightModal-View" title="Calender" ><i class="material-icons">date_range</i>
 
-                                                   </a>
+                                                   <!--<a  class="btn btn-simple btn-warning cal-btn" data-toggle="modal" data-target="#RightModal-View" title="Calender" ><i class="material-icons">date_range</i></a> -->
+                                                   <a  class="btn btn-simple btn-warning cal-btn"  ui-sref="view-calendar({ id: assetDetail.id})" title="Calender" ><i class="material-icons">date_range</i></a>
+
                                                </div>
                                            </div>
 
@@ -657,7 +679,7 @@
                                                                     <a  ng-class="{active: $state.includes('admin')}"  has-permission="" ui-sref=""  class="btn btn-simple btn-danger"><i class="material-icons">delete_forever</i></a>
                                                                 </td>
                                                             </tr>
-                                                            
+
                                                             </tbody>
                                                         </table>
 
@@ -676,13 +698,13 @@
                                                    <div class="row docsRow" ng-if="fileCount" >
 
                                                        <div class="col-md-2 txt-align-center DocsCon" ng-repeat="uploadFile in uploadFiles">
-                                                          <div class="DeleteBtn" ng-click="deleteConfirmDoc(uploadFile.id)"  onClick="$('#deleteModal').modal()" data-target="#myModal">                               
+                                                          <div class="DeleteBtn" ng-click="deleteConfirmDoc(uploadFile.id)"  onClick="$('#deleteModal').modal()" data-target="#myModal">
                                                              <i class="material-icons">close</i>
                                                            </div>
-                                                           <a href="#"  ng-click="showFile(uploadFile.id, uploadFile.file)">
-                                                               <img src="assets/img/Docs-icon.png" alt="docs"/>
+                                                           <a href="#"  ng-click="">
+                                                               <img src="assets/img/{{uploadFile.extension}}.png" alt="docs"/>
                                                            </a>
-                                                           <p>{{uploadFile.title}}</p>
+                                                           <p style="padding-top: 10px;font-weight: 400;font-size: 15px">{{uploadFile.title}}</p>
                                                            <div  ng-if="uploadFile.id == download">
                                                             <a href="{{content}}" download>download</a>
                                                            </div>
@@ -709,14 +731,14 @@
                                                    <div class="row docsRow" ng-if="photoCount" >
 
                                                         <div class="col-md-2 txt-align-center DocsCon" ng-repeat="uploadPhoto in uploadAssetPhotos">
-                                                            <div class="DeleteBtn" ng-click="deleteConfirmDoc(uploadPhoto.id)"  onClick="$('#deleteModal').modal()" data-target="#myModal">                                 
+                                                            <div class="DeleteBtn" ng-click="deleteConfirmDoc(uploadPhoto.id)"  onClick="$('#deleteModal').modal()" data-target="#myModal">
                                                                <i class="material-icons">close</i>
                                                              </div>
-                                                            <a href="#" ng-click="showFile(uploadPhoto.id, uploadPhoto.file)">
+                                                            <a href="#" ng-click="">
                                                                 <!-- <img src="D:\asset\uploads\site\{{uploadPhoto.id}}\{{uploadPhoto.file}}" alt="docs" /> -->
-                                                                <img src="assets/img/img-icon.png" alt="docs" />
+                                                                <img src="assets/img/{{uploadPhoto.extension}}.png" alt="docs" />
                                                             </a>
-                                                            <p>{{uploadPhoto.title}}</p>
+                                                            <p style="padding-top: 10px;font-weight: 400;font-size: 15px">{{uploadPhoto.title}}</p>
                                                             <div ng-if="uploadPhoto.id == download">
                                                             <a href="{{content}}" download>download</a>
                                                            </div>

@@ -53,6 +53,12 @@ public class Asset extends AbstractAuditingEntity implements Serializable {
     @JoinColumn(name = "siteId", nullable = false)
     private Site site;
     
+    @OneToMany(mappedBy="asset",cascade={CascadeType.ALL}, fetch = FetchType.LAZY, orphanRemoval = true)    
+    private List<AssetStatusHistory> assetStatusHistoryList;
+    
+    @OneToMany(mappedBy="asset",cascade={CascadeType.ALL}, fetch = FetchType.LAZY, orphanRemoval = true)   
+    private List<AssetSiteHistory> assetSiteHistoryList;
+
     @Column(name="qr_code_image")
     private String qrCodeImage;
     
@@ -265,6 +271,7 @@ public class Asset extends AbstractAuditingEntity implements Serializable {
 	public void setSerialNumber(String serialNumber) {
 		this.serialNumber = serialNumber;
 	}
+	
 	public Date getAcquiredDate() {
 		return acquiredDate;
 	}
@@ -318,6 +325,18 @@ public class Asset extends AbstractAuditingEntity implements Serializable {
 	}
 	public void setWarrantyType(String warrantyType) {
 		this.warrantyType = warrantyType;
+	}
+	public List<AssetStatusHistory> getAssetStatusHistory() {
+		return assetStatusHistoryList;
+	}
+	public void setAssetStatusHistory(List<AssetStatusHistory> assetStatusHistory) {
+		this.assetStatusHistoryList = assetStatusHistory;
+	}
+	public List<AssetSiteHistory> getAssetSiteHistory() {
+		return assetSiteHistoryList;
+	}
+	public void setAssetSiteHistory(List<AssetSiteHistory> assetSiteHistory) {
+		this.assetSiteHistoryList = assetSiteHistory;
 	}
     
 }

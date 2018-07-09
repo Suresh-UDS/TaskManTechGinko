@@ -33,6 +33,7 @@ import com.ts.app.repository.AttendanceRepository;
 import com.ts.app.repository.EmployeeRepository;
 import com.ts.app.repository.SiteRepository;
 import com.ts.app.repository.UserRepository;
+import com.ts.app.service.util.AmazonS3Utils;
 import com.ts.app.service.util.ExportUtil;
 import com.ts.app.service.util.FileUploadHelper;
 import com.ts.app.service.util.MapperUtil;
@@ -85,6 +86,9 @@ public class AttendanceService extends AbstractService {
 
     @Inject
     private Environment env;
+    
+    @Inject
+	private AmazonS3Utils s3ServiceUtils;
 
 	public AttendanceDTO saveCheckOutAttendance(AttendanceDTO attnDto){
         Attendance attn = mapperUtil.toEntity(attnDto, Attendance.class);
@@ -282,7 +286,7 @@ public class AttendanceService extends AbstractService {
 		Attendance attendanceImage = attendanceRepository.findOne(attendanceDto.getId());
 		// CheckInOut checkInOut = CollectionUtils.isNotEmpty(checkInOutExistingList) ?
 		// checkInOutExistingList.get(0) : null;
-		String fileName = fileUploadHelper.uploadAttendanceFile(attendanceDto.getEmployeeEmpId(), attendanceDto.getAction(), attendanceDto.getPhotoOutFile(),
+		String fileName = s3ServiceUtils.uploadAttendanceFile(attendanceDto.getEmployeeEmpId(), attendanceDto.getAction(), attendanceDto.getPhotoOutFile(),
 				System.currentTimeMillis());
 		attendanceDto.setAttendanceIn(fileName);
 		// Attendance attendanceImage = new Attendance();

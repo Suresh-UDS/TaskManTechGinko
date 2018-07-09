@@ -42,6 +42,7 @@ import com.ts.app.repository.SettingsRepository;
 import com.ts.app.repository.ManufacturerRepository;
 import com.ts.app.repository.TicketRepository;
 import com.ts.app.repository.UserRepository;
+import com.ts.app.service.util.AmazonS3Utils;
 import com.ts.app.service.util.FileUploadHelper;
 import com.ts.app.service.util.MapperUtil;
 import com.ts.app.web.rest.dto.AttendanceDTO;
@@ -89,6 +90,18 @@ public class RateCardService extends AbstractService {
 
 	@Inject
 	private FileUploadHelper fileUploadHelper;
+	
+	@Inject
+	private AmazonS3Utils amazonS3Utils;
+	
+	@Value("${AWS.s3-cloudfront-url}")
+	private String cloudFrontUrl;
+	
+	@Value("${AWS.s3-bucketEnv}")
+	private String bucketEnv;
+	
+	@Value("${AWS.s3-quotation-path}")
+	private String quotationFilePath;
 
 	public RateCardDTO createRateCardInformation(RateCardDTO rateCardDto) {
 		// log.info("The admin Flag value is " +adminFlag);
@@ -641,10 +654,10 @@ public class RateCardService extends AbstractService {
 
         log.debug("Employee list from check in out images"+quotationDTO.getId());
         //Attendance attendanceImage = attendanceRepository.findOne(attendanceDto.getId());
-        String quotationFileName = fileUploadHelper.uploadQuotationFile(quotationDTO.getId(), quotationDTO.getQuotationFile(), System.currentTimeMillis());
-        quotationDTO.setQuotationFileName(quotationFileName);
-
-        updateImageName(quotationDTO.getId(),quotationFileName);
+        quotationDTO = amazonS3Utils.uploadQuotationFile(quotationDTO.getId(), quotationDTO.getQuotationFile(), System.currentTimeMillis(), quotationDTO);
+        quotationDTO.setQuotationFileName(quotationDTO.getQuotationFileName());
+        quotationDTO.setUrl(quotationDTO.getUrl());
+        updateImageName(quotationDTO.getId(), quotationDTO.getQuotationFileName());
 
 		return quotationDTO;
 	}
@@ -679,10 +692,10 @@ public class RateCardService extends AbstractService {
     }
 
 	public String getQuotationImage(String quotationId, String imageId) {
-        String quotationBase64 = null;
+        String quotationFileUrl = null;
         log.debug("Quotation Image service"+quotationId+" "+imageId);
-        quotationBase64=fileUploadHelper.readQuotationImages(quotationId,imageId);
-        return quotationBase64;
+        quotationFileUrl = cloudFrontUrl + bucketEnv + quotationFilePath + imageId;
+        return quotationFileUrl;
 
     }
 

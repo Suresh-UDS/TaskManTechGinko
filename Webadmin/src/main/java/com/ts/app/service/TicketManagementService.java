@@ -15,6 +15,7 @@ import org.hibernate.Hibernate;
 import org.json.JSONException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.env.Environment;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -42,6 +43,7 @@ import com.ts.app.repository.SettingsRepository;
 import com.ts.app.repository.SiteRepository;
 import com.ts.app.repository.TicketRepository;
 import com.ts.app.repository.UserRepository;
+import com.ts.app.service.util.AmazonS3Utils;
 import com.ts.app.service.util.ExportUtil;
 import com.ts.app.service.util.FileUploadHelper;
 import com.ts.app.service.util.MapperUtil;
@@ -84,9 +86,6 @@ public class TicketManagementService extends AbstractService {
     private NotificationRepository notificationRepository;
 
     @Inject
-    private SchedulerService schedulerService;
-
-    @Inject
     private MailService mailService;
 
     @Inject
@@ -106,6 +105,18 @@ public class TicketManagementService extends AbstractService {
 	
 	@Inject
 	private FileUploadHelper fileUploadHelper;
+	
+	@Inject
+	private AmazonS3Utils amazonS3utils;
+	
+	@Value("${AWS.s3-cloudfront-url}")
+	private String cloudFrontUrl;
+	
+	@Value("${AWS.s3-bucketEnv}")
+	private String bucketEnv;
+	
+	@Value("${AWS.s3-ticket-path}")
+	private String ticketFilePath;
 	
 
     public TicketDTO saveTicket(TicketDTO ticketDTO){
@@ -485,19 +496,21 @@ public class TicketManagementService extends AbstractService {
     public TicketDTO uploadFile(TicketDTO ticketDTO) throws JSONException {
 
         log.debug("Employee list from check in out images"+ticketDTO.getId());
-        String ticketFileName = fileUploadHelper.uploadTicketFile(ticketDTO.getId(), ticketDTO.getImageFile(), System.currentTimeMillis());
+        ticketDTO = amazonS3utils.uploadTicketFile(ticketDTO.getId(), ticketDTO.getImageFile(), System.currentTimeMillis(), ticketDTO);
         Ticket ticket = ticketRepository.findOne(ticketDTO.getId());
-        ticket.setImage(ticketFileName);
+        ticket.setImage(ticketDTO.getImage());
         ticketRepository.saveAndFlush(ticket);
-        ticketDTO.setImage(ticketFileName);
+        ticketDTO.setImage(ticketDTO.getImage());
+        ticketDTO.setUrl(ticketDTO.getUrl());
 		return ticketDTO;
 	}
 	
 	public String getTicketImage(long ticketId, String imageId) {
-        String ticketBase64 = null;
+        String fileUrl = null;
         log.debug("Ticket Image service"+ticketId+" "+imageId);
-        ticketBase64=fileUploadHelper.readTicketImages(ticketId,imageId);
-        return ticketBase64;
+        Ticket ticket = ticketRepository.findOne(ticketId);
+        fileUrl = cloudFrontUrl + bucketEnv + ticketFilePath + ticket.getImage();
+        return fileUrl;
     }
 
 }

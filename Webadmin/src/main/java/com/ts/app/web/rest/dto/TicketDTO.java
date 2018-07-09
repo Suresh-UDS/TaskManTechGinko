@@ -58,7 +58,8 @@ public class TicketDTO extends BaseDTO {
     private String image;
     
     private MultipartFile imageFile;
-
+    
+    private String url;
 
     public long getId() {
         return id;
@@ -274,6 +275,14 @@ public class TicketDTO extends BaseDTO {
 
 	public void setImageFile(MultipartFile imageFile) {
 		this.imageFile = imageFile;
+	}
+
+	public String getUrl() {
+		return url;
+	}
+
+	public void setUrl(String url) {
+		this.url = url;
 	}
 
 	

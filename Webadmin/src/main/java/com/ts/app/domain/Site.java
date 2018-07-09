@@ -45,7 +45,7 @@ public class Site extends AbstractAuditingEntity implements Serializable {
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "projectId", nullable = false)
 	private Project project;
-
+	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "userId", nullable = false)
 	private User user;
@@ -192,6 +192,5 @@ public class Site extends AbstractAuditingEntity implements Serializable {
 	public void setShifts(List<Shift> shifts) {
 		this.shifts = shifts;
 	}
-    
-    
+
 }

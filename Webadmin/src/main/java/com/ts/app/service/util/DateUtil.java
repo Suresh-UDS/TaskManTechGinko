@@ -4,6 +4,8 @@ import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.TimeZone;
@@ -112,6 +114,10 @@ public class DateUtil {
         DateFormat dtFormat = new SimpleDateFormat("dd-MMM-yyyy hh:mm a");
         String strDate = dtFormat.format(date);
         return strDate;
-
+	}
+	
+	public static ZonedDateTime convertToZDT(Date date) {
+		ZonedDateTime zdt = ZonedDateTime.ofInstant(date.toInstant(), ZoneId.of("Asia/Kolkata"));
+		return zdt;
 	}
 }

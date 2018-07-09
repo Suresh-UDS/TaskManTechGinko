@@ -27,11 +27,12 @@ angular.module('timeSheetApp')
         $scope.selectedZone = null;
         $scope.pageSort = 10;
         $scope.assetGen ={};
+        $scope.assetVal ={};
         $scope.assetPPM ={};
         $scope.selectedConfig = null;
         $scope.selectedAssetType = {};
         $scope.selectedAssetGroup = {};
-        $scope.selectedAssetStatus = {};
+        $scope.selectedAssetStatus = "COMMISSIONED";
         $scope.selectedManufacturer = {};
         $scope.selectedServiceProvider = {};
         $scope.selectedServiceWarranty = {};
@@ -57,6 +58,7 @@ angular.module('timeSheetApp')
         $scope.searchAssetGroup ={};
         $scope.searchAcquiredDateSer =null;
         $scope.ppmSearchCriteria = {};
+        $scope.amcSearchCriteria = {};
         $scope.ppmFrom = null;
         $scope.ppmTo = null;
         $scope.amcFrom = null;
@@ -133,8 +135,6 @@ angular.module('timeSheetApp')
 
         $scope.initCalender();
 
-        demo.initFullCalendar();
-
         $scope.openCalendar = function(e,cmp) {
             e.preventDefault();
             e.stopPropagation();
@@ -206,20 +206,33 @@ angular.module('timeSheetApp')
                
             }
         });
+        
+        $('input#ppmJobStartTime').on('dp.change', function(e){
+            $scope.assetPPM.jobStartTime = e.date._d;
+            $scope.ppmTo = $filter('date')(e.date._d, 'dd/MM/yyyy HH:mm');
+        });
+        
+
+        
+        $scope.initPPMSchedule = function() {
+        		$scope.loadSiteShifts();
+        	}
 
         $scope.savePPMSchedule = function (){
+            
 
         	console.log(" --- Create asset ppm ---" ,$scope.assetPPM.title);
 
-            if(!$scope.assetGen.id && !$stateParams.id){
+
+            if(!$scope.assetVal.id && !$stateParams.id){
 
                   $scope.showNotifications('top','center','danger','Please create asset first..');
 
             }else{
 
-                if($scope.assetGen.id){
+                if($scope.assetVal.id){
 
-                   $scope.assetPPM.assetId = $scope.assetGen.id;
+                   $scope.assetPPM.assetId = $scope.assetVal.id;
 
                 }else if($stateParams.id){
 
@@ -242,7 +255,14 @@ angular.module('timeSheetApp')
                 if($scope.selectedTimeInterval) {
                     $scope.assetPPM.frequencyDuration = $scope.selectedTimeInterval;
                 }
-    	    	$scope.assetPPM.maintenanceType = 'PPM';
+    	    			$scope.assetPPM.maintenanceType = 'PPM';
+    	    			
+    	    			$scope.shiftTimings = [];
+		    	    	if($scope.selectedShift) {
+			    	    	$scope.shiftTimings.push($scope.selectedShift.startTime +'-' +$scope.selectedShift.endTime);
+		    	    	}
+		    	    	
+		    	    	$scope.assetPPM.shiftTimings = $scope.shiftTimings;
 
                 console.log("To be create PPM",$scope.assetPPM);
 
@@ -250,11 +270,13 @@ angular.module('timeSheetApp')
 
             	AssetComponent.createPPM($scope.assetPPM).then(function(response) {
 
+
+
                     //console.log("PPM schedule response",JSON.stringify(response));
 
                     $scope.success = 'OK';
 
-                    $scope.showNotifications('top','center','success','PPM schedule Added');
+                    $scope.showNotifications('top','center','success','PPM schedule has been added Successfully!!');
 
                     $scope.assetPPM = {};
                     $scope.selectedChecklist = {};
@@ -269,6 +291,7 @@ angular.module('timeSheetApp')
                     $("#dateFilterPpmTo").val("");
 
                     $scope.loadPPMSchedule();
+                    $scope.loadSiteShifts();
                     $scope.loadingStop();
 
                 }).catch(function (response) {
@@ -313,11 +336,14 @@ angular.module('timeSheetApp')
                 ManufacturerComponent.create($scope.manufacturer).then(function (response) {
                     console.log(response);
                     $scope.manufacturer = {};
-                    $scope.showNotifications('top','center','success','Manufacturer Added Successfully');
+                    $scope.showNotifications('top','center','success','Manufacturer has been added Successfully!!');
                     $scope.loadManufacturer();
 
 
-                })
+                }).catch(function(){
+                $scope.showNotifications('top','center','danger','Error in Manufacturer. Please try again later..');
+                $scope.error = 'ERROR';
+            });
             }else{
                 console.log("Manufacturer not entered");
             }
@@ -341,11 +367,14 @@ angular.module('timeSheetApp')
                 VendorComponent.create($scope.vendor).then(function (response) {
                     console.log(response);
                     $scope.vendor = {};
-                    $scope.showNotifications('top','center','success','Vendor Added Successfully');
+                    $scope.showNotifications('top','center','success','Vendor has been added Successfully!!');
                     $scope.loadVendor();
 
 
-                })
+                }).catch(function(){
+                $scope.showNotifications('top','center','danger','Error in Vendor. Please try again later..');
+                $scope.error = 'ERROR';
+            });
             }else{
                 console.log("Vendor not entered");
             }
@@ -369,11 +398,14 @@ angular.module('timeSheetApp')
                 AssetComponent.createWar($scope.Warranty).then(function (response) {
                     console.log(response);
                     $scope.servicewarranties = {};
-                    $scope.showNotifications('top','center','success','Service Warranty Added Successfully');
+                    $scope.showNotifications('top','center','success','Service Warranty has been added Successfully!!');
                     $scope.loadWarranty();
 
 
-                })
+                }).catch(function(){
+                $scope.showNotifications('top','center','danger','Error in Service Warranty. Please try again later..');
+                $scope.error = 'ERROR';
+            });
             }else{
                 console.log("Warranty not entered");
             }
@@ -415,6 +447,7 @@ angular.module('timeSheetApp')
 
         $scope.loadBlocks = function () {
                 console.log('selected project -' + ($scope.selectedProject ? $scope.selectedProject.id : 0) + ', site -' + ($scope.selectedSites ? $scope.selectedSites.id : 0))
+                $rootScope.selectedSite = $scope.selectedSites;
                 var projectId = $scope.selectedProject ? $scope.selectedProject.id : 0;
                 LocationComponent.findBlocks(0,$scope.selectedSites.id).then(function (data) {
                     $scope.selectedBlock = null;
@@ -461,6 +494,16 @@ angular.module('timeSheetApp')
             }
         }
 
+        $scope.loadSiteShifts = function() {
+        		console.log('selected site - ' + JSON.stringify($scope.selectedSites));
+        		if($scope.selectedSites) {
+            		SiteComponent.findShifts($scope.selectedSites.id).then(function(data){
+            			$scope.shifts = data;
+                        console.log('selected shifts - ' + JSON.stringify($scope.shifts));
+            		});
+        		}
+        }
+        
         $scope.initMaterialWizard();
 
         $scope.editAsset = function(){
@@ -480,6 +523,8 @@ angular.module('timeSheetApp')
                 $scope.assetEdit.modelNumber = $scope.assetList.modelNumber;
                 $scope.assetEdit.serialNumber =  $scope.assetList.serialNumber;
                 $scope.assetEdit.acquiredDate = $scope.assetList.acquiredDate;
+                $scope.assetEdit.warFromDate  = $scope.assetList.warrantyFromDate;
+                $scope.assetEdit.warToDate  = $scope.assetList.warrantyToDate;
                 $scope.assetEdit.acquiredDate1 = $scope.assetList.acquiredDate;
                 $scope.assetEdit.purchasePrice = $scope.assetList.purchasePrice;
                 $scope.assetEdit.currentPrice = $scope.assetList.currentPrice;
@@ -494,6 +539,7 @@ angular.module('timeSheetApp')
                 $scope.selectedManufacturer = {id:$scope.assetList.manufacturerId,name:$scope.assetList.manufacturerName};
                 $scope.selectedVendor = {id:$scope.assetList.vendorId};
                 $scope.selectedServiceWarranty = {name:$scope.assetList.warrantyType};
+                $scope.selectedAssetStatus = $scope.assetList.status;
                 if($scope.assetList.siteId){
                         LocationComponent.findBlocks(0,$scope.assetList.siteId).then(function (data) {
                         //$scope.selectedBlock = null;
@@ -513,6 +559,8 @@ angular.module('timeSheetApp')
                         console.log('zones list',$scope.zones);
                    });
                 }
+
+                $scope.loadSiteShifts();
 
                 //$scope.genQrCodes();
 
@@ -548,11 +596,12 @@ angular.module('timeSheetApp')
 
         /* Sorting functions*/
 
-        //$scope.isActiveAsc = 'assetCode';
+        $scope.isActiveAsc = 'assetCode';
         $scope.isActiveDesc = '';
 
         $scope.columnAscOrder = function(field){
             $scope.selectedColumn = field;
+            console.log('>>> selected coloumn <<< '+$scope.selectedColumn);
             $scope.isActiveAsc = field;
             $scope.isActiveDesc = '';
             $scope.isAscOrder = true;
@@ -694,8 +743,9 @@ angular.module('timeSheetApp')
             if($scope.selectedColumn){
 
                 $scope.searchCriteria.columnName = $scope.selectedColumn;
+                console.log('>>> $scope.searchCriteria.columnName <<< '+$scope.searchCriteria.columnName);
                 $scope.searchCriteria.sortByAsc = $scope.isAscOrder;
-
+                console.log('>>> $scope.searchCriteria.sortByAsc <<< '+$scope.searchCriteria.sortByAsc);
             }else{
                 $scope.searchCriteria.columnName ="id";
                 $scope.searchCriteria.sortByAsc = true;
@@ -735,6 +785,9 @@ angular.module('timeSheetApp')
 
                 }
 
+            }).catch(function(){
+                $scope.showNotifications('top','center','danger','Error load asset list. Please try again later..');
+                $scope.error = 'ERROR';
             });
         }
 
@@ -756,19 +809,33 @@ angular.module('timeSheetApp')
             });
         }
 
-        $scope.loadCalendar = function () {
+         var date = new Date(), y = date.getFullYear(), m = date.getMonth();
+         var firstDay = new Date(y, m, 1);
+         var lastDay = new Date(y, m + 1, 0);
 
-            AssetComponent.getPPMScheduleCalendar().then(function(data){
+        $scope.loadCalendar = function (startDate = firstDay,endDate = lastDay) {
+
+            $rootScope.loadingStart();
+
+            var scheduleObj = {assetId:$stateParams.id,checkInDateTimeFrom:startDate,checkInDateTimeTo:endDate};
+
+            AssetComponent.getPPMScheduleCalendar(scheduleObj.assetId,scheduleObj).then(function(data){
 
                 console.log("Asset Calendar details ==" + JSON.stringify(data));
 
                 $scope.PPMScheduleCalendar = data;
+
+                $scope.initFullCalendar($scope.PPMScheduleCalendar);
+
+                $rootScope.loadingStop();
+
+               
             });
 
 
         }
 
-        $scope.loadCalendar();
+        //$scope.loadCalendar();
 
 
         $scope.assetConfig=function(){
@@ -784,10 +851,10 @@ angular.module('timeSheetApp')
 
                 $scope.assetConfigs.assetId = $stateParams.id;
             }
-            else if($scope.assetGen.id){
+            else if($scope.assetval.id){
 
                 $scope.assetConfigs.assetType = $scope.selectedAssetType.name;
-                $scope.assetConfigs.assetId = $scope.assetGen.id;
+                $scope.assetConfigs.assetId = $scope.assetVal.id;
             }
                console.log("Asset Config load" ,$scope.assetConfigs);
 
@@ -797,7 +864,10 @@ angular.module('timeSheetApp')
                         $scope.assetParameters = data;
 
 
-                    });
+                    }).catch(function(){
+                $scope.showNotifications('top','center','danger','Error load asset config list. Please try again later..');
+                $scope.error = 'ERROR';
+            });
 
 
         }
@@ -817,24 +887,74 @@ angular.module('timeSheetApp')
                 $scope.validationRequired = $scope.parameterConfig.validationRequired;
                 $scope.consumptionMonitoringRequired = $scope.parameterConfig.consumptionMonitoringRequired;
                 $scope.alertRequired = $scope.parameterConfig.alertRequired;
-                $scope.selectedMinValue = $scope.parameterConfig.max;
-                $scope.selectedMaxValue = $scope.parameterConfig.min;
+                $scope.selectedMinValue = $scope.parameterConfig.min;
+                $scope.selectedMaxValue = $scope.parameterConfig.max;
                 $rootScope.loadingStop();
 
             }).catch(function(response){
+                 $scope.showNotifications('top','center','danger','Error load asset config. Please try again later..');
                 $rootScope.loadingStop();
                
             });
         };
-
+        
+        $scope.warFromMsg =false;
 
         $('input#acquiredDate').on('dp.change', function(e){
-                $scope.assetGen.acquiredDate = e.date._d;
-                $scope.assetEditDate = e.date._d;
+        	
+        		var aqDate = $filter('date')(e.date._d, 'yyyy-MM-dd');
+//        		alert(aqDate);
+                $scope.assetGen.acquiredDate = aqDate;
+
+                $scope.assetEditDate = aqDate;
+
+                //$scope.assetGen.acquiredDate = $filter('date')(e.date._d, 'EEE, dd MMM yyyy HH:mm:ss Z');
+                //$scope.assetEditDate = $filter('date')(e.date._d, 'EEE, dd MMM yyyy HH:mm:ss Z');
+        });
+        
+
+        $('input#warFromDate').on('dp.change', function(e){
+            $scope.assetGen.warrantyFromDate =  e.date._d;
+
+            $scope.warFromDate = $filter('date')(e.date._d, 'yyyy-MM-dd');
+
+            if($scope.assetGen.startDate > $scope.assetGen.endDate) {
+
+                    //scope.showNotifications('top','center','danger','From date cannot be greater than To date');
+                    $scope.warFromMsg = true;
+                    
+                    
+                    //return false;
+            }else {
+              
+               $scope.warFromMsg =false;
+               
+           
+            }
+        });
+
+         $scope.warToMsg =false;
+
+        $('input#warToDate').on('dp.change', function(e){
+            $scope.assetGen.warrantyToDate = e.date._d;
+            $scope.warToDate = $filter('date')(e.date._d, 'yyyy-MM-dd');
+
+            if($scope.assetGen.endDate < $scope.assetGen.startDate) {
+                    //$scope.showNotifications('top','center','danger','To date cannot be lesser than From date');
+                    $scope.warToMsg =true;
+                    
+                   
+                    //return false;
+            }else {
+               
+                 $scope.warToMsg =false;
+                 
+               
+            }
         });
 
         $('input#searchAcquiredDate').on('dp.change', function(e){
-                $scope.searchAcquiredDate = $filter('date')(e.date._d, 'dd/MM/yyyy');
+                $scope.searchAcquiredDate = $filter('date')(e.date._d, 'dd-MM-yyyy');
                 $scope.searchAcquiredDateSer = e.date._d;
         });
 
@@ -857,7 +977,7 @@ angular.module('timeSheetApp')
 
                     if($scope.selectedAssetType.id){ $scope.assetGen.assetType = $scope.selectedAssetType.name; }
                     if($scope.selectedAssetGroup.id){ $scope.assetGen.assetGroup = $scope.selectedAssetGroup.assetgroup;}
-                    if($scope.selectedAssetStatus.id){ $scope.assetGen.assetStatus = $scope.selectedAssetStatus.id;}
+                    if($scope.selectedAssetStatus){ $scope.assetGen.status = $scope.selectedAssetStatus;}
                     if($scope.selectedManufacturer.id){$scope.assetGen.manufacturerId = $scope.selectedManufacturer.id;}
                     if($scope.selectedServiceProvider.id){$scope.assetGen.serviceProvider = $scope.selectedServiceProvider.id;}
                     if($scope.selectedServiceWarranty.id){$scope.assetGen.warrantyType = $scope.selectedServiceWarranty.name;}
@@ -871,11 +991,11 @@ angular.module('timeSheetApp')
                     console.log("Asset Create List -- ",$scope.assetGen);
                     AssetComponent.create($scope.assetGen).then(function(response) {
                         console.log("Asset response",JSON.stringify(response));
-                        $scope.assetGen.id=response.id;
-                        $scope.assetGen.siteId=response.siteId;
+                        $scope.assetVal.id=response.id;
+                        $scope.assetVal.siteId=response.siteId;
                         $scope.success = 'OK';
                         $rootScope.loadingStop();
-                        $scope.showNotifications('top','center','success','Asset Added');
+                        $scope.showNotifications('top','center','success','Asset has been added Successfully!!');
                         $scope.loadEmployees();
                         $scope.btnDisabled= false;
                         //$scope.loadAssets();
@@ -908,15 +1028,15 @@ angular.module('timeSheetApp')
         
         $rootScope.loadingStart();
 
-        if(!$scope.assetGen.id && !$stateParams.id){
+        if(!$scope.assetVal.id && !$stateParams.id){
 
           $scope.showNotifications('top','center','danger','Please create asset first..');
 
         }else{
 
-        if($scope.assetGen.id){
+        if($scope.assetVal.id){
 
-            var qr = {id:$scope.assetGen.id,code:$scope.assetGen.assetcode};
+            var qr = {id:$scope.assetVal.id,code:$scope.assetGen.assetcode};
 
         }else if($stateParams.id){
 
@@ -932,16 +1052,19 @@ angular.module('timeSheetApp')
                 console.log('response qr---',response);
 
                 //$scope.success = 'OK';
-                var qrAry  = response.split('.');
+//                var qrAry  = response.split('.');
 
-             $scope.qr_img = qrAry[0];
-             $scope.assetCode = qrAry[1];
+             $scope.qr_img = response.url;
+             $scope.assetCode = response.code;
 
-             console.log('create qr---',qrAry);
+//             console.log('create qr---',qrAry);
 
              $rootScope.loadingStop();
 
                 //$scope.genQrCodes();
+            }).catch(function(){
+                $scope.showNotifications('top','center','danger','Error in create Qr. Please try again later..');
+                $scope.error = 'ERROR';
             });
         }
     }
@@ -958,9 +1081,9 @@ angular.module('timeSheetApp')
 
                 var qr_id ={id:$stateParams.id};
 
-              }else if($scope.assetGen.id){
+              }else if($scope.assetVal.id){
 
-                var qr_id ={id:$scope.assetGen.id};
+                var qr_id ={id:$scope.assetVal.id};
               }
               
 
@@ -970,12 +1093,12 @@ angular.module('timeSheetApp')
 
             AssetComponent.genQrCode(qr_id).then(function(response){
 
-                var qrAry  = response.split('.');
+//                var qrAry  = response.split('.');
 
-             $scope.qr_img = qrAry[0];
-             $scope.assetCode = qrAry[1];
+             $scope.qr_img = response.url;
+             $scope.assetCode = response.code;
 
-             console.log('get qr---',qrAry);
+             console.log('get qr---',response);
 
              $rootScope.loadingStop();
 
@@ -992,7 +1115,8 @@ angular.module('timeSheetApp')
         $scope.updateAsset = function () {
             $rootScope.loadingStart();
         	$scope.error = null;
-        	$scope.success =null;
+            $scope.success =null;
+        	$scope.btnDisabled =true;
 
 
                 if($scope.selectedAssetType)
@@ -1042,10 +1166,23 @@ angular.module('timeSheetApp')
                 else{
                     $scope.assetEdit.warrantyType = $scope.assetList.warrantyType;
                 }
+                if($scope.selectedAssetStatus){
+                    $scope.assetEdit.status = $scope.selectedAssetStatus;
+                }else{
+                    $scope.assetEdit.status = $scope.assetList.status;
+                }
                 if($scope.assetEditDate){
                     $scope.assetEdit.acquiredDate = $scope.assetEditDate;
                     $scope.assetEdit.acquiredDate1 = $filter('date')($scope.assetEditDate, 'dd/MM/yyyy');
 
+                }
+                if($scope.warFromDate){
+                    $scope.assetEdit.warrantyFromDate = $scope.warFromDate;
+
+                }
+                if($scope.warToDate){
+                    $scope.assetEdit.warrantyToDate = $scope.warToDate;
+                    
                 }
 
 
@@ -1057,7 +1194,8 @@ angular.module('timeSheetApp')
 
                 $scope.success = 'OK';
                 $rootScope.loadingStop();
-                 $scope.showNotifications('top','center','success','Asset Updated!!');
+                $scope.btnDisabled =false;
+                 $scope.showNotifications('top','center','success','Asset has been updated Successfully!!');
                  //$scope.loadAssets();
 
             	//$location.path('/assets');
@@ -1065,6 +1203,7 @@ angular.module('timeSheetApp')
             }).catch(function (response) {
                 $rootScope.loadingStop();
                 $scope.success = null;
+                $scope.btnDisabled =false;
 
                 console.log('Error - '+ response.data);
                 if (response.status === 400 && response.data.message === 'error.duplicateRecordError') {
@@ -1127,12 +1266,12 @@ angular.module('timeSheetApp')
 
 
         $scope.deleteAsset = function () {
-        	AssetComponent.remove($scope.deleteAssetId).then(function(){
-
-            	$scope.success = 'OK';
-                $scope.showNotifications('top','center','success','Asset Deleted Successfully!!');
-            	$scope.loadAssets();
-        	});
+	        	AssetComponent.remove($scope.deleteAssetId).then(function(){
+	
+	            	$scope.success = 'OK';
+	                $scope.showNotifications('top','center','success','Asset has been deleted successfully!!');
+	            	$scope.loadAssets();
+	        	});
         }
 
         $scope.deleteConfirmDoc = function (id){
@@ -1144,7 +1283,7 @@ angular.module('timeSheetApp')
         $scope.deleteDoc = function () {
             AssetComponent.deleteDoc($scope.deleteDocId).then(function(){
 
-                $scope.showNotifications('top','center','success','Document Deleted Successfully!!');
+                $scope.showNotifications('top','center','success','Document has been deleted successfully!!');
                 $scope.getAllUploadedFiles();
                 $scope.getAllUploadedPhotos();
             });
@@ -1291,9 +1430,9 @@ angular.module('timeSheetApp')
 
             var item_ar = [];
 
-            if($scope.assetGen.id){
+            if($scope.assetVal.id){
 
-                    var assetId= $scope.assetGen.id;
+                    var assetId= $scope.assetVal.id;
 
                 }else if($stateParams.id){
 
@@ -1360,7 +1499,18 @@ angular.module('timeSheetApp')
 
             //alert(page);
             $scope.pages.currPage = page;
-            $scope.search();
+            if($scope.ppmSearchCriteria.maintenanceType =='PPM'){
+
+                $scope.loadPPMJobs();
+
+            }else if($scope.amcSearchCriteria.maintenanceType =='AMC'){
+                
+                $scope.loadAMCJobs();
+
+            }else{
+               $scope.search(); 
+            }
+            
         }
 
 
@@ -1374,11 +1524,14 @@ angular.module('timeSheetApp')
                 AssetTypeComponent.create($scope.assetType).then(function (response) {
                     console.log(response);
                     $scope.assetType = {};
-                    $scope.showNotifications('top','center','success','Asset Type Added Successfully');
+                    $scope.showNotifications('top','center','success','Asset type has been added Successfully!!');
                     $scope.loadAssetType();
 
 
-                })
+                }).catch(function(){
+                $scope.showNotifications('top','center','danger','Error in Asset type. Please try again later..');
+                $scope.error = 'ERROR';
+            });
             }else{
                 console.log("Asset Type not entered");
             }
@@ -1396,10 +1549,13 @@ angular.module('timeSheetApp')
                 AssetComponent.createAssetGroup($scope.assetGroup).then(function (response) {
                     console.log(response);
                     $scope.assetGroup = {};
-                    $scope.showNotifications('top','center','success','Asset Group Added Successfully');
+                    $scope.showNotifications('top','center','success','Asset group has been added Successfully!!');
                     $scope.loadAssetGroup();
 
-                })
+                }).catch(function(){
+                $scope.showNotifications('top','center','danger','Error in Asset group. Please try again later..');
+                $scope.error = 'ERROR';
+            });
             }else{
                 console.log("Asset Group not entered");
             }
@@ -1416,10 +1572,13 @@ angular.module('timeSheetApp')
                 ParameterComponent.create($scope.parameter).then(function (response) {
                     console.log(response);
                     $scope.parameter = null;
-                    $scope.showNotifications('top','center','success','Parameter Added Successfully');
+                    $scope.showNotifications('top','center','success','Parameter has been added Successfully!!');
                     $scope.loadAllParameters();
 
-                })
+                }).catch(function(){
+                $scope.showNotifications('top','center','danger','Error in Parameter. Please try again later..');
+                $scope.error = 'ERROR';
+            });
             }else{
                 console.log("Parameter not entered");
             }
@@ -1434,10 +1593,13 @@ angular.module('timeSheetApp')
                 ParameterUOMComponent.create($scope.parameterUOM).then(function (response) {
                     console.log(response);
                     $scope.parameterUOM = null;
-                    $scope.showNotifications('top','center','success','Parameter UOM Added Successfully');
+                    $scope.showNotifications('top','center','success','Parameter UOM has been added Successfully!!');
                     $scope.loadAllParameterUOMs();
 
-                })
+                }).catch(function(){
+                $scope.showNotifications('top','center','danger','Error in Parameter UOM. Please try again later..');
+                $scope.error = 'ERROR';
+            });
             }else{
                 console.log("Parameter UOM not entered");
             }
@@ -1495,7 +1657,7 @@ angular.module('timeSheetApp')
             $scope.btnDisabled = true;
         	$scope.error = null;
         	$scope.success =null;
-          if(!$scope.assetGen.id && !$stateParams.id){
+          if(!$scope.assetVal.id && !$stateParams.id){
 
               $scope.showNotifications('top','center','danger','Please create asset first..');
 
@@ -1530,9 +1692,9 @@ angular.module('timeSheetApp')
                 	
                 	console.log('Edit parameterConfig details ='+ JSON.stringify($scope.parameterConfig));
 
-                }else if($scope.assetGen.id){
+                }else if($scope.assetVal.id){
 
-                    $scope.parameterConfig.assetId = $scope.assetGen.id;
+                    $scope.parameterConfig.assetId = $scope.assetVal.id;
 
                     if($scope.selectedAssetType.name){
 
@@ -1571,11 +1733,11 @@ angular.module('timeSheetApp')
                     $scope.success = 'OK';
                     if(!$scope.isEdit){
 
-                    $scope.showNotifications('top','center','success','Asset Parameter Saved Successfully');
+                    $scope.showNotifications('top','center','success','Asset Parameter has been added Successfully!!');
 
                     }else{
 
-                     $scope.showNotifications('top','center','success','Asset Parameter Updated Successfully');
+                     $scope.showNotifications('top','center','success','Asset Parameter has been updated Successfully!!');
 
                     }
                    
@@ -1611,9 +1773,9 @@ angular.module('timeSheetApp')
 	    	$scope.uploadObj.type = 'document';
 
 
-            if($scope.assetGen.id){
+            if($scope.assetVal.id){
 
-                $scope.uploadObj.assetId = $scope.assetGen.id;
+                $scope.uploadObj.assetId = $scope.assetVal.id;
 
             }else if($stateParams.id){
 
@@ -1625,7 +1787,7 @@ angular.module('timeSheetApp')
                 $rootScope.loadingStop();
                 $scope.uploadFiles = [];
 	    		$scope.uploadFiles=data;
-
+	    		
                 $scope.fileCount = ($scope.uploadFiles).length;
 
                 console.log("-- Upload files --" , $scope.uploadFiles);
@@ -1640,9 +1802,9 @@ angular.module('timeSheetApp')
 
 	    	$scope.photoObj.type = 'image';
 
-            if($scope.assetGen.id){
+            if($scope.assetVal.id){
 
-                $scope.photoObj.assetId = $scope.assetGen.id;
+                $scope.photoObj.assetId = $scope.assetVal.id;
 
             }else if($stateParams.id){
 
@@ -1663,7 +1825,7 @@ angular.module('timeSheetApp')
 
 	    $scope.uploadAssetFile = function() {
 
-                if(!$scope.assetGen.id && !$stateParams.id){
+                if(!$scope.assetVal.id && !$stateParams.id){
 
                       $scope.showNotifications('top','center','danger','Please create asset first..');
 
@@ -1673,8 +1835,8 @@ angular.module('timeSheetApp')
 
     	        	console.log("file title - " + $scope.uploadAsset.title + "file name -" + $scope.selectedClientFile);
 
-                    if($scope.assetGen.id){
-                        $scope.uploadAsset.assetId = $scope.assetGen.id;
+                    if($scope.assetVal.id){
+                        $scope.uploadAsset.assetId = $scope.assetVal.id;
 
                     }else if($stateParams.id){
 
@@ -1718,7 +1880,7 @@ angular.module('timeSheetApp')
 
 	    $scope.uploadAssetPhotoFile = function() {
 
-        if(!$scope.assetGen.id && !$stateParams.id){
+        if(!$scope.assetVal.id && !$stateParams.id){
 
             $scope.showNotifications('top','center','danger','Please create asset first..');
 
@@ -1732,8 +1894,8 @@ angular.module('timeSheetApp')
 
 	        	$scope.uploadAssetPhoto.uploadFile = $scope.selectedPhotoFile;
 
-                if($scope.assetGen.id){
-                        $scope.uploadAssetPhoto.assetId = $scope.assetGen.id;
+                if($scope.assetVal.id){
+                        $scope.uploadAssetPhoto.assetId = $scope.assetVal.id;
 
                     }else if($stateParams.id){
 
@@ -1875,6 +2037,11 @@ angular.module('timeSheetApp')
                
             }
         });
+        
+        $('input#amcJobStartTime').on('dp.change', function(e){
+            $scope.amcSchedule.jobStartTime = e.date._d;
+            $scope.ppmTo = $filter('date')(e.date._d, 'dd/MM/yyyy HH:mm');
+        });
 
 	    $scope.loadCheckList = function() {
             ChecklistComponent.findAll().then(function(data){
@@ -1903,88 +2070,93 @@ angular.module('timeSheetApp')
 
 	    $scope.saveAmcSchedule = function() {
 
-            if(!$scope.assetGen.id && !$stateParams.id){
+            if(!$scope.assetVal.id && !$stateParams.id){
 
                   $scope.showNotifications('top','center','danger','Please create asset first..');
 
-                }else{
+            }else{
 
-                if($scope.assetGen.id){
+                if($scope.assetVal.id){
 
-                    $scope.amcSchedule.assetId= $scope.assetGen.id;
+                    $scope.amcSchedule.assetId= $scope.assetVal.id;
 
                 }else if($stateParams.id){
 
                      $scope.amcSchedule.assetId = $stateParams.id;
                 }
 
-    	    	console.log($scope.selectedChecklist);
+    	    			console.log($scope.selectedChecklist);
 
 
-                 if($scope.selectedEmployee){
+                if($scope.selectedEmployee){
                     $scope.amcSchedule.empId = $scope.selectedEmployee.id;
                 }
 
-    	    	if($scope.selectedChecklist){
-    	    		$scope.amcSchedule.checklistId = $scope.selectedChecklist.id;
-    	    	}
-
-    	    	if($scope.selectedFrequencyPrefix) {
-    	    		$scope.amcSchedule.frequencyPrefix = $scope.selectedFrequencyPrefix;
-    	    	}
-    	    	if($scope.selectedFrequency) {
-    	    		$scope.amcSchedule.frequency = $scope.selectedFrequency;
-    	    	}
-    	    	if($scope.selectedFreqDuration) {
-    	    		$scope.amcSchedule.frequencyDuration = $scope.selectedFreqDuration;
-    	    	}
-
-    	    	$scope.amcSchedule.maintenanceType = 'AMC';
-
-    	    	console.log("To be create AMC schedule",$scope.amcSchedule);
-
-                 $rootScope.loadingStart();
-
-    	    	AssetComponent.saveAmcSchedule($scope.amcSchedule).then(function(data){
-    	    		console.log(data);
-    	    		if(data && data.checklistId) {
-    	    			console.log(data.checklistId);
-    	    			//$scope.amcScheduleList.push(data);
-                        $scope.loadAmcSchedule();
-                        $scope.showNotifications('top','center','success','AMC Schedule Saved Successfully');
-                        $scope.amcSchedule = {};
-
-                        $scope.selectedChecklist = {};
-                        $scope.selectedEmployee = {};
-                        $scope.selectedFrequencyPrefix = {};
-                        $scope.selectedFreqDuration = {};
-                        $scope.selectedFrequency = {};
-
-                        $scope.amcFrom = "";
-                        $scope.amcTo = "";
-
-                        $("#dateFilterAmcFrom").val("");
-                        $("#dateFilterAmcTo").val("");
-                        $rootScope.loadingStop();
-
-
-    	    		}
-    	    	}).catch(function (response) {
-
-                    $rootScope.loadingStop();
-
-                if (response.status === 400 && response.data.message === 'error.duplicateRecordError') {
-                    $scope.errorProjectExists = 'ERROR';
-                    $scope.showNotifications('top','center','danger','AMC Schedule Already Exists');
-                } else {
-                    $scope.error = 'ERROR';
-                     $scope.showNotifications('top','center','danger','Error in creating AMC Schedule. Please try again later..');
-                }
-
-
-            });
-
-            }
+	    	    		if($scope.selectedChecklist){
+		    	    		$scope.amcSchedule.checklistId = $scope.selectedChecklist.id;
+		    	    	}
+		
+		    	    	if($scope.selectedFrequencyPrefix) {
+		    	    		$scope.amcSchedule.frequencyPrefix = $scope.selectedFrequencyPrefix;
+		    	    	}
+		    	    	if($scope.selectedFrequency) {
+		    	    		$scope.amcSchedule.frequency = $scope.selectedFrequency;
+		    	    	}
+		    	    	if($scope.selectedFreqDuration) {
+		    	    		$scope.amcSchedule.frequencyDuration = $scope.selectedFreqDuration;
+		    	    	}
+		
+		    	    	$scope.shiftTimings = [];
+		    	    	if($scope.selectedShift) {
+			    	    	$scope.shiftTimings.push($scope.selectedShift.startTime +'-' +$scope.selectedShift.endTime);
+		    	    	}
+		    	    	$scope.amcSchedule.shiftTimings = $scope.shiftTimings;
+		    	    	//$scope.amcSchedule.maintenanceType = 'AMC';
+		
+		    	    	console.log("To be create AMC schedule",$scope.amcSchedule);
+		
+		                 $rootScope.loadingStart();
+		
+		    	    	AssetComponent.saveAmcSchedule($scope.amcSchedule).then(function(data){
+		    	    		console.log(data);
+		    	    		if(data) {
+		    	    			console.log(data.checklistId);
+		    	    			//$scope.amcScheduleList.push(data);
+		                        $scope.loadAmcSchedule();
+		                        $scope.showNotifications('top','center','success','AMC Schedule has been added Successfully!!');
+		                        $scope.amcSchedule = {};
+		
+		                        $scope.selectedChecklist = {};
+		                        $scope.selectedEmployee = {};
+		                        $scope.selectedFrequencyPrefix = {};
+		                        $scope.selectedFreqDuration = {};
+		                        $scope.selectedFrequency = {};
+		
+		                        $scope.amcFrom = "";
+		                        $scope.amcTo = "";
+		
+		                        $("#dateFilterAmcFrom").val("");
+		                        $("#dateFilterAmcTo").val("");
+		                        $rootScope.loadingStop();
+		
+		
+		    	    		}
+		    	    	}).catch(function (response) {
+	
+	                    $rootScope.loadingStop();
+	
+	                if (response.status === 400 && response.data.message === 'error.duplicateRecordError') {
+	                    $scope.errorProjectExists = 'ERROR';
+	                    $scope.showNotifications('top','center','danger','AMC Schedule Already Exists');
+	                } else {
+	                    $scope.error = 'ERROR';
+	                     $scope.showNotifications('top','center','danger','Error in creating AMC Schedule. Please try again later..');
+	                }
+	
+	
+	            });
+	
+	       }
 
 	    }
 
@@ -1994,9 +2166,9 @@ angular.module('timeSheetApp')
 
             var item_ar = [];
 
-            if($scope.assetGen.id){
+            if($scope.assetVal.id){
 
-                    var assetId= $scope.assetGen.id;
+                    var assetId= $scope.assetVal.id;
 
                 }else if($stateParams.id){
 
@@ -2111,8 +2283,8 @@ angular.module('timeSheetApp')
             //var deferred = $q.defer();
             if($scope.assetList.siteId){
                var empParam = {siteId:$scope.assetList.siteId,list:true};
-            } else if($scope.assetGen.siteId) {
-                var empParam = {siteId:$scope.assetGen.siteId,list:true};
+            } else if($scope.assetVal.siteId) {
+                var empParam = {siteId:$scope.assetVal.siteId,list:true};
             }
 
             //alert(empParam.siteId);
@@ -2128,28 +2300,77 @@ angular.module('timeSheetApp')
 
         $scope.loadAMCJobs = function() {
             $rootScope.loadingStart();
-        	$scope.searchCriteria.maintenanceType = "AMC";
-        	$scope.searchCriteria.assetId = $stateParams.id;
-        	console.log($scope.searchCriteria);
-        	JobComponent.search($scope.searchCriteria).then(function(data){
+            var amcCurrPageVal = ($scope.pages ? $scope.pages.currPage : 1);
+                    if(!$scope.amcSearchCriteria) {
+                        var amcSearchCriteria = {
+                                currPage : amcCurrPageVal
+                        };
+                        $scope.amcSearchCriteria = amcSearchCriteria;
+                    }
+
+                $scope.amcSearchCriteria.currPage = amcCurrPageVal;
+
+        	$scope.amcSearchCriteria.maintenanceType = "AMC";
+        	$scope.amcSearchCriteria.assetId = $stateParams.id;
+            $scope.amcJobLists = "";
+        	console.log('AMC search criteria',$scope.amcSearchCriteria);
+        	JobComponent.search($scope.amcSearchCriteria).then(function(data){
                 $rootScope.loadingStop();
         		console.log(data);
         		$scope.amcJobLists = data.transactions;
+
+               /*
+                ** Call pagination  main function **
+                */
+
+                $scope.pager = {};
+                $scope.pager = PaginationComponent.GetPager(data.totalCount, $scope.pages.currPage);
+                $scope.totalCountPages = data.totalCount;
         	});
         }
 
         $scope.loadPPMJobs = function() {
                 $rootScope.loadingStart();
+                 var ppmCurrPageVal = ($scope.pages ? $scope.pages.currPage : 1);
+                    if(!$scope.ppmSearchCriteria) {
+                        var ppmSearchCriteria = {
+                                currPage : ppmCurrPageVal
+                        };
+                        $scope.ppmSearchCriteria = ppmSearchCriteria;
+                    }
+
+                $scope.ppmSearchCriteria.currPage = ppmCurrPageVal;
 	        	$scope.ppmSearchCriteria.maintenanceType = "PPM";
 	        	$scope.ppmSearchCriteria.assetId = $stateParams.id;
-	        	console.log($scope.searchCriteria);
+
+	        	console.log('PPM search criteria',$scope.ppmSearchCriteria);
+                $scope.ppmJobLists = "";
 	        	JobComponent.search($scope.ppmSearchCriteria).then(function(data){
                     $rootScope.loadingStop();
 	        		console.log(data);
 	        		$scope.ppmJobLists = data.transactions;
-	        	});
-        }
 
+                    /*
+                    ** Call pagination  main function **
+                    */
+
+                $scope.pager = {};
+                $scope.pager = PaginationComponent.GetPager(data.totalCount, $scope.pages.currPage);
+                $scope.totalCountPages = data.totalCount;
+
+                console.log("Pagination",$scope.pager);
+                console.log("PPM Job List - ", data);
+
+	        	});
+
+        }
+        
+        $scope.loadStatus = function() {
+            AssetComponent.getStatus().then(function(data) {
+                console.log('Asset status list-- ',data);
+                $scope.statuses = data;
+            });
+        }
 
 
         $scope.loadAllRules = function() {
@@ -2158,6 +2379,7 @@ angular.module('timeSheetApp')
         		$scope.readingRules = data;
         	});
         }
+
 
         $scope.cancel = function(){
 
@@ -2225,8 +2447,160 @@ angular.module('timeSheetApp')
             }
 
 
-       
 
+    $scope.initFullCalendar = function(eventsData) {
+        var calendar = $('#fullCalendar');
+
+        var today = new Date();
+        var y = today.getFullYear();
+        var m = today.getMonth();
+        var d = today.getDate();
+
+        calendar.fullCalendar({
+            viewRender: function(view, element) {
+                // We make sure that we activate the perfect scrollbar when the view isn't on Month
+                if (view.name != 'month') {
+                    $(element).find('.fc-scroller').perfectScrollbar();
+                }
+            },
+            header: {
+                left: 'title',
+                center: 'month,agendaWeek,agendaDay',
+                right: 'prev,next,today'
+            },
+            defaultDate: today,
+            selectable: true,
+            selectHelper: true,
+            views: {
+                month: { // name of view
+                    titleFormat: 'MMMM YYYY'
+                    // other view-specific options here
+                },
+                week: {
+                    titleFormat: " MMMM D YYYY"
+                },
+                day: {
+                    titleFormat: 'D MMM, YYYY'
+                }
+            },
+
+            select: function(start, end) {
+
+                // on select we show the Sweet Alert modal with an input
+                swal({
+                    title: 'Create an Schedule',
+                    html: '<div class="form-group">' +
+                        '<input type "text" class="form-control" placeholder="Schedule Title" id="input-title">' +
+                        '</div>'+
+                        '<div class="form-group">' +
+                        '<input type "text" class="form-control" placeholder="Schedule Description" id="input-desc" >' +
+                        '</div>'+
+                        '<div class="form-group">' +
+                        '<input type "text" class="form-control" placeholder="DD/MM/YYYY" id="input-fdate" >' +
+                        '</div>'+
+                        '<div class="form-group">' +
+                        '<input type "text" class="form-control" placeholder="DD/MM/YYYY" id="input-tdate" >' +
+                        '</div>'+
+                        '<div class="form-group">' +
+                        '<input type "text" class="form-control" placeholder="Weekly" id="input-frq" >' +
+                        '</div>',
+                    showCancelButton: true,
+                    confirmButtonClass: 'btn btn-success',
+                    cancelButtonClass: 'btn btn-danger',
+                    buttonsStyling: false
+                }).then(function(result) {
+
+                    var eventData;
+                    event_title = $('#input-title').val();
+                    event_desc = $('#input-desc').val();
+                    event_frq = $('#input-frq').val();
+
+                    if (event_title) {
+                        eventData = {
+                            title: event_title,
+                            start: start,
+                            end: end
+                        };
+                        $calendar.fullCalendar('renderEvent', eventData, true); // stick? = true
+                    }
+
+                    $calendar.fullCalendar('unselect');
+
+                });
+            },
+            editable: true,
+            eventLimit: true, // allow "more" link when too many events
+
+
+            // color classes: [ event-blue | event-azure | event-green | event-orange | event-red ]
+
+            events:eventsData,
+
+            /*events: [{
+                    title: 'Vaccum Cleaner',
+                    start: new Date(y, m, 1),
+                    className: 'event-default'
+                },
+                {
+                    id: 999,
+                    title: 'Ac maintenance',
+                    start: new Date(y, m, d - 4, 6, 0),
+                    allDay: false,
+                    className: 'event-rose'
+                }
+              
+            ],*/
+
+            eventClick: function(calEvent, jsEvent, view) {
+
+            //alert('Event: ' + calEvent.title);
+            if(calEvent.start !=''){
+                var d = new Date(calEvent.start);
+                var inputFdate=d.toLocaleString(); // 7/25/2016, 1:35:07 PM
+            }else{
+              var inputFdate= '';
+            }
+            if(calEvent.end !=null){
+               var d = new Date(calEvent.end);
+                var inputTdate=d.toLocaleString(); // 7/25/2016, 1:35:07 PM
+            }else{
+              var d = new Date(calEvent.start);
+              var inputTdate=d.toLocaleString(); // 7/25/2016, 1:35:07 PM
+            }
+
+            swal({
+                    title: 'View schedule',
+                    html: '<div class="form-group">' +
+                        '<input type "readonly" class="form-control" placeholder="Schedule Title" id="input-title" value="'+calEvent.title+'">' +
+                        '</div>'+
+                        '<div class="form-group">' +
+                        '<input type "readonly" class="form-control" placeholder="Schedule Description" id="input-desc" >' +
+                        '</div>'+
+                        '<div class="form-group">' +
+                        '<input type "readonly" class="form-control" placeholder="DD/MM/YYYY" id="input-fdate" value="'+inputFdate+'" >' +
+                        '</div>'+
+                        '<div class="form-group">' +
+                        '<input type "readonly" class="form-control" placeholder="DD/MM/YYYY" id="input-tdate" value="'+inputTdate+'">' +
+                        '</div>'+
+                        '<div class="form-group">' +
+                        '<input type "readonly" class="form-control" placeholder="Weekly" id="input-frq" value="">' +
+                        '</div>',
+                    showCancelButton: true,
+                    confirmButtonClass: 'btn btn-success',
+                    cancelButtonClass: 'btn btn-danger',
+                    buttonsStyling: false
+                });
+
+            // change the border color just for fun
+            $(this).css('border-color', 'red');
+
+          }
+
+
+        });
+    }
+
+    //$scope.initFullCalendar();
 
 
     });
