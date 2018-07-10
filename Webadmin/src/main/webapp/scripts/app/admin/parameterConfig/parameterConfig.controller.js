@@ -56,7 +56,7 @@ angular.module('timeSheetApp')
 
         $scope.initCalender();
 
-        demo.initFullCalendar();
+        //demo.initFullCalendar();
 
         $scope.openCalendar = function(e,cmp) {
             e.preventDefault();
@@ -80,6 +80,9 @@ angular.module('timeSheetApp')
         		AssetTypeComponent.findAll().then(function (data) {
                 $scope.selectedAssetType = null;
                 $scope.assetTypes = data;
+
+                console.log('Asset type list',$scope.assetTypes);
+
                 $scope.loadingStop();
             });
         }
