@@ -8,6 +8,7 @@ import {JobPopoverPage} from "../jobs/job-popover";
 import {Camera, CameraOptions} from "@ionic-native/camera";
 import{AssetService} from "../service/assetService";
 import {CalenderPage} from "../calender-page/calender-page";
+import{SQLite,SQLiteObject } from "@ionic-native/sqlite";
 
 /**
  * Generated class for the GetAssetReadings page.
@@ -27,15 +28,18 @@ export class GetAssetReading {
     assetConfig:any;
     current:any;
 
+    offlineReading:any;
+
 
     constructor(public navCtrl: NavController, public navParams: NavParams, public modalController: ModalController,
                 public componentService:componentService, public popoverCtrl:PopoverController, public camera:Camera,
-                public assetService:AssetService,public viewCtrl:ViewController) {
+                public assetService:AssetService,public viewCtrl:ViewController,private sqlite:SQLite) {
         this.assetDetails = this.navParams.get('assetDetails');
         console.log(this.navParams.get('assetDetails'));
         this.dateTime = new Date();
         this.takenImages = [];
         this.assetConfig=[];
+        this.offlineReading = [];
 
     }
     ionViewWillEnter(){
@@ -52,7 +56,7 @@ export class GetAssetReading {
     }
 
     dismiss() {
-        let data = { 'foo': 'bar' };
+        let data = {};
         this.viewCtrl.dismiss(data);
     }
 
@@ -72,23 +76,17 @@ export class GetAssetReading {
                         response=>{
                             console.log("Get Asset Previous readings");
                             console.log(response);
-
                             if(response.consumptionMonitoringRequired){
                                 if(response.initialValue>0){
                                     config.previousValue = response.initialValue;
-                                    config.reading=response.initialValue;
-
                                 }else{
                                     config.previousValue = null;
-                                    config.reading=null;
                                 }
                             }else{
                                 if(response.value>0){
                                     config.previousValue = response.value;
-                                    config.reading = response.value;
                                 }else{
                                     config.previousValue = null;
-                                    config.reading=null;
                                 }
                             }
 
@@ -188,7 +186,7 @@ export class GetAssetReading {
 
                         };
                         console.log(assetReading);
-                        this.assetSaveReading(assetReading);
+                        this.assetSaveReadingLocal(assetReading);
                     }else{
                         var msg = "Asset reading should be greater than "+reading.min+"or less than "+reading.max;
                         this.componentService.showToastMessage(msg,'bottom');
@@ -207,7 +205,7 @@ export class GetAssetReading {
 
                     };
                     console.log(assetReading);
-                    this.assetSaveReading(assetReading);
+                    this.assetSaveReadingLocal(assetReading);
                 }
 
 
@@ -225,9 +223,8 @@ export class GetAssetReading {
 
                 };
                 console.log(assetReading);
-                this.assetSaveReading(assetReading);
+                this.assetSaveReadingLocal(assetReading);
             }
-
 
         }else if(reading.consumptionMonitoringRequired){
             if( reading.max>0) {
@@ -242,10 +239,9 @@ export class GetAssetReading {
                             assetId:reading.assetId,
                             assetParameterConfigId:reading.id,
                             consumptionMonitoringRequired:reading.consumptionMonitoringRequired,
-
                         };
                         console.log(assetReading);
-                        this.assetSaveReading(assetReading);
+                        this.assetSaveReadingLocal(assetReading);
                     }else{
                         var msg = "Asset reading should be greater than "+reading.min+"or less than "+reading.max;
                         this.componentService.showToastMessage(msg,'bottom');
@@ -264,7 +260,7 @@ export class GetAssetReading {
 
                     };
                     console.log(assetReading);
-                    this.assetSaveReading(assetReading);
+                    this.assetSaveReadingLocal(assetReading);
                 }
             }else{
                 assetReading = {
@@ -278,7 +274,7 @@ export class GetAssetReading {
                     consumptionMonitoringRequired:reading.consumptionMonitoringRequired,
                 };
                 console.log(assetReading);
-                this.assetSaveReading(assetReading);
+                this.assetSaveReadingLocal(assetReading);
             }
 
         }else{
@@ -293,7 +289,7 @@ export class GetAssetReading {
                         consumptionMonitoringRequired:reading.consumptionMonitoringRequired,
                     };
                     console.log(assetReading);
-                    this.assetSaveReading(assetReading);
+                    this.assetSaveReadingLocal(assetReading);
                 }else{
                     var msg = "Asset reading should be greater than "+reading.min+"or less than "+reading.max;
                     this.componentService.showToastMessage(msg,'bottom');
@@ -308,13 +304,18 @@ export class GetAssetReading {
                     consumptionMonitoringRequired:reading.consumptionMonitoringRequired,
                 };
                 console.log(assetReading);
-                this.assetSaveReading(assetReading);
+                this.assetSaveReadingLocal(assetReading);
             }
 
         }
 
 
     }
+
+
+    // saveAssetReading(){
+    //
+    // }
 
     assetSaveReading(assetReading)
     {
@@ -339,6 +340,117 @@ export class GetAssetReading {
             }
 
         )
+    }
+
+
+    // save reading in local
+
+    assetSaveReadingLocal(asset){
+        this.sqlite.create({
+            name:'data.db',
+            location:'default',
+        })
+            .then((db:SQLiteObject)=>{
+            db.executeSql('DROP TABLE  readingList',{});
+
+            db.executeSql('create TABLE IF NOT EXISTS readingList (name VARCHAR,uom VARCHAR,initialValue INT,finalValue INT,consumption VARCHAR,assetId INT,assetParameterConfigId) ',{})
+                .then(()=> {
+                    console.log('Executed SQL');
+                    console.log("Asset");
+                    console.log(asset);
+
+                    // for(var i=0; i< asset.length;i++){
+                        console.log("asset save to local",asset);
+                        var query= "INSERT INTO readingList (name,uom,initialValue,finalValue,consumption,assetId,assetParameterConfigId) VALUES (?,?,?,?,?,?,?)";
+                        // db.executeSql(query,[8,'Test',100,true,new Date(),66,8,new Date(),40,'watt'])
+                        db.executeSql(query,[asset.name, asset.uom,asset.initialValue,asset.finalValue,asset.consumption,asset.assetId,asset.assetParameterConfigId])
+                            .then((data)=>
+                            {
+                                console.log('Executed SQL');
+                                console.log('Table Will Be Created');
+                                console.log(data);
+                            })
+
+                            .catch(e=>console.log(e));
+                    // }
+                })
+                .catch(e=>console.log(e));
+
+            setTimeout(()=>{
+            var query= "select * from readingList";
+                db.executeSql(query,{}).then((data)=>{
+                    console.log(data);
+                    if(data.rows.length >0){
+                        for(var i=0; i< data.rows.length; i++){
+                            this.offlineReading.push(data.rows.item(i));
+                            console.log(data.rows.item(i));
+                        }
+
+                    }
+
+                },(error)=>{
+                    console.log("ERROR" + JSON.stringify(error));
+                })
+            },3000)
+
+            })
+
+
+    }
+
+
+    saveReadingLocal(asset){
+        this.sqlite.create({
+            name:'data.db',
+            location:'default'
+        })
+
+
+            .then((db:SQLiteObject)=>{
+                db.executeSql('DROP TABLE  readingList',{});
+
+                db.executeSql('create TABLE IF NOT EXISTS readingList (name VARCHAR,uom VARCHAR,value INT,assetId INT,assetParameterConfigId INT,consumptionMonitoringRequired) ',{})
+                    .then(()=> {
+                        console.log('Executed SQL');
+                        console.log("Asset");
+                        console.log(asset);
+
+                        // for(var i=0; i< asset.length;i++){
+                        console.log("asset save to local",asset);
+                        var query= "INSERT INTO readingList (name,uom,value,assetId,assetParameterConfigId,consumptionMonitoringRequired) VALUES (?,?,?,?,?,?)";
+                        // db.executeSql(query,[8,'Test',100,true,new Date(),66,8,new Date(),40,'watt'])
+                        db.executeSql(query,[asset.name, asset.uom,asset.value,asset.assetId,asset.assetParameterConfigId,asset.consumptionMonitoringRequired])
+                            .then((data)=>
+                            {
+                                console.log('Executed SQL');
+                                console.log('Table Will Be Created');
+                                console.log(data);
+                            })
+
+                            .catch(e=>console.log(e));
+                        // }
+                    })
+                    .catch(e=>console.log(e));
+
+                setTimeout(()=>{
+                    var query= "select * from readingList";
+                    db.executeSql(query,{}).then((data)=>{
+                        console.log(data);
+                        if(data.rows.length >0){
+                            for(var i=0; i< data.rows.length; i++){
+                                this.offlineReading.push(data.rows.item(i));
+                                console.log(data.rows.item(i));
+                            }
+
+                        }
+
+                    },(error)=>{
+                        console.log("ERROR" + JSON.stringify(error));
+                    })
+                },3000)
+
+            })
+
     }
 
 

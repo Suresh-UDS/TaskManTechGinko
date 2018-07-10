@@ -447,6 +447,11 @@
                                                </table>
 
                                            </div>
+                                            <!-- Pagination directive start -->
+
+                                            <pagination-new></pagination-new>
+
+                                            <!-- Pagination directive end -->
 
                                        </div>
                                        <div class="tab-pane in amc-tasks" id="amc-tasks">
@@ -485,6 +490,12 @@
 
                                            </div>
 
+                                            <!-- Pagination directive start -->
+
+                                            <pagination-new></pagination-new>
+
+                                            <!-- Pagination directive end -->
+
                                        </div>
                                        <div class="tab-pane in ppm-schedule" id="ppm-schedule" >
 
@@ -492,7 +503,7 @@
                                                <div class="col-md-12 text-right">
 
                                                    <!--<a  class="btn btn-simple btn-warning cal-btn" data-toggle="modal" data-target="#RightModal-View" title="Calender" ><i class="material-icons">date_range</i></a> -->
-                                                   <a  class="btn btn-simple btn-warning cal-btn"  ui-sref="view-calendar" ng-click="loadCalendar(assetDetail.id)" title="Calender" ><i class="material-icons">date_range</i></a>
+                                                   <a  class="btn btn-simple btn-warning cal-btn"  ui-sref="view-calendar({ id: assetDetail.id})" title="Calender" ><i class="material-icons">date_range</i></a>
 
                                                </div>
                                            </div>
@@ -875,6 +886,12 @@
                                               </div>
 
                                           </div>
+
+                                           <!-- Pagination directive start -->
+
+                                            <pagination-new></pagination-new>
+
+                                            <!-- Pagination directive end -->
 
                                        </div>
 

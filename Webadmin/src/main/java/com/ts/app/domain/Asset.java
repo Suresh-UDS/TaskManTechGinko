@@ -2,7 +2,6 @@ package com.ts.app.domain;
 
 import java.io.Serializable;
 import java.sql.Date;
-import java.time.ZonedDateTime;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -44,7 +43,7 @@ public class Asset extends AbstractAuditingEntity implements Serializable {
     private String title;
 
     @Size(min = 1, max = 250)
-    @Column(length = 250)
+    @Column(length = 250, unique=true)
     private String code;
 
     @Size(min = 1, max = 2500)
@@ -54,10 +53,12 @@ public class Asset extends AbstractAuditingEntity implements Serializable {
     @JoinColumn(name = "siteId", nullable = false)
     private Site site;
     
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "assetStatusHistoryId", nullable = false)
-    private AssetStatusHistory assetStatusHistory;
+    @OneToMany(mappedBy="asset",cascade={CascadeType.ALL}, fetch = FetchType.LAZY, orphanRemoval = true)    
+    private List<AssetStatusHistory> assetStatusHistoryList;
     
+    @OneToMany(mappedBy="asset",cascade={CascadeType.ALL}, fetch = FetchType.LAZY, orphanRemoval = true)   
+    private List<AssetSiteHistory> assetSiteHistoryList;
+
     @Column(name="qr_code_image")
     private String qrCodeImage;
     
@@ -325,11 +326,17 @@ public class Asset extends AbstractAuditingEntity implements Serializable {
 	public void setWarrantyType(String warrantyType) {
 		this.warrantyType = warrantyType;
 	}
-	public AssetStatusHistory getAssetStatusHistory() {
-		return assetStatusHistory;
+	public List<AssetStatusHistory> getAssetStatusHistory() {
+		return assetStatusHistoryList;
 	}
-	public void setAssetStatusHistory(AssetStatusHistory assetStatusHistory) {
-		this.assetStatusHistory = assetStatusHistory;
+	public void setAssetStatusHistory(List<AssetStatusHistory> assetStatusHistory) {
+		this.assetStatusHistoryList = assetStatusHistory;
+	}
+	public List<AssetSiteHistory> getAssetSiteHistory() {
+		return assetSiteHistoryList;
+	}
+	public void setAssetSiteHistory(List<AssetSiteHistory> assetSiteHistory) {
+		this.assetSiteHistoryList = assetSiteHistory;
 	}
     
 }

@@ -1,6 +1,7 @@
 package com.ts.app.repository;
 
 import java.sql.Date;
+import java.time.ZonedDateTime;
 import java.util.List;
 
 import org.springframework.data.domain.Page;
@@ -140,10 +141,15 @@ public interface AssetRepository extends JpaRepository<Asset, Long>,JpaSpecifica
     @Query("SELECT e FROM Asset e WHERE e.active='Y' order by e.title")
     Page<Asset> findAllAsset(Pageable pageRequest);
 
-    @Query("SELECT r FROM AssetParameterReading r WHERE r.asset.id = :assetId and r.active = 'Y' order by r.createdDate DESC")
-	List<AssetParameterReading> findByAssetReading(@Param("assetId") long assetId);
+    @Query("SELECT r FROM AssetParameterReading r WHERE r.asset.id = :assetId and r.active = 'Y' order by r.createdDate desc")
+	Page<AssetParameterReading> findByAssetReading(@Param("assetId") long assetId, Pageable pageRequest);
     
     @Query("SELECT r FROM AssetParameterReading r WHERE r.asset.id = :assetId and r.assetParameterConfig.id = :assetParamId and r.active = 'Y' order by r.createdDate DESC")
 	List<AssetParameterReading> findAssetReadingById(@Param("assetId") long assetId, @Param("assetParamId") long assetParamId);
 
+    @Query("SELECT r FROM AssetParameterReading r WHERE r.asset.id = :assetId and r.createdDate between :fromDate and :toDate order by r.createdDate desc")
+    Page<AssetParameterReading> findAssetReadingByDate(@Param("assetId") long assetId, @Param("fromDate") ZonedDateTime fromDate, @Param("toDate") ZonedDateTime toDate, Pageable pageRequest);
+
+    @Query("SELECT r FROM AssetParameterReading r WHERE r.asset.id = :assetId and r.name = :paramName order by r.createdDate desc")
+	Page<AssetParameterReading> findReadingByName(@Param("paramName") String paramName, @Param("assetId") long assetId, Pageable pageRequest);
 }

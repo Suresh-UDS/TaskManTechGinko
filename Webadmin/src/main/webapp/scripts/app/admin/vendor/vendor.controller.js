@@ -12,6 +12,7 @@ angular.module('timeSheetApp')
         $scope.error = null;
         $scope.doNotMatch = null;
         $scope.pager = {};
+        $scope.pageSort = 10;
         $scope.searchCriteria = {};
         $scope.pages = { currPage : 1};
         $scope.isEdit = !!$stateParams.id;
@@ -38,7 +39,7 @@ angular.module('timeSheetApp')
 
         $scope.initCalender();
 
-        demo.initFullCalendar();
+        //demo.initFullCalendar();
 
         $scope.openCalendar = function(e,cmp) {
             e.preventDefault();
@@ -78,7 +79,7 @@ angular.module('timeSheetApp')
         		$scope.search();
         };
 
-        $scope.isActiveAsc = 'id';
+        $scope.isActiveAsc = 'name';
         $scope.isActiveDesc = '';
 
         $scope.columnAscOrder = function(field){
@@ -86,8 +87,8 @@ angular.module('timeSheetApp')
             $scope.isActiveAsc = field;
             $scope.isActiveDesc = '';
             $scope.isAscOrder = true;
-            $scope.search();
-            //$scope.loadTickets();
+            //$scope.search();
+            $scope.loadVendors();
         }
 
         $scope.columnDescOrder = function(field){
@@ -95,8 +96,8 @@ angular.module('timeSheetApp')
             $scope.isActiveDesc = field;
             $scope.isActiveAsc = '';
             $scope.isAscOrder = false;
-            $scope.search();
-            //$scope.loadTickets();
+            //$scope.search();
+            $scope.loadVendors();
         }
 
         $scope.searchFilter = function () {
@@ -115,13 +116,29 @@ angular.module('timeSheetApp')
             $scope.searchCriteria.currPage = currPageVal;
             $scope.searchCriteria.findAll = false;
 
-             if(!$scope.selectedName) {
+             if(!$scope.searchName) {
                 $scope.searchCriteria.findAll = true;
             }
 
-            if($scope.selectedName) {
-                    $scope.searchCriteria.name = $scope.selectedName;
+            if($scope.searchName) {
+                    $scope.searchCriteria.vendorName = $scope.searchName;
                 }
+
+                //----
+            if($scope.pageSort){
+                $scope.searchCriteria.sort = $scope.pageSort;
+            }
+
+            if($scope.selectedColumn){
+
+                $scope.searchCriteria.columnName = $scope.selectedColumn;
+                console.log('>>> $scope.searchCriteria.columnName <<< '+$scope.searchCriteria.columnName);
+                $scope.searchCriteria.sortByAsc = $scope.isAscOrder;
+                console.log('>>> $scope.searchCriteria.sortByAsc <<< '+$scope.searchCriteria.sortByAsc);
+            }else{
+                $scope.searchCriteria.columnName ="name";
+                $scope.searchCriteria.sortByAsc = true;
+            }
                
             console.log("search criteria",$scope.searchCriteria);
                      $scope.vendors = '';
@@ -275,6 +292,7 @@ angular.module('timeSheetApp')
             $scope.selectedProject = null;
             $scope.searchCriteria = {};
             $scope.selectedName = null;
+            $scope.searchName = null;
             $scope.selectedSite = null;
             $scope.selectedStatus = null;
             $scope.pages = {

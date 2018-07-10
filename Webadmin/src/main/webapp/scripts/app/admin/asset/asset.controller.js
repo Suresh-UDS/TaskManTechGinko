@@ -27,6 +27,7 @@ angular.module('timeSheetApp')
         $scope.selectedZone = null;
         $scope.pageSort = 10;
         $scope.assetGen ={};
+        $scope.assetVal ={};
         $scope.assetPPM ={};
         $scope.selectedConfig = null;
         $scope.selectedAssetType = {};
@@ -57,6 +58,8 @@ angular.module('timeSheetApp')
         $scope.searchAssetGroup ={};
         $scope.searchAcquiredDateSer =null;
         $scope.ppmSearchCriteria = {};
+        $scope.amcSearchCriteria = {};
+        $scope.redSearchCriteria = {};
         $scope.ppmFrom = null;
         $scope.ppmTo = null;
         $scope.amcFrom = null;
@@ -132,8 +135,6 @@ angular.module('timeSheetApp')
         }
 
         $scope.initCalender();
-
-        demo.initFullCalendar();
 
         $scope.openCalendar = function(e,cmp) {
             e.preventDefault();
@@ -224,15 +225,15 @@ angular.module('timeSheetApp')
         	console.log(" --- Create asset ppm ---" ,$scope.assetPPM.title);
 
 
-            if(!$scope.assetGen.id && !$stateParams.id){
+            if(!$scope.assetVal.id && !$stateParams.id){
 
                   $scope.showNotifications('top','center','danger','Please create asset first..');
 
             }else{
 
-                if($scope.assetGen.id){
+                if($scope.assetVal.id){
 
-                   $scope.assetPPM.assetId = $scope.assetGen.id;
+                   $scope.assetPPM.assetId = $scope.assetVal.id;
 
                 }else if($stateParams.id){
 
@@ -809,17 +810,29 @@ angular.module('timeSheetApp')
             });
         }
 
-        $scope.loadCalendar = function (id) {
+         var date = new Date(), y = date.getFullYear(), m = date.getMonth();
+         var firstDay = new Date(y, m, 1);
+         var lastDay = new Date(y, m + 1, 0);
 
-            var scheduleObj = {assetId:id,checkInDateTimeFrom:null,checkInDateTimeTo:null};
+        $scope.loadCalendar = function (startDate = firstDay,endDate = lastDay) {
 
-            AssetComponent.getPPMScheduleCalendar(id,scheduleObj).then(function(data){
+           // $scope.initFullCalendar([]);
+
+            $rootScope.loadingStart();
+
+            var scheduleObj = {assetId:$stateParams.id,checkInDateTimeFrom:startDate,checkInDateTimeTo:endDate};
+
+            AssetComponent.getPPMScheduleCalendar(scheduleObj.assetId,scheduleObj).then(function(data){
 
                 console.log("Asset Calendar details ==" + JSON.stringify(data));
 
                 $scope.PPMScheduleCalendar = data;
 
-                demo.events = $scope.PPMScheduleCalendar;
+                $scope.initFullCalendar($scope.PPMScheduleCalendar);
+
+                $rootScope.loadingStop();
+
+               
             });
 
 
@@ -841,10 +854,10 @@ angular.module('timeSheetApp')
 
                 $scope.assetConfigs.assetId = $stateParams.id;
             }
-            else if($scope.assetGen.id){
+            else if($scope.assetval.id){
 
                 $scope.assetConfigs.assetType = $scope.selectedAssetType.name;
-                $scope.assetConfigs.assetId = $scope.assetGen.id;
+                $scope.assetConfigs.assetId = $scope.assetVal.id;
             }
                console.log("Asset Config load" ,$scope.assetConfigs);
 
@@ -981,8 +994,8 @@ angular.module('timeSheetApp')
                     console.log("Asset Create List -- ",$scope.assetGen);
                     AssetComponent.create($scope.assetGen).then(function(response) {
                         console.log("Asset response",JSON.stringify(response));
-                        $scope.assetGen.id=response.id;
-                        $scope.assetGen.siteId=response.siteId;
+                        $scope.assetVal.id=response.id;
+                        $scope.assetVal.siteId=response.siteId;
                         $scope.success = 'OK';
                         $rootScope.loadingStop();
                         $scope.showNotifications('top','center','success','Asset has been added Successfully!!');
@@ -1018,15 +1031,15 @@ angular.module('timeSheetApp')
         
         $rootScope.loadingStart();
 
-        if(!$scope.assetGen.id && !$stateParams.id){
+        if(!$scope.assetVal.id && !$stateParams.id){
 
           $scope.showNotifications('top','center','danger','Please create asset first..');
 
         }else{
 
-        if($scope.assetGen.id){
+        if($scope.assetVal.id){
 
-            var qr = {id:$scope.assetGen.id,code:$scope.assetGen.assetcode};
+            var qr = {id:$scope.assetVal.id,code:$scope.assetGen.assetcode};
 
         }else if($stateParams.id){
 
@@ -1038,19 +1051,11 @@ angular.module('timeSheetApp')
             $scope.assetCode = "";
 
             AssetComponent.createQr(qr).then(function(response){
-
                 console.log('response qr---',response);
-
-                //$scope.success = 'OK';
-//                var qrAry  = response.split('.');
-
-             $scope.qr_img = response.url;
-             $scope.assetCode = response.code;
-
+                $scope.qr_img = response.url;
+                $scope.assetCode = response.code;
 //             console.log('create qr---',qrAry);
-
              $rootScope.loadingStop();
-
                 //$scope.genQrCodes();
             }).catch(function(){
                 $scope.showNotifications('top','center','danger','Error in create Qr. Please try again later..');
@@ -1071,9 +1076,9 @@ angular.module('timeSheetApp')
 
                 var qr_id ={id:$stateParams.id};
 
-              }else if($scope.assetGen.id){
+              }else if($scope.assetVal.id){
 
-                var qr_id ={id:$scope.assetGen.id};
+                var qr_id ={id:$scope.assetVal.id};
               }
               
 
@@ -1082,15 +1087,11 @@ angular.module('timeSheetApp')
 
 
             AssetComponent.genQrCode(qr_id).then(function(response){
-
-//                var qrAry  = response.split('.');
-
-             $scope.qr_img = response.url;
-             $scope.assetCode = response.code;
-
-             console.log('get qr---',response);
-
-             $rootScope.loadingStop();
+	             $scope.qr_img = response.url;
+	             $scope.assetCode = response.code;
+	             console.log('get qr---',response);
+	
+	             $rootScope.loadingStop();
 
             });
             /*.catch(function(){
@@ -1420,9 +1421,9 @@ angular.module('timeSheetApp')
 
             var item_ar = [];
 
-            if($scope.assetGen.id){
+            if($scope.assetVal.id){
 
-                    var assetId= $scope.assetGen.id;
+                    var assetId= $scope.assetVal.id;
 
                 }else if($stateParams.id){
 
@@ -1489,7 +1490,20 @@ angular.module('timeSheetApp')
 
             //alert(page);
             $scope.pages.currPage = page;
-            $scope.search();
+            if($scope.ppmSearchCriteria.maintenanceType =='PPM'){
+
+                $scope.loadPPMJobs();
+
+            }else if($scope.amcSearchCriteria.maintenanceType =='AMC'){
+                
+                $scope.loadAMCJobs();
+
+            }else if($scope.redSearchCriteria.module == "Readings"){
+                $scope.loadAssetReadings();
+            }else{
+               $scope.search(); 
+            }
+            
         }
 
 
@@ -1636,7 +1650,7 @@ angular.module('timeSheetApp')
             $scope.btnDisabled = true;
         	$scope.error = null;
         	$scope.success =null;
-          if(!$scope.assetGen.id && !$stateParams.id){
+          if(!$scope.assetVal.id && !$stateParams.id){
 
               $scope.showNotifications('top','center','danger','Please create asset first..');
 
@@ -1671,9 +1685,9 @@ angular.module('timeSheetApp')
                 	
                 	console.log('Edit parameterConfig details ='+ JSON.stringify($scope.parameterConfig));
 
-                }else if($scope.assetGen.id){
+                }else if($scope.assetVal.id){
 
-                    $scope.parameterConfig.assetId = $scope.assetGen.id;
+                    $scope.parameterConfig.assetId = $scope.assetVal.id;
 
                     if($scope.selectedAssetType.name){
 
@@ -1752,9 +1766,9 @@ angular.module('timeSheetApp')
 	    	$scope.uploadObj.type = 'document';
 
 
-            if($scope.assetGen.id){
+            if($scope.assetVal.id){
 
-                $scope.uploadObj.assetId = $scope.assetGen.id;
+                $scope.uploadObj.assetId = $scope.assetVal.id;
 
             }else if($stateParams.id){
 
@@ -1781,9 +1795,9 @@ angular.module('timeSheetApp')
 
 	    	$scope.photoObj.type = 'image';
 
-            if($scope.assetGen.id){
+            if($scope.assetVal.id){
 
-                $scope.photoObj.assetId = $scope.assetGen.id;
+                $scope.photoObj.assetId = $scope.assetVal.id;
 
             }else if($stateParams.id){
 
@@ -1804,7 +1818,7 @@ angular.module('timeSheetApp')
 
 	    $scope.uploadAssetFile = function() {
 
-                if(!$scope.assetGen.id && !$stateParams.id){
+                if(!$scope.assetVal.id && !$stateParams.id){
 
                       $scope.showNotifications('top','center','danger','Please create asset first..');
 
@@ -1814,8 +1828,8 @@ angular.module('timeSheetApp')
 
     	        	console.log("file title - " + $scope.uploadAsset.title + "file name -" + $scope.selectedClientFile);
 
-                    if($scope.assetGen.id){
-                        $scope.uploadAsset.assetId = $scope.assetGen.id;
+                    if($scope.assetVal.id){
+                        $scope.uploadAsset.assetId = $scope.assetVal.id;
 
                     }else if($stateParams.id){
 
@@ -1859,7 +1873,7 @@ angular.module('timeSheetApp')
 
 	    $scope.uploadAssetPhotoFile = function() {
 
-        if(!$scope.assetGen.id && !$stateParams.id){
+        if(!$scope.assetVal.id && !$stateParams.id){
 
             $scope.showNotifications('top','center','danger','Please create asset first..');
 
@@ -1873,8 +1887,8 @@ angular.module('timeSheetApp')
 
 	        	$scope.uploadAssetPhoto.uploadFile = $scope.selectedPhotoFile;
 
-                if($scope.assetGen.id){
-                        $scope.uploadAssetPhoto.assetId = $scope.assetGen.id;
+                if($scope.assetVal.id){
+                        $scope.uploadAssetPhoto.assetId = $scope.assetVal.id;
 
                     }else if($stateParams.id){
 
@@ -2049,15 +2063,15 @@ angular.module('timeSheetApp')
 
 	    $scope.saveAmcSchedule = function() {
 
-            if(!$scope.assetGen.id && !$stateParams.id){
+            if(!$scope.assetVal.id && !$stateParams.id){
 
                   $scope.showNotifications('top','center','danger','Please create asset first..');
 
             }else{
 
-                if($scope.assetGen.id){
+                if($scope.assetVal.id){
 
-                    $scope.amcSchedule.assetId= $scope.assetGen.id;
+                    $scope.amcSchedule.assetId= $scope.assetVal.id;
 
                 }else if($stateParams.id){
 
@@ -2145,9 +2159,9 @@ angular.module('timeSheetApp')
 
             var item_ar = [];
 
-            if($scope.assetGen.id){
+            if($scope.assetVal.id){
 
-                    var assetId= $scope.assetGen.id;
+                    var assetId= $scope.assetVal.id;
 
                 }else if($stateParams.id){
 
@@ -2227,13 +2241,39 @@ angular.module('timeSheetApp')
 
         $scope.loadAssetReadings = function() {
             $rootScope.loadingStart();
-        	var id = $stateParams.id;
-        	AssetComponent.findByAssetReadings(id).then(function(data){
+            var redCurrPageVal = ($scope.pages ? $scope.pages.currPage : 1);
+                    if(!$scope.redSearchCriteria) {
+                        var redSearchCriteria = {
+                                currPage : redCurrPageVal
+                        };
+                        $scope.redSearchCriteria = redSearchCriteria;
+                    }
+
+                $scope.redSearchCriteria.currPage = redCurrPageVal;
+                $scope.redSearchCriteria.module = "Readings";
+                $scope.redSearchCriteria.assetId = $stateParams.id;
+            $scope.assetReadings = "";
+        	console.log('Readings search criteria',$scope.redSearchCriteria);
+        	AssetComponent.findByAssetReadings($scope.redSearchCriteria).then(function(data){
                 $rootScope.loadingStop();
         		console.log('View Readings - ' +JSON.stringify(data));
-        		if(data.length > 0) {
-        			$scope.assetReadings = data;
-            		$scope.viewAssetReading(data[0].id);
+        		if(data.transactions.length > 0) {
+        			$scope.assetReadings = data.transactions;
+            		$scope.viewAssetReading(data.transactions[0].id);
+
+
+                 /*
+                ** Call pagination  main function **
+                */
+
+                $scope.pager = {};
+                $scope.pager = PaginationComponent.GetPager(data.totalCount, $scope.pages.currPage);
+                $scope.totalCountPages = data.totalCount;
+
+                console.log("Pagination",$scope.pager);
+                console.log("Readings List - ", data);
+
+
         		}else{
         			console.log('No readings');
         			$scope.noReading = true;
@@ -2262,8 +2302,8 @@ angular.module('timeSheetApp')
             //var deferred = $q.defer();
             if($scope.assetList.siteId){
                var empParam = {siteId:$scope.assetList.siteId,list:true};
-            } else if($scope.assetGen.siteId) {
-                var empParam = {siteId:$scope.assetGen.siteId,list:true};
+            } else if($scope.assetVal.siteId) {
+                var empParam = {siteId:$scope.assetVal.siteId,list:true};
             }
 
             //alert(empParam.siteId);
@@ -2279,26 +2319,69 @@ angular.module('timeSheetApp')
 
         $scope.loadAMCJobs = function() {
             $rootScope.loadingStart();
-        	$scope.searchCriteria.maintenanceType = "AMC";
-        	$scope.searchCriteria.assetId = $stateParams.id;
-        	console.log($scope.searchCriteria);
-        	JobComponent.search($scope.searchCriteria).then(function(data){
+            var amcCurrPageVal = ($scope.pages ? $scope.pages.currPage : 1);
+                    if(!$scope.amcSearchCriteria) {
+                        var amcSearchCriteria = {
+                                currPage : amcCurrPageVal
+                        };
+                        $scope.amcSearchCriteria = amcSearchCriteria;
+                    }
+
+                $scope.amcSearchCriteria.currPage = amcCurrPageVal;
+
+        	$scope.amcSearchCriteria.maintenanceType = "AMC";
+        	$scope.amcSearchCriteria.assetId = $stateParams.id;
+            $scope.amcJobLists = "";
+        	console.log('AMC search criteria',$scope.amcSearchCriteria);
+        	JobComponent.search($scope.amcSearchCriteria).then(function(data){
                 $rootScope.loadingStop();
         		console.log(data);
         		$scope.amcJobLists = data.transactions;
+
+               /*
+                ** Call pagination  main function **
+                */
+
+                $scope.pager = {};
+                $scope.pager = PaginationComponent.GetPager(data.totalCount, $scope.pages.currPage);
+                $scope.totalCountPages = data.totalCount;
         	});
         }
 
         $scope.loadPPMJobs = function() {
                 $rootScope.loadingStart();
+                 var ppmCurrPageVal = ($scope.pages ? $scope.pages.currPage : 1);
+                    if(!$scope.ppmSearchCriteria) {
+                        var ppmSearchCriteria = {
+                                currPage : ppmCurrPageVal
+                        };
+                        $scope.ppmSearchCriteria = ppmSearchCriteria;
+                    }
+
+                $scope.ppmSearchCriteria.currPage = ppmCurrPageVal;
 	        	$scope.ppmSearchCriteria.maintenanceType = "PPM";
 	        	$scope.ppmSearchCriteria.assetId = $stateParams.id;
-	        	console.log($scope.searchCriteria);
+
+	        	console.log('PPM search criteria',$scope.ppmSearchCriteria);
+                $scope.ppmJobLists = "";
 	        	JobComponent.search($scope.ppmSearchCriteria).then(function(data){
                     $rootScope.loadingStop();
 	        		console.log(data);
 	        		$scope.ppmJobLists = data.transactions;
+
+                    /*
+                    ** Call pagination  main function **
+                    */
+
+                $scope.pager = {};
+                $scope.pager = PaginationComponent.GetPager(data.totalCount, $scope.pages.currPage);
+                $scope.totalCountPages = data.totalCount;
+
+                console.log("Pagination",$scope.pager);
+                console.log("PPM Job List - ", data);
+
 	        	});
+
         }
         
         $scope.loadStatus = function() {
@@ -2381,6 +2464,162 @@ angular.module('timeSheetApp')
                 }
 
             }
+
+
+
+    $scope.initFullCalendar = function(eventsData) {
+        var calendar = $('#fullCalendar');
+
+        var today = new Date();
+        var y = today.getFullYear();
+        var m = today.getMonth();
+        var d = today.getDate();
+
+        calendar.fullCalendar({
+            viewRender: function(view, element) {
+                // We make sure that we activate the perfect scrollbar when the view isn't on Month
+                if (view.name != 'month') {
+                    $(element).find('.fc-scroller').perfectScrollbar();
+                }
+            },
+            header: {
+                left: 'title',
+                center: 'month,agendaWeek,agendaDay',
+                right: 'prev,next,today'
+            },
+            defaultDate: today,
+            selectable: true,
+            selectHelper: true,
+            views: {
+                month: { // name of view
+                    titleFormat: 'MMMM YYYY'
+                    // other view-specific options here
+                },
+                week: {
+                    titleFormat: " MMMM D YYYY"
+                },
+                day: {
+                    titleFormat: 'D MMM, YYYY'
+                }
+            },
+
+            select: function(start, end) {
+
+                // on select we show the Sweet Alert modal with an input
+                swal({
+                    title: 'Create an Schedule',
+                    html: '<div class="form-group">' +
+                        '<input type "text" class="form-control" placeholder="Schedule Title" id="input-title">' +
+                        '</div>'+
+                        '<div class="form-group">' +
+                        '<input type "text" class="form-control" placeholder="Schedule Description" id="input-desc" >' +
+                        '</div>'+
+                        '<div class="form-group">' +
+                        '<input type "text" class="form-control" placeholder="DD/MM/YYYY" id="input-fdate" >' +
+                        '</div>'+
+                        '<div class="form-group">' +
+                        '<input type "text" class="form-control" placeholder="DD/MM/YYYY" id="input-tdate" >' +
+                        '</div>'+
+                        '<div class="form-group">' +
+                        '<input type "text" class="form-control" placeholder="Weekly" id="input-frq" >' +
+                        '</div>',
+                    showCancelButton: true,
+                    confirmButtonClass: 'btn btn-success',
+                    cancelButtonClass: 'btn btn-danger',
+                    buttonsStyling: false
+                }).then(function(result) {
+
+                    var eventData;
+                    event_title = $('#input-title').val();
+                    event_desc = $('#input-desc').val();
+                    event_frq = $('#input-frq').val();
+
+                    if (event_title) {
+                        eventData = {
+                            title: event_title,
+                            start: start,
+                            end: end
+                        };
+                        $calendar.fullCalendar('renderEvent', eventData, true); // stick? = true
+                    }
+
+                    $calendar.fullCalendar('unselect');
+
+                });
+            },
+            editable: true,
+            eventLimit: true, // allow "more" link when too many events
+
+
+            // color classes: [ event-blue | event-azure | event-green | event-orange | event-red ]
+
+            events:eventsData,
+
+            /*events: [{
+                    title: 'Vaccum Cleaner',
+                    start: new Date(y, m, 1),
+                    className: 'event-default'
+                },
+                {
+                    id: 999,
+                    title: 'Ac maintenance',
+                    start: new Date(y, m, d - 4, 6, 0),
+                    allDay: false,
+                    className: 'event-rose'
+                }
+              
+            ],*/
+
+            eventClick: function(calEvent, jsEvent, view) {
+
+            //alert('Event: ' + calEvent.title);
+            if(calEvent.start !=''){
+                var d = new Date(calEvent.start);
+                var inputFdate=d.toLocaleString(); // 7/25/2016, 1:35:07 PM
+            }else{
+              var inputFdate= '';
+            }
+            if(calEvent.end !=null){
+               var d = new Date(calEvent.end);
+                var inputTdate=d.toLocaleString(); // 7/25/2016, 1:35:07 PM
+            }else{
+              var d = new Date(calEvent.start);
+              var inputTdate=d.toLocaleString(); // 7/25/2016, 1:35:07 PM
+            }
+
+            swal({
+                    title: 'View schedule',
+                    html: '<div class="form-group">' +
+                        '<input type "readonly" class="form-control" placeholder="Schedule Title" id="input-title" value="'+calEvent.title+'">' +
+                        '</div>'+
+                        '<div class="form-group">' +
+                        '<input type "readonly" class="form-control" placeholder="Schedule Description" id="input-desc" >' +
+                        '</div>'+
+                        '<div class="form-group">' +
+                        '<input type "readonly" class="form-control" placeholder="DD/MM/YYYY" id="input-fdate" value="'+inputFdate+'" >' +
+                        '</div>'+
+                        '<div class="form-group">' +
+                        '<input type "readonly" class="form-control" placeholder="DD/MM/YYYY" id="input-tdate" value="'+inputTdate+'">' +
+                        '</div>'+
+                        '<div class="form-group">' +
+                        '<input type "readonly" class="form-control" placeholder="Weekly" id="input-frq" value="">' +
+                        '</div>',
+                    showCancelButton: true,
+                    confirmButtonClass: 'btn btn-success',
+                    cancelButtonClass: 'btn btn-danger',
+                    buttonsStyling: false
+                });
+
+            // change the border color just for fun
+            $(this).css('border-color', 'red');
+
+          }
+
+
+        });
+    }
+
+
 
 
     });

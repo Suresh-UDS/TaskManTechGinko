@@ -65,6 +65,8 @@ public class QuotationDTO extends BaseDTO implements Serializable {
     private MultipartFile quotationFile;
     
     private String quotationFileName;
+    
+    private String url;
 
 	public String getQuotationFileName() {
 		return quotationFileName;
@@ -290,4 +292,12 @@ public class QuotationDTO extends BaseDTO implements Serializable {
     public void setJobId(long jobId) {
         this.jobId = jobId;
     }
+
+	public String getUrl() {
+		return url;
+	}
+
+	public void setUrl(String url) {
+		this.url = url;
+	}
 }

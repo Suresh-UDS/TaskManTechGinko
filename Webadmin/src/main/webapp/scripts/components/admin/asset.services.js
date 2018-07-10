@@ -235,7 +235,7 @@ angular.module('timeSheetApp')
             	});
             },
             getPPMScheduleCalendar : function(assetId,searchCriteria) {
-                return $http.post('api/assets/'+assetId+'/ppmschedule/calendar').then(function(response){
+                return $http.post('api/assets/'+assetId+'/ppmschedule/calendar',searchCriteria).then(function(response){
                     return response.data;
                 });
             },
@@ -271,8 +271,8 @@ angular.module('timeSheetApp')
             	});
             },
 
-            findByAssetReadings : function(id) {
-            	return $http.get('api/assets/'+id+'/viewAssetReadings').then(function(response) {
+            findByAssetReadings : function(searchCriteria) {
+            	return $http.post('api/assets/viewAssetReadings', searchCriteria).then(function(response) {
             		return response.data;
             	});
             },

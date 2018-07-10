@@ -34,7 +34,7 @@
                                                    <!---->
                                                 <!--</div>-->
                                                 <div class="wizard-navigation" >
-                                                    <div  ng-class="!assetGen.id ? 'OverlayBx' : ''" ></div>
+                                                    <div  ng-class="!assetVal.id ? 'OverlayBx' : ''" ></div>
                                                     <ul class="arrow-steps" >
                                                         <li class="step active">
                                                             <a href=".general" data-toggle="tab" >General</a>
@@ -1999,7 +1999,7 @@
                                                     </div>
                                                 </div>
 
-                                                <div class="wizard-footer"  ng-show="assetGen.id">
+                                                <div class="wizard-footer"  ng-show="assetVal.id">
                                                     <div class="pull-right">
                                                         <input type='button' class='btn btn-next btn-fill btn-default btn-wd' name='next' value='Next'  />
                                                         <!-- <input type='button' class='btn btn-finish btn-fill btn-success btn-wd' name='finish' value='Finish' /> -->
@@ -2021,7 +2021,7 @@
                                 <div class="row" >
 
                                     <div class="col-sm-offset-8 col-sm-4 txt-align-rgt">
-                                        <button class="btn btn-success" type="submit" ng-hide="assetGen.id"
+                                        <button class="btn btn-success" type="submit" ng-hide="assetVal.id"
                                                 id="form-button-save" ng-disabled="form.$invalid || btnDisabled" ng-click="saveAsset()" >
                                                     <span class="btn-label">
                                             				<i class="material-icons">check</i>
