@@ -99,7 +99,7 @@ public class AssetSpecification implements Specification<Asset> {
 		
 		predicates.add(builder.equal(root.get("active"), "Y"));
 
-		query.orderBy(builder.desc(root.get("title")));
+		query.orderBy(builder.desc(root.get("createdDate")));
 
 		List<Predicate> orPredicates = new ArrayList<>();
 		log.debug("AssetSpecification toPredicate - searchCriteria userId -" + searchCriteria.getUserId());
