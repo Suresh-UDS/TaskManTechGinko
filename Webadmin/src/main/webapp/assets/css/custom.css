@@ -529,7 +529,7 @@ textarea.form-control {
  {
    padding-top:20px;
  }
-.DocsCon:hover .DeleteBtn
+.DocsCon:hover .DeleteBtn,.DocsCon:hover .DownloadBtn
 {
 	display:block;
 }
@@ -544,6 +544,7 @@ textarea.form-control {
     top: -18px;
     display:none;
     transition: all 1s ease;
+    z-index: 18;
 }
 .DeleteBtn i
 {
@@ -551,6 +552,24 @@ textarea.form-control {
     font-size: 18px;
     cursor:pointer;
     padding-top: 5px;
+}
+
+.DownloadBtn
+{
+    position: absolute;
+    width: 80px;
+    height: 80px;
+    right: 26%;
+    top: 0;
+    background: #ffffffd6;
+    z-index: 14;
+    display:none;
+}
+.DownloadBtn i
+{
+    padding-top: 9px;
+    font-size: 40px;
+    cursor:pointer;
 }
 
 /*End Checklist css */
@@ -1269,7 +1288,7 @@ a.cal-btn i
     font-size: 30px !important;
 }
   .pageCenter{
-      top: calc(100% / 5);
+      top: calc(200% / 5);
       left: calc(100% / 2.3);
       z-index: 100000;
       position: absolute;
@@ -1298,15 +1317,14 @@ a.cal-btn i
      padding-left: 0px !important;
   }
   .overlay{
-    background: rgba(255,255,255,0.3);
+    background: rgba(255,255,255,0.5);
     width: 100%;
-    height: 100%;
+    height: 200%;
     position: absolute;
     top: 0;
     left: 0;
     z-index: 10000;
     display: none;
-
   }
   .timeline:before {
   background:none !important;

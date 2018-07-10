@@ -593,6 +593,9 @@
                                                           <a  ng-class="{active: $state.includes('admin')}"  has-permission="" ui-sref=""  class="btn btn-simple btn-danger"><i class="material-icons">delete_forever</i></a>
                                                       </td> -->
                                                   </tr>
+                                                  <tr>
+                                                     <td colspan="7" align="center" ng-show="!ppmScheduleList">No PPM Schedules Found</td>
+                                                  </tr>
 
                                                   </tbody>
                                               </table>
@@ -681,6 +684,9 @@
                                                                     <a  ng-class="{active: $state.includes('admin')}"  has-permission="" ui-sref=""  class="btn btn-simple btn-danger"><i class="material-icons">delete_forever</i></a>
                                                                 </td> -->
                                                             </tr>
+                                                            <tr>
+                                                               <td colspan="7" align="center" ng-show="!amcScheduleList">No PPM Schedules Found</td>
+                                                            </tr>
 
                                                             </tbody>
                                                         </table>
@@ -703,6 +709,12 @@
                                                           <div class="DeleteBtn" ng-click="deleteConfirmDoc(uploadFile.id)"  onClick="$('#deleteModal').modal()" data-target="#myModal">
                                                              <i class="material-icons">close</i>
                                                            </div>
+                                                           <div class="DownloadBtn">
+                                                             <a href="{{uploadFile.url}}" id="loop">
+                                                               <i class="material-icons">cloud_download</i>
+                                                             </a>
+                                                           </div>
+
                                                            <a href="#"  ng-click="">
                                                                <img src="assets/img/{{uploadFile.extension}}.png" alt="docs"/>
                                                            </a>
@@ -736,6 +748,11 @@
                                                             <div class="DeleteBtn" ng-click="deleteConfirmDoc(uploadPhoto.id)"  onClick="$('#deleteModal').modal()" data-target="#myModal">
                                                                <i class="material-icons">close</i>
                                                              </div>
+                                                            <div class="DownloadBtn">
+                                                              <a href="{{uploadPhoto.url}}" id="loop">
+                                                                <i class="material-icons">cloud_download</i>
+                                                              </a>
+                                                            </div>
                                                             <a href="#" ng-click="">
                                                                 <!-- <img src="D:\asset\uploads\site\{{uploadPhoto.id}}\{{uploadPhoto.file}}" alt="docs" /> -->
                                                                 <img src="assets/img/{{uploadPhoto.extension}}.png" alt="docs" />
@@ -823,6 +840,9 @@
                                                                            <a  has-permission="" ui-sref="" class="btn btn-simple btn-danger" disabled><i class="material-icons">delete_forever</i><div class="ripple-container"></div></a>
                                                                        </td>
 
+                                                                   </tr>
+                                                                   <tr>
+                                                                     <td colspan="7" align="center" ng-show="!assetParameters">No asset param Found</td>
                                                                    </tr>
 
                                                                    </tbody>

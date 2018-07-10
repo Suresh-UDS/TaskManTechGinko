@@ -994,7 +994,7 @@
 
                                                                         </div>
                                                                     </div>
-                                                                    <div class="col-md-4" ng-init="loadCheckList()">
+                                                                    <div class="col-md-4" ng-init="loadCheckList();">
                                                                         <div class="form-group selectcon is-empty SelectWithAddbtnCon">
                                                                             <div class="row">
                                                                                 <div class="col-md-10 pad-r-0px">
@@ -1255,6 +1255,9 @@
                                                                         <!--&lt;!&ndash;<a  ng-class="{active: $state.includes('admin')}"  has-permission="" ui-sref=""  class="btn btn-simple btn-danger"><i class="material-icons">delete_forever</i></a>&ndash;&gt;-->
                                                                     <!--</td>-->
 
+                                                                </tr>
+                                                                <tr>
+                                                                <td colspan="7" align="center" ng-show="!ppmScheduleList">No PPM Schedules Found</td>
                                                                 </tr>
 
                                                                 </tbody>
@@ -1579,6 +1582,9 @@
                                                                 <!--</td>-->
 
                                                             </tr>
+                                                            <tr>
+                                                               <td colspan="7" align="center" ng-show="!amcScheduleList">No AMC Schedules Found</td>
+                                                            </tr>
 
                                                             </tbody>
                                                         </table>
@@ -1897,6 +1903,9 @@
                                                                                         <a  has-permission="Config:Delete" ui-sref="" class="btn btn-simple btn-danger" ng-click="deleteConfigConfirm(assetParam.id)"><i class="material-icons" onClick="$('#deleteModalConfig').modal()" data-target="#myModal">delete_forever</i><div class="ripple-container"></div></a>
                                                                                     </td>
 
+                                                                                </tr>
+                                                                                <tr>
+                                                                                   <td colspan="7" align="center" ng-show="!assetParameters">No asset param Found</td>
                                                                                 </tr>
 
                                                                             </tbody>

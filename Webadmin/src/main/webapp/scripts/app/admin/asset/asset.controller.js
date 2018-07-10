@@ -267,7 +267,7 @@ angular.module('timeSheetApp')
 
                 console.log("To be create PPM",$scope.assetPPM);
 
-                $rootScope.loadingStart();
+                $sope.loadingStart();
 
             	AssetComponent.createPPM($scope.assetPPM).then(function(response) {
 
@@ -293,7 +293,7 @@ angular.module('timeSheetApp')
 
                     $scope.loadPPMSchedule();
                     $scope.loadSiteShifts();
-                    $scope.loadingStop();
+                   
 
                 }).catch(function (response) {
                     $scope.success = null;
@@ -511,7 +511,10 @@ angular.module('timeSheetApp')
             		SiteComponent.findShifts($scope.selectedSites.id).then(function(data){
             			$scope.shifts = data;
                         console.log('selected shifts - ' + JSON.stringify($scope.shifts));
-            		});
+                        //$scope.loadingStop();
+            		}).catch(function(){
+                        //$scope.loadingStop();
+                    });
         		}
         }
         
@@ -575,7 +578,7 @@ angular.module('timeSheetApp')
 
                 //$scope.genQrCodes();
 
-                $rootScope.loadingStop();
+                $scope.loadingStop();
 
                 //$scope.assetConfig();
 
@@ -852,6 +855,7 @@ angular.module('timeSheetApp')
 
 
         $scope.assetConfig=function(){
+            $scope.loadingStart();
 
             if($stateParams.id){
                if($scope.assetDetail.assetType){
@@ -872,12 +876,14 @@ angular.module('timeSheetApp')
                console.log("Asset Config load" ,$scope.assetConfigs);
 
                     AssetComponent.findByAssetConfig($scope.assetConfigs).then(function(data){
-
+                        
                         console.log(data);
                         $scope.assetParameters = data;
 
+                        $scope.loadingStop();
 
                     }).catch(function(){
+                $scope.loadingStop();
                 $scope.showNotifications('top','center','danger','Error load asset config list. Please try again later..');
                 $scope.error = 'ERROR';
             });
@@ -887,7 +893,7 @@ angular.module('timeSheetApp')
 
         $scope.getParameterConfigDetails = function(id, mode) {
                 $rootScope.loadPageTop();
-                $rootScope.loadingStart();
+                $scope.loadingStart();
                 $scope.isEdit = (mode == 'edit' ? true : false)
             AssetComponent.getAssetParamConfig(id).then(function (data) {
                 $scope.parameterConfig = data;
@@ -906,7 +912,7 @@ angular.module('timeSheetApp')
 
             }).catch(function(response){
                  $scope.showNotifications('top','center','danger','Error load asset config. Please try again later..');
-                $rootScope.loadingStop();
+                $scope.loadingStop();
                
             });
         };
@@ -976,7 +982,7 @@ angular.module('timeSheetApp')
          /* Create and save asset */
 
         $scope.saveAsset = function () {
-                $rootScope.loadingStart();
+                $scope.loadingStart();
                 $scope.btnDisabled = true;
                 $scope.error = null;
                 $scope.success = null;
@@ -1007,7 +1013,7 @@ angular.module('timeSheetApp')
                         $scope.assetVal.id=response.id;
                         $scope.assetVal.siteId=response.siteId;
                         $scope.success = 'OK';
-                        $rootScope.loadingStop();
+                        $scope.loadingStop();
                         $scope.showNotifications('top','center','success','Asset has been added Successfully!!');
                         $scope.loadEmployees();
                         $scope.btnDisabled= false;
@@ -1015,7 +1021,7 @@ angular.module('timeSheetApp')
                         //$location.path('/assets');
 
                     }).catch(function (response) {
-                        $rootScope.loadingStop();
+                        $scope.loadingStop();
                         $scope.btnDisabled= false;
                         $scope.success = null;
                         console.log('Error - '+ response.data);
@@ -1039,7 +1045,7 @@ angular.module('timeSheetApp')
 
        $scope.createQrCode= function(){
         
-        $rootScope.loadingStart();
+        $scope.loadingStart();
 
         if(!$scope.assetVal.id && !$stateParams.id){
 
@@ -1065,9 +1071,10 @@ angular.module('timeSheetApp')
                 $scope.qr_img = response.url;
                 $scope.assetCode = response.code;
 //             console.log('create qr---',qrAry);
-             $rootScope.loadingStop();
+             $scope.loadingStop();
                 //$scope.genQrCodes();
             }).catch(function(){
+                $scope.loadingStop();
                 $scope.showNotifications('top','center','danger','Error in create Qr. Please try again later..');
                 $scope.error = 'ERROR';
             });
@@ -1080,7 +1087,7 @@ angular.module('timeSheetApp')
 
        $scope.genQrCodes= function(){
 
-        $rootScope.loadingStart();
+        $scope.loadingStart();
 
               if($stateParams.id){
 
@@ -1101,12 +1108,12 @@ angular.module('timeSheetApp')
 	             $scope.assetCode = response.code;
 	             console.log('get qr---',response);
 	
-	             $rootScope.loadingStop();
+	             $scope.loadingStop();
 
             });
             /*.catch(function(){
                 $scope.showNotifications('top','center','danger','Error to retrieve  qr code..');
-                $rootScope.loadingStop();
+                $scope.loadingStop();
             });*/
 
        }
@@ -1120,7 +1127,7 @@ angular.module('timeSheetApp')
        /* Update and save asset */
 
         $scope.updateAsset = function () {
-            $rootScope.loadingStart();
+            $scope.loadingStart();
         	$scope.error = null;
             $scope.success =null;
         	$scope.btnDisabled =true;
@@ -1200,7 +1207,7 @@ angular.module('timeSheetApp')
         	AssetComponent.update($scope.assetEdit).then(function () {
 
                 $scope.success = 'OK';
-                $rootScope.loadingStop();
+                $scope.loadingStop();
                 $scope.btnDisabled =false;
                  $scope.showNotifications('top','center','success','Asset has been updated Successfully!!');
                  //$scope.loadAssets();
@@ -1434,6 +1441,8 @@ angular.module('timeSheetApp')
 
 
         $scope.loadPPMSchedule = function() {
+            
+            $scope.loadingStart();
 
             var item_ar = [];
 
@@ -1448,7 +1457,7 @@ angular.module('timeSheetApp')
 
             AssetComponent.findByAssetPPM(assetId).then(function(data) {
 
-
+            
                 $scope.ppmScheduleList = data;
 
                 for(var i = 0;i < $scope.ppmScheduleList.length;i++){
@@ -1489,6 +1498,10 @@ angular.module('timeSheetApp')
                 }
 
                 console.log("PPM List" , $scope.ppmScheduleList);
+                $scope.loadingStop();
+            }).catch(function(){
+                 $scope.loadingStop();
+                 $scope.showNotifications('top','center','danger','Error in PPM schedule list. Please try again later..');
             });
         }
 
@@ -1674,7 +1687,7 @@ angular.module('timeSheetApp')
 
 
 	    $scope.saveAssetParamConfig = function () {
-            $scope.loadingStart;
+             $scope.loadingStart();
             $scope.btnDisabled = true;
         	$scope.error = null;
         	$scope.success =null;
@@ -1767,11 +1780,11 @@ angular.module('timeSheetApp')
                     $scope.consumptionMonitoringRequired = "";
                     $scope.selectedParameterUOM = {};
                     $scope.selectedParameter = {};
-                    $rootScope.loadingStop();
+                    $scope.loadingStop();
 
                     //$scope.loadAllParameters();
                 }).catch(function (response) {
-                    $rootScope.loadingStop();
+                    $scope.loadingStop();
                     $scope.success = null;
                     console.log('Error - '+ response.data);
                     if (response.status === 400 && response.data.message === 'error.duplicateRecordError') {
@@ -2136,7 +2149,7 @@ angular.module('timeSheetApp')
 		
 		    	    	console.log("To be create AMC schedule",$scope.amcSchedule);
 		
-		                 $rootScope.loadingStart();
+		                 $scope.loadingStart();
 		
 		    	    	AssetComponent.saveAmcSchedule($scope.amcSchedule).then(function(data){
 		    	    		console.log(data);
@@ -2158,13 +2171,13 @@ angular.module('timeSheetApp')
 		
 		                        $("#dateFilterAmcFrom").val("");
 		                        $("#dateFilterAmcTo").val("");
-		                        $rootScope.loadingStop();
+		                       
 		
 		
 		    	    		}
 		    	    	}).catch(function (response) {
 	
-	                    $rootScope.loadingStop();
+	                    $scope.loadingStop();
 	
 	                if (response.status === 400 && response.data.message === 'error.duplicateRecordError') {
 	                    $scope.errorProjectExists = 'ERROR';
@@ -2183,7 +2196,7 @@ angular.module('timeSheetApp')
 
 	    $scope.loadAmcSchedule = function() {
 
-            $rootScope.loadingStart();
+            $scope.loadingStart();
 
             var item_ar = [];
 
@@ -2198,7 +2211,7 @@ angular.module('timeSheetApp')
 
 	    	AssetComponent.findByAssetAMC(assetId).then(function(data) {
 
-                $rootScope.loadingStop();
+                $scope.loadingStop();
 
 	    		//console.log(data);
 
@@ -2229,6 +2242,9 @@ angular.module('timeSheetApp')
 
                            }
 
+                   }).catch(function(){
+                       $scope.loadingStop();
+                       $scope.showNotifications('top','center','danger','Error in  AMC schedule list. Please try again later..');
                    });
 
 
@@ -2346,7 +2362,7 @@ angular.module('timeSheetApp')
         }
 
         $scope.loadAMCJobs = function() {
-            $rootScope.loadingStart();
+            $scope.loadingStart();
             var amcCurrPageVal = ($scope.pages ? $scope.pages.currPage : 1);
                     if(!$scope.amcSearchCriteria) {
                         var amcSearchCriteria = {
@@ -2362,7 +2378,7 @@ angular.module('timeSheetApp')
             $scope.amcJobLists = "";
         	console.log('AMC search criteria',$scope.amcSearchCriteria);
         	JobComponent.search($scope.amcSearchCriteria).then(function(data){
-                $rootScope.loadingStop();
+                $scope.loadingStop();
         		console.log(data);
         		$scope.amcJobLists = data.transactions;
 
@@ -2373,11 +2389,14 @@ angular.module('timeSheetApp')
                 $scope.pager = {};
                 $scope.pager = PaginationComponent.GetPager(data.totalCount, $scope.pages.currPage);
                 $scope.totalCountPages = data.totalCount;
-        	});
+        	}).catch(function(){
+                 $scope.loadingStop();
+                 $scope.showNotifications('top','center','danger','Error in loading AMC jobs. Please try again later..');
+            });
         }
 
         $scope.loadPPMJobs = function() {
-                $rootScope.loadingStart();
+                $scope.loadingStart();
                  var ppmCurrPageVal = ($scope.pages ? $scope.pages.currPage : 1);
                     if(!$scope.ppmSearchCriteria) {
                         var ppmSearchCriteria = {
@@ -2408,7 +2427,10 @@ angular.module('timeSheetApp')
                 console.log("Pagination",$scope.pager);
                 console.log("PPM Job List - ", data);
 
-	        	});
+	        	}).catch(function(){
+                    $scope.showNotifications('top','center','danger','Error in Loading PPM Jobs. Please try again later..');
+                    $scope.loadingStop();
+                });
 
         }
         
