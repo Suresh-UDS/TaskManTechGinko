@@ -246,7 +246,7 @@
                                                                                     <div class="form-group">
                                                                                         <label class="control-label">Site   <span class="red-star">*</span> </label>
                                                                                         <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                                                                        <select class="form-control " ng-model="selectedSites"  ng-options="site as site.name for site in sites track by site.id" ng-change="loadBlocks();loadEmployees();" name="AssetSite" required>
+                                                                                        <select class="form-control " ng-model="selectedSites"  ng-options="site as site.name for site in sites track by site.id"  onclick="$('#siteChangeModalConfig').modal()" data-target="#myModal"  name="AssetSite" required>
                                                                                             <option value="">Select Site ...</option>
                                                                                         </select>
 
@@ -2108,6 +2108,9 @@
                                                                    <div class="DeleteBtn" ng-click="deleteConfirmDoc(uploadFile.id)"  onClick="$('#deleteModal').modal()" data-target="#myModal">
                                                                      <i class="material-icons">close</i>
                                                                  </div>
+                                                                   <div class="DownloadBtn">
+                                                                       <i class="material-icons">cloud_download</i>
+                                                                   </div>
                                                                    <a href="{{uploadFile.url}}" id="loop">
                                                                        <img src="assets/img/{{uploadFile.extension}}.png" alt="docs" title="Download"  />
                                                                    </a>
@@ -2141,6 +2144,9 @@
                                                                     <div class="DeleteBtn" ng-click="deleteConfirmDoc(uploadPhoto.id)"  onClick="$('#deleteModal').modal()" data-target="#myModal">
                                                                          <i class="material-icons">close</i>
                                                                      </div>
+                                                                    <div class="DownloadBtn">
+                                                                        <i class="material-icons">cloud_download</i>
+                                                                    </div>
                                                                     <a href="{{uploadPhoto.url}}" id="loop2">
                                                                         <!-- <img src="D:\asset\uploads\site\{{uploadPhoto.id}}\{{uploadPhoto.file}}" alt="docs" ng-click="showFile(uploadPhoto.id, uploadPhoto.file)"/> -->
                                                                         <img src="assets/img/{{uploadPhoto.extension}}.png" alt="docs" title="Download" />
@@ -2692,6 +2698,30 @@
                 <div class="delete-footer">
                     <button type="button" ng-click="deleteAssetConfig()"
                         class="btn btn-danger text-danger" data-dismiss="modal">Confirm</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<!-- Site change confirmation dialog -->
+
+<div class="row">
+
+    <div id="siteChangeModalConfig" data-backdrop="false" class="modal fade"
+        tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+        aria-hidden="true">
+        <div class="delete-dialog">
+            <div class="modal-content">
+                <div class="modal-body">
+                    Please confirm the site transfer. The schedules and jobs will be moved to the newly selected site.<br>
+                </div>
+                <div class="delete-footer">
+                    <button type="button" ng-click="siteChangeAssetConfig()"
+                        class="btn btn-danger-outline text-danger" data-dismiss="modal">Confirm</button>
                     <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
 
                 </div>

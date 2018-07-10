@@ -27,7 +27,7 @@
                                        <li class=""><a href=".ppm-schedule" data-toggle="tab"
                                                        ng-click="loadPPMSchedule()">PPM Schedule</a></li>
                                        <li class=""><a href=".amc-schedule" data-toggle="tab" ng-click="loadAmcSchedule()"
-                                                       >AMC schedule</a></li>
+                                                       >Vendor Management</a></li>
                                        <li class=""><a href=".Config" data-toggle="tab"
                                        ng-click="assetConfig()">Config</a></li>
 
@@ -152,7 +152,7 @@
                                                                <table class="table">
                                                                    <tbody>
                                                                    <tr>
-                                                                       <td>Manufactururer </td>
+                                                                       <td>Manufacturer </td>
                                                                        <td>{{assetDetail.manufacturerName}}</td>
                                                                    </tr>
                                                                    <tr>
@@ -655,6 +655,7 @@
                                                             <thead>
                                                             <tr>
                                                                 <th width="15%">Title</th>
+                                                                <th width="15%">Maintenance Type</th>
                                                                 <th width="30%">Checklist</th>
                                                                 <th>From Date</th>
                                                                 <th>To Date</th>
@@ -668,6 +669,7 @@
 
                                                             <tr ng-repeat="amcSchedule in amcScheduleList">
                                                                 <td>{{amcSchedule.title}}</td>
+                                                                <td>{{amcSchedule.maintenanceType}}</td>
                                                                 <td>{{amcSchedule.checklistName}}</td>
                                                                 <!-- <td>
                                                                     <div class="bootstrap-tagsinput">
@@ -1013,7 +1015,7 @@
                     </div>
                     <div class="delete-footer">
                         <button type="button" ng-click="deleteDoc()"
-                            class="btn btn-danger-outline text-danger" data-dismiss="modal">Confirm</button>
+                            class="btn btn-danger text-danger" data-dismiss="modal">Confirm</button>
                         <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
 
                     </div>

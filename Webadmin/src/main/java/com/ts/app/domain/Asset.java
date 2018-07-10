@@ -49,7 +49,7 @@ public class Asset extends AbstractAuditingEntity implements Serializable {
     @Size(min = 1, max = 2500)
     private String description;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "siteId", nullable = false)
     private Site site;
     

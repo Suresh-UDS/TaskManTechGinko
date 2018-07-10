@@ -1912,7 +1912,7 @@
                                                                                        <button class="btn btn-success" tabindex="0" ng-click="uploadAssetPhotoFile()"  ng-disabled="importClientForm1.$invalid || imgNotValid || imgSizeHigh">
                                                                                     <span class="btn-label">
                                                                                         <i class="material-icons">file_upload</i>
-                                                                                    </span>Upload Docs
+                                                                                    </span>Upload Photos
                                                                                        </button>
 
                                                                                    </div>
@@ -1952,6 +1952,9 @@
                                                                          <div class="DeleteBtn" ng-click="deleteConfirmDoc(uploadFile.id)"  onClick="$('#deleteModal').modal()" data-target="#myModal">
                                                                              <i class="material-icons">close</i>
                                                                          </div>
+                                                                           <div class="DownloadBtn">
+                                                                               <i class="material-icons">cloud_download</i>
+                                                                           </div>
                                                                        <a href="{{uploadFile.url}}" id="loop">
                                                                            <img src="assets/img/{{uploadFile.extension}}.png" alt="docs" title="Download"/>
                                                                            <!-- <img src="assets/img/Docs-icon.png" alt="docs" /> -->
@@ -1987,6 +1990,9 @@
                                                                         <div class="DeleteBtn" ng-click="deleteConfirmDoc(uploadPhoto.id)"  onClick="$('#deleteModal').modal()" data-target="#myModal">
                                                                         	 <i class="material-icons">close</i>
                                                                          </div>
+                                                                        <div class="DownloadBtn">
+                                                                            <i class="material-icons">cloud_download</i>
+                                                                        </div>
                                                                         <a href="{{uploadPhoto.url}}" id="loop2">
                                                                             <!-- <img src="D:\asset\uploads\site\{{uploadPhoto.id}}\{{uploadPhoto.file}}" alt="docs" /> -->
                                                                             <img src="assets/img/{{uploadFile.extension}}.png" alt="docs" title="Download"/>

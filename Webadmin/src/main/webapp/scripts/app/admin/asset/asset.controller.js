@@ -1118,6 +1118,12 @@ angular.module('timeSheetApp')
 
        }
 
+       $scope.updateSite = function(selectedSite) {
+    	   		$scope.selectedSites = selectedSite;
+    	   
+       }
+       
+       
        /* Update and save asset */
 
         $scope.updateAsset = function () {
@@ -1137,8 +1143,8 @@ angular.module('timeSheetApp')
                 }else{
                     $scope.assetEdit.assetGroup = $scope.assetList.assetGroup;
                 }
-                if($scope.selectedSite){
-                   $scope.assetEdit.siteId = $scope.selectedSite.id;
+                if($scope.selectedSites){
+                   $scope.assetEdit.siteId = $scope.selectedSites.id;
                 }else{
                     $scope.assetEdit.siteId = $scope.assetList.siteId;
                 }
@@ -1647,14 +1653,19 @@ angular.module('timeSheetApp')
         }
 
         $scope.deleteAssetConfig = function(id) {
-            $scope.loadingStart();
-        	AssetComponent.deleteConfigById($scope.deleteParamConId).then(function(data){
-        		console.log(data);
-        		$scope.assetParameters = data;
-                $scope.assetConfig();
-                $scope.loadingStop();
-        		
-        	});
+            $rootScope.loadingStart();
+	        	AssetComponent.deleteConfigById($scope.deleteParamConId).then(function(data){
+	        		console.log(data);
+	        		$scope.assetParameters = data;
+	                $scope.assetConfig();
+	                $rootScope.loadingStop();
+	        		
+	        	});
+        }
+        
+        $scope.siteChangeAssetConfig = function() {
+        		$scope.loadBlocks();
+        		$scope.loadEmployees();
         }
 
         $scope.loadAllParameters = function() {
