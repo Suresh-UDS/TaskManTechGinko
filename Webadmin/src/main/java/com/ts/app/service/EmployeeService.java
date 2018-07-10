@@ -149,7 +149,7 @@ public class    EmployeeService extends AbstractService {
 
     @Inject
     private UserRoleService userRoleService;
-    
+
     @Inject
     private EmployeeShiftRepository employeeShiftRepository;
 
@@ -342,7 +342,7 @@ public class    EmployeeService extends AbstractService {
 		employee = mapperUtil.toModel(employeeUpdate, EmployeeDTO.class);
 		return employee;
 	}
-	
+
 	public void updateEmployeeShifts(List<EmployeeShiftDTO> employeeShifts) {
 		if(CollectionUtils.isNotEmpty(employeeShifts)) {
 			for(EmployeeShiftDTO empShiftDto : employeeShifts) {
@@ -350,7 +350,7 @@ public class    EmployeeService extends AbstractService {
 			}
 		}
 	}
-	
+
 	public EmployeeShiftDTO updateEmployeeShift(EmployeeShiftDTO employeeShift) {
 		log.debug("Inside Employee Shift Update");
 		EmployeeShift employeeShiftUpdate = employeeShiftRepository.findOne(employeeShift.getId());
@@ -375,7 +375,7 @@ public class    EmployeeService extends AbstractService {
         employeeRepository.save(employeeUpdate);
 		//employeeRepository.delete(employeeUpdate);
 	}
-	
+
 	public void deleteEmployeeShift(long id) {
 		log.debug("Inside Employee Shift Delete");
 		EmployeeShift employeeShiftUpdate = employeeShiftRepository.findOne(id);
@@ -717,6 +717,9 @@ public class    EmployeeService extends AbstractService {
                 }else{
                     log.debug("Employee checked false "+result.size());
                     empDto.setCheckedIn(false);
+                    empDto.setSiteName(CollectionUtils.isNotEmpty(emp.getProjectSites()) ? emp.getProjectSites().get(0).getSite().getName() : "");
+                    empDto.setSiteId(CollectionUtils.isNotEmpty(emp.getProjectSites()) ? emp.getProjectSites().get(0).getSite().getId() : "");
+
                 }
                 employeeDtos.add(empDto);
 
@@ -968,7 +971,7 @@ public class    EmployeeService extends AbstractService {
 		}
 		return result;
 	}
-	
+
 	public SearchResult<EmployeeShiftDTO> findEmpShiftBySearchCriteria(SearchCriteria searchCriteria) {
 		User user = userRepository.findOne(searchCriteria.getUserId());
 		SearchResult<EmployeeShiftDTO> result = new SearchResult<EmployeeShiftDTO>();
@@ -1001,7 +1004,7 @@ public class    EmployeeService extends AbstractService {
 			java.sql.Timestamp startDate = DateUtil.convertToTimestamp(startCal.getTime());
 			java.sql.Timestamp toDate = DateUtil.convertToTimestamp(endCal.getTime());
 
-			
+
 			log.debug("findBySearchCriteria - "+searchCriteria.getSiteId() +", "+searchCriteria.getEmployeeId() +", "+searchCriteria.getProjectId());
 
 			boolean isClient = false;
@@ -1066,7 +1069,7 @@ public class    EmployeeService extends AbstractService {
 		result.setTransactions(transactions);
 		return;
 	}
-	
+
 	private void buildEmployeeShiftSearchResult(SearchCriteria searchCriteria, Page<EmployeeShift> page, List<EmployeeShiftDTO> transactions, SearchResult<EmployeeShiftDTO> result) {
 		if(page != null) {
 			result.setTotalPages(page.getTotalPages());
@@ -1132,17 +1135,17 @@ public class    EmployeeService extends AbstractService {
     		empDto.setClient(employee.isClient());
     		return empDto;
     }
-    
+
     private EmployeeShiftDTO mapToModel(EmployeeShift employeeShift) {
 		EmployeeShiftDTO empShiftDto = new EmployeeShiftDTO();
 		empShiftDto.setId(employeeShift.getId());
 		empShiftDto.setEmployeeId(employeeShift.getEmployee().getId());
 		empShiftDto.setEmployeeEmpId(employeeShift.getEmployee().getEmpId());
 		empShiftDto.setEmployeeFullName(employeeShift.getEmployee().getFullName());
-		Calendar startCal = Calendar.getInstance(TimeZone.getTimeZone("Asia/Kolkata"));  
+		Calendar startCal = Calendar.getInstance(TimeZone.getTimeZone("Asia/Kolkata"));
 		startCal.setTimeInMillis(employeeShift.getStartTime().getTime());
 		empShiftDto.setStartTime(startCal.getTime());
-		Calendar endCal = Calendar.getInstance(TimeZone.getTimeZone("Asia/Kolkata"));  
+		Calendar endCal = Calendar.getInstance(TimeZone.getTimeZone("Asia/Kolkata"));
 		endCal.setTimeInMillis(employeeShift.getEndTime().getTime());
 		empShiftDto.setEndTime(endCal.getTime());
 		empShiftDto.setSiteId(employeeShift.getSite().getId());
