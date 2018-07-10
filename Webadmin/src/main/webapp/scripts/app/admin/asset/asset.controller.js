@@ -1602,13 +1602,18 @@ angular.module('timeSheetApp')
 
         $scope.deleteAssetConfig = function(id) {
             $rootScope.loadingStart();
-        	AssetComponent.deleteConfigById($scope.deleteParamConId).then(function(data){
-        		console.log(data);
-        		$scope.assetParameters = data;
-                $scope.assetConfig();
-                $rootScope.loadingStop();
-        		
-        	});
+	        	AssetComponent.deleteConfigById($scope.deleteParamConId).then(function(data){
+	        		console.log(data);
+	        		$scope.assetParameters = data;
+	                $scope.assetConfig();
+	                $rootScope.loadingStop();
+	        		
+	        	});
+        }
+        
+        $scope.siteChangeAssetConfig = function() {
+        		$scope.loadBlocks();
+        		$scope.loadEmployees();
         }
 
         $scope.loadAllParameters = function() {

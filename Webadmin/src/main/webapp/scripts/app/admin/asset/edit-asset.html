@@ -246,7 +246,7 @@
                                                                                     <div class="form-group">
                                                                                         <label class="control-label">Site   <span class="red-star">*</span> </label>
                                                                                         <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                                                                        <select class="form-control " ng-model="selectedSites"  ng-options="site as site.name for site in sites track by site.id" ng-change="loadBlocks();loadEmployees();" name="AssetSite" required>
+                                                                                        <select class="form-control " ng-model="selectedSites"  ng-options="site as site.name for site in sites track by site.id"  onClick="$('#siteChangeModalConfig').modal()" data-target="#myModal"  name="AssetSite" required>
                                                                                             <option value="">Select Site ...</option>
                                                                                         </select>
 
@@ -2674,6 +2674,30 @@
                 </div>
                 <div class="delete-footer">
                     <button type="button" ng-click="deleteAssetConfig()"
+                        class="btn btn-danger-outline text-danger" data-dismiss="modal">Confirm</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<!-- Site change confirmation dialog -->
+
+<div class="row">
+
+    <div id="siteChangeModalConfig" data-backdrop="false" class="modal fade"
+        tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+        aria-hidden="true">
+        <div class="delete-dialog">
+            <div class="modal-content">
+                <div class="modal-body">
+                    Please confirm the site transfer. The schedules and jobs will be moved to the newly selected site.<br>
+                </div>
+                <div class="delete-footer">
+                    <button type="button" ng-click="siteChangeAssetConfig()"
                         class="btn btn-danger-outline text-danger" data-dismiss="modal">Confirm</button>
                     <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
 

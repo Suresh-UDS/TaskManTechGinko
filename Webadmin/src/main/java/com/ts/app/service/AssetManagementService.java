@@ -3,10 +3,8 @@ package com.ts.app.service;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.TimeZone;
+
 import javax.inject.Inject;
 
 import org.apache.commons.collections.CollectionUtils;
@@ -47,6 +45,7 @@ import com.ts.app.domain.MaintenanceType;
 import com.ts.app.domain.Manufacturer;
 import com.ts.app.domain.ParameterConfig;
 import com.ts.app.domain.Project;
+import com.ts.app.domain.SchedulerConfig;
 import com.ts.app.domain.Setting;
 import com.ts.app.domain.Site;
 import com.ts.app.domain.User;
@@ -69,12 +68,14 @@ import com.ts.app.repository.CheckInOutRepository;
 import com.ts.app.repository.ChecklistRepository;
 import com.ts.app.repository.EmployeeRepository;
 import com.ts.app.repository.JobRepository;
+import com.ts.app.repository.JobSpecification;
 import com.ts.app.repository.LocationRepository;
 import com.ts.app.repository.ManufacturerRepository;
 import com.ts.app.repository.NotificationRepository;
 import com.ts.app.repository.ParameterConfigRepository;
 import com.ts.app.repository.PricingRepository;
 import com.ts.app.repository.ProjectRepository;
+import com.ts.app.repository.SchedulerConfigRepository;
 import com.ts.app.repository.SettingsRepository;
 import com.ts.app.repository.SiteRepository;
 import com.ts.app.repository.TicketRepository;
@@ -232,6 +233,9 @@ public class AssetManagementService extends AbstractService {
 	@Inject
 	private AssetStatusHistoryRepository assetStatusHistoryRepository;
 	
+	@Inject
+	private SchedulerConfigRepository schedulerConfigRepository;
+	
 	public static final String EMAIL_NOTIFICATION_READING = "email.notification.reading";
 	
 	public static final String EMAIL_NOTIFICATION_READING_EMAILS = "email.notification.reading.emails";
@@ -366,7 +370,7 @@ public class AssetManagementService extends AbstractService {
 	
 	public boolean isDuplicatePPMSchedule(AssetPpmScheduleDTO assetPpmScheduleDTO) {
 	    log.debug("Asset Title "+assetPpmScheduleDTO.getTitle());
-		List<AssetPPMSchedule> assetPPMSchedule = assetPpmScheduleRepository.findAssetPPMScheduleByTitle(assetPpmScheduleDTO.getTitle());
+		List<AssetPPMSchedule> assetPPMSchedule = assetPpmScheduleRepository.findAssetPPMScheduleByTitle(assetPpmScheduleDTO.getAssetId(), assetPpmScheduleDTO.getTitle());
 		if(assetPPMSchedule != null) {
 			return true;
 		}
@@ -493,6 +497,36 @@ public class AssetManagementService extends AbstractService {
 				assetSiteHistoryList = new ArrayList<AssetSiteHistory>();
 			}
 			asset.setAssetSiteHistory(assetSiteHistoryList);
+			
+			//update asset scheduler config with new site info
+			List<SchedulerConfig> schedules = schedulerConfigRepository.findAssetSchedule(assetDTO.getId());
+			if(CollectionUtils.isNotEmpty(schedules)) {
+				for(SchedulerConfig config : schedules) {
+					String configData = config.getData();
+					String siteIdParam = "&siteId=";
+					String siteIdConfig = siteIdParam + currSite.getId();
+					int startInd = configData.indexOf(siteIdConfig);
+					StringBuilder sb = new StringBuilder(configData);
+					sb = sb.replace(startInd, siteIdConfig.length(), siteIdParam + site.getId());
+					config.setData(sb.toString());
+				}
+				schedulerConfigRepository.save(schedules);
+			}
+			
+			//update asset jobs
+			Calendar currDate = Calendar.getInstance();
+			List<Job> jobList = jobRepository.findByAssetAndStartDate(assetDTO.getId(), DateUtil.convertToSQLDate(currDate.getTime()));
+			if(CollectionUtils.isNotEmpty(jobList)) {
+				for(Job job : jobList) {
+					job.setSite(site);
+					if(job.getParentJob() != null) {
+						job.getParentJob().setSite(site);
+					}
+				}
+				jobRepository.save(jobList);
+			}
+			
+			
 		}
 		if (assetDTO.getManufacturerId() != asset.getManufacturer().getId()) {
 			Manufacturer manufacturer = getManufacturer(assetDTO.getManufacturerId());
@@ -614,7 +648,7 @@ public class AssetManagementService extends AbstractService {
 		assetAMC.setAsset(asset);
 		assetAMC.setActive(AssetAMCSchedule.ACTIVE_YES);
 
-		List<AssetAMCSchedule> existingSchedules = assetRepository.findAssetAMCScheduleByTitle(assetAMCScheduleDTO.getTitle());
+		List<AssetAMCSchedule> existingSchedules = assetRepository.findAssetAMCScheduleByTitle(asset.getId(), assetAMCScheduleDTO.getTitle());
 		log.debug("Existing schedule -" + existingSchedules);
 		if (CollectionUtils.isEmpty(existingSchedules)) {
 			assetAMC = assetAMCRepository.save(assetAMC);
@@ -665,7 +699,7 @@ public class AssetManagementService extends AbstractService {
 	public List<AssetAMCScheduleDTO> getAssetAMCSchedules(long assetId) {
 		List<AssetAMCScheduleDTO> assetAMCScheduleDTOs = null;
 		String type = MaintenanceType.valueOf("AMC").getValue();
-		List<AssetAMCSchedule> assetAMCSchedules = assetAMCRepository.findAssetAMCScheduleByAssetId(assetId, type);
+		List<AssetAMCSchedule> assetAMCSchedules = assetAMCRepository.findAssetAMCScheduleByAssetId(assetId);
 		if (CollectionUtils.isNotEmpty(assetAMCSchedules)) {
 			assetAMCScheduleDTOs = mapperUtil.toModelList(assetAMCSchedules, AssetAMCScheduleDTO.class);
 		}
@@ -1307,7 +1341,7 @@ public class AssetManagementService extends AbstractService {
 		assetPPMSchedule.setAsset(asset);
 		assetPPMSchedule.setActive(AssetPPMSchedule.ACTIVE_YES);
 
-		List<AssetPPMSchedule> assetPPMSchedules = assetPpmScheduleRepository.findAssetPPMScheduleByTitle(assetPpmScheduleDTO.getTitle());
+		List<AssetPPMSchedule> assetPPMSchedules = assetPpmScheduleRepository.findAssetPPMScheduleByTitle(asset.getId(), assetPpmScheduleDTO.getTitle());
 		log.debug("Existing schedule -" + assetPPMSchedule);
 		if (CollectionUtils.isEmpty(assetPPMSchedules)) {
 			assetPPMSchedule = assetPpmScheduleRepository.save(assetPPMSchedule);

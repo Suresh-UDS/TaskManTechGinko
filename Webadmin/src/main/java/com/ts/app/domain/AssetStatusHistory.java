@@ -39,8 +39,8 @@ public class AssetStatusHistory extends AbstractAuditingEntity implements Serial
 	@Column(length = 50, unique = false, nullable = false)
 	private String status;
 	
-	@ManyToOne(fetch = FetchType.LAZY, cascade={CascadeType.ALL})
-	@JoinColumn(name = "assetId", referencedColumnName = "id", nullable = true)
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "assetId", referencedColumnName = "id", nullable = false)
 	private Asset asset;
 	
 	public long getId() {

@@ -158,16 +158,25 @@ pushService:
    url: http://localhost:9000/
 
 scheduler:
-   job:
-      creationPolicy: monthly
+job:
+   creationPolicy: monthly
    dailyJob:
       enabled: true
       creation: monthly
    weeklyJob:
-      enabled: false
-      creation: monthly
+      enabled: true
    monthlyJob:
-      enabled: false
+      enabled: true
+   quarterlyJob:
+      enabled: true   
+   yearlyJob:
+      enabled: true
+      creation: daily
+   fortnightlyJob:
+      enabled: true
+      creation: daily
+   halfyearlyJob:
+      enabled: true
       creation: yearly
    overdueJob:
       enabled: false
