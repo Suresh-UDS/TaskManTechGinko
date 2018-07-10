@@ -41,11 +41,11 @@ public class SlaConfigResource {
 	}
 	
 	@RequestMapping(value = "/sla", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<?> updateSla(@Valid @RequestBody SlaConfigDTO slaconfigdto, HttpServletRequest request)
+	public String updateSla(@Valid @RequestBody SlaConfigDTO slaconfigdto, HttpServletRequest request)
 	{
 		log.debug("********SLAConfig update******** " + slaconfigdto.getId());
-		slaconfigdto = slaservice.updateSLA(slaconfigdto);
-		return new ResponseEntity<>(HttpStatus.OK);
+		String status = slaservice.updateSLA(slaconfigdto);
+		return status +(HttpStatus.OK);
 	}
 	@RequestMapping(value = "/sla/delete/{id}", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> deleteSla(@PathVariable Long id)
