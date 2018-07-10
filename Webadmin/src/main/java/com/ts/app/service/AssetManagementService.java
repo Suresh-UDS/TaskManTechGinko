@@ -3,12 +3,15 @@ package com.ts.app.service;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.inject.Inject;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.io.FilenameUtils;
+import org.hibernate.Hibernate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -68,7 +71,6 @@ import com.ts.app.repository.CheckInOutRepository;
 import com.ts.app.repository.ChecklistRepository;
 import com.ts.app.repository.EmployeeRepository;
 import com.ts.app.repository.JobRepository;
-import com.ts.app.repository.JobSpecification;
 import com.ts.app.repository.LocationRepository;
 import com.ts.app.repository.ManufacturerRepository;
 import com.ts.app.repository.NotificationRepository;
@@ -484,6 +486,7 @@ public class AssetManagementService extends AbstractService {
 		asset.setAssetGroup(assetDTO.getAssetGroup());
 		asset.setDescription(assetDTO.getDescription());
 		//update site history
+		Hibernate.initialize(asset.getSite());
 		Site currSite = asset.getSite();
 		if (assetDTO.getSiteId() != currSite.getId()) {
 			Site site = getSite(assetDTO.getSiteId());
@@ -495,8 +498,11 @@ public class AssetManagementService extends AbstractService {
 			List<AssetSiteHistory> assetSiteHistoryList = asset.getAssetSiteHistory();
 			if(CollectionUtils.isEmpty(assetSiteHistoryList)) {
 				assetSiteHistoryList = new ArrayList<AssetSiteHistory>();
+				assetSiteHistoryList.add(assetSiteHistory);
+				asset.setAssetSiteHistory(assetSiteHistoryList);
+			}else {
+				assetSiteHistoryList.add(assetSiteHistory);
 			}
-			asset.setAssetSiteHistory(assetSiteHistoryList);
 			
 			//update asset scheduler config with new site info
 			List<SchedulerConfig> schedules = schedulerConfigRepository.findAssetSchedule(assetDTO.getId());
@@ -507,7 +513,7 @@ public class AssetManagementService extends AbstractService {
 					String siteIdConfig = siteIdParam + currSite.getId();
 					int startInd = configData.indexOf(siteIdConfig);
 					StringBuilder sb = new StringBuilder(configData);
-					sb = sb.replace(startInd, siteIdConfig.length(), siteIdParam + site.getId());
+					sb = sb.replace(startInd, startInd + siteIdConfig.length(), siteIdParam + site.getId());
 					config.setData(sb.toString());
 				}
 				schedulerConfigRepository.save(schedules);

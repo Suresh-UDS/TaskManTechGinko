@@ -1111,6 +1111,12 @@ angular.module('timeSheetApp')
 
        }
 
+       $scope.updateSite = function(selectedSite) {
+    	   		$scope.selectedSites = selectedSite;
+    	   
+       }
+       
+       
        /* Update and save asset */
 
         $scope.updateAsset = function () {
@@ -1130,8 +1136,8 @@ angular.module('timeSheetApp')
                 }else{
                     $scope.assetEdit.assetGroup = $scope.assetList.assetGroup;
                 }
-                if($scope.selectedSite){
-                   $scope.assetEdit.siteId = $scope.selectedSite.id;
+                if($scope.selectedSites){
+                   $scope.assetEdit.siteId = $scope.selectedSites.id;
                 }else{
                     $scope.assetEdit.siteId = $scope.assetList.siteId;
                 }
