@@ -326,12 +326,14 @@ angular.module('timeSheetApp')
             ManufacturerComponent.findAll().then(function (data) {
                 //console.log("Loading all Manufacturer -- " , data);
                 $scope.manufacturers = data;
+                $scope.loadingStop();
             });
         }
 
         $scope.addManufacturer = function () {
 
             console.log("add manufacturer",$scope.manufacturer);
+            $scope.loadingStart();
             if($scope.manufacturer){
                 console.log("Manufacturer entered");
                 ManufacturerComponent.create($scope.manufacturer).then(function (response) {
@@ -342,6 +344,7 @@ angular.module('timeSheetApp')
 
 
                 }).catch(function(){
+                $scope.loadingStop();
                 $scope.showNotifications('top','center','danger','Error in Manufacturer. Please try again later..');
                 $scope.error = 'ERROR';
             });
@@ -353,14 +356,16 @@ angular.module('timeSheetApp')
         }
 
          $scope.loadVendor = function () {
+
             VendorComponent.findAll().then(function (data) {
                 //console.log("Loading all Vendor -- " , data)
                 $scope.vendors = data;
+                $scope.loadingStop();
             });
         }
 
         $scope.addVendor = function () {
-
+            $scope.loadingStart();
             console.log("add vendor",$scope.vendor);
             if($scope.vendor){
 
@@ -373,6 +378,7 @@ angular.module('timeSheetApp')
 
 
                 }).catch(function(){
+                $scope.loadingStop();
                 $scope.showNotifications('top','center','danger','Error in Vendor. Please try again later..');
                 $scope.error = 'ERROR';
             });
@@ -387,11 +393,12 @@ angular.module('timeSheetApp')
             AssetComponent.getWarList().then(function (data) {
                 console.log("Loading all service warranties -- " , data)
                 $scope.servicewarranties = data;
+                 $scope.loadingStop();
             });
         }
 
         $scope.addWarranty = function () {
-
+             $scope.loadingStart();
             console.log("add Warranty",$scope.Warranty);
             if($scope.Warranty){
 
@@ -404,6 +411,7 @@ angular.module('timeSheetApp')
 
 
                 }).catch(function(){
+                $scope.loadingStop();
                 $scope.showNotifications('top','center','danger','Error in Service Warranty. Please try again later..');
                 $scope.error = 'ERROR';
             });
@@ -429,6 +437,7 @@ angular.module('timeSheetApp')
                 //console.log("Loading all AssetType -- " , data)
                  //$scope.selectedAssetType = null;
                 $scope.assetTypes = data;
+                $scope.loadingStop();
             });
         }
 
@@ -436,6 +445,7 @@ angular.module('timeSheetApp')
             AssetComponent.loadAssetGroup().then(function (data) {
                 //console.log("Loading all Asset Group -- " , data)
                 $scope.assetGroups = data;
+                $scope.loadingStop();
             });
         }
 
@@ -597,7 +607,7 @@ angular.module('timeSheetApp')
 
         /* Sorting functions*/
 
-        $scope.isActiveAsc = 'assetCode';
+        $scope.isActiveAsc = 'code';
         $scope.isActiveDesc = '';
 
         $scope.columnAscOrder = function(field){
@@ -1512,6 +1522,7 @@ angular.module('timeSheetApp')
 
         $scope.addAssetType = function () {
             console.log($scope.assetType);
+             $scope.loadingStart();
             if($scope.assetType){
                 console.log("Asset Type entered");
                 AssetTypeComponent.create($scope.assetType).then(function (response) {
@@ -1522,6 +1533,7 @@ angular.module('timeSheetApp')
 
 
                 }).catch(function(){
+                 $scope.loadingStop();
                 $scope.showNotifications('top','center','danger','Error in Asset type. Please try again later..');
                 $scope.error = 'ERROR';
             });
@@ -1537,6 +1549,7 @@ angular.module('timeSheetApp')
         $scope.addAssetGroup = function () {
 
             console.log($scope.assetGroup);
+             $scope.loadingStart();
             if($scope.assetGroup){
                 console.log("Asset Group entered");
                 AssetComponent.createAssetGroup($scope.assetGroup).then(function (response) {
@@ -1546,6 +1559,7 @@ angular.module('timeSheetApp')
                     $scope.loadAssetGroup();
 
                 }).catch(function(){
+                $scope.loadingStop();
                 $scope.showNotifications('top','center','danger','Error in Asset group. Please try again later..');
                 $scope.error = 'ERROR';
             });
@@ -1559,7 +1573,7 @@ angular.module('timeSheetApp')
          /* Add asset parameter */
 
          $scope.addParameter = function () {
-
+              $scope.loadingStart();   
             if($scope.parameter){
                 console.log("Parameter entered");
                 ParameterComponent.create($scope.parameter).then(function (response) {
@@ -1569,6 +1583,7 @@ angular.module('timeSheetApp')
                     $scope.loadAllParameters();
 
                 }).catch(function(){
+                $scope.loadingStop();
                 $scope.showNotifications('top','center','danger','Error in Parameter. Please try again later..');
                 $scope.error = 'ERROR';
             });
@@ -1580,7 +1595,7 @@ angular.module('timeSheetApp')
         /* Add asset parameter UOM */
 
         $scope.addParameterUOM = function () {
-
+              $scope.loadingStart();
             if($scope.parameterUOM){
                 console.log("ParameterUOM entered");
                 ParameterUOMComponent.create($scope.parameterUOM).then(function (response) {
@@ -1590,6 +1605,7 @@ angular.module('timeSheetApp')
                     $scope.loadAllParameterUOMs();
 
                 }).catch(function(){
+                $scope.loadingStop();
                 $scope.showNotifications('top','center','danger','Error in Parameter UOM. Please try again later..');
                 $scope.error = 'ERROR';
             });
@@ -1630,7 +1646,7 @@ angular.module('timeSheetApp')
 	            $scope.selectedParameter = null;
 	            $scope.parameters = data;
                 console.log('param list --',$scope.parameters);
-                //$rootScope.loadingStop();
+                $rootScope.loadingStop();
     		});
         }
 
@@ -1640,6 +1656,7 @@ angular.module('timeSheetApp')
 	    		ParameterUOMComponent.findAll().then(function (data) {
 	            $scope.selectedParameterUOM = null;
 	            $scope.parameterUOMs = data;
+                 $scope.loadingStop();
 	        });
 	    }
 
@@ -2257,7 +2274,7 @@ angular.module('timeSheetApp')
         	AssetComponent.findByAssetReadings($scope.redSearchCriteria).then(function(data){
                 $rootScope.loadingStop();
         		console.log('View Readings - ' +JSON.stringify(data));
-        		if(data.transactions.length > 0) {
+        		if(data.transactions != null) {
         			$scope.assetReadings = data.transactions;
             		$scope.viewAssetReading(data.transactions[0].id);
 
@@ -2485,7 +2502,8 @@ angular.module('timeSheetApp')
             header: {
                 left: 'title',
                 center: 'month,agendaWeek,agendaDay',
-                right: 'prev,next,today'
+                //right: 'prev,next,today'
+                right: 'today'
             },
             defaultDate: today,
             selectable: true,

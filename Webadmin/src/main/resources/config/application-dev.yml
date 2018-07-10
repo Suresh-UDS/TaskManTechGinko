@@ -91,7 +91,7 @@ import:
             completed: /opt/imports/completed
            
 extensionImg: jpeg,jpg,png    
-extensionFile: pdf,xlsx,xls,docs,doc,csv,txt       
+extensionFile: pdf,xlsx,xls,docx,doc,csv,txt       
 
 asset:
    file:

@@ -562,7 +562,7 @@
                                                       <th>From Date</th>
                                                       <th width="10%">To Date</th>
                                                       <th width="10%">Frequency</th>
-                                                      <th width="5%" align="right">Actions</th>
+                                                      <!-- <th width="5%" align="right">Actions</th> -->
                                                   </tr>
 
                                                   </thead>
@@ -589,9 +589,9 @@
                                                       <td>{{ppmSchedules.startDate}}</td>
                                                       <td>{{ppmSchedules.endDate}}</td>
                                                       <td>{{ppmSchedules.frequencyPrefix}}&nbsp; {{ppmSchedules.frequencyDuration}}&nbsp; {{ppmSchedules.frequency}}</td>
-                                                      <td class="text-right">
+                                                      <!-- <td class="text-right">
                                                           <a  ng-class="{active: $state.includes('admin')}"  has-permission="" ui-sref=""  class="btn btn-simple btn-danger"><i class="material-icons">delete_forever</i></a>
-                                                      </td>
+                                                      </td> -->
                                                   </tr>
 
                                                   </tbody>
@@ -656,7 +656,7 @@
                                                                 <th>From Date</th>
                                                                 <th>To Date</th>
                                                                 <th>Frequency</th>
-                                                                <th align="right">Actions</th>
+                                                                <!-- <th align="right">Actions</th> -->
                                                             </tr>
 
                                                             </thead>
@@ -675,9 +675,9 @@
                                                                 <td>{{amcSchedule.startDate}}</td>
                                                                 <td>{{amcSchedule.endDate}}</td>
                                                                 <td>{{amcSchedule.frequencyPrefix}}&nbsp; {{amcSchedule.frequencyDuration}}&nbsp; {{amcSchedule.frequency}}</td>
-                                                                <td class="text-right">
+                                                                <!-- <td class="text-right">
                                                                     <a  ng-class="{active: $state.includes('admin')}"  has-permission="" ui-sref=""  class="btn btn-simple btn-danger"><i class="material-icons">delete_forever</i></a>
-                                                                </td>
+                                                                </td> -->
                                                             </tr>
 
                                                             </tbody>
@@ -839,14 +839,14 @@
 
                                           <div class="">
 
-                                              <ul class="nav nav-pills nav-pills-warning">
+                                              <!-- <ul class="nav nav-pills nav-pills-warning">
                                                   <li ng-class="reading.id == viewRead ? 'active' : ''" ng-repeat="reading in assetReadings">
                                                       <a href=".Fuel" data-toggle="tab" ng-click="viewAssetReading(reading.id)">{{reading.name}}</a>
                                                   </li>
                                                   <li class="active" ng-show="!assetReadings.length">
                                                       <a href=".Fuel" data-toggle="tab">No_Readings</a>
                                                   </li>
-                                              </ul>
+                                              </ul> -->
 
                                               <div class="tab-content TabsContent ViewTables" style="">
 
@@ -858,6 +858,7 @@
 
                                                                       <thead>
                                                                       <tr>
+                                                                          <th width="25%">Name</th>
                                                                           <th width="25%">Date</th>
                                                                           <th width="25%">Initial Value</th>
                                                                           <th width="25%">Final Value</th>
@@ -866,11 +867,12 @@
                                                                       </thead>
 
                                                                       <tbody>
-                                                                      <tr ng-hide="noReading">
-                                                                          <td>{{readingData.createdDate | date: "dd-MM-yyyy hh:mm:ss"}}</td>
-                                                                          <td>{{readingData.initialValue}}&nbsp; {{readingData.uom}}</td>
-                                                                          <td>{{readingData.finalValue}}&nbsp; {{readingData.uom}}</td>
-                                                                          <td>{{readingData.consumption}}&nbsp; {{readingData.uom}}</td>
+                                                                      <tr ng-hide="noReading" ng-repeat="reading in assetReadings">
+                                                                          <td> <a  ng-click="viewAssetReading(reading.id)"><span class="label label-warning">{{reading.name}}</span></a></td>
+                                                                          <td>{{reading.createdDate | date: "dd-MM-yyyy hh:mm:ss"}}</td>
+                                                                          <td>{{reading.initialValue}}&nbsp; {{reading.uom}}</td>
+                                                                          <td>{{reading.finalValue}}&nbsp; {{reading.uom}}</td>
+                                                                          <td>{{reading.consumption}}&nbsp; {{reading.uom}}</td>
                                                                       </tr>
                                                                       <tr ng-show="noReading">
                                                                       	<td colspan="4" align="center">No Readings Found</td>
