@@ -569,6 +569,7 @@ textarea.form-control {
 {
     padding-top: 9px;
     font-size: 40px;
+    cursor:pointer;
 }
 
 /*End Checklist css */
