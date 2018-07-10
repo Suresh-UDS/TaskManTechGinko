@@ -536,16 +536,21 @@ textarea.form-control {
 .DeleteBtn
 {
 	position: absolute;
-    right: 55px;
-    top: -10px;
+    width: 30px;
+    height: 30px;
+    background: #ff0000;
+    border-radius: 50%;
+    right: 40px;
+    top: -18px;
     display:none;
     transition: all 1s ease;
 }
 .DeleteBtn i
 {
-	color: red;
+	color: white;
     font-size: 18px;
     cursor:pointer;
+    padding-top: 5px;
 }
 
 /*End Checklist css */
