@@ -1289,11 +1289,15 @@ angular.module('timeSheetApp')
 
 
         $scope.deleteDoc = function () {
+            $scope.loadingStart();
             AssetComponent.deleteDoc($scope.deleteDocId).then(function(){
 
                 $scope.showNotifications('top','center','success','Document has been deleted successfully!!');
                 $scope.getAllUploadedFiles();
                 $scope.getAllUploadedPhotos();
+                $scope.loadingStop();
+            }).catch(function(){
+                $scope.loadingStop();
             });
         }
 
@@ -1791,7 +1795,7 @@ angular.module('timeSheetApp')
 
 	    $scope.getAllUploadedFiles = function() {
            
-            $rootScope.loadingStart();
+            $scope.loadingStart();
 
 	    	$scope.uploadObj.type = 'document';
 
@@ -1807,7 +1811,7 @@ angular.module('timeSheetApp')
 
 
 	    	AssetComponent.getAllUploadedFiles($scope.uploadObj).then(function(data){
-                $rootScope.loadingStop();
+                $scope.loadingStop();
                 $scope.uploadFiles = [];
 	    		$scope.uploadFiles=data;
 	    		
@@ -1815,13 +1819,13 @@ angular.module('timeSheetApp')
 
                 console.log("-- Upload files --" , $scope.uploadFiles);
 	    	}).catch(function(response){
-                $rootScope.loadingStop();
+                $scope.loadingStop();
             });
 	    }
 
 	    $scope.getAllUploadedPhotos = function() {
 
-            $rootScope.loadingStart();
+            $scope.loadingStart();
 
 	    	$scope.photoObj.type = 'image';
 
@@ -1835,14 +1839,14 @@ angular.module('timeSheetApp')
             }
 
 	    	AssetComponent.getAllUploadedPhotos($scope.photoObj).then(function(data){
-                $rootScope.loadingStop();
+                $scope.loadingStop();
                 $scope.uploadAssetPhotos = [];
                 $scope.uploadAssetPhotos=data;
                 $scope.photoCount = ($scope.uploadAssetPhotos).length;
 
                 console.log("-- Uploaded Photos --",$scope.uploadAssetPhotos);
 	    	}).catch(function(response){
-                $rootScope.loadingStop();
+                $scope.loadingStop();
             });
 	    }
 
@@ -1875,7 +1879,7 @@ angular.module('timeSheetApp')
 
                     $rootScope.loadingStart();
     	        	AssetComponent.uploadAssetFile($scope.uploadAsset).then(function(data){
-                        $rootScope.loadingStop();
+                        $scope.loadingStop();
     	        		console.log("-- Upload file --",data);
     	        		if(data) {
                             $scope.uploadFiles =[];
@@ -1888,10 +1892,11 @@ angular.module('timeSheetApp')
                         $scope.selectedClientFile = "";
 
     	        	},function(err){
+                        $scope.loadingStop();
     	        		console.log('Import error');
     	        		console.log(err);
     	        	}).catch(function(response){
-                $rootScope.loadingStop();
+                $scope.loadingStop();
                 $scope.showNotifications('top','center','danger','Unable to  upload file..');
             });
             	} else {
@@ -1928,10 +1933,10 @@ angular.module('timeSheetApp')
 	        	$scope.uploadAssetPhoto.type = 'image';
 
 	        	console.log($scope.uploadAssetPhoto);
-                $rootScope.loadingStart();
+                $scope.loadingStart();
 	        	AssetComponent.uploadAssetPhoto($scope.uploadAssetPhoto).then(function(data){
 	        		console.log(data);
-                    $rootScope.loadingStop();
+                    $scope.loadingStop();
 	        		if(data) {
                         $scope.uploadAssetPhotos =[];
 	        			$scope.uploadAssetPhotos.push(data);
@@ -1944,10 +1949,11 @@ angular.module('timeSheetApp')
                     $scope.selectedPhotoFile = "";
 
 	        	},function(err){
+                    $scope.loadingStop();
 	        		console.log('Import error');
 	        		console.log(err);
 	        	}).catch(function(response){
-                $rootScope.loadingStop();
+                $scope.loadingStop();
                 $scope.showNotifications('top','center','danger','Unable to  upload file..');
             });
         	} else {
