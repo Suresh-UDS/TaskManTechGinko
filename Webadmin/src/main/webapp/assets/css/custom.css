@@ -1545,7 +1545,8 @@ div.bouncing-container {
 }
 div.bouncing-container.asset
 {
-    right: 105px;
+    right: 83px;
+    top: 0px;
 }
 div.bouncing-container .message-container {
     position: relative;
