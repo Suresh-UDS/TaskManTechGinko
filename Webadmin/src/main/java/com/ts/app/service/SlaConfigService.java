@@ -62,7 +62,7 @@ public class SlaConfigService {
         	slaescconfig.setEmail(slaescconfigdto.getEmail());
         	slaescalationconfig.add(slaescconfig);
         }
-        sla.setSlaesc(slaescalationconfig);
+//        sla.setSlaesc(slaescalationconfig);
         sla = slaconfigrepository.save(sla);
         
         return slaconfigdto;
@@ -97,7 +97,7 @@ public class SlaConfigService {
         	slaescconfig.setEmail(slaescconfigdto.getEmail());
         	slaescalationconfig.add(slaescconfig);
         }
-		slaUpdate.setSlaesc(slaescalationconfig);
+//		slaUpdate.setSlaesc(slaescalationconfig);
 		slaUpdate = slaconfigrepository.saveAndFlush(slaUpdate);
 		//mapperUtil.toModel(slaUpdate, SlaConfigDTO.class);
 		return "success";

@@ -30,7 +30,6 @@ public class SlaConfig extends AbstractAuditingEntity implements Serializable{
 	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "siteId", nullable = false)
-	@Column(nullable = false)
 	private Site site;
 	
 	private String processType;
@@ -44,10 +43,10 @@ public class SlaConfig extends AbstractAuditingEntity implements Serializable{
 	@Column(nullable = false)
 	private int hours;
 	
-	@OneToMany(cascade = CascadeType.ALL)
-	@JoinTable(name = "sla_config_esc_config", joinColumns = { @JoinColumn(name = "SlaId") }, inverseJoinColumns = { @JoinColumn(name = "SlaEscId") })
-	private List<SlaEscalationConfig> slaesc = new ArrayList<SlaEscalationConfig>();
-	
+//	@OneToMany(cascade = CascadeType.ALL)
+//	@JoinTable(name = "sla_config_esc_config", joinColumns = { @JoinColumn(name = "SlaId") }, inverseJoinColumns = { @JoinColumn(name = "SlaEscId") })
+//	private List<SlaEscalationConfig> slaesc = new ArrayList<SlaEscalationConfig>();
+//	
 	public long getId() {
 		return id;
 	}
@@ -96,12 +95,12 @@ public class SlaConfig extends AbstractAuditingEntity implements Serializable{
 		this.hours = hours;
 	}
 
-	public List<SlaEscalationConfig> getSlaesc() {
-		return slaesc;
-	}
-
-	public void setSlaesc(List<SlaEscalationConfig> slaesc) {
-		this.slaesc = slaesc;
-	}
+//	public List<SlaEscalationConfig> getSlaesc() {
+//		return slaesc;
+//	}
+//
+//	public void setSlaesc(List<SlaEscalationConfig> slaesc) {
+//		this.slaesc = slaesc;
+//	}
 
 }
