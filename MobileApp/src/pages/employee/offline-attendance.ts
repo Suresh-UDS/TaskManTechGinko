@@ -40,6 +40,7 @@ export class OfflineAttendance {
     attendanceId:any;
     loader:any;
     showCheckIn:boolean;
+    siteId:any;
     constructor(public navCtrl: NavController,private dbService:DBService,public component:componentService, public navParams: NavParams, private  authService: authService, public camera: Camera,
                 private loadingCtrl:LoadingController, private geolocation:Geolocation, private toastCtrl:ToastController,
                 private geoFence:Geofence, private employeeService: EmployeeService, private jobService: JobService, private siteService:SiteService, private attendanceService:AttendanceService) {
@@ -49,8 +50,9 @@ export class OfflineAttendance {
         this.showCheckIn = true;
         this.site = this.navParams.get('site');
         console.log(this.navParams.get('employeeList'));
-        this.employeeList = this.navParams.get('employeeList');
+        // this.employeeList = this.navParams.get('employeeList');
         // this.employeeList = this.employeeList[0];
+        this.siteId = this.navParams.get('siteId');
     }
 
     viewList(i)
@@ -100,6 +102,18 @@ export class OfflineAttendance {
             this.longitude = 0;
         });
 
+
+
+        this.dbService.getSiteEmployee(this.siteId).then((response)=>{
+                console.log(response);
+                this.component.closeLoader()
+                this.employeeList = response;
+            },
+            (error)=>{
+                console.log(error);
+                this.component.closeLoader()
+            });
+
     }
 
 
@@ -107,15 +121,14 @@ export class OfflineAttendance {
 
     ionViewWillEnter(){
         // this.getEmployees();
-        console.log("Attendance check in data");
-        console.log(window.localStorage.getItem('attendanceCheckInData'));
+        // console.log("Attendance check in data");
+        // console.log(window.localStorage.getItem('attendanceCheckInData'));
 
-        if(window.localStorage.getItem('attendanceCheckInData')){
-            this.showCheckIn = false;
-        }else{
-            this.showCheckIn = true;
-        }
-
+        // if(window.localStorage.getItem('attendanceCheckInData')){
+        //     this.showCheckIn = false;
+        // }else{
+        //     this.showCheckIn = true;
+        // }
     }
 
 
@@ -154,17 +167,32 @@ export class OfflineAttendance {
         this.component.showLoader("save attendance")
         var attendanceData = {
             siteId:employee.siteId,
-            employeeEmpId:employee.employeeEmpId,
+            employeeEmpId:employee.empId,
             latitudeIn:this.lattitude,
             longitudeIn:this.longitude,
             checkInImage:imageData,
             checkInTime:new Date(),
-            offlineAttendance:true
+            offlineAttendance:true,
+            id:employee.employeeId
         };
 
         this.dbService.setAttendance(attendanceData).then(response=>{
             console.log(response);
-            this.component.closeLoader()
+            this.dbService.updateEmployee(employee.employeeId,true).then(response=>{
+                console.log(response);
+                this.dbService.getSiteEmployee(this.siteId).then((response)=>{
+                        console.log(response);
+                        // this.component.closeLoader()
+                        this.employeeList = response;
+                        this.component.closeLoader()
+                    },
+                    (error)=>{
+                        console.log(error);
+                        // this.component.closeLoader()
+                    });
+            },err=>{
+                console.log(err)
+            })
         },err=>{
             console.log(err)
         })
@@ -181,17 +209,39 @@ export class OfflineAttendance {
             employeeEmpId:employee.empId,
             latitudeIn:this.lattitude,
             longitudeIn:this.longitude,
-            checkInImage:imageData,
+            checkOutImage:imageData,
             checkOutTime:new Date(),
-            id:attendanceId,
+            id:employee.employeeId,
             offlineAttendance:true
 
         };
 
+        this.dbService.updateAttendance(attendanceData).then(response=>{
+            console.log(response);
+                this.component.closeLoader()
+            this.dbService.updateEmployee(employee.employeeId,false).then(response=>{
+                console.log(response);
+                this.dbService.getSiteEmployee(this.siteId).then((response)=>{
+                        console.log(response);
+                        // this.component.closeLoader()
+                        this.employeeList = response;
+                        this.component.closeLoader()
+                    },
+                    (error)=>{
+                        console.log(error);
+                        // this.component.closeLoader()
+                    });
+            },err=>{
+                console.log(err)
+            })
+        },err=>{
+            console.log(err)
+        })
+
         // window.localStorage.setItem('attendanceCheckOutData',JSON.stringify(attendanceData));
-        this.navCtrl.setRoot(TabsPage);
+        // this.navCtrl.setRoot(TabsPage);
         // this.component.showToastMessage('Your attendnace has been marked localy')
-        demo.showSwal('feedback-success','Attendance marked locally, please connect to network to sync it to server!');
+        // demo.showSwal('feedback-success','Attendance marked locally, please connect to network to sync it to server!');
 
     }
 

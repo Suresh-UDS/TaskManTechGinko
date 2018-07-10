@@ -46,26 +46,26 @@ export class OfflineAttendanceSites {
         })
 
     }
-
-    viewList(i)
-    {
-        this.navCtrl.push(AttendanceListPage);
-    }
+    //
+    // viewList(i)
+    // {
+    //     this.navCtrl.push(AttendanceListPage);
+    // }
 
     showSuccessToast(msg){
         this.component.showToastMessage(msg,'bottom');
     }
 
-    getAttendances(site){
-        // this.attendanceService.getSiteAttendances(site.id).subscribe(response=>{
-        //     console.log(response.json());
-        //     this.navCtrl.push(AttendanceListPage,{'attendances':response.json()});
-        // })
-
-        this.dbService.getSiteEmployee(site.id).then((response)=>{
-            console.log(response);
-        });
-    }
+    // getAttendances(site){
+    //     // this.attendanceService.getSiteAttendances(site.id).subscribe(response=>{
+    //     //     console.log(response.json());
+    //     //     this.navCtrl.push(AttendanceListPage,{'attendances':response.json()});
+    //     // })
+    //
+    //     this.dbService.getSiteEmployee(site.id).then((response)=>{
+    //         console.log(response);
+    //     });
+    // }
 
     ionViewDidLoad() {
         console.log('ionViewDidLoad offline SiteListPage');
@@ -81,10 +81,10 @@ export class OfflineAttendanceSites {
 
     ionViewWillEnter(){
 
-        this.dbService.getSite().then(data=>{
-            console.log(data);
-        })
-
+        // this.dbService.getSite().then(data=>{
+        //     console.log(data);
+        // })
+        this.siteList;
         // this.siteService.searchSite().subscribe(response=>{
         //     console.log(response.json());
         //     this.siteList = response.json();
@@ -101,10 +101,9 @@ export class OfflineAttendanceSites {
 
     gotoEmployeeList(site){
         this.component.showLoader("")
-        this.dbService.getSiteEmployee(site.id).then((response)=>{
-            console.log(response);
-            this.component.closeLoader()
-            this.navCtrl.push(OfflineAttendance,{employeeList:response})
-        });
+
+        this.navCtrl.push(OfflineAttendance,{siteId:site.id})
+
+
     }
 }
