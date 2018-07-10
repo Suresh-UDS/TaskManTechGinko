@@ -1357,7 +1357,7 @@
                                                                     		<div class="form-group">
 						                                                    <label class="control-label">Start Date Time<span class="red-star">*</span></label>
 						                                                    <span class="form-control-feedback calender-icon"><i class="material-icons">date_range</i></span>
-						                                                    <input type="text" class="form-control datetimepicker"  id="ppmJobStartTime"  ng-model="assetPPM.jobStartTime" required/>
+						                                                    <input type="text" class="form-control datetimepicker padng-right30"  id="ppmJobStartTime"  ng-model="assetPPM.jobStartTime" required/>
 																		   <div ng-show="form3.$submitted || form3.ppmJobStartTime.$touched">
                                                                                 <div
                                                                                     ng-show="form3.ppmJobStartTime.$dirty || form3.ppmJobStartTime.$invalid">
@@ -1423,7 +1423,7 @@
                                                                     <th>From Date</th>
                                                                     <th width="10%">To Date</th>
                                                                     <th width="10%">Frequency</th>
-                                                                    <th width="5%" align="right">Actions</th>
+                                                                    <!--<th width="5%" align="right">Actions</th>-->
                                                                 </tr>
 
                                                                 </thead>
@@ -1450,9 +1450,9 @@
                                                                     <td>{{ppmSchedules.startDate}}</td>
                                                                     <td>{{ppmSchedules.endDate}}</td>
                                                                     <td>{{ppmSchedules.frequencyPrefix}}&nbsp; {{ppmSchedules.frequencyDuration}}&nbsp; {{ppmSchedules.frequency}}</td>
-                                                                    <td class="text-right">
-                                                                        <a  ng-class="{active: $state.includes('admin')}"  has-permission="" ui-sref=""  class="btn btn-simple btn-danger"><i class="material-icons">delete_forever</i></a>
-                                                                    </td>
+                                                                    <!--<td class="text-right">-->
+                                                                        <!--<a  ng-class="{active: $state.includes('admin')}"  has-permission="" ui-sref=""  class="btn btn-simple btn-danger"><i class="material-icons">delete_forever</i></a>-->
+                                                                    <!--</td>-->
                                                                 </tr>
 
                                                                 </tbody>
@@ -1651,11 +1651,11 @@
                                                                     </div>
                                                                 </div>
                                                                 <div class="row">
-                                                                    <div class="col-md-2" >
+                                                                    <div class="col-md-3" >
                                                                     		<div class="form-group">
 						                                                    <label class="control-label">Start Date Time<span class="red-star">*</span></label>
 						                                                    <span class="form-control-feedback calender-icon"><i class="material-icons">date_range</i></span>
-						                                                    <input type="text" class="form-control datetimepicker"  id="amcJobStartTime"  ng-model="amcSchedule.jobStartTime" required/>
+						                                                    <input type="text" class="form-control datetimepicker padng-right30"  id="amcJobStartTime"  ng-model="amcSchedule.jobStartTime" required/>
 																		   <div ng-show="form3.$submitted || form3.amcJobStartTime.$touched">
                                                                                 <div
                                                                                     ng-show="form3.amcJobStartTime.$dirty || form3.amcJobStartTime.$invalid">
@@ -1704,7 +1704,7 @@
                                                                             </select>
                                                                         </div>
                                                                     </div>
-                                                                    <div class="col-md-5 txt-align-rgt" style="padding-top: 25px;">
+                                                                    <div class="col-md-4 txt-align-rgt" style="padding-top: 25px;">
                                                                         <button  type="submit" class="btn btn-success add-btn margn-top0"    ng-disabled="form4.$invalid|| amcFromMsg || amcToMsg">Add</button>
                                                                     </div>
                                                                 </div>
@@ -1721,7 +1721,7 @@
                                                                     <th>From Date</th>
                                                                     <th>To Date</th>
                                                                     <th>Frequency</th>
-                                                                    <th align="right">Actions</th>
+                                                                    <!--<th align="right">Actions</th>-->
                                                                 </tr>
 
                                                                 </thead>
@@ -1740,9 +1740,9 @@
                                                                     <td>{{amcSchedule.startDate}}</td>
                                                                     <td>{{amcSchedule.endDate}}</td>
                                                                     <td>{{amcSchedule.frequencyPrefix}}&nbsp; {{amcSchedule.frequencyDuration}}&nbsp; {{amcSchedule.frequency}}</td>
-                                                                    <td class="text-right">
-                                                                        <a  ng-class="{active: $state.includes('admin')}"  has-permission="" ui-sref=""  class="btn btn-simple btn-danger"><i class="material-icons">delete_forever</i></a>
-                                                                    </td>
+                                                                    <!--<td class="text-right">-->
+                                                                        <!--<a  ng-class="{active: $state.includes('admin')}"  has-permission="" ui-sref=""  class="btn btn-simple btn-danger"><i class="material-icons">delete_forever</i></a>-->
+                                                                    <!--</td>-->
                                                                 </tr>
 
                                                                 </tbody>

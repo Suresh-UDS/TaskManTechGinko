@@ -489,7 +489,7 @@ textarea.form-control {
 .HoverBx a:hover i,.HoverBx button:hover i
 {
     color: orange;
-    font-size: 25px;
+    font-size: 20px;
 }
 .btn.btn-primary, .btn.btn-primary:hover, .btn.btn-primary:focus, .btn.btn-primary:active, .btn.btn-primary.active, .btn.btn-primary:active:focus, .btn.btn-primary:active:hover, .btn.btn-primary.active:focus, .btn.btn-primary.active:hover, .open>.btn.btn-primary.dropdown-toggle, .open>.btn.btn-primary.dropdown-toggle:focus, .open>.btn.btn-primary.dropdown-toggle:hover, .navbar .navbar-nav>li>a.btn.btn-primary, .navbar .navbar-nav>li>a.btn.btn-primary:hover, .navbar .navbar-nav>li>a.btn.btn-primary:focus, .navbar .navbar-nav>li>a.btn.btn-primary:active, .navbar .navbar-nav>li>a.btn.btn-primary.active, .navbar .navbar-nav>li>a.btn.btn-primary:active:focus, .navbar .navbar-nav>li>a.btn.btn-primary:active:hover, .navbar .navbar-nav>li>a.btn.btn-primary.active:focus, .navbar .navbar-nav>li>a.btn.btn-primary.active:hover, .open>.navbar .navbar-nav>li>a.btn.btn-primary.dropdown-toggle, .open>.navbar .navbar-nav>li>a.btn.btn-primary.dropdown-toggle:focus, .open>.navbar .navbar-nav>li>a.btn.btn-primary.dropdown-toggle:hover
 {
@@ -1089,7 +1089,7 @@ button.btn.btn-outline {
 .arrow-steps .step.active a
 {
     color: #fff !important;
-    margin-left: 20px !important;
+    margin-left: 5px !important;
 }
 .arrow-steps .step.active:after {
     border-left: 17px solid #ff9800;
@@ -1354,6 +1354,10 @@ a.cal-btn i
  {
      padding-top: 25px;
  }
+.padng-right30
+{
+    padding-right: 30px;
+}
 .modal-content .modal-header
 {
     padding-top: 8px;
