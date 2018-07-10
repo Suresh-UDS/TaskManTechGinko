@@ -577,13 +577,14 @@ public class AssetManagementService extends AbstractService {
 		assetRepository.save(asset);
 	}
 	
-	public AssetDTO generateAssetQRCode(long assetId, String assetCode) {
+	public Map<String, Object> generateAssetQRCode(long assetId, String assetCode) {
 		Asset asset = assetRepository.findOne(assetId);
 		long siteId = asset.getSite().getId();
 		String code = String.valueOf(siteId)+"_"+assetCode;
 		asset.setCode(code);
 		assetRepository.save(asset);
 		byte[] qrCodeImage = null;
+		Map<String, Object> qrCodeObject = new HashMap<>();
 //		String qrCodeBase64 = null;
 		AssetDTO assetDTO = new AssetDTO();
 		if (asset != null) {
@@ -592,7 +593,9 @@ public class AssetManagementService extends AbstractService {
 			String qrCodePath = env.getProperty("AWS.s3-qrcode-path");
 			if (org.apache.commons.lang3.StringUtils.isNotEmpty(qrCodePath)) {
 				assetDTO = s3ServiceUtils.uploadQrCodeFile(code, qrCodeImage, assetDTO);
-				assetDTO.setCode(code);
+				qrCodeObject.put("code", code);
+				qrCodeObject.put("url", assetDTO.getUrl());
+				qrCodeObject.put("imageName", assetDTO.getQrCodeImage());
 				asset.setQrCodeImage(assetDTO.getQrCodeImage());
 				assetRepository.save(asset);
 			}
@@ -601,12 +604,13 @@ public class AssetManagementService extends AbstractService {
 //			}
 	}
 		log.debug("*****************"+ asset.getId());
-		return assetDTO;
+		return qrCodeObject;
 	}
 
-	public AssetDTO getQRCode(long assetId) {
+	public Map<String, Object> getQRCode(long assetId) {
 		log.debug(">>> get QR Code <<<");
-		AssetDTO assetDTO = new AssetDTO();
+//		AssetDTO assetDTO = new AssetDTO();
+		Map<String, Object> hm = new HashMap<>();		
 		Asset asset = assetRepository.findOne(assetId);
 //		String qrCodeBase64 = null;
 		String imageFileUrl = "" ;
@@ -614,12 +618,12 @@ public class AssetManagementService extends AbstractService {
 		if (asset != null) {
 			imageFileUrl = cloudFrontUrl + bucketEnv + qrcodePath + asset.getQrCodeImage();
 			if (org.apache.commons.lang3.StringUtils.isNotBlank(imageFileUrl)) {
-				assetDTO.setCode(assetcode);
-				assetDTO.setUrl(imageFileUrl);
+				hm.put("code", assetcode);
+				hm.put("url", imageFileUrl);
 			}
 		}
 //		qrCodeBase64 = qrCodeBase64 + "." + assetcode;
-		return assetDTO;
+		return hm;
 		}
 
 	public ExportResult generateReport(List<AssetDTO> transactions, SearchCriteria criteria) {
@@ -1574,21 +1578,42 @@ public class AssetManagementService extends AbstractService {
 		SearchResult<AssetParameterReadingDTO> result = new SearchResult<AssetParameterReadingDTO>();
 
 		Pageable pageRequest = null;
-		Page<AssetParameterReading> page = null;
-		List<AssetParameterReading> allAssetsList = new ArrayList<AssetParameterReading>();
-		List<AssetParameterReadingDTO> transactions = null;
-		
-		page = assetRepository.findByAssetReading(searchCriteria.getAssetId(), pageRequest);
-		allAssetsList.addAll(page.getContent());
-		
-		if(CollectionUtils.isNotEmpty(allAssetsList)) {
-			if(transactions == null) {
-				transactions = new ArrayList<AssetParameterReadingDTO>();
+		if(searchCriteria != null) {
+			if (!StringUtils.isEmpty(searchCriteria.getColumnName())) {
+				Sort sort = new Sort(searchCriteria.isSortByAsc() ? Sort.Direction.ASC : Sort.Direction.DESC, searchCriteria.getColumnName());
+				log.debug("Sorting object" + sort);
+				pageRequest = createPageSort(searchCriteria.getCurrPage(), searchCriteria.getSort(), sort);
+			} else {
+				if (searchCriteria.isList()) {
+					pageRequest = createPageRequest(searchCriteria.getCurrPage(), true);
+				} else {
+					pageRequest = createPageRequest(searchCriteria.getCurrPage());
+				}
 			}
-        		for(AssetParameterReading assetReading : allAssetsList) {
-        			transactions.add(mapperUtil.toModel(assetReading, AssetParameterReadingDTO.class));
-        		}
-			buildSearchResultReading(searchCriteria, page, transactions,result);
+
+			Page<AssetParameterReading> page = null;
+			List<AssetParameterReading> allAssetsList = new ArrayList<AssetParameterReading>();
+			List<AssetParameterReadingDTO> transactions = null;
+			
+			if(searchCriteria.getReadingFromDate() != null && searchCriteria.getReadingToDate() != null) { 
+				page = assetRepository.findAssetReadingByDate(searchCriteria.getAssetId(), searchCriteria.getReadingFromDate(), searchCriteria.getReadingToDate(), pageRequest);
+			}else if(searchCriteria.getParamName() != null && searchCriteria.getAssetId() > 0){
+				page = assetRepository.findReadingByName(searchCriteria.getParamName(), searchCriteria.getAssetId(), pageRequest);
+			}else {
+				page = assetRepository.findByAssetReading(searchCriteria.getAssetId(), pageRequest);
+			}
+	
+			allAssetsList.addAll(page.getContent());
+		
+			if(CollectionUtils.isNotEmpty(allAssetsList)) {
+				if(transactions == null) {
+					transactions = new ArrayList<AssetParameterReadingDTO>();
+				}
+	        		for(AssetParameterReading assetReading : allAssetsList) {
+	        			transactions.add(mapperUtil.toModel(assetReading, AssetParameterReadingDTO.class));
+	        		}
+				buildSearchResultReading(searchCriteria, page, transactions,result);
+			}
 		}
 		
 		return result;

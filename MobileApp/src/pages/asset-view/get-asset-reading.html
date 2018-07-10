@@ -41,7 +41,7 @@
                                     <ion-label class="margin0">{{config.uom}}</ion-label>
                                 </ion-col>
                             </ion-row>
-                            <ion-row class="margin0" *ngIf="config.reading ">
+                            <ion-row class="margin0" *ngIf="config.previousValue ">
                                 <ion-col col-4>
                                     <ion-label class="margin0 padding0">Final Reading:</ion-label>
                                 </ion-col>
@@ -77,6 +77,7 @@
                             </div>
                             <div text-center class="white-bg margin-top20">
                                 <button type="submit" class="btn btn-warning margin-auto" (click)="saveReading(config)">Submit Reading</button>
+                                <!--<button type="submit" class="btn btn-warning margin-auto" (click)="assetSaveReadingLocal(config)">Submit Reading</button>-->
                             </div>
                         </div>
                     </div>
@@ -132,6 +133,7 @@
                                 </ion-row>
                             </div>
                             <div text-center class="white-bg margin-top20">
+                                <!--<button type="submit" class="btn btn-warning margin-auto" (click)="assetSaveReadingLocal(config)">Submit Reading</button>-->
                                 <button type="submit" class="btn btn-warning margin-auto" (click)="saveReading(config)">Submit Reading</button>
                             </div>
                         </div>

@@ -6,9 +6,10 @@ angular.module('timeSheetApp')
 
 
     	$scope.sla = {};
-    	$rootScope.loginView = false;
     	$scope.selectedProject = {};
     	$scope.selectedSite = {};
+    	$scope.sevCat = {};
+    	$rootScope.loginView = false;
     	
 			//init load
 			$scope.initLoad = function(){
@@ -56,11 +57,12 @@ angular.module('timeSheetApp')
                 };
                 
                 $scope.addSla = function() {
+//					if(jQuery.isEmptyObject($scope.searchProject) == false)
                 	console.log($scope.sla);
-                	console.log(selectedProject.name);
-                	console.log(selectedSite.name);
-                	$scope.sla.projectName = selectedProject.name;
-                	$scope.sla.siteName = selectedSite.name;
+                	console.log('selected project - ' + JSON.stringify($scope.selectedSite));
+                	console.log($scope.selectedSite.id);
+                	$scope.sla.siteId = $scope.selectedSite.id;
+                	console.log($scope.sla);
                 	SlaComponent.createSla($scope.sla).then(function (data) {
                 		$scope.saveSla = data;
                 		console.log("SLA saving");
@@ -84,6 +86,7 @@ angular.module('timeSheetApp')
                 	if($scope.selectedProject) {
                     	ProjectComponent.findSites($scope.selectedProject.id).then(function (data) {
                             $scope.sites = data;
+                            
                         });
                 	}else {
                     	SiteComponent.findAll().then(function (data) {
@@ -91,4 +94,10 @@ angular.module('timeSheetApp')
                         });
                 	}
                 };
+                
+                $scope.addSeverityCategory = function () {
+                	console.log("SEVCAT *** " + $scope.sla.severity	)
+                	$scope.sevCat.severity = $scope.sla.severity;
+                	$scope.sevCat.hrs = $scope.sla.hrs;
+                }
     });

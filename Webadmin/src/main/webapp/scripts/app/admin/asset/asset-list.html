@@ -34,9 +34,9 @@
             <button ng-click="load52WeekSchedule()" class="btn btn-circle orange-clr" title="52 Week Schedule">
                 <i class="material-icons">assignment</i>
             </button>
-            <button ui-sref="qr-code-list"  class="btn btn-circle orange-clr" title="Generate QR Code">
+            <!-- <button ui-sref="qr-code-list"  class="btn btn-circle orange-clr" title="Generate QR Code">
                 <i class="material-icons">dashboard</i>
-            </button>
+            </button> -->
 
         </div>
 
@@ -188,19 +188,19 @@
                             <thead>
 
                             <tr>
-                                <th>
+                                <!-- <th>
                                     <div class="checkbox form-horizontal-checkbox">
                                         <label>
                                             <input type="checkbox" name="optionsCheckboxes">
                                         </label>
                                     </div>
-                                </th>
+                                </th> -->
                                 <th>Asset Code
                                     <span class="sortingIcons">
-                                        <span ng-click="columnAscOrder('assetCode')" ng-class="isActiveAsc == 'assetCode' ? 'active' : ''" >
+                                        <span ng-click="columnAscOrder('code')" ng-class="isActiveAsc == 'code' ? 'active' : ''" >
                                             <i  class="fa fa-caret-up"></i>
                                         </span>
-                                        <span ng-click="columnDescOrder('assetCode')" ng-class="isActiveDesc == 'assetCode' ? 'active' : ''" >
+                                        <span ng-click="columnDescOrder('code')" ng-class="isActiveDesc == 'code' ? 'active' : ''" >
                                              <i  ng-class="class" class="fa fa-caret-down"></i>
                                         </span>
                                     </span>
@@ -265,13 +265,13 @@
 
                             <tbody>
                             <tr ng-repeat="asset in assets">
-                            <td>
+                            <!-- <td>
                                 <div class="checkbox form-horizontal-checkbox">
                                     <label>
                                         <input type="checkbox" name="optionsCheckboxes">
                                     </label>
                                 </div>
-                            </td>
+                            </td> -->
                                 <td>{{asset.code}}</td>
                                 <td>{{asset.title}}</td>
                                 <td>{{asset.assetType}}</td>

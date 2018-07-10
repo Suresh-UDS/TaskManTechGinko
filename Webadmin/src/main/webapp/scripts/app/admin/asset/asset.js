@@ -113,7 +113,7 @@ angular.module('timeSheetApp')
                 }
             }).state('view-calendar', {
             parent: 'manage',
-            url: '/view-calendar',
+            url: '/view-calendar/:id',
             controller: 'AssetController',
             data: {
                 authorities: [],

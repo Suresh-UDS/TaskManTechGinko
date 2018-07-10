@@ -41,7 +41,7 @@ angular.module('timeSheetApp')
 
         $scope.initCalender();
 
-        demo.initFullCalendar();
+        //demo.initFullCalendar();
 
         $scope.openCalendar = function(e,cmp) {
             e.preventDefault();
@@ -61,10 +61,12 @@ angular.module('timeSheetApp')
         $scope.initMaterialWizard();
         
         $scope.loadAllAssetTypes = function() {
+                $scope.loadingStart();
         		AssetTypeComponent.findAll().then(function (data) {
                 $scope.selectedAssetType = null;
                 $scope.assetTypes = data;
                 console.log('Asset type',$scope.assetTypes); 
+                $scope.loadingStop();
             });
         }
         
@@ -122,6 +124,8 @@ angular.module('timeSheetApp')
          }
 
         $scope.search = function () {
+
+            $scope.loadingStop();
            
             var currPageVal = ($scope.pages ? $scope.pages.currPage : 1);
             var searchCriteria = {

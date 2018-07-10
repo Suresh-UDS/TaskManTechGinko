@@ -56,7 +56,7 @@ angular.module('timeSheetApp')
 
         $scope.initCalender();
 
-        demo.initFullCalendar();
+        //demo.initFullCalendar();
 
         $scope.openCalendar = function(e,cmp) {
             e.preventDefault();
@@ -80,6 +80,9 @@ angular.module('timeSheetApp')
         		AssetTypeComponent.findAll().then(function (data) {
                 $scope.selectedAssetType = null;
                 $scope.assetTypes = data;
+
+                console.log('Asset type list',$scope.assetTypes);
+
                 $scope.loadingStop();
             });
         }
@@ -87,6 +90,7 @@ angular.module('timeSheetApp')
         $scope.addAssetType = function () {
  
             console.log($scope.assetType);
+            $scope.loadingStart();
             if($scope.assetType){
                 console.log("Asset Type entered");
                 AssetTypeComponent.create($scope.assetType).then(function (response) {
@@ -96,7 +100,9 @@ angular.module('timeSheetApp')
                     $scope.loadAssetTypes();
                     
 
-                })
+                }).catch(function(){
+                   $scope.loadingStop();
+                });
             }else{
                 console.log("Asset Type not entered");
             }
@@ -116,6 +122,7 @@ angular.module('timeSheetApp')
 	    
 	    $scope.addAssetParam = function () {
 	        console.log($scope.assetParam.name);
+             $scope.loadingStart();
 	        if($scope.assetParam){
 	            console.log("Parameter entered");
 	            ParameterComponent.create($scope.assetParam).then(function (response) {
@@ -124,7 +131,9 @@ angular.module('timeSheetApp')
 	                $scope.showNotifications('top','center','success','Parameter Added Successfully');
 	                $scope.loadAssetParams();
 	
-	            })
+	            }).catch(function(){
+                    $scope.loadingStop();
+                });
 	        }else{
 	            console.log("Parameter not entered");
 	        }
@@ -140,6 +149,7 @@ angular.module('timeSheetApp')
 	    
 	    $scope.addParameterUOM = function () {
 	        console.log($scope.parameterUOM.name);
+             $scope.loadingStart();
 	        if($scope.parameterUOM){
 	            console.log("ParameterUOM entered");
 	            ParameterUOMComponent.create($scope.parameterUOM).then(function (response) {
@@ -148,7 +158,9 @@ angular.module('timeSheetApp')
 	                $scope.showNotifications('top','center','success','Parameter UOM Added Successfully');
 	                $scope.loadAssetParamUoms();
 	
-	            })
+	            }).catch(function(){
+                    $scope.loadingStop();
+                });
 	        }else{
 	            console.log("Parameter UOM not entered");
 	        }
