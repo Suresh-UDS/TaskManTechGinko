@@ -1676,7 +1676,7 @@ angular.module('timeSheetApp')
 
 
 	    $scope.saveAssetParamConfig = function () {
-            $scope.loadingStart;
+             $scope.loadingStart();
             $scope.btnDisabled = true;
         	$scope.error = null;
         	$scope.success =null;
@@ -1769,11 +1769,11 @@ angular.module('timeSheetApp')
                     $scope.consumptionMonitoringRequired = "";
                     $scope.selectedParameterUOM = {};
                     $scope.selectedParameter = {};
-                    $rootScope.loadingStop();
+                    $scope.loadingStop();
 
                     //$scope.loadAllParameters();
                 }).catch(function (response) {
-                    $rootScope.loadingStop();
+                    $scope.loadingStop();
                     $scope.success = null;
                     console.log('Error - '+ response.data);
                     if (response.status === 400 && response.data.message === 'error.duplicateRecordError') {
