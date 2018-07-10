@@ -718,7 +718,7 @@ public class    EmployeeService extends AbstractService {
                     log.debug("Employee checked false "+result.size());
                     empDto.setCheckedIn(false);
                     empDto.setSiteName(CollectionUtils.isNotEmpty(emp.getProjectSites()) ? emp.getProjectSites().get(0).getSite().getName() : "");
-                    empDto.setSiteId(CollectionUtils.isNotEmpty(emp.getProjectSites()) ? emp.getProjectSites().get(0).getSite().getId() : "");
+                    empDto.setSiteId(CollectionUtils.isNotEmpty(emp.getProjectSites()) ? emp.getProjectSites().get(0).getSite().getId() : 0);
 
                 }
                 employeeDtos.add(empDto);
