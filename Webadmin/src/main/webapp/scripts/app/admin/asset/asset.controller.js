@@ -511,7 +511,10 @@ angular.module('timeSheetApp')
             		SiteComponent.findShifts($scope.selectedSites.id).then(function(data){
             			$scope.shifts = data;
                         console.log('selected shifts - ' + JSON.stringify($scope.shifts));
-            		});
+                        //$scope.loadingStop();
+            		}).catch(function(){
+                        //$scope.loadingStop();
+                    });
         		}
         }
         
@@ -575,7 +578,7 @@ angular.module('timeSheetApp')
 
                 //$scope.genQrCodes();
 
-                $rootScope.loadingStop();
+                $scope.loadingStop();
 
                 //$scope.assetConfig();
 
@@ -852,6 +855,7 @@ angular.module('timeSheetApp')
 
 
         $scope.assetConfig=function(){
+            $scope.loadingStart();
 
             if($stateParams.id){
                if($scope.assetDetail.assetType){
@@ -872,12 +876,14 @@ angular.module('timeSheetApp')
                console.log("Asset Config load" ,$scope.assetConfigs);
 
                     AssetComponent.findByAssetConfig($scope.assetConfigs).then(function(data){
-
+                        
                         console.log(data);
                         $scope.assetParameters = data;
 
+                        $scope.loadingStop();
 
                     }).catch(function(){
+                $scope.loadingStop();
                 $scope.showNotifications('top','center','danger','Error load asset config list. Please try again later..');
                 $scope.error = 'ERROR';
             });
@@ -887,7 +893,7 @@ angular.module('timeSheetApp')
 
         $scope.getParameterConfigDetails = function(id, mode) {
                 $rootScope.loadPageTop();
-                $rootScope.loadingStart();
+                $scope.loadingStart();
                 $scope.isEdit = (mode == 'edit' ? true : false)
             AssetComponent.getAssetParamConfig(id).then(function (data) {
                 $scope.parameterConfig = data;
@@ -906,7 +912,7 @@ angular.module('timeSheetApp')
 
             }).catch(function(response){
                  $scope.showNotifications('top','center','danger','Error load asset config. Please try again later..');
-                $rootScope.loadingStop();
+                $scope.loadingStop();
                
             });
         };
@@ -976,7 +982,7 @@ angular.module('timeSheetApp')
          /* Create and save asset */
 
         $scope.saveAsset = function () {
-                $rootScope.loadingStart();
+                $scope.loadingStart();
                 $scope.btnDisabled = true;
                 $scope.error = null;
                 $scope.success = null;
@@ -1007,7 +1013,7 @@ angular.module('timeSheetApp')
                         $scope.assetVal.id=response.id;
                         $scope.assetVal.siteId=response.siteId;
                         $scope.success = 'OK';
-                        $rootScope.loadingStop();
+                        $scope.loadingStop();
                         $scope.showNotifications('top','center','success','Asset has been added Successfully!!');
                         $scope.loadEmployees();
                         $scope.btnDisabled= false;
@@ -1015,7 +1021,7 @@ angular.module('timeSheetApp')
                         //$location.path('/assets');
 
                     }).catch(function (response) {
-                        $rootScope.loadingStop();
+                        $scope.loadingStop();
                         $scope.btnDisabled= false;
                         $scope.success = null;
                         console.log('Error - '+ response.data);
@@ -1039,7 +1045,7 @@ angular.module('timeSheetApp')
 
        $scope.createQrCode= function(){
         
-        $rootScope.loadingStart();
+        $scope.loadingStart();
 
         if(!$scope.assetVal.id && !$stateParams.id){
 
@@ -1065,9 +1071,10 @@ angular.module('timeSheetApp')
                 $scope.qr_img = response.url;
                 $scope.assetCode = response.code;
 //             console.log('create qr---',qrAry);
-             $rootScope.loadingStop();
+             $scope.loadingStop();
                 //$scope.genQrCodes();
             }).catch(function(){
+                $scope.loadingStop();
                 $scope.showNotifications('top','center','danger','Error in create Qr. Please try again later..');
                 $scope.error = 'ERROR';
             });
@@ -1080,7 +1087,7 @@ angular.module('timeSheetApp')
 
        $scope.genQrCodes= function(){
 
-        $rootScope.loadingStart();
+        $scope.loadingStart();
 
               if($stateParams.id){
 
@@ -1101,20 +1108,26 @@ angular.module('timeSheetApp')
 	             $scope.assetCode = response.code;
 	             console.log('get qr---',response);
 	
-	             $rootScope.loadingStop();
+	             $scope.loadingStop();
 
             });
             /*.catch(function(){
                 $scope.showNotifications('top','center','danger','Error to retrieve  qr code..');
-                $rootScope.loadingStop();
+                $scope.loadingStop();
             });*/
 
        }
 
+       $scope.updateSite = function(selectedSite) {
+    	   		$scope.selectedSites = selectedSite;
+    	   
+       }
+       
+       
        /* Update and save asset */
 
         $scope.updateAsset = function () {
-            $rootScope.loadingStart();
+            $scope.loadingStart();
         	$scope.error = null;
             $scope.success =null;
         	$scope.btnDisabled =true;
@@ -1130,8 +1143,8 @@ angular.module('timeSheetApp')
                 }else{
                     $scope.assetEdit.assetGroup = $scope.assetList.assetGroup;
                 }
-                if($scope.selectedSite){
-                   $scope.assetEdit.siteId = $scope.selectedSite.id;
+                if($scope.selectedSites){
+                   $scope.assetEdit.siteId = $scope.selectedSites.id;
                 }else{
                     $scope.assetEdit.siteId = $scope.assetList.siteId;
                 }
@@ -1194,7 +1207,7 @@ angular.module('timeSheetApp')
         	AssetComponent.update($scope.assetEdit).then(function () {
 
                 $scope.success = 'OK';
-                $rootScope.loadingStop();
+                $scope.loadingStop();
                 $scope.btnDisabled =false;
                  $scope.showNotifications('top','center','success','Asset has been updated Successfully!!');
                  //$scope.loadAssets();
@@ -1637,13 +1650,18 @@ angular.module('timeSheetApp')
 
         $scope.deleteAssetConfig = function(id) {
             $rootScope.loadingStart();
-        	AssetComponent.deleteConfigById($scope.deleteParamConId).then(function(data){
-        		console.log(data);
-        		$scope.assetParameters = data;
-                $scope.assetConfig();
-                $rootScope.loadingStop();
-        		
-        	});
+	        	AssetComponent.deleteConfigById($scope.deleteParamConId).then(function(data){
+	        		console.log(data);
+	        		$scope.assetParameters = data;
+	                $scope.assetConfig();
+	                $rootScope.loadingStop();
+	        		
+	        	});
+        }
+        
+        $scope.siteChangeAssetConfig = function() {
+        		$scope.loadBlocks();
+        		$scope.loadEmployees();
         }
 
         $scope.loadAllParameters = function() {
@@ -1669,7 +1687,7 @@ angular.module('timeSheetApp')
 
 
 	    $scope.saveAssetParamConfig = function () {
-            $scope.loadingStart;
+             $scope.loadingStart();
             $scope.btnDisabled = true;
         	$scope.error = null;
         	$scope.success =null;
@@ -1762,11 +1780,11 @@ angular.module('timeSheetApp')
                     $scope.consumptionMonitoringRequired = "";
                     $scope.selectedParameterUOM = {};
                     $scope.selectedParameter = {};
-                    $rootScope.loadingStop();
+                    $scope.loadingStop();
 
                     //$scope.loadAllParameters();
                 }).catch(function (response) {
-                    $rootScope.loadingStop();
+                    $scope.loadingStop();
                     $scope.success = null;
                     console.log('Error - '+ response.data);
                     if (response.status === 400 && response.data.message === 'error.duplicateRecordError') {

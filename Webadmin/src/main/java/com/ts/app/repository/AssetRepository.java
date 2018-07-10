@@ -25,8 +25,8 @@ public interface AssetRepository extends JpaRepository<Asset, Long>,JpaSpecifica
     @Query("SELECT a from Asset a where a.title = :title")
     List<Asset> findAssetByTitle(@Param("title") String title);
     
-    @Query("SELECT a from AssetAMCSchedule a where a.title = :title")
-    List<AssetAMCSchedule> findAssetAMCScheduleByTitle(@Param("title") String title);
+    @Query("SELECT a from AssetAMCSchedule a where a.asset.id = :assetId and a.title = :title")
+    List<AssetAMCSchedule> findAssetAMCScheduleByTitle(@Param("assetId") long assetId, @Param("title") String title);
     
 
     @Query("SELECT a from Asset a where a.code = :code")
