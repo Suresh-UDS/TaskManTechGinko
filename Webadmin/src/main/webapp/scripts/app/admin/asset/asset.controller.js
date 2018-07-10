@@ -597,7 +597,7 @@ angular.module('timeSheetApp')
 
         /* Sorting functions*/
 
-        $scope.isActiveAsc = 'assetCode';
+        $scope.isActiveAsc = 'code';
         $scope.isActiveDesc = '';
 
         $scope.columnAscOrder = function(field){
