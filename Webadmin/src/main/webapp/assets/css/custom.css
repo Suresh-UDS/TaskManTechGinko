@@ -75,6 +75,19 @@ ul.checkList li
 .p-t-1, .p-y-1 {
     padding-top: 10px!important;
 }
+.logo a.LogoTxt
+{
+    padding-top: 20px !important;
+    font-size: 15px;
+    width: 40px !important;
+}
+.LogoCon img.LoginLogo
+{
+    border-radius: 5px;
+    box-shadow: 0px 2px 10px #ccc;
+    width: 98%;
+}
+
 .RightAddBtn
 {
     padding:20px 5px 5px 5px;
