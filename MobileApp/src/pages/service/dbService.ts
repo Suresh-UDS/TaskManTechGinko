@@ -30,16 +30,20 @@ export class DBService {
     selectAMC:any;
     selectPPM:any;
     selectConfig:any;
+    selectPreviousReading:any;
+    selectViewReading:any;
 
     constructor(private sqlite: SQLite,private componentService:componentService,private jobService:JobService,private siteService:SiteService,public employeeService:EmployeeService, public assetService:AssetService) {
 
-        this.selectSite = []
-        this.selectEmployee = []
-        this.selectJobs = []
-        this.selectAsset = []
-        this.selectAMC = []
-        this.selectPPM = []
-        this.selectConfig = []
+        this.selectSite = [];
+        this.selectEmployee = [];
+        this.selectJobs = [];
+        this.selectAsset = [];
+        this.selectAMC = [];
+        this.selectPPM = [];
+        this.selectConfig = [];
+        this.selectPreviousReading=[];
+        this.selectViewReading=[];
 
         this.sqlite.create({
             name: 'data.db',
@@ -559,12 +563,12 @@ export class DBService {
                 var param = [];
                 var asset=this.selectAsset;
                 var search = {assetId: asset.id}
-                this.assetService. viewReading(search).subscribe(
+                this.assetService.viewReading(search).subscribe(
                     response => {
                         // console.log("Getting Jobs response");//
                         // console.log(response);//
                         viewReading= response.transactions;
-                        if (viewReading.length > 0) {
+                        if (viewReading) {
                             for (var i = 0; i < viewReading; i++) {
                                 param.push([viewReading[i].name, viewReading[i].uom, viewReading[i].initialValue,viewReading[i].initialReadingTime, viewReading[i].finalValue,viewReading[i].finalReadingTime, viewReading[i].consumption,viewReading[i].assetId,viewReading[i].assetParameterConfigId,viewReading[i].consumptionMonitoringRequired])
                             }
@@ -641,9 +645,9 @@ export class DBService {
 
 
                 var tablename = 'PreviousReading'
-                var createQuery = "create table if not exists PreviousReading (name VARCHAR,uom VARCHAR,initialValue INT,initialValueTime DATE,finalValue INT,finalValueTime DATE,consumption VARCHAR,assetId INT,assetParameterConfigId INT,consumptionMonitoringRequired BOOLEAN)";
-                var insertQuery = "INSERT INTO PreviousReading(name,uom,initialValue,initialValueTime,finalValue,FinalValueTime,consumption,assetId,assetParameterConfigId,consumptionMonitoringRequired) VALUES (?,?,?,?,?,?,?,?,?,?)"
-                var updateQuery = "update PreviousReading set name=?,uom=?,initialValue=?,initialValueTime,finalValue=?,FinalValueTime=?,consumption=?,assetParameterConfigId,consumptionMonitoringRequired where assetId=? ";
+                var createQuery = "create table if not exists PreviousReading (name VARCHAR,uom VARCHAR,initialValue INT,initialValueTime DATE,finalValue INT,finalValueTime DATE,consumption VARCHAR,assetId INT,assetParameterConfigId INT,consumptionMonitoringRequired BOOLEAN,value INT)";
+                var insertQuery = "INSERT INTO PreviousReading(name,uom,initialValue,initialValueTime,finalValue,FinalValueTime,consumption,assetId,assetParameterConfigId,consumptionMonitoringRequired,value) VALUES (?,?,?,?,?,?,?,?,?,?,?)"
+                var updateQuery = "update PreviousReading set name=?,uom=?,initialValue=?,initialValueTime,finalValue=?,FinalValueTime=?,consumption=?,assetParameterConfigId,consumptionMonitoringRequired,value where assetId=? ";
 
 
                 setTimeout(() => {
@@ -804,13 +808,13 @@ export class DBService {
     getPreviousReading(id,type)
     {
         console.log("ID:"+id)
-        this.selectConfig.splice(0,this.selectConfig.length);
+        this.selectPreviousReading.splice(0,this.selectPreviousReading.length);
         return new Promise((resolve, reject) => {
             setTimeout(() => {
                 console.log("**************")
                 console.log(this.db);
                 console.log("Select Get Config Table");
-                var addQuery = "select * from config where assetType=? and assetId=?";
+                var addQuery = "select * from previousReading where assetType=? and assetId=?";
                 this.db.executeSql(addQuery,[type,id]).then((data) => {
                     console.log(data)
                     if (data.rows.length > 0) {
@@ -818,8 +822,8 @@ export class DBService {
                             this.selectConfig.push(data.rows.item(i))
                         }
                     }
-                    console.log(this.selectConfig)
-                    resolve(this.selectConfig);
+                    console.log(this.selectPreviousReading)
+                    resolve(this.selectPreviousReading);
                 }, (error) => {
                     console.log("ERROR: " + JSON.stringify(error))
                 })
@@ -829,6 +833,36 @@ export class DBService {
         })
 
     }
+
+    getViewReading(id,type)
+    {
+        console.log("ID:"+id)
+        this.selectViewReading.splice(0,this.selectViewReading.length);
+        return new Promise((resolve, reject) => {
+            setTimeout(() => {
+                console.log("**************")
+                console.log(this.db);
+                console.log("Select Get ViewReading Table");
+                var addQuery = "select * from viewReading where assetType=? and assetId=?";
+                this.db.executeSql(addQuery,[type,id]).then((data) => {
+                    console.log(data);
+                    if (data.rows.length > 0) {
+                        for (var i = 0; i < data.rows.length; i++) {
+                            this.selectViewReading.push(data.rows.item(i))
+                        }
+                    }
+                    console.log(this.selectViewReading)
+                    resolve(this.selectViewReading);
+                }, (error) => {
+                    console.log("ERROR: " + JSON.stringify(error))
+                })
+
+            }, 3000)
+
+        })
+
+    }
+
 
     //Jobs
     getJobs(id)
