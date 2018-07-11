@@ -574,7 +574,7 @@ export class AssetView {
         this.assetDetails.reading=null;
         this.spinner=true;
         // this.assetService.viewReading(searchCriteria).subscribe(
-        this.dbService. getViewReading(this.assetDetails.type,this.assetDetails.id).then(
+        this.dbService.getViewReading(this.assetDetails.id,this.assetDetails.type).then(
             response=>
             {
                 console.log("View Reading Response");
