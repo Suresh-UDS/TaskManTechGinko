@@ -1224,12 +1224,12 @@
                                                                                         <option value="" >Select Checklist ..</option>
                                                                                     </select>
                                                                             </div>
-                                                                            <div class="col-md-2">
+                                                                            <!-- <div class="col-md-2"> -->
                                                                                <!--  <a href="javascript:;" data-toggle="collapse" data-parent="#accordian" data-target="#addChecklist" class="btn btn-round btn-fab btn-fab-mini btn-simple" aria-expanded="false" aria-controls="collapseExample">
                                                                                     <i class="material-icons">add</i>
                                                                                 </a> -->
-                                                                                <a  has-permission="" class="btn btn-round btn-fab btn-fab-mini btn-simple"  onClick="$('#addChecklist').modal()" data-target="#myModal"><i class="material-icons">add</i><div class="ripple-container" ></div></a>
-                                                                            </div>
+                                                                                <!-- <a  has-permission="" class="btn btn-round btn-fab btn-fab-mini btn-simple"  onClick="$('#addChecklist').modal()" data-target="#myModal"><i class="material-icons">add</i><div class="ripple-container" ></div></a>
+                                                                            </div> -->
 
                                                                            <!--  <div class="clear"></div>
                                                                             <div class="collapse" id="addAssetGroup">
@@ -1357,7 +1357,7 @@
                                                                     		<div class="form-group">
 						                                                    <label class="control-label">Start Date Time<span class="red-star">*</span></label>
 						                                                    <span class="form-control-feedback calender-icon"><i class="material-icons">date_range</i></span>
-						                                                    <input type="text" class="form-control datetimepicker padng-right30"  id="ppmJobStartTime"  ng-model="ppmJobStartTime" placeholder="{{ppmJobStartTime | date:'dd-MMM-yyyy'}}" required/>
+						                                                    <input type="text" class="form-control datetimepicker padng-right30"  id="ppmJobStartTime"  ng-model="ppmJobStartTime" placeholder="{{ppmJobStartTime | date:'dd/MM/yyyy hh:mm a'}}" required/>
 																		   <div ng-show="form3.$submitted || form3.ppmJobStartTime.$touched">
                                                                                 <div
                                                                                     ng-show="form3.ppmJobStartTime.$dirty || form3.ppmJobStartTime.$invalid">
@@ -1476,7 +1476,8 @@
                                                                     <div class="col-md-3">
                                                                         <div class="form-group selectcon is-empty SelectWithAddbtnCon">
                                                                             <div class="row">
-                                                                                <div class="col-md-10 pad-r-0px">
+                                                                                <div class="col-md-12">
+                                                                                <!-- <div class="col-md-10 pad-r-0px"> -->
                                                                                     <label class="control-label">Type</label>
                                                                                     <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
                                                                                     <select class="form-control ng-pristine ng-valid ng-touched" ng-model="amcSchedule.maintenanceType" tabindex="0" aria-invalid="false">
@@ -1531,19 +1532,20 @@
                                                                     <div class="col-md-3" ng-init="loadCheckList()">
                                                                         <div class="form-group selectcon is-empty SelectWithAddbtnCon">
                                                                             <div class="row">
-                                                                                <div class="col-md-10 pad-r-0px">
+                                                                                <div class="col-md-12">
+                                                                                <!-- <div class="col-md-10 pad-r-0px"> -->
                                                                                     <label class="control-label">Checklist</label>
                                                                                     <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
                                                                                         <select class="form-control ng-pristine ng-valid ng-touched" ng-model="selectedChecklist" ng-options="checklist as checklist.name for checklist in checkLists" tabindex="0" aria-invalid="false">
                                                                                             <option value="" >Select Checklist ..</option>
                                                                                         </select>
                                                                                 </div>
-                                                                                <div class="col-md-2">
+                                                                                <!-- <div class="col-md-2"> -->
                                                                                    <!--  <a href="javascript:;" data-toggle="collapse" data-parent="#accordian" data-target="#addChecklist" class="btn btn-round btn-fab btn-fab-mini btn-simple" aria-expanded="false" aria-controls="collapseExample">
                                                                                         <i class="material-icons">add</i>
                                                                                     </a> -->
-                                                                                    <a  has-permission="" class="btn btn-round btn-fab btn-fab-mini btn-simple"  onClick="$('#addChecklist').modal()" data-target="#myModal"><i class="material-icons">add</i><div class="ripple-container" ></div></a>
-                                                                                </div>
+                                                                                   <!--  <a  has-permission="" class="btn btn-round btn-fab btn-fab-mini btn-simple"  onClick="$('#addChecklist').modal()" data-target="#myModal"><i class="material-icons">add</i><div class="ripple-container" ></div></a>
+                                                                                </div> -->
 
                                                                                <!--  <div class="clear"></div>
                                                                                 <div class="collapse" id="addAssetGroup">
@@ -1660,7 +1662,7 @@
                                                                     		<div class="form-group">
 						                                                    <label class="control-label">Start Date Time<span class="red-star">*</span></label>
 						                                                    <span class="form-control-feedback calender-icon"><i class="material-icons">date_range</i></span>
-						                                                    <input type="text" class="form-control datetimepicker padng-right30"  id="amcJobStartTime"  ng-model="amcJobStartTime" placeholder="{{amcJobStartTime | date:'dd-MMM-yyyy'}}" required/>
+						                                                    <input type="text" class="form-control datetimepicker padng-right30"  id="amcJobStartTime"  ng-model="amcJobStartTime" placeholder="{{amcJobStartTime | date:'dd/MM/yyyy hh:mm a'}}" required/>
 																		   <div ng-show="form3.$submitted || form3.amcJobStartTime.$touched">
                                                                                 <div
                                                                                     ng-show="form3.amcJobStartTime.$dirty || form3.amcJobStartTime.$invalid">

@@ -159,16 +159,16 @@ angular.module('timeSheetApp')
 
         $scope.showNotifications= function(position,alignment,color,msg){
 
-            /*if(nottifShow == true){
-               nottifShow = false ;*/
+            if(nottifShow == true){
+               $rootScope.overlayShow();
                demo.showNotification(position,alignment,color,msg);
 
-           /* }else if(nottifShow == false){
+            }else if(nottifShow == false){
                 $timeout(function() {
-                  nottifShow = true ;
-                }, 1000);
+                  $rootScope.overlayHide() ;
+                }, 2000);
 
-            }*/
+            }
 
         }
 
@@ -191,6 +191,19 @@ angular.module('timeSheetApp')
                
            
             }
+
+            if($scope.assetPPM.endDate < $scope.assetPPM.startDate) {
+                    //$scope.showNotifications('top','center','danger','To date cannot be lesser than From date');
+                    $scope.ppmToMsg =true;
+                    
+                   
+                    //return false;
+            }else {
+               
+                 $scope.ppmToMsg =false;
+                 
+               
+            }
         });
 
         $scope.ppmToMsg =false;
@@ -210,6 +223,20 @@ angular.module('timeSheetApp')
                  $scope.ppmToMsg =false;
                  
                
+            }
+
+            if($scope.assetPPM.startDate > $scope.assetPPM.endDate) {
+
+                    //scope.showNotifications('top','center','danger','From date cannot be greater than To date');
+                    $scope.ppmFromMsg = true;
+                    
+                    
+                    //return false;
+            }else {
+              
+               $scope.ppmFromMsg =false;
+               
+           
             }
         });
         
@@ -292,6 +319,8 @@ angular.module('timeSheetApp')
                     $scope.selectedFrequnceyOccurrence = {};
                     $scope.ppmFrom = "";
                     $scope.ppmTo = "";
+                    $scope.ppmJobStartTime = "";
+        
 
                     $("#dateFilterPpmFrom").val("");
                     $("#dateFilterPpmTo").val("");
@@ -2075,6 +2104,18 @@ angular.module('timeSheetApp')
                
            
             }
+            if($scope.amcSchedule.endDate < $scope.amcSchedule.startDate) {
+                    //$scope.showNotifications('top','center','danger','To date cannot be lesser than From date');
+                    $scope.amcToMsg =true;
+                    
+                   
+                    //return false;
+            }else {
+               
+                 $scope.amcToMsg =false;
+                 
+               
+            }
         });
 
          $scope.amcToMsg =false;
@@ -2094,6 +2135,19 @@ angular.module('timeSheetApp')
                  $scope.amcToMsg =false;
                  
                
+            }
+            if($scope.amcSchedule.startDate > $scope.amcSchedule.endDate) {
+
+                    //scope.showNotifications('top','center','danger','From date cannot be greater than To date');
+                    $scope.amcFromMsg = true;
+                    
+                    
+                    //return false;
+            }else {
+              
+               $scope.amcFromMsg =false;
+               
+           
             }
         });
         
@@ -2190,9 +2244,11 @@ angular.module('timeSheetApp')
 		                        $scope.selectedFrequencyPrefix = {};
 		                        $scope.selectedFreqDuration = {};
 		                        $scope.selectedFrequency = {};
+
 		
 		                        $scope.amcFrom = "";
 		                        $scope.amcTo = "";
+                                $scope.amcJobStartTime = "";
 		
 		                        $("#dateFilterAmcFrom").val("");
 		                        $("#dateFilterAmcTo").val("");

@@ -21,6 +21,7 @@ angular.module('timeSheetApp')
             $scope.searchName = null;
         $scope.manufacturer = {};
         $scope.pager = {};
+        $scope.noData = false;
 
         console.log($stateParams)
                     var that =  $scope;
@@ -195,6 +196,10 @@ angular.module('timeSheetApp')
                     $scope.pageEntries = $scope.manufacturers.length;
                     $scope.totalCountPages = data.totalCount;
                     $scope.pageSort = 10;
+                    $scope.noData = false;
+
+                }else{
+                     $scope.noData = true;
                 }
 
             });
