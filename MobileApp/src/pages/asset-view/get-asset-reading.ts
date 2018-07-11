@@ -68,57 +68,57 @@ export class GetAssetReading {
         console.log(this.assetDetails);
         console.log(this.assetDetails.config);
         // online
-        this.assetService.getAssetConfig(this.assetDetails.assetType,this.assetDetails.id).subscribe(
-        // this.dbService.getConfig(this.assetDetails.assetType,this.assetDetails.id).then(
-            response=>{
-                console.log("Asset config details");
-                console.log(response);
-                this.assetConfig = response;
-                for(let config of this.assetConfig){
-                    this.assetService.getAssetPreviousReadings(config.assetId,config.id).subscribe(
-                        response=>{
-                            console.log("Get Asset Previous readings");
-                            console.log(response);
-                            if(response.consumptionMonitoringRequired){
-                                if(response.initialValue>0){
-                                    config.previousValue = response.initialValue;
-                                }else{
-                                    config.previousValue = null;
-                                }
-                            }else{
-                                if(response.value>0){
-                                    config.previousValue = response.value;
-                                }else{
-                                    config.previousValue = null;
-                                }
-                            }
-
-                            // if(response.initialValue<0){
-                            //
-                            //     if(response.value>0){
-                            //         config.previousValue=response.value;
-                            //     }
-                            // }
-                            // else if(response.finalValue<=0)
-                            // {
-                            //     config.previousValue=response.initialValue;
-                            //     config.reading=response.initialValue;
-                            //     console.log(this.assetConfig);
-                            //     config.previousReadingId=response.id;
-                            // }else{
-                            //     config.previousValue=response.finalValue;
-                            //     config.reading=response.initialValue;
-                            //     console.log(this.assetConfig);
-                            //
-                            // }
-                        }
-                    )
-                }
-            },err=>{
-                console.log("Error in getting asset config");
-                console.log(err);
-            }
-        )
+        // // this.assetService.getAssetConfig(this.assetDetails.assetType,this.assetDetails.id).subscribe(
+        // // //
+        // //     response=>{
+        // //         console.log("Asset config details");
+        // //         console.log(response);
+        // //         this.assetConfig = response;
+        // //         for(let config of this.assetConfig){
+        // //             this.assetService.getAssetPreviousReadings(config.assetId,config.id).subscribe(
+        // //                 response=>{
+        // //                     console.log("Get Asset Previous readings");
+        // //                     console.log(response);
+        // //                     if(response.consumptionMonitoringRequired){
+        // //                         if(response.initialValue>0){
+        // //                             config.previousValue = response.initialValue;
+        // //                         }else{
+        // //                             config.previousValue = null;
+        // //                         }
+        // //                     }else{
+        // //                         if(response.value>0){
+        // //                             config.previousValue = response.value;
+        // //                         }else{
+        // //                             config.previousValue = null;
+        // //                         }
+        // //                     }
+        //
+        //                     // if(response.initialValue<0){
+        //                     //
+        //                     //     if(response.value>0){
+        //                     //         config.previousValue=response.value;
+        //                     //     }
+        //                     // }
+        //                     // else if(response.finalValue<=0)
+        //                     // {
+        //                     //     config.previousValue=response.initialValue;
+        //                     //     config.reading=response.initialValue;
+        //                     //     console.log(this.assetConfig);
+        //                     //     config.previousReadingId=response.id;
+        //                     // }else{
+        //                     //     config.previousValue=response.finalValue;
+        //                     //     config.reading=response.initialValue;
+        //                     //     console.log(this.assetConfig);
+        //                     //
+        //                     // }
+        //                 }
+        //             )
+        //         }
+        //     },err=>{
+        //         console.log("Error in getting asset config");
+        //         console.log(err);
+        //     }
+        // )
 // offline
 
             this.dbService.getConfig(this.assetDetails.assetType,this.assetDetails.id).then(
@@ -127,19 +127,19 @@ export class GetAssetReading {
                 console.log(response);
                 this.assetConfig = response;
                 for(let config of this.assetConfig){
-                    this.assetService.getAssetPreviousReadings(config.assetId,config.id).subscribe(
+                    this.dbService.getPreviousReading(config.assetId,config.id).then(
                         response=>{
                             console.log("Get Asset Previous readings");
-                            console.log(response);
-                            if(response.consumptionMonitoringRequired){
-                                if(response.initialValue>0){
-                                    config.previousValue = response.initialValue;
+                            console.log(response[0]);
+                            if(response[0].consumptionMonitoringRequired){
+                                if(response[0].initialValue>0){
+                                    config.previousValue = response[0].initialValue;
                                 }else{
                                     config.previousValue = null;
                                 }
                             }else{
-                                if(response.value>0){
-                                    config.previousValue = response.value;
+                                if(response[0].value>0){
+                                    config.previousValue = response[0].value;
                                 }else{
                                     config.previousValue = null;
                                 }
@@ -241,7 +241,9 @@ export class GetAssetReading {
 
                         };
                         console.log(assetReading);
-                        this.assetSaveReading(assetReading);
+                        // this.assetSaveReading(assetReading); //online
+
+                        this.assetSaveReadingLocal(assetReading) //offline
                     }else{
                         var msg = "Asset reading should be greater than "+reading.min+"or less than "+reading.max;
                         this.componentService.showToastMessage(msg,'bottom');
@@ -260,7 +262,9 @@ export class GetAssetReading {
 
                     };
                     console.log(assetReading);
-                    this.assetSaveReading(assetReading);
+                    // this.assetSaveReading(assetReading); //online
+                    this.assetSaveReadingLocal(assetReading) //offline
+
                 }
 
 
@@ -278,7 +282,12 @@ export class GetAssetReading {
 
                 };
                 console.log(assetReading);
-                this.assetSaveReading(assetReading);
+
+
+                // this.assetSaveReading(assetReading);//online
+
+                this.assetSaveReadingLocal(assetReading) //offline
+
             }
 
         }else if(reading.consumptionMonitoringRequired){
@@ -296,7 +305,10 @@ export class GetAssetReading {
                             consumptionMonitoringRequired:reading.consumptionMonitoringRequired,
                         };
                         console.log(assetReading);
-                        this.assetSaveReading(assetReading);
+                        // this.assetSaveReading(assetReading); //online
+
+                        this.assetSaveReadingLocal(assetReading) //offline
+
                     }else{
                         var msg = "Asset reading should be greater than "+reading.min+"or less than "+reading.max;
                         this.componentService.showToastMessage(msg,'bottom');
@@ -315,7 +327,9 @@ export class GetAssetReading {
 
                     };
                     console.log(assetReading);
-                    this.assetSaveReading(assetReading);
+                    // this.assetSaveReading(assetReading); //online
+                    this.assetSaveReadingLocal(assetReading) //offline
+
                 }
             }else{
                 assetReading = {
@@ -329,7 +343,9 @@ export class GetAssetReading {
                     consumptionMonitoringRequired:reading.consumptionMonitoringRequired,
                 };
                 console.log(assetReading);
-                this.assetSaveReading(assetReading);
+                // this.assetSaveReading(assetReading); //online
+                this.assetSaveReadingLocal(assetReading) //offline
+
             }
 
         }else{
@@ -344,7 +360,10 @@ export class GetAssetReading {
                         consumptionMonitoringRequired:reading.consumptionMonitoringRequired,
                     };
                     console.log(assetReading);
-                    this.assetSaveReading(assetReading);
+                    // this.assetSaveReading(assetReading); //online
+
+                    this.assetSaveReadingLocal(assetReading) //offline
+
                 }else{
                     var msg = "Asset reading should be greater than "+reading.min+"or less than "+reading.max;
                     this.componentService.showToastMessage(msg,'bottom');
@@ -359,7 +378,9 @@ export class GetAssetReading {
                     consumptionMonitoringRequired:reading.consumptionMonitoringRequired,
                 };
                 console.log(assetReading);
-                this.assetSaveReading(assetReading);
+                // this.assetSaveReading(assetReading); //online
+                this.assetSaveReadingLocal(assetReading) //offline
+
             }
 
         }

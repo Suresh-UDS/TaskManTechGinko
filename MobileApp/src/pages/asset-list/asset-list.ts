@@ -134,58 +134,58 @@ export class AssetList {
     setDataSync()
     {
         this.componentService.showLoader("Data Sync");
-        this.dbService.setAsset().then(
-            response=>{
-                console.log(response)
+        // this.dbService.setAsset().then(
+        //     response=>{
+        //         console.log(response)
                 this.dbService.getAsset().then(
                     response=>{
                         console.log(response)
-                    this.dbService.setPPM().then(
-                        response=>{
-                            console.log(response)
-                            this.dbService.setAMC().then(
-                                response=>{
-                                    console.log(response)
-                                    this.dbService.setConfig().then(
-                                        response=>{
-                                            console.log(response)
-                                            this.dbService.setJobs().then(
-                                                response=>{
-                                                    console.log(response)
-                                                    this.dbService.setTickets().then(
-                                                        response=> {
-                                                            console.log(response)
-                                                            this.dbService.setSites().then(
-                                                                response=> {
-                                                                    console.log(response)
-                                                                    this.dbService.setEmployee().then(
-                                                                        response=> {
-                                                                            console.log(response)
+                    // this.dbService.setPPM().then(
+                    //     response=>{
+                    //         console.log(response)
+                    //         this.dbService.setAMC().then(
+                    //             response=>{
+                    //                 console.log(response)
+                    //                 this.dbService.setConfig().then(
+                    //                     response=>{
+                    //                         console.log(response)
+                    //                         this.dbService.setJobs().then(
+                    //                             response=>{
+                    //                                 console.log(response)
+                    //                                 this.dbService.setTickets().then(
+                    //                                     response=> {
+                    //                                         console.log(response)
+                    //                                         this.dbService.setSites().then(
+                    //                                             response=> {
+                    //                                                 console.log(response)
+                    //                                                 this.dbService.setEmployee().then(
+                    //                                                     response=> {
+                    //                                                         console.log(response)
                                                                                     // this.componentService.closeLoader();
                         this.dbService.setViewReading().then(
                             response=>{
                                 console.log(response)
-
-                                this.dbService.setAssetPreviousReading().then(
-                                    response=> {
-                                        console.log(response)
-                                        this.componentService.closeLoader();
-                                    })
+                                this.componentService.closeLoader();
+                                // this.dbService.setAssetPreviousReading().then(
+                                //     response=> {
+                                //         console.log(response)
+                                //         this.componentService.closeLoader();
+                                //     })
                             }
                         )
 
                                                                         })
-                                                                })
-
-                                                        })
-
-                                                })
-                                        })
-                                })
-                        })
-
-                    })
-            })
+                    //                                             })
+                    //
+                    //                                     })
+                    //
+                    //                             })
+                    //                     })
+                    //             })
+                    //     })
+                    //
+                    // })
+            // })
     }
 
 
