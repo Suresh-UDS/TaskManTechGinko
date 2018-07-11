@@ -162,11 +162,18 @@ export class AssetList {
                                                                         response=> {
                                                                             console.log(response)
                                                                                     // this.componentService.closeLoader();
-                                                                                    this.dbService.setAssetPreviousReading().then(
-                                                                                        response=> {
-                                                                                            console.log(response)
-                                                                                            this.componentService.closeLoader();
-                                                                                        })
+                        this.dbService.setViewReading().then(
+                            response=>{
+                                console.log(response)
+
+                                this.dbService.setAssetPreviousReading().then(
+                                    response=> {
+                                        console.log(response)
+                                        this.componentService.closeLoader();
+                                    })
+                            }
+                        )
+
                                                                         })
                                                                 })
 
