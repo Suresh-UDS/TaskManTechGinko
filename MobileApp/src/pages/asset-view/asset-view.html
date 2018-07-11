@@ -33,7 +33,7 @@
     </ion-toolbar>
     <div [ngSwitch]="true">
 
-        <ion-list *ngSwitchCase=" categories === 'jobs' || categories === 'tickets' " no-margin="" style="background: wheat;">
+        <ion-list *ngSwitchCase=" categories === 'jobs' || categories === 'tickets' ||categories === 'readings'" no-margin="" style="background: wheat;">
 
             <ion-row no-margin class="" no-padding="" >
                 <ion-col col-5 class="ver-center  margin-right15" (click)="selectFromDate()">
@@ -655,32 +655,8 @@
 
     </ion-list>
 
-    <ion-list *ngSwitchCase="'readings'">
-        <!--<ion-row no-margin class="" no-padding style="background: wheat;">-->
-            <!--<ion-col col-5 class="ver-center  margin-right15" (click)="readingFromDate()">-->
-                <!--<ion-col col-2  class="ver-center padding-bottom1">-->
-                    <!--<ion-icon ios="ios-calendar" md="md-calendar"  class="fnt-24 clr-orange"></ion-icon>-->
-                <!--</ion-col>-->
-                <!--<ion-col col-10 class="ver-center padding-top-bottom0">-->
-                    <!--<ion-label *ngIf="!fromDate" class="bg-trans padding-bottom0" no-margin="">From date</ion-label>-->
-                    <!--<p padding-left no-margin="">{{ readingFromDate | date:'dd/MM/yyyy' }}</p>-->
-                <!--</ion-col>-->
-            <!--</ion-col>-->
-            <!--<ion-col col-5 (click)="readingToDate()" class="ver-center">-->
-                <!--<ion-col col-2 class="ver-center padding-bottom1">-->
-                    <!--<ion-icon ios="ios-calendar" md="md-calendar" class="fnt-24 clr-orange"></ion-icon>-->
-                <!--</ion-col>-->
-                <!--<ion-col col-10 class="ver-center padding-top-bottom0">-->
-                    <!--<ion-label *ngIf="!toDate" class="bg-trans padding-bottom0" no-margin="">To date</ion-label>-->
-                    <!--<p padding-left no-margin="">{{ readingToDate | date:'dd/MM/yyyy' }}</p>-->
-                <!--</ion-col>-->
-            <!--</ion-col>-->
-            <!--<ion-col col-2 class=" ver-center padding-top-bottom0">-->
-                <!--<button ion-button round class="color-white" (click)=" readingDateSearch(readingFromDate,readingToDate)" [disabled]="!viewButton">-->
-                    <!--<ion-icon name="arrow-round-forward"></ion-icon>-->
-                <!--</button>-->
-            <!--</ion-col>-->
-        <!--</ion-row>-->
+    <ion-list *ngSwitchCase="'readings'" style="margin-top:56px">
+
         <div  *ngIf="(!assetDetails.reading || assetDetails.reading.length < 0) && spinner" text-center class="margin-top25">
             <ion-spinner name="circles"></ion-spinner>
         </div>

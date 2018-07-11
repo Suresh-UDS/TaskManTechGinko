@@ -423,19 +423,22 @@ export class AssetView {
                 toDate:toDate.toISOString(),
                 assetId:this.assetDetails.id
             };
-            this.componentService.showLoader("")
             this.getTickets(this.ticketSearchCriteria);
         }
-        // else if(this.categories == 'readings')
-        // {
-        //     console.log("From Date:" +this.readingFromDate.toISOString());
-        //         console.log("To Date:" + this.readingToDate.toISOString());
-        //         this.readingSearchCriteria={
-        //             fromDate:this.readingFromDate.toISOString(),
-        //             toDate:this.readingToDate.toISOString(),
-        //             assetId:this.assetDetails.id
-        //         };
-        // }
+        else if(this.categories == 'readings')
+        {
+            console.log("From Date:" +fromDate.toISOString());
+                console.log("To Date:" +toDate.toISOString());
+            // this.componentService.showLoader("")
+                this.readingSearchCriteria={
+                    readingFromDate:fromDate.toISOString(),
+                    readingToDate:toDate.toISOString(),
+                    assetId:this.assetDetails.id
+                };
+
+           this.getReading(this.readingSearchCriteria);
+           // this.componentService.closeLoader();
+        }
 
     }
     //
@@ -535,7 +538,7 @@ export class AssetView {
         this.spinner=true;
 
         //offline
-        // this.dbService.getConfig(this.assetDetails.id).then(
+        // this.dbService.getConfig(this.assetDetails.assetType,this.assetDetails.id).then(
         //     (res)=>{
         //         this.componentService.closeLoader()
         //         console.log(res)
