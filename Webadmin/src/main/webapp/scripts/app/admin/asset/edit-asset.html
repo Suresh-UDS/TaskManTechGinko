@@ -1,4 +1,4 @@
-<div class="crud-form" ng-init="editAsset();loadingStart();loadAllParameters();loadAllParameterUOMs();loadSiteShifts();"
+<div class="crud-form" ng-init="editAsset();loadingStart();loadAllParameters();loadAllParameterUOMs();"
 	data-unique-hash="a2ad475d60b22954085c657a73309b8f">
 	<div class="">
 		<div class="row">
@@ -1155,7 +1155,9 @@
                                                                     		<div class="form-group">
 						                                                    <label class="control-label">Start Date Time<span class="red-star">*</span></label>
 						                                                    <span class="form-control-feedback calender-icon"><i class="material-icons">date_range</i></span>
+
 						                                                    <input type="text" class="form-control datetimepicker padng-right30"  id="ppmJobStartTime"  ng-model="ppmJobStartTime" ng-required="true" placeholder="{{ppmJobStartTime | date:'dd/MM/yyyy hh:mm a'}}" />
+
 																		   <div ng-show="form3.$submitted || form3.ppmJobStartTime.$touched">
                                                                                 <div
                                                                                     ng-show="form3.ppmJobStartTime.$dirty || form3.ppmJobStartTime.$invalid">
@@ -1474,7 +1476,9 @@
                                                                     		<div class="form-group">
 						                                                    <label class="control-label">Start Date Time<span class="red-star">*</span></label>
 						                                                    <span class="form-control-feedback calender-icon"><i class="material-icons">date_range</i></span>
+
 						                                                    <input type="text" class="form-control datetimepicker padng-right30"  id="amcJobStartTime"  ng-model="amcJobStartTime" placeholder="{{amcJobStartTime | date:'dd/MM/yyyy hh:mm a'}}" required/>
+
 																		   <div ng-show="form3.$submitted || form3.amcJobStartTime.$touched">
                                                                                 <div
                                                                                     ng-show="form3.amcJobStartTime.$dirty || form3.amcJobStartTime.$invalid">
@@ -1514,7 +1518,7 @@
 						                                                </div>
 
                                                                     </div>
-                                                                <div class="col-md-3" >
+                                                                <div class="col-md-3" ng-init="loadSiteShifts()">
                                                                         <div class="form-group">
                                                                             <label class="control-label">Shift</label>
                                                                             <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>

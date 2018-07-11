@@ -70,39 +70,32 @@ export class AssetList {
 
 
           //offline
-      // setTimeout(() => {
-      //     this.dbService.getAsset().then(
-      //         (res)=>{
-      //             this.componentService.closeLoader()
-      //             console.log(res)
-      //             this.assetList = res;
-      //             // this.dbService.setAMC();
-      //             // this.dbService.setPPM();
-      //             // this.dbService.setConfig();
-      //             // this.dbService.setJobs();
-      //             // this.dbService.setSites();
-      //                   this.dbService.setReadings();
-      //                   this.dbService.setReadingsList();
-
-      //         },
-      //         (err)=>{
-      //
-      //         })
-      // },3000)
+      setTimeout(() => {
+          this.dbService.getAsset().then(
+              (res)=>{
+                  this.componentService.closeLoader()
+                  console.log(res)
+                  this.assetList = res;
+              },
+              (err)=>{
+                  this.assetList = [];
+                  this.componentService.closeLoader()
+              })
+      },3000)
 
 
 
               //online
-              this.assetService.findAllAssets().subscribe(
-                  response=>{
-                      this.componentService.closeLoader()
-                      console.log(response);
-                      this.assetList = response;
-                  },
-                  error=>{
-                      console.log("")
-                  }
-              );
+              // this.assetService.findAllAssets().subscribe(
+              //     response=>{
+              //         this.componentService.closeLoader()
+              //         console.log(response);
+              //         this.assetList = response;
+              //     },
+              //     error=>{
+              //         console.log("")
+              //     }
+              // );
 
 
       if(this.navParams.get('text'))
@@ -111,15 +104,16 @@ export class AssetList {
           var text = this.navParams.get('text');
 
 
-          // this.dbService.getAssetByCode(text).then(
-          this.assetService.getAssetByCode(text).subscribe(
+          this.dbService.getAssetByCode(text).then(
+          // this.assetService.getAssetByCode(text).subscribe(
               response=>{
                   this.componentService.showToastMessage('Asset found, navigating..','bottom')
                   console.log("Search by asset code response");
                   console.log(response);
                   window.document.querySelector('ion-app').classList.add('transparentBody')
                   // this.navCtrl.setRoot(AssetList,{assetDetails:response,qr:true});
-                  this.navCtrl.push(AssetView,{assetDetails:response});
+                  // this.navCtrl.push(AssetView,{assetDetails:response}); //online
+                  this.navCtrl.push(AssetView,{assetDetails:response[0]}); //offline
 
               },
               err=>{
@@ -140,9 +134,9 @@ export class AssetList {
     setDataSync()
     {
         this.componentService.showLoader("Data Sync");
-        this.dbService.setAsset().then(
-            response=>{
-                console.log(response)
+        // this.dbService.setAsset().then(
+        //     response=>{
+        //         console.log(response)
                 this.dbService.getAsset().then(
                     response=>{
                         console.log(response)
@@ -167,23 +161,30 @@ export class AssetList {
                     //                                                 this.dbService.setEmployee().then(
                     //                                                     response=> {
                     //                                                         console.log(response)
-                    //                                                                 // this.componentService.closeLoader();
-                                                                                    this.dbService.setAssetPreviousReading().then(
-                                                                                        response=> {
-                                                                                            console.log(response)
-                                                                                            this.componentService.closeLoader();
-                                                                                        })
-                                                                        })
-                                                                })
+                                                                                    // this.componentService.closeLoader();
+                        this.dbService.setViewReading().then(
+                            response=>{
+                                console.log(response)
+                                this.componentService.closeLoader();
+                                // this.dbService.setAssetPreviousReading().then(
+                                //     response=> {
+                                //         console.log(response)
+                                //         this.componentService.closeLoader();
+                                //     })
+                            }
+                        )
 
-            //                                             })
-            //
-            //                                     })
-            //                             })
-            //                     })
-            //             })
-            //
-            //         })
+                                                                        })
+                    //                                             })
+                    //
+                    //                                     })
+                    //
+                    //                             })
+                    //                     })
+                    //             })
+                    //     })
+                    //
+                    // })
             // })
     }
 

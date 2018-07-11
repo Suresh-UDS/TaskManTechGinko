@@ -755,13 +755,5 @@ public class AssetResource {
 		result = assetService.getAssetConfig(id);
 		return result;
 	}
-	
-	@RequestMapping(value= "/move/qrcodes/{title}", method = RequestMethod.GET)
-	public List<Object> findAllAssetQrCodes(@PathVariable("title") String title) {
-		log.info("Get All Asset qr codes");
-		return assetService.findAllAssetQrcode(title);
-	}
-	
-	
 
 }

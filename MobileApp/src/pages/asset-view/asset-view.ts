@@ -34,12 +34,11 @@ export class AssetView {
   tickets:any;
   jobPage=0;
   count:any;
+  readingPage=0;
 
     totalPages:0;
     page:1;
 
-    readingFromDate:any;
-    readingToDate:any;
 
     fromDate:any;
     toDate:any;
@@ -95,7 +94,8 @@ export class AssetView {
         let profileModal = this.modalCtrl.create(GetAssetReading, {assetDetails:this.assetDetails });
         profileModal.onDidDismiss(data => {
             console.log(data);
-            this.getReading(this.readingSearchCriteria);
+            // this.getReading(this.readingSearchCriteria);
+            this.getReading();
         });
         profileModal.present();
 
@@ -190,36 +190,36 @@ export class AssetView {
         // }
         this.spinner = true;
         //offline
-        // this.dbService.getJobs(this.assetDetails.id).then(
-        //     (res)=>{
-        //         this.componentService.closeLoader()
-        //         console.log(res)
-        //         this.assetDetails.jobs = res;
-        //     },
-        //     (err)=>{
-        //
-        //     }
-        // )
+        this.dbService.getJobs(this.assetDetails.id).then(
+            (res)=>{
+                this.componentService.closeLoader()
+                console.log(res)
+                this.assetDetails.jobs = res;
+            },
+            (err)=>{
+
+            }
+        )
 
 
         //Online
-        this.jobService.getJobs(searchCriteria).subscribe(
-            response=>{
-                this.spinner = false;
-                this.componentService.closeLoader();
-                console.log("Getting Jobs response");
-                console.log(response);
-                this.assetDetails.jobs = response.transactions;
-                this.page = response.currPage;
-                this.totalPages = response.totalPages;
-                console.log(this.assetDetails.jobs)
-            },
-            error=>{
-                this.spinner = false;
-                this.componentService.closeLoader();
-                console.log(error)
-                console.log("Getting Jobs errors")
-            })
+        // this.jobService.getJobs(searchCriteria).subscribe(
+        //     response=>{
+        //         this.spinner = false;
+        //         this.componentService.closeLoader();
+        //         console.log("Getting Jobs response");
+        //         console.log(response);
+        //         this.assetDetails.jobs = response.transactions;
+        //         this.page = response.currPage;
+        //         this.totalPages = response.totalPages;
+        //         console.log(this.assetDetails.jobs)
+        //     },
+        //     error=>{
+        //         this.spinner = false;
+        //         this.componentService.closeLoader();
+        //         console.log(error)
+        //         console.log("Getting Jobs errors")
+        //     })
     }
 
     jobScroll(infiniteScroll) {
@@ -284,7 +284,7 @@ export class AssetView {
             setTimeout(() => {
                 this.assetService.viewReading(searchCriteria).subscribe(
                     response => {
-                        console.log('ionViewDidLoad jobs list:');
+                        console.log('ionViewDidLoad readings list:');
                         console.log(response);
                         console.log(response.transactions);
                         for (var i = 0; i < response.transactions.length; i++) {
@@ -436,7 +436,8 @@ export class AssetView {
                     assetId:this.assetDetails.id
                 };
 
-           this.getReading(this.readingSearchCriteria);
+           // this.getReading(this.readingSearchCriteria);
+            this.getReading();
            // this.componentService.closeLoader();
         }
 
@@ -468,33 +469,33 @@ export class AssetView {
     getAssetPPMSchedule()
     {
         this.spinner = true;
-        //offline
-        // this.dbService.getPPM(this.assetDetails.id).then(
-        //     (res)=>{
-        //         this.componentService.closeLoader()
-        //         console.log(res)
-        //         this.assetDetails.ppms = res;
-        //     },
-        //     (err)=>{
-        //
-        //     }
-        // )
+        // offline
+        this.dbService.getPPM(this.assetDetails.id).then(
+            (res)=>{
+                this.componentService.closeLoader()
+                console.log(res)
+                this.assetDetails.ppms = res;
+            },
+            (err)=>{
+
+            }
+        )
 
         //Online
-        this.assetService.getAssetPPMSchedule(this.assetDetails.id).subscribe(
-            response=>{
-                this.spinner = false;
-                this.componentService.closeLoader();
-                console.log("Get asset PPM response");
-                console.log(response);
-                this.assetDetails.ppms = response;
-            },
-            error=>{
-                this.spinner = false;
-                this.componentService.closeLoader();
-                console.log("Get asset PPM error");
-                console.log(error);
-            })
+        // this.assetService.getAssetPPMSchedule(this.assetDetails.id).subscribe(
+        //     response=>{
+        //         this.spinner = false;
+        //         this.componentService.closeLoader();
+        //         console.log("Get asset PPM response");
+        //         console.log(response);
+        //         this.assetDetails.ppms = response;
+        //     },
+        //     error=>{
+        //         this.spinner = false;
+        //         this.componentService.closeLoader();
+        //         console.log("Get asset PPM error");
+        //         console.log(error);
+        //     })
     }
 
 
@@ -504,33 +505,33 @@ export class AssetView {
         this.spinner = true;
 
         //offline
-        // this.dbService.getAMC(this.assetDetails.id).then(
-        //     (res)=>{
-        //         this.componentService.closeLoader()
-        //         console.log(res)
-        //         this.assetDetails.amcs = res;
-        //     },
-        //     (err)=>{
-        //
-        //     }
-        // )
+        this.dbService.getAMC(this.assetDetails.id).then(
+            (res)=>{
+                this.componentService.closeLoader()
+                console.log(res)
+                this.assetDetails.amcs = res;
+            },
+            (err)=>{
+
+            }
+        )
 
 
         //Online
-        this.assetService.getAssetAMCSchedule(this.assetDetails.id).subscribe(
-            response=>{
-                this.spinner = false;
-                this.componentService.closeLoader()
-                console.log("Get asset AMC response");
-                this.assetDetails.amcs = response;
-                console.log(this.assetDetails.amcs);
-            },
-            error=>{
-                this.spinner = false;
-                this.componentService.closeLoader()
-                console.log("Get asset AMC error");
-                console.log(error);
-            })
+        // this.assetService.getAssetAMCSchedule(this.assetDetails.id).subscribe(
+        //     response=>{
+        //         this.spinner = false;
+        //         this.componentService.closeLoader()
+        //         console.log("Get asset AMC response");
+        //         this.assetDetails.amcs = response;
+        //         console.log(this.assetDetails.amcs);
+        //     },
+        //     error=>{
+        //         this.spinner = false;
+        //         this.componentService.closeLoader()
+        //         console.log("Get asset AMC error");
+        //         console.log(error);
+        //     })
     }
 
     // Config
@@ -538,47 +539,49 @@ export class AssetView {
         this.spinner=true;
 
         //offline
-        // this.dbService.getConfig(this.assetDetails.assetType,this.assetDetails.id).then(
-        //     (res)=>{
-        //         this.componentService.closeLoader()
-        //         console.log(res)
-        //         this.assetDetails.config = res;
-        //         console.log(this.assetDetails.config)
-        //     },
-        //     (err)=>{
-        //
-        //     }
-        // )
+        this.dbService.getConfig(this.assetDetails.assetType,this.assetDetails.id).then(
+            (res)=>{
+                this.componentService.closeLoader()
+                console.log(res)
+                this.assetDetails.config = res;
+                console.log(this.assetDetails.config)
+            },
+            (err)=>{
+
+            }
+        )
 
 
         // online
-        console.log(this.assetDetails.config);
-        this.assetService.getAssetConfig(this.assetDetails.assetType,this.assetDetails.id).subscribe(
-            response=>{
-                this.spinner = false;
-                this.componentService.closeLoader()
-                console.log("Asset config");
-                console.log(response);
-                this.assetDetails.config = response;
-            },err=>{
-                this.spinner = false;
-                this.componentService.closeLoader();
-                console.log("Error in getting asset config");
-                console.log(err);
-            })
+        // console.log(this.assetDetails.config);
+        // this.assetService.getAssetConfig(this.assetDetails.assetType,this.assetDetails.id).subscribe(
+        //     response=>{
+        //         this.spinner = false;
+        //         this.componentService.closeLoader()
+        //         console.log("Asset config");
+        //         console.log(response);
+        //         this.assetDetails.config = response;
+        //     },err=>{
+        //         this.spinner = false;
+        //         this.componentService.closeLoader();
+        //         console.log("Error in getting asset config");
+        //         console.log(err);
+        //     })
     }
 
     // Reading
-    getReading(searchCriteria){
+    getReading(){
         this.assetDetails.reading=null;
         this.spinner=true;
-        this.assetService.viewReading(searchCriteria).subscribe(
+        // this.assetService.viewReading(searchCriteria).subscribe(
+        this.dbService.getViewReading(this.assetDetails.id,this.assetDetails.type).then(
             response=>
             {
                 console.log("View Reading Response");
                 console.log(response);
                 this.spinner=false;
-                this.assetDetails.reading = response.transactions;
+                // this.assetDetails.reading = response.transactions;
+                this.assetDetails.reading = response;
             },error=>
             {
                 console.log("Error in View Reading");
