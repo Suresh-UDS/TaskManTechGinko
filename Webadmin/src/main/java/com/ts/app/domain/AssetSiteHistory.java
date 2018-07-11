@@ -31,12 +31,12 @@ public class AssetSiteHistory extends AbstractAuditingEntity implements Serializ
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private long id;
 
-	@ManyToOne(fetch = FetchType.LAZY, cascade={CascadeType.ALL})
-	@JoinColumn(name = "assetId", referencedColumnName = "id", nullable = true)
+	@ManyToOne(optional = false)
+	@JoinColumn(name = "assetId", referencedColumnName = "id", nullable = false)
 	private Asset asset;
 	
-	@ManyToOne(fetch = FetchType.LAZY, cascade={CascadeType.ALL})
-	@JoinColumn(name = "siteId", referencedColumnName = "id", nullable = true)
+	@ManyToOne(optional = false)
+	@JoinColumn(name = "siteId", referencedColumnName = "id", nullable = false)
 	private Site site;
 	
 	public long getId() {

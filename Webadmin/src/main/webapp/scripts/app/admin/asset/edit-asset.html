@@ -1,4 +1,4 @@
-<div class="crud-form" ng-init="editAsset();loadingStart();loadAllParameters();loadAllParameterUOMs();"
+<div class="crud-form" ng-init="editAsset();loadingStart();loadAllParameters();loadAllParameterUOMs();loadSiteShifts();"
 	data-unique-hash="a2ad475d60b22954085c657a73309b8f">
 	<div class="">
 		<div class="row">
@@ -246,7 +246,7 @@
                                                                                     <div class="form-group">
                                                                                         <label class="control-label">Site   <span class="red-star">*</span> </label>
                                                                                         <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                                                                        <select class="form-control " ng-model="selectedSites"  ng-options="site as site.name for site in sites track by site.id" ng-change="loadBlocks();loadEmployees();" name="AssetSite" required>
+                                                                                        <select class="form-control " ng-model="selectedSites"  ng-options="site as site.name for site in sites track by site.id"  onclick="$('#siteChangeModalConfig').modal()" data-target="#myModal"  name="AssetSite" required>
                                                                                             <option value="">Select Site ...</option>
                                                                                         </select>
 
@@ -1154,7 +1154,7 @@
                                                                     		<div class="form-group">
 						                                                    <label class="control-label">Start Date Time<span class="red-star">*</span></label>
 						                                                    <span class="form-control-feedback calender-icon"><i class="material-icons">date_range</i></span>
-						                                                    <input type="text" class="form-control datetimepicker padng-right30"  id="ppmJobStartTime"  ng-model="assetPPM.jobStartTime" ng-required="true"/>
+						                                                    <input type="text" class="form-control datetimepicker padng-right30"  id="ppmJobStartTime"  ng-model="ppmJobStartTime" ng-required="true" placeholder="{{ppmJobStartTime | date:'dd-MMM-yyyy'}}" />
 																		   <div ng-show="form3.$submitted || form3.ppmJobStartTime.$touched">
                                                                                 <div
                                                                                     ng-show="form3.ppmJobStartTime.$dirty || form3.ppmJobStartTime.$invalid">
@@ -1471,7 +1471,7 @@
                                                                     		<div class="form-group">
 						                                                    <label class="control-label">Start Date Time<span class="red-star">*</span></label>
 						                                                    <span class="form-control-feedback calender-icon"><i class="material-icons">date_range</i></span>
-						                                                    <input type="text" class="form-control datetimepicker padng-right30"  id="amcJobStartTime"  ng-model="amcSchedule.jobStartTime" required/>
+						                                                    <input type="text" class="form-control datetimepicker padng-right30"  id="amcJobStartTime"  ng-model="amcJobStartTime" placeholder="{{amcJobStartTime | date:'dd-MMM-yyyy'}}" required/>
 																		   <div ng-show="form3.$submitted || form3.amcJobStartTime.$touched">
                                                                                 <div
                                                                                     ng-show="form3.amcJobStartTime.$dirty || form3.amcJobStartTime.$invalid">
@@ -1511,7 +1511,7 @@
 						                                                </div>
 
                                                                     </div>
-                                                                <div class="col-md-3" ng-init="loadSiteShifts()">
+                                                                <div class="col-md-3" >
                                                                         <div class="form-group">
                                                                             <label class="control-label">Shift</label>
                                                                             <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
@@ -1904,6 +1904,9 @@
                                                                                     </td>
 
                                                                                 </tr>
+                                                                                <tr>
+                                                                                   <td colspan="7" align="center" ng-show="!assetParameters">No asset param Found</td>
+                                                                                </tr>
 
                                                                             </tbody>
                                                                         </table>
@@ -2102,11 +2105,16 @@
                                                            <div class="row docsRow" ng-if="fileCount" >
 
                                                                <div class="col-md-2 txt-align-center DocsCon" ng-repeat="uploadFile in uploadFiles">
-                                                                   <div class="DeleteBtn" ng-click="deleteConfirmDoc(uploadFile.id)"  onClick="$('#deleteModal').modal()" data-target="#myModal">
+                                                                   <div class="DeleteBtn" ng-click="deleteConfirmDoc(uploadFile.id,'file')"  onClick="$('#deleteModal').modal()" data-target="#myModal">
                                                                      <i class="material-icons">close</i>
                                                                  </div>
-                                                                   <a href="{{uploadFile.url}}" id="loop">
-                                                                       <img src="assets/img/{{uploadFile.extension}}.png" alt="docs" title="Download"  />
+                                                                   <div class="DownloadBtn">
+                                                                     <a href="{{uploadFile.url}}" id="loop">
+                                                                       <i class="material-icons">cloud_download</i>
+                                                                    </a>
+                                                                   </div>
+                                                                   <a href="#" id="loop">
+                                                                       <img ng-src="assets/img/{{uploadFile.extension}}.png" alt="docs" title="Download"  />
                                                                    </a>
                                                                    <p style="padding-top: 10px;font-weight: 400;font-size: 15px">{{uploadFile.title}}</p>
                                                                    <div  ng-if="uploadFile.id == download">
@@ -2135,12 +2143,19 @@
                                                             <div class="row docsRow" ng-if="photoCount" >
 
                                                                 <div class="col-md-2 txt-align-center DocsCon" ng-repeat="uploadPhoto in uploadAssetPhotos">
-                                                                    <div class="DeleteBtn" ng-click="deleteConfirmDoc(uploadPhoto.id)"  onClick="$('#deleteModal').modal()" data-target="#myModal">
+                                                                    <div class="DeleteBtn" ng-click="deleteConfirmDoc(uploadPhoto.id,'photo')"  onClick="$('#deleteModal').modal()" data-target="#myModal">
+                                                                        
                                                                          <i class="material-icons">close</i>
+                                                                         
                                                                      </div>
-                                                                    <a href="{{uploadPhoto.url}}" id="loop2">
+                                                                    <div class="DownloadBtn">
+                                                                        <a href="{{uploadPhoto.url}}" id="loop2">
+                                                                        <i class="material-icons">cloud_download</i>
+                                                                        </a>
+                                                                    </div>
+                                                                    <a href="#" id="loop2">
                                                                         <!-- <img src="D:\asset\uploads\site\{{uploadPhoto.id}}\{{uploadPhoto.file}}" alt="docs" ng-click="showFile(uploadPhoto.id, uploadPhoto.file)"/> -->
-                                                                        <img src="assets/img/{{uploadPhoto.extension}}.png" alt="docs" title="Download" />
+                                                                        <img ng-src="assets/img/{{uploadPhoto.extension}}.png" alt="docs" title="Download" />
                                                                     </a>
                                                                     <p style="padding-top: 10px;font-weight: 400;font-size: 15px">{{uploadPhoto.title}}</p>
                                                                     <div ng-if="uploadPhoto.id == download">
@@ -2689,6 +2704,30 @@
                 <div class="delete-footer">
                     <button type="button" ng-click="deleteAssetConfig()"
                         class="btn btn-danger text-danger" data-dismiss="modal">Confirm</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<!-- Site change confirmation dialog -->
+
+<div class="row">
+
+    <div id="siteChangeModalConfig" data-backdrop="false" class="modal fade"
+        tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+        aria-hidden="true">
+        <div class="delete-dialog">
+            <div class="modal-content">
+                <div class="modal-body">
+                    Please confirm the site transfer. The schedules and jobs will be moved to the newly selected site.<br>
+                </div>
+                <div class="delete-footer">
+                    <button type="button" ng-click="siteChangeAssetConfig()"
+                        class="btn btn-danger-outline text-danger" data-dismiss="modal">Confirm</button>
                     <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
 
                 </div>

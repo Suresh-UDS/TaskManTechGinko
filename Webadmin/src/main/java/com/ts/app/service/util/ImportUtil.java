@@ -748,6 +748,7 @@ public class ImportUtil {
 				
 				assetAMCDto.setEmpId(Long.parseLong(getCellValue(currentRow.getCell(10))));
 				assetAMCDto.setFrequencyPrefix("Every");
+				assetAMCDto.setMaintenanceType(getCellValue(currentRow.getCell(11)));
 				assetManagementService.createAssetAMCSchedule(assetAMCDto);
 				
 			}

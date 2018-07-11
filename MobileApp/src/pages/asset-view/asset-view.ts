@@ -38,6 +38,9 @@ export class AssetView {
     totalPages:0;
     page:1;
 
+    readingFromDate:any;
+    readingToDate:any;
+
     fromDate:any;
     toDate:any;
     viewButton:any;
@@ -45,6 +48,7 @@ export class AssetView {
     spinner:any;
     jobSearchCriteria:any;
     ticketSearchCriteria:any;
+    readingSearchCriteria:any;
     fileTransfer: FileTransferObject = this.transfer.create();
 
 
@@ -79,6 +83,9 @@ export class AssetView {
           assetId:this.assetDetails.id
       }
 
+      this.readingSearchCriteria={
+          assetId:this.assetDetails.id
+      }
       this.getAssetById();
   }
 
@@ -88,7 +95,7 @@ export class AssetView {
         let profileModal = this.modalCtrl.create(GetAssetReading, {assetDetails:this.assetDetails });
         profileModal.onDidDismiss(data => {
             console.log(data);
-            this.getReading();
+            this.getReading(this.readingSearchCriteria);
         });
         profileModal.present();
 
@@ -416,18 +423,21 @@ export class AssetView {
                 toDate:toDate.toISOString(),
                 assetId:this.assetDetails.id
             };
-            this.componentService.showLoader("")
             this.getTickets(this.ticketSearchCriteria);
         }
         else if(this.categories == 'readings')
         {
-            console.log("From Date:" + fromDate.toISOString());
-                console.log("To Date:" + toDate.toISOString());
-                var searchCriteria={
-                    fromDate:fromDate.toISOString(),
-                    toDate:toDate.toISOString(),
+            console.log("From Date:" +fromDate.toISOString());
+                console.log("To Date:" +toDate.toISOString());
+            // this.componentService.showLoader("")
+                this.readingSearchCriteria={
+                    readingFromDate:fromDate.toISOString(),
+                    readingToDate:toDate.toISOString(),
                     assetId:this.assetDetails.id
                 };
+
+           this.getReading(this.readingSearchCriteria);
+           // this.componentService.closeLoader();
         }
 
     }
@@ -438,18 +448,18 @@ export class AssetView {
     getAssetById(){
         this.componentService.closeLoader();
         //Online
-        // this.assetService.getAssetById(this.assetDetails.id).subscribe(
-        //     response=>{
-        //         this.componentService.closeLoader();
-        //         console.log("Asset by id");
-        //         console.log(response);
-        //         this.assetDetails = response;
-        //     },err=>{
-        //         this.componentService.closeLoader();
-        //         console.log("Error in getting asset by id");
-        //         console.log(err);
-        //     }
-        // )
+        this.assetService.getAssetById(this.assetDetails.id).subscribe(
+            response=>{
+                this.componentService.closeLoader();
+                console.log("Asset by id");
+                console.log(response);
+                this.assetDetails = response;
+            },err=>{
+                this.componentService.closeLoader();
+                console.log("Error in getting asset by id");
+                console.log(err);
+            }
+        )
 
     }
 
@@ -459,32 +469,32 @@ export class AssetView {
     {
         this.spinner = true;
         //offline
-        this.dbService.getPPM(this.assetDetails.id).then(
-            (res)=>{
-                this.componentService.closeLoader()
-                console.log(res)
-                this.assetDetails.ppms = res;
-            },
-            (err)=>{
-
-            }
-        )
+        // this.dbService.getPPM(this.assetDetails.id).then(
+        //     (res)=>{
+        //         this.componentService.closeLoader()
+        //         console.log(res)
+        //         this.assetDetails.ppms = res;
+        //     },
+        //     (err)=>{
+        //
+        //     }
+        // )
 
         //Online
-        // this.assetService.getAssetPPMSchedule(this.assetDetails.id).subscribe(
-        //     response=>{
-        //         this.spinner = false;
-        //         this.componentService.closeLoader();
-        //         console.log("Get asset PPM response");
-        //         console.log(response);
-        //         this.assetDetails.ppms = response;
-        //     },
-        //     error=>{
-        //         this.spinner = false;
-        //         this.componentService.closeLoader();
-        //         console.log("Get asset PPM error");
-        //         console.log(error);
-        //     })
+        this.assetService.getAssetPPMSchedule(this.assetDetails.id).subscribe(
+            response=>{
+                this.spinner = false;
+                this.componentService.closeLoader();
+                console.log("Get asset PPM response");
+                console.log(response);
+                this.assetDetails.ppms = response;
+            },
+            error=>{
+                this.spinner = false;
+                this.componentService.closeLoader();
+                console.log("Get asset PPM error");
+                console.log(error);
+            })
     }
 
 
@@ -494,33 +504,33 @@ export class AssetView {
         this.spinner = true;
 
         //offline
-        this.dbService.getAMC(this.assetDetails.id).then(
-            (res)=>{
-                this.componentService.closeLoader()
-                console.log(res)
-                this.assetDetails.amcs = res;
-            },
-            (err)=>{
-
-            }
-        )
+        // this.dbService.getAMC(this.assetDetails.id).then(
+        //     (res)=>{
+        //         this.componentService.closeLoader()
+        //         console.log(res)
+        //         this.assetDetails.amcs = res;
+        //     },
+        //     (err)=>{
+        //
+        //     }
+        // )
 
 
         //Online
-        // this.assetService.getAssetAMCSchedule(this.assetDetails.id).subscribe(
-        //     response=>{
-        //         this.spinner = false;
-        //         this.componentService.closeLoader()
-        //         console.log("Get asset AMC response");
-        //         this.assetDetails.amcs = response;
-        //         console.log(this.assetDetails.amcs);
-        //     },
-        //     error=>{
-        //         this.spinner = false;
-        //         this.componentService.closeLoader()
-        //         console.log("Get asset AMC error");
-        //         console.log(error);
-        //     })
+        this.assetService.getAssetAMCSchedule(this.assetDetails.id).subscribe(
+            response=>{
+                this.spinner = false;
+                this.componentService.closeLoader()
+                console.log("Get asset AMC response");
+                this.assetDetails.amcs = response;
+                console.log(this.assetDetails.amcs);
+            },
+            error=>{
+                this.spinner = false;
+                this.componentService.closeLoader()
+                console.log("Get asset AMC error");
+                console.log(error);
+            })
     }
 
     // Config
@@ -528,47 +538,47 @@ export class AssetView {
         this.spinner=true;
 
         //offline
-        this.dbService.getConfig(this.assetDetails.id).then(
-            (res)=>{
-                this.componentService.closeLoader()
-                console.log(res)
-                this.assetDetails.config = res;
-                console.log(this.assetDetails.config)
-            },
-            (err)=>{
-
-            }
-        )
-
-
-        //online
-        // console.log(this.assetDetails.config);
-        // this.assetService.getAssetConfig(this.assetDetails.assetType,this.assetDetails.id).subscribe(
-        //     response=>{
-        //         this.spinner = false;
+        // this.dbService.getConfig(this.assetDetails.assetType,this.assetDetails.id).then(
+        //     (res)=>{
         //         this.componentService.closeLoader()
-        //         console.log("Asset config");
-        //         console.log(response);
-        //         this.assetDetails.config = response;
-        //     },err=>{
-        //         this.spinner = false;
-        //         this.componentService.closeLoader();
-        //         console.log("Error in getting asset config");
-        //         console.log(err);
-        //     })
+        //         console.log(res)
+        //         this.assetDetails.config = res;
+        //         console.log(this.assetDetails.config)
+        //     },
+        //     (err)=>{
+        //
+        //     }
+        // )
+
+
+        // online
+        console.log(this.assetDetails.config);
+        this.assetService.getAssetConfig(this.assetDetails.assetType,this.assetDetails.id).subscribe(
+            response=>{
+                this.spinner = false;
+                this.componentService.closeLoader()
+                console.log("Asset config");
+                console.log(response);
+                this.assetDetails.config = response;
+            },err=>{
+                this.spinner = false;
+                this.componentService.closeLoader();
+                console.log("Error in getting asset config");
+                console.log(err);
+            })
     }
 
     // Reading
-    getReading(){
+    getReading(searchCriteria){
         this.assetDetails.reading=null;
         this.spinner=true;
-        this.assetService.viewReading(this.assetDetails.id).subscribe(
+        this.assetService.viewReading(searchCriteria).subscribe(
             response=>
             {
                 console.log("View Reading Response");
                 console.log(response);
                 this.spinner=false;
-                this.assetDetails.reading = response;
+                this.assetDetails.reading = response.transactions;
             },error=>
             {
                 console.log("Error in View Reading");
@@ -579,17 +589,17 @@ export class AssetView {
     }
 
     // Reading Date Search
-    // readingDateSearch(fromDate,toDate) {
-    //     // this.componentService.showLoader("")
-    //     console.log("From Date:" + fromDate.toISOString());
-    //     console.log("To Date:" + toDate.toISOString());
-    //     var searchCriteria={
-    //         fromDate:fromDate.toISOString(),
-    //         toDate:toDate.toISOString(),
-    //         assetId:this.assetDetails.id
-    //     };
-    // }
-    //
+    readingDateSearch(readingFromDate,readingToDate) {
+        // this.componentService.showLoader("")
+        console.log("reading From Date:" + readingFromDate.toISOString());
+        console.log("reading To Date:" + readingToDate.toISOString());
+        var searchCriteria={
+            fromDate:readingFromDate.toISOString(),
+            toDate:readingToDate.toISOString(),
+            assetId:this.assetDetails.id
+        };
+    }
+
 
 
 

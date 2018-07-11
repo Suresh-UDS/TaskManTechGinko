@@ -816,6 +816,7 @@ public class JobManagementService extends AbstractService {
 			//data.append("&location="+assetPpmScheduleDTO.getLocationId());
 			data.append("&frequency="+assetPpmScheduleDTO.getFrequency());
 			data.append("&duration="+assetPpmScheduleDTO.getFrequencyDuration());
+			data.append("&assetId="+assetPpmScheduleDTO.getAssetId());
 			//data.append("&schedule="+Frequency.valueOf(assetPpmScheduleDTO.getFrequency()).getTypeFrequency());
 			schConfDto.setData(data.toString());
 			schConfDto.setSchedule(Frequency.valueOf(assetPpmScheduleDTO.getFrequency()).getValue());
@@ -1516,7 +1517,7 @@ public class JobManagementService extends AbstractService {
 		job.setTitle(assetAMCScheduleDTO.getTitle());
 		job.setDescription(assetAMCScheduleDTO.getTitle() +" "+ assetAMCScheduleDTO.getFrequencyPrefix()+" "+assetAMCScheduleDTO.getFrequencyDuration()+" "+assetAMCScheduleDTO.getFrequency());
 		job.setMaintenanceType(assetAMCScheduleDTO.getMaintenanceType());
-		job.setFrequency(Frequency.valueOf(assetAMCScheduleDTO.getFrequency()).getValue());
+		job.setSchedule(Frequency.valueOf(assetAMCScheduleDTO.getFrequency()).getValue());
 		job.setActive(job.ACTIVE_YES);
 		job = jobRepository.saveAndFlush(job);
 
