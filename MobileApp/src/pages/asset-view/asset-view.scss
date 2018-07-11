@@ -1,7 +1,6 @@
 page-asset-view {
 
-  .tool-bar
-  {
+  .tool-bar {
     padding: 4px 0 0 0 !important;
     min-height: 0 !important;
   }
@@ -26,25 +25,20 @@ page-asset-view {
     }
   }
 
-  .label-on-left
-  {
+  .label-on-left {
     padding-bottom: 10px !important;
   }
 
-  .primary-border-bottom
-  {
+  .primary-border-bottom {
     border-bottom: 1px solid orange;
   }
-  .padding-bottom1
-  {
+  .padding-bottom1 {
     padding-bottom: 1px !important;
   }
-  .fnt-40
-  {
+  .fnt-40 {
     font-size: 40px !important;
   }
-  .border-up
-  {
+  .border-up {
     border-bottom: 1px solid #eeeeee;
   }
 
@@ -52,13 +46,30 @@ page-asset-view {
     padding-left: 20px !important;
     padding-right: 20px !important;
   }
-  ion-input
-  {
-    border-bottom:1px solid #CCC;
+  ion-input {
+    border-bottom: 1px solid #CCC;
 
   }
-  .has-refresher > .scroll-content
-  {
+  .has-refresher > .scroll-content {
     border-top: none !important;
   }
+
+//(job . maintenanceType) == 'amc' {
+//  .blue {
+//    border: 1px solid #00bcd4 !important;
+//    padding: 4px !important;
+//    border-radius: 15px !important;
+//    color: white !important;
+//    background-color: #00bcd4 !important;
+//  }
+//
+//}(job . maintenanceType) == 'ppm' {
+//  .green{
+//    border: 1px solid green !important;
+//    padding: 4px !important;
+//    border-radius: 15px !important;
+//    color: white !important;
+//    background-color: green !important;
+//  }
+//}
 }

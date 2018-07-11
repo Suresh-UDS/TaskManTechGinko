@@ -65,6 +65,8 @@ export class DBService {
     //Asset table
     setAsset()
     {
+
+        console.log(this.db);
         return new Promise((resolve, reject) => {
             setTimeout(() => {
                 this.db.executeSql("DROP TABLE assetList", {})
@@ -106,12 +108,14 @@ export class DBService {
                     this.create(tablename, createQuery, insertQuery, updateQuery, param).then(
                         response=>{
                             resolve(response)
+
                         }
                     )
                 }, 15000)
 
             }, 3000)
         })
+
     }
 
     //PPM Table
@@ -409,6 +413,8 @@ export class DBService {
 
 
 
+    //view
+
 
 
 
@@ -417,16 +423,16 @@ export class DBService {
     {
         return new Promise((resolve, reject) => {
             setTimeout(() => {
-                console.log("CHECK")
-                console.log(param)
+                console.log("CHECK");
+                console.log(param);
                 this.db.executeSql("SELECT tbl_name FROM sqlite_master WHERE tbl_name=?", [tbl]).then((data) => {
                     //testing
-                    console.log("Search Table")
-                    console.log(data)
+                    console.log("Search Table");
+                    console.log(data);
                     if (data.rows.length > 0) {
-                        console.log("Table exists")
+                        console.log("Table exists");
                         console.log("Table Name:" + data.rows.item(0).tbl_name);
-                        console.log("Update table")
+                        console.log("Update table");
                         for (var i = 0; i < param.length; i++) {
                             this.db.executeSql(update, param[i]).then((data) => {
                             }, (error) => {
@@ -437,6 +443,7 @@ export class DBService {
                     else {
                         console.log("No table");
                         console.log("Create table " + tbl);
+
                         this.db.executeSql(create, {}).then((data) => {
                             console.log(data)
                             for (var i = 0; i < param.length; i++) {
@@ -460,6 +467,173 @@ export class DBService {
             }, 1000)
         })
     }
+
+
+    setReadings(asset)
+    {
+        return new Promise((resolve, reject) => {
+            setTimeout(() => {
+                this.db.executeSql("DROP TABLE readings", {})
+                console.log("Asset Reading Data");
+                var readings;
+                var param = [];
+                    var search = {assetId: asset.id}
+                    this.assetService.saveReading(search).subscribe(
+                        response => {
+                            readings= response.transactions;
+                            if (readings.length > 0) {
+                                for (var i = 0; i < readings; i++) {
+                                    param.push([readings[i].name, readings[i].uom, readings[i].initialValue, readings[i].finalValue, readings[i].consumption, readings[i].assetId,readings[i].assetParameterConfigId])
+                                }
+                            }
+                        },
+                        error => {
+                            console.log("Get asset readings error");
+                        })
+
+                var tablename = 'readings';
+                var createQuery = "create table if not exists readings (name VARCHAR,uom VARCHAR,initialValue INT,finalValue INT,consumption VARCHAR,assetId INT,assetParameterConfigId INT)";
+                var insertQuery = "INSERT INTO readings(name,uom,initialValue,finalValue,consumption,assetId,assetParameterConfigId) VALUES (?,?,?,?,?,?,?)"
+                var updateQuery = "update readings set name=?,uom=?,initialValue=?,finalValue=?,consumption=?,assetParameterConfigId where assetId=? ";
+                setTimeout(() => {
+                    this.create(tablename, createQuery, insertQuery, updateQuery, param).then(
+                        response=>{
+                            resolve(response)
+                        }
+                    )
+                }, 15000)
+            }, 3000)
+        })
+
+    }
+
+
+    setReadingsList(asset)
+    {
+        return new Promise((resolve, reject) => {
+            setTimeout(() => {
+                this.db.executeSql("DROP TABLE readingsList", {})
+                console.log("Asset Reading Data Local");
+                var readingsList;
+                var param = [];
+                    var search = {assetId: asset.id}
+                    this.assetService.saveReading(search).subscribe(
+                        response => {
+                            // console.log("Getting Jobs response");//
+                            // console.log(response);//
+                            readingsList= response.transactions;
+                            if (readingsList> 0) {
+                                for (var i = 0; i < readingsList; i++) {
+                                    param.push([readingsList[i].name, readingsList[i].uom, readingsList[i].value, readingsList[i].assetId,readingsList[i].assetParameterConfigId,readingsList[i].consumptionMonitoringRequired])
+                                }
+                            }
+                        },
+                        error => {
+                            console.log("Get asset readings error");
+                        })
+
+                var tablename = 'readingsList'
+                var createQuery = "create TABLE IF NOT EXISTS readingsList (name VARCHAR,uom VARCHAR,value INT,assetId INT,assetParameterConfigId INT,consumptionMonitoringRequired BOOLEAN)";
+                var insertQuery = "INSERT INTO readingList(name,uom,value,assetId,assetParameterConfigId,consumptionMonitoringRequired) VALUES (?,?,?,?,?,?)"
+                var updateQuery = "update readingList set name=?,uom=?,value=?,assetParameterConfigId=?,consumptionMonitoringRequired=? where assetId=? ";
+                setTimeout(() => {
+                    this.create(tablename, createQuery, insertQuery, updateQuery, param).then(
+                        response=>{
+                            resolve(response)
+                        }
+                    )
+                }, 15000)
+            }, 3000)
+        })
+
+    }
+
+
+    setViewReading(asset)
+    {
+        return new Promise((resolve, reject) => {
+            setTimeout(() => {
+                this.db.executeSql("DROP TABLE viewReading", {})
+                console.log("Asset View Reading Data");
+                var viewReading;
+                var param = [];
+                var search = {assetId: asset.id}
+                this.assetService. viewReading(search).subscribe(
+                    response => {
+                        // console.log("Getting Jobs response");//
+                        // console.log(response);//
+                        viewReading= response.transactions;
+                        if (viewReading.length > 0) {
+                            for (var i = 0; i < viewReading; i++) {
+                                param.push([viewReading[i].name, viewReading[i].uom, viewReading[i].initialValue,viewReading[i].initialReadingTime, viewReading[i].finalValue,viewReading[i].finalReadingTime, viewReading[i].consumption,viewReading[i].assetId,viewReading[i].assetParameterConfigId,viewReading[i].consumptionMonitoringRequired])
+                            }
+                        }
+                    },
+                    error => {
+                        console.log("Get Asset View Readings Error");
+                    });
+
+                var tablename = 'viewReading';
+                var createQuery = "create table if not exists viewReading (name VARCHAR,uom VARCHAR,initialValue INT,initialValueTime DATE,finalValue INT,finalValueTime DATE,consumption VARCHAR,assetId INT,assetParameterConfigId INT,consumptionMonitoringRequired BOOLEAN)";
+                var insertQuery = "INSERT INTO viewReading(name,uom,initialValue,initialValueTime,finalValue,FinalValueTime,consumption,assetId,assetParameterConfigId,consumptionMonitoringRequired) VALUES (?,?,?,?,?,?,?,?,?,?)";
+                var updateQuery = "update viewReading set name=?,uom=?,initialValue=?,initialValueTime,finalValue=?,FinalValueTime=?,consumption=?,assetParameterConfigId,consumptionMonitoringRequired where assetId=? ";
+                setTimeout(() => {
+                    this.create(tablename, createQuery, insertQuery, updateQuery, param).then(
+                        response=>{
+                            resolve(response)
+                        }
+                    )
+                }, 15000)
+            }, 3000)
+        })
+
+    }
+
+
+
+
+    // setAssetPreviousReading(asset)
+    // {
+    //     return new Promise((resolve, reject) => {
+    //         setTimeout(() => {
+    //             this.db.executeSql("DROP TABLE PreviousReading", {})
+    //             console.log("Asset Previous Reading Data");
+    //             var assetPreviousReading;
+    //             var param = [];
+    //             var search = {assetId: asset.id}
+    //             this.assetService.getAssetPreviousReadings().subscribe(
+    //                 response => {
+    //                     // console.log("Getting Jobs response");//
+    //                     // console.log(response);//
+    //                     assetPreviousReading= response.transactions;
+    //                     if (assetPreviousReading.length > 0) {
+    //                         for (var i = 0; i < assetPreviousReading; i++) {
+    //                             param.push([assetPreviousReading[i].name, assetPreviousReading[i].uom, assetPreviousReading[i].initialValue,assetPreviousReading[i].initialReadingTime, assetPreviousReading[i].finalValue,assetPreviousReading[i].finalReadingTime, assetPreviousReading[i].consumption,assetPreviousReading[i].assetId,assetPreviousReading[i].assetParameterConfigId,assetPreviousReading[i].consumptionMonitoringRequired])
+    //                         }
+    //                     }
+    //                 },
+    //                 error => {
+    //                     console.log("Get Asset Previous Readings Error");
+    //                 })
+    //
+    //             var tablename = 'PreviousReading'
+    //             var createQuery = "create table if not exists PreviousReading (name VARCHAR,uom VARCHAR,initialValue INT,initialValueTime DATE,finalValue INT,finalValueTime DATE,consumption VARCHAR,assetId INT,assetParameterConfigId INT,consumptionMonitoringRequired BOOLEAN)";
+    //             var insertQuery = "INSERT INTO PreviousReading(name,uom,initialValue,initialValueTime,finalValue,FinalValueTime,consumption,assetId,assetParameterConfigId,consumptionMonitoringRequired) VALUES (?,?,?,?,?,?,?,?,?,?)"
+    //             var updateQuery = "update PreviousReading set name=?,uom=?,initialValue=?,initialValueTime,finalValue=?,FinalValueTime=?,consumption=?,assetParameterConfigId,consumptionMonitoringRequired where assetId=? ";
+    //             setTimeout(() => {
+    //                 this.create(tablename, createQuery, insertQuery, updateQuery, param).then(
+    //                     response=>{
+    //                         resolve(response)
+    //                     }
+    //                 )
+    //             }, 15000)
+    //         }, 3000)
+    //     })
+    //
+    // }
+
+
+
 
     ///Attendance set
 

@@ -25,7 +25,7 @@
             <ion-segment-button value="ppm" (ionSelect)="getAssetPPMSchedule()">PPM </ion-segment-button>
             <ion-segment-button value="amc" (ionSelect)="getAssetAMCSchedule()">AMC </ion-segment-button>
             <ion-segment-button value="config" (ionSelect)="getAssetConfig()">Config </ion-segment-button>
-            <ion-segment-button value="readings" (ionSelect)="getReading()">Readings</ion-segment-button>
+            <ion-segment-button value="readings" (ionSelect)="getReading(readingSearchCriteria)">Reading</ion-segment-button>
             <ion-segment-button value="jobs" (ionSelect)="getJobs(jobSearchCriteria)">Jobs</ion-segment-button>
             <ion-segment-button value="tickets" (ionSelect)="getTickets(ticketSearchCriteria)">Tickets</ion-segment-button>
             <ion-segment-button value="history">History</ion-segment-button>
@@ -33,7 +33,7 @@
     </ion-toolbar>
     <div [ngSwitch]="true">
 
-        <ion-list *ngSwitchCase=" categories === 'jobs' || categories === 'tickets' || categories === 'readings' " no-margin="" style="background: wheat;">
+        <ion-list *ngSwitchCase=" categories === 'jobs' || categories === 'tickets' " no-margin="" style="background: wheat;">
 
             <ion-row no-margin class="" no-padding="" >
                 <ion-col col-5 class="ver-center  margin-right15" (click)="selectFromDate()">
@@ -79,10 +79,10 @@
                 <ion-icon name="speedometer" class="fnt-35"></ion-icon>
             </button>
 
-            <ion-label color="dark" class="margin0 bg-orange"  *ngSwitchCase =" 'jobs' ">Job</ion-label>
-            <button ion-fab color="primary" (click)="createJob()" *ngSwitchCase =" 'jobs' ">
-                <ion-icon name="ios-construct-outline" class="fnt-35"></ion-icon>
-            </button>
+            <!--<ion-label color="dark" class="margin0 bg-orange"  *ngSwitchCase =" 'jobs' ">Job</ion-label>-->
+            <!--<button ion-fab color="primary" (click)="createJob()" *ngSwitchCase =" 'jobs' ">-->
+                <!--<ion-icon name="ios-construct-outline" class="fnt-35"></ion-icon>-->
+            <!--</button>-->
 
             <ion-label color="dark" class="margin0 bg-orange"  *ngSwitchCase =" 'details' ">Image</ion-label>
             <button ion-fab color="primary" (click)="addAssetImage()" *ngSwitchCase =" 'details'" >
@@ -515,13 +515,15 @@
                             <ion-icon name="ios-construct-outline" class="fnt-24"></ion-icon>
                         </button>
                     </ion-col>
-                    <ion-col col-8 class="padding-left5">
+                    <ion-col col-6 class="padding-left5">
                         <div class="border-btm padding-bottom5 ln-ght20" text-capitalize>
                             <p text-left class="margin0">{{job.title}}</p>
                             <p text-left class="margin0">{{job.employeeName}}</p>
                             <p text-left class="margin0">{{job.siteProjectName}} - {{job.siteName}} -
                                 <span>
-                                    <h6 text-uppercase="" text-right="" class="margin0 display-inline" [ngClass]="{'green' : (job.maintenanceType) == 'amc', 'blue' : (job.maintenanceType) == 'ppm' }">{{job.maintenanceType}}</h6>
+                                    <!--<button ion-button round text-capitalize [ngClass]="{'blue' : (job.maintenanceType) == 'amc', 'blue' : (job.maintenanceType) == 'ppm' }">{{job.maintenanceType}}</button>-->
+                                    <p text-uppercase text-right class="margin0 display-inline" [ngClass]="{'blue' : (job.maintenanceType) == 'amc', 'green' : (job.maintenanceType) == 'ppm' }">{{job.maintenanceType}}</p>
+
                                 </span>
                             </p>
                         </div>
@@ -653,28 +655,28 @@
 
     </ion-list>
 
-    <ion-list *ngSwitchCase="'readings'" style="margin-top: 56px">
+    <ion-list *ngSwitchCase="'readings'">
         <!--<ion-row no-margin class="" no-padding style="background: wheat;">-->
-            <!--<ion-col col-5 class="ver-center  margin-right15" (click)="selectFromDate()">-->
+            <!--<ion-col col-5 class="ver-center  margin-right15" (click)="readingFromDate()">-->
                 <!--<ion-col col-2  class="ver-center padding-bottom1">-->
                     <!--<ion-icon ios="ios-calendar" md="md-calendar"  class="fnt-24 clr-orange"></ion-icon>-->
                 <!--</ion-col>-->
                 <!--<ion-col col-10 class="ver-center padding-top-bottom0">-->
                     <!--<ion-label *ngIf="!fromDate" class="bg-trans padding-bottom0" no-margin="">From date</ion-label>-->
-                    <!--<p padding-left no-margin="">{{ fromDate | date:'dd/MM/yyyy' }}</p>-->
+                    <!--<p padding-left no-margin="">{{ readingFromDate | date:'dd/MM/yyyy' }}</p>-->
                 <!--</ion-col>-->
             <!--</ion-col>-->
-            <!--<ion-col col-5 (click)="selectToDate()" class="ver-center">-->
+            <!--<ion-col col-5 (click)="readingToDate()" class="ver-center">-->
                 <!--<ion-col col-2 class="ver-center padding-bottom1">-->
                     <!--<ion-icon ios="ios-calendar" md="md-calendar" class="fnt-24 clr-orange"></ion-icon>-->
                 <!--</ion-col>-->
                 <!--<ion-col col-10 class="ver-center padding-top-bottom0">-->
                     <!--<ion-label *ngIf="!toDate" class="bg-trans padding-bottom0" no-margin="">To date</ion-label>-->
-                    <!--<p padding-left no-margin="">{{ toDate | date:'dd/MM/yyyy' }}</p>-->
+                    <!--<p padding-left no-margin="">{{ readingToDate | date:'dd/MM/yyyy' }}</p>-->
                 <!--</ion-col>-->
             <!--</ion-col>-->
             <!--<ion-col col-2 class=" ver-center padding-top-bottom0">-->
-                <!--<button ion-button round class="color-white" (click)="readingDateSearch(fromDate,toDate)" [disabled]="!viewButton">-->
+                <!--<button ion-button round class="color-white" (click)=" readingDateSearch(readingFromDate,readingToDate)" [disabled]="!viewButton">-->
                     <!--<ion-icon name="arrow-round-forward"></ion-icon>-->
                 <!--</button>-->
             <!--</ion-col>-->
