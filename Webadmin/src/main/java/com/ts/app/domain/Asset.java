@@ -18,6 +18,8 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+import org.apache.commons.collections.CollectionUtils;
+
 /**
  * Created by karthick on 7/1/2017.
  */
@@ -53,10 +55,10 @@ public class Asset extends AbstractAuditingEntity implements Serializable {
     @JoinColumn(name = "siteId", nullable = false)
     private Site site;
     
-    @OneToMany(mappedBy="asset",cascade={CascadeType.ALL}, fetch = FetchType.LAZY, orphanRemoval = true)    
+    @OneToMany(mappedBy="asset",cascade={CascadeType.ALL}, fetch = FetchType.LAZY)    
     private List<AssetStatusHistory> assetStatusHistoryList;
     
-    @OneToMany(mappedBy="asset",cascade={CascadeType.ALL}, fetch = FetchType.LAZY, orphanRemoval = true)   
+    @OneToMany(mappedBy="asset",cascade={CascadeType.ALL}, fetch = FetchType.LAZY)   
     private List<AssetSiteHistory> assetSiteHistoryList;
 
     @Column(name="qr_code_image")
@@ -336,7 +338,12 @@ public class Asset extends AbstractAuditingEntity implements Serializable {
 		return assetSiteHistoryList;
 	}
 	public void setAssetSiteHistory(List<AssetSiteHistory> assetSiteHistory) {
-		this.assetSiteHistoryList = assetSiteHistory;
+		if(CollectionUtils.isNotEmpty(this.assetSiteHistoryList)) {
+			this.assetSiteHistoryList.clear();
+			this.assetSiteHistoryList.addAll(assetSiteHistory);
+		}else {
+			this.assetSiteHistoryList = assetSiteHistory;
+		}
 	}
     
 }
