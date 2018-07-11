@@ -75,6 +75,8 @@ angular.module('timeSheetApp')
         $scope.alertRequired = false;
         $scope.selectedMinValue = null;
         $scope.selectedMaxValue = null;
+        $scope.deleteDocId = null;
+        $scope.docType = null;
 
         //scope.searchAcquiredDate = $filter('date')(new Date(), 'dd/MM/yyyy');
         $scope.searchAcquiredDate = "";
@@ -338,7 +340,7 @@ angular.module('timeSheetApp')
                 console.log("Manufacturer entered");
                 ManufacturerComponent.create($scope.manufacturer).then(function (response) {
                     console.log(response);
-                    $scope.manufacturer = {};
+                    $scope.manufacturer = "";
                     $scope.showNotifications('top','center','success','Manufacturer has been added Successfully!!');
                     $scope.loadManufacturer();
 
@@ -372,7 +374,7 @@ angular.module('timeSheetApp')
                 console.log("Asset Type entered");
                 VendorComponent.create($scope.vendor).then(function (response) {
                     console.log(response);
-                    $scope.vendor = {};
+                    $scope.vendor = "";
                     $scope.showNotifications('top','center','success','Vendor has been added Successfully!!');
                     $scope.loadVendor();
 
@@ -405,7 +407,7 @@ angular.module('timeSheetApp')
                 console.log("Asset Type entered");
                 AssetComponent.createWar($scope.Warranty).then(function (response) {
                     console.log(response);
-                    $scope.servicewarranties = {};
+                    $scope.servicewarranties = "";
                     $scope.showNotifications('top','center','success','Service Warranty has been added Successfully!!');
                     $scope.loadWarranty();
 
@@ -1288,20 +1290,29 @@ angular.module('timeSheetApp')
 	        	});
         }
 
-        $scope.deleteConfirmDoc = function (id){
+        $scope.deleteConfirmDoc = function (id,type){
             $scope.deleteDocId= id;
+            $scope.docType= type;
         }
 
 
 
         $scope.deleteDoc = function () {
             $scope.loadingStart();
-            AssetComponent.deleteDoc($scope.deleteDocId).then(function(){
+            var docId = $scope.deleteDocId;
+            AssetComponent.deleteDoc(docId).then(function(data){
 
-                $scope.showNotifications('top','center','success','Document has been deleted successfully!!');
-                $scope.getAllUploadedFiles();
+                console.log('Deleted data',data);
+
+            $scope.showNotifications('top','center','success','Document has been deleted successfully!!');
+              if($scope.docType == 'file'){
+                  $scope.getAllUploadedFiles();  
+              }else if($scope.docType == 'photo'){
                 $scope.getAllUploadedPhotos();
-                $scope.loadingStop();
+              }
+                
+                
+                //$scope.loadingStop();
             }).catch(function(){
                 $scope.loadingStop();
             });
@@ -1550,7 +1561,7 @@ angular.module('timeSheetApp')
                 console.log("Asset Type entered");
                 AssetTypeComponent.create($scope.assetType).then(function (response) {
                     console.log(response);
-                    $scope.assetType = {};
+                    $scope.assetType = "";
                     $scope.showNotifications('top','center','success','Asset type has been added Successfully!!');
                     $scope.loadAssetType();
 
@@ -1577,7 +1588,7 @@ angular.module('timeSheetApp')
                 console.log("Asset Group entered");
                 AssetComponent.createAssetGroup($scope.assetGroup).then(function (response) {
                     console.log(response);
-                    $scope.assetGroup = {};
+                    $scope.assetGroup = "";
                     $scope.showNotifications('top','center','success','Asset group has been added Successfully!!');
                     $scope.loadAssetGroup();
 
@@ -1601,7 +1612,7 @@ angular.module('timeSheetApp')
                 console.log("Parameter entered");
                 ParameterComponent.create($scope.parameter).then(function (response) {
                     console.log(response);
-                    $scope.parameter = null;
+                    $scope.parameter = "";
                     $scope.showNotifications('top','center','success','Parameter has been added Successfully!!');
                     $scope.loadAllParameters();
 
@@ -1623,7 +1634,7 @@ angular.module('timeSheetApp')
                 console.log("ParameterUOM entered");
                 ParameterUOMComponent.create($scope.parameterUOM).then(function (response) {
                     console.log(response);
-                    $scope.parameterUOM = null;
+                    $scope.parameterUOM = "";
                     $scope.showNotifications('top','center','success','Parameter UOM has been added Successfully!!');
                     $scope.loadAllParameterUOMs();
 
@@ -1822,13 +1833,14 @@ angular.module('timeSheetApp')
 
 
 	    	AssetComponent.getAllUploadedFiles($scope.uploadObj).then(function(data){
-                $scope.loadingStop();
+                
                 $scope.uploadFiles = [];
 	    		$scope.uploadFiles=data;
 	    		
                 $scope.fileCount = ($scope.uploadFiles).length;
 
                 console.log("-- Upload files --" , $scope.uploadFiles);
+                $scope.loadingStop();
 	    	}).catch(function(response){
                 $scope.loadingStop();
             });
@@ -1850,12 +1862,13 @@ angular.module('timeSheetApp')
             }
 
 	    	AssetComponent.getAllUploadedPhotos($scope.photoObj).then(function(data){
-                $scope.loadingStop();
+               
                 $scope.uploadAssetPhotos = [];
                 $scope.uploadAssetPhotos=data;
                 $scope.photoCount = ($scope.uploadAssetPhotos).length;
 
                 console.log("-- Uploaded Photos --",$scope.uploadAssetPhotos);
+                $scope.loadingStop();
 	    	}).catch(function(response){
                 $scope.loadingStop();
             });
