@@ -1952,6 +1952,19 @@ public class AssetManagementService extends AbstractService {
 		AssetParameterConfig assetConfigEntity = assetParamConfigRepository.findOne(id);
 		return mapperUtil.toModel(assetConfigEntity, AssetParameterConfigDTO.class);
 	}
+
+	public List<Object> findAllAssetQrcode(String title) {
+		List<Asset> assetEntity = assetRepository.findAssetByTitle(title);
+		List<Object> collect = new ArrayList<>();
+		for(Asset assetList : assetEntity) {
+			if(assetList.getCode() != null) { 
+				Map<String, Object> qrCodeObject = generateAssetQRCode(assetList.getId(), assetList.getCode());
+				qrCodeObject.values();
+				collect.add(qrCodeObject);
+			}
+		}
+		return collect;
+	}
 	
 
 }
