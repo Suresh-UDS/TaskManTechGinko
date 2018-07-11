@@ -20,6 +20,6 @@ public interface AssetPpmScheduleRepository extends JpaRepository<AssetPPMSchedu
 	 @Query("SELECT a from AssetPPMSchedule a where a.asset.id = :assetId and a.active = 'Y'  order by a.title")
     Page<AssetPPMSchedule> findAllPPMSchedule(@Param("assetId") long assetId, Pageable pageRequest);
 	 
-	 @Query("SELECT a from AssetPPMSchedule a where a.title = :title")
-	 List<AssetPPMSchedule> findAssetPPMScheduleByTitle(@Param("title") String title);
+	 @Query("SELECT a from AssetPPMSchedule a where a.title = :title and a.asset.id = :assetId")
+	 List<AssetPPMSchedule> findAssetPPMScheduleByTitle(@Param("assetId") long assetId, @Param("title") String title);
 }

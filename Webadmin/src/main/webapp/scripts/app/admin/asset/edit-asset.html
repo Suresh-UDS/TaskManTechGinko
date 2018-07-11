@@ -246,7 +246,7 @@
                                                                                     <div class="form-group">
                                                                                         <label class="control-label">Site   <span class="red-star">*</span> </label>
                                                                                         <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                                                                        <select class="form-control " ng-model="selectedSites"  ng-options="site as site.name for site in sites track by site.id" ng-change="loadBlocks();loadEmployees();" name="AssetSite" required>
+                                                                                        <select class="form-control " ng-model="selectedSites"  ng-options="site as site.name for site in sites track by site.id"  onclick="$('#siteChangeModalConfig').modal()" data-target="#myModal"  name="AssetSite" required>
                                                                                             <option value="">Select Site ...</option>
                                                                                         </select>
 
@@ -602,7 +602,7 @@
                                                                                             <a  has-permission="" class="btn btn-round btn-fab btn-fab-mini btn-simple"  onClick="$('#addWarranty').modal()" data-target="#myModal"><i class="material-icons">add</i><div class="ripple-container" ></div></a>
                                                                                         </div>
                                                                                     </div>
-                                                                                    
+
 
                                                                                 </div>
                                                                                 <!-- <div class="collapse" id="addWarrantyType">
@@ -994,7 +994,7 @@
 
                                                                         </div>
                                                                     </div>
-                                                                    <div class="col-md-4" ng-init="loadCheckList()">
+                                                                    <div class="col-md-4" ng-init="loadCheckList();">
                                                                         <div class="form-group selectcon is-empty SelectWithAddbtnCon">
                                                                             <div class="row">
                                                                                 <div class="col-md-10 pad-r-0px">
@@ -1154,7 +1154,7 @@
                                                                     		<div class="form-group">
 						                                                    <label class="control-label">Start Date Time<span class="red-star">*</span></label>
 						                                                    <span class="form-control-feedback calender-icon"><i class="material-icons">date_range</i></span>
-						                                                    <input type="text" class="form-control datetimepicker"  id="ppmJobStartTime"  ng-model="assetPPM.jobStartTime" ng-required="true"/>
+						                                                    <input type="text" class="form-control datetimepicker padng-right30"  id="ppmJobStartTime"  ng-model="assetPPM.jobStartTime" ng-required="true"/>
 																		   <div ng-show="form3.$submitted || form3.ppmJobStartTime.$touched">
                                                                                 <div
                                                                                     ng-show="form3.ppmJobStartTime.$dirty || form3.ppmJobStartTime.$invalid">
@@ -1169,7 +1169,7 @@
                                                                             </div>
 						                                                </div>
                                                                     </div>
-                                                                    <div class="col-md-3">
+                                                                    <div class="col-md-1">
                                                                     		<div class="form-group">
 						                                                    <label class="control-label">Hours<span class="red-star">*</span> </label>
 						                                                    <input
@@ -1221,7 +1221,9 @@
                                                                     <th>From Date</th>
                                                                     <th width="10%">To Date</th>
                                                                     <th width="10%">Frequency</th>
-                                                                    <!-- <th width="5%" align="right">Actions</th> -->
+
+                                                                    <!--<th width="5%" align="right">Actions</th>-->
+
                                                                 </tr>
 
                                                                 </thead>
@@ -1248,16 +1250,21 @@
                                                                     <td>{{ppmSchedules.startDate}}</td>
                                                                     <td>{{ppmSchedules.endDate}}</td>
                                                                     <td>{{ppmSchedules.frequencyPrefix}}&nbsp; {{ppmSchedules.frequencyDuration}}&nbsp; {{ppmSchedules.frequency}}</td>
-                                                                   <!--  <td class="text-right">
-                                                                        <a  ng-class="{active: $state.includes('admin')}"  has-permission="" ui-sref=""  class="btn btn-simple btn-danger"><i class="material-icons">delete_forever</i></a>
-                                                                    </td> -->
+
+                                                                    <!--<td class="text-right">-->
+                                                                        <!--&lt;!&ndash;<a  ng-class="{active: $state.includes('admin')}"  has-permission="" ui-sref=""  class="btn btn-simple btn-danger"><i class="material-icons">delete_forever</i></a>&ndash;&gt;-->
+                                                                    <!--</td>-->
+
+                                                                </tr>
+                                                                <tr>
+                                                                <td colspan="7" align="center" ng-show="!ppmScheduleList">No PPM Schedules Found</td>
                                                                 </tr>
 
                                                                 </tbody>
                                                             </table>
 
                                                         </div>
-                                                    
+
                                                 </div>
                                                 <div class="tab-pane fade amcschedule" id="amc-schedule" >
                                                     <form name="form4" role="form"  ng-submit="saveAmcSchedule()" novalidate
@@ -1464,7 +1471,7 @@
                                                                     		<div class="form-group">
 						                                                    <label class="control-label">Start Date Time<span class="red-star">*</span></label>
 						                                                    <span class="form-control-feedback calender-icon"><i class="material-icons">date_range</i></span>
-						                                                    <input type="text" class="form-control datetimepicker"  id="amcJobStartTime"  ng-model="amcSchedule.jobStartTime" required/>
+						                                                    <input type="text" class="form-control datetimepicker padng-right30"  id="amcJobStartTime"  ng-model="amcSchedule.jobStartTime" required/>
 																		   <div ng-show="form3.$submitted || form3.amcJobStartTime.$touched">
                                                                                 <div
                                                                                     ng-show="form3.amcJobStartTime.$dirty || form3.amcJobStartTime.$invalid">
@@ -1479,7 +1486,7 @@
                                                                             </div>
 						                                                </div>
                                                                     </div>
-                                                                <div class="col-md-3">
+                                                                <div class="col-md-1">
                                                                     		<div class="form-group">
 						                                                    <label class="control-label">Hours<span class="red-star">*</span> </label>
 						                                                    <input
@@ -1530,7 +1537,9 @@
                                                                 <th>From Date</th>
                                                                 <th width="10%">To Date</th>
                                                                 <th width="10%">Frequency</th>
-                                                                <!-- <th width="5%" align="right">Actions</th> -->
+
+                                                                <!--<th width="5%" align="right">Actions</th>-->
+
                                                             </tr>
 
                                                             </thead>
@@ -1567,9 +1576,14 @@
                                                                 <td>{{amcSchedule.startDate}}</td>
                                                                 <td>{{amcSchedule.endDate}}</td>
                                                                 <td>{{amcSchedule.frequencyPrefix}}&nbsp; {{amcSchedule.frequencyDuration}}&nbsp; {{amcSchedule.frequency}}</td>
-                                                               <!--  <td class="text-right">
-                                                                    <a  ng-class="{active: $state.includes('admin')}"  has-permission="" ui-sref=""  class="btn btn-simple btn-danger"><i class="material-icons">delete_forever</i></a>
-                                                                </td> -->
+
+                                                                <!--<td class="text-right">-->
+                                                                    <!--&lt;!&ndash;<a  ng-class="{active: $state.includes('admin')}"  has-permission="" ui-sref=""  class="btn btn-simple btn-danger"><i class="material-icons">delete_forever</i></a>&ndash;&gt;-->
+                                                                <!--</td>-->
+
+                                                            </tr>
+                                                            <tr>
+                                                               <td colspan="7" align="center" ng-show="!amcScheduleList">No AMC Schedules Found</td>
                                                             </tr>
 
                                                             </tbody>
@@ -1890,6 +1904,9 @@
                                                                                     </td>
 
                                                                                 </tr>
+                                                                                <tr>
+                                                                                   <td colspan="7" align="center" ng-show="!assetParameters">No asset param Found</td>
+                                                                                </tr>
 
                                                                             </tbody>
                                                                         </table>
@@ -2088,11 +2105,16 @@
                                                            <div class="row docsRow" ng-if="fileCount" >
 
                                                                <div class="col-md-2 txt-align-center DocsCon" ng-repeat="uploadFile in uploadFiles">
-                                                                   <div class="DeleteBtn" ng-click="deleteConfirmDoc(uploadFile.id)"  onClick="$('#deleteModal').modal()" data-target="#myModal">
+                                                                   <div class="DeleteBtn" ng-click="deleteConfirmDoc(uploadFile.id,'file')"  onClick="$('#deleteModal').modal()" data-target="#myModal">
                                                                      <i class="material-icons">close</i>
                                                                  </div>
-                                                                   <a href="{{uploadFile.url}}" id="loop">
-                                                                       <img src="assets/img/{{uploadFile.extension}}.png" alt="docs" title="Download"  />
+                                                                   <div class="DownloadBtn">
+                                                                     <a href="{{uploadFile.url}}" id="loop">
+                                                                       <i class="material-icons">cloud_download</i>
+                                                                    </a>
+                                                                   </div>
+                                                                   <a href="#" id="loop">
+                                                                       <img ng-src="assets/img/{{uploadFile.extension}}.png" alt="docs" title="Download"  />
                                                                    </a>
                                                                    <p style="padding-top: 10px;font-weight: 400;font-size: 15px">{{uploadFile.title}}</p>
                                                                    <div  ng-if="uploadFile.id == download">
@@ -2121,12 +2143,19 @@
                                                             <div class="row docsRow" ng-if="photoCount" >
 
                                                                 <div class="col-md-2 txt-align-center DocsCon" ng-repeat="uploadPhoto in uploadAssetPhotos">
-                                                                    <div class="DeleteBtn" ng-click="deleteConfirmDoc(uploadPhoto.id)"  onClick="$('#deleteModal').modal()" data-target="#myModal">
+                                                                    <div class="DeleteBtn" ng-click="deleteConfirmDoc(uploadPhoto.id,'photo')"  onClick="$('#deleteModal').modal()" data-target="#myModal">
+                                                                        
                                                                          <i class="material-icons">close</i>
+                                                                         
                                                                      </div>
-                                                                    <a href="{{uploadPhoto.url}}" id="loop2">
+                                                                    <div class="DownloadBtn">
+                                                                        <a href="{{uploadPhoto.url}}" id="loop2">
+                                                                        <i class="material-icons">cloud_download</i>
+                                                                        </a>
+                                                                    </div>
+                                                                    <a href="#" id="loop2">
                                                                         <!-- <img src="D:\asset\uploads\site\{{uploadPhoto.id}}\{{uploadPhoto.file}}" alt="docs" ng-click="showFile(uploadPhoto.id, uploadPhoto.file)"/> -->
-                                                                        <img src="assets/img/{{uploadPhoto.extension}}.png" alt="docs" title="Download" />
+                                                                        <img ng-src="assets/img/{{uploadPhoto.extension}}.png" alt="docs" title="Download" />
                                                                     </a>
                                                                     <p style="padding-top: 10px;font-weight: 400;font-size: 15px">{{uploadPhoto.title}}</p>
                                                                     <div ng-if="uploadPhoto.id == download">
@@ -2641,7 +2670,7 @@
 <!-- Add Document/Image delete  dialog -->
 
 <div class="row">
-        <div id="deleteModal" data-backdrop="false" class="modal fade"
+        <div id="deleteModal" data-backdrop="false" class="modal fade deleteModal"
             tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
             aria-hidden="true">
             <div class="delete-dialog">
@@ -2651,7 +2680,7 @@
                     </div>
                     <div class="delete-footer">
                         <button type="button" ng-click="deleteDoc()"
-                            class="btn btn-danger-outline text-danger" data-dismiss="modal">Confirm</button>
+                            class="btn btn-danger text-danger" data-dismiss="modal">Confirm</button>
                         <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
 
                     </div>
@@ -2664,7 +2693,7 @@
 
 <div class="row">
 
-    <div id="deleteModalConfig" data-backdrop="false" class="modal fade"
+    <div id="deleteModalConfig" data-backdrop="false" class="modal fade deleteModal"
         tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
         aria-hidden="true">
         <div class="delete-dialog">
@@ -2674,6 +2703,30 @@
                 </div>
                 <div class="delete-footer">
                     <button type="button" ng-click="deleteAssetConfig()"
+                        class="btn btn-danger text-danger" data-dismiss="modal">Confirm</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<!-- Site change confirmation dialog -->
+
+<div class="row">
+
+    <div id="siteChangeModalConfig" data-backdrop="false" class="modal fade"
+        tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+        aria-hidden="true">
+        <div class="delete-dialog">
+            <div class="modal-content">
+                <div class="modal-body">
+                    Please confirm the site transfer. The schedules and jobs will be moved to the newly selected site.<br>
+                </div>
+                <div class="delete-footer">
+                    <button type="button" ng-click="siteChangeAssetConfig()"
                         class="btn btn-danger-outline text-danger" data-dismiss="modal">Confirm</button>
                     <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
 

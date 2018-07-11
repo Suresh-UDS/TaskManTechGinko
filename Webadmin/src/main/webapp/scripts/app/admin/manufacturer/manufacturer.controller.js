@@ -61,10 +61,12 @@ angular.module('timeSheetApp')
         $scope.initMaterialWizard();
         
         $scope.loadAllAssetTypes = function() {
+                $scope.loadingStart();
         		AssetTypeComponent.findAll().then(function (data) {
                 $scope.selectedAssetType = null;
                 $scope.assetTypes = data;
                 console.log('Asset type',$scope.assetTypes); 
+                $scope.loadingStop();
             });
         }
         
@@ -122,6 +124,8 @@ angular.module('timeSheetApp')
          }
 
         $scope.search = function () {
+
+            $scope.loadingStop();
            
             var currPageVal = ($scope.pages ? $scope.pages.currPage : 1);
             var searchCriteria = {
@@ -327,16 +331,16 @@ angular.module('timeSheetApp')
 
         $scope.showNotifications= function(position,alignment,color,msg){
            
-            if(nottifShow == true){
-               nottifShow = false ;
+            /*if(nottifShow == true){
+               nottifShow = false ;*/
                demo.showNotification(position,alignment,color,msg);
                
-            }else if(nottifShow == false){
+           /* }else if(nottifShow == false){
                 $timeout(function() {
                   nottifShow = true ;
                 }, 8000);
 
-            }
+            }*/
             
         }
 

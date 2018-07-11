@@ -153,4 +153,9 @@ public interface JobRepository extends JpaRepository<Job, Long>,JpaSpecification
     @Query("SELECT j from Job j where  j.ticket.id=:ticketId")
     Job findByTicketId(@Param("ticketId")Long ticketId);
 
+    //find jobs for asset
+    @Query("SELECT j from Job j where j.asset.id = :assetId and j.plannedStartTime >= :startDate ")
+    List<Job> findByAssetAndStartDate(@Param("assetId") long assetId, @Param("startDate") Date startDate);
+
+
 }

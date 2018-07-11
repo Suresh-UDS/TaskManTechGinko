@@ -138,10 +138,20 @@ angular.module('timeSheetApp')
             	});
             },
 
-            deleteDoc : function(id) {
-            	return $http.delete('/assets/'+id+'/document/image').then(function(reaponse){
-            		return response.data;
-            	});
+            deleteDoc : function(id,callback) {
+            	/*return $http.delete('api/assets/'+id+'/document/image').then(function(response){
+            		return response;
+            	});*/
+                  var cb = callback || angular.noop;
+
+                return  $http.delete('api/assets/'+id+'/document/image').then(
+                    function (response) {
+                        return cb(response);
+                    }).catch(
+                    function (err) {
+                        console.log(JSON.stringify(err));
+                        return cb(err);
+                    });
             },
 
             createAssetParamConfig : function(assetParam, callback) {

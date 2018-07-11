@@ -185,8 +185,19 @@ scheduler:
       enabled: true
    monthlyJob:
       enabled: true
-   overdueJob:
+   quarterlyJob:
+      enabled: true   
+   yearlyJob:
       enabled: true
+      creation: daily
+   fortnightlyJob:
+      enabled: true
+      creation: daily
+   halfyearlyJob:
+      enabled: true
+      creation: yearly
+   overdueJob:
+      enabled: false
    eodJobReport:
       enabled: true
    attendanceDetailReport:
