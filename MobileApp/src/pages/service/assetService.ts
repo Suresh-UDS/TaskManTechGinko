@@ -10,6 +10,7 @@ import {AppConfig, ApplicationConfig, MY_CONFIG_TOKEN} from "./app-config";
 @Injectable()
 export class AssetService {
 
+
     constructor(private http: HttpClient, private https: Http, public loadingCtrl: LoadingController, @Inject(MY_CONFIG_TOKEN) private config: ApplicationConfig) {
 
     }
@@ -94,8 +95,9 @@ export class AssetService {
         )
     }
 
-    viewReading(assetId):Observable<any>{
-        return this.http.get(this.config.Url+'api/assets/'+assetId+'/viewAssetReadings' ).map(
+    viewReading(searchCriteria):Observable<any>{
+        // var searchCriteria={assetId : assetId};
+        return this.http.post(this.config.Url+'api/assets/viewAssetReadings',searchCriteria).map(
             response=>{
                 console.log("View Reading");
                 console.log(response);
