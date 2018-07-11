@@ -139,7 +139,7 @@ angular.module('timeSheetApp')
             },
 
             deleteDoc : function(id) {
-            	return $http.delete('/assets/'+id+'/document/image').then(function(reaponse){
+            	return $http.delete('api/assets/'+id+'/document/image').then(function(reaponse){
             		return response.data;
             	});
             },
