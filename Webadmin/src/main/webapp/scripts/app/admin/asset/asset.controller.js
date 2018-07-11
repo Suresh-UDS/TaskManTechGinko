@@ -77,6 +77,8 @@ angular.module('timeSheetApp')
         $scope.selectedMaxValue = null;
         $scope.deleteDocId = null;
         $scope.docType = null;
+        $scope.ppmJobStartTime = null;
+        $scope.amcJobStartTime = null;
 
         //scope.searchAcquiredDate = $filter('date')(new Date(), 'dd/MM/yyyy');
         $scope.searchAcquiredDate = "";
@@ -156,16 +158,16 @@ angular.module('timeSheetApp')
 
         $scope.showNotifications= function(position,alignment,color,msg){
 
-            if(nottifShow == true){
-               nottifShow = false ;
+            /*if(nottifShow == true){
+               nottifShow = false ;*/
                demo.showNotification(position,alignment,color,msg);
 
-            }else if(nottifShow == false){
+           /* }else if(nottifShow == false){
                 $timeout(function() {
                   nottifShow = true ;
                 }, 1000);
 
-            }
+            }*/
 
         }
 
@@ -212,7 +214,7 @@ angular.module('timeSheetApp')
         
         $('input#ppmJobStartTime').on('dp.change', function(e){
             $scope.assetPPM.jobStartTime = e.date._d;
-            $scope.ppmTo = $filter('date')(e.date._d, 'dd/MM/yyyy HH:mm');
+            $scope.ppmJobStartTime =$filter('date')(e.date._d, 'dd/MM/yyyy hh:mm a');
         });
         
 
@@ -1249,7 +1251,7 @@ angular.module('timeSheetApp')
 
         $scope.load52WeekSchedule = function() {
         		console.log('site selection - ' + JSON.stringify($scope.searchSite));
-        		if($scope.searchSite && $scope.searchSite.id) {
+        		if(jQuery.isEmptyObject($scope.searchSite) == false) {
             		$scope.searchCriteria.siteId = $scope.searchSite.id;
             		AssetComponent.exportAsset52WeekSchedule($scope.searchCriteria).then(function(data){
             			console.log("response for 52week schedule - "+ JSON.stringify(data));
@@ -2091,9 +2093,9 @@ angular.module('timeSheetApp')
             }
         });
         
-        $('input#amcJobStartTime').on('dp.change', function(e){
+        $('input#amcJobStartTime').on('dp.change', function(e){  
             $scope.amcSchedule.jobStartTime = e.date._d;
-            $scope.ppmTo = $filter('date')(e.date._d, 'dd/MM/yyyy HH:mm');
+             $scope.amcJobStartTime = $filter('date')(e.date._d, 'dd/MM/yyyy hh:mm a');
         });
 
 	    $scope.loadCheckList = function() {
