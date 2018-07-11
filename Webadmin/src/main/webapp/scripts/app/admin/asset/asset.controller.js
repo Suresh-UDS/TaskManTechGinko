@@ -79,6 +79,7 @@ angular.module('timeSheetApp')
         $scope.docType = null;
         $scope.ppmJobStartTime = null;
         $scope.amcJobStartTime = null;
+        $scope.noData = false;
 
         //scope.searchAcquiredDate = $filter('date')(new Date(), 'dd/MM/yyyy');
         $scope.searchAcquiredDate = "";
@@ -800,7 +801,10 @@ angular.module('timeSheetApp')
                     $scope.pageEntries = $scope.assets.length;
                     $scope.totalCountPages = data.totalCount;
                     $scope.pageSort = 10;
+                    $scope.noData = false;
 
+                }else{
+                     $scope.noData = true;
                 }
 
             }).catch(function(){
