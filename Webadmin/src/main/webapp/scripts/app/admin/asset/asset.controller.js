@@ -299,7 +299,7 @@ angular.module('timeSheetApp')
 
                 console.log("To be create PPM",$scope.assetPPM);
 
-                $sope.loadingStart();
+                $scope.loadingStart();
 
             	AssetComponent.createPPM($scope.assetPPM).then(function(response) {
 
@@ -973,9 +973,56 @@ angular.module('timeSheetApp')
         $('input#warFromDate').on('dp.change', function(e){
             $scope.assetGen.warrantyFromDate =  e.date._d;
 
-            $scope.warFromDate = $filter('date')(e.date._d, 'yyyy-MM-dd');
+            $scope.warFromDate = $filter('date')(e.date._d, 'dd/MM/yyyy');
 
-            if($scope.assetGen.startDate > $scope.assetGen.endDate) {
+            if($scope.assetGen.warrantyFromDate > $scope.assetGen.warrantyToDate) {
+
+                    //scope.showNotifications('top','center','danger','From date cannot be greater than To date');
+                    $scope.warFromMsg = true;
+                    
+                    
+                    //return false;
+            }else {
+              
+               $scope.warFromMsg =false;
+               
+           
+            }
+
+            if($scope.assetGen.warrantyToDate < $scope.assetGen.warrantyFromDate) {
+                    //$scope.showNotifications('top','center','danger','To date cannot be lesser than From date');
+                    $scope.warToMsg =true;
+                    
+                   
+                    //return false;
+            }else {
+               
+                 $scope.warToMsg =false;
+                 
+               
+            }
+        });
+
+         $scope.warToMsg =false;
+
+        $('input#warToDate').on('dp.change', function(e){
+            $scope.assetGen.warrantyToDate = e.date._d;
+            $scope.warToDate = $filter('date')(e.date._d, 'dd/MM/yyyy');
+
+            if($scope.assetGen.warrantyToDate < $scope.assetGen.warrantyFromDate) {
+                    //$scope.showNotifications('top','center','danger','To date cannot be lesser than From date');
+                    $scope.warToMsg =true;
+                    
+                   
+                    //return false;
+            }else {
+               
+                 $scope.warToMsg =false;
+                 
+               
+            }
+
+            if($scope.assetGen.warrantyFromDate > $scope.assetGen.warrantyToDate) {
 
                     //scope.showNotifications('top','center','danger','From date cannot be greater than To date');
                     $scope.warFromMsg = true;
@@ -990,28 +1037,8 @@ angular.module('timeSheetApp')
             }
         });
 
-         $scope.warToMsg =false;
-
-        $('input#warToDate').on('dp.change', function(e){
-            $scope.assetGen.warrantyToDate = e.date._d;
-            $scope.warToDate = $filter('date')(e.date._d, 'yyyy-MM-dd');
-
-            if($scope.assetGen.endDate < $scope.assetGen.startDate) {
-                    //$scope.showNotifications('top','center','danger','To date cannot be lesser than From date');
-                    $scope.warToMsg =true;
-                    
-                   
-                    //return false;
-            }else {
-               
-                 $scope.warToMsg =false;
-                 
-               
-            }
-        });
-
         $('input#searchAcquiredDate').on('dp.change', function(e){
-                $scope.searchAcquiredDate = $filter('date')(e.date._d, 'dd-MM-yyyy');
+                $scope.searchAcquiredDate = $filter('date')(e.date._d, 'dd/MM/yyyy');
                 $scope.searchAcquiredDateSer = e.date._d;
         });
 
