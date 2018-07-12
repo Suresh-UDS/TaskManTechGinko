@@ -6,7 +6,7 @@ angular.module('timeSheetApp')
 				function($scope, $rootScope, $state, $timeout, ManufacturerComponent,AssetTypeComponent,
 						$http, $stateParams,
 						$location,PaginationComponent) {
-        $rootScope.loadingStop();
+        $scope.loadingStop();
         $rootScope.loginView = false;
         $scope.success = null;
         $scope.error = null;
@@ -224,7 +224,7 @@ angular.module('timeSheetApp')
         $scope.saveManufacturer = function () {
 	        	$scope.error = null;
 	        	$scope.success =null;
-                $rootScope.loadingStart();
+                $scope.loadingStart();
 
 	        	if($scope.selectedAssetType.name !=""){
 	        	    $scope.manufacturer.assetType = $scope.selectedAssetType.name;
@@ -237,11 +237,11 @@ angular.module('timeSheetApp')
                 //post($scope.manufacturer).then(function () {
 	        	 ManufacturerComponent.create($scope.manufacturer).then(function () {
 	                $scope.success = 'OK';
-                    $rootScope.loadingStop();
+                    $scope.loadingStop();
 	                $scope.showNotifications('top','center','success','Manufacturer Saved Successfully');
 	                $location.path('/manufacturer-list');
 	            }).catch(function (response) {
-                    $rootScope.loadingStop();
+                    $scope.loadingStop();
 	                $scope.success = null;
 	                console.log('Error - '+ response.data);
 	                if (response.status === 400 && response.data.message === 'error.duplicateRecordError') {
@@ -258,7 +258,7 @@ angular.module('timeSheetApp')
         $scope.UpdateManufacturer = function () {
                 $scope.error = null;
                 $scope.success =null;
-                $rootScope.loadingStart();
+                $scope.loadingStart();
 
                 if($scope.selectedAssetType){
                     $scope.manufacturer.assetType = $scope.selectedAssetType.name;
@@ -269,7 +269,7 @@ angular.module('timeSheetApp')
                 //var post = $scope.isEdit ? ManufacturerComponent.update : ManufacturerComponent.create
                 //post($scope.manufacturer).then(function () {
                  ManufacturerComponent.update($scope.manufacturer).then(function () {
-                    $rootScope.loadingStop();
+                    $scope.loadingStop();
                     $scope.success = 'OK';
                     $scope.showNotifications('top','center','success','Manufacturer updated Successfully');
                     $location.path('/manufacturer-list');
