@@ -103,7 +103,9 @@ public class AttendanceService extends AbstractService {
             log.debug("check in image not available");
         }else{
             log.debug("check in image available");
-            dbAttn.setCheckOutImage("data:image/jpeg;base64,"+attn.getCheckOutImage());
+            attnDto = s3ServiceUtils.uploadCheckoutImage(attn.getCheckOutImage(), attnDto);
+            attnDto.setUrl(attnDto.getUrl());
+            dbAttn.setCheckOutImage(attn.getCheckOutImage());
         }
         dbAttn.setLatitudeOut(attn.getLatitudeOut());
         dbAttn.setLongitudeOut(attn.getLongitudeOut());
@@ -112,7 +114,6 @@ public class AttendanceService extends AbstractService {
 
         dbAttn = attendanceRepository.save(dbAttn);
         attnDto = mapperUtil.toModel(dbAttn, AttendanceDTO.class);
-
         return attnDto;
     }
 
@@ -258,7 +259,9 @@ public class AttendanceService extends AbstractService {
                 log.debug("check in image not available");
             }else{
                 log.debug("check in image available");
-                attn.setCheckInImage("data:image/jpeg;base64,"+attn.getCheckInImage());
+                attnDto = s3ServiceUtils.uploadCheckInImage(attn.getCheckInImage(), attnDto);
+                attnDto.setUrl(attnDto.getUrl());
+                attn.setCheckInImage(attn.getCheckInImage());
             }
             //mark the shift timings
             findShiftTiming(true,attnDto, attn);
