@@ -16,6 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.ts.app.service.AmazonS3Service;
 import com.ts.app.web.rest.dto.AssetDTO;
 import com.ts.app.web.rest.dto.AssetDocumentDTO;
+import com.ts.app.web.rest.dto.EmployeeDTO;
 import com.ts.app.web.rest.dto.QuotationDTO;
 import com.ts.app.web.rest.dto.TicketDTO;
 
@@ -131,6 +132,24 @@ public class AmazonS3Utils {
 		
 		return fileName;
 	}    
+	
+	public EmployeeDTO uploadEnrollImage(String qrCodeImage, EmployeeDTO employeeDTO) { 
+    	String filename = "enrollImage.png";
+    	String fileUrl = "";
+    	String imageDataString = "data:image/png;base64,";
+    	try {
+	        // Converting Image byte array into Base64 String
+	        imageDataString += qrCodeImage;
+	        log.debug("base64 string" +imageDataString);
+	        fileUrl = amazonS3Service.uploadEnrollImageToS3(filename, imageDataString);
+	        employeeDTO.setQrCodeImage(filename);
+	        employeeDTO.setUrl(fileUrl);
+    	} catch(Exception e) { 
+    		e.printStackTrace();
+    	}
+    	
+		return employeeDTO;
+    } 
     
   
     

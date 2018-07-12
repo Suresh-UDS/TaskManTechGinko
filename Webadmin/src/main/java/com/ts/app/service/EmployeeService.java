@@ -54,6 +54,7 @@ import com.ts.app.repository.ProjectRepository;
 import com.ts.app.repository.SiteRepository;
 import com.ts.app.repository.UserRepository;
 import com.ts.app.repository.UserRoleRepository;
+import com.ts.app.service.util.AmazonS3Utils;
 import com.ts.app.service.util.DateUtil;
 import com.ts.app.service.util.ExportUtil;
 import com.ts.app.service.util.FileUploadHelper;
@@ -149,6 +150,9 @@ public class    EmployeeService extends AbstractService {
 
 	@Inject
 	private Environment env;
+	
+	@Inject
+	private AmazonS3Utils amazonS3utils;
 
 	public EmployeeDTO findByEmpId(String empId) {
         Employee employee = employeeRepository.findByEmpId(empId);
@@ -710,19 +714,19 @@ public class    EmployeeService extends AbstractService {
 	public EmployeeDTO enrollFace(EmployeeDTO employeeDTO){
         Employee entity = employeeRepository.findOne(employeeDTO.getId());
         if (StringUtils.isEmpty(employeeDTO.getEnrolled_face())) {
-
             log.debug("Employee image not found");
-
         }else{
+        	String enrollImage = employeeDTO.getEnrolled_face();
             log.debug("Employee image found");
+            employeeDTO = amazonS3utils.uploadEnrollImage(enrollImage, employeeDTO);
             entity.setEnrolled_face("data:image/jpeg;base64,"+employeeDTO.getEnrolled_face());
             entity.setFaceIdEnrolled(true);
             entity.setFaceAuthorised(false);
             employeeRepository.saveAndFlush(entity);
         }
 
-
         employeeDTO = mapperUtil.toModel(entity, EmployeeDTO.class);
+        employeeDTO.setUrl(employeeDTO.getUrl());
         return employeeDTO;
     }
 
