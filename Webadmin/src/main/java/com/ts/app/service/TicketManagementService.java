@@ -22,6 +22,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.ts.app.config.Constants;
 import com.ts.app.domain.AbstractAuditingEntity;
 import com.ts.app.domain.Employee;
 import com.ts.app.domain.EmployeeProjectSite;
@@ -443,10 +444,13 @@ public class TicketManagementService extends AbstractService {
 		if(ticketReports != null && ticketReports.getSettingValue().equalsIgnoreCase("true")) {
 			settings = settingsRepository.findSettingByKeyAndSiteIdOrProjectId(SettingsService.EMAIL_NOTIFICATION_TICKET_EMAILS, site.getId(), site.getProject().getId());
 			if(CollectionUtils.isNotEmpty(settings)) {
-				ticketReports = settings.get(0);
+				ticketReportEmails = settings.get(0);
 			}
 		}
 	    String ticketEmails = (user != null ? user.getEmail() : "");
+	    if(StringUtils.isNotEmpty(ticketEmails)) {
+	    		ticketEmails += Constants.COMMA_SEPARATOR;
+	    }
 	    ticketEmails += ticketReportEmails != null ? ticketReportEmails.getSettingValue() : "";
 	    if(StringUtils.isNotEmpty(ticket.getStatus()) && (ticket.getStatus().equalsIgnoreCase("Open") || ticket.getStatus().equalsIgnoreCase("Assigned"))) {
 	    		if(isNew) {

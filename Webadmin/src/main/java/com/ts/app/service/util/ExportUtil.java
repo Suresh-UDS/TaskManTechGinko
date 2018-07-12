@@ -73,8 +73,8 @@ public class ExportUtil {
 
 	private String[] EMP_HEADER = { "EMPLOYEE ID", "EMPLOYEE NAME", "DESIGNATION", "REPORTING TO", "CLIENT", "SITE",
 			"ACTIVE" };
-	private String[] JOB_HEADER = { "SITE", "TITLE", "DESCRIPTION", "EMPLOYEE", "TYPE", "PLANNED START TIME", "COMPLETED TIME",
-			"STATUS", "TICKET ID", "TICKET TITLE" };
+	private String[] JOB_HEADER = { "SITE", "TITLE", "DESCRIPTION", "TICKET ID", "TICKET TITLE", "EMPLOYEE", "TYPE", "PLANNED START TIME", "COMPLETED TIME",
+			"STATUS" };
 	private String[] ATTD_HEADER = { "EMPLOYEE ID", "EMPLOYEE NAME", "SITE", "CLIENT", "CHECK IN", "CHECK OUT",
 			"CHECK OUT IMAGE", "SHIFT CONTINUED" };
 	private String[] TICKET_HEADER = { "ID", "SITE", "ISSUE", "DESCRIPTION","STATUS", "PENDING STATUS","CATEGORY", "SEVERITY", "INITIATOR",
@@ -1248,15 +1248,15 @@ public class ExportUtil {
 					dataRow.createCell(0).setCellValue(transaction.getSiteName());
 					dataRow.createCell(1).setCellValue(transaction.getTitle());
 					dataRow.createCell(2).setCellValue(transaction.getDescription());
-					dataRow.createCell(3).setCellValue(transaction.getEmployeeName());
-					dataRow.createCell(4).setCellValue(String.valueOf(transaction.getJobType()));
-					dataRow.createCell(5).setCellValue(DateUtil.formatToDateTimeString(transaction.getPlannedStartTime()));
-					dataRow.createCell(6).setCellValue(DateUtil.formatToDateTimeString(transaction.getActualEndTime()));
-					dataRow.createCell(7)
+					dataRow.createCell(3).setCellValue(transaction.getTicketId() > 0 ? transaction.getTicketId() +"" : "");
+					dataRow.createCell(4).setCellValue(transaction.getTicketName());
+					dataRow.createCell(5).setCellValue(transaction.getEmployeeName());
+					dataRow.createCell(6).setCellValue(String.valueOf(transaction.getJobType()));
+					dataRow.createCell(7).setCellValue(DateUtil.formatToDateTimeString(transaction.getPlannedStartTime()));
+					dataRow.createCell(8).setCellValue(DateUtil.formatToDateTimeString(transaction.getActualEndTime()));
+					dataRow.createCell(9)
 							.setCellValue(transaction.getJobStatus() != null ? transaction.getJobStatus().name()
 									: JobStatus.OPEN.name());
-					dataRow.createCell(8).setCellValue(transaction.getTicketId() > 0 ? transaction.getTicketId() +"" : "");
-					dataRow.createCell(9).setCellValue(transaction.getTicketName());
 				}
 
 				for (int i = 0; i < JOB_HEADER.length; i++) {
