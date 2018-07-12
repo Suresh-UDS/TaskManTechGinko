@@ -22,7 +22,7 @@
         <span style="float: right">
             <!--<button ion-button  (click)="viewCamera(employee,'enroll')"  >Enroll</button>-->
             <span *ngIf="employee.faceAuthorised == 'true'">
-                <button ion-button color="orange" (click)="viewCamera(employee,'verify','checkIn')" *ngIf="employee.checkedIn == 'false' || employee.notCheckedOut == 'true'" >Check - In</button>
+                <button ion-button color="orange" (click)="viewCamera(employee,'verify','checkIn')" *ngIf="employee.checkedIn == 'false' && employee.notCheckedOut == 'false'" >Check - In</button>
                 <button ion-button color="orange" (click)="viewCamera(employee,'verify','checkOut')" *ngIf="employee.checkedIn == 'true' && employee.notCheckedOut == 'false'">Check - Out</button>
             </span>
         </span></p>
