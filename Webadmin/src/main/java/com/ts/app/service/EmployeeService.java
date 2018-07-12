@@ -719,6 +719,7 @@ public class    EmployeeService extends AbstractService {
         	String enrollImage = employeeDTO.getEnrolled_face();
             log.debug("Employee image found");
             employeeDTO = amazonS3utils.uploadEnrollImage(enrollImage, employeeDTO);
+            employeeDTO.setUrl(employeeDTO.getUrl());
             entity.setEnrolled_face("data:image/jpeg;base64,"+employeeDTO.getEnrolled_face());
             entity.setFaceIdEnrolled(true);
             entity.setFaceAuthorised(false);
@@ -726,7 +727,6 @@ public class    EmployeeService extends AbstractService {
         }
 
         employeeDTO = mapperUtil.toModel(entity, EmployeeDTO.class);
-        employeeDTO.setUrl(employeeDTO.getUrl());
         return employeeDTO;
     }
 
