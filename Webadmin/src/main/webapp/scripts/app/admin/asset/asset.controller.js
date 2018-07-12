@@ -154,20 +154,20 @@ angular.module('timeSheetApp')
 
         }
 
-        var nottifShow = true ;
+       /* var nottifShow = true ;*/
 
         $scope.showNotifications= function(position,alignment,color,msg){
 
-            if(nottifShow == true){
+            /*if(nottifShow == true){*/
                $rootScope.overlayShow();
                demo.showNotification(position,alignment,color,msg);
 
-            }else if(nottifShow == false){
+            /*}else if(nottifShow == false){*/
                 $timeout(function() {
                   $rootScope.overlayHide() ;
-                }, 2000);
+                }, 5000);
 
-            }
+            /*}*/
 
         }
 
@@ -681,7 +681,7 @@ angular.module('timeSheetApp')
 
         $scope.search = function () {
 
-            $rootScope.loadingStop();
+            $scope.loadingStop();
 
            var currPageVal = ($scope.pages ? $scope.pages.currPage : 1);
             if(!$scope.searchCriteria) {
@@ -833,7 +833,7 @@ angular.module('timeSheetApp')
                 }
 
             }).catch(function(){
-                $scope.showNotifications('top','center','danger','Error load asset list. Please try again later..');
+                //$scope.showNotifications('top','center','danger','Error load asset list. Please try again later..');
                 $scope.error = 'ERROR';
             });
         }
@@ -1280,7 +1280,7 @@ angular.module('timeSheetApp')
 
         $scope.load52WeekSchedule = function() {
         		console.log('site selection - ' + JSON.stringify($scope.searchSite));
-        		if(jQuery.isEmptyObject($scope.searchSite) == false) {
+        		if(jQuery.isEmptyObject($scope.searchSite) == false && $scope.searchCriteria.siteId != 0) {
             		$scope.searchCriteria.siteId = $scope.searchSite.id;
             		AssetComponent.exportAsset52WeekSchedule($scope.searchCriteria).then(function(data){
             			console.log("response for 52week schedule - "+ JSON.stringify(data));
