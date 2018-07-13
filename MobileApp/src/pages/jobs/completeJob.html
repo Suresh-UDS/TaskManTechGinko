@@ -54,22 +54,25 @@
             </ion-row>
         </div>
 
-        <ion-row class="margin-tp25 white-bg padding10" >
-            <div *ngIf="jobDetails.checklistItems?.length > 0">
-                <ion-item *ngFor="let list of jobDetails.checklistItems;let i = index">
-                    <ion-label style="color: black">{{list.checklistItemName}}</ion-label>
-                    <ion-checkbox [(ngModel)]="list.completed"   checked="list.completed" >
-                    </ion-checkbox>
-                </ion-item>
-                <ion-item>
-                    <ion-icon name="create" style="color: black" text-right class=" margin-left-20" (click)="presentProfileModal()"></ion-icon>
-                </ion-item>
+        <!--<ion-row class="margin-tp25 white-bg padding10" >-->
+            <!--<div *ngIf="jobDetails.checklistItems?.length > 0">-->
+                <!--<ion-item *ngFor="let list of jobDetails.checklistItems;let i = index">-->
+                    <!--<ion-label style="color: black">{{list.checklistItemName}}</ion-label>-->
+                    <!--<ion-checkbox [(ngModel)]="list.completed"   checked="list.completed" >-->
+                    <!--</ion-checkbox>-->
+                <!--</ion-item>-->
+                <!--<ion-item>-->
+                    <!--<ion-icon name="create" style="color: black" text-right class=" margin-left-20" (click)=""></ion-icon>-->
+                <!--</ion-item>-->
 
-            </div>
-            <div *ngIf="!jobDetails.checklistItems?.length > 0" class="align-center">
-                <p text-center>No Checklist Found</p>
-            </div>
-        </ion-row>
+            <!--</div>-->
+            <!--<div *ngIf="!jobDetails.checklistItems?.length > 0" class="align-center">-->
+                <!--<p text-center>No Checklist Found</p>-->
+            <!--</div>-->
+        <!--</ion-row>-->
+        <button class="btn btn-warning center" (click)="presentCheckListModal(jobDetails.checklistItems)">
+            Checklist
+        </button>
 
 
     </ion-list>

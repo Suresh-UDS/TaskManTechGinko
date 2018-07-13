@@ -17,47 +17,14 @@
 
 <ion-content padding>
 
-  <ion-list >
+    <div *ngIf="checkListItems > 0">
+      <ion-item *ngFor="let list of checkListItems;let i = index">
+        <ion-label style="color: black">{{list.checklistItemName}}</ion-label>
+        <ion-checkbox [(ngModel)]="list.completed"   checked="list.completed" >
+        </ion-checkbox>
+      </ion-item>
 
-    <div class="margin0 white-bg padding10">
-      <ion-row class="margin0">
-        <ion-col col-6 class="label-on-left">
-          <p class="line-height">New Images </p>
-        </ion-col>
-        <ion-col col-6 text-right>
-          <button class="ion-button" round class="camera-btn"><ion-icon name="ios-camera"></ion-icon></button>
-        </ion-col>
-      </ion-row>
-      <ion-row>
-        <ion-col col-3  class="">
-          <img  class="job-img margin-bottom25">
-        </ion-col>
-      </ion-row>
     </div>
-
-    <div class="margin-tp25 white-bg padding10" >
-      <ion-row class="margin0">
-        <ion-col col-6 class="label-on-left">
-          <p class="line-height">Uploaded Images </p>
-        </ion-col>
-      </ion-row>
-      <ion-row>
-        <ion-col col-3  class="">
-          <img class="job-img margin-bottom25">
-        </ion-col>
-      </ion-row>
-    </div>
-
-    <div class="margin-tp25 white-bg padding10">
-      <ion-row class="margin0">
-          <p>Remarks</p>
-      </ion-row>
-      <ion-row class="margin0 border-btm">
-        <ion-input type="text" value=""></ion-input>
-      </ion-row>
-    </div>
-
-  </ion-list>
 
 </ion-content>
 <ion-footer>
