@@ -2,6 +2,7 @@ package com.ts.app.service;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -103,7 +104,8 @@ public class AttendanceService extends AbstractService {
             log.debug("check in image not available");
         }else{
             log.debug("check in image available");
-            attnDto = s3ServiceUtils.uploadCheckoutImage(attn.getCheckOutImage(), attnDto);
+            long dateTime = new Date().getTime(); 
+            attnDto = s3ServiceUtils.uploadCheckoutImage(attn.getCheckOutImage(), attnDto, dateTime);
             attnDto.setUrl(attnDto.getUrl());
             dbAttn.setCheckOutImage(attn.getCheckOutImage());
         }
@@ -259,7 +261,8 @@ public class AttendanceService extends AbstractService {
                 log.debug("check in image not available");
             }else{
                 log.debug("check in image available");
-                attnDto = s3ServiceUtils.uploadCheckInImage(attn.getCheckInImage(), attnDto);
+                long dateTime = new Date().getTime();
+                attnDto = s3ServiceUtils.uploadCheckInImage(attn.getCheckInImage(), attnDto, dateTime);
                 attnDto.setUrl(attnDto.getUrl());
                 attn.setCheckInImage(attn.getCheckInImage());
             }
