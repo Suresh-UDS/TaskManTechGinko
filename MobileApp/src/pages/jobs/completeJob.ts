@@ -11,6 +11,9 @@ import {componentService} from "../service/componentService";
 import { FileTransfer, FileUploadOptions, FileTransferObject } from '@ionic-native/file-transfer';
 import { File } from '@ionic-native/file';
 import {ApplicationConfig, MY_CONFIG_TOKEN} from "../service/app-config";
+import{ModalController} from "ionic-angular";
+import{Checklist} from "../checklist/checklist";
+
 @Component({
     selector: 'page-complete-job',
     templateUrl: 'completeJob.html'
@@ -43,7 +46,7 @@ export class CompleteJobPage {
 
     constructor(public navCtrl: NavController,public navParams:NavParams, public authService: authService, @Inject(MY_CONFIG_TOKEN) private config:ApplicationConfig,
                 private loadingCtrl:LoadingController, public camera: Camera,private geolocation:Geolocation, private jobService: JobService,
-                private attendanceService: AttendanceService,public popoverCtrl: PopoverController, private component:componentService,private transfer: FileTransfer, private file: File) {
+                private attendanceService: AttendanceService,public popoverCtrl: PopoverController, private component:componentService,private transfer: FileTransfer, private file: File,private modalCtrl:ModalController) {
         this.jobDetails=this.navParams.get('job');
         this.takenImages = [];
         this.checkOutDetails={
@@ -362,5 +365,14 @@ export class CompleteJobPage {
     call()
     {
 
+    }
+
+
+    presentProfileModal() {
+        let profileModal = this.modalCtrl.create(Checklist, {});
+        profileModal.onDidDismiss(data => {
+            console.log(data);
+        });
+        profileModal.present();
     }
 }
