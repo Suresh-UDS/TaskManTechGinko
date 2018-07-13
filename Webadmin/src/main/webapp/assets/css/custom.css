@@ -487,6 +487,11 @@ textarea.form-control {
     border-radius: 3px;
     min-width: 200px;
 }
+.HoverBx.TicketActBx
+{
+    min-width: 390px;
+    /*top: 12px;*/
+}
 .hoverMe:hover .Viewmore
 {
     display: none;
@@ -498,6 +503,10 @@ textarea.form-control {
 .HoverBx a i,.HoverBx button i
 {
     transition: font-size .2s linear .1s;
+}
+.HoverBx:hover a
+{
+    color: orange;
 }
 .HoverBx a:hover i,.HoverBx button:hover i
 {
