@@ -29,6 +29,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -354,7 +355,7 @@ public class AssetResource {
 		log.debug("********** validation extension : "+ ext);
 		String[] arrExt = ext.split(",");
 		for (String exten : arrExt) {
-			if (extension.equals(exten)) {
+			if (extension.equalsIgnoreCase(exten)) {
 				assetDocumentDTO = assetService.uploadFile(assetDocumentDTO, file);
 				assetDocumentDTO.setExtension(extension);
 			}
@@ -755,5 +756,31 @@ public class AssetResource {
 		result = assetService.getAssetConfig(id);
 		return result;
 	}
+	
+	@RequestMapping(value= "/list/qrcodes/[{assetIds}]", method = RequestMethod.GET)
+	public List<Object> findAllAssetQrCodes(@PathVariable long[] assetIds) {
+		log.info("Get List of Asset qr codes");
+		List<Object> qrList = null;
+		try { 
+			qrList = assetService.findAllAssetQrcode(assetIds);
+		} catch(Exception e) { 
+			throw new TimesheetException("Error while get listing QR codes" + e);
+		}
+		return qrList;
+	}
+	
+	@RequestMapping(value= "/list/qrcodes/findAll", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	public List<Object> findAllAssetQrCodes() {
+		log.info("Get List of All Asset QR Codes");
+		List<Object> qrLists = null;
+		try { 
+			qrLists = assetService.findAllQrcodes();
+		} catch(Exception e) { 
+			throw new TimesheetException("Error while get listing QR codes" + e);
+		}
+		return qrLists;
+	}
+	
+	
 
 }

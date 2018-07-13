@@ -8,6 +8,7 @@ import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
 import java.util.TimeZone;
@@ -18,6 +19,7 @@ import com.ts.app.web.rest.dto.*;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.Hibernate;
+import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.env.Environment;
@@ -54,6 +56,7 @@ import com.ts.app.repository.ProjectRepository;
 import com.ts.app.repository.SiteRepository;
 import com.ts.app.repository.UserRepository;
 import com.ts.app.repository.UserRoleRepository;
+import com.ts.app.service.util.AmazonS3Utils;
 import com.ts.app.service.util.DateUtil;
 import com.ts.app.service.util.ExportUtil;
 import com.ts.app.service.util.FileUploadHelper;
@@ -149,6 +152,9 @@ public class    EmployeeService extends AbstractService {
 
 	@Inject
 	private Environment env;
+	
+	@Inject
+	private AmazonS3Utils amazonS3utils;
 
 	public EmployeeDTO findByEmpId(String empId) {
         Employee employee = employeeRepository.findByEmpId(empId);
@@ -710,17 +716,18 @@ public class    EmployeeService extends AbstractService {
 	public EmployeeDTO enrollFace(EmployeeDTO employeeDTO){
         Employee entity = employeeRepository.findOne(employeeDTO.getId());
         if (StringUtils.isEmpty(employeeDTO.getEnrolled_face())) {
-
             log.debug("Employee image not found");
-
         }else{
+        	String enrollImage = employeeDTO.getEnrolled_face();
             log.debug("Employee image found");
-            entity.setEnrolled_face("data:image/jpeg;base64,"+employeeDTO.getEnrolled_face());
+            long dateTime = new Date().getTime(); 
+            employeeDTO = amazonS3utils.uploadEnrollImage(enrollImage, employeeDTO, dateTime);
+            employeeDTO.setUrl(employeeDTO.getUrl());
+            entity.setEnrolled_face(employeeDTO.getEnrolled_face());
             entity.setFaceIdEnrolled(true);
             entity.setFaceAuthorised(false);
             employeeRepository.saveAndFlush(entity);
         }
-
 
         employeeDTO = mapperUtil.toModel(entity, EmployeeDTO.class);
         return employeeDTO;

@@ -16,6 +16,8 @@ import org.springframework.web.multipart.MultipartFile;
 import com.ts.app.service.AmazonS3Service;
 import com.ts.app.web.rest.dto.AssetDTO;
 import com.ts.app.web.rest.dto.AssetDocumentDTO;
+import com.ts.app.web.rest.dto.AttendanceDTO;
+import com.ts.app.web.rest.dto.EmployeeDTO;
 import com.ts.app.web.rest.dto.QuotationDTO;
 import com.ts.app.web.rest.dto.TicketDTO;
 
@@ -46,7 +48,7 @@ public class AmazonS3Utils {
         try {
             File file = convertMultiPartToFile(multipartFile);
             String fileName = generateFileName(multipartFile);
-            String nameOfFile = assetCode + "_" + "document" + "_" + fileName;
+            String nameOfFile = assetCode + "_" + fileName;
             fileUrl = amazonS3Service.uploadAssetFileTos3bucket(nameOfFile, file);
             assetDocumentDTO.setFile(nameOfFile);
             assetDocumentDTO.setUrl(fileUrl);
@@ -131,6 +133,62 @@ public class AmazonS3Utils {
 		
 		return fileName;
 	}    
+	
+	public EmployeeDTO uploadEnrollImage(String qrCodeImage, EmployeeDTO employeeDTO, long dateTime) { 
+    	String filename = "enrollImage_"+ dateTime +".png";
+    	String fileUrl = "";
+    	String imageDataString = "data:image/png;base64,";
+    	try {
+	        // Converting Image byte array into Base64 String
+	        imageDataString += qrCodeImage;
+	        log.debug("base64 string" +imageDataString);
+	        fileUrl = amazonS3Service.uploadEnrollImageToS3(filename, imageDataString);
+	        employeeDTO.setEnrolled_face(filename);
+	        employeeDTO.setUrl(fileUrl);
+    	} catch(Exception e) { 
+    		e.printStackTrace();
+    	}
+    	
+		return employeeDTO;
+    }
+
+	public AttendanceDTO uploadCheckoutImage(String checkOutImage, AttendanceDTO attnDto, long dateTime) {
+		// TODO Auto-generated method stub
+		String filename = "checkOutImage_"+ dateTime +".png";
+    	String fileUrl = "";
+    	String imageDataString = "data:image/png;base64,";
+    	try {
+	        // Converting Image byte array into Base64 String
+	        imageDataString += checkOutImage;
+	        log.debug("base64 string" + imageDataString);
+	        fileUrl = amazonS3Service.uploadCheckOutImageToS3(filename, imageDataString);
+	        attnDto.setCheckOutImage(filename);
+	        attnDto.setUrl(fileUrl);
+    	} catch(Exception e) { 
+    		e.printStackTrace();
+    	}
+    	
+		return attnDto;
+	}
+	
+	public AttendanceDTO uploadCheckInImage(String checkInImage, AttendanceDTO attnDto, long dateTime) {
+		// TODO Auto-generated method stub
+		String filename = "checkInImage_"+ dateTime +".png";
+    	String fileUrl = "";
+    	String imageDataString = "data:image/png;base64,";
+    	try {
+	        // Converting Image byte array into Base64 String
+	        imageDataString += checkInImage;
+	        log.debug("base64 string" + imageDataString);
+	        fileUrl = amazonS3Service.uploadCheckInImageToS3(filename, imageDataString);
+	        attnDto.setCheckInImage(filename);
+	        attnDto.setUrl(fileUrl);
+    	} catch(Exception e) { 
+    		e.printStackTrace();
+    	}
+    	
+		return attnDto;
+	}
     
   
     

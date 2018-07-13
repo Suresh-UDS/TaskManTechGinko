@@ -60,6 +60,8 @@ public class AttendanceDTO extends BaseDTO implements Serializable{
 
 	private boolean notCheckedOut;
 	
+	private String url;
+	
 	public Long getId() {
 		return id;
 	}
@@ -227,6 +229,14 @@ public class AttendanceDTO extends BaseDTO implements Serializable{
 
 	public void setNotCheckedOut(boolean notCheckedOut) {
 		this.notCheckedOut = notCheckedOut;
+	}
+
+	public String getUrl() {
+		return url;
+	}
+
+	public void setUrl(String url) {
+		this.url = url;
 	}
     
     

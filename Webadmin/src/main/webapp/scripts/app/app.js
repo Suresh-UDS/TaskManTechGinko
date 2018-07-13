@@ -120,6 +120,16 @@ angular.module('timeSheetApp', ['LocalStorageModule',
          $('.overlay').show();
 
         }
+        $rootScope.overlayShow = function(){
+
+         $('.overlay').show();
+
+        }
+        $rootScope.overlayHide = function(){
+
+         $('.overlay').hide();
+
+        }
 
         $rootScope.loadingStop = function(){
 
