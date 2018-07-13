@@ -5,8 +5,8 @@
     </button>
     <ion-title>Jobs</ion-title>
       <!--<ion-buttons right>-->
-          <!--<button ion-button clear (click)="addJob()" class="add-btn">-->
-              <!--<ion-icon name="add"></ion-icon>-->
+          <!--<button color="primary" ion-button clear (click)="scanQR()" class="add-btn">-->
+              <!--<i class="fa fa-qrcode clr-orange fnt-24"></i>-->
           <!--</button>-->
       <!--</ion-buttons>-->
   </ion-navbar>
@@ -42,7 +42,7 @@
             </div>
             <div  class="white-bg" *ngFor="let job of todaysJobs" >
 
-                <div class="padding-left16 padding-top5" *ngIf="job.schedule == 'ONCE' || job.schedule==null ">
+                <div class="padding-left16 padding-top5">
                     <ion-row class="margin0">
 
                         <ion-col col-2 class="ver-center">
@@ -75,7 +75,7 @@
 
                     </ion-row>
                 </div>
-                <ion-item-sliding #slidingItem *ngIf="job.schedule == 'ONCE' || job.schedule==null ">
+                <ion-item-sliding #slidingItem >
 
                     <ion-item #item class="item-fnt padding-left0" >
                         <!--<div class="padding-left16">-->

@@ -178,6 +178,29 @@ button.button-md-primary p.siteName
 
 }
 
+scanqr
+{
+  ion-content.content-md
+  {
+    background: transparent !important;
+  }
+  ion-content
+  {
+    background: transparent !important;
+
+    .fixed-content
+    {
+      background: transparent !important;
+    }
+  }
+
+}
+
+ion-app.md
+{
+  background: transparent !important;
+}
+
 .form-group label.control-label{
   color: #000;
 }

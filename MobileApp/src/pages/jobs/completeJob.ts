@@ -153,7 +153,7 @@ export class CompleteJobPage {
                 console.log("Save Job response");
                 this.component.closeLoader();
                 this.component.showToastMessage('Job Saved Successfully','bottom');
-                console.log(response)
+                console.log(response);
                 console.log(job.checkInOutId);
                 if(this.takenImages.length>0){
                     this.component.showLoader('Uploading Images');
@@ -165,11 +165,11 @@ export class CompleteJobPage {
                     this.checkOutDetails.id=job.checkInOutId;
                     this.jobService.updateJobImages(this.checkOutDetails).subscribe(
                         response=>{
-                            this.component.closeLoader();
+                            // this.component.closeLoader();
                             console.log("complete job response");
                             console.log(response);
                             console.log(job);
-                            this.component.showToastMessage('Job Completed Successfully','bottom');
+                            // this.component.showToastMessage('Job Completed Successfully','bottom');
                             // this.component.showLoader('Uploading Images');
                             //TODO
                             //File Upload after successful checkout
@@ -230,8 +230,12 @@ export class CompleteJobPage {
 
                         },err=>{
                             this.component.closeLoader();
+                            // this.navCtrl.pop();
                         }
                     )
+                }else{
+                    this.component.closeAll();
+                    this.navCtrl.pop();
                 }
             },err=>{
                 console.log("Error in saving response");
