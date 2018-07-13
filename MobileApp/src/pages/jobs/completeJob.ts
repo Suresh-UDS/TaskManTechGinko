@@ -372,6 +372,7 @@ export class CompleteJobPage {
         let profileModal = this.modalCtrl.create(Checklist, {checkListItems:checkListItems});
         profileModal.onDidDismiss(data => {
             console.log(data);
+            this.jobDetails.checkListItems = data;
         });
         profileModal.present();
     }

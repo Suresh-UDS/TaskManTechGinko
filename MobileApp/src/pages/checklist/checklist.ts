@@ -20,6 +20,7 @@ export class Checklist {
   constructor(public navCtrl: NavController, public navParams: NavParams,public viewCtrl:ViewController,
                 private camera:Camera) {
         this.checkListItems=[];
+        this.takenImages=[];
   }
 
   ionViewDidLoad() {
@@ -30,7 +31,8 @@ export class Checklist {
   }
 
   dismiss(){
-    this.viewCtrl.dismiss();
+      let data = this.checkListItems;
+    this.viewCtrl.dismiss(data);
   }
 
   viewCamera(i) {

@@ -1002,6 +1002,18 @@ a:hover, a:focus
 {
   border-bottom: 1px solid #eeeeee;
 }
+.border-inp
+{
+    border:1px solid #eeeeee;
+}
+.margin-top10
+{
+    margin-top:10px !important;
+}
+.margin-top25
+{
+    margin-top:25px !important;
+}
 p.titleTxt
 {
   font-weight:600;
