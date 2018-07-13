@@ -1,5 +1,29 @@
-<div ng-init="">
+<div ng-init="loadVendors()">
 
+
+    <div class="row" >
+        <div class="col-md-6 txt-align-lft">
+
+            <button class="btn btn-info add-btn margn-tb0" data-toggle="modal" data-target="#basicFilter" tabindex="0">
+                <i class="material-icons">filter_list</i> Basic Filter
+                <div class="ripple-container"></div>
+            </button>
+
+        </div>
+        <div class="col-md-6 txt-align-rgt">
+
+            <button class="btn btn-success add-btn margn-tb0"   ui-sref="add-vendor" ng-class="{active: $state.includes('admin')}" tabindex="0">
+                <i class="material-icons">add</i> Add
+                <div class="ripple-container"></div>
+            </button>
+
+            <button class="btn btn-warning add-btn margn-tb0"  ng-click="refreshPage()" tabindex="0">
+                <i class="material-icons">refresh</i> Reload
+                <div class="ripple-container"></div>
+            </button>
+
+        </div>
+    </div>
 
 
     <div class="row">
@@ -7,60 +31,61 @@
             <div class="card margin-TB-5 tablecard appModuleCard">
 
                 <div class="card-content">
-                    <div class="row" ng-init="loadVendors();">
-                        <div class="col-md-12">
-                            <div class="card formcard FilterCard">
-                                <div class="card-content">
-                                    <form name="searchForm"  ng-submit="searchFilter();" novalidate >
 
-                                        <div class="row" >
+                    <!--<div class="row">-->
+                        <!--<div class="col-md-12">-->
+                            <!--<div class="card formcard FilterCard">-->
+                                <!--<div class="card-content">-->
+                                    <!--<form name="searchForm"  ng-submit="searchFilter();" novalidate >-->
 
-                                            <div class="col-xs-12 col-md-4">
-                                                <div class="form-group no-padding" >
-                                                    <div class="dropdown">
-                                                        <div class="form-group">
-                                                            <label class="control-label">Search Name</label>
-                                                            <input id='name'
-                                                                   class='form-control'
-                                                                   name='name'
-                                                                   ng-model="searchName"
-                                                                   type='text' value=""
+                                        <!--<div class="row" >-->
 
-                                                            />
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
+                                            <!--<div class="col-xs-12 col-md-4">-->
+                                                <!--<div class="form-group no-padding" >-->
+                                                    <!--<div class="dropdown">-->
+                                                        <!--<div class="form-group">-->
+                                                            <!--<label class="control-label">Search Name</label>-->
+                                                            <!--<input id='name'-->
+                                                                   <!--class='form-control'-->
+                                                                   <!--name='name'-->
+                                                                   <!--ng-model="searchName"-->
+                                                                   <!--type='text' value=""-->
 
-                                            <div class="col-xs-12 col-md-8 pad10px">
-                                                <div class="floatR form-group pull-right">
-                                                    <button type="submit" class="btn btn-circle blue-clr">
-                                                        <i class="material-icons">search</i>
-                                                    </button>
-                                                    <!-- <button data-toggle="modal" data-target="#RightModal-Add"  class="btn btn-circle green-clr">
-                                                        <i class="material-icons">add</i>
-                                                    </button> -->
-                                                    <button data-toggle="modal" data-target="#RightModal-Add"  class="btn btn-circle green-clr" ui-sref="add-vendor">
-                                                        <i class="material-icons">add</i>
-                                                    </button>
-                                                    <button ng-click="refreshPage()" class="btn btn-circle orange-clr">
-                                                        <i class="material-icons">refresh</i>
-                                                    </button>
-                                                </div>
-                                                <div class="clearfix"></div>
-                                            </div>
-                                        </div>
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                                                            <!--/>-->
+                                                        <!--</div>-->
+                                                    <!--</div>-->
+                                                <!--</div>-->
+                                            <!--</div>-->
+
+                                            <!--<div class="col-xs-12 col-md-8 pad10px">-->
+                                                <!--<div class="floatR form-group pull-right">-->
+                                                    <!--<button type="submit" class="btn btn-circle blue-clr">-->
+                                                        <!--<i class="material-icons">search</i>-->
+                                                    <!--</button>-->
+                                                    <!--&lt;!&ndash; <button data-toggle="modal" data-target="#RightModal-Add"  class="btn btn-circle green-clr">-->
+                                                        <!--<i class="material-icons">add</i>-->
+                                                    <!--</button> &ndash;&gt;-->
+                                                    <!--<button data-toggle="modal" data-target="#RightModal-Add"  class="btn btn-circle green-clr" ui-sref="add-vendor">-->
+                                                        <!--<i class="material-icons">add</i>-->
+                                                    <!--</button>-->
+                                                    <!--<button ng-click="refreshPage()" class="btn btn-circle orange-clr">-->
+                                                        <!--<i class="material-icons">refresh</i>-->
+                                                    <!--</button>-->
+                                                <!--</div>-->
+                                                <!--<div class="clearfix"></div>-->
+                                            <!--</div>-->
+                                        <!--</div>-->
+                                    <!--</form>-->
+                                <!--</div>-->
+                            <!--</div>-->
+                        <!--</div>-->
+                    <!--</div>-->
 
 
 
 
                     <div class="table-responsive tablecard">
-                        <table class="table table-striped table-hover">
+                        <table class="table table-hover withSortingIcons">
 
                             <thead>
                             <tr>
@@ -75,7 +100,7 @@
                                         </span>
                                     </span>
                                 </th>
-                                <th width="15%">Contact First Name
+                                <th width="15%">First Name
 
                                     <span class="sortingIcons">
                                         <span ng-click="columnAscOrder('contactFirstName')" ng-class="isActiveAsc == 'contactFirstName' ? 'active' : ''" >
@@ -86,7 +111,7 @@
                                         </span>
                                     </span>
                                 </th>
-                                <th width="15%">Contact Last Name
+                                <th width="15%">Last Name
 
                                     <span class="sortingIcons">
                                         <span ng-click="columnAscOrder('contactLastName')" ng-class="isActiveAsc == 'contactLastName' ? 'active' : ''" >
@@ -120,11 +145,19 @@
                                     <td>{{vendor.contactLastName}}</td>
 								   	<td>{{vendor.phone}}</td>
 								   	<td>{{vendor.addressLine1}} {{vendor.addressLine2}} {{vendor.city}} {{vendor.state}}</td>
-	                                 <td class="text-right">
-	                                     <a data-toggle="modal"  data-target="#RightModal-View" ng-click="getVendorDetails(vendor.id, 'view')"  has-permission="Vendor:View"   class="btn btn-simple btn-info"><i class="material-icons">visibility</i></a>
-	                                    <!--  <a data-toggle="modal"  data-target="#RightModal-Edit" ng-click="getVendorDetails(vendor.id, 'edit')"  has-permission="Vendor:Edit"   class="btn btn-simple btn-info"><i class="material-icons">edit</i></a> -->
-                                        <a  ui-sref="edit-vendor({ id: vendor.id })"  has-permission="Vendor:Edit"   class="btn btn-simple btn-info"><i class="material-icons">edit</i></a>
-                                        <a  has-permission="Vendor:Delete" ui-sref="" class="btn btn-simple btn-danger" ng-click="deleteConfirm(vendor.id)" onClick="$('#deleteVendor').modal()" data-target="#myModal"><i class="material-icons">delete_forever</i><div class="ripple-container"></div></a>
+	                                 <td class="text-right hoverMe">
+
+                                         <a   has-authority="ROLE_ADMIN"  title="View More Action"  class="btn btn-simple btn-info btn-icon like Viewmore"><i class="material-icons">more_vert</i></a>
+
+                                         <div class="HoverBx">
+                                             <a data-toggle="modal"  data-target="#RightModal-View" ng-click="getVendorDetails(vendor.id, 'view')"  has-permission="Vendor:View"   class="btn btn-simple btn-info"><i class="material-icons">visibility</i></a>
+                                             <!--  <a data-toggle="modal"  data-target="#RightModal-Edit" ng-click="getVendorDetails(vendor.id, 'edit')"  has-permission="Vendor:Edit"   class="btn btn-simple btn-info"><i class="material-icons">edit</i></a> -->
+                                             <a  ui-sref="edit-vendor({ id: vendor.id })"  has-permission="Vendor:Edit"   class="btn btn-simple btn-info"><i class="material-icons">edit</i></a>
+                                             <a  has-permission="Vendor:Delete" ui-sref="" class="btn btn-simple btn-danger" ng-click="deleteConfirm(vendor.id)" onClick="$('#deleteVendor').modal()" data-target="#myModal"><i class="material-icons">delete_forever</i><div class="ripple-container"></div></a>
+
+                                         </div>
+
+
 	                                 </td>
 
 								</tr>
@@ -157,7 +190,7 @@
         </div>
 
     </div>
-    
+
     <div class="card margin-TB-5 txt-align-center" ng-show="noData">
 
         <div class="card-content">
@@ -623,3 +656,49 @@
     </div>
 
 </div>
+
+
+<!-- BasicFilterModal -->
+<div class="modal fade BasicFilterModal FilterModalCon" id="basicFilter" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form name="searchForm"   novalidate >
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                        <i class="material-icons">clear</i>
+                    </button>
+                    <h4 class="modal-title">Basic Filter</h4>
+                </div>
+                <div class="modal-body">
+
+                    <div class="row">
+
+                        <div class="col-xs-12 col-md-6">
+                            <div class="form-group no-padding" >
+                                <div class="dropdown">
+                                    <div class="form-group">
+                                        <label class="control-label">Search Name</label>
+                                        <input id='name'
+                                               class='form-control'
+                                               name='name'
+                                               ng-model="searchName"
+                                               type='text' value=""
+
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-success btn-simple" ng-click = "searchFilter()" data-dismiss="modal" ng-disabled="searchForm.$invalid">Apply Filter</button>
+                    <!--<button type="button" class="btn btn-danger btn-simple" data-dismiss="modal">Close</button>-->
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<!--  End Modal -->
