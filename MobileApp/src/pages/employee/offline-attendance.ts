@@ -173,12 +173,13 @@ export class OfflineAttendance {
             checkInImage:imageData,
             checkInTime:new Date(),
             offlineAttendance:true,
-            id:employee.employeeId
+            id:employee.employeeId,
+            offlineCheckin:true
         };
 
         this.dbService.setAttendance(attendanceData).then(response=>{
             console.log(response);
-            this.dbService.updateEmployee(employee.employeeId,true).then(response=>{
+            this.dbService.updateEmployee(employee.employeeId,true,false).then(response=>{
                 console.log(response);
                 this.dbService.getSiteEmployee(this.siteId).then((response)=>{
                         console.log(response);
@@ -204,6 +205,7 @@ export class OfflineAttendance {
     }
 
     saveAttendanceOutLocal(employee,imageData,attendanceId){
+        this.component.showLoader("save attendance")
         var attendanceData = {
             siteId:employee.siteId,
             employeeEmpId:employee.empId,
@@ -212,14 +214,14 @@ export class OfflineAttendance {
             checkOutImage:imageData,
             checkOutTime:new Date(),
             id:employee.employeeId,
-            offlineAttendance:true
-
+            offlineAttendance:true,
+            attendanceId:employee.attendanceId
         };
 
-        this.dbService.updateAttendance(attendanceData).then(response=>{
+        this.dbService.setAttendance(attendanceData).then(response=>{
             console.log(response);
                 this.component.closeLoader()
-            this.dbService.updateEmployee(employee.employeeId,false).then(response=>{
+            this.dbService.updateEmployee(employee.employeeId,true,true).then(response=>{
                 console.log(response);
                 this.dbService.getSiteEmployee(this.siteId).then((response)=>{
                         console.log(response);

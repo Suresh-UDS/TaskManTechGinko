@@ -17,6 +17,7 @@ import {CompleteJobPage} from "../jobs/completeJob";
 import {ViewJobPage} from "../jobs/view-job";
 import {LoginPage} from "../login/login";
 import {DBService} from "../service/dbService";
+import {AttendanceService} from "../service/attendanceService";
 declare var demo;
 @Component({
   selector: 'page-dashboard',
@@ -60,7 +61,7 @@ export class DashboardPage {
     addEmployee:any;
     slideIndex:any;
 
-  constructor(public renderer: Renderer,public componentService:componentService,public plt: Platform,public myService:authService,private loadingCtrl:LoadingController,public navCtrl: NavController,public component:componentService,public authService:authService,public modalCtrl: ModalController,
+  constructor(public renderer: Renderer,public attendanceService:AttendanceService,public componentService:componentService,public plt: Platform,public myService:authService,private loadingCtrl:LoadingController,public navCtrl: NavController,public component:componentService,public authService:authService,public modalCtrl: ModalController,
               private datePickerProvider: DatePickerProvider, private siteService:SiteService, private employeeService: EmployeeService, private jobService:JobService, public events:Events, private actionSheetCtrl:ActionSheetController, private alertController:AlertController, private dbService:DBService) {
 
 
@@ -451,16 +452,50 @@ export class DashboardPage {
                 text:'Sync',
                 handler:()=>{
                     this.componentService.showLoader("Data Sync")
-                    this.dbService.setSites().then(data=>{
-                        console.log(data);
-                        this.dbService.setEmployee().then(response=>{
-                            console.log(response);
-                            this.componentService.closeLoader()
-                        },err=>{
-                            console.log(err)
-                        })
+                    this.markOfflineAttendance().then(response=>{
+                        console.log(response);
+                        this.dbService.dropAttendance().then(
+                            response=>{
+                                this.dbService.setSites().then(data=>{
+                                    console.log(data);
+                                    this.dbService.getSite().then(response=>{
+                                        console.log(response);
+                                        this.dbService.setEmployee().then(response=>{
+                                            console.log(response);
+                                            this.componentService.closeLoader();
+                                        },err=>{
+                                            console.log(err)
+                                        })
+                                    },err=>{
+                                        console.log(err)
+                                    })
+                                },err=>{
+                                    console.log(err);
+                                })
+                        },
+                            error=>{
+                                console.log(error)
+                            })
+
+
                     },err=>{
-                        console.log(err);
+                        console.log(err)
+                        this.dbService.setSites().then(data=>{
+                            console.log(data);
+                            this.dbService.getSite().then(response=>{
+                                console.log(response);
+                                this.dbService.setEmployee().then(response=>{
+                                    console.log(response);
+                                    this.componentService.closeLoader();
+                                },err=>{
+                                    console.log(err)
+                                })
+                            },err=>{
+                                console.log(err)
+                            })
+                        },err=>{
+                            console.log(err);
+                        })
                     })
 
                 }
@@ -470,5 +505,91 @@ export class DashboardPage {
         alert.present();
     }
 
+    markOfflineAttendance(){
+        return new Promise((resolve, reject) => {
+            setTimeout(() => {
+                this.dbService.getAttendance().then(response=>{
+                    console.log(response);
+                    // this.componentService.closeLoader()
+                    var data:any;
+                    data = response;
+                    for(var i=0;i<data.length;i++) {
+                        console.log("=================="+data[i].siteId)
+                        console.log(data[i].offlineCheckin)
+                        if(data[i].offlineCheckin == 'true')
+                        {
+                            this.attendanceIn(data[i]).then(
+                                response=>{
+                                    console.log(response)
+                                    resolve("sss")
+                                })
+                        }
+                        else {
+                            this.attendanceService.markAttendanceCheckOut(data[i].siteId, data[i].employeeId, data[i].latitudeIn, data[i].longitudeIn, data[i].checkOutImage, data[i].attendanceId).subscribe(
+                                response => {
+                                    resolve("ssss")
+                                    console.log("Offline attendance data synced to server");
+                                },
+                                error2 => {
+                                    console.log("Error in syncing attendance to server");
+                                    this.componentService.closeLoader()
+                                    this.componentService.showToastMessage("Error in syncing attendance to server","center")
+                                })
+                        }
+                    }
+                },err=>{
+                    console.log(err)
+                    reject(err)
+                })
+            }, 3000)
+
+        })
+    }
+
+
+    attendanceOut(data,id)
+    {
+        return new Promise((resolve,reject)=>{
+            setTimeout(()=>{
+                this.attendanceService.markAttendanceCheckOut(data.siteId, data.employeeEmpId, data.latitudeIn, data.longitudeIn, data.checkOutImage,id).subscribe(
+                    response => {
+                        console.log("Offline attendance data synced to server");
+                        resolve("s")
+                    },
+                    error2 => {
+                        console.log("Error in syncing attendance to server");
+                        this.componentService.closeLoader()
+                        this.componentService.showToastMessage("Error in syncing attendance to server","")
+                    })
+            },3000)
+
+        })
+
+    }
+
+    attendanceIn(data)
+    {
+        return new Promise((resolve, reject) => {
+            setTimeout(() => {
+                this.attendanceService.markAttendanceCheckIn(data.siteId, data.employeeEmpId, data.latitudeIn, data.longitudeIn, data.checkInImage).subscribe(
+                    response => {
+                        console.log("Offline attendance data synced to server");
+                        console.log(response)
+                        this.attendanceOut(data,response.json().id).then(
+                            response=>{
+                                resolve("")
+                            }
+                        )
+
+                    }, error2 => {
+                        console.log("Error in syncing attendance to server");
+                        this.componentService.closeLoader()
+                        this.componentService.showToastMessage("Error in syncing attendance to server","center")
+                    })
+            }, 3000)
+
+        })
+
+    }
 
 }
