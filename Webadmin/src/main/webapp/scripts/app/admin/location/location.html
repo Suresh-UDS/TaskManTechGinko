@@ -2,17 +2,35 @@
 <div class="" ng-controller="LocationController" ng-init="initLoad()">
 	<div class="success-message hidden"></div>
 
-    <div class="row">
 
-        <div class="col-md-8">
-            <!--<h2 class="title">Checklist</h2>-->
+    <div class="row" ng-init="loadProjectsList();">
+        <div class="col-md-6 txt-align-lft">
+
+            <button class="btn btn-info add-btn margn-tb0" data-toggle="modal" data-target="#basicFilter" tabindex="0">
+                <i class="material-icons">filter_list</i> Basic Filter
+                <div class="ripple-container"></div>
+            </button>
+            <button class="btn btn-success add-btn margn-tb0" data-toggle="modal" data-target="#advancedFilter" tabindex="0">
+                <i class="material-icons">filter_list</i> Advanced Filter
+                <div class="ripple-container"></div>
+            </button>
+
         </div>
+        <div class="col-md-6 txt-align-rgt">
 
-        <div class="col-md-4 txt-align-rgt">
+            <button class="btn btn-success add-btn margn-tb0"  ui-sref="add-location"  has-permission="Location:Create" ng-class="{active: $state.includes('admin')}" tabindex="0">
+                <i class="material-icons">add</i> Add
+                <div class="ripple-container"></div>
+            </button>
+
+            <button class="btn btn-warning add-btn margn-tb0"  ng-click="refreshPage()" tabindex="0">
+                <i class="material-icons">refresh</i> Reload
+                <div class="ripple-container"></div>
+            </button>
 
         </div>
-
     </div>
+
     <div class="row">
 
         <div class="col-md-12">
@@ -20,90 +38,90 @@
 
                 <div class="card-content">
 
-                    <div class="row" ng-init="loadProjectsList();">
-                        <div class="col-md-12">
-                                <div class="card formcard FilterCard">
+                    <!--<div class="row" >-->
+                        <!--<div class="col-md-12">-->
+                                <!--<div class="card formcard FilterCard">-->
 
-                                    <div class="card-content">
-									<form name="searchForm"  ng-submit="searchFilter();" novalidate >
-                                        <div class="row">
-                                            <div class="dropdown col-xs-12 col-md-2 col-sm-4">
-                                                <div class="form-group">
-                                                    <label class="control-label">Select Client</label>
-                                                    <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                                    <select class="form-control " ng-model="selectedProject"  ng-change="loadDepSites();"  ng-options="project as project.name for project in projectsList">
-                                                        <option value="">Select Client...</option>
-                                                    </select>
-                                                </div>
-                                            </div>
-                                            <div class="dropdown col-xs-12 col-md-2 col-sm-4">
-                                                <div class="form-group">
-                                                    <label class="control-label">Select Site</label>
-                                                    <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                                    <select class="form-control " ng-model="selectedSite"  ng-change="loadDepBlocks();" ng-options="site as site.name for site in sitesList">
-                                                        <option value="">Select Site...</option>
-                                                    </select>
-                                                </div>
-                                            </div>
-                                            <div class="dropdown col-xs-12 col-md-2 col-sm-4">
-                                                <div class="form-group">
-                                                    <label class="control-label">Block </label>
-                                                    <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                                    <select class="form-control " ng-model="selectedBlock" ng-change="loadDepFloors()"  ng-options="block as block for  block in  blocksList">
-                                                        <option value="">Select Block...</option>
-                                                    </select>
-                                                </div>
-                                            </div>
-                                            <div class="dropdown col-xs-12 col-md-2 col-sm-4">
-                                                <div class="form-group">
-                                                    <label class="control-label">Select Floor</label>
-                                                    <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                                    <select class="form-control " ng-model="selectedFloor" ng-change="loadDepZones()"  ng-options="floor as floor for floor in floorsList">
-                                                        <option value="">Select Floor...</option>
-                                                    </select>
-
-
-
-                                                </div>
-                                            </div>
-                                            <div class="dropdown col-xs-12 col-md-2 col-sm-4">
-                                                <div class="form-group">
-                                                    <label class="control-label">Select Zone</label>
-                                                    <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                                    <select class="form-control " ng-model="selectedZone"  ng-options="zone as zone for zone in zonesList">
-                                                        <option value="">Select Zone...</option>
-                                                    </select>
+                                    <!--<div class="card-content">-->
+									<!--<form name="searchForm"  ng-submit="searchFilter();" novalidate >-->
+                                        <!--<div class="row">-->
+                                            <!--<div class="dropdown col-xs-12 col-md-2 col-sm-4">-->
+                                                <!--<div class="form-group">-->
+                                                    <!--<label class="control-label">Select Client</label>-->
+                                                    <!--<span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>-->
+                                                    <!--<select class="form-control " ng-model="selectedProject"  ng-change="loadDepSites();"  ng-options="project as project.name for project in projectsList">-->
+                                                        <!--<option value="">Select Client...</option>-->
+                                                    <!--</select>-->
+                                                <!--</div>-->
+                                            <!--</div>-->
+                                            <!--<div class="dropdown col-xs-12 col-md-2 col-sm-4">-->
+                                                <!--<div class="form-group">-->
+                                                    <!--<label class="control-label">Select Site</label>-->
+                                                    <!--<span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>-->
+                                                    <!--<select class="form-control " ng-model="selectedSite"  ng-change="loadDepBlocks();" ng-options="site as site.name for site in sitesList">-->
+                                                        <!--<option value="">Select Site...</option>-->
+                                                    <!--</select>-->
+                                                <!--</div>-->
+                                            <!--</div>-->
+                                            <!--<div class="dropdown col-xs-12 col-md-2 col-sm-4">-->
+                                                <!--<div class="form-group">-->
+                                                    <!--<label class="control-label">Block </label>-->
+                                                    <!--<span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>-->
+                                                    <!--<select class="form-control " ng-model="selectedBlock" ng-change="loadDepFloors()"  ng-options="block as block for  block in  blocksList">-->
+                                                        <!--<option value="">Select Block...</option>-->
+                                                    <!--</select>-->
+                                                <!--</div>-->
+                                            <!--</div>-->
+                                            <!--<div class="dropdown col-xs-12 col-md-2 col-sm-4">-->
+                                                <!--<div class="form-group">-->
+                                                    <!--<label class="control-label">Select Floor</label>-->
+                                                    <!--<span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>-->
+                                                    <!--<select class="form-control " ng-model="selectedFloor" ng-change="loadDepZones()"  ng-options="floor as floor for floor in floorsList">-->
+                                                        <!--<option value="">Select Floor...</option>-->
+                                                    <!--</select>-->
 
 
 
-                                                </div>
-                                            </div>
-
-                                            <div class="col-xs-12 col-md-2 col-sm-4 txt-align-rgt  padng-top25">
-
-	                                            <button type="submit" class="btn btn-circle blue-clr">
-	                                                <i class="material-icons">search</i>
-	                                            </button>
-
-					                            <button ui-sref="add-location"  has-permission="Location:Create" ng-class="{active: $state.includes('admin')}"  class="btn btn-circle green-clr">
-					                                <i class="material-icons">add</i>
-					                            </button>
-					                            <button ng-click="refreshPage()" class="btn btn-circle orange-clr">
-					                                <i class="material-icons">refresh</i>
-					                            </button>
+                                                <!--</div>-->
+                                            <!--</div>-->
+                                            <!--<div class="dropdown col-xs-12 col-md-2 col-sm-4">-->
+                                                <!--<div class="form-group">-->
+                                                    <!--<label class="control-label">Select Zone</label>-->
+                                                    <!--<span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>-->
+                                                    <!--<select class="form-control " ng-model="selectedZone"  ng-options="zone as zone for zone in zonesList">-->
+                                                        <!--<option value="">Select Zone...</option>-->
+                                                    <!--</select>-->
 
 
-					                        </div>
-                                        </div>
-                                       </form>
-                        			</div>
-                        		</div>
-                        	</div>
 
-                    </div>
+                                                <!--</div>-->
+                                            <!--</div>-->
+
+                                            <!--<div class="col-xs-12 col-md-2 col-sm-4 txt-align-rgt  padng-top25">-->
+
+	                                            <!--<button type="submit" class="btn btn-circle blue-clr">-->
+	                                                <!--<i class="material-icons">search</i>-->
+	                                            <!--</button>-->
+
+					                            <!--<button ui-sref="add-location"  has-permission="Location:Create" ng-class="{active: $state.includes('admin')}"  class="btn btn-circle green-clr">-->
+					                                <!--<i class="material-icons">add</i>-->
+					                            <!--</button>-->
+					                            <!--<button ng-click="refreshPage()" class="btn btn-circle orange-clr">-->
+					                                <!--<i class="material-icons">refresh</i>-->
+					                            <!--</button>-->
+
+
+					                        <!--</div>-->
+                                        <!--</div>-->
+                                       <!--</form>-->
+                        			<!--</div>-->
+                        		<!--</div>-->
+                        	<!--</div>-->
+
+                    <!--</div>-->
 
                     <div class="table-responsive">
-                        <table class="table table-striped table-hover">
+                        <table class="table table-hover withSortingIcons">
                             <thead>
                             <tr>
                                 <th>ID
@@ -267,3 +285,121 @@
 
 	</div>
 </div>
+
+
+<!-- BasicFilterModal -->
+<div class="modal fade BasicFilterModal FilterModalCon" id="basicFilter" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form name="searchForm"   novalidate >
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                        <i class="material-icons">clear</i>
+                    </button>
+                    <h4 class="modal-title">Basic Filter</h4>
+                </div>
+                <div class="modal-body">
+
+                    <div class="row">
+
+                        <div class="col-xs-12 col-md-4">
+                            <div class="form-group" >
+                                <div class="dropdown">
+                                    <label class="label-control">Client</label>
+                                    <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
+                                    <select class="form-control " ng-model="searchProject" ng-change="loadDepSites()" ng-options="project as project.name for project in projects" ng-pattern="Select Client" >
+                                        <option value="">Select Client...</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-md-4">
+                            <div class="dropdown">
+                                <div class="form-group">
+                                    <label class="label-control">Site</label>
+                                    <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
+                                    <select class="form-control " ng-model="searchSite"  ng-options="site as site.name for site in sites" ng-pattern="Select Site">
+                                        <option value="">Select Site...</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+
+
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-success btn-simple" ng-click = "searchFilter()" data-dismiss="modal" ng-disabled="searchForm.$invalid">Apply Filter</button>
+                    <!--<button type="button" class="btn btn-danger btn-simple" data-dismiss="modal">Close</button>-->
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<!--  End Modal -->
+
+<!-- AdvancedFilterModal -->
+<div class="modal fade AdvancedFilterModal FilterModalCon" id="advancedFilter" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form name="searchForm"   novalidate >
+
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                        <i class="material-icons">clear</i>
+                    </button>
+                    <h4 class="modal-title">Advanced Filter</h4>
+                </div>
+                <div class="modal-body">
+
+
+                    <div class="row">
+
+                        <div class="dropdown col-xs-12 col-md-4 col-sm-4">
+                            <div class="form-group">
+                                <label class="control-label">Block </label>
+                                <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
+                                <select class="form-control " ng-model="selectedBlock" ng-change="loadDepFloors()"  ng-options="block as block for  block in  blocksList">
+                                    <option value="">Select Block...</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="dropdown col-xs-12 col-md-4 col-sm-4">
+                            <div class="form-group">
+                                <label class="control-label">Select Floor</label>
+                                <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
+                                <select class="form-control " ng-model="selectedFloor" ng-change="loadDepZones()"  ng-options="floor as floor for floor in floorsList">
+                                    <option value="">Select Floor...</option>
+                                </select>
+
+
+
+                            </div>
+                        </div>
+                        <div class="dropdown col-xs-12 col-md-4 col-sm-4">
+                            <div class="form-group">
+                                <label class="control-label">Select Zone</label>
+                                <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
+                                <select class="form-control " ng-model="selectedZone"  ng-options="zone as zone for zone in zonesList">
+                                    <option value="">Select Zone...</option>
+                                </select>
+
+
+
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-success btn-simple" ng-click = "searchFilter()" data-dismiss="modal" ng-disabled="searchForm.$invalid">Apply Filter</button>
+                    <!--<button type="button" class="btn btn-danger btn-simple" data-dismiss="modal">Close</button>-->
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<!--  End Modal -->
