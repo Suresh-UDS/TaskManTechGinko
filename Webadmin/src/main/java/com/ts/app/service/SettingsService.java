@@ -54,6 +54,10 @@ public class SettingsService extends AbstractService {
 	public static final String EMAIL_NOTIFICATION_READING = "email.notification.reading";
 	
 	public static final String EMAIL_NOTIFICATION_READING_EMAILS = "email.notification.reading.emails";
+	
+	public static final String EMAIL_NOTIFICATION_ASSET = "email.notification.asset";
+	
+	public static final String EMAIL_NOTIFICATION_ASSET_EMAILS = "email.notification.asset.emails";
 
 	@Inject
 	private SettingsRepository settingsRepository;
@@ -274,6 +278,36 @@ public class SettingsService extends AbstractService {
 		readingEmailsSetting.setSiteName(settingsDto.getSiteName());
 		readingEmailsSetting.setActive("Y");
 		
+		Setting assetAlertSetting = null;
+		if(settingsDto.getReadingEmailAlertId() > 0) {
+			assetAlertSetting = settingsRepository.findOne(settingsDto.getReadingEmailAlertId());
+		}else {
+			assetAlertSetting = new Setting();
+		}
+		assetAlertSetting.setSettingKey(EMAIL_NOTIFICATION_ASSET);
+		assetAlertSetting.setSettingValue(String.valueOf(settingsDto.isAssetEmailAlert()));
+		assetAlertSetting.setProjectId(settingsDto.getProjectId());
+		assetAlertSetting.setProjectName(settingsDto.getProjectName());
+		assetAlertSetting.setSiteId(settingsDto.getSiteId());
+		assetAlertSetting.setSiteName(settingsDto.getSiteName());
+		assetAlertSetting.setActive("Y");
+		
+		Setting assetEmailsSetting = null;
+		if(settingsDto.getOverdueEmailsId() > 0) {
+			assetEmailsSetting = settingsRepository.findOne(settingsDto.getAssetEmailAlertId());
+		}else {
+			assetEmailsSetting = new Setting();
+		}
+		assetEmailsSetting.setSettingKey(EMAIL_NOTIFICATION_ASSET_EMAILS);
+		if(CollectionUtils.isNotEmpty(settingsDto.getAssetEmailIds())) {
+			assetEmailsSetting.setSettingValue(CommonUtil.convertToString(settingsDto.getAssetEmailIds()));
+		}
+		assetEmailsSetting.setProjectId(settingsDto.getProjectId());
+		assetEmailsSetting.setProjectName(settingsDto.getProjectName());
+		assetEmailsSetting.setSiteId(settingsDto.getSiteId());
+		assetEmailsSetting.setSiteName(settingsDto.getSiteName());
+		assetEmailsSetting.setActive("Y");
+		
 		List<Setting> settingList = new ArrayList<Setting>();
 		if(StringUtils.isNotEmpty(attendanceAlertSetting.getSettingValue())) {
 			settingList.add(attendanceAlertSetting);
@@ -316,6 +350,12 @@ public class SettingsService extends AbstractService {
 		}
 		if(StringUtils.isNotEmpty(readingEmailsSetting.getSettingValue())) {
 			settingList.add(readingEmailsSetting);
+		}
+		if(StringUtils.isNotEmpty(assetAlertSetting.getSettingValue())) {
+			settingList.add(assetAlertSetting);
+		}
+		if(StringUtils.isNotEmpty(assetEmailsSetting.getSettingValue())) {
+			settingList.add(assetEmailsSetting);
 		}
 		settingsRepository.save(settingList);
 		
@@ -381,6 +421,12 @@ public class SettingsService extends AbstractService {
 				}else if(setting.getSettingKey().equalsIgnoreCase(EMAIL_NOTIFICATION_READING_EMAILS)) {
 					settingDto.setReadingEmailsId(setting.getId());
 					settingDto.setReadingEmailIds(CommonUtil.convertToList(setting.getSettingValue(), ","));
+				}else if(setting.getSettingKey().equalsIgnoreCase(EMAIL_NOTIFICATION_ASSET)) {
+					settingDto.setAssetEmailAlertId(setting.getId());
+					settingDto.setAssetEmailAlert(Boolean.valueOf(setting.getSettingValue()));
+				}else if(setting.getSettingKey().equalsIgnoreCase(EMAIL_NOTIFICATION_ASSET_EMAILS)) {
+					settingDto.setAssetEmailsId(setting.getId());
+					settingDto.setAssetEmailIds(CommonUtil.convertToList(setting.getSettingValue(), ","));
 				}
 				
 				//settings.add(settingDto);

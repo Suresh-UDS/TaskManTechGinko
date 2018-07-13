@@ -73,6 +73,14 @@ public class SettingsDTO extends BaseDTO implements Serializable {
     private boolean readingEmailAlert;
     
     private List<String> readingEmailIds;
+    
+    private long assetEmailsId;
+    
+    private long assetEmailAlertId;
+    
+    private boolean assetEmailAlert;
+    
+    private List<String> assetEmailIds;
 
     public long getSiteId() {
 		return siteId;
@@ -328,6 +336,38 @@ public class SettingsDTO extends BaseDTO implements Serializable {
 
 	public void setReadingEmailAlertId(long readingEmailAlertId) {
 		this.readingEmailAlertId = readingEmailAlertId;
+	}
+
+	public long getAssetEmailsId() {
+		return assetEmailsId;
+	}
+
+	public void setAssetEmailsId(long assetEmailsId) {
+		this.assetEmailsId = assetEmailsId;
+	}
+
+	public long getAssetEmailAlertId() {
+		return assetEmailAlertId;
+	}
+
+	public void setAssetEmailAlertId(long assetEmailAlertId) {
+		this.assetEmailAlertId = assetEmailAlertId;
+	}
+
+	public boolean isAssetEmailAlert() {
+		return assetEmailAlert;
+	}
+
+	public void setAssetEmailAlert(boolean assetEmailAlert) {
+		this.assetEmailAlert = assetEmailAlert;
+	}
+
+	public List<String> getAssetEmailIds() {
+		return assetEmailIds;
+	}
+
+	public void setAssetEmailIds(List<String> assetEmailIds) {
+		this.assetEmailIds = assetEmailIds;
 	}
 
 }

@@ -365,4 +365,22 @@ public class MailService {
     		String subject = messageSource.getMessage("email.attendance.checkout.alert.title", null, locale);
     		sendEmail(emailIds, subject, emailContent, true, true,null);
     	}
+    
+    @Async
+	public void sendAssetBreakdownAlert(String emailIds, String title, String siteName, String assetCode, String username, Date date) {
+		// TODO Auto-generated method stub
+    	log.debug("Sending Asset breakdown alert e-mail to '{}'", emailIds);
+        Locale locale = Locale.forLanguageTag("en-US");
+        Context context = new Context(locale);
+        context.setVariable("assetName", title);
+        context.setVariable("assetCode", assetCode);
+        context.setVariable("siteName", siteName);
+        context.setVariable("date", date);
+        context.setVariable("userName", username);
+        String content = templateEngine.process("assetBreakdownAlert", context);
+        String subject = messageSource.getMessage("email.assetBreakdown.title", null, locale);
+        sendEmail(emailIds, subject, content, true, true, null);
+	}
+
+	
 }
