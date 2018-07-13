@@ -21,12 +21,12 @@ spring:
     datasource:
         driver-class-name: com.mysql.jdbc.Driver
         #url: jdbc:mysql://ec2-54-255-148-73.ap-southeast-1.compute.amazonaws.com:3306/Taskman?useUnicode=true&characterEncoding=utf8
-        #url: jdbc:mysql://localhost:3306/TaskMan?useUnicode=true&characterEncoding=utf8
-        url: jdbc:mysql://localhost:3306/TaskMan_R2?useUnicode=true&characterEncoding=utf8
+        url: jdbc:mysql://localhost:3306/TaskMan?useUnicode=true&characterEncoding=utf8
+        #url: jdbc:mysql://localhost:3306/TaskMan_R2?useUnicode=true&characterEncoding=utf8
         #url: jdbc:mysql://localhost:3306/Taskman?useUnicode=true&characterEncoding=utf8
         name:
         username: root
-        password: admin
+        password: root
     jpa:
         database-platform: org.hibernate.dialect.MySQLInnoDBDialect
         database: MYSQL
@@ -175,6 +175,9 @@ AWS:
    s3-attendance-path: attendance/
    s3-ticket-path : tickets/
    s3-quotation-path : quotations/
+   s3-enroll-path : employeeEnroll/
+   s3-checkin-path : attendanceCheckIn/
+   s3-checkout-path : attendanceCheckOut/
 
 scheduler:
    job:

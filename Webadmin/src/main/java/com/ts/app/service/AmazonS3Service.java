@@ -83,6 +83,15 @@ public class AmazonS3Service {
     @Value("${AWS.s3-quotation-path}")
     private String quotationPath;
     
+    @Value("${AWS.s3-enroll-path}")
+    private String enrollImagePath;
+    
+    @Value("${AWS.s3-checkin-path}")
+    private String checkInPath;
+    
+    @Value("${AWS.s3-checkout-path}")
+    private String checkOutPath;
+    
     @PostConstruct
     private void initializeAmazon() {
        log.info("Amazon S3 credentials accessKey -" + this.accessKey + ", secretKey -" + this.secretKey);
@@ -265,7 +274,88 @@ public class AmazonS3Service {
 		return prefixUrl;
 		
 	}
+
+	public String uploadEnrollImageToS3(String filename, String imageDataString) {
+		// TODO Auto-generated method stub
+		String key = bucketEnv + enrollImagePath + filename;
+		String prefixUrl = "";
+		try {
+			
+			byte[] bI = org.apache.commons.codec.binary.Base64.decodeBase64((imageDataString.substring(imageDataString.indexOf(",")+1)).getBytes());
+			log.debug("Image Strings -" +bI);
+			InputStream fis = new ByteArrayInputStream(bI);
+			
+			ObjectMetadata metadata = new ObjectMetadata();
+			metadata.setContentLength(bI.length);
+			metadata.setContentType("image/png");
+			metadata.setCacheControl("public, max-age=31536000");
+		
+			PutObjectResult result = s3client.putObject(bucketName, key, fis, metadata);
+			s3client.setObjectAcl(bucketName, key, CannedAccessControlList.PublicRead);
+			log.debug("result of object request -" + result);
+			prefixUrl = cloudFrontUrl + key;
+			
+		} catch(AmazonS3Exception e) {
+			log.info("Error while upload a Enroll image -" +e);
+			e.printStackTrace();
+		}
+		 return prefixUrl;
+		
+	}
+
+	public String uploadCheckOutImageToS3(String filename, String imageDataString) {
+		// TODO Auto-generated method stub
+		String key = bucketEnv + checkOutPath + filename;
+		String prefixUrl = "";
+		try {
+			
+			byte[] bI = org.apache.commons.codec.binary.Base64.decodeBase64((imageDataString.substring(imageDataString.indexOf(",")+1)).getBytes());
+			log.debug("Image Strings -" +bI);
+			InputStream fis = new ByteArrayInputStream(bI);
+			
+			ObjectMetadata metadata = new ObjectMetadata();
+			metadata.setContentLength(bI.length);
+			metadata.setContentType("image/png");
+			metadata.setCacheControl("public, max-age=31536000");
+		
+			PutObjectResult result = s3client.putObject(bucketName, key, fis, metadata);
+			s3client.setObjectAcl(bucketName, key, CannedAccessControlList.PublicRead);
+			log.debug("result of object request -" + result);
+			prefixUrl = cloudFrontUrl + key;
+			
+		} catch(AmazonS3Exception e) {
+			log.info("Error while upload a attendance CheckOut image -" + e);
+			e.printStackTrace();
+		}
+		 return prefixUrl;
+	}
     
+	public String uploadCheckInImageToS3(String filename, String imageDataString) {
+		// TODO Auto-generated method stub
+		String key = bucketEnv + checkInPath + filename;
+		String prefixUrl = "";
+		try {
+			
+			byte[] bI = org.apache.commons.codec.binary.Base64.decodeBase64((imageDataString.substring(imageDataString.indexOf(",")+1)).getBytes());
+			log.debug("Image Strings -" +bI);
+			InputStream fis = new ByteArrayInputStream(bI);
+			
+			ObjectMetadata metadata = new ObjectMetadata();
+			metadata.setContentLength(bI.length);
+			metadata.setContentType("image/png");
+			metadata.setCacheControl("public, max-age=31536000");
+		
+			PutObjectResult result = s3client.putObject(bucketName, key, fis, metadata);
+			s3client.setObjectAcl(bucketName, key, CannedAccessControlList.PublicRead);
+			log.debug("result of object request -" + result);
+			prefixUrl = cloudFrontUrl + key;
+			
+		} catch(AmazonS3Exception e) {
+			log.info("Error while upload a attendance CheckIn image -" + e);
+			e.printStackTrace();
+		}
+		 return prefixUrl;
+	}
 
     
 	
