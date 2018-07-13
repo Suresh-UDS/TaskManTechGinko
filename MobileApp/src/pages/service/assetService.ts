@@ -100,7 +100,7 @@ export class AssetService {
         return this.http.post(this.config.Url+'api/assets/viewAssetReadings',searchCriteria).map(
             response=>{
                 console.log("View Reading");
-                console.log(response);
+                console.log(response.json());
                 return response.json();
             }
         )
