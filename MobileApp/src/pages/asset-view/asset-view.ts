@@ -34,7 +34,6 @@ export class AssetView {
   tickets:any;
   jobPage=0;
   count:any;
-  readingPage=0;
 
     totalPages:0;
     page:1;
@@ -72,19 +71,19 @@ export class AssetView {
 
       this.searchCriteria={
           assetId:this.assetDetails.id
-      }
+      };
 
       this.jobSearchCriteria={
           assetId:this.assetDetails.id
-      }
+      };
 
       this.ticketSearchCriteria={
           assetId:this.assetDetails.id
-      }
+      };
 
       this.readingSearchCriteria={
           assetId:this.assetDetails.id
-      }
+      };
       this.getAssetById();
   }
 
@@ -109,7 +108,7 @@ export class AssetView {
         fab.close();
         this.jobSearchCriteria={
             assetId:this.assetDetails.id
-        }
+        };
         this.ticketSearchCriteria={
             assetId:this.assetDetails.id
         }
@@ -279,7 +278,7 @@ export class AssetView {
         console.log(infiniteScroll);
         console.log(this.totalPages);
         console.log(this.page);
-        var searchCriteria = {
+        var readingSearchCriteria = {
             currPage: this.page + 1,
             assetId:this.assetDetails.id
         };
@@ -287,13 +286,12 @@ export class AssetView {
             console.log("End of all pages");
             infiniteScroll.complete();
             this.componentService.showToastMessage('Reading list Loaded', 'bottom');
-
         } else {
             console.log("Getting  pages");
             console.log(this.totalPages);
             console.log(this.page);
             setTimeout(() => {
-                this.assetService.viewReading(searchCriteria).subscribe(
+                this.assetService.viewReading(readingSearchCriteria).subscribe(
                     response => {
                         console.log('ionViewDidLoad readings list:');
                         console.log(response);
@@ -483,8 +481,8 @@ export class AssetView {
         // offline
         this.dbService.getPPM(this.assetDetails.id).then(
             (res)=>{
-                this.componentService.closeLoader()
-                console.log(res)
+                this.componentService.closeLoader();
+                console.log(res);
                 this.assetDetails.ppms = res;
             },
             (err)=>{
@@ -518,8 +516,8 @@ export class AssetView {
         //offline
         this.dbService.getAMC(this.assetDetails.id).then(
             (res)=>{
-                this.componentService.closeLoader()
-                console.log(res)
+                this.componentService.closeLoader();
+                console.log(res);
                 this.assetDetails.amcs = res;
             },
             (err)=>{
@@ -603,21 +601,6 @@ export class AssetView {
         )
     }
 
-    // Reading Date Search
-    readingDateSearch(readingFromDate,readingToDate) {
-        // this.componentService.showLoader("")
-        console.log("reading From Date:" + readingFromDate.toISOString());
-        console.log("reading To Date:" + readingToDate.toISOString());
-        var searchCriteria={
-            fromDate:readingFromDate.toISOString(),
-            toDate:readingToDate.toISOString(),
-            assetId:this.assetDetails.id
-        };
-    }
-
-
-
-
 
     // Tickets
     getTickets(searchCriteria)
@@ -626,7 +609,7 @@ export class AssetView {
         this.jobService.searchTickets(searchCriteria).subscribe(
             response=>{
                 this.spinner = false;
-                this.componentService.closeLoader()
+                this.componentService.closeLoader();
                 console.log("Getting tickets response");
                 console.log(response);
                 this.assetDetails.tickets = response.transactions;
@@ -634,8 +617,8 @@ export class AssetView {
             },
             error=>{
                 this.spinner = false;
-                this.componentService.closeLoader()
-                console.log(error)
+                this.componentService.closeLoader();
+                console.log(error);
                 console.log("Getting Ticket errors")
             })
     }
