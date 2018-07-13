@@ -95,7 +95,7 @@ export class AssetView {
         profileModal.onDidDismiss(data => {
             console.log(data);
             // this.getReading(this.readingSearchCriteria);
-            this.getReading();
+            this.getReading(this.readingSearchCriteria);
         });
         profileModal.present();
 
@@ -133,7 +133,7 @@ export class AssetView {
             let token_header=window.localStorage.getItem('session');
             let options: FileUploadOptions = {
                 fileKey: 'uploadFile',
-                fileName:'uploadFile',
+                fileName:'uploadFile.png',
                 headers:{
                     'X-Auth-Token':token_header
                 },
@@ -190,36 +190,36 @@ export class AssetView {
         // }
         this.spinner = true;
         //offline
-        this.dbService.getJobs(this.assetDetails.id).then(
-            (res)=>{
-                this.componentService.closeLoader()
-                console.log(res)
-                this.assetDetails.jobs = res;
-            },
-            (err)=>{
-
-            }
-        )
+        // this.dbService.getJobs(this.assetDetails.id).then(
+        //     (res)=>{
+        //         this.componentService.closeLoader()
+        //         console.log(res)
+        //         this.assetDetails.jobs = res;
+        //     },
+        //     (err)=>{
+        //
+        //     }
+        // )
 
 
         //Online
-        // this.jobService.getJobs(searchCriteria).subscribe(
-        //     response=>{
-        //         this.spinner = false;
-        //         this.componentService.closeLoader();
-        //         console.log("Getting Jobs response");
-        //         console.log(response);
-        //         this.assetDetails.jobs = response.transactions;
-        //         this.page = response.currPage;
-        //         this.totalPages = response.totalPages;
-        //         console.log(this.assetDetails.jobs)
-        //     },
-        //     error=>{
-        //         this.spinner = false;
-        //         this.componentService.closeLoader();
-        //         console.log(error)
-        //         console.log("Getting Jobs errors")
-        //     })
+        this.jobService.getJobs(searchCriteria).subscribe(
+            response=>{
+                this.spinner = false;
+                this.componentService.closeLoader();
+                console.log("Getting Jobs response");
+                console.log(response);
+                this.assetDetails.jobs = response.transactions;
+                this.page = response.currPage;
+                this.totalPages = response.totalPages;
+                console.log(this.assetDetails.jobs)
+            },
+            error=>{
+                this.spinner = false;
+                this.componentService.closeLoader();
+                console.log(error)
+                console.log("Getting Jobs errors")
+            })
     }
 
     jobScroll(infiniteScroll) {
@@ -437,7 +437,7 @@ export class AssetView {
                 };
 
            // this.getReading(this.readingSearchCriteria);
-            this.getReading();
+            this.getReading(this.readingSearchCriteria);
            // this.componentService.closeLoader();
         }
 
@@ -542,6 +542,7 @@ export class AssetView {
         this.dbService.getConfig(this.assetDetails.assetType,this.assetDetails.id).then(
             (res)=>{
                 this.componentService.closeLoader()
+                this.spinner = false;
                 console.log(res)
                 this.assetDetails.config = res;
                 console.log(this.assetDetails.config)
@@ -570,11 +571,11 @@ export class AssetView {
     }
 
     // Reading
-    getReading(){
+    getReading(searchCriteria){
         this.assetDetails.reading=null;
         this.spinner=true;
         // this.assetService.viewReading(searchCriteria).subscribe(
-        this.dbService.getViewReading(this.assetDetails.id,this.assetDetails.type).then(
+        this.dbService.getViewReading(searchCriteria).then(
             response=>
             {
                 console.log("View Reading Response");
