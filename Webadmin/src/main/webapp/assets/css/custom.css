@@ -352,6 +352,10 @@ span.calender-big-icon
 {
   padding-top: 38px;
 }
+.dateFilterCon span.calender-big-icon
+{
+    padding-top: 30px;
+}
 span.d-sm-arrow-icon
 {
   padding-top: 7px;
