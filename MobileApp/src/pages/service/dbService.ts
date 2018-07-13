@@ -50,8 +50,8 @@ export class DBService {
             location: 'default'
         }).then((db: SQLiteObject) => {
                 this.db = db;
-                console.log("Database connection")
-                console.log(this.db)
+                console.log("Database connection");
+                console.log(this.db);
             })
 
 
@@ -449,7 +449,7 @@ export class DBService {
                         console.log("Create table " + tbl);
 
                         this.db.executeSql(create, {}).then((data) => {
-                            console.log(data)
+                            console.log(data);
                             for (var i = 0; i < param.length; i++) {
                                 var query = insert;
                                 this.db.executeSql(insert, param[i]).then((data) => {
@@ -516,11 +516,11 @@ export class DBService {
     {
         return new Promise((resolve, reject) => {
             setTimeout(() => {
-                this.db.executeSql("DROP TABLE readingsList", {})
+                this.db.executeSql("DROP TABLE readingsList", {});
                 console.log("Asset Reading Data Local");
                 var readingsList;
                 var param = [];
-                    var search = {assetId: asset.id}
+                    var search = {assetId: asset.id};
                     this.assetService.saveReading(search).subscribe(
                         response => {
                             // console.log("Getting Jobs response");//
@@ -534,9 +534,9 @@ export class DBService {
                         },
                         error => {
                             console.log("Get asset readings error");
-                        })
+                        });
 
-                var tablename = 'readingsList'
+                var tablename = 'readingsList';
                 var createQuery = "create TABLE IF NOT EXISTS readingsList (name VARCHAR,uom VARCHAR,value INT,assetId INT,assetParameterConfigId INT,consumptionMonitoringRequired BOOLEAN)";
                 var insertQuery = "INSERT INTO readingList(name,uom,value,assetId,assetParameterConfigId,consumptionMonitoringRequired) VALUES (?,?,?,?,?,?)"
                 var updateQuery = "update readingList set name=?,uom=?,value=?,assetParameterConfigId=?,consumptionMonitoringRequired=? where assetId=? ";
@@ -557,19 +557,19 @@ export class DBService {
     {
         return new Promise((resolve, reject) => {
             setTimeout(() => {
-                this.db.executeSql("DROP TABLE viewReading", {})
+                this.db.executeSql("DROP TABLE viewReading", {});
                 console.log("Asset View Reading Data");
                 var viewReading;
                 var param = [];
                 var asset=this.selectAsset;
                 for(var j=0;j<this.selectAsset.length;j++){
-                    var search = {assetId: asset[j].id}
+                    var search = {assetId: asset[j].id};
                     this.assetService.viewReading(search).subscribe(
                         response => {
                             // console.log("Getting Jobs response");//
                             // console.log(response);//
                             viewReading= response.transactions;
-                            console.log(viewReading)
+                            console.log(viewReading);
                             if (viewReading) {
                                 for (var i = 0; i < viewReading.length; i++) {
                                     param.push([viewReading[i].name, viewReading[i].uom, viewReading[i].initialValue,viewReading[i].initialReadingTime, viewReading[i].finalValue,viewReading[i].finalReadingTime, viewReading[i].consumption,viewReading[i].assetId,viewReading[i].assetParameterConfigId,viewReading[i].consumptionMonitoringRequired,viewReading[i].assetType])
@@ -605,7 +605,7 @@ export class DBService {
     {
         return new Promise((resolve, reject) => {
             setTimeout(() => {
-                this.db.executeSql("DROP TABLE PreviousReading", {})
+                this.db.executeSql("DROP TABLE PreviousReading", {});
                 console.log("Asset Previous Reading Data");
                 var assetPreviousReading;
                 var param = [];
@@ -784,7 +784,7 @@ export class DBService {
         this.selectConfig.splice(0,this.selectConfig.length);
         return new Promise((resolve, reject) => {
             setTimeout(() => {
-                console.log("**************")
+                console.log("*****getConfig*********")
                 console.log(this.db);
                 console.log("Select Get Config Table");
                 var addQuery = "select * from config where assetType=? and assetId=?";
@@ -815,7 +815,7 @@ export class DBService {
         this.selectPreviousReading.splice(0,this.selectPreviousReading.length);
         return new Promise((resolve, reject) => {
             setTimeout(() => {
-                console.log("**************")
+                console.log("*******getPreviousReading*******")
                 console.log(this.db);
                 console.log("Select Get Config Table");
                 var addQuery = "select * from previousReading where assetParameterConfigId=? and assetId=?";
@@ -840,11 +840,11 @@ export class DBService {
 
     getViewReading(id,type)
     {
-        console.log("ID:"+id)
+        console.log("ID:"+id);
         this.selectViewReading.splice(0,this.selectViewReading.length);
         return new Promise((resolve, reject) => {
             setTimeout(() => {
-                console.log("**************")
+                console.log("*******getViewReading*******");
                 console.log(this.db);
                 console.log("Select Get ViewReading Table");
                 var addQuery = "select * from viewReading where assetType=? and assetId=?";
@@ -855,7 +855,7 @@ export class DBService {
                             this.selectViewReading.push(data.rows.item(i))
                         }
                     }
-                    console.log(this.selectViewReading)
+                    console.log(this.selectViewReading);
                     resolve(this.selectViewReading);
                 }, (error) => {
                     console.log("ERROR: " + JSON.stringify(error))
@@ -875,7 +875,7 @@ export class DBService {
         this.selectJobs.splice(0,this.selectJobs.length);
         return new Promise((resolve, reject) => {
             setTimeout(() => {
-                console.log("**************")
+                console.log("******getJobs********")
                 console.log(this.db);
                 console.log("Select Get Job Table");
                 var addQuery = "select * from job where assetId=?";
@@ -901,7 +901,7 @@ export class DBService {
     //Get site
     getSite()
     {
-        console.log("ID:")
+        console.log("ID:");
         this.selectJobs.splice(0,this.selectSite.length);
         return new Promise((resolve, reject) => {
             setTimeout(() => {

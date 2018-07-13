@@ -241,9 +241,9 @@ export class GetAssetReading {
 
                         };
                         console.log(assetReading);
-                        // this.assetSaveReading(assetReading); //online
+                        this.assetSaveReading(assetReading); //online
 
-                        this.assetSaveReadingLocal(assetReading) //offline
+                        // this.assetSaveReadingLocal(assetReading) //offline
                     }else{
                         var msg = "Asset reading should be greater than "+reading.min+"or less than "+reading.max;
                         this.componentService.showToastMessage(msg,'bottom');
@@ -262,8 +262,8 @@ export class GetAssetReading {
 
                     };
                     console.log(assetReading);
-                    // this.assetSaveReading(assetReading); //online
-                    this.assetSaveReadingLocal(assetReading) //offline
+                    this.assetSaveReading(assetReading); //online
+                    // this.assetSaveReadingLocal(assetReading) //offline
 
                 }
 
@@ -284,9 +284,9 @@ export class GetAssetReading {
                 console.log(assetReading);
 
 
-                // this.assetSaveReading(assetReading);//online
+                this.assetSaveReading(assetReading);//online
 
-                this.assetSaveReadingLocal(assetReading) //offline
+                // this.assetSaveReadingLocal(assetReading) //offline
 
             }
 
@@ -305,9 +305,9 @@ export class GetAssetReading {
                             consumptionMonitoringRequired:reading.consumptionMonitoringRequired,
                         };
                         console.log(assetReading);
-                        // this.assetSaveReading(assetReading); //online
+                        this.assetSaveReading(assetReading); //online
 
-                        this.assetSaveReadingLocal(assetReading) //offline
+                        // this.assetSaveReadingLocal(assetReading) //offline
 
                     }else{
                         var msg = "Asset reading should be greater than "+reading.min+"or less than "+reading.max;
@@ -327,8 +327,8 @@ export class GetAssetReading {
 
                     };
                     console.log(assetReading);
-                    // this.assetSaveReading(assetReading); //online
-                    this.assetSaveReadingLocal(assetReading) //offline
+                    this.assetSaveReading(assetReading); //online
+                    // this.assetSaveReadingLocal(assetReading) //offline
 
                 }
             }else{
@@ -343,8 +343,8 @@ export class GetAssetReading {
                     consumptionMonitoringRequired:reading.consumptionMonitoringRequired,
                 };
                 console.log(assetReading);
-                // this.assetSaveReading(assetReading); //online
-                this.assetSaveReadingLocal(assetReading) //offline
+                this.assetSaveReading(assetReading); //online
+                // this.assetSaveReadingLocal(assetReading) //offline
 
             }
 
@@ -360,9 +360,9 @@ export class GetAssetReading {
                         consumptionMonitoringRequired:reading.consumptionMonitoringRequired,
                     };
                     console.log(assetReading);
-                    // this.assetSaveReading(assetReading); //online
+                    this.assetSaveReading(assetReading); //online
 
-                    this.assetSaveReadingLocal(assetReading) //offline
+                    // this.assetSaveReadingLocal(assetReading) //offline
 
                 }else{
                     var msg = "Asset reading should be greater than "+reading.min+"or less than "+reading.max;
@@ -378,8 +378,8 @@ export class GetAssetReading {
                     consumptionMonitoringRequired:reading.consumptionMonitoringRequired,
                 };
                 console.log(assetReading);
-                // this.assetSaveReading(assetReading); //online
-                this.assetSaveReadingLocal(assetReading) //offline
+                this.assetSaveReading(assetReading); //online
+                // this.assetSaveReadingLocal(assetReading) //offline
 
             }
 
@@ -404,7 +404,7 @@ export class GetAssetReading {
                 }else{
                     console.log("Error status false");
                     this.componentService.showToastMessage('Reading Saved','bottom');
-                    let data = { 'foo': 'bar' };
+                    let data = {};
                     this.viewCtrl.dismiss(data);
                 }
             },
@@ -424,8 +424,7 @@ export class GetAssetReading {
     assetSaveReadingLocal(asset){
         this.dbService.setReadings(asset).then(
             response=>{
-                console.log(response)
-
+                console.log(response);
             }
         )
 
@@ -487,7 +486,7 @@ export class GetAssetReading {
 
         this.dbService.setReadingsList(asset).then(
             response=>{
-                console.log(response)
+                console.log(response);
             }
         )
         // this.sqlite.create({
