@@ -48,7 +48,7 @@ public class AmazonS3Utils {
         try {
             File file = convertMultiPartToFile(multipartFile);
             String fileName = generateFileName(multipartFile);
-            String nameOfFile = assetCode + "_" + "document" + "_" + fileName;
+            String nameOfFile = assetCode + "_" + fileName;
             fileUrl = amazonS3Service.uploadAssetFileTos3bucket(nameOfFile, file);
             assetDocumentDTO.setFile(nameOfFile);
             assetDocumentDTO.setUrl(fileUrl);
