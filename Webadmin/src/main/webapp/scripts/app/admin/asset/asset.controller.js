@@ -340,7 +340,7 @@ angular.module('timeSheetApp')
 
                         console.log($scope.errorAssetsExists);
                     } else {
-                        $scope.showNotifications('top','center','danger','Error in creating PPM schedule. Please try again later..');
+                        $scope.showNotifications('top','center','danger','Unable to creating PPM schedule. Please try again later..');
                         $scope.error = 'ERROR';
                     }
                 });
@@ -379,7 +379,7 @@ angular.module('timeSheetApp')
 
                 }).catch(function(){
                 $scope.loadingStop();
-                $scope.showNotifications('top','center','danger','Error in Manufacturer. Please try again later..');
+                $scope.showNotifications('top','center','danger','Unable to Manufacturer add. Please try again later..');
                 $scope.error = 'ERROR';
             });
             }else{
@@ -413,7 +413,7 @@ angular.module('timeSheetApp')
 
                 }).catch(function(){
                 $scope.loadingStop();
-                $scope.showNotifications('top','center','danger','Error in Vendor. Please try again later..');
+                $scope.showNotifications('top','center','danger','Unable to in Vendor add. Please try again later..');
                 $scope.error = 'ERROR';
             });
             }else{
@@ -446,7 +446,7 @@ angular.module('timeSheetApp')
 
                 }).catch(function(){
                 $scope.loadingStop();
-                $scope.showNotifications('top','center','danger','Error in Service Warranty. Please try again later..');
+                $scope.showNotifications('top','center','danger','Unable to Service Warranty add. Please try again later..');
                 $scope.error = 'ERROR';
             });
             }else{
@@ -571,9 +571,11 @@ angular.module('timeSheetApp')
                 $scope.assetEdit.modelNumber = $scope.assetList.modelNumber;
                 $scope.assetEdit.serialNumber =  $scope.assetList.serialNumber;
                 $scope.assetEdit.acquiredDate = $scope.assetList.acquiredDate;
-                $scope.assetEdit.warFromDate  = $scope.assetList.warrantyFromDate;
-                $scope.assetEdit.warToDate  = $scope.assetList.warrantyToDate;
-                $scope.assetEdit.acquiredDate1 = $scope.assetList.acquiredDate;
+                $scope.assetEdit.warrantyFromDate  = $scope.assetList.warrantyFromDate;
+                $scope.assetEdit.warFromDate1  = $filter('date')($scope.assetList.warrantyFromDate, 'dd/MM/yyyy');;
+                $scope.assetEdit.warrantyToDate  = $scope.assetList.warrantyToDate;
+                $scope.assetEdit.warToDate1  = $filter('date')($scope.assetList.warrantyToDate, 'dd/MM/yyyy');
+                $scope.assetEdit.acquiredDate1 = $filter('date')($scope.assetList.acquiredDate, 'dd/MM/yyyy');
                 $scope.assetEdit.purchasePrice = $scope.assetList.purchasePrice;
                 $scope.assetEdit.currentPrice = $scope.assetList.currentPrice;
                 $scope.assetEdit.estimatedDisposePrice = $scope.assetList.estimatedDisposePrice;
@@ -922,7 +924,7 @@ angular.module('timeSheetApp')
 
                     }).catch(function(){
                 $scope.loadingStop();
-                $scope.showNotifications('top','center','danger','Error load asset config list. Please try again later..');
+                //$scope.showNotifications('top','center','danger','Unable to load asset config list. Please try again later..');
                 $scope.error = 'ERROR';
             });
 
@@ -949,7 +951,7 @@ angular.module('timeSheetApp')
                 $rootScope.loadingStop();
 
             }).catch(function(response){
-                 $scope.showNotifications('top','center','danger','Error load asset config. Please try again later..');
+                 $scope.showNotifications('top','center','danger','Unable to load asset config. Please try again later..');
                 $scope.loadingStop();
                
             });
@@ -973,9 +975,12 @@ angular.module('timeSheetApp')
         $('input#warFromDate').on('dp.change', function(e){
             $scope.assetGen.warrantyFromDate =  e.date._d;
 
-            $scope.warFromDate = $filter('date')(e.date._d, 'dd/MM/yyyy');
+            $scope.warFromDate1 = $filter('date')(e.date._d, 'dd/MM/yyyy');
+            $scope.warFromDate = e.date._d;
 
-            if($scope.assetGen.warrantyFromDate > $scope.assetGen.warrantyToDate) {
+           
+
+            if($scope.warFromDate > $scope.warToDate) {
 
                     //scope.showNotifications('top','center','danger','From date cannot be greater than To date');
                     $scope.warFromMsg = true;
@@ -989,7 +994,7 @@ angular.module('timeSheetApp')
            
             }
 
-            if($scope.assetGen.warrantyToDate < $scope.assetGen.warrantyFromDate) {
+            if($scope.warToDate < $scope.warFromDate) {
                     //$scope.showNotifications('top','center','danger','To date cannot be lesser than From date');
                     $scope.warToMsg =true;
                     
@@ -1008,8 +1013,9 @@ angular.module('timeSheetApp')
         $('input#warToDate').on('dp.change', function(e){
             $scope.assetGen.warrantyToDate = e.date._d;
             $scope.warToDate = $filter('date')(e.date._d, 'dd/MM/yyyy');
+            $scope.warToDate = e.date._d;
 
-            if($scope.assetGen.warrantyToDate < $scope.assetGen.warrantyFromDate) {
+            if($scope.warToDate < $scope.warFromDate) {
                     //$scope.showNotifications('top','center','danger','To date cannot be lesser than From date');
                     $scope.warToMsg =true;
                     
@@ -1022,7 +1028,7 @@ angular.module('timeSheetApp')
                
             }
 
-            if($scope.assetGen.warrantyFromDate > $scope.assetGen.warrantyToDate) {
+            if($scope.warFromDate > $scope.warToDate) {
 
                     //scope.showNotifications('top','center','danger','From date cannot be greater than To date');
                     $scope.warFromMsg = true;
@@ -1097,7 +1103,7 @@ angular.module('timeSheetApp')
 
                             console.log($scope.errorAssetsExists);
                         } else {
-                            $scope.showNotifications('top','center','danger','Error in creating Asset. Please try again later..');
+                            $scope.showNotifications('top','center','danger','Unable to creating Asset. Please try again later..');
                             $scope.error = 'ERROR';
                         }
                     });
@@ -1140,7 +1146,7 @@ angular.module('timeSheetApp')
                 //$scope.genQrCodes();
             }).catch(function(){
                 $scope.loadingStop();
-                $scope.showNotifications('top','center','danger','Error in create Qr. Please try again later..');
+                $scope.showNotifications('top','center','danger','Unable to create Qr . Please try again later..');
                 $scope.error = 'ERROR';
             });
         }
@@ -1252,10 +1258,10 @@ angular.module('timeSheetApp')
                 }
                 if($scope.assetEditDate){
                     $scope.assetEdit.acquiredDate = $scope.assetEditDate;
-                    $scope.assetEdit.acquiredDate1 = $filter('date')($scope.assetEditDate, 'dd/MM/yyyy');
 
                 }
                 if($scope.warFromDate){
+
                     $scope.assetEdit.warrantyFromDate = $scope.warFromDate;
 
                 }
@@ -1579,7 +1585,7 @@ angular.module('timeSheetApp')
                 $scope.loadingStop();
             }).catch(function(){
                  $scope.loadingStop();
-                 $scope.showNotifications('top','center','danger','Error in PPM schedule list. Please try again later..');
+                 //$scope.showNotifications('top','center','danger','Error in PPM schedule list. Please try again later..');
             });
         }
 
@@ -1631,7 +1637,7 @@ angular.module('timeSheetApp')
 
                 }).catch(function(){
                  $scope.loadingStop();
-                $scope.showNotifications('top','center','danger','Error in Asset type. Please try again later..');
+                $scope.showNotifications('top','center','danger','Unable to Asset type. Please try again later..');
                 $scope.error = 'ERROR';
             });
             }else{
@@ -1657,7 +1663,7 @@ angular.module('timeSheetApp')
 
                 }).catch(function(){
                 $scope.loadingStop();
-                $scope.showNotifications('top','center','danger','Error in Asset group. Please try again later..');
+                $scope.showNotifications('top','center','danger','Unable to Asset group. Please try again later..');
                 $scope.error = 'ERROR';
             });
             }else{
@@ -1681,7 +1687,7 @@ angular.module('timeSheetApp')
 
                 }).catch(function(){
                 $scope.loadingStop();
-                $scope.showNotifications('top','center','danger','Error in Parameter. Please try again later..');
+                $scope.showNotifications('top','center','danger','Unable to Parameter add. Please try again later..');
                 $scope.error = 'ERROR';
             });
             }else{
@@ -1703,7 +1709,7 @@ angular.module('timeSheetApp')
 
                 }).catch(function(){
                 $scope.loadingStop();
-                $scope.showNotifications('top','center','danger','Error in Parameter UOM. Please try again later..');
+                $scope.showNotifications('top','center','danger','Unable to Parameter UOM add. Please try again later..');
                 $scope.error = 'ERROR';
             });
             }else{
@@ -2293,7 +2299,7 @@ angular.module('timeSheetApp')
 	                    $scope.showNotifications('top','center','danger','AMC Schedule Already Exists');
 	                } else {
 	                    $scope.error = 'ERROR';
-	                     $scope.showNotifications('top','center','danger','Error in creating AMC Schedule. Please try again later..');
+	                     $scope.showNotifications('top','center','danger','Unable to creating AMC Schedule. Please try again later..');
 	                }
 	
 	
@@ -2353,7 +2359,7 @@ angular.module('timeSheetApp')
 
                    }).catch(function(){
                        $scope.loadingStop();
-                       $scope.showNotifications('top','center','danger','Error in  AMC schedule list. Please try again later..');
+                       //$scope.showNotifications('top','center','danger','Error in  AMC schedule list. Please try again later..');
                    });
 
 
@@ -2500,7 +2506,7 @@ angular.module('timeSheetApp')
                 $scope.totalCountPages = data.totalCount;
         	}).catch(function(){
                  $scope.loadingStop();
-                 $scope.showNotifications('top','center','danger','Error in loading AMC jobs. Please try again later..');
+                 $scope.showNotifications('top','center','danger','Unable to loading AMC jobs. Please try again later..');
             });
         }
 
@@ -2537,7 +2543,7 @@ angular.module('timeSheetApp')
                 console.log("PPM Job List - ", data);
 
 	        	}).catch(function(){
-                    $scope.showNotifications('top','center','danger','Error in Loading PPM Jobs. Please try again later..');
+                    $scope.showNotifications('top','center','danger','Unable toLoading PPM Jobs. Please try again later..');
                     $scope.loadingStop();
                 });
 

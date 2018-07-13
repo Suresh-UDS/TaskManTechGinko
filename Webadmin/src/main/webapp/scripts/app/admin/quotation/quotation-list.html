@@ -1,173 +1,194 @@
 
-<!--<div class="row TopButtonsCon">-->
-    <!--<div class="col-md-8">-->
-        <!--&lt;!&ndash;<h2 class="title">Quotation</h2>&ndash;&gt;-->
-    <!--</div>-->
-    <!--<div class="col-md-4 txt-align-rgt" ng-init="loadAllQuotations()">-->
-        <!--<button ui-sref="add-quotation"  ng-class="{active: $state.includes('admin')}" has-authority="ROLE_ADMIN" class="btn btn-success align-left"> <i class="material-icons padding-right5">add</i>ADD<div class="ripple-container"></div></button>-->
-        <!--<button ng-click="refreshPage()" class="btn btn-warning align-left"> <i class="material-icons padding-right5">refresh</i>Reload<div class="ripple-container"></div></button>-->
-    <!--</div>-->
-<!--</div>-->
 
-<div class="row" ng-init="initLoad()" >
+<div class="row" ng-init="initLoad();loadProjectsList();">
+    <div class="col-md-6 txt-align-lft">
+
+        <button class="btn btn-info add-btn margn-tb0" data-toggle="modal" data-target="#basicFilter" tabindex="0">
+            <i class="material-icons">filter_list</i> Basic Filter
+            <div class="ripple-container"></div>
+        </button>
+        <button class="btn btn-success add-btn margn-tb0" data-toggle="modal" data-target="#advancedFilter" tabindex="0">
+            <i class="material-icons">filter_list</i> Advanced Filter
+            <div class="ripple-container"></div>
+        </button>
+
+    </div>
+    <div class="col-md-6 txt-align-rgt">
+
+        <button class="btn btn-success add-btn margn-tb0"  ui-sref="add-quotation" has-permission="Quotation:Create" ng-class="{active: $state.includes('admin')}" tabindex="0">
+            <i class="material-icons">add</i> Add
+            <div class="ripple-container"></div>
+        </button>
+
+        <button class="btn btn-warning add-btn margn-tb0"  ng-click="refreshPage()" tabindex="0">
+            <i class="material-icons">refresh</i> Reload
+            <div class="ripple-container"></div>
+        </button>
+
+    </div>
+</div>
+
+<div class="row">
 
     <div class="col-md-12">
         <div class="card margin-TB-5 tablecard appModuleCard">
 
             <div class="card-content">
-                    <div class="row" ng-init="loadProjectsList();">
-                        <div class="col-md-12">
-                            <div class="card formcard FilterCard">
-                                <div class="card-content">
 
-                                    <form name="searchForm" ng-submit="searchFilter()">
+                    <!--<div class="row" >-->
+                        <!--<div class="col-md-12">-->
+                            <!--<div class="card formcard FilterCard">-->
+                                <!--<div class="card-content">-->
 
-                                    <div class="row" >
+                                    <!--<form name="searchForm" ng-submit="searchFilter()">-->
 
-                                    	<div class="col-xs-12 col-md-3">
-                                                <div class="form-group" >
-                                                    <!-- <div class="dropdown">
-                                                        <input type="text"
-                                                               class="form-control border-bottom-input"
-                                                               placeholder="Client"
-                                                               ng-model="searchCriteria.projectName"
-                                                               ng-value="searchCriteria.projectName"
-                                                               />
-                                                    </div> -->
-                                                    <div class="dropdown">
-                                                        <label class="label-control">Select Client</label>
-                                                        <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                                        <select class="form-control " ng-model="selectedProject" ng-change="loadSites()" ng-options="project as project.name for project in projects" >
-                                                            <option value="">Select Client...</option>
-                                                        </select>
-                                                    </div>
-                                                </div>
-                                        </div>
-                                        <div class="col-xs-12 col-md-3">
-                                            <div class="form-group" >
-                                                <!-- <div class="dropdown">
-                                                    <input type="text"
-                                                           class="form-control border-bottom-input"
-                                                           placeholder="Site"
-                                                           ng-model="searchCriteria.siteName"
-                                                           ng-value="searchCriteria.siteName"
-                                                           />
-                                                </div> -->
-                                                    <div class="dropdown">
-                                                        <label class="label-control">Select Site</label>
-                                                        <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                                        <select class="form-control " ng-model="selectedSite" ng-change="loadEmployees()" ng-options="site as site.name for site in sites">
-                                                            <option value="">Select Site...</option>
-                                                        </select>
-                                                    </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-xs-12 col-md-3 pdng-top25">
-                                            <div class="form-group" >
-                                                <div class="dropdown">
-                                                    <input type="text"
-                                                           class="form-control border-bottom-input"
-                                                           placeholder="Id"
-                                                           ng-model="selectedId"
+                                    <!--<div class="row" >-->
 
-                                                            />
+                                    	<!--<div class="col-xs-12 col-md-3">-->
+                                                <!--<div class="form-group" >-->
+                                                    <!--&lt;!&ndash; <div class="dropdown">-->
+                                                        <!--<input type="text"-->
+                                                               <!--class="form-control border-bottom-input"-->
+                                                               <!--placeholder="Client"-->
+                                                               <!--ng-model="searchCriteria.projectName"-->
+                                                               <!--ng-value="searchCriteria.projectName"-->
+                                                               <!--/>-->
+                                                    <!--</div> &ndash;&gt;-->
+                                                    <!--<div class="dropdown">-->
+                                                        <!--<label class="label-control">Select Client</label>-->
+                                                        <!--<span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>-->
+                                                        <!--<select class="form-control " ng-model="selectedProject" ng-change="loadSites()" ng-options="project as project.name for project in projects" >-->
+                                                            <!--<option value="">Select Client...</option>-->
+                                                        <!--</select>-->
+                                                    <!--</div>-->
+                                                <!--</div>-->
+                                        <!--</div>-->
+                                        <!--<div class="col-xs-12 col-md-3">-->
+                                            <!--<div class="form-group" >-->
+                                                <!--&lt;!&ndash; <div class="dropdown">-->
+                                                    <!--<input type="text"-->
+                                                           <!--class="form-control border-bottom-input"-->
+                                                           <!--placeholder="Site"-->
+                                                           <!--ng-model="searchCriteria.siteName"-->
+                                                           <!--ng-value="searchCriteria.siteName"-->
+                                                           <!--/>-->
+                                                <!--</div> &ndash;&gt;-->
+                                                    <!--<div class="dropdown">-->
+                                                        <!--<label class="label-control">Select Site</label>-->
+                                                        <!--<span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>-->
+                                                        <!--<select class="form-control " ng-model="selectedSite" ng-change="loadEmployees()" ng-options="site as site.name for site in sites">-->
+                                                            <!--<option value="">Select Site...</option>-->
+                                                        <!--</select>-->
+                                                    <!--</div>-->
+                                            <!--</div>-->
+                                        <!--</div>-->
+                                        <!--<div class="col-xs-12 col-md-3 pdng-top25">-->
+                                            <!--<div class="form-group" >-->
+                                                <!--<div class="dropdown">-->
+                                                    <!--<input type="text"-->
+                                                           <!--class="form-control border-bottom-input"-->
+                                                           <!--placeholder="Id"-->
+                                                           <!--ng-model="selectedId"-->
 
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-xs-12 col-md-3 pdng-top25">
-                                                <div class="form-group" >
-                                                    <div class="dropdown">
-                                                        <input type="text"
-                                                               class="form-control border-bottom-input"
-                                                               placeholder="Title"
-                                                               ng-model="selectedTitle"
+                                                            <!--/>-->
 
-                                                               />
-                                                    </div>
-                                                </div>
-                                        </div>
+                                                <!--</div>-->
+                                            <!--</div>-->
+                                        <!--</div>-->
+                                        <!--<div class="col-xs-12 col-md-3 pdng-top25">-->
+                                                <!--<div class="form-group" >-->
+                                                    <!--<div class="dropdown">-->
+                                                        <!--<input type="text"-->
+                                                               <!--class="form-control border-bottom-input"-->
+                                                               <!--placeholder="Title"-->
+                                                               <!--ng-model="selectedTitle"-->
+
+                                                               <!--/>-->
+                                                    <!--</div>-->
+                                                <!--</div>-->
+                                        <!--</div>-->
 
 
-                                    </div>
-                                    <div class="row">
-		                                <!-- <div class="col-xs-12 col-md-2">
-		                                    	<div class="form-group">
-					                            <label class="label-control">Submitted Date</label>
-					                            <span class="form-control-feedback calender-big-icon"><i class="material-icons">date_range</i></span>
-					                            <input type="text" class="form-control datepicker"  id="submittedDateFilter"  ng-model="selectedSubmittedDate" />
+                                    <!--</div>-->
+                                    <!--<div class="row">-->
+		                                <!--&lt;!&ndash; <div class="col-xs-12 col-md-2">-->
+		                                    	<!--<div class="form-group">-->
+					                            <!--<label class="label-control">Submitted Date</label>-->
+					                            <!--<span class="form-control-feedback calender-big-icon"><i class="material-icons">date_range</i></span>-->
+					                            <!--<input type="text" class="form-control datepicker"  id="submittedDateFilter"  ng-model="selectedSubmittedDate" />-->
 
-                                            </div>
-										</div>
+                                            <!--</div>-->
+										<!--</div>-->
 
-										<div class="col-xs-12 col-md-2">
-		                                    	<div class="form-group">
-					                            <label class="label-control">Approved Date</label>
-					                            <span class="form-control-feedback calender-big-icon"><i class="material-icons">date_range</i></span>
-					                            <input type="text" class="form-control datepicker"  id="approvedDateFilter"  ng-model="selectedApprovedDate" />
+										<!--<div class="col-xs-12 col-md-2">-->
+		                                    	<!--<div class="form-group">-->
+					                            <!--<label class="label-control">Approved Date</label>-->
+					                            <!--<span class="form-control-feedback calender-big-icon"><i class="material-icons">date_range</i></span>-->
+					                            <!--<input type="text" class="form-control datepicker"  id="approvedDateFilter"  ng-model="selectedApprovedDate" />-->
 
-                                            </div>
-										</div>	  -->
-										<div class="col-xs-12 col-md-3 pdng-top25">
-                                            <div class="form-group" >
-                                                <div class="dropdown">
-                                                    <input type="text"
-                                                           class="form-control searchable-input floatL border-bottom-input"
-                                                           placeholder="Created By"
-                                                           ng-model="selectedCreatedBy"
-                                                           />
-                                                </div>
-                                            </div>
-                                         </div>
-                                        <div class="col-xs-12 col-md-3 pdng-top25">
-                                            <div class="form-group" >
-                                                <div class="dropdown">
-                                                    <input type="text"
-                                                           class="form-control searchable-input floatL border-bottom-input"
-                                                           placeholder="Approved By"
-                                                           ng-model="selectedApprovedBy"
+                                            <!--</div>-->
+										<!--</div>	  &ndash;&gt;-->
+										<!--<div class="col-xs-12 col-md-3 pdng-top25">-->
+                                            <!--<div class="form-group" >-->
+                                                <!--<div class="dropdown">-->
+                                                    <!--<input type="text"-->
+                                                           <!--class="form-control searchable-input floatL border-bottom-input"-->
+                                                           <!--placeholder="Created By"-->
+                                                           <!--ng-model="selectedCreatedBy"-->
+                                                           <!--/>-->
+                                                <!--</div>-->
+                                            <!--</div>-->
+                                         <!--</div>-->
+                                        <!--<div class="col-xs-12 col-md-3 pdng-top25">-->
+                                            <!--<div class="form-group" >-->
+                                                <!--<div class="dropdown">-->
+                                                    <!--<input type="text"-->
+                                                           <!--class="form-control searchable-input floatL border-bottom-input"-->
+                                                           <!--placeholder="Approved By"-->
+                                                           <!--ng-model="selectedApprovedBy"-->
 
-                                                           />
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-xs-12 col-md-3 pdng-top25">
-                                            <div class="form-group" >
-                                                <div class="dropdown">
-                                                    <input type="text"
-                                                           class="form-control searchable-input floatL border-bottom-input"
-                                                           placeholder="Status"
-                                                           ng-model="selectedStatus"
-                                                           />
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-xs-12 col-md-3 txt-align-rgt">
-                                            <div class="floatR form-group">
+                                                           <!--/>-->
+                                                <!--</div>-->
+                                            <!--</div>-->
+                                        <!--</div>-->
+                                        <!--<div class="col-xs-12 col-md-3 pdng-top25">-->
+                                            <!--<div class="form-group" >-->
+                                                <!--<div class="dropdown">-->
+                                                    <!--<input type="text"-->
+                                                           <!--class="form-control searchable-input floatL border-bottom-input"-->
+                                                           <!--placeholder="Status"-->
+                                                           <!--ng-model="selectedStatus"-->
+                                                           <!--/>-->
+                                                <!--</div>-->
+                                            <!--</div>-->
+                                        <!--</div>-->
 
-                                                <button type="submit" class="btn btn-circle blue-clr">
-                                                    <i class="material-icons">search</i>
-                                                </button>
-                                                <button ui-sref="add-quotation" has-permission="Quotation:Create"  ng-class="{active: $state.includes('admin')}"  class="btn btn-circle green-clr">
-                                                    <i class="material-icons">add</i>
-                                                </button>
-                                                <button ng-click="refreshPage()" class="btn btn-circle orange-clr">
-                                                    <i class="material-icons">refresh</i>
-                                                </button>
+                                        <!--<div class="col-xs-12 col-md-3 txt-align-rgt">-->
+                                            <!--<div class="floatR form-group">-->
 
-                                            </div>
-                                        </div>
-                                    </div>
-                                </form>
+                                                <!--<button type="submit" class="btn btn-circle blue-clr">-->
+                                                    <!--<i class="material-icons">search</i>-->
+                                                <!--</button>-->
+                                                <!--<button ui-sref="add-quotation" has-permission="Quotation:Create"  ng-class="{active: $state.includes('admin')}"  class="btn btn-circle green-clr">-->
+                                                    <!--<i class="material-icons">add</i>-->
+                                                <!--</button>-->
+                                                <!--<button ng-click="refreshPage()" class="btn btn-circle orange-clr">-->
+                                                    <!--<i class="material-icons">refresh</i>-->
+                                                <!--</button>-->
 
-                            </div>
-                        </div>
-                     </div>
-                </div>
+                                            <!--</div>-->
+                                        <!--</div>-->
+                                    <!--</div>-->
+                                <!--</form>-->
+
+                            <!--</div>-->
+                        <!--</div>-->
+                     <!--</div>-->
+                    <!--</div>-->
 
 
                 <div class="table-responsive">
-                    <table class="table table-striped">
+                    <table class="table table-hover withSortingIcons">
                         <thead>
                         <tr>
                             <th>Id
@@ -268,21 +289,29 @@
                             <button class="btn btn-info" ng-if="quotation.isDrafted">Pending</button>
                             <button class="btn btn-warning" ng-if="quotation.isSubmitted">Waiting for approval</button></td>
                             <td>{{quotation.grandTotal}} </td>
-                            <td class="text-right">
-                                <a name="View" ng-class="{active: $state.includes('admin')}"  ui-sref="view-quotation({ id: quotation._id })"  class="btn btn-simple btn-info"><i class="material-icons">remove_red_eye</i></a>
+                            <td class="text-right hoverMe">
 
-                                <a name="Edit" ng-if="!quotation.isSubmitted && !quotation.isApproved" has-permission="Quotation:Edit"  ng-class="{active: $state.includes('admin')}"  ui-sref="edit-quotation({ id: quotation._id })"  class="btn btn-simple btn-success"><i class="material-icons">edit</i></a>
+                                <a   has-authority="ROLE_ADMIN"  title="View More Action"  class="btn btn-simple btn-info btn-icon like Viewmore"><i class="material-icons">more_vert</i></a>
 
-                                <!-- <a name="Approve Quotation" ng-if="quotation.isSubmitted" ng-class="{active: $state.includes('admin')}" has-authority="ROLE_ADMIN" ng-click="approveQuotation(quotation)"  class="btn btn-simple btn-success"></a> -->
-                                <button  title="Approve" ng-if="quotation.isSubmitted && !quotation.isApproved"    data-toggle="modal" data-target="#approveQuotationModal" data-dismiss="#approveQuotationModal" ng-click="selectQuotation(quotation)"  class="btn btn-simple btn-info btn-icon like"> <i class="material-icons">
-                                    offline_pin
-                                </i> </button>
-                                <button  title="Reject" ng-if="quotation.isSubmitted && !quotation.isApproved && !quotation.isRejected"    data-toggle="modal" data-target="#rejectQuotationModal" data-dismiss="#rejectQuotationModal" ng-click="selectQuotation(quotation)"  class="btn btn-simple btn-info btn-icon like">
-                                    <i class="material-icons">highlight_off</i> </button>
+                                <div class="HoverBx">
+
+                                    <a name="View" ng-class="{active: $state.includes('admin')}"  ui-sref="view-quotation({ id: quotation._id })"  class="btn btn-simple btn-info"><i class="material-icons">remove_red_eye</i></a>
+
+                                    <a name="Edit" ng-if="!quotation.isSubmitted && !quotation.isApproved" has-permission="Quotation:Edit"  ng-class="{active: $state.includes('admin')}"  ui-sref="edit-quotation({ id: quotation._id })"  class="btn btn-simple btn-success"><i class="material-icons">edit</i></a>
+
+                                    <!-- <a name="Approve Quotation" ng-if="quotation.isSubmitted" ng-class="{active: $state.includes('admin')}" has-authority="ROLE_ADMIN" ng-click="approveQuotation(quotation)"  class="btn btn-simple btn-success"></a> -->
+                                    <button  title="Approve" ng-if="quotation.isSubmitted && !quotation.isApproved"    data-toggle="modal" data-target="#approveQuotationModal" data-dismiss="#approveQuotationModal" ng-click="selectQuotation(quotation)"  class="btn btn-simple btn-info btn-icon like"> <i class="material-icons">
+                                        offline_pin
+                                    </i> </button>
+                                    <button  title="Reject" ng-if="quotation.isSubmitted && !quotation.isApproved && !quotation.isRejected"    data-toggle="modal" data-target="#rejectQuotationModal" data-dismiss="#rejectQuotationModal" ng-click="selectQuotation(quotation)"  class="btn btn-simple btn-info btn-icon like">
+                                        <i class="material-icons">highlight_off</i> </button>
+
+                                    <a name="Delete" ng-if="quotation.isApproved || quotation.isDrafted" ng-class="{active: $state.includes('admin')}"   ng-click="deleteConfirm(site)"  onClick="$('#deleteModal').modal()" data-target="#myModal"  class="btn btn-simple btn-danger"><i class="material-icons">close</i></a>
+
+                                </div>
+
                              </td>
-                             <td>
-                                <a name="Delete" ng-if="quotation.isApproved || quotation.isDrafted" ng-class="{active: $state.includes('admin')}"   ng-click="deleteConfirm(site)"  onClick="$('#deleteModal').modal()" data-target="#myModal"  class="btn btn-simple btn-danger"><i class="material-icons">close</i></a>
-                            </td>
+
 
                         </tr>
 
@@ -346,3 +375,150 @@
     <pagination-new></pagination-new>
 
     <!-- Pagination directive end -->
+
+
+<!-- BasicFilterModal -->
+<div class="modal fade BasicFilterModal FilterModalCon" id="basicFilter" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form name="searchForm"   novalidate >
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                        <i class="material-icons">clear</i>
+                    </button>
+                    <h4 class="modal-title">Basic Filter</h4>
+                </div>
+                <div class="modal-body">
+
+                    <div class="row">
+
+                        <div class="col-xs-12 col-md-4">
+                            <div class="form-group" >
+                                <div class="dropdown">
+                                    <label class="label-control">Client</label>
+                                    <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
+                                    <select class="form-control " ng-model="searchProject" ng-change="loadDepSites()" ng-options="project as project.name for project in projects" ng-pattern="Select Client" >
+                                        <option value="">Select Client...</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-md-4">
+                            <div class="dropdown">
+                                <div class="form-group">
+                                    <label class="label-control">Site</label>
+                                    <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
+                                    <select class="form-control " ng-model="searchSite"  ng-options="site as site.name for site in sites" ng-pattern="Select Site">
+                                        <option value="">Select Site...</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+
+
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-success btn-simple" ng-click = "searchFilter()" data-dismiss="modal" ng-disabled="searchForm.$invalid">Apply Filter</button>
+                    <!--<button type="button" class="btn btn-danger btn-simple" data-dismiss="modal">Close</button>-->
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<!--  End Modal -->
+
+<!-- AdvancedFilterModal -->
+<div class="modal fade AdvancedFilterModal FilterModalCon" id="advancedFilter" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form name="searchForm"   novalidate >
+
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                        <i class="material-icons">clear</i>
+                    </button>
+                    <h4 class="modal-title">Advanced Filter</h4>
+                </div>
+                <div class="modal-body">
+
+                    <div class="row">
+
+                        <div class="col-xs-12 col-md-4">
+                            <div class="form-group" >
+                                <div class="dropdown">
+                                    <input type="text"
+                                           class="form-control border-bottom-input"
+                                           placeholder="Id"
+                                           ng-model="selectedId"
+
+                                    />
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-md-4">
+                            <div class="form-group" >
+                                <div class="dropdown">
+                                    <input type="text"
+                                           class="form-control border-bottom-input"
+                                           placeholder="Title"
+                                           ng-model="selectedTitle"
+
+                                    />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-md-4">
+                            <div class="form-group" >
+                                <div class="dropdown">
+                                    <input type="text"
+                                           class="form-control searchable-input floatL border-bottom-input"
+                                           placeholder="Created By"
+                                           ng-model="selectedCreatedBy"
+                                    />
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="row">
+
+                        <div class="col-xs-12 col-md-4">
+                            <div class="form-group" >
+                                <div class="dropdown">
+                                    <input type="text"
+                                           class="form-control searchable-input floatL border-bottom-input"
+                                           placeholder="Approved By"
+                                           ng-model="selectedApprovedBy"
+
+                                    />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-md-4">
+                            <div class="form-group" >
+                                <div class="dropdown">
+                                    <input type="text"
+                                           class="form-control searchable-input floatL border-bottom-input"
+                                           placeholder="Status"
+                                           ng-model="selectedStatus"
+                                    />
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-success btn-simple" ng-click = "searchFilter()" data-dismiss="modal" ng-disabled="searchForm.$invalid">Apply Filter</button>
+                    <!--<button type="button" class="btn btn-danger btn-simple" data-dismiss="modal">Close</button>-->
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<!--  End Modal -->

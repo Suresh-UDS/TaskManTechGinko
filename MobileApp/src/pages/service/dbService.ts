@@ -572,7 +572,7 @@ export class DBService {
                             console.log(viewReading)
                             if (viewReading) {
                                 for (var i = 0; i < viewReading.length; i++) {
-                                    param.push([viewReading[i].name, viewReading[i].uom, viewReading[i].initialValue,viewReading[i].initialReadingTime, viewReading[i].finalValue,viewReading[i].finalReadingTime, viewReading[i].consumption,viewReading[i].assetId,viewReading[i].assetParameterConfigId,viewReading[i].consumptionMonitoringRequired,viewReading[i].assetType])
+                                    param.push([viewReading[i].id,viewReading[i].name, viewReading[i].uom, viewReading[i].initialValue,viewReading[i].initialReadingTime, viewReading[i].finalValue,viewReading[i].finalReadingTime, viewReading[i].consumption,viewReading[i].assetId,viewReading[i].assetParameterConfigId,viewReading[i].consumptionMonitoringRequired,viewReading[i].assetType])
                                 }
                             }
                         },
@@ -583,9 +583,9 @@ export class DBService {
 
 
                 var tablename = 'viewReading';
-                var createQuery = "create table if not exists viewReading (name VARCHAR,uom VARCHAR,initialValue INT,initialValueTime DATE,finalValue INT,finalValueTime DATE,consumption VARCHAR,assetId INT,assetParameterConfigId INT,consumptionMonitoringRequired BOOLEAN,assetType TEXT)";
-                var insertQuery = "INSERT INTO viewReading(name,uom,initialValue,initialValueTime,finalValue,FinalValueTime,consumption,assetId,assetParameterConfigId,consumptionMonitoringRequired,assetType) VALUES (?,?,?,?,?,?,?,?,?,?,?)";
-                var updateQuery = "update viewReading set name=?,uom=?,initialValue=?,initialValueTime,finalValue=?,FinalValueTime=?,consumption=?,assetParameterConfigId,consumptionMonitoringRequired,assetType where assetId=? ";
+                var createQuery = "create table if not exists viewReading (id INT,name VARCHAR,uom VARCHAR,initialValue INT,initialValueTime DATE,finalValue INT,finalValueTime DATE,consumption VARCHAR,assetId INT,assetParameterConfigId INT,consumptionMonitoringRequired BOOLEAN,assetType TEXT)";
+                var insertQuery = "INSERT INTO viewReading(id,name,uom,initialValue,initialValueTime,finalValue,FinalValueTime,consumption,assetId,assetParameterConfigId,consumptionMonitoringRequired,assetType) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)";
+                var updateQuery = "update viewReading set id,name=?,uom=?,initialValue=?,initialValueTime,finalValue=?,FinalValueTime=?,consumption=?,assetParameterConfigId,consumptionMonitoringRequired,assetType where assetId=? ";
                 setTimeout(() => {
                     this.create(tablename, createQuery, insertQuery, updateQuery, param).then(
                         response=>{
@@ -708,6 +708,7 @@ export class DBService {
                     resolve(this.selectAsset);
                 }, (error) => {
                     console.log("ERROR: " + JSON.stringify(error))
+                    reject("Error")
                 })
             }, 3000)
         })
@@ -838,18 +839,18 @@ export class DBService {
 
     }
 
-    getViewReading(id,type)
+    getViewReading(search)
     {
-        console.log("ID:"+id)
+        console.log("ID:"+search.assetId)
         this.selectViewReading.splice(0,this.selectViewReading.length);
         return new Promise((resolve, reject) => {
             setTimeout(() => {
                 console.log("**************")
                 console.log(this.db);
                 console.log("Select Get ViewReading Table");
-                var addQuery = "select * from viewReading where assetType=? and assetId=?";
-                this.db.executeSql(addQuery,[type,id]).then((data) => {
-                    console.log(data);
+                var addQuery = "select * from viewReading where assetId=?";
+                this.db.executeSql(addQuery,[search.assetId]).then((data) => {
+                        console.log(data);
                     if (data.rows.length > 0) {
                         for (var i = 0; i < data.rows.length; i++) {
                             this.selectViewReading.push(data.rows.item(i))
@@ -985,33 +986,5 @@ export class DBService {
         })
     }
 
-
-
-
-
     // **** //
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 }
