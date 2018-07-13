@@ -203,18 +203,18 @@
 
 
                     <div class="table-responsive">
-                        <table class="table table-striped" >
+                        <table class="table table-hover withSortingIcons" >
 
                             <thead>
 
                             <tr>
-                                <!-- <th>
+                                <th>
                                     <div class="checkbox form-horizontal-checkbox">
                                         <label>
-                                            <input type="checkbox" name="optionsCheckboxes">
+                                            <input type="checkbox" name="optionsCheckboxes" ng-model="allItemsSelected" ng-change="selectAll()">
                                         </label>
                                     </div>
-                                </th> -->
+                                </th>
                                 <th>Asset Code
                                     <span class="sortingIcons">
                                         <span ng-click="columnAscOrder('code')" ng-class="isActiveAsc == 'code' ? 'active' : ''" >
@@ -285,13 +285,13 @@
 
                             <tbody>
                             <tr ng-repeat="asset in assets">
-                            <!-- <td>
+                            <td>
                                 <div class="checkbox form-horizontal-checkbox">
                                     <label>
-                                        <input type="checkbox" name="optionsCheckboxes">
+                                        <input type="checkbox" name="optionsCheckboxes" ng-model="asset.isChecked" ng-change="selectEntity(asset.id)">
                                     </label>
                                 </div>
-                            </td> -->
+                            </td>
                                 <td>{{asset.code}}</td>
                                 <td>{{asset.title}}</td>
                                 <td>{{asset.assetType}}</td>
@@ -354,7 +354,7 @@
         </div>
 
     </div>
-    
+
     <div class="card margin-TB-5 txt-align-center" ng-show="noData">
 
         <div class="card-content">

@@ -19,6 +19,7 @@ import org.springframework.core.env.Environment;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
@@ -1951,6 +1952,49 @@ public class AssetManagementService extends AbstractService {
 		// TODO Auto-generated method stub
 		AssetParameterConfig assetConfigEntity = assetParamConfigRepository.findOne(id);
 		return mapperUtil.toModel(assetConfigEntity, AssetParameterConfigDTO.class);
+	}
+
+	public List<Object> findAllAssetQrcode(long[] qrCodeObj) {
+		List<Object> collect = new ArrayList<>();
+		for(long assetId :  qrCodeObj) { 
+			Map<String, Object> qrCodeList = new HashMap<>();
+			Asset assetEntity = assetRepository.findOne(assetId);
+			AssetDTO assetModel = mapperUtil.toModel(assetEntity, AssetDTO.class);
+			qrCodeList.put("code", assetModel.getCode());
+			qrCodeList.put("type", assetModel.getAssetType());
+			qrCodeList.put("url", cloudFrontUrl + bucketEnv + qrcodePath + assetModel.getQrCodeImage());
+			qrCodeList.put("group", assetModel.getAssetGroup());
+			qrCodeList.put("title", assetModel.getTitle());
+			qrCodeList.put("status", assetModel.getStatus());
+			qrCodeList.put("acquireDate", assetModel.getAcquiredDate());
+			qrCodeList.put("siteName", assetModel.getSiteName());
+			qrCodeList.put("manufacturerName", assetModel.getManufacturerName());
+			qrCodeList.put("vendorName", assetModel.getAmcVendorName());
+			collect.add(qrCodeList);
+		}
+		return collect;
+	}
+
+	public List<Object> findAllQrcodes() {
+		// TODO Auto-generated method stub
+		List<Object> collect = new ArrayList<>();
+		List<Asset> assetEntities = assetRepository.findAll();
+		List<AssetDTO> assetModel = mapperUtil.toModelList(assetEntities, AssetDTO.class);
+		for(AssetDTO assetEntity : assetModel) {
+			Map<String, Object> qrCodeLists = new HashMap<>();
+			qrCodeLists.put("code", assetEntity.getCode());
+			qrCodeLists.put("type", assetEntity.getAssetType());
+			qrCodeLists.put("url", cloudFrontUrl + bucketEnv + qrcodePath + assetEntity.getQrCodeImage());
+			qrCodeLists.put("group", assetEntity.getAssetGroup());
+			qrCodeLists.put("title", assetEntity.getTitle());
+			qrCodeLists.put("status", assetEntity.getStatus());
+			qrCodeLists.put("acquireDate", assetEntity.getAcquiredDate());
+			qrCodeLists.put("siteName", assetEntity.getSiteName());
+			qrCodeLists.put("manufacturerName", assetEntity.getManufacturerName());
+			qrCodeLists.put("vendorName", assetEntity.getAmcVendorName());
+			collect.add(qrCodeLists);
+		}
+		return collect;
 	}
 	
 

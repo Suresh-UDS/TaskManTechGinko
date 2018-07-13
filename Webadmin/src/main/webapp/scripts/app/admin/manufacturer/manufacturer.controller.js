@@ -6,7 +6,7 @@ angular.module('timeSheetApp')
 				function($scope, $rootScope, $state, $timeout, ManufacturerComponent,AssetTypeComponent,
 						$http, $stateParams,
 						$location,PaginationComponent) {
-        $scope.loadingStop();
+        $rootScope.loadingStop(); 
         $rootScope.loginView = false;
         $scope.success = null;
         $scope.error = null;
@@ -62,7 +62,7 @@ angular.module('timeSheetApp')
         $scope.initMaterialWizard();
         
         $scope.loadAllAssetTypes = function() {
-                $scope.loadingStart();
+                //$scope.loadingStart();
         		AssetTypeComponent.findAll().then(function (data) {
                 $scope.selectedAssetType = null;
                 $scope.assetTypes = data;
