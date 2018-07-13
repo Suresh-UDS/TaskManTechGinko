@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import {Component, Inject} from '@angular/core';
 import {NavController, NavParams} from "ionic-angular";
 import {ModalController} from "ionic-angular";
 import {AssetFilter} from "./asset-filter";
@@ -14,7 +14,9 @@ import {SiteService} from "../service/siteService";
 import {DBService} from "../service/dbService";
 import {Network} from "@ionic-native/network";
 import { Diagnostic } from '@ionic-native/diagnostic';
-
+import {ApplicationConfig, MY_CONFIG_TOKEN} from "../service/app-config";
+import {FileTransferObject, FileUploadOptions, FileTransfer} from "@ionic-native/file-transfer";
+import set = Reflect.set;
 /**
  * Generated class for the AssetList page.
  *
@@ -40,7 +42,9 @@ export class AssetList {
     database:any;
     asset:any;
     db:any;
-  constructor(public modalCtrl:ModalController,private diagnostic: Diagnostic,private sqlite: SQLite,public componentService:componentService, public navCtrl: NavController, public navParams: NavParams, public modalController:ModalController, public qrScanner:QRScanner, public assetService:AssetService,public dbService:DBService) {
+    fileTransfer: FileTransferObject = this.transfer.create();
+
+    constructor(@Inject(MY_CONFIG_TOKEN) private config:ApplicationConfig,private transfer: FileTransfer,public modalCtrl:ModalController,private diagnostic: Diagnostic,private sqlite: SQLite,public componentService:componentService, public navCtrl: NavController, public navParams: NavParams, public modalController:ModalController, public qrScanner:QRScanner, public assetService:AssetService,public dbService:DBService) {
     this.assetList = [];
     this.test = [];
     this.searchCriteria = {};
@@ -69,7 +73,7 @@ export class AssetList {
 
 
 
-          //offline
+      //     //offline
       setTimeout(() => {
           this.dbService.getAsset().then(
               (res)=>{
@@ -130,62 +134,115 @@ export class AssetList {
   }
 
 
+    saveReadingToServer(readings)
+    {
+        return new Promise((resolve,reject)=>{
+            for(var i=0;i<readings.length;i++)
+            {
+                this.assetService.saveReading({name:readings[i].name,uom:readings[i].uom,initialValue:readings[i].initialValue,finalValue:readings[i].finalValue,consumption:readings[i].consumption,assetId:readings[i].assetId,assetParameterConfigId:readings[i].assetParameterConfigId}).subscribe(
+                    response => {
+                        console.log("save reading sync to server");
+                        console.log(response)
+                        resolve("s")
+                    },
+                    error => {
+                        console.log("save readings error sync to server");
+                        reject("no")
+                    })
+            }
+
+        })
+    }
+
 
     setDataSync()
     {
         this.componentService.showLoader("Data Sync");
-        // this.dbService.setAsset().then(
-        //     response=>{
-        //         console.log(response)
-                this.dbService.getAsset().then(
+        this.dbService.getReading().then(
+            response=> {
+                console.log(response)
+                    this.saveReadingToServer(response).then(
+                        response=>{
+                            this.dbService.dropReadingTable().then(
+                                response=>{
+                                            console.log(response)
+                                                this.setData().then(
+                                                    response=>{
+                                                        console.log(response);
+                                                    },
+                                                    error=>{
+                                                        console.log(error)
+                                                    })
+                                                })
+                         },
+                         error=>{
+                            this.componentService.closeLoader();
+                             this.componentService.showToastMessage("Error server sync","bottom")
+                         })
+            },error=>{
+                this.setData().then(
                     response=>{
-                        console.log(response)
-                    // this.dbService.setPPM().then(
-                    //     response=>{
-                    //         console.log(response)
-                    //         this.dbService.setAMC().then(
-                    //             response=>{
-                    //                 console.log(response)
-                    //                 this.dbService.setConfig().then(
-                    //                     response=>{
-                    //                         console.log(response)
-                    //                         this.dbService.setJobs().then(
-                    //                             response=>{
-                    //                                 console.log(response)
-                    //                                 this.dbService.setTickets().then(
-                    //                                     response=> {
-                    //                                         console.log(response)
-                    //                                         this.dbService.setSites().then(
-                    //                                             response=> {
-                    //                                                 console.log(response)
-                    //                                                 this.dbService.setEmployee().then(
-                    //                                                     response=> {
-                    //                                                         console.log(response)
-                                                                                    // this.componentService.closeLoader();
-                        this.dbService.setViewReading().then(
-                            response=>{
-                                console.log(response)
-                                this.componentService.closeLoader();
-                                // this.dbService.setAssetPreviousReading().then(
-                                //     response=> {
-                                //         console.log(response)
-                                //         this.componentService.closeLoader();
-                                //     })
-                            }
-                        )
+                        console.log(response);
+                    },
+                    error=>{
+                        console.log(error)
+                    })
+            })
+    }
 
+    setData()
+    {
+        return new Promise((resolve,reject)=>{
+            setTimeout(()=>{
+                    this.dbService.setAsset().then(
+                        response=>{
+                            console.log(response)
+                            this.dbService.getAsset().then(
+                                response=>{
+                                    console.log(response)
+                                            this.dbService.setPPM().then(
+                                                response=>{
+                                                    console.log(response)
+                                                    this.dbService.setAMC().then(
+                                                        response=>{
+                                                            console.log(response)
+                                                            this.dbService.setConfig().then(
+                                                                response=>{
+                                                                    console.log(response)
+                                                                    this.dbService.setJobs().then(
+                                                                        response=>{
+                                                                            console.log(response)
+                                                                            this.dbService.setTickets().then(
+                                                                                response=> {
+                                                                                    console.log(response)
+                                                                                    this.dbService.setSites().then(
+                                                                                        response=> {
+                                                                                            console.log(response)
+                                                                                            this.dbService.setEmployee().then(
+                                                                                                response=> {
+                                                                                                    console.log(response)
+                                                                                                        this.dbService.setViewReading().then(
+                                                                                                            response=>{
+                                                                                                                console.log(response)
+                                                                                                                this.dbService.setAssetPreviousReading().then(
+                                                                                                                    response=> {
+                                                                                                                        console.log(response)
+                                                                                                                        resolve("data s")
+                                                                                                                        this.componentService.closeLoader();
+                                                                                                                    })
+                                                                                                            })
+                                                                                                })
+                                                                                        })
+                                                                                })
                                                                         })
-                    //                                             })
-                    //
-                    //                                     })
-                    //
-                    //                             })
-                    //                     })
-                    //             })
-                    //     })
-                    //
-                    // })
-            // })
+                                                                })
+                                                        })
+                                                })
+                                })
+                        })
+
+            },3000)
+        })
     }
 
 
