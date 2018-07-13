@@ -134,8 +134,8 @@ public class AmazonS3Utils {
 		return fileName;
 	}    
 	
-	public EmployeeDTO uploadEnrollImage(String qrCodeImage, EmployeeDTO employeeDTO) { 
-    	String filename = "enrollImage.png";
+	public EmployeeDTO uploadEnrollImage(String qrCodeImage, EmployeeDTO employeeDTO, long dateTime) { 
+    	String filename = "enrollImage_"+ dateTime +".png";
     	String fileUrl = "";
     	String imageDataString = "data:image/png;base64,";
     	try {
@@ -152,9 +152,9 @@ public class AmazonS3Utils {
 		return employeeDTO;
     }
 
-	public AttendanceDTO uploadCheckoutImage(String checkOutImage, AttendanceDTO attnDto) {
+	public AttendanceDTO uploadCheckoutImage(String checkOutImage, AttendanceDTO attnDto, long dateTime) {
 		// TODO Auto-generated method stub
-		String filename = "checkOutImage.png";
+		String filename = "checkOutImage_"+ dateTime +".png";
     	String fileUrl = "";
     	String imageDataString = "data:image/png;base64,";
     	try {
@@ -171,9 +171,9 @@ public class AmazonS3Utils {
 		return attnDto;
 	}
 	
-	public AttendanceDTO uploadCheckInImage(String checkInImage, AttendanceDTO attnDto) {
+	public AttendanceDTO uploadCheckInImage(String checkInImage, AttendanceDTO attnDto, long dateTime) {
 		// TODO Auto-generated method stub
-		String filename = "checkInImage.png";
+		String filename = "checkInImage_"+ dateTime +".png";
     	String fileUrl = "";
     	String imageDataString = "data:image/png;base64,";
     	try {
