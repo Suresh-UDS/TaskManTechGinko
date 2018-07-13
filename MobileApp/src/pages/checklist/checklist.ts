@@ -16,13 +16,14 @@ export class Checklist {
 
     checkListItems:any;
   constructor(public navCtrl: NavController, public navParams: NavParams,public viewCtrl:ViewController) {
-       this.checkListItems= this.navParams.get('checkListItems');
-       console.log("checklistItems");
-       console.log(this.checkListItems);
+        this.checkListItems=[];
   }
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad Checklist');
+      this.checkListItems= this.navParams.get('checkListItems');
+      console.log("checklistItems");
+      console.log(this.checkListItems);
   }
 
   dismiss(){

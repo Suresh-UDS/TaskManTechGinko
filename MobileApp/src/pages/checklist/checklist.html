@@ -17,14 +17,28 @@
 
 <ion-content padding>
 
-    <div *ngIf="checkListItems > 0">
-      <ion-item *ngFor="let list of checkListItems;let i = index">
-        <ion-label style="color: black">{{list.checklistItemName}}</ion-label>
-        <ion-checkbox [(ngModel)]="list.completed"   checked="list.completed" >
-        </ion-checkbox>
-      </ion-item>
 
-    </div>
+        <div *ngFor="let list of checkListItems;let i = index">
+            <div class="margin-tp25 white-bg padding10">
+                <ion-label style="color: black">{{list.checklistItemName}}</ion-label>
+                <ion-checkbox [(ngModel)]="list.completed"   checked="list.completed" >
+                </ion-checkbox>
+                <ion-row calss="margin0">
+                    <ion-col>
+                        <p class="line-height">Remarks</p>
+                    </ion-col>
+                </ion-row>
+                <ion-row class="margin0 border-btm">
+                    <ion-col>
+                        <ion-input type="text" value=""></ion-input>
+                    </ion-col>
+                </ion-row>
+
+            </div>
+        </div>
+
+
+
 
 </ion-content>
 <ion-footer>
