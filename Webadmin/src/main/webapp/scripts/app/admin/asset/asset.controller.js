@@ -810,6 +810,8 @@ angular.module('timeSheetApp')
                 $scope.assets = data.transactions;
                 $scope.assetsLoader = true;
 
+              
+
                 /*
                     ** Call pagination  main function **
                 */
@@ -2785,6 +2787,77 @@ angular.module('timeSheetApp')
         });
     }
 
+
+     /* Multiple check box select(Multiple qr printing) Start */
+
+                // This scope will be bound to checkbox in table header
+               $scope.allItemsSelected = false;
+               
+            
+    
+            // This executes when entity in table is checked
+
+            $scope.checkboxSel=[];
+
+            $scope.selectEntity = function (id) {
+
+
+                var newArr =new Array(); 
+
+                if($scope.checkboxSel.indexOf(id) <= -1){
+                
+                $scope.checkboxSel.push(id); 
+               
+                }else if($scope.checkboxSel.indexOf(id) > -1){
+
+                    var remId =$scope.checkboxSel.indexOf(id);
+
+                   $scope.checkboxSel.splice(remId, 1);   
+                }
+
+                 //alert($scope.checkboxSel);
+
+                // If any entity is not checked, then uncheck the "allItemsSelected" checkbox
+
+                for (var i = 0; i <= $scope.assets.length; i++) {
+                    
+                    if (!$scope.assets[i].isChecked) {
+                        $scope.allItemsSelected = false;
+                        return;
+                    }
+
+                    
+                }
+
+    
+                //If not the check the "allItemsSelected" checkbox
+                $scope.allItemsSelected = true;
+            };
+    
+            // This executes when checkbox in table header is checked
+            $scope.selectAll = function () {
+
+                $scope.checkboxSel=[]; 
+
+                // Loop through all the entities and set their isChecked property
+                for (var i = 0; i < $scope.assets.length; i++) {
+
+                    $scope.checkboxSel.push($scope.assets[i].id); 
+                    
+                    $scope.assets[i].isChecked = $scope.allItemsSelected;
+                }
+
+                if(!$scope.allItemsSelected){
+
+                    $scope.checkboxSel=[]; 
+                }
+
+                 //alert($scope.checkboxSel);
+
+                
+            };
+
+             /* Multiple check box select(Multiple qr printing) End */
 
 
 
