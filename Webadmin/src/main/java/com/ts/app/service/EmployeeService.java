@@ -8,6 +8,7 @@ import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
 import java.util.TimeZone;
@@ -18,6 +19,7 @@ import com.ts.app.web.rest.dto.*;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.Hibernate;
+import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.env.Environment;
@@ -718,9 +720,10 @@ public class    EmployeeService extends AbstractService {
         }else{
         	String enrollImage = employeeDTO.getEnrolled_face();
             log.debug("Employee image found");
-            employeeDTO = amazonS3utils.uploadEnrollImage(enrollImage, employeeDTO);
+            long dateTime = new Date().getTime(); 
+            employeeDTO = amazonS3utils.uploadEnrollImage(enrollImage, employeeDTO, dateTime);
             employeeDTO.setUrl(employeeDTO.getUrl());
-            entity.setEnrolled_face("data:image/jpeg;base64,"+employeeDTO.getEnrolled_face());
+            entity.setEnrolled_face(employeeDTO.getEnrolled_face());
             entity.setFaceIdEnrolled(true);
             entity.setFaceAuthorised(false);
             employeeRepository.saveAndFlush(entity);
