@@ -79,6 +79,7 @@ angular.module('timeSheetApp')
         $scope.docType = null;
         $scope.ppmJobStartTime = null;
         $scope.amcJobStartTime = null;
+        $scope.noData = false;
 
         //scope.searchAcquiredDate = $filter('date')(new Date(), 'dd/MM/yyyy');
         $scope.searchAcquiredDate = "";
@@ -154,20 +155,20 @@ angular.module('timeSheetApp')
 
         }
 
-        var nottifShow = true ;
+       /* var nottifShow = true ;*/
 
         $scope.showNotifications= function(position,alignment,color,msg){
 
-            /*if(nottifShow == true){
-               nottifShow = false ;*/
+            /*if(nottifShow == true){*/
+               $rootScope.overlayShow();
                demo.showNotification(position,alignment,color,msg);
 
-           /* }else if(nottifShow == false){
+            /*}else if(nottifShow == false){*/
                 $timeout(function() {
-                  nottifShow = true ;
-                }, 1000);
+                  $rootScope.overlayHide() ;
+                }, 5000);
 
-            }*/
+            /*}*/
 
         }
 
@@ -190,6 +191,19 @@ angular.module('timeSheetApp')
                
            
             }
+
+            if($scope.assetPPM.endDate < $scope.assetPPM.startDate) {
+                    //$scope.showNotifications('top','center','danger','To date cannot be lesser than From date');
+                    $scope.ppmToMsg =true;
+                    
+                   
+                    //return false;
+            }else {
+               
+                 $scope.ppmToMsg =false;
+                 
+               
+            }
         });
 
         $scope.ppmToMsg =false;
@@ -209,6 +223,20 @@ angular.module('timeSheetApp')
                  $scope.ppmToMsg =false;
                  
                
+            }
+
+            if($scope.assetPPM.startDate > $scope.assetPPM.endDate) {
+
+                    //scope.showNotifications('top','center','danger','From date cannot be greater than To date');
+                    $scope.ppmFromMsg = true;
+                    
+                    
+                    //return false;
+            }else {
+              
+               $scope.ppmFromMsg =false;
+               
+           
             }
         });
         
@@ -271,7 +299,7 @@ angular.module('timeSheetApp')
 
                 console.log("To be create PPM",$scope.assetPPM);
 
-                $sope.loadingStart();
+                $scope.loadingStart();
 
             	AssetComponent.createPPM($scope.assetPPM).then(function(response) {
 
@@ -291,6 +319,8 @@ angular.module('timeSheetApp')
                     $scope.selectedFrequnceyOccurrence = {};
                     $scope.ppmFrom = "";
                     $scope.ppmTo = "";
+                    $scope.ppmJobStartTime = "";
+        
 
                     $("#dateFilterPpmFrom").val("");
                     $("#dateFilterPpmTo").val("");
@@ -652,7 +682,7 @@ angular.module('timeSheetApp')
 
         $scope.search = function () {
 
-            $rootScope.loadingStop();
+            $scope.loadingStop();
 
            var currPageVal = ($scope.pages ? $scope.pages.currPage : 1);
             if(!$scope.searchCriteria) {
@@ -801,10 +831,14 @@ angular.module('timeSheetApp')
                     $scope.totalCountPages = data.totalCount;
                     $scope.pageSort = 10;
 
+                $scope.noData = false;
+
+                }else{
+                     $scope.noData = true;
                 }
 
             }).catch(function(){
-                $scope.showNotifications('top','center','danger','Error load asset list. Please try again later..');
+                //$scope.showNotifications('top','center','danger','Error load asset list. Please try again later..');
                 $scope.error = 'ERROR';
             });
         }
@@ -939,9 +973,56 @@ angular.module('timeSheetApp')
         $('input#warFromDate').on('dp.change', function(e){
             $scope.assetGen.warrantyFromDate =  e.date._d;
 
-            $scope.warFromDate = $filter('date')(e.date._d, 'yyyy-MM-dd');
+            $scope.warFromDate = $filter('date')(e.date._d, 'dd/MM/yyyy');
 
-            if($scope.assetGen.startDate > $scope.assetGen.endDate) {
+            if($scope.assetGen.warrantyFromDate > $scope.assetGen.warrantyToDate) {
+
+                    //scope.showNotifications('top','center','danger','From date cannot be greater than To date');
+                    $scope.warFromMsg = true;
+                    
+                    
+                    //return false;
+            }else {
+              
+               $scope.warFromMsg =false;
+               
+           
+            }
+
+            if($scope.assetGen.warrantyToDate < $scope.assetGen.warrantyFromDate) {
+                    //$scope.showNotifications('top','center','danger','To date cannot be lesser than From date');
+                    $scope.warToMsg =true;
+                    
+                   
+                    //return false;
+            }else {
+               
+                 $scope.warToMsg =false;
+                 
+               
+            }
+        });
+
+         $scope.warToMsg =false;
+
+        $('input#warToDate').on('dp.change', function(e){
+            $scope.assetGen.warrantyToDate = e.date._d;
+            $scope.warToDate = $filter('date')(e.date._d, 'dd/MM/yyyy');
+
+            if($scope.assetGen.warrantyToDate < $scope.assetGen.warrantyFromDate) {
+                    //$scope.showNotifications('top','center','danger','To date cannot be lesser than From date');
+                    $scope.warToMsg =true;
+                    
+                   
+                    //return false;
+            }else {
+               
+                 $scope.warToMsg =false;
+                 
+               
+            }
+
+            if($scope.assetGen.warrantyFromDate > $scope.assetGen.warrantyToDate) {
 
                     //scope.showNotifications('top','center','danger','From date cannot be greater than To date');
                     $scope.warFromMsg = true;
@@ -956,28 +1037,8 @@ angular.module('timeSheetApp')
             }
         });
 
-         $scope.warToMsg =false;
-
-        $('input#warToDate').on('dp.change', function(e){
-            $scope.assetGen.warrantyToDate = e.date._d;
-            $scope.warToDate = $filter('date')(e.date._d, 'yyyy-MM-dd');
-
-            if($scope.assetGen.endDate < $scope.assetGen.startDate) {
-                    //$scope.showNotifications('top','center','danger','To date cannot be lesser than From date');
-                    $scope.warToMsg =true;
-                    
-                   
-                    //return false;
-            }else {
-               
-                 $scope.warToMsg =false;
-                 
-               
-            }
-        });
-
         $('input#searchAcquiredDate').on('dp.change', function(e){
-                $scope.searchAcquiredDate = $filter('date')(e.date._d, 'dd-MM-yyyy');
+                $scope.searchAcquiredDate = $filter('date')(e.date._d, 'dd/MM/yyyy');
                 $scope.searchAcquiredDateSer = e.date._d;
         });
 
@@ -1251,7 +1312,7 @@ angular.module('timeSheetApp')
 
         $scope.load52WeekSchedule = function() {
         		console.log('site selection - ' + JSON.stringify($scope.searchSite));
-        		if(jQuery.isEmptyObject($scope.searchSite) == false) {
+        		if(jQuery.isEmptyObject($scope.searchSite) == false && $scope.searchCriteria.siteId != 0) {
             		$scope.searchCriteria.siteId = $scope.searchSite.id;
             		AssetComponent.exportAsset52WeekSchedule($scope.searchCriteria).then(function(data){
             			console.log("response for 52week schedule - "+ JSON.stringify(data));
@@ -2071,6 +2132,18 @@ angular.module('timeSheetApp')
                
            
             }
+            if($scope.amcSchedule.endDate < $scope.amcSchedule.startDate) {
+                    //$scope.showNotifications('top','center','danger','To date cannot be lesser than From date');
+                    $scope.amcToMsg =true;
+                    
+                   
+                    //return false;
+            }else {
+               
+                 $scope.amcToMsg =false;
+                 
+               
+            }
         });
 
          $scope.amcToMsg =false;
@@ -2090,6 +2163,19 @@ angular.module('timeSheetApp')
                  $scope.amcToMsg =false;
                  
                
+            }
+            if($scope.amcSchedule.startDate > $scope.amcSchedule.endDate) {
+
+                    //scope.showNotifications('top','center','danger','From date cannot be greater than To date');
+                    $scope.amcFromMsg = true;
+                    
+                    
+                    //return false;
+            }else {
+              
+               $scope.amcFromMsg =false;
+               
+           
             }
         });
         
@@ -2186,9 +2272,11 @@ angular.module('timeSheetApp')
 		                        $scope.selectedFrequencyPrefix = {};
 		                        $scope.selectedFreqDuration = {};
 		                        $scope.selectedFrequency = {};
+
 		
 		                        $scope.amcFrom = "";
 		                        $scope.amcTo = "";
+                                $scope.amcJobStartTime = "";
 		
 		                        $("#dateFilterAmcFrom").val("");
 		                        $("#dateFilterAmcTo").val("");

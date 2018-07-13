@@ -90,6 +90,8 @@ public class EmployeeDTO extends BaseDTO {
 	private boolean client;
 
 	private long attendanceId;
+	
+	private String url;
 
 	public long getId() {
 		return id;
@@ -397,4 +399,12 @@ public class EmployeeDTO extends BaseDTO {
     public void setAttendanceId(long attendanceId) {
         this.attendanceId = attendanceId;
     }
+
+	public String getUrl() {
+		return url;
+	}
+
+	public void setUrl(String url) {
+		this.url = url;
+	}
 }
