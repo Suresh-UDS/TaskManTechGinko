@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import {NavController, NavParams} from "ionic-angular";
 import{ViewController} from "ionic-angular";
+import {Camera, CameraOptions} from "@ionic-native/camera";
 
 /**
  * Generated class for the Checklist page.
@@ -15,7 +16,9 @@ import{ViewController} from "ionic-angular";
 export class Checklist {
 
     checkListItems:any;
-  constructor(public navCtrl: NavController, public navParams: NavParams,public viewCtrl:ViewController) {
+    takenImages:any;
+  constructor(public navCtrl: NavController, public navParams: NavParams,public viewCtrl:ViewController,
+                private camera:Camera) {
         this.checkListItems=[];
   }
 
@@ -29,6 +32,31 @@ export class Checklist {
   dismiss(){
     this.viewCtrl.dismiss();
   }
+
+  viewCamera(i) {
+
+        const options: CameraOptions = {
+            quality: 50,
+            destinationType: this.camera.DestinationType.NATIVE_URI,
+            encodingType: this.camera.EncodingType.JPEG,
+            mediaType: this.camera.MediaType.PICTURE
+        };
+
+        this.camera.getPicture(options).then((imageData) => {
+
+            console.log('imageData -' +imageData);
+            imageData = imageData.replace("assets-library://", "cdvfile://localhost/assets-library/")
+
+            this.takenImages.push(imageData);
+            this.checkListItems[i].image_1 = this.takenImages[0];
+            this.checkListItems[i].image_2 = this.takenImages[1];
+            this.checkListItems[i].image_3 = this.takenImages[2];
+
+
+        })
+
+  }
+
 
 
 

@@ -23,14 +23,23 @@
                 <ion-label style="color: black">{{list.checklistItemName}}</ion-label>
                 <ion-checkbox [(ngModel)]="list.completed"   checked="list.completed" >
                 </ion-checkbox>
-                <ion-row calss="margin0">
-                    <ion-col>
-                        <p class="line-height">Remarks</p>
+                <ion-row class="margin0 border-btm">
+                    <ion-col col-8>
+                        <ion-input type="text" value="" placeholder="Remarks"></ion-input>
+                    </ion-col>
+                    <ion-col col-4>
+                        <button class="ion-button" round (click)="viewCamera(i)" class="camera-btn"><ion-icon name="ios-camera"></ion-icon></button>
                     </ion-col>
                 </ion-row>
-                <ion-row class="margin0 border-btm">
-                    <ion-col>
-                        <ion-input type="text" value=""></ion-input>
+                <ion-row>
+                    <ion-col col-4  class="">
+                        <img alt="assets/imgs/placeholder.png" [src]="list.image_1" class="job-img margin-bottom25" (click)="viewOnlyImage(i,image)">
+                    </ion-col>
+                    <ion-col col-4  class="">
+                        <img alt="assets/imgs/placeholder.png" [src]="list.image_2" class="job-img margin-bottom25" (click)="viewOnlyImage(i,image)">
+                    </ion-col>
+                    <ion-col col-4  class="">
+                        <img alt="assets/imgs/placeholder.png" [src]="list.image_3" class="job-img margin-bottom25" (click)="viewOnlyImage(i,image)">
                     </ion-col>
                 </ion-row>
 
