@@ -216,6 +216,7 @@ export class GetAssetReading {
     saveReading(reading){
         console.log("Save Reading");
         console.log(reading);
+        console.log(reading.name);
         var assetReading={};
         console.log(reading.currentValue);
         console.log(reading.min);
@@ -241,9 +242,7 @@ export class GetAssetReading {
 
                         };
                         console.log(assetReading);
-                        // this.assetSaveReading(assetReading); //online
-
-                        this.assetSaveReadingLocal(assetReading) //offline
+                        this.assetSaveReading(assetReading); //online
                     }else{
                         var msg = "Asset reading should be greater than "+reading.min+"or less than "+reading.max;
                         this.componentService.showToastMessage(msg,'bottom');
@@ -262,8 +261,7 @@ export class GetAssetReading {
 
                     };
                     console.log(assetReading);
-                    // this.assetSaveReading(assetReading); //online
-                    this.assetSaveReadingLocal(assetReading) //offline
+                    this.assetSaveReading(assetReading); //online
 
                 }
 
@@ -284,9 +282,8 @@ export class GetAssetReading {
                 console.log(assetReading);
 
 
-                // this.assetSaveReading(assetReading);//online
+                this.assetSaveReading(assetReading);//online
 
-                this.assetSaveReadingLocal(assetReading) //offline
 
             }
 
@@ -305,9 +302,7 @@ export class GetAssetReading {
                             consumptionMonitoringRequired:reading.consumptionMonitoringRequired,
                         };
                         console.log(assetReading);
-                        // this.assetSaveReading(assetReading); //online
-
-                        this.assetSaveReadingLocal(assetReading) //offline
+                        this.assetSaveReading(assetReading); //online
 
                     }else{
                         var msg = "Asset reading should be greater than "+reading.min+"or less than "+reading.max;
@@ -327,8 +322,7 @@ export class GetAssetReading {
 
                     };
                     console.log(assetReading);
-                    // this.assetSaveReading(assetReading); //online
-                    this.assetSaveReadingLocal(assetReading) //offline
+                    this.assetSaveReading(assetReading); //online
 
                 }
             }else{
@@ -343,8 +337,7 @@ export class GetAssetReading {
                     consumptionMonitoringRequired:reading.consumptionMonitoringRequired,
                 };
                 console.log(assetReading);
-                // this.assetSaveReading(assetReading); //online
-                this.assetSaveReadingLocal(assetReading) //offline
+                this.assetSaveReading(assetReading); //online
 
             }
 
@@ -360,9 +353,8 @@ export class GetAssetReading {
                         consumptionMonitoringRequired:reading.consumptionMonitoringRequired,
                     };
                     console.log(assetReading);
-                    // this.assetSaveReading(assetReading); //online
+                    this.assetSaveReading(assetReading); //online
 
-                    this.assetSaveReadingLocal(assetReading) //offline
 
                 }else{
                     var msg = "Asset reading should be greater than "+reading.min+"or less than "+reading.max;
@@ -378,9 +370,7 @@ export class GetAssetReading {
                     consumptionMonitoringRequired:reading.consumptionMonitoringRequired,
                 };
                 console.log(assetReading);
-                // this.assetSaveReading(assetReading); //online
-                this.assetSaveReadingLocal(assetReading) //offline
-
+                this.assetSaveReading(assetReading); //online?
             }
 
         }
@@ -393,29 +383,46 @@ export class GetAssetReading {
     //
     // }
 
+
+    //online
+
     assetSaveReading(assetReading)
     {
-        this.assetService.saveReading(assetReading).subscribe(
-            response=>{
-                console.log("Save Reading Response");
-                console.log(response);
-                if(response.errorStatus){
-                    this.componentService.showToastMessage('Invalid Entry','bottom');
-                }else{
-                    console.log("Error status false");
-                    this.componentService.showToastMessage('Reading Saved','bottom');
-                    let data = { 'foo': 'bar' };
-                    this.viewCtrl.dismiss(data);
-                }
-            },
-            error=>
-            {
-                console.log("Save Reading Error");
-                console.log(error);
-                this.componentService.showToastMessage('Save Reading Error','bottom');
-            }
+        //offline
 
+        this.dbService.setReadings(assetReading).then(
+            response=>{
+                console.log(response)
+                this.componentService.showToastMessage('Reading Saved','bottom');
+                this.viewCtrl.dismiss();
+            },
+            error=>{
+                console.log(error)
+            }
         )
+
+        //online
+        // this.assetService.saveReading(assetReading).subscribe(
+        //     response=>{
+        //         console.log("Save Reading Response");
+        //         console.log(response);
+        //         if(response.errorStatus){
+        //             this.componentService.showToastMessage('Invalid Entry','bottom');
+        //         }else{
+        //             console.log("Error status false");
+        //             this.componentService.showToastMessage('Reading Saved','bottom');
+        //             let data = { 'foo': 'bar' };
+        //             this.viewCtrl.dismiss(data);
+        //         }
+        //     },
+        //     error=>
+        //     {
+        //         console.log("Save Reading Error");
+        //         console.log(error);
+        //         this.componentService.showToastMessage('Save Reading Error','bottom');
+        //     }
+        //
+        // )
     }
 
 
