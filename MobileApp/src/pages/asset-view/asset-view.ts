@@ -133,7 +133,7 @@ export class AssetView {
             let token_header=window.localStorage.getItem('session');
             let options: FileUploadOptions = {
                 fileKey: 'uploadFile',
-                fileName:'uploadFile',
+                fileName:'uploadFile.png',
                 headers:{
                     'X-Auth-Token':token_header
                 },
@@ -190,36 +190,36 @@ export class AssetView {
         // }
         this.spinner = true;
         //offline
-        this.dbService.getJobs(this.assetDetails.id).then(
-            (res)=>{
-                this.componentService.closeLoader()
-                console.log(res)
-                this.assetDetails.jobs = res;
-            },
-            (err)=>{
-
-            }
-        )
+        // this.dbService.getJobs(this.assetDetails.id).then(
+        //     (res)=>{
+        //         this.componentService.closeLoader()
+        //         console.log(res)
+        //         this.assetDetails.jobs = res;
+        //     },
+        //     (err)=>{
+        //
+        //     }
+        // )
 
 
         //Online
-        // this.jobService.getJobs(searchCriteria).subscribe(
-        //     response=>{
-        //         this.spinner = false;
-        //         this.componentService.closeLoader();
-        //         console.log("Getting Jobs response");
-        //         console.log(response);
-        //         this.assetDetails.jobs = response.transactions;
-        //         this.page = response.currPage;
-        //         this.totalPages = response.totalPages;
-        //         console.log(this.assetDetails.jobs)
-        //     },
-        //     error=>{
-        //         this.spinner = false;
-        //         this.componentService.closeLoader();
-        //         console.log(error)
-        //         console.log("Getting Jobs errors")
-        //     })
+        this.jobService.getJobs(searchCriteria).subscribe(
+            response=>{
+                this.spinner = false;
+                this.componentService.closeLoader();
+                console.log("Getting Jobs response");
+                console.log(response);
+                this.assetDetails.jobs = response.transactions;
+                this.page = response.currPage;
+                this.totalPages = response.totalPages;
+                console.log(this.assetDetails.jobs)
+            },
+            error=>{
+                this.spinner = false;
+                this.componentService.closeLoader();
+                console.log(error)
+                console.log("Getting Jobs errors")
+            })
     }
 
     jobScroll(infiniteScroll) {
