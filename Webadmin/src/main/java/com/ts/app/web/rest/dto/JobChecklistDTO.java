@@ -5,7 +5,7 @@ import java.io.Serializable;
 public class JobChecklistDTO extends BaseDTO implements Serializable {
 
 	/**
-	 * 
+	 *
 	 */
 	private static final long serialVersionUID = 1L;
 
@@ -14,16 +14,25 @@ public class JobChecklistDTO extends BaseDTO implements Serializable {
 	private String checklistId;
 
 	private String checklistName;
-	
+
 	private String checklistItemId;
 
 	private String checklistItemName;
-	
+
 	private long jobId;
-	
+
 	private String jobTitle;
-	
+
 	private boolean completed;
+
+	private String image_1;
+
+	private String image_2;
+
+	private String image_3;
+
+	private String remarks;
+
 
 
 	public long getId() {
@@ -89,6 +98,37 @@ public class JobChecklistDTO extends BaseDTO implements Serializable {
 	public void setCompleted(boolean completed) {
 		this.completed = completed;
 	}
-	
 
+
+    public String getImage_1() {
+        return image_1;
+    }
+
+    public void setImage_1(String image_1) {
+        this.image_1 = image_1;
+    }
+
+    public String getImage_2() {
+        return image_2;
+    }
+
+    public void setImage_2(String image_2) {
+        this.image_2 = image_2;
+    }
+
+    public String getImage_3() {
+        return image_3;
+    }
+
+    public void setImage_3(String image_3) {
+        this.image_3 = image_3;
+    }
+
+    public String getRemarks() {
+        return remarks;
+    }
+
+    public void setRemarks(String remarks) {
+        this.remarks = remarks;
+    }
 }

@@ -496,6 +496,7 @@ public class JobManagementService extends AbstractService {
             log.debug("JobManagementService toPredicate - searchCriteria jobstatus -"+ searchCriteria.getJobStatus());
             log.debug("JobManagementService toPredicate - searchCriteria jobTitle -"+ searchCriteria.getJobTitle());
             log.debug("JobManagementService toPredicate - searchCriteria scheduled -"+ searchCriteria.isScheduled());
+            log.debug("JobManagementService toPredicate - searchCriteria scheduled -"+ searchCriteria.getLocationId());
             log.debug("JobSpecification toPredicate - searchCriteria get assigned status -"+ searchCriteria.isAssignedStatus());
             log.debug("JobSpecification toPredicate - searchCriteria get completed status -"+ searchCriteria.isCompletedStatus());
             log.debug("JobSpecification toPredicate - searchCriteria get overdue status -"+ searchCriteria.isOverdueStatus());
@@ -699,7 +700,7 @@ public class JobManagementService extends AbstractService {
 				ticket.setStatus(TicketStatus.ASSIGNED.toValue());
 				ticketRepository.save(ticket);
 			}
-	
+
 			if(jobDTO.getParentJobId()>0){
 			    Job parentJob = jobRepository.findOne(jobDTO.getParentJobId());
 			    job.setParentJob(parentJob);
@@ -852,6 +853,7 @@ public class JobManagementService extends AbstractService {
 			List<JobChecklistDTO> jobclDtoList = jobDTO.getChecklistItems();
 			List<JobChecklist> checklistItems = new ArrayList<JobChecklist>();
 			for(JobChecklistDTO jobclDto : jobclDtoList) {
+			    log.debug("Job checklist remarks"+jobclDto.getRemarks());
 				JobChecklist checklist = mapperUtil.toEntity(jobclDto, JobChecklist.class);
 				checklist.setJob(job);
 				checklistItems.add(checklist);

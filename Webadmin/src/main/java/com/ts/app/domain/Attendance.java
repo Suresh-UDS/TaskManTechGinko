@@ -38,9 +38,11 @@ public class Attendance extends AbstractAuditingEntity implements Serializable{
 	private String checkOutImage;
 
 	private double longitudeIn;
+
 	private double longitudeOut;
 
 	private double latitudeIn;
+
 	private double latitudeOut;
 
 	private String attendanceIn;
@@ -50,6 +52,8 @@ public class Attendance extends AbstractAuditingEntity implements Serializable{
 	private String action;
 
 	private boolean offline;
+
+	private boolean late;
 
 	@ManyToOne(fetch = FetchType.LAZY, cascade={CascadeType.REFRESH})
 	@JoinColumn(name = "siteId", nullable = false)
@@ -64,7 +68,7 @@ public class Attendance extends AbstractAuditingEntity implements Serializable{
 	private String shiftEndTime;
 
 	private boolean notCheckedOut;
-	
+
 	@OneToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "continuedAttendanceId", referencedColumnName = "id", nullable = true)
 	private Attendance continuedAttendance;
@@ -217,6 +221,13 @@ public class Attendance extends AbstractAuditingEntity implements Serializable{
 	public void setContinuedAttendance(Attendance continuedAttendance) {
 		this.continuedAttendance = continuedAttendance;
 	}
-    
-    
+
+
+    public boolean isLate() {
+        return late;
+    }
+
+    public void setLate(boolean late) {
+        this.late = late;
+    }
 }
