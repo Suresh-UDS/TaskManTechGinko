@@ -89,6 +89,9 @@ public class ExportUtil {
 
 	@Inject
 	private MapperUtil<AbstractAuditingEntity, BaseDTO> mapperUtil;
+	
+	@Inject
+	private GoogleSheetsUtil googleSheetsUtil;
 
 	public ExportResult writeConsolidatedJobReportToFile(String projName, List<ReportResult> content,
 			final String empId, ExportResult result) {
@@ -699,7 +702,7 @@ public class ExportUtil {
 			xssfWorkbook.write(fileOutputStream);
 			fileOutputStream.close();
 			//upload to google drive
-			String[] fileDetails = GoogleSheetsUtil.upload(exportFileName,filePath);
+			String[] fileDetails = googleSheetsUtil.upload(exportFileName,filePath);
 			result.setWebLink(fileDetails[0]);
 			result.setWebContentLink(fileDetails[1]);
 		} catch (IOException e) {

@@ -210,6 +210,12 @@ scheduler:
 
 default.user.password: uds12345
 
+google:
+   drive:
+      api:
+          callback:
+              host: ec2-54-255-148-73.ap-southeast-1.compute.amazonaws.com    
+              port: 8080
 # ===================================================================
 # JHipster specific properties
 # ===================================================================
