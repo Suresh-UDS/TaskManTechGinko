@@ -217,5 +217,29 @@ public class AttendanceResource {
 		response.setHeader("Content-Disposition","attachment; filename=\"" + fileId + ".xlsx\"");
 		return content;
 	}
+	
+	@RequestMapping(value = "/attendance/uploadExistingCheckInImages", method = RequestMethod.POST)
+	public ResponseEntity<?> uploadExistingCheckInImage() { 
+		log.debug("Upload Existing Img to AWS s3");
+		String result = "";
+		try { 
+			result = attendanceService.uploadExistingCheckInImage();
+		} catch(Exception e) { 
+			throw new TimesheetException("Error while uploading checkInImage to S3" +e);
+		}
+		return new ResponseEntity<>(result, HttpStatus.CREATED);
+	}
+	
+	@RequestMapping(value = "/attendance/uploadExistingCheckOutImages", method = RequestMethod.POST)
+	public ResponseEntity<?> uploadExistingCheckOutImage() { 
+		log.debug("Upload Existing Img to AWS s3");
+		String result = "";
+		try { 
+			result = attendanceService.uploadExistingCheckOutImage();
+		} catch(Exception e) { 
+			throw new TimesheetException("Error while uploading checkOutImage to S3" +e);
+		}
+		return new ResponseEntity<>(result, HttpStatus.CREATED);
+	}
 
 }

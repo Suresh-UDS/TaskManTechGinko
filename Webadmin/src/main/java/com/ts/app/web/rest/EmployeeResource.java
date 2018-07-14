@@ -526,6 +526,19 @@ public class EmployeeResource {
 		}
 		return result;
 	}
+    
+    @RequestMapping(value="/employee/uploadExistingImage", method = RequestMethod.POST)
+    public ResponseEntity<?> uploadExistingImg() { 
+    	log.debug("Upload Existing Employee enroll image");
+    	String result = "";
+    	try {
+    		result = employeeService.uploadEmpExistingImage();
+    	}catch(Exception e) {
+    		throw new TimesheetException("Error while upload existing enroll image" + e);
+    	}
+    	return new ResponseEntity<>(result, HttpStatus.CREATED);
+    }
+    
 
 
 }

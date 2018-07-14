@@ -400,7 +400,15 @@ angular.module('timeSheetApp')
                 return $http.get('api/assets/assetstatus').then(function (response) {
                     return response.data;
                 });
+            },
+
+            multipleQr: function(MultipleIds) {
+              
+                return $http.get('api/list/qrcodes/['+MultipleIds +']').then(function (response) {
+                    return response.data;
+                });
             }
+            
            
 
 

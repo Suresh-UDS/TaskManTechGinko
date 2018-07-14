@@ -130,7 +130,7 @@ angular.module('timeSheetApp')
             }
         }).state('qr-code-list', {
             parent: 'manage',
-            url: '/qr-code-list',
+            url: '/qr-code-list/:ids',
             controller: 'AssetController',
             data: {
                 authorities: [],
