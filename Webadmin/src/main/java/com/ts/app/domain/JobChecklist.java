@@ -51,13 +51,13 @@ public class JobChecklist extends AbstractAuditingEntity implements Serializable
 	private boolean completed;
 
 	@Column(name = "image_1")
-    private String image1;
+    private String image_1;
 
     @Column(name = "image_2")
-    private String image2;
+    private String image_2;
 
     @Column(name = "image_3")
-    private String image3;
+    private String image_3;
 
     @Column(name = "remarks")
     private String remarks;
@@ -120,28 +120,28 @@ public class JobChecklist extends AbstractAuditingEntity implements Serializable
 	}
 
 
-    public String getImage1() {
-        return image1;
+    public String getImage_1() {
+        return image_1;
     }
 
-    public void setImage1(String image1) {
-        this.image1 = image1;
+    public void setImage_1(String image_1) {
+        this.image_1 = image_1;
     }
 
-    public String getImage2() {
-        return image2;
+    public String getImage_2() {
+        return image_2;
     }
 
-    public void setImage2(String image2) {
-        this.image2 = image2;
+    public void setImage_2(String image_2) {
+        this.image_2 = image_2;
     }
 
-    public String getImage3() {
-        return image3;
+    public String getImage_3() {
+        return image_3;
     }
 
-    public void setImage3(String image3) {
-        this.image3 = image3;
+    public void setImage_3(String image_3) {
+        this.image_3 = image_3;
     }
 
     public String getRemarks() {
