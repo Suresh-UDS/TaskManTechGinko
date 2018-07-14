@@ -854,6 +854,7 @@ public class JobManagementService extends AbstractService {
 			List<JobChecklist> checklistItems = new ArrayList<JobChecklist>();
 			for(JobChecklistDTO jobclDto : jobclDtoList) {
 			    log.debug("Job checklist remarks"+jobclDto.getRemarks());
+			    log.debug("Job checklist remarks"+jobclDto.getImage_1());
 				JobChecklist checklist = mapperUtil.toEntity(jobclDto, JobChecklist.class);
 				checklist.setJob(job);
 				checklistItems.add(checklist);
